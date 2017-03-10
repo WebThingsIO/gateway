@@ -1,0 +1,13 @@
+{
+  "name": "MozIoT Gateway",
+  "short_name": "MozIoT",
+  "start_url": ".",
+  "display": "standalone",
+  "description": "Web of Things gateway",
+  "icons": [{
+    "src": "images/icon.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  }],
+  "background-color": "#5d9bc7"
+}
