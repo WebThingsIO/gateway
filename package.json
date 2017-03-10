@@ -1,0 +1,22 @@
+{
+  "name": "moziot-gateway",
+  "version": "1.0.0",
+  "description": "Web of Things gateway",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moziot/gateway.git"
+  },
+  "author": "Mozilla IoT",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/moziot/gateway/issues"
+  },
+  "homepage": "https://wiki.mozilla.org/MozIoT",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

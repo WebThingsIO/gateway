@@ -1,0 +1,31 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+html {
+  font-size: 10px;
+  font-family: sans-serif;
+  padding: 2rem;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  background-color: #5d9bc7;
+}
+
+#wordmark {
+  width: 12.5rem;
+}
+
+#devices {
+  padding-top: 15rem;
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+}
