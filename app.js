@@ -4,6 +4,12 @@
 var express = require('express');
 var app = express();
 
+app.use('/things', function(request, response) {
+  var options = {
+    root: 'static'
+  };
+  response.sendFile('things.json', options);
+});
 app.use(express.static('static'));
 
 app.listen(8080, function () {

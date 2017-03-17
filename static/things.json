@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Smart Switch (ZigBee)",
+    "description": "On/Off Switch",
+    "type": "onOffSwitch",
+    "properties":[
+      {
+        "name": "on",
+        "type": "boolean",
+        "href": "properties/on"
+      }
+    ],
+    "actions": [
+      {
+        "name": "toggle",
+        "description": "Toggle switch on and off"
+      }
+    ]
+  },
+  {
+    "name": "Smart Switch (Z-Wave)",
+    "description": "On/Off Switch",
+    "type": "onOffSwitch",
+    "properties":[
+      {
+        "name": "on",
+        "type": "boolean",
+        "href": "properties/on"
+      }
+    ],
+    "actions": [
+      {
+        "name": "toggle",
+        "description": "Toggle switch on and off"
+      }
+    ]
+  }
+]
