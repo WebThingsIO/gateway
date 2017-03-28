@@ -42,5 +42,5 @@ class FooAdapter {
     }
 }
 
-exports = FooAdapter;
+module.exports = FooAdapter;
 
