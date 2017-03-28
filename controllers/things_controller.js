@@ -1,5 +1,5 @@
 /**
- * Things Router.
+ * Things Controller.
  *
  * Manages HTTP requests to /things.
  *
@@ -8,13 +8,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 var express = require('express');
-var ThingsRouter = express.Router();
-var Database = require('../db.js');
+var Things = require('../models/things');
 
-ThingsRouter.get('/', function (request, response) {
-  Database.getAllThings().then(function(things) {
+var ThingsController = express.Router();
+
+ThingsController.get('/', function (request, response) {
+  Things.getAllThings().then(function(things) {
     response.send(JSON.stringify(things));
   });
 });
 
-module.exports = ThingsRouter;
+module.exports = ThingsController;
