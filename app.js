@@ -15,7 +15,7 @@ var app = express();
 db.open();
 
 // Serve Things from Things router
-var thingsRouter = require('./routes/things_router');
+var thingsRouter = require('./controllers/things_controller');
 app.use('/things', thingsRouter);
 
 // Serve static files from static/ directory

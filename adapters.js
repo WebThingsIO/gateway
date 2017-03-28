@@ -47,4 +47,3 @@ class AdapterManager extends EventEmitter {
 }
 
 module.exports = new AdapterManager();
-

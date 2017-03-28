@@ -1,6 +1,6 @@
 'use strict';
 
-var Thing = require('../thing.js').Thing;
+var Thing = require('../models/thing.js').Thing;
 
 class FooThing extends Thing {
     constructor(adapter, name) {
@@ -43,4 +43,3 @@ class FooAdapter {
 }
 
 module.exports = FooAdapter;
-
