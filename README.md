@@ -38,5 +38,5 @@ Load ```http://localhost:8080``` in your web browser.
   * **app.webmanifest** - W3C web app manifest for front end
 * **app.js** - The main back end script
 * **db.js** - Manages the SQLite3 database
-* **adapters.js** - Manages the various network adapters of the gateway (e.g. ZigBee, Z-Wave)
+* **adapter-manager.js** - Manages the various network adapters of the gateway (e.g. ZigBee, Z-Wave)
 * **package.json** - npm module manifest
