@@ -1,0 +1,59 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+#add-thing-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #305067;
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+#add-thing-screen.hidden {
+  display: none;
+}
+
+#add-thing-back-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 6.4rem;
+  height: 6.4rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  background-image: url('../images/back.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+}
+
+#add-thing-back-button:hover, #add-thing-back-button:active {
+  opacity: 1;
+}
+
+#add-thing-scanning {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#add-thing-cancel-button {
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #fff;
+}
+
+#add-thing-cancel-button:hover, #add-thing-cancel-button:active {
+  background-color: #658196;
+}
+
+#add-button::-moz-focus-inner, #add-thing-cancel-button::-moz-focus-inner {
+  border: 0;
+}
