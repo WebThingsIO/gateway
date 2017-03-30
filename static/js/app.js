@@ -16,28 +16,10 @@ var App = {
   /**
    * Start MozIoT gateway app.
    */
-  start: function() {
-    this.thingsElement = document.getElementById('things');
-    this.showThings();
-  },
-
-  /**
-   * Display all connected web things.
-   */
-  showThings: function(things) {
-    // Fetch a list of things from the server
-    fetch(this.DOMAIN + '/things').then((function(response) {
-      return response.json();
-    }).bind(this)).then((function(things) {
-      if (things.length > 0) {
-        this.thingsElement.innerHTML = '';
-      };
-      // Create a new Thing for each thing description
-      things.forEach(function(description) {
-        var newThing = new Thing(description);
-      });
-    }).bind(this));
-  },
+  init: function() {
+    HomeScreen.init();
+    AddThingScreen.init();
+  }
 };
 
 /**
@@ -45,5 +27,5 @@ var App = {
   */
 window.addEventListener('load', function app_onLoad() {
   window.removeEventListener('load', app_onLoad);
-  App.start();
+  App.init();
 });

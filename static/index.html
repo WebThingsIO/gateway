@@ -6,16 +6,34 @@
   <head>
     <meta charset="utf-8">
     <title>MozIoT Gateway</title>
-    <link rel="stylesheet" type="text/css" href="css/app.css" />
     <link rel="manifest" href="app.webmanifest">
     <link rel="icon" href="images/icon.png" type="image/png" />
     <script type="text/javascript" src="js/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <script type="text/javascript" src="js/home.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <script type="text/javascript" src="js/add-thing.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/add-thing.css" />
     <script type="text/javascript" src="js/thing.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/thing.css" />
   </head>
   <body>
-    <img id="wordmark" src="images/moziot_wordmark.png" />
-    <div id="background">
+
+    <!-- Home Screen -->
+    <div id="home-screen">
+      <img id="wordmark" src="images/moziot_wordmark.png" />
       <div id="things">No devices yet.</div>
+      <button id="add-button" />
     </div>
+
+    <!-- Add Thing Screen -->
+    <div id="add-thing-screen" class="hidden">
+      <button id="add-thing-back-button"></button>
+      <div id="add-thing-scanning">
+        <p>Scanning for new devices...</p>
+        <button id="add-thing-cancel-button">Cancel</button>
+      </div>
+    </div>
+
   </body>
 </html>
