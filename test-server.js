@@ -23,12 +23,85 @@ app.use(bodyParser.json());
 const ROOT = '/things';
 
 app.get(ROOT, function (req, res) {
-  var things = adapterManager.getThings();
-  var thingNames = [];
-  for (var thing of things) {
-    thingNames.push(thing.getName());
+  var devices = adapterManager.getDevices();
+  var deviceIds = [];
+  for (var deviceId in devices) {
+    deviceIds.push(deviceId);
   }
-  res.json(thingNames);
+  res.json(deviceIds);
+});
+
+adapterManager.on('device-added', function deviceAdded(device) {
+  var thing_uri = ROOT + '/' + device.getId();
+  var attribute_names = device.getAttributeNames();
+
+  app.get(thing_uri, function (req, res) {
+    let properties = [];
+    for (let attribute_name of attribute_names) {
+      let attribute = device.getAttribute(attribute_name);
+      let property_description = {
+        'name': attribute_name,
+        'type': attribute.type,
+        'href': thing_uri + '/' + attribute_name,
+      };
+      if (attribute.unit) {
+        property_description.unit = attribute.unit;
+      }
+      if (attribute.description) {
+        property_description.description = attribute.description;
+      }
+      properties.push(property_description);
+    }
+    var description = {
+        'name': device.getName(),
+        'type': device.getType(),
+        'properties': properties,
+        'actions': [],
+        'events': [],
+    };
+    res.json(description);
+  });
+
+  for (let property_name of attribute_names) {
+    let property_uri = thing_uri + '/' + property_name;
+    console.log('device-added: adding property_uri =', property_uri);
+    app.get(property_uri, function (req, res) {
+      let value = device.getAttributeValue(property_name);
+      console.log('GET: get of', property_uri,
+                  'name', property_name,
+                  'value', value);
+      res.json(value);
+    });
+    app.put(property_uri, function (req, res) {
+      let value = JSON.parse(req.body.value);
+      console.log('PUT: set of', property_uri, 'to', value);
+      device.setAttributeValue(property_name, value);
+      return res.send('set');
+    });
+    app.post(property_uri, function (req, res) {
+      let value = JSON.parse(req.body.value);
+      console.log('POST: set of', property_uri, 'to', value);
+      device.setAttributeValue(property_name, value);
+      return res.send('set');
+    });
+  }
+});
+
+adapterManager.on('value-changed', function valueChanged(info) {
+  console.log('Value of', info.device.getName(),
+              'property', info.property,
+              'changed to', info.value);
+});
+
+process.on('SIGINT', function() {
+  console.log('Control-C: disconnecting adapters...');
+  adapterManager.unloadAdapters();
+  process.exit();
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error(reason);
+  process.exit(1);
 });
 
 var server = app.listen(8088, function () {
@@ -40,70 +113,3 @@ var server = app.listen(8088, function () {
   adapterManager.loadAdapters();
 });
 
-adapterManager.on('device-added', function deviceAdded(thing) {
-  var thing_uri = ROOT + '/' + thing.getName();
-  var property_names = thing.getPropertyNames();
-
-  app.get(thing_uri, function (req, res) {
-    let properties = [];
-    for (let property_name of property_names) {
-      let property = thing.getProperty(property_name);
-      let property_description = {
-        'name': property_name,
-        'type': property.type,
-        'href': thing_uri + '/' + property_name,
-      };
-      if (property.unit) {
-        property_description.unit = property.unit;
-      }
-      if (property.description) {
-        property_description.description = property.description;
-      }
-      properties.push(property_description);
-    }
-    var description = {
-        'name': thing.getName(),
-        'type': thing.getType(),
-        'properties': properties,
-        'actions': thing.getActions(),
-        'events': thing.getEvents(),
-    };
-    res.json(description);
-  });
-
-  for (let property_name of property_names) {
-    let property_uri = thing_uri + '/' + property_name;
-    console.log('device-added: adding property_uri =', property_uri);
-    app.get(property_uri, function (req, res) {
-      let value = thing.getPropertyValue(property_name);
-      console.log('GET: get of', property_uri,
-                  'name', property_name,
-                  'value', value);
-      res.json(value);
-    });
-    app.put(property_uri, function (req, res) {
-      let value = JSON.parse(req.body.value);
-      console.log('PUT: set of', property_uri, 'to', value);
-      thing.setPropertyValue(property_name, value);
-      return res.send('set');
-    });
-    app.post(property_uri, function (req, res) {
-      let value = JSON.parse(req.body.value);
-      console.log('POST: set of', property_uri, 'to', value);
-      thing.setPropertyValue(property_name, value);
-      return res.send('set');
-    });
-  }
-});
-
-adapterManager.on('value-changed', function valueChanged(info) {
-  console.log('Value of', info.thing.getName(),
-              'property', info.property,
-              'changed to', info.value);
-});
-
-process.on('SIGINT', function() {
-  console.log('Control-C: disconnecting adapters...');
-  adapterManager.unloadAdapters();
-  process.exit();
-});

@@ -19,20 +19,30 @@ class AdapterManager extends EventEmitter {
   constructor() {
     super();
     this.adapters = [];
-    this.things = [];
+    this.devices = {};
   }
 
-  addThing(adapter, thing) {
-    this.things.push(thing);
-    this.emit('device-added', thing);
+  addAdapter(adapter) {
+    adapter.name = adapter.constructor.name;
+    this.adapters.push(adapter);
+    this.emit('adapter-added', adapter);
+  }
+
+  addDevice(adapter, device) {
+    this.devices[device.id] = device;
+    this.emit('device-added', device);
   }
 
   getAdapters() {
     return this.adapters;
   }
 
-  getThings() {
-    return this.things;
+  getDevice(id) {
+    return this.devices[id];
+  }
+
+  getDevices() {
+    return this.devices;
   }
 
   loadAdapters() {
@@ -49,15 +59,10 @@ class AdapterManager extends EventEmitter {
           path.extname(filename) !== '.js') {
           continue;
         }
-        console.log('Loading Adapter', adapterFilename);
+        console.log('Loading Adapters from', adapterFilename);
 
-        let Adapter = require(adapterFilename);
-        let adapter = new Adapter(adapterManager);
-        adapter.filename = adapterFilename;
-        adapter.name = adapter.constructor.name;
-        adapterManager.adapters.push(adapter);
-
-        adapterManager.emit('adapter-added', adapter);
+        let loadAdapters = require(adapterFilename);
+        loadAdapters(adapterManager);
       }
     });
   }
