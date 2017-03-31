@@ -18,7 +18,9 @@ const DEBUG = false;
 
 class ZWaveAdapter extends Adapter {
   constructor(adapterManager, port) {
-    super(adapterManager);
+    // We
+    super(adapterManager, '???');
+    this.ready = false;
 
     this.port = port;
     this.nodes = {};
@@ -57,8 +59,7 @@ class ZWaveAdapter extends Adapter {
 
   driverReady(homeId) {
     console.log('ZWave: Driver Ready: HomeId:', homeId.toString(16));
-    this.id = homeId;
-    this.manager.addAdapter(this);
+    this.id = 'zwave-' + homeId.toString(16);
   }
 
   driverFailed() {
@@ -68,6 +69,7 @@ class ZWaveAdapter extends Adapter {
 
   scanComplete() {
     console.log('ZWave: Scan complete');
+    this.ready = true;
     this.zwave.requestAllConfigParams(3);
     if (DEBUG) {
       this.dump();
@@ -154,9 +156,9 @@ class ZWaveAdapter extends Adapter {
           'type': 'bool',
           'value': false,
         };
-        this.manager.addDevice(this, node);
+        this.addDevice(node);
       } else {
-        this.manager.addDevice(this, node);
+        this.addDevice(node);
       }
     }
   }
@@ -284,6 +286,7 @@ function loadZWaveAdapters(adapterManager) {
     }
 
     console.log('Found ZWave port @', port.comName);
+
     adapterManager.addAdapter(new ZWaveAdapter(adapterManager, port));
   });
 }
