@@ -12,12 +12,12 @@
 
 'use strict';
 
-var Thing = require('../models/thing.js').Thing;
-var Adapter = require('../models/adapter.js').Adapter;
+var Device = require('../device.js').Device;
+var Adapter = require('../adapter.js').Adapter;
 
-class FooThing extends Thing {
-  constructor(adapter, name) {
-    let properties = {
+class FooDevice extends Device {
+  constructor(adapter, id, name) {
+    let attributes = {
       'temperature': {
         'type': 'integer',
         'unit': 'celsius',
@@ -35,14 +35,14 @@ class FooThing extends Thing {
         'value': false,
       },
     };
-    super(adapter, 'FooThing', name, properties, [], []);
+    super(adapter, 'FooDevice', id, name, attributes);
   }
 
-  setPropertyValue(name, value) {
+  setAttributeValue(name, value) {
     // This function should propogate the value to the hardware
-    // Calling super.setPropertyValue will update the value cache
+    // Calling super.setAttrbiuteValue will update the value cache
     // and send a 'value-changed' event to any listeners.
-    super.setPropertyValue(name, value);
+    super.setAttributeValue(name, value);
   }
 }
 
@@ -51,9 +51,13 @@ class FooAdapter extends Adapter {
   constructor(adapterManager) {
     super(adapterManager);
 
-    adapterManager.addThing(this, new FooThing(this, 'thing1'));
-    adapterManager.addThing(this, new FooThing(this, 'thing2'));
+    adapterManager.addDevice(this, new FooDevice(this, 'Foo1', 'device1'));
+    adapterManager.addDevice(this, new FooDevice(this, 'Foo2', 'device2'));
   }
 }
 
-module.exports = FooAdapter;
+function loadFooAdapters(adapterManager) {
+  adapterManager.addAdapter(new FooAdapter(adapterManager));
+}
+
+module.exports = loadFooAdapters;
