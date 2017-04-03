@@ -1,24 +1,82 @@
 # MozIoT Gateway
 Web of Things gateway.
 
-## Get Started
+## Prerequisites
+
+### Install pkg-config
+
+Under ubuntu:
+```
+sudo apt-get install pkg-config
+```
+
+Under OSX:
+[This page](http://macappstore.org/pkg-config/) covers installing pkg-config
+under OSX.
+
+### Recommended: install nvm
+
+nvm allows you to easily install different versions of node. To install nvm:
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+```
+
+Close and reopen your temrinal window. Use nvm to install node and set the
+default version.
+```
+nvm install v7.7.2
+nvm use v7.7.2
+nvm alias default v7.7.2
+```
+
+Verify that node and npm have been installed:
+```
+$ npm --version
+4.1.2
+$ node --version
+v7.7.2
+```
+
+### Install node (if you didn't use nvm)
+
+Follow the directions from [NodeJS](https://nodejs.org) to install on your platform.
+This step is not required if you installed node via nvm in the previous step.
+
+### Build and install openzwave
+
+```
+cd
+git clone https://github.com/OpenZWave/open-zwave.git
+cd open-zwave
+make && sudo make install
+```
+
+## Download and Install gateway
 Make sure that you have a recent version of [NodeJS](https://nodejs.org) installed.
 
 Clone the GitHub repository (or fork it first):
-
-```$ git clone https://github.com/moziot/gateway.git```
+```
+cd
+git clone https://github.com/moziot/gateway.git
+```
 
 Change into the gateway directory:
 
-```$ cd gateway```
+```
+cd gateway
+```
 
 Install dependencies:
 
-```$ npm install```
+```
+npm install
+```
 
  Start the web server:
 
-```$ node app.js```
+```
+node app.js
+```
 
 Load ```http://localhost:8080``` in your web browser.
 
@@ -38,5 +96,7 @@ Load ```http://localhost:8080``` in your web browser.
   * **app.webmanifest** - W3C web app manifest for front end
 * **app.js** - The main back end script
 * **db.js** - Manages the SQLite3 database
+* **adapter.js** - Base class used by adapters
+* **device.js** - Base class used by adapter devices.
 * **adapter-manager.js** - Manages the various network adapters of the gateway (e.g. ZigBee, Z-Wave)
 * **package.json** - npm module manifest
