@@ -2,7 +2,13 @@
 Web of Things gateway.
 
 ## Get Started
-Make sure that you have a recent version of [NodeJS](https://nodejs.org) installed.
+
+### Prerequisites
+* [Git](https://git-scm.com/)
+* [NodeJS](https://nodejs.org) ([Installation instructions](https://github.com/moziot/wiki/wiki/Installing-nodejs))
+* [OpenZWave](http://www.openzwave.com/) ([Installation instructions](https://github.com/moziot/wiki/wiki/Installing-openzwave))
+
+### Get the Source
 
 Clone the GitHub repository (or fork it first):
 
@@ -15,6 +21,8 @@ Change into the gateway directory:
 Install dependencies:
 
 ```$ npm install```
+
+### Run
 
  Start the web server:
 
@@ -38,5 +46,7 @@ Load ```http://localhost:8080``` in your web browser.
   * **app.webmanifest** - W3C web app manifest for front end
 * **app.js** - The main back end script
 * **db.js** - Manages the SQLite3 database
+* **adapter.js** - Base class used by adapters
+* **device.js** - Base class used by adapter devices
 * **adapter-manager.js** - Manages the various network adapters of the gateway (e.g. ZigBee, Z-Wave)
 * **package.json** - npm module manifest
