@@ -14,6 +14,7 @@
 var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('events').EventEmitter;
+var Deferred = require('./deferred');
 
 /**
  * @class AdapterManager
@@ -24,8 +25,10 @@ class AdapterManager extends EventEmitter {
 
   constructor() {
     super();
-    this.adapters = [];
+    this.adapters = {};
     this.devices = {};
+    this.deferredAdd = null;
+    this.deferredRemove = null;
   }
 
   /**
@@ -34,7 +37,7 @@ class AdapterManager extends EventEmitter {
    */
   addAdapter(adapter) {
     adapter.name = adapter.constructor.name;
-    this.adapters.push(adapter);
+    this.adapters[adapter.id] = adapter;
 
     /**
      * Adapter added event.
@@ -47,7 +50,103 @@ class AdapterManager extends EventEmitter {
     this.emit('adapter-added', adapter);
   }
 
-  addDevice(device) {
+  /**
+   * @method addNewDevice
+   * Initiates pairing on all of the adapters that support it.
+   * The user then presses the "button" on the device to be added.
+   * @returns A promise that resolves to the newly added device.
+   */
+  addNewDevice() {
+    var deferredAdd = new Deferred();
+
+    if (this.deferredAdd) {
+      deferredAdd.reject('Add already in progress');
+    } else if (this.deferredRemove) {
+      deferredAdd.reject('Remove already in progress');
+    } else {
+      this.deferredAdd = deferredAdd;
+      for (var adapter of this.adapters) {
+        console.log('About to call startPairing on', adapter.name);
+        adapter.startPairing();
+      }
+    }
+
+    return deferredAdd.promise;
+  }
+
+  /**
+   * @method cancelAddNewDevice
+   *
+   * Cancels a previous addNewDevice request.
+   */
+  cancelAddNewDevice() {
+    var deferredAdd = this.deferredAdd;
+
+    if (deferredAdd) {
+      for (var adapter of this.adapters) {
+        adapter.cancelPairing();
+      }
+      this.deferredAdd = null;
+      deferredAdd.reject('addNewDevice cancelled');
+    }
+  }
+
+  /**
+   * @method cancelAddSomeDevice
+   *
+   * Cancels a previous removeSomeDevice request.
+   */
+  cancelRemoveSomeDevice() {
+    var deferredRemove = this.deferredRemove;
+    if (deferredRemove) {
+      for (var adapter of this.adapters) {
+        adapter.cancelUnpairing();
+      }
+      this.deferredAdd = null;
+      deferredRemove.reject('removeSomeDevice cancelled');
+    }
+  }
+
+  /**
+   * @method getAdapter
+   * @returns Returns the adapter with the indicated id.
+   */
+  getAdapter(id) {
+    return this.adapters[id];
+  }
+
+  /**
+   * @method getAdapters
+   * @returns Returns a dictionary of the loaded adapters. The dictionary 
+   *          key corresponds to the adapter id. 
+   */
+  getAdapters() {
+    return this.adapters;
+  }
+
+  /**
+   * @method getDevice
+   * @returns Returns the device with the indicated id.
+   */
+  getDevice(id) {
+    return this.devices[id];
+  }
+
+  /**
+   * @method getDevices
+   * @returns Returns an dictionary of all of the known devices. 
+   *          The dictionary key corresponds to the device id. 
+   */
+  getDevices() {
+    return this.devices;
+  }
+
+  /**
+   * @method handleDeviceAdded
+   *
+   * Called when the indicated device has been added to an adapter.
+   */
+  handleDeviceAdded(device) {
     this.devices[device.id] = device;
 
     /**
@@ -59,9 +158,27 @@ class AdapterManager extends EventEmitter {
      * @type  {Device}
      */
     this.emit('device-added', device);
+
+    // If this device was added in response to addNewDevice, then
+    // We need to cancel pairing mode on all of the "other" adapters.
+
+    var deferredAdd = this.deferredAdd;
+    if (deferredAdd) {
+      this.deferredAdd = null;
+      for (var adapter of this.adapters) {
+        if (adapter !== device.adapter) {
+          adapter.cancelPairing();
+        }
+      }
+      deferredAdd.resolve(device);
+    }
   }
 
-  removeDevice(device) {
+  /**
+   * @method handleDeviceRemoved
+   * Called when the indicated device has been removed an adapter.
+   */
+  handleDeviceRemoved(device) {
     delete this.devices[device.id];
 
     /**
@@ -73,71 +190,25 @@ class AdapterManager extends EventEmitter {
      * @type  {Device}
      */
     this.emit('device-removed', device);
-  }
 
-  /**
-   * @method discoverAdapters
-   * @returns A promise that resolves to an array of known adapters.
-   */
-  discoverAdapters() {
-    var adapterManager = this;
-    return new Promise(function(resolve, reject) {
-      resolve(adapterManager.adapters);
-    });
-  }
+    // If this device was removed in response to removeSomeDevice, then
+    // We need to cancel unpairing mode on all of the "other" adapters.
 
-  /**
-   * @method discoverDevices
-   * @returns A promise that resolves to dictionary of all known devices.
-   */
-  discoverDevices() {
-    var adapterManager = this;
-    return new Promise(function(resolve, reject) {
-      resolve(adapterManager.devices);
-    });
-  }
-
-  /**
-   * @method getAdapter
-   * @returns te adapter with the indicated 'id'.
-   */
-  getAdapter(id) {
-    for (var adapter of this.adapters) {
-      if (adapter.getId() == id) {
-        return adapter;
+    var deferredRemove = this.deferredRemove;
+    if (deferredRemove) {
+      this.deferredRemove = null;
+      for (var adapter of this.adapters) {
+        if (adapter !== device.adapter) {
+          adapter.cancelUnpairing();
+        }
       }
+      deferredRemove.resolve(device);
     }
-    return undefined;
   }
 
-  /**
-   * @method getAdapters
-   * @returns an array of known adapters.
-   */
-  getAdapters() {
-    return this.adapters;
-  }
-
-  /**
-   * @method getDevice
-   * @returns the device with the indicated 'id'.
-   */
-  getDevice(id) {
-    return this.devices[id];
-  }
-
-  /**
-   * @method getDevices
-   * @returns an array of known devices.
-   */
-  getDevices() {
-    return this.devices;
-  }
-
-  /**
+  /** 
+   * @method loadAdapters 
    * Loads all of the adapters from the adapters directory.
-   * @method loadAdapters
-   *
    */
   loadAdapters() {
     var adapterDir = './adapters';
@@ -161,8 +232,36 @@ class AdapterManager extends EventEmitter {
     });
   }
 
+  /**
+   * @method removeSomeDevice
+   * Initiates unpairing on all of the adapters that support it.
+   * The user then presses the "button" on the device to be removed.
+   * @returns A promise that resolves to the removed device.
+   */
+  removeSomeDevice() {
+    var deferredRemove = new Deferred();
+
+    if (this.deferredAdd) {
+      deferredRemove.reject('Add already in progress');
+    } else if (this.deferredRemove) {
+      deferredRemove.reject('Remove already in progress');
+    } else {
+      this.deferredRemove = deferredRemove;
+      for (var adapter of this.adapters) {
+        adapter.startUnpairing();
+      }
+    }
+
+    return deferredRemove.promise;
+  }
+
+  /**
+   * @method unloadAdapters 
+   * Unloads all of the loaded adapters. 
+   */
   unloadAdapters() {
-    for (var adapter of this.adapters) {
+    for (var adapterId in this.adapters) {
+      var adapter = this.adapters[adapterId];
       console.log('Unloading', adapter.name);
       adapter.unload();
     }

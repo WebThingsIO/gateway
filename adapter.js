@@ -43,6 +43,10 @@ class Adapter {
     return this.devices[id];
   }
 
+  getDevices() {
+    return this.devices;
+  }
+
   getName() {
     return this.name;
   }
@@ -59,37 +63,40 @@ class Adapter {
     }
   }
 
-  addDevice(device) {
+  /**
+   * @method deviceAdded
+   *
+   * Called to indicated that a device is now being managed by this adapter.
+   */
+  handleDeviceAdded(device) {
     this.devices[device.id] = device;
-    this.manager.addDevice(device);
+    this.manager.handleDeviceAdded(device);
   }
 
-  removeDevice(device) {
+  /**
+   * @method deviceRemoved
+   *
+   * Called to indicate that a device is no longer managed by this adapter.
+   */
+  handleDeviceRemoved(device) {
     delete this.devices[device.id];
-    this.manager.removeDevice(device);
+    this.manager.handleDeviceRemoved(device);
   }
 
-  discoverDevices() {
-    var adapter = this;
-    return new Promise(function(resolve, reject) {
-      resolve(adapter.devices);
-    });
-  }
-
-  pair() {
-    console.log('Adapter:', this.name, 'id', id, 'pairing started');
+  startPairing() {
+    console.log('Adapter:', this.name, 'id', this.id, 'pairing started');
   }
 
   cancelPairing() {
-    console.log('Adapter:', this.name, 'id', id, 'pairing cancelled');
+    console.log('Adapter:', this.name, 'id', this.id, 'pairing cancelled');
   }
 
-  unpair() {
-    console.log('Adapter:', this.name, 'id', id, 'unpairing started');
+  startUnpairing() {
+    console.log('Adapter:', this.name, 'id', this.id, 'unpairing started');
   }
 
   cancelUnpairing() {
-    console.log('Adapter:', this.name, 'id', id, 'unpairing cancelled');
+    console.log('Adapter:', this.name, 'id', this.id, 'unpairing cancelled');
   }
 
   unload() {

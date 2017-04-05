@@ -31,6 +31,11 @@ app.get(ROOT, function (req, res) {
   res.json(deviceIds);
 });
 
+app.put('/foobar', function (request, response) {
+  console.log('addSomeDevice');
+  res.send('/foobar put');
+});
+
 adapterManager.on('device-added', function deviceAdded(device) {
   var thing_uri = ROOT + '/' + device.getId();
   var attribute_names = device.getAttributeNames();
