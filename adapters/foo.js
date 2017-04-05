@@ -49,10 +49,10 @@ class FooDevice extends Device {
 class FooAdapter extends Adapter {
 
   constructor(adapterManager) {
-    super(adapterManager);
+    super(adapterManager, 'Foo1');
 
-    adapterManager.addDevice(this, new FooDevice(this, 'Foo1', 'device1'));
-    adapterManager.addDevice(this, new FooDevice(this, 'Foo2', 'device2'));
+    this.addDevice(new FooDevice(this, 'Foo1', 'device1'));
+    this.addDevice(new FooDevice(this, 'Foo2', 'device2'));
   }
 }
 

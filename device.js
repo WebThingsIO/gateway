@@ -20,6 +20,15 @@ class Device {
         this.attributes = attributes;
     }
 
+    asDict() {
+        return {
+            'id': this.id,
+            'name': this.name,
+            'type': this.type,
+            'attributes': this.attributes,
+        };
+    }
+
     getId() {
       return this.id;
     }
