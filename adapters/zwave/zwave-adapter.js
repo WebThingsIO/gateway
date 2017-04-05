@@ -33,6 +33,7 @@ class ZWaveAdapter extends Adapter {
     this.zwave.on('driver failed', this.driverFailed.bind(this));
     this.zwave.on('scan complete', this.scanComplete.bind(this));
     this.zwave.on('node added', this.nodeAdded.bind(this));
+    this.zwave.on('node removed', this.nodeRemoved.bind(this));
     this.zwave.on('node event', this.nodeEvent.bind(this));
     this.zwave.on('node ready', this.nodeReady.bind(this));
     this.zwave.on('notification', this.nodeNotification.bind(this));
@@ -41,6 +42,14 @@ class ZWaveAdapter extends Adapter {
     this.zwave.on('value removed', this.valueRemoved.bind(this));
 
     this.zwave.connect(port.comName);
+  }
+
+  asDict() {
+    var dict = super.asDict();
+    for (var attr of ['port', 'manufacturer', 'manufacturerId', 'product', 'productType', 'productId', 'location']) {
+      dict[attr] = this[attr];
+    }
+    return dict;
   }
 
   dump() {
@@ -60,6 +69,8 @@ class ZWaveAdapter extends Adapter {
   driverReady(homeId) {
     console.log('ZWave: Driver Ready: HomeId:', homeId.toString(16));
     this.id = 'zwave-' + homeId.toString(16);
+
+    this.manager.addAdapter(this);
   }
 
   driverFailed() {
@@ -84,7 +95,7 @@ class ZWaveAdapter extends Adapter {
     // Pass in the empty string as a name here. Once the node is initialized
     // (i.e. nodeReady) then if the user has assigned a name, we'll get
     // that name.
-    let deviceId = 'zwave-' + this.id.toString(16) + '-' + nodeId;
+    let deviceId = this.id.toString(16) + '-' + nodeId;
     let node = new ZWaveNode(this, deviceId, '');
     this.nodes[nodeId] = node;
 
@@ -93,12 +104,29 @@ class ZWaveAdapter extends Adapter {
     // So we defer telling the framework until nodeReady.
   }
 
+  nodeRemoved(nodeId) {
+    if (DEBUG) {
+      console.log('ZWave: node%d removed', nodeId);
+    }
+
+    var node = this.nodes[nodeId];
+    if (node) {
+      delete this.nodes[nodeId];
+      this.handleDeviceRemoved(node);
+    }
+  }
+
   nodeEvent(nodeId, data) {
     console.log('ZWave: node%d event: Basic set %d', nodeId, data);
   }
 
   nodeReady(nodeId, nodeInfo) {
-    var node = this.nodes[nodeId];
+    var node;
+    if (nodeId == 1) {
+      node = this;
+    } else {
+      node = this.nodes[nodeId];
+    }
     if (node) {
       node.manufacturer = nodeInfo.manufacturer;
       node.manufacturerId = nodeInfo.manufacturerid;
@@ -112,7 +140,7 @@ class ZWaveAdapter extends Adapter {
       } else if (node.defaultName) {
         // Otherwise use the constructed name
         node.name = node.defaultName;
-      } else {
+      } else if (nodeId > 1) {
         // We don't have anything else, use the id
         node.name = node.id;
       }
@@ -142,23 +170,8 @@ class ZWaveAdapter extends Adapter {
                         nodeId, values[idx]['label'], values[idx]['value']);
         }
       }
-
-      if (nodeId == 1) {
-        // Node 1 corresponds to the Controller. Add a device which allows
-        // for painr/unpairing commands.
-        node.attributes['pair'] = {
-          'name': 'pair',
-          'type': 'bool',
-          'value': false,
-        };
-        node.attributes['unpair'] = {
-          'name': 'unpair',
-          'type': 'bool',
-          'value': false,
-        };
-        this.addDevice(node);
-      } else {
-        this.addDevice(node);
+      if (nodeId > 1) {
+        this.handleDeviceAdded(node);
       }
     }
   }
@@ -244,6 +257,26 @@ class ZWaveAdapter extends Adapter {
     }
   }
 
+  startPairing() {
+    console.log('ZWave: Press the Inclusion button on the device to add');
+    this.zwave.addNode();
+  }
+
+  cancelPairing() {
+    console.log('ZWave: Cancelling pairing mode');
+    this.zwave.cancelControllerCommand();
+  }
+
+  startUnpairing() {
+    console.log('Press the Exclusion button on the device to remove');
+    this.zwave.removeNode();
+  }
+
+  cancelUnpairing() {
+    console.log('ZWave: Cancelling unpairing mode');
+    this.zwave.cancelControllerCommand();
+  }
+
   unload() {
     this.zwave.disconnect(this.port.comName);
     super.unload();
@@ -287,7 +320,9 @@ function loadZWaveAdapters(adapterManager) {
 
     console.log('Found ZWave port @', port.comName);
 
-    adapterManager.addAdapter(new ZWaveAdapter(adapterManager, port));
+    var zwaveAdapter = new ZWaveAdapter(adapterManager, port);
+
+    // The zwave adapter will be added when it's driverReady method is called.
   });
 }
 

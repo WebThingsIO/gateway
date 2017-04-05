@@ -10,59 +10,34 @@
 var express = require('express');
 var adapterManager = require('../adapter-manager');
 
-var AdaptersController = express.Router();
+var adaptersController = express.Router();
 
-AdaptersController.get('/', function (request, response) {
-  adapterManager.discoverAdapters().then(function(adapters) {
-    var adapterList = [];
-    for (var adapter of adapters) {
-      adapterList.push(adapter.asDict());
-    }
-    response.json(adapterList);
-  });
+/**
+ * Return a list of adapters
+ */
+adaptersController.get('/', (request, response) => {
+  adapters = adapterManager.getAdapters();
+  var adapterList = [];
+  for (var adapterId in adapters) {
+    var adapter = adapters[adapterId];
+    adapterList.push(adapter.asDict());
+  }
+  response.json(adapterList);
 });
 
-AdaptersController.get('/:adapterId/', function (request, response) {
+/**
+ * Get a particular adapter.
+ */
+adaptersController.get('/:adapterId/', (request, response) => {
   var adapterId = request.params['adapterId'];
   var adapter = adapterManager.getAdapter(adapterId);
   if (adapter) {
     response.json(adapter.asDict());
-    return;
+  } else {
+    response.status(404).send('Adapter "' + adapterId + '" not found.');
   }
-  response.status(404).send('Adapter "' + adapterId + '" not found.');
 });
 
-AdaptersController.get('/:adapterId/devices/', function (request, response) {
-  var adapterId = request.params['adapterId'];
-  var adapter = adapterManager.getAdapter(adapterId);
-  if (adapter) {
-    adapter.discoverDevices().then(function(devices) {
-      var deviceList = [];
-      for (var deviceId in adapter.devices) {
-        var device = adapter.devices[deviceId];
-        deviceList.push(device.asDict());
-      }
-      response.json(deviceList);
-    });
-    return;
-  }
-  response.status(404).send('Adapter "' + adapterId + '" not found.');
-});
 
-AdaptersController.get('/:adapterId/devices/:deviceId/', function (request, response) {
-  var adapterId = request.params['adapterId'];
-  var deviceId = request.params['deviceId'];
-  var adapter = adapterManager.getAdapter(adapterId);
-  if (adapter) {
-    var device = adapter.getDevice(deviceId);
-    if (device) {
-      response.json(device.asDict());
-      return;
-    }
-    response.status(404).send('Adapter "' + adapterId + '" device "' + deviceId + '" not found.');
-    return;
-  }
-  response.status(404).send('Adapter "' + adapterId + '" not found.');
-});
 
-module.exports = AdaptersController;
+module.exports = adaptersController;
