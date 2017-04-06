@@ -10,8 +10,15 @@
  'use strict';
 
 /* jshint unused:false */
+/* globals App */
 
 var AddThingScreen = {
+
+  /**
+   * URL of curent pair action request.
+   */
+  actionUrl: null,
+
   /**
    * Initialise Add Thing Screen.
    */
@@ -25,10 +32,66 @@ var AddThingScreen = {
   },
 
   /**
+   * Create a new "pair" action on the gateway.
+   */
+  requestPairing: function() {
+    var action = {
+      'name': 'pair'
+    };
+    fetch(App.DOMAIN + '/actions', {
+      method: 'POST',
+      body: JSON.stringify(action),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      AddThingScreen.actionUrl = json.href;
+      console.log('Pairing request created with URL ' + json.href);
+    })
+    .catch(function(error) {
+      console.error('Pairing request failed: ' + error);
+    });
+  },
+
+  /**
+   * Cancel a pairing request.
+   */
+  requestCancelPairing: function() {
+    var url = AddThingScreen.actionUrl;
+    if(!url) {
+      return;
+    }
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(function(response) {
+      if (response.ok) {
+        AddThingScreen.actionUrl = null;
+        console.log('Successfully cancelled pairing request.');
+      } else {
+        console.error('Error cancelling pairing request ' +
+          response.statusText);
+      }
+    })
+    .catch(function(error) {
+      console.error('Error cancelling pairing request ' + error);
+    });
+  },
+
+  /**
    * Show Add Thing Screen.
    */
   show: function() {
     this.element.classList.remove('hidden');
+    this.requestPairing();
   },
 
   /**
@@ -36,5 +99,6 @@ var AddThingScreen = {
    */
   hide: function() {
     this.element.classList.add('hidden');
+    this.requestCancelPairing();
   }
 };

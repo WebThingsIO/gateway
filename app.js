@@ -57,6 +57,10 @@ app.use('/things', thingsRouter);
 var adaptersRouter = require('./controllers/adapters_controller');
 app.use('/adapters', adaptersRouter);
 
+// Gateway actions router.
+var actionsRouter = require('./controllers/actions_controller');
+app.use('/actions', actionsRouter);
+
 if (opt.options.debug) {
   // Serve Debug stuff from /debug
   var debugRouter = require('./controllers/debug_controller');
