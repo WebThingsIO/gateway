@@ -65,7 +65,8 @@ class AdapterManager extends EventEmitter {
       deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing();
       }
@@ -83,7 +84,8 @@ class AdapterManager extends EventEmitter {
     var deferredAdd = this.deferredAdd;
 
     if (deferredAdd) {
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         adapter.cancelPairing();
       }
       this.deferredAdd = null;
@@ -99,7 +101,8 @@ class AdapterManager extends EventEmitter {
   cancelRemoveSomeDevice() {
     var deferredRemove = this.deferredRemove;
     if (deferredRemove) {
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         adapter.cancelUnpairing();
       }
       this.deferredAdd = null;
@@ -165,7 +168,8 @@ class AdapterManager extends EventEmitter {
     var deferredAdd = this.deferredAdd;
     if (deferredAdd) {
       this.deferredAdd = null;
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         if (adapter !== device.adapter) {
           adapter.cancelPairing();
         }
@@ -197,7 +201,8 @@ class AdapterManager extends EventEmitter {
     var deferredRemove = this.deferredRemove;
     if (deferredRemove) {
       this.deferredRemove = null;
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         if (adapter !== device.adapter) {
           adapter.cancelUnpairing();
         }
@@ -247,7 +252,8 @@ class AdapterManager extends EventEmitter {
       deferredRemove.reject('Remove already in progress');
     } else {
       this.deferredRemove = deferredRemove;
-      for (var adapter of this.adapters) {
+      for (var adapterId in this.adapters) {
+        var adapter = this.adapters[adapterId];
         adapter.startUnpairing();
       }
     }
