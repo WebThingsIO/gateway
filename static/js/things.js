@@ -1,5 +1,5 @@
 /**
- * Gateway Home Screen.
+ * Things Screen.
  *
  * UI for showing Things connected to the gateway.
  *
@@ -7,9 +7,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-var HomeScreen = {
+var ThingsScreen = {
   /**
-   * Initialise Home Screen.
+   * Initialise Things Screen.
    */
   init: function() {
     this.thingsElement = document.getElementById('things');

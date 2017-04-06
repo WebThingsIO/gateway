@@ -17,8 +17,26 @@ var App = {
    * Start MozIoT gateway app.
    */
   init: function() {
-    HomeScreen.init();
+    ThingsScreen.init();
     AddThingScreen.init();
+    this.views = [];
+    this.views['things'] = document.getElementById('things-view');
+    this.views['adapters'] = document.getElementById('adapters-view');
+    this.views['settings'] = document.getElementById('settings-view');
+    this.currentView = 'things';
+    Menu.init();
+    this.menuButton = document.getElementById('menu-button');
+    this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
+  },
+
+  selectView: function(view) {
+    if (!this.views[view]) {
+      console.error('Tried to select view that didnt exist');
+      return;
+    }
+    this.views[this.currentView].classList.remove('selected');
+    this.views[view].classList.add('selected');
+    this.currentView = view;
   }
 };
 
