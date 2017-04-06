@@ -24,7 +24,15 @@ class ZWaveNode extends Device {
     this.zwType = '';
     this.location = '';
     this.classes = {};
+    this.values = {};
     this.ready = false;
+  }
+
+  asDict() {
+    var dict = super.asDict();
+    dict.classes = this.classes;
+    dict.values = this.values;
+    return dict;
   }
 
   setAttributeValue(name, value) {

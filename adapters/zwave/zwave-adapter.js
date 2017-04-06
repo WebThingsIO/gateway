@@ -18,21 +18,26 @@ const DEBUG = false;
 
 class ZWaveAdapter extends Adapter {
   constructor(adapterManager, port) {
-    // We
+    // We don't know our id yet. So we set it to ??? and once we get the
+    // driverReady notification, which will then set the id based on the homeId.
     super(adapterManager, '???');
     this.ready = false;
+    this.named = false;
 
     this.port = port;
     this.nodes = {};
 
     this.zwave = new ZWaveModule({
-      ConsoleOutput: false
+      SaveConfiguration: true,
+      ConsoleOutput: false,
+      UserPath: '.',
     });
     this.zwave.on('controller command', this.controllerCommand.bind(this));
     this.zwave.on('driver ready', this.driverReady.bind(this));
     this.zwave.on('driver failed', this.driverFailed.bind(this));
     this.zwave.on('scan complete', this.scanComplete.bind(this));
     this.zwave.on('node added', this.nodeAdded.bind(this));
+    this.zwave.on('node naming', this.nodeNaming.bind(this));
     this.zwave.on('node removed', this.nodeRemoved.bind(this));
     this.zwave.on('node event', this.nodeEvent.bind(this));
     this.zwave.on('node ready', this.nodeReady.bind(this));
@@ -99,28 +104,12 @@ class ZWaveAdapter extends Adapter {
     let node = new ZWaveNode(this, deviceId, '');
     this.nodes[nodeId] = node;
 
-    // We can't tell the adapter manager about this node yet, since we don't
-    // know our attributes until we get the valueAdded calls.
-    // So we defer telling the framework until nodeReady.
-  }
-
-  nodeRemoved(nodeId) {
-    if (DEBUG) {
-      console.log('ZWave: node%d removed', nodeId);
-    }
-
-    var node = this.nodes[nodeId];
-    if (node) {
-      delete this.nodes[nodeId];
-      this.handleDeviceRemoved(node);
+    if (nodeId > 1) {
+      this.handleDeviceAdded(node);
     }
   }
 
-  nodeEvent(nodeId, data) {
-    console.log('ZWave: node%d event: Basic set %d', nodeId, data);
-  }
-
-  nodeReady(nodeId, nodeInfo) {
+  nodeNaming(nodeId, nodeInfo) {
     var node;
     if (nodeId == 1) {
       node = this;
@@ -144,16 +133,51 @@ class ZWaveAdapter extends Adapter {
         // We don't have anything else, use the id
         node.name = node.id;
       }
-
       node.location = nodeInfo.loc;
-      node.ready = true;
 
-      console.log('ZWave: node%d: Ready',
-                  nodeId,
-                  node.manufacturer ? node.manufacturer : 'id=' + node.manufacturerId,
-                  node.product ? node.product : 'product=' + node.productId + ', type=' + node.productType);
-      console.log('ZWave: node%d: name="%s", type="%s", location="%s"',
-                  nodeId, node.name, node.zwType, node.location);
+      if (DEBUG || !node.named) {
+        console.log('ZWave: node%d: Named',
+                    nodeId,
+                    node.manufacturer ? node.manufacturer : 'id=' + node.manufacturerId,
+                    node.product ? node.product : 'product=' + node.productId + ', type=' + node.productType);
+        console.log('ZWave: node%d: name="%s", type="%s", location="%s"',
+                    nodeId, node.name, node.zwType, node.location);
+      }
+      node.named = true;
+
+      if (DEBUG) {
+        for (var comClass in node.classes) {
+          var values = node.classes[comClass];
+          console.log('ZWave: node%d: class %d', nodeId, comClass);
+          for (var idx in values) {
+            console.log('ZWave: node%d:   %s=%s',
+                        nodeId, values[idx]['label'], values[idx]['value']);
+          }
+        }
+      }
+    }
+  }
+
+  nodeRemoved(nodeId) {
+    if (DEBUG) {
+      console.log('ZWave: node%d removed', nodeId);
+    }
+
+    var node = this.nodes[nodeId];
+    if (node) {
+      delete this.nodes[nodeId];
+      this.handleDeviceRemoved(node);
+    }
+  }
+
+  nodeEvent(nodeId, data) {
+    console.log('ZWave: node%d event: Basic set %d', nodeId, data);
+  }
+
+  nodeReady(nodeId, nodeInfo) {
+    var node = this.nodes[nodeId];
+    if (node) {
+      node.ready = true;
 
       for (var comClass in node.classes) {
         switch (comClass) {
@@ -162,16 +186,6 @@ class ZWaveAdapter extends Adapter {
             this.zwave.enablePoll(nodeId, comClass);
             break;
         }
-        if (DEBUG) {
-          var values = node.classes[comClass];
-          console.log('ZWave: node%d: class %d', nodeId, comClass);
-          for (var idx in values)
-            console.log('ZWave: node%d:   %s=%s',
-                        nodeId, values[idx]['label'], values[idx]['value']);
-        }
-      }
-      if (nodeId > 1) {
-        this.handleDeviceAdded(node);
       }
     }
   }
@@ -215,6 +229,7 @@ class ZWaveAdapter extends Adapter {
         node.classes[comClass] = {};
       }
       node.classes[comClass][value.index] = value;
+      node.values[value.value_id] = value;
 
       if (value.genre === 'user') {
         node.attributes[value.value_id] = {
@@ -253,6 +268,8 @@ class ZWaveAdapter extends Adapter {
       if (node.classes[comClass] && node.classes[comClass][value_index]) {
         let valueId = node.classes[comClass][value_index].value_id;
         delete node.classes[comClass][value_index];
+        delete node.values[value_id];
+        delete node.attributes[value_id];
       }
     }
   }
@@ -323,6 +340,7 @@ function loadZWaveAdapters(adapterManager) {
     var zwaveAdapter = new ZWaveAdapter(adapterManager, port);
 
     // The zwave adapter will be added when it's driverReady method is called.
+    // Prior to that we don't know what the homeID of the adapter is.
   });
 }
 
