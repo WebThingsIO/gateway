@@ -8,23 +8,53 @@
     <title>MozIoT Gateway</title>
     <link rel="manifest" href="app.webmanifest">
     <link rel="icon" href="images/icon.png" type="image/png" />
+    <!-- App -->
     <script type="text/javascript" src="js/app.js"></script>
     <link rel="stylesheet" type="text/css" href="css/app.css" />
-    <script type="text/javascript" src="js/home.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <!-- Things -->
+    <script type="text/javascript" src="js/things.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/things.css" />
+    <!-- Menu -->
+    <script type="text/javascript" src="js/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/menu.css" />
+    <!-- Add Thing -->
     <script type="text/javascript" src="js/add-thing.js"></script>
     <link rel="stylesheet" type="text/css" href="css/add-thing.css" />
+    <!-- Thing -->
     <script type="text/javascript" src="js/thing.js"></script>
     <link rel="stylesheet" type="text/css" href="css/thing.css" />
   </head>
   <body>
+    <img id="wordmark" src="images/moziot_wordmark.png" />
 
-    <!-- Home Screen -->
-    <div id="home-screen">
-      <img id="wordmark" src="images/moziot_wordmark.png" />
+    <!-- Things View -->
+    <section data-view="things" class="selected" id="things-view">
+
       <div id="things">No devices yet.</div>
       <button id="add-button" />
-    </div>
+    </section>
+
+    <!-- Adapters View -->
+    <section data-view="adapters" id="adapters-view" class="hidden">
+
+    </section>
+
+    <!-- Settings View -->
+    <section data-view="settings" id="settings-view" class="hidden">
+
+    </section>
+
+    <!-- Menu -->
+    <nav id="main-menu" class="hidden">
+      <ul>
+        <li><a id="things-menu-item" data-view="things" href="" class="selected">Things</a></li>
+        <li><a id="adapters-menu-item" data-view="adapters" href="">Adapters</a></li>
+        <li><a id="settings-menu-item" data-view="settings" href="">Settings</a></li>
+      </ul>
+    </nav>
+
+    <!-- Floating buttons -->
+    <button id="menu-button"></button>
 
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden">

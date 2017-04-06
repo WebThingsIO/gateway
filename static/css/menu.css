@@ -1,0 +1,54 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#main-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 32rem;
+  background-color: #5288af;
+  margin: 0;
+  transition: transform 0.5s ease;
+}
+
+#main-menu.hidden {
+  transform: translate(-32rem);
+}
+
+#main-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 9.6rem;
+}
+
+#main-menu a {
+  display: block;
+  padding: 2rem;
+  padding-left: 6.8rem;
+  font-size: 1.8rem;
+  color: #fff;
+  text-decoration: none;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  outline: 0;
+}
+
+#main-menu a:hover, #main-menu a.selected {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+#main-menu a[data-view='things'] {
+  background-image: url('../images/things-icon.png');
+}
+
+#main-menu a[data-view='adapters'] {
+  background-image: url('../images/adapters-icon.png');
+}
+
+#main-menu a[data-view='settings'] {
+  background-image: url('../images/settings-icon.png');
+}
