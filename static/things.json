@@ -1,9 +1,9 @@
 [
   {
-    "name": "Smart Switch (ZigBee)",
+    "name": "Smart Switch A",
     "description": "On/Off Switch",
     "type": "onOffSwitch",
-    "href": "/things/onOffSwitch1",
+    "href": "/things/onOffSwitchA",
     "properties":[
       {
         "name": "on",
@@ -19,10 +19,10 @@
     ]
   },
   {
-    "name": "Smart Switch (Z-Wave)",
+    "name": "Smart Switch B",
     "description": "On/Off Switch",
     "type": "onOffSwitch",
-    "href": "/things/onOffSwitch2",
+    "href": "/things/onOffSwitchB",
     "properties":[
       {
         "name": "on",

@@ -18,6 +18,7 @@ var App = {
    */
   init: function() {
     ThingsScreen.init();
+    AdaptersScreen.init();
     AddThingScreen.init();
     this.views = [];
     this.views['things'] = document.getElementById('things-view');
