@@ -7,6 +7,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+'use strict';
+
+/* jshint unused:false */
+/* globals App, Adapter */
+
 var AdaptersScreen = {
   /**
    * Initialise Adapters Screen.
@@ -26,11 +31,11 @@ var AdaptersScreen = {
     }).bind(this)).then((function(adapters) {
       if (adapters.length > 0) {
         this.adaptersElement.innerHTML = '';
-      };
+      }
       // Create a new Thing for each thing description
       adapters.forEach(function(metadata) {
         var newAdapter = new Adapter(metadata);
       });
     }).bind(this));
   },
-}
+};

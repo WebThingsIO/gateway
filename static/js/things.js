@@ -7,6 +7,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+'use strict';
+
+/* jshint unused:false */
+/* globals AddThingScreen, App, Thing */
+
 var ThingsScreen = {
   /**
    * Initialise Things Screen.
@@ -29,11 +35,11 @@ var ThingsScreen = {
     }).bind(this)).then((function(things) {
       if (things.length > 0) {
         this.thingsElement.innerHTML = '';
-      };
+      }
       // Create a new Thing for each thing description
       things.forEach(function(description) {
         var newThing = new Thing(description);
       });
     }).bind(this));
   },
-}
+};
