@@ -7,6 +7,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+'use strict';
+
+/* jshint unused:false */
+/* globals ThingsScreen, AdaptersScreen, AddThingScreen, Menu */
+
 var App = {
   /**
    * Domain name web app is hosted at.
@@ -21,9 +26,9 @@ var App = {
     AdaptersScreen.init();
     AddThingScreen.init();
     this.views = [];
-    this.views['things'] = document.getElementById('things-view');
-    this.views['adapters'] = document.getElementById('adapters-view');
-    this.views['settings'] = document.getElementById('settings-view');
+    this.views.things = document.getElementById('things-view');
+    this.views.adapters = document.getElementById('adapters-view');
+    this.views.settings = document.getElementById('settings-view');
     this.currentView = 'things';
     Menu.init();
     this.menuButton = document.getElementById('menu-button');
