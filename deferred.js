@@ -5,6 +5,8 @@
  * @module Deferred
  */
 
+'use strict';
+
 class Deferred {
   constructor() {
     this.promise = new Promise((resolve, reject) => {

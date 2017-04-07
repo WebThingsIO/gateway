@@ -41,7 +41,8 @@ if (opt.options.port) {
   port = parseInt(opt.options.port);
 }
 
-// We need to install a bodyParser in order to access the body in PUT & POST requests
+// We need to install a bodyParser in order to access the body in
+// PUT & POST requests
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

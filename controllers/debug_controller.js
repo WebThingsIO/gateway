@@ -7,6 +7,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+'use strict';
+
 var express = require('express');
 var adapterManager = require('../adapter-manager');
 
@@ -17,7 +20,8 @@ var debugController = express.Router();
  */
 debugController.get('/addNewDevice', (request, response) => {
   adapterManager.addNewDevice().then((device) => {
-    console.log('addSomeDevice added id', device.getId(), 'name', device.getName());
+    console.log('addSomeDevice added id', device.getId(),
+		'name', device.getName());
   }, (str) => {
     console.log('addSomeDevice cancelled');
   });
@@ -57,7 +61,7 @@ debugController.get('/devices', (request, response) => {
  * Get a particular device registered with the adapter manager.
  */
 debugController.get('/device/:deviceId', (request, response) => {
-  var deviceId = request.params['deviceId'];
+  var deviceId = request.params.deviceId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
     response.json(device.asDict());
@@ -70,14 +74,14 @@ debugController.get('/device/:deviceId', (request, response) => {
  * Gets an attribute from a device.
  */
 debugController.get('/device/:deviceId/:attributeId', (request, response) => {
-  var deviceId = request.params['deviceId'];
-  var attributeId = request.params['attributeId'];
+  var deviceId = request.params.deviceId;
+  var attributeId = request.params.attributeId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
     var attribute = device.getAttribute(attributeId);
     if (attribute) {
       console.log('attributeId =', attributeId);
-      valueDict = {};
+      var valueDict = {};
       valueDict[attributeId] = device.getAttributeValue(attributeId);
       response.json(valueDict);
       return;
@@ -94,8 +98,8 @@ debugController.get('/device/:deviceId/:attributeId', (request, response) => {
  * Sets an attribute associated with a device.
  */
 debugController.put('/device/:deviceId/:attributeId', (request, response) => {
-  var deviceId = request.params['deviceId'];
-  var attributeId = request.params['attributeId'];
+  var deviceId = request.params.deviceId;
+  var attributeId = request.params.attributeId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
     var attribute = device.getAttribute(attributeId);
@@ -124,7 +128,8 @@ debugController.put('/device/:deviceId/:attributeId', (request, response) => {
  */
 debugController.get('/removeSomeDevice', (request, response) => {
   adapterManager.removeSomeDevice().then((device) => {
-    console.log('removeSomeDevice removed id', device.getId(), 'name', device.getName());
+    console.log('removeSomeDevice removed id', device.getId(),
+		'name', device.getName());
   }, (str) => {
     console.log('removeSomeDevice cancelled');
   });

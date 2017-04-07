@@ -7,6 +7,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+'use strict';
+
 var sqlite3 = require('sqlite3').verbose();
 var fs = require('fs');
 
@@ -69,12 +72,13 @@ var Database = {
    */
   getAllThings: function() {
     return new Promise((function(resolve, reject) {
-      this.db.all('SELECT rowid AS id, description FROM things', (function(err, rows) {
+      this.db.all('SELECT rowid AS id, description FROM things',
+	(function(err, rows) {
         if (err) {
           reject(err);
         } else {
           var things = [];
-          for (row of rows) {
+          for (var row of rows) {
             things.push(JSON.parse(row.description));
           }
           resolve(things);
@@ -82,6 +86,6 @@ var Database = {
       }));
     }).bind(this));
   }
-}
+};
 
 module.exports = Database;

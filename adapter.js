@@ -60,7 +60,7 @@ class Adapter {
       'id': this.id,
       'name': this.name,
       'ready': this.ready,
-    }
+    };
   }
 
   /**
