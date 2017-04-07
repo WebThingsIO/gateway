@@ -7,6 +7,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+'use strict';
+
 var express = require('express');
 var adapterManager = require('../adapter-manager');
 
@@ -16,7 +19,7 @@ var adaptersController = express.Router();
  * Return a list of adapters
  */
 adaptersController.get('/', (request, response) => {
-  adapters = adapterManager.getAdapters();
+  var adapters = adapterManager.getAdapters();
   var adapterList = [];
   for (var adapterId in adapters) {
     var adapter = adapters[adapterId];
@@ -29,7 +32,7 @@ adaptersController.get('/', (request, response) => {
  * Get a particular adapter.
  */
 adaptersController.get('/:adapterId/', (request, response) => {
-  var adapterId = request.params['adapterId'];
+  var adapterId = request.params.adapterId;
   var adapter = adapterManager.getAdapter(adapterId);
   if (adapter) {
     response.json(adapter.asDict());

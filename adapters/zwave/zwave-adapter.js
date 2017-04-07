@@ -51,14 +51,15 @@ class ZWaveAdapter extends Adapter {
 
   asDict() {
     var dict = super.asDict();
-    for (var attr of ['port', 'manufacturer', 'manufacturerId', 'product', 'productType', 'productId', 'location']) {
+    for (var attr of ['port', 'manufacturer', 'manufacturerId', 'product',
+                      'productType', 'productId', 'location']) {
       dict[attr] = this[attr];
     }
     return dict;
   }
 
   dump() {
-    console.log('Dump of Nodes')
+    console.log('Dump of Nodes');
     for (var nodeId in this.nodes) {
       let node = this.nodes[nodeId];
       console.log('node%d', nodeId, 'name=', node.name);
@@ -67,8 +68,8 @@ class ZWaveAdapter extends Adapter {
   }
 
   controllerCommand(nodeId, retVal, state, msg) {
-    console.log('ZWave: Controller Command feedback: %s node%d retVal:%d state:%d',
-                msg, nodeId, retVal, state)
+    console.log('ZWave: Controller Command feedback: %s node%d retVal:%d ' +
+                'state:%d', msg, nodeId, retVal, state);
   }
 
   driverReady(homeId) {
@@ -80,7 +81,7 @@ class ZWaveAdapter extends Adapter {
 
   driverFailed() {
     console.log('ZWave: failed to start driver');
-    zwave.disconnect();
+    this.zwave.disconnect();
   }
 
   scanComplete() {
@@ -138,8 +139,11 @@ class ZWaveAdapter extends Adapter {
       if (DEBUG || !node.named) {
         console.log('ZWave: node%d: Named',
                     nodeId,
-                    node.manufacturer ? node.manufacturer : 'id=' + node.manufacturerId,
-                    node.product ? node.product : 'product=' + node.productId + ', type=' + node.productType);
+                    node.manufacturer ? node.manufacturer :
+                                        'id=' + node.manufacturerId,
+                    node.product ? node.product :
+                                   'product=' + node.productId +
+                                   ', type=' + node.productType);
         console.log('ZWave: node%d: name="%s", type="%s", location="%s"',
                     nodeId, node.name, node.zwType, node.location);
       }
@@ -151,7 +155,7 @@ class ZWaveAdapter extends Adapter {
           console.log('ZWave: node%d: class %d', nodeId, comClass);
           for (var idx in values) {
             console.log('ZWave: node%d:   %s=%s',
-                        nodeId, values[idx]['label'], values[idx]['value']);
+                        nodeId, values[idx].label, values[idx].value);
           }
         }
       }
@@ -221,7 +225,7 @@ class ZWaveAdapter extends Adapter {
   valueAdded(nodeId, comClass, value) {
     if (value.genre === 'user' || DEBUG) {
       console.log('ZWave: node%d valueAdded: %d:%s -> %s',
-                  nodeId, comClass, value['label'], value['value']);
+                  nodeId, comClass, value.label, value.value);
     }
     var node = this.nodes[nodeId];
     if (node) {
@@ -241,7 +245,8 @@ class ZWaveAdapter extends Adapter {
         // We use the label from the first 'user' value that we see to help
         // disambiguate different nodes.
         if (!node.defaultName) {
-          node.defaultName = this.id.toString(16) + '-' + nodeId + '-' + value.label;
+          node.defaultName = this.id.toString(16) +
+                             '-' + nodeId + '-' + value.label;
         }
       }
     }
@@ -251,7 +256,7 @@ class ZWaveAdapter extends Adapter {
     var node = this.nodes[nodeId];
     if (node && node.ready) {
       console.log('ZWave: node%d valueChanged: %d:%s -> %s',
-                  nodeId, comClass, value['label'], value['value']);
+                  nodeId, comClass, value.label, value.value);
       node.classes[comClass][value.index] = value;
       if (node.attributes[value.value_id]) {
         node.attributes[value.value_id].value = value.value;
@@ -268,8 +273,8 @@ class ZWaveAdapter extends Adapter {
       if (node.classes[comClass] && node.classes[comClass][value_index]) {
         let valueId = node.classes[comClass][value_index].value_id;
         delete node.classes[comClass][value_index];
-        delete node.values[value_id];
-        delete node.attributes[value_id];
+        delete node.values[valueId];
+        delete node.attributes[valueId];
       }
     }
   }
@@ -301,9 +306,12 @@ class ZWaveAdapter extends Adapter {
 }
 
 function isZWavePort(port) {
-  return ((port.vendorId == "0x0658" && port.productId == "0x0200") ||  // Aeotech Z-Stick Gen-5
-          (port.vendorId == "0x0658" && port.productId == "0x0280") ||  // UZB1
-          (port.vendorId == "0x10c4" && port.productId == "0xea60"));   // Aeotech Z-Stick S2
+  return ((port.vendorId == '0x0658' &&
+           port.productId == '0x0200') ||  // Aeotech Z-Stick Gen-5
+          (port.vendorId == '0x0658' &&
+           port.productId == '0x0280') ||  // UZB1
+          (port.vendorId == '0x10c4' &&
+           port.productId == '0xea60'));   // Aeotech Z-Stick S2
 }
 
 // Scan the serial ports looking for an OpenZWave adapter.
@@ -337,7 +345,8 @@ function loadZWaveAdapters(adapterManager) {
 
     console.log('Found ZWave port @', port.comName);
 
-    var zwaveAdapter = new ZWaveAdapter(adapterManager, port);
+    /* jshint -W031 */
+    new ZWaveAdapter(adapterManager, port);
 
     // The zwave adapter will be added when it's driverReady method is called.
     // Prior to that we don't know what the homeID of the adapter is.

@@ -37,7 +37,7 @@ class ZWaveNode extends Device {
 
   setAttributeValue(name, value) {
     console.log('ZWave: setAttributeValue name:', name, 'value:', value);
-    let zwValue = this.attributes[name]['zwValue'];
+    let zwValue = this.attributes[name].zwValue;
     this.adapter.zwave.setValue(zwValue.node_id, zwValue.class_id,
                                 zwValue.instance, zwValue.index, value);
 
