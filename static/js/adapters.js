@@ -26,7 +26,7 @@ var AdaptersScreen = {
    */
   showAdapters: function(things) {
     // Fetch a list of adapters from the server
-    fetch(App.DOMAIN + '/adapters').then((function(response) {
+    fetch('/adapters').then((function(response) {
       return response.json();
     }).bind(this)).then((function(adapters) {
       if (adapters.length > 0) {

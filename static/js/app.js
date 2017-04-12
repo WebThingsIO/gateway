@@ -14,9 +14,9 @@
 
 var App = {
   /**
-   * Domain name web app is hosted at.
+   * Current server host.
    */
-  DOMAIN: window.location.origin,
+  HOST: window.location.host,
 
   /**
    * Start MozIoT gateway app.

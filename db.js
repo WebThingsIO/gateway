@@ -52,14 +52,17 @@ var Database = {
     var things = require('./' + this.DATA_FILENAME);
     var db = this.db;
     var createTableSQL = 'CREATE TABLE IF NOT EXISTS things (' +
-      'id INTEGER PRIMARY KEY ASC,' +
+      'id TEXT PRIMARY KEY,' +
       'description TEXT' +
     ');';
     db.serialize(function() {
       db.run(createTableSQL);
-      var insertSQL = db.prepare('INSERT INTO things (description) VALUES (?)');
+      var insertSQL = db.prepare(
+        'INSERT INTO things (id, description) VALUES (?, ?)');
       for (var thing of things) {
-        insertSQL.run(JSON.stringify(thing));
+        var thingId = thing.id;
+        delete thing.id;
+        insertSQL.run(thingId, JSON.stringify(thing));
       }
       insertSQL.finalize();
     });
@@ -70,20 +73,42 @@ var Database = {
    *
    * @return Promise which resolves with a list of Thing objects.
    */
-  getAllThings: function() {
+  getThings: function() {
     return new Promise((function(resolve, reject) {
-      this.db.all('SELECT rowid AS id, description FROM things',
-	(function(err, rows) {
+      this.db.all('SELECT id, description FROM things',
+        (function(err, rows) {
         if (err) {
           reject(err);
         } else {
           var things = [];
           for (var row of rows) {
-            things.push(JSON.parse(row.description));
+            var thing = JSON.parse(row.description);
+            thing.id = row.id;
+            things.push(thing);
           }
           resolve(things);
         }
       }));
+    }).bind(this));
+  },
+
+  /**
+   * Add a new Thing to the Database.
+   *
+   * @param String id The ID to give the new Thing.
+   * @param String description A serialised Thing description.
+   */
+  createThing: function(id, description) {
+    return new Promise((function(resolve, reject) {
+      var db = this.db;
+      db.run('INSERT INTO things (id, description) VALUES (?, ?)',
+        [id, JSON.stringify(description)], function(error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        });
     }).bind(this));
   }
 };

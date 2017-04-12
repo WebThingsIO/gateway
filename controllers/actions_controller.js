@@ -29,8 +29,11 @@ ActionsController.post('/', function (request, response) {
     response.status(400).send('No action name provided');
     return;
   }
+  // TODO: Move this business logic to an Actions model
   var id = ActionsController.nextId;
   switch(request.body.name) {
+
+    // Handle pairing request
     case 'pair':
       var action = {
         'name': 'pair',
@@ -38,9 +41,16 @@ ActionsController.post('/', function (request, response) {
       };
       ActionsController.actions[id] = action;
       ActionsController.nextId++;
-      AdapterManager.addNewDevice();
+      AdapterManager.addNewDevice().then(function(device) {
+        // TODO: construct new Thing from Device
+        Things.handleNewDevice(device.asDict());
+      }).catch(function(error) {
+        console.error('Error trying to add new device ' + error);
+      });
       response.status(201).send(JSON.stringify(action));
       break;
+
+    // Respond with error if unknown action requested
     default:
       response.status(400).send('Invalid action name');
   }

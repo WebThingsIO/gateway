@@ -9,19 +9,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/* jshint unused:false */
+/* globals WebSocketServer */
+
 'use strict';
 
 var express = require('express');
-var db = require('./db');
-var app = express();
-var adapterManager = require('./adapter-manager');
 var bodyParser = require('body-parser');
+var GetOpt = require('node-getopt');
+var adapterManager = require('./adapter-manager');
+var db = require('./db');
 
+var app = express();
+var expressWs = require('express-ws')(app);
 var port = 8080;
 
-var GetOpt = require('node-getopt');
+// Command line arguments
 var getopt = new GetOpt([
-  ['d', 'debug',      'Enab;e debug features'],
+  ['d', 'debug',      'Enable debug features'],
   ['p', 'port=PORT',  'Specify the server port to use (default ' + port + ')'],
   ['h', 'help',       'Display help' ],
   ['v', 'verbose',    'Show verbose output' ],
@@ -52,6 +57,10 @@ db.open();
 // Serve Things from Things router
 var thingsRouter = require('./controllers/things_controller');
 app.use('/things', thingsRouter);
+
+// Serve New Things from New Things router
+var newThingsRouter = require('./controllers/new_things_controller');
+app.use('/new_things', newThingsRouter);
 
 // Serve Adapters from Adapters router.
 var adaptersRouter = require('./controllers/adapters_controller');
@@ -85,8 +94,7 @@ process.on('SIGINT', function() {
 });
 
 // Start HTTP server on port 8080
-app.listen(port, function () {
+app.listen(port, function() {
   console.log('Listening on port', port);
-
   adapterManager.loadAdapters();
 });

@@ -30,16 +30,15 @@ var ThingsScreen = {
    */
   showThings: function(things) {
     // Fetch a list of things from the server
-    fetch(App.DOMAIN + '/things').then((function(response) {
+    fetch('/things').then((function(response) {
       return response.json();
     }).bind(this)).then((function(things) {
       if (things.length > 0) {
         this.thingsElement.innerHTML = '';
       }
-      // Create a new Thing for each thing description
       things.forEach(function(description) {
         var newThing = new Thing(description);
       });
     }).bind(this));
-  },
+  }
 };

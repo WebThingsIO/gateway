@@ -16,4 +16,8 @@
 .thing-name {
   color: white;
   font-size: 1.3rem;
+  display: block;
+  width: 12.8rem;
+  height: 3.2rem;
+  overflow: hidden;
 }

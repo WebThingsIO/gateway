@@ -26,6 +26,8 @@
     <!-- Thing -->
     <script type="text/javascript" src="js/thing.js"></script>
     <link rel="stylesheet" type="text/css" href="css/thing.css" />
+    <!-- New Thing -->
+    <script type="text/javascript" src="js/new-thing.js"></script>
     <!-- Adapter -->
     <script type="text/javascript" src="js/adapter.js"></script>
     <link rel="stylesheet" type="text/css" href="css/adapter.css" />
@@ -65,9 +67,12 @@
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden">
       <button id="add-thing-back-button"></button>
-      <div id="add-thing-scanning">
-        <p>Scanning for new devices...</p>
-        <button id="add-thing-cancel-button">Cancel</button>
+      <div id="add-thing-content">
+        <p id="add-thing-status">
+          <img class="spinner" src="images/loading.gif" />Scanning for new devices...
+        </p>
+        <div id="new-things"></div>
+        <button id="add-thing-cancel-button">Done</button>
       </div>
     </div>
 

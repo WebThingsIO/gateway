@@ -10,7 +10,7 @@
  'use strict';
 
 /* jshint unused:false */
-/* globals App */
+/* globals App, NewThing, ThingsScreen */
 
 var AddThingScreen = {
 
@@ -26,6 +26,7 @@ var AddThingScreen = {
     this.element = document.getElementById('add-thing-screen');
     this.backButton = document.getElementById('add-thing-back-button');
     this.cancelButton = document.getElementById('add-thing-cancel-button');
+    this.newThingsElement = document.getElementById('new-things');
     // Add event listeners
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.cancelButton.addEventListener('click', this.hide.bind(this));
@@ -35,10 +36,16 @@ var AddThingScreen = {
    * Create a new "pair" action on the gateway.
    */
   requestPairing: function() {
+    // Create a websocket to start listening for new things
+    var socket = new WebSocket('ws://' + App.HOST + '/new_things');
+    socket.onmessage = (function(event) {
+      this.showNewThing(JSON.parse(event.data));
+    }).bind(this);
+
     var action = {
       'name': 'pair'
     };
-    fetch(App.DOMAIN + '/actions', {
+    fetch('/actions', {
       method: 'POST',
       body: JSON.stringify(action),
       headers: {
@@ -91,6 +98,7 @@ var AddThingScreen = {
    */
   show: function() {
     this.element.classList.remove('hidden');
+    this.newThingsElement.innerHTML = '';
     this.requestPairing();
   },
 
@@ -100,5 +108,11 @@ var AddThingScreen = {
   hide: function() {
     this.element.classList.add('hidden');
     this.requestCancelPairing();
+    ThingsScreen.showThings();
+  },
+
+  showNewThing: function(thing) {
+    var newThing = new NewThing(thing.id, thing);
   }
+
 };
