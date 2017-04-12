@@ -120,8 +120,8 @@ class AdapterManager extends EventEmitter {
 
   /**
    * @method getAdapters
-   * @returns Returns a dictionary of the loaded adapters. The dictionary 
-   *          key corresponds to the adapter id. 
+   * @returns Returns a dictionary of the loaded adapters. The dictionary
+   *          key corresponds to the adapter id.
    */
   getAdapters() {
     return this.adapters;
@@ -137,8 +137,8 @@ class AdapterManager extends EventEmitter {
 
   /**
    * @method getDevices
-   * @returns Returns an dictionary of all of the known devices. 
-   *          The dictionary key corresponds to the device id. 
+   * @returns Returns an dictionary of all of the known devices.
+   *          The dictionary key corresponds to the device id.
    */
   getDevices() {
     return this.devices;
@@ -211,8 +211,8 @@ class AdapterManager extends EventEmitter {
     }
   }
 
-  /** 
-   * @method loadAdapters 
+  /**
+   * @method loadAdapters
    * Loads all of the adapters from the adapters directory.
    */
   loadAdapters() {
@@ -262,8 +262,8 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method unloadAdapters 
-   * Unloads all of the loaded adapters. 
+   * @method unloadAdapters
+   * Unloads all of the loaded adapters.
    */
   unloadAdapters() {
     for (var adapterId in this.adapters) {

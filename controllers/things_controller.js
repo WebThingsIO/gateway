@@ -16,8 +16,28 @@ var Things = require('../models/things');
 var ThingsController = express.Router();
 
 ThingsController.get('/', function (request, response) {
-  Things.getAllThings().then(function(things) {
+  Things.getThings().then(function(things) {
     response.send(JSON.stringify(things));
+  });
+});
+
+/**
+ * Handle creating a new thing.
+ */
+ThingsController.post('/', function (request, response) {
+  if (!request.body || !request.body.id) {
+    response.status(400).send('No id in thing description');
+    return;
+  }
+  var description = request.body;
+  var id = description.id;
+  delete description.id;
+  Things.createThing(id, description).then(function(thing) {
+    console.log('Successfully created new thing ' + thing);
+    response.status(201).send(thing);
+  }).catch(function(error) {
+    console.error('Error saving new thing ' + error);
+    response.status(500).send(error);
   });
 });
 

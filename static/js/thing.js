@@ -16,8 +16,8 @@
  * @param Object description Thing description object.
  */
 var Thing = function(description) {
-  this.type = description.type;
   this.name = description.name;
+  this.type = description.type;
   this.container = document.getElementById('things');
   this.render();
 };

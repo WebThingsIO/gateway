@@ -20,7 +20,7 @@ var Menu = {
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.items = [];
     this.items.things = document.getElementById('things-menu-item');
-    this.items.things = document.getElementById('adapters-menu-item');
+    this.items.adapters = document.getElementById('adapters-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
     this.currentItem = 'things';
   },
@@ -74,7 +74,7 @@ var Menu = {
    */
   selectItem: function(item) {
     if (!this.items[item]) {
-      console.error('Tried to select a menu item that didnt exist');
+      console.error('Tried to select a menu item that didnt exist ' + item);
         return;
     }
     this.items[this.currentItem].classList.remove('selected');

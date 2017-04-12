@@ -1,5 +1,6 @@
 [
   {
+    "id": "thing1",
     "name": "Smart Switch A",
     "description": "On/Off Switch",
     "type": "onOffSwitch",
@@ -19,6 +20,7 @@
     ]
   },
   {
+    "id": "thing2",
     "name": "Smart Switch B",
     "description": "On/Off Switch",
     "type": "onOffSwitch",
