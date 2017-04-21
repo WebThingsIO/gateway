@@ -12,12 +12,12 @@
 
 class Device {
 
-    constructor(adapter, type, id, name, attributes) {
+    constructor(adapter, type, id, name, properties) {
         this.adapter = adapter;
         this.id = id;
         this.type = type;
         this.name = name;
-        this.attributes = attributes;
+        this.properties = properties;
     }
 
     asDict() {
@@ -25,7 +25,7 @@ class Device {
             'id': this.id,
             'name': this.name,
             'type': this.type,
-            'attributes': this.attributes,
+            'properties': this.properties,
         };
     }
 
@@ -41,23 +41,28 @@ class Device {
         return this.type;
     }
 
-    getAttributeNames() {
-        return Object.keys(this.attributes);
+    getPropertyIds() {
+        return Object.keys(this.properties);
     }
 
-    getAttribute(name) {
-        return this.attributes[name];
+    getProperty(id) {
+        return this.properties[id];
     }
 
-    getAttributeValue(name) {
-        return this.attributes[name].value;
+    getPropertyValue(id) {
+        return this.properties[id].value;
     }
 
-    setAttributeValue(name, value) {
-        this.attributes[name].value = value;
+    setName(name) {
+        this.name = name;
+        this.adapter.manager.emit('device-name-changed', this);
+    }
+
+    setPropertyValue(id, value) {
+        this.properties[id].value = value;
         this.adapter.manager.emit('value-changed', {
            'device': this,
-           'attribute': name,
+           'property': id,
            'value': value
         });
     }

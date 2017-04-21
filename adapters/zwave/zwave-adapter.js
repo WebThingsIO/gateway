@@ -236,7 +236,8 @@ class ZWaveAdapter extends Adapter {
       node.values[value.value_id] = value;
 
       if (value.genre === 'user') {
-        node.attributes[value.value_id] = {
+        node.properties[value.value_id] = {
+          'id': value.value_id,
           'name': value.label,
           'type': value.type,
           'value': value.value,
@@ -258,9 +259,9 @@ class ZWaveAdapter extends Adapter {
       console.log('ZWave: node%d valueChanged: %d:%s -> %s',
                   nodeId, comClass, value.label, value.value);
       node.classes[comClass][value.index] = value;
-      if (node.attributes[value.value_id]) {
-        node.attributes[value.value_id].value = value.value;
-        node.attributes[value.value_id].zwValue = value;
+      if (node.properties[value.value_id]) {
+        node.properties[value.value_id].value = value.value;
+        node.properties[value.value_id].zwValue = value;
       }
     }
   }
@@ -274,7 +275,7 @@ class ZWaveAdapter extends Adapter {
         let valueId = node.classes[comClass][value_index].value_id;
         delete node.classes[comClass][value_index];
         delete node.values[valueId];
-        delete node.attributes[valueId];
+        delete node.properties[valueId];
       }
     }
   }

@@ -71,23 +71,23 @@ debugController.get('/device/:deviceId', (request, response) => {
 });
 
 /**
- * Gets an attribute from a device.
+ * Gets an property from a device.
  */
-debugController.get('/device/:deviceId/:attributeId', (request, response) => {
+debugController.get('/device/:deviceId/:propertyId', (request, response) => {
   var deviceId = request.params.deviceId;
-  var attributeId = request.params.attributeId;
+  var propertyId = request.params.propertyId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var attribute = device.getAttribute(attributeId);
-    if (attribute) {
-      console.log('attributeId =', attributeId);
+    var property = device.getProperty(propertyId);
+    if (property) {
+      console.log('propertyId =', propertyId);
       var valueDict = {};
-      valueDict[attributeId] = device.getAttributeValue(attributeId);
+      valueDict[propertyId] = device.getpropertyValue(propertyId);
       response.json(valueDict);
       return;
     }
     response.status(404).send('Device "' + deviceId +
-                              '" attribute "' + attributeId +
+                              '" property "' + propertyId +
                               '" not found.');
     return;
   }
@@ -95,28 +95,28 @@ debugController.get('/device/:deviceId/:attributeId', (request, response) => {
 });
 
 /**
- * Sets an attribute associated with a device.
+ * Sets an property associated with a device.
  */
-debugController.put('/device/:deviceId/:attributeId', (request, response) => {
+debugController.put('/device/:deviceId/:propertyId', (request, response) => {
   var deviceId = request.params.deviceId;
-  var attributeId = request.params.attributeId;
+  var propertyId = request.params.propertyId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var attribute = device.getAttribute(attributeId);
-    if (attribute) {
-      var attributeValue = request.body[attributeId];
-      if (attributeValue !== undefined) {
-        device.setAttributeValue(attributeId, attributeValue);
+    var property = device.getProperty(propertyId);
+    if (property) {
+      var propertyValue = request.body[propertyId];
+      if (propertyValue !== undefined) {
+        device.setPropertyValue(propertyId, propertyValue);
         response.send();
         return;
       }
       response.status(404).send('Device "' + deviceId +
-                                '" attribute "' + attributeId +
+                                '" property "' + propertyId +
                                 '" not found in request.');
       return;
     }
     response.status(404).send('Device "' + deviceId +
-                              '" attribute "' + attributeId +
+                              '" property "' + propertyId +
                               '" not found.');
     return;
   }

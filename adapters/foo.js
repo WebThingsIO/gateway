@@ -17,7 +17,7 @@ var Adapter = require('../adapter.js').Adapter;
 
 class FooDevice extends Device {
   constructor(adapter, id, name) {
-    let attributes = {
+    let properties = {
       'temperature': {
         'type': 'integer',
         'unit': 'celsius',
@@ -35,14 +35,14 @@ class FooDevice extends Device {
         'value': false,
       },
     };
-    super(adapter, 'FooDevice', id, name, attributes);
+    super(adapter, 'FooDevice', id, name, properties);
   }
 
-  setAttributeValue(name, value) {
+  setPropertyValue(name, value) {
     // This function should propogate the value to the hardware
     // Calling super.setAttrbiuteValue will update the value cache
     // and send a 'value-changed' event to any listeners.
-    super.setAttributeValue(name, value);
+    super.setPropertyValue(name, value);
   }
 }
 

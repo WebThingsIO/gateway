@@ -35,15 +35,17 @@ class ZWaveNode extends Device {
     return dict;
   }
 
-  setAttributeValue(name, value) {
-    console.log('ZWave: setAttributeValue name:', name, 'value:', value);
-    let zwValue = this.attributes[name].zwValue;
+  setPropertyValue(id, value) {
+    console.log('ZWave: setPropertyValue id:', id,
+                'name:', this.properties[id].name,
+                'value:', value);
+    let zwValue = this.properties[id].zwValue;
     this.adapter.zwave.setValue(zwValue.node_id, zwValue.class_id,
                                 zwValue.instance, zwValue.index, value);
 
     // Calling super.setPropertyValue will update the value cache
     // and send a 'value-changed' event to any listeners.
-    super.setAttributeValue(name, value);
+    super.setPropertyValue(id, value);
   }
 }
 
