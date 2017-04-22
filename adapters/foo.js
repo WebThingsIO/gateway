@@ -17,32 +17,33 @@ var Adapter = require('../adapter.js').Adapter;
 
 class FooDevice extends Device {
   constructor(adapter, id, name) {
-    let properties = {
-      'temperature': {
-        'type': 'integer',
-        'unit': 'celsius',
-        'description': 'An ambient temperature sensor',
-        'value': 23,
-      },
-      'humidity': {
-        'type': 'integer',
-        'unit': 'percent',
-        'value': 35,
-      },
-      'led': {
-        'type': 'boolean',
-        'description': 'A red LED',
-        'value': false,
-      },
-    };
-    super(adapter, 'FooDevice', id, name, properties);
+    super(adapter, id);
+
+    this.name = name;
+    this.type = 'onOffSwitch';
+    this.description = this.name + ' description.';
+
+    this.properties = [{
+      'name': 'on',
+      'type': 'boolean',
+    }];
+    this.actions = [{
+      'name': 'toggle',
+      'description': 'Foo toggler',
+    }];
+    this.value = {'on': false};
+  }
+
+  getPropertyValue(name) {
+    if (name in this.value) {
+      return this.value[name];
+    }
   }
 
   setPropertyValue(name, value) {
-    // This function should propogate the value to the hardware
-    // Calling super.setAttrbiuteValue will update the value cache
-    // and send a 'value-changed' event to any listeners.
-    super.setPropertyValue(name, value);
+    this.value[name] = value;
+    console.log('Foo: device:', this.name, 'set property:', name, 'to:', value);
+    this.notifyValueChanged(name, value);
   }
 }
 

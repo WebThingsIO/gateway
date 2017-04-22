@@ -23,12 +23,21 @@ class Adapter {
     this.id = id;
     this.name = this.constructor.name;
     this.devices = {};
+    this.actions = {};
 
     // We assume that the adapter is ready right away. If, for some reason
     // a particular adapter (like ZWave) needs some time, then it should
     // set ready to false in its constructor.
     this.ready = true;
     console.log('Adapter:', this.name, 'id', id, 'created');
+  }
+
+  dump() {
+    console.log('Adapter:', this.name, '- dump() not implemented');
+  }
+
+  addAction(name, func) {
+
   }
 
   /**

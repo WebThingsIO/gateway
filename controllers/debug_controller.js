@@ -73,21 +73,20 @@ debugController.get('/device/:deviceId', (request, response) => {
 /**
  * Gets an property from a device.
  */
-debugController.get('/device/:deviceId/:propertyId', (request, response) => {
+debugController.get('/device/:deviceId/:propertyName', (request, response) => {
   var deviceId = request.params.deviceId;
-  var propertyId = request.params.propertyId;
+  var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getProperty(propertyId);
+    var property = device.getProperty(propertyName);
     if (property) {
-      console.log('propertyId =', propertyId);
       var valueDict = {};
-      valueDict[propertyId] = device.getpropertyValue(propertyId);
+      valueDict[propertyName] = device.getPropertyValue(propertyName);
       response.json(valueDict);
       return;
     }
     response.status(404).send('Device "' + deviceId +
-                              '" property "' + propertyId +
+                              '" property "' + propertyName +
                               '" not found.');
     return;
   }
@@ -97,26 +96,26 @@ debugController.get('/device/:deviceId/:propertyId', (request, response) => {
 /**
  * Sets an property associated with a device.
  */
-debugController.put('/device/:deviceId/:propertyId', (request, response) => {
+debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   var deviceId = request.params.deviceId;
-  var propertyId = request.params.propertyId;
+  var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getProperty(propertyId);
+    var property = device.getProperty(propertyName);
     if (property) {
-      var propertyValue = request.body[propertyId];
+      var propertyValue = request.body[propertyName];
       if (propertyValue !== undefined) {
-        device.setPropertyValue(propertyId, propertyValue);
+        device.setPropertyValue(propertyName, propertyValue);
         response.send();
         return;
       }
       response.status(404).send('Device "' + deviceId +
-                                '" property "' + propertyId +
+                                '" property "' + propertyName +
                                 '" not found in request.');
       return;
     }
     response.status(404).send('Device "' + deviceId +
-                              '" property "' + propertyId +
+                              '" property "' + propertyName +
                               '" not found.');
     return;
   }

@@ -10,62 +10,75 @@
 
 'use strict';
 
+var assert = require('assert');
+
 class Device {
 
-    constructor(adapter, type, id, name, properties) {
-        this.adapter = adapter;
-        this.id = id;
-        this.type = type;
-        this.name = name;
-        this.properties = properties;
-    }
+  constructor(adapter, id) {
+    this.adapter = adapter;
+    this.id = id;
+    this.type = 'thing';
+    this.name = 'unknown';
+    this.properties = [];
+    this.propertyMap = {};
+    this.actions = [];
+  }
 
-    asDict() {
-        return {
-            'id': this.id,
-            'name': this.name,
-            'type': this.type,
-            'properties': this.properties,
-        };
-    }
+  asDict() {
+    return {
+        'id': this.id,
+        'name': this.name,
+        'type': this.type,
+        'properties': this.properties,
+        'propertyMap': this.propertyMap,
+        'actions': this.actions,
+    };
+  }
 
-    getId() {
-      return this.id;
-    }
+  getId() {
+    return this.id;
+  }
 
-    getName() {
-        return this.name;
-    }
+  getName() {
+    return this.name;
+  }
 
-    getType() {
-        return this.type;
-    }
+  getType() {
+    return this.type;
+  }
 
-    getPropertyIds() {
-        return Object.keys(this.properties);
-    }
+  getProperties() {
+    return this.properties;
+  }
 
-    getProperty(id) {
-        return this.properties[id];
+  getProperty(name) {
+    for (var property of this.properties) {
+      if (property.name == name) {
+        return property;
+      }
     }
+  }
 
-    getPropertyValue(id) {
-        return this.properties[id].value;
-    }
+  getPropertyValue(name) {
+    assert(false, 'getPropertyValue must be implemented in derived class');
+  }
 
-    setName(name) {
-        this.name = name;
-        this.adapter.manager.emit('device-name-changed', this);
-    }
+  notifyValueChanged(name, value) {
+    this.adapter.manager.emit('value-changed', {
+      'device': this,
+      'property': name,
+      'value': value
+    });
+  }
 
-    setPropertyValue(id, value) {
-        this.properties[id].value = value;
-        this.adapter.manager.emit('value-changed', {
-           'device': this,
-           'property': id,
-           'value': value
-        });
-    }
+  setName(name) {
+    this.name = name;
+    this.adapter.manager.emit('device-name-changed', this);
+  }
+
+  setPropertyValue(name, value) {
+    assert(false, 'setPropertyValue must be implemented in derived class');
+  }
 }
 
 exports.Device = Device;
