@@ -54,23 +54,22 @@ var Things = {
        // Make sure the things map is up to date with database
        this.getThings().then((function() {
          // Get a map of things in the database
-         var knownThings = this.things;
-         // Get a list of devices the adapter manager knows about
-         var devices = adapterManager.getDevices();
+         var storedThings = this.things;
+         // Get a list of things connected to adapters
+         var connectedThings = adapterManager.getThings();
          var newThings = [];
-         for (var deviceId in devices) {
-           // If it's not yet in the database, add it to the list of new things
-           if (!knownThings[deviceId]) {
-             // For now, all Things are assumed to be on/off switches!
-             // TODO: Construct new Thing object from Thing description
-             var newThing = {
-               'id': deviceId,
-               'name': devices[deviceId].name,
-               'type': 'onOffSwitch'
-             };
-             newThings.push(newThing);
+         connectedThings.forEach(function(connectedThing) {
+           if(!storedThings[connectedThing.id]) {
+             connectedThing.href = '/things/' + connectedThing.id;
+             if (connectedThing.properties) {
+               connectedThing.properties.forEach(function(property) {
+                 property.href = '/things/' + connectedThing.id +
+                   '/properties/' + property.name;
+               });
+             }
+             newThings.push(connectedThing);
            }
-         }
+         });
          resolve(newThings);
        }).bind(this));
      }).bind(this));
@@ -93,9 +92,18 @@ var Things = {
     * @param Object New Thing description
     */
    handleNewThing: function(newThing) {
+     // Give the Thing a URL
+     newThing.href = '/things/' + newThing.id;
      // Temporary hack because name can currently be blank
      if (!newThing.name) {
        newThing.name = 'My On/Off Switch';
+     }
+     // Give the Thing's properties URLs
+     if (newThing.properties) {
+       newThing.properties.forEach(function(property) {
+         property.href = '/things/' + newThing.id +
+           '/properties/' + property.name;
+       });
      }
      // Notify each open websocket of the new Thing
      this.websockets.forEach(function(socket) {

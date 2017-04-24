@@ -34,8 +34,9 @@ var NewThing = function(id, description) {
 NewThing.prototype.view = function() {
   switch(this.description.type) {
     case 'onOffSwitch':
-      return '<div id="new-thing-' + this.id + '" class="new-thing">' +
-             '  <img class="new-thing-icon" src="/images/on_off_switch.png" />'+
+      return '<div id="new-thing-' + this.id + '"' +
+             '  class="new-thing on-off-switch">' +
+             '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
                   this.description.name + '"></input>' +

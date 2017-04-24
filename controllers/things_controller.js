@@ -12,9 +12,13 @@
 
 var express = require('express');
 var Things = require('../models/things');
+var AdapterManager = require('../adapter-manager');
 
 var ThingsController = express.Router();
 
+/**
+ * Get a list of Things.
+ */
 ThingsController.get('/', function (request, response) {
   Things.getThings().then(function(things) {
     response.send(JSON.stringify(things));
@@ -39,6 +43,43 @@ ThingsController.post('/', function (request, response) {
     console.error('Error saving new thing ' + error);
     response.status(500).send(error);
   });
+});
+
+/**
+ * Get a property of a Thing.
+ */
+ThingsController.get('/:thingId/properties/:propertyName',
+  function(request, response) {
+  var thingId = request.params.thingId;
+  var propertyName = request.params.propertyName;
+  var value = AdapterManager.getProperty(thingId, propertyName);
+  // TODO: Only respond once Promise resolves when bug #42 has landed.
+  var result = {};
+  if (value === undefined) {
+    result[propertyName] = null;
+  } else {
+    result[propertyName] = value;
+  }
+  response.status(200).send(JSON.stringify(result));
+});
+
+/**
+ * Set a property of a Thing.
+ */
+ThingsController.put('/:thingId/properties/:propertyName',
+  function(request, response) {
+  var thingId = request.params.thingId;
+  var propertyName = request.params.propertyName;
+  if(!request.body || request.body[propertyName] === undefined) {
+    response.status(400).send('Invalid property name');
+    return;
+  }
+  var value = request.body[propertyName];
+  AdapterManager.setProperty(thingId, propertyName, value);
+  // TODO: Only respond once Promise resolves when bug #42 has landed.
+  var result = {};
+  result[propertyName] = value;
+  response.status(200).send(JSON.stringify(result));
 });
 
 module.exports = ThingsController;
