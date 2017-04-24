@@ -19,6 +19,11 @@ var App = {
   HOST: window.location.host,
 
   /**
+   * Current server origin.
+   */
+  ORIGIN: window.location.origin,
+
+  /**
    * Start MozIoT gateway app.
    */
   init: function() {

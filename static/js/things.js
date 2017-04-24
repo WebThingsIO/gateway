@@ -11,7 +11,7 @@
 'use strict';
 
 /* jshint unused:false */
-/* globals AddThingScreen, App, Thing */
+/* globals AddThingScreen, App, Thing, OnOffSwitch */
 
 var ThingsScreen = {
   /**
@@ -37,7 +37,16 @@ var ThingsScreen = {
         this.thingsElement.innerHTML = '';
       }
       things.forEach(function(description) {
-        var newThing = new Thing(description);
+        switch(description.type) {
+          case 'onOffSwitch':
+            console.log('rendering new on/off switch');
+            var newOnOffSwitch = new OnOffSwitch(description);
+            break;
+          default:
+            console.log('rendering new thing');
+            var newThing = new Thing(description);
+            break;
+        }
       });
     }).bind(this));
   }

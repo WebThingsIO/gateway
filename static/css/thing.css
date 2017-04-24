@@ -11,6 +11,9 @@
 .thing-icon {
   width: 12.8rem;
   height: 12.8rem;
+  background-size: 12.8rem;
+  background-repeat: no-repeat;
+  background-image: url('../images/unknown-thing.png');
 }
 
 .thing-name {
@@ -20,4 +23,20 @@
   width: 12.8rem;
   height: 3.2rem;
   overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+
+/* On/Off Switch */
+
+.on-off-switch .thing-icon {
+  background-image: url('../images/on-off-switch.png');
+}
+
+.on-off-switch.on .thing-icon {
+  background-image: url('../images/on-off-switch-on.png');
+}
+
+.on-off-switch.off .thing-icon {
+  background-image: url('../images/on-off-switch-off.png');
 }

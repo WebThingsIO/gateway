@@ -9,7 +9,7 @@
       {
         "name": "on",
         "type": "boolean",
-        "href": "properties/on"
+        "href": "/things/onOffSwitchA/properties/on"
       }
     ],
     "actions": [
@@ -29,7 +29,7 @@
       {
         "name": "on",
         "type": "boolean",
-        "href": "properties/on"
+        "href": "/things/onOffSwitchB/properties/on"
       }
     ],
     "actions": [

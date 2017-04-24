@@ -98,6 +98,8 @@
 .new-thing-icon {
   width: 6.4rem;
   height: 6.4rem;
+  background-image: url('../images/unknown-thing.png');
+  background-size: 6.4rem;
 }
 
 .new-thing-metadata {
@@ -129,4 +131,8 @@
   color: #ccc;
   margin: 1rem 0;
   font-size: 1.5rem;
+}
+
+.new-thing.on-off-switch .new-thing-icon {
+  background-image: url('../images/on-off-switch.png');  
 }

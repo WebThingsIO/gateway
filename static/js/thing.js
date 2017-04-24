@@ -10,6 +10,8 @@
 
 'use strict';
 
+/* globals App */
+
 /**
  * Thing constructor.
  *
@@ -19,24 +21,37 @@ var Thing = function(description) {
   this.name = description.name;
   this.type = description.type;
   this.container = document.getElementById('things');
-  this.render();
+  this.element = this.render();
+  this.properties = {};
+  // Parse base URL of Thing
+  if (description.href) {
+    this.href = new URL(description.href, App.ORIGIN);
+    console.log('BTF Thing URL ' + this.href);
+  }
+  // Parse properties
+  if (description.properties) {
+    this.propertyDescriptions = {};
+    description.properties.forEach(function(property) {
+      this.propertyDescriptions[property.name] = property;
+    }, this);
+  }
+  return this;
 };
 
 /**
  * HTML view for Thing.
  */
 Thing.prototype.view = function() {
-  switch(this.type) {
-    case 'onOffSwitch':
-      return '<div class="thing"><img class="thing-icon" ' +
-        'src="/images/on_off_switch.png" /><span class="thing-name">' +
-        this.name + '</span></div>';
-  }
+  return '<div class="thing"><img class="thing-icon" ' +
+    'src="/images/unknown-thing.png" /><span class="thing-name">' +
+    this.name + '</span></div>';
 };
 
 /**
  * Render Thing view and add to DOM.
  */
 Thing.prototype.render = function() {
-  this.container.insertAdjacentHTML('beforeend', this.view());
+  var element = document.createElement('div');
+  element.innerHTML = this.view();
+  return this.container.appendChild(element.firstChild);
 };
