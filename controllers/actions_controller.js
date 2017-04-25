@@ -42,7 +42,7 @@ ActionsController.post('/', function (request, response) {
       ActionsController.actions[id] = action;
       ActionsController.nextId++;
       AdapterManager.addNewThing().then(function(thing) {
-        Things.handleNewDevice(thing);
+        Things.handleNewThing(thing);
       }).catch(function(error) {
         console.error('Error trying to add new thing ' + error);
       });

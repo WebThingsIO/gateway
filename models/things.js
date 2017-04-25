@@ -92,17 +92,11 @@ var Things = {
     *
     * @param Object New Thing description
     */
-   handleNewDevice: function(newDevice) {
+   handleNewThing: function(newThing) {
      // Temporary hack because name can currently be blank
-     if (!newDevice.name) {
-       newDevice.name = 'My On/Off Switch';
+     if (!newThing.name) {
+       newThing.name = 'My On/Off Switch';
      }
-     // TODO: Construct new Thing object from Thing description
-     var newThing = {
-       'id': newDevice.id,
-       'name': newDevice.name,
-       'type': 'onOffSwitch'
-     };
      // Notify each open websocket of the new Thing
      this.websockets.forEach(function(socket) {
        socket.send(JSON.stringify(newThing));
