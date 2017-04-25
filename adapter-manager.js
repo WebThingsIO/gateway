@@ -169,21 +169,33 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method getProperties
+   * @method getPropertyDescriptions
    * @returns Retrieves all of the properties associated with the thing
    *          identified by `thingId`.
    */
-  getProperties(thingId) {
+  getPropertyDescriptions(thingId) {
     var device = this.getDevice(thingId);
     if (device) {
-      return device.getProperties();
+      return device.getPropertyDescriptions();
+    }
+  }
+
+  /**
+   * @method getPropertyDescription
+   * @returns Retrieves the property named `propertyName` from the thing
+   *          identified by `thingId`.
+   */
+  getPropertyDescription(thingId, propertyName) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.getPropertyDescription(propertyName);
     }
   }
 
   /**
    * @method getProperty
-   * @returns Retrieves the property named `propertyName` from the thing
-   *          identified by `thingId`.
+   * @returns Retrieves the value of the property named `propertyName` from
+   *          the thing identified by `thingId`.
    */
   getProperty(thingId, propertyName) {
     var device = this.getDevice(thingId);
@@ -193,26 +205,14 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method getPropertyValue
-   * @returns Retrieves the value of the property named `propertyName` from
-   *          the thing identified by `thingId`.
-   */
-  getPropertyValue(thingId, propertyName) {
-    var device = this.getDevice(thingId);
-    if (device) {
-      return device.getPropertyValue(propertyName);
-    }
-  }
-
-  /**
-   * @method setPropertyValue
+   * @method setProperty
    * @returns Sets the value of the property named `propertyName` for
    *          the thing identified by `thingId`.
    */
-  setPropertyValue(thingId, propertyName, value) {
+  setProperty(thingId, propertyName, value) {
     var device = this.getDevice(thingId);
     if (device) {
-      device.setPropertyValue(propertyName, value);
+      device.setProperty(propertyName, value);
     }
   }
 

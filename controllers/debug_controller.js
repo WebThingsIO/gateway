@@ -77,10 +77,10 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getProperty(propertyName);
+    var property = device.getPropertyDescription(propertyName);
     if (property) {
       var valueDict = {};
-      valueDict[propertyName] = device.getPropertyValue(propertyName);
+      valueDict[propertyName] = device.getProperty(propertyName);
       response.json(valueDict);
       return;
     }
@@ -100,11 +100,11 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getProperty(propertyName);
+    var property = device.getPropertyDescription(propertyName);
     if (property) {
       var propertyValue = request.body[propertyName];
       if (propertyValue !== undefined) {
-        device.setPropertyValue(propertyName, propertyValue);
+        device.setProperty(propertyName, propertyValue);
         response.send();
         return;
       }
@@ -149,10 +149,10 @@ debugController.get('/thing/:thingId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var thing = adapterManager.getThing(thingId);
   if (thing) {
-    var property = adapterManager.getProperty(thing.id, propertyName);
+    var property = adapterManager.getPropertyDescription(thing.id, propertyName);
     if (property) {
       var valueDict = {};
-      valueDict[propertyName] = adapterManager.getPropertyValue(thing.id, propertyName);
+      valueDict[propertyName] = adapterManager.getProperty(thing.id, propertyName);
       response.json(valueDict);
       return;
     }
@@ -172,11 +172,11 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var thing = adapterManager.getThing(thingId);
   if (thing) {
-    var property = adapterManager.getProperty(thing.id, propertyName);
+    var property = adapterManager.getPropertyDescription(thing.id, propertyName);
     if (property) {
       var propertyValue = request.body[propertyName];
       if (propertyValue !== undefined) {
-        adapterManager.setPropertyValue(thing.id, propertyName, propertyValue);
+        adapterManager.setProperty(thing.id, propertyName, propertyValue);
         response.send();
         return;
       }
