@@ -15,8 +15,8 @@ class Deferred {
   constructor() {
     this.id = ++id;
     this.promise = new Promise((resolve, reject) => {
-      this.resolve_func = resolve;
-      this.reject_func = reject;
+      this.resolveFunc = resolve;
+      this.rejectFunc = reject;
     });
     if (DEBUG) {
       console.log('Deferred: Created deferred promise id:', this.id);
@@ -27,14 +27,14 @@ class Deferred {
     if (DEBUG) {
       console.log('Deferred: Resolving deferred promise id:', this.id, 'arg:', arg);
     }
-    this.resolve_func(arg);
+    this.resolveFunc(arg);
   }
 
   reject(arg) {
     if (DEBUG) {
       console.log('Deferred: Rejecting deferred promise id:', this.id, 'arg:', arg);
     }
-    this.reject_func(arg);
+    this.rejectFunc(arg);
   }
 }
 

@@ -43,15 +43,15 @@ class Thing {
         return Object.keys(this.properties);
     }
 
-    getProperty(name) {
+    getPropertyDescription(name) {
         return this.properties[name];
     }
 
-    getPropertyValue(name) {
+    getProperty(name) {
         return this.properties[name].value;
     }
 
-    setPropertyValue(name, value) {
+    setProperty(name, value) {
         this.properties[name].value = value;
         this.adapter.manager.emit('value-changed', {
            'thing': this,

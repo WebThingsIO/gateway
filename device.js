@@ -48,11 +48,11 @@ class Device {
     return this.type;
   }
 
-  getProperties() {
+  getPropertyDescriptions() {
     return this.properties;
   }
 
-  getProperty(propertyName) {
+  getPropertyDescription(propertyName) {
     for (var property of this.properties) {
       if (property.name == propertyName) {
         return property;
@@ -60,8 +60,8 @@ class Device {
     }
   }
 
-  getPropertyValue(propertyName) {
-    assert(false, 'getPropertyValue must be implemented in derived class');
+  getProperty(propertyName) {
+    assert(false, 'getProperty must be implemented in derived class');
   }
 
   getThing() {
@@ -69,7 +69,7 @@ class Device {
       id: this.id,
       name: this.name,
       type: this.type,
-      properties: this.getProperties(),
+      properties: this.getPropertyDescriptions(),
     };
     if (this.description.length > 0) {
       thing.description = this.description;
@@ -94,8 +94,8 @@ class Device {
     this.name = name;
   }
 
-  setPropertyValue(propertyName, value) {
-    assert(false, 'setPropertyValue must be implemented in derived class');
+  setProperty(propertyName, value) {
+    assert(false, 'setProperty must be implemented in derived class');
   }
 }
 

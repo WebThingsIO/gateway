@@ -34,13 +34,13 @@ class FooDevice extends Device {
     this.value = {'on': false};
   }
 
-  getPropertyValue(name) {
+  getProperty(name) {
     if (name in this.value) {
       return this.value[name];
     }
   }
 
-  setPropertyValue(name, value) {
+  setProperty(name, value) {
     this.value[name] = value;
     console.log('Foo: device:', this.name, 'set property:', name, 'to:', value);
     this.notifyValueChanged(name, value);

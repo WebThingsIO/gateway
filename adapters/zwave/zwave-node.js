@@ -61,7 +61,7 @@ class ZWaveNode extends Device {
     return dict;
   }
 
-  getPropertyValue(propertyName) {
+  getProperty(propertyName) {
     var valueId = this.propertyMap[propertyName];
     if (valueId) {
         return this.values[valueId].value;
@@ -104,9 +104,9 @@ class ZWaveNode extends Device {
            this.zwInfo.location;
   }
 
-  setPropertyValue(propertyName, value) {
+  setProperty(propertyName, value) {
     var valueId = this.propertyMap[propertyName];
-    console.log('ZWave: setPropertyValue propertyName:', propertyName,
+    console.log('ZWave: setProperty propertyName:', propertyName,
                 'valueId:', valueId,
                 'value:', value);
     if (valueId) {
