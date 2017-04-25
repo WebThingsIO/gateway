@@ -51,12 +51,12 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method addNewDevice
+   * @method addNewThing
    * Initiates pairing on all of the adapters that support it.
    * The user then presses the "button" on the device to be added.
    * @returns A promise that resolves to the newly added device.
    */
-  addNewDevice() {
+  addNewThing() {
     var deferredAdd = new Deferred();
 
     if (this.deferredAdd) {
@@ -76,11 +76,11 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method cancelAddNewDevice
+   * @method cancelAddNewThing
    *
-   * Cancels a previous addNewDevice request.
+   * Cancels a previous addNewThing request.
    */
-  cancelAddNewDevice() {
+  cancelAddNewThing() {
     var deferredAdd = this.deferredAdd;
 
     if (deferredAdd) {
@@ -89,24 +89,24 @@ class AdapterManager extends EventEmitter {
         adapter.cancelPairing();
       }
       this.deferredAdd = null;
-      deferredAdd.reject('addNewDevice cancelled');
+      deferredAdd.reject('addNewThing cancelled');
     }
   }
 
   /**
-   * @method cancelAddSomeDevice
+   * @method cancelAddSomeThing
    *
-   * Cancels a previous removeSomeDevice request.
+   * Cancels a previous removeSomeThing request.
    */
-  cancelRemoveSomeDevice() {
+  cancelRemoveSomeThing() {
     var deferredRemove = this.deferredRemove;
     if (deferredRemove) {
       for (var adapterId in this.adapters) {
         var adapter = this.adapters[adapterId];
         adapter.cancelUnpairing();
       }
-      this.deferredAdd = null;
-      deferredRemove.reject('removeSomeDevice cancelled');
+      this.deferredRemove = null;
+      deferredRemove.reject('removeSomeThing cancelled');
     }
   }
 
@@ -145,24 +145,97 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
+   * @method getThings
+   * @returns Returns an dictionary of all of the known things.
+   *          The dictionary key corresponds to the device id.
+   */
+  getThings() {
+    var things = [];
+    for (var thingId in this.devices) {
+      things.push(this.getThing(thingId));
+    }
+    return things;
+  }
+
+  /**
+   * @method getThing
+   * @returns Returns the thing with the indicated id.
+   */
+  getThing(thingId) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.getThing();
+    }
+  }
+
+  /**
+   * @method getProperties
+   * @returns Retrieves all of the properties associated with the thing
+   *          identified by `thingId`.
+   */
+  getProperties(thingId) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.getProperties();
+    }
+  }
+
+  /**
+   * @method getProperty
+   * @returns Retrieves the property named `propertyName` from the thing
+   *          identified by `thingId`.
+   */
+  getProperty(thingId, propertyName) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.getProperty(propertyName);
+    }
+  }
+
+  /**
+   * @method getPropertyValue
+   * @returns Retrieves the value of the property named `propertyName` from
+   *          the thing identified by `thingId`.
+   */
+  getPropertyValue(thingId, propertyName) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.getPropertyValue(propertyName);
+    }
+  }
+
+  /**
+   * @method setPropertyValue
+   * @returns Sets the value of the property named `propertyName` for
+   *          the thing identified by `thingId`.
+   */
+  setPropertyValue(thingId, propertyName, value) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      device.setPropertyValue(propertyName, value);
+    }
+  }
+
+  /**
    * @method handleDeviceAdded
    *
    * Called when the indicated device has been added to an adapter.
    */
   handleDeviceAdded(device) {
     this.devices[device.id] = device;
+    var thing = device.getThing();
 
     /**
-     * Device added event.
+     * Thing added event.
      *
-     * This event is emitted whenever a new device is added.
+     * This event is emitted whenever a new thing is added.
      *
-     * @event device-added
-     * @type  {Device}
+     * @event thing-added
+     * @type  {Thing}
      */
-    this.emit('device-added', device);
+    this.emit('thing-added', thing);
 
-    // If this device was added in response to addNewDevice, then
+    // If this device was added in response to addNewThing, then
     // We need to cancel pairing mode on all of the "other" adapters.
 
     var deferredAdd = this.deferredAdd;
@@ -174,7 +247,8 @@ class AdapterManager extends EventEmitter {
           adapter.cancelPairing();
         }
       }
-      deferredAdd.resolve(device);
+      console.log('AdapterManager: About to resolve deferredAdd');
+      deferredAdd.resolve(thing);
     }
   }
 
@@ -184,20 +258,22 @@ class AdapterManager extends EventEmitter {
    */
   handleDeviceRemoved(device) {
     delete this.devices[device.id];
+    var thing = device.getThing();
 
     /**
-     * Device removed event.
+     * Thing removed event.
      *
-     * This event is emitted whenever a new device is removed.
+     * This event is emitted whenever a new thing is removed.
      *
-     * @event device-added
-     * @type  {Device}
+     * @event thing-added
+     * @type  {Thing}
      */
-    this.emit('device-removed', device);
+    this.emit('thing-removed', thing);
 
-    // If this device was removed in response to removeSomeDevice, then
+    // If this device was removed in response to removeSomeThing, then
     // We need to cancel unpairing mode on all of the "other" adapters.
 
+    console.log('AdapterManager: handleDeviceRemoved');
     var deferredRemove = this.deferredRemove;
     if (deferredRemove) {
       this.deferredRemove = null;
@@ -207,7 +283,8 @@ class AdapterManager extends EventEmitter {
           adapter.cancelUnpairing();
         }
       }
-      deferredRemove.resolve(device);
+      console.log('AdapterManager: About to resolve deferredRemove');
+      deferredRemove.resolve(thing);
     }
   }
 
@@ -238,12 +315,12 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method removeSomeDevice
+   * @method removeSomeThing
    * Initiates unpairing on all of the adapters that support it.
    * The user then presses the "button" on the device to be removed.
    * @returns A promise that resolves to the removed device.
    */
-  removeSomeDevice() {
+  removeSomeThing() {
     var deferredRemove = new Deferred();
 
     if (this.deferredAdd) {
