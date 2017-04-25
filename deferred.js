@@ -7,12 +7,34 @@
 
 'use strict';
 
+const DEBUG = true;
+
+var id = 0;
+
 class Deferred {
   constructor() {
+    this.id = ++id;
     this.promise = new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
+      this.resolve_func = resolve;
+      this.reject_func = reject;
     });
+    if (DEBUG) {
+      console.log('Deferred: Created deferred promise id:', this.id);
+    }
+  }
+
+  resolve(arg) {
+    if (DEBUG) {
+      console.log('Deferred: Resolving deferred promise id:', this.id, 'arg:', arg);
+    }
+    this.resolve_func(arg);
+  }
+
+  reject(arg) {
+    if (DEBUG) {
+      console.log('Deferred: Rejecting deferred promise id:', this.id, 'arg:', arg);
+    }
+    this.reject_func(arg);
   }
 }
 

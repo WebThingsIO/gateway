@@ -41,11 +41,10 @@ ActionsController.post('/', function (request, response) {
       };
       ActionsController.actions[id] = action;
       ActionsController.nextId++;
-      AdapterManager.addNewDevice().then(function(device) {
-        // TODO: construct new Thing from Device
-        Things.handleNewDevice(device.asDict());
+      AdapterManager.addNewThing().then(function(thing) {
+        Things.handleNewDevice(thing);
       }).catch(function(error) {
-        console.error('Error trying to add new device ' + error);
+        console.error('Error trying to add new thing ' + error);
       });
       response.status(201).send(JSON.stringify(action));
       break;
@@ -74,7 +73,7 @@ ActionsController.delete('/:actionId', function(request, response) {
   }
   switch(ActionsController.actions[actionId].name) {
     case 'pair':
-      AdapterManager.cancelAddNewDevice();
+      AdapterManager.cancelAddNewThing();
       break;
   }
   delete ActionsController.actions[actionId];

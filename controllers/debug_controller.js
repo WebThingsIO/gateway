@@ -18,12 +18,11 @@ var debugController = express.Router();
 /**
  * Add a new device
  */
-debugController.get('/addNewDevice', (request, response) => {
-  adapterManager.addNewDevice().then((device) => {
-    console.log('addSomeDevice added id', device.getId(),
-		'name', device.getName());
+debugController.get('/addNewThing', (request, response) => {
+  adapterManager.addNewThing().then((thing) => {
+    console.log('debugController: addNewThing added thing', thing);
   }, (str) => {
-    console.log('addSomeDevice cancelled');
+    console.log('debugController: addNewThing cancelled');
   });
   response.status(204).send();
 });
@@ -31,16 +30,16 @@ debugController.get('/addNewDevice', (request, response) => {
 /**
  * Cancel adding a new device
  */
-debugController.get('/cancelAddNewDevice', (request, response) => {
-  adapterManager.cancelAddNewDevice();
+debugController.get('/cancelAddNewThing', (request, response) => {
+  adapterManager.cancelAddNewThing();
   response.status(204).send();
 });
 
 /**
  * Cancel removing a device;
  */
-debugController.get('/cancelRemoveSomeDevice', (request, response) => {
-  adapterManager.cancelRemoveSomeDevice();
+debugController.get('/cancelRemoveSomeThing', (request, response) => {
+  adapterManager.cancelRemoveSomeThing();
   response.status(204).send();
 });
 
@@ -123,14 +122,85 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
 });
 
 /**
+ * Get a list of the things registered with the adapter manager.
+ */
+debugController.get('/things', (request, response) => {
+  response.json(adapterManager.getThings());
+});
+
+/**
+ * Get a particular thing registered with the adapter manager.
+ */
+debugController.get('/thing/:thingId', (request, response) => {
+  var thingId = request.params.thingId;
+  var thing = adapterManager.getThing(thingId);
+  if (thing) {
+    response.json(thing);
+  } else {
+    response.status(404).send('Thing "' + thingId + '" not found.');
+  }
+});
+
+/**
+ * Gets an property from a thing.
+ */
+debugController.get('/thing/:thingId/:propertyName', (request, response) => {
+  var thingId = request.params.thingId;
+  var propertyName = request.params.propertyName;
+  var thing = adapterManager.getThing(thingId);
+  if (thing) {
+    var property = adapterManager.getProperty(thing.id, propertyName);
+    if (property) {
+      var valueDict = {};
+      valueDict[propertyName] = adapterManager.getPropertyValue(thing.id, propertyName);
+      response.json(valueDict);
+      return;
+    }
+    response.status(404).send('Thing "' + thingId +
+                              '" property "' + propertyName +
+                              '" not found.');
+    return;
+  }
+  response.status(404).send('Thing "' + thingId + '" not found.');
+});
+
+/**
+ * Sets an property associated with a thing.
+ */
+debugController.put('/thing/:thingId/:propertyName', (request, response) => {
+  var thingId = request.params.thingId;
+  var propertyName = request.params.propertyName;
+  var thing = adapterManager.getThing(thingId);
+  if (thing) {
+    var property = adapterManager.getProperty(thing.id, propertyName);
+    if (property) {
+      var propertyValue = request.body[propertyName];
+      if (propertyValue !== undefined) {
+        adapterManager.setPropertyValue(thing.id, propertyName, propertyValue);
+        response.send();
+        return;
+      }
+      response.status(404).send('Thing "' + thingId +
+                                '" property "' + propertyName +
+                                '" not found in request.');
+      return;
+    }
+    response.status(404).send('Thing "' + thingId +
+                              '" property "' + propertyName +
+                              '" not found.');
+    return;
+  }
+  response.status(404).send('Thing "' + thingId + '" not found.');
+});
+
+/**
  * Remove an existing device.
  */
-debugController.get('/removeSomeDevice', (request, response) => {
-  adapterManager.removeSomeDevice().then((device) => {
-    console.log('removeSomeDevice removed id', device.getId(),
-		'name', device.getName());
+debugController.get('/removeSomeThing', (request, response) => {
+  adapterManager.removeSomeThing().then((thing) => {
+    console.log('debugController: removeSomeThing removed', thing);
   }, (str) => {
-    console.log('removeSomeDevice cancelled');
+    console.log('debugController: removeSomeThing cancelled');
   });
   response.status(204).send();
 });

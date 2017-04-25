@@ -31,7 +31,7 @@ class ZWaveAdapter extends Adapter {
 
     this.zwave = new ZWaveModule({
       SaveConfiguration: true,
-      ConsoleOutput: true,
+      ConsoleOutput: false,
       UserPath: '.',
     });
     this.zwave.on('controller command', this.controllerCommand.bind(this));
@@ -61,14 +61,14 @@ class ZWaveAdapter extends Adapter {
   }
 
   dump() {
-    console.log(this.oneLineSummary());
-    console.log(ZWaveNode.oneLineHeader(0));
-    console.log(ZWaveNode.oneLineHeader(1));
+    console.log('ZWave:', this.oneLineSummary());
+    console.log('ZWave:', ZWaveNode.oneLineHeader(0));
+    console.log('ZWave:', ZWaveNode.oneLineHeader(1));
     for (var nodeId in this.nodes) {
       let node = this.nodes[nodeId];
-      console.log(node.oneLineSummary());
+      console.log('ZWave:', node.oneLineSummary());
     }
-    console.log('----');
+    console.log('ZWave:', '----');
   }
 
   controllerCommand(nodeId, retVal, state, msg) {
@@ -222,7 +222,6 @@ class ZWaveAdapter extends Adapter {
   }
 
   nodeNotification(nodeId, notif, help) {
-    console.log('nodeNotification: nodeId', nodeId, notif, help);
     var node = this.nodes[nodeId];
     var lastStatus;
     switch (notif) {
@@ -326,7 +325,9 @@ class ZWaveAdapter extends Adapter {
   }
 
   startPairing() {
+    console.log('ZWave: ===============================================')
     console.log('ZWave: Press the Inclusion button on the device to add');
+    console.log('ZWave: ===============================================')
     this.zwave.addNode();
   }
 
@@ -336,7 +337,9 @@ class ZWaveAdapter extends Adapter {
   }
 
   startUnpairing() {
-    console.log('Press the Exclusion button on the device to remove');
+    console.log('ZWave: ==================================================')
+    console.log('ZWave: Press the Exclusion button on the device to remove');
+    console.log('ZWave: ==================================================')
     this.zwave.removeNode();
   }
 

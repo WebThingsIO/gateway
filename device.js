@@ -19,6 +19,7 @@ class Device {
     this.id = id;
     this.type = 'thing';
     this.name = 'unknown';
+    this.description = '';
     this.properties = [];
     this.propertyMap = {};
     this.actions = [];
@@ -51,32 +52,49 @@ class Device {
     return this.properties;
   }
 
-  getProperty(name) {
+  getProperty(propertyName) {
     for (var property of this.properties) {
-      if (property.name == name) {
+      if (property.name == propertyName) {
         return property;
       }
     }
   }
 
-  getPropertyValue(name) {
+  getPropertyValue(propertyName) {
     assert(false, 'getPropertyValue must be implemented in derived class');
   }
 
-  notifyValueChanged(name, value) {
+  getThing() {
+    var thing = {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      properties: this.getProperties(),
+    };
+    if (this.description.length > 0) {
+      thing.description = this.description;
+    }
+
+    return thing;
+  }
+
+  notifyValueChanged(propertyName, value) {
     this.adapter.manager.emit('value-changed', {
       'device': this,
-      'property': name,
+      'property': propertyName,
       'value': value
     });
   }
 
-  setName(name) {
-    this.name = name;
-    this.adapter.manager.emit('device-name-changed', this);
+  setDescription(description) {
+    this.description = description;
   }
 
-  setPropertyValue(name, value) {
+  setName(name) {
+    this.name = name;
+  }
+
+  setPropertyValue(propertyName, value) {
     assert(false, 'setPropertyValue must be implemented in derived class');
   }
 }

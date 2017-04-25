@@ -61,8 +61,8 @@ class ZWaveNode extends Device {
     return dict;
   }
 
-  getPropertyValue(name) {
-    var valueId = this.propertyMap[name];
+  getPropertyValue(propertyName) {
+    var valueId = this.propertyMap[propertyName];
     if (valueId) {
         return this.values[valueId].value;
     }
@@ -104,16 +104,16 @@ class ZWaveNode extends Device {
            this.zwInfo.location;
   }
 
-  setPropertyValue(name, value) {
-    var valueId = this.propertyMap[name];
-    console.log('ZWave: setPropertyValue name:', name,
+  setPropertyValue(propertyName, value) {
+    var valueId = this.propertyMap[propertyName];
+    console.log('ZWave: setPropertyValue propertyName:', propertyName,
                 'valueId:', valueId,
                 'value:', value);
     if (valueId) {
       let zwValue = this.values[valueId];
       this.adapter.zwave.setValue(zwValue.node_id, zwValue.class_id,
                                   zwValue.instance, zwValue.index, value);
-      this.notifyValueChanged(name, value);
+      this.notifyValueChanged(propertyName, value);
     }
   }
 }
