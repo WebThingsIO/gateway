@@ -87,7 +87,7 @@ class ZWaveAdapter extends Adapter {
 
   driverFailed() {
     console.log('ZWave: failed to start driver');
-    this.zwave.disconnect();
+    this.zwave.disconnect(this.port.comName);
   }
 
   handleDeviceAdded(node) {
