@@ -42,6 +42,11 @@ v7.7.2
 Follow the directions from [NodeJS](https://nodejs.org) to install on your platform.
 This step is not required if you installed node via nvm in the previous step.
 
+### Build and install libusb and libudev (Linux only)
+```
+sudo apt-get install libusb-1.0-0-dev libudev-dev
+```
+
 ### Build and install openzwave
 
 ```
