@@ -18,9 +18,9 @@ utils.repeatChar = repeatChar;
 
 utils.padLeft = function(str, len) {
   return (repeatChar(' ', len) + str).slice(-len);
-}
+};
 
 utils.padRight = function(str, len) {
   return (str + repeatChar(' ', len)).slice(0, len);
-}
+};
 

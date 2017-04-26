@@ -25,14 +25,16 @@ class Deferred {
 
   resolve(arg) {
     if (DEBUG) {
-      console.log('Deferred: Resolving deferred promise id:', this.id, 'arg:', arg);
+      console.log('Deferred: Resolving deferred promise id:', this.id,
+                  'arg:', arg);
     }
     this.resolveFunc(arg);
   }
 
   reject(arg) {
     if (DEBUG) {
-      console.log('Deferred: Rejecting deferred promise id:', this.id, 'arg:', arg);
+      console.log('Deferred: Rejecting deferred promise id:', this.id,
+                  'arg:', arg);
     }
     this.rejectFunc(arg);
   }

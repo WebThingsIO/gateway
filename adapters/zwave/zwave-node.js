@@ -1,6 +1,6 @@
 /**
  *
- * ZWaveAdapter - Adapter which manages ZWave nodes
+ * ZWaveNode - represents a node on the ZWave network.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -48,6 +48,7 @@ class ZWaveNode extends Device {
     this.location = '';
     this.classes = {};
     this.values = {};
+    this.propertyMap = {};
     this.ready = false;
     this.lastStatus = 'constructed';
   }
@@ -58,6 +59,7 @@ class ZWaveNode extends Device {
     dict.status = this.status;
     dict.classes = this.classes;
     dict.values = this.values;
+    dict.propertyMap = this.propertyMap;
     return dict;
   }
 
@@ -119,4 +121,3 @@ class ZWaveNode extends Device {
 }
 
 module.exports = ZWaveNode;
-

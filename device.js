@@ -21,7 +21,6 @@ class Device {
     this.name = 'unknown';
     this.description = '';
     this.properties = [];
-    this.propertyMap = {};
     this.actions = [];
   }
 
@@ -31,7 +30,6 @@ class Device {
         'name': this.name,
         'type': this.type,
         'properties': this.properties,
-        'propertyMap': this.propertyMap,
         'actions': this.actions,
     };
   }
