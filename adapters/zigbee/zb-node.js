@@ -40,6 +40,11 @@ class ZigBeeNode extends Device {
     return dict;
   }
 
+  getProperty(propertyName) {
+    console.log('ZigBee: getProperty not implemented yet - returning false');
+    return false;
+  }
+
   setProperty(propertyName, value) {
     var clusterId = this.propertyMap[propertyName];
     console.log('ZigBee: setProperty propertyName:', propertyName,
