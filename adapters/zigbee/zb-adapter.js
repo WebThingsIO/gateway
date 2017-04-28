@@ -15,6 +15,7 @@ var ZigBeeNode = require('./zb-node');
 var SerialPort = require('serialport');
 var xbeeApi = require('xbee-api');
 var at = require('./zb-at');
+var utils = require('../../utils');
 var zdo = require('./zb-zdo');
 var zclId = require('zcl-id');
 var zigBeeClassifier = require('./zb-classifier');
@@ -86,11 +87,11 @@ class ZigBeeAdapter extends Adapter {
     this.running = false;
     this.waitFrame = null;
 
-    this.debugFrames = true;
-    this.debugFrameParsing = true;
-    this.debugFrameData = true;
-    this.debugFlow = true;
-    this.debugDumpFrameDetail = true;
+    this.debugFrames = false;
+    this.debugFrameParsing = false;
+    this.debugFrameData = false;
+    this.debugFlow = false;
+    this.debugDumpFrameDetail = false;
 
     this.serialNumber = '0000000000000000';
     this.nextStartIndex = -1;
@@ -271,8 +272,12 @@ class ZigBeeAdapter extends Adapter {
 
       case C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX:
         console.log(label, 'ZIGBEE_EXPLICIT_RX');
-        console.log(label, frame.remote64, frame.clusterId,
-                    this.zdo.getClusterIdDescription(frame.clusterId));
+        if (this.zdo.isZdoFrame(frame)) {
+          console.log(label, frame.remote64, frame.clusterId,
+                      this.zdo.getClusterIdDescription(frame.clusterId));
+        } else {
+          console.log(label, frame.remote64, frame.clusterId);
+        }
         if (this.debugDumpFrameDetail) {
           console.log(label, frame);
         }
@@ -342,7 +347,9 @@ class ZigBeeAdapter extends Adapter {
     console.log('ZigBee: ----- Nodes -----');
     for (var nodeId in this.nodes) {
       var node = this.nodes[nodeId];
+      var name = utils.padRight(node.name, 32);
       console.log('ZigBee: Node:', node.addr64, node.addr16,
+                  'Name:', name,
                   'endpoints:', Object.keys(node.activeEndpoints));
       for (var neighbor of node.neighbors) {
         console.log('ZigBee:   Neighbor: %s %s DT: %s R: %s PJ: %s D: %s ' +
@@ -781,6 +788,8 @@ class ZigBeeAdapter extends Adapter {
     var frame = {};
     frame.id = frameId;
     frame.type = C.FRAME_TYPE.EXPLICIT_ADDRESSING_ZIGBEE_COMMAND_FRAME;
+    frame.destination64 = node.addr64;
+    frame.destination16 = node.addr16;
     frame.sourceEndpoint = 0;
 
     //TODO: Need to determine this by querying the device
@@ -806,8 +815,12 @@ class ZigBeeAdapter extends Adapter {
     if (this.debugFlow) {
       console.log('ZigBeeAdapter: handleDeviceAdded: ', node.addr64);
     }
-    zigBeeClassifier.classify(node);
-    super.handleDeviceAdded(node);
+    if (node.isCoordinator) {
+      node.name = node.defaultName;
+    } else {
+      zigBeeClassifier.classify(node);
+      super.handleDeviceAdded(node);
+    }
   }
 
   handleFrame(frame) {
