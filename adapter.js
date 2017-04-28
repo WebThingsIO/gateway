@@ -29,7 +29,6 @@ class Adapter {
     // a particular adapter (like ZWave) needs some time, then it should
     // set ready to false in its constructor.
     this.ready = true;
-    console.log('Adapter:', this.name, 'id', id, 'created');
   }
 
   dump() {
