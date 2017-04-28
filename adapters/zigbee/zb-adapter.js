@@ -86,11 +86,11 @@ class ZigBeeAdapter extends Adapter {
     this.running = false;
     this.waitFrame = null;
 
-    this.debugFrames = false;
-    this.debugFrameParsing = false;
-    this.debugFrameData = false;
-    this.debugFlow = false;
-    this.debugDumpFrameDetail = false;
+    this.debugFrames = true;
+    this.debugFrameParsing = true;
+    this.debugFrameData = true;
+    this.debugFlow = true;
+    this.debugDumpFrameDetail = true;
 
     this.serialNumber = '0000000000000000';
     this.nextStartIndex = -1;
@@ -181,9 +181,9 @@ class ZigBeeAdapter extends Adapter {
     }
     var configCommands = [];
     if (this.configuredPanId64 === '0000000000000000') {
-      configCommands.push(
-        this.AT(AT_CMD.CONFIGURED_64_BIT_PAN_ID, this.operatingPanId64)
-      );
+      configCommands.push(this.AT(AT_CMD.CONFIGURED_64_BIT_PAN_ID,
+                                  {configuredPanId: this.operatingPanId64}));
+      configCommands.push(this.AT(AT_CMD.CONFIGURED_64_BIT_PAN_ID));
     }
     if (this.zigBeeStackProfile != 2) {
       configCommands.push(this.AT(AT_CMD.ZIGBEE_STACK_PROFILE,
