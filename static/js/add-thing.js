@@ -37,7 +37,7 @@ var AddThingScreen = {
    */
   requestPairing: function() {
     // Create a websocket to start listening for new things
-    var socket = new WebSocket('ws://' + App.HOST + '/new_things');
+    var socket = new WebSocket('wss://' + App.HOST + '/new_things');
     socket.onmessage = (function(event) {
       this.showNewThing(JSON.parse(event.data));
     }).bind(this);
