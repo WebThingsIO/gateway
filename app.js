@@ -10,19 +10,29 @@
  */
 
 /* jshint unused:false */
-/* globals WebSocketServer */
 
 'use strict';
 
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
 var express = require('express');
+var expressWs = require('express-ws');
 var bodyParser = require('body-parser');
 var GetOpt = require('node-getopt');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
 
-var app = express();
-var expressWs = require('express-ws')(app);
 var port = 8080;
+var https_port = 4443;
+var options = {
+  key: fs.readFileSync('privatekey.pem'),
+  cert: fs.readFileSync('certificate.pem')
+};
+
+var app = express();
+var server = https.createServer(options, app);
+var expressWs = expressWs(app, server);
 
 // Command line arguments
 var getopt = new GetOpt([
@@ -93,8 +103,7 @@ process.on('SIGINT', function() {
   process.exit(1);
 });
 
-// Start HTTP server on port 8080
-app.listen(port, function() {
-  console.log('Listening on port', port);
+server.listen(https_port, function() {
+  console.log('Listening on port', https_port);
   adapterManager.loadAdapters();
 });
