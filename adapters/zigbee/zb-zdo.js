@@ -136,7 +136,8 @@ class ZdoApi {
   }
 
   isZdoFrame(frame) {
-    return this.getClusterIdAsInt(frame.clusterId) in zdoParser;
+    return frame.profileId === '0000' &&
+           (this.getClusterIdAsInt(frame.clusterId) in zdoParser);
   }
 
   parseZdoFrame(frame) {

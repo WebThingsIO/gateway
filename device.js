@@ -18,7 +18,7 @@ class Device {
     this.adapter = adapter;
     this.id = id;
     this.type = 'thing';
-    this.name = 'unknown';
+    this.name = '';
     this.description = '';
     this.properties = [];
     this.actions = [];

@@ -27,6 +27,12 @@ class ZigBeeNode extends Device {
     this.propertyMap = {};
 
     this.isCoordinator = (id64 == adapter.serialNumber);
+
+    if (this.isCoordinator) {
+      this.defaultName = deviceId + '-Dongle';
+    } else {
+      this.defaultName = deviceId + '-Node';
+    }
   }
 
   asDict() {
@@ -47,7 +53,8 @@ class ZigBeeNode extends Device {
 
   setProperty(propertyName, value) {
     var clusterId = this.propertyMap[propertyName];
-    console.log('ZigBee: setProperty propertyName:', propertyName,
+    console.log('ZigBee: ', this.name,
+                'setProperty:', propertyName,
                 'clusterId:', clusterId,
                 'value:', value);
     if (clusterId !== undefined) {

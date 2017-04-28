@@ -26,9 +26,12 @@ class ZWaveClassifier {
         if (!node.isCoordinator) {
             this.initOnOffSwitch(node);
         }
+        if (!node.name) {
+            node.name = node.defaultName;
+        }
     }
 
-    initOnOffSwitch(node, valueId) {
+    initOnOffSwitch(node) {
         node.type = THING_TYPE_ON_OFF_SWITCH;
         node.properties = [{
             'name': 'on',
@@ -39,6 +42,8 @@ class ZWaveClassifier {
             'description': 'Toggles On/Off',
         }];
         node.propertyMap = {'on': zclId.cluster('genOnOff').value };
+
+        node.defaultName = node.id + '-' + node.type;
     }
 }
 
