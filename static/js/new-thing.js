@@ -44,6 +44,17 @@ NewThing.prototype.view = function() {
              '  </div>' +
              '  <button class="new-thing-save-button">Save</button>' +
              '</div>';
+    default:
+      return '<div id="new-thing-' + this.id + '"' +
+             '  class="new-thing">' +
+             '  <div class="new-thing-icon"></div>'+
+             '  <div class="new-thing-metadata">' +
+             '    <input type="text" class="new-thing-name" value="' +
+                  this.description.name + '"></input>' +
+             '    <span class="new-thing-type">Unknown device type</span>' +
+             '  </div>' +
+             '  <button class="new-thing-save-button">Save</button>' +
+             '</div>';
   }
 };
 
