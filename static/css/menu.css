@@ -10,7 +10,7 @@
   width: 32rem;
   background-color: #5288af;
   margin: 0;
-  transition: transform 0.5s ease;
+  transition: transform 0.25s ease;
 }
 
 #main-menu.hidden {
