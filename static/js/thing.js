@@ -26,7 +26,6 @@ var Thing = function(description) {
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
-    console.log('BTF Thing URL ' + this.href);
   }
   // Parse properties
   if (description.properties) {
