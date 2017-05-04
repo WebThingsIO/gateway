@@ -16,11 +16,18 @@ function repeatChar(char, len) {
 }
 utils.repeatChar = repeatChar;
 
-utils.padLeft = function(str, len) {
+function padLeft(str, len) {
   return (repeatChar(' ', len) + str).slice(-len);
-};
+}
+utils.padLeft = padLeft;
 
-utils.padRight = function(str, len) {
+function padRight(str, len) {
   return (str + repeatChar(' ', len)).slice(0, len);
-};
+}
+utils.padRight = padRight;
+
+function hexStr(num, len) {
+  return (repeatChar('0', len) + num.toString(16)).slice(-len);
+}
+utils.hexStr = hexStr;
 
