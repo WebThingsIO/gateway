@@ -16,11 +16,15 @@
 var assert = require('assert');
 var BufferBuilder = require('buffer-builder');
 var BufferReader = require('buffer-reader');
+var utils = require('../../utils');
 var xbeeApi = require('xbee-api');
 
 var C = xbeeApi.constants;
 
 exports = module.exports;
+
+const ZDO_PROFILE_ID = 0;
+const ZDO_PROFILE_ID_HEX = utils.hexStr(ZDO_PROFILE_ID, 4);
 
 var zci = exports.CLUSTER_ID = {};
 
@@ -51,6 +55,11 @@ zci[zci.MATCH_DESCRIPTOR_REQUEST] = 'Match Descriptor Req (0x0005)';
 zci.END_DEVICE_ANNOUNCEMENT = 0x0013;
 zci[zci.END_DEVICE_ANNOUNCEMENT] = 'End Device Announcement (0x0013)';
 
+zci.BIND_REQUEST = 0x0021;
+zci[zci.BIND_REQUEST] = 'Bind Req (0x0021)';
+zci.BIND_RESPONSE = 0x8021;
+zci[zci.BIND_RESPONSE] = 'Bind Resp (0x8021)';
+
 zci.MANAGEMENT_LQI_REQUEST = 0x0031;
 zci[zci.MANAGEMENT_LQI_REQUEST] = 'Mgmt LQI (Neighbor Table) Req (0x0031)';
 zci.MANAGEMENT_LQI_RESPONSE = 0x8031;
@@ -77,7 +86,7 @@ class ZdoApi {
 
   getClusterIdAsString(clusterId) {
     if (typeof(clusterId) === 'number') {
-      return clusterId.toString(16);
+      return utils.hexStr(clusterId, 4);
     }
     return '' + clusterId;
   }
@@ -136,8 +145,10 @@ class ZdoApi {
   }
 
   isZdoFrame(frame) {
-    return frame.profileId === '0000' &&
-           (this.getClusterIdAsInt(frame.clusterId) in zdoParser);
+    if (typeof(frame.profileId) === 'number') {
+      return frame.profileId === ZDO_PROFILE_ID;
+    }
+    return frame.profileId === ZDO_PROFILE_ID_HEX;
   }
 
   parseZdoFrame(frame) {
@@ -159,6 +170,31 @@ zdoBuilder[zci.ACTIVE_ENDPOINTS_REQUEST] = function(frame, builder) {
   builder.appendUInt16LE(parseInt(frame.destination16, 16));
 };
 
+zdoBuilder[zci.BIND_REQUEST] = function(frame, builder) {
+  builder.appendString(frame.bindSrcAddr64.swapHex(), 'hex');
+  builder.appendUInt8(frame.bindSrcEndpoint);
+  if (typeof(frame.bindClusterId) === 'number') {
+    builder.appendUInt16LE(frame.bindClusterId, 'hex');
+  } else {
+    builder.appendString(frame.bindClusterId.swapHex(), 'hex');
+  }
+  builder.appendUInt8(frame.bindDstAddrMode);
+  if (frame.bindDstAddrMode === 1) {
+    assert(frame.bindDstAddr16 !== undefined,
+           'Must provide bindDstAddr16 for bindDstAddrMode 1');
+    builder.appendString(frame.bindDstAddr16.swapHex(), 'hex');
+  } else if (frame.bindDstAddrMode === 3) {
+    assert(frame.bindDstAddr64 !== undefined,
+           'Must provide bindDstAddr16 for bindDstAddrMode 3');
+    assert(frame.bindDstEndpoint !== undefined,
+           'Must provide bindDstEndpoint for bindDstAddrMode 3');
+    builder.appendString(frame.bindDstAddr64.swapHex(), 'hex');
+    builder.appendUInt8(frame.bindDstEndpoint);
+  } else {
+    assert(false, 'Must provide frame.bindDstAddrMode');
+  }
+};
+
 zdoBuilder[zci.MANAGEMENT_LQI_REQUEST] = function(frame, builder) {
   builder.appendUInt8(frame.startIndex);
 };
@@ -169,11 +205,11 @@ zdoBuilder[zci.MANAGEMENT_RTG_REQUEST] = function(frame, builder) {
 
 zdoBuilder[zci.NODE_DESCRIPTOR_REQUEST] = function(frame, builder) {
   builder.appendUInt16LE(parseInt(frame.destination16, 16));
-  builder.appendUInt8(frame.endpoint);
 };
 
 zdoBuilder[zci.SIMPLE_DESCRIPTOR_REQUEST] = function(frame, builder) {
   builder.appendUInt16LE(parseInt(frame.destination16, 16));
+  builder.appendUInt8(frame.endpoint);
 };
 
 //---------------------------------------------------------------------------
@@ -192,6 +228,10 @@ zdoParser[zci.ACTIVE_ENDPOINTS_RESPONSE] = function(frame, reader) {
       frame.activeEndpoints[i] = reader.nextUInt8();
     }
   }
+};
+
+zdoParser[zci.BIND_RESPONSE] = function(frame, reader) {
+  frame.status = reader.nextUInt8();
 };
 
 zdoParser[zci.END_DEVICE_ANNOUNCEMENT] = function(frame, reader) {

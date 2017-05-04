@@ -22,6 +22,7 @@ class Device {
     this.description = '';
     this.properties = [];
     this.actions = [];
+    this.values = {};
   }
 
   asDict() {
