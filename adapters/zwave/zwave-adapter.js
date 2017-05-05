@@ -29,6 +29,10 @@ class ZWaveAdapter extends Adapter {
     this.nodes = {};
     this.nodesBeingAdded = {};
 
+    // Use debugFlow if you need to debug the flow of the program. This causes
+    // prints at the beginning of many functions to print some info.
+    this.debugFlow = false;
+
     this.zwave = new ZWaveModule({
       SaveConfiguration: true,
       ConsoleOutput: false,
@@ -47,6 +51,7 @@ class ZWaveAdapter extends Adapter {
     this.zwave.on('value added', this.valueAdded.bind(this));
     this.zwave.on('value changed', this.valueChanged.bind(this));
     this.zwave.on('value removed', this.valueRemoved.bind(this));
+    this.zwave.on('scene event', this.sceneEvent.bind(this));
 
     this.zwave.connect(port.comName);
   }
@@ -91,6 +96,9 @@ class ZWaveAdapter extends Adapter {
   }
 
   handleDeviceAdded(node) {
+    if (this.debugFlow) {
+      console.log('ZWave: handleDeviceAdded:', node.nodeId);
+    }
     delete this.nodesBeingAdded[node.zwInfo.nodeId];
 
     if (node.nodeId > 1) {
@@ -100,6 +108,9 @@ class ZWaveAdapter extends Adapter {
   }
 
   handleDeviceRemoved(node) {
+    if (this.debugFlow) {
+      console.log('ZWave: handleDeviceRemoved:', node.nodeId);
+    }
     delete this.nodes[node.zwInfo.nodeId];
     delete this.nodesBeingAdded[node.zwInfo.nodeId];
     super.handleDeviceRemoved(node);
@@ -173,12 +184,12 @@ class ZWaveAdapter extends Adapter {
       node.named = true;
 
       if (DEBUG) {
-        for (var comClass in node.classes) {
-          var values = node.classes[comClass];
+        for (var comClass in node.zwClasses) {
+          var zwClass = node.zwClasses[comClass];
           console.log('ZWave: node%d: class %d', nodeId, comClass);
-          for (var idx in values) {
+          for (var idx in zwClass) {
             console.log('ZWave: node%d:   %s=%s',
-                        nodeId, values[idx].label, values[idx].value);
+                        nodeId, zwClass[idx].label, zwClass[idx].value);
           }
         }
       }
@@ -207,7 +218,7 @@ class ZWaveAdapter extends Adapter {
       node.lastStatus = 'ready';
       node.ready = true;
 
-      for (var comClass in node.classes) {
+      for (var comClass in node.zwClasses) {
         switch (comClass) {
           case 0x25: // COMMAND_CLASS_SWITCH_BINARY
           case 0x26: // COMMAND_CLASS_SWITCH_MULTILEVEL
@@ -265,47 +276,65 @@ class ZWaveAdapter extends Adapter {
     return 'Controller: ' + this.id + ' Path: ' + this.port.comName;
   }
 
-  valueAdded(nodeId, comClass, value) {
-    if (value.genre === 'user' || DEBUG) {
-      console.log('ZWave: node%d valueAdded: %d:%s -> %s',
-                  nodeId, comClass, value.label, value.value);
+  sceneEvent(nodeId, sceneId) {
+    console.log('ZWave: scene event: nodeId:', nodeId, 'sceneId', sceneId);
+  }
+
+  findPropertyNameFromValueId(node, valueId) {
+    for (var propertyName in node.propertyMaps) {
+      if (node.propertyMaps[propertyName] == valueId) {
+        return propertyName;
+      }
     }
+  }
+
+  valueAdded(nodeId, comClass, value) {
     var node = this.nodes[nodeId];
     if (node) {
       node.lastStatus = 'added';
-      if (!node.classes[comClass]) {
-        node.classes[comClass] = {};
+      if (!node.zwClasses[comClass]) {
+        node.zwClasses[comClass] = {};
       }
-      node.classes[comClass][value.index] = value;
-      node.values[value.value_id] = value;
+      node.zwClasses[comClass][value.index] = value;
+      node.zwValues[value.value_id] = value;
 
-      if (value.genre === 'user') {
-        node.properties[value.value_id] = {
-          'id': value.value_id,
-          'name': value.label,
-          'type': value.type,
-          'value': value.value,
-          'zwValue': value,
-        };
+      var propertyName = this.findPropertyNameFromValueId(node, value.value_id);
+      if (value.genre === 'user' || DEBUG) {
+        if (propertyName) {
+          console.log('ZWave: node%d valueAdded: %d:%s -> %s property: %s',
+                      nodeId, comClass, value.label, value.value, propertyName);
+          node.values[propertyName] = value.value;
+        } else {
+          console.log('ZWave: node%d valueAdded: %d:%s -> %s',
+                      nodeId, comClass, value.label, value.value);
+        }
+      }
+      if (propertyName) {
+        node.values[propertyName] = value.value;
+      }
+      if (value.genre === 'user' && !node.defaultName)  {
         // We use the label from the first 'user' value that we see to help
         // disambiguate different nodes.
-        if (!node.defaultName) {
-          node.defaultName = this.id.toString(16) +
-                             '-' + nodeId + '-' + value.label;
-        }
+        node.defaultName = this.id.toString(16) +
+                           '-' + nodeId + '-' + value.label;
       }
     }
   }
 
   valueChanged(nodeId, comClass, value) {
     var node = this.nodes[nodeId];
-    if (node && node.ready) {
-      console.log('ZWave: node%d valueChanged: %d:%s -> %s',
-                  nodeId, comClass, value.label, value.value);
-      node.classes[comClass][value.index] = value;
-      if (node.properties[value.value_id]) {
-        node.properties[value.value_id].value = value.value;
-        node.properties[value.value_id].zwValue = value;
+    if (node) {
+      node.zwClasses[comClass][value.index] = value;
+      node.zwValues[value.value_id] = value;
+
+      var propertyName = this.findPropertyNameFromValueId(node, value.value_id);
+      if (propertyName) {
+        node.values[propertyName] = value.value;
+        console.log('ZWave: node%d valueChanged: %d:%s -> %s property: %s',
+                    nodeId, comClass, value.label, value.value, propertyName);
+      } else {
+        console.log('ZWave: node%d valueChanged: %d:%s -> %s',
+                    nodeId, comClass, value.label, value.value);
       }
     }
   }
@@ -315,19 +344,22 @@ class ZWaveAdapter extends Adapter {
                 nodeId, comClass);
     var node = this.nodes[nodeId];
     if (node) {
-      if (node.classes[comClass] && node.classes[comClass][value_index]) {
-        let valueId = node.classes[comClass][value_index].value_id;
-        delete node.classes[comClass][value_index];
-        delete node.values[valueId];
-        delete node.properties[valueId];
+      if (node.zwClasses[comClass] && node.zwClasses[comClass][value_index]) {
+        let valueId = node.zwClasses[comClass][value_index].value_id;
+        delete node.zwClasses[comClass][value_index];
+        delete node.zwValues[valueId];
+        var propertyName = this.findPropertyNameFromValueId(node, valueId);
+        if (propertyName) {
+          delete node.values[propertyName];
+        }
       }
     }
   }
 
   startPairing() {
-    console.log('ZWave: ===============================================')
+    console.log('ZWave: ===============================================');
     console.log('ZWave: Press the Inclusion button on the device to add');
-    console.log('ZWave: ===============================================')
+    console.log('ZWave: ===============================================');
     this.zwave.addNode();
   }
 
@@ -337,9 +369,9 @@ class ZWaveAdapter extends Adapter {
   }
 
   startUnpairing() {
-    console.log('ZWave: ==================================================')
+    console.log('ZWave: ==================================================');
     console.log('ZWave: Press the Exclusion button on the device to remove');
-    console.log('ZWave: ==================================================')
+    console.log('ZWave: ==================================================');
     this.zwave.removeNode();
   }
 

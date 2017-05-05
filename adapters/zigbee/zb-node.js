@@ -50,7 +50,7 @@ class ZigBeeNode extends Device {
     dict.addr16 = this.addr16;
     dict.neighbors = this.neighbors;
     dict.activeEndpoints = this.activeEndpoints;
-    dict.propertyMap = this.propertyMaps;
+    dict.propertyMaps = this.propertyMaps;
     dict.isCoordinator = this.isCoordinator;
     for (var endpointNum in dict.activeEndpoints) {
       var endpoint = dict.activeEndpoints[endpointNum];
@@ -106,10 +106,6 @@ class ZigBeeNode extends Device {
         }
       }
     }
-  }
-
-  getProperty(propertyName) {
-    return this.values[propertyName];
   }
 
   getValueFromAttrEntry(attrEntry) {
