@@ -32,6 +32,7 @@ class Device {
         'type': this.type,
         'properties': this.properties,
         'actions': this.actions,
+        'values': this.values,
     };
   }
 
@@ -60,7 +61,7 @@ class Device {
   }
 
   getProperty(propertyName) {
-    assert(false, 'getProperty must be implemented in derived class');
+    return this.values[propertyName];
   }
 
   getThing() {
@@ -78,6 +79,7 @@ class Device {
   }
 
   notifyValueChanged(propertyName, value) {
+    this.values[propertyName] = value;
     this.adapter.manager.emit('value-changed', {
       'device': this,
       'property': propertyName,
