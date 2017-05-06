@@ -21,6 +21,7 @@
     "express": "^4.15.2",
     "express-ws": "^3.0.0",
     "node-getopt": "^0.2.3",
+    "onoff": "^1.1.2",
     "openzwave-shared": "^1.3.2",
     "serialport": "^4.0.7",
     "sqlite3": "^3.1.8",
