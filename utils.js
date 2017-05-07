@@ -12,6 +12,9 @@
 var utils = module.exports = {};
 
 function repeatChar(char, len) {
+  if (len <= 0) {
+    return '';
+  }
   return new Array(len + 1).join(char);
 }
 utils.repeatChar = repeatChar;
@@ -31,3 +34,64 @@ function hexStr(num, len) {
 }
 utils.hexStr = hexStr;
 
+function alignCenter(str, len) {
+  if (str.length >= len) {
+    return str.slice(0, len);
+  }
+  var leftSpace = parseInt((len - str.length) / 2);
+  return padRight(padLeft(str, str.length + leftSpace), len);
+}
+
+/**
+ * Prints formatted columns of lines. Lines is an array of lines.
+ * Each line can be a single character, in which case a separator line
+ * using that character is printed. Otherwise a line is expected to be an
+ * array of fields.
+ * The alignment argument is expected to be a string, one character per
+ * column. '<' = left, '>' = right, '=' = center). If no alignment
+ * character is found, then left alignment is assumed.
+ */
+function printTable(alignment, lines) {
+  var width = [];
+
+  // Take a pass through the data and figure out the width for each column.
+  for (var line of lines) {
+    if (typeof(line) !== 'string') {
+      for (var idx in line) {
+        var colWidth = line[idx].length;
+        if (width[idx] === undefined || colWidth > width[idx]) {
+          width[idx] = colWidth;
+        }
+      }
+    }
+  }
+
+  // Now that we know how wide each column is, go and print them.
+  for (line of lines) {
+    var lineStr = '';
+    for (idx in width) {
+      if (idx > 0) {
+        lineStr += ' ';
+      }
+      colWidth = width[idx];
+      if (typeof(line) === 'string') {
+        lineStr += repeatChar(line[0], colWidth);
+      } else {
+        var align = alignment[idx];
+        var field = line[idx];
+        if (field === undefined) {
+          field = '';
+        }
+        if (align === '>') {
+          lineStr += padLeft(field, colWidth);
+        } else if (align === '=') {
+          lineStr += alignCenter(field, colWidth);
+        } else {
+          lineStr += padRight(field, colWidth);
+        }
+      }
+    }
+    console.log(lineStr);
+  }
+}
+utils.printTable = printTable;
