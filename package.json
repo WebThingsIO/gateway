@@ -29,5 +29,8 @@
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",
     "zcl-packet": "^0.2.2"
+  },
+  "devDependencies": {
+    "node-rest-client": "^3.1.0"
   }
 }
