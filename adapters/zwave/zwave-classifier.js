@@ -49,26 +49,6 @@ class ZWaveClassifier {
         }];
         node.propertyMaps = {'on': valueId };
         node.values.on = node.zwValues[valueId].value;
-
-        if (node.zwInfo.productId == 0x0060 &&
-            (node.zwInfo.productType & 0xff) == 0x03) {
-            // Aeotec Smart Switch 6
-
-            // Set Configuration index 80 to 2 so that it will report
-            // changes when the user presses the switch.
-
-            console.log('nodeId:', node.zwInfo.nodeId,
-                        'classId:', COMMAND_CLASS_CONFIGURATION,
-                        'instance:', 1,
-                        'index:', 80,
-                        'value', 'Basic');
-
-            node.adapter.zwave.setValue(node.zwInfo.nodeId,         // nodeId
-                                        COMMAND_CLASS_CONFIGURATION,// classId
-                                        1,                          // instance
-                                        80,                         // index
-                                        'Basic');                   // value
-        }
     }
 }
 
