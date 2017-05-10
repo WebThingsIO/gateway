@@ -11,15 +11,12 @@
 'use strict';
 
 /* jshint unused:false */
-/* globals AdapterManager */
 
 var express = require('express');
-var Things = require('../models/things');
-var AdapterManager = require('../adapter-manager');
+var Action = require('../models/action');
+var Actions = require('../models/actions');
 
 var ActionsController = express.Router();
-ActionsController.actions = {};
-ActionsController.nextId = 0;
 
 /**
  * Handle creating a new action.
@@ -29,37 +26,23 @@ ActionsController.post('/', function (request, response) {
     response.status(400).send('No action name provided');
     return;
   }
-  // TODO: Move this business logic to an Actions model
-  var id = ActionsController.nextId;
-  switch(request.body.name) {
 
-    // Handle pairing request
-    case 'pair':
-      var action = {
-        'name': 'pair',
-        'href': '/actions/' + id,
-      };
-      ActionsController.actions[id] = action;
-      ActionsController.nextId++;
-      AdapterManager.addNewThing().then(function(thing) {
-        Things.handleNewThing(thing);
-      }).catch(function(error) {
-        console.error('Error trying to add new thing ' + error);
-      });
-      response.status(201).json(action);
-      break;
+  var action = new Action(request.body.name);
 
-    // Respond with error if unknown action requested
-    default:
-      response.status(400).send('Invalid action name');
+  try {
+    Actions.add(action);
+  } catch(e) {
+    response.status(400).send('Invalid action name');
   }
+
+  response.status(201).json(action.getDescription());
 });
 
 /**
  * Handle getting a list of actions.
  */
 ActionsController.get('/', function(request, response) {
-  response.status(200).json(ActionsController.actions);
+  response.status(200).json(Actions.getAll());
 });
 
 /**
@@ -67,16 +50,12 @@ ActionsController.get('/', function(request, response) {
  */
 ActionsController.delete('/:actionId', function(request, response) {
   var actionId = request.params.actionId;
-  if(!ActionsController.actions[actionId]) {
+  try {
+    Actions.remove(actionId);
+  } catch(e) {
     response.status(404).send('Action ""' + actionId + '" not found.');
     return;
   }
-  switch(ActionsController.actions[actionId].name) {
-    case 'pair':
-      AdapterManager.cancelAddNewThing();
-      break;
-  }
-  delete ActionsController.actions[actionId];
   response.status(204).send();
 });
 

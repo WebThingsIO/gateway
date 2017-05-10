@@ -22,6 +22,7 @@ var bodyParser = require('body-parser');
 var GetOpt = require('node-getopt');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
+var config = require('./config');
 
 var port = 8080;
 var https_port = 4443;
@@ -64,30 +65,20 @@ app.use(bodyParser.json());
 // Open the thing database.
 db.open();
 
-// Serve Things from Things router
-var thingsRouter = require('./controllers/things_controller');
-app.use('/things', thingsRouter);
-
-// Serve New Things from New Things router
-var newThingsRouter = require('./controllers/new_things_controller');
-app.use('/new_things', newThingsRouter);
-
-// Serve Adapters from Adapters router.
-var adaptersRouter = require('./controllers/adapters_controller');
-app.use('/adapters', adaptersRouter);
-
-// Gateway actions router.
-var actionsRouter = require('./controllers/actions_controller');
-app.use('/actions', actionsRouter);
-
+// Things router
+app.use(config.THINGS_PATH, require('./controllers/things_controller'));
+// New Things router
+app.use(config.NEW_THINGS_PATH, require('./controllers/new_things_controller'));
+// Adapters router
+app.use(config.ADAPTERS_PATH, require('./controllers/adapters_controller'));
+// Actions router
+app.use(config.ACTIONS_PATH, require('./controllers/actions_controller'));
+// Debug router
 if (opt.options.debug) {
-  // Serve Debug stuff from /debug
-  var debugRouter = require('./controllers/debug_controller');
-  app.use('/debug', debugRouter);
+  app.use(config.DEBUG_PATH, require('./controllers/debug_controller'));
 }
-
-// Serve static files from static/ directory
-app.use(express.static('static'));
+// Static router
+app.use(express.static(config.STATIC_PATH));
 
 // Get some decent error messages for unhandled rejections. This is
 // often just errors in the code.
