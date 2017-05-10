@@ -21,7 +21,7 @@ var ThingsController = express.Router();
  */
 ThingsController.get('/', function (request, response) {
   Things.getThings().then(function(things) {
-    response.send(JSON.stringify(things));
+    response.status(200).json(things);
   });
 });
 
@@ -60,7 +60,7 @@ ThingsController.get('/:thingId/properties/:propertyName',
   } else {
     result[propertyName] = value;
   }
-  response.status(200).send(JSON.stringify(result));
+  response.status(200).json(result);
 });
 
 /**
@@ -79,7 +79,7 @@ ThingsController.put('/:thingId/properties/:propertyName',
   // TODO: Only respond once Promise resolves when bug #42 has landed.
   var result = {};
   result[propertyName] = value;
-  response.status(200).send(JSON.stringify(result));
+  response.status(200).json(result);
 });
 
 module.exports = ThingsController;

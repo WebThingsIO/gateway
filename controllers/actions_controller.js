@@ -46,7 +46,7 @@ ActionsController.post('/', function (request, response) {
       }).catch(function(error) {
         console.error('Error trying to add new thing ' + error);
       });
-      response.status(201).send(JSON.stringify(action));
+      response.status(201).json(action);
       break;
 
     // Respond with error if unknown action requested
@@ -59,7 +59,7 @@ ActionsController.post('/', function (request, response) {
  * Handle getting a list of actions.
  */
 ActionsController.get('/', function(request, response) {
-  response.status(200).send(JSON.stringify(ActionsController.actions));
+  response.status(200).json(ActionsController.actions);
 });
 
 /**
