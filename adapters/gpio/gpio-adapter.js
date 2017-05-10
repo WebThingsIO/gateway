@@ -87,6 +87,7 @@ class GpioAdapter extends Adapter {
       /* jshint -W031 */
       new GpioDevice(this, pin, gpioConfigs[pin]);
     }
+    adapterManager.addAdapter(this);
   }
 }
 
