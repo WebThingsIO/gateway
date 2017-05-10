@@ -11,6 +11,7 @@
 var fs = require('fs');
 
 exports.THINGS_PATH = '/things';
+exports.PROPERTIES_PATH = '/properties';
 exports.NEW_THINGS_PATH = '/new_things';
 exports.ADAPTERS_PATH = '/adapters';
 exports.ACTIONS_PATH = '/actions';

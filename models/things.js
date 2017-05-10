@@ -10,15 +10,17 @@
 
 'use strict';
 
+var Thing = require('./thing.js');
 var Database = require('../db.js');
-var adapterManager = require('../adapter-manager');
+var AdapterManager = require('../adapter-manager');
+var Config = require('../config');
 
 var Things = {
 
   /**
    * A Map of Things in the Things database.
    */
-  things: {},
+  things: new Map(),
 
    /**
     * A collection of open websockets listening for new things.
@@ -28,18 +30,35 @@ var Things = {
    /**
     * Get all Things stored in the database.
     *
-    * @return Promise which resolves with a list of Thing objects.
+    * @return {Promise} which resolves with a Map of Thing objects.
     */
    getThings: function() {
      return new Promise((function(resolve, reject) {
        Database.getThings().then((function(things) {
          // Update the map of Things
-         this.things = {};
+         this.things = new Map();
          things.forEach(function(thing) {
-           this.things[thing.id] = thing;
+           this.things.set(thing.id, new Thing(thing.id, thing));
          }, this);
-         resolve(things);
+         resolve(this.things);
        }).bind(this));
+     }).bind(this));
+   },
+
+   /**
+    * Get Thing Descriptions for all Things stored in the database.
+    *
+    * @Return {Promise} which resolves with a list of Thing Descriptions.
+    */
+   getThingDescriptions: function() {
+     return new Promise((function(resolve, reject) {
+       this.getThings().then(function(things) {
+         var descriptions = [];
+         for (let [id, thing] of things) {
+           descriptions.push(thing.getDescription());
+         }
+         resolve(descriptions);
+       });
      }).bind(this));
    },
 
@@ -51,20 +70,18 @@ var Things = {
    */
    getNewThings: function() {
      return new Promise((function(resolve, reject) {
-       // Make sure the things map is up to date with database
-       this.getThings().then((function() {
-         // Get a map of things in the database
-         var storedThings = this.things;
+       // Get a map of things in the database
+       this.getThings().then((function(storedThings) {
          // Get a list of things connected to adapters
-         var connectedThings = adapterManager.getThings();
+         var connectedThings = AdapterManager.getThings();
          var newThings = [];
          connectedThings.forEach(function(connectedThing) {
-           if(!storedThings[connectedThing.id]) {
-             connectedThing.href = '/things/' + connectedThing.id;
+           if(!storedThings.has(connectedThing.id)) {
+             connectedThing.href = Config.THINGS_PATH + '/' + connectedThing.id;
              if (connectedThing.properties) {
                connectedThing.properties.forEach(function(property) {
-                 property.href = '/things/' + connectedThing.id +
-                   '/properties/' + property.name;
+                 property.href = Config.THINGS_PATH + '/' + connectedThing.id +
+                   Config.PROPERTIES_PATH + '/' + property.name;
                });
              }
              newThings.push(connectedThing);
@@ -82,8 +99,8 @@ var Things = {
     * @param Object description Thing description.
     */
    createThing: function(id, description) {
-     // TODO: Create a Thing object
-     return Database.createThing(id, description);
+     var thing = new Thing(id, description);
+     return Database.createThing(thing.id, thing.getDescription());
    },
 
    /**
@@ -92,22 +109,11 @@ var Things = {
     * @param Object New Thing description
     */
    handleNewThing: function(newThing) {
-     // Give the Thing a URL
-     newThing.href = '/things/' + newThing.id;
-     // Temporary hack because name can currently be blank
-     if (!newThing.name) {
-       newThing.name = 'My On/Off Switch';
-     }
-     // Give the Thing's properties URLs
-     if (newThing.properties) {
-       newThing.properties.forEach(function(property) {
-         property.href = '/things/' + newThing.id +
-           '/properties/' + property.name;
-       });
-     }
+     var thing = new Thing(newThing.id, newThing);
+
      // Notify each open websocket of the new Thing
      this.websockets.forEach(function(socket) {
-       socket.send(JSON.stringify(newThing));
+       socket.send(JSON.stringify(thing.getDescription()));
      });
    },
 
