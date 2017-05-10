@@ -20,7 +20,7 @@ var ThingsController = express.Router();
  * Get a list of Things.
  */
 ThingsController.get('/', function (request, response) {
-  Things.getThings().then(function(things) {
+  Things.getThingDescriptions().then(function(things) {
     response.status(200).json(things);
   });
 });
