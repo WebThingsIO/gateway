@@ -53,7 +53,7 @@ debugController.get('/devices', (request, response) => {
     var device = adapterManager.devices[deviceId];
     deviceList.push(device.asDict());
   }
-  response.json(deviceList);
+  response.status(200).json(deviceList);
 });
 
 /**
@@ -63,7 +63,7 @@ debugController.get('/device/:deviceId', (request, response) => {
   var deviceId = request.params.deviceId;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    response.json(device.asDict());
+    response.status(200).json(device.asDict());
   } else {
     response.status(404).send('Device "' + deviceId + '" not found.');
   }
@@ -81,7 +81,7 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
     if (property) {
       var valueDict = {};
       valueDict[propertyName] = device.getProperty(propertyName);
-      response.json(valueDict);
+      response.status(200).json(valueDict);
       return;
     }
     response.status(404).send('Device "' + deviceId +
@@ -125,7 +125,7 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
  * Get a list of the things registered with the adapter manager.
  */
 debugController.get('/things', (request, response) => {
-  response.json(adapterManager.getThings());
+  response.status(200).json(adapterManager.getThings());
 });
 
 /**
@@ -135,7 +135,7 @@ debugController.get('/thing/:thingId', (request, response) => {
   var thingId = request.params.thingId;
   var thing = adapterManager.getThing(thingId);
   if (thing) {
-    response.json(thing);
+    response.status(200).json(thing);
   } else {
     response.status(404).send('Thing "' + thingId + '" not found.');
   }
@@ -153,7 +153,7 @@ debugController.get('/thing/:thingId/:propertyName', (request, response) => {
     if (property) {
       var valueDict = {};
       valueDict[propertyName] = adapterManager.getProperty(thing.id, propertyName);
-      response.json(valueDict);
+      response.status(200).json(valueDict);
       return;
     }
     response.status(404).send('Thing "' + thingId +
