@@ -114,7 +114,8 @@ $ npm install
 $ node app.js
 ```
 
-Load ```http://localhost:8080``` in your web browser (or use the server's IP address if loading remotely).
+Load ```https://localhost:4443``` in your web browser (or use the server's IP address if loading remotely).
+Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
 
 
 ## Source Code Structure
