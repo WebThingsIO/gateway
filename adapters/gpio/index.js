@@ -9,6 +9,8 @@
 
 'use strict';
 
+var fs = require('fs');
+
 function maybeLoadGpioAdapter(adapterManager) {
   var gpioConfigFilename = 'config/gpio-config.js';
 
@@ -21,7 +23,8 @@ function maybeLoadGpioAdapter(adapterManager) {
   try {
     fs.accessSync('/sys/class/gpio/export', fs.constants.W_OK);
   } catch (err) {
-    console.log('Not starting GPIO adapter - no permissions to /sys/class/gpio/export');
+    console.log('Not starting GPIO adapter - ' +
+                'no permissions to /sys/class/gpio/export');
     return;
   }
 

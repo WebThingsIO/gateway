@@ -10,13 +10,15 @@
 
 'use strict';
 
+var ZWaveProperty = require('./zwave-property');
+
 // See; http://wiki.micasaverde.com/index.php/ZWave_Command_Classes for a
 // complete list of command classes.
 
 const COMMAND_CLASS_SWITCH_BINARY = 37;     // 0x25
 //const COMMAND_CLASS_SWITCH_MULTILEVEL = 38; // 0x26
 //const COMMAND_CLASS_SWITCH_ALL = 39;        // 0x27
-const COMMAND_CLASS_CONFIGURATION = 112;    // 0x98
+//const COMMAND_CLASS_CONFIGURATION = 112;    // 0x98
 
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
 
@@ -39,16 +41,11 @@ class ZWaveClassifier {
 
     initOnOffSwitch(node, valueId) {
         node.type = THING_TYPE_ON_OFF_SWITCH;
-        node.properties = [{
-            'name': 'on',
-            'type': 'boolean',
-        }];
+        node.properties = [new ZWaveProperty(node, 'on', 'boolean', valueId)];
         node.actions = [{
             'name': 'toggle',
             'description': 'Toggles On/Off',
         }];
-        node.propertyMaps = {'on': valueId };
-        node.values.on = node.zwValues[valueId].value;
     }
 }
 

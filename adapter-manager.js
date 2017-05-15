@@ -164,7 +164,7 @@ class AdapterManager extends EventEmitter {
   getThing(thingId) {
     var device = this.getDevice(thingId);
     if (device) {
-      return device.getThing();
+      return device.asThing();
     }
   }
 
@@ -194,26 +194,32 @@ class AdapterManager extends EventEmitter {
 
   /**
    * @method getProperty
-   * @returns Retrieves the value of the property named `propertyName` from
-   *          the thing identified by `thingId`.
+   * @returns a promise which resolves to the retrieved value of `propertyName`
+   *          from the thing identified by `thingId`.
    */
   getProperty(thingId, propertyName) {
     var device = this.getDevice(thingId);
     if (device) {
       return device.getProperty(propertyName);
     }
+    return new Promise((resolve, reject) => {
+      reject('getProperty: device: ' + thingId + ' not found.');
+    });
   }
 
   /**
    * @method setProperty
-   * @returns Sets the value of the property named `propertyName` for
-   *          the thing identified by `thingId`.
+   * @returns a promise which resolves to the updated value of `propertyName`
+   *          for the thing identified by `thingId`.
    */
   setProperty(thingId, propertyName, value) {
     var device = this.getDevice(thingId);
     if (device) {
-      device.setProperty(propertyName, value);
+      return device.setProperty(propertyName, value);
     }
+    return new Promise((resolve, reject) => {
+      reject('setProperty: device: ' + thingId + ' not found.');
+    });
   }
 
   /**
@@ -223,7 +229,7 @@ class AdapterManager extends EventEmitter {
    */
   handleDeviceAdded(device) {
     this.devices[device.id] = device;
-    var thing = device.getThing();
+    var thing = device.asThing();
 
     /**
      * Thing added event.
@@ -258,7 +264,7 @@ class AdapterManager extends EventEmitter {
    */
   handleDeviceRemoved(device) {
     delete this.devices[device.id];
-    var thing = device.getThing();
+    var thing = device.asThing();
 
     /**
      * Thing removed event.

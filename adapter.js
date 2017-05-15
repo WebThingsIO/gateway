@@ -112,4 +112,4 @@ class Adapter {
   }
 }
 
-exports.Adapter = Adapter;
+module.exports = Adapter;

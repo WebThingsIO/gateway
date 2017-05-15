@@ -10,8 +10,6 @@
 
 'use strict';
 
-var assert = require('assert');
-
 class Device {
 
   constructor(adapter, id) {
@@ -22,7 +20,6 @@ class Device {
     this.description = '';
     this.properties = [];
     this.actions = [];
-    this.values = {};
   }
 
   asDict() {
@@ -30,10 +27,28 @@ class Device {
         'id': this.id,
         'name': this.name,
         'type': this.type,
-        'properties': this.properties,
+        'properties': this.properties.map((property) => {
+          return property.asDict();
+        }),
         'actions': this.actions,
-        'values': this.values,
     };
+  }
+
+  /**
+   * @returns this object as a thing
+   */
+  asThing() {
+    var thing = {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      properties: this.getPropertyDescriptions(),
+    };
+    if (this.description) {
+      thing.description = this.description;
+    }
+
+    return thing;
   }
 
   getId() {
@@ -49,10 +64,12 @@ class Device {
   }
 
   getPropertyDescriptions() {
-    return this.properties;
+    return this.properties.map((property) => {
+      return property.asPropertyDescription();
+    });
   }
 
-  getPropertyDescription(propertyName) {
+  findProperty(propertyName) {
     for (var property of this.properties) {
       if (property.name == propertyName) {
         return property;
@@ -60,31 +77,25 @@ class Device {
     }
   }
 
+  /**
+   * @method getProperty
+   * @returns a promise which resolves to the retrieved value.
+   */
   getProperty(propertyName) {
-    return this.values[propertyName];
-  }
-
-  getThing() {
-    var thing = {
-      id: this.id,
-      name: this.name,
-      type: this.type,
-      properties: this.getPropertyDescriptions(),
-    };
-    if (this.description.length > 0) {
-      thing.description = this.description;
-    }
-
-    return thing;
-  }
-
-  notifyValueChanged(propertyName, value) {
-    this.values[propertyName] = value;
-    this.adapter.manager.emit('value-changed', {
-      'device': this,
-      'property': propertyName,
-      'value': value
+    return new Promise((resolve, reject) => {
+      var property = this.findProperty(propertyName);
+      if (property) {
+        property.getValue().then((value) => {
+          resolve(value);
+        });
+      } else {
+        reject('Property "' + propertyName + '" not found');
+      }
     });
+  }
+
+  notifyPropertyChanged(property) {
+    this.adapter.manager.emit('property-changed', property);
   }
 
   setDescription(description) {
@@ -95,9 +106,25 @@ class Device {
     this.name = name;
   }
 
+  /**
+   * @method setProperty
+   * @returns a promise which resolves to the updated value.
+   *
+   * @note it is possible that the updated value doesn't match
+   * the value passed in.
+   */
   setProperty(propertyName, value) {
-    assert(false, 'setProperty must be implemented in derived class');
+    return new Promise((resolve, reject) => {
+      var property = this.findProperty(propertyName);
+      if (property) {
+        property.setValue(value).then((updatedValue) => {
+          resolve(updatedValue);
+        });
+      } else {
+        reject('Property "' + propertyName + '" not found');
+      }
+    });
   }
 }
 
-exports.Device = Device;
+module.exports = Device;

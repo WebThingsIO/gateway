@@ -10,6 +10,6 @@
 
 'use strict';
 
-var loadZWaveAdapters = require('./zwave-adapter.js');
+var loadZWaveAdapters = require('./zwave-adapter');
 
 module.exports = loadZWaveAdapters;

@@ -9,7 +9,7 @@
 
 'use strict';
 
-var Adapter = require('../../adapter').Adapter;
+var Adapter = require('../../adapter');
 var ZigBeeNode = require('./zb-node');
 var SerialPort = require('serialport');
 var xbeeApi = require('xbee-api');

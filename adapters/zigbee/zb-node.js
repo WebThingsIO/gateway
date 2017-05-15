@@ -9,7 +9,7 @@
 
 'use strict';
 
-var Device = require('../../device').Device;
+var Device = require('../../device');
 var utils = require('../../utils');
 var xbeeApi = require('xbee-api');
 var zclId = require('zcl-id');
@@ -33,7 +33,6 @@ class ZigBeeNode extends Device {
     this.addr16 = id16;
     this.neighbors = [];
     this.activeEndpoints = {};
-    this.propertyMaps = {};
 
     this.isCoordinator = (id64 == adapter.serialNumber);
 
@@ -50,7 +49,6 @@ class ZigBeeNode extends Device {
     dict.addr16 = this.addr16;
     dict.neighbors = this.neighbors;
     dict.activeEndpoints = this.activeEndpoints;
-    dict.propertyMaps = this.propertyMaps;
     dict.isCoordinator = this.isCoordinator;
     for (var endpointNum in dict.activeEndpoints) {
       var endpoint = dict.activeEndpoints[endpointNum];
@@ -75,8 +73,8 @@ class ZigBeeNode extends Device {
     return dict;
   }
 
-  getAttrEntryFromFrame(frame, propertyMap) {
-    var attr = zclId.attr(propertyMap.clusterId, propertyMap.attr).value;
+  getAttrEntryFromFrame(frame, property) {
+    var attr = zclId.attr(property.clusterId, property.attr).value;
     if (frame.zcl && Array.isArray(frame.zcl.payload)) {
       for (var attrEntry of frame.zcl.payload) {
         if (attrEntry.attrId == attr) {
@@ -86,23 +84,22 @@ class ZigBeeNode extends Device {
     }
   }
 
-  frameHasAttr(frame, propertyMap) {
-    var attrEntry = this.getAttrEntryFromFrame(frame, propertyMap);
+  frameHasAttr(frame, property) {
+    var attrEntry = this.getAttrEntryFromFrame(frame, property);
     return !!attrEntry;
   }
 
-  findPropertyNameFromFrame(frame) {
+  findPropertyFromFrame(frame) {
     var profileId = parseInt(frame.profileId, 16);
     var clusterId = parseInt(frame.clusterId, 16);
     var endpoint = parseInt(frame.sourceEndpoint, 16);
 
-    for (var propertyName in this.propertyMaps) {
-      var propertyMap = this.propertyMaps[propertyName];
-      if (profileId == propertyMap.profileId &&
-          endpoint == propertyMap.endpoint &&
-          clusterId == propertyMap.clusterId) {
-        if (this.frameHasAttr(frame, propertyMap)) {
-          return propertyName;
+    for (var property of this.properties) {
+      if (profileId == property.profileId &&
+          endpoint == property.endpoint &&
+          clusterId == property.clusterId) {
+        if (this.frameHasAttr(frame, property)) {
+          return property;
         }
       }
     }
@@ -116,20 +113,24 @@ class ZigBeeNode extends Device {
   }
 
   handleReadRsp(frame) {
-    var propertyName = this.findPropertyNameFromFrame(frame);
-    if (propertyName) {
-      var propertyMap = this.propertyMaps[propertyName];
-      var attrEntry = this.getAttrEntryFromFrame(frame, propertyMap);
+    var property = this.findPropertyFromFrame(frame);
+    if (property) {
+      var attrEntry = this.getAttrEntryFromFrame(frame, property);
       var value = this.getValueFromAttrEntry(attrEntry);
-      this.values[propertyName] = value;
+      property.setCachedValue(value);
       console.log('ZigBee:', this.name,
-                  'property:', propertyName,
-                  'profileId:', utils.hexStr(propertyMap.profileId, 4),
-                  'endpoint:', propertyMap.endpoint,
-                  'clusterId:', utils.hexStr(propertyMap.clusterId, 4),
+                  'property:', property.name,
+                  'profileId:', utils.hexStr(property.profileId, 4),
+                  'endpoint:', property.endpoint,
+                  'clusterId:', utils.hexStr(property.clusterId, 4),
                   frame.zcl.cmdId,
                   'value:', value);
-      this.notifyValueChanged(propertyName, value);
+      var deferredSet = property.deferredSet;
+      if (deferredSet) {
+        property.deferredSet = null;
+        deferredSet.resolve(property.value);
+      }
+      this.notifyPropertyChanged(property);
     }
   }
 
@@ -140,15 +141,14 @@ class ZigBeeNode extends Device {
     }
   }
 
-  makeBindFrame(propertyName) {
-    var propertyMap = this.propertyMaps[propertyName];
+  makeBindFrame(property) {
     var frame = this.adapter.zdo.makeFrame({
       destination64: this.addr64,
       destination16: this.addr16,
       clusterId: zdo.CLUSTER_ID.BIND_REQUEST,
       bindSrcAddr64: this.addr64,
-      bindSrcEndpoint: propertyMap.endpoint,
-      bindClusterId: propertyMap.clusterId,
+      bindSrcEndpoint: property.endpoint,
+      bindClusterId: property.clusterId,
       bindDstAddrMode: 3,
       bindDstAddr64: this.adapter.serialNumber,
       bindDstEndpoint: 0,
@@ -156,12 +156,11 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeConfigReportFrame(propertyName) {
-    var propertyMap = this.propertyMaps[propertyName];
-    var clusterId = propertyMap.clusterId;
-    var attr = propertyMap.attr;
+  makeConfigReportFrame(property) {
+    var clusterId = property.clusterId;
+    var attr = property.attr;
     var frame = this.makeZclFrame(
-      propertyMap,
+      property,
       {
         cmd: 'configReport',
         payload: [{
@@ -176,9 +175,9 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeDiscoverAttributesFrame(propertyName) {
+  makeDiscoverAttributesFrame(property) {
     var frame = this.makeZclFrame(
-      this.propertyMaps[propertyName],
+      property,
       {
         cmd: 'discover',
         payload: {
@@ -190,12 +189,11 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeReadAttributeFrame(propertyName) {
-    var propertyMap = this.propertyMaps[propertyName];
-    var clusterId = propertyMap.clusterId;
-    var attr = propertyMap.attr;
+  makeReadAttributeFrame(property) {
+    var clusterId = property.clusterId;
+    var attr = property.attr;
     var frame = this.makeZclFrame(
-      propertyMap,
+      property,
       {
         cmd: 'read',
         payload: [{ direction: 0,
@@ -206,12 +204,11 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeReadReportConfigFrame(propertyName) {
-    var propertyMap = this.propertyMaps[propertyName];
-    var clusterId = propertyMap.clusterId;
-    var attr = propertyMap.attr;
+  makeReadReportConfigFrame(property) {
+    var clusterId = property.clusterId;
+    var attr = property.attr;
     var frame = this.makeZclFrame(
-      propertyMap,
+      property,
       {
         cmd: 'readReportConfig',
         payload: [{ direction: 0,
@@ -222,7 +219,7 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeZclFrame(propertyMap, zclData) {
+  makeZclFrame(property, zclData) {
     if (!zclData.frameCntl) {
       zclData.frameCntl = { frameType: 0 };
     }
@@ -249,9 +246,9 @@ class ZigBeeNode extends Device {
       destination16: this.addr16,
       sourceEndpoint: 0,
 
-      destinationEndpoint: propertyMap.endpoint,
-      profileId: propertyMap.profileId,
-      clusterId: utils.hexStr(propertyMap.clusterId, 4),
+      destinationEndpoint: property.endpoint,
+      profileId: property.profileId,
+      clusterId: utils.hexStr(property.clusterId, 4),
 
       broadcastRadius: 0,
       options: 0,
@@ -263,39 +260,26 @@ class ZigBeeNode extends Device {
                            frame.id,
                            zclData.cmd,
                            zclData.payload,
-                           propertyMap.clusterId);
+                           property.clusterId);
     return frame;
+  }
+
+  notifyPropertyChanged(property) {
+    var deferredSet = property.deferredSet;
+    if (deferredSet) {
+      property.deferredSet = null;
+      deferredSet.resolve(property.value);
+    }
+    super.notifyPropertyChanged(property);
   }
 
   sendFrames(frames) {
     this.adapter.sendFrames(frames);
   }
 
-  sendZclFrame(propertyMap, zclData) {
-    var frame = this.makeZclFrame(propertyMap, zclData);
+  sendZclFrame(property, zclData) {
+    var frame = this.makeZclFrame(property, zclData);
     this.adapter.sendFrame(frame);
-  }
-
-  setProperty(propertyName, value) {
-
-    var propertyMap = this.propertyMaps[propertyName];
-    var cmd = propertyMap.cmd[value];
-    console.log('ZigBee:', this.name,
-                'property:', propertyName,
-                'profileId:', utils.hexStr(propertyMap.profileId, 4),
-                'endpoint:', propertyMap.endpoint,
-                'clusterId:', utils.hexStr(propertyMap.clusterId, 4),
-                'set:', cmd,
-                'value:', value);
-
-    this.sendZclFrame(
-      propertyMap,
-      {
-        frameCntl: { frameType: 1 },
-        cmd: cmd,
-      }
-    );
-    this.notifyValueChanged(propertyName, value);
   }
 }
 

@@ -40,7 +40,8 @@ ThingsController.post('/', function (request, response) {
     console.log('Successfully created new thing ' + thing);
     response.status(201).send(thing);
   }).catch(function(error) {
-    console.error('Error saving new thing ' + error);
+    console.error('Error saving new thing');
+    console.error(error);
     response.status(500).send(error);
   });
 });
@@ -52,15 +53,16 @@ ThingsController.get('/:thingId/properties/:propertyName',
   function(request, response) {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
-  var value = AdapterManager.getProperty(thingId, propertyName);
-  // TODO: Only respond once Promise resolves when bug #42 has landed.
-  var result = {};
-  if (value === undefined) {
-    result[propertyName] = null;
-  } else {
+  AdapterManager.getProperty(thingId, propertyName).then((value) => {
+    var result = {};
     result[propertyName] = value;
-  }
-  response.status(200).json(result);
+    response.status(200).json(result);
+  }).catch((error) => {
+    console.error('Error getting value for thingId:', thingId,
+                  'property:', propertyName);
+    console.error(error);
+    response.status(500).send(error);
+  });
 });
 
 /**
@@ -75,11 +77,19 @@ ThingsController.put('/:thingId/properties/:propertyName',
     return;
   }
   var value = request.body[propertyName];
-  AdapterManager.setProperty(thingId, propertyName, value);
-  // TODO: Only respond once Promise resolves when bug #42 has landed.
-  var result = {};
-  result[propertyName] = value;
-  response.status(200).json(result);
+  AdapterManager.setProperty(thingId, propertyName, value)
+    .then((updatedValue) => {
+      // Note: it's possible that updatedValue doesn't match value.
+      var result = {};
+      result[propertyName] = updatedValue;
+      response.status(200).json(result);
+    }).catch((error) => {
+      console.error('Error setting value for thingId:', thingId,
+                    'property:', propertyName,
+                    'value:', value);
+      console.error(error);
+      response.status(500).send(error);
+    });
 });
 
 module.exports = ThingsController;

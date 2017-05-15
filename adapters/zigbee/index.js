@@ -10,6 +10,6 @@
 
 'use strict';
 
-var loadZigBeeAdapters = require('./zb-adapter.js');
+var loadZigBeeAdapters = require('./zb-adapter');
 
 module.exports = loadZigBeeAdapters;
