@@ -11,10 +11,11 @@
 
 'use strict';
 
+var config = require('./config');
 var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('events').EventEmitter;
-var Deferred = require('./deferred');
+var Deferred = require('./adapters/deferred');
 
 /**
  * @class AdapterManager
@@ -296,28 +297,20 @@ class AdapterManager extends EventEmitter {
 
   /**
    * @method loadAdapters
-   * Loads all of the adapters from the adapters directory.
+   * Loads all of the configured adapters from the adapters directory.
    */
   loadAdapters() {
-    var adapterDir = './adapters';
-    var adapterManager = this;
-    fs.readdir(adapterDir, function fileList(err, filenames) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      for (var filename of filenames) {
-        let adapterFilename = adapterDir + '/' + filename;
-        if (!fs.lstatSync(adapterFilename).isDirectory() &&
-          path.extname(filename) !== '.js') {
-          continue;
-        }
-        console.log('Loading Adapters from', adapterFilename);
+    for (var adapterName in config.adapters) {
+      var adapterConfig = config.adapters[adapterName];
 
-        let adapterLoader = require(adapterFilename);
-        adapterLoader(adapterManager);
+      if (adapterConfig.enabled) {
+        console.log('Loading adapters for', adapterName, 'from', adapterConfig.path);
+        let adapterLoader = require(adapterConfig.path);
+        adapterLoader(this);
+      } else {
+        console.log('Not loading adapters for', adapterName, '- disabled');
       }
-    });
+    }
   }
 
   /**

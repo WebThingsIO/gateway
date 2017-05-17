@@ -9,10 +9,11 @@
 
 'use strict';
 
-var Adapter = require('../../adapter');
-var Device = require('../../device');
+var Adapter = require('../adapter');
+var config = require('../../config');
+var Device = require('../device');
 var Gpio = require('onoff').Gpio;
-var Property = require('../../property');
+var Property = require('../property');
 
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
 

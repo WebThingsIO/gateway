@@ -10,9 +10,9 @@
 
 'use strict';
 
-var Deferred = require('../../deferred');
-var Property = require('../../property');
-var utils = require('../../utils');
+var Deferred = require('../deferred');
+var Property = require('../property');
+var utils = require('../utils');
 
 class ZigBeeProperty extends Property {
   constructor(device, name, type, profileId, endpoint, clusterId, cmd, attr) {

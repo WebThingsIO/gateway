@@ -10,8 +10,8 @@
 
 'use strict';
 
-var Deferred = require('../../deferred');
-var Property = require('../../property');
+var Deferred = require('../deferred');
+var Property = require('../property');
 
 class ZWaveProperty extends Property {
   constructor(device, name, type, valueId) {

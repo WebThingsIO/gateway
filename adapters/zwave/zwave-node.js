@@ -9,8 +9,8 @@
 
 'use strict';
 
-var Device = require('../../device');
-var utils = require('../../utils');
+var Device = require('../device');
+var utils = require('../utils');
 
 var padLeft = utils.padLeft;
 var padRight = utils.padRight;

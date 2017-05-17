@@ -9,8 +9,8 @@
 
 'use strict';
 
-var Device = require('../../device');
-var utils = require('../../utils');
+var Device = require('../device');
+var utils = require('../utils');
 var xbeeApi = require('xbee-api');
 var zclId = require('zcl-id');
 var zcl = require('zcl-packet');

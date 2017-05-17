@@ -9,7 +9,7 @@
 
 'use strict';
 
-var Adapter = require('../../adapter');
+var Adapter = require('../adapter');
 var ZWaveNode = require('./zwave-node');
 var SerialPort = require('serialport');
 var zwaveClassifier = require('./zwave-classifier');

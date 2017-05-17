@@ -16,7 +16,7 @@
 var assert = require('assert');
 var BufferBuilder = require('buffer-builder');
 var BufferReader = require('buffer-reader');
-var utils = require('../../utils');
+var utils = require('../utils');
 var xbeeApi = require('xbee-api');
 
 var C = xbeeApi.constants;

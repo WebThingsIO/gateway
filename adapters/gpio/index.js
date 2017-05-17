@@ -12,8 +12,6 @@
 var fs = require('fs');
 
 function maybeLoadGpioAdapter(adapterManager) {
-  var gpioConfigFilename = 'config/gpio-config.js';
-
   // Verify that we have write permissions to /sys/class/gpio/export. Under
   // regular linux, this file is owned by root, so the server would need to
   // run as the root user. On the Raspberry Pi, being a member of the gpio
@@ -28,15 +26,8 @@ function maybeLoadGpioAdapter(adapterManager) {
     return;
   }
 
-  if (!fs.existsSync(gpioConfigFilename)) {
-    console.log('Not starting GPIO adapter - no config file');
-    return;
-  }
-
-  var gpioConfigs = require('../../' + gpioConfigFilename);
-
   var loadGpioAdapter = require('./gpio-adapter.js');
-  loadGpioAdapter(adapterManager, gpioConfigs);
+  loadGpioAdapter(adapterManager, config.gpio);
 }
 
 module.exports = maybeLoadGpioAdapter;

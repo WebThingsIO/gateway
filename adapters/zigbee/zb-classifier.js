@@ -11,7 +11,7 @@
 'use strict';
 
 var zclId = require('zcl-id');
-var utils = require('../../utils');
+var utils = require('../utils');
 var ZigBeeProperty = require('./zb-property');
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
