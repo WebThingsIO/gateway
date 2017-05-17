@@ -29,7 +29,7 @@ class Property {
   asDict() {
     return {
       name: this.name,
-      type: this.tye,
+      type: this.type,
       unit: this.unit,
       description: this.description,
       value: this.value,
