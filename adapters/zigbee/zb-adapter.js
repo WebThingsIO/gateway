@@ -9,13 +9,13 @@
 
 'use strict';
 
-var Adapter = require('../../adapter').Adapter;
+var Adapter = require('../adapter');
 var ZigBeeNode = require('./zb-node');
 var SerialPort = require('serialport');
 var xbeeApi = require('xbee-api');
 var at = require('./zb-at');
 var util = require('util');
-var utils = require('../../utils');
+var utils = require('../utils');
 var zdo = require('./zb-zdo');
 var zcl = require('zcl-packet');
 var zclId = require('zcl-id');

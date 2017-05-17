@@ -7,7 +7,7 @@
 
 'use strict';
 
-const DEBUG = true;
+const DEBUG = false;
 
 var id = 0;
 

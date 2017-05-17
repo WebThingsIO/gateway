@@ -248,5 +248,3 @@ atParser[ac.SERIAL_NUMBER_LOW] = function(frame, reader) {
 atParser[ac.ZIGBEE_STACK_PROFILE] = function(frame, reader) {
   frame.zigBeeStackProfile = reader.nextUInt8();
 };
-
-

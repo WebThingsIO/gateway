@@ -53,12 +53,14 @@ function alignCenter(str, len) {
  */
 function printTable(alignment, lines) {
   var width = [];
+  var colWidth;
+  var idx;
 
   // Take a pass through the data and figure out the width for each column.
   for (var line of lines) {
     if (typeof(line) !== 'string') {
-      for (var idx in line) {
-        var colWidth = line[idx].length;
+      for (idx in line) {
+        colWidth = line[idx].length;
         if (width[idx] === undefined || colWidth > width[idx]) {
           width[idx] = colWidth;
         }

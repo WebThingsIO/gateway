@@ -9,8 +9,8 @@
 
 'use strict';
 
-var Device = require('../../device').Device;
-var utils = require('../../utils');
+var Device = require('../device');
+var utils = require('../utils');
 
 var padLeft = utils.padLeft;
 var padRight = utils.padRight;
@@ -23,6 +23,8 @@ let BASIC_STR = [
   'Slave',
   'RoutingSlave'
 ];
+
+const DEBUG = false;
 
 class ZWaveNode extends Device {
 
@@ -46,21 +48,36 @@ class ZWaveNode extends Device {
 
     this.nodeId = nodeId;
     this.location = '';
-    this.zwClasses = {};
+    this.zwClasses = [];
     this.zwValues = {};
-    this.propertyMaps = {};
     this.ready = false;
     this.lastStatus = 'constructed';
   }
 
   asDict() {
     var dict = super.asDict();
+    dict.lastStatus = this.lastStatus;
     dict.zwInfo = this.zwInfo;
-    dict.status = this.status;
     dict.zwClasses = this.zwClasses;
     dict.zwValues = this.zwValues;
-    dict.propertyMaps = this.propertyMaps;
     return dict;
+  }
+
+  findPropertyFromValueId(valueId) {
+    for (var property of this.properties) {
+      if (property.valueId == valueId) {
+        return property;
+      }
+    }
+  }
+
+  notifyPropertyChanged(property) {
+    var deferredSet = property.deferredSet;
+    if (deferredSet) {
+      property.deferredSet = null;
+      deferredSet.resolve(property.value);
+    }
+    super.notifyPropertyChanged(property);
   }
 
   static oneLineHeader(line) {
@@ -99,16 +116,65 @@ class ZWaveNode extends Device {
            this.zwInfo.location;
   }
 
-  setProperty(propertyName, value) {
-    var valueId = this.propertyMaps[propertyName];
-    console.log('ZWave: setProperty propertyName:', propertyName,
-                'valueId:', valueId,
-                'value:', value);
-    if (valueId) {
-      let zwValue = this.zwValues[valueId];
-      this.adapter.zwave.setValue(zwValue.node_id, zwValue.class_id,
-                                  zwValue.instance, zwValue.index, value);
-      this.notifyValueChanged(propertyName, value);
+  zwValueAdded(comClass, zwValue) {
+    this.lastStatus = 'value-added';
+    if (this.zwClasses.indexOf(comClass) < 0) {
+      this.zwClasses.push(comClass);
+    }
+    this.zwValues[zwValue.value_id] = zwValue;
+
+    var property = this.findPropertyFromValueId(zwValue.value_id);
+    if (zwValue.genre === 'user' || DEBUG) {
+      if (property) {
+        property.value = zwValue.value;
+        console.log('ZWave: node%d valueAdded: %d:%s -> %s property: %s',
+                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
+                    property.name);
+      } else {
+        console.log('ZWave: node%d valueAdded: %d:%s -> %s',
+                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+      }
+    }
+    if (zwValue.genre === 'user' && !this.defaultName)  {
+      // We use the label from the first 'user' value that we see to help
+      // disambiguate different nodes.
+      this.defaultName = this.id + '-' + zwValue.label;
+    }
+  }
+
+  zwValueChanged(comClass, zwValue) {
+    this.lastStatus = 'value-changed';
+    this.zwValues[zwValue.value_id] = zwValue;
+
+    var property = this.findPropertyFromValueId(zwValue.value_id);
+    if (property) {
+      property.setCachedValue(zwValue.value);
+      console.log('ZWave: node%d valueChanged: %d:%s = %s -> property: %s = %s',
+                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
+                  property.name, property.value);
+      this.notifyPropertyChanged(property);
+    } else {
+      console.log('ZWave: node%d valueChanged: %d:%s = %s',
+                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+    }
+  }
+
+  zwValueRemoved(comClass, instance, index) {
+    this.lastStatus = 'value-removed';
+    var valueId = this.zwInfo.nodeId + '-' +
+                  comClass + '-' + instance + '-' + index;
+    var zwValue = this.zwValues[valueId];
+    delete this.zwValues[valueId];
+    var property = this.findPropertyFromValueId(zwValue.value_id);
+    if (property) {
+      delete property.valueId;
+      delete property.value;
+      console.log('ZWave: node%d valueRemoved: %d:%s -> %s property: %s',
+                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
+                  property.name);
+    } else {
+      console.log('ZWave: node%d valueRemoved: %d:%s -> %s',
+                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
     }
   }
 }

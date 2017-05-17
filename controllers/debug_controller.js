@@ -15,6 +15,23 @@ var adapterManager = require('../adapter-manager');
 
 var debugController = express.Router();
 
+adapterManager.on('adapter-added', (adapter) => {
+  console.log('debug: Got "adapter-added" notification for', adapter.name);
+});
+
+adapterManager.on('thing-added', (thing) => {
+  console.log('debug: Got "thing-added" notification for', thing.name);
+});
+
+adapterManager.on('thing-removed', (thing) => {
+  console.log('debug: Got "thing-removed" notification for', thing.name);
+});
+
+adapterManager.on('property-changed', (property) => {
+  console.log('debug: Got "property-changed" notification for', property.name,
+              'value:', property.value);
+});
+
 /**
  * Add a new device
  */
@@ -77,19 +94,18 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getPropertyDescription(propertyName);
-    if (property) {
+    device.getProperty(propertyName).then((value) => {
       var valueDict = {};
-      valueDict[propertyName] = device.getProperty(propertyName);
+      valueDict[propertyName] = value;
       response.status(200).json(valueDict);
-      return;
-    }
-    response.status(404).send('Device "' + deviceId +
-                              '" property "' + propertyName +
-                              '" not found.');
-    return;
+    }).catch((error) => {
+      console.log('Device "' + deviceId + '"');
+      console.log(error);
+      response.status(404).send('Device "' + deviceId + error);
+    });
+  } else {
+    response.status(404).send('Device "' + deviceId + '" not found.');
   }
-  response.status(404).send('Device "' + deviceId + '" not found.');
 });
 
 /**
@@ -100,25 +116,25 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   var propertyName = request.params.propertyName;
   var device = adapterManager.getDevice(deviceId);
   if (device) {
-    var property = device.getPropertyDescription(propertyName);
-    if (property) {
-      var propertyValue = request.body[propertyName];
-      if (propertyValue !== undefined) {
-        device.setProperty(propertyName, propertyValue);
-        response.send();
-        return;
-      }
+    var propertyValue = request.body[propertyName];
+    if (propertyValue !== undefined) {
+      device.setProperty(propertyName, propertyValue).then((value) => {
+        var valueDict = {};
+        valueDict[propertyName] = propertyValue;
+        response.status(200).json(valueDict);
+      }).catch((error) => {
+        console.log('Device "' + deviceId + '"');
+        console.log(error);
+        response.status(404).send('Device "' + deviceId + '" ' + error);
+      });
+    } else {
       response.status(404).send('Device "' + deviceId +
                                 '" property "' + propertyName +
                                 '" not found in request.');
-      return;
     }
-    response.status(404).send('Device "' + deviceId +
-                              '" property "' + propertyName +
-                              '" not found.');
-    return;
+  } else {
+    response.status(404).send('Device "' + deviceId + '" not found.');
   }
-  response.status(404).send('Device "' + deviceId + '" not found.');
 });
 
 /**
@@ -142,55 +158,52 @@ debugController.get('/thing/:thingId', (request, response) => {
 });
 
 /**
- * Gets an property from a thing.
+ * Gets a property associated with a thing.
  */
 debugController.get('/thing/:thingId/:propertyName', (request, response) => {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
   var thing = adapterManager.getThing(thingId);
   if (thing) {
-    var property = adapterManager.getPropertyDescription(thing.id, propertyName);
-    if (property) {
+    adapterManager.getProperty(thing.id, propertyName).then((value) => {
       var valueDict = {};
-      valueDict[propertyName] = adapterManager.getProperty(thing.id, propertyName);
+      valueDict[propertyName] = value;
       response.status(200).json(valueDict);
-      return;
-    }
-    response.status(404).send('Thing "' + thingId +
-                              '" property "' + propertyName +
-                              '" not found.');
-    return;
+    }).catch((error) => {
+      response.status(404).send('Thing "' + thingId + ' ' + error);
+    });
+  } else {
+    response.status(404).send('Thing "' + thingId + '" not found.');
   }
-  response.status(404).send('Thing "' + thingId + '" not found.');
 });
 
 /**
- * Sets an property associated with a thing.
+ * Sets a property associated with a thing.
  */
 debugController.put('/thing/:thingId/:propertyName', (request, response) => {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
   var thing = adapterManager.getThing(thingId);
   if (thing) {
-    var property = adapterManager.getPropertyDescription(thing.id, propertyName);
-    if (property) {
-      var propertyValue = request.body[propertyName];
-      if (propertyValue !== undefined) {
-        adapterManager.setProperty(thing.id, propertyName, propertyValue);
-        response.send();
-        return;
-      }
+    var propertyValue = request.body[propertyName];
+    if (propertyValue !== undefined) {
+      adapterManager.setProperty(propertyName, propertyValue).then((value) => {
+        var valueDict = {};
+        valueDict[propertyName] = value;
+        response.status(200).json(valueDict);
+      }).catch((error) => {
+        console.log('Thing "' + thingId);
+        console.log(error);
+        response.status(404).send('Thing "' + thingId + ' ' + error);
+      });
+    } else {
       response.status(404).send('Thing "' + thingId +
                                 '" property "' + propertyName +
                                 '" not found in request.');
-      return;
     }
-    response.status(404).send('Thing "' + thingId +
-                              '" property "' + propertyName +
-                              '" not found.');
-    return;
+  } else {
+    response.status(404).send('Thing "' + thingId + '" not found.');
   }
-  response.status(404).send('Thing "' + thingId + '" not found.');
 });
 
 /**

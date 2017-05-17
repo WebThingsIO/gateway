@@ -9,12 +9,45 @@
 
 'use strict';
 
-var fs = require('fs');
+var Adapter = require('../adapter');
+var config = require('../../config');
+var Device = require('../device');
 var Gpio = require('onoff').Gpio;
-var Device = require('../../device.js').Device;
-var Adapter = require('../../adapter.js').Adapter;
+var Property = require('../property');
 
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
+
+class GpioProperty extends Property {
+  constructor(device, name, type) {
+    super(device, name, type);
+    this.setCachedValue(this.device.gpio.readSync());
+    this.device.notifyPropertyChanged(this);
+  }
+
+  /**
+   * @method setValue
+   * @returns a promise which resolves to the updated value.
+   *
+   * @note it is possible that the updated value doesn't match
+   * the value passed in.
+   */
+  setValue(value) {
+    return new Promise((resolve, reject) => {
+      this.device.gpio.write(value ? 1 : 0, (err) => {
+        if (err) {
+          console.error('GPIO: write for pin:', this.device.name, 'failed');
+          console.error(err);
+          reject(err);
+        } else {
+          this.setCachedValue(value);
+          console.log('GPIO:', this.name, 'set:', this.name, 'to:', this.value);
+          resolve(this.value);
+          this.device.notifyPropertyChanged(this);
+        }
+      });
+    });
+  }
+}
 
 class GpioDevice extends Device {
   constructor(adapter, pin, pinConfig) {
@@ -33,15 +66,25 @@ class GpioDevice extends Device {
       }
       this.gpio = new Gpio(pin, 'in', pinConfig.edge);
     } else if (pinConfig.direction == 'out') {
+      this.gpio = new Gpio(pin, 'out');
+
+      // Unfortunately, the onoff library writes to the direction file
+      // even if the direction is already set to out. This has a side
+      // effect of setting the value to zero, so for the time being
+      // we reflect that behaviour.
       if (pinConfig.value === undefined) {
         pinConfig.value = 0;
       }
-      this.gpio = new Gpio(pin, 'out');
-      this.gpio.writeSync(pinConfig.value);
+
+      if (pinConfig.value !== undefined) {
+        this.gpio.writeSync(pinConfig.value);
+      }
     }
     pinConfig.pin = pin;
     this.pinConfig = pinConfig;
     this.name = pinConfig.name;
+
+    console.log('GPIO:', this.pinConfig);
 
     if (pinConfig.direction === 'out') {
       this.initOnOffSwitch();
@@ -57,29 +100,12 @@ class GpioDevice extends Device {
 
   initOnOffSwitch() {
     this.type = THING_TYPE_ON_OFF_SWITCH;
-    this.properties = [{
-      'name': 'on',
-      'type': 'boolean',
-    }];
-    this.values['on'] = (this.pinConfig.value != 0);
-  }
-
-  getProperty(propertyName) {
-    if (propertyName in this.values) {
-      return this.values[propertyName];
-    }
-  }
-
-  setProperty(propertyName, value) {
-    this.values[propertyName] = value;
-    console.log('GPIO:', this.name, 'set:', propertyName, 'to:', value);
-    this.gpio.writeSync(value ? 1 : 0);
-    this.notifyValueChanged(propertyName, value);
+    this.properties = [
+      new GpioProperty(this, 'on', 'boolean', this.pinConfig.pin)];
   }
 }
 
 class GpioAdapter extends Adapter {
-
   constructor(adapterManager, gpioConfigs) {
     super(adapterManager, 'GPIO');
 
@@ -91,7 +117,7 @@ class GpioAdapter extends Adapter {
   }
 }
 
-function loadGpioAdapter(adapterManager, gpioConfig) {
+function loadGpioAdapter(adapterManager, gpioConfigs) {
   /* jshint -W031 */
   new GpioAdapter(adapterManager, gpioConfigs);
 }

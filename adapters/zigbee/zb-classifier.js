@@ -11,7 +11,8 @@
 'use strict';
 
 var zclId = require('zcl-id');
-var utils = require('../../utils');
+var utils = require('../utils');
+var ZigBeeProperty = require('./zb-property');
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);
@@ -53,31 +54,27 @@ class ZigBeeClassifier {
 
   initOnOffSwitch(node, endpointNum) {
     node.type = THING_TYPE_ON_OFF_SWITCH;
-    node.properties = [{
-      'name': 'on',
-      'type': 'boolean',
-    }];
+    var property = new ZigBeeProperty(
+      node,                           // device
+      'on',                           // name
+      'boolean',                      // type
+      ZHA_PROFILE_ID,                 // profileId
+      endpointNum,                    // endpoint
+      CLUSTER_ID_GENONOFF,            // clusterId
+      { true: 'on', false: 'off' },   // cmd
+      'onOff'                         // attr
+    );
+
+    node.properties = [property];
     node.actions = [{
       'name': 'toggle',
       'description': 'Toggles On/Off',
     }];
-    node.propertyMaps = { 'on': {
-                            'profileId': ZHA_PROFILE_ID,
-                            'endpoint': endpointNum,
-                            'clusterId': CLUSTER_ID_GENONOFF,
-                            'cmd': {
-                              true: 'on',
-                              false: 'off'
-                            },
-                            'attr': 'onOff'
-                          },
-                        };
-
     node.defaultName = node.id + '-' + node.type;
     node.sendFrames([
-      node.makeBindFrame('on'),
-      node.makeConfigReportFrame('on'),
-      node.makeReadAttributeFrame('on')
+      node.makeBindFrame(property),
+      node.makeConfigReportFrame(property),
+      node.makeReadAttributeFrame(property)
     ]);
   }
 }
