@@ -20,11 +20,12 @@ exports.DEBUG_PATH = '/debug';
 // We only checkin the NAME-example.js files into source code control. If the real
 // config file doesn't exist, then we fallback to the name-example one.
 function loadConfig(name) {
-  var moduleName = './' + name;
-  if (fs.exists(moduleName + '.js')) {
-    return require(moduleName);
+  if (fs.existsSync('./config/' + name + '.js')) {
+    console.log('Loading config for', name);
+    return require('./' + name);
   }
-  return require(moduleName + '-example');
+  console.log('Loading example config for', name);
+  return require('./' + name + '-example');
 }
 
 exports.adapters = loadConfig('adapter-config');
