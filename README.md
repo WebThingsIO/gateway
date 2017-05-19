@@ -120,19 +120,12 @@ Since you're using a self-signed certificate, you'll need to add a security exce
 
 ## Source Code Structure
 
-* **models/** - Data model and business logic for Things
+* **adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
+* **config/** - Gateway configuration (e.g. URL structure and adapter configuration)
 * **controllers/** - App URL routes and their logic
-* **adapters/** - Network adapter device drivers (e.g. ZigBee, Z-Wave)
+* **models/** - Data model and business logic for Things
 * **static/** - Static HTML, CSS, JavaScript & image resources for web app front end
-  * **css/** - Style sheets
-  * **images/** - Image files
-  * **js/** - JavaScript files for the web app front end
-  * **index.html** - The home page of the gateway
-  * **things.json** - A default list of devices to populate the database with
-  * **app.webmanifest** - W3C web app manifest for front end
+* **adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
 * **app.js** - The main back end script
 * **db.js** - Manages the SQLite3 database
-* **adapter.js** - Base class used by adapters
-* **device.js** - Base class used by adapter devices.
-* **adapter-manager.js** - Manages the various network adapters of the gateway (e.g. ZigBee, Z-Wave)
 * **package.json** - npm module manifest
