@@ -75,6 +75,11 @@ zci[zci.MANAGEMENT_LEAVE_REQUEST] = 'Mgmt Leave Req (0x0034)';
 zci.MANAGEMENT_LEAVE_RESPONSE = 0x8034;
 zci[zci.MANAGEMENT_LEAVE_RESPONSE] = 'Mgmt Leave Resp (0x8034)';
 
+zci.MANAGEMENT_PERMIT_JOIN_REQUEST = 0x0036;
+zci[zci.MANAGEMENT_PERMIT_JOIN_REQUEST] = 'Mgmt Permit Join Req (0x0036)';
+zci.MANAGEMENT_PERMIT_JOIN_RESPONSE = 0x8036;
+zci[zci.MANAGEMENT_PERMIT_JOIN_RESPONSE] = 'Mgmt Permit Join Resp (0x8036)';
+
 zci.MANAGEMENT_NETWORK_UPDATE_REQUEST = 0x0038;
 zci[zci.MANAGEMENT_NETWORK_UPDATE_REQUEST] = 'Mgmt Network Update Req (0x0038)';
 zci.MANAGEMENT_NETWORK_UPDATE_NOTIFY = 0x8038;
@@ -209,6 +214,11 @@ zdoBuilder[zci.MANAGEMENT_LQI_REQUEST] = function(frame, builder) {
   builder.appendUInt8(frame.startIndex);
 };
 
+zdoBuilder[zci.MANAGEMENT_PERMIT_JOIN_REQUEST] = function(frame, builder) {
+  builder.appendUInt8(frame.permitDuration);
+  builder.appendUInt8(frame.trustCenterSignificance);
+};
+
 zdoBuilder[zci.MANAGEMENT_RTG_REQUEST] = function(frame, builder) {
   builder.appendUInt8(frame.startIndex);
 };
@@ -291,6 +301,10 @@ zdoParser[zci.MANAGEMENT_NETWORK_UPDATE_NOTIFY] = function(frame, reader) {
     frame.energyValues[i] = reader.nextUInt8();
   }
 };
+
+zdoParser[zci.MANAGEMENT_PERMIT_JOIN_RESPONSE] = function(frame, reader) {
+  frame.status = reader.nextUInt8();
+}
 
 zdoParser[zci.MANAGEMENT_RTG_RESPONSE] = function(frame, reader) {
   frame.status = reader.nextUInt8();

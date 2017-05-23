@@ -35,6 +35,16 @@ var Actions = {
   },
 
   /**
+   * Get a particular action.
+   *
+   * @returns {Object} The specified action, or udefined if the action
+   * doesn't exist.
+   */
+  get: function(id) {
+    return this.actions[id];
+  },
+
+  /**
    * Get a list of all current actions.
    *
    * @returns {Object} A map of current actions.
@@ -51,16 +61,42 @@ var Actions = {
   add: function(action) {
     var id = action.id;
     this.actions[id] = action;
+    action.status = 'pending';
     switch(action.name) {
       case 'pair':
         AdapterManager.addNewThing().then(function(thing) {
           Things.handleNewThing(thing);
+          action.status = 'completed';
         }).catch(function(error) {
-          console.error('Thing was not added ' + error);
+          action.status = 'error';
+          action.error = error;
+          console.error('Thing was not added');
+          console.error(error);
         });
         break;
+      case 'unpair':
+        if (action.parameters.id) {
+          AdapterManager.removeThing(action.parameters.id)
+            .then(function(thingIdUnpaired) {
+              console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
+              Things.handleRemovedThing(thingIdUnpaired);
+              action.status = 'completed';
+            }).catch(function(error) {
+              action.status = 'error';
+              action.error = error;
+              console.error('unpair of thing:',
+                            action.parameters.id, 'failed.');
+              console.error(error);
+            });
+        } else {
+          var msg = "unpair missing 'id' parameter.";
+          action.status = 'error';
+          action.error = msg;
+          console.error(msg);
+        }
+        break;
       default:
-        throw 'Invalid action name';
+        throw 'Invalid action name: "' + action.name + '"';
     }
   },
 
@@ -72,16 +108,26 @@ var Actions = {
    * If the action has not yet been completed, it is cancelled.
    */
   remove: function(id) {
-    if(!this.actions[id]) {
-      throw 'Invalid action id';
+    var action = this.actions[id];
+    if(!action) {
+      throw 'Invalid action id: ' + id;
     }
-    switch(this.actions[id].name) {
-      case 'pair':
-        AdapterManager.cancelAddNewThing();
-        break;
+
+    if (action.status === 'pending') {
+      switch(action.name) {
+        case 'pair':
+          AdapterManager.cancelAddNewThing();
+          break;
+        case 'unpair':
+          AdapterManager.cancelRemoveThing(action.parameters.id);
+          break;
+        default:
+          throw 'Invalid action name: "' + action.name + '"';
+      }
     }
+
+    action.status = 'deleted';
     delete this.actions[id];
-    return;
   }
 };
 

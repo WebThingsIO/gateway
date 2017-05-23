@@ -32,6 +32,10 @@ adapterManager.on('property-changed', (property) => {
               'value:', property.value);
 });
 
+adapterManager.on('pairing-timeout', () => {
+  console.log('debug: Got "pairing-timeout" notification');
+});
+
 /**
  * Add a new device
  */

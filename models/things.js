@@ -117,6 +117,11 @@ var Things = {
      });
    },
 
+   handleRemovedThing: function(thingId) {
+    /// TODO: Remove from database
+    /// TODO: Send websocket notification
+   },
+
   /**
    * Add a websocket to the list of new Thing subscribers.
    *

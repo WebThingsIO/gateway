@@ -13,16 +13,22 @@
 var Actions = require('../models/actions');
 var config = require('../config');
 
-var Action = function(name) {
+var Action = function(name, parameters) {
   this.id = Actions.generateId();
   this.name = name;
+  this.parameters = parameters || {};
   this.href = config.ACTIONS_PATH + '/' + this.id;
+  this.status = 'created';
+  this.error = '';
 };
 
 Action.prototype.getDescription = function() {
   return {
     'name': this.name,
-    'href': this.href
+    'parameters': this.parameters,
+    'href': this.href,
+    'status': this.status,
+    'error': this.error,
   };
 };
 

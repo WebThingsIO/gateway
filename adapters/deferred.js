@@ -1,6 +1,6 @@
 /**
- * Wraps up a promise in a slightly more convenient manner for passing 
- * around, or saving. 
+ * Wraps up a promise in a slightly more convenient manner for passing
+ * around, or saving.
  *
  * @module Deferred
  */

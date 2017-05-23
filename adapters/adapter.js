@@ -91,7 +91,7 @@ class Adapter {
     this.manager.handleDeviceRemoved(device);
   }
 
-  startPairing() {
+  startPairing(timeoutSeconds) {
     console.log('Adapter:', this.name, 'id', this.id, 'pairing started');
   }
 

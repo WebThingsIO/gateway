@@ -69,8 +69,13 @@ class AdapterManager extends EventEmitter {
       for (var adapterId in this.adapters) {
         var adapter = this.adapters[adapterId];
         console.log('About to call startPairing on', adapter.name);
-        adapter.startPairing();
+        adapter.startPairing(config.adapterManager.pairingTimeout);
       }
+      this.pairingTimeout = setTimeout(() => {
+        console.log('Pairing timeout');
+        this.emit('pairing-timeout');
+        this.cancelAddNewThing();
+      }, config.adapterManager.pairingTimeout * 1000);
     }
 
     return deferredAdd.promise;
@@ -83,6 +88,11 @@ class AdapterManager extends EventEmitter {
    */
   cancelAddNewThing() {
     var deferredAdd = this.deferredAdd;
+
+    if (this.pairingTimeout) {
+      clearTimeout(this.pairingTimeout);
+      this.pairingTimeout = null;
+    }
 
     if (deferredAdd) {
       for (var adapterId in this.adapters) {
@@ -257,7 +267,10 @@ class AdapterManager extends EventEmitter {
           adapter.cancelPairing();
         }
       }
-      console.log('AdapterManager: About to resolve deferredAdd');
+      if (this.pairingTimeout) {
+        clearTimeout(this.pairingTimeout);
+        this.pairingTimeout = null;
+      }
       deferredAdd.resolve(thing);
     }
   }
@@ -329,7 +342,7 @@ class AdapterManager extends EventEmitter {
         this.deferredRemove = deferredRemove;
         device.adapter.removeThing(device);
       } else {
-        deferredRemove.reject('removeThing: thingId "' + thingId + '" not found.');
+        deferredRemove.reject('removeThing: thingId: ' + thingId + ' not found.');
       }
     }
 

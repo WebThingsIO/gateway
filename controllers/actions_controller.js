@@ -27,15 +27,18 @@ ActionsController.post('/', function (request, response) {
     return;
   }
 
-  var action = new Action(request.body.name);
+  var actionName = request.body.name;
+  var actionParams = request.body.parameters;
+  var action = new Action(actionName, actionParams);
 
   try {
     Actions.add(action);
+    response.status(201).json(action.getDescription());
   } catch(e) {
-    response.status(400).send('Invalid action name');
+    console.error('Creating action', actionName, 'failed');
+    console.error(e);
+    response.status(400).send(e);
   }
-
-  response.status(201).json(action.getDescription());
 });
 
 /**
@@ -46,6 +49,21 @@ ActionsController.get('/', function(request, response) {
 });
 
 /**
+ * Handle getting a particular action.
+ */
+ActionsController.get('/:actionId', function(request, response) {
+  var actionId = request.params.actionId;
+  var action =  Actions.get(actionId);
+  if (action) {
+    response.status(200).json(action);
+  } else {
+    var error = 'Action "' + actionId + '" not found';
+    console.error(error);
+    response.status(404).send(error);
+  }
+});
+
+/**
  * Handle cancelling an action.
  */
 ActionsController.delete('/:actionId', function(request, response) {
@@ -53,7 +71,9 @@ ActionsController.delete('/:actionId', function(request, response) {
   try {
     Actions.remove(actionId);
   } catch(e) {
-    response.status(404).send('Action ""' + actionId + '" not found.');
+    console.error('Removing action', actionId, 'failed');
+    console.error(e);
+    response.status(404).send(e);
     return;
   }
   response.status(204).send();

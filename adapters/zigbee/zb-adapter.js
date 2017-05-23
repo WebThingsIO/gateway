@@ -14,6 +14,7 @@ var ZigBeeNode = require('./zb-node');
 var SerialPort = require('serialport');
 var xbeeApi = require('xbee-api');
 var at = require('./zb-at');
+var config = require('../../config');
 var util = require('util');
 var utils = require('../utils');
 var zdo = require('./zb-zdo');
@@ -23,6 +24,8 @@ var zigBeeClassifier = require('./zb-classifier');
 
 var C = xbeeApi.constants;
 var AT_CMD = at.AT_CMD;
+
+var zb_config = config.adapters.zigbee;
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);
@@ -103,6 +106,8 @@ class ZigBeeAdapter extends Adapter {
     this.debugFrameParsing = false;
 
     this.frameDumped = false;
+    this.isPairing = false;
+    this.pairingTimeout = null;
 
     this.xb = new xbeeApi.XBeeAPI({
       api_mode: 1,
@@ -156,12 +161,12 @@ class ZigBeeAdapter extends Adapter {
         this.AT(AT_CMD.SCAN_CHANNELS),
         this.AT(AT_CMD.NODE_IDENTIFIER),
         this.AT(AT_CMD.NUM_REMAINING_CHILDREN),
-        this.AT(AT_CMD.NODE_JOIN_TIME),
         this.AT(AT_CMD.ZIGBEE_STACK_PROFILE),
         this.AT(AT_CMD.API_OPTIONS),
         this.AT(AT_CMD.ENCRYPTION_ENABLED),
         this.AT(AT_CMD.ENCRYPTION_OPTIONS),
         FUNC(this, this.configureIfNeeded, []),
+        FUNC(this, this.permitJoin, [0]),
         FUNC(this, this.adapterInitialized, []),
       ]);
     });
@@ -582,6 +587,9 @@ class ZigBeeAdapter extends Adapter {
       node = this.nodes[frame.zdoAddr64] =
         new ZigBeeNode(this, frame.zdoAddr64, frame.zdoAddr16);
     }
+    if (this.isPairing) {
+      this.cancelPairing();
+    }
     this.populateNodeInfo(node);
   }
 
@@ -934,15 +942,51 @@ class ZigBeeAdapter extends Adapter {
     this.handleDeviceRemoved(node);
   }
 
+  //----- PERMIT JOIN -------------------------------------------------------
+
+  permitJoin(seconds) {
+    this.networkJoinTime = seconds;
+
+    var permitJoinFrame = this.zdo.makeFrame({
+      destination64: '000000000000ffff',
+      destination16: 'fffe',
+      clusterId: zdo.CLUSTER_ID.MANAGEMENT_PERMIT_JOIN_REQUEST,
+      permitDuration: seconds,
+      trustCenterSignificance: 0,
+    });
+
+    this.queueCommandsAtFront([
+      this.AT(AT_CMD.NODE_JOIN_TIME, {networkJoinTime: seconds}),
+      new Command(SEND_FRAME, permitJoinFrame),
+      new Command(WAIT_FRAME, {
+        type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
+        id: permitJoinFrame.id,
+      }),
+    ]);
+  }
+
+  startPairing(timeoutSeconds) {
+    console.log('ZigBee: Pairing mode started');
+    this.isPairing = true;
+    this.permitJoin(timeoutSeconds);
+  }
+
+  cancelPairing() {
+    console.log('ZigBee: Cancelling pairing mode');
+    this.isPairing = false;
+    this.permitJoin(0);
+  }
+
   //-------------------------------------------------------------------------
 
   sendFrame(frame) {
-    this.queueCommands([new Command(SEND_FRAME, frame),
-                        new Command(WAIT_FRAME, {
-                          type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
-                          id: frame.id,
-                        }),
-                      ]);
+    this.queueCommands([
+      new Command(SEND_FRAME, frame),
+      new Command(WAIT_FRAME, {
+        type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
+        id: frame.id,
+      }),
+    ]);
   }
 
   //-------------------------------------------------------------------------
@@ -960,10 +1004,10 @@ class ZigBeeAdapter extends Adapter {
   }
 
   handleFrame(frame) {
-    this.frameDumped = false;
     if (this.debugFrameParsing) {
       this.dumpFrame('Rcvd (before parsing):', frame);
     }
+    this.frameDumped = false;
     var frameHandler = ZigBeeAdapter.frameHandler[frame.type];
     if (frameHandler) {
       frameHandler.call(this, frame);
