@@ -294,10 +294,10 @@ class ZWaveAdapter extends Adapter {
     }
   }
 
-  valueRemoved(nodeId, comClass, valueIndex) {
+  valueRemoved(nodeId, comClass, valueInstance, valueIndex) {
     var node = this.nodes[nodeId];
     if (node) {
-      node.zwValueRemoved(comClass, valueIndex);
+      node.zwValueRemoved(comClass, valueInstance, valueIndex);
     }
   }
 
@@ -313,15 +313,16 @@ class ZWaveAdapter extends Adapter {
     this.zwave.cancelControllerCommand();
   }
 
-  startUnpairing() {
+  removeThing(node) {
+    // ZWave can't really remove a particular thing.
     console.log('ZWave: ==================================================');
     console.log('ZWave: Press the Exclusion button on the device to remove');
     console.log('ZWave: ==================================================');
     this.zwave.removeNode();
   }
 
-  cancelUnpairing() {
-    console.log('ZWave: Cancelling unpairing mode');
+  cancelRemoveThing(node) {
+    console.log('ZWave: Cancelling remove mode');
     this.zwave.cancelControllerCommand();
   }
 

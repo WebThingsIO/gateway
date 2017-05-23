@@ -95,19 +95,22 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method cancelAddSomeThing
+   * @method cancelRemoveThing
    *
-   * Cancels a previous removeSomeThing request.
+   * Cancels a previous removeThing request.
    */
-  cancelRemoveSomeThing() {
+  cancelRemoveThing(thingId) {
     var deferredRemove = this.deferredRemove;
     if (deferredRemove) {
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
-        adapter.cancelUnpairing();
+      var device = this.getDevice(thingId);
+      if (device) {
+        var adapter = device.adapter;
+        if (adapter) {
+          adapter.cancelRemoveThing(device);
+        }
       }
       this.deferredRemove = null;
-      deferredRemove.reject('removeSomeThing cancelled');
+      deferredRemove.reject('removeThing cancelled');
     }
   }
 
@@ -277,21 +280,10 @@ class AdapterManager extends EventEmitter {
      */
     this.emit('thing-removed', thing);
 
-    // If this device was removed in response to removeSomeThing, then
-    // We need to cancel unpairing mode on all of the "other" adapters.
-
-    console.log('AdapterManager: handleDeviceRemoved');
     var deferredRemove = this.deferredRemove;
-    if (deferredRemove) {
+    if (deferredRemove && deferredRemove.adapter == device.adapter) {
       this.deferredRemove = null;
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
-        if (adapter !== device.adapter) {
-          adapter.cancelUnpairing();
-        }
-      }
-      console.log('AdapterManager: About to resolve deferredRemove');
-      deferredRemove.resolve(thing);
+      deferredRemove.resolve(device.id);
     }
   }
 
@@ -314,12 +306,16 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method removeSomeThing
-   * Initiates unpairing on all of the adapters that support it.
-   * The user then presses the "button" on the device to be removed.
-   * @returns A promise that resolves to the removed device.
+   * @method removeThing
+   *
+   * Initiates removing a particular device.
+   * @returns A promise that resolves to the device which was actually removed.
+   * Note that it's possible that the device actually removed might
+   * not be the same as the one requested. This can occur with zwave for
+   * example if the user presses the button on a device which is different
+   * from the one that they requested removal of.
    */
-  removeSomeThing() {
+   removeThing(thingId) {
     var deferredRemove = new Deferred();
 
     if (this.deferredAdd) {
@@ -327,15 +323,18 @@ class AdapterManager extends EventEmitter {
     } else if (this.deferredRemove) {
       deferredRemove.reject('Remove already in progress');
     } else {
-      this.deferredRemove = deferredRemove;
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
-        adapter.startUnpairing();
+      var device = this.getDevice(thingId);
+      if (device) {
+        deferredRemove.adapter = device.adapter;
+        this.deferredRemove = deferredRemove;
+        device.adapter.removeThing(device);
+      } else {
+        deferredRemove.reject('removeThing: thingId "' + thingId + '" not found.');
       }
     }
 
     return deferredRemove.promise;
-  }
+   }
 
   /**
    * @method unloadAdapters

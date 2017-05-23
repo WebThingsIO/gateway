@@ -164,17 +164,21 @@ class ZWaveNode extends Device {
     var valueId = this.zwInfo.nodeId + '-' +
                   comClass + '-' + instance + '-' + index;
     var zwValue = this.zwValues[valueId];
-    delete this.zwValues[valueId];
-    var property = this.findPropertyFromValueId(zwValue.value_id);
-    if (property) {
-      delete property.valueId;
-      delete property.value;
-      console.log('ZWave: node%d valueRemoved: %d:%s -> %s property: %s',
-                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
-                  property.name);
+    if (zwValue) {
+      delete this.zwValues[valueId];
+      var property = this.findPropertyFromValueId(zwValue.value_id);
+      if (property) {
+        delete property.valueId;
+        delete property.value;
+        console.log('ZWave: node%d valueRemoved: %d:%s -> %s property: %s',
+                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
+                    property.name);
+      } else {
+        console.log('ZWave: node%d valueRemoved: %d:%s -> %s',
+                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+      }
     } else {
-      console.log('ZWave: node%d valueRemoved: %d:%s -> %s',
-                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+      console.log('ZWave: zwValueRemoved unknown valueId:', valueId);
     }
   }
 }

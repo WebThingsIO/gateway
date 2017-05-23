@@ -99,12 +99,12 @@ class Adapter {
     console.log('Adapter:', this.name, 'id', this.id, 'pairing cancelled');
   }
 
-  startUnpairing() {
-    console.log('Adapter:', this.name, 'id', this.id, 'unpairing started');
+  removeThing(device) {
+    console.log('Adapter:', this.name, 'id', this.id, 'removeThing(', device.id, ') started');
   }
 
-  cancelUnpairing() {
-    console.log('Adapter:', this.name, 'id', this.id, 'unpairing cancelled');
+  cancelRemoveThing(device) {
+    console.log('Adapter:', this.name, 'id', this.id, 'cancelRemoveThing(', device.id, ')');
   }
 
   unload() {
