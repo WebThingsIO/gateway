@@ -55,8 +55,9 @@ debugController.get('/cancelAddNewThing', (request, response) => {
 /**
  * Cancel removing a device;
  */
-debugController.get('/cancelRemoveSomeThing', (request, response) => {
-  adapterManager.cancelRemoveSomeThing();
+debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
+  var thingId = request.params.thingId;
+  adapterManager.cancelRemoveThing(thingId);
   response.status(204).send();
 });
 
@@ -207,15 +208,21 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
 });
 
 /**
- * Remove an existing device.
+ * Remove an existing Thing.
  */
-debugController.get('/removeSomeThing', (request, response) => {
-  adapterManager.removeSomeThing().then((thing) => {
-    console.log('debugController: removeSomeThing removed', thing);
+debugController.get('/removeThing/:thingId', (request, response) => {
+  var thingId = request.params.thingId;
+  adapterManager.removeThing(thingId).then((thingIdRemoved) => {
+    console.log('debugController: removed', thingIdRemoved);
+    if (thingId != thingIdRemoved) {
+      console.log('debugController: Actually removed', thingIdRemoved,
+                  'even though request was for:', thingId);
+    }
+    response.status(200).json({removed: thingIdRemoved});
   }, (str) => {
-    console.log('debugController: removeSomeThing cancelled');
+    console.log('debugController: remove failed:', str);
+    response.status(500).send('remove of ' + thingId + ' failed: ' + str);
   });
-  response.status(204).send();
 });
 
 module.exports = debugController;

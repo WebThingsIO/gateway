@@ -70,6 +70,11 @@ zci[zci.MANAGEMENT_RTG_REQUEST] = 'Mgmt RTG (Routing Table) Req (0x0032)';
 zci.MANAGEMENT_RTG_RESPONSE = 0x8032;
 zci[zci.MANAGEMENT_RTG_RESPONSE] = 'Mgmt RTG (Routing Table) Resp (0x8032)';
 
+zci.MANAGEMENT_LEAVE_REQUEST = 0x0034;
+zci[zci.MANAGEMENT_LEAVE_REQUEST] = 'Mgmt Leave Req (0x0034)';
+zci.MANAGEMENT_LEAVE_RESPONSE = 0x8034;
+zci[zci.MANAGEMENT_LEAVE_RESPONSE] = 'Mgmt Leave Resp (0x8034)';
+
 zci.MANAGEMENT_NETWORK_UPDATE_REQUEST = 0x0038;
 zci[zci.MANAGEMENT_NETWORK_UPDATE_REQUEST] = 'Mgmt Network Update Req (0x0038)';
 zci.MANAGEMENT_NETWORK_UPDATE_NOTIFY = 0x8038;
@@ -195,6 +200,11 @@ zdoBuilder[zci.BIND_REQUEST] = function(frame, builder) {
   }
 };
 
+zdoBuilder[zci.MANAGEMENT_LEAVE_REQUEST] = function(frame, builder) {
+  builder.appendString(frame.destination64.swapHex(), 'hex');
+  builder.appendUInt8(frame.leaveOptions);
+};
+
 zdoBuilder[zci.MANAGEMENT_LQI_REQUEST] = function(frame, builder) {
   builder.appendUInt8(frame.startIndex);
 };
@@ -238,6 +248,10 @@ zdoParser[zci.END_DEVICE_ANNOUNCEMENT] = function(frame, reader) {
   frame.zdoAddr16 = reader.nextString(2, 'hex').swapHex();
   frame.zdoAddr64 = reader.nextString(8, 'hex').swapHex();
   frame.capability = reader.nextUInt8();
+};
+
+zdoParser[zci.MANAGEMENT_LEAVE_RESPONSE] = function(frame, reader) {
+  frame.status = reader.nextUInt8();
 };
 
 zdoParser[zci.MANAGEMENT_LQI_RESPONSE] = function(frame, reader) {
@@ -341,6 +355,9 @@ zdoParser[zci.NODE_DESCRIPTOR_RESPONSE] = function(frame, reader) {
 zdoParser[zci.SIMPLE_DESCRIPTOR_RESPONSE] = function(frame, reader) {
   frame.status = reader.nextUInt8();
   frame.zdoAddr16 = reader.nextString(2, 'hex').swapHex();
+  if (reader.offset >= reader.buf.length) {
+    return;
+  }
   frame.simpleDescriptorLength = reader.nextUInt8();
 
   if (frame.simpleDescriptorLength === 0) {

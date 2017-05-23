@@ -102,6 +102,8 @@ class ZigBeeAdapter extends Adapter {
     // if the frame parsing code is crashing.
     this.debugFrameParsing = false;
 
+    this.frameDumped = false;
+
     this.xb = new xbeeApi.XBeeAPI({
       api_mode: 1,
       raw_frames: this.debugRawFrames,
@@ -250,6 +252,7 @@ class ZigBeeAdapter extends Adapter {
   }
 
   dumpFrame(label, frame) {
+    this.frameDumped = true;
     var frameTypeStr = C.FRAME_TYPE[frame.type];
     if (!frameTypeStr) {
       frameTypeStr = 'Unknown(0x' + frame.type.toString(16) + ')';
@@ -312,7 +315,7 @@ class ZigBeeAdapter extends Adapter {
           console.log(label, 'Explicit Rx', frame.remote64,
                       'ZHA', frame.clusterId,
                       zclId.cluster(parseInt(frame.clusterId, 16)).key,
-                      frame.zcl.cmdId);
+                      frame.zcl ? frame.zcl.cmdId : '???');
         } else {
           console.log(label, frame.remote64, frame.clusterId);
         }
@@ -484,6 +487,9 @@ class ZigBeeAdapter extends Adapter {
   handleExplicitRx(frame) {
     if (this.zdo.isZdoFrame(frame)) {
       this.zdo.parseZdoFrame(frame);
+      if (this.debugFrames) {
+        this.dumpFrame('Rcvd:', frame);
+      }
       var clusterId = parseInt(frame.clusterId, 16);
       if (clusterId in ZigBeeAdapter.zdoClusterHandler) {
         ZigBeeAdapter.zdoClusterHandler[clusterId].call(this, frame);
@@ -495,6 +501,9 @@ class ZigBeeAdapter extends Adapter {
           console.log(error);
         } else {
           frame.zcl = data;
+          if (this.debugFrames) {
+            this.dumpFrame('Rcvd:', frame);
+          }
           var node = this.nodes[frame.remote64];
           if (node) {
             node.handleZhaResponse(frame);
@@ -554,6 +563,26 @@ class ZigBeeAdapter extends Adapter {
 
   handleAtSerialNumberLow(frame) {
     this.serialNumber = this.serialNumber.slice(0, 8) + frame.serialNumberLow;
+  }
+
+  //----- END DEVICE ANNOUNCEMENT -------------------------------------------
+
+  handleEndDeviceAnnouncement(frame) {
+    if (this.debugFlow) {
+      console.log('Processing END_DEVICE_ANNOUNCEMENT');
+    }
+
+    var node = this.nodes[frame.zdoAddr64];
+    if (node) {
+      // This probably shouldn't happen, but if it does, update the
+      // 16 bit address.
+      node.addr16 = frame.zdoAddr16;
+    } else {
+
+      node = this.nodes[frame.zdoAddr64] =
+        new ZigBeeNode(this, frame.zdoAddr64, frame.zdoAddr16);
+    }
+    this.populateNodeInfo(node);
   }
 
   //----- GET ACTIVE ENDPOINTS ----------------------------------------------
@@ -676,9 +705,8 @@ class ZigBeeAdapter extends Adapter {
     }
     var node = this.nodes[frame.remote64];
     if (!node) {
-      node = this.nodes[frame.remote64] = new ZigBeeNode(this,
-                                                          frame.remote64,
-                                                          frame.remote16);
+      node = this.nodes[frame.remote64] =
+        new ZigBeeNode(this, frame.remote64, frame.remote16);
     }
 
     for (var i = 0; i < frame.numEntriesThisResponse; i++) {
@@ -690,9 +718,8 @@ class ZigBeeAdapter extends Adapter {
       }
       var neighborNode = this.nodes[neighbor.addr64];
       if (!neighborNode) {
-        this.nodes[neighbor.addr64] = new ZigBeeNode(this,
-                                                      neighbor.addr64,
-                                                      neighbor.addr16);
+        this.nodes[neighbor.addr64] =
+          new ZigBeeNode(this, neighbor.addr64, neighbor.addr16);
         neighborNode = this.nodes[neighbor.addr64];
       }
       if (neighborNode.addr16 == 'fffe') {
@@ -816,9 +843,17 @@ class ZigBeeAdapter extends Adapter {
     });
     return [
       new Command(SEND_FRAME, nodeDescFrame),
+
+      // I've seen a couple of cases where the Tx Status message seems
+      // to get dropped, so wait for the actual response instead.
+      //
+      // TODO: Should probably update all of the WAIT_FRAME to wait for
+      // the actual response rather than the Tx Status message
       new Command(WAIT_FRAME, {
-        type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
-        id: nodeDescFrame.id,
+        type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+        clusterId: this.zdo.getClusterIdAsString(
+          zdo.CLUSTER_ID.SIMPLE_DESCRIPTOR_RESPONSE),
+        zdoSeq: nodeDescFrame.id,
       }),
     ];
   }
@@ -838,6 +873,65 @@ class ZigBeeAdapter extends Adapter {
         endpoint.outputClusters = frame.outputClusters.slice(0);
       }
     }
+  }
+
+  //----- MANAGEMENT LEAVE --------------------------------------------------
+
+  removeThing(node) {
+    if (this.debugFlow) {
+      console.log('removeThing(' + node.addr64 + ')');
+    }
+    this.managementLeave(node);
+  }
+
+  cancelRemoveThing(node) {
+    // Nothing to do. We've either sent the leave request or not.
+  }
+
+  managementLeave(node) {
+    if (this.debugFlow) {
+      console.log('managementLeave node.addr64 =', node.addr64);
+    }
+
+    var leaveFrame = this.zdo.makeFrame({
+      destination64: node.addr64,
+      destination16: node.addr16,
+      clusterId: zdo.CLUSTER_ID.MANAGEMENT_LEAVE_REQUEST,
+      leaveOptions: 0,
+    });
+    this.queueCommandsAtFront([
+      new Command(SEND_FRAME, leaveFrame),
+      new Command(WAIT_FRAME, {
+        type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
+        id: leaveFrame.id,
+      }),
+    ]);
+  }
+
+  handleManagementLeaveResponse(frame) {
+    if (frame.status !== 0) {
+      return;
+    }
+    var node = this.nodes[frame.remote64];
+    if (!node) {
+      // Node doesn't exist, nothing else to do
+      return;
+    }
+    // Walk through all of the nodes and remove the node from the
+    // neighbor tables
+
+    for (var nodeAddr in this.nodes) {
+      var scanNode = this.nodes[nodeAddr];
+      for (var neighborIdx in scanNode.neighbors) {
+        var neighbor = scanNode.neighbors[neighborIdx];
+        if (neighbor.addr64 == frame.remote64) {
+          scanNode.neighbors.splice(neighborIdx, 1);
+          break;
+        }
+      }
+    }
+    delete this.nodes[frame.remote64];
+    this.handleDeviceRemoved(node);
   }
 
   //-------------------------------------------------------------------------
@@ -866,6 +960,7 @@ class ZigBeeAdapter extends Adapter {
   }
 
   handleFrame(frame) {
+    this.frameDumped = false;
     if (this.debugFrameParsing) {
       this.dumpFrame('Rcvd (before parsing):', frame);
     }
@@ -873,7 +968,7 @@ class ZigBeeAdapter extends Adapter {
     if (frameHandler) {
       frameHandler.call(this, frame);
     }
-    if (this.debugFrames) {
+    if (this.debugFrames && !this.frameDumped) {
       this.dumpFrame('Rcvd:', frame);
     }
 
@@ -1041,12 +1136,16 @@ fh[C.FRAME_TYPE.ROUTE_RECORD] =
 var zch = ZigBeeAdapter.zdoClusterHandler = {};
 zch[zdo.CLUSTER_ID.ACTIVE_ENDPOINTS_RESPONSE] =
   ZigBeeAdapter.prototype.handleActiveEndpointsResponse;
+zch[zdo.CLUSTER_ID.MANAGEMENT_LEAVE_RESPONSE] =
+  ZigBeeAdapter.prototype.handleManagementLeaveResponse;
 zch[zdo.CLUSTER_ID.MANAGEMENT_LQI_RESPONSE] =
   ZigBeeAdapter.prototype.handleManagementLqiResponse;
 zch[zdo.CLUSTER_ID.MANAGEMENT_RTG_RESPONSE] =
   ZigBeeAdapter.prototype.handleManagementRtgResponse;
 zch[zdo.CLUSTER_ID.SIMPLE_DESCRIPTOR_RESPONSE] =
   ZigBeeAdapter.prototype.handleSimpleDescriptorResponse;
+zch[zdo.CLUSTER_ID.END_DEVICE_ANNOUNCEMENT] =
+  ZigBeeAdapter.prototype.handleEndDeviceAnnouncement;
 
 function isDigiPort(port) {
   // Note that 0403:6001 is the default FTDI VID:PID, so we need to further
