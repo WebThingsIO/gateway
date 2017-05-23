@@ -22,6 +22,9 @@ var C = xbeeApi.constants;
 
 var ac = exports.AT_CMD = {};
 
+ac.APPLY_CHANGES = 'AC';
+ac[ac.APPLY_CHANGES] = 'Apply Changes (AC)';
+
 ac.API_OPTIONS = 'AO';
 ac[ac.API_OPTIONS] = 'API Options (AO)';
 

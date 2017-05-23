@@ -301,7 +301,7 @@ class ZWaveAdapter extends Adapter {
     }
   }
 
-  startPairing() {
+  startPairing(timeoutSeconds) {
     console.log('ZWave: ===============================================');
     console.log('ZWave: Press the Inclusion button on the device to add');
     console.log('ZWave: ===============================================');

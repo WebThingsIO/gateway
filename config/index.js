@@ -30,4 +30,5 @@ function loadConfig(name) {
 }
 
 exports.adapters = loadConfig('adapter-config');
+exports.adapterManager = loadConfig('adapter-manager-config');
 exports.gpio = loadConfig('gpio-config');
