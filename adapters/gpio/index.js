@@ -8,7 +8,7 @@
 
 'use strict';
 
-var config = require('../../config');
+var config = require('config');
 var fs = require('fs');
 
 function maybeLoadGpioAdapter(adapterManager) {
@@ -27,7 +27,7 @@ function maybeLoadGpioAdapter(adapterManager) {
   }
 
   var loadGpioAdapter = require('./gpio-adapter');
-  loadGpioAdapter(adapterManager, config.gpio);
+  loadGpioAdapter(adapterManager, config.get('adapter.gpio'));
 }
 
 module.exports = maybeLoadGpioAdapter;

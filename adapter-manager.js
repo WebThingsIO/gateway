@@ -11,7 +11,7 @@
 
 'use strict';
 
-var config = require('./config');
+var config = require('config');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 
@@ -64,16 +64,17 @@ class AdapterManager extends EventEmitter {
       deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
+      var pairingTimeout = config.get('adapterManager.pairingTimeout');
       for (var adapterId in this.adapters) {
         var adapter = this.adapters[adapterId];
         console.log('About to call startPairing on', adapter.name);
-        adapter.startPairing(config.adapterManager.pairingTimeout);
+        adapter.startPairing(pairingTimeout);
       }
       this.pairingTimeout = setTimeout(() => {
         console.log('Pairing timeout');
         this.emit('pairing-timeout');
         this.cancelAddNewThing();
-      }, config.adapterManager.pairingTimeout * 1000);
+      }, pairingTimeout * 1000);
     }
 
     return deferredAdd.promise;
@@ -303,8 +304,9 @@ class AdapterManager extends EventEmitter {
    * Loads all of the configured adapters from the adapters directory.
    */
   loadAdapters() {
-    for (var adapterName in config.adapters) {
-      var adapterConfig = config.adapters[adapterName];
+    var adaptersConfig = config.get('adapters');
+    for (var adapterName in adaptersConfig) {
+      var adapterConfig = adaptersConfig[adapterName];
 
       if (adapterConfig.enabled) {
         console.log('Loading adapters for', adapterName,
@@ -312,7 +314,8 @@ class AdapterManager extends EventEmitter {
         let adapterLoader = require(adapterConfig.path);
         adapterLoader(this);
       } else {
-        console.log('Not loading adapters for', adapterName, '- disabled');
+        console.log('Not loading adapters for', adapterName,
+                    '- disabled');
       }
     }
   }

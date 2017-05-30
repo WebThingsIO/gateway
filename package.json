@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "./test/run-tests.sh",
-    "jshint": "./test/jshint-all.sh"
+    "jshint": "./test/jshint-all.sh",
+    "mocha": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "homepage": "https://wiki.mozilla.org/MozIoT",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "config": "^1.26.1",
     "express": "^4.15.2",
     "express-ws": "^3.0.0",
     "node-getopt": "^0.2.3",
@@ -32,7 +34,10 @@
     "zcl-packet": "^0.2.2"
   },
   "devDependencies": {
+    "chai": "^4.0.1",
+    "chai-http": "^3.0.0",
     "jshint": "^2.9.4",
+    "mocha": "^3.4.2",
     "node-rest-client": "^3.1.0"
   }
 }

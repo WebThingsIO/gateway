@@ -10,7 +10,7 @@
 
 'use strict';
 
-var Config = require('../config');
+var Constants = require('../constants');
 
 /**
  * Thing constructor.
@@ -29,7 +29,7 @@ var Thing = function(id, description) {
   this.id = id;
   this.name = description.name || '';
   this.type = description.type || '';
-  this.href = description.href || Config.THINGS_PATH + '/' + this.id;
+  this.href = description.href || Constants.THINGS_PATH + '/' + this.id;
   this.properties = {};
   this.actions = {};
   this.events = {};
@@ -37,8 +37,8 @@ var Thing = function(id, description) {
     for (var propertyName in description.properties) {
       var property = description.properties[propertyName];
       // Give the property a URL if it doesn't have one
-      property.href = property.href || Config.THINGS_PATH + '/' + this.id +
-        Config.PROPERTIES_PATH + '/' + propertyName;
+      property.href = property.href || Constants.THINGS_PATH + '/' + this.id +
+        Constants.PROPERTIES_PATH + '/' + propertyName;
       this.properties[propertyName] = property;
     }
   }

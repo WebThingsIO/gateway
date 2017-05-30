@@ -22,7 +22,7 @@ var bodyParser = require('body-parser');
 var GetOpt = require('node-getopt');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
-var config = require('./config');
+var Constants = require('./constants');
 
 var port = 8080;
 var https_port = 4443;
@@ -66,19 +66,20 @@ app.use(bodyParser.json());
 db.open();
 
 // Things router
-app.use(config.THINGS_PATH, require('./controllers/things_controller'));
+app.use(Constants.THINGS_PATH, require('./controllers/things_controller'));
 // New Things router
-app.use(config.NEW_THINGS_PATH, require('./controllers/new_things_controller'));
+app.use(Constants.NEW_THINGS_PATH,
+        require('./controllers/new_things_controller'));
 // Adapters router
-app.use(config.ADAPTERS_PATH, require('./controllers/adapters_controller'));
+app.use(Constants.ADAPTERS_PATH, require('./controllers/adapters_controller'));
 // Actions router
-app.use(config.ACTIONS_PATH, require('./controllers/actions_controller'));
+app.use(Constants.ACTIONS_PATH, require('./controllers/actions_controller'));
 // Debug router
 if (opt.options.debug) {
-  app.use(config.DEBUG_PATH, require('./controllers/debug_controller'));
+  app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
 }
 // Static router
-app.use(express.static(config.STATIC_PATH));
+app.use(express.static(Constants.STATIC_PATH));
 
 // Get some decent error messages for unhandled rejections. This is
 // often just errors in the code.
@@ -98,3 +99,5 @@ server.listen(https_port, function() {
   console.log('Listening on port', https_port);
   adapterManager.loadAdapters();
 });
+
+module.exports = app; // for testing

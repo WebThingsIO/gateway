@@ -13,7 +13,7 @@
 var Thing = require('./thing.js');
 var Database = require('../db.js');
 var AdapterManager = require('../adapter-manager');
-var Config = require('../config');
+var Constants = require('../constants');
 
 var Things = {
 
@@ -77,12 +77,14 @@ var Things = {
          var newThings = [];
          connectedThings.forEach(function(connectedThing) {
            if(!storedThings.has(connectedThing.id)) {
-             connectedThing.href = Config.THINGS_PATH + '/' + connectedThing.id;
+             connectedThing.href =
+              Constants.THINGS_PATH + '/' + connectedThing.id;
              if (connectedThing.properties) {
                for (var propertyName in connectedThing.properties) {
                  var property = connectedThing.properties[propertyName];
-                 property.href = Config.THINGS_PATH + '/' + connectedThing.id +
-                   Config.PROPERTIES_PATH + '/' + propertyName;
+                 property.href = Constants.THINGS_PATH +
+                   '/' + connectedThing.id +
+                   Constants.PROPERTIES_PATH + '/' + propertyName;
                }
              }
              newThings.push(connectedThing);

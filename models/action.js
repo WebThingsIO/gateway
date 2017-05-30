@@ -11,13 +11,13 @@
 'use strict';
 
 var Actions = require('../models/actions');
-var config = require('../config');
+var Constants = require('../constants');
 
 var Action = function(name, parameters) {
   this.id = Actions.generateId();
   this.name = name;
   this.parameters = parameters || {};
-  this.href = config.ACTIONS_PATH + '/' + this.id;
+  this.href = Constants.ACTIONS_PATH + '/' + this.id;
   this.status = 'created';
   this.error = '';
 };
