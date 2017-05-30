@@ -10,15 +10,11 @@
 
 'use strict';
 
+var config = require('config');
 var sqlite3 = require('sqlite3').verbose();
 var fs = require('fs');
 
 var Database = {
-  /**
-   * Filename to use for SQLLite 3 database.
-   */
-  DB_FILENAME: 'db.sqlite3',
-
   /**
    * Filename to use for default list of Things.
    */
@@ -33,11 +29,17 @@ var Database = {
    * Open the database.
    */
   open: function() {
-    var filename = './' + this.DB_FILENAME;
+    var filename = config.get('database.filename');
+    var removeBeforeOpen = config.get('database.removeBeforeOpen');
     // Check if database already exists
     var exists = fs.existsSync(filename);
+    if (exists && removeBeforeOpen) {
+      fs.unlinkSync(filename);
+      exists = false;
+    }
+    console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
     // Open database or create it if it doesn't exist
-    this.db = new sqlite3.Database(this.DB_FILENAME);
+    this.db = new sqlite3.Database(filename);
     // If database newly created, populate with default data
     if (!exists) {
       this.populate();
