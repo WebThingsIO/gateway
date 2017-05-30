@@ -89,7 +89,7 @@ var Actions = {
               console.error(error);
             });
         } else {
-          var msg = "unpair missing 'id' parameter.";
+          var msg = 'unpair missing "id" parameter.';
           action.status = 'error';
           action.error = msg;
           console.error(msg);

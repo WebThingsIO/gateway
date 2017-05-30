@@ -18,8 +18,9 @@ exports.ACTIONS_PATH = '/actions';
 exports.STATIC_PATH = 'static';
 exports.DEBUG_PATH = '/debug';
 
-// We only checkin the NAME-example.js files into source code control. If the real
-// config file doesn't exist, then we fallback to the name-example one.
+// We only checkin the NAME-example.js files into source code control.
+// If the real config file doesn't exist, then we fallback to the
+// name-example.js one.
 function loadConfig(name) {
   if (fs.existsSync('./config/' + name + '.js')) {
     console.log('Loading config for', name);

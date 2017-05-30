@@ -14,7 +14,6 @@ var ZigBeeNode = require('./zb-node');
 var SerialPort = require('serialport');
 var xbeeApi = require('xbee-api');
 var at = require('./zb-at');
-var config = require('../../config');
 var util = require('util');
 var utils = require('../utils');
 var zdo = require('./zb-zdo');
@@ -24,8 +23,6 @@ var zigBeeClassifier = require('./zb-classifier');
 
 var C = xbeeApi.constants;
 var AT_CMD = at.AT_CMD;
-
-var zb_config = config.adapters.zigbee;
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);

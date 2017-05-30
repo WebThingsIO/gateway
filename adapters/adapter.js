@@ -100,11 +100,13 @@ class Adapter {
   }
 
   removeThing(device) {
-    console.log('Adapter:', this.name, 'id', this.id, 'removeThing(', device.id, ') started');
+    console.log('Adapter:', this.name, 'id', this.id,
+                'removeThing(', device.id, ') started');
   }
 
   cancelRemoveThing(device) {
-    console.log('Adapter:', this.name, 'id', this.id, 'cancelRemoveThing(', device.id, ')');
+    console.log('Adapter:', this.name, 'id', this.id,
+                'cancelRemoveThing(', device.id, ')');
   }
 
   unload() {

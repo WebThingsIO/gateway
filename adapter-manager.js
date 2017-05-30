@@ -12,8 +12,6 @@
 'use strict';
 
 var config = require('./config');
-var fs = require('fs');
-var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 
@@ -309,7 +307,8 @@ class AdapterManager extends EventEmitter {
       var adapterConfig = config.adapters[adapterName];
 
       if (adapterConfig.enabled) {
-        console.log('Loading adapters for', adapterName, 'from', adapterConfig.path);
+        console.log('Loading adapters for', adapterName,
+                    'from', adapterConfig.path);
         let adapterLoader = require(adapterConfig.path);
         adapterLoader(this);
       } else {
@@ -342,7 +341,8 @@ class AdapterManager extends EventEmitter {
         this.deferredRemove = deferredRemove;
         device.adapter.removeThing(device);
       } else {
-        deferredRemove.reject('removeThing: thingId: ' + thingId + ' not found.');
+        deferredRemove.reject('removeThing: thingId: ' + thingId +
+                              ' not found.');
       }
     }
 

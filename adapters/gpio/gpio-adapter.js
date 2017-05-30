@@ -10,7 +10,6 @@
 'use strict';
 
 var Adapter = require('../adapter');
-var config = require('../../config');
 var Device = require('../device');
 var Gpio = require('onoff').Gpio;
 var Property = require('../property');
@@ -101,7 +100,7 @@ class GpioDevice extends Device {
   initOnOffSwitch() {
     this.type = THING_TYPE_ON_OFF_SWITCH;
     this.properties.set('on',
-      new GpioProperty(this, 'on', 'boolean', this.pinConfig.pin)];
+      new GpioProperty(this, 'on', 'boolean', this.pinConfig.pin));
   }
 }
 

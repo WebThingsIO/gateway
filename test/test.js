@@ -12,13 +12,11 @@
 'use strict';
 
 var Gateway = require('./gateway');
-var Thing = require('./thing');
 var GetOpt = require('node-getopt');
 var utils = require('../utils');
 
 // Command line arguments
 var getopt = new GetOpt([
-  ['d', 'debug',    'Enable debug features'],
   ['h', 'help',     'Display help' ],
   ['v', 'verbose',  'Show verbose output' ],
   ['l', 'list',     'List all things'],
@@ -34,7 +32,6 @@ getopt.bindHelp(
 );
 var opt = getopt.parseSystem();
 const VERBOSE = opt.options.verbose;
-const DEBUG = opt.options.debug;
 
 if (VERBOSE) {
   console.log(opt);
@@ -111,7 +108,7 @@ gateway.getThings().then((things) => {
   if (opt.options.thing) {
     things = things.filter(thingMatches);
   }
-  if (things.length == 0) {
+  if (things.length === 0) {
     console.log('No things found');
     return;
   }
