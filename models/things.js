@@ -79,10 +79,11 @@ var Things = {
            if(!storedThings.has(connectedThing.id)) {
              connectedThing.href = Config.THINGS_PATH + '/' + connectedThing.id;
              if (connectedThing.properties) {
-               connectedThing.properties.forEach(function(property) {
+               for (var propertyName in connectedThing.properties) {
+                 var property = connectedThing.properties[propertyName];
                  property.href = Config.THINGS_PATH + '/' + connectedThing.id +
-                   Config.PROPERTIES_PATH + '/' + property.name;
-               });
+                   Config.PROPERTIES_PATH + '/' + propertyName;
+               }
              }
              newThings.push(connectedThing);
            }

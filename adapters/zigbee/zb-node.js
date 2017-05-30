@@ -94,7 +94,7 @@ class ZigBeeNode extends Device {
     var clusterId = parseInt(frame.clusterId, 16);
     var endpoint = parseInt(frame.sourceEndpoint, 16);
 
-    for (var property of this.properties) {
+    for (var property of this.properties.values()) {
       if (profileId == property.profileId &&
           endpoint == property.endpoint &&
           clusterId == property.clusterId) {
