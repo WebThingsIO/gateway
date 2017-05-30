@@ -30,20 +30,17 @@ var Thing = function(id, description) {
   this.name = description.name || '';
   this.type = description.type || '';
   this.href = description.href || Config.THINGS_PATH + '/' + this.id;
-  this.properties = [];
-  this.actions = [];
-  this.events = [];
+  this.properties = {};
+  this.actions = {};
+  this.events = {};
   if (description.properties) {
-    description.properties.forEach(function(property) {
-      if (!property.name) {
-        console.error('Properties must have a name');
-        return;
-      }
+    for (var propertyName in description.properties) {
+      var property = description.properties[propertyName];
       // Give the property a URL if it doesn't have one
       property.href = property.href || Config.THINGS_PATH + '/' + this.id +
-        Config.PROPERTIES_PATH + '/' + property.name;
-      this.properties.push(property);
-    }, this);
+        Config.PROPERTIES_PATH + '/' + propertyName;
+      this.properties[propertyName] = property;
+    }
   }
 };
 

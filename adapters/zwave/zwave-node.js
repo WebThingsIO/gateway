@@ -64,7 +64,7 @@ class ZWaveNode extends Device {
   }
 
   findPropertyFromValueId(valueId) {
-    for (var property of this.properties) {
+    for (var property of this.properties.values()) {
       if (property.valueId == valueId) {
         return property;
       }

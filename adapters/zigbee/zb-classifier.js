@@ -65,11 +65,7 @@ class ZigBeeClassifier {
       'onOff'                         // attr
     );
 
-    node.properties = [property];
-    node.actions = [{
-      'name': 'toggle',
-      'description': 'Toggles On/Off',
-    }];
+    node.properties.set('on', property);
     node.defaultName = node.id + '-' + node.type;
     node.sendFrames([
       node.makeBindFrame(property),

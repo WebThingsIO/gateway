@@ -18,18 +18,20 @@ class Device {
     this.type = 'thing';
     this.name = '';
     this.description = '';
-    this.properties = [];
-    this.actions = [];
+    this.properties = new Map();
+    this.actions = new Map();
   }
 
   asDict() {
+    var properties = {};
+    this.properties.forEach((property, propertyName) => {
+      properties[propertyName] = property.asDict();
+    });
     return {
         'id': this.id,
         'name': this.name,
         'type': this.type,
-        'properties': this.properties.map((property) => {
-          return property.asDict();
-        }),
+        'properties': properties,
         'actions': this.actions,
     };
   }
@@ -64,17 +66,15 @@ class Device {
   }
 
   getPropertyDescriptions() {
-    return this.properties.map((property) => {
-      return property.asPropertyDescription();
+    var propDescs = {};
+    this.properties.forEach((property, propertyName) => {
+      propDescs[propertyName] = property.asPropertyDescription();
     });
+    return propDescs;
   }
 
   findProperty(propertyName) {
-    for (var property of this.properties) {
-      if (property.name == propertyName) {
-        return property;
-      }
-    }
+    return this.properties.get(propertyName);
   }
 
   /**

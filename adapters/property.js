@@ -41,10 +41,8 @@ class Property {
    * this does not include the href field.
    */
   asPropertyDescription() {
-    var description = {
-      name: this.name,
-      type: this.type,
-    };
+    var description = {};
+    description.type = this.type;
     if (this.description) {
       description.description = this.description;
     }

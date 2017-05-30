@@ -41,11 +41,8 @@ class ZWaveClassifier {
 
     initOnOffSwitch(node, valueId) {
         node.type = THING_TYPE_ON_OFF_SWITCH;
-        node.properties = [new ZWaveProperty(node, 'on', 'boolean', valueId)];
-        node.actions = [{
-            'name': 'toggle',
-            'description': 'Toggles On/Off',
-        }];
+        node.properties.set('on',
+                            new ZWaveProperty(node, 'on', 'boolean', valueId);
     }
 }
 

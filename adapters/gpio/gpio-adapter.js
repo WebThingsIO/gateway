@@ -100,7 +100,7 @@ class GpioDevice extends Device {
 
   initOnOffSwitch() {
     this.type = THING_TYPE_ON_OFF_SWITCH;
-    this.properties = [
+    this.properties.set('on',
       new GpioProperty(this, 'on', 'boolean', this.pinConfig.pin)];
   }
 }

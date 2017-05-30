@@ -30,9 +30,10 @@ var Thing = function(description) {
   // Parse properties
   if (description.properties) {
     this.propertyDescriptions = {};
-    description.properties.forEach(function(property) {
-      this.propertyDescriptions[property.name] = property;
-    }, this);
+    for (var propertyName in description.properties) {
+      var property = description.properties[propertyName];
+      this.propertyDescriptions[propertyName] = property;
+    }
   }
   return this;
 };
