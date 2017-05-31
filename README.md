@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/moziot/gateway.svg?branch=master)](https://travis-ci.org/moziot/gateway)
+
 # MozIoT Gateway
 Web of Things gateway.
 
