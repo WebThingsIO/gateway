@@ -304,7 +304,7 @@ zdoParser[zci.MANAGEMENT_NETWORK_UPDATE_NOTIFY] = function(frame, reader) {
 
 zdoParser[zci.MANAGEMENT_PERMIT_JOIN_RESPONSE] = function(frame, reader) {
   frame.status = reader.nextUInt8();
-}
+};
 
 zdoParser[zci.MANAGEMENT_RTG_RESPONSE] = function(frame, reader) {
   frame.status = reader.nextUInt8();

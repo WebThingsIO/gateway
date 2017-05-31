@@ -54,7 +54,7 @@ var Things = {
      return new Promise((function(resolve, reject) {
        this.getThings().then(function(things) {
          var descriptions = [];
-         for (let [id, thing] of things) {
+         for (let thing of things.values()) {
            descriptions.push(thing.getDescription());
          }
          resolve(descriptions);

@@ -1,0 +1,29 @@
+language: node_js
+
+sudo: required
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+      - libudev-dev
+
+before_install:
+  - wget https://github.com/OpenZWave/open-zwave/archive/master.zip
+  - unzip master.zip
+  - cd open-zwave-master
+  - sudo make install
+  - sudo ldconfig /usr/local/lib /usr/local/lib64
+  - npm install -g node-gyp
+  - cd ..
+
+env:
+  global:
+    - CC=gcc-4.9
+    - CXX=g++-4.9
+
+node_js:
+  - 7

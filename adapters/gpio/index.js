@@ -1,5 +1,4 @@
 /**
- *
  * index.js - Loads the GPIO adapter.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -27,7 +26,7 @@ function maybeLoadGpioAdapter(adapterManager) {
     return;
   }
 
-  var loadGpioAdapter = require('./gpio-adapter.js');
+  var loadGpioAdapter = require('./gpio-adapter');
   loadGpioAdapter(adapterManager, config.gpio);
 }
 

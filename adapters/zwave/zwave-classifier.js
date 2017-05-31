@@ -42,7 +42,7 @@ class ZWaveClassifier {
     initOnOffSwitch(node, valueId) {
         node.type = THING_TYPE_ON_OFF_SWITCH;
         node.properties.set('on',
-                            new ZWaveProperty(node, 'on', 'boolean', valueId);
+                            new ZWaveProperty(node, 'on', 'boolean', valueId));
     }
 }
 
