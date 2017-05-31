@@ -4,7 +4,8 @@
   "description": "Web of Things gateway",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./test/run-tests.sh",
+    "jshint": "./test/jshint-all.sh"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "zcl-packet": "^0.2.2"
   },
   "devDependencies": {
+    "jshint": "^2.9.4",
     "node-rest-client": "^3.1.0"
   }
 }
