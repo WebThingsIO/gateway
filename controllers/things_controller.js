@@ -92,4 +92,19 @@ ThingsController.put('/:thingId/properties/:propertyName',
     });
 });
 
+/**
+ * Remove a Thing.
+ */
+ThingsController.delete('/:thingId', function(request, response) {
+  var thingId = request.params.thingId;
+  try {
+    Things.removeThing(thingId).then(function() {
+      console.log('Successfully deleted ' + thingId + ' from database.');
+      response.status(204).send();
+    });
+  } catch(e) {
+    response.status(500).send('Failed to remove thing ' + thingId);
+  }
+});
+
 module.exports = ThingsController;

@@ -10,7 +10,7 @@
 'use strict';
 
 /* jshint unused:false */
-/* globals ThingsScreen, AdaptersScreen, AddThingScreen, Menu */
+/* globals ThingsScreen, AdaptersScreen, AddThingScreen, Menu, ContextMenu */
 
 var App = {
   /**
@@ -30,6 +30,7 @@ var App = {
     ThingsScreen.init();
     AdaptersScreen.init();
     AddThingScreen.init();
+    ContextMenu.init();
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');

@@ -24,6 +24,9 @@
     <!-- Add Thing -->
     <script type="text/javascript" src="js/add-thing.js"></script>
     <link rel="stylesheet" type="text/css" href="css/add-thing.css" />
+    <!-- Context Menu -->
+    <script type="text/javascript" src="js/context-menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/context-menu.css" />
     <!-- Thing -->
     <script type="text/javascript" src="js/thing.js"></script>
     <link rel="stylesheet" type="text/css" href="css/thing.css" />
@@ -41,7 +44,7 @@
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
 
-      <div id="things">No devices yet.</div>
+      <div id="things">No devices.</div>
       <button id="add-button" />
     </section>
 
@@ -68,8 +71,8 @@
     <button id="menu-button"></button>
 
     <!-- Add Thing Screen -->
-    <div id="add-thing-screen" class="hidden">
-      <button id="add-thing-back-button"></button>
+    <div id="add-thing-screen" class="hidden dialog">
+      <button id="add-thing-back-button" class="back-button"></button>
       <div id="add-thing-content">
         <p id="add-thing-status">
           <img class="spinner" src="images/loading.gif" />Scanning for new devices...
@@ -78,6 +81,17 @@
         <button id="add-thing-cancel-button">Done</button>
       </div>
     </div>
+
+    <!-- Context Menu -->
+    <div id="context-menu" class="hidden dialog">
+      <button id="context-menu-back-button" class="back-button"></button>
+      <h1 id="context-menu-heading"></h1>
+      <div id="context-menu-content">
+        <button id="remove-thing-button" class="context-menu-button danger">
+          Remove
+        </button>
+      </div>
+    </menu>
 
   </body>
 </html>

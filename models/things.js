@@ -132,6 +132,16 @@ var Things = {
    */
    registerWebsocket: function(websocket) {
      this.websockets.push(websocket);
+   },
+
+   /**
+    * Remove a Thing.
+    *
+    * @param String id ID to give Thing.
+    * @param Object description Thing description.
+    */
+   removeThing: function(id) {
+     return Database.removeThing(id);
    }
  };
 

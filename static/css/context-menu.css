@@ -1,0 +1,35 @@
+#context-menu {
+  text-align: center;
+}
+
+#context-menu h1 {
+  font-size: 1.6rem;
+  font-weight: normal;
+  height: 5.6rem;
+  padding: 2rem;
+  max-width: calc(100% - 15.2rem);
+  margin: 2rem auto 0 auto;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+#context-menu-content {
+  text-align: center;
+  position: relative;
+  top: calc(50% - 3.8rem);
+  transform: translateY(-50%);
+}
+
+.context-menu-button {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1.6rem;
+  width: 60%;
+  min-width: 15rem;
+  height: 6rem;
+}
+
+.context-menu-button.danger {
+  background-color: #ff5555;
+}
