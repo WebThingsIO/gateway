@@ -10,7 +10,7 @@
  'use strict';
 
 /* jshint unused:false */
-/* globals App, NewThing, ThingsScreen */
+/* globals App, NewThing */
 
 var AddThingScreen = {
 
@@ -108,7 +108,8 @@ var AddThingScreen = {
   hide: function() {
     this.element.classList.add('hidden');
     this.requestCancelPairing();
-    ThingsScreen.showThings();
+    var newEvent = new CustomEvent('_thingchange');
+    window.dispatchEvent(newEvent);
   },
 
   showNewThing: function(thing) {

@@ -68,3 +68,38 @@ section.selected {
 #menu-button:hover, #add-button:active {
   opacity: 1;
 }
+
+/* Dialog */
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #305067;
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+.dialog.hidden {
+  display: none;
+}
+
+.dialog .back-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 5.6rem;
+  height: 5.6rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  background-image: url('../images/back.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+}
+
+.dialog .back-button:hover, .dialog .back-button:active {
+  opacity: 1;
+}

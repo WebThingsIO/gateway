@@ -22,6 +22,8 @@ var Thing = function(description) {
   this.type = description.type;
   this.container = document.getElementById('things');
   this.element = this.render();
+  this.element.addEventListener('contextmenu',
+    this.handleContextMenu.bind(this));
   this.properties = {};
   // Parse base URL of Thing
   if (description.href) {
@@ -54,4 +56,22 @@ Thing.prototype.render = function() {
   var element = document.createElement('div');
   element.innerHTML = this.view();
   return this.container.appendChild(element.firstChild);
+};
+
+/**
+ * Handle a context menu event.
+ *
+ * Right click on desktop, long press on mobile.
+ *
+ * @param {Event} e contextmenu event.
+ */
+Thing.prototype.handleContextMenu = function(e) {
+  e.preventDefault(e);
+  var newEvent = new CustomEvent('_contextmenu', {
+    detail: {
+      thingUrl: this.href.href,
+      thingName: this.name
+    }
+  });
+  window.dispatchEvent(newEvent);
 };

@@ -43,7 +43,7 @@ OnOffSwitch.prototype.view = function() {
 /**
  * Update the on/off status of the on/off switch.
  */
-Thing.prototype.updateStatus = function() {
+OnOffSwitch.prototype.updateStatus = function() {
   if (!this.onPropertyUrl) {
     return;
   }
@@ -66,7 +66,7 @@ Thing.prototype.updateStatus = function() {
 /**
  * Show on state.
  */
-Thing.prototype.showOn = function() {
+OnOffSwitch.prototype.showOn = function() {
   this.element.classList.remove('off');
   this.element.classList.add('on');
 };
@@ -74,7 +74,7 @@ Thing.prototype.showOn = function() {
 /**
  * Show off state.
  */
-Thing.prototype.showOff = function() {
+OnOffSwitch.prototype.showOff = function() {
   this.element.classList.remove('on');
   this.element.classList.add('off');
 };
@@ -82,15 +82,17 @@ Thing.prototype.showOff = function() {
 /**
  * Show transition state.
  */
-Thing.prototype.showTransition = function() {
+OnOffSwitch.prototype.showTransition = function() {
   this.element.classList.remove('on');
   this.element.classList.remove('off');
 };
 
 /**
  * Handle a click on the on/off switch.
+ *
+ * @param {Event} e click event.
  */
-Thing.prototype.handleClick = function(e) {
+OnOffSwitch.prototype.handleClick = function(e) {
   if (this.properties.on === true) {
     this.turnOff();
   } else if (this.properties.on === false) {
@@ -102,37 +104,37 @@ Thing.prototype.handleClick = function(e) {
  * Send a request to turn on and update state.
  *
  */
-Thing.prototype.turnOn = function() {
+OnOffSwitch.prototype.turnOn = function() {
   this.showTransition();
   this.properties.on = null;
   var payload = {
-    'on': true
+   'on': true
   };
   fetch(this.onPropertyUrl, {
-    method: 'PUT',
-    body: JSON.stringify(payload),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+   method: 'PUT',
+   body: JSON.stringify(payload),
+   headers: {
+     'Accept': 'application/json',
+     'Content-Type': 'application/json'
+   }
   })
   .then((function(response) {
-    if (response.status == 200) {
-      this.showOn();
-      this.properties.on = true;
-    } else {
-      console.error('Status ' + response.status + ' trying to turn on switch');
-    }
+   if (response.status == 200) {
+     this.showOn();
+     this.properties.on = true;
+   } else {
+     console.error('Status ' + response.status + ' trying to turn on switch');
+   }
   }).bind(this))
   .catch(function(error) {
-    console.error('Error trying to turn on switch: ' + error);
+   console.error('Error trying to turn on switch: ' + error);
   });
 };
 
 /**
  * Send a request to turn off and update state.
  */
-Thing.prototype.turnOff = function() {
+OnOffSwitch.prototype.turnOff = function() {
   this.showTransition();
   this.properties.on = null;
   var payload = {

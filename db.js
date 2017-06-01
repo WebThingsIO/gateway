@@ -112,6 +112,24 @@ var Database = {
           }
         });
     }).bind(this));
+  },
+
+  /**
+   * Remove a Thing from the Database.
+   *
+   * @param String id The ID of the Thing to remove.
+   */
+  removeThing: function(id) {
+    return new Promise((function(resolve, reject) {
+      var db = this.db;
+      db.run('DELETE FROM things WHERE id = ?', id, function(error) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    }).bind(this));
   }
 };
 
