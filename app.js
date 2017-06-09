@@ -13,6 +13,7 @@
 
 'use strict';
 
+// Dependencies
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
@@ -20,10 +21,15 @@ var express = require('express');
 var expressWs = require('express-ws');
 var bodyParser = require('body-parser');
 var GetOpt = require('node-getopt');
+var passport = require('passport');
+var config = require('config');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
-var Constants = require('./constants');
+var Users = require('./models/users');
+var Authentication = require('./authentication');
+var Router = require('./router');
 
+// HTTP server configuration
 var port = 8080;
 var https_port = 4443;
 var options = {
@@ -31,6 +37,7 @@ var options = {
   cert: fs.readFileSync('certificate.pem')
 };
 
+// Create Express app, HTTP(S) server and WebSocket server
 var app = express();
 var server = https.createServer(options, app);
 var expressWs = expressWs(app, server);
@@ -57,29 +64,22 @@ if (opt.options.port) {
   port = parseInt(opt.options.port);
 }
 
-// We need to install a bodyParser in order to access the body in
-// PUT & POST requests
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Configure app
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(bodyParser.json());   // Use bodyParser to access the body of requests
 
-// Open the thing database.
-db.open();
-
-// Things router
-app.use(Constants.THINGS_PATH, require('./controllers/things_controller'));
-// New Things router
-app.use(Constants.NEW_THINGS_PATH,
-        require('./controllers/new_things_controller'));
-// Adapters router
-app.use(Constants.ADAPTERS_PATH, require('./controllers/adapters_controller'));
-// Actions router
-app.use(Constants.ACTIONS_PATH, require('./controllers/actions_controller'));
-// Debug router
-if (opt.options.debug) {
-  app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
+// Configure authentication with Passport
+if (config.get('authentication.enabled')) {
+  Authentication.configure(app, passport);
 }
-// Static router
-app.use(express.static(Constants.STATIC_PATH));
+
+// Configure router with configured app and command line options.
+Router.configure(app, opt);
+
+// Open the database
+db.open();
 
 // Get some decent error messages for unhandled rejections. This is
 // often just errors in the code.
@@ -95,6 +95,7 @@ process.on('SIGINT', function() {
   process.exit(1);
 });
 
+// Start the HTTPS server
 server.listen(https_port, function() {
   console.log('Listening on port', https_port);
   adapterManager.loadAdapters();
