@@ -34,6 +34,32 @@ section.selected {
   display: block;
 }
 
+input[type="text"], input[type="password"] {
+  height: 1.75rem;
+  background-color: #d2d9de;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 1.6rem;
+}
+
+button {
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #fff;
+}
+
+button:hover, button:active {
+  background-color: #658196;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
 #wordmark {
   position: fixed;
   bottom: 2rem;

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MozIoT Gateway Setup</title>
+    <link rel="manifest" href="../app.webmanifest">
+    <link rel="icon" href="../images/icon.png" type="image/png" />
+    <!-- App -->
+    <script type="text/javascript" src="js/setup.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/app.css" />
+    <link rel="stylesheet" type="text/css" href="css/setup.css" />
+  </head>
+  <body>
+    <img id="wordmark" src="../images/moziot-wordmark.png" />
+    <form id="user-creation-form">
+      <h1>Welcome</h1>
+      <p>Create your first user account:</p>
+      <input type="text" placeholder="Name"></input>
+      <input type="text" placeholder="Email"></input>
+      <input type="password" placeholder="Password"></input>
+      <input type="password" placeholder="Confirm Password"></input>
+      <button id="next-button" type="submit">Next</button>
+    </form>
+  </body>
+</html>
