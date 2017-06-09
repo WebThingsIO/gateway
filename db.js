@@ -13,6 +13,7 @@
 var config = require('config');
 var sqlite3 = require('sqlite3').verbose();
 var fs = require('fs');
+var bcrypt = require('bcrypt-nodejs');
 
 var Database = {
   /**
@@ -53,12 +54,15 @@ var Database = {
     console.log('Populating database with default things...');
     var things = require('./' + this.DATA_FILENAME);
     var db = this.db;
-    var createTableSQL = 'CREATE TABLE IF NOT EXISTS things (' +
+
+    // Create Things table
+    var thingsTableSQL = 'CREATE TABLE IF NOT EXISTS things (' +
       'id TEXT PRIMARY KEY,' +
       'description TEXT' +
     ');';
     db.serialize(function() {
-      db.run(createTableSQL);
+      db.run(thingsTableSQL);
+      // Populate Things table
       var insertSQL = db.prepare(
         'INSERT INTO things (id, description) VALUES (?, ?)');
       for (var thing of things) {
@@ -67,6 +71,32 @@ var Database = {
         insertSQL.run(thingId, JSON.stringify(thing));
       }
       insertSQL.finalize();
+    });
+
+    // Create Users table
+    var usersTableSQL = 'CREATE TABLE IF NOT EXISTS users (' +
+      'id INTEGER PRIMARY KEY ASC,' +
+      'email TEXT,' +
+      'password TEXT,' +
+      'name TEXT' +
+    ');';
+    db.serialize(function() {
+      db.run(usersTableSQL);
+      // Add default user if provided
+      var defaultUser = config.get('authentication.defaultUser');
+      if(!defaultUser) {
+        return;
+      }
+      var passwordHash = bcrypt.hashSync(defaultUser.password);
+      db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+        [defaultUser.email, passwordHash, defaultUser.name],
+        function(error) {
+        if (error) {
+          console.error('Failed to save default user.');
+        } else {
+          console.log('Saved default user ' + defaultUser.email);
+        }
+      });
     });
   },
 
@@ -127,6 +157,23 @@ var Database = {
           reject(error);
         } else {
           resolve();
+        }
+      });
+    }).bind(this));
+  },
+
+  /**
+   * Get a user by their email address.
+   */
+  getUser: function(email) {
+    return new Promise((function(resolve, reject) {
+      var db = this.db;
+      db.get('SELECT * FROM users WHERE email = ?', email,
+        function(error, row) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(row);
         }
       });
     }).bind(this));

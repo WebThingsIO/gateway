@@ -16,4 +16,5 @@ require('./common');
 
 describe('ThingsController', () => {
   require('./integration/things-test');
+  require('./integration/users-test');
 });

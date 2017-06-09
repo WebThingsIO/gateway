@@ -8,28 +8,10 @@
   transform: translateY(-50%);
 }
 
-#add-thing-cancel-button, .new-thing-save-button {
-  background-color: #597285;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  color: #fff;
-}
-
 .new-thing-save-button {
   height: 4rem;
   background-color: #7f93a1;
   margin: 1.25rem 0;
-}
-
-#add-thing-cancel-button:hover, #add-thing-cancel-button:active,
-.new-thing-save-button:hover, .new-thing-save-button:active {
-  background-color: #658196;
-}
-
-#add-thing-cancel-button::-moz-focus-inner,
-.new-thing-save-button::-moz-focus-inner, {
-  border: 0;
 }
 
 .new-thing-save-button:disabled, .new-thing-save-button:disabled:hover,
@@ -75,14 +57,7 @@
 
 .new-thing-name {
   display: block;
-  height: 1.75rem;
   width: calc(100% - 2rem);
-  background-color: #d2d9de;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  margin: 0.5rem 0
-  font-size: 1.6rem;
 }
 
 .new-thing-name:disabled {

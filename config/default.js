@@ -37,4 +37,13 @@ module.exports = {
     filename: './db.sqlite3',
     removeBeforeOpen: false,
   },
+  authentication: {
+    enabled: false,
+    defaultUser:  {              // DO NOT USE THIS IN PRODUCTION
+      email: 'user@example.com',
+      password: 'password',
+      name: 'Example User'
+    },
+    secret: 'top secret 51'      // DO NOT USE THIS IN PRODUCTION
+  }
 };
