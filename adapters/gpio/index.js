@@ -27,7 +27,7 @@ function maybeLoadGpioAdapter(adapterManager) {
   }
 
   var loadGpioAdapter = require('./gpio-adapter');
-  loadGpioAdapter(adapterManager, config.get('adapter.gpio'));
+  loadGpioAdapter(adapterManager, config.get('adapters.gpio'));
 }
 
 module.exports = maybeLoadGpioAdapter;
