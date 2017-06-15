@@ -81,12 +81,12 @@ class PhilipsHueDevice extends Device {
  * Handles the username acquisition (pairing) process
  */
 class PhilipsHueAdapter extends Adapter {
-  constructor(adapterManager, bridge) {
-    super(adapterManager, 'philips-hue');
+  constructor(adapterManager, bridgeId, bridgeIp) {
+    super(adapterManager, 'philips-hue-' + bridgeId);
 
     this.username = null;
-    this.bridge = bridge;
-    this.bridgeIp = bridge.internalipaddress;
+    this.bridgeId = bridgeId;
+    this.bridgeIp = bridgeIp;
     this.pairing = false;
     this.lights = {};
 
@@ -99,7 +99,7 @@ class PhilipsHueAdapter extends Adapter {
         return Promise.reject('no known bridges');
       }
 
-      var username = knownBridgeUsernames[this.bridge.id];
+      var username = knownBridgeUsernames[this.bridgeId];
       if (!username) {
         return Promise.reject('no known username');
       }
@@ -130,7 +130,7 @@ class PhilipsHueAdapter extends Adapter {
         if (!knownBridgeUsernames) {
           knownBridgeUsernames = {};
         }
-        knownBridgeUsernames[this.bridge.id] = this.username;
+        knownBridgeUsernames[this.bridgeId] = this.username;
         return storage.setItem(KNOWN_BRIDGE_USERNAMES, knownBridgeUsernames);
       }).catch(e => {
         console.error('philips-hue-adapter pairing error:', e);
@@ -202,7 +202,7 @@ class PhilipsHueAdapter extends Adapter {
           continue;
         }
         var light = lights[lightId];
-        var id = 'philips-hue-' + this.bridge.id + '-' + lightId;
+        var id = 'philips-hue-' + this.bridgeId + '-' + lightId;
         this.lights[lightId] = new PhilipsHueDevice(this, id, lightId, light);
       }
     });
