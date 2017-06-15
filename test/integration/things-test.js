@@ -1,7 +1,7 @@
 'use strict';
 
 /* Tell jshint about mocha globals, and  */
-/* globals describe, it, chai, mockAdapter, server */
+/* globals it, chai, mockAdapter, server */
 
 require('../common');
 
