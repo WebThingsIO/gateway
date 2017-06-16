@@ -143,4 +143,8 @@ var Things = {
    }
  };
 
+AdapterManager.on('thing-added', function(thing) {
+  Things.handleNewThing(thing);
+});
+
 module.exports = Things;
