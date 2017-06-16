@@ -146,7 +146,7 @@ class PhilipsHueAdapter extends Adapter {
   }
 
   /**
-   * Perform a single attempt at pairing
+   * Perform a single attempt at pairing with a Hue hub
    * @return {Promise} Resolved with username if pairing succeeds
    */
   pair() {
