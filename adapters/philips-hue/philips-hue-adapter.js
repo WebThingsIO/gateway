@@ -1,6 +1,6 @@
 /**
  *
- * PhilipsHueAdapter - an adapter for controlling TP-Link Smart Lights
+ * PhilipsHueAdapter - an adapter for controlling Philips Hue lights
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
