@@ -65,6 +65,8 @@ app.use(bodyParser.json());
 // Open the thing database.
 db.open();
 
+// Users router
+app.use(Constants.USERS_PATH, require('./controllers/users_controller'));
 // Things router
 app.use(Constants.THINGS_PATH, require('./controllers/things_controller'));
 // New Things router

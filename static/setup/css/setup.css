@@ -1,0 +1,40 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+body {
+  padding: 0;
+  background-color: #305067;
+  color: #fff;
+}
+
+#wordmark {
+
+}
+
+#user-creation-form {
+  top: 50%;
+  transform: translateY(calc(-50% - 4rem));
+  position: relative;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 50%;
+  min-width: 28rem;
+  max-width: 35rem;
+  margin: 0 auto;
+}
+
+#user-creation-form input {
+  display: block;
+  width: calc(100% - 4rem);
+  margin: 1rem;
+}
+
+h1 {
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: normal;
+}
+
+#next-button {
+  margin: 1rem;
+}

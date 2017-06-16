@@ -8,6 +8,7 @@
 
 'use strict';
 
+exports.USERS_PATH = '/users';
 exports.THINGS_PATH = '/things';
 exports.PROPERTIES_PATH = '/properties';
 exports.NEW_THINGS_PATH = '/new_things';
