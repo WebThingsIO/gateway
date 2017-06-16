@@ -107,7 +107,7 @@ class PhilipsHueAdapter extends Adapter {
       this.username = username;
       this.discoverLights();
     }).catch(e => {
-      console.error('philips-hue-adapter storage error:', e);
+      console.error(e);
     });
   }
 
@@ -137,7 +137,7 @@ class PhilipsHueAdapter extends Adapter {
       knownBridgeUsernames[this.bridgeId] = this.username;
       return storage.setItem(KNOWN_BRIDGE_USERNAMES, knownBridgeUsernames);
     }).catch(e => {
-      console.error('philips-hue-adapter pairing error:', e);
+      console.error(e);
       if (this.pairing && Date.now() < this.pairingEnd) {
         // Attempt pairing again later
         setTimeout(this.attemptPairing.bind(this), 500);
@@ -225,7 +225,7 @@ class PhilipsHueAdapter extends Adapter {
       json: true,
       body: properties
     }).catch(e => {
-      console.error('philips-hue-adapter error:', e);
+      console.error(e);
     });
   }
 }
