@@ -100,4 +100,6 @@ server.listen(https_port, function() {
   adapterManager.loadAdapters();
 });
 
+app._server = server;
+
 module.exports = app; // for testing

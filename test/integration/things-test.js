@@ -6,6 +6,7 @@
 require('../common');
 
 var Constants = require('../../constants');
+const WebSocket = require('ws');
 
 it('GET with no things', (done) => {
   chai.request(server)
@@ -144,4 +145,91 @@ it('Verify property of a thing changed', (done) => {
       res.body.on.should.be.eql(true);
       done();
     });
+});
+
+it('lists 0 new things after creating thing', (done) => {
+  chai.request(server)
+    .get(Constants.NEW_THINGS_PATH)
+    .end((err, res) => {
+      res.should.have.status(200);
+      res.body.should.be.a('array');
+      res.body.length.should.be.eql(0);
+      done();
+    });
+});
+
+function makeDescr(id) {
+  return {
+    id: id,
+    name: id,
+    properties: {}
+  };
+};
+
+it('lists new things when devices are added', (done) => {
+  mockAdapter().addDevice('test-2', makeDescr('test-2'));
+  mockAdapter().addDevice('test-3', makeDescr('test-3'));
+
+  chai.request(server)
+    .get(Constants.NEW_THINGS_PATH)
+    .end((err, res) => {
+      res.should.have.status(200);
+      res.body.should.be.a('array');
+      res.body.length.should.be.eql(2);
+      res.body[0].should.have.a.property('href');
+      res.body[0].href.should.be.eql(Constants.THINGS_PATH + '/test-2');
+      res.body[1].should.have.a.property('href');
+      res.body[1].href.should.be.eql(Constants.THINGS_PATH + '/test-3');
+      done();
+    });
+});
+
+it('should send multiple devices during pairing', (done) => {
+  let addr = server._server.address();
+  let socketPath = 'wss://127.0.0.1:' + addr.port + Constants.NEW_THINGS_PATH;
+  function connectSocket() {
+    return new Promise((resolve, reject) => {
+      let ws = new WebSocket(socketPath);
+
+      ws.once('open', function() {
+        resolve(ws);
+      });
+    });
+  }
+
+  // We expect things test-2, test-3, test-4, and test-5 to show up eventually
+  let found = {
+    'test-2': false,
+    'test-3': false,
+    'test-4': false,
+    'test-5': false
+  };
+
+  function allFound() {
+    for (let id in found) {
+      if (!found[id]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  connectSocket().then(ws => {
+    ws.on('message', function(newThingStr) {
+      let newThing = JSON.parse(newThingStr);
+      found[newThing.id] = true;
+      if (allFound()) {
+        done();
+      }
+    });
+
+    chai.request(server)
+      .post(Constants.ACTIONS_PATH)
+      .send({name: 'pair'})
+      .end((err, res) => {
+        res.should.have.status(201);
+        mockAdapter().addDevice('test-4', makeDescr('test-4'));
+        mockAdapter().addDevice('test-5', makeDescr('test-5'));
+      });
+  });
 });
