@@ -88,6 +88,7 @@ class PhilipsHueAdapter extends Adapter {
     this.bridgeId = bridgeId;
     this.bridgeIp = bridgeIp;
     this.pairing = false;
+    this.pairingEnd = 0;
     this.lights = {};
 
     adapterManager.addAdapter(this);
@@ -116,32 +117,32 @@ class PhilipsHueAdapter extends Adapter {
    */
   startPairing(timeoutSeconds) {
     this.pairing = true;
-    var endTime = Date.now() + timeoutSeconds * 1000;
+    this.pairingEnd = Date.now() + timeoutSeconds * 1000;
 
-    var attemptPairing = () => {
-      this.pair().then(username => {
-        this.username = username;
-        return this.discoverLights();
-      }).then(() => {
-        return storage.init();
-      }).then(() => {
-        return storage.getItem(KNOWN_BRIDGE_USERNAMES);
-      }).then(knownBridgeUsernames => {
-        if (!knownBridgeUsernames) {
-          knownBridgeUsernames = {};
-        }
-        knownBridgeUsernames[this.bridgeId] = this.username;
-        return storage.setItem(KNOWN_BRIDGE_USERNAMES, knownBridgeUsernames);
-      }).catch(e => {
-        console.error('philips-hue-adapter pairing error:', e);
-        if (this.pairing && Date.now() < endTime) {
-          // Attempt pairing again later
-          setTimeout(attemptPairing, 500);
-        }
-      });
-    };
+    this.attemptPairing();
+  }
 
-    attemptPairing();
+  attemptPairing() {
+    this.pair().then(username => {
+      this.username = username;
+      return this.discoverLights();
+    }).then(() => {
+      return storage.init();
+    }).then(() => {
+      return storage.getItem(KNOWN_BRIDGE_USERNAMES);
+    }).then(knownBridgeUsernames => {
+      if (!knownBridgeUsernames) {
+        knownBridgeUsernames = {};
+      }
+      knownBridgeUsernames[this.bridgeId] = this.username;
+      return storage.setItem(KNOWN_BRIDGE_USERNAMES, knownBridgeUsernames);
+    }).catch(e => {
+      console.error('philips-hue-adapter pairing error:', e);
+      if (this.pairing && Date.now() < this.pairingEnd) {
+        // Attempt pairing again later
+        setTimeout(this.attemptPairing.bind(this), 500);
+      }
+    });
   }
 
   /**
