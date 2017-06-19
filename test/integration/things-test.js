@@ -257,7 +257,7 @@ it('should add a device during pairing then create a thing', done => {
         found = true;
       }
     }
-    assert.isOk(found, 'should find thing in /new_things output');
+    assert(found, 'should find thing in /new_things output');
 
     return rp(chai.request(server)
       .post(Constants.THINGS_PATH)
@@ -275,7 +275,7 @@ it('should add a device during pairing then create a thing', done => {
         found = true;
       }
     }
-    assert.isNotOk(found, 'should find no longer thing in /new_things output:'
+    assert(!found, 'should find no longer thing in /new_things output:'
       + JSON.stringify(res.body, null, 2));
 
     return rp(chai.request(server)
@@ -289,7 +289,7 @@ it('should add a device during pairing then create a thing', done => {
         found = true;
       }
     }
-    assert.isOk(found, 'should find thing in /new_things output');
+    assert(found, 'should find thing in /new_things output');
 
     done();
   });
@@ -312,7 +312,40 @@ it('should remove a thing', done => {
         found = true;
       }
     }
-    assert.isNotOk(found, 'should not find thing in /things output');
+    assert(!found, 'should not find thing in /things output');
+
+    return rp(chai.request(server)
+        .get(Constants.NEW_THINGS_PATH));
+  }).then(res => {
+    res.should.have.status(200);
+    res.body.should.be.a('array');
+    let found = false;
+    for (let thing of res.body) {
+      if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
+        found = true;
+      }
+    }
+    assert(found, 'should find thing in /new_things output');
+
+    done();
+  });
+});
+
+it('should remove a device', done => {
+  let thingId = 'test-6';
+  mockAdapter().removeDevice(thingId).then(() => {
+    return rp(chai.request(server)
+      .get(Constants.NEW_THINGS_PATH))
+  }).then(res => {
+    res.should.have.status(200);
+    res.body.should.be.a('array');
+    let found = false;
+    for (let thing of res.body) {
+      if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
+        found = true;
+      }
+    }
+    assert(!found, 'should not find thing in /new_things output');
 
     done();
   });
