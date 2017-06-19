@@ -47,10 +47,12 @@ var Actions = {
   /**
    * Get a list of all current actions.
    *
-   * @returns {Object} A map of current actions.
+   * @returns {Array} A list of current actions.
    */
   getAll: function() {
-    return this.actions;
+    return Object.keys(this.actions).map(id => {
+      return this.actions[id];
+    });
   },
 
   /**
