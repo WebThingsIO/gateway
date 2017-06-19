@@ -97,6 +97,7 @@ var Actions = {
         }
         break;
       default:
+        delete this.actions[id];
         throw 'Invalid action name: "' + action.name + '"';
     }
   },
