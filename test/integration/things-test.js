@@ -215,10 +215,11 @@ it('should send multiple devices during pairing', (done) => {
   }
 
   connectSocket().then(ws => {
-    ws.on('message', function(newThingStr) {
+    ws.on('message', function onNewThing(newThingStr) {
       let newThing = JSON.parse(newThingStr);
       found[newThing.id] = true;
       if (allFound()) {
+        ws.removeEventListener('message', onNewThing);
         done();
       }
     });
