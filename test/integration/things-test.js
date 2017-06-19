@@ -185,7 +185,7 @@ it('lists new things when devices are added', (done) => {
 });
 
 it('should send multiple devices during pairing', (done) => {
-  let addr = server._server.address();
+  let addr = server.address();
   let socketPath = 'wss://127.0.0.1:' + addr.port + Constants.NEW_THINGS_PATH;
   function connectSocket() {
     return new Promise((resolve, reject) => {

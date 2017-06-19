@@ -20,8 +20,9 @@ let chaiHttp = require('chai-http');
 chai.should();
 chai.use(chaiHttp);
 
-var server = require('../app');
+let {server, app} = require('../app');
 global.server = server;
+global.app = app;
 
 var adapterManager = require('../adapter-manager');
 
