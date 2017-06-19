@@ -3,10 +3,11 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const {server, chai, mockAdapter} = require('../common');
+const {server, chai, mockAdapter, rp} = require('../common');
 
 var Constants = require('../../constants');
 const WebSocket = require('ws');
+const assert = require('assert');
 
 it('GET with no things', (done) => {
   chai.request(server)
@@ -164,7 +165,7 @@ function makeDescr(id) {
     name: id,
     properties: {}
   };
-};
+}
 
 it('lists new things when devices are added', (done) => {
   mockAdapter().addDevice('test-2', makeDescr('test-2'));
@@ -235,18 +236,6 @@ it('should send multiple devices during pairing', (done) => {
   });
 });
 
-function rp(chaiRequest) {
-  return new Promise((resolve, reject) => {
-    chaiRequest.end((err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-}
-
 it('should add a device during pairing then create a thing', done => {
   let thingId = 'test-6';
   let descr = makeDescr(thingId);
@@ -286,7 +275,8 @@ it('should add a device during pairing then create a thing', done => {
         found = true;
       }
     }
-    assert.isNotOk(found, 'should find no longer thing in /new_things output:' + JSON.stringify(res.body, null, 2));
+    assert.isNotOk(found, 'should find no longer thing in /new_things output:'
+      + JSON.stringify(res.body, null, 2));
 
     return rp(chai.request(server)
         .get(Constants.THINGS_PATH));
