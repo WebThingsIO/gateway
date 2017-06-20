@@ -13,6 +13,7 @@ var localStrategy = require('passport-local').Strategy;
 var config = require('config');
 var Users = require('./models/users');
 var Constants = require('./constants');
+var bcrypt = require('bcrypt-nodejs');
 
 var Authentication = {
   /**
@@ -93,9 +94,39 @@ var Authentication = {
     if (request.isAuthenticated()) {
       return next();
     } else {
-      // if they aren't redirect them to the login page
-      response.redirect(Constants.LOGIN_PATH);
+      Users.getUsers().then(users => {
+        if (users.length > 0) {
+          // If they aren't and there is a user they could log in as, redirect
+          // them to the login page
+          response.redirect(Constants.LOGIN_PATH);
+        } else if (request.baseUrl === Constants.USERS_PATH &&
+                   request.method === 'POST') {
+          // if they're trying to POST a user let them do that
+          console.log('Bypassing authentication: No users');
+          return next();
+        } else {
+          // Redirect them to the login page where they can create a user
+          response.redirect(Constants.LOGIN_PATH);
+        }
+      });
     }
+  },
+
+  /**
+   * Hash a password asynchronously
+   * @param {String} password
+   * @return {Promise<String>} hashed password
+   */
+  hashPassword: function(password) {
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(password, null, null, function(err, hash) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(hash);
+        }
+      });
+    });
   }
 };
 module.exports = Authentication;

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mozilla IoT Gateway Account Creation</title>
+    <link rel="manifest" href="../app.webmanifest">
+    <link rel="icon" href="../images/icon.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
+  </head>
+  <body>
+    <img id="wordmark" src="../images/moziot-wordmark.png" />
+    <form id="create-user-form" class="user-form" action="/users" method="post">
+      <h1>Welcome</h1>
+      <p>Create your first user account:</p>
+      <input type="text" name="name" placeholder="Name" required></input>
+      <input type="email" name="email" placeholder="Email" required></input>
+      <input id="password" type="password" name="password"
+             placeholder="Password" required></input>
+      <input id="confirm-password" type="password" name="confirm-password"
+             placeholder="Confirm Password" required></input>
+      <div id="error-password-mismatch" class="error hidden">
+        Passwords do not match
+      </div>
+      <button id="create-user-button" type="submit">Next</button>
+    </form>
+    <script src="/js/create_user.js"></script>
+  </body>
+</html>
+

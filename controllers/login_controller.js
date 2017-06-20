@@ -13,15 +13,24 @@
 var express = require('express');
 var passport = require('passport');
 var path = require('path');
+var Users = require('../models/users');
 
 var LoginController = express.Router();
+
+const viewsRoot = path.join(__dirname, '../views');
 
 /**
  * Get the login page.
  */
 LoginController.get('/',
   function(request, response) {
-    response.sendFile('login.html', { root: path.join(__dirname, '../views') });
+    Users.getUsers().then(users => {
+      if (users.length > 0) {
+        response.sendFile('login.html', { root: viewsRoot });
+      } else {
+        response.sendFile('create_user.html', { root: viewsRoot });
+      }
+    });
   }
 );
 

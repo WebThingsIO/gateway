@@ -177,6 +177,41 @@ var Database = {
         }
       });
     }).bind(this));
+  },
+
+  /**
+   * Get all Users stored in the database.
+   *
+   * @return {Promise<Array<User>>} resolves with a list of User objects
+   */
+  getUsers: function() {
+    return new Promise((resolve, reject) => {
+      this.db.all('SELECT * FROM users', (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  },
+
+  /**
+   * Create a user
+   * @param {User} user
+   * @return {Promise<User>}
+   */
+  createUser: function(user) {
+    return new Promise((resolve, reject) => {
+      this.db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+        [user.email, user.password, user.name], function(error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(user);
+          }
+        });
+    });
   }
 };
 

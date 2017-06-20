@@ -7,7 +7,7 @@ body {
   color: #fff;
 }
 
-#login-form {
+.user-form {
   top: 50%;
   transform: translateY(calc(-50% - 4rem));
   position: relative;
@@ -19,13 +19,13 @@ body {
   margin: 0 auto;
 }
 
-#user-creation-form input {
+.user-form input {
   display: block;
   width: calc(100% - 4rem);
   margin: 1rem;
 }
 
-#login-button {
+#login-button, #create-user-button {
   display: block;
   margin: 1rem auto;
 }
