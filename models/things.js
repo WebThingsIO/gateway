@@ -33,16 +33,14 @@ var Things = {
     * @return {Promise} which resolves with a Map of Thing objects.
     */
    getThings: function() {
-     return new Promise((function(resolve, reject) {
-       Database.getThings().then((function(things) {
-         // Update the map of Things
-         this.things = new Map();
-         things.forEach(function(thing) {
-           this.things.set(thing.id, new Thing(thing.id, thing));
-         }, this);
-         resolve(this.things);
-       }).bind(this));
-     }).bind(this));
+     return Database.getThings().then((things) => {
+       // Update the map of Things
+       this.things = new Map();
+       things.forEach((thing) => {
+         this.things.set(thing.id, new Thing(thing.id, thing));
+       });
+       return this.things;
+     });
    },
 
    /**
@@ -51,15 +49,13 @@ var Things = {
     * @Return {Promise} which resolves with a list of Thing Descriptions.
     */
    getThingDescriptions: function() {
-     return new Promise((function(resolve, reject) {
-       this.getThings().then(function(things) {
-         var descriptions = [];
-         for (let thing of things.values()) {
-           descriptions.push(thing.getDescription());
-         }
-         resolve(descriptions);
-       });
-     }).bind(this));
+     return this.getThings().then(function(things) {
+       var descriptions = [];
+       for (let thing of things.values()) {
+         descriptions.push(thing.getDescription());
+       }
+       return descriptions;
+     });
    },
 
   /**
@@ -69,30 +65,28 @@ var Things = {
    * @returns Promise A promise which resolves with a list of Things.
    */
    getNewThings: function() {
-     return new Promise((function(resolve, reject) {
-       // Get a map of things in the database
-       this.getThings().then((function(storedThings) {
-         // Get a list of things connected to adapters
-         var connectedThings = AdapterManager.getThings();
-         var newThings = [];
-         connectedThings.forEach(function(connectedThing) {
-           if(!storedThings.has(connectedThing.id)) {
-             connectedThing.href =
-              Constants.THINGS_PATH + '/' + connectedThing.id;
-             if (connectedThing.properties) {
-               for (var propertyName in connectedThing.properties) {
-                 var property = connectedThing.properties[propertyName];
-                 property.href = Constants.THINGS_PATH +
-                   '/' + connectedThing.id +
-                   Constants.PROPERTIES_PATH + '/' + propertyName;
-               }
+     // Get a map of things in the database
+     return this.getThings().then((function(storedThings) {
+       // Get a list of things connected to adapters
+       var connectedThings = AdapterManager.getThings();
+       var newThings = [];
+       connectedThings.forEach(function(connectedThing) {
+         if(!storedThings.has(connectedThing.id)) {
+           connectedThing.href =
+            Constants.THINGS_PATH + '/' + connectedThing.id;
+           if (connectedThing.properties) {
+             for (var propertyName in connectedThing.properties) {
+               var property = connectedThing.properties[propertyName];
+               property.href = Constants.THINGS_PATH +
+                 '/' + connectedThing.id +
+                 Constants.PROPERTIES_PATH + '/' + propertyName;
              }
-             newThings.push(connectedThing);
            }
-         });
-         resolve(newThings);
-       }).bind(this));
-     }).bind(this));
+           newThings.push(connectedThing);
+         }
+       });
+       return newThings;
+     }));
    },
 
    /**
