@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/moziot/gateway.svg?branch=master)](https://travis-ci.org/moziot/gateway)
+[![Build Status](https://travis-ci.org/mozilla-iot/gateway.svg?branch=master)](https://travis-ci.org/mozilla-iot/gateway)
 
 # MozIoT Gateway
 Web of Things gateway.
