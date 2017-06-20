@@ -56,20 +56,41 @@ it('should create a new pairing action', (done) => {
     });
 });
 
+it('should list and retrieve the new action', (done) => {
+  rp(chai.request(server)
+    .get(Constants.ACTIONS_PATH)).then(res => {
+    res.should.have.status(200);
+    res.body.should.be.a('array');
+    res.body.length.should.be.eql(1);
+    res.body[0].should.have.a.property('name');
+    res.body[0].should.have.a.property('id');
+    res.body[0].name.should.be.eql('pair');
 
-it('should retrieve the new action', (done) => {
-  chai.request(server)
-    .get(Constants.ACTIONS_PATH)
-    .end((err, res) => {
-      res.should.have.status(200);
-      res.body.should.be.a('array');
-      res.body.length.should.be.eql(1);
-      res.body[0].should.have.a.property('name');
-      res.body[0].should.have.a.property('id');
-      res.body[0].name.should.be.eql('pair');
-      done();
-    });
+    return res.body[0].id;
+  }).then(actionId => {
+    return rp(chai.request(server)
+      .get(Constants.ACTIONS_PATH + '/' + actionId));
+  }).then(res => {
+    res.should.have.status(200);
+    res.body.should.have.a.property('name');
+    res.body.name.should.be.eql('pair');
+    res.body.should.have.a.property('id');
+
+    done();
+  });
 });
+
+it('should error retrieving a nonexistent action', (done) => {
+  let actionId = 'tomato';
+  rp(chai.request(server)
+    .get(Constants.ACTIONS_PATH + '/' + actionId)).then(() => {
+    throw new Error('Response should be 404');
+  }).catch(err => {
+    err.response.should.have.status(404);
+    done();
+  });
+});
+
 
 it('should remove an action', done => {
 
