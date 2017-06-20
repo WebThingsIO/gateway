@@ -37,3 +37,15 @@ it('gets specifically mockAdapter', (done) => {
   });
 });
 
+it('fails to get a nonexistent adapter', (done) => {
+  let mockAdapterId = 'nonexistent-adapter';
+
+  rp(chai.request(server)
+    .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)).then(() => {
+    throw new Error('Reponse should be a 404');
+  }).catch(err => {
+    err.response.should.have.status(404);
+    done();
+  });
+});
+
