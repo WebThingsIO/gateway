@@ -351,3 +351,29 @@ it('should remove a device', done => {
   });
 });
 
+it('should remove a device in response to unpair', done => {
+  let thingId = 'test-5';
+  // The mock adapter requires knowing in advance that we're going to unpair
+  // a specific device
+  mockAdapter().unpairDevice(thingId);
+  rp(chai.request(server)
+    .post(Constants.ACTIONS_PATH)
+    .send({name: 'unpair', parameters: {id: thingId}})).then(res => {
+    res.should.have.status(201);
+    return rp(chai.request(server)
+      .get(Constants.NEW_THINGS_PATH))
+  }).then(res => {
+    res.should.have.status(200);
+    res.body.should.be.a('array');
+    let found = false;
+    for (let thing of res.body) {
+      if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
+        found = true;
+      }
+    }
+
+    assert.isNotOk(found, 'should not find thing in /new_things output');
+
+    done();
+  });
+});
