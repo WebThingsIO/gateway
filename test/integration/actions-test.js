@@ -97,6 +97,18 @@ it('should remove an action', done => {
 });
 
 
+it('should error removing a nonexistent action', done => {
+  let actionId = 555;
+
+  rp(chai.request(server)
+    .delete(Constants.ACTIONS_PATH + '/' + actionId)).then(res => {
+    throw new Error('Not a 404');
+  }).catch(err => {
+    err.response.status.should.be.eql(404);
+    done();
+  });
+});
+
 it('should error on an unpair of a nonexistent device',
    done => {
   let thingId = 'test-nonexistent';
