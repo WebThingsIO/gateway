@@ -11,7 +11,9 @@
 'use strict';
 
 var express = require('express');
+var Authentication = require('../authentication');
 var Users = require('../models/users');
+
 var UsersController = express.Router();
 
 /**
@@ -28,6 +30,36 @@ UsersController.get('/:email', function(request, response) {
   }).catch(function(error) {
     response.status(500).send(error);
     console.error('Failed to get user ' + email);
+  });
+});
+
+/**
+ * Create a user
+ */
+UsersController.post('/', function(request, response) {
+  let body = request.body;
+
+  if (!body || !body.email || !body.password) {
+    response.status(400).send('User requires email and password');
+    return;
+  }
+
+  Authentication.hashPassword(body.password).then(hash => {
+    return Users.createUser(body.email, hash, body.name);
+  }).then(user => {
+    request.login(user, error => {
+      if (error) {
+        console.error('Error creating new user');
+        console.error(error);
+        response.status(500).send(error);
+      } else {
+        response.redirect('/');
+      }
+    });
+  }).catch(error => {
+    console.error('Error creating new user');
+    console.error(error);
+    response.status(500).send(error);
   });
 });
 

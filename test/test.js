@@ -14,7 +14,11 @@
 
 require('./common');
 
+// Note that this test must run first to authenticate because tests share state
+describe('UsersController', () => {
+  require('./integration/users-test');
+});
+
 describe('ThingsController', () => {
   require('./integration/things-test');
-  require('./integration/users-test');
 });

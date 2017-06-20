@@ -32,6 +32,29 @@ var Users = {
         reject(error);
       });
     });
+  },
+
+  /**
+   * Get all Users stored in the database
+   * @return {Promise<Array<User>>}
+   */
+  getUsers: function() {
+    return Database.getUsers().then(userRows => {
+      return userRows.map(row => {
+        return new User(row.email, row.password, row.name);
+      });
+    });
+  },
+
+  /**
+   * Create a new User
+   * @param {String} email
+   * @param {String} password
+   * @param {String?} name - optional name of user
+   */
+  createUser: function(email, password, name) {
+    var user = new User(email, password, name);
+    return Database.createUser(user);
   }
 };
 

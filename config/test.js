@@ -26,11 +26,7 @@ module.exports = {
     removeBeforeOpen: true,
   },
   authentication: {
-    enabled: false,
-    defaultUser:  {              // DO NOT USE THIS IN PRODUCTION
-      email: 'test@example.com',
-      password: 'password',
-      name: 'Test User'
-    }
+    enabled: true,
+    defaultUser: null
   }
 };
