@@ -13,7 +13,6 @@ it('GET with no actions', (done) => {
   chai.request(server)
     .get(Constants.ACTIONS_PATH)
     .end((err, res) => {
-      console.log(res.body);
       res.should.have.status(200);
       res.body.should.be.a('array');
       res.body.length.should.be.eql(0);
