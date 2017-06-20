@@ -97,3 +97,32 @@ it('should remove an action', done => {
   });
 });
 
+
+it('should error on an unpair of a nonexistent device',
+   done => {
+  let thingId = 'test-nonexistent';
+  // The mock adapter requires knowing in advance that we're going to unpair
+  // a specific device
+  mockAdapter().unpairDevice(thingId);
+
+  rp(chai.request(server)
+    .post(Constants.ACTIONS_PATH)
+    .send({name: 'unpair', parameters: {id: thingId}})).then(res => {
+    res.should.have.status(201);
+    return rp(chai.request(server)
+      .get(Constants.ACTIONS_PATH));
+  }).then(res => {
+    res.body.should.be.a('array');
+    res.body[0].should.have.a.property('name');
+    res.body[0].name.should.be.eql('unpair');
+
+    res.body[0].should.have.a.property('id');
+
+    res.body[0].should.have.a.property('status');
+    res.body[0].status.should.be.eql('error');
+
+    res.body[0].should.have.a.property('error');
+    done();
+  });
+});
+
