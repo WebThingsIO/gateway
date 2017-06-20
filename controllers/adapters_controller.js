@@ -41,17 +41,4 @@ adaptersController.get('/:adapterId/', (request, response) => {
   }
 });
 
-/**
- * Get a particular adapter.
- */
-adaptersController.get('/:adapterId/:action', (request, response) => {
-  var adapterId = request.params.adapterId;
-  var adapter = adapterManager.getAdapter(adapterId);
-  if (adapter) {
-    response.json(adapter.asDict());
-  } else {
-    response.status(404).send('Adapter "' + adapterId + '" not found.');
-  }
-});
-
 module.exports = adaptersController;
