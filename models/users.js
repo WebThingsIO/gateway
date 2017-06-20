@@ -20,17 +20,11 @@ var Users = {
    *   or false if user doesn't exist.
    */
   getUser: function(email) {
-    return new Promise(function(resolve, reject) {
-      Database.getUser(email).then(function(result) {
-        if (result) {
-          var user = new User(result.email, result.password, result.name);
-          resolve(user);
-        } else {
-          resolve(false);
-        }
-      }).catch(function(error) {
-        reject(error);
-      });
+    return Database.getUser(email).then((result) => {
+      if (!result) {
+        return false;
+      }
+      return new User(result.email, result.password, result.name);
     });
   }
 };
