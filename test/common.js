@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* globals assert */
+/* globals assert, expect */
 
 process.env.NODE_ENV = 'test';
 
@@ -32,5 +32,5 @@ function mockAdapter() {
 global.mockAdapter = mockAdapter;
 
 module.exports = {
-  mockAdapter, server, chai,
+  mockAdapter, server, chai, assert, expect
 };
