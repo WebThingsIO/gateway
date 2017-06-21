@@ -41,6 +41,7 @@
     "zcl-packet": "^0.2.2"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "chai": "^4.0.1",
     "chai-http": "^3.0.0",
     "eslint": "^4.0.0",
