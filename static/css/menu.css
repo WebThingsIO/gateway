@@ -52,3 +52,7 @@
 #main-menu a[data-view='settings'] {
   background-image: url('../images/settings-icon.png');
 }
+
+#log-out-menu-item {
+  background-image: url('../images/log-out-icon.png');
+}

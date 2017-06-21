@@ -60,10 +60,14 @@ var Menu = {
     if(e.target.tagName != 'A') {
       return;
     }
+    let view = e.target.dataset.view;
+    if (!view) {
+      return;
+    }
     e.preventDefault();
     this.hide();
-    this.selectItem(e.target.dataset.view);
-    App.selectView(e.target.dataset.view);
+    this.selectItem(view);
+    App.selectView(view);
   },
 
   /**
