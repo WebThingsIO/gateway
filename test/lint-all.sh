@@ -6,6 +6,6 @@ SCRIPTDIR="$(dirname ""$0"")"
 #exit 0
 
 for filename in $(git ls-files "${SCRIPTDIR}/../*.js"); do
-  echo "jshint ${filename}"
-  jshint ${filename}
+  echo "eslint ${filename}"
+  eslint ${filename}
 done
