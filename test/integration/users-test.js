@@ -4,8 +4,8 @@
 /* globals it */
 
 const {chai, server} = require('../common');
+const assert = chai.assert;
 
-var assert = require('assert');
 var Constants = require('../../constants');
 
 const testUser = {
@@ -18,8 +18,8 @@ it('gets a route but is not authed', (done) => {
   chai.request(server)
     .get('/')
     .end((err, res) => {
-      assert.ok(res.request.url.endsWith('/login'),
-                'should be redirected to /login');
+      assert(res.request.url.endsWith('/login'),
+             'should be redirected to /login');
       done();
     });
 });

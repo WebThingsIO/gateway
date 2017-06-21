@@ -4,10 +4,10 @@
 /* globals it */
 
 const {server, chai, mockAdapter, rp} = require('../common');
+const assert = chai.assert;
 
 var Constants = require('../../constants');
 const WebSocket = require('ws');
-const assert = require('assert');
 
 it('GET with no things', (done) => {
   chai.request(server)
