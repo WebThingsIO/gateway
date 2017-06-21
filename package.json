@@ -4,9 +4,9 @@
   "description": "Web of Things gateway",
   "main": "app.js",
   "scripts": {
-    "test": "./test/run-tests.sh",
+    "test": "npm run lint && npm run mocha",
     "lint": "eslint .",
-    "mocha": "mocha"
+    "mocha": "./test/run-tests.sh"
   },
   "repository": {
     "type": "git",

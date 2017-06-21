@@ -30,3 +30,7 @@ function mockAdapter() {
   return adapter;
 }
 global.mockAdapter = mockAdapter;
+
+module.exports = {
+  mockAdapter, server, chai,
+};
