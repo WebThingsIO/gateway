@@ -9,10 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* jshint unused:false */
-
-'use strict';
-
 // Dependencies
 var http = require('http');
 var https = require('https');

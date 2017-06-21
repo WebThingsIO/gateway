@@ -148,7 +148,6 @@ class MockAdapter extends Adapter {
 }
 
 function loadMockAdapter(adapterManager, testConfigs) {
-  /* jshint -W031 */
   new MockAdapter(adapterManager, testConfigs);
 }
 

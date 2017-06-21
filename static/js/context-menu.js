@@ -9,7 +9,6 @@
  */
  'use strict';
 
-/* jshint unused:false */
 /* globals App, NewThing, ThingsScreen */
 
 var ContextMenu = {
