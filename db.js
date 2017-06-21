@@ -98,6 +98,18 @@ var Database = {
         }
       });
     });
+
+    var jwtTableSQL = 'CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
+      'id INTEGER PRIMARY KEY ASC,' +
+      'user INTEGER,' +
+      'issuedAt DATE,' +
+      'publicKey TEXT,' +
+      'FOREIGN KEY (user) REFERENCES users(id)' +
+    ');';
+
+    db.serialize(function() {
+      db.run(jwtTableSQL);
+    });
   },
 
   /**
