@@ -10,7 +10,6 @@
 
 'use strict';
 
-/* jshint unused:false */
 /* globals AddThingScreen, App, Thing, OnOffSwitch */
 
 var ThingsScreen = {

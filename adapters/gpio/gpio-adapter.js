@@ -109,7 +109,6 @@ class GpioAdapter extends Adapter {
     super(adapterManager, 'GPIO');
 
     for (var pin in gpioConfig.pins) {
-      /* jshint -W031 */
       new GpioDevice(this, pin, gpioConfig.pins[pin]);
     }
     adapterManager.addAdapter(this);
@@ -117,7 +116,6 @@ class GpioAdapter extends Adapter {
 }
 
 function loadGpioAdapter(adapterManager, gpioConfig) {
-  /* jshint -W031 */
   new GpioAdapter(adapterManager, gpioConfig);
 }
 

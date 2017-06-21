@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "./test/run-tests.sh",
-    "jshint": "./test/jshint-all.sh",
+    "lint": "./test/lint-all.sh",
     "mocha": "mocha"
   },
   "repository": {
@@ -40,7 +40,7 @@
   "devDependencies": {
     "chai": "^4.0.1",
     "chai-http": "^3.0.0",
-    "jshint": "^2.9.4",
+    "eslint": "^4.0.0",
     "mocha": "^3.4.2",
     "node-rest-client": "^3.1.0"
   }

@@ -2,7 +2,7 @@
 
 SCRIPTDIR="$(dirname ""$0"")"
 
-${SCRIPTDIR}/jshint-all.sh
+${SCRIPTDIR}/lint-all.sh
 
 if [ ! -f "certificate.pem" ]; then
   ${SCRIPTDIR}/../tools/make-self-signed-cert.sh

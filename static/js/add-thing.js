@@ -9,7 +9,6 @@
  */
  'use strict';
 
-/* jshint unused:false */
 /* globals App, NewThing */
 
 var AddThingScreen = {

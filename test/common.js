@@ -6,9 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-/* Tell jshint about globals */
 /* globals assert */
 
 process.env.NODE_ENV = 'test';

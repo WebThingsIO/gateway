@@ -7,7 +7,6 @@
  */
 'use strict';
 
-/* jshint unused:false */
 /* globals App */
 
 var Menu = {

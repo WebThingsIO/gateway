@@ -372,7 +372,6 @@ function loadZWaveAdapters(adapterManager) {
 
     console.log('Found ZWave port @', port.comName);
 
-    /* jshint -W031 */
     new ZWaveAdapter(adapterManager, port);
 
     // The zwave adapter will be added when it's driverReady method is called.

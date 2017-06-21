@@ -9,7 +9,6 @@
  */
 'use strict';
 
-/* jshint unused:false */
 /* globals ThingsScreen, AdaptersScreen, AddThingScreen, Menu, ContextMenu */
 
 var App = {

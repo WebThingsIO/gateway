@@ -1223,7 +1223,6 @@ function findDigiPorts() {
 function loadZigBeeAdapters(adapterManager) {
   findDigiPorts().then((digiPorts) => {
     for (var port of digiPorts) {
-      /* jshint -W031 */
       new ZigBeeAdapter(adapterManager, port);
     }
   }, (error) => {
