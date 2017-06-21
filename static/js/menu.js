@@ -20,7 +20,6 @@ var Menu = {
     this.items = [];
     this.items.things = document.getElementById('things-menu-item');
     this.items.adapters = document.getElementById('adapters-menu-item');
-    this.items.settings = document.getElementById('settings-menu-item');
     this.currentItem = 'things';
   },
 
