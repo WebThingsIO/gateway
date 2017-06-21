@@ -1,9 +1,9 @@
 'use strict';
 
 /* Tell jshint about mocha globals, and  */
-/* globals it, chai, server */
+/* globals it */
 
-require('../common');
+const {chai, server} = require('../common');
 
 var assert = require('assert');
 var Constants = require('../../constants');
