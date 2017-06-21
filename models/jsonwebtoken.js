@@ -13,6 +13,7 @@
 const assert = require('assert');
 const ec = require('../ec-crypto');
 const jwt = require('jsonwebtoken');
+const uuid = require('uuid');
 
 class JSONWebToken {
 
@@ -36,16 +37,18 @@ class JSONWebToken {
       user,
       issuedAt: new Date(),
       publicKey: pair.public,
+      keyId: uuid.v4(),
     };
 
     return { sig, token };
   }
 
   constructor(obj) {
-    const {user, issuedAt, publicKey} = obj;
+    const {user, issuedAt, publicKey, keyId} = obj;
     assert(typeof user === 'number');
     assert(issuedAt);
     assert(typeof publicKey === 'string');
+    assert(typeof keyId === 'string');
     this.user = user;
     this.issuedAt = issuedAt;
     this.publicKey = publicKey;
