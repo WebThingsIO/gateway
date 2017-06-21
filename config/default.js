@@ -9,6 +9,12 @@
 'use strict';
 
 module.exports = {
+  // Expose CLI
+  cli: true,
+
+  ports: {
+    https: 4443
+  },
   adapters : {
     gpio: {
       enabled: false,
