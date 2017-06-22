@@ -57,7 +57,33 @@ it('gets that user', (done) => {
     });
 });
 
+it('logs out', (done) => {
+  chai.request(server)
+    .post(Constants.LOG_OUT_PATH)
+    .end((err, res) => {
+      res.should.have.status(200);
+      done();
+    });
+});
 
-// TODO: logs out as a user
-// TODO: fails to create a user when a user exists
-// TODO: logs in as a user
+it('fails to create a user when a user exists', (done) => {
+  chai.request(server)
+    .post(Constants.USERS_PATH)
+    .send(testUser)
+    .end((err, res) => {
+      assert.ok(res.request.url.endsWith('/login'),
+                'should be redirected to /login');
+      done();
+    });
+});
+
+it('logs in as a user', (done) => {
+  chai.request(server)
+    .post(Constants.LOGIN_PATH)
+    .send(testUser)
+    .end((err, res) => {
+      res.should.have.status(200);
+      done();
+    });
+});
+

@@ -15,5 +15,6 @@ exports.NEW_THINGS_PATH = '/new_things';
 exports.ADAPTERS_PATH = '/adapters';
 exports.ACTIONS_PATH = '/actions';
 exports.LOGIN_PATH = '/login';
+exports.LOG_OUT_PATH = '/log-out';
 exports.STATIC_PATH = 'static';
 exports.DEBUG_PATH = '/debug';
