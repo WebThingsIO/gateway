@@ -24,7 +24,7 @@ var Users = {
       if (!result) {
         return false;
       }
-      return new User(result.email, result.password, result.name);
+      return new User(result.id, result.email, result.password, result.name);
     });
   },
 
@@ -35,7 +35,7 @@ var Users = {
   getUsers: function() {
     return Database.getUsers().then(userRows => {
       return userRows.map(row => {
-        return new User(row.email, row.password, row.name);
+        return new User(row.id, row.email, row.password, row.name);
       });
     });
   },
@@ -45,10 +45,12 @@ var Users = {
    * @param {String} email
    * @param {String} password
    * @param {String?} name - optional name of user
+   * @return {User} user object.
    */
-  createUser: function(email, password, name) {
-    var user = new User(email, password, name);
-    return Database.createUser(user);
+  createUser: async function(email, password, name) {
+    const user = new User(null, email, password, name);
+    user.id = await Database.createUser(user);
+    return user;
   }
 };
 

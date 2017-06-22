@@ -10,10 +10,11 @@
 
 'use strict';
 
-var config = require('config');
-var sqlite3 = require('sqlite3').verbose();
-var fs = require('fs');
-var bcrypt = require('bcrypt-nodejs');
+const config = require('config');
+const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
+const bcrypt = require('bcrypt-nodejs');
+const assert = require('assert');
 
 var Database = {
   /**
@@ -97,6 +98,24 @@ var Database = {
           console.log('Saved default user ' + defaultUser.email);
         }
       });
+    });
+
+    /**
+     * This really should have a foreign key constraint but it does not work
+     * with our version of node-sqlite / sqlite.
+     *
+     * https://github.com/mapbox/node-sqlite3/pull/660
+     */
+    var jwtTableSQL = 'CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
+      'id INTEGER PRIMARY KEY ASC,' +
+      'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
+      'user INTEGER,' +
+      'issuedAt DATE,' +
+      'publicKey TEXT' +
+    ');';
+
+    db.serialize(function() {
+      db.run(jwtTableSQL);
     });
   },
 
@@ -201,16 +220,95 @@ var Database = {
    * @param {User} user
    * @return {Promise<User>}
    */
-  createUser: function(user) {
-    return new Promise((resolve, reject) => {
-      this.db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
-        [user.email, user.password, user.name], function(error) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(user);
+  createUser: async function(user) {
+    const result = await this.run(
+      'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+      [user.email, user.password, user.name]
+    );
+    assert(typeof result.lastID === 'number');
+    return result.lastID;
+  },
+
+  deleteUser: function(userId) {
+    assert(typeof userId === 'number');
+    const deleteUser = this.run(
+      'DELETE FROM users WHERE id = ?',
+      [userId]
+    );
+    const deleteTokens = this.deleteJSONWebTokensForUser(userId);
+    /**
+     * XXX: This is a terrible hack until we get foreign key constraint support
+     * turned on with node-sqlite. As is this could leave junk around in the db.
+     */
+    return Promise.all([deleteTokens, deleteUser]);
+  },
+
+  /**
+   * Delete all jsonwebtoken's for a given user.
+   */
+  deleteJSONWebTokensForUser: function(userId) {
+    assert(typeof userId === 'number');
+    return this.run(
+      'DELETE FROM jsonwebtoken_to_user WHERE user = ?',
+      [userId]
+    );
+  },
+
+  /**
+   * Insert a JSONWebToken into the database and return it's primary key.
+   */
+  createJSONWebToken: async function(token) {
+    const {keyId, user, publicKey, issuedAt} = token;
+    const result = await this.run(
+      'INSERT INTO jsonwebtoken_to_user (keyId, user, issuedAt, publicKey) ' +
+      'VALUES (?, ?, ?, ?)',
+      [keyId, user, issuedAt, publicKey]
+    );
+    assert(typeof result.lastID === 'number');
+    return result.lastID;
+  },
+
+  getJSONWebTokenByKeyId: function(keyId) {
+    assert(typeof keyId === 'string');
+    return this.get(
+      'SELECT * FROM jsonwebtoken_to_user WHERE keyId = ?',
+      keyId
+    );
+  },
+
+  get: function(sql, ...params) {
+    return new Promise((accept, reject) => {
+      params.push(function(err, row) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        accept(row);
+      });
+
+      try {
+        this.db.get(sql, ...params);
+      } catch (err) {
+        reject(err);
+        return;
+      }
+    });
+  },
+
+  run: function(sql, values) {
+    return new Promise((accept, reject) => {
+      try {
+        this.db.run(sql, values, function (err) {
+          if (err) {
+            reject(err);
+            return;
           }
+          // node-sqlite puts results on "this" so avoid arrrow fn.
+          accept(this);
         });
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 };

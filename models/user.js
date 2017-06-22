@@ -12,11 +12,18 @@
 
 var bcrypt = require('bcrypt-nodejs');
 
-var User = function(email, password, name) {
+var User = function(id, email, password, name) {
+  this.id = id;
   this.email = email;
   this.password = password; // Hashed
   this.name = name;
 };
+
+User.generate = async function(email, rawPassword, name) {
+  // TODO: Make async.
+  const hash = bcrypt.hashSync(rawPassword);
+  return new User(null, email, rawPassword, name);
+}
 
 /**
  * Check stored password against provided password.
