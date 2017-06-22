@@ -8,6 +8,34 @@ const {server, chai, mockAdapter, rp} = require('../common');
 var Constants = require('../../constants');
 const WebSocket = require('ws');
 
+it('removes all existing actions', done => {
+
+  rp(chai.request(server)
+    .get(Constants.ACTIONS_PATH)).then(res => {
+    res.should.have.status(200);
+    res.body.should.be.a('array');
+
+    // Issue a request to delete all current actions
+    let deleteReqs = res.body.map(action => {
+      return rp(chai.request(server)
+        .delete(Constants.ACTIONS_PATH + '/' + action.id));
+    });
+
+    return Promise.all(deleteReqs);
+  }).then(responses => {
+    for (let res of responses) {
+      res.should.have.status(204);
+    }
+
+    return rp(chai.request(server)
+      .get(Constants.ACTIONS_PATH));
+  }).then(res => {
+    res.body.should.be.a('array');
+    res.body.length.should.be.eql(0);
+
+    done();
+  });
+});
 
 it('GET with no actions', (done) => {
   chai.request(server)
