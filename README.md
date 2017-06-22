@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mozilla-iot/gateway.svg?branch=master)](https://travis-ci.org/mozilla-iot/gateway)
 
-# MozIoT Gateway
+# Mozilla IoT Gateway
 Web of Things gateway.
 
 ## Prerequisites
@@ -9,7 +9,7 @@ Web of Things gateway.
 
 (If you're just installing on your PC, you can skip this step).
 
-If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/moziot/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
+If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/mozilla-iot/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
 
 ### Install pkg-config
 
@@ -85,7 +85,7 @@ Note: You may need to manually add `/usr/local/lib` to your `LD_LIBRARY_PATH` en
 Clone the GitHub repository (or fork it first):
 ```
 $ cd
-$ git clone https://github.com/moziot/gateway.git
+$ git clone https://github.com/mozilla-iot/gateway.git
 ```
 
 Change into the gateway directory:
