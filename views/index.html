@@ -63,7 +63,11 @@
       <ul>
         <li><a id="things-menu-item" data-view="things" href="" class="selected">Things</a></li>
         <li><a id="adapters-menu-item" data-view="adapters" href="">Adapters</a></li>
-        <li><a id="log-out-menu-item" href="/log-out">Log out</a></li>
+        <li>
+          <form method="post" action="/log-out" class="log-out-form">
+            <button type="submit" class="log-out-button">Log out</button>
+          </form>
+        </li>
       </ul>
     </nav>
 

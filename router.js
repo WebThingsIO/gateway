@@ -31,7 +31,8 @@ var Router = {
     app.use(Constants.ACTIONS_PATH,
       require('./controllers/actions_controller'));
     app.use(Constants.LOGIN_PATH, require('./controllers/login_controller'));
-    app.use(Constants.LOG_OUT_PATH, require('./controllers/log_out_controller'));
+    app.use(Constants.LOG_OUT_PATH,
+      require('./controllers/log_out_controller'));
     if (opt.options.debug) {
       app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
     }

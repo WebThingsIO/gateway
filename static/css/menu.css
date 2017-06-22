@@ -24,7 +24,7 @@
   padding-top: 9.6rem;
 }
 
-#main-menu a {
+#main-menu a, .log-out-button {
   display: block;
   padding: 2rem;
   padding-left: 6.8rem;
@@ -37,7 +37,7 @@
   outline: 0;
 }
 
-#main-menu a:hover, #main-menu a.selected {
+#main-menu a:hover, #main-menu a.selected, .log-out-button:hover, .log-out-button.selected {
   background-color: rgba(0, 0, 0, 0.12);
 }
 
@@ -53,6 +53,10 @@
   background-image: url('../images/settings-icon.png');
 }
 
-#log-out-menu-item {
+.log-out-button {
+  background-color: unset;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
   background-image: url('../images/log-out-icon.png');
 }

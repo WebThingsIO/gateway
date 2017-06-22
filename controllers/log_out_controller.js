@@ -18,7 +18,7 @@ var LogOutController = express.Router();
 /**
  * Log out the user
  */
-LogOutController.get('/', (request, response) => {
+LogOutController.post('/', (request, response) => {
   request.logOut()
   response.redirect(Constants.LOGIN_PATH);
 });

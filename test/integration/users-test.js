@@ -59,7 +59,7 @@ it('gets that user', (done) => {
 
 it('logs out', (done) => {
   chai.request(server)
-    .get(Constants.LOG_OUT_PATH)
+    .post(Constants.LOG_OUT_PATH)
     .end((err, res) => {
       res.should.have.status(200);
       done();
