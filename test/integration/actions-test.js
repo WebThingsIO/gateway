@@ -119,7 +119,6 @@ it('should error retrieving a nonexistent action', (done) => {
   });
 });
 
-
 it('should remove an action', done => {
 
   rp(chai.request(server)
@@ -144,7 +143,6 @@ it('should remove an action', done => {
     done();
   });
 });
-
 
 it('should error removing a nonexistent action', done => {
   let actionId = 555;
