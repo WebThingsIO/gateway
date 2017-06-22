@@ -1,11 +1,12 @@
 'use strict';
 
 /* Tell jshint about mocha globals, and  */
-/* globals it, chai, mockAdapter, server */
+/* globals it */
 
-require('../common');
+const {server, chai, mockAdapter, rp} = require('../common');
 
 var Constants = require('../../constants');
+
 
 
 it('gets all adapters', (done) => {
