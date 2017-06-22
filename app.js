@@ -123,4 +123,7 @@ server.listen(port, function() {
   console.log('Listening on port', server.address().port);
 });
 
-module.exports = app; // for testing
+module.exports = { // for testing
+  app: app,
+  server: server
+};

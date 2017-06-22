@@ -47,10 +47,12 @@ var Actions = {
   /**
    * Get a list of all current actions.
    *
-   * @returns {Object} A map of current actions.
+   * @returns {Array} A list of current actions.
    */
   getAll: function() {
-    return this.actions;
+    return Object.keys(this.actions).map(id => {
+      return this.actions[id];
+    });
   },
 
   /**
@@ -64,8 +66,7 @@ var Actions = {
     action.status = 'pending';
     switch(action.name) {
       case 'pair':
-        AdapterManager.addNewThing().then(function(thing) {
-          Things.handleNewThing(thing);
+        AdapterManager.addNewThing().then(function() {
           action.status = 'completed';
         }).catch(function(error) {
           action.status = 'error';
@@ -96,6 +97,7 @@ var Actions = {
         }
         break;
       default:
+        delete this.actions[id];
         throw 'Invalid action name: "' + action.name + '"';
     }
   },

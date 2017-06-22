@@ -9,6 +9,7 @@
 /* globals assert, expect */
 
 process.env.NODE_ENV = 'test';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 var chai = require('chai');
 global.chai = chai;
@@ -19,8 +20,9 @@ let chaiHttp = require('chai-http');
 chai.should();
 chai.use(chaiHttp);
 
-var server = require('../app');
+let {server, app} = require('../app');
 global.server = server;
+global.app = app;
 
 var adapterManager = require('../adapter-manager');
 
@@ -34,3 +36,4 @@ global.mockAdapter = mockAdapter;
 module.exports = {
   mockAdapter, server, chai, assert, expect
 };
+

@@ -65,9 +65,9 @@ class Adapter {
 
   asDict() {
     return {
-      'id': this.id,
-      'name': this.name,
-      'ready': this.ready,
+      'id': this.getId(),
+      'name': this.getName(),
+      'ready': this.isReady(),
     };
   }
 
