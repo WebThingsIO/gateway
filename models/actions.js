@@ -64,8 +64,7 @@ var Actions = {
     action.status = 'pending';
     switch(action.name) {
       case 'pair':
-        AdapterManager.addNewThing().then(function(thing) {
-          Things.handleNewThing(thing);
+        AdapterManager.addNewThing().then(function() {
           action.status = 'completed';
         }).catch(function(error) {
           action.status = 'error';

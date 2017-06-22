@@ -106,11 +106,9 @@ var Things = {
     * @param Object New Thing description
     */
    handleNewThing: function(newThing) {
-     var thing = new Thing(newThing.id, newThing);
-
      // Notify each open websocket of the new Thing
      this.websockets.forEach(function(socket) {
-       socket.send(JSON.stringify(thing.getDescription()));
+       socket.send(JSON.stringify(newThing));
      });
    },
 
@@ -138,5 +136,9 @@ var Things = {
      return Database.removeThing(id);
    }
  };
+
+AdapterManager.on('thing-added', function(thing) {
+  Things.handleNewThing(thing);
+});
 
 module.exports = Things;
