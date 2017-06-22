@@ -11,14 +11,12 @@
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-var chai = require('chai');
+const chai = require('./chai');
 global.chai = chai;
 global.assert = chai.assert;
 global.expect = chai.expect;
 
-let chaiHttp = require('chai-http');
 chai.should();
-chai.use(chaiHttp);
 
 let {server, app} = require('../app');
 global.server = server;
