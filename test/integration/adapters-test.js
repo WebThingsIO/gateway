@@ -10,8 +10,8 @@ var Constants = require('../../constants');
 
 
 it('gets all adapters', (done) => {
-  rp(chai.request(server)
-    .get(Constants.ADAPTERS_PATH)).then(res => {
+  chai.request(server)
+    .get(Constants.ADAPTERS_PATH).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
     res.body.length.should.be.eql(1);
@@ -26,8 +26,8 @@ it('gets all adapters', (done) => {
 it('gets specifically mockAdapter', (done) => {
   let mockAdapterId = mockAdapter().getId();
 
-  rp(chai.request(server)
-    .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)).then(res => {
+  chai.request(server)
+    .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId).then(res => {
     res.should.have.status(200);
     res.body.should.have.a.property('id');
     res.body.id.should.be.eql(mockAdapter().getId());
@@ -41,8 +41,8 @@ it('gets specifically mockAdapter', (done) => {
 it('fails to get a nonexistent adapter', (done) => {
   let mockAdapterId = 'nonexistent-adapter';
 
-  rp(chai.request(server)
-    .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)).then(() => {
+  chai.request(server)
+    .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId).then(() => {
     throw new Error('Reponse should be a 404');
   }).catch(err => {
     err.response.should.have.status(404);

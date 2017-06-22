@@ -33,20 +33,7 @@ function mockAdapter() {
 }
 global.mockAdapter = mockAdapter;
 
-function rp(chaiRequest) {
-  return new Promise((resolve, reject) => {
-    chaiRequest.end((err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-}
-global.rp = rp;
-
 module.exports = {
-  mockAdapter, server, chai, assert, expect, rp
+  mockAdapter, server, chai, assert, expect
 };
 

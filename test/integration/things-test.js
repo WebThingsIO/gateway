@@ -241,13 +241,13 @@ it('should add a device during pairing then create a thing', done => {
   let descr = makeDescr(thingId);
   mockAdapter().pairDevice(thingId, descr);
   // send pair action
-  rp(chai.request(server)
+  chai.request(server)
     .post(Constants.ACTIONS_PATH)
-    .send({name: 'pair'})).then(res => {
+    .send({name: 'pair'}).then(res => {
 
     res.should.have.status(201);
-    return rp(chai.request(server)
-        .get(Constants.NEW_THINGS_PATH));
+    return chai.request(server)
+        .get(Constants.NEW_THINGS_PATH);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -259,13 +259,13 @@ it('should add a device during pairing then create a thing', done => {
     }
     assert(found, 'should find thing in /new_things output');
 
-    return rp(chai.request(server)
+    return chai.request(server)
       .post(Constants.THINGS_PATH)
-      .send(descr));
+      .send(descr);
   }).then(res => {
     res.should.have.status(201);
-    return rp(chai.request(server)
-        .get(Constants.NEW_THINGS_PATH));
+    return chai.request(server)
+        .get(Constants.NEW_THINGS_PATH);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -278,8 +278,8 @@ it('should add a device during pairing then create a thing', done => {
     assert(!found, 'should find no longer thing in /new_things output:'
       + JSON.stringify(res.body, null, 2));
 
-    return rp(chai.request(server)
-        .get(Constants.THINGS_PATH));
+    return chai.request(server)
+        .get(Constants.THINGS_PATH);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -298,11 +298,11 @@ it('should add a device during pairing then create a thing', done => {
 it('should remove a thing', done => {
   let thingId = 'test-6';
 
-  rp(chai.request(server)
-    .delete(Constants.THINGS_PATH + '/' + thingId)).then(res => {
+  chai.request(server)
+    .delete(Constants.THINGS_PATH + '/' + thingId).then(res => {
     res.should.have.status(204);
-    return rp(chai.request(server)
-      .get(Constants.THINGS_PATH));
+    return chai.request(server)
+      .get(Constants.THINGS_PATH);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -314,8 +314,8 @@ it('should remove a thing', done => {
     }
     assert(!found, 'should not find thing in /things output');
 
-    return rp(chai.request(server)
-        .get(Constants.NEW_THINGS_PATH));
+    return chai.request(server)
+        .get(Constants.NEW_THINGS_PATH);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -334,8 +334,8 @@ it('should remove a thing', done => {
 it('should remove a device', done => {
   let thingId = 'test-6';
   mockAdapter().removeDevice(thingId).then(() => {
-    return rp(chai.request(server)
-      .get(Constants.NEW_THINGS_PATH))
+    return chai.request(server)
+      .get(Constants.NEW_THINGS_PATH)
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
@@ -356,12 +356,12 @@ it('should remove a device in response to unpair', done => {
   // The mock adapter requires knowing in advance that we're going to unpair
   // a specific device
   mockAdapter().unpairDevice(thingId);
-  rp(chai.request(server)
+  chai.request(server)
     .post(Constants.ACTIONS_PATH)
-    .send({name: 'unpair', parameters: {id: thingId}})).then(res => {
+    .send({name: 'unpair', parameters: {id: thingId}}).then(res => {
     res.should.have.status(201);
-    return rp(chai.request(server)
-      .get(Constants.NEW_THINGS_PATH))
+    return chai.request(server)
+      .get(Constants.NEW_THINGS_PATH)
   }).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');

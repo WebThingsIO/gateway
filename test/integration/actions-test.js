@@ -3,22 +3,22 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const {server, chai, mockAdapter, rp} = require('../common');
+const {server, chai, mockAdapter} = require('../common');
 
 var Constants = require('../../constants');
 const WebSocket = require('ws');
 
 it('removes all existing actions', done => {
 
-  rp(chai.request(server)
-    .get(Constants.ACTIONS_PATH)).then(res => {
+  chai.request(server)
+    .get(Constants.ACTIONS_PATH).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
 
     // Issue a request to delete all current actions
     let deleteReqs = res.body.map(action => {
-      return rp(chai.request(server)
-        .delete(Constants.ACTIONS_PATH + '/' + action.id));
+      return chai.request(server)
+        .delete(Constants.ACTIONS_PATH + '/' + action.id);
     });
 
     return Promise.all(deleteReqs);
@@ -27,8 +27,8 @@ it('removes all existing actions', done => {
       res.should.have.status(204);
     }
 
-    return rp(chai.request(server)
-      .get(Constants.ACTIONS_PATH));
+    return chai.request(server)
+      .get(Constants.ACTIONS_PATH);
   }).then(res => {
     res.body.should.be.a('array');
     res.body.length.should.be.eql(0);
@@ -85,8 +85,8 @@ it('should create a new pairing action', (done) => {
 });
 
 it('should list and retrieve the new action', (done) => {
-  rp(chai.request(server)
-    .get(Constants.ACTIONS_PATH)).then(res => {
+  chai.request(server)
+    .get(Constants.ACTIONS_PATH).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
     res.body.length.should.be.eql(1);
@@ -96,8 +96,8 @@ it('should list and retrieve the new action', (done) => {
 
     return res.body[0].id;
   }).then(actionId => {
-    return rp(chai.request(server)
-      .get(Constants.ACTIONS_PATH + '/' + actionId));
+    return chai.request(server)
+      .get(Constants.ACTIONS_PATH + '/' + actionId);
   }).then(res => {
     res.should.have.status(200);
     res.body.should.have.a.property('name');
@@ -110,8 +110,8 @@ it('should list and retrieve the new action', (done) => {
 
 it('should error retrieving a nonexistent action', (done) => {
   let actionId = 'tomato';
-  rp(chai.request(server)
-    .get(Constants.ACTIONS_PATH + '/' + actionId)).then(() => {
+  chai.request(server)
+    .get(Constants.ACTIONS_PATH + '/' + actionId).then(() => {
     throw new Error('Response should be 404');
   }).catch(err => {
     err.response.should.have.status(404);
@@ -121,21 +121,21 @@ it('should error retrieving a nonexistent action', (done) => {
 
 it('should remove an action', done => {
 
-  rp(chai.request(server)
-    .get(Constants.ACTIONS_PATH)).then(res => {
+  chai.request(server)
+    .get(Constants.ACTIONS_PATH).then(res => {
     res.should.have.status(200);
     res.body.should.be.a('array');
     res.body.length.should.be.eql(1);
     let actionId = res.body[0].id;
     return actionId;
   }).then(actionId => {
-    return rp(chai.request(server)
-      .delete(Constants.ACTIONS_PATH + '/' + actionId));
+    return chai.request(server)
+      .delete(Constants.ACTIONS_PATH + '/' + actionId);
   }).then(res => {
     res.should.have.status(204);
 
-    return rp(chai.request(server)
-      .get(Constants.ACTIONS_PATH));
+    return chai.request(server)
+      .get(Constants.ACTIONS_PATH);
   }).then(res => {
     res.body.should.be.a('array');
     res.body.length.should.be.eql(0);
@@ -147,8 +147,8 @@ it('should remove an action', done => {
 it('should error removing a nonexistent action', done => {
   let actionId = 555;
 
-  rp(chai.request(server)
-    .delete(Constants.ACTIONS_PATH + '/' + actionId)).then(res => {
+  chai.request(server)
+    .delete(Constants.ACTIONS_PATH + '/' + actionId).then(res => {
     throw new Error('Not a 404');
   }).catch(err => {
     err.response.status.should.be.eql(404);
@@ -163,12 +163,12 @@ it('should error on an unpair of a nonexistent device',
   // a specific device
   mockAdapter().unpairDevice(thingId);
 
-  rp(chai.request(server)
+  chai.request(server)
     .post(Constants.ACTIONS_PATH)
-    .send({name: 'unpair', parameters: {id: thingId}})).then(res => {
+    .send({name: 'unpair', parameters: {id: thingId}}).then(res => {
     res.should.have.status(201);
-    return rp(chai.request(server)
-      .get(Constants.ACTIONS_PATH));
+    return chai.request(server)
+      .get(Constants.ACTIONS_PATH);
   }).then(res => {
     res.body.should.be.a('array');
     res.body[0].should.have.a.property('name');
