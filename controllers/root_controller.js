@@ -19,10 +19,11 @@ var RootController = express.Router();
 /**
  * Get the home page.
  */
-RootController.get('/', Authentication.isLoggedIn,
-  function(request, response) {
-    response.sendFile('index.html', { root: path.join(__dirname, '../views') });
-  }
-);
+RootController.get('/', function(request, response) {
+  response.sendFile(
+    'index.html',
+    { root: path.join(__dirname, '../views')
+  });
+});
 
 module.exports = RootController;

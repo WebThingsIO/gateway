@@ -16,6 +16,12 @@ const fs = require('fs');
 const bcrypt = require('bcrypt-nodejs');
 const assert = require('assert');
 
+const TABLES = [
+  'users',
+  'jsonwebtoken_to_user',
+  'things',
+];
+
 var Database = {
   /**
    * Filename to use for default list of Things.
@@ -77,7 +83,7 @@ var Database = {
     // Create Users table
     var usersTableSQL = 'CREATE TABLE IF NOT EXISTS users (' +
       'id INTEGER PRIMARY KEY ASC,' +
-      'email TEXT,' +
+      'email TEXT UNIQUE,' +
       'password TEXT,' +
       'name TEXT' +
     ');';
@@ -199,6 +205,16 @@ var Database = {
   },
 
   /**
+   * Get a user by it's primary key (id).
+   */
+  getUserById: async function(id) {
+    return await this.get(
+      'SELECT * FROM users WHERE id = ?',
+      id
+    );
+  },
+
+  /**
    * Get all Users stored in the database.
    *
    * @return {Promise<Array<User>>} resolves with a list of User objects
@@ -268,12 +284,36 @@ var Database = {
     return result.lastID;
   },
 
+  /**
+   * Get a JWT by it's key id.
+   */
   getJSONWebTokenByKeyId: function(keyId) {
     assert(typeof keyId === 'string');
     return this.get(
       'SELECT * FROM jsonwebtoken_to_user WHERE keyId = ?',
       keyId
     );
+  },
+
+  /**
+   * Delete a JWT by it's key id.
+   */
+  deleteJSONWebTokenByKeyId: async function(keyId) {
+    assert(typeof keyId === 'string');
+    const result = await this.run(
+      'DELETE FROM jsonwebtoken_to_user WHERE keyId = ?',
+      keyId
+    );
+    return result.changes !== 0;
+  },
+
+  /**
+   * ONLY for tests (clears all tables).
+   */
+  deleteEverything: async function() {
+    return Promise.all(TABLES.map((t) => {
+      return this.run(`DELETE FROM ${t}`);
+    }));
   },
 
   get: function(sql, ...params) {

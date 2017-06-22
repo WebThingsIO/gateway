@@ -10,33 +10,32 @@
 
 'use strict';
 
-var express = require('express');
-var Authentication = require('../authentication');
-var Users = require('../models/users');
+const Router = require('express-promise-router');
+const Authentication = require('../authentication');
+const Users = require('../models/users');
+const JSONWebToken = require('../models/jsonwebtoken');
 
-var UsersController = express.Router();
+const UsersController = Router();
+const auth = require('../jwt-middleware')();
 
 /**
  * Get a user.
  */
-UsersController.get('/:email', function(request, response) {
-  var email = request.params.email;
-  Users.getUser(email).then(function(user) {
-    if (user) {
-      response.status(200).json(user.getDescription());
-    } else {
-      response.status(404).send('User not found');
-    }
-  }).catch(function(error) {
-    response.status(500).send(error);
-    console.error('Failed to get user ' + email);
-  });
+UsersController.get('/info', auth, async (request, response) => {
+  const user = await Users.getUserById(request.jwt.user);
+  // This should never happen if we auth'ed the JWT the user row should
+  // be present barring any bugs/races.
+  if (!user) {
+    response.sendStatus(500);
+    return;
+  }
+  response.status(200).json(user.getDescription());
 });
 
 /**
  * Create a user
  */
-UsersController.post('/', function(request, response) {
+UsersController.post('/', async (request, response) => {
   let body = request.body;
 
   if (!body || !body.email || !body.password) {
@@ -44,22 +43,19 @@ UsersController.post('/', function(request, response) {
     return;
   }
 
-  Authentication.hashPassword(body.password).then(hash => {
-    return Users.createUser(body.email, hash, body.name);
-  }).then(user => {
-    request.login(user, error => {
-      if (error) {
-        console.error('Error creating new user');
-        console.error(error);
-        response.status(500).send(error);
-      } else {
-        response.redirect('/');
-      }
-    });
-  }).catch(error => {
-    console.error('Error creating new user');
-    console.error(error);
-    response.status(500).send(error);
+  const hasEmail = await Users.getUser(body.email);
+  if (hasEmail) {
+    response.sendStatus(400);
+    return;
+  }
+
+  // TODO: user facing errors...
+  const hash = await Authentication.hashPassword(body.password);
+  const user = await Users.createUser(body.email, hash, body.name);
+  const jwt = await JSONWebToken.issueToken(user.id);
+
+  response.send({
+    jwt,
   });
 });
 

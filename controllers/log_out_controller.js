@@ -10,17 +10,21 @@
 
 'use strict';
 
-var express = require('express');
-const Constants = require('../constants');
+const assert = require('assert');
+const Router = require('express-promise-router');
 
-var LogOutController = express.Router();
+const Constants = require('../constants');
+const JSONWebToken = require('../models/jsonwebtoken');
+
+var LogOutController = new Router();
 
 /**
  * Log out the user
  */
-LogOutController.post('/', (request, response) => {
-  request.logOut()
-  response.redirect(Constants.LOGIN_PATH);
+LogOutController.post('/', async (request, response) => {
+  const {jwt} = request;
+  await JSONWebToken.revokeToken(jwt.keyId);
+  response.sendStatus(200);
 });
 
 module.exports = LogOutController;

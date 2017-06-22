@@ -61,6 +61,17 @@ class MockAdapter extends Adapter {
   }
 
   /**
+   * For cleanup between tests.
+   */
+  clearState() {
+    this.actions = {};
+
+    for (let deviceId in this.devices) {
+      this.removeDevice(deviceId);
+    }
+  }
+
+  /**
    * Add a MockDevice to the MockAdapter
    *
    * @param {String} deviceId ID of the device to add.

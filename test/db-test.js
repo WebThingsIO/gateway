@@ -39,6 +39,19 @@ describe('db', () => {
        await Database.getJSONWebTokenByKeyId(token.keyId);
       assert(!fromDbAfterDelete);
     });
+
+    it('should be able to cleanup single keys', async () => {
+      const {sig, token} = JSONWebToken.create(user.id);
+      await Database.createJSONWebToken(token);
+      const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
+      assert(fromDb);
+
+      await Database.deleteJSONWebTokenByKeyId(token.keyId);
+      const fromDbAfterDelete =
+       await Database.getJSONWebTokenByKeyId(token.keyId);
+      assert(!fromDbAfterDelete);
+    });
+
   });
 
 })

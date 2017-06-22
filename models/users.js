@@ -29,6 +29,21 @@ var Users = {
   },
 
   /**
+   * Get a user from the database.
+   *
+   * @param {number}  id primary key.
+   * @return {Promise} Promise which resolves to user object
+   *   or false if user doesn't exist.
+   */
+  getUserById: async function (id) {
+    const row = await Database.getUserById(id);
+    if (!row) {
+      return row;
+    }
+    return new User(row.id, row.email, row.password, row.name);
+  },
+
+  /**
    * Get all Users stored in the database
    * @return {Promise<Array<User>>}
    */

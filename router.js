@@ -10,8 +10,11 @@
 
 'use strict';
 
-var express = require('express');
-var Constants = require('./constants');
+const express = require('express');
+const Constants = require('./constants');
+const authMiddleware = require('./jwt-middleware');
+
+const auth = authMiddleware();
 
 /**
  * Router.
@@ -23,16 +26,20 @@ var Router = {
   configure: function(app, opt) {
     app.use('/', require('./controllers/root_controller'));
     app.use(Constants.USERS_PATH, require('./controllers/users_controller'));
-    app.use(Constants.THINGS_PATH, require('./controllers/things_controller'));
-    app.use(Constants.NEW_THINGS_PATH,
-      require('./controllers/new_things_controller'));
-    app.use(Constants.ADAPTERS_PATH,
-      require('./controllers/adapters_controller'));
-    app.use(Constants.ACTIONS_PATH,
-      require('./controllers/actions_controller'));
     app.use(Constants.LOGIN_PATH, require('./controllers/login_controller'));
+
+    // These routes _must_ have authorization.
+    app.use(Constants.THINGS_PATH,
+      auth, require('./controllers/things_controller'));
+    app.use(Constants.NEW_THINGS_PATH,
+      auth, require('./controllers/new_things_controller'));
+    app.use(Constants.ADAPTERS_PATH,
+      auth, require('./controllers/adapters_controller'));
+    app.use(Constants.ACTIONS_PATH,
+      auth, require('./controllers/actions_controller'));
     app.use(Constants.LOG_OUT_PATH,
-      require('./controllers/log_out_controller'));
+      auth, require('./controllers/log_out_controller'));
+
     if (opt.options.debug) {
       app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
     }

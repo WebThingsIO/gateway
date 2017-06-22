@@ -26,6 +26,16 @@ var Actions = {
   nextId: 0,
 
   /**
+   * Reset actions state.
+   */
+  clearState() {
+    this.nextId = 0;
+    for (let id in this.actions) {
+      this.remove(id);
+    }
+  },
+
+  /**
    * Generate an ID for a new action.
    *
    * @returns {integer} An id.
