@@ -39,6 +39,7 @@ it('fails to get a nonexistent adapter', async () => {
   try {
     await chai.request(server)
       .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId);
+    throw new Error('request should fail');
   } catch(err) {
     err.response.should.have.status(404);
   }

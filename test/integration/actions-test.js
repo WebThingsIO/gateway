@@ -46,6 +46,7 @@ it('should fail to create a new action (empty body)', async () => {
     await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .send();
+    throw new Error('request should fail');
   } catch(err) {
     err.response.should.have.status(400);
   }
@@ -59,6 +60,7 @@ it('should fail to create a new action (unknown name)', async () => {
     await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .send(descr);
+    throw new Error('request should fail');
   } catch(err) {
     err.response.should.have.status(400);
   }
@@ -97,8 +99,9 @@ it('should list and retrieve the new action', async () => {
 it('should error retrieving a nonexistent action', async () => {
   let actionId = 'tomato';
   try {
-    const res = await chai.request(server)
+    await chai.request(server)
       .get(Constants.ACTIONS_PATH + '/' + actionId);
+    throw new Error('request should fail');
   } catch(err) {
     err.response.should.have.status(404);
   }
@@ -129,6 +132,7 @@ it('should error removing a nonexistent action', async () => {
   try {
     await chai.request(server)
       .delete(Constants.ACTIONS_PATH + '/' + actionId);
+    throw new Error('request should fail');
   } catch(err) {
     err.response.status.should.be.eql(404);
   }
