@@ -8,7 +8,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 // Dependencies
 var http = require('http');
 var https = require('https');
@@ -26,8 +25,7 @@ var Authentication = require('./authentication');
 var Router = require('./router');
 
 // HTTP server configuration
-var port = 8080;
-var https_port = 4443;
+var port = config.get('ports.https');
 var options = {
   key: fs.readFileSync('privatekey.pem'),
   cert: fs.readFileSync('certificate.pem')
@@ -38,26 +36,51 @@ var app = express();
 var server = https.createServer(options, app);
 var expressWs = expressWs(app, server);
 
-// Command line arguments
-var getopt = new GetOpt([
-  ['d', 'debug',      'Enable debug features'],
-  ['p', 'port=PORT',  'Specify the server port to use (default ' + port + ')'],
-  ['h', 'help',       'Display help' ],
-  ['v', 'verbose',    'Show verbose output' ],
-]);
+function configureOptions() {
+  if (!config.get('cli')) {
+    return {
+      options: {
+        debug: false,
+        port: null,
+      }
+    };
+  }
 
-var opt = getopt.parseSystem();
-if (opt.options.verbose) {
+  // Command line arguments
+  const getopt = new GetOpt([
+    ['d', 'debug', 'Enable debug features'],
+    ['p', 'port=PORT', 'Specify the server port to use (default ' + port + ')'],
+    ['h', 'help', 'Display help' ],
+    ['v', 'verbose', 'Show verbose output'],
+  ]);
+
+  const opt = getopt.parseSystem();
+  const options = {
+    debug: !!opt.options.debug, // cast to bool
+    verbose: opt.options.verbose,
+  }
+
+  if (opt.options.verbose) {
     console.log(opt);
-}
+  }
 
-if (opt.options.help) {
+  if (opt.options.help) {
     getopt.showHelp();
     process.exit(1);
+  }
+
+  if (opt.options.port) {
+    options.port = parseInt(opt.options.port);
+  }
+
+  return {
+    options
+  };
 }
 
+const opt = configureOptions();
 if (opt.options.port) {
-  port = parseInt(opt.options.port);
+  port = opt.options.port;
 }
 
 // Configure app
@@ -77,24 +100,27 @@ Router.configure(app, opt);
 // Open the database
 db.open();
 
-// Get some decent error messages for unhandled rejections. This is
-// often just errors in the code.
-process.on('unhandledRejection', (reason) => {
-  console.log('Unhandled Rejection');
-  console.error(reason);
-});
 
-// Do graceful shutdown when Control-C is pressed.
-process.on('SIGINT', function() {
-  console.log('Control-C: disconnecting adapters...');
-  adapterManager.unloadAdapters();
-  process.exit(1);
-});
+if (config.get('cli')) {
+  // Get some decent error messages for unhandled rejections. This is
+  // often just errors in the code.
+  process.on('unhandledRejection', (reason) => {
+    console.log('Unhandled Rejection');
+    console.error(reason);
+  });
+
+  // Do graceful shutdown when Control-C is pressed.
+  process.on('SIGINT', function() {
+    console.log('Control-C: disconnecting adapters...');
+    adapterManager.unloadAdapters();
+    process.exit(1);
+  });
+}
 
 // Start the HTTPS server
-server.listen(https_port, function() {
-  console.log('Listening on port', https_port);
+server.listen(port, function() {
   adapterManager.loadAdapters();
+  console.log('Listening on port', server.address().port);
 });
 
 module.exports = app; // for testing

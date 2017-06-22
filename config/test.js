@@ -9,6 +9,10 @@
 'use strict';
 
 module.exports = {
+  cli: false,
+  ports: {
+    https: 0 // 0 = find a free open port
+  },
   adapters : {
     mock: {
       enabled: true,
@@ -22,8 +26,8 @@ module.exports = {
     },
   },
   database: {
-    filename: './test-db.sqlite3',
-    removeBeforeOpen: true,
+    filename: ':memory:',
+    removeBeforeOpen: false,
   },
   authentication: {
     enabled: true,
