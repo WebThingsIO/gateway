@@ -1,6 +1,5 @@
 const uuid = require('uuid');
 
-const {assert} = require('./common');
 const Database = require('../db');
 const User = require('../models/user');
 const JSONWebToken = require('../models/jsonwebtoken');
@@ -24,34 +23,38 @@ describe('db', () => {
       const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
-      assert.equal(fromDb.publicKey, token.publicKey);
+      expect(fromDb.publicKey).toEqual(token.publicKey);
 
       const count = await Database.getUserCount();
-      assert.equal(count, 1);
+      expect(count).toEqual(1);
     });
 
     it('should be unreachable after deleting user', async () => {
       const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
-      assert(fromDb);
+      expect(fromDb).toBeTruthy();
 
       await Database.deleteUser(user.id);
       const fromDbAfterDelete =
        await Database.getJSONWebTokenByKeyId(token.keyId);
-      assert(!fromDbAfterDelete);
+
+      expect(fromDbAfterDelete).toBeFalsy();
     });
 
     it('should be able to cleanup single keys', async () => {
       const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
-      assert(fromDb);
+      expect(fromDb).toEqual(expect.objectContaining({
+        keyId: token.keyId,
+      }));
 
       await Database.deleteJSONWebTokenByKeyId(token.keyId);
       const fromDbAfterDelete =
        await Database.getJSONWebTokenByKeyId(token.keyId);
-      assert(!fromDbAfterDelete);
+
+      expect(fromDbAfterDelete).toBeFalsy();
     });
 
   });

@@ -10,7 +10,6 @@ const {
   headerAuth,
 } = require('../user');
 
-const {assert, expect} = chai;
 const pFinal = require('../promise-final');
 const e2p = require('event-to-promise');
 
@@ -27,10 +26,26 @@ const TEST_THING = {
 };
 
 describe('actions/', function() {
-  let jwt;
+  let jwt, toClose = [];
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
+
+  // Ensure these objects get properly closed after tests.
+  afterAll(async () => {
+    await Promise.all(toClose.map(async (item) => {
+      item.close();
+      await e2p(item, 'close');
+    }));
+  });
+
+  /**
+   * Add an item (any interface /w close event and method) to the list of
+   * resources that must be closed to cleanly exit the test.
+   */
+  function ensureClose(item) {
+    toClose.push(item);
+  }
 
   async function addDevice(desc = TEST_THING) {
     const {id} = desc;
@@ -54,9 +69,9 @@ describe('actions/', function() {
     const res = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(0);
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
   });
 
   it('fail to create a new thing (empty body)', async () => {
@@ -67,15 +82,14 @@ describe('actions/', function() {
         .send();
       throw new Error('Should have failed to create new thing');
     } catch(err) {
-      err.response.should.have.status(400);
+      expect(err.response.status).toEqual(400);
     }
   });
 
   it('fail to create a new thing (duplicate)', async () => {
     await addDevice();
     const err = await pFinal(addDevice());
-    expect(err).to.be.a('error');
-    expect(err.response).to.have.status(500);
+    expect(err.response.status).toEqual(500);
   });
 
   it('GET with 1 thing', async () => {
@@ -84,11 +98,11 @@ describe('actions/', function() {
       .get(Constants.THINGS_PATH)
       .set(...headerAuth(jwt));
 
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(1);
-    res.body[0].should.have.a.property('href');
-    res.body[0].href.should.be.eql(Constants.THINGS_PATH + '/test-1');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('href');
+    expect(res.body[0].href).toEqual(Constants.THINGS_PATH + '/test-1');
   });
 
   it('GET a property of a thing', async () => {
@@ -97,9 +111,9 @@ describe('actions/', function() {
       .get(Constants.THINGS_PATH + '/test-1/properties/on')
       .set(...headerAuth(jwt));
 
-    res.should.have.status(200);
-    res.body.should.have.a.property('on');
-    res.body.on.should.be.eql(false);
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('on');
+    expect(res.body.on).toEqual(false);
   });
 
   it('fail to GET a non-existant property of a thing', async () => {
@@ -107,14 +121,14 @@ describe('actions/', function() {
       .get(Constants.THINGS_PATH + '/test-1/properties/xyz')
       .set(...headerAuth(jwt)));
 
-    expect(err.response).to.have.status(500);
+    expect(err.response.status).toEqual(500);
   });
 
   it('fail to GET a property of a non-existent thing', async () => {
     const err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH + '/test-1a/properties/on')
       .set(...headerAuth(jwt)));
-    err.response.should.have.status(500);
+    expect(err.response.status).toEqual(500);
   });
 
   it('fail to set a property of a thing', async () => {
@@ -123,7 +137,7 @@ describe('actions/', function() {
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
       .set(...headerAuth(jwt))
       .send({}));
-    err.response.should.have.status(400);
+    expect(err.response.status).toEqual(400);
   });
 
   it('fail to set a property of a thing', async () => {
@@ -131,7 +145,7 @@ describe('actions/', function() {
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
       .set(...headerAuth(jwt))
       .send({abc: true}));
-    err.response.should.have.status(400);
+    expect(err.response.status).toEqual(400);
   });
 
   it('set a property of a thing', async () => {
@@ -141,9 +155,9 @@ describe('actions/', function() {
       .set(...headerAuth(jwt))
       .send({on: true});
 
-    on.should.have.status(200);
-    on.body.should.have.a.property('on');
-    on.body.on.should.be.eql(true);
+    expect(on.status).toEqual(200);
+    expect(on.body).toHaveProperty('on');
+    expect(on.body.on).toEqual(true);
 
 
     // Flip it back to off...
@@ -152,9 +166,9 @@ describe('actions/', function() {
       .set(...headerAuth(jwt))
       .send({on: false});
 
-    off.should.have.status(200);
-    off.body.should.have.a.property('on');
-    off.body.on.should.be.eql(false);
+    expect(off.status).toEqual(200);
+    expect(off.body).toHaveProperty('on');
+    expect(off.body.on).toEqual(false);
   });
 
   it('lists 0 new things after creating thing', async () => {
@@ -163,9 +177,9 @@ describe('actions/', function() {
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt))
 
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(0);
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
   });
 
   it('lists new things when devices are added', async () => {
@@ -176,13 +190,13 @@ describe('actions/', function() {
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
 
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(2);
-    res.body[0].should.have.a.property('href');
-    res.body[0].href.should.be.eql(Constants.THINGS_PATH + '/test-2');
-    res.body[1].should.have.a.property('href');
-    res.body[1].href.should.be.eql(Constants.THINGS_PATH + '/test-3');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(2);
+    expect(res.body[0]).toHaveProperty('href');
+    expect(res.body[0].href).toEqual(Constants.THINGS_PATH + '/test-2');
+    expect(res.body[1]).toHaveProperty('href');
+    expect(res.body[1].href).toEqual(Constants.THINGS_PATH + '/test-3');
   });
 
   it('should send multiple devices during pairing', async () => {
@@ -191,6 +205,7 @@ describe('actions/', function() {
       `wss://127.0.0.1:${addr.port}${Constants.NEW_THINGS_PATH}?jwt=${jwt}`;
 
     const ws = new WebSocket(socketPath);
+    ensureClose(ws);
     await e2p(ws, 'open');
 
     // We expect things test-4, and test-5 to show up eventually
@@ -201,7 +216,7 @@ describe('actions/', function() {
         while ((expectedMessages--) > 0) {
           const {data} = await e2p(ws, 'message');
           const parsed = JSON.parse(data);
-          expect(parsed.id).to.be.a('string');
+          expect(typeof parsed.id).toBe('string');
           messages.push(parsed.id);
         }
         return messages;
@@ -218,8 +233,8 @@ describe('actions/', function() {
       })(),
     ]);
 
-    expect(messages.sort()).to.deep.equal(['test-4', 'test-5']);
-    expect(res).to.have.status(201);
+    expect(messages.sort()).toEqual(['test-4', 'test-5']);
+    expect(res.status).toEqual(201);
   });
 
   it('should add a device during pairing then create a thing', async () => {
@@ -231,53 +246,53 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send({name: 'pair'});
-    res.should.have.status(201);
+    expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     let found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(found, 'should find thing in /new_things output');
+    expect(found).assert('should find thing in /new_things output');
 
     res = await chai.request(server)
       .post(Constants.THINGS_PATH)
       .set(...headerAuth(jwt))
       .send(descr);
-    res.should.have.status(201);
+    expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(!found, 'should find no longer thing in /new_things output:'
+    expect(!found).assert('should find no longer thing in /new_things output:'
       + JSON.stringify(res.body, null, 2));
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(found, 'should find thing in /new_things output');
+    expect(found).assert('should find thing in /new_things output');
   });
 
   it('should remove a thing', async () => {
@@ -289,38 +304,38 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send({name: 'pair'});
-    expect(pair).to.have.status(201);
+    expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
       .delete(Constants.THINGS_PATH + '/' + thingId)
       .set(...headerAuth(jwt));
-    res.should.have.status(204);
+    expect(res.status).toEqual(204);
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     let found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(!found, 'should not find thing in /things output');
+    expect(!found).assert('should not find thing in /things output');
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(found, 'should find thing in /new_things output');
+    expect(found).assert('should find thing in /new_things output');
   });
 
   it('should remove a device', async () => {
@@ -335,21 +350,21 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send({name: 'pair'});
-    expect(pair).to.have.status(201);
+    expect(pair.status).toEqual(201);
     await mockAdapter().removeDevice(thingId);
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     let found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
         found = true;
       }
     }
-    assert(!found, 'should not find thing in /new_things output');
+    expect(!found).assert('should not find thing in /new_things output');
   });
 
   it('should remove a device in response to unpair', async () => {
@@ -362,13 +377,13 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send({name: 'unpair', parameters: {id: thingId}});
-    res.should.have.status(201);
+    expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
     let found = false;
     for (let thing of res.body) {
       if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
@@ -376,6 +391,6 @@ describe('actions/', function() {
       }
     }
 
-    assert.isNotOk(found, 'should not find thing in /new_things output');
+    expect(!found).assert('should not find thing in /new_things output');
   });
 });

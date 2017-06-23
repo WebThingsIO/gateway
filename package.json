@@ -48,8 +48,20 @@
     "chai-http": "^3.0.0",
     "codecov": "^2.2.0",
     "eslint": "^4.0.0",
+    "jest": "^20.0.4",
     "mocha": "^3.4.2",
     "node-rest-client": "^3.1.0",
     "nyc": "^11.0.2"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "transform": {
+      "^.+\\.jsx?$": "./jest-transform"
+    },
+    "setupTestFrameworkScriptFile": "<rootDir>/test/common.js",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*-test.js?(x)"
+    ]
   }
 }

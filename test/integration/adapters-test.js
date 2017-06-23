@@ -22,13 +22,13 @@ describe('adapters', function() {
     const res = await chai.request(server)
       .get(Constants.ADAPTERS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(1);
-    res.body[0].should.have.a.property('id');
-    res.body[0].id.should.be.eql(mockAdapter().getId());
-    res.body[0].should.have.a.property('ready');
-    res.body[0].ready.should.be.eql(mockAdapter().isReady());
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0].id).toEqual(mockAdapter().getId());
+    expect(res.body[0]).toHaveProperty('ready');
+    expect(res.body[0].ready).toEqual(mockAdapter().isReady());
   });
 
   it('gets specifically mockAdapter', async () => {
@@ -37,11 +37,11 @@ describe('adapters', function() {
     const res = await chai.request(server)
       .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.have.a.property('id');
-    res.body.id.should.be.eql(mockAdapter().getId());
-    res.body.should.have.a.property('ready');
-    res.body.ready.should.be.eql(mockAdapter().isReady());
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    expect(res.body.id).toEqual(mockAdapter().getId());
+    expect(res.body).toHaveProperty('ready');
+    expect(res.body.ready).toEqual(mockAdapter().isReady());
   });
 
   it('fails to get a nonexistent adapter', async () => {
@@ -53,7 +53,7 @@ describe('adapters', function() {
         .set(...headerAuth(jwt));
       throw new Error('request should fail');
     } catch(err) {
-      err.response.should.have.status(404);
+      expect(err.response.status).toEqual(404);
     }
   });
 
