@@ -7,6 +7,7 @@
     "test": "npm run lint && npm run mocha",
     "lint": "eslint .",
     "mocha": "./test/run-tests.sh",
+    "yarn-check": "./test/yarn-test.sh",
     "cov": "nyc npm run mocha",
     "cov-html": "nyc --reporter=html npm run mocha"
   },
