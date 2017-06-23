@@ -115,6 +115,7 @@ var AddThingScreen = {
   },
 
   showNewThing: function(thing) {
+    // eslint-disable-next-line no-unused-vars
     var newThing = new NewThing(thing.id, thing);
   }
 

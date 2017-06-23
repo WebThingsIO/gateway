@@ -13,7 +13,6 @@ const {
 const pFinal = require('../promise-final');
 
 const Constants = require('../../constants');
-const WebSocket = require('ws');
 
 describe('actions/', function() {
   let jwt;

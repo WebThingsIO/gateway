@@ -3,7 +3,7 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const {server, chai, mockAdapter, rp} = require('../common');
+const {server, chai, mockAdapter} = require('../common');
 const {
   TEST_USER,
   createUser,

@@ -3,7 +3,7 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const {server, chai, mockAdapter, rp} = require('../common');
+const {server, chai, mockAdapter} = require('../common');
 const {
   TEST_USER,
   createUser,
@@ -38,7 +38,7 @@ describe('actions/', function() {
       .post(Constants.THINGS_PATH)
       .set(...headerAuth(jwt))
       .send(TEST_THING);
-    mockAdapter().addDevice('test-1', TEST_THING);
+    mockAdapter().addDevice(id, TEST_THING);
     return res;
   }
 

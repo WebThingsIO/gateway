@@ -10,8 +10,9 @@
 
 'use strict';
 
-/* globals AddThingScreen, App, Thing, OnOffSwitch */
+/* globals AddThingScreen, Thing, OnOffSwitch */
 
+// eslint-disable-next-line
 var ThingsScreen = {
 
   NO_THINGS_MESSAGE: 'No devices.',
@@ -49,10 +50,12 @@ var ThingsScreen = {
           switch(description.type) {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');
+              // eslint-disable-next-line no-unused-vars
               var newOnOffSwitch = new OnOffSwitch(description);
               break;
             default:
               console.log('rendering new thing');
+              // eslint-disable-next-line no-unused-vars
               var newThing = new Thing(description);
               break;
           }

@@ -3,8 +3,7 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const {chai, expect, server} = require('../common');
-const assert = chai.assert;
+const {expect, server} = require('../common');
 const pFinal = require('../promise-final');
 const {
   TEST_USER,
@@ -13,8 +12,6 @@ const {
   userInfo,
   logoutUser,
 } = require('../user');
-
-var Constants = require('../../constants');
 
 it('creates a user and get email', async () => {
   const jwt = await createUser(server, TEST_USER);

@@ -94,10 +94,8 @@ OnOffSwitch.prototype.showTransition = function() {
 
 /**
  * Handle a click on the on/off switch.
- *
- * @param {Event} e click event.
  */
-OnOffSwitch.prototype.handleClick = function(e) {
+OnOffSwitch.prototype.handleClick = function() {
   if (this.properties.on === true) {
     this.turnOff();
   } else if (this.properties.on === false) {

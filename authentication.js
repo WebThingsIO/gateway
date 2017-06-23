@@ -8,9 +8,6 @@
 
 'use strict';
 
-var config = require('config');
-var Users = require('./models/users');
-var Constants = require('./constants');
 var bcrypt = require('bcrypt-nodejs');
 
 var Authentication = {

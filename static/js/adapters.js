@@ -9,8 +9,9 @@
  */
 'use strict';
 
-/* globals App, Adapter */
+/* globals Adapter */
 
+// eslint-disable-next-line no-unused-vars
 var AdaptersScreen = {
   /**
    * Initialise Adapters Screen.
@@ -23,7 +24,7 @@ var AdaptersScreen = {
   /**
    * Display all installed/connected adapters.
    */
-  showAdapters: function(things) {
+  showAdapters: function() {
     var opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`
@@ -38,6 +39,7 @@ var AdaptersScreen = {
       }
       // Create a new Thing for each thing description
       adapters.forEach(function(metadata) {
+        // eslint-disable-next-line no-unused-vars
         var newAdapter = new Adapter(metadata);
       });
     }).bind(this));

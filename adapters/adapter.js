@@ -35,6 +35,7 @@ class Adapter {
     console.log('Adapter:', this.name, '- dump() not implemented');
   }
 
+  // eslint-disable-next-line
   addAction(name, func) {
 
   }
@@ -91,6 +92,7 @@ class Adapter {
     this.manager.handleDeviceRemoved(device);
   }
 
+  // eslint-disable-next-line
   startPairing(timeoutSeconds) {
     console.log('Adapter:', this.name, 'id', this.id, 'pairing started');
   }

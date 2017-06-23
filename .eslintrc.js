@@ -13,11 +13,7 @@ module.exports = {
   },
   'rules': {
     'no-console': 0,
-    // TODO: Turn this back on...
-    'no-unused-vars': 0,
     'max-len': ['error', 80],
-    // TODO: Turn this back on...
-    'no-redeclare': 0,
     quotes: ['error', 'single', {
       allowTemplateLiterals: true,
     }],
