@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * MozIoT Gateway App.
+ * Things Gateway App.
  *
  * Back end main script.
  *

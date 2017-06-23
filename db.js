@@ -1,5 +1,5 @@
 /**
- * MozIoT Gateway Database.
+ * Things Gateway Database.
  *
  * Stores a list of Things connected to the gateway.
  *
