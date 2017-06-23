@@ -173,7 +173,7 @@ it('lists new things when devices are added', async () => {
   res.body[1].href.should.be.eql(Constants.THINGS_PATH + '/test-3');
 });
 
-it('should send multiple devices during pairing', async () => {
+it('should send multiple devices during pairing', (done) => {
   let addr = server.address();
   let socketPath = 'wss://127.0.0.1:' + addr.port + Constants.NEW_THINGS_PATH;
   function connectSocket() {
@@ -203,13 +203,25 @@ it('should send multiple devices during pairing', async () => {
     return true;
   }
 
-  const res = await chai.request(server)
-    .post(Constants.ACTIONS_PATH)
-    .send({name: 'pair'});
+  connectSocket().then(ws => {
+    ws.on('message', function onNewThing(newThingStr) {
+      let newThing = JSON.parse(newThingStr);
+      found[newThing.id] = true;
+      if (allFound()) {
+        ws.removeEventListener('message', onNewThing);
+        done();
+      }
+    });
 
-  res.should.have.status(201);
-  mockAdapter().addDevice('test-4', makeDescr('test-4'));
-  mockAdapter().addDevice('test-5', makeDescr('test-5'));
+    chai.request(server)
+      .post(Constants.ACTIONS_PATH)
+      .send({name: 'pair'})
+      .end((err, res) => {
+        res.should.have.status(201);
+        mockAdapter().addDevice('test-4', makeDescr('test-4'));
+        mockAdapter().addDevice('test-5', makeDescr('test-5'));
+      });
+  });
 });
 
 it('should add a device during pairing then create a thing', async () => {
