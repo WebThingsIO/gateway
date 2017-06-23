@@ -212,6 +212,7 @@ class ZWaveAdapter extends Adapter {
     console.log('ZWave: node%d event: Basic set %d', nodeId, data);
   }
 
+  // eslint-disable-next-line no-unused-vars
   nodeReady(nodeId, nodeInfo) {
     var node = this.nodes[nodeId];
     if (node) {
@@ -232,6 +233,7 @@ class ZWaveAdapter extends Adapter {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   nodeNotification(nodeId, notif, help) {
     var node = this.nodes[nodeId];
     var lastStatus;
@@ -301,6 +303,7 @@ class ZWaveAdapter extends Adapter {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   startPairing(timeoutSeconds) {
     console.log('ZWave: ===============================================');
     console.log('ZWave: Press the Inclusion button on the device to add');
@@ -313,6 +316,7 @@ class ZWaveAdapter extends Adapter {
     this.zwave.cancelControllerCommand();
   }
 
+  // eslint-disable-next-line no-unused-vars
   removeThing(node) {
     // ZWave can't really remove a particular thing.
     console.log('ZWave: ==================================================');
@@ -321,6 +325,7 @@ class ZWaveAdapter extends Adapter {
     this.zwave.removeNode();
   }
 
+  // eslint-disable-next-line no-unused-vars
   cancelRemoveThing(node) {
     console.log('ZWave: Cancelling remove mode');
     this.zwave.cancelControllerCommand();

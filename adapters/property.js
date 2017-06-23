@@ -74,7 +74,7 @@ class Property {
    * the previously cached value.
    */
   getValue() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       console.log('getValue for property', this.name,
                   'for:', this.device.name,
                   'returning', this.value);
@@ -93,7 +93,7 @@ class Property {
    * by a derived class.
    */
   setValue(value) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.setCachedValue(value);
       console.log('setValue for property', this.name,
                   'to', this.value);

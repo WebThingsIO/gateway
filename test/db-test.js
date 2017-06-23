@@ -1,7 +1,6 @@
 const uuid = require('uuid');
 
 const {assert} = require('./common');
-const testConfig = require('../config/test');
 const Database = require('../db');
 const User = require('../models/user');
 const JSONWebToken = require('../models/jsonwebtoken');
@@ -22,7 +21,7 @@ describe('db', () => {
     });
 
     it('should be able to insert and fetch a JWT', async () => {
-      const {sig, token} = JSONWebToken.create(user.id);
+      const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       assert.equal(fromDb.publicKey, token.publicKey);
@@ -32,7 +31,7 @@ describe('db', () => {
     });
 
     it('should be unreachable after deleting user', async () => {
-      const {sig, token} = JSONWebToken.create(user.id);
+      const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       assert(fromDb);
@@ -44,7 +43,7 @@ describe('db', () => {
     });
 
     it('should be able to cleanup single keys', async () => {
-      const {sig, token} = JSONWebToken.create(user.id);
+      const {token} = JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       assert(fromDb);

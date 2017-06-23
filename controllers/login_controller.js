@@ -11,7 +11,6 @@
 'use strict';
 
 const Router = require('express-promise-router');
-const path = require('path');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
 const Authentication = require('../authentication');

@@ -16,7 +16,6 @@
   var password = document.getElementById('password');
   var name = document.getElementById('name');
   var confirmPassword = document.getElementById('confirm-password');
-  var createUserButton = document.getElementById('create-user-button');
   var errorPasswordMismatch =
     document.getElementById('error-password-mismatch');
 

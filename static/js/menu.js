@@ -9,6 +9,7 @@
 
 /* globals App */
 
+// eslint-disable-next-line no-unused-vars
 var Menu = {
    /**
     * Initialise menu.

@@ -31,7 +31,7 @@ NewThingsController.get('/', function (request, response) {
 /**
  * Handle a WebSocket request on /new_things
  */
-NewThingsController.ws('/', function(websocket, request) {
+NewThingsController.ws('/', function(websocket) {
   console.log('Opened a new things socket');
   // Register the WebSocket with the Things model so new devices can be pushed
   // to the client as they are added.

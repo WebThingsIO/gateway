@@ -112,6 +112,7 @@ var Things = {
      });
    },
 
+   // eslint-disable-next-line
    handleRemovedThing: function(thingId) {
     /// TODO: Remove from database
     /// TODO: Send websocket notification

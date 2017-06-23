@@ -522,6 +522,7 @@ class ZigBeeAdapter extends Adapter {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   handleRouteRecord(frame) {
     if (this.debugFlow) {
       console.log('Processing ROUTE_RECORD');
@@ -889,6 +890,7 @@ class ZigBeeAdapter extends Adapter {
     this.managementLeave(node);
   }
 
+  // eslint-disable-next-line no-unused-vars
   cancelRemoveThing(node) {
     // Nothing to do. We've either sent the leave request or not.
   }

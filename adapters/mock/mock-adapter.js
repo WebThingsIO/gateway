@@ -55,6 +55,7 @@ class MockDevice extends Device {
 }
 
 class MockAdapter extends Adapter {
+  // eslint-disable-next-line no-unused-vars
   constructor(adapterManager, testConfigs) {
     super(adapterManager, 'Mock');
     adapterManager.addAdapter(this);
@@ -116,6 +117,7 @@ class MockAdapter extends Adapter {
     this.unpairDeviceId = deviceId;
   }
 
+  // eslint-disable-next-line no-unused-vars
   startPairing(timeoutSeconds) {
     console.log('MockAdapter:', this.name, 'id', this.id, 'pairing started');
     if (this.pairDeviceId) {
@@ -123,7 +125,7 @@ class MockAdapter extends Adapter {
       var deviceDescription = this.pairDeviceDescription;
       this.pairDeviceId = null;
       this.pairDeviceDescription = null;
-      this.addDevice(deviceId, deviceDescription).then((device) => {
+      this.addDevice(deviceId, deviceDescription).then(() => {
         console.log('MockAdapter: device:', deviceId, 'was paired.');
       }).catch((err) => {
         console.error('MockAdapter: unpairing', deviceId, 'failed');
@@ -143,7 +145,7 @@ class MockAdapter extends Adapter {
     if (this.unpairDeviceId) {
       var deviceId = this.unpairDeviceId;
       this.unpairDeviceId = null;
-      this.removeDevice(deviceId).then((device) => {
+      this.removeDevice(deviceId).then(() => {
         console.log('MockAdapter: device:', deviceId, 'was unpaired.');
       }).catch((err) => {
         console.error('MockAdapter: unpairing', deviceId, 'failed');

@@ -9,8 +9,7 @@
  */
  'use strict';
 
-/* globals App, NewThing, ThingsScreen */
-
+// eslint-disable-next-line no-unused-vars
 var ContextMenu = {
 
   /**

@@ -42,7 +42,7 @@ adapterManager.on('pairing-timeout', () => {
 debugController.get('/addNewThing', (request, response) => {
   adapterManager.addNewThing().then((thing) => {
     console.log('debugController: addNewThing added thing', thing);
-  }, (str) => {
+  }, () => {
     console.log('debugController: addNewThing cancelled');
   });
   response.status(204).send();
@@ -123,7 +123,7 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   if (device) {
     var propertyValue = request.body[propertyName];
     if (propertyValue !== undefined) {
-      device.setProperty(propertyName, propertyValue).then((value) => {
+      device.setProperty(propertyName, propertyValue).then(() => {
         var valueDict = {};
         valueDict[propertyName] = propertyValue;
         response.status(200).json(valueDict);

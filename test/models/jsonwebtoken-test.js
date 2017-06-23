@@ -10,8 +10,8 @@ describe('JSONWebToken', function() {
 
     const {sig: sig2} = JSONWebToken.create(userId);
 
-    const result = subject.verify(sig);
-    assert(!subject .verify(sig2));
+    assert(subject.verify(sig));
+    assert(!subject.verify(sig2));
   });
 
 });

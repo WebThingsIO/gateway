@@ -61,7 +61,7 @@ NewThing.prototype.view = function() {
 /**
  * Render New Thing view and add to DOM.
  */
-NewThing.prototype.render = function(newThing) {
+NewThing.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 };
 

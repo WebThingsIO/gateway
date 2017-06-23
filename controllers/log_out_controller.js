@@ -10,10 +10,8 @@
 
 'use strict';
 
-const assert = require('assert');
 const Router = require('express-promise-router');
 
-const Constants = require('../constants');
 const JSONWebToken = require('../models/jsonwebtoken');
 
 var LogOutController = new Router();

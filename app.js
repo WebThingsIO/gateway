@@ -9,7 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // Dependencies
-var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var express = require('express');
@@ -19,8 +18,6 @@ var GetOpt = require('node-getopt');
 var config = require('config');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
-var Users = require('./models/users');
-var Authentication = require('./authentication');
 var Router = require('./router');
 
 // HTTP server configuration
@@ -33,7 +30,7 @@ var options = {
 // Create Express app, HTTP(S) server and WebSocket server
 var app = express();
 var server = https.createServer(options, app);
-var expressWs = expressWs(app, server);
+expressWs(app, server);
 
 function configureOptions() {
   if (!config.get('cli')) {
