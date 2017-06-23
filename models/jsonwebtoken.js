@@ -29,7 +29,7 @@ class JSONWebToken {
       complete: true,
     });
 
-    if (!decoded.header || !decoded.header.kid) {
+    if (!decoded || !decoded.header || !decoded.header.kid) {
       return false;
     }
 

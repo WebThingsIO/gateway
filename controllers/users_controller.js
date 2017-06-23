@@ -19,6 +19,16 @@ const UsersController = Router();
 const auth = require('../jwt-middleware')();
 
 /**
+ * Get the count of users.
+ *
+ * NOTE: This is temporary while we figure out mutli user UI.
+ */
+UsersController.get('/count', async (request, response) => {
+  const count = await Users.getCount();
+  return response.status(200).send({ count });
+});
+
+/**
  * Get a user.
  */
 UsersController.get('/info', auth, async (request, response) => {

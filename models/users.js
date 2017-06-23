@@ -28,6 +28,10 @@ var Users = {
     });
   },
 
+  getCount: function() {
+    return Database.getUserCount();
+  },
+
   /**
    * Get a user from the database.
    *

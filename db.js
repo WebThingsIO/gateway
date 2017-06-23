@@ -231,6 +231,11 @@ var Database = {
     });
   },
 
+  getUserCount: async function() {
+    const {count} = await this.get('SELECT count(*) as count FROM users');
+    return count;
+  },
+
   /**
    * Create a user
    * @param {User} user

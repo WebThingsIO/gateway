@@ -24,8 +24,13 @@ var AdaptersScreen = {
    * Display all installed/connected adapters.
    */
   showAdapters: function(things) {
+    var opts = {
+      headers: {
+        'Authorization': `Bearer ${window.API.jwt}`
+      }
+    };
     // Fetch a list of adapters from the server
-    fetch('/adapters').then((function(response) {
+    fetch('/adapters', opts).then((function(response) {
       return response.json();
     }).bind(this)).then((function(adapters) {
       if (adapters.length > 0) {

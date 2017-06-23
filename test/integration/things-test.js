@@ -193,7 +193,7 @@ describe('actions/', function() {
     const ws = new WebSocket(socketPath);
     await e2p(ws, 'open');
 
-    // We expect things test-2, test-3, test-4, and test-5 to show up eventually
+    // We expect things test-4, and test-5 to show up eventually
     const [messages, res] = await Promise.all([
       (async () => {
         let messages = [];

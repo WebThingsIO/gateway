@@ -26,6 +26,9 @@ describe('db', () => {
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       assert.equal(fromDb.publicKey, token.publicKey);
+
+      const count = await Database.getUserCount();
+      assert.equal(count, 1);
     });
 
     it('should be unreachable after deleting user', async () => {
