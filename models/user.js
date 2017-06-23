@@ -22,7 +22,7 @@ var User = function(id, email, password, name) {
 User.generate = async function(email, rawPassword, name) {
   // TODO: Make async.
   const hash = bcrypt.hashSync(rawPassword);
-  return new User(null, email, rawPassword, name);
+  return new User(null, email, hash, name);
 }
 
 /**
