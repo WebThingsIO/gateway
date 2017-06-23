@@ -14,12 +14,12 @@
   </head>
   <body>
     <img id="wordmark" src="../images/moziot-wordmark.png" />
-    <form id="create-user-form" class="user-form" action="/users" method="post">
+    <form id="create-user-form" class="user-form">
       <h1>Welcome</h1>
       <p>Create your first user account:</p>
-      <input type="text" name="name" placeholder="Name" required></input>
-      <input type="email" name="email" placeholder="Email" required></input>
-      <input id="password" type="password" name="password"
+      <input type="text" name="name" placeholder="Name" id="name" required></input>
+      <input type="email" name="email" placeholder="Email" id="email" required></input>
+      <input id="password" type="password" name="password" id="password"
              placeholder="Password" required></input>
       <input id="confirm-password" type="password" name="confirm-password"
              placeholder="Confirm Password" required></input>
@@ -28,7 +28,7 @@
       </div>
       <button id="create-user-button" type="submit">Next</button>
     </form>
-    <script src="/js/create_user.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/create-user.js"></script>
   </body>
 </html>
-

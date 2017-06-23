@@ -82,6 +82,7 @@ NewThing.prototype.save = function() {
     method: 'POST',
     body: JSON.stringify(thing),
     headers: {
+      'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }

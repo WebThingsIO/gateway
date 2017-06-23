@@ -10,38 +10,46 @@
 
 'use strict';
 
-var express = require('express');
-var passport = require('passport');
-var path = require('path');
-var Users = require('../models/users');
+const Router = require('express-promise-router');
+const path = require('path');
+const Users = require('../models/users');
+const JSONWebToken = require('../models/jsonwebtoken');
+const Authentication = require('../authentication');
 
-var LoginController = express.Router();
-
-const viewsRoot = path.join(__dirname, '../views');
-
-/**
- * Get the login page.
- */
-LoginController.get('/',
-  function(request, response) {
-    Users.getUsers().then(users => {
-      if (users.length > 0) {
-        response.sendFile('login.html', { root: viewsRoot });
-      } else {
-        response.sendFile('create_user.html', { root: viewsRoot });
-      }
-    });
-  }
-);
+var LoginController = Router();
 
 /**
  * Handle login request.
  */
-LoginController.post('/', passport.authenticate('local',
-  {
-    successRedirect: '/',
-    failureRedirect: '/login/'
+LoginController.post('/', async (request, response) => {
+  const {body} = request;
+  if (!body || !body.email || !body.password) {
+    response.status(400).send('User requires email and password');
+    return;
   }
-));
+
+  const user = await Users.getUser(body.email);
+  if (!user) {
+    response.sendStatus(401);
+    return;
+  }
+
+  const passwordMatch = await Authentication.comparePassword(
+    body.password,
+    user.password
+  );
+
+  if (!passwordMatch) {
+    response.sendStatus(401);
+    return;
+  }
+
+  // Issue a new JWT for this user.
+  const jwt = await JSONWebToken.issueToken(user.id);
+
+  response.send({
+    jwt,
+  });
+});
 
 module.exports = LoginController;

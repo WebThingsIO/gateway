@@ -21,11 +21,18 @@ var ContextMenu = {
     this.backButton = document.getElementById('context-menu-back-button');
     this.heading = document.getElementById('context-menu-heading');
     this.removeButton = document.getElementById('remove-thing-button');
+    this.logoutForm = document.getElementById('logout');
     this.thingUrl = '';
     // Add event listeners
     window.addEventListener('_contextmenu', this.show.bind(this));
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.removeButton.addEventListener('click', this.handleRemove.bind(this));
+    this.logoutForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.API.logout().then(() => {
+        window.location.href = '/login.html';
+      });
+    })
   },
 
   /**
@@ -53,6 +60,7 @@ var ContextMenu = {
     fetch(this.thingUrl, {
       method: 'DELETE',
       headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }

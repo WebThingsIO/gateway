@@ -47,7 +47,12 @@ OnOffSwitch.prototype.updateStatus = function() {
   if (!this.onPropertyUrl) {
     return;
   }
-  fetch(this.onPropertyUrl).then((function(response) {
+  var opts = {
+    headers: {
+      'Authorization': `Bearer ${window.API.jwt}`
+    }
+  };
+  fetch(this.onPropertyUrl, opts).then((function(response) {
     return response.json();
   }).bind(this)).then((function(response) {
     this.properties.on = response.on;
@@ -114,6 +119,7 @@ OnOffSwitch.prototype.turnOn = function() {
    method: 'PUT',
    body: JSON.stringify(payload),
    headers: {
+     'Authorization': `Bearer ${window.API.jwt}`,
      'Accept': 'application/json',
      'Content-Type': 'application/json'
    }
@@ -144,6 +150,7 @@ OnOffSwitch.prototype.turnOff = function() {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {
+      'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }

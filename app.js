@@ -16,7 +16,6 @@ var express = require('express');
 var expressWs = require('express-ws');
 var bodyParser = require('body-parser');
 var GetOpt = require('node-getopt');
-var passport = require('passport');
 var config = require('config');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
@@ -88,11 +87,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json());   // Use bodyParser to access the body of requests
-
-// Configure authentication with Passport
-if (config.get('authentication.enabled')) {
-  Authentication.configure(app, passport);
-}
 
 // Configure router with configured app and command line options.
 Router.configure(app, opt);

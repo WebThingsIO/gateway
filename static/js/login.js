@@ -1,0 +1,33 @@
+/**
+ * User login.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+'use strict';
+
+(function() {
+
+  var form = document.getElementById('login-form');
+  var email = document.getElementById('email');
+  var password = document.getElementById('password');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const emailValue = email.value;
+    const passwordValue = password.value;
+
+    window.API.login(emailValue, passwordValue).
+      then(() => {
+        console.log('~~~ log in success ~~~');
+        window.location.href = '/';
+      }).
+      catch((err) => {
+        // TODO: User facing errors ...
+        console.error(err);
+      });
+  })
+
+})();

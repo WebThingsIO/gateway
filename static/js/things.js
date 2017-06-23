@@ -32,8 +32,13 @@ var ThingsScreen = {
    * Display all connected web things.
    */
   showThings: function() {
+    const opts = {
+      headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
+      }
+    };
     // Fetch a list of things from the server
-    fetch('/things').then((function(response) {
+    fetch('/things', opts).then((function(response) {
       return response.json();
     }).bind(this)).then((function(things) {
       if (things.length === 0) {

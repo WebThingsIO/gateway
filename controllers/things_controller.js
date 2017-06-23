@@ -87,7 +87,6 @@ ThingsController.put('/:thingId/properties/:propertyName',
       console.error('Error setting value for thingId:', thingId,
                     'property:', propertyName,
                     'value:', value);
-      console.error(error);
       response.status(500).send(error);
     });
 });

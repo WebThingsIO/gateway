@@ -35,8 +35,9 @@ var AddThingScreen = {
    * Create a new "pair" action on the gateway.
    */
   requestPairing: function() {
+    var path = `wss://${App.HOST}/new_things?jwt=${window.API.jwt}`;
     // Create a websocket to start listening for new things
-    var socket = new WebSocket('wss://' + App.HOST + '/new_things');
+    var socket = new WebSocket(path);
     socket.onmessage = (function(event) {
       this.showNewThing(JSON.parse(event.data));
     }).bind(this);
@@ -48,6 +49,7 @@ var AddThingScreen = {
       method: 'POST',
       body: JSON.stringify(action),
       headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
@@ -75,7 +77,8 @@ var AddThingScreen = {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${window.API.jwt}`
       }
     })
     .then(function(response) {
