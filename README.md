@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mozilla-iot/gateway.svg?branch=master)](https://travis-ci.org/mozilla-iot/gateway)
 
-# Mozilla IoT Gateway
+# Things Gateway by Mozilla
 Web of Things gateway.
 
 ## Prerequisites

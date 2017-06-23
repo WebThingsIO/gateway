@@ -1,5 +1,5 @@
 /**
- * MozIoT Gateway App.
+ * Things Gateway App.
  *
  * Front end main script.
  *
@@ -23,7 +23,7 @@ var App = {
   ORIGIN: window.location.origin,
 
   /**
-   * Start MozIoT gateway app.
+   * Start Things Gateway app.
    */
   init: function() {
     ThingsScreen.init();

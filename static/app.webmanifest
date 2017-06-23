@@ -1,6 +1,6 @@
 {
-  "name": "MozIoT Gateway",
-  "short_name": "MozIoT",
+  "name": "Things Gateway",
+  "short_name": "Things",
   "start_url": ".",
   "display": "standalone",
   "description": "Web of Things gateway",

@@ -1,5 +1,5 @@
 {
-  "name": "moziot-gateway",
+  "name": "things-gateway",
   "version": "1.0.0",
   "description": "Web of Things gateway",
   "main": "app.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moziot/gateway.git"
+    "url": "git+https://github.com/mozilla-iot/gateway.git"
   },
   "author": "Mozilla IoT",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/moziot/gateway/issues"
+    "url": "https://github.com/mozilla-iot/gateway/issues"
   },
-  "homepage": "https://wiki.mozilla.org/MozIoT",
+  "homepage": "https://iot.mozilla.org",
   "dependencies": {
     "asn1.js": "^4.9.1",
     "bcrypt-nodejs": "0.0.3",
