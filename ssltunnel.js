@@ -19,7 +19,7 @@ var TunnelService = {
     switchToHttps: null,
 
     // method that starts the client if the box has a registered tunnel
-    start: function() {
+    start: function(response, urlredirect) {
         let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
         let endpoint = tunneltoken.name + '.' + config.get('ssltunnel.domain');
         this.pagekiteProcess  =
@@ -32,6 +32,14 @@ var TunnelService = {
         // change the server
         this.pagekiteProcess.stdout.on('data', (data) => {
             console.log(`[pagekite] stdout: ${data}`);
+            if (response) {
+                if (data.indexOf('err=Error in connect') > -1) {
+                    response.status(400).end();
+                } else if (data.indexOf('connect=') > -1) {
+                    response.send(urlredirect);
+                    response.status(200).end();
+                }
+            }
         });
         this.pagekiteProcess.on('data', (data) => {
             console.log(`[pagekite] stderr: ${data}`);
