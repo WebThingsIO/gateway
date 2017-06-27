@@ -12,9 +12,11 @@
   var form = document.getElementById('login-form');
   var email = document.getElementById('email');
   var password = document.getElementById('password');
+  var errorSubmission = document.getElementById('error-submission');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    errorSubmission.classList.add('hidden');
 
     const emailValue = email.value;
     const passwordValue = password.value;
@@ -25,7 +27,8 @@
         window.location.href = '/';
       }).
       catch((err) => {
-        // TODO: User facing errors ...
+        errorSubmission.classList.remove('hidden');
+        errorSubmission.textContent = err;
         console.error(err);
       });
   })
