@@ -16,7 +16,7 @@ var TunnelService = {
 
     pagekiteProcess: null,
     tunneltoken: null,
-    switchToHttp: null,
+    switchToHttps: null,
 
     // method that starts the client if the box has a registered tunnel
     start: function() {

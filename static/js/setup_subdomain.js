@@ -44,16 +44,17 @@ createDomainButton.addEventListener('click', function() {
         }
     }).then(function (response) {
         if (response.ok) {
-            displayMessage('Success! Please wait while we redirect you...',
-                'message');
-            setTimeout(
-                function() {
-                    window.location.replace('https://'  +
-                        window.location.hostname + ':4443/');
-                }, 1000);
+            return response.text();
         } else {
             displayMessage(response.statusText, 'error');
         }
+    }).then(function (body){
+        displayMessage('Success! Please wait while we redirect you...',
+            'message');
+        setTimeout(
+            function() {
+                window.location.replace(body);
+            }, 5000);
     }).catch(function(error) {
         displayMessage(error, 'error');
     });

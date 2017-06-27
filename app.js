@@ -140,7 +140,7 @@ server.listen(port, function() {
 });
 
 // function to stop running server and start https
-TunnelService.switchToHttp = function(){
+TunnelService.switchToHttps = function(){
   server.close();
   startHttpsService();
 };

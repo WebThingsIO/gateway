@@ -96,7 +96,10 @@ SettingsController.post('/subscribe', function (request, response) {
                     fs.writeFileSync('certificate.pem', results.cert);
                     fs.writeFileSync('privatekey.pem', results.privkey);
                     TunnelService.start();
-                    TunnelService.switchToHttp();
+                    TunnelService.switchToHttps();
+                    let endpoint = 'https://' + subdomain + '.' +
+                        config.get('ssltunnel.domain') + ':4443';
+                    response.send(endpoint);
                     response.status(200).end();
                 }, function (err) {
                     returnError(err.detail ||
