@@ -8,7 +8,17 @@
 'use strict';
 
 (function() {
-  if (!window.API.isLoggedIn()) {
+  if (window.API.isLoggedIn()) {
+    window.API.verifyJWT().then((valid) => {
+      if (!valid) {
+        redirectUnauthed();
+      }
+    });
+  } else {
+    redirectUnauthed();
+  }
+
+  function redirectUnauthed() {
     window.API.userCount().then((count) => {
       let url;
       if (count > 0) {
