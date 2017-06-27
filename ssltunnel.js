@@ -50,8 +50,8 @@ var TunnelService = {
 
     // method to check if the box has certificates
     hasCertificates: function() {
-        return fs.existsSync('./certificate.pem') &&
-            fs.existsSync('./privatekey.pem');
+        return fs.existsSync('./ssl/certificate.pem') &&
+            fs.existsSync('./ssl/privatekey.pem');
     },
 
     // method to check if the box has a registered tunnel

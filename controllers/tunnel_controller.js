@@ -18,6 +18,7 @@ const leChallengeDns = require('le-challenge-dns').create({ debug: false })
 const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
 const TunnelService = require('../ssltunnel');
 
 var SettingsController = express.Router();
@@ -93,8 +94,10 @@ SettingsController.post('/subscribe', function (request, response) {
                 }).then(function (results) {
                     console.log('success', results);
                     // ok. we got the certificates. let's save them
-                    fs.writeFileSync('certificate.pem', results.cert);
-                    fs.writeFileSync('privatekey.pem', results.privkey);
+                    fs.writeFileSync(path.join('ssl', 'certificate.pem'),
+                        results.cert);
+                    fs.writeFileSync(path.join('ssl', 'privatekey.pem'),
+                        results.privkey);
                     TunnelService.start();
                     TunnelService.switchToHttp();
                     response.status(200).end();

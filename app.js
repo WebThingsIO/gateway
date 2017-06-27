@@ -12,6 +12,7 @@
 var https = require('https');
 var http = require('http');
 var fs = require('fs');
+var path = require('path');
 var express = require('express');
 var expressWs = require('express-ws');
 var bodyParser = require('body-parser');
@@ -31,8 +32,8 @@ function startHttpsService() {
       // HTTP server configuration
     var port = config.get('ports.https');
     var options = {
-        key: fs.readFileSync('privatekey.pem'),
-        cert: fs.readFileSync('certificate.pem')
+        key: fs.readFileSync(path.join('ssl', 'privatekey.pem')),
+        cert: fs.readFileSync(path.join('ssl', 'certificate.pem'))
     };
     server = https.createServer(options, app);
     // Start the HTTPS server

@@ -105,9 +105,9 @@ $ npm install
  The HTTPS server looks for privatekey.pem and certificate.pem. You can use a real certificate or generate a self-signed one by following the steps below.
 
  ```
- $ openssl genrsa -out privatekey.pem 2048
- $ openssl req -new -sha256 -key privatekey.pem -out csr.pem
- $ openssl x509 -req -in csr.pem -signkey privatekey.pem -out certificate.pem
+ $ openssl genrsa -out ssl/privatekey.pem 2048
+ $ openssl req -new -sha256 -key ssl/privatekey.pem -out ssl/csr.pem
+ $ openssl x509 -req -in ssl/csr.pem -signkey ssl/privatekey.pem -out ssl/certificate.pem
 ```
 
  Start the web server:
