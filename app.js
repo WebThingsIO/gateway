@@ -133,11 +133,13 @@ if (config.get('cli')) {
   });
 }
 
-// Start the HTTPS server
-server.listen(port, function() {
-  adapterManager.loadAdapters();
-  console.log('Listening on port', server.address().port);
-});
+if (!server.listening) {
+  // Start the HTTPS server
+  server.listen(port, function() {
+    adapterManager.loadAdapters();
+    console.log('Listening on port', server.address().port);
+  });
+}
 
 // function to stop running server and start https
 TunnelService.switchToHttps = function(){
