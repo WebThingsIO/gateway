@@ -27,8 +27,8 @@ var TunnelSetup = {
             return next();
         } else {
             // then we check if we have certificates installed
-            if ((fs.existsSync('./certificate.pem')
-                && fs.existsSync('./privatekey.pem'))
+            if ((fs.existsSync('./ssl/certificate.pem')
+                && fs.existsSync('./ssl/privatekey.pem'))
                 || (fs.existsSync('notunnel')))  {
                 // if certs are installed,
                 // then we don't need to do anything and return
