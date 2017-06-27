@@ -16,12 +16,12 @@ var TunnelService = {
 
     pagekiteProcess: null,
     tunneltoken: null,
-    switchToHttp: null,
+    switchToHttps: null,
 
     // method that starts the client if the box has a registered tunnel
     start: function() {
         let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
-        let endpoint = tunneltoken.name + '.' + config.get('ssltunnel.domain') ;
+        let endpoint = tunneltoken.name + '.' + config.get('ssltunnel.domain');
         this.pagekiteProcess  =
             spawnSync(config.get('ssltunnel.pagekite_cmd'),
                 ['--clean', '--frontend=' + endpoint + ':' +

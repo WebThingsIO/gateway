@@ -96,7 +96,10 @@ SettingsController.post('/subscribe', function (request, response) {
                     fs.writeFileSync('certificate.pem', results.cert);
                     fs.writeFileSync('privatekey.pem', results.privkey);
                     TunnelService.start();
-                    TunnelService.switchToHttp();
+                    TunnelService.switchToHttps();
+                    let endpoint = 'https://' + subdomain + '.' +
+                        config.get('ssltunnel.domain') + ':4443';
+                    response.send(endpoint);
                     response.status(200).end();
                 }, function (err) {
                     returnError(err.detail ||
@@ -112,6 +115,19 @@ SettingsController.post('/subscribe', function (request, response) {
 SettingsController.post('/skiptunnel', function (request, response) {
     fs.writeFileSync('notunnel');
     response.status(200).end();
+});
+
+
+SettingsController.get('/tunnelinfo', function (request, response) {
+    if (fs.existsSync('tunneltoken')){
+        let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
+        let endpoint = 'https://' + tunneltoken.name + '.' +
+            config.get('ssltunnel.domain') + ':4443';
+        response.send(endpoint);
+        response.status(200).end();
+    } else {
+        response.status(404).end();
+    }
 });
 
 module.exports = SettingsController;
