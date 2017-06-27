@@ -27,6 +27,19 @@ var TunnelService = require('./ssltunnel');
 var app = express();
 var server;
 
+// Defer calls to ws(), storing all context necessary to recreate them once
+// express-ws is initialized
+var deferredWsRoutes = [];
+function deferWs() {
+  deferredWsRoutes.push({
+    'this': this,
+    'arguments': arguments
+  });
+}
+
+app.ws = deferWs;
+express.Router.ws = deferWs;
+
 function startHttpsService() {
       // HTTP server configuration
     var port = config.get('ports.https');
@@ -35,7 +48,15 @@ function startHttpsService() {
         cert: fs.readFileSync('certificate.pem')
     };
     server = https.createServer(options, app);
+
+    // Inject the real ws handler
+    delete app.ws;
+    delete express.Router.ws;
     expressWs(app, server);
+    // Process the deferred routes
+    for (let defer of deferredWsRoutes) {
+      app.ws.apply(defer.this, defer.arguments);
+    }
 
     // Start the HTTPS server
     server.listen(port, function() {
@@ -146,7 +167,6 @@ TunnelService.switchToHttps = function(){
   server.close();
   startHttpsService();
 };
-expressWs(app, server);
 
 module.exports = { // for testing
   app: app,
