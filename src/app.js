@@ -56,6 +56,23 @@ if (fs.existsSync('notunnel')) {
   });
 }
 
+// Move certificates, if necessary. If this throws an error, let it bubble up.
+if (!fs.existsSync('ssl')) {
+  fs.mkdirSync('ssl');
+}
+
+if (fs.existsSync('privatekey.pem')) {
+  fs.renameSync('privatekey.pem', path.join('ssl', 'privatekey.pem'));
+}
+
+if (fs.existsSync('certificate.pem')) {
+  fs.renameSync('certificate.pem', path.join('ssl', 'certificate.pem'));
+}
+
+if (fs.existsSync('chain.pem')) {
+  fs.renameSync('chain.pem', path.join('ssl', 'chain.pem'));
+}
+
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
 
@@ -69,11 +86,11 @@ function createHttpsServer() {
 
   // HTTPS server configuration
   const options = {
-    key: fs.readFileSync('privatekey.pem'),
-    cert: fs.readFileSync('certificate.pem')
+    key: fs.readFileSync(path.join('ssl', 'privatekey.pem')),
+    cert: fs.readFileSync(path.join('ssl', 'certificate.pem'))
   };
-  if (fs.existsSync('chain.pem')){
-    options.ca = fs.readFileSync('chain.pem');
+  if (fs.existsSync(path.join('ssl', 'chain.pem'))) {
+    options.ca = fs.readFileSync(path.join('ssl', 'chain.pem'));
   }
   return https.createServer(options);
 }
