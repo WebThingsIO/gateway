@@ -114,4 +114,17 @@ SettingsController.post('/skiptunnel', function (request, response) {
     response.status(200).end();
 });
 
+
+SettingsController.get('/tunnelinfo', function (request, response) {
+    if (fs.existsSync('tunneltoken')){
+        let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
+        let endpoint = 'https://' + tunneltoken.name + '.' +
+            config.get('ssltunnel.domain') + ':4443';
+        response.send(endpoint);
+        response.status(200).end();
+    } else {
+        response.status(404).end();
+    }
+});
+
 module.exports = SettingsController;

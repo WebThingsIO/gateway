@@ -17,26 +17,19 @@ var SettingsScreen = {
     * Initialise Settings Screen.
     */
     init: function() {
-     this.addDomain = document.getElementById('add-domain');
-     this.addDomain.addEventListener('click', this.register.bind(this));
-    },
-
-    register: function() {
-      let subdomain = document.getElementById('tbxsubdomain');
-      fetch('/settings/subscribe/' + subdomain, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((function(response) {
-        return response.json();
-      }).bind(this)).then((function(json) {
-        console.log('Success registering domains:', json);
-      }).bind(this))
-      .catch(function(error) {
-        console.error('Failed to register domain:', error);
-      });
+     fetch('/settings/tunnelinfo')
+         .then(function (res) {
+             return res.text();
+         })
+         .then(function (body) {
+             let msg = '';
+             if (body) {
+                 msg = 'Your tunnel gateway is:';
+             } else {
+                 msg = 'You don\'t have a tunnel gateway set.';
+             }
+             document.getElementById('lblsubdomain').innerHTML = msg;
+             document.getElementById('tbxsubdomain').innerHTML = body;
+        });
     }
 };
