@@ -95,12 +95,10 @@ SettingsController.post('/subscribe', function (request, response) {
                     // ok. we got the certificates. let's save them
                     fs.writeFileSync('certificate.pem', results.cert);
                     fs.writeFileSync('privatekey.pem', results.privkey);
-                    TunnelService.start();
+                    let endpoint_url = 'https://' + subdomain + '.' +
+                        config.get('ssltunnel.domain');
+                    TunnelService.start(response, endpoint_url);
                     TunnelService.switchToHttps();
-                    let endpoint = 'https://' + subdomain + '.' +
-                        config.get('ssltunnel.domain') + ':4443';
-                    response.send(endpoint);
-                    response.status(200).end();
                 }, function (err) {
                     returnError(err.detail ||
                         err.message.substring(0,err.message.indexOf('\n')));

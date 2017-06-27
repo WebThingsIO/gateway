@@ -43,18 +43,19 @@ createDomainButton.addEventListener('click', function() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.ok) {
-            return response.text();
-        } else {
-            displayMessage(response.statusText, 'error');
-        }
+        return response.text();
     }).then(function (body){
-        displayMessage('Success! Please wait while we redirect you...',
-            'message');
-        setTimeout(
-            function() {
-                window.location.replace(body);
+        if (body) {
+            displayMessage('Success! Please wait while we redirect you...',
+                'message');
+            setTimeout(function() {
+                    window.location.replace(body);
             }, 5000);
+        } else {
+            displayMessage('Error issuing certificate. Please try again',
+                'error');
+        }
+
     }).catch(function(error) {
         displayMessage(error, 'error');
     });
