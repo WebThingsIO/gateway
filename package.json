@@ -40,7 +40,10 @@
     "ws": "^2.2.3",
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",
-    "zcl-packet": "^0.2.2"
+    "zcl-packet": "^0.2.2",
+    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "greenlock": "^2.1.15",
+    "node-fetch": "^1.7.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

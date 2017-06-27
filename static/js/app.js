@@ -9,7 +9,8 @@
  */
 'use strict';
 
-/* globals ThingsScreen, AdaptersScreen, AddThingScreen, Menu, ContextMenu */
+/* globals ThingsScreen, AdaptersScreen,
+AddThingScreen, Menu, ContextMenu, SettingsScreen */
 
 var App = {
   /**
@@ -30,6 +31,7 @@ var App = {
     AdaptersScreen.init();
     AddThingScreen.init();
     ContextMenu.init();
+    SettingsScreen.init();
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');

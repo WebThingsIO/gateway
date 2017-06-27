@@ -39,6 +39,9 @@
     <script type="text/javascript" src="js/adapter.js"></script>
     <link rel="stylesheet" type="text/css" href="css/adapter.css" />
     <script type="text/javascript" src="js/check-user.js"></script>
+    <!-- Settings -->
+    <script type="text/javascript" src="js/settings.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/settings.css" />
   </head>
   <body>
     <img id="wordmark" src="images/moziot-wordmark.png" />
@@ -57,7 +60,10 @@
 
     <!-- Settings View -->
     <section data-view="settings" id="settings-view" class="hidden">
-
+      <div id="settings">
+        <input type="text" id="tbxsubdomain"/>
+        <button id="add-domain">Done</button>
+      </div>
     </section>
 
     <!-- Menu -->

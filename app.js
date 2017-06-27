@@ -10,6 +10,7 @@
  */
 // Dependencies
 var https = require('https');
+var http = require('http');
 var fs = require('fs');
 var express = require('express');
 var expressWs = require('express-ws');
@@ -19,17 +20,40 @@ var config = require('config');
 var adapterManager = require('./adapter-manager');
 var db = require('./db');
 var Router = require('./router');
+var TunnelService = require('./ssltunnel');
 
-// HTTP server configuration
-var port = config.get('ports.https');
-var options = {
-  key: fs.readFileSync('privatekey.pem'),
-  cert: fs.readFileSync('certificate.pem')
-};
 
 // Create Express app, HTTP(S) server and WebSocket server
 var app = express();
-var server = https.createServer(options, app);
+var server;
+
+function startHttpsService() {
+      // HTTP server configuration
+    var port = config.get('ports.https');
+    var options = {
+        key: fs.readFileSync('privatekey.pem'),
+        cert: fs.readFileSync('certificate.pem')
+    };
+    server = https.createServer(options, app);
+    // Start the HTTPS server
+    server.listen(port, function() {
+      adapterManager.loadAdapters();
+      console.log('Listening on port', server.address().port);
+    });
+}
+
+// if we have the certificates installed, we start https
+if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
+    startHttpsService();
+    if (TunnelService.hasTunnelToken()){
+      TunnelService.start();
+    }
+} else {
+    // otherwise we start plain http
+    var port = config.get('ports.http');
+    server = http.createServer(app);
+}
+
 expressWs(app, server);
 
 function configureOptions() {
@@ -104,6 +128,7 @@ if (config.get('cli')) {
   process.on('SIGINT', function() {
     console.log('Control-C: disconnecting adapters...');
     adapterManager.unloadAdapters();
+    TunnelService.stop();
     process.exit(1);
   });
 }
@@ -113,6 +138,12 @@ server.listen(port, function() {
   adapterManager.loadAdapters();
   console.log('Listening on port', server.address().port);
 });
+
+// function to stop running server and start https
+TunnelService.switchToHttp = function(){
+  server.close();
+  startHttpsService();
+};
 
 module.exports = { // for testing
   app: app,

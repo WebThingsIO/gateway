@@ -1,0 +1,83 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+body {
+  padding: 0;
+  background-color: #305067;
+  color: #fff;
+}
+
+.subdomain-form {
+  top: 50%;
+  transform: translateY(calc(-50% - 6rem));
+  position: relative;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 50%;
+  min-width: 28rem;
+  max-width: 38rem;
+  margin: 0 auto;
+}
+
+.subdomain-form input {
+  display: inline-block;
+  width: 18rem;
+  margin: 1rem;
+}
+
+#skip-subdomain-button, #create-domain-button {
+  display: inline-block;
+  margin: 1rem auto;
+}
+
+#label-subdomain {
+  display: inline-block;
+  padding-left: 0.5rem;
+}
+
+.error {
+  color: red;
+}
+
+.hidden {
+  display: none;
+}
+
+h1 {
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: lighter;
+  line-height: 1.6rem;
+}
+
+p {
+  font-weight: lighter;
+  padding-bottom: 0.6rem;
+}
+
+input[type="text"], input[type="email"] {
+  height: 2.3rem;
+  background-color: #d2d9de;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+
+button {
+  font-size: 1.6rem;
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem 4rem;
+  color: #fff;
+}
+
+button:hover, button:active {
+  background-color: #658196;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+

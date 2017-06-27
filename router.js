@@ -24,6 +24,7 @@ var Router = {
    * Configure web app routes.
    */
   configure: function(app, opt) {
+    app.use('/', require('./controllers/root_controller'));
     app.use(Constants.USERS_PATH, require('./controllers/users_controller'));
     app.use(Constants.LOGIN_PATH, require('./controllers/login_controller'));
 
@@ -43,6 +44,8 @@ var Router = {
       app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
     }
     app.use(express.static(Constants.STATIC_PATH));
+    app.use(Constants.SETTINGS_PATH,
+        require('./controllers/tunnel_controller'));
   }
 };
 

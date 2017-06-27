@@ -18,3 +18,4 @@ exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
 exports.STATIC_PATH = 'static';
 exports.DEBUG_PATH = '/debug';
+exports.SETTINGS_PATH = '/settings';

@@ -13,7 +13,8 @@ module.exports = {
   cli: true,
 
   ports: {
-    https: 4443
+    https: 4443,
+    http:  8080
   },
   adapters : {
     gpio: {
@@ -47,5 +48,11 @@ module.exports = {
     enabled: true,
     defaultUser: null,
     secret: 'top secret 51'      // DO NOT USE THIS IN PRODUCTION
+  },
+  ssltunnel: {
+    enabled: true,
+    registration_endpoint: 'mozilla-iot.org',
+    domain: 'box.mozilla-iot.org',
+    pagekite_cmd: './pagekite.py'
   }
 };
