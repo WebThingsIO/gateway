@@ -29,7 +29,7 @@ var ContextMenu = {
     this.logoutForm.addEventListener('submit', (e) => {
       e.preventDefault();
       window.API.logout().then(() => {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
       });
     })
   },

@@ -10,12 +10,23 @@
 
 'use strict';
 
+const path = require('path');
+
 const Router = require('express-promise-router');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
 const Authentication = require('../authentication');
 
 var LoginController = Router();
+
+const loginRoot = path.join(__dirname, '../static/login');
+
+/**
+ * Serve the static login page
+ */
+LoginController.get('/', async (request, response) => {
+  response.sendFile('index.html', {root: loginRoot});
+});
 
 /**
  * Handle login request.
