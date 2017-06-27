@@ -28,7 +28,7 @@
       }).
       catch((err) => {
         errorSubmission.classList.remove('hidden');
-        errorSubmission.textContent = err;
+        errorSubmission.textContent = err.message;
         console.error(err);
       });
   })
