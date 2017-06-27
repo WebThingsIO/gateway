@@ -41,7 +41,7 @@
       };
       return fetch('/users/', opts).then((res) => {
         if (!res.ok) {
-          return Promise.reject('Repeating signup not permitted');
+          throw new Error('Repeating signup not permitted');
         }
         return res.json();
       }).then((body) => {
@@ -63,7 +63,7 @@
       };
       return fetch('/login/', opts).then((res) => {
         if (!res.ok) {
-          return Promise.reject('Incorrect username or password');
+          throw new Error('Incorrect username or password');
         }
         return res.json();
       }).then((body) => {
