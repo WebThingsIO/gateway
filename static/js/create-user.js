@@ -18,12 +18,14 @@
   var confirmPassword = document.getElementById('confirm-password');
   var errorPasswordMismatch =
     document.getElementById('error-password-mismatch');
+  var errorSubmission = document.getElementById('error-submission');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    errorSubmission.classList.add('hidden');
     if (password.value !== confirmPassword.value) {
       errorPasswordMismatch.classList.remove('hidden');
-      event.preventDefault();
+      return;
     } else {
       errorPasswordMismatch.classList.add('hidden');
     }
@@ -38,7 +40,8 @@
         window.location.href = '/';
       }).
       catch((err) => {
-        // TODO: User facing errors ...
+        errorSubmission.classList.remove('hidden');
+        errorSubmission.textContent = err;
         console.error(err);
       });
   })

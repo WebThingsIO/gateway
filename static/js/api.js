@@ -40,6 +40,9 @@
         })
       };
       return fetch('/users/', opts).then((res) => {
+        if (!res.ok) {
+          return Promise.reject('Repeating signup not permitted');
+        }
         return res.json();
       }).then((body) => {
         const jwt = body.jwt;
@@ -59,6 +62,9 @@
         })
       };
       return fetch('/login/', opts).then((res) => {
+        if (!res.ok) {
+          return Promise.reject('Incorrect username or password');
+        }
         return res.json();
       }).then((body) => {
         const jwt = body.jwt;
