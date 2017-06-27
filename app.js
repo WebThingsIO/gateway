@@ -35,6 +35,8 @@ function startHttpsService() {
         cert: fs.readFileSync('certificate.pem')
     };
     server = https.createServer(options, app);
+    expressWs(app, server);
+
     // Start the HTTPS server
     server.listen(port, function() {
       adapterManager.loadAdapters();
@@ -53,8 +55,6 @@ if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
     var port = config.get('ports.http');
     server = http.createServer(app);
 }
-
-expressWs(app, server);
 
 function configureOptions() {
   if (!config.get('cli')) {
