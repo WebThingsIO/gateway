@@ -29,6 +29,18 @@
       }
     },
 
+    verifyJWT() {
+      const opts = {
+        headers: {
+          'Authorization': `Bearer ${window.API.jwt}`,
+        }
+      };
+
+      return fetch('/things/', opts).then((res) => {
+        return res.ok;
+      });
+    },
+
     createUser: function (name, email, password) {
       const opts = {
         method: 'POST',
