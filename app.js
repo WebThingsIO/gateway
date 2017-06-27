@@ -146,6 +146,7 @@ TunnelService.switchToHttps = function(){
   server.close();
   startHttpsService();
 };
+expressWs(app, server);
 
 module.exports = { // for testing
   app: app,
