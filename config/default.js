@@ -53,6 +53,7 @@ module.exports = {
     enabled: true,
     registration_endpoint: 'mozilla-iot.org',
     domain: 'box.mozilla-iot.org',
-    pagekite_cmd: './pagekite.py'
+    pagekite_cmd: './pagekite.py',
+    port: 443
   }
 };
