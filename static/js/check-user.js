@@ -12,9 +12,9 @@
     window.API.userCount().then((count) => {
       let url;
       if (count > 0) {
-        url = '/login.html';
+        url = '/login';
       } else {
-        url = '/create_user.html';
+        url = '/signup';
       }
       window.location.href = url;
     });
