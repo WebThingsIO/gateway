@@ -13,7 +13,8 @@
 const subdomain = document.getElementById('subdomain');
 const email = document.getElementById('email');
 const createDomainButton = document.getElementById('create-domain-button');
-const skipButton = document.getElementById('skip-subdomain-button');
+// https://github.com/mozilla-iot/gateway/issues/159
+//const skipButton = document.getElementById('skip-subdomain-button');
 const errorMessage = document.getElementById('error-setup');
 
 function displayMessage(errorMsg, type){
@@ -61,6 +62,8 @@ createDomainButton.addEventListener('click', function() {
     });
 });
 
+/*
+ * https://github.com/mozilla-iot/gateway/issues/159
 skipButton.addEventListener('click', function() {
     // call the settings controller to skip the domain subscription
     displayMessage('Processing...', 'message');
@@ -80,4 +83,4 @@ skipButton.addEventListener('click', function() {
     }).catch(function(error) {
         displayMessage(error, 'error');
     });
-});
+});*/
