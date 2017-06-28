@@ -17,12 +17,13 @@
     <form id="create-subdomain-form" class="subdomain-form">
       <h1>Welcome</h1>
       <p>Choose a secure web address for your gateway:</p>
-      <input type="text" id="subdomain" placeholder="subdomain" required/><div id="label-subdomain">.mozilla-iot.org</div>
+      <input type="text" id="subdomain" placeholder="subdomain" required/><div id="label-subdomain">.box.mozilla-iot.org</div>
       <input type="email" id="email" placeholder="Email" required/><br>
       <div id="error-setup" class="error hidden">
         An error occured when setting up the subdomain
       </div><br>
-      <button id="skip-subdomain-button" type="button">Skip</button>
+      <!-- https://github.com/mozilla-iot/gateway/issues/159 -->
+      <!--<button id="skip-subdomain-button" type="button">Skip</button>-->
       <button id="create-domain-button" type="button">Create</button>
     </form>
     <script src="/js/setup_subdomain.js"></script>
