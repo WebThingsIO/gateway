@@ -47,6 +47,9 @@ function startHttpsService() {
         key: fs.readFileSync('privatekey.pem'),
         cert: fs.readFileSync('certificate.pem')
     };
+    if (fs.existsSync('chain.pem')){
+        options.ca = fs.readFileSync('chain.pem');
+    }
     server = https.createServer(options, app);
 
     // Inject the real ws handler

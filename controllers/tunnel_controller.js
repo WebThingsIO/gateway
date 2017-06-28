@@ -95,6 +95,8 @@ SettingsController.post('/subscribe', function (request, response) {
                     // ok. we got the certificates. let's save them
                     fs.writeFileSync('certificate.pem', results.cert);
                     fs.writeFileSync('privatekey.pem', results.privkey);
+                    fs.writeFileSync('chain.pem', results.chain);
+
                     let endpoint_url = 'https://' + subdomain + '.' +
                         config.get('ssltunnel.domain');
                     TunnelService.start(response, endpoint_url);
