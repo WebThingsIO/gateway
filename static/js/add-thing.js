@@ -39,7 +39,12 @@ var AddThingScreen = {
     // Create a websocket to start listening for new things
     var socket = new WebSocket(path);
     socket.onmessage = (function(event) {
-      this.showNewThing(JSON.parse(event.data));
+      const thingInfo = JSON.parse(event.data);
+      if (thingInfo.isDiscovery) {
+        this.discoverNewThing(thingInfo);
+      } else {
+        this.showNewThing(thingInfo);
+      }
     }).bind(this);
 
     var action = {
@@ -112,6 +117,23 @@ var AddThingScreen = {
     this.requestCancelPairing();
     var newEvent = new CustomEvent('_thingchange');
     window.dispatchEvent(newEvent);
+  },
+
+  discoverNewThing: function(thing) {
+    console.log('got thing?', thing)
+    const discoveredContainer = document.getElementById('discovered-devices');
+    const newItemRow = document.createElement('li');
+
+    const newItemTitle = document.createElement('span');
+    newItemTitle.className = 'discovery-name';
+    newItemTitle.textContent = `${thing.manufacturer} - ${thing.product}`;
+    newItemRow.appendChild(newItemTitle);
+
+    const pairButton = document.createElement('button');
+    pairButton.textContent = 'Pair';
+    newItemRow.appendChild(pairButton);
+
+    discoveredContainer.appendChild(newItemRow);
   },
 
   showNewThing: function(thing) {
