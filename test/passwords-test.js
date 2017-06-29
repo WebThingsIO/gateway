@@ -12,6 +12,9 @@ describe('Passwords', () => {
 
     assert(Passwords.compareSync(pass, passHash),
       'hash should compare correctly to original password');
+    const compareAsync = await Passwords.compare(pass, passHash);
+    assert(compareAsync,
+      'hash should async compare correctly to original password');
     assert(Passwords.compareSync(pass, passHashSync),
       'hashSync should compare correctly to original password');
     assert(!Passwords.compareSync(passFake, passHash),
