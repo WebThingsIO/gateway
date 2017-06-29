@@ -1,2 +1,9 @@
 node_modules/
 db.sqlite3
+.node-persist/
+.nyc_output/
+*.pem
+*.swp
+.DS_Store
+tunneltoken
+notunnel
