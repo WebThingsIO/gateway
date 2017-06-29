@@ -1,3 +1,11 @@
+/**
+ * Passwords utilities.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 const bcrypt = require('bcryptjs');
 
 module.exports = {
@@ -17,6 +25,16 @@ module.exports = {
    */
   hashSync: function(password) {
     return bcrypt.hashSync(password, 10);
+  },
+
+  /**
+   * Compare two password hashes asynchronously
+   * @param {String} passwordText - a plain text password
+   * @param {String} passwordHash - the expected hash
+   * @return {Promise<boolean>} If the hashes are equal
+   */
+  compare: function(passwordText, passwordHash) {
+    return bcrypt.compare(passwordText, passwordHash);
   },
 
   /**

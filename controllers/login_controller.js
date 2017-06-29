@@ -15,7 +15,7 @@ const path = require('path');
 const Router = require('express-promise-router');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
-const Authentication = require('../authentication');
+const Passwords = require('../passwords');
 
 var LoginController = Router();
 
@@ -44,7 +44,7 @@ LoginController.post('/', async (request, response) => {
     return;
   }
 
-  const passwordMatch = await Authentication.comparePassword(
+  const passwordMatch = await Passwords.compare(
     body.password,
     user.password
   );

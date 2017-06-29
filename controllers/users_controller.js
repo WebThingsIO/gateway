@@ -11,7 +11,7 @@
 'use strict';
 
 const Router = require('express-promise-router');
-const Authentication = require('../authentication');
+const Passwords = require('../passwords');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
 
@@ -60,7 +60,7 @@ UsersController.post('/', async (request, response) => {
   }
 
   // TODO: user facing errors...
-  const hash = await Authentication.hashPassword(body.password);
+  const hash = await Passwords.hash(body.password);
   const user = await Users.createUser(body.email, hash, body.name);
   const jwt = await JSONWebToken.issueToken(user.id);
 

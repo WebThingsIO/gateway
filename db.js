@@ -13,7 +13,7 @@
 const config = require('config');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
-const bcrypt = require('bcrypt-nodejs');
+const Passwords = require('./passwords');
 const assert = require('assert');
 
 const TABLES = [
@@ -94,7 +94,7 @@ var Database = {
       if(!defaultUser) {
         return;
       }
-      var passwordHash = bcrypt.hashSync(defaultUser.password);
+      var passwordHash = Passwords.hashSync(defaultUser.password);
       db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
         [defaultUser.email, passwordHash, defaultUser.name],
         function(error) {
