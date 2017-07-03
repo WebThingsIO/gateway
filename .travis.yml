@@ -20,6 +20,10 @@ before_install:
   - npm install -g node-gyp
   - cd ..
 
+cache:
+  directories:
+    - open-zwave-master
+
 env:
   global:
     - CC=gcc-4.9
