@@ -96,8 +96,10 @@ $ cd gateway
 
 Install dependencies:
 
+NOTE: `yarn` is preferred but npm install will also work.
+
 ```
-$ npm install
+$ yarn
 ```
 
  Add SSL certificate:

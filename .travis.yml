@@ -1,4 +1,5 @@
 language: node_js
+cache: yarn
 
 sudo: required
 
@@ -33,6 +34,7 @@ script:
   - npm run lint
   - ./tools/make-self-signed-cert.sh
   - ./node_modules/.bin/jest --coverage
+  - npm run yarn-check
 
 after_script:
   - ./node_modules/.bin/codecov
