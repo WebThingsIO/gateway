@@ -28,6 +28,10 @@ module.exports = {
         },
       }
     },
+    'philips-hue': {
+      enabled: true,
+      path: './adapters/philips-hue'
+    },
     zigbee: {
       enabled: true,
       path: './adapters/zigbee',

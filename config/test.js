@@ -18,6 +18,9 @@ module.exports = {
       enabled: true,
       path: './adapters/mock',
     },
+    'philips-hue': {
+      enabled: false,
+    },
     zwave: {
       enabled: false,
     },
