@@ -25,9 +25,9 @@ describe('actions/', function() {
     const res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(0);
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
   });
 
   it('should fail to create a new action (empty body)', async () => {
@@ -35,7 +35,7 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send());
-    err.response.should.have.status(400);
+    expect(err.response.status).toEqual(400);
   });
 
   it('should fail to create a new action (unknown name)', async () => {
@@ -46,7 +46,7 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send(descr));
-    err.response.should.have.status(400);
+    expect(err.response.status).toEqual(400);
   });
 
   it('should list and retrieve the new action', async () => {
@@ -59,26 +59,26 @@ describe('actions/', function() {
       .set(...headerAuth(jwt))
       .send(descr);
 
-    pair.should.have.status(201);
+    expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(1);
-    res.body[0].should.have.a.property('name');
-    res.body[0].should.have.a.property('id');
-    res.body[0].name.should.be.eql('pair');
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0].name).toEqual('pair');
 
     const actionId = res.body[0].id;
     res = await chai.request(server)
       .get(Constants.ACTIONS_PATH + '/' + actionId)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.have.a.property('name');
-    res.body.name.should.be.eql('pair');
-    res.body.should.have.a.property('id');
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual('pair');
+    expect(res.body).toHaveProperty('id');
   });
 
   it('should error retrieving a nonexistent action', async () => {
@@ -86,7 +86,7 @@ describe('actions/', function() {
     const err = await pFinal(chai.request(server)
       .get(Constants.ACTIONS_PATH + '/' + actionId)
       .set(...headerAuth(jwt)));
-    err.response.should.have.status(404);
+    expect(err.response.status).toEqual(404);
   });
 
   it('should remove an action', async () => {
@@ -102,21 +102,21 @@ describe('actions/', function() {
     let res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt));
-    res.should.have.status(200);
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(1);
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
     const actionId = res.body[0].id;
 
     res = await chai.request(server)
       .delete(Constants.ACTIONS_PATH + '/' + actionId)
       .set(...headerAuth(jwt));
-    res.should.have.status(204);
+    expect(res.status).toEqual(204);
 
     res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt));
-    res.body.should.be.a('array');
-    res.body.length.should.be.eql(0);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
   });
 
   it('should error removing a nonexistent action', async () => {
@@ -124,7 +124,7 @@ describe('actions/', function() {
     const err = await pFinal(chai.request(server)
       .delete(Constants.ACTIONS_PATH + '/' + actionId)
       .set(...headerAuth(jwt)));
-    err.response.status.should.be.eql(404);
+    expect(err.response.status).toEqual(404);
   });
 
   it('should error on an unpair of a nonexistent device', async () => {
@@ -137,21 +137,21 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .send({name: 'unpair', parameters: {id: thingId}});
-    res.should.have.status(201);
+    expect(res.status).toEqual(201);
 
     res = await chai.request(server)
         .get(Constants.ACTIONS_PATH)
         .set(...headerAuth(jwt));
-    res.body.should.be.a('array');
-    res.body[0].should.have.a.property('name');
-    res.body[0].name.should.be.eql('unpair');
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0].name).toEqual('unpair');
 
-    res.body[0].should.have.a.property('id');
+    expect(res.body[0]).toHaveProperty('id');
 
-    res.body[0].should.have.a.property('status');
-    res.body[0].status.should.be.eql('error');
+    expect(res.body[0]).toHaveProperty('status');
+    expect(res.body[0].status).toEqual('error');
 
-    res.body[0].should.have.a.property('error');
+    expect(res.body[0]).toHaveProperty('error');
   });
 
 });

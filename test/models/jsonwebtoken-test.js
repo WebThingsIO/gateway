@@ -1,5 +1,4 @@
 const JSONWebToken = require('../../models/jsonwebtoken');
-const {assert} = require('../common');
 
 describe('JSONWebToken', function() {
 
@@ -10,8 +9,8 @@ describe('JSONWebToken', function() {
 
     const {sig: sig2} = JSONWebToken.create(userId);
 
-    assert(subject.verify(sig));
-    assert(!subject.verify(sig2));
+    expect(subject.verify(sig)).toBeTruthy();
+    expect(subject.verify(sig2)).toEqual(false);
   });
 
 });

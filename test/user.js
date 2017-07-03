@@ -4,7 +4,6 @@
 
 const Constants = require('../constants');
 const chai = require('./chai');
-const {expect} = chai;
 
 const TEST_USER = {
   email: 'test@example.com',
@@ -16,8 +15,8 @@ async function getJWT(path, server, user) {
   const res = await chai.request(server).
     post(path).
     send(user);
-  expect(res).to.have.status(200)
-  expect(res.body.jwt).to.be.a('string');
+  expect(res.status).toEqual(200);
+  expect(typeof res.body.jwt).toBe('string');
   return res.body.jwt;
 }
 
@@ -34,8 +33,8 @@ async function userInfo(server, jwt) {
     get(Constants.USERS_PATH + '/info').
     set(...headerAuth(jwt)).
     send();
-  expect(res).to.have.status(200)
-  expect(res.body).to.be.a('object');
+  expect(res.status).toEqual(200);
+  expect(typeof res.body).toBe('object');
   return res.body;
 }
 
@@ -44,7 +43,7 @@ async function logoutUser(server, jwt) {
     post(Constants.LOG_OUT_PATH).
     set(...headerAuth(jwt)).
     send();
-  expect(res).to.have.status(200)
+  expect(res.status).toEqual(200);
   return res;
 }
 

@@ -27,10 +27,10 @@ env:
 
 script:
   - npm run lint
-  - nyc npm run mocha
+  - ./tools/make-self-signed-cert.sh
+  - ./node_modules/.bin/jest --coverage
 
 after_script:
-  - nyc report --reporter=text-lcov > coverage.lcov
   - ./node_modules/.bin/codecov
 
 node_js:

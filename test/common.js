@@ -6,20 +6,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* globals assert, expect */
+/* globals expect */
 
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const Database = require('../db');
 const Actions = require('../models/actions');
+const e2p = require('event-to-promise');
 
 const chai = require('./chai');
 global.chai = chai;
-global.assert = chai.assert;
-global.expect = chai.expect;
 
-chai.should();
+expect.extend({
+  assert(value, message = 'expected condition to be truthy') {
+    const pass = !!value;
+    return {
+      pass,
+      message,
+    };
+  }
+});
 
 let {server, app} = require('../app');
 global.server = server;
@@ -29,7 +36,7 @@ var adapterManager = require('../adapter-manager');
 
 function mockAdapter() {
   var adapter = adapterManager.getAdapter('Mock');
-  assert.notEqual(adapter, undefined, 'No Mock Adapter found');
+  expect(adapter).not.toBeUndefined();
   return adapter;
 }
 global.mockAdapter = mockAdapter;
@@ -37,11 +44,18 @@ global.mockAdapter = mockAdapter;
 afterEach(async () => {
   // This is all potentially brittle.
   const adapter = adapterManager.getAdapter('Mock');
-  adapter.clearState();
+  if (adapter) {
+    adapter.clearState();
+  }
   Actions.clearState();
   await Database.deleteEverything();
 });
 
+afterAll(async () => {
+  server.close();
+  await e2p(server, 'close');
+});
+
 module.exports = {
-  mockAdapter, server, chai, assert, expect
+  mockAdapter, server, chai,
 };
