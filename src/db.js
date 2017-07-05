@@ -26,7 +26,7 @@ var Database = {
   /**
    * Filename to use for default list of Things.
    */
-  DATA_FILENAME: 'static/things.json',
+  DATA_FILENAME: '../static/things.json',
 
   /**
    * SQLLite3 Database object.

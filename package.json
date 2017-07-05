@@ -8,8 +8,7 @@
     "lint": "eslint .",
     "mocha": "./test/run-tests.sh",
     "yarn-check": "./test/yarn-test.sh",
-    "cov": "nyc npm run mocha",
-    "cov-html": "nyc --reporter=html npm run mocha",
+    "cov": "jest --coverage",
     "start": "node app.js"
   },
   "repository": {
@@ -61,9 +60,9 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "transform": {
-      "^.+\\.jsx?$": "./jest-transform"
+      "^.+\\.jsx?$": "./src/jest-transform"
     },
-    "setupTestFrameworkScriptFile": "<rootDir>/test/common.js",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node",
     "testMatch": [
       "**/test/**/*-test.js?(x)"

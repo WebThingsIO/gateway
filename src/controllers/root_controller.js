@@ -21,8 +21,8 @@ var RootController = express.Router();
  */
 RootController.get('/', TunnelSetup.isTunnelSet,
   function(request, response) {
-    response.sendFile('index.html',
-        { root: path.join(__dirname, '../static/') });
+    const root = path.join(__dirname, '../../static/');
+    response.sendFile('index.html', { root });
   }
 );
 

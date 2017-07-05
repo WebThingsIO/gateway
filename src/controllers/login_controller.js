@@ -19,7 +19,7 @@ const Passwords = require('../passwords');
 
 var LoginController = Router();
 
-const loginRoot = path.join(__dirname, '../static/login');
+const loginRoot = path.join(__dirname, '../../static/login');
 
 /**
  * Serve the static login page
