@@ -6,6 +6,7 @@ module.exports = {
     'browser': true,
     'jest': true,
     'mocha': true,
+    'jasmine': true,
   },
   'extends': 'eslint:recommended',
   'parser': 'babel-eslint',
