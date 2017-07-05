@@ -5,7 +5,7 @@ describe('Passwords', () => {
   beforeEach(() => {
     // Increase timeout because bcrypt is slow
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
   });
 
   it('should be able to generate and compare hashes', async () => {
