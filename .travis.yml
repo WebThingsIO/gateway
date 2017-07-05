@@ -1,5 +1,8 @@
 language: node_js
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    - open-zwave-master
 
 sudo: required
 
@@ -13,13 +16,7 @@ addons:
       - libudev-dev
 
 before_install:
-  - wget https://github.com/OpenZWave/open-zwave/archive/master.zip
-  - unzip master.zip
-  - cd open-zwave-master
-  - sudo make install
-  - sudo ldconfig /usr/local/lib /usr/local/lib64
-  - npm install -g node-gyp
-  - cd ..
+  - ./tools/compile-openzwave.sh
 
 env:
   global:
