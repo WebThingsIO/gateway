@@ -1,4 +1,3 @@
-const {assert} = require('./common');
 const Passwords = require('../passwords');
 
 describe('Passwords', () => {
@@ -10,17 +9,12 @@ describe('Passwords', () => {
     const passHashSync = Passwords.hashSync(pass);
     const passFakeHashSync = Passwords.hashSync(passFake);
 
-    assert(Passwords.compareSync(pass, passHash),
-      'hash should compare correctly to original password');
+    expect(Passwords.compareSync(pass, passHash)).toBeTruthy();
     const compareAsync = await Passwords.compare(pass, passHash);
-    assert(compareAsync,
-      'hash should async compare correctly to original password');
-    assert(Passwords.compareSync(pass, passHashSync),
-      'hashSync should compare correctly to original password');
-    assert(!Passwords.compareSync(passFake, passHash),
-      'hash should not match fake password');
-    assert(!Passwords.compareSync(pass, passFakeHashSync),
-      'fake hash sync should not match original password');
+    expect(compareAsync).toBeTruthy();
+    expect(Passwords.compareSync(pass, passHashSync)).toBeTruthy();
+    expect(Passwords.compareSync(passFake, passHash)).toBeFalsy();
+    expect(Passwords.compareSync(pass, passFakeHashSync)).toBeFalsy();
   });
 })
 
