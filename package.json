@@ -9,7 +9,8 @@
     "mocha": "./test/run-tests.sh",
     "yarn-check": "./test/yarn-test.sh",
     "cov": "nyc npm run mocha",
-    "cov-html": "nyc --reporter=html npm run mocha"
+    "cov-html": "nyc --reporter=html npm run mocha",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
