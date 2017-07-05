@@ -19,7 +19,9 @@ module.exports = {
   },
 
   /**
-   * Hash a password synchronously
+   * Hash a password synchronously.
+   * WARNING: This will block for a very long time
+   *
    * @param {String} password
    * @return {String} hashed password
    */
