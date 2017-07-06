@@ -31,7 +31,10 @@
     "express": "^4.15.2",
     "express-promise-router": "2.0.0-alpha.1",
     "express-ws": "^3.0.0",
+    "greenlock": "^2.1.15",
     "jsonwebtoken": "^7.4.1",
+    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "node-fetch": "^1.7.1",
     "node-getopt": "^0.2.3",
     "onoff": "^1.1.2",
     "openzwave-shared": "^1.3.2",
@@ -41,31 +44,38 @@
     "ws": "^2.2.3",
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",
-    "zcl-packet": "^0.2.2",
-    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
-    "greenlock": "^2.1.15",
-    "node-fetch": "^1.7.1"
+    "zcl-packet": "^0.2.2"
   },
   "devDependencies": {
+    "@types/asn1js": "^0.0.1",
+    "@types/node": "^8.0.7",
+    "awesome-typescript-loader": "^3.2.1",
     "babel-eslint": "^7.2.3",
     "chai": "^4.0.1",
     "chai-http": "^3.0.0",
     "codecov": "^2.2.0",
+    "copy-webpack-plugin": "^4.0.1",
     "eslint": "^4.0.0",
     "jest": "^20.0.4",
     "mocha": "^3.4.2",
     "node-rest-client": "^3.1.0",
-    "nyc": "^11.0.2"
+    "nyc": "^11.0.2",
+    "source-map-support": "^0.4.15",
+    "ts-jest": "^20.0.6",
+    "typescript": "^2.4.1",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+    "testMatch": ["**/test/**/*-test.(ts|tsx|js)"],
+    "mapCoverage": true,
     "transform": {
-      "^.+\\.jsx?$": "./src/jest-transform"
+      "^.+\\.jsx?$": "./src/jest-transform",
+      "^.+\\.tsx?$": "ts-jest/preprocessor"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/test/**/*-test.js?(x)"
-    ]
+    "testEnvironment": "node"
   }
 }
