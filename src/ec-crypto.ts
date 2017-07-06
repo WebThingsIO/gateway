@@ -8,8 +8,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-const asn1 = require('asn1.js');
-const crypto = require('crypto');
+import * as asn1 from 'asn1.js';
+import * as crypto from 'crypto';
 
 /**
  * This curve goes by different names in different standards.
@@ -54,7 +54,7 @@ const SECP256R1_CURVE = [1, 2, 840, 10045, 3, 1, 7];
  *
  * @return {Object} .public in PEM. .prviate in PEM.
  */
-function generateKeyPair() {
+export function generateKeyPair() {
   const key = crypto.createECDH(CURVE);
   key.generateKeys();
 
@@ -83,7 +83,4 @@ function generateKeyPair() {
   return { public: pub, private: priv };
 }
 
-module.exports = {
-  generateKeyPair,
-  JWT_ALGORITHM: 'ES256',
-}
+export const JWT_ALGORITHM = 'ES256';
