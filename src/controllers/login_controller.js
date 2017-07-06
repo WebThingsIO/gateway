@@ -16,10 +16,11 @@ const Router = require('express-promise-router');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
 const Passwords = require('../passwords');
+const Constants = require('../constants');
 
 var LoginController = Router();
 
-const loginRoot = path.join(__dirname, '../../static/login');
+const loginRoot = path.join(Constants.STATIC_PATH, 'login');
 
 /**
  * Serve the static login page

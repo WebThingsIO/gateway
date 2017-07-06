@@ -10,19 +10,20 @@
 
 'use strict';
 
-var express = require('express');
-var path = require('path');
-var TunnelSetup = require('../tunnel_setup');
+const express = require('express');
+const TunnelSetup = require('../tunnel_setup');
+const Constants = require('../constants');
 
-var RootController = express.Router();
+const RootController = express.Router();
 
 /**
  * Get the home page.
  */
 RootController.get('/', TunnelSetup.isTunnelSet,
   function(request, response) {
-    const root = path.join(__dirname, '../../static/');
-    response.sendFile('index.html', { root });
+    response.sendFile('index.html', {
+      root: Constants.STATIC_PATH,
+    });
   }
 );
 

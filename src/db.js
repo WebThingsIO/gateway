@@ -16,6 +16,9 @@ const fs = require('fs');
 const Passwords = require('./passwords');
 const assert = require('assert');
 
+// Imported as a module so we use a relative path.
+const ThingsData = require('../static/things.json');
+
 const TABLES = [
   'users',
   'jsonwebtoken_to_user',
@@ -23,11 +26,6 @@ const TABLES = [
 ];
 
 var Database = {
-  /**
-   * Filename to use for default list of Things.
-   */
-  DATA_FILENAME: '../static/things.json',
-
   /**
    * SQLLite3 Database object.
    */
@@ -59,7 +57,6 @@ var Database = {
    */
   populate: function() {
     console.log('Populating database with default things...');
-    var things = require('./' + this.DATA_FILENAME);
     var db = this.db;
 
     // Create Things table
@@ -72,7 +69,7 @@ var Database = {
       // Populate Things table
       var insertSQL = db.prepare(
         'INSERT INTO things (id, description) VALUES (?, ?)');
-      for (var thing of things) {
+      for (var thing of ThingsData) {
         var thingId = thing.id;
         delete thing.id;
         insertSQL.run(thingId, JSON.stringify(thing));
