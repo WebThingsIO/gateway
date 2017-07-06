@@ -6,8 +6,9 @@
   "scripts": {
     "test": "npm run lint && npm run mocha",
     "lint": "eslint .",
-    "mocha": "./test/run-tests.sh",
-    "yarn-check": "./test/yarn-test.sh",
+    "mocha": "./src/test/run-tests.sh",
+    "jest": "./src/test/run-tests.sh",
+    "yarn-check": "./src/test/yarn-test.sh",
     "cov": "jest --coverage",
     "start": "webpack && node build/gateway.js",
     "debug-ide": "webpack && node --debug-brk=5858 build/gateway.js",

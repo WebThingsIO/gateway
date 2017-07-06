@@ -115,26 +115,30 @@ $ yarn
  Start the web server:
 
 ```
-$ node app.js
+$ npm start
 ```
 
 Load ```https://localhost:4443``` in your web browser (or use the server's IP address if loading remotely).
 Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
 
+## Debugging
+
+If you are using vscode simply use the "launch" target it will build the gateway in debugger mode.
+
+If you are not using vscode run `npm run debug` and it will build the gateway and launch it with --inspect.
 
 ## Source Code Structure
 
-* **adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
-* **config/** - Gateway configuration
-* **controllers/** - App URL routes and their logic
-* **models/** - Data model and business logic
-* **static/** - Static CSS, JavaScript & image resources for web app front end
-* **tools/** - Helpful utilities (not part of the build)
-* **views/** - Web app front end views
-* **adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
-* **app.js** - The main back end script
-* **authentication.js** - Handles authenticating access to resources
-* **constants.js** - System wide constants
-* **db.js** - Manages the SQLite3 database
-* **package.json** - npm module manifest
-* **router.js** - Routes app URLs to controllers
+* **/config/** - Gateway configuration
+* **/src/adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
+* **/src/controllers/** - App URL routes and their logic
+* **/src/models/** - Data model and business logic
+* **/src/static/** - Static CSS, JavaScript & image resources for web app front end
+* **/src/tools/** - Helpful utilities (not part of the build)
+* **/src/views/** - Web app front end views
+* **/src/adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
+* **/src/app.js** - The main back end script
+* **/src/constants.js** - System wide constants
+* **/src/db.js** - Manages the SQLite3 database
+* **/src/package.json** - npm module manifest
+* **/src/router.js** - Routes app URLs to controllers
