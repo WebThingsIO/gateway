@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "outDir": "./tsdist/",
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es2017",
+    "strict": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "lib":[
+      "es2015",
+      "dom",
+      "dom.iterable",
+      "es6",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
