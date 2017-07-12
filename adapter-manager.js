@@ -238,6 +238,16 @@ class AdapterManager extends EventEmitter {
   /**
    * @method handleDeviceAdded
    *
+   * Called when we discover a device, but have not paired with it yet.
+   * The individual adapters determine whether or not auto-pairing happens.
+   */
+  handleDeviceDiscovered(device) {
+    this.emit('thing-discovered', device);
+  }
+
+  /**
+   * @method handleDeviceAdded
+   *
    * Called when the indicated device has been added to an adapter.
    */
   handleDeviceAdded(device) {

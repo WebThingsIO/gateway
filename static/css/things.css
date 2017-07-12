@@ -38,3 +38,36 @@
 #add-button:hover, #add-button:active {
   opacity: 1;
 }
+
+
+#discovered-devices {
+  list-style-type: none;
+  width: 600px;
+  margin: 0 auto;
+}
+
+#discovered-devices li {
+  display: flex;
+  padding: 6px 4px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+}
+
+#discovered-devices li:last-child {
+  border-bottom: 0;
+}
+
+#discovered-devices li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#discovered-devices li button:hover {
+  cursor: pointer;
+}
+
+.discovery-name {
+  flex: 1;
+  text-align: left;
+  margin-right: 10px;
+}

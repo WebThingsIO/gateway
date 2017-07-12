@@ -83,6 +83,15 @@ class Adapter {
   }
 
   /**
+   * @method deviceDiscovered
+   *
+   * Called to indicated that a device has been discovered.
+   */
+  handleDeviceDiscovered(device) {
+    this.manager.handleDeviceDiscovered(device);
+  }
+
+  /**
    * @method deviceRemoved
    *
    * Called to indicate that a device is no longer managed by this adapter.

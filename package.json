@@ -32,8 +32,12 @@
     "express": "^4.15.2",
     "express-promise-router": "2.0.0-alpha.1",
     "express-ws": "^3.0.0",
+    "greenlock": "^2.1.15",
     "jsonwebtoken": "^7.4.1",
+    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "node-fetch": "^1.7.1",
     "node-getopt": "^0.2.3",
+    "node-hid": "^0.5.4",
     "onoff": "^1.1.2",
     "openzwave-shared": "^1.3.2",
     "serialport": "^4.0.7",
@@ -42,10 +46,7 @@
     "ws": "^2.2.3",
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",
-    "zcl-packet": "^0.2.2",
-    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
-    "greenlock": "^2.1.15",
-    "node-fetch": "^1.7.1"
+    "zcl-packet": "^0.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

@@ -112,6 +112,19 @@ var Things = {
      });
    },
 
+   /**
+    * Handle discovering a new thing, but not pairing yet.
+    *
+    * @param Object New Thing description
+    */
+   discoverNewThing: function({ info }) {
+    console.log('Notifying UI of new thing', info);
+     // Notify each open websocket of the new Thing
+     this.websockets.forEach(function(socket) {
+       socket.send(JSON.stringify(info));
+     });
+   },
+
    // eslint-disable-next-line
    handleRemovedThing: function(thingId) {
     /// TODO: Remove from database
@@ -137,6 +150,10 @@ var Things = {
      return Database.removeThing(id);
    }
  };
+
+AdapterManager.on('thing-discovered', function(thing) {
+  Things.discoverNewThing(thing);
+});
 
 AdapterManager.on('thing-added', function(thing) {
   Things.handleNewThing(thing);

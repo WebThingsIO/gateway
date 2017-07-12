@@ -28,6 +28,10 @@ module.exports = {
         },
       }
     },
+    'hid': {
+      enabled: true,
+      path: './adapters/hid'
+    },
     zigbee: {
       enabled: true,
       path: './adapters/zigbee',

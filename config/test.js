@@ -14,6 +14,9 @@ module.exports = {
     https: 0 // 0 = find a free open port
   },
   adapters : {
+    hid: {
+      enabled: false,
+    },
     mock: {
       enabled: true,
       path: './adapters/mock',
