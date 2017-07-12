@@ -37,3 +37,5 @@ after_script:
 
 node_js:
   - 7
+notifications:
+  irc: "irc.mozilla.org#iot"
