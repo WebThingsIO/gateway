@@ -7,7 +7,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install git -y
 
-mkdir mozilla-iot
+mkdir -p mozilla-iot
 cd mozilla-iot
 
 # Install and configure nvm
@@ -17,8 +17,8 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | b
 # from a script), so we just run it here.
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm install v7.7.2
-nvm use v7.7.2
+nvm install v7.10.1
+nvm use v7.10.1
 
 # Download, build, and install OpenZWave
 sudo apt install libusb-1.0-0-dev libudev-dev -y
@@ -47,6 +47,6 @@ sudo update-rc.d gateway-iptables.sh defaults
 
 echo "###################################################################"
 echo "#"
-echo "# Please reboot to properly activate NVM and the iptables rules.
+echo "# Please reboot to properly activate NVM and the iptables rules."
 echo "#"
 echo "###################################################################"
