@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /home/pi
+
 # Update the base packages that come with the system. This is required
 # so that we can install git
 
@@ -22,7 +24,9 @@ nvm use v7.10.1
 
 # Download, build, and install OpenZWave
 sudo apt install libusb-1.0-0-dev libudev-dev -y
-git clone https://github.com/OpenZWave/open-zwave.git
+if [ ! -d "open-zwave" ]; then
+    git clone https://github.com/OpenZWave/open-zwave.git
+fi
 cd open-zwave
 make
 sudo make install
@@ -30,7 +34,9 @@ sudo ldconfig /usr/local/lib
 
 # Download and install the required node modules
 cd ..
-git clone https://github.com/moziot/gateway.git
+if [ ! -d "gateway" ]; then
+    git clone https://github.com/moziot/gateway.git
+fi
 cd gateway
 npm install .
 
@@ -43,7 +49,9 @@ sudo chmod +x /etc/init.d /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
 
 # Create a self-signed cert. This is temporary (for development).
-./tools/make-self-signed-cert.sh
+if [ ! -f "certificate.pem" ]; then
+    ./tools/make-self-signed-cert.sh
+fi
 
 echo "###################################################################"
 echo "#"
