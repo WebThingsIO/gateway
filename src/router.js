@@ -43,6 +43,8 @@ var Router = {
     if (opt.options.debug) {
       app.use(Constants.DEBUG_PATH, require('./controllers/debug_controller'));
     }
+
+    // XXX: This will go away eventually when gateway is purely an API server.
     app.use(express.static(Constants.STATIC_PATH));
     app.use(Constants.SETTINGS_PATH,
         require('./controllers/tunnel_controller'));

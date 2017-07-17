@@ -15,6 +15,16 @@ var config = require('config');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 
+// Use webpack provided require for dynamic includes from the bundle  .
+const dynamicRequire = (() => {
+  if (typeof __non_webpack_require__ !== 'undefined') {
+    // eslint-disable-next-line no-undef
+    return __non_webpack_require__;
+  }
+  return require;
+})();
+
+
 /**
  * @class AdapterManager
  * @classdesc The AdapterManager will load any adapters from the 'adapters'
@@ -311,7 +321,7 @@ class AdapterManager extends EventEmitter {
       if (adapterConfig.enabled) {
         console.log('Loading adapters for', adapterName,
                     'from', adapterConfig.path);
-        let adapterLoader = require(adapterConfig.path);
+        let adapterLoader = dynamicRequire(adapterConfig.path);
         adapterLoader(this);
       } else {
         console.log('Not loading adapters for', adapterName,
