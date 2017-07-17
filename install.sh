@@ -44,14 +44,14 @@ npm install .
 sudo cp systemd/system/mozilla-iot-gateway.service /etc/systemd/system
 sudo systemctl enable mozilla-iot-gateway.service
 
-sudo cp gateway-iptables.sh /etc/init.d
-sudo chmod +x /etc/init.d /etc/init.d/gateway-iptables.sh
+sudo cp etc/init.d/gateway-iptables.sh /etc/init.d
+sudo chmod +x /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
 
 # Create a self-signed cert. This is temporary (for development).
-if [ ! -f "certificate.pem" ]; then
-    ./tools/make-self-signed-cert.sh
-fi
+#if [ ! -f "certificate.pem" ]; then
+#    ./tools/make-self-signed-cert.sh
+#fi
 
 echo "###################################################################"
 echo "#"
