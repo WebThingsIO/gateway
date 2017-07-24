@@ -37,7 +37,7 @@ var TunnelSetup = {
                 // if there are no certs installed,
                 // we display the cert setup page to the user
                 response.sendFile('tunnel_setup.html',
-                    { root: path.join(__dirname, 'views') });
+                    { root: path.join(__dirname, '../src/views') });
             }
         }
     }
