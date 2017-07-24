@@ -11,6 +11,12 @@ const TEST_USER = {
   password: 'rhubarb'
 };
 
+const TEST_USER_DIFFERENT = {
+  email: 'test@evil.com',
+  name: 'Evil Test User',
+  password: 'shoebarb'
+};
+
 async function getJWT(path, server, user) {
   const res = await chai.request(server).
     post(path).
@@ -53,6 +59,7 @@ function headerAuth(jwt) {
 
 module.exports = {
   TEST_USER,
+  TEST_USER_DIFFERENT,
   createUser,
   loginUser,
   userInfo,
