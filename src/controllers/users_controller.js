@@ -59,12 +59,6 @@ UsersController.post('/', async (request, response) => {
     return;
   }
 
-  const hasEmail = await Users.getUser(body.email);
-  if (hasEmail) {
-    response.sendStatus(400);
-    return;
-  }
-
   // TODO: user facing errors...
   const hash = await Passwords.hash(body.password);
   const user = await Users.createUser(body.email, hash, body.name);
