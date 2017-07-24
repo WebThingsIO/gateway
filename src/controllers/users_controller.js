@@ -53,6 +53,12 @@ UsersController.post('/', async (request, response) => {
     return;
   }
 
+  const count = await Users.getCount();
+  if (count > 0) {
+    response.status(400).send('Gateway user already created');
+    return;
+  }
+
   const hasEmail = await Users.getUser(body.email);
   if (hasEmail) {
     response.sendStatus(400);
