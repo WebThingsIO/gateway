@@ -7,44 +7,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Things Gateway</title>
-    <link rel="manifest" href="app.webmanifest">
-    <link rel="icon" href="images/icon.png" type="image/png" />
-    <!-- App -->
-    <script type="text/javascript" src="js/api.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/app.css" />
-    <!-- Things Screen -->
-    <script type="text/javascript" src="js/things.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/things.css" />
-    <!-- Adapters Screen -->
-    <script type="text/javascript" src="js/adapters.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/adapters.css" />
-    <!-- Menu -->
-    <script type="text/javascript" src="js/menu.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/menu.css" />
-    <!-- Add Thing -->
-    <script type="text/javascript" src="js/add-thing.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/add-thing.css" />
-    <!-- Context Menu -->
-    <script type="text/javascript" src="js/context-menu.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/context-menu.css" />
-    <!-- Thing -->
-    <script type="text/javascript" src="js/thing.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/thing.css" />
-    <!-- On/Off Switch -->
-    <script type="text/javascript" src="js/on-off-switch.js"></script>
-    <!-- New Thing -->
-    <script type="text/javascript" src="js/new-thing.js"></script>
-    <!-- Adapter -->
-    <script type="text/javascript" src="js/adapter.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/adapter.css" />
-    <script type="text/javascript" src="js/check-user.js"></script>
-    <!-- Settings -->
-    <script type="text/javascript" src="js/settings.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/settings.css" />
+    <link rel="manifest" href="/app.webmanifest">
+    <link rel="icon" href="/images/icon.png" type="image/png" />
+
+    <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="/css/things.css" />
+    <link rel="stylesheet" type="text/css" href="/css/adapters.css" />
+    <link rel="stylesheet" type="text/css" href="/css/menu.css" />
+    <link rel="stylesheet" type="text/css" href="/css/add-thing.css" />
+    <link rel="stylesheet" type="text/css" href="/css/context-menu.css" />
+    <link rel="stylesheet" type="text/css" href="/css/thing.css" />
+    <link rel="stylesheet" type="text/css" href="/css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="/css/settings.css" />
+
+    <script type="text/javascript" src="/js/api.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" src="/js/lib/page.js"></script>
+    <script type="text/javascript" src="/js/router.js"></script>
+    <script type="text/javascript" src="/js/things.js"></script>
+    <script type="text/javascript" src="/js/adapters.js"></script>
+    <script type="text/javascript" src="/js/menu.js"></script>
+    <script type="text/javascript" src="/js/add-thing.js"></script>
+    <script type="text/javascript" src="/js/context-menu.js"></script>
+    <script type="text/javascript" src="/js/thing.js"></script>
+    <script type="text/javascript" src="/js/on-off-switch.js"></script>
+    <script type="text/javascript" src="/js/new-thing.js"></script>
+    <script type="text/javascript" src="/js/adapter.js"></script>
+    <script type="text/javascript" src="/js/check-user.js"></script>
+    <script type="text/javascript" src="/js/settings.js"></script>
+
   </head>
   <body>
-    <img id="wordmark" src="images/moziot-wordmark.png" />
+    <img id="wordmark" src="/images/moziot-wordmark.png" />
 
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
@@ -69,9 +63,9 @@
     <!-- Menu -->
     <nav id="main-menu" class="hidden">
       <ul>
-        <li><a id="things-menu-item" data-view="things" href="" class="selected">Things</a></li>
-        <li><a id="adapters-menu-item" data-view="adapters" href="">Adapters</a></li>
-        <li><a id="settings-menu-item" data-view="settings" href="">Settings</a></li>
+        <li><a id="things-menu-item" data-view="things" href="/things" class="selected">Things</a></li>
+        <li><a id="adapters-menu-item" data-view="adapters" href="/adapters">Adapters</a></li>
+        <li><a id="settings-menu-item" data-view="settings" href="/settings">Settings</a></li>
         <li>
           <form id="logout" class="log-out-form">
             <button type="submit" class="log-out-button">Log out</button>
@@ -88,7 +82,7 @@
       <button id="add-thing-back-button" class="back-button"></button>
       <div id="add-thing-content">
         <p id="add-thing-status">
-          <img class="spinner" src="images/loading.gif" />Scanning for new devices...
+          <img class="spinner" src="/images/loading.gif" />Scanning for new devices...
         </p>
         <div id="new-things"></div>
         <button id="add-thing-cancel-button">Done</button>

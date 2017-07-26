@@ -49,7 +49,8 @@ OnOffSwitch.prototype.updateStatus = function() {
   }
   var opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`
+      'Authorization': `Bearer ${window.API.jwt}`,
+      'Accept': 'application/json'
     }
   };
   fetch(this.onPropertyUrl, opts).then((function(response) {

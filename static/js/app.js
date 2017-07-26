@@ -10,7 +10,7 @@
 'use strict';
 
 /* globals ThingsScreen, AdaptersScreen,
-AddThingScreen, Menu, ContextMenu, SettingsScreen */
+AddThingScreen, Menu, ContextMenu, SettingsScreen, Router */
 
 var App = {
   /**
@@ -27,19 +27,32 @@ var App = {
    * Start Things Gateway app.
    */
   init: function() {
-    ThingsScreen.init();
-    AdaptersScreen.init();
     AddThingScreen.init();
     ContextMenu.init();
-    SettingsScreen.init();
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');
     this.views.settings = document.getElementById('settings-view');
     this.currentView = 'things';
     Menu.init();
+    Router.init();
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
+  },
+
+  showThings: function() {
+    ThingsScreen.init();
+    this.selectView('things');
+  },
+
+  showAdapters: function() {
+    AdaptersScreen.init();
+    this.selectView('adapters');
+  },
+
+  showSettings: function() {
+    SettingsScreen.init();
+    this.selectView('settings');
   },
 
   selectView: function(view) {

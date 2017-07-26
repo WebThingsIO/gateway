@@ -36,6 +36,7 @@ var ThingsScreen = {
     const opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json'
       }
     };
     // Fetch a list of things from the server

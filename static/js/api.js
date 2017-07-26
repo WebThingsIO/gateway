@@ -16,7 +16,12 @@
     },
 
     userCount() {
-      return fetch('/users/count').then((res) => {
+      const opts = {
+        headers: {
+          'Accept': 'application/json'
+        }
+      };
+      return fetch('/users/count', opts).then((res) => {
         return res.json();
       }).then((body) => {
         return body.count;
@@ -33,6 +38,7 @@
       const opts = {
         headers: {
           'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json'
         }
       };
 
@@ -45,7 +51,8 @@
       const opts = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           name, email, password
@@ -67,7 +74,8 @@
       const opts = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           email, password
@@ -92,7 +100,8 @@
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${window.API.jwt}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       }).then((res) => {
         if (res.status !== 200) {

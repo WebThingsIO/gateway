@@ -21,6 +21,7 @@ var Menu = {
     this.items = [];
     this.items.things = document.getElementById('things-menu-item');
     this.items.adapters = document.getElementById('adapters-menu-item');
+    this.items.settings = document.getElementById('settings-menu-item');
     this.currentItem = 'things';
   },
 
@@ -64,10 +65,8 @@ var Menu = {
     if (!view) {
       return;
     }
-    e.preventDefault();
     this.hide();
     this.selectItem(view);
-    App.selectView(view);
   },
 
   /**
