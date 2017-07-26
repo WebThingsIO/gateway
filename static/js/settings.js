@@ -17,7 +17,12 @@ var SettingsScreen = {
     * Initialise Settings Screen.
     */
     init: function() {
-     fetch('/settings/tunnelinfo')
+      const opts = {
+        headers: {
+          'Accept': 'application/json'
+        }
+      };
+     fetch('/settings/tunnelinfo', opts)
          .then(function (res) {
              return res.text();
          })

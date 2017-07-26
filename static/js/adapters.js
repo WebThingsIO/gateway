@@ -27,7 +27,8 @@ var AdaptersScreen = {
   showAdapters: function() {
     var opts = {
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json'
       }
     };
     // Fetch a list of adapters from the server
