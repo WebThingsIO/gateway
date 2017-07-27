@@ -23,3 +23,10 @@ exports.LOG_OUT_PATH = '/log-out';
 exports.STATIC_PATH = path.join(__dirname, '../static');
 exports.DEBUG_PATH = '/debug';
 exports.SETTINGS_PATH = '/settings';
+
+exports.SET_PROPERTY = 'setProperty';
+exports.REQUEST_ACTION = 'requestAction';
+exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
+exports.PROPERTY_STATUS = 'propertyStatus';
+exports.ACTION_STATUS = 'actionStatus';
+exports.EVENT = 'event';
