@@ -40,6 +40,22 @@ describe('actions/', function() {
   });
 
   /**
+   * Open a websocket
+   * @param {String} path
+   * @return {WebSocket}
+   */
+  async function openWebSocket(path) {
+    let addr = server.address();
+    let socketPath =
+      `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
+
+    const ws = new WebSocket(socketPath);
+    ensureClose(ws);
+    await e2p(ws, 'open');
+    return ws;
+  }
+
+  /**
    * Add an item (any interface /w close event and method) to the list of
    * resources that must be closed to cleanly exit the test.
    */
@@ -200,13 +216,7 @@ describe('actions/', function() {
   });
 
   it('should send multiple devices during pairing', async () => {
-    let addr = server.address();
-    let socketPath =
-      `wss://127.0.0.1:${addr.port}${Constants.NEW_THINGS_PATH}?jwt=${jwt}`;
-
-    const ws = new WebSocket(socketPath);
-    ensureClose(ws);
-    await e2p(ws, 'open');
+    let ws = await openWebSocket(Constants.NEW_THINGS_PATH);
 
     // We expect things test-4, and test-5 to show up eventually
     const [messages, res] = await Promise.all([
@@ -393,4 +403,36 @@ describe('actions/', function() {
 
     expect(!found).assert('should not find thing in /new_things output');
   });
+
+  it('should receive propertyStatus messages over websocket', async () => {
+    let ws = await openWebSocket(Constants.THINGS_PATH + '/' + TEST_THING.id);
+
+    let [res, messages] = await Promise.all([
+      (async () => {
+        await addDevice();
+        return await chai.request(server)
+          .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
+          .set(...headerAuth(jwt))
+          .send({on: true});
+      })(),
+      (async () => {
+        let messages = [];
+        let expectedMessages = 2;
+        for (let i = 0; i < expectedMessages; i++) {
+          const {data} = await e2p(ws, 'message');
+          const parsed = JSON.parse(data);
+          messages.push(parsed);
+        }
+        return messages;
+      })()
+    ]);
+    expect(res.status).toEqual(200);
+    expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
+    // NB: the property changes from undefined to false
+    expect(messages[0].data.on).toEqual(false);
+
+    expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
+    expect(messages[1].data.on).toEqual(true);
+  });
+
 });

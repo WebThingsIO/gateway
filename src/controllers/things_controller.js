@@ -10,11 +10,12 @@
 
 'use strict';
 
-var express = require('express');
-var Things = require('../models/things');
-var AdapterManager = require('../adapter-manager');
+const express = require('express');
+const AdapterManager = require('../adapter-manager');
+const Constants = require('../constants.js');
+const Things = require('../models/things');
 
-var ThingsController = express.Router();
+const ThingsController = express.Router();
 
 /**
  * Get a list of Things.
@@ -104,6 +105,24 @@ ThingsController.delete('/:thingId', function(request, response) {
   } catch(e) {
     response.status(500).send('Failed to remove thing ' + thingId);
   }
+});
+
+/**
+ * Connect to receive messages from a Thing
+ */
+ThingsController.ws('/:thingId/', function(websocket, request) {
+  let thingId = request.params.thingId;
+  AdapterManager.on('property-changed', function(property) {
+    if (property.device.id !== thingId) {
+      return;
+    }
+    websocket.send(JSON.stringify({
+      messageType: Constants.PROPERTY_STATUS,
+      data: {
+        [property.name]: property.value
+      }
+    }));
+  });
 });
 
 module.exports = ThingsController;
