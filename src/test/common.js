@@ -28,9 +28,8 @@ expect.extend({
   }
 });
 
-let {server, app} = require('../app');
+let {server, httpServer} = require('../app');
 global.server = server;
-global.app = app;
 
 var adapterManager = require('../adapter-manager');
 
@@ -53,9 +52,13 @@ afterEach(async () => {
 
 afterAll(async () => {
   server.close();
-  await e2p(server, 'close');
+  httpServer.close();
+  await Promise.all([
+    e2p(server, 'close'),
+    e2p(httpServer, 'close')
+  ])
 });
 
 module.exports = {
-  mockAdapter, server, chai,
+  mockAdapter, server, chai, httpServer,
 };

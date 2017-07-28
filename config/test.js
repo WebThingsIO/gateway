@@ -11,7 +11,8 @@
 module.exports = {
   cli: false,
   ports: {
-    https: 0 // 0 = find a free open port
+    https: 0, // 0 = find a free open port
+    http: 0,
   },
   adapters : {
     mock: {
