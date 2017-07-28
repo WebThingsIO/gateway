@@ -8,91 +8,89 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // Dependencies
-var https = require('https');
-var http = require('http');
-var fs = require('fs');
-var express = require('express');
-var expressWs = require('express-ws');
-var bodyParser = require('body-parser');
-var GetOpt = require('node-getopt');
-var config = require('config');
-var adapterManager = require('./adapter-manager');
-var db = require('./db');
-var Router = require('./router');
-var TunnelService = require('./ssltunnel');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const express = require('express');
+const expressWs = require('express-ws');
+const bodyParser = require('body-parser');
+const GetOpt = require('node-getopt');
+const config = require('config');
+const adapterManager = require('./adapter-manager');
+const db = require('./db');
+const Router = require('./router');
+const TunnelService = require('./ssltunnel');
 
+let httpServer = http.createServer();
+let httpApp = createGatewayApp(httpServer);
 
-// Create Express app, HTTP(S) server and WebSocket server
-var app = express();
-var server;
+let httpsServer = null;
+let httpsApp = null;
 
-// Defer calls to ws(), storing all context necessary to recreate them once
-// express-ws is initialized
-var deferredWsRoutes = [];
-function deferWs() {
-  deferredWsRoutes.push({
-    'this': this,
-    'arguments': arguments
+function startHttpsGateway() {
+  let port = config.get('ports.https');
+  const cliOptions = getOptions();
+  if (typeof cliOptions.port === 'number') {
+    port = cliOptions.port;
+  }
+
+  // HTTPS server configuration
+  const options = {
+    key: fs.readFileSync('privatekey.pem'),
+    cert: fs.readFileSync('certificate.pem')
+  };
+  if (fs.existsSync('chain.pem')){
+    options.ca = fs.readFileSync('chain.pem');
+  }
+  httpsServer = https.createServer(options);
+  httpsApp = createGatewayApp(httpsServer);
+  httpsServer.on('request', httpsApp);
+
+  // Start the HTTPS server
+  httpsServer.listen(port, function() {
+    adapterManager.loadAdapters();
+    console.log('Listening on port', httpsServer.address().port);
+  });
+
+  // Redirect HTTP to HTTPS
+  httpServer.on('request', createRedirectApp(httpsServer.address().port));
+  const httpPort = config.get('ports.http');
+  httpServer.listen(httpPort, function() {
+    console.log('Redirector listening on port', httpServer.address().port);
   });
 }
 
-app.ws = deferWs;
-express.Router.ws = deferWs;
+function startHttpGateway() {
+  httpServer.on('request', httpApp);
 
-function startHttpsService() {
-      // HTTP server configuration
-    var port = config.get('ports.https');
-    var options = {
-        key: fs.readFileSync('privatekey.pem'),
-        cert: fs.readFileSync('certificate.pem')
-    };
-    if (fs.existsSync('chain.pem')){
-        options.ca = fs.readFileSync('chain.pem');
-    }
-    server = https.createServer(options, app);
+  let port = config.get('ports.http');
+  const options = getOptions();
+  if (typeof options.port === 'number') {
+    port = options.port;
+  }
 
-    // Inject the real ws handler
-    delete app.ws;
-    delete express.Router.ws;
-    expressWs(app, server);
-    // Process the deferred routes
-    for (let defer of deferredWsRoutes) {
-      app.ws.apply(defer.this, defer.arguments);
-    }
-
-    // Start the HTTPS server
-    server.listen(port, function() {
-      adapterManager.loadAdapters();
-      console.log('Listening on port', server.address().port);
-    });
+  httpServer.listen(port, function() {
+    adapterManager.loadAdapters();
+    console.log('Listening on port', httpServer.address().port);
+  });
 }
 
-// if we have the certificates installed, we start https
-if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
-    startHttpsService();
-    if (TunnelService.hasTunnelToken()){
-      TunnelService.start();
-    }
-} else {
-    // otherwise we start plain http
-    var port = config.get('ports.http');
-    server = http.createServer(app);
+function stopHttpGateway() {
+  httpServer.removeListener('request', httpApp);
 }
 
-function configureOptions() {
+function getOptions() {
   if (!config.get('cli')) {
     return {
-      options: {
-        debug: false,
-        port: null,
-      }
+      debug: false,
+      port: null
     };
   }
 
   // Command line arguments
   const getopt = new GetOpt([
     ['d', 'debug', 'Enable debug features'],
-    ['p', 'port=PORT', 'Specify the server port to use (default ' + port + ')'],
+    ['p', 'port=PORT', 'Specify the server port to use'],
     ['h', 'help', 'Display help' ],
     ['v', 'verbose', 'Show verbose output'],
   ]);
@@ -116,28 +114,72 @@ function configureOptions() {
     options.port = parseInt(opt.options.port);
   }
 
-  return {
-    options
-  };
+  return options;
 }
 
-const opt = configureOptions();
-if (opt.options.port) {
-  port = opt.options.port;
+function createApp() {
+  const app = express();
+
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
+  app.use(bodyParser.json());   // Use bodyParser to access the body of requests
+
+  return app;
 }
 
-// Configure app
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-app.use(bodyParser.json());   // Use bodyParser to access the body of requests
+/**
+ * @param {http.Server|https.Server} server
+ * @return {express.Router}
+ */
+function createGatewayApp(server) {
+  const app = createApp();
+  const opt = getOptions();
 
-// Configure router with configured app and command line options.
-Router.configure(app, opt);
+  // Inject WebSocket support
+  expressWs(app, server);
+
+  // Configure router with configured app and command line options.
+  Router.configure(app, opt);
+  return app;
+}
+
+function createRedirectApp(port) {
+  const app = createApp();
+  // Redirect based on https://https.cio.gov/apis/
+  app.use(function(request, response) {
+    if (request.method !== 'GET') {
+      response.sendStatus(403);
+      return;
+    }
+    if (request.headers.authorization) {
+      response.sendStatus(403);
+      return;
+    }
+    let httpsUrl = 'https://' + request.hostname;
+    if (port !== 443) {
+      httpsUrl += ':' + port
+    }
+    httpsUrl += request.url;
+    response.redirect(301, httpsUrl);
+  });
+
+  return app;
+}
+
+// if we have the certificates installed, we start https
+if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
+  startHttpsGateway();
+  if (TunnelService.hasTunnelToken()) {
+    TunnelService.start();
+  }
+} else {
+  // otherwise we start plain http
+  startHttpGateway();
+}
 
 // Open the database
 db.open();
-
 
 if (config.get('cli')) {
   // Get some decent error messages for unhandled rejections. This is
@@ -156,21 +198,13 @@ if (config.get('cli')) {
   });
 }
 
-if (!server.listening) {
-  // Start the HTTPS server
-  server.listen(port, function() {
-    adapterManager.loadAdapters();
-    console.log('Listening on port', server.address().port);
-  });
-}
-
 // function to stop running server and start https
 TunnelService.switchToHttps = function(){
-  server.close();
-  startHttpsService();
+  stopHttpGateway();
+  startHttpsGateway();
 };
 
 module.exports = { // for testing
-  app: app,
-  server: server
+  httpServer: httpServer,
+  server: httpsServer
 };

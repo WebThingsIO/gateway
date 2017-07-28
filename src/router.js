@@ -23,7 +23,7 @@ var Router = {
   /**
    * Configure web app routes.
    */
-  configure: function(app, opt) {
+  configure: function(app, options) {
 
     const API_PREFIX = '/api'; // A pseudo path to use for API requests
     const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
@@ -54,7 +54,7 @@ var Router = {
       require('./controllers/login_controller'));
     app.use(API_PREFIX + Constants.SETTINGS_PATH,
       require('./controllers/tunnel_controller'));
-    if (opt.options.debug) {
+    if (options.debug) {
       app.use(API_PREFIX + Constants.DEBUG_PATH,
       require('./controllers/debug_controller'));
     }
