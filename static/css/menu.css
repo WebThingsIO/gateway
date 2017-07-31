@@ -41,15 +41,15 @@
   background-color: rgba(0, 0, 0, 0.12);
 }
 
-#main-menu a[data-view='things'] {
+#main-menu #things-menu-item {
   background-image: url('../images/things-icon.png');
 }
 
-#main-menu a[data-view='adapters'] {
+#main-menu #adapters-menu-item {
   background-image: url('../images/adapters-icon.png');
 }
 
-#main-menu a[data-view='settings'] {
+#main-menu #settings-menu-item {
   background-image: url('../images/settings-icon.png');
 }
 

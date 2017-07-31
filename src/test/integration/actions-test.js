@@ -24,6 +24,7 @@ describe('actions/', function() {
   it('GET with no actions', async () => {
     const res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -34,6 +35,7 @@ describe('actions/', function() {
     const err = await pFinal(chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send());
     expect(err.response.status).toEqual(400);
   });
@@ -45,6 +47,7 @@ describe('actions/', function() {
     const err = await pFinal(chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send(descr));
     expect(err.response.status).toEqual(400);
   });
@@ -57,12 +60,14 @@ describe('actions/', function() {
     const pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send(descr);
 
     expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -74,6 +79,7 @@ describe('actions/', function() {
     const actionId = res.body[0].id;
     res = await chai.request(server)
       .get(Constants.ACTIONS_PATH + '/' + actionId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('name');
@@ -85,6 +91,7 @@ describe('actions/', function() {
     const actionId = 'foobarmissing';
     const err = await pFinal(chai.request(server)
       .get(Constants.ACTIONS_PATH + '/' + actionId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
   });
@@ -96,11 +103,13 @@ describe('actions/', function() {
 
     await chai.request(server)
       .post(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(descr);
 
     let res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -109,11 +118,13 @@ describe('actions/', function() {
 
     res = await chai.request(server)
       .delete(Constants.ACTIONS_PATH + '/' + actionId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(204);
 
     res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(0);
@@ -123,6 +134,7 @@ describe('actions/', function() {
     let actionId = 555;
     const err = await pFinal(chai.request(server)
       .delete(Constants.ACTIONS_PATH + '/' + actionId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
   });
@@ -136,11 +148,13 @@ describe('actions/', function() {
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send({name: 'unpair', parameters: {id: thingId}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
         .get(Constants.ACTIONS_PATH)
+        .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body[0]).toHaveProperty('name');

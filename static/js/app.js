@@ -40,8 +40,8 @@ var App = {
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
   },
 
-  showThings: function() {
-    ThingsScreen.init();
+  showThings: function(context) {
+    ThingsScreen.init(context.params.thingId || null);
     this.selectView('things');
   },
 
@@ -62,6 +62,7 @@ var App = {
     }
     this.views[this.currentView].classList.remove('selected');
     this.views[view].classList.add('selected');
+    Menu.selectItem(view);
     this.currentView = view;
   }
 };

@@ -20,6 +20,7 @@ const TEST_USER_DIFFERENT = {
 async function getJWT(path, server, user) {
   const res = await chai.request(server).
     post(path).
+    set('Accept', 'application/json').
     send(user);
   expect(res.status).toEqual(200);
   expect(typeof res.body.jwt).toBe('string');
@@ -38,6 +39,7 @@ async function userInfo(server, jwt) {
   const res = await chai.request(server).
     get(Constants.USERS_PATH + '/info').
     set(...headerAuth(jwt)).
+    set('Accept', 'application/json').
     send();
   expect(res.status).toEqual(200);
   expect(typeof res.body).toBe('object');
@@ -48,6 +50,7 @@ async function logoutUser(server, jwt) {
   const res = await chai.request(server).
     post(Constants.LOG_OUT_PATH).
     set(...headerAuth(jwt)).
+    set('Accept', 'application/json').
     send();
   expect(res.status).toEqual(200);
   return res;

@@ -147,6 +147,27 @@ var Database = {
   },
 
   /**
+   * Get a thing by its id.
+   *
+   * @param {string} id ID of the Thing to get.
+   */
+  getThing: function(id) {
+    return new Promise((function(resolve, reject) {
+      var db = this.db;
+      db.get('SELECT id, description FROM things WHERE id = ?', id,
+        function(error, row) {
+        if (error || row === undefined) {
+          reject(error);
+        } else {
+          var thing = JSON.parse(row.description);
+          thing.id = row.id;
+          resolve(thing);
+        }
+      });
+    }).bind(this));
+  },
+
+  /**
    * Add a new Thing to the Database.
    *
    * @param String id The ID to give the new Thing.
