@@ -126,7 +126,8 @@ ThingsController.delete('/:thingId', function(request, response) {
  */
 ThingsController.ws('/:thingId/', function(websocket, request) {
   let thingId = request.params.thingId;
-  AdapterManager.on('property-changed', function(property) {
+
+  function onPropertyChanged(property) {
     if (property.device.id !== thingId) {
       return;
     }
@@ -136,6 +137,12 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
         [property.name]: property.value
       }
     }));
+  }
+
+  AdapterManager.on('property-changed', onPropertyChanged);
+
+  websocket.on('close', function() {
+    AdapterManager.removeListener('property-changed', onPropertyChanged);
   });
 });
 
