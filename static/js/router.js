@@ -12,9 +12,9 @@
 // eslint-disable-next-line no-unused-vars
 var Router = {
   init: function() {
-
     page('/', '/things');
     page('/things', App.showThings.bind(App));
+    page('/things/:thingId', App.showThings.bind(App));
     page('/adapters', App.showAdapters.bind(App));
     page('/settings', App.showSettings.bind(App));
     page();

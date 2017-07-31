@@ -48,6 +48,20 @@ ThingsController.post('/', function (request, response) {
 });
 
 /**
+ * Get a Thing.
+ */
+ ThingsController.get('/:thingId', function(request, response) {
+   var id = request.params.thingId;
+   Things.getThingDescription(id).then(function(thing) {
+     response.status(200).json(thing);
+   }).catch(function(error) {
+     console.error('Error getting thing description for thing with id ' + id);
+     console.error('Error: ' + error);
+     response.status(404).send(error);
+   });
+ });
+
+/**
  * Get a property of a Thing.
  */
 ThingsController.get('/:thingId/properties/:propertyName',

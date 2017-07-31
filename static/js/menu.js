@@ -7,8 +7,6 @@
  */
 'use strict';
 
-/* globals App */
-
 // eslint-disable-next-line no-unused-vars
 var Menu = {
    /**
@@ -61,12 +59,7 @@ var Menu = {
     if(e.target.tagName != 'A') {
       return;
     }
-    let view = e.target.dataset.view;
-    if (!view) {
-      return;
-    }
     this.hide();
-    this.selectItem(view);
   },
 
   /**

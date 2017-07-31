@@ -25,7 +25,7 @@ const TEST_THING = {
   }
 };
 
-describe('actions/', function() {
+describe('things/', function() {
   let jwt, toClose = [];
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
@@ -67,6 +67,7 @@ describe('actions/', function() {
     const {id} = desc;
     const res = await chai.request(server)
       .post(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(TEST_THING);
     mockAdapter().addDevice(id, TEST_THING);
@@ -84,6 +85,7 @@ describe('actions/', function() {
   it('GET with no things', async () => {
     const res = await chai.request(server)
       .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -95,6 +97,7 @@ describe('actions/', function() {
       await chai.request(server)
         .post(Constants.THINGS_PATH)
         .set(...headerAuth(jwt))
+        .set('Accept', 'application/json')
         .send();
       throw new Error('Should have failed to create new thing');
     } catch(err) {
@@ -112,6 +115,7 @@ describe('actions/', function() {
     await addDevice();
     const res = await chai.request(server)
       .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
@@ -121,10 +125,33 @@ describe('actions/', function() {
     expect(res.body[0].href).toEqual(Constants.THINGS_PATH + '/test-1');
   });
 
+  it('GET a thing', async () => {
+    await addDevice();
+    const res = await chai.request(server)
+      .get(Constants.THINGS_PATH + '/test-1')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual('test-1');
+  });
+
+  it('fail to GET a non-existent thing', async () => {
+    await addDevice();
+    const err = await pFinal(chai.request(server)
+      .get(Constants.THINGS_PATH + '/test-2')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+
+    expect(err.response.status).toEqual(404);
+  });
+
   it('GET a property of a thing', async () => {
     await addDevice();
     const res = await chai.request(server)
       .get(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
@@ -135,6 +162,7 @@ describe('actions/', function() {
   it('fail to GET a non-existant property of a thing', async () => {
     const err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH + '/test-1/properties/xyz')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
 
     expect(err.response.status).toEqual(500);
@@ -143,6 +171,7 @@ describe('actions/', function() {
   it('fail to GET a property of a non-existent thing', async () => {
     const err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH + '/test-1a/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(500);
   });
@@ -151,6 +180,7 @@ describe('actions/', function() {
     await addDevice();
     const err = await pFinal(chai.request(server)
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({}));
     expect(err.response.status).toEqual(400);
@@ -159,6 +189,7 @@ describe('actions/', function() {
   it('fail to set a property of a thing', async () => {
     const err = await pFinal(chai.request(server)
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({abc: true}));
     expect(err.response.status).toEqual(400);
@@ -168,6 +199,7 @@ describe('actions/', function() {
     await addDevice();
     const on = await chai.request(server)
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({on: true});
 
@@ -179,6 +211,7 @@ describe('actions/', function() {
     // Flip it back to off...
     const off = await chai.request(server)
       .put(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({on: false});
 
@@ -191,6 +224,7 @@ describe('actions/', function() {
     await addDevice();
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
 
     expect(res.status).toEqual(200);
@@ -204,6 +238,7 @@ describe('actions/', function() {
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
@@ -234,6 +269,7 @@ describe('actions/', function() {
       (async () => {
         const res = await chai.request(server)
           .post(Constants.ACTIONS_PATH)
+          .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
           .send({name: 'pair'});
 
@@ -255,11 +291,13 @@ describe('actions/', function() {
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send({name: 'pair'});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -273,12 +311,14 @@ describe('actions/', function() {
 
     res = await chai.request(server)
       .post(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(descr);
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -293,6 +333,7 @@ describe('actions/', function() {
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -313,16 +354,19 @@ describe('actions/', function() {
     let pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
       .send({name: 'pair'});
     expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
       .delete(Constants.THINGS_PATH + '/' + thingId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(204);
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -336,6 +380,7 @@ describe('actions/', function() {
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -358,6 +403,7 @@ describe('actions/', function() {
     // send pair action
     let pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({name: 'pair'});
     expect(pair.status).toEqual(201);
@@ -365,6 +411,7 @@ describe('actions/', function() {
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -385,12 +432,14 @@ describe('actions/', function() {
     mockAdapter().unpairDevice(thingId);
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({name: 'unpair', parameters: {id: thingId}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -412,6 +461,7 @@ describe('actions/', function() {
         await addDevice();
         return await chai.request(server)
           .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
+          .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
           .send({on: true});
       })(),

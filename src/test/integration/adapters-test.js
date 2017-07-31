@@ -12,7 +12,7 @@ const {
 
 const Constants = require('../../constants');
 
-describe('adapters', function() {
+describe('adapters/', function() {
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
@@ -21,6 +21,7 @@ describe('adapters', function() {
   it('gets all adapters', async () => {
     const res = await chai.request(server)
       .get(Constants.ADAPTERS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -36,6 +37,7 @@ describe('adapters', function() {
 
     const res = await chai.request(server)
       .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('id');
@@ -50,6 +52,7 @@ describe('adapters', function() {
     try {
       await chai.request(server)
         .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)
+        .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
       throw new Error('request should fail');
     } catch(err) {

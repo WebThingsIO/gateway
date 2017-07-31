@@ -16,14 +16,21 @@
 var ThingsScreen = {
 
   NO_THINGS_MESSAGE: 'No devices.',
+  THING_NOT_FOUND_MESSAGE: 'Thing not found.',
 
   /**
    * Initialise Things Screen.
+   *
+   * @param {String} thingId Optional thing ID to show, otherwise show all.
    */
-  init: function() {
+  init: function(thingId) {
     this.thingsElement = document.getElementById('things');
     this.addButton = document.getElementById('add-button');
-    this.showThings();
+    if (thingId) {
+      this.showThing(thingId);
+    } else {
+      this.showThings();
+    }
     window.addEventListener('_thingchange', this.showThings.bind(this));
     this.addButton.addEventListener('click',
       AddThingScreen.show.bind(AddThingScreen));
@@ -62,6 +69,46 @@ var ThingsScreen = {
           }
         });
       }
+    }).bind(this));
+  },
+
+  /**
+   * Display a single Thing.
+   *
+   * @param {String} id The ID of the Thing to show.
+   */
+  showThing: function(id) {
+    const opts = {
+      headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json'
+      }
+    };
+    // Fetch a thing from the server
+    fetch('/things/' + id, opts).then((function(response) {
+      if (response.status == 404) {
+        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+        return;
+      }
+      response.json().then((function(description) {
+        if (!description) {
+          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+          return;
+        }
+        this.thingsElement.innerHTML = '';
+        switch(description.type) {
+          case 'onOffSwitch':
+            console.log('rendering new on/off switch');
+            // eslint-disable-next-line no-unused-vars
+            var newOnOffSwitch = new OnOffSwitch(description);
+            break;
+          default:
+            console.log('rendering new thing');
+            // eslint-disable-next-line no-unused-vars
+            var newThing = new Thing(description);
+            break;
+        }
+      }).bind(this));
     }).bind(this));
   }
 };
