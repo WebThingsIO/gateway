@@ -58,5 +58,6 @@ module.exports = {
     domain: 'mozilla-iot.org',
     pagekite_cmd: './pagekite.py',
     port: 443
-  }
+  },
+  gateway: 'https://localhost:4443'
 };

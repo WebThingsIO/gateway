@@ -108,6 +108,8 @@ var Database = {
      * with our version of node-sqlite / sqlite.
      *
      * https://github.com/mapbox/node-sqlite3/pull/660
+     *
+     * Instead, the INTEGER user is either the id of the user or -1 if NULL
      */
     var jwtTableSQL = 'CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
       'id INTEGER PRIMARY KEY ASC,' +
