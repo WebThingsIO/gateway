@@ -11,10 +11,14 @@ const {
 } = require('../user');
 
 const pFinal = require('../promise-final');
-const e2p = require('event-to-promise');
+
+const {
+  openWebSocket,
+  readWebSocket,
+  closeWebSocket
+} = require('../websocket-util');
 
 var Constants = require('../../constants');
-const WebSocket = require('ws');
 
 const TEST_THING = {
   id: 'test-1',
@@ -26,42 +30,10 @@ const TEST_THING = {
 };
 
 describe('things/', function() {
-  let jwt, toClose = [];
+  let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
-
-  // Ensure these objects get properly closed after tests.
-  afterAll(async () => {
-    await Promise.all(toClose.map(async (item) => {
-      item.close();
-      await e2p(item, 'close');
-    }));
-  });
-
-  /**
-   * Open a websocket
-   * @param {String} path
-   * @return {WebSocket}
-   */
-  async function openWebSocket(path) {
-    let addr = server.address();
-    let socketPath =
-      `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
-
-    const ws = new WebSocket(socketPath);
-    ensureClose(ws);
-    await e2p(ws, 'open');
-    return ws;
-  }
-
-  /**
-   * Add an item (any interface /w close event and method) to the list of
-   * resources that must be closed to cleanly exit the test.
-   */
-  function ensureClose(item) {
-    toClose.push(item);
-  }
 
   async function addDevice(desc = TEST_THING) {
     const {id} = desc;
@@ -251,21 +223,11 @@ describe('things/', function() {
   });
 
   it('should send multiple devices during pairing', async () => {
-    let ws = await openWebSocket(Constants.NEW_THINGS_PATH);
+    let ws = await openWebSocket(Constants.NEW_THINGS_PATH, jwt);
 
     // We expect things test-4, and test-5 to show up eventually
     const [messages, res] = await Promise.all([
-      (async () => {
-        let messages = [];
-        let expectedMessages = 2;
-        while ((expectedMessages--) > 0) {
-          const {data} = await e2p(ws, 'message');
-          const parsed = JSON.parse(data);
-          expect(typeof parsed.id).toBe('string');
-          messages.push(parsed.id);
-        }
-        return messages;
-      })(),
+      readWebSocket(ws, 2),
       (async () => {
         const res = await chai.request(server)
           .post(Constants.ACTIONS_PATH)
@@ -279,8 +241,14 @@ describe('things/', function() {
       })(),
     ]);
 
-    expect(messages.sort()).toEqual(['test-4', 'test-5']);
+    let parsedIds = messages.map(msg => {
+      expect(typeof msg.id).toBe('string');
+      return msg.id;
+    });
+    expect(parsedIds.sort()).toEqual(['test-4', 'test-5']);
     expect(res.status).toEqual(201);
+
+    await closeWebSocket(ws);
   });
 
   it('should add a device during pairing then create a thing', async () => {
@@ -454,7 +422,8 @@ describe('things/', function() {
   });
 
   it('should receive propertyStatus messages over websocket', async () => {
-    let ws = await openWebSocket(Constants.THINGS_PATH + '/' + TEST_THING.id);
+    let ws = await openWebSocket(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
 
     let [res, messages] = await Promise.all([
       (async () => {
@@ -465,16 +434,7 @@ describe('things/', function() {
           .set(...headerAuth(jwt))
           .send({on: true});
       })(),
-      (async () => {
-        let messages = [];
-        let expectedMessages = 2;
-        for (let i = 0; i < expectedMessages; i++) {
-          const {data} = await e2p(ws, 'message');
-          const parsed = JSON.parse(data);
-          messages.push(parsed);
-        }
-        return messages;
-      })()
+      readWebSocket(ws, 2)
     ]);
     expect(res.status).toEqual(200);
     expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
@@ -483,6 +443,8 @@ describe('things/', function() {
 
     expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
     expect(messages[1].data.on).toEqual(true);
+
+    await closeWebSocket(ws);
   });
 
 });
