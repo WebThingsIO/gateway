@@ -144,6 +144,39 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   websocket.on('close', function() {
     AdapterManager.removeListener('property-changed', onPropertyChanged);
   });
+
+  websocket.on('message', function(requestText) {
+    let request = JSON.parse(requestText);
+    let device = AdapterManager.getDevice(thingId);
+    if (!device) {
+      websocket.send(JSON.stringify({
+        messageType: Constants.ERROR,
+        data: {
+          status: '400 Bad Request',
+          message: `Thing ${thingId} not found`,
+          request: request
+        }
+      }));
+      return;
+    }
+    if (request.messageType === Constants.SET_PROPERTY) {
+      let setRequests = Object.keys(request.data).map(property => {
+        let value = request.data[property];
+        return device.setProperty(property, value);
+      });
+      Promise.all(setRequests).catch(err => {
+        // If any set fails, send an error
+        websocket.send(JSON.stringify({
+          messageType: Constants.ERROR,
+          data: {
+            status: '400 Bad Request',
+            message: err,
+            request: request
+          }
+        }));
+      });
+    }
+  });
 });
 
 module.exports = ThingsController;
