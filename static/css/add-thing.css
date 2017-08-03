@@ -77,3 +77,7 @@
 .new-thing.on-off-switch .new-thing-icon {
   background-image: url('../images/on-off-switch.png');
 }
+
+.new-thing.binary-sensor .new-thing-icon {
+  background-image: url('../images/binary-sensor.png');
+}
