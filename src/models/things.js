@@ -125,6 +125,10 @@ var Things = {
    */
    registerWebsocket: function(websocket) {
      this.websockets.push(websocket);
+     websocket.on('close', () => {
+       let index = this.websockets.indexOf(websocket);
+       this.websockets.splice(index, 1);
+     });
    },
 
    /**
