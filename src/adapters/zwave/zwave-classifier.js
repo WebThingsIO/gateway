@@ -17,10 +17,12 @@ var ZWaveProperty = require('./zwave-property');
 
 const COMMAND_CLASS_SWITCH_BINARY = 37;     // 0x25
 //const COMMAND_CLASS_SWITCH_MULTILEVEL = 38; // 0x26
+const COMMAND_CLASS_SENSOR_BINARY  = 48; // 0x30
 //const COMMAND_CLASS_SWITCH_ALL = 39;        // 0x27
 //const COMMAND_CLASS_CONFIGURATION = 112;    // 0x98
 
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
+const THING_TYPE_BINARY_SENSOR = 'binarySensor';
 
 class ZWaveClassifier {
 
@@ -35,6 +37,9 @@ class ZWaveClassifier {
                 // This looks like an on/off switch
                 this.initOnOffSwitch(node, valueId);
                 return;
+            } else if (value.class_id == COMMAND_CLASS_SENSOR_BINARY) {
+                this.initBinarySensor(node, valueId);
+                return;
             }
         }
     }
@@ -42,6 +47,12 @@ class ZWaveClassifier {
     initOnOffSwitch(node, valueId) {
         node.type = THING_TYPE_ON_OFF_SWITCH;
         node.properties.set('on',
+                            new ZWaveProperty(node, 'on', 'boolean', valueId));
+    }
+
+    initBinarySensor(node, valueId) {
+        node.type = THING_TYPE_BINARY_SENSOR;
+        node.properties.set('triggered',
                             new ZWaveProperty(node, 'on', 'boolean', valueId));
     }
 }

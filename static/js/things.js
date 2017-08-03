@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals AddThingScreen, Thing, OnOffSwitch */
+/* globals AddThingScreen, Thing, OnOffSwitch, BinarySensor */
 
 // eslint-disable-next-line
 var ThingsScreen = {
@@ -60,6 +60,11 @@ var ThingsScreen = {
               console.log('rendering new on/off switch');
               // eslint-disable-next-line no-unused-vars
               var newOnOffSwitch = new OnOffSwitch(description);
+              break;
+            case 'binarySensor':
+              console.log('rendering new binary sensor');
+              // eslint-disable-next-line no-unused-vars
+              var newBinarySensor = new BinarySensor(description);
               break;
             default:
               console.log('rendering new thing');
