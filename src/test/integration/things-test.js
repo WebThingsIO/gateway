@@ -13,9 +13,10 @@ const {
 const pFinal = require('../promise-final');
 
 const {
-  openWebSocket,
-  readWebSocket,
-  closeWebSocket
+  webSocketOpen,
+  webSocketRead,
+  webSocketSend,
+  webSocketClose
 } = require('../websocket-util');
 
 var Constants = require('../../constants');
@@ -223,11 +224,11 @@ describe('things/', function() {
   });
 
   it('should send multiple devices during pairing', async () => {
-    let ws = await openWebSocket(Constants.NEW_THINGS_PATH, jwt);
+    let ws = await webSocketOpen(Constants.NEW_THINGS_PATH, jwt);
 
     // We expect things test-4, and test-5 to show up eventually
     const [messages, res] = await Promise.all([
-      readWebSocket(ws, 2),
+      webSocketRead(ws, 2),
       (async () => {
         const res = await chai.request(server)
           .post(Constants.ACTIONS_PATH)
@@ -248,7 +249,7 @@ describe('things/', function() {
     expect(parsedIds.sort()).toEqual(['test-4', 'test-5']);
     expect(res.status).toEqual(201);
 
-    await closeWebSocket(ws);
+    await webSocketClose(ws);
   });
 
   it('should add a device during pairing then create a thing', async () => {
@@ -422,7 +423,7 @@ describe('things/', function() {
   });
 
   it('should receive propertyStatus messages over websocket', async () => {
-    let ws = await openWebSocket(Constants.THINGS_PATH + '/' + TEST_THING.id,
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
 
     let [res, messages] = await Promise.all([
@@ -434,7 +435,7 @@ describe('things/', function() {
           .set(...headerAuth(jwt))
           .send({on: true});
       })(),
-      readWebSocket(ws, 2)
+      webSocketRead(ws, 2)
     ]);
     expect(res.status).toEqual(200);
     expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
@@ -444,7 +445,7 @@ describe('things/', function() {
     expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
     expect(messages[1].data.on).toEqual(true);
 
-    await closeWebSocket(ws);
+    await webSocketClose(ws);
   });
 
 });

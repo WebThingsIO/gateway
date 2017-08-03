@@ -9,7 +9,7 @@ const {server} = require('./common');
  * @param {String} jwt
  * @return {WebSocket}
  */
-async function openWebSocket(path, jwt) {
+async function webSocketOpen(path, jwt) {
   let addr = server.address();
   let socketPath =
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
@@ -25,7 +25,7 @@ async function openWebSocket(path, jwt) {
  * @param {number} expectedMessages
  * @return {Array<Object>} read messages
  */
-async function readWebSocket(ws, expectedMessages) {
+async function webSocketRead(ws, expectedMessages) {
   let messages = [];
   for (let i = 0; i < expectedMessages; i++) {
     const {data} = await e2p(ws, 'message');
@@ -36,15 +36,33 @@ async function readWebSocket(ws, expectedMessages) {
 }
 
 /**
+ * Send a JSON message over a websocket
+ * @param {WebSocket} ws
+ * @param {Object|string} message
+ */
+async function webSocketSend(ws, message) {
+  if (typeof message !== 'string') {
+    message = JSON.stringify(message);
+  }
+
+  await new Promise((resolve) => {
+    ws.send(message, function() {
+      resolve();
+    });
+  });
+}
+
+/**
  * Close a WebSocket and wait for it to be closed
  */
-async function closeWebSocket(ws) {
+async function webSocketClose(ws) {
   ws.close();
   await e2p(ws, 'close');
 }
 
 module.exports = {
-  openWebSocket,
-  readWebSocket,
-  closeWebSocket
+  webSocketOpen,
+  webSocketRead,
+  webSocketSend,
+  webSocketClose
 };
