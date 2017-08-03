@@ -43,7 +43,7 @@ describe('things/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(TEST_THING);
-    mockAdapter().addDevice(id, TEST_THING);
+    await mockAdapter().addDevice(id, TEST_THING);
     return res;
   }
 
@@ -448,4 +448,53 @@ describe('things/', function() {
     await webSocketClose(ws);
   });
 
+  it('should set a property using setProperty over websocket', async () => {
+    await addDevice();
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+    await webSocketSend(ws, {
+      messageType: Constants.SET_PROPERTY,
+      data: {
+        on: true
+      }
+    });
+
+    const on = await chai.request(server)
+      .get(Constants.THINGS_PATH + '/test-1/properties/on')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(on.status).toEqual(200);
+    expect(on.body).toHaveProperty('on');
+    expect(on.body.on).toEqual(true);
+
+    await webSocketClose(ws);
+  });
+
+  it('should fail to set a nonexistent property using setProperty', async () =>
+  {
+    await addDevice();
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+    let request = {
+      messageType: Constants.SET_PROPERTY,
+      data: {
+        rutabaga: true
+      }
+    };
+    let [sendError, messages] = await Promise.all([
+      webSocketSend(ws, request),
+      webSocketRead(ws, 1)
+    ]);
+
+    expect(sendError).toBeFalsy();
+
+    let error = messages[0];
+    expect(error.messageType).toBe(Constants.ERROR);
+    expect(error.data.request).toMatchObject(request);
+
+    await webSocketClose(ws);
+  });
 });
