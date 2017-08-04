@@ -518,4 +518,77 @@ describe('things/', function() {
 
     await webSocketClose(ws);
   });
+
+  it('should fail to set a nonexistent thing\'s property using setProperty',
+  async () => {
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/nonexistent-thing',
+      jwt);
+
+    let request = {
+      messageType: Constants.SET_PROPERTY,
+      data: {
+        on: true
+      }
+    };
+    let [sendError, messages] = await Promise.all([
+      webSocketSend(ws, request),
+      webSocketRead(ws, 1)
+    ]);
+
+    expect(sendError).toBeFalsy();
+
+    let error = messages[0];
+    expect(error.messageType).toBe(Constants.ERROR);
+    expect(error.data.request).toMatchObject(request);
+
+    await webSocketClose(ws);
+  });
+
+  it('should only receive propertyStatus messages from the connected thing',
+  async () => {
+    await addDevice();
+    let otherThingId = 'test-7';
+    await addDevice(Object.assign({}, TEST_THING, {
+      id: otherThingId,
+      name: otherThingId
+    }));
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+
+    // PUT test-7 on true, then test-1 on true, then test-1 on false. If we
+    // receive an update that on is true twice, we know that the WS received
+    // both test-7 and test-1's statuses. If we receive true then false, the WS
+    // correctly received both of test-1's statuses.
+    let [res, messages] = await Promise.all([
+      chai.request(server)
+        .put(Constants.THINGS_PATH + '/' + otherThingId + '/properties/on')
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt))
+        .send({on: true}).then(() => {
+          return chai.request(server)
+            .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
+            .set('Accept', 'application/json')
+            .set(...headerAuth(jwt))
+            .send({on: true});
+        }).then(() => {
+          return chai.request(server)
+            .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
+            .set('Accept', 'application/json')
+            .set(...headerAuth(jwt))
+            .send({on: false});
+        }),
+      webSocketRead(ws, 2)
+    ]);
+
+    expect(res.status).toEqual(200);
+
+    expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
+    expect(messages[0].data.on).toEqual(true);
+
+    expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
+    expect(messages[1].data.on).toEqual(false);
+
+    await webSocketClose(ws);
+  });
 });
