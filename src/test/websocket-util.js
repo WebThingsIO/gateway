@@ -16,6 +16,12 @@ async function webSocketOpen(path, jwt) {
 
   const ws = new WebSocket(socketPath);
   await e2p(ws, 'open');
+
+  // Allow the app to handle the websocket open
+  await new Promise(res => {
+    setTimeout(res, 0);
+  });
+
   return ws;
 }
 
