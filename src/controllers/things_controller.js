@@ -155,7 +155,6 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
         data: {
           status: '400 Bad Request',
           message: 'Parsing request failed',
-          request: request
         }
       }));
       return;

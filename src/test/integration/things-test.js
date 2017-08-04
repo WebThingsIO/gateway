@@ -497,4 +497,25 @@ describe('things/', function() {
 
     await webSocketClose(ws);
   });
+
+  it('should receive an error from sending a malformed message', async () =>
+  {
+    await addDevice();
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+    let request = 'good morning friend I am not JSON';
+
+    let [sendError, messages] = await Promise.all([
+      webSocketSend(ws, request),
+      webSocketRead(ws, 1)
+    ]);
+
+    expect(sendError).toBeFalsy();
+
+    let error = messages[0];
+    expect(error.messageType).toBe(Constants.ERROR);
+
+    await webSocketClose(ws);
+  });
 });
