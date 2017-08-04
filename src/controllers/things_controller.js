@@ -146,7 +146,21 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   });
 
   websocket.on('message', function(requestText) {
-    let request = JSON.parse(requestText);
+    let request = null;
+    try {
+      request = JSON.parse(requestText);
+    } catch(e) {
+      websocket.send(JSON.stringify({
+        messageType: Constants.ERROR,
+        data: {
+          status: '400 Bad Request',
+          message: 'Parsing request failed',
+          request: request
+        }
+      }));
+      return;
+    }
+
     let device = AdapterManager.getDevice(thingId);
     if (!device) {
       websocket.send(JSON.stringify({
