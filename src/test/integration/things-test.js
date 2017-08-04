@@ -42,8 +42,8 @@ describe('things/', function() {
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send(TEST_THING);
-    await mockAdapter().addDevice(id, TEST_THING);
+      .send(desc);
+    await mockAdapter().addDevice(id, desc);
     return res;
   }
 
