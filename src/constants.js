@@ -30,3 +30,4 @@ exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
 exports.PROPERTY_STATUS = 'propertyStatus';
 exports.ACTION_STATUS = 'actionStatus';
 exports.EVENT = 'event';
+exports.ERROR = 'error';
