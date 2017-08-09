@@ -2,11 +2,92 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#settings {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #fff;
+#settings-menu {
   position: relative;
   top: 50%;
+  transform: translate(0, -50%);
+  transition: transform 0.25s ease;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#settings-menu.hidden {
+  transform: translate(-100%, -50%);
+}
+
+#settings-menu ul {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.settings-item {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  background-color: #48779a;
+  border-radius: 0.5rem;
+  background-image: url('../images/right-arrow.png');
+  background-size: auto 2rem;
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+
+.settings-item a {
+  display: block;
+  margin: 1rem 0;
+  padding: 2rem 2rem 2rem 5.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.8rem;
+  background-position: 1rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  outline: 0;
+}
+
+#domain-settings-link {
+  background-image: url('../images/domain-icon.png');
+}
+
+#settings-back-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  outline: 0;
+}
+
+#settings-back-button.hidden {
+  display: none;
+}
+
+.settings-section {
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s ease;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.settings-section.hidden {
+  transform: translateX(100%);
+}
+
+#current-domain {
+  position: relative;
+  color: #fff;
+  background-color: #48779a;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  color: #fff;
+  text-align: center;
+  top: 50%;
   transform: translateY(-50%);
+  font-size: 1.4rem;
+  max-width: 60rem;
+  margin: 0 auto;
 }

@@ -44,7 +44,7 @@
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
 
-      <div id="things">No devices.</div>
+      <div id="things"></div>
       <button id="add-button" />
     </section>
 
@@ -55,10 +55,15 @@
 
     <!-- Settings View -->
     <section data-view="settings" id="settings-view" class="hidden">
-      <div id="settings">
-        <div id="lblsubdomain"></div>
-        <div id="tbxsubdomain"></div>
-      </div>
+      <nav id="settings-menu" class="hidden">
+        <ul>
+          <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
+        </ul>
+      </nav>
+      <section id="domain-settings" class="hidden settings-section">
+        <div id="current-domain"></div>
+      </section>
+      <a href="/settings" id="settings-back-button" class="hidden back-button"></button>
     </section>
 
     <!-- Menu -->

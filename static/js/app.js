@@ -29,29 +29,32 @@ var App = {
   init: function() {
     AddThingScreen.init();
     ContextMenu.init();
+    ThingsScreen.init();
+    AdaptersScreen.init();
+    SettingsScreen.init();
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');
     this.views.settings = document.getElementById('settings-view');
     this.currentView = 'things';
-    Menu.init();
-    Router.init();
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
+    Menu.init();
+    Router.init();
   },
 
   showThings: function(context) {
-    ThingsScreen.init(context.params.thingId || null);
+    ThingsScreen.show(context.params.thingId || null);
     this.selectView('things');
   },
 
   showAdapters: function() {
-    AdaptersScreen.init();
+    AdaptersScreen.show();
     this.selectView('adapters');
   },
 
-  showSettings: function() {
-    SettingsScreen.init();
+  showSettings: function(context) {
+    SettingsScreen.show(context.params.section || null);
     this.selectView('settings');
   },
 
@@ -64,6 +67,14 @@ var App = {
     this.views[view].classList.add('selected');
     Menu.selectItem(view);
     this.currentView = view;
+  },
+
+  showMenuButton: function() {
+    this.menuButton.classList.remove('hidden');
+  },
+
+  hideMenuButton: function() {
+    this.menuButton.classList.add('hidden');
   }
 };
 

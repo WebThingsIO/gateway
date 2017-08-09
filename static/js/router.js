@@ -17,6 +17,7 @@ var Router = {
     page('/things/:thingId', App.showThings.bind(App));
     page('/adapters', App.showAdapters.bind(App));
     page('/settings', App.showSettings.bind(App));
+    page('/settings/:section', App.showSettings.bind(App));
     page();
   }
 };

@@ -14,17 +14,16 @@
 // eslint-disable-next-line no-unused-vars
 var AdaptersScreen = {
   /**
-   * Initialise Adapters Screen.
+   * Initialise adapters screen.
    */
-  init: function() {
-    this.adaptersElement = document.getElementById('adapters');
-    this.showAdapters();
-  },
+   init: function() {
+     this.adaptersElement = document.getElementById('adapters');
+   },
 
   /**
    * Display all installed/connected adapters.
    */
-  showAdapters: function() {
+  show: function() {
     var opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
