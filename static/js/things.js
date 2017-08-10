@@ -20,20 +20,26 @@ var ThingsScreen = {
 
   /**
    * Initialise Things Screen.
+   */
+  init: function() {
+    this.thingsElement = document.getElementById('things');
+    this.addButton = document.getElementById('add-button');
+    window.addEventListener('_thingchange', this.showThings.bind(this));
+    this.addButton.addEventListener('click',
+      AddThingScreen.show.bind(AddThingScreen));
+  },
+
+  /**
+   * Show things screen.
    *
    * @param {String} thingId Optional thing ID to show, otherwise show all.
    */
-  init: function(thingId) {
-    this.thingsElement = document.getElementById('things');
-    this.addButton = document.getElementById('add-button');
+  show: function(thingId) {
     if (thingId) {
       this.showThing(thingId);
     } else {
       this.showThings();
-    }
-    window.addEventListener('_thingchange', this.showThings.bind(this));
-    this.addButton.addEventListener('click',
-      AddThingScreen.show.bind(AddThingScreen));
+    }       
   },
 
   /**

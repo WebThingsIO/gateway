@@ -128,6 +128,10 @@ h1, h2, h3, h4, h5, h6 {
   outline: 0;
 }
 
+#menu-button.hidden {
+  display: none;
+}
+
 #menu-button::-moz-focus-inner {
   border: 0;
 }
@@ -152,7 +156,7 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-.dialog .back-button {
+.back-button {
   position: fixed;
   top: 2rem;
   left: 2rem;
@@ -167,6 +171,6 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.8;
 }
 
-.dialog .back-button:hover, .dialog .back-button:active {
+.back-button:hover, .back-button:active {
   opacity: 1;
 }
