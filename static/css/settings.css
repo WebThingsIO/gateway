@@ -52,6 +52,10 @@
   background-image: url('../images/domain-icon.png');
 }
 
+#user-settings-link {
+  background-image: url('../images/users-icon.png');
+}
+
 #settings-back-button {
   position: fixed;
   top: 2rem;
@@ -84,10 +88,34 @@
   border-radius: 0.5rem;
   padding: 2rem;
   color: #fff;
-  text-align: center;
+  text-align: left;
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.4rem;
   max-width: 60rem;
   margin: 0 auto;
+}
+
+#current-user {
+  position: relative;
+  color: #fff;
+  background-color: #48779a;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  color: #fff;
+  text-align: left;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+#current-user-name {
+  display: block;
+}
+
+#current-user-email {
+  display: block;
+  color: #ccc;
 }

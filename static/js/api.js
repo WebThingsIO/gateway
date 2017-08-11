@@ -70,6 +70,21 @@
       });
     },
 
+    getUserInfo: function() {
+      const opts = {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${window.API.jwt}`,
+        }
+      };
+      return fetch('/users/info', opts).then((response) => {
+        if (!response.ok) {
+          throw new Error('Unable to access user info');
+        }
+        return response.json();
+      });
+    },
+
     login: function (email, password) {
       const opts = {
         method: 'POST',
