@@ -38,10 +38,10 @@ ThingsController.post('/', function (request, response) {
   var id = description.id;
   delete description.id;
   Things.createThing(id, description).then(function(thing) {
-    console.log('Successfully created new thing ' + thing);
+    console.log('Successfully created new thing ' + thing.name);
     response.status(201).send(thing);
   }).catch(function(error) {
-    console.error('Error saving new thing');
+    console.error('Error saving new thing', id, description);
     console.error(error);
     response.status(500).send(error);
   });
