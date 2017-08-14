@@ -10,7 +10,7 @@
 
 var config = require('config');
 var fs = require('fs');
-var path = require('path');
+const Constants = require('./constants');
 
 var TunnelSetup = {
 
@@ -37,7 +37,7 @@ var TunnelSetup = {
                 // if there are no certs installed,
                 // we display the cert setup page to the user
                 response.sendFile('tunnel_setup.html',
-                    { root: path.join(__dirname, '../src/views') });
+                    { root: Constants.VIEWS_PATH });
             }
         }
     }
