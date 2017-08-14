@@ -6,6 +6,7 @@
     "module": "es6",
     "target": "es2017",
     "strict": true,
+    "strictNullChecks": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
