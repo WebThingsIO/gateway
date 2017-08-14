@@ -18,11 +18,12 @@ exports.ADAPTERS_PATH = '/adapters';
 exports.ACTIONS_PATH = '/actions';
 exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
-// Remember we end up in the build/* directory so this path looks slightly
+exports.SETTINGS_PATH = '/settings';
+exports.DEBUG_PATH = '/debug';
+// Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');
-exports.DEBUG_PATH = '/debug';
-exports.SETTINGS_PATH = '/settings';
+exports.VIEWS_PATH = path.join(__dirname, '../src/views');
 
 exports.SET_PROPERTY = 'setProperty';
 exports.REQUEST_ACTION = 'requestAction';
