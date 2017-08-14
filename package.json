@@ -71,11 +71,18 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
-    "testMatch": ["**/test/**/*-test.(ts|tsx|js)"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ],
+    "testMatch": [
+      "**/test/**/*-test.(ts|tsx|js)"
+    ],
     "mapCoverage": true,
     "transform": {
-      "^.+\\.jsx?$": "./src/jest-transform",
       "^.+\\.tsx?$": "ts-jest/preprocessor"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
