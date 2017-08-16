@@ -39,7 +39,7 @@ module.exports = {
   entry: './src/app.js',
   target: 'node',
   node: {
-    __dirname: false,
+    __dirname: true,
     __filename: false,
   },
   resolve: {
