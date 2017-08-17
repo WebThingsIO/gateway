@@ -129,16 +129,18 @@ If you are not using vscode run `npm run debug` and it will build the gateway an
 
 ## Source Code Structure
 
-* **/config/** - Gateway configuration
-* **/src/adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
-* **/src/controllers/** - App URL routes and their logic
-* **/src/models/** - Data model and business logic
-* **/src/static/** - Static CSS, JavaScript & image resources for web app front end
-* **/src/tools/** - Helpful utilities (not part of the build)
-* **/src/views/** - Web app front end views
-* **/src/adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
-* **/src/app.js** - The main back end script
-* **/src/constants.js** - System wide constants
-* **/src/db.js** - Manages the SQLite3 database
-* **/src/package.json** - npm module manifest
-* **/src/router.js** - Routes app URLs to controllers
+* **config/** - Gateway configuration
+* **src/**
+  * **adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
+  * **controllers/** - App URL routes and their logic
+  * **models/** - Data model and business logic
+  * **test/** - Integration tests
+  * **views/** - HTML views
+  * **adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
+  * **app.js** - The main back end script
+  * **constants.js** - System wide constants
+  * **db.js** - Manages the SQLite3 database
+  * **router.js** - Routes app URLs to controllers
+* **static/** - Static CSS, JavaScript & image resources for web app front end
+* **tools/** - Helpful utilities (not part of the build)
+* **package.json** - npm module manifest
