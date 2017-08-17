@@ -44,6 +44,9 @@ module.exports = {
     filename: './db.sqlite3',
     removeBeforeOpen: false,
   },
+  settings: {
+    directory: './settings/', // Directory to store settings in
+  },
   authentication: {
     enabled: true,
     defaultUser: null,

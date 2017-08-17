@@ -10,7 +10,7 @@
 'use strict';
 
 /* globals ThingsScreen, AdaptersScreen,
-AddThingScreen, Menu, ContextMenu, SettingsScreen, Router */
+AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router */
 
 var App = {
   /**
@@ -32,9 +32,11 @@ var App = {
     ThingsScreen.init();
     AdaptersScreen.init();
     SettingsScreen.init();
+    FloorplanScreen.init();
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');
+    this.views.floorplan = document.getElementById('floorplan-view');
     this.views.settings = document.getElementById('settings-view');
     this.currentView = 'things';
     this.menuButton = document.getElementById('menu-button');
@@ -56,6 +58,11 @@ var App = {
   showSettings: function(context) {
     SettingsScreen.show(context.params.section || null);
     this.selectView('settings');
+  },
+
+  showFloorplan: function() {
+    FloorplanScreen.show();
+    this.selectView('floorplan');
   },
 
   selectView: function(view) {

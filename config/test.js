@@ -30,6 +30,9 @@ module.exports = {
     filename: ':memory:',
     removeBeforeOpen: false,
   },
+  settings: {
+    directory: './test-settings/'
+  },
   authentication: {
     enabled: true,
     defaultUser: null

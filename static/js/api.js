@@ -123,6 +123,63 @@
           console.error('Logout failed...');
         }
       });
+    },
+
+    getExperimentSetting: function(experimentName) {
+      return new Promise((resolve, reject) => {
+        var headers = {
+          'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json'
+        };
+        fetch('/settings/experiments/' + experimentName, {
+          method: 'GET',
+          headers: headers
+        })
+        .then(function(response) {
+          if (response.status == 200) {
+            response.json()
+            .then(function(json) {
+              resolve(json.enabled);
+            }).catch(function(e) {
+              reject('Error getting ' + experimentName + ' ' + e);
+            });
+          } else {
+            reject('Error getting ' + experimentName);
+          }
+        })
+        .catch(function(e) {
+          reject('Error getting ' + experimentName + ' ' +  e);
+        });
+      });
+    },
+
+    setExperimentSetting: function(experimentName, enabled) {
+      return new Promise((resolve, reject) => {
+        var headers = {
+          'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        var payload = {
+         'enabled': enabled
+        };
+        fetch('/settings/experiments/' + experimentName, {
+         method: 'PUT',
+         body: JSON.stringify(payload),
+         headers: headers
+        })
+        .then(function(response) {
+          if (response.status == 200) {
+           console.log('Set ' + experimentName + ' to ' + enabled);
+           resolve();
+          } else {
+           reject('Unexpected response code while setting experiment setting');
+          }
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+      });
     }
   };
 }());

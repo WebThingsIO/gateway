@@ -1,0 +1,8 @@
+#floorplan {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
