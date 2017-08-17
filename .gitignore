@@ -8,3 +8,5 @@ db.sqlite3
 tunneltoken
 notunnel
 /build
+settings/
+test-settings/

@@ -41,6 +41,10 @@
   background-color: rgba(0, 0, 0, 0.12);
 }
 
+#main-menu a.hidden {
+  display: none;
+}
+
 #main-menu #things-menu-item {
   background-image: url('../images/things-icon.png');
 }
@@ -51,6 +55,10 @@
 
 #main-menu #settings-menu-item {
   background-image: url('../images/settings-icon.png');
+}
+
+#main-menu #floorplan-menu-item {
+  background-image: url('../images/floorplan-icon.png');
 }
 
 .log-out-button {

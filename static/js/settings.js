@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App */
+/* globals App, Menu */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -22,6 +22,7 @@ var SettingsScreen = {
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
+    this.experimentSettings = document.getElementById('experiment-settings');
     this.backButton = document.getElementById('settings-back-button');
   },
 
@@ -39,6 +40,7 @@ var SettingsScreen = {
     this.menu.classList.remove('hidden');
     this.domainSettings.classList.add('hidden');
     this.userSettings.classList.add('hidden');
+    this.experimentSettings.classList.add('hidden');
   },
 
   hideMenu: function() {
@@ -60,6 +62,9 @@ var SettingsScreen = {
         break;
       case 'users':
         this.showUserSettings();
+        break;
+      case 'experiments':
+        this.showExperimentSettings();
         break;
       default:
         console.error('Tried to display undefined section');
@@ -102,5 +107,33 @@ var SettingsScreen = {
        document.getElementById('current-user-email').innerText = '';
      }
     });
+  },
+
+  showExperimentSettings: function() {
+    this.experimentSettings.classList.remove('hidden');
+    this.floorplanExperimentCheckbox =
+      document.getElementById('floorplan-experiment-checkbox');
+
+    window.API.getExperimentSetting('floorplan')
+    .then((function(value) {
+      this.floorplanExperimentCheckbox.checked = value;
+    }).bind(this))
+    .catch(function(e) {
+      console.error('Error getting floorplan experiment setting ' + e);
+    });
+
+    this.floorplanExperimentCheckbox.addEventListener('change', (function(e) {
+      var value = e.target.checked ? true : false;
+      window.API.setExperimentSetting('floorplan', value).then(function() {
+        if (value) {
+          Menu.showItem('floorplan');
+        } else {
+          Menu.hideItem('floorplan');
+        }
+      }).catch(function(e) {
+        console.error('Failed to enabled floorplan experiment: ' + e);
+      });
+
+    }).bind(this));
   }
 };

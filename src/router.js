@@ -53,7 +53,7 @@ var Router = {
     app.use(API_PREFIX + Constants.LOGIN_PATH,
       require('./controllers/login_controller'));
     app.use(API_PREFIX + Constants.SETTINGS_PATH,
-      require('./controllers/tunnel_controller'));
+      require('./controllers/settings_controller'));
     if (options.debug) {
       app.use(API_PREFIX + Constants.DEBUG_PATH,
       require('./controllers/debug_controller'));

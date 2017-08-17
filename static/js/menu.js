@@ -20,7 +20,17 @@ var Menu = {
     this.items.things = document.getElementById('things-menu-item');
     this.items.adapters = document.getElementById('adapters-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
+    this.items.floorplan = document.getElementById('floorplan-menu-item');
     this.currentItem = 'things';
+    window.API.getExperimentSetting('floorplan').then(function(value) {
+      if (value) {
+        Menu.showItem('floorplan');
+      } else {
+        Menu.hideItem('floorplan');
+      }
+    }).catch(function(e) {
+      console.log('Floorplan experiment setting is not yet set ' + e);
+    });
   },
 
   /**
@@ -75,5 +85,19 @@ var Menu = {
     this.items[this.currentItem].classList.remove('selected');
     this.items[item].classList.add('selected');
     this.currentItem = item;
+  },
+
+  /**
+   * Enable a menu item.
+   */
+  showItem: function(item) {
+    this.items[item].classList.remove('hidden');
+  },
+
+ /*
+  * Disable a menu item.
+  */
+  hideItem: function(item) {
+    this.items[item].classList.add('hidden');
   }
 };

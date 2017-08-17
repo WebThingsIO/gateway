@@ -1,7 +1,7 @@
 /**
- * Tunnel Controller.
+ * Settings Controller.
  *
- * Manages tunnel controller actions
+ * Manages gateway settings.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,8 +19,53 @@ const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const TunnelService = require('../ssltunnel');
+const Settings = require('../models/settings');
 
 var SettingsController = express.Router();
+
+/**
+ * Set an experiment setting.
+ */
+SettingsController.put('/experiments/:experimentName',
+  function (request, response) {
+  var experimentName = request.params.experimentName;
+
+  if(!request.body || request.body['enabled'] === undefined) {
+    response.status(400).send('Enabled property not defined');
+    return;
+  }
+  var enabled = request.body['enabled'];
+
+  Settings.set('experiments.' + experimentName + '.enabled', enabled)
+  .then(function(result) {
+    response.status(200).json({'enabled': result});
+  }).catch(function(e) {
+    console.error('Failed to set setting experiments.' + experimentName);
+    console.error(e);
+    response.status(400).send(e);
+  });
+});
+
+/**
+ * Get an experiment setting.
+ */
+SettingsController.get('/experiments/:experimentName',
+  function (request, response) {
+  var experimentName = request.params.experimentName;
+
+  Settings.get('experiments.' + experimentName + '.enabled')
+  .then(function(result) {
+    if (result === undefined) {
+      response.status(404).send('Setting not found');
+    } else {
+      response.status(200).json({'enabled': result});
+    }
+  }).catch(function(e) {
+    console.error('Failed to get setting experiments.' + experimentName);
+    console.error(e);
+    response.status(400).send(e);
+  });
+});
 
 SettingsController.post('/subscribe', function (request, response) {
 

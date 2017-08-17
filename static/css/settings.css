@@ -56,6 +56,10 @@
   background-image: url('../images/users-icon.png');
 }
 
+#experiment-settings-link {
+  background-image: url('../images/experiments-icon.png');
+}
+
 #settings-back-button {
   position: fixed;
   top: 2rem;
@@ -118,4 +122,66 @@
 #current-user-email {
   display: block;
   color: #ccc;
+}
+
+#experiment-settings ul {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.experiment-item {
+  display: block;
+  margin: 1rem 0;
+  font-size: 1.8rem;
+  padding: 2rem 2rem 2rem 5.5rem;
+  list-style-type: none;
+  background-color: #48779a;
+  color: #fff;
+  border-radius: 0.5rem;
+  background-position: 1rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+}
+
+.experiment-item label {
+  line-height: 3.2rem;
+}
+
+:root .experiment-checkbox {
+  /* original check box is pushed outside the viewport */
+  position: absolute;
+  left: -1000em;
+}
+
+:root .experiment-checkbox + label:before {
+  content: "";
+  display: inline-block;
+  width  : 3rem;
+  height : 3rem;
+  float: right;
+  margin : 0.1rem 0;
+  background: url("../images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
+}
+
+:root .experiment-checkbox:checked + label:before {
+  background-position: 0 -3rem;
+}
+
+:root .experiment-checkbox:disabled + label:before {
+  background-position: 0 -6rem;
+}
+
+:root .experiment-checkbox:checked:disabled + label:before {
+  background-position: 0 -9rem;
+}
+
+#floorplan-experiment-item {
+  background-image: url('../images/floorplan-icon.png');
 }
