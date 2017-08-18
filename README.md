@@ -96,7 +96,9 @@ $ cd gateway
 
 Install dependencies:
 
-NOTE: `yarn` is preferred but npm install will also work.
+NOTE: `yarn` is preferred but `npm install` will also work. To install `yarn`,
+run `sudo apt-get install yarn` or follow the [directions for your
+OS](https://yarnpkg.com/en/docs/install).
 
 ```
 $ yarn
