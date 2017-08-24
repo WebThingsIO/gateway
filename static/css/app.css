@@ -81,7 +81,7 @@ input[type="text"], input[type="password"], input[type="email"] {
   font-size: 1.6rem;
 }
 
-button {
+.text-button {
   background-color: #597285;
   border: none;
   border-radius: 0.5rem;
@@ -89,12 +89,41 @@ button {
   color: #fff;
 }
 
-button:hover, button:active {
+.text-button:hover, .text-button:active {
   background-color: #658196;
 }
 
-button::-moz-focus-inner {
+.text-button::-moz-focus-inner {
   border: 0;
+}
+
+.icon-button {
+  position: fixed;
+  width: 5.6rem;
+  height: 5.6rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
+}
+
+.icon-button::-moz-focus-inner {
+  border: 0;
+}
+
+.icon-button:hover, .icon-button:active {
+  opacity: 1;
+}
+
+.icon-button.hidden {
+  display: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -157,20 +186,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .back-button {
-  position: fixed;
   top: 2rem;
   left: 2rem;
-  width: 5.6rem;
-  height: 5.6rem;
-  padding: 0;
-  background-color: transparent;
-  border: none;
   background-image: url('../images/back.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-}
-
-.back-button:hover, .back-button:active {
-  opacity: 1;
 }

@@ -12,29 +12,7 @@
 }
 
 #add-button {
-  position: fixed;
   bottom: 2rem;
   right: 2rem;
-  width: 5.6rem;
-  height: 5.6rem;
-  padding: 0;
-  background-color: transparent;
-  border: none;
   background-image: url('../images/add.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  outline: 0;
-}
-
-#add-button::-moz-focus-inner {
-  border: 0;
-}
-
-#add-button:hover, #add-button:active {
-  opacity: 1;
 }

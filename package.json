@@ -32,6 +32,7 @@
     "debug": "^2.6.8",
     "event-to-promise": "^0.8.0",
     "express": "^4.15.2",
+    "express-fileupload": "^0.2.0",
     "express-promise-router": "2.0.0-alpha.1",
     "express-ws": "^3.0.0",
     "greenlock": "^2.1.15",

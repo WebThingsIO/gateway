@@ -47,6 +47,9 @@ module.exports = {
   settings: {
     directory: './settings/', // Directory to store settings in
   },
+  uploads: {
+    directory: '../static/uploads/' // Directory to store uploads in
+  },
   authentication: {
     enabled: true,
     defaultUser: null,

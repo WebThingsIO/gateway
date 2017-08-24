@@ -34,9 +34,11 @@ var Router = {
     // Content negotiation middleware
     app.use(function(request, response, next) {
       // If request won't accept HTML but will accept JSON,
-      // or is a WebSocket request, treat it as an API request
+      // or is a WebSocket request, or is multipart/form-data
+      // treat it as an API request
       if (!request.accepts('html') && request.accepts('json') ||
-          request.get('Upgrade') === 'websocket') {
+          request.get('Upgrade') === 'websocket' ||
+          request.is('multipart/form-data')) {
         request.url = API_PREFIX + request.url;
         next();
       // Otherwise treat it as an app request
@@ -72,6 +74,8 @@ var Router = {
       auth, require('./controllers/log_out_controller'));
     app.use(API_PREFIX + Constants.USERS_PATH,
       require('./controllers/users_controller'));
+    app.use(API_PREFIX + Constants.UPLOADS_PATH,
+      auth, require('./controllers/uploads_controller'));
   }
 };
 

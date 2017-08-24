@@ -33,6 +33,9 @@ module.exports = {
   settings: {
     directory: './test-settings/'
   },
+  uploads: {
+    directory: '../../static/uploads/' // Directory to store uploads in
+  },
   authentication: {
     enabled: true,
     defaultUser: null
