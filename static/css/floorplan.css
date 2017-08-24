@@ -1,8 +1,70 @@
+#floorplan-view {
+  background-color: #5d9bc7;
+}
+
+#floorplan-view.edit {
+  background-color: #305067;
+}
+
 #floorplan {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #fff;
+  display: block;
+  width: 100vmin;
+  height: 100vmin;
+  margin: 0 auto;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  background-image: url('/uploads/floorplan.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+#floorplan-edit-button {
+  bottom: 2rem;
+  right: 2rem;
+  background-image: url('../images/edit.svg');
+}
+
+#floorplan-save-button {
+  bottom: 2rem;
+  right: 2rem;
+  background-image: url('../images/save.svg');
+}
+
+#floorplan-upload-form {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+#floorplan-upload-form.hidden {
+  display: none;
+}
+
+#floorplan-upload-button {
+  margin: 1rem;
+  background-image: url('../images/upload.png');
+  background-repeat: no-repeat;
+  background-position: 0.75rem;
+  background-size: 2.4rem;
+  padding-left: 4rem;
+}
+
+#floorplan-upload-button.loading {
+  background-image: url('../images/loading.gif');
+}
+
+#floorplan-view .hint {
+  font-size: 1.4rem;
+  color: #ccc;
+}
+
+#floorplan-file-input {
+  display: none;
 }

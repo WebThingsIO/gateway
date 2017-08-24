@@ -45,9 +45,8 @@
 
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
-
       <div id="things"></div>
-      <button id="add-button" />
+      <button id="add-button" class="icon-button"></button>
     </section>
 
     <!-- Adapters View -->
@@ -57,7 +56,14 @@
 
     <!-- Floorplan View -->
     <section data-view="floorplan" id="floorplan-view" class="hidden">
-      <div id="floorplan">No floorplan created.</div>
+      <div id="floorplan"></div>
+      <form id="floorplan-upload-form" class="hidden">
+        <button id="floorplan-upload-button" class="text-button">Upload floorplan...</button>
+        <div class="hint">(.svg recommended)</div>
+      </form>
+      <button id="floorplan-edit-button" class="icon-button"></button>
+      <button id="floorplan-save-button" class="hidden icon-button"></button>
+      <input id="floorplan-file-input" type="file" name="upload" accept="image/*">
     </section>
 
     <!-- Settings View -->
@@ -86,7 +92,7 @@
           </li>
         </ul>
       </section>
-      <a href="/settings" id="settings-back-button" class="hidden back-button"></button>
+      <a href="/settings" id="settings-back-button" class="hidden back-button icon-button"></a>
     </section>
 
     <!-- Menu -->
@@ -98,7 +104,7 @@
         <li><a id="settings-menu-item" href="/settings">Settings</a></li>
         <li>
           <form id="logout" class="log-out-form">
-            <button type="submit" class="log-out-button">Log out</button>
+            <button type="submit" class="log-out-button text-button">Log out</button>
           </form>
         </li>
       </ul>
@@ -109,26 +115,26 @@
 
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden dialog">
-      <button id="add-thing-back-button" class="back-button"></button>
+      <button id="add-thing-back-button" class="back-button icon-button"></button>
       <div id="add-thing-content">
         <p id="add-thing-status">
           <img class="spinner" src="/images/loading.gif" />Scanning for new devices...
         </p>
         <div id="new-things"></div>
-        <button id="add-thing-cancel-button">Done</button>
+        <button id="add-thing-cancel-button" class="text-button">Done</button>
       </div>
     </div>
 
     <!-- Context Menu -->
     <div id="context-menu" class="hidden dialog">
-      <button id="context-menu-back-button" class="back-button"></button>
+      <button id="context-menu-back-button" class="back-button icon-button"></button>
       <h1 id="context-menu-heading"></h1>
       <div id="context-menu-content">
         <button id="remove-thing-button" class="context-menu-button danger">
           Remove
         </button>
       </div>
-    </menu>
+    </div>
 
   </body>
 </html>

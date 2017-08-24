@@ -13,6 +13,7 @@ const http = require('http');
 const fs = require('fs');
 const express = require('express');
 const expressWs = require('express-ws');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const GetOpt = require('node-getopt');
 const config = require('config');
@@ -124,6 +125,7 @@ function createApp() {
     extended: false
   }));
   app.use(bodyParser.json());   // Use bodyParser to access the body of requests
+  app.use(fileUpload());        // Use fileUpload to handle multi-part uploads
 
   return app;
 }

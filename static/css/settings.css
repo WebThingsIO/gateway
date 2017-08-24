@@ -60,17 +60,6 @@
   background-image: url('../images/experiments-icon.png');
 }
 
-#settings-back-button {
-  position: fixed;
-  top: 2rem;
-  left: 2rem;
-  outline: 0;
-}
-
-#settings-back-button.hidden {
-  display: none;
-}
-
 .settings-section {
   position: fixed;
   display: block;
