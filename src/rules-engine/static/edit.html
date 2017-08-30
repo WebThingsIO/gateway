@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Rules</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="edit.css"/>
+  </head>
+  <body>
+    <div id="title-bar">
+      <a href="index.html" id="back-button">
+        <img src="images/back-16.svg" alt="Back" width="40" height="40"/>
+      </a>
+      <div class="rule-info">
+        <h1><span class="rule-name">Rule Name</span><img src="images/customize-16.svg" class="rule-name-customize"/></h1>
+        <p>Rule Description</p>
+      </div>
+      <button id="delete-button">
+        <img src="images/delete-16.svg" alt="Delete" width="40" height="40"/>
+      </button>
+    </div>
+    <div id="rule-area">
+      <div id="drag-hint">
+        <div class="drag-hint-trigger drag-hint">
+          <div class="drag-hint-container">
+            <p>Add device as input</p>
+            <div class="drag-hint-block device-block">+</div>
+          </div>
+        </div>
+        <div class="drag-hint-action drag-hint">
+          <div class="drag-hint-container">
+            <p>Add device as output</p>
+            <div class="drag-hint-block device-block">+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="devices-list">
+     <div id="delete-area">
+       <div class="delete-container">
+         <h2 class="delete-prompt">Drop devices here to disconnect</h2>
+       </div>
+     </div>
+      <h3 class="devices-list-header">My Devices</h3>
+    </div>
+    <div id="rule-delete-overlay">
+      <div class="rule-delete-dialog">
+        <p>Are you sure you want to remove this rule permanently?</p>
+        <input class="rule-delete-cancel-button" type="button"
+               value="Cancel"/>
+        <input class="rule-delete-confirm-button" type="button"
+               value="Remove Rule"/>
+      </div>
+    </div>
+    <script src="src/jwt.js"></script>
+    <script src="src/Gateway.js"></script>
+    <script src="src/Rule.js"></script>
+    <script src="src/DevicePropertyBlock.js"></script>
+    <script src="src/Draggable.js"></script>
+    <script src="src/PropertySelect.js"></script>
+    <script src="src/edit.js"></script>
+  </body>
+</html>

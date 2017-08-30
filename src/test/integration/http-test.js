@@ -8,7 +8,6 @@ describe('http redirector', function() {
   it('should redirect GET /', async () => {
     const res  = await chai.request(httpServer)
       .get('/');
-    console.log(res);
     expect(res.status).toBe(200);
     // chai.request appears to not allow passing followRedirect: false, so
     // this slight hack is necessary

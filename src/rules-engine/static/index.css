@@ -1,0 +1,146 @@
+#rules {
+  margin: 0 auto;
+}
+
+.rule {
+  position: relative;
+  margin: 10px;
+  padding: 0;
+  box-sizing: border-box;
+  width: 400px;
+  height: 266px;
+  border: 2px solid #979797;
+  border-radius: 5px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.rule-info h3 {
+  color: #4a4a4a;
+  margin: 0;
+}
+
+.rule-info p {
+  color: #9b9b9b;
+  font-size: 12px;
+}
+
+.rule-preview {
+  background: url(images/background-small.png);
+  box-sizing: border-box;
+  padding: 30px;
+  width: 100%;
+  height: 60%;
+}
+
+.rule-edit-overlay {
+  position: absolute;
+  width: 100%;
+  height: 60%;
+  opacity: 0;
+  background: rgba(64, 64, 64, 0.8);
+}
+
+.rule-edit-overlay:hover {
+  opacity: 1;
+}
+
+.rule-info {
+  padding: 10px 20px;
+  width: 66%;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.rule-switch {
+  padding-right: 20px;
+  padding-top: 11%;
+  float: right;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.rule-switch-checkbox {
+  display: none;
+}
+
+.rule-switch-slider {
+  display: block;
+  width: 55px;
+  height: 22px;
+  border-radius: 11px;
+  background: #737373;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.rule-switch-slider:after {
+  display: block;
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background: #d7d7d7;
+  transform: translate(0, -4px);
+  transition: 0.1s;
+}
+
+input:checked + .rule-switch-slider {
+  background: #12bc00;
+}
+
+input:checked + .rule-switch-slider:after {
+  transform: translate(25px, -4px);
+  background: #30e60b;
+}
+
+#create-rule {
+  border: 1px dashed #979797;
+  text-align: center;
+  cursor: pointer;
+}
+
+#create-rule h3 {
+  padding-top: calc(266px / 2 - 2.5em);
+}
+
+.rule-delete-button {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  background: url(images/delete-button.png);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  border: 1px solid #979797;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  cursor: pointer;
+}
+
+.rule-edit-overlay.delete {
+  height: 100%;
+  z-index: 10;
+  opacity: 1;
+}
+
+.rule-edit-overlay.delete .rule-edit-button,
+.rule-edit-overlay.delete .rule-delete-button {
+  display: none;
+}
+
+
+.rule-edit-overlay.delete .rule-delete-dialog {
+  display: block;
+}
+
+.device-block {
+  width: 82px;
+  height: 82px;
+}
+
+.device-icon {
+  margin: 17px;
+  padding: 0;
+}
