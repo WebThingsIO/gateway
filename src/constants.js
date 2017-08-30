@@ -20,6 +20,7 @@ exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
 exports.SETTINGS_PATH = '/settings';
 exports.DEBUG_PATH = '/debug';
+exports.RULES_ENGINE_PATH = '/rules-engine';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');

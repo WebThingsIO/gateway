@@ -12,6 +12,7 @@
 
 const express = require('express');
 const Constants = require('./constants');
+const JSONWebToken = require('./models/jsonwebtoken');
 const authMiddleware = require('./jwt-middleware');
 
 const auth = authMiddleware();
@@ -45,6 +46,18 @@ var Router = {
         next();
       }
     });
+
+    try {
+      let rulesEngine = require('rules-engine/index.js');
+      // Issue a token without an associated user
+      JSONWebToken.issueToken(-1).then(jwt => {
+        rulesEngine.setJWT(jwt);
+      });
+      app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
+      app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
+    } catch(e) {
+      console.warn('rules engine is not installed', e);
+    }
 
     // Web app routes - send index.html and fall back to client side URL router
     app.use(APP_PREFIX + '/*', require('./controllers/root_controller'));

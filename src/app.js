@@ -21,6 +21,9 @@ const db = require('./db');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 
+// Open the database
+db.open();
+
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
 
@@ -177,9 +180,6 @@ if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
   // otherwise we start plain http
   startHttpGateway();
 }
-
-// Open the database
-db.open();
 
 if (config.get('cli')) {
   // Get some decent error messages for unhandled rejections. This is
