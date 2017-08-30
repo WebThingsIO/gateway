@@ -1,0 +1,11 @@
+language: node_js
+
+script:
+  - npm run lint
+  - ./node_modules/.bin/jest --coverage
+
+after_script:
+  - ./node_modules/.bin/codecov
+
+node_js:
+  - 7

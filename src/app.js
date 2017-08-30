@@ -19,6 +19,7 @@ const GetOpt = require('node-getopt');
 const config = require('config');
 const adapterManager = require('./adapter-manager');
 const db = require('./db');
+const JSONWebToken = require('./models/jsonwebtoken');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 
@@ -53,6 +54,7 @@ function startHttpsGateway() {
   // Start the HTTPS server
   httpsServer.listen(port, function() {
     adapterManager.loadAdapters();
+    rulesEngineConfigure(httpsServer);
     console.log('Listening on port', httpsServer.address().port);
   });
 
@@ -75,6 +77,7 @@ function startHttpGateway() {
 
   httpServer.listen(port, function() {
     adapterManager.loadAdapters();
+    rulesEngineConfigure(httpServer);
     console.log('Listening on port', httpServer.address().port);
   });
 }
@@ -119,6 +122,23 @@ function getOptions() {
   }
 
   return options;
+}
+
+/**
+ * Because the rules engine talks to the server over the public HTTP/WS API,
+ * the gateway needs to configure it with a JWT and a server address
+ * @param {http.Server|https.Server} server
+ */
+function rulesEngineConfigure(server) {
+  const rulesEngine = require('./rules-engine/index.js');
+  let protocol = 'https';
+  if (server instanceof http.Server) {
+    protocol = 'http';
+  }
+  const gatewayHref = protocol + '://127.0.0.1:' + server.address().port;
+  JSONWebToken.issueToken(-1).then(jwt => {
+    rulesEngine.configure(gatewayHref, jwt);
+  });
 }
 
 function createApp() {
