@@ -56,6 +56,7 @@ var Router = {
         rulesEngine.setJWT(jwt);
       });
       app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
+      app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
     } catch(e) {
       console.warn('rules engine is not installed', e);
     }
