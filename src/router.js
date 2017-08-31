@@ -52,7 +52,7 @@ var Router = {
       let rulesEngine = require('./rules-engine/index.js');
       // Issue a token without an associated user
       app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
-      app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
+      app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
     } catch(e) {
       console.warn('rules engine is not installed', e);
     }
