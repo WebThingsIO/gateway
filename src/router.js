@@ -48,14 +48,9 @@ var Router = {
       }
     });
 
-    try {
-      let rulesEngine = require('./rules-engine/index.js');
-      // Issue a token without an associated user
-      app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
-      app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
-    } catch(e) {
-      console.warn('rules engine is not installed', e);
-    }
+    let rulesEngine = require('./rules-engine/index.js');
+    app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
+    app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
 
     // Web app routes - send index.html and fall back to client side URL router
     app.use(APP_PREFIX + '/*', require('./controllers/root_controller'));
