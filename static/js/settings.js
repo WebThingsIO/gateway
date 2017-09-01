@@ -109,56 +109,35 @@ var SettingsScreen = {
     });
   },
 
+  showExperimentCheckbox: function(experiment, checkboxId) {
+    var checkbox = document.getElementById(checkboxId);
+    window.API.getExperimentSetting(experiment)
+    .then(function(value) {
+      checkbox.checked = value;
+    })
+    .catch(function(e) {
+      console.error('Error getting ' + experiment + ' experiment setting ' + e);
+    });
+
+    checkbox.addEventListener('change', function(e) {
+      var value = e.target.checked ? true : false;
+      window.API.setExperimentSetting(experiment, value).then(function() {
+        if (value) {
+          Menu.showItem(experiment);
+        } else {
+          Menu.hideItem(experiment);
+        }
+      }).catch(function(e) {
+        console.error('Failed to enable ' + experiment + ' experiment: ' + e);
+      });
+    });
+  },
+
   showExperimentSettings: function() {
     this.experimentSettings.classList.remove('hidden');
-    this.floorplanExperimentCheckbox =
-      document.getElementById('floorplan-experiment-checkbox');
-
-    window.API.getExperimentSetting('floorplan')
-    .then((function(value) {
-      this.floorplanExperimentCheckbox.checked = value;
-    }).bind(this))
-    .catch(function(e) {
-      console.error('Error getting floorplan experiment setting ' + e);
-    });
-
-    this.floorplanExperimentCheckbox.addEventListener('change', (function(e) {
-      var value = e.target.checked ? true : false;
-      window.API.setExperimentSetting('floorplan', value).then(function() {
-        if (value) {
-          Menu.showItem('floorplan');
-        } else {
-          Menu.hideItem('floorplan');
-        }
-      }).catch(function(e) {
-        console.error('Failed to enabled floorplan experiment: ' + e);
-      });
-
-    }).bind(this));
-
-    this.speechExperimentCheckbox =
-      document.getElementById('speech-experiment-checkbox');
-
-    window.API.getExperimentSetting('speech')
-    .then((function(value) {
-      this.speechExperimentCheckbox.checked = value;
-    }).bind(this))
-    .catch(function(e) {
-      console.error('Error getting speech experiment setting ' + e);
-    });
-
-    this.speechExperimentCheckbox.addEventListener('change', (function(e) {
-      var value = e.target.checked ? true : false;
-      window.API.setExperimentSetting('speech', value).then(function() {
-        if (value) {
-          Menu.showItem('speech');
-        } else {
-          Menu.hideItem('speech');
-        }
-      }).catch(function(e) {
-        console.error('Failed to enabled speech experiment: ' + e);
-      });
-
-    }).bind(this));
+    this.showExperimentCheckbox('floorplan', 'floorplan-experiment-checkbox');
+    this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
+    this.showExperimentCheckbox('rulesEngine',
+      'rules-engine-experiment-checkbox');
   }
 };

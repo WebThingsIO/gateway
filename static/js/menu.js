@@ -22,15 +22,28 @@ var Menu = {
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
     this.items.speech = document.getElementById('speech-button');
+    this.items.rulesEngine =
+      document.getElementById('rules-engine-menu-item');
     this.currentItem = 'things';
-    window.API.getExperimentSetting('floorplan').then(function(value) {
+
+    this.getExperimentSetting('floorplan');
+    this.getExperimentSetting('rulesEngine');
+  },
+
+  /**
+   * Update a menu item's visibility based on whether its corresponding
+   * experiment is enabled
+   * @param {String} experiment
+   */
+  getExperimentSetting: function(experiment) {
+    window.API.getExperimentSetting(experiment).then(function(value) {
       if (value) {
-        Menu.showItem('floorplan');
+        Menu.showItem(experiment);
       } else {
-        Menu.hideItem('floorplan');
+        Menu.hideItem(experiment);
       }
     }).catch(function(e) {
-      console.log('Floorplan experiment setting is not yet set ' + e);
+      console.log(experiment + ' experiment setting is not yet set ' + e);
     });
     window.API.getExperimentSetting('speech').then(function(value) {
       if (value) {
