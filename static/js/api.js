@@ -15,6 +15,20 @@
       return !!this.jwt;
     },
 
+    /**
+     * The default options to use with fetching API calls
+     * @return {Object}
+     */
+    headers() {
+      let headers = {
+        Accept: 'application/json'
+      }
+      if (this.jwt) {
+        headers.Authorization = 'Bearer ' + this.jwt;
+      }
+      return headers;
+    },
+
     userCount() {
       const opts = {
         headers: {

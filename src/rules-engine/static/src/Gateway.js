@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global apiOptions */
+/* global API */
 
 /**
  * A remote Gateway
@@ -18,7 +18,9 @@ function Gateway() {
  * @return {Promise<Array<ThingDescription>>}
  */
 Gateway.prototype.readThings = function() {
-  return fetch('/things', apiOptions()).then(res => {
+  return fetch('/things', {
+    headers: API.headers()
+  }).then(res => {
     return res.json();
   }).then(things => {
     this.things = things;
