@@ -102,11 +102,6 @@ index.delete('/rules/:id', async function(req, res) {
   }
 });
 
-index.use('/jwt', async function(req, res) {
-  let jwt = await storage.getItem('RulesEngine.jwt');
-  res.send(jwt);
-});
-
 index.configure = async function(gatewayHref, jwt) {
   if (!storage.setItem) {
     await storageInit();
