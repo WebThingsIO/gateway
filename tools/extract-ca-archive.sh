@@ -20,6 +20,6 @@ if [ -d $base_name ]; then
   rm -r $base_name
 fi
 
-tar xzf "$base_name-$digest.tar.gz" ./$target
+tar xzf "$base_name-$digest.tar.gz" -C $target
 
 exit $?
