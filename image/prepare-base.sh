@@ -43,6 +43,7 @@ sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
 [Unit]
 Description=Mozilla IoT Gateway Client
 After=network.target
+OnFailure=mozilla-iot-gateway-update-rollback.service
 
 [Service]
 Type=simple
@@ -62,7 +63,24 @@ RestartSec=10s
 WantedBy=multi-user.target
 END
 
-# Enable it so that the gateway starts up automatically on each boot
+sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway-update-rollback.service' <<END
+[Unit]
+Description=Mozilla IoT Gateway Client Update Rollback
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=pi
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/gateway
+# Edit this line, if needed, to set the correct path to the script
+ExecStart=/home/pi/mozilla-iot/gateway/tools/rollback.sh
+
+END
+
+# Enable the gateway service so that it starts up automatically on each boot
 sudo systemctl enable mozilla-iot-gateway.service
 
 # Create a script which redirects port 80 to 8080 and 443 to 4443. This
