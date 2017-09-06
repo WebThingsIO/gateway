@@ -196,6 +196,9 @@ PropertySelect.prototype.select = function(optionElt) {
   let selected = this.elt.querySelector('.selected');
   if (selected) {
     if (!JSON.parse(selected.dataset.value)) {
+      if (selected === optionElt) {
+        return;
+      }
       this.elt.removeChild(selected);
     } else {
       selected.classList.remove('selected');
