@@ -9,7 +9,7 @@ let rule = null;
 const ruleIdMatches = window.location.search.match(/ruleId=(\d+)/)
 if (ruleIdMatches) {
   const ruleId = ruleIdMatches[1];
-  rulePromise = fetch('rules/' + ruleId, {
+  rulePromise = fetch('/rules-engine/rules/' + ruleId, {
     headers: API.headers()
   }).then(function(res) {
     return res.json();
@@ -69,7 +69,7 @@ function makeDeviceBlock(thing) {
   elt.classList.add('device');
 
   elt.innerHTML = `<div class="device-block">
-    <img class="device-icon" src="images/onoff.svg" width="48px"
+    <img class="device-icon" src="/rules-engine/images/onoff.svg" width="48px"
          height="48px"/>
   </div>
   <p>${thing.name}</p>`;
