@@ -65,7 +65,7 @@ function RuleCard(gateway, elt, id, desc) {
 }
 
 RuleCard.prototype.onEditButtonClick = function() {
-  window.location = 'edit.html?ruleId=' + this.rule.id;
+  window.location = 'edit/?ruleId=' + this.rule.id;
 };
 
 RuleCard.prototype.onDeleteButtonClick = function() {

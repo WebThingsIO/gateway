@@ -67,7 +67,7 @@ body {
 
 #rule-area {
   position: relative;
-  background: url(images/background.png);
+  background: url(/rules-engine/images/background.png);
   flex: 1;
 }
 
