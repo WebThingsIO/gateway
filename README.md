@@ -146,3 +146,15 @@ If you are not using vscode run `npm run debug` and it will build the gateway an
 * **static/** - Static CSS, JavaScript & image resources for web app front end
 * **tools/** - Helpful utilities (not part of the build)
 * **package.json** - npm module manifest
+
+## Running Tests
+To run the linter and all tests:
+```
+$ npm test
+```
+
+To run a single test:
+```
+$ jest src/test/{test-name}.js
+```
+(assumes you have the ```jest``` command on your ```PATH```, otherwise use ```./node_modules/jest/bin/jest.js```)
