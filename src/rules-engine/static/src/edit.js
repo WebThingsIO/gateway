@@ -35,6 +35,8 @@ ruleName.addEventListener('blur', function() {
 let ruleDescription = document.querySelector('.rule-info > p');
 
 let devicesList = document.getElementById('devices-list');
+let onboardingHint = document.getElementById('onboarding-hint');
+let connection = document.getElementById('connection');
 
 let deleteOverlay = document.getElementById('rule-delete-overlay');
 let deleteButton = document.getElementById('delete-button');
@@ -93,6 +95,50 @@ function makeDevicePropertyBlock(role, x, y) {
   block.setRulePart(rulePart);
 }
 
+function showConnection() {
+  connection.classList.remove('hidden');
+
+  let triggerBlock = document.querySelector('.device-block.trigger').parentNode;
+  let actionBlock = document.querySelector('.device-block.action').parentNode;
+  function transformToCoords(elt) {
+    let re = /translate\((\d+)px, +(\d+)px\)/;
+    let matches = elt.style.transform.match(re);
+    let x = parseFloat(matches[1]);
+    let y = parseFloat(matches[2]);
+    return {
+      x: x,
+      y: y
+    };
+  }
+  let triggerCoords = transformToCoords(triggerBlock);
+  let actionCoords = transformToCoords(actionBlock);
+
+  let startX = triggerCoords.x + 310;
+  let startY = triggerCoords.y + 50;
+  let endX = actionCoords.x - 10;
+  let endY = actionCoords.y + 50;
+
+  let midX = (startX + endX) / 2;
+
+  let pathDesc  = [
+    'M', startX, startY,
+    'C', midX, startY, midX, endY, endX, endY
+  ].join(' ');
+
+  let path = connection.querySelector('path');
+  path.setAttribute('d', pathDesc);
+  let circleTrigger = connection.querySelector('.trigger');
+  circleTrigger.setAttribute('cx', startX);
+  circleTrigger.setAttribute('cy', startY);
+  let circleAction = connection.querySelector('.action');
+  circleAction.setAttribute('cx', endX);
+  circleAction.setAttribute('cy', endY);
+}
+
+function hideConnection() {
+  connection.classList.add('hidden');
+}
+
 gateway.readThings().then(things => {
   for (let thing of things) {
     let elt = makeDeviceBlock(thing);
@@ -105,6 +151,17 @@ gateway.readThings().then(things => {
   function onRuleUpdate() {
     ruleName.textContent = rule.name || 'Rule Name';
     ruleDescription.textContent = rule.toHumanDescription();
+    if (rule.trigger && rule.action) {
+      showConnection();
+    } else {
+      hideConnection();
+    }
+
+    if (!rule.trigger && !rule.action) {
+      onboardingHint.classList.remove('hidden');
+    } else {
+      onboardingHint.classList.add('hidden');
+    }
   }
   rule = new Rule(gateway, ruleDesc, onRuleUpdate);
   if (ruleDesc) {
@@ -135,4 +192,3 @@ deleteConfirm.addEventListener('click', function() {
     window.location = 'index.html';
   });
 });
-
