@@ -3,7 +3,9 @@
 # Things Gateway by Mozilla
 Web of Things gateway.
 
-## Prerequisites
+If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://iot.mozilla.org/gateway/) a pre-built software image from Mozilla to an SD card. Otherwise you can build it from source yourself (see below).
+
+## Prerequisites for Building
 
 ### Install OS
 
@@ -80,7 +82,7 @@ Note: You may need to manually add `/usr/local/lib` to your `LD_LIBRARY_PATH` en
 
 (You can run this on the command line as well so it has immediate effect).
 
-## Download and Install gateway
+## Download and Build Gateway
 
 Clone the GitHub repository (or fork it first):
 ```
@@ -129,6 +131,18 @@ If you are using vscode simply use the "launch" target it will build the gateway
 
 If you are not using vscode run `npm run debug` and it will build the gateway and launch it with --inspect.
 
+## Running Tests
+To run the linter and all tests:
+```
+$ npm test
+```
+
+To run a single test:
+```
+$ jest src/test/{test-name}.js
+```
+(assumes you have the ```jest``` command on your ```PATH```, otherwise use ```./node_modules/jest/bin/jest.js```)
+
 ## Source Code Structure
 
 * **config/** - Gateway configuration
@@ -146,15 +160,3 @@ If you are not using vscode run `npm run debug` and it will build the gateway an
 * **static/** - Static CSS, JavaScript & image resources for web app front end
 * **tools/** - Helpful utilities (not part of the build)
 * **package.json** - npm module manifest
-
-## Running Tests
-To run the linter and all tests:
-```
-$ npm test
-```
-
-To run a single test:
-```
-$ jest src/test/{test-name}.js
-```
-(assumes you have the ```jest``` command on your ```PATH```, otherwise use ```./node_modules/jest/bin/jest.js```)
