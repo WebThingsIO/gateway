@@ -1,5 +1,41 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#title-bar {
+  text-align: center;
+  height: 120px;
+  width: 100%;
+  line-height: 120px;
+  margin: 0;
+  padding: 0;
+}
+
+#title-bar > h1 {
+  margin: 0;
+}
+
+#back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  border: 0;
+  background: none;
+}
+
+#back-button:active {
+  background: #f8f8f8;
+}
+
+#back-button > img {
+  margin: 40px;
+  padding: 0;
+}
+
 #rules {
-  margin: 0 auto;
 }
 
 .rule {
