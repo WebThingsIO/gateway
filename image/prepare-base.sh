@@ -150,4 +150,11 @@ END
 sudo chmod +x /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
 
+# Check for an update every day
+sudo sh -c 'cat > /etc/cron.daily/mozilla-iot-gateway-update.sh' <<END
+#!/bin/bash
+su pi -c 'node /home/pi/mozilla-iot/gateway/tools/check-update.js'
+END
+sudo chmod +x /etc/cron.daily/mozilla-iot-gateway-update.sh
+
 echo "Done"
