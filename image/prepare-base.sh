@@ -74,7 +74,7 @@ StandardOutput=journal
 StandardError=journal
 User=pi
 # Edit this line, if needed, to specify where you installed the server
-WorkingDirectory=/home/pi/mozilla-iot/gateway
+WorkingDirectory=/home/pi/mozilla-iot/
 # Edit this line, if needed, to set the correct path to the script
 ExecStart=/home/pi/mozilla-iot/gateway/tools/rollback.sh
 
@@ -151,10 +151,11 @@ sudo chmod +x /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
 
 # Check for an update every day
-sudo sh -c 'cat > /etc/cron.daily/mozilla-iot-gateway-update.sh' <<END
+sudo sh -c 'cat > /etc/cron.daily/mozilla-iot-gateway-update' <<END
 #!/bin/bash
-su pi -c 'node /home/pi/mozilla-iot/gateway/tools/check-update.js'
+cd /home/pi/mozilla-iot/gateway 
+su pi -c '/home/pi/.nvm/versions/node/v7.10.1/bin/node tools/check-for-update.js'
 END
-sudo chmod +x /etc/cron.daily/mozilla-iot-gateway-update.sh
+sudo chmod +x /etc/cron.daily/mozilla-iot-gateway-update
 
 echo "Done"
