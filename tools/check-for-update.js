@@ -44,7 +44,7 @@ fetch('https://api.github.com/repos/hobinjk/gateway/releases').then(res => {
           if (err) {
             reject(err);
           } else {
-            resolve(err);
+            resolve();
           }
         });
       });
