@@ -157,7 +157,7 @@ gateway.readThings().then(things => {
       hideConnection();
     }
 
-    if (!rule.trigger && !rule.action) {
+    if (!document.querySelector('.device-property-block')) {
       onboardingHint.classList.remove('hidden');
     } else {
       onboardingHint.classList.add('hidden');
