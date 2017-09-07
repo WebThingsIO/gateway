@@ -286,6 +286,12 @@ body {
   fill: #7DC124;
 }
 
+#onboarding-hint h2 {
+  color: #4a4a4a;
+  font-weight: normal;
+  font-style: italic;
+}
+
 #onboarding-hint.hidden {
   display: none;
 }
