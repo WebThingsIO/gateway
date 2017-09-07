@@ -151,7 +151,7 @@ gateway.readThings().then(things => {
   function onRuleUpdate() {
     ruleName.textContent = rule.name || 'Rule Name';
     ruleDescription.textContent = rule.toHumanDescription();
-    if (rule.trigger && rule.action) {
+    if (rule.trigger && rule.action && !document.querySelector('.dragging')) {
       showConnection();
     } else {
       hideConnection();
