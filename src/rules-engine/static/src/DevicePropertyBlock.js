@@ -68,6 +68,8 @@ DevicePropertyBlock.prototype.onDown = function() {
   } else if (this.role === 'action') {
     this.ruleActionArea.classList.remove('inactive');
   }
+
+  this.rule.onUpdate();
 };
 
 /**
@@ -142,6 +144,8 @@ DevicePropertyBlock.prototype.onUp = function(clientX, clientY) {
   if (clientY > window.innerHeight - devicesListHeight) {
     this.remove();
   }
+
+  this.rule.onUpdate();
 };
 
 /**
