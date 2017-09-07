@@ -21,6 +21,7 @@ var Menu = {
     this.items.adapters = document.getElementById('adapters-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
+    this.items.speech = document.getElementById('speech-button');
     this.currentItem = 'things';
     window.API.getExperimentSetting('floorplan').then(function(value) {
       if (value) {
@@ -30,6 +31,15 @@ var Menu = {
       }
     }).catch(function(e) {
       console.log('Floorplan experiment setting is not yet set ' + e);
+    });
+    window.API.getExperimentSetting('speech').then(function(value) {
+      if (value) {
+        Menu.showItem('speech');
+      } else {
+        Menu.hideItem('speech');
+      }
+    }).catch(function(e) {
+      console.log('Speech experiment setting is not yet set ' + e);
     });
   },
 

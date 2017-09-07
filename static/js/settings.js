@@ -135,5 +135,30 @@ var SettingsScreen = {
       });
 
     }).bind(this));
+
+    this.speechExperimentCheckbox =
+      document.getElementById('speech-experiment-checkbox');
+
+    window.API.getExperimentSetting('speech')
+    .then((function(value) {
+      this.speechExperimentCheckbox.checked = value;
+    }).bind(this))
+    .catch(function(e) {
+      console.error('Error getting speech experiment setting ' + e);
+    });
+
+    this.speechExperimentCheckbox.addEventListener('change', (function(e) {
+      var value = e.target.checked ? true : false;
+      window.API.setExperimentSetting('speech', value).then(function() {
+        if (value) {
+          Menu.showItem('speech');
+        } else {
+          Menu.hideItem('speech');
+        }
+      }).catch(function(e) {
+        console.error('Failed to enabled speech experiment: ' + e);
+      });
+
+    }).bind(this));
   }
 };
