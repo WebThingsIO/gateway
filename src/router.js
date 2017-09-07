@@ -72,6 +72,8 @@ var Router = {
       auth, require('./controllers/log_out_controller'));
     app.use(API_PREFIX + Constants.USERS_PATH,
       require('./controllers/users_controller'));
+    app.use(API_PREFIX + Constants.COMMAND_PATH,
+      require('./controllers/command_controller'));
   }
 };
 

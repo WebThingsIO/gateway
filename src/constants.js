@@ -19,6 +19,7 @@ exports.ACTIONS_PATH = '/actions';
 exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
 exports.SETTINGS_PATH = '/settings';
+exports.COMMAND_PATH = '/command';
 exports.DEBUG_PATH = '/debug';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.

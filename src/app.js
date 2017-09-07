@@ -20,6 +20,7 @@ const adapterManager = require('./adapter-manager');
 const db = require('./db');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
+const JSONWebToken = require('./models/jsonwebtoken');
 
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
@@ -50,6 +51,7 @@ function startHttpsGateway() {
   httpsServer.listen(port, function() {
     adapterManager.loadAdapters();
     console.log('Listening on port', httpsServer.address().port);
+    commandParserConfigure(httpsServer);
   });
 
   // Redirect HTTP to HTTPS
@@ -115,6 +117,23 @@ function getOptions() {
   }
 
   return options;
+}
+
+/**
+ * The command parser talks to the server over the public HTTP/WS API,
+ * the gateway needs to configure it with a JWT and a server address
+ * @param {http.Server|https.Server} server
+ */
+function commandParserConfigure(server) {
+  const commandParser = require('./controllers/command_controller.js');
+  let protocol = 'https';
+  if (server instanceof http.Server) {
+    protocol = 'http';
+  }
+  const gatewayHref = protocol + '://127.0.0.1:' + server.address().port;
+  JSONWebToken.issueToken(-1).then(jwt => {
+    commandParser.configure(gatewayHref, jwt);
+  });
 }
 
 function createApp() {
