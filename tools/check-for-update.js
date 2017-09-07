@@ -6,7 +6,7 @@ const exec = require('child_process').exec;
 
 let pkg = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf-8'}));
 
-fetch('https://api.github.com/repos/hobinjk/gateway/releases').then(res => {
+fetch('https://api.github.com/repos/mozilla-iot/gateway/releases').then(res => {
   return res.json();
 }).then(releases => {
   // Assumes that releases are in chronological order, latest-first
@@ -25,7 +25,9 @@ fetch('https://api.github.com/repos/hobinjk/gateway/releases').then(res => {
     // download latestRelease.assets[:].browser_download_url
     let gatewayUrl = null;
     let nodeModulesUrl = null;
-    let validAssetRe = new RegExp('^https://github.com/hobinjk/gateway/releases/download/' + releaseVer + '/[a-z0-9_-]+.tar.gz$');
+    let validAssetRe = new RegExp(
+      '^https://github.com/mozilla-iot/gateway/releases/download/' + releaseVer
+      + '/[a-z0-9_-]+.tar.gz$');
     for (let asset of latestRelease.assets) {
       if (!asset.browser_download_url.match(validAssetRe)) {
         continue;
@@ -40,7 +42,8 @@ fetch('https://api.github.com/repos/hobinjk/gateway/releases').then(res => {
 
     if (nodeModulesUrl && gatewayUrl) {
       return new Promise(function(resolve, reject) {
-        exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`, {cwd: '..'}, function(err) {
+        exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
+          {cwd: '..'}, function(err) {
           if (err) {
             reject(err);
           } else {
@@ -49,7 +52,8 @@ fetch('https://api.github.com/repos/hobinjk/gateway/releases').then(res => {
         });
       });
     } else {
-      console.warn(`Release ${releaseVer} does not include archives`, latestRelease.assets);
+      console.warn(`Release ${releaseVer} does not include archives`,
+        latestRelease.assets);
     }
   } else {
     console.log(`Our version ${currentVer} >= ${releaseVer}, exiting`);
