@@ -61,6 +61,10 @@
   background-image: url('../images/floorplan-icon.png');
 }
 
+#main-menu #microphone-menu-item {
+  background-image: url('../images/microphone.svg');
+}
+
 .log-out-button {
   background-color: unset;
   text-align: left;

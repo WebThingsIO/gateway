@@ -4838,6 +4838,10 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
+speaktome-api@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/speaktome-api/-/speaktome-api-0.1.2.tgz#a02bfb1c3ac9159bc3c93bc4bb4e9303f5c71950"
+
 split-string@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-2.1.1.tgz#af4b06d821560426446c3cd931cda618940d37d0"

@@ -174,3 +174,7 @@
 #floorplan-experiment-item {
   background-image: url('../images/floorplan-icon.png');
 }
+
+#speech-experiment-item {
+  background-image: url('../images/microphone.svg');
+}

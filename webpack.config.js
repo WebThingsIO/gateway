@@ -24,6 +24,11 @@ const plugins = [
     banner: 'require("source-map-support").install();',
     raw: true,
   }),
+  // Here we install the speak-to-me api into static
+  new CopyWebpackPlugin([
+    { from: 'node_modules/speaktome-api/build/stm_web.min.js',
+        to: '../static/js/lib' },
+  ]),
   // Until we ship our plugin API we simply copy these over.
   new CopyWebpackPlugin([
     { from: 'src/adapters/', to: 'adapters/' },

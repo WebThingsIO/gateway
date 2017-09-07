@@ -10,7 +10,8 @@
 'use strict';
 
 /* globals ThingsScreen, AdaptersScreen,
-AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router */
+AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router,
+Speech */
 
 var App = {
   /**
@@ -33,6 +34,7 @@ var App = {
     AdaptersScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
+    Speech.init(this);
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');

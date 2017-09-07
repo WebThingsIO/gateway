@@ -38,6 +38,8 @@
     <script type="text/javascript" src="/js/check-user.js"></script>
     <script type="text/javascript" src="/js/floorplan.js"></script>
     <script type="text/javascript" src="/js/settings.js"></script>
+    <script type="text/javascript" src="/js/lib/stm_web.min.js"></script>
+    <script type="text/javascript" src="/js/speech.js"></script>
 
   </head>
   <body>
@@ -90,6 +92,11 @@
             <input id="floorplan-experiment-checkbox" class="experiment-checkbox" type="checkbox">
             <label for="floorplan-experiment-checkbox">Floorplan</label>
           </li>
+          <li id="speech-experiment-item" class="experiment-item">
+            <input id="speech-experiment-checkbox" class="experiment-checkbox"
+                   type="checkbox">
+            <label for="speech-experiment-checkbox">Speech Commands</label>
+          </li>
         </ul>
       </section>
       <a href="/settings" id="settings-back-button" class="hidden back-button icon-button"></a>
@@ -112,7 +119,8 @@
 
     <!-- Floating buttons -->
     <button id="menu-button"></button>
-
+    <!-- Speech button -->
+    <button id="speech-button" class="icon-button hidden"></button>
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden dialog">
       <button id="add-thing-back-button" class="back-button icon-button"></button>
