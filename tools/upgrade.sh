@@ -11,9 +11,26 @@ if [ -d "/tmp/gateway/node_modules" ]; then
 	rm -r /tmp/gateway/node_modules
 fi
 
-$gateway_old/tools/extract-ca-archive.sh gateway-*.tar.gz /tmp
+extractCAArchive() {
+  file=$1
+  target=$2
+  digest=${file#*-}
+  digest=${digest%.tar.gz}
+  base_name=${file%-*}
+
+  check_digest=$(openssl dgst -sha256 $base_name-$digest.tar.gz | awk '{print $2}')
+
+  if [ "$digest" != "$check_digest" ]; then
+    echo "Digest mismatch: $digest != $check_digest"
+    exit -1
+  fi
+
+  tar xzf "$base_name-$digest.tar.gz" -C $target
+}
+
+extractCAArchive gateway-*.tar.gz /tmp
 rm gateway-*.tar.gz
-$gateway_old/tools/extract-ca-archive.sh node_modules-*.tar.gz /tmp/gateway
+extractCAArchive node_modules-*.tar.gz /tmp/gateway
 rm node_modules-*.tar.gz
 
 sudo systemctl stop mozilla-iot-gateway.service
