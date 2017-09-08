@@ -360,6 +360,12 @@ var Database = {
     });
   },
 
+  /**
+   * Run a SQL statement
+   * @param {String} sql
+   * @param {Array<any>} values
+   * @return {Promise<Object>} promise resolved to `this` of statement result
+   */
   run: function(sql, values) {
     return new Promise((accept, reject) => {
       try {
