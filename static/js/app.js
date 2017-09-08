@@ -11,7 +11,7 @@
 
 /* globals ThingsScreen, AdaptersScreen,
 AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router,
-Speech */
+RulesScreen, RuleScreen, Speech */
 
 var App = {
   /**
@@ -35,11 +35,16 @@ var App = {
     SettingsScreen.init();
     FloorplanScreen.init();
     Speech.init(this);
+    RulesScreen.init();
+    RuleScreen.init();
+
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.adapters = document.getElementById('adapters-view');
     this.views.floorplan = document.getElementById('floorplan-view');
     this.views.settings = document.getElementById('settings-view');
+    this.views.rules = document.getElementById('rules-view');
+    this.views.rule = document.getElementById('rule-view');
     this.currentView = 'things';
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
@@ -65,6 +70,16 @@ var App = {
   showFloorplan: function() {
     FloorplanScreen.show();
     this.selectView('floorplan');
+  },
+
+  showRules: function() {
+    RulesScreen.show();
+    this.selectView('rules');
+  },
+
+  showRule: function(context) {
+    RuleScreen.show(context.params.rule);
+    this.selectView('rule');
   },
 
   selectView: function(view) {

@@ -20,6 +20,9 @@
     <link rel="stylesheet" type="text/css" href="/css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="/css/floorplan.css" />
     <link rel="stylesheet" type="text/css" href="/css/settings.css" />
+    <link rel="stylesheet" type="text/css" href="/css/rules-common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/rules.css" />
+    <link rel="stylesheet" type="text/css" href="/css/rule.css" />
 
     <script type="text/javascript" src="/js/api.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
@@ -40,6 +43,15 @@
     <script type="text/javascript" src="/js/settings.js"></script>
     <script type="text/javascript" src="/js/lib/stm_web.min.js"></script>
     <script type="text/javascript" src="/js/speech.js"></script>
+
+    <script type="text/javascript" src="/js/rules/DevicePropertyBlock.js"></script>
+    <script type="text/javascript" src="/js/rules/Draggable.js"></script>
+    <script type="text/javascript" src="/js/rules/Gateway.js"></script>
+    <script type="text/javascript" src="/js/rules/PropertySelect.js"></script>
+    <script type="text/javascript" src="/js/rules/Rule.js"></script>
+    <script type="text/javascript" src="/js/rules/RuleCard.js"></script>
+    <script type="text/javascript" src="/js/rules-screen.js"></script>
+    <script type="text/javascript" src="/js/rule-screen.js"></script>
 
   </head>
   <body>
@@ -106,11 +118,86 @@
       <a href="/settings" id="settings-back-button" class="hidden back-button icon-button"></a>
     </section>
 
+    <!-- Rules View -->
+    <section data-view="rules" id="rules-view" class="hidden">
+      <div class="title-bar">
+        <h1>Rules</h1>
+      </div>
+      <div id="rules">
+        <div id="create-rule" class="rule">
+          <h3>
+            +<br/>
+            Create Rule
+          </h3>
+        </div></div>
+    </section>
+
+    <section data-view="rule" id="rule-view" class="hidden">
+      <div class="title-bar">
+        <a href="/rules" class="rule-back-button">
+          <img src="/images/back-16.svg" alt="Back" width="40" height="40"/>
+        </a>
+        <div class="rule-info">
+          <h1><span class="rule-name">Rule Name</span><img src="/images/customize-16.svg" class="rule-name-customize"/></h1>
+          <p>Rule Description</p>
+        </div>
+        <button id="delete-button">
+          <img src="/images/delete-16.svg" alt="Delete" width="40" height="40"/>
+        </button>
+      </div>
+      <div id="rule-area">
+        <div id="onboarding-hint">
+         <div class="drag-hint">
+            <div class="drag-hint-container">
+              <h2>Drag your devices here to start creating a rule</h2>
+            </div>
+          </div>
+        </div>
+        <div id="drag-hint">
+          <div class="drag-hint-trigger drag-hint">
+            <div class="drag-hint-container">
+              <p>Add device as input</p>
+              <div class="drag-hint-block device-block">+</div>
+            </div>
+          </div>
+          <div class="drag-hint-effect drag-hint">
+            <div class="drag-hint-container">
+              <p>Add device as output</p>
+              <div class="drag-hint-block device-block">+</div>
+            </div>
+          </div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" id="connection">
+          <circle class="trigger" r="6"></circle>
+          <circle class="effect" r="6"></circle>
+          <path d=""></path>
+        </svg>
+      </div>
+      <div id="devices-list">
+        <div id="delete-area">
+          <div class="delete-container">
+            <h2 class="delete-prompt">Drop devices here to disconnect</h2>
+          </div>
+        </div>
+        <h3 class="devices-list-header">My Devices</h3>
+      </div>
+      <div id="rule-delete-overlay">
+        <div class="rule-delete-dialog">
+          <p>Are you sure you want to remove this rule permanently?</p>
+          <input class="rule-delete-cancel-button" type="button"
+                 value="Cancel"/>
+          <input class="rule-delete-confirm-button" type="button"
+                 value="Remove Rule"/>
+        </div>
+      </div>
+    </section>
+
     <!-- Menu -->
     <nav id="main-menu" class="hidden">
       <ul>
         <li><a id="things-menu-item" href="/things" class="selected">Things</a></li>
-        <li><a id="rules-menu-item" href="/rules-engine" class="hidden">Rules</a></li>
+        <li><a id="rules-menu-item" href="/rules" class="hidden">Rules</a></li>
         <li><a id="adapters-menu-item" href="/adapters">Adapters</a></li>
         <li><a id="floorplan-menu-item" href="/floorplan" class="hidden">Floorplan</a></li>
         <li><a id="settings-menu-item" href="/settings">Settings</a></li>
