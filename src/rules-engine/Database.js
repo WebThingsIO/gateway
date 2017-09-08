@@ -6,11 +6,12 @@
 
 'use strict';
 
-const config = require('config');
-const sqlite3 = require('sqlite3').verbose();
+const db = require('../db.js');
 
 function Database() {
-  this.db = null;
+  if (!db.db) {
+    db.open();
+  }
   this.open();
 }
 
@@ -18,14 +19,11 @@ function Database() {
  * Open the database
  */
 Database.prototype.open = function() {
-  let filename = config.get('database.filename');
-  this.db = new sqlite3.Database(filename);
-
   let rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
     id INTEGER PRIMARY KEY,
     description TEXT
   );`;
-  return this.run(rulesTableSQL, []);
+  return db.run(rulesTableSQL, []);
 };
 
 /**
@@ -35,7 +33,7 @@ Database.prototype.open = function() {
  */
 Database.prototype.getRules = function() {
   return new Promise((resolve, reject) => {
-    this.db.all(
+    db.db.all(
       'SELECT id, description FROM rules',
       [],
       function(err, rows) {
@@ -60,7 +58,7 @@ Database.prototype.getRules = function() {
  * @return {Promise<number>} resolves to rule id
  */
 Database.prototype.createRule = function(desc) {
-  return this.run(
+  return db.run(
     'INSERT INTO rules (description) VALUES (?)',
     [JSON.stringify(desc)]
   ).then(res => {
@@ -75,7 +73,7 @@ Database.prototype.createRule = function(desc) {
  * @return {Promise}
  */
 Database.prototype.updateRule = function(id, desc) {
-  return this.run(
+  return db.run(
     'UPDATE rules SET description = ? WHERE id = ?',
     [JSON.stringify(desc), id]
   );
@@ -87,29 +85,7 @@ Database.prototype.updateRule = function(id, desc) {
  * @return {Promise}
  */
 Database.prototype.deleteRule = function(id) {
-  return this.run('DELETE FROM rules WHERE id = ?', [id]);
-};
-
-/**
- * Run a SQL statement
- * @param {String} sql
- * @param {Array<any>} values
- * @return {Promise<Object>} promise resolved to `this` of statement result
- */
-Database.prototype.run = function(sql, values) {
-  return new Promise((resolve, reject) => {
-    this.db.run(
-      sql,
-      values,
-      function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(this);
-        }
-      }
-    );
-  });
+  return db.run('DELETE FROM rules WHERE id = ?', [id]);
 };
 
 module.exports = new Database();
