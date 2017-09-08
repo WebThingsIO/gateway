@@ -51,10 +51,10 @@ Rule.prototype.update = function() {
 
   let request = null;
   if (typeof(this.id) !== 'undefined') {
-    request = fetch('/rules-engine/rules/' + this.id, fetchOptions);
+    request = fetch('/rules/' + this.id, fetchOptions);
   } else {
     fetchOptions.method = 'POST';
-    request = fetch('/rules-engine/rules/', fetchOptions).then(res => {
+    request = fetch('/rules/', fetchOptions).then(res => {
       return res.json();
     }).then(rule => {
       this.id = rule.id;

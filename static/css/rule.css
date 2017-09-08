@@ -1,9 +1,13 @@
-body {
+#rule-view.hidden {
+  display: none;
+}
+
+#rule-view.selected {
   display: flex;
   flex-direction: column;
 }
 
-#title-bar {
+#rule-view > .title-bar {
   width: 100%;
   height: 120px;
   display: flex;
@@ -12,7 +16,7 @@ body {
   background: white;
 }
 
-#back-button {
+.rule-back-button {
   border: 0;
   background: #4a4a4a;
   color: white;
@@ -20,11 +24,11 @@ body {
   height: 120px;
 }
 
-#back-button:active {
+.rule-back-button:active {
   background: #222;
 }
 
-#back-button > img {
+.rule-back-button > img {
   margin: 40px;
   padding: 0;
 }
@@ -67,7 +71,7 @@ body {
 
 #rule-area {
   position: relative;
-  background: url(/rules-engine/images/background.png);
+  background: url(/images/background.png);
   flex: 1;
 }
 

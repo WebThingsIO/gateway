@@ -16,13 +16,14 @@ var Menu = {
     this.element = document.getElementById('main-menu');
     this.hidden = true;
     this.element.addEventListener('click', this.handleClick.bind(this));
-    this.items = [];
+    this.items = {};
     this.items.things = document.getElementById('things-menu-item');
     this.items.adapters = document.getElementById('adapters-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
     this.items.speech = document.getElementById('speech-button');
     this.items.rules = document.getElementById('rules-menu-item');
+    this.items.rule = document.getElementById('rules-menu-item');
     this.currentItem = 'things';
 
     this.getExperimentSetting('floorplan');

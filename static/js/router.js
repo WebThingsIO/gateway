@@ -19,6 +19,8 @@ var Router = {
     page('/settings', App.showSettings.bind(App));
     page('/settings/:section', App.showSettings.bind(App));
     page('/floorplan', App.showFloorplan.bind(App));
+    page('/rules', App.showRules.bind(App));
+    page('/rules/:rule', App.showRule.bind(App));
     page();
   }
 };
