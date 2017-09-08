@@ -7,12 +7,12 @@
 const Property = require('../Property');
 
 /**
- * Action - The outcome of a Rule once triggered
+ * Effect - The outcome of a Rule once triggered
  */
-class Action {
+class Effect {
   /**
-   * Create an Action based on a wire-format description
-   * @param {ActionDescription} desc
+   * Create an Effect based on a wire-format description
+   * @param {EffectDescription} desc
    */
   constructor(desc) {
     this.type = this.constructor.name;
@@ -20,7 +20,7 @@ class Action {
   }
 
   /**
-   * @return {ActionDescription}
+   * @return {EffectDescription}
    */
   toDescription() {
     return {
@@ -30,7 +30,7 @@ class Action {
   }
 
   /**
-   * Set the state of Action based on a trigger
+   * Set the state of Effect based on a trigger
    * @param {State} _state
    */
   setState(_state) {
@@ -38,4 +38,4 @@ class Action {
   }
 }
 
-module.exports = Action;
+module.exports = Effect;

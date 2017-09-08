@@ -19,13 +19,13 @@ const testRule = {
     type: 'BooleanTrigger',
     onValue: true
   },
-  action: {
+  effect: {
     property: {
       name: 'on',
       type: 'boolean',
       href: '/things/light1/properties/on'
     },
-    type: 'PulseAction',
+    type: 'PulseEffect',
     value: true
   }
 };
@@ -43,13 +43,13 @@ const numberTestRule = {
     levelType: 'LESS',
     level: 120
   },
-  action: {
+  effect: {
     property: {
       name: 'sat',
       type: 'number',
       href: '/things/light2/properties/sat'
     },
-    type: 'SetAction',
+    type: 'SetEffect',
     value: 30
   }
 };
@@ -81,7 +81,7 @@ describe('index router', function() {
           property: null,
           type: 'Whatever'
         },
-        action: testRule.action
+        effect: testRule.effect
       }));
     expect(err.response.status).toEqual(400);
   });

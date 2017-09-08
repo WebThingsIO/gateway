@@ -81,7 +81,7 @@ function makeDeviceBlock(thing) {
 
 /**
  * Instantiate a DevicePropertyBlock
- * @param {'trigger'|'action'} role
+ * @param {'trigger'|'effect'} role
  * @param {number} x
  * @param {number} y
  */
@@ -99,7 +99,7 @@ function showConnection() {
   connection.classList.remove('hidden');
 
   let triggerBlock = document.querySelector('.device-block.trigger').parentNode;
-  let actionBlock = document.querySelector('.device-block.action').parentNode;
+  let effectBlock = document.querySelector('.device-block.effect').parentNode;
   function transformToCoords(elt) {
     let re = /translate\((\d+)px, +(\d+)px\)/;
     let matches = elt.style.transform.match(re);
@@ -111,12 +111,12 @@ function showConnection() {
     };
   }
   let triggerCoords = transformToCoords(triggerBlock);
-  let actionCoords = transformToCoords(actionBlock);
+  let effectCoords = transformToCoords(effectBlock);
 
   let startX = triggerCoords.x + 310;
   let startY = triggerCoords.y + 50;
-  let endX = actionCoords.x - 10;
-  let endY = actionCoords.y + 50;
+  let endX = effectCoords.x - 10;
+  let endY = effectCoords.y + 50;
 
   let midX = (startX + endX) / 2;
 
@@ -130,9 +130,9 @@ function showConnection() {
   let circleTrigger = connection.querySelector('.trigger');
   circleTrigger.setAttribute('cx', startX);
   circleTrigger.setAttribute('cy', startY);
-  let circleAction = connection.querySelector('.action');
-  circleAction.setAttribute('cx', endX);
-  circleAction.setAttribute('cy', endY);
+  let circleEffect = connection.querySelector('.effect');
+  circleEffect.setAttribute('cx', endX);
+  circleEffect.setAttribute('cy', endY);
 }
 
 function hideConnection() {
@@ -151,7 +151,7 @@ gateway.readThings().then(things => {
   function onRuleUpdate() {
     ruleName.textContent = rule.name || 'Rule Name';
     ruleDescription.textContent = rule.toHumanDescription();
-    if (rule.trigger && rule.action && !document.querySelector('.dragging')) {
+    if (rule.trigger && rule.effect && !document.querySelector('.dragging')) {
       showConnection();
     } else {
       hideConnection();
@@ -166,13 +166,13 @@ gateway.readThings().then(things => {
   rule = new Rule(gateway, ruleDesc, onRuleUpdate);
   if (ruleDesc) {
     let areaRect = ruleArea.getBoundingClientRect();
-    // Create DevicePropertyBlocks from trigger and action if applicable
+    // Create DevicePropertyBlocks from trigger and effect if applicable
     if (ruleDesc.trigger) {
       makeDevicePropertyBlock('trigger', 20,
         areaRect.height / 2);
     }
-    if (ruleDesc.action) {
-      makeDevicePropertyBlock('action', areaRect.width - 320,
+    if (ruleDesc.effect) {
+      makeDevicePropertyBlock('effect', areaRect.width - 320,
         areaRect.height / 2);
     }
   }

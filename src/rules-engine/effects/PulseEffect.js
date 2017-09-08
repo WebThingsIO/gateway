@@ -5,15 +5,15 @@
  */
 
 const assert = require('assert');
-const Action = require('./Action');
+const Effect = require('./Effect');
 
 /**
- * An Action which permanently sets the target property to
- * a value when triggered
+ * An Effect which temporarily sets the target property to
+ * a value before restoring its original value
  */
-class SetAction extends Action {
+class PulseEffect extends Effect {
   /**
-   * @param {ActionDescription} desc
+   * @param {EffectDescription} desc
    */
   constructor(desc) {
     super(desc);
@@ -21,10 +21,11 @@ class SetAction extends Action {
     assert(typeof this.value === this.property.type,
       'setpoint and property must be same type');
     this.on = false;
+    this.oldValue = null;
   }
 
   /**
-   * @return {ActionDescription}
+   * @return {EffectDescription}
    */
   toDescription() {
     return Object.assign(
@@ -34,18 +35,21 @@ class SetAction extends Action {
   }
 
   /**
-   * @return {State}
+   * @param {State} state
    */
   setState(state) {
     if (!this.on && state.on) {
-      this.on = true;
-      return this.property.set(this.value);
+      this.property.get().then(value => {
+        this.oldValue = value;
+        this.on = true;
+        return this.property.set(this.value);
+      });
     }
     if (this.on && !state.on) {
       this.on = false;
-      return Promise.resolve();
+      return this.property.set(this.oldValue);
     }
   }
 }
 
-module.exports = SetAction;
+module.exports = PulseEffect;

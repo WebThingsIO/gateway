@@ -56,7 +56,7 @@ PropertySelect.prototype.addOption = function(name, value, selected) {
 /**
  * Updates available options based on the PropertySelector's
  * DevicePropertyBlock's role.
- * @param {'trigger'|'action'} role
+ * @param {'trigger'|'effect'} role
  */
 PropertySelect.prototype.updateOptionsForRole = function(role) {
   if (this.role === role) {
@@ -88,21 +88,21 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           trigger: triggerOff
         });
       }
-    } else if (role === 'action') {
+    } else if (role === 'effect') {
       if (property.type === 'boolean') {
-        let actionOn = {
-          type: 'PulseAction',
+        let effectOn = {
+          type: 'PulseEffect',
           property: property,
           value: true
         };
-        let actionOff = Object.assign({}, actionOn, {
+        let effectOff = Object.assign({}, effectOn, {
           value: false
         });
         this.addOption('On', {
-          action: actionOn
+          effect: effectOn
         });
         this.addOption('Off', {
-          action: actionOff
+          effect: effectOff
         });
       }
     }
@@ -126,8 +126,8 @@ PropertySelect.prototype.onClick = function(e) {
     if (rulePart.trigger) {
       this.rule.setTrigger(rulePart.trigger);
     }
-    if (rulePart.action) {
-      this.rule.setAction(rulePart.action);
+    if (rulePart.effect) {
+      this.rule.setEffect(rulePart.effect);
     }
   }
 };
