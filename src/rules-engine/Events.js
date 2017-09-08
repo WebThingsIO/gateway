@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 module.exports = {
-  // Sent by a trigger to a rule to notify actions
+  // Sent by a trigger to a rule to notify effects
   STATE_CHANGED: 'state-changed',
   // Sent by a property to a trigger to potentially change state
   VALUE_CHANGED: 'value-changed'

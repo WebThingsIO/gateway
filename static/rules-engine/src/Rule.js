@@ -25,7 +25,7 @@ function Rule(gateway, desc, onUpdate) {
       this.name = 'Rule Name';
     }
     this.trigger = desc.trigger;
-    this.action = desc.action;
+    this.effect = desc.effect;
   }
 }
 
@@ -85,13 +85,13 @@ Rule.prototype.delete = function() {
  * @return {RuleDescription?} description or null if not a valid rule
  */
 Rule.prototype.toDescription = function() {
-  if (!this.trigger || !this.action) {
+  if (!this.trigger || !this.effect) {
     return null;
   }
   return {
     name: this.name,
     trigger: this.trigger,
-    action: this.action
+    effect: this.effect
   };
 };
 
@@ -130,26 +130,26 @@ Rule.prototype.toTriggerHumanDescription = function() {
 };
 
 /**
- * Convert the rule's action's description to a human-readable string
+ * Convert the rule's effect's description to a human-readable string
  * @return {String}
  */
-Rule.prototype.toActionHumanDescription = function() {
-  let actionThing = this.gateway.things.filter(
-    RuleUtils.byProperty(this.action.property)
+Rule.prototype.toEffectHumanDescription = function() {
+  let effectThing = this.gateway.things.filter(
+    RuleUtils.byProperty(this.effect.property)
   )[0];
 
-  let actionStr = '';
+  let effectStr = '';
 
-  if (this.action.type === 'SET') {
-    actionStr += 'set ';
+  if (this.effect.type === 'SET') {
+    effectStr += 'set ';
   } else {
-    actionStr += 'pulse ';
+    effectStr += 'pulse ';
   }
 
-  actionStr += `${actionThing.name} ${this.action.property.name} to `;
-  actionStr += this.action.value;
+  effectStr += `${effectThing.name} ${this.effect.property.name} to `;
+  effectStr += this.effect.value;
 
-  return actionStr;
+  return effectStr;
 };
 
 /**
@@ -158,15 +158,15 @@ Rule.prototype.toActionHumanDescription = function() {
  */
 Rule.prototype.toHumanDescription = function() {
   let triggerStr = '???';
-  let actionStr = '???';
+  let effectStr = '???';
 
   if (this.trigger) {
     triggerStr = this.toTriggerHumanDescription();
   }
-  if (this.action) {
-    actionStr = this.toActionHumanDescription();
+  if (this.effect) {
+    effectStr = this.toEffectHumanDescription();
   }
-  return 'If ' + triggerStr + ' then ' + actionStr;
+  return 'If ' + triggerStr + ' then ' + effectStr;
 };
 
 /**
@@ -179,11 +179,11 @@ Rule.prototype.setTrigger = function(trigger) {
 };
 
 /**
- * Set the action of the Rule, updating the server model if valid
+ * Set the effect of the Rule, updating the server model if valid
  * @return {Promise}
  */
-Rule.prototype.setAction = function(action) {
-  this.action = action;
+Rule.prototype.setEffect = function(effect) {
+  this.effect = effect;
   return this.update();
 };
 

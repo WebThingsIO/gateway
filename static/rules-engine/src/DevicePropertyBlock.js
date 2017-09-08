@@ -34,7 +34,7 @@ function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
 
   this.ruleArea = ruleArea;
   this.ruleTriggerArea = this.ruleArea.querySelector('.drag-hint-trigger');
-  this.ruleActionArea = this.ruleArea.querySelector('.drag-hint-action');
+  this.ruleEffectArea = this.ruleArea.querySelector('.drag-hint-effect');
 
   this.onDown = this.onDown.bind(this);
   this.onMove = this.onMove.bind(this);
@@ -65,8 +65,8 @@ DevicePropertyBlock.prototype.onDown = function() {
 
   if (this.role === 'trigger') {
     this.ruleTriggerArea.classList.remove('inactive');
-  } else if (this.role === 'action') {
-    this.ruleActionArea.classList.remove('inactive');
+  } else if (this.role === 'effect') {
+    this.ruleEffectArea.classList.remove('inactive');
   }
 
   this.rule.onUpdate();
@@ -80,14 +80,14 @@ DevicePropertyBlock.prototype.onMove = function(clientX, clientY, relX, relY) {
   let devicesListHeight = devicesList.getBoundingClientRect().height;
   if (clientY > window.innerHeight - devicesListHeight) {
     this.deviceBlock.classList.remove('trigger');
-    this.deviceBlock.classList.remove('action');
+    this.deviceBlock.classList.remove('effect');
   } else {
     if (relX < window.innerWidth / 2) {
       this.deviceBlock.classList.add('trigger');
-      this.deviceBlock.classList.remove('action');
+      this.deviceBlock.classList.remove('effect');
     } else {
       this.deviceBlock.classList.remove('trigger');
-      this.deviceBlock.classList.add('action');
+      this.deviceBlock.classList.add('effect');
     }
   }
 
@@ -131,12 +131,12 @@ DevicePropertyBlock.prototype.onUp = function(clientX, clientY) {
       this.ruleTriggerArea.classList.add('inactive');
       this.propertySelect.updateOptionsForRole(this.role);
     }
-  } else if (this.deviceBlock.classList.contains('action')) {
-    if (this.ruleActionArea.classList.contains('inactive')) {
+  } else if (this.deviceBlock.classList.contains('effect')) {
+    if (this.ruleEffectArea.classList.contains('inactive')) {
       this.reset();
     } else {
-      this.role = 'action';
-      this.ruleActionArea.classList.add('inactive');
+      this.role = 'effect';
+      this.ruleEffectArea.classList.add('inactive');
       this.propertySelect.updateOptionsForRole(this.role);
     }
   }
@@ -155,10 +155,10 @@ DevicePropertyBlock.prototype.reset = function() {
   this.elt.style.transform = this.resetState.transform;
   if (this.role === 'trigger') {
     this.deviceBlock.classList.add('trigger')
-    this.deviceBlock.classList.remove('action')
-  } else if (this.role === 'action') {
+    this.deviceBlock.classList.remove('effect')
+  } else if (this.role === 'effect') {
     this.deviceBlock.classList.remove('trigger')
-    this.deviceBlock.classList.add('action')
+    this.deviceBlock.classList.add('effect')
   } else {
     this.remove();
   }
@@ -174,10 +174,10 @@ DevicePropertyBlock.prototype.setRulePart = function(rulePart) {
     this.ruleTriggerArea.classList.add('inactive');
     this.propertySelect.updateOptionsForRole(this.role);
     this.propertySelect.selectByValue(rulePart);
-  } else if(rulePart.action) {
-    this.role = 'action';
-    this.deviceBlock.classList.add('action');
-    this.ruleActionArea.classList.add('inactive');
+  } else if(rulePart.effect) {
+    this.role = 'effect';
+    this.deviceBlock.classList.add('effect');
+    this.ruleEffectArea.classList.add('inactive');
     this.propertySelect.updateOptionsForRole(this.role);
     this.propertySelect.selectByValue(rulePart);
   }
@@ -190,7 +190,7 @@ DevicePropertyBlock.prototype.remove = function() {
   this.ruleArea.removeChild(this.elt);
   if (this.role === 'trigger') {
     this.rule.setTrigger(null);
-  } else if (this.role === 'action') {
-    this.rule.setAction(null);
+  } else if (this.role === 'effect') {
+    this.rule.setEffect(null);
   }
 };

@@ -7,7 +7,7 @@ const EventEmitter = require('events').EventEmitter;
 
 /**
  * The trigger component of a Rule which monitors some state and passes on
- * whether to be active to the Rule's action
+ * whether to be active to the Rule's effect
  */
 class Trigger extends EventEmitter {
   constructor() {

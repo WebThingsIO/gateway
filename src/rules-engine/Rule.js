@@ -3,18 +3,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
-const actions = require('./actions');
+const effects = require('./effects');
 const triggers = require('./triggers');
 const Events = require('./Events');
 
 class Rule {
   /**
    * @param {Trigger} trigger
-   * @param {Action} action
+   * @param {Effect} effect
    */
-  constructor(trigger, action) {
+  constructor(trigger, effect) {
     this.trigger = trigger;
-    this.action = action;
+    this.effect = effect;
 
     this.onTriggerStateChanged = this.onTriggerStateChanged.bind(this);
   }
@@ -28,11 +28,11 @@ class Rule {
   }
 
   /**
-   * On a state changed event, pass the state forwawrd to the rule's action
+   * On a state changed event, pass the state forwawrd to the rule's effect
    * @param {State} state
    */
   onTriggerStateChanged(state) {
-    this.action.setState(state);
+    this.effect.setState(state);
   }
 
   /**
@@ -41,7 +41,7 @@ class Rule {
   toDescription() {
     let desc = {
       trigger: this.trigger.toDescription(),
-      action: this.action.toDescription()
+      effect: this.effect.toDescription()
     };
     if (this.hasOwnProperty('id')) {
       desc.id = this.id;
@@ -69,8 +69,8 @@ class Rule {
  */
 Rule.fromDescription = function(desc) {
   const trigger = triggers.fromDescription(desc.trigger);
-  const action = actions.fromDescription(desc.action);
-  let rule = new Rule(trigger, action);
+  const effect = effects.fromDescription(desc.effect);
+  let rule = new Rule(trigger, effect);
   if (desc.hasOwnProperty('id')) {
     rule.id = desc.id;
   }

@@ -30,7 +30,7 @@ function RuleCard(gateway, elt, id, desc) {
         <img class="device-icon" src="images/onoff.svg" width="48px"
              height="48px"/>
       </div>
-      <div class="device-block action">
+      <div class="device-block effect">
         <img class="device-icon" src="images/onoff.svg" width="48px"
              height="48px"/>
       </div>

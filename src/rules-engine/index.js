@@ -39,8 +39,8 @@ function parseRuleFromBody(req, res, next) {
     res.status(400).send(new APIError('No trigger provided').toString());
     return;
   }
-  if (!req.body.action) {
-    res.status(400).send(new APIError('No action provided').toString());
+  if (!req.body.effect) {
+    res.status(400).send(new APIError('No effect provided').toString());
     return;
   }
 
