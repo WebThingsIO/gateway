@@ -19,7 +19,6 @@ const GetOpt = require('node-getopt');
 const config = require('config');
 const adapterManager = require('./adapter-manager');
 const db = require('./db');
-const JSONWebToken = require('./models/jsonwebtoken');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 
@@ -136,9 +135,7 @@ function rulesEngineConfigure(server) {
     protocol = 'http';
   }
   const gatewayHref = protocol + '://127.0.0.1:' + server.address().port;
-  JSONWebToken.issueToken(-1).then(jwt => {
-    rulesEngine.configure(gatewayHref, jwt);
-  });
+  rulesEngine.configure(gatewayHref);
 }
 
 function createApp() {

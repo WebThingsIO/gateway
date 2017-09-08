@@ -4,15 +4,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-const config = require('config');
 const PromiseRouter = require('express-promise-router');
-const winston = require('winston');
+const config = require('config');
 const storage = require('node-persist');
+const winston = require('winston');
 
+const APIError = require('./APIError');
 const Database = require('./Database');
 const Engine = require('./Engine');
+const JSONWebToken = require('../models/jsonwebtoken');
 const Rule = require('./Rule');
-const APIError = require('./APIError');
 
 const index = PromiseRouter();
 
@@ -98,12 +99,12 @@ index.delete('/rules/:id', async function(req, res) {
   }
 });
 
-index.configure = async function(gatewayHref, jwt) {
+index.configure = async function(gatewayHref) {
   if (!storage.setItem) {
     await storageInit();
   }
   await storage.setItem('RulesEngine.gateway', gatewayHref);
-  await storage.setItem('RulesEngine.jwt', jwt);
+  await storage.setItem('RulesEngine.jwt', await JSONWebToken.issueToken(-1));
 
   await Database.open();
   await engine.getRules();
