@@ -65,8 +65,8 @@
   background-image: url('../images/microphone.svg');
 }
 
-#main-menu #rules-engine-menu-item {
-  background-image: url('../images/rules-engine-icon.png');
+#main-menu #rules-menu-item {
+  background-image: url('../images/rules-icon.png');
 }
 
 .log-out-button {

@@ -22,12 +22,12 @@ var Menu = {
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
     this.items.speech = document.getElementById('speech-button');
-    this.items.rulesEngine =
-      document.getElementById('rules-engine-menu-item');
+    this.items.rules = document.getElementById('rules-menu-item');
     this.currentItem = 'things';
 
     this.getExperimentSetting('floorplan');
-    this.getExperimentSetting('rulesEngine');
+    this.getExperimentSetting('speech');
+    this.getExperimentSetting('rules');
   },
 
   /**
@@ -44,15 +44,6 @@ var Menu = {
       }
     }).catch(function(e) {
       console.log(experiment + ' experiment setting is not yet set ' + e);
-    });
-    window.API.getExperimentSetting('speech').then(function(value) {
-      if (value) {
-        Menu.showItem('speech');
-      } else {
-        Menu.hideItem('speech');
-      }
-    }).catch(function(e) {
-      console.log('Speech experiment setting is not yet set ' + e);
     });
   },
 

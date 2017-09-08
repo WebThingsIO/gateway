@@ -137,7 +137,6 @@ var SettingsScreen = {
     this.experimentSettings.classList.remove('hidden');
     this.showExperimentCheckbox('floorplan', 'floorplan-experiment-checkbox');
     this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
-    this.showExperimentCheckbox('rulesEngine',
-      'rules-engine-experiment-checkbox');
+    this.showExperimentCheckbox('rules', 'rules-experiment-checkbox');
   }
 };
