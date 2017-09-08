@@ -5,10 +5,8 @@
  */
 
 const config = require('config');
-const express = require('express');
 const PromiseRouter = require('express-promise-router');
 const winston = require('winston');
-const path = require('path');
 const storage = require('node-persist');
 
 const Database = require('./Database');
@@ -28,8 +26,6 @@ function storageInit() {
 }
 
 let engine = new Engine();
-
-index.use('/', express.static(path.join(__dirname, 'static')));
 
 /**
  * Express middleware for extracting rules from the bodies of requests
