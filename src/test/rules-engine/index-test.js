@@ -63,7 +63,7 @@ describe('index router', function() {
 
   it('gets a list of 0 rules', async () => {
     const res = await chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/')
+      .get(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -73,7 +73,7 @@ describe('index router', function() {
 
   it('fails to create a rule', async () => {
     const err = await pFinal(chai.request(server)
-      .post(Constants.RULES_ENGINE_PATH + '/rules/')
+      .post(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({
@@ -88,7 +88,7 @@ describe('index router', function() {
 
   it('creates a rule', async () => {
     let res = await chai.request(server)
-      .post(Constants.RULES_ENGINE_PATH + '/rules/')
+      .post(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(testRule);
@@ -98,7 +98,7 @@ describe('index router', function() {
     ruleId = res.body.id;
 
     res = await chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/')
+      .get(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -109,7 +109,7 @@ describe('index router', function() {
 
   it('gets this rule specifically', async () => {
     let res = await chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/' + ruleId)
+      .get(Constants.RULES_ENGINE_PATH + '/' + ruleId)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -118,7 +118,7 @@ describe('index router', function() {
 
   it('fails to get a nonexistent rule specifically', async () => {
     const err = await pFinal(chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/1337')
+      .get(Constants.RULES_ENGINE_PATH + '/1337')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
@@ -127,14 +127,14 @@ describe('index router', function() {
 
   it('modifies this rule', async () => {
     let res = await chai.request(server)
-      .put(Constants.RULES_ENGINE_PATH + '/rules/' + ruleId)
+      .put(Constants.RULES_ENGINE_PATH + '/' + ruleId)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(numberTestRule);
     expect(res.status).toEqual(200);
 
     res = await chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/')
+      .get(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -146,14 +146,14 @@ describe('index router', function() {
 
   it('deletes this rule', async () => {
     let res = await chai.request(server)
-      .delete(Constants.RULES_ENGINE_PATH + '/rules/' + ruleId)
+      .delete(Constants.RULES_ENGINE_PATH + '/' + ruleId)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send();
     expect(res.status).toEqual(200);
 
     res = await chai.request(server)
-      .get(Constants.RULES_ENGINE_PATH + '/rules/')
+      .get(Constants.RULES_ENGINE_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
     expect(res.status).toEqual(200);
@@ -163,7 +163,7 @@ describe('index router', function() {
 
   it('fails to delete a nonexistent rule', async () => {
     const err = await pFinal(chai.request(server)
-      .delete(Constants.RULES_ENGINE_PATH + '/rules/0')
+      .delete(Constants.RULES_ENGINE_PATH + '/0')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send());
@@ -172,7 +172,7 @@ describe('index router', function() {
 
   it('fails to modify a nonexistent rule', async () => {
     const err = await pFinal(chai.request(server)
-      .put(Constants.RULES_ENGINE_PATH + '/rules/0')
+      .put(Constants.RULES_ENGINE_PATH + '/0')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(testRule));
