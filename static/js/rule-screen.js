@@ -19,9 +19,10 @@ const RuleScreen = {
 
     this.rule = null;
 
+    this.view = document.getElementById('rule-view');
     this.ruleArea = document.getElementById('rule-area');
-    this.ruleName = document.querySelector('.rule-name');
-    this.ruleNameCustomize = document.querySelector('.rule-name-customize');
+    this.ruleName = this.view.querySelector('.rule-name');
+    this.ruleNameCustomize = this.view.querySelector('.rule-name-customize');
     this.ruleNameCustomize.addEventListener('click', () => {
       // Select all of ruleName, https://stackoverflow.com/questions/6139107/
       let range = document.createRange();
@@ -36,7 +37,7 @@ const RuleScreen = {
       this.rule.name = this.ruleName.textContent;
       this.rule.update();
     });
-    this.ruleDescription = document.querySelector('.rule-info > p');
+    this.ruleDescription = this.view.querySelector('.rule-info > p');
 
     this.devicesList = document.getElementById('devices-list');
     this.onboardingHint = document.getElementById('onboarding-hint');
@@ -44,8 +45,8 @@ const RuleScreen = {
 
     this.deleteOverlay = document.getElementById('rule-delete-overlay');
     this.deleteButton = document.getElementById('delete-button');
-    this.deleteCancel = document.querySelector('.rule-delete-cancel-button');
-    this.deleteConfirm = document.querySelector('.rule-delete-confirm-button');
+    this.deleteCancel = this.view.querySelector('.rule-delete-cancel-button');
+    this.deleteConfirm = this.view.querySelector('.rule-delete-confirm-button');
 
     this.deleteButton.addEventListener('click', () => {
       this.deleteOverlay.classList.add('active');
@@ -121,8 +122,9 @@ const RuleScreen = {
     this.connection.classList.remove('hidden');
 
     let triggerBlock =
-      document.querySelector('.device-block.trigger').parentNode;
-    let effectBlock = document.querySelector('.device-block.effect').parentNode;
+      this.view.querySelector('.device-block.trigger').parentNode;
+    let effectBlock =
+      this.view.querySelector('.device-block.effect').parentNode;
     function transformToCoords(elt) {
       let re = /translate\((\d+)px, +(\d+)px\)/;
       let matches = elt.style.transform.match(re);
@@ -183,14 +185,19 @@ const RuleScreen = {
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
-      rulePromise = fetch('/rules-engine/rules/' + ruleId, {
+      rulePromise = fetch('/rules/' + ruleId, {
         headers: API.headers()
       }).then(function(res) {
         return res.json();
       });
     }
 
+    function remove(elt) {
+      return elt.parentNode.removeChild(elt);
+    }
+
     this.gateway.readThings().then(things => {
+      this.devicesList.querySelectorAll('.device').forEach(remove);
       for (let thing of things) {
         let elt = this.makeDeviceBlock(thing);
         elt.addEventListener('mousedown',
@@ -202,6 +209,9 @@ const RuleScreen = {
     }).then(ruleDesc => {
       this.rule = new Rule(this.gateway, ruleDesc,
         this.onRuleUpdate.bind(this));
+
+      this.ruleArea.querySelectorAll('.device-property-block').forEach(remove);
+
       if (ruleDesc) {
         let areaRect = this.ruleArea.getBoundingClientRect();
         // Create DevicePropertyBlocks from trigger and effect if applicable

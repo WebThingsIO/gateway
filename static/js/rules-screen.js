@@ -24,6 +24,13 @@ var RulesScreen = {
     return fetch('/rules', {headers: API.headers()}).then(res => {
       return res.json();
      }).then(fetchedRules => {
+       this.rulesList.querySelectorAll('.rule').forEach(elt => {
+         if (elt.id === 'create-rule') {
+           return;
+         }
+         elt.parentNode.removeChild(elt);
+       });
+
        for (let ruleDesc of fetchedRules) {
          this.addRuleCard(ruleDesc);
        }
