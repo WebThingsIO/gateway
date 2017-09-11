@@ -1,17 +1,5 @@
-#rules-view > .title-bar {
-  text-align: center;
-  height: 12rem;
-  width: 100%;
-  line-height: 12rem;
-  margin: 0;
-  padding: 0;
-}
-
-#rules-view > .title-bar > h1 {
-  margin: 0;
-}
-
-#rules {
+#rules-view {
+  margin-top: 9.6rem;
 }
 
 .rule {
