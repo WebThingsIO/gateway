@@ -48,10 +48,6 @@ var Router = {
       }
     });
 
-    let rulesEngine = require('./rules-engine/index.js');
-    app.use(APP_PREFIX + Constants.RULES_ENGINE_PATH, rulesEngine);
-    app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
-
     // Web app routes - send index.html and fall back to client side URL router
     app.use(APP_PREFIX + '/*', require('./controllers/root_controller'));
 
@@ -80,6 +76,10 @@ var Router = {
       require('./controllers/users_controller'));
     app.use(API_PREFIX + Constants.UPLOADS_PATH,
       auth, require('./controllers/uploads_controller'));
+
+    let rulesEngine = require('./rules-engine/index.js');
+    app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
+
   }
 };
 

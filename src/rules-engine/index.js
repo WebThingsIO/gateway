@@ -55,7 +55,7 @@ function parseRuleFromBody(req, res, next) {
   next();
 }
 
-index.get('/rules', async function(req, res) {
+index.get('/', async function(req, res) {
   let rules = await engine.getRules();
   res.send(rules.map(rule => {
     return rule.toDescription();
@@ -63,7 +63,7 @@ index.get('/rules', async function(req, res) {
 });
 
 
-index.get('/rules/:id', async function(req, res) {
+index.get('/:id', async function(req, res) {
   try {
     const id = parseInt(req.params.id);
     const rule = await engine.getRule(id);
@@ -74,12 +74,12 @@ index.get('/rules/:id', async function(req, res) {
   }
 });
 
-index.post('/rules', parseRuleFromBody, async function(req, res) {
+index.post('/', parseRuleFromBody, async function(req, res) {
   let ruleId = await engine.addRule(req.rule);
   res.send({id: ruleId});
 });
 
-index.put('/rules/:id', parseRuleFromBody, async function(req, res) {
+index.put('/:id', parseRuleFromBody, async function(req, res) {
   try {
     await engine.updateRule(parseInt(req.params.id), req.rule);
     res.send({});
@@ -89,7 +89,7 @@ index.put('/rules/:id', parseRuleFromBody, async function(req, res) {
   }
 });
 
-index.delete('/rules/:id', async function(req, res) {
+index.delete('/:id', async function(req, res) {
   try {
     await engine.deleteRule(req.params.id)
     res.send({});
