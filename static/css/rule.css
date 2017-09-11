@@ -266,8 +266,11 @@
 
 #rule-view .rule-delete-dialog {
   display: block;
-  font-size: 2.4rem;
-  width: 24rem;
+  width: 48rem;
+}
+
+#rule-view .rule-delete-dialog > p {
+  font-size: 2rem;
 }
 
 #rule-delete-overlay.active {
