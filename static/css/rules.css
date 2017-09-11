@@ -137,6 +137,10 @@ input:checked + .rule-switch-slider:after {
   display: block;
 }
 
+#rules-view .rule-delete-dialog > p {
+  font-size: 2rem;
+}
+
 #rules-view .device-block {
   width: 8.2rem;
   height: 8.2rem;
