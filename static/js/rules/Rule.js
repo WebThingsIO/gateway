@@ -77,7 +77,7 @@ Rule.prototype.delete = function() {
     return;
   }
 
-  return fetch('/rules-engine/rules/' + this.id, fetchOptions);
+  return fetch('/rules/' + this.id, fetchOptions);
 };
 
 /**

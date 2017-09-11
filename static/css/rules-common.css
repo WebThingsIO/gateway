@@ -1,13 +1,20 @@
+#rules-view h1, #rule-view h1 {
+  font-size: 3.2rem;
+}
 
-.hidden {
-  display: none;
+#rules-view h3, #rule-view h3 {
+  font-size: 1.8rem;
+}
+
+#rules-view p, #rule-view p {
+  font-size: 1.2rem;
 }
 
 .device-block {
-  margin: 14px;
+  margin: 1.4rem;
   padding: 0;
-  width: 100px;
-  height: 100px;
+  width: 10rem;
+  height: 10rem;
   background: #787878;
   display: inline-block;
   vertical-align: bottom;
@@ -22,17 +29,17 @@
 }
 
 .device-icon {
-  margin: 27px;
+  margin: 2.7rem;
   padding: 0;
 }
 
 .rule-edit-button, .rule-delete-cancel-button, .rule-delete-confirm-button {
   background: #ededed;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.3rem;
   color: #404040;
-  padding: 12px 24px;
-  font-size: 20px;
+  padding: 1.2rem 2.4rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 

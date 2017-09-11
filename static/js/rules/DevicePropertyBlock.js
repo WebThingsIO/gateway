@@ -19,7 +19,7 @@ function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
   this.elt.classList.add('device-property-block');
   this.snapToGrid(x, y);
   this.elt.innerHTML = `<div class="device-block">
-      <img class="device-icon" src="/rules-engine/images/onoff.svg" width="48px"
+      <img class="device-icon" src="/images/onoff.svg" width="48px"
            height="48px"/>
     </div>
     <div class="device-property-info">

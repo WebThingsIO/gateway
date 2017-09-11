@@ -1,3 +1,7 @@
+#rule-view {
+  position: absolute;
+}
+
 #rule-view.hidden {
   display: none;
 }
@@ -9,7 +13,7 @@
 
 #rule-view > .title-bar {
   width: 100%;
-  height: 120px;
+  height: 12rem;
   display: flex;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   z-index: 10;
@@ -20,8 +24,8 @@
   border: 0;
   background: #4a4a4a;
   color: white;
-  width: 120px;
-  height: 120px;
+  width: 12rem;
+  height: 12rem;
 }
 
 .rule-back-button:active {
@@ -29,30 +33,30 @@
 }
 
 .rule-back-button > img {
-  margin: 40px;
+  margin: 4rem;
   padding: 0;
 }
 
 #delete-button {
   background: none;
   border: 0;
-  width: 120px;
-  height: 120px;
+  width: 12rem;
+  height: 12rem;
 }
 
 #delete-button:active {
   background: #777;
 }
 
-.rule-info {
-  padding-left: 48px;
+#rule-view .rule-info {
+  padding-left: 4.8rem;
   flex: 1;
 }
 
 .rule-info h1 {
   color: #4a4a4a;
   margin: 0;
-  margin-top: 8px;
+  margin-top: 0.8rem;
   font-weight: normal;
 }
 
@@ -64,9 +68,9 @@
   cursor: pointer;
 }
 
-.rule-info p {
+#rule-view .rule-info > p {
   color: #9b9b9b;
-  font-size: 20px;
+  font-size: 1.6rem;
 }
 
 #rule-area {
@@ -118,9 +122,9 @@
   background: none;
   border: 1px dashed black;
   text-align: center;
-  line-height: 100px;
-  font-size: 24px;
-  margin: 14px auto;
+  line-height: 10rem;
+  font-size: 2.4rem;
+  margin: 1.4rem auto;
 }
 
 #devices-list {
@@ -132,10 +136,10 @@
 
 #devices-list > h3,
 #devices-list p {
-  padding-left: 14px;
+  padding-left: 1.4rem;
 }
 
-.device-block {
+#devices-list .device-block {
   display: block;
 }
 
@@ -146,7 +150,7 @@
 
 .device-property-block {
   position: absolute;
-  width: 300px;
+  width: 30rem;
   display: flex;
 }
 
@@ -162,21 +166,21 @@
 }
 
 .device-name {
-  margin: 0 24px;
-  font-size: 16px;
-  height: 50px;
-  line-height: 50px;
+  margin: 0 2.4rem;
+  font-size: 1.6rem;
+  height: 5rem;
+  line-height: 5rem;
 }
 
 .property-select-option {
   background: #4a4a4a;
-  height: 50px;
-  line-height: 50px;
+  height: 5rem;
+  line-height: 5rem;
   color: white;
-  padding: 0 20px;
+  padding: 0 2rem;
   width: 100%;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 1.6rem;
   display: none;
   cursor: pointer;
 }
@@ -192,10 +196,10 @@
   right: 0;
   width: 0;
   height: 0;
-  border-bottom: 10px solid white;
-  border-right: 10px solid transparent;
-  border-left: 10px solid transparent;
-  transform: translate(1px, 35px) rotate(135deg);
+  border-bottom: 1rem solid white;
+  border-right: 1rem solid transparent;
+  border-left: 1rem solid transparent;
+  transform: translate(0.1rem, 3.5rem) rotate(135deg);
 }
 
 .property-select.open > .property-select-option.selected:after {
@@ -227,7 +231,7 @@
   background: white;
   box-sizing: border-box;
   margin: 0;
-  padding: 20px;
+  padding: 2rem;
 }
 
 .delete-container {
@@ -260,9 +264,9 @@
   background: rgba(64, 64, 64, 0.8);
 }
 
-.rule-delete-dialog {
+#rule-view .rule-delete-dialog {
   display: block;
-  font-size: 24px;
+  font-size: 2.4rem;
   width: 24rem;
 }
 
@@ -278,15 +282,19 @@
   height: 100%;
 }
 
+#connection.hidden {
+  display: none;
+}
+
 #connection > path {
   stroke: #7DC124;
-  stroke-width: 5px;
+  stroke-width: 0.5rem;
   fill: none;
 }
 
 #connection > circle {
   stroke: white;
-  stroke-width: 2px;
+  stroke-width: 0.2rem;
   fill: #7DC124;
 }
 
