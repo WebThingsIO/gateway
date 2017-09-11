@@ -207,6 +207,8 @@ const RuleScreen = {
         let elt = this.makeDeviceBlock(thing);
         elt.addEventListener('mousedown',
           this.onDeviceBlockDown.bind(this, thing));
+        elt.addEventListener('touchstart',
+          this.onDeviceBlockDown.bind(this, thing));
         this.devicesList.appendChild(elt);
       }
     }).then(function() {

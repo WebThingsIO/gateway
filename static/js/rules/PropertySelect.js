@@ -24,6 +24,9 @@ function PropertySelect(parent, rule, thing) {
   this.elt.addEventListener('mousedown', function(e) {
     e.stopPropagation();
   });
+  this.elt.addEventListener('touchstart', function(e) {
+    e.stopPropagation();
+  });
 
   parent.appendChild(this.elt);
 }

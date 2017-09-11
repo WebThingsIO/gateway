@@ -18,32 +18,58 @@ function Draggable(elt, afterDown, afterMove, afterUp) {
   this.onMove = this.onMove.bind(this);
   this.onUp = this.onUp.bind(this);
   elt.addEventListener('mousedown', this.onDown);
+  elt.addEventListener('touchstart', this.onDown);
 }
+
+/**
+ * @param {MouseEvent|TouchEvent} event
+ * @return {{clientX: number, clientY: number}}
+ */
+Draggable.prototype.getClientCoords = function(event) {
+  if (event.type.startsWith('touch')) {
+    return {
+      clientX: event.changedTouches[0].clientX,
+      clientY: event.changedTouches[0].clientY
+    };
+  }
+  return {
+    clientX: event.clientX,
+    clientY: event.clientY
+  };
+};
 
 Draggable.prototype.onDown = function(event) {
   window.addEventListener('mousemove', this.onMove);
+  window.addEventListener('touchmove', this.onMove);
   window.addEventListener('mouseup', this.onUp);
+  window.addEventListener('touchend', this.onUp);
   event.preventDefault();
+
   if (this.afterDown) {
-    this.afterDown(event.clientX, event.clientY);
+    let coords = this.getClientCoords(event);
+    this.afterDown(coords.clientX, coords.clientY);
   }
 };
 
 Draggable.prototype.onMove = function(event) {
-  let x = event.clientX - this.baseX;
-  let y = event.clientY - this.baseY;
+  let coords = this.getClientCoords(event);
+  let x = coords.clientX - this.baseX;
+  let y = coords.clientY - this.baseY;
 
   this.elt.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   if (this.afterMove) {
-    this.afterMove(event.clientX, event.clientY, x, y);
+    this.afterMove(coords.clientX, coords.clientY, x, y);
   }
 };
 
 Draggable.prototype.onUp = function(event) {
   window.removeEventListener('mousemove', this.onMove);
+  window.removeEventListener('touchmove', this.onMove);
   window.removeEventListener('mouseup', this.onUp);
+  window.removeEventListener('touchend', this.onUp);
   if (this.afterUp) {
-    this.afterUp(event.clientX, event.clientY);
+    let coords = this.getClientCoords(event);
+    this.afterUp(coords.clientX, coords.clientY);
   }
 };
 
