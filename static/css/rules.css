@@ -1,8 +1,8 @@
 #rules-view > .title-bar {
   text-align: center;
-  height: 120px;
+  height: 12rem;
   width: 100%;
-  line-height: 120px;
+  line-height: 12rem;
   margin: 0;
   padding: 0;
 }
@@ -16,13 +16,14 @@
 
 .rule {
   position: relative;
-  margin: 10px;
+  background: white;
+  margin: 1rem;
   padding: 0;
   box-sizing: border-box;
-  width: 400px;
-  height: 266px;
-  border: 2px solid #979797;
-  border-radius: 5px;
+  width: 40rem;
+  height: 26.6rem;
+  border: 0.2rem solid #979797;
+  border-radius: 0.5rem;
   display: inline-block;
   vertical-align: bottom;
 }
@@ -30,17 +31,18 @@
 .rule-info h3 {
   color: #4a4a4a;
   margin: 0;
+  font-size: 1.6rem;
 }
 
 .rule-info p {
   color: #9b9b9b;
-  font-size: 12px;
+  font-size: 1.2rem;
 }
 
 .rule-preview {
-  background: url(images/background-small.png);
+  background: url(/images/background-small.png);
   box-sizing: border-box;
-  padding: 30px;
+  padding: 3rem;
   width: 100%;
   height: 60%;
 }
@@ -58,14 +60,14 @@
 }
 
 .rule-info {
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   width: 66%;
   display: inline-block;
   vertical-align: bottom;
 }
 
 .rule-switch {
-  padding-right: 20px;
+  padding-right: 2rem;
   padding-top: 11%;
   float: right;
   display: inline-block;
@@ -78,9 +80,9 @@
 
 .rule-switch-slider {
   display: block;
-  width: 55px;
-  height: 22px;
-  border-radius: 11px;
+  width: 5.5rem;
+  height: 2.2rem;
+  border-radius: 1.1rem;
   background: #737373;
   cursor: pointer;
   transition: 0.1s;
@@ -89,11 +91,11 @@
 .rule-switch-slider:after {
   display: block;
   content: "";
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1.5rem;
   background: #d7d7d7;
-  transform: translate(0, -4px);
+  transform: translate(0, -0.4rem);
   transition: 0.1s;
 }
 
@@ -102,7 +104,7 @@ input:checked + .rule-switch-slider {
 }
 
 input:checked + .rule-switch-slider:after {
-  transform: translate(25px, -4px);
+  transform: translate(2.5rem, -0.4rem);
   background: #30e60b;
 }
 
@@ -113,16 +115,16 @@ input:checked + .rule-switch-slider:after {
 }
 
 #create-rule h3 {
-  padding-top: calc(266px / 2 - 2.5em);
+  padding-top: calc(26.6rem / 2 - 2.5em);
 }
 
 .rule-delete-button {
   position: absolute;
-  top: -18px;
-  right: -18px;
-  background: url(images/delete-button.png);
-  width: 36px;
-  height: 36px;
+  top: -1.8rem;
+  right: -1.8rem;
+  background: url(/images/delete-button.png);
+  width: 3.6rem;
+  height: 3.6rem;
   padding: 0;
   margin: 0;
   border-radius: 50%;
@@ -147,12 +149,12 @@ input:checked + .rule-switch-slider:after {
   display: block;
 }
 
-.device-block {
-  width: 82px;
-  height: 82px;
+#rules-view .device-block {
+  width: 8.2rem;
+  height: 8.2rem;
 }
 
-.device-icon {
-  margin: 17px;
+#rules-view .device-icon {
+  margin: 1.7rem;
   padding: 0;
 }

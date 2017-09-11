@@ -27,11 +27,11 @@ function RuleCard(gateway, elt, id, desc) {
     </div>
     <div class="rule-preview">
       <div class="device-block trigger">
-        <img class="device-icon" src="images/onoff.svg" width="48px"
+        <img class="device-icon" src="/images/onoff.svg" width="48px"
              height="48px"/>
       </div>
       <div class="device-block effect">
-        <img class="device-icon" src="images/onoff.svg" width="48px"
+        <img class="device-icon" src="/images/onoff.svg" width="48px"
              height="48px"/>
       </div>
     </div>
