@@ -1,4 +1,4 @@
-/* global Rule */
+/* global Rule, page */
 
 /**
  * A summary of a Rule in card format
@@ -65,7 +65,7 @@ function RuleCard(gateway, elt, id, desc) {
 }
 
 RuleCard.prototype.onEditButtonClick = function() {
-  window.location = 'edit/?ruleId=' + this.rule.id;
+  page('/rules/' + this.rule.id);
 };
 
 RuleCard.prototype.onDeleteButtonClick = function() {
