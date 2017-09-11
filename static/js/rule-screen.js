@@ -192,6 +192,11 @@ const RuleScreen = {
       });
     }
 
+    this.ruleArea.querySelector('.drag-hint-trigger')
+      .classList.remove('inactive');
+    this.ruleArea.querySelector('.drag-hint-effect')
+      .classList.remove('inactive');
+
     function remove(elt) {
       return elt.parentNode.removeChild(elt);
     }
