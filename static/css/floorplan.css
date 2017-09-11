@@ -68,3 +68,17 @@
 #floorplan-file-input {
   display: none;
 }
+
+.svg-thing-link {
+  outline: none;
+}
+
+.svg-thing-icon {
+  fill: #89b6d6;
+  stroke: #fff;
+  stroke-width: 0.2;
+}
+
+#floorplan-view.edit .svg-thing-icon {
+  fill: #5c7587;
+}

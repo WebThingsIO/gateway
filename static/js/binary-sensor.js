@@ -33,7 +33,7 @@ BinarySensor.prototype = Object.create(Thing.prototype);
 /**
  * HTML view for Thing.
  */
-BinarySensor.prototype.view = function() {
+BinarySensor.prototype.htmlView = function() {
   return '<div class="thing binary-sensor">' +
          '  <div class="thing-icon"></div>' +
          '  <span class="thing-name">' + this.name + '</span>' +

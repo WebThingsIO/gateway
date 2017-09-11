@@ -10,6 +10,8 @@
 
 'use strict';
 
+/* globals Thing, OnOffSwitch */
+
 // eslint-disable-next-line no-unused-vars
 var FloorplanScreen = {
 
@@ -25,6 +27,7 @@ var FloorplanScreen = {
     this.uploadForm = document.getElementById('floorplan-upload-form');
     this.uploadButton = document.getElementById('floorplan-upload-button');
     this.fileInput = document.getElementById('floorplan-file-input');
+    this.things = document.getElementById('floorplan-things');
 
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.saveButton.addEventListener('click', this.save.bind(this));
@@ -34,7 +37,41 @@ var FloorplanScreen = {
   },
 
   show: function() {
-
+    const opts = {
+      headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json'
+      }
+    };
+    // Fetch a list of things from the server
+    fetch('/things', opts).then((function(response) {
+      return response.json();
+    }).bind(this)).then((function(things) {
+      if (things.length === 0) {
+        return;
+      } else {
+        var cx = 7;
+        var cy = 7;
+        this.things.innerHTML = '';
+        things.forEach(function(description) {
+          description.floorplanX = cx;
+          description.floorplanY = cy;
+          switch(description.type) {
+            case 'onOffSwitch':
+              console.log('rendering new on/off switch');
+              // eslint-disable-next-line no-unused-vars
+              var newOnOffSwitch = new OnOffSwitch(description, 'svg');
+              break;
+            default:
+              console.log('rendering new thing');
+              // eslint-disable-next-line no-unused-vars
+              var newThing = new Thing(description, 'svg');
+              break;
+          }
+          cx += 11;
+        });
+      }
+    }).bind(this));
   },
 
  /**
