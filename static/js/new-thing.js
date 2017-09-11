@@ -42,7 +42,9 @@ NewThing.prototype.view = function() {
                   this.description.name + '"></input>' +
              '    <span class="new-thing-type">On/Off Switch</span>' +
              '  </div>' +
-             '  <button class="new-thing-save-button">Save</button>' +
+             '  <button class="new-thing-save-button text-button">' +
+             '    Save' +
+             '  </button>' +
              '</div>';
     default:
       return '<div id="new-thing-' + this.id + '"' +
@@ -53,7 +55,9 @@ NewThing.prototype.view = function() {
                   this.description.name + '"></input>' +
              '    <span class="new-thing-type">Unknown device type</span>' +
              '  </div>' +
-             '  <button class="new-thing-save-button">Save</button>' +
+             '  <button class="new-thing-save-button text-button">' +
+             '    Save' +
+             '  </button>' +
              '</div>';
   }
 };

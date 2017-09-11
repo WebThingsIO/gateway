@@ -16,10 +16,15 @@
  * OnOffSwitch Constructor (extends Thing).
  *
  * @param Object description Thing description object.
+ * @param {String} format 'svg' or 'html'.
  */
-var OnOffSwitch = function(description) {
+var OnOffSwitch = function(description, format) {
   this.base = Thing;
-  this.base(description);
+  this.base(description, format);
+  if (format == 'svg') {
+    // For now the SVG view is just a link.
+    return;
+  }
   // Parse on property URL
   if (this.propertyDescriptions.on.href) {
     this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
@@ -31,13 +36,27 @@ var OnOffSwitch = function(description) {
 OnOffSwitch.prototype = Object.create(Thing.prototype);
 
 /**
- * HTML view for Thing.
+ * HTML view for on/off switch.
  */
-OnOffSwitch.prototype.view = function() {
+OnOffSwitch.prototype.htmlView = function() {
   return '<div class="thing on-off-switch">' +
          '  <div class="thing-icon"></div>' +
          '  <span class="thing-name">' + this.name + '</span>' +
          '</div>';
+};
+
+/**
+ * SVG view for on/off switch.
+ */
+Thing.prototype.svgView = function() {
+  return '<a href="' + this.href +'" class="svg-thing-link">' +
+         '  <circle cx="' + this.x + '" cy="' + this.y + '" r="5"' +
+         '    class="svg-thing-icon">' +
+         '  </circle>' +
+         '  <image x="' + (this.x - 2.5) + '" y="' + (this.y - 2.5) + '" ' +
+         '    width="5" height="5" ' +
+         '    xlink:href="/images/on-off-switch.svg"></image>' +
+         '</a>';
 };
 
 /**
