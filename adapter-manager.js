@@ -28,6 +28,7 @@ class AdapterManager extends EventEmitter {
     this.devices = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
+    this.adaptersLoaded = false;
   }
 
   /**
@@ -304,6 +305,12 @@ class AdapterManager extends EventEmitter {
    * Loads all of the configured adapters from the adapters directory.
    */
   loadAdapters() {
+    if (this.adaptersLoaded) {
+      // This is kind of a hack, but it allows the gateway to restart properly
+      // when switching between http and https modes.
+      return;
+    }
+    this.adaptersLoaded = true;
     var adaptersConfig = config.get('adapters');
     for (var adapterName in adaptersConfig) {
       var adapterConfig = adaptersConfig[adapterName];
@@ -357,11 +364,16 @@ class AdapterManager extends EventEmitter {
    * Unloads all of the loaded adapters.
    */
   unloadAdapters() {
+    if (!this.adaptersLoaded) {
+      // The adapters are not currently loaded, no need to unload.
+      return;
+    }
     for (var adapterId in this.adapters) {
       var adapter = this.adapters[adapterId];
       console.log('Unloading', adapter.name);
       adapter.unload();
     }
+    ths.adaptersLoaded = false;
   }
 }
 
