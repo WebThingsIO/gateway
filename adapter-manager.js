@@ -373,7 +373,7 @@ class AdapterManager extends EventEmitter {
       console.log('Unloading', adapter.name);
       adapter.unload();
     }
-    ths.adaptersLoaded = false;
+    this.adaptersLoaded = false;
   }
 }
 
