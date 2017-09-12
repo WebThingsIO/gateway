@@ -107,6 +107,28 @@ ThingsController.put('/:thingId/properties/:propertyName',
 });
 
 /**
+ * Modify a Thing.
+ */
+ThingsController.patch('/:thingId', function(request, response) {
+  var thingId = request.params.thingId;
+  if(!request.body ||
+    !request.body['floorplanX'] || !request.body['floorplanY']) {
+    response.status(400).send('x and y properties needed to position Thing');
+    return;
+  }
+  Things.getThing(thingId).then((thing) => {
+    // return
+    return thing.setCoordinates(
+      request.body['floorplanX'], request.body['floorplanY']);
+  }).then((description) => {
+    response.status(200).json(description);
+  }).catch(function(e) {
+    response.status(500).send('Failed to update thing ' + thingId + ' ' + e);
+  });
+
+});
+
+/**
  * Remove a Thing.
  */
 ThingsController.delete('/:thingId', function(request, response) {

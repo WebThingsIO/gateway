@@ -132,6 +132,18 @@ var Things = {
    },
 
    /**
+    * Get a Thing by its ID.
+    *
+    * @param {String} id The ID of the Thing to get.
+    * @return {Object} A Thing object.
+    */
+    getThing: function(id) {
+      return Database.getThing(id).then((thing) => {
+        return new Thing(thing.id, thing);
+      });
+    },
+
+   /**
     * Get a Thing description for a thing by its ID.
     *
     * @param {String} id The ID of the Thing to get a description of.

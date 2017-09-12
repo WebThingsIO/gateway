@@ -51,7 +51,7 @@ var Thing = function(description, format) {
 };
 
 /**
- * HTML view for Thing.
+ * HTML view for unknown Thing.
  */
 Thing.prototype.htmlView = function() {
   return '<div class="thing"><img class="thing-icon" ' +
@@ -60,13 +60,21 @@ Thing.prototype.htmlView = function() {
 };
 
 /**
- * SVG view for Thing.
+ * SVG view for unknown thing.
  */
 Thing.prototype.svgView = function() {
-  return '<a href="' + this.href +'" class="svg-thing-link">' +
-    '  <circle cx="' + this.x + '" cy="' + this.y + '" ' +
-    '    r="5" class="svg-thing-icon"></circle>' +
-    '</a>';
+  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
+         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
+         '  class="floorplan-thing">' +
+         '  <a href="' + this.href +'" class="svg-thing-link">' +
+         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
+         '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
+         '      xlink:href="/images/unknown-thing.svg" />' +
+         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
+                this.name.substring(0, 7) +
+         '    </text>' +
+         '  </a>' +
+         '</g>';
 };
 
 /**

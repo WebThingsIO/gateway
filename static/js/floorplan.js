@@ -10,27 +10,33 @@
 
 'use strict';
 
-/* globals Thing, OnOffSwitch */
+/* globals Thing, OnOffSwitch, BinarySensor */
 
 // eslint-disable-next-line no-unused-vars
 var FloorplanScreen = {
 
+  ORIGIN_X: 7,    // X co-ordinate to start placing un-positioned things from.
+  ORIGIN_Y: 7,    // X co-ordinate to start placing un-positioned things from.
+  THING_GAP: 11, // Gap between unpositioned things along x axis.
 
   /**
   * Initialise Floorplan Screen.
   */
   init: function() {
+    // A list of Things on the floorplan
+    this.things = [];
+
     this.view = document.getElementById('floorplan-view');
     this.floorplan = document.getElementById('floorplan');
     this.editButton = document.getElementById('floorplan-edit-button');
-    this.saveButton = document.getElementById('floorplan-save-button');
+    this.doneButton = document.getElementById('floorplan-done-button');
     this.uploadForm = document.getElementById('floorplan-upload-form');
     this.uploadButton = document.getElementById('floorplan-upload-button');
     this.fileInput = document.getElementById('floorplan-file-input');
-    this.things = document.getElementById('floorplan-things');
+    this.thingsElement = document.getElementById('floorplan-things');
 
     this.editButton.addEventListener('click', this.edit.bind(this));
-    this.saveButton.addEventListener('click', this.save.bind(this));
+    this.doneButton.addEventListener('click', this.done.bind(this));
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
     this.uploadForm.addEventListener('submit', this.blackHole);
     this.fileInput.addEventListener('change', this.upload.bind(this));
@@ -47,29 +53,34 @@ var FloorplanScreen = {
     fetch('/things', opts).then((function(response) {
       return response.json();
     }).bind(this)).then((function(things) {
+      this.things = [];
+      this.thingsElement.innerHTML = '';
       if (things.length === 0) {
         return;
       } else {
-        var cx = 7;
-        var cy = 7;
-        this.things.innerHTML = '';
+        var x = this.ORIGIN_X;
+        var y = this.ORIGIN_Y;
         things.forEach(function(description) {
-          description.floorplanX = cx;
-          description.floorplanY = cy;
+          if (!description.floorplanX || !description.floorplanY) {
+            description.floorplanX =  x;
+            description.floorplanY =  y;
+            x += this.THING_GAP; // increment x co-ordinate.
+          }
           switch(description.type) {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');
-              // eslint-disable-next-line no-unused-vars
-              var newOnOffSwitch = new OnOffSwitch(description, 'svg');
+              this.things.push(new OnOffSwitch(description, 'svg'));
+              break;
+            case 'binarySensor':
+              console.log('rendering new binary sensor');
+              this.things.push(new BinarySensor(description, 'svg'));
               break;
             default:
               console.log('rendering new thing');
-              // eslint-disable-next-line no-unused-vars
-              var newThing = new Thing(description, 'svg');
+              this.things.push(new Thing(description, 'svg'));
               break;
           }
-          cx += 11;
-        });
+        }, this);
       }
     }).bind(this));
   },
@@ -80,18 +91,51 @@ var FloorplanScreen = {
   edit: function() {
     this.view.classList.add('edit');
     this.editButton.classList.add('hidden');
-    this.saveButton.classList.remove('hidden');
+    this.doneButton.classList.remove('hidden');
     this.uploadForm.classList.remove('hidden');
+
+    // Bind to this before adding listener to make it easier to remove.
+    this.selectThing = this.selectThing.bind(this);
+    this.moveThing = this.moveThing.bind(this);
+    this.deselectThing = this.deselectThing.bind(this);
+
+    // Disable hyperlinks for things
+    this.things.forEach(function(thing) {
+      thing.element.addEventListener('click', this.blackHole);
+      thing.element.addEventListener('mousedown', this.selectThing);
+      thing.element.addEventListener('touchstart', this.selectThing);
+    }, this);
+
+    // Enable moving and deslecting things
+    this.pointerOffsetX = 0;
+    this.pointerOffsetY = 0;
+    this.thingsElement.addEventListener('mousemove', this.moveThing);
+    this.thingsElement.addEventListener('mouseup', this.deselectThing);
+    this.thingsElement.addEventListener('touchmove', this.moveThing);
+    this.thingsElement.addEventListener('touchend', this.deselectThing);
   },
 
   /**
-   * Save changes and take floorplan out of edit mode.
+   * Exit edit mode.
    */
-  save: function() {
+  done: function() {
     this.view.classList.remove('edit');
-    this.saveButton.classList.add('hidden');
+    this.doneButton.classList.add('hidden');
     this.editButton.classList.remove('hidden');
     this.uploadForm.classList.add('hidden');
+
+    // Re-enable hyperlinks for things
+    this.things.forEach(function(thing) {
+      thing.element.removeEventListener('click', this.blackHole);
+      thing.element.removeEventListener('mousedown', this.selectThing);
+      thing.element.removeEventListener('touchstart', this.selectThing);
+    }, this);
+
+    // Disable moving and deslecting things
+    this.thingsElement.removeEventListener('mousemove', this.moveThing);
+    this.thingsElement.removeEventListener('mouseup', this.deselectThing);
+    this.thingsElement.removeEventListener('touchmove', this.moveThing);
+    this.thingsElement.removeEventListener('touchend', this.deselectThing);
   },
 
   /**
@@ -115,7 +159,7 @@ var FloorplanScreen = {
       method: 'POST',
       body: formData,
       headers: {
-         'Authorization': `Bearer ${window.API.jwt}`,
+        'Authorization': `Bearer ${window.API.jwt}`,
       }
     }).then((response) => {
       this.uploadButton.classList.remove('loading');
@@ -132,6 +176,100 @@ var FloorplanScreen = {
       this.uploadButton.classList.remove('loading');
       console.error('Failed to upload floorplan ' + error);
     });
+  },
+
+  /**
+   * Select Thing.
+   *
+   * @param {Event} e mousedown or touchstart event.
+   */
+  selectThing: function(e) {
+    // Prevent interaction with HTML5 drag and drop
+    e.preventDefault();
+
+    this.pointerOffsetX = 0;
+    this.pointerOffsetY = 0;
+    this.selectedThing = e.currentTarget;
+    var point = this.thingsElement.createSVGPoint();
+    point.x = e.clientX || e.touches[0].clientX;
+    point.y = e.clientY || e.touches[0].clientY;
+    var matrix = this.thingsElement.getScreenCTM();
+    point = point.matrixTransform(matrix.inverse());
+
+    this.pointerOffsetX =
+      point.x - parseInt(this.selectedThing.getAttribute('dragx'));
+    this.pointerOffsetY =
+      point.y - parseInt(this.selectedThing.getAttribute('dragy'));
+  },
+
+  /**
+   * Deselect Thing.
+   */
+  deselectThing: function() {
+    if (!this.selectedThing) {
+      return;
+    }
+    var thing = this.selectedThing;
+    var x = thing.getAttribute('dragx');
+    var y = thing.getAttribute('dragy');
+    var thingUrl = thing.firstElementChild.getAttribute('href');
+
+    // HTTP PATCH request to set x and y co-ordinates of Thing in database.
+    var payload = {
+      floorplanX: x,
+      floorplanY: y
+    };
+    fetch(thingUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+      headers: {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => {
+      if (response.ok) {
+        console.log('Successfully moved thing to (' + x + ',' + y + ')');
+      } else {
+        console.error('Failed to move thing ' + thingUrl);
+      }
+    }).catch(function(e) {
+      console.error('Error trying to move thing ' + thingUrl + ' ' + e);
+    });
+
+    // Reset co-ordinates
+    this.selectedThing = null;
+    this.pointerOffsetX = 0;
+    this.pointerOffsetY = 0;
+  },
+
+  /**
+   * Move Thing.
+   *
+   * @param {Event} e mousemove or touchmove event.
+   */
+  moveThing: function(e) {
+    if (!this.selectedThing) {
+      return;
+    }
+
+    var point = this.thingsElement.createSVGPoint();
+    point.x = e.clientX || e.touches[0].clientX;
+    point.y = e.clientY || e.touches[0].clientY;
+    var matrix = this.thingsElement.getScreenCTM();
+    point = point.matrixTransform(matrix.inverse());
+    point.x -= this.pointerOffsetX;
+    point.y -= this.pointerOffsetY;
+
+    // Ensure Thing isn't moved outside the bounds of the floorplan.
+    if (point.x < this.O || point.x > 100 || point.y < 0 || point.y > 100) {
+      return;
+    }
+
+    this.selectedThing.setAttribute('dragx', point.x);
+    this.selectedThing.setAttribute('dragy', point.y);
+    this.selectedThing.setAttribute('transform',
+      'translate(' + point.x + ',' + point.y + ')');
   },
 
   /*

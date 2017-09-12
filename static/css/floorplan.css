@@ -26,10 +26,10 @@
   background-image: url('../images/edit.svg');
 }
 
-#floorplan-save-button {
+#floorplan-done-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/save.svg');
+  background-image: url('../images/done.svg');
 }
 
 #floorplan-upload-form {
@@ -81,4 +81,19 @@
 
 #floorplan-view.edit .svg-thing-icon {
   fill: #5c7587;
+}
+
+.svg-thing-text {
+  fill: #fff;
+  text-shadow: 1px 1px 5px #000;
+  font-size: 2px; /* Gets scaled into SVG units */
+  display: none;
+}
+
+#floorplan-view.edit .svg-thing-link {
+  cursor: move;
+}
+
+#floorplan-view.edit .svg-thing-text {
+  display: block;
 }
