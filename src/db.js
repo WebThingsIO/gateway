@@ -190,6 +190,26 @@ var Database = {
   },
 
   /**
+   * Update a Thing in the Database.
+   *
+   * @param String id ID of the thing to update.
+   * @param String description A serialised Thing description.
+   */
+  updateThing: function(id, description) {
+    return new Promise((function(resolve, reject) {
+      var db = this.db;
+      db.run('UPDATE things SET description=? WHERE id=?',
+        [JSON.stringify(description), id], function(error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        });
+    }).bind(this));
+  },
+
+  /**
    * Remove a Thing from the Database.
    *
    * @param String id The ID of the Thing to remove.

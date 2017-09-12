@@ -11,6 +11,7 @@
 'use strict';
 
 var Constants = require('../constants');
+var Database = require('../db.js');
 
 /**
  * Thing constructor.
@@ -42,6 +43,22 @@ var Thing = function(id, description) {
       this.properties[propertyName] = property;
     }
   }
+  this.floorplanX = description.floorplanX;
+  this.floorplanY = description.floorplanY;
+};
+
+/**
+ * Set the x and y co-ordinates for a Thing on the floorplan.
+ *
+ * @param {number} x The x co-ordinate on floorplan (0-100).
+ * @param {number} y The y co-ordinate on floorplan (0-100).
+ * @return {Promise} A promise which resolves with the description set.
+ */
+Thing.prototype.setCoordinates = function(x, y) {
+  var description = this.getDescription();
+  description.floorplanX = x;
+  description.floorplanY = y;
+  return Database.updateThing(this.id, description);
 };
 
 /**
@@ -54,7 +71,9 @@ Thing.prototype.getDescription = function() {
     'href': this.href,
     'properties': this.properties,
     'actions': this.actions,
-    'events': this.events
+    'events': this.events,
+    'floorplanX': this.floorplanX,
+    'floorplanY': this.floorplanY
   };
 };
 

@@ -23,7 +23,7 @@ var OnOffSwitch = function(description, format) {
   this.base(description, format);
   if (format == 'svg') {
     // For now the SVG view is just a link.
-    return;
+    return this;
   }
   // Parse on property URL
   if (this.propertyDescriptions.on.href) {
@@ -31,6 +31,7 @@ var OnOffSwitch = function(description, format) {
   }
   this.updateStatus();
   this.element.addEventListener('click', this.handleClick.bind(this));
+  return this;
 };
 
 OnOffSwitch.prototype = Object.create(Thing.prototype);
@@ -48,15 +49,19 @@ OnOffSwitch.prototype.htmlView = function() {
 /**
  * SVG view for on/off switch.
  */
-Thing.prototype.svgView = function() {
-  return '<a href="' + this.href +'" class="svg-thing-link">' +
-         '  <circle cx="' + this.x + '" cy="' + this.y + '" r="5"' +
-         '    class="svg-thing-icon">' +
-         '  </circle>' +
-         '  <image x="' + (this.x - 2.5) + '" y="' + (this.y - 2.5) + '" ' +
-         '    width="5" height="5" ' +
-         '    xlink:href="/images/on-off-switch.svg"></image>' +
-         '</a>';
+OnOffSwitch.prototype.svgView = function() {
+  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
+         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
+         '  class="floorplan-thing">' +
+         '  <a href="' + this.href +'" class="svg-thing-link">' +
+         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
+         '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
+         '      xlink:href="/images/on-off-switch.svg" />' +
+         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
+                this.name.substring(0, 7) +
+         '    </text>' +
+         '  </a>' +
+         '</g>';
 };
 
 /**

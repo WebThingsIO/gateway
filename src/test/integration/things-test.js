@@ -193,6 +193,30 @@ describe('things/', function() {
     expect(off.body.on).toEqual(false);
   });
 
+  it('set x and y coordinates of a thing', async () => {
+    await addDevice();
+    const on = await chai.request(server)
+      .patch(Constants.THINGS_PATH + '/test-1')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({floorplanX: 10, floorplanY: 20});
+
+    expect(on.status).toEqual(200);
+    expect(on.body).toHaveProperty('floorplanX');
+    expect(on.body).toHaveProperty('floorplanY');
+    expect(on.body.floorplanX).toEqual(10);
+    expect(on.body.floorplanY).toEqual(20);
+  });
+
+  it('fail to set x and y coordinates of a thing', async () => {
+    const err = await pFinal(chai.request(server)
+      .patch(Constants.THINGS_PATH + '/test-1')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({abc: true}));
+    expect(err.response.status).toEqual(400);
+  });
+
   it('lists 0 new things after creating thing', async () => {
     await addDevice();
     const res = await chai.request(server)
