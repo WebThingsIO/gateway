@@ -78,7 +78,7 @@ var Router = {
       auth, require('./controllers/uploads_controller'));
 
     let rulesEngine = require('./rules-engine/index.js');
-    app.use(API_PREFIX + Constants.RULES_ENGINE_PATH, auth, rulesEngine);
+    app.use(API_PREFIX + Constants.RULES_PATH, auth, rulesEngine);
 
   }
 };
