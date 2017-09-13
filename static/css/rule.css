@@ -150,8 +150,7 @@
 
 .device-property-block {
   position: absolute;
-  width: 30rem;
-  display: flex;
+  font-size: 0;
 }
 
 .device-property-block > .device-block {
@@ -159,17 +158,19 @@
 }
 
 .device-property-info {
-  flex: 1;
+  width: 20rem;
   background: white;
   display: inline-block;
   vertical-align: bottom;
 }
 
 .device-name {
-  margin: 0 2.4rem;
-  font-size: 1.6rem;
+  margin: 0 2rem;
   height: 5rem;
   line-height: 5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .property-select-option {
