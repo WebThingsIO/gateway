@@ -33,10 +33,18 @@ const RuleScreen = {
     });
 
     this.ruleName.contentEditable = true;
+    this.ruleName.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        this.ruleName.blur();
+      }
+    });
+
     this.ruleName.addEventListener('blur', () => {
       this.rule.name = this.ruleName.textContent;
       this.rule.update();
     });
+
     this.ruleDescription = this.view.querySelector('.rule-info > p');
 
     this.devicesList = document.getElementById('devices-list');
