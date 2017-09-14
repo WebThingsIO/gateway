@@ -11,3 +11,4 @@ notunnel
 settings/
 test-settings/
 static/uploads/floorplan.svg
+static/js/lib/stm_web.min.js
