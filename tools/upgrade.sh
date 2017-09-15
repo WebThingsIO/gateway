@@ -1,7 +1,20 @@
 #!/bin/bash
 
+# Performs an upgrade given the urls to the content-addressed archives. Expects
+# to be run in the ~/mozilla-iot directory
+
 gateway_archive_url=$1
 node_modules_archive_url=$2
+
+if [ -z $gateway_archive_url ] || [ -z $node_modules_archive_url ]; then
+  echo "Usage: ./gateway/tools/upgrade.sh [gateway_archive_url] [node_modules_archive_url]"
+  exit 1
+fi
+
+# bring down the gateway very early in the process so that it has time to
+# asynchronously finalize
+sudo systemctl stop mozilla-iot-gateway.service
+
 wget $gateway_archive_url
 wget $node_modules_archive_url
 
@@ -32,8 +45,6 @@ extractCAArchive gateway-*.tar.gz /tmp
 rm gateway-*.tar.gz
 extractCAArchive node_modules-*.tar.gz /tmp/gateway
 rm node_modules-*.tar.gz
-
-sudo systemctl stop mozilla-iot-gateway.service
 
 if [ -d "gateway_old" ]; then
   rm -fr gateway_old
