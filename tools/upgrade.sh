@@ -28,6 +28,12 @@ if [ -d "/tmp/gateway/node_modules" ]; then
 	rm -r /tmp/gateway/node_modules
 fi
 
+die() {
+  sudo systemctl start mozilla-iot-gateway.service
+  exit -1
+}
+
+
 extractCAArchive() {
   file=$1
   target=$2
@@ -39,10 +45,13 @@ extractCAArchive() {
 
   if [ "$digest" != "$check_digest" ]; then
     echo "Digest mismatch: $digest != $check_digest"
-    exit -1
+    die
   fi
 
-  tar xzf "$base_name-$digest.tar.gz" -C $target
+  if ! tar xzf "$base_name-$digest.tar.gz" -C $target; then
+    echo "Archive extraction failed"
+    die
+  fi
 }
 
 extractCAArchive gateway-*.tar.gz /tmp
