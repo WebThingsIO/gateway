@@ -120,20 +120,17 @@
 
     <!-- Rules View -->
     <section data-view="rules" id="rules-view" class="hidden">
+      <div class="title-bar">
+        <h3 class="rules-header">Rules</h3>
+      </div>
       <div id="rules">
-        <div id="create-rule" class="rule">
-          <h3>
-            +<br/>
-            Create Rule
-          </h3>
-        </div></div>
+      </div>
+      <button id="create-rule-button" class="icon-button"></button>
     </section>
 
     <section data-view="rule" id="rule-view" class="hidden">
       <div class="title-bar">
-        <a href="/rules" class="rule-back-button">
-          <img src="/images/back-16.svg" alt="Back" width="40" height="40"/>
-        </a>
+        <a href="/rules" class="back-button icon-button"></a>
         <div class="rule-info">
           <h1><span class="rule-name">Rule Name</span><img src="/images/customize-16.svg" class="rule-name-customize"/></h1>
           <p>Rule Description</p>
@@ -177,7 +174,6 @@
             <h2 class="delete-prompt">Drop devices here to disconnect</h2>
           </div>
         </div>
-        <h3 class="devices-list-header">My Devices</h3>
       </div>
       <div id="rule-delete-overlay">
         <div class="rule-delete-dialog">

@@ -11,7 +11,7 @@
 // eslint-disable-next-line no-unused-vars
 var RulesScreen = {
   init: function() {
-    this.createRuleButton = document.getElementById('create-rule');
+    this.createRuleButton = document.getElementById('create-rule-button');
     this.rulesList = document.getElementById('rules');
     this.gateway = new Gateway();
     this.nextId = 0;

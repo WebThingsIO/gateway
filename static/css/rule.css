@@ -1,5 +1,7 @@
 #rule-view {
   position: absolute;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #rule-view.hidden {
@@ -13,11 +15,12 @@
 
 #rule-view > .title-bar {
   width: 100%;
-  height: 12rem;
+  height: 9.6rem;
+  padding-left: 9.6rem;
   display: flex;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   z-index: 10;
-  background: white;
+  background: #46769C;
 }
 
 .rule-back-button {
@@ -49,15 +52,17 @@
 }
 
 #rule-view .rule-info {
-  padding-left: 4.8rem;
+  padding: 0;
   flex: 1;
 }
 
-.rule-info h1 {
-  color: #4a4a4a;
+#rule-view .rule-info h1 {
   margin: 0;
-  margin-top: 0.8rem;
+  margin-top: 2rem;
+  font-size: 1.6rem;
+  font-family: 'Open Sans', sans-serif;
   font-weight: normal;
+  color: white;
 }
 
 .rule-name-customize {
@@ -69,8 +74,9 @@
 }
 
 #rule-view .rule-info > p {
-  color: #9b9b9b;
   font-size: 1.6rem;
+  margin-top: 0.8rem;
+  color: #DAE3EB;
 }
 
 #rule-area {
@@ -103,11 +109,11 @@
 }
 
 .drag-hint-trigger {
-  background: rgba(69, 161, 255, 0.3);
+  background: rgba(129, 184, 225, 0.3);
 }
 
 .drag-hint-effect {
-  background: rgba(48, 230, 11, 0.3);
+  background: rgba(255, 207, 138, 0.3);
 }
 
 .drag-hint.inactive {
@@ -130,11 +136,10 @@
 #devices-list {
   box-shadow: 0 -1px 3px rgba(0,0,0,0.12), 0 -1px 2px rgba(0,0,0,0.24);
   z-index: 10;
-  background: white;
+  background: #5A9AC9;
   position: relative;
 }
 
-#devices-list > h3,
 #devices-list p {
   padding-left: 1.4rem;
 }
@@ -155,16 +160,21 @@
 
 .device-property-block > .device-block {
   margin: 0;
+  border-radius: 1rem 0 0 1rem;
 }
 
 .device-property-info {
   width: 20rem;
   background: white;
+  border-radius: 0 1rem 0 0;
   display: inline-block;
   vertical-align: bottom;
 }
 
 .device-name {
+  color: #4a4a4a;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
   margin: 0 2rem;
   height: 5rem;
   line-height: 5rem;
@@ -189,6 +199,7 @@
 .property-select-option.selected {
   display: block;
   position: relative;
+  border-radius: 0 0 1rem 0;
 }
 
 .property-select-option.selected:after {
@@ -291,7 +302,7 @@
 }
 
 #connection > path {
-  stroke: #7DC124;
+  stroke: #305067;
   stroke-width: 0.5rem;
   fill: none;
 }
@@ -299,7 +310,7 @@
 #connection > circle {
   stroke: white;
   stroke-width: 0.2rem;
-  fill: #7DC124;
+  fill: #305067;
 }
 
 #onboarding-hint h2 {
