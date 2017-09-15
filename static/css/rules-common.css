@@ -11,21 +11,21 @@
 }
 
 .device-block {
+  border-radius: 1rem;
   margin: 1.4rem;
   padding: 0;
   width: 10rem;
   height: 10rem;
-  background: #787878;
-  display: inline-block;
-  vertical-align: bottom;
+  background: #ACCCE3;
+  float: left;
 }
 
 .device-block.trigger {
-  background: #45a1ff;
+  background: #81B8E1;
 }
 
 .device-block.effect {
-  background: #30e60b;
+  background: #FFCF8A;
 }
 
 .device-icon {

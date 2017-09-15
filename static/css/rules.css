@@ -1,33 +1,56 @@
 #rules-view {
-  margin-top: 9.6rem;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  position: absolute;
+}
+
+#rules-view h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+}
+
+#rules-view .title-bar {
+  text-align: center;
+  line-height: 9.6rem;
+  height: 9.6rem;
+}
+
+.rules-header {
+  margin: 0 auto;
+  display: inline-block;
+  padding: 0;
+  padding-left: 6.8rem;
+  font-size: 1.8rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  background-image: url('../images/rules-icon.png');
 }
 
 .rule {
   position: relative;
-  background: white;
+  background: #46769C;
   margin: 1rem;
   padding: 0;
   box-sizing: border-box;
   width: 40rem;
   height: 26.6rem;
-  border: 0.2rem solid #979797;
   border-radius: 0.5rem;
   display: inline-block;
   vertical-align: bottom;
 }
 
 .rule-info h3 {
-  color: #4a4a4a;
   margin: 0;
   font-size: 1.6rem;
 }
 
 .rule-info p {
-  color: #9b9b9b;
   font-size: 1.2rem;
 }
 
 .rule-preview {
+  border-radius: 0.5rem 0.5rem 0 0;
   background: url(/images/background-small.png);
   box-sizing: border-box;
   padding: 3rem;
@@ -36,6 +59,7 @@
 }
 
 .rule-edit-overlay {
+  border-radius: 0.5rem 0.5rem 0 0;
   position: absolute;
   width: 100%;
   height: 60%;
@@ -71,7 +95,7 @@
   width: 5.5rem;
   height: 2.2rem;
   border-radius: 1.1rem;
-  background: #737373;
+  background: #4a4a4a;
   cursor: pointer;
   transition: 0.1s;
 }
@@ -82,18 +106,18 @@
   width: 3rem;
   height: 3rem;
   border-radius: 1.5rem;
-  background: #d7d7d7;
+  background: #B1B1B3;
   transform: translate(0, -0.4rem);
   transition: 0.1s;
 }
 
 input:checked + .rule-switch-slider {
-  background: #12bc00;
+  background: #305067;
 }
 
 input:checked + .rule-switch-slider:after {
   transform: translate(2.5rem, -0.4rem);
-  background: #30e60b;
+  background: white;
 }
 
 #create-rule {
@@ -150,3 +174,12 @@ input:checked + .rule-switch-slider:after {
   margin: 1.7rem;
   padding: 0;
 }
+
+#create-rule-button {
+  bottom: 2rem;
+  right: 2rem;
+  background-image: url('../images/add.png');
+}
+
+#rules {
+  padding-left: 9.6rem;
