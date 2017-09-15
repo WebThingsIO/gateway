@@ -4,9 +4,11 @@ const semver = require('semver');
 
 const exec = require('child_process').exec;
 
-let pkg = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf-8'}));
+const remote = 'mozilla-iot';
 
-fetch('https://api.github.com/repos/mozilla-iot/gateway/releases').then(res => {
+const pkg = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf-8'}));
+
+fetch(`https://api.github.com/repos/${remote}/gateway/releases`).then(res => {
   return res.json();
 }).then(releases => {
   // Assumes that releases are in chronological order, latest-first
@@ -26,7 +28,7 @@ fetch('https://api.github.com/repos/mozilla-iot/gateway/releases').then(res => {
     let gatewayUrl = null;
     let nodeModulesUrl = null;
     let validAssetRe = new RegExp(
-      '^https://github.com/mozilla-iot/gateway/releases/download/' + releaseVer
+      `^https://github.com/${remote}/gateway/releases/download/` + releaseVer
       + '/[a-z0-9_-]+.tar.gz$');
     for (let asset of latestRelease.assets) {
       if (!asset.browser_download_url.match(validAssetRe)) {
