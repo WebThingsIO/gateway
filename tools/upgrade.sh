@@ -19,6 +19,10 @@ wget $gateway_archive_url
 wget $node_modules_archive_url
 
 gateway_old=./gateway
+
+# Copy all files from the current gateway to the upgraded gateway. This
+# includes tunneltoken, notunnel, any certificates, db.sqlite3, and
+# node_modules
 cp -r $gateway_old /tmp/gateway
 if [ -d "/tmp/gateway/node_modules" ]; then
 	rm -r /tmp/gateway/node_modules
