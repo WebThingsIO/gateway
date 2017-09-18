@@ -25,11 +25,14 @@ gateway_old=./gateway
 # node_modules
 cp -r $gateway_old /tmp/gateway
 if [ -d "/tmp/gateway/node_modules" ]; then
-	rm -r /tmp/gateway/node_modules
+  rm -r /tmp/gateway/node_modules
 fi
 
 die() {
   sudo systemctl start mozilla-iot-gateway.service
+  rm gateway-*.tar.gz
+  rm node_modules-*.tar.gz
+  rm -r /tmp/gateway
   exit -1
 }
 
@@ -40,24 +43,24 @@ extractCAArchive() {
   digest=${file#*-}
   digest=${digest%.tar.gz}
   base_name=${file%-*}
+  archive_name=$base_name-$digest.tar.gz
 
-  check_digest=$(openssl dgst -sha256 $base_name-$digest.tar.gz | awk '{print $2}')
+  check_digest=$(openssl dgst -sha256 $archive_name | awk '{print $2}')
 
   if [ "$digest" != "$check_digest" ]; then
     echo "Digest mismatch: $digest != $check_digest"
     die
   fi
 
-  if ! tar xzf "$base_name-$digest.tar.gz" -C $target; then
+  if ! tar xzf $archive_name -C $target; then
     echo "Archive extraction failed"
     die
   fi
+  rm $archive_name
 }
 
 extractCAArchive gateway-*.tar.gz /tmp
-rm gateway-*.tar.gz
 extractCAArchive node_modules-*.tar.gz /tmp/gateway
-rm node_modules-*.tar.gz
 
 if [ -d "gateway_old" ]; then
   rm -fr gateway_old
