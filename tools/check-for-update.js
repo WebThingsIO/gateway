@@ -43,15 +43,13 @@ fetch(`https://api.github.com/repos/${remote}/gateway/releases`).then(res => {
     }
 
     if (nodeModulesUrl && gatewayUrl) {
-      return new Promise(function(resolve, reject) {
-        exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
-          {cwd: '..'}, function(err) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
+      exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
+        {cwd: '..'}, function(err, stdout, stderr) {
+        if (err) {
+          console.error('Upgrade failed', err, stdout, stderr);
+        } else {
+          console.log('Upgrade succeeded');
+        }
       });
     } else {
       console.warn(`Release ${releaseVer} does not include archives`,
