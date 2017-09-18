@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App */
+/* globals App, API */
 
 /**
  * Thing constructor.
@@ -32,6 +32,15 @@ var Thing = function(description, format) {
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
+
+    var wsHref = this.href.href.replace(/^http/, 'ws');
+    this.ws = new WebSocket(wsHref + '?jwt=' + API.jwt);
+    this.ws.addEventListener('message', function(event) {
+      var message = JSON.parse(event.data);
+      if (message.messageType === 'propertyStatus') {
+        this.onPropertyStatus(message.data);
+      }
+    }.bind(this));
   }
   // Parse properties
   if (description.properties) {
@@ -110,4 +119,11 @@ Thing.prototype.handleContextMenu = function(e) {
     }
   });
   window.dispatchEvent(newEvent);
+};
+
+/**
+ * Handle a 'propertyStatus' websocket message
+ * @param {Object} properties - property data
+ */
+Thing.prototype.onPropertyStatus = function(_properties) {
 };

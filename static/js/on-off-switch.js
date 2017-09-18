@@ -77,20 +77,33 @@ OnOffSwitch.prototype.updateStatus = function() {
       'Accept': 'application/json'
     }
   };
-  fetch(this.onPropertyUrl, opts).then((function(response) {
+
+  fetch(this.onPropertyUrl, opts).then(function(response) {
     return response.json();
-  }).bind(this)).then((function(response) {
-    this.properties.on = response.on;
-    if (response.on === null) {
-      return;
-    } else if(response.on) {
-      this.showOn();
-    } else {
-      this.showOff();
-    }
+  }).then((function(response) {
+    this.onPropertyStatus(response);
   }).bind(this)).catch(function(error) {
     console.error('Error fetching on/off switch status ' + error);
   });
+};
+
+/**
+ * Handle a 'propertyStatus' message
+ * @param {Object} properties - property data
+ */
+OnOffSwitch.prototype.onPropertyStatus = function(data) {
+  if (!data.hasOwnProperty('on')) {
+    return;
+  }
+  this.properties.on = data.on;
+  if (data.on === null) {
+    return;
+  }
+  if (data.on) {
+    this.showOn();
+  } else {
+    this.showOff();
+  }
 };
 
 /**
