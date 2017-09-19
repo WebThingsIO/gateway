@@ -129,6 +129,9 @@ const RuleScreen = {
   showConnection: function() {
     this.connection.classList.remove('hidden');
 
+    let dragHint = document.getElementById('drag-hint');
+    let flexDir = window.getComputedStyle(dragHint).flexDirection;
+
     let triggerBlock =
       this.view.querySelector('.device-block.trigger').parentNode;
     let effectBlock =
@@ -146,10 +149,19 @@ const RuleScreen = {
     let triggerCoords = transformToCoords(triggerBlock);
     let effectCoords = transformToCoords(effectBlock);
 
-    let startX = triggerCoords.x + 310;
-    let startY = triggerCoords.y + 50;
+    let dpbRect = triggerBlock.getBoundingClientRect();
+
+    let startX = triggerCoords.x + dpbRect.width + 10;
+    let startY = triggerCoords.y + dpbRect.height / 2;
     let endX = effectCoords.x - 10;
-    let endY = effectCoords.y + 50;
+    let endY = effectCoords.y + dpbRect.height / 2;
+
+    if (flexDir === 'column') {
+      startX = triggerCoords.x + dpbRect.width / 2;
+      startY = triggerCoords.y + dpbRect.height + 10;
+      endX = effectCoords.x + dpbRect.width / 2;
+      endY = effectCoords.y - 10;
+    }
 
     let midX = (startX + endX) / 2;
 
@@ -228,15 +240,30 @@ const RuleScreen = {
       this.ruleArea.querySelectorAll('.device-property-block').forEach(remove);
 
       if (ruleDesc) {
+        let dragHint = document.getElementById('drag-hint');
+        let flexDir = window.getComputedStyle(dragHint).flexDirection;
+
         let areaRect = this.ruleArea.getBoundingClientRect();
         // Create DevicePropertyBlocks from trigger and effect if applicable
+        let centerX = areaRect.width / 2 - 150;
+        let centerY = areaRect.height / 2 - 50;
         if (ruleDesc.trigger) {
-          this.makeDevicePropertyBlock('trigger', 20,
-            areaRect.height / 2);
+          if (flexDir === 'column') {
+            this.makeDevicePropertyBlock('trigger', centerX,
+              areaRect.height / 4);
+          } else {
+            this.makeDevicePropertyBlock('trigger', areaRect.width / 4,
+              centerY);
+          }
         }
         if (ruleDesc.effect) {
-          this.makeDevicePropertyBlock('effect', areaRect.width - 320,
-            areaRect.height / 2);
+          if (flexDir === 'column') {
+            this.makeDevicePropertyBlock('effect', centerX,
+              areaRect.height * 3 / 4);
+          } else {
+            this.makeDevicePropertyBlock('effect', areaRect.width * 3 / 4,
+              centerY);
+          }
         }
       }
       this.onRuleUpdate();

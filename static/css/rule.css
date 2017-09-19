@@ -335,3 +335,9 @@
 #onboarding-hint.hidden {
   display: none;
 }
+
+@media only screen and (max-width: 700px) and (min-height: 600px) {
+  #drag-hint {
+    flex-direction: column;
+  }
+}
