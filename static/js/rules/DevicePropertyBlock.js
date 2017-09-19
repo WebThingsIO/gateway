@@ -43,6 +43,12 @@ function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
   this.ruleArea.appendChild(this.elt);
   this.draggable = new Draggable(this.elt, this.onDown,
     this.onMove, this.onUp);
+
+  this.onWindowResize = this.onWindowResize.bind(this);
+  window.addEventListener('resize', this.onWindowResize);
+
+  let dragHint = document.getElementById('drag-hint');
+  this.flexDir = window.getComputedStyle(dragHint).flexDirection;
 }
 
 /**
@@ -76,18 +82,29 @@ DevicePropertyBlock.prototype.onDown = function() {
  * On mouse move during a drag
  */
 DevicePropertyBlock.prototype.onMove = function(clientX, clientY, relX, relY) {
+  let ruleAreaRect = this.ruleArea.getBoundingClientRect();
   let devicesList = document.getElementById('devices-list');
   let devicesListHeight = devicesList.getBoundingClientRect().height;
   if (clientY > window.innerHeight - devicesListHeight) {
     this.deviceBlock.classList.remove('trigger');
     this.deviceBlock.classList.remove('effect');
   } else {
-    if (relX < window.innerWidth / 2) {
-      this.deviceBlock.classList.add('trigger');
-      this.deviceBlock.classList.remove('effect');
-    } else {
-      this.deviceBlock.classList.remove('trigger');
-      this.deviceBlock.classList.add('effect');
+    if (this.flexDir === 'row') {
+      if (relX < ruleAreaRect.width / 2) {
+        this.deviceBlock.classList.add('trigger');
+        this.deviceBlock.classList.remove('effect');
+      } else {
+        this.deviceBlock.classList.remove('trigger');
+        this.deviceBlock.classList.add('effect');
+      }
+    } else if (this.flexDir === 'column') {
+      if (relY < ruleAreaRect.height / 2) {
+        this.deviceBlock.classList.add('trigger');
+        this.deviceBlock.classList.remove('effect');
+      } else {
+        this.deviceBlock.classList.remove('trigger');
+        this.deviceBlock.classList.add('effect');
+      }
     }
   }
 
@@ -181,7 +198,48 @@ DevicePropertyBlock.prototype.setRulePart = function(rulePart) {
     this.propertySelect.updateOptionsForRole(this.role);
     this.propertySelect.selectByValue(rulePart);
   }
-}
+};
+
+/**
+ * Switch from row to column grid alignments if necessary when the window is
+ * resized
+ */
+DevicePropertyBlock.prototype.onWindowResize = function() {
+  if (!this.role) {
+    return;
+  }
+  let dragHint = document.getElementById('drag-hint');
+  let flexDir = window.getComputedStyle(dragHint).flexDirection;
+  // Throw away our current coords and snap to the new layout direction
+  if (this.flexDir === flexDir) {
+    return;
+  }
+
+  let areaRect = this.ruleArea.getBoundingClientRect();
+  let rect = this.elt.getBoundingClientRect();
+
+  if (flexDir === 'row') {
+    let centerY = areaRect.height / 2 - rect.height / 2;
+
+    let roleX = areaRect.width / 4 - rect.width / 2;
+    if (this.role === 'effect') {
+      roleX = areaRect.width * 3 / 4 - rect.width / 2;
+    }
+
+    this.snapToGrid(roleX, centerY);
+  } else if (flexDir === 'column') {
+    let centerX = areaRect.width / 2 - rect.width / 2;
+
+    let roleY = areaRect.height / 4 - rect.height / 2;
+    if (this.role === 'effect') {
+      roleY = areaRect.height * 3 / 4 - rect.height / 2;
+    }
+
+    this.snapToGrid(centerX, roleY);
+  }
+  this.rule.onUpdate();
+  this.flexDir = flexDir;
+};
 
 /**
  * Remove the DevicePropertyBlock from the DOM and from its associated rule
@@ -193,4 +251,5 @@ DevicePropertyBlock.prototype.remove = function() {
   } else if (this.role === 'effect') {
     this.rule.setEffect(null);
   }
+  window.removeEventListener('resize', this.onWindowResize);
 };
