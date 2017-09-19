@@ -14,6 +14,7 @@
 }
 
 #rule-view > .title-bar {
+  box-sizing: border-box;
   width: 100%;
   height: 9.6rem;
   padding-left: 9.6rem;
