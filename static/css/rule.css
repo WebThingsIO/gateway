@@ -143,6 +143,8 @@
   z-index: 10;
   background: #5A9AC9;
   position: relative;
+  overflow: scroll;
+  white-space: nowrap;
 }
 
 #devices-list p {
@@ -156,6 +158,7 @@
 .device {
   display: inline-block;
   vertical-align: bottom;
+  white-space: normal;
 }
 
 .device-property-block {
