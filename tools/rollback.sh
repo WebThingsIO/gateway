@@ -6,24 +6,21 @@
 
 # from https://stackoverflow.com/questions/552724/
 function recentEnough() {
-   local filename=$1
-   local changed=`stat -c %Y "$filename"`
-   local now=`date +%s`
-   local elapsed
+  local filename=$1
+  local changed=`stat -c %Y "$filename"`
+  local now=`date +%s`
+  local elapsed
 
-   let elapsed=now-changed
-   # if less than 60 * 60 * 24 * 14 seconds have passed
-   if [ $elapsed -lt 1209600 ]; then
-     return 1
-   else
-     return 0
-   fi
+  let elapsed=now-changed
+  # if less than 60 * 60 * 24 * 14 seconds have passed
+  if [ $elapsed -lt 1209600 ]; then
+    return 1
+  fi
+  return 0
 }
 
-if [ -d "gateway_old" ] && [ ! -z `recentEnough "gateway_old"` ]; then
-  if [ -d "gateway_failed" ]; then
-    rm -fr gateway_failed
-  fi
+if [ -d "gateway_old" ] && [ ! -z $(recentEnough "gateway_old") ]; then
+  rm -fr gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
 fi
