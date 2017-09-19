@@ -42,10 +42,14 @@
 }
 
 #delete-button {
+  display: none; /* TODO */
   background: none;
   border: 0;
-  width: 12rem;
-  height: 12rem;
+  width: 9.6rem;
+  height: 9.6rem;
+  position: fixed;
+  top: 0;
+  right: 0;
 }
 
 #delete-button:active {
