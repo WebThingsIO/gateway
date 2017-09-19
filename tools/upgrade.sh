@@ -24,15 +24,13 @@ gateway_old=./gateway
 # includes tunneltoken, notunnel, any certificates, db.sqlite3, and
 # node_modules
 cp -r $gateway_old /tmp/gateway
-if [ -d "/tmp/gateway/node_modules" ]; then
-  rm -r /tmp/gateway/node_modules
-fi
+rm -fr /tmp/gateway/node_modules
 
 die() {
   sudo systemctl start mozilla-iot-gateway.service
-  rm gateway-*.tar.gz
-  rm node_modules-*.tar.gz
-  rm -r /tmp/gateway
+  rm -f gateway-*.tar.gz
+  rm -f node_modules-*.tar.gz
+  rm -fr /tmp/gateway
   exit -1
 }
 
@@ -62,9 +60,7 @@ extractCAArchive() {
 extractCAArchive gateway-*.tar.gz /tmp
 extractCAArchive node_modules-*.tar.gz /tmp/gateway
 
-if [ -d "gateway_old" ]; then
-  rm -fr gateway_old
-fi
+rm -fr gateway_old
 
 mv $gateway_old gateway_old
 mv /tmp/gateway gateway
