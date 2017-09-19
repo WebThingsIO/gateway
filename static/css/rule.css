@@ -163,6 +163,7 @@
 
 .device-property-block {
   position: absolute;
+  border-radius: 1rem;
   font-size: 0;
 }
 
@@ -174,7 +175,7 @@
 .device-property-info {
   width: 20rem;
   background: white;
-  border-radius: 0 1rem 0 0;
+  border-radius: 0 1rem 1rem 0;
   display: inline-block;
   vertical-align: bottom;
 }
