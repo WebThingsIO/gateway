@@ -127,7 +127,7 @@
 
 .drag-hint-block.device-block {
   background: none;
-  border: 1px dashed black;
+  border: 1px dashed #4a4a4a;
   text-align: center;
   line-height: 10rem;
   font-size: 2.4rem;
@@ -253,7 +253,7 @@
   width: 100%;
   height: 100%;
   text-align: center;
-  border: 1px dashed black;
+  border: 1px dashed #4a4a4a;
   box-sizing: border-box;
 }
 
@@ -264,6 +264,10 @@
   transform: translate(-50%, -50%);
   padding: 0;
   margin: 0;
+}
+
+.drag-hint > .drag-hint-container {
+  color: #4a4a4a;
 }
 
 #rule-delete-overlay {
