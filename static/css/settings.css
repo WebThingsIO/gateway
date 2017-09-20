@@ -59,6 +59,9 @@
 #experiment-settings-link {
   background-image: url('../images/experiments-icon.png');
 }
+#update-settings-link {
+  background-image: url('../images/update-icon.svg');
+}
 
 .settings-section {
   position: fixed;
@@ -74,22 +77,7 @@
   transform: translateX(100%);
 }
 
-#current-domain {
-  position: relative;
-  color: #fff;
-  background-color: #48779a;
-  border-radius: 0.5rem;
-  padding: 2rem;
-  color: #fff;
-  text-align: left;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.4rem;
-  max-width: 60rem;
-  margin: 0 auto;
-}
-
-#current-user {
+.settings-container {
   position: relative;
   color: #fff;
   background-color: #48779a;
@@ -113,7 +101,7 @@
   color: #ccc;
 }
 
-#experiment-settings ul {
+#experiment-settings ul, #update-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -124,7 +112,7 @@
   padding: 2rem;
 }
 
-.experiment-item {
+.experiment-item, .update-item {
   display: block;
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -136,6 +124,10 @@
   background-position: 1rem;
   background-size: 3.2rem;
   background-repeat: no-repeat;
+}
+
+.update-item {
+  padding: 2rem;
 }
 
 .experiment-item label {
@@ -181,4 +173,27 @@
 
 #rules-experiment-item {
   background-image: url('../images/rules-icon.png');
+}
+
+#update-now.hidden {
+  display: none;
+}
+
+#update-settings > .settings-container {
+  font-size: 1.8rem;
+}
+
+#up-to-date-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#update-now {
+  font-size: 1.8rem;
+  padding: 1.8rem;
+  margin-left: 1rem;
+  background: #305067;
+}
+
+#update-settings-up-to-date {
 }

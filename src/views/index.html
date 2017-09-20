@@ -90,13 +90,14 @@
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
           <li class="settings-item"><a id="user-settings-link" href="/settings/users">Users</a></li>
           <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments">Experiments</a></li>
+          <li class="settings-item"><a id="update-settings-link" href="/settings/updates">Updates</a></li>
         </ul>
       </nav>
       <section id="domain-settings" class="hidden settings-section">
-        <div id="current-domain"></div>
+        <div id="current-domain" class="settings-container"></div>
       </section>
       <section id="user-settings" class="hidden settings-section">
-        <div id="current-user">
+        <div id="current-user" class="settings-container">
           <span id="current-user-name"></span><span id="current-user-name"></span>
           <span id="current-user-email"></span><span id="current-user-email"></span>
         </div>
@@ -115,6 +116,19 @@
           <li id="rules-experiment-item" class="experiment-item">
             <input id="rules-experiment-checkbox" class="experiment-checkbox" type="checkbox">
             <label for="rules-experiment-checkbox">Rules</label>
+          </li>
+        </ul>
+      </section>
+      <section id="update-settings" class="hidden settings-section">
+        <ul>
+          <!-- TODO(hobinjk): allow disabling automatic updates -->
+          <li class="update-item" id="up-to-date-container">
+            <p id="update-settings-up-to-date"></p>
+            <button id="update-now" class="text-button hidden">Update Now</button>
+          </li>
+          <li class="update-item">
+            <p id="update-settings-version"></p>
+            <p id="update-settings-status"></p>
           </li>
         </ul>
       </section>
