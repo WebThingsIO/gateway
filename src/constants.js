@@ -20,6 +20,7 @@ exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
 exports.SETTINGS_PATH = '/settings';
 exports.COMMANDS_PATH = '/commands';
+exports.UPDATES_PATH = '/updates';
 exports.UPLOADS_PATH = '/uploads';
 exports.DEBUG_PATH = '/debug';
 exports.RULES_PATH = '/rules';
