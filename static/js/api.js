@@ -194,6 +194,22 @@
           reject(error);
         });
       });
+    },
+
+    getUpdateStatus: function() {
+      return fetch('/updates/status',
+        {headers: this.headers()}
+      ).then(res => {
+        return res.json();
+      });
+    },
+
+    getUpdateLatest: function() {
+      return fetch('/updates/latest',
+        {headers: this.headers()}
+      ).then(res => {
+        return res.json();
+      });
     }
   };
 }());

@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App, Menu */
+/* globals App, API, Menu */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -23,6 +23,7 @@ var SettingsScreen = {
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
+    this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
   },
 
@@ -41,6 +42,7 @@ var SettingsScreen = {
     this.domainSettings.classList.add('hidden');
     this.userSettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
+    this.updateSettings.classList.add('hidden');
   },
 
   hideMenu: function() {
@@ -65,6 +67,9 @@ var SettingsScreen = {
         break;
       case 'experiments':
         this.showExperimentSettings();
+        break;
+      case 'updates':
+        this.showUpdateSettings();
         break;
       default:
         console.error('Tried to display undefined section');
@@ -138,5 +143,112 @@ var SettingsScreen = {
     this.showExperimentCheckbox('floorplan', 'floorplan-experiment-checkbox');
     this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
     this.showExperimentCheckbox('rules', 'rules-experiment-checkbox');
+  },
+
+  /**
+   * Compare two semantic versions
+   * @param {String} verA
+   * @param {String} verB
+   * @return {number} 0 if verA == verB, -1 if verA < verB, 1 if verA > verB
+   */
+  compareSemver: function(verA, verB) {
+    if (verA === verB) {
+      return 0;
+    }
+
+    function parsePart(part) {
+      return parseInt(part);
+    }
+
+    let partsA = verA.split('.').map(parsePart);
+    let partsB = verB.split('.').map(parsePart);
+
+    for (var i = 0; i < partsA.length; i++) {
+      let partA = partsA[i];
+      let partB = partsB[i];
+      if (partA === partB) {
+        continue;
+      }
+      if (partA < partB) {
+        return -1;
+      }
+      return 1;
+    }
+    return 0;
+  },
+
+  showUpdateSettings: function() {
+    this.updateSettings.classList.remove('hidden');
+    let updateNow = document.getElementById('update-now');
+
+    updateNow.addEventListener('click', this.onUpdateClick);
+    this.fetchUpdateInfo();
+  },
+
+  fetchUpdateInfo: function() {
+    let upToDateElt = document.getElementById('update-settings-up-to-date');
+    let updateNow = document.getElementById('update-now');
+    let versionElt = document.getElementById('update-settings-version');
+    let statusElt = document.getElementById('update-settings-status');
+
+    let fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest()]);
+    fetches.then(function(results) {
+      let status = results[0];
+      let latest = results[1];
+      let cmp = 0;
+      if (latest.version) {
+        cmp = this.compareSemver(status.version, latest.version);
+      }
+      if (cmp < 0) {
+        // Update available
+        upToDateElt.textContent = 'New version available';
+        updateNow.classList.remove('hidden');
+      } else {
+        // All up to date!
+        upToDateElt.textContent = 'Your system is up to date';
+      }
+      versionElt.textContent = `Current version: ${status.version}`;
+      let statusText = 'Last update: ';
+
+      if (status.timestamp) {
+        statusText += new Date(status.timestamp).toString();
+
+        if (!status.success) {
+          statusText += ' (failed)';
+        }
+      } else {
+        statusText += 'Never';
+      }
+
+      statusElt.textContent = statusText;
+    }.bind(this));
+
+  },
+
+  onUpdateClick: function() {
+    let updateNow = document.getElementById('update-now');
+    updateNow.removeEventListener('click', this.onUpdateClick);
+    updateNow.classList.add('disabled');
+
+    fetch('/updates/update', {
+      headers: API.headers(),
+      method: 'POST'
+    }).then(() => {
+      updateNow.textContent = 'In Progress'
+      let isDown = false;
+      let interval = setInterval(() => {
+        API.getUpdateStatus().then(() => {
+          if (isDown) {
+            clearInterval(interval);
+            updateNow.textContent = 'Update Now';
+            this.showUpdateSettings();
+          }
+        }).catch(() => {
+          isDown = true;
+        });
+      });
+    }).catch(function() {
+      updateNow.textContent = 'Error';
+    });
   }
 };
