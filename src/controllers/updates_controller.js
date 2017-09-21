@@ -104,16 +104,8 @@ UpdatesController.get('/status', async function(request, response) {
 });
 
 UpdatesController.post('/update', async function(request, response) {
-  const child = childProcess.spawn(
-    process.argv[0],
-    ['tools/check-for-update.js'],
-    {
-      detached: true,
-      stdio: 'ignore'
-    }
-  );
-
-  child.unref();
+  childProcess.exec('sudo systemctl start ' +
+    'mozilla-iot-gateway.check-for-update.service');
 
   response.end();
 });
