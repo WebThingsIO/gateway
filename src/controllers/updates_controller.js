@@ -92,12 +92,12 @@ UpdatesController.get('/status', async function(request, response) {
       success: false,
       version: currentVersion,
       failedVersion: failedVersion,
-      timestamp: failedStats.ctimeMs
+      timestamp: failedStats.ctime
     });
   } else {
     let timestamp = null;
     if (oldStats) {
-      timestamp = oldStats.ctimeMs;
+      timestamp = oldStats.ctime;
     }
     response.send({
       success: true,
