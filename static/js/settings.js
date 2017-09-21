@@ -238,20 +238,23 @@ var SettingsScreen = {
     }).then(function() {
       updateNow.textContent = 'In Progress'
       let isDown = false;
-      let interval = setInterval(function() {
+      function checkStatus() {
         API.getUpdateStatus().then(function() {
           if (isDown) {
-            clearInterval(interval);
             SettingsScreen.showUpdateSettings();
             updateNow.textContent = 'Update Now';
+          } else {
+            setTimeout(checkStatus, 5000);
           }
         }).catch(function() {
           if (!isDown) {
             updateNow.textContent = 'Restarting';
             isDown = true;
           }
+          setTimeout(checkStatus, 5000);
         });
-      }, 1000);
+      }
+      checkStatus();
     }).catch(function() {
       updateNow.textContent = 'Error';
     });
