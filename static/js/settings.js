@@ -233,17 +233,17 @@ var SettingsScreen = {
     fetch('/updates/update', {
       headers: API.headers(),
       method: 'POST'
-    }).then(() => {
+    }).then(function() {
       updateNow.textContent = 'In Progress'
       let isDown = false;
-      let interval = setInterval(() => {
-        API.getUpdateStatus().then(() => {
+      let interval = setInterval(function() {
+        API.getUpdateStatus().then(function() {
           if (isDown) {
             clearInterval(interval);
-            this.showUpdateSettings();
+            SettingsScreen.showUpdateSettings();
             updateNow.textContent = 'Update Now';
           }
-        }).catch(() => {
+        }).catch(function() {
           if (!isDown) {
             updateNow.textContent = 'Restarting';
             isDown = true;
