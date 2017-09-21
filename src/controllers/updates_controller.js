@@ -46,6 +46,11 @@ UpdatesController.get('/latest', async function(request, response) {
   const res = await
     fetch('https://api.github.com/repos/mozilla-iot/gateway/releases');
   const releases = await res.json();
+  if (!releases || !releases.filter) {
+    console.warn('API returned invalid releases, rate limit likely exceeded');
+    response.send({version: null});
+    return;
+  }
   const latestRelease = releases.filter(release => {
     return !release.prerelease && !release.draft;
   })[0];
