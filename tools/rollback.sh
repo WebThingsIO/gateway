@@ -14,12 +14,12 @@ function recentEnough() {
   let elapsed=now-changed
   # if less than 60 * 60 * 24 * 14 seconds have passed
   if [ $elapsed -lt 1209600 ]; then
-    return 1
+    return 0 # successful exit
   fi
-  return 0
+  return 1
 }
 
-if [ -d "gateway_old" ] && [ ! -z $(recentEnough "gateway_old") ]; then
+if [ -d "gateway_old" ] && $(recentEnough "gateway_old"); then
   rm -fr gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
