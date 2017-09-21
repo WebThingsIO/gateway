@@ -79,7 +79,7 @@ describe('command/', function() {
 
     try {
       await chai.request(server)
-        .post(Constants.COMMAND_PATH)
+        .post(Constants.COMMANDS_PATH)
         .set(...headerAuth(jwt))
         .set('Accept', 'application/json')
         .send({ text: 'whatever'});
@@ -93,7 +93,7 @@ describe('command/', function() {
     setupNock();
     try {
       await chai.request(server)
-        .post(Constants.COMMAND_PATH)
+        .post(Constants.COMMANDS_PATH)
         .set(...headerAuth(jwt))
         .set('Accept', 'application/json')
         .send();
@@ -128,7 +128,7 @@ describe('command/', function() {
 
     const res = await addDevice();
     await chai.request(server)
-      .post(Constants.COMMAND_PATH)
+      .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
       .send({ text: 'turn the light on'});
@@ -158,7 +158,7 @@ describe('command/', function() {
 
     try {
       await chai.request(server)
-        .post(Constants.COMMAND_PATH)
+        .post(Constants.COMMANDS_PATH)
         .set(...headerAuth(jwt))
         .set('Accept', 'application/json')
         .send({ text: 'turn the light on'});
