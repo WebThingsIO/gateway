@@ -203,9 +203,11 @@ var SettingsScreen = {
         // Update available
         upToDateElt.textContent = 'New version available';
         updateNow.classList.remove('hidden');
+        updateNow.classList.remove('disabled');
       } else {
         // All up to date!
         upToDateElt.textContent = 'Your system is up to date';
+        updateNow.classList.add('hidden');
       }
       versionElt.textContent = `Current version: ${status.version}`;
       let statusText = 'Last update: ';
