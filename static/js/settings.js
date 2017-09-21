@@ -240,13 +240,16 @@ var SettingsScreen = {
         API.getUpdateStatus().then(() => {
           if (isDown) {
             clearInterval(interval);
-            updateNow.textContent = 'Update Now';
             this.showUpdateSettings();
+            updateNow.textContent = 'Update Now';
           }
         }).catch(() => {
-          isDown = true;
+          if (!isDown) {
+            updateNow.textContent = 'Restarting';
+            isDown = true;
+          }
         });
-      });
+      }, 1000);
     }).catch(function() {
       updateNow.textContent = 'Error';
     });
