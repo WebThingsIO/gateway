@@ -6,7 +6,6 @@
 const {server, chai} = require('../common');
 const pFinal = require('../promise-final');
 const storage = require('node-persist');
-const config = require('config');
 const {
   TEST_USER,
   createUser,
@@ -20,11 +19,7 @@ describe('settings/', function() {
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
     // Clear settings storage
-    storage.init({
-      dir: config.get('settings.directory')
-    }).then(async () => {
-      await storage.clear();
-    });
+    await storage.clear();
   });
 
   it('Fail to get a setting that hasnt been set', async () => {
