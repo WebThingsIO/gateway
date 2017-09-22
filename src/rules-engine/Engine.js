@@ -16,18 +16,18 @@ class Engine {
 
   /**
    * Get a list of all current rules
-   * @return {Array<Rule>} rules
+   * @return {Promise<Array<Rule>>} rules
    */
   getRules() {
     let rulesPromise = Promise.resolve(this.rules);
 
     if (!this.rules) {
-      rulesPromise = Database.getRules().then(ruleDescs => {
+      rulesPromise = Database.getRules().then(async ruleDescs => {
         this.rules = {};
         for (let ruleId in ruleDescs) {
           ruleDescs[ruleId].id = parseInt(ruleId);
           this.rules[ruleId] = Rule.fromDescription(ruleDescs[ruleId]);
-          this.rules[ruleId].start();
+          await this.rules[ruleId].start();
         }
         console.log('loaded rules', this.rules);
         return this.rules;
@@ -59,13 +59,12 @@ class Engine {
    * @param {Rule} rule
    * @return {Promise<number>} rule id
    */
-  addRule(rule) {
-    return Database.createRule(rule.toDescription()).then(id => {
-      rule.id = id;
-      this.rules[id] = rule;
-      rule.start();
-      return id;
-    });
+  async addRule(rule) {
+    const id = await Database.createRule(rule.toDescription());
+    rule.id = id;
+    this.rules[id] = rule;
+    await rule.start();
+    return id;
   }
 
   /**
@@ -74,16 +73,16 @@ class Engine {
    * @param {Rule} rule
    * @return {Promise}
    */
-  updateRule(ruleId, rule) {
+  async updateRule(ruleId, rule) {
     if (!this.rules[ruleId]) {
       return Promise.reject(new Error('Rule ' + ruleId + ' does not exist'));
     }
     rule.id = ruleId;
-    return Database.updateRule(ruleId, rule.toDescription()).then(() => {
-      this.rules[ruleId].stop();
-      this.rules[ruleId] = rule;
-      rule.start();
-    });
+    await Database.updateRule(ruleId, rule.toDescription());
+
+    this.rules[ruleId].stop();
+    this.rules[ruleId] = rule;
+    await rule.start();
   }
 
   /**
