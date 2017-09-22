@@ -1,4 +1,3 @@
-const config = require('config');
 const storage = require('node-persist');
 
 const {server, chai, mockAdapter} = require('../common');
@@ -149,9 +148,6 @@ describe('rules engine', function() {
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
     // jest's lifecycle is weird and invalidates the engine's first JWT
-    await storage.init({
-      dir: config.get('settings.directory')
-    });
     await storage.setItem('RulesEngine.jwt', jwt);
     await addDevice(thingLight1);
     await addDevice(thingLight2);
