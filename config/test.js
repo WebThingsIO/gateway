@@ -19,6 +19,9 @@ module.exports = {
       enabled: true,
       path: './adapters/mock',
     },
+    tplight: {
+      enabled: false,
+    },
     zwave: {
       enabled: false,
     },
