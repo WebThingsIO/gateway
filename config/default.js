@@ -28,6 +28,10 @@ module.exports = {
         },
       }
     },
+    plugin: {
+      enabled: true,
+      path: './adapters/plugin',
+    },
     zigbee: {
       enabled: true,
       path: './adapters/zigbee',

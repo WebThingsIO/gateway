@@ -27,13 +27,18 @@ class Property {
    * This is primarily used for debugging.
    */
   asDict() {
-    return {
+    var prop = {
       name: this.name,
       type: this.type,
-      unit: this.unit,
-      description: this.description,
       value: this.value,
     };
+    if (this.description) {
+      prop.description = this.description;
+    }
+    if (this.unit) {
+      prop.unit = this.unit;
+    }
+    return prop;
   }
 
   /**

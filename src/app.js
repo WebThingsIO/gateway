@@ -232,7 +232,7 @@ if (config.get('cli')) {
     console.log('Control-C: disconnecting adapters...');
     adapterManager.unloadAdapters();
     TunnelService.stop();
-    process.exit(1);
+    process.exit(0);
   });
 }
 

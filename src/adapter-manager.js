@@ -46,8 +46,12 @@ class AdapterManager extends EventEmitter {
    * This function is typically called when loading adapters.
    */
   addAdapter(adapter) {
-    adapter.name = adapter.constructor.name;
+    if (!adapter.name) {
+      adapter.name = adapter.constructor.name;
+    }
     this.adapters[adapter.id] = adapter;
+
+    console.log('AdapterManager: Adapter:', adapter.name, 'added.');
 
     /**
      * Adapter added event.

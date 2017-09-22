@@ -66,6 +66,19 @@ debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
 });
 
 /**
+ * Get a list of devices ids registered with the adapter manager.
+ */
+debugController.get('/deviceIds', (request, response) => {
+  var devices = adapterManager.getDevices();
+  var deviceList = [];
+  for (var deviceId in devices) {
+    var device = adapterManager.devices[deviceId];
+    deviceList.push(device.id);
+  }
+  response.status(200).json(deviceList);
+});
+
+/**
  * Get a list of the devices registered with the adapter manager.
  */
 debugController.get('/devices', (request, response) => {
@@ -123,9 +136,9 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   if (device) {
     var propertyValue = request.body[propertyName];
     if (propertyValue !== undefined) {
-      device.setProperty(propertyName, propertyValue).then(() => {
+      device.setProperty(propertyName, propertyValue).then(updatedValue => {
         var valueDict = {};
-        valueDict[propertyName] = propertyValue;
+        valueDict[propertyName] = updatedValue;
         response.status(200).json(valueDict);
       }).catch((error) => {
         console.log('Device "' + deviceId + '"');
