@@ -51,7 +51,7 @@ class LevelTrigger extends PropertyTrigger {
   onValueChanged(propValue) {
     let on = false;
 
-    switch (this.type) {
+    switch (this.levelType) {
       case LevelTriggerTypes.LESS:
         if (propValue < this.level) {
           on = true;
