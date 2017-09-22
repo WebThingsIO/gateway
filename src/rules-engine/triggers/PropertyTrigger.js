@@ -28,9 +28,9 @@ class PropertyTrigger extends Trigger {
     );
   }
 
-  start() {
+  async start() {
     this.property.on(Events.VALUE_CHANGED, this.onValueChanged);
-    this.property.start();
+    await this.property.start();
   }
 
   onValueChanged(_value) {

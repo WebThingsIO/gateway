@@ -5,6 +5,7 @@
  */
 
 const assert = require('assert');
+const e2p = require('event-to-promise');
 const fetch = require('node-fetch');
 const storage = require('node-persist');
 const winston = require('winston');
@@ -67,7 +68,6 @@ class Property extends EventEmitter {
    */
   async getHref() {
     let href = await storage.getItem('RulesEngine.gateway') + this.href;
-    winston.log('getHref', href);
     return href;
   }
 
@@ -129,6 +129,7 @@ class Property extends EventEmitter {
 
     this.ws = new WebSocket(wsHref);
     this.ws.on('message', this.onMessage);
+    await e2p(this.ws, 'open');
   }
 
   onMessage(text) {
