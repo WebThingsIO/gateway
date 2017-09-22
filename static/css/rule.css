@@ -272,6 +272,7 @@
   transform: translate(-50%, -50%);
   padding: 0;
   margin: 0;
+  color: #4a4a4a;
 }
 
 .drag-hint > .drag-hint-container {
