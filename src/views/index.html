@@ -208,7 +208,11 @@
     <!-- Floating buttons -->
     <button id="menu-button"></button>
     <!-- Speech button -->
-    <button id="speech-button" class="icon-button hidden"></button>
+    <div id="speech-wrapper" class="hidden">
+      <button id="speech-button" class="icon-button"></button>
+      <canvas  id="stm-levels"></canvas>
+      <div id="snackbar">Some text some message..</div>
+    </div>
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden dialog">
       <button id="add-thing-back-button" class="back-button icon-button"></button>
