@@ -33,10 +33,6 @@ const getopt = new GetOpt([
 ]);
 
 const opt = getopt.parseSystem();
-const options = {
-  debug: !!opt.options.debug, // cast to bool
-  verbose: opt.options.verbose,
-}
 
 if (opt.options.verbose) {
   console.log(opt);
