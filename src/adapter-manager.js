@@ -14,6 +14,8 @@
 var config = require('config');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
+const PluginClient = require('./adapters/plugin/plugin-client');
+
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -315,6 +317,24 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
+   * @method loadAdapter
+   *
+   * Loads a single adapter.
+   */
+
+   loadAdapter(adapterManager, adapterId, adapterConfig) {
+    if (adapterConfig.enabled) {
+      console.log('Loading adapters for', adapterId,
+                  'from', adapterConfig.path);
+      let adapterLoader = dynamicRequire(adapterConfig.path);
+      adapterLoader(this, adapterId, adapterConfig);
+    } else {
+      console.log('Not loading adapters for', adapterId,
+                  '- disabled');
+    }
+   }
+
+  /**
    * @method loadAdapters
    * Loads all of the configured adapters from the adapters directory.
    */
@@ -326,17 +346,29 @@ class AdapterManager extends EventEmitter {
     }
     this.adaptersLoaded = true;
     var adaptersConfig = config.get('adapters');
-    for (var adapterName in adaptersConfig) {
-      var adapterConfig = adaptersConfig[adapterName];
-
-      if (adapterConfig.enabled) {
-        console.log('Loading adapters for', adapterName,
-                    'from', adapterConfig.path);
-        let adapterLoader = dynamicRequire(adapterConfig.path);
-        adapterLoader(this);
+    for (var adapterId in adaptersConfig) {
+      var adapterConfig = adaptersConfig[adapterId];
+      if (adapterConfig.plugin) {
+        if (adapterConfig.plugin === 'test') {
+          // This is a special case where we load the adapter
+          // directly into the gateway, but we use IPC comms
+          // to talk to the adapter (i.e. for testing)
+          var pluginClient = new PluginClient(adapterId, {verbose: false});
+          pluginClient.register().then(adapterManagerProxy => {
+            console.log('Loading adapter', adapterId, 'as plugin');
+            this.loadAdapter(adapterManagerProxy, adapterId, adapterConfig);
+          }).catch(err => {
+            console.error('Failed to register adapter with gateway');
+            console.error(err);
+          });
+        } else {
+          // This is the normal plugin adapter case, and we
+          // currently don't need to do anything. We assume
+          // that the adapter is started elsewhere.
+        }
       } else {
-        console.log('Not loading adapters for', adapterName,
-                    '- disabled');
+        // Load this adapter directly into the gateway.
+        this.loadAdapter(this, adapterId, adapterConfig);
       }
     }
   }
