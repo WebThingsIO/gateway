@@ -17,6 +17,7 @@ module.exports = {
   adapters : {
     mock: {
       enabled: true,
+      plugin: 'test',
       path: './adapters/mock',
     },
     zwave: {
