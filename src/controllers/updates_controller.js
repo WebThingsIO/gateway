@@ -39,16 +39,40 @@ function stat(path) {
   });
 }
 
+let cacheLatest = {
+  tag: null,
+  time: 0,
+  value: {version: null}
+};
+const cacheDuration = 60 * 1000;
+
+function cacheLatestInsert(response, value) {
+  cacheLatest.tag = response.get('etag');
+  cacheLatest.time = Date.now();
+  cacheLatest.value = value;
+}
+
 /**
  * Send the client an object describing the latest release
  */
 UpdatesController.get('/latest', async function(request, response) {
+  const etag = request.get('If-None-Match');
+  if (etag) {
+    if (cacheLatest.tag === etag &&
+        Date.now() - cacheLatest.time < cacheDuration) {
+      response.sendStatus(304);
+      return;
+    }
+  }
+
   const res = await
     fetch('https://api.github.com/repos/mozilla-iot/gateway/releases');
   const releases = await res.json();
   if (!releases || !releases.filter) {
     console.warn('API returned invalid releases, rate limit likely exceeded');
-    response.send({version: null});
+    let value = {version: null};
+    response.send(value);
+    cacheLatestInsert(response, value);
     return;
   }
   const latestRelease = releases.filter(release => {
@@ -56,11 +80,15 @@ UpdatesController.get('/latest', async function(request, response) {
   })[0];
   if (!latestRelease) {
     console.warn('No releases found');
-    response.send({version: null});
+    let value = {version: null};
+    response.send(value);
+    cacheLatestInsert(response, value);
     return;
   }
   let releaseVer = latestRelease.tag_name;
-  response.send({version: releaseVer});
+  let value = {version: releaseVer};
+  response.send(value);
+  cacheLatestInsert(response, value);
 });
 
 /**
