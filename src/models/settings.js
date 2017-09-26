@@ -1,7 +1,7 @@
 /**
  * Settings Model.
  *
- * Manages the getting and setting of settings using node-persist.
+ * Manages the getting and setting of settings using ../storage.js
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,7 +11,7 @@
 'use strict';
 
 const config = require('config');
-const storage = require('node-persist');
+const storage = require('../storage');
 
 const Settings = {
 
@@ -40,6 +40,10 @@ const Settings = {
           console.error('Failed to get ' + key);
           reject(e);
         })
+      }).catch(function(e) {
+        console.error('settings.js: Failed to init');
+        console.error(e);
+        reject(e);
       });
     });
   },

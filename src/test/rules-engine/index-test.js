@@ -1,4 +1,4 @@
-const storage = require('node-persist');
+const storage = require('../../storage');
 
 const {server, chai, mockAdapter} = require('../common');
 
