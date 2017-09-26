@@ -5,7 +5,7 @@
 
 const {server, chai} = require('../common');
 const pFinal = require('../promise-final');
-const storage = require('node-persist');
+const storage = require('../../storage');
 const {
   TEST_USER,
   createUser,
@@ -45,7 +45,7 @@ describe('settings/', function() {
 
   it('Get a setting', async () => {
     const putRes = await chai.request(server)
-      .put(Constants.SETTINGS_PATH + '/experiments/bar')
+      .put(Constants.SETTINGS_PATH + '/experiments/foobar')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': true});
@@ -55,7 +55,7 @@ describe('settings/', function() {
     expect(putRes.body.enabled).toEqual(true);
 
     const res = await chai.request(server)
-      .get(Constants.SETTINGS_PATH + '/experiments/bar')
+      .get(Constants.SETTINGS_PATH + '/experiments/foobar')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 

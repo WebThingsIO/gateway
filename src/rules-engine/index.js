@@ -6,7 +6,7 @@
 
 const PromiseRouter = require('express-promise-router');
 const config = require('config');
-const storage = require('node-persist');
+const storage = require('../storage');
 const winston = require('winston');
 
 const APIError = require('./APIError');
