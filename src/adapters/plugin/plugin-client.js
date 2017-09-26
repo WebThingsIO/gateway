@@ -28,7 +28,7 @@ class PluginClient {
     this.verbose &&
       console.log('PluginClient: rcvd ManagerMsg:', msg);
 
-    if (!this.deferredReplay) {
+    if (!this.deferredReply) {
       console.error('No deferredReply setup');
       return;
     }

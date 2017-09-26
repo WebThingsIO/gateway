@@ -12,7 +12,7 @@
 'use strict';
 
 const Adapter = require('../adapter');
-const Constants = require('../../constants');
+const Constants = require('../adapter-constants');
 const DeviceProxy = require('./device-proxy');
 const fs = require('fs');
 const IpcSocket = require('./ipc');

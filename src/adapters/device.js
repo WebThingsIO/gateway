@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Constants = require('../constants');
+const Constants = require('./adapter-constants');
 
 class Device {
 
