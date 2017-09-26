@@ -13,7 +13,11 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const Database = require('../db');
 const Actions = require('../models/actions');
+const config = require('config');
 const e2p = require('event-to-promise');
+const fs = require('fs');
+const storage = require('node-persist');
+const uuid = require('uuid/v4');
 
 const chai = require('./chai');
 global.chai = chai;
@@ -40,6 +44,17 @@ function mockAdapter() {
 }
 global.mockAdapter = mockAdapter;
 
+let testId = uuid();
+let storageDir = config.get('settings.directory') + '-' + testId;
+
+beforeAll(async () => {
+  // Give each test its own settings instance
+  await storage.init({
+    dir: storageDir,
+    continuous: false
+  });
+});
+
 afterEach(async () => {
   // This is all potentially brittle.
   const adapter = adapterManager.getAdapter('Mock');
@@ -56,7 +71,9 @@ afterAll(async () => {
   await Promise.all([
     e2p(server, 'close'),
     e2p(httpServer, 'close')
-  ])
+  ]);
+  await storage.clear();
+  fs.rmdirSync(storageDir);
 });
 
 module.exports = {

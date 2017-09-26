@@ -45,7 +45,7 @@ module.exports = {
     removeBeforeOpen: false,
   },
   settings: {
-    directory: './settings/', // Directory to store settings in
+    directory: './settings', // Directory to store settings in
   },
   uploads: {
     directory: '../static/uploads/' // Directory to store uploads in
