@@ -37,9 +37,9 @@ Close and reopen your terminal window. Use nvm to install node and set the
 default version.
 
 ```
-$ nvm install v7.7.2
-$ nvm use v7.7.2
-$ nvm alias default v7.7.2
+$ nvm install v7.10.1
+$ nvm use v7.10.1
+$ nvm alias default v7.10.1
 ```
 
 Verify that node and npm have been installed:
