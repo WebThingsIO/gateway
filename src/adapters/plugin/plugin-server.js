@@ -13,6 +13,7 @@
 
 'use strict';
 
+const Constants = require('./../../constants');
 const AdapterProxy = require('./adapter-proxy');
 const fs = require('fs');
 const IpcSocket = require('./ipc');
@@ -46,13 +47,12 @@ class PluginServer {
 
     switch (msg.messageType) {
 
-      case 'registerAdapter':
-        var adapter = this.registerAdapter(msg.data.id);
+      case Constants.REGISTER_ADAPTER:
+        var adapter = this.registerAdapter(msg.data.adapterId);
         this.ipcSocket.sendJson({
-          messageType: 'resgisterAdapterReply',
+          messageType: Constants.REGISTER_ADAPTER_REPLY,
           data: {
             ipcAddr: adapter.ipcAddr,
-            idBase: adapter.idBase,
           },
           id: msg.id,
         });
@@ -62,7 +62,7 @@ class PluginServer {
   }
 
   registerAdapter(adapterId) {
-    if (adapterId in this.adapters) {
+    if (this.adapters.hasOwnProperty(adapterId)) {
       // This is an adapter that we already know about.
     } else {
       // We haven't seen this adapter before.

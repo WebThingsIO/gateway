@@ -183,7 +183,7 @@ var Things = {
   }
 };
 
-AdapterManager.on('thing-added', function(thing) {
+AdapterManager.on(Constants.THING_ADDED, function(thing) {
   Things.handleNewThing(thing);
 });
 

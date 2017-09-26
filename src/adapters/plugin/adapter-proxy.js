@@ -12,14 +12,12 @@
 'use strict';
 
 const Adapter = require('../adapter');
+const Constants = require('../../constants');
 const DeviceProxy = require('./device-proxy');
 const fs = require('fs');
 const IpcSocket = require('./ipc');
 
 const DEBUG = false;
-
-// Used for message id's
-var idBase = 0;
 
 /**
  * Class used to describe an adapter from the perspective
@@ -28,8 +26,7 @@ var idBase = 0;
 class AdapterProxy extends Adapter {
 
   constructor(adapterManager, adapterId, pluginServer) {
-    super(adapterManager, '???');
-    this.id = adapterId;
+    super(adapterManager, adapterId);
     this.pluginServer = pluginServer;
 
     this.ipcFile = '/tmp/gateway.adapter.' + this.id;
@@ -41,34 +38,30 @@ class AdapterProxy extends Adapter {
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
                                    this.onMsg.bind(this));
     this.ipcSocket.bind(this.ipcAddr);
-
-    idBase += 1;
-    this.idBase = idBase * 1000;
-    this.ipcSocket.idBase = this.idBase;
   }
 
   startPairing(timeoutSeconds) {
     DEBUG && console.log('AdapterProxy: startPairing',
                          this.name, 'id', this.id);
-    this.sendMsg('startPairing', {timeout: timeoutSeconds});
+    this.sendMsg(Constants.START_PAIRING, {timeout: timeoutSeconds});
   }
 
   cancelPairing() {
     DEBUG && console.log('AdapterProxy: cancelPairing',
                          this.name, 'id', this.id);
-    this.sendMsg('cancelPairing', {});
+    this.sendMsg(Constants.CANCEL_PAIRING, {});
   }
 
   removeThing(device) {
     DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
                          'removeThing:', device.id);
-    this.sendMsg('removeThing', {deviceId: device.id});
+    this.sendMsg(Constants.REMOVE_THING, {deviceId: device.id});
   }
 
   cancelRemoveThing(device) {
     DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
                          'cancelRemoveThing:', device.id);
-    this.sendMsg('cancelRemoveThing', {deviceId: device.id});
+    this.sendMsg(Constants.CANCEL_REMOVE_THING, {deviceId: device.id});
   }
 
   onMsg(msg) {
@@ -78,30 +71,30 @@ class AdapterProxy extends Adapter {
 
     switch (msg.messageType) {
 
-      case 'addAdapter':
+      case Constants.ADD_ADAPTER:
         this.id = msg.data.adapterId;
         this.name = msg.data.name;
         this.manager.addAdapter(this);
         break;
 
-      case 'handleDeviceAdded':
+      case Constants.HANDLE_DEVICE_ADDED:
         device = new DeviceProxy(this, msg.data);
         super.handleDeviceAdded(device);
         break;
 
-      case 'handleDeviceRemoved':
+      case Constants.HANDLE_DEVICE_REMOVED:
         device = this.devices[msg.data.id];
         if (device) {
           super.handleDeviceRemoved(device);
         }
         break;
 
-      case 'propertyChanged':
+      case Constants.PROPERTY_CHANGED:
         device = this.devices[msg.data.deviceId];
         if (device) {
           property = device.findProperty(msg.data.propertyName);
           if (property) {
-            property.setCachedValue(msg.data.propertyValue);
+            property.doPropertyChange(msg.data.propertyValue);
             device.notifyPropertyChanged(property);
           }
         }
@@ -120,17 +113,6 @@ class AdapterProxy extends Adapter {
     };
     DEBUG && console.log('AdapterProxy: sendMsg:', msg);
     return this.ipcSocket.sendJson(msg);
-  }
-
-  sendMsgGetReply(methodType, data) {
-    var msg = {
-      messageType: methodType,
-      data: data,
-    };
-    DEBUG && console.log('AdapterProxy: sendMsgGetReply:', msg);
-    return this.ipcSocket.sendJsonGetReply(msg);
-    // TODO: Need to implement a timeout in case the plugin
-    //       "goes away".
   }
 }
 

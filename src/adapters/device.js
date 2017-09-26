@@ -10,6 +10,8 @@
 
 'use strict';
 
+const Constants = require('../constants');
+
 class Device {
 
   constructor(adapter, id) {
@@ -95,7 +97,7 @@ class Device {
   }
 
   notifyPropertyChanged(property) {
-    this.adapter.manager.emit('property-changed', property);
+    this.adapter.manager.emit(Constants.PROPERTY_CHANGED, property);
   }
 
   setDescription(description) {

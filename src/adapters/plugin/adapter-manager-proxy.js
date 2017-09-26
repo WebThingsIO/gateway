@@ -11,6 +11,7 @@
 
 'use strict';
 
+const Constants = require('../../constants');
 const EventEmitter = require('events').EventEmitter;
 
 const DEBUG = false;
@@ -22,15 +23,11 @@ class AdapterManagerProxy extends EventEmitter {
 
     this.pluginClient = pluginClient;
 
-    this.on('property-changed', (property) => {
-      DEBUG && console.log('proxy: Got "property-changed" notification for',
+    this.on(Constants.PROPERTY_CHANGED, (property) => {
+      DEBUG && console.log('AdapterManagerProxy: Got',
+                           Constants.PROPERTY_CHANGED, 'notification for',
                            property.name, 'value:', property.value);
-
-      this.pluginClient.sendNotification('propertyChanged', {
-        deviceId: property.device.id,
-        propertyName: property.name,
-        propertyValue: property.value,
-      });
+      this.sendPropertyChangedNotification(property);
     });
   }
 
@@ -55,7 +52,8 @@ class AdapterManagerProxy extends EventEmitter {
    */
   handleDeviceAdded(device) {
     DEBUG && console.log('AdapterManagerProxy: handleDeviceAdded');
-    this.pluginClient.sendNotification('handleDeviceAdded', device.asDict());
+    this.pluginClient.sendNotification(
+      Constants.HANDLE_DEVICE_ADDED, device.asDict());
   }
 
   /**
@@ -64,11 +62,16 @@ class AdapterManagerProxy extends EventEmitter {
    */
   handleDeviceRemoved(device) {
     DEBUG && console.log('AdapterManagerProxy: handleDeviceRemoveds');
-    this.pluginClient.sendNotification('handleDeviceRemoved', {
-      id: device.id,
-    });
+    this.pluginClient.sendNotification(
+      Constants.HANDLE_DEVICE_REMOVED, {
+        id: device.id,
+      });
   }
 
+  /**
+   * @method onMsg
+   * Called whenever a message is received from the gateway.
+   */
   onMsg(msg) {
     DEBUG && console.log('AdapterManagerProxy: Rcvd:', msg);
     var adapter = this.adapter;
@@ -81,14 +84,13 @@ class AdapterManagerProxy extends EventEmitter {
     // The first switch covers adapter messages. i.e. don't have a deviceId.
     switch (msg.messageType) {
 
-      case 'startPairing':
+      case Constants.START_PAIRING:
         adapter.startPairing(msg.data.timeout);
         return;
 
-      case 'cancelPairing':
+      case Constants.CANCEL_PAIRING:
         adapter.cancelPairing();
         return;
-
     }
 
     // All messages from here on are assumed to require a valid deviceId.
@@ -103,36 +105,53 @@ class AdapterManagerProxy extends EventEmitter {
 
     switch (msg.messageType) {
 
-      case 'removeThing':
+      case Constants.REMOVE_THING:
         adapter.removeThing(device);
         break;
 
-      case 'cancelRemoveThing':
+      case Constants.CANCEL_REMOVE_THING:
         adapter.cancelRemoveThing(device);
         break;
 
-      case 'setProperty':
+      case Constants.SET_PROPERTY:
         var propertyName = msg.data.propertyName;
         var propertyValue = msg.data.propertyValue;
-        device.setProperty(propertyName, propertyValue)
-          .then(updatedValue => {
-            this.pluginClient.sendReply(msg, {
-              deviceId: deviceId,
-              propertyName: propertyName,
-              propertyValue: updatedValue
-            });
-          }).catch(error => {
+        var property = device.findProperty(propertyName);
+        if (property) {
+          property.setValue(propertyValue).then(_updatedValue => {
+            this.sendPropertyChangedNotification(property);
+          }).catch(err => {
+            // Something bad happened. The gateway is still
+            // expecting a reply, so we report the error
+            // and just send whatever the current value is.
             console.error('AdapterManagerProxy: Failed to setProperty',
                           propertyName, 'to', propertyValue,
                           'for device:', deviceId);
-            console.error(error);
+            console.error(err);
+            this.sendPropertyChangedNotification(property);
           });
+        } else {
+          console.error('AdapterManagerProxy: Unknown property:',
+                        propertyName);
+        }
         break;
 
       default:
         console.warning('AdapterManagerProxy: unrecognized msg:', msg);
         break;
     }
+  }
+
+  /**
+   * @method sendPropertyChangedNotification
+   * Sends a propertyChanged notification to the gateway.
+   */
+  sendPropertyChangedNotification(property) {
+    this.pluginClient.sendNotification(Constants.PROPERTY_CHANGED, {
+      deviceId: property.device.id,
+      propertyName: property.name,
+      propertyValue: property.value,
+    });
   }
 }
 

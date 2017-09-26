@@ -12,6 +12,7 @@
 'use strict';
 
 var config = require('config');
+const Constants = require('./constants');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 const PluginClient = require('./adapters/plugin/plugin-client');
@@ -60,10 +61,10 @@ class AdapterManager extends EventEmitter {
      *
      * This is event is emitted whenever a new adapter is loaded.
      *
-     * @event adapter-added
+     * @event adapterAdded
      * @type  {Adapter}
      */
-    this.emit('adapter-added', adapter);
+    this.emit(Constants.ADAPTER_ADDED, adapter);
   }
 
   /**
@@ -89,7 +90,7 @@ class AdapterManager extends EventEmitter {
       }
       this.pairingTimeout = setTimeout(() => {
         console.log('Pairing timeout');
-        this.emit('pairing-timeout');
+        this.emit(Constants.PAIRING_TIMEOUT);
         this.cancelAddNewThing();
       }, pairingTimeout * 1000);
     }
@@ -266,10 +267,10 @@ class AdapterManager extends EventEmitter {
      *
      * This event is emitted whenever a new thing is added.
      *
-     * @event thing-added
+     * @event thingAdded
      * @type  {Thing}
      */
-    this.emit('thing-added', thing);
+    this.emit(Constants.THING_ADDED, thing);
 
     // If this device was added in response to addNewThing, then
     // We need to cancel pairing mode on all of the "other" adapters.
@@ -304,10 +305,10 @@ class AdapterManager extends EventEmitter {
      *
      * This event is emitted whenever a new thing is removed.
      *
-     * @event thing-added
+     * @event thingRemoved
      * @type  {Thing}
      */
-    this.emit('thing-removed', thing);
+    this.emit(Constants.THING_REMOVED, thing);
 
     var deferredRemove = this.deferredRemove;
     if (deferredRemove && deferredRemove.adapter == device.adapter) {
@@ -345,7 +346,7 @@ class AdapterManager extends EventEmitter {
       return;
     }
     this.adaptersLoaded = true;
-    var adaptersConfig = config.get('adapters');
+    var adaptersConfig = config.get(Constants.ADAPTERS_CONFIG);
     for (var adapterId in adaptersConfig) {
       var adapterConfig = adaptersConfig[adapterId];
       if (adapterConfig.plugin) {

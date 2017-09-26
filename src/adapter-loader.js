@@ -11,6 +11,7 @@
 'use strict';
 
 var config = require('config');
+const Constants = require('constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./adapters/plugin/plugin-client');
 
@@ -26,8 +27,6 @@ const dynamicRequire = (() => {
 
 // Command line arguments
 const getopt = new GetOpt([
-  ['d', 'debug', 'Enable debug features'],
-  ['p', 'port=PORT', 'Specify the server port to use'],
   ['h', 'help', 'Display help' ],
   ['v', 'verbose', 'Show verbose output'],
 ]);
@@ -48,7 +47,7 @@ if (opt.argv.length != 1) {
   process.exit(1);
 }
 var adapterId = opt.argv[0];
-var adapterConfig = config.get('adapters.' + adapterId);
+var adapterConfig = config.get(Constants.ADAPTERS_CONFIG + '.' + adapterId);
 if (!adapterConfig) {
   console.error('No configuration for adapter "' + adapterId + '"');
   process.exit(1);

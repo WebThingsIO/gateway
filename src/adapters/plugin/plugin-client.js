@@ -12,6 +12,8 @@
 'use strict';
 
 const AdapterManagerProxy = require('./adapter-manager-proxy');
+const Constants = require('../../constants');
+const Deferred = require('../deferred');
 const IpcSocket = require('./ipc');
 
 class PluginClient {
@@ -19,67 +21,74 @@ class PluginClient {
   constructor(adapterId, {verbose}={}) {
     this.adapterId = adapterId;
     this.verbose = verbose;
+    this.deferredReply = null;
   }
 
   onManagerMsg(msg) {
     this.verbose &&
       console.log('PluginClient: rcvd ManagerMsg:', msg);
+
+    if (!this.deferredReplay) {
+      console.error('No deferredReply setup');
+      return;
+    }
+
+    if (msg.messageType === Constants.REGISTER_ADAPTER_REPLY) {
+      this.verbose &&
+        console.log('Registered with PluginServer: ', msg);
+      this.adapterIpcAddr = msg.data.ipcAddr;
+
+      this.adapterManager = new AdapterManagerProxy(this);
+
+      // Now that we're registered with the server, open the adapter
+      // specific IPC channel with the server.
+      this.adapterIpcSocket =
+        new IpcSocket('PluginClientAdapter', 'pair',
+                      this.adapterManager.onMsg.bind(this.adapterManager));
+      this.adapterIpcSocket.connect(this.adapterIpcAddr);
+      var deferredReply = this.deferredReply;
+      this.deferredReply = null;
+      deferredReply.resolve(this.adapterManager);
+    } else {
+      console.error('Unexpected registration reply for gateway');
+      console.error(msg);
+    }
   }
 
   register() {
-    return new Promise((resolve, reject) => {
-      this.managerIpcFile = '/tmp/gateway.adapterManager';
-      this.managerIpcAddr = 'ipc://' + this.managerIpcFile;
+    if (this.deferredReply) {
+      console.error('Already waiting for registration reply');
+      return;
+    }
+    this.deferredReply = new Deferred();
 
-      this.verbose &&
-        console.log('ManagerIpcAddr =', this.managerIpcAddr);
-      this.managerIpcSocket = new IpcSocket('PluginClientServer', 'req',
-                                            this.onManagerMsg.bind(this));
-      this.managerIpcSocket.connect(this.managerIpcAddr);
+    this.managerIpcFile = '/tmp/gateway.adapterManager';
+    this.managerIpcAddr = 'ipc://' + this.managerIpcFile;
 
-      // Register ourselves with the server
-      this.verbose &&
-        console.log('Registering with server');
-      this.managerIpcSocket.sendJsonGetReply({
-        messageType: 'registerAdapter',
-        data: {
-          id: this.adapterId
-        },
-      }).then((reply) => {
-        this.verbose &&
-          console.log('Registered with PluginServer: ', reply);
-        this.adapterIpcAddr = reply.data.ipcAddr;
+    this.verbose &&
+      console.log('ManagerIpcAddr =', this.managerIpcAddr);
+    this.managerIpcSocket = new IpcSocket('PluginClientServer', 'req',
+                                          this.onManagerMsg.bind(this));
+    this.managerIpcSocket.connect(this.managerIpcAddr);
 
-        this.adapterManager = new AdapterManagerProxy(this);
-
-        // Now that we're registered with the server, open the adapter
-        // specific IPC channel with the server.
-        this.adapterIpcSocket =
-          new IpcSocket('PluginClientAdapter', 'pair',
-                        this.adapterManager.onMsg.bind(this.adapterManager));
-        this.adapterIpcSocket.connect(this.adapterIpcAddr);
-        this.adapterIpcSocket.idBase = reply.data.idBase;
-        resolve(this.adapterManager);
-      }).catch(err => {
-        console.error('Error registering with server');
-        console.error(err);
-        reject('Error registering with server');
-      });
+    // Register ourselves with the server
+    this.verbose &&
+      console.log('Registering with server');
+    
+    this.managerIpcSocket.sendJson({
+      messageType: 'registerAdapter',
+      data: {
+        adapterId: this.adapterId
+      },
     });
+
+    return this.deferredReply.promise;
   }
 
   sendNotification(methodType, data) {
     this.adapterIpcSocket.sendJson({
       messageType: methodType,
       data: data,
-    });
-  }
-
-  sendReply(msg, data) {
-    this.adapterIpcSocket.sendJson({
-      messageType: msg.messageType + 'Reply',
-      data: data,
-      id: msg.id,
     });
   }
 }

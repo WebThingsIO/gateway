@@ -9,7 +9,8 @@
 
 'use strict';
 
-var Property = require('../property');
+const Deferred = require('../deferred');
+const Property = require('../property');
 
 class PropertyProxy extends Property {
   constructor(device, propertyDict) {
@@ -23,6 +24,32 @@ class PropertyProxy extends Property {
     }
 
     this.value = propertyDict.value;
+
+    this.propertyChangedPromises = [];
+  }
+
+  /**
+   * @method onPropertyChanged
+   * @returns a promise which is resoved when the next
+   * propertyChanged notification is received.
+   */
+  onPropertyChanged() {
+    var deferredChange = new Deferred();
+    this.propertyChangedPromises.push(deferredChange);
+    return deferredChange.promise;
+  }
+
+  /**
+   * @method doPropertyChanged
+   * Called whenever a property changed notification is received
+   * from the adapter.
+   */
+  doPropertyChanged(value) {
+    this.setCachedValue(value);
+    while (this.propertyChangedPromises.length > 0) {
+      var deferredChange = this.propertyChangedPromises.pop();
+      deferredChange.resolve(value);
+    }
   }
 
   /**
@@ -37,20 +64,21 @@ class PropertyProxy extends Property {
                   'for:', this.device.name,
                   'to value:', value);
 
-      var device = this.device;
-      device.adapter.sendMsgGetReply(
+      this.device.adapter.sendMsg(
         'setProperty', {
-          deviceId: device.id,
+          deviceId: this.device.id,
           propertyName: this.name,
           propertyValue: value,
-        }
-      ).then(reply => {
-        this.setCachedValue(reply.data.propertyValue);
-        resolve(this.value);
+      });
+
+      //TODO: Add a timeout
+
+      this.onPropertyChanged().then(updatedValue => {
+        resolve(updatedValue);
       }).catch(error => {
         console.error('PropertyProxy: Failed to setProperty',
                       this.name, 'to', value,
-                      'for device:', device.id);
+                      'for device:', this.device.id);
         console.error(error);
         reject(error);
       });

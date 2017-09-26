@@ -29,10 +29,27 @@ exports.RULES_PATH = '/rules';
 exports.STATIC_PATH = path.join(__dirname, '../static');
 exports.VIEWS_PATH = path.join(__dirname, '../src/views');
 
-exports.SET_PROPERTY = 'setProperty';
-exports.REQUEST_ACTION = 'requestAction';
-exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
-exports.PROPERTY_STATUS = 'propertyStatus';
+exports.ADAPTERS_CONFIG = 'adapters';
+
 exports.ACTION_STATUS = 'actionStatus';
+exports.ADAPTER_ADDED = 'adapterAdded';
+exports.ADD_ADAPTER = 'addAdapter';
+exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
+exports.CANCEL_PAIRING = 'cacnelPairing';
+exports.CANCEL_REMOVE_THING = 'cancelRemoveThing';
 exports.EVENT = 'event';
 exports.ERROR = 'error';
+exports.HANDLE_DEVICE_ADDED = 'handleDeviceAdded';
+exports.HANDLE_DEVICE_REMOVED = 'handleDeviceRemoved';
+exports.PAIRING_TIMEOUT = 'pairingTimeout';
+exports.PROPERTY_CHANGED = 'propertyChanged';
+exports.PROPERTY_STATUS = 'propertyStatus';
+exports.REGISTER_ADAPTER = 'registerAdapter';
+exports.REGISTER_ADAPTER_REPLY = 'registerAdapterReply';
+exports.REMOVE_THING = 'removeThing';
+exports.REQUEST_ACTION = 'requestAction';
+exports.SET_PROPERTY = 'setProperty';
+exports.START_PAIRING = 'startPairing';
+exports.THING_ADDED = 'thingAdded';
+exports.THING_REMOVED = 'thingRemoved';
+
