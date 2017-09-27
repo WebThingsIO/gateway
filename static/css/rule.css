@@ -138,21 +138,26 @@
   margin: 1.4rem auto;
 }
 
-#devices-list {
+#devices-list-container {
   box-shadow: 0 -1px 3px rgba(0,0,0,0.12), 0 -1px 2px rgba(0,0,0,0.24);
   z-index: 10;
   background: #5A9AC9;
   position: relative;
-  overflow: scroll;
+}
+#devices-list {
+  overflow-x: scroll;
+  overflow-y: hidden;
   white-space: nowrap;
+  margin: 0 3rem;
 }
 
 #devices-list p {
-  padding-left: 1.4rem;
+  padding: 0 1.4rem;
 }
 
 #devices-list .device-block {
   display: block;
+  margin-bottom: 0.4rem;
 }
 
 .device {
@@ -341,4 +346,38 @@
   #drag-hint {
     flex-direction: column;
   }
+}
+
+#devices-list-scroll-left, #devices-list-scroll-right {
+  position: absolute;
+  top: 0;
+  width: 3.6rem;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: #46769C
+}
+
+#devices-list-scroll-left:active,
+#devices-list-scroll-right:active {
+  background: #81B8E1;
+}
+
+#devices-list-scroll-left.hidden,
+#devices-list-scroll-right.hidden {
+  display: none;
+}
+
+#devices-list-scroll-left {
+  left: 0;
+}
+
+#devices-list-scroll-right {
+  right: 0;
+}
+
+.scroll-icon {
+  width: 3.2rem;
+  height: 3.2rem;
 }
