@@ -42,6 +42,7 @@ class AdapterManager extends EventEmitter {
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.adaptersLoaded = false;
+    this.deferredWaitForAdapter = new Map();
   }
 
   /**
@@ -65,6 +66,12 @@ class AdapterManager extends EventEmitter {
      * @type  {Adapter}
      */
     this.emit(Constants.ADAPTER_ADDED, adapter);
+
+    var deferredWait = this.deferredWaitForAdapter.get(adapter.id);
+    if (deferredWait) {
+      this.deferredWaitForAdapter.delete(adapter.id);
+      deferredWait.resolve(adapter);
+    }
   }
 
   /**
@@ -421,6 +428,34 @@ class AdapterManager extends EventEmitter {
       adapter.unload();
     }
     this.adaptersLoaded = false;
+  }
+
+  /**
+   * @method waitForAdapter
+   *
+   * Returns a promise which resolves to the adapter with the indicated id.
+   */
+  waitForAdapter(adapterId) {
+    var adapter = this.getAdapter(adapterId);
+    if (adapter) {
+      // The adapter already exists, just create a Promise
+      // that resolves to that.
+      return Promise.resolve(adapter);
+    }
+
+    var deferredWait = this.deferredWaitForAdapter.get(adapterId);
+    if (deferredWait) {
+      // There is already a promise queued up. We'll create
+      // another by adding a then to the existing promise
+      // chain.
+      return deferredWait.promise.then(adapter => {
+        return adapter;
+      });
+    }
+
+    deferredWait = new Deferred();
+    this.deferredWaitForAdapter.set(adapterId, deferredWait);
+    return deferredWait.promise;
   }
 }
 

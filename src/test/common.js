@@ -54,6 +54,9 @@ beforeAll(async () => {
     dir: storageDir,
     continuous: false
   });
+  // If the mock adapter is a plugin, then it may not be available
+  // immediately, so wait for it to be available.
+  await adapterManager.waitForAdapter('Mock');
 });
 
 afterEach(async () => {
