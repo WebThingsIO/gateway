@@ -95,7 +95,7 @@ const numberTestRule = {
       type: 'number',
       href: '/things/light3/properties/bri'
     },
-    type: 'SetEffect',
+    type: 'PulseEffect',
     value: 30
   }
 };
@@ -120,7 +120,7 @@ const mixedTestRule = {
       type: 'boolean',
       href: '/things/light3/properties/on'
     },
-    type: 'PulseEffect',
+    type: 'SetEffect',
     value: true
   }
 };
@@ -354,6 +354,23 @@ describe('rules engine', function() {
     expect(messages[1]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
       data: {on: true}
+    });
+
+    [resPut, messages] = await Promise.all([
+      chai.request(server)
+        .put(Constants.THINGS_PATH + '/' + thingLight2.id + '/properties/hue')
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt))
+        .send({hue: 0}),
+      webSocketRead(ws, 1)
+    ]);
+    expect(resPut.status).toEqual(200);
+
+    expect(Array.isArray(messages)).toBeTruthy();
+    expect(messages.length).toEqual(1);
+    expect(messages[0]).toMatchObject({
+      messageType: Constants.PROPERTY_STATUS,
+      data: {bri: 100}
     });
 
     await deleteRule(numberTestRuleId);
