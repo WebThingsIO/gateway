@@ -70,6 +70,20 @@ const RuleScreen = {
       });
     });
 
+    this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
+    this.onScrollRightClick = this.onScrollRightClick.bind(this);
+
+    let scrollLeft = document.getElementById('devices-list-scroll-left');
+    let scrollRight = document.getElementById('devices-list-scroll-right');
+
+    scrollLeft.addEventListener('click', this.onScrollLeftClick);
+    scrollLeft.addEventListener('touchstart', this.onScrollLeftClick);
+    scrollRight.addEventListener('click', this.onScrollRightClick);
+    scrollRight.addEventListener('touchstart', this.onScrollRightClick);
+
+    this.onWindowResize = this.onWindowResize.bind(this);
+    window.addEventListener('resize', this.onWindowResize);
+    this.onWindowResize();
   },
 
   /**
@@ -139,6 +153,9 @@ const RuleScreen = {
     function transformToCoords(elt) {
       let re = /translate\((\d+)px, +(\d+)px\)/;
       let matches = elt.style.transform.match(re);
+      if (!matches) {
+        return {x: 0, y: 0};
+      }
       let x = parseFloat(matches[1]);
       let y = parseFloat(matches[2]);
       return {
@@ -231,6 +248,7 @@ const RuleScreen = {
           this.onDeviceBlockDown.bind(this, thing));
         this.devicesList.appendChild(elt);
       }
+      this.onWindowResize();
     }).then(function() {
       return rulePromise;
     }).then(ruleDesc => {
@@ -244,29 +262,59 @@ const RuleScreen = {
         let flexDir = window.getComputedStyle(dragHint).flexDirection;
 
         let areaRect = this.ruleArea.getBoundingClientRect();
+        let dpbRect = {
+          width: 300,
+          height: 100
+        };
+
         // Create DevicePropertyBlocks from trigger and effect if applicable
-        let centerX = areaRect.width / 2 - 150;
-        let centerY = areaRect.height / 2 - 50;
+        let centerX = areaRect.width / 2 - dpbRect.width / 2;
+        let centerY = areaRect.height / 2 - dpbRect.height / 2;
         if (ruleDesc.trigger) {
           if (flexDir === 'column') {
             this.makeDevicePropertyBlock('trigger', centerX,
-              areaRect.height / 4);
+              areaRect.height / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('trigger', areaRect.width / 4,
+            this.makeDevicePropertyBlock('trigger',
+              areaRect.width / 4 - dpbRect.width / 2,
               centerY);
           }
         }
         if (ruleDesc.effect) {
           if (flexDir === 'column') {
             this.makeDevicePropertyBlock('effect', centerX,
-              areaRect.height * 3 / 4);
+              areaRect.height * 3 / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('effect', areaRect.width * 3 / 4,
+            this.makeDevicePropertyBlock('effect',
+              areaRect.width * 3 / 4 - dpbRect.width / 2,
               centerY);
           }
         }
       }
       this.onRuleUpdate();
     });
+  },
+
+  onWindowResize: function() {
+    let scrollWidth = this.devicesList.scrollWidth;
+    let boundingWidth = this.devicesList.getBoundingClientRect().width;
+    let scrollLeft = document.getElementById('devices-list-scroll-left');
+    let scrollRight = document.getElementById('devices-list-scroll-right');
+
+    if (boundingWidth < scrollWidth) {
+      scrollLeft.classList.remove('hidden');
+      scrollRight.classList.remove('hidden');
+    } else {
+      scrollLeft.classList.add('hidden');
+      scrollRight.classList.add('hidden');
+    }
+  },
+
+  onScrollLeftClick: function() {
+    this.devicesList.scrollLeft -= 128;
+  },
+
+  onScrollRightClick: function() {
+    this.devicesList.scrollLeft += 128;
   }
 };

@@ -185,12 +185,19 @@
           <path d=""></path>
         </svg>
       </div>
-      <div id="devices-list">
+      <div id="devices-list-container">
+        <button id="devices-list-scroll-left">
+          <img class="scroll-icon" src="/images/arrowhead-left-16.svg"/>
+        </button>
+        <button id="devices-list-scroll-right">
+          <img class="scroll-icon" src="/images/arrowhead-right-16.svg"/>
+        </button>
         <div id="delete-area">
           <div class="delete-container">
             <h2 class="delete-prompt">Drop devices here to disconnect</h2>
           </div>
         </div>
+        <div id="devices-list"></div>
       </div>
       <div id="rule-delete-overlay">
         <div class="rule-delete-dialog">
