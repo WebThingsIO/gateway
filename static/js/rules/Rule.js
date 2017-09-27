@@ -114,10 +114,15 @@ Rule.prototype.toTriggerHumanDescription = function() {
     RuleUtils.byProperty(this.trigger.property)
   )[0];
 
-  let triggerStr = `${triggerThing.name} ${this.trigger.property.name} is `;
+  let triggerStr = `${triggerThing.name} `;
   if (this.trigger.type === 'BooleanTrigger') {
-    triggerStr += this.trigger.onValue;
+    triggerStr += 'is ';
+    if (!this.trigger.onValue) {
+      triggerStr += 'not ';
+    }
+    triggerStr += this.trigger.property.name;
   } else {
+    triggerStr += `${this.trigger.property.name} is `;
     if (this.trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
     } else {
@@ -139,7 +144,19 @@ Rule.prototype.toEffectHumanDescription = function() {
   )[0];
 
   let effectStr = '';
-
+  if (this.effect.property.name === 'on' &&
+    effectThing.type === 'onOffSwitch') {
+    effectStr = `turn ${effectThing.name} `;
+    if (this.effect.value) {
+      effectStr += 'on';
+    } else {
+      effectStr += 'off';
+    }
+    if (this.effect.type === 'SET') {
+      effectStr += ' permanently';
+    }
+    return effectStr;
+  }
   if (this.effect.type === 'SET') {
     effectStr += 'set ';
   } else {
