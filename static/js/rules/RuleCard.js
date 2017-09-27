@@ -13,6 +13,8 @@ function RuleCard(gateway, elt, id, desc) {
   this.id = id;
   this.rule = new Rule(gateway, desc);
 
+  let checked = this.rule.enabled ? 'checked' : '';
+
   this.elt.innerHTML = `
     <div class="rule-edit-overlay">
       <div class="rule-delete-button"></div>
@@ -41,7 +43,7 @@ function RuleCard(gateway, elt, id, desc) {
     </div>
     <form class="rule-switch">
       <input type="checkbox" id="rule-switch-${id}"
-             class="rule-switch-checkbox" checked/>
+             class="rule-switch-checkbox" ${checked}/>
       <label class="rule-switch-slider" for="rule-switch-${id}"></label>
     </form>
   `;
@@ -50,6 +52,7 @@ function RuleCard(gateway, elt, id, desc) {
   this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
   this.onDeleteCancelClick = this.onDeleteCancelClick.bind(this);
   this.onDeleteConfirmClick = this.onDeleteConfirmClick.bind(this);
+  this.onEnabledCheckboxChange = this.onEnabledCheckboxChange.bind(this);
 
   this.editButton = this.elt.querySelector('.rule-edit-button');
   this.editButton.addEventListener('click', this.onEditButtonClick);
@@ -60,6 +63,9 @@ function RuleCard(gateway, elt, id, desc) {
   this.deleteCancel.addEventListener('click', this.onDeleteCancelClick);
   this.deleteConfirm = this.elt.querySelector('.rule-delete-confirm-button');
   this.deleteConfirm.addEventListener('click', this.onDeleteConfirmClick);
+
+  this.enabledCheckbox = this.elt.querySelector('.rule-switch-checkbox');
+  this.enabledCheckbox.addEventListener('change', this.onEnabledCheckboxChange);
 
   this.editOverlay = this.elt.querySelector('.rule-edit-overlay');
 }
@@ -79,5 +85,14 @@ RuleCard.prototype.onDeleteCancelClick = function() {
 RuleCard.prototype.onDeleteConfirmClick = function() {
   this.rule.delete();
   this.elt.parentNode.removeChild(this.elt);
+};
+
+RuleCard.prototype.onEnabledCheckboxChange = function() {
+  if (this.enabledCheckbox.checked) {
+    this.rule.enabled = true;
+  } else {
+    this.rule.enabled = false;
+  }
+  this.rule.update();
 };
 

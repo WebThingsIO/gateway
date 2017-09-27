@@ -19,6 +19,7 @@ function Rule(gateway, desc, onUpdate) {
 
   if (desc) {
     this.id = desc.id;
+    this.enabled = desc.enabled;
     if (desc.name) {
       this.name = desc.name;
     } else {
@@ -26,6 +27,8 @@ function Rule(gateway, desc, onUpdate) {
     }
     this.trigger = desc.trigger;
     this.effect = desc.effect;
+  } else {
+    this.enabled = true;
   }
 }
 
@@ -89,6 +92,7 @@ Rule.prototype.toDescription = function() {
     return null;
   }
   return {
+    enabled: this.enabled,
     name: this.name,
     trigger: this.trigger,
     effect: this.effect
