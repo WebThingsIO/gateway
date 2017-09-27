@@ -54,6 +54,7 @@ const thingLight3 = {
 };
 
 const testRule = {
+  enabled: true,
   trigger: {
     property: {
       name: 'on',
@@ -75,6 +76,7 @@ const testRule = {
 };
 
 const numberTestRule = {
+  enabled: true,
   name: 'Number Test Rule',
   trigger: {
     property: {
@@ -99,6 +101,7 @@ const numberTestRule = {
 };
 
 const mixedTestRule = {
+  enabled: true,
   name: 'Mixed Test Rule',
   trigger: {
     property: {
@@ -265,6 +268,35 @@ describe('rules engine', function() {
       .set(...headerAuth(jwt))
       .send(testRule));
     expect(err.response.status).toEqual(404);
+  });
+
+  it('creates and simulates a disabled rule', async () => {
+    const disabledRule = Object.assign(testRule, {enabled: false});
+    let res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(disabledRule);
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    res = await chai.request(server)
+      .put(Constants.THINGS_PATH + '/' + thingLight1.id + '/properties/on')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({on: true});
+
+    res = await chai.request(server)
+      .get(Constants.THINGS_PATH + '/' + thingLight2.id + '/properties/on')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body.on).toEqual(false);
+
+    await deleteRule(ruleId);
   });
 
   it('creates and simulates two rules', async () => {
