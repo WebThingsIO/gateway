@@ -9,10 +9,12 @@ const Events = require('./Events');
 
 class Rule {
   /**
+   * @param {boolean} enabled
    * @param {Trigger} trigger
    * @param {Effect} effect
    */
-  constructor(trigger, effect) {
+  constructor(enabled, trigger, effect) {
+    this.enabled = enabled;
     this.trigger = trigger;
     this.effect = effect;
 
@@ -32,6 +34,9 @@ class Rule {
    * @param {State} state
    */
   onTriggerStateChanged(state) {
+    if (!this.enabled) {
+      return;
+    }
     this.effect.setState(state);
   }
 
@@ -40,6 +45,7 @@ class Rule {
    */
   toDescription() {
     let desc = {
+      enabled: this.enabled,
       trigger: this.trigger.toDescription(),
       effect: this.effect.toDescription()
     };
@@ -70,7 +76,7 @@ class Rule {
 Rule.fromDescription = function(desc) {
   const trigger = triggers.fromDescription(desc.trigger);
   const effect = effects.fromDescription(desc.effect);
-  let rule = new Rule(trigger, effect);
+  let rule = new Rule(desc.enabled, trigger, effect);
   if (desc.hasOwnProperty('id')) {
     rule.id = desc.id;
   }
