@@ -13,6 +13,7 @@
 var Constants = require('../constants');
 var Database = require('../db.js');
 const EventEmitter = require('events');
+const WebSocket = require('ws');
 
 /**
  * Thing constructor.
@@ -125,7 +126,10 @@ Thing.prototype.registerWebsocket = function(ws) {
  */
 Thing.prototype.remove = function() {
   this.websockets.forEach(function(ws) {
-    ws.close();
+    if (ws.readyState === WebSocket.OPEN ||
+        ws.readyState === WebSocket.CONNECTING) {
+      ws.close();
+    }
   });
 };
 
