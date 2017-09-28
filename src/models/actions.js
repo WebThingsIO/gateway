@@ -12,18 +12,26 @@
 
 var Things = require('../models/things');
 var AdapterManager = require('../adapter-manager');
+const Constants = require('../constants');
+const EventEmitter = require('events');
 
-var Actions = {
+class Actions extends EventEmitter {
 
-  /**
-   * A map of action requests.
-   */
-  actions: {},
+  constructor() {
+    super();
 
-  /**
-   * A counter to generate action IDs.
-   */
-  nextId: 0,
+    /**
+     * A map of action requests.
+     */
+    this.actions = {};
+
+    /**
+     * A counter to generate action IDs.
+     */
+    this.nextId = 0;
+
+    this.onActionStatus = this.onActionStatus.bind(this);
+  }
 
   /**
    * Reset actions state.
@@ -33,16 +41,16 @@ var Actions = {
     for (let id in this.actions) {
       this.remove(id);
     }
-  },
+  }
 
   /**
    * Generate an ID for a new action.
    *
    * @returns {integer} An id.
    */
-  generateId: function() {
+  generateId() {
     return ++this.nextId;
-  },
+  }
 
   /**
    * Get a particular action.
@@ -50,27 +58,27 @@ var Actions = {
    * @returns {Object} The specified action, or udefined if the action
    * doesn't exist.
    */
-  get: function(id) {
+  get(id) {
     return this.actions[id];
-  },
+  }
 
   /**
    * Get a list of all current actions.
    *
    * @returns {Array} A list of current actions.
    */
-  getAll: function() {
+  getAll() {
     return Object.keys(this.actions).map(id => {
       return this.actions[id];
     });
-  },
+  }
 
   /**
    * Add a new action.
    *
    * @param {Action} action An Action object.
    */
-  add: function(action) {
+  add(action) {
     var id = action.id;
     this.actions[id] = action;
     action.status = 'pending';
@@ -110,7 +118,14 @@ var Actions = {
         delete this.actions[id];
         throw 'Invalid action name: "' + action.name + '"';
     }
-  },
+  }
+
+  /**
+   * Forward the actionStatus event
+   */
+  onActionStatus(action) {
+    this.emit(Constants.ACTION_STATUS, action);
+  }
 
   /**
    * Remove an action from the action list.
@@ -119,7 +134,7 @@ var Actions = {
    *
    * If the action has not yet been completed, it is cancelled.
    */
-  remove: function(id) {
+  remove(id) {
     var action = this.actions[id];
     if(!action) {
       throw 'Invalid action id: ' + id;
@@ -141,6 +156,6 @@ var Actions = {
     action.status = 'deleted';
     delete this.actions[id];
   }
-};
+}
 
-module.exports = Actions;
+module.exports = new Actions();
