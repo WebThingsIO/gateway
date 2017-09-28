@@ -12,6 +12,7 @@
 
 var Constants = require('../constants');
 var Database = require('../db.js');
+const EventEmitter = require('events');
 
 /**
  * Thing constructor.
@@ -32,8 +33,10 @@ var Thing = function(id, description) {
   this.type = description.type || '';
   this.href = description.href || Constants.THINGS_PATH + '/' + this.id;
   this.properties = {};
-  this.actions = {};
-  this.events = {};
+  this.actions = description.actions || {};
+  this.events = description.events || {};
+  this.eventsDispatched = [];
+  this.emitter = new EventEmitter();
   if (description.properties) {
     for (var propertyName in description.properties) {
       var property = description.properties[propertyName];
@@ -45,6 +48,7 @@ var Thing = function(id, description) {
   }
   this.floorplanX = description.floorplanX;
   this.floorplanY = description.floorplanY;
+  this.websockets = [];
 };
 
 /**
@@ -62,19 +66,67 @@ Thing.prototype.setCoordinates = function(x, y) {
 };
 
 /**
+ * Dispatch an event to all listeners subscribed to the Thing
+ * @param {Event} event
+ */
+Thing.prototype.dispatchEvent = function(event) {
+  this.eventsDispatched.push(event);
+  this.emitter.emit(Constants.EVENT, event);
+};
+
+/**
+ * Add a subscription to the Thing's events
+ * @param {Function} callback
+ */
+Thing.prototype.addEventSubscription = function(callback) {
+  this.emitter.on(Constants.EVENT, callback);
+};
+
+/**
+ * Remove a subscription to the Thing's events
+ * @param {Function} callback
+ */
+Thing.prototype.removeEventSubscription = function(callback) {
+  this.emitter.removeListener(Constants.EVENT, callback);
+};
+
+/**
  * Get a JSON Thing Description for this Thing.
  */
 Thing.prototype.getDescription = function() {
+  let actionDescriptions = {};
+  for (let key in this.actions) {
+    actionDescriptions[key] = this.actions[key].getDescription();
+  }
+
+  let eventDescriptions = {};
+  for (let key in this.events) {
+    eventDescriptions[key] = this.events[key].getDescription();
+  }
+
   return {
     'name': this.name,
     'type': this.type,
     'href': this.href,
     'properties': this.properties,
-    'actions': this.actions,
-    'events': this.events,
+    'actions': actionDescriptions,
+    'events': eventDescriptions,
     'floorplanX': this.floorplanX,
     'floorplanY': this.floorplanY
   };
+};
+
+Thing.prototype.registerWebsocket = function(ws) {
+  this.websockets.push(ws);
+};
+
+/**
+ * Remove and clean up the Thing
+ */
+Thing.prototype.remove = function() {
+  this.websockets.forEach(function(ws) {
+    ws.close();
+  });
 };
 
 module.exports = Thing;

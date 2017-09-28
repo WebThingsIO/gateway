@@ -149,6 +149,20 @@ ThingsController.delete('/:thingId', function(request, response) {
  */
 ThingsController.ws('/:thingId/', function(websocket, request) {
   let thingId = request.params.thingId;
+  let subscribedEventNames = {};
+
+  Things.getThing(thingId).then(function(thing) {
+    if (!thing) {
+      return;
+    }
+
+    thing.registerWebsocket(websocket);
+    thing.addEventSubscription(onEvent);
+
+    websocket.on('close', function() {
+      thing.removeEventSubscription(onEvent);
+    });
+  });
 
   function onPropertyChanged(property) {
     if (property.device.id !== thingId) {
@@ -166,6 +180,17 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     websocket.send(JSON.stringify({
       messageType: Constants.ACTION_STATUS,
       data: action.getDescription()
+    }));
+  }
+
+  function onEvent(event) {
+    if (!subscribedEventNames[event.name]) {
+      return;
+    }
+
+    websocket.send(JSON.stringify({
+      messageType: Constants.EVENT,
+      data: event.getDescription()
     }));
   }
 
@@ -204,22 +229,31 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       }));
       return;
     }
-    if (request.messageType === Constants.SET_PROPERTY) {
-      let setRequests = Object.keys(request.data).map(property => {
-        let value = request.data[property];
-        return device.setProperty(property, value);
-      });
-      Promise.all(setRequests).catch(err => {
-        // If any set fails, send an error
-        websocket.send(JSON.stringify({
-          messageType: Constants.ERROR,
-          data: {
-            status: '400 Bad Request',
-            message: err,
-            request: request
-          }
-        }));
-      });
+
+    switch (request.messageType) {
+      case Constants.SET_PROPERTY: {
+        let setRequests = Object.keys(request.data).map(property => {
+          let value = request.data[property];
+          return device.setProperty(property, value);
+        });
+        Promise.all(setRequests).catch(err => {
+          // If any set fails, send an error
+          websocket.send(JSON.stringify({
+            messageType: Constants.ERROR,
+            data: {
+              status: '400 Bad Request',
+              message: err,
+              request: request
+            }
+          }));
+        });
+        break;
+      }
+
+      case Constants.ADD_EVENT_SUBSCRIPTION: {
+        subscribedEventNames[request.data.name] = true;
+        break;
+      }
     }
   });
 });

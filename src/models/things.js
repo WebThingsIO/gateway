@@ -28,11 +28,15 @@ var Things = {
    websockets: [],
 
    /**
-    * Get all Things stored in the database.
+    * Get all Things known to the Gateway, initially loading them from the
+    * database,
     *
     * @return {Promise} which resolves with a Map of Thing objects.
     */
    getThings: function() {
+     if (this.things.size > 0) {
+       return Promise.resolve(this.things);
+     }
      return Database.getThings().then((things) => {
        // Update the map of Things
        this.things = new Map();
@@ -44,9 +48,21 @@ var Things = {
    },
 
    /**
+    * Get a single Thing
+    *
+    * @param {String} id
+    * @return {Promise<Thing>}
+    */
+   getThing: function(id) {
+     return this.getThings().then(function(things) {
+       return things.get(id);
+     });
+   },
+
+   /**
     * Get Thing Descriptions for all Things stored in the database.
     *
-    * @Return {Promise} which resolves with a list of Thing Descriptions.
+    * @return {Promise} which resolves with a list of Thing Descriptions.
     */
    getThingDescriptions: function() {
      return this.getThings().then(function(things) {
@@ -97,7 +113,11 @@ var Things = {
     */
    createThing: function(id, description) {
      var thing = new Thing(id, description);
-     return Database.createThing(thing.id, thing.getDescription());
+     return Database.createThing(thing.id, thing.getDescription())
+     .then(function(thingDesc) {
+       this.things.set(thing.id, thing);
+       return thingDesc;
+     }.bind(this));
    },
 
    /**
@@ -110,12 +130,6 @@ var Things = {
      this.websockets.forEach(function(socket) {
        socket.send(JSON.stringify(newThing));
      });
-   },
-
-   // eslint-disable-next-line
-   handleRemovedThing: function(thingId) {
-    /// TODO: Remove from database
-    /// TODO: Send websocket notification
    },
 
   /**
@@ -159,10 +173,16 @@ var Things = {
     * Remove a Thing.
     *
     * @param String id ID to give Thing.
-    * @param Object description Thing description.
     */
    removeThing: function(id) {
-     return Database.removeThing(id);
+     return Database.removeThing(id).then(() => {
+       let thing = this.things.get(id);
+       if (!thing) {
+         return;
+       }
+       thing.remove();
+       this.things.delete(id);
+     });
    }
  };
 
