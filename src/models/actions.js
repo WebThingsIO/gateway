@@ -81,14 +81,16 @@ class Actions extends EventEmitter {
   add(action) {
     var id = action.id;
     this.actions[id] = action;
-    action.status = 'pending';
+    action.on(Constants.ACTION_STATUS, this.onActionStatus);
+
+    action.updateStatus('pending');
     switch(action.name) {
       case 'pair':
         AdapterManager.addNewThing().then(function() {
-          action.status = 'completed';
+          action.updateStatus('completed');
         }).catch(function(error) {
-          action.status = 'error';
           action.error = error;
+          action.updateStatus('error');
           console.error('Thing was not added');
           console.error(error);
         });
@@ -98,19 +100,19 @@ class Actions extends EventEmitter {
           AdapterManager.removeThing(action.parameters.id)
             .then(function(thingIdUnpaired) {
               console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
-              Things.handleRemovedThing(thingIdUnpaired);
-              action.status = 'completed';
+              Things.removeThing(thingIdUnpaired);
+              action.updateStatus('completed');
             }).catch(function(error) {
-              action.status = 'error';
               action.error = error;
+              action.updateStatus('error');
               console.error('unpair of thing:',
                             action.parameters.id, 'failed.');
               console.error(error);
             });
         } else {
           var msg = 'unpair missing "id" parameter.';
-          action.status = 'error';
           action.error = msg;
+          action.updateStatus('error');
           console.error(msg);
         }
         break;
@@ -153,7 +155,8 @@ class Actions extends EventEmitter {
       }
     }
 
-    action.status = 'deleted';
+    action.updateStatus('deleted');
+    action.removeListener(Constants.ACTION_STATUS, this.onActionStatus);
     delete this.actions[id];
   }
 }

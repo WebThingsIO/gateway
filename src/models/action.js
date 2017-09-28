@@ -10,26 +10,45 @@
 
 'use strict';
 
-var Actions = require('../models/actions');
-var Constants = require('../constants');
+const Actions = require('../models/actions');
+const Constants = require('../constants');
+const EventEmitter = require('events');
 
-var Action = function(name, parameters) {
-  this.id = Actions.generateId();
-  this.name = name;
-  this.parameters = parameters || {};
-  this.href = Constants.ACTIONS_PATH + '/' + this.id;
-  this.status = 'created';
-  this.error = '';
-};
+class Action extends EventEmitter {
+  /**
+   * Create a new Action
+   * @param {String} name
+   * @param {Object} parameters
+   */
+  constructor(name, parameters) {
+    super();
 
-Action.prototype.getDescription = function() {
-  return {
-    'name': this.name,
-    'parameters': this.parameters,
-    'href': this.href,
-    'status': this.status,
-    'error': this.error,
-  };
-};
+    this.id = Actions.generateId();
+    this.name = name;
+    this.parameters = parameters || {};
+    this.href = Constants.ACTIONS_PATH + '/' + this.id;
+    this.status = 'created';
+    this.error = '';
+  }
+
+  getDescription() {
+    return {
+      'name': this.name,
+      'parameters': this.parameters,
+      'href': this.href,
+      'status': this.status,
+      'error': this.error,
+    };
+  }
+
+  /**
+   * Update status and notify listeners
+   * @param {String} newStatus
+   */
+  updateStatus(newStatus) {
+    this.status = newStatus;
+    this.emit(Constants.ACTION_STATUS, this);
+  }
+}
 
 module.exports = Action;
