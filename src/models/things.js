@@ -175,8 +175,13 @@ var Things = {
        thing.remove();
        this.things.delete(id);
      });
-   }
- };
+   },
+
+  clearState: function() {
+    this.websockets = [];
+    this.things = new Map();
+  }
+};
 
 AdapterManager.on('thing-added', function(thing) {
   Things.handleNewThing(thing);

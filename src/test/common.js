@@ -13,6 +13,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const Database = require('../db');
 const Actions = require('../models/actions');
+const Things = require('../models/things');
 const config = require('config');
 const e2p = require('event-to-promise');
 const fs = require('fs');
@@ -62,6 +63,7 @@ afterEach(async () => {
     adapter.clearState();
   }
   Actions.clearState();
+  Things.clearState();
   await Database.deleteEverything();
 });
 
