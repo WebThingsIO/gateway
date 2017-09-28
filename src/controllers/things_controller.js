@@ -11,6 +11,7 @@
 'use strict';
 
 const express = require('express');
+const Actions = require('../models/actions');
 const AdapterManager = require('../adapter-manager');
 const Constants = require('../constants.js');
 const Things = require('../models/things');
@@ -161,10 +162,19 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     }));
   }
 
+  function onActionStatus(action) {
+    websocket.send(JSON.stringify({
+      messageType: Constants.ACTION_STATUS,
+      data: action.getDescription()
+    }));
+  }
+
   AdapterManager.on('property-changed', onPropertyChanged);
+  Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
   websocket.on('close', function() {
     AdapterManager.removeListener('property-changed', onPropertyChanged);
+    Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
   });
 
   websocket.on('message', function(requestText) {
