@@ -152,16 +152,14 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   let subscribedEventNames = {};
 
   Things.getThing(thingId).then(function(thing) {
-    if (!thing) {
-      return;
-    }
-
     thing.registerWebsocket(websocket);
     thing.addEventSubscription(onEvent);
 
     websocket.on('close', function() {
       thing.removeEventSubscription(onEvent);
     });
+  }).catch(function() {
+    console.warn('WebSocket opened on nonexistent thing', thingId);
   });
 
   function onPropertyChanged(property) {

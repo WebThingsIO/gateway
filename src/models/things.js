@@ -48,18 +48,6 @@ var Things = {
    },
 
    /**
-    * Get a single Thing
-    *
-    * @param {String} id
-    * @return {Promise<Thing>}
-    */
-   getThing: function(id) {
-     return this.getThings().then(function(things) {
-       return things.get(id);
-     });
-   },
-
-   /**
     * Get Thing Descriptions for all Things stored in the database.
     *
     * @return {Promise} which resolves with a list of Thing Descriptions.
@@ -149,23 +137,27 @@ var Things = {
     * Get a Thing by its ID.
     *
     * @param {String} id The ID of the Thing to get.
-    * @return {Object} A Thing object.
+    * @return {Promise<Thing>} A Thing object.
     */
-    getThing: function(id) {
-      return Database.getThing(id).then((thing) => {
-        return new Thing(thing.id, thing);
-      });
-    },
+   getThing: function(id) {
+     return this.getThings().then(function(things) {
+       if (things.has(id)) {
+         return things.get(id);
+       } else {
+         throw new Error('Unable to find thing with id: ' + id);
+       }
+     });
+   },
 
    /**
     * Get a Thing description for a thing by its ID.
     *
     * @param {String} id The ID of the Thing to get a description of.
-    * @return {Object} A Thing description object.
+    * @return {Promise<ThingDescription>} A Thing description object.
     */
     getThingDescription: function(id) {
-      return Database.getThing(id).then((thing) => {
-        return new Thing(thing.id, thing).getDescription();
+      return this.getThing(id).then((thing) => {
+        return thing.getDescription();
       });
     },
 
