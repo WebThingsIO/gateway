@@ -100,15 +100,36 @@ describe('things/', function() {
   });
 
   it('GET a thing', async () => {
-    await addDevice();
+    const thingDescr = {
+      id: 'pi-1',
+      type: 'thing',
+      name: 'pi-1',
+      properties: {
+        on : {type: 'boolean', value: true}
+      },
+      actions: {
+        reboot: {
+          description: 'Reboot the device'
+        }
+      },
+      events: {
+        reboot: {
+          description: 'Going down for reboot'
+        }
+      }
+    };
+
+    await addDevice(thingDescr);
     const res = await chai.request(server)
-      .get(Constants.THINGS_PATH + '/test-1')
+      .get(Constants.THINGS_PATH + '/' + thingDescr.id)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual('test-1');
+    expect(res.body.name).toEqual(thingDescr.id);
+    delete thingDescr.id;
+    expect(res.body).toMatchObject(thingDescr);
   });
 
   it('fail to GET a non-existent thing', async () => {
