@@ -95,23 +95,13 @@ Thing.prototype.removeEventSubscription = function(callback) {
  * Get a JSON Thing Description for this Thing.
  */
 Thing.prototype.getDescription = function() {
-  let actionDescriptions = {};
-  for (let key in this.actions) {
-    actionDescriptions[key] = this.actions[key].getDescription();
-  }
-
-  let eventDescriptions = {};
-  for (let key in this.events) {
-    eventDescriptions[key] = this.events[key].getDescription();
-  }
-
   return {
     'name': this.name,
     'type': this.type,
     'href': this.href,
     'properties': this.properties,
-    'actions': actionDescriptions,
-    'events': eventDescriptions,
+    'actions': this.actions,
+    'events': this.events,
     'floorplanX': this.floorplanX,
     'floorplanY': this.floorplanY
   };
