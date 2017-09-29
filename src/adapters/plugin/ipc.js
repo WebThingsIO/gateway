@@ -23,6 +23,7 @@ class IpcSocket {
   }
 
   close() {
+    console.log('IpcSocket: closing for', this.name);
     this.socket.close();
   }
 
