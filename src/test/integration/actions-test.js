@@ -12,12 +12,6 @@ const {
 
 const pFinal = require('../promise-final');
 
-const {
-  webSocketOpen,
-  webSocketRead,
-  webSocketClose
-} = require('../websocket-util');
-
 const Constants = require('../../constants');
 
 describe('actions/', function() {
@@ -172,62 +166,5 @@ describe('actions/', function() {
     expect(res.body[0].status).toEqual('error');
 
     expect(res.body[0]).toHaveProperty('error');
-  });
-
-  it('should receive action status messages over websocket', async () => {
-    let descr = {
-      name: 'pair'
-    };
-
-    let ws = await webSocketOpen(Constants.THINGS_PATH + '/test',
-      jwt);
-
-    const [actionId, messages] = await Promise.all([
-      (async () => {
-        await chai.request(server)
-          .post(Constants.ACTIONS_PATH)
-          .set('Accept', 'application/json')
-          .set(...headerAuth(jwt))
-          .send(descr);
-
-        let res = await chai.request(server)
-          .get(Constants.ACTIONS_PATH)
-          .set('Accept', 'application/json')
-          .set(...headerAuth(jwt));
-        expect(res.status).toEqual(200);
-        expect(Array.isArray(res.body)).toBeTruthy();
-        expect(res.body.length).toEqual(1);
-        const actionId = res.body[0].id;
-
-        res = await chai.request(server)
-          .delete(Constants.ACTIONS_PATH + '/' + actionId)
-          .set('Accept', 'application/json')
-          .set(...headerAuth(jwt));
-        expect(res.status).toEqual(204);
-
-        res = await chai.request(server)
-          .get(Constants.ACTIONS_PATH)
-          .set('Accept', 'application/json')
-          .set(...headerAuth(jwt));
-
-        expect(Array.isArray(res.body)).toBeTruthy();
-        expect(res.body.length).toEqual(0);
-
-        return actionId;
-      })(),
-      webSocketRead(ws, 2)
-    ]);
-
-    const actionPath = Constants.ACTIONS_PATH + '/' + actionId;
-
-    expect(messages[0].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[0].data.status).toEqual('pending');
-    expect(messages[0].data.href).toEqual(actionPath);
-
-    expect(messages[1].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[1].data.status).toEqual('deleted');
-    expect(messages[1].data.href).toEqual(actionPath);
-
-    await webSocketClose(ws);
   });
 });
