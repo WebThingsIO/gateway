@@ -159,7 +159,15 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       thing.removeEventSubscription(onEvent);
     });
   }).catch(function() {
-    console.warn('WebSocket opened on nonexistent thing', thingId);
+    console.error('WebSocket opened on nonexistent thing', thingId);
+    websocket.send(JSON.stringify({
+      messageType: Constants.ERROR,
+      data: {
+        status: '404 Not Found',
+        message: 'Thing ' + thingId + ' not found',
+      }
+    }));
+    websocket.close();
   });
 
   function onPropertyChanged(property) {
