@@ -11,6 +11,7 @@ const {
 } = require('../user');
 
 const pFinal = require('../promise-final');
+const e2p = require('event-to-promise');
 
 const {
   webSocketOpen,
@@ -719,5 +720,19 @@ describe('things/', function() {
     expect(messages[1].data.href).toEqual(actionPath);
 
     await webSocketClose(ws);
+  });
+
+  it('should close websocket connections on thing deletion', async () => {
+    await addDevice();
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+    let res = await chai.request(server)
+      .delete(Constants.THINGS_PATH + '/' + TEST_THING.id)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(204);
+
+    await e2p(ws, 'close');
   });
 });
