@@ -615,4 +615,54 @@ describe('things/', function() {
 
     await webSocketClose(ws);
   });
+
+  it('should receive event notifications over websocket',
+  async () => {
+    await addDevice();
+    let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
+      jwt);
+
+
+    const Things = require('../../models/things');
+    const Event = require('../../models/event');
+
+    let thing = await Things.getThing(TEST_THING.id);
+    let eventAFirst = new Event('a', 'just a cool event');
+    let eventB = new Event('b', 'just a boring event');
+    let eventASecond = new Event('a', 'just another cool event');
+
+    let subscriptionRequest = {
+      messageType: Constants.ADD_EVENT_SUBSCRIPTION,
+      data: {
+        name: 'a'
+      }
+    };
+
+    await webSocketSend(ws, subscriptionRequest);
+
+    let [res, messages] = await Promise.all([
+      (async () => {
+        await new Promise(res => {
+          setTimeout(res, 0);
+        });
+        thing.dispatchEvent(eventAFirst);
+        thing.dispatchEvent(eventB);
+        thing.dispatchEvent(eventASecond);
+        return true;
+      })(),
+      webSocketRead(ws, 2)
+    ]);
+
+    expect(res).toBeTruthy();
+
+    expect(messages[0].messageType).toEqual(Constants.EVENT);
+    expect(messages[0].data.name).toEqual(eventAFirst.name);
+    expect(messages[0].data.description).toEqual(eventAFirst.description);
+
+    expect(messages[1].messageType).toEqual(Constants.EVENT);
+    expect(messages[1].data.name).toEqual(eventASecond.name);
+    expect(messages[1].data.description).toEqual(eventASecond.description);
+
+    await webSocketClose(ws);
+  });
 });
