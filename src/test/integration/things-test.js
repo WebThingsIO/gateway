@@ -448,27 +448,21 @@ describe('things/', function() {
   });
 
   it('should receive propertyStatus messages over websocket', async () => {
+    await addDevice();
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
 
-    let [res, messages] = await Promise.all([
-      (async () => {
-        await addDevice();
-        return await chai.request(server)
-          .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
-          .set('Accept', 'application/json')
-          .set(...headerAuth(jwt))
-          .send({on: true});
-      })(),
-      webSocketRead(ws, 2)
+    let [messages, res] = await Promise.all([
+      webSocketRead(ws, 1),
+      chai.request(server)
+        .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt))
+        .send({on: true})
     ]);
     expect(res.status).toEqual(200);
     expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
-    // NB: the property changes from undefined to false
-    expect(messages[0].data.on).toEqual(false);
-
-    expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
-    expect(messages[1].data.on).toEqual(true);
+    expect(messages[0].data.on).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -544,29 +538,18 @@ describe('things/', function() {
     await webSocketClose(ws);
   });
 
-  it('should fail to set a nonexistent thing\'s property using setProperty',
+  it('should fail to connect to a nonexistent thing over websocket',
   async () => {
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/nonexistent-thing',
       jwt);
 
-    let request = {
-      messageType: Constants.SET_PROPERTY,
-      data: {
-        on: true
-      }
-    };
-    let [sendError, messages] = await Promise.all([
-      webSocketSend(ws, request),
-      webSocketRead(ws, 1)
-    ]);
-
-    expect(sendError).toBeFalsy();
+    let messages = await webSocketRead(ws, 1);
 
     let error = messages[0];
     expect(error.messageType).toBe(Constants.ERROR);
-    expect(error.data.request).toMatchObject(request);
+    expect(error.data.status).toEqual('404 Not Found');
 
-    await webSocketClose(ws);
+    await e2p(ws, 'close');
   });
 
   it('should only receive propertyStatus messages from the connected thing',
