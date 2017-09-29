@@ -49,6 +49,8 @@ let testId = uuid();
 let storageDir = config.get('settings.directory') + '-' + testId;
 
 beforeAll(async () => {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
   // Give each test its own settings instance
   await storage.init({
     dir: storageDir,
