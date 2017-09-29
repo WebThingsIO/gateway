@@ -23,7 +23,7 @@ class DeviceProxy extends Device {
 
     for (var propertyName in deviceDict.properties) {
       var propertyDict = deviceDict.properties[propertyName];
-      var propertyProxy = new PropertyProxy(this, propertyDict);
+      var propertyProxy = new PropertyProxy(this, propertyName, propertyDict);
       this.properties.set(propertyName, propertyProxy);
     }
 

@@ -63,7 +63,7 @@ afterEach(async () => {
   // This is all potentially brittle.
   const adapter = adapterManager.getAdapter('Mock');
   if (adapter) {
-    adapter.clearState();
+    await adapter.clearState();
   }
   Actions.clearState();
   Things.clearState();
@@ -71,6 +71,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
+  adapterManager.unloadAdapters();
   server.close();
   httpServer.close();
   await Promise.all([

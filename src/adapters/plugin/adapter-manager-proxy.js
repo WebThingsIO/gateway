@@ -37,7 +37,7 @@ class AdapterManagerProxy extends EventEmitter {
    * Adds an adapter to the collection of adapters managed by AdapterManager.
    */
   addAdapter(adapter) {
-    DEBUG && console.log('AdapterManagerProxy: addAdapter');
+    DEBUG && console.log('AdapterManagerProxy: addAdapter:', adapter.id);
     this.adapter = adapter;
     this.pluginClient.sendNotification('addAdapter', {
       adapterId: adapter.id,
@@ -51,7 +51,7 @@ class AdapterManagerProxy extends EventEmitter {
    * Called when the indicated device has been added to an adapter.
    */
   handleDeviceAdded(device) {
-    DEBUG && console.log('AdapterManagerProxy: handleDeviceAdded');
+    DEBUG && console.log('AdapterManagerProxy: handleDeviceAdded:', device.id);
     this.pluginClient.sendNotification(
       Constants.HANDLE_DEVICE_ADDED, device.asDict());
   }
@@ -61,7 +61,8 @@ class AdapterManagerProxy extends EventEmitter {
    * Called when the indicated device has been removed an adapter.
    */
   handleDeviceRemoved(device) {
-    DEBUG && console.log('AdapterManagerProxy: handleDeviceRemoveds');
+    DEBUG && console.log('AdapterManagerProxy: handleDeviceRemoved:',
+                         device.id);
     this.pluginClient.sendNotification(
       Constants.HANDLE_DEVICE_REMOVED, {
         id: device.id,
@@ -82,6 +83,7 @@ class AdapterManagerProxy extends EventEmitter {
     }
 
     // The first switch covers adapter messages. i.e. don't have a deviceId.
+    // or don't need a device object.
     switch (msg.messageType) {
 
       case Constants.START_PAIRING:
@@ -91,6 +93,59 @@ class AdapterManagerProxy extends EventEmitter {
       case Constants.CANCEL_PAIRING:
         adapter.cancelPairing();
         return;
+
+      case Constants.UNLOAD_ADAPTER:
+        adapter.unload();
+        this.pluginClient.unload();
+        return;
+
+      case Constants.CLEAR_MOCK_ADAPTER_STATE:
+        adapter.clearState().then(() => {
+          this.pluginClient.sendNotification(
+            Constants.MOCK_ADAPTER_STATE_CLEARED, {
+              adapterId: adapter.id,
+            });
+        });
+        return;
+
+      case Constants.ADD_MOCK_DEVICE:
+        adapter.addDevice(msg.data.deviceId, msg.data.deviceDescr)
+          .then(device => {
+            this.pluginClient.sendNotification(
+              Constants.MOCK_DEVICE_ADDED_REMOVED, {
+                deviceId: device.id,
+              });
+          }).catch(err => {
+            this.pluginClient.sendNotification(
+              Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
+                error: err,
+              });
+          });
+        return;
+
+      case Constants.REMOVE_NOCK_DEVICE:
+        adapter.removeDevice(msg.data.deviceId)
+        .then(device => {
+          this.pluginClient.sendNotification(
+            Constants.MOCK_DEVICE_ADDED_REMOVED, {
+              deviceId: device.id,
+            });
+        }).catch(err => {
+          this.pluginClient.sendNotification(
+            Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
+              error: err,
+            });
+        });
+      return;
+
+      case Constants.PAIR_MOCK_DEVICE:
+        adapter.pairDevice(msg.data.deviceId, msg.data.deviceDescr);
+        return;
+
+      case Constants.UNPAIR_MOCK_DEVICE:
+        adapter.unpairDevice(msg.data.deviceId);
+        return;
+
     }
 
     // All messages from here on are assumed to require a valid deviceId.
@@ -119,7 +174,9 @@ class AdapterManagerProxy extends EventEmitter {
         var property = device.findProperty(propertyName);
         if (property) {
           property.setValue(propertyValue).then(_updatedValue => {
-            this.sendPropertyChangedNotification(property);
+            // We should get a propertyChanged notification thru
+            // the normal channels, so don't sent another one here.
+            // We don't really need to do anything.
           }).catch(err => {
             // Something bad happened. The gateway is still
             // expecting a reply, so we report the error
@@ -137,7 +194,7 @@ class AdapterManagerProxy extends EventEmitter {
         break;
 
       default:
-        console.warning('AdapterManagerProxy: unrecognized msg:', msg);
+        console.warn('AdapterManagerProxy: unrecognized msg:', msg);
         break;
     }
   }

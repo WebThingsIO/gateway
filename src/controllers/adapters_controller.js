@@ -20,11 +20,9 @@ var adaptersController = express.Router();
  */
 adaptersController.get('/', (request, response) => {
   var adapters = adapterManager.getAdapters();
-  var adapterList = [];
-  for (var adapterId in adapters) {
-    var adapter = adapters[adapterId];
-    adapterList.push(adapter.asDict());
-  }
+  var adapterList = Array.from(adapters.values()).map(adapter => {
+    return adapter.asDict();
+  });
   response.json(adapterList);
 });
 

@@ -62,14 +62,17 @@ class MockAdapter extends Adapter {
   }
 
   /**
-   * For cleanup between tests.
+   * For cleanup between tests. Returns a promise which resolves
+   * when all of the state has been cleared.
    */
   clearState() {
     this.actions = {};
 
-    for (let deviceId in this.devices) {
-      this.removeDevice(deviceId);
-    }
+    return Promise.all(
+      Object.keys(this.devices).map(deviceId => {
+        return this.removeDevice(deviceId);
+      })
+    );
   }
 
   /**

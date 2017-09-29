@@ -91,6 +91,11 @@ class PluginClient {
       data: data,
     });
   }
+
+  unload() {
+    this.adapterIpcSocket.close();
+    this.managerIpcSocket.close();
+  }
 }
 
 module.exports = PluginClient;

@@ -37,7 +37,7 @@ class AdapterManager extends EventEmitter {
 
   constructor() {
     super();
-    this.adapters = {};
+    this.adapters = new Map();
     this.devices = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
@@ -53,9 +53,7 @@ class AdapterManager extends EventEmitter {
     if (!adapter.name) {
       adapter.name = adapter.constructor.name;
     }
-    this.adapters[adapter.id] = adapter;
-
-    console.log('AdapterManager: Adapter:', adapter.name, 'added.');
+    this.adapters.set(adapter.id, adapter);
 
     /**
      * Adapter added event.
@@ -90,11 +88,10 @@ class AdapterManager extends EventEmitter {
     } else {
       this.deferredAdd = deferredAdd;
       var pairingTimeout = config.get('adapterManager.pairingTimeout');
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing(pairingTimeout);
-      }
+      });
       this.pairingTimeout = setTimeout(() => {
         console.log('Pairing timeout');
         this.emit(Constants.PAIRING_TIMEOUT);
@@ -119,10 +116,9 @@ class AdapterManager extends EventEmitter {
     }
 
     if (deferredAdd) {
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         adapter.cancelPairing();
-      }
+      });
       this.deferredAdd = null;
       deferredAdd.reject('addNewThing cancelled');
     }
@@ -152,13 +148,13 @@ class AdapterManager extends EventEmitter {
    * @method getAdapter
    * @returns Returns the adapter with the indicated id.
    */
-  getAdapter(id) {
-    return this.adapters[id];
+  getAdapter(adapterId) {
+    return this.adapters.get(adapterId);
   }
 
   /**
    * @method getAdapters
-   * @returns Returns a dictionary of the loaded adapters. The dictionary
+   * @returns Returns a Map of the loaded adapters. The dictionary
    *          key corresponds to the adapter id.
    */
   getAdapters() {
@@ -285,12 +281,11 @@ class AdapterManager extends EventEmitter {
     var deferredAdd = this.deferredAdd;
     if (deferredAdd) {
       this.deferredAdd = null;
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         if (adapter !== device.adapter) {
           adapter.cancelPairing();
         }
-      }
+      });
       if (this.pairingTimeout) {
         clearTimeout(this.pairingTimeout);
         this.pairingTimeout = null;
@@ -335,7 +330,7 @@ class AdapterManager extends EventEmitter {
       console.log('Loading adapters for', adapterId,
                   'from', adapterConfig.path);
       let adapterLoader = dynamicRequire(adapterConfig.path);
-      adapterLoader(this, adapterId, adapterConfig);
+      adapterLoader(adapterManager, adapterId, adapterConfig);
     } else {
       console.log('Not loading adapters for', adapterId,
                   '- disabled');
@@ -422,8 +417,9 @@ class AdapterManager extends EventEmitter {
       // The adapters are not currently loaded, no need to unload.
       return;
     }
-    for (var adapterId in this.adapters) {
-      var adapter = this.adapters[adapterId];
+    // unload the adapters in the reverse of the order that they were loaded.
+    for (var adapterId of Array.from(this.adapters.keys()).reverse()) {
+      var adapter = this.getAdapter(adapterId);
       console.log('Unloading', adapter.name);
       adapter.unload();
     }

@@ -13,15 +13,16 @@
 
 'use strict';
 
+const Adapter = require('../adapter');
 const AdapterProxy = require('./adapter-proxy');
 const Constants = require('../adapter-constants');
 const fs = require('fs');
 const IpcSocket = require('./ipc');
 
-class PluginServer {
+class PluginServer extends Adapter {
 
   constructor(adapterManager, {verbose}={}) {
-    this.adapterManager = adapterManager;
+    super(adapterManager, 'plugin-server');
 
     this.verbose = verbose;
     this.adapters = {};
@@ -39,6 +40,8 @@ class PluginServer {
     this.ipcSocket.bind(this.ipcAddr);
     this.verbose &&
       console.log('Server bound to', this.ipcAddr);
+
+    this.manager.addAdapter(this);
   }
 
   onMsg(msg) {
@@ -67,9 +70,13 @@ class PluginServer {
     } else {
       // We haven't seen this adapter before.
       this.adapters[adapterId] =
-        new AdapterProxy(this.adapterManager, adapterId, this);
+        new AdapterProxy(this.manager, adapterId, this);
     }
     return this.adapters[adapterId];
+  }
+
+  unload() {
+    this.ipcSocket.close();
   }
 }
 

@@ -101,7 +101,7 @@ class Property {
     return new Promise((resolve) => {
       this.setCachedValue(value);
       console.log('setValue for property', this.name,
-                  'to', this.value);
+                  'to', this.value, 'for', this.device.id);
       resolve(this.value);
     });
   }
