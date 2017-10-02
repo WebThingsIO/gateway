@@ -62,5 +62,5 @@ module.exports = {
     pagekite_cmd: './pagekite.py',
     port: 443
   },
-  bcryptRounds: 10
+  bcryptRounds: 0
 };
