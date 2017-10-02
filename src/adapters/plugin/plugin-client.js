@@ -76,7 +76,7 @@ class PluginClient {
       console.log('Registering with server');
     
     this.managerIpcSocket.sendJson({
-      messageType: 'registerAdapter',
+      messageType: Constants.REGISTER_ADAPTER,
       data: {
         adapterId: this.adapterId
       },
@@ -93,8 +93,17 @@ class PluginClient {
   }
 
   unload() {
-    this.adapterIpcSocket.close();
-    this.managerIpcSocket.close();
+    //console.log('IpcSocket:About to close',
+    //            this.adapterIpcSocket.name,
+    //            this.managerIpcSocket.name);
+    // Wait a small amount of time to allow the adapterUnloaded
+    // message to be processed by the server before closing.
+    setTimeout(() => {
+      this.adapterIpcSocket.close();
+      this.managerIpcSocket.close();
+      //console.log('IpcSocket: after close');
+    }, 500);
+
   }
 }
 

@@ -16,7 +16,7 @@ const Constants = require('./constants');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 const PluginClient = require('./adapters/plugin/plugin-client');
-
+const PluginServer = require('./adapters/plugin/plugin-server');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -43,6 +43,7 @@ class AdapterManager extends EventEmitter {
     this.deferredRemove = null;
     this.adaptersLoaded = false;
     this.deferredWaitForAdapter = new Map();
+    this.pluginServer = null;
   }
 
   /**
@@ -348,6 +349,13 @@ class AdapterManager extends EventEmitter {
       return;
     }
     this.adaptersLoaded = true;
+
+    // Load the Adapter Plugin Server
+
+    this.pluginServer = new PluginServer(this);
+
+    // Load the Adapters
+
     var adaptersConfig = config.get(Constants.ADAPTERS_CONFIG);
     for (var adapterId in adaptersConfig) {
       var adapterConfig = adaptersConfig[adapterId];

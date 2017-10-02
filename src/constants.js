@@ -33,6 +33,7 @@ exports.ADAPTERS_CONFIG = 'adapters';
 
 exports.ACTION_STATUS = 'actionStatus';
 exports.ADAPTER_ADDED = 'adapterAdded';
+exports.ADAPYTER_UNLOADED = 'adapterUnloaded';
 exports.ADD_ADAPTER = 'addAdapter';
 exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
 exports.ADD_MOCK_DEVICE = 'addMockDevice';

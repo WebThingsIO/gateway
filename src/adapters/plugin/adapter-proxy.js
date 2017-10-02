@@ -80,6 +80,11 @@ class AdapterProxy extends Adapter {
         this.manager.addAdapter(this);
         break;
 
+      case Constants.ADAPTER_UNLOADED:
+        this.ipcSocket.close();
+        this.pluginServer.unregisterAdapter(msg.data.adapterId);
+        break;
+
       case Constants.HANDLE_DEVICE_ADDED:
         device = new DeviceProxy(this, msg.data);
         super.handleDeviceAdded(device);
@@ -224,11 +229,6 @@ class AdapterProxy extends Adapter {
     this.sendMsg(Constants.UNLOAD_ADAPTER, {
       adapterId: this.getId(),
     });
-    // Sleep a small amount to allow the message to actually be sent
-    // before closing the socket.
-    setTimeout(() => {
-      this.ipcSocket.close();
-    }, 200);
   }
 
 }

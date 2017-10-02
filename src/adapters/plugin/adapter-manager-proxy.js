@@ -95,7 +95,11 @@ class AdapterManagerProxy extends EventEmitter {
         return;
 
       case Constants.UNLOAD_ADAPTER:
+        //console.log('IpcSocket: UNLOAD_ADAPTER:', adapter.id);
         adapter.unload();
+        this.pluginClient.sendNotification(Constants.ADAPTER_UNLOADED, {
+          adapterId: adapter.id,
+        });
         this.pluginClient.unload();
         return;
 

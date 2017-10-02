@@ -25,13 +25,11 @@ describe('adapters/', function() {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
-    // We should receive 2 adapters, the plugin-server, and the
-    // MockAdapter.
-    expect(res.body.length).toEqual(2);
-    expect(res.body[1]).toHaveProperty('id');
-    expect(res.body[1].id).toEqual(mockAdapter().getId());
-    expect(res.body[1]).toHaveProperty('ready');
-    expect(res.body[1].ready).toEqual(mockAdapter().isReady());
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0].id).toEqual(mockAdapter().getId());
+    expect(res.body[0]).toHaveProperty('ready');
+    expect(res.body[0].ready).toEqual(mockAdapter().isReady());
   });
 
   it('gets specifically mockAdapter', async () => {

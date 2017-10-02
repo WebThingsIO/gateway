@@ -13,19 +13,18 @@
 
 'use strict';
 
-const Adapter = require('../adapter');
 const AdapterProxy = require('./adapter-proxy');
 const Constants = require('../adapter-constants');
 const fs = require('fs');
 const IpcSocket = require('./ipc');
 
-class PluginServer extends Adapter {
+class PluginServer {
 
   constructor(adapterManager, {verbose}={}) {
-    super(adapterManager, 'plugin-server');
+    this.manager = adapterManager;
 
     this.verbose = verbose;
-    this.adapters = {};
+    this.adapters = new Map();
 
     this.ipcFile = '/tmp/gateway.adapterManager';
     this.ipcAddr = 'ipc://' + this.ipcFile;
@@ -40,8 +39,6 @@ class PluginServer extends Adapter {
     this.ipcSocket.bind(this.ipcAddr);
     this.verbose &&
       console.log('Server bound to', this.ipcAddr);
-
-    this.manager.addAdapter(this);
   }
 
   onMsg(msg) {
@@ -65,26 +62,30 @@ class PluginServer extends Adapter {
   }
 
   registerAdapter(adapterId) {
-    if (this.adapters.hasOwnProperty(adapterId)) {
+    //console.log('PluginServer: register adapter', adapterId);
+    var adapter = this.adapters.get(adapterId);
+    if (adapter) {
       // This is an adapter that we already know about.
     } else {
       // We haven't seen this adapter before.
-      this.adapters[adapterId] =
-        new AdapterProxy(this.manager, adapterId, this);
+      adapter = new AdapterProxy(this.manager, adapterId, this);
+      this.adapters.set(adapterId, adapter);
     }
-    return this.adapters[adapterId];
+    return adapter;
   }
 
-  unload() {
-    this.ipcSocket.close();
+  unregisterAdapter(adapterId) {
+    //console.log('PluginServer: unregister adapter', adapterId);
+    this.adapters.delete(adapterId);
+    //console.log('PluginServer: unregistering:', adapterId,
+    //            'remaining:', this.adapters.size, this.adapters.keys());
+    if (this.adapters.size == 0) {
+      this.ipcSocket.close();
+      setTimeout(() => {
+        //console.log('After unregisterAdapter');
+      }, 500);
+    }
   }
 }
 
-function loadPluginServer(adapterManager) {
-  // This function just loads the plugin server. It
-  // doesn't actually load any plugins.
-
-  new PluginServer(adapterManager);
-}
-
-module.exports = loadPluginServer;
+module.exports = PluginServer;
