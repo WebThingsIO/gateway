@@ -2,6 +2,9 @@
 
 # Generates release archives based on the current Gateway revision
 
+# Expects to be run in the Gateway directory and has the potential for errors
+# if package.json has uncommitted changes.
+
 if [ ! -e "package.json" ]; then
   echo "Usage: ./tools/generate-release.sh"
   echo "Error: missing package.json"
