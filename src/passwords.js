@@ -9,7 +9,10 @@
 const bcrypt = require('bcryptjs');
 const config = require('config');
 
-const rounds = config.get('bcryptRounds');
+let rounds;
+if (config.has('bcryptRounds')) {
+  rounds = config.get('bcryptRounds');
+}
 
 module.exports = {
   /**

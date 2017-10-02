@@ -61,6 +61,5 @@ module.exports = {
     domain: 'mozilla-iot.org',
     pagekite_cmd: './pagekite.py',
     port: 443
-  },
-  bcryptRounds: 0
+  }
 };
