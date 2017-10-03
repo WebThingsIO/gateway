@@ -200,11 +200,12 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     }));
   }
 
-  AdapterManager.on('property-changed', onPropertyChanged);
+  AdapterManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
   websocket.on('close', function() {
-    AdapterManager.removeListener('property-changed', onPropertyChanged);
+    AdapterManager.removeListener(Constants.PROPERTY_CHANGED,
+                                  onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
   });
 

@@ -12,8 +12,11 @@
 'use strict';
 
 var config = require('config');
+const Constants = require('./constants');
 var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
+const PluginClient = require('./adapters/plugin/plugin-client');
+const PluginServer = require('./adapters/plugin/plugin-server');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -34,11 +37,13 @@ class AdapterManager extends EventEmitter {
 
   constructor() {
     super();
-    this.adapters = {};
+    this.adapters = new Map();
     this.devices = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.adaptersLoaded = false;
+    this.deferredWaitForAdapter = new Map();
+    this.pluginServer = null;
   }
 
   /**
@@ -46,18 +51,26 @@ class AdapterManager extends EventEmitter {
    * This function is typically called when loading adapters.
    */
   addAdapter(adapter) {
-    adapter.name = adapter.constructor.name;
-    this.adapters[adapter.id] = adapter;
+    if (!adapter.name) {
+      adapter.name = adapter.constructor.name;
+    }
+    this.adapters.set(adapter.id, adapter);
 
     /**
      * Adapter added event.
      *
      * This is event is emitted whenever a new adapter is loaded.
      *
-     * @event adapter-added
+     * @event adapterAdded
      * @type  {Adapter}
      */
-    this.emit('adapter-added', adapter);
+    this.emit(Constants.ADAPTER_ADDED, adapter);
+
+    var deferredWait = this.deferredWaitForAdapter.get(adapter.id);
+    if (deferredWait) {
+      this.deferredWaitForAdapter.delete(adapter.id);
+      deferredWait.resolve(adapter);
+    }
   }
 
   /**
@@ -76,14 +89,13 @@ class AdapterManager extends EventEmitter {
     } else {
       this.deferredAdd = deferredAdd;
       var pairingTimeout = config.get('adapterManager.pairingTimeout');
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing(pairingTimeout);
-      }
+      });
       this.pairingTimeout = setTimeout(() => {
         console.log('Pairing timeout');
-        this.emit('pairing-timeout');
+        this.emit(Constants.PAIRING_TIMEOUT);
         this.cancelAddNewThing();
       }, pairingTimeout * 1000);
     }
@@ -105,10 +117,9 @@ class AdapterManager extends EventEmitter {
     }
 
     if (deferredAdd) {
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         adapter.cancelPairing();
-      }
+      });
       this.deferredAdd = null;
       deferredAdd.reject('addNewThing cancelled');
     }
@@ -138,13 +149,13 @@ class AdapterManager extends EventEmitter {
    * @method getAdapter
    * @returns Returns the adapter with the indicated id.
    */
-  getAdapter(id) {
-    return this.adapters[id];
+  getAdapter(adapterId) {
+    return this.adapters.get(adapterId);
   }
 
   /**
    * @method getAdapters
-   * @returns Returns a dictionary of the loaded adapters. The dictionary
+   * @returns Returns a Map of the loaded adapters. The dictionary
    *          key corresponds to the adapter id.
    */
   getAdapters() {
@@ -260,10 +271,10 @@ class AdapterManager extends EventEmitter {
      *
      * This event is emitted whenever a new thing is added.
      *
-     * @event thing-added
+     * @event thingAdded
      * @type  {Thing}
      */
-    this.emit('thing-added', thing);
+    this.emit(Constants.THING_ADDED, thing);
 
     // If this device was added in response to addNewThing, then
     // We need to cancel pairing mode on all of the "other" adapters.
@@ -271,12 +282,11 @@ class AdapterManager extends EventEmitter {
     var deferredAdd = this.deferredAdd;
     if (deferredAdd) {
       this.deferredAdd = null;
-      for (var adapterId in this.adapters) {
-        var adapter = this.adapters[adapterId];
+      this.adapters.forEach(adapter => {
         if (adapter !== device.adapter) {
           adapter.cancelPairing();
         }
-      }
+      });
       if (this.pairingTimeout) {
         clearTimeout(this.pairingTimeout);
         this.pairingTimeout = null;
@@ -298,10 +308,10 @@ class AdapterManager extends EventEmitter {
      *
      * This event is emitted whenever a new thing is removed.
      *
-     * @event thing-added
+     * @event thingRemoved
      * @type  {Thing}
      */
-    this.emit('thing-removed', thing);
+    this.emit(Constants.THING_REMOVED, thing);
 
     var deferredRemove = this.deferredRemove;
     if (deferredRemove && deferredRemove.adapter == device.adapter) {
@@ -309,6 +319,24 @@ class AdapterManager extends EventEmitter {
       deferredRemove.resolve(device.id);
     }
   }
+
+  /**
+   * @method loadAdapter
+   *
+   * Loads a single adapter.
+   */
+
+   loadAdapter(adapterManager, adapterId, adapterConfig) {
+    if (adapterConfig.enabled) {
+      console.log('Loading adapters for', adapterId,
+                  'from', adapterConfig.path);
+      let adapterLoader = dynamicRequire(adapterConfig.path);
+      adapterLoader(adapterManager, adapterId, adapterConfig);
+    } else {
+      console.log('Not loading adapters for', adapterId,
+                  '- disabled');
+    }
+   }
 
   /**
    * @method loadAdapters
@@ -321,18 +349,37 @@ class AdapterManager extends EventEmitter {
       return;
     }
     this.adaptersLoaded = true;
-    var adaptersConfig = config.get('adapters');
-    for (var adapterName in adaptersConfig) {
-      var adapterConfig = adaptersConfig[adapterName];
 
-      if (adapterConfig.enabled) {
-        console.log('Loading adapters for', adapterName,
-                    'from', adapterConfig.path);
-        let adapterLoader = dynamicRequire(adapterConfig.path);
-        adapterLoader(this);
+    // Load the Adapter Plugin Server
+
+    this.pluginServer = new PluginServer(this, {verbose: false});
+
+    // Load the Adapters
+
+    var adaptersConfig = config.get(Constants.ADAPTERS_CONFIG);
+    for (var adapterId in adaptersConfig) {
+      var adapterConfig = adaptersConfig[adapterId];
+      if (adapterConfig.plugin) {
+        if (adapterConfig.plugin === 'test') {
+          // This is a special case where we load the adapter
+          // directly into the gateway, but we use IPC comms
+          // to talk to the adapter (i.e. for testing)
+          var pluginClient = new PluginClient(adapterId, {verbose: false});
+          pluginClient.register().then(adapterManagerProxy => {
+            console.log('Loading adapter', adapterId, 'as plugin');
+            this.loadAdapter(adapterManagerProxy, adapterId, adapterConfig);
+          }).catch(err => {
+            console.error('Failed to register adapter with gateway');
+            console.error(err);
+          });
+        } else {
+          // This is the normal plugin adapter case, and we
+          // currently don't need to do anything. We assume
+          // that the adapter is started elsewhere.
+        }
       } else {
-        console.log('Not loading adapters for', adapterName,
-                    '- disabled');
+        // Load this adapter directly into the gateway.
+        this.loadAdapter(this, adapterId, adapterConfig);
       }
     }
   }
@@ -378,12 +425,38 @@ class AdapterManager extends EventEmitter {
       // The adapters are not currently loaded, no need to unload.
       return;
     }
-    for (var adapterId in this.adapters) {
-      var adapter = this.adapters[adapterId];
+    // unload the adapters in the reverse of the order that they were loaded.
+    for (var adapterId of Array.from(this.adapters.keys()).reverse()) {
+      var adapter = this.getAdapter(adapterId);
       console.log('Unloading', adapter.name);
       adapter.unload();
     }
     this.adaptersLoaded = false;
+  }
+
+  /**
+   * @method waitForAdapter
+   *
+   * Returns a promise which resolves to the adapter with the indicated id.
+   * This function is really only used to support testing and
+   * ensure that tests don't proceed until 
+   */
+  waitForAdapter(adapterId) {
+    var adapter = this.getAdapter(adapterId);
+    if (adapter) {
+      // The adapter already exists, just create a Promise
+      // that resolves to that.
+      return Promise.resolve(adapter);
+    }
+
+    var deferredWait = this.deferredWaitForAdapter.get(adapterId);
+    if (!deferredWait) {
+      // No deferred wait currently setup. Set a new one up.
+      deferredWait = new Deferred();
+      this.deferredWaitForAdapter.set(adapterId, deferredWait);
+    }
+    
+    return deferredWait.promise;
   }
 }
 

@@ -54,13 +54,16 @@ beforeAll(async () => {
     dir: storageDir,
     continuous: false
   });
+  // If the mock adapter is a plugin, then it may not be available
+  // immediately, so wait for it to be available.
+  await adapterManager.waitForAdapter('Mock');
 });
 
 afterEach(async () => {
   // This is all potentially brittle.
   const adapter = adapterManager.getAdapter('Mock');
   if (adapter) {
-    adapter.clearState();
+    await adapter.clearState();
   }
   Actions.clearState();
   Things.clearState();
@@ -68,6 +71,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
+  adapterManager.unloadAdapters();
   server.close();
   httpServer.close();
   await Promise.all([

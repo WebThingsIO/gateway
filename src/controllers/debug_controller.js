@@ -10,30 +10,36 @@
 
 'use strict';
 
+const Constants = require('../constants');
 var express = require('express');
 var adapterManager = require('../adapter-manager');
 
 var debugController = express.Router();
 
-adapterManager.on('adapter-added', (adapter) => {
-  console.log('debug: Got "adapter-added" notification for', adapter.name);
+adapterManager.on(Constants.ADAPTER_ADDED, (adapter) => {
+  console.log('debug: Got "', Constants.ADAPTER_ADDED,
+              '" notification for', adapter.id, adapter.name);
 });
 
-adapterManager.on('thing-added', (thing) => {
-  console.log('debug: Got "thing-added" notification for', thing.name);
+adapterManager.on(Constants.THING_ADDED, (thing) => {
+  console.log('debug: Got "', Constants.THING_ADDED,
+              '" notification for', thing.name);
 });
 
-adapterManager.on('thing-removed', (thing) => {
-  console.log('debug: Got "thing-removed" notification for', thing.name);
+adapterManager.on(Constants.THING_REMOVED, (thing) => {
+  console.log('debug: Got "', Constants.THING_REMOVED,
+              '" notification for', thing.name);
 });
 
-adapterManager.on('property-changed', (property) => {
-  console.log('debug: Got "property-changed" notification for', property.name,
+adapterManager.on(Constants.PROPERTY_CHANGED, (property) => {
+  console.log('debug: Got "', Constants.PROPERTY_CHANGED,
+              '" notification for', property.name,
               'value:', property.value);
 });
 
-adapterManager.on('pairing-timeout', () => {
-  console.log('debug: Got "pairing-timeout" notification');
+adapterManager.on(Constants.PAIRING_TIMEOUT, () => {
+  console.log('debug: Got "', Constants.PAIRING_TIMEOUT,
+              '" notification');
 });
 
 /**
@@ -63,6 +69,19 @@ debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
   var thingId = request.params.thingId;
   adapterManager.cancelRemoveThing(thingId);
   response.status(204).send();
+});
+
+/**
+ * Get a list of devices ids registered with the adapter manager.
+ */
+debugController.get('/deviceIds', (request, response) => {
+  var devices = adapterManager.getDevices();
+  var deviceList = [];
+  for (var deviceId in devices) {
+    var device = adapterManager.devices[deviceId];
+    deviceList.push(device.id);
+  }
+  response.status(200).json(deviceList);
 });
 
 /**
@@ -123,9 +142,9 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   if (device) {
     var propertyValue = request.body[propertyName];
     if (propertyValue !== undefined) {
-      device.setProperty(propertyName, propertyValue).then(() => {
+      device.setProperty(propertyName, propertyValue).then(updatedValue => {
         var valueDict = {};
-        valueDict[propertyName] = propertyValue;
+        valueDict[propertyName] = updatedValue;
         response.status(200).json(valueDict);
       }).catch((error) => {
         console.log('Device "' + deviceId + '"');

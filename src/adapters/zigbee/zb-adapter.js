@@ -72,12 +72,14 @@ function FUNC(ths, func, args) {
 }
 
 class ZigBeeAdapter extends Adapter {
-  constructor(adapterManager, port) {
-    // We don't know our id yet. So we set it to ??? and once we can
-    // communicate with the controller.
-    //
-    // The id will be the serial number of the controller.
-    super(adapterManager, '???');
+  constructor(adapterManager, adapterId, port) {
+    // The SigBee adapter supports multiple dongles and
+    // will create an adapter object for each dongle.
+    // We don't know the actual adapter id until we
+    // retrieve the serial number from the dongle. So we
+    // set it to zb-unknown here, and fix things up later
+    // just before we call addAdapter.
+    super(adapterManager, 'zb-uknown');
 
     this.port = port;
 
@@ -1222,10 +1224,10 @@ function findDigiPorts() {
   });
 }
 
-function loadZigBeeAdapters(adapterManager) {
+function loadZigBeeAdapters(adapterManager, adapterId, _adapterConfig) {
   findDigiPorts().then((digiPorts) => {
     for (var port of digiPorts) {
-      new ZigBeeAdapter(adapterManager, port);
+      new ZigBeeAdapter(adapterManager, adapterId, port);
     }
   }, (error) => {
     console.error(error);

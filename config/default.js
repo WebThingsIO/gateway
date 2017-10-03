@@ -28,6 +28,11 @@ module.exports = {
         },
       }
     },
+    example_plugin: {
+      enabled: true,
+      plugin: true,
+      path: './adapters/example-plugin',
+    },
     zigbee: {
       enabled: true,
       path: './adapters/zigbee',

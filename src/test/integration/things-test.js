@@ -252,8 +252,8 @@ describe('things/', function() {
   });
 
   it('lists new things when devices are added', async () => {
-    mockAdapter().addDevice('test-2', makeDescr('test-2'));
-    mockAdapter().addDevice('test-3', makeDescr('test-3'));
+    await mockAdapter().addDevice('test-2', makeDescr('test-2'));
+    await mockAdapter().addDevice('test-3', makeDescr('test-3'));
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
@@ -282,8 +282,8 @@ describe('things/', function() {
           .set(...headerAuth(jwt))
           .send({name: 'pair'});
 
-        mockAdapter().addDevice('test-4', makeDescr('test-4'));
-        mockAdapter().addDevice('test-5', makeDescr('test-5'));
+        await mockAdapter().addDevice('test-4', makeDescr('test-4'));
+        await mockAdapter().addDevice('test-5', makeDescr('test-5'));
         return res;
       })(),
     ]);
@@ -440,7 +440,7 @@ describe('things/', function() {
   });
 
   it('should remove a device in response to unpair', async () => {
-    mockAdapter().addDevice('test-5', makeDescr('test-5'));
+    await mockAdapter().addDevice('test-5', makeDescr('test-5'));
     let thingId = 'test-5';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device

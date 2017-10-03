@@ -6,4 +6,4 @@ if [ ! -f "certificate.pem" ]; then
   ${SCRIPTDIR}/../../tools/make-self-signed-cert.sh
 fi
 
-jest
+jest "$@"

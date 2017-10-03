@@ -1,8 +1,8 @@
 /**
  * Adapter Controller.
  *
- * Manages HTTP requests to /adapters. 
- *  
+ * Manages HTTP requests to /adapters.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -20,11 +20,9 @@ var adaptersController = express.Router();
  */
 adaptersController.get('/', (request, response) => {
   var adapters = adapterManager.getAdapters();
-  var adapterList = [];
-  for (var adapterId in adapters) {
-    var adapter = adapters[adapterId];
-    adapterList.push(adapter.asDict());
-  }
+  var adapterList = Array.from(adapters.values()).map(adapter => {
+    return adapter.asDict();
+  });
   response.json(adapterList);
 });
 

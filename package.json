@@ -38,6 +38,7 @@
     "greenlock": "^2.1.15",
     "jsonwebtoken": "^7.4.1",
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "nanomsg": "^3.3.0",
     "node-fetch": "^1.7.1",
     "node-getopt": "^0.2.3",
     "node-persist": "^2.1.0",

@@ -1,5 +1,5 @@
 /**
- * mock-adapter.js - Mock Adapter.
+ * example-plugin-adapter.js - Example adapter implemented as a plugin.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,7 @@ var Adapter = require('../adapter');
 var Device = require('../device');
 var Property = require('../property');
 
-class MockProperty extends Property {
+class ExampleProperty extends Property {
   constructor(device, name, propertyDescription) {
     super(device, name, propertyDescription.type);
     this.unit = propertyDescription.unit;
@@ -40,7 +40,7 @@ class MockProperty extends Property {
   }
 }
 
-class MockDevice extends Device {
+class ExampleDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
     this.name = deviceDescription.name;
@@ -48,35 +48,32 @@ class MockDevice extends Device {
     this.description = deviceDescription.description;
     for (var propertyName in deviceDescription.properties) {
       var propertyDescription = deviceDescription.properties[propertyName];
-      var property = new MockProperty(this, propertyName, propertyDescription);
+      var property = new ExampleProperty(this, propertyName,
+                                         propertyDescription);
       this.properties.set(propertyName, property);
     }
   }
 }
 
-class MockAdapter extends Adapter {
-  // eslint-disable-next-line no-unused-vars
-  constructor(adapterManager, adapterId, testConfigs) {
-    super(adapterManager, adapterId);
+class ExamplePluginAdapter extends Adapter {
+  constructor(adapterManager, _adapterId, _adapterConfig) {
+    super(adapterManager, 'ExamplePlugin');
     adapterManager.addAdapter(this);
   }
 
   /**
-   * For cleanup between tests. Returns a promise which resolves
-   * when all of the state has been cleared.
+   * For cleanup between tests.
    */
   clearState() {
     this.actions = {};
 
-    return Promise.all(
-      Object.keys(this.devices).map(deviceId => {
-        return this.removeDevice(deviceId);
-      })
-    );
+    for (let deviceId in this.devices) {
+      this.removeDevice(deviceId);
+    }
   }
 
   /**
-   * Add a MockDevice to the MockAdapter
+   * Add a ExampleDevice to the ExamplePluginAdapter
    *
    * @param {String} deviceId ID of the device to add.
    * @return {Promise} which resolves to the device added.
@@ -86,7 +83,7 @@ class MockAdapter extends Adapter {
       if (deviceId in this.devices) {
         reject('Device: ' + deviceId + ' already exists.');
       } else {
-        var device = new MockDevice(this, deviceId, deviceDescription);
+        var device = new ExampleDevice(this, deviceId, deviceDescription);
         this.handleDeviceAdded(device);
         resolve(device);
       }
@@ -94,7 +91,7 @@ class MockAdapter extends Adapter {
   }
 
   /**
-   * Remove a MockDevice from the MockAdapter.
+   * Remove a ExampleDevice from the ExamplePluginAdapter.
    *
    * @param {String} deviceId ID of the device to remove.
    * @return {Promise} which resolves to the device removed.
@@ -122,49 +119,64 @@ class MockAdapter extends Adapter {
 
   // eslint-disable-next-line no-unused-vars
   startPairing(timeoutSeconds) {
-    console.log('MockAdapter:', this.name, 'id', this.id, 'pairing started');
+    console.log('ExamplePluginAdapter:', this.name,
+                'id', this.id, 'pairing started');
     if (this.pairDeviceId) {
       var deviceId = this.pairDeviceId;
       var deviceDescription = this.pairDeviceDescription;
       this.pairDeviceId = null;
       this.pairDeviceDescription = null;
       this.addDevice(deviceId, deviceDescription).then(() => {
-        console.log('MockAdapter: device:', deviceId, 'was paired.');
+        console.log('ExamplePluginAdapter: device:', deviceId, 'was paired.');
       }).catch((err) => {
-        console.error('MockAdapter: unpairing', deviceId, 'failed');
+        console.error('ExamplePluginAdapter: unpairing', deviceId, 'failed');
         console.error(err);
       });
     }
   }
 
   cancelPairing() {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'pairing cancelled');
   }
 
   removeThing(device) {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'removeThing(', device.id, ') started');
     if (this.unpairDeviceId) {
       var deviceId = this.unpairDeviceId;
       this.unpairDeviceId = null;
       this.removeDevice(deviceId).then(() => {
-        console.log('MockAdapter: device:', deviceId, 'was unpaired.');
+        console.log('ExamplePluginAdapter: device:', deviceId, 'was unpaired.');
       }).catch((err) => {
-        console.error('MockAdapter: unpairing', deviceId, 'failed');
+        console.error('ExamplePluginAdapter: unpairing', deviceId, 'failed');
         console.error(err);
       });
     }
   }
 
   cancelRemoveThing(device) {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'cancelRemoveThing(', device.id, ')');
   }
 }
 
-function loadMockAdapter(adapterManager, adapterId, testConfigs) {
-  new MockAdapter(adapterManager, adapterId, testConfigs);
+function loadExamplePluginAdapter(adapterManager, adapterId, adapterConfig) {
+  var adapter = new ExamplePluginAdapter(adapterManager, adapterId,
+                                         adapterConfig);
+  var device = new ExampleDevice(adapter, 'example-plug-2', {
+    name: 'example-plug-2',
+    type: 'onOffSwitch',
+    description: 'Example Plugin Device',
+    properties: {
+      on: {
+        name: 'on',
+        type: 'boolean',
+        value: false,
+      },
+    },
+  });
+  adapter.handleDeviceAdded(device);
 }
 
-module.exports = loadMockAdapter;
+module.exports = loadExamplePluginAdapter;
