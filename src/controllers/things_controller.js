@@ -204,7 +204,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
   websocket.on('close', function() {
-    AdapterManager.removeListener(Constants.PROPERTY_CHANGED, 
+    AdapterManager.removeListener(Constants.PROPERTY_CHANGED,
                                   onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
   });

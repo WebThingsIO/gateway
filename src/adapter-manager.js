@@ -438,6 +438,8 @@ class AdapterManager extends EventEmitter {
    * @method waitForAdapter
    *
    * Returns a promise which resolves to the adapter with the indicated id.
+   * This function is really only used to support testing and
+   * ensure that tests don't proceed until 
    */
   waitForAdapter(adapterId) {
     var adapter = this.getAdapter(adapterId);
@@ -448,17 +450,12 @@ class AdapterManager extends EventEmitter {
     }
 
     var deferredWait = this.deferredWaitForAdapter.get(adapterId);
-    if (deferredWait) {
-      // There is already a promise queued up. We'll create
-      // another by adding a then to the existing promise
-      // chain.
-      return deferredWait.promise.then(adapter => {
-        return adapter;
-      });
+    if (!deferredWait) {
+      // No deferred wait currently setup. Set a new one up.
+      deferredWait = new Deferred();
+      this.deferredWaitForAdapter.set(adapterId, deferredWait);
     }
-
-    deferredWait = new Deferred();
-    this.deferredWaitForAdapter.set(adapterId, deferredWait);
+    
     return deferredWait.promise;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * mock-adapter.js - Mock Adapter.
+ * example-plugin-adapter.js - Example adapter implemented as a plugin.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,7 @@ var Adapter = require('../adapter');
 var Device = require('../device');
 var Property = require('../property');
 
-class MockProperty extends Property {
+class ExampleProperty extends Property {
   constructor(device, name, propertyDescription) {
     super(device, name, propertyDescription.type);
     this.unit = propertyDescription.unit;
@@ -40,7 +40,7 @@ class MockProperty extends Property {
   }
 }
 
-class MockDevice extends Device {
+class ExampleDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
     this.name = deviceDescription.name;
@@ -48,15 +48,16 @@ class MockDevice extends Device {
     this.description = deviceDescription.description;
     for (var propertyName in deviceDescription.properties) {
       var propertyDescription = deviceDescription.properties[propertyName];
-      var property = new MockProperty(this, propertyName, propertyDescription);
+      var property = new ExampleProperty(this, propertyName,
+                                         propertyDescription);
       this.properties.set(propertyName, property);
     }
   }
 }
 
-class TestPluginAdapter extends Adapter {
-  constructor(adapterManager, _adapterId, _testConfigs) {
-    super(adapterManager, 'TestPlug');
+class ExamplePluginAdapter extends Adapter {
+  constructor(adapterManager, _adapterId, _adapterConfig) {
+    super(adapterManager, 'ExamplePlugin');
     adapterManager.addAdapter(this);
   }
 
@@ -72,7 +73,7 @@ class TestPluginAdapter extends Adapter {
   }
 
   /**
-   * Add a MockDevice to the TestPluginAdapter
+   * Add a ExampleDevice to the ExamplePluginAdapter
    *
    * @param {String} deviceId ID of the device to add.
    * @return {Promise} which resolves to the device added.
@@ -82,7 +83,7 @@ class TestPluginAdapter extends Adapter {
       if (deviceId in this.devices) {
         reject('Device: ' + deviceId + ' already exists.');
       } else {
-        var device = new MockDevice(this, deviceId, deviceDescription);
+        var device = new ExampleDevice(this, deviceId, deviceDescription);
         this.handleDeviceAdded(device);
         resolve(device);
       }
@@ -90,7 +91,7 @@ class TestPluginAdapter extends Adapter {
   }
 
   /**
-   * Remove a MockDevice from the TestPluginAdapter.
+   * Remove a ExampleDevice from the ExamplePluginAdapter.
    *
    * @param {String} deviceId ID of the device to remove.
    * @return {Promise} which resolves to the device removed.
@@ -118,7 +119,7 @@ class TestPluginAdapter extends Adapter {
 
   // eslint-disable-next-line no-unused-vars
   startPairing(timeoutSeconds) {
-    console.log('TestPluginAdapter:', this.name,
+    console.log('ExamplePluginAdapter:', this.name,
                 'id', this.id, 'pairing started');
     if (this.pairDeviceId) {
       var deviceId = this.pairDeviceId;
@@ -126,46 +127,47 @@ class TestPluginAdapter extends Adapter {
       this.pairDeviceId = null;
       this.pairDeviceDescription = null;
       this.addDevice(deviceId, deviceDescription).then(() => {
-        console.log('TestPluginAdapter: device:', deviceId, 'was paired.');
+        console.log('ExamplePluginAdapter: device:', deviceId, 'was paired.');
       }).catch((err) => {
-        console.error('TestPluginAdapter: unpairing', deviceId, 'failed');
+        console.error('ExamplePluginAdapter: unpairing', deviceId, 'failed');
         console.error(err);
       });
     }
   }
 
   cancelPairing() {
-    console.log('TestPluginAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'pairing cancelled');
   }
 
   removeThing(device) {
-    console.log('TestPluginAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'removeThing(', device.id, ') started');
     if (this.unpairDeviceId) {
       var deviceId = this.unpairDeviceId;
       this.unpairDeviceId = null;
       this.removeDevice(deviceId).then(() => {
-        console.log('TestPluginAdapter: device:', deviceId, 'was unpaired.');
+        console.log('ExamplePluginAdapter: device:', deviceId, 'was unpaired.');
       }).catch((err) => {
-        console.error('TestPluginAdapter: unpairing', deviceId, 'failed');
+        console.error('ExamplePluginAdapter: unpairing', deviceId, 'failed');
         console.error(err);
       });
     }
   }
 
   cancelRemoveThing(device) {
-    console.log('TestPluginAdapter:', this.name, 'id', this.id,
+    console.log('ExamplePluginAdapter:', this.name, 'id', this.id,
                 'cancelRemoveThing(', device.id, ')');
   }
 }
 
-function loadTestPluginAdapter(adapterManager, adapterId, testConfigs) {
-  var adapter = new TestPluginAdapter(adapterManager, adapterId, testConfigs);
-  var device = new MockDevice(adapter, 'testplug-2', {
-    name: 'testplug-2',
+function loadExamplePluginAdapter(adapterManager, adapterId, adapterConfig) {
+  var adapter = new ExamplePluginAdapter(adapterManager, adapterId,
+                                         adapterConfig);
+  var device = new ExampleDevice(adapter, 'example-plug-2', {
+    name: 'example-plug-2',
     type: 'onOffSwitch',
-    description: 'Plugin Test Device',
+    description: 'Example Plugin Device',
     properties: {
       on: {
         name: 'on',
@@ -177,4 +179,4 @@ function loadTestPluginAdapter(adapterManager, adapterId, testConfigs) {
   adapter.handleDeviceAdded(device);
 }
 
-module.exports = loadTestPluginAdapter;
+module.exports = loadExamplePluginAdapter;

@@ -9,6 +9,7 @@
 
 'use strict';
 
+const Constants = require('../adapter-constants');
 const Deferred = require('../deferred');
 const Property = require('../property');
 
@@ -59,13 +60,13 @@ class PropertyProxy extends Property {
    * the value passed in.
    */
   setValue(value) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       console.log('PropertyProxy: setProperty property:', this.name,
                   'for:', this.device.id,
                   'to value:', value);
 
       this.device.adapter.sendMsg(
-        'setProperty', {
+        Constants.SET_PROPERTY, {
           deviceId: this.device.id,
           propertyName: this.name,
           propertyValue: value,
@@ -75,14 +76,12 @@ class PropertyProxy extends Property {
 
       this.onPropertyChanged().then(updatedValue => {
         resolve(updatedValue);
-      // Currently there is no code to trigger an error, so
-      // I've commented this out to improve coverage.
-      //}).catch(error => {
-      //  console.error('PropertyProxy: Failed to setProperty',
-      //                this.name, 'to', value,
-      //                'for device:', this.device.id);
-      //  console.error(error);
-      //  reject(error);
+      }).catch(error => {
+        console.error('PropertyProxy: Failed to setProperty',
+                      this.name, 'to', value,
+                      'for device:', this.device.id);
+        console.error(error);
+        reject(error);
       });
     });
   }

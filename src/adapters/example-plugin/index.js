@@ -8,4 +8,4 @@
 
 'use strict';
 
-module.exports = require('./test-plugin-adapter');
+module.exports = require('./example-plugin-adapter');

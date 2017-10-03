@@ -74,7 +74,7 @@ class PluginClient {
     // Register ourselves with the server
     this.verbose &&
       console.log('Registering with server');
-    
+
     this.managerIpcSocket.sendJson({
       messageType: Constants.REGISTER_ADAPTER,
       data: {

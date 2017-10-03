@@ -39,7 +39,7 @@ class AdapterManagerProxy extends EventEmitter {
   addAdapter(adapter) {
     DEBUG && console.log('AdapterManagerProxy: addAdapter:', adapter.id);
     this.adapter = adapter;
-    this.pluginClient.sendNotification('addAdapter', {
+    this.pluginClient.sendNotification(Constants.ADD_ADAPTER, {
       adapterId: adapter.id,
       name: adapter.name,
     });
@@ -139,7 +139,7 @@ class AdapterManagerProxy extends EventEmitter {
               error: err,
             });
         });
-      return;
+        return;
 
       case Constants.PAIR_MOCK_DEVICE:
         adapter.pairDevice(msg.data.deviceId, msg.data.deviceDescr);

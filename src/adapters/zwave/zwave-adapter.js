@@ -19,9 +19,13 @@ const DEBUG = false;
 
 class ZWaveAdapter extends Adapter {
   constructor(adapterManager, adapterId, port) {
-    // We don't know our id yet. So we set it to ??? and once we get the
-    // driverReady notification, which will then set the id based on the homeId.
-    super(adapterManager, adapterId);
+    // The ZWave adapter supports multiple dongles and
+    // will create an adapter object for each dongle.
+    // We don't know the actual adapter id until we
+    // retrieve the home id from the dongle. So we set the
+    // adapter id to zwave-unknown here and fix things up
+    // later just before we call addAdapter.
+    super(adapterManager, 'zwave-unknown');
     this.ready = false;
     this.named = false;
 

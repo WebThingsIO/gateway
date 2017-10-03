@@ -77,10 +77,6 @@ class PluginServer {
     this.adapters.delete(adapterId);
     if (this.adapters.size == 0) {
       this.ipcSocket.close();
-      setTimeout(() => {
-        // This delay allows some of the console logs to 
-        // show up, and allows the tests to run.
-      }, 500);
     }
   }
 }
