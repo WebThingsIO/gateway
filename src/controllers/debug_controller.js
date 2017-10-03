@@ -18,7 +18,7 @@ var debugController = express.Router();
 
 adapterManager.on(Constants.ADAPTER_ADDED, (adapter) => {
   console.log('debug: Got "', Constants.ADAPTER_ADDED,
-              '" notification for', adapter.name);
+              '" notification for', adapter.id, adapter.name);
 });
 
 adapterManager.on(Constants.THING_ADDED, (thing) => {

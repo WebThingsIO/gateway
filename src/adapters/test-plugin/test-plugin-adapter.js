@@ -55,9 +55,8 @@ class MockDevice extends Device {
 }
 
 class TestPluginAdapter extends Adapter {
-  // eslint-disable-next-line no-unused-vars
-  constructor(adapterManager, testConfigs) {
-    super(adapterManager, 'TPA-0001');
+  constructor(adapterManager, _adapterId, _testConfigs) {
+    super(adapterManager, 'TestPlug');
     adapterManager.addAdapter(this);
   }
 
@@ -161,8 +160,8 @@ class TestPluginAdapter extends Adapter {
   }
 }
 
-function loadTestPluginAdapter(adapterManager, testConfigs) {
-  var adapter = new TestPluginAdapter(adapterManager, testConfigs);
+function loadTestPluginAdapter(adapterManager, adapterId, testConfigs) {
+  var adapter = new TestPluginAdapter(adapterManager, adapterId, testConfigs);
   var device = new MockDevice(adapter, 'testplug-2', {
     name: 'testplug-2',
     type: 'onOffSwitch',

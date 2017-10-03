@@ -11,7 +11,7 @@
 'use strict';
 
 var config = require('config');
-const Constants = require('constants');
+const Constants = require('./constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./adapters/plugin/plugin-client');
 

@@ -93,15 +93,11 @@ class PluginClient {
   }
 
   unload() {
-    //console.log('IpcSocket:About to close',
-    //            this.adapterIpcSocket.name,
-    //            this.managerIpcSocket.name);
     // Wait a small amount of time to allow the adapterUnloaded
     // message to be processed by the server before closing.
     setTimeout(() => {
       this.adapterIpcSocket.close();
       this.managerIpcSocket.close();
-      //console.log('IpcSocket: after close');
     }, 500);
 
   }

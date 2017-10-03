@@ -56,8 +56,8 @@ class MockDevice extends Device {
 
 class MockAdapter extends Adapter {
   // eslint-disable-next-line no-unused-vars
-  constructor(adapterManager, testConfigs) {
-    super(adapterManager, 'Mock');
+  constructor(adapterManager, adapterId, testConfigs) {
+    super(adapterManager, adapterId);
     adapterManager.addAdapter(this);
   }
 
@@ -163,8 +163,8 @@ class MockAdapter extends Adapter {
   }
 }
 
-function loadMockAdapter(adapterManager, testConfigs) {
-  new MockAdapter(adapterManager, testConfigs);
+function loadMockAdapter(adapterManager, adapterId, testConfigs) {
+  new MockAdapter(adapterManager, adapterId, testConfigs);
 }
 
 module.exports = loadMockAdapter;

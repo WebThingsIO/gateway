@@ -18,10 +18,10 @@ var ZWaveModule = require('openzwave-shared');
 const DEBUG = false;
 
 class ZWaveAdapter extends Adapter {
-  constructor(adapterManager, port) {
+  constructor(adapterManager, adapterId, port) {
     // We don't know our id yet. So we set it to ??? and once we get the
     // driverReady notification, which will then set the id based on the homeId.
-    super(adapterManager, '???');
+    super(adapterManager, adapterId);
     this.ready = false;
     this.named = false;
 
@@ -368,7 +368,7 @@ function findZWavePort(callback) {
   });
 }
 
-function loadZWaveAdapters(adapterManager) {
+function loadZWaveAdapters(adapterManager, adapterId, _adapterConfig) {
   findZWavePort(function (error, port) {
     if (error) {
       console.error('Unable to find ZWave adapter');
@@ -377,7 +377,7 @@ function loadZWaveAdapters(adapterManager) {
 
     console.log('Found ZWave port @', port.comName);
 
-    new ZWaveAdapter(adapterManager, port);
+    new ZWaveAdapter(adapterManager, adapterId, port);
 
     // The zwave adapter will be added when it's driverReady method is called.
     // Prior to that we don't know what the homeID of the adapter is.

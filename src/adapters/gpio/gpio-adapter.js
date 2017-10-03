@@ -105,8 +105,8 @@ class GpioDevice extends Device {
 }
 
 class GpioAdapter extends Adapter {
-  constructor(adapterManager, gpioConfig) {
-    super(adapterManager, 'GPIO');
+  constructor(adapterManager, adapterId, gpioConfig) {
+    super(adapterManager, adapterId);
 
     for (var pin in gpioConfig.pins) {
       new GpioDevice(this, pin, gpioConfig.pins[pin]);
@@ -115,8 +115,8 @@ class GpioAdapter extends Adapter {
   }
 }
 
-function loadGpioAdapter(adapterManager, gpioConfig) {
-  new GpioAdapter(adapterManager, gpioConfig);
+function loadGpioAdapter(adapterManager, adapterId, gpioConfig) {
+  new GpioAdapter(adapterManager, adapterId, gpioConfig);
 }
 
 module.exports = loadGpioAdapter;

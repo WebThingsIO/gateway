@@ -52,9 +52,9 @@ class PluginServer {
         this.ipcSocket.sendJson({
           messageType: Constants.REGISTER_ADAPTER_REPLY,
           data: {
+            adapterId: msg.data.adapterId,
             ipcAddr: adapter.ipcAddr,
           },
-          id: msg.id,
         });
         break;
 
@@ -62,7 +62,6 @@ class PluginServer {
   }
 
   registerAdapter(adapterId) {
-    //console.log('PluginServer: register adapter', adapterId);
     var adapter = this.adapters.get(adapterId);
     if (adapter) {
       // This is an adapter that we already know about.
@@ -75,14 +74,12 @@ class PluginServer {
   }
 
   unregisterAdapter(adapterId) {
-    //console.log('PluginServer: unregister adapter', adapterId);
     this.adapters.delete(adapterId);
-    //console.log('PluginServer: unregistering:', adapterId,
-    //            'remaining:', this.adapters.size, this.adapters.keys());
     if (this.adapters.size == 0) {
       this.ipcSocket.close();
       setTimeout(() => {
-        //console.log('After unregisterAdapter');
+        // This delay allows some of the console logs to 
+        // show up, and allows the tests to run.
       }, 500);
     }
   }

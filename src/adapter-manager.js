@@ -352,7 +352,7 @@ class AdapterManager extends EventEmitter {
 
     // Load the Adapter Plugin Server
 
-    this.pluginServer = new PluginServer(this);
+    this.pluginServer = new PluginServer(this, {verbose: false});
 
     // Load the Adapters
 
