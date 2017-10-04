@@ -5,13 +5,13 @@
  */
 
 const assert = require('assert');
-const Effect = require('./Effect');
+const PropertyEffect = require('./PropertyEffect');
 
 /**
  * An Effect which permanently sets the target property to
  * a value when triggered
  */
-class SetEffect extends Effect {
+class SetEffect extends PropertyEffect {
   /**
    * @param {EffectDescription} desc
    */
