@@ -46,62 +46,29 @@ var Database = {
     console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
     // Open database or create it if it doesn't exist
     this.db = new sqlite3.Database(filename);
-    // If database newly created, populate with default data
-    if (!exists) {
-      this.populate();
-    }
+    this.db.serialize(() => {
+      this.createTables();
+      // If database newly created, populate with default data
+      if (!exists) {
+        this.populate();
+      }
+    });
   },
 
-  /**
-   * Populate the database with default data.
-   */
-  populate: function() {
-    console.log('Populating database with default things...');
-    var db = this.db;
-
+  createTables: function() {
     // Create Things table
-    var thingsTableSQL = 'CREATE TABLE IF NOT EXISTS things (' +
+    this.db.run('CREATE TABLE IF NOT EXISTS things (' +
       'id TEXT PRIMARY KEY,' +
       'description TEXT' +
-    ');';
-    db.serialize(function() {
-      db.run(thingsTableSQL);
-      // Populate Things table
-      var insertSQL = db.prepare(
-        'INSERT INTO things (id, description) VALUES (?, ?)');
-      for (var thing of ThingsData) {
-        var thingId = thing.id;
-        delete thing.id;
-        insertSQL.run(thingId, JSON.stringify(thing));
-      }
-      insertSQL.finalize();
-    });
+    ');');
 
     // Create Users table
-    var usersTableSQL = 'CREATE TABLE IF NOT EXISTS users (' +
+    this.db.run('CREATE TABLE IF NOT EXISTS users (' +
       'id INTEGER PRIMARY KEY ASC,' +
       'email TEXT UNIQUE,' +
       'password TEXT,' +
       'name TEXT' +
-    ');';
-    db.serialize(function() {
-      db.run(usersTableSQL);
-      // Add default user if provided
-      var defaultUser = config.get('authentication.defaultUser');
-      if(!defaultUser) {
-        return;
-      }
-      var passwordHash = Passwords.hashSync(defaultUser.password);
-      db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
-        [defaultUser.email, passwordHash, defaultUser.name],
-        function(error) {
-        if (error) {
-          console.error('Failed to save default user.');
-        } else {
-          console.log('Saved default user ' + defaultUser.email);
-        }
-      });
-    });
+    ');');
 
     /**
      * This really should have a foreign key constraint but it does not work
@@ -111,17 +78,44 @@ var Database = {
      *
      * Instead, the INTEGER user is either the id of the user or -1 if NULL
      */
-    var jwtTableSQL = 'CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
+    this.db.run('CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
       'id INTEGER PRIMARY KEY ASC,' +
       'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
       'user INTEGER,' +
       'issuedAt DATE,' +
       'publicKey TEXT' +
-    ');';
+    ');');
+  },
 
-    db.serialize(function() {
-      db.run(jwtTableSQL);
-    });
+  /**
+   * Populate the database with default data.
+   */
+  populate: function() {
+    console.log('Populating database with default things...');
+    // Populate Things table
+    var insertSQL = this.db.prepare(
+      'INSERT INTO things (id, description) VALUES (?, ?)');
+    for (var thing of ThingsData) {
+      var thingId = thing.id;
+      delete thing.id;
+      insertSQL.run(thingId, JSON.stringify(thing));
+    }
+    insertSQL.finalize();
+
+    // Add default user if provided
+    var defaultUser = config.get('authentication.defaultUser');
+    if (defaultUser) {
+      var passwordHash = Passwords.hashSync(defaultUser.password);
+      this.db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+        [defaultUser.email, passwordHash, defaultUser.name],
+        function(error) {
+        if (error) {
+          console.error('Failed to save default user.');
+        } else {
+          console.log('Saved default user ' + defaultUser.email);
+        }
+      });
+    }
   },
 
   /**
