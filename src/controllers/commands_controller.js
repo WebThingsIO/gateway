@@ -35,7 +35,7 @@
 const express = require('express');
 const Constants = require('../constants.js');
 const rp = require('request-promise');
-
+const uuidv4 =  require('uuid/v4');
 const CommandsController = express.Router();
 
 
@@ -114,28 +114,45 @@ CommandsController.post('/', function (request, response) {
           .then(function(thingBody) {
             let jsonBody = JSON.parse(thingBody);
             let match = payload.param.toUpperCase();
+            let thingfound = false; 
             for (var i = 0; i < jsonBody.length; i++) {
               var obj = jsonBody[i];
               let name = obj.name.toUpperCase();
               if (name == match) {
-                payload.href = obj.properties.on.href;
+                thingfound = true;
                 break;
               }
             }
-            if (payload.href != '') {
+            if (thingfound) {
+              if ((payload.param3 != null) && 
+                (payload.param3 != ''  && obj.properties.hue != '')) {
+                var colorname_to_hue = {red:0, orange:8500, yellow:17000, 
+                  green:25500, white:34000, blue:46920, purple:48000, 
+                  magenta:54000, pink:60000};
+                if (!colorname_to_hue[payload.param3]) {
+                  response.status(404).json({'message': 'Hue color not found'});
+                  return;
+                } else {
+                  iotOptions.body = JSON.stringify({'hue':
+                   colorname_to_hue[payload.param3]}); 
+                  payload.href = obj.properties.hue.href; 
+                }
+              } else if (payload.param2 == 'on' || payload.param2 == 'off') {
+                iotOptions.body = JSON.stringify({'on': 
+                (payload.param2 == 'on') ? true : false});
+                payload.href = obj.properties.on.href;
+              } else {
+                response.status(404).json({'message': 'Command not found'});
+                return;
+              }
+              iotOptions.uri = CommandsController.gatewayHref + payload.href;  
+              iotOptions.headers.Authorization = 
+                'Bearer ' + CommandsController.jwt;
               // Returning 201 to signify that the command was mapped to an
               // intent and matched a 'thing' in our list.  Return a response to
               // caller with this status before the command finishes execution
               // as the execution can take some time (e.g. blinds)
-              response.status(201).send(JSON.stringify(
-                {'message': 'Command Created'}));
-              iotOptions.uri = CommandsController.gatewayHref + payload.href;
-              iotOptions.headers.Authorization = 'Bearer ' +
-                CommandsController.jwt;
-
-              (payload.param2 == 'on')?
-                iotOptions.body = JSON.stringify({'on': true}):
-                iotOptions.body = JSON.stringify({'on': false});
+              response.status(201).json({'message': 'Command Created'});
               rp(iotOptions)
                 .then(function() {
                   // In the future we may want to use WS to give a status of
@@ -146,16 +163,14 @@ CommandsController.post('/', function (request, response) {
                   console.log('catch inside PUT:' + err);
                 });
             } else {
-              response.status(404).send(JSON.stringify(
-                {'message': 'Thing not found'}));
+              response.status(404).json({'message': 'Thing not found'});
             }
           })
           .catch(function(err) {
             console.log('error catch:' + err);
           });
       } else {
-        response.status(406).send(JSON.stringify(
-          {'message': 'Unable to understand command'}));
+        response.status(406).json({'message': 'Unable to understand command'});
       }
     })
     .catch(function(err) {
@@ -171,7 +186,7 @@ function getAiBody(text) {
     'v':'20150910',
     'query': '',
     'lang':'en',
-    'sessionId':'b083ae95-e39a-4954-a05b-84687f50f790'
+    'sessionId': uuidv4()
   };
   body.query = text;
   return body;
@@ -188,6 +203,7 @@ function parseAIBody(aiBody) {
     cmd: 'none',
     param: 'none',
     param2: 'none',
+    param3: 'none',
     href: ''
   };
   //Determine the action from the API.AI intent parser
@@ -196,6 +212,7 @@ function parseAIBody(aiBody) {
       payload.cmd = 'IOT';
       payload.param = jsonBody.result.parameters.rooms;
       payload.param2 = jsonBody.result.parameters.onoff;
+      payload.param3 = jsonBody.result.parameters.color;
       break;
     case 'input.unknown':
       console.log('unable to parse the intent');
