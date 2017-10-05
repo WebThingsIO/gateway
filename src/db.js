@@ -23,6 +23,7 @@ const TABLES = [
   'users',
   'jsonwebtoken_to_user',
   'things',
+  'settings',
 ];
 
 var Database = {
@@ -84,6 +85,12 @@ var Database = {
       'user INTEGER,' +
       'issuedAt DATE,' +
       'publicKey TEXT' +
+    ');');
+
+    // Create Settings table
+    this.db.run('CREATE TABLE IF NOT EXISTS settings (' +
+      'key TEXT PRIMARY KEY,' +
+      'value TEXT' +
     ');');
   },
 
@@ -247,6 +254,46 @@ var Database = {
   getUserCount: async function() {
     const {count} = await this.get('SELECT count(*) as count FROM users');
     return count;
+  },
+
+  /**
+   * Get a setting or return undefined
+   * @param {String} key
+   * @return {Promise<Object?>} value
+   */
+  getSetting: async function(key) {
+    const res = await this.get('SELECT value FROM settings WHERE key=?', key);
+    console.log('getSetting', res);
+
+    if (!res) {
+      return;
+    }
+
+    const {value} = res;
+    if (typeof value === 'undefined') {
+      return value;
+    } else {
+      return JSON.parse(value);
+    }
+  },
+
+  /**
+   * Set a setting. Assumes that the only access to the database is
+   * single-threaded
+   *
+   * @param {String} key
+   * @param {Object} value
+   * @return {Promise}
+   */
+  setSetting: async function(key, value) {
+    value = JSON.stringify(value);
+    let currentValue = await this.getSetting(key);
+    if (typeof currentValue === 'undefined') {
+      return this.run('INSERT INTO settings (key, value) VALUES (?, ?)',
+                      [key, value]);
+    } else {
+      return this.run('UPDATE settings SET value=? WHERE key=?', [value, key]);
+    }
   },
 
   /**
