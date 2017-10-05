@@ -131,7 +131,7 @@ describe('command/', function() {
       .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({ text: 'turn the light on'});
+      .send({ text: 'turn on the kitchen'});
     expect(res.status).toEqual(201);
   });
 
@@ -161,7 +161,7 @@ describe('command/', function() {
         .post(Constants.COMMANDS_PATH)
         .set(...headerAuth(jwt))
         .set('Accept', 'application/json')
-        .send({ text: 'turn the light on'});
+        .send({ text: 'turn on the bathroom'});
       throw new Error('Should have failed to create new thing');
     } catch(err) {
       expect(err.response.status).toEqual(404);
