@@ -7,7 +7,7 @@
 const assert = require('assert');
 const e2p = require('event-to-promise');
 const fetch = require('node-fetch');
-const storage = require('node-persist');
+const Settings = require('../models/settings');
 const winston = require('winston');
 const EventEmitter = require('events').EventEmitter;
 const WebSocket = require('ws');
@@ -67,7 +67,7 @@ class Property extends EventEmitter {
    * @return {String} full property href
    */
   async getHref() {
-    let href = await storage.getItem('RulesEngine.gateway') + this.href;
+    let href = await Settings.get('RulesEngine.gateway') + this.href;
     return href;
   }
 
@@ -75,7 +75,7 @@ class Property extends EventEmitter {
    * @return {Promise<Object>} headers for JWT bearer auth
    */
   async headerAuth() {
-    const jwt = await storage.getItem('RulesEngine.jwt');
+    const jwt = await Settings.get('RulesEngine.jwt');
     if (jwt) {
       return {
         Authorization: 'Bearer ' + jwt
@@ -122,8 +122,8 @@ class Property extends EventEmitter {
 
   async start() {
     const thingHref = this.href.split('/properties')[0];
-    const jwt = await storage.getItem('RulesEngine.jwt');
-    const gateway = await storage.getItem('RulesEngine.gateway') ;
+    const jwt = await Settings.get('RulesEngine.jwt');
+    const gateway = await Settings.get('RulesEngine.gateway');
     const wsHref = gateway.replace(/^http/, 'ws') + thingHref +
       '?jwt=' + jwt;
 

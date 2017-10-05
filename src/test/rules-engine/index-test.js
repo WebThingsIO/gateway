@@ -1,6 +1,5 @@
-const storage = require('node-persist');
-
 const {server, chai, mockAdapter} = require('../common');
+const Settings = require('../../models/settings');
 
 const pFinal = require('../promise-final');
 const {
@@ -126,7 +125,7 @@ const mixedTestRule = {
 };
 
 describe('rules engine', function() {
-  let ruleId = null, jwt;
+  let ruleId = null, jwt, gatewayHref;
 
   async function addDevice(desc) {
     const {id} = desc;
@@ -150,8 +149,13 @@ describe('rules engine', function() {
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-    // jest's lifecycle is weird and invalidates the engine's first JWT
-    await storage.setItem('RulesEngine.jwt', jwt);
+    // common.js clears settings after every test so we need to restore the
+    // rules engine's
+    await Settings.set('RulesEngine.jwt', jwt);
+    if (!gatewayHref) {
+      gatewayHref = await Settings.get('RulesEngine.gateway');
+    }
+    await Settings.set('RulesEngine.gateway', gatewayHref);
     await addDevice(thingLight1);
     await addDevice(thingLight2);
     await addDevice(thingLight3);

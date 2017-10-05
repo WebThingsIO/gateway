@@ -5,8 +5,7 @@
  */
 
 const PromiseRouter = require('express-promise-router');
-const config = require('config');
-const storage = require('node-persist');
+const Settings = require('../models/settings');
 const winston = require('winston');
 
 const APIError = require('./APIError');
@@ -19,12 +18,6 @@ const index = PromiseRouter();
 
 winston.cli();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-function storageInit() {
-  return storage.init({
-    dir: config.get('settings.directory')
-  });
-}
 
 let engine = new Engine();
 
@@ -100,11 +93,8 @@ index.delete('/:id', async function(req, res) {
 });
 
 index.configure = async function(gatewayHref) {
-  if (!storage.setItem) {
-    await storageInit();
-  }
-  await storage.setItem('RulesEngine.gateway', gatewayHref);
-  await storage.setItem('RulesEngine.jwt', await JSONWebToken.issueToken(-1));
+  await Settings.set('RulesEngine.gateway', gatewayHref);
+  await Settings.set('RulesEngine.jwt', await JSONWebToken.issueToken(-1));
 
   await Database.open();
   await engine.getRules();
