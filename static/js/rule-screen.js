@@ -8,7 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* global API, DevicePropertyBlock, Gateway, Rule, RuleUtils, page */
+/* global API, DevicePropertyBlock, Gateway, Rule, RulePartBlock, RuleUtils,
+   page */
 
 'use strict';
 
@@ -100,8 +101,14 @@ const RuleScreen = {
 
     let x = deviceRect.left;
     let y = deviceRect.top;
-    let newBlock = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
-      x, y);
+    let newBlock;
+    if (thing === 'IFTTT Hook') {
+      newBlock = new RulePartBlock(this.ruleArea, this.rule, thing,
+                                   '/images/if.svg', x, y);
+    } else {
+      newBlock = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
+                                         x, y);
+    }
 
     newBlock.draggable.onDown(event);
   },
@@ -111,33 +118,41 @@ const RuleScreen = {
    * @param {ThingDescription} thing
    * @return {Element}
    */
-  makeDeviceBlock: function(thing) {
+  makeRulePartBlockTemplate: function(name, icon) {
     let elt = document.createElement('div');
     elt.classList.add('device');
 
     elt.innerHTML = `<div class="device-block">
-      <img class="device-icon" src="/images/onoff.svg" width="48px"
+      <img class="device-icon" src="${icon}" width="48px"
            height="48px"/>
     </div>
-    <p>${thing.name}</p>`;
+    <p>${name}</p>`;
 
     return elt;
   },
 
   /**
-   * Instantiate a DevicePropertyBlock
+   * Instantiate a RulePartBlock
    * @param {'trigger'|'effect'} role
    * @param {number} x
    * @param {number} y
    */
-  makeDevicePropertyBlock: function(role, x, y) {
-    let thing = this.gateway.things.filter(
-      RuleUtils.byProperty(this.rule[role].property)
-    )[0];
-    let block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
+  makeRulePartBlock: function(role, x, y) {
     let rulePart = {};
     rulePart[role] = this.rule[role];
-    block.setRulePart(rulePart);
+    if (this.rule[role].type.startsWith('IfThisThenThat')) {
+      let block = new RulePartBlock(this.ruleArea, this.rule,
+                                    'IFTTT Hook', '/images/if.svg',
+                                    x, y);
+      block.setRulePart(rulePart);
+    } else {
+      let thing = this.gateway.things.filter(
+        RuleUtils.byProperty(this.rule[role].property)
+      )[0];
+      let block = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
+                                          x, y);
+      block.setRulePart(rulePart);
+    }
   },
 
   showConnection: function() {
@@ -211,7 +226,7 @@ const RuleScreen = {
       this.hideConnection();
     }
 
-    if (!document.querySelector('.device-property-block')) {
+    if (!document.querySelector('.rule-part-block')) {
       this.onboardingHint.classList.remove('hidden');
     } else {
       this.onboardingHint.classList.add('hidden');
@@ -240,14 +255,24 @@ const RuleScreen = {
 
     this.gateway.readThings().then(things => {
       this.devicesList.querySelectorAll('.device').forEach(remove);
+
       for (let thing of things) {
-        let elt = this.makeDeviceBlock(thing);
+        let elt = this.makeRulePartBlockTemplate(thing.name,
+                                                 '/images/onoff.svg');
         elt.addEventListener('mousedown',
           this.onDeviceBlockDown.bind(this, thing));
         elt.addEventListener('touchstart',
           this.onDeviceBlockDown.bind(this, thing));
         this.devicesList.appendChild(elt);
       }
+      let iftttElt = this.makeRulePartBlockTemplate('IFTTT Hook',
+                                                    '/images/if.svg');
+      iftttElt.addEventListener('mousedown',
+        this.onDeviceBlockDown.bind(this, 'IFTTT Hook'));
+      iftttElt.addEventListener('touchstart',
+        this.onDeviceBlockDown.bind(this, 'IFTTT Hook'));
+      this.devicesList.appendChild(iftttElt);
+
       this.onWindowResize();
     }).then(function() {
       return rulePromise;
@@ -255,7 +280,7 @@ const RuleScreen = {
       this.rule = new Rule(this.gateway, ruleDesc,
         this.onRuleUpdate.bind(this));
 
-      this.ruleArea.querySelectorAll('.device-property-block').forEach(remove);
+      this.ruleArea.querySelectorAll('.rule-part-block').forEach(remove);
 
       if (ruleDesc) {
         let dragHint = document.getElementById('drag-hint');
@@ -272,20 +297,20 @@ const RuleScreen = {
         let centerY = areaRect.height / 2 - dpbRect.height / 2;
         if (ruleDesc.trigger) {
           if (flexDir === 'column') {
-            this.makeDevicePropertyBlock('trigger', centerX,
+            this.makeRulePartBlock('trigger', centerX,
               areaRect.height / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('trigger',
+            this.makeRulePartBlock('trigger',
               areaRect.width / 4 - dpbRect.width / 2,
               centerY);
           }
         }
         if (ruleDesc.effect) {
           if (flexDir === 'column') {
-            this.makeDevicePropertyBlock('effect', centerX,
+            this.makeRulePartBlock('effect', centerX,
               areaRect.height * 3 / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('effect',
+            this.makeRulePartBlock('effect',
               areaRect.width * 3 / 4 - dpbRect.width / 2,
               centerY);
           }

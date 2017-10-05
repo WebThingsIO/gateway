@@ -166,18 +166,18 @@
   white-space: normal;
 }
 
-.device-property-block {
+.rule-part-block {
   position: absolute;
   border-radius: 1rem;
   font-size: 0;
 }
 
-.device-property-block > .device-block {
+.rule-part-block > .device-block {
   margin: 0;
   border-radius: 1rem 0 0 1rem;
 }
 
-.device-property-info {
+.rule-part-info {
   width: 20rem;
   background: white;
   border-radius: 0 1rem 1rem 0;
@@ -185,7 +185,7 @@
   vertical-align: bottom;
 }
 
-.device-name {
+.rule-part-name {
   color: #4a4a4a;
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
