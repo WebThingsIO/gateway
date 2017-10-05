@@ -210,6 +210,10 @@
   border-radius: 0 0 1rem 0;
 }
 
+.ifttt-property > a {
+  color: white;
+}
+
 .property-select-option {
   background: #4a4a4a;
   height: 5rem;

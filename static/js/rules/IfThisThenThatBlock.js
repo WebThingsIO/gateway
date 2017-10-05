@@ -16,9 +16,9 @@ function IfThisThenThatBlock(ruleArea, rule, x, y) {
 
   this.event = 'gateway';
 
-  let rulePartProperty = this.elt.querySelector('.rule-part-property');
-  rulePartProperty.classList.add('ifttt-property');
-  rulePartProperty.textContent = `Event: ${this.event}`;
+  this.rulePartProperty = this.elt.querySelector('.rule-part-property');
+  this.rulePartProperty.classList.add('ifttt-property');
+  this.updateProperty();
 }
 
 IfThisThenThatBlock.prototype =
@@ -42,6 +42,7 @@ IfThisThenThatBlock.prototype.onUp = function(clientX, clientY) {
         event: this.event
       });
     }
+    this.updateProperty();
   }
 };
 
@@ -51,7 +52,20 @@ IfThisThenThatBlock.prototype.onUp = function(clientX, clientY) {
 IfThisThenThatBlock.prototype.setRulePart = function(rulePart) {
   RulePartBlock.prototype.setRulePart.call(this, rulePart);
   this.event = rulePart.event || 'gateway';
-  let rulePartProperty = this.elt.querySelector('.rule-part-property');
-  rulePartProperty.textContent = `Event: ${this.event}`;
+  this.updateProperty();
+};
+
+/**
+ * Update the block's property based on its role
+ */
+IfThisThenThatBlock.prototype.updateProperty = function() {
+  if (this.role === 'trigger') {
+    this.rulePartProperty.innerHTML =
+      'Hook: <a href="/rules-ifttt">/rules-ifttt</a>';
+  } else if (this.role === 'effect') {
+    this.rulePartProperty.textContent = `Event: ${this.event}`;
+  } else {
+    this.rulePartProperty.textContent = 'Event or Hook';
+  }
 };
 
