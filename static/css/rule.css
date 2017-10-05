@@ -197,6 +197,19 @@
   white-space: nowrap;
 }
 
+.rule-part-property {
+  background: #4a4a4a;
+  height: 5rem;
+}
+
+.ifttt-property {
+  line-height: 5rem;
+  color: white;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+  border-radius: 0 0 1rem 0;
+}
+
 .property-select-option {
   background: #4a4a4a;
   height: 5rem;

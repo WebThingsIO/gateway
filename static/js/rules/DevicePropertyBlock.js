@@ -15,7 +15,7 @@ function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
                      x, y);
   this.thing = thing;
 
-  let rulePartInfo = this.elt.querySelector('.rule-part-info');
+  let rulePartInfo = this.elt.querySelector('.rule-part-property');
 
   this.propertySelect = new PropertySelect(rulePartInfo, rule, thing);
 }

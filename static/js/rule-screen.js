@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* global API, DevicePropertyBlock, Gateway, Rule, RulePartBlock, RuleUtils,
-   page */
+/* global API, DevicePropertyBlock, Gateway, Rule, IfThisThenThatBlock,
+   RuleUtils, page */
 
 'use strict';
 
@@ -103,8 +103,7 @@ const RuleScreen = {
     let y = deviceRect.top;
     let newBlock;
     if (thing === 'IFTTT Hook') {
-      newBlock = new RulePartBlock(this.ruleArea, this.rule, thing,
-                                   '/images/if.svg', x, y);
+      newBlock = new IfThisThenThatBlock(this.ruleArea, this.rule, x, y);
     } else {
       newBlock = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
                                          x, y);
@@ -141,9 +140,7 @@ const RuleScreen = {
     let rulePart = {};
     rulePart[role] = this.rule[role];
     if (this.rule[role].type.startsWith('IfThisThenThat')) {
-      let block = new RulePartBlock(this.ruleArea, this.rule,
-                                    'IFTTT Hook', '/images/if.svg',
-                                    x, y);
+      let block = new IfThisThenThatBlock(this.ruleArea, this.rule, x, y);
       block.setRulePart(rulePart);
     } else {
       let thing = this.gateway.things.filter(

@@ -147,7 +147,7 @@ Rule.prototype.toTriggerHumanDescription = function() {
  * @return {String}
  */
 Rule.prototype.toEffectHumanDescription = function() {
-  if (this.trigger.type === 'IfThisThenThatEffect') {
+  if (this.effect.type === 'IfThisThenThatEffect') {
     return 'send request to IFTTT maker hook';
   }
 

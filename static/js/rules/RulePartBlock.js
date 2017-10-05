@@ -27,6 +27,7 @@ function RulePartBlock(ruleArea, rule, name, icon, x, y) {
       <h3 class="rule-part-name">
         ${name}
       </h3>
+      <div class="rule-part-property"></div>
     </div>`;
   this.deviceBlock = this.elt.querySelector('.device-block');
 
