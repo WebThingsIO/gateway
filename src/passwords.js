@@ -7,6 +7,12 @@
  */
 
 const bcrypt = require('bcryptjs');
+const config = require('config');
+
+let rounds;
+if (config.has('bcryptRounds')) {
+  rounds = config.get('bcryptRounds');
+}
 
 module.exports = {
   /**
@@ -15,7 +21,7 @@ module.exports = {
    * @return {Promise<String>} hashed password
    */
   hash: function(password) {
-    return bcrypt.hash(password, 10);
+    return bcrypt.hash(password, rounds);
   },
 
   /**
@@ -26,7 +32,7 @@ module.exports = {
    * @return {String} hashed password
    */
   hashSync: function(password) {
-    return bcrypt.hashSync(password, 10);
+    return bcrypt.hashSync(password, rounds);
   },
 
   /**

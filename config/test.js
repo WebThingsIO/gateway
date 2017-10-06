@@ -40,5 +40,6 @@ module.exports = {
   authentication: {
     enabled: true,
     defaultUser: null
-  }
+  },
+  bcryptRounds: 2
 };
