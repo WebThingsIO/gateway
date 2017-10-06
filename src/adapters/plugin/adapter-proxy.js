@@ -15,8 +15,6 @@ const Adapter = require('../adapter');
 const Constants = require('../adapter-constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
-const fs = require('fs');
-const IpcSocket = require('./ipc');
 
 const DEBUG = false;
 
@@ -26,20 +24,11 @@ const DEBUG = false;
  */
 class AdapterProxy extends Adapter {
 
-  constructor(adapterManager, adapterId, pluginServer) {
+  constructor(adapterManager, adapterId, plugin) {
     super(adapterManager, adapterId);
-    this.pluginServer = pluginServer;
-
-    this.ipcFile = '/tmp/gateway.adapter.' + this.id;
-    this.ipcAddr = 'ipc://' + this.ipcFile;
-
-    if (fs.existsSync(this.ipcFile)) {
-      fs.unlinkSync(this.ipcFile);
-    }
-    this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
-                                   this.onMsg.bind(this));
-    this.ipcSocket.bind(this.ipcAddr);
+    this.plugin = plugin;
     this.deferredMock = null;
+    this.deferredUnload = null;
   }
 
   startPairing(timeoutSeconds) {
@@ -66,98 +55,26 @@ class AdapterProxy extends Adapter {
     this.sendMsg(Constants.CANCEL_REMOVE_THING, {deviceId: device.id});
   }
 
-  onMsg(msg) {
-    var device;
-    var property;
-    var deferredMock;
-    DEBUG && console.log('AdapterProxy: Rcvd Msg', msg);
-
-    switch (msg.messageType) {
-
-      case Constants.ADD_ADAPTER:
-        this.id = msg.data.adapterId;
-        this.name = msg.data.name;
-        this.manager.addAdapter(this);
-        break;
-
-      case Constants.ADAPTER_UNLOADED:
-        this.ipcSocket.close();
-        this.pluginServer.unregisterAdapter(msg.data.adapterId);
-        break;
-
-      case Constants.HANDLE_DEVICE_ADDED:
-        device = new DeviceProxy(this, msg.data);
-        super.handleDeviceAdded(device);
-        break;
-
-      case Constants.HANDLE_DEVICE_REMOVED:
-        device = this.devices[msg.data.id];
-        if (device) {
-          super.handleDeviceRemoved(device);
-        }
-        break;
-
-      case Constants.PROPERTY_CHANGED:
-        device = this.devices[msg.data.deviceId];
-        if (device) {
-          property = device.findProperty(msg.data.propertyName);
-          if (property) {
-            property.doPropertyChanged(msg.data.propertyValue);
-            device.notifyPropertyChanged(property);
-          }
-        }
-        break;
-
-      case Constants.MOCK_ADAPTER_STATE_CLEARED:
-        deferredMock = this.deferredMock;
-        if (!deferredMock) {
-          console.error('mockAdapterStateCleared: No deferredMock');
-        } else {
-          this.deferredMock = null;
-          deferredMock.resolve();
-        }
-        break;
-
-      case Constants.MOCK_DEVICE_ADDED_REMOVED:
-        deferredMock = this.deferredMock;
-        if (!deferredMock) {
-          console.error('mockDeviceAddedRemoved: No deferredMock');
-        } else {
-          this.deferredMock = null;
-          device = this.devices[msg.data.deviceId];
-          if (device) {
-            deferredMock.resolve(device);
-          } else {
-            // For the removal case, the device will have already
-            // been removed, so we create a fake device.
-            deferredMock.resolve({id: msg.data.deviceId});
-          }
-        }
-        break;
-
-      case Constants.MOCK_DEVICE_ADD_REMOVE_FAILED:
-        deferredMock = this.deferredMock;
-        if (!deferredMock) {
-          console.error('No deferredMock');
-        } else {
-          this.deferredMock = null;
-          deferredMock.reject(msg.data.error);
-        }
-        break;
-
-      default:
-        console.error('AdapterProxy: unrecognized msg:', msg);
-        break;
-    }
+  sendMsg(methodType, data) {
+    return this.plugin.sendMsg(methodType, data);
   }
 
-  sendMsg(methodType, data) {
-    var msg = {
-      messageType: methodType,
-      data: data,
-    };
-    DEBUG && console.log('AdapterProxy: sendMsg:', msg);
-    return this.ipcSocket.sendJson(msg);
+  /**
+   * Unloads an adapter.
+   *
+   * @returns a promise which resolves when the adapter has
+   *          finished unloading.
+   */
+  unload() {
+    if (this.deferredUnload) {
+      console.error('AdapterProxy: unload already in progress');
+      return Promise.reject();
+    }
+    this.deferredUnload = new Deferred;
+    this.sendMsg(Constants.UNLOAD_ADAPTER, {
+      adapterId: this.id,
+    });
+    return this.deferredUnload.promise;
   }
 
   // The following methods are added to support using the
@@ -206,6 +123,10 @@ class AdapterProxy extends Adapter {
       return Promise.reject(err);
     }
     this.deferredMock = new Deferred();
+
+    // We need the actual device object when we recolve the promise
+    // so we stash it here since it gets removed under our feet.
+    this.deferredMock.device = this.getDevice(deviceId);
     this.sendMsg(Constants.REMOVE_MOCK_DEVICE, {
       deviceId: deviceId,
     });
@@ -224,13 +145,6 @@ class AdapterProxy extends Adapter {
       deviceId: deviceId,
     });
   }
-
-  unload() {
-    this.sendMsg(Constants.UNLOAD_ADAPTER, {
-      adapterId: this.getId(),
-    });
-  }
-
 }
 
 module.exports = AdapterProxy;

@@ -49,6 +49,9 @@ module.exports = {
     filename: './db.sqlite3',
     removeBeforeOpen: false,
   },
+  ipc: {
+    protocol: 'ipc',
+  },
   settings: {
     directory: './settings', // Directory to store settings in
   },

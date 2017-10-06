@@ -43,6 +43,16 @@ adapterManager.on(Constants.PAIRING_TIMEOUT, () => {
 });
 
 /**
+ * List all known adapters
+ */
+debugController.get('/adapters', (request, response) => {
+  var adapters = adapterManager.getAdapters();
+  response.status(200).json(Array.from(adapters.values()).map(adapter => {
+    return adapter.asDict();
+  }));
+});
+
+/**
  * Add a new device
  */
 debugController.get('/addNewThing', (request, response) => {
@@ -162,6 +172,16 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
 });
 
 /**
+ * Get a list of plugins
+ */
+debugController.get('/plugins', (request, response) => {
+  var plugins = Array.from(adapterManager.pluginServer.plugins.values());
+  response.status(200).json(plugins.map(plugin => {
+    return plugin.asDict();
+  }));
+});
+
+/**
  * Get a list of the things registered with the adapter manager.
  */
 debugController.get('/things', (request, response) => {
@@ -246,6 +266,15 @@ debugController.get('/removeThing/:thingId', (request, response) => {
     console.log('debugController: remove failed:', str);
     response.status(500).send('remove of ' + thingId + ' failed: ' + str);
   });
+});
+
+/**
+ * Unload adapters
+ */
+debugController.get('/unloadAdapters', (request, response) => {
+  console.log('debugController: Unloading Adapters');
+  adapterManager.unloadAdapters();
+  response.status(200).send('');
 });
 
 module.exports = debugController;

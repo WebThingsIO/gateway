@@ -337,7 +337,7 @@ class ZWaveAdapter extends Adapter {
 
   unload() {
     this.zwave.disconnect(this.port.comName);
-    super.unload();
+    return super.unload();
   }
 }
 

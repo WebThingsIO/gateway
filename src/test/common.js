@@ -19,6 +19,51 @@ const e2p = require('event-to-promise');
 const chai = require('./chai');
 global.chai = chai;
 
+const debugJasmine = false;
+
+if (debugJasmine) {
+  // The following debug code can prove to be very useful when
+  // trying to debug interactions between the various jest processes
+  // which are running the tests.
+  jasmine.getEnv().addReporter({
+    jasmineStarted: function(_suiteInfo) {
+      const process = require('process');
+      console.log('=====', process.pid, 'jasmineStarted =====');
+    },
+    jasmineDone: function() {
+      const process = require('process');
+      console.log('=====', process.pid, 'jasmineDone =====');
+    },
+    suiteStarted: function(result) {
+      const process = require('process');
+      console.log('=====', process.pid, 'suiteStarted',
+                  result.description, '=====');
+    },
+    suiteDone: function(result) {
+      const process = require('process');
+      console.log('=====', process.pid, 'suiteDone',
+                  result.description, '=====');
+    },
+    specStarted: function(result) {
+      const process = require('process');
+      console.log('=====', process.pid, 'specStarted',
+                  result.description, '=====');
+    },
+    specDone: function(result) {
+      const process = require('process');
+      console.log('=====', process.pid, 'specDone',
+                  result.description, '=====');
+    },
+  });
+
+  var origConsole = console.log;
+  console.log = function() {
+    let pidStr = ('     ' + process.pid).slice(-5) + ': ';
+    Array.prototype.unshift.call(arguments, pidStr);
+    origConsole.apply(this, arguments);
+  }
+}
+
 expect.extend({
   assert(value, message = 'expected condition to be truthy') {
     const pass = !!value;
@@ -59,7 +104,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  adapterManager.unloadAdapters();
+  await adapterManager.unloadAdapters();
   server.close();
   httpServer.close();
   await Promise.all([

@@ -23,6 +23,9 @@ const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
 
+var appInstance = require('./app-instance');
+appInstance.mark();
+
 // Open the database
 db.open();
 
