@@ -12,6 +12,7 @@
 var RulesScreen = {
   init: function() {
     this.createRuleButton = document.getElementById('create-rule-button');
+    this.createRuleHint = document.getElementById('create-rule-hint');
     this.rulesList = document.getElementById('rules');
     this.gateway = new Gateway();
     this.nextId = 0;
@@ -25,14 +26,17 @@ var RulesScreen = {
       return res.json();
      }).then(fetchedRules => {
        this.rulesList.querySelectorAll('.rule').forEach(elt => {
-         if (elt.id === 'create-rule') {
-           return;
-         }
          elt.parentNode.removeChild(elt);
        });
 
        for (let ruleDesc of fetchedRules) {
          this.addRuleCard(ruleDesc);
+       }
+
+       if (fetchedRules.length === 0) {
+         this.createRuleHint.classList.remove('hidden');
+       } else {
+         this.createRuleHint.classList.add('hidden');
        }
     });
   },
