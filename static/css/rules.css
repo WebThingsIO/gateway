@@ -181,5 +181,17 @@ input:checked + .rule-switch-slider:after {
   background-image: url('../images/add.png');
 }
 
+#create-rule-hint {
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#create-rule-hint.hidden {
+  display: none;
+}
+
 #rules {
   padding-left: 9.6rem;
