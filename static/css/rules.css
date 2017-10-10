@@ -1,3 +1,16 @@
+@media only screen and (max-width: 400px) {
+  html {
+    font-size: 7px;
+  }
+
+  #rules-view > #rules {
+    padding-left: 2rem;
+  }
+
+  #rules-view, #rules {
+    background: #5d9bc7;
+  }
+}
 #rules-view {
   color: white;
   font-family: 'Open Sans', sans-serif;
