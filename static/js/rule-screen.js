@@ -261,9 +261,15 @@ const RuleScreen = {
         let flexDir = window.getComputedStyle(dragHint).flexDirection;
 
         let areaRect = this.ruleArea.getBoundingClientRect();
+        let rem = 10;
+        try {
+          rem = parseFloat(window.getComputedStyle(document.body).fontSize);
+        } catch(e) {
+          console.error(e);
+        }
         let dpbRect = {
-          width: 300,
-          height: 100
+          width: 30 * rem,
+          height: 10 * rem
         };
 
         // Create DevicePropertyBlocks from trigger and effect if applicable
