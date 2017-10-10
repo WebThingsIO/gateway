@@ -342,7 +342,7 @@
   display: none;
 }
 
-@media only screen and (max-width: 700px) and (min-height: 600px) {
+@media only screen and (max-width: 700px) and (min-height: 400px) {
   #drag-hint {
     flex-direction: column;
   }
