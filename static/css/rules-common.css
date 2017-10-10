@@ -31,6 +31,8 @@
 .device-icon {
   margin: 2.7rem;
   padding: 0;
+  width: 4.8rem;
+  height: 4.8rem;
 }
 
 .rule-edit-button, .rule-delete-cancel-button, .rule-delete-confirm-button {

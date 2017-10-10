@@ -116,8 +116,7 @@ const RuleScreen = {
     elt.classList.add('device');
 
     elt.innerHTML = `<div class="device-block">
-      <img class="device-icon" src="/images/onoff.svg" width="48px"
-           height="48px"/>
+      <img class="device-icon" src="/images/onoff.svg"/>
     </div>
     <p>${thing.name}</p>`;
 
