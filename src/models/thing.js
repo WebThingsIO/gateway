@@ -60,10 +60,9 @@ var Thing = function(id, description) {
  * @return {Promise} A promise which resolves with the description set.
  */
 Thing.prototype.setCoordinates = function(x, y) {
-  var description = this.getDescription();
-  description.floorplanX = x;
-  description.floorplanY = y;
-  return Database.updateThing(this.id, description);
+  this.floorplanX = x;
+  this.floorplanY = y;
+  return Database.updateThing(this.id, this.getDescription());
 };
 
 /**
