@@ -55,7 +55,7 @@ var Speech = {
                 x.className.replace('show', ''); }, 3000);
             new Audio(`/audio/${audio}.mp3`).play();
           }
-          document.getElementById('stm-levels').hidden = true;
+          document.getElementById('stm-levels').classList.add('hidden');
           document.getElementById('speech-button').style.backgroundImage =
               `url('/images/microphone.svg')`;
           // sort results to get the one with the highest confidence
@@ -105,7 +105,8 @@ var Speech = {
         } else if (msg.state === 'listening') {
             let mediaStream = this.stm.getmediaStream();
             if (mediaStream) {
-                document.getElementById('stm-levels').hidden = false;
+                document.getElementById('stm-levels')
+                  .classList.remove('hidden');
 
                 // Build the WebAudio graph we'll be using
                 let audioContext = new AudioContext();
@@ -148,7 +149,7 @@ var Speech = {
         const context = levels.getContext('2d');
         context.clearRect(0, 0, levels.width, levels.height);
 
-        if (levels.hidden) {
+        if (levels.classList.contains('hidden')) {
             return; // If we've been hidden, return right away
         }
 
