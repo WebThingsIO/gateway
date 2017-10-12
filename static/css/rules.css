@@ -1,8 +1,4 @@
 @media only screen and (max-width: 600px) {
-  #rules-view > #rules {
-    padding-left: 2rem;
-  }
-
   #rules-view, #rules {
     background: #5d9bc7;
   }
@@ -40,7 +36,7 @@
 .rule {
   position: relative;
   background: #46769C;
-  margin: 1rem;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   width: 40rem;
@@ -193,5 +189,9 @@ input:checked + .rule-switch-slider:after {
 }
 
 #rules {
-  padding-left: 9.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 40rem);
+  grid-gap: 2rem;
+  min-width: 40rem;
+  justify-content: center;
 }
