@@ -262,11 +262,6 @@ const RuleScreen = {
 
         let areaRect = this.ruleArea.getBoundingClientRect();
         let rem = 10;
-        try {
-          rem = parseFloat(window.getComputedStyle(document.body).fontSize);
-        } catch(e) {
-          console.error(e);
-        }
         let dpbRect = {
           width: 30 * rem,
           height: 10 * rem

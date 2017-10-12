@@ -8,12 +8,6 @@
   }
 }
 
-@media only screen and (max-width: 430px) {
-  html {
-    font-size: 7px;
-  }
-}
-
 #rules-view {
   color: white;
   font-family: 'Open Sans', sans-serif;
