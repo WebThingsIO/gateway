@@ -70,7 +70,7 @@ class AdapterProxy extends Adapter {
       console.error('AdapterProxy: unload already in progress');
       return Promise.reject();
     }
-    this.deferredUnload = new Deferred;
+    this.deferredUnload = new Deferred();
     this.sendMsg(Constants.UNLOAD_ADAPTER, {
       adapterId: this.id,
     });
@@ -124,7 +124,7 @@ class AdapterProxy extends Adapter {
     }
     this.deferredMock = new Deferred();
 
-    // We need the actual device object when we recolve the promise
+    // We need the actual device object when we resolve the promise
     // so we stash it here since it gets removed under our feet.
     this.deferredMock.device = this.getDevice(deviceId);
     this.sendMsg(Constants.REMOVE_MOCK_DEVICE, {

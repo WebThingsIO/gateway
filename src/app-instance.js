@@ -1,5 +1,5 @@
 /*
- * app-timestamp.js
+ * app-instance.js
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,7 +7,7 @@
  */
 
 // The way that the jest framework works, it has a pool of
-// processes which each one or more tests. This means that
+// processes which each run one or more tests. This means that
 // there can be multiple process running at the same time.
 //
 // Furthermore, if one of the processes ends, then it may
@@ -25,11 +25,11 @@ const process = require('process');
 class AppInstance {
 
   constructor() {
-    this.timestamp = this.mark();
+    this.mark();
   }
 
   get() {
-    return process.pid + this.timestamp;
+    return process.pid + '-' + this.timestamp;
   }
 
   mark() {
