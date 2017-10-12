@@ -31,6 +31,9 @@ module.exports = {
     filename: ':memory:',
     removeBeforeOpen: false,
   },
+  ipc: {
+    protocol: 'inproc',
+  },
   settings: {
     directory: './test-settings'
   },

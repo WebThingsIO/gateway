@@ -13,10 +13,9 @@
 
 'use strict';
 
-const AdapterProxy = require('./adapter-proxy');
 const Constants = require('../adapter-constants');
-const fs = require('fs');
 const IpcSocket = require('./ipc');
+const Plugin = require('./plugin');
 
 class PluginServer {
 
@@ -24,36 +23,33 @@ class PluginServer {
     this.manager = adapterManager;
 
     this.verbose = verbose;
-    this.adapters = new Map();
+    this.plugins = new Map();
 
-    this.ipcFile = '/tmp/gateway.adapterManager';
-    this.ipcAddr = 'ipc://' + this.ipcFile;
-
-    // In the event that we crashed before, then go ahead and remove
-    // the named pipe, otherwise bind will complain if it already exists.
-    if (fs.existsSync(this.ipcFile)) {
-      fs.unlinkSync(this.ipcFile);
-    }
     this.ipcSocket = new IpcSocket('PluginServer', 'rep',
+                                   'gateway.adapterManager',
                                    this.onMsg.bind(this));
-    this.ipcSocket.bind(this.ipcAddr);
+    this.ipcSocket.bind();
     this.verbose &&
-      console.log('Server bound to', this.ipcAddr);
+      console.log('Server bound to', this.ipcSocket.ipcAddr);
+  }
+
+  addAdapter(adapter) {
+    this.manager.addAdapter(adapter);
   }
 
   onMsg(msg) {
     this.verbose &&
-      console.log('AdapterManagerServer rcvd:', msg);
+      console.log('PluginServer: Rcvd:', msg);
 
     switch (msg.messageType) {
 
-      case Constants.REGISTER_ADAPTER:
-        var adapter = this.registerAdapter(msg.data.adapterId);
+      case Constants.REGISTER_PLUGIN:
+        var plugin = this.registerPlugin(msg.data.pluginId);
         this.ipcSocket.sendJson({
-          messageType: Constants.REGISTER_ADAPTER_REPLY,
+          messageType: Constants.REGISTER_PLUGIN_REPLY,
           data: {
-            adapterId: msg.data.adapterId,
-            ipcAddr: adapter.ipcAddr,
+            pluginId: msg.data.pluginId,
+            ipcBaseAddr: plugin.ipcBaseAddr,
           },
         });
         break;
@@ -61,21 +57,21 @@ class PluginServer {
     }
   }
 
-  registerAdapter(adapterId) {
-    var adapter = this.adapters.get(adapterId);
-    if (adapter) {
-      // This is an adapter that we already know about.
+  registerPlugin(pluginId) {
+    var plugin = this.plugins.get(pluginId);
+    if (plugin) {
+      // This is a plugin that we already know about.
     } else {
-      // We haven't seen this adapter before.
-      adapter = new AdapterProxy(this.manager, adapterId, this);
-      this.adapters.set(adapterId, adapter);
+      // We haven't seen this plugin before.
+      plugin = new Plugin(pluginId, this);
+      this.plugins.set(pluginId, plugin);
     }
-    return adapter;
+    return plugin;
   }
 
-  unregisterAdapter(adapterId) {
-    this.adapters.delete(adapterId);
-    if (this.adapters.size == 0) {
+  unregisterPlugin(pluginId) {
+    this.plugins.delete(pluginId);
+    if (this.plugins.size == 0) {
       this.ipcSocket.close();
     }
   }

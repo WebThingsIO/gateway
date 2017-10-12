@@ -1,28 +1,59 @@
 'use strict';
 
+const config = require('config');
+const fs = require('fs');
 const nanomsg = require('nanomsg');
+
+var appInstance = require('../../app-instance');
 
 const DEBUG = false;
 
 class IpcSocket {
 
-  constructor(name, socketType, onMsg) {
+  constructor(name, socketType, ipcBaseAddr, onMsg) {
     this.name = name;
     this.socket = nanomsg.socket(socketType);
+    this.ipcBaseAddr = ipcBaseAddr;
     this.onMsg = onMsg;
+
+    this.protocol = config.get('ipc.protocol');
+    switch (this.protocol) {
+      case 'ipc':
+        this.ipcFile = '/tmp/' + ipcBaseAddr;
+        break;
+
+      case 'inproc':
+        this.ipcFile = appInstance.get() + '-' +
+                       ipcBaseAddr;
+        break;
+
+      default:
+        var err = 'Unsupported IPC protocol: ' + this.protocol;
+        console.error(err);
+        throw err;
+    }
+    this.ipcAddr = this.protocol + '://' + this.ipcFile;
 
     this.socket.on('data', this.onData.bind(this));
   }
 
-  bind(addr) {
-    return this.socket.bind(addr);
+  bind() {
+    if (this.protocol === 'ipc') {
+      if (fs.existsSync(this.ipcFile)) {
+        fs.unlinkSync(this.ipcFile);
+      }
+    }
+    DEBUG && console.log('IpcSocket:    bind', this.ipcAddr);
+    return this.socket.bind(this.ipcAddr);
   }
 
-  connect(addr) {
-    return this.socket.connect(addr);
+  connect() {
+    DEBUG && console.log('IpcSocket: connect', this.ipcAddr);
+    return this.socket.connect(this.ipcAddr);
   }
 
   close() {
+    DEBUG && console.log('IpcSocket:   close', this.ipcAddr);
     this.socket.close();
   }
 

@@ -18,8 +18,8 @@ const IpcSocket = require('./ipc');
 
 class PluginClient {
 
-  constructor(adapterId, {verbose}={}) {
-    this.adapterId = adapterId;
+  constructor(pluginId, {verbose}={}) {
+    this.pluginId = pluginId;
     this.verbose = verbose;
     this.deferredReply = null;
   }
@@ -33,19 +33,22 @@ class PluginClient {
       return;
     }
 
-    if (msg.messageType === Constants.REGISTER_ADAPTER_REPLY) {
-      this.verbose &&
-        console.log('Registered with PluginServer: ', msg);
-      this.adapterIpcAddr = msg.data.ipcAddr;
+    if (msg.messageType === Constants.REGISTER_PLUGIN_REPLY) {
 
       this.adapterManager = new AdapterManagerProxy(this);
 
-      // Now that we're registered with the server, open the adapter
+      // Now that we're registered with the server, open the plugin
       // specific IPC channel with the server.
-      this.adapterIpcSocket =
-        new IpcSocket('PluginClientAdapter', 'pair',
+      this.pluginIpcBaseAddr = msg.data.ipcBaseAddr;
+      this.pluginIpcSocket =
+        new IpcSocket('PluginClient', 'pair',
+                      this.pluginIpcBaseAddr,
                       this.adapterManager.onMsg.bind(this.adapterManager));
-      this.adapterIpcSocket.connect(this.adapterIpcAddr);
+      this.pluginIpcSocket.connect(this.pluginIpcAddr);
+      this.verbose &&
+        console.log('PluginClient: registered with PluginServer:',
+                    this.pluginIpcSocket.ipcAddr);
+
       var deferredReply = this.deferredReply;
       this.deferredReply = null;
       deferredReply.resolve(this.adapterManager);
@@ -62,23 +65,21 @@ class PluginClient {
     }
     this.deferredReply = new Deferred();
 
-    this.managerIpcFile = '/tmp/gateway.adapterManager';
-    this.managerIpcAddr = 'ipc://' + this.managerIpcFile;
-
-    this.verbose &&
-      console.log('ManagerIpcAddr =', this.managerIpcAddr);
-    this.managerIpcSocket = new IpcSocket('PluginClientServer', 'req',
-                                          this.onManagerMsg.bind(this));
-    this.managerIpcSocket.connect(this.managerIpcAddr);
+    this.managerIpcSocket =
+      new IpcSocket('PluginClientServer', 'req',
+                    'gateway.adapterManager',
+                    this.onManagerMsg.bind(this));
+    this.managerIpcSocket.connect();
 
     // Register ourselves with the server
     this.verbose &&
-      console.log('Registering with server');
+      console.log('Connected to server:', this.managerIpcSocket.ipcAddr,
+                  'registering...');
 
     this.managerIpcSocket.sendJson({
-      messageType: Constants.REGISTER_ADAPTER,
+      messageType: Constants.REGISTER_PLUGIN,
       data: {
-        adapterId: this.adapterId
+        pluginId: this.pluginId
       },
     });
 
@@ -86,17 +87,18 @@ class PluginClient {
   }
 
   sendNotification(methodType, data) {
-    this.adapterIpcSocket.sendJson({
+    data.pluginId = this.pluginId;
+    this.pluginIpcSocket.sendJson({
       messageType: methodType,
       data: data,
     });
   }
 
   unload() {
-    // Wait a small amount of time to allow the adapterUnloaded
+    // Wait a small amount of time to allow the pluginUnloaded
     // message to be processed by the server before closing.
     setTimeout(() => {
-      this.adapterIpcSocket.close();
+      this.pluginIpcSocket.close();
       this.managerIpcSocket.close();
     }, 500);
 

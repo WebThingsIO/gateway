@@ -23,6 +23,10 @@ const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
 
+// The following causes an instance of AppInstance to be created.
+// This is then used in other places (like src/adapters/plugin/ipc.js)
+require('./app-instance');
+
 // Open the database
 db.open();
 

@@ -326,7 +326,7 @@ class AdapterManager extends EventEmitter {
    * Loads a single adapter.
    */
 
-   loadAdapter(adapterManager, adapterId, adapterConfig) {
+  loadAdapter(adapterManager, adapterId, adapterConfig) {
     if (adapterConfig.enabled) {
       console.log('Loading adapters for', adapterId,
                   'from', adapterConfig.path);
@@ -357,14 +357,14 @@ class AdapterManager extends EventEmitter {
     // Load the Adapters
 
     var adaptersConfig = config.get(Constants.ADAPTERS_CONFIG);
-    for (var adapterId in adaptersConfig) {
-      var adapterConfig = adaptersConfig[adapterId];
+    for (let adapterId in adaptersConfig) {
+      let adapterConfig = adaptersConfig[adapterId];
       if (adapterConfig.plugin) {
         if (adapterConfig.plugin === 'test') {
           // This is a special case where we load the adapter
           // directly into the gateway, but we use IPC comms
           // to talk to the adapter (i.e. for testing)
-          var pluginClient = new PluginClient(adapterId, {verbose: false});
+          let pluginClient = new PluginClient(adapterId, {verbose: false});
           pluginClient.register().then(adapterManagerProxy => {
             console.log('Loading adapter', adapterId, 'as plugin');
             this.loadAdapter(adapterManagerProxy, adapterId, adapterConfig);
@@ -419,19 +419,26 @@ class AdapterManager extends EventEmitter {
   /**
    * @method unloadAdapters
    * Unloads all of the loaded adapters.
+   *
+   * @returns a promise which is resolved when all of the adapters
+   *          are unloaded.
    */
   unloadAdapters() {
     if (!this.adaptersLoaded) {
       // The adapters are not currently loaded, no need to unload.
-      return;
-    }
-    // unload the adapters in the reverse of the order that they were loaded.
-    for (var adapterId of Array.from(this.adapters.keys()).reverse()) {
-      var adapter = this.getAdapter(adapterId);
-      console.log('Unloading', adapter.name);
-      adapter.unload();
+      return Promise.resolve();
     }
     this.adaptersLoaded = false;
+
+    let unloadPromises = [];
+    // unload the adapters in the reverse of the order that they were loaded.
+    for (let adapterId of Array.from(this.adapters.keys()).reverse()) {
+      let adapter = this.getAdapter(adapterId);
+      console.log('Unloading', adapter.name);
+      unloadPromises.push(adapter.unload());
+      this.adapters.delete(adapterId);
+    }
+    return Promise.all(unloadPromises);
   }
 
   /**
@@ -439,7 +446,7 @@ class AdapterManager extends EventEmitter {
    *
    * Returns a promise which resolves to the adapter with the indicated id.
    * This function is really only used to support testing and
-   * ensure that tests don't proceed until 
+   * ensure that tests don't proceed until
    */
   waitForAdapter(adapterId) {
     var adapter = this.getAdapter(adapterId);
@@ -455,7 +462,7 @@ class AdapterManager extends EventEmitter {
       deferredWait = new Deferred();
       this.deferredWaitForAdapter.set(adapterId, deferredWait);
     }
-    
+
     return deferredWait.promise;
   }
 }

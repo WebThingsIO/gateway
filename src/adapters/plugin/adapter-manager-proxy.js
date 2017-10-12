@@ -52,8 +52,10 @@ class AdapterManagerProxy extends EventEmitter {
    */
   handleDeviceAdded(device) {
     DEBUG && console.log('AdapterManagerProxy: handleDeviceAdded:', device.id);
+    var deviceDict = device.asDict();
+    deviceDict.adapterId = device.adapter.id;
     this.pluginClient.sendNotification(
-      Constants.HANDLE_DEVICE_ADDED, device.asDict());
+      Constants.HANDLE_DEVICE_ADDED, deviceDict);
   }
 
   /**
@@ -65,6 +67,7 @@ class AdapterManagerProxy extends EventEmitter {
                          device.id);
     this.pluginClient.sendNotification(
       Constants.HANDLE_DEVICE_REMOVED, {
+        adapterId: device.adapter.id,
         id: device.id,
       });
   }
@@ -99,6 +102,10 @@ class AdapterManagerProxy extends EventEmitter {
         this.pluginClient.sendNotification(Constants.ADAPTER_UNLOADED, {
           adapterId: adapter.id,
         });
+        return;
+
+      case Constants.UNLOAD_PLUGIN:
+        this.pluginClient.sendNotification(Constants.PLUGIN_UNLOADED, {});
         this.pluginClient.unload();
         return;
 
@@ -116,26 +123,30 @@ class AdapterManagerProxy extends EventEmitter {
           .then(device => {
             this.pluginClient.sendNotification(
               Constants.MOCK_DEVICE_ADDED_REMOVED, {
+                adapterId: adapter.id,
                 deviceId: device.id,
               });
           }).catch(err => {
             this.pluginClient.sendNotification(
               Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
+                adapterId: adapter.id,
                 error: err,
               });
           });
         return;
 
-      case Constants.REMOVE_NOCK_DEVICE:
+      case Constants.REMOVE_MOCK_DEVICE:
         adapter.removeDevice(msg.data.deviceId)
         .then(device => {
           this.pluginClient.sendNotification(
             Constants.MOCK_DEVICE_ADDED_REMOVED, {
+              adapterId: adapter.id,
               deviceId: device.id,
             });
         }).catch(err => {
           this.pluginClient.sendNotification(
             Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
+              adapterId: adapter.id,
               error: err,
             });
         });
@@ -208,6 +219,7 @@ class AdapterManagerProxy extends EventEmitter {
    */
   sendPropertyChangedNotification(property) {
     this.pluginClient.sendNotification(Constants.PROPERTY_CHANGED, {
+      adapterId: property.device.adapter.id,
       deviceId: property.device.id,
       propertyName: property.name,
       propertyValue: property.value,

@@ -111,8 +111,15 @@ class Adapter {
                 'cancelRemoveThing(', device.id, ')');
   }
 
+  /**
+   * Unloads an adapter.
+   *
+   * @returns a promise which resolves when the adapter has
+   *          finished unloading.
+   */
   unload() {
     console.log('Adapter:', this.name, 'unloaded');
+    return Promise.resolve();
   }
 }
 
