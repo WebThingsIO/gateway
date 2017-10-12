@@ -194,4 +194,5 @@ input:checked + .rule-switch-slider:after {
   grid-gap: 2rem;
   min-width: 40rem;
   justify-content: center;
+  padding-bottom: 9.6rem;
 }
