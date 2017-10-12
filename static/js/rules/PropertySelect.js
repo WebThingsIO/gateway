@@ -3,16 +3,16 @@
  * thing's properties. In a perfect world this would be a styled select, but
  * this is not a perfect world.
  * @constructor
- * @param {Element} parent
+ * @param {Element} container
  * @param {Rule} rule
  * @param {ThingDescription} thing
  */
-function PropertySelect(parent, rule, thing) {
+function PropertySelect(container, rule, thing) {
   this.rule = rule;
   this.thing = thing;
   this.role = '';
 
-  this.elt = document.createElement('div');
+  this.elt = container;
   this.elt.classList.add('property-select');
 
   this.onClick = this.onClick.bind(this);
@@ -27,8 +27,6 @@ function PropertySelect(parent, rule, thing) {
   this.elt.addEventListener('touchstart', function(e) {
     e.stopPropagation();
   });
-
-  parent.appendChild(this.elt);
 }
 
 /**

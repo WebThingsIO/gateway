@@ -4,19 +4,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-const Property = require('../Property');
-
 /**
  * Effect - The outcome of a Rule once triggered
  */
 class Effect {
   /**
    * Create an Effect based on a wire-format description
-   * @param {EffectDescription} desc
+   * @param {EffectDescription} _desc
    */
-  constructor(desc) {
+  constructor(_desc) {
     this.type = this.constructor.name;
-    this.property = new Property(desc.property);
   }
 
   /**
@@ -24,8 +21,7 @@ class Effect {
    */
   toDescription() {
     return {
-      type: this.type,
-      property: this.property.toDescription()
+      type: this.type
     };
   }
 

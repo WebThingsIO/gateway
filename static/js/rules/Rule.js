@@ -114,6 +114,10 @@ const RuleUtils = {
  * @return {String}
  */
 Rule.prototype.toTriggerHumanDescription = function() {
+  if (this.trigger.type === 'IfThisThenThatTrigger') {
+    return 'IFTTT maker hook';
+  }
+
   let triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
   )[0];
@@ -125,7 +129,7 @@ Rule.prototype.toTriggerHumanDescription = function() {
       triggerStr += 'not ';
     }
     triggerStr += this.trigger.property.name;
-  } else {
+  } else if (this.trigger.type === 'LevelTrigger') {
     triggerStr += `${this.trigger.property.name} is `;
     if (this.trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
@@ -143,6 +147,10 @@ Rule.prototype.toTriggerHumanDescription = function() {
  * @return {String}
  */
 Rule.prototype.toEffectHumanDescription = function() {
+  if (this.effect.type === 'IfThisThenThatEffect') {
+    return 'send request to IFTTT maker hook';
+  }
+
   let effectThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.effect.property)
   )[0];

@@ -84,6 +84,10 @@ var Router = {
     let rulesEngine = require('./rules-engine/index.js');
     app.use(API_PREFIX + Constants.RULES_PATH, auth, rulesEngine);
 
+    const IfThisThenThatListener =
+      require('./rules-engine/triggers/IfThisThenThatListener.js');
+    app.use(API_PREFIX + Constants.RULES_IFTTT_PATH,
+      IfThisThenThatListener.router);
   }
 };
 

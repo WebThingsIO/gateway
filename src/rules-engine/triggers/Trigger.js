@@ -23,6 +23,19 @@ class Trigger extends EventEmitter {
       type: this.type
     };
   }
+
+  /**
+   * Start the Trigger if necessary
+   */
+  start() {
+  }
+
+  /**
+   * Stop the Trigger
+   */
+  stop() {
+  }
+
 }
 
 module.exports = Trigger;

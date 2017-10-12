@@ -44,5 +44,6 @@ module.exports = {
     enabled: true,
     defaultUser: null
   },
-  bcryptRounds: 2
+  bcryptRounds: 2,
+  iftttKey: 'no-key'
 };

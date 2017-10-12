@@ -6,6 +6,7 @@
 
 const effects = {
   Effect: require('./Effect'),
+  IfThisThenThatEffect: require('./IfThisThenThatEffect'),
   SetEffect: require('./SetEffect'),
   PulseEffect: require('./PulseEffect')
 };
