@@ -1,3 +1,9 @@
+@media only screen and (max-width: 730px) {
+  #rules-view, #rules {
+    background: #5d9bc7;
+  }
+}
+
 #rules-view {
   color: white;
   font-family: 'Open Sans', sans-serif;
@@ -30,7 +36,7 @@
 .rule {
   position: relative;
   background: #46769C;
-  margin: 1rem;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
   width: 40rem;
@@ -135,6 +141,7 @@ input:checked + .rule-switch-slider:after {
   top: -1.8rem;
   right: -1.8rem;
   background: url(/images/delete-button.png);
+  background-size: 3.6rem;
   width: 3.6rem;
   height: 3.6rem;
   padding: 0;
@@ -194,4 +201,10 @@ input:checked + .rule-switch-slider:after {
 }
 
 #rules {
-  padding-left: 9.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 40rem);
+  grid-gap: 2rem;
+  min-width: 40rem;
+  justify-content: center;
+  padding-bottom: 9.6rem;
+}

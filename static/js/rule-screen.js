@@ -116,8 +116,7 @@ const RuleScreen = {
     elt.classList.add('device');
 
     elt.innerHTML = `<div class="device-block">
-      <img class="device-icon" src="/images/onoff.svg" width="48px"
-           height="48px"/>
+      <img class="device-icon" src="/images/onoff.svg"/>
     </div>
     <p>${thing.name}</p>`;
 
@@ -262,9 +261,10 @@ const RuleScreen = {
         let flexDir = window.getComputedStyle(dragHint).flexDirection;
 
         let areaRect = this.ruleArea.getBoundingClientRect();
+        let rem = 10;
         let dpbRect = {
-          width: 300,
-          height: 100
+          width: 30 * rem,
+          height: 10 * rem
         };
 
         // Create DevicePropertyBlocks from trigger and effect if applicable
