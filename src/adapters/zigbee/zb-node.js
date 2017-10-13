@@ -277,9 +277,12 @@ class ZigBeeNode extends Device {
     this.adapter.sendFrames(frames);
   }
 
-  sendZclFrame(property, zclData) {
+  sendZclFrameWaitExplicitRxResolve(property, zclData) {
     var frame = this.makeZclFrame(property, zclData);
-    this.adapter.sendFrame(frame);
+    this.adapter.sendFrameWaitFrameResolve(frame, {
+      type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+      remote64: frame.destination64,
+    }, property);
   }
 }
 
