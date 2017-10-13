@@ -43,35 +43,35 @@ class ZigBeeProperty extends Property {
    * the value passed in.
    */
   setValue(value) {
-    var deferredSet = new Deferred();
-    if (this.deferredSet) {
-      deferredSet.reject('ZigBee: setProperty property ' + this.name +
-                         ' already has a set in progress.');
+    var deferredSet = this.deferredSet;
+    if (!deferredSet) {
+      deferredSet = new Deferred();
+      this.deferredSet = deferredSet;
+    }
+
+    this.setCachedValue(value);
+
+    let cmd = this.cmd[value];
+
+    console.log('ZigBee: setProperty property:', this.name,
+                'for:', this.device.name,
+                'profileId:', utils.hexStr(this.profileId, 4),
+                'endpoint:', this.endpoint,
+                'clusterId:', utils.hexStr(this.clusterId, 4),
+                'cmd:', cmd,
+                'value:', value);
+
+    if (cmd === undefined) {
+      let err = 'ZigBee: unrecognized value: "' + value + '"';
+      console.error('ZigBee: unrecognized value: "' + value + '"');
+      deferredSet.reject(err);
     } else {
-      // We don't update the cached value here, but rather
-      // wait for the valueChanged notificaton.
-
-      var cmd = this.cmd[value];
-
-      console.log('ZigBee: setProperty property:', this.name,
-                  'for:', this.device.name,
-                  'profileId:', utils.hexStr(this.profileId, 4),
-                  'endpoint:', this.endpoint,
-                  'clusterId:', utils.hexStr(this.clusterId, 4),
-                  'cmd:', cmd,
-                  'value:', value);
-
-      if (cmd === undefined) {
-        deferredSet.reject('ZigBee: unrecognized value: "' + value + '"');
-      } else {
-        this.device.sendZclFrame(
-          this,
-          {
-            frameCntl: { frameType: 1 },
-            cmd: cmd,
-          });
-        this.deferredSet = deferredSet;
-      }
+      this.device.sendZclFrameWaitExplicitRxResolve(
+        this,
+        {
+          frameCntl: { frameType: 1 },
+          cmd: cmd,
+        });
     }
     return deferredSet.promise;
   }

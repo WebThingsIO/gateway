@@ -59,6 +59,7 @@ function serialWriteError(error) {
 const SEND_FRAME = 0x01;
 const WAIT_FRAME = 0x02;
 const EXEC_FUNC = 0x03;
+const RESOLVE_SET_PROPERTY = 0x04;
 
 class Command {
   constructor(cmdType, cmdData) {
@@ -990,6 +991,21 @@ class ZigBeeAdapter extends Adapter {
     ]);
   }
 
+  sendFrameWaitFrame(sendFrame, waitFrame) {
+    this.queueCommands([
+      new Command(SEND_FRAME, sendFrame),
+      new Command(WAIT_FRAME, waitFrame),
+    ]);
+  }
+
+  sendFrameWaitFrameResolve(sendFrame, waitFrame, property) {
+    this.queueCommands([
+      new Command(SEND_FRAME, sendFrame),
+      new Command(WAIT_FRAME, waitFrame),
+      new Command(RESOLVE_SET_PROPERTY, property),
+    ]);
+  }
+
   //-------------------------------------------------------------------------
 
   handleDeviceAdded(node) {
@@ -1139,6 +1155,15 @@ class ZigBeeAdapter extends Adapter {
             console.log('EXEC_FUNC', func.name);
           }
           func.apply(ths, args);
+          break;
+
+        case RESOLVE_SET_PROPERTY:
+          var property = cmd.cmdData;
+          var deferredSet = property.deferredSet;
+          if (deferredSet) {
+            property.deferredSet = null;
+            deferredSet.resolve(property.value);
+          }
           break;
       }
     }
