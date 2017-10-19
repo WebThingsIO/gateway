@@ -14,6 +14,7 @@ module.exports = {
     https: 0, // 0 = find a free open port
     http: 0,
   },
+  behindForwarding: false,
   adapters : {
     Mock: {
       enabled: true,

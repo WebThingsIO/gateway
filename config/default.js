@@ -16,6 +16,9 @@ module.exports = {
     https: 4443,
     http:  8080
   },
+  // Whether the gateway is behind port forwarding and should use simplified
+  // port-free urls
+  behindForwarding: true,
   adapters : {
     gpio: {
       enabled: false,
