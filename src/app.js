@@ -222,7 +222,8 @@ function createRedirectApp(port) {
       return;
     }
     let httpsUrl = 'https://' + request.hostname;
-    if (port !== 443) {
+    // If we're behind forwarding we can redirect to the port-free https url
+    if (port !== 443 && !config.get('behindForwarding')) {
       httpsUrl += ':' + port
     }
     httpsUrl += request.url;
