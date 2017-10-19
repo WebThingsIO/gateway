@@ -101,8 +101,7 @@ SettingsController.post('/subscribe', function (request, response) {
         return new Promise((resolve) => {
             // ok now that we have a challenge, we call our gateway to setup
             // the TXT record
-            fetch('http://' + config.get('ssltunnel.registration_endpoint') + 
-                ':' + config.get('ssltunnel.registration_endpoint_port') +
+            fetch('http://' + config.get('ssltunnel.registration_endpoint') +
                 '/dnsconfig?token=' + token + '&challenge=' + keyAuthDigest)
                 .catch(function(e) {
                     returnError(e);
@@ -116,9 +115,8 @@ SettingsController.post('/subscribe', function (request, response) {
         });
     }
 
-    fetch('http://' + config.get('ssltunnel.registration_endpoint') +
-        ':' + config.get('ssltunnel.registration_endpoint_port') +
-        '/subscribe?name=' + subdomain)
+    fetch('http://' + config.get('ssltunnel.registration_endpoint')
+        + '/subscribe?name=' + subdomain)
         .then(function (res) {
             return res.text();
         })
