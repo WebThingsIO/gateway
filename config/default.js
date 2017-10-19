@@ -66,11 +66,9 @@ module.exports = {
   ssltunnel: {
     enabled: true,
     registration_endpoint: 'api.mozilla-iot.org',
-    registration_endpoint_port: 81,    
     domain: 'mozilla-iot.org',
     pagekite_cmd: './pagekite.py',
-    port: 443,
-    http_port: 80    
+    port: 443
   },
   bcryptRounds: 2
 };
