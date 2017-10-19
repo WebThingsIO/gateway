@@ -26,8 +26,12 @@ var TunnelService = {
             spawnSync(config.get('ssltunnel.pagekite_cmd'),
                 ['--clean', '--frontend=' + endpoint + ':' +
                     config.get('ssltunnel.port'),
+                    '--frontend=' + endpoint + ':' +
+                    config.get('ssltunnel.http_port'),
                     '--service_on=https:' + endpoint +
-                    ':localhost:'+config.get('ports.https')+':moziot']);
+                    ':localhost:'+config.get('ports.https')+':moziot',
+                    '--service_on=http:' + endpoint +
+                    ':localhost:'+config.get('ports.http')+':moziot']);
         // TODO: we should replace the hardcoded secret by the token after
         // change the server
         this.pagekiteProcess.stdout.on('data', (data) => {
