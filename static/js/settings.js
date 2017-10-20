@@ -509,8 +509,7 @@ var SettingsScreen = {
       function checkStatus() {
         API.getUpdateStatus().then(function() {
           if (isDown) {
-            SettingsScreen.showUpdateSettings();
-            updateNow.textContent = 'Update Now';
+            window.location.reload(true);
           } else {
             setTimeout(checkStatus, 5000);
           }
