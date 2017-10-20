@@ -8,10 +8,9 @@
 
 'use strict';
 
-var config = require('config');
 var fs = require('fs');
 
-function maybeLoadGpioAdapter(adapterManager) {
+function maybeLoadGpioAdapter(adapterManager, adapterId, adapterConfig) {
   // Verify that we have write permissions to /sys/class/gpio/export. Under
   // regular linux, this file is owned by root, so the server would need to
   // run as the root user. On the Raspberry Pi, being a member of the gpio
@@ -27,7 +26,7 @@ function maybeLoadGpioAdapter(adapterManager) {
   }
 
   var loadGpioAdapter = require('./gpio-adapter');
-  loadGpioAdapter(adapterManager, config.get('adapters.gpio'));
+  loadGpioAdapter(adapterManager, adapterId, adapterConfig);
 }
 
 module.exports = maybeLoadGpioAdapter;
