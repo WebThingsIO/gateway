@@ -44,7 +44,13 @@ createDomainButton.addEventListener('click', function() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        return response.text();
+        if (response.statusText.indexOf('UnavailableName') > -1){
+            throw new
+                Error('This subdomain is already being used. ' +
+                'Please choose a different one.');
+        } else {
+            return response.text();
+        }
     }).then(function (body){
         if (body) {
             displayMessage('Success! Please wait while we redirect you...',
