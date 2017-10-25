@@ -29,6 +29,20 @@ function displayMessage(errorMsg, type){
     }
 }
 
+subdomain.addEventListener('input', function() {
+    // Ensure that subdomain is valid:
+    // - Contains only a-z, 0-9, and hyphens, but does not start or end with
+    //   hyphen.
+    // - Is not equal to "api", as that's reserved.
+    const val = subdomain.value;
+    const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/, 'i');
+    if (!re.test(val) || val === 'api') {
+        createDomainButton.disabled = true;
+    } else {
+        createDomainButton.disabled = false;
+    }
+});
+
 createDomainButton.addEventListener('click', function() {
     displayMessage('Processing...', 'message');
     // call the settings controller to subscribe the domain in the gateway
