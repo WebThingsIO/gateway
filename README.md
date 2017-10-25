@@ -45,9 +45,9 @@ $ nvm alias default v7.10.1
 Verify that node and npm have been installed:
 ```
 $ npm --version
-4.1.2
+4.2.0
 $ node --version
-v7.7.2
+v7.10.1
 ```
 
 ### Install node (if you didn't use nvm)
