@@ -74,13 +74,16 @@ $ cd
 $ git clone https://github.com/OpenZWave/open-zwave.git
 $ cd open-zwave
 $ make && sudo make install
+$ sudo ldconfig
 ```
 
 Note: You may need to manually add `/usr/local/lib` to your `LD_LIBRARY_PATH` enviroment variable by adding the following to your `~/.profile` file:
 
 `export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH`
 
-(You can run this on the command line as well so it has immediate effect).
+You can run this on the command line as well so it has immediate effect. After
+running it you should run `sudo ldconfig` again to make sure the configuration
+change goes through.
 
 ## Download and Build Gateway
 
