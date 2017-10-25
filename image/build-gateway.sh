@@ -61,8 +61,10 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
+npm install -g yarn
+
 # Build the node modules, cross compiling any native code.
-(cd ${GATEWAY}; npm --arch=${ARCH} install --target_arch=arm)
+(cd ${GATEWAY}; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm)
 
 set -x
 
