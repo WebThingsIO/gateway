@@ -29,23 +29,60 @@ function displayMessage(errorMsg, type){
     }
 }
 
-subdomain.addEventListener('input', function() {
-    // Ensure that subdomain is valid:
-    // - Contains only a-z, 0-9, and hyphens, but does not start or end with
-    //   hyphen.
-    // - Is not equal to "api", as that's reserved.
-    const val = subdomain.value;
-    const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/, 'i');
+/**
+ * Ensure that subdomain is valid:
+ * - Contains only a-z, 0-9, and hyphens, but does not start or end with
+ *   hyphen.
+ * - Is not equal to "api", as that's reserved.
+ */
+function validateDomain() {
+    const val = subdomain.value.toLowerCase();
+    const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
     if (!re.test(val) || val === 'api') {
-        createDomainButton.disabled = true;
-    } else {
-        createDomainButton.disabled = false;
+        return false;
     }
-});
 
-createDomainButton.addEventListener('click', function() {
+    return true;
+}
+
+/**
+ * Ensure that email is at least somewhat valid.
+ */
+function validateEmail() {
+    const val = email.value;
+    // eslint-disable-next-line max-len
+    const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
+    return re.test(val);
+}
+
+/**
+ * Ensure that all inputs are valid.
+ */
+function validateInput() {
+    if (validateDomain() && validateEmail()) {
+        createDomainButton.disabled = false;
+    } else {
+        createDomainButton.disabled = true;
+    }
+}
+
+/**
+ * Submit the form if Enter was pressed in one of the inputs and all input is
+ * valid.
+ */
+function submitOnEnter(evt) {
+    if (evt.key === 'Enter' && validateDomain() && validateEmail()) {
+        submitForm();
+    }
+}
+
+/**
+ * Submit the form.
+ */
+function submitForm() {
     displayMessage('Processing...', 'message');
-    // call the settings controller to subscribe the domain in the gateway
+
+    // Call the settings controller to subscribe the domain in the gateway.
     var action = {
       'email': email.value,
       'subdomain': subdomain.value
@@ -80,7 +117,15 @@ createDomainButton.addEventListener('click', function() {
     }).catch(function(error) {
         displayMessage(error, 'error');
     });
-});
+}
+
+subdomain.addEventListener('input', validateInput);
+email.addEventListener('input', validateInput);
+
+subdomain.addEventListener('keydown', submitOnEnter);
+email.addEventListener('keydown', submitOnEnter);
+
+createDomainButton.addEventListener('click', submitForm);
 
 /*
  * https://github.com/mozilla-iot/gateway/issues/159

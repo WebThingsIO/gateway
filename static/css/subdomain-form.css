@@ -73,8 +73,12 @@ button {
   color: #fff;
 }
 
-button:hover, button:active {
+button:hover:enabled, button:active:enabled {
   background-color: #658196;
+}
+
+button:disabled {
+  background-color: #444;
 }
 
 button::-moz-focus-inner {
