@@ -28,6 +28,7 @@
     "asn1.js": "^4.9.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
+    "compression": "^1.7.1",
     "config": "^1.26.1",
     "event-to-promise": "^0.8.0",
     "express": "^4.15.2",
