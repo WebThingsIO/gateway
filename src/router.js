@@ -10,6 +10,7 @@
 
 'use strict';
 
+const compression = require('compression');
 const express = require('express');
 const Constants = require('./constants');
 const authMiddleware = require('./jwt-middleware');
@@ -27,6 +28,9 @@ var Router = {
 
     const API_PREFIX = '/api'; // A pseudo path to use for API requests
     const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
+
+    // Compress all responses larger than 1kb
+    app.use(compression());
 
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
