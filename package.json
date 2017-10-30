@@ -94,5 +94,8 @@
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node"
+  },
+  "resolutions": {
+    "pyconf": "https://github.com/mozilla-iot/node-config-python"
   }
 }

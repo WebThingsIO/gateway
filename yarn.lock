@@ -4296,9 +4296,9 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-pyconf@^1.1.2:
+pyconf@^1.1.2, "pyconf@https://github.com/mozilla-iot/node-config-python":
   version "1.1.2"
-  resolved "https://registry.yarnpkg.com/pyconf/-/pyconf-1.1.2.tgz#61a7aa299ff6ee57b8c687ad355a55d2e7a86a6b"
+  resolved "https://github.com/mozilla-iot/node-config-python#9d334161bca5bb49958d9b479b7e349d2503c24a"
   dependencies:
     safe-replace "^1.0.2"
 
