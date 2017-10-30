@@ -94,5 +94,9 @@
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node"
+  },
+  "resolutions": {
+    "le-store-certbot": "https://github.com/mozilla-iot/le-store-certbot/tarball/master",
+    "pyconf": "https://github.com/mozilla-iot/node-config-python/tarball/master"
   }
 }
