@@ -29,7 +29,7 @@ var Router = {
     const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
 
     // First look for a static file
-    app.use(express.static(Constants.STATIC_PATH));
+    app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
 
     // Content negotiation middleware
     app.use(function(request, response, next) {
