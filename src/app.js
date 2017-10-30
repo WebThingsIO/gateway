@@ -17,11 +17,13 @@ const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const GetOpt = require('node-getopt');
 const config = require('config');
+const path = require('path');
 const adapterManager = require('./adapter-manager');
 const db = require('./db');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
+const Constants = require('./constants');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/adapters/plugin/ipc.js)
@@ -191,6 +193,24 @@ function createGatewayApp(server) {
 
 function createRedirectApp(port) {
   const app = createApp();
+
+  // Allow LE challenges, used when renewing domain.
+  app.use(/^\/\.well-known\/acme-challenge\/.*/,
+          function(request, response, next) {
+    if (request.method !== 'GET') {
+      response.sendStatus(403);
+      return;
+    }
+
+    const reqPath = path.join(Constants.STATIC_PATH, request.path);
+    if (fs.existsSync(reqPath)) {
+      response.sendFile(reqPath);
+      return;
+    }
+
+    next();
+  });
+
   // Redirect based on https://https.cio.gov/apis/
   app.use(function(request, response) {
     if (request.method !== 'GET') {

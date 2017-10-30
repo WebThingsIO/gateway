@@ -36,7 +36,7 @@ nvm install v7.10.1
 nvm use v7.10.1
 
 # Install prequisite packages
-sudo apt install libusb-1.0-0-dev libudev-dev -y
+sudo apt install libusb-1.0-0-dev libudev-dev certbot -y
 
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
@@ -108,11 +108,43 @@ OnCalendar=daily
 WantedBy=timers.target
 END
 
-# Enable the gateway service so that it starts up automatically on each boot
+# Enable the gateway service so that it starts up automatically on each boot.
 sudo systemctl enable mozilla-iot-gateway.service
 
-# Check for an update every day
+# Check for an update every day.
 sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
+
+# Create the systemd certificate renewal service.
+sudo su -c 'cat > /etc/systemd/system/mozilla-iot-gateway.renew-certificates.service' <<END
+[Unit]
+Description=Mozilla IoT Gateway Certificate Renewer
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=root
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/gateway
+# Edit this line, if needed, to set the correct path to the script
+ExecStart=/home/pi/mozilla-iot/gateway/tools/renew-certificates.sh
+END
+
+sudo su -c 'cat > /etc/systemd/system/mozilla-iot-gateway.renew-certificates.timer' <<END
+[Unit]
+Description=Run the Mozilla IoT Gateway certifate renewal service daily.
+
+[Timer]
+OnCalendar=daily
+
+[Install]
+WantedBy=timers.target
+END
+
+# Enable the certificate renewal service so that it starts up automatically on
+# each boot.
+sudo systemctl enable mozilla-iot-gateway.renew-certificates.timer
 
 # Create a script which redirects port 80 to 8080 and 443 to 4443. This
 # allows the gateway to run under the pi user rather than requiring to
