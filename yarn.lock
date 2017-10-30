@@ -154,6 +154,10 @@ ansi-styles@^3.0.0:
   dependencies:
     color-convert "^1.0.0"
 
+any-promise@^1.0.0, any-promise@^1.1.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
+
 anymatch@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-1.3.0.tgz#a3e52fa39168c825ff57b0248126ce5a8ff95507"
@@ -2092,6 +2096,14 @@ fs-extra@^4.0.1:
     jsonfile "^3.0.0"
     universalify "^0.1.0"
 
+fs-symlink@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/fs-symlink/-/fs-symlink-1.2.1.tgz#1beba83ea9dca8123600e3f0b9a51b18640bbc40"
+  dependencies:
+    mkdirp "^0.5.0"
+    mkdirp-then "1"
+    mz "^2.0.0"
+
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
@@ -3294,9 +3306,10 @@ le-sni-auto@^2.1.0:
 
 le-store-certbot@^2.0.3, "le-store-certbot@https://github.com/mozilla-iot/le-store-certbot/tarball/master":
   version "2.0.5"
-  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/master#67da42eefbb2cf1ed451e989c467019f2ef374fd"
+  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/master#2ce8e79d7fe72f98184bd859ccf6ce08f4e87dcb"
   dependencies:
     bluebird "^3.4.1"
+    fs-symlink "^1.2.1"
     mkdirp "^0.5.1"
     pyconf "^1.1.2"
     safe-replace "^1.0.2"
@@ -3626,6 +3639,13 @@ mixin-deep@^1.1.3:
     for-in "^1.0.2"
     is-extendable "^0.1.1"
 
+mkdirp-then@1:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mkdirp-then/-/mkdirp-then-1.2.0.tgz#a492c879ca4d873f5ee45008f8f55fd0150de3c5"
+  dependencies:
+    any-promise "^1.1.0"
+    mkdirp "^0.5.0"
+
 mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
@@ -3678,6 +3698,14 @@ multicast-dns@^6.0.1:
 mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
+
+mz@^2.0.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/mz/-/mz-2.7.0.tgz#95008057a56cafadc2bc63dde7f9ff6955948e32"
+  dependencies:
+    any-promise "^1.0.0"
+    object-assign "^4.0.1"
+    thenify-all "^1.0.0"
 
 nan@2.4, nan@~2.4.0:
   version "2.4.0"
@@ -4298,7 +4326,7 @@ punycode@^1.2.4, punycode@^1.4.1:
 
 pyconf@^1.1.2, "pyconf@https://github.com/mozilla-iot/node-config-python/tarball/master":
   version "1.1.2"
-  resolved "https://github.com/mozilla-iot/node-config-python/tarball/master#4110e761fd68d4180d3394c27c9f5871ca176b5c"
+  resolved "https://github.com/mozilla-iot/node-config-python/tarball/master#e77828f7e08ae88464dbe004b9d5382a94e54e03"
   dependencies:
     safe-replace "^1.0.2"
 
@@ -5148,6 +5176,18 @@ test-exclude@^4.1.1:
 text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
+
+thenify-all@^1.0.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/thenify-all/-/thenify-all-1.6.0.tgz#1a1918d402d8fc3f98fbf234db0bcc8cc10e9726"
+  dependencies:
+    thenify ">= 3.1.0 < 4"
+
+"thenify@>= 3.1.0 < 4":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/thenify/-/thenify-3.3.0.tgz#e69e38a1babe969b0108207978b9f62b88604839"
+  dependencies:
+    any-promise "^1.0.0"
 
 throat@^3.0.0:
   version "3.2.0"
