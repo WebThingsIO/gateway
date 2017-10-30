@@ -3306,7 +3306,7 @@ le-sni-auto@^2.1.0:
 
 le-store-certbot@^2.0.3, "le-store-certbot@https://github.com/mozilla-iot/le-store-certbot/tarball/master":
   version "2.0.5"
-  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/master#2ce8e79d7fe72f98184bd859ccf6ce08f4e87dcb"
+  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/master#0deb27c829977362f0d3fbae1c2384054d598559"
   dependencies:
     bluebird "^3.4.1"
     fs-symlink "^1.2.1"
