@@ -3304,9 +3304,9 @@ le-sni-auto@^2.1.0:
   dependencies:
     bluebird "^3.4.1"
 
-le-store-certbot@^2.0.3, "le-store-certbot@https://github.com/mozilla-iot/le-store-certbot/tarball/master":
+le-store-certbot@^2.0.3, "le-store-certbot@https://github.com/mozilla-iot/le-store-certbot/tarball/82b00d5d9d0e6b0b025203d11aedb34ca4803b92":
   version "2.0.5"
-  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/master#0deb27c829977362f0d3fbae1c2384054d598559"
+  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/82b00d5d9d0e6b0b025203d11aedb34ca4803b92#06862bc61d1ab8592843688690aa78fd29e846a5"
   dependencies:
     bluebird "^3.4.1"
     fs-symlink "^1.2.1"
@@ -4324,9 +4324,9 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-pyconf@^1.1.2, "pyconf@https://github.com/mozilla-iot/node-config-python/tarball/master":
+pyconf@^1.1.2, "pyconf@https://github.com/mozilla-iot/node-config-python/tarball/254eb3beda4ec883738b322c6d1cdedd2a75c644":
   version "1.1.2"
-  resolved "https://github.com/mozilla-iot/node-config-python/tarball/master#e77828f7e08ae88464dbe004b9d5382a94e54e03"
+  resolved "https://github.com/mozilla-iot/node-config-python/tarball/254eb3beda4ec883738b322c6d1cdedd2a75c644#e77828f7e08ae88464dbe004b9d5382a94e54e03"
   dependencies:
     safe-replace "^1.0.2"
 
