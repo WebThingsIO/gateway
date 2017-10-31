@@ -9,9 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 const JSONWebToken = require('./models/jsonwebtoken');
-const makeDebug = require('debug');
-
-const debug = makeDebug('jwt-middleware');
 
 const AUTH_TYPE = 'Bearer';
 
@@ -23,7 +20,6 @@ const AUTH_TYPE = 'Bearer';
  */
 function extractJWTQS(req) {
   if (typeof req.query === 'object' && req.query.jwt) {
-    debug('using jwt from query string');
     return req.query.jwt;
   }
   return false;
@@ -38,12 +34,11 @@ function extractJWTQS(req) {
 function extractJWTHeader(req) {
   const {authorization} = req.headers;
   if (!authorization) {
-    debug('no authorization header');
     return false;
   }
   const [type, sig] = authorization.split(' ');
   if (type !== AUTH_TYPE) {
-    debug('invalid auth type');
+    console.warn('JWT header extraction failed: invalid auth type');
     return false;
   }
   return sig;
@@ -74,7 +69,7 @@ function middleware() {
         next();
       }).
       catch((err) => {
-        debug('error running jwt middleware', err.stack);
+        console.error('error running jwt middleware', err.stack);
         next(err);
       })
   };
