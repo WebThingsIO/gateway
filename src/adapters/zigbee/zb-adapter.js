@@ -142,7 +142,7 @@ class ZigBeeAdapter extends Adapter {
 
     console.log('ZigBee: Opening serial port', port.comName);
     this.serialport = new SerialPort(port.comName, {
-      baudrate: 9600,
+      baudRate: 9600,
       parser: this.xb.rawParser(),
     }, (err) => {
       if (err) {
