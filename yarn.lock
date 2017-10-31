@@ -1800,9 +1800,9 @@ express-fileupload@^0.3.0:
     fs-extra "^4.0.1"
     streamifier "^0.1.1"
 
-express-promise-router@2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/express-promise-router/-/express-promise-router-2.0.0-alpha.1.tgz#fb77854e276cc3447879364af1e22a4b4e9e72be"
+express-promise-router@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/express-promise-router/-/express-promise-router-2.0.0.tgz#dd8c5894b40c061c8dcc6591d2145690e99e9551"
   dependencies:
     is-promise "^2.1.0"
     lodash "^4.13.1"
