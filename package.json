@@ -36,7 +36,7 @@
     "express-promise-router": "2.0.0-alpha.1",
     "express-ws": "^3.0.0",
     "greenlock": "^2.1.15",
-    "jsonwebtoken": "^7.4.1",
+    "jsonwebtoken": "^8.1.0",
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
     "nanomsg": "^3.3.0",
     "node-fetch": "^1.7.1",
