@@ -31,7 +31,7 @@
     "config": "^1.26.1",
     "event-to-promise": "^0.8.0",
     "express": "^4.15.2",
-    "express-fileupload": "^0.2.0",
+    "express-fileupload": "^0.3.0",
     "express-promise-router": "2.0.0-alpha.1",
     "express-ws": "^3.0.0",
     "greenlock": "^2.1.15",
@@ -48,7 +48,7 @@
     "sqlite3": "^3.1.8",
     "uuid": "^3.1.0",
     "winston": "^2.3.1",
-    "ws": "^2.2.3",
+    "ws": "^3.2.0",
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",
     "zcl-packet": "^0.2.2"
