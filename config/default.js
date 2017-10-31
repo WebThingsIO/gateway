@@ -68,7 +68,8 @@ module.exports = {
     registration_endpoint: 'api.mozilla-iot.org',
     domain: 'mozilla-iot.org',
     pagekite_cmd: './pagekite.py',
-    port: 443
+    port: 443,
+    certemail: 'certificate@mozilla-iot.org'
   },
   bcryptRounds: 2
 };
