@@ -54,6 +54,16 @@ module.exports = {
   },
   settings: {
     directory: './settings', // Directory to store settings in
+    defaults: {
+      experiments: {
+        floorplan: {
+          enabled: true,
+        },
+        rules: {
+          enabled: true,
+        },
+      },
+    },
   },
   uploads: {
     directory: '../static/uploads/' // Directory to store uploads in
