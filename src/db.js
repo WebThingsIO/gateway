@@ -113,15 +113,54 @@ var Database = {
     var defaultUser = config.get('authentication.defaultUser');
     if (defaultUser) {
       var passwordHash = Passwords.hashSync(defaultUser.password);
-      this.db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
+      this.db.run(
+        'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
         [defaultUser.email, passwordHash, defaultUser.name],
         function(error) {
-        if (error) {
-          console.error('Failed to save default user.');
+          if (error) {
+            console.error('Failed to save default user.');
+          } else {
+            console.log('Saved default user ' + defaultUser.email);
+          }
+        });
+    }
+
+    // Add any settings provided.
+    var generateSettings = function(obj, baseKey) {
+      const settings = [];
+      
+      for (const key in obj) {
+        let newKey;
+        if (baseKey !== '') {
+          newKey = baseKey + '.' + key;
         } else {
-          console.log('Saved default user ' + defaultUser.email);
+          newKey = key;
         }
-      });
+        
+        if (typeof obj[key] === 'object') {
+          Array.prototype.push.apply(settings,
+                                     generateSettings(obj[key], newKey));
+        } else {
+          settings.push([newKey, obj[key]]);
+        }
+      }
+      return settings;
+    };
+
+    var settings = generateSettings(config.get('settings.defaults'), '');
+    for (const setting of settings) {
+      this.db.run(
+        'INSERT INTO settings (key, value) VALUES (?, ?)',
+        [setting[0], setting[1]],
+        function(error) {
+          if (error) {
+            console.error('Failed to insert setting ' +
+                          setting[0]);
+          } else {
+            console.log('Saved setting ' + setting[0] + ' = ' +
+                        setting[1]);
+          }
+        });
     }
   },
 
