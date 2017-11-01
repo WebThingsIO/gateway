@@ -143,11 +143,15 @@ class ZigBeeAdapter extends Adapter {
     console.log('ZigBee: Opening serial port', port.comName);
     this.serialport = new SerialPort(port.comName, {
       baudRate: 9600,
-      parser: this.xb.rawParser(),
     }, (err) => {
       if (err) {
         console.error('ZigBee: SerialPort open err =', err);
       }
+
+      // Hook up the ZigBee raw parser.
+      this.serialport.on('data', chunk => {
+        this.xb.parseRaw(chunk);
+      });
 
       this.queueCommands([
         this.AT(AT_CMD.DEVICE_TYPE_IDENTIFIER),
@@ -1220,8 +1224,8 @@ zch[zdo.CLUSTER_ID.END_DEVICE_ANNOUNCEMENT] =
 function isDigiPort(port) {
   // Note that 0403:6001 is the default FTDI VID:PID, so we need to further
   // refine the search using the manufacturer.
-  return (port.vendorId === '0x0403' &&
-          port.productId === '0x6001' &&
+  return (port.vendorId === '0403' &&
+          port.productId === '6001' &&
           port.manufacturer === 'Digi');
 }
 

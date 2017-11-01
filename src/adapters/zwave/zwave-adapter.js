@@ -342,12 +342,12 @@ class ZWaveAdapter extends Adapter {
 }
 
 function isZWavePort(port) {
-  return ((port.vendorId == '0x0658' &&
-           port.productId == '0x0200') ||  // Aeotech Z-Stick Gen-5
-          (port.vendorId == '0x0658' &&
-           port.productId == '0x0280') ||  // UZB1
-          (port.vendorId == '0x10c4' &&
-           port.productId == '0xea60'));   // Aeotech Z-Stick S2
+  return ((port.vendorId == '0658' &&
+           port.productId == '0200') ||  // Aeotech Z-Stick Gen-5
+          (port.vendorId == '0658' &&
+           port.productId == '0280') ||  // UZB1
+          (port.vendorId == '10c4' &&
+           port.productId == 'ea60'));   // Aeotech Z-Stick S2
 }
 
 // Scan the serial ports looking for an OpenZWave adapter.
