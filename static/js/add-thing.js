@@ -7,7 +7,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
- 'use strict';
+'use strict';
 
 /* globals App, NewThing */
 
@@ -37,8 +37,8 @@ var AddThingScreen = {
   requestPairing: function() {
     var path = `wss://${App.HOST}/new_things?jwt=${window.API.jwt}`;
     // Create a websocket to start listening for new things
-    var socket = new WebSocket(path);
-    socket.onmessage = (function(event) {
+    this.socket = new WebSocket(path);
+    this.socket.onmessage = (function(event) {
       this.showNewThing(JSON.parse(event.data));
     }).bind(this);
 
@@ -69,6 +69,12 @@ var AddThingScreen = {
    * Cancel a pairing request.
    */
   requestCancelPairing: function() {
+    // Close websocket.
+    if (typeof this.socket !== 'undefined') {
+      this.socket.close();
+      delete this.socket;
+    }
+
     var url = AddThingScreen.actionUrl;
     if(!url) {
       return;
