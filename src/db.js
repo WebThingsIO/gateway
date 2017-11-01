@@ -138,8 +138,7 @@ var Database = {
         }
         
         if (typeof obj[key] === 'object') {
-          Array.prototype.push.apply(settings,
-                                     generateSettings(obj[key], newKey));
+          settings.push(...generateSettings(obj[key], newKey));
         } else {
           settings.push([newKey, obj[key]]);
         }
