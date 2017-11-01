@@ -6,4 +6,4 @@ certbot renew \
     --config-dir "$moziot_dir/etc" \
     --logs-dir "$moziot_dir/var/log" \
     --work-dir "$moziot_dir/var/lib" \
-    --deploy-hook "$moziot_dir/tools/deploy-certificates.sh"
+    --deploy-hook "$moziot_dir/gateway/tools/deploy-certificates.sh"
