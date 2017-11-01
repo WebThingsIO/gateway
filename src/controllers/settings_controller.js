@@ -20,6 +20,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const TunnelService = require('../ssltunnel');
 const Settings = require('../models/settings');
+const Constants = require('../constants');
 
 var SettingsController = express.Router();
 
@@ -80,9 +81,11 @@ SettingsController.post('/subscribe', function (request, response) {
     // function to automatically agree and accept the ToS
     function leAgree(opts, agreeCb) { agreeCb(null, opts.tosUrl); }
     let leStore = require('le-store-certbot').create({
-        configDir: null,
-        debug: true,
-        logsDir: null
+        webrootPath: Constants.STATIC_PATH,
+        configDir: '~/mozilla-iot/etc',
+        logsDir: '~/mozilla-iot/var/log',
+        workDir: '~/mozilla-iot/var/lib',
+        debug: true
     });
     let le = greenlock.create({
         server: greenlock.productionServerUrl,
