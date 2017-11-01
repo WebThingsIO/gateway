@@ -1256,6 +1256,13 @@ function findDigiPorts() {
 function loadZigBeeAdapters(adapterManager, adapterId, _adapterConfig) {
   findDigiPorts().then((digiPorts) => {
     for (var port of digiPorts) {
+      // Under OSX, SerialPort.list returns the /dev/tty.usbXXX instead
+      // /dev/cu.usbXXX. tty.usbXXX requires DCD to be asserted which
+      // isn't necessarily the case for ZWave dongles. The cu.usbXXX
+      // doesn't care about DCD.
+      if (port.comName.startsWith('/dev/tty.usb')) {
+        port.comName = port.comName.replace('/dev/tty', '/dev/cu');
+      }
       new ZigBeeAdapter(adapterManager, adapterId, port);
     }
   }, (error) => {
