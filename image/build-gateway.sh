@@ -20,7 +20,7 @@ OPEN_ZWAVE=OpenZWave/open-zwave
 GATEWAY_TARBALL=gateway.tar.gz
 OPENZWAVE_TARBALL=openzwave.tar.gz
 
-ARCH=armv7l
+ARCH=armv6l
 SYSROOT=/rpxc/sysroot
 
 # Remove the output, if it exists
