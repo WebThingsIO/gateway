@@ -59,7 +59,7 @@ class Property {
 
   /**
    * Sets this.value and makes adjustments to ensure that the value
-   * is consitent with the type.
+   * is consistent with the type.
    */
   setCachedValue(value) {
     if (this.type === 'boolean') {
@@ -75,7 +75,7 @@ class Property {
    * @method getValue
    * @returns a promise which resolves to the retrieved value.
    *
-   * This implementation is a simple implementation that just returns
+   * This implementation is a simple one that just returns
    * the previously cached value.
    */
   getValue() {
@@ -94,7 +94,7 @@ class Property {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    *
-   * It is anticipated that this method will most likely be overriden
+   * It is anticipated that this method will most likely be overridden
    * by a derived class.
    */
   setValue(value) {

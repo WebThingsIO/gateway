@@ -15,19 +15,6 @@ module.exports = {
     http: 0,
   },
   behindForwarding: false,
-  adapters : {
-    Mock: {
-      enabled: true,
-      plugin: 'test',
-      path: './adapters/mock',
-    },
-    zwave: {
-      enabled: false,
-    },
-    zigbee: {
-      enabled: false,
-    },
-  },
   database: {
     filename: ':memory:',
     removeBeforeOpen: false,

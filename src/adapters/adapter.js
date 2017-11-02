@@ -18,9 +18,10 @@
  */
 class Adapter {
 
-  constructor(adapterManager, id) {
+  constructor(adapterManager, id, packageName) {
     this.manager = adapterManager;
     this.id = id;
+    this.packageName = packageName;
     this.name = this.constructor.name;
     this.devices = {};
     this.actions = {};
@@ -35,17 +36,16 @@ class Adapter {
     console.log('Adapter:', this.name, '- dump() not implemented');
   }
 
-  // eslint-disable-next-line
-  addAction(name, func) {
-
-  }
-
   /**
    * @method getId
    * @returns the id of this adapter.
    */
   getId() {
     return this.id;
+  }
+
+  getPackageName() {
+    return this.packageName;
   }
 
   getDevice(id) {
@@ -75,7 +75,7 @@ class Adapter {
   /**
    * @method deviceAdded
    *
-   * Called to indicated that a device is now being managed by this adapter.
+   * Called to indicate that a device is now being managed by this adapter.
    */
   handleDeviceAdded(device) {
     this.devices[device.id] = device;

@@ -105,18 +105,18 @@ class GpioDevice extends Device {
 }
 
 class GpioAdapter extends Adapter {
-  constructor(adapterManager, adapterId, gpioConfig) {
-    super(adapterManager, adapterId);
+  constructor(adapterManager, manifest) {
+    super(adapterManager, manifest.name, manifest.name);
 
-    for (var pin in gpioConfig.pins) {
-      new GpioDevice(this, pin, gpioConfig.pins[pin]);
+    for (var pin in manifest.moziot.config.pins) {
+      new GpioDevice(this, pin, manifest.moziot.config.pins[pin]);
     }
     adapterManager.addAdapter(this);
   }
 }
 
-function loadGpioAdapter(adapterManager, adapterId, gpioConfig) {
-  new GpioAdapter(adapterManager, adapterId, gpioConfig);
+function loadGpioAdapter(adapterManager, manifest, _errorCallback) {
+  new GpioAdapter(adapterManager, manifest);
 }
 
 module.exports = loadGpioAdapter;

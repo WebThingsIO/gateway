@@ -40,7 +40,29 @@ const Settings = {
       console.error('Failed to set ' + key + ' to ' + value);
       throw e;
     });
-  }
+  },
+
+  /**
+   * Delete a setting.
+   *
+   * @param {String} key Key of setting to delete.
+   */
+  delete: function(key) {
+    return Database.deleteSetting(key).catch(function(e) {
+      console.error('Failed to delete ' + key);
+      throw e;
+    });
+  },
+
+  /**
+   * Get an object of all adapter-related settings.
+   */
+  getAdapterSettings: function() {
+    return Database.getAdapterSettings().catch(function(e) {
+      console.error('Failed to get adapter settings');
+      throw e;
+    });
+  },
 };
 
 module.exports = Settings;

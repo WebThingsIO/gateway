@@ -1,0 +1,36 @@
+{
+  "name": "moziot-adapter-gpio",
+  "version": "0.2.1",
+  "description": "GPIO adapter plugin for Mozilla IoT Gateway",
+  "main": "index.js",
+  "keywords": [
+    "moziot",
+    "adapter",
+    "gpio"
+  ],
+  "homepage": "https://iot.mozilla.org/",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozilla-iot/gateway.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mozilla-iot/gateway/issues"
+  },
+  "moziot": {
+    "api": {
+      "min": 1,
+      "max": 1
+    },
+    "plugin": false,
+    "config": {
+      "pins": {
+        "18": {
+          "name": "led",
+          "direction": "out",
+          "value": 0
+        }
+      }
+    }
+  }
+}

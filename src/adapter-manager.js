@@ -17,6 +17,9 @@ var EventEmitter = require('events').EventEmitter;
 var Deferred = require('./adapters/deferred');
 const PluginClient = require('./adapters/plugin/plugin-client');
 const PluginServer = require('./adapters/plugin/plugin-server');
+const Settings = require('./models/settings');
+const fs = require('fs');
+const path = require('path');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -151,6 +154,15 @@ class AdapterManager extends EventEmitter {
    */
   getAdapter(adapterId) {
     return this.adapters.get(adapterId);
+  }
+
+  /**
+   * @method getAdaptersByPackageName
+   * @returns Returns a list of loaded adapters with the given package name.
+   */
+  getAdaptersByPackageName(packageName) {
+    return Array.from(this.adapters.values()).filter(
+      (a) => a.getPackageName() === packageName);
   }
 
   /**
@@ -326,17 +338,117 @@ class AdapterManager extends EventEmitter {
    * Loads a single adapter.
    */
 
-  loadAdapter(adapterManager, adapterId, adapterConfig) {
-    if (adapterConfig.enabled) {
-      console.log('Loading adapters for', adapterId,
-                  'from', adapterConfig.path);
-      let adapterLoader = dynamicRequire(adapterConfig.path);
-      adapterLoader(adapterManager, adapterId, adapterConfig);
-    } else {
-      console.log('Not loading adapters for', adapterId,
-                  '- disabled');
+  async loadAdapter(adapterId) {
+    const adapterPath = path.join(__dirname,
+                                  config.get('adapterManager.path'),
+                                  adapterId);
+    const testMode = process.env.NODE_ENV === 'test';
+
+    // Skip if there's no package.json file.
+    const packageJson = path.join(adapterPath, 'package.json');
+    if (!fs.lstatSync(packageJson).isFile()) {
+      console.error('package.json not found for adapter:', adapterId);
+      return;
     }
-   }
+
+    // Read the package.json file.
+    let data;
+    try {
+      data = fs.readFileSync(packageJson);
+    } catch (err) {
+      console.error('Failed to read package.json for adapter:', adapterId);
+      console.error(err);
+      return;
+    }
+
+    let manifest;
+    try {
+      manifest = JSON.parse(data);
+    } catch (err) {
+      console.error('Failed to parse package.json for adapter:', adapterId);
+      console.error(err);
+      return;
+    }
+
+    // Verify API version.
+    const apiVersion = config.get('adapterManager.api');
+    if (manifest.moziot.api.min > apiVersion ||
+        manifest.moziot.api.max < apiVersion) {
+      console.error('API mismatch for adapter:', manifest.name);
+      console.error('Current:', apiVersion, 'Supported:',
+                    manifest.moziot.api.min, '-', manifest.moziot.api.max);
+      return;
+    }
+
+    // Get any saved settings for this adapter.
+    const key = `adapters.${manifest.name}`;
+    let savedSettings = await Settings.get(key);
+    let newSettings = Object.assign({}, manifest);
+    if (savedSettings) {
+      // Overwrite config and enablement values.
+      newSettings.moziot.enabled = savedSettings.moziot.enabled;
+      newSettings.config = Object.assign(manifest.moziot.config || {},
+                                         savedSettings.moziot.config);
+    } else {
+      // Default the Zigbee and Z-Wave adapters to enabled for now.
+      const defaults = [
+        'moziot-adapter-zigbee',
+        'moziot-adapter-zwave',
+      ];
+
+      if (defaults.includes(manifest.name) ||
+          (manifest.moziot._test && testMode)) {
+        newSettings.moziot.enabled = true;
+      } else {
+        newSettings.moziot.enabled = false;
+      }
+
+      if (!newSettings.moziot.hasOwnProperty('config')) {
+        newSettings.moziot.config = {};
+      }
+    }
+
+    // Update the settings database.
+    await Settings.set(key, newSettings);
+
+    // If this adapter is not explicitly enabled, move on.
+    if (!newSettings.moziot.enabled) {
+      console.log('Adapter not enabled:', manifest.name);
+      return;
+    }
+
+    const errorCallback = function(packageName, errorStr) {
+      console.log('Failed to load', packageName, '-', errorStr);
+    };
+
+    // Load the adapter
+    console.log('Loading adapter:', manifest.name);
+    if (manifest.moziot.plugin) {
+      if (manifest.moziot._test) {
+        // This is a special case where we load the adapter directly
+        // into the gateway, but we use IPC comms to talk to the
+        // adapter (i.e. for testing)
+        const pluginClient = new PluginClient(manifest.name,
+                                              {verbose: false});
+        pluginClient.register().then(adapterManagerProxy => {
+          console.log('Loading adapter', manifest.name, 'as plugin');
+          const adapterLoader = dynamicRequire(path.join(adapterPath));
+          adapterLoader(adapterManagerProxy, newSettings, errorCallback);
+        }).catch(err => {
+          console.error('Failed to register adapter with gateway');
+          console.error(err);
+        });
+      } else {
+        // This is the normal plugin adapter case, and we currently
+        // don't need to do anything. We assume that the adapter is
+        // started elsewhere.
+      }
+    } else {
+      // Load this adapter directly into the gateway.
+      const adapterLoader = dynamicRequire(path.join(adapterPath));
+      adapterLoader(this, newSettings, errorCallback);
+    }
+  }
 
   /**
    * @method loadAdapters
@@ -356,32 +468,35 @@ class AdapterManager extends EventEmitter {
 
     // Load the Adapters
 
-    var adaptersConfig = config.get(Constants.ADAPTERS_CONFIG);
-    for (let adapterId in adaptersConfig) {
-      let adapterConfig = adaptersConfig[adapterId];
-      if (adapterConfig.plugin) {
-        if (adapterConfig.plugin === 'test') {
-          // This is a special case where we load the adapter
-          // directly into the gateway, but we use IPC comms
-          // to talk to the adapter (i.e. for testing)
-          let pluginClient = new PluginClient(adapterId, {verbose: false});
-          pluginClient.register().then(adapterManagerProxy => {
-            console.log('Loading adapter', adapterId, 'as plugin');
-            this.loadAdapter(adapterManagerProxy, adapterId, adapterConfig);
-          }).catch(err => {
-            console.error('Failed to register adapter with gateway');
-            console.error(err);
-          });
-        } else {
-          // This is the normal plugin adapter case, and we
-          // currently don't need to do anything. We assume
-          // that the adapter is started elsewhere.
-        }
-      } else {
-        // Load this adapter directly into the gateway.
-        this.loadAdapter(this, adapterId, adapterConfig);
+    const adapterManager = this;
+    const adapterPath = path.join(__dirname,
+                                  config.get('adapterManager.path'));
+
+    // Search adapters directory
+    fs.readdir(adapterPath, async function(err, files) {
+      if (err) {
+        console.error('Failed to search adapters directory');
+        console.error(err);
+        return;
       }
-    }
+
+      for (let fname of files) {
+        // Ignore 'plugin', as it contains library code.
+        if (fname === 'plugin') {
+          continue;
+        }
+
+        const adapterName = fname;
+        fname = path.join(adapterPath, fname);
+
+        // Skip if not a directory.
+        if (!fs.lstatSync(fname).isDirectory()) {
+          continue;
+        }
+
+        adapterManager.loadAdapter(adapterName);
+      }
+    });
   }
 
   /**
@@ -428,16 +543,62 @@ class AdapterManager extends EventEmitter {
       // The adapters are not currently loaded, no need to unload.
       return Promise.resolve();
     }
-    this.adaptersLoaded = false;
 
     let unloadPromises = [];
     // unload the adapters in the reverse of the order that they were loaded.
-    for (let adapterId of Array.from(this.adapters.keys()).reverse()) {
-      let adapter = this.getAdapter(adapterId);
-      console.log('Unloading', adapter.name);
-      unloadPromises.push(adapter.unload());
-      this.adapters.delete(adapterId);
+    for (const adapterId of Array.from(this.adapters.keys()).reverse()) {
+      unloadPromises.push(this.unloadAdapter(adapterId));
     }
+
+    this.adaptersLoaded = false;
+    return Promise.all(unloadPromises);
+  }
+
+  /**
+   * @method unloadAdapter
+   * Unload the given adapter.
+   *
+   * @param {String} id The ID of the adapter to unload.
+   * @returns A promise which is resolved when the adapter is unloaded.
+   */
+  unloadAdapter(id) {
+    if (!this.adaptersLoaded) {
+      // The adapters are not currently loaded, no need to unload.
+      return Promise.resolve();
+    }
+
+    let adapter = this.getAdapter(id);
+    if (typeof adapter === 'undefined') {
+      // This adapter wasn't loaded.
+      return Promise.resolve();
+    }
+
+    console.log('Unloading', adapter.name);
+    this.adapters.delete(adapter.id);
+    return adapter.unload();
+  }
+
+  /**
+   * @method unloadAdaptersByPackageName
+   * Unload adapters with the given package name.
+   *
+   * @param {String} packageName The package name of the adapters to unload.
+   * @returns A promise which is resolved when the adapters are unloaded.
+   */
+  unloadAdaptersByPackageName(packageName) {
+    if (!this.adaptersLoaded) {
+      // The adapters are not currently loaded, no need to unload.
+      return Promise.resolve();
+    }
+
+    let adapters = this.getAdaptersByPackageName(packageName);
+    let unloadPromises = [];
+    for (const a of adapters) {
+      console.log('Unloading', a.name);
+      unloadPromises.push(a.unload());
+      this.adapters.delete(a.id);
+    }
+
     return Promise.all(unloadPromises);
   }
 

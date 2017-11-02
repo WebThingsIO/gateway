@@ -73,14 +73,14 @@ function FUNC(ths, func, args) {
 }
 
 class ZigBeeAdapter extends Adapter {
-  constructor(adapterManager, adapterId, port) {
+  constructor(adapterManager, packageName, port) {
     // The SigBee adapter supports multiple dongles and
     // will create an adapter object for each dongle.
     // We don't know the actual adapter id until we
     // retrieve the serial number from the dongle. So we
     // set it to zb-unknown here, and fix things up later
     // just before we call addAdapter.
-    super(adapterManager, 'zb-uknown');
+    super(adapterManager, 'zb-uknown', packageName);
 
     this.port = port;
 
@@ -256,7 +256,7 @@ class ZigBeeAdapter extends Adapter {
       //}));
       this.queueCommandsAtFront(configCommands);
     } else {
-      console.log('ZigBee: No configuration requried');
+      console.log('ZigBee: No configuration required');
     }
   }
 
@@ -902,6 +902,11 @@ class ZigBeeAdapter extends Adapter {
     // Nothing to do. We've either sent the leave request or not.
   }
 
+  unload() {
+    this.serialport.close();
+    return super.unload();
+  }
+
   managementLeave(node) {
     if (this.debugFlow) {
       console.log('managementLeave node.addr64 =', node.addr64);
@@ -1253,7 +1258,7 @@ function findDigiPorts() {
   });
 }
 
-function loadZigBeeAdapters(adapterManager, adapterId, _adapterConfig) {
+function loadZigBeeAdapters(adapterManager, manifest, errorCallback) {
   findDigiPorts().then((digiPorts) => {
     for (var port of digiPorts) {
       // Under OSX, SerialPort.list returns the /dev/tty.usbXXX instead
@@ -1263,10 +1268,10 @@ function loadZigBeeAdapters(adapterManager, adapterId, _adapterConfig) {
       if (port.comName.startsWith('/dev/tty.usb')) {
         port.comName = port.comName.replace('/dev/tty', '/dev/cu');
       }
-      new ZigBeeAdapter(adapterManager, adapterId, port);
+      new ZigBeeAdapter(adapterManager, manifest.name, port);
     }
   }, (error) => {
-    console.error(error);
+    errorCallback(manifest.name, error);
   });
 }
 
