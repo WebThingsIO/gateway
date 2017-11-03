@@ -7,3 +7,5 @@ certbot renew \
     --logs-dir "$moziot_dir/var/log" \
     --work-dir "$moziot_dir/var/lib" \
     --deploy-hook "$moziot_dir/gateway/tools/deploy-certificates.sh"
+
+chown -R pi:pi "$moziot_dir/etc" "$moziot_dir/var"
