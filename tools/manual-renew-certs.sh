@@ -129,6 +129,15 @@ cp "${moziot_dir}/etc/live/${domain}/privkey.pem" \
 cp "${moziot_dir}/etc/live/${domain}/chain.pem" \
     "${moziot_dir}/gateway/chain.pem"
 
+echo "Registering domain with server."
+token="$(egrep -o '"token":".*?"' "${moziot_dir}/gateway/tunneltoken" | \
+         cut -d: -f2 | \
+         sed 's/"//g')"
+curl "http://api.mozilla-iot.org/setemail" \
+    -s -G \
+    --data-urlencode "token=${token}" \
+    --data-urlencode "email=${email}" || abort "Failed to register."
+
 echo "Starting IoT gateway service."
 systemctl start mozilla-iot-gateway.service || abort "Failed to start service."
 
