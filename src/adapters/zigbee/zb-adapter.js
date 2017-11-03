@@ -524,8 +524,8 @@ class ZigBeeAdapter extends Adapter {
 
   handleTransmitStatus(frame) {
     if (frame.deliveryStatus !== 0) {
-      console.error('Transmit Status ERROR:', '0x' +
-                    frame.deliveryStatus.toString(16));
+      console.error('Transmit Status ERROR:',
+                    this.getDeliveryStatusAsString(frame.deliveryStatus));
     }
   }
 
