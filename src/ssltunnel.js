@@ -11,6 +11,7 @@
 const fs = require('fs');
 const config = require('config');
 const Settings = require('./models/settings');
+const fetch = require('node-fetch');
 var spawnSync = require('child_process').spawn;
 
 var TunnelService = {
@@ -21,7 +22,7 @@ var TunnelService = {
 
     // method that starts the client if the box has a registered tunnel
     start: function(response, urlredirect) {
-        Settings.get('tunneltoken').then(function(result) {
+        Settings.get('tunneltoken').then((result) => {
             if (typeof result === 'object') {
                 let endpoint = result.name + '.' +
                     config.get('ssltunnel.domain');
@@ -52,6 +53,10 @@ var TunnelService = {
                 this.pagekiteProcess.on('close', (code) => {
                     console.log(`[pagekite] process exited with code ${code}`);
                 });
+
+                // Ping the registration server every hour.
+                const delay = 60 * 60 * 1000;
+                setInterval(() => this.pingRegistrationServer(), delay);
             } else {
                 console.error('tunneltoken not set');
                 if (response) {
@@ -87,7 +92,7 @@ var TunnelService = {
         return typeof tunneltoken === 'object';
     },
 
-    // method to check if user skipped the sl tunnel setup
+    // method to check if user skipped the ssl tunnel setup
     userSkipped: async function() {
         let notunnel = await Settings.get('notunnel');
         if (typeof notunnel === 'boolean' && notunnel) {
@@ -95,7 +100,24 @@ var TunnelService = {
         }
 
         return false;
-    }
+    },
+
+    // method to ping the registration server to track active domains
+    pingRegistrationServer: function() {
+        Settings.get('tunneltoken').then((result) => {
+            if (typeof result === 'object') {
+                fetch(config.get('ssltunnel.registration_endpoint') +
+                      '/ping?token=' + result.token)
+                    .catch((e) => {
+                        console.debug('Failed to ping registration server:', e);
+                    });
+            } else {
+                console.error('tunneltoken not set');
+            }
+        }).catch(function(e) {
+            console.error('Failed to get tunneltoken setting:', e);
+        });
+    },
 }
 
 module.exports = TunnelService;
