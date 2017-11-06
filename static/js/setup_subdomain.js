@@ -32,12 +32,12 @@ function displayMessage(errorMsg, type){
  * Ensure that subdomain is valid:
  * - Contains only a-z, 0-9, and hyphens, but does not start or end with
  *   hyphen.
- * - Is not equal to "api", as that's reserved.
+ * - Is not equal to "api" or "www", as those are reserved.
  */
 function validateDomain() {
     const val = subdomain.value.toLowerCase();
     const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
-    if (!re.test(val) || val === 'api') {
+    if (!re.test(val) || ['api', 'www'].includes(val)) {
         return false;
     }
 
