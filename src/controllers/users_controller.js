@@ -16,9 +16,9 @@ const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
 const config = require('config');
 const fetch = require('node-fetch');
-const fs = require('fs');
 const UsersController = Router();
 const auth = require('../jwt-middleware')();
+const Settings = require('../models/settings');
 
 /**
  * Get the count of users.
@@ -61,23 +61,30 @@ UsersController.post('/', async (request, response) => {
     return;
   }
 
-  if (config.get('ssltunnel.enabled') && fs.existsSync('tunneltoken')) {
-    // now we associate user's emails with the subdomain
-    fetch('http://' +
-    config.get('ssltunnel.registration_endpoint') +
-    '/setemail?token=' + JSON.parse(fs.readFileSync('tunneltoken')).token +
-    '&email=' + body.email)
-    .catch(function(e) {
-        // https://github.com/mozilla-iot/gateway/issues/358
-        // we should store this error and display to the user on
-        // settings page to allow him to retry
-        throw e;
-    })
-    .then(function(res) {
-        return res.text();
-    })
-    .then(function() {
-        console.log('Online account created.');
+  if (config.get('ssltunnel.enabled')) {
+    Settings.get('tunneltoken').then(function(result) {
+      if (typeof result === 'object') {
+        // now we associate user's emails with the subdomain
+        fetch('http://' + config.get('ssltunnel.registration_endpoint') +
+              '/setemail?token=' + result.token + '&email=' + body.email)
+        .catch(function(e) {
+            // https://github.com/mozilla-iot/gateway/issues/358
+            // we should store this error and display to the user on
+            // settings page to allow him to retry
+            throw e;
+        })
+        .then(function(res) {
+            return res.text();
+        })
+        .then(function() {
+            console.log('Online account created.');
+        });
+      }
+    }).catch(function(e) {
+      console.error('Failed to get tunneltoken setting');
+      console.error(e);
+      response.status(400).send(e);
+      return;
     });
   }
 

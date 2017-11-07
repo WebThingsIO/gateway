@@ -24,6 +24,7 @@ const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
 const Constants = require('./constants');
+const Settings = require('./models/settings');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/adapters/plugin/ipc.js)
@@ -31,6 +32,25 @@ require('./app-instance');
 
 // Open the database
 db.open();
+
+// Move the tunneltoken into the database
+if (fs.existsSync('tunneltoken')) {
+  const token = JSON.parse(fs.readFileSync('tunneltoken'));
+  Settings.set('tunneltoken', token).then(function() {
+    fs.unlinkSync('tunneltoken');
+  }).catch(function(e) {
+    throw e;
+  });
+}
+
+// Move the notunnel setting into the database
+if (fs.existsSync('notunnel')) {
+  Settings.set('notunnel', true).then(function() {
+    fs.unlinkSync('notunnel');
+  }).catch(function(e) {
+    throw e;
+  });
+}
 
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
@@ -234,13 +254,28 @@ function createRedirectApp(port) {
 }
 
 // if we have the certificates installed, we start https
-if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
-  startHttpsGateway();
-  if (TunnelService.hasTunnelToken()) {
-    TunnelService.start();
-  }
+if (TunnelService.hasCertificates()) {
+  let promise = TunnelService.userSkipped().then(function(res) {
+    if (res) {
+      startHttpGateway();
+    } else {
+      startHttpsGateway();
+      TunnelService.hasTunnelToken().then(function(result) {
+        if (result) {
+          TunnelService.start();
+        } else {
+          // otherwise we start plain http
+          startHttpGateway();
+        }
+      });
+    }
+  });
+
+  // Wait for the gateway to start.
+  (async function() {
+    await promise;
+  })();
 } else {
-  // otherwise we start plain http
   startHttpGateway();
 }
 

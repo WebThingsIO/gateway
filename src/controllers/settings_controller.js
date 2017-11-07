@@ -130,7 +130,8 @@ SettingsController.post('/subscribe', function (request, response) {
             } else {
                 // store the token in the db
                 token = jsonToken.token;
-                fs.writeFileSync('tunneltoken', JSON.stringify(jsonToken));
+                Settings.set('tunneltoken', jsonToken);
+
                 // Register Let's Encrypt
                 le.register({
                     domains: [fulldomain],
@@ -160,21 +161,31 @@ SettingsController.post('/subscribe', function (request, response) {
 });
 
 SettingsController.post('/skiptunnel', function (request, response) {
-    fs.writeFileSync('notunnel');
-    response.status(200).end();
+    Settings.set('notunnel', true).then(function() {
+      response.status(200).end();
+    }).catch(function(e) {
+      console.error('Failed to set notunnel setting.');
+      console.error(e);
+      response.status(400).send(e);
+    });
 });
 
 
 SettingsController.get('/tunnelinfo', function (request, response) {
-    if (fs.existsSync('tunneltoken')){
-        let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
-        let endpoint = 'https://' + tunneltoken.name + '.' +
-            config.get('ssltunnel.domain');
+    Settings.get('tunneltoken').then(function(result) {
+      if (typeof result === 'object') {
+        let endpoint = 'https://' + result.name + '.' +
+          config.get('ssltunnel.domain');
         response.send(endpoint);
         response.status(200).end();
     } else {
         response.status(404).end();
     }
+    }).catch(function(e) {
+      console.error('Failed to retrieve tunneltoken setting');
+      console.error(e);
+      response.status(400).send(e);
+    });
 });
 
 module.exports = SettingsController;

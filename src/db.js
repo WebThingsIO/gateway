@@ -28,7 +28,7 @@ const TABLES = [
 
 var Database = {
   /**
-   * SQLLite3 Database object.
+   * SQLite3 Database object.
    */
   db: null,
 

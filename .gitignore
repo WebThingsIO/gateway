@@ -7,9 +7,7 @@
 OZW_Log.txt
 db.sqlite3
 node_modules/
-notunnel
 static/js/lib/stm_web.min.js
 static/uploads/floorplan.svg
-tunneltoken
 zwcfg_0x*.xml
 zwscene.xml
