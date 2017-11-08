@@ -122,4 +122,28 @@ Thing.prototype.remove = function() {
   });
 };
 
+/**
+ * Add an action
+ * @param {Action} action
+ * @return {boolean} Whether a known action
+ */
+Thing.prototype.addAction = function(action) {
+  if (this.actions[action.name]) {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Remove an action
+ * @param {Action} action
+ * @return {boolean} Whether a known action
+ */
+Thing.prototype.removeAction = function(action) {
+  if (this.actions[action.name]) {
+    return true;
+  }
+  return false;
+};
+
 module.exports = Thing;

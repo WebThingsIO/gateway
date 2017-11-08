@@ -31,6 +31,25 @@ const TEST_THING = {
   }
 };
 
+const piDescr = {
+  id: 'pi-1',
+  type: 'thing',
+  name: 'pi-1',
+  properties: {
+    on : {type: 'boolean', value: true}
+  },
+  actions: {
+    reboot: {
+      description: 'Reboot the device'
+    }
+  },
+  events: {
+    reboot: {
+      description: 'Going down for reboot'
+    }
+  }
+};
+
 describe('things/', function() {
   let jwt;
   beforeEach(async () => {
@@ -100,24 +119,7 @@ describe('things/', function() {
   });
 
   it('GET a thing', async () => {
-    const thingDescr = {
-      id: 'pi-1',
-      type: 'thing',
-      name: 'pi-1',
-      properties: {
-        on : {type: 'boolean', value: true}
-      },
-      actions: {
-        reboot: {
-          description: 'Reboot the device'
-        }
-      },
-      events: {
-        reboot: {
-          description: 'Going down for reboot'
-        }
-      }
-    };
+    const thingDescr = Object.assign({}, piDescr);
 
     await addDevice(thingDescr);
     const res = await chai.request(server)
@@ -738,5 +740,40 @@ describe('things/', function() {
     expect(res.status).toEqual(204);
 
     await e2p(ws, 'close');
+  });
+
+  it('creates and gets the actions of a thing', async () => {
+    await addDevice(piDescr);
+
+    const thingBase = Constants.THINGS_PATH + '/' + piDescr.id;
+
+    let res = await chai.request(server)
+      .get(thingBase)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
+    const actionDescr = {
+      name: 'reboot'
+    };
+
+    res = await chai.request(server)
+      .post(thingBase + Constants.ACTIONS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(actionDescr);
+    expect(res.status).toEqual(201);
+
+    res = await chai.request(server)
+      .get(thingBase + Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0].name).toEqual('reboot');
+    expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
   });
 });
