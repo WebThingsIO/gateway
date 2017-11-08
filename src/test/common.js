@@ -74,7 +74,7 @@ expect.extend({
   }
 });
 
-let {server, httpServer} = require('../app');
+let {server, httpServer, serverStartup} = require('../app');
 global.server = server;
 
 var adapterManager = require('../adapter-manager');
@@ -87,6 +87,9 @@ function mockAdapter() {
 global.mockAdapter = mockAdapter;
 
 beforeAll(async () => {
+  // The server may not be done with reading tunneltoken and related settings
+  await serverStartup;
+
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
   await adapterManager.waitForAdapter('Mock');

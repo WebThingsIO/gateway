@@ -24,6 +24,7 @@ const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
 const Constants = require('./constants');
+const Settings = require('./models/settings');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/adapters/plugin/ipc.js)
@@ -32,17 +33,34 @@ require('./app-instance');
 // Open the database
 db.open();
 
+// Move the tunneltoken into the database
+if (fs.existsSync('tunneltoken')) {
+  const token = JSON.parse(fs.readFileSync('tunneltoken'));
+  Settings.set('tunneltoken', token).then(function() {
+    fs.unlinkSync('tunneltoken');
+  }).catch(function(e) {
+    throw e;
+  });
+}
+
+// Move the notunnel setting into the database
+if (fs.existsSync('notunnel')) {
+  Settings.set('notunnel', true).then(function() {
+    fs.unlinkSync('notunnel');
+  }).catch(function(e) {
+    throw e;
+  });
+}
+
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
 
-let httpsServer = null;
+let httpsServer = createHttpsServer();
 let httpsApp = null;
 
-function startHttpsGateway() {
-  let port = config.get('ports.https');
-  const cliOptions = getOptions();
-  if (typeof cliOptions.port === 'number') {
-    port = cliOptions.port;
+function createHttpsServer() {
+  if (!TunnelService.hasCertificates()) {
+    return null;
   }
 
   // HTTPS server configuration
@@ -53,7 +71,20 @@ function startHttpsGateway() {
   if (fs.existsSync('chain.pem')){
     options.ca = fs.readFileSync('chain.pem');
   }
-  httpsServer = https.createServer(options);
+  return https.createServer(options);
+}
+
+function startHttpsGateway() {
+  let port = config.get('ports.https');
+  const cliOptions = getOptions();
+  if (typeof cliOptions.port === 'number') {
+    port = cliOptions.port;
+  }
+
+  if (!httpsServer) {
+    httpsServer = createHttpsServer();
+  }
+
   httpsApp = createGatewayApp(httpsServer);
   httpsServer.on('request', httpsApp);
 
@@ -233,14 +264,23 @@ function createRedirectApp(port) {
   return app;
 }
 
+let serverStartup = Promise.resolve();
+
 // if we have the certificates installed, we start https
-if (TunnelService.hasCertificates() && !TunnelService.userSkipped()) {
-  startHttpsGateway();
-  if (TunnelService.hasTunnelToken()) {
-    TunnelService.start();
-  }
+if (TunnelService.hasCertificates()) {
+  serverStartup = TunnelService.userSkipped().then(function(res) {
+    if (res) {
+      startHttpGateway();
+    } else {
+      startHttpsGateway();
+      TunnelService.hasTunnelToken().then(function(result) {
+        if (result) {
+          TunnelService.start();
+        }
+      });
+    }
+  });
 } else {
-  // otherwise we start plain http
   startHttpGateway();
 }
 
@@ -269,5 +309,6 @@ TunnelService.switchToHttps = function(){
 
 module.exports = { // for testing
   httpServer: httpServer,
-  server: httpsServer
+  server: httpsServer,
+  serverStartup: serverStartup
 };

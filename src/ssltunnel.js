@@ -10,6 +10,7 @@
 
 const fs = require('fs');
 const config = require('config');
+const Settings = require('./models/settings');
 var spawnSync = require('child_process').spawn;
 
 var TunnelService = {
@@ -20,32 +21,50 @@ var TunnelService = {
 
     // method that starts the client if the box has a registered tunnel
     start: function(response, urlredirect) {
-        let tunneltoken = JSON.parse(fs.readFileSync('tunneltoken'));
-        let endpoint = tunneltoken.name + '.' + config.get('ssltunnel.domain');
-        this.pagekiteProcess  =
-            spawnSync(config.get('ssltunnel.pagekite_cmd'),
-                ['--clean', '--frontend=' + endpoint + ':' +
-                    config.get('ssltunnel.port'),
-                    '--service_on=https:' + endpoint +
-                    ':localhost:'+config.get('ports.https')+':moziot']);
-        // TODO: we should replace the hardcoded secret by the token after
-        // change the server
-        this.pagekiteProcess.stdout.on('data', (data) => {
-            console.log(`[pagekite] stdout: ${data}`);
-            if (response) {
-                if (data.indexOf('err=Error in connect') > -1) {
+        Settings.get('tunneltoken').then(function(result) {
+            if (typeof result === 'object') {
+                let endpoint = result.name + '.' +
+                    config.get('ssltunnel.domain');
+                this.pagekiteProcess  =
+                    spawnSync(config.get('ssltunnel.pagekite_cmd'),
+                              ['--clean', '--frontend=' + endpoint + ':' +
+                              config.get('ssltunnel.port'),
+                              '--service_on=https:' + endpoint +
+                              ':localhost:' +
+                              config.get('ports.https')+':moziot']);
+
+                // TODO: we should replace the hardcoded secret by the token
+                // after change the server
+                this.pagekiteProcess.stdout.on('data', (data) => {
+                    console.log(`[pagekite] stdout: ${data}`);
+                    if (response) {
+                        if (data.indexOf('err=Error in connect') > -1) {
+                            response.status(400).end();
+                        } else if (data.indexOf('connect=') > -1) {
+                            response.send(urlredirect);
+                            response.status(200).end();
+                        }
+                    }
+                });
+                this.pagekiteProcess.on('data', (data) => {
+                    console.log(`[pagekite] stderr: ${data}`);
+                });
+                this.pagekiteProcess.on('close', (code) => {
+                    console.log(`[pagekite] process exited with code ${code}`);
+                });
+            } else {
+                console.error('tunneltoken not set');
+                if (response) {
                     response.status(400).end();
-                } else if (data.indexOf('connect=') > -1) {
-                    response.send(urlredirect);
-                    response.status(200).end();
                 }
             }
-        });
-        this.pagekiteProcess.on('data', (data) => {
-            console.log(`[pagekite] stderr: ${data}`);
-        });
-        this.pagekiteProcess.on('close', (code) => {
-          console.log(`[pagekite] process exited with code ${code}`);
+        }).catch(function(e) {
+            console.error('Failed to get tunneltoken setting');
+            console.error(e);
+
+            if (response) {
+                response.status(400).send(e);
+            }
         });
     },
 
@@ -63,13 +82,19 @@ var TunnelService = {
     },
 
     // method to check if the box has a registered tunnel
-    hasTunnelToken: function() {
-        return fs.existsSync('./tunneltoken');
+    hasTunnelToken: async function() {
+        let tunneltoken = await Settings.get('tunneltoken');
+        return typeof tunneltoken === 'object';
     },
 
     // method to check if user skipped the sl tunnel setup
-    userSkipped: function() {
-         return fs.existsSync('./notunnel');
+    userSkipped: async function() {
+        let notunnel = await Settings.get('notunnel');
+        if (typeof notunnel === 'boolean' && notunnel) {
+            return true;
+        }
+
+        return false;
     }
 }
 
