@@ -59,7 +59,7 @@ let httpsServer = createHttpsServer();
 let httpsApp = null;
 
 function createHttpsServer() {
-  if (!fs.existsSync('privatekey.pem') || !fs.existsSync('certificate.pem')) {
+  if (!TunnelService.hasCertificates()) {
     return null;
   }
 
@@ -79,6 +79,10 @@ function startHttpsGateway() {
   const cliOptions = getOptions();
   if (typeof cliOptions.port === 'number') {
     port = cliOptions.port;
+  }
+
+  if (!httpsServer) {
+    httpsServer = createHttpsServer();
   }
 
   httpsApp = createGatewayApp(httpsServer);
