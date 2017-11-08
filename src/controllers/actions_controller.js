@@ -9,16 +9,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-var express = require('express');
+const PromiseRouter = require('express-promise-router');
 var Action = require('../models/action');
 var Actions = require('../models/actions');
+var Things = require('../models/things');
 
-var ActionsController = express.Router();
+const ActionsController = PromiseRouter({mergeParams: true});
 
 /**
  * Handle creating a new action.
  */
-ActionsController.post('/', function (request, response) {
+ActionsController.post('/', async (request, response) => {
   if (!request.body.name) {
     response.status(400).send('No action name provided');
     return;
@@ -26,7 +27,20 @@ ActionsController.post('/', function (request, response) {
 
   var actionName = request.body.name;
   var actionParams = request.body.parameters;
-  var action = new Action(actionName, actionParams);
+  var action = null;
+  var thingId = request.params.thingId;
+  if (thingId) {
+    try {
+      var thing = await Things.getThing(thingId);
+      action = new Action(actionName, actionParams, thing);
+    } catch(e) {
+      console.error('Thing does not exist', thingId, e);
+      response.status(400).send(e);
+      return;
+    }
+  } else {
+    action = new Action(actionName, actionParams);
+  }
 
   try {
     Actions.add(action);
@@ -42,7 +56,11 @@ ActionsController.post('/', function (request, response) {
  * Handle getting a list of actions.
  */
 ActionsController.get('/', function(request, response) {
-  response.status(200).json(Actions.getAll());
+  if (request.params.thingId) {
+    response.status(200).json(Actions.getByThing(request.params.thingId));
+  } else {
+    response.status(200).json(Actions.getAll());
+  }
 });
 
 /**

@@ -12,6 +12,7 @@
 
 const express = require('express');
 const Actions = require('../models/actions');
+const ActionsController = require('./actions_controller');
 const AdapterManager = require('../adapter-manager');
 const Constants = require('../constants.js');
 const Things = require('../models/things');
@@ -106,6 +107,12 @@ ThingsController.put('/:thingId/properties/:propertyName',
       response.status(500).send(error);
     });
 });
+
+/**
+ * Use an ActionsController to handle each thing's
+ * actions
+ */
+ThingsController.use('/:thingId' + Constants.ACTIONS_PATH, ActionsController);
 
 /**
  * Modify a Thing.

@@ -19,14 +19,20 @@ class Action extends EventEmitter {
    * Create a new Action
    * @param {String} name
    * @param {Object} parameters
+   * @param {Thing?} thing
    */
-  constructor(name, parameters) {
+  constructor(name, parameters, thing) {
     super();
 
     this.id = Actions.generateId();
     this.name = name;
     this.parameters = parameters || {};
-    this.href = Constants.ACTIONS_PATH + '/' + this.id;
+    if (thing) {
+      this.href = thing.href + Constants.ACTIONS_PATH + '/' + this.id;
+      this.thingId = thing.id;
+    } else {
+      this.href = Constants.ACTIONS_PATH + '/' + this.id;
+    }
     this.status = 'created';
     this.error = '';
   }

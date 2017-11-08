@@ -74,6 +74,16 @@ class Actions extends EventEmitter {
   }
 
   /**
+   * Get only the actions which are associated with
+   * a specific thing
+   */
+  getByThing(thingId) {
+    return this.getAll().filter(action => {
+      return action.thingId === thingId
+    });
+  }
+
+  /**
    * Add a new action.
    *
    * @param {Action} action An Action object.
@@ -84,6 +94,20 @@ class Actions extends EventEmitter {
     action.on(Constants.ACTION_STATUS, this.onActionStatus);
 
     action.updateStatus('pending');
+
+    if (action.thingId) {
+      Things.getThing(action.thingId).then(thing => {
+        let success = thing.addAction(action);
+        if (!success) {
+          delete this.actions[id];
+          throw 'Invalid thing action name: "' + action.name + '"';
+        }
+      }).catch(err => {
+        console.error('Error adding thing action', err);
+      });
+      return;
+    }
+
     switch(action.name) {
       case 'pair':
         AdapterManager.addNewThing().then(function() {
@@ -143,15 +167,25 @@ class Actions extends EventEmitter {
     }
 
     if (action.status === 'pending') {
-      switch(action.name) {
-        case 'pair':
-          AdapterManager.cancelAddNewThing();
-          break;
-        case 'unpair':
-          AdapterManager.cancelRemoveThing(action.parameters.id);
-          break;
-        default:
-          throw 'Invalid action name: "' + action.name + '"';
+      if (action.thingId) {
+        Things.getThing(action.thingId).then(thing => {
+          if (!thing.removeAction(action)) {
+            throw 'Invalid thing action name: "' + action.name + '"';
+          }
+        }).catch(err => {
+          console.error('Error removing thing action', err);
+        });
+      } else {
+        switch(action.name) {
+          case 'pair':
+            AdapterManager.cancelAddNewThing();
+            break;
+          case 'unpair':
+            AdapterManager.cancelRemoveThing(action.parameters.id);
+            break;
+          default:
+            throw 'Invalid action name: "' + action.name + '"';
+        }
       }
     }
 
