@@ -55,14 +55,12 @@ if (fs.existsSync('notunnel')) {
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
 
-let httpsServer = null;
+let httpsServer = createHttpsServer();
 let httpsApp = null;
 
-function startHttpsGateway() {
-  let port = config.get('ports.https');
-  const cliOptions = getOptions();
-  if (typeof cliOptions.port === 'number') {
-    port = cliOptions.port;
+function createHttpsServer() {
+  if (!fs.existsSync('privatekey.pem') || !fs.existsSync('certificate.pem')) {
+    return null;
   }
 
   // HTTPS server configuration
@@ -73,7 +71,16 @@ function startHttpsGateway() {
   if (fs.existsSync('chain.pem')){
     options.ca = fs.readFileSync('chain.pem');
   }
-  httpsServer = https.createServer(options);
+  return https.createServer(options);
+}
+
+function startHttpsGateway() {
+  let port = config.get('ports.https');
+  const cliOptions = getOptions();
+  if (typeof cliOptions.port === 'number') {
+    port = cliOptions.port;
+  }
+
   httpsApp = createGatewayApp(httpsServer);
   httpsServer.on('request', httpsApp);
 
@@ -253,9 +260,11 @@ function createRedirectApp(port) {
   return app;
 }
 
+let serverStartup = Promise.resolve();
+
 // if we have the certificates installed, we start https
 if (TunnelService.hasCertificates()) {
-  let promise = TunnelService.userSkipped().then(function(res) {
+  serverStartup = TunnelService.userSkipped().then(function(res) {
     if (res) {
       startHttpGateway();
     } else {
@@ -263,18 +272,10 @@ if (TunnelService.hasCertificates()) {
       TunnelService.hasTunnelToken().then(function(result) {
         if (result) {
           TunnelService.start();
-        } else {
-          // otherwise we start plain http
-          startHttpGateway();
         }
       });
     }
   });
-
-  // Wait for the gateway to start.
-  (async function() {
-    await promise;
-  })();
 } else {
   startHttpGateway();
 }
@@ -304,5 +305,6 @@ TunnelService.switchToHttps = function(){
 
 module.exports = { // for testing
   httpServer: httpServer,
-  server: httpsServer
+  server: httpsServer,
+  serverStartup: serverStartup
 };
