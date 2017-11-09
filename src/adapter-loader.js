@@ -11,10 +11,74 @@
 'use strict';
 
 var config = require('config');
-const Constants = require('./constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./adapters/plugin/plugin-client');
+const fs = require('fs');
+const path = require('path');
 
+function loadAdapter(adapterId, verbose) {
+  const adapterPath = path.join(__dirname,
+                                config.get('adapterManager.path'),
+                                adapterId);
+
+  // Skip if there's no package.json file.
+  const packageJson = path.join(adapterPath, 'package.json');
+  if (!fs.lstatSync(packageJson).isFile()) {
+    console.error('package.json not found for adapter:', adapterId);
+    return false;
+  }
+
+  // Read the package.json file.
+  let data;
+  try {
+    data = fs.readFileSync(packageJson);
+  } catch (err) {
+    console.error('Failed to read package.json for adapter:', adapterId);
+    console.error(err);
+    return false;
+  }
+
+  let manifest;
+  try {
+    manifest = JSON.parse(data);
+  } catch (err) {
+    console.error('Failed to parse package.json for adapter:', adapterId);
+    console.error(err);
+    return false;
+  }
+
+  // Verify API version.
+  const apiVersion = config.get('adapterManager.api');
+  if (manifest.moziot.api.min > apiVersion ||
+      manifest.moziot.api.max < apiVersion) {
+    console.error('API mismatch for adapter:', manifest.name);
+    console.error('Current:', apiVersion, 'Supported:',
+                  manifest.moziot.api.min, '-', manifest.moziot.api.max);
+    return false;
+  }
+  let newSettings = Object.assign({}, manifest);
+  if (!newSettings.moziot.hasOwnProperty('config')) {
+    newSettings.moziot.config = {};
+  }
+
+  const errorCallback = function(packageName, errorStr) {
+    console.log('Failed to load', packageName, '-', errorStr);
+  };
+
+  var pluginClient = new PluginClient(adapterId, {verbose: verbose});
+  pluginClient.register().then(adapterManagerProxy => {
+    console.log('Loading adapter for', manifest.name,
+                'from', adapterPath);
+    let adapterLoader = dynamicRequire(adapterPath);
+    adapterLoader(adapterManagerProxy, newSettings, errorCallback);
+  }).catch(err => {
+    console.error('Failed to register adapter with gateway');
+    console.error(err);
+    return false;
+  });
+
+  return true;
+}
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -47,27 +111,6 @@ if (opt.argv.length != 1) {
   process.exit(1);
 }
 var adapterId = opt.argv[0];
-var adapterConfig = config.get(Constants.ADAPTERS_CONFIG + '.' + adapterId);
-if (!adapterConfig) {
-  console.error('No configuration for adapter "' + adapterId + '"');
+if (!loadAdapter(adapterId, opt.verbose)) {
   process.exit(1);
 }
-if (!adapterConfig.enabled) {
-  console.error('Adapter "' + adapterId + '" is disabled.');
-  process.exit(1);
-}
-if (!adapterConfig.plugin) {
-  console.error('Adapter "' + adapterId + '" isn\'t configured as a plugin.');
-  process.exit(1);
-}
-
-var pluginClient = new PluginClient(adapterId, {verbose: opt.verbose});
-pluginClient.register().then(adapterManagerProxy => {
-  console.log('Loading adapters for', adapterId,
-              'from', adapterConfig.path);
-  let adapterLoader = dynamicRequire(adapterConfig.path);
-  adapterLoader(adapterManagerProxy, adapterId, adapterConfig);
-}).catch(err => {
-  console.error('Failed to register adapter with gateway');
-  console.error(err);
-});

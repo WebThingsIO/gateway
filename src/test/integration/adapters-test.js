@@ -60,4 +60,8 @@ describe('adapters/', function() {
     }
   });
 
+  it('test loading an adapter via plugin mechanism', async () => {
+
+  });
+
 });

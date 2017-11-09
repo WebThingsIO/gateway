@@ -33,10 +33,22 @@ class PluginServer {
       console.log('Server bound to', this.ipcSocket.ipcAddr);
   }
 
+  /**
+   * @method addAdapter
+   *
+   * Tells the adapter manager about new adapters added via a plugin.
+   */
   addAdapter(adapter) {
     this.manager.addAdapter(adapter);
   }
 
+  /**
+   * @method onMsg
+   *
+   * Called when the plugin server receives an adapter manager IPC message
+   * from a plugin. This particular IPC channel is only used to register
+   * plugins. Each plugin will get its own IPC channel once its registered.
+   */
   onMsg(msg) {
     this.verbose &&
       console.log('PluginServer: Rcvd:', msg);
@@ -57,6 +69,23 @@ class PluginServer {
     }
   }
 
+  /**
+   * @method loadPlugin
+   *
+   * Loads a plugin by launching a separate process.
+   */
+  loadPlugin(pluginId, manifest) {
+    let plugin = this.registerPlugin(pluginId);
+    plugin.exec = manifest.moziot.exec;
+    plugin.start();
+  }
+
+  /**
+   * @method registerPlugin
+   *
+   * Called when the plugin server receives a register plugin message
+   * via IPC.
+   */
   registerPlugin(pluginId) {
     var plugin = this.plugins.get(pluginId);
     if (plugin) {
@@ -69,6 +98,11 @@ class PluginServer {
     return plugin;
   }
 
+  /**
+   * @method unregisterPlugin
+   *
+   * Called when the plugin sends a plugin-unloaded message.
+   */
   unregisterPlugin(pluginId) {
     this.plugins.delete(pluginId);
     if (this.plugins.size == 0) {

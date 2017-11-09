@@ -15,6 +15,7 @@ const AdapterProxy = require('./adapter-proxy');
 const Constants = require('../adapter-constants');
 const DeviceProxy = require('./device-proxy');
 const IpcSocket = require('./ipc');
+const spawn = require('child_process').spawn;
 
 const DEBUG = false;
 
@@ -26,21 +27,30 @@ class Plugin {
 
     this.adapters = new Map();
     this.ipcBaseAddr = 'gateway.plugin.' + this.pluginId;
-    
+
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
                                    this.ipcBaseAddr,
                                    this.onMsg.bind(this));
     this.ipcSocket.bind();
     this.deferredUnload = null;
+    this.exec = '';
+    this.process = null;
+    this.restart = true;
   }
 
   asDict() {
+    let pid = 'not running';
+    if (this.process) {
+      pid = this.process.pid;
+    }
     return {
       pluginId: this.pluginId,
       ipcBaseAddr: this.ipcBaseAddr,
       adapters: Array.from(this.adapters.values()).map(adapter => {
         return adapter.asDict();
       }),
+      exec: this.exec,
+      pid: pid,
     };
   }
 
@@ -60,7 +70,7 @@ class Plugin {
         return;
 
       case Constants.PLUGIN_UNLOADED:
-        this.ipcSocket.close();
+        this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
         deferredUnload = this.deferredUnload;
         if (deferredUnload) {
@@ -83,14 +93,14 @@ class Plugin {
     var device;
     var property;
     var deferredMock;
-    
+
     switch (msg.messageType) {
 
       case Constants.ADAPTER_UNLOADED:
         this.adapters.delete(adapterId);
         if (this.adapters.size == 0) {
           // We may need to reevaluate this, and only auto-unload
-          // the plugin for the MockAdapter. For plugins which 
+          // the plugin for the MockAdapter. For plugins which
           // support hot-swappable dongles (like zwave/zigbee) it makes
           // sense to have a plugin loaded with no adapters present.
           this.unload();
@@ -161,7 +171,7 @@ class Plugin {
           deferredMock.reject(msg.data.error);
         }
         break;
-    
+
       default:
         console.error('Plugin: unrecognized msg:', msg);
         break;
@@ -178,8 +188,50 @@ class Plugin {
     return this.ipcSocket.sendJson(msg);
   }
 
+  /**
+   * Does cleanup required to allow the test suite to complete cleanly.
+   */
+  shutdown() {
+    this.ipcSocket.close();
+  }
+
+  start() {
+    // If we need embedded spaces, then consider changing to use the npm
+    // module called splitargs
+    this.restart = true;
+    let args = this.exec.split(' ');
+    this.process = spawn(args[0], args.slice(1));
+
+    this.process.on('error', err => {
+      // We failed to spawn the process. This most likely means that the
+      // exec string is malformed somehow. Report the error but don't try
+      // restarting.
+      this.restart = false;
+      console.error('Failed to start plugin', this.pluginId);
+      console.error('Command:', this.exec);
+      console.error(err);
+    });
+
+    this.process.stdout.on('data', data => {
+      process.stdout.write(data);
+    });
+
+    this.process.stderr.on('data', data => {
+      process.stderr.write(data);
+    });
+
+    this.process.on('exit', code => {
+      if (this.restart) {
+        console.log('Plugin:', this.pluginId, 'died, code =', code,
+                    'restarting...');
+        this.start();
+      }
+    });
+  }
+
   unload() {
-    this.sendMsg(Constants.UNLOAD_PLUGIN, { });
+    this.restart = false;
+    this.sendMsg(Constants.UNLOAD_PLUGIN, {});
   }
 }
 

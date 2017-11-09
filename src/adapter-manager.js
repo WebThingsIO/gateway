@@ -345,7 +345,6 @@ class AdapterManager extends EventEmitter {
     const adapterPath = path.join(__dirname,
                                   config.get('adapterManager.path'),
                                   packageName);
-    const testMode = process.env.NODE_ENV === 'test';
 
     // Skip if there's no package.json file.
     const packageJson = path.join(adapterPath, 'package.json');
@@ -397,15 +396,8 @@ class AdapterManager extends EventEmitter {
       newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
                                                 savedSettings.moziot.config);
     } else {
-      // Default the Zigbee and Z-Wave adapters to enabled for now.
-      const defaults = [
-        'moziot-adapter-zigbee',
-        'moziot-adapter-zwave',
-      ];
-
-      if ((defaults.includes(manifest.name) && !testMode) ||
-          (manifest.moziot._test && testMode)) {
-        newSettings.moziot.enabled = true;
+      if (manifest.moziot.hasOwnProperty('enabled')) {
+        newSettings.moziot.enabled = manifest.moziot.enabled;
       } else {
         newSettings.moziot.enabled = false;
       }
@@ -432,7 +424,7 @@ class AdapterManager extends EventEmitter {
     // Load the adapter
     console.log('Loading adapter:', manifest.name);
     if (manifest.moziot.plugin) {
-      if (manifest.moziot._test) {
+      if (config.get('ipc.protocol') == 'inproc') {
         // This is a special case where we load the adapter directly
         // into the gateway, but we use IPC comms to talk to the
         // adapter (i.e. for testing)
@@ -450,9 +442,9 @@ class AdapterManager extends EventEmitter {
           return Promise.reject(err);
         }
       } else {
-        // This is the normal plugin adapter case, and we currently
-        // don't need to do anything. We assume that the adapter is
-        // started elsewhere.
+        // This is the normal plugin adapter case, tell the PluginServer
+        // to load the plugin.
+        this.pluginServer.loadPlugin(packageName, manifest);
       }
     } else {
       // Load this adapter directly into the gateway.

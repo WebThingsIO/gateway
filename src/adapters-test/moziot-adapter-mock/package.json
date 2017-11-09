@@ -22,7 +22,7 @@
       "min": 1,
       "max": 1
     },
-    "plugin": true,
-    "_test": true
+    "enabled": true,
+    "plugin": true
   }
 }
