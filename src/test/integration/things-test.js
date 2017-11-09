@@ -812,4 +812,40 @@ describe('things/', function() {
       .send(actionDescr));
     expect(err.response.status).toEqual(400);
   });
+
+  it('should create an action over websocket', async () => {
+    await addDevice(piDescr);
+    const thingBase = Constants.THINGS_PATH + '/' + piDescr.id;
+    let ws = await webSocketOpen(thingBase, jwt);
+
+    const [_, messages] = await Promise.all([
+      webSocketSend(ws, {
+        messageType: Constants.REQUEST_ACTION,
+        data: {
+          name: 'reboot'
+        }
+      }),
+      webSocketRead(ws, 1)
+    ]);
+
+    const actionStatus = messages[0];
+    expect(actionStatus.messageType).toEqual(Constants.ACTION_STATUS);
+    expect(actionStatus.data.name).toEqual('reboot');
+
+    let res = await chai.request(server)
+      .get(thingBase + Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0].name).toEqual('reboot');
+    expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
+
+    await webSocketClose(ws);
+  });
+
+
 });

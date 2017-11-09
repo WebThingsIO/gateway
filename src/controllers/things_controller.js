@@ -11,6 +11,7 @@
 'use strict';
 
 const express = require('express');
+const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
 const AdapterManager = require('../adapter-manager');
@@ -266,6 +267,37 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
 
       case Constants.ADD_EVENT_SUBSCRIPTION: {
         subscribedEventNames[request.data.name] = true;
+        break;
+      }
+
+      case Constants.REQUEST_ACTION: {
+        Things.getThing(thingId).then(thing => {
+          let action = new Action(request.data.name,
+                                  request.data.parameters, thing);
+
+          return Actions.add(action);
+        }).catch(err => {
+          websocket.send(JSON.stringify({
+            messageType: Constants.ERROR,
+            data: {
+              status: '400 Bad Request',
+              message: err.message,
+              request: request
+            }
+          }));
+        });
+        break;
+      }
+
+      default: {
+        websocket.send(JSON.stringify({
+          messageType: Constants.ERROR,
+          data: {
+            status: '400 Bad Request',
+            message: `Unknown messageType: ${request.messageType}`,
+            request: request
+          }
+        }));
         break;
       }
     }
