@@ -43,7 +43,7 @@ ActionsController.post('/', async (request, response) => {
   }
 
   try {
-    Actions.add(action);
+    await Actions.add(action);
     response.status(201).json(action.getDescription());
   } catch(e) {
     console.error('Creating action', actionName, 'failed');

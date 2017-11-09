@@ -87,6 +87,7 @@ class Actions extends EventEmitter {
    * Add a new action.
    *
    * @param {Action} action An Action object.
+   * @return {Promise} resolved when action added or rejected if failed
    */
   add(action) {
     var id = action.id;
@@ -96,16 +97,13 @@ class Actions extends EventEmitter {
     action.updateStatus('pending');
 
     if (action.thingId) {
-      Things.getThing(action.thingId).then(thing => {
+      return Things.getThing(action.thingId).then(thing => {
         let success = thing.addAction(action);
         if (!success) {
           delete this.actions[id];
-          throw 'Invalid thing action name: "' + action.name + '"';
+          throw new Error('Invalid thing action name: "' + action.name + '"');
         }
-      }).catch(err => {
-        console.error('Error adding thing action', err);
       });
-      return;
     }
 
     switch(action.name) {
@@ -142,8 +140,10 @@ class Actions extends EventEmitter {
         break;
       default:
         delete this.actions[id];
-        throw 'Invalid action name: "' + action.name + '"';
+        return Promise.reject(
+          new Error('Invalid action name: "' + action.name + '"'));
     }
+    return Promise.resolve();
   }
 
   /**
