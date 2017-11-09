@@ -76,7 +76,7 @@ UsersController.post('/', async (request, response) => {
     if (typeof result === 'object') {
       try {
         // now we associate user's emails with the subdomain
-        await fetch('http://' + config.get('ssltunnel.registration_endpoint') +
+        await fetch(config.get('ssltunnel.registration_endpoint') +
                     '/setemail?token=' + result.token + '&email=' +
                     body.email);
       } catch (e) {

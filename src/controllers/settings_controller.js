@@ -111,7 +111,7 @@ SettingsController.post('/subscribe', async (request, response) => {
       return new Promise((resolve) => {
         // ok now that we have a challenge, we call our gateway to setup
         // the TXT record
-        fetch('http://' + config.get('ssltunnel.registration_endpoint') +
+        fetch(config.get('ssltunnel.registration_endpoint') +
               '/dnsconfig?token=' + token + '&challenge=' + keyAuthDigest)
           .catch(function(e) {
             returnError(e);
@@ -128,8 +128,8 @@ SettingsController.post('/subscribe', async (request, response) => {
   let jsonToken;
   try {
     const res =
-      await fetch('http://' + config.get('ssltunnel.registration_endpoint')
-                  + '/subscribe?name=' + subdomain);
+      await fetch(config.get('ssltunnel.registration_endpoint') +
+                  '/subscribe?name=' + subdomain);
     const body = await res.text();
 
     jsonToken = JSON.parse(body);
