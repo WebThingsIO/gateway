@@ -776,4 +776,27 @@ describe('things/', function() {
     expect(res.body[0].name).toEqual('reboot');
     expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
   });
+
+  it('fails to create thing action which does not exist', async () => {
+    await addDevice(piDescr);
+
+    const thingBase = Constants.THINGS_PATH + '/' + piDescr.id;
+
+    let res = await chai.request(server)
+      .get(thingBase)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
+    const actionDescr = {
+      name: 'pair'
+    };
+
+    let err = await pFinal(chai.request(server)
+      .post(thingBase + Constants.ACTIONS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(actionDescr));
+    expect(err.response.status).toEqual(400);
+  });
 });
