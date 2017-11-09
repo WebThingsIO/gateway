@@ -790,6 +790,21 @@ describe('things/', function() {
     expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
   });
 
+  it('fails to create an action on a nonexistent thing', async () => {
+    const thingBase = Constants.THINGS_PATH + '/nonexistent-thing';
+
+    const actionDescr = {
+      name: 'pair'
+    };
+
+    let err = await pFinal(chai.request(server)
+      .post(thingBase + Constants.ACTIONS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(actionDescr));
+    expect(err.response.status).toEqual(400);
+  });
+
   it('fails to create thing action which does not exist', async () => {
     await addDevice(piDescr);
 
@@ -847,5 +862,47 @@ describe('things/', function() {
     await webSocketClose(ws);
   });
 
+  it('should fail to create an unknown action over websocket', async () => {
+    await addDevice(piDescr);
+    const thingBase = Constants.THINGS_PATH + '/' + piDescr.id;
+    let ws = await webSocketOpen(thingBase, jwt);
 
+    const [_, messages] = await Promise.all([
+      webSocketSend(ws, {
+        messageType: Constants.REQUEST_ACTION,
+        data: {
+          name: 'pair'
+        }
+      }),
+      webSocketRead(ws, 2)
+    ]);
+
+    const pending = messages[0];
+    expect(pending.messageType).toEqual(Constants.ACTION_STATUS);
+    expect(pending.data.status).toEqual('pending');
+
+    const err = messages[1];
+    expect(err.messageType).toEqual(Constants.ERROR);
+
+    await webSocketClose(ws);
+  });
+
+  it('should fail to handle an unknown websocket messageType', async () => {
+    await addDevice(piDescr);
+    const thingBase = Constants.THINGS_PATH + '/' + piDescr.id;
+    let ws = await webSocketOpen(thingBase, jwt);
+
+    const [_, messages] = await Promise.all([
+      webSocketSend(ws, {
+        messageType: 'tomato',
+        data: {}
+      }),
+      webSocketRead(ws, 1)
+    ]);
+
+    const actionStatus = messages[0];
+    expect(actionStatus.messageType).toEqual(Constants.ERROR);
+
+    await webSocketClose(ws);
+  });
 });
