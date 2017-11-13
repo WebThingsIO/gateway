@@ -56,7 +56,6 @@ module.exports = {
     protocol: 'ipc',
   },
   settings: {
-    directory: './settings', // Directory to store settings in
     defaults: {
       experiments: {
         floorplan: {
@@ -72,9 +71,7 @@ module.exports = {
     directory: '../static/uploads/' // Directory to store uploads in
   },
   authentication: {
-    enabled: true,
     defaultUser: null,
-    secret: 'top secret 51'      // DO NOT USE THIS IN PRODUCTION
   },
   ssltunnel: {
     enabled: true,

@@ -36,14 +36,14 @@ module.exports = {
     protocol: 'inproc',
   },
   settings: {
-    directory: './test-settings'
+    defaults: {
+    },
   },
   uploads: {
     directory: '../../static/uploads/' // Directory to store uploads in
   },
   authentication: {
-    enabled: true,
-    defaultUser: null
+    defaultUser: null,
   },
   bcryptRounds: 2
 };
