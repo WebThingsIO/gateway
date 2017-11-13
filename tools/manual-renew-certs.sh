@@ -91,7 +91,7 @@ echo "Starting PageKite."
 "${moziot_dir}/gateway/pagekite.py" \
     --clean \
     --frontend="${domain}:443" \
-    --service_on="https:${domain}:localhost:4443:moziot" \
+    --service_on="https:${domain}:localhost:4443:${token}" \
     --daemonize \
     --pidfile="${pagekite_pidfile}" || abort "Failed to start PageKite."
 

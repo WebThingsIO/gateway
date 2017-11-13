@@ -33,7 +33,8 @@ var TunnelService = {
                               config.get('ssltunnel.port'),
                               '--service_on=https:' + endpoint +
                               ':localhost:' +
-                              config.get('ports.https')+':moziot']);
+                              config.get('ports.https') + ':' +
+                              this.tunneltoken.token]);
 
                 // TODO: we should replace the hardcoded secret by the token
                 // after change the server
