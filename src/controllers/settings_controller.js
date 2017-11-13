@@ -73,11 +73,12 @@ SettingsController.get('/experiments/:experimentName',
 });
 
 SettingsController.post('/subscribe', async (request, response) => {
-  let email = config.get('ssltunnel.certemail');
+  let email = request.body.email;
   let subdomain = request.body.subdomain;
   let fulldomain =  subdomain + '.' + config.get('ssltunnel.domain');
 
   function returnError(message) {
+    console.error(message);
     response.statusMessage = 'Error issuing certificate - ' + message;
     response.status(400).end();
   }
@@ -150,7 +151,7 @@ SettingsController.post('/subscribe', async (request, response) => {
   try {
     let results = await le.register({
       domains: [fulldomain],
-      email: email,
+      email: config.get('ssltunnel.certemail'),
       agreeTos: true,
       rsaKeySize: 2048,
       challengeType: 'dns-01'
@@ -162,6 +163,20 @@ SettingsController.post('/subscribe', async (request, response) => {
     fs.writeFileSync('certificate.pem', results.cert);
     fs.writeFileSync('privatekey.pem', results.privkey);
     fs.writeFileSync('chain.pem', results.chain);
+
+    // now we associate user's emails with the subdomain
+    try {
+      await fetch(config.get('ssltunnel.registration_endpoint') +
+                  '/setemail?token=' + token + '&email=' + email);
+      console.log('Online account created.');
+    } catch (e) {
+      // https://github.com/mozilla-iot/gateway/issues/358
+      // we should store this error and display to the user on
+      // settings page to allow him to retry
+      returnError(e);
+      return;
+    }
+
     let endpoint_url = 'https://' + subdomain + '.' +
       config.get('ssltunnel.domain');
     TunnelService.start(response, endpoint_url);

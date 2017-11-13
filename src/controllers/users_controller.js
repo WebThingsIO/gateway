@@ -14,10 +14,7 @@ const PromiseRouter = require('express-promise-router');
 const Passwords = require('../passwords');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
-const config = require('config');
-const fetch = require('node-fetch');
 const auth = require('../jwt-middleware')();
-const Settings = require('../models/settings');
 
 const UsersController = PromiseRouter();
 
@@ -60,34 +57,6 @@ UsersController.post('/', async (request, response) => {
   if (count > 0) {
     response.status(400).send('Gateway user already created');
     return;
-  }
-
-  if (config.get('ssltunnel.enabled')) {
-    let result;
-    try {
-      result = await Settings.get('tunneltoken');
-    } catch (e) {
-      console.error('Failed to get tunneltoken setting');
-      console.error(e);
-      response.status(400).send(e);
-      return;
-    }
-
-    if (typeof result === 'object') {
-      try {
-        // now we associate user's emails with the subdomain
-        await fetch(config.get('ssltunnel.registration_endpoint') +
-                    '/setemail?token=' + result.token + '&email=' +
-                    body.email);
-      } catch (e) {
-        // https://github.com/mozilla-iot/gateway/issues/358
-        // we should store this error and display to the user on
-        // settings page to allow him to retry
-        throw e;
-      }
-
-      console.log('Online account created.');
-    }
   }
 
   // TODO: user facing errors...
