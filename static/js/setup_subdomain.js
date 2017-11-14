@@ -11,6 +11,7 @@
 'use strict';
 
 const subdomain = document.getElementById('subdomain');
+const email = document.getElementById('email');
 const createDomainButton = document.getElementById('create-domain-button');
 // https://github.com/mozilla-iot/gateway/issues/159
 //const skipButton = document.getElementById('skip-subdomain-button');
@@ -45,10 +46,20 @@ function validateDomain() {
 }
 
 /**
+ * Ensure that email is at least somewhat valid.
+ */
+function validateEmail() {
+    const val = email.value;
+    // eslint-disable-next-line max-len
+    const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
+    return re.test(val);
+}
+
+/**
  * Ensure that all inputs are valid.
  */
 function validateInput() {
-    if (validateDomain()) {
+    if (validateDomain() && validateEmail()) {
         createDomainButton.disabled = false;
     } else {
         createDomainButton.disabled = true;
@@ -60,7 +71,7 @@ function validateInput() {
  * valid.
  */
 function submitOnEnter(evt) {
-    if (evt.key === 'Enter' && validateDomain()) {
+    if (evt.key === 'Enter' && validateDomain() && validateEmail()) {
         submitForm();
     }
 }
@@ -73,6 +84,7 @@ function submitForm() {
 
     // Call the settings controller to subscribe the domain in the gateway.
     var action = {
+      'email': email.value,
       'subdomain': subdomain.value
     };
     fetch('/settings/subscribe', {
@@ -108,7 +120,11 @@ function submitForm() {
 }
 
 subdomain.addEventListener('input', validateInput);
+email.addEventListener('input', validateInput);
+
 subdomain.addEventListener('keydown', submitOnEnter);
+email.addEventListener('keydown', submitOnEnter);
+
 createDomainButton.addEventListener('click', submitForm);
 
 /*
