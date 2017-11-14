@@ -10,7 +10,6 @@
 
 var config = require('config');
 var fs = require('fs');
-const Constants = require('./constants');
 const Settings = require('./models/settings');
 
 var TunnelSetup = {
@@ -42,8 +41,10 @@ var TunnelSetup = {
             } else {
                 // if there are no certs installed,
                 // we display the cert setup page to the user
-                response.sendFile('tunnel_setup.html',
-                    { root: Constants.VIEWS_PATH });
+                response.render('tunnel_setup',
+                                {
+                                    domain: config.get('ssltunnel.domain'),
+                                });
             }
         }
     }

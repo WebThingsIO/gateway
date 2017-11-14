@@ -18,6 +18,7 @@ const bodyParser = require('body-parser');
 const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
+const mustacheExpress = require('mustache-express');
 const adapterManager = require('./adapter-manager');
 const db = require('./db');
 const Router = require('./router');
@@ -196,6 +197,9 @@ function rulesEngineConfigure(server) {
 
 function createApp() {
   const app = express();
+  app.engine('mustache', mustacheExpress());
+  app.set('view engine', 'mustache');
+  app.set('views', Constants.VIEWS_PATH);
 
   app.use(bodyParser.urlencoded({
     extended: false
