@@ -72,8 +72,23 @@ SettingsController.get('/experiments/:experimentName',
   }
 });
 
+SettingsController.post('/reclaim', async (request, response) => {
+  let subdomain = request.body.subdomain;
+
+  try {
+    await fetch(config.get('ssltunnel.registration_endpoint') +
+                '/reclaim?name=' + subdomain);
+    response.status(200).end();
+  } catch (e) {
+    console.error(e);
+    response.statusMessage = 'Error issuing certificate - ' + e;
+    response.status(400).end();
+  }
+});
+
 SettingsController.post('/subscribe', async (request, response) => {
   let email = request.body.email;
+  let reclamationToken = request.body.reclamationToken;
   let subdomain = request.body.subdomain;
   let fulldomain =  subdomain + '.' + config.get('ssltunnel.domain');
 
@@ -128,9 +143,13 @@ SettingsController.post('/subscribe', async (request, response) => {
 
   let jsonToken;
   try {
-    const res =
-      await fetch(config.get('ssltunnel.registration_endpoint') +
-                  '/subscribe?name=' + subdomain);
+    let subscribeUrl = config.get('ssltunnel.registration_endpoint') +
+      '/subscribe?name=' + subdomain + '&email=' + email;
+    if (reclamationToken) {
+      subscribeUrl += '&reclamationToken=' + reclamationToken.trim();
+    }
+
+    const res = await fetch(subscribeUrl);
     const body = await res.text();
 
     jsonToken = JSON.parse(body);
