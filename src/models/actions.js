@@ -74,8 +74,17 @@ class Actions extends EventEmitter {
   }
 
   /**
-   * Get only the actions which are associated with
-   * a specific thing
+   * Get only the actions which are not associated with a specific thing
+   */
+  getUnassociated() {
+    return this.getAll().filter(action => {
+      return !action.thingId;
+    });
+  }
+
+
+  /**
+   * Get only the actions which are associated with a specific thing
    */
   getByThing(thingId) {
     return this.getAll().filter(action => {
