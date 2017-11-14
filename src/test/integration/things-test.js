@@ -776,18 +776,14 @@ describe('things/', function() {
     expect(res.body[0].name).toEqual('reboot');
     expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
 
-    // Expect it to also show up in the root actions route
+    // Expect it to not show up in the root (Gateway's) actions route
     res = await chai.request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('id');
-    expect(res.body[0].name).toEqual('reboot');
-    expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
   });
 
   it('fails to create an action on a nonexistent thing', async () => {

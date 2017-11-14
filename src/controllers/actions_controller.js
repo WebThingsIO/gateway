@@ -59,7 +59,7 @@ ActionsController.get('/', function(request, response) {
   if (request.params.thingId) {
     response.status(200).json(Actions.getByThing(request.params.thingId));
   } else {
-    response.status(200).json(Actions.getAll());
+    response.status(200).json(Actions.getUnassociated());
   }
 });
 
