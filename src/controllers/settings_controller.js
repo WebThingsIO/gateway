@@ -81,7 +81,7 @@ SettingsController.post('/reclaim', async (request, response) => {
     response.status(200).end();
   } catch (e) {
     console.error(e);
-    response.statusMessage = 'Error issuing certificate - ' + e;
+    response.statusMessage = 'Error reclaiming domain - ' + e;
     response.status(400).end();
   }
 });
