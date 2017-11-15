@@ -183,17 +183,20 @@ SettingsController.post('/subscribe', async (request, response) => {
     fs.writeFileSync('privatekey.pem', results.privkey);
     fs.writeFileSync('chain.pem', results.chain);
 
-    // now we associate user's emails with the subdomain
-    try {
-      await fetch(config.get('ssltunnel.registration_endpoint') +
-                  '/setemail?token=' + token + '&email=' + email);
-      console.log('Online account created.');
-    } catch (e) {
-      // https://github.com/mozilla-iot/gateway/issues/358
-      // we should store this error and display to the user on
-      // settings page to allow him to retry
-      returnError(e);
-      return;
+    // now we associate user's emails with the subdomain, unless it was
+    // reclaimed.
+    if (!reclamationToken) {
+      try {
+        await fetch(config.get('ssltunnel.registration_endpoint') +
+                    '/setemail?token=' + token + '&email=' + email);
+        console.log('Online account created.');
+      } catch (e) {
+        // https://github.com/mozilla-iot/gateway/issues/358
+        // we should store this error and display to the user on
+        // settings page to allow him to retry
+        returnError(e);
+        return;
+      }
     }
 
     let endpoint_url = 'https://' + subdomain + '.' +
