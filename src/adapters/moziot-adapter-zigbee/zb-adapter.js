@@ -74,7 +74,7 @@ function FUNC(ths, func, args) {
 
 class ZigBeeAdapter extends Adapter {
   constructor(adapterManager, packageName, port) {
-    // The SigBee adapter supports multiple dongles and
+    // The ZigBee adapter supports multiple dongles and
     // will create an adapter object for each dongle.
     // We don't know the actual adapter id until we
     // retrieve the serial number from the dongle. So we
