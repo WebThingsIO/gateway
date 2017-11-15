@@ -109,23 +109,29 @@ var Speech = {
                   .classList.remove('hidden');
 
                 // Build the WebAudio graph we'll be using
-                let audioContext = new AudioContext();
-                let sourceNode = audioContext.
+                this.audioContext = new AudioContext();
+                this.sourceNode = this.audioContext.
                     createMediaStreamSource(mediaStream);
-                let analyzerNode = audioContext.createAnalyser();
-                let outputNode = audioContext.createMediaStreamDestination();
+                this.analyzerNode = this.audioContext.createAnalyser();
+                this.outputNode =
+                    this.audioContext.createMediaStreamDestination();
 
                 // make sure we're doing mono everywhere
-                sourceNode.channelCount = 1;
-                analyzerNode.channelCount = 1;
-                outputNode.channelCount = 1;
+                this.sourceNode.channelCount = 1;
+                this.analyzerNode.channelCount = 1;
+                this.outputNode.channelCount = 1;
 
                 // connect the nodes together
-                sourceNode.connect(analyzerNode);
-                analyzerNode.connect(outputNode);
+                this.sourceNode.connect(this.analyzerNode);
+                this.analyzerNode.connect(this.outputNode);
 
-                this.visualize(analyzerNode);
+                this.visualize(this.analyzerNode);
             }
+        }
+        else if (msg.state === 'processing') {
+            this.analyzerNode.disconnect(this.outputNode);
+            this.sourceNode.disconnect(this.analyzerNode);
+            this.audioContext.close();
         }
     },
 
