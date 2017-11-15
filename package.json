@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@types/asn1js": "^0.0.1",
+    "@types/express": "^4.0.39",
     "@types/node": "^8.0.7",
     "awesome-typescript-loader": "^3.2.1",
     "babel-eslint": "^8.0.1",
