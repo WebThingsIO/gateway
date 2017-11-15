@@ -72,8 +72,23 @@ SettingsController.get('/experiments/:experimentName',
   }
 });
 
+SettingsController.post('/reclaim', async (request, response) => {
+  let subdomain = request.body.subdomain;
+
+  try {
+    await fetch(config.get('ssltunnel.registration_endpoint') +
+                '/reclaim?name=' + subdomain);
+    response.status(200).end();
+  } catch (e) {
+    console.error(e);
+    response.statusMessage = 'Error reclaiming domain - ' + e;
+    response.status(400).end();
+  }
+});
+
 SettingsController.post('/subscribe', async (request, response) => {
   let email = request.body.email;
+  let reclamationToken = request.body.reclamationToken;
   let subdomain = request.body.subdomain;
   let fulldomain =  subdomain + '.' + config.get('ssltunnel.domain');
 
@@ -128,9 +143,13 @@ SettingsController.post('/subscribe', async (request, response) => {
 
   let jsonToken;
   try {
-    const res =
-      await fetch(config.get('ssltunnel.registration_endpoint') +
-                  '/subscribe?name=' + subdomain);
+    let subscribeUrl = config.get('ssltunnel.registration_endpoint') +
+      '/subscribe?name=' + subdomain + '&email=' + email;
+    if (reclamationToken) {
+      subscribeUrl += '&reclamationToken=' + reclamationToken.trim();
+    }
+
+    const res = await fetch(subscribeUrl);
     const body = await res.text();
 
     jsonToken = JSON.parse(body);
@@ -164,17 +183,20 @@ SettingsController.post('/subscribe', async (request, response) => {
     fs.writeFileSync('privatekey.pem', results.privkey);
     fs.writeFileSync('chain.pem', results.chain);
 
-    // now we associate user's emails with the subdomain
-    try {
-      await fetch(config.get('ssltunnel.registration_endpoint') +
-                  '/setemail?token=' + token + '&email=' + email);
-      console.log('Online account created.');
-    } catch (e) {
-      // https://github.com/mozilla-iot/gateway/issues/358
-      // we should store this error and display to the user on
-      // settings page to allow him to retry
-      returnError(e);
-      return;
+    // now we associate user's emails with the subdomain, unless it was
+    // reclaimed.
+    if (!reclamationToken) {
+      try {
+        await fetch(config.get('ssltunnel.registration_endpoint') +
+                    '/setemail?token=' + token + '&email=' + email);
+        console.log('Online account created.');
+      } catch (e) {
+        // https://github.com/mozilla-iot/gateway/issues/358
+        // we should store this error and display to the user on
+        // settings page to allow him to retry
+        returnError(e);
+        return;
+      }
     }
 
     let endpoint_url = 'https://' + subdomain + '.' +

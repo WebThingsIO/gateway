@@ -35,7 +35,15 @@ body {
   padding-left: 0.5rem;
 }
 
+#reclamation-token {
+  display: none;
+}
+
 .error {
+  color: orange;
+}
+
+.error a {
   color: orange;
 }
 

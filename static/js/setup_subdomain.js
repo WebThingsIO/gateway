@@ -12,21 +12,22 @@
 
 const subdomain = document.getElementById('subdomain');
 const email = document.getElementById('email');
+const reclamationToken = document.getElementById('reclamation-token');
 const createDomainButton = document.getElementById('create-domain-button');
 // https://github.com/mozilla-iot/gateway/issues/159
 //const skipButton = document.getElementById('skip-subdomain-button');
 const errorMessage = document.getElementById('error-setup');
 
 function displayMessage(errorMsg, type){
-    errorMessage.innerHTML = errorMsg;
-    errorMessage.classList.remove('hidden');
-    if (type === 'message') {
-        errorMessage.classList.remove('error');
-        errorMessage.classList.add('message');
-    } else {
-        errorMessage.classList.remove('message');
-        errorMessage.classList.add('error');
-    }
+  errorMessage.innerHTML = errorMsg;
+  errorMessage.classList.remove('hidden');
+  if (type === 'message') {
+    errorMessage.classList.remove('error');
+    errorMessage.classList.add('message');
+  } else {
+    errorMessage.classList.remove('message');
+    errorMessage.classList.add('error');
+  }
 }
 
 /**
@@ -36,34 +37,34 @@ function displayMessage(errorMsg, type){
  * - Is not equal to "api" or "www", as those are reserved.
  */
 function validateDomain() {
-    const val = subdomain.value.toLowerCase();
-    const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
-    if (!re.test(val) || ['api', 'www'].includes(val)) {
-        return false;
-    }
+  const val = subdomain.value.toLowerCase();
+  const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
+  if (!re.test(val) || ['api', 'www'].includes(val)) {
+    return false;
+  }
 
-    return true;
+  return true;
 }
 
 /**
  * Ensure that email is at least somewhat valid.
  */
 function validateEmail() {
-    const val = email.value;
-    // eslint-disable-next-line max-len
-    const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
-    return re.test(val);
+  const val = email.value;
+  // eslint-disable-next-line max-len
+  const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
+  return re.test(val);
 }
 
 /**
  * Ensure that all inputs are valid.
  */
 function validateInput() {
-    if (validateDomain() && validateEmail()) {
-        createDomainButton.disabled = false;
-    } else {
-        createDomainButton.disabled = true;
-    }
+  if (validateDomain() && validateEmail()) {
+    createDomainButton.disabled = false;
+  } else {
+    createDomainButton.disabled = true;
+  }
 }
 
 /**
@@ -71,52 +72,89 @@ function validateInput() {
  * valid.
  */
 function submitOnEnter(evt) {
-    if (evt.key === 'Enter' && validateDomain() && validateEmail()) {
-        submitForm();
-    }
+  if (evt.key === 'Enter' && validateDomain() && validateEmail()) {
+    submitForm();
+  }
 }
 
 /**
  * Submit the form.
  */
 function submitForm() {
-    displayMessage('Processing...', 'message');
+  displayMessage('Processing...', 'message');
 
-    // Call the settings controller to subscribe the domain in the gateway.
-    var action = {
-      'email': email.value,
-      'subdomain': subdomain.value
-    };
-    fetch('/settings/subscribe', {
-        method: 'POST',
-        body: JSON.stringify(action),
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }).then(function (response) {
-        if (response.statusText.indexOf('UnavailableName') > -1){
-            throw new
-                Error('This subdomain is already being used. ' +
-                'Please choose a different one.');
-        } else {
-            return response.text();
-        }
-    }).then(function (body){
-        if (body) {
-            displayMessage('Success! Please wait while we redirect you...',
-                'message');
-            setTimeout(function() {
-                    window.location.replace(body);
-            }, 5000);
-        } else {
-            displayMessage('Error issuing certificate. Please try again',
-                'error');
-        }
+  // Call the settings controller to subscribe the domain in the gateway.
+  var action = {
+    'email': email.value,
+    'subdomain': subdomain.value,
+    'reclamationToken': reclamationToken.value
+  };
+  fetch('/settings/subscribe', {
+    method: 'POST',
+    body: JSON.stringify(action),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  }).then(function (response) {
+    if (response.statusText.indexOf('UnavailableName') > -1) {
+      if (response.statusText.indexOf('ReclamationPossible') > -1) {
+        const text1 = document.createTextNode(
+          'It looks like you\'ve already registered that subdomain. ');
+        const text2 = document.createTextNode(' to reclaim it.');
+        const reclaim = document.createElement('a');
+        reclaim.innerText = 'Click here';
+        reclaim.href = '#';
+        reclaim.onclick = () => {
+          reclamationToken.style.display = 'inline-block';
+          errorMessage.innerHTML = 'Please check your email for a ' +
+            'reclamation token and paste it above.';
 
-    }).catch(function(error) {
-        displayMessage(error, 'error');
-    });
+          fetch('/settings/reclaim', {
+            method: 'POST',
+            body: JSON.stringify({subdomain: subdomain.value}),
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }).catch(function() {
+            displayMessage('Could not reclaim domain.', 'error');
+          });
+        };
+
+        errorMessage.innerHTML = '';
+        errorMessage.appendChild(text1);
+        errorMessage.appendChild(reclaim);
+        errorMessage.appendChild(text2);
+
+        errorMessage.classList.remove('hidden');
+        errorMessage.classList.remove('message');
+        errorMessage.classList.add('error');
+        return Promise.reject();
+      } else {
+        displayMessage('This subdomain is already being used. ' +
+                       'Please choose a different one.',
+                       'error');
+        return Promise.reject();
+      }
+    } else if (response.statusText.indexOf('ReclamationTokenMismatch') > -1) {
+      displayMessage('Invalid reclamation token.', 'error');
+      return Promise.reject();
+    } else {
+      return response.text();
+    }
+  }).then(function (body) {
+    if (body) {
+      displayMessage('Success! Please wait while we redirect you...',
+                     'message');
+      setTimeout(function() {
+        window.location.replace(body);
+      }, 5000);
+    } else {
+      displayMessage('Error issuing certificate. Please try again.',
+                     'error');
+    }
+  }, function () {});
 }
 
 subdomain.addEventListener('input', validateInput);
@@ -130,22 +168,21 @@ createDomainButton.addEventListener('click', submitForm);
 /*
  * https://github.com/mozilla-iot/gateway/issues/159
 skipButton.addEventListener('click', function() {
-    // call the settings controller to skip the domain subscription
-    displayMessage('Processing...', 'message');
-    fetch('/settings/skiptunnel', {
-        method: 'POST',
-    }).then(function (response) {
-        if (response.ok) {
-            displayMessage('Redirecting..', 'message');
-            setTimeout(
-                function() {
-                    window.location.replace('http://'  +
-                        window.location.hostname + ':8080')
-                    }, 1000);
-        } else {
-            displayMessage(response.statusText, 'error');
-        }
-    }).catch(function(error) {
-        displayMessage(error, 'error');
-    });
+  // call the settings controller to skip the domain subscription
+  displayMessage('Processing...', 'message');
+  fetch('/settings/skiptunnel', {
+    method: 'POST',
+  }).then(function (response) {
+    if (response.ok) {
+      displayMessage('Redirecting..', 'message');
+      setTimeout(function() {
+        window.location.replace('http://' + window.location.hostname +
+                                ':8080');
+      }, 1000);
+    } else {
+      displayMessage(response.statusText, 'error');
+    }
+  }).catch(function(error) {
+    displayMessage(error, 'error');
+  });
 });*/
