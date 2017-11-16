@@ -27,6 +27,7 @@ exports.UPDATES_PATH = '/updates';
 exports.UPLOADS_PATH = '/uploads';
 exports.DEBUG_PATH = '/debug';
 exports.RULES_PATH = '/rules';
+exports.OAUTH_PATH = '/oauth';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');

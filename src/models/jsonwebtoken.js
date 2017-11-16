@@ -160,4 +160,4 @@ class JSONWebToken {
 
 }
 
-export default JSONWebToken;
+module.exports = JSONWebToken;
