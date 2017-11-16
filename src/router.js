@@ -34,7 +34,7 @@ var Router = {
 
 
     app.use(Constants.OAUTH_PATH,
-            require('./controllers/oauth2_controller'));
+            require('./controllers/oauth_controller'));
 
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
