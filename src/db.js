@@ -510,4 +510,4 @@ var Database = {
   }
 };
 
-export default Database;
+module.exports = Database;

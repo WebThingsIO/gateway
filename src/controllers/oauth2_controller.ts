@@ -262,3 +262,4 @@ async function handleRefreshTokenRequest(request: express.Request, response: exp
   // Issue things the same way as in the accesstokenrequest code
 }
 
+module.exports = OAuthController;

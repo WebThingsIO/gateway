@@ -32,6 +32,10 @@ var Router = {
     // Compress all responses larger than 1kb
     app.use(compression());
 
+
+    app.use(Constants.OAUTH_PATH,
+            require('./controllers/oauth2_controller'));
+
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
 
