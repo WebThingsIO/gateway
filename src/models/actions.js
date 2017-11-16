@@ -74,9 +74,10 @@ class Actions extends EventEmitter {
   }
 
   /**
-   * Get only the actions which are not associated with a specific thing
+   * Get only the actions which are not associated with a specific thing and
+   * therefore belong to the root Gateway
    */
-  getUnassociated() {
+  getGatewayActions() {
     return this.getAll().filter(action => {
       return !action.thingId;
     });
