@@ -17,9 +17,7 @@ const assert = require('assert');
 const ec = require('../ec-crypto');
 const Database = require('../db');
 
-const ROLE_AUTH_CODE = 'authorization_code';
 const ROLE_ACCESS_TOKEN = 'access_token';
-const ROLE_REFRESH_TOKEN = 'refresh_token';
 
 class JSONWebToken {
 
@@ -45,7 +43,8 @@ class JSONWebToken {
     }
 
     const token = new JSONWebToken(tokenData);
-    if (token.verify(sig)) {
+    token.payload = token.verify(sig);
+    if (token.payload) {
       return token;
     }
 
@@ -73,12 +72,13 @@ class JSONWebToken {
    * @return {string} the JWT token signature.
    */
   static async issueOAuthToken(client, role) {
-    const {sig, token} = this.create(-1, role);
-    token.client = client.id;
+    const {sig, token} = this.create(-1, {
+      role,
+      client_id: client.id
+    });
     await Database.createJSONWebToken(token);
     return sig;
   }
-
 
   /**
    * Remove a JWT token from the database by it's key id.
@@ -96,12 +96,8 @@ class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static create(user, role=ROLE_ACCESS_TOKEN) {
+  static create(user, payload={role: ROLE_ACCESS_TOKEN}) {
     const pair = ec.generateKeyPair();
-
-    // Nothing yet ...
-    const payload = {
-    };
 
     const keyId = uuid.v4();
     const sig = jwt.sign(payload, pair.private, {
@@ -113,29 +109,23 @@ class JSONWebToken {
       user,
       issuedAt: new Date(),
       publicKey: pair.public,
-      keyId,
-      role
+      keyId
     };
 
     return { sig, token };
   }
 
   constructor(obj) {
-    let {user, issuedAt, publicKey, keyId, role} = obj;
+    const {user, issuedAt, publicKey, keyId} = obj;
     assert(typeof user === 'number');
     assert(issuedAt);
     assert(typeof publicKey === 'string');
     assert(typeof keyId === 'string');
-    if (!role) {
-      role = ROLE_ACCESS_TOKEN;
-    }
-    assert(role === ROLE_AUTH_CODE || role === ROLE_ACCESS_TOKEN ||
-           role === ROLE_REFRESH_TOKEN);
     this.user = user;
     this.issuedAt = issuedAt;
     this.publicKey = publicKey;
     this.keyId = keyId;
-    this.role = role;
+    this.payload = null;
   }
 
   /**
