@@ -21,6 +21,7 @@ const fs = require('fs');
 const TunnelService = require('../ssltunnel');
 const Settings = require('../models/settings');
 const Constants = require('../constants');
+const AdapterManager = require('../adapter-manager');
 
 var SettingsController = PromiseRouter();
 
@@ -234,6 +235,67 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
     }
   } catch (e) {
     console.error('Failed to retrieve tunneltoken setting');
+    console.error(e);
+    response.status(400).send(e);
+  }
+});
+
+SettingsController.get('/adapters', async (request, response) => {
+  Settings.getAdapterSettings().then(function(result) {
+    if (result === undefined) {
+      response.status(404).json([]);
+    } else {
+      response.status(200).json(result);
+    }
+  }).catch(function(e) {
+    console.error('Failed to get adapter settings.');
+    console.error(e);
+    response.status(400).send(e);
+  });
+});
+
+SettingsController.put('/adapters/:adapterName', async (request, response) => {
+  var adapterName = request.params.adapterName;
+
+  if (!request.body || request.body['enabled'] === undefined) {
+    response.status(400).send('Enabled property not defined');
+    return;
+  }
+
+  var enabled = request.body['enabled'];
+
+  const key = `adapters.${adapterName}`;
+
+  let current;
+  try {
+    current = await Settings.get(key);
+  } catch (e) {
+    console.error('Failed to get current settings for adapter ' + adapterName);
+    console.error(e);
+    response.status(400).send(e);
+    return;
+  }
+
+  current.moziot.enabled = enabled;
+  try {
+    await Settings.set(key, current);
+  } catch (e) {
+    console.error('Failed to set settings for adapter ' + adapterName);
+    console.error(e);
+    response.status(400).send(e);
+    return;
+  }
+
+  try {
+    if (enabled) {
+      await AdapterManager.loadAdapter(adapterName);
+    } else {
+      await AdapterManager.unloadAdaptersByPackageName(adapterName);
+    }
+
+    response.status(200).json({'enabled': enabled});
+  } catch (e) {
+    console.error('Failed to toggle adapter ' + adapterName);
     console.error(e);
     response.status(400).send(e);
   }

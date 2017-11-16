@@ -336,6 +336,8 @@ class AdapterManager extends EventEmitter {
    * @method loadAdapter
    *
    * Loads a single adapter.
+   *
+   * @returns A promise which is resolved when the adapter is loaded.
    */
 
   async loadAdapter(adapterId) {
@@ -348,7 +350,7 @@ class AdapterManager extends EventEmitter {
     const packageJson = path.join(adapterPath, 'package.json');
     if (!fs.lstatSync(packageJson).isFile()) {
       console.error('package.json not found for adapter:', adapterId);
-      return;
+      return Promise.reject();
     }
 
     // Read the package.json file.
@@ -358,7 +360,7 @@ class AdapterManager extends EventEmitter {
     } catch (err) {
       console.error('Failed to read package.json for adapter:', adapterId);
       console.error(err);
-      return;
+      return Promise.reject();
     }
 
     let manifest;
@@ -367,7 +369,7 @@ class AdapterManager extends EventEmitter {
     } catch (err) {
       console.error('Failed to parse package.json for adapter:', adapterId);
       console.error(err);
-      return;
+      return Promise.reject();
     }
 
     // Verify API version.
@@ -377,7 +379,7 @@ class AdapterManager extends EventEmitter {
       console.error('API mismatch for adapter:', manifest.name);
       console.error('Current:', apiVersion, 'Supported:',
                     manifest.moziot.api.min, '-', manifest.moziot.api.max);
-      return;
+      return Promise.reject();
     }
 
     // Get any saved settings for this adapter.
@@ -387,8 +389,8 @@ class AdapterManager extends EventEmitter {
     if (savedSettings) {
       // Overwrite config and enablement values.
       newSettings.moziot.enabled = savedSettings.moziot.enabled;
-      newSettings.config = Object.assign(manifest.moziot.config || {},
-                                         savedSettings.moziot.config);
+      newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
+                                                savedSettings.moziot.config);
     } else {
       // Default the Zigbee and Z-Wave adapters to enabled for now.
       const defaults = [
@@ -414,7 +416,7 @@ class AdapterManager extends EventEmitter {
     // If this adapter is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
       console.log('Adapter not enabled:', manifest.name);
-      return;
+      return Promise.reject();
     }
 
     const errorCallback = function(packageName, errorStr) {
@@ -430,14 +432,16 @@ class AdapterManager extends EventEmitter {
         // adapter (i.e. for testing)
         const pluginClient = new PluginClient(manifest.name,
                                               {verbose: false});
-        pluginClient.register().then(adapterManagerProxy => {
+        try {
+          const adapterManagerProxy = await pluginClient.register();
           console.log('Loading adapter', manifest.name, 'as plugin');
-          const adapterLoader = dynamicRequire(path.join(adapterPath));
+          const adapterLoader = dynamicRequire(adapterPath);
           adapterLoader(adapterManagerProxy, newSettings, errorCallback);
-        }).catch(err => {
+        } catch (err) {
           console.error('Failed to register adapter with gateway');
           console.error(err);
-        });
+          return Promise.reject();
+        }
       } else {
         // This is the normal plugin adapter case, and we currently
         // don't need to do anything. We assume that the adapter is
@@ -445,9 +449,11 @@ class AdapterManager extends EventEmitter {
       }
     } else {
       // Load this adapter directly into the gateway.
-      const adapterLoader = dynamicRequire(path.join(adapterPath));
+      const adapterLoader = dynamicRequire(adapterPath);
       adapterLoader(this, newSettings, errorCallback);
     }
+
+    return Promise.resolve();
   }
 
   /**

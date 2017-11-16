@@ -22,6 +22,7 @@ var SettingsScreen = {
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
+    this.adapterSettings = document.getElementById('adapter-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
@@ -41,6 +42,7 @@ var SettingsScreen = {
     this.menu.classList.remove('hidden');
     this.domainSettings.classList.add('hidden');
     this.userSettings.classList.add('hidden');
+    this.adapterSettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
   },
@@ -64,6 +66,9 @@ var SettingsScreen = {
         break;
       case 'users':
         this.showUserSettings();
+        break;
+      case 'adapters':
+        this.showAdapterSettings();
         break;
       case 'experiments':
         this.showExperimentSettings();
@@ -111,6 +116,94 @@ var SettingsScreen = {
      } else {
        document.getElementById('current-user-email').innerText = '';
      }
+    });
+  },
+
+  showAdapterSettings: function() {
+    this.adapterSettings.classList.remove('hidden');
+    const opts = {
+      headers: {
+        'Accept': 'application/json'
+      }
+    };
+    fetch('/settings/adapters', opts).then(function (response) {
+      return response.json();
+    }).then(function (body) {
+      if (!body) {
+        return;
+      }
+
+      const adapterList = document.getElementById('available-adapters-list');
+      adapterList.innerHTML = '';
+
+      for (const s of body) {
+        try {
+          const settings = JSON.parse(s.value);
+
+          const li = document.createElement('li');
+          li.className = 'adapter-item';
+
+          const headerDiv = document.createElement('div');
+          headerDiv.className = 'adapter-settings-header';
+
+          const titleDiv = document.createElement('div');
+          titleDiv.innerText = settings.name;
+          titleDiv.className = 'adapter-settings-name';
+
+          const descriptionDiv = document.createElement('div');
+          descriptionDiv.innerText = settings.description;
+          descriptionDiv.className = 'adapter-settings-description';
+
+          const controlDiv = document.createElement('div');
+          controlDiv.className = 'adapter-settings-controls';
+
+          const toggleButton = document.createElement('button');
+          toggleButton.id = `adapter-toggle-${settings.name}`;
+          toggleButton.className = 'text-button';
+          toggleButton.adapterEnabled = settings.moziot.enabled;
+
+          if (settings.moziot.enabled) {
+            toggleButton.innerText = 'Disable';
+            toggleButton.classList.add('adapter-settings-disable');
+          } else {
+            toggleButton.innerText = 'Enable';
+            toggleButton.classList.add('adapter-settings-enable');
+          }
+
+          toggleButton.addEventListener('click', function(e) {
+            const value = !e.target.adapterEnabled;
+            e.target.adapterEnabled = value;
+
+            window.API.setAdapterSetting(settings.name, value)
+              .then(function() {
+                if (value) {
+                  e.target.innerText = 'Disable';
+                  toggleButton.classList.remove('adapter-settings-enable');
+                  toggleButton.classList.add('adapter-settings-disable');
+                } else {
+                  e.target.innerText = 'Enable';
+                  toggleButton.classList.remove('adapter-settings-disable');
+                  toggleButton.classList.add('adapter-settings-enable');
+                }
+              })
+              .catch(function(e) {
+                console.error(
+                  'Failed to toggle adapter', settings.name, ': ', e);
+              });
+          });
+
+          headerDiv.appendChild(titleDiv);
+          headerDiv.appendChild(descriptionDiv);
+
+          controlDiv.appendChild(toggleButton);
+
+          li.appendChild(headerDiv);
+          li.appendChild(controlDiv);
+          adapterList.appendChild(li);
+        } catch (err) {
+          console.log('Failed to parse adapter settings:', s);
+        }
+      }
     });
   },
 

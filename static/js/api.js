@@ -139,6 +139,33 @@
       });
     },
 
+    setAdapterSetting: function(adapterId, enabled) {
+      return new Promise((resolve, reject) => {
+        var headers = {
+          'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        var payload = {
+          'enabled': enabled
+        };
+        fetch('/settings/adapters/' + adapterId, {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+          headers: headers
+        }).then(function(response) {
+          if (response.status == 200) {
+            console.log('Set ' + adapterId + ' to ' + enabled);
+            resolve();
+          } else {
+            reject('Unexpected response code while setting adapter setting');
+          }
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+    },
+
     getExperimentSetting: function(experimentName) {
       return new Promise((resolve, reject) => {
         var headers = {

@@ -56,9 +56,14 @@
   background-image: url('../images/users-icon.png');
 }
 
+#adapter-settings-link {
+  background-image: url('../images/extensions.svg');
+}
+
 #experiment-settings-link {
   background-image: url('../images/experiments-icon.png');
 }
+
 #update-settings-link {
   background-image: url('../images/update-icon.svg');
 }
@@ -101,7 +106,7 @@
   color: #ccc;
 }
 
-#experiment-settings ul, #update-settings ul {
+#adapter-settings ul, #experiment-settings ul, #update-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -126,12 +131,55 @@
   background-repeat: no-repeat;
 }
 
-.update-item {
-  padding: 2rem;
+.adapter-item {
+  display: block;
+  font-size: 1.8rem;
+  list-style-type: none;
+  background-color: #48779a;
+  color: #fff;
+  border-radius: 0.5rem;
 }
 
-.experiment-item label {
-  line-height: 3.2rem;
+.adapter-settings-header {
+  margin: 1rem 0;
+  padding: 2rem 2rem 0.5rem 6.5rem;
+  background-image: url('../images/adapters-icon.png');
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  background-position: 1.8rem 2.8rem;
+}
+
+.adapter-settings-description {
+  color: #ccc;
+}
+
+.adapter-settings-controls {
+  padding: 0rem 1rem 1rem 1rem;
+  text-align: right;
+}
+
+.adapter-settings-controls button {
+  font-size: 1.8rem;
+}
+
+.adapter-settings-disable,
+.adapter-settings-enable {
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: 0.5em;
+  padding-left: 3rem;
+}
+
+.adapter-settings-disable {
+  background-image: url('../images/pause.svg');
+}
+
+.adapter-settings-enable {
+  background-image: url('../images/play.svg');
+}
+
+.update-item {
+  padding: 2rem;
 }
 
 :root .experiment-checkbox {
