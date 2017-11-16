@@ -1,5 +1,5 @@
 /**
- * OAuth2 Controller.
+ * OAuth Controller.
  *
  * Handles a simple OAuth2 flow with a hardcoded client
  *
@@ -11,24 +11,17 @@
 import * as express from 'express';
 import { URL } from 'url';
 import * as assert from 'assert';
-import JSONWebToken from '../models/jsonwebtoken';
-import Database from '../db';
+import * as JSONWebToken from '../models/jsonwebtoken';
+import * as Database from '../db';
+import {Scope, ClientId, ClientRegistry} from '../oauth-types';
+import OAuthClients from '../models/oauthclients';
 
-const OAuth2Controller = express.Router();
-
-type ClientId = string;
-
-class ClientRegistry {
-  constructor(public redirect_uri: URL, public id: ClientId, public scope: Scope) {
-  }
-}
-
-type Scope = 'readwrite';
+const OAuthController = express.Router();
 
 type InvalidRequest = 'invalid_request';
 type UnauthorizedClient = 'unauthorized_client';
 
-type OAuth2Request = {
+type OAuthRequest = {
   client_id: ClientId,
   redirect_uri: URL|undefined,
   state?: string
@@ -97,10 +90,6 @@ type RefreshTokenRequest = {
 
 type RefreshTokenResponse = AccessTokenResponse;
 
-const OAuth2Clients = new Map();
-OAuth2Clients.set('hello',
-                  new ClientRegistry(new URL('http://localhost:8080/'), 'hello', 'readwrite'));
-
 function redirect(response: express.Response, url: URL, params: {[key: string]: any}) {
   for (let key in params) {
     if (!params.hasOwnProperty(key)) {
@@ -111,8 +100,8 @@ function redirect(response: express.Response, url: URL, params: {[key: string]: 
   response.redirect(url.toString());
 }
 
-function verifyClient(request: OAuth2Request, response: express.Response): ClientRegistry|null {
-  let client = OAuth2Clients.get(request.client_id);
+function verifyClient(request: OAuthRequest, response: express.Response): ClientRegistry|null {
+  let client = OAuthClients.get(request.client_id);
   if (!client) {
     let err: ErrorResponse<UnauthorizedClient> = {
       error: 'unauthorized_client',
@@ -128,7 +117,7 @@ function verifyClient(request: OAuth2Request, response: express.Response): Clien
     request.redirect_uri = client.redirect_uri;
   }
 
-  if (request.redirect_uri !== client.redirect_uri) {
+  if (request.redirect_uri!.toString() !== client.redirect_uri.toString()) {
     let err: ErrorResponse<InvalidRequest> = {
       error: 'invalid_request',
       error_description: 'mismatched redirect_uri',
@@ -142,14 +131,14 @@ function verifyClient(request: OAuth2Request, response: express.Response): Clien
   return client;
 }
 
-OAuth2Controller.get('/authorization', async (request: express.Request, response: express.Response) => {
+OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
   // From query component construct
   let authRequest: AuthorizationRequest = {
-    response_type: request.params.response_type,
-    client_id: request.params.client_id,
-    redirect_uri: request.params.redirect_uri,
-    scope: request.params.scope,
-    state: request.params.state
+    response_type: request.query.response_type,
+    client_id: request.query.client_id,
+    redirect_uri: new URL(request.query.redirect_uri),
+    scope: request.query.scope,
+    state: request.query.state
   };
 
   let client = verifyClient(authRequest, response);
@@ -202,22 +191,29 @@ OAuth2Controller.get('/authorization', async (request: express.Request, response
   );
 });
 
-OAuth2Controller.post('/token', async (request: express.Request, response: express.Response) => {
-
-  if (request.params.grant_type === 'authorization_code') {
+OAuthController.post('/token', async (request: express.Request, response: express.Response) => {
+  const requestData = request.body;
+  if (requestData.grant_type === 'authorization_code') {
     handleAccessTokenRequest(request, response);
-  } else if (request.params.grant_type === 'refresh_token') {
+  } else if (requestData.grant_type === 'refresh_token') {
     handleAccessTokenRequest(request, response);
     // handleRefreshTokenRequest(request, response);
+  } else {
+   let err: AccessTokenErrorResponse = {
+      error: 'unsupported_grant_type',
+      state: requestData.state
+    };
+    response.status(400).json(err);
   }
 });
 
 async function handleAccessTokenRequest(request: express.Request, response: express.Response) {
+  const requestData = request.body;
   let tokenRequest: AccessTokenRequest = {
-    grant_type: request.params.grant_type,
-    code: request.params.code,
-    redirect_uri: request.params.redirect_uri,
-    client_id: request.params.client_id
+    grant_type: requestData.grant_type,
+    code: requestData.code,
+    redirect_uri: requestData.redirect_uri && new URL(requestData.redirect_uri),
+    client_id: requestData.client_id
   };
 
   let client = verifyClient(tokenRequest, response);
@@ -226,17 +222,26 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
   }
 
   let tokenData = await JSONWebToken.verifyJWT(tokenRequest.code);
-  if (!tokenData || tokenData.role !== 'authorization_code' || tokenData.client_id !== client.id) {
+  if (!tokenData) {
+    let err: AccessTokenErrorResponse = {
+      error: 'invalid_grant',
+      error_description: 'included JWT is invalid',
+      state: request.params.state
+    };
+
+    response.status(400).json(err);
+    return;
+  }
+
+  let payload = tokenData.payload;
+  if (!payload || payload.role !== 'authorization_code' || payload.client_id !== client.id) {
     let err: AccessTokenErrorResponse = {
       error: 'invalid_grant',
       state: request.params.state
     };
 
-    redirect(
-      response,
-      request.params.redirect_uri,
-      err
-    );
+    response.status(400).json(err);
+    return;
   }
 
   let accessToken = await JSONWebToken.issueOAuthToken(client, 'access_token');
