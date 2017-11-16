@@ -14,39 +14,15 @@ module.exports = {
 
   ports: {
     https: 4443,
-    http:  8080
+    http: 8080
   },
   // Whether the gateway is behind port forwarding and should use simplified
   // port-free urls
   behindForwarding: true,
-  adapters : {
-    gpio: {
-      enabled: false,
-      path: './adapters/gpio',
-      pins: {
-        18: {
-          name: 'led',
-          direction: 'out',   // 'in' or 'out'
-          value: 0            // value on required when 'direction' is 'out'
-        },
-      }
-    },
-    example_plugin: {
-      enabled: true,
-      plugin: true,
-      path: './adapters/example-plugin',
-    },
-    zigbee: {
-      enabled: true,
-      path: './adapters/zigbee',
-    },
-    zwave: {
-      enabled: true,
-      path: './adapters/zwave',
-    }
-  },
   adapterManager: {
     pairingTimeout: 3 * 60,   // seconds
+    path: './adapters',
+    api: 1
   },
   database: {
     filename: './db.sqlite3',

@@ -80,7 +80,7 @@ global.server = server;
 var adapterManager = require('../adapter-manager');
 
 function mockAdapter() {
-  var adapter = adapterManager.getAdapter('Mock');
+  var adapter = adapterManager.getAdapter('moziot-adapter-mock');
   expect(adapter).not.toBeUndefined();
   return adapter;
 }
@@ -92,12 +92,12 @@ beforeAll(async () => {
 
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
-  await adapterManager.waitForAdapter('Mock');
+  await adapterManager.waitForAdapter('moziot-adapter-mock');
 });
 
 afterEach(async () => {
   // This is all potentially brittle.
-  const adapter = adapterManager.getAdapter('Mock');
+  const adapter = adapterManager.getAdapter('moziot-adapter-mock');
   if (adapter) {
     await adapter.clearState();
   }

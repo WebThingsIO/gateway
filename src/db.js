@@ -317,7 +317,7 @@ var Database = {
 
   /**
    * Set a setting. Assumes that the only access to the database is
-   * single-threaded
+   * single-threaded.
    *
    * @param {String} key
    * @param {Object} value
@@ -332,6 +332,35 @@ var Database = {
     } else {
       return this.run('UPDATE settings SET value=? WHERE key=?', [value, key]);
     }
+  },
+
+  /**
+   * Remove a setting. Assumes that the only access to the database is
+   * single-threaded.
+   *
+   * @param {String} key
+   * @return {Promise}
+   */
+  deleteSetting: async function(key) {
+    this.run('DELETE FROM settings WHERE key = ?', [key]);
+  },
+
+  /**
+   * Get a list of adapter-related settings.
+   *
+   * @return {Promise<Array<Setting>>} resolves with a list of setting objects
+   */
+  getAdapterSettings: async function() {
+    return new Promise((resolve, reject) => {
+      this.db.all('SELECT * FROM settings WHERE key LIKE "adapters.%"',
+                  (err, rows) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(rows);
+                    }
+                  });
+    });
   },
 
   /**

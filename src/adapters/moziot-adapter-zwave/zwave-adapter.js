@@ -18,14 +18,14 @@ var ZWaveModule = require('openzwave-shared');
 const DEBUG = false;
 
 class ZWaveAdapter extends Adapter {
-  constructor(adapterManager, adapterId, port) {
+  constructor(adapterManager, packageName, port) {
     // The ZWave adapter supports multiple dongles and
     // will create an adapter object for each dongle.
     // We don't know the actual adapter id until we
     // retrieve the home id from the dongle. So we set the
     // adapter id to zwave-unknown here and fix things up
     // later just before we call addAdapter.
-    super(adapterManager, 'zwave-unknown');
+    super(adapterManager, 'zwave-unknown', packageName);
     this.ready = false;
     this.named = false;
 
@@ -336,7 +336,12 @@ class ZWaveAdapter extends Adapter {
   }
 
   unload() {
-    this.zwave.disconnect(this.port.comName);
+    // Wrap in setTimeout to resolve issues with disconnect() hanging.
+    // See: https://github.com/OpenZWave/node-openzwave-shared/issues/182
+    setTimeout(() => {
+      this.zwave.disconnect(this.port.comName);
+    }).ref();
+
     return super.unload();
   }
 }
@@ -379,16 +384,16 @@ function findZWavePort(callback) {
   });
 }
 
-function loadZWaveAdapters(adapterManager, adapterId, _adapterConfig) {
+function loadZWaveAdapters(adapterManager, manifest, errorCallback) {
   findZWavePort(function (error, port) {
     if (error) {
-      console.error('Unable to find ZWave adapter');
+      errorCallback(manifest.name, 'Unable to find ZWave adapter');
       return;
     }
 
     console.log('Found ZWave port @', port.comName);
 
-    new ZWaveAdapter(adapterManager, adapterId, port);
+    new ZWaveAdapter(adapterManager, manifest.name, port);
 
     // The zwave adapter will be added when it's driverReady method is called.
     // Prior to that we don't know what the homeID of the adapter is.
