@@ -54,7 +54,8 @@ describe('oauth/', function() {
   it('performs simple authorization', async () => {
     const clientServer = await setupOAuth();
     let res = await chai.request(clientServer)
-      .get('/auth');
+      .get('/auth')
+      .set('Accept', 'application/json');
 
     let jwt = res.body.token.access_token;
     // Try using the access token
