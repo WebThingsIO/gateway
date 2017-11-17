@@ -1,11 +1,12 @@
 const express = require('express');
 const e2p = require('event-to-promise');
+const http = require('http');
 const simpleOAuth2 = require('simple-oauth2');
 
 const {server, chai} = require('../common');
 
 describe('oauth/', function() {
-  function setupOAuth() {
+  async function setupOAuth() {
     const config = {
       client: {
         id: 'hello',
@@ -40,19 +41,16 @@ describe('oauth/', function() {
       });
     });
 
-    return new Promise(resolve => {
-      let server = client.listen(port, () => {
-        resolve({
-          client: client,
-          clientServer: server
-        });
-      });
-    });
+    let clientServer = http.createServer();
+    clientServer.on('request', client);
+    clientServer.listen(port);
+    await e2p(clientServer, 'listening')
+    return clientServer;
   }
 
   it('performs simple authorization', async () => {
-    const {client, clientServer} = await setupOAuth();
-    const res = await chai.request(client)
+    const clientServer = await setupOAuth();
+    const res = await chai.request(clientServer)
       .get('/auth');
     console.log(res.body);
     clientServer.close();
