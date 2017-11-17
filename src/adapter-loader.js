@@ -24,7 +24,7 @@ async function loadAdapter(packageName, verbose) {
   // Skip if there's no package.json file.
   const packageJson = path.join(adapterPath, 'package.json');
   if (!fs.lstatSync(packageJson).isFile()) {
-    const err = 'package.json not found for package: ${packageName}';
+    const err = `package.json not found for package: ${packageName}`;
     return Promise.reject(err);
   }
 
@@ -34,7 +34,7 @@ async function loadAdapter(packageName, verbose) {
     data = fs.readFileSync(packageJson);
   } catch (e) {
     const err =
-      'Failed to read package.json for package: ${packageName}\n${e}';
+      `Failed to read package.json for package: ${packageName}\n${e}`;
     return Promise.reject(err);
 }
 
@@ -43,7 +43,7 @@ async function loadAdapter(packageName, verbose) {
     manifest = JSON.parse(data);
   } catch (e) {
     const err =
-      'Failed to parse package.json for package: ${packageName}\n${e}';
+      `Failed to parse package.json for package: ${packageName}\n${e}`;
     return Promise.reject(err);
   }
 
@@ -51,10 +51,10 @@ async function loadAdapter(packageName, verbose) {
   const apiVersion = config.get('adapterManager.api');
   if (manifest.moziot.api.min > apiVersion ||
       manifest.moziot.api.max < apiVersion) {
-    return Promise.reject('API mismatch for package: ${manifest.name}\n' +
-                          'Current: ${apiVersion} ' +
-                          'Supported: ${manifest.moziot.api.min}-' +
-                          '${manifest.moziot.api.max}');
+    return Promise.reject(
+      `API mismatch for package: ${manifest.name}\n` +
+      `Current: ${apiVersion} ` +
+      `Supported: ${manifest.moziot.api.min}-${manifest.moziot.api.max}`);
   }
   let newSettings = Object.assign({}, manifest);
   if (!newSettings.moziot.hasOwnProperty('config')) {
@@ -75,7 +75,7 @@ async function loadAdapter(packageName, verbose) {
       resolve();
     }).catch(e => {
       const err =
-        'Failed to register package: ${manifest.name} with gateway\n' + e;
+        `Failed to register package: ${manifest.name} with gateway\n${e}`;
       reject(err);
     });
   });
