@@ -90,7 +90,8 @@ type RefreshTokenRequest = {
 
 type RefreshTokenResponse = AccessTokenResponse;
 
-function redirect(response: express.Response, url: URL, params: {[key: string]: any}) {
+function redirect(response: express.Response, baseURL: URL, params: {[key: string]: any}) {
+  let url = new URL(baseURL.toString());
   for (let key in params) {
     if (!params.hasOwnProperty(key)) {
       continue;
