@@ -520,7 +520,7 @@ class AdapterManager extends EventEmitter {
    * example if the user presses the button on a device which is different
    * from the one that they requested removal of.
    */
-   removeThing(thingId) {
+  removeThing(thingId) {
     var deferredRemove = new Deferred();
 
     if (this.deferredAdd) {
