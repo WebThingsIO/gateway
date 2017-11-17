@@ -4,6 +4,8 @@ const http = require('http');
 const simpleOAuth2 = require('simple-oauth2');
 
 const {server, chai} = require('../common');
+const Constants = require('../../constants');
+const {headerAuth} = require('../user');
 
 describe('oauth/', function() {
   async function setupOAuth() {
@@ -13,7 +15,8 @@ describe('oauth/', function() {
         secret: 'super secret'
       },
       auth: {
-        tokenHost: 'https://127.0.0.1:' + server.address().port
+        tokenHost: 'https://127.0.0.1:' + server.address().port +
+          Constants.OAUTH_PATH
       }
     };
 
@@ -50,9 +53,17 @@ describe('oauth/', function() {
 
   it('performs simple authorization', async () => {
     const clientServer = await setupOAuth();
-    const res = await chai.request(clientServer)
+    let res = await chai.request(clientServer)
       .get('/auth');
-    console.log(res.body);
+
+    let jwt = res.body.token.access_token;
+    // Try using the access token
+    res = await chai.request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
     clientServer.close();
     await e2p(clientServer, 'close');
   });

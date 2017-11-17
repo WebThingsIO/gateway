@@ -35,7 +35,7 @@ var Router = {
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
 
-    app.use(API_PREFIX + Constants.OAUTH_PATH,
+    app.use(Constants.OAUTH_PATH,
             require('./controllers/oauth_controller'));
 
     // Content negotiation middleware
