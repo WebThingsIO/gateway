@@ -56,7 +56,7 @@
 
   </head>
   <body>
-    <img id="wordmark" src="/images/moziot-wordmark.png" />
+    <img id="wordmark" alt="Mozilla IoT" src="/images/moziot-wordmark.png" />
 
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
@@ -90,6 +90,7 @@
         <ul>
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
           <li class="settings-item"><a id="user-settings-link" href="/settings/users">Users</a></li>
+          <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters">Add-ons</a></li>
           <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments">Experiments</a></li>
           <li class="settings-item"><a id="update-settings-link" href="/settings/updates">Updates</a></li>
         </ul>
@@ -99,9 +100,13 @@
       </section>
       <section id="user-settings" class="hidden settings-section">
         <div id="current-user" class="settings-container">
-          <span id="current-user-name"></span><span id="current-user-name"></span>
-          <span id="current-user-email"></span><span id="current-user-email"></span>
+          <span id="current-user-name"></span>
+          <span id="current-user-email"></span>
         </div>
+      </section>
+      <section id="adapter-settings" class="hidden settings-section">
+        <ul id="available-adapters-list">
+        </ul>
       </section>
       <section id="experiment-settings" class="hidden settings-section">
         <ul>
@@ -153,7 +158,10 @@
       <div class="title-bar">
         <a href="/rules" class="back-button icon-button"></a>
         <div class="rule-info">
-          <h1><span class="rule-name">Rule Name</span><img src="/images/customize-16.svg" class="rule-name-customize"/></h1>
+          <h1>
+            <span class="rule-name">Rule Name</span>
+            <img src="/images/customize-16.svg" alt="Customize Rule Name" class="rule-name-customize"/>
+          </h1>
           <p>Rule Description</p>
         </div>
         <button id="delete-button">
@@ -191,10 +199,10 @@
       </div>
       <div id="devices-list-container">
         <button id="devices-list-scroll-left">
-          <img class="scroll-icon" src="/images/arrowhead-left-16.svg"/>
+          <img class="scroll-icon" alt="Scroll Left" src="/images/arrowhead-left-16.svg"/>
         </button>
         <button id="devices-list-scroll-right">
-          <img class="scroll-icon" src="/images/arrowhead-right-16.svg"/>
+          <img class="scroll-icon" alt="Scroll Right" src="/images/arrowhead-right-16.svg"/>
         </button>
         <div id="delete-area">
           <div class="delete-container">
@@ -243,7 +251,7 @@
       <button id="add-thing-back-button" class="back-button icon-button"></button>
       <div id="add-thing-content">
         <p id="add-thing-status">
-          <img class="spinner" src="/images/loading.gif" />Scanning for new devices...
+          <img class="spinner" alt="Scanning" src="/images/loading.gif" />Scanning for new devices...
         </p>
         <div id="new-things"></div>
         <button id="add-thing-cancel-button" class="text-button">Done</button>

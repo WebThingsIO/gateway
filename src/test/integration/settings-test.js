@@ -12,6 +12,7 @@ const {
   headerAuth,
 } = require('../user');
 const Constants = require('../../constants');
+const AdapterManager = require('../../adapter-manager');
 
 describe('settings/', function() {
 
@@ -62,6 +63,90 @@ describe('settings/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('enabled');
     expect(res.body.enabled).toEqual(true);
+  });
+
+  it('Get the adapter list', async () => {
+    try {
+      await AdapterManager.loadAdaptersByPackageName('moziot-adapter-example');
+    } catch (_e) {
+      // pass intentionally
+    }
+
+    const res = await chai.request(server)
+      .get(Constants.SETTINGS_PATH + '/adapters')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body[0]).toHaveProperty('value');
+    expect(JSON.parse(res.body[0].value)).toHaveProperty('name');
+    expect(JSON.parse(res.body[0].value)).toHaveProperty('description');
+    expect(JSON.parse(res.body[0].value)).toHaveProperty('moziot');
+  });
+
+  it('Toggle an adapter', async () => {
+    try {
+      await AdapterManager.loadAdaptersByPackageName('moziot-adapter-example');
+    } catch (_e) {
+      // pass intentionally
+    }
+
+    // Toggle on
+    console.log('enabling...');
+    const res1 = await chai.request(server)
+      .put(Constants.SETTINGS_PATH + '/adapters/moziot-adapter-example')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({'enabled': true});
+
+    expect(res1.status).toEqual(200);
+
+    // Get status
+    const res2 = await chai.request(server)
+      .get(Constants.SETTINGS_PATH + '/adapters')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res2.status).toEqual(200);
+    let adapterConfig1;
+    for (const cfg of res2.body) {
+      if (cfg.key.indexOf('moziot-adapter-example') > -1) {
+        adapterConfig1 = JSON.parse(cfg.value);
+        break;
+      }
+    }
+
+    expect(adapterConfig1).toHaveProperty('moziot');
+    expect(adapterConfig1.moziot.enabled).toBe(true);
+
+    // Toggle off
+    console.log('disabling...');
+    const res3 = await chai.request(server)
+      .put(Constants.SETTINGS_PATH + '/adapters/moziot-adapter-example')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({'enabled': false});
+
+    expect(res3.status).toEqual(200);
+
+    // Get status
+    const res4 = await chai.request(server)
+      .get(Constants.SETTINGS_PATH + '/adapters')
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res4.status).toEqual(200);
+    let adapterConfig2;
+    for (const cfg of res4.body) {
+      if (cfg.key.indexOf('moziot-adapter-example') > -1) {
+        adapterConfig2 = JSON.parse(cfg.value);
+        break;
+      }
+    }
+
+    expect(adapterConfig2).toHaveProperty('moziot');
+    expect(adapterConfig2.moziot.enabled).toBe(false);
   });
 
 });

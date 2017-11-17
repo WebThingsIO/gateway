@@ -333,51 +333,58 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method loadAdapter
+   * @method loadAdaptersByPackageName
    *
-   * Loads a single adapter.
+   * Loads adapters with the given package name.
+   *
+   * @param {String} packageName The package name of the adapters to load.
+   * @returns A promise which is resolved when the adapters are loaded.
    */
 
-  async loadAdapter(adapterId) {
+  async loadAdaptersByPackageName(packageName) {
     const adapterPath = path.join(__dirname,
                                   config.get('adapterManager.path'),
-                                  adapterId);
+                                  packageName);
     const testMode = process.env.NODE_ENV === 'test';
 
     // Skip if there's no package.json file.
     const packageJson = path.join(adapterPath, 'package.json');
     if (!fs.lstatSync(packageJson).isFile()) {
-      console.error('package.json not found for adapter:', adapterId);
-      return;
+      const err = `package.json not found for package: ${packageName}`;
+      console.error(err);
+      return Promise.reject(err);
     }
 
     // Read the package.json file.
     let data;
     try {
       data = fs.readFileSync(packageJson);
-    } catch (err) {
-      console.error('Failed to read package.json for adapter:', adapterId);
+    } catch (e) {
+      const err =
+        `Failed to read package.json for package: ${packageName}\n${e}`;
       console.error(err);
-      return;
+      return Promise.reject(err);
     }
 
     let manifest;
     try {
       manifest = JSON.parse(data);
-    } catch (err) {
-      console.error('Failed to parse package.json for adapter:', adapterId);
+    } catch (e) {
+      const err =
+        `Failed to parse package.json for package: ${packageName}\n${e}`;
       console.error(err);
-      return;
+      return Promise.reject(err);
     }
 
     // Verify API version.
     const apiVersion = config.get('adapterManager.api');
     if (manifest.moziot.api.min > apiVersion ||
         manifest.moziot.api.max < apiVersion) {
-      console.error('API mismatch for adapter:', manifest.name);
-      console.error('Current:', apiVersion, 'Supported:',
-                    manifest.moziot.api.min, '-', manifest.moziot.api.max);
-      return;
+      const err = `API mismatch for package: ${manifest.name}\nCurrent: ${
+        apiVersion} Supported: ${manifest.moziot.api.min}-${
+          manifest.moziot.api.max}`;
+      console.error(err);
+      return Promise.reject(err);
     }
 
     // Get any saved settings for this adapter.
@@ -387,8 +394,8 @@ class AdapterManager extends EventEmitter {
     if (savedSettings) {
       // Overwrite config and enablement values.
       newSettings.moziot.enabled = savedSettings.moziot.enabled;
-      newSettings.config = Object.assign(manifest.moziot.config || {},
-                                         savedSettings.moziot.config);
+      newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
+                                                savedSettings.moziot.config);
     } else {
       // Default the Zigbee and Z-Wave adapters to enabled for now.
       const defaults = [
@@ -396,7 +403,7 @@ class AdapterManager extends EventEmitter {
         'moziot-adapter-zwave',
       ];
 
-      if (defaults.includes(manifest.name) ||
+      if ((defaults.includes(manifest.name) && !testMode) ||
           (manifest.moziot._test && testMode)) {
         newSettings.moziot.enabled = true;
       } else {
@@ -413,8 +420,9 @@ class AdapterManager extends EventEmitter {
 
     // If this adapter is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
-      console.log('Adapter not enabled:', manifest.name);
-      return;
+      const err = `Package not enabled: ${manifest.name}`;
+      console.log(err);
+      return Promise.reject(err);
     }
 
     const errorCallback = function(packageName, errorStr) {
@@ -430,14 +438,17 @@ class AdapterManager extends EventEmitter {
         // adapter (i.e. for testing)
         const pluginClient = new PluginClient(manifest.name,
                                               {verbose: false});
-        pluginClient.register().then(adapterManagerProxy => {
+        try {
+          const adapterManagerProxy = await pluginClient.register();
           console.log('Loading adapter', manifest.name, 'as plugin');
-          const adapterLoader = dynamicRequire(path.join(adapterPath));
+          const adapterLoader = dynamicRequire(adapterPath);
           adapterLoader(adapterManagerProxy, newSettings, errorCallback);
-        }).catch(err => {
-          console.error('Failed to register adapter with gateway');
+        } catch (e) {
+          const err =
+            `Failed to register package with gateway: ${manifest.name}\n${e}`;
           console.error(err);
-        });
+          return Promise.reject(err);
+        }
       } else {
         // This is the normal plugin adapter case, and we currently
         // don't need to do anything. We assume that the adapter is
@@ -445,7 +456,7 @@ class AdapterManager extends EventEmitter {
       }
     } else {
       // Load this adapter directly into the gateway.
-      const adapterLoader = dynamicRequire(path.join(adapterPath));
+      const adapterLoader = dynamicRequire(adapterPath);
       adapterLoader(this, newSettings, errorCallback);
     }
   }
@@ -494,7 +505,7 @@ class AdapterManager extends EventEmitter {
           continue;
         }
 
-        adapterManager.loadAdapter(adapterName);
+        adapterManager.loadAdaptersByPackageName(adapterName);
       }
     });
   }
@@ -509,7 +520,7 @@ class AdapterManager extends EventEmitter {
    * example if the user presses the button on a device which is different
    * from the one that they requested removal of.
    */
-   removeThing(thingId) {
+  removeThing(thingId) {
     var deferredRemove = new Deferred();
 
     if (this.deferredAdd) {
