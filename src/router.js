@@ -35,9 +35,6 @@ var Router = {
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
 
-    app.use(Constants.OAUTH_PATH,
-            require('./controllers/oauth_controller'));
-
     // Content negotiation middleware
     app.use(function(request, response, next) {
       // If request won't accept HTML but will accept JSON,
@@ -93,6 +90,8 @@ var Router = {
     let rulesEngine = require('./rules-engine/index.js');
     app.use(API_PREFIX + Constants.RULES_PATH, auth, rulesEngine);
 
+    app.use(API_PREFIX + Constants.OAUTH_PATH,
+            require('./controllers/oauth_controller').default);
   }
 };
 
