@@ -24,6 +24,6 @@
     },
     "enabled": true,
     "plugin": true,
-    "exec": "node ./src/adapter-loader.js moziot-adapter-zigbee"
+    "exec": "node ./src/addon-loader.js moziot-adapter-zigbee"
   }
 }

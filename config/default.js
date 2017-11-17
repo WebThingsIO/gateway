@@ -19,9 +19,9 @@ module.exports = {
   // Whether the gateway is behind port forwarding and should use simplified
   // port-free urls
   behindForwarding: true,
-  adapterManager: {
+  addonManager: {
     pairingTimeout: 3 * 60,   // seconds
-    path: './adapters',
+    path: './addons',
     api: 1
   },
   database: {

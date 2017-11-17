@@ -1,7 +1,7 @@
 /**
- * Manages all of the Adapters used in the system.
+ * Manages all of the add-ons used in the system.
  *
- * @module AdapterManager
+ * @module AddonManager
  */
 /**
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,9 +14,9 @@
 var config = require('config');
 const Constants = require('./constants');
 var EventEmitter = require('events').EventEmitter;
-var Deferred = require('./adapters/deferred');
-const PluginClient = require('./adapters/plugin/plugin-client');
-const PluginServer = require('./adapters/plugin/plugin-server');
+var Deferred = require('./addons/deferred');
+const PluginClient = require('./addons/plugin/plugin-client');
+const PluginServer = require('./addons/plugin/plugin-server');
 const Settings = require('./models/settings');
 const fs = require('fs');
 const path = require('path');
@@ -32,11 +32,11 @@ const dynamicRequire = (() => {
 
 
 /**
- * @class AdapterManager
- * @classdesc The AdapterManager will load any adapters from the 'adapters'
- * directory. See loadAdapters() for details.
+ * @class AddonManager
+ * @classdesc The AddonManager will load any add-ons from the 'addons'
+ * directory. See loadAddons() for details.
  */
-class AdapterManager extends EventEmitter {
+class AddonManager extends EventEmitter {
 
   constructor() {
     super();
@@ -44,14 +44,14 @@ class AdapterManager extends EventEmitter {
     this.devices = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
-    this.adaptersLoaded = false;
+    this.addonsLoaded = false;
     this.deferredWaitForAdapter = new Map();
     this.pluginServer = null;
   }
 
   /**
-   * Adds an adapter to the collection of adapters managed by AdapterManager.
-   * This function is typically called when loading adapters.
+   * Adds an adapter to the collection of adapters managed by AddonManager.
+   * This function is typically called when loading add-ons.
    */
   addAdapter(adapter) {
     if (!adapter.name) {
@@ -91,7 +91,7 @@ class AdapterManager extends EventEmitter {
       deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
-      var pairingTimeout = config.get('adapterManager.pairingTimeout');
+      var pairingTimeout = config.get('addonManager.pairingTimeout');
       this.adapters.forEach(adapter => {
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing(pairingTimeout);
@@ -333,21 +333,20 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method loadAdaptersByPackageName
+   * @method loadAddon
    *
-   * Loads adapters with the given package name.
+   * Loads add-on with the given package name.
    *
-   * @param {String} packageName The package name of the adapters to load.
-   * @returns A promise which is resolved when the adapters are loaded.
+   * @param {String} packageName The package name of the add-on to load.
+   * @returns A promise which is resolved when the add-on is loaded.
    */
-
-  async loadAdaptersByPackageName(packageName) {
-    const adapterPath = path.join(__dirname,
-                                  config.get('adapterManager.path'),
-                                  packageName);
+  async loadAddon(packageName) {
+    const addonPath = path.join(__dirname,
+                                config.get('addonManager.path'),
+                                packageName);
 
     // Skip if there's no package.json file.
-    const packageJson = path.join(adapterPath, 'package.json');
+    const packageJson = path.join(addonPath, 'package.json');
     if (!fs.lstatSync(packageJson).isFile()) {
       const err = `package.json not found for package: ${packageName}`;
       console.error(err);
@@ -376,7 +375,7 @@ class AdapterManager extends EventEmitter {
     }
 
     // Verify API version.
-    const apiVersion = config.get('adapterManager.api');
+    const apiVersion = config.get('addonManager.api');
     if (manifest.moziot.api.min > apiVersion ||
         manifest.moziot.api.max < apiVersion) {
       const err = `API mismatch for package: ${manifest.name}\nCurrent: ${
@@ -386,8 +385,8 @@ class AdapterManager extends EventEmitter {
       return Promise.reject(err);
     }
 
-    // Get any saved settings for this adapter.
-    const key = `adapters.${manifest.name}`;
+    // Get any saved settings for this add-on.
+    const key = `addons.${manifest.name}`;
     let savedSettings = await Settings.get(key);
     let newSettings = Object.assign({}, manifest);
     if (savedSettings) {
@@ -408,7 +407,7 @@ class AdapterManager extends EventEmitter {
     // Update the settings database.
     await Settings.set(key, newSettings);
 
-    // If this adapter is not explicitly enabled, move on.
+    // If this add-on is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
       const err = `Package not enabled: ${manifest.name}`;
       console.log(err);
@@ -419,20 +418,20 @@ class AdapterManager extends EventEmitter {
       console.log('Failed to load', packageName, '-', errorStr);
     };
 
-    // Load the adapter
-    console.log('Loading adapter:', manifest.name);
+    // Load the add-on
+    console.log('Loading add-on:', manifest.name);
     if (manifest.moziot.plugin) {
       if (config.get('ipc.protocol') == 'inproc') {
         // This is a special case where we load the adapter directly
         // into the gateway, but we use IPC comms to talk to the
-        // adapter (i.e. for testing)
+        // add-on (i.e. for testing)
         const pluginClient = new PluginClient(manifest.name,
                                               {verbose: false});
         try {
-          const adapterManagerProxy = await pluginClient.register();
-          console.log('Loading adapter', manifest.name, 'as plugin');
-          const adapterLoader = dynamicRequire(adapterPath);
-          adapterLoader(adapterManagerProxy, newSettings, errorCallback);
+          const addonManagerProxy = await pluginClient.register();
+          console.log('Loading add-on', manifest.name, 'as plugin');
+          const addonLoader = dynamicRequire(addonPath);
+          addonLoader(addonManagerProxy, newSettings, errorCallback);
         } catch (e) {
           const err =
             `Failed to register package with gateway: ${manifest.name}\n${e}`;
@@ -445,38 +444,37 @@ class AdapterManager extends EventEmitter {
         this.pluginServer.loadPlugin(packageName, manifest);
       }
     } else {
-      // Load this adapter directly into the gateway.
-      const adapterLoader = dynamicRequire(adapterPath);
-      adapterLoader(this, newSettings, errorCallback);
+      // Load this add-on directly into the gateway.
+      const addonLoader = dynamicRequire(addonPath);
+      addonLoader(this, newSettings, errorCallback);
     }
   }
 
   /**
-   * @method loadAdapters
-   * Loads all of the configured adapters from the adapters directory.
+   * @method loadAddons
+   * Loads all of the configured add-ons from the adapters directory.
    */
-  loadAdapters() {
-    if (this.adaptersLoaded) {
+  loadAddons() {
+    if (this.addonsLoaded) {
       // This is kind of a hack, but it allows the gateway to restart properly
       // when switching between http and https modes.
       return;
     }
-    this.adaptersLoaded = true;
+    this.addonsLoaded = true;
 
-    // Load the Adapter Plugin Server
+    // Load the Plugin Server
 
     this.pluginServer = new PluginServer(this, {verbose: false});
 
-    // Load the Adapters
+    // Load the add-ons
 
-    const adapterManager = this;
-    const adapterPath = path.join(__dirname,
-                                  config.get('adapterManager.path'));
+    const addonManager = this;
+    const addonPath = path.join(__dirname, config.get('addonManager.path'));
 
-    // Search adapters directory
-    fs.readdir(adapterPath, async function(err, files) {
+    // Search add-ons directory
+    fs.readdir(addonPath, async function(err, files) {
       if (err) {
-        console.error('Failed to search adapters directory');
+        console.error('Failed to search add-ons directory');
         console.error(err);
         return;
       }
@@ -487,15 +485,15 @@ class AdapterManager extends EventEmitter {
           continue;
         }
 
-        const adapterName = fname;
-        fname = path.join(adapterPath, fname);
+        const addonName = fname;
+        fname = path.join(addonPath, fname);
 
         // Skip if not a directory.
         if (!fs.lstatSync(fname).isDirectory()) {
           continue;
         }
 
-        adapterManager.loadAdaptersByPackageName(adapterName);
+        addonManager.loadAddon(addonName);
       }
     });
   }
@@ -533,15 +531,15 @@ class AdapterManager extends EventEmitter {
    }
 
   /**
-   * @method unloadAdapters
-   * Unloads all of the loaded adapters.
+   * @method unloadAddons
+   * Unloads all of the loaded add-ons.
    *
-   * @returns a promise which is resolved when all of the adapters
+   * @returns a promise which is resolved when all of the add-ons
    *          are unloaded.
    */
-  unloadAdapters() {
-    if (!this.adaptersLoaded) {
-      // The adapters are not currently loaded, no need to unload.
+  unloadAddons() {
+    if (!this.addonsLoaded) {
+      // The add-ons are not currently loaded, no need to unload.
       return Promise.resolve();
     }
 
@@ -551,7 +549,7 @@ class AdapterManager extends EventEmitter {
       unloadPromises.push(this.unloadAdapter(adapterId));
     }
 
-    this.adaptersLoaded = false;
+    this.addonsLoaded = false;
     return Promise.all(unloadPromises);
   }
 
@@ -563,8 +561,8 @@ class AdapterManager extends EventEmitter {
    * @returns A promise which is resolved when the adapter is unloaded.
    */
   unloadAdapter(id) {
-    if (!this.adaptersLoaded) {
-      // The adapters are not currently loaded, no need to unload.
+    if (!this.addonsLoaded) {
+      // The add-ons are not currently loaded, no need to unload.
       return Promise.resolve();
     }
 
@@ -580,15 +578,15 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method unloadAdaptersByPackageName
-   * Unload adapters with the given package name.
+   * @method unloadAddon
+   * Unload add-on with the given package name.
    *
-   * @param {String} packageName The package name of the adapters to unload.
-   * @returns A promise which is resolved when the adapters are unloaded.
+   * @param {String} packageName The package name of the add-on to unload.
+   * @returns A promise which is resolved when the add-on is unloaded.
    */
-  unloadAdaptersByPackageName(packageName) {
-    if (!this.adaptersLoaded) {
-      // The adapters are not currently loaded, no need to unload.
+  unloadAddon(packageName) {
+    if (!this.addonsLoaded) {
+      // The add-ons are not currently loaded, no need to unload.
       return Promise.resolve();
     }
 
@@ -629,4 +627,4 @@ class AdapterManager extends EventEmitter {
   }
 }
 
-module.exports = new AdapterManager();
+module.exports = new AddonManager();

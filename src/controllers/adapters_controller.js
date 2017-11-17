@@ -11,7 +11,7 @@
 'use strict';
 
 var express = require('express');
-var adapterManager = require('../adapter-manager');
+var addonManager = require('../addon-manager');
 
 var adaptersController = express.Router();
 
@@ -19,7 +19,7 @@ var adaptersController = express.Router();
  * Return a list of adapters
  */
 adaptersController.get('/', (request, response) => {
-  var adapters = adapterManager.getAdapters();
+  var adapters = addonManager.getAdapters();
   var adapterList = Array.from(adapters.values()).map(adapter => {
     return adapter.asDict();
   });
@@ -31,7 +31,7 @@ adaptersController.get('/', (request, response) => {
  */
 adaptersController.get('/:adapterId/', (request, response) => {
   var adapterId = request.params.adapterId;
-  var adapter = adapterManager.getAdapter(adapterId);
+  var adapter = addonManager.getAdapter(adapterId);
   if (adapter) {
     response.json(adapter.asDict());
   } else {

@@ -14,7 +14,7 @@ const express = require('express');
 const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
-const AdapterManager = require('../adapter-manager');
+const AddonManager = require('../addon-manager');
 const Constants = require('../constants.js');
 const Things = require('../models/things');
 
@@ -71,7 +71,7 @@ ThingsController.get('/:thingId/properties/:propertyName',
   function(request, response) {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
-  AdapterManager.getProperty(thingId, propertyName).then((value) => {
+  AddonManager.getProperty(thingId, propertyName).then((value) => {
     var result = {};
     result[propertyName] = value;
     response.status(200).json(result);
@@ -95,7 +95,7 @@ ThingsController.put('/:thingId/properties/:propertyName',
     return;
   }
   var value = request.body[propertyName];
-  AdapterManager.setProperty(thingId, propertyName, value)
+  AddonManager.setProperty(thingId, propertyName, value)
     .then((updatedValue) => {
       // Note: it's possible that updatedValue doesn't match value.
       var result = {};
@@ -208,12 +208,12 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     }));
   }
 
-  AdapterManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
+  AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
   websocket.on('close', function() {
-    AdapterManager.removeListener(Constants.PROPERTY_CHANGED,
-                                  onPropertyChanged);
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
+                                onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
   });
 
@@ -232,7 +232,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       return;
     }
 
-    let device = AdapterManager.getDevice(thingId);
+    let device = AddonManager.getDevice(thingId);
     if (!device) {
       websocket.send(JSON.stringify({
         messageType: Constants.ERROR,

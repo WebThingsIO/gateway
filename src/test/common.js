@@ -77,10 +77,10 @@ expect.extend({
 let {server, httpServer, serverStartup} = require('../app');
 global.server = server;
 
-var adapterManager = require('../adapter-manager');
+var addonManager = require('../addon-manager');
 
 function mockAdapter() {
-  var adapter = adapterManager.getAdapter('moziot-adapter-mock');
+  var adapter = addonManager.getAdapter('moziot-adapter-mock');
   expect(adapter).not.toBeUndefined();
   return adapter;
 }
@@ -92,12 +92,12 @@ beforeAll(async () => {
 
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
-  await adapterManager.waitForAdapter('moziot-adapter-mock');
+  await addonManager.waitForAdapter('moziot-adapter-mock');
 });
 
 afterEach(async () => {
   // This is all potentially brittle.
-  const adapter = adapterManager.getAdapter('moziot-adapter-mock');
+  const adapter = addonManager.getAdapter('moziot-adapter-mock');
   if (adapter) {
     await adapter.clearState();
   }
@@ -107,7 +107,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await adapterManager.unloadAdapters();
+  await addonManager.unloadAddons();
   server.close();
   httpServer.close();
   await Promise.all([

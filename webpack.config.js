@@ -31,7 +31,7 @@ const plugins = [
   ]),
   // Until we ship our plugin API we simply copy these over.
   new CopyWebpackPlugin([
-    { from: 'src/adapters/', to: 'adapters/' },
+    { from: 'src/addons/', to: 'addons/' },
   ])
 ];
 

@@ -1,7 +1,7 @@
 /*
- * Adapter Plugin Loader app.
+ * Add-on Loader app.
  *
- * This app will load an adapter plugin as a standalone process.
+ * This app will load an add-on as a standalone process.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,17 +12,17 @@
 
 var config = require('config');
 const GetOpt = require('node-getopt');
-const PluginClient = require('./adapters/plugin/plugin-client');
+const PluginClient = require('./addons/plugin/plugin-client');
 const fs = require('fs');
 const path = require('path');
 
-async function loadAdapter(packageName, verbose) {
-  const adapterPath = path.join(__dirname,
-                                config.get('adapterManager.path'),
-                                packageName);
+async function loadAddon(packageName, verbose) {
+  const addonPath = path.join(__dirname,
+                              config.get('addonManager.path'),
+                              packageName);
 
   // Skip if there's no package.json file.
-  const packageJson = path.join(adapterPath, 'package.json');
+  const packageJson = path.join(addonPath, 'package.json');
   if (!fs.lstatSync(packageJson).isFile()) {
     const err = `package.json not found for package: ${packageName}`;
     return Promise.reject(err);
@@ -48,7 +48,7 @@ async function loadAdapter(packageName, verbose) {
   }
 
   // Verify API version.
-  const apiVersion = config.get('adapterManager.api');
+  const apiVersion = config.get('addonManager.api');
   if (manifest.moziot.api.min > apiVersion ||
       manifest.moziot.api.max < apiVersion) {
     return Promise.reject(
@@ -67,11 +67,11 @@ async function loadAdapter(packageName, verbose) {
 
   var pluginClient = new PluginClient(packageName, {verbose: verbose});
   return new Promise((resolve, reject) => {
-    pluginClient.register().then(adapterManagerProxy => {
-      console.log('Loading adapter for', manifest.name,
-                  'from', adapterPath);
-      let adapterLoader = dynamicRequire(adapterPath);
-      adapterLoader(adapterManagerProxy, newSettings, errorCallback);
+    pluginClient.register().then(addonManagerProxy => {
+      console.log('Loading add-on for', manifest.name,
+                  'from', addonPath);
+      let addonLoader = dynamicRequire(addonPath);
+      addonLoader(addonManagerProxy, newSettings, errorCallback);
       resolve();
     }).catch(e => {
       const err =
@@ -113,7 +113,7 @@ if (opt.argv.length != 1) {
 }
 var packageName = opt.argv[0];
 
-loadAdapter(packageName, opt.verbose).catch(err => {
+loadAddon(packageName, opt.verbose).catch(err => {
   console.error(err);
   process.exit(1);
 });

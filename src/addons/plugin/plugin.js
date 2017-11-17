@@ -12,7 +12,7 @@
 'use strict';
 
 const AdapterProxy = require('./adapter-proxy');
-const Constants = require('../adapter-constants');
+const Constants = require('../addon-constants');
 const DeviceProxy = require('./device-proxy');
 const IpcSocket = require('./ipc');
 const spawn = require('child_process').spawn;

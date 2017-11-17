@@ -56,7 +56,7 @@
   background-image: url('../images/users-icon.png');
 }
 
-#adapter-settings-link {
+#addon-settings-link {
   background-image: url('../images/extensions.svg');
 }
 
@@ -106,7 +106,7 @@
   color: #ccc;
 }
 
-#adapter-settings ul, #experiment-settings ul, #update-settings ul {
+#addon-settings ul, #experiment-settings ul, #update-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -131,7 +131,7 @@
   background-repeat: no-repeat;
 }
 
-.adapter-item {
+.addon-item {
   display: block;
   font-size: 1.8rem;
   list-style-type: none;
@@ -140,7 +140,7 @@
   border-radius: 0.5rem;
 }
 
-.adapter-settings-header {
+.addon-settings-header {
   margin: 1rem 0;
   padding: 2rem 2rem 0.5rem 6.5rem;
   background-image: url('../images/extensions.svg');
@@ -149,32 +149,32 @@
   background-position: 1.8rem 2.8rem;
 }
 
-.adapter-settings-description {
+.addon-settings-description {
   color: #ccc;
 }
 
-.adapter-settings-controls {
+.addon-settings-controls {
   padding: 0rem 1rem 1rem 1rem;
   text-align: right;
 }
 
-.adapter-settings-controls button {
+.addon-settings-controls button {
   font-size: 1.8rem;
 }
 
-.adapter-settings-disable,
-.adapter-settings-enable {
+.addon-settings-disable,
+.addon-settings-enable {
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
   padding-left: 3rem;
 }
 
-.adapter-settings-disable {
+.addon-settings-disable {
   background-image: url('../images/pause.svg');
 }
 
-.adapter-settings-enable {
+.addon-settings-enable {
   background-image: url('../images/play.svg');
 }
 

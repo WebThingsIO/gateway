@@ -3,7 +3,7 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-const Plugin = require('../../adapters/plugin/plugin');
+const Plugin = require('../../addons/plugin/plugin');
 
 describe('plugins/', function() {
 

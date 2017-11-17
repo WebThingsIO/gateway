@@ -1,7 +1,7 @@
 /**
- * Proxy version of AdapterManager used by plugins.
+ * Proxy version of AddonManager used by plugins.
  *
- * @module AdapterManagerProxy
+ * @module AddonManagerProxy
  */
 /**
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@ const EventEmitter = require('events').EventEmitter;
 
 const DEBUG = false;
 
-class AdapterManagerProxy extends EventEmitter {
+class AddonManagerProxy extends EventEmitter {
 
   constructor (pluginClient) {
     super();
@@ -24,7 +24,7 @@ class AdapterManagerProxy extends EventEmitter {
     this.pluginClient = pluginClient;
 
     this.on(Constants.PROPERTY_CHANGED, (property) => {
-      DEBUG && console.log('AdapterManagerProxy: Got',
+      DEBUG && console.log('AddonManagerProxy: Got',
                            Constants.PROPERTY_CHANGED, 'notification for',
                            property.name, 'value:', property.value);
       this.sendPropertyChangedNotification(property);
@@ -34,10 +34,10 @@ class AdapterManagerProxy extends EventEmitter {
   /**
    * @method addAdapter
    *
-   * Adds an adapter to the collection of adapters managed by AdapterManager.
+   * Adds an adapter to the collection of adapters managed by AddonManager.
    */
   addAdapter(adapter) {
-    DEBUG && console.log('AdapterManagerProxy: addAdapter:', adapter.id);
+    DEBUG && console.log('AddonManagerProxy: addAdapter:', adapter.id);
     this.adapter = adapter;
     this.pluginClient.sendNotification(Constants.ADD_ADAPTER, {
       adapterId: adapter.id,
@@ -51,7 +51,7 @@ class AdapterManagerProxy extends EventEmitter {
    * Called when the indicated device has been added to an adapter.
    */
   handleDeviceAdded(device) {
-    DEBUG && console.log('AdapterManagerProxy: handleDeviceAdded:', device.id);
+    DEBUG && console.log('AddonManagerProxy: handleDeviceAdded:', device.id);
     var deviceDict = device.asDict();
     deviceDict.adapterId = device.adapter.id;
     this.pluginClient.sendNotification(
@@ -63,7 +63,7 @@ class AdapterManagerProxy extends EventEmitter {
    * Called when the indicated device has been removed an adapter.
    */
   handleDeviceRemoved(device) {
-    DEBUG && console.log('AdapterManagerProxy: handleDeviceRemoved:',
+    DEBUG && console.log('AddonManagerProxy: handleDeviceRemoved:',
                          device.id);
     this.pluginClient.sendNotification(
       Constants.HANDLE_DEVICE_REMOVED, {
@@ -77,11 +77,11 @@ class AdapterManagerProxy extends EventEmitter {
    * Called whenever a message is received from the gateway.
    */
   onMsg(msg) {
-    DEBUG && console.log('AdapterManagerProxy: Rcvd:', msg);
+    DEBUG && console.log('AddonManagerProxy: Rcvd:', msg);
     var adapter = this.adapter;
     if (!adapter) {
-      console.error('AdapterManagerProxy: No adapter added yet.')
-      console.error('AdapterManagerProxy: Ignoring msg:', msg);
+      console.error('AddonManagerProxy: No adapter added yet.')
+      console.error('AddonManagerProxy: Ignoring msg:', msg);
       return;
     }
 
@@ -167,8 +167,8 @@ class AdapterManagerProxy extends EventEmitter {
     var deviceId = msg.data.deviceId;
     var device = adapter.getDevice(deviceId);
     if (!device) {
-      console.error('AdapterManagerProxy: No such device:', deviceId);
-      console.error('AdapterManagerProxy: Ignoring msg:', msg);
+      console.error('AddonManagerProxy: No such device:', deviceId);
+      console.error('AddonManagerProxy: Ignoring msg:', msg);
       return;
     }
 
@@ -195,20 +195,20 @@ class AdapterManagerProxy extends EventEmitter {
             // Something bad happened. The gateway is still
             // expecting a reply, so we report the error
             // and just send whatever the current value is.
-            console.error('AdapterManagerProxy: Failed to setProperty',
+            console.error('AddonManagerProxy: Failed to setProperty',
                           propertyName, 'to', propertyValue,
                           'for device:', deviceId);
             console.error(err);
             this.sendPropertyChangedNotification(property);
           });
         } else {
-          console.error('AdapterManagerProxy: Unknown property:',
+          console.error('AddonManagerProxy: Unknown property:',
                         propertyName);
         }
         break;
 
       default:
-        console.warn('AdapterManagerProxy: unrecognized msg:', msg);
+        console.warn('AddonManagerProxy: unrecognized msg:', msg);
         break;
     }
   }
@@ -227,4 +227,4 @@ class AdapterManagerProxy extends EventEmitter {
   }
 }
 
-module.exports = AdapterManagerProxy;
+module.exports = AddonManagerProxy;

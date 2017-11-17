@@ -8,9 +8,9 @@
 
 'use strict';
 
-var Adapter = require('../../adapters/adapter');
-var Device = require('../../adapters/device');
-var Property = require('../../adapters/property');
+var Adapter = require('../../addons/adapter');
+var Device = require('../../addons/device');
+var Property = require('../../addons/property');
 
 class MockProperty extends Property {
   constructor(device, name, propertyDescription) {
@@ -55,9 +55,9 @@ class MockDevice extends Device {
 }
 
 class MockAdapter extends Adapter {
-  constructor(adapterManager, packageName) {
-    super(adapterManager, packageName, packageName);
-    adapterManager.addAdapter(this);
+  constructor(addonManager, packageName) {
+    super(addonManager, packageName, packageName);
+    addonManager.addAdapter(this);
   }
 
   /**
@@ -162,8 +162,8 @@ class MockAdapter extends Adapter {
   }
 }
 
-function loadMockAdapter(adapterManager, manifest, _errorCallback) {
-  new MockAdapter(adapterManager, manifest.name);
+function loadMockAdapter(addonManager, manifest, _errorCallback) {
+  new MockAdapter(addonManager, manifest.name);
 }
 
 module.exports = loadMockAdapter;

@@ -11,7 +11,7 @@
 'use strict';
 
 var Things = require('../models/things');
-var AdapterManager = require('../adapter-manager');
+var AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const EventEmitter = require('events');
 
@@ -118,7 +118,7 @@ class Actions extends EventEmitter {
 
     switch(action.name) {
       case 'pair':
-        AdapterManager.addNewThing().then(function() {
+        AddonManager.addNewThing().then(function() {
           action.updateStatus('completed');
         }).catch(function(error) {
           action.error = error;
@@ -129,7 +129,7 @@ class Actions extends EventEmitter {
         break;
       case 'unpair':
         if (action.parameters.id) {
-          AdapterManager.removeThing(action.parameters.id)
+          AddonManager.removeThing(action.parameters.id)
             .then(function(thingIdUnpaired) {
               console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
               Things.removeThing(thingIdUnpaired);
@@ -188,10 +188,10 @@ class Actions extends EventEmitter {
       } else {
         switch(action.name) {
           case 'pair':
-            AdapterManager.cancelAddNewThing();
+            AddonManager.cancelAddNewThing();
             break;
           case 'unpair':
-            AdapterManager.cancelRemoveThing(action.parameters.id);
+            AddonManager.cancelRemoveThing(action.parameters.id);
             break;
           default:
             throw 'Invalid action name: "' + action.name + '"';

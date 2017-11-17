@@ -9,7 +9,7 @@
 
 'use strict';
 
-const Constants = require('../adapter-constants');
+const Constants = require('../addon-constants');
 const Deferred = require('../deferred');
 const Property = require('../property');
 

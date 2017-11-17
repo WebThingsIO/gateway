@@ -15,8 +15,8 @@ module.exports = {
     http: 0,
   },
   behindForwarding: false,
-  adapterManager: {
-    path: './adapters-test',
+  addonManager: {
+    path: './addons-test',
   },
   database: {
     filename: ':memory:',

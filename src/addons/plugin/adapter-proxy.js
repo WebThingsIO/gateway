@@ -12,7 +12,7 @@
 'use strict';
 
 const Adapter = require('../adapter');
-const Constants = require('../adapter-constants');
+const Constants = require('../addon-constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 
@@ -24,8 +24,8 @@ const DEBUG = false;
  */
 class AdapterProxy extends Adapter {
 
-  constructor(adapterManager, adapterId, plugin) {
-    super(adapterManager, adapterId);
+  constructor(addonManager, adapterId, plugin) {
+    super(addonManager, adapterId);
     this.plugin = plugin;
     this.deferredMock = null;
     this.deferredUnload = null;

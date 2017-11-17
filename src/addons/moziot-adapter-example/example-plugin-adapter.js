@@ -56,9 +56,9 @@ class ExampleDevice extends Device {
 }
 
 class ExamplePluginAdapter extends Adapter {
-  constructor(adapterManager, packageName) {
-    super(adapterManager, 'ExamplePlugin', packageName);
-    adapterManager.addAdapter(this);
+  constructor(addonManager, packageName) {
+    super(addonManager, 'ExamplePlugin', packageName);
+    addonManager.addAdapter(this);
   }
 
   /**
@@ -161,8 +161,8 @@ class ExamplePluginAdapter extends Adapter {
   }
 }
 
-function loadExamplePluginAdapter(adapterManager, manifest, _errorCallback) {
-  var adapter = new ExamplePluginAdapter(adapterManager, manifest.name);
+function loadExamplePluginAdapter(addonManager, manifest, _errorCallback) {
+  var adapter = new ExamplePluginAdapter(addonManager, manifest.name);
   var device = new ExampleDevice(adapter, 'example-plug-2', {
     name: 'example-plug-2',
     type: 'onOffSwitch',
