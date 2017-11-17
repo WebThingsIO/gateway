@@ -333,53 +333,58 @@ class AdapterManager extends EventEmitter {
   }
 
   /**
-   * @method loadAdapter
+   * @method loadAdaptersByPackageName
    *
-   * Loads a single adapter.
+   * Loads adapters with the given package name.
    *
-   * @returns A promise which is resolved when the adapter is loaded.
+   * @param {String} packageName The package name of the adapters to load.
+   * @returns A promise which is resolved when the adapters are loaded.
    */
 
-  async loadAdapter(adapterId) {
+  async loadAdaptersByPackageName(packageName) {
     const adapterPath = path.join(__dirname,
                                   config.get('adapterManager.path'),
-                                  adapterId);
+                                  packageName);
     const testMode = process.env.NODE_ENV === 'test';
 
     // Skip if there's no package.json file.
     const packageJson = path.join(adapterPath, 'package.json');
     if (!fs.lstatSync(packageJson).isFile()) {
-      console.error('package.json not found for adapter:', adapterId);
-      return Promise.reject();
+      const err = `package.json not found for package: ${packageName}`;
+      console.error(err);
+      return Promise.reject(err);
     }
 
     // Read the package.json file.
     let data;
     try {
       data = fs.readFileSync(packageJson);
-    } catch (err) {
-      console.error('Failed to read package.json for adapter:', adapterId);
+    } catch (e) {
+      const err =
+        `Failed to read package.json for package: ${packageName}\n${e}`;
       console.error(err);
-      return Promise.reject();
+      return Promise.reject(err);
     }
 
     let manifest;
     try {
       manifest = JSON.parse(data);
-    } catch (err) {
-      console.error('Failed to parse package.json for adapter:', adapterId);
+    } catch (e) {
+      const err =
+        `Failed to parse package.json for package: ${packageName}\n${e}`;
       console.error(err);
-      return Promise.reject();
+      return Promise.reject(err);
     }
 
     // Verify API version.
     const apiVersion = config.get('adapterManager.api');
     if (manifest.moziot.api.min > apiVersion ||
         manifest.moziot.api.max < apiVersion) {
-      console.error('API mismatch for adapter:', manifest.name);
-      console.error('Current:', apiVersion, 'Supported:',
-                    manifest.moziot.api.min, '-', manifest.moziot.api.max);
-      return Promise.reject();
+      const err = `API mismatch for package: ${manifest.name}\nCurrent: ${
+        apiVersion} Supported: ${manifest.moziot.api.min}-${
+          manifest.moziot.api.max}`;
+      console.error(err);
+      return Promise.reject(err);
     }
 
     // Get any saved settings for this adapter.
@@ -415,8 +420,9 @@ class AdapterManager extends EventEmitter {
 
     // If this adapter is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
-      console.log('Adapter not enabled:', manifest.name);
-      return Promise.reject();
+      const err = `Package not enabled: ${manifest.name}`;
+      console.log(err);
+      return Promise.reject(err);
     }
 
     const errorCallback = function(packageName, errorStr) {
@@ -437,10 +443,11 @@ class AdapterManager extends EventEmitter {
           console.log('Loading adapter', manifest.name, 'as plugin');
           const adapterLoader = dynamicRequire(adapterPath);
           adapterLoader(adapterManagerProxy, newSettings, errorCallback);
-        } catch (err) {
-          console.error('Failed to register adapter with gateway');
+        } catch (e) {
+          const err =
+            `Failed to register package with gateway: ${manifest.name}\n${e}`;
           console.error(err);
-          return Promise.reject();
+          return Promise.reject(err);
         }
       } else {
         // This is the normal plugin adapter case, and we currently
@@ -452,8 +459,6 @@ class AdapterManager extends EventEmitter {
       const adapterLoader = dynamicRequire(adapterPath);
       adapterLoader(this, newSettings, errorCallback);
     }
-
-    return Promise.resolve();
   }
 
   /**
@@ -500,7 +505,7 @@ class AdapterManager extends EventEmitter {
           continue;
         }
 
-        adapterManager.loadAdapter(adapterName);
+        adapterManager.loadAdaptersByPackageName(adapterName);
       }
     });
   }

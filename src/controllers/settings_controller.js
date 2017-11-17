@@ -288,7 +288,7 @@ SettingsController.put('/adapters/:adapterName', async (request, response) => {
 
   try {
     if (enabled) {
-      await AdapterManager.loadAdapter(adapterName);
+      await AdapterManager.loadAdaptersByPackageName(adapterName);
     } else {
       await AdapterManager.unloadAdaptersByPackageName(adapterName);
     }
