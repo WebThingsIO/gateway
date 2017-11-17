@@ -403,7 +403,7 @@ class AdapterManager extends EventEmitter {
         'moziot-adapter-zwave',
       ];
 
-      if (defaults.includes(manifest.name) ||
+      if ((defaults.includes(manifest.name) && !testMode) ||
           (manifest.moziot._test && testMode)) {
         newSettings.moziot.enabled = true;
       } else {
