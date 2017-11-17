@@ -15,7 +15,7 @@ describe('plugins/', function() {
     let plugin = new Plugin('plugin-start-test', null);
     plugin.exec = 'node -e process.exit(42);';
     plugin.start();
-    // Normnally, the plugin mechanism would try to restart the plugin
+    // Normally, the plugin mechanism would try to restart the plugin
     // when it exits, so we set restart to false to prevent that.
     plugin.restart = false;
     let promise = new Promise(resolve => {
@@ -54,7 +54,7 @@ describe('plugins/', function() {
     // setup a different exit code the next time it restarts
     plugin.exec = 'node -e process.exit(43);';
 
-    let promise = new Promise(resolve => {
+    let code = await new Promise(resolve => {
       plugin.process.on('exit', code => {
         console.log('Got exit code', code);
         if (code == 42) {
@@ -68,7 +68,6 @@ describe('plugins/', function() {
         }
       });
     });
-    let code = await(promise);
     expect(code).toEqual(43);
 
     plugin.shutdown();

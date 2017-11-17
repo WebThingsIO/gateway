@@ -16,7 +16,7 @@ const PluginClient = require('./adapters/plugin/plugin-client');
 const fs = require('fs');
 const path = require('path');
 
-function loadAdapter(adapterId, verbose) {
+async function loadAdapter(packageName, verbose) {
   const adapterPath = path.join(__dirname,
                                 config.get('adapterManager.path'),
                                 adapterId);
@@ -24,37 +24,37 @@ function loadAdapter(adapterId, verbose) {
   // Skip if there's no package.json file.
   const packageJson = path.join(adapterPath, 'package.json');
   if (!fs.lstatSync(packageJson).isFile()) {
-    console.error('package.json not found for adapter:', adapterId);
-    return false;
+    const err = 'package.json not found for package: ${packageName}';
+    return Promise.reject(err);
   }
 
   // Read the package.json file.
   let data;
   try {
     data = fs.readFileSync(packageJson);
-  } catch (err) {
-    console.error('Failed to read package.json for adapter:', adapterId);
-    console.error(err);
-    return false;
-  }
+  } catch (e) {
+    const err =
+      'Failed to read package.json for package: ${packageName}\n${e}';
+    return Promise.reject(err);
+}
 
   let manifest;
   try {
     manifest = JSON.parse(data);
-  } catch (err) {
-    console.error('Failed to parse package.json for adapter:', adapterId);
-    console.error(err);
-    return false;
+  } catch (e) {
+    const err =
+      'Failed to parse package.json for package: ${packageName}\n${e}';
+    return Promise.reject(err);
   }
 
   // Verify API version.
   const apiVersion = config.get('adapterManager.api');
   if (manifest.moziot.api.min > apiVersion ||
       manifest.moziot.api.max < apiVersion) {
-    console.error('API mismatch for adapter:', manifest.name);
-    console.error('Current:', apiVersion, 'Supported:',
-                  manifest.moziot.api.min, '-', manifest.moziot.api.max);
-    return false;
+    return Promise.reject('API mismatch for package: ${manifest.name}\n' +
+                          'Current: ${apiVersion} ' +
+                          'Supported: ${manifest.moziot.api.min}-' +
+                          '${manifest.moziot.api.max}');
   }
   let newSettings = Object.assign({}, manifest);
   if (!newSettings.moziot.hasOwnProperty('config')) {
@@ -62,22 +62,23 @@ function loadAdapter(adapterId, verbose) {
   }
 
   const errorCallback = function(packageName, errorStr) {
-    console.log('Failed to load', packageName, '-', errorStr);
+    console.error('Failed to load', packageName, '-', errorStr);
   };
 
   var pluginClient = new PluginClient(adapterId, {verbose: verbose});
-  pluginClient.register().then(adapterManagerProxy => {
-    console.log('Loading adapter for', manifest.name,
-                'from', adapterPath);
-    let adapterLoader = dynamicRequire(adapterPath);
-    adapterLoader(adapterManagerProxy, newSettings, errorCallback);
-  }).catch(err => {
-    console.error('Failed to register adapter with gateway');
-    console.error(err);
-    return false;
+  return new Promise((resolve, reject) => {
+    pluginClient.register().then(adapterManagerProxy => {
+      console.log('Loading adapter for', manifest.name,
+                  'from', adapterPath);
+      let adapterLoader = dynamicRequire(adapterPath);
+      adapterLoader(adapterManagerProxy, newSettings, errorCallback);
+      resolve();
+    }).catch(e => {
+      const err =
+        'Failed to register package: ${manifest.name} with gateway\n' + e;
+      reject(err);
+    });
   });
-
-  return true;
 }
 
 // Use webpack provided require for dynamic includes from the bundle  .
@@ -111,6 +112,8 @@ if (opt.argv.length != 1) {
   process.exit(1);
 }
 var adapterId = opt.argv[0];
-if (!loadAdapter(adapterId, opt.verbose)) {
+
+loadAdapter(adapterId, opt.verbose).catch(err => {
+  console.error(err);
   process.exit(1);
-}
+});
