@@ -245,7 +245,21 @@ SettingsController.get('/addons', async (request, response) => {
     if (result === undefined) {
       response.status(404).json([]);
     } else {
-      response.status(200).json(result);
+      let presentAddons = [];
+      for (const setting of result) {
+        // Remove the leading 'addons.' from the settings key to get the
+        // package name.
+        const packageName = setting.key.substr(setting.key.indexOf('.') + 1);
+        if (packageName.length <= 0) {
+          continue;
+        }
+
+        if (AddonManager.isAddonAvailable(packageName)) {
+          presentAddons.push(setting);
+        }
+      }
+
+      response.status(200).json(presentAddons);
     }
   }).catch(function(e) {
     console.error('Failed to get add-on settings.');
