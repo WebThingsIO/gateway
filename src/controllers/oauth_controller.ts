@@ -101,7 +101,8 @@ function redirect(response: express.Response, baseURL: URL, params: {[key: strin
   response.redirect(url.toString());
 }
 
-function verifyClient(request: OAuthRequest, response: express.Response): ClientRegistry|null {
+function verifyClient(request: OAuthRequest, response: express.Response):
+  ClientRegistry|null {
   let client = OAuthClients.get(request.client_id);
   if (!client) {
     let err: ErrorResponse<UnauthorizedClient> = {
@@ -130,6 +131,49 @@ function verifyClient(request: OAuthRequest, response: express.Response): Client
   }
 
   return client;
+}
+
+function verifyClientAuthorization(client: ClientRegistry,
+  request: express.Request, response: express.Response): boolean {
+  let authorization = request.headers.authorization;
+  if (typeof authorization !== 'string' || !authorization.startsWith('Basic ')) {
+    let err: ErrorResponse<UnauthorizedClient> = {
+      error: 'unauthorized_client',
+      error_description: 'authorization header missing or malformed',
+    };
+
+    response.status(400).json(err);
+    return false;
+  }
+
+  let userPassB64 = authorization.substring('Basic '.length);
+  let userPass = Buffer.from(userPassB64, 'base64').toString();
+
+  let parts = userPass.split(':');
+  if (parts.length !== 2) {
+    let err: ErrorResponse<UnauthorizedClient> = {
+      error: 'unauthorized_client',
+      error_description: 'authorization header missing or malformed',
+    };
+
+    response.status(400).json(err);
+    return false;
+  }
+
+  let clientId = decodeURIComponent(parts[0]);
+  let clientSecret = decodeURIComponent(parts[1]);
+
+  if (client.id !== clientId || client.secret !== clientSecret) {
+    let err: ErrorResponse<UnauthorizedClient> = {
+      error: 'unauthorized_client',
+      error_description: 'authorization header mismatch',
+    };
+
+    response.status(400).json(err);
+    return false;
+  }
+
+  return true;
 }
 
 OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
@@ -219,6 +263,10 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
 
   let client = verifyClient(tokenRequest, response);
   if (!client) {
+    return;
+  }
+
+  if (!verifyClientAuthorization(client, request, response)) {
     return;
   }
 

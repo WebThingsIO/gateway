@@ -1,6 +1,7 @@
 const express = require('express');
 const e2p = require('event-to-promise');
 const http = require('http');
+const pFinal = require('../promise-final');
 const simpleOAuth2 = require('simple-oauth2');
 
 const {server, chai} = require('../common');
@@ -8,20 +9,9 @@ const Constants = require('../../constants');
 const {headerAuth} = require('../user');
 
 describe('oauth/', function() {
-  async function setupOAuth() {
-    const config = {
-      client: {
-        id: 'hello',
-        secret: 'super secret'
-      },
-      auth: {
-        tokenHost: 'https://127.0.0.1:' + server.address().port +
-          Constants.OAUTH_PATH
-      }
-    };
+  let clientServer, oauth2;
 
-    const oauth2 = simpleOAuth2.create(config);
-
+  beforeAll(async () => {
     const client = express();
     const port = 31338;
     client.get('/auth', (req, res) => {
@@ -37,26 +27,50 @@ describe('oauth/', function() {
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      oauth2.authorizationCode.getToken({code: code}, (err, result) => {
-        expect(err).toBeFalsy();
+      oauth2.authorizationCode.getToken({code: code}).then(result => {
         const token = oauth2.accessToken.create(result);
         res.json(token);
+      }).catch(err => {
+        res.status(400).json(err);
       });
     });
 
-    let clientServer = http.createServer();
+    clientServer = http.createServer();
     clientServer.on('request', client);
     clientServer.listen(port);
     await e2p(clientServer, 'listening')
-    return clientServer;
+  });
+
+  afterAll(async () => {
+    clientServer.close();
+    oauth2 = null;
+    await e2p(clientServer, 'close');
+    clientServer = null;
+  });
+
+  function setupOAuth(configProvided) {
+    const config = Object.assign({
+      client: {
+        id: 'hello',
+        secret: 'super secret'
+      },
+      auth: {
+        tokenHost: 'https://127.0.0.1:' + server.address().port +
+          Constants.OAUTH_PATH
+      }
+    }, configProvided || {});
+
+    oauth2 = simpleOAuth2.create(config);
   }
 
   it('performs simple authorization', async () => {
-    const clientServer = await setupOAuth();
+    setupOAuth();
+
     let res = await chai.request(clientServer)
       .get('/auth')
       .set('Accept', 'application/json');
 
+    expect(res.status).toEqual(200);
     let jwt = res.body.token.access_token;
     // Try using the access token
     res = await chai.request(server)
@@ -64,9 +78,21 @@ describe('oauth/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
+  });
 
-    clientServer.close();
-    await e2p(clientServer, 'close');
+  it('fails authorization with an incorrect secret', async () => {
+    setupOAuth({
+      client: {
+        id: 'hello',
+        secret: 'not a super secret'
+      }
+    });
+
+    const err = await pFinal(chai.request(clientServer)
+        .get('/auth')
+        .set('Accept', 'application/json'));
+
+    expect(err.response.status).toEqual(400);
   });
 });
 
