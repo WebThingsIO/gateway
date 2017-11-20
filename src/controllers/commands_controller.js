@@ -33,14 +33,13 @@
 'use strict';
 
 const express = require('express');
+const fetch = require('node-fetch');
 const Constants = require('../constants.js');
-const rp = require('request-promise');
 const uuidv4 =  require('uuid/v4');
 const CommandsController = express.Router();
 
-
+const aiUrl = 'https://api.api.ai/api/query';
 const aiOptions = {
-  uri: 'https://api.api.ai/api/query',
   method: 'POST',
   body: '',
   headers: {
@@ -50,8 +49,6 @@ const aiOptions = {
 };
 
 const thingsOptions = {
-  uri: '',
-  rejectUnauthorized: false,
   body: '',
   method: 'GET',
   headers: {
@@ -61,9 +58,7 @@ const thingsOptions = {
 };
 
 const iotOptions = {
-  uri: '',
   method: 'PUT',
-  rejectUnauthorized: false,
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -88,6 +83,13 @@ CommandsController.configure =  function(gatewayHref, jwt) {
 };
 
 /**
+ * Helper function for converting fetch results to text
+ */
+function toText(res) {
+  return res.text();
+}
+
+/**
  * Parses the intent for a text sentence and sends to the API.ai intent
  * parser to determine intent.  Then executes the intent as an action on the
  * thing API.
@@ -101,16 +103,16 @@ CommandsController.post('/', function (request, response) {
   }
 
   aiOptions.body = JSON.stringify(getAiBody(request.body.text));
-  rp(aiOptions)
+  fetch(aiUrl, aiOptions).then(toText)
     .then(function(aiBody) {
       var payload = parseAIBody(aiBody);
       if (payload.cmd == 'IOT') {
-        thingsOptions.uri = CommandsController.gatewayHref +
+        const thingsUrl = CommandsController.gatewayHref +
           Constants.THINGS_PATH;
         thingsOptions.headers.Authorization = 'Bearer ' +
           CommandsController.jwt;
 
-        rp(thingsOptions)
+        fetch(thingsUrl, thingsOptions).then(toText)
           .then(function(thingBody) {
             let jsonBody = JSON.parse(thingBody);
             let match = payload.param.toUpperCase();
@@ -145,7 +147,7 @@ CommandsController.post('/', function (request, response) {
                 response.status(404).json({'message': 'Command not found'});
                 return;
               }
-              iotOptions.uri = CommandsController.gatewayHref + payload.href;  
+              const iotUrl = CommandsController.gatewayHref + payload.href;
               iotOptions.headers.Authorization = 
                 'Bearer ' + CommandsController.jwt;
               // Returning 201 to signify that the command was mapped to an
@@ -153,7 +155,7 @@ CommandsController.post('/', function (request, response) {
               // caller with this status before the command finishes execution
               // as the execution can take some time (e.g. blinds)
               response.status(201).json({'message': 'Command Created'});
-              rp(iotOptions)
+              fetch(iotUrl, iotOptions)
                 .then(function() {
                   // In the future we may want to use WS to give a status of
                   // the disposition of the command execution..
