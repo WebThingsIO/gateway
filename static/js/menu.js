@@ -18,7 +18,6 @@ var Menu = {
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.items = {};
     this.items.things = document.getElementById('things-menu-item');
-    this.items.adapters = document.getElementById('adapters-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
     this.items.speech = document.getElementById('speech-wrapper');
