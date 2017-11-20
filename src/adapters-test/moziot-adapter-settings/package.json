@@ -6,7 +6,7 @@
   "keywords": [
     "moziot",
     "adapter",
-    "mock"
+    "test"
   ],
   "homepage": "https://iot.mozilla.org/",
   "license": "MPL-2.0",

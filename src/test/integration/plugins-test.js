@@ -10,7 +10,8 @@ describe('plugins/', function() {
   it('Test the plugin start mechanism (good exec)', async () => {
 
     // The use of the mock adapter already tests most of the methods in the
-    // Plugin class. however it doesn't test the start method.
+    // Plugin class. However it doesn't test the start method, so we add
+    // some tests here to do that.
 
     let plugin = new Plugin('plugin-start-test', null);
     plugin.exec = 'node -e process.exit(42);';

@@ -396,9 +396,7 @@ class AdapterManager extends EventEmitter {
       newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
                                                 savedSettings.moziot.config);
     } else {
-      if (manifest.moziot.hasOwnProperty('enabled')) {
-        newSettings.moziot.enabled = manifest.moziot.enabled;
-      } else {
+      if (!manifest.moziot.hasOwnProperty('enabled')) {
         newSettings.moziot.enabled = false;
       }
 

@@ -19,7 +19,7 @@ const path = require('path');
 async function loadAdapter(packageName, verbose) {
   const adapterPath = path.join(__dirname,
                                 config.get('adapterManager.path'),
-                                adapterId);
+                                packageName);
 
   // Skip if there's no package.json file.
   const packageJson = path.join(adapterPath, 'package.json');
@@ -65,7 +65,7 @@ async function loadAdapter(packageName, verbose) {
     console.error('Failed to load', packageName, '-', errorStr);
   };
 
-  var pluginClient = new PluginClient(adapterId, {verbose: verbose});
+  var pluginClient = new PluginClient(packageName, {verbose: verbose});
   return new Promise((resolve, reject) => {
     pluginClient.register().then(adapterManagerProxy => {
       console.log('Loading adapter for', manifest.name,
@@ -108,12 +108,12 @@ if (opt.options.help) {
 }
 
 if (opt.argv.length != 1) {
-  console.error('Expecting a single adapterId to load');
+  console.error('Expecting a single package to load');
   process.exit(1);
 }
-var adapterId = opt.argv[0];
+var packageName = opt.argv[0];
 
-loadAdapter(adapterId, opt.verbose).catch(err => {
+loadAdapter(packageName, opt.verbose).catch(err => {
   console.error(err);
   process.exit(1);
 });
