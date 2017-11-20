@@ -27,6 +27,7 @@ type OAuthRequest = {
   state?: string
 };
 
+// https://tools.ietf.org/html/rfc6749#section-4.1.1
 type AuthorizationRequest = {
   response_type: 'code', // no suppport or desire for implicit auth
   client_id: ClientId,
@@ -58,10 +59,11 @@ type AuthorizationErrorResponse = ErrorResponse<AuthorizationError>;
 type AuthorizationResponse =
   AuthorizationSuccessResponse|AuthorizationErrorResponse;
 
+// https://tools.ietf.org/html/rfc6749#section-4.1.3
 type AccessTokenRequest = {
   grant_type: 'authorization_code',
   code: AuthorizationCode,
-  redirect_uri: URL,
+  redirect_uri: URL|undefined,
   client_id: ClientId
 };
 
@@ -181,7 +183,7 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
   let authRequest: AuthorizationRequest = {
     response_type: request.query.response_type,
     client_id: request.query.client_id,
-    redirect_uri: new URL(request.query.redirect_uri),
+    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
     scope: request.query.scope,
     state: request.query.state
   };
@@ -220,6 +222,7 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
 
   // TODO: prompt user for auth instead of always granting
   // TODO: use that user's UID instead of -1
+  // TODO: should expire in 10 minutes
   // const {jwt} = request;
   // const tokenData = await Database.getJSONWebTokenByKeyId(jwt.kid);
   let code = await JSONWebToken.issueOAuthToken(client, 'authorization_code');
