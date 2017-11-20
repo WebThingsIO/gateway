@@ -18,8 +18,8 @@
  */
 class Adapter {
 
-  constructor(adapterManager, id, packageName) {
-    this.manager = adapterManager;
+  constructor(addonManager, id, packageName) {
+    this.manager = addonManager;
     this.id = id;
     this.packageName = packageName;
     this.name = this.constructor.name;

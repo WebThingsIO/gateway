@@ -12,7 +12,7 @@
 
 var Thing = require('./thing.js');
 var Database = require('../db.js');
-var AdapterManager = require('../adapter-manager');
+var AddonManager = require('../addon-manager');
 var Constants = require('../constants');
 
 var Things = {
@@ -72,7 +72,7 @@ var Things = {
      // Get a map of things in the database
      return this.getThings().then((function(storedThings) {
        // Get a list of things connected to adapters
-       var connectedThings = AdapterManager.getThings();
+       var connectedThings = AddonManager.getThings();
        var newThings = [];
        connectedThings.forEach(function(connectedThing) {
          if(!storedThings.has(connectedThing.id)) {
@@ -183,7 +183,7 @@ var Things = {
   }
 };
 
-AdapterManager.on(Constants.THING_ADDED, function(thing) {
+AddonManager.on(Constants.THING_ADDED, function(thing) {
   Things.handleNewThing(thing);
 });
 

@@ -139,7 +139,7 @@
       });
     },
 
-    setAdapterSetting: function(adapterId, enabled) {
+    setAddonSetting: function(addonName, enabled) {
       return new Promise((resolve, reject) => {
         var headers = {
           'Authorization': `Bearer ${window.API.jwt}`,
@@ -149,16 +149,16 @@
         var payload = {
           'enabled': enabled
         };
-        fetch('/settings/adapters/' + adapterId, {
+        fetch('/settings/addons/' + addonName, {
           method: 'PUT',
           body: JSON.stringify(payload),
           headers: headers
         }).then(function(response) {
           if (response.status == 200) {
-            console.log('Set ' + adapterId + ' to ' + enabled);
+            console.log('Set ' + addonName + ' to ' + enabled);
             resolve();
           } else {
-            reject('Unexpected response code while setting adapter setting');
+            reject('Unexpected response code while setting add-on setting');
           }
         }).catch(function(error) {
           reject(error);

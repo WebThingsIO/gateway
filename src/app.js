@@ -19,7 +19,7 @@ const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
 const mustacheExpress = require('mustache-express');
-const adapterManager = require('./adapter-manager');
+const addonManager = require('./addon-manager');
 const db = require('./db');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
@@ -28,7 +28,7 @@ const Constants = require('./constants');
 const Settings = require('./models/settings');
 
 // The following causes an instance of AppInstance to be created.
-// This is then used in other places (like src/adapters/plugin/ipc.js)
+// This is then used in other places (like src/addons/plugin/ipc.js)
 require('./app-instance');
 
 // Open the database
@@ -91,7 +91,7 @@ function startHttpsGateway() {
 
   // Start the HTTPS server
   httpsServer.listen(port, function() {
-    adapterManager.loadAdapters();
+    addonManager.loadAddons();
     rulesEngineConfigure(httpsServer);
     console.log('Listening on port', httpsServer.address().port);
     commandParserConfigure(httpsServer);
@@ -115,7 +115,7 @@ function startHttpGateway() {
   }
 
   httpServer.listen(port, function() {
-    adapterManager.loadAdapters();
+    addonManager.loadAddons();
     rulesEngineConfigure(httpServer);
     console.log('Listening on port', httpServer.address().port);
   });
@@ -298,8 +298,8 @@ if (config.get('cli')) {
 
   // Do graceful shutdown when Control-C is pressed.
   process.on('SIGINT', function() {
-    console.log('Control-C: disconnecting adapters...');
-    adapterManager.unloadAdapters();
+    console.log('Control-C: unloading add-ons...');
+    addonManager.unloadAddons();
     TunnelService.stop();
     process.exit(0);
   });

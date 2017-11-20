@@ -346,13 +346,13 @@ var Database = {
   },
 
   /**
-   * Get a list of adapter-related settings.
+   * Get a list of add-on-related settings.
    *
    * @return {Promise<Array<Setting>>} resolves with a list of setting objects
    */
-  getAdapterSettings: async function() {
+  getAddonSettings: async function() {
     return new Promise((resolve, reject) => {
-      this.db.all('SELECT * FROM settings WHERE key LIKE "adapters.%"',
+      this.db.all('SELECT * FROM settings WHERE key LIKE "addons.%"',
                   (err, rows) => {
                     if (err) {
                       reject(err);

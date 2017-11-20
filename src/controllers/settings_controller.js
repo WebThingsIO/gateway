@@ -21,7 +21,7 @@ const fs = require('fs');
 const TunnelService = require('../ssltunnel');
 const Settings = require('../models/settings');
 const Constants = require('../constants');
-const AdapterManager = require('../adapter-manager');
+const AddonManager = require('../addon-manager');
 
 var SettingsController = PromiseRouter();
 
@@ -240,22 +240,22 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
   }
 });
 
-SettingsController.get('/adapters', async (request, response) => {
-  Settings.getAdapterSettings().then(function(result) {
+SettingsController.get('/addons', async (request, response) => {
+  Settings.getAddonSettings().then(function(result) {
     if (result === undefined) {
       response.status(404).json([]);
     } else {
       response.status(200).json(result);
     }
   }).catch(function(e) {
-    console.error('Failed to get adapter settings.');
+    console.error('Failed to get add-on settings.');
     console.error(e);
     response.status(400).send(e);
   });
 });
 
-SettingsController.put('/adapters/:adapterName', async (request, response) => {
-  var adapterName = request.params.adapterName;
+SettingsController.put('/addons/:addonName', async (request, response) => {
+  var addonName = request.params.addonName;
 
   if (!request.body || request.body['enabled'] === undefined) {
     response.status(400).send('Enabled property not defined');
@@ -264,13 +264,13 @@ SettingsController.put('/adapters/:adapterName', async (request, response) => {
 
   var enabled = request.body['enabled'];
 
-  const key = `adapters.${adapterName}`;
+  const key = `addons.${addonName}`;
 
   let current;
   try {
     current = await Settings.get(key);
   } catch (e) {
-    console.error('Failed to get current settings for adapter ' + adapterName);
+    console.error('Failed to get current settings for add-on ' + addonName);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -280,7 +280,7 @@ SettingsController.put('/adapters/:adapterName', async (request, response) => {
   try {
     await Settings.set(key, current);
   } catch (e) {
-    console.error('Failed to set settings for adapter ' + adapterName);
+    console.error('Failed to set settings for add-on ' + addonName);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -288,14 +288,14 @@ SettingsController.put('/adapters/:adapterName', async (request, response) => {
 
   try {
     if (enabled) {
-      await AdapterManager.loadAdaptersByPackageName(adapterName);
+      await AddonManager.loadAddon(addonName);
     } else {
-      await AdapterManager.unloadAdaptersByPackageName(adapterName);
+      await AddonManager.unloadAddon(addonName);
     }
 
     response.status(200).json({'enabled': enabled});
   } catch (e) {
-    console.error('Failed to toggle adapter ' + adapterName);
+    console.error('Failed to toggle add-on ' + addonName);
     console.error(e);
     response.status(400).send(e);
   }

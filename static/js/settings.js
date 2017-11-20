@@ -22,7 +22,7 @@ var SettingsScreen = {
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
-    this.adapterSettings = document.getElementById('adapter-settings');
+    this.addonSettings = document.getElementById('addon-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
@@ -42,7 +42,7 @@ var SettingsScreen = {
     this.menu.classList.remove('hidden');
     this.domainSettings.classList.add('hidden');
     this.userSettings.classList.add('hidden');
-    this.adapterSettings.classList.add('hidden');
+    this.addonSettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
   },
@@ -67,8 +67,8 @@ var SettingsScreen = {
       case 'users':
         this.showUserSettings();
         break;
-      case 'adapters':
-        this.showAdapterSettings();
+      case 'addons':
+        this.showAddonSettings();
         break;
       case 'experiments':
         this.showExperimentSettings();
@@ -119,76 +119,76 @@ var SettingsScreen = {
     });
   },
 
-  showAdapterSettings: function() {
-    this.adapterSettings.classList.remove('hidden');
+  showAddonSettings: function() {
+    this.addonSettings.classList.remove('hidden');
     const opts = {
       headers: {
         'Accept': 'application/json'
       }
     };
-    fetch('/settings/adapters', opts).then(function (response) {
+    fetch('/settings/addons', opts).then(function (response) {
       return response.json();
     }).then(function (body) {
       if (!body) {
         return;
       }
 
-      const adapterList = document.getElementById('available-adapters-list');
-      adapterList.innerHTML = '';
+      const addonList = document.getElementById('available-addons-list');
+      addonList.innerHTML = '';
 
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
 
           const li = document.createElement('li');
-          li.className = 'adapter-item';
+          li.className = 'addon-item';
 
           const headerDiv = document.createElement('div');
-          headerDiv.className = 'adapter-settings-header';
+          headerDiv.className = 'addon-settings-header';
 
           const titleDiv = document.createElement('div');
           titleDiv.innerText = settings.name;
-          titleDiv.className = 'adapter-settings-name';
+          titleDiv.className = 'addon-settings-name';
 
           const descriptionDiv = document.createElement('div');
           descriptionDiv.innerText = settings.description;
-          descriptionDiv.className = 'adapter-settings-description';
+          descriptionDiv.className = 'addon-settings-description';
 
           const controlDiv = document.createElement('div');
-          controlDiv.className = 'adapter-settings-controls';
+          controlDiv.className = 'addon-settings-controls';
 
           const toggleButton = document.createElement('button');
-          toggleButton.id = `adapter-toggle-${settings.name}`;
+          toggleButton.id = `addon-toggle-${settings.name}`;
           toggleButton.className = 'text-button';
-          toggleButton.adapterEnabled = settings.moziot.enabled;
+          toggleButton.addonEnabled = settings.moziot.enabled;
 
           if (settings.moziot.enabled) {
             toggleButton.innerText = 'Disable';
-            toggleButton.classList.add('adapter-settings-disable');
+            toggleButton.classList.add('addon-settings-disable');
           } else {
             toggleButton.innerText = 'Enable';
-            toggleButton.classList.add('adapter-settings-enable');
+            toggleButton.classList.add('addon-settings-enable');
           }
 
           toggleButton.addEventListener('click', function(e) {
-            const value = !e.target.adapterEnabled;
-            e.target.adapterEnabled = value;
+            const value = !e.target.addonEnabled;
+            e.target.addonEnabled = value;
 
-            window.API.setAdapterSetting(settings.name, value)
+            window.API.setAddonSetting(settings.name, value)
               .then(function() {
                 if (value) {
                   e.target.innerText = 'Disable';
-                  toggleButton.classList.remove('adapter-settings-enable');
-                  toggleButton.classList.add('adapter-settings-disable');
+                  toggleButton.classList.remove('addon-settings-enable');
+                  toggleButton.classList.add('addon-settings-disable');
                 } else {
                   e.target.innerText = 'Enable';
-                  toggleButton.classList.remove('adapter-settings-disable');
-                  toggleButton.classList.add('adapter-settings-enable');
+                  toggleButton.classList.remove('addon-settings-disable');
+                  toggleButton.classList.add('addon-settings-enable');
                 }
               })
               .catch(function(e) {
                 console.error(
-                  'Failed to toggle adapter', settings.name, ': ', e);
+                  'Failed to toggle add-on', settings.name, ': ', e);
               });
           });
 
@@ -199,9 +199,9 @@ var SettingsScreen = {
 
           li.appendChild(headerDiv);
           li.appendChild(controlDiv);
-          adapterList.appendChild(li);
+          addonList.appendChild(li);
         } catch (err) {
-          console.log('Failed to parse adapter settings:', s);
+          console.log('Failed to parse add-on settings:', s);
         }
       }
     });

@@ -11,7 +11,7 @@
 
 'use strict';
 
-const AdapterManagerProxy = require('./adapter-manager-proxy');
+const AddonManagerProxy = require('./addon-manager-proxy');
 const Constants = require('../../constants');
 const Deferred = require('../deferred');
 const IpcSocket = require('./ipc');
@@ -35,7 +35,7 @@ class PluginClient {
 
     if (msg.messageType === Constants.REGISTER_PLUGIN_REPLY) {
 
-      this.adapterManager = new AdapterManagerProxy(this);
+      this.addonManager = new AddonManagerProxy(this);
 
       // Now that we're registered with the server, open the plugin
       // specific IPC channel with the server.
@@ -43,7 +43,7 @@ class PluginClient {
       this.pluginIpcSocket =
         new IpcSocket('PluginClient', 'pair',
                       this.pluginIpcBaseAddr,
-                      this.adapterManager.onMsg.bind(this.adapterManager));
+                      this.addonManager.onMsg.bind(this.addonManager));
       this.pluginIpcSocket.connect(this.pluginIpcAddr);
       this.verbose &&
         console.log('PluginClient: registered with PluginServer:',
@@ -51,7 +51,7 @@ class PluginClient {
 
       var deferredReply = this.deferredReply;
       this.deferredReply = null;
-      deferredReply.resolve(this.adapterManager);
+      deferredReply.resolve(this.addonManager);
     } else {
       console.error('Unexpected registration reply for gateway');
       console.error(msg);
@@ -67,7 +67,7 @@ class PluginClient {
 
     this.managerIpcSocket =
       new IpcSocket('PluginClientServer', 'req',
-                    'gateway.adapterManager',
+                    'gateway.addonManager',
                     this.onManagerMsg.bind(this));
     this.managerIpcSocket.connect();
 

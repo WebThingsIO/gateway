@@ -9,17 +9,17 @@
 
 'use strict';
 
-var Adapter = require('../../adapters/adapter');
+var Adapter = require('../../addons/adapter');
 
 class SettingsTestAdapter extends Adapter {
-  constructor(adapterManager, packageName) {
-    super(adapterManager, packageName, packageName);
-    adapterManager.addAdapter(this);
+  constructor(addonManager, packageName) {
+    super(addonManager, packageName, packageName);
+    addonManager.addAdapter(this);
   }
 }
 
-function loadSettingsTestAdapter(adapterManager, manifest, _errorCallback) {
-  new SettingsTestAdapter(adapterManager, manifest.name);
+function loadSettingsTestAdapter(addonManager, manifest, _errorCallback) {
+  new SettingsTestAdapter(addonManager, manifest.name);
 }
 
 module.exports = loadSettingsTestAdapter;

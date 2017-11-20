@@ -12,32 +12,32 @@
 
 const Constants = require('../constants');
 var express = require('express');
-var adapterManager = require('../adapter-manager');
+var addonManager = require('../addon-manager');
 
 var debugController = express.Router();
 
-adapterManager.on(Constants.ADAPTER_ADDED, (adapter) => {
+addonManager.on(Constants.ADAPTER_ADDED, (adapter) => {
   console.log('debug: Got "', Constants.ADAPTER_ADDED,
               '" notification for', adapter.id, adapter.name);
 });
 
-adapterManager.on(Constants.THING_ADDED, (thing) => {
+addonManager.on(Constants.THING_ADDED, (thing) => {
   console.log('debug: Got "', Constants.THING_ADDED,
               '" notification for', thing.name);
 });
 
-adapterManager.on(Constants.THING_REMOVED, (thing) => {
+addonManager.on(Constants.THING_REMOVED, (thing) => {
   console.log('debug: Got "', Constants.THING_REMOVED,
               '" notification for', thing.name);
 });
 
-adapterManager.on(Constants.PROPERTY_CHANGED, (property) => {
+addonManager.on(Constants.PROPERTY_CHANGED, (property) => {
   console.log('debug: Got "', Constants.PROPERTY_CHANGED,
               '" notification for', property.name,
               'value:', property.value);
 });
 
-adapterManager.on(Constants.PAIRING_TIMEOUT, () => {
+addonManager.on(Constants.PAIRING_TIMEOUT, () => {
   console.log('debug: Got "', Constants.PAIRING_TIMEOUT,
               '" notification');
 });
@@ -46,7 +46,7 @@ adapterManager.on(Constants.PAIRING_TIMEOUT, () => {
  * List all known adapters
  */
 debugController.get('/adapters', (request, response) => {
-  var adapters = adapterManager.getAdapters();
+  var adapters = addonManager.getAdapters();
   response.status(200).json(Array.from(adapters.values()).map(adapter => {
     return adapter.asDict();
   }));
@@ -56,7 +56,7 @@ debugController.get('/adapters', (request, response) => {
  * Add a new device
  */
 debugController.get('/addNewThing', (request, response) => {
-  adapterManager.addNewThing().then((thing) => {
+  addonManager.addNewThing().then((thing) => {
     console.log('debugController: addNewThing added thing', thing);
   }, () => {
     console.log('debugController: addNewThing cancelled');
@@ -68,7 +68,7 @@ debugController.get('/addNewThing', (request, response) => {
  * Cancel adding a new device
  */
 debugController.get('/cancelAddNewThing', (request, response) => {
-  adapterManager.cancelAddNewThing();
+  addonManager.cancelAddNewThing();
   response.status(204).send();
 });
 
@@ -77,42 +77,42 @@ debugController.get('/cancelAddNewThing', (request, response) => {
  */
 debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
   var thingId = request.params.thingId;
-  adapterManager.cancelRemoveThing(thingId);
+  addonManager.cancelRemoveThing(thingId);
   response.status(204).send();
 });
 
 /**
- * Get a list of devices ids registered with the adapter manager.
+ * Get a list of devices ids registered with the add-on manager.
  */
 debugController.get('/deviceIds', (request, response) => {
-  var devices = adapterManager.getDevices();
+  var devices = addonManager.getDevices();
   var deviceList = [];
   for (var deviceId in devices) {
-    var device = adapterManager.devices[deviceId];
+    var device = addonManager.devices[deviceId];
     deviceList.push(device.id);
   }
   response.status(200).json(deviceList);
 });
 
 /**
- * Get a list of the devices registered with the adapter manager.
+ * Get a list of the devices registered with the add-on manager.
  */
 debugController.get('/devices', (request, response) => {
-  var devices = adapterManager.getDevices();
+  var devices = addonManager.getDevices();
   var deviceList = [];
   for (var deviceId in devices) {
-    var device = adapterManager.devices[deviceId];
+    var device = addonManager.devices[deviceId];
     deviceList.push(device.asDict());
   }
   response.status(200).json(deviceList);
 });
 
 /**
- * Get a particular device registered with the adapter manager.
+ * Get a particular device registered with the add-on manager.
  */
 debugController.get('/device/:deviceId', (request, response) => {
   var deviceId = request.params.deviceId;
-  var device = adapterManager.getDevice(deviceId);
+  var device = addonManager.getDevice(deviceId);
   if (device) {
     response.status(200).json(device.asDict());
   } else {
@@ -126,7 +126,7 @@ debugController.get('/device/:deviceId', (request, response) => {
 debugController.get('/device/:deviceId/:propertyName', (request, response) => {
   var deviceId = request.params.deviceId;
   var propertyName = request.params.propertyName;
-  var device = adapterManager.getDevice(deviceId);
+  var device = addonManager.getDevice(deviceId);
   if (device) {
     device.getProperty(propertyName).then((value) => {
       var valueDict = {};
@@ -148,7 +148,7 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
 debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   var deviceId = request.params.deviceId;
   var propertyName = request.params.propertyName;
-  var device = adapterManager.getDevice(deviceId);
+  var device = addonManager.getDevice(deviceId);
   if (device) {
     var propertyValue = request.body[propertyName];
     if (propertyValue !== undefined) {
@@ -175,25 +175,25 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
  * Get a list of plugins
  */
 debugController.get('/plugins', (request, response) => {
-  var plugins = Array.from(adapterManager.pluginServer.plugins.values());
+  var plugins = Array.from(addonManager.pluginServer.plugins.values());
   response.status(200).json(plugins.map(plugin => {
     return plugin.asDict();
   }));
 });
 
 /**
- * Get a list of the things registered with the adapter manager.
+ * Get a list of the things registered with the add-on manager.
  */
 debugController.get('/things', (request, response) => {
-  response.status(200).json(adapterManager.getThings());
+  response.status(200).json(addonManager.getThings());
 });
 
 /**
- * Get a particular thing registered with the adapter manager.
+ * Get a particular thing registered with the add-on manager.
  */
 debugController.get('/thing/:thingId', (request, response) => {
   var thingId = request.params.thingId;
-  var thing = adapterManager.getThing(thingId);
+  var thing = addonManager.getThing(thingId);
   if (thing) {
     response.status(200).json(thing);
   } else {
@@ -207,9 +207,9 @@ debugController.get('/thing/:thingId', (request, response) => {
 debugController.get('/thing/:thingId/:propertyName', (request, response) => {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
-  var thing = adapterManager.getThing(thingId);
+  var thing = addonManager.getThing(thingId);
   if (thing) {
-    adapterManager.getProperty(thing.id, propertyName).then((value) => {
+    addonManager.getProperty(thing.id, propertyName).then((value) => {
       var valueDict = {};
       valueDict[propertyName] = value;
       response.status(200).json(valueDict);
@@ -227,11 +227,11 @@ debugController.get('/thing/:thingId/:propertyName', (request, response) => {
 debugController.put('/thing/:thingId/:propertyName', (request, response) => {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
-  var thing = adapterManager.getThing(thingId);
+  var thing = addonManager.getThing(thingId);
   if (thing) {
     var propertyValue = request.body[propertyName];
     if (propertyValue !== undefined) {
-      adapterManager.setProperty(propertyName, propertyValue).then((value) => {
+      addonManager.setProperty(propertyName, propertyValue).then((value) => {
         var valueDict = {};
         valueDict[propertyName] = value;
         response.status(200).json(valueDict);
@@ -255,7 +255,7 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
  */
 debugController.get('/removeThing/:thingId', (request, response) => {
   var thingId = request.params.thingId;
-  adapterManager.removeThing(thingId).then((thingIdRemoved) => {
+  addonManager.removeThing(thingId).then((thingIdRemoved) => {
     console.log('debugController: removed', thingIdRemoved);
     if (thingId != thingIdRemoved) {
       console.log('debugController: Actually removed', thingIdRemoved,
@@ -269,11 +269,11 @@ debugController.get('/removeThing/:thingId', (request, response) => {
 });
 
 /**
- * Unload adapters
+ * Unload add-ons
  */
-debugController.get('/unloadAdapters', (request, response) => {
-  console.log('debugController: Unloading Adapters');
-  adapterManager.unloadAdapters();
+debugController.get('/unloadAddons', (request, response) => {
+  console.log('debugController: Unloading Add-ons');
+  addonManager.unloadAddons();
   response.status(200).send('');
 });
 

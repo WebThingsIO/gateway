@@ -73,14 +73,14 @@ function FUNC(ths, func, args) {
 }
 
 class ZigBeeAdapter extends Adapter {
-  constructor(adapterManager, packageName, port) {
+  constructor(addonManager, packageName, port) {
     // The ZigBee adapter supports multiple dongles and
     // will create an adapter object for each dongle.
     // We don't know the actual adapter id until we
     // retrieve the serial number from the dongle. So we
     // set it to zb-unknown here, and fix things up later
     // just before we call addAdapter.
-    super(adapterManager, 'zb-uknown', packageName);
+    super(addonManager, 'zb-uknown', packageName);
 
     this.port = port;
 
@@ -1258,7 +1258,7 @@ function findDigiPorts() {
   });
 }
 
-function loadZigBeeAdapters(adapterManager, manifest, errorCallback) {
+function loadZigBeeAdapters(addonManager, manifest, errorCallback) {
   findDigiPorts().then((digiPorts) => {
     for (var port of digiPorts) {
       // Under OSX, SerialPort.list returns the /dev/tty.usbXXX instead
@@ -1268,7 +1268,7 @@ function loadZigBeeAdapters(adapterManager, manifest, errorCallback) {
       if (port.comName.startsWith('/dev/tty.usb')) {
         port.comName = port.comName.replace('/dev/tty', '/dev/cu');
       }
-      new ZigBeeAdapter(adapterManager, manifest.name, port);
+      new ZigBeeAdapter(addonManager, manifest.name, port);
     }
   }, (error) => {
     errorCallback(manifest.name, error);

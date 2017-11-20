@@ -13,20 +13,20 @@
 
 'use strict';
 
-const Constants = require('../adapter-constants');
+const Constants = require('../addon-constants');
 const IpcSocket = require('./ipc');
 const Plugin = require('./plugin');
 
 class PluginServer {
 
-  constructor(adapterManager, {verbose}={}) {
-    this.manager = adapterManager;
+  constructor(addonManager, {verbose}={}) {
+    this.manager = addonManager;
 
     this.verbose = verbose;
     this.plugins = new Map();
 
     this.ipcSocket = new IpcSocket('PluginServer', 'rep',
-                                   'gateway.adapterManager',
+                                   'gateway.addonManager',
                                    this.onMsg.bind(this));
     this.ipcSocket.bind();
     this.verbose &&

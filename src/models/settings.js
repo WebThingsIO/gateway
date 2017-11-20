@@ -55,11 +55,11 @@ const Settings = {
   },
 
   /**
-   * Get an object of all adapter-related settings.
+   * Get an object of all add-on-related settings.
    */
-  getAdapterSettings: function() {
-    return Database.getAdapterSettings().catch(function(e) {
-      console.error('Failed to get adapter settings');
+  getAddonSettings: function() {
+    return Database.getAddonSettings().catch(function(e) {
+      console.error('Failed to get add-on settings');
       throw e;
     });
   },
