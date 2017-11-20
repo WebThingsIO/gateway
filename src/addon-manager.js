@@ -452,7 +452,7 @@ class AddonManager extends EventEmitter {
 
   /**
    * @method loadAddons
-   * Loads all of the configured add-ons from the adapters directory.
+   * Loads all of the configured add-ons from the addons directory.
    */
   loadAddons() {
     if (this.addonsLoaded) {
