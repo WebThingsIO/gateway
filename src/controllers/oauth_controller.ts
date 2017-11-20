@@ -240,16 +240,16 @@ OAuthController.post('/token', async (request: express.Request, response: expres
   const requestData = request.body;
   if (requestData.grant_type === 'authorization_code') {
     handleAccessTokenRequest(request, response);
-  } else if (requestData.grant_type === 'refresh_token') {
-    handleAccessTokenRequest(request, response);
-    // handleRefreshTokenRequest(request, response);
-  } else {
-   let err: AccessTokenErrorResponse = {
-      error: 'unsupported_grant_type',
-      state: requestData.state
-    };
-    response.status(400).json(err);
+    return;
   }
+  // if (requestData.grant_type === 'refresh_token') {
+  //   handleRefreshTokenRequest(request, response);
+  // }
+  let err: AccessTokenErrorResponse = {
+    error: 'unsupported_grant_type',
+    state: requestData.state
+  };
+  response.status(400).json(err);
 });
 
 async function handleAccessTokenRequest(request: express.Request, response: express.Response) {
@@ -304,16 +304,6 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
   };
 
   response.json(res);
-}
-
-async function handleRefreshTokenRequest(request: express.Request, response: express.Response) {
-  let tokenRequest: RefreshTokenRequest = {
-    grant_type: request.params.grant_type,
-    refresh_token: request.params.refresh_token,
-    scope: request.params.scope
-  };
-
-  // Issue things the same way as in the accesstokenrequest code
 }
 
 export default OAuthController;
