@@ -15,6 +15,9 @@ module.exports = {
     http: 0,
   },
   behindForwarding: false,
+  adapterManager: {
+    path: './adapters-test',
+  },
   database: {
     filename: ':memory:',
     removeBeforeOpen: false,
