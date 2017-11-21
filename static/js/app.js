@@ -56,7 +56,8 @@ var App = {
   },
 
   showSettings: function(context) {
-    SettingsScreen.show(context.params.section || null);
+    SettingsScreen.show(context.params.section || null,
+                        context.params.subsection || null);
     this.selectView('settings');
   },
 

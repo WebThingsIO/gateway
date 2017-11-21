@@ -24,7 +24,7 @@
         Accept: 'application/json'
       }
       if (this.jwt) {
-        headers.Authorization = 'Bearer ' + this.jwt;
+        headers.Authorization = `Bearer ${this.jwt}`;
       }
       return headers;
     },
