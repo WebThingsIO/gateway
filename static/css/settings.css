@@ -2,6 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#settings-view {
+  background-color: #5d9bc7;
+}
+
 #settings-menu {
   position: relative;
   top: 50%;
@@ -61,7 +65,7 @@
 }
 
 #addon-settings-link {
-  background-image: url('../images/extensions.svg');
+  background-image: url('../images/add-on.svg');
 }
 
 #experiment-settings-link {
@@ -123,31 +127,6 @@
   color: #ccc;
 }
 
-#adapters {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #fff;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.adapter {
-  width: 12.8rem;
-  text-align: center;
-  margin: 1rem;
-  display: inline-block;
-}
-
-.adapter-icon {
-  width: 12.8rem;
-}
-
-.adapter-name {
-  color: white;
-  font-size: 1.3rem;
-}
-
 #adapter-settings ul,
 #addon-settings ul,
 #experiment-settings ul,
@@ -160,6 +139,22 @@
   max-width: 60rem;
   margin: 0 auto;
   padding: 2rem;
+}
+
+#no-adapters {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+  color: white;
+  font-size: 2rem;
+}
+
+#no-adapters.hidden {
+  display: none;
 }
 
 .experiment-item, .update-item {
@@ -177,13 +172,22 @@
 }
 
 .adapter-item,
-.addon-item {
+.addon-item,
+.discovered-addon-item {
   display: block;
   font-size: 1.8rem;
   list-style-type: none;
-  background-color: #48779a;
   color: #fff;
   border-radius: 0.5rem;
+}
+
+.adapter-item,
+.addon-item {
+  background-color: #5288af;
+}
+
+.discovered-addon-item {
+  background-color: #597285;
 }
 
 .adapter-settings-header {
@@ -198,7 +202,7 @@
 .addon-settings-header {
   margin: 1rem 0;
   padding: 2rem 2rem 0.5rem 6.5rem;
-  background-image: url('../images/extensions.svg');
+  background-image: url('../images/add-on.svg');
   background-size: 4rem;
   background-repeat: no-repeat;
   background-position: 1.8rem 2.8rem;
@@ -232,13 +236,24 @@
 }
 
 .adapter-settings-disable,
+.adapter-settings-enable,
+.addon-settings-disable,
+.addon-settings-enable {
+  background-color: #48779a;
+}
+
+.addon-discovery-settings-add {
+  background-color: #7f93a1;
+}
+
+.adapter-settings-disable,
 .addon-settings-disable {
-  background-image: url('../images/pause.svg');
+  background-image: url('../images/disable.svg');
 }
 
 .adapter-settings-enable,
 .addon-settings-enable {
-  background-image: url('../images/play.svg');
+  background-image: url('../images/enable.svg');
 }
 
 .addon-discovery-settings-add {
