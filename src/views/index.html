@@ -13,12 +13,10 @@
 
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/things.css" />
-    <link rel="stylesheet" type="text/css" href="/css/adapters.css" />
     <link rel="stylesheet" type="text/css" href="/css/menu.css" />
     <link rel="stylesheet" type="text/css" href="/css/add-thing.css" />
     <link rel="stylesheet" type="text/css" href="/css/context-menu.css" />
     <link rel="stylesheet" type="text/css" href="/css/thing.css" />
-    <link rel="stylesheet" type="text/css" href="/css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="/css/floorplan.css" />
     <link rel="stylesheet" type="text/css" href="/css/settings.css" />
     <link rel="stylesheet" type="text/css" href="/css/rules-common.css" />
@@ -30,7 +28,6 @@
     <script type="text/javascript" src="/js/lib/page.js"></script>
     <script type="text/javascript" src="/js/router.js"></script>
     <script type="text/javascript" src="/js/things.js"></script>
-    <script type="text/javascript" src="/js/adapters.js"></script>
     <script type="text/javascript" src="/js/menu.js"></script>
     <script type="text/javascript" src="/js/add-thing.js"></script>
     <script type="text/javascript" src="/js/context-menu.js"></script>
@@ -38,7 +35,6 @@
     <script type="text/javascript" src="/js/on-off-switch.js"></script>
     <script type="text/javascript" src="/js/binary-sensor.js"></script>
     <script type="text/javascript" src="/js/new-thing.js"></script>
-    <script type="text/javascript" src="/js/adapter.js"></script>
     <script type="text/javascript" src="/js/check-user.js"></script>
     <script type="text/javascript" src="/js/floorplan.js"></script>
     <script type="text/javascript" src="/js/settings.js"></script>
@@ -64,11 +60,6 @@
       <button id="add-button" class="icon-button"></button>
     </section>
 
-    <!-- Adapters View -->
-    <section data-view="adapters" id="adapters-view" class="hidden">
-      <div id="adapters">No adapters detected.</div>
-    </section>
-
     <!-- Floorplan View -->
     <section data-view="floorplan" id="floorplan-view" class="hidden">
       <div id="floorplan">
@@ -90,6 +81,7 @@
         <ul>
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
           <li class="settings-item"><a id="user-settings-link" href="/settings/users">Users</a></li>
+          <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters">Adapters</a></li>
           <li class="settings-item"><a id="addon-settings-link" href="/settings/addons">Add-ons</a></li>
           <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments">Experiments</a></li>
           <li class="settings-item"><a id="update-settings-link" href="/settings/updates">Updates</a></li>
@@ -103,6 +95,10 @@
           <span id="current-user-name"></span>
           <span id="current-user-email"></span>
         </div>
+      </section>
+      <section id="adapter-settings" class="hidden settings-section">
+        <ul id="adapters-list">
+        </ul>
       </section>
       <section id="addon-settings" class="hidden settings-section">
         <ul id="available-addons-list">
@@ -227,7 +223,6 @@
       <ul>
         <li><a id="things-menu-item" href="/things" class="selected">Things</a></li>
         <li><a id="rules-menu-item" href="/rules">Rules</a></li>
-        <li><a id="adapters-menu-item" href="/adapters">Adapters</a></li>
         <li><a id="floorplan-menu-item" href="/floorplan">Floorplan</a></li>
         <li><a id="settings-menu-item" href="/settings">Settings</a></li>
         <li>

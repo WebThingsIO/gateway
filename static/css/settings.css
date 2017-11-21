@@ -56,6 +56,10 @@
   background-image: url('../images/users-icon.png');
 }
 
+#adapter-settings-link {
+  background-image: url('../images/adapters-icon.png');
+}
+
 #addon-settings-link {
   background-image: url('../images/extensions.svg');
 }
@@ -106,7 +110,35 @@
   color: #ccc;
 }
 
-#addon-settings ul, #experiment-settings ul, #update-settings ul {
+#adapters {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.adapter {
+  width: 12.8rem;
+  text-align: center;
+  margin: 1rem;
+  display: inline-block;
+}
+
+.adapter-icon {
+  width: 12.8rem;
+}
+
+.adapter-name {
+  color: white;
+  font-size: 1.3rem;
+}
+
+#adapter-settings ul,
+#addon-settings ul,
+#experiment-settings ul,
+#update-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -131,6 +163,7 @@
   background-repeat: no-repeat;
 }
 
+.adapter-item,
 .addon-item {
   display: block;
   font-size: 1.8rem;
@@ -138,6 +171,15 @@
   background-color: #48779a;
   color: #fff;
   border-radius: 0.5rem;
+}
+
+.adapter-settings-header {
+  margin: 1rem 0;
+  padding: 2rem 2rem 0.5rem 6.5rem;
+  background-image: url('../images/adapter-icon.png');
+  background-size: 4rem;
+  background-repeat: no-repeat;
+  background-position: 1.8rem 2.8rem;
 }
 
 .addon-settings-header {
@@ -149,19 +191,24 @@
   background-position: 1.8rem 2.8rem;
 }
 
+.adapter-settings-description,
 .addon-settings-description {
   color: #ccc;
 }
 
+.adapter-settings-controls,
 .addon-settings-controls {
   padding: 0rem 1rem 1rem 1rem;
   text-align: right;
 }
 
+.adapter-settings-controls button,
 .addon-settings-controls button {
   font-size: 1.8rem;
 }
 
+.adapter-settings-disable,
+.adapter-settings-enable,
 .addon-settings-disable,
 .addon-settings-enable {
   background-size: 2rem;
@@ -170,10 +217,12 @@
   padding-left: 3rem;
 }
 
+.adapter-settings-disable,
 .addon-settings-disable {
   background-image: url('../images/pause.svg');
 }
 
+.adapter-settings-enable,
 .addon-settings-enable {
   background-image: url('../images/play.svg');
 }

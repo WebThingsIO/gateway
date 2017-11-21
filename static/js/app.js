@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals ThingsScreen, AdaptersScreen,
+/* globals ThingsScreen,
 AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router,
 RulesScreen, RuleScreen, Speech */
 
@@ -31,7 +31,6 @@ var App = {
     AddThingScreen.init();
     ContextMenu.init();
     ThingsScreen.init();
-    AdaptersScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
     Speech.init(this);
@@ -40,7 +39,6 @@ var App = {
 
     this.views = [];
     this.views.things = document.getElementById('things-view');
-    this.views.adapters = document.getElementById('adapters-view');
     this.views.floorplan = document.getElementById('floorplan-view');
     this.views.settings = document.getElementById('settings-view');
     this.views.rules = document.getElementById('rules-view');
@@ -55,11 +53,6 @@ var App = {
   showThings: function(context) {
     ThingsScreen.show(context.params.thingId || null);
     this.selectView('things');
-  },
-
-  showAdapters: function() {
-    AdaptersScreen.show();
-    this.selectView('adapters');
   },
 
   showSettings: function(context) {
