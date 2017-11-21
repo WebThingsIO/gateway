@@ -177,6 +177,10 @@ atBuilder[ac.NODE_JOIN_TIME] = function(frame, builder) {
   builder.appendUInt8(frame.nodeJoinTime);
 };
 
+atBuilder[ac.SCAN_CHANNELS] = function(frame, builder) {
+  builder.appendUInt16BE(frame.scanChannels);
+};
+
 atBuilder[ac.ZIGBEE_STACK_PROFILE] = function(frame, builder) {
   builder.appendUInt8(frame.zigBeeStackProfile);
 };
