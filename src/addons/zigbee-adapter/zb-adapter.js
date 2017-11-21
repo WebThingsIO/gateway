@@ -73,15 +73,16 @@ function FUNC(ths, func, args) {
 }
 
 class ZigBeeAdapter extends Adapter {
-  constructor(addonManager, packageName, port) {
+  constructor(addonManager, manifest, port) {
     // The ZigBee adapter supports multiple dongles and
     // will create an adapter object for each dongle.
     // We don't know the actual adapter id until we
     // retrieve the serial number from the dongle. So we
     // set it to zb-unknown here, and fix things up later
     // just before we call addAdapter.
-    super(addonManager, 'zb-uknown', packageName);
+    super(addonManager, 'zb-uknown', manifest.name);
 
+    this.manifest = manifest;
     this.port = port;
 
     // debugRawFrames causes the raw serial frames to/from the dongle
@@ -240,6 +241,21 @@ class ZigBeeAdapter extends Adapter {
       configCommands.push(this.AT(AT_CMD.ENCRYPTION_OPTIONS,
                                   {encryptionOptions: 2}));
       configCommands.push(this.AT(AT_CMD.ENCRYPTION_OPTIONS));
+    }
+    let configScanChannels = this.manifest.moziot.config.scanChannels;
+    if (typeof(configScanChannels) === 'string') {
+      configScanChannels = parseInt(configScanChannels, 16);
+    } else if (typeof(configScanChannels) !== 'number') {
+      configScanChannels = 0x1ffe;
+    }
+    if (this.scanChannels != configScanChannels) {
+      // For reference, the most likely values to use as configScanChannels
+      // would be channels 15 and 20, which sit between the Wifi channels.
+      // Channel 15 corresponds to a mask of 0x0010
+      // Channel 20 corresponds to a mask of 0x0200
+      configCommands.push(this.AT(AT_CMD.SCAN_CHANNELS,
+                                  {scanChannels: configScanChannels }));
+      configCommands.push(this.AT(AT_CMD.SCAN_CHANNELS));
     }
     if (configCommands.length > 0) {
       // We're going to change something, so we might as well set the link
@@ -1268,7 +1284,7 @@ function loadZigBeeAdapters(addonManager, manifest, errorCallback) {
       if (port.comName.startsWith('/dev/tty.usb')) {
         port.comName = port.comName.replace('/dev/tty', '/dev/cu');
       }
-      new ZigBeeAdapter(addonManager, manifest.name, port);
+      new ZigBeeAdapter(addonManager, manifest, port);
     }
   }, (error) => {
     errorCallback(manifest.name, error);
