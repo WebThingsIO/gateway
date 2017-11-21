@@ -1,10 +1,11 @@
 {
-  "name": "moziot-adapter-mock",
+  "name": "mock-adapter",
   "version": "0.2.1",
   "description": "Mock adapter plugin for Mozilla IoT Gateway",
   "main": "index.js",
   "keywords": [
-    "moziot",
+    "mozilla",
+    "iot",
     "adapter",
     "mock"
   ],

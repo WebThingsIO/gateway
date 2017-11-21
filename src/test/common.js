@@ -80,7 +80,7 @@ global.server = server;
 var addonManager = require('../addon-manager');
 
 function mockAdapter() {
-  var adapter = addonManager.getAdapter('moziot-adapter-mock');
+  var adapter = addonManager.getAdapter('mock-adapter');
   expect(adapter).not.toBeUndefined();
   return adapter;
 }
@@ -92,12 +92,12 @@ beforeAll(async () => {
 
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
-  await addonManager.waitForAdapter('moziot-adapter-mock');
+  await addonManager.waitForAdapter('mock-adapter');
 });
 
 afterEach(async () => {
   // This is all potentially brittle.
-  const adapter = addonManager.getAdapter('moziot-adapter-mock');
+  const adapter = addonManager.getAdapter('mock-adapter');
   if (adapter) {
     await adapter.clearState();
   }

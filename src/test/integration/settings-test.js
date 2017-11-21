@@ -67,7 +67,7 @@ describe('settings/', function() {
 
   it('Get the add-on list', async () => {
     try {
-      await AddonManager.loadAddon('moziot-adapter-settings');
+      await AddonManager.loadAddon('settings-adapter');
     } catch (_e) {
       // pass intentionally
     }
@@ -87,7 +87,7 @@ describe('settings/', function() {
 
   it('Toggle an add-on', async () => {
     try {
-      await AddonManager.loadAddon('moziot-adapter-settings');
+      await AddonManager.loadAddon('settings-adapter');
     } catch (_e) {
       // pass intentionally
     }
@@ -95,7 +95,7 @@ describe('settings/', function() {
     // Toggle on
     console.log('enabling...');
     const res1 = await chai.request(server)
-      .put(Constants.SETTINGS_PATH + '/addons/moziot-adapter-settings')
+      .put(Constants.SETTINGS_PATH + '/addons/settings-adapter')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': true});
@@ -111,7 +111,7 @@ describe('settings/', function() {
     expect(res2.status).toEqual(200);
     let addonConfig1;
     for (const cfg of res2.body) {
-      if (cfg.key.indexOf('moziot-adapter-settings') > -1) {
+      if (cfg.key.indexOf('settings-adapter') > -1) {
         addonConfig1 = JSON.parse(cfg.value);
         break;
       }
@@ -123,7 +123,7 @@ describe('settings/', function() {
     // Toggle off
     console.log('disabling...');
     const res3 = await chai.request(server)
-      .put(Constants.SETTINGS_PATH + '/addons/moziot-adapter-settings')
+      .put(Constants.SETTINGS_PATH + '/addons/settings-adapter')
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': false});
@@ -139,7 +139,7 @@ describe('settings/', function() {
     expect(res4.status).toEqual(200);
     let addonConfig2;
     for (const cfg of res4.body) {
-      if (cfg.key.indexOf('moziot-adapter-settings') > -1) {
+      if (cfg.key.indexOf('settings-adapter') > -1) {
         addonConfig2 = JSON.parse(cfg.value);
         break;
       }

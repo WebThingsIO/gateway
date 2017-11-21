@@ -45,6 +45,7 @@ class AddonManager extends EventEmitter {
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.addonsLoaded = false;
+    this.availableAddons = [];
     this.deferredWaitForAdapter = new Map();
     this.pluginServer = null;
   }
@@ -406,6 +407,7 @@ class AddonManager extends EventEmitter {
 
     // Update the settings database.
     await Settings.set(key, newSettings);
+    this.availableAddons.push(packageName);
 
     // If this add-on is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
@@ -599,6 +601,17 @@ class AddonManager extends EventEmitter {
     }
 
     return Promise.all(unloadPromises);
+  }
+
+  /**
+   * @method isAddonAvailable
+   *
+   * @param {String} packageName The package name to check
+   * @returns Boolean indicating whether or not the package name is available
+   *          on the system.
+   */
+  isAddonAvailable(packageName) {
+    return this.availableAddons.includes(packageName);
   }
 
   /**
