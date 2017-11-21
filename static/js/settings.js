@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App, API, Menu */
+/* globals App, API, Menu, page */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -24,14 +24,19 @@ var SettingsScreen = {
     this.userSettings = document.getElementById('user-settings');
     this.adapterSettings = document.getElementById('adapter-settings');
     this.addonSettings = document.getElementById('addon-settings');
+    this.addonMainSettings = document.getElementById('addon-main-settings');
+    this.addonDiscoverySettings =
+      document.getElementById('addon-discovery-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
   },
 
-  show: function(section) {
+  show: function(section, subsection) {
+    this.backButton.href = '/settings';
+
     if (section) {
-      this.showSection(section);
+      this.showSection(section, subsection);
     } else {
       this.showMenu();
     }
@@ -45,6 +50,8 @@ var SettingsScreen = {
     this.userSettings.classList.add('hidden');
     this.adapterSettings.classList.add('hidden');
     this.addonSettings.classList.add('hidden');
+    this.addonMainSettings.classList.add('hidden');
+    this.addonDiscoverySettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
   },
@@ -61,7 +68,7 @@ var SettingsScreen = {
     this.backButton.classList.add('hidden');
   },
 
-  showSection: function(section) {
+  showSection: function(section, subsection) {
     switch(section) {
       case 'domain':
         this.showDomainSettings();
@@ -73,7 +80,18 @@ var SettingsScreen = {
         this.showAdapterSettings();
         break;
       case 'addons':
-        this.showAddonSettings();
+        if (subsection) {
+          switch(subsection) {
+            case 'discover':
+              this.showDiscoverAddonsScreen();
+              break;
+            default:
+              console.error('Tried to display undefined subsection');
+              return;
+          }
+        } else {
+          this.showAddonSettings();
+        }
         break;
       case 'experiments':
         this.showExperimentSettings();
@@ -93,9 +111,7 @@ var SettingsScreen = {
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
     const opts = {
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: API.headers(),
     };
     fetch('/settings/tunnelinfo', opts).then(function (response) {
       return response.text();
@@ -128,10 +144,7 @@ var SettingsScreen = {
     this.adapterSettings.classList.remove('hidden');
 
     const opts = {
-      headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json'
-      }
+      headers: API.headers(),
     };
 
     // Fetch a list of adapters from the server
@@ -210,10 +223,17 @@ var SettingsScreen = {
 
   showAddonSettings: function() {
     this.addonSettings.classList.remove('hidden');
+    this.addonDiscoverySettings.classList.add('hidden');
+    this.addonMainSettings.classList.remove('hidden');
+
+    const discoverAddonsButton =
+      document.getElementById('discover-addons-button');
+    discoverAddonsButton.addEventListener('click', () => {
+      page('/settings/addons/discover');
+    });
+
     const opts = {
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: API.headers(),
     };
     fetch('/settings/addons', opts).then(function (response) {
       return response.json();
@@ -292,6 +312,89 @@ var SettingsScreen = {
         } catch (err) {
           console.log('Failed to parse add-on settings:', s);
         }
+      }
+    });
+  },
+
+  showDiscoverAddonsScreen: function() {
+    this.backButton.href = '/settings/addons';
+    this.addonSettings.classList.remove('hidden');
+    this.addonMainSettings.classList.add('hidden');
+    this.addonDiscoverySettings.classList.remove('hidden');
+
+    const opts = {
+      headers: API.headers(),
+    };
+    fetch('/addons/discover', opts).then(function (response) {
+      return response.json();
+    }).then(function (body) {
+      if (!body) {
+        return;
+      }
+
+      const addonList = document.getElementById('discovered-addons-list');
+      addonList.innerHTML = '';
+
+      for (const addon of body) {
+        const li = document.createElement('li');
+        li.className = 'addon-item';
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'addon-settings-header';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.innerText = addon.display_name;
+        titleDiv.className = 'addon-settings-name';
+
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.innerText = addon.description;
+        descriptionDiv.className = 'addon-settings-description';
+
+        const controlDiv = document.createElement('div');
+        controlDiv.className = 'addon-settings-controls';
+
+        let actionElement;
+
+        if (addon.installed) {
+          actionElement = document.createElement('div');
+          actionElement.className = 'addon-discovery-settings-added';
+          actionElement.innerText = 'Added';
+        } else {
+          actionElement = document.createElement('button');
+          actionElement.id = `addon-install-${addon.name}`;
+          actionElement.className = 'text-button addon-discovery-settings-add';
+          actionElement.innerText = 'Add';
+        }
+
+        /* TODO
+        installButton.addEventListener('click', function(e) {
+          const value = !e.target.addonEnabled;
+          e.target.addonEnabled = value;
+
+          window.API.installAddon(addon.name, value)
+            .then(function() {
+              if (value) {
+                controlDiv.innerHTML = '';
+                const el = document.createElement('div');
+                el.className = 'addon-discovery-settings-added';
+                controlDiv.appendChild(el);
+              }
+            })
+            .catch(function(e) {
+              console.error(
+                'Failed to install add-on', addon.name, ': ', e);
+            });
+        });
+        */
+
+        headerDiv.appendChild(titleDiv);
+        headerDiv.appendChild(descriptionDiv);
+
+        controlDiv.appendChild(actionElement);
+
+        li.appendChild(headerDiv);
+        li.appendChild(controlDiv);
+        addonList.appendChild(li);
       }
     });
   },
