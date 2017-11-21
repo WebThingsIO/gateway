@@ -151,8 +151,18 @@ var SettingsScreen = {
     fetch('/adapters', opts).then(function (response) {
       return response.json();
     }).then(function (adapters) {
+      const noAdapters = document.getElementById('no-adapters');
       const adaptersList = document.getElementById('adapters-list');
       adaptersList.innerHTML = '';
+
+      if (adapters.length == 0) {
+        noAdapters.classList.remove('hidden');
+        adaptersList.classList.add('hidden');
+        return;
+      }
+
+      noAdapters.classList.add('hidden');
+      adaptersList.classList.remove('hidden');
 
       for (const metadata of adapters) {
         const li = document.createElement('li');
@@ -337,7 +347,7 @@ var SettingsScreen = {
 
       for (const addon of body) {
         const li = document.createElement('li');
-        li.className = 'addon-item';
+        li.className = 'discovered-addon-item';
 
         const headerDiv = document.createElement('div');
         headerDiv.className = 'addon-settings-header';
