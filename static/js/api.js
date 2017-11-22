@@ -149,7 +149,7 @@
         var payload = {
           'enabled': enabled
         };
-        fetch('/settings/addons/' + addonName, {
+        fetch('/addons/toggle/' + addonName, {
           method: 'PUT',
           body: JSON.stringify(payload),
           headers: headers

@@ -22,7 +22,8 @@ module.exports = {
   addonManager: {
     pairingTimeout: 3 * 60,   // seconds
     path: './addons',
-    api: 1
+    api: 1,
+    listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json',
   },
   database: {
     filename: './db.sqlite3',
