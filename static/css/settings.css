@@ -84,6 +84,7 @@
   transition: transform 0.25s ease;
   padding: 1.5rem;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 .settings-section.hidden {
@@ -97,6 +98,7 @@
   height: 100%;
   padding: 0;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 .settings-subsection.hidden {
@@ -139,6 +141,14 @@
   max-width: 60rem;
   margin: 0 auto;
   padding: 2rem;
+  max-height: 100%;
+}
+
+#adapter-settings ul li:last-child,
+#addon-settings ul li:last-child,
+#experiment-settings ul li:last-child,
+#update-settings ul li:last-child {
+  margin-bottom: 3rem;
 }
 
 #no-adapters {
@@ -179,6 +189,7 @@
   list-style-type: none;
   color: #fff;
   border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .adapter-item,
@@ -191,7 +202,6 @@
 }
 
 .adapter-settings-header {
-  margin: 1rem 0;
   padding: 2rem 2rem 0.5rem 6.5rem;
   background-image: url('../images/adapter-icon.png');
   background-size: 4rem;
@@ -200,7 +210,6 @@
 }
 
 .addon-settings-header {
-  margin: 1rem 0;
   padding: 2rem 2rem 0.5rem 6.5rem;
   background-image: url('../images/add-on.svg');
   background-size: 4rem;
