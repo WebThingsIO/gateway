@@ -166,6 +166,60 @@
       });
     },
 
+    installAddon: function(addonName, addonUrl) {
+      return new Promise((resolve, reject) => {
+        var headers = {
+          'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        var payload = {
+          'name': addonName,
+          'url': addonUrl,
+        };
+        fetch('/addons', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: headers
+        }).then(function(response) {
+          if (response.status == 200) {
+            console.log(`Successfully installed ${addonName}`);
+            resolve();
+          } else {
+            reject('Unexpected response code while installing add-on.');
+          }
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+    },
+
+    uninstallAddon: function(addonName) {
+      return new Promise((resolve, reject) => {
+        var headers = {
+          'Authorization': `Bearer ${window.API.jwt}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        var payload = {
+          'name': addonName,
+        };
+        fetch('/addons/' + addonName, {
+          method: 'DELETE',
+          headers: headers
+        }).then(function(response) {
+          if (response.status == 200) {
+            console.log(`Successfully uninstalled ${addonName}`);
+            resolve();
+          } else {
+            reject('Unexpected response code while uninstalling add-on.');
+          }
+        }).catch(function(error) {
+          reject(error);
+        });
+      });
+    },
+
     getExperimentSetting: function(experimentName) {
       return new Promise((resolve, reject) => {
         var headers = {

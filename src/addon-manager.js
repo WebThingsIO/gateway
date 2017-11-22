@@ -20,6 +20,8 @@ const PluginServer = require('./addons/plugin/plugin-server');
 const Settings = require('./models/settings');
 const fs = require('fs');
 const path = require('path');
+const rimraf = require('rimraf');
+const tar = require('tar');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -45,7 +47,7 @@ class AddonManager extends EventEmitter {
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.addonsLoaded = false;
-    this.installedAddons = [];
+    this.installedAddons = new Set();
     this.deferredWaitForAdapter = new Map();
     this.pluginServer = null;
   }
@@ -407,7 +409,7 @@ class AddonManager extends EventEmitter {
 
     // Update the settings database.
     await Settings.set(key, newSettings);
-    this.installedAddons.push(packageName);
+    this.installedAddons.add(packageName);
 
     // If this add-on is not explicitly enabled, move on.
     if (!newSettings.moziot.enabled) {
@@ -611,7 +613,139 @@ class AddonManager extends EventEmitter {
    *          on the system.
    */
   isAddonInstalled(packageName) {
-    return this.installedAddons.includes(packageName);
+    return this.installedAddons.has(packageName);
+  }
+
+  /**
+   * @method installAddon
+   *
+   * @param {String} packageName The package name to install
+   * @param {String} packagePath Path to the package tarball
+   * @returns A promise that resolves when the package is installed.
+   */
+  async installAddon(packageName, packagePath) {
+    if (!this.addonsLoaded) {
+      const err =
+        'Cannot install add-on before other add-ons have been loaded.';
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    if (!fs.lstatSync(packagePath).isFile()) {
+      const err = `Cannot extract invalid path: ${packagePath}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    const addonPath = path.join(__dirname,
+                                config.get('addonManager.path'),
+                                packageName);
+
+    try {
+      // Create the add-on directory, if necessary
+      if (!fs.existsSync(addonPath)) {
+        fs.mkdirSync(addonPath);
+      }
+    } catch (e) {
+      const err = `Failed to create add-on directory: ${addonPath}\n${e}`
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    const cleanup = () => {
+      if (fs.lstatSync(addonPath).isDirectory()) {
+        rimraf(addonPath, {glob: false}, (e) => {
+          if (e) {
+            console.error(`Error removing ${packageName}: ${e}`);
+          }
+        });
+      }
+    };
+
+    try {
+      // Try to extract the tarball
+      await tar.x({file: packagePath, strip: 1, cwd: addonPath}, ['package']);
+    } catch (e) {
+      // Clean up if extraction failed
+      cleanup();
+
+      const err = `Failed to extract package: ${packagePath}\n${e}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    // Update the saved settings (if any) and enable the add-on
+    const key = `addons.${packageName}`;
+    let savedSettings = await Settings.get(key);
+    if (savedSettings) {
+      savedSettings.moziot.enabled = true;
+    } else {
+      savedSettings = {
+        moziot: {
+          enabled: true,
+        },
+      };
+    }
+    await Settings.set(key, savedSettings);
+
+    // Now, load the add-on
+    try {
+      await this.loadAddon(packageName);
+    } catch (e) {
+      // Clean up if loading failed
+      cleanup();
+
+      const err = `Failed to load add-on: ${packageName}\n${e}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+  }
+
+  /**
+   * @method uninstallAddon
+   *
+   * @param {String} packageName The package name to uninstall
+   * @returns A promise that resolves when the package is uninstalled.
+   */
+  async uninstallAddon(packageName) {
+    try {
+      // Try to gracefully unload
+      await this.unloadAddon(packageName);
+    } catch (e) {
+      console.error(`Failed to unload ${packageName} properly: ${e}`);
+      // keep going
+    }
+
+    const addonPath = path.join(__dirname,
+                                config.get('addonManager.path'),
+                                packageName);
+
+    // Unload this module from the require cache
+    Object.keys(require.cache).map((x) => {
+      if (x.startsWith(addonPath)) {
+        delete require.cache[x];
+      }
+    });
+
+    // Remove the package from the file system
+    if (fs.lstatSync(addonPath).isDirectory()) {
+      rimraf(addonPath, {glob: false}, (e) => {
+        if (e) {
+          console.error(`Error removing ${packageName}: ${e}`);
+        }
+      });
+    }
+
+    // Update the saved settings and disable the add-on
+    const key = `addons.${packageName}`;
+    let savedSettings = await Settings.get(key);
+    if (savedSettings) {
+      savedSettings.moziot.enabled = false;
+      await Settings.set(key, savedSettings);
+    }
+
+    // Remove from our list of installed add-ons
+    this.installedAddons.delete(packageName);
   }
 
   /**

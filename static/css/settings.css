@@ -243,7 +243,10 @@
 .adapter-settings-enable,
 .addon-settings-disable,
 .addon-settings-enable,
-.addon-discovery-settings-add {
+.addon-discovery-settings-add,
+.addon-discovery-settings-installing,
+.addon-discovery-settings-install-failed,
+.addon-settings-remove {
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
@@ -253,7 +256,8 @@
 .adapter-settings-disable,
 .adapter-settings-enable,
 .addon-settings-disable,
-.addon-settings-enable {
+.addon-settings-enable,
+.addon-settings-remove{
   background-color: #48779a;
 }
 
@@ -269,6 +273,11 @@
 .adapter-settings-enable,
 .addon-settings-enable {
   background-image: url('../images/enable.svg');
+}
+
+.addon-settings-remove {
+  margin-right: 8px;
+  background-image: url('../images/remove.svg');
 }
 
 .addon-discovery-settings-add {
