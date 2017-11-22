@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App, API, Menu, page */
+/* globals App, API, Menu, page, Adapter, AvailableAddon, DiscoveredAddon */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -82,8 +82,8 @@ var SettingsScreen = {
       case 'addons':
         if (subsection) {
           switch(subsection) {
-            case 'discover':
-              this.showDiscoverAddonsScreen();
+            case 'discovered':
+              this.showDiscoveredAddonsScreen();
               break;
             default:
               console.error('Tried to display undefined subsection');
@@ -158,75 +158,13 @@ var SettingsScreen = {
       if (adapters.length == 0) {
         noAdapters.classList.remove('hidden');
         adaptersList.classList.add('hidden');
-        return;
-      }
+      } else {
+        noAdapters.classList.add('hidden');
+        adaptersList.classList.remove('hidden');
 
-      noAdapters.classList.add('hidden');
-      adaptersList.classList.remove('hidden');
-
-      for (const metadata of adapters) {
-        const li = document.createElement('li');
-        li.className = 'adapter-item';
-
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'adapter-settings-header';
-
-        const titleDiv = document.createElement('div');
-        titleDiv.innerText = metadata.name;
-        titleDiv.className = 'adapter-settings-name';
-
-        const descriptionDiv = document.createElement('div');
-        descriptionDiv.innerText = metadata.id;
-        descriptionDiv.className = 'adapter-settings-description';
-
-        const controlDiv = document.createElement('div');
-        controlDiv.className = 'adapter-settings-controls';
-
-        const toggleButton = document.createElement('button');
-        toggleButton.id = `adapter-toggle-${metadata.id}`;
-        toggleButton.className = 'text-button';
-        toggleButton.adapterEnabled = metadata.ready;
-
-        if (metadata.ready) {
-          toggleButton.innerText = 'Disable';
-          toggleButton.classList.add('adapter-settings-disable');
-        } else {
-          toggleButton.innerText = 'Enable';
-          toggleButton.classList.add('adapter-settings-enable');
+        for (const metadata of adapters) {
+          new Adapter(metadata);
         }
-
-        /* TODO
-        toggleButton.addEventListener('click', function(e) {
-          const value = !e.target.adapterEnabled;
-          e.target.adapterEnabled = value;
-
-          window.API.setAdapterSetting(metadata.id, value)
-            .then(function() {
-              if (value) {
-                e.target.innerText = 'Disable';
-                toggleButton.classList.remove('adapter-settings-enable');
-                toggleButton.classList.add('adapter-settings-disable');
-              } else {
-                e.target.innerText = 'Enable';
-                toggleButton.classList.remove('adapter-settings-disable');
-                toggleButton.classList.add('adapter-settings-enable');
-              }
-            })
-            .catch(function(e) {
-              console.error(
-                'Failed to toggle add-on', settings.name, ': ', e);
-            });
-        });
-        */
-
-        headerDiv.appendChild(titleDiv);
-        headerDiv.appendChild(descriptionDiv);
-
-        controlDiv.appendChild(toggleButton);
-
-        li.appendChild(headerDiv);
-        li.appendChild(controlDiv);
-        adaptersList.appendChild(li);
       }
     });
   },
@@ -239,13 +177,13 @@ var SettingsScreen = {
     const discoverAddonsButton =
       document.getElementById('discover-addons-button');
     discoverAddonsButton.addEventListener('click', () => {
-      page('/settings/addons/discover');
+      page('/settings/addons/discovered');
     });
 
     const opts = {
       headers: API.headers(),
     };
-    fetch('/settings/addons', opts).then(function (response) {
+    fetch('/addons/available', opts).then(function (response) {
       return response.json();
     }).then(function (body) {
       if (!body) {
@@ -258,67 +196,7 @@ var SettingsScreen = {
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
-
-          const li = document.createElement('li');
-          li.className = 'addon-item';
-
-          const headerDiv = document.createElement('div');
-          headerDiv.className = 'addon-settings-header';
-
-          const titleDiv = document.createElement('div');
-          titleDiv.innerText = settings.name;
-          titleDiv.className = 'addon-settings-name';
-
-          const descriptionDiv = document.createElement('div');
-          descriptionDiv.innerText = settings.description;
-          descriptionDiv.className = 'addon-settings-description';
-
-          const controlDiv = document.createElement('div');
-          controlDiv.className = 'addon-settings-controls';
-
-          const toggleButton = document.createElement('button');
-          toggleButton.id = `addon-toggle-${settings.name}`;
-          toggleButton.className = 'text-button';
-          toggleButton.addonEnabled = settings.moziot.enabled;
-
-          if (settings.moziot.enabled) {
-            toggleButton.innerText = 'Disable';
-            toggleButton.classList.add('addon-settings-disable');
-          } else {
-            toggleButton.innerText = 'Enable';
-            toggleButton.classList.add('addon-settings-enable');
-          }
-
-          toggleButton.addEventListener('click', function(e) {
-            const value = !e.target.addonEnabled;
-            e.target.addonEnabled = value;
-
-            window.API.setAddonSetting(settings.name, value)
-              .then(function() {
-                if (value) {
-                  e.target.innerText = 'Disable';
-                  toggleButton.classList.remove('addon-settings-enable');
-                  toggleButton.classList.add('addon-settings-disable');
-                } else {
-                  e.target.innerText = 'Enable';
-                  toggleButton.classList.remove('addon-settings-disable');
-                  toggleButton.classList.add('addon-settings-enable');
-                }
-              })
-              .catch(function(e) {
-                console.error(
-                  'Failed to toggle add-on', settings.name, ': ', e);
-              });
-          });
-
-          headerDiv.appendChild(titleDiv);
-          headerDiv.appendChild(descriptionDiv);
-
-          controlDiv.appendChild(toggleButton);
-
-          li.appendChild(headerDiv);
-          li.appendChild(controlDiv);
-          addonList.appendChild(li);
+          new AvailableAddon(settings);
         } catch (err) {
           console.log('Failed to parse add-on settings:', s);
         }
@@ -326,7 +204,7 @@ var SettingsScreen = {
     });
   },
 
-  showDiscoverAddonsScreen: function() {
+  showDiscoveredAddonsScreen: function() {
     this.backButton.href = '/settings/addons';
     this.addonSettings.classList.remove('hidden');
     this.addonMainSettings.classList.add('hidden');
@@ -335,7 +213,7 @@ var SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
-    fetch('/addons/discover', opts).then(function (response) {
+    fetch('/addons/discovered', opts).then(function (response) {
       return response.json();
     }).then(function (body) {
       if (!body) {
@@ -346,65 +224,7 @@ var SettingsScreen = {
       addonList.innerHTML = '';
 
       for (const addon of body) {
-        const li = document.createElement('li');
-        li.className = 'discovered-addon-item';
-
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'addon-settings-header';
-
-        const titleDiv = document.createElement('div');
-        titleDiv.innerText = addon.display_name;
-        titleDiv.className = 'addon-settings-name';
-
-        const descriptionDiv = document.createElement('div');
-        descriptionDiv.innerText = addon.description;
-        descriptionDiv.className = 'addon-settings-description';
-
-        const controlDiv = document.createElement('div');
-        controlDiv.className = 'addon-settings-controls';
-
-        let actionElement;
-
-        if (addon.installed) {
-          actionElement = document.createElement('div');
-          actionElement.className = 'addon-discovery-settings-added';
-          actionElement.innerText = 'Added';
-        } else {
-          actionElement = document.createElement('button');
-          actionElement.id = `addon-install-${addon.name}`;
-          actionElement.className = 'text-button addon-discovery-settings-add';
-          actionElement.innerText = 'Add';
-        }
-
-        /* TODO
-        installButton.addEventListener('click', function(e) {
-          const value = !e.target.addonEnabled;
-          e.target.addonEnabled = value;
-
-          window.API.installAddon(addon.name, value)
-            .then(function() {
-              if (value) {
-                controlDiv.innerHTML = '';
-                const el = document.createElement('div');
-                el.className = 'addon-discovery-settings-added';
-                controlDiv.appendChild(el);
-              }
-            })
-            .catch(function(e) {
-              console.error(
-                'Failed to install add-on', addon.name, ': ', e);
-            });
-        });
-        */
-
-        headerDiv.appendChild(titleDiv);
-        headerDiv.appendChild(descriptionDiv);
-
-        controlDiv.appendChild(actionElement);
-
-        li.appendChild(headerDiv);
-        li.appendChild(controlDiv);
-        addonList.appendChild(li);
+        new DiscoveredAddon(addon);
       }
     });
   },

@@ -217,8 +217,14 @@
   background-position: 1.8rem 2.8rem;
 }
 
+.adapter-settings-name,
+.addon-settings-name {
+  display: block;
+}
+
 .adapter-settings-description,
 .addon-settings-description {
+  display: block;
   color: #ccc;
 }
 
