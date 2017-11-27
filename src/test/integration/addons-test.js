@@ -26,7 +26,7 @@ describe('addons', function() {
     }
 
     const res = await chai.request(server)
-      .get(`${Constants.ADDONS_PATH}/available`)
+      .get(`${Constants.ADDONS_PATH}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -48,7 +48,7 @@ describe('addons', function() {
     // Toggle on
     console.log('enabling...');
     const res1 = await chai.request(server)
-      .put(`${Constants.ADDONS_PATH}/toggle/settings-adapter`)
+      .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': true});
@@ -57,7 +57,7 @@ describe('addons', function() {
 
     // Get status
     const res2 = await chai.request(server)
-      .get(`${Constants.ADDONS_PATH}/available`)
+      .get(`${Constants.ADDONS_PATH}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -76,7 +76,7 @@ describe('addons', function() {
     // Toggle off
     console.log('disabling...');
     const res3 = await chai.request(server)
-      .put(`${Constants.ADDONS_PATH}/toggle/settings-adapter`)
+      .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': false});
@@ -85,7 +85,7 @@ describe('addons', function() {
 
     // Get status
     const res4 = await chai.request(server)
-      .get(`${Constants.ADDONS_PATH}/available`)
+      .get(`${Constants.ADDONS_PATH}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -100,20 +100,5 @@ describe('addons', function() {
 
     expect(addonConfig2).toHaveProperty('moziot');
     expect(addonConfig2.moziot.enabled).toBe(false);
-  });
-
-  it('Discover add-ons', async () => {
-    const res = await chai.request(server)
-      .get(`${Constants.ADDONS_PATH}/discovered`)
-      .set('Accept', 'application/json')
-      .set(...headerAuth(jwt));
-    expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length >= 1).toBeTruthy();
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('display_name');
-    expect(res.body[0]).toHaveProperty('description');
-    expect(res.body[0]).toHaveProperty('version');
-    expect(res.body[0]).toHaveProperty('url');
   });
 });

@@ -30,6 +30,8 @@ var SettingsScreen = {
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
+
+    this.installedAddons = [];
   },
 
   show: function(section, subsection) {
@@ -183,9 +185,10 @@ var SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
-    fetch('/addons/available', opts).then(function (response) {
+    fetch('/addons', opts).then((response) => {
+      this.installedAddons = [];
       return response.json();
-    }).then(function (body) {
+    }).then((body) => {
       if (!body) {
         return;
       }
@@ -196,6 +199,7 @@ var SettingsScreen = {
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
+          this.installedAddons.push(settings.name);
           new AvailableAddon(settings);
         } catch (err) {
           console.log('Failed to parse add-on settings:', s);
@@ -213,19 +217,24 @@ var SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
-    fetch('/addons/discovered', opts).then(function (response) {
-      return response.json();
-    }).then(function (body) {
-      if (!body) {
+    fetch('/settings/addonsListUrl', opts).then((response) => {
+      return response.text();
+    }).then((url) => {
+      if (!url) {
         return;
       }
 
-      const addonList = document.getElementById('discovered-addons-list');
-      addonList.innerHTML = '';
+      fetch(url).then((resp) => {
+        return resp.json();
+      }).then((body) => {
+        const addonList = document.getElementById('discovered-addons-list');
+        addonList.innerHTML = '';
 
-      for (const addon of body) {
-        new DiscoveredAddon(addon);
-      }
+        for (const addon of body) {
+          addon.installed = this.installedAddons.includes(addon.name);
+          new DiscoveredAddon(addon);
+        }
+      });
     });
   },
 
