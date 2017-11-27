@@ -1,4 +1,7 @@
 module.exports = {
+  plugins: [
+    'html'
+  ],
   'env': {
     'commonjs': true,
     'es6': true,
