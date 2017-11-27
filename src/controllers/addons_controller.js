@@ -1,11 +1,10 @@
 const PromiseRouter = require('express-promise-router');
-const fetch = require('node-fetch');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');
 
 const AddonsController = PromiseRouter();
 
-AddonsController.get('/available', async (request, response) => {
+AddonsController.get('/', async (request, response) => {
   Settings.getAddonSettings().then(function(result) {
     if (result === undefined) {
       response.status(404).json([]);
@@ -33,15 +32,15 @@ AddonsController.get('/available', async (request, response) => {
   });
 });
 
-AddonsController.put('/toggle/:addonName', async (request, response) => {
-  var addonName = request.params.addonName;
+AddonsController.put('/:addonName', async (request, response) => {
+  const addonName = request.params.addonName;
 
   if (!request.body || request.body['enabled'] === undefined) {
     response.status(400).send('Enabled property not defined');
     return;
   }
 
-  var enabled = request.body['enabled'];
+  const enabled = request.body['enabled'];
 
   const key = `addons.${addonName}`;
 
@@ -78,24 +77,6 @@ AddonsController.put('/toggle/:addonName', async (request, response) => {
     console.error(e);
     response.status(400).send(e);
   }
-});
-
-AddonsController.get('/discovered', async (request, response) => {
-  let addons;
-  try {
-    const res = await fetch('https://raw.githubusercontent.com/mozilla-iot/' +
-                            'addon-list/master/list.json');
-    addons = await res.json();
-  } catch (e) {
-    response.status(400).send(e);
-    return;
-  }
-
-  let discovered = addons.map((a) => {
-    a.installed = AddonManager.isAddonAvailable(a.name);
-    return a;
-  });
-  response.status(200).json(discovered);
 });
 
 module.exports = AddonsController;

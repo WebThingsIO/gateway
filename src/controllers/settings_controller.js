@@ -220,7 +220,6 @@ SettingsController.post('/skiptunnel', async (request, response) => {
   }
 });
 
-
 SettingsController.get('/tunnelinfo', async (request, response) => {
   try {
     const result = await Settings.get('tunneltoken');
@@ -237,6 +236,11 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
     console.error(e);
     response.status(400).send(e);
   }
+});
+
+SettingsController.get('/addonsListUrl', (request, response) => {
+  response.send(config.get('addonManager.listUrl'));
+  response.status(200).end();
 });
 
 module.exports = SettingsController;
