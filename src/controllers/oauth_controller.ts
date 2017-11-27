@@ -15,6 +15,8 @@ import * as JSONWebToken from '../models/jsonwebtoken';
 import * as Database from '../db';
 import {Scope, ClientId, ClientRegistry} from '../oauth-types';
 import OAuthClients from '../models/oauthclients';
+import * as authMiddleware from '../jwt-middleware';
+const auth = authMiddleware();
 
 const OAuthController = express.Router();
 
@@ -178,16 +180,9 @@ function verifyClientAuthorization(client: ClientRegistry,
   return true;
 }
 
-OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
-  // From query component construct
-  let authRequest: AuthorizationRequest = {
-    response_type: request.query.response_type,
-    client_id: request.query.client_id,
-    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
-    scope: request.query.scope,
-    state: request.query.state
-  };
-
+function verifyAuthorizationRequest(authRequest: AuthorizationRequest,
+                                    response: express.Response):
+                                      ClientRegistry|undefined {
   let client = verifyClient(authRequest, response);
   if (!client) {
     return;
@@ -220,12 +215,57 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
     return;
   }
 
-  // TODO: prompt user for auth instead of always granting
-  // TODO: use that user's UID instead of -1
+  return client;
+}
+
+OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
+  // From query component construct
+  let authRequest: AuthorizationRequest = {
+    response_type: request.query.response_type,
+    client_id: request.query.client_id,
+    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
+    scope: request.query.scope,
+    state: request.query.state
+  };
+
+  let client = verifyAuthorizationRequest(authRequest, response);
+  if (!client) {
+    return;
+  }
+
+  response.render('add_service', {
+    name: client.name,
+    domain: client.redirect_uri.host,
+    request: authRequest
+  });
+});
+
+OAuthController.get('/allow', auth, async (request: express.Request, response: express.Response) => {
+  let authRequest: AuthorizationRequest = {
+    response_type: request.query.response_type,
+    client_id: request.query.client_id,
+    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
+    scope: request.query.scope,
+    state: request.query.state
+  };
+
+  let client = verifyAuthorizationRequest(authRequest, response);
+  if (!client) {
+    return;
+  }
+
+  let jwt = (request as any).jwt;
+  if (!jwt) {
+    return;
+  }
+
+  if (!jwt.payload || jwt.payload.role !== 'user_token') {
+    response.status(401).send('Authorization must come from user');
+    return;
+  }
+
   // TODO: should expire in 10 minutes
-  // const {jwt} = request;
-  // const tokenData = await Database.getJSONWebTokenByKeyId(jwt.kid);
-  let code = await JSONWebToken.issueOAuthToken(client, 'authorization_code');
+  let code = await JSONWebToken.issueOAuthToken(client, jwt.user, 'authorization_code');
 
   let success: AuthorizationSuccessResponse = {
     code: code,
@@ -295,7 +335,7 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     return;
   }
 
-  let accessToken = await JSONWebToken.issueOAuthToken(client, 'access_token');
+  let accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.user, 'access_token');
   // let refreshToken = await JSONWebToken.issueOAuthToken(client, 'refresh_token');
 
   let res: AccessTokenSuccessResponse = {
