@@ -272,13 +272,12 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
   if (!verifyClientAuthorization(client, request, response)) {
     return;
   }
-
   let tokenData = await JSONWebToken.verifyJWT(tokenRequest.code);
   if (!tokenData) {
     let err: AccessTokenErrorResponse = {
       error: 'invalid_grant',
       error_description: 'included JWT is invalid',
-      state: request.params.state
+      state: request.body.state
     };
 
     response.status(400).json(err);
@@ -289,7 +288,7 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
   if (!payload || payload.role !== 'authorization_code' || payload.client_id !== client.id) {
     let err: AccessTokenErrorResponse = {
       error: 'invalid_grant',
-      state: request.params.state
+      state: request.body.state
     };
 
     response.status(400).json(err);
