@@ -4,7 +4,8 @@ export type Scope = 'readwrite';
 export type ClientId = string;
 
 export class ClientRegistry {
-  constructor(public redirect_uri: URL, public id: ClientId, public secret: string, public scope: Scope) {
+  constructor(public redirect_uri: URL, public id: ClientId, public name: string,
+              public secret: string, public scope: Scope) {
   }
 }
 

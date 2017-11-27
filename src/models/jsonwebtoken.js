@@ -17,7 +17,7 @@ const assert = require('assert');
 const ec = require('../ec-crypto');
 const Database = require('../db');
 
-const ROLE_ACCESS_TOKEN = 'access_token';
+const ROLE_USER_TOKEN = 'user_token';
 
 class JSONWebToken {
 
@@ -68,11 +68,12 @@ class JSONWebToken {
    * database.
    *
    * @param {ClientRegistry} client to issue token for.
+   * @param {number} user user id associated with token
    * @param {string} role for token to fulfill
    * @return {string} the JWT token signature.
    */
-  static async issueOAuthToken(client, role) {
-    const {sig, token} = this.create(-1, {
+  static async issueOAuthToken(client, user, role) {
+    const {sig, token} = this.create(user, {
       role,
       client_id: client.id
     });
@@ -96,7 +97,7 @@ class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static create(user, payload={role: ROLE_ACCESS_TOKEN}) {
+  static create(user, payload={role: ROLE_USER_TOKEN}) {
     const pair = ec.generateKeyPair();
 
     const keyId = uuid.v4();
