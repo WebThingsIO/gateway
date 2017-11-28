@@ -1,0 +1,53 @@
+body {
+  background: #305067;
+}
+
+.title-bar {
+  text-align: center;
+  width: 100%;
+  height: 9.6rem;
+  font-size: 2.4rem;
+  color: white;
+}
+
+.title-bar > h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+  line-height: 9.6rem;
+}
+
+#authorize-form {
+  position: absolute;
+
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: white;
+  font-size: 1.8rem;
+}
+
+.text-button {
+  display: inline-block;
+  padding: 2rem;
+  padding-left: 6.8rem;
+  font-size: 1.8rem;
+  text-decoration: none;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  line-height: 2.5rem;
+  margin: 1rem;
+  outline: 0;
+  border: 0;
+}
+
+#cancel-button {
+  background-image: url(/images/close-16.svg);
+}
+
+#authorize-button {
+  background-image: url(/images/check-16.svg);
+}
