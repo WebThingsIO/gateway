@@ -133,147 +133,121 @@
           'Accept': 'application/json'
         }
       }).then((res) => {
-        if (res.status !== 200) {
+        if (!res.ok) {
           console.error('Logout failed...');
         }
       });
     },
 
     setAddonSetting: function(addonName, enabled) {
-      return new Promise((resolve, reject) => {
-        var headers = {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
-        var payload = {
-          'enabled': enabled
-        };
-        fetch('/addons/' + addonName, {
-          method: 'PUT',
-          body: JSON.stringify(payload),
-          headers: headers
-        }).then(function(response) {
-          if (response.status == 200) {
-            console.log('Set ' + addonName + ' to ' + enabled);
-            resolve();
-          } else {
-            reject('Unexpected response code while setting add-on setting');
-          }
-        }).catch(function(error) {
-          reject(error);
-        });
+      var headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      var payload = {
+        'enabled': enabled
+      };
+      return fetch('/addons/' + addonName, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+        headers: headers
+      }).then(function(response) {
+        if (!response.ok) {
+          throw new Error(
+            'Unexpected response code while setting add-on setting');
+        }
+
+        console.log('Set ' + addonName + ' to ' + enabled);
       });
     },
 
     installAddon: function(addonName, addonUrl) {
-      return new Promise((resolve, reject) => {
-        var headers = {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
-        var payload = {
-          'name': addonName,
-          'url': addonUrl,
-        };
-        fetch('/addons', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: headers
-        }).then(function(response) {
-          if (response.status == 200) {
-            console.log(`Successfully installed ${addonName}`);
-            resolve();
-          } else {
-            reject('Unexpected response code while installing add-on.');
-          }
-        }).catch(function(error) {
-          reject(error);
-        });
+      var headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      var payload = {
+        'name': addonName,
+        'url': addonUrl,
+      };
+      return fetch('/addons', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: headers
+      }).then(function(response) {
+        if (!response.ok) {
+          throw new Error('Unexpected response code while installing add-on.');
+        }
+
+        console.log(`Successfully installed ${addonName}`);
       });
     },
 
     uninstallAddon: function(addonName) {
-      return new Promise((resolve, reject) => {
-        var headers = {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
-        var payload = {
-          'name': addonName,
-        };
-        fetch('/addons/' + addonName, {
-          method: 'DELETE',
-          headers: headers
-        }).then(function(response) {
-          if (response.status == 200) {
-            console.log(`Successfully uninstalled ${addonName}`);
-            resolve();
-          } else {
-            reject('Unexpected response code while uninstalling add-on.');
-          }
-        }).catch(function(error) {
-          reject(error);
-        });
+      var headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      return fetch('/addons/' + addonName, {
+        method: 'DELETE',
+        headers: headers
+      }).then(function(response) {
+        if (!response.ok) {
+          throw new Error(
+            'Unexpected response code while uninstalling add-on.');
+        }
+
+        console.log(`Successfully uninstalled ${addonName}`);
       });
     },
 
     getExperimentSetting: function(experimentName) {
-      return new Promise((resolve, reject) => {
-        var headers = {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json'
-        };
-        fetch('/settings/experiments/' + experimentName, {
-          method: 'GET',
-          headers: headers
-        })
-        .then(function(response) {
-          if (response.status == 200) {
-            response.json()
-            .then(function(json) {
-              resolve(json.enabled);
-            }).catch(function(e) {
-              reject('Error getting ' + experimentName + ' ' + e);
-            });
-          } else {
-            reject('Error getting ' + experimentName);
-          }
-        })
-        .catch(function(e) {
-          reject('Error getting ' + experimentName + ' ' +  e);
-        });
+      var headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json'
+      };
+      return fetch('/settings/experiments/' + experimentName, {
+        method: 'GET',
+        headers: headers
+      })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Error getting ' + experimentName);
+        }
+
+        return response.json()
+          .then(function(json) {
+            return json.enabled;
+          }).catch(function(e) {
+            throw new Error('Error getting ' + experimentName + ' ' + e);
+          });
       });
     },
 
     setExperimentSetting: function(experimentName, enabled) {
-      return new Promise((resolve, reject) => {
-        var headers = {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
-        var payload = {
-         'enabled': enabled
-        };
-        fetch('/settings/experiments/' + experimentName, {
-         method: 'PUT',
-         body: JSON.stringify(payload),
-         headers: headers
-        })
-        .then(function(response) {
-          if (response.status == 200) {
-           console.log('Set ' + experimentName + ' to ' + enabled);
-           resolve();
-          } else {
-           reject('Unexpected response code while setting experiment setting');
-          }
-        })
-        .catch(function(error) {
-          reject(error);
-        });
+      var headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      var payload = {
+       'enabled': enabled
+      };
+      return fetch('/settings/experiments/' + experimentName, {
+       method: 'PUT',
+       body: JSON.stringify(payload),
+       headers: headers
+      })
+      .then(function(response) {
+        if (!response.ok) {
+         throw new Error(
+            'Unexpected response code while setting experiment setting');
+        }
+
+       console.log('Set ' + experimentName + ' to ' + enabled);
       });
     },
 
