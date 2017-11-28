@@ -1,5 +1,5 @@
 /**
- * AvailableAddon.
+ * InstalledAddon.
  *
  * Represents an existing, installed add-on.
  *
@@ -10,22 +10,22 @@
 'use strict';
 
 /**
- * AvailableAddon constructor.
+ * InstalledAddon constructor.
  *
- * @param Object description AvailableAddon metadata object.
+ * @param Object description InstalledAddon metadata object.
  */
-var AvailableAddon = function(metadata) {
+var InstalledAddon = function(metadata) {
   this.name = metadata.name;
   this.description = metadata.description;
   this.enabled = metadata.moziot.enabled;
-  this.container = document.getElementById('available-addons-list');
+  this.container = document.getElementById('installed-addons-list');
   this.render();
 };
 
 /**
- * HTML view for AvailableAddon.
+ * HTML view for InstalledAddon.
  */
-AvailableAddon.prototype.view = function() {
+InstalledAddon.prototype.view = function() {
   let buttonText, buttonClass;
   if (this.enabled) {
     buttonText = 'Disable';
@@ -51,9 +51,9 @@ AvailableAddon.prototype.view = function() {
 };
 
 /**
- * Render AvailableAddon view and add to DOM.
+ * Render InstalledAddon view and add to DOM.
  */
-AvailableAddon.prototype.render = function() {
+InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
   const button = document.getElementById(`addon-toggle-${this.name}`);
@@ -63,7 +63,7 @@ AvailableAddon.prototype.render = function() {
 /**
  * Handle a click on the enable/disable button.
  */
-AvailableAddon.prototype.handleToggle = function(e) {
+InstalledAddon.prototype.handleToggle = function(e) {
   const button = e.target;
   this.enabled = !this.enabled;
   window.API.setAddonSetting(this.name, this.enabled)

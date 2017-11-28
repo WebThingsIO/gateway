@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App, API, Menu, page, Adapter, AvailableAddon, DiscoveredAddon */
+/* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -193,14 +193,14 @@ var SettingsScreen = {
         return;
       }
 
-      const addonList = document.getElementById('available-addons-list');
+      const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
           this.installedAddons.push(settings.name);
-          new AvailableAddon(settings);
+          new InstalledAddon(settings);
         } catch (err) {
           console.log('Failed to parse add-on settings:', s);
         }
