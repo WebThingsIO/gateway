@@ -17,6 +17,7 @@ module.exports = {
   behindForwarding: false,
   addonManager: {
     path: './addons-test',
+    listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/test.json',
   },
   database: {
     filename: ':memory:',

@@ -9,7 +9,7 @@
 
 'use strict';
 
-var Adapter = require('../../addons/adapter');
+var Adapter = require('../adapter');
 
 class SettingsTestAdapter extends Adapter {
   constructor(addonManager, packageName) {

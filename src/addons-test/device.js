@@ -1,0 +1,1 @@
+../addons/device.js

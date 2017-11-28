@@ -53,6 +53,9 @@ AddonsController.put('/:addonName', async (request, response) => {
   let current;
   try {
     current = await Settings.get(key);
+    if (typeof current === 'undefined') {
+      throw new Error('Setting is undefined.');
+    }
   } catch (e) {
     console.error('Failed to get current settings for add-on ' + addonName);
     console.error(e);

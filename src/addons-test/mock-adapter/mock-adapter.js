@@ -8,9 +8,9 @@
 
 'use strict';
 
-var Adapter = require('../../addons/adapter');
-var Device = require('../../addons/device');
-var Property = require('../../addons/property');
+var Adapter = require('../adapter');
+var Device = require('../device');
+var Property = require('../property');
 
 class MockProperty extends Property {
   constructor(device, name, propertyDescription) {
