@@ -9,7 +9,7 @@ AddonsController.get('/', async (request, response) => {
     if (result === undefined) {
       response.status(404).json([]);
     } else {
-      let availableAddons = [];
+      let installedAddons = [];
       for (const setting of result) {
         // Remove the leading 'addons.' from the settings key to get the
         // package name.
@@ -18,12 +18,12 @@ AddonsController.get('/', async (request, response) => {
           continue;
         }
 
-        if (AddonManager.isAddonAvailable(packageName)) {
-          availableAddons.push(setting);
+        if (AddonManager.isAddonInstalled(packageName)) {
+          installedAddons.push(setting);
         }
       }
 
-      response.status(200).json(availableAddons);
+      response.status(200).json(installedAddons);
     }
   }).catch(function(e) {
     console.error('Failed to get add-on settings.');
