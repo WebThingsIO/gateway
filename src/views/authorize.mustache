@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#75AACF">
+    <title>Things Gateway - Authorization Request</title>
+    <link rel="manifest" href="/app.webmanifest">
+    <link rel="icon" href="/images/icon.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="/css/authorize.css" />
+  </head>
+  <body>
+    <img id="wordmark" src="../images/moziot-wordmark.png" alt="Mozilla IoT"/>
+
+    <!-- OAuth Authorization -->
+    <section id="authorize-view" class="selected">
+      <div class="title-bar">
+        <a href="/" class="back-button icon-button"></a>
+        <h1>Authorization Request</h1>
+      </div>
+
+      <form id="authorize-form" method="get" action="allow">
+        <p><b>{{name}}</b> would like to access your gateway to monitor and control devices.</p>
+        <p><small>from {{domain}}</small></p>
+        <input name="response_type" value="{{request.response_type}}" type="hidden">
+        <input name="client_id" value="{{request.client_id}}" type="hidden">
+        <input name="scope" value="{{request.scope}}" type="hidden">
+        <input name="state" value="{{request.state}}" type="hidden">
+        <input id="jwt" name="jwt" value="" type="hidden">
+        <input id="authorize-button" type="submit" value="Allow" class="text-button">
+        <a id="cancel-button" href="/" class="text-button">Deny</a>
+      </form>
+    </section>
+
+    <script type="text/javascript" src="/js/api.js"></script>
+    <script type="text/javascript">
+      let jwt = document.getElementById('jwt');
+      jwt.value = window.API.jwt;
+    </script>
+  </body>
+</html>
+

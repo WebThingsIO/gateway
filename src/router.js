@@ -52,6 +52,10 @@ var Router = {
       }
     });
 
+    // Let OAuth handle its own rendering
+    app.use(APP_PREFIX + Constants.OAUTH_PATH,
+            require('./controllers/oauth_controller').default);
+
     // Web app routes - send index.html and fall back to client side URL router
     app.use(APP_PREFIX + '/*', require('./controllers/root_controller'));
 

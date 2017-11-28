@@ -233,7 +233,7 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
     return;
   }
 
-  response.render('add_service', {
+  response.render('authorize', {
     name: client.name,
     domain: client.redirect_uri.host,
     request: authRequest
