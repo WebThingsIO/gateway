@@ -13,7 +13,7 @@ var Adapter = require('../adapter');
 var ZWaveNode = require('./zwave-node');
 var SerialPort = require('serialport');
 var zwaveClassifier = require('./zwave-classifier');
-var ZWaveModule = require('openzwave-shared');
+var ZWaveModule;
 
 const DEBUG = false;
 
@@ -385,6 +385,13 @@ function findZWavePort(callback) {
 }
 
 function loadZWaveAdapters(addonManager, manifest, errorCallback) {
+  try {
+    ZWaveModule = require('openzwave-shared');
+  } catch (err) {
+    errorCallback(manifest.name, `Failed to load openzwave-shared: ${err}`);
+    return;
+  }
+
   findZWavePort(function (error, port) {
     if (error) {
       errorCallback(manifest.name, 'Unable to find ZWave adapter');
