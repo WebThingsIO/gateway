@@ -168,7 +168,7 @@ var FloorplanScreen = {
         // Add a timestamp to the background image to force image reload
         var timestamp = Date.now();
         this.floorplan.setAttribute('style',
-          'background-image: url(/uploads/floorplan.svg?t=' + timestamp + ')');
+          `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
       } else {
         console.error('Failed to upload floorplan');
       }
