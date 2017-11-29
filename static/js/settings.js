@@ -29,6 +29,8 @@ var SettingsScreen = {
       document.getElementById('addon-discovery-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
+    this.authorizationSettings =
+      document.getElementById('authorization-settings');
     this.backButton = document.getElementById('settings-back-button');
 
     this.installedAddons = new Set();
@@ -56,6 +58,7 @@ var SettingsScreen = {
     this.addonDiscoverySettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
+    this.authorizationSettings.classList.add('hidden');
   },
 
   hideMenu: function() {
@@ -100,6 +103,9 @@ var SettingsScreen = {
         break;
       case 'updates':
         this.showUpdateSettings();
+        break;
+      case 'authorizations':
+        this.showAuthorizationSettings();
         break;
       default:
         console.error('Tried to display undefined section');
@@ -381,6 +387,69 @@ var SettingsScreen = {
       checkStatus();
     }).catch(function() {
       updateNow.textContent = 'Error';
+    });
+  },
+
+  showAuthorizationSettings: function() {
+    this.authorizationSettings.classList.remove('hidden');
+
+    fetch('/authorizations', {
+      headers: API.headers()
+    }).then(function (response) {
+      return response.json();
+    }).then(clients => {
+      const authorizationsList = document.getElementById('authorizations');
+      const noAuthorizations = document.getElementById('no-authorizations');
+      authorizationsList.innerHTML = '';
+
+      if (clients.length === 0) {
+        noAuthorizations.classList.remove('hidden');
+        authorizationsList.classList.add('hidden');
+        return;
+      }
+
+      noAuthorizations.classList.add('hidden');
+      authorizationsList.classList.remove('hidden');
+
+      for (let client of clients) {
+        let authorization = document.createElement('li');
+        authorization.classList.add('authorization-item');
+        let name = document.createElement('p');
+        name.textContent = client.name;
+        let origin = document.createElement('p');
+        origin.classList.add('origin');
+        origin.textContent = new URL(client.redirect_uri).host;
+        let revoke = document.createElement('input');
+        revoke.classList.add('revoke-button', 'text-button');
+        revoke.type = 'button';
+        revoke.value = 'Revoke';
+        revoke.dataset.clientId = client.id;
+        revoke.addEventListener('click', this.revokeAuthorization);
+
+        authorization.appendChild(name);
+        authorization.appendChild(origin);
+        authorization.appendChild(revoke);
+        authorizationsList.appendChild(authorization);
+      }
+    });
+  },
+
+  revokeAuthorization: function(event) {
+    let revoke = event.target;
+    if (!revoke.dataset.clientId) {
+      console.warn('Missing clientId on revoke', revoke);
+      return;
+    }
+    let clientId = revoke.dataset.clientId;
+
+    fetch('/authorizations/' + clientId, {
+      headers: API.headers(),
+      method: 'DELETE'
+    }).then(() => {
+      let authorization = revoke.parentNode;
+      authorization.parentNode.removeChild(authorization);
+    }).catch(err => {
+      console.warn('Unable to revoke', err);
     });
   }
 };
