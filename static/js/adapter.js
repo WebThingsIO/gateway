@@ -42,11 +42,11 @@ Adapter.prototype.view = function() {
         <span class="adapter-settings-description">${this.id}</span>
       </div>
       <div class="adapter-settings-controls">
-        <button id="adapter-toggle-${this.id}"
+        <!--button id="adapter-toggle-${this.id}"
           class="text-button ${buttonClass}"
           adapterEnabled="${this.ready}">
           ${buttonText}
-        </button>
+        </button-->
       </div>
     </li>`;
 };
@@ -57,8 +57,10 @@ Adapter.prototype.view = function() {
 Adapter.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
+  /*
   const button = document.getElementById(`adapter-toggle-${this.id}`);
   button.addEventListener('click', this.handleToggle.bind(this));
+  */
 };
 
 /**
