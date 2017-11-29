@@ -76,6 +76,10 @@
   background-image: url('../images/update-icon.svg');
 }
 
+#authorization-settings-link {
+  background-image: url(/images/authorization.svg);
+}
+
 .settings-section {
   position: fixed;
   display: block;
@@ -132,7 +136,8 @@
 #adapter-settings ul,
 #addon-settings ul,
 #experiment-settings ul,
-#update-settings ul {
+#update-settings ul,
+#authorization-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -151,7 +156,8 @@
   margin-bottom: 3rem;
 }
 
-#no-adapters {
+#no-adapters,
+#no-authorizations {
   text-align: center;
   position: relative;
   top: 50%;
@@ -163,11 +169,12 @@
   font-size: 2rem;
 }
 
-#no-adapters.hidden {
+#no-adapters.hidden,
+#no-authorizations.hidden {
   display: none;
 }
 
-.experiment-item, .update-item {
+.experiment-item, .update-item, .authorization-item {
   display: block;
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -183,6 +190,7 @@
 
 .adapter-item,
 .addon-item,
+.authorization-item,
 .discovered-addon-item {
   display: block;
   font-size: 1.8rem;
@@ -193,7 +201,8 @@
 }
 
 .adapter-item,
-.addon-item {
+.addon-item,
+.authorization-item {
   background-color: #5288af;
 }
 
@@ -360,4 +369,32 @@
 }
 
 #update-settings-up-to-date {
+}
+
+.authorization-item {
+  position: relative;
+  padding-left: 12rem;
+  background-image: url(/images/authorization.svg);
+  background-size: 8rem auto;
+  background-repeat: no-repeat;
+  background-position: left 2rem center;
+}
+
+.revoke-button {
+  position: absolute;
+  right: 2rem;
+  padding-left: 2.8rem;
+  font-size: 1.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #48779a;
+
+  background-image: url(/images/stop-16.svg);
+  background-position: 1rem;
+  background-size: 1.2rem;
+  background-repeat: no-repeat;
+}
+
+.origin {
+  color: rgba(255, 255, 255, 0.7);
 }
