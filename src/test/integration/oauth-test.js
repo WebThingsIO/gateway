@@ -113,6 +113,34 @@ describe('oauth/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
+
+    res = await chai.request(server)
+      .get(Constants.OAUTHCLIENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+    expect(res.status).toEqual(200);
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].id).toEqual(CLIENT_ID);
+
+    res = await chai.request(server)
+      .delete(Constants.OAUTHCLIENTS_PATH + '/' + CLIENT_ID)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+    expect(res.status).toEqual(200);
+
+    res = await chai.request(server)
+      .get(Constants.OAUTHCLIENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+    expect(res.status).toEqual(200);
+    expect(res.body.length).toEqual(0);
+
+    // Try using the access token now that it's revoked
+    const err = await pFinal(chai.request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(401);
   });
 
   it('fails authorization with an incorrect secret', async () => {
