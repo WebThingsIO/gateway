@@ -16,8 +16,6 @@ var zclId = require('zcl-id');
 var zcl = require('zcl-packet');
 var zdo = require('./zb-zdo');
 
-const DATA_TYPE_BOOLEAN = zclId.dataType('boolean').value;
-
 var C = xbeeApi.constants;
 
 class ZigBeeNode extends Device {
@@ -105,26 +103,48 @@ class ZigBeeNode extends Device {
     }
   }
 
-  getValueFromAttrEntry(attrEntry) {
-    if (attrEntry.dataType == DATA_TYPE_BOOLEAN) {
-      return attrEntry.attrData !== 0;
+  handleDiscoverRsp(frame) {
+    let payload = frame.zcl.payload;
+    let maxAttrId = 0;
+    for (let attrInfo of payload.attrInfos) {
+      maxAttrId = Math.max(maxAttrId, attrInfo.attrId);
+      let clusterId = parseInt(frame.clusterId, 16);
+      let attr = zclId.attr(clusterId, attrInfo.attrId);
+      let attrStr = attr ? attr.key : 'unknown';
+      let dataType = zclId.dataType(attrInfo.dataType);
+      let dataTypeStr = dataType ? dataType.key : 'unknown';
+      console.log('      AttrId:', attrStr + ' (' + attrInfo.attrId + ')',
+                  'dataType:', dataTypeStr + ' (' + attrInfo.dataType + ')');
     }
-    return attrEntry.attrData;
+
+    if (frame.zcl.payload.discComplete == 0) {
+      // More attributes are available
+      let discoverFrame =
+        this.makeDiscoverAttributesFrame(
+          frame.sourceEndpoint,
+          frame.profileId,
+          frame.clusterId,
+          maxAttrId + 1);
+        this.adapter.sendFrameWaitFrameAtFront(discoverFrame, {
+          type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
+          id: discoverFrame.id,
+        });
+    }
   }
 
   handleReadRsp(frame) {
     var property = this.findPropertyFromFrame(frame);
     if (property) {
       var attrEntry = this.getAttrEntryFromFrame(frame, property);
-      var value = this.getValueFromAttrEntry(attrEntry);
+      let [value, logValue] = property.parseAttrEntry(attrEntry);
       property.setCachedValue(value);
-      console.log('ZigBee:', this.name,
+      console.log(this.name,
                   'property:', property.name,
                   'profileId:', utils.hexStr(property.profileId, 4),
                   'endpoint:', property.endpoint,
                   'clusterId:', utils.hexStr(property.clusterId, 4),
                   frame.zcl.cmdId,
-                  'value:', value);
+                  'value:', logValue);
       var deferredSet = property.deferredSet;
       if (deferredSet) {
         property.deferredSet = null;
@@ -135,9 +155,16 @@ class ZigBeeNode extends Device {
   }
 
   handleZhaResponse(frame) {
-    if (frame.zcl &&
-        (frame.zcl.cmdId == 'readRsp' || frame.zcl.cmdId == 'report')) {
-      this.handleReadRsp(frame);
+    if (frame.zcl) {
+      switch (frame.zcl.cmdId) {
+        case 'readRsp':
+        case 'report':
+          this.handleReadRsp(frame);
+          break;
+        case 'discoverRsp':
+          this.handleDiscoverRsp(frame);
+          break;
+      }
     }
   }
 
@@ -159,7 +186,7 @@ class ZigBeeNode extends Device {
   makeConfigReportFrame(property) {
     var clusterId = property.clusterId;
     var attr = property.attr;
-    var frame = this.makeZclFrame(
+    var frame = this.makeZclFrameForProperty(
       property,
       {
         cmd: 'configReport',
@@ -167,21 +194,22 @@ class ZigBeeNode extends Device {
           direction: 0,
           attrId: zclId.attr(clusterId, attr).value,
           dataType: zclId.attrType(clusterId, attr).value,
-          minRepIntval: 0,
-          maxRepIntval: 0,
+          minRepIntval: 1,
+          maxRepIntval: 120,
+          repChange: 1,
         }],
       }
     );
     return frame;
   }
 
-  makeDiscoverAttributesFrame(property) {
+  makeDiscoverAttributesFrame(endpoint, profileId, clusterId, startAttrId) {
     var frame = this.makeZclFrame(
-      property,
+      endpoint, profileId, clusterId,
       {
         cmd: 'discover',
         payload: {
-          startAttrId: 0,
+          startAttrId: startAttrId,
           maxAttrIds: 255,
         },
       }
@@ -192,7 +220,7 @@ class ZigBeeNode extends Device {
   makeReadAttributeFrame(property) {
     var clusterId = property.clusterId;
     var attr = property.attr;
-    var frame = this.makeZclFrame(
+    var frame = this.makeZclFrameForProperty(
       property,
       {
         cmd: 'read',
@@ -207,7 +235,7 @@ class ZigBeeNode extends Device {
   makeReadReportConfigFrame(property) {
     var clusterId = property.clusterId;
     var attr = property.attr;
-    var frame = this.makeZclFrame(
+    var frame = this.makeZclFrameForProperty(
       property,
       {
         cmd: 'readReportConfig',
@@ -219,7 +247,7 @@ class ZigBeeNode extends Device {
     return frame;
   }
 
-  makeZclFrame(property, zclData) {
+  makeZclFrame(endpoint, profileId, clusterId, zclData) {
     if (!zclData.frameCntl) {
       zclData.frameCntl = { frameType: 0 };
     }
@@ -246,9 +274,9 @@ class ZigBeeNode extends Device {
       destination16: this.addr16,
       sourceEndpoint: 0,
 
-      destinationEndpoint: property.endpoint,
-      profileId: property.profileId,
-      clusterId: utils.hexStr(property.clusterId, 4),
+      destinationEndpoint: endpoint,
+      profileId: profileId,
+      clusterId: utils.hexStr(clusterId, 4),
 
       broadcastRadius: 0,
       options: 0,
@@ -260,8 +288,15 @@ class ZigBeeNode extends Device {
                            frame.id,
                            zclData.cmd,
                            zclData.payload,
-                           property.clusterId);
+                           clusterId);
     return frame;
+  }
+
+  makeZclFrameForProperty(property, zclData) {
+    return this.makeZclFrame(property.endpoint,
+                             property.profileId,
+                             property.clusterId,
+                             zclData);
   }
 
   notifyPropertyChanged(property) {
@@ -278,7 +313,7 @@ class ZigBeeNode extends Device {
   }
 
   sendZclFrameWaitExplicitRxResolve(property, zclData) {
-    var frame = this.makeZclFrame(property, zclData);
+    var frame = this.makeZclFrameForProperty(property, zclData);
     this.adapter.sendFrameWaitFrameResolve(frame, {
       type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
       remote64: frame.destination64,

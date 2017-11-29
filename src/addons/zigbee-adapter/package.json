@@ -27,7 +27,8 @@
     "plugin": true,
     "exec": "node ./src/addon-loader.js zigbee-adapter",
     "config": {
-      "scanChannels": "0x1ffe"
+      "scanChannels": "0x1ffe",
+      "discoverAttributes": false
     }
   }
 }

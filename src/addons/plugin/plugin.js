@@ -15,6 +15,7 @@ const AdapterProxy = require('./adapter-proxy');
 const Constants = require('../addon-constants');
 const DeviceProxy = require('./device-proxy');
 const IpcSocket = require('./ipc');
+const readline = require('readline');
 const spawn = require('child_process').spawn;
 
 const DEBUG = false;
@@ -24,6 +25,7 @@ class Plugin {
   constructor(pluginId, pluginServer) {
     this.pluginId = pluginId;
     this.pluginServer = pluginServer;
+    this.logPrefix = pluginId.replace('-adapter', '');
 
     this.adapters = new Map();
     this.ipcBaseAddr = 'gateway.plugin.' + this.pluginId;
@@ -130,9 +132,9 @@ class Plugin {
       case Constants.PROPERTY_CHANGED:
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
-          property = device.findProperty(msg.data.propertyName);
+          property = device.findProperty(msg.data.property.name);
           if (property) {
-            property.doPropertyChanged(msg.data.propertyValue);
+            property.doPropertyChanged(msg.data.property);
             device.notifyPropertyChanged(property);
           }
         }
@@ -212,19 +214,31 @@ class Plugin {
       console.error(err);
     });
 
-    this.process.stdout.on('data', data => {
-      process.stdout.write(data);
+    this.stdoutReadline = readline.createInterface({
+      input: this.process.stdout
+    });
+    this.stdoutReadline.on('line', line => {
+      console.log(this.logPrefix + ': ' + line);
     });
 
-    this.process.stderr.on('data', data => {
-      process.stderr.write(data);
+    this.stderrReadline = readline.createInterface({
+      input: this.process.stderr
+    });
+    this.stderrReadline.on('line', line => {
+      console.error(this.logPrefix + ': ' + line);
     });
 
     this.process.on('exit', code => {
       if (this.restart) {
-        console.log('Plugin:', this.pluginId, 'died, code =', code,
-                    'restarting...');
-        this.start();
+        if (code == Constants.DONT_RESTART_EXIT_CODE) {
+          console.log('Plugin:', this.pluginId, 'died, code =', code,
+                      'NOT restarting...');
+          this.restart = false;
+        } else {
+          console.log('Plugin:', this.pluginId, 'died, code =', code,
+                      'restarting...');
+          this.start();
+        }
       }
     });
   }

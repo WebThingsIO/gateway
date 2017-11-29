@@ -14,8 +14,8 @@ var Deferred = require('../deferred');
 var Property = require('../property');
 
 class ZWaveProperty extends Property {
-  constructor(device, name, type, valueId) {
-    super(device, name, type);
+  constructor(device, name, propertyDescr, valueId) {
+    super(device, name, propertyDescr);
 
     this.valueId = valueId;
     var zwValue = device.zwValues[valueId];
@@ -40,13 +40,13 @@ class ZWaveProperty extends Property {
   setValue(value) {
     var deferredSet = new Deferred();
     if (this.deferredSet) {
-      deferredSet.reject('ZWave: setProperty property ' + this.name +
+      deferredSet.reject('setProperty property ' + this.name +
                          ' already has a set in progress.');
     } else {
       // We don't update the cached value here, but rather
       // wait for the valueChanged notificaton.
 
-      console.log('ZWave: setProperty property:', this.name,
+      console.log('setProperty property:', this.name,
                   'for:', this.device.name,
                   'valueId:', this.valueId,
                   'value:', value);
@@ -57,7 +57,7 @@ class ZWaveProperty extends Property {
                                            value);
         this.deferredSet = deferredSet;
       } else {
-        deferredSet.reject('ZWave: setProperty property ' + this.name +
+        deferredSet.reject('setProperty property ' + this.name +
                           ' for node ' + this.device.id +
                           ' doesn\'t have a valueId');
       }

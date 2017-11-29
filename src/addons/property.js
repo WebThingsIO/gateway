@@ -10,16 +10,29 @@
 
 'use strict';
 
+const assert = require('assert');
+
+const DESCR_FIELDS = ['type', 'unit', 'description', 'min', 'max'];
+function copyDescrFieldsInto(target, source) {
+  for (let field of DESCR_FIELDS) {
+    if (source.hasOwnProperty(field)) {
+      target[field] = source[field];
+    }
+  }
+}
+
 class Property {
-  constructor(device, name, type) {
+  constructor(device, name, propertyDescr) {
+    // The propertyDescr argument used to be the 'type' string, so we add an
+    // assertion here to notify anybody who has an older plugin.
+
+    assert.equal(typeof(propertyDescr), 'object',
+                 'Please update plugin to use property description.');
+
     this.device = device;
     this.name = name;
-    this.type = type;
 
-    // Other optional attributes that an instance of this class can have.
-    // this.unit
-    // this.description
-    // this.value
+    copyDescrFieldsInto(this, propertyDescr);
   }
 
   /**
@@ -29,15 +42,9 @@ class Property {
   asDict() {
     var prop = {
       name: this.name,
-      type: this.type,
       value: this.value,
     };
-    if (this.description) {
-      prop.description = this.description;
-    }
-    if (this.unit) {
-      prop.unit = this.unit;
-    }
+    copyDescrFieldsInto(prop, this);
     return prop;
   }
 
@@ -47,13 +54,7 @@ class Property {
    */
   asPropertyDescription() {
     var description = {};
-    description.type = this.type;
-    if (this.description) {
-      description.description = this.description;
-    }
-    if (this.unit) {
-      description.unit = this.unit;
-    }
+    copyDescrFieldsInto(description, this);
     return description;
   }
 

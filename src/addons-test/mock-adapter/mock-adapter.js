@@ -14,7 +14,7 @@ var Property = require('../../addons/property');
 
 class MockProperty extends Property {
   constructor(device, name, propertyDescription) {
-    super(device, name, propertyDescription.type);
+    super(device, name, propertyDescription);
     this.unit = propertyDescription.unit;
     this.description = propertyDescription.description;
     this.setCachedValue(propertyDescription.value);

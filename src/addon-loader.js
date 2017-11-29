@@ -11,6 +11,7 @@
 'use strict';
 
 var config = require('config');
+const Constants = require('./constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./addons/plugin/plugin-client');
 const fs = require('fs');
@@ -74,8 +75,9 @@ async function loadAddon(packageName, verbose) {
       addonLoader(addonManagerProxy, newSettings, errorCallback);
       resolve();
     }).catch(e => {
+      console.error(e);
       const err =
-        `Failed to register package: ${manifest.name} with gateway\n${e}`;
+        `Failed to register package: ${manifest.name} with gateway`;
       reject(err);
     });
   });
@@ -89,6 +91,13 @@ const dynamicRequire = (() => {
   }
   return require;
 })();
+
+// Get some decent error messages for unhandled rejections. This is
+// often just errors in the code.
+process.on('unhandledRejection', (reason) => {
+  console.log('Unhandled Rejection');
+  console.error(reason);
+});
 
 // Command line arguments
 const getopt = new GetOpt([
@@ -104,16 +113,16 @@ if (opt.options.verbose) {
 
 if (opt.options.help) {
   getopt.showHelp();
-  process.exit(1);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 
 if (opt.argv.length != 1) {
   console.error('Expecting a single package to load');
-  process.exit(1);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 var packageName = opt.argv[0];
 
 loadAddon(packageName, opt.verbose).catch(err => {
   console.error(err);
-  process.exit(1);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 });
