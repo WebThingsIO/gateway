@@ -17,6 +17,19 @@ const TEST_USER_DIFFERENT = {
   password: 'shoebarb'
 };
 
+const TEST_USER_UPDATE_1 = {
+  email: 'test@other.com',
+  name: 'Other User',
+  password: 'rhubarb'
+};
+
+const TEST_USER_UPDATE_2 = {
+  email: 'test@other.com',
+  name: 'Other User',
+  password: 'rhubarb',
+  newPassword: 'strawberry'
+};
+
 async function getJWT(path, server, user) {
   const res = await chai.request(server).
     post(path).
@@ -35,9 +48,29 @@ async function createUser(server, user) {
   return getJWT(Constants.USERS_PATH, server, user);
 }
 
+async function editUser(server, jwt, user) {
+  const res = await chai.request(server).
+    put(`${Constants.USERS_PATH}/${user.id}`).
+    set(...headerAuth(jwt)).
+    set('Accept', 'application/json').
+    send(user);
+  expect(res.status).toEqual(200);
+  return res;
+}
+
+async function deleteUser(server, jwt, userId) {
+  const res = await chai.request(server).
+    delete(`${Constants.USERS_PATH}/${userId}`).
+    set(...headerAuth(jwt)).
+    set('Accept', 'application/json').
+    send();
+  expect(res.status).toEqual(200);
+  return res;
+}
+
 async function userInfo(server, jwt) {
   const res = await chai.request(server).
-    get(Constants.USERS_PATH + '/info').
+    get(`${Constants.USERS_PATH}/info`).
     set(...headerAuth(jwt)).
     set('Accept', 'application/json').
     send();
@@ -63,7 +96,11 @@ function headerAuth(jwt) {
 module.exports = {
   TEST_USER,
   TEST_USER_DIFFERENT,
+  TEST_USER_UPDATE_1,
+  TEST_USER_UPDATE_2,
   createUser,
+  editUser,
+  deleteUser,
   loginUser,
   userInfo,
   logoutUser,
