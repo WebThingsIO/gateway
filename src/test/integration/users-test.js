@@ -17,7 +17,6 @@ const {
   userInfo,
   logoutUser,
 } = require('../user');
-const Users = require('../../models/Users');
 
 it('creates a user and get email', async () => {
   const jwt = await createUser(server, TEST_USER);
@@ -65,10 +64,10 @@ it('edits an invalid user', async () => {
 
 it('edits a user', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const user = await Users.getUser(TEST_USER.email);
+  let info = await userInfo(server, jwt);
   await editUser(
-    server, jwt, Object.assign(TEST_USER_UPDATE_1, {id: user.id}));
-  const info = await userInfo(server, jwt);
+    server, jwt, Object.assign(TEST_USER_UPDATE_1, {id: info.id}));
+  info = await userInfo(server, jwt);
   expect(info.name).toBe(TEST_USER_UPDATE_1.name);
   expect(info.email).toBe(TEST_USER_UPDATE_1.email);
 
@@ -79,10 +78,10 @@ it('edits a user', async () => {
 
 it('edits a user, including password', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const user = await Users.getUser(TEST_USER.email);
+  let info = await userInfo(server, jwt);
   await editUser(
-    server, jwt, Object.assign(TEST_USER_UPDATE_2, {id: user.id}));
-  const info = await userInfo(server, jwt);
+    server, jwt, Object.assign(TEST_USER_UPDATE_2, {id: info.id}));
+  info = await userInfo(server, jwt);
   expect(info.name).toBe(TEST_USER_UPDATE_2.name);
   expect(info.email).toBe(TEST_USER_UPDATE_2.email);
 
@@ -95,8 +94,8 @@ it('edits a user, including password', async () => {
 
 it('deletes a user', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const user = await Users.getUser(TEST_USER.email);
-  await deleteUser(server, jwt, user.id);
+  let info = await userInfo(server, jwt);
+  await deleteUser(server, jwt, info.id);
   const rsp1 = await pFinal(userInfo(server, jwt));
   expect(rsp1.response.status).toBe(401);
   const rsp2 = await pFinal(loginUser(server, TEST_USER));
