@@ -266,6 +266,7 @@ var Database = {
    * Get a user by it's primary key (id).
    */
   getUserById: async function(id) {
+    assert(typeof id === 'number');
     return await this.get(
       'SELECT * FROM users WHERE id = ?',
       id
@@ -377,6 +378,24 @@ var Database = {
     return result.lastID;
   },
 
+  /**
+   * Edit a user.
+   * @param {User} user
+   * @return Promise that resolves when operation is complete.
+   */
+  editUser: async function(user) {
+    assert(typeof user.id === 'number');
+    return this.run(
+      'UPDATE users SET email=?, password=?, name=? WHERE id=?',
+      [user.email, user.password, user.name, user.id]
+    );
+  },
+
+  /**
+   * Delete a user.
+   * @param {Number} userId
+   * @return Promise that resolves when operation is complete.
+   */
   deleteUser: function(userId) {
     assert(typeof userId === 'number');
     const deleteUser = this.run(

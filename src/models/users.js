@@ -35,11 +35,18 @@ var Users = {
   /**
    * Get a user from the database.
    *
-   * @param {number}  id primary key.
+   * @param {number} id primary key.
    * @return {Promise} Promise which resolves to user object
    *   or false if user doesn't exist.
    */
   getUserById: async function (id) {
+    if (typeof id !== 'number') {
+      id = parseInt(id, 10);
+      if (isNaN(id)) {
+        return Promise.reject('Invalid user ID');
+      }
+    }
+
     const row = await Database.getUserById(id);
     if (!row) {
       return row;
@@ -70,7 +77,32 @@ var Users = {
     const user = new User(null, email, password, name);
     user.id = await Database.createUser(user);
     return user;
-  }
+  },
+
+  /**
+   * Edit an existing User
+   * @param {User} user to edit
+   * @return {Promise} Promise which resolves when operation is complete.
+   */
+  editUser: async function(user) {
+    await Database.editUser(user);
+  },
+
+  /**
+   * Delete an existing User
+   * @param {Number} userId
+   * @return {Promise} Promise which resolves when operation is complete.
+   */
+  deleteUser: async function(userId) {
+    if (typeof userId !== 'number') {
+      userId = parseInt(userId, 10);
+      if (isNaN(userId)) {
+        return Promise.reject('Invalid user ID');
+      }
+    }
+
+    await Database.deleteUser(userId);
+  },
 };
 
 module.exports = Users;

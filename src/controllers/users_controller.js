@@ -46,16 +46,16 @@ UsersController.get('/info', auth, async (request, response) => {
  * Create a user
  */
 UsersController.post('/', async (request, response) => {
-  let body = request.body;
+  const body = request.body;
 
   if (!body || !body.email || !body.password) {
-    response.status(400).send('User requires email and password');
+    response.status(400).send('User requires email and password.');
     return;
   }
 
   const count = await Users.getCount();
   if (count > 0) {
-    response.status(400).send('Gateway user already created');
+    response.status(400).send('Gateway user already created.');
     return;
   }
 
@@ -67,6 +67,50 @@ UsersController.post('/', async (request, response) => {
   response.send({
     jwt,
   });
+});
+
+/**
+ * Edit a user
+ */
+UsersController.put('/:userId', async (request, response) => {
+  const user = await Users.getUserById(request.params.userId);
+
+  if (!user) {
+    response.sendStatus(404);
+    return;
+  }
+
+  const body = request.body;
+  if (!body || !body.email || !body.password) {
+    response.status(400).send('User requires email and password.');
+    return;
+  }
+
+  const passwordMatch = await Passwords.compare(body.password, user.password);
+  if (!passwordMatch) {
+    response.status(400).send('Passwords do not match.');
+    return;
+  }
+
+  if (body.newPassword) {
+    user.password = await Passwords.hash(body.newPassword);
+  }
+
+  user.email = body.email;
+  user.name = body.name;
+
+  await Users.editUser(user);
+  response.sendStatus(200);
+});
+
+/**
+ * Delete a user
+ */
+UsersController.delete('/:userId', async (request, response) => {
+  const userId = request.params.userId;
+
+  await Users.deleteUser(userId);
+  response.sendStatus(200);
 });
 
 module.exports = UsersController;
