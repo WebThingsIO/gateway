@@ -76,7 +76,7 @@ UsersController.put('/:userId', async (request, response) => {
   const user = await Users.getUserById(request.params.userId);
 
   if (!user) {
-    response.sendStatus(500);
+    response.sendStatus(404);
     return;
   }
 

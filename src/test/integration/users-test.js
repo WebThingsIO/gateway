@@ -60,7 +60,7 @@ it('edits an invalid user', async () => {
   const jwt = await createUser(server, TEST_USER);
   const rsp = await pFinal(
     editUser(server, jwt, Object.assign(TEST_USER_UPDATE_1, {id: 0})));
-  expect(rsp.response.status).toEqual(500);
+  expect(rsp.response.status).toEqual(404);
 });
 
 it('edits a user', async () => {
