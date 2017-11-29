@@ -21,7 +21,7 @@ const ThingsData = require('../static/things.json');
 
 const TABLES = [
   'users',
-  'jsonwebtoken_to_user',
+  'jsonwebtokens',
   'things',
   'settings',
 ];
@@ -79,12 +79,13 @@ var Database = {
      *
      * Instead, the INTEGER user is either the id of the user or -1 if NULL
      */
-    this.db.run('CREATE TABLE IF NOT EXISTS jsonwebtoken_to_user (' +
+    this.db.run('CREATE TABLE IF NOT EXISTS jsonwebtokens (' +
       'id INTEGER PRIMARY KEY ASC,' +
       'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
       'user INTEGER,' +
       'issuedAt DATE,' +
-      'publicKey TEXT' +
+      'publicKey TEXT,' +
+      'payload TEXT' +
     ');');
 
     // Create Settings table
@@ -416,43 +417,67 @@ var Database = {
   deleteJSONWebTokensForUser: function(userId) {
     assert(typeof userId === 'number');
     return this.run(
-      'DELETE FROM jsonwebtoken_to_user WHERE user = ?',
+      'DELETE FROM jsonwebtokens WHERE user = ?',
       [userId]
     );
   },
 
   /**
-   * Insert a JSONWebToken into the database and return it's primary key.
+   * Insert a JSONWebToken into the database
+   * @param {JSONWebToken} token
+   * @return {Promise<number>} resolved to JWT's primary key
    */
   createJSONWebToken: async function(token) {
-    const {keyId, user, publicKey, issuedAt} = token;
+    const {keyId, user, publicKey, issuedAt, payload} = token;
     const result = await this.run(
-      'INSERT INTO jsonwebtoken_to_user (keyId, user, issuedAt, publicKey) ' +
-      'VALUES (?, ?, ?, ?)',
-      [keyId, user, issuedAt, publicKey]
+      'INSERT INTO jsonwebtokens (keyId, user, issuedAt, publicKey, payload) ' +
+      'VALUES (?, ?, ?, ?, ?)',
+      [keyId, user, issuedAt, publicKey, JSON.stringify(payload)]
     );
     assert(typeof result.lastID === 'number');
     return result.lastID;
   },
 
   /**
-   * Get a JWT by it's key id.
+   * Get a JWT by its key id.
+   * @param {string} keyId
+   * @return {Promise<Object>} jwt data
    */
   getJSONWebTokenByKeyId: function(keyId) {
     assert(typeof keyId === 'string');
     return this.get(
-      'SELECT * FROM jsonwebtoken_to_user WHERE keyId = ?',
+      'SELECT * FROM jsonwebtokens WHERE keyId = ?',
       keyId
     );
   },
 
   /**
+   * Get all known JWTs of a user
+   * @param {number} userId
+   * @return {Promise<Array<Object>>}
+   */
+  getJSONWebTokensByUser: function(userId) {
+    return new Promise((resolve, reject) => {
+      this.db.all('SELECT * FROM jsonwebtokens WHERE user = ?', [userId],
+      (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  },
+
+  /**
    * Delete a JWT by it's key id.
+   * @param {string} keyId
+   * @return {Promise<boolean>} whether deleted
    */
   deleteJSONWebTokenByKeyId: async function(keyId) {
     assert(typeof keyId === 'string');
     const result = await this.run(
-      'DELETE FROM jsonwebtoken_to_user WHERE keyId = ?',
+      'DELETE FROM jsonwebtokens WHERE keyId = ?',
       keyId
     );
     return result.changes !== 0;

@@ -110,7 +110,8 @@ class JSONWebToken {
       user,
       issuedAt: new Date(),
       publicKey: pair.public,
-      keyId
+      keyId,
+      payload
     };
 
     return { sig, token };
@@ -126,7 +127,7 @@ class JSONWebToken {
     this.issuedAt = issuedAt;
     this.publicKey = publicKey;
     this.keyId = keyId;
-    this.payload = null;
+    this.payload = {};
   }
 
   /**
