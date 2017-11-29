@@ -96,6 +96,8 @@ var Router = {
 
     app.use(API_PREFIX + Constants.OAUTH_PATH,
             require('./controllers/oauth_controller').default);
+    app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, auth,
+            require('./controllers/oauthclients_controller').default);
   }
 };
 
