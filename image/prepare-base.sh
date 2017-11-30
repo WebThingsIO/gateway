@@ -36,7 +36,7 @@ nvm install v7.10.1
 nvm use v7.10.1
 
 # Install required root packages
-sudo prepare-base-root.sh
+sudo ./prepare-base-root.sh
 
 # Install prequisite packages
 sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot -y
