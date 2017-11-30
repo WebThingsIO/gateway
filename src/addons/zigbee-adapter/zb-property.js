@@ -1,5 +1,5 @@
 /**
- * ZigBee Property.
+ * Zigbee Property.
  *
  * Object which decscribes a property, and its value.
  *
@@ -40,7 +40,7 @@ function percentToLevel(percent) {
   return Math.min(Math.round(percent * 254 / 100), 254);
 }
 
-class ZigBeeProperty extends Property {
+class ZigbeeProperty extends Property {
   constructor(device, name, propertyDescr, profileId, endpoint, clusterId, attr,
               setAttrFromValue, parseValueFromAttr) {
     super(device, name, propertyDescr);
@@ -197,4 +197,4 @@ class ZigBeeProperty extends Property {
   }
 }
 
-module.exports = ZigBeeProperty;
+module.exports = ZigbeeProperty;

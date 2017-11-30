@@ -1,6 +1,6 @@
 /**
  *
- * ZigBeeDevice - represents a device on the ZigBee network
+ * ZigbeeDevice - represents a device on the Zigbee network
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,10 +18,10 @@ var zdo = require('./zb-zdo');
 
 var C = xbeeApi.constants;
 
-class ZigBeeNode extends Device {
+class ZigbeeNode extends Device {
 
   constructor(adapter, id64, id16) {
-    // Our id is a Mac address on the ZigBee network. It's unique within
+    // Our id is a Mac address on the Zigbee network. It's unique within
     // the zigbee network, but might not be globally unique, so we prepend
     // with zb- to put it in a namespace.
     var deviceId = 'zb-' + id64;
@@ -321,4 +321,4 @@ class ZigBeeNode extends Device {
   }
 }
 
-module.exports = ZigBeeNode;
+module.exports = ZigbeeNode;

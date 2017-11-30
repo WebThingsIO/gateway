@@ -1,6 +1,6 @@
 /**
  *
- * zb-zdo - Frame builder/parser for the ZigBee ZDO layer
+ * zb-zdo - Frame builder/parser for the Zigbee ZDO layer
  *
  * This follows the pattern used for the xbee-api, and builds the
  * buffer needed for the frame.data used with the

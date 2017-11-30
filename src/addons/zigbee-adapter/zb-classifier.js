@@ -1,6 +1,6 @@
 /**
  *
- * ZigBeeClassifier - Determines properties from ZigBee clusters.
+ * ZigbeeClassifier - Determines properties from Zigbee clusters.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,7 @@
 
 const zclId = require('zcl-id');
 const utils = require('../utils');
-const ZigBeeProperty = require('./zb-property');
+const ZigbeeProperty = require('./zb-property');
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);
@@ -24,7 +24,7 @@ const CLUSTER_ID_GENLEVELCTRL_HEX = utils.hexStr(CLUSTER_ID_GENLEVELCTRL, 4);
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
 const THING_TYPE_MULTI_LEVEL_SWITCH = 'multiLevelSwitch';
 
-class ZigBeeClassifier {
+class ZigbeeClassifier {
 
   constructor() {
   }
@@ -66,7 +66,7 @@ class ZigBeeClassifier {
 
   addProperty(node, name, descr, profileId, endpoint, clusterId,
               attr, setAttrFromValue, parseValueFromAttr) {
-    let property =  new ZigBeeProperty(node, name, descr, profileId,
+    let property =  new ZigbeeProperty(node, name, descr, profileId,
                                        endpoint, clusterId, attr,
                                        setAttrFromValue, parseValueFromAttr);
     node.properties.set(name, property);
@@ -135,4 +135,4 @@ class ZigBeeClassifier {
   }
 }
 
-module.exports = new ZigBeeClassifier();
+module.exports = new ZigbeeClassifier();
