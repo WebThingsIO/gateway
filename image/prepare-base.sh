@@ -35,9 +35,6 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v7.10.1
 nvm use v7.10.1
 
-# Install required root packages
-sudo ./prepare-base-root.sh
-
 # Install prequisite packages
 sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot -y
 
@@ -113,6 +110,9 @@ END
 
 # Disable the gateway service so that doesn't start up automatically on each boot.
 sudo systemctl disable mozilla-iot-gateway.service
+
+# Install required root packages
+sudo ./prepare-base-root.sh
 
 # Check for an update every day.
 sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
