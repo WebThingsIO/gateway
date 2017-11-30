@@ -261,7 +261,7 @@ class ZigbeeAdapter extends Adapter {
       // We're going to change something, so we might as well set the link
       // key, since it's write only and we can't tell if its been set before.
       configCommands.push(this.AT(AT_CMD.LINK_KEY,
-                                  {linkKey: 'ZigbeeAlliance09'}));
+                                  {linkKey: 'ZigBeeAlliance09'}));
       configCommands.push(this.AT(AT_CMD.WRITE_PARAMETERS));
 
       // TODO: It sends a modem status, but only the first time after the
