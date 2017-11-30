@@ -16,6 +16,17 @@ cd gateway-wifi-setup/
 npm install
 chmod +x run.sh
 
-# and install the systemd service
+# install and enable the systemd service
 cp config/mozilla-gateway-wifi-setup.service /etc/systemd/system/mozilla-gateway-wifi-setup.service
-sudo systemctl enable mozilla-gateway-wifi-setup.service
+systemctl enable mozilla-gateway-wifi-setup.service
+
+# disable hostapd and dnsmasq auto start
+systemctl disable hostapd.service
+systemctl disable dnsmasq.service
+
+# install hostapd and dnsmasq config files 
+cp config/hostapd.conf /etc/hostapd/hostapd.conf
+cp config/dnsmasq.conf /etc/dnsmasq.conf
+sudo sh -c 'cat >> /etc/default/hostapd' << END
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+END
