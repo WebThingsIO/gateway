@@ -35,6 +35,9 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v7.10.1
 nvm use v7.10.1
 
+# Install required root packages
+sudo prepare-base-root.sh
+
 # Install prequisite packages
 sudo apt install libusb-1.0-0-dev libudev-dev certbot -y
 
@@ -62,6 +65,7 @@ RestartSec=10s
 [Install]
 WantedBy=multi-user.target
 END
+sudo systemctl disable mozilla-iot-gateway
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.update-rollback.service' <<END
 [Unit]
