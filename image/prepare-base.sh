@@ -39,7 +39,7 @@ nvm use v7.10.1
 sudo prepare-base-root.sh
 
 # Install prequisite packages
-sudo apt install libusb-1.0-0-dev libudev-dev certbot -y
+sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot -y
 
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
@@ -65,7 +65,6 @@ RestartSec=10s
 [Install]
 WantedBy=multi-user.target
 END
-sudo systemctl disable mozilla-iot-gateway
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.update-rollback.service' <<END
 [Unit]
@@ -112,8 +111,8 @@ OnCalendar=daily
 WantedBy=timers.target
 END
 
-# Enable the gateway service so that it starts up automatically on each boot.
-sudo systemctl enable mozilla-iot-gateway.service
+# Disable the gateway service so that doesn't start up automatically on each boot.
+sudo systemctl disable mozilla-iot-gateway.service
 
 # Check for an update every day.
 sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
