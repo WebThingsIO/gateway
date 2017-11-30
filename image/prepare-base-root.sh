@@ -22,3 +22,4 @@ chmod +x run.sh
 
 # copia o servico para o folder de instalacao com o boot de start e type=oneshot
 cp config/mozilla-gateway-wifi-setup.service /etc/systemd/system/mozilla-gateway-wifi-setup.service
+sudo systemctl enable mozilla-gateway-wifi-setup.service
