@@ -12,11 +12,10 @@
 
 const compression = require('compression');
 const express = require('express');
-const Constants = require('./constants');
-const authMiddleware = require('./jwt-middleware');
-
 const nocache = require('nocache')();
-const auth = authMiddleware();
+const Constants = require('./constants');
+const jwtMiddleware = require('./jwt-middleware');
+const auth = jwtMiddleware.middleware();
 
 /**
  * Router.

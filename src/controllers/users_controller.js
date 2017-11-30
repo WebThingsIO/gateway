@@ -14,7 +14,8 @@ const PromiseRouter = require('express-promise-router');
 const Passwords = require('../passwords');
 const Users = require('../models/users');
 const JSONWebToken = require('../models/jsonwebtoken');
-const auth = require('../jwt-middleware')();
+const jwtMiddleware = require('../jwt-middleware');
+const auth = jwtMiddleware.middleware();
 
 const UsersController = PromiseRouter();
 
@@ -29,16 +30,28 @@ UsersController.get('/count', async (request, response) => {
 });
 
 /**
- * Get a user.
+ * Get info about all users.
  */
 UsersController.get('/info', auth, async (request, response) => {
-  const user = await Users.getUserById(request.jwt.user);
-  // This should never happen if we auth'ed the JWT the user row should
-  // be present barring any bugs/races.
+  const users = await Users.getUsers();
+  const descriptions = users.map(user => {
+    const loggedIn = user.id === request.jwt.user;
+    return Object.assign(user.getDescription(), {loggedIn});
+  });
+  return response.status(200).send(descriptions);
+});
+
+/**
+ * Get a user.
+ */
+UsersController.get('/:userId', auth, async (request, response) => {
+  const user = await Users.getUserById(request.params.userId);
+
   if (!user) {
-    response.sendStatus(500);
+    response.sendStatus(404);
     return;
   }
+
   response.status(200).json(user.getDescription());
 });
 
@@ -53,9 +66,20 @@ UsersController.post('/', async (request, response) => {
     return;
   }
 
+  // If a user has already been created, this path must be authenticated.
   const count = await Users.getCount();
   if (count > 0) {
-    response.status(400).send('Gateway user already created.');
+    const jwt = await jwtMiddleware.authenticate(request);
+    if (!jwt) {
+      response.sendStatus(401);
+      return;
+    }
+  }
+
+  // See if this user already exists.
+  const found = await Users.getUser(body.email);
+  if (found) {
+    response.status(400).send('User already exists.');
     return;
   }
 
@@ -72,7 +96,7 @@ UsersController.post('/', async (request, response) => {
 /**
  * Edit a user
  */
-UsersController.put('/:userId', async (request, response) => {
+UsersController.put('/:userId', auth, async (request, response) => {
   const user = await Users.getUserById(request.params.userId);
 
   if (!user) {
@@ -106,7 +130,7 @@ UsersController.put('/:userId', async (request, response) => {
 /**
  * Delete a user
  */
-UsersController.delete('/:userId', async (request, response) => {
+UsersController.delete('/:userId', auth, async (request, response) => {
   const userId = request.params.userId;
 
   await Users.deleteUser(userId);
