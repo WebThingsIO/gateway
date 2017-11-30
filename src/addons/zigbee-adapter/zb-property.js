@@ -73,22 +73,22 @@ class ZigBeeProperty extends Property {
    * a property value.
    *
    * @param attrEntry - An attribute entry from the zcl-packet library
-   *                    readRsp which will look something like this:
-   * { attrId: 0, status: 0, dataType: 32, attrData: 254 }
+   *    readRsp which will look something like this:
+   *    { attrId: 0, status: 0, dataType: 32, attrData: 254 }
    *
    *    attrId is a 16-bit attribute id.
    *    status is an 8-bit status indicating the success/failure of the read.
    *    dataType is an 8-bit field indicating the type of data.
    *    attrData contains the actual data.
    *
-   * The above fields can be examined symbolically using the zcl-id module:
+   *    The above fields can be examined symbolically using the zcl-id module:
    *    zclId.attr('genLevelCtrl', 0).key == 'currentLevel'
    *    zclId.status(0).key == 'success'
    *    zclId.dataType(32).key == 'uint8'
    *
    * @returns an array containing 2 entries. The first entry is the
-   *          property value, and the second entry is a printable version
-   * suitable for logging.
+   *    property value, and the second entry is a printable version
+   *    suitable for logging.
    */
 
   parseAttrEntry(attrEntry) {
