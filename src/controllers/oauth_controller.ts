@@ -100,7 +100,9 @@ function redirect(response: express.Response, baseURL: URL, params: {[key: strin
     if (!params.hasOwnProperty(key)) {
       continue;
     }
-    url.searchParams.set(key, params[key].toString());
+    if (typeof params[key] !== 'undefined') {
+      url.searchParams.set(key, params[key].toString());
+    }
   }
   response.redirect(url.toString());
 }
