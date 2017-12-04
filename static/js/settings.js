@@ -31,7 +31,7 @@ var SettingsScreen = {
     this.updateSettings = document.getElementById('update-settings');
     this.backButton = document.getElementById('settings-back-button');
 
-    this.installedAddons = [];
+    this.installedAddons = new Set();
   },
 
   show: function(section, subsection) {
@@ -186,7 +186,7 @@ var SettingsScreen = {
       headers: API.headers(),
     };
     fetch('/addons', opts).then((response) => {
-      this.installedAddons = [];
+      this.installedAddons.clear();
       return response.json();
     }).then((body) => {
       if (!body) {
@@ -199,10 +199,10 @@ var SettingsScreen = {
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
-          this.installedAddons.push(settings.name);
-          new InstalledAddon(settings);
+          this.installedAddons.add(settings.name);
+          new InstalledAddon(settings, this.installedAddons);
         } catch (err) {
-          console.log('Failed to parse add-on settings:', s);
+          console.log(`Failed to parse add-on settings: ${err}`);
         }
       }
     });
@@ -231,7 +231,7 @@ var SettingsScreen = {
         addonList.innerHTML = '';
 
         for (const addon of body) {
-          addon.installed = this.installedAddons.includes(addon.name);
+          addon.installed = this.installedAddons.has(addon.name);
           new DiscoveredAddon(addon);
         }
       });

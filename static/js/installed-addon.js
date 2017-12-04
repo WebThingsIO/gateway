@@ -12,13 +12,16 @@
 /**
  * InstalledAddon constructor.
  *
- * @param Object description InstalledAddon metadata object.
+ * @param {Object} metadata InstalledAddon metadata object.
+ * @param {Object} addonsSet Handle to the installedAddons set from
+ *                 SettingsScreen.
  */
-var InstalledAddon = function(metadata) {
+var InstalledAddon = function(metadata, addonsSet) {
   this.name = metadata.name;
   this.description = metadata.description;
   this.enabled = metadata.moziot.enabled;
   this.container = document.getElementById('installed-addons-list');
+  this.addonsSet = addonsSet;
   this.render();
 };
 
@@ -36,12 +39,16 @@ InstalledAddon.prototype.view = function() {
   }
 
   return `
-    <li class="addon-item">
+    <li id="addon-item-${this.name}" class="addon-item">
       <div class="addon-settings-header">
         <span class="addon-settings-name">${this.name}</span>
         <span class="addon-settings-description">${this.description}</span>
       </div>
       <div class="addon-settings-controls">
+        <button id="addon-remove-${this.name}"
+          class="text-button addon-settings-remove">
+          Remove
+        </button>
         <button id="addon-toggle-${this.name}"
           class="text-button ${buttonClass}">
           ${buttonText}
@@ -56,8 +63,26 @@ InstalledAddon.prototype.view = function() {
 InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
-  const button = document.getElementById(`addon-toggle-${this.name}`);
-  button.addEventListener('click', this.handleToggle.bind(this));
+  const removeButton = document.getElementById(`addon-remove-${this.name}`);
+  removeButton.addEventListener('click', this.handleRemove.bind(this));
+
+  const toggleButton = document.getElementById(`addon-toggle-${this.name}`);
+  toggleButton.addEventListener('click', this.handleToggle.bind(this));
+}
+
+/**
+ * Handle a click on the remove button.
+ */
+InstalledAddon.prototype.handleRemove = function() {
+  window.API.uninstallAddon(this.name)
+    .then(() => {
+      const el = document.getElementById(`addon-item-${this.name}`);
+      el.parentNode.removeChild(el);
+      this.addonsSet.delete(this.name);
+    })
+    .catch((e) => {
+      console.error(`Failed to uninstall add-on: ${this.name}\n${e}`);
+    });
 }
 
 /**

@@ -18,6 +18,7 @@ var DiscoveredAddon = function(metadata) {
   this.name = metadata.name;
   this.displayName = metadata.display_name;
   this.description = metadata.description;
+  this.url = metadata.url;
   this.installed = metadata.installed;
   this.container = document.getElementById('discovered-addons-list');
   this.render();
@@ -65,5 +66,21 @@ DiscoveredAddon.prototype.render = function() {
 /**
  * Handle a click on the install button.
  */
-DiscoveredAddon.prototype.handleInstall = function() {
+DiscoveredAddon.prototype.handleInstall = function(e) {
+  const controlDiv = e.target.parentNode;
+  const installing =
+    '<span class="addon-discovery-settings-installing">Installing...</span>';
+  controlDiv.innerHTML = installing;
+
+  window.API.installAddon(this.name, this.url)
+    .then(() => {
+      const el = '<span class="addon-discovery-settings-added">Added</span>';
+      controlDiv.innerHTML = el;
+    })
+    .catch((err) => {
+      console.error(`Failed to install add-on: ${this.name}\n${err}`);
+      const el =
+        '<span class="addon-discovery-settings-install-failed">Failed</span>';
+      controlDiv.innerHTML = el;
+    });
 };
