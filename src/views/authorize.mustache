@@ -12,6 +12,9 @@
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/authorize.css" />
+
+    <script type="text/javascript" src="/js/api.js"></script>
+    <script type="text/javascript" src="/js/check-user.js"></script>
   </head>
   <body>
     <img id="wordmark" src="../images/moziot-wordmark.png" alt="Mozilla IoT"/>
@@ -31,15 +34,15 @@
         <input name="scope" value="{{request.scope}}" type="hidden">
         <input name="state" value="{{request.state}}" type="hidden">
         <input id="jwt" name="jwt" value="" type="hidden">
-        <input id="authorize-button" type="submit" value="Allow" class="text-button">
+        <input id="authorize-button" type="submit" value="Allow" class="text-button" disabled>
         <a id="cancel-button" href="/" class="text-button">Deny</a>
       </form>
     </section>
 
-    <script type="text/javascript" src="/js/api.js"></script>
     <script type="text/javascript">
       let jwt = document.getElementById('jwt');
       jwt.value = window.API.jwt;
+      document.getElementById('authorize-button').removeAttribute('disabled');
     </script>
   </body>
 </html>
