@@ -29,7 +29,6 @@ class Engine {
           this.rules[ruleId] = Rule.fromDescription(ruleDescs[ruleId]);
           await this.rules[ruleId].start();
         }
-        console.log('loaded rules', this.rules);
         return this.rules;
       });
     }
