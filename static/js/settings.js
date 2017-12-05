@@ -446,8 +446,15 @@ var SettingsScreen = {
       headers: API.headers(),
       method: 'DELETE'
     }).then(() => {
-      let authorization = revoke.parentNode;
-      authorization.parentNode.removeChild(authorization);
+      const authorization = revoke.parentNode;
+      const authorizationsList = authorization.parentNode;
+      authorizationsList.removeChild(authorization);
+
+      if (authorizationsList.children.length === 0) {
+        const noAuthorizations = document.getElementById('no-authorizations');
+        noAuthorizations.classList.remove('hidden');
+        authorizationsList.classList.add('hidden');
+      }
     }).catch(err => {
       console.warn('Unable to revoke', err);
     });
