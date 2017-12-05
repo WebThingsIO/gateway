@@ -12,7 +12,7 @@
 
 const Database = require('../db');
 
-const DEBUG = false;
+const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 const Settings = {
 

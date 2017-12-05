@@ -26,7 +26,7 @@ const TABLES = [
   'settings',
 ];
 
-const DEBUG = false;
+const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 var Database = {
   /**
