@@ -14,7 +14,7 @@ const Settings = require('./models/settings');
 const fetch = require('node-fetch');
 const spawnSync = require('child_process').spawn;
 
-const DEBUG = false;
+const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 var TunnelService = {
 
