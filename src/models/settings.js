@@ -12,6 +12,8 @@
 
 const Database = require('../db');
 
+const DEBUG = false;
+
 const Settings = {
 
   /**
@@ -34,7 +36,9 @@ const Settings = {
    */
   set: function(key, value) {
     return Database.setSetting(key, value).then(function() {
-      console.log('Set ' + key + ' to ' + value);
+      if (DEBUG) {
+        console.log('Set ' + key + ' to ' + value);
+      }
       return value;
     }).catch(function(e) {
       console.error('Failed to set ' + key + ' to ' + value);

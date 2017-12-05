@@ -26,6 +26,8 @@ const TABLES = [
   'settings',
 ];
 
+const DEBUG = false;
+
 var Database = {
   /**
    * SQLite3 Database object.
@@ -155,7 +157,7 @@ var Database = {
           if (error) {
             console.error('Failed to insert setting ' +
                           setting[0]);
-          } else {
+          } else if (DEBUG) {
             console.log('Saved setting ' + setting[0] + ' = ' +
                         setting[1]);
           }
@@ -302,7 +304,9 @@ var Database = {
    */
   getSetting: async function(key) {
     const res = await this.get('SELECT value FROM settings WHERE key=?', key);
-    console.log('getSetting', res);
+    if (DEBUG) {
+      console.log('getSetting', key, res);
+    }
 
     if (!res) {
       return;

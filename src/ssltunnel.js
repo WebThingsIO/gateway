@@ -12,7 +12,9 @@ const fs = require('fs');
 const config = require('config');
 const Settings = require('./models/settings');
 const fetch = require('node-fetch');
-var spawnSync = require('child_process').spawn;
+const spawnSync = require('child_process').spawn;
+
+const DEBUG = false;
 
 var TunnelService = {
 
@@ -39,7 +41,9 @@ var TunnelService = {
                 // TODO: we should replace the hardcoded secret by the token
                 // after change the server
                 this.pagekiteProcess.stdout.on('data', (data) => {
-                    console.log(`[pagekite] stdout: ${data}`);
+                    if (DEBUG) {
+                        console.log(`[pagekite] stdout: ${data}`);
+                    }
                     if (response) {
                         if (data.indexOf('err=Error in connect') > -1) {
                             response.status(400).end();
