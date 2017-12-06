@@ -15,18 +15,16 @@ const Property = require('../property');
 
 class PropertyProxy extends Property {
   constructor(device, propertyName, propertyDict) {
-    super(device, propertyName, propertyDict.type);
-
-    if (propertyDict.description) {
-      this.description = propertyDict.description;
-    }
-    if (propertyDict.unit) {
-      this.description = propertyDict.unit;
-    }
+    super(device, propertyName, propertyDict);
 
     this.value = propertyDict.value;
 
     this.propertyChangedPromises = [];
+    this.propertyDict = {};
+  }
+
+  asDict() {
+    return Object.assign({}, this.propertyDict, super.asDict());
   }
 
   /**
@@ -45,11 +43,12 @@ class PropertyProxy extends Property {
    * Called whenever a property changed notification is received
    * from the adapter.
    */
-  doPropertyChanged(value) {
-    this.setCachedValue(value);
+  doPropertyChanged(propertyDict) {
+    this.propertyDict = Object.assign({}, propertyDict);
+    this.setCachedValue(propertyDict.value);
     while (this.propertyChangedPromises.length > 0) {
       var deferredChange = this.propertyChangedPromises.pop();
-      deferredChange.resolve(value);
+      deferredChange.resolve(propertyDict.value);
     }
   }
 

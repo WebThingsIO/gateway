@@ -96,6 +96,10 @@ class Device {
     });
   }
 
+  hasProperty(propertyName) {
+    return this.properties.has(propertyName);
+  }
+
   notifyPropertyChanged(property) {
     this.adapter.manager.emit(Constants.PROPERTY_CHANGED, property);
   }

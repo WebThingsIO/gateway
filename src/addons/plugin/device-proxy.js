@@ -27,7 +27,21 @@ class DeviceProxy extends Device {
       this.properties.set(propertyName, propertyProxy);
     }
 
+    // Copy over any extra device fields which might be useful for debugging.
+    this.deviceDict = {};
+    for (let field in deviceDict) {
+      if (['id', 'name', 'type', 'properties', 'actions', 'events']
+            .includes(field)) {
+        continue;
+      }
+      this.deviceDict[field] = deviceDict[field];
+    }
+
     //TODO: Add support for actions once we know what they look like.
+  }
+
+  asDict() {
+    return Object.assign({}, this.deviceDict, super.asDict());
   }
 }
 

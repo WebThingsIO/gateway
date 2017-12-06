@@ -10,6 +10,8 @@
 
 const path = require('path');
 
+exports.DONT_RESTART_EXIT_CODE = 100;
+
 exports.USERS_PATH = '/users';
 exports.THINGS_PATH = '/things';
 exports.PROPERTIES_PATH = '/properties';

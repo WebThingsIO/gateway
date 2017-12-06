@@ -77,7 +77,7 @@ ac.WRITE_PARAMETERS = 'WR';
 ac[ac.WRITE_PARAMETERS] = 'Write Parameters (WR)';
 
 ac.ZIGBEE_STACK_PROFILE = 'ZS';
-ac[ac.ZIGBEE_STACK_PROFILE] = 'ZigBee Stack Profile (ZS)';
+ac[ac.ZIGBEE_STACK_PROFILE] = 'Zigbee Stack Profile (ZS)';
 
 var atBuilder = module.exports.atBuilder = {};
 var atParser = module.exports.atParser = {};

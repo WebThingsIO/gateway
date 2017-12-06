@@ -127,11 +127,11 @@ class ZWaveNode extends Device {
     if (zwValue.genre === 'user' || DEBUG) {
       if (property) {
         property.value = zwValue.value;
-        console.log('ZWave: node%d valueAdded: %d:%s -> %s property: %s',
+        console.log('node%d valueAdded: %d:%s -> %s property: %s',
                     this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
                     property.name);
       } else {
-        console.log('ZWave: node%d valueAdded: %d:%s -> %s',
+        console.log('node%d valueAdded: %d:%s -> %s',
                     this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
       }
     }
@@ -149,12 +149,12 @@ class ZWaveNode extends Device {
     var property = this.findPropertyFromValueId(zwValue.value_id);
     if (property) {
       property.setCachedValue(zwValue.value);
-      console.log('ZWave: node%d valueChanged: %d:%s = %s -> property: %s = %s',
+      console.log('node%d valueChanged: %d:%s = %s -> property: %s = %s',
                   this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
                   property.name, property.value);
       this.notifyPropertyChanged(property);
     } else {
-      console.log('ZWave: node%d valueChanged: %d:%s = %s',
+      console.log('node%d valueChanged: %d:%s = %s',
                   this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
     }
   }
@@ -170,15 +170,15 @@ class ZWaveNode extends Device {
       if (property) {
         delete property.valueId;
         delete property.value;
-        console.log('ZWave: node%d valueRemoved: %d:%s -> %s property: %s',
+        console.log('node%d valueRemoved: %d:%s -> %s property: %s',
                     this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
                     property.name);
       } else {
-        console.log('ZWave: node%d valueRemoved: %d:%s -> %s',
+        console.log('node%d valueRemoved: %d:%s -> %s',
                     this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
       }
     } else {
-      console.log('ZWave: zwValueRemoved unknown valueId:', valueId);
+      console.log('zwValueRemoved unknown valueId:', valueId);
     }
   }
 }

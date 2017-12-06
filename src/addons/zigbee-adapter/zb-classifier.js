@@ -1,6 +1,6 @@
 /**
  *
- * ZigBeeClassifier - Determines properties from ZigBee clusters.
+ * ZigbeeClassifier - Determines properties from Zigbee clusters.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,20 +10,71 @@
 
 'use strict';
 
-var zclId = require('zcl-id');
-var utils = require('../utils');
-var ZigBeeProperty = require('./zb-property');
+const zclId = require('zcl-id');
+const utils = require('../utils');
+const ZigbeeProperty = require('./zb-property');
 
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);
 const CLUSTER_ID_GENONOFF = zclId.cluster('genOnOff').value;
 const CLUSTER_ID_GENONOFF_HEX = utils.hexStr(CLUSTER_ID_GENONOFF, 4);
+const CLUSTER_ID_GENLEVELCTRL = zclId.cluster('genLevelCtrl').value;
+const CLUSTER_ID_GENLEVELCTRL_HEX = utils.hexStr(CLUSTER_ID_GENLEVELCTRL, 4);
 
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
+const THING_TYPE_MULTI_LEVEL_SWITCH = 'multiLevelSwitch';
 
-class ZigBeeClassifier {
+class ZigbeeClassifier {
 
   constructor() {
+  }
+
+  addLevelProperty(node, endpoint) {
+    this.addProperty(
+      node,                           // device
+      'level',                        // name
+      {                               // property description
+        type: 'number',
+        unit: '%',
+        min: 0,
+        max: 100,
+      },
+      ZHA_PROFILE_ID,                 // profileId
+      endpoint,                       // endpoint
+      CLUSTER_ID_GENLEVELCTRL,        // clusterId
+      'currentLevel',                 // attr
+      'setLevelValue',                // setAttrFromValue
+      'parseLevelAttr'                // parseValueFromAttr
+    );
+  }
+
+  addOnProperty(node, endpoint) {
+    this.addProperty(
+      node,                           // device
+      'on',                           // name
+      {                               // property description
+        type: 'boolean',
+      },
+      ZHA_PROFILE_ID,                 // profileId
+      endpoint,                       // endpoint
+      CLUSTER_ID_GENONOFF,            // clusterId
+      'onOff',                        // attr
+      'setOnOffValue',                // setAttrFromValue
+      'parseOnOffAttr'                // parseValueFromAttr
+    );
+  }
+
+  addProperty(node, name, descr, profileId, endpoint, clusterId,
+              attr, setAttrFromValue, parseValueFromAttr) {
+    let property =  new ZigbeeProperty(node, name, descr, profileId,
+                                       endpoint, clusterId, attr,
+                                       setAttrFromValue, parseValueFromAttr);
+    node.properties.set(name, property);
+    node.sendFrames([
+      node.makeBindFrame(property),
+      node.makeConfigReportFrame(property),
+      node.makeReadAttributeFrame(property),
+    ]);
   }
 
   findZhaEndpointWithInputClusterIdHex(node, clusterIdHex) {
@@ -37,16 +88,36 @@ class ZigBeeClassifier {
     }
   }
 
-  classify(node) {
-    if (!node.isCoordinator) {
-      var endpointNum;
-      endpointNum =
-        this.findZhaEndpointWithInputClusterIdHex(node,
-                                                  CLUSTER_ID_GENONOFF_HEX);
-      if (endpointNum) {
-        this.initOnOffSwitch(node, endpointNum);
-      }
+  // internal function allows us to use early returns.
+  classifyInternal(node) {
+    let endpoint;
+
+    endpoint =
+      this.findZhaEndpointWithInputClusterIdHex(node,
+                                                CLUSTER_ID_GENLEVELCTRL_HEX);
+    if (endpoint) {
+      this.initMultiLevelSwitch(node, endpoint);
+      return;
     }
+
+    endpoint =
+      this.findZhaEndpointWithInputClusterIdHex(node,
+                                                CLUSTER_ID_GENONOFF_HEX);
+    if (endpoint) {
+      this.initOnOffSwitch(node, endpoint);
+      return;
+    }
+  }
+
+  classify(node) {
+    if (node.isCoordinator) {
+      return;
+    }
+
+    this.classifyInternal(node);
+
+    // Now that we know the type, set the default name.
+    node.defaultName = node.id + '-' + node.type;
     if (!node.name) {
       node.name = node.defaultName;
     }
@@ -54,25 +125,14 @@ class ZigBeeClassifier {
 
   initOnOffSwitch(node, endpointNum) {
     node.type = THING_TYPE_ON_OFF_SWITCH;
-    var property = new ZigBeeProperty(
-      node,                           // device
-      'on',                           // name
-      'boolean',                      // type
-      ZHA_PROFILE_ID,                 // profileId
-      endpointNum,                    // endpoint
-      CLUSTER_ID_GENONOFF,            // clusterId
-      { true: 'on', false: 'off' },   // cmd
-      'onOff'                         // attr
-    );
+    this.addOnProperty(node, endpointNum);
+  }
 
-    node.properties.set('on', property);
-    node.defaultName = node.id + '-' + node.type;
-    node.sendFrames([
-      node.makeBindFrame(property),
-      node.makeConfigReportFrame(property),
-      node.makeReadAttributeFrame(property)
-    ]);
+  initMultiLevelSwitch(node, endpointNum) {
+    node.type = THING_TYPE_MULTI_LEVEL_SWITCH;
+    this.addOnProperty(node, endpointNum);
+    this.addLevelProperty(node, endpointNum);
   }
 }
 
-module.exports = new ZigBeeClassifier();
+module.exports = new ZigbeeClassifier();

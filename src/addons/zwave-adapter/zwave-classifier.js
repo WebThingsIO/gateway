@@ -10,7 +10,7 @@
 
 'use strict';
 
-var ZWaveProperty = require('./zwave-property');
+const ZWaveProperty = require('./zwave-property');
 
 // See; http://wiki.micasaverde.com/index.php/ZWave_Command_Classes for a
 // complete list of command classes.
@@ -26,35 +26,49 @@ const THING_TYPE_BINARY_SENSOR = 'binarySensor';
 
 class ZWaveClassifier {
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    classify(node) {
-        for (var valueId in node.zwValues) {
-            var value = node.zwValues[valueId];
+  classify(node) {
+    for (var valueId in node.zwValues) {
+      var value = node.zwValues[valueId];
 
-            if (value.class_id == COMMAND_CLASS_SWITCH_BINARY) {
-                // This looks like an on/off switch
-                this.initOnOffSwitch(node, valueId);
-                return;
-            } else if (value.class_id == COMMAND_CLASS_SENSOR_BINARY) {
-                this.initBinarySensor(node, valueId);
-                return;
-            }
-        }
+      if (value.class_id == COMMAND_CLASS_SWITCH_BINARY) {
+        // This looks like an on/off switch
+        this.initOnOffSwitch(node, valueId);
+        return;
+      } else if (value.class_id == COMMAND_CLASS_SENSOR_BINARY) {
+        this.initBinarySensor(node, valueId);
+        return;
+      }
     }
+  }
 
-    initOnOffSwitch(node, valueId) {
-        node.type = THING_TYPE_ON_OFF_SWITCH;
-        node.properties.set('on',
-                            new ZWaveProperty(node, 'on', 'boolean', valueId));
-    }
+  initOnOffSwitch(node, valueId) {
+    node.type = THING_TYPE_ON_OFF_SWITCH;
+    node.properties.set('on',
+                        new ZWaveProperty(
+                          node,               // device
+                          'on',               // name
+                          {                   // property decscription
+                            type: 'boolean'
+                          },
+                          valueId             // valueId
+                        ));
+  }
 
-    initBinarySensor(node, valueId) {
-        node.type = THING_TYPE_BINARY_SENSOR;
-        node.properties.set('triggered',
-                            new ZWaveProperty(node, 'on', 'boolean', valueId));
-    }
+  initBinarySensor(node, valueId) {
+    node.type = THING_TYPE_BINARY_SENSOR;
+    node.properties.set('triggered',
+                        new ZWaveProperty(
+                          node,               // device
+                          'on',               // name
+                          {                   // property description
+                            type: 'boolean'
+                          },
+                          valueId             // valueId
+                        ));
+  }
 }
 
 module.exports = new ZWaveClassifier();
