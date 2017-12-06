@@ -75,7 +75,7 @@ class ZigbeeClassifier {
     node.sendFrames([
       node.makeBindFrame(property),
       node.makeConfigReportFrame(property),
-      node.makeReadAttributeFrame(property),
+      node.makeReadAttributeFrameForProperty(property),
     ]);
   }
 

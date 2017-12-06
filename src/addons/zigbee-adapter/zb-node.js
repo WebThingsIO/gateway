@@ -18,6 +18,8 @@ var zdo = require('./zb-zdo');
 
 var C = xbeeApi.constants;
 
+const SKIP_DISCOVER_READ_CLUSTERS = ['haDiagnostic'];
+
 class ZigbeeNode extends Device {
 
   constructor(adapter, id64, id16) {
@@ -71,19 +73,23 @@ class ZigbeeNode extends Device {
     return dict;
   }
 
-  getAttrEntryFromFrame(frame, property) {
-    var attr = zclId.attr(property.clusterId, property.attr).value;
+  getAttrEntryFromFrame(frame, attrId) {
     if (frame.zcl && Array.isArray(frame.zcl.payload)) {
       for (var attrEntry of frame.zcl.payload) {
-        if (attrEntry.attrId == attr) {
+        if (attrEntry.attrId == attrId) {
           return attrEntry;
         }
       }
     }
   }
 
+  getAttrEntryFromFrameForProperty(frame, property) {
+    let attrId = zclId.attr(property.clusterId, property.attr).value;
+    return this.getAttrEntryFromFrame(frame, attrId);
+  }
+
   frameHasAttr(frame, property) {
-    var attrEntry = this.getAttrEntryFromFrame(frame, property);
+    var attrEntry = this.getAttrEntryFromFrameForProperty(frame, property);
     return !!attrEntry;
   }
 
@@ -105,37 +111,77 @@ class ZigbeeNode extends Device {
 
   handleDiscoverRsp(frame) {
     let payload = frame.zcl.payload;
-    let maxAttrId = 0;
-    for (let attrInfo of payload.attrInfos) {
-      maxAttrId = Math.max(maxAttrId, attrInfo.attrId);
-      let clusterId = parseInt(frame.clusterId, 16);
-      let attr = zclId.attr(clusterId, attrInfo.attrId);
-      let attrStr = attr ? attr.key : 'unknown';
-      let dataType = zclId.dataType(attrInfo.dataType);
-      let dataTypeStr = dataType ? dataType.key : 'unknown';
-      console.log('      AttrId:', attrStr + ' (' + attrInfo.attrId + ')',
-                  'dataType:', dataTypeStr + ' (' + attrInfo.dataType + ')');
-    }
-
-    if (frame.zcl.payload.discComplete == 0) {
+    if (payload.discComplete == 0) {
       // More attributes are available
       let discoverFrame =
         this.makeDiscoverAttributesFrame(
           frame.sourceEndpoint,
           frame.profileId,
           frame.clusterId,
-          maxAttrId + 1);
+          payload.attrInfos.slice(-1)[0].attrId + 1
+        );
         this.adapter.sendFrameWaitFrameAtFront(discoverFrame, {
-          type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
-          id: discoverFrame.id,
+          type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+          zclCmdId: 'discoverRsp',
+          zclSeqNum: discoverFrame.id
         });
+    }
+
+    let clusterId = parseInt(frame.clusterId, 16);
+    let clusterIdStr =  zclId.cluster(clusterId).key;
+    let attrInfo;
+    if (SKIP_DISCOVER_READ_CLUSTERS.includes(clusterIdStr)) {
+      // This is a cluster which dosen't seem to respond to read requests.
+      // Just print the attributes.
+      for (attrInfo of payload.attrInfos) {
+        let attr = zclId.attr(clusterId, attrInfo.attrId);
+        let attrStr = attr ? attr.key : 'unknown';
+        let dataType = zclId.dataType(attrInfo.dataType);
+        let dataTypeStr = dataType ? dataType.key : 'unknown';
+        console.log('      AttrId:', attrStr + ' (' + attrInfo.attrId + ')',
+                    'dataType:', dataTypeStr + ' (' + attrInfo.dataType + ')');
+      }
+      return;
+    }
+
+    // Read the values of all of the attributes. We put this after
+    // asking for the next frame, since the read requests go at the
+    // front of the queue.
+
+    for (attrInfo of payload.attrInfos.reverse()) {
+      let readFrame = this.makeReadAttributeFrame(
+        frame.sourceEndpoint,
+        frame.profileId,
+        clusterId,
+        attrInfo.attrId
+      );
+      this.adapter.sendFrameWaitFrameAtFront(readFrame, {
+        type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+        zclCmdId: 'readRsp',
+        zclSeqNum: readFrame.id
+      });
     }
   }
 
   handleReadRsp(frame) {
-    var property = this.findPropertyFromFrame(frame);
+    if (this.adapter.discoveringAttributes && frame.zcl.cmdId === 'readRsp') {
+      let clusterId = parseInt(frame.clusterId, 16);
+      for (let attrEntry of frame.zcl.payload) {
+        let attr = zclId.attr(clusterId, attrEntry.attrId);
+        let attrStr = attr ? attr.key : 'unknown';
+        let dataType = zclId.dataType(attrEntry.dataType);
+        let dataTypeStr = dataType ? dataType.key : 'unknown';
+        console.log('      AttrId:', attrStr + ' (' + attrEntry.attrId + ')',
+                    'dataType:', dataTypeStr + ' (' + attrEntry.dataType + ')',
+                    'data:', attrEntry.attrData);
+      }
+      return;
+    }
+
+    let property = this.findPropertyFromFrame(frame);
     if (property) {
-      var attrEntry = this.getAttrEntryFromFrame(frame, property);
+      //console.log('ReadRsp found property');
+      let attrEntry = this.getAttrEntryFromFrameForProperty(frame, property);
       let [value, logValue] = property.parseAttrEntry(attrEntry);
       property.setCachedValue(value);
       console.log(this.name,
@@ -217,19 +263,22 @@ class ZigbeeNode extends Device {
     return frame;
   }
 
-  makeReadAttributeFrame(property) {
-    var clusterId = property.clusterId;
-    var attr = property.attr;
-    var frame = this.makeZclFrameForProperty(
-      property,
+  makeReadAttributeFrame(endpoint, profileId, clusterId, attrId) {
+    var frame = this.makeZclFrame(
+      endpoint, profileId, clusterId,
       {
         cmd: 'read',
-        payload: [{ direction: 0,
-                    attrId: zclId.attr(clusterId, attr).value,
-                 }],
+        payload: [{ direction: 0, attrId: attrId }],
       }
     );
     return frame;
+  }
+
+  makeReadAttributeFrameForProperty(property) {
+    return this.makeReadAttributeFrame(property.endpoint,
+                                       property.profileId,
+                                       property.clusterId,
+                                       property.attrId);
   }
 
   makeReadReportConfigFrame(property) {

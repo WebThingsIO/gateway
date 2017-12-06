@@ -10,9 +10,10 @@
 
 'use strict';
 
-var Deferred = require('../deferred');
-var Property = require('../property');
-var utils = require('../utils');
+const Deferred = require('../deferred');
+const Property = require('../property');
+const utils = require('../utils');
+const zclId = require('zcl-id');
 
 /**
  * @function levelToPercent
@@ -51,6 +52,7 @@ class ZigbeeProperty extends Property {
     this.setAttrFromValue = Object.getPrototypeOf(this)[setAttrFromValue];
     this.parseValueFromAttr = Object.getPrototypeOf(this)[parseValueFromAttr];
     this.attr = attr;
+    this.attrId = zclId.attr(clusterId, attr).value;
   }
 
   asDict() {
