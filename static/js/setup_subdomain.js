@@ -39,7 +39,7 @@ function displayMessage(errorMsg, type){
 function validateDomain() {
   const val = subdomain.value.toLowerCase();
   const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
-  if (!re.test(val) || ['api', 'www'].includes(val)) {
+  if (!re.test(val) || ['api', 'www'].includes(val) || val.length > 63) {
     return false;
   }
 
@@ -53,7 +53,7 @@ function validateEmail() {
   const val = email.value;
   // eslint-disable-next-line max-len
   const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
-  return re.test(val);
+  return re.test(val) && val.length <= 254;
 }
 
 /**
