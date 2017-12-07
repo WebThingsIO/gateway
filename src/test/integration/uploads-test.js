@@ -20,7 +20,7 @@ describe('uploads/', function() {
     jwt = await createUser(server, TEST_USER);
   });
 
-  it('Upload a file', async() => {
+  it('Upload a file', async () => {
     const res = await chai.request(server)
       .post(Constants.UPLOADS_PATH)
       .set(...headerAuth(jwt))

@@ -24,16 +24,25 @@ describe('settings/', function() {
 
   it('Fail to get a setting that hasnt been set', async () => {
     const err = await pFinal(chai.request(server)
-      .get(Constants.SETTINGS_PATH + '/experiments/foo')
+      .get(`${Constants.SETTINGS_PATH}/experiments/foo`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
 
     expect(err.response.status).toEqual(404);
   });
 
-  it('Set a setting', async() => {
+  it('Fail to set a setting when missing data', async () => {
+    const err = await pFinal(chai.request(server)
+      .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send());
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('Set a setting', async () => {
     const res = await chai.request(server)
-      .put(Constants.SETTINGS_PATH + '/experiments/bar')
+      .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': true});
@@ -45,7 +54,7 @@ describe('settings/', function() {
 
   it('Get a setting', async () => {
     const putRes = await chai.request(server)
-      .put(Constants.SETTINGS_PATH + '/experiments/bar')
+      .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({'enabled': true});
@@ -55,7 +64,7 @@ describe('settings/', function() {
     expect(putRes.body.enabled).toEqual(true);
 
     const res = await chai.request(server)
-      .get(Constants.SETTINGS_PATH + '/experiments/bar')
+      .get(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 

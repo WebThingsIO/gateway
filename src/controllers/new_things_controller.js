@@ -1,7 +1,7 @@
 /**
  * New Things Controller.
  *
- * /new_things returns a list of Things connected/paried with the gateway which
+ * /new_things returns a list of Things connected/paired with the gateway which
  * haven't yet been added to the gateway database.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
