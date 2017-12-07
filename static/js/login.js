@@ -24,7 +24,14 @@
     window.API.login(emailValue, passwordValue).
       then(() => {
         console.log('~~~ log in success ~~~');
-        window.location.href = '/';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let url = '/';
+        if (urlParams.has('url')) {
+          url = decodeURIComponent(urlParams.get('url'));
+        }
+
+        window.location.href = url;
       }).
       catch((err) => {
         errorSubmission.classList.remove('hidden');
