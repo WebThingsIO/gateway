@@ -22,10 +22,11 @@
     window.API.userCount().then((count) => {
       let url;
       if (count > 0) {
-        url = '/login';
+        url = `/login?url=${encodeURIComponent(window.location.pathname)}`;
       } else {
         url = '/signup';
       }
+
       window.location.href = url;
     });
   }
