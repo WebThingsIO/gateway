@@ -3860,6 +3860,10 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+nocache@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/nocache/-/nocache-2.0.0.tgz#202b48021a0c4cbde2df80de15a17443c8b43980"
+
 nock@^9.0.18:
   version "9.0.18"
   resolved "https://registry.yarnpkg.com/nock/-/nock-9.0.18.tgz#814b6af376b8399d1bbcbaa17f1a458c653a719b"
