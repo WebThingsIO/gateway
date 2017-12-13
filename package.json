@@ -40,6 +40,7 @@
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
     "mustache-express": "^1.2.5",
     "nanomsg": "^3.3.0",
+    "nocache": "^2.0.0",
     "node-fetch": "^1.7.1",
     "node-getopt": "^0.2.3",
     "onoff": "^1.1.2",
