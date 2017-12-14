@@ -695,6 +695,7 @@ class AddonManager extends EventEmitter {
       // Clean up if loading failed
       cleanup();
 
+      console.error(e);
       const err = `Failed to load add-on: ${packageName}\n${e}`;
       console.error(err);
       return Promise.reject(err);
