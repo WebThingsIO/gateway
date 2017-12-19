@@ -47,7 +47,7 @@ cd gateway
 npm --arch=${ARCH} install
 
 # Create a tarball with all of the node modules
-tar czf ${NODE_MODULES_TAR_GZ}  node_modules
+tar czf ${NODE_MODULES_TARBALL}  node_modules
 
 # And one with OpenZWave
 tar czf ${OPENZWAVE_TARBALL} -C ${SYSROOT} usr/local/include/openzwave usr/local/lib
