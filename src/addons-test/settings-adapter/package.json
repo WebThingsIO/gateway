@@ -18,6 +18,10 @@
   "bugs": {
     "url": "https://github.com/mozilla-iot/gateway/issues"
   },
+  "files": [
+    "index.js",
+    "settings-adapter.js"
+  ],
   "moziot": {
     "api": {
       "min": 1,

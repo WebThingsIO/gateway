@@ -18,6 +18,14 @@
   "bugs": {
     "url": "https://github.com/mozilla-iot/gateway/issues"
   },
+  "files": [
+    "index.js",
+    "package.json",
+    "zwave-adapter.js",
+    "zwave-classifier.js",
+    "zwave-node.js",
+    "zwave-property.js"
+  ],
   "moziot": {
     "api": {
       "min": 1,

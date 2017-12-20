@@ -22,6 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const tar = require('tar');
+const crypto = require('crypto');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -346,6 +347,28 @@ class AddonManager extends EventEmitter {
     }
   }
 
+  hashFile(fname) {
+    const hash = crypto.createHash('sha256');
+
+    try {
+      const fd = fs.openSync(fname, 'r');
+      const buffer = new Uint8Array(4096);
+
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const bytes = fs.readSync(fd, buffer, 0, 4096);
+        if (bytes <= 0) {
+          break;
+        }
+        hash.update(buffer.slice(0, bytes));
+      }
+    } catch (e) {
+      return null;
+    }
+
+    return hash.digest('hex');
+  }
+
   /**
    * @method loadAddon
    *
@@ -386,6 +409,57 @@ class AddonManager extends EventEmitter {
         `Failed to parse package.json for package: ${packageName}\n${e}`;
       console.error(err);
       return Promise.reject(err);
+    }
+
+    // Verify the files list in the package.
+    if (!manifest.hasOwnProperty('files') || manifest.files.length === 0) {
+      const err = `files property missing for package ${manifest.name}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    for (let fname of manifest.files) {
+      fname = path.join(addonPath, fname);
+      if (!fs.existsSync(fname)) {
+        const err = `Package ${manifest.name} missing file: ${fname}`;
+        console.error(err);
+        return Promise.reject(err);
+      }
+    }
+
+    // If a SHA256SUMS file is present, verify it. This file is of the format:
+    // <checksum> <filename>
+    //
+    // To generate a file of this type, you can use:
+    //   `rm -f SHA256SUMS && sha256sum file1 file2 ... > SHA256SUMS`
+    // To verify, use:
+    //   `sha256sum --check SHA256SUMS`
+    const sumsFile = path.join(addonPath, 'SHA256SUMS');
+    if (fs.existsSync(sumsFile)) {
+      try {
+        const data = fs.readFileSync(sumsFile);
+        const lines = data.split(/\r?\n/);
+        for (const line of lines) {
+          const parts = line.split(/\s+/);
+          if (parts.length !== 2) {
+            const err = `Invalid checksum in package ${manifest.name}`;
+            console.error(err);
+            return Promise.reject(err);
+          }
+
+          if (this.hashFile(path.join(addonPath, parts[1]) !== parts[0])) {
+            const err =
+              `Checksum failed in package ${manifest.name}: ${parts[1]}`;
+            console.error(err);
+            return Promise.reject(err);
+          }
+        }
+      } catch (e) {
+        const err =
+          `Failed to read SHA256SUMS for package ${manifest.name}: ${e}`;
+        console.error(err);
+        return Promise.reject(err);
+      }
     }
 
     // Verify API version.
