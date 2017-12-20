@@ -123,7 +123,7 @@ AddonsController.post('/', async (request, response) => {
     await AddonManager.installAddon(name, destPath);
     response.sendStatus(200);
   } catch (e) {
-    console.error(`Failed to install add-on: ${name}\n${e}`);
+    console.error(e);
     response.status(400).send(e);
   }
 

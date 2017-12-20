@@ -9,22 +9,62 @@ const {
   createUser,
   headerAuth,
 } = require('../user');
-const Constants = require('../../constants');
+
 const AddonManager = require('../../addon-manager');
-const pFinal = require('../promise-final');
-const fetch = require('node-fetch');
 const config = require('config');
+const Constants = require('../../constants');
+const fetch = require('node-fetch');
+const jsonfile = require('jsonfile');
+const path = require('path');
+const pFinal = require('../promise-final');
+
+const testManifestFilename = path.join(__dirname, '../..',
+                                       config.get('addonManager.path'),
+                                       'test-adapter', 'package.json');
+
+const testManifest = {
+  name: 'test-adapter',
+  moziot: {
+    api: {
+      min: 1,
+      max: 1
+    },
+    enabled: true,
+  },
+};
+
+function copyManifest(manifest) {
+  // This essentially does a deep copy.
+  return JSON.parse(JSON.stringify(manifest));
+}
+
+async function loadSettingsAdapterWithManifest(manifest) {
+  // If the adapter is already loaded, then unload it.
+  if (AddonManager.getAdapter('test-adapter')) {
+    await AddonManager.unloadAdapter('test-adapter');
+  }
+  // Create the package.json file for the test-adapter
+  jsonfile.writeFileSync(testManifestFilename, manifest, {spaces: 2});
+
+  try {
+    await AddonManager.loadAddon('test-adapter');
+  } catch (err) {
+    return err;
+  }
+}
 
 describe('addons', function() {
+
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-  })
+  });
 
   it('Get the add-on list', async () => {
     try {
       await AddonManager.loadAddon('settings-adapter');
     } catch (_e) {
+      console.error(_e);
       // pass intentionally
     }
 
@@ -55,6 +95,7 @@ describe('addons', function() {
     try {
       await AddonManager.loadAddon('settings-adapter');
     } catch (_e) {
+      console.error(_e);
       // pass intentionally
     }
 
@@ -165,6 +206,7 @@ describe('addons', function() {
     try {
       await AddonManager.loadAddon('example-adapter');
     } catch (_e) {
+      console.error(_e);
       // pass intentionally
     }
 
@@ -192,5 +234,46 @@ describe('addons', function() {
     expect(res3.status).toEqual(200);
     expect(Array.isArray(res3.body)).toBe(true);
     expect(res3.body.length).toEqual(0);
+  });
+
+  it('Validate valid package.json loads fine', async () => {
+    let err = await loadSettingsAdapterWithManifest(testManifest);
+    expect(err).toBeUndefined();
+  });
+
+  it('Fail package.json with missing moziot key', async () => {
+    let manifest = copyManifest(testManifest);
+    delete manifest.moziot;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with non-object moziot', async () => {
+    let manifest = copyManifest(testManifest);
+    manifest.moziot = 123;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with missing moziot.api key', async () => {
+    let manifest = copyManifest(testManifest);
+    delete manifest.moziot.api;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with non-object moziot.api key', async () => {
+    let manifest = copyManifest(testManifest);
+    manifest.moziot.api = 456;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with missing moziot.api.min key', async () => {
+    let manifest = copyManifest(testManifest);
+    delete manifest.moziot.api.min;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with non-numeric moziot.api.min', async () => {
+    let manifest = copyManifest(testManifest);
+    manifest.moziot.api.min = 'abc';
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 });
