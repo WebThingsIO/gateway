@@ -11,6 +11,7 @@
 'use strict';
 
 const Database = require('../db');
+const util = require('util');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -23,7 +24,7 @@ const Settings = {
    */
   get: function(key) {
     return Database.getSetting(key).catch(function(e) {
-      console.error('Failed to get ' + key);
+      console.error('Failed to get', key);
       throw e;
     });
   },
@@ -37,11 +38,13 @@ const Settings = {
   set: function(key, value) {
     return Database.setSetting(key, value).then(function() {
       if (DEBUG) {
-        console.log('Set ' + key + ' to ' + value);
+        console.log('Set', key, 'to',
+                    util.inspect(value, {breakLength: Infinity}));
       }
       return value;
     }).catch(function(e) {
-      console.error('Failed to set ' + key + ' to ' + value);
+      console.error('Failed to set', key, 'to',
+                    util.inspect(value, {breakLength: Infinity}));
       throw e;
     });
   },
@@ -53,7 +56,7 @@ const Settings = {
    */
   delete: function(key) {
     return Database.deleteSetting(key).catch(function(e) {
-      console.error('Failed to delete ' + key);
+      console.error('Failed to delete', key);
       throw e;
     });
   },
