@@ -26,7 +26,7 @@ env:
 script:
   - npm run lint
   - ./tools/make-self-signed-cert.sh
-  - ./node_modules/.bin/jest --coverage
+  - ./node_modules/.bin/jest --runInBand --coverage
   - npm run yarn-check
 
 after_script:
