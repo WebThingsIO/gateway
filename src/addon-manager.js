@@ -434,20 +434,20 @@ class AddonManager extends EventEmitter {
     //   `rm -f SHA256SUMS && sha256sum file1 file2 ... > SHA256SUMS`
     // To verify, use:
     //   `sha256sum --check SHA256SUMS`
-    const sumsFile = path.join(addonPath, 'SHA256SUMS');
-    if (fs.existsSync(sumsFile)) {
+    if (manifest.files.includes('SHA256SUMS')) {
+      const sumsFile = path.join(addonPath, 'SHA256SUMS');
       try {
-        const data = fs.readFileSync(sumsFile);
-        const lines = data.split(/\r?\n/);
+        const data = fs.readFileSync(sumsFile, 'utf8');
+        const lines = data.trim().split(/\r?\n/);
         for (const line of lines) {
-          const parts = line.split(/\s+/);
+          const parts = line.trim().split(/\s+/);
           if (parts.length !== 2) {
             const err = `Invalid checksum in package ${manifest.name}`;
             console.error(err);
             return Promise.reject(err);
           }
 
-          if (this.hashFile(path.join(addonPath, parts[1]) !== parts[0])) {
+          if (this.hashFile(path.join(addonPath, parts[1])) !== parts[0]) {
             const err =
               `Checksum failed in package ${manifest.name}: ${parts[1]}`;
             console.error(err);
