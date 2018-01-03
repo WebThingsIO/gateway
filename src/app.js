@@ -27,6 +27,9 @@ const JSONWebToken = require('./models/jsonwebtoken');
 const Constants = require('./constants');
 const Settings = require('./models/settings');
 
+// Causes a timestamp to be prepended to console log lines.
+require('./log-timestamps');
+
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/addons/plugin/ipc.js)
 require('./app-instance');
