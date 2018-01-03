@@ -8,7 +8,6 @@ const assert = require('assert');
 const e2p = require('event-to-promise');
 const fetch = require('node-fetch');
 const Settings = require('../models/settings');
-const winston = require('winston');
 const EventEmitter = require('events').EventEmitter;
 const WebSocket = require('ws');
 const Events = require('./Events');
@@ -89,7 +88,7 @@ class Property extends EventEmitter {
    * @return {Promise} resolves to property's value
    */
   async get() {
-    winston.info('property get', {name: this.name});
+    console.info('property get', this.name);
     const res = await fetch(await this.getHref(), {
       headers: Object.assign({
         'Accept': 'application/json'
@@ -97,7 +96,7 @@ class Property extends EventEmitter {
     });
     const data = await res.json();
 
-    winston.info('property got', {data: data});
+    console.info('property got', data);
     return data[this.name]
   }
 
@@ -108,7 +107,7 @@ class Property extends EventEmitter {
   async set(value) {
     let data = {};
     data[this.name] = value;
-    winston.info('property set', {data: data});
+    console.info('property set', data);
     return fetch(await this.getHref(), {
       method: 'PUT',
       headers: Object.assign({
@@ -136,7 +135,7 @@ class Property extends EventEmitter {
     let msg = JSON.parse(text);
     if (msg.messageType === 'propertyStatus') {
       if (msg.data.hasOwnProperty(this.name)) {
-        winston.info('emit', {
+        console.info('emit', {
           event: Events.VALUE_CHANGED,
           data: msg.data[this.name]
         });
@@ -152,7 +151,7 @@ class Property extends EventEmitter {
         this.ws.close();
       }
     } else {
-      winston.warn(this.constructor.name + '.stop was not started');
+      console.warn(this.constructor.name + '.stop was not started');
     }
   }
 }

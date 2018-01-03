@@ -6,7 +6,6 @@
 
 const PromiseRouter = require('express-promise-router');
 const Settings = require('../models/settings');
-const winston = require('winston');
 
 const APIError = require('./APIError');
 const Database = require('./Database');
@@ -16,7 +15,6 @@ const Rule = require('./Rule');
 
 const index = PromiseRouter();
 
-winston.cli();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 let engine = new Engine();

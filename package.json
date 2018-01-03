@@ -55,7 +55,6 @@
     "string.prototype.padstart": "^3.0.0",
     "tar": "^4.0.2",
     "uuid": "^3.1.0",
-    "winston": "^2.3.1",
     "ws": "^3.3.1",
     "xbee-api": "^0.5.2",
     "zcl-id": "^0.3.2",

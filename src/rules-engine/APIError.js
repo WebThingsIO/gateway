@@ -4,8 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-const winston = require('winston');
-
 /**
  * A simple helper class for sending JSON-formatted errors to clients
  */
@@ -15,7 +13,7 @@ class APIError extends Error {
     if (originalError) {
       this.message += ': ' + originalError.message;
     }
-    winston.error('new API Error: ' + this.message);
+    console.error('new API Error: ' + this.message);
   }
 
   toString() {
