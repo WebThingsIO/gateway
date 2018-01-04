@@ -28,7 +28,7 @@ if (!console.constructor.hooked) {
   console.constructor.hooked = true;
 
   // BufferedConsole is used (under jest) when running multiple tests
-  // CustomeConsole is used (under jest) when running a single test
+  // CustomConsole is used (under jest) when running a single test
 
   if (console.constructor.name === 'BufferedConsole') {
     // The code for the write function comes from the jest source code:
