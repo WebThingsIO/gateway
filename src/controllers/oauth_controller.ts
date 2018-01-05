@@ -15,8 +15,8 @@ import * as JSONWebToken from '../models/jsonwebtoken';
 import * as Database from '../db';
 import {Scope, ClientId, ClientRegistry} from '../oauth-types';
 import OAuthClients from '../models/oauthclients';
-import * as jwtMiddleware from '../jwt-middleware';
-const auth = jwtMiddleware.middleware();
+import * as authMiddleware from '../jwt-middleware';
+const auth = authMiddleware();
 
 const OAuthController = express.Router();
 

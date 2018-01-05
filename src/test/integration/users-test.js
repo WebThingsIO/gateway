@@ -11,13 +11,10 @@ const {
   TEST_USER_UPDATE_1,
   TEST_USER_UPDATE_2,
   createUser,
-  addUser,
   editUser,
   deleteUser,
   loginUser,
   userInfo,
-  userInfoById,
-  userCount,
   logoutUser,
 } = require('../user');
 
@@ -27,49 +24,16 @@ it('creates a user and get email', async () => {
   expect(info.email).toBe(TEST_USER.email);
 });
 
-it('gets user count', async () => {
-  const count1 = await userCount(server);
-  expect(count1.count).toBe(0);
-  await createUser(server, TEST_USER);
-  const count2 = await userCount(server);
-  expect(count2.count).toBe(1);
-});
-
-it('gets invalid user info', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  const err = await pFinal(userInfoById(server, jwt, 1000));
-  expect(err.response.status).toBe(404);
-});
-
-it('gets user info by id', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  const info1 = await userInfo(server, jwt);
-  const info2 = await userInfoById(server, jwt, info1.id);
-  expect(info2.id).toBe(info1.id);
-  expect(info2.email).toBe(info1.email);
-  expect(info2.name).toBe(info1.name);
-});
-
-it('fails to create a user when missing data', async () => {
-  const err = await pFinal(createUser(server, {email: 'fake@test.com'}));
-  expect(err.response.status).toEqual(400);
-});
-
-it('fails to create another user when not logged in', async () => {
+it('fails to create a duplicate user when a user exists', async () => {
   await pFinal(createUser(server, TEST_USER));
-  const diff = await pFinal(createUser(server, TEST_USER_DIFFERENT));
-  expect(diff.response.status).toEqual(401);
-});
-
-it('fails to create a duplicate user', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  const again = await pFinal(addUser(server, jwt, TEST_USER));
+  const again = await pFinal(createUser(server, TEST_USER));
   expect(again.response.status).toEqual(400);
 });
 
-it('creates a second user', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  await addUser(server, jwt, TEST_USER_DIFFERENT);
+it('fails to create another user when a user exists', async () => {
+  await pFinal(createUser(server, TEST_USER));
+  const diff = await pFinal(createUser(server, TEST_USER_DIFFERENT));
+  expect(diff.response.status).toEqual(400);
 });
 
 it('logs in as a user', async () => {
@@ -94,31 +58,15 @@ it('logs in as a user', async () => {
 it('edits an invalid user', async () => {
   const jwt = await createUser(server, TEST_USER);
   const rsp = await pFinal(
-    editUser(server, jwt, Object.assign({}, TEST_USER_UPDATE_1, {id: 0})));
+    editUser(server, jwt, Object.assign(TEST_USER_UPDATE_1, {id: 0})));
   expect(rsp.response.status).toEqual(404);
-});
-
-it('fails to edit a user when missing data', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
-  const err = await pFinal(editUser(server, jwt, {id: info.id}));
-  expect(err.response.status).toEqual(400);
-});
-
-it('fails to edit user with incorrect password', async () => {
-  const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
-  const err = await pFinal(
-    editUser(server, jwt, Object.assign({}, TEST_USER_UPDATE_1,
-                                        {id: info.id, password: 'wrong'})));
-  expect(err.response.status).toEqual(400);
 });
 
 it('edits a user', async () => {
   const jwt = await createUser(server, TEST_USER);
   let info = await userInfo(server, jwt);
   await editUser(
-    server, jwt, Object.assign({}, TEST_USER_UPDATE_1, {id: info.id}));
+    server, jwt, Object.assign(TEST_USER_UPDATE_1, {id: info.id}));
   info = await userInfo(server, jwt);
   expect(info.name).toBe(TEST_USER_UPDATE_1.name);
   expect(info.email).toBe(TEST_USER_UPDATE_1.email);
@@ -132,7 +80,7 @@ it('edits a user, including password', async () => {
   const jwt = await createUser(server, TEST_USER);
   let info = await userInfo(server, jwt);
   await editUser(
-    server, jwt, Object.assign({}, TEST_USER_UPDATE_2, {id: info.id}));
+    server, jwt, Object.assign(TEST_USER_UPDATE_2, {id: info.id}));
   info = await userInfo(server, jwt);
   expect(info.name).toBe(TEST_USER_UPDATE_2.name);
   expect(info.email).toBe(TEST_USER_UPDATE_2.email);
@@ -140,7 +88,7 @@ it('edits a user, including password', async () => {
   // Log out and log back in to verify.
   await logoutUser(server, jwt);
   await loginUser(server,
-                  Object.assign({}, TEST_USER_UPDATE_2,
+                  Object.assign(TEST_USER_UPDATE_2,
                                 {password: TEST_USER_UPDATE_2.newPassword}));
 });
 
@@ -152,17 +100,4 @@ it('deletes a user', async () => {
   expect(rsp1.response.status).toBe(401);
   const rsp2 = await pFinal(loginUser(server, TEST_USER));
   expect(rsp2.response.status).toBe(401);
-});
-
-it('fails to log in with missing data', async () => {
-  await createUser(server, TEST_USER);
-  const err = await pFinal(loginUser(server, {email: TEST_USER.email}));
-  expect(err.response.status).toBe(400);
-});
-
-it('fails to log in with incorrect password', async () => {
-  await createUser(server, TEST_USER);
-  const err = await pFinal(
-    loginUser(server, Object.assign({}, TEST_USER, {password: 'wrong'})));
-  expect(err.response.status).toBe(401);
 });

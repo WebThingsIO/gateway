@@ -22,14 +22,12 @@
     window.API.userCount().then((count) => {
       let url;
       if (count > 0) {
-        url = `/login/?url=${encodeURIComponent(window.location.pathname)}`;
+        url = `/login?url=${encodeURIComponent(window.location.pathname)}`;
       } else {
-        url = '/signup/';
+        url = '/signup';
       }
 
-      if (window.location.pathname !== url.split('?')[0]) {
-        window.location.href = url;
-      }
+      window.location.href = url;
     });
   }
 

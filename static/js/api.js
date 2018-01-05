@@ -84,73 +84,7 @@
       });
     },
 
-    getUser: function(id) {
-      const opts = {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
-        }
-      };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
-          throw new Error('Unable to access user info');
-        }
-        return response.json();
-      });
-    },
-
-    addUser: function (name, email, password) {
-      const opts = {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name, email, password
-        })
-      };
-      return fetch('/users/', opts).then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to add new user');
-        }
-      });
-    },
-
-    editUser: function(id, name, email, password, newPassword) {
-      const opts = {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({id, name, email, password, newPassword}),
-      };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to edit user');
-        }
-      });
-    },
-
-    deleteUser: function(id) {
-      const opts = {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
-        }
-      };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to delete user');
-        }
-      });
-    },
-
-    getAllUserInfo: function() {
+    getUserInfo: function() {
       const opts = {
         headers: {
           'Accept': 'application/json',
