@@ -11,33 +11,89 @@
 
 'use strict';
 
-const FUNCS = ['log', 'info', 'debug', 'error', 'warn'];
+const format = require('util').format;
 
-function logWithTimestamp(realFunc, args) {
+function logPrefix() {
   let currTime = new Date();
-  let prefix = currTime.getFullYear() + '-' +
-             ('0' + (currTime.getMonth() + 1)).slice(-2) + '-' +
-             ('0' + currTime.getDate()).slice(-2) + ' ' +
-             ('0' + currTime.getHours()).slice(-2) + ':' +
-             ('0' + currTime.getMinutes()).slice(-2) + ':' +
-             ('0' + currTime.getSeconds()).slice(-2) + '.' +
-             ('00' + currTime.getMilliseconds()).slice(-3) + ' ';
-
-  if (args.length > 0 && typeof(args[0]) === 'string') {
-    // This allows console.log('Test %d', 3) to still work properly.
-    args[0] = prefix + args[0];
-  } else {
-    // This covers other cases like: console.log(1);
-    Array.prototype.unshift.call(args, prefix);
-  }
-
-  // Now call the real logging funtion with modified arguments.
-  realFunc.apply(null, args);
+  return currTime.getFullYear() + '-' +
+         ('0' + (currTime.getMonth() + 1)).slice(-2) + '-' +
+         ('0' + currTime.getDate()).slice(-2) + ' ' +
+         ('0' + currTime.getHours()).slice(-2) + ':' +
+         ('0' + currTime.getMinutes()).slice(-2) + ':' +
+         ('0' + currTime.getSeconds()).slice(-2) + '.' +
+         ('00' + currTime.getMilliseconds()).slice(-3) + ' ';
 }
 
-for (let func of FUNCS) {
-  let realFunc = console[func];
-  console[func] = function() {
-    logWithTimestamp(realFunc, arguments);
-  };
+if (!console.constructor.hooked) {
+  console.constructor.hooked = true;
+
+  // BufferedConsole is used (under jest) when running multiple tests
+  // CustomConsole is used (under jest) when running a single test
+
+  if (console.constructor.name === 'BufferedConsole') {
+    // The code for the write function comes from the jest source code:
+    // https://github.com/facebook/jest/blob/master/packages/jest-util/
+    //    src/buffered_console.js
+
+    const callsites = require('callsites');
+
+    console.constructor.write = function write(buffer, type, message, level) {
+      const call = callsites()[level != null ? level : 2];
+      const origin = call.getFileName() + ':' + call.getLineNumber();
+      buffer.push({message: logPrefix() + message, origin, type});
+      return buffer;
+    }
+
+    console.log = function log() {
+      console.constructor.write(
+        this._buffer, 'log', format.apply(null, arguments));
+    }
+    console.info = function info() {
+      console.constructor.write(
+        this._buffer, 'info', format.apply(null, arguments));
+    }
+    console.warn = function warn() {
+      console.constructor.write(
+        this._buffer, 'warn', format.apply(null, arguments));
+    }
+    console.error = function error() {
+      console.constructor.write(
+        this._buffer, 'error', format.apply(null, arguments));
+    }
+    // jest's BufferedConsole doesn't provide a debug, so we skip it as well.
+
+  } else if (console.constructor.name === 'CustomConsole') {
+
+    // See: https://github.com/facebook/jest/blob/master/packages/jest-util/
+    //        src/Console.js
+    //      for the implementation of _log
+
+    console.log = function log() {
+      console._log('log', logPrefix() + format.apply(null, arguments));
+    }
+
+    console.info = function info() {
+      console._log('info', logPrefix() + format.apply(null, arguments));
+    }
+
+    console.warn = function warn() {
+      console._log('warn', logPrefix() + format.apply(null, arguments));
+    }
+
+    console.error = function error() {
+      console._log('error', logPrefix() + format.apply(null, arguments));
+    }
+    // jest's CustomConsole doesn't provide a debug, so we skip it as well.
+
+  } else {
+    // This path is for the normal non-jest output
+    const FUNCS = ['log', 'info', 'debug', 'error', 'warn'];
+
+    for (let func of FUNCS) {
+      let realFunc = console[func];
+      console[func] = function() {
+        realFunc(logPrefix() + format.apply(null, arguments));
+      };
+    }
+  }
 }
