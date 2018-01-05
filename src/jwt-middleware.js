@@ -75,7 +75,4 @@ function middleware() {
   };
 }
 
-module.exports = {
-  middleware,
-  authenticate,
-};
+module.exports = middleware;

@@ -40,7 +40,6 @@
     <script type="text/javascript" src="/js/adapter.js"></script>
     <script type="text/javascript" src="/js/installed-addon.js"></script>
     <script type="text/javascript" src="/js/discovered-addon.js"></script>
-    <script type="text/javascript" src="/js/user.js"></script>
     <script type="text/javascript" src="/js/settings.js"></script>
     <script type="text/javascript" src="/js/lib/stm_web.min.js"></script>
     <script type="text/javascript" src="/js/speech.js"></script>
@@ -96,49 +95,10 @@
         <div id="current-domain" class="settings-container"></div>
       </section>
       <section id="user-settings" class="hidden settings-section">
-        <section id="user-settings-main" class="hidden settings-subsection">
-          <ul id="users-list">
-          </ul>
-          <button id="add-user-button" class="icon-button"></button>
-        </section>
-        <section id="user-settings-edit" class="hidden settings-subsection">
-          <form id="edit-user-form" class="user-form">
-            <input type="text" id="user-settings-edit-name" name="name"
-              placeholder="Name" required>
-            <input type="email" id="user-settings-edit-email" name="email"
-              placeholder="Email" required>
-            <input type="password" id="user-settings-edit-password"
-              name="password" placeholder="Password" required>
-            <input type="password" id="user-settings-edit-new-password"
-              name="confirm-password" placeholder="New Password (Optional)">
-            <input type="password" id="user-settings-edit-confirm-password"
-              name="confirm-password" placeholder="Confirm New Password">
-            <div id="user-settings-edit-password-mismatch" class="error hidden">
-              Passwords do not match
-            </div>
-            <div id="user-settings-edit-error" class="error hidden"></div>
-            <button id="user-settings-edit-save" class="user-settings-save"
-              type="submit">Save</button>
-          </form>
-        </section>
-        <section id="user-settings-add" class="hidden settings-subsection">
-          <form id="add-user-form" class="user-form">
-            <input type="text" id="user-settings-add-name" name="name"
-              placeholder="Name" required>
-            <input type="email" id="user-settings-add-email" name="email"
-              placeholder="Email" required>
-            <input type="password" id="user-settings-add-password"
-              name="password" placeholder="Password" required>
-            <input type="password" id="user-settings-add-confirm-password"
-              name="confirm-password" placeholder="Confirm Password" required>
-            <div id="user-settings-add-password-mismatch" class="error hidden">
-              Passwords do not match
-            </div>
-            <div id="user-settings-add-error" class="error hidden"></div>
-            <button id="user-settings-add-save" class="user-settings-save"
-              type="submit">Save</button>
-          </form>
-        </section>
+        <div id="current-user" class="settings-container">
+          <span id="current-user-name"></span>
+          <span id="current-user-email"></span>
+        </div>
       </section>
       <section id="adapter-settings" class="hidden settings-section">
         <div id="no-adapters">No adapters present.</div>

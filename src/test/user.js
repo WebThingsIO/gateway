@@ -48,16 +48,6 @@ async function createUser(server, user) {
   return getJWT(Constants.USERS_PATH, server, user);
 }
 
-async function addUser(server, jwt, user) {
-  const res = await chai.request(server).
-    post(Constants.USERS_PATH).
-    set(...headerAuth(jwt)).
-    set('Accept', 'application/json').
-    send(user);
-  expect(res.status).toEqual(200);
-  return res;
-}
-
 async function editUser(server, jwt, user) {
   const res = await chai.request(server).
     put(`${Constants.USERS_PATH}/${user.id}`).
@@ -85,33 +75,6 @@ async function userInfo(server, jwt) {
     set('Accept', 'application/json').
     send();
   expect(res.status).toEqual(200);
-  expect(Array.isArray(res.body)).toBe(true);
-  for (const user of res.body) {
-    if (user.loggedIn) {
-      return user;
-    }
-  }
-
-  return null;
-}
-
-async function userInfoById(server, jwt, userId) {
-  const res = await chai.request(server).
-    get(`${Constants.USERS_PATH}/${userId}`).
-    set(...headerAuth(jwt)).
-    set('Accept', 'application/json').
-    send();
-  expect(res.status).toEqual(200);
-  expect(typeof res.body).toBe('object');
-  return res.body;
-}
-
-async function userCount(server) {
-  const res = await chai.request(server).
-    get(`${Constants.USERS_PATH}/count`).
-    set('Accept', 'application/json').
-    send();
-  expect(res.status).toEqual(200);
   expect(typeof res.body).toBe('object');
   return res.body;
 }
@@ -136,13 +99,10 @@ module.exports = {
   TEST_USER_UPDATE_1,
   TEST_USER_UPDATE_2,
   createUser,
-  addUser,
   editUser,
   deleteUser,
   loginUser,
   userInfo,
-  userInfoById,
-  userCount,
   logoutUser,
   headerAuth,
 };
