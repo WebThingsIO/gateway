@@ -12,7 +12,9 @@
 'use strict';
 
 const AdapterProxy = require('./adapter-proxy');
+const config = require('config');
 const Constants = require('../addon-constants');
+const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const IpcSocket = require('./ipc');
 const readline = require('readline');
@@ -34,10 +36,11 @@ class Plugin {
                                    this.ipcBaseAddr,
                                    this.onMsg.bind(this));
     this.ipcSocket.bind();
-    this.deferredUnload = null;
     this.exec = '';
     this.process = null;
     this.restart = true;
+    this.unloadCompletedPromise = null;
+    this.unloadedRcvdPromise = null;
   }
 
   asDict() {
@@ -60,7 +63,6 @@ class Plugin {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
     var adapterId = msg.data.adapterId;
     var adapter;
-    var deferredUnload;
 
     // The first switch manages plugin level messages.
     switch (msg.messageType) {
@@ -74,10 +76,26 @@ class Plugin {
       case Constants.PLUGIN_UNLOADED:
         this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
-        deferredUnload = this.deferredUnload;
-        if (deferredUnload) {
-          this.deferredUnload = null;
-          deferredUnload.resolve();
+        if (this.unloadedRcvdPromise) {
+          const socketsClosedPromise = new Deferred();
+          if (config.get('ipc.protocol') === 'inproc') {
+            // In test mode we want to wait until the sockets are actually
+            // closed before we resolve the unloadCompletedPromise.
+            this.unloadedRcvdPromise.resolve(socketsClosedPromise);
+            this.unloadedRcvdPromise = null;
+          } else {
+            // For non-test mode, the plugin is out-of-process so there is no
+            // way for us to know when then sockets are closed. We won't try
+            // try to restart the plugin until it exits, so there isn't any
+            // problem with resolving the unloadCompletedPromise right away.
+            socketsClosedPromise.resolve();
+          }
+          socketsClosedPromise.promise.then(() => {
+            if (this.unloadCompletedPromise) {
+              this.unloadCompletedPromise.resolve();
+              this.unloadCompletedPromise = null;
+            }
+          });
         }
         return;
     }
@@ -101,18 +119,20 @@ class Plugin {
       case Constants.ADAPTER_UNLOADED:
         this.adapters.delete(adapterId);
         if (this.adapters.size == 0) {
+          // We've unloaded the last adapter for the plugin, now unload
+          // the plugin.
+
           // We may need to reevaluate this, and only auto-unload
           // the plugin for the MockAdapter. For plugins which
           // support hot-swappable dongles (like zwave/zigbee) it makes
           // sense to have a plugin loaded with no adapters present.
           this.unload();
-          this.deferredUnload = adapter.deferredUnload;
-          adapter.deferredUnload = null;
+          this.unloadCompletedPromise = adapter.unloadCompletedPromise;
+          adapter.unloadCompletedPromise = null;
         } else {
-          let deferredUnload = adapter.deferredUnload;
-          if (deferredUnload) {
-            adapter.deferredUnload = null;
-            deferredUnload.resolve();
+          if (adapter.unloadCompletedPromise) {
+            adapter.unloadCompletedPromise.resolve();
+            adapter.unloadCompletedPromise = null;
           }
         }
         break;
@@ -245,6 +265,7 @@ class Plugin {
 
   unload() {
     this.restart = false;
+    this.unloadedRcvdPromise = new Deferred();
     this.sendMsg(Constants.UNLOAD_PLUGIN, {});
   }
 }

@@ -28,7 +28,7 @@ class AdapterProxy extends Adapter {
     super(addonManager, adapterId);
     this.plugin = plugin;
     this.deferredMock = null;
-    this.deferredUnload = null;
+    this.unloadCompletedPromise = null;
   }
 
   startPairing(timeoutSeconds) {
@@ -66,15 +66,15 @@ class AdapterProxy extends Adapter {
    *          finished unloading.
    */
   unload() {
-    if (this.deferredUnload) {
+    if (this.unloadCompletedPromise) {
       console.error('AdapterProxy: unload already in progress');
       return Promise.reject();
     }
-    this.deferredUnload = new Deferred();
+    this.unloadCompletedPromise = new Deferred();
     this.sendMsg(Constants.UNLOAD_ADAPTER, {
       adapterId: this.id,
     });
-    return this.deferredUnload.promise;
+    return this.unloadCompletedPromise.promise;
   }
 
   // The following methods are added to support using the

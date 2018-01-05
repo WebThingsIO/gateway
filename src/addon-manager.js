@@ -11,10 +11,10 @@
 
 'use strict';
 
-var config = require('config');
+const config = require('config');
 const Constants = require('./constants');
-var EventEmitter = require('events').EventEmitter;
-var Deferred = require('./addons/deferred');
+const EventEmitter = require('events').EventEmitter;
+const Deferred = require('./addons/deferred');
 const PluginClient = require('./addons/plugin/plugin-client');
 const PluginServer = require('./addons/plugin/plugin-server');
 const Settings = require('./models/settings');
@@ -192,6 +192,17 @@ class AddonManager extends EventEmitter {
    */
   getDevices() {
     return this.devices;
+  }
+
+  /**
+   * @method getPlugin
+   *
+   * Returns a previously registered plugin.
+   */
+  getPlugin(pluginId) {
+    if (this.pluginServer) {
+      return this.pluginServer.getPlugin(pluginId);
+    }
   }
 
   /**

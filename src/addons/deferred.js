@@ -28,7 +28,7 @@ class Deferred {
       console.log('Deferred: Resolving deferred promise id:', this.id,
                   'arg:', arg);
     }
-    this.resolveFunc(arg);
+    return this.resolveFunc(arg);
   }
 
   reject(arg) {
@@ -36,7 +36,7 @@ class Deferred {
       console.log('Deferred: Rejecting deferred promise id:', this.id,
                   'arg:', arg);
     }
-    this.rejectFunc(arg);
+    return this.rejectFunc(arg);
   }
 }
 

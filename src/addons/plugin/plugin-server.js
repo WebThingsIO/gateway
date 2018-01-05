@@ -70,6 +70,15 @@ class PluginServer {
   }
 
   /**
+   * @method getPlugin
+   *
+   * Returns a previously loaded plugin instance.
+   */
+  getPlugin(pluginId) {
+    return this.plugins.get(pluginId);
+  }
+
+  /**
    * @method loadPlugin
    *
    * Loads a plugin by launching a separate process.
