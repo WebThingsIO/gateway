@@ -95,13 +95,8 @@ class PluginClient {
   }
 
   unload() {
-    // Wait a small amount of time to allow the pluginUnloaded
-    // message to be processed by the server before closing.
-    setTimeout(() => {
-      this.pluginIpcSocket.close();
-      this.managerIpcSocket.close();
-    }, 500);
-
+    this.pluginIpcSocket.close();
+    this.managerIpcSocket.close();
   }
 }
 
