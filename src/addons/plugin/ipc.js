@@ -4,13 +4,16 @@ const config = require('config');
 const fs = require('fs');
 const nanomsg = require('nanomsg');
 
+require('string.prototype.padstart').shim();
+require('string.prototype.padend').shim();
+
 var appInstance = require('../../app-instance');
 
 const DEBUG = false;
 const DEBUG_MSG = false;
 
-var boundAddrs = new Set();
-var connectedAddrs = new Set();
+const boundAddrs = new Set();
+const connectedAddrs = new Set();
 var socketId = 0;
 
 class IpcSocket {
@@ -42,8 +45,8 @@ class IpcSocket {
     }
     this.ipcAddr = this.protocol + '://' + this.ipcFile;
 
-    this.logPrefix = 'IpcSocket' + ('   ' + this.socketId).slice(-3) + ': ' +
-                     (this.name + '                  ').slice(0, 18) + ':';
+    this.logPrefix = 'IpcSocket' + ('' + this.socketId).padStart(3) + ': ' +
+                     this.name.padEnd(18) + ':';
     DEBUG && this.log('  alloc', this.ipcAddr, socketType);
 
     this.socket.on('data', this.onData.bind(this));
