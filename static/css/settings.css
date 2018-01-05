@@ -124,15 +124,7 @@
   margin: 0 auto;
 }
 
-#current-user-name {
-  display: block;
-}
-
-#current-user-email {
-  display: block;
-  color: #ccc;
-}
-
+#user-settings ul,
 #adapter-settings ul,
 #addon-settings ul,
 #experiment-settings ul,
@@ -149,6 +141,7 @@
   max-height: 100%;
 }
 
+#user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
 #experiment-settings ul li:last-child,
@@ -188,6 +181,7 @@
   background-repeat: no-repeat;
 }
 
+.user-item,
 .adapter-item,
 .addon-item,
 .authorization-item,
@@ -200,6 +194,7 @@
   margin-bottom: 1rem;
 }
 
+.user-item,
 .adapter-item,
 .addon-item,
 .authorization-item {
@@ -210,44 +205,55 @@
   background-color: #597285;
 }
 
-.adapter-settings-header {
+.user-settings-header,
+.adapter-settings-header,
+.addon-settings-header {
   padding: 2rem 2rem 0.5rem 6.5rem;
-  background-image: url('../images/adapter-icon.png');
   background-size: 4rem;
   background-repeat: no-repeat;
   background-position: 1.8rem 2.8rem;
+}
+
+.user-settings-header {
+  background-image: url('../images/user.svg');
+}
+
+.adapter-settings-header {
+  background-image: url('../images/adapter-icon.png');
 }
 
 .addon-settings-header {
-  padding: 2rem 2rem 0.5rem 6.5rem;
   background-image: url('../images/add-on.svg');
-  background-size: 4rem;
-  background-repeat: no-repeat;
-  background-position: 1.8rem 2.8rem;
 }
 
+.user-settings-name,
 .adapter-settings-name,
 .addon-settings-name {
   display: block;
 }
 
+.user-settings-description,
 .adapter-settings-description,
 .addon-settings-description {
   display: block;
   color: #ccc;
 }
 
+.user-settings-controls,
 .adapter-settings-controls,
 .addon-settings-controls {
   padding: 0rem 1rem 1rem 1rem;
   text-align: right;
 }
 
+.user-settings-controls button,
 .adapter-settings-controls button,
 .addon-settings-controls button {
   font-size: 1.8rem;
 }
 
+.user-settings-edit,
+.user-settings-remove,
 .adapter-settings-disable,
 .adapter-settings-enable,
 .addon-settings-disable,
@@ -262,6 +268,8 @@
   padding-left: 4rem;
 }
 
+.user-settings-edit,
+.user-settings-remove,
 .adapter-settings-disable,
 .adapter-settings-enable,
 .addon-settings-disable,
@@ -284,7 +292,12 @@
   background-image: url('../images/enable.svg');
 }
 
-.addon-settings-remove {
+.user-settings-edit {
+  background-image: url('../images/edit-plain.svg');
+}
+
+.addon-settings-remove, 
+.user-settings-remove {
   margin-right: 8px;
   background-image: url('../images/remove.svg');
 }
@@ -293,12 +306,15 @@
   background-image: url('../images/new.svg');
 }
 
+#add-user-button,
 #discover-addons-button {
   bottom: 2rem;
   right: 2rem;
   background-image: url('../images/add.png');
 }
 
+#user-settings-edit,
+#user-settings-add,
 #addon-discovery-settings {
   background-color: #305067;
 }
@@ -397,4 +413,64 @@
 
 .origin {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.user-form {
+  top: 50%;
+  transform: translateY(calc(-50% - 6rem));
+  position: relative;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 50%;
+  min-width: 28rem;
+  max-width: 38rem;
+  margin: 0 auto;
+}
+
+.user-form input {
+  display: block;
+  width: 18rem;
+  margin: 1rem;
+}
+
+.user-settings-save {
+  display: block;
+  margin: 1rem auto;
+}
+
+.user-form .error {
+  color: orange;
+}
+
+.user-form input[type="text"],
+.user-form input[type="password"],
+.user-form input[type="email"] {
+  height: 2.3rem;
+  background-color: #d2d9de;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 1rem auto;
+}
+
+.user-form button {
+  font-size: 1.6rem;
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem 4rem;
+  color: #fff;
+}
+
+.user-form button:hover,
+.user-form button:active {
+  background-color: #658196;
+}
+
+.user-form button::-moz-focus-inner {
+  border: 0;
+}
+
+.user-form .hidden {
+  display: none;
 }

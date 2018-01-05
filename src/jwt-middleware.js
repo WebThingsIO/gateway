@@ -75,4 +75,7 @@ function middleware() {
   };
 }
 
-module.exports = middleware;
+module.exports = {
+  middleware,
+  authenticate,
+};
