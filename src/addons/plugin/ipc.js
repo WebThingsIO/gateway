@@ -7,14 +7,22 @@ const nanomsg = require('nanomsg');
 var appInstance = require('../../app-instance');
 
 const DEBUG = false;
+const DEBUG_MSG = false;
+
+var boundAddrs = new Set();
+var connectedAddrs = new Set();
+var socketId = 0;
 
 class IpcSocket {
 
   constructor(name, socketType, ipcBaseAddr, onMsg) {
     this.name = name;
+    this.socketType = socketType;
     this.socket = nanomsg.socket(socketType);
     this.ipcBaseAddr = ipcBaseAddr;
     this.onMsg = onMsg;
+    socketId += 1;
+    this.socketId = socketId;
 
     this.protocol = config.get('ipc.protocol');
     switch (this.protocol) {
@@ -34,26 +42,87 @@ class IpcSocket {
     }
     this.ipcAddr = this.protocol + '://' + this.ipcFile;
 
+    this.logPrefix = 'IpcSocket' + ('   ' + this.socketId).slice(-3) + ': ' +
+                     (this.name + '                  ').slice(0, 18) + ':';
+    DEBUG && this.log('  alloc', this.ipcAddr, socketType);
+
     this.socket.on('data', this.onData.bind(this));
+    this.connected = false;
+    this.bound = false;
+  }
+
+  error() {
+    Array.prototype.unshift.call(arguments, this.logPrefix);
+    console.error.apply(null, arguments);
+  }
+
+  log() {
+    Array.prototype.unshift.call(arguments, this.logPrefix);
+    console.log.apply(null, arguments);
   }
 
   bind() {
+    DEBUG && this.log('   bind', this.ipcAddr);
+
+    if (this.bound) {
+      this.error('socket already bound:', this.ipcAddr);
+    }
+    if (this.connected) {
+      this.error('socket already connected:', this.ipcAddr);
+    }
+    this.bound = true;
+
+    if (this.socketType === 'pair') {
+      if (boundAddrs.has(this.ipcAddr)) {
+        this.error('address already bound:', this.ipcAddr);
+      }
+      boundAddrs.add(this.ipcAddr);
+    }
+
     if (this.protocol === 'ipc') {
       if (fs.existsSync(this.ipcFile)) {
         fs.unlinkSync(this.ipcFile);
       }
     }
-    DEBUG && console.log('IpcSocket:    bind', this.ipcAddr);
     return this.socket.bind(this.ipcAddr);
   }
 
   connect() {
-    DEBUG && console.log('IpcSocket: connect', this.ipcAddr);
+    DEBUG && this.log('connect', this.ipcAddr);
+
+    if (this.bound) {
+      this.error('socket already bound:', this.ipcAddr);
+    }
+    if (this.connected) {
+      this.error('socket already connected:', this.ipcAddr);
+    }
+    this.connected = true;
+
+    if (this.socketType === 'pair') {
+      if (connectedAddrs.has(this.ipcAddr)) {
+        this.error('address already connected:', this.ipcAddr);
+      }
+      connectedAddrs.add(this.ipcAddr);
+    }
+
     return this.socket.connect(this.ipcAddr);
   }
 
   close() {
-    DEBUG && console.log('IpcSocket:   close', this.ipcAddr);
+    DEBUG && this.log('  close', this.ipcAddr);
+    if (this.connected) {
+      this.connected = false;
+      if (this.socketType === 'pair') {
+        connectedAddrs.delete(this.ipcAddr);
+      }
+    } else if (this.bound) {
+      this.bound = false;
+      if (this.socketType === 'pair') {
+        boundAddrs.delete(this.ipcAddr);
+      }
+    } else {
+      this.error('socket not connected or bound:', this.ipcAddr);
+    }
     this.socket.close();
   }
 
@@ -68,12 +137,12 @@ class IpcSocket {
     try {
       var data = JSON.parse(bufStr);
     } catch (err) {
-      console.error('Error parsing message as JSON');
-      console.error('Rcvd: "' + bufStr + '"');
-      console.error(err);
+      this.error('Error parsing message as JSON');
+      this.error('Rcvd: "' + bufStr + '"');
+      this.error(err);
       return;
     }
-    DEBUG && console.log('IPC:', this.name, 'Rcvd:', data);
+    DEBUG_MSG && this.log(this.name, 'Rcvd:', data);
     this.onMsg(data);
   }
 
@@ -86,7 +155,7 @@ class IpcSocket {
    */
   sendJson(obj) {
     var jsonObj = JSON.stringify(obj);
-    DEBUG && console.log('IPC:', this.name, 'Sending:', jsonObj);
+    DEBUG_MSG && this.log(this.name, 'Sending:', jsonObj);
     this.socket.send(jsonObj);
   }
 }
