@@ -116,11 +116,11 @@ class AddonManagerProxy extends EventEmitter {
           //       of the file because at the top of the file, otherwise we
           //       have circular requires and the addonManager object won't
           //       have been created yet.
-          let addonManager = require('../../addon-manager');
+          const addonManager = require('../../addon-manager');
           // NOTE: The call to getPlugin will only succeed when doing
           //       inproc IPC, since getPlugin reaches into server-side
           //       data structures, and we're running on the client.
-          let plugin = addonManager.getPlugin(this.pluginClient.pluginId);
+          const plugin = addonManager.getPlugin(this.pluginClient.pluginId);
           if (plugin && plugin.unloadedRcvdPromise) {
             plugin.unloadedRcvdPromise.promise
               .then((socketsClosedPromise) => {

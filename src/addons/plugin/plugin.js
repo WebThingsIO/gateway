@@ -77,7 +77,7 @@ class Plugin {
         this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
         if (this.unloadedRcvdPromise) {
-          let socketsClosedPromise = new Deferred();
+          const socketsClosedPromise = new Deferred();
           if (config.get('ipc.protocol') === 'inproc') {
             // In test mode we want to wait until the sockets are actually
             // closed before we resolve the unloadCompletedPromise.
