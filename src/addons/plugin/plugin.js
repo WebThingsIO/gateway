@@ -16,6 +16,7 @@ const config = require('config');
 const Constants = require('../addon-constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
+const format = require('string-format');
 const IpcSocket = require('./ipc');
 const readline = require('readline');
 const spawn = require('child_process').spawn;
@@ -37,6 +38,7 @@ class Plugin {
                                    this.onMsg.bind(this));
     this.ipcSocket.bind();
     this.exec = '';
+    this.execPath = '.';
     this.process = null;
     this.restart = true;
     this.unloadCompletedPromise = null;
@@ -218,10 +220,19 @@ class Plugin {
   }
 
   start() {
+    const execArgs = {
+      nodeLoader: 'node ./src/addon-loader.js',
+      name: this.pluginId,
+      path: this.execPath,
+    };
+    let execCmd  = format(this.exec, execArgs);
+
+    DEBUG && console.log('  Launching:', execCmd);
+
     // If we need embedded spaces, then consider changing to use the npm
     // module called splitargs
     this.restart = true;
-    let args = this.exec.split(' ');
+    let args = execCmd.split(' ');
     this.process = spawn(args[0], args.slice(1));
 
     this.process.on('error', err => {

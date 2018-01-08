@@ -17,15 +17,12 @@ const PluginClient = require('./addons/plugin/plugin-client');
 const fs = require('fs');
 const path = require('path');
 
-async function loadAddon(packageName, verbose) {
-  const addonPath = path.join(__dirname,
-                              config.get('addonManager.path'),
-                              packageName);
+async function loadAddon(addonPath, verbose) {
 
   // Skip if there's no package.json file.
   const packageJson = path.join(addonPath, 'package.json');
   if (!fs.lstatSync(packageJson).isFile()) {
-    const err = `package.json not found for package: ${packageName}`;
+    const err = `package.json not found: ${packageJson}`;
     return Promise.reject(err);
   }
 
@@ -35,7 +32,7 @@ async function loadAddon(packageName, verbose) {
     data = fs.readFileSync(packageJson);
   } catch (e) {
     const err =
-      `Failed to read package.json for package: ${packageName}\n${e}`;
+      `Failed to read package.json: ${packageJson}\n${e}`;
     return Promise.reject(err);
 }
 
@@ -44,9 +41,10 @@ async function loadAddon(packageName, verbose) {
     manifest = JSON.parse(data);
   } catch (e) {
     const err =
-      `Failed to parse package.json for package: ${packageName}\n${e}`;
+      `Failed to parse package.json: ${packageJson}\n${e}`;
     return Promise.reject(err);
   }
+  let packageName = manifest.name;
 
   // Verify API version.
   const apiVersion = config.get('addonManager.api');
@@ -120,9 +118,9 @@ if (opt.argv.length != 1) {
   console.error('Expecting a single package to load');
   process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
-var packageName = opt.argv[0];
+var addonPath = opt.argv[0];
 
-loadAddon(packageName, opt.verbose).catch(err => {
+loadAddon(addonPath, opt.verbose).catch(err => {
   console.error(err);
   process.exit(Constants.DONT_RESTART_EXIT_CODE);
 });

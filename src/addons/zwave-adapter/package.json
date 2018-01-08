@@ -33,6 +33,6 @@
     },
     "enabled": true,
     "plugin": true,
-    "exec": "node ./src/addon-loader.js zwave-adapter"
+    "exec": "{nodeLoader} {path}"
   }
 }
