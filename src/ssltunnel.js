@@ -26,6 +26,7 @@ var TunnelService = {
     start: function(response, urlredirect) {
         Settings.get('tunneltoken').then((result) => {
             if (typeof result === 'object') {
+                let responseSent = false;
                 this.tunneltoken = result;
                 let endpoint = result.name + '.' +
                     config.get('ssltunnel.domain');
@@ -45,11 +46,16 @@ var TunnelService = {
                         console.log(`[pagekite] stdout: ${data}`);
                     }
                     if (response) {
+                        if (responseSent) {
+                            return;
+                        }
+
                         if (data.indexOf('err=Error in connect') > -1) {
+                            responseSent = true;
                             response.status(400).end();
                         } else if (data.indexOf('connect=') > -1) {
+                            responseSent = true;
                             response.send(urlredirect);
-                            response.status(200).end();
                         }
                     }
                 });
