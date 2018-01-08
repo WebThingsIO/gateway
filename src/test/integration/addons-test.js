@@ -24,6 +24,10 @@ const testManifestFilename = path.join(__dirname, '../..',
 
 const testManifest = {
   name: 'test-adapter',
+  files: [
+    'index.js',
+    'test-adapter.js'
+  ],
   moziot: {
     api: {
       min: 1,
