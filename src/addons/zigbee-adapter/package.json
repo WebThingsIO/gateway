@@ -18,6 +18,15 @@
   "bugs": {
     "url": "https://github.com/mozilla-iot/gateway/issues"
   },
+  "files": [
+    "index.js",
+    "zb-adapter.js",
+    "zb-at.js",
+    "zb-classifier.js",
+    "zb-node.js",
+    "zb-property.js",
+    "zb-zdo.js"
+  ],
   "moziot": {
     "api": {
       "min": 1,
