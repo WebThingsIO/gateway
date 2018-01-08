@@ -401,10 +401,10 @@ class AddonManager extends EventEmitter {
    * Verifies that the manifest looks valid. We only need to validate
    * fields that we actually use.
    */
-
   validateManifest(manifest) {
     let manifestTemplate = {
       name: '',
+      version: '',
       moziot: {
         api: {
           min: 0,
@@ -516,8 +516,6 @@ class AddonManager extends EventEmitter {
     // Verify that important fields exist in the manifest
     let err = this.validateManifest(manifest);
     if (err) {
-      console.error(
-        `Error found in manifest for ${packageName}\n${err}`);
       return Promise.reject(
         `Error found in manifest for ${packageName}\n${err}`);
     }

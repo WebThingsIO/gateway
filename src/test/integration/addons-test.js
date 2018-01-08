@@ -24,6 +24,7 @@ const testManifestFilename = path.join(__dirname, '../..',
 
 const testManifest = {
   name: 'test-adapter',
+  version: '0',
   files: [
     'index.js',
     'test-adapter.js'
@@ -278,6 +279,18 @@ describe('addons', function() {
   it('Fail package.json with non-numeric moziot.api.min', async () => {
     let manifest = copyManifest(testManifest);
     manifest.moziot.api.min = 'abc';
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with missing version', async () => {
+    let manifest = copyManifest(testManifest);
+    delete manifest.version;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with non-string version', async () => {
+    let manifest = copyManifest(testManifest);
+    manifest.version = 1;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 });
