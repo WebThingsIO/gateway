@@ -362,7 +362,7 @@ class AddonManager extends EventEmitter {
     // Skip if there's no package.json file.
     const packageJson = path.join(addonPath, 'package.json');
     if (!fs.lstatSync(packageJson).isFile()) {
-      const err = `package.json not found for package: ${packageName}`;
+      const err = `package.json not found: ${packageJson}`;
       console.error(err);
       return Promise.reject(err);
     }
@@ -373,7 +373,7 @@ class AddonManager extends EventEmitter {
       data = fs.readFileSync(packageJson);
     } catch (e) {
       const err =
-        `Failed to read package.json for package: ${packageName}\n${e}`;
+        `Failed to read package.json: ${packageJson}\n${e}`;
       console.error(err);
       return Promise.reject(err);
     }
@@ -383,7 +383,7 @@ class AddonManager extends EventEmitter {
       manifest = JSON.parse(data);
     } catch (e) {
       const err =
-        `Failed to parse package.json for package: ${packageName}\n${e}`;
+        `Failed to parse package.json: ${packageJson}\n${e}`;
       console.error(err);
       return Promise.reject(err);
     }
@@ -456,7 +456,7 @@ class AddonManager extends EventEmitter {
       } else {
         // This is the normal plugin adapter case, tell the PluginServer
         // to load the plugin.
-        this.pluginServer.loadPlugin(packageName, manifest);
+        this.pluginServer.loadPlugin(addonPath, manifest);
       }
     } else {
       // Load this add-on directly into the gateway.
@@ -672,6 +672,8 @@ class AddonManager extends EventEmitter {
         });
       }
     };
+
+    console.log(`Expanding add-on ${packagePath} into ${addonPath}`);
 
     try {
       // Try to extract the tarball

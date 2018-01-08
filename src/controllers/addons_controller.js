@@ -102,6 +102,8 @@ AddonsController.post('/', async (request, response) => {
   const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
   const destPath = path.join(tempPath, `${name}.tar.gz`);
 
+  console.log(`Fetching add-on ${url} as ${destPath}`);
+
   try {
     const res = await fetch(url);
     const dest = fs.createWriteStream(destPath);

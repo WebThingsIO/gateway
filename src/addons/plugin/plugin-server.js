@@ -83,9 +83,10 @@ class PluginServer {
    *
    * Loads a plugin by launching a separate process.
    */
-  loadPlugin(pluginId, manifest) {
-    let plugin = this.registerPlugin(pluginId);
+  loadPlugin(pluginPath, manifest) {
+    let plugin = this.registerPlugin(manifest.name);
     plugin.exec = manifest.moziot.exec;
+    plugin.execPath = pluginPath;
     plugin.start();
   }
 
