@@ -36,7 +36,7 @@ nvm install v7.10.1
 nvm use v7.10.1
 
 # Install prequisite packages
-sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot -y
+sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot libnanomsg4 libnanomsg-dev -y
 
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
