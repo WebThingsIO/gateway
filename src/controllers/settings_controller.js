@@ -238,9 +238,11 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
   }
 });
 
-SettingsController.get('/addonsListUrl', (request, response) => {
-  response.send(config.get('addonManager.listUrl'));
-  response.status(200).end();
+SettingsController.get('/addonsInfo', (request, response) => {
+  response.json({
+    url: config.get('addonManager.listUrl'),
+    api: config.get('addonManager.api'),
+  });
 });
 
 module.exports = SettingsController;

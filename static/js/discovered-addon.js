@@ -20,6 +20,7 @@ var DiscoveredAddon = function(metadata) {
   this.description = metadata.description;
   this.url = metadata.url;
   this.installed = metadata.installed;
+  this.api = Object.assign({}, metadata.api);
   this.container = document.getElementById('discovered-addons-list');
   this.render();
 };

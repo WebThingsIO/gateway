@@ -188,6 +188,9 @@ describe('addons', function() {
     expect(list[0]).toHaveProperty('description');
     expect(list[0]).toHaveProperty('version');
     expect(list[0]).toHaveProperty('url');
+    expect(list[0]).toHaveProperty('api');
+    expect(list[0].api).toHaveProperty('min');
+    expect(list[0].api).toHaveProperty('max');
 
     const res3 = await chai.request(server)
       .post(Constants.ADDONS_PATH)
