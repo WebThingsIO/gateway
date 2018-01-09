@@ -223,20 +223,24 @@ var SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
-    fetch('/settings/addonsListUrl', opts).then((response) => {
-      return response.text();
-    }).then((url) => {
-      if (!url) {
+    fetch('/settings/addonsInfo', opts).then((response) => {
+      return response.json();
+    }).then((data) => {
+      if (!data || !data.url || !data.api) {
         return;
       }
 
-      fetch(url).then((resp) => {
+      fetch(data.url).then((resp) => {
         return resp.json();
       }).then((body) => {
         const addonList = document.getElementById('discovered-addons-list');
         addonList.innerHTML = '';
 
         for (const addon of body) {
+          if (addon.api.min > data.api || addon.api.max < data.api) {
+            continue;
+          }
+
           addon.installed = this.installedAddons.has(addon.name);
           new DiscoveredAddon(addon);
         }
