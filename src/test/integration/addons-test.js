@@ -296,4 +296,16 @@ describe('addons', function() {
     manifest.version = 1;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
+
+  it('Fail package.json with missing files array', async () => {
+    let manifest = copyManifest(testManifest);
+    delete manifest.files;
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
+
+  it('Fail package.json with empty files array', async () => {
+    let manifest = copyManifest(testManifest);
+    manifest.files = [];
+    expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
+  });
 });
