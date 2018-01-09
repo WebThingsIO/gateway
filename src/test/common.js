@@ -11,10 +11,13 @@
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
+const config = require('config');
 const Database = require('../db');
 const Actions = require('../models/actions');
 const Things = require('../models/things');
 const e2p = require('event-to-promise');
+const fs = require('fs');
+const path = require('path');
 
 const chai = require('./chai');
 global.chai = chai;
@@ -86,7 +89,20 @@ function mockAdapter() {
 }
 global.mockAdapter = mockAdapter;
 
+function removeTestManifest() {
+  const testManifestFilename = path.join(__dirname, '..',
+                                         config.get('addonManager.path'),
+                                         'test-adapter', 'package.json');
+  if (fs.existsSync(testManifestFilename)) {
+    console.log('Removing', testManifestFilename);
+    fs.unlinkSync(testManifestFilename);
+  } else {
+    console.log('No need to remove', testManifestFilename);
+  }
+}
+
 beforeAll(async () => {
+  removeTestManifest();
   // The server may not be done with reading tunneltoken and related settings
   await serverStartup;
 
@@ -114,6 +130,7 @@ afterAll(async () => {
     e2p(server, 'close'),
     e2p(httpServer, 'close')
   ]);
+  removeTestManifest();
 });
 
 module.exports = {

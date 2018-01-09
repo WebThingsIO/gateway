@@ -33,7 +33,6 @@ const dynamicRequire = (() => {
   return require;
 })();
 
-
 /**
  * @class AddonManager
  * @classdesc The AddonManager will load any add-ons from the 'addons'
@@ -370,6 +369,58 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method validateManifestObject
+   *
+   * Verifies one level of an object, and recurses as required.
+   */
+  validateManifestObject(prefix, object, template) {
+    for (let key in template) {
+      if (key in object) {
+        let objectVal = object[key];
+        let templateVal = template[key];
+        if (typeof(objectVal) != typeof(templateVal)) {
+          return `Expecting ${prefix}${key} to have type: ` +
+                 typeof(templateVal) + ', found: ' + typeof(objectVal);
+        }
+        if (typeof(objectVal) === 'object') {
+          let err = this.validateManifestObject(prefix + key + '.',
+                                                objectVal, templateVal);
+          if (err) {
+            return err;
+          }
+        }
+      } else {
+        return `Manifest is missing: ${prefix}${key}`;
+      }
+    }
+  }
+
+  /**
+   * @method validateManifest
+   *
+   * Verifies that the manifest looks valid. We only need to validate
+   * fields that we actually use.
+   */
+  validateManifest(manifest) {
+    let manifestTemplate = {
+      name: '',
+      version: '',
+      moziot: {
+        api: {
+          min: 0,
+          max: 0,
+        },
+      }
+    };
+    if (config.get('ipc.protocol') !== 'inproc') {
+      // If we're not using in-process plugins, then
+      // we also need the exec keyword to exist.
+      manifestTemplate.moziot.exec = '';
+    }
+    return this.validateManifestObject('', manifest, manifestTemplate);
+  }
+
+  /**
    * @method loadAddon
    *
    * Loads add-on with the given package name.
@@ -462,6 +513,13 @@ class AddonManager extends EventEmitter {
       }
     }
 
+    // Verify that important fields exist in the manifest
+    let err = this.validateManifest(manifest);
+    if (err) {
+      return Promise.reject(
+        `Error found in manifest for ${packageName}\n${err}`);
+    }
+
     // Verify API version.
     const apiVersion = config.get('addonManager.api');
     if (manifest.moziot.api.min > apiVersion ||
@@ -504,13 +562,13 @@ class AddonManager extends EventEmitter {
     }
 
     const errorCallback = function(packageName, errorStr) {
-      console.log('Failed to load', packageName, '-', errorStr);
+      console.error('Failed to load', packageName, '-', errorStr);
     };
 
     // Load the add-on
     console.log('Loading add-on:', manifest.name);
     if (manifest.moziot.plugin) {
-      if (config.get('ipc.protocol') == 'inproc') {
+      if (config.get('ipc.protocol') === 'inproc') {
         // This is a special case where we load the adapter directly
         // into the gateway, but we use IPC comms to talk to the
         // add-on (i.e. for testing)
@@ -582,7 +640,9 @@ class AddonManager extends EventEmitter {
           continue;
         }
 
-        addonManager.loadAddon(addonName);
+        addonManager.loadAddon(addonName).catch(err => {
+          console.error(`Failed to load add-on: ${addonName}\n${err}`);
+        });
       }
     });
   }
@@ -781,11 +841,7 @@ class AddonManager extends EventEmitter {
     } catch (e) {
       // Clean up if loading failed
       cleanup();
-
-      console.error(e);
-      const err = `Failed to load add-on: ${packageName}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
+      return Promise.reject(`Failed to load add-on: ${packageName}\n${e}`);
     }
   }
 
