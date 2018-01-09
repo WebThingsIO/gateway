@@ -378,14 +378,20 @@ class AddonManager extends EventEmitter {
       if (key in object) {
         let objectVal = object[key];
         let templateVal = template[key];
-        if (typeof(objectVal) != typeof(templateVal)) {
+        if (typeof(objectVal) !== typeof(templateVal)) {
           return `Expecting ${prefix}${key} to have type: ` +
                  typeof(templateVal) + ', found: ' + typeof(objectVal);
         }
         if (typeof(objectVal) === 'object') {
           if (Array.isArray(objectVal)) {
-            if (templateVal.length > 0 && objectVal.length === 0) {
-              return `Expecting ${prefix}${key} to be a non-empty array.`;
+            if (templateVal.length > 0) {
+              const expectedType = typeof(templateVal[0]);
+              for (const val of objectVal) {
+                if (typeof(val) !== expectedType) {
+                  return `Expecting all values in ${prefix}${key} to be of ` +
+                    `type ${expectedType}`;
+                }
+              }
             }
           } else {
             let err = this.validateManifestObject(prefix + key + '.',
@@ -411,7 +417,7 @@ class AddonManager extends EventEmitter {
     let manifestTemplate = {
       name: '',
       version: '',
-      files: ['non-empty'],
+      files: [''],
       moziot: {
         api: {
           min: 0,
