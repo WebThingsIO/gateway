@@ -383,10 +383,16 @@ class AddonManager extends EventEmitter {
                  typeof(templateVal) + ', found: ' + typeof(objectVal);
         }
         if (typeof(objectVal) === 'object') {
-          let err = this.validateManifestObject(prefix + key + '.',
-                                                objectVal, templateVal);
-          if (err) {
-            return err;
+          if (Array.isArray(objectVal)) {
+            if (templateVal.length > 0 && objectVal.length === 0) {
+              return `Expecting ${prefix}${key} to be a non-empty array.`;
+            }
+          } else {
+            let err = this.validateManifestObject(prefix + key + '.',
+                                                  objectVal, templateVal);
+            if (err) {
+              return err;
+            }
           }
         }
       } else {
@@ -405,6 +411,7 @@ class AddonManager extends EventEmitter {
     let manifestTemplate = {
       name: '',
       version: '',
+      files: ['non-empty'],
       moziot: {
         api: {
           min: 0,
