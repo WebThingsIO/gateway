@@ -41,8 +41,9 @@ class AddonManagerProxy extends EventEmitter {
     DEBUG && console.log('AddonManagerProxy: addAdapter:', adapter.id);
     this.adapter = adapter;
     this.pluginClient.sendNotification(Constants.ADD_ADAPTER, {
-      adapterId: adapter.id,
-      name: adapter.name,
+      adapterId: adapter.getId(),
+      name: adapter.getName(),
+      packageName: adapter.getPackageName(),
     });
   }
 
