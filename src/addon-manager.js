@@ -601,7 +601,7 @@ class AddonManager extends EventEmitter {
       } else {
         // This is the normal plugin adapter case, tell the PluginServer
         // to load the plugin.
-        this.pluginServer.loadPlugin(addonPath, manifest);
+        this.pluginServer.loadPlugin(addonPath, newSettings);
       }
     } else {
       // Load this add-on directly into the gateway.

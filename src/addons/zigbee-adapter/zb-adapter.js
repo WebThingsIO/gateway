@@ -80,7 +80,7 @@ class ZigbeeAdapter extends Adapter {
     // retrieve the serial number from the dongle. So we
     // set it to zb-unknown here, and fix things up later
     // just before we call addAdapter.
-    super(addonManager, 'zb-uknown', manifest.name);
+    super(addonManager, 'zb-unknown', manifest.name);
 
     this.manifest = manifest;
     this.port = port;
