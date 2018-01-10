@@ -24,6 +24,8 @@ const CLUSTER_ID_GENLEVELCTRL_HEX = utils.hexStr(CLUSTER_ID_GENLEVELCTRL, 4);
 const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
 const THING_TYPE_MULTI_LEVEL_SWITCH = 'multiLevelSwitch';
 
+const UI_SUPPORTS_MULTILEVEL = false;
+
 class ZigbeeClassifier {
 
   constructor() {
@@ -92,12 +94,14 @@ class ZigbeeClassifier {
   classifyInternal(node) {
     let endpoint;
 
-    endpoint =
-      this.findZhaEndpointWithInputClusterIdHex(node,
-                                                CLUSTER_ID_GENLEVELCTRL_HEX);
-    if (endpoint) {
-      this.initMultiLevelSwitch(node, endpoint);
-      return;
+    if (UI_SUPPORTS_MULTILEVEL) {
+      endpoint =
+        this.findZhaEndpointWithInputClusterIdHex(node,
+                                                  CLUSTER_ID_GENLEVELCTRL_HEX);
+      if (endpoint) {
+        this.initMultiLevelSwitch(node, endpoint);
+        return;
+      }
     }
 
     endpoint =
