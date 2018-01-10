@@ -282,6 +282,13 @@ class Plugin {
     this.unloadedRcvdPromise = new Deferred();
     this.sendMsg(Constants.UNLOAD_PLUGIN, {});
   }
+
+  kill() {
+    if (this.process) {
+      this.restart = false;
+      this.process.kill();
+    }
+  }
 }
 
 module.exports = Plugin;

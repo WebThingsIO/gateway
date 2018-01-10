@@ -760,6 +760,11 @@ class AddonManager extends EventEmitter {
       this.adapters.delete(a.id);
     }
 
+    const plugin = this.getPlugin(packageName);
+    if (plugin) {
+      plugin.kill();
+    }
+
     return Promise.all(unloadPromises);
   }
 
