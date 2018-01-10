@@ -36,7 +36,22 @@ nvm install v7.10.1
 nvm use v7.10.1
 
 # Install prequisite packages
-sudo apt install hostapd dnsmasq libusb-1.0-0-dev libudev-dev certbot libnanomsg4 libnanomsg-dev -y
+sudo apt install -y \
+  certbot \
+  dnsmasq \
+  hostapd \
+  libffi-dev \
+  libnanomsg-dev \
+  libnanomsg4 \
+  libudev-dev \
+  libusb-1.0-0-dev \
+  python-pip \
+  python3-pip
+
+# Install Python add-on bindings
+_url="https://github.com/mozilla-iot/gateway-addon-python/releases/download/v0.2.0/gateway_addon-0.2.0.tar.gz"
+sudo pip2 install "$_url"
+sudo pip3 install "$_url"
 
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
