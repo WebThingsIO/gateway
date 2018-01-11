@@ -69,6 +69,13 @@ Thing.prototype.htmlView = function() {
 };
 
 /**
+ * HTML detail view for unknown Thing.
+ */
+Thing.prototype.htmlDetailView = function() {
+  return this.htmlView();
+};
+
+/**
  * SVG view for unknown thing.
  */
 Thing.prototype.svgView = function() {
@@ -98,7 +105,11 @@ Thing.prototype.render = function(format) {
     element.innerHTML = this.svgView();
   } else {
     element = document.createElement('div');
-    element.innerHTML = this.htmlView();
+    if (format == 'htmlDetail') {
+      element.innerHTML = this.htmlDetailView();
+    } else {
+      element.innerHTML = this.htmlView();
+    }
   }
   return this.container.appendChild(element.firstChild);
 };
