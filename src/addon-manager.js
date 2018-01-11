@@ -207,7 +207,7 @@ class AddonManager extends EventEmitter {
 
   /**
    * @method getThings
-   * @returns Returns an dictionary of all of the known things.
+   * @returns Returns a dictionary of all of the known things.
    *          The dictionary key corresponds to the device id.
    */
   getThings() {

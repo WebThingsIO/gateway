@@ -139,6 +139,11 @@ class ZWaveNode extends Device {
       // We use the label from the first 'user' value that we see to help
       // disambiguate different nodes.
       this.defaultName = this.id + '-' + zwValue.label;
+
+      // Assign a name if we don't yet have one.
+      if (!this.name) {
+        this.name = this.defaultName;
+      }
     }
   }
 
