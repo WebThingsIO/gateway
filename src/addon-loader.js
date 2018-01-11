@@ -14,8 +14,13 @@ var config = require('config');
 const Constants = require('./constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./addons/plugin/plugin-client');
+const db = require('./db');
+const Settings = require('./models/settings');
 const fs = require('fs');
 const path = require('path');
+
+// Open the database.
+db.open();
 
 async function loadAddon(addonPath, verbose) {
 
@@ -34,7 +39,7 @@ async function loadAddon(addonPath, verbose) {
     const err =
       `Failed to read package.json: ${packageJson}\n${e}`;
     return Promise.reject(err);
-}
+  }
 
   let manifest;
   try {
@@ -55,9 +60,19 @@ async function loadAddon(addonPath, verbose) {
       `Current: ${apiVersion} ` +
       `Supported: ${manifest.moziot.api.min}-${manifest.moziot.api.max}`);
   }
+
+  // Get any saved settings for this add-on.
+  const key = `addons.${manifest.name}`;
+  let savedSettings = await Settings.get(key);
   let newSettings = Object.assign({}, manifest);
-  if (!newSettings.moziot.hasOwnProperty('config')) {
-    newSettings.moziot.config = {};
+  if (savedSettings) {
+    // Overwrite config values.
+    newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
+                                              savedSettings.moziot.config);
+  } else {
+    if (!newSettings.moziot.hasOwnProperty('config')) {
+      newSettings.moziot.config = {};
+    }
   }
 
   const errorCallback = function(packageName, errorStr) {
