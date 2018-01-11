@@ -286,6 +286,8 @@ class Plugin {
   kill() {
     if (this.process) {
       this.restart = false;
+
+      // Kill uses SIGTERM by default
       this.process.kill();
     }
   }
