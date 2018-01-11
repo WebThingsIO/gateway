@@ -123,8 +123,11 @@ class ZWaveAdapter extends Adapter {
   scanComplete() {
     // Add any nodes which otherwise aren't responding. This typically
     // corresponds to devices which are sleeping and only check in periodically.
-    for (var nodeId in this.nodesBeingAdded) {
-      this.handleDeviceAdded(this.nodesBeingAdded[nodeId]);
+    for (const nodeId in this.nodesBeingAdded) {
+      const node = this.nodesBeingAdded[nodeId];
+      if (node.lastStatus !== 'dead') {
+        this.handleDeviceAdded(node);
+      }
     }
     console.log('Scan complete');
     this.ready = true;
