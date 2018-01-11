@@ -24,8 +24,9 @@ const DEBUG = false;
  */
 class AdapterProxy extends Adapter {
 
-  constructor(addonManager, adapterId, plugin) {
-    super(addonManager, adapterId);
+  constructor(addonManager, adapterId, name, packageName, plugin) {
+    super(addonManager, adapterId, packageName);
+    this.name = name;
     this.plugin = plugin;
     this.deferredMock = null;
     this.unloadCompletedPromise = null;

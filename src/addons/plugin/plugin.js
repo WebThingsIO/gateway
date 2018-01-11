@@ -69,8 +69,11 @@ class Plugin {
     // The first switch manages plugin level messages.
     switch (msg.messageType) {
       case Constants.ADD_ADAPTER:
-        adapter = new AdapterProxy(this.pluginServer.manager, adapterId, this);
-        adapter.name = msg.data.name;
+        adapter = new AdapterProxy(this.pluginServer.manager,
+                                   adapterId,
+                                   msg.data.name,
+                                   msg.data.packageName,
+                                   this);
         this.adapters.set(adapterId, adapter);
         this.pluginServer.addAdapter(adapter);
         return;
