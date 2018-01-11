@@ -268,11 +268,14 @@ class Plugin {
           console.log('Plugin:', this.pluginId, 'died, code =', code,
                       'NOT restarting...');
           this.restart = false;
+          this.process = null;
         } else {
           console.log('Plugin:', this.pluginId, 'died, code =', code,
                       'restarting...');
           this.start();
         }
+      } else {
+        this.process = null;
       }
     });
   }
@@ -285,9 +288,9 @@ class Plugin {
 
   kill() {
     if (this.process) {
-      this.restart = false;
-
       // Kill uses SIGTERM by default
+      console.log('Plugin: killing', this.pluginId);
+      this.restart = false;
       this.process.kill();
     }
   }

@@ -752,6 +752,7 @@ class AddonManager extends EventEmitter {
       return Promise.resolve();
     }
 
+    const plugin = this.getPlugin(packageName);
     let adapters = this.getAdaptersByPackageName(packageName);
     let unloadPromises = [];
     for (const a of adapters) {
@@ -760,11 +761,13 @@ class AddonManager extends EventEmitter {
       this.adapters.delete(a.id);
     }
 
+    // Give the process 5 seconds to exit before killing it.
     const cleanup = () => {
-      const plugin = this.getPlugin(packageName);
-      if (plugin) {
-        plugin.kill();
-      }
+      setTimeout(() => {
+        if (plugin) {
+          plugin.kill();
+        }
+      }, 5000);
     };
 
     return Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
