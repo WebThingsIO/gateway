@@ -263,3 +263,36 @@ h1, h2, h3, h4, h5, h6 {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
+.switch {
+}
+
+.switch-checkbox {
+  display: none;
+}
+
+.switch-slider {
+  display: block;
+  width: 5.5rem;
+  height: 2.2rem;
+  border-radius: 1.1rem;
+  background: #5d9bc7;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.switch-slider:after {
+  display: block;
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: white;
+  transform: translate(0.35rem, 0.35rem);
+  transition: 0.1s;
+}
+
+input:checked + .switch-slider:after {
+  transform: translate(3.65rem, 0.35rem);
+}
+

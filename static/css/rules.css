@@ -92,37 +92,27 @@
   vertical-align: bottom;
 }
 
-.rule-switch-checkbox {
-  display: none;
-}
-
-.rule-switch-slider {
-  display: block;
+.rule-switch > .switch-slider {
   width: 5.5rem;
   height: 2.2rem;
   border-radius: 1.1rem;
   background: #4a4a4a;
-  cursor: pointer;
-  transition: 0.1s;
 }
 
-.rule-switch-slider:after {
-  display: block;
-  content: "";
+.rule-switch > .switch-slider:after {
   width: 3rem;
   height: 3rem;
   border-radius: 1.5rem;
   background: #B1B1B3;
   transform: translate(0, -0.4rem);
-  transition: 0.1s;
 }
 
-input:checked + .rule-switch-slider {
+
+.rule-switch > input:checked + .switch-slider {
   background: #305067;
 }
 
-input:checked + .rule-switch-slider:after {
-  transform: translate(2.5rem, -0.4rem);
+.rule-switch > input:checked + .switch-slider:after {
   background: white;
 }
 
