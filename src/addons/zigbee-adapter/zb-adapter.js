@@ -1370,7 +1370,7 @@ function loadZigbeeAdapters(addonManager, manifest, errorCallback) {
       }
       new ZigbeeAdapter(addonManager, manifest, port);
     }
-  }, (error) => {
+  }).catch(error => {
     errorCallback(manifest.name, error);
   });
 }

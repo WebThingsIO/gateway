@@ -108,41 +108,7 @@ class AddonManagerProxy extends EventEmitter {
         return;
 
       case Constants.UNLOAD_PLUGIN:
-        if (config.get('ipc.protocol') === 'inproc') {
-          // When we're testing, we run in the same process and we need
-          // to close the sockets before the adapter.unload promise is
-          // resolved. So we hook into the plugin unloadedRcvdPromise.
-
-          // NOTE: We need to put this require here rather than at the top
-          //       of the file because at the top of the file, otherwise we
-          //       have circular requires and the addonManager object won't
-          //       have been created yet.
-          const addonManager = require('../../addon-manager');
-          // NOTE: The call to getPlugin will only succeed when doing
-          //       inproc IPC, since getPlugin reaches into server-side
-          //       data structures, and we're running on the client.
-          const plugin = addonManager.getPlugin(this.pluginClient.pluginId);
-          if (plugin && plugin.unloadedRcvdPromise) {
-            plugin.unloadedRcvdPromise.promise
-              .then((socketsClosedPromise) => {
-                this.pluginClient.unload();
-                socketsClosedPromise.resolve();
-              });
-          } else {
-            // Wait a small amount of time to allow the pluginUnloaded
-            // message to be processed by the server before closing.
-            setTimeout(() => {
-              this.pluginClient.unload();
-            }, 500);
-          }
-        } else {
-          // Wait a small amount of time to allow the pluginUnloaded
-          // message to be processed by the server before closing.
-          setTimeout(() => {
-            this.pluginClient.unload();
-          }, 500);
-        }
-        this.pluginClient.sendNotification(Constants.PLUGIN_UNLOADED, {});
+        this.unloadPlugin();
         return;
 
       case Constants.CLEAR_MOCK_ADAPTER_STATE:
@@ -259,6 +225,49 @@ class AddonManagerProxy extends EventEmitter {
       deviceId: property.device.id,
       property: property.asDict()
     });
+  }
+
+  /**
+   * @method unloadPlugin
+   *
+   * Unloads the plugin, and tells the server about it.
+   */
+  unloadPlugin() {
+    if (config.get('ipc.protocol') === 'inproc') {
+      // When we're testing, we run in the same process and we need
+      // to close the sockets before the adapter.unload promise is
+      // resolved. So we hook into the plugin unloadedRcvdPromise.
+
+      // NOTE: We need to put this require here rather than at the top
+      //       of the file because at the top of the file, otherwise we
+      //       have circular requires and the addonManager object won't
+      //       have been created yet.
+      const addonManager = require('../../addon-manager');
+      // NOTE: The call to getPlugin will only succeed when doing
+      //       inproc IPC, since getPlugin reaches into server-side
+      //       data structures, and we're running on the client.
+      const plugin = addonManager.getPlugin(this.pluginClient.pluginId);
+      if (plugin && plugin.unloadedRcvdPromise) {
+        plugin.unloadedRcvdPromise.promise
+          .then((socketsClosedPromise) => {
+            this.pluginClient.unload();
+            socketsClosedPromise.resolve();
+          });
+      } else {
+        // Wait a small amount of time to allow the pluginUnloaded
+        // message to be processed by the server before closing.
+        setTimeout(() => {
+          this.pluginClient.unload();
+        }, 500);
+      }
+    } else {
+      // Wait a small amount of time to allow the pluginUnloaded
+      // message to be processed by the server before closing.
+      setTimeout(() => {
+        this.pluginClient.unload();
+      }, 500);
+    }
+    this.pluginClient.sendNotification(Constants.PLUGIN_UNLOADED, {});
   }
 }
 

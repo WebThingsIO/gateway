@@ -75,17 +75,17 @@ async function loadAddon(addonPath, verbose) {
     }
   }
 
-  const errorCallback = function(packageName, errorStr) {
-    console.error('Failed to load', packageName, '-', errorStr);
-  };
-
   var pluginClient = new PluginClient(packageName, {verbose: verbose});
   return new Promise((resolve, reject) => {
     pluginClient.register().then(addonManagerProxy => {
       console.log('Loading add-on for', manifest.name,
                   'from', addonPath);
       let addonLoader = dynamicRequire(addonPath);
-      addonLoader(addonManagerProxy, newSettings, errorCallback);
+      addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
+        console.error('Failed to load', packageName, '-', errorStr);
+        addonManagerProxy.unloadPlugin();
+        process.exit(Constants.DONT_RESTART_EXIT_CODE);
+      });
       resolve();
     }).catch(e => {
       console.error(e);
