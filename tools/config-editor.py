@@ -9,7 +9,7 @@ import sys
 import tempfile
 
 
-_CONFIG_DATABASE = '/home/pi/mozilla-iot/gateway/db.sqlite3'
+_DEFAULT_DATABASE = '/home/pi/mozilla-iot/gateway/db.sqlite3'
 _DEFAULT_EDITOR = 'nano'
 
 
@@ -26,12 +26,16 @@ def main():
                         help='Edit the existing config')
     args = parser.parse_args()
 
-    if not os.path.isfile(_CONFIG_DATABASE):
+    database = os.getenv('MOZIOT_DATABASE')
+    if not database:
+        database = _DEFAULT_DATABASE
+
+    if not os.path.isfile(database):
         print('Config database not found.')
         sys.exit(1)
 
     # Open the config database.
-    conn = sqlite3.connect(_CONFIG_DATABASE)
+    conn = sqlite3.connect(database)
     c = conn.cursor()
 
     # Get the current config data from the database.
@@ -71,7 +75,7 @@ def main():
         # Start up an editor for the user.
         editor = os.getenv('EDITOR')
         if not editor:
-            editor = _DEFAULT_EDITOR 
+            editor = _DEFAULT_EDITOR
 
         subprocess.call([editor, fname])
 
