@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals OnOffSwitch, Thing */
+/* globals OnOffSwitch, Thing, ThingDetailLayout */
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -18,7 +18,7 @@
  * @param Object description Thing description object.
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
-var ColorLight = function(description, format) {
+function ColorLight(description, format) {
   Thing.call(this, description, format);
   if (format == 'svg') {
     // For now the SVG view is just a link.
@@ -42,11 +42,15 @@ var ColorLight = function(description, format) {
     this.colorInput.addEventListener('change', () => {
       this.setColor(this.colorInput.value);
     });
+
+    this.layout = new ThingDetailLayout(
+      this.element.querySelectorAll('.thing-detail-container'));
+    this.layout.update();
   } else {
     this.element.addEventListener('click', this.handleClick.bind(this));
   }
   return this;
-};
+}
 
 ColorLight.prototype = Object.create(OnOffSwitch.prototype);
 
@@ -127,8 +131,7 @@ ColorLight.prototype.htmlDetailView = function() {
       </div>
       <div class="thing-detail-label">Color</div>
     </div>
-    <div class="thing-detail-container"
-         style="top: 75%; left: 40%;">
+    <div class="thing-detail-container">
       <div class="thing-detail on-off-switch-switch">
         <div class="thing-detail-contents">
           <form class="switch">

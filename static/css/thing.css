@@ -18,6 +18,10 @@
 
 .thing-detail-container {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -5rem;
+  margin-top: -5rem;
 }
 
 .thing-detail {
@@ -100,6 +104,7 @@
   text-align: center;
   margin: 1rem;
   display: inline-block;
+  transform: translate(0, 0); /* promote to layer to draw above links */
 }
 
 .color-light-icon {
@@ -107,4 +112,16 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
+}
+
+.thing-detail-layout-links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.thing-detail-layout-link {
+  stroke: white;
+  stroke-width: 2px;
 }
