@@ -1134,7 +1134,7 @@ class ZigbeeAdapter extends Adapter {
   }
 
   discoverAttributesTimeout(frame) {
-    // Some the attributes fail to read during discover. I suspect that
+    // Some of the attributes fail to read during discover. I suspect that
     // this is because something related to the attribute hasn't been
     // initialized. Just report what we know.
     if (frame.zcl && frame.zcl.cmd == 'read') {
