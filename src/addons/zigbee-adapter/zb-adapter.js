@@ -27,6 +27,9 @@ var AT_CMD = at.AT_CMD;
 const ZHA_PROFILE_ID = zclId.profile('HA').value;
 const ZHA_PROFILE_ID_HEX = utils.hexStr(ZHA_PROFILE_ID, 4);
 
+const WAIT_TIMEOUT_DELAY = 1000;
+const WAIT_RETRY_MAX = 3;   // includes initial send
+
 const DEVICE_TYPE = {
   0x30001: 'ConnectPort X8 Gateway',
   0x30002: 'ConnectPort X4 Gateway',
@@ -65,6 +68,26 @@ class Command {
   constructor(cmdType, cmdData) {
     this.cmdType = cmdType;
     this.cmdData = cmdData;
+  }
+
+  print(adapter, idx) {
+    let idxStr = ('    ' + idx).slice(-4) + ': ';
+    switch (this.cmdType) {
+      case SEND_FRAME:
+        adapter.dumpFrame(idxStr + 'SEND:', this.cmdData);
+        break;
+      case WAIT_FRAME:
+        console.log(idxStr + 'WAIT');
+        break;
+      case EXEC_FUNC:
+        console.log(idxStr + 'EXEC:', this.cmdData[1].name, this.cmdData[2]);
+        break;
+      case RESOLVE_SET_PROPERTY:
+        console.log(idxStr + 'RESOLVE_SET_PROPERTY');
+        break;
+      default:
+        console.log(idxStr + 'UNKNOWN');
+    }
   }
 }
 
@@ -120,6 +143,10 @@ class ZigbeeAdapter extends Adapter {
     this.cmdQueue = [];
     this.running = false;
     this.waitFrame = null;
+    this.waitTimeout = null;
+    this.waitRetryCount = 0;
+    this.lastFrameSent = null;
+    this.discoveringAttributes = false;
 
     this.serialNumber = '0000000000000000';
     this.nextStartIndex = -1;
@@ -322,7 +349,7 @@ class ZigbeeAdapter extends Adapter {
           console.log(label, 'Explicit Tx', frame.destination64,
                       'ZHA', frame.clusterId,
                       zclId.cluster(parseInt(frame.clusterId, 16)).key,
-                      frame.zcl.cmd);
+                      frame.zcl.cmd, frame.zcl.payload);
         } else {
           console.log(label, frame.destination64, frame.clusterId);
         }
@@ -340,7 +367,7 @@ class ZigbeeAdapter extends Adapter {
           console.log(label, 'Explicit Rx', frame.remote64,
                       'ZHA', frame.clusterId,
                       zclId.cluster(parseInt(frame.clusterId, 16)).key,
-                      frame.zcl ? frame.zcl.cmdId : '???');
+                      frame.zcl ? frame.zcl.cmdId : '???', frame.zcl.payload);
         } else {
           console.log(label, frame.remote64, frame.clusterId);
         }
@@ -528,6 +555,13 @@ class ZigbeeAdapter extends Adapter {
           frame.zcl = data;
           if (this.debugFrames) {
             this.dumpFrame('Rcvd:', frame);
+          }
+          // Add some special fields to ease waitFrame processing.
+          if (frame.zcl.seqNum) {
+            frame.zclSeqNum = frame.zcl.seqNum;
+          }
+          if (frame.zcl.cmdId) {
+            frame.zclCmdId = frame.zcl.cmdId;
           }
           var node = this.nodes[frame.remote64];
           if (node) {
@@ -1015,8 +1049,10 @@ class ZigbeeAdapter extends Adapter {
   //----- Discover Attributes -----------------------------------------------
 
   discoverAttributes(node) {
+    this.waitFrameTimeoutFunc = this.discoverAttributesTimeout.bind(this);
+    this.discoveringAttributes = true;
+    console.log('**** Starting discovery for node:', node.id, '*****');
     let commands = [];
-    console.log('Node:', node.id);
     for (let endpointNum in node.activeEndpoints) {
       let endpoint = node.activeEndpoints[endpointNum];
 
@@ -1043,8 +1079,9 @@ class ZigbeeAdapter extends Adapter {
           commands = commands.concat([
             new Command(SEND_FRAME, discoverFrame),
             new Command(WAIT_FRAME, {
-              type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
-              id: discoverFrame.id,
+              type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+              zclCmdId: 'discoverRsp',
+              zclSeqNum: discoverFrame.id
             }),
           ]);
         }
@@ -1075,8 +1112,9 @@ class ZigbeeAdapter extends Adapter {
           commands = commands.concat([
             new Command(SEND_FRAME, discoverFrame),
             new Command(WAIT_FRAME, {
-              type: C.FRAME_TYPE.ZIGBEE_TRANSMIT_STATUS,
-              id: discoverFrame.id,
+              type: C.FRAME_TYPE.ZIGBEE_EXPLICIT_RX,
+              zclCmdId: 'discoverRsp',
+              zclSeqNum: discoverFrame.id
             }),
           ]);
         }
@@ -1084,11 +1122,37 @@ class ZigbeeAdapter extends Adapter {
         commands = commands.concat(FUNC(this, this.print, ['    None']));
       }
     }
+    commands = commands.concat(FUNC(this, this.doneDiscoverAttributes, [node]));
 
     this.queueCommandsAtFront(commands);
   }
 
+  doneDiscoverAttributes(node) {
+    console.log('***** Discovery done for node:', node.id, '*****');
+    this.waitFrameTimeoutFunc = null;
+    this.discoveringAttributes = false;
+  }
+
+  discoverAttributesTimeout(frame) {
+    // Some of the attributes fail to read during discover. I suspect that
+    // this is because something related to the attribute hasn't been
+    // initialized. Just report what we know.
+    if (frame.zcl && frame.zcl.cmd == 'read') {
+      let clusterId = parseInt(frame.clusterId, 16);
+      for (let attrEntry of frame.zcl.payload) {
+        let attr = zclId.attr(clusterId, attrEntry.attrId);
+        let attrStr = attr ? attr.key : 'unknown';
+        console.log('      AttrId:', attrStr + ' (' + attrEntry.attrId + ')',
+                    'read failed');
+      }
+    }
+  }
+
   //-------------------------------------------------------------------------
+
+  nextFrameId() {
+    return xbeeApi._frame_builder.nextFrameId();
+  }
 
   sendFrame(frame) {
     this.queueCommands([
@@ -1158,6 +1222,11 @@ class ZigbeeAdapter extends Adapter {
           console.log('Wait satisified');
         }
         this.waitFrame = null;
+        this.waitRetryCount = 0;
+        if (this.waitTimeout) {
+          clearTimeout(this.waitTimeout);
+          this.waitTimeout = null;
+        }
       }
     }
     this.run();
@@ -1191,6 +1260,15 @@ class ZigbeeAdapter extends Adapter {
 
   print(str) {
     console.log(str);
+  }
+
+  dumpCommands() {
+    console.log('Commands (' + this.cmdQueue.length + ')');
+    for (let idx in this.cmdQueue) {
+      let cmd = this.cmdQueue[idx];
+      cmd.print(this, idx);
+    }
+    console.log('---');
   }
 
   queueCommands(cmdSeq) {
@@ -1235,18 +1313,23 @@ class ZigbeeAdapter extends Adapter {
       switch (cmd.cmdType) {
 
         case SEND_FRAME:
-          if (this.debugFlow) {
-            console.log('SEND_FRAME');
-          }
           var frame = cmd.cmdData;
+          var sentPrefix = '';
+          if (frame.resend) {
+            sentPrefix = 'Re';
+          }
+          if (this.debugFlow) {
+            console.log(sentPrefix + 'SEND_FRAME');
+          }
           if (this.debugFrames) {
-            this.dumpFrame('Sent:', frame);
+            this.dumpFrame(sentPrefix + 'Sent:', frame);
           }
           var rawFrame = this.xb.buildFrame(frame);
           if (this.debugRawFrames) {
-            console.log('Sent:', rawFrame);
+            console.log(sentPrefix + 'Sent:', rawFrame);
           }
           this.serialport.write(rawFrame, serialWriteError);
+          this.lastFrameSent = frame;
           break;
 
         case WAIT_FRAME:
@@ -1254,6 +1337,9 @@ class ZigbeeAdapter extends Adapter {
             console.log('WAIT_FRAME');
           }
           this.waitFrame = cmd.cmdData;
+          this.waitRetryCount += 1;
+          this.waitTimeout = setTimeout(this.waitTimedOut.bind(this),
+                                        WAIT_TIMEOUT_DELAY);
           break;
 
         case EXEC_FUNC:
@@ -1277,6 +1363,48 @@ class ZigbeeAdapter extends Adapter {
       }
     }
     this.running = false;
+  }
+
+  waitTimedOut() {
+    // We timed out waiting for a response, resend the last command.
+    clearTimeout(this.waitTimeout);
+    this.waitTimeout = null;
+
+    // We need to set waitFrame back to null in order for the run
+    // function to do anything.
+    let waitFrame = this.waitFrame;
+    this.waitFrame = null;
+
+    if (this.waitRetryCount > WAIT_RETRY_MAX) {
+      // We've tried a few times, but no response.
+      if (this.waitFrameTimeoutFunc) {
+        this.waitFrameTimeoutFunc(this.lastFrameSent);
+      }
+      if (!this.running) {
+        this.run();
+      }
+      return;
+    }
+
+    if (this.lastFrameSent && waitFrame) {
+      if (this.debugFrames) {
+        console.error('Resending ...');
+      }
+      this.lastFrameSent.resend = true;
+
+      // Uncomment the following to cause the new send to go out with
+      // a new ID. In the cases I've seen, sending with the new or
+      // existing ID doesn't change the behaviour. Leaving the ID the
+      // same allows up to pick up a late response from an earlier
+      // request.
+
+      //this.lastFrameSent.id = this.nextFrameId();
+      //if (waitFrame.id) {
+      //  waitFrame.id = this.lastFrameSent.id;
+      //}
+
+      this.sendFrameWaitFrameAtFront(this.lastFrameSent, waitFrame);
+    }
   }
 }
 
