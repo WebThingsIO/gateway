@@ -96,13 +96,20 @@
   color: #5d9bc7;
 }
 
+.color-light-icon-path {
+  fill: #ffffff;
+}
+
+.color-light-container.off .color-light-icon-path {
+  fill: #444444;
+}
+
 .color-light {
   width: 12.8rem;
   height: 12.8rem;
   border-radius: 6.4rem;
   border: 2px solid white;
   text-align: center;
-  margin: 1rem;
   display: inline-block;
   transform: translate(0, 0); /* promote to layer to draw above links */
 }
