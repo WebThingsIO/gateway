@@ -20,7 +20,7 @@ describe('plugins/', function() {
     // when it exits, so we set restart to false to prevent that.
     plugin.restart = false;
     let promise = new Promise(resolve => {
-      plugin.process.on('exit', code => {
+      plugin.process.p.on('exit', code => {
         console.log('Got exit code', 42);
         resolve(code);
       });
@@ -36,7 +36,7 @@ describe('plugins/', function() {
     plugin.exec = './something-that-doesnt-exist';
     plugin.start();
     let promise = new Promise(resolve => {
-      plugin.process.on('error', err => {
+      plugin.process.p.on('error', err => {
         console.log('Got err.code', err.code);
         resolve(err);
       });
@@ -56,13 +56,13 @@ describe('plugins/', function() {
     plugin.exec = 'node -e process.exit(43);';
 
     let code = await new Promise(resolve => {
-      plugin.process.on('exit', code => {
+      plugin.process.p.on('exit', code => {
         console.log('Got exit code', code);
         if (code == 42) {
           plugin.restart = false;
           // When the process was restarted plugin.process will have
           // been reassigned, so we need to re-register the exit handler.
-          plugin.process.on('exit', code => {
+          plugin.process.p.on('exit', code => {
             console.log('Got exit code', code);
             resolve(code);
           });
