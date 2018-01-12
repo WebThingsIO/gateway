@@ -30,6 +30,9 @@ function ColorLight(description, format) {
 
   this.updateStatus();
   this.colorLight = this.element.querySelector('.color-light');
+  this.colorLightIconPath =
+    this.element.querySelector('.color-light-icon-path');
+
   if (format === 'htmlDetail') {
     this.onOffSwitch = this.element.querySelector('.color-light-onoff-switch');
     this.onOffLabel = this.element.querySelector('.color-light-onoff-label');
@@ -226,6 +229,17 @@ ColorLight.prototype.updateColor = function(color) {
   this.properties.color = color;
   this.colorLight.style.background = color;
   this.colorInput.value = color;
+
+  let r = parseInt(color.substr(1,2), 16);
+  let g = parseInt(color.substr(3,2), 16);
+  let b = parseInt(color.substr(5,2), 16);
+
+  // From https://stackoverflow.com/questions/3942878/
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+    this.colorLightIconPath.style.stroke = '#666666';
+  } else {
+    this.colorLightIconPath.style.stroke = '#ffffff';
+  }
 };
 
 ColorLight.prototype.setColor = function(color) {
