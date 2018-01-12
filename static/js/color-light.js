@@ -42,7 +42,6 @@ function ColorLight(description, format) {
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
-    this.layout.update();
   } else {
     this.element.addEventListener('click', this.handleClick.bind(this));
   }
