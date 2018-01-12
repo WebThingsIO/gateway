@@ -33,6 +33,19 @@ var NewThing = function(id, description) {
  */
 NewThing.prototype.view = function() {
   switch(this.description.type) {
+    case 'binarySensor':
+      return '<div id="new-thing-' + this.id + '"' +
+             '  class="new-thing binary-sensor">' +
+             '  <div class="new-thing-icon"></div>'+
+             '  <div class="new-thing-metadata">' +
+             '    <input type="text" class="new-thing-name" value="' +
+                  this.description.name + '"></input>' +
+             '    <span class="new-thing-type">Binary Sensor</span>' +
+             '  </div>' +
+             '  <button class="new-thing-save-button text-button">' +
+             '    Save' +
+             '  </button>' +
+             '</div>';
     case 'onOffSwitch':
       return '<div id="new-thing-' + this.id + '"' +
              '  class="new-thing on-off-switch">' +

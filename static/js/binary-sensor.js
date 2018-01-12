@@ -25,10 +25,10 @@ var BinarySensor = function(description, format) {
     return this;
   }
   // Parse on property URL
-  if (this.propertyDescriptions.triggered &&
-    this.propertyDescriptions.triggered.href) {
-    this.triggeredPropertyUrl =
-      new URL(this.propertyDescriptions.triggered.href, this.href);
+  if (this.propertyDescriptions.on &&
+    this.propertyDescriptions.on.href) {
+    this.onPropertyUrl =
+      new URL(this.propertyDescriptions.on.href, this.href);
   }
   this.updateStatus();
   return this;
@@ -66,43 +66,62 @@ BinarySensor.prototype.svgView = function() {
  * Update the on/off status of the binary sensor.
  */
 BinarySensor.prototype.updateStatus = function() {
-  if (!this.triggeredPropertyUrl) {
+  if (!this.onPropertyUrl) {
     return;
   }
   var opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`
+      'Authorization': `Bearer ${window.API.jwt}`,
+      'Accept': 'application/json'
     }
   };
-  fetch(this.triggeredPropertyUrl, opts).then((function(response) {
+  fetch(this.onPropertyUrl, opts).then((function(response) {
     return response.json();
   }).bind(this)).then((function(response) {
-    this.properties.triggered = response.triggered;
-    if (response.triggered === null) {
+    this.properties.on = response.on;
+    if (response.on === null) {
       return;
-    } else if(response.triggered) {
-      this.showTriggered();
+    } else if(response.on) {
+      this.showOn();
     } else {
-      this.showUntriggered();
+      this.showOff();
     }
   }).bind(this)).catch(function(error) {
-    console.error('Error fetching triggered/untriggered switch status ' +
-      error);
+    console.error('Error fetching on/off sensor status ' + error);
   });
+};
+
+/**
+ * Handle a 'propertyStatus' message
+ * @param {Object} properties - property data
+ */
+BinarySensor.prototype.onPropertyStatus = function(data) {
+  if (!data.hasOwnProperty('on')) {
+    return;
+  }
+  this.properties.on = data.on;
+  if (data.on === null) {
+    return;
+  }
+  if (data.on) {
+    this.showOn();
+  } else {
+    this.showOff();
+  }
 };
 
 /**
  * Show on state.
  */
-BinarySensor.prototype.showTriggered = function() {
-  this.element.classList.remove('untriggered');
-  this.element.classList.add('triggered');
+BinarySensor.prototype.showOn = function() {
+  this.element.classList.remove('off');
+  this.element.classList.add('on');
 };
 
 /**
  * Show off state.
  */
-BinarySensor.prototype.showUntriggered = function() {
-  this.element.classList.remove('triggered');
-  this.element.classList.add('untriggered');
+BinarySensor.prototype.showOff = function() {
+  this.element.classList.remove('on');
+  this.element.classList.add('off');
 };

@@ -59,7 +59,7 @@ class ZWaveClassifier {
 
   initBinarySensor(node, valueId) {
     node.type = THING_TYPE_BINARY_SENSOR;
-    node.properties.set('triggered',
+    node.properties.set('on',
                         new ZWaveProperty(
                           node,               // device
                           'on',               // name

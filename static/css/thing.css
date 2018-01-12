@@ -47,10 +47,10 @@
   background-image: url('../images/binary-sensor.png');
 }
 
-.binary-sensor.triggered .thing-icon {
+.binary-sensor.on .thing-icon {
   background-image: url('../images/binary-sensor-on.png');
 }
 
-.binary-sensor.untriggered .thing-icon {
+.binary-sensor.off .thing-icon {
   background-image: url('../images/binary-sensor-off.png');
 }
