@@ -39,7 +39,12 @@ class Plugin {
     this.ipcSocket.bind();
     this.exec = '';
     this.execPath = '.';
-    this.process = null;
+
+    // Make this a nested object such that if the Plugin object is reused,
+    // i.e. the plugin is disabled and quickly re-enabled, the gateway process
+    // can maintain a proper reference to the process object.
+    this.process = {p: null};
+
     this.restart = true;
     this.unloadCompletedPromise = null;
     this.unloadedRcvdPromise = null;
@@ -47,8 +52,8 @@ class Plugin {
 
   asDict() {
     let pid = 'not running';
-    if (this.process) {
-      pid = this.process.pid;
+    if (this.process.p) {
+      pid = this.process.p.pid;
     }
     return {
       pluginId: this.pluginId,
@@ -236,9 +241,9 @@ class Plugin {
     // module called splitargs
     this.restart = true;
     let args = execCmd.split(' ');
-    this.process = spawn(args[0], args.slice(1));
+    this.process.p = spawn(args[0], args.slice(1));
 
-    this.process.on('error', err => {
+    this.process.p.on('error', err => {
       // We failed to spawn the process. This most likely means that the
       // exec string is malformed somehow. Report the error but don't try
       // restarting.
@@ -249,30 +254,33 @@ class Plugin {
     });
 
     this.stdoutReadline = readline.createInterface({
-      input: this.process.stdout
+      input: this.process.p.stdout
     });
     this.stdoutReadline.on('line', line => {
       console.log(this.logPrefix + ': ' + line);
     });
 
     this.stderrReadline = readline.createInterface({
-      input: this.process.stderr
+      input: this.process.p.stderr
     });
     this.stderrReadline.on('line', line => {
       console.error(this.logPrefix + ': ' + line);
     });
 
-    this.process.on('exit', code => {
+    this.process.p.on('exit', code => {
       if (this.restart) {
         if (code == Constants.DONT_RESTART_EXIT_CODE) {
           console.log('Plugin:', this.pluginId, 'died, code =', code,
                       'NOT restarting...');
           this.restart = false;
+          this.process.p = null;
         } else {
           console.log('Plugin:', this.pluginId, 'died, code =', code,
                       'restarting...');
           this.start();
         }
+      } else {
+        this.process.p = null;
       }
     });
   }
