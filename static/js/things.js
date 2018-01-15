@@ -113,6 +113,11 @@ var ThingsScreen = {
             // eslint-disable-next-line no-unused-vars
             var newOnOffSwitch = new OnOffSwitch(description);
             break;
+          case 'binarySensor':
+            console.log('rendering new binary sensor');
+            // eslint-disable-next-line no-unused-vars
+            var newBinarySensor = new BinarySensor(description);
+            break;
           default:
             console.log('rendering new thing');
             // eslint-disable-next-line no-unused-vars
