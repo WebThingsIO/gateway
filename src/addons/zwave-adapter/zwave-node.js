@@ -63,6 +63,30 @@ class ZWaveNode extends Device {
     return dict;
   }
 
+  /**
+   * @method findValueId
+   *
+   * Searches through the valueId's associated with this node, and returns
+   * the first one which matches the given criteria.
+   *
+   * @param {number} commandClass The command class of the valueId to find
+   * @param {number} [instance] a specific instance number associated with
+   *                            the valueId
+   * @param {number} [index] a specific index associated with the valueId
+   * @returns {String} The valueId key associated with the found value, or
+   *                   undefined if no valueId was found.
+   */
+  findValueId(commandClass, instance, index) {
+    for (var valueId in this.zwValues) {
+      const value = this.zwValues[valueId];
+      if (value.class_id == commandClass &&
+          (typeof(instance) === 'undefined' || value.instance == instance) &&
+          (typeof(index) === 'undefined' || value.index == index)) {
+        return valueId;
+      }
+    }
+  }
+
   findPropertyFromValueId(valueId) {
     for (var property of this.properties.values()) {
       if (property.valueId == valueId) {
@@ -126,13 +150,15 @@ class ZWaveNode extends Device {
     var property = this.findPropertyFromValueId(zwValue.value_id);
     if (zwValue.genre === 'user' || DEBUG) {
       if (property) {
-        property.value = zwValue.value;
-        console.log('node%d valueAdded: %d:%s -> %s property: %s',
-                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
-                    property.name);
+        let [value, logValue] = property.parseZwValue(zwValue.value);
+        property.setCachedValue(value);
+        console.log('node%d valueAdded: %s:%s property: %s = %s',
+                  this.zwInfo.nodeId, zwValue.value_id, zwValue.label,
+                  property.name, logValue);
       } else {
-        console.log('node%d valueAdded: %d:%s -> %s',
-                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+        console.log('node%d valueAdded: %s:%s = %s',
+                    this.zwInfo.nodeId, zwValue.value_id,
+                    zwValue.label, zwValue.value);
       }
     }
     if (zwValue.genre === 'user' && !this.defaultName)  {
@@ -150,17 +176,18 @@ class ZWaveNode extends Device {
   zwValueChanged(comClass, zwValue) {
     this.lastStatus = 'value-changed';
     this.zwValues[zwValue.value_id] = zwValue;
-
     var property = this.findPropertyFromValueId(zwValue.value_id);
     if (property) {
-      property.setCachedValue(zwValue.value);
-      console.log('node%d valueChanged: %d:%s = %s -> property: %s = %s',
-                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
-                  property.name, property.value);
+      let [value, logValue] = property.parseZwValue(zwValue.value);
+      property.setCachedValue(value);
+      console.log('node%d valueChanged: %s:%s property: %s = %s',
+            this.zwInfo.nodeId, zwValue.value_id, zwValue.label,
+            property.name, logValue);
       this.notifyPropertyChanged(property);
     } else {
-      console.log('node%d valueChanged: %d:%s = %s',
-                  this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+      console.log('node%d valueChanged: %s:%s = %s',
+                  this.zwInfo.nodeId, zwValue.value_id,
+                  zwValue.label, zwValue.value);
     }
   }
 
@@ -173,14 +200,16 @@ class ZWaveNode extends Device {
       delete this.zwValues[valueId];
       var property = this.findPropertyFromValueId(zwValue.value_id);
       if (property) {
+        let [_value, logValue] = property.parseZwValue(zwValue.value);
         delete property.valueId;
         delete property.value;
-        console.log('node%d valueRemoved: %d:%s -> %s property: %s',
-                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value,
-                    property.name);
+        console.log('node%d valueRemoved: %s:%s %s property: %s = %s',
+                    this.zwInfo.nodeId, zwValue.value_id, zwValue.label,
+                    property.name, logValue);
       } else {
-        console.log('node%d valueRemoved: %d:%s -> %s',
-                    this.zwInfo.nodeId, comClass, zwValue.label, zwValue.value);
+        console.log('node%d valueRemoved: %s:%s = %s',
+                    this.zwInfo.nodeId, zwValue.value_id,
+                    zwValue.label, zwValue.value);
       }
     } else {
       console.log('zwValueRemoved unknown valueId:', valueId);

@@ -10,6 +10,7 @@
 
 'use strict';
 
+const Constants = require('../addon-constants');
 const zclId = require('zcl-id');
 const utils = require('../utils');
 const ZigbeeProperty = require('./zb-property');
@@ -24,14 +25,6 @@ const CLUSTER_ID_HAELECTRICAL = zclId.cluster('haElectricalMeasurement').value;
 const CLUSTER_ID_HAELECTRICAL_HEX = utils.hexStr(CLUSTER_ID_HAELECTRICAL, 4);
 const CLUSTER_ID_SEMETERING = zclId.cluster('seMetering').value;
 const CLUSTER_ID_SEMETERING_HEX = utils.hexStr(CLUSTER_ID_SEMETERING, 4);
-
-const THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
-const THING_TYPE_BINARY_SENSOR = 'binarySensor';
-const THING_TYPE_MULTI_LEVEL_SWITCH = 'multiLevelSwitch';
-const THING_TYPE_SMARTPLUG = 'smartPlug';
-
-const UI_SUPPORTS_MULTILEVEL = false;
-const UI_SUPPORTS_SMARTPLUG = false;
 
 class ZigbeeClassifier {
 
@@ -349,36 +342,24 @@ class ZigbeeClassifier {
   }
 
   initBinarySensor(node, endpointNum) {
-    node.type = THING_TYPE_BINARY_SENSOR;
+    node.type = Constants.THING_TYPE_BINARY_SENSOR;
     this.addOnProperty(node, endpointNum);
   }
 
   initOnOffSwitch(node, genOnOffEndpoint) {
-    node.type = THING_TYPE_ON_OFF_SWITCH;
+    node.type = Constants.THING_TYPE_ON_OFF_SWITCH;
 
     this.addOnProperty(node, genOnOffEndpoint);
   }
 
   initMultiLevelSwitch(node, genLevelCtrlEndpoint) {
-    if (UI_SUPPORTS_MULTILEVEL) {
-      node.type = THING_TYPE_MULTI_LEVEL_SWITCH;
-    } else {
-      node.type = THING_TYPE_ON_OFF_SWITCH;
-    }
+    node.type = Constants.THING_TYPE_MULTI_LEVEL_SWITCH;
     this.addOnProperty(node, genLevelCtrlEndpoint);
     this.addLevelProperty(node, genLevelCtrlEndpoint);
   }
 
   initHaSmartPlug(node, haElectricalEndpoint, genLevelCtrlEndpoint) {
-    if (UI_SUPPORTS_SMARTPLUG) {
-      node.type = THING_TYPE_SMARTPLUG;
-    } else {
-      if (UI_SUPPORTS_MULTILEVEL && genLevelCtrlEndpoint) {
-        node.type = THING_TYPE_MULTI_LEVEL_SWITCH;
-      } else {
-        node.type = THING_TYPE_ON_OFF_SWITCH;
-      }
-    }
+    node.type = Constants.THING_TYPE_SMARTPLUG;
     this.addOnProperty(node, haElectricalEndpoint);
     if (genLevelCtrlEndpoint) {
       this.addLevelProperty(node, genLevelCtrlEndpoint);
@@ -390,15 +371,7 @@ class ZigbeeClassifier {
   }
 
   initSeSmartPlug(node, seMeteringEndpoint, genLevelCtrlEndpoint) {
-    if (UI_SUPPORTS_SMARTPLUG) {
-      node.type = THING_TYPE_SMARTPLUG;
-    } else {
-      if (UI_SUPPORTS_MULTILEVEL && genLevelCtrlEndpoint) {
-        node.type = THING_TYPE_MULTI_LEVEL_SWITCH;
-      } else {
-        node.type = THING_TYPE_ON_OFF_SWITCH;
-      }
-    }
+    node.type = Constants.THING_TYPE_SMARTPLUG;
     this.addOnProperty(node, seMeteringEndpoint);
     if (genLevelCtrlEndpoint) {
       this.addLevelProperty(node, genLevelCtrlEndpoint);
