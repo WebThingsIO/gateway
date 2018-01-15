@@ -17,29 +17,30 @@ var addonManager = require('../addon-manager');
 var debugController = express.Router();
 
 addonManager.on(Constants.ADAPTER_ADDED, (adapter) => {
-  console.log('debug: Got "', Constants.ADAPTER_ADDED,
-              '" notification for', adapter.id, adapter.name);
+  console.log('debug: Got:', Constants.ADAPTER_ADDED,
+              'notification for', adapter.id, adapter.name);
 });
 
 addonManager.on(Constants.THING_ADDED, (thing) => {
-  console.log('debug: Got "', Constants.THING_ADDED,
-              '" notification for', thing.name);
+  console.log('debug: Got:', Constants.THING_ADDED,
+              'notification for', thing.name);
 });
 
 addonManager.on(Constants.THING_REMOVED, (thing) => {
-  console.log('debug: Got "', Constants.THING_REMOVED,
-              '" notification for', thing.name);
+  console.log('debug: Got:', Constants.THING_REMOVED,
+              'notification for', thing.name);
 });
 
 addonManager.on(Constants.PROPERTY_CHANGED, (property) => {
-  console.log('debug: Got "', Constants.PROPERTY_CHANGED,
-              '" notification for', property.name,
+  console.log('debug: Got:', Constants.PROPERTY_CHANGED,
+              'notification for:', property.device.name,
+              'property:', property.name,
               'value:', property.value);
 });
 
 addonManager.on(Constants.PAIRING_TIMEOUT, () => {
-  console.log('debug: Got "', Constants.PAIRING_TIMEOUT,
-              '" notification');
+  console.log('debug: Got:', Constants.PAIRING_TIMEOUT,
+              'notification');
 });
 
 /**
