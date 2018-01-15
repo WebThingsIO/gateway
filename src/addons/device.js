@@ -55,6 +55,10 @@ class Device {
     return thing;
   }
 
+  debugCmd(cmd, params) {
+    console.log('Device:', this.name, 'got debugCmd:', cmd, 'params:', params);
+  }
+
   getId() {
     return this.id;
   }

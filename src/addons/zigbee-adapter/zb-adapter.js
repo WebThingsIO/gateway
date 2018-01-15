@@ -146,7 +146,6 @@ class ZigbeeAdapter extends Adapter {
     this.waitTimeout = null;
     this.waitRetryCount = 0;
     this.lastFrameSent = null;
-    this.discoveringAttributes = false;
 
     this.serialNumber = '0000000000000000';
     this.nextStartIndex = -1;
@@ -1050,7 +1049,7 @@ class ZigbeeAdapter extends Adapter {
 
   discoverAttributes(node) {
     this.waitFrameTimeoutFunc = this.discoverAttributesTimeout.bind(this);
-    this.discoveringAttributes = true;
+    node.discoveringAttributes = true;
     console.log('**** Starting discovery for node:', node.id, '*****');
     let commands = [];
     for (let endpointNum in node.activeEndpoints) {
@@ -1060,7 +1059,7 @@ class ZigbeeAdapter extends Adapter {
         FUNC(this, this.print,
           ['  Input clusters for endpoint ' + endpointNum])
       );
-      if (endpoint.inputClusters.length) {
+      if (endpoint.inputClusters && endpoint.inputClusters.length) {
         for (let inputCluster of endpoint.inputClusters) {
           let inputClusterId = parseInt(inputCluster, 16);
           let zclCluster = zclId.clusterId.get(inputClusterId);
@@ -1093,7 +1092,7 @@ class ZigbeeAdapter extends Adapter {
         FUNC(this, this.print,
           ['  Output clusters for endpoint ' + endpointNum])
       );
-      if (endpoint.outputClusters.length) {
+      if (endpoint.outputClusters && endpoint.outputClusters.length) {
         for (let outputCluster of endpoint.outputClusters) {
           let outputClusterId = parseInt(outputCluster, 16);
           let zclCluster = zclId.clusterId.get(outputClusterId);
@@ -1130,7 +1129,7 @@ class ZigbeeAdapter extends Adapter {
   doneDiscoverAttributes(node) {
     console.log('***** Discovery done for node:', node.id, '*****');
     this.waitFrameTimeoutFunc = null;
-    this.discoveringAttributes = false;
+    node.discoveringAttributes = false;
   }
 
   discoverAttributesTimeout(frame) {

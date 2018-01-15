@@ -9,6 +9,7 @@
 
 'use strict';
 
+const Constants = require('../addon-constants');
 const PropertyProxy = require('./property-proxy');
 
 var Device = require('../device');
@@ -42,6 +43,16 @@ class DeviceProxy extends Device {
 
   asDict() {
     return Object.assign({}, this.deviceDict, super.asDict());
+  }
+
+  debugCmd(cmd, params) {
+    this.adapter.sendMsg(
+      Constants.DEBUG_CMD, {
+        deviceId: this.id,
+        cmd: cmd,
+        params: params
+      }
+    );
   }
 }
 

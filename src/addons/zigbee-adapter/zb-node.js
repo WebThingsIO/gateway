@@ -41,6 +41,7 @@ class ZigbeeNode extends Device {
     } else {
       this.defaultName = deviceId + '-Node';
     }
+    this.discoveringAttributes = false;
   }
 
   asDict() {
@@ -71,6 +72,17 @@ class ZigbeeNode extends Device {
       }
     }
     return dict;
+  }
+
+  debugCmd(cmd, _params) {
+    switch (cmd) {
+      case 'discoverAttr':
+        this.adapter.discoverAttributes(this);
+        break;
+
+      default:
+        console.log('Unrecognized debugCmd:', cmd);
+    }
   }
 
   getAttrEntryFromFrame(frame, attrId) {
@@ -164,7 +176,7 @@ class ZigbeeNode extends Device {
   }
 
   handleReadRsp(frame) {
-    if (this.adapter.discoveringAttributes && frame.zcl.cmdId === 'readRsp') {
+    if (this.discoveringAttributes && frame.zcl.cmdId === 'readRsp') {
       let clusterId = parseInt(frame.clusterId, 16);
       for (let attrEntry of frame.zcl.payload) {
         let attr = zclId.attr(clusterId, attrEntry.attrId);

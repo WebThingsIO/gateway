@@ -45,6 +45,7 @@ exports.ADD_MOCK_DEVICE = 'addMockDevice';
 exports.CANCEL_PAIRING = 'cancelPairing';
 exports.CANCEL_REMOVE_THING = 'cancelRemoveThing';
 exports.CLEAR_MOCK_ADAPTER_STATE = 'clearMockAdapterState';
+exports.DEBUG_CMD = 'debugCmd';
 exports.EVENT = 'event';
 exports.ERROR = 'error';
 exports.HANDLE_DEVICE_ADDED = 'handleDeviceAdded';
