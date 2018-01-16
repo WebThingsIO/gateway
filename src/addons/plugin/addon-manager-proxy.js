@@ -209,6 +209,10 @@ class AddonManagerProxy extends EventEmitter {
         }
         break;
 
+      case Constants.DEBUG_CMD:
+        device.debugCmd(msg.data.cmd, msg.data.params);
+        break;
+
       default:
         console.warn('AddonManagerProxy: unrecognized msg:', msg);
         break;

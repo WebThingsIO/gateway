@@ -143,6 +143,20 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
 });
 
 /**
+ * Sends a debug command to a particular device.
+ */
+debugController.put('/device/:deviceId/cmd/:cmd', (request, response) => {
+  var deviceId = request.params.deviceId;
+  var device = addonManager.getDevice(deviceId);
+  if (device) {
+      device.debugCmd(request.params.cmd, request.body);
+      response.status(200).json(request.body);
+  } else {
+    response.status(404).send('Device "' + deviceId + '" not found.');
+  }
+});
+
+/**
  * Sets an property associated with a device.
  */
 debugController.put('/device/:deviceId/:propertyName', (request, response) => {
