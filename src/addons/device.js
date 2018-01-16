@@ -74,7 +74,9 @@ class Device {
   getPropertyDescriptions() {
     var propDescs = {};
     this.properties.forEach((property, propertyName) => {
-      propDescs[propertyName] = property.asPropertyDescription();
+      if (property.isVisible()) {
+        propDescs[propertyName] = property.asPropertyDescription();
+      }
     });
     return propDescs;
   }

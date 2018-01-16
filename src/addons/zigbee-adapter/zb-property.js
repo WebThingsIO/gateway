@@ -49,8 +49,22 @@ class ZigbeeProperty extends Property {
     this.profileId = profileId;
     this.endpoint = endpoint;
     this.clusterId = clusterId;
-    this.setAttrFromValue = Object.getPrototypeOf(this)[setAttrFromValue];
-    this.parseValueFromAttr = Object.getPrototypeOf(this)[parseValueFromAttr];
+    if (setAttrFromValue) {
+      this.setAttrFromValue = Object.getPrototypeOf(this)[setAttrFromValue];
+      if (!this.setAttrFromValue) {
+        let err = 'Unknown function: ' + setAttrFromValue;
+        console.error(err);
+        throw err;
+      }
+    }
+    if (parseValueFromAttr) {
+      this.parseValueFromAttr = Object.getPrototypeOf(this)[parseValueFromAttr];
+      if (!this.parseValueFromAttr) {
+        let err = 'Unknown function: ' + parseValueFromAttr;
+        console.error(err);
+        throw err;
+      }
+    }
     this.attr = attr;
     this.attrId = zclId.attr(clusterId, attr).value;
   }
@@ -111,6 +125,103 @@ class ZigbeeProperty extends Property {
       percent,
       percent.toFixed(1) + '% (' + this.level + ')'
     ];
+  }
+
+  /**
+   * @method parseHaCurrentAttr
+   *
+   * Converts the rmsCurrent attribute into current (amps)
+   * for devices which support the haElectricalMeasurement cluster.
+   */
+  parseHaCurrentAttr(attrEntry) {
+    if (!this.hasOwnProperty('multiplier')) {
+      let multiplierProperty = this.device.findProperty('_currentMul');
+      if (multiplierProperty && multiplierProperty.value) {
+        this.multiplier = multiplierProperty.value;
+      }
+    }
+    if (!this.hasOwnProperty('divisor')) {
+      let divisorProperty = this.device.findProperty('_currentDiv');
+      if (divisorProperty && divisorProperty.value) {
+        this.divisor = divisorProperty.value;
+      }
+    }
+
+    let current = 0;
+    if (this.multiplier && this.divisor) {
+      let rmsCurrent = attrEntry.attrData;
+      current = rmsCurrent * this.multiplier / this.divisor;
+    }
+    return [current, '' + current];
+  }
+
+  /**
+   * @method parseHaInstantaneousPowerAttr
+   *
+   * Converts the instantaneousDemand attribute into power (watts)
+   * for devices which support the haElectricalMeasurement cluster.
+   */
+  parseHaInstantaneousPowerAttr(attrEntry) {
+    if (!this.hasOwnProperty('multiplier')) {
+      let multiplierProperty = this.device.findProperty('_powerMul');
+      if (multiplierProperty && multiplierProperty.value) {
+        this.multiplier = multiplierProperty.value;
+      }
+    }
+    if (!this.hasOwnProperty('divisor')) {
+      let divisorProperty = this.device.findProperty('_powerDiv');
+      if (divisorProperty && divisorProperty.value) {
+        this.divisor = divisorProperty.value;
+      }
+    }
+
+    let power = 0;
+    if (this.multiplier && this.divisor) {
+      let demand = attrEntry.attrData;
+      // the units for haElectricalMeasurement are watts
+      power = demand * this.multiplier / this.divisor;
+    }
+    return [power, '' + power];
+  }
+
+  /**
+   * @method parseSeInstantaneousPowerAttr
+   *
+   * Converts the instantaneousDemand attribute into power (watts)
+   * for devices which support the seMetering cluster.
+   */
+  parseSeInstantaneousPowerAttr(attrEntry) {
+    if (!this.hasOwnProperty('multiplier')) {
+      let multiplierProperty = this.device.findProperty('_multiplier');
+      if (multiplierProperty && multiplierProperty.value) {
+        this.multiplier = multiplierProperty.value;
+      }
+    }
+    if (!this.hasOwnProperty('divisor')) {
+      let divisorProperty = this.device.findProperty('_divisor');
+      if (divisorProperty && divisorProperty.value) {
+        this.divisor = divisorProperty.value;
+      }
+    }
+
+    let power = 0;
+    if (this.multiplier && this.divisor) {
+      let demand = attrEntry.attrData;
+      // the units for seMetering are kilowatts, so we multiple by 1000
+      // to convert to watts.
+      power = demand * this.multiplier * 1000 / this.divisor;
+    }
+    return [power, '' + power];
+  }
+
+  /**
+   * @method parseNumericAttr
+   *
+   * Converts generic numeric attributes in a number.
+   */
+  parseNumericAttr(attrEntry) {
+    let value = attrEntry.attrData;
+    return [value, '' + value];
   }
 
   /**

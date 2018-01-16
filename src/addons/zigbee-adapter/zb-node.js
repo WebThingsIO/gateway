@@ -226,19 +226,37 @@ class ZigbeeNode extends Device {
     }
   }
 
-  makeBindFrame(property) {
+  makeBindFrame(endpoint, clusterId) {
     var frame = this.adapter.zdo.makeFrame({
       destination64: this.addr64,
       destination16: this.addr16,
       clusterId: zdo.CLUSTER_ID.BIND_REQUEST,
       bindSrcAddr64: this.addr64,
-      bindSrcEndpoint: property.endpoint,
-      bindClusterId: property.clusterId,
+      bindSrcEndpoint: endpoint,
+      bindClusterId: clusterId,
       bindDstAddrMode: 3,
       bindDstAddr64: this.adapter.serialNumber,
       bindDstEndpoint: 0,
     });
     return frame;
+  }
+
+  makeBindFramesFor(frames) {
+    // Find all of the unique clusterId/endpoint combinations and create
+    // bind frames for each one.
+    let uniqueClusterEndpoint = {};
+    for (const frame of frames) {
+      if (frame.zcl && frame.zcl.cmd == 'configReport') {
+        let key = '' + frame.destinationEndpoint + frame.clusterId;
+        uniqueClusterEndpoint[key] =
+          [frame.destinationEndpoint, frame.clusterId];
+      }
+    }
+    let bindFrames = [];
+    for (const uce of Object.values(uniqueClusterEndpoint)) {
+      bindFrames = bindFrames.concat(this.makeBindFrame(uce[0], uce[1]));
+    }
+    return bindFrames;
   }
 
   makeConfigReportFrame(property) {

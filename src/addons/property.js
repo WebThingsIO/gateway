@@ -31,6 +31,10 @@ class Property {
 
     this.device = device;
     this.name = name;
+    this.visible = true;
+    if (propertyDescr.hasOwnProperty('visible')) {
+      this.visible = propertyDescr.visible;
+    }
 
     copyDescrFieldsInto(this, propertyDescr);
   }
@@ -43,6 +47,7 @@ class Property {
     var prop = {
       name: this.name,
       value: this.value,
+      visible: this.visible,
     };
     copyDescrFieldsInto(prop, this);
     return prop;
@@ -56,6 +61,15 @@ class Property {
     var description = {};
     copyDescrFieldsInto(description, this);
     return description;
+  }
+
+  /**
+   * @method isVisible
+   * @returns true if this is a visible property, which is a property
+   *          that is reported in the property description.
+   */
+  isVisible() {
+    return this.visible;
   }
 
   /**
