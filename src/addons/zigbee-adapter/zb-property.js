@@ -119,7 +119,6 @@ class ZigbeeProperty extends Property {
    */
   parseLevelAttr(attrEntry) {
     this.level = attrEntry.attrData;
-    console.log('Setting this.level to', this.level);
     let percent = levelToPercent(this.level);
     return [
       percent,
