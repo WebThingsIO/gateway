@@ -26,6 +26,7 @@ var AddThingScreen = {
     this.backButton = document.getElementById('add-thing-back-button');
     this.cancelButton = document.getElementById('add-thing-cancel-button');
     this.newThingsElement = document.getElementById('new-things');
+    this.visibleThings = new Set();
     // Add event listeners
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.cancelButton.addEventListener('click', this.hide.bind(this));
@@ -107,6 +108,7 @@ var AddThingScreen = {
   show: function() {
     this.element.classList.remove('hidden');
     this.newThingsElement.innerHTML = '';
+    this.visibleThings.clear();
     this.requestPairing();
   },
 
@@ -121,8 +123,10 @@ var AddThingScreen = {
   },
 
   showNewThing: function(thing) {
-    // eslint-disable-next-line no-unused-vars
-    var newThing = new NewThing(thing.id, thing);
+    if (!this.visibleThings.has(thing.id)) {
+      this.visibleThings.add(thing.id);
+      new NewThing(thing.id, thing);
+    }
   }
 
 };
