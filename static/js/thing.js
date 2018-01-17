@@ -32,6 +32,7 @@ var Thing = function(description, format) {
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
+    this.id = this.href.pathname.split('/').pop();
 
     var wsHref = this.href.href.replace(/^http/, 'ws');
     this.ws = new WebSocket(wsHref + '?jwt=' + API.jwt);
