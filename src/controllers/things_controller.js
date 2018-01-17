@@ -211,11 +211,13 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
-  websocket.on('close', function() {
-    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
-                                onPropertyChanged);
+  const cleanup = () => {
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
-  });
+  };
+
+  websocket.on('error', cleanup);
+  websocket.on('close', cleanup);
 
   websocket.on('message', function(requestText) {
     let request = null;
