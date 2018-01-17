@@ -46,7 +46,7 @@ class ZigbeeClassifier {
       'level',                        // name
       {                               // property description
         type: 'number',
-        unit: '%',
+        unit: 'percent',
         min: 0,
         max: 100,
       },
@@ -107,7 +107,7 @@ class ZigbeeClassifier {
       'current',                      // name
       {                               // property description
         type: 'number',
-        unit: 'amps',
+        unit: 'ampere',
       },
       ZHA_PROFILE_ID,                 // profileId
       haElectricalEndpoint,           // endpoint
@@ -167,7 +167,7 @@ class ZigbeeClassifier {
       'instantaneousPower',           // name
       {                               // property description
         type: 'number',
-        unit: 'watts',
+        unit: 'watt',
       },
       ZHA_PROFILE_ID,                 // profileId
       haElectricalEndpoint,           // endpoint
@@ -184,7 +184,7 @@ class ZigbeeClassifier {
       'voltage',                      // name
       {                               // property description
         type: 'number',
-        unit: 'volts',
+        unit: 'volt',
       },
       ZHA_PROFILE_ID,                 // profileId
       haElectricalEndpoint,           // endpoint
@@ -227,7 +227,7 @@ class ZigbeeClassifier {
       'instantaneousPower',           // name
       {                               // property description
         type: 'number',
-        unit: 'watts',
+        unit: 'watt',
       },
       ZHA_PROFILE_ID,                 // profileId
       seMeteringEndpoint,             // endpoint

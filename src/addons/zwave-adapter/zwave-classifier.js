@@ -72,7 +72,7 @@ class ZWaveClassifier {
         'level',                // name
         {                       // property decscription
           type: 'number',
-          unit: '%',
+          unit: 'percent',
           min: 0,
           max: 100,
         },
@@ -90,7 +90,7 @@ class ZWaveClassifier {
         'instantaneousPower',   // name
         {                       // property decscription
           type: 'number',
-          unit: 'watts',
+          unit: 'watt',
         },
         powerValueId            // valueId
       );
@@ -104,7 +104,7 @@ class ZWaveClassifier {
         'voltage',              // name
         {                       // property decscription
           type: 'number',
-          unit: 'volts',
+          unit: 'volt',
         },
         voltageValueId          // valueId
       );
@@ -121,7 +121,7 @@ class ZWaveClassifier {
         'current',              // name
         {                       // property decscription
           type: 'number',
-          unit: 'amps',
+          unit: 'ampere',
         },
         currentValueId          // valueId
       );
