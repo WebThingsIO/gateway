@@ -175,7 +175,7 @@ MultiLevelSwitch.prototype.updateOn = function(on) {
 MultiLevelSwitch.prototype.updateLevel = function(level) {
   level = parseFloat(level);
   this.properties.level = level;
-  // TODO update ui thingy
+
   let bar = MULTI_LEVEL_SWITCH_OFF_BAR;
   let blank = MULTI_LEVEL_SWITCH_OFF_BLANK;
 
