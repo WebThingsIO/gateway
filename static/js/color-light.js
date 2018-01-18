@@ -197,7 +197,6 @@ ColorLight.prototype.updateStatus = function() {
  * @param {Object} properties - property data
  */
 ColorLight.prototype.onPropertyStatus = function(data) {
-  console.log(data);
   if (data.hasOwnProperty('on')) {
     this.updateOn(data.on);
   }
