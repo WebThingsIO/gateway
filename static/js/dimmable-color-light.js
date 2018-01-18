@@ -35,9 +35,6 @@ function DimmableColorLight(description, format) {
 
   this.updateStatus();
 
-  this.levelLabel =
-    this.element.querySelector('.dimmable-color-light-level');
-
   if (format !== 'htmlDetail') {
     this.element.addEventListener('click', this.handleClick.bind(this));
   }
@@ -45,12 +42,6 @@ function DimmableColorLight(description, format) {
 }
 
 DimmableColorLight.prototype = Object.create(ColorLight.prototype);
-
-DimmableColorLight.prototype.iconView = function() {
-  let level = this.properties.level;
-  return ColorLight.prototype.iconView.call(this) +
-    `<div class="dimmable-color-light-level">${level}%</div>`;
-};
 
 /**
  * Update the status of the light.
@@ -88,6 +79,9 @@ DimmableColorLight.prototype.updateStatus = function() {
 DimmableColorLight.prototype.onPropertyStatus = function(data) {
   if (data.hasOwnProperty('on')) {
     this.updateOn(data.on);
+    if (this.properties.on) {
+      this.colorLightLabel.textContent = this.properties.level + '%';
+    }
   }
   if (data.hasOwnProperty('color')) {
     this.updateColor(data.color);
@@ -102,7 +96,9 @@ DimmableColorLight.prototype.onPropertyStatus = function(data) {
  */
 DimmableColorLight.prototype.updateLevel = function(level) {
   this.properties.level = level;
-  this.levelLabel.textContent = level + '%';
+  if (this.properties.on) {
+    this.colorLightLabel.textContent = level + '%';
+  }
 
   if (this.details) {
     this.details.level.update();
