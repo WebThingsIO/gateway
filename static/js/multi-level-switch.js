@@ -12,6 +12,11 @@
 
 /* globals LevelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
 
+const MULTI_LEVEL_SWITCH_OFF_BAR = 'white';
+const MULTI_LEVEL_SWITCH_OFF_BLANK = '#89b6d6';
+const MULTI_LEVEL_SWITCH_ON_BAR = '#5d9bc7';
+const MULTI_LEVEL_SWITCH_ON_BLANK = 'white';
+
 /**
  * MultiLevelSwitch Constructor (extends OnOffSwitch).
  *
@@ -145,6 +150,12 @@ MultiLevelSwitch.prototype.updateOn = function(on) {
     return;
   }
 
+  this.updateLevel(this.properties.level);
+
+  if (!on) {
+    this.levelBarLabel.textContent = 'OFF';
+  }
+
   if (this.details) {
     this.details.on.update();
   }
@@ -160,18 +171,21 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
   level = parseFloat(level);
   this.properties.level = level;
   // TODO update ui thingy
-  let blank = '#5d9bc7';
-  let bar = 'white';
+  let bar = MULTI_LEVEL_SWITCH_OFF_BAR;
+  let blank = MULTI_LEVEL_SWITCH_OFF_BLANK;
 
   if (this.properties.on) {
-    bar = blank;
-    blank = 'white';
+    bar = MULTI_LEVEL_SWITCH_ON_BAR;
+    blank = MULTI_LEVEL_SWITCH_ON_BLANK;
   }
 
   let levelBackground = `linear-gradient(${blank}, ${blank} ${100 - level}%,` +
                               `${bar} ${100 - level}%, ${bar})`;
   this.levelBar.style.background = levelBackground;
-  this.levelBarLabel.textContent = level + '%';
+
+  if (this.properties.on) {
+    this.levelBarLabel.textContent = level + '%';
+  }
 
   if (this.details) {
     this.details.level.update();
