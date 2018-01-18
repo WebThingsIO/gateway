@@ -128,8 +128,11 @@ ColorLight.prototype.htmlDetailView = function() {
   let onoff = checked ? 'on' : 'off';
   let color = this.properties.color;
 
-  return `<div class="color-light-container">` + this.iconView() +
-    `<div class="thing-detail-container">
+  return `<div class="color-light-container">
+    <div class="thing">
+      ${this.iconView()}
+    </div>
+    <div class="thing-detail-container">
       <div class="thing-detail">
         <input class="thing-detail-contents color-light-color" type="color"
                value="${color}"/>

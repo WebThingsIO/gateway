@@ -8,9 +8,12 @@
   display: inline-block;
   text-decoration: none;
   color: white;
+  box-sizing: border-box;
+  vertical-align: bottom;
 }
 
 .thing-icon {
+  display: block;
   width: 12.8rem;
   height: 12.8rem;
   background-size: 12.8rem;
@@ -114,12 +117,13 @@
 }
 
 .color-light {
+  box-sizing: border-box;
+  display: block;
   width: 12.8rem;
   height: 12.8rem;
   border-radius: 6.4rem;
   border: 2px solid white;
   text-align: center;
-  display: inline-block;
   transform: translate(0, 0); /* promote to layer to draw above links */
 }
 
