@@ -2,16 +2,35 @@
 
 function ThingDetailLayout(elements) {
   this.elements = elements;
+  this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  this.svg.classList.add('thing-detail-layout-links');
 
-  const scale = Math.min(300, window.innerWidth / 2);
 
-  let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.classList.add('thing-detail-layout-links');
-  svg.setAttribute('width', scale * 2);
-  svg.setAttribute('height', scale * 2);
+  let things = document.getElementById('things');
+  things.insertBefore(this.svg, things.firstChild);
 
-  for (let i = 0; i < elements.length; i++) {
-    let angle = i/elements.length * 2 * Math.PI;
+  this.doLayout = this.doLayout.bind(this);
+
+  this.doLayout();
+
+  window.addEventListener('resize', this.doLayout);
+}
+
+ThingDetailLayout.prototype.doLayout = function() {
+  let scale = 300;
+  let angleStart = 0;
+
+  if (window.innerWidth < 680) {
+    scale = Math.max(130, window.innerWidth / 2 - 30);
+    angleStart = -0.7;
+  }
+
+  this.svg.setAttribute('width', scale * 2);
+  this.svg.setAttribute('height', scale * 2);
+  this.svg.innerHTML = '';
+
+  for (let i = 0; i < this.elements.length; i++) {
+    let angle = i/this.elements.length * 2 * Math.PI + angleStart;
     let x = scale * Math.cos(angle);
     let y = scale * Math.sin(angle);
 
@@ -24,11 +43,8 @@ function ThingDetailLayout(elements) {
     line.setAttribute('x2', x + scale);
     line.setAttribute('y2', y + scale);
 
-    svg.appendChild(line);
+    this.svg.appendChild(line);
   }
-
-  let things = document.getElementById('things');
-  things.insertBefore(svg, things.firstChild);
 }
 
 window.ThingDetailLayout = ThingDetailLayout;
