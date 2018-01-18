@@ -228,7 +228,9 @@ ColorLight.prototype.updateOn = function(on) {
 ColorLight.prototype.updateColor = function(color) {
   this.properties.color = color;
   this.colorLight.style.background = color;
-  this.colorInput.value = color;
+  if (this.colorInput) {
+    this.colorInput.value = color;
+  }
 
   let r = parseInt(color.substr(1,2), 16);
   let g = parseInt(color.substr(3,2), 16);
