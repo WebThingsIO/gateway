@@ -175,5 +175,9 @@
 }
 
 .level-bar-label {
-  padding-top: 0.5rem;
+  padding-top: 0.2rem;
+}
+
+.on .level-bar-label {
+  font-weight: bold;
 }
