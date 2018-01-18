@@ -88,9 +88,12 @@
 
 /* Color Light */
 
+.color-light-onoff-label, .color-light-label {
+  text-transform: uppercase;
+}
+
 .color-light-onoff-label {
   padding-top: 0.5rem;
-  text-transform: uppercase;
 }
 
 .color-light-container.on .on-off-switch-switch {
@@ -102,8 +105,12 @@
   fill: #ffffff;
 }
 
-.color-light-container.off .color-light-icon-path {
+.color-light.bright-color .color-light-icon-path {
   fill: #444444;
+}
+
+.color-light.bright-color {
+  color: #444444;
 }
 
 .color-light {
