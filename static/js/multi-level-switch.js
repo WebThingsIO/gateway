@@ -85,7 +85,12 @@ MultiLevelSwitch.prototype.htmlDetailView = function() {
     details = this.details.on.view() + this.details.level.view();
   }
 
-  return '<div>' + this.iconView() + details + '</div>';
+  return `<div>
+    <div class="thing">
+      ${this.iconView()}
+      ${details}
+    </div>
+  </div>`;
 };
 
 /**
