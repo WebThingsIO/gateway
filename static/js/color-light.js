@@ -167,7 +167,7 @@ ColorLight.prototype.svgView = function() {
          '  <a href="' + this.href +'" class="svg-thing-link">' +
          '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
          '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
-         '      xlink:href="/images/on-off-switch.svg" />' +
+         '      xlink:href="/images/bulb.svg" />' +
          '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
                 this.name.substring(0, 7) +
          '    </text>' +
