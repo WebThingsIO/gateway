@@ -46,8 +46,6 @@ function MultiLevelSwitch(description, format) {
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
-  } else {
-    this.element.addEventListener('click', this.handleClick.bind(this));
   }
   return this;
 }
@@ -67,10 +65,10 @@ MultiLevelSwitch.prototype.iconView = function() {
  * HTML view for multi level switch
  */
 MultiLevelSwitch.prototype.htmlView = function() {
-  return `<div class="thing">
+  return `<a href="${this.href}" class="thing">
     ${this.iconView()}
     <span class="thing-name">${this.name}</span>
-  </div>`;
+  </a>`;
 }
 
 /**
