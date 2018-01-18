@@ -33,6 +33,8 @@ function DimmableColorLight(description, format) {
   this.levelPropertyUrl = new URL(this.propertyDescriptions.level.href,
                                   this.href);
 
+  this.colorLightLabel.classList.add('level-bar-label');
+
   this.updateStatus();
 
   if (format !== 'htmlDetail') {
