@@ -148,13 +148,20 @@ main() {
 
     # Install default add-ons
     sudo mkdir -p "${ADDONS_DIR}"
+    addon_list=$(curl "https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json")
     tempdir=$(mktemp -d)
-    zigbee_url="https://github.com/mozilla-iot/zigbee-adapter/releases/download/v0.3.0-pre1/zigbee-adapter-0.3.0-pre1.tgz"
-    curl -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
+    zigbee_url=$(echo "${addon_list}" | python3 -c \
+      "import json, sys; \
+      l = json.loads(sys.stdin.read()); \
+      print([x['url'] for x in l if x['name'] == 'zigbee-adapter'][0]);")
+    curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
     sudo tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
-    zwave_url="https://github.com/mozilla-iot/zwave-adapter/releases/download/v0.3.0-pre1/zwave-adapter-0.3.0-pre1.tgz"
-    curl -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
+    zwave_url=$(echo "${addon_list}" | python3 -c \
+      "import json, sys; \
+      l = json.loads(sys.stdin.read()); \
+      print([x['url'] for x in l if x['name'] == 'zwave-adapter'][0]);")
+    curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
     sudo tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
     rm -rf "${tempdir}"
