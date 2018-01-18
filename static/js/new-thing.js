@@ -46,7 +46,7 @@ NewThing.prototype.view = function() {
              '    Save' +
              '  </button>' +
              '</div>';
-    case 'colorLight':
+    case 'onOffColorLight':
       return `<div id="new-thing-${this.id}"
                    class="new-thing on-off-switch">
          <div class="new-thing-icon"></div>

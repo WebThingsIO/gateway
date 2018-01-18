@@ -67,7 +67,7 @@ var ThingsScreen = {
               // eslint-disable-next-line no-unused-vars
               var newOnOffSwitch = new OnOffSwitch(description);
               break;
-            case 'colorLight':
+            case 'onOffColorLight':
               console.log('rendering new color light');
               // eslint-disable-next-line no-unused-vars
               var newColorLight = new ColorLight(description);
@@ -123,7 +123,7 @@ var ThingsScreen = {
             // eslint-disable-next-line no-unused-vars
             var newBinarySensor = new BinarySensor(description);
             break;
-          case 'colorLight':
+          case 'onOffColorLight':
             console.log('rendering new color light');
             // eslint-disable-next-line no-unused-vars
             var newColorLight = new ColorLight(description, 'htmlDetail');
