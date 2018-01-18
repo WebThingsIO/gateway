@@ -11,7 +11,7 @@
 'use strict';
 
 /* globals AddThingScreen, Thing, OnOffSwitch, BinarySensor, ColorLight,
- OnOffLight, MultiLevelSwitch */
+ DimmableColorLight, OnOffLight, MultiLevelSwitch */
 
 // eslint-disable-next-line
 var ThingsScreen = {
@@ -78,6 +78,11 @@ var ThingsScreen = {
               // eslint-disable-next-line no-unused-vars
               var newColorLight = new ColorLight(description);
               break;
+            case 'dimmableColorLight':
+              console.log('rendering new dimmable color light');
+              // eslint-disable-next-line no-unused-vars
+              var newDimmableColorLight = new DimmableColorLight(description);
+              break;
             case 'binarySensor':
               console.log('rendering new binary sensor');
               // eslint-disable-next-line no-unused-vars
@@ -143,6 +148,12 @@ var ThingsScreen = {
             console.log('rendering new color light');
             // eslint-disable-next-line no-unused-vars
             var newColorLight = new ColorLight(description, 'htmlDetail');
+            break;
+          case 'dimmableColorLight':
+            console.log('rendering new dimmable color light');
+            // eslint-disable-next-line no-unused-vars
+            var newDimmableColorLight = new DimmableColorLight(description,
+                                                               'htmlDetail');
             break;
           case 'multiLevelSwitch':
             console.log('rendering new multi level switch');

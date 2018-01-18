@@ -72,6 +72,19 @@ NewThing.prototype.view = function() {
            Save
          </button>
        </div>`;
+    case 'dimmableColorLight':
+      return `<div id="new-thing-${this.id}"
+                   class="new-thing on-off-switch">
+         <div class="new-thing-icon"></div>
+         <div class="new-thing-metadata">
+           <input type="text" class="new-thing-name"
+                  value="${this.description.name}"/>
+           <span class="new-thing-type">Dimmable Color Light</span>
+         </div>
+         <button class="new-thing-save-button text-button">
+           Save
+         </button>
+       </div>`;
     case 'multiLevelSwitch':
       return '<div id="new-thing-' + this.id + '"' +
              '  class="new-thing on-off-switch">' +
