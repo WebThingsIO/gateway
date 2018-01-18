@@ -51,6 +51,7 @@ var Database = {
     this.db = new sqlite3.Database(filename);
     this.db.serialize(() => {
       this.createTables();
+      this.migrate();
       // If database newly created, populate with default data
       if (!exists) {
         this.populate();
@@ -95,6 +96,13 @@ var Database = {
       'key TEXT PRIMARY KEY,' +
       'value TEXT' +
     ');');
+  },
+
+  /**
+   * Do anything necessary to migrate from old database schemas.
+   */
+  migrate: function() {
+    this.db.run('DROP TABLE IF EXISTS jsonwebtoken_to_user');
   },
 
   /**
