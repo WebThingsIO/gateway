@@ -130,7 +130,7 @@
   background: #89b6d6;
 }
 
-.color-light-icon, .thing-detail-layout-links, .level-bar {
+.color-light-icon, .thing-detail-layout-links, .level-bar-info {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -159,6 +159,7 @@
 
 .on > .level-bar-container {
   background: white;
+  color: #5d9bc7;
 }
 
 .level-bar {
@@ -166,8 +167,13 @@
   height: 8rem;
   border-radius: 0.6rem;
   border: 0.2rem solid white;
+  margin: 0 auto;
 }
 
 .on .level-bar {
   border-color: #5d9bc7;
+}
+
+.level-bar-label {
+  padding-top: 0.5rem;
 }

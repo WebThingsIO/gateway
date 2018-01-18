@@ -38,6 +38,7 @@ function MultiLevelSwitch(description, format) {
   this.updateStatus();
 
   this.levelBar = this.element.querySelector('.level-bar');
+  this.levelBarLabel = this.element.querySelector('.level-bar-label');
 
   if (format === 'htmlDetail') {
     this.details.on.attach();
@@ -55,7 +56,10 @@ MultiLevelSwitch.prototype = Object.create(OnOffSwitch.prototype);
 
 MultiLevelSwitch.prototype.iconView = function() {
   return `<div class="level-bar-container">
-    <div class="level-bar"></div>
+    <div class="level-bar-info">
+      <div class="level-bar"></div>
+      <div class="level-bar-label"></div>
+    </div>
   </div>`;
 };
 
@@ -151,6 +155,7 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
   let levelBackground = `linear-gradient(${blank}, ${blank} ${100 - level}%,` +
                               `${bar} ${100 - level}%, ${bar})`;
   this.levelBar.style.background = levelBackground;
+  this.levelBarLabel.textContent = level + '%';
 
   if (this.details) {
     this.details.level.update();
