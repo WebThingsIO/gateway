@@ -33,8 +33,9 @@ var Router = {
     // Compress all responses larger than 1kb
     app.use(compression());
 
-    // First look for a static file
-    app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
+    // First look for a static file. Turn off max-age and let the default ETag
+    // handle caching.
+    app.use(express.static(Constants.STATIC_PATH, {maxAge: 0}));
 
     // Content negotiation middleware
     app.use(function(request, response, next) {
