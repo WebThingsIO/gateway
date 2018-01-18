@@ -95,6 +95,7 @@ main() {
 
   ROOT_MOUNTPOINT=rpi-root
   MOZILLA_IOT_DIR=${ROOT_MOUNTPOINT}/home/pi/mozilla-iot
+  ADDONS_DIR=${MOZILLA_IOT_DIR}/gateway/build/addons
 
   if [ "${VERBOSE}" == "1" ]; then
     echo "          BOOT_DEV: ${BOOT_DEV}"
@@ -144,6 +145,26 @@ main() {
     echo "Adding gateway files from ${GATEWAY_TARBALL} to image"
     sudo mkdir -p ${MOZILLA_IOT_DIR}
     sudo tar xf ${GATEWAY_TARBALL} -C ${MOZILLA_IOT_DIR}
+
+    # Install default add-ons
+    sudo mkdir -p "${ADDONS_DIR}"
+    addon_list=$(curl "https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json")
+    tempdir=$(mktemp -d)
+    zigbee_url=$(echo "${addon_list}" | python3 -c \
+      "import json, sys; \
+      l = json.loads(sys.stdin.read()); \
+      print([x['url'] for x in l if x['name'] == 'zigbee-adapter'][0]);")
+    curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
+    sudo tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
+    sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
+    zwave_url=$(echo "${addon_list}" | python3 -c \
+      "import json, sys; \
+      l = json.loads(sys.stdin.read()); \
+      print([x['url'] for x in l if x['name'] == 'zwave-adapter'][0]);")
+    curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
+    sudo tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
+    sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
+    rm -rf "${tempdir}"
 
     # The pi user has a user id of 1000 and a group id of 1000
     echo "Fixing permissions on ${MOZILLA_IOT_DIR}"
