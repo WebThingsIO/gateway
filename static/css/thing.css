@@ -6,6 +6,8 @@
   text-align: center;
   margin: 1rem;
   display: inline-block;
+  text-decoration: none;
+  color: white;
 }
 
 .thing-icon {
