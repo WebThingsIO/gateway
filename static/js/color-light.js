@@ -45,8 +45,6 @@ function ColorLight(description, format) {
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
-  } else {
-    this.element.addEventListener('click', this.handleClick.bind(this));
   }
   return this;
 }
@@ -110,10 +108,10 @@ ColorLight.prototype.iconView = function() {
  * HTML view for Color bulb
  */
 ColorLight.prototype.htmlView = function() {
-  return `<div class="thing color-light-container">
+  return `<a href="${this.href}" class="thing color-light-container">
     ${this.iconView()}
     <span class="thing-name">${this.name}</span>
-  </div>`;
+  </a>`;
 }
 
 /**
