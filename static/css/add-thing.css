@@ -81,3 +81,7 @@
 .new-thing.binary-sensor .new-thing-icon {
   background-image: url('../images/binary-sensor.png');
 }
+
+.new-thing.on-off-light .new-thing-icon {
+  background-image: url('../images/bulb.png');
+}
