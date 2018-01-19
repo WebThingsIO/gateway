@@ -126,6 +126,8 @@
   border: 2px solid white;
   text-align: center;
   transform: translate(0, 0); /* promote to layer to draw above links */
+
+  background: #89b6d6;
 }
 
 .color-light-icon {

@@ -53,8 +53,11 @@ function ColorLight(description, format) {
 ColorLight.prototype = Object.create(OnOffSwitch.prototype);
 
 ColorLight.prototype.iconView = function() {
-  let color = this.properties.color;
-  return `<div class="color-light" style="background: ${color};">
+  let colorStyle = '';
+  if (this.properties.on) {
+    colorStyle = `background: ${this.properties.color}`;
+  }
+  return `<div class="color-light" style="${colorStyle}">
     <div class="color-light-icon">
       <svg
          xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -229,8 +232,13 @@ ColorLight.prototype.updateOn = function(on) {
 
   if (on) {
     this.showOn();
+
+    this.updateColor(this.properties.color);
   } else {
     this.showOff();
+
+    this.colorLight.classList.remove('bright-color');
+    this.colorLight.style.background = '';
   }
 };
 
@@ -239,7 +247,9 @@ ColorLight.prototype.updateColor = function(color) {
   if (!this.colorLight) {
     return;
   }
-  this.colorLight.style.background = color;
+  if (this.properties.on) {
+    this.colorLight.style.background = color;
+  }
   if (this.colorInput) {
     this.colorInput.value = color;
   }
@@ -249,7 +259,7 @@ ColorLight.prototype.updateColor = function(color) {
   let b = parseInt(color.substr(5,2), 16);
 
   // From https://stackoverflow.com/questions/3942878/
-  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186 && this.properties.on) {
     this.colorLight.classList.add('bright-color');
   } else {
     this.colorLight.classList.remove('bright-color');
