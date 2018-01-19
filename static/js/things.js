@@ -25,7 +25,10 @@ var ThingsScreen = {
   init: function() {
     this.thingsElement = document.getElementById('things');
     this.addButton = document.getElementById('add-button');
+    this.menuButton = document.getElementById('menu-button');
+    this.backButton = document.getElementById('back-button');
     window.addEventListener('_thingchange', this.showThings.bind(this));
+    this.backButton.addEventListener('click', () => window.history.back());
     this.addButton.addEventListener('click',
       AddThingScreen.show.bind(AddThingScreen));
   },
@@ -37,8 +40,12 @@ var ThingsScreen = {
    */
   show: function(thingId) {
     if (thingId) {
+      this.backButton.classList.remove('hidden');
+      this.menuButton.classList.add('hidden');
       this.showThing(thingId);
     } else {
+      this.menuButton.classList.remove('hidden');
+      this.backButton.classList.add('hidden');
       this.showThings();
     }
   },
