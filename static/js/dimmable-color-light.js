@@ -37,9 +37,6 @@ function DimmableColorLight(description, format) {
 
   this.updateStatus();
 
-  if (format !== 'htmlDetail') {
-    this.element.addEventListener('click', this.handleClick.bind(this));
-  }
   return this;
 }
 
@@ -111,6 +108,6 @@ DimmableColorLight.prototype.updateLevel = function(level) {
  * @param {number} level
  */
 DimmableColorLight.prototype.setLevel = function(level) {
-  MultiLevelSwitch.prototype.call(this, level);
+  MultiLevelSwitch.prototype.setLevel.call(this, level);
 };
 
