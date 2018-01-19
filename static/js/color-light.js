@@ -243,6 +243,9 @@ ColorLight.prototype.updateOn = function(on) {
 };
 
 ColorLight.prototype.updateColor = function(color) {
+  if (!color) {
+    return;
+  }
   this.properties.color = color;
   if (!this.colorLight) {
     return;
