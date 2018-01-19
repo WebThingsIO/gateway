@@ -20,6 +20,8 @@ const {
   webSocketClose
 } = require('../websocket-util');
 
+const WebSocket = require('ws');
+
 var Constants = require('../../constants');
 
 const TEST_THING = {
@@ -572,7 +574,9 @@ describe('things/', function() {
     expect(error.messageType).toBe(Constants.ERROR);
     expect(error.data.status).toEqual('404 Not Found');
 
-    await e2p(ws, 'close');
+    if (ws.readyState !== WebSocket.CLOSED) {
+      await e2p(ws, 'close');
+    }
   });
 
   it('should only receive propertyStatus messages from the connected thing',
