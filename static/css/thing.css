@@ -6,14 +6,48 @@
   text-align: center;
   margin: 1rem;
   display: inline-block;
+  text-decoration: none;
+  color: white;
+  box-sizing: border-box;
+  vertical-align: bottom;
 }
 
 .thing-icon {
+  display: block;
   width: 12.8rem;
   height: 12.8rem;
   background-size: 12.8rem;
   background-repeat: no-repeat;
   background-image: url('../images/unknown-thing.png');
+}
+
+.thing-detail-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -5rem;
+  margin-top: -5rem;
+}
+
+.thing-detail {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 5rem;
+  border: 2px solid white;
+  background: #88B6D6;
+  position: relative;
+}
+
+.thing-detail-contents {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.thing-detail-label {
+  text-align: center;
+  width: 10rem;
 }
 
 .thing-name {
@@ -53,4 +87,64 @@
 
 .binary-sensor.off .thing-icon {
   background-image: url('../images/binary-sensor-off.png');
+}
+
+/* Color Light */
+
+.color-light-onoff-label, .color-light-label {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.color-light-onoff-label {
+  padding-top: 0.5rem;
+}
+
+.color-light-container.on .on-off-switch-switch {
+  background: white;
+  color: #5d9bc7;
+}
+
+.color-light-icon-path {
+  fill: #ffffff;
+}
+
+.color-light.bright-color .color-light-icon-path {
+  fill: #444444;
+}
+
+.color-light.bright-color {
+  color: #444444;
+}
+
+.color-light {
+  box-sizing: border-box;
+  display: block;
+  width: 12.8rem;
+  height: 12.8rem;
+  border-radius: 6.4rem;
+  border: 2px solid white;
+  text-align: center;
+  transform: translate(0, 0); /* promote to layer to draw above links */
+
+  background: #89b6d6;
+}
+
+.color-light-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.thing-detail-layout-links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.thing-detail-layout-link {
+  stroke: white;
+  stroke-width: 2px;
 }

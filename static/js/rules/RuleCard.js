@@ -39,10 +39,10 @@ function RuleCard(gateway, elt, id, desc) {
       <h3>${this.rule.name}</h3>
       <p>${this.rule.toHumanDescription()}</p>
     </div>
-    <form class="rule-switch">
+    <form class="rule-switch switch">
       <input type="checkbox" id="rule-switch-${id}"
-             class="rule-switch-checkbox" ${checked}/>
-      <label class="rule-switch-slider" for="rule-switch-${id}"></label>
+             class="switch-checkbox" ${checked}/>
+      <label class="switch-slider" for="rule-switch-${id}"></label>
     </form>
   `;
 
@@ -62,7 +62,7 @@ function RuleCard(gateway, elt, id, desc) {
   this.deleteConfirm = this.elt.querySelector('.rule-delete-confirm-button');
   this.deleteConfirm.addEventListener('click', this.onDeleteConfirmClick);
 
-  this.enabledCheckbox = this.elt.querySelector('.rule-switch-checkbox');
+  this.enabledCheckbox = this.elt.querySelector('.switch-checkbox');
   this.enabledCheckbox.addEventListener('change', this.onEnabledCheckboxChange);
 
   this.editOverlay = this.elt.querySelector('.rule-edit-overlay');
