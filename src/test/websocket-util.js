@@ -15,11 +15,17 @@ async function webSocketOpen(path, jwt) {
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 
   const ws = new WebSocket(socketPath);
+  ws.unreadMessages = [];
+
+  ws.on('message', function(message) {
+    this.unreadMessages.push(message);
+  }.bind(ws));
+
   await e2p(ws, 'open');
 
-  // Allow the app to handle the websocket open
+  // Allow the app to handle the websocket open reaaallly slowwwwllllyyyy
   await new Promise(res => {
-    setTimeout(res, 0);
+    setTimeout(res, 250);
   });
 
   return ws;
@@ -33,10 +39,14 @@ async function webSocketOpen(path, jwt) {
  */
 async function webSocketRead(ws, expectedMessages) {
   let messages = [];
-  for (let i = 0; i < expectedMessages; i++) {
-    const {data} = await e2p(ws, 'message');
-    const parsed = JSON.parse(data);
-    messages.push(parsed);
+  while (messages.length < expectedMessages) {
+    if (ws.unreadMessages.length > 0) {
+      const data = ws.unreadMessages.shift();
+      const parsed = JSON.parse(data);
+      messages.push(parsed);
+    } else {
+      await e2p(ws, 'message');
+    }
   }
   return messages;
 }
