@@ -23,9 +23,9 @@ async function webSocketOpen(path, jwt) {
 
   await e2p(ws, 'open');
 
-  // Allow the app to handle the websocket open
+  // Allow the app to handle the websocket open reaaallly slowwwwllllyyyy
   await new Promise(res => {
-    setTimeout(res, 0);
+    setTimeout(res, 250);
   });
 
   return ws;
