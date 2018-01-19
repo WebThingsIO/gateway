@@ -93,6 +93,7 @@
 
 .color-light-onoff-label, .color-light-label {
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 .color-light-onoff-label {
