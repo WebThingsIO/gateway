@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals OnOffSwitch, Thing, ThingDetailLayout */
+/* globals OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -19,6 +19,12 @@
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function ColorLight(description, format) {
+  if (format === 'htmlDetail') {
+    this.details = {
+      on: new OnOffDetail(this)
+    };
+  }
+
   Thing.call(this, description, format);
   if (format == 'svg') {
     // For now the SVG view is just a link.
@@ -35,11 +41,9 @@ function ColorLight(description, format) {
     this.element.querySelector('.color-light-icon-path');
 
   if (format === 'htmlDetail') {
-    this.onOffSwitch = this.element.querySelector('.color-light-onoff-switch');
-    this.onOffLabel = this.element.querySelector('.color-light-onoff-label');
-    this.colorInput = this.element.querySelector('.color-light-color');
+    this.details.on.attach();
 
-    this.onOffSwitch.addEventListener('click', this.handleClick.bind(this));
+    this.colorInput = this.element.querySelector('.color-light-color');
     this.colorInput.addEventListener('change', () => {
       this.setColor(this.colorInput.value);
     });
@@ -126,9 +130,6 @@ ColorLight.prototype.htmlView = function() {
  * HTML detail view for Color bulb
  */
 ColorLight.prototype.htmlDetailView = function() {
-  let id = this.href.pathname.split('/').pop();
-  let checked = this.properties.on;
-  let onoff = checked ? 'on' : 'off';
   let color = this.properties.color;
 
   return `<div class="color-light-container">
@@ -142,21 +143,7 @@ ColorLight.prototype.htmlDetailView = function() {
       </div>
       <div class="thing-detail-label">Color</div>
     </div>
-    <div class="thing-detail-container">
-      <div class="thing-detail on-off-switch-switch">
-        <div class="thing-detail-contents">
-          <form class="switch">
-            <input type="checkbox" id="color-light-switch-${id}"
-                   class="switch-checkbox color-light-onoff-switch" ${checked}/>
-            <label class="switch-slider" for="color-light-switch-${id}"></label>
-          </form>
-          <div class="color-light-onoff-label">
-            ${onoff}
-          </div>
-        </div>
-      </div>
-      <div class="thing-detail-label">On/Off</div>
-    </div>
+    ${this.details.on.view()}
   </div>`;
 };
 
@@ -225,9 +212,8 @@ ColorLight.prototype.updateOn = function(on) {
   let onoff = on ? 'on' : 'off';
   this.colorLightLabel.textContent = onoff;
 
-  if (this.onOffLabel) {
-    this.onOffLabel.textContent = onoff;
-    this.onOffSwitch.checked = on;
+  if (this.details) {
+    this.details.on.update();
   }
 
   if (on) {

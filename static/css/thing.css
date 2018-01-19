@@ -91,16 +91,16 @@
 
 /* Color Light */
 
-.color-light-onoff-label, .color-light-label {
+.on-off-label, .color-light-label {
   text-transform: uppercase;
   font-weight: bold;
 }
 
-.color-light-onoff-label {
+.on-off-label {
   padding-top: 0.5rem;
 }
 
-.color-light-container.on .on-off-switch-switch {
+.on .on-off-switch-switch {
   background: white;
   color: #5d9bc7;
 }
@@ -117,7 +117,7 @@
   color: #444444;
 }
 
-.color-light {
+.color-light, .level-bar-container {
   box-sizing: border-box;
   display: block;
   width: 12.8rem;
@@ -130,14 +130,7 @@
   background: #89b6d6;
 }
 
-.color-light-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-
-.thing-detail-layout-links {
+.color-light-icon, .thing-detail-layout-links, .level-bar-info {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -148,3 +141,41 @@
   stroke: white;
   stroke-width: 2px;
 }
+
+.level {
+  width: 8rem;
+  height: 8rem;
+}
+
+.level-input {
+  width: 8rem;
+  margin: 0;
+  transform: rotate(-90deg) translate(-3rem, 0);
+}
+
+.level-bar-container {
+  background: #89b6d6;
+}
+
+.on .level-bar-container {
+  background: white;
+  color: #5d9bc7;
+}
+
+.level-bar {
+  width: 1rem;
+  height: 8rem;
+  border-radius: 0.6rem;
+  border: 0.2rem solid white;
+  margin: 0 auto;
+}
+
+.on .level-bar {
+  border-color: #5d9bc7;
+}
+
+.level-bar-label {
+  padding-top: 0.2rem;
+  font-weight: bold;
+}
+
