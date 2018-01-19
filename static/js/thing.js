@@ -18,9 +18,16 @@
  * @param {Object} description Thing description object.
  * @param {String} format 'svg' or 'html', defaults to html.
  */
-var Thing = function(description, format) {
+var Thing = function(description, format, options) {
+  const opts = options || {};
   this.name = description.name;
   this.type = description.type;
+  this.svgBaseIcon = opts.svgBaseIcon || '/images/unknown-thing.svg';
+  this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
+  this.thingCssClass = opts.thingCssClass || '';
+  this.addIconToView =
+    typeof(opts.addIconToView) === 'boolean' ? opts.addIconToView : true;
+
   if (format == 'svg') {
     this.container = document.getElementById('floorplan-things');
     this.x = description.floorplanX;
@@ -64,34 +71,39 @@ var Thing = function(description, format) {
  * HTML view for unknown Thing.
  */
 Thing.prototype.htmlView = function() {
-  return '<div class="thing"><img class="thing-icon" ' +
-    'src="/images/unknown-thing.png" /><span class="thing-name">' +
-    this.name + '</span></div>';
+  return `<div class="thing ${this.thingCssClass}">
+    <img class="thing-icon"
+      ${this.addIconToView ? `src="${this.pngBaseIcon}"` : ''} />
+    <span class="thing-name">${this.name}</span>
+  </div>`;
 };
 
 /**
  * HTML detail view for unknown Thing.
  */
 Thing.prototype.htmlDetailView = function() {
-  return this.htmlView();
+  return `<div class="thing ${this.thingCssClass}">
+    <img class="thing-icon"
+      ${this.addIconToView ? `src="${this.pngBaseIcon}"` : ''} />
+  </div>`;
 };
 
 /**
  * SVG view for unknown thing.
  */
 Thing.prototype.svgView = function() {
-  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
-         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
-         '  class="floorplan-thing">' +
-         '  <a href="' + this.href +'" class="svg-thing-link">' +
-         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
-         '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
-         '      xlink:href="/images/unknown-thing.svg" />' +
-         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
-                this.name.substring(0, 7) +
-         '    </text>' +
-         '  </a>' +
-         '</g>';
+  return `<g transform="translate(${this.x},${this.y})"
+            dragx="${this.x}" dragy="${this.y}"
+            class="floorplan-thing">
+            <a href="${this.href}" class="svg-thing-link">
+              <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
+              <image x="-2.5" y="-2.5" width="5" height="5"
+                xlink:href="${this.svgBaseIcon}" />
+              <text x="0" y="8" text-anchor="middle" class="svg-thing-text">
+                ${this.name.substring(0, 7)}
+              </text>
+            </a>
+          </g>`;
 };
 
 /**

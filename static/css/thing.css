@@ -193,3 +193,25 @@
   font-weight: bold;
 }
 
+#thing-title.hidden {
+  display: none;
+}
+
+#thing-title {
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  top: 1.8rem;
+}
+
+#thing-title-icon {
+  height: 4rem;
+  position: relative;
+  top: 1.3rem;
+  padding-right: 1rem;
+}
+
+#thing-title-name {
+  font-size: 1.6rem;
+  color: #fff;
+}

@@ -6,6 +6,7 @@
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  max-height: 100%;
 }
 
 .new-thing-save-button {

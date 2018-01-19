@@ -19,7 +19,10 @@
  */
 var BinarySensor = function(description, format) {
   this.base = Thing;
-  this.base(description, format);
+  this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
+                                  pngBaseIcon: '/images/binary-sensor.png',
+                                  thingCssClass: 'binary-sensor',
+                                  addIconToView: false});
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
@@ -35,32 +38,6 @@ var BinarySensor = function(description, format) {
 };
 
 BinarySensor.prototype = Object.create(Thing.prototype);
-
-/**
- * HTML view for Thing.
- */
-BinarySensor.prototype.htmlView = function() {
-  return '<div class="thing binary-sensor">' +
-         '  <div class="thing-icon"></div>' +
-         '  <span class="thing-name">' + this.name + '</span>' +
-         '</div>';
-};
-
-/**
- * SVG view for binary sensor.
- */
-BinarySensor.prototype.svgView = function() {
-  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
-         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
-         '  class="floorplan-thing">' +
-         '  <a href="' + this.href +'" class="svg-thing-link">' +
-         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
-         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
-                this.name.substring(0, 7) +
-         '    </text>' +
-         '  </a>' +
-         '</g>';
-};
 
 /**
  * Update the on/off status of the binary sensor.

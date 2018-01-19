@@ -112,6 +112,8 @@ input[type="text"], input[type="password"], input[type="email"] {
   -ms-user-select: none;
   user-select: none;
   outline: 0;
+  z-index: 100;
+  cursor: pointer;
 }
 
 .icon-button::-moz-focus-inner {
@@ -183,6 +185,7 @@ h1, h2, h3, h4, h5, h6 {
   -ms-user-select: none;
   user-select: none;
   outline: 0;
+  cursor: pointer;
 }
 
 #menu-button {
@@ -221,6 +224,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #305067;
   font-size: 1.6rem;
   color: #fff;
+  overflow: auto;
 }
 
 .dialog.hidden {

@@ -20,7 +20,10 @@
  */
 function OnOffLight(description, format) {
   this.base = Thing;
-  this.base(description, format);
+  this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
+                                  pngBaseIcon: '/images/bulb.png',
+                                  thingCssClass: 'on-off-light',
+                                  addIconToView: false});
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
@@ -35,31 +38,3 @@ function OnOffLight(description, format) {
 }
 
 OnOffLight.prototype = Object.create(OnOffSwitch.prototype);
-
-/**
- * HTML view for On/Off Light
- */
-OnOffLight.prototype.htmlView = function() {
-  return `<div class="thing on-off-light">
-    <div class="thing-icon"></div>
-    <span class="thing-name">${this.name}</span>
-  </div>`;
-}
-
-/**
- * SVG view for On/Off Light
- */
-OnOffLight.prototype.svgView = function() {
-  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
-         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
-         '  class="floorplan-thing">' +
-         '  <a href="' + this.href +'" class="svg-thing-link">' +
-         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
-         '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
-         '      xlink:href="/images/bulb.svg" />' +
-         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
-                this.name.substring(0, 7) +
-         '    </text>' +
-         '  </a>' +
-         '</g>';
-};

@@ -30,7 +30,11 @@ function MultiLevelSwitch(description, format) {
     this.details.level  = new LevelDetail(this);
   }
 
-  Thing.call(this, description, format);
+  this.base = Thing;
+  this.base(description, format, {svgBaseIcon: '/images/level.svg',
+                                  pngBaseIcon: '/images/level.svg',
+                                  thingCssClass: '',
+                                  addIconToView: false});
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
@@ -69,7 +73,7 @@ MultiLevelSwitch.prototype.iconView = function() {
  * HTML view for multi level switch
  */
 MultiLevelSwitch.prototype.htmlView = function() {
-  return `<a href="${this.href}" class="thing">
+  return `<a href="${this.href}" class="thing ${this.thingCssClass}">
     ${this.iconView()}
     <span class="thing-name">${this.name}</span>
   </a>`;
@@ -85,29 +89,11 @@ MultiLevelSwitch.prototype.htmlDetailView = function() {
   }
 
   return `<div>
-    <div class="thing">
+    <div class="thing ${this.thingCssClass}">
       ${this.iconView()}
       ${details}
     </div>
   </div>`;
-};
-
-/**
- * SVG view for multi-level switch.
- */
-MultiLevelSwitch.prototype.svgView = function() {
-  return '<g transform="translate(' + this.x + ',' + this.y + ')"' +
-         '  dragx="' + this.x + '" dragy="' + this.y + '"' +
-         '  class="floorplan-thing">' +
-         '  <a href="' + this.href +'" class="svg-thing-link">' +
-         '    <circle cx="0" cy="0" r="5" class="svg-thing-icon" />' +
-         '    <image x="-2.5" y="-2.5" width="5" height="5" ' +
-         '      xlink:href="/images/level.svg" />' +
-         '    <text x="0" y="8" text-anchor="middle" class="svg-thing-text">' +
-                this.name.substring(0, 7) +
-         '    </text>' +
-         '  </a>' +
-         '</g>';
 };
 
 /**
@@ -197,6 +183,10 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
 };
 
 MultiLevelSwitch.prototype.setLevel = function(level) {
+  if (typeof(level) === 'string') {
+    level = parseInt(level, 10);
+  }
+
   const payload = {
    level: level
   };
