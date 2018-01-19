@@ -10,18 +10,22 @@
 
 'use strict';
 
-/* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon */
+/* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon,
+   User */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
 
   /**
-  * Initialise Settings Screen.
-  */
+   * Initialise Settings Screen.
+   */
   init: function() {
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
+    this.userSettingsMain = document.getElementById('user-settings-main');
+    this.userSettingsEdit = document.getElementById('user-settings-edit');
+    this.userSettingsAdd = document.getElementById('user-settings-add');
     this.adapterSettings = document.getElementById('adapter-settings');
     this.addonSettings = document.getElementById('addon-settings');
     this.addonMainSettings = document.getElementById('addon-main-settings');
@@ -36,11 +40,11 @@ var SettingsScreen = {
     this.installedAddons = new Set();
   },
 
-  show: function(section, subsection) {
+  show: function(section, subsection, id) {
     this.backButton.href = '/settings';
 
     if (section) {
-      this.showSection(section, subsection);
+      this.showSection(section, subsection, id);
     } else {
       this.showMenu();
     }
@@ -52,6 +56,9 @@ var SettingsScreen = {
     this.menu.classList.remove('hidden');
     this.domainSettings.classList.add('hidden');
     this.userSettings.classList.add('hidden');
+    this.userSettingsMain.classList.add('hidden');
+    this.userSettingsEdit.classList.add('hidden');
+    this.userSettingsAdd.classList.add('hidden');
     this.adapterSettings.classList.add('hidden');
     this.addonSettings.classList.add('hidden');
     this.addonMainSettings.classList.add('hidden');
@@ -73,13 +80,27 @@ var SettingsScreen = {
     this.backButton.classList.add('hidden');
   },
 
-  showSection: function(section, subsection) {
+  showSection: function(section, subsection, id) {
     switch(section) {
       case 'domain':
         this.showDomainSettings();
         break;
       case 'users':
-        this.showUserSettings();
+        if (subsection) {
+          switch(subsection) {
+            case 'edit':
+              this.showEditUserScreen(id);
+              break;
+            case 'add':
+              this.showAddUserScreen(id);
+              break;
+            default:
+              console.error('Tried to display undefined subsection');
+              return;
+          }
+        } else {
+          this.showUserSettings();
+        }
         break;
       case 'adapters':
         this.showAdapterSettings();
@@ -134,17 +155,128 @@ var SettingsScreen = {
 
   showUserSettings: function() {
     this.userSettings.classList.remove('hidden');
-    window.API.getUserInfo().then(function (response) {
-     if (response.name) {
-       document.getElementById('current-user-name').innerText = response.name;
-     } else {
-       document.getElementById('current-user-name').innerText = '';
-     }
-     if (response.email) {
-       document.getElementById('current-user-email').innerText = response.email;
-     } else {
-       document.getElementById('current-user-email').innerText = '';
-     }
+    this.userSettingsEdit.classList.add('hidden');
+    this.userSettingsAdd.classList.add('hidden');
+    this.userSettingsMain.classList.remove('hidden');
+
+    const addUserButton =
+      document.getElementById('add-user-button');
+    addUserButton.addEventListener('click', () => {
+      page('/settings/users/add');
+    });
+
+    window.API.getAllUserInfo().then(function (users) {
+      const usersList = document.getElementById('users-list');
+      usersList.innerHTML = '';
+
+      for (const metadata of users) {
+        new User(metadata);
+      }
+    });
+  },
+
+  showEditUserScreen: function(id) {
+    this.backButton.href = '/settings/users';
+    this.userSettings.classList.remove('hidden');
+    this.userSettingsMain.classList.add('hidden');
+    this.userSettingsAdd.classList.add('hidden');
+    this.userSettingsEdit.classList.remove('hidden');
+
+    window.API.getUser(id).then(function (user) {
+      const form = document.getElementById('edit-user-form');
+      const email = document.getElementById('user-settings-edit-email');
+      const name = document.getElementById('user-settings-edit-name');
+      const password = document.getElementById('user-settings-edit-password');
+      const newPassword =
+        document.getElementById('user-settings-edit-new-password');
+      const confirmPassword =
+        document.getElementById('user-settings-edit-confirm-password');
+      const passwordMismatch =
+        document.getElementById('user-settings-edit-password-mismatch');
+      const error = document.getElementById('user-settings-edit-error');
+
+      email.value = user.email;
+      name.value = user.name;
+      password.value = '';
+      newPassword.value = '';
+      confirmPassword.value = '';
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        error.classList.add('hidden');
+        if (newPassword.value !== '' &&
+            newPassword.value !== confirmPassword.value) {
+          passwordMismatch.classList.remove('hidden');
+          return;
+        } else {
+          passwordMismatch.classList.add('hidden');
+        }
+
+        const emailValue = email.value;
+        const nameValue = name.value;
+        const passwordValue = password.value;
+        const newPasswordValue =
+          newPassword.value !== '' ? newPassword.value : null;
+
+        window.API.editUser(id, nameValue, emailValue, passwordValue,
+                            newPasswordValue)
+          .then(() => {
+            page('/settings/users');
+          })
+          .catch((err) => {
+            error.classList.remove('hidden');
+            error.textContent = err.message;
+            console.error(err);
+          });
+      });
+    });
+  },
+
+  showAddUserScreen: function() {
+    this.backButton.href = '/settings/users';
+    this.userSettings.classList.remove('hidden');
+    this.userSettingsMain.classList.add('hidden');
+    this.userSettingsEdit.classList.add('hidden');
+    this.userSettingsAdd.classList.remove('hidden');
+
+    const form = document.getElementById('add-user-form');
+    const email = document.getElementById('user-settings-add-email');
+    const name = document.getElementById('user-settings-add-name');
+    const password = document.getElementById('user-settings-add-password');
+    const confirmPassword =
+      document.getElementById('user-settings-add-confirm-password');
+    const passwordMismatch =
+      document.getElementById('user-settings-add-password-mismatch');
+    const error = document.getElementById('user-settings-add-error');
+
+    email.value = '';
+    name.value = '';
+    password.value = '';
+    confirmPassword.value = '';
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      error.classList.add('hidden');
+      if (password.value !== confirmPassword.value) {
+        passwordMismatch.classList.remove('hidden');
+        return;
+      } else {
+        passwordMismatch.classList.add('hidden');
+      }
+
+      const emailValue = email.value;
+      const nameValue = name.value;
+      const passwordValue = password.value;
+
+      window.API.addUser(nameValue, emailValue, passwordValue)
+        .then(() => {
+          page('/settings/users');
+        })
+        .catch((err) => {
+          error.classList.remove('hidden');
+          error.textContent = err.message;
+          console.error(err);
+        });
     });
   },
 
