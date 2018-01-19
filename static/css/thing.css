@@ -157,7 +157,7 @@
   background: #89b6d6;
 }
 
-.on > .level-bar-container {
+.on .level-bar-container {
   background: white;
   color: #5d9bc7;
 }
@@ -176,8 +176,6 @@
 
 .level-bar-label {
   padding-top: 0.2rem;
-}
-
-.on .level-bar-label {
   font-weight: bold;
 }
+
