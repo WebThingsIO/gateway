@@ -16,7 +16,7 @@
 // eslint-disable-next-line
 var ThingsScreen = {
 
-  NO_THINGS_MESSAGE: 'No devices.',
+  NO_THINGS_MESSAGE: 'No devices yet. Click + to scan for available devices.',
   THING_NOT_FOUND_MESSAGE: 'Thing not found.',
 
   /**
