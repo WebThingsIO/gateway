@@ -114,6 +114,7 @@
 
 .rule-switch > input:checked + .switch-slider:after {
   background: white;
+  transform: translate(2.5rem, -0.4rem);
 }
 
 #create-rule {

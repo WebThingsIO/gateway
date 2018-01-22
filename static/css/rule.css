@@ -162,8 +162,9 @@
 
 .device {
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: top;
   white-space: normal;
+  width: 12.8rem;
 }
 
 .device-property-block {
