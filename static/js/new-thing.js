@@ -137,6 +137,19 @@ NewThing.prototype.view = function() {
              '    Save' +
              '  </button>' +
              '</div>';
+     case 'smartPlug':
+       return `<div id="new-thing-${this.id}"
+                    class="new-thing smart-plug">
+          <div class="new-thing-icon"></div>
+          <div class="new-thing-metadata">
+            <input type="text" class="new-thing-name"
+                   value="${this.description.name}"/>
+            <span class="new-thing-type">Smart Plug</span>
+          </div>
+          <button class="new-thing-save-button text-button">
+            Save
+          </button>
+        </div>`;
     default:
       return '<div id="new-thing-' + this.id + '"' +
              '  class="new-thing">' +
