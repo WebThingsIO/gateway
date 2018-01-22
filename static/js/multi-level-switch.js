@@ -23,18 +23,20 @@ const MULTI_LEVEL_SWITCH_ON_BLANK = 'white';
  * @param Object description Thing description object.
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
-function MultiLevelSwitch(description, format) {
+function MultiLevelSwitch(description, format, options) {
   if (format === 'htmlDetail') {
     this.details = this.details || {};
     this.details.on = new OnOffDetail(this);
     this.details.level  = new LevelDetail(this);
   }
 
+  const opts = options || {svgBaseIcon: '/images/level.svg',
+                           pngBaseIcon: '/images/level.svg',
+                           thingCssClass: '',
+                           addIconToView: false}
+
   this.base = Thing;
-  this.base(description, format, {svgBaseIcon: '/images/level.svg',
-                                  pngBaseIcon: '/images/level.svg',
-                                  thingCssClass: '',
-                                  addIconToView: false});
+  this.base(description, format, opts);
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
