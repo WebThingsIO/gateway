@@ -89,6 +89,25 @@
   background-image: url('../images/binary-sensor-off.png');
 }
 
+/* Multi Level Sensor */
+
+.multi-level-sensor-text {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 12.8rem;
+  height: 12.8rem;
+  padding-top: 4.2rem;
+  border-radius: 6.4rem;
+  border: 2px solid white;
+  text-align: center;
+  transform: translate(0, 0); /* promote to layer to draw above links */
+
+  font-size: 2.8rem;
+  font-weight: bold;
+  background: #fff;
+  color: #5d9bc7;
+}
+
 /* On/Off Light */
 
 .on-off-light .thing-icon {

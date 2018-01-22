@@ -11,7 +11,7 @@
 'use strict';
 
 /* globals Thing, OnOffSwitch, BinarySensor, ColorLight, MultiLevelSwitch,
-  OnOffLight, DimmableLight, DimmableColorLight */
+  OnOffLight, DimmableLight, DimmableColorLight, MultiLevelSensor */
 
 // eslint-disable-next-line no-unused-vars
 var FloorplanScreen = {
@@ -91,6 +91,10 @@ var FloorplanScreen = {
             case 'binarySensor':
               console.log('rendering new binary sensor');
               this.things.push(new BinarySensor(description, 'svg'));
+              break;
+            case 'multiLevelSensor':
+              console.log('rendering new multi level sensor');
+              this.things.push(new MultiLevelSensor(description, 'svg'));
               break;
             case 'multiLevelSwitch':
               console.log('rendering new multi level switch');
