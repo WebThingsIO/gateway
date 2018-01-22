@@ -12,7 +12,7 @@
 
 /* globals AddThingScreen, Thing, OnOffSwitch, BinarySensor, ColorLight,
  DimmableLight, DimmableColorLight, OnOffLight, MultiLevelSwitch,
- MultiLevelSensor */
+ MultiLevelSensor, SmartPlug */
 
 // eslint-disable-next-line
 var ThingsScreen = {
@@ -113,6 +113,11 @@ var ThingsScreen = {
               // eslint-disable-next-line no-unused-vars
               var newMultiLevelSwitch = new MultiLevelSwitch(description);
               break;
+            case 'smartPlug':
+              console.log('rendering new smart plug');
+              // eslint-disable-next-line no-unused-vars
+              var newSmartPlug = new SmartPlug(description);
+              break;
             default:
               console.log('rendering new thing');
               // eslint-disable-next-line no-unused-vars
@@ -181,6 +186,11 @@ var ThingsScreen = {
           case 'multiLevelSwitch':
             console.log('rendering new multi level switch');
             thing = new MultiLevelSwitch(description, 'htmlDetail');
+            break;
+          case 'smartPlug':
+            console.log('rendering new smart plug');
+            // eslint-disable-next-line no-unused-vars
+            thing = new SmartPlug(description, 'htmlDetail');
             break;
           default:
             console.log('rendering new thing');

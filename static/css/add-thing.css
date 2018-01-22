@@ -86,3 +86,7 @@
 .new-thing.on-off-light .new-thing-icon {
   background-image: url('../images/bulb.png');
 }
+
+.new-thing.smart-plug .new-thing-icon {
+  background-image: url('../images/smart-plug.svg');
+}
