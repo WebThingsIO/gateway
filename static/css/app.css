@@ -165,7 +165,8 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-#menu-button {
+#menu-button,
+#back-button {
   position: fixed;
   top: 2rem;
   left: 2rem;
@@ -174,7 +175,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   background-color: transparent;
   border: none;
-  background-image: url('../images/menu.png');
   background-size: cover;
   background-repeat: no-repeat;
   opacity: 0.8;
@@ -185,18 +185,29 @@ h1, h2, h3, h4, h5, h6 {
   outline: 0;
 }
 
-#menu-button.hidden {
+#menu-button {
+  background-image: url('../images/menu.png');
+}
+
+#back-button {
+  background-image: url('../images/back.png');
+}
+
+#menu-button.hidden,
+#back-button.hidden {
   display: none;
 }
 
-#menu-button::-moz-focus-inner {
+#menu-button::-moz-focus-inner,
+#back-button::-moz-focus-inner {
   border: 0;
 }
 
 #menu-button:hover,
+#back-button:hover,
 #add-button:active,
 #create-rule-button:active,
-#discover-addons-button:active, {
+#discover-addons-button:active {
   opacity: 1;
 }
 
