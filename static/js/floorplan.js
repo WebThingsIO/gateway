@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals Thing, OnOffSwitch, BinarySensor, ColorLight, MultiLevelSwitch */
+/* globals Thing, OnOffSwitch, BinarySensor, ColorLight, MultiLevelSwitch,
+  OnOffLight */
 
 // eslint-disable-next-line no-unused-vars
 var FloorplanScreen = {
@@ -70,6 +71,10 @@ var FloorplanScreen = {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');
               this.things.push(new OnOffSwitch(description, 'svg'));
+              break;
+            case 'onOffLight':
+              console.log('rendering new on/off light');
+              this.things.push(new OnOffLight(description, 'svg'));
               break;
             case 'onOffColorLight':
               console.log('rendering new color light');

@@ -89,6 +89,20 @@
   background-image: url('../images/binary-sensor-off.png');
 }
 
+/* On/Off Light */
+
+.on-off-light .thing-icon {
+  background-image: url('../images/bulb.png');
+}
+
+.on-off-light.on .thing-icon {
+  background-image: url('../images/bulb-on.png');
+}
+
+.on-off-light.off .thing-icon {
+  background-image: url('../images/bulb-off.png');
+}
+
 /* Color Light */
 
 .on-off-label, .color-light-label {
