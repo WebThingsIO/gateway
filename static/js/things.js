@@ -24,6 +24,7 @@ var ThingsScreen = {
    */
   init: function() {
     this.thingsElement = document.getElementById('things');
+    this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
     this.backButton = document.getElementById('back-button');
@@ -46,6 +47,7 @@ var ThingsScreen = {
     } else {
       this.menuButton.classList.remove('hidden');
       this.backButton.classList.add('hidden');
+      this.thingTitleElement.classList.add('hidden');
       this.showThings();
     }
   },
@@ -135,45 +137,42 @@ var ThingsScreen = {
           return;
         }
         this.thingsElement.innerHTML = '';
+        let thing;
         switch(description.type) {
           case 'onOffSwitch':
             console.log('rendering new on/off switch');
-            // eslint-disable-next-line no-unused-vars
-            var newOnOffSwitch = new OnOffSwitch(description);
+            thing = new OnOffSwitch(description, 'htmlDetail');
             break;
           case 'binarySensor':
             console.log('rendering new binary sensor');
-            // eslint-disable-next-line no-unused-vars
-            var newBinarySensor = new BinarySensor(description);
+            thing = new BinarySensor(description, 'htmlDetail');
             break;
           case 'onOffLight':
             console.log('rendering new on/off light');
-            // eslint-disable-next-line no-unused-vars
-            var newOnOffLight = new OnOffLight(description);
+            thing = new OnOffLight(description, 'htmlDetail');
             break;
           case 'onOffColorLight':
             console.log('rendering new color light');
-            // eslint-disable-next-line no-unused-vars
-            var newColorLight = new ColorLight(description, 'htmlDetail');
+            thing = new ColorLight(description, 'htmlDetail');
             break;
           case 'dimmableColorLight':
             console.log('rendering new dimmable color light');
-            // eslint-disable-next-line no-unused-vars
-            var newDimmableColorLight = new DimmableColorLight(description,
-                                                               'htmlDetail');
+            thing = new DimmableColorLight(description, 'htmlDetail');
             break;
           case 'multiLevelSwitch':
             console.log('rendering new multi level switch');
-            // eslint-disable-next-line no-unused-vars
-            var newMultiLevelSwitch = new MultiLevelSwitch(description,
-                                                           'htmlDetail');
+            thing = new MultiLevelSwitch(description, 'htmlDetail');
             break;
           default:
             console.log('rendering new thing');
             // eslint-disable-next-line no-unused-vars
-            var newThing = new Thing(description);
+            thing = new Thing(description, 'htmlDetail');
             break;
         }
+
+        document.getElementById('thing-title-icon').src = thing.pngBaseIcon;
+        document.getElementById('thing-title-name').innerText = thing.name;
+        this.thingTitleElement.classList.remove('hidden');
       }).bind(this));
     }).bind(this));
   }

@@ -24,7 +24,10 @@ function DimmableColorLight(description, format) {
     this.details = this.details || {};
     this.details.level = new LevelDetail(this);
   }
-  ColorLight.call(this, description, format);
+
+  this.base = ColorLight;
+  this.base(description, format);
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;

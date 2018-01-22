@@ -74,7 +74,7 @@ NewThing.prototype.view = function() {
        </div>`;
     case 'dimmableColorLight':
       return `<div id="new-thing-${this.id}"
-                   class="new-thing on-off-switch">
+                   class="new-thing on-off-light">
          <div class="new-thing-icon"></div>
          <div class="new-thing-metadata">
            <input type="text" class="new-thing-name"
