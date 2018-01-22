@@ -131,7 +131,9 @@
   color: #444444;
 }
 
-.color-light, .level-bar-container {
+.dimmable-light,
+.color-light,
+.level-bar-container {
   box-sizing: border-box;
   display: block;
   width: 12.8rem;
@@ -144,7 +146,10 @@
   background: #89b6d6;
 }
 
-.color-light-icon, .thing-detail-layout-links, .level-bar-info {
+.dimmable-light-icon,
+.color-light-icon,
+.thing-detail-layout-links,
+.level-bar-info {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -171,7 +176,8 @@
   background: #89b6d6;
 }
 
-.on .level-bar-container {
+.on .level-bar-container,
+.on .dimmable-light {
   background: white;
   color: #5d9bc7;
 }
@@ -214,4 +220,14 @@
 #thing-title-name {
   font-size: 1.6rem;
   color: #fff;
+}
+
+.dimmable-light {
+  background: #88b6d6;
+  fill: #fff;
+}
+
+.dimmable-light.on {
+  background: #fff;
+  fill: #5d9bc7;
 }
