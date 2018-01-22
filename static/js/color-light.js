@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
+/* globals ColorDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -20,9 +20,9 @@
  */
 function ColorLight(description, format) {
   if (format === 'htmlDetail') {
-    this.details = {
-      on: new OnOffDetail(this)
-    };
+    this.details = this.details || {};
+    this.details.on = new OnOffDetail(this);
+    this.details.color = new ColorDetail(this);
   }
 
   Thing.call(this, description, format);
@@ -41,7 +41,9 @@ function ColorLight(description, format) {
     this.element.querySelector('.color-light-icon-path');
 
   if (format === 'htmlDetail') {
-    this.details.on.attach();
+    for (let prop in this.details) {
+      this.details[prop].attach();
+    }
 
     this.colorInput = this.element.querySelector('.color-light-color');
     this.colorInput.addEventListener('change', () => {
@@ -130,20 +132,16 @@ ColorLight.prototype.htmlView = function() {
  * HTML detail view for Color bulb
  */
 ColorLight.prototype.htmlDetailView = function() {
-  let color = this.properties.color;
+  let detailsHTML = '';
+  for (let prop in this.details) {
+    detailsHTML += this.details[prop].view();
+  }
 
   return `<div class="color-light-container">
     <div class="thing">
       ${this.iconView()}
     </div>
-    <div class="thing-detail-container">
-      <div class="thing-detail">
-        <input class="thing-detail-contents color-light-color" type="color"
-               value="${color}"/>
-      </div>
-      <div class="thing-detail-label">Color</div>
-    </div>
-    ${this.details.on.view()}
+    ${detailsHTML}
   </div>`;
 };
 
@@ -239,8 +237,8 @@ ColorLight.prototype.updateColor = function(color) {
   if (this.properties.on) {
     this.colorLight.style.background = color;
   }
-  if (this.colorInput) {
-    this.colorInput.value = color;
+  if (this.details) {
+    this.details.color.update();
   }
 
   let r = parseInt(color.substr(1,2), 16);

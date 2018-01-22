@@ -25,10 +25,9 @@ const MULTI_LEVEL_SWITCH_ON_BLANK = 'white';
  */
 function MultiLevelSwitch(description, format) {
   if (format === 'htmlDetail') {
-    this.details = {
-      on: new OnOffDetail(this),
-      level: new LevelDetail(this)
-    };
+    this.details = this.details || {};
+    this.details.on = new OnOffDetail(this);
+    this.details.level  = new LevelDetail(this);
   }
 
   Thing.call(this, description, format);
