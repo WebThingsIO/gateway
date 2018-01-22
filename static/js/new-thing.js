@@ -46,6 +46,19 @@ NewThing.prototype.view = function() {
              '    Save' +
              '  </button>' +
              '</div>';
+    case 'multiLevelSensor':
+      return '<div id="new-thing-' + this.id + '"' +
+             '  class="new-thing binary-sensor">' +
+             '  <div class="new-thing-icon"></div>'+
+             '  <div class="new-thing-metadata">' +
+             '    <input type="text" class="new-thing-name" value="' +
+                  this.description.name + '"></input>' +
+             '    <span class="new-thing-type">Multi Level Sensor</span>' +
+             '  </div>' +
+             '  <button class="new-thing-save-button text-button">' +
+             '    Save' +
+             '  </button>' +
+             '</div>';
     case 'onOffLight':
       return `<div id="new-thing-${this.id}"
                    class="new-thing on-off-light">
