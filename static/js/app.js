@@ -97,6 +97,12 @@ var App = {
   }
 };
 
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register('/service-worker.js', {
+    scope: '/'
+  });
+}
+
 /**
   * Start app on page load.
   */
