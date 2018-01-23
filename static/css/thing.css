@@ -48,6 +48,8 @@
 .thing-detail-label {
   text-align: center;
   width: 10rem;
+  overflow-wrap: break-word;
+  background: #5d9bc7;
 }
 
 .thing-name {
@@ -59,7 +61,6 @@
   overflow: hidden;
   margin: 0.5rem 0;
 }
-
 
 /* On/Off Switch */
 
@@ -150,6 +151,7 @@
   color: #444444;
 }
 
+.unknown-thing,
 .dimmable-light,
 .color-light,
 .level-bar-container {
@@ -162,9 +164,10 @@
   text-align: center;
   transform: translate(0, 0); /* promote to layer to draw above links */
 
-  background: #89b6d6;
+  background: #88b6d6;
 }
 
+.unknown-thing img,
 .dimmable-light-icon,
 .color-light-icon,
 .thing-detail-layout-links,
@@ -173,6 +176,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
+}
+
+.unknown-thing-icon {
+  display: block;
+  width: 12.8rem;
+  height: 12.8rem;
 }
 
 .thing-detail-layout-link {
@@ -192,7 +201,7 @@
 }
 
 .level-bar-container {
-  background: #89b6d6;
+  background: #88b6d6;
 }
 
 .on .level-bar-container,
@@ -289,4 +298,48 @@
 
 .power-label {
   font-weight: bold;
+}
+
+.generic-string-input,
+.generic-number-input {
+  width: 6rem;
+  text-align: center;
+  color: #333;
+}
+
+.hide-number-spinner::-webkit-inner-spin-button,
+.hide-number-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: textfield;
+ }
+
+.hide-number-spinner {
+  -moz-appearance: textfield;
+}
+
+.generic-checkbox {
+  position: absolute;
+  left: -1000em;
+}
+
+.generic-checkbox + label:before {
+  content: "";
+  display: inline-block;
+  width  : 3rem;
+  height : 3rem;
+  float: right;
+  margin : 0.1rem 0;
+  background: url("../images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
+}
+
+.generic-checkbox:checked + label:before {
+  background-position: 0 -3rem;
+}
+
+.generic-checkbox:disabled + label:before {
+  background-position: 0 -6rem;
+}
+
+.generic-checkbox:checked:disabled + label:before {
+  background-position: 0 -9rem;
 }

@@ -71,7 +71,10 @@ section.selected {
   display: block;
 }
 
-input[type="text"], input[type="password"], input[type="email"] {
+input[type="number"],
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   height: 1.75rem;
   background-color: #d2d9de;
   border: none;
