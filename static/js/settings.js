@@ -200,6 +200,7 @@ var SettingsScreen = {
       password.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
+      name.focus();
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -253,6 +254,7 @@ var SettingsScreen = {
     name.value = '';
     password.value = '';
     confirmPassword.value = '';
+    name.focus();
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
