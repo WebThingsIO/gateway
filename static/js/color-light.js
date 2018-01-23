@@ -131,7 +131,7 @@ ColorLight.prototype.htmlView = function() {
     ${this.iconView()}
     <span class="thing-name">${this.name}</span>
   </a>`;
-}
+};
 
 /**
  * HTML detail view for Color bulb

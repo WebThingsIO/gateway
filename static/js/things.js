@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals AddThingScreen, Thing, OnOffSwitch, BinarySensor, ColorLight,
+/* globals AddThingScreen, UnknownThing, OnOffSwitch, BinarySensor, ColorLight,
  DimmableLight, DimmableColorLight, OnOffLight, MultiLevelSwitch,
  MultiLevelSensor, SmartPlug */
 
@@ -121,7 +121,7 @@ var ThingsScreen = {
             default:
               console.log('rendering new thing');
               // eslint-disable-next-line no-unused-vars
-              var newThing = new Thing(description);
+              var newThing = new UnknownThing(description);
               break;
           }
         });
@@ -195,7 +195,7 @@ var ThingsScreen = {
           default:
             console.log('rendering new thing');
             // eslint-disable-next-line no-unused-vars
-            thing = new Thing(description, 'htmlDetail');
+            thing = new UnknownThing(description, 'htmlDetail');
             break;
         }
 

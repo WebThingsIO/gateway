@@ -10,9 +10,9 @@
 
 'use strict';
 
-/* globals Thing, OnOffSwitch, BinarySensor, ColorLight, MultiLevelSwitch,
-  OnOffLight, DimmableLight, DimmableColorLight, MultiLevelSensor, SmartPlug */
-
+/* globals UnknownThing, OnOffSwitch, BinarySensor, ColorLight,
+  MultiLevelSwitch, OnOffLight, DimmableLight, DimmableColorLight,
+  MultiLevelSensor, SmartPlug */
 
 // eslint-disable-next-line no-unused-vars
 var FloorplanScreen = {
@@ -107,7 +107,7 @@ var FloorplanScreen = {
               break;
             default:
               console.log('rendering new thing');
-              this.things.push(new Thing(description, 'svg'));
+              this.things.push(new UnknownThing(description, 'svg'));
               break;
           }
         }, this);
