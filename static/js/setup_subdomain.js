@@ -107,6 +107,7 @@ function submitForm() {
         reclaim.href = '#';
         reclaim.onclick = () => {
           reclamationToken.style.display = 'inline-block';
+          reclamationToken.focus();
           errorMessage.innerHTML = 'Please check your email for a ' +
             'reclamation token and paste it above.';
 
@@ -162,6 +163,7 @@ email.addEventListener('input', validateInput);
 
 subdomain.addEventListener('keydown', submitOnEnter);
 email.addEventListener('keydown', submitOnEnter);
+reclamationToken.addEventListener('keydown', submitOnEnter);
 
 createDomainButton.addEventListener('click', submitForm);
 
