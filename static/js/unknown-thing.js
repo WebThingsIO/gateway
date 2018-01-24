@@ -18,7 +18,8 @@
  * @param Object description Thing description object.
  */
 var UnknownThing = function(description, format) {
-  this.displayedProperties = {};
+  this.displayedProperties = this.displayedProperties || {};
+
   if (description.properties) {
     for (const name in description.properties) {
       const prop = description.properties[name];
@@ -40,7 +41,7 @@ var UnknownThing = function(description, format) {
             continue;
         }
 
-        const obj = {href, detail};
+        const obj = {href, detail, type: prop.type};
         this.displayedProperties[name] = obj;
       }
     }
@@ -106,12 +107,12 @@ UnknownThing.prototype.updateStatus = function() {
 UnknownThing.prototype.onPropertyStatus = function(data) {
   for (const prop in data) {
     if (!this.displayedProperties.hasOwnProperty(prop)) {
-      return;
+      continue;
     }
 
     const value = data[prop];
     if (typeof(value) === 'undefined' || value === null) {
-      return;
+      continue;
     }
 
     this.properties[prop] = value;
@@ -129,6 +130,7 @@ UnknownThing.prototype.updateProperty = function(name, value) {
     return;
   }
 
+  this.properties[name] = value;
   this.displayedProperties[name].detail.update();
 };
 
@@ -138,6 +140,10 @@ UnknownThing.prototype.updateProperty = function(name, value) {
  * @param {*} value - value of the property
  */
 UnknownThing.prototype.setProperty = function(name, value) {
+  if (this.displayedProperties[name].type === 'number') {
+    value = parseFloat(value);
+  }
+
   const payload = {
     [name]: value,
   };

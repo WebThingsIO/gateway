@@ -22,7 +22,7 @@ LevelDetail.prototype.attach = function() {
 }
 
 LevelDetail.prototype.view = function() {
-  let level = this.thing.properties.level;
+  const level = this.thing.properties.level;
 
   return `<div class="thing-detail-container">
     <div class="thing-detail">
@@ -38,6 +38,10 @@ LevelDetail.prototype.view = function() {
 };
 
 LevelDetail.prototype.update = function() {
+  if (!this.level) {
+    return;
+  }
+
   if (this.thing.properties.level == this.level.value) {
     return;
   }

@@ -47,9 +47,10 @@
 
 .thing-detail-label {
   text-align: center;
-  width: 10rem;
+  max-width: 10rem;
   overflow-wrap: break-word;
   background: #5d9bc7;
+  display: inline-block;
 }
 
 .thing-name {
@@ -296,7 +297,7 @@
   color: #5d9bc7;
 }
 
-.power-label {
+.generic-label {
   font-weight: bold;
 }
 
@@ -342,4 +343,8 @@
 
 .generic-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
+}
+
+#things a {
+  text-decoration: none;
 }
