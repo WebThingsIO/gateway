@@ -190,9 +190,15 @@ class AddonManagerProxy extends EventEmitter {
         var property = device.findProperty(propertyName);
         if (property) {
           property.setValue(propertyValue).then(_updatedValue => {
-            // We should get a propertyChanged notification thru
-            // the normal channels, so don't sent another one here.
-            // We don't really need to do anything.
+            if (property.fireAndForget) {
+              // This property doesn't send propertyChanged notifications,
+              // so we fake one.
+              this.sendPropertyChangedNotification(property);
+            } else {
+              // We should get a propertyChanged notification thru
+              // the normal channels, so don't sent another one here.
+              // We don't really need to do anything.
+            }
           }).catch(err => {
             // Something bad happened. The gateway is still
             // expecting a reply, so we report the error
