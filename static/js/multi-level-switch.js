@@ -176,7 +176,7 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
   this.levelBar.style.background = levelBackground;
 
   if (this.properties.on) {
-    this.levelBarLabel.textContent = level + '%';
+    this.levelBarLabel.textContent = `${Math.round(level)}%`;
   }
 
   if (this.details) {

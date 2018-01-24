@@ -86,7 +86,7 @@ MultiLevelSensor.prototype.onPropertyStatus = function(data) {
  * Show level.
  */
 MultiLevelSensor.prototype.showLevel = function(level) {
-  this.levelText.innerText = `${level}%`;
+  this.levelText.innerText = `${Math.round(level)}%`;
 };
 
 MultiLevelSensor.prototype.iconView = function() {
@@ -95,7 +95,7 @@ MultiLevelSensor.prototype.iconView = function() {
     level = this.properties.level;
   }
 
-  return `<div class="multi-level-sensor-text">${level}%</div>`;
+  return `<div class="multi-level-sensor-text">${Math.round(level)}%</div>`;
 };
 
 /**
