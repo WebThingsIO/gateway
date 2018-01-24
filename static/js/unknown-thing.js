@@ -18,7 +18,8 @@
  * @param Object description Thing description object.
  */
 var UnknownThing = function(description, format) {
-  this.displayedProperties = {};
+  this.displayedProperties = this.displayedProperties || {};
+
   if (description.properties) {
     for (const name in description.properties) {
       const prop = description.properties[name];
@@ -106,12 +107,12 @@ UnknownThing.prototype.updateStatus = function() {
 UnknownThing.prototype.onPropertyStatus = function(data) {
   for (const prop in data) {
     if (!this.displayedProperties.hasOwnProperty(prop)) {
-      return;
+      continue;
     }
 
     const value = data[prop];
     if (typeof(value) === 'undefined' || value === null) {
-      return;
+      continue;
     }
 
     this.properties[prop] = value;

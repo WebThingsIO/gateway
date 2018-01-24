@@ -44,6 +44,8 @@ OnOffDetail.prototype.view = function() {
 
 OnOffDetail.prototype.update = function() {
   let on = this.thing.properties.on;
-  this.onOffLabel.textContent = on ? 'on' : 'off';
-  this.onOffSwitch.checked = on;
+  if (this.onOffLabel && this.onOffSwitch) {
+    this.onOffLabel.textContent = on ? 'on' : 'off';
+    this.onOffSwitch.checked = on;
+  }
 };

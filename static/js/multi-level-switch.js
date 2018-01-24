@@ -207,6 +207,5 @@ MultiLevelSwitch.prototype.setLevel = function(level) {
   }).catch(function(error) {
    console.error('Error trying to set level: ' + error);
   });
-
 };
 
