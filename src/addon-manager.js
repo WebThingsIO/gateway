@@ -482,6 +482,17 @@ class AddonManager extends EventEmitter {
       return Promise.reject(err);
     }
 
+    if (fs.existsSync(path.join(addonPath, '.git'))) {
+      // This looks like a git repository, so we'll skip checking the
+      // SHA256SUMS file.
+      const sha256SumsIndex = manifest.files.indexOf('SHA256SUMS');
+      if (sha256SumsIndex >= 0) {
+        manifest.files.splice(sha256SumsIndex, 1);
+        console.log(`Not checking SHA256SUMS file for ${manifest.name} ` +
+        'since a .git directory was detected');
+      }
+    }
+
     for (let fname of manifest.files) {
       fname = path.join(addonPath, fname);
       if (!fs.existsSync(fname)) {
