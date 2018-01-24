@@ -12,8 +12,7 @@
 'use strict';
 
 /* globals LabelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-  LevelDetail, MULTI_LEVEL_SWITCH_OFF_BAR, MULTI_LEVEL_SWITCH_OFF_BLANK,
-  MULTI_LEVEL_SWITCH_ON_BAR, MULTI_LEVEL_SWITCH_ON_BLANK */
+  LevelDetail */
 
 /**
  * SmartPlug Constructor (extends OnOffSwitch).
@@ -198,6 +197,7 @@ SmartPlug.prototype.updateProperty = function(name, value) {
     case 'voltage':
     case 'current':
     case 'frequency':
+      this.properties[name] = value;
       this.displayedProperties[name].detail.update();
       break;
     case 'level':

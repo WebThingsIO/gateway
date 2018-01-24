@@ -41,7 +41,7 @@ var UnknownThing = function(description, format) {
             continue;
         }
 
-        const obj = {href, detail};
+        const obj = {href, detail, type: prop.type};
         this.displayedProperties[name] = obj;
       }
     }
@@ -130,6 +130,7 @@ UnknownThing.prototype.updateProperty = function(name, value) {
     return;
   }
 
+  this.properties[name] = value;
   this.displayedProperties[name].detail.update();
 };
 
@@ -139,6 +140,10 @@ UnknownThing.prototype.updateProperty = function(name, value) {
  * @param {*} value - value of the property
  */
 UnknownThing.prototype.setProperty = function(name, value) {
+  if (this.displayedProperties[name].type === 'number') {
+    value = parseFloat(value);
+  }
+
   const payload = {
     [name]: value,
   };
