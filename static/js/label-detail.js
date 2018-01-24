@@ -21,8 +21,8 @@ LabelDetail.prototype.attach = function() {
 };
 
 LabelDetail.prototype.view = function() {
-  const value = this.thing.properties[this.name];
-  const data = value ? `${value}${this.unit}` : `0${this.unit}`;
+  const value = parseFloat(this.thing.properties[this.name]);
+  const data = value ? `${value.toFixed(2)}${this.unit}` : `0${this.unit}`;
 
   return `<div class="thing-detail-container">
     <div class="thing-detail label">
@@ -41,6 +41,7 @@ LabelDetail.prototype.update = function() {
     return;
   }
 
-  const value = this.thing.properties[this.name];
-  this.label.innerText = value ? `${value}${this.unit}` : `0${this.unit}`;
+  const value = parseFloat(this.thing.properties[this.name]);
+  this.label.innerText =
+    value ? `${value.toFixed(2)}${this.unit}` : `0${this.unit}`;
 };

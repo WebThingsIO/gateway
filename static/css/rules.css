@@ -180,6 +180,7 @@
 }
 
 #create-rule-hint {
+  text-align: center;
   font-size: 2rem;
   position: absolute;
   top: 50%;

@@ -76,7 +76,7 @@ DimmableLight.prototype.onPropertyStatus = function(data) {
     this.updateOn(data.on);
     if (this.properties.on) {
       this.container.classList.add('on');
-      this.levelBarLabel.textContent = this.properties.level + '%';
+      this.levelBarLabel.textContent = `${Math.round(this.properties.level)}%`;
     } else {
       this.container.classList.remove('on');
     }
@@ -92,7 +92,7 @@ DimmableLight.prototype.onPropertyStatus = function(data) {
 DimmableLight.prototype.updateLevel = function(level) {
   this.properties.level = level;
   if (this.properties.on) {
-    this.levelBarLabel.textContent = level + '%';
+    this.levelBarLabel.textContent = `${Math.round(level)}%`;
   }
 
   if (this.details) {

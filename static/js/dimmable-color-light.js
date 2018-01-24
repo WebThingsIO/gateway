@@ -82,7 +82,8 @@ DimmableColorLight.prototype.onPropertyStatus = function(data) {
   if (data.hasOwnProperty('on')) {
     this.updateOn(data.on);
     if (this.properties.on) {
-      this.colorLightLabel.textContent = this.properties.level + '%';
+      this.colorLightLabel.textContent =
+        `${Math.round(this.properties.level)}%`;
     }
   }
   if (data.hasOwnProperty('color')) {
@@ -99,7 +100,7 @@ DimmableColorLight.prototype.onPropertyStatus = function(data) {
 DimmableColorLight.prototype.updateLevel = function(level) {
   this.properties.level = level;
   if (this.properties.on) {
-    this.colorLightLabel.textContent = level + '%';
+    this.colorLightLabel.textContent = `${Math.round(level)}%`;
   }
 
   if (this.details) {

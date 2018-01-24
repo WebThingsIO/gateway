@@ -215,10 +215,12 @@ SmartPlug.prototype.updateOn = function(on) {
 
   if (on) {
     this.showOn();
-    this.updatePower();
+    this.updatePower(this.properties.power);
   } else {
     this.showOff();
-    this.smartPlugLabel.innerText = 'off';
+    if (this.smartPlugLabel) {
+      this.smartPlugLabel.innerText = 'off';
+    }
   }
 };
 
@@ -226,12 +228,16 @@ SmartPlug.prototype.updateOn = function(on) {
  * Show updated power consumption value.
  */
 SmartPlug.prototype.updatePower = function(power) {
-  if (!this.properties.on) {
-    this.smartPlugLabel.innerText = 'off';
-  } else if (power) {
-    this.smartPlugLabel.innerText = power + 'W';
-  } else {
-    this.smartPlugLabel.innerText = '0W';
+  power = parseFloat(power);
+
+  if (this.smartPlugLabel) {
+    if (!this.properties.on) {
+      this.smartPlugLabel.innerText = 'off';
+    } else if (power) {
+      this.smartPlugLabel.innerText = `${power.toFixed(2)}W`;
+    } else {
+      this.smartPlugLabel.innerText = '0W';
+    }
   }
 
   this.displayedProperties.instantaneousPower.detail.update();
