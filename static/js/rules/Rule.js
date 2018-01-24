@@ -114,6 +114,10 @@ const RuleUtils = {
  * @return {String}
  */
 Rule.prototype.toTriggerHumanDescription = function() {
+  if (this.trigger.type === 'TimeTrigger') {
+    return 'the time of day is ' + this.trigger.time;
+  }
+
   let triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
   )[0];

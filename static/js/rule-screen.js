@@ -8,7 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* global API, DevicePropertyBlock, Gateway, Rule, RuleUtils, page */
+/* global API, DevicePropertyBlock, Gateway, Rule, RuleUtils, TimeTriggerBlock,
+ page */
 
 'use strict';
 
@@ -47,7 +48,7 @@ const RuleScreen = {
 
     this.ruleDescription = this.view.querySelector('.rule-info > p');
 
-    this.devicesList = document.getElementById('devices-list');
+    this.rulePartsList = document.getElementById('rule-parts-list');
     this.onboardingHint = document.getElementById('onboarding-hint');
     this.connection = document.getElementById('connection');
 
@@ -73,8 +74,8 @@ const RuleScreen = {
     this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
     this.onScrollRightClick = this.onScrollRightClick.bind(this);
 
-    let scrollLeft = document.getElementById('devices-list-scroll-left');
-    let scrollRight = document.getElementById('devices-list-scroll-right');
+    let scrollLeft = document.getElementById('rule-parts-list-scroll-left');
+    let scrollRight = document.getElementById('rule-parts-list-scroll-right');
 
     scrollLeft.addEventListener('click', this.onScrollLeftClick);
     scrollLeft.addEventListener('touchstart', this.onScrollLeftClick);
@@ -87,8 +88,8 @@ const RuleScreen = {
   },
 
   /**
-   * Instantiate a draggable DevicePropertyBlock from a template DeviceBlock in
-   * the palette
+   * Instantiate a draggable DevicePropertyBlock from a template DeviceBlock
+   * in the palette
    * @param {ThingDescription} thing
    * @param {Event} event
    */
@@ -107,16 +108,50 @@ const RuleScreen = {
   },
 
   /**
+   * Instantiate a draggable TimeTriggerBlock from a template
+   * TimeTriggerBlock
+   * in the palette
+   * @param {Event} event
+   */
+  onTimeTriggerBlockDown: function(event) {
+    if (!this.rule) {
+      return;
+    }
+    let deviceRect = event.target.getBoundingClientRect();
+    let x = deviceRect.left;
+    let y = deviceRect.top;
+
+    let newBlock = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
+    newBlock.draggable.onDown(event);
+  },
+
+  /**
+   * Create a block representing a time trigger
+   * @return {Element}
+   */
+  makeTimeTriggerBlock: function() {
+    let elt = document.createElement('div');
+    elt.classList.add('rule-part');
+
+    elt.innerHTML = `<div class="rule-part-block time-trigger-block">
+      <img class="rule-part-icon" src="/images/clock.svg"/>
+    </div>
+    <p>Clock</p>`;
+
+    return elt;
+  },
+
+  /**
    * Create a device-block from a thing
    * @param {ThingDescription} thing
    * @return {Element}
    */
   makeDeviceBlock: function(thing) {
     let elt = document.createElement('div');
-    elt.classList.add('device');
+    elt.classList.add('rule-part');
 
-    elt.innerHTML = `<div class="device-block">
-      <img class="device-icon" src="/images/onoff.svg"/>
+    elt.innerHTML = `<div class="rule-part-block device-block">
+      <img class="rule-part-icon" src="/images/onoff.svg"/>
     </div>
     <p>${thing.name}</p>`;
 
@@ -129,11 +164,17 @@ const RuleScreen = {
    * @param {number} x
    * @param {number} y
    */
-  makeDevicePropertyBlock: function(role, x, y) {
-    let thing = this.gateway.things.filter(
-      RuleUtils.byProperty(this.rule[role].property)
-    )[0];
-    let block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
+  makeRulePartBlock: function(role, x, y) {
+    let part = this.rule[role];
+    let block = null;
+    if (part.type === 'TimeTrigger') {
+      block = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
+    } else {
+      let thing = this.gateway.things.filter(
+        RuleUtils.byProperty(this.rule[role].property)
+      )[0];
+      block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
+    }
     let rulePart = {};
     rulePart[role] = this.rule[role];
     block.setRulePart(rulePart);
@@ -146,9 +187,9 @@ const RuleScreen = {
     let flexDir = window.getComputedStyle(dragHint).flexDirection;
 
     let triggerBlock =
-      this.view.querySelector('.device-block.trigger').parentNode;
+      this.view.querySelector('.rule-part-block.trigger').parentNode;
     let effectBlock =
-      this.view.querySelector('.device-block.effect').parentNode;
+      this.view.querySelector('.rule-part-block.effect').parentNode;
     function transformToCoords(elt) {
       let re = /translate\((\d+)px, +(\d+)px\)/;
       let matches = elt.style.transform.match(re);
@@ -210,7 +251,7 @@ const RuleScreen = {
       this.hideConnection();
     }
 
-    if (!document.querySelector('.device-property-block')) {
+    if (!document.querySelector('.rule-part-container')) {
       this.onboardingHint.classList.remove('hidden');
     } else {
       this.onboardingHint.classList.add('hidden');
@@ -237,15 +278,22 @@ const RuleScreen = {
       return elt.parentNode.removeChild(elt);
     }
 
+    this.rulePartsList.querySelectorAll('.rule-part').forEach(remove);
+    let ttBlock = this.makeTimeTriggerBlock();
+    ttBlock.addEventListener('mousedown',
+      this.onTimeTriggerBlockDown.bind(this));
+    ttBlock.addEventListener('touchstart',
+      this.onTimeTriggerBlockDown.bind(this));
+    this.rulePartsList.appendChild(ttBlock);
+
     this.gateway.readThings().then(things => {
-      this.devicesList.querySelectorAll('.device').forEach(remove);
       for (let thing of things) {
         let elt = this.makeDeviceBlock(thing);
         elt.addEventListener('mousedown',
           this.onDeviceBlockDown.bind(this, thing));
         elt.addEventListener('touchstart',
           this.onDeviceBlockDown.bind(this, thing));
-        this.devicesList.appendChild(elt);
+        this.rulePartsList.appendChild(elt);
       }
       this.onWindowResize();
     }).then(function() {
@@ -254,7 +302,7 @@ const RuleScreen = {
       this.rule = new Rule(this.gateway, ruleDesc,
         this.onRuleUpdate.bind(this));
 
-      this.ruleArea.querySelectorAll('.device-property-block').forEach(remove);
+      this.ruleArea.querySelectorAll('.rule-part-container').forEach(remove);
 
       if (ruleDesc) {
         let dragHint = document.getElementById('drag-hint');
@@ -272,20 +320,20 @@ const RuleScreen = {
         let centerY = areaRect.height / 2 - dpbRect.height / 2;
         if (ruleDesc.trigger) {
           if (flexDir === 'column') {
-            this.makeDevicePropertyBlock('trigger', centerX,
+            this.makeRulePartBlock('trigger', centerX,
               areaRect.height / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('trigger',
+            this.makeRulePartBlock('trigger',
               areaRect.width / 4 - dpbRect.width / 2,
               centerY);
           }
         }
         if (ruleDesc.effect) {
           if (flexDir === 'column') {
-            this.makeDevicePropertyBlock('effect', centerX,
+            this.makeRulePartBlock('effect', centerX,
               areaRect.height * 3 / 4 - dpbRect.height / 2);
           } else {
-            this.makeDevicePropertyBlock('effect',
+            this.makeRulePartBlock('effect',
               areaRect.width * 3 / 4 - dpbRect.width / 2,
               centerY);
           }
@@ -296,10 +344,10 @@ const RuleScreen = {
   },
 
   onWindowResize: function() {
-    let scrollWidth = this.devicesList.scrollWidth;
-    let boundingWidth = this.devicesList.getBoundingClientRect().width;
-    let scrollLeft = document.getElementById('devices-list-scroll-left');
-    let scrollRight = document.getElementById('devices-list-scroll-right');
+    let scrollWidth = this.rulePartsList.scrollWidth;
+    let boundingWidth = this.rulePartsList.getBoundingClientRect().width;
+    let scrollLeft = document.getElementById('rule-parts-list-scroll-left');
+    let scrollRight = document.getElementById('rule-parts-list-scroll-right');
 
     if (boundingWidth < scrollWidth) {
       scrollLeft.classList.remove('hidden');
@@ -311,10 +359,10 @@ const RuleScreen = {
   },
 
   onScrollLeftClick: function() {
-    this.devicesList.scrollLeft -= 128;
+    this.rulePartsList.scrollLeft -= 128;
   },
 
   onScrollRightClick: function() {
-    this.devicesList.scrollLeft += 128;
+    this.rulePartsList.scrollLeft += 128;
   }
 };

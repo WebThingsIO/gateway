@@ -129,7 +129,7 @@
   display: none;
 }
 
-.drag-hint-block.device-block {
+.drag-hint-block.rule-part-block {
   background: none;
   border: 1px dashed #4a4a4a;
   text-align: center;
@@ -138,47 +138,47 @@
   margin: 1.4rem auto;
 }
 
-#devices-list-container {
+#rule-parts-list-container {
   box-shadow: 0 -1px 3px rgba(0,0,0,0.12), 0 -1px 2px rgba(0,0,0,0.24);
   z-index: 10;
   background: #5A9AC9;
   position: relative;
 }
-#devices-list {
+#rule-parts-list {
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
   margin: 0 3rem;
 }
 
-#devices-list p {
+#rule-parts-list p {
   padding: 0 1.4rem;
 }
 
-#devices-list .device-block {
+#rule-parts-list .rule-part-block {
   display: block;
   margin-bottom: 0.4rem;
 }
 
-.device {
+.rule-part {
   display: inline-block;
   vertical-align: top;
   white-space: normal;
   width: 12.8rem;
 }
 
-.device-property-block {
+.rule-part-container {
   position: absolute;
   border-radius: 1rem;
   font-size: 0;
 }
 
-.device-property-block > .device-block {
+.rule-part-container > .rule-part-block {
   margin: 0;
   border-radius: 1rem 0 0 1rem;
 }
 
-.device-property-info {
+.rule-part-info {
   width: 20rem;
   background: white;
   border-radius: 0 1rem 1rem 0;
@@ -186,7 +186,7 @@
   vertical-align: bottom;
 }
 
-.device-name {
+.rule-part-name {
   color: #4a4a4a;
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
@@ -349,7 +349,7 @@
   }
 }
 
-#devices-list-scroll-left, #devices-list-scroll-right {
+#rule-parts-list-scroll-left, #rule-parts-list-scroll-right {
   position: absolute;
   top: 0;
   width: 3.6rem;
@@ -360,25 +360,37 @@
   background: #46769C
 }
 
-#devices-list-scroll-left:active,
-#devices-list-scroll-right:active {
+#rule-parts-list-scroll-left:active,
+#rule-parts-list-scroll-right:active {
   background: #81B8E1;
 }
 
-#devices-list-scroll-left.hidden,
-#devices-list-scroll-right.hidden {
+#rule-parts-list-scroll-left.hidden,
+#rule-parts-list-scroll-right.hidden {
   display: none;
 }
 
-#devices-list-scroll-left {
+#rule-parts-list-scroll-left {
   left: 0;
 }
 
-#devices-list-scroll-right {
+#rule-parts-list-scroll-right {
   right: 0;
 }
 
 .scroll-icon {
   width: 3.2rem;
   height: 3.2rem;
+}
+
+.time-input {
+  background: #4a4a4a;
+  height: 5rem;
+  line-height: 5rem;
+  color: white;
+  padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  border-radius: 0 0 1rem 0;
 }

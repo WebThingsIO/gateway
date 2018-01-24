@@ -8,6 +8,7 @@ const triggers = {
   BooleanTrigger: require('./BooleanTrigger'),
   LevelTrigger: require('./LevelTrigger'),
   PropertyTrigger: require('./PropertyTrigger'),
+  TimeTrigger: require('./TimeTrigger'),
   Trigger: require('./Trigger')
 };
 

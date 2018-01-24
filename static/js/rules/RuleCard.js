@@ -28,11 +28,11 @@ function RuleCard(gateway, elt, id, desc) {
       </div>
     </div>
     <div class="rule-preview">
-      <div class="device-block trigger">
-        <img class="device-icon" src="/images/onoff.svg"/>
+      <div class="rule-part-block trigger">
+        <img class="rule-part-icon" src="/images/onoff.svg"/>
       </div>
-      <div class="device-block effect">
-        <img class="device-icon" src="/images/onoff.svg"/>
+      <div class="rule-part-block effect">
+        <img class="rule-part-icon" src="/images/onoff.svg"/>
       </div>
     </div>
     <div class="rule-info">

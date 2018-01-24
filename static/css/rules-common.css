@@ -10,7 +10,7 @@
   font-size: 1.2rem;
 }
 
-.device-block {
+.rule-part-block {
   border-radius: 1rem;
   margin: 1.4rem;
   padding: 0;
@@ -20,15 +20,15 @@
   float: left;
 }
 
-.device-block.trigger {
+.rule-part-block.trigger {
   background: #81B8E1;
 }
 
-.device-block.effect {
+.rule-part-block.effect {
   background: #FFCF8A;
 }
 
-.device-icon {
+.rule-part-icon {
   margin: 2.7rem;
   padding: 0;
   width: 4.8rem;

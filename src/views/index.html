@@ -58,7 +58,9 @@
     <script type="text/javascript" src="/js/lib/stm_web.min.js"></script>
     <script type="text/javascript" src="/js/speech.js"></script>
 
+    <script type="text/javascript" src="/js/rules/RulePartBlock.js"></script>
     <script type="text/javascript" src="/js/rules/DevicePropertyBlock.js"></script>
+    <script type="text/javascript" src="/js/rules/TimeTriggerBlock.js"></script>
     <script type="text/javascript" src="/js/rules/Draggable.js"></script>
     <script type="text/javascript" src="/js/rules/Gateway.js"></script>
     <script type="text/javascript" src="/js/rules/PropertySelect.js"></script>
@@ -267,11 +269,11 @@
           <path d=""></path>
         </svg>
       </div>
-      <div id="devices-list-container">
-        <button id="devices-list-scroll-left">
+      <div id="rule-parts-list-container">
+        <button id="rule-parts-list-scroll-left">
           <img class="scroll-icon" alt="Scroll Left" src="/images/arrowhead-left-16.svg"/>
         </button>
-        <button id="devices-list-scroll-right">
+        <button id="rule-parts-list-scroll-right">
           <img class="scroll-icon" alt="Scroll Right" src="/images/arrowhead-right-16.svg"/>
         </button>
         <div id="delete-area">
@@ -279,7 +281,7 @@
             <h2 class="delete-prompt">Drop devices here to disconnect</h2>
           </div>
         </div>
-        <div id="devices-list"></div>
+        <div id="rule-parts-list"></div>
       </div>
       <div id="rule-delete-overlay">
         <div class="rule-delete-dialog">
