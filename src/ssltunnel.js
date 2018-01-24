@@ -119,7 +119,7 @@ var TunnelService = {
         fetch(config.get('ssltunnel.registration_endpoint') +
               '/ping?token=' + this.tunneltoken.token)
             .catch((e) => {
-                console.debug('Failed to ping registration server:', e);
+                console.log('Failed to ping registration server:', e);
             });
     },
 }
