@@ -65,30 +65,6 @@ describe('command/', function() {
     return res;
   }
 
-  it('should return 500 when intent cannot be parsed', async () => {
-    var piResp = {
-      'result': {
-        'action': 'input.unknown',
-        'parameters': {}
-      }
-    };
-
-    nock('https://api.api.ai')
-      .post('/api/query')
-      .reply(200, piResp);
-
-    try {
-      await chai.request(server)
-        .post(Constants.COMMANDS_PATH)
-        .set(...headerAuth(jwt))
-        .set('Accept', 'application/json')
-        .send({ text: 'whatever'});
-      throw new Error('Should have failed to parse');
-    } catch(err) {
-      expect(err.response.status).toEqual(406);
-    }
-  });
-
   it('should return 400 for POST with no text body', async () => {
     setupNock();
     try {
@@ -135,7 +111,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
   });
 
-  it('should return 404 when a matching thing is not found', async () => {
+  it('should return and error when a matching thing is not found', async () => {
     var resp = [{
       'name': 'Bathroom',
       'type': 'onOffSwitch',
@@ -164,7 +140,7 @@ describe('command/', function() {
         .send({ text: 'turn on the bathroom'});
       throw new Error('Should have failed to create new thing');
     } catch(err) {
-      expect(err.response.status).toEqual(404);
+      expect(err);
     }
   });
 
