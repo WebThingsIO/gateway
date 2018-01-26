@@ -148,8 +148,7 @@ Rule.prototype.toEffectHumanDescription = function() {
   )[0];
 
   let effectStr = '';
-  if (this.effect.property.name === 'on' &&
-    effectThing.type === 'onOffSwitch') {
+  if (this.effect.property.name === 'on') {
     effectStr = `turn ${effectThing.name} `;
     if (this.effect.value) {
       effectStr += 'on';
