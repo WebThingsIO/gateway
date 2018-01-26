@@ -17,6 +17,9 @@ addons:
 
 before_install:
   - ./tools/compile-openzwave.sh
+  - git clone https://github.com/mozilla-iot/intent-parser
+  - sudo pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+  - python intent-parser/intent-parser-server.py & 
 
 env:
   global:
