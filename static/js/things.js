@@ -12,7 +12,7 @@
 
 /* globals AddThingScreen, UnknownThing, OnOffSwitch, BinarySensor, ColorLight,
  DimmableLight, DimmableColorLight, OnOffLight, MultiLevelSwitch,
- MultiLevelSensor, SmartPlug */
+ MultiLevelSensor, SmartPlug, Menu */
 
 // eslint-disable-next-line
 var ThingsScreen = {
@@ -45,6 +45,7 @@ var ThingsScreen = {
       this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
+      Menu.hide();
       this.showThing(thingId);
     } else {
       this.addButton.classList.remove('hidden');
