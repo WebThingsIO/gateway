@@ -42,10 +42,12 @@ var ThingsScreen = {
    */
   show: function(thingId) {
     if (thingId) {
+      this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
       this.showThing(thingId);
     } else {
+      this.addButton.classList.remove('hidden');
       this.menuButton.classList.remove('hidden');
       this.backButton.classList.add('hidden');
       this.thingTitleElement.classList.add('hidden');
