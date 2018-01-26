@@ -200,3 +200,7 @@
   justify-content: center;
   padding-bottom: 9.6rem;
 }
+
+#create-rule-hint {
+  font-size: 1.6rem;
+}
