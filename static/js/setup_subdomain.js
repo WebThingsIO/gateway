@@ -14,7 +14,7 @@ const subdomain = document.getElementById('subdomain');
 const email = document.getElementById('email');
 const reclamationToken = document.getElementById('reclamation-token');
 const createDomainButton = document.getElementById('create-domain-button');
-const skipButton = document.getElementById('skip-subdomain-button');
+const skipAnchor = document.getElementById('skip-subdomain-anchor');
 const errorMessage = document.getElementById('error-setup');
 
 function displayMessage(errorMsg, type){
@@ -166,7 +166,7 @@ reclamationToken.addEventListener('keydown', submitOnEnter);
 
 createDomainButton.addEventListener('click', submitForm);
 
-skipButton.addEventListener('click', function() {
+skipAnchor.addEventListener('click', function() {
   // call the settings controller to skip the domain subscription
   displayMessage('Processing...', 'message');
   fetch('/settings/skiptunnel', {
@@ -178,7 +178,7 @@ skipButton.addEventListener('click', function() {
     if (response.ok) {
       displayMessage('Redirecting...', 'message');
       setTimeout(function() {
-        window.location.replace(`http://${window.location.hostname}:8080`);
+        window.location.replace(`http://${window.location.host}`);
       }, 1000);
     } else {
       displayMessage(response.statusText, 'error');
@@ -186,4 +186,6 @@ skipButton.addEventListener('click', function() {
   }).catch(function(error) {
     displayMessage(error, 'error');
   });
+
+  return false;
 });

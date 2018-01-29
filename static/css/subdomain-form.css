@@ -25,7 +25,18 @@ body {
   margin: 1rem;
 }
 
-#skip-subdomain-button, #create-domain-button {
+#skip-subdomain-anchor {
+  text-decoration: none;
+}
+
+#skip-subdomain-anchor:link,
+#skip-subdomain-anchor:visited,
+#skip-subdomain-anchor:hover,
+#skip-subdomain-anchor:active {
+  color: #fff;
+}
+
+#create-domain-button {
   display: inline-block;
   margin: 1rem auto;
 }
