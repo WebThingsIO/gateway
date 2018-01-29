@@ -5,38 +5,26 @@ const CACHE = 'mozilla-iot-cache-0.0.1';
 
 self.addEventListener('fetch', function(event) {
   let accept = event.request.headers.get('Accept');
-  if (accept === 'application/json' || event.request.method !== 'GET') {
-    event.respondWith(fetch(event.request));
+  if (accept === 'application/json' || event.request.method !== 'GET' ||
+      event.request.cache === 'no-cache') {
     return;
   }
 
-  let cache = fromCache(event.request);
-  cache.then(function(cached) {
-    let resFetch = null;
-    if (cached && event.request.cache !== 'no-cache') {
-      event.respondWith(cached);
-    } else {
-      resFetch = fetch(event.request);
-      event.respondWith(resFetch);
-    }
-    update(event.request, resFetch);
-  });
+  event.respondWith(fromCache(event.request));
+  event.waitUntil(update(event.request));
 });
 
 function fromCache(request) {
   return caches.open(CACHE).then(function(cache) {
     return cache.match(request);
   }).then(function(matching) {
-    return matching;
+    return matching || fetch(request);
   });
 }
 
-function update(request, inProgressFetch) {
+function update(request) {
   return caches.open(CACHE).then(function(cache) {
-    if (!inProgressFetch) {
-      inProgressFetch = fetch(request);
-    }
-    return inProgressFetch.then(function(response) {
+    return fetch(request).then(function(response) {
       return cache.put(request, response);
     });
   });
