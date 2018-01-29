@@ -17,31 +17,41 @@ function ThingDetailLayout(elements) {
 }
 
 ThingDetailLayout.prototype.doLayout = function() {
-  let scale = 300;
+  let xScale = 300;
+  let yScale = 300;
+
   let angleStart = 0;
 
-  if (window.innerWidth < 680) {
-    scale = Math.max(130, window.innerWidth / 2 - 30);
-    angleStart = -0.7;
+  let circlePadding = 70;
+
+  let limitedXScale = window.innerWidth / 2 - circlePadding;
+  if (limitedXScale < xScale) {
+    xScale = Math.max(120, limitedXScale);
   }
 
-  this.svg.setAttribute('width', scale * 2);
-  this.svg.setAttribute('height', scale * 2);
+  let limitedYScale = (window.innerHeight - 96) / 2 - circlePadding;
+  // The title bar takes up 9.6rem from the top
+  if (limitedYScale < yScale) {
+    yScale = Math.max(135, limitedYScale);
+  }
+
+  this.svg.setAttribute('width', xScale * 2);
+  this.svg.setAttribute('height', yScale * 2);
   this.svg.innerHTML = '';
 
   for (let i = 0; i < this.elements.length; i++) {
     let angle = i/this.elements.length * 2 * Math.PI + angleStart;
-    let x = scale * Math.cos(angle);
-    let y = scale * Math.sin(angle);
+    let x = xScale * Math.cos(angle);
+    let y = yScale  * Math.sin(angle);
 
     this.elements[i].style.transform = `translate(${x}px, ${y}px)`;
 
     let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.classList.add('thing-detail-layout-link');
-    line.setAttribute('x1', scale);
-    line.setAttribute('y1', scale);
-    line.setAttribute('x2', x + scale);
-    line.setAttribute('y2', y + scale);
+    line.setAttribute('x1', xScale);
+    line.setAttribute('y1', yScale);
+    line.setAttribute('x2', x + xScale);
+    line.setAttribute('y2', y + yScale);
 
     this.svg.appendChild(line);
   }
