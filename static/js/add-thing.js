@@ -36,7 +36,12 @@ var AddThingScreen = {
    * Create a new "pair" action on the gateway.
    */
   requestPairing: function() {
-    var path = `wss://${App.HOST}/new_things?jwt=${window.API.jwt}`;
+    let proto = 'ws:';
+    if (window.location.protocol === 'https:') {
+      proto = 'wss:';
+    }
+    const path = `${proto}//${App.HOST}/new_things?jwt=${window.API.jwt}`;
+
     // Create a websocket to start listening for new things
     this.socket = new WebSocket(path);
     this.socket.onmessage = (function(event) {
