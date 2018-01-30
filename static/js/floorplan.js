@@ -42,6 +42,11 @@ var FloorplanScreen = {
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
     this.uploadForm.addEventListener('submit', this.blackHole);
     this.fileInput.addEventListener('change', this.upload.bind(this));
+
+    // Add a timestamp to the background image to force image reload
+    var timestamp = Date.now();
+    this.floorplan.setAttribute('style',
+      `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
   },
 
   show: function() {
