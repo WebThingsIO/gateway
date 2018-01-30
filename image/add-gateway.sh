@@ -94,8 +94,11 @@ main() {
   ROOT_DEV=${KPARTX_DEVS[1]}
 
   ROOT_MOUNTPOINT=rpi-root
+  BOOT_MOUNTPOINT=rpi-boot
   MOZILLA_IOT_DIR=${ROOT_MOUNTPOINT}/home/pi/mozilla-iot
   ADDONS_DIR=${MOZILLA_IOT_DIR}/gateway/build/addons
+  ETC_DIR=${ROOT_MOUNTPOINT}/etc
+  CMDLINE=${BOOT_MOUNTPOINT}/cmdline.txt
 
   if [ "${VERBOSE}" == "1" ]; then
     echo "          BOOT_DEV: ${BOOT_DEV}"
@@ -123,6 +126,16 @@ main() {
     exit 1
   fi
   LOOP_MOUNT_CREATED=1
+
+  # Mount the boot parition of the image
+  mkdir -p ${BOOT_MOUNTPOINT}
+  if sudo mount ${BOOT_DEV} ${BOOT_MOUNTPOINT}; then
+    echo "Boot partition mounted successfully"
+  else
+    echo "Failed to mount boot partition"
+    exit 1
+  fi
+  BOOT_MOUNTED=1
 
   # Mount the root parition of the image
   mkdir -p ${ROOT_MOUNTPOINT}
@@ -166,6 +179,43 @@ main() {
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
     rm -rf "${tempdir}"
 
+    # Setup things so that the filesystem gets resized
+    # on the next boot.
+
+    sudo sh -c "cat > '${ETC_DIR}/init.d/resize2fs_once'" <<'END'
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          resize2fs_once
+# Required-Start:
+# Required-Stop:
+# Default-Start: 3
+# Default-Stop:
+# Short-Description: Resize the root filesystem to fill partition
+# Description:
+### END INIT INFO
+. /lib/lsb/init-functions
+case "$1" in
+  start)
+    log_daemon_msg "Starting resize2fs_once"
+    ROOT_DEV=$(findmnt / -o source -n) &&
+    resize2fs $ROOT_DEV &&
+    update-rc.d resize2fs_once remove &&
+    rm /etc/init.d/resize2fs_once &&
+    log_end_msg $?
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac
+END
+    sudo chmod +x "${ETC_DIR}/init.d/resize2fs_once"
+    sudo ln -s "../init.d/resize2fs_once" "${ETC_DIR}/rc3.d/S01resize2fs_once"
+
+    if ! grep -q 'init_resize.sh' ${CMDLINE} ; then
+      sudo sed -i ${CMDLINE} -e 's@$@ quiet init=/usr/lib/raspi-config/init_resize.sh@'
+    fi
+
     # The pi user has a user id of 1000 and a group id of 1000
     echo "Fixing permissions on ${MOZILLA_IOT_DIR}"
     sudo chown -R 1000.1000 ${MOZILLA_IOT_DIR}
@@ -197,6 +247,14 @@ function cleanup() {
   fi
   if [ -d ${ROOT_MOUNTPOINT} ]; then
     sudo rmdir ${ROOT_MOUNTPOINT}
+  fi
+  if [ "${BOOT_MOUNTED}" == 1 ]; then
+    echo "Unmounting ${BOOT_DEV}"
+    sudo umount ${BOOT_MOUNTPOINT}
+    BOOT_MOUNTED=0
+  fi
+  if [ -d ${BOOT_MOUNTPOINT} ]; then
+    sudo rmdir ${BOOT_MOUNTPOINT}
   fi
   if [ "${LOOP_MOUNT_CREATED}" == 1 ]; then
     echo "Removing loop mounts"
