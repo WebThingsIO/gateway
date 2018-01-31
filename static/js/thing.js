@@ -71,9 +71,12 @@ var Thing = function(description, format, options) {
  * HTML view for unknown Thing.
  */
 Thing.prototype.htmlView = function() {
+  let thingIcon = '<div class="thing-icon"></div>';
+  if (this.addIconToView) {
+    thingIcon = `<img class="thing-icon" src="${this.pngBaseIcon}"/>`;
+  }
   return `<div class="thing ${this.thingCssClass}">
-    <img class="thing-icon"
-      ${this.addIconToView ? `src="${this.pngBaseIcon}"` : ''} />
+    ${thingIcon}
     <span class="thing-name">${this.name}</span>
   </div>`;
 };
