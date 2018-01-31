@@ -141,15 +141,16 @@
 }
 
 .color-light-icon-path {
-  fill: #ffffff;
+  fill: #fff;
+  stroke: #fff;
 }
 
 .color-light.bright-color .color-light-icon-path {
-  fill: #444444;
+  stroke: #666;
 }
 
-.color-light.bright-color {
-  color: #444444;
+.on .color-light {
+  color: #5d9bc7;
 }
 
 .unknown-thing,

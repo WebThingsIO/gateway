@@ -77,8 +77,8 @@ ColorLight.prototype.iconView = function() {
          xmlns:svg="http://www.w3.org/2000/svg"
          xmlns="http://www.w3.org/2000/svg"
          version="1.1"
-         viewBox="0 0 64 64"
-         height="64"
+         viewBox="0 0 64 66"
+         height="66"
          width="64">
         <defs
            id="defs16980" />
@@ -94,7 +94,7 @@ ColorLight.prototype.iconView = function() {
             </cc:Work>
           </rdf:RDF>
         </metadata>
-        <g transform="translate(0,-988.36216)">
+        <g transform="translate(0,-987.36216)">
           <path
              d="m 41.6997,1041.6985 c 0,1.0723 -0.8727,1.9367 -1.9366,1.9367 l
              -15.5179,0 c -1.0722,0 -1.9366,-0.8727 -1.9366,-1.9367 0,-1.0722
@@ -201,15 +201,12 @@ ColorLight.prototype.updateOn = function(on) {
     this.details.on.update();
   }
 
+  this.colorLight.style.background = on ? 'white' : '';
+
   if (on) {
     this.showOn();
-
-    this.updateColor(this.properties.color);
   } else {
     this.showOff();
-
-    this.colorLight.classList.remove('bright-color');
-    this.colorLight.style.background = '';
   }
 };
 
@@ -221,9 +218,8 @@ ColorLight.prototype.updateColor = function(color) {
   if (!this.colorLight) {
     return;
   }
-  if (this.properties.on) {
-    this.colorLight.style.background = color;
-  }
+  this.colorLightIconPath.style.fill = color;
+
   if (this.details) {
     this.details.color.update();
   }
@@ -233,7 +229,7 @@ ColorLight.prototype.updateColor = function(color) {
   let b = parseInt(color.substr(5,2), 16);
 
   // From https://stackoverflow.com/questions/3942878/
-  if (r * 0.299 + g * 0.587 + b * 0.114 > 186 && this.properties.on) {
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
     this.colorLight.classList.add('bright-color');
   } else {
     this.colorLight.classList.remove('bright-color');
