@@ -89,6 +89,50 @@ Thing.prototype.htmlDetailView = function() {
 };
 
 /**
+ * Generate a wrapped svg text element containing the provided text
+ * @param {String} text
+ * @return {Element}
+ */
+Thing.prototype.makeWrappedSVGText = function(text) {
+  let lineHeight = 2.5;
+  let lineWidth = 12;
+  let x = 0;
+  let y = 8;
+  let row = '';
+  let words = text.split(' ');
+
+  let textElt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  textElt.setAttribute('x', x);
+  textElt.setAttribute('y', y);
+  textElt.setAttribute('text-anchor', 'middle');
+  textElt.classList.add('svg-thing-text');
+
+  function makeTSpan(textContent) {
+    let tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    tspan.setAttribute('x', x);
+    tspan.setAttribute('y', y);
+    tspan.textContent = textContent;
+    return tspan;
+  }
+
+  while (words.length > 0) {
+    let word = words.shift();
+    if (row.length + word.length + 1 < lineWidth) {
+      row += ' ' + word;
+    } else {
+      textElt.appendChild(makeTSpan(row));
+      row = word;
+      y += lineHeight;
+    }
+  }
+  if (row) {
+    textElt.appendChild(makeTSpan(row));
+  }
+
+  return textElt;
+};
+
+/**
  * SVG view for unknown thing.
  */
 Thing.prototype.svgView = function() {
@@ -99,9 +143,7 @@ Thing.prototype.svgView = function() {
               <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
               <image x="-2.5" y="-2.5" width="5" height="5"
                 xlink:href="${this.svgBaseIcon}" />
-              <text x="0" y="8" text-anchor="middle" class="svg-thing-text">
-                ${this.name.substring(0, 7)}
-              </text>
+              ${this.makeWrappedSVGText(this.name).outerHTML}
             </a>
           </g>`;
 };
