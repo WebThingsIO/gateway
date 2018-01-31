@@ -37,6 +37,8 @@ var Router = {
 
     // Content negotiation middleware
     app.use(function(request, response, next) {
+      // Inform the browser that content negotiation is taking place
+      response.setHeader('Vary', 'Accept');
       // If request won't accept HTML but will accept JSON,
       // or is a WebSocket request, or is multipart/form-data
       // treat it as an API request
