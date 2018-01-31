@@ -21,6 +21,23 @@
   background-image: url('../images/unknown-thing.png');
 }
 
+.thing-details-link {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 10;
+  float: right;
+  background-color: #89b6d6;
+  background-size: 3.2rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../images/thing-details-link.svg');
+  border: 2px solid white;
+  border-radius: 2rem;
+  width: 4rem;
+  height: 4rem;
+}
+
 .thing-detail-container {
   position: absolute;
   top: 50%;
@@ -167,6 +184,10 @@
   transform: translate(0, 0); /* promote to layer to draw above links */
 
   background: #88b6d6;
+}
+
+.unknown-thing {
+  background: #5d9bc7;
 }
 
 .unknown-thing img,

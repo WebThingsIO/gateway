@@ -106,12 +106,11 @@ SmartPlug.prototype.iconView = function() {
  * HTML view for smart plug.
  */
 SmartPlug.prototype.htmlView = function() {
-  return `<a href="${this.href}">
-    <div class="thing smart-plug">
-      ${this.iconView()}
-      <span class="thing-name">${this.name}</span>
-    </div>
-  </a>`;
+  return `<div class="thing smart-plug">
+    <a href="${this.href}" class="thing-details-link"></a>
+    ${this.iconView()}
+    <span class="thing-name">${this.name}</span>
+  </div>`
 };
 
 /**

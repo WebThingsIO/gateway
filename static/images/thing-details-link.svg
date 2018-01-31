@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="508px" height="549px" viewBox="0 0 508 549" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>thing-details-link</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="thing-details-link">
+            <circle id="Oval" fill="#FFFFFF" cx="254.5" cy="275.5" r="84.5"></circle>
+            <circle id="Oval-2" fill="#FFFFFF" cx="314" cy="76" r="50"></circle>
+            <circle id="Oval-2" fill="#FFFFFF" cx="414" cy="325" r="50"></circle>
+            <circle id="Oval-2" fill="#FFFFFF" cx="225" cy="465" r="50"></circle>
+            <circle id="Oval-2" fill="#FFFFFF" cx="85" cy="329" r="50"></circle>
+            <circle id="Oval-2" fill="#FFFFFF" cx="91" cy="126" r="50"></circle>
+            <path d="M313.5,76.5 L255.5,273.5" id="Line" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
+            <path d="M92.5,124.5 L256.5,270.5" id="Line-2" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
+            <path d="M81.5,329.5 L260.5,268.5" id="Line-3" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
+            <path d="M225.5,462.5 L256.5,266.5" id="Line-4" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
+            <path d="M415.5,324.5 L260.5,272.5" id="Line-5" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
+        </g>
+    </g>
+</svg>

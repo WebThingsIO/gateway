@@ -127,10 +127,11 @@ ColorLight.prototype.iconView = function() {
  * HTML view for Color bulb
  */
 ColorLight.prototype.htmlView = function() {
-  return `<a href="${this.href}" class="thing ${this.thingCssClass}">
+  return `<div class="thing ${this.thingCssClass}">
+    <a href="${this.href}" class="thing-details-link"></a>
     ${this.iconView()}
     <span class="thing-name">${this.name}</span>
-  </a>`;
+  </div>`;
 };
 
 /**
