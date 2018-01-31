@@ -12,6 +12,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.*
 
 SCRIPT_NAME=$(basename $0)
+SCRIPT_DIR=$(dirname $0)
 VERBOSE=0
 ENABLE_CONSOLE=1
 ENABLE_WIFI=0
@@ -19,6 +20,8 @@ WIFI_SSID=
 WIFI_PASSWORD=
 ENABLE_SSH=0
 HOSTNAME=gateway
+PRINT_SUMMARY=0
+DD_DEV=
 
 ###########################################################################
 #
@@ -35,8 +38,11 @@ where OPTION can be one of:
   --ssid          Specify the SSID for Wifi access
   --password      Specify the password for wifi access
   --hostname      Specify the hostname
+  --dd DEV        Issue a dd command to copy the image to an sdcard
+  --summary       Print summary of changed files
   -h, --help      Print this help
   -v, --verbose   Turn on some verbose reporting
+  -x              Does a 'set -x'
 END
 }
 
@@ -50,8 +56,7 @@ copy_prep_files() {
   HOME_PI="${ROOT_MOUNTPOINT}/home/pi"
 
   sudo rm -f "${HOME_PI}"/prepare-base*.sh
-  sudo wget --directory-prefix="${HOME_PI}" "https://raw.githubusercontent.com/mozilla-iot/gateway/master/image/prepare-base.sh"
-  sudo wget --directory-prefix="${HOME_PI}" "https://raw.githubusercontent.com/mozilla-iot/gateway/master/image/prepare-base-root.sh"
+  sudo cp "${SCRIPT_DIR}"/prepare-base*.sh "${HOME_PI}"
   sudo chmod +x "${HOME_PI}"/prepare-base*.sh
 }
 
@@ -63,6 +68,8 @@ enable_serial_console() {
 
   CONFIG=${BOOT_MOUNTPOINT}/config.txt
   if grep -q "enable_uart=1" ${CONFIG} ; then
+    echo "Serial console appears to already be enabled"
+  else
     echo "Enabling serial console"
     sudo sh -c "cat >> '${CONFIG}'" <<END
 
@@ -70,8 +77,6 @@ enable_uart=1
 force_turbo=1
 core_freq=250
 END
-  else
-    echo "Serial console appears to already be enabled"
   fi
 }
 
@@ -89,15 +94,48 @@ enable_ssh() {
 # Enables Wifi
 #
 enable_wifi() {
-  echo "Enabling Wifi"
-  WPA_CONF=${ROOT_MOUNTPOINT}/wpa_supplicant/wpa_supplicant.conf
-  sudo sh -c "cat >> '${CONFIG}'" <<END
+  WPA_CONF=${ROOT_MOUNTPOINT}/etc/wpa_supplicant/wpa_supplicant.conf
+  if sudo grep -q 'ssid="'${WIFI_SSID}'"' "${WPA_CONF}"; then
+    echo "Wifi appears to already be enabled for '${WIFI_SSID}'"
+  else
+    echo "Enabling Wifi for SSID '${WIFI_SSID}'"
+    sudo sh -c "cat >> '${WPA_CONF}'" <<END
 
 network={
   ssid="${WIFI_SSID}"
-  password="${WIFI_PASSWORD}"
+  psk="${WIFI_PASSWORD}"
 }
 END
+  fi
+}
+
+###########################################################################
+#
+# Prints a summary of the files touched by this script
+#
+print_summary() {
+
+  echo "#############################"
+  echo "########## SUMMARY ##########"
+  echo "#############################"
+  echo "===== ls boot/ssh ====="
+  ls -l "${BOOT_MOUNTPOINT}/ssh"
+
+  echo "===== boot/config.txt ====="
+  tail -6 "${BOOT_MOUNTPOINT}/config.txt"
+
+  echo "===== rootfs/etc/hostname ====="
+  cat "${ROOT_MOUNTPOINT}/etc/hostname"
+
+  echo "===== rootfs/etc/hosts ====="
+  cat "${ROOT_MOUNTPOINT}/etc/hosts"
+
+  echo "===== rootfs/etc/wpa_supplicant/wpa_supplicant.conf ====="
+  sudo cat "${ROOT_MOUNTPOINT}/etc/wpa_supplicant/wpa_supplicant.conf"
+
+  echo "===== ls rootfs/home/pi"
+  ls -l "${ROOT_MOUNTPOINT}/home/pi"
+  echo "#############################"
 }
 
 ###########################################################################
@@ -107,8 +145,26 @@ END
 update_hostname() {
   HOSTS_FILENAME="${ROOT_MOUNTPOINT}/etc/hosts"
   HOSTNAME_FILENAME="${ROOT_MOUNTPOINT}/etc/hostname"
+  OLD_HOSTNAME="$(cat ${HOSTNAME_FILENAME})"
+
+  echo "Updating hostname from '${OLD_HOSTNAME}' to '${HOSTNAME}'"
+
   sudo sh -c "echo '${HOSTNAME}' > '${HOSTNAME_FILENAME}'"
-  sudo sed -i "${HOSTS_FILENAME}" -e "s/raspberrypi/${HOSTNAME}/"
+  sudo sed -i "${HOSTS_FILENAME}" -e "s/${OLD_HOSTNAME}/${HOSTNAME}/g"
+}
+
+###########################################################################
+#
+# Writes the image file to the sdcard
+#
+write_image() {
+  # Unmount anything on the destination device
+  mount | grep "${DD_DEV}" | while read dev rest; do
+    echo "Unmounting '${dev}'"
+    sudo umount "${dev}"
+  done
+  echo "Writing image '${PREP_FILENAME}' to '${DD_DEV}'"
+  sudo dd status=progress bs=10M if="${PREP_FILENAME}" of="${DD_DEV}"
 }
 
 ###########################################################################
@@ -116,12 +172,29 @@ update_hostname() {
 # Parses command line arguments and run the program.
 #
 main() {
-  while getopts ":vh-:" opt "$@"; do
+  while getopts ":vhx-:" opt "$@"; do
     case $opt in
       -)
         case "${OPTARG}" in
+          dd)
+            DD_DEV="${!OPTIND}"
+            OPTIND=$(( OPTIND + 1 ))
+            ;;
+          help)
+            usage
+            exit 1
+            ;;
+          hostname)
+            HOSTNAME="${!OPTIND}"
+            OPTIND=$(( OPTIND + 1 ))
+            ;;
           noconsole)
             ENABLE_CONSOLE=0
+            ;;
+          password)
+            ENABLE_WIFI=1
+            WIFI_PASSWORD="${!OPTIND}"
+            OPTIND=$(( OPTIND + 1 ))
             ;;
           ssh)
             ENABLE_SSH=1
@@ -131,18 +204,8 @@ main() {
             WIFI_SSID="${!OPTIND}"
             OPTIND=$(( OPTIND + 1 ))
             ;;
-          password)
-            ENABLE_WIFI=1
-            WIFI_PASSWORD="${!OPTIND}"
-            OPTIND=$(( OPTIND + 1 ))
-            ;;
-          hostname)
-            HOSTNAME="${!OPTIND}"
-            OPTIND=$(( OPTIND + 1 ))
-            ;;
-          help)
-            usage
-            exit 1
+          summary)
+            PRINT_SUMMARY=1
             ;;
           verbose)
             VERBOSE=1
@@ -160,6 +223,9 @@ main() {
         ;;
       v)
         VERBOSE=1
+        ;;
+      x)
+        set -x
         ;;
       ?)
         echo "Unrecognized option: ${opt}"
@@ -189,6 +255,7 @@ main() {
     echo "     WIFI_SSID = ${WIFI_SSID}"
     echo " WIFI_PASSWORD = ${WIFI_PASSWORD}"
     echo "    ENABLE_SSH = ${ENABLE_SSH}"
+    echo "        DD_DEV = ${DD_DEV}"
   fi
 
   if [ ! -f "${IMG_FILENAME}" ]; then
@@ -210,7 +277,7 @@ main() {
   declare -a KPARTX_DEVS
   KPARTX_DEVS=($(while read dev rest; do
     echo "/dev/mapper/${dev}"
-  done < <(sudo kpartx -v -l "${PREP_FILENAME}")))
+  done < <(sudo kpartx -l "${PREP_FILENAME}")))
 
   BOOT_DEV=${KPARTX_DEVS[0]}
   ROOT_DEV=${KPARTX_DEVS[1]}
@@ -224,7 +291,7 @@ main() {
   fi
 
   # Create the loop mounts
-  if sudo kpartx -v -a "${PREP_FILENAME}"; then
+  if sudo kpartx -a "${PREP_FILENAME}"; then
     # It seems that there is sometimes a race and that the loop files don't
     # always exist by the time kpartx exits, so we wait until we actually
     # see the loop file before continuing.
@@ -245,7 +312,7 @@ main() {
   fi
   LOOP_MOUNT_CREATED=1
 
-  # Mount the boot parition of the image
+  # Mount the boot partition of the image
   mkdir -p ${BOOT_MOUNTPOINT}
   if sudo mount ${BOOT_DEV} ${BOOT_MOUNTPOINT}; then
     echo "Boot partition mounted successfully"
@@ -255,7 +322,7 @@ main() {
   fi
   BOOT_MOUNTED=1
 
-  # Mount the root parition of the image
+  # Mount the root partition of the image
   mkdir -p ${ROOT_MOUNTPOINT}
   if sudo mount ${ROOT_DEV} ${ROOT_MOUNTPOINT}; then
     echo "Root partition mounted successfully"
@@ -283,12 +350,19 @@ main() {
   copy_prep_files
   sync
 
+  if [ "${PRINT_SUMMARY}" == 1 ]; then
+    print_summary
+  fi
+
+  # Adding a sleep here helps ensure that the mounted directories are
+  # not actually still in use.
+  sleep 1
+
   cleanup
 
-  # Because I always forget, print out the commands to upload to aws
-  echo ""
-  echo "Use a command like the following to write the image:"
-  echo "sudo dd status=progress bs=10M if=${PREP_FILENAME} of=/dev/xxx"
+  if [ ! -z "${DD_DEV}" ]; then
+    write_image
+  fi
 }
 
 ###########################################################################
@@ -297,6 +371,17 @@ main() {
 # reason then we'll still undo whatever is needed.
 #
 function cleanup() {
+
+  # Note: If for some reason, the unmount or removal of the loop mounts
+  #       fail, then you can use the following command to see what
+  # loop mounts still exist:
+  #
+  #   sudo dmsetup ls
+  #
+  # and remove it manually using something like (after unmounting manually):
+  #
+  #   sudo dmsetup remove loop1p2
+
   if [ "${ROOT_MOUNTED}" == 1 ]; then
     echo "Unmounting ${ROOT_DEV}"
     sudo umount ${ROOT_MOUNTPOINT}
@@ -315,7 +400,7 @@ function cleanup() {
   fi
   if [ "${LOOP_MOUNT_CREATED}" == 1 ]; then
     echo "Removing loop mounts"
-    sudo kpartx -v -d "${PREP_FILENAME}"
+    sudo kpartx -d "${PREP_FILENAME}"
     LOOP_MOUNT_CREATED=0
   fi
 }
