@@ -309,12 +309,12 @@
   background-image: url('../images/smart-plug-off.svg');
 }
 
-.on .smart-plug .thing-icon, .smart-plug-container.on .thing-icon {
+.smart-plug.on .thing-icon, .smart-plug-container.on .thing-icon {
   background-image: url('../images/smart-plug-on.svg');
   background-color: #ffffff;
 }
 
-.off .smart-plug .thing-icon, .smart-plug-container.off .thing-icon {
+.smart-plug.off .thing-icon, .smart-plug-container.off .thing-icon {
   background-image: url('../images/smart-plug-off.svg');
 }
 
@@ -325,7 +325,7 @@
   padding-top: 8.75rem;
 }
 
-.on .smart-plug .smart-plug-label, .smart-plug-container.on .smart-plug-label {
+.smart-plug.on .smart-plug-label, .smart-plug-container.on .smart-plug-label {
   color: #5d9bc7;
 }
 
