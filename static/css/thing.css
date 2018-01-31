@@ -80,6 +80,16 @@
   margin: 0.5rem 0;
 }
 
+/* Hint at interactive things */
+.color-light,
+.dimmable-light,
+.on-off-light > .thing-icon,
+.smart-plug > .thing-icon,
+.on-off-switch > .thing-icon,
+.level-bar-container {
+  cursor: pointer;
+}
+
 /* On/Off Switch */
 
 .on-off-switch .thing-icon {

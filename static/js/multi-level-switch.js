@@ -56,6 +56,9 @@ function MultiLevelSwitch(description, format, options) {
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
+  } else {
+    this.element.querySelector('.level-bar-container')
+      .addEventListener('click', this.handleClick.bind(this));
   }
   return this;
 }

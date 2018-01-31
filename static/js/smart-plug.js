@@ -89,6 +89,9 @@ function SmartPlug(description, format) {
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
+  } else {
+    this.element.querySelector('.thing-icon')
+      .addEventListener('click', this.handleClick.bind(this));
   }
 
   return this;
