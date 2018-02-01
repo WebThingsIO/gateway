@@ -5,6 +5,10 @@
 #settings-view {
   background-color: #5d9bc7;
   height: 100%;
+  padding-top: 7.5rem;
+  padding-bottom: 7.5rem;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 #settings-menu {
@@ -15,7 +19,6 @@
   width: 100%;
   margin: 0 auto;
   max-height: 100%;
-  overflow: auto;
 }
 
 #settings-menu.hidden {
@@ -28,6 +31,7 @@
   max-width: 60rem;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: 0;
 }
 
 .settings-item {
@@ -299,7 +303,7 @@
   background-image: url('../images/edit-plain.svg');
 }
 
-.addon-settings-remove, 
+.addon-settings-remove,
 .user-settings-remove {
   margin-right: 8px;
   background-image: url('../images/remove.svg');
@@ -313,7 +317,7 @@
 #discover-addons-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/add.png');
+  background-image: url('../images/add.svg');
 }
 
 #user-settings-edit,

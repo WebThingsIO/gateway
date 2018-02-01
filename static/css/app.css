@@ -192,7 +192,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #menu-button {
-  background-image: url('../images/menu.png');
+  background-image: url('../images/menu.svg');
 }
 
 #back-button {
@@ -313,4 +313,3 @@ h1, h2, h3, h4, h5, h6 {
 input:checked + .switch-slider:after {
   transform: translate(3.65rem, 0.35rem);
 }
-
