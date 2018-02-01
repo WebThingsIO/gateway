@@ -258,19 +258,47 @@
   width: 100%;
   text-align: center;
   position: fixed;
-  top: 1.8rem;
+  top: 0;
+  height: 9.6rem;
+  display: flex;
+  align-items: center;
+}
+
+#thing-title-container {
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  text-overflow: ellipsis;
+  height: 100%;
+  line-height: 9.6rem;
 }
 
 #thing-title-icon {
   height: 4rem;
   position: relative;
   top: 1.3rem;
-  padding-right: 1rem;
+  padding-right: 0.5rem;
 }
 
 #thing-title-name {
   font-size: 1.6rem;
-  color: #fff;
+}
+
+#thing-title-back-flex,
+#thing-title-speech-flex {
+  flex: 1;
+  min-width: 9.6rem;
+  flex-shrink: 0;
+  height: 9.6rem;
+}
+
+#thing-title-speech-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.speech-enabled > #thing-title-speech-flex {
+  min-width: 9.6rem;
 }
 
 .dimmable-light {

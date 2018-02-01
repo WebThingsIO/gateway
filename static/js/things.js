@@ -204,6 +204,14 @@ var ThingsScreen = {
 
         document.getElementById('thing-title-icon').src = thing.pngBaseIcon;
         document.getElementById('thing-title-name').innerText = thing.name;
+
+        let speechWrapper = document.getElementById('speech-wrapper');
+        if (speechWrapper.classList.contains('hidden')) {
+          this.thingTitleElement.classList.remove('speech-enabled');
+        } else {
+          this.thingTitleElement.classList.add('speech-enabled');
+        }
+
         this.thingTitleElement.classList.remove('hidden');
       }).bind(this));
     }).bind(this));
