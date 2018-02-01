@@ -21,6 +21,23 @@
   background-image: url('../images/unknown-thing.png');
 }
 
+.thing-details-link {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 10;
+  float: right;
+  background-color: #89b6d6;
+  background-size: 2.4rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../images/thing.svg');
+  border: 1px solid white;
+  border-radius: 2rem;
+  width: 4rem;
+  height: 4rem;
+}
+
 .thing-detail-container {
   position: absolute;
   top: 50%;
@@ -169,6 +186,10 @@
   background: #88b6d6;
 }
 
+.unknown-thing {
+  background: #5d9bc7;
+}
+
 .unknown-thing img,
 .dimmable-light-icon,
 .color-light-icon,
@@ -278,12 +299,12 @@
   background-image: url('../images/smart-plug-off.svg');
 }
 
-.on .smart-plug .thing-icon, .smart-plug-container.on .thing-icon {
+.smart-plug.on .thing-icon, .smart-plug-container.on .thing-icon {
   background-image: url('../images/smart-plug-on.svg');
   background-color: #ffffff;
 }
 
-.off .smart-plug .thing-icon, .smart-plug-container.off .thing-icon {
+.smart-plug.off .thing-icon, .smart-plug-container.off .thing-icon {
   background-image: url('../images/smart-plug-off.svg');
 }
 
@@ -294,7 +315,7 @@
   padding-top: 8.75rem;
 }
 
-.on .smart-plug .smart-plug-label, .smart-plug-container.on .smart-plug-label {
+.smart-plug.on .smart-plug-label, .smart-plug-container.on .smart-plug-label {
   color: #5d9bc7;
 }
 

@@ -101,7 +101,7 @@ DimmableLight.prototype.updateLevel = function(level) {
 };
 
 DimmableLight.prototype.iconView = function() {
-  return `<div class="dimmable-light">
+  return `<div class="dimmable-light level-bar-container">
     <div class="dimmable-light-icon">
       <svg
          xmlns:dc="http://purl.org/dc/elements/1.1/"

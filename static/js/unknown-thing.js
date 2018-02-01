@@ -169,13 +169,18 @@ UnknownThing.prototype.setProperty = function(name, value) {
  */
 UnknownThing.prototype.htmlView = function() {
   if (Object.keys(this.displayedProperties).length > 0) {
-    return `<a href="${this.href}" class="thing">
-      <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
+    return `<div class="thing">
+      <a href="${this.href}" class="thing-details-link"></a>
+      <div class="unknown-thing">
+        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
+      </div>
       <span class="thing-name">${this.name}</span>
-    </a>`;
+    </div>`;
   } else {
     return `<div class="thing">
-      <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
+      <div class="unknown-thing">
+        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
+      </div>
       <span class="thing-name">${this.name}</span>
     </div>`;
   }
@@ -185,25 +190,19 @@ UnknownThing.prototype.htmlView = function() {
  * HTML detail view for unknown thing.
  */
 UnknownThing.prototype.htmlDetailView = function() {
-  if (Object.keys(this.displayedProperties).length > 0) {
-    let detailsHTML = '';
-    for (const prop in this.displayedProperties) {
-      detailsHTML += this.displayedProperties[prop].detail.view();
-    }
-
-    return `<div class="unknown-thing-container">
-      <div class="thing">
-        <div class="unknown-thing">
-          <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-        </div>
-      </div>
-      ${detailsHTML}
-    </div>`;
-  } else {
-    return `<div class="thing">
-      <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-    </div>`;
+  let detailsHTML = '';
+  for (const prop in this.displayedProperties) {
+    detailsHTML += this.displayedProperties[prop].detail.view();
   }
+
+  return `<div class="unknown-thing-container">
+    <div class="thing">
+      <div class="unknown-thing">
+        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
+      </div>
+    </div>
+    ${detailsHTML}
+  </div>`;
 };
 
 /**
