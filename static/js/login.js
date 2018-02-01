@@ -25,10 +25,12 @@
       then(() => {
         console.log('~~~ log in success ~~~');
 
-        const urlParams = new URLSearchParams(window.location.search);
+        const search = window.location.search;
+        const match = search.match(/url=([^=&]+)/);
+
         let url = '/';
-        if (urlParams.has('url')) {
-          url = decodeURIComponent(urlParams.get('url'));
+        if (match) {
+          url = decodeURIComponent(match[1]);
         }
 
         window.location.href = url;
