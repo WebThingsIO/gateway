@@ -176,7 +176,7 @@
 #create-rule-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/add.png');
+  background-image: url('../images/add.svg');
 }
 
 #create-rule-hint {
