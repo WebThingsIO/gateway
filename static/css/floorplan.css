@@ -71,6 +71,7 @@
 
 .svg-thing-link {
   outline: none;
+  cursor: pointer;
 }
 
 .svg-thing-icon {
