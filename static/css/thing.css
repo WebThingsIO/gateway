@@ -28,11 +28,11 @@
   z-index: 10;
   float: right;
   background-color: #89b6d6;
-  background-size: 3.2rem;
+  background-size: 2.4rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../images/thing-details-link.svg');
-  border: 2px solid white;
+  background-image: url('../images/things-icon.png');
+  border: 1px solid white;
   border-radius: 2rem;
   width: 4rem;
   height: 4rem;
@@ -78,16 +78,6 @@
   height: 3.6rem;
   overflow: hidden;
   margin: 0.5rem 0;
-}
-
-/* Hint at interactive things */
-.color-light,
-.dimmable-light,
-.on-off-light > .thing-icon,
-.smart-plug > .thing-icon,
-.on-off-switch > .thing-icon,
-.level-bar-container {
-  cursor: pointer;
 }
 
 /* On/Off Switch */
