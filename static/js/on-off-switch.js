@@ -137,8 +137,7 @@ OnOffSwitch.prototype.turnOn = function() {
   })
   .then((function(response) {
    if (response.status == 200) {
-     this.showOn();
-     this.properties.on = true;
+     this.onPropertyStatus({on: true});
    } else {
      console.error('Status ' + response.status + ' trying to turn on switch');
    }
@@ -168,8 +167,7 @@ OnOffSwitch.prototype.turnOff = function() {
   })
   .then((function(response) {
     if (response.status == 200) {
-      this.showOff();
-      this.properties.on = false;
+      this.onPropertyStatus({on: false});
     } else {
       console.error('Status ' + response.status + ' trying to turn off switch');
     }
