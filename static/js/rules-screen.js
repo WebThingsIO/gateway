@@ -47,7 +47,13 @@ var RulesScreen = {
   addRuleCard: function(desc) {
     let ruleElt = document.createElement('div');
     ruleElt.classList.add('rule');
-    new RuleCard(this.gateway, ruleElt, this.nextId, desc);
+    try {
+      new RuleCard(this.gateway, ruleElt, this.nextId, desc);
+    } catch(e) {
+      console.error('Invalid rule', desc, e);
+      this.nextId += 1;
+      return;
+    }
     this.nextId += 1;
     this.rulesList.appendChild(ruleElt);
   },
