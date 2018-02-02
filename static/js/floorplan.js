@@ -185,20 +185,29 @@ var FloorplanScreen = {
     var formData = new FormData();
     formData.append('file', file);
     this.uploadButton.classList.add('loading');
+    let headers = {
+      'Authorization': `Bearer ${window.API.jwt}`,
+    };
+
     fetch('/uploads', {
       method: 'POST',
       body: formData,
-      headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-      }
+      headers: headers
     }).then((response) => {
       this.uploadButton.classList.remove('loading');
       if (response.ok) {
         console.log('Successfully uploaded floorplan');
-        // Add a timestamp to the background image to force image reload
-        var timestamp = Date.now();
-        this.floorplan.setAttribute('style',
-          `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
+        fetch('/uploads/floorplan.svg', {
+          method: 'GET',
+          headers: headers,
+          // Make sure we update the cache with the new floorplan
+          cache: 'reload'
+        }).then(() => {
+          // Add a timestamp to the background image to force image reload
+          var timestamp = Date.now();
+          this.floorplan.setAttribute('style',
+            `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
+        });
       } else {
         console.error('Failed to upload floorplan');
       }
