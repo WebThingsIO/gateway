@@ -24,13 +24,19 @@ const RuleScreen = {
     this.ruleArea = document.getElementById('rule-area');
     this.ruleName = this.view.querySelector('.rule-name');
     this.ruleNameCustomize = this.view.querySelector('.rule-name-customize');
-    this.ruleNameCustomize.addEventListener('click', () => {
+
+    const selectRuleName = () => {
       // Select all of ruleName, https://stackoverflow.com/questions/6139107/
       let range = document.createRange();
       range.selectNodeContents(this.ruleName);
       let selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
+    };
+    this.ruleNameCustomize.addEventListener('click', selectRuleName);
+    this.ruleName.addEventListener('dblclick', function(event) {
+      event.preventDefault();
+      selectRuleName();
     });
 
     this.ruleName.contentEditable = true;
