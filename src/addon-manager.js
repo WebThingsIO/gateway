@@ -85,7 +85,7 @@ class AddonManager extends EventEmitter {
    * The user then presses the "button" on the device to be added.
    * @returns A promise that resolves to the newly added device.
    */
-  addNewThing() {
+  addNewThing(pairingTimeout) {
     var deferredAdd = new Deferred();
 
     if (this.deferredAdd) {
@@ -94,7 +94,6 @@ class AddonManager extends EventEmitter {
       deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
-      var pairingTimeout = config.get('addonManager.pairingTimeout');
       this.adapters.forEach(adapter => {
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing(pairingTimeout);

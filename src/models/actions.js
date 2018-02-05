@@ -118,7 +118,7 @@ class Actions extends EventEmitter {
 
     switch(action.name) {
       case 'pair':
-        AddonManager.addNewThing().then(function() {
+        AddonManager.addNewThing(action.parameters.timeout).then(function() {
           action.updateStatus('completed');
         }).catch(function(error) {
           action.error = error;

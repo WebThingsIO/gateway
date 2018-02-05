@@ -9,6 +9,18 @@
   max-height: 100%;
 }
 
+#add-adapters-hint.hidden,
+#add-thing-status.hidden {
+  display: none;
+}
+
+#add-adapters-hint-anchor:link,
+#add-adapters-hint-anchor:visited,
+#add-adapters-hint-anchor:hover,
+#add-adapters-hint-anchor:active {
+  color: #fff;
+}
+
 .new-thing-save-button {
   height: 4rem;
   background-color: #7f93a1;

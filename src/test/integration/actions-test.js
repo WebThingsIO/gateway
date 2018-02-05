@@ -54,7 +54,10 @@ describe('actions/', function() {
 
   it('should list and retrieve the new action', async () => {
     let descr = {
-      name: 'pair'
+      name: 'pair',
+      parameters: {
+        timeout: 60,
+      },
     };
 
     const pair = await chai.request(server)
@@ -98,7 +101,10 @@ describe('actions/', function() {
 
   it('should remove an action', async () => {
     let descr = {
-      name: 'pair'
+      name: 'pair',
+      parameters: {
+        timeout: 60,
+      },
     };
 
     await chai.request(server)
