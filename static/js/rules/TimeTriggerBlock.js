@@ -17,7 +17,10 @@ function TimeTriggerBlock(ruleArea, rule, x, y) {
 
   this.timeInput = document.createElement('input');
   this.timeInput.type = 'time';
-  this.timeInput.value = new Date().getHours() + ':' + new Date().getMinutes();
+  let date = new Date();
+  let hours = TimeTriggerBlock.leftPad(date.getHours());
+  let minutes = TimeTriggerBlock.leftPad(date.getMinutes());
+  this.timeInput.value = hours + ':' + minutes;
   this.timeInput.classList.add('time-input');
 
   // Disable dragging started by clicking time input
@@ -31,7 +34,7 @@ function TimeTriggerBlock(ruleArea, rule, x, y) {
   this.timeInput.addEventListener('change', () => {
     this.rule.setTrigger({
       type: 'TimeTrigger',
-      time: this.timeInput.value
+      time: TimeTriggerBlock.localToUTC(this.timeInput.value)
     });
   });
 
@@ -48,7 +51,8 @@ TimeTriggerBlock.prototype.setRulePart = function(rulePart) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
     this.ruleTriggerArea.classList.add('inactive');
-    this.timeInput.value = rulePart.trigger.time;
+
+    this.timeInput.value = TimeTriggerBlock.utcToLocal(rulePart.trigger.time);
   }
 
   if (rulePart.effect) {
@@ -61,4 +65,34 @@ TimeTriggerBlock.prototype.onUp = function(clientX, clientY) {
   if (this.role === 'effect') {
     this.remove();
   }
+};
+
+TimeTriggerBlock.leftPad = function(n) {
+  return n.toString().padStart(2, '0');
+};
+
+/**
+ * Convert from a utc time string to one in the local timezone
+ * @param {String} utcTime - formatted HH:MM
+ * @return {String}
+ */
+TimeTriggerBlock.utcToLocal = function(utcTime) {
+  let timeParts = utcTime.split(':');
+  let date = new Date();
+  date.setUTCHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+  let lp = TimeTriggerBlock.leftPad;
+  return lp(date.getHours()) + ':' + lp(date.getMinutes());
+};
+
+/**
+ * Convert from a local time string to one in UTC
+ * @param {String} localTime - formatted HH:MM
+ * @return {String}
+ */
+TimeTriggerBlock.localToUTC = function(localTime) {
+  let timeParts = localTime.split(':');
+  let date = new Date();
+  date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+  let lp = TimeTriggerBlock.leftPad;
+  return lp(date.getUTCHours()) + ':' + lp(date.getUTCMinutes());
 };
