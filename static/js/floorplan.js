@@ -251,7 +251,7 @@ var FloorplanScreen = {
     var thing = this.selectedThing;
     var x = thing.getAttribute('dragx');
     var y = thing.getAttribute('dragy');
-    var thingUrl = thing.firstElementChild.getAttribute('href');
+    var thingUrl = thing.firstElementChild.getAttribute('xlink:href');
 
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
     var payload = {
