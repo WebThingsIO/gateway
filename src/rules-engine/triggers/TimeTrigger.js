@@ -36,11 +36,9 @@ class TimeTrigger extends Trigger {
     let hours = parseInt(parts[0], 10);
     let minutes = parseInt(parts[1], 10);
 
+    // Time is specified in UTC
     let nextTime = new Date();
-    nextTime.setHours(hours);
-    nextTime.setMinutes(minutes);
-    nextTime.setSeconds(0);
-    nextTime.setMilliseconds(0);
+    nextTime.setUTCHours(hours, minutes, 0, 0);
 
     if (nextTime.getTime() < Date.now()) {
       // NB: this will wrap properly into the next month/year

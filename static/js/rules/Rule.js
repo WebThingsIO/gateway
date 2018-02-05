@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global API */
+/* global API, TimeTriggerBlock */
 
 /**
  * Model of a Rule loaded from the Rules Engine
@@ -115,7 +115,8 @@ const RuleUtils = {
  */
 Rule.prototype.toTriggerHumanDescription = function() {
   if (this.trigger.type === 'TimeTrigger') {
-    return 'the time of day is ' + this.trigger.time;
+    return 'the time of day is ' +
+      TimeTriggerBlock.utcToLocal(this.trigger.time);
   }
 
   let triggerThing = this.gateway.things.filter(
