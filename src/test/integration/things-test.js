@@ -284,7 +284,7 @@ describe('things/', function() {
           .post(Constants.ACTIONS_PATH)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({name: 'pair'});
+          .send({name: 'pair', parameters: {timeout: 60}});
 
         await mockAdapter().addDevice('test-4', makeDescr('test-4'));
         await mockAdapter().addDevice('test-5', makeDescr('test-5'));
@@ -311,7 +311,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({name: 'pair'});
+      .send({name: 'pair', parameters: {timeout: 60}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
@@ -374,7 +374,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({name: 'pair'});
+      .send({name: 'pair', parameters: {timeout: 60}});
     expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
@@ -424,7 +424,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: 'pair'});
+      .send({name: 'pair', parameters: {timeout: 60}});
     expect(pair.status).toEqual(201);
     await mockAdapter().removeDevice(thingId);
 
@@ -689,7 +689,7 @@ describe('things/', function() {
           .post(Constants.ACTIONS_PATH)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({name: 'pair'});
+          .send({name: 'pair', parameters: {timeout: 60}});
 
         let res = await chai.request(server)
           .get(Constants.ACTIONS_PATH)
@@ -794,7 +794,10 @@ describe('things/', function() {
     const thingBase = Constants.THINGS_PATH + '/nonexistent-thing';
 
     const actionDescr = {
-      name: 'pair'
+      name: 'pair',
+      parameters: {
+        timeout: 60,
+      },
     };
 
     let err = await pFinal(chai.request(server)
@@ -817,7 +820,10 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
 
     const actionDescr = {
-      name: 'pair'
+      name: 'pair',
+      parameters: {
+        timeout: 60,
+      },
     };
 
     let err = await pFinal(chai.request(server)
@@ -871,7 +877,10 @@ describe('things/', function() {
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
-          name: 'pair'
+          name: 'pair',
+          parameters: {
+            timeout: 60,
+          },
         }
       }),
       webSocketRead(ws, 2)

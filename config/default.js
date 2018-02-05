@@ -20,7 +20,6 @@ module.exports = {
   // port-free urls
   behindForwarding: true,
   addonManager: {
-    pairingTimeout: 3 * 60,   // seconds
     path: './addons',
     api: 1,
     listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json',
