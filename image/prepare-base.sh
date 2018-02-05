@@ -39,6 +39,7 @@ nvm use v7.10.1
 sudo apt install -y \
   certbot \
   dnsmasq \
+  git \
   hostapd \
   libffi-dev \
   libnanomsg-dev \
@@ -52,6 +53,12 @@ sudo apt install -y \
 _url="https://github.com/mozilla-iot/gateway-addon-python/releases/download/v0.2.0/gateway_addon-0.2.0.tar.gz"
 sudo pip2 install "$_url"
 sudo pip3 install "$_url"
+
+_url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
+sudo pip2 install "$_url"
+sudo pip3 install "$_url"
+
+git clone https://github.com/mozilla-iot/intent-parser "$HOME/mozilla-iot/intent-parser"
 
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
@@ -163,6 +170,30 @@ END
 # Enable the certificate renewal service so that it starts up automatically on
 # each boot.
 sudo systemctl enable mozilla-iot-gateway.renew-certificates.timer
+
+sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.intent-parser.service' <<END
+[Unit]
+Description=Mozilla IoT Gateway Intent Parser
+After=network.target
+OnFailure=mozilla-iot-gateway.update-rollback.service
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=pi
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/intent-parser
+# Edit this line, if needed, to set the correct path to node
+ExecStart=/home/pi/mozilla-iot/intent-parser/intent-parser-server.py
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+END
+
+sudo systemctl enable mozilla-iot-gateway.intent-parser.service
 
 # Create a script which redirects port 80 to 8080 and 443 to 4443. This
 # allows the gateway to run under the pi user rather than requiring to
