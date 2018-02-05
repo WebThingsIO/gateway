@@ -26,16 +26,25 @@ var AddThingScreen = {
     this.backButton = document.getElementById('add-thing-back-button');
     this.cancelButton = document.getElementById('add-thing-cancel-button');
     this.newThingsElement = document.getElementById('new-things');
+    this.scanStatus = document.getElementById('add-thing-status');
+    this.addonsHint = document.getElementById('add-adapters-hint');
+    this.addonsHintAnchor =
+      document.getElementById('add-adapters-hint-anchor');
+    this.pairingTimeout = null;
     this.visibleThings = new Set();
     // Add event listeners
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.cancelButton.addEventListener('click', this.hide.bind(this));
+    this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
   },
 
   /**
    * Create a new "pair" action on the gateway.
    */
   requestPairing: function() {
+    this.scanStatus.classList.remove('hidden');
+    this.addonsHint.classList.add('hidden');
+
     let proto = 'ws:';
     if (window.location.protocol === 'https:') {
       proto = 'wss:';
@@ -48,8 +57,14 @@ var AddThingScreen = {
       this.showNewThing(JSON.parse(event.data));
     }).bind(this);
 
+    // Timeout, in seconds.
+    const timeout = 60;
+
     var action = {
-      'name': 'pair'
+      'name': 'pair',
+      'parameters': {
+        'timeout': timeout,
+      },
     };
     fetch('/actions', {
       method: 'POST',
@@ -60,10 +75,22 @@ var AddThingScreen = {
         'Content-Type': 'application/json'
       }
     })
-    .then(function(response) {
+    .then((response) => {
       return response.json();
-    }).then(function(json) {
+    }).then((json) => {
       AddThingScreen.actionUrl = json.href;
+
+      this.pairingTimeout = setTimeout(() => {
+        this.scanStatus.classList.add('hidden');
+
+        if (this.visibleThings.size === 0) {
+          this.addonsHint.classList.remove('hidden');
+        }
+
+        this.pairingTimeout = null;
+        this.requestCancelPairing();
+      }, timeout * 1000);
+
       console.log('Pairing request created with URL ' + json.href);
     })
     .catch(function(error) {
@@ -75,6 +102,11 @@ var AddThingScreen = {
    * Cancel a pairing request.
    */
   requestCancelPairing: function() {
+    if (this.pairingTimeout !== null) {
+      clearTimeout(this.pairingTimeout);
+      this.pairingTimeout = null;
+    }
+
     // Close websocket.
     if (typeof this.socket !== 'undefined') {
       this.socket.close();
