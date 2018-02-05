@@ -16,6 +16,10 @@ var RulesScreen = {
     this.rulesList = document.getElementById('rules');
     this.gateway = new Gateway();
     this.nextId = 0;
+
+    this.createRuleButton.addEventListener('click', () => {
+      page('/rules/new');
+    });
   },
 
   /**
@@ -61,10 +65,6 @@ var RulesScreen = {
   show: function() {
     this.gateway.readThings().then(() => {
       return this.readRules();
-    }).then(() => {
-      this.createRuleButton.addEventListener('click', () => {
-        page('/rules/new');
-      });
     });
   }
 };
