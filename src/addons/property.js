@@ -32,6 +32,7 @@ class Property {
     this.device = device;
     this.name = name;
     this.visible = true;
+    this.fireAndForget = false;
     if (propertyDescr.hasOwnProperty('visible')) {
       this.visible = propertyDescr.visible;
     }
