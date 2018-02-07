@@ -12,7 +12,7 @@
 #   - /build/Open-ZWave/open-zwave  - git repository containing the desired version of OpenZWave
 #   - /build/gateway                - git repository containing the gateway software
 
-NODE_VERSION=v7.10.1
+NODE_VERSION="--lts"
 
 GATEWAY=gateway
 OPEN_ZWAVE=OpenZWave/open-zwave
@@ -52,7 +52,7 @@ export CC="arm-linux-gnueabihf-gcc ${OPTS}"
 export CXX="arm-linux-gnueabihf-g++ ${OPTS}"
 
 # Install and configure nvm
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the RPi, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.
