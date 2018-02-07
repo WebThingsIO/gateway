@@ -36,6 +36,7 @@ after_script:
   - ./node_modules/.bin/codecov
 
 node_js:
-  - 7
+  - 8
+  - 9
 notifications:
   irc: "irc.mozilla.org#iot"
