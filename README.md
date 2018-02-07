@@ -35,25 +35,27 @@ Under OSX:
 nvm allows you to easily install different versions of node. To install nvm:
 
 ```
-$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 ```
 
-Close and reopen your terminal window. Use nvm to install node and set the
-default version.
+Close and reopen your terminal window. Use nvm to install a LTS version of node and set the
+default version. 
 
 ```
-$ nvm install v7.10.1
-$ nvm use v7.10.1
-$ nvm alias default v7.10.1
+$ nvm install --lts
+$ nvm use --lts
+$ nvm alias default lts/*
 ```
 
 Verify that node and npm have been installed:
 ```
 $ npm --version
-4.2.0
+5.6.0
 $ node --version
-v7.10.1
+v8.9.4
 ```
+
+Note: these versions might differ from the LTS version installed locally.
 
 ### Install node (if you didn't use nvm)
 
