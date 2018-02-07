@@ -1,5 +1,6 @@
 #!/bin/bash
 
+NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts"
 
 cd /home/pi
@@ -15,7 +16,7 @@ mkdir -p mozilla-iot
 cd mozilla-iot
 
 # Install and configure nvm
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the RPi, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.

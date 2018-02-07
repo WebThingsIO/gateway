@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NVM_VERSION=v0.33.8
+NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts"
 
 # first we install nvm
