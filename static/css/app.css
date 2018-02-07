@@ -313,3 +313,7 @@ h1, h2, h3, h4, h5, h6 {
 input:checked + .switch-slider:after {
   transform: translate(3.65rem, 0.35rem);
 }
+
+body.hidden {
+  visibility: hidden;
+}
