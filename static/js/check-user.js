@@ -12,6 +12,8 @@
     window.API.verifyJWT().then((valid) => {
       if (!valid) {
         redirectUnauthed();
+      } else {
+        document.body.classList.remove('hidden');
       }
     });
   } else {
