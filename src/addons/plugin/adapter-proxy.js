@@ -57,6 +57,7 @@ class AdapterProxy extends Adapter {
   }
 
   sendMsg(methodType, data) {
+    data.adapterId = this.id;
     return this.plugin.sendMsg(methodType, data);
   }
 
