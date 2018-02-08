@@ -378,7 +378,7 @@ var SettingsScreen = {
           addon.installed = this.installedAddons.has(addon.name);
           new DiscoveredAddon(addon);
         }
-      });
+      }).catch((e) => console.error(`Failed to parse add-ons list: ${e}`));
     });
   },
 
