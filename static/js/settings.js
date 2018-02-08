@@ -37,7 +37,8 @@ var SettingsScreen = {
       document.getElementById('authorization-settings');
     this.backButton = document.getElementById('settings-back-button');
 
-    this.installedAddons = new Set();
+    this.availableAddons = new Map();
+    this.installedAddons = new Map();
   },
 
   show: function(section, subsection, id) {
@@ -311,6 +312,57 @@ var SettingsScreen = {
     });
   },
 
+  fetchAddonList: function() {
+    const opts = {
+      headers: API.headers(),
+    };
+
+    let api = null;
+    // First, get the list of installed add-ons.
+    return fetch('/addons', opts).then((response) => {
+      this.installedAddons.clear();
+      return response.json();
+    }).then((body) => {
+      if (!body) {
+        return;
+      }
+
+      // Store a map of name->version.
+      for (const s of body) {
+        try {
+          const settings = JSON.parse(s.value);
+          this.installedAddons.set(settings.name, settings);
+        } catch (err) {
+          console.log(`Failed to parse add-on settings: ${err}`);
+        }
+      }
+
+      // Now, get the list of available add-ons.
+      return fetch('/settings/addonsInfo', opts);
+    }).then((response) => {
+      return response.json();
+    }).then((data) => {
+      if (!data || !data.url || !data.api) {
+        return;
+      }
+
+      api = data.api;
+      return fetch(data.url);
+    }).then((resp) => {
+      return resp.json();
+    }).then((body) => {
+      for (const addon of body) {
+        // Skip incompatible add-ons.
+        if (addon.api.min > api || addon.api.max < api) {
+          continue;
+        }
+
+        addon.installed = this.installedAddons.has(addon.name);
+        this.availableAddons.set(addon.name, addon);
+      }
+    }).catch((e) => console.error(`Failed to parse add-ons list: ${e}`));
+  },
+
   showAddonSettings: function() {
     this.addonSettings.classList.remove('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
@@ -322,28 +374,21 @@ var SettingsScreen = {
       page('/settings/addons/discovered');
     });
 
-    const opts = {
-      headers: API.headers(),
-    };
-    fetch('/addons', opts).then((response) => {
-      this.installedAddons.clear();
-      return response.json();
-    }).then((body) => {
-      if (!body) {
-        return;
-      }
-
+    this.fetchAddonList().then(() => {
       const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
-      for (const s of body) {
-        try {
-          const settings = JSON.parse(s.value);
-          this.installedAddons.add(settings.name);
-          new InstalledAddon(settings, this.installedAddons);
-        } catch (err) {
-          console.log(`Failed to parse add-on settings: ${err}`);
+      for (const name of Array.from(this.installedAddons.keys()).sort()) {
+        const addon = this.installedAddons.get(name);
+        let updateUrl = null;
+        if (this.availableAddons.has(name)) {
+          const available = this.availableAddons.get(name);
+          if (available.version !== addon.version) {
+            updateUrl = available.url;
+          }
         }
+
+        new InstalledAddon(addon, updateUrl, this.installedAddons);
       }
     });
   },
@@ -354,31 +399,17 @@ var SettingsScreen = {
     this.addonMainSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.remove('hidden');
 
-    const opts = {
-      headers: API.headers(),
-    };
-    fetch('/settings/addonsInfo', opts).then((response) => {
-      return response.json();
-    }).then((data) => {
-      if (!data || !data.url || !data.api) {
-        return;
+    let promise;
+    if (this.installedAddons.size === 0 && this.availableAddons.size === 0) {
+      promise = this.fetchAddonList();
+    } else {
+      promise = Promise.resolve();
+    }
+
+    promise.then(() => {
+      for (const name of Array.from(this.availableAddons.keys()).sort()) {
+        new DiscoveredAddon(this.availableAddons.get(name));
       }
-
-      fetch(data.url).then((resp) => {
-        return resp.json();
-      }).then((body) => {
-        const addonList = document.getElementById('discovered-addons-list');
-        addonList.innerHTML = '';
-
-        for (const addon of body) {
-          if (addon.api.min > data.api || addon.api.max < data.api) {
-            continue;
-          }
-
-          addon.installed = this.installedAddons.has(addon.name);
-          new DiscoveredAddon(addon);
-        }
-      }).catch((e) => console.error(`Failed to parse add-ons list: ${e}`));
     });
   },
 

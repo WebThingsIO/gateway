@@ -10,6 +10,54 @@ const Settings = require('../models/settings');
 
 const AddonsController = PromiseRouter();
 
+/**
+ * Install an add-on.
+ *
+ * @param {String} name The package name
+ * @param {String} url The package URL
+ * @returns A Promise that resolves when the add-on is installed.
+ */
+async function installAddon(name, url) {
+  const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
+  const destPath = path.join(tempPath, `${name}.tar.gz`);
+
+  console.log(`Fetching add-on ${url} as ${destPath}`);
+
+  try {
+    const res = await fetch(url);
+    const dest = fs.createWriteStream(destPath);
+    await promisePipe(res.body, dest);
+  } catch (e) {
+    rimraf(tempPath, {glob: false}, (e) => {
+      if (e) {
+        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+      }
+    });
+    const err = `Failed to download add-on: ${name}\n${e}`;
+    console.error(err);
+    return Promise.reject(err);
+  }
+
+  let success = false, err;
+  try {
+    await AddonManager.installAddon(name, destPath);
+    success = true;
+  } catch (e) {
+    err = e;
+  }
+
+  rimraf(tempPath, {glob: false}, (e) => {
+    if (e) {
+      console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+    }
+  });
+
+  if (!success) {
+    console.error(err);
+    return Promise.reject(err);
+  }
+}
+
 AddonsController.get('/', async (request, response) => {
   Settings.getAddonSettings().then(function(result) {
     if (result === undefined) {
@@ -99,39 +147,33 @@ AddonsController.post('/', async (request, response) => {
   const name = request.body.name;
   const url = request.body.url;
 
-  const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
-  const destPath = path.join(tempPath, `${name}.tar.gz`);
-
-  console.log(`Fetching add-on ${url} as ${destPath}`);
-
   try {
-    const res = await fetch(url);
-    const dest = fs.createWriteStream(destPath);
-    await promisePipe(res.body, dest);
+    await installAddon(name, url);
+    response.sendStatus(200);
   } catch (e) {
-    rimraf(tempPath, {glob: false}, (e) => {
-      if (e) {
-        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
-      }
-    });
-    console.error(`Failed to download add-on: ${name}\n${e}`);
     response.status(400).send(e);
+  }
+});
+
+AddonsController.patch('/:addonName', async (request, response) => {
+  const name = request.params.addonName;
+
+  if (!request.body ||
+      !request.body.hasOwnProperty('url')) {
+    response.status(400).send('Missing required parameter(s).');
     return;
   }
 
+  const url = request.body.url;
+
   try {
-    await AddonManager.installAddon(name, destPath);
+    await AddonManager.uninstallAddon(name);
+    await installAddon(name, url);
     response.sendStatus(200);
   } catch (e) {
-    console.error(e);
+    console.error(`Failed to update add-on: ${name}\n${e}`);
     response.status(400).send(e);
   }
-
-  rimraf(tempPath, {glob: false}, (e) => {
-    if (e) {
-      console.error(`Error removing temp directory: ${tempPath}\n${e}`);
-    }
-  });
 });
 
 AddonsController.delete('/:addonName', async (request, response) => {

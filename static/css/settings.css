@@ -234,9 +234,12 @@
 }
 
 .user-settings-name,
-.adapter-settings-name,
-.addon-settings-name {
+.adapter-settings-name {
   display: block;
+}
+
+.addon-settings-version {
+  float: right;
 }
 
 .user-settings-description,
@@ -279,6 +282,7 @@
 .user-settings-remove,
 .adapter-settings-disable,
 .adapter-settings-enable,
+.addon-settings-update,
 .addon-settings-disable,
 .addon-settings-enable,
 .addon-settings-remove {
@@ -287,6 +291,18 @@
 
 .addon-discovery-settings-add {
   background-color: #7f93a1;
+}
+
+.addon-settings-update {
+  background-size: 3rem;
+  background-repeat: no-repeat;
+  background-position: 0.5em;
+  padding-left: 4rem;
+  background-image: url('../images/update-icon.svg');
+}
+
+.addon-settings-update.hidden {
+  display: none;
 }
 
 .adapter-settings-disable,

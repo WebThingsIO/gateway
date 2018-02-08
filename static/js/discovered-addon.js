@@ -18,6 +18,7 @@ var DiscoveredAddon = function(metadata) {
   this.name = metadata.name;
   this.displayName = metadata.display_name;
   this.description = metadata.description;
+  this.version = metadata.version;
   this.url = metadata.url;
   this.installed = metadata.installed;
   this.api = Object.assign({}, metadata.api);
@@ -44,6 +45,7 @@ DiscoveredAddon.prototype.view = function() {
     <li class="discovered-addon-item">
       <div class="addon-settings-header">
         <span class="addon-settings-name">${this.displayName}</span>
+        <span class="addon-settings-version">${this.version}</span>
         <span class="addon-settings-description">${this.description}</span>
       </div>
       <div class="addon-settings-controls">

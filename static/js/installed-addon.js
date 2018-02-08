@@ -13,15 +13,17 @@
  * InstalledAddon constructor.
  *
  * @param {Object} metadata InstalledAddon metadata object.
- * @param {Object} addonsSet Handle to the installedAddons set from
+ * @param {Object} addonsMap Handle to the installedAddons map from
  *                 SettingsScreen.
  */
-var InstalledAddon = function(metadata, addonsSet) {
+var InstalledAddon = function(metadata, updateUrl, addonsMap) {
   this.name = metadata.name;
   this.description = metadata.description;
+  this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
+  this.updateUrl = updateUrl;
   this.container = document.getElementById('installed-addons-list');
-  this.addonsSet = addonsSet;
+  this.addonsMap = addonsMap;
   this.render();
 };
 
@@ -29,29 +31,36 @@ var InstalledAddon = function(metadata, addonsSet) {
  * HTML view for InstalledAddon.
  */
 InstalledAddon.prototype.view = function() {
-  let buttonText, buttonClass;
+  let toggleButtonText, toggleButtonClass;
   if (this.enabled) {
-    buttonText = 'Disable';
-    buttonClass = 'addon-settings-disable';
+    toggleButtonText = 'Disable';
+    toggleButtonClass = 'addon-settings-disable';
   } else {
-    buttonText = 'Enable';
-    buttonClass = 'addon-settings-enable';
+    toggleButtonText = 'Enable';
+    toggleButtonClass = 'addon-settings-enable';
   }
+
+  const updateButtonClass = this.updateUrl ? '' : 'hidden';
 
   return `
     <li id="addon-item-${this.name}" class="addon-item">
       <div class="addon-settings-header">
         <span class="addon-settings-name">${this.name}</span>
+        <span class="addon-settings-version">${this.version}</span>
         <span class="addon-settings-description">${this.description}</span>
       </div>
       <div class="addon-settings-controls">
+        <button id="addon-update-${this.name}"
+          class="text-button addon-settings-update ${updateButtonClass}">
+          Update
+        </button>
         <button id="addon-remove-${this.name}"
           class="text-button addon-settings-remove">
           Remove
         </button>
         <button id="addon-toggle-${this.name}"
-          class="text-button ${buttonClass}">
-          ${buttonText}
+          class="text-button ${toggleButtonClass}">
+          ${toggleButtonText}
         </button>
       </div>
     </li>`;
@@ -63,12 +72,35 @@ InstalledAddon.prototype.view = function() {
 InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
+  const updateButton = document.getElementById(`addon-update-${this.name}`);
+  updateButton.addEventListener('click', this.handleUpdate.bind(this));
+
   const removeButton = document.getElementById(`addon-remove-${this.name}`);
   removeButton.addEventListener('click', this.handleRemove.bind(this));
 
   const toggleButton = document.getElementById(`addon-toggle-${this.name}`);
   toggleButton.addEventListener('click', this.handleToggle.bind(this));
-}
+};
+
+/**
+ * Handle a click on the update button.
+ */
+InstalledAddon.prototype.handleUpdate = function(e) {
+  const controlDiv = e.target.parentNode;
+  const updating = document.createElement('span');
+  updating.classList.add('addon-updating');
+  updating.innerText = 'Updating...';
+  controlDiv.replaceChild(updating, e.target);
+
+  window.API.updateAddon(this.name, this.updateUrl)
+    .then(() => {
+      updating.innerText = 'Updated';
+    })
+    .catch((err) => {
+      console.error(`Failed to update add-on: ${this.name}\n${err}`);
+      updating.innerText = 'Failed';
+    });
+};
 
 /**
  * Handle a click on the remove button.
@@ -78,12 +110,12 @@ InstalledAddon.prototype.handleRemove = function() {
     .then(() => {
       const el = document.getElementById(`addon-item-${this.name}`);
       el.parentNode.removeChild(el);
-      this.addonsSet.delete(this.name);
+      this.addonsMap.delete(this.name);
     })
     .catch((e) => {
       console.error(`Failed to uninstall add-on: ${this.name}\n${e}`);
     });
-}
+};
 
 /**
  * Handle a click on the enable/disable button.
