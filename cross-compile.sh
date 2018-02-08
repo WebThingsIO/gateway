@@ -18,7 +18,8 @@ OPENZWAVE_TARBALL=openzwave.tar.gz
 # Remove the output, if it exists
 rm -f ${NODE_MODULES_TARBALL} ${OPENZWAVE_TARBALL}
 
-NODE_VERSION=v7.10.1
+NVM_VERSION="v0.33.8"
+NODE_VERSION="--lts"
 
 ARCH=armv7l
 SYSROOT=/rpxc/sysroot
@@ -34,7 +35,7 @@ export CC="arm-linux-gnueabihf-gcc ${OPTS}"
 export CXX="arm-linux-gnueabihf-g++ ${OPTS}"
 
 # Install and configure nvm
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the RPi, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.
