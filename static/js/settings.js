@@ -349,6 +349,7 @@ var SettingsScreen = {
       api = data.api;
       return fetch(data.url);
     }).then((resp) => {
+      this.availableAddons.clear();
       return resp.json();
     }).then((body) => {
       for (const addon of body) {
@@ -380,15 +381,17 @@ var SettingsScreen = {
 
       for (const name of Array.from(this.installedAddons.keys()).sort()) {
         const addon = this.installedAddons.get(name);
-        let updateUrl = null;
+        let updateUrl = null, updateVersion = null;
         if (this.availableAddons.has(name)) {
           const available = this.availableAddons.get(name);
           if (available.version !== addon.version) {
             updateUrl = available.url;
+            updateVersion = available.version;
           }
         }
 
-        new InstalledAddon(addon, updateUrl, this.installedAddons);
+        new InstalledAddon(
+          addon, this.installedAddons, updateUrl, updateVersion);
       }
     });
   },
@@ -407,6 +410,9 @@ var SettingsScreen = {
     }
 
     promise.then(() => {
+      const addonList = document.getElementById('discovered-addons-list');
+      addonList.innerHTML = '';
+
       for (const name of Array.from(this.availableAddons.keys()).sort()) {
         new DiscoveredAddon(this.availableAddons.get(name));
       }

@@ -15,13 +15,16 @@
  * @param {Object} metadata InstalledAddon metadata object.
  * @param {Object} addonsMap Handle to the installedAddons map from
  *                 SettingsScreen.
+ * @param {String} updateUrl URL for updated add-on package
+ * @param {String} updateVersion Version of updated add-on package
  */
-var InstalledAddon = function(metadata, updateUrl, addonsMap) {
+var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion) {
   this.name = metadata.name;
   this.description = metadata.description;
   this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
   this.updateUrl = updateUrl;
+  this.updateVersion = updateVersion;
   this.container = document.getElementById('installed-addons-list');
   this.addonsMap = addonsMap;
   this.render();
@@ -87,6 +90,8 @@ InstalledAddon.prototype.render = function() {
  */
 InstalledAddon.prototype.handleUpdate = function(e) {
   const controlDiv = e.target.parentNode;
+  const versionDiv =
+    document.querySelector(`#addon-item-${this.name} .addon-settings-version`);
   const updating = document.createElement('span');
   updating.classList.add('addon-updating');
   updating.innerText = 'Updating...';
@@ -94,6 +99,7 @@ InstalledAddon.prototype.handleUpdate = function(e) {
 
   window.API.updateAddon(this.name, this.updateUrl)
     .then(() => {
+      versionDiv.innerText = this.updateVersion;
       updating.innerText = 'Updated';
     })
     .catch((err) => {

@@ -242,6 +242,10 @@
   float: right;
 }
 
+.addon-updating {
+  margin-right: .8rem;
+}
+
 .user-settings-description,
 .adapter-settings-description,
 .addon-settings-description {
@@ -298,6 +302,7 @@
   background-repeat: no-repeat;
   background-position: 0.5em;
   padding-left: 4rem;
+  margin-right: .8rem;
   background-image: url('../images/update-icon.svg');
 }
 
@@ -321,7 +326,7 @@
 
 .addon-settings-remove,
 .user-settings-remove {
-  margin-right: 8px;
+  margin-right: .8rem;
   background-image: url('../images/remove.svg');
 }
 
