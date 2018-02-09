@@ -206,12 +206,12 @@
     },
 
     setAddonSetting: function(addonName, enabled) {
-      var headers = {
+      const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-      var payload = {
+      const payload = {
         'enabled': enabled
       };
       return fetch('/addons/' + addonName, {
@@ -229,12 +229,12 @@
     },
 
     installAddon: function(addonName, addonUrl) {
-      var headers = {
+      const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-      var payload = {
+      const payload = {
         'name': addonName,
         'url': addonUrl,
       };
@@ -252,7 +252,7 @@
     },
 
     uninstallAddon: function(addonName) {
-      var headers = {
+      const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -270,8 +270,30 @@
       });
     },
 
+    updateAddon: function(addonName, addonUrl) {
+      const headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      const payload = {
+        'url': addonUrl,
+      };
+      return fetch('/addons/' + addonName, {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+        headers: headers
+      }).then(function(response) {
+        if (!response.ok) {
+          throw new Error('Unexpected response code while updating add-on.');
+        }
+
+        console.log(`Successfully updated ${addonName}`);
+      });
+    },
+
     getExperimentSetting: function(experimentName) {
-      var headers = {
+      const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json'
       };
@@ -294,12 +316,12 @@
     },
 
     setExperimentSetting: function(experimentName, enabled) {
-      var headers = {
+      const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-      var payload = {
+      const payload = {
        'enabled': enabled
       };
       return fetch('/settings/experiments/' + experimentName, {
