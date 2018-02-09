@@ -167,7 +167,7 @@ AddonsController.patch('/:addonName', async (request, response) => {
   const url = request.body.url;
 
   try {
-    await AddonManager.uninstallAddon(name);
+    await AddonManager.uninstallAddon(name, true);
     await installAddon(name, url);
     response.sendStatus(200);
   } catch (e) {
@@ -180,7 +180,7 @@ AddonsController.delete('/:addonName', async (request, response) => {
   const addonName = request.params.addonName;
 
   try {
-    await AddonManager.uninstallAddon(addonName);
+    await AddonManager.uninstallAddon(addonName, false);
     response.sendStatus(200);
   } catch (e) {
     console.error(`Failed to uninstall add-on: ${addonName}\n${e}`);

@@ -776,14 +776,14 @@ class AddonManager extends EventEmitter {
       this.adapters.delete(a.id);
     }
 
-    // Give the process 5 seconds to exit before killing it.
+    // Give the process 3 seconds to exit before killing it.
     const cleanup = () => {
       setTimeout(() => {
         if (pluginProcess.p) {
           console.log(`Killing ${packageName} plugin.`);
           pluginProcess.p.kill();
         }
-      }, 5000);
+      }, 3000);
     };
 
     return Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
@@ -888,15 +888,22 @@ class AddonManager extends EventEmitter {
    * @method uninstallAddon
    *
    * @param {String} packageName The package name to uninstall
+   * @param {Boolean} wait Whether or not to wait for unloading to finish
    * @returns A promise that resolves when the package is uninstalled.
    */
-  async uninstallAddon(packageName) {
+  async uninstallAddon(packageName, wait) {
     try {
       // Try to gracefully unload
       await this.unloadAddon(packageName);
     } catch (e) {
       console.error(`Failed to unload ${packageName} properly: ${e}`);
       // keep going
+    }
+
+    if (wait) {
+      // If wait was set, wait 3 seconds + a little for the process to die.
+      // 3 seconds, because that's what is used in unloadAddon().
+      await new Promise((resolve) => setTimeout(resolve, 3500));
     }
 
     const addonPath = path.join(__dirname,
