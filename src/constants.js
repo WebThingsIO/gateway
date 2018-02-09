@@ -11,6 +11,7 @@
 const path = require('path');
 
 exports.DONT_RESTART_EXIT_CODE = 100;
+exports.UNLOAD_PLUGIN_KILL_DELAY = 3000;
 
 exports.USERS_PATH = '/users';
 exports.THINGS_PATH = '/things';

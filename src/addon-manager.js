@@ -783,7 +783,7 @@ class AddonManager extends EventEmitter {
           console.log(`Killing ${packageName} plugin.`);
           pluginProcess.p.kill();
         }
-      }, 3000);
+      }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
 
     return Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
@@ -903,7 +903,9 @@ class AddonManager extends EventEmitter {
     if (wait) {
       // If wait was set, wait 3 seconds + a little for the process to die.
       // 3 seconds, because that's what is used in unloadAddon().
-      await new Promise((resolve) => setTimeout(resolve, 3500));
+      await new Promise((resolve) => {
+        setTimeout(resolve, Constants.UNLOAD_PLUGIN_KILL_DELAY + 500);
+      });
     }
 
     const addonPath = path.join(__dirname,
