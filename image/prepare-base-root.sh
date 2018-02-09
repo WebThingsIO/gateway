@@ -14,6 +14,7 @@ nvm use ${NODE_VERSION}
 # download and install the code
 wget https://github.com/mozilla-iot/gateway-wifi-setup/archive/master.zip
 unzip master.zip -d .
+rm master.zip
 mv gateway-wifi-setup-master/ gateway-wifi-setup/
 cd gateway-wifi-setup/
 npm install
