@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This is intended for use with Gateway releases before 0.3.0, as those
+# releases did not have an automatic certificate updater. The certificate
+# paths specified in this script do not match what is currently expected,
+# so DO NOT run this on any releases after 0.3.0. It should be safe on 0.3.0,
+# but should be unnecessary.
+
 script_dir=$(readlink -f $(dirname "$0"))
 moziot_dir="/home/pi/mozilla-iot"
 moziot_email="certificate@mozilla-iot.org"
@@ -120,13 +126,12 @@ kill -15 $(<"${pagekite_pidfile}") >/dev/null 2>&1
 rm -f "${pagekite_pidfile}"
 
 echo "Copying in new certificates."
-mkdir -p "${moziot_dir}/gateway/ssl"
 cp "${moziot_dir}/etc/live/${domain}/cert.pem" \
-    "${moziot_dir}/gateway/ssl/certificate.pem"
+    "${moziot_dir}/gateway/certificate.pem"
 cp "${moziot_dir}/etc/live/${domain}/privkey.pem" \
-    "${moziot_dir}/gateway/ssl/privatekey.pem"
+    "${moziot_dir}/gateway/privatekey.pem"
 cp "${moziot_dir}/etc/live/${domain}/chain.pem" \
-    "${moziot_dir}/gateway/ssl/chain.pem"
+    "${moziot_dir}/gateway/chain.pem"
 
 echo "Registering domain with server."
 curl "http://api.mozilla-iot.org/setemail" \

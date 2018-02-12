@@ -26,15 +26,4 @@ module.exports = {
   ipc: {
     protocol: 'inproc',
   },
-  settings: {
-    defaults: {
-    },
-  },
-  uploads: {
-    directory: '../../static/uploads/' // Directory to store uploads in
-  },
-  authentication: {
-    defaultUser: null,
-  },
-  bcryptRounds: 2
 };

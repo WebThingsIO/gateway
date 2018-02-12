@@ -22,6 +22,7 @@ const path = require('path');
 const TunnelService = require('../ssltunnel');
 const Settings = require('../models/settings');
 const Constants = require('../constants');
+const UserProfile = require('../user-profile');
 
 var SettingsController = PromiseRouter();
 
@@ -106,9 +107,9 @@ SettingsController.post('/subscribe', async (request, response) => {
 
   let leStore = require('le-store-certbot').create({
       webrootPath: Constants.STATIC_PATH,
-      configDir: '~/mozilla-iot/etc',
-      logsDir: '~/mozilla-iot/var/log',
-      workDir: '~/mozilla-iot/var/lib',
+      configDir: path.join(UserProfile.baseDir, 'etc'),
+      logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
+      workDir: path.join(UserProfile.baseDir, 'var', 'lib'),
       debug: true
   });
   let le = greenlock.create({
@@ -180,9 +181,12 @@ SettingsController.post('/subscribe', async (request, response) => {
     console.log('success', results);
 
     // ok. we got the certificates. let's save them
-    fs.writeFileSync(path.join('ssl', 'certificate.pem'), results.cert);
-    fs.writeFileSync(path.join('ssl', 'privatekey.pem'), results.privkey);
-    fs.writeFileSync(path.join('ssl', 'chain.pem'), results.chain);
+    fs.writeFileSync(
+      path.join(UserProfile.sslDir, 'certificate.pem'), results.cert);
+    fs.writeFileSync(
+      path.join(UserProfile.sslDir, 'privatekey.pem'), results.privkey);
+    fs.writeFileSync(
+      path.join(UserProfile.sslDir, 'chain.pem'), results.chain);
 
     // now we associate user's emails with the subdomain, unless it was
     // reclaimed.

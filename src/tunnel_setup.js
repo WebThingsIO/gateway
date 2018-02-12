@@ -8,10 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-var config = require('config');
-var fs = require('fs');
-var path = require('path');
+const config = require('config');
+const fs = require('fs');
+const path = require('path');
 const Settings = require('./models/settings');
+const UserProfile = require('./user-profile');
 
 var TunnelSetup = {
 
@@ -33,8 +34,10 @@ var TunnelSetup = {
             }
 
             // then we check if we have certificates installed
-            if ((fs.existsSync(path.join('ssl', 'certificate.pem'))
-                && fs.existsSync(path.join('ssl', 'privatekey.pem')))
+            if ((fs.existsSync(path.join(UserProfile.sslDir,
+                                         'certificate.pem'))
+                && fs.existsSync(path.join(UserProfile.sslDir,
+                                           'privatekey.pem')))
                 || notunnel) {
                 // if certs are installed,
                 // then we don't need to do anything and return
