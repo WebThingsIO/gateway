@@ -2,7 +2,7 @@
 
 SCRIPTDIR="$(dirname ""$0"")"
 
-if [ ! -f "certificate.pem" ]; then
+if [ ! -f "ssl/certificate.pem" ]; then
   ${SCRIPTDIR}/../../tools/make-self-signed-cert.sh
 fi
 

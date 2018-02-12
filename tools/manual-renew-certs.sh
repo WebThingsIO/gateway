@@ -120,12 +120,13 @@ kill -15 $(<"${pagekite_pidfile}") >/dev/null 2>&1
 rm -f "${pagekite_pidfile}"
 
 echo "Copying in new certificates."
+mkdir -p "${moziot_dir}/gateway/ssl"
 cp "${moziot_dir}/etc/live/${domain}/cert.pem" \
-    "${moziot_dir}/gateway/certificate.pem"
+    "${moziot_dir}/gateway/ssl/certificate.pem"
 cp "${moziot_dir}/etc/live/${domain}/privkey.pem" \
-    "${moziot_dir}/gateway/privatekey.pem"
+    "${moziot_dir}/gateway/ssl/privatekey.pem"
 cp "${moziot_dir}/etc/live/${domain}/chain.pem" \
-    "${moziot_dir}/gateway/chain.pem"
+    "${moziot_dir}/gateway/ssl/chain.pem"
 
 echo "Registering domain with server."
 curl "http://api.mozilla-iot.org/setemail" \

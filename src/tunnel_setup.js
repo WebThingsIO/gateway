@@ -10,6 +10,7 @@
 
 var config = require('config');
 var fs = require('fs');
+var path = require('path');
 const Settings = require('./models/settings');
 
 var TunnelSetup = {
@@ -32,8 +33,8 @@ var TunnelSetup = {
             }
 
             // then we check if we have certificates installed
-            if ((fs.existsSync('./certificate.pem')
-                && fs.existsSync('./privatekey.pem'))
+            if ((fs.existsSync(path.join('ssl', 'certificate.pem'))
+                && fs.existsSync(path.join('ssl', 'privatekey.pem')))
                 || notunnel) {
                 // if certs are installed,
                 // then we don't need to do anything and return

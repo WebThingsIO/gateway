@@ -10,6 +10,7 @@
 
 const fs = require('fs');
 const config = require('config');
+const path = require('path');
 const Settings = require('./models/settings');
 const fetch = require('node-fetch');
 const spawnSync = require('child_process').spawn;
@@ -94,8 +95,8 @@ var TunnelService = {
 
     // method to check if the box has certificates
     hasCertificates: function() {
-        return fs.existsSync('./certificate.pem') &&
-            fs.existsSync('./privatekey.pem');
+        return fs.existsSync(path.join('ssl', 'certificate.pem')) &&
+            fs.existsSync(path.join('ssl', 'privatekey.pem'));
     },
 
     // method to check if the box has a registered tunnel
