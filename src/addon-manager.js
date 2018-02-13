@@ -474,6 +474,14 @@ class AddonManager extends EventEmitter {
       return Promise.reject(err);
     }
 
+    // Verify that the name in the package matches the packageName
+    if (manifest.name != packageName) {
+      const err = `Name from package.json "${manifest.name}" doesn't ` +
+                  `match the name from list.json "${packageName}"`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
     // Verify the files list in the package.
     if (!manifest.hasOwnProperty('files') || manifest.files.length === 0) {
       const err = `files property missing for package ${manifest.name}`;
