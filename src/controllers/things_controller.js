@@ -211,9 +211,14 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
+  let heartbeatInterval = setInterval(function() {
+    websocket.ping();
+  }, 30 * 1000);
+
   const cleanup = () => {
     AddonManager.removeListener(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
+    clearInterval(heartbeatInterval);
   };
 
   websocket.on('error', cleanup);
