@@ -39,7 +39,7 @@ $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh |
 ```
 
 Close and reopen your terminal window. Use nvm to install a LTS version of node and set the
-default version. 
+default version.
 
 ```
 $ nvm install --lts
@@ -89,7 +89,7 @@ Note: You may need to manually add `/usr/local/lib` to your `LD_LIBRARY_PATH` en
 `export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH`
 
 You can run this on the command line as well so it has immediate effect. After
-running it you should run `sudo ldconfig` again to make sure the configuration
+running it, you should run `sudo ldconfig` again to make sure the configuration
 change goes through.
 
 ## Download and Build Gateway
@@ -118,7 +118,7 @@ $ yarn
 
  Add SSL certificate:
 
- The HTTPS server looks for privatekey.pem and certificate.pem. You can use a real certificate or generate a self-signed one by following the steps below.
+ If you don't plan on using Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain, you can use your own SSL certificate. The HTTPS server looks for `privatekey.pem` and `certificate.pem`. You can use a real certificate or generate a self-signed one by following the steps below.
 
  ```
  $ mkdir -p ssl
@@ -138,9 +138,9 @@ Since you're using a self-signed certificate, you'll need to add a security exce
 
 ## Debugging
 
-If you are using vscode simply use the "launch" target it will build the gateway in debugger mode.
+If you are using VS Code, simply use the "launch" target. It will build the gateway in debugger mode.
 
-If you are not using vscode run `npm run debug` and it will build the gateway and launch it with --inspect.
+If you are not using VS Code, run `npm run debug` and it will build the gateway and launch it with `--inspect`.
 
 ## Running Tests
 To run the linter and all tests:
@@ -156,18 +156,31 @@ $ jest src/test/{test-name}.js
 
 ## Source Code Structure
 
-* **config/** - Gateway configuration
-* **src/**
-  * **adapters/** - Adapter device drivers (e.g. ZigBee, Z-Wave)
-  * **controllers/** - App URL routes and their logic
-  * **models/** - Data model and business logic
-  * **test/** - Integration tests
-  * **views/** - HTML views
-  * **adapter-manager.js** - Manages adapters (e.g. ZigBee, Z-Wave)
-  * **app.js** - The main back end script
-  * **constants.js** - System wide constants
-  * **db.js** - Manages the SQLite3 database
-  * **router.js** - Routes app URLs to controllers
-* **static/** - Static CSS, JavaScript & image resources for web app front end
-* **tools/** - Helpful utilities (not part of the build)
-* **package.json** - npm module manifest
+* **`config/`** - Gateway configuration files
+* **`doc/`** - Additional documentation
+* **`image/`** - Tools for building the Raspberry Pi image
+* **`src/`**
+  * **`addons/`** - Utility classes and methods used by add-ons
+  * **`addons-test/`** - Add-ons used strictly for testing
+  * **`controllers/`** - App URL routes and their logic
+  * **`models/`** - Data model and business logic
+  * **`rules-engine/`** - The rules engine
+  * **`test/`** - Integration tests
+  * **`views/`** - HTML views
+  * **`addon-loader.js`** - Script used for starting up Node-based add-ons
+  * **`addon-manager.js`** - Manages add-ons (e.g. ZigBee, Z-Wave)
+  * **`app.js`** - The main back end
+  * **`app-instance.js`** - Application wrapper for integration tests
+  * **`constants.js`** - System-wide constants
+  * **`db.js`** - Manages the SQLite3 database
+  * **`ec-crypto.js`** - Elliptic curve helpers for the ES256 curve
+  * **`jwt-middleware.js`** - Express middleware for determining authentication status
+  * **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
+  * **`oauth-types.js`** - OAuth types
+  * **`passwords.js`** - Password utilities
+  * **`router.js`** - Routes app URLs to controllers
+  * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
+  * **`tunnel_setup.js`** - Express middleware to determine if the tunnel is set up
+* **`static/`** - Static CSS, JavaScript & image resources for web app front end
+* **`tools/`** - Helpful utilities (not part of the build)
+* **`package.json`** - npm module manifest

@@ -17,5 +17,3 @@ export class ClientRegistry {
     };
   }
 }
-
-
