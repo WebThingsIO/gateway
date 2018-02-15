@@ -209,6 +209,7 @@ SmartPlug.prototype.updateProperty = function(name, value) {
 };
 
 SmartPlug.prototype.updateOn = function(on) {
+  this.properties.on = on;
   this.displayedProperties.on.detail.update();
 
   if (this.displayedProperties.level) {
@@ -231,6 +232,7 @@ SmartPlug.prototype.updateOn = function(on) {
  */
 SmartPlug.prototype.updatePower = function(power) {
   power = parseFloat(power);
+  this.properties.power = power;
 
   if (this.smartPlugLabel) {
     if (!this.properties.on) {
