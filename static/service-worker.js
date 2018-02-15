@@ -6,7 +6,7 @@ const CACHE = 'mozilla-iot-cache-0.0.1';
 self.addEventListener('fetch', function(event) {
   let accept = event.request.headers.get('Accept');
   if (accept === 'application/json' || event.request.method !== 'GET' ||
-      event.request.cache === 'no-cache') {
+      event.request.cache === 'no-cache' || event.request.mode !== 'no-cors') {
     return;
   }
 
