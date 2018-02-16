@@ -12,8 +12,12 @@
     window.API.verifyJWT().then((valid) => {
       if (!valid) {
         redirectUnauthed();
-      } else {
+      } else if (document.body) {
         document.body.classList.remove('hidden');
+      } else {
+        document.addEventListener('DOMContentLoaded', () => {
+          document.body.classList.remove('hidden');
+        });
       }
     });
   } else {
