@@ -22,8 +22,7 @@ const RootController = express.Router();
 RootController.get('/', TunnelSetup.isTunnelSet,
   function(request, response) {
     response.sendFile('index.html', {
-      root: Constants.VIEWS_PATH,
-      maxAge: '14d'
+      root: Constants.VIEWS_PATH
     });
   }
 );

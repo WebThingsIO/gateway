@@ -43,7 +43,7 @@ var Router = {
     });
 
     // First look for a static file
-    app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
+    app.use(express.static(Constants.STATIC_PATH));
 
     // Content negotiation middleware
     app.use(function(request, response, next) {
