@@ -10,6 +10,8 @@
 
 'use strict';
 
+// const Iot = require('iot.js');
+
 const assert = require('assert');
 
 const DESCR_FIELDS = ['type', 'unit', 'description', 'min', 'max'];

@@ -26,6 +26,7 @@
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
     "asn1.js": "^5.0.0",
+    "aws-iot-device-sdk": "^2.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
     "compression": "^1.7.1",

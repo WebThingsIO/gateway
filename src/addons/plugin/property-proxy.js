@@ -12,6 +12,7 @@
 const Constants = require('../addon-constants');
 const Deferred = require('../deferred');
 const Property = require('../property');
+const Iot = require('../../iot');
 
 class PropertyProxy extends Property {
   constructor(device, propertyName, propertyDict) {
@@ -70,6 +71,12 @@ class PropertyProxy extends Property {
           propertyName: this.name,
           propertyValue: value,
       });
+
+      Iot.eventBus.publish('be-safe-gateway-events', JSON.stringify({
+        property: this.name,
+        value: this.value,
+        device: this.device.id
+      }));
 
       //TODO: Add a timeout
 
