@@ -347,7 +347,7 @@ var SettingsScreen = {
       }
 
       api = data.api;
-      return fetch(data.url);
+      return fetch(data.url, {method: 'GET', cache: 'reload'});
     }).then((resp) => {
       this.availableAddons.clear();
       return resp.json();
