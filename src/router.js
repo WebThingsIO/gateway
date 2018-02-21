@@ -32,6 +32,16 @@ var Router = {
     // Compress all responses larger than 1kb
     app.use(compression());
 
+    // Enable HSTS
+    app.use((request, response, next) => {
+      if (request.protocol === 'https') {
+        response.set('Strict-Transport-Security',
+                     'max-age=31536000; includeSubDomains');
+      }
+
+      next();
+    });
+
     // First look for a static file
     app.use(express.static(Constants.STATIC_PATH, {maxAge: '14d'}));
 
