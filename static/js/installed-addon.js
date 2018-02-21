@@ -17,14 +17,17 @@
  *                 SettingsScreen.
  * @param {String} updateUrl URL for updated add-on package
  * @param {String} updateVersion Version of updated add-on package
+ * @param {String} updateChecksum Checksum of the updated add-on package
  */
-var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion) {
+var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
+                              updateChecksum) {
   this.name = metadata.name;
   this.description = metadata.description;
   this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
   this.updateUrl = updateUrl;
   this.updateVersion = updateVersion;
+  this.updateChecksum = updateChecksum;
   this.container = document.getElementById('installed-addons-list');
   this.addonsMap = addonsMap;
   this.render();
@@ -97,7 +100,7 @@ InstalledAddon.prototype.handleUpdate = function(e) {
   updating.innerText = 'Updating...';
   controlDiv.replaceChild(updating, e.target);
 
-  window.API.updateAddon(this.name, this.updateUrl)
+  window.API.updateAddon(this.name, this.updateUrl, this.updateChecksum)
     .then(() => {
       versionDiv.innerText = this.updateVersion;
       updating.innerText = 'Updated';

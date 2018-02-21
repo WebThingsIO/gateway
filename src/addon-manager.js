@@ -23,6 +23,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const tar = require('tar');
 const crypto = require('crypto');
+const Utils = require('./utils');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -345,28 +346,6 @@ class AddonManager extends EventEmitter {
     }
   }
 
-  hashFile(fname) {
-    const hash = crypto.createHash('sha256');
-
-    try {
-      const fd = fs.openSync(fname, 'r');
-      const buffer = new Uint8Array(4096);
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const bytes = fs.readSync(fd, buffer, 0, 4096);
-        if (bytes <= 0) {
-          break;
-        }
-        hash.update(buffer.slice(0, bytes));
-      }
-    } catch (e) {
-      return null;
-    }
-
-    return hash.digest('hex');
-  }
-
   /**
    * @method validateManifestObject
    *
@@ -529,7 +508,7 @@ class AddonManager extends EventEmitter {
             return Promise.reject(err);
           }
 
-          if (this.hashFile(path.join(addonPath, parts[1])) !== parts[0]) {
+          if (Utils.hashFile(path.join(addonPath, parts[1])) !== parts[0]) {
             const err =
               `Checksum failed in package ${manifest.name}: ${parts[1]}`;
             console.error(err);

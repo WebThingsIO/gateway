@@ -381,17 +381,18 @@ var SettingsScreen = {
 
       for (const name of Array.from(this.installedAddons.keys()).sort()) {
         const addon = this.installedAddons.get(name);
-        let updateUrl = null, updateVersion = null;
+        let updateUrl = null, updateVersion = null, updateChecksum = null;
         if (this.availableAddons.has(name)) {
           const available = this.availableAddons.get(name);
           if (available.version !== addon.version) {
             updateUrl = available.url;
             updateVersion = available.version;
+            updateChecksum = available.checksum;
           }
         }
 
-        new InstalledAddon(
-          addon, this.installedAddons, updateUrl, updateVersion);
+        new InstalledAddon(addon, this.installedAddons, updateUrl,
+                           updateVersion, updateChecksum);
       }
     });
   },

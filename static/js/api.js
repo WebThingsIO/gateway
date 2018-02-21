@@ -228,7 +228,7 @@
       });
     },
 
-    installAddon: function(addonName, addonUrl) {
+    installAddon: function(addonName, addonUrl, addonChecksum) {
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
@@ -237,6 +237,7 @@
       const payload = {
         'name': addonName,
         'url': addonUrl,
+        'checksum': addonChecksum,
       };
       return fetch('/addons', {
         method: 'POST',
@@ -270,7 +271,7 @@
       });
     },
 
-    updateAddon: function(addonName, addonUrl) {
+    updateAddon: function(addonName, addonUrl, addonChecksum) {
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
@@ -278,6 +279,7 @@
       };
       const payload = {
         'url': addonUrl,
+        'checksum': addonChecksum,
       };
       return fetch('/addons/' + addonName, {
         method: 'PATCH',

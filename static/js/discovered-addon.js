@@ -20,6 +20,7 @@ var DiscoveredAddon = function(metadata) {
   this.description = metadata.description;
   this.version = metadata.version;
   this.url = metadata.url;
+  this.checksum = metadata.checksum;
   this.installed = metadata.installed;
   this.api = Object.assign({}, metadata.api);
   this.container = document.getElementById('discovered-addons-list');
@@ -75,7 +76,7 @@ DiscoveredAddon.prototype.handleInstall = function(e) {
     '<span class="addon-discovery-settings-installing">Installing...</span>';
   controlDiv.innerHTML = installing;
 
-  window.API.installAddon(this.name, this.url)
+  window.API.installAddon(this.name, this.url, this.checksum)
     .then(() => {
       const el = '<span class="addon-discovery-settings-added">Added</span>';
       controlDiv.innerHTML = el;
