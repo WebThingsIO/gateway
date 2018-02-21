@@ -7,17 +7,19 @@
  */
 'use strict';
 
-(function() {
-  if (window.API.isLoggedIn()) {
-    window.API.verifyJWT().then((valid) => {
-      if (!valid) {
-        redirectUnauthed();
-      } else {
-        document.body.classList.remove('hidden');
-      }
-    });
-  } else {
-    redirectUnauthed();
+(function () {
+  function init() {
+    if (window.API.isLoggedIn()) {
+      window.API.verifyJWT().then((valid) => {
+        if (!valid) {
+          redirectUnauthed();
+        } else {
+          document.body.classList.remove('hidden');
+        }
+      });
+    } else {
+      redirectUnauthed();
+    }
   }
 
   function redirectUnauthed() {
@@ -35,4 +37,5 @@
     });
   }
 
+  document.addEventListener('DOMContentLoaded', init);
 }());
