@@ -188,6 +188,7 @@ describe('addons', function() {
     expect(list[0]).toHaveProperty('description');
     expect(list[0]).toHaveProperty('version');
     expect(list[0]).toHaveProperty('url');
+    expect(list[0]).toHaveProperty('checksum');
     expect(list[0]).toHaveProperty('api');
     expect(list[0].api).toHaveProperty('min');
     expect(list[0].api).toHaveProperty('max');
@@ -196,7 +197,9 @@ describe('addons', function() {
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: list[0].name, url: list[0].url});
+      .send({name: list[0].name,
+             url: list[0].url,
+             checksum: list[0].checksum});
     expect(res3.status).toEqual(200);
 
     const res4 = await chai.request(server)

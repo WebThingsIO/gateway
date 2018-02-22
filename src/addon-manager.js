@@ -22,7 +22,6 @@ const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const tar = require('tar');
-const crypto = require('crypto');
 const Utils = require('./utils');
 
 // Use webpack provided require for dynamic includes from the bundle  .
