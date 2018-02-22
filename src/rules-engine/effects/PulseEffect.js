@@ -38,14 +38,20 @@ class PulseEffect extends Effect {
    * @param {State} state
    */
   setState(state) {
-    if (!this.on && state.on) {
-      this.property.get().then(value => {
+    if (state.on) {
+      // If we're already active, just perform the effect again
+      if (this.on) {
+        return this.property.set(this.value);
+      }
+      // Activate the effect and save our current state to revert to upon
+      // deactivation
+       this.property.get().then(value => {
         this.oldValue = value;
         this.on = true;
         return this.property.set(this.value);
       });
-    }
-    if (this.on && !state.on) {
+    } else if (this.on) {
+      // Revert to our original value
       this.on = false;
       return this.property.set(this.oldValue);
     }
