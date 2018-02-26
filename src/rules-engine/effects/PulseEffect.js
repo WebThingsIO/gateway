@@ -5,13 +5,13 @@
  */
 
 const assert = require('assert');
-const Effect = require('./Effect');
+const PropertyEffect = require('./PropertyEffect');
 
 /**
  * An Effect which temporarily sets the target property to
  * a value before restoring its original value
  */
-class PulseEffect extends Effect {
+class PulseEffect extends PropertyEffect {
   /**
    * @param {EffectDescription} desc
    */

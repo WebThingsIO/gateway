@@ -5,12 +5,11 @@
  */
 
 const assert = require('assert');
-const e2p = require('event-to-promise');
 const fetch = require('node-fetch');
 const Settings = require('../models/settings');
 const EventEmitter = require('events').EventEmitter;
-const WebSocket = require('ws');
 const Events = require('./Events');
+const ThingConnection = require('./ThingConnection');
 
 /**
  * Utility to support operations on Thing's properties
@@ -40,7 +39,8 @@ class Property extends EventEmitter {
     this.name = parts[parts.length - 1];
 
     this.onMessage = this.onMessage.bind(this);
-    this.ws = null;
+    let thingHref = this.href.split('/properties')[0];
+    this.thingConn = new ThingConnection(thingHref, this.onMessage);
     this.id = Math.floor(Math.random() * 100000);
   }
 
@@ -120,19 +120,10 @@ class Property extends EventEmitter {
   }
 
   async start() {
-    const thingHref = this.href.split('/properties')[0];
-    const jwt = await Settings.get('RulesEngine.jwt');
-    const gateway = await Settings.get('RulesEngine.gateway');
-    const wsHref = gateway.replace(/^http/, 'ws') + thingHref +
-      '?jwt=' + jwt;
-
-    this.ws = new WebSocket(wsHref);
-    this.ws.on('message', this.onMessage);
-    await e2p(this.ws, 'open');
+    await this.thingConn.start();
   }
 
-  onMessage(text) {
-    let msg = JSON.parse(text);
+  onMessage(msg) {
     if (msg.messageType === 'propertyStatus') {
       if (msg.data.hasOwnProperty(this.name)) {
         console.info('emit', {
@@ -145,14 +136,7 @@ class Property extends EventEmitter {
   }
 
   stop() {
-    if (this.ws) {
-      this.ws.removeListener('message', this.onMessage);
-      if (this.ws.readyState === WebSocket.OPEN) {
-        this.ws.close();
-      }
-    } else {
-      console.warn(this.constructor.name + '.stop was not started');
-    }
+    this.thingConn.stop();
   }
 }
 

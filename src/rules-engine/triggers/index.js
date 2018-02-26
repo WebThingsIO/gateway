@@ -6,6 +6,7 @@
 
 const triggers = {
   BooleanTrigger: require('./BooleanTrigger'),
+  EventTrigger: require('./EventTrigger'),
   LevelTrigger: require('./LevelTrigger'),
   PropertyTrigger: require('./PropertyTrigger'),
   TimeTrigger: require('./TimeTrigger'),
