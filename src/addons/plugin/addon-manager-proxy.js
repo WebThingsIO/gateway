@@ -22,6 +22,7 @@ class AddonManagerProxy extends EventEmitter {
   constructor (pluginClient) {
     super();
 
+    this.adapters = new Map();
     this.pluginClient = pluginClient;
 
     this.on(Constants.PROPERTY_CHANGED, (property) => {
@@ -38,8 +39,10 @@ class AddonManagerProxy extends EventEmitter {
    * Adds an adapter to the collection of adapters managed by AddonManager.
    */
   addAdapter(adapter) {
-    DEBUG && console.log('AddonManagerProxy: addAdapter:', adapter.id);
-    this.adapter = adapter;
+    var adapterId = adapter.id;
+    DEBUG && console.log('AddonManagerProxy: addAdapter:', adapterId);
+
+    this.adapters.set(adapterId, adapter);
     this.pluginClient.sendNotification(Constants.ADD_ADAPTER, {
       adapterId: adapter.getId(),
       name: adapter.getName(),
@@ -80,15 +83,25 @@ class AddonManagerProxy extends EventEmitter {
    */
   onMsg(msg) {
     DEBUG && console.log('AddonManagerProxy: Rcvd:', msg);
-    var adapter = this.adapter;
+
+    // The first switch covers unload plugin.
+    switch (msg.messageType) {
+      case Constants.UNLOAD_PLUGIN:
+        this.unloadPlugin();
+        return;
+    }
+
+    // The second switch covers adapter messages. i.e. don't have a deviceId.
+    // or don't need a device object.
+
+    var adapterId = msg.data.adapterId;
+    var adapter = this.adapters.get(adapterId);
     if (!adapter) {
-      console.error('AddonManagerProxy: No adapter added yet.')
+      console.error('AddonManagerProxy: Unrecognized adapter:', adapterId);
       console.error('AddonManagerProxy: Ignoring msg:', msg);
       return;
     }
 
-    // The first switch covers adapter messages. i.e. don't have a deviceId.
-    // or don't need a device object.
     switch (msg.messageType) {
 
       case Constants.START_PAIRING:
@@ -101,14 +114,11 @@ class AddonManagerProxy extends EventEmitter {
 
       case Constants.UNLOAD_ADAPTER:
         adapter.unload().then(() => {
+          this.adapters.delete(adapterId);
           this.pluginClient.sendNotification(Constants.ADAPTER_UNLOADED, {
             adapterId: adapter.id,
           });
         });
-        return;
-
-      case Constants.UNLOAD_PLUGIN:
-        this.unloadPlugin();
         return;
 
       case Constants.CLEAR_MOCK_ADAPTER_STATE:
