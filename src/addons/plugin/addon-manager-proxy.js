@@ -84,6 +84,16 @@ class AddonManagerProxy extends EventEmitter {
   onMsg(msg) {
     DEBUG && console.log('AddonManagerProxy: Rcvd:', msg);
 
+    // The first switch covers unload plugin.
+    switch (msg.messageType) {
+      case Constants.UNLOAD_PLUGIN:
+        this.unloadPlugin();
+        return;
+    }
+
+    // The second switch covers adapter messages. i.e. don't have a deviceId.
+    // or don't need a device object.
+
     var adapterId = msg.data.adapterId;
     var adapter = this.adapters.get(adapterId);
     if (!adapter) {
@@ -92,8 +102,6 @@ class AddonManagerProxy extends EventEmitter {
       return;
     }
 
-    // The first switch covers adapter messages. i.e. don't have a deviceId.
-    // or don't need a device object.
     switch (msg.messageType) {
 
       case Constants.START_PAIRING:
@@ -111,10 +119,6 @@ class AddonManagerProxy extends EventEmitter {
             adapterId: adapter.id,
           });
         });
-        return;
-
-      case Constants.UNLOAD_PLUGIN:
-        this.unloadPlugin();
         return;
 
       case Constants.CLEAR_MOCK_ADAPTER_STATE:
