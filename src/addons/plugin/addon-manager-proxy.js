@@ -97,7 +97,7 @@ class AddonManagerProxy extends EventEmitter {
     var adapterId = msg.data.adapterId;
     var adapter = this.adapters.get(adapterId);
     if (!adapter) {
-      console.error('AddonManagerProxy: Unregcognized adapter:', adapterId);
+      console.error('AddonManagerProxy: Unrecognized adapter:', adapterId);
       console.error('AddonManagerProxy: Ignoring msg:', msg);
       return;
     }
