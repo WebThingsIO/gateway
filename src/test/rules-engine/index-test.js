@@ -25,6 +25,16 @@ const thingLight1 = {
     hue: {type: 'number', value: 0},
     sat: {type: 'number', value: 0},
     bri: {type: 'number', value: 100}
+  },
+  actions: {
+    blink: {
+      description: 'Blink the switch on and off'
+    }
+  },
+  events: {
+    surge: {
+      description: 'Surge in power detected'
+    }
   }
 };
 
@@ -143,6 +153,25 @@ const mixedTestRule = {
     },
     type: 'SetEffect',
     value: true
+  }
+};
+
+const eventActionRule = {
+  enabled: true,
+  name: 'Event Action Rule',
+  trigger: {
+    type: 'EventTrigger',
+    event: 'surge',
+    thing: {
+      href: '/things/light1'
+    }
+  },
+  effect: {
+    type: 'ActionEffect',
+    action: 'blink',
+    thing: {
+      href: '/things/light1'
+    }
   }
 };
 
@@ -402,7 +431,13 @@ describe('rules engine', function() {
     await deleteRule(numberTestRuleId);
     await deleteRule(mixedTestRuleId);
     await webSocketClose(ws);
- });
+  });
+
+  function sleep(ms) {
+    return new Promise(res => {
+      setTimeout(res, ms);
+    });
+  }
 
   it('creates and simulates an off rule', async () => {
     // Both lights are on, light1 is turned off, turning light2 off. light2 is
@@ -425,12 +460,6 @@ describe('rules engine', function() {
         .set(...headerAuth(jwt))
         .send({on: on});
       expect(res.status).toEqual(200);
-    }
-
-    function sleep(ms) {
-      return new Promise(res => {
-        setTimeout(res, ms);
-      });
     }
 
     await setOn(thingLight1.id, true);
@@ -460,6 +489,41 @@ describe('rules engine', function() {
     await sleep(200);
     expect(await getOn(thingLight2.id)).toEqual(true);
 
+    await deleteRule(ruleId);
+  });
+
+  it('creates an event and action rule', async () => {
+    let res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(eventActionRule);
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    await sleep(200);
+
+    const Things = require('../../models/things');
+    const Event = require('../../models/event');
+
+    let thing = await Things.getThing(thingLight1.id);
+    thing.dispatchEvent(new Event('surge',
+                                  'oh no there is too much electricity'));
+
+    await sleep(200);
+
+    res = await chai.request(server)
+      .get(Constants.THINGS_PATH + '/' + thingLight1.id +
+           Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].name).toEqual('blink');
+
+    // dispatch event get action
     await deleteRule(ruleId);
   });
 });

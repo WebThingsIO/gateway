@@ -47,7 +47,7 @@ class EventTrigger extends Trigger {
     if (msg.messageType !== 'event') {
       return;
     }
-    if (!msg.data.hasOwnProperty(this.event)) {
+    if (msg.data.name !== this.event) {
       return;
     }
 
