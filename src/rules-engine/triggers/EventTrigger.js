@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
+const Constants = require('../../constants.js');
 const Events = require('../Events');
 const ThingConnection = require('../ThingConnection');
 const Trigger = require('./Trigger');
@@ -34,6 +35,12 @@ class EventTrigger extends Trigger {
 
   async start() {
     await this.thingConn.start();
+    await this.thingConn.send(JSON.stringify({
+      messageType: Constants.ADD_EVENT_SUBSCRIPTION,
+      data: {
+        name: this.event
+      }
+    }));
   }
 
   onMessage(msg) {

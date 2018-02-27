@@ -26,6 +26,14 @@ class ThingConnection {
     await e2p(this.ws, 'open');
   }
 
+  async send(msg) {
+    await new Promise((resolve) => {
+      this.ws.send(msg, function() {
+        resolve();
+      });
+    });
+  }
+
   stop() {
     if (this.ws) {
       this.ws.removeListener('message', this.onMessage);
