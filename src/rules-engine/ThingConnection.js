@@ -24,6 +24,11 @@ class ThingConnection {
     this.ws = new WebSocket(wsHref);
     this.ws.on('message', this.onMessage);
     await e2p(this.ws, 'open');
+
+    // Allow the app to handle the websocket open
+    await new Promise(res => {
+      setTimeout(res, 100);
+    });
   }
 
   async send(msg) {

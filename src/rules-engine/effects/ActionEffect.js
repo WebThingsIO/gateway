@@ -54,16 +54,18 @@ class SetEffect extends Effect {
       parameters: this.parameters
     };
 
-    let href = await Settings.get('RulesEngine.gateway') + this.thing.href;
+    let href = await Settings.get('RulesEngine.gateway') + this.thing.href +
+      '/actions';
+    let jwt = await Settings.get('RulesEngine.jwt');
 
-    let res = await fetch(href + this.thing.href + '/actions', {
+    let res = await fetch(href, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer ' + await Settings.get('RulesEngine.jwt'),
-        'Content-Type': 'appication/json',
+        Authorization: 'Bearer ' + jwt,
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(descr)
+      body: JSON.stringify(descr),
     });
     if (!res.ok) {
       console.warn('Unable to dispatch action', res);

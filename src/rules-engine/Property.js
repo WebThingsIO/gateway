@@ -41,7 +41,6 @@ class Property extends EventEmitter {
     this.onMessage = this.onMessage.bind(this);
     let thingHref = this.href.split('/properties')[0];
     this.thingConn = new ThingConnection(thingHref, this.onMessage);
-    this.id = Math.floor(Math.random() * 100000);
   }
 
   /**
