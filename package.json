@@ -38,6 +38,7 @@
     "greenlock": "^2.1.15",
     "jsonwebtoken": "^8.1.0",
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "mkdirp": "^0.5.1",
     "mustache-express": "^1.2.5",
     "nanomsg": "^3.3.0",
     "nocache": "^2.0.0",

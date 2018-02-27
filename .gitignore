@@ -5,9 +5,10 @@
 .nyc_output/
 /build
 OZW_Log.txt
+config/local.js
 db.sqlite3
 node_modules/
 static/js/lib/stm_web.min.js
-static/uploads/floorplan.svg
+static/uploads
 zwcfg_0x*.xml
 zwscene.xml

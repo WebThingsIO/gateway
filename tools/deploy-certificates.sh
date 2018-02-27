@@ -1,15 +1,16 @@
 #!/bin/bash
 
-gateway_dir="/home/pi/mozilla-iot/gateway"
+MOZIOT_HOME="${MOZIOT_HOME:=/home/pi/.mozilla-iot}"
+SSL_DIR="${MOZIOT_HOME}/ssl"
 
 # Make sure the certificate and private key files are never world readable.
 umask 077
 
 # Copy in the new certs.
-mkdir -p "${gateway_dir}/ssl"
-cp "${RENEWED_LINEAGE}/chain.pem" "${gateway_dir}/ssl/chain.pem"
-cp "${RENEWED_LINEAGE}/cert.pem" "${gateway_dir}/ssl/certificate.pem"
-cp "${RENEWED_LINEAGE}/privkey.pem" "${gateway_dir}/ssl/privatekey.pem"
+[ ! -d "${SSL_DIR}" ] && mkdir -p "${SSL_DIR}"
+cp "${RENEWED_LINEAGE}/chain.pem" "${SSL_DIR}/chain.pem"
+cp "${RENEWED_LINEAGE}/cert.pem" "${SSL_DIR}/certificate.pem"
+cp "${RENEWED_LINEAGE}/privkey.pem" "${SSL_DIR}/privatekey.pem"
 
 # Restart the gateway.
 systemctl restart mozilla-iot-gateway.service

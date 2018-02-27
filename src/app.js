@@ -7,6 +7,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+// Set up the user profile.
+const UserProfile = require('./user-profile');
+UserProfile.init();
+UserProfile.migrate();
+
 // Dependencies
 const https = require('https');
 const http = require('http');
@@ -25,7 +31,6 @@ const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
 const Constants = require('./constants');
-const Settings = require('./models/settings');
 
 // Causes a timestamp to be prepended to console log lines.
 require('./log-timestamps');
@@ -36,42 +41,6 @@ require('./app-instance');
 
 // Open the database
 db.open();
-
-// Move the tunneltoken into the database
-if (fs.existsSync('tunneltoken')) {
-  const token = JSON.parse(fs.readFileSync('tunneltoken'));
-  Settings.set('tunneltoken', token).then(function() {
-    fs.unlinkSync('tunneltoken');
-  }).catch(function(e) {
-    throw e;
-  });
-}
-
-// Move the notunnel setting into the database
-if (fs.existsSync('notunnel')) {
-  Settings.set('notunnel', true).then(function() {
-    fs.unlinkSync('notunnel');
-  }).catch(function(e) {
-    throw e;
-  });
-}
-
-// Move certificates, if necessary. If this throws an error, let it bubble up.
-if (!fs.existsSync('ssl')) {
-  fs.mkdirSync('ssl');
-}
-
-if (fs.existsSync('privatekey.pem')) {
-  fs.renameSync('privatekey.pem', path.join('ssl', 'privatekey.pem'));
-}
-
-if (fs.existsSync('certificate.pem')) {
-  fs.renameSync('certificate.pem', path.join('ssl', 'certificate.pem'));
-}
-
-if (fs.existsSync('chain.pem')) {
-  fs.renameSync('chain.pem', path.join('ssl', 'chain.pem'));
-}
 
 let httpServer = http.createServer();
 let httpApp = createGatewayApp(httpServer);
@@ -86,11 +55,11 @@ function createHttpsServer() {
 
   // HTTPS server configuration
   const options = {
-    key: fs.readFileSync(path.join('ssl', 'privatekey.pem')),
-    cert: fs.readFileSync(path.join('ssl', 'certificate.pem'))
+    key: fs.readFileSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
+    cert: fs.readFileSync(path.join(UserProfile.sslDir, 'certificate.pem'))
   };
-  if (fs.existsSync(path.join('ssl', 'chain.pem'))) {
-    options.ca = fs.readFileSync(path.join('ssl', 'chain.pem'));
+  if (fs.existsSync(path.join(UserProfile.sslDir, 'chain.pem'))) {
+    options.ca = fs.readFileSync(path.join(UserProfile.sslDir, 'chain.pem'));
   }
   return https.createServer(options);
 }

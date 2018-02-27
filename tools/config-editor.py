@@ -9,7 +9,11 @@ import sys
 import tempfile
 
 
-_DEFAULT_DATABASE = '/home/pi/mozilla-iot/gateway/db.sqlite3'
+_MOZIOT_HOME = os.getenv('MOZIOT_HOME')
+if not _MOZIOT_HOME:
+    _MOZIOT_HOME = os.path.join(os.path.expanduser('~'), '.mozilla-iot')
+
+_DEFAULT_DATABASE = os.path.join(_MOZIOT_HOME, 'config', 'db.sqlite3')
 _DEFAULT_EDITOR = 'nano'
 
 

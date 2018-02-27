@@ -118,13 +118,15 @@ $ yarn
 
  Add SSL certificate:
 
- If you don't plan on using Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain, you can use your own SSL certificate. The HTTPS server looks for `privatekey.pem` and `certificate.pem`. You can use a real certificate or generate a self-signed one by following the steps below.
+ If you don't plan on using Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain, you can use your own SSL certificate. The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
 
  ```
- $ mkdir -p ssl
- $ openssl genrsa -out ssl/privatekey.pem 2048
- $ openssl req -new -sha256 -key ssl/privatekey.pem -out ssl/csr.pem
- $ openssl x509 -req -in ssl/csr.pem -signkey ssl/privatekey.pem -out ssl/certificate.pem
+ $ MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
+ $ SSL_DIR="${MOZIOT_HOME}/ssl"
+ $ [ ! -d "${SSL_DIR}" ] && mkdir -p "${SSL_DIR}"
+ $ openssl genrsa -out "${SSL_DIR}/privatekey.pem" 2048
+ $ openssl req -new -sha256 -key "${SSL_DIR}/privatekey.pem" -out "${SSL_DIR}/csr.pem"
+ $ openssl x509 -req -in "${SSL_DIR}/csr.pem" -signkey "${SSL_DIR}/privatekey.pem" -out "${SSL_DIR}/certificate.pem"
 ```
 
  Start the web server:
@@ -181,6 +183,7 @@ $ jest src/test/{test-name}.js
   * **`router.js`** - Routes app URLs to controllers
   * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
   * **`tunnel_setup.js`** - Express middleware to determine if the tunnel is set up
+  * **`user-profile.js`** - Manages persistent user data
 * **`static/`** - Static CSS, JavaScript & image resources for web app front end
 * **`tools/`** - Helpful utilities (not part of the build)
 * **`package.json`** - npm module manifest

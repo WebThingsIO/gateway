@@ -13,10 +13,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const config = require('config');
 const Constants = require('../constants');
+const UserProfile = require('../user-profile');
 
-const UPLOADS_PATH = path.join(__dirname, config.get('uploads.directory'));
+const UPLOADS_PATH = UserProfile.uploadDir;
 const FLOORPLAN_PATH = path.join(UPLOADS_PATH, 'floorplan.svg');
 const FALLBACK_FLOORPLAN_PATH = path.join(Constants.STATIC_PATH,
                                           'images',

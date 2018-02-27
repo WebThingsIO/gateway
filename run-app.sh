@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
+
 run_app() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -16,4 +18,4 @@ run_app() {
   npm start
 }
 
-run_app > ${HOME}/mozilla-iot/gateway/run-app.log 2>&1
+run_app > "${MOZIOT_HOME}/log/run-app.log" 2>&1
