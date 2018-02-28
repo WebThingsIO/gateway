@@ -110,6 +110,43 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
       }
     }
   }
+  if (role === 'trigger') {
+    this.addEventOptions();
+  } else if (role === 'effect') {
+    this.addActionOptions();
+  }
+};
+
+PropertySelect.prototype.addEventOptions = function() {
+  for (let name of Object.keys(this.thing.events)) {
+    let eventTrigger = {
+      type: 'EventTrigger',
+      thing: {
+        href: this.thing.href
+      },
+      event: name
+    };
+    this.addOption('Event "' + name + '"', {
+      trigger: eventTrigger
+    });
+  }
+};
+
+PropertySelect.prototype.addActionOptions = function() {
+  for (let name of Object.keys(this.thing.actions)) {
+    let actionEffect = {
+      type: 'ActionEffect',
+      thing: {
+        href: this.thing.href
+      },
+      action: name,
+      parameters: {}
+    };
+    this.addOption('Action "' + name + '"', {
+      effect: actionEffect
+    });
+  }
+
 };
 
 /**

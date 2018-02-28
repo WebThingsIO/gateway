@@ -176,9 +176,16 @@ const RuleScreen = {
     if (part.type === 'TimeTrigger') {
       block = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
     } else {
-      let thing = this.gateway.things.filter(
-        RuleUtils.byProperty(this.rule[role].property)
-      )[0];
+      let thing = null;
+      if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
+        thing = this.gateway.things.filter(
+          RuleUtils.byHref(this.rule[role].thing.href)
+        )[0];
+      } else {
+        thing = this.gateway.things.filter(
+          RuleUtils.byProperty(this.rule[role].property)
+        )[0];
+      }
       block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
     }
     let rulePart = {};

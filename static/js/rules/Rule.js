@@ -106,6 +106,11 @@ const RuleUtils = {
       let optProp = option.properties[property.name];
       return optProp && (optProp.href === property.href);
     };
+  },
+  byHref: function byHref(href) {
+    return function(thing) {
+      return thing.href === href;
+    };
   }
 };
 
@@ -118,6 +123,14 @@ Rule.prototype.toTriggerHumanDescription = function() {
     return 'the time of day is ' +
       TimeTriggerBlock.utcToLocal(this.trigger.time);
   }
+
+  if (this.trigger.type === 'EventTrigger') {
+    let triggerThing = this.gateway.things.filter(
+      RuleUtils.byHref(this.trigger.thing.href)
+    )[0];
+    return `${triggerThing.name} event "${this.trigger.event}" occurs`;
+  }
+
 
   let triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
@@ -148,6 +161,13 @@ Rule.prototype.toTriggerHumanDescription = function() {
  * @return {String}
  */
 Rule.prototype.toEffectHumanDescription = function() {
+  if (this.effect.type === 'ActionEffect') {
+    let effectThing = this.gateway.things.filter(
+      RuleUtils.byHref(this.effect.thing.href)
+    )[0];
+    return `do ${effectThing.name} action "${this.effect.action}"`;
+  }
+
   let effectThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.effect.property)
   )[0];
