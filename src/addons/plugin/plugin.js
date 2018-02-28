@@ -20,6 +20,8 @@ const format = require('string-format');
 const IpcSocket = require('./ipc');
 const readline = require('readline');
 const spawn = require('child_process').spawn;
+const path = require('path');
+const UserProfile = require('../../user-profile');
 
 const DEBUG = false;
 
@@ -231,11 +233,13 @@ class Plugin {
 
   start() {
     const execArgs = {
-      nodeLoader: 'node ./src/addon-loader.js',
+      nodeLoader: `node ${path.join(UserProfile.gatewayDir,
+                                    'src',
+                                    'addon-loader.js')}`,
       name: this.pluginId,
       path: this.execPath,
     };
-    let execCmd  = format(this.exec, execArgs);
+    let execCmd = format(this.exec, execArgs);
 
     DEBUG && console.log('  Launching:', execCmd);
 
@@ -243,7 +247,15 @@ class Plugin {
     // module called splitargs
     this.restart = true;
     let args = execCmd.split(' ');
-    this.process.p = spawn(args[0], args.slice(1));
+    this.process.p = spawn(
+      args[0],
+      args.slice(1),
+      {
+        env: Object.assign(process.env,
+                           {NODE_PATH: path.join(UserProfile.gatewayDir,
+                                                 'node_modules')})
+      }
+    );
 
     this.process.p.on('error', err => {
       // We failed to spawn the process. This most likely means that the

@@ -8,20 +8,19 @@
 
 'use strict';
 
+const os = require('os');
+const home = os.homedir();
+
 module.exports = {
   cli: false,
+  profileDir: `${home}/.mozilla-iot/test`,
   ports: {
     https: 0, // 0 = find a free open port
     http: 0,
   },
   behindForwarding: false,
   addonManager: {
-    path: './addons-test',
     listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/test.json',
-  },
-  database: {
-    filename: ':memory:',
-    removeBeforeOpen: false,
   },
   ipc: {
     protocol: 'inproc',

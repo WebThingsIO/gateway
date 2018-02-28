@@ -18,6 +18,7 @@ const Deferred = require('./addons/deferred');
 const PluginClient = require('./addons/plugin/plugin-client');
 const PluginServer = require('./addons/plugin/plugin-server');
 const Settings = require('./models/settings');
+const UserProfile = require('./user-profile');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
@@ -419,9 +420,7 @@ class AddonManager extends EventEmitter {
    * @returns A promise which is resolved when the add-on is loaded.
    */
   async loadAddon(packageName) {
-    const addonPath = path.join(__dirname,
-                                config.get('addonManager.path'),
-                                packageName);
+    const addonPath = path.join(UserProfile.addonsDir, packageName);
 
     // Skip if there's no package.json file.
     const packageJson = path.join(addonPath, 'package.json');
@@ -625,7 +624,7 @@ class AddonManager extends EventEmitter {
     // Load the add-ons
 
     const addonManager = this;
-    const addonPath = path.join(__dirname, config.get('addonManager.path'));
+    const addonPath = UserProfile.addonsDir;
 
     // Search add-ons directory
     fs.readdir(addonPath, async function(err, files) {
@@ -807,9 +806,7 @@ class AddonManager extends EventEmitter {
       return Promise.reject(err);
     }
 
-    const addonPath = path.join(__dirname,
-                                config.get('addonManager.path'),
-                                packageName);
+    const addonPath = path.join(UserProfile.addonsDir, packageName);
 
     try {
       // Create the add-on directory, if necessary
@@ -894,9 +891,7 @@ class AddonManager extends EventEmitter {
       });
     }
 
-    const addonPath = path.join(__dirname,
-                                config.get('addonManager.path'),
-                                packageName);
+    const addonPath = path.join(UserProfile.addonsDir, packageName);
 
     // Unload this module from the require cache
     Object.keys(require.cache).map((x) => {

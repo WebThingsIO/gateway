@@ -25,8 +25,15 @@ const Profile = {
     this.baseDir = config.get('profileDir');
     this.configDir = path.join(this.baseDir, 'config');
     this.sslDir = path.join(this.baseDir, 'ssl');
-    this.uploadDir = path.join(this.baseDir, 'uploads');
+    this.uploadsDir = path.join(this.baseDir, 'uploads');
+    this.logDir = path.join(this.baseDir, 'log');
     this.gatewayDir = path.join(__dirname, '..');
+
+    if (process.env.NODE_ENV === 'test') {
+      this.addonsDir = path.join(this.gatewayDir, 'src', 'addons-test');
+    } else {
+      this.addonsDir = path.join(this.baseDir, 'addons');
+    }
   },
 
   migrate: function() {
@@ -37,8 +44,14 @@ const Profile = {
     if (!fs.existsSync(this.sslDir)) {
       mkdirp.sync(this.sslDir);
     }
-    if (!fs.existsSync(this.uploadDir)) {
-      mkdirp.sync(this.uploadDir);
+    if (!fs.existsSync(this.uploadsDir)) {
+      mkdirp.sync(this.uploadsDir);
+    }
+    if (!fs.existsSync(this.logDir)) {
+      mkdirp.sync(this.logDir);
+    }
+    if (!fs.existsSync(this.addonsDir)) {
+      mkdirp.sync(this.addonsDir);
     }
 
     // Relocate the database, if necessary, before opening it.
@@ -103,17 +116,17 @@ const Profile = {
     }
 
     // Move old uploads, if necessary.
-    const oldUploadDir = path.join(this.gatewayDir, 'static', 'uploads');
-    if (fs.existsSync(oldUploadDir) &&
-        fs.lstatSync(oldUploadDir).isDirectory()) {
-      const fnames = fs.readdirSync(oldUploadDir);
+    const oldUploadsDir = path.join(this.gatewayDir, 'static', 'uploads');
+    if (fs.existsSync(oldUploadsDir) &&
+        fs.lstatSync(oldUploadsDir).isDirectory()) {
+      const fnames = fs.readdirSync(oldUploadsDir);
       for (const fname of fnames) {
         fs.renameSync(
-          path.join(oldUploadDir, fname), path.join(this.uploadDir, fname));
+          path.join(oldUploadsDir, fname), path.join(this.uploadsDir, fname));
       }
 
-      fs.rmdirSync(oldUploadDir);
-      fs.symlinkSync(this.uploadDir, oldUploadDir);
+      fs.rmdirSync(oldUploadsDir);
+      fs.symlinkSync(this.uploadsDir, oldUploadsDir);
     }
 
     // Create a user config if one doesn't exist.
@@ -139,6 +152,30 @@ const Profile = {
       }
 
       fs.rmdirSync(oldProfileDir);
+    }
+
+    // Move add-ons.
+    if (process.env.NODE_ENV !== 'test') {
+      const oldAddonsDir = path.join(this.gatewayDir, 'build', 'addons');
+      if (fs.existsSync(oldAddonsDir) &&
+          fs.lstatSync(oldAddonsDir).isDirectory()) {
+        const fnames = fs.readdirSync(oldAddonsDir);
+        for (const fname of fnames) {
+          const oldFname = path.join(oldAddonsDir, fname);
+          const newFname = path.join(this.addonsDir, fname);
+          const lstat = fs.lstatSync(oldFname);
+
+          if (fname !== 'plugin' && lstat.isDirectory()) {
+            // Move existing add-ons.
+            fs.renameSync(oldFname, newFname);
+          } else if (fname.endsWith('.js') && lstat.isFile()) {
+            // Symlink dependencies.
+            if (!fs.lstatSync(newFname).isSymbolicLink()) {
+              fs.symlinkSync(oldFname, newFname);
+            }
+          }
+        }
+      }
     }
   },
 };
