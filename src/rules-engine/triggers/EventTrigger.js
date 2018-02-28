@@ -15,6 +15,7 @@ const Trigger = require('./Trigger');
 class EventTrigger extends Trigger {
   constructor(desc) {
     super();
+    this.thing = desc.thing;
     this.event = desc.event;
     this.onMessage = this.onMessage.bind(this);
     this.thingConn = new ThingConnection(desc.thing.href, this.onMessage);
