@@ -12,7 +12,7 @@ const Settings = require('../../models/settings');
 /**
  * An Effect which creates an action
  */
-class SetEffect extends Effect {
+class ActionEffect extends Effect {
   /**
    * @param {EffectDescription} desc
    */
@@ -33,7 +33,11 @@ class SetEffect extends Effect {
   toDescription() {
     return Object.assign(
       super.toDescription(),
-      {value: this.value}
+      {
+        thing: this.thing,
+        action: this.action,
+        parameters: this.parameters
+      }
     );
   }
 
@@ -73,5 +77,5 @@ class SetEffect extends Effect {
   }
 }
 
-module.exports = SetEffect;
+module.exports = ActionEffect;
 
