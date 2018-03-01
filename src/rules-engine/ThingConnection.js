@@ -8,7 +8,14 @@ const e2p = require('event-to-promise');
 const Settings = require('../models/settings');
 const WebSocket = require('ws');
 
+/**
+ * Manages WebSocket connection to a Thing
+ */
 class ThingConnection {
+  /**
+   * @param {String|URL} href - Link to Thing endpoint
+   * @param {Function<Object>} messageHandler - called with messages from WS
+   */
   constructor(href, messageHandler) {
     this.href = href;
     this.messageHandler = messageHandler;
@@ -16,6 +23,10 @@ class ThingConnection {
     this.ws = null;
   }
 
+  /**
+   * Connect to the Thing's websocket
+   * @return {Promise}
+   */
   async start() {
     const jwt = await Settings.get('RulesEngine.jwt');
     const gateway = await Settings.get('RulesEngine.gateway');
@@ -31,6 +42,11 @@ class ThingConnection {
     });
   }
 
+  /**
+   * Send a string over the websocket to the Thing
+   * @param {String} msg
+   * @return {Promise}
+   */
   async send(msg) {
     await new Promise((resolve) => {
       this.ws.send(msg, function() {
@@ -39,6 +55,9 @@ class ThingConnection {
     });
   }
 
+  /**
+   * Disconnect the websocket
+   */
   stop() {
     if (this.ws) {
       this.ws.removeListener('message', this.onMessage);
@@ -49,7 +68,6 @@ class ThingConnection {
       console.warn(this.constructor.name + '.stop was not started');
     }
   }
-
 
   onMessage(text) {
     let msg = JSON.parse(text);
