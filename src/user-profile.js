@@ -97,6 +97,14 @@ const Profile = {
       fs.renameSync(chainPath2, path.join(this.sslDir, 'chain.pem'));
     }
 
+    const csrPath1 = path.join(this.gatewayDir, 'csr.pem');
+    const csrPath2 = path.join(this.gatewayDir, 'ssl', 'csr.pem');
+    if (fs.existsSync(csrPath1)) {
+      fs.renameSync(csrPath1, path.join(this.sslDir, 'csr.pem'));
+    } else if (fs.existsSync(csrPath2)) {
+      fs.renameSync(csrPath2, path.join(this.sslDir, 'csr.pem'));
+    }
+
     const oldSslDir = path.join(this.gatewayDir, 'ssl');
     if (fs.existsSync(oldSslDir)) {
       fs.rmdirSync(oldSslDir);
