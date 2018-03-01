@@ -13,7 +13,7 @@
 
 const AdapterProxy = require('./adapter-proxy');
 const config = require('config');
-const Constants = require('../addon-constants');
+const Constants = require('../constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
@@ -21,7 +21,7 @@ const IpcSocket = require('./ipc');
 const readline = require('readline');
 const spawn = require('child_process').spawn;
 const path = require('path');
-const UserProfile = require('../../user-profile');
+const UserProfile = require('../user-profile');
 
 const DEBUG = false;
 

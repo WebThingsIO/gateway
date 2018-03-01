@@ -7,7 +7,7 @@ const nanomsg = require('nanomsg');
 require('string.prototype.padstart').shim();
 require('string.prototype.padend').shim();
 
-var appInstance = require('../../app-instance');
+var appInstance = require('../app-instance');
 
 const DEBUG = false;
 const DEBUG_MSG = false;

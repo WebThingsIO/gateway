@@ -11,8 +11,8 @@
 
 'use strict';
 
-const Adapter = require('../adapter');
-const Constants = require('../addon-constants');
+const {Adapter} = require('gateway-addon');
+const Constants = require('../constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 

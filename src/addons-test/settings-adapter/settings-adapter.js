@@ -9,7 +9,7 @@
 
 'use strict';
 
-var Adapter = require('../adapter');
+const {Adapter} = require('gateway-addon');
 
 class SettingsTestAdapter extends Adapter {
   constructor(addonManager, packageName) {

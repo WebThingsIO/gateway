@@ -12,7 +12,7 @@
 'use strict';
 
 const AddonManagerProxy = require('./addon-manager-proxy');
-const Constants = require('../../constants');
+const Constants = require('../constants');
 const Deferred = require('../deferred');
 const IpcSocket = require('./ipc');
 

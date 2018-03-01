@@ -8,9 +8,7 @@
 
 'use strict';
 
-var Adapter = require('../adapter');
-var Device = require('../device');
-var Property = require('../property');
+const {Adapter, Device, Property} = require('gateway-addon');
 
 class MockProperty extends Property {
   constructor(device, name, propertyDescription) {

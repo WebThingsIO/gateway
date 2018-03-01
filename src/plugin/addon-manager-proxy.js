@@ -12,7 +12,7 @@
 'use strict';
 
 const config = require('config');
-const Constants = require('../../constants');
+const Constants = require('../constants');
 const EventEmitter = require('events').EventEmitter;
 
 const DEBUG = false;
@@ -262,7 +262,7 @@ class AddonManagerProxy extends EventEmitter {
       //       of the file because at the top of the file, otherwise we
       //       have circular requires and the addonManager object won't
       //       have been created yet.
-      const addonManager = require('../../addon-manager');
+      const addonManager = require('../addon-manager');
       // NOTE: The call to getPlugin will only succeed when doing
       //       inproc IPC, since getPlugin reaches into server-side
       //       data structures, and we're running on the client.

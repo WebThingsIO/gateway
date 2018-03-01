@@ -9,9 +9,9 @@
 
 'use strict';
 
-const Constants = require('../addon-constants');
+const Constants = require('../constants');
 const Deferred = require('../deferred');
-const Property = require('../property');
+const {Property} = require('gateway-addon');
 
 class PropertyProxy extends Property {
   constructor(device, propertyName, propertyDict) {
