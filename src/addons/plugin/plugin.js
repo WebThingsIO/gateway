@@ -115,7 +115,7 @@ class Plugin {
     adapter = this.adapters.get(adapterId);
     if (!adapter) {
       console.error('Plugin:', this.pluginId,
-                    'Unregcognized adapter:', adapterId,
+                    'Unrecognized adapter:', adapterId,
                     'Ignoring msg:', msg);
       return;
     }

@@ -74,6 +74,28 @@ const testRule = {
   }
 };
 
+const offRule = {
+  enabled: true,
+  trigger: {
+    property: {
+      name: 'on',
+      type: 'boolean',
+      href: '/things/light1/properties/on'
+    },
+    type: 'BooleanTrigger',
+    onValue: false
+  },
+  effect: {
+    property: {
+      name: 'on',
+      type: 'boolean',
+      href: '/things/light2/properties/on'
+    },
+    type: 'PulseEffect',
+    value: false
+  }
+};
+
 const numberTestRule = {
   enabled: true,
   name: 'Number Test Rule',
@@ -381,4 +403,63 @@ describe('rules engine', function() {
     await deleteRule(mixedTestRuleId);
     await webSocketClose(ws);
  });
+
+  it('creates and simulates an off rule', async () => {
+    // Both lights are on, light1 is turned off, turning light2 off. light2 is
+    // turned on, light1 is turned off (double activation), turning light2 off.
+    // light1 is turned on, turning light2 on.
+
+    async function getOn(lightId) {
+      let res = await chai.request(server)
+        .get(Constants.THINGS_PATH + '/' + lightId + '/properties/on')
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt));
+      expect(res.status).toEqual(200);
+      return res.body.on;
+    }
+
+    async function setOn(lightId, on) {
+      let res = await chai.request(server)
+        .put(Constants.THINGS_PATH + '/' + lightId + '/properties/on')
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt))
+        .send({on: on});
+      expect(res.status).toEqual(200);
+    }
+
+    function sleep(ms) {
+      return new Promise(res => {
+        setTimeout(res, ms);
+      });
+    }
+
+    await setOn(thingLight1.id, true);
+    await setOn(thingLight2.id, true);
+
+    let res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(offRule);
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    await setOn(thingLight1.id, false);
+    await sleep(200);
+    expect(await getOn(thingLight2.id)).toEqual(false);
+
+    await setOn(thingLight2.id, true);
+    expect(await getOn(thingLight2.id)).toEqual(true);
+
+    await setOn(thingLight1.id, false);
+    await sleep(200);
+    expect(await getOn(thingLight2.id)).toEqual(false);
+
+    await setOn(thingLight1.id, true);
+    await sleep(200);
+    expect(await getOn(thingLight2.id)).toEqual(true);
+
+    await deleteRule(ruleId);
+  });
 });

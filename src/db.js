@@ -13,6 +13,7 @@
 const config = require('config');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const path = require('path');
 const Passwords = require('./passwords');
 const assert = require('assert');
 
@@ -38,8 +39,18 @@ var Database = {
    * Open the database.
    */
   open: function() {
-    var filename = config.get('database.filename');
+    // If the database is already open, just return.
+    if (this.db) {
+      return;
+    }
+
+    // Don't pull this from user-profile.js, because that would cause a
+    // circular dependency.
+    const filename =
+      path.join(config.get('profileDir'), 'config', 'db.sqlite3');
+
     var removeBeforeOpen = config.get('database.removeBeforeOpen');
+
     // Check if database already exists
     var exists = fs.existsSync(filename);
     if (exists && removeBeforeOpen) {

@@ -8,13 +8,18 @@
 
 'use strict';
 
+const os = require('os');
+const home = os.homedir();
+
 module.exports = {
   // Expose CLI
   cli: true,
 
+  profileDir: `${home}/.mozilla-iot`,
+
   ports: {
     https: 4443,
-    http: 8080
+    http: 8080,
   },
   // Whether the gateway is behind port forwarding and should use simplified
   // port-free urls
@@ -25,7 +30,6 @@ module.exports = {
     listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json',
   },
   database: {
-    filename: './db.sqlite3',
     removeBeforeOpen: false,
   },
   ipc: {
@@ -43,9 +47,6 @@ module.exports = {
       },
     },
   },
-  uploads: {
-    directory: '../static/uploads/' // Directory to store uploads in
-  },
   authentication: {
     defaultUser: null,
   },
@@ -55,7 +56,7 @@ module.exports = {
     domain: 'mozilla-iot.org',
     pagekite_cmd: './pagekite.py',
     port: 443,
-    certemail: 'certificate@mozilla-iot.org'
+    certemail: 'certificate@mozilla-iot.org',
   },
-  bcryptRounds: 2
+  bcryptRounds: 2,
 };
