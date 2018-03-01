@@ -252,8 +252,11 @@ class Plugin {
       args.slice(1),
       {
         env: Object.assign(process.env,
-                           {NODE_PATH: path.join(UserProfile.gatewayDir,
-                                                 'node_modules')})
+                           {
+                             MOZIOT_HOME: UserProfile.baseDir,
+                             NODE_PATH: path.join(UserProfile.gatewayDir,
+                                                  'node_modules'),
+                           }),
       }
     );
 
