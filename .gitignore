@@ -1,14 +1,14 @@
-*.pem
+# Standard artifacts
 *.swp
 .DS_Store
-.node-persist/
 .nyc_output/
+
+# Build artifacts
 /build
-OZW_Log.txt
-config/local.js
-db.sqlite3
 node_modules/
 static/js/lib/stm_web.min.js
+
+# Run-time artifacts
+.node-persist/
+config/local.js
 static/uploads
-zwcfg_0x*.xml
-zwscene.xml

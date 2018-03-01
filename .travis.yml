@@ -25,6 +25,7 @@ env:
   global:
     - CC=gcc-4.9
     - CXX=g++-4.9
+    - MOZIOT_HOME=/home/travis/.mozilla-iot/test
 
 script:
   - npm run lint

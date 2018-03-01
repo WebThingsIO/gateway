@@ -11,10 +11,10 @@
 process.env.NODE_ENV = 'test';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const config = require('config');
 const Database = require('../db');
 const Actions = require('../models/actions');
 const Things = require('../models/things');
+const UserProfile = require('../user-profile');
 const e2p = require('event-to-promise');
 const fs = require('fs');
 const path = require('path');
@@ -90,8 +90,7 @@ function mockAdapter() {
 global.mockAdapter = mockAdapter;
 
 function removeTestManifest() {
-  const testManifestFilename = path.join(__dirname, '..',
-                                         config.get('addonManager.path'),
+  const testManifestFilename = path.join(UserProfile.addonsDir,
                                          'test-adapter', 'package.json');
   if (fs.existsSync(testManifestFilename)) {
     console.log('Removing', testManifestFilename);

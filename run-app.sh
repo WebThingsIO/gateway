@@ -18,4 +18,5 @@ run_app() {
   npm start
 }
 
+mkdir -p "${MOZIOT_HOME}/log"
 run_app > "${MOZIOT_HOME}/log/run-app.log" 2>&1

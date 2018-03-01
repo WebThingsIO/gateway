@@ -17,9 +17,9 @@ const fetch = require('node-fetch');
 const jsonfile = require('jsonfile');
 const path = require('path');
 const pFinal = require('../promise-final');
+const UserProfile = require('../../user-profile');
 
-const testManifestFilename = path.join(__dirname, '../..',
-                                       config.get('addonManager.path'),
+const testManifestFilename = path.join(UserProfile.addonsDir,
                                        'test-adapter', 'package.json');
 
 const testManifest = {

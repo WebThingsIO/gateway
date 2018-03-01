@@ -46,17 +46,22 @@ var Database = {
 
     // Don't pull this from user-profile.js, because that would cause a
     // circular dependency.
-    const filename =
-      path.join(config.get('profileDir'), 'config', 'db.sqlite3');
+    let filename;
+    if (process.env.NODE_ENV === 'test') {
+      filename = ':memory:';
+    } else {
+      filename = path.join(config.get('profileDir'), 'config', 'db.sqlite3');
 
-    var removeBeforeOpen = config.get('database.removeBeforeOpen');
+      var removeBeforeOpen = config.get('database.removeBeforeOpen');
 
-    // Check if database already exists
-    var exists = fs.existsSync(filename);
-    if (exists && removeBeforeOpen) {
-      fs.unlinkSync(filename);
-      exists = false;
+      // Check if database already exists
+      var exists = fs.existsSync(filename);
+      if (exists && removeBeforeOpen) {
+        fs.unlinkSync(filename);
+        exists = false;
+      }
     }
+
     console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
     // Open database or create it if it doesn't exist
     this.db = new sqlite3.Database(filename);
