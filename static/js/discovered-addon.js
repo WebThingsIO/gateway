@@ -16,13 +16,12 @@
  */
 var DiscoveredAddon = function(metadata) {
   this.name = metadata.name;
-  this.displayName = metadata.display_name;
+  this.displayName = metadata.displayName;
   this.description = metadata.description;
   this.version = metadata.version;
   this.url = metadata.url;
   this.checksum = metadata.checksum;
   this.installed = metadata.installed;
-  this.api = Object.assign({}, metadata.api);
   this.container = document.getElementById('discovered-addons-list');
   this.render();
 };

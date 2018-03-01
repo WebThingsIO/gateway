@@ -317,7 +317,8 @@ var SettingsScreen = {
       headers: API.headers(),
     };
 
-    let api = null;
+    let api = null, architecture = null;
+
     // First, get the list of installed add-ons.
     return fetch('/addons', opts).then((response) => {
       this.installedAddons.clear();
@@ -342,11 +343,12 @@ var SettingsScreen = {
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      if (!data || !data.url || !data.api) {
+      if (!data || !data.url || !data.api || !data.architecture) {
         return;
       }
 
       api = data.api;
+      architecture = data.architecture;
       return fetch(data.url, {method: 'GET', cache: 'reload'});
     }).then((resp) => {
       this.availableAddons.clear();
@@ -358,8 +360,22 @@ var SettingsScreen = {
           continue;
         }
 
-        addon.installed = this.installedAddons.has(addon.name);
-        this.availableAddons.set(addon.name, addon);
+        // Only support architecture-compatible add-ons.
+        for (const arch in addon.packages) {
+          if (arch === 'any' || arch === architecture) {
+            const entry = {
+              name: addon.name,
+              displayName: addon.display_name,
+              description: addon.description,
+              version: addon.version,
+              url: addon.packages[arch].url,
+              checksum: addon.packages[arch].checksum,
+              installed: this.installedAddons.has(addon.name),
+            };
+            this.availableAddons.set(addon.name, entry);
+            break;
+          }
+        }
       }
     }).catch((e) => console.error(`Failed to parse add-ons list: ${e}`));
   },
