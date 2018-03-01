@@ -7,6 +7,7 @@ const promisePipe = require('promisepipe');
 const rimraf = require('rimraf');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');
+const Utils = require('../utils');
 
 const AddonsController = PromiseRouter();
 
@@ -15,9 +16,10 @@ const AddonsController = PromiseRouter();
  *
  * @param {String} name The package name
  * @param {String} url The package URL
+ * @param {String} checksum SHA-256 checksum of the package
  * @returns A Promise that resolves when the add-on is installed.
  */
-async function installAddon(name, url) {
+async function installAddon(name, url, checksum) {
   const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
   const destPath = path.join(tempPath, `${name}.tar.gz`);
 
@@ -34,6 +36,17 @@ async function installAddon(name, url) {
       }
     });
     const err = `Failed to download add-on: ${name}\n${e}`;
+    console.error(err);
+    return Promise.reject(err);
+  }
+
+  if (Utils.hashFile(destPath) !== checksum.toLowerCase()) {
+    rimraf(tempPath, {glob: false}, (e) => {
+      if (e) {
+        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+      }
+    });
+    const err = `Checksum did not match for add-on: ${name}`;
     console.error(err);
     return Promise.reject(err);
   }
@@ -139,16 +152,18 @@ AddonsController.put('/:addonName', async (request, response) => {
 AddonsController.post('/', async (request, response) => {
   if (!request.body ||
       !request.body.hasOwnProperty('name') ||
-      !request.body.hasOwnProperty('url')) {
+      !request.body.hasOwnProperty('url') ||
+      !request.body.hasOwnProperty('checksum')) {
     response.status(400).send('Missing required parameter(s).');
     return;
   }
 
   const name = request.body.name;
   const url = request.body.url;
+  const checksum = request.body.checksum;
 
   try {
-    await installAddon(name, url);
+    await installAddon(name, url, checksum);
     response.sendStatus(200);
   } catch (e) {
     response.status(400).send(e);
@@ -159,16 +174,18 @@ AddonsController.patch('/:addonName', async (request, response) => {
   const name = request.params.addonName;
 
   if (!request.body ||
-      !request.body.hasOwnProperty('url')) {
+      !request.body.hasOwnProperty('url') ||
+      !request.body.hasOwnProperty('checksum')) {
     response.status(400).send('Missing required parameter(s).');
     return;
   }
 
   const url = request.body.url;
+  const checksum = request.body.checksum;
 
   try {
     await AddonManager.uninstallAddon(name, true);
-    await installAddon(name, url);
+    await installAddon(name, url, checksum);
     response.sendStatus(200);
   } catch (e) {
     console.error(`Failed to update add-on: ${name}\n${e}`);

@@ -184,6 +184,7 @@ $ jest src/test/{test-name}.js
   * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
   * **`tunnel_setup.js`** - Express middleware to determine if the tunnel is set up
   * **`user-profile.js`** - Manages persistent user data
+  * **`utils.js`** - Various utility functions
 * **`static/`** - Static CSS, JavaScript & image resources for web app front end
 * **`tools/`** - Helpful utilities (not part of the build)
 * **`package.json`** - npm module manifest
