@@ -19,11 +19,11 @@ const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 const TunnelService = require('../ssltunnel');
 const Settings = require('../models/settings');
 const Constants = require('../constants');
 const UserProfile = require('../user-profile');
+const Utils = require('../utils');
 
 var SettingsController = PromiseRouter();
 
@@ -248,7 +248,7 @@ SettingsController.get('/addonsInfo', (request, response) => {
   response.json({
     url: config.get('addonManager.listUrl'),
     api: config.get('addonManager.api'),
-    architecture: `${process.platform}-${process.arch}`,
+    architecture: Utils.getArchitecture(),
   });
 });
 

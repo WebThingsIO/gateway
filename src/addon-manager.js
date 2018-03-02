@@ -24,6 +24,9 @@ const path = require('path');
 const rimraf = require('rimraf');
 const tar = require('tar');
 const Utils = require('./utils');
+const os = require('os');
+const promisePipe = require('promisepipe');
+const fetch = require('node-fetch');
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -623,23 +626,16 @@ class AddonManager extends EventEmitter {
     // Search add-ons directory
     fs.readdir(addonPath, async function(err, files) {
       if (err) {
+        // This should probably never happen.
         console.error('Failed to search add-ons directory');
         console.error(err);
         return;
       }
 
-      for (let fname of files) {
-        // Ignore 'plugin', as it contains library code.
-        if (fname === 'plugin') {
-          continue;
-        }
-
-        const addonName = fname;
-        fname = path.join(addonPath, fname);
-
+      for (const addonName of files) {
         // Skip if not a directory. Use stat rather than lstat such that we
         // also load through symlinks.
-        if (!fs.statSync(fname).isDirectory()) {
+        if (!fs.statSync(path.join(addonPath, addonName)).isDirectory()) {
           continue;
         }
 
@@ -648,6 +644,18 @@ class AddonManager extends EventEmitter {
         });
       }
     });
+
+    if (process.env.NODE_ENV !== 'test') {
+      // Check for add-ons in 10 seconds (allow add-ons to load first).
+      setTimeout(() => {
+        this.updateAddons();
+
+        // Check every day.
+        const delay = 60 * 1000;
+        //const delay = 24 * 60 * 60 * 1000;
+        setInterval(this.updateAddons, delay);
+      }, 10000);
+    }
   }
 
   /**
@@ -781,13 +789,75 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * Install an add-on.
+   *
+   * @param {String} name The package name
+   * @param {String} url The package URL
+   * @param {String} checksum SHA-256 checksum of the package
+   * @param {Boolean} enable Whether or not to enable the add-on after install
+   * @returns A Promise that resolves when the add-on is installed.
+   */
+  async installAddonFromUrl(name, url, checksum, enable) {
+    const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
+    const destPath = path.join(tempPath, `${name}.tar.gz`);
+
+    console.log(`Fetching add-on ${url} as ${destPath}`);
+
+    try {
+      const res = await fetch(url);
+      const dest = fs.createWriteStream(destPath);
+      await promisePipe(res.body, dest);
+    } catch (e) {
+      rimraf(tempPath, {glob: false}, (e) => {
+        if (e) {
+          console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+        }
+      });
+      const err = `Failed to download add-on: ${name}\n${e}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    if (Utils.hashFile(destPath) !== checksum.toLowerCase()) {
+      rimraf(tempPath, {glob: false}, (e) => {
+        if (e) {
+          console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+        }
+      });
+      const err = `Checksum did not match for add-on: ${name}`;
+      console.error(err);
+      return Promise.reject(err);
+    }
+
+    let success = false, err;
+    try {
+      await this.installAddon(name, destPath, enable);
+      success = true;
+    } catch (e) {
+      err = e;
+    }
+
+    rimraf(tempPath, {glob: false}, (e) => {
+      if (e) {
+        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
+      }
+    });
+
+    if (!success) {
+      console.error(err);
+      return Promise.reject(err);
+    }
+  }
+
+  /**
    * @method installAddon
    *
    * @param {String} packageName The package name to install
    * @param {String} packagePath Path to the package tarball
+   * @param {Boolean} enable Whether or not to enable the add-on after install
    * @returns A promise that resolves when the package is installed.
    */
-  async installAddon(packageName, packagePath) {
+  async installAddon(packageName, packagePath, enable) {
     if (!this.addonsLoaded) {
       const err =
         'Cannot install add-on before other add-ons have been loaded.';
@@ -842,23 +912,30 @@ class AddonManager extends EventEmitter {
     const key = `addons.${packageName}`;
     let savedSettings = await Settings.get(key);
     if (savedSettings) {
-      savedSettings.moziot.enabled = true;
+      // Only enable if we're supposed to. Otherwise, keep whatever the current
+      // setting is.
+      if (enable) {
+        savedSettings.moziot.enabled = true;
+      }
     } else {
+      // If this add-on is brand new, use the passed-in enable flag.
       savedSettings = {
         moziot: {
-          enabled: true,
+          enabled: enable,
         },
       };
     }
     await Settings.set(key, savedSettings);
 
-    // Now, load the add-on
-    try {
-      await this.loadAddon(packageName);
-    } catch (e) {
-      // Clean up if loading failed
-      cleanup();
-      return Promise.reject(`Failed to load add-on: ${packageName}\n${e}`);
+    if (savedSettings.moziot.enabled) {
+      // Now, load the add-on
+      try {
+        await this.loadAddon(packageName);
+      } catch (e) {
+        // Clean up if loading failed
+        cleanup();
+        return Promise.reject(`Failed to load add-on: ${packageName}\n${e}`);
+      }
     }
   }
 
@@ -867,9 +944,10 @@ class AddonManager extends EventEmitter {
    *
    * @param {String} packageName The package name to uninstall
    * @param {Boolean} wait Whether or not to wait for unloading to finish
+   * @param {Boolean} disable Whether or not to disable the add-on
    * @returns A promise that resolves when the package is uninstalled.
    */
-  async uninstallAddon(packageName, wait) {
+  async uninstallAddon(packageName, wait, disable) {
     try {
       // Try to gracefully unload
       await this.unloadAddon(packageName);
@@ -905,11 +983,13 @@ class AddonManager extends EventEmitter {
     }
 
     // Update the saved settings and disable the add-on
-    const key = `addons.${packageName}`;
-    let savedSettings = await Settings.get(key);
-    if (savedSettings) {
-      savedSettings.moziot.enabled = false;
-      await Settings.set(key, savedSettings);
+    if (disable) {
+      const key = `addons.${packageName}`;
+      let savedSettings = await Settings.get(key);
+      if (savedSettings) {
+        savedSettings.moziot.enabled = false;
+        await Settings.set(key, savedSettings);
+      }
     }
 
     // Remove from our list of installed add-ons
@@ -939,6 +1019,96 @@ class AddonManager extends EventEmitter {
     }
 
     return deferredWait.promise;
+  }
+
+  /**
+   * @method updateAddons
+   *
+   * Attempt to update all installed add-ons.
+   *
+   * @returns A promise which is resolved when updating is complete.
+   */
+  async updateAddons() {
+    const api = config.get('addonManager.api');
+    const architecture = Utils.getArchitecture();
+    const addonPath = UserProfile.addonsDir;
+    const available = {};
+
+    console.log('Checking for add-on updates...');
+
+    try {
+      const response = await fetch(config.get('addonManager.listUrl'));
+      const list = await response.json();
+
+      for (const addon of list) {
+        // Skip incompatible add-ons.
+        if (addon.api.min > api || addon.api.max < api) {
+          continue;
+        }
+
+        // Only support architecture-compatible add-ons.
+        for (const arch in addon.packages) {
+          if (arch === 'any' || arch === architecture) {
+            available[addon.name] = {
+              version: addon.version,
+              url: addon.packages[arch].url,
+              checksum: addon.packages[arch].checksum,
+            };
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Failed to parse add-on list.');
+      return;
+    }
+
+    // Try to update what we can. Don't use the installedAddons set because it
+    // doesn't contain add-ons that failed to load properly.
+    fs.readdir(addonPath, async (err, files) => {
+      if (err) {
+        console.error('Failed to search add-on directory');
+        console.error(err);
+        return;
+      }
+
+      for (const addonName of files) {
+        // Skip if not a directory. Use stat rather than lstat such that we
+        // also load through symlinks.
+        if (!fs.statSync(path.join(addonPath, addonName)).isDirectory()) {
+          continue;
+        }
+
+        // Try to load package.json.
+        const packageJson = path.join(addonPath, addonName, 'package.json');
+        if (!fs.existsSync(packageJson)) {
+          continue;
+        }
+
+        let manifest;
+        try {
+          const data = fs.readFileSync(packageJson);
+          manifest = JSON.parse(data);
+        } catch (e) {
+          console.error(`Failed to read package.json: ${packageJson}\n${e}`);
+          continue;
+        }
+
+        // Check if an update is available.
+        if (available.hasOwnProperty(addonName) &&
+            available[addonName].version !== manifest.version) {
+          try {
+            await this.uninstallAddon(addonName, true, false);
+            await this.installAddonFromUrl(addonName,
+                                           available[addonName].url,
+                                           available[addonName].checksum,
+                                           false);
+          } catch (e) {
+            console.error(`Failed to update ${addonName}: ${e}`);
+          }
+        }
+      }
+    });
   }
 }
 
