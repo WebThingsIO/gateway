@@ -8,6 +8,7 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
+const process = require('process');
 
 module.exports = {
   /**
@@ -36,5 +37,12 @@ module.exports = {
     }
 
     return hash.digest('hex').toLowerCase();
+  },
+
+  /**
+   * Get the current architecture as "os-machine", i.e. darwin-x64.
+   */
+  getArchitecture: function() {
+    return `${process.platform}-${process.arch}`;
   },
 };

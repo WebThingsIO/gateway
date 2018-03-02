@@ -1,75 +1,8 @@
 const PromiseRouter = require('express-promise-router');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const promisePipe = require('promisepipe');
-const rimraf = require('rimraf');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');
-const Utils = require('../utils');
 
 const AddonsController = PromiseRouter();
-
-/**
- * Install an add-on.
- *
- * @param {String} name The package name
- * @param {String} url The package URL
- * @param {String} checksum SHA-256 checksum of the package
- * @returns A Promise that resolves when the add-on is installed.
- */
-async function installAddon(name, url, checksum) {
-  const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
-  const destPath = path.join(tempPath, `${name}.tar.gz`);
-
-  console.log(`Fetching add-on ${url} as ${destPath}`);
-
-  try {
-    const res = await fetch(url);
-    const dest = fs.createWriteStream(destPath);
-    await promisePipe(res.body, dest);
-  } catch (e) {
-    rimraf(tempPath, {glob: false}, (e) => {
-      if (e) {
-        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
-      }
-    });
-    const err = `Failed to download add-on: ${name}\n${e}`;
-    console.error(err);
-    return Promise.reject(err);
-  }
-
-  if (Utils.hashFile(destPath) !== checksum.toLowerCase()) {
-    rimraf(tempPath, {glob: false}, (e) => {
-      if (e) {
-        console.error(`Error removing temp directory: ${tempPath}\n${e}`);
-      }
-    });
-    const err = `Checksum did not match for add-on: ${name}`;
-    console.error(err);
-    return Promise.reject(err);
-  }
-
-  let success = false, err;
-  try {
-    await AddonManager.installAddon(name, destPath);
-    success = true;
-  } catch (e) {
-    err = e;
-  }
-
-  rimraf(tempPath, {glob: false}, (e) => {
-    if (e) {
-      console.error(`Error removing temp directory: ${tempPath}\n${e}`);
-    }
-  });
-
-  if (!success) {
-    console.error(err);
-    return Promise.reject(err);
-  }
-}
 
 AddonsController.get('/', async (request, response) => {
   Settings.getAddonSettings().then(function(result) {
@@ -163,7 +96,7 @@ AddonsController.post('/', async (request, response) => {
   const checksum = request.body.checksum;
 
   try {
-    await installAddon(name, url, checksum);
+    await AddonManager.installAddonFromUrl(name, url, checksum, true);
     response.sendStatus(200);
   } catch (e) {
     response.status(400).send(e);
@@ -184,8 +117,8 @@ AddonsController.patch('/:addonName', async (request, response) => {
   const checksum = request.body.checksum;
 
   try {
-    await AddonManager.uninstallAddon(name, true);
-    await installAddon(name, url, checksum);
+    await AddonManager.uninstallAddon(name, true, false);
+    await AddonManager.installAddonFromUrl(name, url, checksum, true);
     response.sendStatus(200);
   } catch (e) {
     console.error(`Failed to update add-on: ${name}\n${e}`);
@@ -197,7 +130,7 @@ AddonsController.delete('/:addonName', async (request, response) => {
   const addonName = request.params.addonName;
 
   try {
-    await AddonManager.uninstallAddon(addonName, false);
+    await AddonManager.uninstallAddon(addonName, false, true);
     response.sendStatus(200);
   } catch (e) {
     console.error(`Failed to uninstall add-on: ${addonName}\n${e}`);
