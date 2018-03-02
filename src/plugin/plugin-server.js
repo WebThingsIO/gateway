@@ -13,7 +13,7 @@
 
 'use strict';
 
-const Constants = require('../addon-constants');
+const Constants = require('../constants');
 const IpcSocket = require('./ipc');
 const Plugin = require('./plugin');
 

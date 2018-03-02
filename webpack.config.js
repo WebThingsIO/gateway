@@ -29,10 +29,6 @@ const plugins = [
     { from: 'node_modules/speaktome-api/build/stm_web.min.js',
         to: '../static/js/lib' },
   ]),
-  // Until we ship our plugin API we simply copy these over.
-  new CopyWebpackPlugin([
-    { from: 'src/addons/', to: 'addons/' },
-  ])
 ];
 
 module.exports = {

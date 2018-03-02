@@ -1,1 +1,0 @@
-../addons/adapter.js

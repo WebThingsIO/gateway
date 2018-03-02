@@ -31,8 +31,8 @@ const testManifest = {
   ],
   moziot: {
     api: {
-      min: 1,
-      max: 1
+      min: 2,
+      max: 2
     },
     enabled: true,
   },
@@ -240,7 +240,7 @@ describe('addons', function() {
       .set(...headerAuth(jwt))
       .send({name: list[0].name,
              url: list[0].packages.any.url,
-             checksum: list[0].checksum});
+             checksum: list[0].packages.any.checksum});
     expect(res3.status).toEqual(200);
 
     const res4 = await chai.request(server)

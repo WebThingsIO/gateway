@@ -14,9 +14,9 @@
 const config = require('config');
 const Constants = require('./constants');
 const EventEmitter = require('events').EventEmitter;
-const Deferred = require('./addons/deferred');
-const PluginClient = require('./addons/plugin/plugin-client');
-const PluginServer = require('./addons/plugin/plugin-server');
+const Deferred = require('./deferred');
+const PluginClient = require('./plugin/plugin-client');
+const PluginServer = require('./plugin/plugin-server');
 const Settings = require('./models/settings');
 const UserProfile = require('./user-profile');
 const fs = require('fs');
@@ -575,33 +575,27 @@ class AddonManager extends EventEmitter {
 
     // Load the add-on
     console.log('Loading add-on:', manifest.name);
-    if (manifest.moziot.plugin) {
-      if (config.get('ipc.protocol') === 'inproc') {
-        // This is a special case where we load the adapter directly
-        // into the gateway, but we use IPC comms to talk to the
-        // add-on (i.e. for testing)
-        const pluginClient = new PluginClient(manifest.name,
-                                              {verbose: false});
-        try {
-          const addonManagerProxy = await pluginClient.register();
-          console.log('Loading add-on', manifest.name, 'as plugin');
-          const addonLoader = dynamicRequire(addonPath);
-          addonLoader(addonManagerProxy, newSettings, errorCallback);
-        } catch (e) {
-          const err =
-            `Failed to register package with gateway: ${manifest.name}\n${e}`;
-          console.error(err);
-          return Promise.reject(err);
-        }
-      } else {
-        // This is the normal plugin adapter case, tell the PluginServer
-        // to load the plugin.
-        this.pluginServer.loadPlugin(addonPath, newSettings);
+    if (config.get('ipc.protocol') === 'inproc') {
+      // This is a special case where we load the adapter directly
+      // into the gateway, but we use IPC comms to talk to the
+      // add-on (i.e. for testing)
+      const pluginClient = new PluginClient(manifest.name,
+                                            {verbose: false});
+      try {
+        const addonManagerProxy = await pluginClient.register();
+        console.log('Loading add-on', manifest.name, 'as plugin');
+        const addonLoader = dynamicRequire(addonPath);
+        addonLoader(addonManagerProxy, newSettings, errorCallback);
+      } catch (e) {
+        const err =
+          `Failed to register package with gateway: ${manifest.name}\n${e}`;
+        console.error(err);
+        return Promise.reject(err);
       }
     } else {
-      // Load this add-on directly into the gateway.
-      const addonLoader = dynamicRequire(addonPath);
-      addonLoader(this, newSettings, errorCallback);
+      // This is the normal plugin adapter case, tell the PluginServer
+      // to load the plugin.
+      this.pluginServer.loadPlugin(addonPath, newSettings);
     }
   }
 
@@ -643,8 +637,9 @@ class AddonManager extends EventEmitter {
         const addonName = fname;
         fname = path.join(addonPath, fname);
 
-        // Skip if not a directory.
-        if (!fs.lstatSync(fname).isDirectory()) {
+        // Skip if not a directory. Use stat rather than lstat such that we
+        // also load through symlinks.
+        if (!fs.statSync(fname).isDirectory()) {
           continue;
         }
 

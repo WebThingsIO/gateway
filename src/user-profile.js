@@ -178,7 +178,7 @@ const Profile = {
             fs.renameSync(oldFname, newFname);
           } else if (fname.endsWith('.js') && lstat.isFile()) {
             // Symlink dependencies.
-            if (!fs.lstatSync(newFname).isSymbolicLink()) {
+            if (!fs.existsSync(newFname)) {
               fs.symlinkSync(oldFname, newFname);
             }
           }

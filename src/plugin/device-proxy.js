@@ -9,10 +9,9 @@
 
 'use strict';
 
-const Constants = require('../addon-constants');
+const Constants = require('../constants');
 const PropertyProxy = require('./property-proxy');
-
-var Device = require('../device');
+const {Device} = require('gateway-addon');
 
 class DeviceProxy extends Device {
 
