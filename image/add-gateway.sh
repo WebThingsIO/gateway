@@ -96,7 +96,8 @@ main() {
   ROOT_MOUNTPOINT=rpi-root
   BOOT_MOUNTPOINT=rpi-boot
   MOZILLA_IOT_DIR=${ROOT_MOUNTPOINT}/home/pi/mozilla-iot
-  ADDONS_DIR=${MOZILLA_IOT_DIR}/gateway/build/addons
+  MOZILLA_IOT_PROFILE_DIR=${ROOT_MOUNTPOINT}/home/pi/.mozilla-iot
+  ADDONS_DIR=${MOZILLA_IOT_PROFILE_DIR}/addons
   ETC_DIR=${ROOT_MOUNTPOINT}/etc
   CMDLINE=${BOOT_MOUNTPOINT}/cmdline.txt
 
@@ -157,6 +158,7 @@ main() {
     # Copy in the gateway files
     echo "Adding gateway files from ${GATEWAY_TARBALL} to image"
     sudo mkdir -p ${MOZILLA_IOT_DIR}
+    sudo mkdir -p ${MOZILLA_IOT_PROFILE_DIR}
     sudo tar xf ${GATEWAY_TARBALL} -C ${MOZILLA_IOT_DIR}
 
     # Install default add-ons
@@ -219,6 +221,8 @@ END
     # The pi user has a user id of 1000 and a group id of 1000
     echo "Fixing permissions on ${MOZILLA_IOT_DIR}"
     sudo chown -R 1000.1000 ${MOZILLA_IOT_DIR}
+    echo "Fixing permissions on ${MOZILLA_IOT_PROFILE_DIR}"
+    sudo chown -R 1000.1000 ${MOZILLA_IOT_PROFILE_DIR}
   fi
 
   if false; then
