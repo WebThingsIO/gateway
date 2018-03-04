@@ -39,7 +39,8 @@ var TunnelService = {
                               '--service_on=https:' + endpoint +
                               ':localhost:' +
                               config.get('ports.https') + ':' +
-                              this.tunneltoken.token]);
+                              this.tunneltoken.token],
+                              {shell: true});
 
                 // TODO: we should replace the hardcoded secret by the token
                 // after change the server

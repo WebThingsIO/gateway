@@ -9,6 +9,7 @@
 'use strict';
 
 const os = require('os');
+const path = require('path');
 const home = os.homedir();
 
 module.exports = {
@@ -53,7 +54,7 @@ module.exports = {
     enabled: true,
     registration_endpoint: 'https://api.mozilla-iot.org:8443',
     domain: 'mozilla-iot.org',
-    pagekite_cmd: './pagekite.py',
+    pagekite_cmd: path.normalize(process.cwd() + '/pagekite-' + os.platform + '.py'),
     port: 443,
     certemail: 'certificate@mozilla-iot.org',
   },

@@ -90,7 +90,7 @@ server_pid=$!
 cd - >/dev/null 2>&1
 
 echo "Starting PageKite."
-"${moziot_dir}/gateway/pagekite.py" \
+"${moziot_dir}/gateway/pagekite-linux.py" \
     --clean \
     --frontend="${domain}:443" \
     --service_on="https:${domain}:localhost:4443:${token}" \
