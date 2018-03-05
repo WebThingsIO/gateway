@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals LevelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
+/* globals LevelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
+   Utils */
 
 const MULTI_LEVEL_SWITCH_OFF_BAR = 'white';
 const MULTI_LEVEL_SWITCH_OFF_BLANK = '#89b6d6';
@@ -79,9 +80,9 @@ MultiLevelSwitch.prototype.iconView = function() {
  */
 MultiLevelSwitch.prototype.htmlView = function() {
   return `<div class="thing ${this.thingCssClass}">
-    <a href="${this.href}" class="thing-details-link"></a>
+    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
     ${this.iconView()}
-    <span class="thing-name">${this.name}</span>
+    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
 }
 

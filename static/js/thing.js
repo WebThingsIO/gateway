@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals App, API */
+/* globals App, API, Utils */
 
 /**
  * Thing constructor.
@@ -73,11 +73,12 @@ var Thing = function(description, format, options) {
 Thing.prototype.htmlView = function() {
   let thingIcon = '<div class="thing-icon"></div>';
   if (this.addIconToView) {
-    thingIcon = `<img class="thing-icon" src="${this.pngBaseIcon}"/>`;
+    thingIcon =
+      `<img class="thing-icon" src="${encodeURI(this.pngBaseIcon)}"/>`;
   }
   return `<div class="thing ${this.thingCssClass}">
     ${thingIcon}
-    <span class="thing-name">${this.name}</span>
+    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
 };
 
@@ -87,7 +88,7 @@ Thing.prototype.htmlView = function() {
 Thing.prototype.htmlDetailView = function() {
   return `<div class="thing ${this.thingCssClass}">
     <img class="thing-icon"
-      ${this.addIconToView ? `src="${this.pngBaseIcon}"` : ''} />
+      ${this.addIconToView ? `src="${encodeURI(this.pngBaseIcon)}"` : ''} />
   </div>`;
 };
 
@@ -142,10 +143,10 @@ Thing.prototype.svgView = function() {
   return `<g transform="translate(${this.x},${this.y})"
             dragx="${this.x}" dragy="${this.y}"
             class="floorplan-thing">
-            <a xlink:href="${this.href}" class="svg-thing-link">
+            <a xlink:href="${encodeURI(this.href)}" class="svg-thing-link">
               <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
               <image x="-2.5" y="-2.5" width="5" height="5"
-                xlink:href="${this.svgBaseIcon}" />
+                xlink:href="${encodeURI(this.svgBaseIcon)}" />
               ${this.makeWrappedSVGText(this.name).outerHTML}
             </a>
           </g>`;

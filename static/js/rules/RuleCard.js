@@ -1,4 +1,4 @@
-/* global Rule, page */
+/* global Rule, page, Utils */
 
 /**
  * A summary of a Rule in card format
@@ -36,13 +36,14 @@ function RuleCard(gateway, elt, id, desc) {
       </div>
     </div>
     <div class="rule-info">
-      <h3>${this.rule.name}</h3>
-      <p>${this.rule.toHumanDescription()}</p>
+      <h3>${Utils.escapeHtml(this.rule.name)}</h3>
+      <p>${Utils.escapeHtml(this.rule.toHumanDescription())}</p>
     </div>
     <form class="rule-switch switch">
-      <input type="checkbox" id="rule-switch-${id}"
+      <input type="checkbox" id="rule-switch-${Utils.escapeHtml(id)}"
              class="switch-checkbox" ${checked}/>
-      <label class="switch-slider" for="rule-switch-${id}"></label>
+      <label class="switch-slider" for="rule-switch-${Utils.escapeHtml(id)}">
+      </label>
     </form>
   `;
 
@@ -69,7 +70,7 @@ function RuleCard(gateway, elt, id, desc) {
 }
 
 RuleCard.prototype.onEditButtonClick = function() {
-  page('/rules/' + this.rule.id);
+  page('/rules/' + encodeURIComponent(this.rule.id));
 };
 
 RuleCard.prototype.onDeleteButtonClick = function() {

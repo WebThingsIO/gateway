@@ -9,6 +9,8 @@
  */
 'use strict';
 
+/* globals Utils */
+
 function OnOffDetail(thing) {
   this.thing = thing;
 }
@@ -29,9 +31,10 @@ OnOffDetail.prototype.view = function() {
     <div class="thing-detail on-off-switch-switch">
       <div class="thing-detail-contents">
         <form class="switch">
-          <input type="checkbox" id="switch-${id}"
+          <input type="checkbox" id="switch-${Utils.escapeHtml(id)}"
                  class="switch-checkbox" ${checked}/>
-          <label class="switch-slider" for="switch-${id}"></label>
+          <label class="switch-slider" for="switch-${Utils.escapeHtml(id)}">
+          </label>
         </form>
         <div class="on-off-label">
           ${onoff}

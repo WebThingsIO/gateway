@@ -9,6 +9,8 @@
  */
 'use strict';
 
+/* globals Utils */
+
 /**
  * Adapter constructor.
  *
@@ -38,13 +40,15 @@ Adapter.prototype.view = function() {
   return `
     <li class="adapter-item">
       <div class="adapter-settings-header">
-        <span class="adapter-settings-name">${this.name}</span>
-        <span class="adapter-settings-description">${this.id}</span>
+        <span class="adapter-settings-name">${Utils.escapeHtml(this.name)}
+        </span>
+        <span class="adapter-settings-description">${Utils.escapeHtml(this.id)}
+        </span>
       </div>
       <div class="adapter-settings-controls">
-        <!--button id="adapter-toggle-${this.id}"
+        <!--button id="adapter-toggle-${Utils.escapeHtml(this.id)}"
           class="text-button ${buttonClass}"
-          adapterEnabled="${this.ready}">
+          adapterEnabled="${Utils.escapeHtml(this.ready)}">
           ${buttonText}
         </button-->
       </div>
@@ -58,7 +62,8 @@ Adapter.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
   /*
-  const button = document.getElementById(`adapter-toggle-${this.id}`);
+  const button = document.getElementById(
+    `adapter-toggle-${Utils.escapeHtml(this.id)}`);
   button.addEventListener('click', this.handleToggle.bind(this));
   */
 };

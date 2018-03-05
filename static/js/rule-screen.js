@@ -275,7 +275,7 @@ const RuleScreen = {
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
-      rulePromise = fetch('/rules/' + ruleId, {
+      rulePromise = fetch('/rules/' + encodeURIComponent(ruleId), {
         headers: API.headers()
       }).then(function(res) {
         return res.json();

@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals page */
+/* globals page, Utils */
 
 /**
  * User constructor.
@@ -30,17 +30,19 @@ var User = function(metadata) {
  */
 User.prototype.view = function() {
   return `
-    <li id="user-item-${this.id}" class="user-item">
+    <li id="user-item-${Utils.escapeHtml(this.id)}" class="user-item">
       <div class="user-settings-header">
-        <span class="user-settings-name">${this.name}</span>
-        <span class="user-settings-description">${this.email}</span>
+        <span class="user-settings-name">${Utils.escapeHtml(this.name)}</span>
+        <span class="user-settings-description">
+          ${Utils.escapeHtml(this.email)}
+        </span>
       </div>
       <div class="user-settings-controls">
-        <button id="user-remove-${this.id}"
+        <button id="user-remove-${Utils.escapeHtml(this.id)}"
           class="text-button user-settings-remove">
           Remove
         </button>
-        <button id="user-edit-${this.id}"
+        <button id="user-edit-${Utils.escapeHtml(this.id)}"
           class="text-button user-settings-edit">
           Edit
         </button>
@@ -54,10 +56,12 @@ User.prototype.view = function() {
 User.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
-  const removeButton = document.getElementById(`user-remove-${this.id}`);
+  const removeButton = document.getElementById(
+    `user-remove-${Utils.escapeHtml(this.id)}`);
   removeButton.addEventListener('click', this.handleRemove.bind(this));
 
-  const editButton = document.getElementById(`user-edit-${this.id}`);
+  const editButton = document.getElementById(
+    `user-edit-${Utils.escapeHtml(this.id)}`);
   editButton.addEventListener('click', this.handleEdit.bind(this));
 };
 
@@ -67,7 +71,8 @@ User.prototype.render = function() {
 User.prototype.handleRemove = function() {
   window.API.deleteUser(this.id)
     .then(() => {
-      const el = document.getElementById(`user-item-${this.id}`);
+      const el = document.getElementById(
+        `user-item-${Utils.escapeHtml(this.id)}`);
       el.parentNode.removeChild(el);
 
       if (this.loggedIn) {
@@ -85,5 +90,5 @@ User.prototype.handleRemove = function() {
  * Handle a click on the edit button.
  */
 User.prototype.handleEdit = function() {
-  page(`/settings/users/edit/${this.id}`);
+  page(`/settings/users/edit/${encodeURIComponent(this.id)}`);
 };

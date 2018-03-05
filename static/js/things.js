@@ -145,7 +145,7 @@ var ThingsScreen = {
       }
     };
     // Fetch a thing from the server
-    fetch('/things/' + id, opts).then((function(response) {
+    fetch('/things/' + encodeURIComponent(id), opts).then((function(response) {
       if (response.status == 404) {
         this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
         return;

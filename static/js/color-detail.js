@@ -9,6 +9,9 @@
  */
 
 'use strict';
+
+/* globals Utils */
+
 function ColorDetail(thing) {
   this.thing = thing;
 }
@@ -26,7 +29,7 @@ ColorDetail.prototype.view = function() {
   return `<div class="thing-detail-container">
     <div class="thing-detail">
       <input class="thing-detail-contents color-light-color" type="color"
-             value="${color}"/>
+             value="${Utils.escapeHtml(color)}"/>
     </div>
     <div class="thing-detail-label">Color</div>
   </div>`;

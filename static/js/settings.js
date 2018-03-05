@@ -11,7 +11,7 @@
 'use strict';
 
 /* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon,
-   User */
+   User, Utils */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -531,7 +531,8 @@ var SettingsScreen = {
         upToDateElt.textContent = 'Your system is up to date';
         updateNow.classList.add('hidden');
       }
-      versionElt.textContent = `Current version: ${status.version}`;
+      versionElt.textContent =
+        `Current version: ${Utils.escapeHtml(status.version)}`;
       let statusText = 'Last update: ';
 
       if (status.timestamp) {
@@ -633,7 +634,7 @@ var SettingsScreen = {
     }
     let clientId = revoke.dataset.clientId;
 
-    fetch('/authorizations/' + clientId, {
+    fetch('/authorizations/' + encodeURIComponent(clientId), {
       headers: API.headers(),
       method: 'DELETE'
     }).then(() => {

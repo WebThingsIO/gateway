@@ -9,6 +9,8 @@
  */
 'use strict';
 
+/* globals Utils */
+
 /**
  * DiscoveredAddon constructor.
  *
@@ -35,7 +37,7 @@ DiscoveredAddon.prototype.view = function() {
     el = '<span class="addon-discovery-settings-added">Added</span>';
   } else {
     el = `
-      <button id="addon-install-${this.name}"
+      <button id="addon-install-${Utils.escapeHtml(this.name)}"
         class="text-button addon-discovery-settings-add">
         Add
       </button>`;
@@ -44,9 +46,15 @@ DiscoveredAddon.prototype.view = function() {
   return `
     <li class="discovered-addon-item">
       <div class="addon-settings-header">
-        <span class="addon-settings-name">${this.displayName}</span>
-        <span class="addon-settings-version">${this.version}</span>
-        <span class="addon-settings-description">${this.description}</span>
+        <span class="addon-settings-name">
+          ${Utils.escapeHtml(this.displayName)}
+        </span>
+        <span class="addon-settings-version">
+          ${Utils.escapeHtml(this.version)}
+        </span>
+        <span class="addon-settings-description">
+          ${Utils.escapeHtml(this.description)}
+        </span>
       </div>
       <div class="addon-settings-controls">
         ${el}
@@ -61,7 +69,8 @@ DiscoveredAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
   if (!this.installed) {
-    const button = document.getElementById(`addon-install-${this.name}`);
+    const button = document.getElementById(
+      `addon-install-${Utils.escapeHtml(this.name)}`);
     button.addEventListener('click', this.handleInstall.bind(this));
   }
 };

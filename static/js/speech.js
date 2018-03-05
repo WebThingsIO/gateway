@@ -53,7 +53,7 @@ var Speech = {
             x.className = 'show';
             setTimeout(function(){ x.className =
                 x.className.replace('show', ''); }, 3000);
-            new Audio(`/audio/${audio}.mp3`).play();
+            new Audio(`/audio/${encodeURIComponent(audio)}.mp3`).play();
           }
           document.getElementById('stm-levels').classList.add('hidden');
           document.getElementById('speech-button').style.backgroundImage =
@@ -72,7 +72,7 @@ var Speech = {
           var opts = {
             method: 'POST',
             cache: 'default',
-            body: `{"text":"${results[0].text}"}`,
+            body: JSON.stringify({text: results[0].text}),
             headers: {
                 'Authorization': `Bearer ${window.API.jwt}`,
                 'Accept': 'application/json',
