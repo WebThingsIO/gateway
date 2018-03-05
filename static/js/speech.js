@@ -72,7 +72,7 @@ var Speech = {
           var opts = {
             method: 'POST',
             cache: 'default',
-            body: `{"text":"${results[0].text.replace(/"/g, '\\"')}"}`,
+            body: JSON.stringify({text: results[0].text}),
             headers: {
                 'Authorization': `Bearer ${window.API.jwt}`,
                 'Accept': 'application/json',
