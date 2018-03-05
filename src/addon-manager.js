@@ -651,8 +651,7 @@ class AddonManager extends EventEmitter {
         this.updateAddons();
 
         // Check every day.
-        const delay = 60 * 1000;
-        //const delay = 24 * 60 * 60 * 1000;
+        const delay = 24 * 60 * 60 * 1000;
         setInterval(this.updateAddons, delay);
       }, 10000);
     }
