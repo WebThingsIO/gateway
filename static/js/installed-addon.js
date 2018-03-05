@@ -9,6 +9,8 @@
  */
 'use strict';
 
+/* globals Utils */
+
 /**
  * InstalledAddon constructor.
  *
@@ -49,22 +51,28 @@ InstalledAddon.prototype.view = function() {
   const updateButtonClass = this.updateUrl ? '' : 'hidden';
 
   return `
-    <li id="addon-item-${this.name}" class="addon-item">
+    <li id="addon-item-${Utils.escapeHtml(this.name)}" class="addon-item">
       <div class="addon-settings-header">
-        <span class="addon-settings-name">${this.name}</span>
-        <span class="addon-settings-version">${this.version}</span>
-        <span class="addon-settings-description">${this.description}</span>
+        <span class="addon-settings-name">
+          ${Utils.escapeHtml(this.name)}
+        </span>
+        <span class="addon-settings-version">
+          ${Utils.escapeHtml(this.version)}
+        </span>
+        <span class="addon-settings-description">
+          ${Utils.escapeHtml(this.description)}
+        </span>
       </div>
       <div class="addon-settings-controls">
-        <button id="addon-update-${this.name}"
+        <button id="addon-update-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-update ${updateButtonClass}">
           Update
         </button>
-        <button id="addon-remove-${this.name}"
+        <button id="addon-remove-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-remove">
           Remove
         </button>
-        <button id="addon-toggle-${this.name}"
+        <button id="addon-toggle-${Utils.escapeHtml(this.name)}"
           class="text-button ${toggleButtonClass}">
           ${toggleButtonText}
         </button>
@@ -78,13 +86,16 @@ InstalledAddon.prototype.view = function() {
 InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
-  const updateButton = document.getElementById(`addon-update-${this.name}`);
+  const updateButton = document.getElementById(
+    `addon-update-${Utils.escapeHtml(this.name)}`);
   updateButton.addEventListener('click', this.handleUpdate.bind(this));
 
-  const removeButton = document.getElementById(`addon-remove-${this.name}`);
+  const removeButton = document.getElementById(
+    `addon-remove-${Utils.escapeHtml(this.name)}`);
   removeButton.addEventListener('click', this.handleRemove.bind(this));
 
-  const toggleButton = document.getElementById(`addon-toggle-${this.name}`);
+  const toggleButton = document.getElementById(
+    `addon-toggle-${Utils.escapeHtml(this.name)}`);
   toggleButton.addEventListener('click', this.handleToggle.bind(this));
 };
 
@@ -93,8 +104,8 @@ InstalledAddon.prototype.render = function() {
  */
 InstalledAddon.prototype.handleUpdate = function(e) {
   const controlDiv = e.target.parentNode;
-  const versionDiv =
-    document.querySelector(`#addon-item-${this.name} .addon-settings-version`);
+  const versionDiv = document.querySelector(
+    `#addon-item-${Utils.escapeHtml(this.name)} .addon-settings-version`);
   const updating = document.createElement('span');
   updating.classList.add('addon-updating');
   updating.innerText = 'Updating...';
@@ -117,7 +128,8 @@ InstalledAddon.prototype.handleUpdate = function(e) {
 InstalledAddon.prototype.handleRemove = function() {
   window.API.uninstallAddon(this.name)
     .then(() => {
-      const el = document.getElementById(`addon-item-${this.name}`);
+      const el = document.getElementById(
+        `addon-item-${Utils.escapeHtml(this.name)}`);
       el.parentNode.removeChild(el);
       this.addonsMap.delete(this.name);
     })

@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals ColorDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout */
+/* globals ColorDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
+   Utils */
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -68,7 +69,7 @@ ColorLight.prototype = Object.create(OnOffSwitch.prototype);
 ColorLight.prototype.iconView = function() {
   let colorStyle = '';
   if (this.properties.on) {
-    colorStyle = `background: ${this.properties.color}`;
+    colorStyle = `background: ${Utils.escapeHtml(this.properties.color)}`;
   }
   return `<div class="color-light" style="${colorStyle}">
     <div class="color-light-icon">
@@ -130,9 +131,9 @@ ColorLight.prototype.iconView = function() {
  */
 ColorLight.prototype.htmlView = function() {
   return `<div class="thing ${this.thingCssClass}">
-    <a href="${this.href}" class="thing-details-link"></a>
+    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
     ${this.iconView()}
-    <span class="thing-name">${this.name}</span>
+    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
 };
 

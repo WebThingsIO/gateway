@@ -12,7 +12,7 @@
 'use strict';
 
 /* globals LabelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-  LevelDetail */
+   LevelDetail, Utils */
 
 /**
  * SmartPlug Constructor (extends OnOffSwitch).
@@ -110,9 +110,9 @@ SmartPlug.prototype.iconView = function() {
  */
 SmartPlug.prototype.htmlView = function() {
   return `<div class="thing smart-plug">
-    <a href="${this.href}" class="thing-details-link"></a>
+    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
     ${this.iconView()}
-    <span class="thing-name">${this.name}</span>
+    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`
 };
 

@@ -9,6 +9,9 @@
  */
 
 'use strict';
+
+/* globals Utils */
+
 function LevelDetail(thing) {
   this.thing = thing;
 }
@@ -28,8 +31,8 @@ LevelDetail.prototype.view = function() {
     <div class="thing-detail">
       <div class="thing-detail-contents">
         <form class="level">
-          <input type="range" min="0" max="100" value="${level}"
-                 class="level-input"/>
+          <input type="range" min="0" max="100"
+            value="${Utils.escapeHtml(level)}" class="level-input"/>
         </form>
       </div>
     </div>

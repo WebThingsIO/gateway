@@ -1,4 +1,4 @@
-/* global Draggable */
+/* global Draggable, Utils */
 
 /**
  * An element representing a component of a rule.  Drag-and-dropped within
@@ -20,11 +20,11 @@ function RulePartBlock(ruleArea, rule, name, icon, x, y) {
 
   this.snapToGrid(x, y);
   this.elt.innerHTML = `<div class="rule-part-block">
-      <img class="rule-part-icon" src="${icon}"/>
+      <img class="rule-part-icon" src="${encodeURI(icon)}"/>
     </div>
     <div class="rule-part-info">
       <h3 class="rule-part-name">
-      ${name}
+      ${Utils.escapeHtml(name)}
       </h3>
     </div>`;
 

@@ -9,6 +9,8 @@
  */
 'use strict';
 
+/* globals Utils */
+
 function LabelDetail(thing, name, friendlyName, unit) {
   this.thing = thing;
   this.name = name;
@@ -17,22 +19,26 @@ function LabelDetail(thing, name, friendlyName, unit) {
 }
 
 LabelDetail.prototype.attach = function() {
-  this.label = this.thing.element.querySelector(`#label-${this.name}`);
+  this.label = this.thing.element.querySelector(
+    `#label-${Utils.escapeHtml(this.name)}`);
 };
 
 LabelDetail.prototype.view = function() {
   const value = parseFloat(this.thing.properties[this.name]);
-  const data = value ? `${value.toFixed(2)}${this.unit}` : `0${this.unit}`;
+  const data = value ? `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
+    `0${Utils.escapeHtml(this.unit)}`;
 
   return `<div class="thing-detail-container">
     <div class="thing-detail label">
       <div class="thing-detail-contents">
-        <div class="generic-label" id="label-${this.name}">
+        <div class="generic-label" id="label-${Utils.escapeHtml(this.name)}">
           ${data}
         </div>
       </div>
     </div>
-    <div class="thing-detail-label">${this.friendlyName}</div>
+    <div class="thing-detail-label">
+      ${Utils.escapeHtml(this.friendlyName)}
+    </div>
   </div>`;
 };
 
@@ -42,6 +48,7 @@ LabelDetail.prototype.update = function() {
   }
 
   const value = parseFloat(this.thing.properties[this.name]);
-  this.label.innerText =
-    value ? `${value.toFixed(2)}${this.unit}` : `0${this.unit}`;
+  this.label.innerText = value ?
+    `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
+    `0${Utils.escapeHtml(this.unit)}`;
 };

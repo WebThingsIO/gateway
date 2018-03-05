@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals Thing */
+/* globals Thing, Utils */
 
 /**
  * MultiLevelSensor Constructor (extends Thing).
@@ -104,7 +104,7 @@ MultiLevelSensor.prototype.iconView = function() {
 MultiLevelSensor.prototype.htmlView = function() {
   return `<div class="thing multi-level-sensor">
     ${this.iconView()}
-    <span class="thing-name">${this.name}</span>
+    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
 };
 

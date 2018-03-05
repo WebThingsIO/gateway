@@ -91,11 +91,11 @@
           'Authorization': `Bearer ${window.API.jwt}`,
         }
       };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
+      return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
+        if (!res.ok) {
           throw new Error('Unable to access user info');
         }
-        return response.json();
+        return res.json();
       });
     },
 
@@ -128,8 +128,8 @@
         },
         body: JSON.stringify({id, name, email, password, newPassword}),
       };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
+      return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
+        if (!res.ok) {
           throw new Error('Failed to edit user');
         }
       });
@@ -143,8 +143,8 @@
           'Authorization': `Bearer ${window.API.jwt}`,
         }
       };
-      return fetch(`/users/${id}`, opts).then((response) => {
-        if (!response.ok) {
+      return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
+        if (!res.ok) {
           throw new Error('Failed to delete user');
         }
       });
@@ -214,7 +214,7 @@
       const payload = {
         'enabled': enabled
       };
-      return fetch('/addons/' + addonName, {
+      return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: headers
@@ -258,7 +258,7 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-      return fetch('/addons/' + addonName, {
+      return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'DELETE',
         headers: headers
       }).then(function(response) {
@@ -281,7 +281,7 @@
         'url': addonUrl,
         'checksum': addonChecksum,
       };
-      return fetch('/addons/' + addonName, {
+      return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'PATCH',
         body: JSON.stringify(payload),
         headers: headers
@@ -299,22 +299,23 @@
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json'
       };
-      return fetch('/settings/experiments/' + experimentName, {
-        method: 'GET',
-        headers: headers
-      })
-      .then(function(response) {
-        if (!response.ok) {
-          throw new Error('Error getting ' + experimentName);
-        }
+      return fetch(
+        '/settings/experiments/' + encodeURIComponent(experimentName), {
+          method: 'GET',
+          headers: headers
+        })
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('Error getting ' + experimentName);
+          }
 
-        return response.json()
-          .then(function(json) {
-            return json.enabled;
-          }).catch(function(e) {
-            throw new Error('Error getting ' + experimentName + ' ' + e);
-          });
-      });
+          return response.json()
+            .then(function(json) {
+              return json.enabled;
+            }).catch(function(e) {
+              throw new Error('Error getting ' + experimentName + ' ' + e);
+            });
+        });
     },
 
     setExperimentSetting: function(experimentName, enabled) {
@@ -326,19 +327,20 @@
       const payload = {
        'enabled': enabled
       };
-      return fetch('/settings/experiments/' + experimentName, {
-       method: 'PUT',
-       body: JSON.stringify(payload),
-       headers: headers
-      })
-      .then(function(response) {
-        if (!response.ok) {
-         throw new Error(
-            'Unexpected response code while setting experiment setting');
-        }
+      return fetch(
+        '/settings/experiments/' + encodeURIComponent(experimentName), {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+          headers: headers
+        })
+        .then(function(response) {
+          if (!response.ok) {
+           throw new Error(
+              'Unexpected response code while setting experiment setting');
+          }
 
-       console.log('Set ' + experimentName + ' to ' + enabled);
-      });
+         console.log('Set ' + experimentName + ' to ' + enabled);
+        });
     },
 
     getUpdateStatus: function() {

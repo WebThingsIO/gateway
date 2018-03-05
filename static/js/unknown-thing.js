@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals Thing, ThingDetailLayout */
+/* globals Thing, ThingDetailLayout, Utils */
 
 /**
  * UnknownThing Constructor (extends Thing).
@@ -170,18 +170,18 @@ UnknownThing.prototype.setProperty = function(name, value) {
 UnknownThing.prototype.htmlView = function() {
   if (Object.keys(this.displayedProperties).length > 0) {
     return `<div class="thing">
-      <a href="${this.href}" class="thing-details-link"></a>
+      <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
       <div class="unknown-thing">
         <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
       </div>
-      <span class="thing-name">${this.name}</span>
+      <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
     </div>`;
   } else {
     return `<div class="thing">
       <div class="unknown-thing">
         <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
       </div>
-      <span class="thing-name">${this.name}</span>
+      <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
     </div>`;
   }
 };
@@ -217,7 +217,8 @@ function StringDetail(thing, name) {
  * Attach to the view.
  */
 StringDetail.prototype.attach = function() {
-  this.input = this.thing.element.querySelector(`#string-${this.name}`);
+  this.input = this.thing.element.querySelector(
+    `#string-${Utils.escapeHtml(this.name)}`);
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
@@ -231,12 +232,12 @@ StringDetail.prototype.view = function() {
     <div class="thing-detail string-input">
       <div class="thing-detail-contents">
         <form class="generic-string">
-          <input type="text" id="string-${this.name}"
+          <input type="text" id="string-${Utils.escapeHtml(this.name)}"
             class="generic-string-input"/>
         </form>
       </div>
     </div>
-    <div class="thing-detail-label">${this.name}</div>
+    <div class="thing-detail-label">${Utils.escapeHtml(this.name)}</div>
   </div>`;
 };
 
@@ -266,7 +267,8 @@ function NumberDetail(thing, name, unit, min, max) {
  * Attach to the view.
  */
 NumberDetail.prototype.attach = function() {
-  this.input = this.thing.element.querySelector(`#number-${this.name}`);
+  this.input = this.thing.element.querySelector(
+    `#number-${Utils.escapeHtml(this.name)}`);
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
@@ -276,26 +278,27 @@ NumberDetail.prototype.attach = function() {
  * Build the detail view.
  */
 NumberDetail.prototype.view = function() {
-  const min = this.min === null ? '' : `min=${this.min}`;
-  const max = this.max === null ? '' : `max=${this.max}`;
+  const min = this.min === null ? '' : `min=${Utils.escapeHtml(this.min)}`;
+  const max = this.max === null ? '' : `max=${Utils.escapeHtml(this.max)}`;
   const cls = max && min ? '' : 'hide-number-spinner';
   let unit = '';
   if (this.unit !== null) {
-    unit = `<div class="generic-number-label">${this.unit}</div>`;
+    unit =
+      `<div class="generic-number-label">${Utils.escapeHtml(this.unit)}</div>`;
   }
 
   return `<div class="thing-detail-container">
     <div class="thing-detail number-input">
       <div class="thing-detail-contents">
         <form class="generic-number">
-          <input type="number" id="number-${this.name}"
+          <input type="number" id="number-${Utils.escapeHtml(this.name)}"
             class="generic-number-input ${cls}"
             ${min} ${max} value="0" step="any" />
         </form>
         ${unit}
       </div>
     </div>
-    <div class="thing-detail-label">${this.name}</div>
+    <div class="thing-detail-label">${Utils.escapeHtml(this.name)}</div>
   </div>`;
 };
 
@@ -322,7 +325,8 @@ function BooleanDetail(thing, name) {
  * Attach to the view.
  */
 BooleanDetail.prototype.attach = function() {
-  this.input = this.thing.element.querySelector(`#checkbox-${this.name}`);
+  this.input = this.thing.element.querySelector(
+    `#checkbox-${Utils.escapeHtml(this.name)}`);
   this.input.addEventListener('click', () => {
     this.thing.setProperty(this.name, this.input.checked);
   });
@@ -336,13 +340,13 @@ BooleanDetail.prototype.view = function() {
     <div class="thing-detail boolean-switch">
       <div class="thing-detail-contents">
         <form class="generic-boolean">
-          <input type="checkbox" id="checkbox-${this.name}"
+          <input type="checkbox" id="checkbox-${Utils.escapeHtml(this.name)}"
             class="generic-checkbox" />
-          <label for="checkbox-${this.name}"></label>
+          <label for="checkbox-${Utils.escapeHtml(this.name)}"></label>
         </form>
       </div>
     </div>
-    <div class="thing-detail-label">${this.name}</div>
+    <div class="thing-detail-label">${Utils.escapeHtml(this.name)}</div>
   </div>`;
 };
 

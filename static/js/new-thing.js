@@ -10,6 +10,8 @@
 
 'use strict';
 
+/* globals Utils */
+
 /**
  * New Thing constructor.
  *
@@ -21,7 +23,8 @@ var NewThing = function(id, description) {
   this.description = description;
   this.container = document.getElementById('new-things');
   this.render();
-  this.element = document.getElementById('new-thing-' + this.id);
+  this.element =
+    document.getElementById(`new-thing-${Utils.escapeHtml(this.id)}`);
   this.nameInput = this.element.getElementsByClassName('new-thing-name')[0];
   this.saveButton = this.element.getElementsByClassName(
     'new-thing-save-button')[0];
@@ -34,12 +37,12 @@ var NewThing = function(id, description) {
 NewThing.prototype.view = function() {
   switch(this.description.type) {
     case 'binarySensor':
-      return '<div id="new-thing-' + this.id + '"' +
+      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing binary-sensor">' +
              '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
-                  this.description.name + '"></input>' +
+                  Utils.escapeHtml(this.description.name) + '"></input>' +
              '    <span class="new-thing-type">Binary Sensor</span>' +
              '  </div>' +
              '  <button class="new-thing-save-button text-button">' +
@@ -47,12 +50,12 @@ NewThing.prototype.view = function() {
              '  </button>' +
              '</div>';
     case 'multiLevelSensor':
-      return '<div id="new-thing-' + this.id + '"' +
+      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing binary-sensor">' +
              '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
-                  this.description.name + '"></input>' +
+                  Utils.escapeHtml(this.description.name) + '"></input>' +
              '    <span class="new-thing-type">Multi Level Sensor</span>' +
              '  </div>' +
              '  <button class="new-thing-save-button text-button">' +
@@ -60,12 +63,12 @@ NewThing.prototype.view = function() {
              '  </button>' +
              '</div>';
     case 'onOffLight':
-      return `<div id="new-thing-${this.id}"
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                    class="new-thing on-off-light">
          <div class="new-thing-icon"></div>
          <div class="new-thing-metadata">
            <input type="text" class="new-thing-name"
-                  value="${this.description.name}"/>
+                  value="${Utils.escapeHtml(this.description.name)}"/>
            <span class="new-thing-type">On/Off Light</span>
          </div>
          <button class="new-thing-save-button text-button">
@@ -73,12 +76,12 @@ NewThing.prototype.view = function() {
          </button>
        </div>`;
     case 'onOffColorLight':
-      return `<div id="new-thing-${this.id}"
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                    class="new-thing on-off-light">
          <div class="new-thing-icon"></div>
          <div class="new-thing-metadata">
            <input type="text" class="new-thing-name"
-                  value="${this.description.name}"/>
+                  value="${Utils.escapeHtml(this.description.name)}"/>
            <span class="new-thing-type">Color Light</span>
          </div>
          <button class="new-thing-save-button text-button">
@@ -86,12 +89,12 @@ NewThing.prototype.view = function() {
          </button>
        </div>`;
     case 'dimmableLight':
-      return `<div id="new-thing-${this.id}"
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                    class="new-thing on-off-light">
          <div class="new-thing-icon"></div>
          <div class="new-thing-metadata">
            <input type="text" class="new-thing-name"
-                  value="${this.description.name}"/>
+                  value="${Utils.escapeHtml(this.description.name)}"/>
            <span class="new-thing-type">Dimmable Light</span>
          </div>
          <button class="new-thing-save-button text-button">
@@ -99,12 +102,12 @@ NewThing.prototype.view = function() {
          </button>
        </div>`;
     case 'dimmableColorLight':
-      return `<div id="new-thing-${this.id}"
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                    class="new-thing on-off-light">
          <div class="new-thing-icon"></div>
          <div class="new-thing-metadata">
            <input type="text" class="new-thing-name"
-                  value="${this.description.name}"/>
+                  value="${Utils.escapeHtml(this.description.name)}"/>
            <span class="new-thing-type">Dimmable Color Light</span>
          </div>
          <button class="new-thing-save-button text-button">
@@ -112,12 +115,12 @@ NewThing.prototype.view = function() {
          </button>
        </div>`;
     case 'multiLevelSwitch':
-      return '<div id="new-thing-' + this.id + '"' +
+      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing on-off-switch">' +
              '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
-                  this.description.name + '"></input>' +
+                  Utils.escapeHtml(this.description.name) + '"></input>' +
              '    <span class="new-thing-type">Multi Level Switch</span>' +
              '  </div>' +
              '  <button class="new-thing-save-button text-button">' +
@@ -125,12 +128,12 @@ NewThing.prototype.view = function() {
              '  </button>' +
              '</div>';
     case 'onOffSwitch':
-      return '<div id="new-thing-' + this.id + '"' +
+      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing on-off-switch">' +
              '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
-                  this.description.name + '"></input>' +
+                  Utils.escapeHtml(this.description.name) + '"></input>' +
              '    <span class="new-thing-type">On/Off Switch</span>' +
              '  </div>' +
              '  <button class="new-thing-save-button text-button">' +
@@ -138,12 +141,12 @@ NewThing.prototype.view = function() {
              '  </button>' +
              '</div>';
      case 'smartPlug':
-       return `<div id="new-thing-${this.id}"
+       return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                     class="new-thing smart-plug">
           <div class="new-thing-icon"></div>
           <div class="new-thing-metadata">
             <input type="text" class="new-thing-name"
-                   value="${this.description.name}"/>
+                   value="${Utils.escapeHtml(this.description.name)}"/>
             <span class="new-thing-type">Smart Plug</span>
           </div>
           <button class="new-thing-save-button text-button">
@@ -151,12 +154,12 @@ NewThing.prototype.view = function() {
           </button>
         </div>`;
     default:
-      return '<div id="new-thing-' + this.id + '"' +
+      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing">' +
              '  <div class="new-thing-icon"></div>'+
              '  <div class="new-thing-metadata">' +
              '    <input type="text" class="new-thing-name" value="' +
-                  this.description.name + '"></input>' +
+                  Utils.escapeHtml(this.description.name) + '"></input>' +
              '    <span class="new-thing-type">Unknown device type</span>' +
              '  </div>' +
              '  <button class="new-thing-save-button text-button">' +

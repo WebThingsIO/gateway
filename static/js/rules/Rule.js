@@ -54,7 +54,7 @@ Rule.prototype.update = function() {
 
   let request = null;
   if (typeof(this.id) !== 'undefined') {
-    request = fetch('/rules/' + this.id, fetchOptions);
+    request = fetch('/rules/' + encodeURIComponent(this.id), fetchOptions);
   } else {
     fetchOptions.method = 'POST';
     request = fetch('/rules/', fetchOptions).then(res => {
@@ -80,7 +80,7 @@ Rule.prototype.delete = function() {
     return;
   }
 
-  return fetch('/rules/' + this.id, fetchOptions);
+  return fetch('/rules/' + encodeURIComponent(this.id), fetchOptions);
 };
 
 /**
