@@ -756,7 +756,7 @@ class AddonManager extends EventEmitter {
     }
 
     const adapters = this.getAdaptersByPackageName(packageName);
-    const adapterNames = adapters.map((a) => a.id);
+    const adapterIds = adapters.map((a) => a.id);
     const unloadPromises = [];
     for (const a of adapters) {
       console.log('Unloading', a.name);
@@ -774,8 +774,8 @@ class AddonManager extends EventEmitter {
 
         // Remove devices owned by this add-on.
         for (const deviceId of Object.keys(this.devices)) {
-          if (adapterNames.includes(this.devices[deviceId].adapter.id)) {
-            delete this.devices[deviceId];
+          if (adapterIds.includes(this.devices[deviceId].adapter.id)) {
+            this.handleDeviceRemoved(this.devices[deviceId]);
           }
         }
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
