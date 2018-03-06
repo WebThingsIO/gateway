@@ -25,6 +25,7 @@
   },
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
+    "archiver": "^2.1.1",
     "asn1.js": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
@@ -75,6 +76,7 @@
     "eslint": "^4.7.0",
     "eslint-plugin-html": "^4.0.0",
     "jest": "^21.2.1",
+    "jszip": "^3.1.5",
     "nock": "^9.0.18",
     "node-rest-client": "^3.1.0",
     "nyc": "^11.0.2",
