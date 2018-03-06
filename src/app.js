@@ -107,6 +107,7 @@ function startHttpGateway() {
     addonManager.loadAddons();
     rulesEngineConfigure(httpServer);
     console.log('Listening on port', httpServer.address().port);
+    commandParserConfigure(httpServer);
   });
 }
 
