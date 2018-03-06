@@ -755,8 +755,9 @@ class AddonManager extends EventEmitter {
       pluginProcess = plugin.process;
     }
 
-    let adapters = this.getAdaptersByPackageName(packageName);
-    let unloadPromises = [];
+    const adapters = this.getAdaptersByPackageName(packageName);
+    const adapterNames = adapters.map((a) => a.id);
+    const unloadPromises = [];
     for (const a of adapters) {
       console.log('Unloading', a.name);
       unloadPromises.push(a.unload());
@@ -769,6 +770,13 @@ class AddonManager extends EventEmitter {
         if (pluginProcess.p) {
           console.log(`Killing ${packageName} plugin.`);
           pluginProcess.p.kill();
+        }
+
+        // Remove devices owned by this add-on.
+        for (const deviceId of Object.keys(this.devices)) {
+          if (adapterNames.includes(this.devices[deviceId].adapter.id)) {
+            delete this.devices[deviceId];
+          }
         }
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
