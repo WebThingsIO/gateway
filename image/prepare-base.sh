@@ -69,9 +69,6 @@ sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
 Description=Mozilla IoT Gateway Client
 After=network.target
 OnFailure=mozilla-iot-gateway.update-rollback.service
-# If the gateway fails more than twice within 30 minutes, roll back.
-StartLimitIntervalSec=1800
-StartLimitBurst=2
 
 [Service]
 Type=simple
