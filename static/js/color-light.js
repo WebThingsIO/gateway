@@ -190,7 +190,7 @@ ColorLight.prototype.updateStatus = function() {
   }
 
   Promise.all(promises).then(responses => {
-    return Promiose.all(responses.map(response => {
+    return Promise.all(responses.map(response => {
       return response.json();
     }));
   }).then(responses => {
