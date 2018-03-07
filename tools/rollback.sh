@@ -20,7 +20,10 @@ function recentEnough() {
 }
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old"); then
+  systemctl stop mozilla-iot-gateway
   rm -fr gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
+  systemctl reset-failed mozilla-iot-gateway
+  systemctl start mozilla-iot-gateway
 fi
