@@ -57,11 +57,19 @@ DimmableColorLight.prototype.updateStatus = function() {
     headers: API.headers()
   };
 
-  let onFetch = fetch(this.onPropertyUrl, opts);
-  let colorFetch = fetch(this.colorPropertyUrl, opts);
-  let levelFetch = fetch(this.levelPropertyUrl, opts);
+  const promises = [];
+  promises.push(fetch(this.onPropertyUrl, opts));
+  promises.push(fetch(this.levelPropertyUrl, opts));
 
-  Promise.all([onFetch, colorFetch, levelFetch]).then(responses => {
+  if (this.hasOwnProperty('colorPropertyUrl')) {
+    promises.push(fetch(this.colorPropertyUrl, opts));
+  }
+
+  if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
+    promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
+  }
+
+  Promise.all(promises).then(responses => {
     return Promise.all(responses.map(response => {
       return response.json();
     }));
@@ -91,6 +99,9 @@ DimmableColorLight.prototype.onPropertyStatus = function(data) {
   }
   if (data.hasOwnProperty('level')) {
     this.updateLevel(data.level);
+  }
+  if (data.hasOwnProperty('colorTemperature')) {
+    this.updateColorTemperature(data.colorTemperature);
   }
 };
 

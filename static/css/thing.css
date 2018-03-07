@@ -212,11 +212,13 @@
   stroke-width: 2px;
 }
 
+.color-temperature,
 .level {
   width: 8rem;
   height: 8rem;
 }
 
+.color-temperature-input,
 .level-input {
   width: 8rem;
   margin: 0;
