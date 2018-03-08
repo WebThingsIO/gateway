@@ -58,10 +58,7 @@
     "string.prototype.padstart": "^3.0.0",
     "tar": "^4.0.2",
     "uuid": "^3.1.0",
-    "ws": "^3.3.1",
-    "xbee-api": "^0.5.2",
-    "zcl-id": "^0.3.2",
-    "zcl-packet": "^0.2.2"
+    "ws": "^3.3.1"
   },
   "devDependencies": {
     "@types/asn1js": "^0.0.1",
