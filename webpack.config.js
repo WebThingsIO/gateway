@@ -33,6 +33,7 @@ const plugins = [
 
 module.exports = {
   entry: './src/app.js',
+  mode: 'development',
   target: 'node',
   node: {
     __dirname: false,
@@ -46,7 +47,7 @@ module.exports = {
     filename: 'gateway.js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader'
