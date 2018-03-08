@@ -684,12 +684,6 @@ bindings@1.3.0, bindings@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.3.0.tgz#b346f6ecf6a95f5a815c5839fc7cdb22502f1ed7"
 
-bl@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/bl/-/bl-0.7.0.tgz#3fb0670602ac2878eb770dc2039f1836be62ae5b"
-  dependencies:
-    readable-stream "~1.0.2"
-
 bl@^1.0.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/bl/-/bl-1.2.1.tgz#cac328f7bee45730d404b692203fcb590e172d5e"
@@ -844,10 +838,6 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
-buffer-builder@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/buffer-builder/-/buffer-builder-0.2.0.tgz#3322cd307d8296dab1f604618593b261a3fade8f"
-
 buffer-crc32@^0.2.1:
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
@@ -859,10 +849,6 @@ buffer-equal-constant-time@1.0.1:
 buffer-indexof@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-indexof/-/buffer-indexof-1.1.0.tgz#f54f647c4f4e25228baa656a2e57e43d5f270982"
-
-"buffer-reader@https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz":
-  version "0.0.3"
-  resolved "https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz#8bf62099c3181d3c2bd1a250a1910fd1f52bdea1"
 
 buffer-v6-polyfill@^1.0.3:
   version "1.0.3"
@@ -894,10 +880,6 @@ busboy@^0.2.14:
   dependencies:
     dicer "0.2.5"
     readable-stream "1.1.x"
-
-busyman@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/busyman/-/busyman-0.3.0.tgz#14dea49f62607ce4b2d30b203c6306ef6cca88a7"
 
 bytes@2.4.0:
   version "2.4.0"
@@ -1201,10 +1183,6 @@ concat-stream@^1.6.0:
     inherits "^2.0.3"
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
-
-concentrate@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/concentrate/-/concentrate-0.2.3.tgz#f97a0206521c2d7c45171b64cfc4d6f8b6302542"
 
 config@^1.26.1:
   version "1.26.1"
@@ -1564,19 +1542,6 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-dissolve-chunks@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/dissolve-chunks/-/dissolve-chunks-1.3.0.tgz#16061da67609154772a7561e9c046327a2986563"
-  dependencies:
-    dissolve "0.3.3"
-
-dissolve@0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/dissolve/-/dissolve-0.3.3.tgz#b97ef1ff2989c789cecfb03107e17411fa8be6e5"
-  dependencies:
-    bl "^0.7.0"
-    readable-stream "^1.0.26"
-
 dns-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/dns-equal/-/dns-equal-1.0.0.tgz#b39e7f1da6eb0a75ba9c17324b34753c47e0654d"
@@ -1694,12 +1659,6 @@ enhanced-resolve@^3.0.0, enhanced-resolve@^3.1.0:
 entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
-
-enum@^2.3.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/enum/-/enum-2.4.0.tgz#1aea67cdf74a34e6d8198283b2b3cb348e221b5e"
-  dependencies:
-    is-buffer "^1.1.0"
 
 epoll@~0.1.22:
   version "0.1.22"
@@ -2803,7 +2762,7 @@ is-binary-path@^1.0.0:
   dependencies:
     binary-extensions "^1.0.0"
 
-is-buffer@^1.1.0, is-buffer@^1.1.5:
+is-buffer@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.5.tgz#1f3b26ef613b214b88cbca23cc6c01d87961eecc"
 
@@ -4738,7 +4697,7 @@ read-pkg@^2.0.0:
     normalize-package-data "^2.3.2"
     path-type "^2.0.0"
 
-readable-stream@1.1.x, readable-stream@^1.0.26:
+readable-stream@1.1.x:
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
   dependencies:
@@ -4758,15 +4717,6 @@ readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable
     safe-buffer "~5.1.0"
     string_decoder "~1.0.0"
     util-deprecate "~1.0.1"
-
-readable-stream@~1.0.2:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "0.0.1"
-    string_decoder "~0.10.x"
 
 readable-stream@~2.0.6:
   version "2.0.6"
@@ -6105,14 +6055,6 @@ ws@^3.3.1:
     safe-buffer "~5.1.0"
     ultron "~1.1.0"
 
-xbee-api@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/xbee-api/-/xbee-api-0.5.2.tgz#f5bdc8d1d84cf3450b35707743e4612178bc849a"
-  dependencies:
-    buffer-builder "^0.2.0"
-    buffer-reader "https://github.com/prodatakey/node-buffer-reader/archive/v0.0.3.tar.gz"
-    safe-buffer "~5.0.1"
-
 xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
@@ -6249,29 +6191,6 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
-
-zcl-id@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/zcl-id/-/zcl-id-0.2.0.tgz#1399d5e5b6ba49b66d0d5a506200865d37117e8d"
-  dependencies:
-    busyman "^0.3.0"
-    enum "^2.3.0"
-
-zcl-id@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/zcl-id/-/zcl-id-0.3.2.tgz#3babfb1ecbcc829ba3bb2ebf8327f68902310ec2"
-  dependencies:
-    busyman "^0.3.0"
-    enum "^2.3.0"
-
-zcl-packet@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/zcl-packet/-/zcl-packet-0.2.2.tgz#7bbabd69de9ba70913d9d2039b90c6ce28c11edc"
-  dependencies:
-    concentrate "^0.2.3"
-    dissolve-chunks "^1.3.0"
-    enum "^2.3.0"
-    zcl-id "^0.2.0"
 
 zip-stream@^1.2.0:
   version "1.2.0"
