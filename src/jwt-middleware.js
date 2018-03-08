@@ -78,4 +78,6 @@ function middleware() {
 module.exports = {
   middleware,
   authenticate,
+  extractJWTQS,
+  extractJWTHeader,
 };

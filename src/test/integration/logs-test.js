@@ -21,15 +21,31 @@ describe('logs/', function() {
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-  })
-
-  it('GET logs.zip', async () => {
     fs.writeFileSync(path.join(UserProfile.logDir, 'test.log'),
                      'hello, world!');
+  })
 
+  it('GET logs index', async () => {
     const res = await chai.request(server)
-      .get(Constants.LOGS_PATH)
-      .set('Accept', 'application/zip')
+      .get(Constants. LOGS_PATH)
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(res.type).toBe('text/html');
+    expect(res.text.indexOf('test.log')).toBeGreaterThan(0);
+  });
+
+  it('GET test.log', async () => {
+    const res = await chai.request(server)
+      .get(`${Constants. LOGS_PATH}/files/test.log`)
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(res.type).toBe('text/plain');
+    expect(res.text).toBe('hello, world!');
+  });
+
+  it('GET logs.zip', async () => {
+    const res = await chai.request(server)
+      .get(`${Constants.LOGS_PATH}/zip`)
       .set(...headerAuth(jwt))
       .buffer()
       .parse((res, cb) => {
