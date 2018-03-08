@@ -39,7 +39,6 @@ const CommandsController = express.Router();
 const IntentParser = require('../models/intentparser')
 
 const thingsOptions = {
-  body: '',
   method: 'GET',
   headers: {
     'Authorization': '',
