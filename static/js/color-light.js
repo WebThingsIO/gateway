@@ -26,9 +26,7 @@ function ColorLight(description, format) {
 
     if (description.properties.hasOwnProperty('color')) {
       this.details.color = new ColorDetail(this);
-    }
-
-    if (description.properties.hasOwnProperty('colorTemperature')) {
+    } else if (description.properties.hasOwnProperty('colorTemperature')) {
       const prop = description.properties.colorTemperature;
       this.details.colorTemperature =
         new ColorTemperatureDetail(this, prop.min, prop.max);
@@ -50,9 +48,7 @@ function ColorLight(description, format) {
   if (this.propertyDescriptions.hasOwnProperty('color')) {
     this.colorPropertyUrl = new URL(this.propertyDescriptions.color.href,
                                     this.href);
-  }
-
-  if (this.propertyDescriptions.hasOwnProperty('colorTemperature')) {
+  } else if (this.propertyDescriptions.hasOwnProperty('colorTemperature')) {
     this.colorTemperaturePropertyUrl =
       new URL(this.propertyDescriptions.colorTemperature.href, this.href);
   }
@@ -182,11 +178,9 @@ ColorLight.prototype.updateStatus = function() {
   promises.push(fetch(this.onPropertyUrl, opts));
 
   if (this.hasOwnProperty('colorPropertyUrl')) {
-    promises.push(fetch(this.colorPropertyUrl));
-  }
-
-  if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
-    promises.push(fetch(this.colorTemperaturePropertyUrl));
+    promises.push(fetch(this.colorPropertyUrl, opts));
+  } else if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
+    promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
   }
 
   Promise.all(promises).then(responses => {
@@ -324,12 +318,10 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
 ColorLight.prototype.getIconColor = function() {
   // If we only have color, or we have both, but color temperature is invalid
   // (0), then use the color. Otherwise, use the color temperature.
-  if (this.properties.hasOwnProperty('color') &&
-      (!this.properties.hasOwnProperty('colorTemperature') ||
-       this.properties.colorTemperature === 0)) {
+  if (this.properties.hasOwnProperty('color')) {
     return this.properties.color;
   } else if (this.properties.hasOwnProperty('colorTemperature')) {
-      return this.colorTemperatureToRGB(this.properties.colorTemperature);
+    return this.colorTemperatureToRGB(this.properties.colorTemperature);
   } else {
     return '#ffffff';
   }

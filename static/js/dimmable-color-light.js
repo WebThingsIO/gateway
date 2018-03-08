@@ -63,9 +63,7 @@ DimmableColorLight.prototype.updateStatus = function() {
 
   if (this.hasOwnProperty('colorPropertyUrl')) {
     promises.push(fetch(this.colorPropertyUrl, opts));
-  }
-
-  if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
+  } else if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
     promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
   }
 
@@ -97,11 +95,11 @@ DimmableColorLight.prototype.onPropertyStatus = function(data) {
   if (data.hasOwnProperty('color')) {
     this.updateColor(data.color);
   }
-  if (data.hasOwnProperty('level')) {
-    this.updateLevel(data.level);
-  }
   if (data.hasOwnProperty('colorTemperature')) {
     this.updateColorTemperature(data.colorTemperature);
+  }
+  if (data.hasOwnProperty('level')) {
+    this.updateLevel(data.level);
   }
 };
 
