@@ -45,4 +45,20 @@ module.exports = {
   getArchitecture: function() {
     return `${process.platform}-${process.arch}`;
   },
+
+  /**
+   * Escape text such that it's safe to be placed in HTML.
+   */
+  escapeHtml: function(text) {
+    if (typeof(text) !== 'string') {
+      text = `${text}`;
+    }
+
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
 };

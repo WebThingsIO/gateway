@@ -54,7 +54,8 @@ var Router = {
       // treat it as an API request
       if (!request.accepts('html') && request.accepts('json') ||
           request.get('Upgrade') === 'websocket' ||
-          request.is('multipart/form-data')) {
+          request.is('multipart/form-data') ||
+          request.path.startsWith(Constants.LOGS_PATH)) {
         request.url = API_PREFIX + request.url;
         next();
       // Otherwise treat it as an app request
@@ -84,26 +85,28 @@ var Router = {
     }
 
     // Authenticated API routes
-    app.use(API_PREFIX + Constants.THINGS_PATH, nocache,
-      auth, require('./controllers/things_controller'));
-    app.use(API_PREFIX + Constants.NEW_THINGS_PATH, nocache,
-      auth, require('./controllers/new_things_controller'));
-    app.use(API_PREFIX + Constants.ADAPTERS_PATH, nocache,
-      auth, require('./controllers/adapters_controller'));
-    app.use(API_PREFIX + Constants.ACTIONS_PATH, nocache,
-      auth, require('./controllers/actions_controller'));
-    app.use(API_PREFIX + Constants.LOG_OUT_PATH, nocache,
-      auth, require('./controllers/log_out_controller'));
-    app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache,
-      auth, require('./controllers/uploads_controller'));
-    app.use(API_PREFIX + Constants.COMMANDS_PATH, nocache,
-      auth, require('./controllers/commands_controller'));
-    app.use(API_PREFIX + Constants.UPDATES_PATH, nocache,
-      auth, require('./controllers/updates_controller'));
-    app.use(API_PREFIX + Constants.ADDONS_PATH, nocache,
-      auth, require('./controllers/addons_controller'));
-    app.use(API_PREFIX + Constants.RULES_PATH, nocache,
-      auth, require('./rules-engine/index.js'));
+    app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth,
+            require('./controllers/things_controller'));
+    app.use(API_PREFIX + Constants.NEW_THINGS_PATH, nocache, auth,
+            require('./controllers/new_things_controller'));
+    app.use(API_PREFIX + Constants.ADAPTERS_PATH, nocache, auth,
+            require('./controllers/adapters_controller'));
+    app.use(API_PREFIX + Constants.ACTIONS_PATH, nocache, auth,
+            require('./controllers/actions_controller'));
+    app.use(API_PREFIX + Constants.LOG_OUT_PATH, nocache, auth,
+            require('./controllers/log_out_controller'));
+    app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache, auth,
+            require('./controllers/uploads_controller'));
+    app.use(API_PREFIX + Constants.COMMANDS_PATH, nocache, auth,
+            require('./controllers/commands_controller'));
+    app.use(API_PREFIX + Constants.UPDATES_PATH, nocache, auth,
+            require('./controllers/updates_controller'));
+    app.use(API_PREFIX + Constants.ADDONS_PATH, nocache, auth,
+            require('./controllers/addons_controller'));
+    app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth,
+            require('./rules-engine/index.js'));
+    app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth,
+            require('./controllers/logs_controller'));
 
     app.use(API_PREFIX + Constants.OAUTH_PATH, nocache,
             require('./controllers/oauth_controller').default);
