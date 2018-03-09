@@ -69,14 +69,13 @@ class JSONWebToken {
    *
    * @param {ClientRegistry} client to issue token for.
    * @param {number} user user id associated with token
-   * @param {string} role for token to fulfill
+   * @param {{role: String, scope: String}} payload of token
    * @return {string} the JWT token signature.
    */
-  static async issueOAuthToken(client, user, role) {
-    const {sig, token} = this.create(user, {
-      role,
+  static async issueOAuthToken(client, user, payload) {
+    const {sig, token} = this.create(user, Object.assign({
       client_id: client.id
-    });
+    }, payload));
     await Database.createJSONWebToken(token);
     return sig;
   }

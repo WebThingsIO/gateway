@@ -7,7 +7,7 @@ const simpleOAuth2 = require('simple-oauth2');
 const URL = require('url').URL;
 const qs = require('querystring');
 
-const {server, chai} = require('../common');
+const {server, chai, mockAdapter} = require('../common');
 const Constants = require('../../constants');
 const {
   TEST_USER,
@@ -15,13 +15,36 @@ const {
   headerAuth,
 } = require('../user');
 
-const CLIENT_ID = 'hello';
+const CLIENT_ID = 'test';
 const CLIENT_SECRET = 'super secret';
-const REQUEST_SCOPE = 'readwrite';
+const REQUEST_SCOPE = '/things:readwrite';
 const REQUEST_STATE = 'somethingrandom';
+
+const TEST_THING = {
+  id: 'test-1',
+  type: 'onOffSwitch',
+  name: 'kitchen',
+  properties: {
+    on: {
+      type: 'boolean',
+      value: false
+    }
+  }
+};
 
 describe('oauth/', function() {
   let clientServer, oauth2, customCallbackHandler, userJWT;
+
+  async function addDevice(desc = TEST_THING) {
+    const {id} = desc;
+    const res = await chai.request(server)
+      .post(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT))
+      .send(desc);
+    await mockAdapter().addDevice(id, desc);
+    return res;
+  }
 
   beforeEach(async () => {
     userJWT = await createUser(server, TEST_USER);
@@ -114,6 +137,13 @@ describe('oauth/', function() {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
 
+    // Try using the access token on a forbidden path
+    let err = await pFinal(chai.request(server)
+      .get(Constants.OAUTHCLIENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(401);
+
     res = await chai.request(server)
       .get(Constants.OAUTHCLIENTS_PATH)
       .set('Accept', 'application/json')
@@ -136,7 +166,7 @@ describe('oauth/', function() {
     expect(res.body.length).toEqual(0);
 
     // Try using the access token now that it's revoked
-    const err = await pFinal(chai.request(server)
+    err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
@@ -292,6 +322,71 @@ describe('oauth/', function() {
 
     expect(err.response.status).toEqual(400);
     expect(err.response.body.error).toEqual('invalid_grant');
+  });
+
+  it('restricts jwt scope', async () => {
+    setupOAuth();
+    await addDevice();
+
+    // send the request that the page would send
+    let res = await chai.request(server)
+      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+        response_type: 'code',
+        client_id: CLIENT_ID,
+        scope: '/things/test-1:read',
+        state: REQUEST_STATE
+      }))
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+
+    let jwt = res.body.token.access_token;
+    res = await chai.request(server)
+      .get(Constants.THINGS_PATH + '/' + TEST_THING.id)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
+    // TODO(hobinjk): filter things instead of blocking #793
+    let err = await pFinal(chai.request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(401);
+
+    err = await pFinal(chai.request(server)
+      .delete(Constants.THINGS_PATH + '/' + TEST_THING.id)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(401);
+  });
+
+  it('rejects use of authorization code as access token', async () => {
+    setupOAuth({}, function customCallbackHandler(req, res) {
+      const code = req.query.code;
+      expect(code).toBeTruthy();
+      expect(req.query.state).toEqual('somethingrandom');
+
+      res.json(code);
+    });
+
+    let res = await chai.request(server)
+      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+        response_type: 'code',
+        client_id: CLIENT_ID,
+        scope: '/things/test-1:read',
+        state: REQUEST_STATE
+      }))
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+
+    let jwt = res.body;
+    expect(jwt).toBeTruthy();
+
+    let err = await pFinal(chai.request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(401);
   });
 });
 

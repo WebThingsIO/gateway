@@ -13,9 +13,14 @@ import { URL } from 'url';
 import * as assert from 'assert';
 import * as JSONWebToken from '../models/jsonwebtoken';
 import * as Database from '../db';
-import {Scope, ClientId, ClientRegistry} from '../oauth-types';
+import {
+  scopeValidSubset, Scope, ScopeAccess, ScopeRaw, ClientId, ClientRegistry
+} from '../oauth-types';
+
 import OAuthClients from '../models/oauthclients';
 import * as jwtMiddleware from '../jwt-middleware';
+import * as Constants from '../constants';
+
 const auth = jwtMiddleware.middleware();
 
 const OAuthController = express.Router();
@@ -34,7 +39,7 @@ type AuthorizationRequest = {
   response_type: 'code', // no suppport or desire for implicit auth
   client_id: ClientId,
   redirect_uri: URL|undefined,
-  scope: Scope,
+  scope: ScopeRaw,
   state?: string
 };
 
@@ -76,7 +81,7 @@ type AccessTokenSuccessResponse = {
   token_type: 'bearer',
   expires_in?: number,
   refresh_token?: Token,
-  scope: Scope
+  scope: ScopeRaw
 };
 
 type AccessTokenError =
@@ -89,7 +94,7 @@ type AccessTokenResponse = AccessTokenSuccessResponse|AccessTokenErrorResponse;
 type RefreshTokenRequest = {
   grant_type: 'refresh_token',
   refresh_token: Token,
-  scope: Scope
+  scope: ScopeRaw
 };
 
 type RefreshTokenResponse = AccessTokenResponse;
@@ -203,7 +208,7 @@ function verifyAuthorizationRequest(authRequest: AuthorizationRequest,
     return;
   }
 
-  if (authRequest.scope !== client.scope) {
+  if (!scopeValidSubset(client.scope, authRequest.scope)) {
     let err: AuthorizationErrorResponse = {
       error: 'invalid_scope',
       error_description: 'client scope does not cover requested scope',
@@ -267,7 +272,10 @@ OAuthController.get('/allow', auth, async (request: express.Request, response: e
   }
 
   // TODO: should expire in 10 minutes
-  let code = await JSONWebToken.issueOAuthToken(client, jwt.user, 'authorization_code');
+  let code = await JSONWebToken.issueOAuthToken(client, jwt.user, {
+    role: 'authorization_code',
+    scope: authRequest.scope
+  });
 
   let success: AuthorizationSuccessResponse = {
     code: code,
@@ -337,7 +345,11 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     return;
   }
 
-  let accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.user, 'access_token');
+  let accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.user, {
+    role: Constants.ACCESS_TOKEN,
+    scope: tokenData.payload.scope
+  });
+
   // let refreshToken = await JSONWebToken.issueOAuthToken(client, 'refresh_token');
 
   let res: AccessTokenSuccessResponse = {

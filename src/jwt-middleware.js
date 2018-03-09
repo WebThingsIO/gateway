@@ -8,6 +8,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+const Constants = require('./constants');
 const JSONWebToken = require('./models/jsonwebtoken');
 
 const AUTH_TYPE = 'Bearer';
@@ -57,6 +58,32 @@ async function authenticate(req) {
   return await JSONWebToken.verifyJWT(sig);
 }
 
+function scopeAllowsRequest(scope, request) {
+  let requestPath = request.originalUrl;
+  if (!scope) {
+    return true;
+  }
+  let paths = scope.split(' ');
+  for (let path of paths) {
+    let parts = path.split(':');
+    if (parts.length !== 2) {
+      console.warn('Invalid scope', scope);
+      return false;
+    }
+    let access = parts[1];
+    let readwrite = access === Constants.READWRITE;
+    path = parts[0];
+    if (requestPath.startsWith(path)) {
+      if (!readwrite && request.method !== 'GET' &&
+          request.method !== 'OPTIONS') {
+        return false;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
 function middleware() {
   return (req, res, next) => {
     authenticate(req, res).
@@ -65,6 +92,23 @@ function middleware() {
           res.sendStatus(401);
           return;
         }
+        let scope = jwt.payload.scope;
+        if (jwt.payload.role === Constants.AUTHORIZATION_CODE) {
+          scope = Constants.OAUTH_PATH + ':' + Constants.READWRITE;
+        }
+        if (!scopeAllowsRequest(scope, req)) {
+          res.status(401).send(
+            `Token of role ${jwt.payload.role} used out of scope: ${scope}`);
+          return;
+        }
+        if (jwt.payload.role !== Constants.USER_TOKEN) {
+          if (!jwt.payload.scope) {
+            res.status(400)
+              .send('Token must contain scope');
+            return;
+          }
+        }
+
         req.jwt = jwt;
         next();
       }).
