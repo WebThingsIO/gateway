@@ -80,3 +80,9 @@ exports.THING_TYPE_DIMMABLE_COLOR_LIGHT = 'dimmableColorLight';
 exports.UNLOAD_ADAPTER = 'unloadAdapter';
 exports.UNLOAD_PLUGIN = 'unloadPlugin';
 exports.UNPAIR_MOCK_DEVICE = 'unpairMockDevice';
+
+exports.ACCESS_TOKEN = 'access_token';
+exports.AUTHORIZATION_CODE = 'authorization_code';
+exports.USER_TOKEN = 'user_token';
+exports.READWRITE = 'readwrite';
+exports.READ = 'read';
