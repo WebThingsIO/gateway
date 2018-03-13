@@ -11,7 +11,7 @@
 'use strict';
 
 /* globals ColorDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-   Utils */
+   ColorTemperatureDetail, Utils */
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -23,7 +23,14 @@ function ColorLight(description, format) {
   if (format === 'htmlDetail') {
     this.details = this.details || {};
     this.details.on = new OnOffDetail(this);
-    this.details.color = new ColorDetail(this);
+
+    if (description.properties.hasOwnProperty('color')) {
+      this.details.color = new ColorDetail(this);
+    } else if (description.properties.hasOwnProperty('colorTemperature')) {
+      const prop = description.properties.colorTemperature;
+      this.details.colorTemperature =
+        new ColorTemperatureDetail(this, prop.min, prop.max);
+    }
   }
 
   this.base = Thing;
@@ -37,8 +44,14 @@ function ColorLight(description, format) {
     return this;
   }
   this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
-  this.colorPropertyUrl = new URL(this.propertyDescriptions.color.href,
-                                  this.href);
+
+  if (this.propertyDescriptions.hasOwnProperty('color')) {
+    this.colorPropertyUrl = new URL(this.propertyDescriptions.color.href,
+                                    this.href);
+  } else if (this.propertyDescriptions.hasOwnProperty('colorTemperature')) {
+    this.colorTemperaturePropertyUrl =
+      new URL(this.propertyDescriptions.colorTemperature.href, this.href);
+  }
 
   this.updateStatus();
   this.colorLight = this.element.querySelector('.color-light');
@@ -50,11 +63,6 @@ function ColorLight(description, format) {
     for (let prop in this.details) {
       this.details[prop].attach();
     }
-
-    this.colorInput = this.element.querySelector('.color-light-color');
-    this.colorInput.addEventListener('change', () => {
-      this.setColor(this.colorInput.value);
-    });
 
     this.layout = new ThingDetailLayout(
       this.element.querySelectorAll('.thing-detail-container'));
@@ -69,8 +77,9 @@ ColorLight.prototype = Object.create(OnOffSwitch.prototype);
 ColorLight.prototype.iconView = function() {
   let colorStyle = '';
   if (this.properties.on) {
-    colorStyle = `background: ${Utils.escapeHtml(this.properties.color)}`;
+    colorStyle = `background: ${this.getIconColor()}`;
   }
+
   return `<div class="color-light" style="${colorStyle}">
     <div class="color-light-icon">
       <svg
@@ -165,15 +174,23 @@ ColorLight.prototype.updateStatus = function() {
     }
   };
 
-  fetch(this.onPropertyUrl, opts).then(response => {
-    return response.json();
-  }).then(response => {
-    this.onPropertyStatus(response);
-    return fetch(this.colorPropertyUrl, opts);
-  }).then(response => {
-    return response.json();
-  }).then(response => {
-    this.onPropertyStatus(response);
+  const promises = [];
+  promises.push(fetch(this.onPropertyUrl, opts));
+
+  if (this.hasOwnProperty('colorPropertyUrl')) {
+    promises.push(fetch(this.colorPropertyUrl, opts));
+  } else if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
+    promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
+  }
+
+  Promise.all(promises).then(responses => {
+    return Promise.all(responses.map(response => {
+      return response.json();
+    }));
+  }).then(responses => {
+    responses.forEach(response => {
+      this.onPropertyStatus(response);
+    });
   }).catch(error => {
     console.error('Error fetching on/off switch status ' + error);
   });
@@ -189,6 +206,9 @@ ColorLight.prototype.onPropertyStatus = function(data) {
   }
   if (data.hasOwnProperty('color')) {
     this.updateColor(data.color);
+  }
+  if (data.hasOwnProperty('colorTemperature')) {
+    this.updateColorTemperature(data.colorTemperature);
   }
 };
 
@@ -218,26 +238,17 @@ ColorLight.prototype.updateColor = function(color) {
   if (!color) {
     return;
   }
+
   this.properties.color = color;
   if (!this.colorLight) {
     return;
   }
-  this.colorLightIconPath.style.fill = color;
 
   if (this.details) {
     this.details.color.update();
   }
 
-  let r = parseInt(color.substr(1,2), 16);
-  let g = parseInt(color.substr(3,2), 16);
-  let b = parseInt(color.substr(5,2), 16);
-
-  // From https://stackoverflow.com/questions/3942878/
-  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
-    this.colorLight.classList.add('bright-color');
-  } else {
-    this.colorLight.classList.remove('bright-color');
-  }
+  this.updateIcon();
 };
 
 ColorLight.prototype.setColor = function(color) {
@@ -259,5 +270,122 @@ ColorLight.prototype.setColor = function(color) {
   }).catch(function(error) {
    console.error('Error trying to set color: ' + error);
   });
+};
 
+ColorLight.prototype.updateColorTemperature = function(temperature) {
+  if (typeof(temperature) === 'string') {
+    temperature = parseInt(temperature, 10);
+  }
+
+  this.properties.colorTemperature = temperature;
+  if (!this.colorLight) {
+    return;
+  }
+
+  if (this.details) {
+    this.details.colorTemperature.update();
+  }
+
+  this.updateIcon();
+};
+
+ColorLight.prototype.setColorTemperature = function(temperature) {
+  if (typeof(temperature) === 'string') {
+    temperature = parseInt(temperature, 10);
+  }
+
+  const payload = {
+   colorTemperature: temperature
+  };
+  fetch(this.colorTemperaturePropertyUrl, {
+   method: 'PUT',
+   body: JSON.stringify(payload),
+   headers: Object.assign(window.API.headers(), {
+     'Content-Type': 'application/json'
+   })
+  }).then(response => {
+   if (response.status === 200) {
+     this.updateColorTemperature(temperature);
+   } else {
+     console.error(
+       'Status ' + response.status + ' trying to set color temperature');
+   }
+  }).catch(function(error) {
+   console.error('Error trying to set color temperature: ' + error);
+  });
+};
+
+ColorLight.prototype.getIconColor = function() {
+  // If we only have color, or we have both, but color temperature is invalid
+  // (0), then use the color. Otherwise, use the color temperature.
+  if (this.properties.hasOwnProperty('color')) {
+    return this.properties.color;
+  } else if (this.properties.hasOwnProperty('colorTemperature')) {
+    return this.colorTemperatureToRGB(this.properties.colorTemperature);
+  } else {
+    return '#ffffff';
+  }
+};
+
+ColorLight.prototype.updateIcon = function() {
+  const iconColor = this.getIconColor();
+  this.colorLightIconPath.style.fill = iconColor;
+
+  let r = parseInt(iconColor.substr(1,2), 16);
+  let g = parseInt(iconColor.substr(3,2), 16);
+  let b = parseInt(iconColor.substr(5,2), 16);
+
+  // From https://stackoverflow.com/questions/3942878/
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+    this.colorLight.classList.add('bright-color');
+  } else {
+    this.colorLight.classList.remove('bright-color');
+  }
+};
+
+/**
+ * Algorithm found here:
+ *   http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+ */
+ColorLight.prototype.colorTemperatureToRGB = function(temperature) {
+  temperature /= 100;
+
+  let r;
+  if (temperature <= 66) {
+    r = 255;
+  } else {
+    r = temperature - 60;
+    r = 329.698727446 * Math.pow(r, -0.1332047592);
+    r = Math.max(r, 0);
+    r = Math.min(r, 255);
+  }
+
+  let g;
+  if (temperature <= 66) {
+    g = temperature;
+    g = 99.4708025861 * Math.log(g) - 161.1195681661;
+  } else {
+    g = temperature - 60;
+    g = 288.1221695283 * Math.pow(g, -0.0755148492)
+  }
+
+  g = Math.max(g, 0);
+  g = Math.min(g, 255);
+
+  let b;
+  if (temperature >= 66) {
+    b = 255;
+  } else if (temperature <= 19) {
+    b = 0
+  } else {
+    b = temperature - 10;
+    b = 138.5177312231 * Math.log(b) - 305.0447927307;
+    b = Math.max(b, 0);
+    b = Math.min(b, 255);
+  }
+
+  r = Math.round(r).toString(16);
+  g = Math.round(g).toString(16);
+  b = Math.round(b).toString(16);
+  return `#${r}${g}${b}`;
 };
