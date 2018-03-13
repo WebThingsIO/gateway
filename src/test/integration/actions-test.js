@@ -145,7 +145,7 @@ describe('actions/', function() {
     expect(err.response.status).toEqual(404);
   });
 
-  it('should error on an unpair of a nonexistent device', async () => {
+  it('should succeed on an unpair of a nonexistent device', async () => {
     let thingId = 'test-nonexistent';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
@@ -169,8 +169,6 @@ describe('actions/', function() {
     expect(res.body[0]).toHaveProperty('id');
 
     expect(res.body[0]).toHaveProperty('status');
-    expect(res.body[0].status).toEqual('error');
-
-    expect(res.body[0]).toHaveProperty('error');
+    expect(res.body[0].status).toEqual('completed');
   });
 });
