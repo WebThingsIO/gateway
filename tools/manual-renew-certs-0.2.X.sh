@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# This is intended for use with Gateway releases before 0.3.0, as those
-# releases did not have an automatic certificate updater. The certificate
-# paths specified in this script do not match what is currently expected,
-# so DO NOT run this on any releases after 0.3.0. It should be safe on 0.3.0,
-# but should be unnecessary.
+# This is intended for use with 0.2.X gateway releases.
 
 script_dir=$(readlink -f $(dirname "$0"))
 moziot_dir="/home/pi/mozilla-iot"
@@ -55,8 +51,8 @@ fi
 
 if [ -z "$(which certbot)" ]; then
     echo "Installing certbot."
-    apt-get update >/dev/null 2>&1 && \
-        apt-get -y --force-yes install certbot >/dev/null 2>&1 || \
+    apt update >/dev/null 2>&1 && \
+        apt install -y certbot >/dev/null 2>&1 || \
         abort "Failed to install."
 fi
 
@@ -134,7 +130,7 @@ cp "${moziot_dir}/etc/live/${domain}/chain.pem" \
     "${moziot_dir}/gateway/chain.pem"
 
 echo "Registering domain with server."
-curl "http://api.mozilla-iot.org/setemail" \
+curl "https://api.mozilla-iot.org:8443/setemail" \
     -s -G \
     --data-urlencode "token=${token}" \
     --data-urlencode "email=${email}" || abort "Failed to register."
