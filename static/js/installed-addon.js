@@ -25,6 +25,7 @@ var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
                               updateChecksum) {
   this.name = metadata.name;
   this.description = metadata.description;
+  this.author = metadata.author;
   this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
   this.updateUrl = updateUrl;
@@ -61,6 +62,9 @@ InstalledAddon.prototype.view = function() {
         </span>
         <span class="addon-settings-description">
           ${Utils.escapeHtml(this.description)}
+        </span>
+        <span class="addon-settings-author">
+          Created by: ${Utils.escapeHtml(this.author)}
         </span>
       </div>
       <div class="addon-settings-controls">

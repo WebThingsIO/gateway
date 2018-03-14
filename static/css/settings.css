@@ -253,6 +253,12 @@
   color: #ccc;
 }
 
+.addon-settings-author {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: #ccc
+}
+
 .user-settings-controls,
 .adapter-settings-controls,
 .addon-settings-controls {
