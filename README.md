@@ -127,7 +127,7 @@ Start the web server:
 $ npm start
 ```
 
-Load ```https://localhost:8080``` in your web browser (or use the server's IP address if loading remotely).
+Load ```http://localhost:8080``` in your web browser (or use the server's IP address if loading remotely).
 Then follow the instructions on the webpage to set up domain and register. Once this is done you can Load
 ```https://localhost:4443``` in your web browser (or use the server's IP address if loading remotely).
 
