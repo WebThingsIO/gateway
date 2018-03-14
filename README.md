@@ -116,9 +116,25 @@ run `npm install --global yarn` or for a more secure installation follow the
 $ yarn
 ```
 
- Add SSL certificate:
+Set up domain:
 
- If you don't plan on using Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain, you can use your own SSL certificate. The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
+You can use  Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain.
+If you plan to use your own SSL certificate, please jump to next section on "Add own SSL certificate".
+
+Start the web server:
+
+```
+$ npm start
+```
+
+Load ```https://localhost:8080``` in your web browser (or use the server's IP address if loading remotely).
+Then follow the instructions on the webpage to set up domain and register. Once this is done you can Load
+```https://localhost:4443``` in your web browser (or use the server's IP address if loading remotely).
+
+
+ Add own SSL certificate:
+
+ The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
 
  ```
  $ MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
