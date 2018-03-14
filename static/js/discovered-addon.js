@@ -21,6 +21,7 @@ var DiscoveredAddon = function(metadata) {
   this.displayName = metadata.displayName;
   this.description = metadata.description;
   this.author = metadata.author;
+  this.homepage = metadata.homepage;
   this.version = metadata.version;
   this.url = metadata.url;
   this.checksum = metadata.checksum;
@@ -57,7 +58,9 @@ DiscoveredAddon.prototype.view = function() {
           ${Utils.escapeHtml(this.description)}
         </span>
         <span class="addon-settings-author">
-          Created by: ${Utils.escapeHtml(this.author)}
+          by <a href="${this.homepage}" target="_blank" rel="noopener">
+            ${Utils.escapeHtml(this.author)}
+          </a>
         </span>
       </div>
       <div class="addon-settings-controls">
