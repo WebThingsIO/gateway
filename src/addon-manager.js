@@ -681,8 +681,7 @@ class AddonManager extends EventEmitter {
         this.deferredRemove = deferredRemove;
         device.adapter.removeThing(device);
       } else {
-        deferredRemove.reject('removeThing: thingId: ' + thingId +
-                              ' not found.');
+        deferredRemove.resolve(thingId);
       }
     }
 
