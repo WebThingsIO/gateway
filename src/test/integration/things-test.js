@@ -396,20 +396,6 @@ describe('things/', function() {
       }
     }
     expect(!found).assert('should not find thing in /things output');
-
-    res = await chai.request(server)
-      .get(Constants.NEW_THINGS_PATH)
-      .set('Accept', 'application/json')
-      .set(...headerAuth(jwt));
-    expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    found = false;
-    for (let thing of res.body) {
-      if (thing.href === Constants.THINGS_PATH + '/' + thingId) {
-        found = true;
-      }
-    }
-    expect(found).assert('should find thing in /new_things output');
   });
 
   it('should remove a device', async () => {

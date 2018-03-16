@@ -53,7 +53,7 @@ ThingsController.post('/', function (request, response) {
 /**
  * Get a Thing.
  */
- ThingsController.get('/:thingId', function(request, response) {
+ThingsController.get('/:thingId', function(request, response) {
    var id = request.params.thingId;
    Things.getThingDescription(id).then(function(thing) {
      response.status(200).json(thing);
@@ -62,7 +62,7 @@ ThingsController.post('/', function (request, response) {
      console.error('Error: ' + error);
      response.status(404).send(error);
    });
- });
+});
 
 /**
  * Get a property of a Thing.
@@ -141,15 +141,18 @@ ThingsController.patch('/:thingId', function(request, response) {
  * Remove a Thing.
  */
 ThingsController.delete('/:thingId', function(request, response) {
-  var thingId = request.params.thingId;
-  try {
-    Things.removeThing(thingId).then(function() {
-      console.log('Successfully deleted ' + thingId + ' from database.');
-      response.status(204).send();
+  const thingId = request.params.thingId;
+  AddonManager.removeThing(thingId).
+    then(() => {
+      Things.removeThing(thingId).then(() => {
+        console.log('Successfully deleted ' + thingId + ' from database.');
+        response.status(204).send();
+      }).catch(e => {
+        response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
+      });
+    }).catch((e) => {
+      response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
     });
-  } catch(e) {
-    response.status(500).send('Failed to remove thing ' + thingId);
-  }
 });
 
 /**

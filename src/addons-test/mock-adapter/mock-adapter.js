@@ -142,16 +142,13 @@ class MockAdapter extends Adapter {
   removeThing(device) {
     console.log('MockAdapter:', this.name, 'id', this.id,
                 'removeThing(', device.id, ') started');
-    if (this.unpairDeviceId) {
-      var deviceId = this.unpairDeviceId;
-      this.unpairDeviceId = null;
-      this.removeDevice(deviceId).then(() => {
-        console.log('MockAdapter: device:', deviceId, 'was unpaired.');
-      }).catch((err) => {
-        console.error('MockAdapter: unpairing', deviceId, 'failed');
-        console.error(err);
-      });
-    }
+
+    this.removeDevice(device.id).then(() => {
+      console.log('MockAdapter: device:', device.id, 'was unpaired.');
+    }).catch((err) => {
+      console.error('MockAdapter: unpairing', device.id, 'failed');
+      console.error(err);
+    });
   }
 
   cancelRemoveThing(device) {
