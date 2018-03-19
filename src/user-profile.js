@@ -13,7 +13,7 @@
 'use strict';
 
 const config = require('config');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 const mkdirp = require('mkdirp');
@@ -42,8 +42,8 @@ const Profile = {
    * Manually copy, then unlink, to prevent issues with cross-device renames.
    */
   renameFile: function(src, dst) {
-    fs.copyFileSync(src, dst);
-    fs.unlinkSync(src);
+    fs.copySync(src, dst);
+    fs.removeSync(src);
   },
 
   /**

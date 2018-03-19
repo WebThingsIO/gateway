@@ -42,6 +42,7 @@
     "express-fileupload": "^0.4.0",
     "express-promise-router": "^3.0.1",
     "express-ws": "^3.0.0",
+    "fs-extra": "^5.0.0",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "greenlock": "^2.1.15",
     "jsonwebtoken": "^8.1.0",
