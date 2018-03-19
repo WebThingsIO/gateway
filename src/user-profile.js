@@ -199,7 +199,7 @@ const Profile = {
 
           if (fname !== 'plugin' && lstat.isDirectory()) {
             // Move existing add-ons.
-            this.renameFile(oldFname, newFname);
+            this.renameDir(oldFname, newFname);
           }
         }
       }
