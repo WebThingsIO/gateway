@@ -3139,6 +3139,14 @@ fs-extra@^4.0.2:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
+fs-extra@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
 fs-symlink@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/fs-symlink/-/fs-symlink-1.2.1.tgz#1beba83ea9dca8123600e3f0b9a51b18640bbc40"
