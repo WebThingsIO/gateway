@@ -16,6 +16,7 @@ const nocache = require('nocache')();
 const Constants = require('./constants');
 const jwtMiddleware = require('./jwt-middleware');
 const auth = jwtMiddleware.middleware();
+const UserProfile = require('./user-profile');
 
 /**
  * Router.
@@ -43,6 +44,7 @@ var Router = {
     });
 
     // First look for a static file
+    app.use('/uploads', express.static(UserProfile.uploadsDir));
     app.use(express.static(Constants.STATIC_PATH));
 
     // Content negotiation middleware

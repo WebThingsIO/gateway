@@ -49,6 +49,7 @@
     "mkdirp": "^0.5.1",
     "mustache-express": "^1.2.5",
     "nanomsg": "^4.0.2",
+    "ncp": "^2.0.0",
     "nocache": "^2.0.0",
     "node-fetch": "^2.1.1",
     "node-getopt": "^0.2.3",

@@ -22,12 +22,12 @@ const FALLBACK_FLOORPLAN_PATH = path.join(Constants.STATIC_PATH,
                                           'images',
                                           'floorplan.svg');
 
-// On startup, symlink to the default floorplan, if necessary.
+// On startup, copy the default floorplan, if necessary.
 if (!fs.existsSync(FLOORPLAN_PATH)) {
   try {
-    fs.symlinkSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
+    fs.copyFileSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
   } catch (err) {
-    console.error(`Failed to symlink floorplan: ${err}`);
+    console.error(`Failed to copy floorplan: ${err}`);
   }
 }
 
@@ -52,11 +52,11 @@ UploadsController.post('/', function (request, response) {
   var file = request.files.file;
   file.mv(FLOORPLAN_PATH, function(error) {
     if (error) {
-      // On error, try to symlink to the fallback.
+      // On error, try to copy the fallback.
       try {
-        fs.symlinkSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
+        fs.copyFileSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
       } catch (err) {
-        console.error(`Failed to symlink floorplan: ${err}`);
+        console.error(`Failed to copy floorplan: ${err}`);
       }
 
       return response.status(500).send(

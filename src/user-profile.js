@@ -17,6 +17,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const mkdirp = require('mkdirp');
+const ncp = require('ncp');
+const rimraf = require('rimraf');
 const db = require('./db');
 const Settings = require('./models/settings');
 
@@ -34,6 +36,31 @@ const Profile = {
     } else {
       this.addonsDir = path.join(this.baseDir, 'addons');
     }
+  },
+
+  /**
+   * Manually copy, then unlink, to prevent issues with cross-device renames.
+   */
+  renameFile: function(src, dst) {
+    fs.copyFileSync(src, dst);
+    fs.unlinkSync(src);
+  },
+
+  /**
+   * Manually copy, then remove, to prevent issues with cross-device renames.
+   */
+  renameDir: function(src, dst) {
+    ncp(src, dst, (e) => {
+      if (e) {
+        throw e;
+      }
+
+      rimraf(src, (err) => {
+        if (err) {
+          throw err;
+        }
+      })
+    });
   },
 
   migrate: function() {
@@ -58,7 +85,7 @@ const Profile = {
     const dbPath = path.join(this.configDir, 'db.sqlite3');
     const oldDbPath = path.join(this.gatewayDir, 'db.sqlite3');
     if (fs.existsSync(oldDbPath)) {
-      fs.renameSync(oldDbPath, dbPath);
+      this.renameFile(oldDbPath, dbPath);
     }
 
     // Open the database.
@@ -89,33 +116,33 @@ const Profile = {
     const pkPath1 = path.join(this.gatewayDir, 'privatekey.pem');
     const pkPath2 = path.join(this.gatewayDir, 'ssl', 'privatekey.pem');
     if (fs.existsSync(pkPath1)) {
-      fs.renameSync(pkPath1, path.join(this.sslDir, 'privatekey.pem'));
+      this.renameFile(pkPath1, path.join(this.sslDir, 'privatekey.pem'));
     } else if (fs.existsSync(pkPath2)) {
-      fs.renameSync(pkPath2, path.join(this.sslDir, 'privatekey.pem'));
+      this.renameFile(pkPath2, path.join(this.sslDir, 'privatekey.pem'));
     }
 
     const certPath1 = path.join(this.gatewayDir, 'certificate.pem');
     const certPath2 = path.join(this.gatewayDir, 'ssl', 'certificate.pem');
     if (fs.existsSync(certPath1)) {
-      fs.renamesync(certPath1, path.join(this.sslDir, 'certificate.pem'));
+      this.renameFile(certPath1, path.join(this.sslDir, 'certificate.pem'));
     } else if (fs.existsSync(certPath2)) {
-      fs.renameSync(certPath2, path.join(this.sslDir, 'certificate.pem'));
+      this.renameFile(certPath2, path.join(this.sslDir, 'certificate.pem'));
     }
 
     const chainPath1 = path.join(this.gatewayDir, 'chain.pem');
     const chainPath2 = path.join(this.gatewayDir, 'ssl', 'chain.pem');
     if (fs.existsSync(chainPath1)) {
-      fs.renameSync(chainPath1, path.join(this.sslDir, 'chain.pem'));
+      this.renameFile(chainPath1, path.join(this.sslDir, 'chain.pem'));
     } else if (fs.existsSync(chainPath2)) {
-      fs.renameSync(chainPath2, path.join(this.sslDir, 'chain.pem'));
+      this.renameFile(chainPath2, path.join(this.sslDir, 'chain.pem'));
     }
 
     const csrPath1 = path.join(this.gatewayDir, 'csr.pem');
     const csrPath2 = path.join(this.gatewayDir, 'ssl', 'csr.pem');
     if (fs.existsSync(csrPath1)) {
-      fs.renameSync(csrPath1, path.join(this.sslDir, 'csr.pem'));
+      this.renameFile(csrPath1, path.join(this.sslDir, 'csr.pem'));
     } else if (fs.existsSync(csrPath2)) {
-      fs.renameSync(csrPath2, path.join(this.sslDir, 'csr.pem'));
+      this.renameFile(csrPath2, path.join(this.sslDir, 'csr.pem'));
     }
 
     const oldSslDir = path.join(this.gatewayDir, 'ssl');
@@ -129,12 +156,11 @@ const Profile = {
         fs.lstatSync(oldUploadsDir).isDirectory()) {
       const fnames = fs.readdirSync(oldUploadsDir);
       for (const fname of fnames) {
-        fs.renameSync(
+        this.renameFile(
           path.join(oldUploadsDir, fname), path.join(this.uploadsDir, fname));
       }
 
       fs.rmdirSync(oldUploadsDir);
-      fs.symlinkSync(this.uploadsDir, oldUploadsDir);
     }
 
     // Create a user config if one doesn't exist.
@@ -146,20 +172,18 @@ const Profile = {
 
     const localConfigPath = path.join(this.gatewayDir, 'config', 'local.js');
     if (!fs.existsSync(localConfigPath)) {
-      fs.symlinkSync(userConfigPath, localConfigPath);
+      fs.copyFileSync(userConfigPath, localConfigPath);
     }
 
     // Move anything that exists in ~/mozilla-iot, such as certbot configs.
     const oldProfileDir = path.join(os.homedir(), 'mozilla-iot');
-    if (fs.existsSync(oldProfileDir) &&
-        fs.lstatSync(oldProfileDir).isDirectory()) {
-      const fnames = fs.readdirSync(oldProfileDir);
-      for (const fname of fnames) {
-        fs.renameSync(
-          path.join(oldProfileDir, fname), path.join(this.baseDir, fname));
-      }
-
-      fs.rmdirSync(oldProfileDir);
+    const oldEtcDir = path.join(oldProfileDir, 'etc');
+    if (fs.existsSync(oldEtcDir) && fs.lstatSync(oldEtcDir).isDirectory()) {
+      this.renameDir(oldEtcDir, path.join(this.baseDir, 'etc'));
+    }
+    const oldVarDir = path.join(oldProfileDir, 'var');
+    if (fs.existsSync(oldVarDir) && fs.lstatSync(oldVarDir).isDirectory()) {
+      this.renameDir(oldVarDir, path.join(this.baseDir, 'var'));
     }
 
     // Move add-ons.
@@ -175,12 +199,7 @@ const Profile = {
 
           if (fname !== 'plugin' && lstat.isDirectory()) {
             // Move existing add-ons.
-            fs.renameSync(oldFname, newFname);
-          } else if (fname.endsWith('.js') && lstat.isFile()) {
-            // Symlink dependencies.
-            if (!fs.existsSync(newFname)) {
-              fs.symlinkSync(oldFname, newFname);
-            }
+            this.renameFile(oldFname, newFname);
           }
         }
       }
