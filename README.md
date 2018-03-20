@@ -92,6 +92,14 @@ You can run this on the command line as well so it has immediate effect. After
 running it, you should run `sudo ldconfig` again to make sure the configuration
 change goes through.
 
+### Install OpenSSL (Windows only)
+
+The Gateway depends on [```ursa```](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
+
+Install [OpenSSL](http://slproweb.com/products/Win32OpenSSL.html) =< 1.0.2(normal, not light) in the same bitness as your Node.js.
+
+[See here](https://github.com/JoshKaufman/ursa#windows-install).
+
 ## Download and Build Gateway
 
 * Clone the GitHub repository (or fork it first):
