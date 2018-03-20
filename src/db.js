@@ -65,6 +65,11 @@ var Database = {
     console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
     // Open database or create it if it doesn't exist
     this.db = new sqlite3.Database(filename);
+
+    // Set a timeout in case the database is locked. 10 seconds is a bit long,
+    // but it's better than crashing.
+    this.db.configure('busyTimeout', 10000);
+
     this.db.serialize(() => {
       this.createTables();
       this.migrate();
