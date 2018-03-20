@@ -11,6 +11,7 @@
 const os = require('os');
 const path = require('path');
 const home = os.homedir();
+const suffix = os.platform() === 'win32' ? '-win32' : '';
 
 module.exports = {
   // Expose CLI
@@ -54,7 +55,7 @@ module.exports = {
     enabled: true,
     registration_endpoint: 'https://api.mozilla-iot.org:8443',
     domain: 'mozilla-iot.org',
-    pagekite_cmd: path.normalize(process.cwd() + '/pagekite-' + os.platform + '.py'),
+    pagekite_cmd: path.normalize(process.cwd() + '/pagekite' + suffix + '.py'),
     port: 443,
     certemail: 'certificate@mozilla-iot.org',
   },
