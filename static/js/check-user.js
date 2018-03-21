@@ -28,7 +28,8 @@
     window.API.userCount().then((count) => {
       let url;
       if (count > 0) {
-        url = `/login/?url=${encodeURIComponent(window.location.pathname)}`;
+        const redirectPath = window.location.pathname + window.location.search;
+        url = `/login/?url=${encodeURIComponent(redirectPath)}`;
       } else {
         url = '/signup/';
       }
