@@ -10,8 +10,8 @@
 
 'use strict';
 
-var Constants = require('../constants');
-var Database = require('../db.js');
+const Constants = require('../constants');
+const Database = require('../db.js');
 const EventEmitter = require('events');
 const WebSocket = require('ws');
 
@@ -32,6 +32,7 @@ var Thing = function(id, description) {
   this.id = id;
   this.name = description.name || '';
   this.type = description.type || '';
+  this.description = description.description || '';
   this.href = description.href || Constants.THINGS_PATH + '/' + this.id;
   this.properties = {};
   this.actions = description.actions || {};
@@ -50,6 +51,21 @@ var Thing = function(id, description) {
   this.floorplanX = description.floorplanX;
   this.floorplanY = description.floorplanY;
   this.websockets = [];
+  this.links = [
+    {
+      rel: 'properties',
+      href: `${this.href}/properties`,
+    },
+    {
+      rel: 'actions',
+      href: `${this.href}/actions`,
+    },
+    {
+      rel: 'events',
+      href: `${this.href}/events`,
+    },
+    // TODO: add websocket URL
+  ];
 };
 
 /**
@@ -95,14 +111,16 @@ Thing.prototype.removeEventSubscription = function(callback) {
  */
 Thing.prototype.getDescription = function() {
   return {
-    'name': this.name,
-    'type': this.type,
-    'href': this.href,
-    'properties': this.properties,
-    'actions': this.actions,
-    'events': this.events,
-    'floorplanX': this.floorplanX,
-    'floorplanY': this.floorplanY
+    name: this.name,
+    type: this.type,
+    description: this.description,
+    href: this.href,
+    properties: this.properties,
+    actions: this.actions,
+    events: this.events,
+    floorplanX: this.floorplanX,
+    floorplanY: this.floorplanY,
+    links: this.links,
   };
 };
 

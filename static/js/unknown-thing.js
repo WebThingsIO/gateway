@@ -31,8 +31,8 @@ var UnknownThing = function(description, format) {
             detail = new StringDetail(this, name);
             break;
           case 'number':
-            detail =
-              new NumberDetail(this, name, prop.unit, prop.min, prop.max);
+            detail = new NumberDetail(
+              this, name, prop.unit, prop.minimum, prop.maximum);
             break;
           case 'boolean':
             detail = new BooleanDetail(this, name);

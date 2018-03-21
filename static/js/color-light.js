@@ -29,7 +29,7 @@ function ColorLight(description, format) {
     } else if (description.properties.hasOwnProperty('colorTemperature')) {
       const prop = description.properties.colorTemperature;
       this.details.colorTemperature =
-        new ColorTemperatureDetail(this, prop.min, prop.max);
+        new ColorTemperatureDetail(this, prop.minimum, prop.maximum);
     }
   }
 
