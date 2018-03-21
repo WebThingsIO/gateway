@@ -1,7 +1,6 @@
 const config = require('config');
 const exec = require('child_process').exec;
 const fetch = require('node-fetch');
-const fs = require('fs');
 const semver = require('semver');
 
 const pkg = require('../package.json');
@@ -10,12 +9,14 @@ fetch(config.get('updateUrl'),
       {headers: {'User-Agent': `mozilla-iot-gateway/${pkg.version}`}})
   .then(res => {
     return res.json();
-  }).then(releases => {
+  })
+  .then(releases => {
     // Assumes that releases are in chronological order, latest-first
     return releases.filter(release => {
       return !release.prerelease && !release.draft;
     })[0];
-  }).then(latestRelease => {
+  })
+  .then(latestRelease => {
     if (!latestRelease) {
       console.error('No releases found');
       return;
@@ -27,11 +28,8 @@ fetch(config.get('updateUrl'),
       // download latestRelease.assets[:].browser_download_url
       let gatewayUrl = null;
       let nodeModulesUrl = null;
-      const downloadUrl = config.get('updateUrl')
-        .replace('api.github.com', 'github.com')
-        .replace('/repos/', '/');
       let validAssetRe = new RegExp(
-        `^${downloadUrl}/download/${releaseVer}/[a-z0-9_-]+.tar.gz$`);
+        `/download/${releaseVer}/[a-z0-9_-]+.tar.gz$`);
       for (let asset of latestRelease.assets) {
         if (!asset.browser_download_url.match(validAssetRe)) {
           continue;
