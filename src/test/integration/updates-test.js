@@ -2,7 +2,9 @@
 
 /* globals it */
 
+const config = require('config');
 const nock = require('nock');
+const {URL} = require('url');
 
 const {server, chai} = require('../common');
 const Constants = require('../../constants');
@@ -35,6 +37,8 @@ const releases = [
   },
 ];
 
+const updateUrl = new URL(config.get('updateUrl'));
+
 describe('updates/', function() {
   let jwt;
   beforeEach(async () => {
@@ -42,8 +46,8 @@ describe('updates/', function() {
   });
 
   it('should get /latest with a normal response', async() => {
-    nock('https://api.github.com')
-      .get('/repos/mozilla-iot/gateway/releases')
+    nock(updateUrl.origin)
+      .get(updateUrl.pathname)
       .reply(200, releases);
 
     const res = await chai.request(server)
@@ -57,8 +61,8 @@ describe('updates/', function() {
   });
 
   it('should get /latest with no good releases', async() => {
-    nock('https://api.github.com')
-      .get('/repos/mozilla-iot/gateway/releases')
+    nock(updateUrl.origin)
+      .get(updateUrl.pathname)
       .reply(200, releases.slice(0, 2));
 
     const res = await chai.request(server)
@@ -71,8 +75,8 @@ describe('updates/', function() {
   });
 
   it('should get /latest with a strange error', async() => {
-    nock('https://api.github.com')
-      .get('/repos/mozilla-iot/gateway/releases')
+    nock(updateUrl.origin)
+      .get(updateUrl.pathname)
       .reply(200, {error: true});
 
     const res = await chai.request(server)
