@@ -59,3 +59,7 @@ body {
 #authorize-button {
   background-image: url(/images/check-16.svg);
 }
+
+body.hidden {
+  visibility: hidden;
+}
