@@ -30,10 +30,12 @@ var UnknownThing = function(description, format) {
           case 'string':
             detail = new StringDetail(this, name);
             break;
-          case 'number':
-            detail =
-              new NumberDetail(this, name, prop.unit, prop.min, prop.max);
+          case 'number': {
+            const min = prop.hasOwnProperty('min') ? prop.min : prop.minimum;
+            const max = prop.hasOwnProperty('max') ? prop.max : prop.maximum;
+            detail = new NumberDetail(this, name, prop.unit, min, max);
             break;
+          }
           case 'boolean':
             detail = new BooleanDetail(this, name);
             break;

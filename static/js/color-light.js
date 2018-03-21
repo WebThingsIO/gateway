@@ -28,8 +28,10 @@ function ColorLight(description, format) {
       this.details.color = new ColorDetail(this);
     } else if (description.properties.hasOwnProperty('colorTemperature')) {
       const prop = description.properties.colorTemperature;
+      const min = prop.hasOwnProperty('min') ? prop.min : prop.minimum;
+      const max = prop.hasOwnProperty('max') ? prop.max : prop.maximum;
       this.details.colorTemperature =
-        new ColorTemperatureDetail(this, prop.min, prop.max);
+        new ColorTemperatureDetail(this, min, max);
     }
   }
 

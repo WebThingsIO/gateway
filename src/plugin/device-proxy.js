@@ -20,6 +20,7 @@ class DeviceProxy extends Device {
 
     this.name = deviceDict.name;
     this.type = deviceDict.type;
+    this.description = deviceDict.description || '';
 
     for (var propertyName in deviceDict.properties) {
       var propertyDict = deviceDict.properties[propertyName];
@@ -30,8 +31,8 @@ class DeviceProxy extends Device {
     // Copy over any extra device fields which might be useful for debugging.
     this.deviceDict = {};
     for (let field in deviceDict) {
-      if (['id', 'name', 'type', 'properties', 'actions', 'events']
-            .includes(field)) {
+      if (['id', 'name', 'type', 'description', 'properties', 'actions',
+           'events'].includes(field)) {
         continue;
       }
       this.deviceDict[field] = deviceDict[field];
