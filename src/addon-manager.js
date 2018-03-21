@@ -1085,6 +1085,11 @@ class AddonManager extends EventEmitter {
           continue;
         }
 
+        // Skip if .git directory is present.
+        if (fs.existsSync(path.join(addonPath, addonName, '.git'))) {
+          continue;
+        }
+
         // Try to load package.json.
         const packageJson = path.join(addonPath, addonName, 'package.json');
         if (!fs.existsSync(packageJson)) {
