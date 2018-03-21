@@ -59,4 +59,5 @@ module.exports = {
     certemail: 'certificate@mozilla-iot.org',
   },
   bcryptRounds: 2,
+  updateUrl: 'https://api.github.com/repos/mozilla-iot/gateway/releases',
 };

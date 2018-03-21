@@ -1,8 +1,11 @@
 const childProcess = require('child_process');
+const config = require('config');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const semver = require('semver');
 const PromiseRouter = require('express-promise-router');
+
+const pkg = require('../../package.json');
 
 const UpdatesController = PromiseRouter();
 
@@ -65,8 +68,10 @@ UpdatesController.get('/latest', async function(request, response) {
     }
   }
 
-  const res = await
-    fetch('https://api.github.com/repos/mozilla-iot/gateway/releases');
+  const res = await fetch(
+    config.get('updateUrl'),
+    {headers: {'User-Agent': `mozilla-iot-gateway/${pkg.version}`}});
+
   const releases = await res.json();
   if (!releases || !releases.filter) {
     console.warn('API returned invalid releases, rate limit likely exceeded');
