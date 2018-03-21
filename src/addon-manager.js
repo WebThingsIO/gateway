@@ -1087,6 +1087,8 @@ class AddonManager extends EventEmitter {
 
         // Skip if .git directory is present.
         if (fs.existsSync(path.join(addonPath, addonName, '.git'))) {
+          console.log(
+            `Not updating ${addonName} since a .git directory was detected`);
           continue;
         }
 
