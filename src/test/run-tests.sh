@@ -17,9 +17,8 @@ fi
 (
   cd ${MOZIOT_TEST_HOME};
   if [ -d intent-parser ]; then
-    echo "Skipping git pull"
-    #cd intent-parser
-    #git pull
+    cd intent-parser
+    git pull
   else
     git clone https://github.com/mozilla-iot/intent-parser
   fi
