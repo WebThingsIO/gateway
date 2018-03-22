@@ -11,9 +11,16 @@
 const os = require('os');
 const home = os.homedir();
 
+let moziot_home;
+if (process.env.hasOwnProperty('MOZIOT_HOME')) {
+  moziot_home = process.env.MOZIOT_HOME;
+} else {
+  moziot_home = `${home}/.mozilla-iot`;
+}
+
 module.exports = {
   cli: false,
-  profileDir: `${home}/.mozilla-iot/test`,
+  profileDir: moziot_home + '/test',
   ports: {
     https: 0, // 0 = find a free open port
     http: 0,

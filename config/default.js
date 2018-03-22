@@ -12,11 +12,18 @@ const os = require('os');
 const path = require('path');
 const home = os.homedir();
 
+let moziot_home;
+if (process.env.hasOwnProperty('MOZIOT_HOME')) {
+  moziot_home = process.env.MOZIOT_HOME;
+} else {
+  moziot_home = `${home}/.mozilla-iot`;
+}
+
 module.exports = {
   // Expose CLI
   cli: true,
 
-  profileDir: `${home}/.mozilla-iot`,
+  profileDir: moziot_home,
 
   ports: {
     https: 4443,
