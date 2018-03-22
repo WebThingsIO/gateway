@@ -50,7 +50,8 @@ sudo apt install -y \
   libudev-dev \
   libusb-1.0-0-dev \
   python-pip \
-  python3-pip
+  python3-pip \
+  sqlite3
 
 # Install Python add-on bindings
 _url="https://github.com/mozilla-iot/gateway-addon-python/releases/download/v0.2.0/gateway_addon-0.2.0.tar.gz"
