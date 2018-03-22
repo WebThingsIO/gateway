@@ -367,6 +367,7 @@ var SettingsScreen = {
               name: addon.name,
               displayName: addon.display_name,
               description: addon.description,
+              author: addon.author,
               version: addon.version,
               url: addon.packages[arch].url,
               checksum: addon.packages[arch].checksum,
