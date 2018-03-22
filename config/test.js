@@ -10,6 +10,7 @@
 
 module.exports = {
   cli: false,
+  profileDir: process.env.MOZIOT_HOME + '/test',
   ports: {
     https: 0, // 0 = find a free open port
     http: 0,
