@@ -2,6 +2,10 @@ body {
   background: #305067;
 }
 
+body.hidden {
+  visibility: hidden;
+}
+
 .title-bar {
   text-align: center;
   width: 100%;
@@ -27,14 +31,11 @@ body {
 }
 
 #authorize-form {
-  position: absolute;
-
-  top: 50%;
-  width: 100%;
-  transform: translateY(-50%);
   text-align: center;
   color: white;
   font-size: 1.8rem;
+  max-width: 60rem;
+  margin: 0 auto;
 }
 
 .text-button {
@@ -60,6 +61,52 @@ body {
   background-image: url(/images/check-16.svg);
 }
 
-body.hidden {
-  visibility: hidden;
+.generic-checkbox + label::before {
+  float: none;
+  position: relative;
+  top: 0.8rem;
+  left: -0.1rem;
+}
+
+#authorize-things {
+  text-align: left;
+  list-style: none;
+  display: block;
+}
+
+.authorize-all-things {
+  padding-bottom: 1.6rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #d9dee3;
+}
+
+.authorize-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+
+  background: none;
+  color: white;
+  border: 0;
+  font-size: 1.8rem;
+}
+
+.authorize-select-container {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px solid white;
+}
+
+.authorize-select-container:after {
+  border-top: 0.6rem solid white;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  content: '';
+  position: absolute;
+  transform: translate(-50%, 0.2rem);
+  top: 100%;
+  left: 50%;
+  height: 0;
+  width: 0;
 }

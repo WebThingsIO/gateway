@@ -11,10 +11,13 @@
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="/css/thing.css" />
     <link rel="stylesheet" type="text/css" href="/css/authorize.css" />
 
+    <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/api.js"></script>
     <script type="text/javascript" src="/js/check-user.js"></script>
+    <script type="text/javascript" src="/js/authorize.js"></script>
   </head>
   <body class="hidden">
     <img id="wordmark" src="../images/moziot-wordmark.png" alt="Mozilla IoT"/>
@@ -27,23 +30,34 @@
       </div>
 
       <form id="authorize-form" method="get" action="allow">
-        <p><b>{{name}}</b> would like to access your gateway to monitor and control devices.</p>
+        <p><b>{{name}}</b> would like to access your gateway to
+          <span class="authorize-select-container">
+            <select class="authorize-select">
+              <option id="authorize-readwrite">monitor and control</option>
+              <option id="authorize-read">monitor</option>
+            </select>
+          </span>
+        devices.</p>
         <p><small>from {{domain}}</small></p>
+        <ul id="authorize-things">
+          <li class="authorize-all-things">
+            <input id="authorize-all-things" type="checkbox" class="generic-checkbox">
+            <label for="authorize-all-things">
+              Allow for all Things
+            </label>
+          </li>
+        </ul>
+
         <input name="response_type" value="{{request.response_type}}" type="hidden">
         <input name="client_id" value="{{request.client_id}}" type="hidden">
-        <input name="scope" value="{{request.scope}}" type="hidden">
+        <input id="authorize-scope" name="scope" value="{{request.scope}}" type="hidden">
         <input name="state" value="{{request.state}}" type="hidden">
         <input id="jwt" name="jwt" value="" type="hidden">
+
         <input id="authorize-button" type="submit" value="Allow" class="text-button" disabled>
         <a id="cancel-button" href="/" class="text-button">Deny</a>
       </form>
     </section>
-
-    <script type="text/javascript">
-      let jwt = document.getElementById('jwt');
-      jwt.value = window.API.jwt;
-      document.getElementById('authorize-button').removeAttribute('disabled');
-    </script>
   </body>
 </html>
 
