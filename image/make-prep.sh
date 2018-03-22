@@ -22,6 +22,7 @@ ENABLE_SSH=0
 HOSTNAME=gateway
 PRINT_SUMMARY=0
 DD_DEV=
+WIFI_COUNTRY=GB
 
 ###########################################################################
 #
@@ -29,20 +30,21 @@ DD_DEV=
 #
 usage() {
   cat <<END
-${SCRIPT_NAME} [OPTION] img-file prep-file
+${SCRIPT_NAME} [OPTION] raspbian-img-file prep-file
 
 where OPTION can be one of:
 
-  --noconsole     Don't enable the serial console
-  --ssh           Enable ssh
-  --ssid          Specify the SSID for Wifi access
-  --password      Specify the password for wifi access
-  --hostname      Specify the hostname
-  --dd DEV        Issue a dd command to copy the image to an sdcard
-  --summary       Print summary of changed files
-  -h, --help      Print this help
-  -v, --verbose   Turn on some verbose reporting
-  -x              Does a 'set -x'
+  --noconsole       Don't enable the serial console
+  --ssh             Enable ssh
+  --ssid SSID       Specify the SSID for Wifi access
+  --password PWD    Specify the password for wifi access
+  --wifi-country CC Specify the WiFi country code to use (default: GB)
+  --hostname NAME   Specify the hostname
+  --dd DEV          Issue a dd command to copy the image to an sdcard
+  --summary         Print summary of changed files
+  -h, --help        Print this help
+  -v, --verbose     Turn on some verbose reporting
+  -x                Does a 'set -x'
 END
 }
 
@@ -106,6 +108,25 @@ network={
   psk="${WIFI_PASSWORD}"
 }
 END
+  fi
+}
+
+###########################################################################
+#
+# Sets the Wifi Country
+#
+# With raspbian releases from 2018-03-13 onwards, wifi won't be enabled
+# until the country code is set. This means that we can't even run our
+# first time setup, so we go back to the behaviour of previous releases
+# which default the country to GB.
+#
+set_wifi_country() {
+  WPA_CONF=${ROOT_MOUNTPOINT}/etc/wpa_supplicant/wpa_supplicant.conf
+
+  if sudo grep -q "^country=" "${WPA_CONF}"; then
+    sudo sed -i "s/country=.*/country=${WIFI_COUNTRY}/g" ${WPA_CONF}
+  else
+    sudo sed -i "1i country=${WIFI_COUNTRY}" ${WPA_CONF}
   fi
 }
 
@@ -210,9 +231,15 @@ main() {
           verbose)
             VERBOSE=1
             ;;
+          wifi-country)
+            WIFI_COUNTRY="${!OPTIND}"
+            OPTIND=$(( OPTIND + 1 ))
+            ;;
           *)
             if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
               echo "Unknown option --${OPTARG}" >&2
+              echo ""
+              usage
               exit 1
             fi
         esac
@@ -229,6 +256,7 @@ main() {
         ;;
       ?)
         echo "Unrecognized option: ${opt}"
+        echo ""
         usage
         exit 1
         ;;
@@ -239,11 +267,15 @@ main() {
   IMG_FILENAME=$1
   if [ -z "${IMG_FILENAME}" ]; then
     echo "No IMG filename provided."
+    echo ""
+    usage
     exit 1
   fi
   PREP_FILENAME=$2
   if [ -z "${PREP_FILENAME}" ]; then
     echo "No prep filename provided."
+    echo ""
+    usage
     exit 1
   fi
 
@@ -254,6 +286,7 @@ main() {
     echo "   ENABLE_WIFI = ${ENABLE_WIFI}"
     echo "     WIFI_SSID = ${WIFI_SSID}"
     echo " WIFI_PASSWORD = ${WIFI_PASSWORD}"
+    echo "  WIFI_COUNTRY = ${WIFI_COUNTRY}"
     echo "    ENABLE_SSH = ${ENABLE_SSH}"
     echo "        DD_DEV = ${DD_DEV}"
   fi
@@ -334,6 +367,8 @@ main() {
 
   echo ""
 
+  set_wifi_country
+
   if [ "${ENABLE_CONSOLE}" == 1 ]; then
     enable_serial_console
   fi
@@ -384,19 +419,19 @@ function cleanup() {
 
   if [ "${ROOT_MOUNTED}" == 1 ]; then
     echo "Unmounting ${ROOT_DEV}"
-    sudo umount ${ROOT_MOUNTPOINT}
+    sudo umount "${ROOT_MOUNTPOINT}"
     ROOT_MOUNTED=0
   fi
-  if [ -d ${ROOT_MOUNTPOINT} ]; then
-    sudo rmdir ${ROOT_MOUNTPOINT}
+  if [ ! -z "${ROOT_MOUNTPOINT}" -a -d "${ROOT_MOUNTPOINT}" ]; then
+    sudo rmdir "${ROOT_MOUNTPOINT}"
   fi
   if [ "${BOOT_MOUNTED}" == 1 ]; then
     echo "Unmounting ${BOOT_DEV}"
-    sudo umount ${BOOT_MOUNTPOINT}
+    sudo umount "${BOOT_MOUNTPOINT}"
     BOOT_MOUNTED=0
   fi
-  if [ -d ${BOOT_MOUNTPOINT} ]; then
-    sudo rmdir ${BOOT_MOUNTPOINT}
+  if [ ! -z "${BOOT_MOUNTPOINT}" -a -d "${BOOT_MOUNTPOINT}" ]; then
+    sudo rmdir "${BOOT_MOUNTPOINT}"
   fi
   if [ "${LOOP_MOUNT_CREATED}" == 1 ]; then
     echo "Removing loop mounts"
