@@ -58,7 +58,6 @@ sudo pip2 install "$_url"
 sudo pip3 install "$_url"
 
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
-sudo pip2 install "$_url"
 sudo pip3 install "$_url"
 
 git clone https://github.com/mozilla-iot/intent-parser "$HOME/mozilla-iot/intent-parser"
