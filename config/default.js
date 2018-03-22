@@ -17,7 +17,6 @@ if (process.env.hasOwnProperty('MOZIOT_HOME')) {
   moziot_home = process.env.MOZIOT_HOME;
 } else {
   moziot_home = `${home}/.mozilla-iot`;
-  process.env.MOZIOT_HOME = moziot_home;
 }
 
 module.exports = {
