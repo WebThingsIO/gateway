@@ -215,7 +215,11 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
   let heartbeatInterval = setInterval(function() {
-    websocket.ping();
+    try {
+      websocket.ping();
+    } catch (e) {
+      // Do nothing. Let cleanup() handle things if necessary.
+    }
   }, 30 * 1000);
 
   const cleanup = () => {
