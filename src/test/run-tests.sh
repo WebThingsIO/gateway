@@ -10,7 +10,7 @@ fi
 
 # Check to see if the adapt module is installed
 if ! python -c 'import adapt'; then
-  sudo pip install git+https://github.com/mycroftai/adapt#egg=adapt-parser
+  pip install --user git+https://github.com/mycroftai/adapt#egg=adapt-parser
 fi
 
 # install or update the intent parser
