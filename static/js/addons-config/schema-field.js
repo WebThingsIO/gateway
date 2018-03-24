@@ -14,7 +14,7 @@
 'use strict';
 
 /* globals SchemaUtils, NumberField, ObjectField, StringField,
-UnsupportedField, Utils */
+BooleanField, UnsupportedField, Utils */
 
 function SchemaField(
   schema,
@@ -43,7 +43,7 @@ function SchemaField(
 SchemaField.prototype.getFieldType = function () {
   const FIELD_TYPES = {
     //array: "ArrayField",
-    //boolean: "BooleanField",
+    boolean: BooleanField,
     integer: NumberField,
     number: NumberField,
     object: ObjectField,

@@ -12,6 +12,10 @@ var App = {
       {
         'type': 'object',
         'title': 'Number fields & widgets',
+        'required': [
+          'number',
+          'enumString'
+        ],
         'properties': {
           'number': {
             'title': 'Number',
@@ -66,6 +70,11 @@ var App = {
               'option #3',
               'option #4',
             ]
+          },
+          'done': {
+            'type': 'boolean',
+            'title': 'Done?',
+            'default': true
           }
         }
       };
