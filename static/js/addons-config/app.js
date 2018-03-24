@@ -51,6 +51,21 @@ var App = {
             'minimum': 50,
             'maximum': 100,
             'multipleOf': 10
+          },
+          'stringTitle': {
+            'type': 'string',
+            'title': 'Title',
+            'description': 'A sample title'
+          },
+          'enumString': {
+            'type': 'string',
+            'enum': [
+              'option #0',
+              'option #1',
+              'option #2',
+              'option #3',
+              'option #4',
+            ]
           }
         }
       };

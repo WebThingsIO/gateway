@@ -13,6 +13,8 @@
 
 'use strict';
 
+/* globals Utils */
+
 function UnsupportedField(schema) {
   // XXX render json as string so dev can inspect faulty subschema
   this.schema = schema;
@@ -22,9 +24,10 @@ function UnsupportedField(schema) {
 
 UnsupportedField.prototype.render = function () {
   console.log(new Error().stack);
-  const schema = this.schema;
+  const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
+
   return `
     <div className="unsupported-field">
-            Unsupported field schema ${JSON.stringify(schema, null, 2)}.
+      Unsupported field schema ${schema}.
     </div>`;
 }

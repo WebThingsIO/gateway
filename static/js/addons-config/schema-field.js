@@ -14,7 +14,7 @@
 'use strict';
 
 /* globals SchemaUtils, NumberField, ObjectField, StringField,
-UnsupportedField */
+UnsupportedField, Utils */
 
 function SchemaField(
   schema,
@@ -57,7 +57,7 @@ SchemaField.prototype.getFieldType = function () {
 SchemaField.prototype.render = function () {
   const fieldType = this.getFieldType();
   const type = this.schema.type;
-  const id = this.idSchema.$id;
+  const id = Utils.escapeHtml(this.idSchema.$id);
   const description = this.schema.description;
   const classNames = [
     'form-group',
@@ -67,6 +67,7 @@ SchemaField.prototype.render = function () {
     .join(' ')
     .trim();
   let label = this.schema.title || this.name;
+  label = Utils.escapeHtml(label);
   label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
 
   let displayLabel = true;
@@ -88,7 +89,7 @@ SchemaField.prototype.render = function () {
       label + '</label>' : '') +
     (displayLabel && description ?
       '<p id="' + id + '__description" class="field-description">' +
-      description + '</p>' : '');
+      Utils.escapeHtml(description) + '</p>' : '');
 
   const child = new fieldType(
     this.schema,

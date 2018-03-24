@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals SchemaUtils */
+/* globals SchemaUtils, Utils */
 
 function StringField(
     schema,
@@ -49,7 +49,7 @@ StringField.prototype.onStringChange = function (event) {
 }
 
 StringField.prototype.render = function () {
-    const id = this.idSchema.$id;
+    const id = Utils.escapeHtml(this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
 
@@ -58,8 +58,8 @@ StringField.prototype.render = function () {
         const enumOptions = SchemaUtils.getOptionsList(this.schema);
         const selects = enumOptions.map(({ value, label }, i) => {
             return `
-            <option key="${i}" value="${value}">
-              ${label}
+            <option key="${i}" value="${Utils.escapeHtml(value)}">
+              ${Utils.escapeHtml(label)}
             </option>`;
         });
 
@@ -69,7 +69,7 @@ StringField.prototype.render = function () {
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
-        value="${value == null ? '' : value}"
+        value="${value == null ? '' : Utils.escapeHtml(value)}"
         >
         ${selects.join(' ')}
         </select>`;
@@ -80,7 +80,7 @@ StringField.prototype.render = function () {
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
-        value="${value == null ? '' : value}"
+        value="${value == null ? '' : Utils.escapeHtml(value)}"
         />`;
     }
 

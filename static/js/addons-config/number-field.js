@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals SchemaUtils, StringField */
+/* globals SchemaUtils, StringField, Utils */
 
 function NumberField(
   schema,
@@ -70,7 +70,8 @@ NumberField.prototype.onNumberChange = function (value) {
 
 NumberField.prototype.render = function () {
   const id = this.idSchema.$id;
-  const value = this.formData;
+  let value = Number(this.formData);
+  value = this.isNaN(value) ? 0 : value;
 
   // range item
   if (this.schema.hasOwnProperty('minimum') &&
@@ -80,14 +81,15 @@ NumberField.prototype.render = function () {
     field.innerHTML = `
         <input
         type="range"
-        id="${id}"
+        id="${Utils.escapeHtml(id)}"
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
         value=${value == null ? '' : value}
-        ${this.schema.multipleOf ? 'step=' + this.schema.multipleOf : ''}
-        min=${this.schema.minimum}
-        max=${this.schema.maximum}
+        ${this.schema.multipleOf ?
+          'step=' + Number(this.schema.multipleOf) : ''}
+        min=${Number(this.schema.minimum)}
+        max=${Number(this.schema.maximum)}
         />
         <span class="range-view">${value}</span>`
 
