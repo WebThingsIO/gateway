@@ -83,7 +83,7 @@ ObjectField.prototype.render = function () {
       this.schema.properties[name],
       this.formData[name],
       this.idSchema[name],
-      this.name,
+      name,
       this.definitions,
       this.onPropertyChange(name),
       this.require(name),
