@@ -56,9 +56,18 @@ StringField.prototype.render = function () {
     // list item
     if (SchemaUtils.isSelect(this.schema)) {
         const enumOptions = SchemaUtils.getOptionsList(this.schema);
+        const selectedValue = value;
+        let selectedAny = false;
+
         const selects = enumOptions.map(({ value, label }, i) => {
+            const selected = selectedValue === value;
+            selectedAny |= selected;
+
             return `
-            <option key="${i}" value="${Utils.escapeHtml(value)}">
+            <option 
+            key="${i}"
+            value="${Utils.escapeHtml(value)}"
+            ${selected ? 'selected' : ''}>
               ${Utils.escapeHtml(label)}
             </option>`;
         });
@@ -69,10 +78,15 @@ StringField.prototype.render = function () {
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
-        value="${value == null ? '' : Utils.escapeHtml(value)}"
         >
         ${selects.join(' ')}
         </select>`;
+
+        if (!selectedAny) {
+            const select = field.querySelector(`#${id}`);
+            select.selectedIndex = -1;
+        }
+
     } else {
         field.innerHTML = `
         <input
