@@ -58,29 +58,29 @@ StringField.prototype.render = function () {
         const enumOptions = SchemaUtils.getOptionsList(this.schema);
         const selects = enumOptions.map(({ value, label }, i) => {
             return `
-            <option key=${i} value=${value}>
+            <option key="${i}" value="${value}">
               ${label}
             </option>`;
         });
 
         field.innerHTML = `
         <select
-        id=${id}
+        id="${id}"
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
-        value=${value == null ? '' : value}
+        value="${value == null ? '' : value}"
         >
         ${selects.join(' ')}
         </select>`;
     } else {
         field.innerHTML = `
         <input
-        id=${id}
+        id="${id}"
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
-        value=${value == null ? '' : value}
+        value="${value == null ? '' : value}"
         />`;
     }
 

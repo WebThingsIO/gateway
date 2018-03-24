@@ -80,7 +80,7 @@ NumberField.prototype.render = function () {
     field.innerHTML = `
         <input
         type="range"
-        id=${id}
+        id="${id}"
         class="form-control"
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
