@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals SchemaUtils, Validater, SchemaField, ErrorField */
+/* globals SchemaUtils, Validator, SchemaField, ErrorField */
 
 function SchemaForm(schema, id, name, options = {}) {
   this.definitions = schema.definitions;
@@ -44,7 +44,7 @@ SchemaForm.prototype.onChange = function (formData) {
 };
 
 SchemaForm.prototype.validate = function (formData) {
-  return Validater.validateFormData(formData, this.schema);
+  return Validator.validateFormData(formData, this.schema);
 }
 
 SchemaForm.prototype.render = function (data) {

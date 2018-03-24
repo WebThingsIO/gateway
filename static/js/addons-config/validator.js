@@ -15,15 +15,15 @@
 
 /* globals Ajv */
 
-var Validater = {};
+var Validator = {};
 
-Validater._ajv = new Ajv({
+Validator._ajv = new Ajv({
   errorDataPath: 'property',
   allErrors: true,
 });
 
-Validater._reEscapeChar = /\\(\\)?/g
-Validater._rePropName = RegExp(
+Validator._reEscapeChar = /\\(\\)?/g
+Validator._rePropName = RegExp(
   // Match anything that isn't a dot or bracket.
   '[^.[\\]]+' + '|' +
   // Or match property names within brackets.
@@ -37,13 +37,13 @@ Validater._rePropName = RegExp(
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
   , 'g')
 
-Validater._toPath = function (string) {
+Validator._toPath = function (string) {
   const result = [];
-  string.replace(Validater._rePropName,
+  string.replace(Validator._rePropName,
     function (match, expression, quote, subString) {
       let key = match;
       if (quote) {
-        key = subString.replace(Validater._reEscapeChar, '$1');
+        key = subString.replace(Validator._reEscapeChar, '$1');
       }
       else if (expression) {
         key = expression.trim();
@@ -53,7 +53,7 @@ Validater._toPath = function (string) {
   return result;
 }
 
-Validater._toErrorSchema = function (errors) {
+Validator._toErrorSchema = function (errors) {
   // Transforms a ajv validation errors list:
   // [
   //   {dataPath: ".level1.level2[2].level3", message: "err a"},
@@ -74,7 +74,7 @@ Validater._toErrorSchema = function (errors) {
   }
   return errors.reduce((errorSchema, error) => {
     const { dataPath, message } = error;
-    const path = Validater._toPath(dataPath);
+    const path = Validator._toPath(dataPath);
     let parent = errorSchema;
 
     for (const segment of path.slice(0)) {
@@ -95,11 +95,11 @@ Validater._toErrorSchema = function (errors) {
   }, {});
 }
 
-Validater.validateFormData = function (formData, schema) {
-  Validater._ajv.validate(schema, formData);
-  const errors = Validater._ajv.errors;
+Validator.validateFormData = function (formData, schema) {
+  Validator._ajv.validate(schema, formData);
+  const errors = Validator._ajv.errors;
 
-  const errorSchema = Validater._toErrorSchema(errors);
+  const errorSchema = Validator._toErrorSchema(errors);
 
   return { errors, errorSchema };
 }
