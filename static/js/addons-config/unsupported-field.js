@@ -25,9 +25,10 @@ function UnsupportedField(schema) {
 UnsupportedField.prototype.render = function () {
   console.log(new Error().stack);
   const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
+  const field = document.createElement('div');
 
-  return `
-    <div className="unsupported-field">
-      Unsupported field schema ${schema}.
-    </div>`;
+  field.className = 'unsupported-field';
+  field.innerHTML = `Unsupported field schema ${schema}.`;
+
+  return field;
 }
