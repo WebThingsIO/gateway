@@ -57,10 +57,10 @@ NumberField.prototype.onRangeChange = function (event) {
 NumberField.prototype.onNumberChange = function (value) {
   const number = Number(value);
 
-  this.formData = number;
-
   if (this.isNaN(number)) {
     this.formData = value;
+  }else{
+    this.formData = number;
   }
 
   if (this.onChange) {
