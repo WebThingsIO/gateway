@@ -14,7 +14,7 @@
 'use strict';
 
 /* globals SchemaUtils, NumberField, ObjectField, StringField,
-BooleanField, UnsupportedField, Utils */
+BooleanField, ArrayField, UnsupportedField, Utils */
 
 function SchemaField(
   schema,
@@ -42,7 +42,7 @@ function SchemaField(
 
 SchemaField.prototype.getFieldType = function () {
   const FIELD_TYPES = {
-    //array: "ArrayField",
+    array: ArrayField,
     boolean: BooleanField,
     integer: NumberField,
     number: NumberField,
@@ -67,8 +67,10 @@ SchemaField.prototype.render = function () {
     .join(' ')
     .trim();
   let label = this.schema.title || this.name;
-  label = Utils.escapeHtml(label);
-  label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
+  if(label !== undefined && label !== null){
+    label = Utils.escapeHtml(label);
+    label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;  
+  }
 
   let displayLabel = true;
   if (type === 'array') {
@@ -84,7 +86,7 @@ SchemaField.prototype.render = function () {
   const field = document.createElement('div');
   field.className = classNames;
   field.innerHTML =
-    (displayLabel ?
+    (displayLabel && label?
       '<label class="control-label" htmlFor="' + id + '">' +
       label + '</label>' : '') +
     (displayLabel && description ?
