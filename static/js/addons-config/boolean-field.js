@@ -51,6 +51,8 @@ BooleanField.prototype.render = function () {
     const id = Utils.escapeHtml(this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
+    field.className = 'checkbox';
+
     let title = this.schema.title ? this.schema.title : this.name;
     title = Utils.escapeHtml(title);
     title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
@@ -64,7 +66,7 @@ BooleanField.prototype.render = function () {
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
         />
-        <span>${title}</span>
+        <span class="checkbox-title">${title}</span>
         `;
 
     const input = field.querySelector(`#${id}`);

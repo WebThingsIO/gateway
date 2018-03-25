@@ -74,7 +74,6 @@ ArrayField.prototype.onSelectChange = function (value, all) {
       this.formData = this.formData.filter(v => v !== value);
     }
 
-    console.log(this.formData);
     if (this.onChange) {
       this.onChange(this.formData);
     }
@@ -155,7 +154,7 @@ ArrayField.prototype.onDropIndexClick = function (field, index) {
 
 ArrayField.prototype.renderRemoveButton = function (field, index) {
   const button = document.createElement('button');
-  button.className = 'btn-remove';
+  button.className = 'btn-remove btn-form-tools';
   button.disabled = this.disabled || this.readonly;
   button.onclick = this.onDropIndexClick(field, index);
 
@@ -202,7 +201,7 @@ ArrayField.prototype.onAddClick = function (field) {
 
 ArrayField.prototype.renderAddButton = function (field) {
   const button = document.createElement('button');
-  button.className = 'btn-add';
+  button.className = 'btn-add btn-form-tools';
   button.disabled = this.disabled || this.readonly;
   button.onclick = this.onAddClick(field);
 
@@ -213,15 +212,16 @@ ArrayField.prototype.renderArrayFieldItem =
   function (field, itemData, index, itemSchema, canRemove) {
     const id = `${this.idSchema.$id}_${index}`;
     const item = document.createElement('div');
+    item.className = 'array-item-row';
     const hasToolbox = canRemove;
 
     item.id = id;
 
     if (hasToolbox) {
       item.innerHTML = `
-      <div class="array-item col-xs-9">
+      <div class="array-item array-item-col-field">
       </div>
-      <div class="col-xs-3 array-item-toolbox">
+      <div class="array-item-toolbox array-item-col-tool">
       </div>
       `;
 
@@ -230,7 +230,7 @@ ArrayField.prototype.renderArrayFieldItem =
       toolbox.appendChild(buttom);
     } else {
       item.innerHTML = `
-      <div class="array-item col-xs-12">
+      <div class="array-item array-item-col">
       </div>`;
     }
 
@@ -367,17 +367,13 @@ ArrayField.prototype.renderMultiSelect = function () {
     div.className = `checkbox ${disabledCls}`;
 
     div.innerHTML = `
-    <label>
-    <span>
     <input
       type="checkbox"
       id="${id}_${index}"
       ${checked ? 'checked' : ''}
       ${this.disabled || this.readonly ? 'disabled' : ''}
     />
-    <span>${Utils.escapeHtml(option.label)}</span>
-    </span>
-    </label>
+    <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
     `
 
     const input = div.querySelector('input');
