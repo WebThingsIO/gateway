@@ -112,21 +112,39 @@ ArrayField.prototype.isItemRequired = function (itemSchema) {
 
 ArrayField.prototype.onDropIndexClick = function (field, index) {
   return function (event) {
-    const id = `${this.idSchema.$id}_${index}`;
-    const item = field.querySelector('#' + id);
-
-    event.preventDefault();
-    field.removeChild(item);
-
-    for (let i = index + 1; i < this.formData.length; i++) {
-      const id = `${this.idSchema.$id}_${i}`;
-      const newId = `${this.idSchema.$id}_${i - 1}`;
-      const item = field.querySelector('#' + id);
-
-      item.id = newId;
+    const schema = this.schema;
+    const itemsField = field.querySelector('div.array-items');
+    let itemSchema = schema.items;
+    if (SchemaUtils.isFixedItems(schema) &&
+      this.allowAdditionalItems(schema)) {
+      itemSchema = schema.additionalItems;
     }
 
-    this.formData = this.formData.filter((_, i) => i !== index)
+    const newItemsField = itemsField.cloneNode(false);
+
+    event.preventDefault();
+
+    for (let i = 0; i < index; i++) {
+      const id = `${this.idSchema.$id}_${i}`;
+      const item = field.querySelector('#' + id);
+
+      newItemsField.appendChild(item);
+    }
+
+    for (let i = index + 1; i < this.formData.length; i++) {
+      const newItem = this.renderArrayFieldItem(
+        field,
+        this.formData[i],
+        i - 1,
+        itemSchema,
+        true);
+
+      newItemsField.appendChild(newItem);
+    }
+
+    this.formData = this.formData.filter((_, i) => i !== index);
+
+    field.replaceChild(newItemsField, itemsField);
 
     if (this.onChange) {
       this.onChange(this.formData);
@@ -144,11 +162,12 @@ ArrayField.prototype.renderRemoveButton = function (field, index) {
   return button;
 }
 
-ArrayField.prototype.onAddClick = function (field, button) {
+ArrayField.prototype.onAddClick = function (field) {
   return function (event) {
     const schema = this.schema;
     const definitions = this.definitions;
     const index = this.formData.length;
+    const itemsField = field.querySelector('div.array-items');
 
     event.preventDefault();
 
@@ -173,7 +192,7 @@ ArrayField.prototype.onAddClick = function (field, button) {
       itemSchema,
       true);
 
-    field.insertBefore(itemField, button);
+    itemsField.appendChild(itemField);
 
     if (this.onChange) {
       this.onChange(this.formData);
@@ -185,7 +204,7 @@ ArrayField.prototype.renderAddButton = function (field) {
   const button = document.createElement('button');
   button.className = 'btn-add';
   button.disabled = this.disabled || this.readonly;
-  button.onclick = this.onAddClick(field, button);
+  button.onclick = this.onAddClick(field);
 
   return button;
 }
@@ -254,7 +273,9 @@ ArrayField.prototype.renderArrayFieldset = function () {
       '<p id="' + id + '__description' +
       '" class="field-description">' +
       Utils.escapeHtml(description) +
-      '</p>' : ''}`;
+      '</p>' : ''}
+      <div class="array-items">
+      </div>`;
 
   return field;
 }
@@ -265,6 +286,7 @@ ArrayField.prototype.renderNormalArray = function () {
   const items = this.formData;
   const itemSchema = SchemaUtils.retrieveSchema(schema.items, definitions);
   const field = this.renderArrayFieldset();
+  const itemsField = field.querySelector('div.array-items');
 
   items.forEach(function (item, index) {
     const itemField = this.renderArrayFieldItem(
@@ -273,7 +295,7 @@ ArrayField.prototype.renderNormalArray = function () {
       index,
       itemSchema,
       true);
-    field.appendChild(itemField);
+    itemsField.appendChild(itemField);
   }.bind(this));
 
   if (this.isAddable(items)) {
@@ -288,6 +310,7 @@ ArrayField.prototype.renderFixedArray = function () {
   const schema = this.schema;
   const definitions = this.definitions;
   const field = this.renderArrayFieldset();
+  const itemsField = field.querySelector('div.array-items');
 
   let items = this.formData;
   const itemSchemas = schema.items.map(function (item) {
@@ -312,7 +335,7 @@ ArrayField.prototype.renderFixedArray = function () {
       index,
       itemSchema,
       canRemove);
-    field.appendChild(itemField);
+    itemsField.appendChild(itemField);
   }.bind(this));
 
   if (this.allowAdditionalItems() && this.isAddable(items)) {
