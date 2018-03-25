@@ -146,6 +146,23 @@
       }, acc);
     },
 
+    optionsList: function (schema) {
+      if (schema.enum) {
+        return schema.enum.map((value, i) => {
+          const label = (schema.enumNames && schema.enumNames[i]) ||
+            String(value);
+          return { label, value };
+        });
+      } else {
+        const altSchemas = schema.oneOf || schema.anyOf;
+        return altSchemas.map((schema) => {
+          const value = SchemaUtils.toConstant(schema);
+          const label = schema.title || String(value);
+          return { label, value };
+        });
+      }
+    },
+
     computeDefaults: function (schema, parentDefaults, definitions = {}) {
       // Compute the defaults recursively: give highest priority to deepest
       // nodes.

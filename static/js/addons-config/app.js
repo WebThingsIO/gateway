@@ -10,6 +10,17 @@ var App = {
     this.container = document.getElementById('form');
     const schema =
       {
+        'definitions': {
+          'Thing': {
+            'type': 'object',
+            'properties': {
+              'name': {
+                'type': 'string',
+                'default': 'Default name'
+              }
+            }
+          }
+        },
         'type': 'object',
         'title': 'Number fields & widgets',
         'required': [
@@ -75,7 +86,48 @@ var App = {
             'type': 'boolean',
             'title': 'Done?',
             'default': true
-          }
+          },
+          'listOfStrings': {
+            'type': 'array',
+            'title': 'A list of strings',
+            'items': {
+              'type': 'string',
+              'default': 'bazinga'
+            }
+          },
+          'multipleChoicesList': {
+            'type': 'array',
+            'title': 'A multiple choices list',
+            'items': {
+              'type': 'string',
+              'enum': [
+                'foo',
+                'bar',
+                'fuzz',
+                'qux'
+              ]
+            },
+            'uniqueItems': true
+          },
+          'fixedItemsList': {
+            'type': 'array',
+            'title': 'A list of fixed items',
+            'items': [
+              {
+                'title': 'A string value',
+                'type': 'string',
+                'default': 'lorem ipsum'
+              },
+              {
+                'title': 'a boolean value',
+                'type': 'boolean'
+              }
+            ],
+            'additionalItems': {
+              'title': 'Additional item',
+              'type': 'number'
+            }
+          },
         }
       };
     const id = 'addons';
