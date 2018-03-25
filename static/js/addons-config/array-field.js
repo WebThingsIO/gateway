@@ -267,15 +267,13 @@ ArrayField.prototype.renderArrayFieldset = function () {
 
   const field = document.createElement('fieldset');
 
-  field.innerHTML = `
-      <legend id="${id + '__title'}">${title}</legend>
-      ${description ?
-      '<p id="' + id + '__description' +
-      '" class="field-description">' +
-      Utils.escapeHtml(description) +
-      '</p>' : ''}
-      <div class="array-items">
-      </div>`;
+  field.innerHTML =
+    (title ?
+      `<legend id="${id + '__title'}">${title}</legend>` : '') +
+    (description ?
+      `<p id="${id}__description" class="field-description">
+      ${Utils.escapeHtml(description)}</p>` : '') +
+    '<div class="array-items"></div>';
 
   return field;
 }

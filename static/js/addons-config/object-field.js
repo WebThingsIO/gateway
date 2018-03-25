@@ -63,17 +63,20 @@ ObjectField.prototype.render = function () {
   const id = Utils.escapeHtml(this.idSchema.$id);
   const description = this.schema.description;
   let title = this.schema.title ? this.schema.title : this.name;
-  title = Utils.escapeHtml(title);
-  title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
+  if (title !== undefined && title !== null) {
+    title = Utils.escapeHtml(title);
+    title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
+  }
 
   const field = document.createElement('fieldset');
-  field.innerHTML = `
-    <legend id="${id + '__title'}">${title}</legend>
-    ${description ?
-      '<p id="' + id + '__description' +
-      '" class="field-description">' +
-      Utils.escapeHtml(description) +
-      '</p>' : ''}`
+
+
+  field.innerHTML =
+    (title ?
+      `<legend id="${id + '__title'}">${title}</legend>` : '') +
+    (description ?
+      `<p id="${id}__description" class="field-description">
+      ${Utils.escapeHtml(description)}</p>` : '');
 
   // TODO support to specific properties order
   let orderedProperties = Object.keys(this.schema.properties);
