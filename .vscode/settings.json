@@ -1,0 +1,10 @@
+{
+  "files.eol": "\n",
+  "files.encoding": "utf8",
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "all",
+  "eslint.options": {
+    "configFile": ".eslintrc.js"
+  },
+  "eslint.autoFixOnSave": true
+}
