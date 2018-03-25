@@ -40,8 +40,7 @@ function BooleanField(
 }
 
 BooleanField.prototype.onBooleanChange = function (event) {
-    const value = event.target.value;
-    this.formData = Boolean(value);
+    this.formData = event.target.checked;
 
     if (this.onChange) {
         this.onChange(this.formData);
@@ -61,7 +60,7 @@ BooleanField.prototype.render = function () {
         <input
         type="checkbox"
         id="${id}"
-        checked=${typeof value === 'undefined' ? false : Boolean(value)}
+        ${typeof value === 'undefined' ? '' : 'checked'}
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
         />
