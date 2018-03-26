@@ -42,7 +42,7 @@ describe('actions/', function() {
 
   it('should fail to create a new action (unknown name)', async () => {
     let descr = {
-      name: 'potato'
+      potato: {}
     };
     const err = await pFinal(chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -54,9 +54,10 @@ describe('actions/', function() {
 
   it('should list and retrieve the new action', async () => {
     let descr = {
-      name: 'pair',
-      parameters: {
-        timeout: 60,
+      pair: {
+        input: {
+          timeout: 60,
+        },
       },
     };
 
@@ -75,13 +76,17 @@ describe('actions/', function() {
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('id');
-    expect(res.body[0].name).toEqual('pair');
+    expect(res.body[0]).toHaveProperty('pair');
+    expect(res.body[0].pair).toHaveProperty('href');
+    expect(res.body[0].pair).toHaveProperty('input');
+    expect(res.body[0].pair.input).toHaveProperty('timeout');
+    expect(res.body[0].pair.input.timeout).toEqual(60);
+    expect(res.body[0].pair).toHaveProperty('status');
+    expect(res.body[0].pair).toHaveProperty('timeRequested');
 
-    const actionId = res.body[0].id;
+    const actionHref = res.body[0].pair.href;
     res = await chai.request(server)
-      .get(Constants.ACTIONS_PATH + '/' + actionId)
+      .get(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -93,7 +98,7 @@ describe('actions/', function() {
   it('should error retrieving a nonexistent action', async () => {
     const actionId = 'foobarmissing';
     const err = await pFinal(chai.request(server)
-      .get(Constants.ACTIONS_PATH + '/' + actionId)
+      .get(Constants.ACTIONS_PATH + '/pair/' + actionId)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
@@ -101,9 +106,10 @@ describe('actions/', function() {
 
   it('should remove an action', async () => {
     let descr = {
-      name: 'pair',
-      parameters: {
-        timeout: 60,
+      pair: {
+        input: {
+          timeout: 60,
+        },
       },
     };
 
@@ -120,10 +126,10 @@ describe('actions/', function() {
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
-    const actionId = res.body[0].id;
 
+    const actionHref = res.body[0].pair.href;
     res = await chai.request(server)
-      .delete(Constants.ACTIONS_PATH + '/' + actionId)
+      .delete(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(204);
@@ -139,7 +145,7 @@ describe('actions/', function() {
   it('should error removing a nonexistent action', async () => {
     let actionId = 555;
     const err = await pFinal(chai.request(server)
-      .delete(Constants.ACTIONS_PATH + '/' + actionId)
+      .delete(Constants.ACTIONS_PATH + '/pair/' + actionId)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
@@ -155,7 +161,7 @@ describe('actions/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({name: 'unpair', parameters: {id: thingId}});
+      .send({unpair: {input: {id: thingId}}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
@@ -163,12 +169,12 @@ describe('actions/', function() {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
     expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0].name).toEqual('unpair');
-
-    expect(res.body[0]).toHaveProperty('id');
-
-    expect(res.body[0]).toHaveProperty('status');
-    expect(res.body[0].status).toEqual('completed');
+    expect(res.body[0]).toHaveProperty('unpair');
+    expect(res.body[0].unpair).toHaveProperty('input');
+    expect(res.body[0].unpair.input).toHaveProperty('id');
+    expect(res.body[0].unpair.input.id).toBe('test-nonexistent');
+    expect(res.body[0].unpair).toHaveProperty('href');
+    expect(res.body[0].unpair).toHaveProperty('status');
+    expect(res.body[0].unpair.status).toEqual('completed');
   });
 });

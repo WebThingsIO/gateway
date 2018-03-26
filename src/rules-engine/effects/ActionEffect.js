@@ -54,8 +54,9 @@ class ActionEffect extends Effect {
 
   async createAction() {
     let descr = {
-      name: this.action,
-      parameters: this.parameters
+      [this.action]: {
+        input: this.parameters,
+      },
     };
 
     let href = await Settings.get('RulesEngine.gateway') + this.thing.href +

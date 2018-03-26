@@ -71,6 +71,15 @@ var Thing = function(id, description) {
     },
     // TODO: add websocket URL
   ];
+
+  for (const actionName in this.actions) {
+    this.actions[actionName].href =
+      `${this.href}/actions/${actionName}`;
+  }
+
+  for (const eventName in this.events) {
+    this.events[eventName].href = `${this.href}/events/${eventName}`;
+  }
 };
 
 /**
@@ -151,10 +160,7 @@ Thing.prototype.remove = function() {
  * @return {boolean} Whether a known action
  */
 Thing.prototype.addAction = function(action) {
-  if (this.actions[action.name]) {
-    return true;
-  }
-  return false;
+  return this.actions.hasOwnProperty(action.name);
 };
 
 /**
@@ -163,10 +169,7 @@ Thing.prototype.addAction = function(action) {
  * @return {boolean} Whether a known action
  */
 Thing.prototype.removeAction = function(action) {
-  if (this.actions[action.name]) {
-    return true;
-  }
-  return false;
+  return this.actions.hasOwnProperty(action.name);
 };
 
 module.exports = Thing;

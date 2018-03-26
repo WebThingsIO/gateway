@@ -61,9 +61,10 @@ var AddThingScreen = {
     const timeout = 60;
 
     var action = {
-      'name': 'pair',
-      'parameters': {
-        'timeout': timeout,
+      pair: {
+        input: {
+          timeout,
+        },
       },
     };
     fetch('/actions', {

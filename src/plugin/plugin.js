@@ -174,6 +174,20 @@ class Plugin {
         }
         break;
 
+      case Constants.ACTION_STATUS:
+        device = adapter.getDevice(msg.data.deviceId);
+        if (device) {
+          device.actionNotify(msg.data.action);
+        }
+        break;
+
+      case Constants.EVENT:
+        device = adapter.getDevice(msg.data.deviceId);
+        if (device) {
+          device.eventNotify(msg.data.event);
+        }
+        break;
+
       case Constants.MOCK_ADAPTER_STATE_CLEARED:
         deferredMock = adapter.deferredMock;
         if (!deferredMock) {

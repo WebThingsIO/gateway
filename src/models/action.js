@@ -13,38 +13,50 @@
 const Actions = require('../models/actions');
 const Constants = require('../constants');
 const EventEmitter = require('events');
+const {Utils} = require('gateway-addon');
 
 class Action extends EventEmitter {
   /**
    * Create a new Action
    * @param {String} name
-   * @param {Object} parameters
+   * @param {Object} input
    * @param {Thing?} thing
    */
-  constructor(name, parameters, thing) {
+  constructor(name, input, thing) {
     super();
 
     this.id = Actions.generateId();
     this.name = name;
-    this.parameters = parameters || {};
+    this.input = input || {};
     if (thing) {
-      this.href = thing.href + Constants.ACTIONS_PATH + '/' + this.id;
+      this.href = `${thing.href}${Constants.ACTIONS_PATH}/${name}/${this.id}`;
       this.thingId = thing.id;
     } else {
-      this.href = Constants.ACTIONS_PATH + '/' + this.id;
+      this.href = `${Constants.ACTIONS_PATH}/${name}/${this.id}`;
     }
     this.status = 'created';
+    this.timeRequested = Utils.timestamp();
+    this.timeCompleted = null;
     this.error = '';
   }
 
   getDescription() {
-    return {
-      'name': this.name,
-      'parameters': this.parameters,
-      'href': this.href,
-      'status': this.status,
-      'error': this.error,
+    const description = {
+      input: this.input,
+      href: this.href,
+      status: this.status,
+      timeRequested: this.timeRequested,
     };
+
+    if (this.timeCompleted) {
+      description.timeCompleted = this.timeCompleted;
+    }
+
+    if (this.error) {
+      description.error = this.error;
+    }
+
+    return description;
   }
 
   /**
@@ -52,7 +64,21 @@ class Action extends EventEmitter {
    * @param {String} newStatus
    */
   updateStatus(newStatus) {
+    if (newStatus === 'completed') {
+      this.timeCompleted = Utils.timestamp();
+    }
+
     this.status = newStatus;
+    this.emit(Constants.ACTION_STATUS, this);
+  }
+
+  /**
+   * Update from another action.
+   */
+  update(action) {
+    this.status = action.status;
+    this.timeRequested = action.timeRequested;
+    this.timeCompleted = action.timeCompleted;
     this.emit(Constants.ACTION_STATUS, this);
   }
 }

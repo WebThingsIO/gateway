@@ -10,25 +10,32 @@
 
 'use strict';
 
-/**
- * Create a new Event
- * @param {String} name
- * @param {String?} description
- */
-function Event(name, description) {
-  this.name = name;
-  if (description) {
-    this.description = description;
-  }
-  this.time = new Date();
-}
+const {Utils} = require('gateway-addon');
 
-Event.prototype.getDescription = function() {
-  return {
-    name: this.name,
-    description: this.description,
-    time: this.time
-  };
-};
+class Event {
+  /**
+   * Create a new Event
+   * @param {String} name
+   * @param {*} data
+   * @param {Thing?} thing
+   * @param {String?} timestamp
+   */
+  constructor(name, data, thing, timestamp) {
+    this.name = name;
+    this.data = data || null;
+    this.timestamp = timestamp || Utils.timestamp();
+    if (thing) {
+      this.thingId = thing.id;
+    }
+  }
+
+  getDescription() {
+    return {
+      name: this.name,
+      data: this.data,
+      timestamp: this.timestamp,
+    };
+  }
+}
 
 module.exports = Event;

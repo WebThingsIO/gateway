@@ -101,6 +101,8 @@ var Router = {
             require('./controllers/adapters_controller'));
     app.use(API_PREFIX + Constants.ACTIONS_PATH, nocache, auth,
             require('./controllers/actions_controller'));
+    app.use(API_PREFIX + Constants.EVENTS_PATH, nocache, auth,
+            require('./controllers/events_controller'));
     app.use(API_PREFIX + Constants.LOG_OUT_PATH, nocache, auth,
             require('./controllers/log_out_controller'));
     app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache, auth,

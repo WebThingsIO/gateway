@@ -31,6 +31,19 @@ class AddonManagerProxy extends EventEmitter {
                            property.name, 'value:', property.value);
       this.sendPropertyChangedNotification(property);
     });
+
+    this.on(Constants.ACTION_STATUS, (action) => {
+      DEBUG && console.log('AddonManagerProxy: Got',
+                           Constants.ACTION_STATUS, 'notification for',
+                           action.name, 'status:', action.status);
+      this.sendActionStatusNotification(action);
+    });
+
+    this.on(Constants.EVENT, (event) => {
+      DEBUG && console.log('AddonManagerProxy: Got',
+                           Constants.EVENT, 'notification for', event.name);
+      this.sendEventNotification(event);
+    });
   }
 
   /**
@@ -225,6 +238,18 @@ class AddonManagerProxy extends EventEmitter {
         }
         break;
 
+      case Constants.REQUEST_ACTION: {
+        const actionName = msg.data.actionName;
+        const actionId = msg.data.actionId;
+        const input = msg.data.input;
+        device.requestAction(actionId, actionName, input).catch(err => {
+          console.error('AddonManagerProxy: Failed to request action',
+                        actionName, 'for device:', deviceId);
+          console.error(err);
+        });
+        break;
+      }
+
       case Constants.DEBUG_CMD:
         device.debugCmd(msg.data.cmd, msg.data.params);
         break;
@@ -244,6 +269,30 @@ class AddonManagerProxy extends EventEmitter {
       adapterId: property.device.adapter.id,
       deviceId: property.device.id,
       property: property.asDict()
+    });
+  }
+
+  /**
+   * @method sendActionStatusNotification
+   * Sends an actionStatus notification to the gateway.
+   */
+  sendActionStatusNotification(action) {
+    this.pluginClient.sendNotification(Constants.ACTION_STATUS, {
+      adapterId: action.device.adapter.id,
+      deviceId: action.device.id,
+      action: action.asDict(),
+    });
+  }
+
+  /**
+   * @method sendEventNotification
+   * Sends an event notification to the gateway.
+   */
+  sendEventNotification(event) {
+    this.pluginClient.sendNotification(Constants.EVENT, {
+      adapterId: event.device.adapter.id,
+      deviceId: event.device.id,
+      event: event.asDict(),
     });
   }
 
