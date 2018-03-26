@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals Utils */
+/* globals Utils, page */
 
 /**
  * InstalledAddon constructor.
@@ -29,6 +29,8 @@ var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
   this.homepage = metadata.homepage;
   this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
+  this.config = metadata.moziot.config;
+  this.schema = metadata.moziot.schema;
   this.updateUrl = updateUrl;
   this.updateVersion = updateVersion;
   this.updateChecksum = updateChecksum;
@@ -51,6 +53,7 @@ InstalledAddon.prototype.view = function() {
   }
 
   const updateButtonClass = this.updateUrl ? '' : 'hidden';
+  const configButtonClass = this.schema ? '' : 'hidden';
 
   return `
     <li id="addon-item-${Utils.escapeHtml(this.name)}" class="addon-item">
@@ -71,6 +74,10 @@ InstalledAddon.prototype.view = function() {
         </span>
       </div>
       <div class="addon-settings-controls">
+        <button id="addon-config-${Utils.escapeHtml(this.name)}"
+          class="text-button addon-settings-config ${configButtonClass}">
+          Config
+        </button>
         <button id="addon-update-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-update ${updateButtonClass}">
           Update
@@ -93,6 +100,10 @@ InstalledAddon.prototype.view = function() {
 InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
+  const configButton = document.getElementById(
+    `addon-config-${Utils.escapeHtml(this.name)}`);
+  configButton.addEventListener('click', this.handleConfig.bind(this));
+
   const updateButton = document.getElementById(
     `addon-update-${Utils.escapeHtml(this.name)}`);
   updateButton.addEventListener('click', this.handleUpdate.bind(this));
@@ -104,6 +115,13 @@ InstalledAddon.prototype.render = function() {
   const toggleButton = document.getElementById(
     `addon-toggle-${Utils.escapeHtml(this.name)}`);
   toggleButton.addEventListener('click', this.handleToggle.bind(this));
+};
+
+/**
+ * Handle a click on the config button.
+ */
+InstalledAddon.prototype.handleConfig = function() {
+  page(`/settings/addons/config/${this.name}`);
 };
 
 /**

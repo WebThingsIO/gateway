@@ -11,7 +11,7 @@
 'use strict';
 
 /* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon,
-   User, Utils */
+   User, SchemaForm, Utils */
 
 // eslint-disable-next-line no-unused-vars
 var SettingsScreen = {
@@ -31,6 +31,7 @@ var SettingsScreen = {
     this.addonMainSettings = document.getElementById('addon-main-settings');
     this.addonDiscoverySettings =
       document.getElementById('addon-discovery-settings');
+    this.addonConfigSettings = document.getElementById('addon-config-settings');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.authorizationSettings =
@@ -111,6 +112,9 @@ var SettingsScreen = {
           switch(subsection) {
             case 'discovered':
               this.showDiscoveredAddonsScreen();
+              break;
+            case 'config':
+              this.showAddonConfigScreen(id);
               break;
             default:
               console.error('Tried to display undefined subsection');
@@ -384,6 +388,7 @@ var SettingsScreen = {
   showAddonSettings: function() {
     this.addonSettings.classList.remove('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
+    this.addonConfigSettings.classList.add('hidden');
     this.addonMainSettings.classList.remove('hidden');
 
     const discoverAddonsButton =
@@ -411,6 +416,23 @@ var SettingsScreen = {
         new InstalledAddon(addon, this.installedAddons, updateUrl,
                            updateVersion, updateChecksum);
       }
+    });
+  },
+
+  showAddonConfigScreen: function(id) {
+    this.backButton.href = '/settings/addons';
+    this.addonMainSettings.classList.add('hidden');
+    this.addonConfigSettings.classList.remove('hidden');
+
+    this.fetchAddonList().then(() => {
+      this.addonConfigSettings.innerHTML = '';
+
+      const addon = this.installedAddons.get(id);
+      const schema = addon.moziot.schema;
+      const config = addon.moziot.config;
+
+      const configForm = new SchemaForm(schema, `addon-config-${id}`, id);
+      this.addonConfigSettings.appendChild(configForm.render(config));
     });
   },
 

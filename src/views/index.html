@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="/css/rules-common.css" />
     <link rel="stylesheet" type="text/css" href="/css/rules.css" />
     <link rel="stylesheet" type="text/css" href="/css/rule.css" />
+    <link rel="stylesheet" type="text/css" href="/css/addons-form.css" />
 
     <script type="text/javascript" src="/js/api.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
@@ -70,6 +71,19 @@
     <script type="text/javascript" src="/js/rules/RuleCard.js"></script>
     <script type="text/javascript" src="/js/rules-screen.js"></script>
     <script type="text/javascript" src="/js/rule-screen.js"></script>
+
+    <script type="text/javascript" src="/js/lib/ajv.min.js"></script>
+    <script type="text/javascript" src="/js/addons-config/validator.js"></script>
+    <script type="text/javascript" src="/js/addons-config/unsupported-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/error-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/schema-utils.js"></script>
+    <script type="text/javascript" src="/js/addons-config/boolean-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/array-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/object-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/string-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/number-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/schema-field.js"></script>
+    <script type="text/javascript" src="/js/addons-config/schema-form.js"></script>
 
   </head>
   <body class="hidden">
@@ -175,6 +189,8 @@
           <ul id="installed-addons-list">
           </ul>
           <button id="discover-addons-button" class="icon-button"></button>
+        </section>
+        <section id="addon-config-settings" class="hidden settings-subsection">
         </section>
         <section id="addon-discovery-settings" class="hidden settings-subsection">
           <ul id="discovered-addons-list">
