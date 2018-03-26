@@ -156,8 +156,7 @@
   margin-bottom: 3rem;
 }
 
-#no-adapters,
-#no-authorizations {
+#no-adapters {
   text-align: center;
   position: relative;
   top: 50%;
@@ -435,6 +434,16 @@
   background-size: 8rem auto;
   background-repeat: no-repeat;
   background-position: left 2rem center;
+}
+
+#no-authorizations, #new-local-authorization {
+  background-image: none;
+  padding-left: 5.5rem;
+}
+
+#new-local-authorization > a,
+#new-local-authorization > a:visited {
+  color: white;
 }
 
 .revoke-button {

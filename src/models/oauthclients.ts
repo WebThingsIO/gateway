@@ -54,4 +54,9 @@ oauthClients.register(
                      'Test OAuth Client', 'super secret', '/things:readwrite')
 );
 
+oauthClients.register(
+  new ClientRegistry(new URL('https://gateway.localhost/oauth/local-token-service'), 'local-token',
+                     'Local Token Service', 'super secret',
+                     '/things:readwrite')
+);
 export default oauthClients;

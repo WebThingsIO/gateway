@@ -212,8 +212,13 @@
         </ul>
       </section>
       <section id="authorization-settings" class="hidden settings-section">
-        <div id="no-authorizations" class="hidden">No authorizations.</div>
         <ul id="authorizations">
+          <li id="no-authorizations" class="hidden authorization-item">No authorizations.</li>
+          <li id="new-local-authorization" class="authorization-item">
+            <a href="/oauth/authorize?response_type=code&client_id=local-token&scope=/things:readwrite&state=asdf">
+              Create New Local Authorization
+            </a>
+          </li>
         </ul>
       </section>
       <a href="/settings" id="settings-back-button" class="hidden back-button icon-button"></a>

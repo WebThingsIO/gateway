@@ -109,6 +109,10 @@ function redirect(response: express.Response, baseURL: URL, params: {[key: strin
       url.searchParams.set(key, params[key].toString());
     }
   }
+  if (url.hostname === 'gateway.localhost') {
+    response.redirect(url.toString().replace(/^https:\/\/gateway\.localhost/, ''));
+    return;
+  }
   response.redirect(url.toString());
 }
 
@@ -247,6 +251,25 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
   });
 });
 
+OAuthController.get('/local-token-service', async (request: express.Request, response: express.Response) => {
+  let localClient: ClientRegistry = OAuthClients.get('local-token');
+  let tokenRequest: AccessTokenRequest = {
+    grant_type: 'authorization_code',
+    code: request.query.code,
+    redirect_uri: localClient.redirect_uri,
+    client_id: localClient.id
+  };
+  request.body = tokenRequest;
+  request.headers.authorization = 'Basic ' +
+    new Buffer(localClient.id + ':' + localClient.secret).toString('base64');
+  let token = await handleAccessTokenRequest(request, response);
+  if (token) {
+    response.render('local-token-service', {
+      token: token.access_token
+    });
+  }
+});
+
 OAuthController.get('/allow', auth, async (request: express.Request, response: express.Response) => {
   let authRequest: AuthorizationRequest = {
     response_type: request.query.response_type,
@@ -292,7 +315,10 @@ OAuthController.get('/allow', auth, async (request: express.Request, response: e
 OAuthController.post('/token', async (request: express.Request, response: express.Response) => {
   const requestData = request.body;
   if (requestData.grant_type === 'authorization_code') {
-    handleAccessTokenRequest(request, response);
+    let token = await handleAccessTokenRequest(request, response);
+    if (token) {
+      response.json(token);
+    }
     return;
   }
   // if (requestData.grant_type === 'refresh_token') {
@@ -305,7 +331,12 @@ OAuthController.post('/token', async (request: express.Request, response: expres
   response.status(400).json(err);
 });
 
-async function handleAccessTokenRequest(request: express.Request, response: express.Response) {
+/**
+ * Handles the request for an access token using an authorization code.
+ * On error sends a 400 with a JSON reason.
+ */
+async function handleAccessTokenRequest(request: express.Request, response: express.Response):
+    Promise<AccessTokenSuccessResponse|undefined> {
   const requestData = request.body;
   let tokenRequest: AccessTokenRequest = {
     grant_type: requestData.grant_type,
@@ -359,7 +390,7 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     scope: client.scope
   };
 
-  response.json(res);
+  return res;
 }
 
 export default OAuthController;
