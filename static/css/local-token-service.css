@@ -1,0 +1,76 @@
+body {
+  background: #5d9bc7;
+}
+
+body.hidden {
+  visibility: hidden;
+}
+
+section {
+  position: absolute;
+}
+
+a, a:visited {
+  color: white;
+}
+
+.title-bar {
+  text-align: center;
+  width: 100%;
+  height: 9.6rem;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.title-bar > h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+  line-height: 9.6rem;
+
+  padding-left: 6.8rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  background-image: url(/images/authorization.svg);
+}
+
+.main-container {
+  text-align: left;
+  color: white;
+  font-size: 1.8rem;
+  max-width: 60rem;
+  margin: 0 auto;
+  word-break: break-all;
+}
+
+.code-example {
+  text-align: left;
+}
+
+.code-example > h3,
+.code-example > pre {
+  margin: 0;
+}
+
+code {
+  font-size: 1.4rem;
+  display: block;
+  padding: 2rem;
+  background: #305067;
+}
+
+span.insecure {
+  display: none;
+}
+
+.insecure .secure {
+  display: none;
+}
+
+.insecure .insecure {
+  display: inline;
+}

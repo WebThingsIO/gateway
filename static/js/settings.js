@@ -593,16 +593,21 @@ var SettingsScreen = {
     }).then(clients => {
       const authorizationsList = document.getElementById('authorizations');
       const noAuthorizations = document.getElementById('no-authorizations');
-      authorizationsList.innerHTML = '';
+
+      for (let child of authorizationsList.children) {
+        if (child.id === 'no-authorizations' ||
+            child.id === 'new-local-authorization') {
+          continue;
+        }
+        child.parentNode.removeChild(child);
+      }
 
       if (clients.length === 0) {
         noAuthorizations.classList.remove('hidden');
-        authorizationsList.classList.add('hidden');
         return;
       }
 
       noAuthorizations.classList.add('hidden');
-      authorizationsList.classList.remove('hidden');
 
       for (let client of clients) {
         let authorization = document.createElement('li');
@@ -622,7 +627,7 @@ var SettingsScreen = {
         authorization.appendChild(name);
         authorization.appendChild(origin);
         authorization.appendChild(revoke);
-        authorizationsList.appendChild(authorization);
+        authorizationsList.insertBefore(authorization, noAuthorizations);
       }
     });
   },
@@ -646,7 +651,6 @@ var SettingsScreen = {
       if (authorizationsList.children.length === 0) {
         const noAuthorizations = document.getElementById('no-authorizations');
         noAuthorizations.classList.remove('hidden');
-        authorizationsList.classList.add('hidden');
       }
     }).catch(err => {
       console.warn('Unable to revoke', err);
