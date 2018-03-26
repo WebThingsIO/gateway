@@ -3194,7 +3194,7 @@ functional-red-black-tree@^1.0.1:
 
 "gateway-addon@https://github.com/mozilla-iot/gateway-addon-node":
   version "0.3.0"
-  resolved "https://github.com/mozilla-iot/gateway-addon-node#e70fd5ff238fd504551fd1c26c459cbdd02a3854"
+  resolved "https://github.com/mozilla-iot/gateway-addon-node#b96883f3d4ebba8be6d9f02c5aa2e0aae60c8be8"
 
 gauge@~2.7.3:
   version "2.7.4"

@@ -64,6 +64,11 @@ var Thing = function(id, description) {
       rel: 'events',
       href: `${this.href}/events`,
     },
+    {
+      rel: 'alternate',
+      mediaType: 'text/html',
+      href: this.href,
+    },
     // TODO: add websocket URL
   ];
 };
