@@ -75,10 +75,10 @@ SchemaForm.prototype.handleApply = function (e) {
 }
 
 SchemaForm.prototype.renderApplyButton = function (){
-  const applyButton = document.createElement("button");
+  const applyButton = document.createElement('button');
   applyButton.id = 'addon-apply-' + Utils.escapeHtml(this.id);
   applyButton.type = 'button';
-  applyButton.className = "text-button addon-config-button-apply";
+  applyButton.className = 'text-button addon-config-button-apply';
   applyButton.innerText = 'Apply'
   applyButton.addEventListener('click', this.handleApply.bind(this));
   applyButton.disabled = true;
