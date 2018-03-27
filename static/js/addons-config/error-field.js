@@ -15,16 +15,14 @@
 
 function ErrorField() {
   const field = document.createElement('div');
-  field.className = 'panel panel-danger errors';
+  field.className = 'errors-field hidden';
 
   field.innerHTML = `
-    <div class="panel-heading hidden">
-      <h3 class="panel-title">Errors</h3>
+    <div>
+      <h3 class="errors-title">Errors</h3>
     </div>
-    <ul class="list-group">
+    <ul class="errors-list">
     </ul>`
-
-  field.classList.add('hidden');
 
   this.field = field;
   this.errorlist = field.querySelector('ul');
@@ -34,16 +32,20 @@ function ErrorField() {
 
 ErrorField.prototype.render = function (errors) {
 
-  const errorHtml = errors.map((error) => {
-    return `
-          <li key={i} class="list-group-item text-danger">
+  if (errors.length > 0) {
+    const errorHtml = errors.map((error) => {
+      return `
+          <li class="error-item">
             ${(error.dataPath + ' ' + error.message).trim()}
           </li>`
-  });
+    });
 
-  this.errorlist.innerHTML = errorHtml.join(' ');
+    this.errorlist.innerHTML = errorHtml.join(' ');
 
-  this.field.classList.remove('hidden');
+    this.field.classList.remove('hidden');
+  } else {
+    this.field.classList.add('hidden');
+  }
 
   return this.field;
 }

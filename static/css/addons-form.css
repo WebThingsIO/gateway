@@ -138,3 +138,25 @@
     grid-column: 6;
     grid-row: 1;
   }
+
+  .addons-form .errors-field.hidden {
+    display: none;
+  }
+  
+  #addon-config-settings .addons-form .errors-title {
+    margin: 0 auto;
+    padding-bottom: 0.5rem;
+    color: #FFCC66;
+  }
+
+  #addon-config-settings .addons-form .errors-list {
+    transform: translateY(0%);
+    top: auto;
+    margin: 0 auto;
+    padding: 0rem;
+    padding-left: 1em;
+    text-indent: -1em;
+    list-style-position: inside;
+    color: #FFCC66;
+  }
+  
