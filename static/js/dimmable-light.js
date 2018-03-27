@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals API, MultiLevelSwitch */
+const API = require('./api');
+const MultiLevelSwitch = require('./multi-level-switch');
 
 /**
  * DimmableLight Constructor (extends MultiLevelSwitch).
@@ -155,3 +156,5 @@ DimmableLight.prototype.iconView = function() {
     </div>
   </div>`;
 };
+
+module.exports = DimmableLight;

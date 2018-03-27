@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 function LevelDetail(thing) {
   this.thing = thing;
@@ -54,3 +54,5 @@ LevelDetail.prototype.update = function() {
 LevelDetail.prototype.set = function() {
   this.thing.setLevel(this.level.value);
 };
+
+module.exports = LevelDetail;

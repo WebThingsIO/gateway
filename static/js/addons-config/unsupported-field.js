@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals Utils */
+const Utils = require('../utils');
 
 function UnsupportedField(schema) {
   // XXX render json as string so dev can inspect faulty subschema
@@ -32,3 +32,5 @@ UnsupportedField.prototype.render = function() {
 
   return field;
 };
+
+module.exports = UnsupportedField;

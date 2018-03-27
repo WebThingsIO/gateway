@@ -7,6 +7,8 @@
  */
 'use strict';
 
+const API = require('./api');
+
 (function() {
   const form = document.getElementById('login-form');
   const email = document.getElementById('email');
@@ -20,7 +22,7 @@
     const emailValue = email.value;
     const passwordValue = password.value;
 
-    window.API.login(emailValue, passwordValue).
+    API.login(emailValue, passwordValue).
       then(() => {
         console.log('~~~ log in success ~~~');
 

@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 /**
  * Adapter constructor.
@@ -73,3 +73,5 @@ Adapter.prototype.render = function() {
  */
 Adapter.prototype.handleToggle = function() {
 };
+
+module.exports = Adapter;

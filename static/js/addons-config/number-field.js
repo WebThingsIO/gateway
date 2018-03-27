@@ -13,7 +13,9 @@
 
 'use strict';
 
-/* globals SchemaUtils, StringField, Utils */
+const SchemaUtils = require('./schema-utils');
+const StringField = require('./string-field');
+const Utils = require('../utils');
 
 function NumberField(
   schema,
@@ -108,3 +110,5 @@ NumberField.prototype.render = function() {
     this.disabled,
     this.readonly).render();
 };
+
+module.exports = NumberField;

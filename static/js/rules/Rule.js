@@ -4,7 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global API, TimeTriggerBlock */
+const API = require('../api');
+const TimeTriggerBlock = require('./TimeTriggerBlock');
 
 /**
  * Model of a Rule loaded from the Rules Engine
@@ -235,3 +236,4 @@ Rule.prototype.setEffect = function(effect) {
   return this.update();
 };
 
+module.exports = {Rule, RuleUtils};

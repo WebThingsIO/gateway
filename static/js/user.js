@@ -9,7 +9,9 @@
  */
 'use strict';
 
-/* globals page, Utils */
+const API = require('./api');
+const page = require('./lib/page');
+const Utils = require('./utils');
 
 /**
  * User constructor.
@@ -69,14 +71,14 @@ User.prototype.render = function() {
  * Handle a click on the remove button.
  */
 User.prototype.handleRemove = function() {
-  window.API.deleteUser(this.id)
+  API.deleteUser(this.id)
     .then(() => {
       const el = document.getElementById(
         `user-item-${Utils.escapeHtml(this.id)}`);
       el.parentNode.removeChild(el);
 
       if (this.loggedIn) {
-        window.API.logout().then(() => {
+        API.logout().then(() => {
           window.location.href = '/login';
         });
       }
@@ -92,3 +94,5 @@ User.prototype.handleRemove = function() {
 User.prototype.handleEdit = function() {
   page(`/settings/users/edit/${encodeURIComponent(this.id)}`);
 };
+
+module.exports = User;

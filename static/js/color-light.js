@@ -10,8 +10,14 @@
 
 'use strict';
 
-/* globals ColorDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-   ColorTemperatureDetail, Utils */
+const API = require('./api');
+const ColorDetail = require('./color-detail');
+const OnOffDetail = require('./on-off-detail');
+const OnOffSwitch = require('./on-off-switch');
+const Thing = require('./thing');
+const ThingDetailLayout = require('./thing-detail-layout');
+const ColorTemperatureDetail = require('./color-temperature-detail');
+const Utils = require('./utils');
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -171,7 +177,7 @@ ColorLight.prototype.htmlDetailView = function() {
 ColorLight.prototype.updateStatus = function() {
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -260,7 +266,7 @@ ColorLight.prototype.setColor = function(color) {
   fetch(this.colorPropertyUrl, {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: Object.assign(window.API.headers(), {
+    headers: Object.assign(API.headers(), {
       'Content-Type': 'application/json',
     }),
   }).then((response) => {
@@ -302,7 +308,7 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
   fetch(this.colorTemperaturePropertyUrl, {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: Object.assign(window.API.headers(), {
+    headers: Object.assign(API.headers(), {
       'Content-Type': 'application/json',
     }),
   }).then((response) => {
@@ -391,3 +397,5 @@ ColorLight.prototype.colorTemperatureToRGB = function(temperature) {
   b = Math.round(b).toString(16);
   return `#${r}${g}${b}`;
 };
+
+module.exports = ColorLight;

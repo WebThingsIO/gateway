@@ -13,7 +13,9 @@
 
 'use strict';
 
-/* globals SchemaUtils, SchemaField, Utils */
+const SchemaUtils = require('./schema-utils');
+const SchemaField = require('./schema-field');
+const Utils = require('../utils');
 
 function ObjectField(
   schema,
@@ -149,3 +151,5 @@ ObjectField.prototype.render = function() {
 
   return field;
 };
+
+module.exports = ObjectField;

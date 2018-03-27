@@ -10,8 +10,13 @@
 
 'use strict';
 
-/* globals LevelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-   Utils */
+const API = require('./api');
+const LevelDetail = require('./level-detail');
+const OnOffDetail = require('./on-off-detail');
+const OnOffSwitch = require('./on-off-switch');
+const Thing = require('./thing');
+const ThingDetailLayout = require('./thing-detail-layout');
+const Utils = require('./utils');
 
 const MULTI_LEVEL_SWITCH_OFF_BAR = 'white';
 const MULTI_LEVEL_SWITCH_OFF_BLANK = '#89b6d6';
@@ -109,7 +114,7 @@ MultiLevelSwitch.prototype.htmlDetailView = function() {
 MultiLevelSwitch.prototype.updateStatus = function() {
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -201,7 +206,7 @@ MultiLevelSwitch.prototype.setLevel = function(level) {
   fetch(this.levelPropertyUrl, {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: Object.assign(window.API.headers(), {
+    headers: Object.assign(API.headers(), {
       'Content-Type': 'application/json',
     }),
   }).then((response) => {
@@ -215,3 +220,4 @@ MultiLevelSwitch.prototype.setLevel = function(level) {
   });
 };
 
+module.exports = MultiLevelSwitch;

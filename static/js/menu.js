@@ -7,6 +7,8 @@
  */
 'use strict';
 
+const API = require('./api');
+
 // eslint-disable-next-line no-unused-vars
 const Menu = {
   /**
@@ -36,7 +38,7 @@ const Menu = {
    * @param {String} experiment
    */
   getExperimentSetting: function(experiment) {
-    window.API.getExperimentSetting(experiment).then(function(value) {
+    API.getExperimentSetting(experiment).then(function(value) {
       if (value) {
         Menu.showItem(experiment);
       } else {
@@ -115,3 +117,5 @@ const Menu = {
     this.items[item].classList.add('hidden');
   },
 };
+
+module.exports = Menu;

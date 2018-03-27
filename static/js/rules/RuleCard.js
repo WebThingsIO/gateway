@@ -1,4 +1,6 @@
-/* global Rule, page, Utils */
+const {Rule} = require('./Rule');
+const page = require('../lib/page');
+const Utils = require('../utils');
 
 /**
  * A summary of a Rule in card format
@@ -95,3 +97,4 @@ RuleCard.prototype.onEnabledCheckboxChange = function() {
   this.rule.update();
 };
 
+module.exports = RuleCard;

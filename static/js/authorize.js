@@ -1,4 +1,5 @@
-/* global API, Utils */
+const API = require('./api');
+const Utils = require('./utils');
 
 document.addEventListener('DOMContentLoaded', () => {
   const jwt = document.getElementById('jwt');

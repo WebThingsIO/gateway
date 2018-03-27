@@ -10,9 +10,17 @@
 
 'use strict';
 
-/* globals UnknownThing, OnOffSwitch, BinarySensor, ColorLight,
-  MultiLevelSwitch, OnOffLight, DimmableLight, DimmableColorLight,
-  MultiLevelSensor, SmartPlug */
+const API = require('./api');
+const UnknownThing = require('./unknown-thing');
+const OnOffSwitch = require('./on-off-switch');
+const BinarySensor = require('./binary-sensor');
+const ColorLight = require('./color-light');
+const DimmableLight = require('./dimmable-light');
+const DimmableColorLight = require('./dimmable-color-light');
+const OnOffLight = require('./on-off-light');
+const MultiLevelSwitch = require('./multi-level-switch');
+const MultiLevelSensor = require('./multi-level-sensor');
+const SmartPlug = require('./smart-plug');
 
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {
@@ -47,7 +55,7 @@ const FloorplanScreen = {
   show: function() {
     const opts = {
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
       },
     };
@@ -186,7 +194,7 @@ const FloorplanScreen = {
     formData.append('file', file);
     this.uploadButton.classList.add('loading');
     const headers = {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
     };
 
     fetch('/uploads', {
@@ -263,7 +271,7 @@ const FloorplanScreen = {
       method: 'PATCH',
       body: JSON.stringify(payload),
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -323,3 +331,5 @@ const FloorplanScreen = {
     return false;
   },
 };
+
+module.exports = FloorplanScreen;

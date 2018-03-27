@@ -4,7 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global API, Gateway, Menu, RuleCard, page */
+const API = require('./api');
+const Menu = require('./menu');
+const Gateway = require('./rules/Gateway');
+const RuleCard = require('./rules/RuleCard');
+const page = require('./lib/page');
 
 'use strict';
 
@@ -69,3 +73,5 @@ const RulesScreen = {
     });
   },
 };
+
+module.exports = RulesScreen;

@@ -9,7 +9,11 @@
  */
 'use strict';
 
-/* globals App, NewThing, NewWebThing, SettingsScreen */
+const API = require('./api');
+const App = require('./app');
+const NewThing = require('./new-thing');
+const NewWebThing = require('./new-web-thing');
+const SettingsScreen = require('./settings');
 
 const AddThingScreen = {
 
@@ -52,7 +56,7 @@ const AddThingScreen = {
     if (window.location.protocol === 'https:') {
       proto = 'wss:';
     }
-    const path = `${proto}//${App.HOST}/new_things?jwt=${window.API.jwt}`;
+    const path = `${proto}//${App.HOST}/new_things?jwt=${API.jwt}`;
 
     // Create a websocket to start listening for new things
     this.socket = new WebSocket(path);
@@ -74,7 +78,7 @@ const AddThingScreen = {
       method: 'POST',
       body: JSON.stringify(action),
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -124,7 +128,7 @@ const AddThingScreen = {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
       },
     }).then(function(response) {
       if (response.ok) {
@@ -181,3 +185,5 @@ const AddThingScreen = {
     new NewWebThing();
   },
 };
+
+module.exports = AddThingScreen;

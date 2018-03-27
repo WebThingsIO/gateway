@@ -1,4 +1,5 @@
-/* global PropertySelect, RulePartBlock */
+const PropertySelect = require('./PropertySelect');
+const RulePartBlock = require('./RulePartBlock');
 
 /**
  * An element representing a device (`thing`) and a property. Can be
@@ -41,3 +42,5 @@ DevicePropertyBlock.prototype.setRulePart = function(rulePart) {
   this.propertySelect.updateOptionsForRole(this.role);
   this.propertySelect.selectByRuleFragment(rulePart);
 };
+
+module.exports = DevicePropertyBlock;

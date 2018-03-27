@@ -28,6 +28,7 @@ env:
     - MOZIOT_HOME=/home/travis/.mozilla-iot/test
 
 script:
+  - node ./node_modules/webpack/bin/webpack.js
   - npm run lint
   - ./tools/make-self-signed-cert.sh
   - ./node_modules/.bin/jest --runInBand --coverage

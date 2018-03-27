@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global API */
+const API = require('../api');
 
 /**
  * A remote Gateway
@@ -27,3 +27,5 @@ Gateway.prototype.readThings = function() {
     return things;
   });
 };
+
+module.exports = Gateway;

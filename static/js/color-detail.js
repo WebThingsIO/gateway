@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 function ColorDetail(thing) {
   this.thing = thing;
@@ -46,3 +46,4 @@ ColorDetail.prototype.set = function() {
   this.thing.setColor(this.color.value);
 };
 
+module.exports = ColorDetail;

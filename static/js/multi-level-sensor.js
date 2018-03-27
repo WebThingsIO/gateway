@@ -10,7 +10,9 @@
 
 'use strict';
 
-/* globals Thing, Utils */
+const API = require('./api');
+const Thing = require('./thing');
+const Utils = require('./utils');
 
 /**
  * MultiLevelSensor Constructor (extends Thing).
@@ -49,7 +51,7 @@ MultiLevelSensor.prototype.updateStatus = function() {
   }
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -116,3 +118,5 @@ MultiLevelSensor.prototype.htmlDetailView = function() {
     ${this.iconView()}
   </div>`;
 };
+
+module.exports = MultiLevelSensor;

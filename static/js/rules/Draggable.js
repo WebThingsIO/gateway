@@ -73,3 +73,4 @@ Draggable.prototype.onUp = function(event) {
   }
 };
 
+module.exports = Draggable;

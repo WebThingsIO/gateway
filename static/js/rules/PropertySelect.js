@@ -442,3 +442,5 @@ PropertySelect.prototype.select = function(optionElt) {
   }
   optionElt.classList.add('selected');
 };
+
+module.exports = PropertySelect;

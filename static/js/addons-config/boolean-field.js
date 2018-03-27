@@ -13,7 +13,8 @@
 
 'use strict';
 
-/* globals SchemaUtils, Utils */
+const SchemaUtils = require('./schema-utils');
+const Utils = require('../utils');
 
 function BooleanField(schema,
                       formData,
@@ -71,3 +72,5 @@ BooleanField.prototype.render = function() {
 
   return field;
 };
+
+module.exports = BooleanField;

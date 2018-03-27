@@ -9,9 +9,26 @@
  */
 'use strict';
 
-/* globals ThingsScreen,
-AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router,
-RulesScreen, RuleScreen, Speech */
+// eslint-disable-next-line prefer-const
+let ThingsScreen;
+// eslint-disable-next-line prefer-const
+let AddThingScreen;
+// eslint-disable-next-line prefer-const
+let Menu;
+// eslint-disable-next-line prefer-const
+let ContextMenu;
+// eslint-disable-next-line prefer-const
+let SettingsScreen;
+// eslint-disable-next-line prefer-const
+let FloorplanScreen;
+// eslint-disable-next-line prefer-const
+let Router;
+// eslint-disable-next-line prefer-const
+let RulesScreen;
+// eslint-disable-next-line prefer-const
+let RuleScreen;
+// eslint-disable-next-line prefer-const
+let Speech;
 
 const App = {
   /**
@@ -96,6 +113,20 @@ const App = {
     this.menuButton.classList.add('hidden');
   },
 };
+
+module.exports = App;
+
+// avoid circular dependency
+ThingsScreen = require('./things');
+AddThingScreen = require('./add-thing');
+Menu = require('./menu');
+ContextMenu = require('./context-menu');
+SettingsScreen = require('./settings');
+FloorplanScreen = require('./floorplan');
+Router = require('./router');
+RulesScreen = require('./rules-screen');
+RuleScreen = require('./rule-screen');
+Speech = require('./speech');
 
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {

@@ -9,6 +9,8 @@
  */
 'use strict';
 
+const API = require('./api');
+
 // eslint-disable-next-line no-unused-vars
 const ContextMenu = {
 
@@ -28,7 +30,7 @@ const ContextMenu = {
     this.removeButton.addEventListener('click', this.handleRemove.bind(this));
     this.logoutForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      window.API.logout().then(() => {
+      API.logout().then(() => {
         window.location.href = '/login';
       });
     });
@@ -59,7 +61,7 @@ const ContextMenu = {
     fetch(this.thingUrl, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -79,3 +81,5 @@ const ContextMenu = {
     }).bind(this));
   },
 };
+
+module.exports = ContextMenu;

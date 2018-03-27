@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals Utils */
+const API = require('./api');
+const Utils = require('./utils');
 
 /**
  * New Thing constructor.
@@ -193,7 +194,7 @@ NewThing.prototype.save = function() {
     method: 'POST',
     body: JSON.stringify(thing),
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -208,3 +209,5 @@ NewThing.prototype.save = function() {
     console.error(`Failed to save thing ${error}`);
   });
 };
+
+module.exports = NewThing;

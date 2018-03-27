@@ -48,3 +48,5 @@ ErrorField.prototype.render = function(errors) {
 
   return this.field;
 };
+
+module.exports = ErrorField;
