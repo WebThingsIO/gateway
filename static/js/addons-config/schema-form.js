@@ -59,8 +59,8 @@ SchemaForm.prototype.render = function (data) {
   form.id = this.id;
   form.innerHTML = `
   <p>
-    <button type="submit" class="btn btn-info">
-      Submit
+    <button type="button" class="text-button addon-config-button-apply">
+      Apply
     </button>
   </p>`
 

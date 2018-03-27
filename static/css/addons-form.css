@@ -160,3 +160,12 @@
     color: #FFCC66;
   }
   
+  .addons-form .addon-config-button-apply {
+    background-size: 2rem;
+    background-repeat: no-repeat;
+    background-position: 0.5em;
+    padding-left: 4rem;
+    margin-right: .8rem;
+    background-image: url('../images/check-16.svg');
+  }
+  
