@@ -13,7 +13,8 @@
 
 'use strict';
 
-/* globals SchemaUtils, Validator, SchemaField, ErrorField */
+/* globals SchemaUtils, Validator, SchemaField, ErrorField,
+page, Utils */
 
 function SchemaForm(schema, id, name, options = {}) {
   this.definitions = schema.definitions;
@@ -31,6 +32,9 @@ function SchemaForm(schema, id, name, options = {}) {
 
 SchemaForm.prototype.onChange = function (formData) {
   let error = null;
+  this.formData = formData;
+
+  this.applyButton.disabled = false;
 
   if (!this.noValidate && this.liveValidate) {
     const { errors } = this.validate(formData);
@@ -47,6 +51,43 @@ SchemaForm.prototype.validate = function (formData) {
   return Validator.validateFormData(formData, this.schema);
 }
 
+SchemaForm.prototype.scrollToTop= function () {
+  document.getElementById('addon-config-settings').scrollTop = 0;
+};
+
+SchemaForm.prototype.handleApply = function (e) {
+  const { errors } = this.validate(this.formData);
+  const button = e.target;
+  button.disabled = true;
+
+  if (errors) {
+    this.scrollToTop();
+  } else {
+    this.applyButton.innerText = 'Applying...'
+    window.API.setAddonConfig(this.name, this.formData)
+    .then(() => {
+      page('/settings/addons');
+    })
+    .catch((err) => {
+      console.error(`Failed to set config add-on: ${this.name}\n${err}`);
+    });
+  }
+}
+
+SchemaForm.prototype.renderApplyButton = function (){
+  const applyButton = document.createElement("button");
+  applyButton.id = 'addon-apply-' + Utils.escapeHtml(this.id);
+  applyButton.type = 'button';
+  applyButton.className = "text-button addon-config-button-apply";
+  applyButton.innerText = 'Apply'
+  applyButton.addEventListener('click', this.handleApply.bind(this));
+  applyButton.disabled = true;
+
+  this.applyButton = applyButton;
+
+  return applyButton;
+}
+
 SchemaForm.prototype.render = function (data) {
   this.formData =
     SchemaUtils.getDefaultFormState(
@@ -57,12 +98,12 @@ SchemaForm.prototype.render = function (data) {
   const form = document.createElement('form');
   form.className = 'addons-form';
   form.id = this.id;
-  form.innerHTML = `
-  <p>
-    <button type="button" class="text-button addon-config-button-apply">
-      Apply
-    </button>
-  </p>`
+  form.innerHTML = `<p></p>`
+
+  const p = form.querySelector('p');
+
+  const apply = this.renderApplyButton();
+  p.appendChild(apply);
 
   const onChangeHandle = this.onChange.bind(this);
   const child = new SchemaField(this.schema,
@@ -74,7 +115,6 @@ SchemaForm.prototype.render = function (data) {
 
   this.errorField = new ErrorField();
 
-  const p = form.querySelector('p');
   p.insertBefore(child, p.firstChild);
   p.insertBefore(this.errorField.render([]), p.firstChild);
 
