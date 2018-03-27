@@ -20,6 +20,7 @@ exports.NEW_THINGS_PATH = '/new_things';
 exports.ADAPTERS_PATH = '/adapters';
 exports.ADDONS_PATH = '/addons';
 exports.ACTIONS_PATH = '/actions';
+exports.EVENTS_PATH = '/events';
 exports.LOGIN_PATH = '/login';
 exports.LOG_OUT_PATH = '/log-out';
 exports.SETTINGS_PATH = '/settings';

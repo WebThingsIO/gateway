@@ -284,7 +284,7 @@ describe('things/', function() {
           .post(Constants.ACTIONS_PATH)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({name: 'pair', parameters: {timeout: 60}});
+          .send({pair: {input: {timeout: 60}}});
 
         await mockAdapter().addDevice('test-4', makeDescr('test-4'));
         await mockAdapter().addDevice('test-5', makeDescr('test-5'));
@@ -311,7 +311,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({name: 'pair', parameters: {timeout: 60}});
+      .send({pair: {input: {timeout: 60}}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
@@ -374,7 +374,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({name: 'pair', parameters: {timeout: 60}});
+      .send({pair: {input: {timeout: 60}}});
     expect(pair.status).toEqual(201);
 
     let res = await chai.request(server)
@@ -410,7 +410,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: 'pair', parameters: {timeout: 60}});
+      .send({pair: {input: {timeout: 60}}});
     expect(pair.status).toEqual(201);
     await mockAdapter().removeDevice(thingId);
 
@@ -439,7 +439,7 @@ describe('things/', function() {
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: 'unpair', parameters: {id: thingId}});
+      .send({unpair: {input: {id: thingId}}});
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
@@ -669,13 +669,13 @@ describe('things/', function() {
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
 
-    const [actionId, messages] = await Promise.all([
+    const [actionHref, messages] = await Promise.all([
       (async () => {
         await chai.request(server)
           .post(Constants.ACTIONS_PATH)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({name: 'pair', parameters: {timeout: 60}});
+          .send({pair: {input: {timeout: 60}}});
 
         let res = await chai.request(server)
           .get(Constants.ACTIONS_PATH)
@@ -684,10 +684,10 @@ describe('things/', function() {
         expect(res.status).toEqual(200);
         expect(Array.isArray(res.body)).toBeTruthy();
         expect(res.body.length).toEqual(1);
-        const actionId = res.body[0].id;
+        const actionHref = res.body[0].pair.href;
 
         res = await chai.request(server)
-          .delete(Constants.ACTIONS_PATH + '/' + actionId)
+          .delete(actionHref)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt));
         expect(res.status).toEqual(204);
@@ -700,20 +700,18 @@ describe('things/', function() {
         expect(Array.isArray(res.body)).toBeTruthy();
         expect(res.body.length).toEqual(0);
 
-        return actionId;
+        return actionHref;
       })(),
       webSocketRead(ws, 2)
     ]);
 
-    const actionPath = Constants.ACTIONS_PATH + '/' + actionId;
-
     expect(messages[0].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[0].data.status).toEqual('pending');
-    expect(messages[0].data.href).toEqual(actionPath);
+    expect(messages[0].data.pair.status).toEqual('pending');
+    expect(messages[0].data.pair.href).toEqual(actionHref);
 
     expect(messages[1].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[1].data.status).toEqual('deleted');
-    expect(messages[1].data.href).toEqual(actionPath);
+    expect(messages[1].data.pair.status).toEqual('deleted');
+    expect(messages[1].data.pair.href).toEqual(actionHref);
 
     await webSocketClose(ws);
   });
@@ -744,7 +742,7 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
 
     const actionDescr = {
-      name: 'reboot'
+      reboot: {}
     };
 
     res = await chai.request(server)
@@ -761,10 +759,9 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('id');
-    expect(res.body[0].name).toEqual('reboot');
-    expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
+    expect(res.body[0]).toHaveProperty('reboot');
+    expect(res.body[0].reboot).toHaveProperty('href');
+    expect(res.body[0].reboot.href.startsWith(thingBase)).toBeTruthy();
 
     // Expect it to not show up in the root (Gateway's) actions route
     res = await chai.request(server)
@@ -780,9 +777,10 @@ describe('things/', function() {
     const thingBase = Constants.THINGS_PATH + '/nonexistent-thing';
 
     const actionDescr = {
-      name: 'pair',
-      parameters: {
-        timeout: 60,
+      pair: {
+        input: {
+          timeout: 60,
+        },
       },
     };
 
@@ -791,7 +789,7 @@ describe('things/', function() {
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
       .send(actionDescr));
-    expect(err.response.status).toEqual(400);
+    expect(err.response.status).toEqual(404);
   });
 
   it('fails to create thing action which does not exist', async () => {
@@ -806,9 +804,10 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
 
     const actionDescr = {
-      name: 'pair',
-      parameters: {
-        timeout: 60,
+      pair: {
+        input: {
+          timeout: 60,
+        },
       },
     };
 
@@ -829,7 +828,7 @@ describe('things/', function() {
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
-          name: 'reboot'
+          reboot: {},
         }
       }),
       webSocketRead(ws, 1)
@@ -837,7 +836,7 @@ describe('things/', function() {
 
     const actionStatus = messages[0];
     expect(actionStatus.messageType).toEqual(Constants.ACTION_STATUS);
-    expect(actionStatus.data.name).toEqual('reboot');
+    expect(actionStatus.data).toHaveProperty('reboot');
 
     let res = await chai.request(server)
       .get(thingBase + Constants.ACTIONS_PATH)
@@ -846,10 +845,9 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('id');
-    expect(res.body[0].name).toEqual('reboot');
-    expect(res.body[0].href.startsWith(thingBase)).toBeTruthy();
+    expect(res.body[0]).toHaveProperty('reboot');
+    expect(res.body[0].reboot).toHaveProperty('href');
+    expect(res.body[0].reboot.href.startsWith(thingBase)).toBeTruthy();
 
     await webSocketClose(ws);
   });
@@ -863,9 +861,10 @@ describe('things/', function() {
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
-          name: 'pair',
-          parameters: {
-            timeout: 60,
+          pair: {
+            input: {
+              timeout: 60,
+            },
           },
         }
       }),
@@ -874,7 +873,7 @@ describe('things/', function() {
 
     const pending = messages[0];
     expect(pending.messageType).toEqual(Constants.ACTION_STATUS);
-    expect(pending.data.status).toEqual('pending');
+    expect(pending.data.pair.status).toEqual('pending');
 
     const err = messages[1];
     expect(err.messageType).toEqual(Constants.ERROR);

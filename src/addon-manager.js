@@ -15,8 +15,6 @@ const config = require('config');
 const Constants = require('./constants');
 const EventEmitter = require('events').EventEmitter;
 const Deferred = require('./deferred');
-const PluginClient = require('./plugin/plugin-client');
-const PluginServer = require('./plugin/plugin-server');
 const Settings = require('./models/settings');
 const UserProfile = require('./user-profile');
 const fs = require('fs');
@@ -27,6 +25,8 @@ const Utils = require('./utils');
 const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
+
+let PluginClient, PluginServer;
 
 // Use webpack provided require for dynamic includes from the bundle  .
 const dynamicRequire = (() => {
@@ -283,6 +283,20 @@ class AddonManager extends EventEmitter {
     }
     return new Promise((resolve, reject) => {
       reject('setProperty: device: ' + thingId + ' not found.');
+    });
+  }
+
+  /**
+   * @method requestAction
+   * @returns a promise which resolves when the action has been requested.
+   */
+  requestAction(thingId, actionId, actionName, input) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.requestAction(actionId, actionName, input);
+    }
+    return new Promise((resolve, reject) => {
+      reject('requestAction: device: ' + thingId + ' not found.');
     });
   }
 
@@ -615,6 +629,8 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
+    PluginClient = require('./plugin/plugin-client');
+    PluginServer = require('./plugin/plugin-server');
 
     this.pluginServer = new PluginServer(this, {verbose: false});
 

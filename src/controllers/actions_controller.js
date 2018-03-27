@@ -1,8 +1,7 @@
 /**
  * Actions Controller.
  *
- * Manages the top level actions queue for the gateway (i.e. not actions on
- * Things but on the gateway itself.)
+ * Manages the top level actions queue for the gateway and things.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,9 +9,10 @@
  */
 
 const PromiseRouter = require('express-promise-router');
-var Action = require('../models/action');
-var Actions = require('../models/actions');
-var Things = require('../models/things');
+const Action = require('../models/action');
+const Actions = require('../models/actions');
+const AddonManager = require('../addon-manager');
+const Things = require('../models/things');
 
 const ActionsController = PromiseRouter({mergeParams: true});
 
@@ -20,22 +20,26 @@ const ActionsController = PromiseRouter({mergeParams: true});
  * Handle creating a new action.
  */
 ActionsController.post('/', async (request, response) => {
-  if (!request.body.name) {
-    response.status(400).send('No action name provided');
+  const keys = Object.keys(request.body);
+  if (keys.length != 1) {
+    const err = 'Incorrect number of parameters.';
+    console.log(err, request.body);
+    response.status(400).send(err);
     return;
   }
 
-  var actionName = request.body.name;
-  var actionParams = request.body.parameters;
-  var action = null;
-  var thingId = request.params.thingId;
+  const actionName = keys[0];
+  const actionParams = request.body[actionName].input;
+  const thingId = request.params.thingId;
+  let action = null;
+
   if (thingId) {
     try {
-      var thing = await Things.getThing(thingId);
+      const thing = await Things.getThing(thingId);
       action = new Action(actionName, actionParams, thing);
     } catch(e) {
       console.error('Thing does not exist', thingId, e);
-      response.status(400).send(e);
+      response.status(404).send(e);
       return;
     }
   } else {
@@ -44,7 +48,12 @@ ActionsController.post('/', async (request, response) => {
 
   try {
     await Actions.add(action);
-    response.status(201).json(action.getDescription());
+    if (thingId) {
+      await AddonManager.requestAction(
+        thingId, action.id, actionName, actionParams);
+    }
+
+    response.status(201).json({[actionName]: action.getDescription()});
   } catch(e) {
     console.error('Creating action', actionName, 'failed');
     console.error(e);
@@ -66,7 +75,7 @@ ActionsController.get('/', function(request, response) {
 /**
  * Handle getting a particular action.
  */
-ActionsController.get('/:actionId', function(request, response) {
+ActionsController.get('/:actionName/:actionId', function(request, response) {
   var actionId = request.params.actionId;
   var action =  Actions.get(actionId);
   if (action) {
@@ -81,7 +90,7 @@ ActionsController.get('/:actionId', function(request, response) {
 /**
  * Handle cancelling an action.
  */
-ActionsController.delete('/:actionId', function(request, response) {
+ActionsController.delete('/:actionName/:actionId', (request, response) => {
   var actionId = request.params.actionId;
   try {
     Actions.remove(actionId);
@@ -91,7 +100,7 @@ ActionsController.delete('/:actionId', function(request, response) {
     response.status(404).send(e);
     return;
   }
-  response.status(204).send();
+  response.status(204).end();
 });
 
 module.exports = ActionsController;

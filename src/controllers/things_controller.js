@@ -15,7 +15,8 @@ const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants.js');
+const Constants = require('../constants');
+const EventsController = require('./events_controller');
 const Things = require('../models/things');
 
 const ThingsController = express.Router();
@@ -110,10 +111,14 @@ ThingsController.put('/:thingId/properties/:propertyName',
 });
 
 /**
- * Use an ActionsController to handle each thing's
- * actions
+ * Use an ActionsController to handle each thing's actions.
  */
 ThingsController.use('/:thingId' + Constants.ACTIONS_PATH, ActionsController);
+
+/**
+ * Use an EventsController to handle each thing's events.
+ */
+ThingsController.use('/:thingId' + Constants.EVENTS_PATH, EventsController);
 
 /**
  * Modify a Thing.
@@ -196,7 +201,9 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   function onActionStatus(action) {
     websocket.send(JSON.stringify({
       messageType: Constants.ACTION_STATUS,
-      data: action.getDescription()
+      data: {
+        [action.name]: action.getDescription(),
+      },
     }));
   }
 
@@ -285,21 +292,22 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       }
 
       case Constants.REQUEST_ACTION: {
-        Things.getThing(thingId).then(thing => {
-          let action = new Action(request.data.name,
-                                  request.data.parameters, thing);
-
-          return Actions.add(action);
-        }).catch(err => {
-          websocket.send(JSON.stringify({
-            messageType: Constants.ERROR,
-            data: {
-              status: '400 Bad Request',
-              message: err.message,
-              request: request
-            }
-          }));
-        });
+        for (const actionName in request.data) {
+          const actionParams = request.data[actionName].input;
+          Things.getThing(thingId).then(thing => {
+            let action = new Action(actionName, actionParams, thing);
+            return Actions.add(action);
+          }).catch(err => {
+            websocket.send(JSON.stringify({
+              messageType: Constants.ERROR,
+              data: {
+                status: '400 Bad Request',
+                message: err.message,
+                request: request
+              }
+            }));
+          });
+        }
         break;
       }
 

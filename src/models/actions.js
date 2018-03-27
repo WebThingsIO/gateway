@@ -80,6 +80,8 @@ class Actions extends EventEmitter {
   getGatewayActions() {
     return this.getAll().filter(action => {
       return !action.thingId;
+    }).map(action => {
+      return {[action.name]: action.getDescription()};
     });
   }
 
@@ -90,6 +92,8 @@ class Actions extends EventEmitter {
   getByThing(thingId) {
     return this.getAll().filter(action => {
       return action.thingId === thingId
+    }).map(action => {
+      return {[action.name]: action.getDescription()};
     });
   }
 
@@ -118,7 +122,7 @@ class Actions extends EventEmitter {
 
     switch(action.name) {
       case 'pair':
-        AddonManager.addNewThing(action.parameters.timeout).then(function() {
+        AddonManager.addNewThing(action.input.timeout).then(function() {
           action.updateStatus('completed');
         }).catch(function(error) {
           action.error = error;
@@ -128,8 +132,8 @@ class Actions extends EventEmitter {
         });
         break;
       case 'unpair':
-        if (action.parameters.id) {
-          AddonManager.removeThing(action.parameters.id)
+        if (action.input.id) {
+          AddonManager.removeThing(action.input.id)
             .then(function(thingIdUnpaired) {
               console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
               Things.removeThing(thingIdUnpaired);
@@ -138,7 +142,7 @@ class Actions extends EventEmitter {
               action.error = error;
               action.updateStatus('error');
               console.error('unpair of thing:',
-                            action.parameters.id, 'failed.');
+                            action.input.id, 'failed.');
               console.error(error);
             });
         } else {
@@ -191,7 +195,7 @@ class Actions extends EventEmitter {
             AddonManager.cancelAddNewThing();
             break;
           case 'unpair':
-            AddonManager.cancelRemoveThing(action.parameters.id);
+            AddonManager.cancelRemoveThing(action.input.id);
             break;
           default:
             throw 'Invalid action name: "' + action.name + '"';

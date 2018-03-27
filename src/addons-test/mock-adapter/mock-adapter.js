@@ -44,10 +44,19 @@ class MockDevice extends Device {
     this.name = deviceDescription.name;
     this.type = deviceDescription.type;
     this.description = deviceDescription.description;
-    for (var propertyName in deviceDescription.properties) {
-      var propertyDescription = deviceDescription.properties[propertyName];
-      var property = new MockProperty(this, propertyName, propertyDescription);
+    for (const propertyName in deviceDescription.properties) {
+      const propertyDescription = deviceDescription.properties[propertyName];
+      const property =
+        new MockProperty(this, propertyName, propertyDescription);
       this.properties.set(propertyName, property);
+    }
+
+    for (const actionName in deviceDescription.actions) {
+      this.addAction(actionName, deviceDescription.actions[actionName]);
+    }
+
+    for (const eventName in deviceDescription.events) {
+      this.addEvent(eventName, deviceDescription.events[eventName]);
     }
   }
 }

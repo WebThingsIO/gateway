@@ -521,7 +521,7 @@ describe('rules engine', function() {
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
-    expect(res.body[0].name).toEqual('blink');
+    expect(res.body[0]).toHaveProperty('blink');
 
     // dispatch event get action
     await deleteRule(ruleId);

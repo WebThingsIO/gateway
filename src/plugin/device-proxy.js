@@ -9,7 +9,10 @@
 
 'use strict';
 
+const Actions = require('../models/actions');
 const Constants = require('../constants');
+const Event = require('../models/event');
+const Events = require('../models/events');
 const PropertyProxy = require('./property-proxy');
 const {Device} = require('gateway-addon');
 
@@ -22,15 +25,16 @@ class DeviceProxy extends Device {
     this.type = deviceDict.type;
     this.description = deviceDict.description || '';
 
-    for (var propertyName in deviceDict.properties) {
-      var propertyDict = deviceDict.properties[propertyName];
-      var propertyProxy = new PropertyProxy(this, propertyName, propertyDict);
+    for (const propertyName in deviceDict.properties) {
+      const propertyDict = deviceDict.properties[propertyName];
+      const propertyProxy =
+        new PropertyProxy(this, propertyName, propertyDict);
       this.properties.set(propertyName, propertyProxy);
     }
 
     // Copy over any extra device fields which might be useful for debugging.
     this.deviceDict = {};
-    for (let field in deviceDict) {
+    for (const field in deviceDict) {
       if (['id', 'name', 'type', 'description', 'properties', 'actions',
            'events'].includes(field)) {
         continue;
@@ -38,7 +42,19 @@ class DeviceProxy extends Device {
       this.deviceDict[field] = deviceDict[field];
     }
 
-    //TODO: Add support for actions once we know what they look like.
+    if (deviceDict.actions) {
+      for (const actionName in deviceDict.actions) {
+        const dict = deviceDict.actions[actionName];
+        this.actions.set(actionName, dict);
+      }
+    }
+
+    if (deviceDict.events) {
+      for (const eventName in deviceDict.events) {
+        const dict = deviceDict.events[eventName];
+        this.events.set(eventName, dict);
+      }
+    }
   }
 
   asDict() {
@@ -53,6 +69,42 @@ class DeviceProxy extends Device {
         params: params
       }
     );
+  }
+
+  /**
+   * @method requestAction
+   */
+  requestAction(actionId, actionName, input) {
+    return new Promise((resolve, reject) => {
+      if (!this.actions.has(actionName)) {
+        reject('Action "' + actionName + '" not found');
+        return;
+      }
+
+      console.log('DeviceProxy: requestAction:', actionName,
+                  'for:', this.id);
+
+      this.adapter.sendMsg(
+        Constants.REQUEST_ACTION, {
+          deviceId: this.id,
+          actionName,
+          actionId,
+          input,
+        });
+
+      resolve();
+    });
+  }
+
+  actionNotify(action) {
+    const a = Actions.get(action.id);
+    if (a) {
+      a.update(action);
+    }
+  }
+
+  eventNotify(event) {
+    Events.add(new Event(event.name, event.data, this.id, event.timestamp));
   }
 }
 
