@@ -100,6 +100,9 @@ Thing.prototype.setCoordinates = function(x, y) {
  * @param {Event} event
  */
 Thing.prototype.dispatchEvent = function(event) {
+  if (!event.thingId) {
+    event.thingId = this.id;
+  }
   this.eventsDispatched.push(event);
   this.emitter.emit(Constants.EVENT, event);
 };
@@ -122,8 +125,22 @@ Thing.prototype.removeEventSubscription = function(callback) {
 
 /**
  * Get a JSON Thing Description for this Thing.
+ *
+ * @param {String} reqHost request host, if coming via HTTP
+ * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
  */
-Thing.prototype.getDescription = function() {
+Thing.prototype.getDescription = function(reqHost, reqSecure) {
+  const links = JSON.parse(JSON.stringify(this.links));
+
+  if (typeof reqHost !== 'undefined') {
+    const wsLink = {
+      rel: 'alternate',
+      href: `${reqSecure ? 'wss' : 'ws'}://${reqHost}${this.href}`,
+    };
+
+    links.push(wsLink);
+  }
+
   return {
     name: this.name,
     type: this.type,
@@ -134,7 +151,7 @@ Thing.prototype.getDescription = function() {
     events: this.events,
     floorplanX: this.floorplanX,
     floorplanY: this.floorplanY,
-    links: this.links,
+    links: links,
   };
 };
 

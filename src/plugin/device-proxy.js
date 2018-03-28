@@ -96,6 +96,30 @@ class DeviceProxy extends Device {
     });
   }
 
+  /**
+   * @method removeAction
+   */
+  removeAction(actionId, actionName) {
+    return new Promise((resolve, reject) => {
+      if (!this.actions.has(actionName)) {
+        reject('Action "' + actionName + '" not found');
+        return;
+      }
+
+      console.log('DeviceProxy: removeAction:', actionName,
+                  'for:', this.id);
+
+      this.adapter.sendMsg(
+        Constants.REMOVE_ACTION, {
+          deviceId: this.id,
+          actionName,
+          actionId,
+        });
+
+      resolve();
+    });
+  }
+
   actionNotify(action) {
     const a = Actions.get(action.id);
     if (a) {

@@ -59,6 +59,11 @@ class MockDevice extends Device {
       this.addEvent(eventName, deviceDescription.events[eventName]);
     }
   }
+
+  performAction(action) {
+    action.start();
+    action.finish();
+  }
 }
 
 class MockAdapter extends Adapter {

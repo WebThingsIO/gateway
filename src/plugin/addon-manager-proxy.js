@@ -250,6 +250,17 @@ class AddonManagerProxy extends EventEmitter {
         break;
       }
 
+      case Constants.REMOVE_ACTION: {
+        const actionName = msg.data.actionName;
+        const actionId = msg.data.actionId;
+        device.removeAction(actionId, actionName).catch(err => {
+          console.error('AddonManagerProxy: Failed to remove action',
+                        actionName, 'for device:', deviceId);
+          console.error(err);
+        });
+        break;
+      }
+
       case Constants.DEBUG_CMD:
         device.debugCmd(msg.data.cmd, msg.data.params);
         break;
