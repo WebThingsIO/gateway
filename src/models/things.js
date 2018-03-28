@@ -50,13 +50,15 @@ const Things = {
   /**
    * Get Thing Descriptions for all Things stored in the database.
    *
+   * @param {String} reqHost request host, if coming via HTTP
+   * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getThingDescriptions: function() {
+  getThingDescriptions: function(reqHost, reqSecure) {
     return this.getThings().then(function(things) {
       var descriptions = [];
       for (let thing of things.values()) {
-        descriptions.push(thing.getDescription());
+        descriptions.push(thing.getDescription(reqHost, reqSecure));
       }
       return descriptions;
     });
@@ -153,11 +155,13 @@ const Things = {
    * Get a Thing description for a thing by its ID.
    *
    * @param {String} id The ID of the Thing to get a description of.
+   * @param {String} reqHost request host, if coming via HTTP
+   * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise<ThingDescription>} A Thing description object.
    */
-   getThingDescription: function(id) {
+   getThingDescription: function(id, reqHost, reqSecure) {
      return this.getThing(id).then((thing) => {
-       return thing.getDescription();
+       return thing.getDescription(reqHost, reqSecure);
      });
    },
 

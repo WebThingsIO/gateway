@@ -76,12 +76,12 @@ ActionsController.get('/', function(request, response) {
  * Handle getting a particular action.
  */
 ActionsController.get('/:actionName/:actionId', function(request, response) {
-  var actionId = request.params.actionId;
-  var action =  Actions.get(actionId);
+  const actionId = request.params.actionId;
+  const action = Actions.get(actionId);
   if (action) {
-    response.status(200).json(action);
+    response.status(200).json({[action.name]: action.getDescription()});
   } else {
-    var error = 'Action "' + actionId + '" not found';
+    const error = 'Action "' + actionId + '" not found';
     console.error(error);
     response.status(404).send(error);
   }
@@ -90,8 +90,23 @@ ActionsController.get('/:actionName/:actionId', function(request, response) {
 /**
  * Handle cancelling an action.
  */
-ActionsController.delete('/:actionName/:actionId', (request, response) => {
-  var actionId = request.params.actionId;
+ActionsController.delete('/:actionName/:actionId',
+                         async (request, response) => {
+  const actionName = request.params.actionName;
+  const actionId = request.params.actionId;
+  const thingId = request.params.thingId;
+
+  if (thingId) {
+    try {
+      await AddonManager.removeAction(thingId, actionId, actionName);
+    } catch (e) {
+      console.error('Removing action', actionId, 'failed');
+      console.error(e);
+      response.status(400).send(e);
+      return;
+    }
+  }
+
   try {
     Actions.remove(actionId);
   } catch(e) {
@@ -100,6 +115,7 @@ ActionsController.delete('/:actionName/:actionId', (request, response) => {
     response.status(404).send(e);
     return;
   }
+
   response.status(204).end();
 });
 

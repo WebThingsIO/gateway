@@ -17,21 +17,18 @@ class Event {
    * Create a new Event
    * @param {String} name
    * @param {*} data
-   * @param {Thing?} thing
+   * @param {String?} thingId
    * @param {String?} timestamp
    */
-  constructor(name, data, thing, timestamp) {
+  constructor(name, data, thingId, timestamp) {
     this.name = name;
     this.data = data || null;
+    this.thingId = thingId;
     this.timestamp = timestamp || Utils.timestamp();
-    if (thing) {
-      this.thingId = thing.id;
-    }
   }
 
   getDescription() {
     return {
-      name: this.name,
       data: this.data,
       timestamp: this.timestamp,
     };

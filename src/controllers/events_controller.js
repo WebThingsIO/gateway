@@ -11,7 +11,7 @@
 const express = require('express');
 const Events = require('../models/events');
 
-const EventsController = express.Router();
+const EventsController = express.Router({mergeParams: true});
 
 /**
  * Handle getting a list of events.

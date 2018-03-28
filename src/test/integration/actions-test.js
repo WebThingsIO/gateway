@@ -90,9 +90,13 @@ describe('actions/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual('pair');
-    expect(res.body).toHaveProperty('id');
+    expect(res.body).toHaveProperty('pair');
+    expect(res.body.pair).toHaveProperty('href');
+    expect(res.body.pair).toHaveProperty('input');
+    expect(res.body.pair.input).toHaveProperty('timeout');
+    expect(res.body.pair.input.timeout).toEqual(60);
+    expect(res.body.pair).toHaveProperty('status');
+    expect(res.body.pair).toHaveProperty('timeRequested');
   });
 
   it('should error retrieving a nonexistent action', async () => {

@@ -22,7 +22,9 @@ const {
 
 const WebSocket = require('ws');
 
-var Constants = require('../../constants');
+const Constants = require('../../constants');
+const Event = require('../../models/event');
+const Events = require('../../models/events');
 
 const TEST_THING = {
   id: 'test-1',
@@ -619,19 +621,15 @@ describe('things/', function() {
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
 
-
-    const Things = require('../../models/things');
-    const Event = require('../../models/event');
-
-    let thing = await Things.getThing(TEST_THING.id);
-    let eventAFirst = new Event('a', 'just a cool event');
-    let eventB = new Event('b', 'just a boring event');
-    let eventASecond = new Event('a', 'just another cool event');
+    const eventAFirst = new Event('a', 'just a cool event', TEST_THING.id);
+    const eventB = new Event('b', 'just a boring event', TEST_THING.id);
+    const eventASecond =
+      new Event('a', 'just another cool event', TEST_THING.id);
 
     let subscriptionRequest = {
       messageType: Constants.ADD_EVENT_SUBSCRIPTION,
       data: {
-        name: 'a'
+        a: {},
       }
     };
 
@@ -642,9 +640,9 @@ describe('things/', function() {
         await new Promise(res => {
           setTimeout(res, 0);
         });
-        thing.dispatchEvent(eventAFirst);
-        thing.dispatchEvent(eventB);
-        thing.dispatchEvent(eventASecond);
+        Events.add(eventAFirst);
+        Events.add(eventB);
+        Events.add(eventASecond);
         return true;
       })(),
       webSocketRead(ws, 2)
@@ -653,12 +651,10 @@ describe('things/', function() {
     expect(res).toBeTruthy();
 
     expect(messages[0].messageType).toEqual(Constants.EVENT);
-    expect(messages[0].data.name).toEqual(eventAFirst.name);
-    expect(messages[0].data.description).toEqual(eventAFirst.description);
+    expect(messages[0].data).toHaveProperty(eventAFirst.name);
 
     expect(messages[1].messageType).toEqual(Constants.EVENT);
-    expect(messages[1].data.name).toEqual(eventASecond.name);
-    expect(messages[1].data.description).toEqual(eventASecond.description);
+    expect(messages[1].data).toHaveProperty(eventASecond.name);
 
     await webSocketClose(ws);
   });
@@ -702,16 +698,20 @@ describe('things/', function() {
 
         return actionHref;
       })(),
-      webSocketRead(ws, 2)
+      webSocketRead(ws, 3)
     ]);
 
     expect(messages[0].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[0].data.pair.status).toEqual('pending');
+    expect(messages[0].data.pair.status).toEqual('created');
     expect(messages[0].data.pair.href).toEqual(actionHref);
 
     expect(messages[1].messageType).toEqual(Constants.ACTION_STATUS);
-    expect(messages[1].data.pair.status).toEqual('deleted');
+    expect(messages[1].data.pair.status).toEqual('pending');
     expect(messages[1].data.pair.href).toEqual(actionHref);
+
+    expect(messages[2].messageType).toEqual(Constants.ACTION_STATUS);
+    expect(messages[2].data.pair.status).toEqual('deleted');
+    expect(messages[2].data.pair.href).toEqual(actionHref);
 
     await webSocketClose(ws);
   });
@@ -871,9 +871,9 @@ describe('things/', function() {
       webSocketRead(ws, 2)
     ]);
 
-    const pending = messages[0];
-    expect(pending.messageType).toEqual(Constants.ACTION_STATUS);
-    expect(pending.data.pair.status).toEqual('pending');
+    const created = messages[0];
+    expect(created.messageType).toEqual(Constants.ACTION_STATUS);
+    expect(created.data.pair.status).toEqual('created');
 
     const err = messages[1];
     expect(err.messageType).toEqual(Constants.ERROR);

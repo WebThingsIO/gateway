@@ -9,6 +9,8 @@ const {
 } = require('../user');
 
 const Constants = require('../../constants');
+const Event = require('../../models/event');
+const Events = require('../../models/events');
 
 const {
   webSocketOpen,
@@ -504,12 +506,9 @@ describe('rules engine', function() {
 
     await sleep(200);
 
-    const Things = require('../../models/things');
-    const Event = require('../../models/event');
-
-    let thing = await Things.getThing(thingLight1.id);
-    thing.dispatchEvent(new Event('surge',
-                                  'oh no there is too much electricity'));
+    Events.add(new Event('surge',
+                         'oh no there is too much electricity',
+                         thingLight1.id));
 
     await sleep(200);
 

@@ -55,7 +55,7 @@ class Actions extends EventEmitter {
   /**
    * Get a particular action.
    *
-   * @returns {Object} The specified action, or udefined if the action
+   * @returns {Object} The specified action, or undefined if the action
    * doesn't exist.
    */
   get(id) {
@@ -106,9 +106,11 @@ class Actions extends EventEmitter {
   add(action) {
     var id = action.id;
     this.actions[id] = action;
-    action.on(Constants.ACTION_STATUS, this.onActionStatus);
 
-    action.updateStatus('pending');
+    // Call this initially for the 'created' status.
+    this.onActionStatus(action);
+
+    action.on(Constants.ACTION_STATUS, this.onActionStatus);
 
     if (action.thingId) {
       return Things.getThing(action.thingId).then(thing => {
@@ -119,6 +121,9 @@ class Actions extends EventEmitter {
         }
       });
     }
+
+    // Only update the action status if it's being handled internally
+    action.updateStatus('pending');
 
     switch(action.name) {
       case 'pair':

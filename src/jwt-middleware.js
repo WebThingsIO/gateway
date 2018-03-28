@@ -89,7 +89,7 @@ function middleware() {
     authenticate(req, res).
       then((jwt) => {
         if (!jwt) {
-          res.sendStatus(401);
+          res.status(401).end();
           return;
         }
         let scope = jwt.payload.scope;

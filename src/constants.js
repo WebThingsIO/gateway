@@ -63,6 +63,7 @@ exports.PROPERTY_CHANGED = 'propertyChanged';
 exports.PROPERTY_STATUS = 'propertyStatus';
 exports.REGISTER_PLUGIN = 'registerPlugin';
 exports.REGISTER_PLUGIN_REPLY = 'registerPluginReply';
+exports.REMOVE_ACTION = 'removeAction';
 exports.REMOVE_THING = 'removeThing';
 exports.REQUEST_ACTION = 'requestAction';
 exports.SET_PROPERTY = 'setProperty';

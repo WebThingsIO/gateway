@@ -25,9 +25,10 @@ const ThingsController = express.Router();
  * Get a list of Things.
  */
 ThingsController.get('/', function (request, response) {
-  Things.getThingDescriptions().then(function(things) {
-    response.status(200).json(things);
-  });
+  Things.getThingDescriptions(request.get('Host'), request.secure)
+    .then(function(things) {
+      response.status(200).json(things);
+    });
 });
 
 /**
@@ -55,14 +56,16 @@ ThingsController.post('/', function (request, response) {
  * Get a Thing.
  */
 ThingsController.get('/:thingId', function(request, response) {
-   var id = request.params.thingId;
-   Things.getThingDescription(id).then(function(thing) {
-     response.status(200).json(thing);
-   }).catch(function(error) {
-     console.error('Error getting thing description for thing with id ' + id);
-     console.error('Error: ' + error);
-     response.status(404).send(error);
-   });
+   const id = request.params.thingId;
+   Things.getThingDescription(id, request.get('Host'), request.secure)
+     .then(function(thing) {
+       response.status(200).json(thing);
+     })
+     .catch(function(error) {
+       console.error('Error getting thing description for thing with id ' + id);
+       console.error('Error: ' + error);
+       response.status(404).send(error);
+     });
 });
 
 /**
@@ -214,7 +217,9 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
 
     websocket.send(JSON.stringify({
       messageType: Constants.EVENT,
-      data: event.getDescription()
+      data: {
+        [event.name]: event.getDescription(),
+      },
     }));
   }
 
@@ -287,7 +292,9 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       }
 
       case Constants.ADD_EVENT_SUBSCRIPTION: {
-        subscribedEventNames[request.data.name] = true;
+        for (const eventName in request.data) {
+          subscribedEventNames[eventName] = true;
+        }
         break;
       }
 
@@ -296,7 +303,10 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
           const actionParams = request.data[actionName].input;
           Things.getThing(thingId).then(thing => {
             let action = new Action(actionName, actionParams, thing);
-            return Actions.add(action);
+            return Actions.add(action).then(() => {
+              AddonManager.requestAction(
+                thingId, action.id, actionName, actionParams);
+            });
           }).catch(err => {
             websocket.send(JSON.stringify({
               messageType: Constants.ERROR,

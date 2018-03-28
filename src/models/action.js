@@ -64,6 +64,10 @@ class Action extends EventEmitter {
    * @param {String} newStatus
    */
   updateStatus(newStatus) {
+    if (this.status === newStatus) {
+      return;
+    }
+
     if (newStatus === 'completed') {
       this.timeCompleted = Utils.timestamp();
     }
@@ -76,10 +80,13 @@ class Action extends EventEmitter {
    * Update from another action.
    */
   update(action) {
-    this.status = action.status;
     this.timeRequested = action.timeRequested;
     this.timeCompleted = action.timeCompleted;
-    this.emit(Constants.ACTION_STATUS, this);
+
+    if (this.status !== action.status) {
+      this.status = action.status;
+      this.emit(Constants.ACTION_STATUS, this);
+    }
   }
 }
 

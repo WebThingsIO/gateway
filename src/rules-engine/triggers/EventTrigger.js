@@ -39,7 +39,7 @@ class EventTrigger extends Trigger {
     await this.thingConn.send(JSON.stringify({
       messageType: Constants.ADD_EVENT_SUBSCRIPTION,
       data: {
-        name: this.event
+        [this.event]: {},
       }
     }));
   }
@@ -48,7 +48,7 @@ class EventTrigger extends Trigger {
     if (msg.messageType !== 'event') {
       return;
     }
-    if (msg.data.name !== this.event) {
+    if (!msg.data.hasOwnProperty(this.event)) {
       return;
     }
 

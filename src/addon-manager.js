@@ -301,6 +301,20 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method removeAction
+   * @returns a promise which resolves when the action has been removed.
+   */
+  removeAction(thingId, actionId, actionName) {
+    var device = this.getDevice(thingId);
+    if (device) {
+      return device.removeAction(actionId, actionName);
+    }
+    return new Promise((resolve, reject) => {
+      reject('removeAction: device: ' + thingId + ' not found.');
+    });
+  }
+
+  /**
    * @method handleDeviceAdded
    *
    * Called when the indicated device has been added to an adapter.
