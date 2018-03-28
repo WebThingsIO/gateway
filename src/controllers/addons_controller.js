@@ -85,12 +85,12 @@ AddonsController.put('/:addonName', async (request, response) => {
 AddonsController.put('/:addonName/config', async (request, response) => {
   const addonName = request.params.addonName;
 
-  if (!request.body || request.body['config'] === undefined) {
+  if (!request.body || !request.body.hasOwnProperty('config')) {
     response.status(400).send('Config property not defined');
     return;
   }
 
-  const config = request.body['config'];
+  const config = request.body.config;
 
   const key = `addons.${addonName}`;
 
@@ -121,7 +121,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
     await AddonManager.unloadAddon(addonName);
     await AddonManager.loadAddon(addonName);  
 
-    response.status(200).json({'config': config});
+    response.status(200).json({config});
   } catch (e) {
     console.error('Failed to apply config add-on ' + addonName);
     console.error(e);
