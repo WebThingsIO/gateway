@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # This script is expected to be run on the Raspberry Pi and it is
 # used to prepare the base image used for the gateway.
