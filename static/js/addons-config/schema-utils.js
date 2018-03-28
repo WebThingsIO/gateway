@@ -229,6 +229,24 @@
               return [];
             }
           }
+          break;
+
+        // We need default value with a range form.
+        case 'number':
+        case 'integer':
+          if (typeof defaults === 'undefined' &&
+            schema.hasOwnProperty('minimum') &&
+            schema.hasOwnProperty('maximum')) {
+            defaults = schema.minimum;
+          }
+          break;
+
+        // We need default value with a checkbox.
+        case 'boolean':
+          if (typeof defaults === 'undefined') {
+            defaults = false;
+          }
+          break;
       }
       return defaults;
     },

@@ -62,7 +62,7 @@ BooleanField.prototype.render = function () {
         <input
         type="checkbox"
         id="${id}"
-        ${typeof value === 'undefined' ? '' : 'checked'}
+        ${value ? 'checked' : ''}
         ${this.readonly ? 'readonly' : ''}
         ${this.disabled ? 'disabled' : ''}
         />

@@ -25,7 +25,8 @@ var App = {
         'title': 'Number fields & widgets',
         'required': [
           'number',
-          'enumString'
+          'enumString',
+          'integerRange'
         ],
         'properties': {
           'number': {
@@ -164,7 +165,6 @@ var App = {
         'number': 3.14,
         'integer': 42,
         'numberEnum': 2,
-        'integerRange': 42,
         'integerRangeSteps': 100
       };
     this.container.appendChild(new SchemaForm(schema, id, name)
