@@ -82,6 +82,53 @@ AddonsController.put('/:addonName', async (request, response) => {
   }
 });
 
+AddonsController.put('/:addonName/config', async (request, response) => {
+  const addonName = request.params.addonName;
+
+  if (!request.body || !request.body.hasOwnProperty('config')) {
+    response.status(400).send('Config property not defined');
+    return;
+  }
+
+  const config = request.body.config;
+
+  const key = `addons.${addonName}`;
+
+  let current;
+  try {
+    current = await Settings.get(key);
+    if (typeof current === 'undefined') {
+      throw new Error('Setting is undefined.');
+    }
+  } catch (e) {
+    console.error('Failed to get current settings for add-on ' + addonName);
+    console.error(e);
+    response.status(400).send(e);
+    return;
+  }
+
+  current.moziot.config = config;
+  try {
+    await Settings.set(key, current);
+  } catch (e) {
+    console.error('Failed to set settings for add-on ' + addonName);
+    console.error(e);
+    response.status(400).send(e);
+    return;
+  }
+
+  try {
+    await AddonManager.unloadAddon(addonName);
+    await AddonManager.loadAddon(addonName);  
+
+    response.status(200).json({config});
+  } catch (e) {
+    console.error('Failed to apply config add-on ' + addonName);
+    console.error(e);
+    response.status(400).send(e);
+  }
+});
+
 AddonsController.post('/', async (request, response) => {
   if (!request.body ||
       !request.body.hasOwnProperty('name') ||

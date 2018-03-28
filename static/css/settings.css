@@ -298,6 +298,7 @@
 .user-settings-remove,
 .adapter-settings-disable,
 .adapter-settings-enable,
+.addon-settings-config,
 .addon-settings-update,
 .addon-settings-disable,
 .addon-settings-enable,
@@ -307,6 +308,19 @@
 
 .addon-discovery-settings-add {
   background-color: #7f93a1;
+}
+
+.addon-settings-config {
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: 0.5em;
+  padding-left: 4rem;
+  margin-right: .8rem;
+  background-image: url('../images/settings-icon.png');
+}
+
+.addon-settings-config.hidden {
+  display: none;
 }
 
 .addon-settings-update {

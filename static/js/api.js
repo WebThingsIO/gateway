@@ -205,6 +205,30 @@
       });
     },
 
+    setAddonConfig: function(addonName, config) {
+      const headers = {
+        'Authorization': `Bearer ${window.API.jwt}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
+      const payload = {
+        'config': config
+      };
+      const body = JSON.stringify(payload);
+      return fetch('/addons/' + encodeURIComponent(addonName) + '/config', {
+        method: 'PUT',
+        body: body,
+        headers: headers
+      }).then(function(response) {
+        if (!response.ok) {
+          throw new Error(
+            'Unexpected response code while setting add-on config');
+        }
+
+        console.log('Set ' + addonName + ' config to ' + body);
+      });
+    },
+
     setAddonSetting: function(addonName, enabled) {
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,

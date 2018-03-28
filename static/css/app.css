@@ -96,6 +96,10 @@ input[type="email"] {
   background-color: #658196;
 }
 
+.text-button:disabled  {
+  background-color: #8dbee0;
+}
+
 .text-button::-moz-focus-inner {
   border: 0;
 }
