@@ -22,7 +22,7 @@ function ErrorField() {
       <h3 class="errors-title">Errors</h3>
     </div>
     <ul class="errors-list">
-    </ul>`
+    </ul>`;
 
   this.field = field;
   this.errorlist = field.querySelector('ul');
@@ -37,7 +37,7 @@ ErrorField.prototype.render = function (errors) {
       return `
           <li class="error-item">
             ${(error.dataPath + ' ' + error.message).trim()}
-          </li>`
+          </li>`;
     });
 
     this.errorlist.innerHTML = errorHtml.join(' ');
@@ -48,4 +48,4 @@ ErrorField.prototype.render = function (errors) {
   }
 
   return this.field;
-}
+};

@@ -22,7 +22,7 @@ Validator._ajv = new Ajv({
   allErrors: true,
 });
 
-Validator._reEscapeChar = /\\(\\)?/g
+Validator._reEscapeChar = /\\(\\)?/g;
 Validator._rePropName = RegExp(
   // Match anything that isn't a dot or bracket.
   '[^.[\\]]+' + '|' +
@@ -35,7 +35,7 @@ Validator._rePropName = RegExp(
   ')\\]' + '|' +
   // Or match "" as the space between consecutive dots or empty brackets.
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
-  , 'g')
+  , 'g');
 
 Validator._toPath = function (string) {
   const result = [];
@@ -49,9 +49,9 @@ Validator._toPath = function (string) {
         key = expression.trim();
       }
       result.push(key);
-    })
+    });
   return result;
-}
+};
 
 Validator._toErrorSchema = function (errors) {
   // Transforms a ajv validation errors list:
@@ -93,7 +93,7 @@ Validator._toErrorSchema = function (errors) {
     }
     return errorSchema;
   }, {});
-}
+};
 
 Validator.validateFormData = function (formData, schema) {
   Validator._ajv.validate(schema, formData);
@@ -102,4 +102,4 @@ Validator.validateFormData = function (formData, schema) {
   const errorSchema = Validator._toErrorSchema(errors);
 
   return { errors, errorSchema };
-}
+};

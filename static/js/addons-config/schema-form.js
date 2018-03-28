@@ -49,7 +49,7 @@ SchemaForm.prototype.onChange = function (formData) {
 
 SchemaForm.prototype.validate = function (formData) {
   return Validator.validateFormData(formData, this.schema);
-}
+};
 
 SchemaForm.prototype.scrollToTop= function () {
   document.getElementById('addon-config-settings').scrollTop = 0;
@@ -63,7 +63,7 @@ SchemaForm.prototype.handleApply = function (e) {
   if (errors) {
     this.scrollToTop();
   } else {
-    this.applyButton.innerText = 'Applying...'
+    this.applyButton.innerText = 'Applying...';
     window.API.setAddonConfig(this.name, this.formData)
     .then(() => {
       page('/settings/addons');
@@ -72,21 +72,21 @@ SchemaForm.prototype.handleApply = function (e) {
       console.error(`Failed to set config add-on: ${this.name}\n${err}`);
     });
   }
-}
+};
 
 SchemaForm.prototype.renderApplyButton = function (){
   const applyButton = document.createElement('button');
   applyButton.id = 'addon-apply-' + Utils.escapeHtml(this.id);
   applyButton.type = 'button';
   applyButton.className = 'text-button addon-config-button-apply';
-  applyButton.innerText = 'Apply'
+  applyButton.innerText = 'Apply';
   applyButton.addEventListener('click', this.handleApply.bind(this));
   applyButton.disabled = true;
 
   this.applyButton = applyButton;
 
   return applyButton;
-}
+};
 
 SchemaForm.prototype.render = function (data) {
   this.formData =
@@ -98,7 +98,7 @@ SchemaForm.prototype.render = function (data) {
   const form = document.createElement('form');
   form.className = 'addons-form';
   form.id = this.id;
-  form.innerHTML = `<p></p>`
+  form.innerHTML = `<p></p>`;
 
   const p = form.querySelector('p');
 
@@ -119,4 +119,4 @@ SchemaForm.prototype.render = function (data) {
   p.insertBefore(this.errorField.render([]), p.firstChild);
 
   return form;
-}
+};

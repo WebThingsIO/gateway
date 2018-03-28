@@ -1,5 +1,5 @@
 /**
- * Input Field for JSON-schema type:object.
+ * Input Field for JSON-schema type:array.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -44,7 +44,7 @@ ArrayField.prototype.require = function (name) {
     Array.isArray(this.schema.required) &&
     this.schema.required.indexOf(name) !== -1
   );
-}
+};
 
 ArrayField.prototype.onChangeForIndex = function (index) {
   return function (value) {
@@ -61,7 +61,7 @@ ArrayField.prototype.onChangeForIndex = function (index) {
       this.onChange(this.formData);
     }
   }.bind(this);
-}
+};
 
 ArrayField.prototype.onSelectChange = function (value, all) {
   return function (event) {
@@ -86,18 +86,18 @@ ArrayField.prototype.allowAdditionalItems = function () {
     console.warn('additionalItems=true is currently not supported');
   }
   return SchemaUtils.isObject(schema.additionalItems);
-}
+};
 
 ArrayField.prototype.isAddable = function (formItems) {
   const schema = this.schema;
   let addable = true;
 
-  if (schema.maxItems !== undefined) {
+  if (typeof schema.maxItems !== 'undefined') {
     addable = addable && formItems.length < schema.maxItems;
   }
 
   return addable;
-}
+};
 
 ArrayField.prototype.isItemRequired = function (itemSchema) {
   if (Array.isArray(itemSchema.type)) {
@@ -107,7 +107,7 @@ ArrayField.prototype.isItemRequired = function (itemSchema) {
   }
   // All non-null array item types are inherently required by design
   return itemSchema.type !== 'null';
-}
+};
 
 ArrayField.prototype.onDropIndexClick = function (field, index) {
   return function (event) {
@@ -159,7 +159,7 @@ ArrayField.prototype.renderRemoveButton = function (field, index) {
   button.onclick = this.onDropIndexClick(field, index);
 
   return button;
-}
+};
 
 ArrayField.prototype.onAddClick = function (field) {
   return function (event) {
@@ -206,7 +206,7 @@ ArrayField.prototype.renderAddButton = function (field) {
   button.onclick = this.onAddClick(field);
 
   return button;
-}
+};
 
 ArrayField.prototype.renderArrayFieldItem =
   function (field, itemData, index, itemSchema, canRemove) {
@@ -255,7 +255,7 @@ ArrayField.prototype.renderArrayFieldItem =
     childField.appendChild(child);
 
     return item;
-  }
+  };
 
 
 ArrayField.prototype.renderArrayFieldset = function () {
@@ -276,7 +276,7 @@ ArrayField.prototype.renderArrayFieldset = function () {
     '<div class="array-items"></div>';
 
   return field;
-}
+};
 
 ArrayField.prototype.renderNormalArray = function () {
   const schema = this.schema;
@@ -302,7 +302,7 @@ ArrayField.prototype.renderNormalArray = function () {
   }
 
   return field;
-}
+};
 
 ArrayField.prototype.renderFixedArray = function () {
   const schema = this.schema;
@@ -342,7 +342,7 @@ ArrayField.prototype.renderFixedArray = function () {
   }
 
   return field;
-}
+};
 
 ArrayField.prototype.renderMultiSelect = function () {
   const id = Utils.escapeHtml(this.idSchema.$id);
@@ -372,7 +372,7 @@ ArrayField.prototype.renderMultiSelect = function () {
       ${this.disabled || this.readonly ? 'disabled' : ''}
     />
     <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
-    `
+    `;
 
     const input = div.querySelector('input');
     input.onchange = this.onSelectChange(option.value, all);
@@ -382,7 +382,7 @@ ArrayField.prototype.renderMultiSelect = function () {
   }.bind(this));
 
   return field;
-}
+};
 
 ArrayField.prototype.render = function () {
   const schema = this.schema;
@@ -403,4 +403,4 @@ ArrayField.prototype.render = function () {
   }
 
   return this.renderNormalArray();
-}
+};

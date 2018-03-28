@@ -52,7 +52,7 @@ SchemaField.prototype.getFieldType = function () {
 
   const field = FIELD_TYPES[this.schema.type];
   return field ? field : UnsupportedField;
-}
+};
 
 SchemaField.prototype.render = function () {
   const fieldType = this.getFieldType();
@@ -107,4 +107,4 @@ SchemaField.prototype.render = function () {
   field.appendChild(child);
 
   return field;
-}
+};

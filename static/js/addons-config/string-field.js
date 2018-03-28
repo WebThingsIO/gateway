@@ -46,7 +46,7 @@ StringField.prototype.onStringChange = function (event) {
     if (this.onChange) {
         this.onChange(this.formData);
     }
-}
+};
 
 StringField.prototype.render = function () {
     const id = Utils.escapeHtml(this.idSchema.$id);
@@ -102,4 +102,4 @@ StringField.prototype.render = function () {
     input.onchange = this.onStringChange.bind(this);
 
     return field;
-}
+};

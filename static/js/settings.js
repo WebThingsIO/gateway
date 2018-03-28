@@ -424,7 +424,14 @@ var SettingsScreen = {
     this.addonMainSettings.classList.add('hidden');
     this.addonConfigSettings.classList.remove('hidden');
 
-    this.fetchAddonList().then(() => {
+    let promise;
+    if (this.installedAddons.size === 0 && this.availableAddons.size === 0) {
+      promise = this.fetchAddonList();
+    } else {
+      promise = Promise.resolve();
+    }
+
+    promise.then(() => {
       this.addonConfigSettings.innerHTML = '';
 
       const addon = this.installedAddons.get(id);
@@ -582,7 +589,7 @@ var SettingsScreen = {
       headers: API.headers(),
       method: 'POST'
     }).then(function() {
-      updateNow.textContent = 'In Progress'
+      updateNow.textContent = 'In Progress';
       let isDown = false;
       function checkStatus() {
         API.getUpdateStatus().then(function() {

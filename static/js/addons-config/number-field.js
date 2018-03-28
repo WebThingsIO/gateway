@@ -41,7 +41,7 @@ function NumberField(
 
 NumberField.prototype.isNaN = function (x) {
   return x !== x;
-}
+};
 
 NumberField.prototype.onRangeChange = function (event) {
   const value = event.target.value;
@@ -52,7 +52,7 @@ NumberField.prototype.onRangeChange = function (event) {
   if (this.onChange) {
     this.onChange(this.formData);
   }
-}
+};
 
 NumberField.prototype.onNumberChange = function (value) {
   const number = Number(value);
@@ -66,7 +66,7 @@ NumberField.prototype.onNumberChange = function (value) {
   if (this.onChange) {
     this.onChange(this.formData);
   }
-}
+};
 
 NumberField.prototype.render = function () {
   const id = this.idSchema.$id;
@@ -91,7 +91,7 @@ NumberField.prototype.render = function () {
         min=${Number(this.schema.minimum)}
         max=${Number(this.schema.maximum)}
         />
-        <span class="range-view">${value}</span>`
+        <span class="range-view">${value}</span>`;
 
     const input = field.querySelector('input');
     input.onchange = this.onRangeChange.bind(this);
@@ -112,4 +112,4 @@ NumberField.prototype.render = function () {
     this.required,
     this.disabled,
     this.readonly).render();
-}
+};

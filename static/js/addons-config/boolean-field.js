@@ -45,7 +45,7 @@ BooleanField.prototype.onBooleanChange = function (event) {
     if (this.onChange) {
         this.onChange(this.formData);
     }
-}
+};
 
 BooleanField.prototype.render = function () {
     const id = Utils.escapeHtml(this.idSchema.$id);
@@ -73,4 +73,4 @@ BooleanField.prototype.render = function () {
     input.onchange = this.onBooleanChange.bind(this);
 
     return field;
-}
+};

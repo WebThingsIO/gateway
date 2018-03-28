@@ -44,7 +44,7 @@ ObjectField.prototype.require = function (name) {
     Array.isArray(this.schema.required) &&
     this.schema.required.indexOf(name) !== -1
   );
-}
+};
 
 ObjectField.prototype.onPropertyChange = function (name) {
   return function (value) {
@@ -97,4 +97,4 @@ ObjectField.prototype.render = function () {
   }.bind(this));
 
   return field;
-}
+};

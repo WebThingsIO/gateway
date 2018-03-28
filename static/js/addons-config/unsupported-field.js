@@ -31,4 +31,4 @@ UnsupportedField.prototype.render = function () {
   field.innerHTML = `Unsupported field schema ${schema}.`;
 
   return field;
-}
+};
