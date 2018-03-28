@@ -652,9 +652,14 @@ describe('things/', function() {
 
     expect(messages[0].messageType).toEqual(Constants.EVENT);
     expect(messages[0].data).toHaveProperty(eventAFirst.name);
+    expect(messages[0].data[eventAFirst.name]).toHaveProperty('data');
+    expect(messages[0].data[eventAFirst.name].data).toEqual(eventAFirst.data);
 
     expect(messages[1].messageType).toEqual(Constants.EVENT);
     expect(messages[1].data).toHaveProperty(eventASecond.name);
+    expect(messages[1].data[eventASecond.name]).toHaveProperty('data');
+    expect(
+      messages[1].data[eventASecond.name].data).toEqual(eventASecond.data);
 
     await webSocketClose(ws);
   });

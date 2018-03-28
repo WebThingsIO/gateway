@@ -304,7 +304,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
           Things.getThing(thingId).then(thing => {
             let action = new Action(actionName, actionParams, thing);
             return Actions.add(action).then(() => {
-              AddonManager.requestAction(
+              return AddonManager.requestAction(
                 thingId, action.id, actionName, actionParams);
             });
           }).catch(err => {
