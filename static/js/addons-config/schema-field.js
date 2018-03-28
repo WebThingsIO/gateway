@@ -67,9 +67,9 @@ SchemaField.prototype.render = function () {
     .join(' ')
     .trim();
   let label = this.schema.title || this.name;
-  if(label !== undefined && label !== null){
+  if (label !== undefined && label !== null) {
     label = Utils.escapeHtml(label);
-    label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;  
+    label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
   }
 
   let displayLabel = true;
@@ -86,7 +86,7 @@ SchemaField.prototype.render = function () {
   const field = document.createElement('div');
   field.className = classNames;
   field.innerHTML =
-    (displayLabel && label?
+    (displayLabel && label ?
       '<label class="control-label" htmlFor="' + id + '">' +
       label + '</label>' : '') +
     (displayLabel && description ?

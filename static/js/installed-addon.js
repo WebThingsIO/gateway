@@ -76,7 +76,7 @@ InstalledAddon.prototype.view = function() {
       <div class="addon-settings-controls">
         <button id="addon-config-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-config ${configButtonClass}">
-          Config
+          Configure
         </button>
         <button id="addon-update-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-update ${updateButtonClass}">

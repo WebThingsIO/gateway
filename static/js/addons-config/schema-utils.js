@@ -186,7 +186,7 @@
           SchemaUtils.computeDefaults(itemSchema, undefined, definitions)
         );
       }
-      // Not defaults defined for this node, fallback to generic typed ones.
+      // No defaults defined for this node, fallback to generic typed ones.
       if (typeof defaults === 'undefined') {
         defaults = schema.default;
       }

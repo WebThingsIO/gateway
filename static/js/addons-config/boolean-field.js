@@ -1,5 +1,5 @@
 /**
- * Input Field for JSON-schema type:string.
+ * Input Field for JSON-schema type:boolean.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

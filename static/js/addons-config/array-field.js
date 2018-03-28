@@ -93,7 +93,7 @@ ArrayField.prototype.isAddable = function (formItems) {
   let addable = true;
 
   if (typeof schema.maxItems !== 'undefined') {
-    addable = addable && formItems.length < schema.maxItems;
+    addable = formItems.length < schema.maxItems;
   }
 
   return addable;

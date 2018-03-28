@@ -39,10 +39,6 @@ function NumberField(
   return this;
 }
 
-NumberField.prototype.isNaN = function (x) {
-  return x !== x;
-};
-
 NumberField.prototype.onRangeChange = function (event) {
   const value = event.target.value;
   this.rangeValue.innerText = value;
@@ -57,9 +53,9 @@ NumberField.prototype.onRangeChange = function (event) {
 NumberField.prototype.onNumberChange = function (value) {
   const number = Number(value);
 
-  if (this.isNaN(number)) {
+  if (isNaN(number)) {
     this.formData = value;
-  }else{
+  } else {
     this.formData = number;
   }
 
@@ -71,7 +67,7 @@ NumberField.prototype.onNumberChange = function (value) {
 NumberField.prototype.render = function () {
   const id = this.idSchema.$id;
   let value = Number(this.formData);
-  value = this.isNaN(value) ? 0 : value;
+  value = isNaN(value) ? 0 : value;
 
   // range item
   if (this.schema.hasOwnProperty('minimum') &&
@@ -87,7 +83,7 @@ NumberField.prototype.render = function () {
         ${this.disabled ? 'disabled' : ''}
         value=${value == null ? '' : value}
         ${this.schema.multipleOf ?
-          'step=' + Number(this.schema.multipleOf) : ''}
+        'step=' + Number(this.schema.multipleOf) : ''}
         min=${Number(this.schema.minimum)}
         max=${Number(this.schema.maximum)}
         />
