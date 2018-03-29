@@ -65,4 +65,7 @@ rm -fr gateway_old
 mv $gateway_old gateway_old
 mv /tmp/gateway gateway
 touch gateway_old/package.json
+
+./gateway/post-upgrade.sh
+
 sudo systemctl start mozilla-iot-gateway.service
