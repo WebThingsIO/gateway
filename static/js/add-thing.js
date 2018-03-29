@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals App, NewThing */
+/* globals App, NewThing, NewWebThing, SettingsScreen */
 
 var AddThingScreen = {
 
@@ -30,12 +30,15 @@ var AddThingScreen = {
     this.addonsHint = document.getElementById('add-adapters-hint');
     this.addonsHintAnchor =
       document.getElementById('add-adapters-hint-anchor');
+    this.addByUrlAnchor = document.getElementById('add-by-url-anchor');
     this.pairingTimeout = null;
     this.visibleThings = new Set();
     // Add event listeners
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.cancelButton.addEventListener('click', this.hide.bind(this));
     this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
+    this.addByUrlAnchor.addEventListener('click',
+                                         this.showNewWebThing.bind(this));
   },
 
   /**
@@ -144,6 +147,16 @@ var AddThingScreen = {
    * Show Add Thing Screen.
    */
   show: function() {
+    this.addByUrlAnchor.classList.add('hidden');
+    SettingsScreen.fetchAddonList().then(() => {
+      if (SettingsScreen.installedAddons.has('thing-url-adapter')) {
+        const addon = SettingsScreen.installedAddons.get('thing-url-adapter');
+        if (addon.moziot.enabled) {
+          this.addByUrlAnchor.classList.remove('hidden');
+        }
+      }
+    });
+
     this.element.classList.remove('hidden');
     this.newThingsElement.innerHTML = '';
     this.visibleThings.clear();
@@ -165,6 +178,10 @@ var AddThingScreen = {
       this.visibleThings.add(thing.id);
       new NewThing(thing.id, thing);
     }
-  }
+  },
 
+  showNewWebThing: function(e) {
+    e.preventDefault();
+    new NewWebThing();
+  },
 };

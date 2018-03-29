@@ -770,9 +770,10 @@ class AddonManager extends EventEmitter {
    * Unload add-on with the given package name.
    *
    * @param {String} packageName The package name of the add-on to unload.
+   * @param {Boolean} wait Whether or not to wait for unloading to finish
    * @returns A promise which is resolved when the add-on is unloaded.
    */
-  unloadAddon(packageName) {
+  unloadAddon(packageName, wait) {
     if (!this.addonsLoaded) {
       // The add-ons are not currently loaded, no need to unload.
       return Promise.resolve();
@@ -810,7 +811,20 @@ class AddonManager extends EventEmitter {
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
 
-    return Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
+    const all =
+      Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
+
+    if (wait) {
+      // If wait was set, wait 3 seconds + a little for the process to die.
+      // 3 seconds, because that's what is used in unloadAddon().
+      return all.then(() => {
+        return new Promise((resolve) => {
+          setTimeout(resolve, Constants.UNLOAD_PLUGIN_KILL_DELAY + 500);
+        });
+      });
+    }
+
+    return all;
   }
 
   /**
@@ -986,18 +1000,10 @@ class AddonManager extends EventEmitter {
   async uninstallAddon(packageName, wait, disable) {
     try {
       // Try to gracefully unload
-      await this.unloadAddon(packageName);
+      await this.unloadAddon(packageName, wait);
     } catch (e) {
       console.error(`Failed to unload ${packageName} properly: ${e}`);
       // keep going
-    }
-
-    if (wait) {
-      // If wait was set, wait 3 seconds + a little for the process to die.
-      // 3 seconds, because that's what is used in unloadAddon().
-      await new Promise((resolve) => {
-        setTimeout(resolve, Constants.UNLOAD_PLUGIN_KILL_DELAY + 500);
-      });
     }
 
     const addonPath = path.join(UserProfile.addonsDir, packageName);

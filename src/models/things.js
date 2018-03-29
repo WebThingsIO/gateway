@@ -102,7 +102,7 @@ const Things = {
    * @param Object description Thing description.
    */
   createThing: function(id, description) {
-    var thing = new Thing(id, description);
+    const thing = new Thing(id, description);
     return Database.createThing(thing.id, thing.getDescription())
     .then(function(thingDesc) {
       this.things.set(thing.id, thing);

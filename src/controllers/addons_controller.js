@@ -118,7 +118,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
   }
 
   try {
-    await AddonManager.unloadAddon(addonName);
+    await AddonManager.unloadAddon(addonName, true);
     await AddonManager.loadAddon(addonName);  
 
     response.status(200).json({config});
