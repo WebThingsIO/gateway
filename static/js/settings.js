@@ -29,6 +29,7 @@ var SettingsScreen = {
     this.adapterSettings = document.getElementById('adapter-settings');
     this.addonSettings = document.getElementById('addon-settings');
     this.addonMainSettings = document.getElementById('addon-main-settings');
+    this.addonConfigSettings = document.getElementById('addon-config-settings');
     this.addonDiscoverySettings =
       document.getElementById('addon-discovery-settings');
     this.addonConfigSettings = document.getElementById('addon-config-settings');
@@ -64,6 +65,7 @@ var SettingsScreen = {
     this.adapterSettings.classList.add('hidden');
     this.addonSettings.classList.add('hidden');
     this.addonMainSettings.classList.add('hidden');
+    this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
@@ -387,6 +389,7 @@ var SettingsScreen = {
 
   showAddonSettings: function() {
     this.addonSettings.classList.remove('hidden');
+    this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
     this.addonConfigSettings.classList.add('hidden');
     this.addonMainSettings.classList.remove('hidden');
@@ -421,8 +424,10 @@ var SettingsScreen = {
 
   showAddonConfigScreen: function(id) {
     this.backButton.href = '/settings/addons';
+    this.addonSettings.classList.remove('hidden');
     this.addonMainSettings.classList.add('hidden');
     this.addonConfigSettings.classList.remove('hidden');
+    this.addonDiscoverySettings.classList.add('hidden');
 
     let promise;
     if (this.installedAddons.size === 0 && this.availableAddons.size === 0) {
@@ -447,6 +452,7 @@ var SettingsScreen = {
     this.backButton.href = '/settings/addons';
     this.addonSettings.classList.remove('hidden');
     this.addonMainSettings.classList.add('hidden');
+    this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.remove('hidden');
 
     let promise;

@@ -1,171 +1,204 @@
-  .addons-form {
-    top: 50%;
-    color: #fff;
-    font-size: 1.6rem;
-    min-width: 28rem;
-    max-width: 38rem;
-    margin: 0 auto;
-  }
-  
-  .addons-form legend {
-    display: block;
-    width: 100%;
-    padding: 0;
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-    line-height: inherit;
-    border: 0;
-    border-bottom: 1px solid #fff;
- }
+#addon-config-settings {
+  background: #305067;
+}
 
-  .addons-form fieldset {
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-    border: 0;
-  }
+.addons-form {
+  top: 50%;
+  color: #fff;
+  font-size: 1.6rem;
+  min-width: 30rem;
+  max-width: 40rem;
+  margin: 0 auto;
+}
 
-  .addons-form .form-group {
-    margin-bottom: 1.5rem;
-  }
+.addons-form legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  line-height: inherit;
+  border: 0;
+  border-bottom: 1px solid #fff;
+}
 
-  .addons-form .control-label {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
+.addons-form fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
 
-  .addons-form .field-description {
-    margin-top: 0rem;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
+.addons-form > p > .form-group {
+  padding-left: 0;
+}
 
-  .addons-form .form-control {
-    display: block;
-    width: 100%;
-    height: 3rem;
-    background-color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
-  }
+.addons-form > p > .form-group > fieldset > legend {
+  font-size: 2.5rem;
+  border-bottom: none;
+  padding-bottom: 2rem;
+}
 
-  .addons-form .checkbox{
-    height: 2.3rem;
-    line-height: 2.3rem;
-    margin-bottom: 0.5rem;
-  }
+.addons-form > p > .form-group > fieldset > legend:before {
+  content: 'Configuring: ';
+}
 
-  .addons-form input[type=checkbox] {
-    display: inline-block;
-    vertical-align: middle;
-    width: auto;
-    margin-left: 0rem;
-  }
+.addons-form .form-group {
+  padding-left: 10px;
+  margin-bottom: 1.5rem;
+}
 
-  .addons-form .checkbox-title{
-    display: inline-block;
-    vertical-align: middle;
-  }
+.addons-form .control-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
 
-  .addons-form .title {
-    font-size: 1.3rem;
-    display: block;
-    width: 12.8rem;
-    height: 3.6rem;
-    overflow: hidden;
-    margin: 0.5rem 0;
-  }
-  
-  .addons-form .btn-form-tools:hover:enabled, button:active:enabled {
-    background-color: #658196;
-  }
-  
-  .addons-form .btn-form-tools::-moz-focus-inner {
-    border: 0;
-  }
+.addons-form .field-description {
+  margin-top: 0rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
 
-  .addons-form .btn-form-tools {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    padding: 0;
-    background-color: #597285;
-    color: #fff;
-    border: none;
-    background-size: contain;
-    background-repeat: no-repeat;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline: 0;
-    cursor: pointer;
-  }
+.addons-form .form-control {
+  display: block;
+  width: 100%;
+  height: 3rem;
+  background-color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
 
-  .addons-form .btn-add {
-    background-image: url('../images/add_arrayfield.svg');
-  }
+.addons-form .checkbox{
+  height: 2.3rem;
+  line-height: 2.3rem;
+  margin-bottom: 0.5rem;
+}
 
-  .addons-form .btn-remove {
-    background-image: url('../images/clear_arrayfield.svg');
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1rem;
-  }
+.addons-form input[type=checkbox] {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  margin-left: 0rem;
+}
 
-  .addons-form .array-item-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 0.5rem;
-    grid-auto-rows: minmax(3rem, auto);
-  }
+.addons-form .checkbox-title{
+  display: inline-block;
+  vertical-align: middle;
+}
 
-  .addons-form .array-item-col {
-    grid-column: span 6;
-    grid-row: 1;
-  }
+.addons-form .title {
+  font-size: 1.3rem;
+  display: block;
+  width: 12.8rem;
+  height: 3.6rem;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
 
-  .addons-form .array-item-col-field {
-    grid-column-start: span 5;
-    grid-row: 1;
-  }
+.addons-form .btn-form-tools:hover:enabled, button:active:enabled {
+  background-color: #658196;
+}
 
-  .addons-form .array-item-col-tool {
-    position: relative;
-    grid-column: 6;
-    grid-row: 1;
-  }
+.addons-form .btn-form-tools::-moz-focus-inner {
+  border: 0;
+}
 
-  .addons-form .errors-field.hidden {
-    display: none;
-  }
-  
-  #addon-config-settings .addons-form .errors-title {
-    margin: 0 auto;
-    padding-bottom: 0.5rem;
-    color: #FFCC66;
-  }
+.addons-form .btn-form-tools {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 0;
+  background-color: #597285;
+  color: #fff;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
+  cursor: pointer;
+}
 
-  #addon-config-settings .addons-form .errors-list {
-    transform: translateY(0%);
-    top: auto;
-    margin: 0 auto;
-    padding: 0rem;
-    padding-left: 1em;
-    text-indent: -1em;
-    list-style-position: inside;
-    color: #FFCC66;
-  }
-  
-  .addons-form .addon-config-button-apply {
-    background-size: 2rem;
-    background-repeat: no-repeat;
-    background-position: 0.5em;
-    padding-left: 4rem;
-    margin-right: .8rem;
-    background-image: url('../images/check-16.svg');
-  }
-  
+.addons-form .btn-add {
+  background-image: url('../images/add_arrayfield.svg');
+}
+
+.addons-form .btn-remove {
+  background-image: url('../images/clear_arrayfield.svg');
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1rem;
+}
+
+.addons-form .array-item-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.5rem;
+  grid-auto-rows: minmax(3rem, auto);
+  border-bottom: 1px solid #fff;
+}
+
+.addons-form .array-item-col {
+  grid-column: span 6;
+  grid-row: 1;
+}
+
+.addons-form .array-item-col-field {
+  grid-column-start: span 5;
+  grid-row: 1;
+}
+
+.addons-form .array-item-col-tool {
+  position: relative;
+  grid-column: 6;
+  grid-row: 1;
+}
+
+.addons-form .errors-field.hidden {
+  display: none;
+}
+
+#addon-config-settings .addons-form .errors-title {
+  margin: 0 auto;
+  padding-bottom: 0.5rem;
+  color: #FFCC66;
+}
+
+#addon-config-settings .addons-form .errors-list {
+  transform: translateY(0%);
+  top: auto;
+  margin: 0 auto;
+  padding: 0rem;
+  padding-left: 1em;
+  text-indent: -1em;
+  list-style-position: inside;
+  color: #FFCC66;
+}
+
+.addon-config-button-apply {
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: 0.5em;
+  background-image: url('../images/check-16.svg');
+  margin: 1rem auto;
+  font-size: 1.6rem;
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem 1rem 4rem;
+  color: #fff;
+}
+
+.addon-config-button-apply:hover,
+.addon-config-button-apply:active {
+  background-color: #658196;
+}
+
+.addon-config-button-apply::-moz-focus-inner {
+  border: 0;
+}
