@@ -39,5 +39,3 @@ after_script:
 node_js:
   - 8
   - 9
-notifications:
-  irc: "irc.mozilla.org#iot"
