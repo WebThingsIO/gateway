@@ -21,13 +21,26 @@
   color: #fff;
 }
 
+.new-web-thing-cancel-button,
+.new-web-thing-submit-button,
+.new-web-thing-save-button,
 .new-thing-save-button {
   height: 4rem;
   background-color: #7f93a1;
   margin: 1.25rem 0;
 }
 
-.new-thing-save-button:disabled, .new-thing-save-button:disabled:hover,
+.new-web-thing-cancel-button:disabled,
+.new-web-thing-cancel-button:disabled:hover,
+.new-web-thing-cancel-button:hover:active,
+.new-web-thing-submit-button:disabled,
+.new-web-thing-submit-button:disabled:hover,
+.new-web-thing-submit-button:hover:active,
+.new-web-thing-save-button:disabled,
+.new-web-thing-save-button:disabled:hover,
+.new-web-thing-save-button:hover:active,
+.new-thing-save-button:disabled,
+.new-thing-save-button:disabled:hover,
 .new-thing-save-button:hover:active {
   background-color: #597285;
 }
@@ -46,7 +59,6 @@
 .new-thing {
   background-color: #597285;
   width: 50%;
-  height: 6.5rem;
   min-width: 28rem;
   max-width: 65rem;
   margin: 1rem auto;
@@ -65,14 +77,18 @@
 
 .new-thing-metadata {
   flex: 1;
-  padding: 1rem;
+  padding: 1rem 1rem 0 1rem;
 }
 
+.new-web-thing-url,
+.new-web-thing-name,
 .new-thing-name {
   display: block;
-  width: calc(100% - 2rem);
+  width: calc(100% - 1rem);
 }
 
+.new-web-thing-url:disabled,
+.new-web-thing-name:disabled,
 .new-thing-name:disabled {
   background-color: #597285;
   color: #fff;
@@ -85,6 +101,18 @@
   color: #ccc;
   margin: 1rem 0;
   font-size: 1.5rem;
+}
+
+.new-thing-type.error {
+  color: orange;
+}
+
+.new-web-thing-origin {
+  display: inline-block;
+  float: left;
+  color: #ccc;
+  margin-top: -1rem;
+  font-size: 1.3rem;
 }
 
 .new-thing.on-off-switch .new-thing-icon {
@@ -101,4 +129,25 @@
 
 .new-thing.smart-plug .new-thing-icon {
   background-image: url('../images/smart-plug.svg');
+}
+
+.new-thing.web-thing .new-thing-icon {
+  background-image: url('../images/web-thing-icon.svg');
+}
+
+#add-by-url-anchor:link,
+#add-by-url-anchor:visited,
+#add-by-url-anchor:hover,
+#add-by-url-anchor:active {
+  color: #ccc;
+}
+
+#add-by-url-anchor.hidden,
+.new-thing .hidden {
+  display: none;
+}
+
+.new-web-thing-controls {
+  text-align: right;
+  margin-top: -4rem;
 }

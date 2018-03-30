@@ -11,10 +11,11 @@
 
 'use strict';
 
-var express = require('express');
-var Things = require('../models/things');
+const PromiseRouter = require('express-promise-router');
+const fetch = require('node-fetch');
+const Things = require('../models/things');
 
-var NewThingsController = express.Router();
+const NewThingsController = PromiseRouter();
 
 /**
  * Handle GET requests to /new_things
@@ -44,6 +45,39 @@ NewThingsController.ws('/', function(websocket) {
   }).catch(function(error) {
     console.error('Error getting a list of new things from adapters ' + error);
   });
+});
+
+/**
+ * Handle POST requests to /new_things
+ */
+NewThingsController.post('/', async (request, response) => {
+  if (!request.body || !request.body.url) {
+    response.status(400).send('No URL in thing description');
+    return;
+  }
+
+  const url = request.body.url;
+  try {
+    const res = await fetch(url, {headers: {Accept: 'application/json'}});
+
+    if (!res.ok) {
+      response.status(400).send('Web thing not found');
+      return;
+    }
+
+    const description = await res.json();
+
+    // Verify some high level thing description properties.
+    if (description.hasOwnProperty('name') &&
+        description.hasOwnProperty('type') &&
+        description.hasOwnProperty('properties')) {
+      response.json(description);
+    } else {
+      response.status(400).send('Invalid thing description');
+    }
+  } catch (e) {
+    response.status(400).send('Web thing not found');
+  }
 });
 
 module.exports = NewThingsController;

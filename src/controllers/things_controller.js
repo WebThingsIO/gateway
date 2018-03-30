@@ -10,7 +10,7 @@
 
 'use strict';
 
-const express = require('express');
+const PromiseRouter = require('express-promise-router');
 const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
@@ -18,8 +18,9 @@ const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const EventsController = require('./events_controller');
 const Things = require('../models/things');
+const Settings = require('../models/settings');
 
-const ThingsController = express.Router();
+const ThingsController = PromiseRouter();
 
 /**
  * Get a list of Things.
@@ -34,22 +35,60 @@ ThingsController.get('/', function (request, response) {
 /**
  * Handle creating a new thing.
  */
-ThingsController.post('/', function (request, response) {
+ThingsController.post('/', async (request, response) => {
   if (!request.body || !request.body.id) {
     response.status(400).send('No id in thing description');
     return;
   }
-  var description = request.body;
-  var id = description.id;
+  const description = request.body;
+  const id = description.id;
   delete description.id;
-  Things.createThing(id, description).then(function(thing) {
+
+  // If we're adding a native webthing, we need to update the config for
+  // thing-url-adapter so that it knows about it.
+  let webthing = false;
+  if (description.hasOwnProperty('webthingUrl')) {
+    webthing = true;
+
+    const key = 'addons.thing-url-adapter';
+    try {
+      const current = await Settings.get(key);
+      if (typeof current === 'undefined') {
+        throw new Error('Setting is undefined.');
+      }
+
+      current.moziot.config.urls.push(description.webthingUrl);
+      await Settings.set(key, current);
+    } catch (e) {
+      console.error('Failed to update settings for thing-url-adapter');
+      console.error(e);
+      response.status(400).send(e);
+      return;
+    }
+
+    delete description.webthingUrl;
+  }
+
+  try {
+    const thing = await Things.createThing(id, description, webthing);
     console.log('Successfully created new thing ' + thing.name);
     response.status(201).send(thing);
-  }).catch(function(error) {
+  } catch (error) {
     console.error('Error saving new thing', id, description);
     console.error(error);
     response.status(500).send(error);
-  });
+  }
+
+  // If this is a web thing, we need to restart thing-url-adapter.
+  if (webthing) {
+    try {
+      await AddonManager.unloadAddon('thing-url-adapter', true);
+      await AddonManager.loadAddon('thing-url-adapter');
+    } catch (e) {
+      console.error('Failed to restart thing-url-adapter');
+      console.error(e);
+    }
+  }
 });
 
 /**

@@ -166,7 +166,7 @@
 #addon-config-settings .addons-form .errors-title {
   margin: 0 auto;
   padding-bottom: 0.5rem;
-  color: #FFCC66;
+  color: orange;
 }
 
 #addon-config-settings .addons-form .errors-list {
@@ -177,7 +177,7 @@
   padding-left: 1em;
   text-indent: -1em;
   list-style-position: inside;
-  color: #FFCC66;
+  color: orange;
 }
 
 .addon-config-button-apply {
