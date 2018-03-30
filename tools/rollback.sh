@@ -49,6 +49,8 @@ function checkCounter() {
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
   systemctl stop mozilla-iot-gateway
+  # TODO: remove when gateway_old is not 0.3.1
+  nvm alias default v7.10.1
   rm -fr gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
