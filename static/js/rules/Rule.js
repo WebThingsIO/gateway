@@ -143,14 +143,17 @@ Rule.prototype.toTriggerHumanDescription = function() {
       triggerStr += 'not ';
     }
     triggerStr += this.trigger.property.name;
-  } else {
+  } else if (this.trigger.type === 'LevelTrigger') {
     triggerStr += `${this.trigger.property.name} is `;
     if (this.trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
     } else {
       triggerStr += 'greater than ';
     }
-    triggerStr += this.trigger.level;
+    triggerStr += this.trigger.value;
+  } else {
+    console.error('Unknown trigger type', this.trigger);
+    return '???';
   }
 
   return triggerStr;

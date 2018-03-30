@@ -42,18 +42,117 @@ PropertySelect.prototype.clearOptions = function() {
 /**
  * Add an option to the options list
  * @param {String} name - text content of option
- * @param {Object} value - associated data
+ * @param {Object} ruleFragment - associated rule fragment with either trigger
+ * or property defined
  * @param {boolean} selected - if the option is selected
  */
-PropertySelect.prototype.addOption = function(name, value, selected) {
+PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
   const elt = document.createElement('div');
   elt.classList.add('property-select-option');
   if (selected) {
     elt.classList.add('selected');
   }
-  elt.dataset.value = JSON.stringify(value);
+  elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
   elt.textContent = name;
+
+  if (!ruleFragment) {
+    this.elt.appendChild(elt);
+    return;
+  }
+
+  const property = getProperty(ruleFragment);
+
+  const stopPropagation = function(e) {
+    e.stopPropagation();
+  };
+
+  if (property.type === 'number') {
+    let ltOption, gtOption;
+    if (ruleFragment.trigger) {
+      ltOption = document.createElement('option');
+      ltOption.textContent = '<';
+      ltOption.classList.add('lt-option');
+      gtOption = document.createElement('option');
+      gtOption.textContent = '>';
+      gtOption.classList.add('gt-option');
+
+      const select = document.createElement('select');
+      select.appendChild(ltOption);
+      select.appendChild(gtOption);
+      select.addEventListener('click', stopPropagation);
+      elt.appendChild(select);
+    }
+
+    const valueInput = document.createElement('input');
+    valueInput.classList.add('value-input');
+    valueInput.type = 'number';
+    valueInput.addEventListener('click', stopPropagation);
+    elt.appendChild(valueInput);
+
+    elt.addEventListener('change', () => {
+      if (ruleFragment.trigger) {
+        if (ltOption.selected) {
+          ruleFragment.trigger.levelType = 'LESS';
+        } else if (gtOption.selected) {
+          ruleFragment.trigger.levelType = 'GREATER';
+        }
+        ruleFragment.trigger.value = parseFloat(valueInput.value);
+        this.rule.setTrigger(ruleFragment.trigger);
+      } else {
+        ruleFragment.effect.value = parseFloat(valueInput.value);
+        this.rule.setEffect(ruleFragment.effect);
+      }
+      elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
+    });
+  } else if (property.name === 'color') {
+    const valueInput = document.createElement('input');
+    valueInput.classList.add('value-input');
+    valueInput.type = 'color';
+    valueInput.addEventListener('click', stopPropagation);
+    elt.appendChild(valueInput);
+
+    elt.addEventListener('change', () => {
+      if (ruleFragment.trigger) {
+        ruleFragment.trigger.value = valueInput.value;
+        this.rule.setTrigger(ruleFragment.trigger);
+      } else {
+        ruleFragment.effect.value = valueInput.value;
+        this.rule.setEffect(ruleFragment.effect);
+      }
+    });
+  }
+
+  this.updateOption(elt);
+
   this.elt.appendChild(elt);
+};
+
+PropertySelect.prototype.updateOption = function(optionElt) {
+  const ruleFragment = JSON.parse(optionElt.dataset.ruleFragment);
+
+  if (!ruleFragment) {
+    return;
+  }
+
+  const property = getProperty(ruleFragment);
+  const fragmentValue = ruleFragment.trigger ?
+    ruleFragment.trigger.value :
+    ruleFragment.effect.value;
+
+  const valueInput = optionElt.querySelector('.value-input');
+
+  if (property.type === 'number') {
+    if (ruleFragment.trigger) {
+      if (ruleFragment.trigger.levelType === 'GREATER') {
+        optionElt.querySelector('.gt-option').setAttribute('selected', '');
+      } else {
+        optionElt.querySelector('.lt-option').setAttribute('selected', '');
+      }
+    }
+    valueInput.value = fragmentValue;
+  } else if (property.name === 'color') {
+    valueInput.value = fragmentValue;
+  }
 };
 
 /**
@@ -90,6 +189,29 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption('Off', {
           trigger: triggerOff,
         });
+      } else if (property.name === 'color') {
+        // TODO equality isn't a thing we check for
+        // this.addOption('Color', {
+        //   trigger: {
+        //     type: '???',
+        //     property: property,
+        //     onValue: null && (void 0)
+        //   }
+        // });
+      } else if (property.type === 'number') {
+        const name = property.name[0].toUpperCase() + property.name.substr(1);
+        const max = property.maximum || property.max || 0;
+        const min = property.minimum || property.min || 0;
+        const value = (max + min) / 2;
+
+        this.addOption(name, {
+          trigger: {
+            type: 'LevelTrigger',
+            property: property,
+            levelType: 'LESS',
+            value: value,
+          },
+        });
       }
     } else if (role === 'effect') {
       if (property.type === 'boolean') {
@@ -106,6 +228,26 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         });
         this.addOption('Off', {
           effect: effectOff,
+        });
+      } else if (property.name === 'color') {
+        this.addOption('Color', {
+          effect: {
+            type: 'PulseEffect',
+            property: property,
+            value: '#ffffff',
+          },
+        });
+      } else if (property.type === 'number') {
+        const name = property.name[0].toUpperCase() + property.name.substr(1);
+        const max = property.maximum || property.max || 0;
+        const min = property.minimum || property.min || 0;
+        const value = (max + min) / 2;
+        this.addOption(name, {
+          effect: {
+            type: 'PulseEffect',
+            property: property,
+            value: value,
+          },
         });
       }
     }
@@ -158,10 +300,11 @@ PropertySelect.prototype.onClick = function(e) {
     // We were open, so that was a click to select
     this.select(e.target);
 
-    const rulePart = JSON.parse(e.target.dataset.value);
+    const rulePart = JSON.parse(e.target.dataset.ruleFragment);
     if (!rulePart) {
       return;
     }
+
     if (rulePart.trigger) {
       this.rule.setTrigger(rulePart.trigger);
     }
@@ -213,15 +356,58 @@ function deepEqual(a, b) {
   return true;
 }
 
+function getProperty(ruleFragment) {
+  return ruleFragment.trigger ?
+    ruleFragment.trigger.property :
+    ruleFragment.effect.property;
+}
+
+function ruleFragmentEqual(a, b) {
+  if ((!!a) !== (!!b)) {
+    return false;
+  }
+  if (a.trigger && !b.trigger) {
+    return false;
+  }
+  if (a.effect && !b.effect) {
+    return false;
+  }
+
+  const aPart = a.trigger || a.effect;
+  const bPart = b.trigger || b.effect;
+
+  const aProperty = getProperty(a);
+  const bProperty = getProperty(b);
+
+  if (!deepEqual(aProperty, bProperty)) {
+    return false;
+  }
+
+  if (aPart.type !== bPart.type) {
+    return false;
+  }
+
+  if (aProperty.type === 'boolean') {
+    if (aPart.type === 'BooleanTrigger') {
+      return aPart.onValue === bPart.onValue;
+    } else {
+      return aPart.value === bPart.value;
+    }
+  }
+  return true;
+}
+
 /**
  * Select an option by value
- * @param {Object} value
+ * @param {Object} ruleFragment
  */
-PropertySelect.prototype.selectByValue = function(value) {
+PropertySelect.prototype.selectByRuleFragment = function(ruleFragment) {
   const elements = this.elt.querySelectorAll('.property-select-option');
   for (const optionElt of elements) {
-    const optionValue = JSON.parse(optionElt.dataset.value);
-    if (deepEqual(optionValue, value)) {
+    const optionRuleFragment = JSON.parse(optionElt.dataset.ruleFragment);
+    if (ruleFragmentEqual(optionRuleFragment, ruleFragment)) {
+      optionElt.dataset.ruleFragment = JSON.stringify(ruleFragment);
+      this.updateOption(optionElt);
       this.select(optionElt);
       return;
     }
@@ -235,7 +421,7 @@ PropertySelect.prototype.selectByValue = function(value) {
 PropertySelect.prototype.select = function(optionElt) {
   const selected = this.elt.querySelector('.selected');
   if (selected) {
-    if (!JSON.parse(selected.dataset.value)) {
+    if (!JSON.parse(selected.dataset.ruleFragment)) {
       if (selected === optionElt) {
         return;
       }
