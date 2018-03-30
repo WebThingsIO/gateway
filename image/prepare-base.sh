@@ -203,7 +203,7 @@ sudo systemctl enable mozilla-iot-gateway.intent-parser.service
 # be root.
 
 sudo sh -c 'cat > /etc/init.d/gateway-iptables.sh' << 'END'
-#! /bin/sh
+#!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          gateway-iptables
 # Required-Start:    $all
