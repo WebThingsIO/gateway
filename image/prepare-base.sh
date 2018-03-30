@@ -54,7 +54,7 @@ sudo apt install -y \
   sqlite3
 
 # Install Python add-on bindings
-_url="https://github.com/mozilla-iot/gateway-addon-python/releases/download/v0.2.0/gateway_addon-0.2.0.tar.gz"
+_url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
 sudo pip2 install "$_url"
 sudo pip3 install "$_url"
 
