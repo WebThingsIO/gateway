@@ -120,7 +120,7 @@ const numberTestRule = {
     },
     type: 'LevelTrigger',
     levelType: 'GREATER',
-    level: 120,
+    value: 120,
   },
   effect: {
     property: {
@@ -145,7 +145,7 @@ const mixedTestRule = {
     },
     type: 'LevelTrigger',
     levelType: 'LESS',
-    level: 50,
+    value: 50,
   },
   effect: {
     property: {

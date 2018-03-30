@@ -20,7 +20,7 @@ const levelTrigger = {
   },
   type: 'LevelTrigger',
   levelType: 'LESS',
-  level: 120,
+  value: 120,
 };
 
 describe('triggers', function() {
@@ -64,7 +64,7 @@ describe('triggers', function() {
       triggers.fromDescription(Object.assign(
         {},
         levelTrigger,
-        {level: true}
+        {value: true}
       ));
     } catch (e) {
       err = e;

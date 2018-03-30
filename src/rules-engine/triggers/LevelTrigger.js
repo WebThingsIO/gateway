@@ -24,10 +24,10 @@ class LevelTrigger extends PropertyTrigger {
   constructor(desc) {
     super(desc);
     assert(this.property.type === 'number');
-    assert(typeof desc.level === 'number');
+    assert(typeof desc.value === 'number');
     assert(LevelTriggerTypes[desc.levelType]);
 
-    this.level = desc.level;
+    this.value = desc.value;
     this.levelType = desc.levelType;
   }
 
@@ -38,7 +38,7 @@ class LevelTrigger extends PropertyTrigger {
     return Object.assign(
       super.toDescription(),
       {
-        level: this.level,
+        value: this.value,
         levelType: this.levelType,
       }
     );
@@ -53,12 +53,12 @@ class LevelTrigger extends PropertyTrigger {
 
     switch (this.levelType) {
       case LevelTriggerTypes.LESS:
-        if (propValue < this.level) {
+        if (propValue < this.value) {
           on = true;
         }
         break;
       case LevelTriggerTypes.GREATER:
-        if (propValue > this.level) {
+        if (propValue > this.value) {
           on = true;
         }
         break;
