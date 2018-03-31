@@ -98,7 +98,8 @@
   margin: 0.5rem 0;
 }
 
-.addons-form .btn-form-tools:hover:enabled, button:active:enabled {
+.addons-form .btn-form-tools:hover:enabled,
+.addons-form .btn-form-tools:active:enabled {
   background-color: #658196;
 }
 
