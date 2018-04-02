@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -30,8 +30,7 @@ function ErrorField() {
   return this;
 }
 
-ErrorField.prototype.render = function (errors) {
-
+ErrorField.prototype.render = function(errors) {
   if (errors.length > 0) {
     const errorHtml = errors.map((error) => {
       return `

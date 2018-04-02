@@ -8,7 +8,6 @@
 'use strict';
 
 (function() {
-
   var form = document.getElementById('login-form');
   var email = document.getElementById('email');
   var password = document.getElementById('password');
@@ -40,6 +39,5 @@
         errorSubmission.textContent = err.message;
         console.error(err);
       });
-  })
-
+  });
 })();

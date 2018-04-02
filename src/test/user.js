@@ -8,26 +8,26 @@ const chai = require('./chai');
 const TEST_USER = {
   email: 'test@example.com',
   name: 'Test User',
-  password: 'rhubarb'
+  password: 'rhubarb',
 };
 
 const TEST_USER_DIFFERENT = {
   email: 'test@evil.com',
   name: 'Evil Test User',
-  password: 'shoebarb'
+  password: 'shoebarb',
 };
 
 const TEST_USER_UPDATE_1 = {
   email: 'test@other.com',
   name: 'Other User',
-  password: 'rhubarb'
+  password: 'rhubarb',
 };
 
 const TEST_USER_UPDATE_2 = {
   email: 'test@other.com',
   name: 'Other User',
   password: 'rhubarb',
-  newPassword: 'strawberry'
+  newPassword: 'strawberry',
 };
 
 async function getJWT(path, server, user) {

@@ -1,10 +1,10 @@
 /**
  * Input Field for JSON-schema type:number.
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -25,7 +25,6 @@ function NumberField(
   required = false,
   disabled = false,
   readonly = false) {
-
   this.schema = SchemaUtils.retrieveSchema(schema, definitions);
   this.formData = formData;
   this.idSchema = idSchema;
@@ -39,7 +38,7 @@ function NumberField(
   return this;
 }
 
-NumberField.prototype.onRangeChange = function (event) {
+NumberField.prototype.onRangeChange = function(event) {
   const value = event.target.value;
   this.rangeValue.innerText = value;
 
@@ -50,7 +49,7 @@ NumberField.prototype.onRangeChange = function (event) {
   }
 };
 
-NumberField.prototype.onNumberChange = function (value) {
+NumberField.prototype.onNumberChange = function(value) {
   const number = Number(value);
 
   if (isNaN(number)) {
@@ -64,7 +63,7 @@ NumberField.prototype.onNumberChange = function (value) {
   }
 };
 
-NumberField.prototype.render = function () {
+NumberField.prototype.render = function() {
   const id = this.idSchema.$id;
   let value = Number(this.formData);
   value = isNaN(value) ? 0 : value;
@@ -83,7 +82,8 @@ NumberField.prototype.render = function () {
         ${this.disabled ? 'disabled' : ''}
         value=${value == null ? '' : value}
         ${this.schema.multipleOf ?
-        'step=' + Number(this.schema.multipleOf) : ''}
+          'step=' + Number(this.schema.multipleOf) :
+          ''}
         min=${Number(this.schema.minimum)}
         max=${Number(this.schema.maximum)}
         />

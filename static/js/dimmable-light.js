@@ -48,7 +48,7 @@ DimmableLight.prototype.updateStatus = function() {
   }
 
   const opts = {
-    headers: API.headers()
+    headers: API.headers(),
   };
 
   let onFetch = fetch(this.onPropertyUrl, opts);

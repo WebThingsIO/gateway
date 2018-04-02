@@ -47,7 +47,7 @@ class Rule {
     let desc = {
       enabled: this.enabled,
       trigger: this.trigger.toDescription(),
-      effect: this.effect.toDescription()
+      effect: this.effect.toDescription(),
     };
     if (this.hasOwnProperty('id')) {
       desc.id = this.id;

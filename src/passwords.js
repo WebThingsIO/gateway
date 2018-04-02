@@ -53,5 +53,5 @@ module.exports = {
    */
   compareSync: function(passwordText, passwordHash) {
     return bcrypt.compareSync(passwordText, passwordHash);
-  }
+  },
 };

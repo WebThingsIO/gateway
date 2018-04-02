@@ -27,9 +27,9 @@ const TEST_THING = {
   properties: {
     on: {
       type: 'boolean',
-      value: false
-    }
-  }
+      value: false,
+    },
+  },
 };
 
 describe('oauth/', function() {
@@ -58,7 +58,7 @@ describe('oauth/', function() {
       res.redirect(oauth2.authorizationCode.authorizeURL({
         redirect_uri: `http://127.0.0.1:${port}/callback`,
         scope: REQUEST_SCOPE,
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }));
     });
 
@@ -83,7 +83,7 @@ describe('oauth/', function() {
     clientServer = http.createServer();
     clientServer.on('request', client);
     clientServer.listen(port);
-    await e2p(clientServer, 'listening')
+    await e2p(clientServer, 'listening');
   });
 
   afterAll(async () => {
@@ -97,12 +97,12 @@ describe('oauth/', function() {
     const config = Object.assign({
       client: {
         id: CLIENT_ID,
-        secret: CLIENT_SECRET
+        secret: CLIENT_SECRET,
       },
       auth: {
         tokenHost: 'https://127.0.0.1:' + server.address().port +
-          Constants.OAUTH_PATH
-      }
+          Constants.OAUTH_PATH,
+      },
     }, configProvided || {});
 
     oauth2 = simpleOAuth2.create(config);
@@ -124,7 +124,7 @@ describe('oauth/', function() {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }))
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
@@ -177,8 +177,8 @@ describe('oauth/', function() {
     setupOAuth({
       client: {
         id: CLIENT_ID,
-        secret: 'not a super secret'
-      }
+        secret: 'not a super secret',
+      },
     });
 
     let res = await pFinal(chai.request(clientServer)
@@ -193,7 +193,7 @@ describe('oauth/', function() {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }))
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT)));
@@ -206,8 +206,8 @@ describe('oauth/', function() {
     setupOAuth({
       client: {
         id: 'stranger',
-        secret: CLIENT_SECRET
-      }
+        secret: CLIENT_SECRET,
+      },
     });
 
     const err = await pFinal(chai.request(clientServer)
@@ -222,7 +222,7 @@ describe('oauth/', function() {
     try {
       let result = await oauth2.clientCredentials.getToken({});
       expect(result).toBeFalsy();
-    } catch(err) {
+    } catch (err) {
       expect(err).toBeTruthy();
     }
   });
@@ -232,10 +232,10 @@ describe('oauth/', function() {
     try {
       let result = await oauth2.ownerPassword.getToken({
         username: CLIENT_ID,
-        password: CLIENT_SECRET
+        password: CLIENT_SECRET,
       });
       expect(result).toBeFalsy();
-    } catch(err) {
+    } catch (err) {
       expect(err).toBeTruthy();
     }
   });
@@ -249,7 +249,7 @@ describe('oauth/', function() {
     let oauthUrl = new URL(oauth2.authorizationCode.authorizeURL({
       redirect_uri: `http://127.0.0.1:${clientServer.address().port}/callback`,
       scope: 'potato',
-      state: 'somethingrandom'
+      state: 'somethingrandom',
     }));
 
     oauthUrl = oauthUrl.pathname + oauthUrl.search;
@@ -264,7 +264,7 @@ describe('oauth/', function() {
     let oauthUrl = new URL(oauth2.authorizationCode.authorizeURL({
       redirect_uri: `http://127.0.0.1:${clientServer.address().port}/rhubarb`,
       scope: 'readwrite',
-      state: 'somethingrandom'
+      state: 'somethingrandom',
     }));
 
     oauthUrl = oauthUrl.pathname + oauthUrl.search;
@@ -315,7 +315,7 @@ describe('oauth/', function() {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }))
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT)));
@@ -334,7 +334,7 @@ describe('oauth/', function() {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: '/things/test-1:read',
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }))
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
@@ -374,7 +374,7 @@ describe('oauth/', function() {
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: '/things/test-1:read',
-        state: REQUEST_STATE
+        state: REQUEST_STATE,
       }))
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));

@@ -39,7 +39,7 @@ var Users = {
    * @return {Promise} Promise which resolves to user object
    *   or false if user doesn't exist.
    */
-  getUserById: async function (id) {
+  getUserById: async function(id) {
     if (typeof id !== 'number') {
       id = parseInt(id, 10);
       if (isNaN(id)) {

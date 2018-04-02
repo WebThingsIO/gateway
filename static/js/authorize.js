@@ -30,7 +30,7 @@ function init(scope) {
   }
 
   fetch('/things', {
-    headers: API.headers()
+    headers: API.headers(),
   }).then(res => {
     return res.json();
   }).then(things => {

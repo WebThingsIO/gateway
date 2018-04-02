@@ -31,7 +31,7 @@ var ContextMenu = {
       window.API.logout().then(() => {
         window.location.href = '/login';
       });
-    })
+    });
   },
 
   /**
@@ -61,8 +61,8 @@ var ContextMenu = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
     .then((function(response) {
       if (response.ok) {
@@ -79,5 +79,5 @@ var ContextMenu = {
       console.error('Error removing thing ' + error);
       this.hide();
     }).bind(this));
-  }
+  },
 };

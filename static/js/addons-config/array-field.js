@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -25,7 +25,6 @@ function ArrayField(
   required = false,
   disabled = false,
   readonly = false) {
-
   this.schema = SchemaUtils.retrieveSchema(schema, definitions);
   this.formData = formData || [];
   this.idSchema = idSchema;
@@ -39,15 +38,15 @@ function ArrayField(
   return this;
 }
 
-ArrayField.prototype.require = function (name) {
+ArrayField.prototype.require = function(name) {
   return (
     Array.isArray(this.schema.required) &&
     this.schema.required.indexOf(name) !== -1
   );
 };
 
-ArrayField.prototype.onChangeForIndex = function (index) {
-  return function (value) {
+ArrayField.prototype.onChangeForIndex = function(index) {
+  return function(value) {
     const newFormData = this.formData.map((item, i) => {
       // We need to treat undefined items as nulls to have validation.
       // See https://github.com/tdegrunt/jsonschema/issues/206
@@ -63,8 +62,8 @@ ArrayField.prototype.onChangeForIndex = function (index) {
   }.bind(this);
 };
 
-ArrayField.prototype.onSelectChange = function (value, all) {
-  return function (event) {
+ArrayField.prototype.onSelectChange = function(value, all) {
+  return function(event) {
     const checked = event.target.checked;
 
     if (checked) {
@@ -80,7 +79,7 @@ ArrayField.prototype.onSelectChange = function (value, all) {
   }.bind(this);
 };
 
-ArrayField.prototype.allowAdditionalItems = function () {
+ArrayField.prototype.allowAdditionalItems = function() {
   const schema = this.schema;
   if (schema.additionalItems === true) {
     console.warn('additionalItems=true is currently not supported');
@@ -88,7 +87,7 @@ ArrayField.prototype.allowAdditionalItems = function () {
   return SchemaUtils.isObject(schema.additionalItems);
 };
 
-ArrayField.prototype.isAddable = function (formItems) {
+ArrayField.prototype.isAddable = function(formItems) {
   const schema = this.schema;
   let addable = true;
 
@@ -99,7 +98,7 @@ ArrayField.prototype.isAddable = function (formItems) {
   return addable;
 };
 
-ArrayField.prototype.isItemRequired = function (itemSchema) {
+ArrayField.prototype.isItemRequired = function(itemSchema) {
   if (Array.isArray(itemSchema.type)) {
     // While we don't yet support composite/nullable jsonschema types, it's
     // future-proof to check for requirement against these.
@@ -109,8 +108,8 @@ ArrayField.prototype.isItemRequired = function (itemSchema) {
   return itemSchema.type !== 'null';
 };
 
-ArrayField.prototype.onDropIndexClick = function (field, index) {
-  return function (event) {
+ArrayField.prototype.onDropIndexClick = function(field, index) {
+  return function(event) {
     const schema = this.schema;
     const itemsField = field.querySelector('div.array-items');
     let itemSchema = schema.items;
@@ -148,11 +147,10 @@ ArrayField.prototype.onDropIndexClick = function (field, index) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-
   }.bind(this);
 };
 
-ArrayField.prototype.renderRemoveButton = function (field, index) {
+ArrayField.prototype.renderRemoveButton = function(field, index) {
   const button = document.createElement('button');
   button.className = 'btn-remove btn-form-tools';
   button.disabled = this.disabled || this.readonly;
@@ -161,8 +159,8 @@ ArrayField.prototype.renderRemoveButton = function (field, index) {
   return button;
 };
 
-ArrayField.prototype.onAddClick = function (field) {
-  return function (event) {
+ArrayField.prototype.onAddClick = function(field) {
+  return function(event) {
     const schema = this.schema;
     const definitions = this.definitions;
     const index = this.formData.length;
@@ -178,6 +176,7 @@ ArrayField.prototype.onAddClick = function (field) {
 
     const value = SchemaUtils.getDefaultFormState(
       itemSchema,
+      // eslint-disable-next-line no-undefined
       undefined,
       definitions
     );
@@ -199,7 +198,7 @@ ArrayField.prototype.onAddClick = function (field) {
   }.bind(this);
 };
 
-ArrayField.prototype.renderAddButton = function (field) {
+ArrayField.prototype.renderAddButton = function(field) {
   const button = document.createElement('button');
   button.className = 'btn-add btn-form-tools';
   button.disabled = this.disabled || this.readonly;
@@ -209,7 +208,7 @@ ArrayField.prototype.renderAddButton = function (field) {
 };
 
 ArrayField.prototype.renderArrayFieldItem =
-  function (field, itemData, index, itemSchema, canRemove) {
+  function(field, itemData, index, itemSchema, canRemove) {
     const id = `${this.idSchema.$id}_${index}`;
     const item = document.createElement('div');
     item.className = 'array-item-row';
@@ -258,7 +257,7 @@ ArrayField.prototype.renderArrayFieldItem =
   };
 
 
-ArrayField.prototype.renderArrayFieldset = function () {
+ArrayField.prototype.renderArrayFieldset = function() {
   const id = Utils.escapeHtml(this.idSchema.$id);
   const description = this.schema.description;
 
@@ -268,17 +267,17 @@ ArrayField.prototype.renderArrayFieldset = function () {
   const field = document.createElement('fieldset');
 
   field.innerHTML =
-    (title ?
-      `<legend id="${id + '__title'}">${title}</legend>` : '') +
+    (title ? `<legend id="${id + '__title'}">${title}</legend>` : '') +
     (description ?
       `<p id="${id}__description" class="field-description">
-      ${Utils.escapeHtml(description)}</p>` : '') +
+      ${Utils.escapeHtml(description)}</p>` :
+      '') +
     '<div class="array-items"></div>';
 
   return field;
 };
 
-ArrayField.prototype.renderNormalArray = function () {
+ArrayField.prototype.renderNormalArray = function() {
   const schema = this.schema;
   const definitions = this.definitions;
   const items = this.formData;
@@ -286,7 +285,7 @@ ArrayField.prototype.renderNormalArray = function () {
   const field = this.renderArrayFieldset();
   const itemsField = field.querySelector('div.array-items');
 
-  items.forEach(function (item, index) {
+  items.forEach(function(item, index) {
     const itemField = this.renderArrayFieldItem(
       field,
       item,
@@ -304,14 +303,14 @@ ArrayField.prototype.renderNormalArray = function () {
   return field;
 };
 
-ArrayField.prototype.renderFixedArray = function () {
+ArrayField.prototype.renderFixedArray = function() {
   const schema = this.schema;
   const definitions = this.definitions;
   const field = this.renderArrayFieldset();
   const itemsField = field.querySelector('div.array-items');
 
   let items = this.formData;
-  const itemSchemas = schema.items.map(function (item) {
+  const itemSchemas = schema.items.map(function(item) {
     return SchemaUtils.retrieveSchema(item, definitions);
   });
 
@@ -320,7 +319,7 @@ ArrayField.prototype.renderFixedArray = function () {
     items = items.concat(new Array(itemSchemas.length - items.length));
   }
 
-  items.forEach(function (item, index) {
+  items.forEach(function(item, index) {
     const additional = index >= itemSchemas.length;
     const canRemove = additional;
     const itemSchema = additional ?
@@ -344,7 +343,7 @@ ArrayField.prototype.renderFixedArray = function () {
   return field;
 };
 
-ArrayField.prototype.renderMultiSelect = function () {
+ArrayField.prototype.renderMultiSelect = function() {
   const id = Utils.escapeHtml(this.idSchema.$id);
   const items = this.formData;
   const schema = this.schema;
@@ -356,7 +355,7 @@ ArrayField.prototype.renderMultiSelect = function () {
   const field = document.createElement('fieldset');
   field.className = 'checkboxes';
 
-  enumOptions.forEach(function (option, index) {
+  enumOptions.forEach(function(option, index) {
     const checked = items.indexOf(option.value) !== -1;
     const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
 
@@ -378,13 +377,12 @@ ArrayField.prototype.renderMultiSelect = function () {
     input.onchange = this.onSelectChange(option.value, all);
 
     field.appendChild(div);
-
   }.bind(this));
 
   return field;
 };
 
-ArrayField.prototype.render = function () {
+ArrayField.prototype.render = function() {
   const schema = this.schema;
 
   if (!schema.hasOwnProperty('items')) {

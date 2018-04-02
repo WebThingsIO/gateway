@@ -47,6 +47,7 @@ var Database = {
     // Don't pull this from user-profile.js, because that would cause a
     // circular dependency.
     let filename;
+    let exists = false;
     if (process.env.NODE_ENV === 'test') {
       filename = ':memory:';
     } else {
@@ -55,7 +56,7 @@ var Database = {
       var removeBeforeOpen = config.get('database.removeBeforeOpen');
 
       // Check if database already exists
-      var exists = fs.existsSync(filename);
+      exists = fs.existsSync(filename);
       if (exists && removeBeforeOpen) {
         fs.unlinkSync(filename);
         exists = false;
@@ -160,7 +161,7 @@ var Database = {
     // Add any settings provided.
     var generateSettings = function(obj, baseKey) {
       const settings = [];
-      
+
       for (const key in obj) {
         let newKey;
         if (baseKey !== '') {
@@ -168,7 +169,7 @@ var Database = {
         } else {
           newKey = key;
         }
-        
+
         if (typeof obj[key] === 'object') {
           settings.push(...generateSettings(obj[key], newKey));
         } else {
@@ -539,7 +540,6 @@ var Database = {
         this.db.get(sql, ...params);
       } catch (err) {
         reject(err);
-        return;
       }
     });
   },
@@ -553,7 +553,7 @@ var Database = {
   run: function(sql, values) {
     return new Promise((accept, reject) => {
       try {
-        this.db.run(sql, values, function (err) {
+        this.db.run(sql, values, function(err) {
           if (err) {
             reject(err);
             return;
@@ -565,7 +565,7 @@ var Database = {
         reject(err);
       }
     });
-  }
+  },
 };
 
 module.exports = Database;

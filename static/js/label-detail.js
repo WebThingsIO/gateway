@@ -25,7 +25,8 @@ LabelDetail.prototype.attach = function() {
 
 LabelDetail.prototype.view = function() {
   const value = parseFloat(this.thing.properties[this.name]);
-  const data = value ? `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
+  const data = value ?
+    `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
     `0${Utils.escapeHtml(this.unit)}`;
 
   return `<div class="thing-detail-container">

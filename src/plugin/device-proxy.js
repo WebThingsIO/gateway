@@ -66,7 +66,7 @@ class DeviceProxy extends Device {
       Constants.DEBUG_CMD, {
         deviceId: this.id,
         cmd: cmd,
-        params: params
+        params: params,
       }
     );
   }

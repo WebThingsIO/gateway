@@ -1,7 +1,6 @@
 const Settings = require('../../models/settings');
 
 describe('Settings', function() {
-
   it('should be able to round trip', async () => {
     const key = 'yes.it is a.Setting';
     const value = {something: 'complicated'};
@@ -15,6 +14,5 @@ describe('Settings', function() {
     await Settings.set(key, newValue);
     expect(await Settings.get(key)).toEqual(newValue);
   });
-
 });
 

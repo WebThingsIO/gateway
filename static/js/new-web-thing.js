@@ -122,8 +122,8 @@ NewWebThing.prototype.submit = function() {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   }).then(response => {
     if (!response.ok) {
       return response.text();
@@ -221,8 +221,8 @@ NewWebThing.prototype.save = function() {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   }).then(response => {
     return response.json();
   }).then(json => {

@@ -14,7 +14,6 @@ const {
 } = require('../user');
 
 describe('uploads/', function() {
-
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
@@ -29,5 +28,4 @@ describe('uploads/', function() {
 
     expect(res.status).toEqual(201);
   });
-
 });

@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -25,27 +25,26 @@ Validator._ajv = new Ajv({
 Validator._reEscapeChar = /\\(\\)?/g;
 Validator._rePropName = RegExp(
   // Match anything that isn't a dot or bracket.
-  '[^.[\\]]+' + '|' +
+  '[^.[\\]]+|' +
   // Or match property names within brackets.
   '\\[(?:' +
   // Match a non-string expression.
-  '([^"\'].*)' + '|' +
+  '([^"\'].*)|' +
   // Or match strings (supports escaping characters).
   '(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2' +
-  ')\\]' + '|' +
+  ')\\]|' +
   // Or match "" as the space between consecutive dots or empty brackets.
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
   , 'g');
 
-Validator._toPath = function (string) {
+Validator._toPath = function(string) {
   const result = [];
   string.replace(Validator._rePropName,
-    function (match, expression, quote, subString) {
+    function(match, expression, quote, subString) {
       let key = match;
       if (quote) {
         key = subString.replace(Validator._reEscapeChar, '$1');
-      }
-      else if (expression) {
+      } else if (expression) {
         key = expression.trim();
       }
       result.push(key);
@@ -53,7 +52,7 @@ Validator._toPath = function (string) {
   return result;
 };
 
-Validator._toErrorSchema = function (errors) {
+Validator._toErrorSchema = function(errors) {
   // Transforms a ajv validation errors list:
   // [
   //   {dataPath: ".level1.level2[2].level3", message: "err a"},
@@ -95,7 +94,7 @@ Validator._toErrorSchema = function (errors) {
   }, {});
 };
 
-Validator.validateFormData = function (formData, schema) {
+Validator.validateFormData = function(formData, schema) {
   Validator._ajv.validate(schema, formData);
   const errors = Validator._ajv.errors;
 

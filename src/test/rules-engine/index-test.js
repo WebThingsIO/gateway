@@ -15,7 +15,7 @@ const Events = require('../../models/events');
 const {
   webSocketOpen,
   webSocketRead,
-  webSocketClose
+  webSocketClose,
 } = require('../websocket-util');
 
 const thingLight1 = {
@@ -26,18 +26,18 @@ const thingLight1 = {
     on: {type: 'boolean', value: false},
     hue: {type: 'number', value: 0},
     sat: {type: 'number', value: 0},
-    bri: {type: 'number', value: 100}
+    bri: {type: 'number', value: 100},
   },
   actions: {
     blink: {
-      description: 'Blink the switch on and off'
-    }
+      description: 'Blink the switch on and off',
+    },
   },
   events: {
     surge: {
-      description: 'Surge in power detected'
-    }
-  }
+      description: 'Surge in power detected',
+    },
+  },
 };
 
 const thingLight2 = {
@@ -48,8 +48,8 @@ const thingLight2 = {
     on: {type: 'boolean', value: false},
     hue: {type: 'number', value: 0},
     sat: {type: 'number', value: 0},
-    bri: {type: 'number', value: 100}
-  }
+    bri: {type: 'number', value: 100},
+  },
 };
 
 const thingLight3 = {
@@ -60,8 +60,8 @@ const thingLight3 = {
     on: {type: 'boolean', value: false},
     hue: {type: 'number', value: 0},
     sat: {type: 'number', value: 0},
-    bri: {type: 'number', value: 100}
-  }
+    bri: {type: 'number', value: 100},
+  },
 };
 
 const testRule = {
@@ -70,20 +70,20 @@ const testRule = {
     property: {
       name: 'on',
       type: 'boolean',
-      href: '/things/light1/properties/on'
+      href: '/things/light1/properties/on',
     },
     type: 'BooleanTrigger',
-    onValue: true
+    onValue: true,
   },
   effect: {
     property: {
       name: 'on',
       type: 'boolean',
-      href: '/things/light2/properties/on'
+      href: '/things/light2/properties/on',
     },
     type: 'PulseEffect',
-    value: true
-  }
+    value: true,
+  },
 };
 
 const offRule = {
@@ -92,20 +92,20 @@ const offRule = {
     property: {
       name: 'on',
       type: 'boolean',
-      href: '/things/light1/properties/on'
+      href: '/things/light1/properties/on',
     },
     type: 'BooleanTrigger',
-    onValue: false
+    onValue: false,
   },
   effect: {
     property: {
       name: 'on',
       type: 'boolean',
-      href: '/things/light2/properties/on'
+      href: '/things/light2/properties/on',
     },
     type: 'PulseEffect',
-    value: false
-  }
+    value: false,
+  },
 };
 
 const numberTestRule = {
@@ -116,21 +116,21 @@ const numberTestRule = {
       name: 'hue',
       type: 'number',
       href:
-        '/things/light2/properties/hue'
+        '/things/light2/properties/hue',
     },
     type: 'LevelTrigger',
     levelType: 'GREATER',
-    level: 120
+    level: 120,
   },
   effect: {
     property: {
       name: 'bri',
       type: 'number',
-      href: '/things/light3/properties/bri'
+      href: '/things/light3/properties/bri',
     },
     type: 'PulseEffect',
-    value: 30
-  }
+    value: 30,
+  },
 };
 
 const mixedTestRule = {
@@ -141,21 +141,21 @@ const mixedTestRule = {
       name: 'bri',
       type: 'number',
       href:
-        '/things/light3/properties/bri'
+        '/things/light3/properties/bri',
     },
     type: 'LevelTrigger',
     levelType: 'LESS',
-    level: 50
+    level: 50,
   },
   effect: {
     property: {
       name: 'on',
       type: 'boolean',
-      href: '/things/light3/properties/on'
+      href: '/things/light3/properties/on',
     },
     type: 'SetEffect',
-    value: true
-  }
+    value: true,
+  },
 };
 
 const eventActionRule = {
@@ -165,16 +165,16 @@ const eventActionRule = {
     type: 'EventTrigger',
     event: 'surge',
     thing: {
-      href: '/things/light1'
-    }
+      href: '/things/light1',
+    },
   },
   effect: {
     type: 'ActionEffect',
     action: 'blink',
     thing: {
-      href: '/things/light1'
-    }
-  }
+      href: '/things/light1',
+    },
+  },
 };
 
 describe('rules engine', function() {
@@ -232,9 +232,9 @@ describe('rules engine', function() {
       .send({
         trigger: {
           property: null,
-          type: 'Whatever'
+          type: 'Whatever',
         },
-        effect: testRule.effect
+        effect: testRule.effect,
       }));
     expect(err.response.status).toEqual(400);
   });
@@ -294,7 +294,6 @@ describe('rules engine', function() {
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
     expect(res.body[0]).toMatchObject(numberTestRule);
-
   });
 
   it('deletes this rule', async () => {
@@ -303,7 +302,7 @@ describe('rules engine', function() {
     let res = await chai.request(server)
       .get(Constants.RULES_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt))
+      .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(0);
@@ -398,7 +397,7 @@ describe('rules engine', function() {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt))
         .send({hue: 150}),
-      webSocketRead(ws, 2)
+      webSocketRead(ws, 2),
     ]);
     expect(resPut.status).toEqual(200);
 
@@ -406,11 +405,11 @@ describe('rules engine', function() {
     expect(messages.length).toEqual(2);
     expect(messages[0]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
-      data: {bri: 30}
+      data: {bri: 30},
     });
     expect(messages[1]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
-      data: {on: true}
+      data: {on: true},
     });
 
     [resPut, messages] = await Promise.all([
@@ -419,7 +418,7 @@ describe('rules engine', function() {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt))
         .send({hue: 0}),
-      webSocketRead(ws, 1)
+      webSocketRead(ws, 1),
     ]);
     expect(resPut.status).toEqual(200);
 
@@ -427,7 +426,7 @@ describe('rules engine', function() {
     expect(messages.length).toEqual(1);
     expect(messages[0]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
-      data: {bri: 100}
+      data: {bri: 100},
     });
 
     await deleteRule(numberTestRuleId);

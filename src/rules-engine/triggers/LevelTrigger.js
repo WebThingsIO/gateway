@@ -10,7 +10,7 @@ const PropertyTrigger = require('./PropertyTrigger');
 
 const LevelTriggerTypes = {
   LESS: 'LESS',
-  GREATER: 'GREATER'
+  GREATER: 'GREATER',
 };
 
 /**
@@ -39,7 +39,7 @@ class LevelTrigger extends PropertyTrigger {
       super.toDescription(),
       {
         level: this.level,
-        levelType: this.levelType
+        levelType: this.levelType,
       }
     );
   }

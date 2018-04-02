@@ -22,7 +22,7 @@ LevelDetail.prototype.attach = function() {
     this.thing.updateLevel(this.level.value);
   });
   this.level.addEventListener('change', this.set.bind(this));
-}
+};
 
 LevelDetail.prototype.view = function() {
   const level = this.thing.properties.level;

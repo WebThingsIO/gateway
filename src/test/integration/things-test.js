@@ -17,7 +17,7 @@ const {
   webSocketOpen,
   webSocketRead,
   webSocketSend,
-  webSocketClose
+  webSocketClose,
 } = require('../websocket-util');
 
 const WebSocket = require('ws');
@@ -31,8 +31,8 @@ const TEST_THING = {
   type: 'onOffSwitch',
   name: 'test-1',
   properties: {
-    on : {type: 'boolean', value: false}
-  }
+    on: {type: 'boolean', value: false},
+  },
 };
 
 const piDescr = {
@@ -40,18 +40,18 @@ const piDescr = {
   type: 'thing',
   name: 'pi-1',
   properties: {
-    on : {type: 'boolean', value: true}
+    on: {type: 'boolean', value: true},
   },
   actions: {
     reboot: {
-      description: 'Reboot the device'
-    }
+      description: 'Reboot the device',
+    },
   },
   events: {
     reboot: {
-      description: 'Going down for reboot'
-    }
-  }
+      description: 'Going down for reboot',
+    },
+  },
 };
 
 describe('things/', function() {
@@ -75,7 +75,7 @@ describe('things/', function() {
     return {
       id: id,
       name: id,
-      properties: {}
+      properties: {},
     };
   }
 
@@ -97,7 +97,7 @@ describe('things/', function() {
         .set('Accept', 'application/json')
         .send();
       throw new Error('Should have failed to create new thing');
-    } catch(err) {
+    } catch (err) {
       expect(err.response.status).toEqual(400);
     }
   });
@@ -250,7 +250,7 @@ describe('things/', function() {
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt))
+      .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
@@ -349,8 +349,9 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(!found).assert('should find no longer thing in /new_things output:'
-      + JSON.stringify(res.body, null, 2));
+    expect(!found).assert(
+      'should find no longer thing in /new_things output:' +
+      JSON.stringify(res.body, null, 2));
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
@@ -403,7 +404,7 @@ describe('things/', function() {
   it('should remove a device', async () => {
     let thingId = 'test-6';
     await addDevice(Object.assign({}, TEST_THING, {
-      id: thingId
+      id: thingId,
     }));
     let descr = makeDescr(thingId);
     mockAdapter().pairDevice(thingId, descr);
@@ -471,7 +472,7 @@ describe('things/', function() {
         .put(Constants.THINGS_PATH + '/' + TEST_THING.id + '/properties/on')
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt))
-        .send({on: true})
+        .send({on: true}),
     ]);
     expect(res.status).toEqual(200);
     expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
@@ -488,8 +489,8 @@ describe('things/', function() {
     await webSocketSend(ws, {
       messageType: Constants.SET_PROPERTY,
       data: {
-        on: true
-      }
+        on: true,
+      },
     });
 
     const on = await chai.request(server)
@@ -504,8 +505,8 @@ describe('things/', function() {
     await webSocketClose(ws);
   });
 
-  it('should fail to set a nonexistent property using setProperty', async () =>
-  {
+  it('should fail to set a nonexistent property using setProperty',
+  async () => {
     await addDevice();
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
@@ -513,12 +514,12 @@ describe('things/', function() {
     let request = {
       messageType: Constants.SET_PROPERTY,
       data: {
-        rutabaga: true
-      }
+        rutabaga: true,
+      },
     };
     let [sendError, messages] = await Promise.all([
       webSocketSend(ws, request),
-      webSocketRead(ws, 1)
+      webSocketRead(ws, 1),
     ]);
 
     expect(sendError).toBeFalsy();
@@ -530,8 +531,8 @@ describe('things/', function() {
     await webSocketClose(ws);
   });
 
-  it('should receive an error from sending a malformed message', async () =>
-  {
+  it('should receive an error from sending a malformed message',
+  async () => {
     await addDevice();
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
@@ -540,7 +541,7 @@ describe('things/', function() {
 
     let [sendError, messages] = await Promise.all([
       webSocketSend(ws, request),
-      webSocketRead(ws, 1)
+      webSocketRead(ws, 1),
     ]);
 
     expect(sendError).toBeFalsy();
@@ -573,7 +574,7 @@ describe('things/', function() {
     let otherThingId = 'test-7';
     await addDevice(Object.assign({}, TEST_THING, {
       id: otherThingId,
-      name: otherThingId
+      name: otherThingId,
     }));
     let ws = await webSocketOpen(Constants.THINGS_PATH + '/' + TEST_THING.id,
       jwt);
@@ -601,7 +602,7 @@ describe('things/', function() {
             .set(...headerAuth(jwt))
             .send({on: false});
         }),
-      webSocketRead(ws, 2)
+      webSocketRead(ws, 2),
     ]);
 
     expect(res.status).toEqual(200);
@@ -630,7 +631,7 @@ describe('things/', function() {
       messageType: Constants.ADD_EVENT_SUBSCRIPTION,
       data: {
         a: {},
-      }
+      },
     };
 
     await webSocketSend(ws, subscriptionRequest);
@@ -645,7 +646,7 @@ describe('things/', function() {
         Events.add(eventASecond);
         return true;
       })(),
-      webSocketRead(ws, 2)
+      webSocketRead(ws, 2),
     ]);
 
     expect(res).toBeTruthy();
@@ -703,7 +704,7 @@ describe('things/', function() {
 
         return actionHref;
       })(),
-      webSocketRead(ws, 3)
+      webSocketRead(ws, 3),
     ]);
 
     expect(messages[0].messageType).toEqual(Constants.ACTION_STATUS);
@@ -747,7 +748,7 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
 
     const actionDescr = {
-      reboot: {}
+      reboot: {},
     };
 
     res = await chai.request(server)
@@ -834,9 +835,9 @@ describe('things/', function() {
         messageType: Constants.REQUEST_ACTION,
         data: {
           reboot: {},
-        }
+        },
       }),
-      webSocketRead(ws, 1)
+      webSocketRead(ws, 1),
     ]);
 
     const actionStatus = messages[0];
@@ -871,9 +872,9 @@ describe('things/', function() {
               timeout: 60,
             },
           },
-        }
+        },
       }),
-      webSocketRead(ws, 2)
+      webSocketRead(ws, 2),
     ]);
 
     const created = messages[0];
@@ -894,9 +895,9 @@ describe('things/', function() {
     const [_, messages] = await Promise.all([
       webSocketSend(ws, {
         messageType: 'tomato',
-        data: {}
+        data: {},
       }),
-      webSocketRead(ws, 1)
+      webSocketRead(ws, 1),
     ]);
 
     const actionStatus = messages[0];

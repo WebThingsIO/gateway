@@ -16,7 +16,7 @@ describe('adapters/', function() {
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-  })
+  });
 
   it('gets all adapters', async () => {
     const res = await chai.request(server)
@@ -55,9 +55,8 @@ describe('adapters/', function() {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
       throw new Error('request should fail');
-    } catch(err) {
+    } catch (err) {
       expect(err.response.status).toEqual(404);
     }
   });
-
 });

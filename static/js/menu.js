@@ -67,7 +67,7 @@ var Menu = {
    * Toggle menu visibility
    */
   toggle: function() {
-    if(this.hidden) {
+    if (this.hidden) {
       this.show();
     } else {
       this.hide();
@@ -80,7 +80,7 @@ var Menu = {
    * @param {Event} Click event.
    */
   handleClick: function(e) {
-    if(e.target.tagName != 'A') {
+    if (e.target.tagName != 'A') {
       return;
     }
     this.hide();
@@ -113,5 +113,5 @@ var Menu = {
   */
   hideItem: function(item) {
     this.items[item].classList.add('hidden');
-  }
+  },
 };

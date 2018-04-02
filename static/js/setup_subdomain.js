@@ -86,16 +86,16 @@ function submitForm() {
   var action = {
     'email': email.value,
     'subdomain': subdomain.value,
-    'reclamationToken': reclamationToken.value
+    'reclamationToken': reclamationToken.value,
   };
   fetch('/settings/subscribe', {
     method: 'POST',
     body: JSON.stringify(action),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  }).then(function (response) {
+      'Content-Type': 'application/json',
+    },
+  }).then(function(response) {
     if (response.statusText.indexOf('UnavailableName') > -1) {
       if (response.statusText.indexOf('ReclamationPossible') > -1) {
         const text1 = document.createTextNode(
@@ -115,8 +115,8 @@ function submitForm() {
             body: JSON.stringify({subdomain: subdomain.value}),
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           }).catch(function() {
             displayMessage('Could not reclaim domain.', 'error');
           });
@@ -143,7 +143,7 @@ function submitForm() {
     } else {
       return response.text();
     }
-  }).then(function (body) {
+  }).then(function(body) {
     if (body) {
       displayMessage('Success! Please wait while we redirect you...',
                      'message');
@@ -154,7 +154,7 @@ function submitForm() {
       displayMessage('Error issuing certificate. Please try again.',
                      'error');
     }
-  }, function () {});
+  }, function() {});
 }
 
 subdomain.addEventListener('input', validateInput);
@@ -174,7 +174,7 @@ skipAnchor.addEventListener('click', function() {
     headers: {
       'Accept': 'application/json',
     },
-  }).then(function (response) {
+  }).then(function(response) {
     if (response.ok) {
       displayMessage('Redirecting...', 'message');
       setTimeout(function() {

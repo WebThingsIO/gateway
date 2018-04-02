@@ -42,49 +42,46 @@ if (!console.constructor.hooked) {
       const origin = call.getFileName() + ':' + call.getLineNumber();
       buffer.push({message: logPrefix() + message, origin, type});
       return buffer;
-    }
+    };
 
     console.log = function log() {
       console.constructor.write(
         this._buffer, 'log', format.apply(null, arguments));
-    }
+    };
     console.info = function info() {
       console.constructor.write(
         this._buffer, 'info', format.apply(null, arguments));
-    }
+    };
     console.warn = function warn() {
       console.constructor.write(
         this._buffer, 'warn', format.apply(null, arguments));
-    }
+    };
     console.error = function error() {
       console.constructor.write(
         this._buffer, 'error', format.apply(null, arguments));
-    }
+    };
     // jest's BufferedConsole doesn't provide a debug, so we skip it as well.
-
   } else if (console.constructor.name === 'CustomConsole') {
-
     // See: https://github.com/facebook/jest/blob/master/packages/jest-util/
     //        src/Console.js
     //      for the implementation of _log
 
     console.log = function log() {
       console._log('log', logPrefix() + format.apply(null, arguments));
-    }
+    };
 
     console.info = function info() {
       console._log('info', logPrefix() + format.apply(null, arguments));
-    }
+    };
 
     console.warn = function warn() {
       console._log('warn', logPrefix() + format.apply(null, arguments));
-    }
+    };
 
     console.error = function error() {
       console._log('error', logPrefix() + format.apply(null, arguments));
-    }
+    };
     // jest's CustomConsole doesn't provide a debug, so we skip it as well.
-
   } else {
     // This path is for the normal non-jest output
     const FUNCS = ['log', 'info', 'debug', 'error', 'warn'];

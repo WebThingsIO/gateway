@@ -10,7 +10,6 @@
 'use strict';
 
 (function() {
-
   var form = document.getElementById('create-user-form');
   var email = document.getElementById('email');
   var password = document.getElementById('password');
@@ -44,6 +43,5 @@
         errorSubmission.textContent = err.message;
         console.error(err);
       });
-  })
-
+  });
 })();

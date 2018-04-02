@@ -136,9 +136,10 @@ class IpcSocket {
    * Called anytime a new message has been received.
    */
   onData(buf) {
-    var bufStr = buf.toString();
+    const bufStr = buf.toString();
+    let data;
     try {
-      var data = JSON.parse(bufStr);
+      data = JSON.parse(bufStr);
     } catch (err) {
       this.error('Error parsing message as JSON');
       this.error('Rcvd: "' + bufStr + '"');

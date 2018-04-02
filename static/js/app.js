@@ -94,12 +94,12 @@ var App = {
 
   hideMenuButton: function() {
     this.menuButton.classList.add('hidden');
-  }
+  },
 };
 
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {
-    scope: '/'
+    scope: '/',
   });
 }
 

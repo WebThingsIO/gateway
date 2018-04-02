@@ -6,7 +6,7 @@ var App = {
   /**
    * Start app.
    */
-  init: function () {
+  init: function() {
     this.container = document.getElementById('form');
     const schema =
       {
@@ -16,26 +16,26 @@ var App = {
             'properties': {
               'name': {
                 'type': 'string',
-                'default': 'Default name'
-              }
-            }
-          }
+                'default': 'Default name',
+              },
+            },
+          },
         },
         'type': 'object',
         'title': 'Number fields & widgets',
         'required': [
           'number',
           'enumString',
-          'integerRange'
+          'integerRange',
         ],
         'properties': {
           'number': {
             'title': 'Number',
-            'type': 'number'
+            'type': 'number',
           },
           'integer': {
             'title': 'Integer',
-            'type': 'integer'
+            'type': 'integer',
           },
           'numberEnum': {
             'type': 'number',
@@ -43,8 +43,8 @@ var App = {
             'enum': [
               1,
               2,
-              3
-            ]
+              3,
+            ],
           },
           'numberEnumRadio': {
             'type': 'number',
@@ -52,26 +52,26 @@ var App = {
             'enum': [
               1,
               2,
-              3
-            ]
+              3,
+            ],
           },
           'integerRange': {
             'title': 'Integer range',
             'type': 'integer',
             'minimum': 42,
-            'maximum': 100
+            'maximum': 100,
           },
           'integerRangeSteps': {
             'title': 'Integer range (by 10)',
             'type': 'integer',
             'minimum': 50,
             'maximum': 100,
-            'multipleOf': 10
+            'multipleOf': 10,
           },
           'stringTitle': {
             'type': 'string',
             'title': 'Title',
-            'description': 'A sample title'
+            'description': 'A sample title',
           },
           'enumString': {
             'type': 'string',
@@ -81,20 +81,20 @@ var App = {
               'option #2',
               'option #3',
               'option #4',
-            ]
+            ],
           },
           'done': {
             'type': 'boolean',
             'title': 'Done?',
-            'default': true
+            'default': true,
           },
           'listOfStrings': {
             'type': 'array',
             'title': 'A list of strings',
             'items': {
               'type': 'string',
-              'default': 'bazinga'
-            }
+              'default': 'bazinga',
+            },
           },
           'multipleChoicesList': {
             'type': 'array',
@@ -105,10 +105,10 @@ var App = {
                 'foo',
                 'bar',
                 'fuzz',
-                'qux'
-              ]
+                'qux',
+              ],
             },
-            'uniqueItems': true
+            'uniqueItems': true,
           },
           'fixedItemsList': {
             'type': 'array',
@@ -117,17 +117,17 @@ var App = {
               {
                 'title': 'A string value',
                 'type': 'string',
-                'default': 'lorem ipsum'
+                'default': 'lorem ipsum',
               },
               {
                 'title': 'a boolean value',
-                'type': 'boolean'
-              }
+                'type': 'boolean',
+              },
             ],
             'additionalItems': {
               'title': 'Additional item',
-              'type': 'number'
-            }
+              'type': 'number',
+            },
           },
           'tasks': {
             'type': 'array',
@@ -135,28 +135,28 @@ var App = {
             'items': {
               'type': 'object',
               'required': [
-                'title'
+                'title',
               ],
               'properties': {
                 'title': {
                   'type': 'string',
                   'title': 'Title',
-                  'description': 'A sample title'
+                  'description': 'A sample title',
                 },
                 'details': {
                   'type': 'string',
                   'title': 'Task details',
-                  'description': 'Enter the task details'
+                  'description': 'Enter the task details',
                 },
                 'done': {
                   'type': 'boolean',
                   'title': 'Done?',
-                  'default': false
-                }
-              }
-            }
+                  'default': false,
+                },
+              },
+            },
           },
-        }
+        },
       };
     const id = 'addons';
     const name = 'addon-configs';
@@ -165,11 +165,11 @@ var App = {
         'number': 3.14,
         'integer': 42,
         'numberEnum': 2,
-        'integerRangeSteps': 100
+        'integerRangeSteps': 100,
       };
     this.container.appendChild(new SchemaForm(schema, id, name)
       .render(formData));
-  }
+  },
 
 };
 

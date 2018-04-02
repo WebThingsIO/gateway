@@ -49,8 +49,8 @@ OnOffSwitch.prototype.updateStatus = function() {
   var opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   fetch(this.onPropertyUrl, opts).then(function(response) {
@@ -124,7 +124,7 @@ OnOffSwitch.prototype.turnOn = function() {
   this.showTransition();
   this.properties.on = null;
   var payload = {
-   'on': true
+   'on': true,
   };
   fetch(this.onPropertyUrl, {
    method: 'PUT',
@@ -132,8 +132,8 @@ OnOffSwitch.prototype.turnOn = function() {
    headers: {
      'Authorization': `Bearer ${window.API.jwt}`,
      'Accept': 'application/json',
-     'Content-Type': 'application/json'
-   }
+     'Content-Type': 'application/json',
+   },
   })
   .then((function(response) {
    if (response.status == 200) {
@@ -154,7 +154,7 @@ OnOffSwitch.prototype.turnOff = function() {
   this.showTransition();
   this.properties.on = null;
   var payload = {
-    'on': false
+    'on': false,
   };
   fetch(this.onPropertyUrl, {
     method: 'PUT',
@@ -162,8 +162,8 @@ OnOffSwitch.prototype.turnOff = function() {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   .then((function(response) {
     if (response.status == 200) {

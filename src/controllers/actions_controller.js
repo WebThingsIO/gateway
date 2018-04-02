@@ -37,7 +37,7 @@ ActionsController.post('/', async (request, response) => {
     try {
       const thing = await Things.getThing(thingId);
       action = new Action(actionName, actionParams, thing);
-    } catch(e) {
+    } catch (e) {
       console.error('Thing does not exist', thingId, e);
       response.status(404).send(e);
       return;
@@ -54,7 +54,7 @@ ActionsController.post('/', async (request, response) => {
     }
 
     response.status(201).json({[actionName]: action.getDescription()});
-  } catch(e) {
+  } catch (e) {
     console.error('Creating action', actionName, 'failed');
     console.error(e);
     response.status(400).send(e);
@@ -109,7 +109,7 @@ ActionsController.delete('/:actionName/:actionId',
 
   try {
     Actions.remove(actionId);
-  } catch(e) {
+  } catch (e) {
     console.error('Removing action', actionId, 'failed');
     console.error(e);
     response.status(404).send(e);

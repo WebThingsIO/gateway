@@ -28,13 +28,13 @@ function MultiLevelSwitch(description, format, options) {
   if (format === 'htmlDetail') {
     this.details = this.details || {};
     this.details.on = new OnOffDetail(this);
-    this.details.level  = new LevelDetail(this);
+    this.details.level = new LevelDetail(this);
   }
 
   const opts = options || {svgBaseIcon: '/images/level.svg',
                            pngBaseIcon: '/images/level.svg',
                            thingCssClass: '',
-                           addIconToView: false}
+                           addIconToView: false};
 
   this.base = Thing;
   this.base(description, format, opts);
@@ -84,7 +84,7 @@ MultiLevelSwitch.prototype.htmlView = function() {
     ${this.iconView()}
     <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
-}
+};
 
 /**
  * HTML detail view for multi level switch
@@ -110,8 +110,8 @@ MultiLevelSwitch.prototype.updateStatus = function() {
   var opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   fetch(this.onPropertyUrl, opts).then(response => {
@@ -195,14 +195,14 @@ MultiLevelSwitch.prototype.setLevel = function(level) {
   }
 
   const payload = {
-   level: level
+   level: level,
   };
   fetch(this.levelPropertyUrl, {
    method: 'PUT',
    body: JSON.stringify(payload),
    headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json'
-   })
+     'Content-Type': 'application/json',
+   }),
   }).then(response => {
    if (response.status === 200) {
      this.updateLevel(level);

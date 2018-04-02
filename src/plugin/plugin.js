@@ -141,11 +141,9 @@ class Plugin {
           this.unload();
           this.unloadCompletedPromise = adapter.unloadCompletedPromise;
           adapter.unloadCompletedPromise = null;
-        } else {
-          if (adapter.unloadCompletedPromise) {
-            adapter.unloadCompletedPromise.resolve();
-            adapter.unloadCompletedPromise = null;
-          }
+        } else if (adapter.unloadCompletedPromise) {
+          adapter.unloadCompletedPromise.resolve();
+          adapter.unloadCompletedPromise = null;
         }
         break;
 
@@ -285,14 +283,14 @@ class Plugin {
     });
 
     this.stdoutReadline = readline.createInterface({
-      input: this.process.p.stdout
+      input: this.process.p.stdout,
     });
     this.stdoutReadline.on('line', line => {
       console.log(this.logPrefix + ': ' + line);
     });
 
     this.stderrReadline = readline.createInterface({
-      input: this.process.p.stderr
+      input: this.process.p.stderr,
     });
     this.stderrReadline.on('line', line => {
       console.error(this.logPrefix + ': ' + line);

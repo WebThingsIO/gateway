@@ -25,7 +25,7 @@ const ThingsController = PromiseRouter();
 /**
  * Get a list of Things.
  */
-ThingsController.get('/', function (request, response) {
+ThingsController.get('/', function(request, response) {
   Things.getThingDescriptions(request.get('Host'), request.secure)
     .then(function(things) {
       response.status(200).json(things);
@@ -133,7 +133,7 @@ ThingsController.put('/:thingId/properties/:propertyName',
   function(request, response) {
   var thingId = request.params.thingId;
   var propertyName = request.params.propertyName;
-  if(!request.body || request.body[propertyName] === undefined) {
+  if (!request.body || typeof request.body[propertyName] === 'undefined') {
     response.status(400).send('Invalid property name');
     return;
   }
@@ -167,21 +167,20 @@ ThingsController.use('/:thingId' + Constants.EVENTS_PATH, EventsController);
  */
 ThingsController.patch('/:thingId', function(request, response) {
   var thingId = request.params.thingId;
-  if(!request.body ||
-    !request.body['floorplanX'] || !request.body['floorplanY']) {
+  if (!request.body ||
+    !request.body.floorplanX || !request.body.floorplanY) {
     response.status(400).send('x and y properties needed to position Thing');
     return;
   }
   Things.getThing(thingId).then((thing) => {
     // return
     return thing.setCoordinates(
-      request.body['floorplanX'], request.body['floorplanY']);
+      request.body.floorplanX, request.body.floorplanY);
   }).then((description) => {
     response.status(200).json(description);
   }).catch(function(e) {
     response.status(500).send('Failed to update thing ' + thingId + ' ' + e);
   });
-
 });
 
 /**
@@ -223,7 +222,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       data: {
         status: '404 Not Found',
         message: 'Thing ' + thingId + ' not found',
-      }
+      },
     }));
     websocket.close();
   });
@@ -235,8 +234,8 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     websocket.send(JSON.stringify({
       messageType: Constants.PROPERTY_STATUS,
       data: {
-        [property.name]: property.value
-      }
+        [property.name]: property.value,
+      },
     }));
   }
 
@@ -286,13 +285,13 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     let request = null;
     try {
       request = JSON.parse(requestText);
-    } catch(e) {
+    } catch (e) {
       websocket.send(JSON.stringify({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
           message: 'Parsing request failed',
-        }
+        },
       }));
       return;
     }
@@ -304,8 +303,8 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
         data: {
           status: '400 Bad Request',
           message: `Thing ${thingId} not found`,
-          request: request
-        }
+          request: request,
+        },
       }));
       return;
     }
@@ -323,8 +322,8 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
             data: {
               status: '400 Bad Request',
               message: err,
-              request: request
-            }
+              request: request,
+            },
           }));
         });
         break;
@@ -352,8 +351,8 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
               data: {
                 status: '400 Bad Request',
                 message: err.message,
-                request: request
-              }
+                request: request,
+              },
             }));
           });
         }
@@ -366,8 +365,8 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
           data: {
             status: '400 Bad Request',
             message: `Unknown messageType: ${request.messageType}`,
-            request: request
-          }
+            request: request,
+          },
         }));
         break;
       }

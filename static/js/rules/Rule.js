@@ -48,7 +48,7 @@ Rule.prototype.update = function() {
   let fetchOptions = {
     headers: API.headers(),
     method: 'PUT',
-    body: JSON.stringify(desc)
+    body: JSON.stringify(desc),
   };
   fetchOptions.headers['Content-Type'] = 'application/json';
 
@@ -73,7 +73,7 @@ Rule.prototype.update = function() {
 Rule.prototype.delete = function() {
   let fetchOptions = {
     headers: API.headers(),
-    method: 'DELETE'
+    method: 'DELETE',
   };
 
   if (typeof(this.id) === 'undefined') {
@@ -95,7 +95,7 @@ Rule.prototype.toDescription = function() {
     enabled: this.enabled,
     name: this.name,
     trigger: this.trigger,
-    effect: this.effect
+    effect: this.effect,
   };
 };
 
@@ -111,7 +111,7 @@ const RuleUtils = {
     return function(thing) {
       return thing.href === href;
     };
-  }
+  },
 };
 
 /**

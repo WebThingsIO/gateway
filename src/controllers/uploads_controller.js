@@ -36,7 +36,7 @@ var UploadsController = express.Router();
 /**
  * Upload a file.
  */
-UploadsController.post('/', function (request, response) {
+UploadsController.post('/', function(request, response) {
   if (!request.files || !request.files.file) {
     return response.status(500).send('No file provided for upload');
   }

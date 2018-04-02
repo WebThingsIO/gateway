@@ -50,8 +50,8 @@ MultiLevelSensor.prototype.updateStatus = function() {
   var opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
   fetch(this.levelPropertyUrl, opts).then((function(response) {
     return response.json();
@@ -59,9 +59,9 @@ MultiLevelSensor.prototype.updateStatus = function() {
     this.properties.level = response.level;
     if (response.level === null) {
       return;
-    } else {
-      this.showLevel(response.level);
     }
+
+    this.showLevel(response.level);
   }).bind(this)).catch(function(error) {
     console.error('Error fetching sensor level status ' + error);
   });

@@ -59,7 +59,7 @@ const Profile = {
         if (err) {
           throw err;
         }
-      })
+      });
     });
   },
 

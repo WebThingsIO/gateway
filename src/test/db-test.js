@@ -56,7 +56,5 @@ describe('db', () => {
 
       expect(fromDbAfterDelete).toBeFalsy();
     });
-
   });
-
-})
+});

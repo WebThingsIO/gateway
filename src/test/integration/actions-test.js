@@ -19,7 +19,7 @@ describe('actions/', function() {
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-  })
+  });
 
   it('GET with no actions', async () => {
     const res = await chai.request(server)
@@ -42,7 +42,7 @@ describe('actions/', function() {
 
   it('should fail to create a new action (unknown name)', async () => {
     let descr = {
-      potato: {}
+      potato: {},
     };
     const err = await pFinal(chai.request(server)
       .post(Constants.ACTIONS_PATH)

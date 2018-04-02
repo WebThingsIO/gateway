@@ -29,12 +29,12 @@ Draggable.prototype.getClientCoords = function(event) {
   if (event.type.startsWith('touch')) {
     return {
       clientX: event.changedTouches[0].clientX,
-      clientY: event.changedTouches[0].clientY
+      clientY: event.changedTouches[0].clientY,
     };
   }
   return {
     clientX: event.clientX,
-    clientY: event.clientY
+    clientY: event.clientY,
   };
 };
 

@@ -32,7 +32,7 @@ var TunnelService = {
                 this.tunneltoken = result;
                 let endpoint = result.name + '.' +
                     config.get('ssltunnel.domain');
-                this.pagekiteProcess  =
+                this.pagekiteProcess =
                     spawnSync(config.get('ssltunnel.pagekite_cmd'),
                               ['--clean', '--frontend=' + endpoint + ':' +
                               config.get('ssltunnel.port'),
@@ -126,6 +126,6 @@ var TunnelService = {
                 console.log('Failed to ping registration server:', e);
             });
     },
-}
+};
 
 module.exports = TunnelService;

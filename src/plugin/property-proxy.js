@@ -71,7 +71,7 @@ class PropertyProxy extends Property {
           propertyValue: value,
       });
 
-      //TODO: Add a timeout
+      // TODO: Add a timeout
 
       this.onPropertyChanged().then(updatedValue => {
         resolve(updatedValue);

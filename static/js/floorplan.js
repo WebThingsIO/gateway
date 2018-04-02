@@ -48,8 +48,8 @@ var FloorplanScreen = {
     const opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json'
-      }
+        'Accept': 'application/json',
+      },
     };
     // Fetch a list of things from the server
     fetch('/things', opts).then((function(response) {
@@ -59,59 +59,59 @@ var FloorplanScreen = {
       this.thingsElement.innerHTML = '';
       if (things.length === 0) {
         return;
-      } else {
-        var x = this.ORIGIN_X;
-        var y = this.ORIGIN_Y;
-        things.forEach(function(description) {
-          if (!description.floorplanX || !description.floorplanY) {
-            description.floorplanX =  x;
-            description.floorplanY =  y;
-            x += this.THING_GAP; // increment x co-ordinate.
-          }
-          switch(description.type) {
-            case 'onOffSwitch':
-              console.log('rendering new on/off switch');
-              this.things.push(new OnOffSwitch(description, 'svg'));
-              break;
-            case 'onOffLight':
-              console.log('rendering new on/off light');
-              this.things.push(new OnOffLight(description, 'svg'));
-              break;
-            case 'onOffColorLight':
-              console.log('rendering new color light');
-              this.things.push(new ColorLight(description, 'svg'));
-              break;
-            case 'dimmableLight':
-              console.log('rendering new dimmable light');
-              this.things.push(new DimmableLight(description, 'svg'));
-              break;
-            case 'dimmableColorLight':
-              console.log('rendering new dimmable color light');
-              this.things.push(new DimmableColorLight(description, 'svg'));
-              break;
-            case 'binarySensor':
-              console.log('rendering new binary sensor');
-              this.things.push(new BinarySensor(description, 'svg'));
-              break;
-            case 'multiLevelSensor':
-              console.log('rendering new multi level sensor');
-              this.things.push(new MultiLevelSensor(description, 'svg'));
-              break;
-            case 'multiLevelSwitch':
-              console.log('rendering new multi level switch');
-              this.things.push(new MultiLevelSwitch(description, 'svg'));
-              break;
-            case 'smartPlug':
-              console.log('rendering new smart plug');
-              this.things.push(new SmartPlug(description, 'svg'));
-              break;
-            default:
-              console.log('rendering new thing');
-              this.things.push(new UnknownThing(description, 'svg'));
-              break;
-          }
-        }, this);
       }
+
+      var x = this.ORIGIN_X;
+      var y = this.ORIGIN_Y;
+      things.forEach(function(description) {
+        if (!description.floorplanX || !description.floorplanY) {
+          description.floorplanX = x;
+          description.floorplanY = y;
+          x += this.THING_GAP; // increment x co-ordinate.
+        }
+        switch (description.type) {
+          case 'onOffSwitch':
+            console.log('rendering new on/off switch');
+            this.things.push(new OnOffSwitch(description, 'svg'));
+            break;
+          case 'onOffLight':
+            console.log('rendering new on/off light');
+            this.things.push(new OnOffLight(description, 'svg'));
+            break;
+          case 'onOffColorLight':
+            console.log('rendering new color light');
+            this.things.push(new ColorLight(description, 'svg'));
+            break;
+          case 'dimmableLight':
+            console.log('rendering new dimmable light');
+            this.things.push(new DimmableLight(description, 'svg'));
+            break;
+          case 'dimmableColorLight':
+            console.log('rendering new dimmable color light');
+            this.things.push(new DimmableColorLight(description, 'svg'));
+            break;
+          case 'binarySensor':
+            console.log('rendering new binary sensor');
+            this.things.push(new BinarySensor(description, 'svg'));
+            break;
+          case 'multiLevelSensor':
+            console.log('rendering new multi level sensor');
+            this.things.push(new MultiLevelSensor(description, 'svg'));
+            break;
+          case 'multiLevelSwitch':
+            console.log('rendering new multi level switch');
+            this.things.push(new MultiLevelSwitch(description, 'svg'));
+            break;
+          case 'smartPlug':
+            console.log('rendering new smart plug');
+            this.things.push(new SmartPlug(description, 'svg'));
+            break;
+          default:
+            console.log('rendering new thing');
+            this.things.push(new UnknownThing(description, 'svg'));
+            break;
+        }
+      }, this);
     }).bind(this));
   },
 
@@ -192,7 +192,7 @@ var FloorplanScreen = {
     fetch('/uploads', {
       method: 'POST',
       body: formData,
-      headers: headers
+      headers: headers,
     }).then((response) => {
       this.uploadButton.classList.remove('loading');
       if (response.ok) {
@@ -201,7 +201,7 @@ var FloorplanScreen = {
           method: 'GET',
           headers: headers,
           // Make sure we update the cache with the new floorplan
-          cache: 'reload'
+          cache: 'reload',
         }).then(() => {
           // Add a timestamp to the background image to force image reload
           var timestamp = Date.now();
@@ -256,7 +256,7 @@ var FloorplanScreen = {
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
     var payload = {
       floorplanX: x,
-      floorplanY: y
+      floorplanY: y,
     };
     fetch(thingUrl, {
       method: 'PATCH',
@@ -264,8 +264,8 @@ var FloorplanScreen = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     }).then((response) => {
       if (response.ok) {
         console.log('Successfully moved thing to (' + x + ',' + y + ')');
@@ -319,5 +319,5 @@ var FloorplanScreen = {
   blackHole: function(e) {
     e.preventDefault();
     return false;
-  }
+  },
 };

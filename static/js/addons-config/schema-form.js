@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -30,7 +30,7 @@ function SchemaForm(schema, id, name, options = {}) {
   return this;
 }
 
-SchemaForm.prototype.onChange = function (formData) {
+SchemaForm.prototype.onChange = function(formData) {
   let error = null;
   this.formData = formData;
 
@@ -47,15 +47,15 @@ SchemaForm.prototype.onChange = function (formData) {
   }
 };
 
-SchemaForm.prototype.validate = function (formData) {
+SchemaForm.prototype.validate = function(formData) {
   return Validator.validateFormData(formData, this.schema);
 };
 
-SchemaForm.prototype.scrollToTop = function () {
+SchemaForm.prototype.scrollToTop = function() {
   document.getElementById('addon-config-settings').scrollTop = 0;
 };
 
-SchemaForm.prototype.handleApply = function (e) {
+SchemaForm.prototype.handleApply = function(e) {
   const { errors } = this.validate(this.formData);
   const button = e.target;
   button.disabled = true;
@@ -75,7 +75,7 @@ SchemaForm.prototype.handleApply = function (e) {
   }
 };
 
-SchemaForm.prototype.renderApplyButton = function () {
+SchemaForm.prototype.renderApplyButton = function() {
   const applyButton = document.createElement('button');
   applyButton.id = 'addon-apply-' + Utils.escapeHtml(this.id);
   applyButton.type = 'button';
@@ -89,7 +89,7 @@ SchemaForm.prototype.renderApplyButton = function () {
   return applyButton;
 };
 
-SchemaForm.prototype.render = function (data) {
+SchemaForm.prototype.render = function(data) {
   this.formData =
     SchemaUtils.getDefaultFormState(
       this.schema,

@@ -36,7 +36,7 @@ class ActionEffect extends Effect {
       {
         thing: this.thing,
         action: this.action,
-        parameters: this.parameters
+        parameters: this.parameters,
       }
     );
   }
@@ -68,7 +68,7 @@ class ActionEffect extends Effect {
       headers: {
         Accept: 'application/json',
         Authorization: 'Bearer ' + jwt,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(descr),
     });

@@ -29,7 +29,7 @@ class EventTrigger extends Trigger {
       super.toDescription(),
       {
         thing: this.thing,
-        event: this.event
+        event: this.event,
       }
     );
   }
@@ -40,7 +40,7 @@ class EventTrigger extends Trigger {
       messageType: Constants.ADD_EVENT_SUBSCRIPTION,
       data: {
         [this.event]: {},
-      }
+      },
     }));
   }
 

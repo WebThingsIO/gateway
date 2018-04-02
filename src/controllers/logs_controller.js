@@ -74,7 +74,7 @@ LogsController.get('/zip', async (request, response) => {
   response.attachment('logs.zip');
 
   archive.pipe(response);
-  archive.directory(UserProfile.logDir, 'logs')
+  archive.directory(UserProfile.logDir, 'logs');
   archive.finalize();
 });
 

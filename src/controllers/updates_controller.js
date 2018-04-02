@@ -45,7 +45,7 @@ function stat(path) {
 let cacheLatest = {
   tag: null,
   time: 0,
-  value: {version: null}
+  value: {version: null},
 };
 const cacheDuration = 60 * 1000;
 
@@ -113,11 +113,11 @@ UpdatesController.get('/status', async function(request, response) {
   let failedVersion = null;
 
   if (oldStats) {
-    oldVersion = await readVersion('../gateway_old/package.json')
+    oldVersion = await readVersion('../gateway_old/package.json');
   }
 
   if (failedStats) {
-    failedVersion = await readVersion('../gateway_failed/package.json')
+    failedVersion = await readVersion('../gateway_failed/package.json');
   }
 
   if (failedVersion && semver.gt(failedVersion, currentVersion)) {
@@ -125,7 +125,7 @@ UpdatesController.get('/status', async function(request, response) {
       success: false,
       version: currentVersion,
       failedVersion: failedVersion,
-      timestamp: failedStats.ctime
+      timestamp: failedStats.ctime,
     });
   } else {
     let timestamp = null;
@@ -136,7 +136,7 @@ UpdatesController.get('/status', async function(request, response) {
       success: true,
       version: currentVersion,
       oldVersion: oldVersion,
-      timestamp: timestamp
+      timestamp: timestamp,
     });
   }
 });

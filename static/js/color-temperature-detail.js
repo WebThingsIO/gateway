@@ -25,7 +25,7 @@ ColorTemperatureDetail.prototype.attach = function() {
     this.thing.updateColorTemperature(this.temperature.value);
   });
   this.temperature.addEventListener('change', this.set.bind(this));
-}
+};
 
 ColorTemperatureDetail.prototype.view = function() {
   const temperature = this.thing.properties.colorTemperature;
