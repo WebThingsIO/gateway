@@ -56,36 +56,36 @@ const Things = {
    */
   getThingDescriptions: function(reqHost, reqSecure) {
     return this.getThings().then(function(things) {
-      var descriptions = [];
-      for (let thing of things.values()) {
+      const descriptions = [];
+      for (const thing of things.values()) {
         descriptions.push(thing.getDescription(reqHost, reqSecure));
       }
       return descriptions;
     });
   },
 
- /**
-  * Get a list of things which are connected to adapters but not yet saved
-  * in the gateway database.
-  *
-  * @returns Promise A promise which resolves with a list of Things.
-  */
+  /**
+   * Get a list of things which are connected to adapters but not yet saved
+   * in the gateway database.
+   *
+   * @returns Promise A promise which resolves with a list of Things.
+   */
   getNewThings: function() {
     // Get a map of things in the database
     return this.getThings().then((function(storedThings) {
       // Get a list of things connected to adapters
-      var connectedThings = AddonManager.getThings();
-      var newThings = [];
+      const connectedThings = AddonManager.getThings();
+      const newThings = [];
       connectedThings.forEach(function(connectedThing) {
         if (!storedThings.has(connectedThing.id)) {
           connectedThing.href =
-           Constants.THINGS_PATH + '/' + connectedThing.id;
+           `${Constants.THINGS_PATH}/${connectedThing.id}`;
           if (connectedThing.properties) {
-            for (var propertyName in connectedThing.properties) {
-              var property = connectedThing.properties[propertyName];
-              property.href = Constants.THINGS_PATH +
-                '/' + connectedThing.id +
-                Constants.PROPERTIES_PATH + '/' + propertyName;
+            for (const propertyName in connectedThing.properties) {
+              const property = connectedThing.properties[propertyName];
+              property.href = `${Constants.THINGS_PATH
+              }/${connectedThing.id
+              }${Constants.PROPERTIES_PATH}/${propertyName}`;
             }
           }
           newThings.push(connectedThing);
@@ -104,10 +104,10 @@ const Things = {
   createThing: function(id, description) {
     const thing = new Thing(id, description);
     return Database.createThing(thing.id, thing.getDescription())
-    .then(function(thingDesc) {
-      this.things.set(thing.id, thing);
-      return thingDesc;
-    }.bind(this));
+      .then(function(thingDesc) {
+        this.things.set(thing.id, thing);
+        return thingDesc;
+      }.bind(this));
   },
 
   /**
@@ -122,15 +122,15 @@ const Things = {
     });
   },
 
- /**
-  * Add a websocket to the list of new Thing subscribers.
-  *
-  * @param {Websocket} websocket A websocket instance.
-  */
+  /**
+   * Add a websocket to the list of new Thing subscribers.
+   *
+   * @param {Websocket} websocket A websocket instance.
+   */
   registerWebsocket: function(websocket) {
     this.websockets.push(websocket);
     websocket.on('close', () => {
-      let index = this.websockets.indexOf(websocket);
+      const index = this.websockets.indexOf(websocket);
       this.websockets.splice(index, 1);
     });
   },
@@ -146,7 +146,7 @@ const Things = {
       if (things.has(id)) {
         return things.get(id);
       } else {
-        throw new Error('Unable to find thing with id: ' + id);
+        throw new Error(`Unable to find thing with id: ${id}`);
       }
     });
   },
@@ -159,11 +159,11 @@ const Things = {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise<ThingDescription>} A Thing description object.
    */
-   getThingDescription: function(id, reqHost, reqSecure) {
-     return this.getThing(id).then((thing) => {
-       return thing.getDescription(reqHost, reqSecure);
-     });
-   },
+  getThingDescription: function(id, reqHost, reqSecure) {
+    return this.getThing(id).then((thing) => {
+      return thing.getDescription(reqHost, reqSecure);
+    });
+  },
 
   /**
    * Remove a Thing.
@@ -172,7 +172,7 @@ const Things = {
    */
   removeThing: function(id) {
     return Database.removeThing(id).then(() => {
-      let thing = this.things.get(id);
+      const thing = this.things.get(id);
       if (!thing) {
         return;
       }

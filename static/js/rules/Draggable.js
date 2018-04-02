@@ -11,7 +11,7 @@ function Draggable(elt, afterDown, afterMove, afterUp) {
   this.afterDown = afterDown;
   this.afterMove = afterMove;
   this.afterUp = afterUp;
-  let parentRect = this.elt.parentNode.getBoundingClientRect();
+  const parentRect = this.elt.parentNode.getBoundingClientRect();
   this.baseX = parentRect.left;
   this.baseY = parentRect.top;
   this.onDown = this.onDown.bind(this);
@@ -46,17 +46,17 @@ Draggable.prototype.onDown = function(event) {
   event.preventDefault();
 
   if (this.afterDown) {
-    let coords = this.getClientCoords(event);
+    const coords = this.getClientCoords(event);
     this.afterDown(coords.clientX, coords.clientY);
   }
 };
 
 Draggable.prototype.onMove = function(event) {
-  let coords = this.getClientCoords(event);
-  let x = coords.clientX - this.baseX;
-  let y = coords.clientY - this.baseY;
+  const coords = this.getClientCoords(event);
+  const x = coords.clientX - this.baseX;
+  const y = coords.clientY - this.baseY;
 
-  this.elt.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+  this.elt.style.transform = `translate(${x}px,${y}px)`;
   if (this.afterMove) {
     this.afterMove(coords.clientX, coords.clientY, x, y);
   }
@@ -68,7 +68,7 @@ Draggable.prototype.onUp = function(event) {
   window.removeEventListener('mouseup', this.onUp);
   window.removeEventListener('touchend', this.onUp);
   if (this.afterUp) {
-    let coords = this.getClientCoords(event);
+    const coords = this.getClientCoords(event);
     this.afterUp(coords.clientX, coords.clientY);
   }
 };

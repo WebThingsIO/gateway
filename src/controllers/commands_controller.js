@@ -41,15 +41,15 @@ const IntentParser = require('../models/intentparser');
 const thingsOptions = {
   method: 'GET',
   headers: {
-    'Authorization': '',
-    'Accept': 'application/json',
+    Authorization: '',
+    Accept: 'application/json',
   },
 };
 
 const iotOptions = {
   method: 'PUT',
   headers: {
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Content-Type': 'application/json',
   },
   body: '',
@@ -87,95 +87,94 @@ function toText(res) {
 CommandsController.post('/', function(request, response) {
   if (!request.body || typeof request.body.text === 'undefined') {
     response.status(400).send(JSON.stringify(
-      {'message': 'Text element not defined'}));
+      {message: 'Text element not defined'}));
     return;
   }
 
   const thingsUrl = CommandsController.gatewayHref +
   Constants.THINGS_PATH;
-  thingsOptions.headers.Authorization = 'Bearer ' +
-  CommandsController.jwt;
+  thingsOptions.headers.Authorization = `Bearer ${
+    CommandsController.jwt}`;
 
   fetch(thingsUrl, thingsOptions).then(toText)
-  .then(function(thingBody) {
-    let jsonBody = JSON.parse(thingBody);
-    IntentParser.train(jsonBody).then(() => {
-      IntentParser.query(request.body.text).then((payload) => {
-        let match = payload.param.toUpperCase();
-        let thingfound = false;
-        let obj;
-        for (let i = 0; i < jsonBody.length; i++) {
-          obj = jsonBody[i];
-          let name = obj.name.toUpperCase();
-          if (name == match) {
-            thingfound = true;
-            break;
-          }
-        }
-        if (thingfound) {
-          if (payload.param2 == 'on' || payload.param2 == 'off') {
-            iotOptions.body = JSON.stringify({'on':
-            (payload.param2 == 'on') ? true : false});
-            payload.href = obj.properties.on.href;
-          } else if ((payload.param3 != null) &&
-            (payload.param3 != '' && obj.properties.color != '')) {
-            const colorname_to_hue = {
-              red: '#FF0000',
-              orange: '#FFB300',
-              yellow: '#FFF700',
-              green: '#47f837',
-              white: '#FCFBEA',
-              blue: '#1100FF',
-              purple: '#971AC4',
-              magenta: '#75009F',
-              pink: '#FFC0CB',
-            };
-            if (!colorname_to_hue[payload.param3]) {
-              response.status(404).json({'message': 'Hue color not found'});
-              return;
-            } else {
-              iotOptions.body = JSON.stringify({'color':
-               colorname_to_hue[payload.param3]});
-              payload.href = obj.properties.color.href;
+    .then(function(thingBody) {
+      const jsonBody = JSON.parse(thingBody);
+      IntentParser.train(jsonBody).then(() => {
+        IntentParser.query(request.body.text).then((payload) => {
+          const match = payload.param.toUpperCase();
+          let thingfound = false;
+          let obj;
+          for (let i = 0; i < jsonBody.length; i++) {
+            obj = jsonBody[i];
+            const name = obj.name.toUpperCase();
+            if (name == match) {
+              thingfound = true;
+              break;
             }
-          } else {
-            response.status(404).json({'message': 'Command not found'});
-            return;
           }
-          const iotUrl = CommandsController.gatewayHref + payload.href;
-          iotOptions.headers.Authorization =
-            'Bearer ' + CommandsController.jwt;
-          // Returning 201 to signify that the command was mapped to an
-          // intent and matched a 'thing' in our list.  Return a response to
-          // caller with this status before the command finishes execution
-          // as the execution can take some time (e.g. blinds)
-          response.status(201).json({'message': 'Command Created'});
-          fetch(iotUrl, iotOptions)
-            .then(function() {
-              // In the future we may want to use WS to give a status of
-              // the disposition of the command execution..
-            })
-            .catch(function(err) {
-              // Future, give status via WS.
-              console.log('catch inside PUT:' + err);
-            });
-        } else {
-          response.status(404).json({'message': 'Thing not found'});
-        }
+          if (thingfound) {
+            if (payload.param2 == 'on' || payload.param2 == 'off') {
+              iotOptions.body = JSON.stringify({on:
+              (payload.param2 == 'on') ? true : false});
+              payload.href = obj.properties.on.href;
+            } else if ((payload.param3 != null) &&
+              (payload.param3 != '' && obj.properties.color != '')) {
+              const colorname_to_hue = {
+                red: '#FF0000',
+                orange: '#FFB300',
+                yellow: '#FFF700',
+                green: '#47f837',
+                white: '#FCFBEA',
+                blue: '#1100FF',
+                purple: '#971AC4',
+                magenta: '#75009F',
+                pink: '#FFC0CB',
+              };
+              if (!colorname_to_hue[payload.param3]) {
+                response.status(404).json({message: 'Hue color not found'});
+                return;
+              } else {
+                iotOptions.body = JSON.stringify({color:
+                 colorname_to_hue[payload.param3]});
+                payload.href = obj.properties.color.href;
+              }
+            } else {
+              response.status(404).json({message: 'Command not found'});
+              return;
+            }
+            const iotUrl = CommandsController.gatewayHref + payload.href;
+            iotOptions.headers.Authorization =
+              `Bearer ${CommandsController.jwt}`;
+            // Returning 201 to signify that the command was mapped to an
+            // intent and matched a 'thing' in our list.  Return a response to
+            // caller with this status before the command finishes execution
+            // as the execution can take some time (e.g. blinds)
+            response.status(201).json({message: 'Command Created'});
+            fetch(iotUrl, iotOptions)
+              .then(function() {
+                // In the future we may want to use WS to give a status of
+                // the disposition of the command execution..
+              })
+              .catch(function(err) {
+                // Future, give status via WS.
+                console.log(`catch inside PUT:${err}`);
+              });
+          } else {
+            response.status(404).json({message: 'Thing not found'});
+          }
+        }).catch(function(error) {
+          console.log('Error parsing intent:', error);
+          response.status(404).json({message:
+            'Internal error determining intent'});
+        });
       }).catch(function(error) {
         console.log('Error parsing intent:', error);
-        response.status(404).json({'message':
+        response.status(404).json({message:
           'Internal error determining intent'});
       });
-    }).catch(function(error) {
-      console.log('Error parsing intent:', error);
-      response.status(404).json({'message':
-        'Internal error determining intent'});
+    }).catch(function(err) {
+      console.log(`error catch:${err}`);
     });
-  })
-  .catch(function(err) {
-    console.log('error catch:' + err);
-  });
 });
 
 module.exports = CommandsController;

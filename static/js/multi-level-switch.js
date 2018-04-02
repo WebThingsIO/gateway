@@ -107,24 +107,24 @@ MultiLevelSwitch.prototype.htmlDetailView = function() {
  * Update the status of the switch.
  */
 MultiLevelSwitch.prototype.updateStatus = function() {
-  var opts = {
+  const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
 
-  fetch(this.onPropertyUrl, opts).then(response => {
+  fetch(this.onPropertyUrl, opts).then((response) => {
     return response.json();
-  }).then(response => {
+  }).then((response) => {
     this.onPropertyStatus(response);
     return fetch(this.levelPropertyUrl, opts);
-  }).then(response => {
+  }).then((response) => {
     return response.json();
-  }).then(response => {
+  }).then((response) => {
     this.onPropertyStatus(response);
-  }).catch(error => {
-    console.error('Error fetching multi level switch status ' + error);
+  }).catch((error) => {
+    console.error(`Error fetching multi level switch status ${error}`);
   });
 };
 
@@ -176,8 +176,9 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
     blank = MULTI_LEVEL_SWITCH_ON_BLANK;
   }
 
-  let levelBackground = `linear-gradient(${blank}, ${blank} ${100 - level}%,` +
-                              `${bar} ${100 - level}%, ${bar})`;
+  const levelBackground =
+    `linear-gradient(${blank}, ${blank} ${100 - level}%,` +
+    `${bar} ${100 - level}%, ${bar})`;
   this.levelBar.style.background = levelBackground;
 
   if (this.properties.on) {
@@ -190,27 +191,27 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
 };
 
 MultiLevelSwitch.prototype.setLevel = function(level) {
-  if (typeof(level) === 'string') {
+  if (typeof level === 'string') {
     level = parseInt(level, 10);
   }
 
   const payload = {
-   level: level,
+    level: level,
   };
   fetch(this.levelPropertyUrl, {
-   method: 'PUT',
-   body: JSON.stringify(payload),
-   headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json',
-   }),
-  }).then(response => {
-   if (response.status === 200) {
-     this.updateLevel(level);
-   } else {
-     console.error('Status ' + response.status + ' trying to set level');
-   }
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(window.API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      this.updateLevel(level);
+    } else {
+      console.error(`Status ${response.status} trying to set level`);
+    }
   }).catch(function(error) {
-   console.error('Error trying to set level: ' + error);
+    console.error(`Error trying to set level: ${error}`);
   });
 };
 

@@ -18,7 +18,7 @@
  * @param Object description Thing description object.
  * @param {String} format 'svg' or 'html'.
  */
-var OnOffSwitch = function(description, format) {
+const OnOffSwitch = function(description, format) {
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/on-off-switch.svg',
                                   pngBaseIcon: '/images/on-off-switch.png',
@@ -46,10 +46,10 @@ OnOffSwitch.prototype.updateStatus = function() {
   if (!this.onPropertyUrl) {
     return;
   }
-  var opts = {
+  const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
 
@@ -58,7 +58,7 @@ OnOffSwitch.prototype.updateStatus = function() {
   }).then((function(response) {
     this.onPropertyStatus(response);
   }).bind(this)).catch(function(error) {
-    console.error('Error fetching on/off switch status ' + error);
+    console.error(`Error fetching on/off switch status ${error}`);
   });
 };
 
@@ -123,27 +123,25 @@ OnOffSwitch.prototype.handleClick = function() {
 OnOffSwitch.prototype.turnOn = function() {
   this.showTransition();
   this.properties.on = null;
-  var payload = {
-   'on': true,
+  const payload = {
+    on: true,
   };
   fetch(this.onPropertyUrl, {
-   method: 'PUT',
-   body: JSON.stringify(payload),
-   headers: {
-     'Authorization': `Bearer ${window.API.jwt}`,
-     'Accept': 'application/json',
-     'Content-Type': 'application/json',
-   },
-  })
-  .then((function(response) {
-   if (response.status == 200) {
-     this.onPropertyStatus({on: true});
-   } else {
-     console.error('Status ' + response.status + ' trying to turn on switch');
-   }
-  }).bind(this))
-  .catch(function(error) {
-   console.error('Error trying to turn on switch: ' + error);
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: {
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }).then((function(response) {
+    if (response.status == 200) {
+      this.onPropertyStatus({on: true});
+    } else {
+      console.error(`Status ${response.status} trying to turn on switch`);
+    }
+  }).bind(this)).catch(function(error) {
+    console.error(`Error trying to turn on switch: ${error}`);
   });
 };
 
@@ -153,26 +151,24 @@ OnOffSwitch.prototype.turnOn = function() {
 OnOffSwitch.prototype.turnOff = function() {
   this.showTransition();
   this.properties.on = null;
-  var payload = {
-    'on': false,
+  const payload = {
+    on: false,
   };
   fetch(this.onPropertyUrl, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  })
-  .then((function(response) {
+  }).then((function(response) {
     if (response.status == 200) {
       this.onPropertyStatus({on: false});
     } else {
-      console.error('Status ' + response.status + ' trying to turn off switch');
+      console.error(`Status ${response.status} trying to turn off switch`);
     }
-  }).bind(this))
-  .catch(function(error) {
-    console.error('Error trying to turn off switch: ' + error);
+  }).bind(this)).catch(function(error) {
+    console.error(`Error trying to turn off switch: ${error}`);
   });
 };

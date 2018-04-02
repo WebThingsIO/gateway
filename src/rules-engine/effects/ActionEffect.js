@@ -53,21 +53,21 @@ class ActionEffect extends Effect {
   }
 
   async createAction() {
-    let descr = {
+    const descr = {
       [this.action]: {
         input: this.parameters,
       },
     };
 
-    let href = await Settings.get('RulesEngine.gateway') + this.thing.href +
-      '/actions';
-    let jwt = await Settings.get('RulesEngine.jwt');
+    const href = `${await Settings.get('RulesEngine.gateway') + this.thing.href
+    }/actions`;
+    const jwt = await Settings.get('RulesEngine.jwt');
 
-    let res = await fetch(href, {
+    const res = await fetch(href, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer ' + jwt,
+        Authorization: `Bearer ${jwt}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(descr),

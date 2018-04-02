@@ -46,7 +46,7 @@ PropertySelect.prototype.clearOptions = function() {
  * @param {boolean} selected - if the option is selected
  */
 PropertySelect.prototype.addOption = function(name, value, selected) {
-  let elt = document.createElement('div');
+  const elt = document.createElement('div');
   elt.classList.add('property-select-option');
   if (selected) {
     elt.classList.add('selected');
@@ -69,19 +69,19 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
 
   this.clearOptions();
 
-  for (let propName of Object.keys(this.thing.properties)) {
-    let property = this.thing.properties[propName];
+  for (const propName of Object.keys(this.thing.properties)) {
+    const property = this.thing.properties[propName];
     if (!property.name) {
       property.name = propName;
     }
     if (role === 'trigger') {
       if (property.type === 'boolean') {
-        let triggerOn = {
+        const triggerOn = {
           type: 'BooleanTrigger',
           property: property,
           onValue: true,
         };
-        let triggerOff = Object.assign({}, triggerOn, {
+        const triggerOff = Object.assign({}, triggerOn, {
           onValue: false,
         });
         this.addOption('On', {
@@ -93,12 +93,12 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
       }
     } else if (role === 'effect') {
       if (property.type === 'boolean') {
-        let effectOn = {
+        const effectOn = {
           type: 'PulseEffect',
           property: property,
           value: true,
         };
-        let effectOff = Object.assign({}, effectOn, {
+        const effectOff = Object.assign({}, effectOn, {
           value: false,
         });
         this.addOption('On', {
@@ -118,23 +118,23 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
 };
 
 PropertySelect.prototype.addEventOptions = function() {
-  for (let name of Object.keys(this.thing.events)) {
-    let eventTrigger = {
+  for (const name of Object.keys(this.thing.events)) {
+    const eventTrigger = {
       type: 'EventTrigger',
       thing: {
         href: this.thing.href,
       },
       event: name,
     };
-    this.addOption('Event "' + name + '"', {
+    this.addOption(`Event "${name}"`, {
       trigger: eventTrigger,
     });
   }
 };
 
 PropertySelect.prototype.addActionOptions = function() {
-  for (let name of Object.keys(this.thing.actions)) {
-    let actionEffect = {
+  for (const name of Object.keys(this.thing.actions)) {
+    const actionEffect = {
       type: 'ActionEffect',
       thing: {
         href: this.thing.href,
@@ -142,7 +142,7 @@ PropertySelect.prototype.addActionOptions = function() {
       action: name,
       parameters: {},
     };
-    this.addOption('Action "' + name + '"', {
+    this.addOption(`Action "${name}"`, {
       effect: actionEffect,
     });
   }
@@ -158,7 +158,7 @@ PropertySelect.prototype.onClick = function(e) {
     // We were open, so that was a click to select
     this.select(e.target);
 
-    let rulePart = JSON.parse(e.target.dataset.value);
+    const rulePart = JSON.parse(e.target.dataset.value);
     if (!rulePart) {
       return;
     }
@@ -172,10 +172,10 @@ PropertySelect.prototype.onClick = function(e) {
 };
 
 function deepEqual(a, b) {
-  if (typeof(a) !== typeof(b)) {
+  if (typeof a !== typeof b) {
     return false;
   }
-  switch (typeof(a)) {
+  switch (typeof a) {
     case 'boolean':
     case 'number':
     case 'string':
@@ -184,7 +184,7 @@ function deepEqual(a, b) {
     case 'object':
       break;
     default:
-      console.warn('unknown type', typeof(a));
+      console.warn('unknown type', typeof a);
       return false;
   }
 
@@ -192,17 +192,17 @@ function deepEqual(a, b) {
     return b === null;
   }
 
-  let keysA = Object.keys(a);
-  let keysB = Object.keys(b);
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
   if (keysA.length !== keysB.length) {
     return false;
   }
-  for (let key of keysB) {
+  for (const key of keysB) {
     if (!a.hasOwnProperty(key)) {
       return false;
     }
   }
-  for (let key of keysA) {
+  for (const key of keysA) {
     if (!b.hasOwnProperty(key)) {
       return false;
     }
@@ -218,8 +218,9 @@ function deepEqual(a, b) {
  * @param {Object} value
  */
 PropertySelect.prototype.selectByValue = function(value) {
-  for (let optionElt of this.elt.querySelectorAll('.property-select-option')) {
-    let optionValue = JSON.parse(optionElt.dataset.value);
+  const elements = this.elt.querySelectorAll('.property-select-option');
+  for (const optionElt of elements) {
+    const optionValue = JSON.parse(optionElt.dataset.value);
     if (deepEqual(optionValue, value)) {
       this.select(optionElt);
       return;
@@ -232,7 +233,7 @@ PropertySelect.prototype.selectByValue = function(value) {
  * @param {Element} option - option's corresponding element
  */
 PropertySelect.prototype.select = function(optionElt) {
-  let selected = this.elt.querySelector('.selected');
+  const selected = this.elt.querySelector('.selected');
   if (selected) {
     if (!JSON.parse(selected.dataset.value)) {
       if (selected === optionElt) {

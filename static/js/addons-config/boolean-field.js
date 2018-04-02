@@ -15,61 +15,59 @@
 
 /* globals SchemaUtils, Utils */
 
-function BooleanField(
-    schema,
-    formData,
-    idSchema,
-    name,
-    definitions,
-    onChange,
-    required = false,
-    disabled = false,
-    readonly = false) {
-    this.schema = SchemaUtils.retrieveSchema(schema, definitions);
-    this.formData = formData;
-    this.idSchema = idSchema;
-    this.name = name;
-    this.definitions = definitions;
-    this.onChange = onChange;
-    this.required = required;
-    this.disabled = disabled;
-    this.readonly = readonly;
+function BooleanField(schema,
+                      formData,
+                      idSchema,
+                      name,
+                      definitions,
+                      onChange,
+                      required = false,
+                      disabled = false,
+                      readonly = false) {
+  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.formData = formData;
+  this.idSchema = idSchema;
+  this.name = name;
+  this.definitions = definitions;
+  this.onChange = onChange;
+  this.required = required;
+  this.disabled = disabled;
+  this.readonly = readonly;
 
-    return this;
+  return this;
 }
 
 BooleanField.prototype.onBooleanChange = function(event) {
-    this.formData = event.target.checked;
+  this.formData = event.target.checked;
 
-    if (this.onChange) {
-        this.onChange(this.formData);
-    }
+  if (this.onChange) {
+    this.onChange(this.formData);
+  }
 };
 
 BooleanField.prototype.render = function() {
-    const id = Utils.escapeHtml(this.idSchema.$id);
-    const value = this.formData;
-    const field = document.createElement('div');
-    field.className = 'checkbox';
+  const id = Utils.escapeHtml(this.idSchema.$id);
+  const value = this.formData;
+  const field = document.createElement('div');
+  field.className = 'checkbox';
 
-    let title = this.schema.title ? this.schema.title : this.name;
-    title = Utils.escapeHtml(title);
-    title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
+  let title = this.schema.title ? this.schema.title : this.name;
+  title = Utils.escapeHtml(title);
+  title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
 
-    field.innerHTML =
-        `
-        <input
-        type="checkbox"
-        id="${id}"
-        ${value ? 'checked' : ''}
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
-        />
-        <span class="checkbox-title">${title}</span>
-        `;
+  field.innerHTML = `
+    <input
+    type="checkbox"
+    id="${id}"
+    ${value ? 'checked' : ''}
+    ${this.readonly ? 'readonly' : ''}
+    ${this.disabled ? 'disabled' : ''}
+    />
+    <span class="checkbox-title">${title}</span>
+    `;
 
-    const input = field.querySelector(`#${id}`);
-    input.onchange = this.onBooleanChange.bind(this);
+  const input = field.querySelector(`#${id}`);
+  input.onchange = this.onBooleanChange.bind(this);
 
-    return field;
+  return field;
 };

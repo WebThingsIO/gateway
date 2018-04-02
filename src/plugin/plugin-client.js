@@ -18,7 +18,7 @@ const IpcSocket = require('./ipc');
 
 class PluginClient {
 
-  constructor(pluginId, {verbose}={}) {
+  constructor(pluginId, {verbose} = {}) {
     this.pluginId = pluginId;
     this.verbose = verbose;
     this.deferredReply = null;
@@ -48,7 +48,7 @@ class PluginClient {
         console.log('PluginClient: registered with PluginServer:',
                     this.pluginIpcSocket.ipcAddr);
 
-      var deferredReply = this.deferredReply;
+      const deferredReply = this.deferredReply;
       this.deferredReply = null;
       deferredReply.resolve(this.addonManager);
     } else {

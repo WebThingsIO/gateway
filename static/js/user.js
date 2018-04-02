@@ -16,7 +16,7 @@
  *
  * @param Object description User metadata object.
  */
-var User = function(metadata) {
+const User = function(metadata) {
   this.email = metadata.email;
   this.name = metadata.name;
   this.id = metadata.id;

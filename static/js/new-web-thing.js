@@ -103,7 +103,7 @@ NewWebThing.prototype.submit = function() {
   // Clean up the provided URL
   let url = this.urlInput.value.replace(/\/$/, '');
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'http://' + url;
+    url = `http://${url}`;
   }
 
   this.urlInput.value = url;
@@ -120,17 +120,17 @@ NewWebThing.prototype.submit = function() {
     method: 'POST',
     body: JSON.stringify({url}),
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then(response => {
+  }).then((response) => {
     if (!response.ok) {
       return response.text();
     }
 
     return response.json();
-  }).then(description => {
+  }).then((description) => {
     if (typeof description === 'string') {
       throw new Error(description);
     }
@@ -203,7 +203,7 @@ NewWebThing.prototype.submit = function() {
     this.submitButton.classList.add('hidden');
     this.saveButton.classList.remove('hidden');
     this.originLabel.classList.remove('hidden');
-  }).catch(error => {
+  }).catch((error) => {
     this.thingTypeLabel.innerText = error.message;
     this.thingTypeLabel.classList.add('error');
     console.error('Failed to check web thing:', error.message);
@@ -219,19 +219,19 @@ NewWebThing.prototype.save = function() {
     method: 'POST',
     body: JSON.stringify(thing),
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then(response => {
+  }).then((response) => {
     return response.json();
-  }).then(json => {
-    console.log('Successfully created thing ' + json);
+  }).then((json) => {
+    console.log(`Successfully created thing ${json}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;
     this.cancelButton.classList.add('hidden');
-  }).catch(error => {
+  }).catch((error) => {
     console.error('Failed to save web thing:', error);
   });
 };

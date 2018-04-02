@@ -25,7 +25,7 @@ ColorDetail.prototype.attach = function() {
 };
 
 ColorDetail.prototype.view = function() {
-  let color = this.thing.properties.color;
+  const color = this.thing.properties.color;
   return `<div class="thing-detail-container">
     <div class="thing-detail">
       <input class="thing-detail-contents color-light-color" type="color"

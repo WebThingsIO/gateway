@@ -47,7 +47,7 @@ ObjectField.prototype.require = function(name) {
 
 ObjectField.prototype.onPropertyChange = function(name) {
   return function(value) {
-    let newFormData = {};
+    const newFormData = {};
     newFormData[name] = value;
 
     this.formData = Object.assign(this.formData, newFormData);
@@ -71,14 +71,14 @@ ObjectField.prototype.render = function() {
 
 
   field.innerHTML =
-    (title ? `<legend id="${id + '__title'}">${title}</legend>` : '') +
+    (title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
     (description ?
       `<p id="${id}__description" class="field-description">
       ${Utils.escapeHtml(description)}</p>` :
       '');
 
   // TODO support to specific properties order
-  let orderedProperties = Object.keys(this.schema.properties);
+  const orderedProperties = Object.keys(this.schema.properties);
 
   orderedProperties.forEach(function(name) {
     const child = new SchemaField(

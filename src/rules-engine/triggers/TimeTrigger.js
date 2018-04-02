@@ -32,12 +32,12 @@ class TimeTrigger extends Trigger {
   }
 
   scheduleNext() {
-    let parts = this.time.split(':');
-    let hours = parseInt(parts[0], 10);
-    let minutes = parseInt(parts[1], 10);
+    const parts = this.time.split(':');
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
 
     // Time is specified in UTC
-    let nextTime = new Date();
+    const nextTime = new Date();
     nextTime.setUTCHours(hours, minutes, 0, 0);
 
     if (nextTime.getTime() < Date.now()) {

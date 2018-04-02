@@ -51,7 +51,7 @@ describe('updates/', function() {
       .reply(200, releases);
 
     const res = await chai.request(server)
-      .get(Constants.UPDATES_PATH + '/latest')
+      .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -66,7 +66,7 @@ describe('updates/', function() {
       .reply(200, releases.slice(0, 2));
 
     const res = await chai.request(server)
-      .get(Constants.UPDATES_PATH + '/latest')
+      .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -80,7 +80,7 @@ describe('updates/', function() {
       .reply(200, {error: true});
 
     const res = await chai.request(server)
-      .get(Constants.UPDATES_PATH + '/latest')
+      .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
@@ -90,7 +90,7 @@ describe('updates/', function() {
 
   it('GET /status', async () => {
     const res = await chai.request(server)
-      .get(Constants.UPDATES_PATH + '/status')
+      .get(`${Constants.UPDATES_PATH}/status`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 

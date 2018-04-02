@@ -146,7 +146,7 @@ it('edits a user, including password', async () => {
 
 it('deletes a user', async () => {
   const jwt = await createUser(server, TEST_USER);
-  let info = await userInfo(server, jwt);
+  const info = await userInfo(server, jwt);
   await deleteUser(server, jwt, info.id);
   const rsp1 = await pFinal(userInfo(server, jwt));
   expect(rsp1.response.status).toBe(401);

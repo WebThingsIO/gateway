@@ -19,7 +19,7 @@ const Plugin = require('./plugin');
 
 class PluginServer {
 
-  constructor(addonManager, {verbose}={}) {
+  constructor(addonManager, {verbose} = {}) {
     this.manager = addonManager;
 
     this.verbose = verbose;
@@ -55,8 +55,8 @@ class PluginServer {
 
     switch (msg.messageType) {
 
-      case Constants.REGISTER_PLUGIN:
-        var plugin = this.registerPlugin(msg.data.pluginId);
+      case Constants.REGISTER_PLUGIN: {
+        const plugin = this.registerPlugin(msg.data.pluginId);
         this.ipcSocket.sendJson({
           messageType: Constants.REGISTER_PLUGIN_REPLY,
           data: {
@@ -65,7 +65,7 @@ class PluginServer {
           },
         });
         break;
-
+      }
     }
   }
 
@@ -84,7 +84,7 @@ class PluginServer {
    * Loads a plugin by launching a separate process.
    */
   loadPlugin(pluginPath, manifest) {
-    let plugin = this.registerPlugin(manifest.name);
+    const plugin = this.registerPlugin(manifest.name);
     plugin.exec = manifest.moziot.exec;
     plugin.execPath = pluginPath;
     plugin.start();
@@ -97,7 +97,7 @@ class PluginServer {
    * via IPC.
    */
   registerPlugin(pluginId) {
-    var plugin = this.plugins.get(pluginId);
+    let plugin = this.plugins.get(pluginId);
     if (plugin) {
       // This is a plugin that we already know about.
     } else {

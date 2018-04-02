@@ -50,7 +50,7 @@ module.exports = {
    * Escape text such that it's safe to be placed in HTML.
    */
   escapeHtml: function(text) {
-    if (typeof(text) !== 'string') {
+    if (typeof text !== 'string') {
       text = `${text}`;
     }
 

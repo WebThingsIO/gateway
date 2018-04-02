@@ -15,7 +15,7 @@
   MultiLevelSensor, SmartPlug */
 
 // eslint-disable-next-line no-unused-vars
-var FloorplanScreen = {
+const FloorplanScreen = {
 
   ORIGIN_X: 7,    // X co-ordinate to start placing un-positioned things from.
   ORIGIN_Y: 7,    // X co-ordinate to start placing un-positioned things from.
@@ -47,8 +47,8 @@ var FloorplanScreen = {
   show: function() {
     const opts = {
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
       },
     };
     // Fetch a list of things from the server
@@ -61,8 +61,8 @@ var FloorplanScreen = {
         return;
       }
 
-      var x = this.ORIGIN_X;
-      var y = this.ORIGIN_Y;
+      let x = this.ORIGIN_X;
+      const y = this.ORIGIN_Y;
       things.forEach(function(description) {
         if (!description.floorplanX || !description.floorplanY) {
           description.floorplanX = x;
@@ -115,9 +115,9 @@ var FloorplanScreen = {
     }).bind(this));
   },
 
- /**
-  * Put floorplan in edit mode.
-  */
+  /**
+   * Put floorplan in edit mode.
+   */
   edit: function() {
     this.view.classList.add('edit');
     this.editButton.classList.add('hidden');
@@ -181,12 +181,12 @@ var FloorplanScreen = {
    * @param {Event} e A change event on the file input.
    */
   upload: function(e) {
-    var file = e.target.files[0];
-    var formData = new FormData();
+    const file = e.target.files[0];
+    const formData = new FormData();
     formData.append('file', file);
     this.uploadButton.classList.add('loading');
-    let headers = {
-      'Authorization': `Bearer ${window.API.jwt}`,
+    const headers = {
+      Authorization: `Bearer ${window.API.jwt}`,
     };
 
     fetch('/uploads', {
@@ -204,8 +204,9 @@ var FloorplanScreen = {
           cache: 'reload',
         }).then(() => {
           // Add a timestamp to the background image to force image reload
-          var timestamp = Date.now();
-          this.floorplan.setAttribute('style',
+          const timestamp = Date.now();
+          this.floorplan.setAttribute(
+            'style',
             `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
         });
       } else {
@@ -213,7 +214,7 @@ var FloorplanScreen = {
       }
     }).catch((error) => {
       this.uploadButton.classList.remove('loading');
-      console.error('Failed to upload floorplan ' + error);
+      console.error(`Failed to upload floorplan ${error}`);
     });
   },
 
@@ -229,10 +230,10 @@ var FloorplanScreen = {
     this.pointerOffsetX = 0;
     this.pointerOffsetY = 0;
     this.selectedThing = e.currentTarget;
-    var point = this.thingsElement.createSVGPoint();
+    let point = this.thingsElement.createSVGPoint();
     point.x = e.clientX || e.touches[0].clientX;
     point.y = e.clientY || e.touches[0].clientY;
-    var matrix = this.thingsElement.getScreenCTM();
+    const matrix = this.thingsElement.getScreenCTM();
     point = point.matrixTransform(matrix.inverse());
 
     this.pointerOffsetX =
@@ -248,13 +249,13 @@ var FloorplanScreen = {
     if (!this.selectedThing) {
       return;
     }
-    var thing = this.selectedThing;
-    var x = thing.getAttribute('dragx');
-    var y = thing.getAttribute('dragy');
-    var thingUrl = thing.firstElementChild.getAttribute('xlink:href');
+    const thing = this.selectedThing;
+    const x = thing.getAttribute('dragx');
+    const y = thing.getAttribute('dragy');
+    const thingUrl = thing.firstElementChild.getAttribute('xlink:href');
 
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
-    var payload = {
+    const payload = {
       floorplanX: x,
       floorplanY: y,
     };
@@ -262,18 +263,18 @@ var FloorplanScreen = {
       method: 'PATCH',
       body: JSON.stringify(payload),
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     }).then((response) => {
       if (response.ok) {
-        console.log('Successfully moved thing to (' + x + ',' + y + ')');
+        console.log(`Successfully moved thing to (${x},${y})`);
       } else {
-        console.error('Failed to move thing ' + thingUrl);
+        console.error(`Failed to move thing ${thingUrl}`);
       }
     }).catch(function(e) {
-      console.error('Error trying to move thing ' + thingUrl + ' ' + e);
+      console.error(`Error trying to move thing ${thingUrl} ${e}`);
     });
 
     // Reset co-ordinates
@@ -292,10 +293,10 @@ var FloorplanScreen = {
       return;
     }
 
-    var point = this.thingsElement.createSVGPoint();
+    let point = this.thingsElement.createSVGPoint();
     point.x = e.clientX || e.touches[0].clientX;
     point.y = e.clientY || e.touches[0].clientY;
-    var matrix = this.thingsElement.getScreenCTM();
+    const matrix = this.thingsElement.getScreenCTM();
     point = point.matrixTransform(matrix.inverse());
     point.x -= this.pointerOffsetX;
     point.y -= this.pointerOffsetY;
@@ -307,8 +308,9 @@ var FloorplanScreen = {
 
     this.selectedThing.setAttribute('dragx', point.x);
     this.selectedThing.setAttribute('dragy', point.y);
-    this.selectedThing.setAttribute('transform',
-      'translate(' + point.x + ',' + point.y + ')');
+    this.selectedThing.setAttribute(
+      'transform',
+      `translate(${point.x},${point.y})`);
   },
 
   /*

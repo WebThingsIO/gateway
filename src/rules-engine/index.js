@@ -17,7 +17,7 @@ const index = PromiseRouter();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-let engine = new Engine();
+const engine = new Engine();
 
 /**
  * Express middleware for extracting rules from the bodies of requests
@@ -47,8 +47,8 @@ function parseRuleFromBody(req, res, next) {
 }
 
 index.get('/', async function(req, res) {
-  let rules = await engine.getRules();
-  res.send(rules.map(rule => {
+  const rules = await engine.getRules();
+  res.send(rules.map((rule) => {
     return rule.toDescription();
   }));
 });
@@ -66,7 +66,7 @@ index.get('/:id', async function(req, res) {
 });
 
 index.post('/', parseRuleFromBody, async function(req, res) {
-  let ruleId = await engine.addRule(req.rule);
+  const ruleId = await engine.addRule(req.rule);
   res.send({id: ruleId});
 });
 

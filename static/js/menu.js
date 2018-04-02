@@ -8,10 +8,10 @@
 'use strict';
 
 // eslint-disable-next-line no-unused-vars
-var Menu = {
-   /**
-    * Initialise menu.
-    */
+const Menu = {
+  /**
+   * Initialise menu.
+   */
   init: function() {
     this.element = document.getElementById('main-menu');
     this.hidden = true;
@@ -43,7 +43,7 @@ var Menu = {
         Menu.hideItem(experiment);
       }
     }).catch(function(e) {
-      console.log(experiment + ' experiment setting is not yet set ' + e);
+      console.log(`${experiment} experiment setting is not yet set ${e}`);
     });
   },
 
@@ -51,16 +51,16 @@ var Menu = {
   * Show menu.
   */
   show: function() {
-   this.element.classList.remove('hidden');
-   this.hidden = false;
+    this.element.classList.remove('hidden');
+    this.hidden = false;
   },
 
   /**
   * Hide menu.
   */
   hide: function() {
-   this.element.classList.add('hidden');
-   this.hidden = true;
+    this.element.classList.add('hidden');
+    this.hidden = true;
   },
 
   /**
@@ -93,8 +93,8 @@ var Menu = {
    */
   selectItem: function(item) {
     if (!this.items[item]) {
-      console.error('Tried to select a menu item that didnt exist ' + item);
-        return;
+      console.error(`Tried to select a menu item that didnt exist ${item}`);
+      return;
     }
     this.items[this.currentItem].classList.remove('selected');
     this.items[item].classList.add('selected');
@@ -108,9 +108,9 @@ var Menu = {
     this.items[item].classList.remove('hidden');
   },
 
- /*
-  * Disable a menu item.
-  */
+  /*
+   * Disable a menu item.
+   */
   hideItem: function(item) {
     this.items[item].classList.add('hidden');
   },

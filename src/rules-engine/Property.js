@@ -39,7 +39,7 @@ class Property extends EventEmitter {
     this.name = parts[parts.length - 1];
 
     this.onMessage = this.onMessage.bind(this);
-    let thingHref = this.href.split('/properties')[0];
+    const thingHref = this.href.split('/properties')[0];
     this.thingConn = new ThingConnection(thingHref, this.onMessage);
   }
 
@@ -47,7 +47,7 @@ class Property extends EventEmitter {
    * @return {PropertyDescription}
    */
   toDescription() {
-    let desc = {
+    const desc = {
       type: this.type,
       href: this.href,
       name: this.name,
@@ -65,7 +65,7 @@ class Property extends EventEmitter {
    * @return {String} full property href
    */
   async getHref() {
-    let href = await Settings.get('RulesEngine.gateway') + this.href;
+    const href = await Settings.get('RulesEngine.gateway') + this.href;
     return href;
   }
 
@@ -76,7 +76,7 @@ class Property extends EventEmitter {
     const jwt = await Settings.get('RulesEngine.jwt');
     if (jwt) {
       return {
-        Authorization: 'Bearer ' + jwt,
+        Authorization: `Bearer ${jwt}`,
       };
     } else {
       return {};
@@ -90,7 +90,7 @@ class Property extends EventEmitter {
     console.info('property get', this.name);
     const res = await fetch(await this.getHref(), {
       headers: Object.assign({
-        'Accept': 'application/json',
+        Accept: 'application/json',
       }, await this.headerAuth()),
     });
     const data = await res.json();
@@ -104,13 +104,13 @@ class Property extends EventEmitter {
    * @return {Promise} resolves if property is set to value
    */
   async set(value) {
-    let data = {};
+    const data = {};
     data[this.name] = value;
     console.info('property set', data);
     return fetch(await this.getHref(), {
       method: 'PUT',
       headers: Object.assign({
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       }, await this.headerAuth()),
       body: JSON.stringify(data),

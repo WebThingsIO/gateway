@@ -17,7 +17,7 @@
  *
  * @param Object description Thing description object.
  */
-var BinarySensor = function(description, format) {
+const BinarySensor = function(description, format) {
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
                                   pngBaseIcon: '/images/binary-sensor.png',
@@ -46,10 +46,10 @@ BinarySensor.prototype.updateStatus = function() {
   if (!this.onPropertyUrl) {
     return;
   }
-  var opts = {
+  const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
   fetch(this.onPropertyUrl, opts).then((function(response) {
@@ -66,7 +66,7 @@ BinarySensor.prototype.updateStatus = function() {
       this.showOff();
     }
   }).bind(this)).catch(function(error) {
-    console.error('Error fetching on/off sensor status ' + error);
+    console.error(`Error fetching on/off sensor status ${error}`);
   });
 };
 

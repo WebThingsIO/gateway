@@ -14,14 +14,14 @@
 const format = require('util').format;
 
 function logPrefix() {
-  let currTime = new Date();
-  return currTime.getFullYear() + '-' +
-         ('0' + (currTime.getMonth() + 1)).slice(-2) + '-' +
-         ('0' + currTime.getDate()).slice(-2) + ' ' +
-         ('0' + currTime.getHours()).slice(-2) + ':' +
-         ('0' + currTime.getMinutes()).slice(-2) + ':' +
-         ('0' + currTime.getSeconds()).slice(-2) + '.' +
-         ('00' + currTime.getMilliseconds()).slice(-3) + ' ';
+  const currTime = new Date();
+  return `${currTime.getFullYear()}-${
+    (`0${currTime.getMonth() + 1}`).slice(-2)}-${
+    (`0${currTime.getDate()}`).slice(-2)} ${
+    (`0${currTime.getHours()}`).slice(-2)}:${
+    (`0${currTime.getMinutes()}`).slice(-2)}:${
+    (`0${currTime.getSeconds()}`).slice(-2)}.${
+    (`00${currTime.getMilliseconds()}`).slice(-3)} `;
 }
 
 if (!console.constructor.hooked) {
@@ -39,7 +39,7 @@ if (!console.constructor.hooked) {
 
     console.constructor.write = function write(buffer, type, message, level) {
       const call = callsites()[level != null ? level : 2];
-      const origin = call.getFileName() + ':' + call.getLineNumber();
+      const origin = `${call.getFileName()}:${call.getLineNumber()}`;
       buffer.push({message: logPrefix() + message, origin, type});
       return buffer;
     };
@@ -86,8 +86,8 @@ if (!console.constructor.hooked) {
     // This path is for the normal non-jest output
     const FUNCS = ['log', 'info', 'debug', 'error', 'warn'];
 
-    for (let func of FUNCS) {
-      let realFunc = console[func];
+    for (const func of FUNCS) {
+      const realFunc = console[func];
       console[func] = function() {
         realFunc(logPrefix() + format.apply(null, arguments));
       };

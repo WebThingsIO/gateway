@@ -18,7 +18,7 @@
  * @param String id Thing ID.
  * @param Object description Thing description object.
  */
-var NewThing = function(id, description) {
+const NewThing = function(id, description) {
   this.id = id;
   this.description = description;
   this.container = document.getElementById('new-things');
@@ -37,31 +37,31 @@ var NewThing = function(id, description) {
 NewThing.prototype.view = function() {
   switch (this.description.type) {
     case 'binarySensor':
-      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
-             '  class="new-thing binary-sensor">' +
-             '  <div class="new-thing-icon"></div>'+
-             '  <div class="new-thing-metadata">' +
-             '    <input type="text" class="new-thing-name" value="' +
-                  Utils.escapeHtml(this.description.name) + '"></input>' +
-             '    <span class="new-thing-type">Binary Sensor</span>' +
-             '  </div>' +
-             '  <button class="new-thing-save-button text-button">' +
-             '    Save' +
-             '  </button>' +
-             '</div>';
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
+             `  class="new-thing binary-sensor">` +
+             `  <div class="new-thing-icon"></div>` +
+             `  <div class="new-thing-metadata">` +
+             `    <input type="text" class="new-thing-name" value="${
+               Utils.escapeHtml(this.description.name)}"></input>` +
+             `    <span class="new-thing-type">Binary Sensor</span>` +
+             `  </div>` +
+             `  <button class="new-thing-save-button text-button">` +
+             `    Save` +
+             `  </button>` +
+             `</div>`;
     case 'multiLevelSensor':
-      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
-             '  class="new-thing binary-sensor">' +
-             '  <div class="new-thing-icon"></div>'+
-             '  <div class="new-thing-metadata">' +
-             '    <input type="text" class="new-thing-name" value="' +
-                  Utils.escapeHtml(this.description.name) + '"></input>' +
-             '    <span class="new-thing-type">Multi Level Sensor</span>' +
-             '  </div>' +
-             '  <button class="new-thing-save-button text-button">' +
-             '    Save' +
-             '  </button>' +
-             '</div>';
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
+             `  class="new-thing binary-sensor">` +
+             `  <div class="new-thing-icon"></div>` +
+             `  <div class="new-thing-metadata">` +
+             `    <input type="text" class="new-thing-name" value="${
+               Utils.escapeHtml(this.description.name)}"></input>` +
+             `    <span class="new-thing-type">Multi Level Sensor</span>` +
+             `  </div>` +
+             `  <button class="new-thing-save-button text-button">` +
+             `    Save` +
+             `  </button>` +
+             `</div>`;
     case 'onOffLight':
       return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
                    class="new-thing on-off-light">
@@ -115,57 +115,57 @@ NewThing.prototype.view = function() {
          </button>
        </div>`;
     case 'multiLevelSwitch':
-      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
-             '  class="new-thing on-off-switch">' +
-             '  <div class="new-thing-icon"></div>'+
-             '  <div class="new-thing-metadata">' +
-             '    <input type="text" class="new-thing-name" value="' +
-                  Utils.escapeHtml(this.description.name) + '"></input>' +
-             '    <span class="new-thing-type">Multi Level Switch</span>' +
-             '  </div>' +
-             '  <button class="new-thing-save-button text-button">' +
-             '    Save' +
-             '  </button>' +
-             '</div>';
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
+             `  class="new-thing on-off-switch">` +
+             `  <div class="new-thing-icon"></div>` +
+             `  <div class="new-thing-metadata">` +
+             `    <input type="text" class="new-thing-name" value="${
+               Utils.escapeHtml(this.description.name)}"></input>` +
+             `    <span class="new-thing-type">Multi Level Switch</span>` +
+             `  </div>` +
+             `  <button class="new-thing-save-button text-button">` +
+             `    Save` +
+             `  </button>` +
+             `</div>`;
     case 'onOffSwitch':
-      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
-             '  class="new-thing on-off-switch">' +
-             '  <div class="new-thing-icon"></div>'+
-             '  <div class="new-thing-metadata">' +
-             '    <input type="text" class="new-thing-name" value="' +
-                  Utils.escapeHtml(this.description.name) + '"></input>' +
-             '    <span class="new-thing-type">On/Off Switch</span>' +
-             '  </div>' +
-             '  <button class="new-thing-save-button text-button">' +
-             '    Save' +
-             '  </button>' +
-             '</div>';
-     case 'smartPlug':
-       return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                    class="new-thing smart-plug">
-          <div class="new-thing-icon"></div>
-          <div class="new-thing-metadata">
-            <input type="text" class="new-thing-name"
-                   value="${Utils.escapeHtml(this.description.name)}"/>
-            <span class="new-thing-type">Smart Plug</span>
-          </div>
-          <button class="new-thing-save-button text-button">
-            Save
-          </button>
-        </div>`;
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
+             `  class="new-thing on-off-switch">` +
+             `  <div class="new-thing-icon"></div>` +
+             `  <div class="new-thing-metadata">` +
+             `    <input type="text" class="new-thing-name" value="${
+               Utils.escapeHtml(this.description.name)}"></input>` +
+             `    <span class="new-thing-type">On/Off Switch</span>` +
+             `  </div>` +
+             `  <button class="new-thing-save-button text-button">` +
+             `    Save` +
+             `  </button>` +
+             `</div>`;
+    case 'smartPlug':
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
+                   class="new-thing smart-plug">
+         <div class="new-thing-icon"></div>
+         <div class="new-thing-metadata">
+           <input type="text" class="new-thing-name"
+                  value="${Utils.escapeHtml(this.description.name)}"/>
+           <span class="new-thing-type">Smart Plug</span>
+         </div>
+         <button class="new-thing-save-button text-button">
+           Save
+         </button>
+       </div>`;
     default:
-      return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
-             '  class="new-thing">' +
-             '  <div class="new-thing-icon"></div>'+
-             '  <div class="new-thing-metadata">' +
-             '    <input type="text" class="new-thing-name" value="' +
-                  Utils.escapeHtml(this.description.name) + '"></input>' +
-             '    <span class="new-thing-type">Unknown device type</span>' +
-             '  </div>' +
-             '  <button class="new-thing-save-button text-button">' +
-             '    Save' +
-             '  </button>' +
-             '</div>';
+      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
+             `  class="new-thing">` +
+             `  <div class="new-thing-icon"></div>` +
+             `  <div class="new-thing-metadata">` +
+             `    <input type="text" class="new-thing-name" value="${
+               Utils.escapeHtml(this.description.name)}"></input>` +
+             `    <span class="new-thing-type">Unknown device type</span>` +
+             `  </div>` +
+             `  <button class="new-thing-save-button text-button">` +
+             `    Save` +
+             `  </button>` +
+             `</div>`;
   }
 };
 
@@ -186,27 +186,25 @@ NewThing.prototype.handleClick = function(event) {
 };
 
 NewThing.prototype.save = function() {
-  var thing = this.description;
+  const thing = this.description;
   thing.id = this.id;
   thing.name = this.nameInput.value;
   fetch('/things', {
     method: 'POST',
     body: JSON.stringify(thing),
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  })
-  .then((function(response) {
+  }).then((function(response) {
     return response.json();
   }).bind(this)).then((function(json) {
-    console.log('Successfully created thing ' + json);
+    console.log(`Successfully created thing ${json}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;
-  }).bind(this))
-  .catch(function(error) {
-    console.error('Failed to save thing ' + error);
+  }).bind(this)).catch(function(error) {
+    console.error(`Failed to save thing ${error}`);
   });
 };

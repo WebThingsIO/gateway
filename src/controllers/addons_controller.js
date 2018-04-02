@@ -9,7 +9,7 @@ AddonsController.get('/', async (request, response) => {
     if (typeof result === 'undefined') {
       response.status(404).json([]);
     } else {
-      let installedAddons = [];
+      const installedAddons = [];
       for (const setting of result) {
         // Remove the leading 'addons.' from the settings key to get the
         // package name.
@@ -51,7 +51,7 @@ AddonsController.put('/:addonName', async (request, response) => {
       throw new Error('Setting is undefined.');
     }
   } catch (e) {
-    console.error('Failed to get current settings for add-on ' + addonName);
+    console.error(`Failed to get current settings for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -61,7 +61,7 @@ AddonsController.put('/:addonName', async (request, response) => {
   try {
     await Settings.set(key, current);
   } catch (e) {
-    console.error('Failed to set settings for add-on ' + addonName);
+    console.error(`Failed to set settings for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -74,9 +74,9 @@ AddonsController.put('/:addonName', async (request, response) => {
       await AddonManager.unloadAddon(addonName);
     }
 
-    response.status(200).json({'enabled': enabled});
+    response.status(200).json({enabled: enabled});
   } catch (e) {
-    console.error('Failed to toggle add-on ' + addonName);
+    console.error(`Failed to toggle add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
   }
@@ -101,7 +101,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
       throw new Error('Setting is undefined.');
     }
   } catch (e) {
-    console.error('Failed to get current settings for add-on ' + addonName);
+    console.error(`Failed to get current settings for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -111,7 +111,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
   try {
     await Settings.set(key, current);
   } catch (e) {
-    console.error('Failed to set settings for add-on ' + addonName);
+    console.error(`Failed to set settings for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -123,7 +123,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
 
     response.status(200).json({config});
   } catch (e) {
-    console.error('Failed to apply config add-on ' + addonName);
+    console.error(`Failed to apply config add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
   }

@@ -74,20 +74,18 @@ NumberField.prototype.render = function() {
     const field = document.createElement('div');
     field.className = 'field-range-wrapper';
     field.innerHTML = `
-        <input
-        type="range"
-        id="${Utils.escapeHtml(id)}"
-        class="form-control"
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
-        value=${value == null ? '' : value}
-        ${this.schema.multipleOf ?
-          'step=' + Number(this.schema.multipleOf) :
-          ''}
-        min=${Number(this.schema.minimum)}
-        max=${Number(this.schema.maximum)}
-        />
-        <span class="range-view">${value}</span>`;
+      <input
+      type="range"
+      id="${Utils.escapeHtml(id)}"
+      class="form-control"
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      value=${value == null ? '' : value}
+      ${this.schema.multipleOf ? `step=${Number(this.schema.multipleOf)}` : ''}
+      min=${Number(this.schema.minimum)}
+      max=${Number(this.schema.maximum)}
+      />
+      <span class="range-view">${value}</span>`;
 
     const input = field.querySelector('input');
     input.onchange = this.onRangeChange.bind(this);

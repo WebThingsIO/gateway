@@ -10,8 +10,8 @@
 
 'use strict';
 
-var Things = require('../models/things');
-var AddonManager = require('../addon-manager');
+const Things = require('../models/things');
+const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const EventEmitter = require('events');
 
@@ -38,7 +38,7 @@ class Actions extends EventEmitter {
    */
   clearState() {
     this.nextId = 0;
-    for (let id in this.actions) {
+    for (const id in this.actions) {
       this.remove(id);
     }
   }
@@ -68,7 +68,7 @@ class Actions extends EventEmitter {
    * @returns {Array} A list of current actions.
    */
   getAll() {
-    return Object.keys(this.actions).map(id => {
+    return Object.keys(this.actions).map((id) => {
       return this.actions[id];
     });
   }
@@ -78,9 +78,9 @@ class Actions extends EventEmitter {
    * therefore belong to the root Gateway
    */
   getGatewayActions() {
-    return this.getAll().filter(action => {
+    return this.getAll().filter((action) => {
       return !action.thingId;
-    }).map(action => {
+    }).map((action) => {
       return {[action.name]: action.getDescription()};
     });
   }
@@ -90,9 +90,9 @@ class Actions extends EventEmitter {
    * Get only the actions which are associated with a specific thing
    */
   getByThing(thingId) {
-    return this.getAll().filter(action => {
+    return this.getAll().filter((action) => {
       return action.thingId === thingId;
-    }).map(action => {
+    }).map((action) => {
       return {[action.name]: action.getDescription()};
     });
   }
@@ -104,7 +104,7 @@ class Actions extends EventEmitter {
    * @return {Promise} resolved when action added or rejected if failed
    */
   add(action) {
-    var id = action.id;
+    const id = action.id;
     this.actions[id] = action;
 
     // Call this initially for the 'created' status.
@@ -113,11 +113,11 @@ class Actions extends EventEmitter {
     action.on(Constants.ACTION_STATUS, this.onActionStatus);
 
     if (action.thingId) {
-      return Things.getThing(action.thingId).then(thing => {
-        let success = thing.addAction(action);
+      return Things.getThing(action.thingId).then((thing) => {
+        const success = thing.addAction(action);
         if (!success) {
           delete this.actions[id];
-          throw new Error('Invalid thing action name: "' + action.name + '"');
+          throw new Error(`Invalid thing action name: "${action.name}"`);
         }
       });
     }
@@ -151,7 +151,7 @@ class Actions extends EventEmitter {
               console.error(error);
             });
         } else {
-          var msg = 'unpair missing "id" parameter.';
+          const msg = 'unpair missing "id" parameter.';
           action.error = msg;
           action.updateStatus('error');
           console.error(msg);
@@ -160,7 +160,7 @@ class Actions extends EventEmitter {
       default:
         delete this.actions[id];
         return Promise.reject(
-          new Error('Invalid action name: "' + action.name + '"'));
+          new Error(`Invalid action name: "${action.name}"`));
     }
     return Promise.resolve();
   }
@@ -180,18 +180,18 @@ class Actions extends EventEmitter {
    * If the action has not yet been completed, it is cancelled.
    */
   remove(id) {
-    var action = this.actions[id];
+    const action = this.actions[id];
     if (!action) {
-      throw 'Invalid action id: ' + id;
+      throw `Invalid action id: ${id}`;
     }
 
     if (action.status === 'pending') {
       if (action.thingId) {
-        Things.getThing(action.thingId).then(thing => {
+        Things.getThing(action.thingId).then((thing) => {
           if (!thing.removeAction(action)) {
-            throw 'Invalid thing action name: "' + action.name + '"';
+            throw `Invalid thing action name: "${action.name}"`;
           }
-        }).catch(err => {
+        }).catch((err) => {
           console.error('Error removing thing action', err);
         });
       } else {
@@ -203,7 +203,7 @@ class Actions extends EventEmitter {
             AddonManager.cancelRemoveThing(action.input.id);
             break;
           default:
-            throw 'Invalid action name: "' + action.name + '"';
+            throw `Invalid action name: "${action.name}"`;
         }
       }
     }

@@ -1,21 +1,21 @@
 /* global API, Utils */
 
 document.addEventListener('DOMContentLoaded', () => {
-  let jwt = document.getElementById('jwt');
+  const jwt = document.getElementById('jwt');
   jwt.value = API.jwt;
 
-  let scope = document.getElementById('authorize-scope');
+  const scope = document.getElementById('authorize-scope');
   init(scope.value);
 });
 
 function init(scope) {
-  let readWrite = scope.indexOf(':readwrite') >= 0;
-  let authorizeReadWrite = document.getElementById('authorize-readwrite');
-  let authorizeRead = document.getElementById('authorize-read');
-  let authorizeThings = document.getElementById('authorize-things');
-  let authorizeButton = document.getElementById('authorize-button');
-  let authorizeScope = document.getElementById('authorize-scope');
-  let authorizeAllThings = document.getElementById('authorize-all-things');
+  const readWrite = scope.indexOf(':readwrite') >= 0;
+  const authorizeReadWrite = document.getElementById('authorize-readwrite');
+  const authorizeRead = document.getElementById('authorize-read');
+  const authorizeThings = document.getElementById('authorize-things');
+  const authorizeButton = document.getElementById('authorize-button');
+  const authorizeScope = document.getElementById('authorize-scope');
+  const authorizeAllThings = document.getElementById('authorize-all-things');
 
   if (readWrite) {
     authorizeReadWrite.setAttribute('selected', '');
@@ -23,7 +23,7 @@ function init(scope) {
     authorizeRead.setAttribute('selected', '');
   }
 
-  let global = scope.split(':')[0] === '/things';
+  const global = scope.split(':')[0] === '/things';
 
   if (global) {
     authorizeAllThings.setAttribute('checked', '');
@@ -31,13 +31,13 @@ function init(scope) {
 
   fetch('/things', {
     headers: API.headers(),
-  }).then(res => {
+  }).then((res) => {
     return res.json();
-  }).then(things => {
+  }).then((things) => {
     let checkboxIndex = 0;
-    for (let thing of things) {
-      let included = global || (scope.indexOf(thing.href) >= 0);
-      let elt = document.createElement('li');
+    for (const thing of things) {
+      const included = global || (scope.indexOf(thing.href) >= 0);
+      const elt = document.createElement('li');
       elt.classList.add('authorize-thing');
       elt.dataset.href = Utils.escapeHtml(thing.href);
       elt.innerHTML = `
@@ -56,9 +56,9 @@ function init(scope) {
 
 
   authorizeAllThings.addEventListener('change', function() {
-    let authorizeThings = document.querySelectorAll('.authorize-thing');
-    for (let thingElt of authorizeThings) {
-      let checkbox = thingElt.querySelector('.authorize-thing-included');
+    const authorizeThings = document.querySelectorAll('.authorize-thing');
+    for (const thingElt of authorizeThings) {
+      const checkbox = thingElt.querySelector('.authorize-thing-included');
       if (authorizeAllThings.checked) {
         checkbox.checked = authorizeAllThings.checked;
         checkbox.disabled = true;
@@ -74,21 +74,21 @@ function init(scope) {
       readWrite = 'readwrite';
     }
 
-    let urls = [];
+    const urls = [];
     // read scope from .authorize-thing
     if (authorizeAllThings.checked) {
       urls.push('/things');
     } else {
-      let authorizeThings = document.querySelectorAll('.authorize-thing');
-      for (let thingElt of authorizeThings) {
+      const authorizeThings = document.querySelectorAll('.authorize-thing');
+      for (const thingElt of authorizeThings) {
         if (thingElt.querySelector('.authorize-thing-included').checked) {
           urls.push(thingElt.dataset.href);
         }
       }
     }
 
-    authorizeScope.value = urls.map(url => {
-      return url + ':' + readWrite;
+    authorizeScope.value = urls.map((url) => {
+      return `${url}:${readWrite}`;
     }).join(' ');
   });
 

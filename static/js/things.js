@@ -32,7 +32,7 @@ var ThingsScreen = {
     window.addEventListener('_thingchange', this.showThings.bind(this));
     this.backButton.addEventListener('click', () => window.history.back());
     this.addButton.addEventListener('click',
-      AddThingScreen.show.bind(AddThingScreen));
+                                    AddThingScreen.show.bind(AddThingScreen));
   },
 
   /**
@@ -62,8 +62,8 @@ var ThingsScreen = {
   showThings: function() {
     const opts = {
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
       },
     };
     // Fetch a list of things from the server
@@ -78,53 +78,43 @@ var ThingsScreen = {
           switch (description.type) {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');
-              // eslint-disable-next-line no-unused-vars
-              var newOnOffSwitch = new OnOffSwitch(description);
+              new OnOffSwitch(description);
               break;
             case 'onOffLight':
               console.log('rendering new on/off light');
-              // eslint-disable-next-line no-unused-vars
-              var newOnOffLight = new OnOffLight(description);
+              new OnOffLight(description);
               break;
             case 'onOffColorLight':
               console.log('rendering new color light');
-              // eslint-disable-next-line no-unused-vars
-              var newColorLight = new ColorLight(description);
+              new ColorLight(description);
               break;
             case 'dimmableLight':
               console.log('rendering new dimmable light');
-              // eslint-disable-next-line no-unused-vars
-              var newDimmableLight = new DimmableLight(description);
+              new DimmableLight(description);
               break;
             case 'dimmableColorLight':
               console.log('rendering new dimmable color light');
-              // eslint-disable-next-line no-unused-vars
-              var newDimmableColorLight = new DimmableColorLight(description);
+              new DimmableColorLight(description);
               break;
             case 'binarySensor':
               console.log('rendering new binary sensor');
-              // eslint-disable-next-line no-unused-vars
-              var newBinarySensor = new BinarySensor(description);
+              new BinarySensor(description);
               break;
             case 'multiLevelSensor':
               console.log('rendering new multi level sensor');
-              // eslint-disable-next-line no-unused-vars
-              var newMultiLevelSensor = new MultiLevelSensor(description);
+              new MultiLevelSensor(description);
               break;
             case 'multiLevelSwitch':
               console.log('rendering new multi level switch');
-              // eslint-disable-next-line no-unused-vars
-              var newMultiLevelSwitch = new MultiLevelSwitch(description);
+              new MultiLevelSwitch(description);
               break;
             case 'smartPlug':
               console.log('rendering new smart plug');
-              // eslint-disable-next-line no-unused-vars
-              var newSmartPlug = new SmartPlug(description);
+              new SmartPlug(description);
               break;
             default:
               console.log('rendering new thing');
-              // eslint-disable-next-line no-unused-vars
-              var newThing = new UnknownThing(description);
+              new UnknownThing(description);
               break;
           }
         });
@@ -140,12 +130,12 @@ var ThingsScreen = {
   showThing: function(id) {
     const opts = {
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
       },
     };
     // Fetch a thing from the server
-    fetch('/things/' + encodeURIComponent(id), opts).then((function(response) {
+    fetch(`/things/${encodeURIComponent(id)}`, opts).then((function(response) {
       if (response.status == 404) {
         this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
         return;
@@ -205,7 +195,7 @@ var ThingsScreen = {
         document.getElementById('thing-title-icon').src = thing.pngBaseIcon;
         document.getElementById('thing-title-name').innerText = thing.name;
 
-        let speechWrapper = document.getElementById('speech-wrapper');
+        const speechWrapper = document.getElementById('speech-wrapper');
         if (speechWrapper.classList.contains('hidden')) {
           this.thingTitleElement.classList.remove('speech-enabled');
         } else {

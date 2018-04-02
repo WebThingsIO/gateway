@@ -42,8 +42,8 @@ require('./app-instance');
 // Open the database
 db.open();
 
-let httpServer = http.createServer();
-let httpApp = createGatewayApp(httpServer);
+const httpServer = http.createServer();
+const httpApp = createGatewayApp(httpServer);
 
 let httpsServer = createHttpsServer();
 let httpsApp = null;
@@ -164,8 +164,8 @@ function commandParserConfigure(server) {
   if (server instanceof http.Server) {
     protocol = 'http';
   }
-  const gatewayHref = protocol + '://127.0.0.1:' + server.address().port;
-  JSONWebToken.issueToken(-1).then(jwt => {
+  const gatewayHref = `${protocol}://127.0.0.1:${server.address().port}`;
+  JSONWebToken.issueToken(-1).then((jwt) => {
     commandParser.configure(gatewayHref, jwt);
   });
 }
@@ -181,7 +181,7 @@ function rulesEngineConfigure(server) {
   if (server instanceof http.Server) {
     protocol = 'http';
   }
-  const gatewayHref = protocol + '://127.0.0.1:' + server.address().port;
+  const gatewayHref = `${protocol}://127.0.0.1:${server.address().port}`;
   rulesEngine.configure(gatewayHref);
 }
 
@@ -220,21 +220,22 @@ function createRedirectApp(port) {
   const app = createApp();
 
   // Allow LE challenges, used when renewing domain.
-  app.use(/^\/\.well-known\/acme-challenge\/.*/,
-          function(request, response, next) {
-    if (request.method !== 'GET') {
-      response.sendStatus(403);
-      return;
-    }
+  app.use(
+    /^\/\.well-known\/acme-challenge\/.*/,
+    function(request, response, next) {
+      if (request.method !== 'GET') {
+        response.sendStatus(403);
+        return;
+      }
 
-    const reqPath = path.join(Constants.STATIC_PATH, request.path);
-    if (fs.existsSync(reqPath)) {
-      response.sendFile(reqPath);
-      return;
-    }
+      const reqPath = path.join(Constants.STATIC_PATH, request.path);
+      if (fs.existsSync(reqPath)) {
+        response.sendFile(reqPath);
+        return;
+      }
 
-    next();
-  });
+      next();
+    });
 
   // Redirect based on https://https.cio.gov/apis/
   app.use(function(request, response) {
@@ -246,10 +247,10 @@ function createRedirectApp(port) {
       response.sendStatus(403);
       return;
     }
-    let httpsUrl = 'https://' + request.hostname;
+    let httpsUrl = `https://${request.hostname}`;
     // If we're behind forwarding we can redirect to the port-free https url
     if (port !== 443 && !config.get('behindForwarding')) {
-      httpsUrl += ':' + port;
+      httpsUrl += `:${port}`;
     }
     httpsUrl += request.url;
     response.redirect(301, httpsUrl);

@@ -19,7 +19,7 @@ class SetEffect extends PropertyEffect {
     super(desc);
     this.value = desc.value;
     assert(typeof this.value === this.property.type,
-      'setpoint and property must be same type');
+           'setpoint and property must be same type');
     this.on = false;
   }
 

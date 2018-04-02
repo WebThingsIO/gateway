@@ -29,16 +29,16 @@ class AppInstance {
   }
 
   get() {
-    return process.pid + '-' + this.timestamp;
+    return `${process.pid}-${this.timestamp}`;
   }
 
   mark() {
-    let t = new Date();
-    this.timestamp = ('0' + t.getHours()).slice(-2) +
-                     ('0' + t.getMinutes()).slice(-2) +
-                     ('0' + t.getSeconds()).slice(-2) +
-                     ('00' + t.getMilliseconds()).slice(-3);
+    const t = new Date();
+    this.timestamp = (`0${t.getHours()}`).slice(-2) +
+                     (`0${t.getMinutes()}`).slice(-2) +
+                     (`0${t.getSeconds()}`).slice(-2) +
+                     (`00${t.getMilliseconds()}`).slice(-3);
   }
 }
 
- module.exports = new AppInstance();
+module.exports = new AppInstance();

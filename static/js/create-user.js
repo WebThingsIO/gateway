@@ -10,14 +10,14 @@
 'use strict';
 
 (function() {
-  var form = document.getElementById('create-user-form');
-  var email = document.getElementById('email');
-  var password = document.getElementById('password');
-  var name = document.getElementById('name');
-  var confirmPassword = document.getElementById('confirm-password');
-  var errorPasswordMismatch =
+  const form = document.getElementById('create-user-form');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const name = document.getElementById('name');
+  const confirmPassword = document.getElementById('confirm-password');
+  const errorPasswordMismatch =
     document.getElementById('error-password-mismatch');
-  var errorSubmission = document.getElementById('error-submission');
+  const errorSubmission = document.getElementById('error-submission');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

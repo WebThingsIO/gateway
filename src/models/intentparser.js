@@ -10,67 +10,68 @@
 'use strict';
 
 const net = require('net');
-var IntentParser = {
+const IntentParser = {
 
-    keyword: 'turn,switch,make,change',
-    type: 'on,off,red,orange,yellow,green,white,blue,purple,magenta,pink',
+  keyword: 'turn,switch,make,change',
+  type: 'on,off,red,orange,yellow,green,white,blue,purple,magenta,pink',
 
-    /**
-    * Interface train the intent parser
-    */
-    train: function(data) {
-        return new Promise((resolve, reject) => {
-            let socket_client = new net.Socket();
-            socket_client.connect(5555, '127.0.0.1', function() {
-                let things = '';
-                for (const key of Object.keys(data)) {
-                    things += data[key].name + ',';
-                }
-                console.log('Connected to intent parser server');
-                socket_client.on('data', function(data) {
-                    console.log('Training result:' + data);
-                    resolve(data);
-                });
-                socket_client.write('t:' + IntentParser.keyword +
-                    '|' + IntentParser.type + '|' + things.slice(0, -1));
-            });
-            socket_client.on('error', function(data) {
-                console.log('Training error:' + data);
-                reject();
-            });
+  /**
+  * Interface train the intent parser
+  */
+  train: function(data) {
+    return new Promise((resolve, reject) => {
+      const socket_client = new net.Socket();
+      socket_client.connect(5555, '127.0.0.1', function() {
+        let things = '';
+        for (const key of Object.keys(data)) {
+          things += `${data[key].name},`;
+        }
+        console.log('Connected to intent parser server');
+        socket_client.on('data', function(data) {
+          console.log(`Training result:${data}`);
+          resolve(data);
         });
-    },
+        socket_client.write(`t:${IntentParser.keyword
+        }|${IntentParser.type}|${
+          things.slice(0, -1)}`);
+      });
+      socket_client.on('error', function(data) {
+        console.log(`Training error:${data}`);
+        reject();
+      });
+    });
+  },
 
-    /**
-    * Interface to query the intent parser
-    */
-    query: function(query) {
-        return new Promise((resolve, reject) => {
-            let socket_client = new net.Socket();
-            socket_client.connect(5555, '127.0.0.1', function() {
-                socket_client.on('data', function(data) {
-                    console.log('Received: ' + data);
-                    if (data == '-1') {
-                        reject();
-                    } else {
-                        let jsonBody = JSON.parse(data);
-                        resolve({
-                            cmd: 'IOT',
-                            href: '',
-                            param: jsonBody.Location,
-                            param2: jsonBody.Type,
-                            param3: jsonBody.Type,
-                        });
-                    }
-                });
-                socket_client.write('q:' + query);
+  /**
+  * Interface to query the intent parser
+  */
+  query: function(query) {
+    return new Promise((resolve, reject) => {
+      const socket_client = new net.Socket();
+      socket_client.connect(5555, '127.0.0.1', function() {
+        socket_client.on('data', function(data) {
+          console.log(`Received: ${data}`);
+          if (data == '-1') {
+            reject();
+          } else {
+            const jsonBody = JSON.parse(data);
+            resolve({
+              cmd: 'IOT',
+              href: '',
+              param: jsonBody.Location,
+              param2: jsonBody.Type,
+              param3: jsonBody.Type,
             });
-            socket_client.on('error', function(data) {
-                console.log('Query error:' + data);
-                reject();
-            });
+          }
         });
-    },
+        socket_client.write(`q:${query}`);
+      });
+      socket_client.on('error', function(data) {
+        console.log(`Query error:${data}`);
+        reject();
+      });
+    });
+  },
 };
 
 module.exports = IntentParser;

@@ -59,19 +59,19 @@ async function authenticate(req) {
 }
 
 function scopeAllowsRequest(scope, request) {
-  let requestPath = request.originalUrl;
+  const requestPath = request.originalUrl;
   if (!scope) {
     return true;
   }
-  let paths = scope.split(' ');
+  const paths = scope.split(' ');
   for (let path of paths) {
-    let parts = path.split(':');
+    const parts = path.split(':');
     if (parts.length !== 2) {
       console.warn('Invalid scope', scope);
       return false;
     }
-    let access = parts[1];
-    let readwrite = access === Constants.READWRITE;
+    const access = parts[1];
+    const readwrite = access === Constants.READWRITE;
     path = parts[0];
     if (requestPath.startsWith(path)) {
       if (!readwrite && request.method !== 'GET' &&
@@ -94,7 +94,7 @@ function middleware() {
         }
         let scope = jwt.payload.scope;
         if (jwt.payload.role === Constants.AUTHORIZATION_CODE) {
-          scope = Constants.OAUTH_PATH + ':' + Constants.READWRITE;
+          scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
         }
         if (!scopeAllowsRequest(scope, req)) {
           res.status(401).send(

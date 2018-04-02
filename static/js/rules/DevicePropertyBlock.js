@@ -15,7 +15,7 @@ function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
                      '/images/on-off-switch.svg', x, y);
   this.thing = thing;
 
-  let propertyInfo = this.elt.querySelector('.rule-part-info');
+  const propertyInfo = this.elt.querySelector('.rule-part-info');
   this.propertySelect = new PropertySelect(propertyInfo, rule, thing);
 }
 
@@ -25,7 +25,7 @@ DevicePropertyBlock.prototype = Object.create(RulePartBlock.prototype);
  * On mouse up during a drag
  */
 DevicePropertyBlock.prototype.onUp = function(clientX, clientY) {
-  let originalRole = this.role;
+  const originalRole = this.role;
   RulePartBlock.prototype.onUp.call(this, clientX, clientY);
   if (this.role !== originalRole) {
     this.propertySelect.updateOptionsForRole(this.role);

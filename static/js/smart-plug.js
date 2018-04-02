@@ -137,24 +137,24 @@ SmartPlug.prototype.htmlDetailView = function() {
  * Update the status of the smart plug.
  */
 SmartPlug.prototype.updateStatus = function() {
-  const urls = Object.values(this.displayedProperties).map(v => v.href);
+  const urls = Object.values(this.displayedProperties).map((v) => v.href);
   const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
 
-  const requests = urls.map(u => fetch(u, opts));
-  Promise.all(requests).then(responses => {
-    return Promise.all(responses.map(response => {
+  const requests = urls.map((u) => fetch(u, opts));
+  Promise.all(requests).then((responses) => {
+    return Promise.all(responses.map((response) => {
       return response.json();
     }));
-  }).then(responses => {
-    responses.forEach(response => {
+  }).then((responses) => {
+    responses.forEach((response) => {
       this.onPropertyStatus(response);
     });
-  }).catch(error => {
+  }).catch((error) => {
     console.error(`Error fetching smart plug status: ${error}`);
   });
 };
@@ -170,7 +170,7 @@ SmartPlug.prototype.onPropertyStatus = function(data) {
     }
 
     const value = data[prop];
-    if (typeof(value) === 'undefined' || value === null) {
+    if (typeof value === 'undefined' || value === null) {
       continue;
     }
 
@@ -261,26 +261,26 @@ SmartPlug.prototype.updateLevel = function(level) {
  * Set the level.
  */
 SmartPlug.prototype.setLevel = function(level) {
-  if (typeof(level) === 'string') {
+  if (typeof level === 'string') {
     level = parseInt(level, 10);
   }
 
   const payload = {
-   level: level,
+    level: level,
   };
   fetch(this.displayedProperties.level.href, {
-   method: 'PUT',
-   body: JSON.stringify(payload),
-   headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json',
-   }),
-  }).then(response => {
-   if (response.status === 200) {
-     this.updateLevel(level);
-   } else {
-     console.error('Status ' + response.status + ' trying to set level');
-   }
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(window.API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      this.updateLevel(level);
+    } else {
+      console.error(`Status ${response.status} trying to set level`);
+    }
   }).catch(function(error) {
-   console.error('Error trying to set level: ' + error);
+    console.error(`Error trying to set level: ${error}`);
   });
 };

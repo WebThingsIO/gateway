@@ -13,7 +13,7 @@
 AddThingScreen, Menu, ContextMenu, SettingsScreen, FloorplanScreen, Router,
 RulesScreen, RuleScreen, Speech */
 
-var App = {
+const App = {
   /**
    * Current server host.
    */

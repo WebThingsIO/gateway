@@ -19,7 +19,7 @@ class BooleanTrigger extends PropertyTrigger {
   constructor(desc) {
     super(desc);
     assert(this.property.type === 'boolean');
-    assert(typeof(desc.onValue) === 'boolean');
+    assert(typeof desc.onValue === 'boolean');
     this.onValue = desc.onValue;
   }
 

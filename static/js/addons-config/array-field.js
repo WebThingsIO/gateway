@@ -70,7 +70,7 @@ ArrayField.prototype.onSelectChange = function(value, all) {
       this.formData.push(value);
       this.formData.sort((a, b) => all.indexOf(a) > all.indexOf(b));
     } else {
-      this.formData = this.formData.filter(v => v !== value);
+      this.formData = this.formData.filter((v) => v !== value);
     }
 
     if (this.onChange) {
@@ -124,7 +124,7 @@ ArrayField.prototype.onDropIndexClick = function(field, index) {
 
     for (let i = 0; i < index; i++) {
       const id = `${this.idSchema.$id}_${i}`;
-      const item = field.querySelector('#' + id);
+      const item = field.querySelector(`#${id}`);
 
       newItemsField.appendChild(item);
     }
@@ -233,7 +233,7 @@ ArrayField.prototype.renderArrayFieldItem =
       </div>`;
     }
 
-    const itemIdPrefix = this.idSchema.$id + '_' + index;
+    const itemIdPrefix = `${this.idSchema.$id}_${index}`;
     const itemIdSchema = SchemaUtils.toIdSchema(
       itemSchema,
       itemIdPrefix,
@@ -267,12 +267,12 @@ ArrayField.prototype.renderArrayFieldset = function() {
   const field = document.createElement('fieldset');
 
   field.innerHTML =
-    (title ? `<legend id="${id + '__title'}">${title}</legend>` : '') +
+    `${(title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
     (description ?
       `<p id="${id}__description" class="field-description">
       ${Utils.escapeHtml(description)}</p>` :
-      '') +
-    '<div class="array-items"></div>';
+      '')
+    }<div class="array-items"></div>`;
 
   return field;
 };
@@ -350,7 +350,7 @@ ArrayField.prototype.renderMultiSelect = function() {
   const definitions = this.definitions;
   const itemsSchema = SchemaUtils.retrieveSchema(schema.items, definitions);
   const enumOptions = SchemaUtils.optionsList(itemsSchema);
-  const all = enumOptions.map(({ value }) => value);
+  const all = enumOptions.map(({value}) => value);
 
   const field = document.createElement('fieldset');
   field.className = 'checkboxes';

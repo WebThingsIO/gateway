@@ -51,9 +51,9 @@
       const $refSchema =
         SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
       // Drop the $ref property of the source schema.
-      const { ...localSchema } = schema;
+      const {...localSchema} = schema;
       // Update referenced schema definition with local schema properties.
-      return { ...$refSchema, ...localSchema };
+      return {...$refSchema, ...localSchema};
     },
 
     isConstant: function(schema) {
@@ -67,7 +67,7 @@
       return (
         Array.isArray(schema.items) &&
         schema.items.length > 0 &&
-        schema.items.every(item => SchemaUtils.isObject(item))
+        schema.items.every((item) => SchemaUtils.isObject(item))
       );
     },
 
@@ -83,7 +83,7 @@
         return true;
       } else if (Array.isArray(altSchemas)) {
         return altSchemas.every(
-          altSchemas => SchemaUtils.isConstant(altSchemas));
+          (altSchemas) => SchemaUtils.isConstant(altSchemas));
       }
       return false;
     },
@@ -121,7 +121,7 @@
       }
       for (const name in schema.properties || {}) {
         const field = schema.properties[name];
-        const fieldId = idSchema.$id + '_' + name;
+        const fieldId = `${idSchema.$id}_${name}`;
         idSchema[name] = SchemaUtils.toIdSchema(field, fieldId, definitions);
       }
       return idSchema;
@@ -129,7 +129,7 @@
 
     mergeObjects: function(obj1, obj2, concatArrays = false) {
       // Recursively merge deeply nested objects.
-      var acc = Object.assign({}, obj1); // Prevent mutation of source object.
+      const acc = Object.assign({}, obj1); // Prevent mutation of source object.
       return Object.keys(obj2).reduce((acc, key) => {
         const left = obj1[key],
           right = obj2[key];
@@ -151,14 +151,14 @@
         return schema.enum.map((value, i) => {
           const label = (schema.enumNames && schema.enumNames[i]) ||
             String(value);
-          return { label, value };
+          return {label, value};
         });
       } else {
         const altSchemas = schema.oneOf || schema.anyOf;
         return altSchemas.map((schema) => {
           const value = SchemaUtils.toConstant(schema);
           const label = schema.title || String(value);
-          return { label, value };
+          return {label, value};
         });
       }
     },
@@ -182,7 +182,7 @@
           definitions);
         return SchemaUtils.computeDefaults(refSchema, defaults, definitions);
       } else if (SchemaUtils.isFixedItems(schema)) {
-        defaults = schema.items.map(itemSchema => {
+        defaults = schema.items.map((itemSchema) => {
           return SchemaUtils.computeDefaults(
             // eslint-disable-next-line no-undefined
             itemSchema, undefined, definitions);
@@ -255,7 +255,7 @@
 
     getDefaultFormState: function(_schema, formData, definitions = {}) {
       if (!SchemaUtils.isObject(_schema)) {
-        throw new Error('Invalid schema: ' + _schema);
+        throw new Error(`Invalid schema: ${_schema}`);
       }
       const schema = SchemaUtils.retrieveSchema(_schema, definitions, formData);
       const defaults = SchemaUtils.computeDefaults(
@@ -278,14 +278,14 @@
         return schema.enum.map((value, i) => {
           const label = (schema.enumNames && schema.enumNames[i]) ||
             String(value);
-          return { label, value };
+          return {label, value};
         });
       } else {
         const altSchemas = schema.oneOf || schema.anyOf;
         return altSchemas.map((schema) => {
           const value = SchemaUtils.toConstant(schema);
           const label = schema.title || String(value);
-          return { label, value };
+          return {label, value};
         });
       }
     },

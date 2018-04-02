@@ -16,7 +16,7 @@
  *
  * @param Object description DiscoveredAddon metadata object.
  */
-var DiscoveredAddon = function(metadata) {
+const DiscoveredAddon = function(metadata) {
   this.name = metadata.name;
   this.displayName = metadata.displayName;
   this.description = metadata.description;

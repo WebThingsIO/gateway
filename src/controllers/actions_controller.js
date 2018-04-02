@@ -81,7 +81,7 @@ ActionsController.get('/:actionName/:actionId', function(request, response) {
   if (action) {
     response.status(200).json({[action.name]: action.getDescription()});
   } else {
-    const error = 'Action "' + actionId + '" not found';
+    const error = `Action "${actionId}" not found`;
     console.error(error);
     response.status(404).send(error);
   }
@@ -90,33 +90,34 @@ ActionsController.get('/:actionName/:actionId', function(request, response) {
 /**
  * Handle cancelling an action.
  */
-ActionsController.delete('/:actionName/:actionId',
-                         async (request, response) => {
-  const actionName = request.params.actionName;
-  const actionId = request.params.actionId;
-  const thingId = request.params.thingId;
+ActionsController.delete(
+  '/:actionName/:actionId',
+  async (request, response) => {
+    const actionName = request.params.actionName;
+    const actionId = request.params.actionId;
+    const thingId = request.params.thingId;
 
-  if (thingId) {
+    if (thingId) {
+      try {
+        await AddonManager.removeAction(thingId, actionId, actionName);
+      } catch (e) {
+        console.error('Removing action', actionId, 'failed');
+        console.error(e);
+        response.status(400).send(e);
+        return;
+      }
+    }
+
     try {
-      await AddonManager.removeAction(thingId, actionId, actionName);
+      Actions.remove(actionId);
     } catch (e) {
       console.error('Removing action', actionId, 'failed');
       console.error(e);
-      response.status(400).send(e);
+      response.status(404).send(e);
       return;
     }
-  }
 
-  try {
-    Actions.remove(actionId);
-  } catch (e) {
-    console.error('Removing action', actionId, 'failed');
-    console.error(e);
-    response.status(404).send(e);
-    return;
-  }
-
-  response.status(204).end();
-});
+    response.status(204).end();
+  });
 
 module.exports = ActionsController;

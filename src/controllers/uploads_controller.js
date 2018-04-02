@@ -31,7 +31,7 @@ if (!fs.existsSync(FLOORPLAN_PATH)) {
   }
 }
 
-var UploadsController = express.Router();
+const UploadsController = express.Router();
 
 /**
  * Upload a file.
@@ -49,7 +49,7 @@ UploadsController.post('/', function(request, response) {
     return response.status(500).send(`Failed to unlink old floorplan: ${err}`);
   }
 
-  var file = request.files.file;
+  const file = request.files.file;
   file.mv(FLOORPLAN_PATH, function(error) {
     if (error) {
       // On error, try to copy the fallback.

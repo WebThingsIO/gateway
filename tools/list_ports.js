@@ -2,27 +2,27 @@
 
 'use strict';
 
-var SerialPort = require('serialport');
+const SerialPort = require('serialport');
 
 function extraInfo(port) {
-  var output = '';
+  let output = '';
   if (port.manufacturer) {
-    output += ' Vendor: ' + port.manufacturer;
+    output += ` Vendor: ${port.manufacturer}`;
   }
   if (port.serialNumber) {
-    output += ' Serial: ' + port.serialNumber;
+    output += ` Serial: ${port.serialNumber}`;
   }
   return output;
 }
 
 SerialPort.list((error, ports) => {
   if (error) {
-      console.log('Error:', error);
-      return;
+    console.log('Error:', error);
+    return;
   }
-  for (var port of ports) {
+  for (const port of ports) {
     if (port.vendorId) {
-      var vidPid = port.vendorId.slice(2) + ':' + port.productId.slice(2);
+      const vidPid = `${port.vendorId.slice(2)}:${port.productId.slice(2)}`;
       console.log('USB Serial Device', vidPid + extraInfo(port),
                   'found @', port.comName);
     } else {

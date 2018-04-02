@@ -83,16 +83,16 @@ function submitForm() {
   displayMessage('Processing...', 'message');
 
   // Call the settings controller to subscribe the domain in the gateway.
-  var action = {
-    'email': email.value,
-    'subdomain': subdomain.value,
-    'reclamationToken': reclamationToken.value,
+  const action = {
+    email: email.value,
+    subdomain: subdomain.value,
+    reclamationToken: reclamationToken.value,
   };
   fetch('/settings/subscribe', {
     method: 'POST',
     body: JSON.stringify(action),
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   }).then(function(response) {
@@ -114,7 +114,7 @@ function submitForm() {
             method: 'POST',
             body: JSON.stringify({subdomain: subdomain.value}),
             headers: {
-              'Accept': 'application/json',
+              Accept: 'application/json',
               'Content-Type': 'application/json',
             },
           }).catch(function() {
@@ -172,7 +172,7 @@ skipAnchor.addEventListener('click', function() {
   fetch('/settings/skiptunnel', {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
   }).then(function(response) {
     if (response.ok) {
