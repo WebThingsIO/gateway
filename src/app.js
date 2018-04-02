@@ -56,7 +56,7 @@ function createHttpsServer() {
   // HTTPS server configuration
   const options = {
     key: fs.readFileSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
-    cert: fs.readFileSync(path.join(UserProfile.sslDir, 'certificate.pem'))
+    cert: fs.readFileSync(path.join(UserProfile.sslDir, 'certificate.pem')),
   };
   if (fs.existsSync(path.join(UserProfile.sslDir, 'chain.pem'))) {
     options.ca = fs.readFileSync(path.join(UserProfile.sslDir, 'chain.pem'));
@@ -119,7 +119,7 @@ function getOptions() {
   if (!config.get('cli')) {
     return {
       debug: false,
-      port: null
+      port: null,
     };
   }
 
@@ -135,7 +135,7 @@ function getOptions() {
   const options = {
     debug: !!opt.options.debug, // cast to bool
     verbose: opt.options.verbose,
-  }
+  };
 
   if (opt.options.verbose) {
     console.log(opt);
@@ -192,7 +192,7 @@ function createApp() {
   app.set('views', Constants.VIEWS_PATH);
 
   app.use(bodyParser.urlencoded({
-    extended: false
+    extended: false,
   }));
   app.use(bodyParser.json());   // Use bodyParser to access the body of requests
   app.use(fileUpload());        // Use fileUpload to handle multi-part uploads
@@ -249,7 +249,7 @@ function createRedirectApp(port) {
     let httpsUrl = 'https://' + request.hostname;
     // If we're behind forwarding we can redirect to the port-free https url
     if (port !== 443 && !config.get('behindForwarding')) {
-      httpsUrl += ':' + port
+      httpsUrl += ':' + port;
     }
     httpsUrl += request.url;
     response.redirect(301, httpsUrl);
@@ -304,5 +304,5 @@ TunnelService.switchToHttps = function(){
 module.exports = { // for testing
   httpServer: httpServer,
   server: httpsServer,
-  serverStartup: serverStartup
+  serverStartup: serverStartup,
 };

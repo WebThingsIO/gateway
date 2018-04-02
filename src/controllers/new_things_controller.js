@@ -20,7 +20,7 @@ const NewThingsController = PromiseRouter();
 /**
  * Handle GET requests to /new_things
  */
-NewThingsController.get('/', function (request, response) {
+NewThingsController.get('/', function(request, response) {
   Things.getNewThings().then(function(newThings) {
     response.json(newThings);
   }).catch(function(error) {

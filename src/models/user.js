@@ -22,7 +22,7 @@ var User = function(id, email, password, name) {
 User.generate = async function(email, rawPassword, name) {
   const hash = await Passwords.hash(rawPassword);
   return new User(null, email, hash, name);
-}
+};
 
 /**
  * Get a JSON description for this user.

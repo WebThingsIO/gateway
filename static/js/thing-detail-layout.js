@@ -1,5 +1,4 @@
 (function() {
-
 function ThingDetailLayout(elements) {
   this.elements = elements;
   this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -42,7 +41,7 @@ ThingDetailLayout.prototype.doLayout = function() {
   for (let i = 0; i < this.elements.length; i++) {
     let angle = i/this.elements.length * 2 * Math.PI + angleStart;
     let x = xScale * Math.cos(angle);
-    let y = yScale  * Math.sin(angle);
+    let y = yScale * Math.sin(angle);
 
     this.elements[i].style.transform = `translate(${x}px, ${y}px)`;
 
@@ -55,8 +54,7 @@ ThingDetailLayout.prototype.doLayout = function() {
 
     this.svg.appendChild(line);
   }
-}
+};
 
 window.ThingDetailLayout = ThingDetailLayout;
-
 })();

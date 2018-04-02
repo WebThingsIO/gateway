@@ -432,7 +432,7 @@ class AddonManager extends EventEmitter {
           min: 0,
           max: 0,
         },
-      }
+      },
     };
     if (config.get('ipc.protocol') !== 'inproc') {
       // If we're not using in-process plugins, then
@@ -929,7 +929,7 @@ class AddonManager extends EventEmitter {
         fs.mkdirSync(addonPath);
       }
     } catch (e) {
-      const err = `Failed to create add-on directory: ${addonPath}\n${e}`
+      const err = `Failed to create add-on directory: ${addonPath}\n${e}`;
       console.error(err);
       return Promise.reject(err);
     }

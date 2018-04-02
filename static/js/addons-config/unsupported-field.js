@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -22,7 +22,7 @@ function UnsupportedField(schema) {
   return this;
 }
 
-UnsupportedField.prototype.render = function () {
+UnsupportedField.prototype.render = function() {
   console.log(new Error().stack);
   const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
   const field = document.createElement('div');

@@ -166,7 +166,7 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   var device = addonManager.getDevice(deviceId);
   if (device) {
     var propertyValue = request.body[propertyName];
-    if (propertyValue !== undefined) {
+    if (typeof propertyValue !== 'undefined') {
       device.setProperty(propertyName, propertyValue).then(updatedValue => {
         var valueDict = {};
         valueDict[propertyName] = updatedValue;
@@ -245,7 +245,7 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
   var thing = addonManager.getThing(thingId);
   if (thing) {
     var propertyValue = request.body[propertyName];
-    if (propertyValue !== undefined) {
+    if (typeof propertyValue !== 'undefined') {
       addonManager.setProperty(propertyName, propertyValue).then((value) => {
         var valueDict = {};
         valueDict[propertyName] = value;

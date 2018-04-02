@@ -23,11 +23,11 @@ describe('logs/', function() {
     jwt = await createUser(server, TEST_USER);
     fs.writeFileSync(path.join(UserProfile.logDir, 'test.log'),
                      'hello, world!');
-  })
+  });
 
   it('GET logs index', async () => {
     const res = await chai.request(server)
-      .get(Constants. LOGS_PATH)
+      .get(Constants.LOGS_PATH)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.type).toBe('text/html');
@@ -36,7 +36,7 @@ describe('logs/', function() {
 
   it('GET test.log', async () => {
     const res = await chai.request(server)
-      .get(`${Constants. LOGS_PATH}/files/test.log`)
+      .get(`${Constants.LOGS_PATH}/files/test.log`)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.type).toBe('text/plain');
@@ -51,12 +51,14 @@ describe('logs/', function() {
       .parse((res, cb) => {
         res.setEncoding('binary');
         res.data = '';
-        res.on('data', (chunk) => res.data += chunk);
+        res.on('data', (chunk) => {
+          res.data += chunk;
+        });
         res.on('end', () => {
           JSZip
             .loadAsync(res.data, {base64: false, checkCRC32: true})
             .then((zip) => cb(null, zip));
-        })
+        });
       });
     expect(res.status).toEqual(200);
     expect(res.type).toBe('application/zip');

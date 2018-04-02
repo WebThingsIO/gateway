@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -25,7 +25,6 @@ function StringField(
     required = false,
     disabled = false,
     readonly = false) {
-
     this.schema = SchemaUtils.retrieveSchema(schema, definitions);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -39,7 +38,7 @@ function StringField(
     return this;
 }
 
-StringField.prototype.onStringChange = function (event) {
+StringField.prototype.onStringChange = function(event) {
     const value = event.target.value;
     this.formData = value;
 
@@ -48,7 +47,7 @@ StringField.prototype.onStringChange = function (event) {
     }
 };
 
-StringField.prototype.render = function () {
+StringField.prototype.render = function() {
     const id = Utils.escapeHtml(this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
@@ -86,7 +85,6 @@ StringField.prototype.render = function () {
             const select = field.querySelector(`#${id}`);
             select.selectedIndex = -1;
         }
-
     } else {
         field.innerHTML = `
         <input

@@ -23,7 +23,7 @@ var TunnelSetup = {
     * @param {Object} response Express response object.
     * @param {Object} next Next middleware.
     */
-    isTunnelSet: async function (request, response, next) {
+    isTunnelSet: async function(request, response, next) {
         // If ssl tunnel is disabled, continue
         if (!config.get('ssltunnel.enabled')) {
             return next();
@@ -35,10 +35,10 @@ var TunnelSetup = {
 
             // then we check if we have certificates installed
             if ((fs.existsSync(path.join(UserProfile.sslDir,
-                                         'certificate.pem'))
-                && fs.existsSync(path.join(UserProfile.sslDir,
-                                           'privatekey.pem')))
-                || notunnel) {
+                                         'certificate.pem')) &&
+                 fs.existsSync(path.join(UserProfile.sslDir,
+                                         'privatekey.pem'))) ||
+                notunnel) {
                 // if certs are installed,
                 // then we don't need to do anything and return
                 return next();
@@ -51,7 +51,7 @@ var TunnelSetup = {
                                 });
             }
         }
-    }
-}
+    },
+};
 
 module.exports = TunnelSetup;

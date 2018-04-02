@@ -10,7 +10,7 @@ const triggers = {
   LevelTrigger: require('./LevelTrigger'),
   PropertyTrigger: require('./PropertyTrigger'),
   TimeTrigger: require('./TimeTrigger'),
-  Trigger: require('./Trigger')
+  Trigger: require('./Trigger'),
 };
 
 /**
@@ -29,5 +29,5 @@ function fromDescription(desc) {
 
 module.exports = {
   triggers: triggers,
-  fromDescription: fromDescription
+  fromDescription: fromDescription,
 };

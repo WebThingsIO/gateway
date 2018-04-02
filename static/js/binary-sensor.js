@@ -49,8 +49,8 @@ BinarySensor.prototype.updateStatus = function() {
   var opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
   fetch(this.onPropertyUrl, opts).then((function(response) {
     return response.json();
@@ -58,7 +58,9 @@ BinarySensor.prototype.updateStatus = function() {
     this.properties.on = response.on;
     if (response.on === null) {
       return;
-    } else if(response.on) {
+    }
+
+    if (response.on) {
       this.showOn();
     } else {
       this.showOff();

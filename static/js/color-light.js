@@ -172,8 +172,8 @@ ColorLight.prototype.updateStatus = function() {
   var opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   const promises = [];
@@ -255,14 +255,14 @@ ColorLight.prototype.updateColor = function(color) {
 
 ColorLight.prototype.setColor = function(color) {
   const payload = {
-   color: color
+   color: color,
   };
   fetch(this.colorPropertyUrl, {
    method: 'PUT',
    body: JSON.stringify(payload),
    headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json'
-   })
+     'Content-Type': 'application/json',
+   }),
   }).then(response => {
    if (response.status === 200) {
      this.updateColor(color);
@@ -297,14 +297,14 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
   }
 
   const payload = {
-   colorTemperature: temperature
+   colorTemperature: temperature,
   };
   fetch(this.colorTemperaturePropertyUrl, {
    method: 'PUT',
    body: JSON.stringify(payload),
    headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json'
-   })
+     'Content-Type': 'application/json',
+   }),
   }).then(response => {
    if (response.status === 200) {
      this.updateColorTemperature(temperature);
@@ -333,9 +333,9 @@ ColorLight.prototype.updateIcon = function() {
   const iconColor = this.getIconColor();
   this.colorLightIconPath.style.fill = iconColor;
 
-  let r = parseInt(iconColor.substr(1,2), 16);
-  let g = parseInt(iconColor.substr(3,2), 16);
-  let b = parseInt(iconColor.substr(5,2), 16);
+  let r = parseInt(iconColor.substr(1, 2), 16);
+  let g = parseInt(iconColor.substr(3, 2), 16);
+  let b = parseInt(iconColor.substr(5, 2), 16);
 
   // From https://stackoverflow.com/questions/3942878/
   if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
@@ -368,7 +368,7 @@ ColorLight.prototype.colorTemperatureToRGB = function(temperature) {
     g = 99.4708025861 * Math.log(g) - 161.1195681661;
   } else {
     g = temperature - 60;
-    g = 288.1221695283 * Math.pow(g, -0.0755148492)
+    g = 288.1221695283 * Math.pow(g, -0.0755148492);
   }
 
   g = Math.max(g, 0);
@@ -378,7 +378,7 @@ ColorLight.prototype.colorTemperatureToRGB = function(temperature) {
   if (temperature >= 66) {
     b = 255;
   } else if (temperature <= 19) {
-    b = 0
+    b = 0;
   } else {
     b = temperature - 10;
     b = 138.5177312231 * Math.log(b) - 305.0447927307;

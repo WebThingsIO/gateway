@@ -19,7 +19,7 @@ function Gateway() {
  */
 Gateway.prototype.readThings = function() {
   return fetch('/things', {
-    headers: API.headers()
+    headers: API.headers(),
   }).then(res => {
     return res.json();
   }).then(things => {

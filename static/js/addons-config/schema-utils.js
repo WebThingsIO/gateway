@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -15,12 +15,12 @@
 
 /* globals SchemaUtils */
 
-(function () {
+(function() {
   window.SchemaUtils = {
 
     REQUIRED_FIELD_SYMBOL: '*',
 
-    findSchemaDefinition: function ($ref, definitions = {}) {
+    findSchemaDefinition: function($ref, definitions = {}) {
       // Extract and use the referenced definition if we have it.
       const match = /^#\/definitions\/(.*)$/.exec($ref);
       if (match && match[1]) {
@@ -42,7 +42,7 @@
       throw new Error(`Could not find a definition for ${$ref}.`);
     },
 
-    retrieveSchema: function (schema, definitions = {}) {
+    retrieveSchema: function(schema, definitions = {}) {
       // No $ref attribute found, returning the original schema.
       if (!schema.hasOwnProperty('$ref')) {
         return schema;
@@ -56,14 +56,14 @@
       return { ...$refSchema, ...localSchema };
     },
 
-    isConstant: function (schema) {
+    isConstant: function(schema) {
       return (
         (Array.isArray(schema.enum) && schema.enum.length === 1) ||
         schema.hasOwnProperty('const')
       );
     },
 
-    isFixedItems: function (schema) {
+    isFixedItems: function(schema) {
       return (
         Array.isArray(schema.items) &&
         schema.items.length > 0 &&
@@ -71,12 +71,12 @@
       );
     },
 
-    isObject: function (thing) {
+    isObject: function(thing) {
       return typeof thing === 'object' &&
         thing !== null && !Array.isArray(thing);
     },
 
-    isSelect: function (_schema, definitions = {}) {
+    isSelect: function(_schema, definitions = {}) {
       const schema = SchemaUtils.retrieveSchema(_schema, definitions);
       const altSchemas = schema.oneOf || schema.anyOf;
       if (Array.isArray(schema.enum)) {
@@ -88,14 +88,14 @@
       return false;
     },
 
-    isMultiSelect: function (schema, definitions = {}) {
+    isMultiSelect: function(schema, definitions = {}) {
       if (!schema.uniqueItems || !schema.items) {
         return false;
       }
       return SchemaUtils.isSelect(schema.items, definitions);
     },
 
-    toConstant: function (schema) {
+    toConstant: function(schema) {
       if (Array.isArray(schema.enum) && schema.enum.length === 1) {
         return schema.enum[0];
       } else if (schema.hasOwnProperty('const')) {
@@ -105,7 +105,7 @@
       }
     },
 
-    toIdSchema: function (schema, id, definitions) {
+    toIdSchema: function(schema, id, definitions) {
       const idSchema = {
         $id: id || 'root',
       };
@@ -127,7 +127,7 @@
       return idSchema;
     },
 
-    mergeObjects: function (obj1, obj2, concatArrays = false) {
+    mergeObjects: function(obj1, obj2, concatArrays = false) {
       // Recursively merge deeply nested objects.
       var acc = Object.assign({}, obj1); // Prevent mutation of source object.
       return Object.keys(obj2).reduce((acc, key) => {
@@ -146,7 +146,7 @@
       }, acc);
     },
 
-    optionsList: function (schema) {
+    optionsList: function(schema) {
       if (schema.enum) {
         return schema.enum.map((value, i) => {
           const label = (schema.enumNames && schema.enumNames[i]) ||
@@ -163,7 +163,7 @@
       }
     },
 
-    computeDefaults: function (schema, parentDefaults, definitions = {}) {
+    computeDefaults: function(schema, parentDefaults, definitions = {}) {
       // Compute the defaults recursively: give highest priority to deepest
       // nodes.
       let defaults = parentDefaults;
@@ -182,9 +182,11 @@
           definitions);
         return SchemaUtils.computeDefaults(refSchema, defaults, definitions);
       } else if (SchemaUtils.isFixedItems(schema)) {
-        defaults = schema.items.map(itemSchema =>
-          SchemaUtils.computeDefaults(itemSchema, undefined, definitions)
-        );
+        defaults = schema.items.map(itemSchema => {
+          return SchemaUtils.computeDefaults(
+            // eslint-disable-next-line no-undefined
+            itemSchema, undefined, definitions);
+        });
       }
       // No defaults defined for this node, fallback to generic typed ones.
       if (typeof defaults === 'undefined') {
@@ -251,7 +253,7 @@
       return defaults;
     },
 
-    getDefaultFormState: function (_schema, formData, definitions = {}) {
+    getDefaultFormState: function(_schema, formData, definitions = {}) {
       if (!SchemaUtils.isObject(_schema)) {
         throw new Error('Invalid schema: ' + _schema);
       }
@@ -271,7 +273,7 @@
       return formData || defaults;
     },
 
-    getOptionsList: function (schema) {
+    getOptionsList: function(schema) {
       if (schema.enum) {
         return schema.enum.map((value, i) => {
           const label = (schema.enumNames && schema.enumNames[i]) ||
@@ -286,6 +288,6 @@
           return { label, value };
         });
       }
-    }
+    },
   };
 }());

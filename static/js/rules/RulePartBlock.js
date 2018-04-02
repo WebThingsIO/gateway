@@ -86,23 +86,21 @@ RulePartBlock.prototype.onMove = function(clientX, clientY, relX, relY) {
   if (clientY > window.innerHeight - deleteAreaHeight) {
     this.rulePartBlock.classList.remove('trigger');
     this.rulePartBlock.classList.remove('effect');
-  } else {
-    if (this.flexDir === 'row') {
-      if (relX < ruleAreaRect.width / 2) {
-        this.rulePartBlock.classList.add('trigger');
-        this.rulePartBlock.classList.remove('effect');
-      } else {
-        this.rulePartBlock.classList.remove('trigger');
-        this.rulePartBlock.classList.add('effect');
-      }
-    } else if (this.flexDir === 'column') {
-      if (relY < ruleAreaRect.height / 2) {
-        this.rulePartBlock.classList.add('trigger');
-        this.rulePartBlock.classList.remove('effect');
-      } else {
-        this.rulePartBlock.classList.remove('trigger');
-        this.rulePartBlock.classList.add('effect');
-      }
+  } else if (this.flexDir === 'row') {
+    if (relX < ruleAreaRect.width / 2) {
+      this.rulePartBlock.classList.add('trigger');
+      this.rulePartBlock.classList.remove('effect');
+    } else {
+      this.rulePartBlock.classList.remove('trigger');
+      this.rulePartBlock.classList.add('effect');
+    }
+  } else if (this.flexDir === 'column') {
+    if (relY < ruleAreaRect.height / 2) {
+      this.rulePartBlock.classList.add('trigger');
+      this.rulePartBlock.classList.remove('effect');
+    } else {
+      this.rulePartBlock.classList.remove('trigger');
+      this.rulePartBlock.classList.add('effect');
     }
   }
 
@@ -116,10 +114,8 @@ RulePartBlock.prototype.onMove = function(clientX, clientY, relX, relY) {
  */
 RulePartBlock.prototype.snapToGrid = function(relX, relY) {
   let grid = 40;
-  let x = Math.floor((relX - grid / 2) / grid) * grid
-        + grid / 2;
-  let y = Math.floor((relY - grid / 2) / grid) * grid
-        + grid / 2;
+  let x = Math.floor((relX - grid / 2) / grid) * grid + grid / 2;
+  let y = Math.floor((relY - grid / 2) / grid) * grid + grid / 2;
   if (y < grid / 2) {
     y = grid / 2;
   }
@@ -166,11 +162,11 @@ RulePartBlock.prototype.onUp = function(clientX, clientY) {
 RulePartBlock.prototype.reset = function() {
   this.elt.style.transform = this.resetState.transform;
   if (this.role === 'trigger') {
-    this.rulePartBlock.classList.add('trigger')
-    this.rulePartBlock.classList.remove('effect')
+    this.rulePartBlock.classList.add('trigger');
+    this.rulePartBlock.classList.remove('effect');
   } else if (this.role === 'effect') {
-    this.rulePartBlock.classList.remove('trigger')
-    this.rulePartBlock.classList.add('effect')
+    this.rulePartBlock.classList.remove('trigger');
+    this.rulePartBlock.classList.add('effect');
   } else {
     this.remove();
   }
@@ -184,7 +180,7 @@ RulePartBlock.prototype.setRulePart = function(rulePart) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
     this.ruleTriggerArea.classList.add('inactive');
-  } else if(rulePart.effect) {
+  } else if (rulePart.effect) {
     this.role = 'effect';
     this.rulePartBlock.classList.add('effect');
     this.ruleEffectArea.classList.add('inactive');

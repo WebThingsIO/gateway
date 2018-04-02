@@ -6,7 +6,7 @@ const AddonsController = PromiseRouter();
 
 AddonsController.get('/', async (request, response) => {
   Settings.getAddonSettings().then(function(result) {
-    if (result === undefined) {
+    if (typeof result === 'undefined') {
       response.status(404).json([]);
     } else {
       let installedAddons = [];
@@ -35,12 +35,12 @@ AddonsController.get('/', async (request, response) => {
 AddonsController.put('/:addonName', async (request, response) => {
   const addonName = request.params.addonName;
 
-  if (!request.body || request.body['enabled'] === undefined) {
+  if (!request.body || typeof request.body.enabled === 'undefined') {
     response.status(400).send('Enabled property not defined');
     return;
   }
 
-  const enabled = request.body['enabled'];
+  const enabled = request.body.enabled;
 
   const key = `addons.${addonName}`;
 
@@ -119,7 +119,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
 
   try {
     await AddonManager.unloadAddon(addonName, true);
-    await AddonManager.loadAddon(addonName);  
+    await AddonManager.loadAddon(addonName);
 
     response.status(200).json({config});
   } catch (e) {

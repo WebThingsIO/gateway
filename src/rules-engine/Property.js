@@ -50,7 +50,7 @@ class Property extends EventEmitter {
     let desc = {
       type: this.type,
       href: this.href,
-      name: this.name
+      name: this.name,
     };
     if (this.unit) {
       desc.unit = this.unit;
@@ -76,7 +76,7 @@ class Property extends EventEmitter {
     const jwt = await Settings.get('RulesEngine.jwt');
     if (jwt) {
       return {
-        Authorization: 'Bearer ' + jwt
+        Authorization: 'Bearer ' + jwt,
       };
     } else {
       return {};
@@ -90,13 +90,13 @@ class Property extends EventEmitter {
     console.info('property get', this.name);
     const res = await fetch(await this.getHref(), {
       headers: Object.assign({
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       }, await this.headerAuth()),
     });
     const data = await res.json();
 
     console.info('property got', data);
-    return data[this.name]
+    return data[this.name];
   }
 
   /**
@@ -111,10 +111,10 @@ class Property extends EventEmitter {
       method: 'PUT',
       headers: Object.assign({
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }, await this.headerAuth()),
       body: JSON.stringify(data),
-      cors: true
+      cors: true,
     });
   }
 
@@ -127,7 +127,7 @@ class Property extends EventEmitter {
       if (msg.data.hasOwnProperty(this.name)) {
         console.info('emit', {
           event: Events.VALUE_CHANGED,
-          data: msg.data[this.name]
+          data: msg.data[this.name],
         });
         this.emit(Events.VALUE_CHANGED, msg.data[this.name]);
       }

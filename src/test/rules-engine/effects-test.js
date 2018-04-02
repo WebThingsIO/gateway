@@ -4,10 +4,10 @@ const pulseEffect = {
   property: {
     name: 'on',
     type: 'boolean',
-    href: '/things/light1/properties/on'
+    href: '/things/light1/properties/on',
   },
   type: 'PulseEffect',
-  value: true
+  value: true,
 };
 
 const setEffect = {
@@ -16,10 +16,10 @@ const setEffect = {
     type: 'number',
     href: '/things/thermostat/properties/temp',
     unit: 'celsius',
-    description: 'thermostat setpoint'
+    description: 'thermostat setpoint',
   },
   type: 'SetEffect',
-  value: 30
+  value: 30,
 };
 
 describe('effects', function() {
@@ -37,7 +37,7 @@ describe('effects', function() {
     let err = null;
     try {
       effects.fromDescription({type: 'LimaEffect'});
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -51,7 +51,7 @@ describe('effects', function() {
         pulseEffect,
         {value: 12}
       ));
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -67,7 +67,7 @@ describe('effects', function() {
       delete brokenEffect.property;
 
       effects.fromDescription(brokenEffect);
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();

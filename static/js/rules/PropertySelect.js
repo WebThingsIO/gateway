@@ -79,16 +79,16 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         let triggerOn = {
           type: 'BooleanTrigger',
           property: property,
-          onValue: true
+          onValue: true,
         };
         let triggerOff = Object.assign({}, triggerOn, {
-          onValue: false
+          onValue: false,
         });
         this.addOption('On', {
-          trigger: triggerOn
+          trigger: triggerOn,
         });
         this.addOption('Off', {
-          trigger: triggerOff
+          trigger: triggerOff,
         });
       }
     } else if (role === 'effect') {
@@ -96,16 +96,16 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         let effectOn = {
           type: 'PulseEffect',
           property: property,
-          value: true
+          value: true,
         };
         let effectOff = Object.assign({}, effectOn, {
-          value: false
+          value: false,
         });
         this.addOption('On', {
-          effect: effectOn
+          effect: effectOn,
         });
         this.addOption('Off', {
-          effect: effectOff
+          effect: effectOff,
         });
       }
     }
@@ -122,12 +122,12 @@ PropertySelect.prototype.addEventOptions = function() {
     let eventTrigger = {
       type: 'EventTrigger',
       thing: {
-        href: this.thing.href
+        href: this.thing.href,
       },
-      event: name
+      event: name,
     };
     this.addOption('Event "' + name + '"', {
-      trigger: eventTrigger
+      trigger: eventTrigger,
     });
   }
 };
@@ -137,16 +137,15 @@ PropertySelect.prototype.addActionOptions = function() {
     let actionEffect = {
       type: 'ActionEffect',
       thing: {
-        href: this.thing.href
+        href: this.thing.href,
       },
       action: name,
-      parameters: {}
+      parameters: {},
     };
     this.addOption('Action "' + name + '"', {
-      effect: actionEffect
+      effect: actionEffect,
     });
   }
-
 };
 
 /**

@@ -84,8 +84,8 @@ UnknownThing.prototype.updateStatus = function() {
   const opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   const requests = urls.map(u => fetch(u, opts));
@@ -154,7 +154,7 @@ UnknownThing.prototype.setProperty = function(name, value) {
     body: JSON.stringify(payload),
     headers: Object.assign(window.API.headers(), {
       'Content-Type': 'application/json',
-    })
+    }),
   }).then(response => {
     if (response.status === 200) {
       this.updateProperty(name, value);

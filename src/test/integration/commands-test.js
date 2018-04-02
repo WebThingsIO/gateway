@@ -20,8 +20,8 @@ const TEST_THING = {
   type: 'onOffSwitch',
   name: 'kitchen',
   properties: {
-    on : {type: 'boolean', value: false}
-  }
+    on: {type: 'boolean', value: false},
+  },
 };
 
 describe('command/', function() {
@@ -30,7 +30,7 @@ describe('command/', function() {
     jwt = await createUser(server, TEST_USER);
 
     const commandParser = require('../../controllers/commands_controller.js');
-    const gatewayHref = 'http://fake.host' ;
+    const gatewayHref = 'http://fake.host';
     commandParser.configure(gatewayHref, jwt);
   });
 
@@ -40,13 +40,13 @@ describe('command/', function() {
         'action': 'iot',
         'parameters': {
           'onoff': 'on',
-          'rooms': 'kitchen'
-        }
+          'rooms': 'kitchen',
+        },
       },
       'status': {
         'code': 200,
-        'errorType': 'success'
-      }
+        'errorType': 'success',
+      },
     };
 
     nock('https://api.api.ai')
@@ -74,7 +74,7 @@ describe('command/', function() {
         .set('Accept', 'application/json')
         .send();
       throw new Error('Should have failed to create new thing');
-    } catch(err) {
+    } catch (err) {
       expect(err.response.status).toEqual(400);
     }
   });
@@ -87,11 +87,11 @@ describe('command/', function() {
       'properties': {
         'on': {
           'type': 'boolean',
-          'href': '/things/zwave-efbddb01-4/properties/on'
-        }
+          'href': '/things/zwave-efbddb01-4/properties/on',
+        },
       },
       'actions': {},
-      'events': {}
+      'events': {},
     }];
     nock('http://fake.host')
       .get('/things')
@@ -119,11 +119,11 @@ describe('command/', function() {
       'properties': {
         'on': {
           'type': 'boolean',
-          'href': '/things/zwave-efbddb01-4/properties/on'
-        }
+          'href': '/things/zwave-efbddb01-4/properties/on',
+        },
       },
       'actions': {},
-      'events': {}
+      'events': {},
     }];
     nock('http://fake.host')
       .get('/things')
@@ -139,9 +139,8 @@ describe('command/', function() {
         .set('Accept', 'application/json')
         .send({ text: 'turn on the bathroom'});
       throw new Error('Should have failed to create new thing');
-    } catch(err) {
+    } catch (err) {
       expect(err);
     }
   });
-
 });

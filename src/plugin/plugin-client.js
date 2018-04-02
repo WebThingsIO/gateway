@@ -34,7 +34,6 @@ class PluginClient {
     }
 
     if (msg.messageType === Constants.REGISTER_PLUGIN_REPLY) {
-
       this.addonManager = new AddonManagerProxy(this);
 
       // Now that we're registered with the server, open the plugin
@@ -79,7 +78,7 @@ class PluginClient {
     this.managerIpcSocket.sendJson({
       messageType: Constants.REGISTER_PLUGIN,
       data: {
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       },
     });
 

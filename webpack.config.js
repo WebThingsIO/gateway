@@ -7,7 +7,7 @@ const fs = require('fs');
 
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CheckerPlugin } = require('awesome-typescript-loader')
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const externals = {};
 fs.readdirSync('node_modules')
@@ -44,17 +44,17 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'gateway.js'
+    filename: 'gateway.js',
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader'
-      }
+        loader: 'awesome-typescript-loader',
+      },
     ],
   },
   devtool: 'sourcemap',
   plugins,
   externals,
-}
+};

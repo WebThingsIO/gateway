@@ -8,7 +8,7 @@ const effects = {
   Effect: require('./Effect'),
   ActionEffect: require('./ActionEffect'),
   SetEffect: require('./SetEffect'),
-  PulseEffect: require('./PulseEffect')
+  PulseEffect: require('./PulseEffect'),
 };
 
 /**
@@ -27,5 +27,5 @@ function fromDescription(desc) {
 
 module.exports = {
   effects: effects,
-  fromDescription: fromDescription
+  fromDescription: fromDescription,
 };

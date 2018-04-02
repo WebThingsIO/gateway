@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -26,7 +26,6 @@ function SchemaField(
   required = false,
   disabled = false,
   readonly = false) {
-
   this.schema = SchemaUtils.retrieveSchema(schema, definitions);
   this.formData = formData;
   this.idSchema = idSchema;
@@ -40,7 +39,7 @@ function SchemaField(
   return this;
 }
 
-SchemaField.prototype.getFieldType = function () {
+SchemaField.prototype.getFieldType = function() {
   const FIELD_TYPES = {
     array: ArrayField,
     boolean: BooleanField,
@@ -54,7 +53,7 @@ SchemaField.prototype.getFieldType = function () {
   return field ? field : UnsupportedField;
 };
 
-SchemaField.prototype.render = function () {
+SchemaField.prototype.render = function() {
   const fieldType = this.getFieldType();
   const type = this.schema.type;
   const id = Utils.escapeHtml(this.idSchema.$id);
@@ -62,12 +61,12 @@ SchemaField.prototype.render = function () {
   const classNames = [
     'form-group',
     'field',
-    `field-${type}`
+    `field-${type}`,
   ]
     .join(' ')
     .trim();
   let label = this.schema.title || this.name;
-  if (label !== undefined && label !== null) {
+  if (typeof label !== 'undefined' && label !== null) {
     label = Utils.escapeHtml(label);
     label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
   }
@@ -88,10 +87,12 @@ SchemaField.prototype.render = function () {
   field.innerHTML =
     (displayLabel && label ?
       '<label class="control-label" htmlFor="' + id + '">' +
-      label + '</label>' : '') +
+      label + '</label>' :
+      '') +
     (displayLabel && description ?
       '<p id="' + id + '__description" class="field-description">' +
-      Utils.escapeHtml(description) + '</p>' : '');
+      Utils.escapeHtml(description) + '</p>' :
+      '');
 
   const child = new fieldType(
     this.schema,

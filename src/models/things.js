@@ -77,7 +77,7 @@ const Things = {
       var connectedThings = AddonManager.getThings();
       var newThings = [];
       connectedThings.forEach(function(connectedThing) {
-        if(!storedThings.has(connectedThing.id)) {
+        if (!storedThings.has(connectedThing.id)) {
           connectedThing.href =
            Constants.THINGS_PATH + '/' + connectedThing.id;
           if (connectedThing.properties) {
@@ -184,7 +184,7 @@ const Things = {
   clearState: function() {
     this.websockets = [];
     this.things = new Map();
-  }
+  },
 };
 
 AddonManager.on(Constants.THING_ADDED, function(thing) {

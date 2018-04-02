@@ -19,7 +19,7 @@ var Speech = {
         app.speechButton.addEventListener('click', this.listen.bind(this));
         // eslint-disable-next-line no-undef
         this.stm = SpeakToMe({
-            listener: this.listener.bind(this)
+            listener: this.listener.bind(this),
         });
         this.listening = false;
     },
@@ -51,10 +51,11 @@ var Speech = {
           const displayNotification = function(msg, audio) {
             x.innerHTML = msg;
             x.className = 'show';
-            setTimeout(function(){ x.className =
-                x.className.replace('show', ''); }, 3000);
+            setTimeout(function() {
+                x.className = x.className.replace('show', '');
+            }, 3000);
             new Audio(`/audio/${encodeURIComponent(audio)}.mp3`).play();
-          }
+          };
           document.getElementById('stm-levels').classList.add('hidden');
           document.getElementById('speech-button').style.backgroundImage =
               `url('/images/microphone.svg')`;
@@ -76,13 +77,13 @@ var Speech = {
             headers: {
                 'Authorization': `Bearer ${window.API.jwt}`,
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
           };
 
           let cmdError;
           fetch('/commands', opts).then(function(response) {
-             if(!response.ok) {
+             if (!response.ok) {
                  cmdError = true;
              }
              return response.json();
@@ -99,8 +100,7 @@ var Speech = {
                   'Sorry, we found a problem processing your command.',
                   'failure');
           });
-        }
-        else if (msg.state === 'ready') {
+        } else if (msg.state === 'ready') {
           this.listening = false;
         } else if (msg.state === 'listening') {
             let mediaStream = this.stm.getmediaStream();
@@ -127,8 +127,7 @@ var Speech = {
 
                 this.visualize(this.analyzerNode);
             }
-        }
-        else if (msg.state === 'processing') {
+        } else if (msg.state === 'processing') {
             this.analyzerNode.disconnect(this.outputNode);
             this.sourceNode.disconnect(this.analyzerNode);
             this.audioContext.close();
@@ -178,11 +177,14 @@ var Speech = {
             if (diameter < 0) {
                 continue;
             }
-            //console.log(xPos, yPos, diameter - 10, diameter/2 - 10);
+            // console.log(xPos, yPos, diameter - 10, diameter/2 - 10);
             // Display a bar for this value.
             var alpha = diameter/500;
-            if(alpha > .2) alpha = .2;
-            else if (alpha < .1) alpha = .1;
+            if (alpha > 0.2) {
+                alpha = 0.2;
+            } else if (alpha < 0.1) {
+                alpha = 0.1;
+            }
 
             context.lineWidth = alpha*alpha*150;
             context.globalAlpha = alpha*alpha*5;
@@ -196,11 +198,13 @@ var Speech = {
                 0,
                 2 * Math.PI
             );
-            if(diameter > 90 && diameter < 360) context.stroke();
+            if (diameter > 90 && diameter < 360) {
+                context.stroke();
+            }
         }
         // Update the visualization the next time we can
         requestAnimationFrame(function() {
             api.visualize(analyzerNode);
         });
-    }
-}
+    },
+};

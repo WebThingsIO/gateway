@@ -22,7 +22,7 @@ ColorDetail.prototype.attach = function() {
     this.thing.updateColor(this.color.value);
   });
   this.color.addEventListener('change', this.set.bind(this));
-}
+};
 
 ColorDetail.prototype.view = function() {
   let color = this.thing.properties.color;

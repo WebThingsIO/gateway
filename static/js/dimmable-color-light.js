@@ -54,7 +54,7 @@ DimmableColorLight.prototype.updateStatus = function() {
   }
 
   const opts = {
-    headers: API.headers()
+    headers: API.headers(),
   };
 
   const promises = [];

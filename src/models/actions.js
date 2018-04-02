@@ -91,7 +91,7 @@ class Actions extends EventEmitter {
    */
   getByThing(thingId) {
     return this.getAll().filter(action => {
-      return action.thingId === thingId
+      return action.thingId === thingId;
     }).map(action => {
       return {[action.name]: action.getDescription()};
     });
@@ -125,7 +125,7 @@ class Actions extends EventEmitter {
     // Only update the action status if it's being handled internally
     action.updateStatus('pending');
 
-    switch(action.name) {
+    switch (action.name) {
       case 'pair':
         AddonManager.addNewThing(action.input.timeout).then(function() {
           action.updateStatus('completed');
@@ -181,7 +181,7 @@ class Actions extends EventEmitter {
    */
   remove(id) {
     var action = this.actions[id];
-    if(!action) {
+    if (!action) {
       throw 'Invalid action id: ' + id;
     }
 
@@ -195,7 +195,7 @@ class Actions extends EventEmitter {
           console.error('Error removing thing action', err);
         });
       } else {
-        switch(action.name) {
+        switch (action.name) {
           case 'pair':
             AddonManager.cancelAddNewThing();
             break;

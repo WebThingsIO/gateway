@@ -34,7 +34,7 @@ function TimeTriggerBlock(ruleArea, rule, x, y) {
   this.timeInput.addEventListener('change', () => {
     this.rule.setTrigger({
       type: 'TimeTrigger',
-      time: TimeTriggerBlock.localToUTC(this.timeInput.value)
+      time: TimeTriggerBlock.localToUTC(this.timeInput.value),
     });
   });
 

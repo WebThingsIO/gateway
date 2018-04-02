@@ -76,8 +76,8 @@ var AddThingScreen = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
     .then((response) => {
       return response.json();
@@ -118,7 +118,7 @@ var AddThingScreen = {
     }
 
     var url = AddThingScreen.actionUrl;
-    if(!url) {
+    if (!url) {
       return;
     }
     fetch(url, {
@@ -126,8 +126,8 @@ var AddThingScreen = {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${window.API.jwt}`
-      }
+        'Authorization': `Bearer ${window.API.jwt}`,
+      },
     })
     .then(function(response) {
       if (response.ok) {

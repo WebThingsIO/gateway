@@ -63,8 +63,8 @@ var ThingsScreen = {
     const opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json'
-      }
+        'Accept': 'application/json',
+      },
     };
     // Fetch a list of things from the server
     fetch('/things', opts).then((function(response) {
@@ -75,7 +75,7 @@ var ThingsScreen = {
       } else {
         this.thingsElement.innerHTML = '';
         things.forEach(function(description) {
-          switch(description.type) {
+          switch (description.type) {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');
               // eslint-disable-next-line no-unused-vars
@@ -141,8 +141,8 @@ var ThingsScreen = {
     const opts = {
       headers: {
         'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json'
-      }
+        'Accept': 'application/json',
+      },
     };
     // Fetch a thing from the server
     fetch('/things/' + encodeURIComponent(id), opts).then((function(response) {
@@ -157,7 +157,7 @@ var ThingsScreen = {
         }
         this.thingsElement.innerHTML = '';
         let thing;
-        switch(description.type) {
+        switch (description.type) {
           case 'onOffSwitch':
             console.log('rendering new on/off switch');
             thing = new OnOffSwitch(description, 'htmlDetail');
@@ -215,5 +215,5 @@ var ThingsScreen = {
         this.thingTitleElement.classList.remove('hidden');
       }).bind(this));
     }).bind(this));
-  }
+  },
 };

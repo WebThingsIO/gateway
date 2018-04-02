@@ -23,5 +23,5 @@ var Router = {
     page('/rules', App.showRules.bind(App));
     page('/rules/:rule', App.showRule.bind(App));
     page();
-  }
+  },
 };

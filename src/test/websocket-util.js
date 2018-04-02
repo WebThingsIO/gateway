@@ -80,5 +80,5 @@ module.exports = {
   webSocketOpen,
   webSocketRead,
   webSocketSend,
-  webSocketClose
+  webSocketClose,
 };

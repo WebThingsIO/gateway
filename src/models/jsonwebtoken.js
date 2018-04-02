@@ -74,7 +74,7 @@ class JSONWebToken {
    */
   static async issueOAuthToken(client, user, payload) {
     const {sig, token} = this.create(user, Object.assign({
-      client_id: client.id
+      client_id: client.id,
     }, payload));
     await Database.createJSONWebToken(token);
     return sig;
@@ -110,7 +110,7 @@ class JSONWebToken {
       issuedAt: new Date(),
       publicKey: pair.public,
       keyId,
-      payload
+      payload,
     };
 
     return { sig, token };

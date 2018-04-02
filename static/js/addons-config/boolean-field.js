@@ -4,7 +4,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code includes react-jsonschema-form
  * released under the Apache License 2.0.
  * https://github.com/mozilla-services/react-jsonschema-form
@@ -25,7 +25,6 @@ function BooleanField(
     required = false,
     disabled = false,
     readonly = false) {
-
     this.schema = SchemaUtils.retrieveSchema(schema, definitions);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -39,7 +38,7 @@ function BooleanField(
     return this;
 }
 
-BooleanField.prototype.onBooleanChange = function (event) {
+BooleanField.prototype.onBooleanChange = function(event) {
     this.formData = event.target.checked;
 
     if (this.onChange) {
@@ -47,7 +46,7 @@ BooleanField.prototype.onBooleanChange = function (event) {
     }
 };
 
-BooleanField.prototype.render = function () {
+BooleanField.prototype.render = function() {
     const id = Utils.escapeHtml(this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');

@@ -26,7 +26,6 @@ var Router = {
    * Configure web app routes.
    */
   configure: function(app, options) {
-
     const API_PREFIX = '/api'; // A pseudo path to use for API requests
     const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
 
@@ -122,7 +121,7 @@ var Router = {
             require('./controllers/oauth_controller').default);
     app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nocache, auth,
             require('./controllers/oauthclients_controller').default);
-  }
+  },
 };
 
 module.exports = Router;

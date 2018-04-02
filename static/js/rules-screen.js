@@ -53,7 +53,7 @@ var RulesScreen = {
     ruleElt.classList.add('rule');
     try {
       new RuleCard(this.gateway, ruleElt, this.nextId, desc);
-    } catch(e) {
+    } catch (e) {
       console.error('Invalid rule', desc, e);
       this.nextId += 1;
       return;
@@ -66,5 +66,5 @@ var RulesScreen = {
     this.gateway.readThings().then(() => {
       return this.readRules();
     });
-  }
+  },
 };

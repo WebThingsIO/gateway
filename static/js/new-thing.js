@@ -35,7 +35,7 @@ var NewThing = function(id, description) {
  * HTML view for New Thing.
  */
 NewThing.prototype.view = function() {
-  switch(this.description.type) {
+  switch (this.description.type) {
     case 'binarySensor':
       return '<div id="new-thing-' + Utils.escapeHtml(this.id) + '"' +
              '  class="new-thing binary-sensor">' +
@@ -195,8 +195,8 @@ NewThing.prototype.save = function() {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
   .then((function(response) {
     return response.json();

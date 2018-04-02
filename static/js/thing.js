@@ -185,8 +185,8 @@ Thing.prototype.handleContextMenu = function(e) {
   var newEvent = new CustomEvent('_contextmenu', {
     detail: {
       thingUrl: this.href.href,
-      thingName: this.name
-    }
+      thingName: this.name,
+    },
   });
   window.dispatchEvent(newEvent);
 };

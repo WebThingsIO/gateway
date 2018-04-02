@@ -59,7 +59,7 @@ var IntentParser = {
                             href: '',
                             param: jsonBody.Location,
                             param2: jsonBody.Type,
-                            param3: jsonBody.Type
+                            param3: jsonBody.Type,
                         });
                     }
                 });
@@ -70,7 +70,7 @@ var IntentParser = {
                 reject();
             });
         });
-    }
-}
+    },
+};
 
 module.exports = IntentParser;

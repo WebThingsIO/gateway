@@ -36,23 +36,23 @@ const express = require('express');
 const fetch = require('node-fetch');
 const Constants = require('../constants.js');
 const CommandsController = express.Router();
-const IntentParser = require('../models/intentparser')
+const IntentParser = require('../models/intentparser');
 
 const thingsOptions = {
   method: 'GET',
   headers: {
     'Authorization': '',
-    'Accept': 'application/json'
-  }
+    'Accept': 'application/json',
+  },
 };
 
 const iotOptions = {
   method: 'PUT',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
-  body: ''
+  body: '',
 };
 
 /**
@@ -67,7 +67,7 @@ CommandsController.jwt = '';
  *  and the python interface since the CommandsController
  *  will be posting to itself.
  */
-CommandsController.configure =  function(gatewayHref, jwt) {
+CommandsController.configure = function(gatewayHref, jwt) {
   CommandsController.gatewayHref = gatewayHref;
   CommandsController.jwt = jwt;
 };
@@ -84,8 +84,8 @@ function toText(res) {
  * parser to determine intent.  Then executes the intent as an action on the
  * thing API.
  */
-CommandsController.post('/', function (request, response) {
-  if(!request.body || request.body.text === undefined) {
+CommandsController.post('/', function(request, response) {
+  if (!request.body || typeof request.body.text === 'undefined') {
     response.status(400).send(JSON.stringify(
       {'message': 'Text element not defined'}));
     return;
@@ -103,8 +103,9 @@ CommandsController.post('/', function (request, response) {
       IntentParser.query(request.body.text).then((payload) => {
         let match = payload.param.toUpperCase();
         let thingfound = false;
-        for (var i = 0; i < jsonBody.length; i++) {
-          var obj = jsonBody[i];
+        let obj;
+        for (let i = 0; i < jsonBody.length; i++) {
+          obj = jsonBody[i];
           let name = obj.name.toUpperCase();
           if (name == match) {
             thingfound = true;
@@ -117,11 +118,18 @@ CommandsController.post('/', function (request, response) {
             (payload.param2 == 'on') ? true : false});
             payload.href = obj.properties.on.href;
           } else if ((payload.param3 != null) &&
-            (payload.param3 != ''  && obj.properties.color != '')) {
-            var colorname_to_hue = {red:'#FF0000',
-              orange:'#FFB300', yellow:'#FFF700',
-              green:'#47f837', white:'#FCFBEA', blue:'#1100FF',
-              purple:'#971AC4', magenta:'#75009F', pink:'#FFC0CB'};
+            (payload.param3 != '' && obj.properties.color != '')) {
+            const colorname_to_hue = {
+              red: '#FF0000',
+              orange: '#FFB300',
+              yellow: '#FFF700',
+              green: '#47f837',
+              white: '#FCFBEA',
+              blue: '#1100FF',
+              purple: '#971AC4',
+              magenta: '#75009F',
+              pink: '#FFC0CB',
+            };
             if (!colorname_to_hue[payload.param3]) {
               response.status(404).json({'message': 'Hue color not found'});
               return;
@@ -168,7 +176,6 @@ CommandsController.post('/', function (request, response) {
   .catch(function(err) {
     console.log('error catch:' + err);
   });
-
 });
 
 module.exports = CommandsController;

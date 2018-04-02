@@ -20,7 +20,7 @@ class Trigger extends EventEmitter {
    */
   toDescription() {
     return {
-      type: this.type
+      type: this.type,
     };
   }
 }

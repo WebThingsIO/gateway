@@ -115,7 +115,7 @@ function middleware() {
       catch((err) => {
         console.error('error running jwt middleware', err.stack);
         next(err);
-      })
+      });
   };
 }
 

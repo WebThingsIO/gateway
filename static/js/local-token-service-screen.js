@@ -20,6 +20,6 @@ var LocalTokenServiceScreen = {
     for (let tokenHint of this.tokenHints) {
       tokenHint.textContent = token;
     }
-  }
+  },
 };
 

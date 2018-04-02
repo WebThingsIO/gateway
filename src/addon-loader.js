@@ -23,7 +23,6 @@ const path = require('path');
 db.open();
 
 async function loadAddon(addonPath, verbose) {
-
   // Skip if there's no package.json file.
   const packageJson = path.join(addonPath, 'package.json');
   if (!fs.lstatSync(packageJson).isFile()) {
@@ -69,10 +68,8 @@ async function loadAddon(addonPath, verbose) {
     // Overwrite config values.
     newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
                                               savedSettings.moziot.config);
-  } else {
-    if (!newSettings.moziot.hasOwnProperty('config')) {
-      newSettings.moziot.config = {};
-    }
+  } else if (!newSettings.moziot.hasOwnProperty('config')) {
+    newSettings.moziot.config = {};
   }
 
   var pluginClient = new PluginClient(packageName, {verbose: verbose});

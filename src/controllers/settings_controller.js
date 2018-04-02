@@ -14,7 +14,7 @@
 
 const PromiseRouter = require('express-promise-router');
 const greenlock = require('greenlock');
-const leChallengeDns = require('le-challenge-dns').create({ debug: false })
+const leChallengeDns = require('le-challenge-dns').create({ debug: false });
 const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
@@ -34,12 +34,12 @@ SettingsController.put('/experiments/:experimentName',
                        async (request, response) => {
   var experimentName = request.params.experimentName;
 
-  if (!request.body || request.body['enabled'] === undefined) {
+  if (!request.body || typeof request.body.enabled === 'undefined') {
     response.status(400).send('Enabled property not defined');
     return;
   }
 
-  var enabled = request.body['enabled'];
+  var enabled = request.body.enabled;
 
   try {
     const result =
@@ -63,7 +63,7 @@ SettingsController.get('/experiments/:experimentName',
   try {
     const result =
       await Settings.get('experiments.' + experimentName + '.enabled');
-    if (result === undefined) {
+    if (typeof result === 'undefined') {
       response.status(404).send('Setting not found');
     } else {
       response.status(200).json({'enabled': result});
@@ -93,7 +93,7 @@ SettingsController.post('/subscribe', async (request, response) => {
   let email = request.body.email;
   let reclamationToken = request.body.reclamationToken;
   let subdomain = request.body.subdomain;
-  let fulldomain =  subdomain + '.' + config.get('ssltunnel.domain');
+  let fulldomain = subdomain + '.' + config.get('ssltunnel.domain');
 
   function returnError(message) {
     console.error(message);
@@ -111,7 +111,7 @@ SettingsController.post('/subscribe', async (request, response) => {
       configDir: path.join(UserProfile.baseDir, 'etc'),
       logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
       workDir: path.join(UserProfile.baseDir, 'var', 'lib'),
-      debug: true
+      debug: true,
   });
   let le = greenlock.create({
       server: greenlock.productionServerUrl,
@@ -120,7 +120,7 @@ SettingsController.post('/subscribe', async (request, response) => {
       approveDomains: [fulldomain],
       agreeToTerms: leAgree,
       debug: true,
-      store: leStore
+      store: leStore,
   });
 
   let token;
@@ -142,7 +142,7 @@ SettingsController.post('/subscribe', async (request, response) => {
             resolve('Success!');
           });
       });
-  }
+  };
 
   let jsonToken;
   try {
@@ -176,7 +176,7 @@ SettingsController.post('/subscribe', async (request, response) => {
       email: config.get('ssltunnel.certemail'),
       agreeTos: true,
       rsaKeySize: 2048,
-      challengeType: 'dns-01'
+      challengeType: 'dns-01',
     });
 
     console.log('success', results);
@@ -211,7 +211,7 @@ SettingsController.post('/subscribe', async (request, response) => {
     TunnelService.switchToHttps();
   } catch (err) {
     returnError(err.detail ||
-                err.message.substring(0,err.message.indexOf('\n')));
+                err.message.substring(0, err.message.indexOf('\n')));
   }
 });
 

@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const ec = require('../../ec-crypto');
 
 describe('JSONWebToken', function() {
-
   it('should be able to round trip', () => {
     const userId = 1;
     const {sig, token} = JSONWebToken.create(userId);
@@ -19,7 +18,7 @@ describe('JSONWebToken', function() {
   it('should fail to verify with a missing key id', async () => {
     const pair = ec.generateKeyPair();
     const sig = jwt.sign({}, pair.private, {
-      algorithm: ec.JWT_ALGORITHM
+      algorithm: ec.JWT_ALGORITHM,
     });
     expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
   });
@@ -28,7 +27,7 @@ describe('JSONWebToken', function() {
     const pair = ec.generateKeyPair();
     const sig = jwt.sign({}, pair.private, {
       algorithm: ec.JWT_ALGORITHM,
-      keyid: 'tomato'
+      keyid: 'tomato',
     });
     expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
   });
@@ -37,9 +36,8 @@ describe('JSONWebToken', function() {
     const pair = ec.generateKeyPair();
     const sig = jwt.sign({}, pair.private, {
       algorithm: 'none',
-      keyid: uuid.v4()
+      keyid: uuid.v4(),
     });
     expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
   });
-
 });

@@ -21,8 +21,8 @@
      */
     headers() {
       let headers = {
-        Accept: 'application/json'
-      }
+        Accept: 'application/json',
+      };
       if (this.jwt) {
         headers.Authorization = `Bearer ${this.jwt}`;
       }
@@ -32,8 +32,8 @@
     userCount() {
       const opts = {
         headers: {
-          'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+        },
       };
       return fetch('/users/count', opts).then((res) => {
         return res.json();
@@ -44,7 +44,7 @@
 
     assertJWT() {
       if (!this.jwt) {
-        throw new Error('No JWT go login..')
+        throw new Error('No JWT go login..');
       }
     },
 
@@ -52,8 +52,8 @@
       const opts = {
         headers: {
           'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+        },
       };
 
       return fetch('/things/', opts).then((res) => {
@@ -61,16 +61,16 @@
       });
     },
 
-    createUser: function (name, email, password) {
+    createUser: function(name, email, password) {
       const opts = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
-          name, email, password
-        })
+          name, email, password,
+        }),
       };
       return fetch('/users/', opts).then((res) => {
         if (!res.ok) {
@@ -89,7 +89,7 @@
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${window.API.jwt}`,
-        }
+        },
       };
       return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
         if (!res.ok) {
@@ -99,7 +99,7 @@
       });
     },
 
-    addUser: function (name, email, password) {
+    addUser: function(name, email, password) {
       const opts = {
         method: 'POST',
         headers: {
@@ -108,8 +108,8 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name, email, password
-        })
+          name, email, password,
+        }),
       };
       return fetch('/users/', opts).then((res) => {
         if (!res.ok) {
@@ -141,7 +141,7 @@
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${window.API.jwt}`,
-        }
+        },
       };
       return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
         if (!res.ok) {
@@ -155,7 +155,7 @@
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${window.API.jwt}`,
-        }
+        },
       };
       return fetch('/users/info', opts).then((response) => {
         if (!response.ok) {
@@ -165,16 +165,16 @@
       });
     },
 
-    login: function (email, password) {
+    login: function(email, password) {
       const opts = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
-          email, password
-        })
+          email, password,
+        }),
       };
       return fetch('/login/', opts).then((res) => {
         if (!res.ok) {
@@ -196,8 +196,8 @@
         headers: {
           'Authorization': `Bearer ${window.API.jwt}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+        },
       }).then((res) => {
         if (!res.ok) {
           console.error('Logout failed...');
@@ -209,16 +209,16 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       const payload = {
-        'config': config
+        'config': config,
       };
       const body = JSON.stringify(payload);
       return fetch('/addons/' + encodeURIComponent(addonName) + '/config', {
         method: 'PUT',
         body: body,
-        headers: headers
+        headers: headers,
       }).then(function(response) {
         if (!response.ok) {
           throw new Error(
@@ -233,15 +233,15 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       const payload = {
-        'enabled': enabled
+        'enabled': enabled,
       };
       return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'PUT',
         body: JSON.stringify(payload),
-        headers: headers
+        headers: headers,
       }).then(function(response) {
         if (!response.ok) {
           throw new Error(
@@ -256,7 +256,7 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       const payload = {
         'name': addonName,
@@ -266,7 +266,7 @@
       return fetch('/addons', {
         method: 'POST',
         body: JSON.stringify(payload),
-        headers: headers
+        headers: headers,
       }).then(function(response) {
         if (!response.ok) {
           throw new Error('Unexpected response code while installing add-on.');
@@ -280,11 +280,11 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'DELETE',
-        headers: headers
+        headers: headers,
       }).then(function(response) {
         if (!response.ok) {
           throw new Error(
@@ -299,7 +299,7 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       const payload = {
         'url': addonUrl,
@@ -308,7 +308,7 @@
       return fetch('/addons/' + encodeURIComponent(addonName), {
         method: 'PATCH',
         body: JSON.stringify(payload),
-        headers: headers
+        headers: headers,
       }).then(function(response) {
         if (!response.ok) {
           throw new Error('Unexpected response code while updating add-on.');
@@ -321,12 +321,12 @@
     getExperimentSetting: function(experimentName) {
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       };
       return fetch(
         '/settings/experiments/' + encodeURIComponent(experimentName), {
           method: 'GET',
-          headers: headers
+          headers: headers,
         })
         .then(function(response) {
           if (!response.ok) {
@@ -346,16 +346,16 @@
       const headers = {
         'Authorization': `Bearer ${window.API.jwt}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       const payload = {
-       'enabled': enabled
+       'enabled': enabled,
       };
       return fetch(
         '/settings/experiments/' + encodeURIComponent(experimentName), {
           method: 'PUT',
           body: JSON.stringify(payload),
-          headers: headers
+          headers: headers,
         })
         .then(function(response) {
           if (!response.ok) {
@@ -381,6 +381,6 @@
       ).then(res => {
         return res.json();
       });
-    }
+    },
   };
 }());

@@ -85,13 +85,13 @@ var SettingsScreen = {
   },
 
   showSection: function(section, subsection, id) {
-    switch(section) {
+    switch (section) {
       case 'domain':
         this.showDomainSettings();
         break;
       case 'users':
         if (subsection) {
-          switch(subsection) {
+          switch (subsection) {
             case 'edit':
               this.showEditUserScreen(id);
               break;
@@ -111,7 +111,7 @@ var SettingsScreen = {
         break;
       case 'addons':
         if (subsection) {
-          switch(subsection) {
+          switch (subsection) {
             case 'discovered':
               this.showDiscoveredAddonsScreen();
               break;
@@ -149,9 +149,9 @@ var SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
-    fetch('/settings/tunnelinfo', opts).then(function (response) {
+    fetch('/settings/tunnelinfo', opts).then(function(response) {
       return response.text();
-    }).then(function (body) {
+    }).then(function(body) {
       if (body) {
         document.getElementById('current-domain').innerText = body;
       } else {
@@ -172,7 +172,7 @@ var SettingsScreen = {
       page('/settings/users/add');
     });
 
-    window.API.getAllUserInfo().then(function (users) {
+    window.API.getAllUserInfo().then(function(users) {
       const usersList = document.getElementById('users-list');
       usersList.innerHTML = '';
 
@@ -189,7 +189,7 @@ var SettingsScreen = {
     this.userSettingsAdd.classList.add('hidden');
     this.userSettingsEdit.classList.remove('hidden');
 
-    window.API.getUser(id).then(function (user) {
+    window.API.getUser(id).then(function(user) {
       const form = document.getElementById('edit-user-form');
       const email = document.getElementById('user-settings-edit-email');
       const name = document.getElementById('user-settings-edit-name');
@@ -297,9 +297,9 @@ var SettingsScreen = {
     };
 
     // Fetch a list of adapters from the server
-    fetch('/adapters', opts).then(function (response) {
+    fetch('/adapters', opts).then(function(response) {
       return response.json();
-    }).then(function (adapters) {
+    }).then(function(adapters) {
       const noAdapters = document.getElementById('no-adapters');
       const adaptersList = document.getElementById('adapters-list');
       adaptersList.innerHTML = '';
@@ -583,7 +583,6 @@ var SettingsScreen = {
 
       statusElt.textContent = statusText;
     }.bind(this));
-
   },
 
   onUpdateClick: function() {
@@ -593,7 +592,7 @@ var SettingsScreen = {
 
     fetch('/updates/update', {
       headers: API.headers(),
-      method: 'POST'
+      method: 'POST',
     }).then(function() {
       updateNow.textContent = 'In Progress';
       let isDown = false;
@@ -622,8 +621,8 @@ var SettingsScreen = {
     this.authorizationSettings.classList.remove('hidden');
 
     fetch('/authorizations', {
-      headers: API.headers()
-    }).then(function (response) {
+      headers: API.headers(),
+    }).then(function(response) {
       return response.json();
     }).then(clients => {
       const authorizationsList = document.getElementById('authorizations');
@@ -677,7 +676,7 @@ var SettingsScreen = {
 
     fetch('/authorizations/' + encodeURIComponent(clientId), {
       headers: API.headers(),
-      method: 'DELETE'
+      method: 'DELETE',
     }).then(() => {
       const authorization = revoke.parentNode;
       const authorizationsList = authorization.parentNode;
@@ -690,5 +689,5 @@ var SettingsScreen = {
     }).catch(err => {
       console.warn('Unable to revoke', err);
     });
-  }
+  },
 };

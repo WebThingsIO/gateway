@@ -213,7 +213,7 @@ const RuleScreen = {
       let y = parseFloat(matches[2]);
       return {
         x: x,
-        y: y
+        y: y,
       };
     }
     let triggerCoords = transformToCoords(triggerBlock);
@@ -235,9 +235,9 @@ const RuleScreen = {
 
     let midX = (startX + endX) / 2;
 
-    let pathDesc  = [
+    let pathDesc = [
       'M', startX, startY,
-      'C', midX, startY, midX, endY, endX, endY
+      'C', midX, startY, midX, endY, endX, endY,
     ].join(' ');
 
     let path = this.connection.querySelector('path');
@@ -276,7 +276,7 @@ const RuleScreen = {
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
       rulePromise = fetch('/rules/' + encodeURIComponent(ruleId), {
-        headers: API.headers()
+        headers: API.headers(),
       }).then(function(res) {
         return res.json();
       });
@@ -325,7 +325,7 @@ const RuleScreen = {
         let rem = 10;
         let dpbRect = {
           width: 30 * rem,
-          height: 10 * rem
+          height: 10 * rem,
         };
 
         // Create DevicePropertyBlocks from trigger and effect if applicable
@@ -377,5 +377,5 @@ const RuleScreen = {
 
   onScrollRightClick: function() {
     this.rulePartsList.scrollLeft += 128;
-  }
+  },
 };

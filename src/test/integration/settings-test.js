@@ -14,7 +14,6 @@ const {
 const Constants = require('../../constants');
 
 describe('settings/', function() {
-
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
@@ -72,5 +71,4 @@ describe('settings/', function() {
     expect(res.body).toHaveProperty('enabled');
     expect(res.body.enabled).toEqual(true);
   });
-
 });

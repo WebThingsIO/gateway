@@ -5,10 +5,10 @@ const booleanTrigger = {
     name: 'on',
     type: 'boolean',
     href:
-      '/things/light1/properties/on'
+      '/things/light1/properties/on',
   },
   type: 'BooleanTrigger',
-  onValue: true
+  onValue: true,
 };
 
 const levelTrigger = {
@@ -16,11 +16,11 @@ const levelTrigger = {
     name: 'hue',
     type: 'number',
     href:
-      '/things/light2/properties/hue'
+      '/things/light2/properties/hue',
   },
   type: 'LevelTrigger',
   levelType: 'LESS',
-  level: 120
+  level: 120,
 };
 
 describe('triggers', function() {
@@ -38,7 +38,7 @@ describe('triggers', function() {
     let err = null;
     try {
       triggers.fromDescription({type: 'LimaTrigger'});
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -52,7 +52,7 @@ describe('triggers', function() {
         booleanTrigger,
         {onValue: 12}
       ));
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -66,7 +66,7 @@ describe('triggers', function() {
         levelTrigger,
         {level: true}
       ));
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -80,7 +80,7 @@ describe('triggers', function() {
         levelTrigger,
         {levelType: 'GARBANZO'}
       ));
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();
@@ -97,7 +97,7 @@ describe('triggers', function() {
       delete brokenTrigger.property;
 
       triggers.fromDescription(brokenTrigger);
-    } catch(e) {
+    } catch (e) {
       err = e;
     }
     expect(err).toBeTruthy();

@@ -113,7 +113,7 @@ SmartPlug.prototype.htmlView = function() {
     <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
     ${this.iconView()}
     <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-  </div>`
+  </div>`;
 };
 
 /**
@@ -141,8 +141,8 @@ SmartPlug.prototype.updateStatus = function() {
   const opts = {
     headers: {
       'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json'
-    }
+      'Accept': 'application/json',
+    },
   };
 
   const requests = urls.map(u => fetch(u, opts));
@@ -266,14 +266,14 @@ SmartPlug.prototype.setLevel = function(level) {
   }
 
   const payload = {
-   level: level
+   level: level,
   };
   fetch(this.displayedProperties.level.href, {
    method: 'PUT',
    body: JSON.stringify(payload),
    headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json'
-   })
+     'Content-Type': 'application/json',
+   }),
   }).then(response => {
    if (response.status === 200) {
      this.updateLevel(level);

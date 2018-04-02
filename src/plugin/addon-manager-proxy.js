@@ -19,7 +19,7 @@ const DEBUG = false;
 
 class AddonManagerProxy extends EventEmitter {
 
-  constructor (pluginClient) {
+  constructor(pluginClient) {
     super();
 
     this.adapters = new Map();
@@ -279,7 +279,7 @@ class AddonManagerProxy extends EventEmitter {
     this.pluginClient.sendNotification(Constants.PROPERTY_CHANGED, {
       adapterId: property.device.adapter.id,
       deviceId: property.device.id,
-      property: property.asDict()
+      property: property.asDict(),
     });
   }
 

@@ -18,22 +18,22 @@ const releases = [
   {
     prerelease: false,
     draft: true,
-    tag_name: '0.1.2'
+    tag_name: '0.1.2',
   },
   {
     prerelease: true,
     draft: false,
-    tag_name: '0.1.1'
+    tag_name: '0.1.1',
   },
   {
     prerelease: false,
     draft: false,
-    tag_name: '0.1.0'
+    tag_name: '0.1.0',
   },
   {
     prerelease: false,
     draft: false,
-    tag_name: '0.0.19'
+    tag_name: '0.0.19',
   },
 ];
 
@@ -45,7 +45,7 @@ describe('updates/', function() {
     jwt = await createUser(server, TEST_USER);
   });
 
-  it('should get /latest with a normal response', async() => {
+  it('should get /latest with a normal response', async () => {
     nock(updateUrl.origin)
       .get(updateUrl.pathname)
       .reply(200, releases);
@@ -60,7 +60,7 @@ describe('updates/', function() {
     expect(res.body.version).toEqual('0.1.0');
   });
 
-  it('should get /latest with no good releases', async() => {
+  it('should get /latest with no good releases', async () => {
     nock(updateUrl.origin)
       .get(updateUrl.pathname)
       .reply(200, releases.slice(0, 2));
@@ -74,7 +74,7 @@ describe('updates/', function() {
     expect(res.body.version).toBeFalsy();
   });
 
-  it('should get /latest with a strange error', async() => {
+  it('should get /latest with a strange error', async () => {
     nock(updateUrl.origin)
       .get(updateUrl.pathname)
       .reply(200, {error: true});
@@ -88,7 +88,7 @@ describe('updates/', function() {
     expect(res.body.version).toBeFalsy();
   });
 
-  it('GET /status', async() => {
+  it('GET /status', async () => {
     const res = await chai.request(server)
       .get(Constants.UPDATES_PATH + '/status')
       .set('Accept', 'application/json')

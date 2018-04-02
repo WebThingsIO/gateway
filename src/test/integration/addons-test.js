@@ -27,12 +27,12 @@ const testManifest = {
   version: '0',
   files: [
     'index.js',
-    'test-adapter.js'
+    'test-adapter.js',
   ],
   moziot: {
     api: {
       min: 2,
-      max: 2
+      max: 2,
     },
     enabled: true,
   },
@@ -59,7 +59,6 @@ async function loadSettingsAdapterWithManifest(manifest) {
 }
 
 describe('addons', function() {
-
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);

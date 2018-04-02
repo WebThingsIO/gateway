@@ -38,7 +38,7 @@ function parseRuleFromBody(req, res, next) {
   let rule = null;
   try {
     rule = Rule.fromDescription(req.body);
-  } catch(e) {
+  } catch (e) {
     res.status(400).send(new APIError('Invalid rule', e).toString());
     return;
   }
@@ -59,7 +59,7 @@ index.get('/:id', async function(req, res) {
     const id = parseInt(req.params.id);
     const rule = await engine.getRule(id);
     res.send(rule.toDescription());
-  } catch(e) {
+  } catch (e) {
     res.status(404).send(
       new APIError('Engine failed to get rule', e).toString());
   }
@@ -74,7 +74,7 @@ index.put('/:id', parseRuleFromBody, async function(req, res) {
   try {
     await engine.updateRule(parseInt(req.params.id), req.rule);
     res.send({});
-  } catch(e) {
+  } catch (e) {
     res.status(404).send(
       new APIError('Engine failed to update rule', e).toString());
   }
@@ -82,9 +82,9 @@ index.put('/:id', parseRuleFromBody, async function(req, res) {
 
 index.delete('/:id', async function(req, res) {
   try {
-    await engine.deleteRule(req.params.id)
+    await engine.deleteRule(req.params.id);
     res.send({});
-  } catch(e) {
+  } catch (e) {
     res.status(404).send(
       new APIError('Engine failed to delete rule', e).toString());
   }

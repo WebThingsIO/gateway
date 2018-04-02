@@ -64,7 +64,7 @@ if (debugJasmine) {
     let pidStr = ('     ' + process.pid).slice(-5) + ': ';
     Array.prototype.unshift.call(arguments, pidStr);
     origConsole.apply(this, arguments);
-  }
+  };
 }
 
 expect.extend({
@@ -74,7 +74,7 @@ expect.extend({
       pass,
       message,
     };
-  }
+  },
 });
 
 let {server, httpServer, serverStartup} = require('../app');
@@ -127,7 +127,7 @@ afterAll(async () => {
   httpServer.close();
   await Promise.all([
     e2p(server, 'close'),
-    e2p(httpServer, 'close')
+    e2p(httpServer, 'close'),
   ]);
   removeTestManifest();
 });
