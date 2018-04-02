@@ -86,12 +86,12 @@ SchemaField.prototype.render = function() {
   field.className = classNames;
   field.innerHTML =
     (displayLabel && label ?
-      '<label class="control-label" htmlFor="' + id + '">' +
-      label + '</label>' :
+      `<label class="control-label" htmlFor="${id}">${
+        label}</label>` :
       '') +
     (displayLabel && description ?
-      '<p id="' + id + '__description" class="field-description">' +
-      Utils.escapeHtml(description) + '</p>' :
+      `<p id="${id}__description" class="field-description">${
+        Utils.escapeHtml(description)}</p>` :
       '');
 
   const child = new fieldType(

@@ -13,7 +13,7 @@ function RuleCard(gateway, elt, id, desc) {
   this.id = id;
   this.rule = new Rule(gateway, desc);
 
-  let checked = this.rule.enabled ? 'checked' : '';
+  const checked = this.rule.enabled ? 'checked' : '';
 
   this.elt.innerHTML = `
     <div class="rule-edit-overlay">
@@ -70,7 +70,7 @@ function RuleCard(gateway, elt, id, desc) {
 }
 
 RuleCard.prototype.onEditButtonClick = function() {
-  page('/rules/' + encodeURIComponent(this.rule.id));
+  page(`/rules/${encodeURIComponent(this.rule.id)}`);
 };
 
 RuleCard.prototype.onDeleteButtonClick = function() {

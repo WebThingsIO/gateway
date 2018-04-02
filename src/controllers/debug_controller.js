@@ -11,10 +11,10 @@
 'use strict';
 
 const Constants = require('../constants');
-var express = require('express');
-var addonManager = require('../addon-manager');
+const express = require('express');
+const addonManager = require('../addon-manager');
 
-var debugController = express.Router();
+const debugController = express.Router();
 
 addonManager.on(Constants.ADAPTER_ADDED, (adapter) => {
   console.log('debug: Got:', Constants.ADAPTER_ADDED,
@@ -47,8 +47,8 @@ addonManager.on(Constants.PAIRING_TIMEOUT, () => {
  * List all known adapters
  */
 debugController.get('/adapters', (request, response) => {
-  var adapters = addonManager.getAdapters();
-  response.status(200).json(Array.from(adapters.values()).map(adapter => {
+  const adapters = addonManager.getAdapters();
+  response.status(200).json(Array.from(adapters.values()).map((adapter) => {
     return adapter.asDict();
   }));
 });
@@ -77,7 +77,7 @@ debugController.get('/cancelAddNewThing', (request, response) => {
  * Cancel removing a device;
  */
 debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
-  var thingId = request.params.thingId;
+  const thingId = request.params.thingId;
   addonManager.cancelRemoveThing(thingId);
   response.status(204).send();
 });
@@ -86,10 +86,10 @@ debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
  * Get a list of devices ids registered with the add-on manager.
  */
 debugController.get('/deviceIds', (request, response) => {
-  var devices = addonManager.getDevices();
-  var deviceList = [];
-  for (var deviceId in devices) {
-    var device = addonManager.devices[deviceId];
+  const devices = addonManager.getDevices();
+  const deviceList = [];
+  for (const deviceId in devices) {
+    const device = addonManager.devices[deviceId];
     deviceList.push(device.id);
   }
   response.status(200).json(deviceList);
@@ -99,10 +99,10 @@ debugController.get('/deviceIds', (request, response) => {
  * Get a list of the devices registered with the add-on manager.
  */
 debugController.get('/devices', (request, response) => {
-  var devices = addonManager.getDevices();
-  var deviceList = [];
-  for (var deviceId in devices) {
-    var device = addonManager.devices[deviceId];
+  const devices = addonManager.getDevices();
+  const deviceList = [];
+  for (const deviceId in devices) {
+    const device = addonManager.devices[deviceId];
     deviceList.push(device.asDict());
   }
   response.status(200).json(deviceList);
@@ -112,12 +112,12 @@ debugController.get('/devices', (request, response) => {
  * Get a particular device registered with the add-on manager.
  */
 debugController.get('/device/:deviceId', (request, response) => {
-  var deviceId = request.params.deviceId;
-  var device = addonManager.getDevice(deviceId);
+  const deviceId = request.params.deviceId;
+  const device = addonManager.getDevice(deviceId);
   if (device) {
     response.status(200).json(device.asDict());
   } else {
-    response.status(404).send('Device "' + deviceId + '" not found.');
+    response.status(404).send(`Device "${deviceId}" not found.`);
   }
 });
 
@@ -125,21 +125,21 @@ debugController.get('/device/:deviceId', (request, response) => {
  * Gets an property from a device.
  */
 debugController.get('/device/:deviceId/:propertyName', (request, response) => {
-  var deviceId = request.params.deviceId;
-  var propertyName = request.params.propertyName;
-  var device = addonManager.getDevice(deviceId);
+  const deviceId = request.params.deviceId;
+  const propertyName = request.params.propertyName;
+  const device = addonManager.getDevice(deviceId);
   if (device) {
     device.getProperty(propertyName).then((value) => {
-      var valueDict = {};
+      const valueDict = {};
       valueDict[propertyName] = value;
       response.status(200).json(valueDict);
     }).catch((error) => {
-      console.log('Device "' + deviceId + '"');
+      console.log(`Device "${deviceId}"`);
       console.log(error);
-      response.status(404).send('Device "' + deviceId + error);
+      response.status(404).send(`Device "${deviceId}${error}`);
     });
   } else {
-    response.status(404).send('Device "' + deviceId + '" not found.');
+    response.status(404).send(`Device "${deviceId}" not found.`);
   }
 });
 
@@ -147,13 +147,13 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
  * Sends a debug command to a particular device.
  */
 debugController.put('/device/:deviceId/cmd/:cmd', (request, response) => {
-  var deviceId = request.params.deviceId;
-  var device = addonManager.getDevice(deviceId);
+  const deviceId = request.params.deviceId;
+  const device = addonManager.getDevice(deviceId);
   if (device) {
-      device.debugCmd(request.params.cmd, request.body);
-      response.status(200).json(request.body);
+    device.debugCmd(request.params.cmd, request.body);
+    response.status(200).json(request.body);
   } else {
-    response.status(404).send('Device "' + deviceId + '" not found.');
+    response.status(404).send(`Device "${deviceId}" not found.`);
   }
 });
 
@@ -161,28 +161,28 @@ debugController.put('/device/:deviceId/cmd/:cmd', (request, response) => {
  * Sets an property associated with a device.
  */
 debugController.put('/device/:deviceId/:propertyName', (request, response) => {
-  var deviceId = request.params.deviceId;
-  var propertyName = request.params.propertyName;
-  var device = addonManager.getDevice(deviceId);
+  const deviceId = request.params.deviceId;
+  const propertyName = request.params.propertyName;
+  const device = addonManager.getDevice(deviceId);
   if (device) {
-    var propertyValue = request.body[propertyName];
+    const propertyValue = request.body[propertyName];
     if (typeof propertyValue !== 'undefined') {
-      device.setProperty(propertyName, propertyValue).then(updatedValue => {
-        var valueDict = {};
+      device.setProperty(propertyName, propertyValue).then((updatedValue) => {
+        const valueDict = {};
         valueDict[propertyName] = updatedValue;
         response.status(200).json(valueDict);
       }).catch((error) => {
-        console.log('Device "' + deviceId + '"');
+        console.log(`Device "${deviceId}"`);
         console.log(error);
-        response.status(404).send('Device "' + deviceId + '" ' + error);
+        response.status(404).send(`Device "${deviceId}" ${error}`);
       });
     } else {
-      response.status(404).send('Device "' + deviceId +
-                                '" property "' + propertyName +
-                                '" not found in request.');
+      response.status(404).send(`Device "${deviceId
+      }" property "${propertyName
+      }" not found in request.`);
     }
   } else {
-    response.status(404).send('Device "' + deviceId + '" not found.');
+    response.status(404).send(`Device "${deviceId}" not found.`);
   }
 });
 
@@ -190,8 +190,8 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
  * Get a list of plugins
  */
 debugController.get('/plugins', (request, response) => {
-  var plugins = Array.from(addonManager.pluginServer.plugins.values());
-  response.status(200).json(plugins.map(plugin => {
+  const plugins = Array.from(addonManager.pluginServer.plugins.values());
+  response.status(200).json(plugins.map((plugin) => {
     return plugin.asDict();
   }));
 });
@@ -207,12 +207,12 @@ debugController.get('/things', (request, response) => {
  * Get a particular thing registered with the add-on manager.
  */
 debugController.get('/thing/:thingId', (request, response) => {
-  var thingId = request.params.thingId;
-  var thing = addonManager.getThing(thingId);
+  const thingId = request.params.thingId;
+  const thing = addonManager.getThing(thingId);
   if (thing) {
     response.status(200).json(thing);
   } else {
-    response.status(404).send('Thing "' + thingId + '" not found.');
+    response.status(404).send(`Thing "${thingId}" not found.`);
   }
 });
 
@@ -220,19 +220,19 @@ debugController.get('/thing/:thingId', (request, response) => {
  * Gets a property associated with a thing.
  */
 debugController.get('/thing/:thingId/:propertyName', (request, response) => {
-  var thingId = request.params.thingId;
-  var propertyName = request.params.propertyName;
-  var thing = addonManager.getThing(thingId);
+  const thingId = request.params.thingId;
+  const propertyName = request.params.propertyName;
+  const thing = addonManager.getThing(thingId);
   if (thing) {
     addonManager.getProperty(thing.id, propertyName).then((value) => {
-      var valueDict = {};
+      const valueDict = {};
       valueDict[propertyName] = value;
       response.status(200).json(valueDict);
     }).catch((error) => {
-      response.status(404).send('Thing "' + thingId + ' ' + error);
+      response.status(404).send(`Thing "${thingId} ${error}`);
     });
   } else {
-    response.status(404).send('Thing "' + thingId + '" not found.');
+    response.status(404).send(`Thing "${thingId}" not found.`);
   }
 });
 
@@ -240,28 +240,28 @@ debugController.get('/thing/:thingId/:propertyName', (request, response) => {
  * Sets a property associated with a thing.
  */
 debugController.put('/thing/:thingId/:propertyName', (request, response) => {
-  var thingId = request.params.thingId;
-  var propertyName = request.params.propertyName;
-  var thing = addonManager.getThing(thingId);
+  const thingId = request.params.thingId;
+  const propertyName = request.params.propertyName;
+  const thing = addonManager.getThing(thingId);
   if (thing) {
-    var propertyValue = request.body[propertyName];
+    const propertyValue = request.body[propertyName];
     if (typeof propertyValue !== 'undefined') {
       addonManager.setProperty(propertyName, propertyValue).then((value) => {
-        var valueDict = {};
+        const valueDict = {};
         valueDict[propertyName] = value;
         response.status(200).json(valueDict);
       }).catch((error) => {
-        console.log('Thing "' + thingId);
+        console.log(`Thing "${thingId}`);
         console.log(error);
-        response.status(404).send('Thing "' + thingId + ' ' + error);
+        response.status(404).send(`Thing "${thingId} ${error}`);
       });
     } else {
-      response.status(404).send('Thing "' + thingId +
-                                '" property "' + propertyName +
-                                '" not found in request.');
+      response.status(404).send(`Thing "${thingId
+      }" property "${propertyName
+      }" not found in request.`);
     }
   } else {
-    response.status(404).send('Thing "' + thingId + '" not found.');
+    response.status(404).send(`Thing "${thingId}" not found.`);
   }
 });
 
@@ -269,7 +269,7 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
  * Remove an existing Thing.
  */
 debugController.get('/removeThing/:thingId', (request, response) => {
-  var thingId = request.params.thingId;
+  const thingId = request.params.thingId;
   addonManager.removeThing(thingId).then((thingIdRemoved) => {
     console.log('debugController: removed', thingIdRemoved);
     if (thingId != thingIdRemoved) {
@@ -279,7 +279,7 @@ debugController.get('/removeThing/:thingId', (request, response) => {
     response.status(200).json({removed: thingIdRemoved});
   }, (str) => {
     console.log('debugController: remove failed:', str);
-    response.status(500).send('remove of ' + thingId + ' failed: ' + str);
+    response.status(500).send(`remove of ${thingId} failed: ${str}`);
   });
 });
 

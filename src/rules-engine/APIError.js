@@ -11,9 +11,9 @@ class APIError extends Error {
   constructor(message, originalError) {
     super(message);
     if (originalError) {
-      this.message += ': ' + originalError.message;
+      this.message += `: ${originalError.message}`;
     }
-    console.error('new API Error: ' + this.message);
+    console.error(`new API Error: ${this.message}`);
   }
 
   toString() {

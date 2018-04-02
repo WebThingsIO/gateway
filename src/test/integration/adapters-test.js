@@ -33,10 +33,10 @@ describe('adapters/', function() {
   });
 
   it('gets specifically mockAdapter', async () => {
-    let mockAdapterId = mockAdapter().getId();
+    const mockAdapterId = mockAdapter().getId();
 
     const res = await chai.request(server)
-      .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)
+      .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -47,11 +47,11 @@ describe('adapters/', function() {
   });
 
   it('fails to get a nonexistent adapter', async () => {
-    let mockAdapterId = 'nonexistent-adapter';
+    const mockAdapterId = 'nonexistent-adapter';
 
     try {
       await chai.request(server)
-        .get(Constants.ADAPTERS_PATH + '/' + mockAdapterId)
+        .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
       throw new Error('request should fail');

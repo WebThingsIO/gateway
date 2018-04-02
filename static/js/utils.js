@@ -11,7 +11,7 @@
 (function() {
   window.Utils = {
     escapeHtml: function(text) {
-      if (typeof(text) !== 'string') {
+      if (typeof text !== 'string') {
         text = `${text}`;
       }
 

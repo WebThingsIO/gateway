@@ -40,11 +40,11 @@ LogsController.get('/', async (request, response) => {
   for (const name of files) {
     if (fs.lstatSync(path.join(UserProfile.logDir, name)).isFile()) {
       content +=
-        '<li>' +
-        `<a href="/logs/files/${encodeURIComponent(name)}?jwt=${jwt}">` +
-        Utils.escapeHtml(name) +
-        '</a>' +
-        '</li>';
+        `${'<li>' +
+        `<a href="/logs/files/${encodeURIComponent(name)}?jwt=${jwt}">`}${
+          Utils.escapeHtml(name)
+        }</a>` +
+        `</li>`;
     }
   }
 

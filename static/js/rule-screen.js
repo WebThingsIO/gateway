@@ -27,9 +27,9 @@ const RuleScreen = {
 
     const selectRuleName = () => {
       // Select all of ruleName, https://stackoverflow.com/questions/6139107/
-      let range = document.createRange();
+      const range = document.createRange();
       range.selectNodeContents(this.ruleName);
-      let selection = window.getSelection();
+      const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
     };
@@ -80,8 +80,8 @@ const RuleScreen = {
     this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
     this.onScrollRightClick = this.onScrollRightClick.bind(this);
 
-    let scrollLeft = document.getElementById('rule-parts-list-scroll-left');
-    let scrollRight = document.getElementById('rule-parts-list-scroll-right');
+    const scrollLeft = document.getElementById('rule-parts-list-scroll-left');
+    const scrollRight = document.getElementById('rule-parts-list-scroll-right');
 
     scrollLeft.addEventListener('click', this.onScrollLeftClick);
     scrollLeft.addEventListener('touchstart', this.onScrollLeftClick);
@@ -103,12 +103,12 @@ const RuleScreen = {
     if (!this.rule) {
       return;
     }
-    let deviceRect = event.target.getBoundingClientRect();
+    const deviceRect = event.target.getBoundingClientRect();
 
-    let x = deviceRect.left;
-    let y = deviceRect.top;
-    let newBlock = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
-      x, y);
+    const x = deviceRect.left;
+    const y = deviceRect.top;
+    const newBlock = new DevicePropertyBlock(this.ruleArea, this.rule, thing,
+                                             x, y);
 
     newBlock.draggable.onDown(event);
   },
@@ -123,11 +123,11 @@ const RuleScreen = {
     if (!this.rule) {
       return;
     }
-    let deviceRect = event.target.getBoundingClientRect();
-    let x = deviceRect.left;
-    let y = deviceRect.top;
+    const deviceRect = event.target.getBoundingClientRect();
+    const x = deviceRect.left;
+    const y = deviceRect.top;
 
-    let newBlock = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
+    const newBlock = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
     newBlock.draggable.onDown(event);
   },
 
@@ -136,7 +136,7 @@ const RuleScreen = {
    * @return {Element}
    */
   makeTimeTriggerBlock: function() {
-    let elt = document.createElement('div');
+    const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block time-trigger-block">
@@ -153,7 +153,7 @@ const RuleScreen = {
    * @return {Element}
    */
   makeDeviceBlock: function(thing) {
-    let elt = document.createElement('div');
+    const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block device-block">
@@ -171,7 +171,7 @@ const RuleScreen = {
    * @param {number} y
    */
   makeRulePartBlock: function(role, x, y) {
-    let part = this.rule[role];
+    const part = this.rule[role];
     let block = null;
     if (part.type === 'TimeTrigger') {
       block = new TimeTriggerBlock(this.ruleArea, this.rule, x, y);
@@ -188,7 +188,7 @@ const RuleScreen = {
       }
       block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
     }
-    let rulePart = {};
+    const rulePart = {};
     rulePart[role] = this.rule[role];
     block.setRulePart(rulePart);
   },
@@ -196,30 +196,30 @@ const RuleScreen = {
   showConnection: function() {
     this.connection.classList.remove('hidden');
 
-    let dragHint = document.getElementById('drag-hint');
-    let flexDir = window.getComputedStyle(dragHint).flexDirection;
+    const dragHint = document.getElementById('drag-hint');
+    const flexDir = window.getComputedStyle(dragHint).flexDirection;
 
-    let triggerBlock =
+    const triggerBlock =
       this.view.querySelector('.rule-part-block.trigger').parentNode;
-    let effectBlock =
+    const effectBlock =
       this.view.querySelector('.rule-part-block.effect').parentNode;
     function transformToCoords(elt) {
-      let re = /translate\((\d+)px, +(\d+)px\)/;
-      let matches = elt.style.transform.match(re);
+      const re = /translate\((\d+)px, +(\d+)px\)/;
+      const matches = elt.style.transform.match(re);
       if (!matches) {
         return {x: 0, y: 0};
       }
-      let x = parseFloat(matches[1]);
-      let y = parseFloat(matches[2]);
+      const x = parseFloat(matches[1]);
+      const y = parseFloat(matches[2]);
       return {
         x: x,
         y: y,
       };
     }
-    let triggerCoords = transformToCoords(triggerBlock);
-    let effectCoords = transformToCoords(effectBlock);
+    const triggerCoords = transformToCoords(triggerBlock);
+    const effectCoords = transformToCoords(effectBlock);
 
-    let dpbRect = triggerBlock.getBoundingClientRect();
+    const dpbRect = triggerBlock.getBoundingClientRect();
 
     let startX = triggerCoords.x + dpbRect.width + 10;
     let startY = triggerCoords.y + dpbRect.height / 2;
@@ -233,19 +233,19 @@ const RuleScreen = {
       endY = effectCoords.y - 10;
     }
 
-    let midX = (startX + endX) / 2;
+    const midX = (startX + endX) / 2;
 
-    let pathDesc = [
+    const pathDesc = [
       'M', startX, startY,
       'C', midX, startY, midX, endY, endX, endY,
     ].join(' ');
 
-    let path = this.connection.querySelector('path');
+    const path = this.connection.querySelector('path');
     path.setAttribute('d', pathDesc);
-    let circleTrigger = this.connection.querySelector('.trigger');
+    const circleTrigger = this.connection.querySelector('.trigger');
     circleTrigger.setAttribute('cx', startX);
     circleTrigger.setAttribute('cy', startY);
-    let circleEffect = this.connection.querySelector('.effect');
+    const circleEffect = this.connection.querySelector('.effect');
     circleEffect.setAttribute('cx', endX);
     circleEffect.setAttribute('cy', endY);
   },
@@ -275,7 +275,7 @@ const RuleScreen = {
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
-      rulePromise = fetch('/rules/' + encodeURIComponent(ruleId), {
+      rulePromise = fetch(`/rules/${encodeURIComponent(ruleId)}`, {
         headers: API.headers(),
       }).then(function(res) {
         return res.json();
@@ -292,63 +292,63 @@ const RuleScreen = {
     }
 
     this.rulePartsList.querySelectorAll('.rule-part').forEach(remove);
-    let ttBlock = this.makeTimeTriggerBlock();
+    const ttBlock = this.makeTimeTriggerBlock();
     ttBlock.addEventListener('mousedown',
-      this.onTimeTriggerBlockDown.bind(this));
+                             this.onTimeTriggerBlockDown.bind(this));
     ttBlock.addEventListener('touchstart',
-      this.onTimeTriggerBlockDown.bind(this));
+                             this.onTimeTriggerBlockDown.bind(this));
     this.rulePartsList.appendChild(ttBlock);
 
-    this.gateway.readThings().then(things => {
-      for (let thing of things) {
-        let elt = this.makeDeviceBlock(thing);
+    this.gateway.readThings().then((things) => {
+      for (const thing of things) {
+        const elt = this.makeDeviceBlock(thing);
         elt.addEventListener('mousedown',
-          this.onDeviceBlockDown.bind(this, thing));
+                             this.onDeviceBlockDown.bind(this, thing));
         elt.addEventListener('touchstart',
-          this.onDeviceBlockDown.bind(this, thing));
+                             this.onDeviceBlockDown.bind(this, thing));
         this.rulePartsList.appendChild(elt);
       }
       this.onWindowResize();
     }).then(function() {
       return rulePromise;
-    }).then(ruleDesc => {
+    }).then((ruleDesc) => {
       this.rule = new Rule(this.gateway, ruleDesc,
-        this.onRuleUpdate.bind(this));
+                           this.onRuleUpdate.bind(this));
 
       this.ruleArea.querySelectorAll('.rule-part-container').forEach(remove);
 
       if (ruleDesc) {
-        let dragHint = document.getElementById('drag-hint');
-        let flexDir = window.getComputedStyle(dragHint).flexDirection;
+        const dragHint = document.getElementById('drag-hint');
+        const flexDir = window.getComputedStyle(dragHint).flexDirection;
 
-        let areaRect = this.ruleArea.getBoundingClientRect();
-        let rem = 10;
-        let dpbRect = {
+        const areaRect = this.ruleArea.getBoundingClientRect();
+        const rem = 10;
+        const dpbRect = {
           width: 30 * rem,
           height: 10 * rem,
         };
 
         // Create DevicePropertyBlocks from trigger and effect if applicable
-        let centerX = areaRect.width / 2 - dpbRect.width / 2;
-        let centerY = areaRect.height / 2 - dpbRect.height / 2;
+        const centerX = areaRect.width / 2 - dpbRect.width / 2;
+        const centerY = areaRect.height / 2 - dpbRect.height / 2;
         if (ruleDesc.trigger) {
           if (flexDir === 'column') {
             this.makeRulePartBlock('trigger', centerX,
-              areaRect.height / 4 - dpbRect.height / 2);
+                                   areaRect.height / 4 - dpbRect.height / 2);
           } else {
             this.makeRulePartBlock('trigger',
-              areaRect.width / 4 - dpbRect.width / 2,
-              centerY);
+                                   areaRect.width / 4 - dpbRect.width / 2,
+                                   centerY);
           }
         }
         if (ruleDesc.effect) {
           if (flexDir === 'column') {
-            this.makeRulePartBlock('effect', centerX,
-              areaRect.height * 3 / 4 - dpbRect.height / 2);
+            this.makeRulePartBlock(
+              'effect', centerX, areaRect.height * 3 / 4 - dpbRect.height / 2);
           } else {
             this.makeRulePartBlock('effect',
-              areaRect.width * 3 / 4 - dpbRect.width / 2,
-              centerY);
+                                   areaRect.width * 3 / 4 - dpbRect.width / 2,
+                                   centerY);
           }
         }
       }
@@ -357,10 +357,10 @@ const RuleScreen = {
   },
 
   onWindowResize: function() {
-    let scrollWidth = this.rulePartsList.scrollWidth;
-    let boundingWidth = this.rulePartsList.getBoundingClientRect().width;
-    let scrollLeft = document.getElementById('rule-parts-list-scroll-left');
-    let scrollRight = document.getElementById('rule-parts-list-scroll-right');
+    const scrollWidth = this.rulePartsList.scrollWidth;
+    const boundingWidth = this.rulePartsList.getBoundingClientRect().width;
+    const scrollLeft = document.getElementById('rule-parts-list-scroll-left');
+    const scrollRight = document.getElementById('rule-parts-list-scroll-right');
 
     if (boundingWidth < scrollWidth) {
       scrollLeft.classList.remove('hidden');

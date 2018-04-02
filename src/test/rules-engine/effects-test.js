@@ -24,12 +24,12 @@ const setEffect = {
 
 describe('effects', function() {
   it('should parse a PulseEffect', () => {
-    let effect = effects.fromDescription(pulseEffect);
+    const effect = effects.fromDescription(pulseEffect);
     expect(effect).toMatchObject(pulseEffect);
   });
 
   it('should parse a SetEffect', () => {
-    let effect = effects.fromDescription(setEffect);
+    const effect = effects.fromDescription(setEffect);
     expect(effect).toMatchObject(setEffect);
   });
 
@@ -60,7 +60,7 @@ describe('effects', function() {
   it('should reject an effect without a property', () => {
     let err = null;
     try {
-      let brokenEffect = Object.assign(
+      const brokenEffect = Object.assign(
         {},
         setEffect
       );

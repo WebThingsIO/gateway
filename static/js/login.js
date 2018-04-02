@@ -8,10 +8,10 @@
 'use strict';
 
 (function() {
-  var form = document.getElementById('login-form');
-  var email = document.getElementById('email');
-  var password = document.getElementById('password');
-  var errorSubmission = document.getElementById('error-submission');
+  const form = document.getElementById('login-form');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const errorSubmission = document.getElementById('error-submission');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

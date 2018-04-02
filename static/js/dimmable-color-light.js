@@ -67,16 +67,16 @@ DimmableColorLight.prototype.updateStatus = function() {
     promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
   }
 
-  Promise.all(promises).then(responses => {
-    return Promise.all(responses.map(response => {
+  Promise.all(promises).then((responses) => {
+    return Promise.all(responses.map((response) => {
       return response.json();
     }));
-  }).then(responses => {
-    responses.forEach(response => {
+  }).then((responses) => {
+    responses.forEach((response) => {
       this.onPropertyStatus(response);
     });
-  }).catch(error => {
-    console.error('Error fetching on/off switch status ' + error);
+  }).catch((error) => {
+    console.error(`Error fetching on/off switch status ${error}`);
   });
 };
 

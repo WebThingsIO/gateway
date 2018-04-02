@@ -24,7 +24,7 @@ NewThingsController.get('/', function(request, response) {
   Things.getNewThings().then(function(newThings) {
     response.json(newThings);
   }).catch(function(error) {
-    console.error('Error getting a list of new things from adapters ' + error);
+    console.error(`Error getting a list of new things from adapters ${error}`);
     response.status(500).send(error);
   });
 });
@@ -43,7 +43,7 @@ NewThingsController.ws('/', function(websocket) {
       websocket.send(JSON.stringify(newThing));
     }, this);
   }).catch(function(error) {
-    console.error('Error getting a list of new things from adapters ' + error);
+    console.error(`Error getting a list of new things from adapters ${error}`);
   });
 });
 

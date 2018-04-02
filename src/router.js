@@ -21,7 +21,7 @@ const UserProfile = require('./user-profile');
 /**
  * Router.
  */
-var Router = {
+const Router = {
   /**
    * Configure web app routes.
    */
@@ -60,7 +60,8 @@ var Router = {
           request.path.startsWith(Constants.LOGS_PATH)) {
         // Enable CORS for API requests
         response.setHeader('Access-Control-Allow-Origin', '*');
-        response.setHeader('Access-Control-Allow-Headers',
+        response.setHeader(
+          'Access-Control-Allow-Headers',
           'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
         request.url = API_PREFIX + request.url;
@@ -77,18 +78,18 @@ var Router = {
             require('./controllers/oauth_controller').default);
 
     // Web app routes - send index.html and fall back to client side URL router
-    app.use(APP_PREFIX + '/*', require('./controllers/root_controller'));
+    app.use(`${APP_PREFIX}/*`, require('./controllers/root_controller'));
 
     // Unauthenticated API routes
     app.use(API_PREFIX + Constants.LOGIN_PATH, nocache,
-      require('./controllers/login_controller'));
+            require('./controllers/login_controller'));
     app.use(API_PREFIX + Constants.SETTINGS_PATH, nocache,
-      require('./controllers/settings_controller'));
+            require('./controllers/settings_controller'));
     app.use(API_PREFIX + Constants.USERS_PATH, nocache,
-      require('./controllers/users_controller'));
+            require('./controllers/users_controller'));
     if (options.debug) {
       app.use(API_PREFIX + Constants.DEBUG_PATH, nocache,
-        require('./controllers/debug_controller'));
+              require('./controllers/debug_controller'));
     }
 
     // Authenticated API routes

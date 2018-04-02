@@ -19,7 +19,7 @@ class PulseEffect extends PropertyEffect {
     super(desc);
     this.value = desc.value;
     assert(typeof this.value === this.property.type,
-      'setpoint and property must be same type');
+           'setpoint and property must be same type');
     this.on = false;
     this.oldValue = null;
   }
@@ -45,7 +45,7 @@ class PulseEffect extends PropertyEffect {
       }
       // Activate the effect and save our current state to revert to upon
       // deactivation
-       this.property.get().then(value => {
+      this.property.get().then((value) => {
         this.oldValue = value;
         this.on = true;
         return this.property.set(this.value);

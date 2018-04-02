@@ -80,7 +80,7 @@ class MockAdapter extends Adapter {
     this.actions = {};
 
     return Promise.all(
-      Object.keys(this.devices).map(deviceId => {
+      Object.keys(this.devices).map((deviceId) => {
         return this.removeDevice(deviceId);
       })
     );
@@ -95,9 +95,9 @@ class MockAdapter extends Adapter {
   addDevice(deviceId, deviceDescription) {
     return new Promise((resolve, reject) => {
       if (deviceId in this.devices) {
-        reject('Device: ' + deviceId + ' already exists.');
+        reject(`Device: ${deviceId} already exists.`);
       } else {
-        var device = new MockDevice(this, deviceId, deviceDescription);
+        const device = new MockDevice(this, deviceId, deviceDescription);
         this.handleDeviceAdded(device);
         resolve(device);
       }
@@ -112,12 +112,12 @@ class MockAdapter extends Adapter {
    */
   removeDevice(deviceId) {
     return new Promise((resolve, reject) => {
-      var device = this.devices[deviceId];
+      const device = this.devices[deviceId];
       if (device) {
         this.handleDeviceRemoved(device);
         resolve(device);
       } else {
-        reject('Device: ' + deviceId + ' not found.');
+        reject(`Device: ${deviceId} not found.`);
       }
     });
   }
@@ -135,8 +135,8 @@ class MockAdapter extends Adapter {
   startPairing(timeoutSeconds) {
     console.log('MockAdapter:', this.name, 'id', this.id, 'pairing started');
     if (this.pairDeviceId) {
-      var deviceId = this.pairDeviceId;
-      var deviceDescription = this.pairDeviceDescription;
+      const deviceId = this.pairDeviceId;
+      const deviceDescription = this.pairDeviceDescription;
       this.pairDeviceId = null;
       this.pairDeviceDescription = null;
       this.addDevice(deviceId, deviceDescription).then(() => {

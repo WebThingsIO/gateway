@@ -96,7 +96,7 @@ class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static create(user, payload={role: ROLE_USER_TOKEN}) {
+  static create(user, payload = {role: ROLE_USER_TOKEN}) {
     const pair = ec.generateKeyPair();
 
     const keyId = uuid.v4();
@@ -113,7 +113,7 @@ class JSONWebToken {
       payload,
     };
 
-    return { sig, token };
+    return {sig, token};
   }
 
   constructor(obj) {

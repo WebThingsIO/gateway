@@ -17,7 +17,7 @@
  *
  * @param Object description Thing description object.
  */
-var UnknownThing = function(description, format) {
+const UnknownThing = function(description, format) {
   this.displayedProperties = this.displayedProperties || {};
 
   if (description.properties) {
@@ -76,29 +76,29 @@ UnknownThing.prototype = Object.create(Thing.prototype);
  * Update the status of the unknown thing.
  */
 UnknownThing.prototype.updateStatus = function() {
-  const urls = Object.values(this.displayedProperties).map(v => v.href);
+  const urls = Object.values(this.displayedProperties).map((v) => v.href);
   if (urls.length === 0) {
     return;
   }
 
   const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
 
-  const requests = urls.map(u => fetch(u, opts));
-  Promise.all(requests).then(responses => {
-    return Promise.all(responses.map(response => {
+  const requests = urls.map((u) => fetch(u, opts));
+  Promise.all(requests).then((responses) => {
+    return Promise.all(responses.map((response) => {
       return response.json();
     }));
-  }).then(responses => {
-    responses.forEach(response => {
+  }).then((responses) => {
+    responses.forEach((response) => {
       this.onPropertyStatus(response);
     });
-  }).catch(error => {
-    console.error('Error fetching properties: ' + error);
+  }).catch((error) => {
+    console.error(`Error fetching properties: ${error}`);
   });
 };
 
@@ -113,7 +113,7 @@ UnknownThing.prototype.onPropertyStatus = function(data) {
     }
 
     const value = data[prop];
-    if (typeof(value) === 'undefined' || value === null) {
+    if (typeof value === 'undefined' || value === null) {
       continue;
     }
 
@@ -155,13 +155,13 @@ UnknownThing.prototype.setProperty = function(name, value) {
     headers: Object.assign(window.API.headers(), {
       'Content-Type': 'application/json',
     }),
-  }).then(response => {
+  }).then((response) => {
     if (response.status === 200) {
       this.updateProperty(name, value);
     } else {
       console.error(`Status ${response.status} trying to set ${name}`);
     }
-  }).catch(error => {
+  }).catch((error) => {
     console.error(`Error trying to set ${name}: ${error}`);
   });
 };
@@ -260,9 +260,9 @@ StringDetail.prototype.update = function() {
 function NumberDetail(thing, name, unit, min, max) {
   this.thing = thing;
   this.name = name;
-  this.unit = typeof(unit) === 'undefined' ? null : unit;
-  this.min = typeof(min) === 'undefined' ? null : min;
-  this.max = typeof(max) === 'undefined' ? null : max;
+  this.unit = typeof unit === 'undefined' ? null : unit;
+  this.min = typeof min === 'undefined' ? null : min;
+  this.max = typeof max === 'undefined' ? null : max;
 }
 
 /**

@@ -44,7 +44,7 @@ describe('settings/', function() {
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({'enabled': true});
+      .send({enabled: true});
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('enabled');
@@ -56,7 +56,7 @@ describe('settings/', function() {
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({'enabled': true});
+      .send({enabled: true});
 
     expect(putRes.status).toEqual(200);
     expect(putRes.body).toHaveProperty('enabled');

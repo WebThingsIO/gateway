@@ -33,7 +33,7 @@ class PropertyProxy extends Property {
    * propertyChanged notification is received.
    */
   onPropertyChanged() {
-    var deferredChange = new Deferred();
+    const deferredChange = new Deferred();
     this.propertyChangedPromises.push(deferredChange);
     return deferredChange.promise;
   }
@@ -47,7 +47,7 @@ class PropertyProxy extends Property {
     this.propertyDict = Object.assign({}, propertyDict);
     this.setCachedValue(propertyDict.value);
     while (this.propertyChangedPromises.length > 0) {
-      var deferredChange = this.propertyChangedPromises.pop();
+      const deferredChange = this.propertyChangedPromises.pop();
       deferredChange.resolve(propertyDict.value);
     }
   }
@@ -69,13 +69,13 @@ class PropertyProxy extends Property {
           deviceId: this.device.id,
           propertyName: this.name,
           propertyValue: value,
-      });
+        });
 
       // TODO: Add a timeout
 
-      this.onPropertyChanged().then(updatedValue => {
+      this.onPropertyChanged().then((updatedValue) => {
         resolve(updatedValue);
-      }).catch(error => {
+      }).catch((error) => {
         console.error('PropertyProxy: Failed to setProperty',
                       this.name, 'to', value,
                       'for device:', this.device.id);

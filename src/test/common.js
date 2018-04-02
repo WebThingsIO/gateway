@@ -59,9 +59,9 @@ if (debugJasmine) {
     },
   });
 
-  var origConsole = console.log;
+  const origConsole = console.log;
   console.log = function() {
-    let pidStr = ('     ' + process.pid).slice(-5) + ': ';
+    const pidStr = `${(`     ${process.pid}`).slice(-5)}: `;
     Array.prototype.unshift.call(arguments, pidStr);
     origConsole.apply(this, arguments);
   };
@@ -77,13 +77,13 @@ expect.extend({
   },
 });
 
-let {server, httpServer, serverStartup} = require('../app');
+const {server, httpServer, serverStartup} = require('../app');
 global.server = server;
 
-var addonManager = require('../addon-manager');
+const addonManager = require('../addon-manager');
 
 function mockAdapter() {
-  var adapter = addonManager.getAdapter('mock-adapter');
+  const adapter = addonManager.getAdapter('mock-adapter');
   expect(adapter).not.toBeUndefined();
   return adapter;
 }

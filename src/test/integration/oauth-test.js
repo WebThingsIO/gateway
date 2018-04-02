@@ -72,10 +72,10 @@ describe('oauth/', function() {
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      oauth2.authorizationCode.getToken({code: code}).then(result => {
+      oauth2.authorizationCode.getToken({code: code}).then((result) => {
         const token = oauth2.accessToken.create(result);
         res.json(token);
-      }).catch(err => {
+      }).catch((err) => {
         res.status(400).json(err);
       });
     });
@@ -100,8 +100,8 @@ describe('oauth/', function() {
         secret: CLIENT_SECRET,
       },
       auth: {
-        tokenHost: 'https://127.0.0.1:' + server.address().port +
-          Constants.OAUTH_PATH,
+        tokenHost: `https://127.0.0.1:${server.address().port
+        }${Constants.OAUTH_PATH}`,
       },
     }, configProvided || {});
 
@@ -120,16 +120,16 @@ describe('oauth/', function() {
 
     // send the request that the page would send
     res = await chai.request(server)
-      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
-      }))
+      })}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
 
-    let jwt = res.body.token.access_token;
+    const jwt = res.body.token.access_token;
     // Try using the access token
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
@@ -153,7 +153,7 @@ describe('oauth/', function() {
     expect(res.body[0].id).toEqual(CLIENT_ID);
 
     res = await chai.request(server)
-      .delete(Constants.OAUTHCLIENTS_PATH + '/' + CLIENT_ID)
+      .delete(`${Constants.OAUTHCLIENTS_PATH}/${CLIENT_ID}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
     expect(res.status).toEqual(200);
@@ -181,7 +181,8 @@ describe('oauth/', function() {
       },
     });
 
-    let res = await pFinal(chai.request(clientServer)
+    const res = await pFinal(
+      chai.request(clientServer)
         .get('/auth')
         .set('Accept', 'application/json'));
     // expect that gateway is showing page for user to authorize
@@ -189,12 +190,12 @@ describe('oauth/', function() {
 
     // send the request that the page would send
     const err = await pFinal(chai.request(server)
-      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
-      }))
+      })}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT)));
 
@@ -210,7 +211,8 @@ describe('oauth/', function() {
       },
     });
 
-    const err = await pFinal(chai.request(clientServer)
+    const err = await pFinal(
+      chai.request(clientServer)
         .get('/auth')
         .set('Accept', 'application/json'));
 
@@ -220,7 +222,7 @@ describe('oauth/', function() {
   it('rejects client credential authorization', async () => {
     setupOAuth();
     try {
-      let result = await oauth2.clientCredentials.getToken({});
+      const result = await oauth2.clientCredentials.getToken({});
       expect(result).toBeFalsy();
     } catch (err) {
       expect(err).toBeTruthy();
@@ -230,7 +232,7 @@ describe('oauth/', function() {
   it('rejects password credential authorization', async () => {
     setupOAuth();
     try {
-      let result = await oauth2.ownerPassword.getToken({
+      const result = await oauth2.ownerPassword.getToken({
         username: CLIENT_ID,
         password: CLIENT_SECRET,
       });
@@ -277,9 +279,9 @@ describe('oauth/', function() {
   });
 
   it('rejects user JWT in access token request', async () => {
-    oauth2.authorizationCode.getToken({code: userJWT}).then(result => {
+    oauth2.authorizationCode.getToken({code: userJWT}).then((result) => {
       expect(result).toBeFalsy();
-    }).catch(err => {
+    }).catch((err) => {
       expect(err).toBeTruthy();
     });
   });
@@ -290,14 +292,14 @@ describe('oauth/', function() {
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      JSONWebToken.verifyJWT(code).then(token => {
+      JSONWebToken.verifyJWT(code).then((token) => {
         return JSONWebToken.revokeToken(token.keyId);
       }).then(() => {
         return oauth2.authorizationCode.getToken({code: code});
-      }).then(result => {
+      }).then((result) => {
         const token = oauth2.accessToken.create(result);
         res.json(token);
-      }).catch(err => {
+      }).catch((err) => {
         res.status(400).json(err.context);
       });
     });
@@ -311,12 +313,12 @@ describe('oauth/', function() {
 
     // send the request that the page would send
     const err = await pFinal(chai.request(server)
-      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
-      }))
+      })}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT)));
 
@@ -330,18 +332,18 @@ describe('oauth/', function() {
 
     // send the request that the page would send
     let res = await chai.request(server)
-      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: '/things/test-1:read',
         state: REQUEST_STATE,
-      }))
+      })}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
 
-    let jwt = res.body.token.access_token;
+    const jwt = res.body.token.access_token;
     res = await chai.request(server)
-      .get(Constants.THINGS_PATH + '/' + TEST_THING.id)
+      .get(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -354,7 +356,7 @@ describe('oauth/', function() {
     expect(err.response.status).toEqual(401);
 
     err = await pFinal(chai.request(server)
-      .delete(Constants.THINGS_PATH + '/' + TEST_THING.id)
+      .delete(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(401);
@@ -369,20 +371,20 @@ describe('oauth/', function() {
       res.json(code);
     });
 
-    let res = await chai.request(server)
-      .get(Constants.OAUTH_PATH + '/allow?' + qs.stringify({
+    const res = await chai.request(server)
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: '/things/test-1:read',
         state: REQUEST_STATE,
-      }))
+      })}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
 
-    let jwt = res.body;
+    const jwt = res.body;
     expect(jwt).toBeTruthy();
 
-    let err = await pFinal(chai.request(server)
+    const err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));

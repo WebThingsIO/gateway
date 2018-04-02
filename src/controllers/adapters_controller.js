@@ -10,17 +10,17 @@
 
 'use strict';
 
-var express = require('express');
-var addonManager = require('../addon-manager');
+const express = require('express');
+const addonManager = require('../addon-manager');
 
-var adaptersController = express.Router();
+const adaptersController = express.Router();
 
 /**
  * Return a list of adapters
  */
 adaptersController.get('/', (request, response) => {
-  var adapters = addonManager.getAdapters();
-  var adapterList = Array.from(adapters.values()).map(adapter => {
+  const adapters = addonManager.getAdapters();
+  const adapterList = Array.from(adapters.values()).map((adapter) => {
     return adapter.asDict();
   });
   response.json(adapterList);
@@ -30,12 +30,12 @@ adaptersController.get('/', (request, response) => {
  * Get a particular adapter.
  */
 adaptersController.get('/:adapterId/', (request, response) => {
-  var adapterId = request.params.adapterId;
-  var adapter = addonManager.getAdapter(adapterId);
+  const adapterId = request.params.adapterId;
+  const adapter = addonManager.getAdapter(adapterId);
   if (adapter) {
     response.json(adapter.asDict());
   } else {
-    response.status(404).send('Adapter "' + adapterId + '" not found.');
+    response.status(404).send(`Adapter "${adapterId}" not found.`);
   }
 });
 

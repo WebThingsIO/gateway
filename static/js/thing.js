@@ -18,7 +18,7 @@
  * @param {Object} description Thing description object.
  * @param {String} format 'svg' or 'html', defaults to html.
  */
-var Thing = function(description, format, options) {
+const Thing = function(description, format, options) {
   const opts = options || {};
   this.name = description.name;
   this.type = description.type;
@@ -26,7 +26,7 @@ var Thing = function(description, format, options) {
   this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
   this.thingCssClass = opts.thingCssClass || '';
   this.addIconToView =
-    typeof(opts.addIconToView) === 'boolean' ? opts.addIconToView : true;
+    typeof opts.addIconToView === 'boolean' ? opts.addIconToView : true;
 
   if (format == 'svg') {
     this.container = document.getElementById('floorplan-things');
@@ -41,10 +41,10 @@ var Thing = function(description, format, options) {
     this.href = new URL(description.href, App.ORIGIN);
     this.id = this.href.pathname.split('/').pop();
 
-    var wsHref = this.href.href.replace(/^http/, 'ws');
-    this.ws = new WebSocket(wsHref + '?jwt=' + API.jwt);
+    const wsHref = this.href.href.replace(/^http/, 'ws');
+    this.ws = new WebSocket(`${wsHref}?jwt=${API.jwt}`);
     this.ws.addEventListener('message', function(event) {
-      var message = JSON.parse(event.data);
+      const message = JSON.parse(event.data);
       if (message.messageType === 'propertyStatus') {
         this.onPropertyStatus(message.data);
       }
@@ -53,8 +53,8 @@ var Thing = function(description, format, options) {
   // Parse properties
   if (description.properties) {
     this.propertyDescriptions = {};
-    for (var propertyName in description.properties) {
-      var property = description.properties[propertyName];
+    for (const propertyName in description.properties) {
+      const property = description.properties[propertyName];
       this.propertyDescriptions[propertyName] = property;
     }
   }
@@ -62,7 +62,7 @@ var Thing = function(description, format, options) {
   // Only allow things to be removed from the HTML view for now.
   if (format != 'svg') {
     this.element.addEventListener('contextmenu',
-      this.handleContextMenu.bind(this));
+                                  this.handleContextMenu.bind(this));
   }
   return this;
 };
@@ -98,21 +98,23 @@ Thing.prototype.htmlDetailView = function() {
  * @return {Element}
  */
 Thing.prototype.makeWrappedSVGText = function(text) {
-  let lineHeight = 2.5;
-  let lineWidth = 12;
-  let x = 0;
+  const lineHeight = 2.5;
+  const lineWidth = 12;
+  const x = 0;
   let y = 8;
   let row = '';
-  let words = text.split(' ');
+  const words = text.split(' ');
 
-  let textElt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  const textElt =
+    document.createElementNS('http://www.w3.org/2000/svg', 'text');
   textElt.setAttribute('x', x);
   textElt.setAttribute('y', y);
   textElt.setAttribute('text-anchor', 'middle');
   textElt.classList.add('svg-thing-text');
 
   function makeTSpan(textContent) {
-    let tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    const tspan =
+      document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
     tspan.setAttribute('x', x);
     tspan.setAttribute('y', y);
     tspan.textContent = textContent;
@@ -120,9 +122,9 @@ Thing.prototype.makeWrappedSVGText = function(text) {
   }
 
   while (words.length > 0) {
-    let word = words.shift();
+    const word = words.shift();
     if (row.length + word.length + 1 < lineWidth) {
-      row += ' ' + word;
+      row += ` ${word}`;
     } else {
       textElt.appendChild(makeTSpan(row));
       row = word;
@@ -158,7 +160,7 @@ Thing.prototype.svgView = function() {
  * @param {String} format 'svg' or 'html'.
  */
 Thing.prototype.render = function(format) {
-  var element;
+  let element;
   if (format == 'svg') {
     element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     element.innerHTML = this.svgView();
@@ -182,7 +184,7 @@ Thing.prototype.render = function(format) {
  */
 Thing.prototype.handleContextMenu = function(e) {
   e.preventDefault(e);
-  var newEvent = new CustomEvent('_contextmenu', {
+  const newEvent = new CustomEvent('_contextmenu', {
     detail: {
       thingUrl: this.href.href,
       thingName: this.name,

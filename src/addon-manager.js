@@ -76,7 +76,7 @@ class AddonManager extends EventEmitter {
      */
     this.emit(Constants.ADAPTER_ADDED, adapter);
 
-    var deferredWait = this.deferredWaitForAdapter.get(adapter.id);
+    const deferredWait = this.deferredWaitForAdapter.get(adapter.id);
     if (deferredWait) {
       this.deferredWaitForAdapter.delete(adapter.id);
       deferredWait.resolve(adapter);
@@ -90,7 +90,7 @@ class AddonManager extends EventEmitter {
    * @returns A promise that resolves to the newly added device.
    */
   addNewThing(pairingTimeout) {
-    var deferredAdd = new Deferred();
+    const deferredAdd = new Deferred();
 
     if (this.deferredAdd) {
       deferredAdd.reject('Add already in progress');
@@ -98,7 +98,7 @@ class AddonManager extends EventEmitter {
       deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
-      this.adapters.forEach(adapter => {
+      this.adapters.forEach((adapter) => {
         console.log('About to call startPairing on', adapter.name);
         adapter.startPairing(pairingTimeout);
       });
@@ -118,7 +118,7 @@ class AddonManager extends EventEmitter {
    * Cancels a previous addNewThing request.
    */
   cancelAddNewThing() {
-    var deferredAdd = this.deferredAdd;
+    const deferredAdd = this.deferredAdd;
 
     if (this.pairingTimeout) {
       clearTimeout(this.pairingTimeout);
@@ -126,7 +126,7 @@ class AddonManager extends EventEmitter {
     }
 
     if (deferredAdd) {
-      this.adapters.forEach(adapter => {
+      this.adapters.forEach((adapter) => {
         adapter.cancelPairing();
       });
       this.deferredAdd = null;
@@ -140,11 +140,11 @@ class AddonManager extends EventEmitter {
    * Cancels a previous removeThing request.
    */
   cancelRemoveThing(thingId) {
-    var deferredRemove = this.deferredRemove;
+    const deferredRemove = this.deferredRemove;
     if (deferredRemove) {
-      var device = this.getDevice(thingId);
+      const device = this.getDevice(thingId);
       if (device) {
-        var adapter = device.adapter;
+        const adapter = device.adapter;
         if (adapter) {
           adapter.cancelRemoveThing(device);
         }
@@ -214,8 +214,8 @@ class AddonManager extends EventEmitter {
    *          The dictionary key corresponds to the device id.
    */
   getThings() {
-    var things = [];
-    for (var thingId in this.devices) {
+    const things = [];
+    for (const thingId in this.devices) {
       things.push(this.getThing(thingId));
     }
     return things;
@@ -226,7 +226,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns the thing with the indicated id.
    */
   getThing(thingId) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.asThing();
     }
@@ -238,7 +238,7 @@ class AddonManager extends EventEmitter {
    *          identified by `thingId`.
    */
   getPropertyDescriptions(thingId) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.getPropertyDescriptions();
     }
@@ -250,7 +250,7 @@ class AddonManager extends EventEmitter {
    *          identified by `thingId`.
    */
   getPropertyDescription(thingId, propertyName) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.getPropertyDescription(propertyName);
     }
@@ -262,12 +262,12 @@ class AddonManager extends EventEmitter {
    *          from the thing identified by `thingId`.
    */
   getProperty(thingId, propertyName) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.getProperty(propertyName);
     }
     return new Promise((resolve, reject) => {
-      reject('getProperty: device: ' + thingId + ' not found.');
+      reject(`getProperty: device: ${thingId} not found.`);
     });
   }
 
@@ -277,12 +277,12 @@ class AddonManager extends EventEmitter {
    *          for the thing identified by `thingId`.
    */
   setProperty(thingId, propertyName, value) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.setProperty(propertyName, value);
     }
     return new Promise((resolve, reject) => {
-      reject('setProperty: device: ' + thingId + ' not found.');
+      reject(`setProperty: device: ${thingId} not found.`);
     });
   }
 
@@ -291,12 +291,12 @@ class AddonManager extends EventEmitter {
    * @returns a promise which resolves when the action has been requested.
    */
   requestAction(thingId, actionId, actionName, input) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.requestAction(actionId, actionName, input);
     }
     return new Promise((resolve, reject) => {
-      reject('requestAction: device: ' + thingId + ' not found.');
+      reject(`requestAction: device: ${thingId} not found.`);
     });
   }
 
@@ -305,12 +305,12 @@ class AddonManager extends EventEmitter {
    * @returns a promise which resolves when the action has been removed.
    */
   removeAction(thingId, actionId, actionName) {
-    var device = this.getDevice(thingId);
+    const device = this.getDevice(thingId);
     if (device) {
       return device.removeAction(actionId, actionName);
     }
     return new Promise((resolve, reject) => {
-      reject('removeAction: device: ' + thingId + ' not found.');
+      reject(`removeAction: device: ${thingId} not found.`);
     });
   }
 
@@ -321,7 +321,7 @@ class AddonManager extends EventEmitter {
    */
   handleDeviceAdded(device) {
     this.devices[device.id] = device;
-    var thing = device.asThing();
+    const thing = device.asThing();
 
     /**
      * Thing added event.
@@ -336,10 +336,10 @@ class AddonManager extends EventEmitter {
     // If this device was added in response to addNewThing, then
     // We need to cancel pairing mode on all of the "other" adapters.
 
-    var deferredAdd = this.deferredAdd;
+    const deferredAdd = this.deferredAdd;
     if (deferredAdd) {
       this.deferredAdd = null;
-      this.adapters.forEach(adapter => {
+      this.adapters.forEach((adapter) => {
         if (adapter !== device.adapter) {
           adapter.cancelPairing();
         }
@@ -358,7 +358,7 @@ class AddonManager extends EventEmitter {
    */
   handleDeviceRemoved(device) {
     delete this.devices[device.id];
-    var thing = device.asThing();
+    const thing = device.asThing();
 
     /**
      * Thing removed event.
@@ -370,7 +370,7 @@ class AddonManager extends EventEmitter {
      */
     this.emit(Constants.THING_REMOVED, thing);
 
-    var deferredRemove = this.deferredRemove;
+    const deferredRemove = this.deferredRemove;
     if (deferredRemove && deferredRemove.adapter == device.adapter) {
       this.deferredRemove = null;
       deferredRemove.resolve(device.id);
@@ -383,28 +383,28 @@ class AddonManager extends EventEmitter {
    * Verifies one level of an object, and recurses as required.
    */
   validateManifestObject(prefix, object, template) {
-    for (let key in template) {
+    for (const key in template) {
       if (key in object) {
-        let objectVal = object[key];
-        let templateVal = template[key];
-        if (typeof(objectVal) !== typeof(templateVal)) {
-          return `Expecting ${prefix}${key} to have type: ` +
-                 typeof(templateVal) + ', found: ' + typeof(objectVal);
+        const objectVal = object[key];
+        const templateVal = template[key];
+        if (typeof objectVal !== typeof templateVal) {
+          return `Expecting ${prefix}${key} to have type: ${
+            typeof templateVal}, found: ${typeof objectVal}`;
         }
-        if (typeof(objectVal) === 'object') {
+        if (typeof objectVal === 'object') {
           if (Array.isArray(objectVal)) {
             if (templateVal.length > 0) {
-              const expectedType = typeof(templateVal[0]);
+              const expectedType = typeof templateVal[0];
               for (const val of objectVal) {
-                if (typeof(val) !== expectedType) {
+                if (typeof val !== expectedType) {
                   return `Expecting all values in ${prefix}${key} to be of ` +
                     `type ${expectedType}`;
                 }
               }
             }
           } else {
-            let err = this.validateManifestObject(prefix + key + '.',
-                                                  objectVal, templateVal);
+            const err = this.validateManifestObject(`${prefix + key}.`,
+                                                    objectVal, templateVal);
             if (err) {
               return err;
             }
@@ -423,7 +423,7 @@ class AddonManager extends EventEmitter {
    * fields that we actually use.
    */
   validateManifest(manifest) {
-    let manifestTemplate = {
+    const manifestTemplate = {
       name: '',
       version: '',
       files: [''],
@@ -553,7 +553,7 @@ class AddonManager extends EventEmitter {
     }
 
     // Verify that important fields exist in the manifest
-    let err = this.validateManifest(manifest);
+    const err = this.validateManifest(manifest);
     if (err) {
       return Promise.reject(
         `Error found in manifest for ${packageName}\n${err}`);
@@ -565,15 +565,15 @@ class AddonManager extends EventEmitter {
         manifest.moziot.api.max < apiVersion) {
       const err = `API mismatch for package: ${manifest.name}\nCurrent: ${
         apiVersion} Supported: ${manifest.moziot.api.min}-${
-          manifest.moziot.api.max}`;
+        manifest.moziot.api.max}`;
       console.error(err);
       return Promise.reject(err);
     }
 
     // Get any saved settings for this add-on.
     const key = `addons.${manifest.name}`;
-    let savedSettings = await Settings.get(key);
-    let newSettings = Object.assign({}, manifest);
+    const savedSettings = await Settings.get(key);
+    const newSettings = Object.assign({}, manifest);
     if (savedSettings) {
       // Overwrite config and enablement values.
       newSettings.moziot.enabled = savedSettings.moziot.enabled;
@@ -669,7 +669,7 @@ class AddonManager extends EventEmitter {
           continue;
         }
 
-        addonManager.loadAddon(addonName).catch(err => {
+        addonManager.loadAddon(addonName).catch((err) => {
           console.error(`Failed to load add-on: ${addonName}\n${err}`);
         });
       }
@@ -698,14 +698,14 @@ class AddonManager extends EventEmitter {
    * from the one that they requested removal of.
    */
   removeThing(thingId) {
-    var deferredRemove = new Deferred();
+    const deferredRemove = new Deferred();
 
     if (this.deferredAdd) {
       deferredRemove.reject('Add already in progress');
     } else if (this.deferredRemove) {
       deferredRemove.reject('Remove already in progress');
     } else {
-      var device = this.getDevice(thingId);
+      const device = this.getDevice(thingId);
       if (device) {
         deferredRemove.adapter = device.adapter;
         this.deferredRemove = deferredRemove;
@@ -716,7 +716,7 @@ class AddonManager extends EventEmitter {
     }
 
     return deferredRemove.promise;
-   }
+  }
 
   /**
    * @method unloadAddons
@@ -731,7 +731,7 @@ class AddonManager extends EventEmitter {
       return Promise.resolve();
     }
 
-    let unloadPromises = [];
+    const unloadPromises = [];
     // unload the adapters in the reverse of the order that they were loaded.
     for (const adapterId of Array.from(this.adapters.keys()).reverse()) {
       unloadPromises.push(this.unloadAdapter(adapterId));
@@ -754,7 +754,7 @@ class AddonManager extends EventEmitter {
       return Promise.resolve();
     }
 
-    let adapter = this.getAdapter(id);
+    const adapter = this.getAdapter(id);
     if (typeof adapter === 'undefined') {
       // This adapter wasn't loaded.
       return Promise.resolve();
@@ -1027,7 +1027,7 @@ class AddonManager extends EventEmitter {
     // Update the saved settings and disable the add-on
     if (disable) {
       const key = `addons.${packageName}`;
-      let savedSettings = await Settings.get(key);
+      const savedSettings = await Settings.get(key);
       if (savedSettings) {
         savedSettings.moziot.enabled = false;
         await Settings.set(key, savedSettings);
@@ -1046,14 +1046,14 @@ class AddonManager extends EventEmitter {
    * ensure that tests don't proceed until
    */
   waitForAdapter(adapterId) {
-    var adapter = this.getAdapter(adapterId);
+    const adapter = this.getAdapter(adapterId);
     if (adapter) {
       // The adapter already exists, just create a Promise
       // that resolves to that.
       return Promise.resolve(adapter);
     }
 
-    var deferredWait = this.deferredWaitForAdapter.get(adapterId);
+    let deferredWait = this.deferredWaitForAdapter.get(adapterId);
     if (!deferredWait) {
       // No deferred wait currently setup. Set a new one up.
       deferredWait = new Deferred();

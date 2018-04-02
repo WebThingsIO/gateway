@@ -33,7 +33,7 @@ const Thing = function(id, description) {
   this.name = description.name || '';
   this.type = description.type || '';
   this.description = description.description || '';
-  this.href = Constants.THINGS_PATH + '/' + this.id;
+  this.href = `${Constants.THINGS_PATH}/${this.id}`;
   this.properties = {};
   this.actions = description.actions || {};
   this.events = description.events || {};
@@ -43,8 +43,8 @@ const Thing = function(id, description) {
     for (const propertyName in description.properties) {
       const property = description.properties[propertyName];
       // Give the property a URL if it doesn't have one
-      property.href = Constants.THINGS_PATH + '/' + this.id +
-        Constants.PROPERTIES_PATH + '/' + propertyName;
+      property.href = `${Constants.THINGS_PATH}/${this.id
+      }${Constants.PROPERTIES_PATH}/${propertyName}`;
       this.properties[propertyName] = property;
     }
   }

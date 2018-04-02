@@ -18,9 +18,9 @@ const effects = {
  * @return {Effect}
  */
 function fromDescription(desc) {
-  let EffectClass = effects[desc.type];
+  const EffectClass = effects[desc.type];
   if (!EffectClass) {
-    throw new Error('Unsupported or invalid effect type:' + desc.type);
+    throw new Error(`Unsupported or invalid effect type:${desc.type}`);
   }
   return new EffectClass(desc);
 }

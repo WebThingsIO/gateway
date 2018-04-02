@@ -7,7 +7,7 @@
 'use strict';
 
 // eslint-disable-next-line no-unused-vars
-var LocalTokenServiceScreen = {
+const LocalTokenServiceScreen = {
   init: function() {
     this.tokenHints = document.querySelectorAll('.token-hint');
   },
@@ -17,7 +17,7 @@ var LocalTokenServiceScreen = {
     if (!token) {
       token = 'not found';
     }
-    for (let tokenHint of this.tokenHints) {
+    for (const tokenHint of this.tokenHints) {
       tokenHint.textContent = token;
     }
   },

@@ -51,19 +51,19 @@ DimmableLight.prototype.updateStatus = function() {
     headers: API.headers(),
   };
 
-  let onFetch = fetch(this.onPropertyUrl, opts);
-  let levelFetch = fetch(this.levelPropertyUrl, opts);
+  const onFetch = fetch(this.onPropertyUrl, opts);
+  const levelFetch = fetch(this.levelPropertyUrl, opts);
 
-  Promise.all([onFetch, levelFetch]).then(responses => {
-    return Promise.all(responses.map(response => {
+  Promise.all([onFetch, levelFetch]).then((responses) => {
+    return Promise.all(responses.map((response) => {
       return response.json();
     }));
-  }).then(responses => {
-    responses.forEach(response => {
+  }).then((responses) => {
+    responses.forEach((response) => {
       this.onPropertyStatus(response);
     });
-  }).catch(error => {
-    console.error('Error fetching on/off switch status ' + error);
+  }).catch((error) => {
+    console.error(`Error fetching on/off switch status ${error}`);
   });
 };
 

@@ -20,9 +20,9 @@ const triggers = {
  * @return {Trigger}
  */
 function fromDescription(desc) {
-  let TriggerClass = triggers[desc.type];
+  const TriggerClass = triggers[desc.type];
   if (!TriggerClass) {
-    throw new Error('Unsupported or invalid trigger type:' + desc.type);
+    throw new Error(`Unsupported or invalid trigger type:${desc.type}`);
   }
   return new TriggerClass(desc);
 }

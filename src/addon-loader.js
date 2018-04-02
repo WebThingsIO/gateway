@@ -10,7 +10,7 @@
 
 'use strict';
 
-var config = require('config');
+const config = require('config');
 const Constants = require('./constants');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./plugin/plugin-client');
@@ -48,7 +48,7 @@ async function loadAddon(addonPath, verbose) {
       `Failed to parse package.json: ${packageJson}\n${e}`;
     return Promise.reject(err);
   }
-  let packageName = manifest.name;
+  const packageName = manifest.name;
 
   // Verify API version.
   const apiVersion = config.get('addonManager.api');
@@ -62,8 +62,8 @@ async function loadAddon(addonPath, verbose) {
 
   // Get any saved settings for this add-on.
   const key = `addons.${manifest.name}`;
-  let savedSettings = await Settings.get(key);
-  let newSettings = Object.assign({}, manifest);
+  const savedSettings = await Settings.get(key);
+  const newSettings = Object.assign({}, manifest);
   if (savedSettings) {
     // Overwrite config values.
     newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
@@ -72,19 +72,19 @@ async function loadAddon(addonPath, verbose) {
     newSettings.moziot.config = {};
   }
 
-  var pluginClient = new PluginClient(packageName, {verbose: verbose});
+  const pluginClient = new PluginClient(packageName, {verbose: verbose});
   return new Promise((resolve, reject) => {
-    pluginClient.register().then(addonManagerProxy => {
+    pluginClient.register().then((addonManagerProxy) => {
       console.log('Loading add-on for', manifest.name,
                   'from', addonPath);
-      let addonLoader = dynamicRequire(addonPath);
+      const addonLoader = dynamicRequire(addonPath);
       addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
         console.error('Failed to load', packageName, '-', errorStr);
         addonManagerProxy.unloadPlugin();
         process.exit(Constants.DONT_RESTART_EXIT_CODE);
       });
       resolve();
-    }).catch(e => {
+    }).catch((e) => {
       console.error(e);
       const err =
         `Failed to register package: ${manifest.name} with gateway`;
@@ -130,9 +130,9 @@ if (opt.argv.length != 1) {
   console.error('Expecting a single package to load');
   process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
-var addonPath = opt.argv[0];
+const addonPath = opt.argv[0];
 
-loadAddon(addonPath, opt.verbose).catch(err => {
+loadAddon(addonPath, opt.verbose).catch((err) => {
   console.error(err);
   process.exit(Constants.DONT_RESTART_EXIT_CODE);
 });

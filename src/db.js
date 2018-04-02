@@ -29,7 +29,7 @@ const TABLES = [
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
-var Database = {
+const Database = {
   /**
    * SQLite3 Database object.
    */
@@ -53,7 +53,7 @@ var Database = {
     } else {
       filename = path.join(config.get('profileDir'), 'config', 'db.sqlite3');
 
-      var removeBeforeOpen = config.get('database.removeBeforeOpen');
+      const removeBeforeOpen = config.get('database.removeBeforeOpen');
 
       // Check if database already exists
       exists = fs.existsSync(filename);
@@ -133,19 +133,19 @@ var Database = {
   populate: function() {
     console.log('Populating database with default things...');
     // Populate Things table
-    var insertSQL = this.db.prepare(
+    const insertSQL = this.db.prepare(
       'INSERT INTO things (id, description) VALUES (?, ?)');
-    for (var thing of ThingsData) {
-      var thingId = thing.id;
+    for (const thing of ThingsData) {
+      const thingId = thing.id;
       delete thing.id;
       insertSQL.run(thingId, JSON.stringify(thing));
     }
     insertSQL.finalize();
 
     // Add default user if provided
-    var defaultUser = config.get('authentication.defaultUser');
+    const defaultUser = config.get('authentication.defaultUser');
     if (defaultUser) {
-      var passwordHash = Passwords.hashSync(defaultUser.password);
+      const passwordHash = Passwords.hashSync(defaultUser.password);
       this.db.run(
         'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
         [defaultUser.email, passwordHash, defaultUser.name],
@@ -153,19 +153,19 @@ var Database = {
           if (error) {
             console.error('Failed to save default user.');
           } else {
-            console.log('Saved default user ' + defaultUser.email);
+            console.log(`Saved default user ${defaultUser.email}`);
           }
         });
     }
 
     // Add any settings provided.
-    var generateSettings = function(obj, baseKey) {
+    const generateSettings = function(obj, baseKey) {
       const settings = [];
 
       for (const key in obj) {
         let newKey;
         if (baseKey !== '') {
-          newKey = baseKey + '.' + key;
+          newKey = `${baseKey}.${key}`;
         } else {
           newKey = key;
         }
@@ -179,18 +179,18 @@ var Database = {
       return settings;
     };
 
-    var settings = generateSettings(config.get('settings.defaults'), '');
+    const settings = generateSettings(config.get('settings.defaults'), '');
     for (const setting of settings) {
       this.db.run(
         'INSERT INTO settings (key, value) VALUES (?, ?)',
         [setting[0], setting[1]],
         function(error) {
           if (error) {
-            console.error('Failed to insert setting ' +
-                          setting[0]);
+            console.error(`Failed to insert setting ${
+              setting[0]}`);
           } else if (DEBUG) {
-            console.log('Saved setting ' + setting[0] + ' = ' +
-                        setting[1]);
+            console.log(`Saved setting ${setting[0]} = ${
+              setting[1]}`);
           }
         });
     }
@@ -203,20 +203,21 @@ var Database = {
    */
   getThings: function() {
     return new Promise((function(resolve, reject) {
-      this.db.all('SELECT id, description FROM things',
+      this.db.all(
+        'SELECT id, description FROM things',
         (function(err, rows) {
-        if (err) {
-          reject(err);
-        } else {
-          var things = [];
-          for (var row of rows) {
-            var thing = JSON.parse(row.description);
-            thing.id = row.id;
-            things.push(thing);
+          if (err) {
+            reject(err);
+          } else {
+            const things = [];
+            for (const row of rows) {
+              const thing = JSON.parse(row.description);
+              thing.id = row.id;
+              things.push(thing);
+            }
+            resolve(things);
           }
-          resolve(things);
-        }
-      }));
+        }));
     }).bind(this));
   },
 
@@ -228,9 +229,11 @@ var Database = {
    */
   createThing: function(id, description) {
     return new Promise((function(resolve, reject) {
-      var db = this.db;
-      db.run('INSERT INTO things (id, description) VALUES (?, ?)',
-        [id, JSON.stringify(description)], function(error) {
+      const db = this.db;
+      db.run(
+        'INSERT INTO things (id, description) VALUES (?, ?)',
+        [id, JSON.stringify(description)],
+        function(error) {
           if (error) {
             reject(error);
           } else {
@@ -248,9 +251,11 @@ var Database = {
    */
   updateThing: function(id, description) {
     return new Promise((function(resolve, reject) {
-      var db = this.db;
-      db.run('UPDATE things SET description=? WHERE id=?',
-        [JSON.stringify(description), id], function(error) {
+      const db = this.db;
+      db.run(
+        'UPDATE things SET description=? WHERE id=?',
+        [JSON.stringify(description), id],
+        function(error) {
           if (error) {
             reject(error);
           } else {
@@ -267,7 +272,7 @@ var Database = {
    */
   removeThing: function(id) {
     return new Promise((function(resolve, reject) {
-      var db = this.db;
+      const db = this.db;
       db.run('DELETE FROM things WHERE id = ?', id, function(error) {
         if (error) {
           reject(error);
@@ -283,15 +288,17 @@ var Database = {
    */
   getUser: function(email) {
     return new Promise((function(resolve, reject) {
-      var db = this.db;
-      db.get('SELECT * FROM users WHERE email = ?', email,
+      const db = this.db;
+      db.get(
+        'SELECT * FROM users WHERE email = ?',
+        email,
         function(error, row) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(row);
-        }
-      });
+          if (error) {
+            reject(error);
+          } else {
+            resolve(row);
+          }
+        });
     }).bind(this));
   },
 
@@ -361,7 +368,7 @@ var Database = {
    */
   setSetting: async function(key, value) {
     value = JSON.stringify(value);
-    let currentValue = await this.getSetting(key);
+    const currentValue = await this.getSetting(key);
     if (typeof currentValue === 'undefined') {
       return this.run('INSERT INTO settings (key, value) VALUES (?, ?)',
                       [key, value]);
@@ -492,14 +499,16 @@ var Database = {
    */
   getJSONWebTokensByUser: function(userId) {
     return new Promise((resolve, reject) => {
-      this.db.all('SELECT * FROM jsonwebtokens WHERE user = ?', [userId],
-      (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
-      });
+      this.db.all(
+        'SELECT * FROM jsonwebtokens WHERE user = ?',
+        [userId],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
     });
   },
 

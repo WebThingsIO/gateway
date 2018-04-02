@@ -16,9 +16,9 @@ function readVersion(packagePath) {
         reject(err);
         return;
       }
-      let pkg = JSON.parse(data);
+      const pkg = JSON.parse(data);
       if (!semver.valid(pkg.version)) {
-        reject(new Error('invalid gateway semver: ' + pkg.version));
+        reject(new Error(`invalid gateway semver: ${pkg.version}`));
         return;
       }
       resolve(pkg.version);
@@ -42,7 +42,7 @@ function stat(path) {
   });
 }
 
-let cacheLatest = {
+const cacheLatest = {
   tag: null,
   time: 0,
   value: {version: null},
@@ -75,23 +75,23 @@ UpdatesController.get('/latest', async function(request, response) {
   const releases = await res.json();
   if (!releases || !releases.filter) {
     console.warn('API returned invalid releases, rate limit likely exceeded');
-    let value = {version: null};
+    const value = {version: null};
     response.send(value);
     cacheLatestInsert(response, value);
     return;
   }
-  const latestRelease = releases.filter(release => {
+  const latestRelease = releases.filter((release) => {
     return !release.prerelease && !release.draft;
   })[0];
   if (!latestRelease) {
     console.warn('No releases found');
-    let value = {version: null};
+    const value = {version: null};
     response.send(value);
     cacheLatestInsert(response, value);
     return;
   }
-  let releaseVer = latestRelease.tag_name;
-  let value = {version: releaseVer};
+  const releaseVer = latestRelease.tag_name;
+  const value = {version: releaseVer};
   response.send(value);
   cacheLatestInsert(response, value);
 });
@@ -106,10 +106,10 @@ UpdatesController.get('/status', async function(request, response) {
   //  update failed, last attempt was ctime of gateway_failed
   // }
   const currentVersion = await readVersion('package.json');
-  let oldStats = await stat('../gateway_old/package.json');
+  const oldStats = await stat('../gateway_old/package.json');
   let oldVersion = null;
 
-  let failedStats = await stat('../gateway_failed/package.json');
+  const failedStats = await stat('../gateway_failed/package.json');
   let failedVersion = null;
 
   if (oldStats) {

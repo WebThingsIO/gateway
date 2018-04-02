@@ -33,7 +33,7 @@ class Plugin {
     this.logPrefix = pluginId.replace('-adapter', '');
 
     this.adapters = new Map();
-    this.ipcBaseAddr = 'gateway.plugin.' + this.pluginId;
+    this.ipcBaseAddr = `gateway.plugin.${this.pluginId}`;
 
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
                                    this.ipcBaseAddr,
@@ -60,7 +60,7 @@ class Plugin {
     return {
       pluginId: this.pluginId,
       ipcBaseAddr: this.ipcBaseAddr,
-      adapters: Array.from(this.adapters.values()).map(adapter => {
+      adapters: Array.from(this.adapters.values()).map((adapter) => {
         return adapter.asDict();
       }),
       exec: this.exec,
@@ -70,8 +70,8 @@ class Plugin {
 
   onMsg(msg) {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
-    var adapterId = msg.data.adapterId;
-    var adapter;
+    const adapterId = msg.data.adapterId;
+    let adapter;
 
     // The first switch manages plugin level messages.
     switch (msg.messageType) {
@@ -122,9 +122,9 @@ class Plugin {
       return;
     }
 
-    var device;
-    var property;
-    var deferredMock;
+    let device;
+    let property;
+    let deferredMock;
 
     switch (msg.messageType) {
 
@@ -228,7 +228,7 @@ class Plugin {
 
   sendMsg(methodType, data) {
     data.pluginId = this.pluginId;
-    var msg = {
+    const msg = {
       messageType: methodType,
       data: data,
     };
@@ -251,14 +251,14 @@ class Plugin {
       name: this.pluginId,
       path: this.execPath,
     };
-    let execCmd = format(this.exec, execArgs);
+    const execCmd = format(this.exec, execArgs);
 
     DEBUG && console.log('  Launching:', execCmd);
 
     // If we need embedded spaces, then consider changing to use the npm
     // module called splitargs
     this.restart = true;
-    let args = execCmd.split(' ');
+    const args = execCmd.split(' ');
     this.process.p = spawn(
       args[0],
       args.slice(1),
@@ -272,7 +272,7 @@ class Plugin {
       }
     );
 
-    this.process.p.on('error', err => {
+    this.process.p.on('error', (err) => {
       // We failed to spawn the process. This most likely means that the
       // exec string is malformed somehow. Report the error but don't try
       // restarting.
@@ -285,18 +285,18 @@ class Plugin {
     this.stdoutReadline = readline.createInterface({
       input: this.process.p.stdout,
     });
-    this.stdoutReadline.on('line', line => {
-      console.log(this.logPrefix + ': ' + line);
+    this.stdoutReadline.on('line', (line) => {
+      console.log(`${this.logPrefix}: ${line}`);
     });
 
     this.stderrReadline = readline.createInterface({
       input: this.process.p.stderr,
     });
-    this.stderrReadline.on('line', line => {
-      console.error(this.logPrefix + ': ' + line);
+    this.stderrReadline.on('line', (line) => {
+      console.error(`${this.logPrefix}: ${line}`);
     });
 
-    this.process.p.on('exit', code => {
+    this.process.p.on('exit', (code) => {
       if (this.restart) {
         if (code == Constants.DONT_RESTART_EXIT_CODE) {
           console.log('Plugin:', this.pluginId, 'died, code =', code,

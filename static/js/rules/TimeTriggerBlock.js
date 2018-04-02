@@ -13,14 +13,14 @@ function TimeTriggerBlock(ruleArea, rule, x, y) {
   RulePartBlock.call(this, ruleArea, rule,
                      'Time of day', '/images/clock.svg', x, y);
 
-  let rulePartInfo = this.elt.querySelector('.rule-part-info');
+  const rulePartInfo = this.elt.querySelector('.rule-part-info');
 
   this.timeInput = document.createElement('input');
   this.timeInput.type = 'time';
-  let date = new Date();
-  let hours = TimeTriggerBlock.leftPad(date.getHours());
-  let minutes = TimeTriggerBlock.leftPad(date.getMinutes());
-  this.timeInput.value = hours + ':' + minutes;
+  const date = new Date();
+  const hours = TimeTriggerBlock.leftPad(date.getHours());
+  const minutes = TimeTriggerBlock.leftPad(date.getMinutes());
+  this.timeInput.value = `${hours}:${minutes}`;
   this.timeInput.classList.add('time-input');
 
   // Disable dragging started by clicking time input
@@ -77,11 +77,11 @@ TimeTriggerBlock.leftPad = function(n) {
  * @return {String}
  */
 TimeTriggerBlock.utcToLocal = function(utcTime) {
-  let timeParts = utcTime.split(':');
-  let date = new Date();
+  const timeParts = utcTime.split(':');
+  const date = new Date();
   date.setUTCHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
-  let lp = TimeTriggerBlock.leftPad;
-  return lp(date.getHours()) + ':' + lp(date.getMinutes());
+  const lp = TimeTriggerBlock.leftPad;
+  return `${lp(date.getHours())}:${lp(date.getMinutes())}`;
 };
 
 /**
@@ -90,9 +90,9 @@ TimeTriggerBlock.utcToLocal = function(utcTime) {
  * @return {String}
  */
 TimeTriggerBlock.localToUTC = function(localTime) {
-  let timeParts = localTime.split(':');
-  let date = new Date();
+  const timeParts = localTime.split(':');
+  const date = new Date();
   date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
-  let lp = TimeTriggerBlock.leftPad;
-  return lp(date.getUTCHours()) + ':' + lp(date.getUTCMinutes());
+  const lp = TimeTriggerBlock.leftPad;
+  return `${lp(date.getUTCHours())}:${lp(date.getUTCMinutes())}`;
 };

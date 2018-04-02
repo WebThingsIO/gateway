@@ -9,7 +9,7 @@
 
 const DEBUG = false;
 
-var id = 0;
+let id = 0;
 
 class Deferred {
   constructor() {

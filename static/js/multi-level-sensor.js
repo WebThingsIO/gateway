@@ -17,7 +17,7 @@
  *
  * @param Object description Thing description object.
  */
-var MultiLevelSensor = function(description, format) {
+const MultiLevelSensor = function(description, format) {
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
                                   pngBaseIcon: '/images/binary-sensor.png',
@@ -47,10 +47,10 @@ MultiLevelSensor.prototype.updateStatus = function() {
   if (!this.levelPropertyUrl) {
     return;
   }
-  var opts = {
+  const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
   fetch(this.levelPropertyUrl, opts).then((function(response) {
@@ -63,7 +63,7 @@ MultiLevelSensor.prototype.updateStatus = function() {
 
     this.showLevel(response.level);
   }).bind(this)).catch(function(error) {
-    console.error('Error fetching sensor level status ' + error);
+    console.error(`Error fetching sensor level status ${error}`);
   });
 };
 
@@ -91,7 +91,7 @@ MultiLevelSensor.prototype.showLevel = function(level) {
 
 MultiLevelSensor.prototype.iconView = function() {
   let level = 0;
-  if (typeof(this.properties.level) !== 'undefined') {
+  if (typeof this.properties.level !== 'undefined') {
     level = this.properties.level;
   }
 

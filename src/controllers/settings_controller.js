@@ -14,7 +14,7 @@
 
 const PromiseRouter = require('express-promise-router');
 const greenlock = require('greenlock');
-const leChallengeDns = require('le-challenge-dns').create({ debug: false });
+const leChallengeDns = require('le-challenge-dns').create({debug: false});
 const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
@@ -25,79 +25,81 @@ const Constants = require('../constants');
 const UserProfile = require('../user-profile');
 const Utils = require('../utils');
 
-var SettingsController = PromiseRouter();
+const SettingsController = PromiseRouter();
 
 /**
  * Set an experiment setting.
  */
-SettingsController.put('/experiments/:experimentName',
-                       async (request, response) => {
-  var experimentName = request.params.experimentName;
+SettingsController.put(
+  '/experiments/:experimentName',
+  async (request, response) => {
+    const experimentName = request.params.experimentName;
 
-  if (!request.body || typeof request.body.enabled === 'undefined') {
-    response.status(400).send('Enabled property not defined');
-    return;
-  }
+    if (!request.body || typeof request.body.enabled === 'undefined') {
+      response.status(400).send('Enabled property not defined');
+      return;
+    }
 
-  var enabled = request.body.enabled;
+    const enabled = request.body.enabled;
 
-  try {
-    const result =
-      await Settings.set('experiments.' + experimentName + '.enabled',
-                         enabled);
-    response.status(200).json({'enabled': result});
-  } catch (e) {
-    console.error('Failed to set setting experiments.' + experimentName);
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
+    try {
+      const result =
+        await Settings.set(`experiments.${experimentName}.enabled`,
+                           enabled);
+      response.status(200).json({enabled: result});
+    } catch (e) {
+      console.error(`Failed to set setting experiments.${experimentName}`);
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
 
 /**
  * Get an experiment setting.
  */
-SettingsController.get('/experiments/:experimentName',
-                       async (request, response) => {
-  var experimentName = request.params.experimentName;
+SettingsController.get(
+  '/experiments/:experimentName',
+  async (request, response) => {
+    const experimentName = request.params.experimentName;
 
-  try {
-    const result =
-      await Settings.get('experiments.' + experimentName + '.enabled');
-    if (typeof result === 'undefined') {
-      response.status(404).send('Setting not found');
-    } else {
-      response.status(200).json({'enabled': result});
+    try {
+      const result =
+        await Settings.get(`experiments.${experimentName}.enabled`);
+      if (typeof result === 'undefined') {
+        response.status(404).send('Setting not found');
+      } else {
+        response.status(200).json({enabled: result});
+      }
+    } catch (e) {
+      console.error(`Failed to get setting experiments.${experimentName}`);
+      console.error(e);
+      response.status(400).send(e);
     }
-  } catch (e) {
-    console.error('Failed to get setting experiments.' + experimentName);
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
+  });
 
 SettingsController.post('/reclaim', async (request, response) => {
-  let subdomain = request.body.subdomain;
+  const subdomain = request.body.subdomain;
 
   try {
-    await fetch(config.get('ssltunnel.registration_endpoint') +
-                '/reclaim?name=' + subdomain);
+    await fetch(`${config.get('ssltunnel.registration_endpoint')
+    }/reclaim?name=${subdomain}`);
     response.status(200).end();
   } catch (e) {
     console.error(e);
-    response.statusMessage = 'Error reclaiming domain - ' + e;
+    response.statusMessage = `Error reclaiming domain - ${e}`;
     response.status(400).end();
   }
 });
 
 SettingsController.post('/subscribe', async (request, response) => {
-  let email = request.body.email;
-  let reclamationToken = request.body.reclamationToken;
-  let subdomain = request.body.subdomain;
-  let fulldomain = subdomain + '.' + config.get('ssltunnel.domain');
+  const email = request.body.email;
+  const reclamationToken = request.body.reclamationToken;
+  const subdomain = request.body.subdomain;
+  const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
 
   function returnError(message) {
     console.error(message);
-    response.statusMessage = 'Error issuing certificate - ' + message;
+    response.statusMessage = `Error issuing certificate - ${message}`;
     response.status(400).end();
   }
 
@@ -106,21 +108,21 @@ SettingsController.post('/subscribe', async (request, response) => {
     agreeCb(null, opts.tosUrl);
   }
 
-  let leStore = require('le-store-certbot').create({
-      webrootPath: Constants.STATIC_PATH,
-      configDir: path.join(UserProfile.baseDir, 'etc'),
-      logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
-      workDir: path.join(UserProfile.baseDir, 'var', 'lib'),
-      debug: true,
+  const leStore = require('le-store-certbot').create({
+    webrootPath: Constants.STATIC_PATH,
+    configDir: path.join(UserProfile.baseDir, 'etc'),
+    logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
+    workDir: path.join(UserProfile.baseDir, 'var', 'lib'),
+    debug: true,
   });
-  let le = greenlock.create({
-      server: greenlock.productionServerUrl,
-      challengeType: 'dns-01',
-      challenges: { 'dns-01': leChallengeDns },
-      approveDomains: [fulldomain],
-      agreeToTerms: leAgree,
-      debug: true,
-      store: leStore,
+  const le = greenlock.create({
+    server: greenlock.productionServerUrl,
+    challengeType: 'dns-01',
+    challenges: {'dns-01': leChallengeDns},
+    approveDomains: [fulldomain],
+    agreeToTerms: leAgree,
+    debug: true,
+    store: leStore,
   });
 
   let token;
@@ -130,8 +132,8 @@ SettingsController.post('/subscribe', async (request, response) => {
       return new Promise((resolve) => {
         // ok now that we have a challenge, we call our gateway to setup
         // the TXT record
-        fetch(config.get('ssltunnel.registration_endpoint') +
-              '/dnsconfig?token=' + token + '&challenge=' + keyAuthDigest)
+        fetch(`${config.get('ssltunnel.registration_endpoint')
+        }/dnsconfig?token=${token}&challenge=${keyAuthDigest}`)
           .catch(function(e) {
             returnError(e);
           })
@@ -142,14 +144,14 @@ SettingsController.post('/subscribe', async (request, response) => {
             resolve('Success!');
           });
       });
-  };
+    };
 
   let jsonToken;
   try {
-    let subscribeUrl = config.get('ssltunnel.registration_endpoint') +
-      '/subscribe?name=' + subdomain + '&email=' + email;
+    let subscribeUrl = `${config.get('ssltunnel.registration_endpoint')
+    }/subscribe?name=${subdomain}&email=${email}`;
     if (reclamationToken) {
-      subscribeUrl += '&reclamationToken=' + reclamationToken.trim();
+      subscribeUrl += `&reclamationToken=${reclamationToken.trim()}`;
     }
 
     const res = await fetch(subscribeUrl);
@@ -171,7 +173,7 @@ SettingsController.post('/subscribe', async (request, response) => {
 
   // Register Let's Encrypt
   try {
-    let results = await le.register({
+    const results = await le.register({
       domains: [fulldomain],
       email: config.get('ssltunnel.certemail'),
       agreeTos: true,
@@ -193,8 +195,8 @@ SettingsController.post('/subscribe', async (request, response) => {
     // reclaimed.
     if (!reclamationToken) {
       try {
-        await fetch(config.get('ssltunnel.registration_endpoint') +
-                    '/setemail?token=' + token + '&email=' + email);
+        await fetch(`${config.get('ssltunnel.registration_endpoint')
+        }/setemail?token=${token}&email=${email}`);
         console.log('Online account created.');
       } catch (e) {
         // https://github.com/mozilla-iot/gateway/issues/358
@@ -205,8 +207,8 @@ SettingsController.post('/subscribe', async (request, response) => {
       }
     }
 
-    let endpoint_url = 'https://' + subdomain + '.' +
-      config.get('ssltunnel.domain');
+    const endpoint_url = `https://${subdomain}.${
+      config.get('ssltunnel.domain')}`;
     TunnelService.start(response, endpoint_url);
     TunnelService.switchToHttps();
   } catch (err) {
@@ -230,8 +232,8 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
   try {
     const result = await Settings.get('tunneltoken');
     if (typeof result === 'object') {
-      let endpoint = 'https://' + result.name + '.' +
-        config.get('ssltunnel.domain');
+      const endpoint = `https://${result.name}.${
+        config.get('ssltunnel.domain')}`;
       response.send(endpoint);
       response.status(200).end();
     } else {

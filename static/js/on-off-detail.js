@@ -23,9 +23,9 @@ OnOffDetail.prototype.attach = function() {
 };
 
 OnOffDetail.prototype.view = function() {
-  let checked = this.thing.properties.on;
-  let onoff = checked ? 'on' : 'off';
-  let id = this.thing.id;
+  const checked = this.thing.properties.on;
+  const onoff = checked ? 'on' : 'off';
+  const id = this.thing.id;
 
   return `<div class="thing-detail-container">
     <div class="thing-detail on-off-switch-switch">
@@ -46,7 +46,7 @@ OnOffDetail.prototype.view = function() {
 };
 
 OnOffDetail.prototype.update = function() {
-  let on = this.thing.properties.on;
+  const on = this.thing.properties.on;
   if (this.onOffLabel && this.onOffSwitch) {
     this.onOffLabel.textContent = on ? 'on' : 'off';
     this.onOffSwitch.checked = on;

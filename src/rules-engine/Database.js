@@ -19,7 +19,7 @@ function Database() {
  * Open the database
  */
 Database.prototype.open = function() {
-  let rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
+  const rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
     id INTEGER PRIMARY KEY,
     description TEXT
   );`;
@@ -41,9 +41,9 @@ Database.prototype.getRules = function() {
           reject(err);
           return;
         }
-        let rules = {};
-        for (let row of rows) {
-          let desc = JSON.parse(row.description);
+        const rules = {};
+        for (const row of rows) {
+          const desc = JSON.parse(row.description);
           rules[row.id] = desc;
         }
         resolve(rules);
@@ -61,7 +61,7 @@ Database.prototype.createRule = function(desc) {
   return db.run(
     'INSERT INTO rules (description) VALUES (?)',
     [JSON.stringify(desc)]
-  ).then(res => {
+  ).then((res) => {
     return parseInt(res.lastID);
   });
 };

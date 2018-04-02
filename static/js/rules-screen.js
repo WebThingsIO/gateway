@@ -9,7 +9,7 @@
 'use strict';
 
 // eslint-disable-next-line no-unused-vars
-var RulesScreen = {
+const RulesScreen = {
   init: function() {
     this.createRuleButton = document.getElementById('create-rule-button');
     this.createRuleHint = document.getElementById('create-rule-hint');
@@ -26,22 +26,22 @@ var RulesScreen = {
    * @return {Promise<Array<RuleDescription>>}
    */
   readRules: function readRules() {
-    return fetch('/rules', {headers: API.headers()}).then(res => {
+    return fetch('/rules', {headers: API.headers()}).then((res) => {
       return res.json();
-     }).then(fetchedRules => {
-       this.rulesList.querySelectorAll('.rule').forEach(elt => {
-         elt.parentNode.removeChild(elt);
-       });
+    }).then((fetchedRules) => {
+      this.rulesList.querySelectorAll('.rule').forEach((elt) => {
+        elt.parentNode.removeChild(elt);
+      });
 
-       for (let ruleDesc of fetchedRules) {
-         this.addRuleCard(ruleDesc);
-       }
+      for (const ruleDesc of fetchedRules) {
+        this.addRuleCard(ruleDesc);
+      }
 
-       if (fetchedRules.length === 0) {
-         this.createRuleHint.classList.remove('hidden');
-       } else {
-         this.createRuleHint.classList.add('hidden');
-       }
+      if (fetchedRules.length === 0) {
+        this.createRuleHint.classList.remove('hidden');
+      } else {
+        this.createRuleHint.classList.add('hidden');
+      }
     });
   },
   /**
@@ -49,7 +49,7 @@ var RulesScreen = {
    * @param {RuleDescription} desc
    */
   addRuleCard: function(desc) {
-    let ruleElt = document.createElement('div');
+    const ruleElt = document.createElement('div');
     ruleElt.classList.add('rule');
     try {
       new RuleCard(this.gateway, ruleElt, this.nextId, desc);

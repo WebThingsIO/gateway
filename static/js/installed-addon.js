@@ -21,8 +21,8 @@
  * @param {String} updateVersion Version of updated add-on package
  * @param {String} updateChecksum Checksum of the updated add-on package
  */
-var InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
-                              updateChecksum) {
+const InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
+                                updateChecksum) {
   this.name = metadata.name;
   this.description = metadata.description;
   this.author = metadata.author;

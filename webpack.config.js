@@ -7,16 +7,16 @@ const fs = require('fs');
 
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CheckerPlugin } = require('awesome-typescript-loader');
+const {CheckerPlugin} = require('awesome-typescript-loader');
 
 const externals = {};
 fs.readdirSync('node_modules')
-.filter(function(x) {
-  return ['.bin'].indexOf(x) === -1;
-})
-.forEach(function(mod) {
-  externals[mod] = 'commonjs ' + mod;
-});
+  .filter(function(x) {
+    return ['.bin'].indexOf(x) === -1;
+  })
+  .forEach(function(mod) {
+    externals[mod] = `commonjs ${mod}`;
+  });
 
 const plugins = [
   new CheckerPlugin(),
@@ -26,8 +26,10 @@ const plugins = [
   }),
   // Here we install the speak-to-me api into static
   new CopyWebpackPlugin([
-    { from: 'node_modules/speaktome-api/build/stm_web.min.js',
-        to: '../static/js/lib' },
+    {
+      from: 'node_modules/speaktome-api/build/stm_web.min.js',
+      to: '../static/js/lib',
+    },
   ]),
 ];
 

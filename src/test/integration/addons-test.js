@@ -90,7 +90,7 @@ describe('addons', function() {
       .put(`${Constants.ADDONS_PATH}/nonexistent-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({'enabled': true}));
+      .send({enabled: true}));
 
     expect(err.response.status).toEqual(400);
   });
@@ -109,7 +109,7 @@ describe('addons', function() {
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({'enabled': true});
+      .send({enabled: true});
 
     expect(res1.status).toEqual(200);
 
@@ -137,7 +137,7 @@ describe('addons', function() {
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({'enabled': false});
+      .send({enabled: false});
 
     expect(res3.status).toEqual(200);
 
@@ -288,66 +288,66 @@ describe('addons', function() {
   });
 
   it('Validate valid package.json loads fine', async () => {
-    let err = await loadSettingsAdapterWithManifest(testManifest);
+    const err = await loadSettingsAdapterWithManifest(testManifest);
     expect(err).toBeUndefined();
   });
 
   it('Fail package.json with missing moziot key', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     delete manifest.moziot;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with non-object moziot', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     manifest.moziot = 123;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with missing moziot.api key', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     delete manifest.moziot.api;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with non-object moziot.api key', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     manifest.moziot.api = 456;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with missing moziot.api.min key', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     delete manifest.moziot.api.min;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with non-numeric moziot.api.min', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     manifest.moziot.api.min = 'abc';
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with missing version', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     delete manifest.version;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with non-string version', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     manifest.version = 1;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with missing files array', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     delete manifest.files;
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });
 
   it('Fail package.json with empty files array', async () => {
-    let manifest = copyManifest(testManifest);
+    const manifest = copyManifest(testManifest);
     manifest.files = [];
     expect(await loadSettingsAdapterWithManifest(manifest)).toBeTruthy();
   });

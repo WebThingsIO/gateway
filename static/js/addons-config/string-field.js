@@ -15,89 +15,88 @@
 
 /* globals SchemaUtils, Utils */
 
-function StringField(
-    schema,
-    formData,
-    idSchema,
-    name,
-    definitions,
-    onChange,
-    required = false,
-    disabled = false,
-    readonly = false) {
-    this.schema = SchemaUtils.retrieveSchema(schema, definitions);
-    this.formData = formData;
-    this.idSchema = idSchema;
-    this.name = name;
-    this.definitions = definitions;
-    this.onChange = onChange;
-    this.required = required;
-    this.disabled = disabled;
-    this.readonly = readonly;
+function StringField(schema,
+                     formData,
+                     idSchema,
+                     name,
+                     definitions,
+                     onChange,
+                     required = false,
+                     disabled = false,
+                     readonly = false) {
+  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.formData = formData;
+  this.idSchema = idSchema;
+  this.name = name;
+  this.definitions = definitions;
+  this.onChange = onChange;
+  this.required = required;
+  this.disabled = disabled;
+  this.readonly = readonly;
 
-    return this;
+  return this;
 }
 
 StringField.prototype.onStringChange = function(event) {
-    const value = event.target.value;
-    this.formData = value;
+  const value = event.target.value;
+  this.formData = value;
 
-    if (this.onChange) {
-        this.onChange(this.formData);
-    }
+  if (this.onChange) {
+    this.onChange(this.formData);
+  }
 };
 
 StringField.prototype.render = function() {
-    const id = Utils.escapeHtml(this.idSchema.$id);
-    const value = this.formData;
-    const field = document.createElement('div');
+  const id = Utils.escapeHtml(this.idSchema.$id);
+  const value = this.formData;
+  const field = document.createElement('div');
 
-    // list item
-    if (SchemaUtils.isSelect(this.schema)) {
-        const enumOptions = SchemaUtils.getOptionsList(this.schema);
-        const selectedValue = value;
-        let selectedAny = false;
+  // list item
+  if (SchemaUtils.isSelect(this.schema)) {
+    const enumOptions = SchemaUtils.getOptionsList(this.schema);
+    const selectedValue = value;
+    let selectedAny = false;
 
-        const selects = enumOptions.map(({ value, label }, i) => {
-            const selected = selectedValue === value;
-            selectedAny |= selected;
+    const selects = enumOptions.map(({value, label}, i) => {
+      const selected = selectedValue === value;
+      selectedAny |= selected;
 
-            return `
-            <option 
-            key="${i}"
-            value="${Utils.escapeHtml(value)}"
-            ${selected ? 'selected' : ''}>
-              ${Utils.escapeHtml(label)}
-            </option>`;
-        });
+      return `
+        <option 
+        key="${i}"
+        value="${Utils.escapeHtml(value)}"
+        ${selected ? 'selected' : ''}>
+          ${Utils.escapeHtml(label)}
+        </option>`;
+    });
 
-        field.innerHTML = `
-        <select
-        id="${id}"
-        class="form-control"
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
-        >
-        ${selects.join(' ')}
-        </select>`;
+    field.innerHTML = `
+      <select
+      id="${id}"
+      class="form-control"
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      >
+      ${selects.join(' ')}
+      </select>`;
 
-        if (!selectedAny) {
-            const select = field.querySelector(`#${id}`);
-            select.selectedIndex = -1;
-        }
-    } else {
-        field.innerHTML = `
-        <input
-        id="${id}"
-        class="form-control"
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
-        value="${value == null ? '' : Utils.escapeHtml(value)}"
-        />`;
+    if (!selectedAny) {
+      const select = field.querySelector(`#${id}`);
+      select.selectedIndex = -1;
     }
+  } else {
+    field.innerHTML = `
+      <input
+      id="${id}"
+      class="form-control"
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      value="${value == null ? '' : Utils.escapeHtml(value)}"
+      />`;
+  }
 
-    const input = field.querySelector(`#${id}`);
-    input.onchange = this.onStringChange.bind(this);
+  const input = field.querySelector(`#${id}`);
+  input.onchange = this.onStringChange.bind(this);
 
-    return field;
+  return field;
 };

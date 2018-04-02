@@ -15,7 +15,7 @@
 
 /* globals Ajv */
 
-var Validator = {};
+const Validator = {};
 
 Validator._ajv = new Ajv({
   errorDataPath: 'property',
@@ -39,7 +39,8 @@ Validator._rePropName = RegExp(
 
 Validator._toPath = function(string) {
   const result = [];
-  string.replace(Validator._rePropName,
+  string.replace(
+    Validator._rePropName,
     function(match, expression, quote, subString) {
       let key = match;
       if (quote) {
@@ -72,7 +73,7 @@ Validator._toErrorSchema = function(errors) {
     return {};
   }
   return errors.reduce((errorSchema, error) => {
-    const { dataPath, message } = error;
+    const {dataPath, message} = error;
     const path = Validator._toPath(dataPath);
     let parent = errorSchema;
 
@@ -100,5 +101,5 @@ Validator.validateFormData = function(formData, schema) {
 
   const errorSchema = Validator._toErrorSchema(errors);
 
-  return { errors, errorSchema };
+  return {errors, errorSchema};
 };

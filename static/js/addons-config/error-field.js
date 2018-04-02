@@ -35,7 +35,7 @@ ErrorField.prototype.render = function(errors) {
     const errorHtml = errors.map((error) => {
       return `
           <li class="error-item">
-            ${(error.dataPath + ' ' + error.message).trim()}
+            ${(`${error.dataPath} ${error.message}`).trim()}
           </li>`;
     });
 

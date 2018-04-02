@@ -62,7 +62,7 @@ function ColorLight(description, format) {
     this.element.querySelector('.color-light-icon-path');
 
   if (format === 'htmlDetail') {
-    for (let prop in this.details) {
+    for (const prop in this.details) {
       this.details[prop].attach();
     }
 
@@ -153,7 +153,7 @@ ColorLight.prototype.htmlView = function() {
  */
 ColorLight.prototype.htmlDetailView = function() {
   let detailsHTML = '';
-  for (let prop in this.details) {
+  for (const prop in this.details) {
     detailsHTML += this.details[prop].view();
   }
 
@@ -169,10 +169,10 @@ ColorLight.prototype.htmlDetailView = function() {
  * Update the status of the light.
  */
 ColorLight.prototype.updateStatus = function() {
-  var opts = {
+  const opts = {
     headers: {
-      'Authorization': `Bearer ${window.API.jwt}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${window.API.jwt}`,
+      Accept: 'application/json',
     },
   };
 
@@ -185,16 +185,16 @@ ColorLight.prototype.updateStatus = function() {
     promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
   }
 
-  Promise.all(promises).then(responses => {
-    return Promise.all(responses.map(response => {
+  Promise.all(promises).then((responses) => {
+    return Promise.all(responses.map((response) => {
       return response.json();
     }));
-  }).then(responses => {
-    responses.forEach(response => {
+  }).then((responses) => {
+    responses.forEach((response) => {
       this.onPropertyStatus(response);
     });
-  }).catch(error => {
-    console.error('Error fetching on/off switch status ' + error);
+  }).catch((error) => {
+    console.error(`Error fetching on/off switch status ${error}`);
   });
 };
 
@@ -220,7 +220,7 @@ ColorLight.prototype.updateOn = function(on) {
     return;
   }
 
-  let onoff = on ? 'on' : 'off';
+  const onoff = on ? 'on' : 'off';
   this.colorLightLabel.textContent = onoff;
 
   if (this.details) {
@@ -255,27 +255,27 @@ ColorLight.prototype.updateColor = function(color) {
 
 ColorLight.prototype.setColor = function(color) {
   const payload = {
-   color: color,
+    color: color,
   };
   fetch(this.colorPropertyUrl, {
-   method: 'PUT',
-   body: JSON.stringify(payload),
-   headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json',
-   }),
-  }).then(response => {
-   if (response.status === 200) {
-     this.updateColor(color);
-   } else {
-     console.error('Status ' + response.status + ' trying to set color');
-   }
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(window.API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      this.updateColor(color);
+    } else {
+      console.error(`Status ${response.status} trying to set color`);
+    }
   }).catch(function(error) {
-   console.error('Error trying to set color: ' + error);
+    console.error(`Error trying to set color: ${error}`);
   });
 };
 
 ColorLight.prototype.updateColorTemperature = function(temperature) {
-  if (typeof(temperature) === 'string') {
+  if (typeof temperature === 'string') {
     temperature = parseInt(temperature, 10);
   }
 
@@ -292,28 +292,28 @@ ColorLight.prototype.updateColorTemperature = function(temperature) {
 };
 
 ColorLight.prototype.setColorTemperature = function(temperature) {
-  if (typeof(temperature) === 'string') {
+  if (typeof temperature === 'string') {
     temperature = parseInt(temperature, 10);
   }
 
   const payload = {
-   colorTemperature: temperature,
+    colorTemperature: temperature,
   };
   fetch(this.colorTemperaturePropertyUrl, {
-   method: 'PUT',
-   body: JSON.stringify(payload),
-   headers: Object.assign(window.API.headers(), {
-     'Content-Type': 'application/json',
-   }),
-  }).then(response => {
-   if (response.status === 200) {
-     this.updateColorTemperature(temperature);
-   } else {
-     console.error(
-       'Status ' + response.status + ' trying to set color temperature');
-   }
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(window.API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      this.updateColorTemperature(temperature);
+    } else {
+      console.error(
+        `Status ${response.status} trying to set color temperature`);
+    }
   }).catch(function(error) {
-   console.error('Error trying to set color temperature: ' + error);
+    console.error(`Error trying to set color temperature: ${error}`);
   });
 };
 
@@ -333,9 +333,9 @@ ColorLight.prototype.updateIcon = function() {
   const iconColor = this.getIconColor();
   this.colorLightIconPath.style.fill = iconColor;
 
-  let r = parseInt(iconColor.substr(1, 2), 16);
-  let g = parseInt(iconColor.substr(3, 2), 16);
-  let b = parseInt(iconColor.substr(5, 2), 16);
+  const r = parseInt(iconColor.substr(1, 2), 16);
+  const g = parseInt(iconColor.substr(3, 2), 16);
+  const b = parseInt(iconColor.substr(5, 2), 16);
 
   // From https://stackoverflow.com/questions/3942878/
   if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {

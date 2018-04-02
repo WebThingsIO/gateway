@@ -7,10 +7,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
- 'use strict';
+'use strict';
 
 // eslint-disable-next-line no-unused-vars
-var ContextMenu = {
+const ContextMenu = {
 
   /**
    * Initialise Add Thing Screen.
@@ -59,24 +59,22 @@ var ContextMenu = {
     fetch(this.thingUrl, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-    })
-    .then((function(response) {
+    }).then((function(response) {
       if (response.ok) {
-        var newEvent = new CustomEvent('_thingchange');
+        const newEvent = new CustomEvent('_thingchange');
         window.dispatchEvent(newEvent);
         console.log('Successfully removed Thing.');
       } else {
-        console.error('Error removing thing ' +
-          response.statusText);
+        console.error(`Error removing thing ${
+          response.statusText}`);
       }
       this.hide();
-    }).bind(this))
-    .catch((function(error) {
-      console.error('Error removing thing ' + error);
+    }).bind(this)).catch((function(error) {
+      console.error(`Error removing thing ${error}`);
       this.hide();
     }).bind(this));
   },

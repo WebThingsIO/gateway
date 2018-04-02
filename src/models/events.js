@@ -30,9 +30,9 @@ class Events {
    * therefore belong to the root Gateway.
    */
   getGatewayEvents() {
-    return this.events.filter(event => {
+    return this.events.filter((event) => {
       return !event.thingId;
-    }).map(event => {
+    }).map((event) => {
       return {[event.name]: event.getDescription()};
     });
   }
@@ -42,9 +42,9 @@ class Events {
    * Get only the events which are associated with a specific thing.
    */
   getByThing(thingId) {
-    return this.events.filter(event => {
+    return this.events.filter((event) => {
       return event.thingId === thingId;
-    }).map(event => {
+    }).map((event) => {
       return {[event.name]: event.getDescription()};
     });
   }
@@ -58,7 +58,8 @@ class Events {
     this.events.push(event);
 
     if (event.thingId) {
-      Things.getThing(event.thingId).then(thing => thing.dispatchEvent(event));
+      Things.getThing(event.thingId).then(
+        (thing) => thing.dispatchEvent(event));
     }
   }
 }

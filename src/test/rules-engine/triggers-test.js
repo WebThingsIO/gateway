@@ -25,12 +25,12 @@ const levelTrigger = {
 
 describe('triggers', function() {
   it('should parse a BooleanTrigger', () => {
-    let trigger = triggers.fromDescription(booleanTrigger);
+    const trigger = triggers.fromDescription(booleanTrigger);
     expect(trigger).toMatchObject(booleanTrigger);
   });
 
   it('should parse a LevelTrigger', () => {
-    let trigger = triggers.fromDescription(levelTrigger);
+    const trigger = triggers.fromDescription(levelTrigger);
     expect(trigger).toMatchObject(levelTrigger);
   });
 
@@ -90,7 +90,7 @@ describe('triggers', function() {
   it('should reject an trigger without a property', () => {
     let err = null;
     try {
-      let brokenTrigger = Object.assign(
+      const brokenTrigger = Object.assign(
         {},
         levelTrigger
       );

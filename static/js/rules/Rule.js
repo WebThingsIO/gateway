@@ -40,12 +40,12 @@ Rule.prototype.update = function() {
   if (this.onUpdate) {
     this.onUpdate();
   }
-  let desc = this.toDescription();
+  const desc = this.toDescription();
   if (!desc) {
     return Promise.reject('invalid description');
   }
 
-  let fetchOptions = {
+  const fetchOptions = {
     headers: API.headers(),
     method: 'PUT',
     body: JSON.stringify(desc),
@@ -53,13 +53,13 @@ Rule.prototype.update = function() {
   fetchOptions.headers['Content-Type'] = 'application/json';
 
   let request = null;
-  if (typeof(this.id) !== 'undefined') {
-    request = fetch('/rules/' + encodeURIComponent(this.id), fetchOptions);
+  if (typeof this.id !== 'undefined') {
+    request = fetch(`/rules/${encodeURIComponent(this.id)}`, fetchOptions);
   } else {
     fetchOptions.method = 'POST';
-    request = fetch('/rules/', fetchOptions).then(res => {
+    request = fetch('/rules/', fetchOptions).then((res) => {
       return res.json();
-    }).then(rule => {
+    }).then((rule) => {
       this.id = rule.id;
     });
   }
@@ -71,16 +71,16 @@ Rule.prototype.update = function() {
  * @return {Promise}
  */
 Rule.prototype.delete = function() {
-  let fetchOptions = {
+  const fetchOptions = {
     headers: API.headers(),
     method: 'DELETE',
   };
 
-  if (typeof(this.id) === 'undefined') {
+  if (typeof this.id === 'undefined') {
     return;
   }
 
-  return fetch('/rules/' + encodeURIComponent(this.id), fetchOptions);
+  return fetch(`/rules/${encodeURIComponent(this.id)}`, fetchOptions);
 };
 
 /**
@@ -103,7 +103,7 @@ Rule.prototype.toDescription = function() {
 const RuleUtils = {
   byProperty: function byProperty(property) {
     return function(option) {
-      let optProp = option.properties[property.name];
+      const optProp = option.properties[property.name];
       return optProp && (optProp.href === property.href);
     };
   },
@@ -120,19 +120,19 @@ const RuleUtils = {
  */
 Rule.prototype.toTriggerHumanDescription = function() {
   if (this.trigger.type === 'TimeTrigger') {
-    return 'the time of day is ' +
-      TimeTriggerBlock.utcToLocal(this.trigger.time);
+    return `the time of day is ${
+      TimeTriggerBlock.utcToLocal(this.trigger.time)}`;
   }
 
   if (this.trigger.type === 'EventTrigger') {
-    let triggerThing = this.gateway.things.filter(
+    const triggerThing = this.gateway.things.filter(
       RuleUtils.byHref(this.trigger.thing.href)
     )[0];
     return `${triggerThing.name} event "${this.trigger.event}" occurs`;
   }
 
 
-  let triggerThing = this.gateway.things.filter(
+  const triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
   )[0];
 
@@ -162,13 +162,13 @@ Rule.prototype.toTriggerHumanDescription = function() {
  */
 Rule.prototype.toEffectHumanDescription = function() {
   if (this.effect.type === 'ActionEffect') {
-    let effectThing = this.gateway.things.filter(
+    const effectThing = this.gateway.things.filter(
       RuleUtils.byHref(this.effect.thing.href)
     )[0];
     return `do ${effectThing.name} action "${this.effect.action}"`;
   }
 
-  let effectThing = this.gateway.things.filter(
+  const effectThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.effect.property)
   )[0];
 
@@ -211,7 +211,7 @@ Rule.prototype.toHumanDescription = function() {
   if (this.effect) {
     effectStr = this.toEffectHumanDescription();
   }
-  return 'If ' + triggerStr + ' then ' + effectStr;
+  return `If ${triggerStr} then ${effectStr}`;
 };
 
 /**

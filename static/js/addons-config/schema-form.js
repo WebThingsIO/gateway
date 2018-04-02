@@ -37,7 +37,7 @@ SchemaForm.prototype.onChange = function(formData) {
   this.applyButton.disabled = false;
 
   if (!this.noValidate && this.liveValidate) {
-    const { errors } = this.validate(formData);
+    const {errors} = this.validate(formData);
     error = errors;
   }
   if (!this.noValidate && error) {
@@ -56,7 +56,7 @@ SchemaForm.prototype.scrollToTop = function() {
 };
 
 SchemaForm.prototype.handleApply = function(e) {
-  const { errors } = this.validate(this.formData);
+  const {errors} = this.validate(this.formData);
   const button = e.target;
   button.disabled = true;
 
@@ -77,7 +77,7 @@ SchemaForm.prototype.handleApply = function(e) {
 
 SchemaForm.prototype.renderApplyButton = function() {
   const applyButton = document.createElement('button');
-  applyButton.id = 'addon-apply-' + Utils.escapeHtml(this.id);
+  applyButton.id = `addon-apply-${Utils.escapeHtml(this.id)}`;
   applyButton.type = 'button';
   applyButton.className = 'addon-config-button-apply';
   applyButton.innerText = 'Apply';
@@ -107,7 +107,8 @@ SchemaForm.prototype.render = function(data) {
   p.appendChild(apply);
 
   const onChangeHandle = this.onChange.bind(this);
-  const child = new SchemaField(this.schema,
+  const child = new SchemaField(
+    this.schema,
     this.formData,
     this.idSchema,
     this.name,

@@ -10,8 +10,8 @@ const {server} = require('./common');
  * @return {WebSocket}
  */
 async function webSocketOpen(path, jwt) {
-  let addr = server.address();
-  let socketPath =
+  const addr = server.address();
+  const socketPath =
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 
   const ws = new WebSocket(socketPath);
@@ -24,7 +24,7 @@ async function webSocketOpen(path, jwt) {
   await e2p(ws, 'open');
 
   // Allow the app to handle the websocket open reaaallly slowwwwllllyyyy
-  await new Promise(res => {
+  await new Promise((res) => {
     setTimeout(res, 250);
   });
 
@@ -38,7 +38,7 @@ async function webSocketOpen(path, jwt) {
  * @return {Array<Object>} read messages
  */
 async function webSocketRead(ws, expectedMessages) {
-  let messages = [];
+  const messages = [];
   while (messages.length < expectedMessages) {
     if (ws.unreadMessages.length > 0) {
       const data = ws.unreadMessages.shift();

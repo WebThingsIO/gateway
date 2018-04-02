@@ -52,7 +52,7 @@ class AddonManagerProxy extends EventEmitter {
    * Adds an adapter to the collection of adapters managed by AddonManager.
    */
   addAdapter(adapter) {
-    var adapterId = adapter.id;
+    const adapterId = adapter.id;
     DEBUG && console.log('AddonManagerProxy: addAdapter:', adapterId);
 
     this.adapters.set(adapterId, adapter);
@@ -70,7 +70,7 @@ class AddonManagerProxy extends EventEmitter {
    */
   handleDeviceAdded(device) {
     DEBUG && console.log('AddonManagerProxy: handleDeviceAdded:', device.id);
-    var deviceDict = device.asDict();
+    const deviceDict = device.asDict();
     deviceDict.adapterId = device.adapter.id;
     this.pluginClient.sendNotification(
       Constants.HANDLE_DEVICE_ADDED, deviceDict);
@@ -107,8 +107,8 @@ class AddonManagerProxy extends EventEmitter {
     // The second switch covers adapter messages. i.e. don't have a deviceId.
     // or don't need a device object.
 
-    var adapterId = msg.data.adapterId;
-    var adapter = this.adapters.get(adapterId);
+    const adapterId = msg.data.adapterId;
+    const adapter = this.adapters.get(adapterId);
     if (!adapter) {
       console.error('AddonManagerProxy: Unrecognized adapter:', adapterId);
       console.error('AddonManagerProxy: Ignoring msg:', msg);
@@ -145,13 +145,13 @@ class AddonManagerProxy extends EventEmitter {
 
       case Constants.ADD_MOCK_DEVICE:
         adapter.addDevice(msg.data.deviceId, msg.data.deviceDescr)
-          .then(device => {
+          .then((device) => {
             this.pluginClient.sendNotification(
               Constants.MOCK_DEVICE_ADDED_REMOVED, {
                 adapterId: adapter.id,
                 deviceId: device.id,
               });
-          }).catch(err => {
+          }).catch((err) => {
             this.pluginClient.sendNotification(
               Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
                 adapterId: adapter.id,
@@ -162,19 +162,19 @@ class AddonManagerProxy extends EventEmitter {
 
       case Constants.REMOVE_MOCK_DEVICE:
         adapter.removeDevice(msg.data.deviceId)
-        .then(device => {
-          this.pluginClient.sendNotification(
-            Constants.MOCK_DEVICE_ADDED_REMOVED, {
-              adapterId: adapter.id,
-              deviceId: device.id,
-            });
-        }).catch(err => {
-          this.pluginClient.sendNotification(
-            Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
-              adapterId: adapter.id,
-              error: err,
-            });
-        });
+          .then((device) => {
+            this.pluginClient.sendNotification(
+              Constants.MOCK_DEVICE_ADDED_REMOVED, {
+                adapterId: adapter.id,
+                deviceId: device.id,
+              });
+          }).catch((err) => {
+            this.pluginClient.sendNotification(
+              Constants.MOCK_DEVICE_ADD_REMOVE_FAILED, {
+                adapterId: adapter.id,
+                error: err,
+              });
+          });
         return;
 
       case Constants.PAIR_MOCK_DEVICE:
@@ -189,8 +189,8 @@ class AddonManagerProxy extends EventEmitter {
 
     // All messages from here on are assumed to require a valid deviceId.
 
-    var deviceId = msg.data.deviceId;
-    var device = adapter.getDevice(deviceId);
+    const deviceId = msg.data.deviceId;
+    const device = adapter.getDevice(deviceId);
     if (!device) {
       console.error('AddonManagerProxy: No such device:', deviceId);
       console.error('AddonManagerProxy: Ignoring msg:', msg);
@@ -207,12 +207,12 @@ class AddonManagerProxy extends EventEmitter {
         adapter.cancelRemoveThing(device);
         break;
 
-      case Constants.SET_PROPERTY:
-        var propertyName = msg.data.propertyName;
-        var propertyValue = msg.data.propertyValue;
-        var property = device.findProperty(propertyName);
+      case Constants.SET_PROPERTY: {
+        const propertyName = msg.data.propertyName;
+        const propertyValue = msg.data.propertyValue;
+        const property = device.findProperty(propertyName);
         if (property) {
-          property.setValue(propertyValue).then(_updatedValue => {
+          property.setValue(propertyValue).then((_updatedValue) => {
             if (property.fireAndForget) {
               // This property doesn't send propertyChanged notifications,
               // so we fake one.
@@ -222,7 +222,7 @@ class AddonManagerProxy extends EventEmitter {
               // the normal channels, so don't sent another one here.
               // We don't really need to do anything.
             }
-          }).catch(err => {
+          }).catch((err) => {
             // Something bad happened. The gateway is still
             // expecting a reply, so we report the error
             // and just send whatever the current value is.
@@ -237,12 +237,12 @@ class AddonManagerProxy extends EventEmitter {
                         propertyName);
         }
         break;
-
+      }
       case Constants.REQUEST_ACTION: {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
         const input = msg.data.input;
-        device.requestAction(actionId, actionName, input).catch(err => {
+        device.requestAction(actionId, actionName, input).catch((err) => {
           console.error('AddonManagerProxy: Failed to request action',
                         actionName, 'for device:', deviceId);
           console.error(err);
@@ -253,7 +253,7 @@ class AddonManagerProxy extends EventEmitter {
       case Constants.REMOVE_ACTION: {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
-        device.removeAction(actionId, actionName).catch(err => {
+        device.removeAction(actionId, actionName).catch((err) => {
           console.error('AddonManagerProxy: Failed to remove action',
                         actionName, 'for device:', deviceId);
           console.error(err);

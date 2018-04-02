@@ -41,7 +41,7 @@ describe('actions/', function() {
   });
 
   it('should fail to create a new action (unknown name)', async () => {
-    let descr = {
+    const descr = {
       potato: {},
     };
     const err = await pFinal(chai.request(server)
@@ -53,7 +53,7 @@ describe('actions/', function() {
   });
 
   it('should list and retrieve the new action', async () => {
-    let descr = {
+    const descr = {
       pair: {
         input: {
           timeout: 60,
@@ -102,14 +102,14 @@ describe('actions/', function() {
   it('should error retrieving a nonexistent action', async () => {
     const actionId = 'foobarmissing';
     const err = await pFinal(chai.request(server)
-      .get(Constants.ACTIONS_PATH + '/pair/' + actionId)
+      .get(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
   });
 
   it('should remove an action', async () => {
-    let descr = {
+    const descr = {
       pair: {
         input: {
           timeout: 60,
@@ -147,16 +147,16 @@ describe('actions/', function() {
   });
 
   it('should error removing a nonexistent action', async () => {
-    let actionId = 555;
+    const actionId = 555;
     const err = await pFinal(chai.request(server)
-      .delete(Constants.ACTIONS_PATH + '/pair/' + actionId)
+      .delete(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
   });
 
   it('should succeed on an unpair of a nonexistent device', async () => {
-    let thingId = 'test-nonexistent';
+    const thingId = 'test-nonexistent';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
     mockAdapter().unpairDevice(thingId);
@@ -169,9 +169,9 @@ describe('actions/', function() {
     expect(res.status).toEqual(201);
 
     res = await chai.request(server)
-        .get(Constants.ACTIONS_PATH)
-        .set('Accept', 'application/json')
-        .set(...headerAuth(jwt));
+      .get(Constants.ACTIONS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body[0]).toHaveProperty('unpair');
     expect(res.body[0].unpair).toHaveProperty('input');

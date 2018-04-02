@@ -10,7 +10,7 @@
 /* globals App, page */
 
 // eslint-disable-next-line no-unused-vars
-var Router = {
+const Router = {
   init: function() {
     page('/', '/things');
     page('/things', App.showThings.bind(App));

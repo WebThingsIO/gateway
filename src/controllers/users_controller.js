@@ -26,7 +26,7 @@ const UsersController = PromiseRouter();
  */
 UsersController.get('/count', async (request, response) => {
   const count = await Users.getCount();
-  return response.status(200).send({ count });
+  return response.status(200).send({count});
 });
 
 /**
@@ -34,7 +34,7 @@ UsersController.get('/count', async (request, response) => {
  */
 UsersController.get('/info', auth, async (request, response) => {
   const users = await Users.getUsers();
-  const descriptions = users.map(user => {
+  const descriptions = users.map((user) => {
     const loggedIn = user.id === request.jwt.user;
     return Object.assign(user.getDescription(), {loggedIn});
   });

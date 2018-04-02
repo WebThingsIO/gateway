@@ -14,7 +14,7 @@
    User, SchemaForm, Utils */
 
 // eslint-disable-next-line no-unused-vars
-var SettingsScreen = {
+const SettingsScreen = {
 
   /**
    * Initialise Settings Screen.
@@ -473,17 +473,18 @@ var SettingsScreen = {
   },
 
   showExperimentCheckbox: function(experiment, checkboxId) {
-    var checkbox = document.getElementById(checkboxId);
+    const checkbox = document.getElementById(checkboxId);
     window.API.getExperimentSetting(experiment)
-    .then(function(value) {
-      checkbox.checked = value;
-    })
-    .catch(function(e) {
-      console.error('Error getting ' + experiment + ' experiment setting ' + e);
-    });
+      .then(function(value) {
+        checkbox.checked = value;
+      })
+      .catch(function(e) {
+        console.error(
+          `Error getting ${experiment} experiment setting ${e}`);
+      });
 
     checkbox.addEventListener('change', function(e) {
-      var value = e.target.checked ? true : false;
+      const value = e.target.checked ? true : false;
       window.API.setExperimentSetting(experiment, value).then(function() {
         if (value) {
           Menu.showItem(experiment);
@@ -491,7 +492,7 @@ var SettingsScreen = {
           Menu.hideItem(experiment);
         }
       }).catch(function(e) {
-        console.error('Failed to enable ' + experiment + ' experiment: ' + e);
+        console.error(`Failed to enable ${experiment} experiment: ${e}`);
       });
     });
   },
@@ -518,12 +519,12 @@ var SettingsScreen = {
       return parseInt(part);
     }
 
-    let partsA = verA.split('.').map(parsePart);
-    let partsB = verB.split('.').map(parsePart);
+    const partsA = verA.split('.').map(parsePart);
+    const partsB = verB.split('.').map(parsePart);
 
-    for (var i = 0; i < partsA.length; i++) {
-      let partA = partsA[i];
-      let partB = partsB[i];
+    for (let i = 0; i < partsA.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
       if (partA === partB) {
         continue;
       }
@@ -537,22 +538,22 @@ var SettingsScreen = {
 
   showUpdateSettings: function() {
     this.updateSettings.classList.remove('hidden');
-    let updateNow = document.getElementById('update-now');
+    const updateNow = document.getElementById('update-now');
 
     updateNow.addEventListener('click', this.onUpdateClick);
     this.fetchUpdateInfo();
   },
 
   fetchUpdateInfo: function() {
-    let upToDateElt = document.getElementById('update-settings-up-to-date');
-    let updateNow = document.getElementById('update-now');
-    let versionElt = document.getElementById('update-settings-version');
-    let statusElt = document.getElementById('update-settings-status');
+    const upToDateElt = document.getElementById('update-settings-up-to-date');
+    const updateNow = document.getElementById('update-now');
+    const versionElt = document.getElementById('update-settings-version');
+    const statusElt = document.getElementById('update-settings-status');
 
-    let fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest()]);
+    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest()]);
     fetches.then(function(results) {
-      let status = results[0];
-      let latest = results[1];
+      const status = results[0];
+      const latest = results[1];
       let cmp = 0;
       if (latest.version) {
         cmp = this.compareSemver(status.version, latest.version);
@@ -586,7 +587,7 @@ var SettingsScreen = {
   },
 
   onUpdateClick: function() {
-    let updateNow = document.getElementById('update-now');
+    const updateNow = document.getElementById('update-now');
     updateNow.removeEventListener('click', this.onUpdateClick);
     updateNow.classList.add('disabled');
 
@@ -624,11 +625,11 @@ var SettingsScreen = {
       headers: API.headers(),
     }).then(function(response) {
       return response.json();
-    }).then(clients => {
+    }).then((clients) => {
       const authorizationsList = document.getElementById('authorizations');
       const noAuthorizations = document.getElementById('no-authorizations');
 
-      for (let child of authorizationsList.children) {
+      for (const child of authorizationsList.children) {
         if (child.id === 'no-authorizations' ||
             child.id === 'new-local-authorization') {
           continue;
@@ -643,15 +644,15 @@ var SettingsScreen = {
 
       noAuthorizations.classList.add('hidden');
 
-      for (let client of clients) {
-        let authorization = document.createElement('li');
+      for (const client of clients) {
+        const authorization = document.createElement('li');
         authorization.classList.add('authorization-item');
-        let name = document.createElement('p');
+        const name = document.createElement('p');
         name.textContent = client.name;
-        let origin = document.createElement('p');
+        const origin = document.createElement('p');
         origin.classList.add('origin');
         origin.textContent = new URL(client.redirect_uri).host;
-        let revoke = document.createElement('input');
+        const revoke = document.createElement('input');
         revoke.classList.add('revoke-button', 'text-button');
         revoke.type = 'button';
         revoke.value = 'Revoke';
@@ -667,14 +668,14 @@ var SettingsScreen = {
   },
 
   revokeAuthorization: function(event) {
-    let revoke = event.target;
+    const revoke = event.target;
     if (!revoke.dataset.clientId) {
       console.warn('Missing clientId on revoke', revoke);
       return;
     }
-    let clientId = revoke.dataset.clientId;
+    const clientId = revoke.dataset.clientId;
 
-    fetch('/authorizations/' + encodeURIComponent(clientId), {
+    fetch(`/authorizations/${encodeURIComponent(clientId)}`, {
       headers: API.headers(),
       method: 'DELETE',
     }).then(() => {
@@ -686,7 +687,7 @@ var SettingsScreen = {
         const noAuthorizations = document.getElementById('no-authorizations');
         noAuthorizations.classList.remove('hidden');
       }
-    }).catch(err => {
+    }).catch((err) => {
       console.warn('Unable to revoke', err);
     });
   },

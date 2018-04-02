@@ -12,7 +12,7 @@
 
 const Passwords = require('../passwords');
 
-var User = function(id, email, password, name) {
+const User = function(id, email, password, name) {
   this.id = id;
   this.email = email;
   this.password = password; // Hashed

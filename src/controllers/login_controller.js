@@ -18,7 +18,7 @@ const JSONWebToken = require('../models/jsonwebtoken');
 const Passwords = require('../passwords');
 const Constants = require('../constants');
 
-var LoginController = Router();
+const LoginController = Router();
 
 const loginRoot = path.join(Constants.STATIC_PATH, 'login');
 

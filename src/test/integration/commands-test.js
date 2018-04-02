@@ -3,7 +3,7 @@
 /* Tell jshint about mocha globals, and  */
 /* globals it */
 
-var nock = require('nock');
+const nock = require('nock');
 
 const {server, chai, mockAdapter} = require('../common');
 
@@ -13,7 +13,7 @@ const {
   headerAuth,
 } = require('../user');
 
-var Constants = require('../../constants');
+const Constants = require('../../constants');
 
 const TEST_THING = {
   id: 'test-1',
@@ -35,17 +35,17 @@ describe('command/', function() {
   });
 
   function setupNock() {
-    var apiResp = {
-      'result': {
-        'action': 'iot',
-        'parameters': {
-          'onoff': 'on',
-          'rooms': 'kitchen',
+    const apiResp = {
+      result: {
+        action: 'iot',
+        parameters: {
+          onoff: 'on',
+          rooms: 'kitchen',
         },
       },
-      'status': {
-        'code': 200,
-        'errorType': 'success',
+      status: {
+        code: 200,
+        errorType: 'success',
       },
     };
 
@@ -80,18 +80,18 @@ describe('command/', function() {
   });
 
   it('should understand a command to turn on a light', async () => {
-    var resp = [{
-      'name': 'Kitchen',
-      'type': 'onOffSwitch',
-      'href': '/things/zwave-efbddb01-4',
-      'properties': {
-        'on': {
-          'type': 'boolean',
-          'href': '/things/zwave-efbddb01-4/properties/on',
+    const resp = [{
+      name: 'Kitchen',
+      type: 'onOffSwitch',
+      href: '/things/zwave-efbddb01-4',
+      properties: {
+        on: {
+          type: 'boolean',
+          href: '/things/zwave-efbddb01-4/properties/on',
         },
       },
-      'actions': {},
-      'events': {},
+      actions: {},
+      events: {},
     }];
     nock('http://fake.host')
       .get('/things')
@@ -107,23 +107,23 @@ describe('command/', function() {
       .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({ text: 'turn on the kitchen'});
+      .send({text: 'turn on the kitchen'});
     expect(res.status).toEqual(201);
   });
 
   it('should return and error when a matching thing is not found', async () => {
-    var resp = [{
-      'name': 'Bathroom',
-      'type': 'onOffSwitch',
-      'href': '/things/zwave-efbddb01-4',
-      'properties': {
-        'on': {
-          'type': 'boolean',
-          'href': '/things/zwave-efbddb01-4/properties/on',
+    const resp = [{
+      name: 'Bathroom',
+      type: 'onOffSwitch',
+      href: '/things/zwave-efbddb01-4',
+      properties: {
+        on: {
+          type: 'boolean',
+          href: '/things/zwave-efbddb01-4/properties/on',
         },
       },
-      'actions': {},
-      'events': {},
+      actions: {},
+      events: {},
     }];
     nock('http://fake.host')
       .get('/things')
@@ -137,7 +137,7 @@ describe('command/', function() {
         .post(Constants.COMMANDS_PATH)
         .set(...headerAuth(jwt))
         .set('Accept', 'application/json')
-        .send({ text: 'turn on the bathroom'});
+        .send({text: 'turn on the bathroom'});
       throw new Error('Should have failed to create new thing');
     } catch (err) {
       expect(err);

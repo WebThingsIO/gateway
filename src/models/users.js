@@ -8,10 +8,10 @@
 
 'use strict';
 
-var User = require('./user.js');
-var Database = require('../db.js');
+const User = require('./user.js');
+const Database = require('../db.js');
 
-var Users = {
+const Users = {
   /**
    * Get a user from the database.
    *
@@ -59,8 +59,8 @@ var Users = {
    * @return {Promise<Array<User>>}
    */
   getUsers: function() {
-    return Database.getUsers().then(userRows => {
-      return userRows.map(row => {
+    return Database.getUsers().then((userRows) => {
+      return userRows.map((row) => {
         return new User(row.id, row.email, row.password, row.name);
       });
     });

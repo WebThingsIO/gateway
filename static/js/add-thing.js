@@ -11,7 +11,7 @@
 
 /* globals App, NewThing, NewWebThing, SettingsScreen */
 
-var AddThingScreen = {
+const AddThingScreen = {
 
   /**
    * URL of curent pair action request.
@@ -63,7 +63,7 @@ var AddThingScreen = {
     // Timeout, in seconds.
     const timeout = 60;
 
-    var action = {
+    const action = {
       pair: {
         input: {
           timeout,
@@ -74,12 +74,11 @@ var AddThingScreen = {
       method: 'POST',
       body: JSON.stringify(action),
       headers: {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-    })
-    .then((response) => {
+    }).then((response) => {
       return response.json();
     }).then((json) => {
       AddThingScreen.actionUrl = json.href;
@@ -95,10 +94,9 @@ var AddThingScreen = {
         this.requestCancelPairing();
       }, timeout * 1000);
 
-      console.log('Pairing request created with URL ' + json.href);
-    })
-    .catch(function(error) {
-      console.error('Pairing request failed: ' + error);
+      console.log(`Pairing request created with URL ${json.href}`);
+    }).catch(function(error) {
+      console.error(`Pairing request failed: ${error}`);
     });
   },
 
@@ -117,29 +115,27 @@ var AddThingScreen = {
       delete this.socket;
     }
 
-    var url = AddThingScreen.actionUrl;
+    const url = AddThingScreen.actionUrl;
     if (!url) {
       return;
     }
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${window.API.jwt}`,
       },
-    })
-    .then(function(response) {
+    }).then(function(response) {
       if (response.ok) {
         AddThingScreen.actionUrl = null;
         console.log('Successfully cancelled pairing request.');
       } else {
-        console.error('Error cancelling pairing request ' +
-          response.statusText);
+        console.error(`Error cancelling pairing request ${
+          response.statusText}`);
       }
-    })
-    .catch(function(error) {
-      console.error('Error cancelling pairing request ' + error);
+    }).catch(function(error) {
+      console.error(`Error cancelling pairing request ${error}`);
     });
   },
 
@@ -169,7 +165,7 @@ var AddThingScreen = {
   hide: function() {
     this.element.classList.add('hidden');
     this.requestCancelPairing();
-    var newEvent = new CustomEvent('_thingchange');
+    const newEvent = new CustomEvent('_thingchange');
     window.dispatchEvent(newEvent);
   },
 

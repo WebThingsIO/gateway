@@ -14,7 +14,7 @@ const Router = require('express-promise-router');
 
 const JSONWebToken = require('../models/jsonwebtoken');
 
-var LogOutController = new Router();
+const LogOutController = new Router();
 
 /**
  * Log out the user

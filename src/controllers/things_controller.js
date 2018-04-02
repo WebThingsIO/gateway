@@ -71,7 +71,7 @@ ThingsController.post('/', async (request, response) => {
 
   try {
     const thing = await Things.createThing(id, description, webthing);
-    console.log('Successfully created new thing ' + thing.name);
+    console.log(`Successfully created new thing ${thing.name}`);
     response.status(201).send(thing);
   } catch (error) {
     console.error('Error saving new thing', id, description);
@@ -95,78 +95,80 @@ ThingsController.post('/', async (request, response) => {
  * Get a Thing.
  */
 ThingsController.get('/:thingId', function(request, response) {
-   const id = request.params.thingId;
-   Things.getThingDescription(id, request.get('Host'), request.secure)
-     .then(function(thing) {
-       response.status(200).json(thing);
-     })
-     .catch(function(error) {
-       console.error('Error getting thing description for thing with id ' + id);
-       console.error('Error: ' + error);
-       response.status(404).send(error);
-     });
+  const id = request.params.thingId;
+  Things.getThingDescription(id, request.get('Host'), request.secure)
+    .then(function(thing) {
+      response.status(200).json(thing);
+    })
+    .catch(function(error) {
+      console.error(`Error getting thing description for thing with id ${id}`);
+      console.error(`Error: ${error}`);
+      response.status(404).send(error);
+    });
 });
 
 /**
  * Get a property of a Thing.
  */
-ThingsController.get('/:thingId/properties/:propertyName',
+ThingsController.get(
+  '/:thingId/properties/:propertyName',
   function(request, response) {
-  var thingId = request.params.thingId;
-  var propertyName = request.params.propertyName;
-  AddonManager.getProperty(thingId, propertyName).then((value) => {
-    var result = {};
-    result[propertyName] = value;
-    response.status(200).json(result);
-  }).catch((error) => {
-    console.error('Error getting value for thingId:', thingId,
-                  'property:', propertyName);
-    console.error(error);
-    response.status(500).send(error);
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    AddonManager.getProperty(thingId, propertyName).then((value) => {
+      const result = {};
+      result[propertyName] = value;
+      response.status(200).json(result);
+    }).catch((error) => {
+      console.error('Error getting value for thingId:', thingId,
+                    'property:', propertyName);
+      console.error(error);
+      response.status(500).send(error);
+    });
   });
-});
 
 /**
  * Set a property of a Thing.
  */
-ThingsController.put('/:thingId/properties/:propertyName',
+ThingsController.put(
+  '/:thingId/properties/:propertyName',
   function(request, response) {
-  var thingId = request.params.thingId;
-  var propertyName = request.params.propertyName;
-  if (!request.body || typeof request.body[propertyName] === 'undefined') {
-    response.status(400).send('Invalid property name');
-    return;
-  }
-  var value = request.body[propertyName];
-  AddonManager.setProperty(thingId, propertyName, value)
-    .then((updatedValue) => {
-      // Note: it's possible that updatedValue doesn't match value.
-      var result = {};
-      result[propertyName] = updatedValue;
-      response.status(200).json(result);
-    }).catch((error) => {
-      console.error('Error setting value for thingId:', thingId,
-                    'property:', propertyName,
-                    'value:', value);
-      response.status(500).send(error);
-    });
-});
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    if (!request.body || typeof request.body[propertyName] === 'undefined') {
+      response.status(400).send('Invalid property name');
+      return;
+    }
+    const value = request.body[propertyName];
+    AddonManager.setProperty(thingId, propertyName, value)
+      .then((updatedValue) => {
+        // Note: it's possible that updatedValue doesn't match value.
+        const result = {};
+        result[propertyName] = updatedValue;
+        response.status(200).json(result);
+      }).catch((error) => {
+        console.error('Error setting value for thingId:', thingId,
+                      'property:', propertyName,
+                      'value:', value);
+        response.status(500).send(error);
+      });
+  });
 
 /**
  * Use an ActionsController to handle each thing's actions.
  */
-ThingsController.use('/:thingId' + Constants.ACTIONS_PATH, ActionsController);
+ThingsController.use(`/:thingId${Constants.ACTIONS_PATH}`, ActionsController);
 
 /**
  * Use an EventsController to handle each thing's events.
  */
-ThingsController.use('/:thingId' + Constants.EVENTS_PATH, EventsController);
+ThingsController.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController);
 
 /**
  * Modify a Thing.
  */
 ThingsController.patch('/:thingId', function(request, response) {
-  var thingId = request.params.thingId;
+  const thingId = request.params.thingId;
   if (!request.body ||
     !request.body.floorplanX || !request.body.floorplanY) {
     response.status(400).send('x and y properties needed to position Thing');
@@ -179,7 +181,7 @@ ThingsController.patch('/:thingId', function(request, response) {
   }).then((description) => {
     response.status(200).json(description);
   }).catch(function(e) {
-    response.status(500).send('Failed to update thing ' + thingId + ' ' + e);
+    response.status(500).send(`Failed to update thing ${thingId} ${e}`);
   });
 });
 
@@ -191,9 +193,9 @@ ThingsController.delete('/:thingId', function(request, response) {
   AddonManager.removeThing(thingId).
     then(() => {
       Things.removeThing(thingId).then(() => {
-        console.log('Successfully deleted ' + thingId + ' from database.');
+        console.log(`Successfully deleted ${thingId} from database.`);
         response.status(204).send();
-      }).catch(e => {
+      }).catch((e) => {
         response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
       });
     }).catch((e) => {
@@ -205,8 +207,8 @@ ThingsController.delete('/:thingId', function(request, response) {
  * Connect to receive messages from a Thing
  */
 ThingsController.ws('/:thingId/', function(websocket, request) {
-  let thingId = request.params.thingId;
-  let subscribedEventNames = {};
+  const thingId = request.params.thingId;
+  const subscribedEventNames = {};
 
   Things.getThing(thingId).then(function(thing) {
     thing.registerWebsocket(websocket);
@@ -221,7 +223,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       messageType: Constants.ERROR,
       data: {
         status: '404 Not Found',
-        message: 'Thing ' + thingId + ' not found',
+        message: `Thing ${thingId} not found`,
       },
     }));
     websocket.close();
@@ -264,7 +266,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
-  let heartbeatInterval = setInterval(function() {
+  const heartbeatInterval = setInterval(function() {
     try {
       websocket.ping();
     } catch (e) {
@@ -296,7 +298,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       return;
     }
 
-    let device = AddonManager.getDevice(thingId);
+    const device = AddonManager.getDevice(thingId);
     if (!device) {
       websocket.send(JSON.stringify({
         messageType: Constants.ERROR,
@@ -311,11 +313,11 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
 
     switch (request.messageType) {
       case Constants.SET_PROPERTY: {
-        let setRequests = Object.keys(request.data).map(property => {
-          let value = request.data[property];
+        const setRequests = Object.keys(request.data).map((property) => {
+          const value = request.data[property];
           return device.setProperty(property, value);
         });
-        Promise.all(setRequests).catch(err => {
+        Promise.all(setRequests).catch((err) => {
           // If any set fails, send an error
           websocket.send(JSON.stringify({
             messageType: Constants.ERROR,
@@ -339,13 +341,13 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       case Constants.REQUEST_ACTION: {
         for (const actionName in request.data) {
           const actionParams = request.data[actionName].input;
-          Things.getThing(thingId).then(thing => {
-            let action = new Action(actionName, actionParams, thing);
+          Things.getThing(thingId).then((thing) => {
+            const action = new Action(actionName, actionParams, thing);
             return Actions.add(action).then(() => {
               return AddonManager.requestAction(
                 thingId, action.id, actionName, actionParams);
             });
-          }).catch(err => {
+          }).catch((err) => {
             websocket.send(JSON.stringify({
               messageType: Constants.ERROR,
               data: {

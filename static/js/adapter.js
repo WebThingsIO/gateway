@@ -16,7 +16,7 @@
  *
  * @param Object description Adapter metadata object.
  */
-var Adapter = function(metadata) {
+const Adapter = function(metadata) {
   this.name = metadata.name;
   this.id = metadata.id;
   this.ready = metadata.ready;

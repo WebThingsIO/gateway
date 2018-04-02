@@ -77,7 +77,7 @@ class DeviceProxy extends Device {
   requestAction(actionId, actionName, input) {
     return new Promise((resolve, reject) => {
       if (!this.actions.has(actionName)) {
-        reject('Action "' + actionName + '" not found');
+        reject(`Action "${actionName}" not found`);
         return;
       }
 
@@ -102,7 +102,7 @@ class DeviceProxy extends Device {
   removeAction(actionId, actionName) {
     return new Promise((resolve, reject) => {
       if (!this.actions.has(actionName)) {
-        reject('Action "' + actionName + '" not found');
+        reject(`Action "${actionName}" not found`);
         return;
       }
 

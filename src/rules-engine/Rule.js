@@ -44,7 +44,7 @@ class Rule {
    * @return {RuleDescription}
    */
   toDescription() {
-    let desc = {
+    const desc = {
       enabled: this.enabled,
       trigger: this.trigger.toDescription(),
       effect: this.effect.toDescription(),
@@ -63,7 +63,7 @@ class Rule {
    */
   stop() {
     this.trigger.removeListener(Events.STATE_CHANGED,
-      this.onTriggerStateChanged);
+                                this.onTriggerStateChanged);
     this.trigger.stop();
   }
 }
@@ -76,7 +76,7 @@ class Rule {
 Rule.fromDescription = function(desc) {
   const trigger = triggers.fromDescription(desc.trigger);
   const effect = effects.fromDescription(desc.effect);
-  let rule = new Rule(desc.enabled, trigger, effect);
+  const rule = new Rule(desc.enabled, trigger, effect);
   if (desc.hasOwnProperty('id')) {
     rule.id = desc.id;
   }

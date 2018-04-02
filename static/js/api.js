@@ -20,7 +20,7 @@
      * @return {Object}
      */
     headers() {
-      let headers = {
+      const headers = {
         Accept: 'application/json',
       };
       if (this.jwt) {
@@ -32,7 +32,7 @@
     userCount() {
       const opts = {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       };
       return fetch('/users/count', opts).then((res) => {
@@ -51,8 +51,8 @@
     verifyJWT() {
       const opts = {
         headers: {
-          'Authorization': `Bearer ${window.API.jwt}`,
-          'Accept': 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
         },
       };
 
@@ -66,7 +66,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           name, email, password,
@@ -87,8 +87,8 @@
     getUser: function(id) {
       const opts = {
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
         },
       };
       return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
@@ -103,8 +103,8 @@
       const opts = {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -122,8 +122,8 @@
       const opts = {
         method: 'PUT',
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({id, name, email, password, newPassword}),
@@ -139,8 +139,8 @@
       const opts = {
         method: 'DELETE',
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
         },
       };
       return fetch(`/users/${encodeURIComponent(id)}`, opts).then((res) => {
@@ -153,8 +153,8 @@
     getAllUserInfo: function() {
       const opts = {
         headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Accept: 'application/json',
+          Authorization: `Bearer ${window.API.jwt}`,
         },
       };
       return fetch('/users/info', opts).then((response) => {
@@ -170,7 +170,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           email, password,
@@ -194,9 +194,9 @@
       return fetch('/log-out', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${window.API.jwt}`,
+          Authorization: `Bearer ${window.API.jwt}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       }).then((res) => {
         if (!res.ok) {
@@ -207,15 +207,15 @@
 
     setAddonConfig: function(addonName, config) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
       const payload = {
-        'config': config,
+        config: config,
       };
       const body = JSON.stringify(payload);
-      return fetch('/addons/' + encodeURIComponent(addonName) + '/config', {
+      return fetch(`/addons/${encodeURIComponent(addonName)}/config`, {
         method: 'PUT',
         body: body,
         headers: headers,
@@ -225,20 +225,20 @@
             'Unexpected response code while setting add-on config');
         }
 
-        console.log('Set ' + addonName + ' config to ' + body);
+        console.log(`Set ${addonName} config to ${body}`);
       });
     },
 
     setAddonSetting: function(addonName, enabled) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
       const payload = {
-        'enabled': enabled,
+        enabled: enabled,
       };
-      return fetch('/addons/' + encodeURIComponent(addonName), {
+      return fetch(`/addons/${encodeURIComponent(addonName)}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: headers,
@@ -248,20 +248,20 @@
             'Unexpected response code while setting add-on setting');
         }
 
-        console.log('Set ' + addonName + ' to ' + enabled);
+        console.log(`Set ${addonName} to ${enabled}`);
       });
     },
 
     installAddon: function(addonName, addonUrl, addonChecksum) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
       const payload = {
-        'name': addonName,
-        'url': addonUrl,
-        'checksum': addonChecksum,
+        name: addonName,
+        url: addonUrl,
+        checksum: addonChecksum,
       };
       return fetch('/addons', {
         method: 'POST',
@@ -278,11 +278,11 @@
 
     uninstallAddon: function(addonName) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
-      return fetch('/addons/' + encodeURIComponent(addonName), {
+      return fetch(`/addons/${encodeURIComponent(addonName)}`, {
         method: 'DELETE',
         headers: headers,
       }).then(function(response) {
@@ -297,15 +297,15 @@
 
     updateAddon: function(addonName, addonUrl, addonChecksum) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
       const payload = {
-        'url': addonUrl,
-        'checksum': addonChecksum,
+        url: addonUrl,
+        checksum: addonChecksum,
       };
-      return fetch('/addons/' + encodeURIComponent(addonName), {
+      return fetch(`/addons/${encodeURIComponent(addonName)}`, {
         method: 'PATCH',
         body: JSON.stringify(payload),
         headers: headers,
@@ -320,65 +320,66 @@
 
     getExperimentSetting: function(experimentName) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
       };
       return fetch(
-        '/settings/experiments/' + encodeURIComponent(experimentName), {
+        `/settings/experiments/${encodeURIComponent(experimentName)}`, {
           method: 'GET',
           headers: headers,
         })
         .then(function(response) {
           if (!response.ok) {
-            throw new Error('Error getting ' + experimentName);
+            throw new Error(`Error getting ${experimentName}`);
           }
 
           return response.json()
             .then(function(json) {
               return json.enabled;
             }).catch(function(e) {
-              throw new Error('Error getting ' + experimentName + ' ' + e);
+              throw new Error(`Error getting ${experimentName} ${e}`);
             });
         });
     },
 
     setExperimentSetting: function(experimentName, enabled) {
       const headers = {
-        'Authorization': `Bearer ${window.API.jwt}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       };
       const payload = {
-       'enabled': enabled,
+        enabled: enabled,
       };
       return fetch(
-        '/settings/experiments/' + encodeURIComponent(experimentName), {
+        `/settings/experiments/${encodeURIComponent(experimentName)}`,
+        {
           method: 'PUT',
           body: JSON.stringify(payload),
           headers: headers,
-        })
-        .then(function(response) {
-          if (!response.ok) {
-           throw new Error(
-              'Unexpected response code while setting experiment setting');
-          }
+        }
+      ).then(function(response) {
+        if (!response.ok) {
+          throw new Error(
+            'Unexpected response code while setting experiment setting');
+        }
 
-         console.log('Set ' + experimentName + ' to ' + enabled);
-        });
+        console.log(`Set ${experimentName} to ${enabled}`);
+      });
     },
 
     getUpdateStatus: function() {
-      return fetch('/updates/status',
-        {headers: this.headers()}
-      ).then(res => {
+      return fetch('/updates/status', {
+        headers: this.headers(),
+      }).then((res) => {
         return res.json();
       });
     },
 
     getUpdateLatest: function() {
-      return fetch('/updates/latest',
-        {headers: this.headers()}
-      ).then(res => {
+      return fetch('/updates/latest', {
+        headers: this.headers(),
+      }).then((res) => {
         return res.json();
       });
     },

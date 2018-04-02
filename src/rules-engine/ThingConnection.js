@@ -30,14 +30,14 @@ class ThingConnection {
   async start() {
     const jwt = await Settings.get('RulesEngine.jwt');
     const gateway = await Settings.get('RulesEngine.gateway');
-    const wsHref = gateway.replace(/^http/, 'ws') + this.href + '?jwt=' + jwt;
+    const wsHref = `${gateway.replace(/^http/, 'ws') + this.href}?jwt=${jwt}`;
 
     this.ws = new WebSocket(wsHref);
     this.ws.on('message', this.onMessage);
     await e2p(this.ws, 'open');
 
     // Allow the app to handle the websocket open
-    await new Promise(res => {
+    await new Promise((res) => {
       setTimeout(res, 100);
     });
   }
@@ -65,12 +65,12 @@ class ThingConnection {
         this.ws.close();
       }
     } else {
-      console.warn(this.constructor.name + '.stop was not started');
+      console.warn(`${this.constructor.name}.stop was not started`);
     }
   }
 
   onMessage(text) {
-    let msg = JSON.parse(text);
+    const msg = JSON.parse(text);
     this.messageHandler(msg);
   }
 }
