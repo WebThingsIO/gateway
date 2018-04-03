@@ -17,7 +17,7 @@ const createDomainButton = document.getElementById('create-domain-button');
 const skipAnchor = document.getElementById('skip-subdomain-anchor');
 const errorMessage = document.getElementById('error-setup');
 
-function displayMessage(errorMsg, type){
+function displayMessage(errorMsg, type) {
   errorMessage.innerHTML = errorMsg;
   errorMessage.classList.remove('hidden');
   if (type === 'message') {
