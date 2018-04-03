@@ -210,6 +210,14 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   const thingId = request.params.thingId;
   const subscribedEventNames = {};
 
+  function sendMessage(message){
+    websocket.send(message, function(err){
+      if (err){
+        console.error(`WebSocket sendMessage failed`, err);
+      }
+    });
+  }
+
   Things.getThing(thingId).then(function(thing) {
     thing.registerWebsocket(websocket);
     thing.addEventSubscription(onEvent);
@@ -219,7 +227,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     });
   }).catch(function() {
     console.error('WebSocket opened on nonexistent thing', thingId);
-    websocket.send(JSON.stringify({
+    sendMessage(JSON.stringify({
       messageType: Constants.ERROR,
       data: {
         status: '404 Not Found',
@@ -233,7 +241,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     if (property.device.id !== thingId) {
       return;
     }
-    websocket.send(JSON.stringify({
+    sendMessage(JSON.stringify({
       messageType: Constants.PROPERTY_STATUS,
       data: {
         [property.name]: property.value,
@@ -242,7 +250,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   }
 
   function onActionStatus(action) {
-    websocket.send(JSON.stringify({
+    sendMessage(JSON.stringify({
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
@@ -254,8 +262,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     if (!subscribedEventNames[event.name]) {
       return;
     }
-
-    websocket.send(JSON.stringify({
+    sendMessage(JSON.stringify({
       messageType: Constants.EVENT,
       data: {
         [event.name]: event.getDescription(),
@@ -288,7 +295,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
     try {
       request = JSON.parse(requestText);
     } catch (e) {
-      websocket.send(JSON.stringify({
+      sendMessage(JSON.stringify({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
@@ -300,7 +307,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
 
     const device = AddonManager.getDevice(thingId);
     if (!device) {
-      websocket.send(JSON.stringify({
+      sendMessage(JSON.stringify({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
@@ -319,7 +326,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
         });
         Promise.all(setRequests).catch((err) => {
           // If any set fails, send an error
-          websocket.send(JSON.stringify({
+          sendMessage(JSON.stringify({
             messageType: Constants.ERROR,
             data: {
               status: '400 Bad Request',
@@ -348,7 +355,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
                 thingId, action.id, actionName, actionParams);
             });
           }).catch((err) => {
-            websocket.send(JSON.stringify({
+            sendMessage(JSON.stringify({
               messageType: Constants.ERROR,
               data: {
                 status: '400 Bad Request',
@@ -362,7 +369,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       }
 
       default: {
-        websocket.send(JSON.stringify({
+        sendMessage(JSON.stringify({
           messageType: Constants.ERROR,
           data: {
             status: '400 Bad Request',
