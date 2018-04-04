@@ -224,6 +224,12 @@ StringDetail.prototype.attach = function() {
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
+  const form = this.input.parentNode;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    this.input.blur();
+    return false;
+  });
 };
 
 /**
@@ -273,6 +279,12 @@ NumberDetail.prototype.attach = function() {
     `#number-${Utils.escapeHtml(this.name)}`);
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
+  });
+  const form = this.input.parentNode;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    this.input.blur();
+    return false;
   });
 };
 
