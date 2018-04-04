@@ -297,7 +297,7 @@ if (config.get('cli')) {
 }
 
 // function to stop running server and start https
-TunnelService.switchToHttps = function(){
+TunnelService.switchToHttps = function() {
   stopHttpGateway();
   startHttpsGateway();
 };

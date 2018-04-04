@@ -210,9 +210,9 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   const thingId = request.params.thingId;
   const subscribedEventNames = {};
 
-  function sendMessage(message){
-    websocket.send(message, function(err){
-      if (err){
+  function sendMessage(message) {
+    websocket.send(message, function(err) {
+      if (err) {
         console.error(`WebSocket sendMessage failed`, err);
       }
     });
