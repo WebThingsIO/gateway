@@ -2,6 +2,7 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 NODE_VERSION="--lts"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
@@ -12,3 +13,5 @@ nvm alias default node
 _url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
 sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
+
+touch .post_upgrade_complete

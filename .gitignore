@@ -12,3 +12,4 @@ static/js/lib/stm_web.min.js
 .node-persist/
 config/local.js
 static/uploads
+.post_upgrade_complete
