@@ -147,7 +147,11 @@ const Profile = {
 
     const oldSslDir = path.join(this.gatewayDir, 'ssl');
     if (fs.existsSync(oldSslDir)) {
-      fs.rmdirSync(oldSslDir);
+      rimraf(oldSslDir, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
     }
 
     // Move old uploads, if necessary.
