@@ -15,13 +15,16 @@
  * InstalledAddon constructor.
  *
  * @param {Object} metadata InstalledAddon metadata object.
- * @param {Object} addonsMap Handle to the installedAddons map from
+ * @param {Object} installedAddonsMap Handle to the installedAddons map from
+ *                 SettingsScreen.
+ * @param {Object} availableAddonsMap Handle to the availableAddons map from
  *                 SettingsScreen.
  * @param {String} updateUrl URL for updated add-on package
  * @param {String} updateVersion Version of updated add-on package
  * @param {String} updateChecksum Checksum of the updated add-on package
  */
-const InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
+const InstalledAddon = function(metadata, installedAddonsMap,
+                                availableAddonsMap, updateUrl, updateVersion,
                                 updateChecksum) {
   this.name = metadata.name;
   this.description = metadata.description;
@@ -35,7 +38,8 @@ const InstalledAddon = function(metadata, addonsMap, updateUrl, updateVersion,
   this.updateVersion = updateVersion;
   this.updateChecksum = updateChecksum;
   this.container = document.getElementById('installed-addons-list');
-  this.addonsMap = addonsMap;
+  this.installedAddonsMap = installedAddonsMap;
+  this.availableAddonsMap = availableAddonsMap;
   this.render();
 };
 
@@ -156,7 +160,11 @@ InstalledAddon.prototype.handleRemove = function() {
       const el = document.getElementById(
         `addon-item-${Utils.escapeHtml(this.name)}`);
       el.parentNode.removeChild(el);
-      this.addonsMap.delete(this.name);
+      this.installedAddonsMap.delete(this.name);
+      const addon = this.availableAddonsMap.get(this.name);
+      if (addon) {
+        addon.installed = false;
+      }
     })
     .catch((e) => {
       console.error(`Failed to uninstall add-on: ${this.name}\n${e}`);
