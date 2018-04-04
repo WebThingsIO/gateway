@@ -51,7 +51,8 @@
       const $refSchema =
         SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
       // Drop the $ref property of the source schema.
-      const {...localSchema} = schema;
+      // eslint-disable-next-line no-unused-vars
+      const {$ref, ...localSchema} = schema;
       // Update referenced schema definition with local schema properties.
       return {...$refSchema, ...localSchema};
     },

@@ -29,6 +29,14 @@ const App = {
           'integerRange',
         ],
         properties: {
+          minItemsList: {
+            type: 'array',
+            title: 'A list with a minimal number of items',
+            minItems: 3,
+            items: {
+              $ref: '#/definitions/Thing',
+            },
+          },
           number: {
             title: 'Number',
             type: 'number',
