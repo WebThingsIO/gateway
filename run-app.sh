@@ -2,6 +2,10 @@
 
 MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 
+if [ ! -f .post_upgrade_complete ]; then
+  ./tools/post-upgrade.sh
+fi
+
 run_app() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
