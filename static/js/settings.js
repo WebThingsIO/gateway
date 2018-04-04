@@ -416,8 +416,8 @@ const SettingsScreen = {
           }
         }
 
-        new InstalledAddon(addon, this.installedAddons, updateUrl,
-                           updateVersion, updateChecksum);
+        new InstalledAddon(addon, this.installedAddons, this.availableAddons,
+                           updateUrl, updateVersion, updateChecksum);
       }
     });
   },
