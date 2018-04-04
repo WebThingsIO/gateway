@@ -26,7 +26,10 @@ function SchemaField(
   required = false,
   disabled = false,
   readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
+                                                    definitions,
+                                                    formData);
+  this.schema = schema;
   this.formData = formData;
   this.idSchema = idSchema;
   this.name = name;
@@ -49,15 +52,15 @@ SchemaField.prototype.getFieldType = function() {
     string: StringField,
   };
 
-  const field = FIELD_TYPES[this.schema.type];
+  const field = FIELD_TYPES[this.retrievedSchema.type];
   return field ? field : UnsupportedField;
 };
 
 SchemaField.prototype.render = function() {
   const fieldType = this.getFieldType();
-  const type = this.schema.type;
+  const type = this.retrievedSchema.type;
   const id = Utils.escapeHtml(this.idSchema.$id);
-  const description = this.schema.description;
+  const description = this.retrievedSchema.description;
   const classNames = [
     'form-group',
     'field',
@@ -65,7 +68,7 @@ SchemaField.prototype.render = function() {
   ]
     .join(' ')
     .trim();
-  let label = this.schema.title || this.name;
+  let label = this.retrievedSchema.title || this.name;
   if (typeof label !== 'undefined' && label !== null) {
     label = Utils.escapeHtml(label);
     label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
@@ -73,7 +76,8 @@ SchemaField.prototype.render = function() {
 
   let displayLabel = true;
   if (type === 'array') {
-    displayLabel = SchemaUtils.isMultiSelect(this.schema, this.definitions);
+    displayLabel = SchemaUtils.isMultiSelect(this.retrievedSchema,
+                                             this.definitions);
   }
   if (type === 'object') {
     displayLabel = false;

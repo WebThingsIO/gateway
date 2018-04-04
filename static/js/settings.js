@@ -445,8 +445,11 @@ const SettingsScreen = {
       const schema = addon.moziot.schema;
       const config = addon.moziot.config;
 
-      const configForm = new SchemaForm(schema, `addon-config-${id}`, id);
-      this.addonConfigSettings.appendChild(configForm.render(config));
+      const configForm = new SchemaForm(schema,
+                                        `addon-config-${id}`,
+                                        id,
+                                        config);
+      this.addonConfigSettings.appendChild(configForm.render());
     });
   },
 

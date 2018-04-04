@@ -24,7 +24,7 @@ function BooleanField(schema,
                       required = false,
                       disabled = false,
                       readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
   this.formData = formData;
   this.idSchema = idSchema;
   this.name = name;
