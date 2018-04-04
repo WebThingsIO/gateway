@@ -89,6 +89,7 @@ NumberField.prototype.render = function() {
 
     const input = field.querySelector('input');
     input.onchange = this.onRangeChange.bind(this);
+    input.oninput = this.onRangeChange.bind(this);
 
     this.rangeValue = field.querySelector('span');
 

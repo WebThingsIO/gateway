@@ -97,6 +97,7 @@ StringField.prototype.render = function() {
 
   const input = field.querySelector(`#${id}`);
   input.onchange = this.onStringChange.bind(this);
+  input.oninput = this.onStringChange.bind(this);
 
   return field;
 };
