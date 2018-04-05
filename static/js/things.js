@@ -14,8 +14,8 @@
  DimmableLight, DimmableColorLight, OnOffLight, MultiLevelSwitch,
  MultiLevelSensor, SmartPlug, Menu */
 
-// eslint-disable-next-line
-var ThingsScreen = {
+// eslint-disable-next-line no-unused-vars
+const ThingsScreen = {
 
   NO_THINGS_MESSAGE: 'No devices yet. Click + to scan for available devices.',
   THING_NOT_FOUND_MESSAGE: 'Thing not found.',
