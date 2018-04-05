@@ -33,8 +33,19 @@ make -C ${OPEN_ZWAVE} clean
 # Clean any previous node modules
 rm -rf ${GATEWAY}/node_modules
 
+# Under rpxc /rpxc/sysroot/usr/lib/arm-linux-gnueabihf/libudev.so is
+# a symlink back to /lib/arm-linux-gnueabihf/libudev.so.1.5.0 which
+# doesn't exist. So we go ahead and create a symlink there and point
+# it to the same path under /rpxc/sysroot
+#
+# My guess is that this would be fine for chrooted apps, but I don't
+# think that the cross compilers run chrooted.
+LIBUDEV_SO=/lib/arm-linux-gnueabihf/libudev.so.1.5.0
+sudo mkdir -p $(dirname ${LIBUDEV_SO})
+sudo ln -s ${SYSROOT}/${LIBUDEV_SO} ${LIBUDEV_SO}
+
 # Cross compile Open-ZWave
-PREFIX=/usr/local CFLAGS=--sysroot=${SYSROOT} LDFLAGS=--sysroot=${SYSROOT} make -C ${OPEN_ZWAVE} CROSS_COMPILE=arm-linux-gnueabihf-
+PREFIX=/usr CFLAGS=--sysroot=${SYSROOT} LDFLAGS=--sysroot=${SYSROOT} make -C ${OPEN_ZWAVE} CROSS_COMPILE=arm-linux-gnueabihf-
 
 # Install Open-ZWave
 # Technically, this is incorrect. We should be setting DESTDIR to ${SYSROOT}.
@@ -43,7 +54,7 @@ PREFIX=/usr/local CFLAGS=--sysroot=${SYSROOT} LDFLAGS=--sysroot=${SYSROOT} make 
 # pkg-config to determine where openzwave is installed and expects that the
 # build tree and the install tree are the same. The host build doesn't need to
 # use openzwave, so we can get away with this sleight of hand for now.
-INSTALL_OPENZWAVE="PREFIX=/usr/local make  -C ${OPEN_ZWAVE} CROSS_COMPILE=arm-linux-gnueabihf- MACHINE=${ARCH} install"
+INSTALL_OPENZWAVE="PREFIX=/usr make  -C ${OPEN_ZWAVE} CROSS_COMPILE=arm-linux-gnueabihf- MACHINE=${ARCH} install"
 sudo ${INSTALL_OPENZWAVE}
 sudo DESTDIR=${SYSROOT} ${INSTALL_OPENZWAVE}
 
