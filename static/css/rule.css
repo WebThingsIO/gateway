@@ -211,16 +211,27 @@
   cursor: pointer;
 }
 
+.property-select-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+}
+
 .property-select-option.selected {
-  display: block;
   position: relative;
   border-radius: 0 0 1rem 0;
+}
+
+.property-select.open > .property-select-option.selected {
+  border-radius: 0;
 }
 
 .property-select-option.selected:after {
   content: "";
   position: absolute;
   right: 0;
+  top: 0;
   width: 0;
   height: 0;
   border-bottom: 1rem solid white;
@@ -233,12 +244,39 @@
   display: none;
 }
 
-.property-select.open > .property-select-option {
-  display: block;
+.property-select.open > .property-select-option,
+.property-select-option.selected {
+  display: flex;
+  align-items: center;
 }
 
 .property-select-option:hover {
   background: #9b9b9b;
+}
+
+.property-select-option select,
+.property-select-option input {
+  margin-left: 0.6rem;
+}
+
+input[type="number"],
+select {
+  width: 3rem;
+  background: #4a4a4a;
+  color: white;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid white;
+  font-size: 1.6rem;
+}
+
+input[type="number"] {
+  padding: 0.2rem;
+}
+
+input[type="color"] {
+  position: relative;
+  top: 0.3rem;
 }
 
 .dragging {

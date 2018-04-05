@@ -39,5 +39,5 @@ DevicePropertyBlock.prototype.setRulePart = function(rulePart) {
   RulePartBlock.prototype.setRulePart.call(this, rulePart);
 
   this.propertySelect.updateOptionsForRole(this.role);
-  this.propertySelect.selectByValue(rulePart);
+  this.propertySelect.selectByRuleFragment(rulePart);
 };
