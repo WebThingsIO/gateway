@@ -56,6 +56,7 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
   const nameElt = document.createElement('span');
   nameElt.classList.add('property-select-name');
   nameElt.textContent = name;
+  nameElt.title = name;
   elt.appendChild(nameElt);
 
   if (!ruleFragment) {
