@@ -53,7 +53,10 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     elt.classList.add('selected');
   }
   elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
-  elt.textContent = name;
+  const nameElt = document.createElement('span');
+  nameElt.classList.add('property-select-name');
+  nameElt.textContent = name;
+  elt.appendChild(nameElt);
 
   if (!ruleFragment) {
     this.elt.appendChild(elt);
@@ -297,10 +300,16 @@ PropertySelect.prototype.addActionOptions = function() {
 PropertySelect.prototype.onClick = function(e) {
   this.elt.classList.toggle('open');
   if (!this.elt.classList.contains('open')) {
-    // We were open, so that was a click to select
-    this.select(e.target);
+    let target = e.target;
+    if (!target.classList.contains('property-select-option')) {
+      target = target.parentNode;
+    }
 
-    const rulePart = JSON.parse(e.target.dataset.ruleFragment);
+    // We were open, so that was a click to select
+    this.select(target);
+
+
+    const rulePart = JSON.parse(target.dataset.ruleFragment);
     if (!rulePart) {
       return;
     }
