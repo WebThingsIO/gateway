@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-/* global API, Gateway, RuleCard, page */
+/* global API, Gateway, Menu, RuleCard, page */
 
 'use strict';
 
@@ -18,6 +18,7 @@ const RulesScreen = {
     this.nextId = 0;
 
     this.createRuleButton.addEventListener('click', () => {
+      Menu.hide();
       page('/rules/new');
     });
   },
