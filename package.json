@@ -53,7 +53,6 @@
     "nocache": "^2.0.0",
     "node-fetch": "^2.1.1",
     "node-getopt": "^0.2.3",
-    "openzwave-shared": "^1.3.2",
     "promisepipe": "^2.1.1",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.0",
