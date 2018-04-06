@@ -185,14 +185,12 @@ describe('addons', function() {
     expect(list[0]).toHaveProperty('name');
     expect(list[0]).toHaveProperty('display_name');
     expect(list[0]).toHaveProperty('description');
-    expect(list[0]).toHaveProperty('version');
-    expect(list[0]).toHaveProperty('url');
-    expect(list[0]).toHaveProperty('checksum');
     expect(list[0]).toHaveProperty('packages');
     expect(list[0]).toHaveProperty('api');
     expect(list[0].api).toHaveProperty('min');
     expect(list[0].api).toHaveProperty('max');
     expect(list[0].packages).toHaveProperty('any');
+    expect(list[0].packages.any).toHaveProperty('version');
     expect(list[0].packages.any).toHaveProperty('url');
     expect(list[0].packages.any).toHaveProperty('checksum');
 
@@ -222,14 +220,12 @@ describe('addons', function() {
     expect(list[0]).toHaveProperty('name');
     expect(list[0]).toHaveProperty('display_name');
     expect(list[0]).toHaveProperty('description');
-    expect(list[0]).toHaveProperty('version');
-    expect(list[0]).toHaveProperty('url');
-    expect(list[0]).toHaveProperty('checksum');
     expect(list[0]).toHaveProperty('packages');
     expect(list[0]).toHaveProperty('api');
     expect(list[0].api).toHaveProperty('min');
     expect(list[0].api).toHaveProperty('max');
     expect(list[0].packages).toHaveProperty('any');
+    expect(list[0].packages.any).toHaveProperty('version');
     expect(list[0].packages.any).toHaveProperty('url');
     expect(list[0].packages.any).toHaveProperty('checksum');
 
