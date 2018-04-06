@@ -536,7 +536,7 @@ class AddonManager extends EventEmitter {
 
           if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
             const err =
-              `Checksum failed in package ${manifest.name}: ${parts[1]}`;
+              `Checksum failed in package ${manifest.name}: ${filename}`;
             console.error(err);
             return Promise.reject(err);
           }
