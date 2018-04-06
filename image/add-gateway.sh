@@ -168,17 +168,24 @@ main() {
     zigbee_url=$(echo "${addon_list}" | python3 -c \
       "import json, sys; \
       l = json.loads(sys.stdin.read()); \
-      print([x['url'] for x in l if x['name'] == 'zigbee-adapter'][0]);")
+      print([x['packages'] for x in l if x['name'] == 'zigbee-adapter'][0]['linux-arm']['url']);")
     curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
     sudo tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
     zwave_url=$(echo "${addon_list}" | python3 -c \
       "import json, sys; \
       l = json.loads(sys.stdin.read()); \
-      print([x['url'] for x in l if x['name'] == 'zwave-adapter'][0]);")
+      print([x['packages'] for x in l if x['name'] == 'zwave-adapter'][0]['linux-arm']['url']);")
     curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
     sudo tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
+    thing_url=$(echo "${addon_list}" | python3 -c \
+      "import json, sys; \
+      l = json.loads(sys.stdin.read()); \
+      print([x['packages'] for x in l if x['name'] == 'thing-url-adapter'][0]['linux-arm']['url']);")
+    curl -L -o "${tempdir}/thing-url-adapter.tgz" "${thing_url}"
+    sudo tar xzf "${tempdir}/thing-url-adapter.tgz" -C "${ADDONS_DIR}"
+    sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/thing-url-adapter"
     rm -rf "${tempdir}"
 
     # Setup things so that the filesystem gets resized
