@@ -125,6 +125,7 @@ main() {
   IMG_FILENAME=${1/%.zip/}
   if [ -z "${IMG_FILENAME}" ]; then
     echo "No IMG filename provided."
+    usage
     exit 1
   fi
 
