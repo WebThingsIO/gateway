@@ -374,7 +374,7 @@ const SettingsScreen = {
               displayName: addon.display_name,
               description: addon.description,
               author: addon.author,
-              version: addon.version,
+              version: addon.packages[arch].version,
               url: addon.packages[arch].url,
               checksum: addon.packages[arch].checksum,
               installed: this.installedAddons.has(addon.name),
@@ -409,7 +409,8 @@ const SettingsScreen = {
         let updateUrl = null, updateVersion = null, updateChecksum = null;
         if (this.availableAddons.has(name)) {
           const available = this.availableAddons.get(name);
-          if (available.version !== addon.version) {
+          const cmp = this.compareSemver(addon.version, available.version);
+          if (cmp < 0) {
             updateUrl = available.url;
             updateVersion = available.version;
             updateChecksum = available.checksum;

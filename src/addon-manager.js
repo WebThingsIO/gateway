@@ -20,6 +20,7 @@ const UserProfile = require('./user-profile');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
+const semver = require('semver');
 const tar = require('tar');
 const Utils = require('./utils');
 const os = require('os');
@@ -1092,7 +1093,7 @@ class AddonManager extends EventEmitter {
         for (const arch in addon.packages) {
           if (arch === 'any' || arch === architecture) {
             available[addon.name] = {
-              version: addon.version,
+              version: addon.packages[arch].version,
               url: addon.packages[arch].url,
               checksum: addon.packages[arch].checksum,
             };
@@ -1145,7 +1146,7 @@ class AddonManager extends EventEmitter {
 
         // Check if an update is available.
         if (available.hasOwnProperty(addonName) &&
-            available[addonName].version !== manifest.version) {
+            semver.lt(manifest.version, available[addonName].version)) {
           try {
             await this.uninstallAddon(addonName, true, false);
             await this.installAddonFromUrl(addonName,
