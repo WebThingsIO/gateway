@@ -20,6 +20,7 @@ const UserProfile = require('./user-profile');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
+const semver = require('semver');
 const tar = require('tar');
 const Utils = require('./utils');
 const os = require('os');
@@ -530,16 +531,12 @@ class AddonManager extends EventEmitter {
         const data = fs.readFileSync(sumsFile, 'utf8');
         const lines = data.trim().split(/\r?\n/);
         for (const line of lines) {
-          const parts = line.trim().split(/\s+/);
-          if (parts.length !== 2) {
-            const err = `Invalid checksum in package ${manifest.name}`;
-            console.error(err);
-            return Promise.reject(err);
-          }
+          const checksum = line.slice(0, 64);
+          const filename = line.slice(64).trimLeft();
 
-          if (Utils.hashFile(path.join(addonPath, parts[1])) !== parts[0]) {
+          if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
             const err =
-              `Checksum failed in package ${manifest.name}: ${parts[1]}`;
+              `Checksum failed in package ${manifest.name}: ${filename}`;
             console.error(err);
             return Promise.reject(err);
           }
@@ -1092,7 +1089,7 @@ class AddonManager extends EventEmitter {
         for (const arch in addon.packages) {
           if (arch === 'any' || arch === architecture) {
             available[addon.name] = {
-              version: addon.version,
+              version: addon.packages[arch].version,
               url: addon.packages[arch].url,
               checksum: addon.packages[arch].checksum,
             };
@@ -1145,7 +1142,7 @@ class AddonManager extends EventEmitter {
 
         // Check if an update is available.
         if (available.hasOwnProperty(addonName) &&
-            available[addonName].version !== manifest.version) {
+            semver.lt(manifest.version, available[addonName].version)) {
           try {
             await this.uninstallAddon(addonName, true, false);
             await this.installAddonFromUrl(addonName,
