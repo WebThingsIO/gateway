@@ -531,14 +531,10 @@ class AddonManager extends EventEmitter {
         const data = fs.readFileSync(sumsFile, 'utf8');
         const lines = data.trim().split(/\r?\n/);
         for (const line of lines) {
-          const parts = line.trim().split(/\s+/);
-          if (parts.length !== 2) {
-            const err = `Invalid checksum in package ${manifest.name}`;
-            console.error(err);
-            return Promise.reject(err);
-          }
+          const checksum = line.slice(0, 64);
+          const filename = line.slice(64).trimLeft();
 
-          if (Utils.hashFile(path.join(addonPath, parts[1])) !== parts[0]) {
+          if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
             const err =
               `Checksum failed in package ${manifest.name}: ${parts[1]}`;
             console.error(err);
