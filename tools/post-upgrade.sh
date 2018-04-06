@@ -2,7 +2,9 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# For some reason NVM_DIR isn't set at this point
+export NVM_DIR=/home/pi/.nvm
+\. "$NVM_DIR/nvm.sh"  # This loads nvm
 NODE_VERSION="--lts"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
