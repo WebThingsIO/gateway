@@ -105,7 +105,7 @@ describe('things/', function() {
   it('fail to create a new thing (duplicate)', async () => {
     await addDevice();
     const err = await pFinal(addDevice());
-    expect(err.response.status).toEqual(500);
+    expect(err.response.status).toEqual(400);
   });
 
   it('GET with 1 thing', async () => {

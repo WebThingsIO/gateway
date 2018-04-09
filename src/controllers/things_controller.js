@@ -44,6 +44,17 @@ ThingsController.post('/', async (request, response) => {
   const id = description.id;
   delete description.id;
 
+  try {
+    // If the thing already exists, bail out.
+    await Things.getThing(id);
+    const err = 'Web thing already added';
+    console.log(err, id);
+    response.status(400).send(err);
+    return;
+  } catch (_e) {
+    // Do nothing, this is what we want.
+  }
+
   // If we're adding a native webthing, we need to update the config for
   // thing-url-adapter so that it knows about it.
   let webthing = false;
