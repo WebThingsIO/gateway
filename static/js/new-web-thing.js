@@ -23,12 +23,13 @@ const getNewWebThingId = function() {
  */
 const NewWebThing = function() {
   this.id = getNewWebThingId();
+  this.originalId = this.id;
   this.url = null;
   this.description = null;
   this.container = document.getElementById('new-things');
   this.render();
   this.element =
-    document.getElementById(`new-thing-${Utils.escapeHtml(this.id)}`);
+    document.getElementById(`new-thing-${Utils.escapeHtml(this.originalId)}`);
   this.thingTypeLabel =
     this.element.getElementsByClassName('new-thing-type')[0];
   this.originLabel =
@@ -49,7 +50,7 @@ const NewWebThing = function() {
  */
 NewWebThing.prototype.view = function() {
   return `
-    <div id="new-thing-${this.id}" class="new-thing web-thing">
+    <div id="new-thing-${this.originalId}" class="new-thing web-thing">
       <div class="new-thing-icon"></div>
       <div class="new-thing-metadata">
         <input type="text" class="new-web-thing-url"
@@ -167,7 +168,7 @@ NewWebThing.prototype.submit = function() {
         break;
       case 'dimmableColorLight':
         this.thingTypeLabel.innerText = 'Dimmable Color Light';
-        this.element.classList.add('binary-sensor');
+        this.element.classList.add('on-off-light');
         break;
       case 'multiLevelSwitch':
         this.thingTypeLabel.innerText = 'Multi Level Switch';
@@ -224,14 +225,43 @@ NewWebThing.prototype.save = function() {
       'Content-Type': 'application/json',
     },
   }).then((response) => {
+    if (!response.ok) {
+      return response.text();
+    }
+
     return response.json();
-  }).then((json) => {
-    console.log(`Successfully created thing ${json}`);
+  }).then((description) => {
+    if (typeof description === 'string') {
+      throw new Error(description);
+    }
+
+    console.log(`Successfully created thing ${description}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;
     this.cancelButton.classList.add('hidden');
   }).catch((error) => {
-    console.error('Failed to save web thing:', error);
+    this.thingTypeLabel.innerText = error.message;
+    this.thingTypeLabel.classList.add('error');
+    this.reset();
+    console.error('Failed to save web thing:', error.message);
   });
+};
+
+NewWebThing.prototype.reset = function() {
+  this.description = null;
+  this.url = null;
+  this.id = this.originalId;
+
+  this.urlInput.value = '';
+  this.nameInput.value = '';
+  this.originLabel.innerText = '';
+  this.element.classList.remove(
+    'binary-sensor', 'on-off-light', 'on-off-switch', 'smart-plug');
+  this.element.classList.add('web-thing');
+  this.urlInput.classList.remove('hidden');
+  this.nameInput.classList.add('hidden');
+  this.submitButton.classList.remove('hidden');
+  this.saveButton.classList.add('hidden');
+  this.originLabel.classList.add('hidden');
 };
