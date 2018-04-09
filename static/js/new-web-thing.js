@@ -224,14 +224,24 @@ NewWebThing.prototype.save = function() {
       'Content-Type': 'application/json',
     },
   }).then((response) => {
+    if (!response.ok) {
+      return response.text();
+    }
+
     return response.json();
-  }).then((json) => {
-    console.log(`Successfully created thing ${json}`);
+  }).then((description) => {
+    if (typeof description === 'string') {
+      throw new Error(description);
+    }
+
+    console.log(`Successfully created thing ${description}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;
     this.cancelButton.classList.add('hidden');
   }).catch((error) => {
-    console.error('Failed to save web thing:', error);
+    this.thingTypeLabel.innerText = error.message;
+    this.thingTypeLabel.classList.add('error');
+    console.error('Failed to save web thing:', error.message);
   });
 };
