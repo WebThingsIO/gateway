@@ -259,8 +259,8 @@
   margin-left: 0.6rem;
 }
 
-input[type="number"],
-select {
+.property-select-option input[type="number"],
+.property-select-option select {
   width: 3rem;
   background: #4a4a4a;
   color: white;
@@ -270,13 +270,8 @@ select {
   font-size: 1.6rem;
 }
 
-input[type="number"] {
+.property-select-option input[type="number"] {
   padding: 0.2rem;
-}
-
-input[type="color"] {
-  position: relative;
-  top: 0.3rem;
 }
 
 .dragging {
