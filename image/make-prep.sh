@@ -15,6 +15,7 @@ SCRIPT_NAME=$(basename $0)
 SCRIPT_DIR=$(dirname $0)
 VERBOSE=0
 ENABLE_CONSOLE=1
+ENABLE_I2C=1
 ENABLE_WIFI=0
 WIFI_SSID=
 WIFI_PASSWORD=
@@ -39,6 +40,7 @@ where OPTION can be one of:
   --ssid SSID       Specify the SSID for Wifi access
   --password PWD    Specify the password for wifi access
   --wifi-country CC Specify the WiFi country code to use (default: GB)
+  --no-i2c          Disable I2C bus
   --hostname NAME   Specify the hostname
   --dd DEV          Issue a dd command to copy the image to an sdcard
   --summary         Print summary of changed files
@@ -81,6 +83,35 @@ core_freq=250
 END
   fi
 }
+
+###########################################################################
+#
+# Enables the I2C bus
+#
+enable_i2c_bus() {
+  CONFIG="${BOOT_MOUNTPOINT}/config.txt"
+  local pattern="dtparam=i2c_arm=on"
+  if grep -q "$pattern" ${CONFIG} ; then
+    sudo sed -i "s/.*$pattern/$pattern/g" "${CONFIG}"
+  else
+    echo "Enabling I2C bus"
+    sudo sh -c "cat >> '${CONFIG}'" <<END
+
+$pattern
+END
+  fi
+
+  CONF="${ROOT_MOUNTPOINT}/etc/modules"
+  if sudo grep -q "i2c-dev" "${CONF}:"; then
+    sudo sed -i "s/.*i2c-dev/i2c-dev/g" "${CONF}"
+  else
+    sudo sh -c "cat >> '${CONF}'" <<END
+
+i2c-dev
+END
+  fi
+}
+
 
 ###########################################################################
 #
@@ -211,6 +242,9 @@ main() {
             HOSTNAME="${!OPTIND}"
             OPTIND=$(( OPTIND + 1 ))
             ;;
+          no-i2c)
+            ENABLE_I2C=0
+            ;;
           noconsole)
             ENABLE_CONSOLE=0
             ;;
@@ -285,6 +319,7 @@ main() {
     echo "  IMG_FILENAME = ${IMG_FILENAME}"
     echo " PREP_FILENAME = ${PREP_FILENAME}"
     echo "ENABLE_CONSOLE = ${ENABLE_CONSOLE}"
+    echo "    ENABLE_I2C = ${ENABLE_I2C}"
     echo "   ENABLE_WIFI = ${ENABLE_WIFI}"
     echo "     WIFI_SSID = ${WIFI_SSID}"
     echo " WIFI_PASSWORD = ${WIFI_PASSWORD}"
@@ -373,6 +408,10 @@ main() {
 
   if [ "${ENABLE_CONSOLE}" == 1 ]; then
     enable_serial_console
+  fi
+
+  if [ "${ENABLE_I2C}" == 1 ]; then
+    enable_i2c_bus
   fi
 
   if [ "${ENABLE_WIFI}" == 1 ]; then
