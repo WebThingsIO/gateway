@@ -20,8 +20,9 @@ module.exports = {
   hashFile: function(fname) {
     const hash = crypto.createHash('sha256');
 
+    let fd;
     try {
-      const fd = fs.openSync(fname, 'r');
+      fd = fs.openSync(fname, 'r');
       const buffer = new Uint8Array(4096);
 
       // eslint-disable-next-line no-constant-condition
@@ -33,7 +34,12 @@ module.exports = {
         hash.update(buffer.slice(0, bytes));
       }
     } catch (e) {
+      console.error(e);
       return null;
+    } finally {
+      if (fd) {
+        fs.closeSync(fd);
+      }
     }
 
     return hash.digest('hex').toLowerCase();
