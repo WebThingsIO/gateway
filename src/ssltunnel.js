@@ -62,7 +62,7 @@ const TunnelService = {
             }
           }
         });
-        this.pagekiteProcess.on('data', (data) => {
+        this.pagekiteProcess.stderr.on('data', (data) => {
           console.log(`[pagekite] stderr: ${data}`);
         });
         this.pagekiteProcess.on('close', (code) => {
