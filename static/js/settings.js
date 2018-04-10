@@ -374,6 +374,7 @@ const SettingsScreen = {
               displayName: addon.display_name,
               description: addon.description,
               author: addon.author,
+              homepage: addon.homepage,
               version: addon.packages[arch].version,
               url: addon.packages[arch].url,
               checksum: addon.packages[arch].checksum,
