@@ -178,10 +178,10 @@ $ jest src/test/{test-name}.js
 * **`doc/`** - Additional documentation
 * **`image/`** - Tools for building the Raspberry Pi image
 * **`src/`**
-  * **`addons/`** - Utility classes and methods used by add-ons
   * **`addons-test/`** - Add-ons used strictly for testing
   * **`controllers/`** - App URL routes and their logic
   * **`models/`** - Data model and business logic
+  * **`plugin/`** - Utility classes and methods used by add-ons
   * **`rules-engine/`** - The rules engine
   * **`test/`** - Integration tests
   * **`views/`** - HTML views
@@ -191,6 +191,7 @@ $ jest src/test/{test-name}.js
   * **`app-instance.js`** - Application wrapper for integration tests
   * **`constants.js`** - System-wide constants
   * **`db.js`** - Manages the SQLite3 database
+  * **`deferred.js`** - Wraps up a promise in a slightly more convenient manner for passing around, or saving
   * **`ec-crypto.js`** - Elliptic curve helpers for the ES256 curve
   * **`jwt-middleware.js`** - Express middleware for determining authentication status
   * **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
