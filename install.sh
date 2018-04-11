@@ -25,6 +25,9 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
+# Allow node to use the Bluetooth adapter
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+
 # Download, build, and install OpenZWave
 sudo apt install libusb-1.0-0-dev libudev-dev -y
 if [ ! -d "open-zwave" ]; then

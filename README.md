@@ -63,6 +63,14 @@ Note: these versions might differ from the LTS version installed locally.
 
 Follow the directions from [NodeJS](https://nodejs.org) to install on your platform.
 
+### Set up Bluetooth permissions
+
+The following is required in order to let node use the Bluetooth adapter.
+
+```
+$ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+```
+
 ### Install libusb and libudev (Linux only)
 ```
 $ sudo apt-get install libusb-1.0-0-dev libudev-dev
