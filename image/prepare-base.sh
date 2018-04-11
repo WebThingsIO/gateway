@@ -38,6 +38,9 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
+# Allow node to use the Bluetooth adapter
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+
 # Install prequisite packages
 sudo apt install -y \
   certbot \
