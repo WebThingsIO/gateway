@@ -10,9 +10,7 @@
 
 const path = require('path');
 
-exports.DONT_RESTART_EXIT_CODE = 100;
-exports.UNLOAD_PLUGIN_KILL_DELAY = 3000;
-
+// Web server routes
 exports.USERS_PATH = '/users';
 exports.THINGS_PATH = '/things';
 exports.PROPERTIES_PATH = '/properties';
@@ -37,8 +35,9 @@ exports.LOGS_PATH = '/logs';
 exports.STATIC_PATH = path.join(__dirname, '../static');
 exports.VIEWS_PATH = path.join(__dirname, '../src/views');
 
-exports.ADAPTERS_CONFIG = 'adapters';
-
+// Plugin and REST/websocket API things
+exports.DONT_RESTART_EXIT_CODE = 100;
+exports.UNLOAD_PLUGIN_KILL_DELAY = 3000;
 exports.ACTION_STATUS = 'actionStatus';
 exports.ADAPTER_ADDED = 'adapterAdded';
 exports.ADAPTER_UNLOADED = 'adapterUnloaded';
@@ -70,6 +69,11 @@ exports.SET_PROPERTY = 'setProperty';
 exports.START_PAIRING = 'startPairing';
 exports.THING_ADDED = 'thingAdded';
 exports.THING_REMOVED = 'thingRemoved';
+exports.UNLOAD_ADAPTER = 'unloadAdapter';
+exports.UNLOAD_PLUGIN = 'unloadPlugin';
+exports.UNPAIR_MOCK_DEVICE = 'unpairMockDevice';
+
+// Thing types
 exports.THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
 exports.THING_TYPE_MULTI_LEVEL_SWITCH = 'multiLevelSwitch';
 exports.THING_TYPE_BINARY_SENSOR = 'binarySensor';
@@ -79,10 +83,8 @@ exports.THING_TYPE_ON_OFF_LIGHT = 'onOffLight';
 exports.THING_TYPE_DIMMABLE_LIGHT = 'dimmableLight';
 exports.THING_TYPE_ON_OFF_COLOR_LIGHT = 'onOffColorLight';
 exports.THING_TYPE_DIMMABLE_COLOR_LIGHT = 'dimmableColorLight';
-exports.UNLOAD_ADAPTER = 'unloadAdapter';
-exports.UNLOAD_PLUGIN = 'unloadPlugin';
-exports.UNPAIR_MOCK_DEVICE = 'unpairMockDevice';
 
+// OAuth things
 exports.ACCESS_TOKEN = 'access_token';
 exports.AUTHORIZATION_CODE = 'authorization_code';
 exports.USER_TOKEN = 'user_token';
