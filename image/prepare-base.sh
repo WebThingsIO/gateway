@@ -25,8 +25,9 @@
 NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts"
 
-sudo apt update
+sudo apt update -y
 sudo apt upgrade -y
+sudo apt update -y
 
 # Install and configure nvm
 curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
