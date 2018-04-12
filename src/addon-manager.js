@@ -785,10 +785,16 @@ class AddonManager extends EventEmitter {
     const adapters = this.getAdaptersByPackageName(packageName);
     const adapterIds = adapters.map((a) => a.id);
     const unloadPromises = [];
-    for (const a of adapters) {
-      console.log('Unloading', a.name);
-      unloadPromises.push(a.unload());
-      this.adapters.delete(a.id);
+    if (adapters.length > 0) {
+      for (const a of adapters) {
+        console.log('Unloading', a.name);
+        unloadPromises.push(a.unload());
+        this.adapters.delete(a.id);
+      }
+    } else {
+      // If there are no adapters, manually unload the plugin, otherwise it
+      // will just restart.
+      plugin.unload();
     }
 
     // Give the process 3 seconds to exit before killing it.
