@@ -816,7 +816,7 @@ class AddonManager extends EventEmitter {
       // 3 seconds, because that's what is used in unloadAddon().
       return all.then(() => {
         return new Promise((resolve) => {
-          setTimeout(resolve, Constants.UNLOAD_PLUGIN_KILL_DELAY + 500);
+          setTimeout(resolve, Constants.UNLOAD_PLUGIN_KILL_DELAY + 1000);
         });
       });
     }
