@@ -108,6 +108,50 @@ Install [OpenSSL](http://slproweb.com/products/Win32OpenSSL.html) =< 1.0.2(norma
 
 [See here](https://github.com/JoshKaufman/ursa#windows-install).
 
+### Install python2 (Windows only)
+
+Pagekite works with python2.
+
+Install Python 2.* from [here](https://www.python.org).
+
+Enable "register extensions" on installing package, or associate a file extension ```.py``` with a python.
+
+### Installs python3 and packages (Optional)
+
+This is required in order to use python3 add-ons"e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/)".
+
+Under Windows:
+
+* Install [python3.*](https://www.python.org).
+  * Enable "Install launcher for all users" and "Add Python 3.* to PATH" on installing.
+  * Enable ```python3``` command using the following.
+```
+mklink "C:\path\to\python3\python3.exe" "C:\path\to\python3\python.exe"
+```
+* Install nanomsg.
+  * Follow the directions from [nanomsg](https://nodejs.org) to install in the same bitness as your Python3.
+  * If you want to build for 64 bit, you need to execute cmake with ```-DCMAKE_GENERATOR_PLATFORM=x64```.
+  * Set ```C:\path\to\nanomsg\bin``` to ```PATH```.
+* Install nnpy
+```
+git clone https://github.com/nanomsg/nnpy.git
+cd nnpy
+```
+Add a file: site.cfg
+```
+[DEFAULT]
+include_dirs = C:\path\to\nanomsg\include\nanomsg
+library_dirs = C:\path\to\nanomsg\lib
+host_library = C:\path\to\nanomsg\bin\nanomsg.dll
+```
+Execute the following command as an administrator.
+```
+python -m pip install .
+python -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.git
+```
+
+Note:12/04/2018 pip3 command has an [issue](https://github.com/pypa/pip/issues/4251) with some languages.
+
 ## Download and Build Gateway
 
 * Clone the GitHub repository (or fork it first):
