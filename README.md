@@ -102,11 +102,53 @@ change goes through.
 
 ### Install OpenSSL (Windows only)
 
-The Gateway depends on [```ursa```](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
+The Gateway depends on [`ursa`](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
 
-Install [OpenSSL](http://slproweb.com/products/Win32OpenSSL.html) =< 1.0.2(normal, not light) in the same bitness as your Node.js.
+Install [OpenSSL](http://slproweb.com/products/Win32OpenSSL.html) =< 1.0.2 (normal, not light) in the same bitness as your Node.js.
 
 [See here](https://github.com/JoshKaufman/ursa#windows-install).
+
+### Install Python 2.7 (Windows only)
+
+PageKite works with Python 2.7.
+
+Install Python 2.7 from [here](https://www.python.org/downloads/windows/).
+
+Enable "register extensions" on installing package, or associate file extension `.py` with python.
+
+### Install Python 3.X and packages (Optional, Windows only)
+
+This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
+
+* Install Python 3.X (ideally 3.4+) from [here](https://www.python.org/downloads/windows/).
+  * Enable "Install launcher for all users" and "Add Python 3.X to PATH" on installing.
+  * Enable `python3` command using the following.
+```
+mklink "C:\path\to\python3\python3.exe" "C:\path\to\python3\python.exe"
+```
+* Install nanomsg.
+  * Follow the directions from [nanomsg](https://github.com/nanomsg/nanomsg) to install in the same bitness as your Python 3.X.
+  * If you want to build for 64-bit, you need to execute cmake with `-DCMAKE_GENERATOR_PLATFORM=x64`.
+  * Add `C:\path\to\nanomsg\bin` to `PATH`.
+* Install nnpy
+```
+git clone https://github.com/nanomsg/nnpy.git
+cd nnpy
+```
+Add a file: site.cfg
+```
+[DEFAULT]
+include_dirs = C:\path\to\nanomsg\include\nanomsg
+library_dirs = C:\path\to\nanomsg\lib
+host_library = C:\path\to\nanomsg\bin\nanomsg.dll
+```
+Execute the following command as an administrator.
+```
+python3 -m pip install .
+python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.git
+```
+
+**Note:** 2018-04-12: `pip3` has an [issue](https://github.com/pypa/pip/issues/4251) with some languages.
 
 ## Download and Build Gateway
 
@@ -178,7 +220,7 @@ To run a single test:
 ```
 $ jest src/test/{test-name}.js
 ```
-(assumes you have the ```jest``` command on your ```PATH```, otherwise use ```./node_modules/jest/bin/jest.js```)
+(assumes you have the `jest` command on your `PATH`, otherwise use `./node_modules/jest/bin/jest.js`)
 
 ## Source Code Structure
 
