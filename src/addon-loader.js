@@ -73,6 +73,11 @@ async function loadAddon(addonPath, verbose) {
   }
 
   const pluginClient = new PluginClient(packageName, {verbose: verbose});
+
+  if (config.get('ipc.protocol') !== 'inproc') {
+    pluginClient.on('unloaded', () => process.exit(0));
+  }
+
   return new Promise((resolve, reject) => {
     pluginClient.register().then((addonManagerProxy) => {
       console.log('Loading add-on for', manifest.name,
