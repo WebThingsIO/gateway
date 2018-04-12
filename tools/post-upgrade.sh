@@ -19,4 +19,20 @@ _url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
 sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
 
+# Install thing-url-adapter
+addons_dir=/home/pi/.mozilla-iot/addons
+if [ ! -d "${addons_dir}/thing-url-adapter" ]; then
+  mkdir -p "${addons_dir}"
+  addon_list=$(curl "https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json")
+  tempdir=$(mktemp -d)
+  thing_url=$(echo "${addon_list}" | python3 -c \
+    "import json, sys; \
+    l = json.loads(sys.stdin.read()); \
+    print([x['packages'] for x in l if x['name'] == 'thing-url-adapter'][0]['linux-arm']['url']);")
+  curl -L -o "${tempdir}/thing-url-adapter.tgz" "${thing_url}"
+  tar xzf "${tempdir}/thing-url-adapter.tgz" -C "${addons_dir}"
+  mv "${addons_dir}/package" "${addons_dir}/thing-url-adapter"
+  rm -rf "${tempdir}"
+fi
+
 touch .post_upgrade_complete
