@@ -14,11 +14,13 @@
 const AddonManagerProxy = require('./addon-manager-proxy');
 const Constants = require('../constants');
 const Deferred = require('../deferred');
+const EventEmitter = require('events');
 const IpcSocket = require('./ipc');
 
-class PluginClient {
+class PluginClient extends EventEmitter {
 
   constructor(pluginId, {verbose} = {}) {
+    super();
     this.pluginId = pluginId;
     this.verbose = verbose;
     this.deferredReply = null;
@@ -96,6 +98,7 @@ class PluginClient {
   unload() {
     this.pluginIpcSocket.close();
     this.managerIpcSocket.close();
+    this.emit('unloaded', {});
   }
 }
 
