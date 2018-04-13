@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # This script automates a bunch of steps of creating a base image
 # for the gateway.
@@ -185,7 +185,9 @@ write_image() {
     sudo umount "${dev}"
   done
   echo "Writing image '${PREP_FILENAME}' to '${DD_DEV}'"
-  sudo dd status=progress bs=10M if="${PREP_FILENAME}" of="${DD_DEV}"
+  args="status=progress"
+  dd if=/dev/zero of=/dev/null $args count=1 > /dev/null 2>&1 || args=""
+  sudo dd bs=10M if="${PREP_FILENAME}" of="${DD_DEV}" $args
 }
 
 ###########################################################################
