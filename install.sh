@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts"
@@ -31,7 +31,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 # Download, build, and install OpenZWave
 sudo apt install libusb-1.0-0-dev libudev-dev -y
 if [ ! -d "open-zwave" ]; then
-    git clone https://github.com/OpenZWave/open-zwave.git
+    git clone https://github.com/OpenZWave/open-zwave.git --depth 1
 fi
 cd open-zwave
 make
@@ -45,14 +45,6 @@ if [ ! -d "gateway" ]; then
 fi
 cd gateway
 npm install .
-
-# Setup systemctl so that the gateway will start at boot time
-sudo cp systemd/system/mozilla-iot-gateway.service /etc/systemd/system
-sudo systemctl enable mozilla-iot-gateway.service
-
-sudo cp etc/init.d/gateway-iptables.sh /etc/init.d
-sudo chmod +x /etc/init.d/gateway-iptables.sh
-sudo update-rc.d gateway-iptables.sh defaults
 
 # Create a self-signed cert. This is temporary (for development).
 #if [ ! -f "certificate.pem" ]; then
