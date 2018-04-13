@@ -74,7 +74,7 @@ const Users = {
    * @return {User} user object.
    */
   createUser: async function(email, password, name) {
-    const user = new User(null, email, password, name);
+    const user = new User(null, email.toLowerCase(), password, name);
     user.id = await Database.createUser(user);
     return user;
   },
@@ -85,6 +85,7 @@ const Users = {
    * @return {Promise} Promise which resolves when operation is complete.
    */
   editUser: async function(user) {
+    user.email = user.email.toLowerCase();
     await Database.editUser(user);
   },
 

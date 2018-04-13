@@ -92,7 +92,7 @@ SettingsController.post('/reclaim', async (request, response) => {
 });
 
 SettingsController.post('/subscribe', async (request, response) => {
-  const email = request.body.email;
+  const email = request.body.email.toLowerCase();
   const reclamationToken = request.body.reclamationToken;
   const subdomain = request.body.subdomain;
   const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;

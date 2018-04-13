@@ -21,6 +21,7 @@ const ncp = require('ncp');
 const rimraf = require('rimraf');
 const db = require('./db');
 const Settings = require('./models/settings');
+const Users = require('./models/users');
 
 const Profile = {
   init: function() {
@@ -90,6 +91,15 @@ const Profile = {
 
     // Open the database.
     db.open();
+
+    // Normalize user email addresses
+    Users.getUsers().then((users) => {
+      users.forEach((user) => {
+        // Call editUser with the same user, as it will normalize the email
+        // for us and save it.
+        Users.editUser(user);
+      });
+    });
 
     // Move the tunneltoken into the database.
     const ttPath = path.join(this.gatewayDir, 'tunneltoken');

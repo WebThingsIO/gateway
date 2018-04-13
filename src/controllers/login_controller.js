@@ -39,7 +39,7 @@ LoginController.post('/', async (request, response) => {
     return;
   }
 
-  const user = await Users.getUser(body.email);
+  const user = await Users.getUser(body.email.toLowerCase());
   if (!user) {
     response.sendStatus(401);
     return;
