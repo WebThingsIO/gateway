@@ -63,8 +63,13 @@ StringField.prototype.render = function() {
     const selectedValue = value;
     let selectedAny = false;
 
+    // User can select undefiend value on field not required.
+    if (!this.required) {
+      enumOptions.unshift({value: '', label: ''});
+    }
+
     const selects = enumOptions.map(({value, label}, i) => {
-      const selected = selectedValue === value;
+      const selected = selectedValue === this.toFormData(value);
       selectedAny |= selected;
 
       return `
