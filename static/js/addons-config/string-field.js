@@ -38,7 +38,8 @@ function StringField(schema,
 }
 
 StringField.prototype.toFormData = function(value) {
-  return value === '' ? function() {}() : value;
+  // eslint-disable-next-line no-undefined
+  return value === '' ? undefined : value;
 };
 
 StringField.prototype.onStringChange = function(event) {
