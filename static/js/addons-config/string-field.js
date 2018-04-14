@@ -37,9 +37,15 @@ function StringField(schema,
   return this;
 }
 
+StringField.prototype.toFormData = function(value) {
+  return value === '' ? function() {}() : value;
+};
+
 StringField.prototype.onStringChange = function(event) {
   const value = event.target.value;
-  this.formData = value;
+  // If an user input nothing on required field, we should set undefined
+  // in order to raise error.
+  this.formData = this.toFormData(value);
 
   if (this.onChange) {
     this.onChange(this.formData);
