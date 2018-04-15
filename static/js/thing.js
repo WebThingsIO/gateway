@@ -18,6 +18,7 @@ const BrightnessDetail = require('./property-detail/brightness');
 const ColorDetail = require('./property-detail/color');
 const ColorTemperatureDetail = require('./property-detail/color-temperature');
 const CurrentDetail = require('./property-detail/current');
+const EnumDetail = require('./property-detail/enum');
 const FrequencyDetail = require('./property-detail/frequency');
 const InstantaneousPowerDetail =
   require('./property-detail/instantaneous-power');
@@ -178,6 +179,8 @@ class Thing {
               }
 
               detail = new detailType(this, name, property);
+            } else if (property.enum) {
+              detail = new EnumDetail(this, name, property);
             } else {
               switch (property.type) {
                 case 'string':
