@@ -15,6 +15,7 @@ const AddThingScreen = require('./add-thing');
 const UnknownThing = require('./unknown-thing');
 const OnOffSwitch = require('./on-off-switch');
 const BinarySensor = require('./binary-sensor');
+const ChoiceDetail = require('./choice-detail');
 const ColorLight = require('./color-light');
 const DimmableLight = require('./dimmable-light');
 const DimmableColorLight = require('./dimmable-color-light');

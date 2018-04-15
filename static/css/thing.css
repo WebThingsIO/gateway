@@ -141,6 +141,30 @@
   background-image: url('../images/bulb-off.png');
 }
 
+
+/* Choice Detail */
+
+.choice-detail {
+
+}
+
+.choice-detail .choice-input {
+    max-width: 95%;
+    background-color: rgba(0,0,0,0);
+    color: white;
+    border: none;
+    font-size: 0.9em;
+    overflow: hidden;
+    max-width: 95%;
+    outline: none;
+    text-align: center;
+    text-align-last: center;
+}
+
+.choice-detail .choice-input option {
+    color: black; /* Needed to fix dropdown text color on Windows */
+}
+
 /* Color Light */
 
 .on-off-label, .color-light-label {
