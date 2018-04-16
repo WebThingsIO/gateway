@@ -17,6 +17,37 @@ const Constants = require('../../constants');
 describe('actions/', function() {
   let jwt;
 
+  const thingLight = {
+    id: 'light',
+    name: 'light',
+    type: 'onOffLight',
+    properties: {
+      on: {type: 'boolean', value: false},
+    },
+    actions: {
+      blink: {
+        description: 'Blink the switch on and off',
+      },
+      rejectRequest: {
+        description: 'Reject when requestAction',
+      },
+      rejectRemove: {
+        description: 'Reject when removeAction',
+      },
+    },
+  };
+
+  async function addDevice(desc) {
+    const {id} = desc;
+    const res = await chai.request(server)
+      .post(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(desc);
+    await mockAdapter().addDevice(id, desc);
+    return res;
+  }
+
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
@@ -46,6 +77,20 @@ describe('actions/', function() {
     };
     const err = await pFinal(chai.request(server)
       .post(Constants.ACTIONS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(descr));
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('should fail when plugin reject requestAction', async () => {
+    const {id} = thingLight;
+    await addDevice(thingLight);
+    const descr = {
+      rejectRequest: {},
+    };
+    const err = await pFinal(chai.request(server)
+      .post(`${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
       .send(descr));
@@ -153,6 +198,34 @@ describe('actions/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(404);
+  });
+
+  it('should fail when plugin reject removeAction', async () => {
+    const {id} = thingLight;
+    await addDevice(thingLight);
+    const descr = {
+      rejectRemove: {},
+    };
+    await chai.request(server)
+      .post(`${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(descr);
+
+    const res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    const actionHref = res.body[0].rejectRemove.href;
+
+    const err = await pFinal(chai.request(server)
+      .delete(actionHref)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt)));
+    expect(err.response.status).toEqual(400);
   });
 
   it('should succeed on an unpair of a nonexistent device', async () => {

@@ -60,6 +60,20 @@ class MockDevice extends Device {
     }
   }
 
+  requestAction(actionId, actionName, input) {
+    if (actionName === 'rejectRequest') {
+      return Promise.reject();
+    }
+    return super.requestAction(actionId, actionName, input);
+  }
+
+  removeAction(actionId, actionName) {
+    if (actionName === 'rejectRemove') {
+      return Promise.reject();
+    }
+    return super.removeAction(actionId, actionName);
+  }
+
   performAction(action) {
     return new Promise((resolve, _reject) => {
       action.start();
