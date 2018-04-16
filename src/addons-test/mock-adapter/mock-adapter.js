@@ -61,8 +61,11 @@ class MockDevice extends Device {
   }
 
   performAction(action) {
-    action.start();
-    action.finish();
+    return new Promise((resolve, _reject) => {
+      action.start();
+      action.finish();
+      resolve();
+    });
   }
 }
 
