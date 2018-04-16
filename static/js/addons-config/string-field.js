@@ -37,9 +37,16 @@ function StringField(schema,
   return this;
 }
 
+StringField.prototype.toFormData = function(value) {
+  // eslint-disable-next-line no-undefined
+  return value === '' ? undefined : value;
+};
+
 StringField.prototype.onStringChange = function(event) {
   const value = event.target.value;
-  this.formData = value;
+  // If an user input nothing on required field, we should set undefined
+  // in order to raise error.
+  this.formData = this.toFormData(value);
 
   if (this.onChange) {
     this.onChange(this.formData);
@@ -57,8 +64,13 @@ StringField.prototype.render = function() {
     const selectedValue = value;
     let selectedAny = false;
 
+    // User can select undefiend value on field not required.
+    if (!this.required) {
+      enumOptions.unshift({value: '', label: ''});
+    }
+
     const selects = enumOptions.map(({value, label}, i) => {
-      const selected = selectedValue === value;
+      const selected = selectedValue === this.toFormData(value);
       selectedAny |= selected;
 
       return `
