@@ -75,7 +75,7 @@ ObjectField.prototype.onPropertyChange = function(name, field) {
 
     this.formData = Object.assign(this.formData, newFormData);
 
-    // modify port of form based on form data.
+    // modify part of form based on form data.
     if (schema.hasOwnProperty('dependencies')){
       const newRetrievedSchema = SchemaUtils.retrieveSchema(schema,
                                                             this.definitions,

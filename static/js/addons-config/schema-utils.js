@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals SchemaUtils Validator */
+/* globals SchemaUtils, Validator */
 
 (function() {
   window.SchemaUtils = {
