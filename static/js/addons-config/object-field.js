@@ -48,12 +48,12 @@ ObjectField.prototype.require = function(name) {
   );
 };
 
-ObjectField.prototype.sortObject = function(obj){
+ObjectField.prototype.sortObject = function(obj) {
   const keys = Object.keys(obj).sort();
   const map = {};
-  keys.forEach(function(key){
+  keys.forEach(function(key) {
     let val = obj[key];
-    if (typeof val === 'object'){
+    if (typeof val === 'object') {
       val = this.sortObject(val);
     }
     map[key] = val;
@@ -76,11 +76,11 @@ ObjectField.prototype.onPropertyChange = function(name, field) {
     this.formData = Object.assign(this.formData, newFormData);
 
     // modify part of form based on form data.
-    if (schema.hasOwnProperty('dependencies')){
+    if (schema.hasOwnProperty('dependencies')) {
       const newRetrievedSchema = SchemaUtils.retrieveSchema(schema,
                                                             this.definitions,
                                                             this.formData);
-      if (!this.isSameSchema(this.retrievedSchema, newRetrievedSchema)){
+      if (!this.isSameSchema(this.retrievedSchema, newRetrievedSchema)) {
         this.retrievedSchema = newRetrievedSchema;
         this.formData = SchemaUtils.getDefaultFormState(newRetrievedSchema,
                                                         this.formData,
