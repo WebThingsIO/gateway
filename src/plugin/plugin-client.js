@@ -87,11 +87,12 @@ class PluginClient extends EventEmitter {
     return this.deferredReply.promise;
   }
 
-  sendNotification(methodType, data) {
+  sendNotification(methodType, data, id) {
     data.pluginId = this.pluginId;
     this.pluginIpcSocket.sendJson({
       messageType: methodType,
       data: data,
+      id: id,
     });
   }
 

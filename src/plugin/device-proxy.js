@@ -14,7 +14,7 @@ const Constants = require('../constants');
 const Event = require('../models/event');
 const Events = require('../models/events');
 const PropertyProxy = require('./property-proxy');
-const {Device} = require('gateway-addon');
+const {Device, Deferred} = require('gateway-addon');
 
 class DeviceProxy extends Device {
 
@@ -84,15 +84,21 @@ class DeviceProxy extends Device {
       console.log('DeviceProxy: requestAction:', actionName,
                   'for:', this.id);
 
+      const deferredSet = new Deferred();
+
+      deferredSet.promise.then(() => {
+        resolve();
+      }).catch(() => {
+        reject();
+      });
+
       this.adapter.sendMsg(
         Constants.REQUEST_ACTION, {
           deviceId: this.id,
           actionName,
           actionId,
           input,
-        });
-
-      resolve();
+        }, deferredSet);
     });
   }
 
@@ -109,14 +115,20 @@ class DeviceProxy extends Device {
       console.log('DeviceProxy: removeAction:', actionName,
                   'for:', this.id);
 
+      const deferredSet = new Deferred();
+
+      deferredSet.promise.then(() => {
+        resolve();
+      }).catch(() => {
+        reject();
+      });
+
       this.adapter.sendMsg(
         Constants.REMOVE_ACTION, {
           deviceId: this.id,
           actionName,
           actionId,
-        });
-
-      resolve();
+        }, deferredSet);
     });
   }
 

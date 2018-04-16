@@ -242,22 +242,48 @@ class AddonManagerProxy extends EventEmitter {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
         const input = msg.data.input;
-        device.requestAction(actionId, actionName, input).catch((err) => {
-          console.error('AddonManagerProxy: Failed to request action',
-                        actionName, 'for device:', deviceId);
-          console.error(err);
-        });
+        const messageId = msg.id;
+        device.requestAction(actionId, actionName, input)
+          .then(() => {
+            this.pluginClient.sendNotification(
+              Constants.METHOD_RESOLVED, {
+                actionName: actionName,
+                actionId: actionId,
+              }, messageId);
+          }).catch((err) => {
+            console.error('AddonManagerProxy: Failed to request action',
+                          actionName, 'for device:', deviceId);
+            console.error(err);
+            this.pluginClient.sendNotification(
+              Constants.METHOD_REJECTED, {
+                actionName: actionName,
+                actionId: actionId,
+              }, messageId);
+          });
         break;
       }
 
       case Constants.REMOVE_ACTION: {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
-        device.removeAction(actionId, actionName).catch((err) => {
-          console.error('AddonManagerProxy: Failed to remove action',
-                        actionName, 'for device:', deviceId);
-          console.error(err);
-        });
+        const messageId = msg.id;
+        device.removeAction(actionId, actionName)
+          .then(() => {
+            this.pluginClient.sendNotification(
+              Constants.METHOD_RESOLVED, {
+                actionName: actionName,
+                actionId: actionId,
+              }, messageId);
+          }).catch((err) => {
+            console.error('AddonManagerProxy: Failed to remove action',
+                          actionName, 'for device:', deviceId);
+            console.error(err);
+            this.pluginClient.sendNotification(
+              Constants.METHOD_REJECTED, {
+                actionName: actionName,
+                actionId: actionId,
+              }, messageId);
+          });
         break;
       }
 

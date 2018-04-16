@@ -50,6 +50,9 @@ class Plugin {
     this.restart = true;
     this.unloadCompletedPromise = null;
     this.unloadedRcvdPromise = null;
+
+    this.nextId = 0;
+    this.completeMethodPromises = new Map();
   }
 
   asDict() {
@@ -70,10 +73,38 @@ class Plugin {
 
   onMsg(msg) {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
+    const messageId = msg.id;
+    const completeMethodPromise = this.completeMethodPromises.get(messageId);
+
+    // The first switch manages method resolved rejected messages.
+    switch (msg.messageType) {
+      case Constants.METHOD_RESOLVED:
+        if (typeof messageId === 'undefined' ||
+            typeof completeMethodPromise === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+        }
+        completeMethodPromise.resolve();
+        this.completeMethodPromises.delete(messageId);
+        return;
+
+      case Constants.METHOD_REJECTED:
+        if (typeof messageId === 'undefined' ||
+            typeof completeMethodPromise === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+        }
+        completeMethodPromise.reject();
+        this.completeMethodPromises.delete(messageId);
+        return;
+    }
+
     const adapterId = msg.data.adapterId;
     let adapter;
 
-    // The first switch manages plugin level messages.
+    // The second switch manages plugin level messages.
     switch (msg.messageType) {
       case Constants.ADD_ADAPTER:
         adapter = new AdapterProxy(this.pluginServer.manager,
@@ -226,13 +257,32 @@ class Plugin {
     }
   }
 
-  sendMsg(methodType, data) {
+  /**
+   * Generate an ID for a message.
+   *
+   * @returns {integer} An id.
+   */
+  generateMsgId() {
+    return ++this.nextId;
+  }
+
+  sendMsg(methodType, data, defferd) {
     data.pluginId = this.pluginId;
     const msg = {
       messageType: methodType,
       data: data,
     };
     DEBUG && console.log('Plugin: sendMsg:', msg);
+
+    // Method which could fail should wait result.
+    if (defferd &&
+        (methodType === Constants.REQUEST_ACTION ||
+         methodType === Constants.REMOVE_ACTION)) {
+      const id = this.generateMsgId();
+      msg.id = id;
+      this.completeMethodPromises.set(id, defferd);
+    }
+
     return this.ipcSocket.sendJson(msg);
   }
 
@@ -240,6 +290,10 @@ class Plugin {
    * Does cleanup required to allow the test suite to complete cleanly.
    */
   shutdown() {
+    this.completeMethodPromises.forEach((promise, key) => {
+      promise.reject();
+      this.completeMethodPromises.delete(key);
+    });
     this.ipcSocket.close();
   }
 
