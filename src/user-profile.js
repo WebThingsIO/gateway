@@ -51,20 +51,31 @@ const Profile = {
    * Manually copy, then remove, to prevent issues with cross-device renames.
    */
   renameDir: function(src, dst) {
-    ncp(src, dst, (e) => {
-      if (e) {
-        throw e;
-      }
-
-      rimraf(src, (err) => {
-        if (err) {
-          throw err;
+    return new Promise((resolve, reject) => {
+      ncp(src, dst, (e) => {
+        if (e) {
+          reject(e);
+          return;
         }
+
+        rimraf(src, (err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve();
+        });
       });
     });
   },
 
+  /**
+   * Migrate from old locations to new ones
+   * @return {Promise} resolved when migration is complete
+   */
   migrate: function() {
+    const pending = [];
     // Create all required profile directories.
     if (!fs.existsSync(this.configDir)) {
       mkdirp.sync(this.configDir);
@@ -193,11 +204,11 @@ const Profile = {
     const oldProfileDir = path.join(os.homedir(), 'mozilla-iot');
     const oldEtcDir = path.join(oldProfileDir, 'etc');
     if (fs.existsSync(oldEtcDir) && fs.lstatSync(oldEtcDir).isDirectory()) {
-      this.renameDir(oldEtcDir, path.join(this.baseDir, 'etc'));
+      pending.push(this.renameDir(oldEtcDir, path.join(this.baseDir, 'etc')));
     }
     const oldVarDir = path.join(oldProfileDir, 'var');
     if (fs.existsSync(oldVarDir) && fs.lstatSync(oldVarDir).isDirectory()) {
-      this.renameDir(oldVarDir, path.join(this.baseDir, 'var'));
+      pending.push(this.renameDir(oldVarDir, path.join(this.baseDir, 'var')));
     }
 
     // Move add-ons.
@@ -213,11 +224,12 @@ const Profile = {
 
           if (fname !== 'plugin' && lstat.isDirectory()) {
             // Move existing add-ons.
-            this.renameDir(oldFname, newFname);
+            pending.push(this.renameDir(oldFname, newFname));
           }
         }
       }
     }
+    return Promise.all(pending);
   },
 };
 

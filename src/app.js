@@ -11,7 +11,7 @@
 // Set up the user profile.
 const UserProfile = require('./user-profile');
 UserProfile.init();
-UserProfile.migrate();
+const migration = UserProfile.migrate();
 
 // Dependencies
 const https = require('https');
@@ -80,7 +80,9 @@ function startHttpsGateway() {
 
   // Start the HTTPS server
   httpsServer.listen(port, function() {
-    addonManager.loadAddons();
+    migration.then(function() {
+      addonManager.loadAddons();
+    });
     rulesEngineConfigure(httpsServer);
     console.log('Listening on port', httpsServer.address().port);
     commandParserConfigure(httpsServer);
@@ -104,7 +106,9 @@ function startHttpGateway() {
   }
 
   httpServer.listen(port, function() {
-    addonManager.loadAddons();
+    migration.then(function() {
+      addonManager.loadAddons();
+    });
     rulesEngineConfigure(httpServer);
     console.log('Listening on port', httpServer.address().port);
     commandParserConfigure(httpServer);
