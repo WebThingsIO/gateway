@@ -236,6 +236,8 @@ const SettingsScreen = {
             error.textContent = err.message;
             console.error(err);
           });
+
+        return false;
       });
     });
   },
@@ -286,6 +288,8 @@ const SettingsScreen = {
           error.textContent = err.message;
           console.error(err);
         });
+
+      return false;
     });
   },
 

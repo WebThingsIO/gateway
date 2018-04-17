@@ -27,6 +27,14 @@ it('creates a user and get email', async () => {
   expect(info.email).toBe(TEST_USER.email);
 });
 
+it('ensures user login is case insensitive', async () => {
+  await createUser(server, TEST_USER);
+  const userCopy = Object.assign({}, TEST_USER);
+  userCopy.email = userCopy.email.toUpperCase();
+  const loginJWT = await loginUser(server, userCopy);
+  expect(loginJWT).toBeTruthy();
+});
+
 it('gets user count', async () => {
   const count1 = await userCount(server);
   expect(count1.count).toBe(0);

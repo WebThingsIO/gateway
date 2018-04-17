@@ -148,7 +148,7 @@ const Database = {
       const passwordHash = Passwords.hashSync(defaultUser.password);
       this.db.run(
         'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
-        [defaultUser.email, passwordHash, defaultUser.name],
+        [defaultUser.email.toLowerCase(), passwordHash, defaultUser.name],
         function(error) {
           if (error) {
             console.error('Failed to save default user.');
