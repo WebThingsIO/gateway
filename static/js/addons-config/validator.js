@@ -97,7 +97,8 @@ Validator._toErrorSchema = function(errors) {
 
 Validator.validateFormData = function(formData, schema) {
   Validator._ajv.validate(schema, formData);
-  const errors = Validator._ajv.errors;
+  let errors = Validator._ajv.errors;
+  errors = errors === null ? [] : errors;
 
   const errorSchema = Validator._toErrorSchema(errors);
 

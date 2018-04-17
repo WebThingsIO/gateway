@@ -16,12 +16,18 @@
 /* globals SchemaUtils, Validator, SchemaField, ErrorField,
 page, Utils */
 
-function SchemaForm(schema, id, name, options = {}) {
+function SchemaForm(schema, id, name, formData, options = {}) {
   this.definitions = schema.definitions;
   this.schema = schema;
   this.id = id;
   this.name = name;
-  this.idSchema = SchemaUtils.toIdSchema(schema, null, this.definitions);
+  this.idSchema = SchemaUtils.toIdSchema(schema,
+                                         null,
+                                         this.definitions,
+                                         formData);
+  this.formData = SchemaUtils.getDefaultFormState(schema,
+                                                  formData,
+                                                  this.definitions);
   this.noValidate =
     options.hasOwnProperty('validate') ? !options.validate : false;
   this.liveValidate =
@@ -60,7 +66,7 @@ SchemaForm.prototype.handleApply = function(e) {
   const button = e.target;
   button.disabled = true;
 
-  if (errors) {
+  if (errors.length > 0) {
     this.scrollToTop();
   } else {
     this.applyButton.innerText = 'Applying...';
@@ -89,13 +95,7 @@ SchemaForm.prototype.renderApplyButton = function() {
   return applyButton;
 };
 
-SchemaForm.prototype.render = function(data) {
-  this.formData =
-    SchemaUtils.getDefaultFormState(
-      this.schema,
-      data,
-      this.definitions);
-
+SchemaForm.prototype.render = function() {
   const form = document.createElement('form');
   form.className = 'addons-form';
   form.id = this.id;

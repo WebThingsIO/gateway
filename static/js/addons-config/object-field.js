@@ -25,7 +25,10 @@ function ObjectField(
   required = false,
   disabled = false,
   readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
+                                                    definitions,
+                                                    formData);
+  this.schema = schema;
   this.formData = formData;
   this.idSchema = idSchema;
   this.name = name;
@@ -40,17 +43,51 @@ function ObjectField(
 
 ObjectField.prototype.require = function(name) {
   return (
-    Array.isArray(this.schema.required) &&
-    this.schema.required.indexOf(name) !== -1
+    Array.isArray(this.retrievedSchema.required) &&
+    this.retrievedSchema.required.indexOf(name) !== -1
   );
 };
 
-ObjectField.prototype.onPropertyChange = function(name) {
+ObjectField.prototype.sortObject = function(obj) {
+  const keys = Object.keys(obj).sort();
+  const map = {};
+  keys.forEach(function(key) {
+    let val = obj[key];
+    if (typeof val === 'object') {
+      val = this.sortObject(val);
+    }
+    map[key] = val;
+  }.bind(this));
+  return map;
+};
+
+ObjectField.prototype.isSameSchema = function(schema1, schema2) {
+  const json1 = JSON.stringify(this.sortObject(schema1));
+  const json2 = JSON.stringify(this.sortObject(schema2));
+  return json1 === json2;
+};
+
+ObjectField.prototype.onPropertyChange = function(name, field) {
   return function(value) {
+    const schema = this.schema;
     const newFormData = {};
     newFormData[name] = value;
 
     this.formData = Object.assign(this.formData, newFormData);
+
+    // modify part of form based on form data.
+    if (schema.hasOwnProperty('dependencies')) {
+      const newRetrievedSchema = SchemaUtils.retrieveSchema(schema,
+                                                            this.definitions,
+                                                            this.formData);
+      if (!this.isSameSchema(this.retrievedSchema, newRetrievedSchema)) {
+        this.retrievedSchema = newRetrievedSchema;
+        this.formData = SchemaUtils.getDefaultFormState(newRetrievedSchema,
+                                                        this.formData,
+                                                        this.definitions);
+        this.renderField(field);
+      }
+    }
 
     if (this.onChange) {
       this.onChange(this.formData);
@@ -58,17 +95,16 @@ ObjectField.prototype.onPropertyChange = function(name) {
   }.bind(this);
 };
 
-ObjectField.prototype.render = function() {
+ObjectField.prototype.renderField = function(field) {
   const id = Utils.escapeHtml(this.idSchema.$id);
-  const description = this.schema.description;
-  let title = this.schema.title ? this.schema.title : this.name;
+  const description = this.retrievedSchema.description;
+  let title = this.retrievedSchema.title ?
+    this.retrievedSchema.title :
+    this.name;
   if (typeof title !== 'undefined' && title !== null) {
     title = Utils.escapeHtml(title);
     title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
   }
-
-  const field = document.createElement('fieldset');
-
 
   field.innerHTML =
     (title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
@@ -78,22 +114,38 @@ ObjectField.prototype.render = function() {
       '');
 
   // TODO support to specific properties order
-  const orderedProperties = Object.keys(this.schema.properties);
+  const orderedProperties = Object.keys(this.retrievedSchema.properties);
 
   orderedProperties.forEach(function(name) {
+    const childSchema = this.retrievedSchema.properties[name];
+    const childIdPrefix = `${this.idSchema.$id}_${name}`;
+    const childData = this.formData[name];
+    const childIdSchema = SchemaUtils.toIdSchema(
+      childSchema,
+      childIdPrefix,
+      this.definitions,
+      childData
+    );
+
     const child = new SchemaField(
-      this.schema.properties[name],
-      this.formData[name],
-      this.idSchema[name],
+      childSchema,
+      childData,
+      childIdSchema,
       name,
       this.definitions,
-      this.onPropertyChange(name),
+      this.onPropertyChange(name, field),
       this.require(name),
       this.disabled,
       this.readonly).render();
 
     field.appendChild(child);
   }.bind(this));
+};
+
+ObjectField.prototype.render = function() {
+  const field = document.createElement('fieldset');
+
+  this.renderField(field);
 
   return field;
 };

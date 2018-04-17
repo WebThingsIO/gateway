@@ -29,6 +29,80 @@ const App = {
           'integerRange',
         ],
         properties: {
+          Person: {
+            title: 'Person',
+            type: 'object',
+            properties: {
+              Doyouhaveanypets: {
+                title: 'Do you have any pets?',
+                type: 'string',
+                enum: [
+                  'No',
+                  'Yes: One',
+                  'Yes: More than one',
+                ],
+                default: 'No',
+              },
+            },
+            required: [
+              'Doyouhaveanypets',
+            ],
+            dependencies: {
+              Doyouhaveanypets: {
+                oneOf: [
+                  {
+                    properties: {
+                      Doyouhaveanypets: {
+                        enum: [
+                          'No',
+                        ],
+                      },
+                    },
+                  },
+                  {
+                    properties: {
+                      Doyouhaveanypets: {
+                        enum: [
+                          'Yes: One',
+                        ],
+                      },
+                      Howoldisyourpet: {
+                        title: 'How old is your pet?',
+                        type: 'number',
+                      },
+                    },
+                    required: [
+                      'Howoldisyourpet',
+                    ],
+                  },
+                  {
+                    properties: {
+                      Doyouhaveanypets: {
+                        enum: [
+                          'Yes: More than one',
+                        ],
+                      },
+                      Doyouwanttogetridofany: {
+                        title: 'Do you want to get rid of any?',
+                        type: 'boolean',
+                      },
+                    },
+                    required: [
+                      'Doyouwanttogetridofany',
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+          minItemsList: {
+            type: 'array',
+            title: 'A list with a minimal number of items',
+            minItems: 3,
+            items: {
+              $ref: '#/definitions/Thing',
+            },
+          },
           number: {
             title: 'Number',
             type: 'number',
@@ -167,8 +241,8 @@ const App = {
         numberEnum: 2,
         integerRangeSteps: 100,
       };
-    this.container.appendChild(new SchemaForm(schema, id, name)
-      .render(formData));
+    this.container.appendChild(new SchemaForm(schema, id, name, formData)
+      .render());
   },
 
 };

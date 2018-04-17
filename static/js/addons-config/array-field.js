@@ -25,7 +25,7 @@ function ArrayField(
   required = false,
   disabled = false,
   readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions);
+  this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
   this.formData = formData || [];
   this.idSchema = idSchema;
   this.name = name;
@@ -237,7 +237,9 @@ ArrayField.prototype.renderArrayFieldItem =
     const itemIdSchema = SchemaUtils.toIdSchema(
       itemSchema,
       itemIdPrefix,
-      this.definitions);
+      this.definitions,
+      itemData
+    );
 
     const childField = item.querySelector('div.array-item');
     const child = new SchemaField(
@@ -281,7 +283,9 @@ ArrayField.prototype.renderNormalArray = function() {
   const schema = this.schema;
   const definitions = this.definitions;
   const items = this.formData;
-  const itemSchema = SchemaUtils.retrieveSchema(schema.items, definitions);
+  const itemSchema = SchemaUtils.retrieveSchema(schema.items,
+                                                definitions,
+                                                items);
   const field = this.renderArrayFieldset();
   const itemsField = field.querySelector('div.array-items');
 
@@ -310,8 +314,8 @@ ArrayField.prototype.renderFixedArray = function() {
   const itemsField = field.querySelector('div.array-items');
 
   let items = this.formData;
-  const itemSchemas = schema.items.map(function(item) {
-    return SchemaUtils.retrieveSchema(item, definitions);
+  const itemSchemas = schema.items.map(function(item, index) {
+    return SchemaUtils.retrieveSchema(item, definitions, items[index]);
   });
 
   if (!items || items.length < itemSchemas.length) {
@@ -348,7 +352,9 @@ ArrayField.prototype.renderMultiSelect = function() {
   const items = this.formData;
   const schema = this.schema;
   const definitions = this.definitions;
-  const itemsSchema = SchemaUtils.retrieveSchema(schema.items, definitions);
+  const itemsSchema = SchemaUtils.retrieveSchema(schema.items,
+                                                 definitions,
+                                                 items);
   const enumOptions = SchemaUtils.optionsList(itemsSchema);
   const all = enumOptions.map(({value}) => value);
 

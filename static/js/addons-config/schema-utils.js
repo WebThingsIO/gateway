@@ -13,7 +13,7 @@
 
 'use strict';
 
-/* globals SchemaUtils */
+/* globals SchemaUtils, Validator */
 
 (function() {
   window.SchemaUtils = {
@@ -42,18 +42,142 @@
       throw new Error(`Could not find a definition for ${$ref}.`);
     },
 
-    retrieveSchema: function(schema, definitions = {}) {
+    retrieveSchema: function(schema, definitions = {}, formData = {}) {
       // No $ref attribute found, returning the original schema.
-      if (!schema.hasOwnProperty('$ref')) {
+      if (schema.hasOwnProperty('$ref')) {
+      // Retrieve the referenced schema definition.
+        const $refSchema =
+        SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
+        // Drop the $ref property of the source schema.
+        // eslint-disable-next-line no-unused-vars
+        const {$ref, ...localSchema} = schema;
+        // Update referenced schema definition with local schema properties.
+        return SchemaUtils.retrieveSchema({...$refSchema, ...localSchema},
+                                          definitions,
+                                          formData);
+      } else if (schema.hasOwnProperty('dependencies')) {
+        const resolvedSchema = SchemaUtils.resolveDependencies(schema,
+                                                               definitions,
+                                                               formData);
+        return SchemaUtils.retrieveSchema(resolvedSchema,
+                                          definitions,
+                                          formData);
+      } else {
         return schema;
       }
-      // Retrieve the referenced schema definition.
-      const $refSchema =
-        SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
-      // Drop the $ref property of the source schema.
-      const {...localSchema} = schema;
-      // Update referenced schema definition with local schema properties.
-      return {...$refSchema, ...localSchema};
+    },
+
+    resolveDependencies: function(schema, definitions, formData) {
+      // Drop the dependencies from the source schema.
+      const {dependencies = {}, ...localSchema} = schema;
+      let resolvedSchema = localSchema;
+      // Process dependencies updating the local schema properties as
+      // appropriate.
+      for (const dependencyKey in dependencies) {
+        // Skip this dependency if its trigger property is not present.
+        if (typeof formData[dependencyKey] === 'undefined') {
+          continue;
+        }
+        const dependencyValue = dependencies[dependencyKey];
+        if (Array.isArray(dependencyValue)) {
+          resolvedSchema = SchemaUtils.withDependentProperties(resolvedSchema,
+                                                               dependencyValue);
+        } else if (SchemaUtils.isObject(dependencyValue)) {
+          resolvedSchema = SchemaUtils.withDependentSchema(resolvedSchema,
+                                                           definitions,
+                                                           formData,
+                                                           dependencyKey,
+                                                           dependencyValue
+          );
+        }
+      }
+      return resolvedSchema;
+    },
+
+    withDependentProperties: function(schema, additionallyRequired) {
+      if (!additionallyRequired) {
+        return schema;
+      }
+      const required = Array.isArray(schema.required) ?
+        Array.from(new Set([...schema.required, ...additionallyRequired])) :
+        additionallyRequired;
+      return {...schema, required: required};
+    },
+
+    withDependentSchema: function(
+      schema,
+      definitions,
+      formData,
+      dependencyKey,
+      dependencyValue
+    ) {
+      const {oneOf, ...dependentSchema} = SchemaUtils.retrieveSchema(
+        dependencyValue,
+        definitions,
+        formData
+      );
+      schema = SchemaUtils.mergeSchemas(schema, dependentSchema);
+      return typeof oneOf === 'undefined' ?
+        schema :
+        SchemaUtils.withExactlyOneSubschema(schema,
+                                            definitions,
+                                            formData,
+                                            dependencyKey,
+                                            oneOf);
+    },
+
+    withExactlyOneSubschema: function(
+      schema,
+      definitions,
+      formData,
+      dependencyKey,
+      oneOf
+    ) {
+      if (!Array.isArray(oneOf)) {
+        throw new Error(
+          `invalid oneOf: it is some ${typeof oneOf} instead of an array`
+        );
+      }
+      const validSubschemas = oneOf.filter((subschema) => {
+        if (!subschema.properties) {
+          return false;
+        }
+        const {[dependencyKey]: conditionPropertySchema} = subschema.properties;
+        if (conditionPropertySchema) {
+          const conditionSchema = {
+            type: 'object',
+            properties: {
+              [dependencyKey]: conditionPropertySchema,
+            },
+          };
+          const {errors} = Validator.validateFormData(formData,
+                                                      conditionSchema);
+          return errors.length === 0;
+        }
+      });
+      if (validSubschemas.length !== 1) {
+        console.warn(
+          'ignoring oneOf in dependencies because there isn\'t ' +
+          'exactly one subschema that is valid'
+        );
+        return schema;
+      }
+      const subschema = validSubschemas[0];
+      // Drop the dependency property from the subschema.
+      const {
+        // eslint-disable-next-line no-unused-vars
+        [dependencyKey]: conditionPropertySchema,
+        ...dependentSubschema
+      } = subschema.properties;
+      const dependentSchema = {...subschema, properties: dependentSubschema};
+      return SchemaUtils.mergeSchemas(
+        schema,
+        SchemaUtils.retrieveSchema(dependentSchema, definitions, formData)
+      );
+    },
+
+    mergeSchemas: function(schema1, schema2) {
+      return SchemaUtils.mergeObjects(schema1, schema2, true);
     },
 
     isConstant: function(schema) {
@@ -105,16 +229,18 @@
       }
     },
 
-    toIdSchema: function(schema, id, definitions) {
+    toIdSchema: function(schema, id, definitions, formData = {}) {
       const idSchema = {
         $id: id || 'root',
       };
       if ('$ref' in schema) {
-        const _schema = SchemaUtils.retrieveSchema(schema, definitions);
-        return SchemaUtils.toIdSchema(_schema, id, definitions);
+        const _schema = SchemaUtils.retrieveSchema(schema,
+                                                   definitions,
+                                                   formData);
+        return SchemaUtils.toIdSchema(_schema, id, definitions, formData);
       }
       if ('items' in schema && !schema.items.$ref) {
-        return SchemaUtils.toIdSchema(schema.items, id, definitions);
+        return SchemaUtils.toIdSchema(schema.items, id, definitions, formData);
       }
       if (schema.type !== 'object') {
         return idSchema;
@@ -122,7 +248,10 @@
       for (const name in schema.properties || {}) {
         const field = schema.properties[name];
         const fieldId = `${idSchema.$id}_${name}`;
-        idSchema[name] = SchemaUtils.toIdSchema(field, fieldId, definitions);
+        idSchema[name] = SchemaUtils.toIdSchema(field,
+                                                fieldId,
+                                                definitions,
+                                                formData[name]);
       }
       return idSchema;
     },
