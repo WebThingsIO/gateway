@@ -1,0 +1,57 @@
+#!/bin/sh
+# NOTE: Since this runs on OpenWRT, it needs to restrict itself to commands
+#       which are compatible with ash which is the sh used there.
+#
+# This script is intended to be used on the OpenWRT platform which doesn't
+# have udev installed. It basically produces output compatible with running
+# the command "udevadm info -e" which is what the node serialport module
+# does here: https://github.com/node-serialport/node-serialport/blob/master/lib/bindings/linux-list.js
+#
+# This inspiration for this came from the Python pyserial file:
+# https://github.com/pyserial/pyserial/blob/master/serial/tools/list_ports_linux.py
+#
+# This use of this allows serial port enumeration, needed for several of the
+# gateway adapters, to work under OpenWRT.
+
+enumerate_device() {
+  NAME=$(basename $1)
+  DEVICE_PATH=$(readlink -f /sys/class/tty/${NAME}/device)
+  if [ ! -e "${DEVICE_PATH}" ]; then
+    return
+  fi
+  echo "P: $(echo ${DEVICE_PATH} | cut -c5-)/tty/${NAME}"
+  echo "N: ${NAME}"
+  echo "E: DEVNAME=$1"
+  SUBSYSTEM=$(basename $(readlink -f ${DEVICE_PATH}/subsystem))
+  if [ "${SUBSYSTEM}" == "usb-serial" ]; then
+    USB_DEVICE_PATH=$(dirname $(dirname ${DEVICE_PATH}))
+  elif [ "${SUBSYSTEM}" == "usb" ]; then
+    USB_DEVICE_PATH=$(dirname ${DEVICE_PATH})
+  else
+    USB_DEVICE_PATH=
+  fi
+  if [ -n "${USB_DEVICE_PATH}" ]; then
+    echo "E: ID_VENDOR_ID=$(cat ${USB_DEVICE_PATH}/idVendor)"
+    echo "E: ID_MODEL_ID=$(cat ${USB_DEVICE_PATH}/idProduct)"
+    if [ -f "${USB_DEVICE_PATH}/serial" ]; then
+      echo "E: ID_SERIAL_SHORT=$(cat ${USB_DEVICE_PATH}/serial)"
+    fi
+    if [ -f "${USB_DEVICE_PATH}/manufacturer" ]; then
+      echo "E: ID_VENDOR_ENC=$(cat ${USB_DEVICE_PATH}/manufacturer)"
+    else
+      echo "E: ID_VENDOR_ENC=$(cat ${USB_DEVICE_PATH}/idVendor)"
+    fi
+  fi
+  echo ""
+}
+
+enumerate_devices() {
+  for DEVICE in "$@"; do
+    enumerate_device ${DEVICE}
+  done
+}
+
+enumerate_devices /dev/ttyUSB*
+enumerate_devices /dev/ttyACM*
+enumerate_devices /dev/ttyAMA*
+enumerate_devices /dev/rfcomm*
