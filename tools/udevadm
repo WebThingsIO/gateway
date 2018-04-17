@@ -10,7 +10,7 @@
 # This inspiration for this came from the Python pyserial file:
 # https://github.com/pyserial/pyserial/blob/master/serial/tools/list_ports_linux.py
 #
-# This use of this allows serial port enumeration, needed for several of the
+# This allows serial port enumeration, needed for several of the
 # gateway adapters, to work under OpenWRT.
 
 enumerate_device() {
