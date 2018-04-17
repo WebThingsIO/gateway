@@ -29,10 +29,10 @@ describe('actions/', function() {
         description: 'Blink the switch on and off',
       },
       rejectRequest: {
-        description: 'Reject when requestAction',
+        description: 'Reject when call requestAction',
       },
       rejectRemove: {
-        description: 'Reject when removeAction',
+        description: 'Reject when call removeAction',
       },
     },
   };
@@ -83,7 +83,7 @@ describe('actions/', function() {
     expect(err.response.status).toEqual(400);
   });
 
-  it('should fail when plugin reject requestAction', async () => {
+  it('should fail when plugin rejects requestAction', async () => {
     const {id} = thingLight;
     await addDevice(thingLight);
     const descr = {
@@ -200,7 +200,7 @@ describe('actions/', function() {
     expect(err.response.status).toEqual(404);
   });
 
-  it('should fail when plugin reject removeAction', async () => {
+  it('should fail when plugin rejects removeAction', async () => {
     const {id} = thingLight;
     await addDevice(thingLight);
     const descr = {

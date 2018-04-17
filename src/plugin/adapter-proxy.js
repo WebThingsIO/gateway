@@ -56,9 +56,9 @@ class AdapterProxy extends Adapter {
     this.sendMsg(Constants.CANCEL_REMOVE_THING, {deviceId: device.id});
   }
 
-  sendMsg(methodType, data, defferd) {
+  sendMsg(methodType, data, deferred) {
     data.adapterId = this.id;
-    return this.plugin.sendMsg(methodType, data, defferd);
+    return this.plugin.sendMsg(methodType, data, deferred);
   }
 
   /**

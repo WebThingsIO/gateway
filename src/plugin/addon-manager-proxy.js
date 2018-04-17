@@ -242,23 +242,22 @@ class AddonManagerProxy extends EventEmitter {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
         const input = msg.data.input;
-        const messageId = msg.id;
         device.requestAction(actionId, actionName, input)
           .then(() => {
             this.pluginClient.sendNotification(
-              Constants.METHOD_RESOLVED, {
+              Constants.REQUEST_ACTION_RESOLVED, {
                 actionName: actionName,
                 actionId: actionId,
-              }, messageId);
+              });
           }).catch((err) => {
             console.error('AddonManagerProxy: Failed to request action',
                           actionName, 'for device:', deviceId);
             console.error(err);
             this.pluginClient.sendNotification(
-              Constants.METHOD_REJECTED, {
+              Constants.REQUEST_ACTION_REJECTED, {
                 actionName: actionName,
                 actionId: actionId,
-              }, messageId);
+              });
           });
         break;
       }
@@ -266,23 +265,25 @@ class AddonManagerProxy extends EventEmitter {
       case Constants.REMOVE_ACTION: {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
-        const messageId = msg.id;
+        const messageId = msg.data.messageId;
         device.removeAction(actionId, actionName)
           .then(() => {
             this.pluginClient.sendNotification(
-              Constants.METHOD_RESOLVED, {
+              Constants.REMOVE_ACTION_RESOLVED, {
                 actionName: actionName,
                 actionId: actionId,
-              }, messageId);
+                messageId: messageId,
+              });
           }).catch((err) => {
             console.error('AddonManagerProxy: Failed to remove action',
                           actionName, 'for device:', deviceId);
             console.error(err);
             this.pluginClient.sendNotification(
-              Constants.METHOD_REJECTED, {
+              Constants.REMOVE_ACTION_REJECTED, {
                 actionName: actionName,
                 actionId: actionId,
-              }, messageId);
+                messageId: messageId,
+              });
           });
         break;
       }
