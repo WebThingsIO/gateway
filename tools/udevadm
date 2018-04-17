@@ -23,9 +23,9 @@ enumerate_device() {
   echo "N: ${NAME}"
   echo "E: DEVNAME=$1"
   SUBSYSTEM=$(basename $(readlink -f ${DEVICE_PATH}/subsystem))
-  if [ "${SUBSYSTEM}" == "usb-serial" ]; then
+  if [ "${SUBSYSTEM}" = "usb-serial" ]; then
     USB_DEVICE_PATH=$(dirname $(dirname ${DEVICE_PATH}))
-  elif [ "${SUBSYSTEM}" == "usb" ]; then
+  elif [ "${SUBSYSTEM}" = "usb" ]; then
     USB_DEVICE_PATH=$(dirname ${DEVICE_PATH})
   else
     USB_DEVICE_PATH=
