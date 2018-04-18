@@ -11,8 +11,14 @@
 
 'use strict';
 
-/* globals LabelDetail, OnOffDetail, OnOffSwitch, Thing, ThingDetailLayout,
-   LevelDetail, Utils */
+const API = require('./api');
+const LabelDetail = require('./label-detail');
+const OnOffDetail = require('./on-off-detail');
+const OnOffSwitch = require('./on-off-switch');
+const Thing = require('./thing');
+const ThingDetailLayout = require('./thing-detail-layout');
+const LevelDetail = require('./level-detail');
+const Utils = require('./utils');
 
 /**
  * SmartPlug Constructor (extends OnOffSwitch).
@@ -140,7 +146,7 @@ SmartPlug.prototype.updateStatus = function() {
   const urls = Object.values(this.displayedProperties).map((v) => v.href);
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -271,7 +277,7 @@ SmartPlug.prototype.setLevel = function(level) {
   fetch(this.displayedProperties.level.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: Object.assign(window.API.headers(), {
+    headers: Object.assign(API.headers(), {
       'Content-Type': 'application/json',
     }),
   }).then((response) => {
@@ -284,3 +290,5 @@ SmartPlug.prototype.setLevel = function(level) {
     console.error(`Error trying to set level: ${error}`);
   });
 };
+
+module.exports = SmartPlug;

@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 function OnOffDetail(thing) {
   this.thing = thing;
@@ -52,3 +52,5 @@ OnOffDetail.prototype.update = function() {
     this.onOffSwitch.checked = on;
   }
 };
+
+module.exports = OnOffDetail;

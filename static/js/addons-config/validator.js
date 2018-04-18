@@ -13,13 +13,14 @@
 
 'use strict';
 
-/* globals Ajv */
-
 const Validator = {};
 
-Validator._ajv = new Ajv({
-  errorDataPath: 'property',
-  allErrors: true,
+// Dynamic loading
+import('../lib/ajv.min').then((Ajv) => {
+  Validator._ajv = new Ajv.default({
+    errorDataPath: 'property',
+    allErrors: true,
+  });
 });
 
 Validator._reEscapeChar = /\\(\\)?/g;
@@ -96,11 +97,16 @@ Validator._toErrorSchema = function(errors) {
 };
 
 Validator.validateFormData = function(formData, schema) {
-  Validator._ajv.validate(schema, formData);
-  let errors = Validator._ajv.errors;
-  errors = errors === null ? [] : errors;
+  if (Validator.hasOwnProperty('_ajv')) {
+    Validator._ajv.validate(schema, formData);
+    let errors = Validator._ajv.errors;
+    errors = errors === null ? [] : errors;
+    const errorSchema = Validator._toErrorSchema(errors);
 
-  const errorSchema = Validator._toErrorSchema(errors);
-
-  return {errors, errorSchema};
+    return {errors, errorSchema};
+  } else {
+    return {errors: [{message: 'validator still not available'}]};
+  }
 };
+
+module.exports = Validator;

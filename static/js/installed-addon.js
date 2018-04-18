@@ -9,7 +9,9 @@
  */
 'use strict';
 
-/* globals Utils, page */
+const API = require('./api');
+const Utils = require('./utils');
+const page = require('./lib/page');
 
 /**
  * InstalledAddon constructor.
@@ -140,7 +142,7 @@ InstalledAddon.prototype.handleUpdate = function(e) {
   updating.innerText = 'Updating...';
   controlDiv.replaceChild(updating, e.target);
 
-  window.API.updateAddon(this.name, this.updateUrl, this.updateChecksum)
+  API.updateAddon(this.name, this.updateUrl, this.updateChecksum)
     .then(() => {
       versionDiv.innerText = this.updateVersion;
       updating.innerText = 'Updated';
@@ -155,7 +157,7 @@ InstalledAddon.prototype.handleUpdate = function(e) {
  * Handle a click on the remove button.
  */
 InstalledAddon.prototype.handleRemove = function() {
-  window.API.uninstallAddon(this.name)
+  API.uninstallAddon(this.name)
     .then(() => {
       const el = document.getElementById(
         `addon-item-${Utils.escapeHtml(this.name)}`);
@@ -177,7 +179,7 @@ InstalledAddon.prototype.handleRemove = function() {
 InstalledAddon.prototype.handleToggle = function(e) {
   const button = e.target;
   this.enabled = !this.enabled;
-  window.API.setAddonSetting(this.name, this.enabled)
+  API.setAddonSetting(this.name, this.enabled)
     .then(() => {
       if (this.enabled) {
         button.innerText = 'Disable';
@@ -193,3 +195,5 @@ InstalledAddon.prototype.handleToggle = function(e) {
       console.error(`Failed to toggle add-on: ${this.name}\n${err}`);
     });
 };
+
+module.exports = InstalledAddon;

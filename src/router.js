@@ -44,7 +44,7 @@ const Router = {
 
     // First look for a static file
     app.use('/uploads', express.static(UserProfile.uploadsDir));
-    app.use(express.static(Constants.STATIC_PATH));
+    app.use(express.static(Constants.BUILD_STATIC_PATH));
 
     // Content negotiation middleware
     app.use(function(request, response, next) {

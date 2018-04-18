@@ -11,7 +11,10 @@
 
 'use strict';
 
-/* globals API, ColorLight, LevelDetail, MultiLevelSwitch */
+const API = require('./api');
+const ColorLight = require('./color-light');
+const LevelDetail = require('./level-detail');
+const MultiLevelSwitch = require('./multi-level-switch');
 
 /**
  * DimmableColorLight Constructor (extends ColorLight).
@@ -124,3 +127,4 @@ DimmableColorLight.prototype.setLevel = function(level) {
   MultiLevelSwitch.prototype.setLevel.call(this, level);
 };
 
+module.exports = DimmableColorLight;

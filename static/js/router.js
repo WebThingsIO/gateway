@@ -7,7 +7,8 @@
  */
 'use strict';
 
-/* globals App, page */
+const App = require('./app');
+const page = require('./lib/page');
 
 // eslint-disable-next-line no-unused-vars
 const Router = {
@@ -25,3 +26,5 @@ const Router = {
     page();
   },
 };
+
+module.exports = Router;

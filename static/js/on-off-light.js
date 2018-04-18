@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals OnOffSwitch, Thing */
+const OnOffSwitch = require('./on-off-switch');
+const Thing = require('./thing');
 
 /**
  * OnOffLight Constructor (extends OnOffSwitch).
@@ -38,3 +39,5 @@ function OnOffLight(description, format) {
 }
 
 OnOffLight.prototype = Object.create(OnOffSwitch.prototype);
+
+module.exports = OnOffLight;

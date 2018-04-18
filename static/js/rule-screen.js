@@ -7,11 +7,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-/* global API, DevicePropertyBlock, Gateway, Rule, RuleUtils, TimeTriggerBlock,
- page */
-
 'use strict';
+
+const API = require('./api');
+const DevicePropertyBlock = require('./rules/DevicePropertyBlock');
+const Gateway = require('./rules/Gateway');
+const {Rule, RuleUtils} = require('./rules/Rule');
+const TimeTriggerBlock = require('./rules/TimeTriggerBlock');
+const page = require('./lib/page');
 
 // eslint-disable-next-line no-unused-vars
 const RuleScreen = {
@@ -379,3 +382,5 @@ const RuleScreen = {
     this.rulePartsList.scrollLeft += 128;
   },
 };
+
+module.exports = RuleScreen;

@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals Utils */
+const API = require('./api');
+const Utils = require('./utils');
 
 let idCounter = -1;
 const getNewWebThingId = function() {
@@ -121,7 +122,7 @@ NewWebThing.prototype.submit = function() {
     method: 'POST',
     body: JSON.stringify({url}),
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -220,7 +221,7 @@ NewWebThing.prototype.save = function() {
     method: 'POST',
     body: JSON.stringify(thing),
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -265,3 +266,5 @@ NewWebThing.prototype.reset = function() {
   this.saveButton.classList.add('hidden');
   this.originLabel.classList.add('hidden');
 };
+
+module.exports = NewWebThing;

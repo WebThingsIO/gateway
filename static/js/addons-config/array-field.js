@@ -13,7 +13,10 @@
 
 'use strict';
 
-/* globals SchemaUtils, SchemaField, Utils, UnsupportedField */
+const SchemaUtils = require('./schema-utils');
+const SchemaField = require('./schema-field');
+const Utils = require('../utils');
+const UnsupportedField = require('./unsupported-field');
 
 function ArrayField(
   schema,
@@ -408,3 +411,5 @@ ArrayField.prototype.render = function() {
 
   return this.renderNormalArray();
 };
+
+module.exports = ArrayField;

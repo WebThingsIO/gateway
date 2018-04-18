@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals Thing */
+const API = require('./api');
+const Thing = require('./thing');
 
 /**
  * BinarySensor Constructor (extends Thing).
@@ -48,7 +49,7 @@ BinarySensor.prototype.updateStatus = function() {
   }
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -104,3 +105,5 @@ BinarySensor.prototype.showOff = function() {
   this.element.classList.remove('on');
   this.element.classList.add('off');
 };
+
+module.exports = BinarySensor;

@@ -232,7 +232,7 @@ function createRedirectApp(port) {
         return;
       }
 
-      const reqPath = path.join(Constants.STATIC_PATH, request.path);
+      const reqPath = path.join(Constants.BUILD_STATIC_PATH, request.path);
       if (fs.existsSync(reqPath)) {
         response.sendFile(reqPath);
         return;

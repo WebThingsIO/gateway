@@ -9,6 +9,8 @@
  */
 'use strict';
 
+const API = require('./api');
+
 (function() {
   const form = document.getElementById('create-user-form');
   const email = document.getElementById('email');
@@ -33,7 +35,7 @@
     const passwordValue = password.value;
     const nameValue = name.value;
 
-    window.API.createUser(nameValue, emailValue, passwordValue).
+    API.createUser(nameValue, emailValue, passwordValue).
       then(() => {
         console.log('~~~ create user success ~~~');
         window.location.href = '/';

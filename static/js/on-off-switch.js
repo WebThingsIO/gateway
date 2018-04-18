@@ -10,7 +10,8 @@
 
 'use strict';
 
-/* globals Thing */
+const API = require('./api');
+const Thing = require('./thing');
 
 /**
  * OnOffSwitch Constructor (extends Thing).
@@ -48,7 +49,7 @@ OnOffSwitch.prototype.updateStatus = function() {
   }
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -130,7 +131,7 @@ OnOffSwitch.prototype.turnOn = function() {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -158,7 +159,7 @@ OnOffSwitch.prototype.turnOff = function() {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -172,3 +173,5 @@ OnOffSwitch.prototype.turnOff = function() {
     console.error(`Error trying to turn off switch: ${error}`);
   });
 };
+
+module.exports = OnOffSwitch;

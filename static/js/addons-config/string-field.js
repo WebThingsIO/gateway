@@ -13,7 +13,8 @@
 
 'use strict';
 
-/* globals SchemaUtils, Utils */
+const SchemaUtils = require('./schema-utils');
+const Utils = require('../utils');
 
 function StringField(schema,
                      formData,
@@ -113,3 +114,5 @@ StringField.prototype.render = function() {
 
   return field;
 };
+
+module.exports = StringField;

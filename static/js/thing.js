@@ -10,7 +10,9 @@
 
 'use strict';
 
-/* globals App, API, Utils */
+const App = require('./app');
+const API = require('./api');
+const Utils = require('./utils');
 
 /**
  * Thing constructor.
@@ -199,3 +201,5 @@ Thing.prototype.handleContextMenu = function(e) {
  */
 Thing.prototype.onPropertyStatus = function(_properties) {
 };
+
+module.exports = Thing;

@@ -1,4 +1,4 @@
-/* global RulePartBlock  */
+const RulePartBlock = require('./RulePartBlock');
 
 /**
  * An element representing a time-based trigger
@@ -96,3 +96,5 @@ TimeTriggerBlock.localToUTC = function(localTime) {
   const lp = TimeTriggerBlock.leftPad;
   return `${lp(date.getUTCHours())}:${lp(date.getUTCMinutes())}`;
 };
+
+module.exports = TimeTriggerBlock;

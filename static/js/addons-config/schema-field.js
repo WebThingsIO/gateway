@@ -13,8 +13,17 @@
 
 'use strict';
 
-/* globals SchemaUtils, NumberField, ObjectField, StringField,
-BooleanField, ArrayField, UnsupportedField, Utils */
+const SchemaUtils = require('./schema-utils');
+const NumberField = require('./number-field');
+const StringField = require('./string-field');
+const BooleanField = require('./boolean-field');
+const UnsupportedField = require('./unsupported-field');
+const Utils = require('../utils');
+
+// eslint-disable-next-line prefer-const
+let ObjectField;
+// eslint-disable-next-line prefer-const
+let ArrayField;
 
 function SchemaField(
   schema,
@@ -113,3 +122,9 @@ SchemaField.prototype.render = function() {
 
   return field;
 };
+
+module.exports = SchemaField;
+
+// avoid circular dependency
+ObjectField = require('./object-field');
+ArrayField = require('./array-field');

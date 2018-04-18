@@ -1,4 +1,5 @@
-/* global Draggable, Utils */
+const Draggable = require('./Draggable');
+const Utils = require('../utils');
 
 /**
  * An element representing a component of a rule.  Drag-and-dropped within
@@ -242,3 +243,4 @@ RulePartBlock.prototype.remove = function() {
   window.removeEventListener('resize', this.onWindowResize);
 };
 
+module.exports = RulePartBlock;

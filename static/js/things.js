@@ -10,9 +10,19 @@
 
 'use strict';
 
-/* globals AddThingScreen, UnknownThing, OnOffSwitch, BinarySensor, ColorLight,
- DimmableLight, DimmableColorLight, OnOffLight, MultiLevelSwitch,
- MultiLevelSensor, SmartPlug, Menu */
+const API = require('./api');
+const AddThingScreen = require('./add-thing');
+const UnknownThing = require('./unknown-thing');
+const OnOffSwitch = require('./on-off-switch');
+const BinarySensor = require('./binary-sensor');
+const ColorLight = require('./color-light');
+const DimmableLight = require('./dimmable-light');
+const DimmableColorLight = require('./dimmable-color-light');
+const OnOffLight = require('./on-off-light');
+const MultiLevelSwitch = require('./multi-level-switch');
+const MultiLevelSensor = require('./multi-level-sensor');
+const SmartPlug = require('./smart-plug');
+const Menu = require('./menu');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -62,7 +72,7 @@ const ThingsScreen = {
   showThings: function() {
     const opts = {
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
       },
     };
@@ -130,7 +140,7 @@ const ThingsScreen = {
   showThing: function(id) {
     const opts = {
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
       },
     };
@@ -207,3 +217,5 @@ const ThingsScreen = {
     }).bind(this));
   },
 };
+
+module.exports = ThingsScreen;

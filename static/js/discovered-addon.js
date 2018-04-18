@@ -9,7 +9,8 @@
  */
 'use strict';
 
-/* globals Utils */
+const API = require('./api');
+const Utils = require('./utils');
 
 /**
  * DiscoveredAddon constructor.
@@ -91,7 +92,7 @@ DiscoveredAddon.prototype.handleInstall = function(e) {
     '<span class="addon-discovery-settings-installing">Installing...</span>';
   controlDiv.innerHTML = installing;
 
-  window.API.installAddon(this.name, this.url, this.checksum)
+  API.installAddon(this.name, this.url, this.checksum)
     .then(() => {
       const el = '<span class="addon-discovery-settings-added">Added</span>';
       controlDiv.innerHTML = el;
@@ -103,3 +104,5 @@ DiscoveredAddon.prototype.handleInstall = function(e) {
       controlDiv.innerHTML = el;
     });
 };
+
+module.exports = DiscoveredAddon;

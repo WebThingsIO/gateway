@@ -20,7 +20,7 @@ const Constants = require('../constants');
 
 const LoginController = Router();
 
-const loginRoot = path.join(Constants.STATIC_PATH, 'login');
+const loginRoot = path.join(Constants.BUILD_STATIC_PATH, 'login');
 
 /**
  * Serve the static login page

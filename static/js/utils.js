@@ -8,19 +8,19 @@
 
 'use strict';
 
-(function() {
-  window.Utils = {
-    escapeHtml: function(text) {
-      if (typeof text !== 'string') {
-        text = `${text}`;
-      }
+const Utils = {
+  escapeHtml: function(text) {
+    if (typeof (text) !== 'string') {
+      text = `${text}`;
+    }
 
-      return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    },
-  };
-}());
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+};
+
+module.exports = Utils;

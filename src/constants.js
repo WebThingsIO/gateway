@@ -33,6 +33,7 @@ exports.LOGS_PATH = '/logs';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');
+exports.BUILD_STATIC_PATH = path.join(__dirname, '../build/static');
 exports.VIEWS_PATH = path.join(__dirname, '../src/views');
 
 // Plugin and REST/websocket API things

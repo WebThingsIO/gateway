@@ -9,7 +9,7 @@
  */
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 function LabelDetail(thing, name, friendlyName, unit) {
   this.thing = thing;
@@ -53,3 +53,5 @@ LabelDetail.prototype.update = function() {
     `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
     `0${Utils.escapeHtml(this.unit)}`;
 };
+
+module.exports = LabelDetail;

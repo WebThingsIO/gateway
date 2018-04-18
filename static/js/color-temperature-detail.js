@@ -10,7 +10,7 @@
 
 'use strict';
 
-/* globals Utils */
+const Utils = require('./utils');
 
 function ColorTemperatureDetail(thing, min, max) {
   this.thing = thing;
@@ -59,3 +59,5 @@ ColorTemperatureDetail.prototype.update = function() {
 ColorTemperatureDetail.prototype.set = function() {
   this.thing.setColorTemperature(this.temperature.value);
 };
+
+module.exports = ColorTemperatureDetail;

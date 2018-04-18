@@ -10,8 +10,16 @@
 
 'use strict';
 
-/* globals App, API, Menu, page, Adapter, InstalledAddon, DiscoveredAddon,
-   User, SchemaForm, Utils */
+const App = require('./app');
+const API = require('./api');
+const Menu = require('./menu');
+const page = require('./lib/page');
+const Adapter = require('./adapter');
+const InstalledAddon = require('./installed-addon');
+const DiscoveredAddon = require('./discovered-addon');
+const User = require('./user');
+const SchemaForm = require('./addons-config/schema-form');
+const Utils = require('./utils');
 
 // eslint-disable-next-line no-unused-vars
 const SettingsScreen = {
@@ -172,7 +180,7 @@ const SettingsScreen = {
       page('/settings/users/add');
     });
 
-    window.API.getAllUserInfo().then(function(users) {
+    API.getAllUserInfo().then(function(users) {
       const usersList = document.getElementById('users-list');
       usersList.innerHTML = '';
 
@@ -189,7 +197,7 @@ const SettingsScreen = {
     this.userSettingsAdd.classList.add('hidden');
     this.userSettingsEdit.classList.remove('hidden');
 
-    window.API.getUser(id).then(function(user) {
+    API.getUser(id).then(function(user) {
       const form = document.getElementById('edit-user-form');
       const email = document.getElementById('user-settings-edit-email');
       const name = document.getElementById('user-settings-edit-name');
@@ -226,8 +234,8 @@ const SettingsScreen = {
         const newPasswordValue =
           newPassword.value !== '' ? newPassword.value : null;
 
-        window.API.editUser(id, nameValue, emailValue, passwordValue,
-                            newPasswordValue)
+        API.editUser(id, nameValue, emailValue, passwordValue,
+                     newPasswordValue)
           .then(() => {
             page('/settings/users');
           })
@@ -279,7 +287,7 @@ const SettingsScreen = {
       const nameValue = name.value;
       const passwordValue = password.value;
 
-      window.API.addUser(nameValue, emailValue, passwordValue)
+      API.addUser(nameValue, emailValue, passwordValue)
         .then(() => {
           page('/settings/users');
         })
@@ -483,7 +491,7 @@ const SettingsScreen = {
 
   showExperimentCheckbox: function(experiment, checkboxId) {
     const checkbox = document.getElementById(checkboxId);
-    window.API.getExperimentSetting(experiment)
+    API.getExperimentSetting(experiment)
       .then(function(value) {
         checkbox.checked = value;
       })
@@ -494,7 +502,7 @@ const SettingsScreen = {
 
     checkbox.addEventListener('change', function(e) {
       const value = e.target.checked ? true : false;
-      window.API.setExperimentSetting(experiment, value).then(function() {
+      API.setExperimentSetting(experiment, value).then(function() {
         if (value) {
           Menu.showItem(experiment);
         } else {
@@ -701,3 +709,5 @@ const SettingsScreen = {
     });
   },
 };
+
+module.exports = SettingsScreen;

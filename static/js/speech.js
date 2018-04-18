@@ -8,6 +8,8 @@
 
 'use strict';
 
+const API = require('./api');
+
 // eslint-disable-next-line no-unused-vars
 const Speech = {
 
@@ -16,11 +18,14 @@ const Speech = {
    */
   init: function(app) {
     app.speechButton = document.getElementById('speech-button');
-    app.speechButton.addEventListener('click', this.listen.bind(this));
-    // eslint-disable-next-line no-undef
-    this.stm = SpeakToMe({
-      listener: this.listener.bind(this),
-    });
+    // Dynamic loading
+    import('../../node_modules/speaktome-api/build/stm_web.min.js')
+      .then((SpeakToMe) => {
+        this.stm = SpeakToMe.default({
+          listener: this.listener.bind(this),
+        });
+        app.speechButton.addEventListener('click', this.listen.bind(this));
+      });
     this.listening = false;
   },
 
@@ -75,7 +80,7 @@ const Speech = {
         cache: 'default',
         body: JSON.stringify({text: results[0].text}),
         headers: {
-          Authorization: `Bearer ${window.API.jwt}`,
+          Authorization: `Bearer ${API.jwt}`,
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
@@ -207,3 +212,5 @@ const Speech = {
     });
   },
 };
+
+module.exports = Speech;

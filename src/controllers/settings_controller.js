@@ -109,7 +109,7 @@ SettingsController.post('/subscribe', async (request, response) => {
   }
 
   const leStore = require('le-store-certbot').create({
-    webrootPath: Constants.STATIC_PATH,
+    webrootPath: Constants.BUILD_STATIC_PATH,
     configDir: path.join(UserProfile.baseDir, 'etc'),
     logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
     workDir: path.join(UserProfile.baseDir, 'var', 'lib'),

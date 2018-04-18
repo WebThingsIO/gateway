@@ -13,8 +13,13 @@
 
 'use strict';
 
-/* globals SchemaUtils, Validator, SchemaField, ErrorField,
-page, Utils */
+const SchemaUtils = require('./schema-utils');
+const Validator = require('./validator');
+const SchemaField = require('./schema-field');
+const ErrorField = require('./error-field');
+const page = require('../lib/page');
+const Utils = require('../utils');
+const API = require('../api');
 
 function SchemaForm(schema, id, name, formData, options = {}) {
   this.definitions = schema.definitions;
@@ -70,7 +75,7 @@ SchemaForm.prototype.handleApply = function(e) {
     this.scrollToTop();
   } else {
     this.applyButton.innerText = 'Applying...';
-    window.API.setAddonConfig(this.name, this.formData)
+    API.setAddonConfig(this.name, this.formData)
       .then(() => {
         page('/settings/addons');
       })
@@ -122,3 +127,5 @@ SchemaForm.prototype.render = function() {
 
   return form;
 };
+
+module.exports = SchemaForm;

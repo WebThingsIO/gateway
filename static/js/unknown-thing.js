@@ -10,7 +10,10 @@
 
 'use strict';
 
-/* globals Thing, ThingDetailLayout, Utils */
+const API = require('./api');
+const Thing = require('./thing');
+const ThingDetailLayout = require('./thing-detail-layout');
+const Utils = require('./utils');
 
 /**
  * UnknownThing Constructor (extends Thing).
@@ -83,7 +86,7 @@ UnknownThing.prototype.updateStatus = function() {
 
   const opts = {
     headers: {
-      Authorization: `Bearer ${window.API.jwt}`,
+      Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
     },
   };
@@ -152,7 +155,7 @@ UnknownThing.prototype.setProperty = function(name, value) {
   fetch(this.displayedProperties[name].href, {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: Object.assign(window.API.headers(), {
+    headers: Object.assign(API.headers(), {
       'Content-Type': 'application/json',
     }),
   }).then((response) => {
@@ -374,3 +377,5 @@ BooleanDetail.prototype.update = function() {
 
   this.input.checked = this.thing.properties[this.name];
 };
+
+module.exports = UnknownThing;

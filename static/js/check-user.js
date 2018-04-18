@@ -7,36 +7,36 @@
  */
 'use strict';
 
-(function() {
-  if (window.API.isLoggedIn()) {
-    window.API.verifyJWT().then((valid) => {
-      if (!valid) {
-        redirectUnauthed();
-      } else if (document.body) {
+const API = require('./api');
+
+if (API.isLoggedIn()) {
+  API.verifyJWT().then((valid) => {
+    if (!valid) {
+      redirectUnauthed();
+    } else if (document.body) {
+      document.body.classList.remove('hidden');
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('hidden');
-      } else {
-        document.addEventListener('DOMContentLoaded', () => {
-          document.body.classList.remove('hidden');
-        });
-      }
-    });
-  } else {
-    redirectUnauthed();
-  }
+      });
+    }
+  });
+} else {
+  redirectUnauthed();
+}
 
-  function redirectUnauthed() {
-    window.API.userCount().then((count) => {
-      let url;
-      if (count > 0) {
-        const redirectPath = window.location.pathname + window.location.search;
-        url = `/login/?url=${encodeURIComponent(redirectPath)}`;
-      } else {
-        url = '/signup/';
-      }
+function redirectUnauthed() {
+  API.userCount().then((count) => {
+    let url;
+    if (count > 0) {
+      const redirectPath = window.location.pathname + window.location.search;
+      url = `/login/?url=${encodeURIComponent(redirectPath)}`;
+    } else {
+      url = '/signup/';
+    }
 
-      if (window.location.pathname !== url.split('?')[0]) {
-        window.location.href = url;
-      }
-    });
-  }
-}());
+    if (window.location.pathname !== url.split('?')[0]) {
+      window.location.href = url;
+    }
+  });
+}
