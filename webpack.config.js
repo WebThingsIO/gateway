@@ -149,6 +149,7 @@ const webpackCssHtml = {
             loader: 'css-loader',
             options: {
               minimize: true,
+              sourceMap: true,
             },
           },
         }),
@@ -182,6 +183,7 @@ const webpackCssHtml = {
     extractCss,
     extractHtml,
   ],
+  devtool: 'source-map',
 };
 
 module.exports = [
