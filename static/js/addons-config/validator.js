@@ -97,7 +97,7 @@ Validator._toErrorSchema = function(errors) {
 };
 
 Validator.validateFormData = function(formData, schema) {
-  if (Validator.hasOwnproperty('_ajv')) {
+  if (Validator.hasOwnProperty('_ajv')) {
     Validator._ajv.validate(schema, formData);
     let errors = Validator._ajv.errors;
     errors = errors === null ? [] : errors;
