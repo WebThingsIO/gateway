@@ -79,53 +79,57 @@ class Plugin {
     switch (msg.messageType) {
       case Constants.REQUEST_ACTION_RESOLVED: {
         const actionId = msg.data.actionId;
-        const deffered = this.requestActionPromises.get(actionId);
+        const deferred = this.requestActionPromises.get(actionId);
         if (typeof actionId === 'undefined' ||
-            typeof deffered === 'undefined') {
+            typeof deferred === 'undefined') {
           console.error('Plugin:', this.pluginId,
                         'Unrecognized action id:', actionId,
                         'Ignoring msg:', msg);
+          return;
         }
-        deffered.resolve();
+        deferred.resolve();
         this.requestActionPromises.delete(actionId);
         return;
       }
       case Constants.REQUEST_ACTION_REJECTED: {
         const actionId = msg.data.actionId;
-        const deffered = this.requestActionPromises.get(actionId);
+        const deferred = this.requestActionPromises.get(actionId);
         if (typeof actionId === 'undefined' ||
-            typeof deffered === 'undefined') {
+            typeof deferred === 'undefined') {
           console.error('Plugin:', this.pluginId,
                         'Unrecognized action id:', actionId,
                         'Ignoring msg:', msg);
+          return;
         }
-        deffered.reject();
+        deferred.reject();
         this.requestActionPromises.delete(actionId);
         return;
       }
       case Constants.REMOVE_ACTION_RESOLVED: {
         const messageId = msg.data.messageId;
-        const deffered = this.removeActionPromises.get(messageId);
+        const deferred = this.removeActionPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
-            typeof deffered === 'undefined') {
+            typeof deferred === 'undefined') {
           console.error('Plugin:', this.pluginId,
                         'Unrecognized message id:', messageId,
                         'Ignoring msg:', msg);
+          return;
         }
-        deffered.resolve();
+        deferred.resolve();
         this.removeActionPromises.delete(messageId);
         return;
       }
       case Constants.REMOVE_ACTION_REJECTED: {
         const messageId = msg.data.messageId;
-        const deffered = this.removeActionPromises.get(messageId);
+        const deferred = this.removeActionPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
-            typeof deffered === 'undefined') {
+            typeof deferred === 'undefined') {
           console.error('Plugin:', this.pluginId,
                         'Unrecognized message id:', messageId,
                         'Ignoring msg:', msg);
+          return;
         }
-        deffered.reject();
+        deferred.reject();
         this.removeActionPromises.delete(messageId);
         return;
       }
@@ -299,7 +303,7 @@ class Plugin {
   sendMsg(methodType, data, deferred) {
     data.pluginId = this.pluginId;
 
-    // Methods which could fail should wait result.
+    // Methods which could fail should await result.
     if (typeof deferred !== 'undefined') {
       switch (methodType) {
         case Constants.REQUEST_ACTION: {
