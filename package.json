@@ -81,17 +81,20 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
     "chai": "^4.0.1",
     "chai-http": "^3.0.0",
     "codecov": "^3.0.0",
     "eslint": "^4.19.0",
     "eslint-plugin-html": "^4.0.3",
     "jest": "^21.2.1",
+    "jsdom": "^11.7.0",
     "jszip": "^3.1.5",
     "nock": "^9.0.18",
     "node-rest-client": "^3.1.0",
     "nyc": "^11.0.2",
     "simple-oauth2": "^1.4.0",
+    "sinon": "^4.5.0",
     "ts-jest": "^21.0.0"
   },
   "jest": {
@@ -108,7 +111,8 @@
     ],
     "mapCoverage": true,
     "transform": {
-      "^.+\\.tsx?$": "ts-jest/preprocessor"
+      "^.+\\.tsx?$": "ts-jest/preprocessor",
+      "(validator\\.js?$|speech\\.js?$)": "babel-jest"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node"
