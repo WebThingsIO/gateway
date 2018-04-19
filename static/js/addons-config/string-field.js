@@ -87,6 +87,7 @@ StringField.prototype.render = function() {
       <select
       id="${id}"
       class="form-control"
+      ${this.required ? 'required' : ''}
       ${this.readonly ? 'readonly' : ''}
       ${this.disabled ? 'disabled' : ''}
       >
@@ -101,7 +102,9 @@ StringField.prototype.render = function() {
     field.innerHTML = `
       <input
       id="${id}"
+      type="text"
       class="form-control"
+      ${this.required ? 'required' : ''}
       ${this.readonly ? 'readonly' : ''}
       ${this.disabled ? 'disabled' : ''}
       value="${value == null ? '' : Utils.escapeHtml(value)}"
