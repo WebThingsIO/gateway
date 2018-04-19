@@ -1,0 +1,9 @@
+{
+  "presets": [["es2015", {"modules": false}]],
+
+  "env": {
+    "test": {
+      "plugins": ["dynamic-import-node"]
+    }
+  }
+}
