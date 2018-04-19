@@ -47,11 +47,11 @@ ActionsController.post('/', async (request, response) => {
   }
 
   try {
-    await Actions.add(action);
     if (thingId) {
       await AddonManager.requestAction(
         thingId, action.id, actionName, actionParams);
     }
+    await Actions.add(action);
 
     response.status(201).json({[actionName]: action.getDescription()});
   } catch (e) {

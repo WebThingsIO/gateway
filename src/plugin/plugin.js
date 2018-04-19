@@ -50,6 +50,10 @@ class Plugin {
     this.restart = true;
     this.unloadCompletedPromise = null;
     this.unloadedRcvdPromise = null;
+
+    this.nextId = 0;
+    this.requestActionPromises = new Map();
+    this.removeActionPromises = new Map();
   }
 
   asDict() {
@@ -70,10 +74,71 @@ class Plugin {
 
   onMsg(msg) {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
+
+    // The first switch manages action method resolved or rejected messages.
+    switch (msg.messageType) {
+      case Constants.REQUEST_ACTION_RESOLVED: {
+        const actionId = msg.data.actionId;
+        const deferred = this.requestActionPromises.get(actionId);
+        if (typeof actionId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized action id:', actionId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.resolve();
+        this.requestActionPromises.delete(actionId);
+        return;
+      }
+      case Constants.REQUEST_ACTION_REJECTED: {
+        const actionId = msg.data.actionId;
+        const deferred = this.requestActionPromises.get(actionId);
+        if (typeof actionId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized action id:', actionId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.reject();
+        this.requestActionPromises.delete(actionId);
+        return;
+      }
+      case Constants.REMOVE_ACTION_RESOLVED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.removeActionPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.resolve();
+        this.removeActionPromises.delete(messageId);
+        return;
+      }
+      case Constants.REMOVE_ACTION_REJECTED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.removeActionPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.reject();
+        this.removeActionPromises.delete(messageId);
+        return;
+      }
+    }
+
     const adapterId = msg.data.adapterId;
     let adapter;
 
-    // The first switch manages plugin level messages.
+    // The second switch manages plugin level messages.
     switch (msg.messageType) {
       case Constants.ADD_ADAPTER:
         adapter = new AdapterProxy(this.pluginServer.manager,
@@ -226,13 +291,43 @@ class Plugin {
     }
   }
 
-  sendMsg(methodType, data) {
+  /**
+   * Generate an ID for a message.
+   *
+   * @returns {integer} An id.
+   */
+  generateMsgId() {
+    return ++this.nextId;
+  }
+
+  sendMsg(methodType, data, deferred) {
     data.pluginId = this.pluginId;
+
+    // Methods which could fail should await result.
+    if (typeof deferred !== 'undefined') {
+      switch (methodType) {
+        case Constants.REQUEST_ACTION: {
+          this.requestActionPromises.set(data.actionId, deferred);
+          break;
+        }
+        case Constants.REMOVE_ACTION: {
+          // removeAction needs ID which is per message, because it
+          // can be called while waiting rejected or resolved.
+          data.messageId = this.generateMsgId();
+          this.removeActionPromises.set(data.messageId, deferred);
+          break;
+        }
+        default:
+          break;
+      }
+    }
+
     const msg = {
       messageType: methodType,
       data: data,
     };
     DEBUG && console.log('Plugin: sendMsg:', msg);
+
     return this.ipcSocket.sendJson(msg);
   }
 
@@ -240,6 +335,14 @@ class Plugin {
    * Does cleanup required to allow the test suite to complete cleanly.
    */
   shutdown() {
+    this.requestActionPromises.forEach((promise, key) => {
+      promise.reject();
+      this.requestActionPromises.delete(key);
+    });
+    this.removeActionPromises.forEach((promise, key) => {
+      promise.reject();
+      this.removeActionPromises.delete(key);
+    });
     this.ipcSocket.close();
   }
 
