@@ -112,7 +112,7 @@
     "mapCoverage": true,
     "transform": {
       "^.+\\.tsx?$": "ts-jest/preprocessor",
-      "(validator\\.js?$|speech\\.js?$)": "babel-jest"
+      "(validator\\.js?$|speech\\.js?$|schema-utils\\.js)": "babel-jest"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node"
