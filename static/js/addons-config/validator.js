@@ -17,7 +17,9 @@ const Validator = {};
 
 // Dynamic loading
 import('../lib/ajv.min').then((Ajv) => {
-  Validator._ajv = new Ajv.default({
+  Ajv = Ajv.default ? Ajv.default : Ajv;
+
+  Validator._ajv = new Ajv({
     errorDataPath: 'property',
     allErrors: true,
   });

@@ -84,12 +84,13 @@ SchemaField.prototype.render = function() {
   }
 
   let displayLabel = true;
+  let displayDescription = true;
   if (type === 'array') {
-    displayLabel = SchemaUtils.isMultiSelect(this.retrievedSchema,
-                                             this.definitions);
+    displayLabel = displayDescription =
+      SchemaUtils.isMultiSelect(this.schema, this.definitions);
   }
   if (type === 'object') {
-    displayLabel = false;
+    displayLabel = displayDescription = false;
   }
   if (type === 'boolean') {
     displayLabel = false;
@@ -102,7 +103,7 @@ SchemaField.prototype.render = function() {
       `<label class="control-label" htmlFor="${id}">${
         label}</label>` :
       '') +
-    (displayLabel && description ?
+    (displayDescription && description ?
       `<p id="${id}__description" class="field-description">${
         Utils.escapeHtml(description)}</p>` :
       '');

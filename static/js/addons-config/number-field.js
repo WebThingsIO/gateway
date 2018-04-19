@@ -42,7 +42,7 @@ function NumberField(
 
 NumberField.prototype.onRangeChange = function(event) {
   const value = event.target.value;
-  this.rangeValue.innerText = value;
+  this.rangeValue.textContent = value;
 
   const number = Number(value);
   this.formData = number;
@@ -80,6 +80,7 @@ NumberField.prototype.render = function() {
       type="range"
       id="${Utils.escapeHtml(id)}"
       class="form-control"
+      ${this.required ? 'required' : ''}
       ${this.readonly ? 'readonly' : ''}
       ${this.disabled ? 'disabled' : ''}
       value=${value == null ? '' : value}

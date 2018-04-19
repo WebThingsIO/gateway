@@ -212,12 +212,9 @@ ArrayField.prototype.renderAddButton = function(field) {
 
 ArrayField.prototype.renderArrayFieldItem =
   function(field, itemData, index, itemSchema, canRemove) {
-    const id = `${this.idSchema.$id}_${index}`;
     const item = document.createElement('div');
     item.className = 'array-item-row';
     const hasToolbox = canRemove;
-
-    item.id = id;
 
     if (hasToolbox) {
       item.innerHTML = `
