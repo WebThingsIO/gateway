@@ -791,9 +791,10 @@ class AddonManager extends EventEmitter {
         unloadPromises.push(a.unload());
         this.adapters.delete(a.id);
       }
-    } else {
+    } else if (plugin) {
       // If there are no adapters, manually unload the plugin, otherwise it
-      // will just restart.
+      // will just restart. Note that if the addon is disabled, then
+      // there might not be a plugin either.
       plugin.unload();
     }
 
