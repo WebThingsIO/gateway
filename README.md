@@ -29,6 +29,12 @@ Under OSX:
 
 [See here](http://macappstore.org/pkg-config/).
 
+### Install curl (needed to install nvm)
+
+Under Linux:
+```
+$ sudo apt-get install curl
+```
 
 ### Install nvm (Recommended)
 
@@ -82,13 +88,20 @@ You'll need git to checkout the repositories.
 
 `$ sudo apt-get install git`
 
+### Install gcc (needed to build open-zwave)
+
+Under Linux:
+```
+$ sudo apt-get install build-essential
+```
+
 ### Build and Install openzwave
 
 ```
 $ cd
 $ git clone https://github.com/OpenZWave/open-zwave.git
 $ cd open-zwave
-$ make && sudo make install
+$ CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make && sudo CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make install
 $ sudo ldconfig
 ```
 
@@ -181,7 +194,7 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
             ```
             $ npm start
             ```
-            
+
         * Load `http://localhost:8080` in your web browser (or use the server's IP address if loading remotely). Then follow the instructions on the web page to set up domain and register. Once this is done you can load
 `https://localhost:4443` in your web browser (or use the server's IP address if loading remotely).
     * If you plan to use your own SSL certificate:
