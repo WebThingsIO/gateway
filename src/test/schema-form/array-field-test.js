@@ -99,6 +99,20 @@ describe('ArrayField', () => {
         .toEqual(true);
     });
 
+    it('should convert non-array data to array', () => {
+      const {schemaForm, node} = createSchemaForm({
+        schema,
+        formData: {},
+      });
+
+      node.querySelector('.btn-add').click();
+
+      const inputs = node.querySelectorAll('.field-string input[type=text]');
+      expect(inputs).toHaveLength(1);
+      // eslint-disable-next-line no-undefined
+      expect(schemaForm.formData).toEqual([undefined]);
+    });
+
     it('should fill an array field with data', () => {
       const {node} = createSchemaForm({
         schema,
