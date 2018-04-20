@@ -29,7 +29,7 @@ function ArrayField(
   disabled = false,
   readonly = false) {
   this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
-  this.formData = formData || [];
+  this.formData = Array.isArray(formData) ? formData : [];
   this.idSchema = idSchema;
   this.name = name;
   this.definitions = definitions;
