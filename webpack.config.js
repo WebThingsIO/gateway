@@ -61,7 +61,7 @@ const pluginsJs = [
     {
       from: 'static/**/*',
       to: path.join(__dirname, 'build/'),
-      ignore: ['*.js'],
+      ignore: ['*.js', 'static/index.html'],
     },
     {
       from: 'static/service-worker.js',
@@ -98,7 +98,7 @@ const webpackJs = {
           {
             loader: 'babel-loader',
             query: {
-              plugins: [ 'transform-object-rest-spread' ],
+              plugins: ['transform-object-rest-spread'],
             },
           },
         ],
@@ -171,12 +171,41 @@ const webpackCssHtml = {
       {
         test:
           /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 8000,
-          fallback: 'file-loader',
-          publicPath: '/',
-        },
+        use: [
+          {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: 'build/.cache/image',
+            },
+          },
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8000,
+              fallback: 'file-loader',
+              publicPath: '/',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+                quality: 80,
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
+              optipng: {
+                enabled: true,
+              },
+              gifsicle: {
+                interlaced: false,
+              },
+            },
+          },
+        ],
       },
     ],
   },
