@@ -87,6 +87,7 @@ const webpackJs = {
   output: {
     path: path.join(__dirname, 'build/static'),
     filename: 'js/[name].js',
+    publicPath: '/',
   },
   module: {
     rules: [
