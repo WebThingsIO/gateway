@@ -64,6 +64,10 @@ const pluginsJs = [
       ignore: ['*.js', 'static/index.html'],
     },
     {
+      from: 'static/js/lib/*',
+      to: path.join(__dirname, 'build/'),
+    },
+    {
       from: 'static/service-worker.js',
       to: path.join(__dirname, 'build/static'),
     },
