@@ -10,7 +10,6 @@
 
 'use strict';
 
-const API = require('./api');
 const MultiLevelSwitch = require('./multi-level-switch');
 
 /**
@@ -24,16 +23,10 @@ function DimmableLight(description, format) {
   this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
                                   pngBaseIcon: '/images/bulb.png',
                                   thingCssClass: '',
+                                  thingDetailCssClass: '',
                                   addIconToView: false});
 
   this.container = this.element.querySelector('.dimmable-light');
-
-  if (format == 'svg') {
-    // For now the SVG view is just a link.
-    return this;
-  }
-
-  this.updateStatus();
 
   return this;
 }
@@ -41,40 +34,13 @@ function DimmableLight(description, format) {
 DimmableLight.prototype = Object.create(MultiLevelSwitch.prototype);
 
 /**
- * Update the status of the light.
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-DimmableLight.prototype.updateStatus = function() {
-  if (!this.levelPropertyUrl) {
-    return;
-  }
-
-  const opts = {
-    headers: API.headers(),
-  };
-
-  const onFetch = fetch(this.onPropertyUrl, opts);
-  const levelFetch = fetch(this.levelPropertyUrl, opts);
-
-  Promise.all([onFetch, levelFetch]).then((responses) => {
-    return Promise.all(responses.map((response) => {
-      return response.json();
-    }));
-  }).then((responses) => {
-    responses.forEach((response) => {
-      this.onPropertyStatus(response);
-    });
-  }).catch((error) => {
-    console.error(`Error fetching on/off switch status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-DimmableLight.prototype.onPropertyStatus = function(data) {
-  if (data.hasOwnProperty('on')) {
-    this.updateOn(data.on);
+DimmableLight.prototype.updateProperty = function(name, value) {
+  if (name === 'on') {
+    this.updateOn(value);
     if (this.properties.on) {
       this.container.classList.add('on');
       this.levelBarLabel.textContent = `${Math.round(this.properties.level)}%`;
@@ -82,8 +48,8 @@ DimmableLight.prototype.onPropertyStatus = function(data) {
       this.container.classList.remove('on');
     }
   }
-  if (data.hasOwnProperty('level')) {
-    this.updateLevel(data.level);
+  if (name === 'level') {
+    this.updateLevel(value);
   }
 };
 
@@ -96,8 +62,8 @@ DimmableLight.prototype.updateLevel = function(level) {
     this.levelBarLabel.textContent = `${Math.round(level)}%`;
   }
 
-  if (this.details) {
-    this.details.level.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.level.detail.update();
   }
 };
 

@@ -12,6 +12,7 @@
 
 const API = require('./api');
 const Thing = require('./thing');
+const OnOffDetail = require('./on-off-detail');
 
 /**
  * OnOffSwitch Constructor (extends Thing).
@@ -20,62 +21,55 @@ const Thing = require('./thing');
  * @param {String} format 'svg' or 'html'.
  */
 const OnOffSwitch = function(description, format) {
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.on = {
+      href: description.properties.on.href,
+      detail: new OnOffDetail(this),
+    };
+  }
+
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/on-off-switch.svg',
                                   pngBaseIcon: '/images/on-off-switch.png',
                                   thingCssClass: 'on-off-switch',
+                                  thingDetailCssClass: 'on-off-switch',
                                   addIconToView: false});
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  // Parse on property URL
-  if (this.propertyDescriptions.on.href) {
-    this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
+
+  this.switch = this.element.querySelector('.thing-icon');
+
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
+  } else {
+    this.switch.addEventListener('click', this.handleClick.bind(this));
   }
+
   this.updateStatus();
-  this.element.addEventListener('click', this.handleClick.bind(this));
+
   return this;
 };
 
 OnOffSwitch.prototype = Object.create(Thing.prototype);
 
 /**
- * Update the on/off status of the on/off switch.
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-OnOffSwitch.prototype.updateStatus = function() {
-  if (!this.onPropertyUrl) {
+OnOffSwitch.prototype.updateProperty = function(name, value) {
+  if (name !== 'on') {
     return;
   }
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-
-  fetch(this.onPropertyUrl, opts).then(function(response) {
-    return response.json();
-  }).then((function(response) {
-    this.onPropertyStatus(response);
-  }).bind(this)).catch(function(error) {
-    console.error(`Error fetching on/off switch status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-OnOffSwitch.prototype.onPropertyStatus = function(data) {
-  if (!data.hasOwnProperty('on')) {
+  this.properties.on = value;
+  if (value === null) {
     return;
   }
-  this.properties.on = data.on;
-  if (data.on === null) {
-    return;
-  }
-  if (data.on) {
+  if (value) {
     this.showOn();
   } else {
     this.showOff();
@@ -127,7 +121,7 @@ OnOffSwitch.prototype.turnOn = function() {
   const payload = {
     on: true,
   };
-  fetch(this.onPropertyUrl, {
+  fetch(this.displayedProperties.on.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {
@@ -155,7 +149,7 @@ OnOffSwitch.prototype.turnOff = function() {
   const payload = {
     on: false,
   };
-  fetch(this.onPropertyUrl, {
+  fetch(this.displayedProperties.on.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: {

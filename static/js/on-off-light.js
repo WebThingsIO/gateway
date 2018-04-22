@@ -12,6 +12,7 @@
 
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
+const OnOffDetail = require('./on-off-detail');
 
 /**
  * OnOffLight Constructor (extends OnOffSwitch).
@@ -20,21 +21,36 @@ const Thing = require('./thing');
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function OnOffLight(description, format) {
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.on = {
+      href: description.properties.on.href,
+      detail: new OnOffDetail(this),
+    };
+  }
+
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
                                   pngBaseIcon: '/images/bulb.png',
                                   thingCssClass: 'on-off-light',
+                                  thingDetailCssClass: 'on-off-light',
                                   addIconToView: false});
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  // Parse on property URL
-  if (this.propertyDescriptions.on.href) {
-    this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
+
+  this.light = this.element.querySelector('.thing-icon');
+
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
+  } else {
+    this.light.addEventListener('click', this.handleClick.bind(this));
   }
+
   this.updateStatus();
-  this.element.addEventListener('click', this.handleClick.bind(this));
+
   return this;
 }
 

@@ -13,6 +13,7 @@
 const App = require('./app');
 const API = require('./api');
 const Utils = require('./utils');
+const ThingDetailLayout = require('./thing-detail-layout');
 
 /**
  * Thing constructor.
@@ -27,6 +28,8 @@ const Thing = function(description, format, options) {
   this.svgBaseIcon = opts.svgBaseIcon || '/images/unknown-thing.svg';
   this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
   this.thingCssClass = opts.thingCssClass || '';
+  this.thingDetailCssClass = opts.thingDetailCssClass || '';
+  this.format = format;
   this.addIconToView =
     typeof opts.addIconToView === 'boolean' ? opts.addIconToView : true;
 
@@ -37,6 +40,7 @@ const Thing = function(description, format, options) {
   } else {
     this.container = document.getElementById('things');
   }
+  this.displayedProperties = this.displayedProperties || {};
   this.properties = {};
   // Parse base URL of Thing
   if (description.href) {
@@ -70,28 +74,86 @@ const Thing = function(description, format, options) {
 };
 
 /**
- * HTML view for unknown Thing.
+ * HTML view for Thing.
  */
-Thing.prototype.htmlView = function() {
+Thing.prototype.attachHtmlDetail = function() {
+  for (const prop of Object.values(this.displayedProperties)) {
+    // only attach at first time.
+    if ((!prop.hasOwnProperty('attached') || !prop.attached) &&
+          prop.hasOwnProperty('detail')) {
+      prop.detail.attach();
+      prop.attached = true;
+    }
+  }
+
+  this.layout = new ThingDetailLayout(
+    this.element.querySelectorAll('.thing-detail-container'));
+};
+
+/**
+ * HTML icon view for Thing.
+ */
+Thing.prototype.iconView = function() {
   let thingIcon = '<div class="thing-icon"></div>';
   if (this.addIconToView) {
     thingIcon =
       `<img class="thing-icon" src="${encodeURI(this.pngBaseIcon)}"/>`;
   }
+  return thingIcon;
+};
+
+/**
+ * HTML view for Thing.
+ */
+Thing.prototype.htmlView = function() {
   return `<div class="thing ${this.thingCssClass}">
-    ${thingIcon}
+    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
+    ${this.iconView()}
     <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;
 };
 
 /**
- * HTML detail view for unknown Thing.
+ * HTML detail view for Thing.
  */
 Thing.prototype.htmlDetailView = function() {
-  return `<div class="thing ${this.thingCssClass}">
-    <img class="thing-icon"
-      ${this.addIconToView ? `src="${encodeURI(this.pngBaseIcon)}"` : ''} />
+  let detailsHTML = '';
+  for (const prop in this.displayedProperties) {
+    if (this.displayedProperties[prop].hasOwnProperty('detail')) {
+      detailsHTML += this.displayedProperties[prop].detail.view();
+    }
+  }
+
+  return `<div class="thing ${this.thingDetailCssClass}">
+    ${this.iconView()}
+    ${detailsHTML}
   </div>`;
+};
+
+/**
+ * Update the status of Thing.
+ */
+Thing.prototype.updateStatus = function() {
+  const urls = Object.values(this.displayedProperties).map((v) => v.href);
+  const opts = {
+    headers: {
+      Authorization: `Bearer ${API.jwt}`,
+      Accept: 'application/json',
+    },
+  };
+
+  const requests = urls.map((u) => fetch(u, opts));
+  Promise.all(requests).then((responses) => {
+    return Promise.all(responses.map((response) => {
+      return response.json();
+    }));
+  }).then((responses) => {
+    responses.forEach((response) => {
+      this.onPropertyStatus(response);
+    });
+  }).catch((error) => {
+    console.error(`Error fetching ${this.name} status: ${error}`);
+  });
 };
 
 /**
@@ -141,7 +203,7 @@ Thing.prototype.makeWrappedSVGText = function(text) {
 };
 
 /**
- * SVG view for unknown thing.
+ * SVG view for Thing.
  */
 Thing.prototype.svgView = function() {
   return `<g transform="translate(${this.x},${this.y})"
@@ -196,10 +258,23 @@ Thing.prototype.handleContextMenu = function(e) {
 };
 
 /**
- * Handle a 'propertyStatus' websocket message
+ * Handle a 'propertyStatus' message.
  * @param {Object} properties - property data
  */
-Thing.prototype.onPropertyStatus = function(_properties) {
+Thing.prototype.onPropertyStatus = function(data) {
+  for (const prop in data) {
+    if (!this.displayedProperties.hasOwnProperty(prop)) {
+      continue;
+    }
+
+    const value = data[prop];
+    if (typeof value === 'undefined' || value === null) {
+      continue;
+    }
+
+    this.properties[prop] = value;
+    this.updateProperty(prop, value);
+  }
 };
 
 module.exports = Thing;

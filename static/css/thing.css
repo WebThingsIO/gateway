@@ -83,10 +83,16 @@
 /* On/Off Switch */
 
 .on-off-switch .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/on-off-switch.png');
 }
 
 .on-off-switch.on .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/on-off-switch-on.png');
 }
 
@@ -97,14 +103,23 @@
 /* Binary Sensor */
 
 .binary-sensor .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/binary-sensor.png');
 }
 
 .binary-sensor.on .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/binary-sensor-on.png');
 }
 
 .binary-sensor.off .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/binary-sensor-off.png');
 }
 
@@ -112,7 +127,7 @@
 
 .multi-level-sensor-text {
   box-sizing: border-box;
-  display: inline-block;
+  display: block;
   width: 12.8rem;
   height: 12.8rem;
   padding-top: 4.2rem;
@@ -130,14 +145,23 @@
 /* On/Off Light */
 
 .on-off-light .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/bulb.png');
 }
 
 .on-off-light.on .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/bulb-on.png');
 }
 
 .on-off-light.off .thing-icon {
+  border-radius: 6.4rem;
+  transform: translate(0);
+  background-color: #5d9bc7;
   background-image: url('../optimized-images/bulb-off.png');
 }
 

@@ -18,9 +18,11 @@ function ColorDetail(thing) {
 
 ColorDetail.prototype.attach = function() {
   this.color = this.thing.element.querySelector('.color-light-color');
-  this.color.addEventListener('input', () => {
-    this.thing.updateColor(this.color.value);
-  });
+  if (typeof this.thing.updateColor === 'function') {
+    this.color.addEventListener('input', () => {
+      this.thing.updateColor(this.color.value);
+    });
+  }
   this.color.addEventListener('change', this.set.bind(this));
 };
 

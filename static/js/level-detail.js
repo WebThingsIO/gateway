@@ -18,9 +18,11 @@ function LevelDetail(thing) {
 
 LevelDetail.prototype.attach = function() {
   this.level = this.thing.element.querySelector('.level-input');
-  this.level.addEventListener('input', () => {
-    this.thing.updateLevel(this.level.value);
-  });
+  if (typeof this.thing.updateLevel === 'function') {
+    this.level.addEventListener('input', () => {
+      this.thing.updateLevel(this.level.value);
+    });
+  }
   this.level.addEventListener('change', this.set.bind(this));
 };
 

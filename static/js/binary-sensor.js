@@ -10,7 +10,6 @@
 
 'use strict';
 
-const API = require('./api');
 const Thing = require('./thing');
 
 /**
@@ -19,71 +18,51 @@ const Thing = require('./thing');
  * @param Object description Thing description object.
  */
 const BinarySensor = function(description, format) {
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.on = {
+      href: description.properties.on.href,
+    };
+  }
+
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
                                   pngBaseIcon: '/images/binary-sensor.png',
                                   thingCssClass: 'binary-sensor',
+                                  thingDetailCssClass: 'binary-sensor',
                                   addIconToView: false});
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  // Parse on property URL
-  if (this.propertyDescriptions.on &&
-    this.propertyDescriptions.on.href) {
-    this.onPropertyUrl =
-      new URL(this.propertyDescriptions.on.href, this.href);
+
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
   }
+
   this.updateStatus();
+
   return this;
 };
 
 BinarySensor.prototype = Object.create(Thing.prototype);
 
 /**
- * Update the on/off status of the binary sensor.
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-BinarySensor.prototype.updateStatus = function() {
-  if (!this.onPropertyUrl) {
+BinarySensor.prototype.updateProperty = function(name, value) {
+  if (name !== 'on') {
     return;
   }
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-  fetch(this.onPropertyUrl, opts).then((function(response) {
-    return response.json();
-  }).bind(this)).then((function(response) {
-    this.properties.on = response.on;
-    if (response.on === null) {
-      return;
-    }
+  this.properties.on = value;
+  if (value === null) {
+    return;
+  }
 
-    if (response.on) {
-      this.showOn();
-    } else {
-      this.showOff();
-    }
-  }).bind(this)).catch(function(error) {
-    console.error(`Error fetching on/off sensor status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-BinarySensor.prototype.onPropertyStatus = function(data) {
-  if (!data.hasOwnProperty('on')) {
-    return;
-  }
-  this.properties.on = data.on;
-  if (data.on === null) {
-    return;
-  }
-  if (data.on) {
+  if (value) {
     this.showOn();
   } else {
     this.showOff();
