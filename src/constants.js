@@ -34,7 +34,7 @@ exports.LOGS_PATH = '/logs';
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');
 exports.BUILD_STATIC_PATH = path.join(__dirname, '../build/static');
-exports.VIEWS_PATH = path.join(__dirname, '../src/views');
+exports.VIEWS_PATH = path.join(__dirname, '../build/views');
 
 // Plugin and REST/websocket API things
 exports.DONT_RESTART_EXIT_CODE = 100;
