@@ -73,7 +73,9 @@ function scopeAllowsRequest(scope, request) {
     const access = parts[1];
     const readwrite = access === Constants.READWRITE;
     path = parts[0];
-    if (requestPath.startsWith(path) || path.startsWith(requestPath)) {
+    if (requestPath.startsWith(path) ||
+        (requestPath === Constants.THINGS_PATH &&
+         path.startsWith(Constants.THINGS_PATH))) {
       if (!readwrite && request.method !== 'GET' &&
           request.method !== 'OPTIONS') {
         return false;

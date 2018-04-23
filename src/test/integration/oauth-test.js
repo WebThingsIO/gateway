@@ -348,13 +348,15 @@ describe('oauth/', function() {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
 
-    let err = await pFinal(chai.request(server)
+    res = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
+      .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].href).toEqual('/things/test-1');
 
-    err = await pFinal(chai.request(server)
+    const err = await pFinal(chai.request(server)
       .delete(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));

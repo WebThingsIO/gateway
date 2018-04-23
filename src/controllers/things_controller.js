@@ -33,21 +33,21 @@ ThingsController.get('/', function(request, response) {
     } else {
       const scope = request.jwt.payload.scope;
       if (scope.indexOf(' ') === -1 && scope.indexOf('/') == 0 &&
-        scope.split('/').length == 2) {
+        scope.split('/').length == 2 &&
+        scope.split(':')[0] === Constants.THINGS_PATH) {
         Things.getThingDescriptions(request.get('Host'), request.secure)
           .then(function(things) {
             response.status(200).json(things);
           });
       } else {
-        // Get thingIds in scope
+        // Get hrefs of things in scope
         const paths = scope.split(' ');
-        const ids = new Array(0);
+        const hrefs = new Array(0);
         for (const path of paths) {
           const parts = path.split(':');
-          const segments = parts[0].split('/');
-          ids.push(segments[segments.length - 1]);
+          hrefs.push(parts[0]);
         }
-        Things.getListThingDescriptions(ids,
+        Things.getListThingDescriptions(hrefs,
                                         request.get('Host'),
                                         request.secure)
           .then(function(things) {
