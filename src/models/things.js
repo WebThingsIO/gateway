@@ -65,33 +65,36 @@ const Things = {
   },
 
   /**
-   * Get a list of Things by their IDs.
+   * Get a list of Things by their hrefs.
    *
-   * {Array} ids IDs of the list of Things to get.
+   * {Array} hrefs hrefs of the list of Things to get.
    * @return {Promise} A promise which resolves with a list of Things.
    */
-  getListThings: function(ids) {
+  getListThings: function(hrefs) {
     return this.getThings().then(function(things) {
       const listThings = [];
-      for (const id of ids) {
-        if (things.has(id)) {
-          listThings.push(things.get(id));
-        }
+      for (const href of hrefs) {
+        things.forEach(function(thing) {
+          if (thing.href === href) {
+            listThings.push(thing);
+          }
+        });
       }
       return listThings;
     });
   },
 
   /**
-   * Get Thing Descriptions for a list of Things by their IDs.
+   * Get Thing Descriptions for a list of Things by their hrefs.
    *
-   * @param {Array} ids The IDs of the list of Things to get descriptions of.
+   * @param {Array} hrefs The hrefs of the list of Things to get
+   *                      descriptions of.
    * @param {String} reqHost request host, if coming via HTTP.
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS.
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getListThingDescriptions: function(ids, reqHost, reqSecure) {
-    return this.getListThings(ids).then(function(listThings) {
+  getListThingDescriptions: function(hrefs, reqHost, reqSecure) {
+    return this.getListThings(hrefs).then(function(listThings) {
       const descriptions = [];
       for (const thing of listThings) {
         descriptions.push(thing.getDescription(reqHost, reqSecure));
