@@ -26,10 +26,40 @@ const ThingsController = PromiseRouter();
  * Get a list of Things.
  */
 ThingsController.get('/', function(request, response) {
-  Things.getThingDescriptions(request.get('Host'), request.secure)
-    .then(function(things) {
-      response.status(200).json(things);
-    });
+  if (request.jwt.payload.role !== Constants.USER_TOKEN) {
+    if (!request.jwt.payload.scope) {
+      response.status(400).send('Token must contain scope');
+    } else {
+      const scope = request.jwt.payload.scope;
+      if (scope.indexOf(' ') === -1 && scope.indexOf('/') == 0 &&
+        scope.split('/').length == 2) {
+        Things.getThingDescriptions(request.get('Host'), request.secure)
+          .then(function(things) {
+            response.status(200).json(things);
+          });
+      } else {
+        // Get thingIds in scope
+        const paths = scope.split(' ');
+        const ids = new Array(0);
+        for (const path of paths) {
+          const parts = path.split(':');
+          const segments = parts[0].split('/');
+          ids.push(segments[segments.length - 1]);
+        }
+        Things.getListThingDescriptions(ids,
+                                        request.get('Host'),
+                                        request.secure)
+          .then(function(things) {
+            response.status(200).json(things);
+          });
+      }
+    }
+  } else {
+    Things.getThingDescriptions(request.get('Host'), request.secure)
+      .then(function(things) {
+        response.status(200).json(things);
+      });
+  }
 });
 
 /**

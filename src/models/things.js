@@ -65,6 +65,42 @@ const Things = {
   },
 
   /**
+   * Get a list of Things by their IDs.
+   *
+   * {Array} ids IDs of the list of Things to get.
+   * @return {Promise} A promise which resolves with a list of Things.
+   */
+  getListThings: function(ids) {
+    return this.getThings().then(function(things) {
+      const listThings = [];
+      for (const id of ids) {
+        if (things.has(id)) {
+          listThings.push(things.get(id));
+        }
+      }
+      return listThings;
+    });
+  },
+
+  /**
+   * Get Thing Descriptions for a list of Things by their IDs.
+   *
+   * @param {Array} ids The IDs of the list of Things to get descriptions of.
+   * @param {String} reqHost request host, if coming via HTTP.
+   * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS.
+   * @return {Promise} which resolves with a list of Thing Descriptions.
+   */
+  getListThingDescriptions: function(ids, reqHost, reqSecure) {
+    return this.getListThings(ids).then(function(listThings) {
+      const descriptions = [];
+      for (const thing of listThings) {
+        descriptions.push(thing.getDescription(reqHost, reqSecure));
+      }
+      return descriptions;
+    });
+  },
+
+  /**
    * Get a list of things which are connected to adapters but not yet saved
    * in the gateway database.
    *
