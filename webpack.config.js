@@ -9,8 +9,9 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {CheckerPlugin} = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const externals = {};
 fs.readdirSync('node_modules')
@@ -57,12 +58,12 @@ const webpackNode = {
   externals,
 };
 
-const pluginsJs = [
+const pluginsWeb = [
   new CopyWebpackPlugin([
     {
       from: 'static/**/*',
       to: path.join(__dirname, 'build/'),
-      ignore: ['*.js', 'static/index.html'],
+      ignore: ['*.js', '*/index.html'],
     },
     {
       from: 'static/js/lib/*',
@@ -75,23 +76,87 @@ const pluginsJs = [
   ]),
   new UglifyJsPlugin({
     test: /\.js$/,
+    sourceMap: true,
+  }),
+  new MiniCssExtractPlugin({
+    filename: 'bundle/[hash]-[name].css',
+  }),
+  new CleanWebpackPlugin(['build/static/bundle']),
+  new HtmlWebpackPlugin({
+    inject: 'head',
+    template: 'static/index.html',
+    chunks: ['style', 'check-user.js', 'app.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'static/signup/index.html',
+    filename: 'signup/index.html',
+    chunks: ['create-user.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'static/login/index.html',
+    filename: 'login/index.html',
+    chunks: ['check-user.js', 'login.js'],
+  }),
+  new HtmlWebpackPlugin({
+    inject: 'head',
+    template: 'src/views/authorize.mustache',
+    filename: '../views/authorize.mustache',
+    chunks: ['check-user.js', 'authorize.js'],
+  }),
+  new HtmlWebpackPlugin({
+    inject: 'head',
+    template: 'src/views/local-token-service.mustache',
+    filename: '../views/local-token-service.mustache',
+    chunks: ['check-user.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'src/views/tunnel_setup.mustache',
+    filename: '../views/tunnel_setup.mustache',
+    chunks: ['setup_subdomain.js'],
   }),
 ];
 
-const webpackJs = {
+const webpackWeb = {
   entry: {
-    app: './static/js/app.js',
-    'check-user': './static/js/check-user.js',
-    'create-user': './static/js/create-user.js',
-    login: './static/js/login.js',
-    authorize: './static/js/authorize.js',
-    setup_subdomain: './static/js/setup_subdomain.js',
+    'app.js': './static/js/app.js',
+    'check-user.js': './static/js/check-user.js',
+    'create-user.js': './static/js/create-user.js',
+    'login.js': './static/js/login.js',
+    'authorize.js': './static/js/authorize.js',
+    'setup_subdomain.js': './static/js/setup_subdomain.js',
+    buildCss: [
+      // css for static/index.html
+      './static/css/app.css',
+      './static/css/things.css',
+      './static/css/menu.css',
+      './static/css/add-thing.css',
+      './static/css/context-menu.css',
+      './static/css/thing.css',
+      './static/css/floorplan.css',
+      './static/css/settings.css',
+      './static/css/rules-common.css',
+      './static/css/rules.css',
+      './static/css/rule.css',
+      './static/css/addons-form.css',
+    ],
   },
   mode: 'development',
   target: 'web',
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'style',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
   output: {
     path: path.join(__dirname, 'build/static'),
-    filename: 'js/[name].js',
+    filename: 'bundle/[hash]-[name]',
     publicPath: '/',
   },
   module: {
@@ -108,59 +173,6 @@ const webpackJs = {
           },
         ],
       },
-    ],
-  },
-  // When require stm_web.min.js, can't resolve 'fs'.
-  // Maybe webpack bug.
-  node: {
-    fs: 'empty',
-  },
-  plugins: pluginsJs,
-};
-
-const extractCss = new MiniCssExtractPlugin({
-  filename: 'css/[name].css',
-});
-const extractHtml = new ExtractTextPlugin('index.html');
-
-const webpackCssHtml = {
-  entry: {
-    buildCss: [
-      // css for index.html
-      './static/css/app.css',
-      './static/css/things.css',
-      './static/css/menu.css',
-      './static/css/add-thing.css',
-      './static/css/context-menu.css',
-      './static/css/thing.css',
-      './static/css/floorplan.css',
-      './static/css/settings.css',
-      './static/css/rules-common.css',
-      './static/css/rules.css',
-      './static/css/rule.css',
-      './static/css/addons-form.css',
-    ],
-    'index.html': './static/index.html',
-  },
-  mode: 'development',
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: 'style',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        },
-      },
-    },
-  },
-  output: {
-    path: path.join(__dirname, 'build/static/'),
-    filename: '[name]',
-  },
-  module: {
-    rules: [
       {
         test: /\.css$/,
         use: [
@@ -177,16 +189,14 @@ const webpackCssHtml = {
       },
       {
         test: /\.html$/,
-        use: extractHtml.extract({
-          use: {
-            loader: 'html-loader',
-            options: {
-              attrs: ['img:src'],
-              root: path.join(__dirname, 'static'),
-              minimize: true,
-            },
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: ['img:src'],
+            root: path.join(__dirname, 'static'),
+            minimize: true,
           },
-        }),
+        },
       },
       {
         test:
@@ -203,7 +213,8 @@ const webpackCssHtml = {
             options: {
               limit: 8000,
               fallback: 'file-loader',
-              publicPath: '/',
+              publicPath: '/images',
+              outputPath: 'images',
             },
           },
           {
@@ -229,15 +240,16 @@ const webpackCssHtml = {
       },
     ],
   },
-  plugins: [
-    extractCss,
-    extractHtml,
-  ],
+  // When require stm_web.min.js, can't resolve 'fs'.
+  // Maybe webpack bug.
+  node: {
+    fs: 'empty',
+  },
+  plugins: pluginsWeb,
   devtool: 'source-map',
 };
 
 module.exports = [
   webpackNode,
-  webpackJs,
-  webpackCssHtml,
+  webpackWeb,
 ];

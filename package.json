@@ -12,7 +12,8 @@
     "cov": "jest --coverage",
     "start": "webpack && node build/gateway.js",
     "debug-ide": "webpack && node --inspect=5858 build/gateway.js",
-    "debug": "webpack && node --inspect build/gateway.js"
+    "debug": "webpack && node --inspect build/gateway.js",
+    "postinstall": "rimraf ./build"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "cache-loader": "^1.2.2",
     "callsites": "^2.0.0",
     "circular-dependency-plugin": "^5.0.1",
+    "clean-webpack-plugin": "^0.1.19",
     "compression": "^1.7.1",
     "config": "^1.26.1",
     "copy-webpack-plugin": "^4.5.0",
@@ -47,12 +49,11 @@
     "express-fileupload": "^0.4.0",
     "express-promise-router": "^3.0.1",
     "express-ws": "^3.0.0",
-    "extract-loader": "^2.0.1",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "greenlock": "^2.1.15",
     "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.2.0",
     "jsonwebtoken": "^8.1.0",
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",

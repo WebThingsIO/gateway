@@ -19,7 +19,8 @@ const Speech = {
   init: function(app) {
     app.speechButton = document.getElementById('speech-button');
     // Dynamic loading
-    import('../../node_modules/speaktome-api/build/stm_web.min.js')
+    import(/* webpackChunkName: "stm_web.min.js" */
+      '../../node_modules/speaktome-api/build/stm_web.min.js')
       .then((SpeakToMe) => {
         this.stm = SpeakToMe.default({
           listener: this.listener.bind(this),
