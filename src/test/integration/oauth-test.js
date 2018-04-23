@@ -348,12 +348,11 @@ describe('oauth/', function() {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
 
-    // TODO(hobinjk): filter things instead of blocking #793
     let err = await pFinal(chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(401);
+    expect(res.status).toEqual(200);
 
     err = await pFinal(chai.request(server)
       .delete(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
