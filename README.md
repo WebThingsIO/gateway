@@ -223,6 +223,15 @@ If you are using VS Code, simply use the "launch" target. It will build the gate
 
 If you are not using VS Code, run `npm run debug` and it will build the gateway and launch it with `--inspect`.
 
+## Install additional dependencies for Test (Debian)
+
+These steps are required on Debian (where python points to python 2.7)
+```
+apt install python-pip
+apt install python3-pip
+pip3 install git+https://github.com/mycroftai/adapt#egg=adapt-parser
+```
+
 ## Running Tests
 To run the linter and all tests:
 ```
