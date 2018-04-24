@@ -85,7 +85,7 @@ const AddThingScreen = {
     }).then((response) => {
       return response.json();
     }).then((json) => {
-      AddThingScreen.actionUrl = json.href;
+      this.actionUrl = json.pair.href;
 
       this.pairingTimeout = setTimeout(() => {
         this.scanStatus.classList.add('hidden');
@@ -98,7 +98,7 @@ const AddThingScreen = {
         this.requestCancelPairing();
       }, timeout * 1000);
 
-      console.log(`Pairing request created with URL ${json.href}`);
+      console.log(`Pairing request created with URL ${json.pair.href}`);
     }).catch(function(error) {
       console.error(`Pairing request failed: ${error}`);
     });
@@ -119,7 +119,7 @@ const AddThingScreen = {
       delete this.socket;
     }
 
-    const url = AddThingScreen.actionUrl;
+    const url = this.actionUrl;
     if (!url) {
       return;
     }
@@ -132,7 +132,7 @@ const AddThingScreen = {
       },
     }).then(function(response) {
       if (response.ok) {
-        AddThingScreen.actionUrl = null;
+        this.actionUrl = null;
         console.log('Successfully cancelled pairing request.');
       } else {
         console.error(`Error cancelling pairing request ${
