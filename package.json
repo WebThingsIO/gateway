@@ -4,15 +4,15 @@
   "description": "Web of Things gateway",
   "main": "app.js",
   "scripts": {
-    "test": "webpack && npm run lint && npm run mocha",
-    "lint": "eslint .",
+    "test": "./node_modules/webpack-cli/bin/webpack.js && npm run lint && npm run mocha",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
     "mocha": "./src/test/run-tests.sh",
     "jest": "./src/test/run-tests.sh",
     "yarn-check": "./src/test/yarn-test.sh",
-    "cov": "jest --coverage",
-    "start": "webpack && node build/gateway.js",
-    "debug-ide": "webpack && node --inspect=5858 build/gateway.js",
-    "debug": "webpack && node --inspect build/gateway.js"
+    "cov": "./node_modules/jest/bin/jest.js --coverage",
+    "start": "./node_modules/webpack-cli/bin/webpack.js && node build/gateway.js",
+    "debug-ide": "./node_modules/webpack-cli/bin/webpack.js && node --inspect=5858 build/gateway.js",
+    "debug": "./node_modules/webpack-cli/bin/webpack.js && node --inspect build/gateway.js"
   },
   "repository": {
     "type": "git",
