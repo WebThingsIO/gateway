@@ -15,30 +15,6 @@ const options = {
   },
 };
 
-// 1. Choose a secure web address for your gateway
-//   - validation should fail
-//     - in use
-//     - periods/other junk
-//     - wrong email
-//   - validation should succeed
-//   - email something to localhost/blackhole
-// 2. Create first user account
-//   - Name
-//   - Email validation
-//   - Password validation
-// 3. Install virtual-things-adapter
-//   1. Open Settings > Addons
-//   2. See VTA
-//   3. Install VTA
-// 4. Add Things
-// 5. Add Virtual DCL
-// 6. Toggle DCL in main page
-// 7. Toggle DCL in expanded page
-// 8. Toggle DCL using API, expect it to change in main and expanded
-// 9. Add Thing but rename it
-// 10. Look at Thing in expanded page
-// 10. Remove all
-
 describe('basic browser tests', function() {
   const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
   beforeEach(() => {
