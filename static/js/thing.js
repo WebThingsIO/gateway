@@ -9,8 +9,6 @@
  */
 
 'use strict';
-
-const App = require('./app');
 const API = require('./api');
 const Utils = require('./utils');
 
@@ -40,7 +38,8 @@ const Thing = function(description, format, options) {
   this.properties = {};
   // Parse base URL of Thing
   if (description.href) {
-    this.href = new URL(description.href, App.ORIGIN);
+    const origin = window.location.origin;
+    this.href = new URL(description.href, origin);
     this.id = this.href.pathname.split('/').pop();
 
     const wsHref = this.href.href.replace(/^http/, 'ws');
