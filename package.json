@@ -97,7 +97,8 @@
     "nyc": "^11.0.2",
     "simple-oauth2": "^1.4.0",
     "sinon": "^4.5.0",
-    "ts-jest": "^21.0.0"
+    "ts-jest": "^21.0.0",
+    "websocket": "^1.0.25"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
