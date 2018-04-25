@@ -426,4 +426,5 @@
   box-sizing: border-box;
   font-size: 1.6rem;
   border-radius: 0 0 1rem 0;
+  border: 0;
 }
