@@ -23,7 +23,11 @@ describe('basic browser tests', function() {
   });
   afterEach(async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-    await AddonManager.uninstallAddon('virtual-things-adapter', true, false);
+    try {
+      await AddonManager.uninstallAddon('virtual-things-adapter', true, false);
+    } catch (e) {
+      console.warn('Unable to cleanup virtual-thing-adapter', e);
+    }
   });
 
 
