@@ -75,6 +75,7 @@ describe('basic browser tests', function() {
 
     await browser.url(url);
 
+    await browser.waitForExist('#name', 5000);
     await browser.setValue('#name', 'Test User');
     await browser.setValue('#email', 'test@example.com');
     await browser.setValue('#password', 'rosebud');
@@ -101,8 +102,9 @@ describe('basic browser tests', function() {
     await browser.click('#discover-addons-button');
     await saveStepScreen('discovering-addons');
 
+    await browser.waitForExist('#addon-install-virtual-things-adapter', 5000);
     await browser.click('#addon-install-virtual-things-adapter');
-    await browser.waitForExist('.addon-discovery-settings-added');
+    await browser.waitForExist('.addon-discovery-settings-added', 5000);
     await saveStepScreen('adapter-added');
 
     await browser.click('#settings-back-button');
