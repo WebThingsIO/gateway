@@ -1,3 +1,4 @@
+const fs = require('fs');
 const webdriverio = require('webdriverio');
 
 const {server} = require('../common');
@@ -63,7 +64,12 @@ describe('basic browser tests', function() {
       if (stepStr.length < 2) {
         stepStr = `0${stepStr}`;
       }
-      await browser.saveScreenshot(`${stepStr}-${step}.png`);
+
+      if (!fs.existsSync('browser-test-output')) {
+        fs.mkdirSync('browser-test-output');
+      }
+      await browser.saveScreenshot(
+        `browser-test-output/${stepStr}-${step}.png`);
       stepNumber += 1;
     }
 

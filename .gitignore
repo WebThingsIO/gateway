@@ -13,3 +13,4 @@ static/js/lib/stm_web.min.js
 config/local.js
 static/uploads
 .post_upgrade_complete
+/browser-test-output
