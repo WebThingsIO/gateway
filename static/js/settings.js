@@ -484,9 +484,9 @@ const SettingsScreen = {
       const addonList = document.getElementById('discovered-addons-list');
       addonList.innerHTML = '';
 
-      for (const name of Array.from(this.availableAddons.keys()).sort()) {
-        new DiscoveredAddon(this.availableAddons.get(name));
-      }
+      Array.from(this.availableAddons.entries())
+        .sort((a, b) => a[1].displayName.localeCompare(b[1].displayName))
+        .forEach((x) => new DiscoveredAddon(x[1]));
     });
   },
 
