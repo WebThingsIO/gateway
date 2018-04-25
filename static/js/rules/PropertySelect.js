@@ -187,10 +187,15 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         const triggerOff = Object.assign({}, triggerOn, {
           onValue: false,
         });
-        this.addOption('On', {
+        const onName = property.name[0].toUpperCase() + property.name.substr(1);
+        let offName = `Not ${onName}`;
+        if (property.name === 'on') {
+          offName = 'Off';
+        }
+        this.addOption(onName, {
           trigger: triggerOn,
         });
-        this.addOption('Off', {
+        this.addOption(offName, {
           trigger: triggerOff,
         });
       } else if (property.name === 'color') {
