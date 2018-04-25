@@ -85,6 +85,8 @@ describe('basic browser tests', function() {
 
     await browser.click('#create-user-button');
 
+    await browser.waitForExist('#menu-button', 5000);
+
     const newUrl = await browser.getUrl();
     expect(newUrl.endsWith('/things')).toBeTruthy();
 
