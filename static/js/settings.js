@@ -55,6 +55,7 @@ const SettingsScreen = {
     this.backButton.href = '/settings';
 
     if (section) {
+      Menu.hide();
       this.showSection(section, subsection, id);
     } else {
       this.showMenu();
