@@ -65,6 +65,19 @@
   background-image: url('../images/rules-icon.png');
 }
 
+#menu-scrim{
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#menu-scrim.hidden {
+  display: none;
+}
+
 .log-out-button {
   background-color: unset;
   text-align: left;
