@@ -366,8 +366,11 @@ describe('Form', () => {
         },
       };
 
+      const addonName = 'settings-adapter';
+
       const {node} = createSchemaForm({
         schema,
+        addonName,
       });
 
       const input = node.querySelector('input');
@@ -375,7 +378,7 @@ describe('Form', () => {
       fireEvent(input, 'change');
 
       sandbox.stub(console, 'error').callsFake((error) => {
-        expect(error).toContain('fetch is not defined');
+        expect(error).toContain(`Failed to set config add-on: ${addonName}`);
         done();
       });
 
