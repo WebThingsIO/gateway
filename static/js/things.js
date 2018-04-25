@@ -22,7 +22,6 @@ const OnOffLight = require('./on-off-light');
 const MultiLevelSwitch = require('./multi-level-switch');
 const MultiLevelSensor = require('./multi-level-sensor');
 const SmartPlug = require('./smart-plug');
-const Menu = require('./menu');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -55,7 +54,6 @@ const ThingsScreen = {
       this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
-      Menu.hide();
       this.showThing(thingId);
     } else {
       this.addButton.classList.remove('hidden');
