@@ -102,7 +102,7 @@ END
   fi
 
   CONF="${ROOT_MOUNTPOINT}/etc/modules"
-  if sudo grep -q "i2c-dev" "${CONF}:"; then
+  if sudo grep -q "i2c-dev" "${CONF}"; then
     sudo sed -i "s/.*i2c-dev/i2c-dev/g" "${CONF}"
   else
     sudo sh -c "cat >> '${CONF}'" <<END
