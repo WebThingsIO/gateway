@@ -44,6 +44,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 # Install prequisite packages
 sudo apt install -y \
+  autoconf \
   certbot \
   dnsmasq \
   git \
@@ -51,6 +52,7 @@ sudo apt install -y \
   libffi-dev \
   libnanomsg-dev \
   libnanomsg4 \
+  libtool \
   libudev-dev \
   libusb-1.0-0-dev \
   python-pip \
