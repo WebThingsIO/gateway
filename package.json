@@ -56,6 +56,7 @@
     "image-webpack-loader": "^4.2.0",
     "jsonwebtoken": "^8.1.0",
     "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
     "mustache-express": "^1.2.5",
     "nanomsg": "^4.0.2",
@@ -78,7 +79,7 @@
     "url-loader": "^1.0.1",
     "uuid": "^3.1.0",
     "webdriverio": "^4.12.0",
-    "webpack": "^4.1.1",
+    "webpack": "^4.6.0",
     "webpack-cli": "^2.0.10",
     "ws": "^5.0.0"
   },

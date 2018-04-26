@@ -8,6 +8,7 @@ const fs = require('fs');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {CheckerPlugin} = require('awesome-typescript-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
@@ -117,12 +118,14 @@ const webpackJs = {
   plugins: pluginsJs,
 };
 
-const extractCss = new ExtractTextPlugin('css/style.css');
+const extractCss = new MiniCssExtractPlugin({
+  filename: 'css/[name].css',
+});
 const extractHtml = new ExtractTextPlugin('index.html');
 
 const webpackCssHtml = {
   entry: {
-    'css/style.css': [
+    buildCss: [
       // css for index.html
       './static/css/app.css',
       './static/css/things.css',
@@ -140,6 +143,18 @@ const webpackCssHtml = {
     'index.html': './static/index.html',
   },
   mode: 'development',
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'style',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
   output: {
     path: path.join(__dirname, 'build/static/'),
     filename: '[name]',
@@ -148,15 +163,17 @@ const webpackCssHtml = {
     rules: [
       {
         test: /\.css$/,
-        use: extractCss.extract({
-          fallback: 'style-loader',
-          use: {
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
             loader: 'css-loader',
             options: {
               sourceMap: true,
             },
           },
-        }),
+        ],
       },
       {
         test: /\.html$/,
