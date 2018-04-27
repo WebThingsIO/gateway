@@ -51,6 +51,12 @@ const Router = {
       // Inform the browser that content negotiation is taking place
       response.setHeader('Vary', 'Accept');
 
+      // Enable CORS for all requests
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
       // If request won't accept HTML but will accept JSON,
       // or is a WebSocket request, or is multipart/form-data
       // treat it as an API request
@@ -58,12 +64,6 @@ const Router = {
           request.get('Upgrade') === 'websocket' ||
           request.is('multipart/form-data') ||
           request.path.startsWith(Constants.LOGS_PATH)) {
-        // Enable CORS for API requests
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.setHeader(
-          'Access-Control-Allow-Headers',
-          'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
         request.url = API_PREFIX + request.url;
         next();
       // Otherwise treat it as an app request
