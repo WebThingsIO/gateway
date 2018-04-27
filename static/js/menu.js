@@ -16,8 +16,10 @@ const Menu = {
    */
   init: function() {
     this.element = document.getElementById('main-menu');
+    this.scrim = document.getElementById('menu-scrim');
     this.hidden = true;
     this.element.addEventListener('click', this.handleClick.bind(this));
+    this.scrim.addEventListener('click', this.handleScrimClick.bind(this));
     this.items = {};
     this.items.things = document.getElementById('things-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
@@ -54,6 +56,7 @@ const Menu = {
   */
   show: function() {
     this.element.classList.remove('hidden');
+    this.scrim.classList.remove('hidden');
     this.hidden = false;
   },
 
@@ -62,6 +65,7 @@ const Menu = {
   */
   hide: function() {
     this.element.classList.add('hidden');
+    this.scrim.classList.add('hidden');
     this.hidden = true;
   },
 
@@ -85,6 +89,15 @@ const Menu = {
     if (e.target.tagName != 'A') {
       return;
     }
+    this.hide();
+  },
+
+  /**
+   * Handle a click event on scrim.
+   *
+   * @param {Event} Click event.
+   */
+  handleScrimClick: function(_e) {
     this.hide();
   },
 

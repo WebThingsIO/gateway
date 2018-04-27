@@ -5,7 +5,6 @@
  */
 
 const API = require('./api');
-const Menu = require('./menu');
 const Gateway = require('./rules/Gateway');
 const RuleCard = require('./rules/RuleCard');
 const page = require('./lib/page');
@@ -22,7 +21,6 @@ const RulesScreen = {
     this.nextId = 0;
 
     this.createRuleButton.addEventListener('click', () => {
-      Menu.hide();
       page('/rules/new');
     });
   },

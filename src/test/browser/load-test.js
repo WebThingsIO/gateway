@@ -98,6 +98,11 @@ describe('basic browser tests', function() {
     await browser.click('#settings-menu-item');
     await saveStepScreen('settings');
 
+    // wait fadeout menu-scrim
+    await browser.waitUntil(async () => {
+      const width = await browser.getCssProperty('#menu-scrim.hidden', 'width');
+      return width && width.parsed && width.parsed.value === 0;
+    }, 5000);
     await browser.click('#addon-settings-link');
     await saveStepScreen('addon-settings');
 
@@ -113,6 +118,13 @@ describe('basic browser tests', function() {
     await browser.click('#settings-back-button');
     await browser.click('#menu-button');
     await browser.click('#things-menu-item');
+
+    // wait fadeout menu-scrim
+    await browser.waitUntil(async () => {
+      const width = await browser.getCssProperty('#menu-scrim.hidden', 'width');
+      return width && width.parsed && width.parsed.value === 0;
+    }, 5000);
+    await browser.waitForVisible('#add-button', 5000);
     await browser.click('#add-button');
     await saveStepScreen('add-things-list');
 

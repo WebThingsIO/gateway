@@ -75,7 +75,7 @@ StringField.prototype.render = function() {
       selectedAny |= selected;
 
       return `
-        <option 
+        <option
         key="${i}"
         value="${Utils.escapeHtml(value)}"
         ${selected ? 'selected' : ''}>

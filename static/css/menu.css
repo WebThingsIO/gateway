@@ -65,6 +65,42 @@
   background-image: url('../images/rules-icon.png');
 }
 
+@keyframes show-scrim{
+  from{
+      opacity: 0;
+  }
+  to{
+      opacity: 0.5;
+  }
+}
+
+@keyframes hide-scrim{
+  from{
+      opacity: 0.5;
+      width: 100%;
+  }
+  to{
+      opacity: 0;
+      width: 100%;
+  }
+}
+
+#menu-scrim{
+  background-color: rgba(0, 0, 0);
+  opacity: 0.5;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  animation: show-scrim 0.25s ease 0s;
+}
+
+#menu-scrim.hidden {
+  animation: hide-scrim 0.25s ease 0s;
+  width: 0%;
+}
+
 .log-out-button {
   background-color: unset;
   text-align: left;
