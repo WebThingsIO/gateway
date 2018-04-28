@@ -1,29 +1,10 @@
 const fs = require('fs');
-const webdriverio = require('webdriverio');
 
-const {server} = require('../common');
+const {getBrowser} = require('./browser-common');
 const AddonManager = require('../../addon-manager');
 
-const selenium = require('selenium-standalone');
-
-const options = {
-  desiredCapabilities: {
-    browserName: 'firefox',
-    acceptInsecureCerts: true,
-    'moz:firefoxOptions': {
-      args: ['-headless'],
-    },
-  },
-};
-
 describe('basic browser tests', function() {
-  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-  beforeEach(() => {
-    // Starting up and interacting with a browser takes forever
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
-  });
   afterEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     try {
       await AddonManager.uninstallAddon('virtual-things-adapter', true, false);
     } catch (e) {
@@ -33,30 +14,7 @@ describe('basic browser tests', function() {
 
 
   it('creates a user', async () => {
-    const url = `https://localhost:${server.address().port}`;
-
-    await new Promise((res, rej) => {
-      selenium.install(function(err) {
-        if (err) {
-          rej(err);
-        } else {
-          res();
-        }
-      });
-    });
-
-    const child = await new Promise((res, rej) => {
-      selenium.start(function(err, child) {
-        if (err) {
-          rej(err);
-        } else {
-          res(child);
-        }
-      });
-    });
-    const browser = webdriverio
-      .remote(options)
-      .init();
+    const browser = getBrowser();
 
     let stepNumber = 0;
     async function saveStepScreen(step) {
@@ -73,7 +31,7 @@ describe('basic browser tests', function() {
       stepNumber += 1;
     }
 
-    await browser.url(url);
+    await browser.url('/');
 
     await browser.waitForExist('#name', 5000);
     await browser.setValue('#name', 'Test User');
@@ -157,8 +115,5 @@ describe('basic browser tests', function() {
     detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-9')).toBeTruthy();
     await saveStepScreen('unknown-thing-detail');
-
-    await browser.end();
-    child.kill();
   });
 });

@@ -223,7 +223,7 @@ function StringDetail(thing, name) {
  */
 StringDetail.prototype.attach = function() {
   this.input = this.thing.element.querySelector(
-    `#string-${Utils.escapeHtml(this.name)}`);
+    `#string-${Utils.escapeHtmlForIdClass(this.name)}`);
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
@@ -243,7 +243,8 @@ StringDetail.prototype.view = function() {
     <div class="thing-detail string-input">
       <div class="thing-detail-contents">
         <form class="generic-string">
-          <input type="text" id="string-${Utils.escapeHtml(this.name)}"
+          <input type="text"
+            id="string-${Utils.escapeHtmlForIdClass(this.name)}"
             class="generic-string-input"/>
         </form>
       </div>
@@ -279,7 +280,7 @@ function NumberDetail(thing, name, unit, min, max) {
  */
 NumberDetail.prototype.attach = function() {
   this.input = this.thing.element.querySelector(
-    `#number-${Utils.escapeHtml(this.name)}`);
+    `#number-${Utils.escapeHtmlForIdClass(this.name)}`);
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
@@ -308,7 +309,8 @@ NumberDetail.prototype.view = function() {
     <div class="thing-detail number-input">
       <div class="thing-detail-contents">
         <form class="generic-number">
-          <input type="number" id="number-${Utils.escapeHtml(this.name)}"
+          <input type="number"
+            id="number-${Utils.escapeHtmlForIdClass(this.name)}"
             class="generic-number-input ${cls}"
             ${min} ${max} value="0" step="any" />
         </form>
@@ -343,7 +345,7 @@ function BooleanDetail(thing, name) {
  */
 BooleanDetail.prototype.attach = function() {
   this.input = this.thing.element.querySelector(
-    `#checkbox-${Utils.escapeHtml(this.name)}`);
+    `#checkbox-${Utils.escapeHtmlForIdClass(this.name)}`);
   this.input.addEventListener('click', () => {
     this.thing.setProperty(this.name, this.input.checked);
   });
@@ -357,7 +359,8 @@ BooleanDetail.prototype.view = function() {
     <div class="thing-detail boolean-switch">
       <div class="thing-detail-contents">
         <form class="generic-boolean">
-          <input type="checkbox" id="checkbox-${Utils.escapeHtml(this.name)}"
+          <input type="checkbox"
+            id="checkbox-${Utils.escapeHtmlForIdClass(this.name)}"
             class="generic-checkbox" />
           <label for="checkbox-${Utils.escapeHtml(this.name)}"></label>
         </form>
