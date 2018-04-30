@@ -72,6 +72,8 @@ NewThingsController.post('/', async (request, response) => {
         description.hasOwnProperty('type') &&
         description.hasOwnProperty('properties')) {
       response.json(description);
+    } else if (Array.isArray(description)) {
+      response.status(400).send('Web things must be added individually');
     } else {
       response.status(400).send('Invalid thing description');
     }
