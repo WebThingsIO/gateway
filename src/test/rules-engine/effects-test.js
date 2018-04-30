@@ -22,6 +22,14 @@ const setEffect = {
   value: 30,
 };
 
+const bothEffect = {
+  effects: [
+    pulseEffect,
+    setEffect,
+  ],
+  type: 'MultiEffect',
+};
+
 describe('effects', function() {
   it('should parse a PulseEffect', () => {
     const effect = effects.fromDescription(pulseEffect);
@@ -31,6 +39,11 @@ describe('effects', function() {
   it('should parse a SetEffect', () => {
     const effect = effects.fromDescription(setEffect);
     expect(effect).toMatchObject(setEffect);
+  });
+
+  it('should parse a MultiEffect', () => {
+    const effect = effects.fromDescription(bothEffect);
+    expect(effect).toMatchObject(bothEffect);
   });
 
   it('should reject an unknown effect type', () => {
