@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('./api');
+const page = require('./lib/page');
 
 // eslint-disable-next-line no-unused-vars
 const ContextMenu = {
@@ -67,12 +68,10 @@ const ContextMenu = {
       },
     }).then((function(response) {
       if (response.ok) {
-        const newEvent = new CustomEvent('_thingchange');
-        window.dispatchEvent(newEvent);
         console.log('Successfully removed Thing.');
+        page('/things');
       } else {
-        console.error(`Error removing thing ${
-          response.statusText}`);
+        console.error(`Error removing thing ${response.statusText}`);
       }
       this.hide();
     }).bind(this)).catch((function(error) {
