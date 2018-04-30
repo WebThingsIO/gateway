@@ -11,7 +11,6 @@ if [ ! -e "package.json" ]; then
   exit 1
 fi
 
-yarn
 _remote=$(git remote get-url origin)
 git clone ./ gateway
 cd gateway
