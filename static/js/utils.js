@@ -21,6 +21,19 @@ const Utils = {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   },
+  escapeHtmlForIdClass: function(text) {
+    if (typeof (text) !== 'string') {
+      text = `${text}`;
+    }
+
+    return text
+      .replace(/&/g, 'amp')
+      .replace(/</g, 'lt')
+      .replace(/>/g, 'gt')
+      .replace(/"/g, 'quot')
+      .replace(/'/g, '039')
+      .replace(/\s/g, 'nbsp');
+  },
 };
 
 module.exports = Utils;
