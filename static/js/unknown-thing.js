@@ -284,6 +284,11 @@ NumberDetail.prototype.attach = function() {
   this.input.addEventListener('blur', () => {
     this.thing.setProperty(this.name, this.input.value);
   });
+  if (this.min !== null && this.max !== null) {
+    this.input.addEventListener('click', () => {
+      this.thing.setProperty(this.name, this.input.value);
+    });
+  }
   const form = this.input.parentNode;
   form.addEventListener('submit', (e) => {
     e.preventDefault();
