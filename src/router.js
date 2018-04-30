@@ -43,8 +43,16 @@ const Router = {
     });
 
     // First look for a static file
+    const staticHandler = express.static(Constants.BUILD_STATIC_PATH);
     app.use('/uploads', express.static(UserProfile.uploadsDir));
-    app.use(express.static(Constants.BUILD_STATIC_PATH));
+    app.use((request, response, next) => {
+      if (request.path === '/' && request.accepts('html')) {
+        // We need this to hit RootController.
+        next();
+      } else {
+        staticHandler(request, response, next);
+      }
+    });
 
     // Content negotiation middleware
     app.use(function(request, response, next) {
