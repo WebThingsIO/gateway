@@ -12,7 +12,11 @@ if [ ! -e "package.json" ]; then
 fi
 
 yarn
+_remote=$(git remote get-url origin)
 git clone ./ gateway
+cd gateway
+git remote set-url origin "${_remote}"
+cd ..
 tar czf gateway.tar.gz gateway
 rm -fr gateway
 ./tools/create-release-archives.sh
