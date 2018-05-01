@@ -15,7 +15,11 @@ function RuleCard(gateway, elt, id, desc) {
   this.id = id;
   this.rule = new Rule(gateway, desc);
 
-  const checked = this.rule.enabled ? 'checked' : '';
+  let checked = this.rule.enabled ? 'checked' : '';
+  if (!this.rule.valid()) {
+    checked = '';
+    this.elt.classList.add('invalid');
+  }
 
   this.elt.innerHTML = `
     <div class="rule-edit-overlay">

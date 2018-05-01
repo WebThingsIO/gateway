@@ -45,6 +45,10 @@
   vertical-align: bottom;
 }
 
+.rule.invalid {
+  background: #7f3939;
+}
+
 .rule-info h3 {
   margin: 0;
   font-size: 1.6rem;
@@ -109,6 +113,10 @@
 
 .rule-switch > input:checked + .switch-slider {
   background: #305067;
+}
+
+.rule.invalid > .rule-switch > input:checked + .switch-slider {
+  background: #4d2121;
 }
 
 .rule-switch > input:checked + .switch-slider:after {

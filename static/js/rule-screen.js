@@ -24,6 +24,7 @@ const RuleScreen = {
     this.rule = null;
 
     this.view = document.getElementById('rule-view');
+    this.titleBar = this.view.querySelector('.title-bar');
     this.ruleArea = document.getElementById('rule-area');
     this.ruleName = this.view.querySelector('.rule-name');
     this.ruleNameCustomize = this.view.querySelector('.rule-name-customize');
@@ -189,6 +190,9 @@ const RuleScreen = {
           RuleUtils.byProperty(this.rule[role].property)
         )[0];
       }
+      if (!thing) {
+        return;
+      }
       block = new DevicePropertyBlock(this.ruleArea, this.rule, thing, x, y);
     }
     const rulePart = {};
@@ -260,8 +264,13 @@ const RuleScreen = {
   onRuleUpdate: function() {
     this.ruleName.textContent = this.rule.name || 'Rule Name';
     this.ruleDescription.textContent = this.rule.toHumanDescription();
-    if (this.rule.trigger && this.rule.effect &&
-      !document.querySelector('.dragging')) {
+    const valid = this.rule.valid();
+    if (valid) {
+      this.titleBar.classList.remove('invalid');
+    } else {
+      this.titleBar.classList.add('invalid');
+    }
+    if (valid && !document.querySelector('.dragging')) {
       this.showConnection();
     } else {
       this.hideConnection();

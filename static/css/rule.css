@@ -24,6 +24,10 @@
   background: #46769C;
 }
 
+#rule-view > .title-bar.invalid {
+  background: #7f3939;
+}
+
 .rule-back-button {
   border: 0;
   background: #4a4a4a;
