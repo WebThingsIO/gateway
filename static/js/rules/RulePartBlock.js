@@ -197,10 +197,7 @@ RulePartBlock.prototype.onWindowResize = function() {
   }
   const dragHint = document.getElementById('drag-hint');
   const flexDir = window.getComputedStyle(dragHint).flexDirection;
-  // Throw away our current coords and snap to the new layout direction
-  if (this.flexDir === flexDir) {
-    return;
-  }
+  // Throw away our current coords and snap to centered on the grid
 
   const areaRect = this.ruleArea.getBoundingClientRect();
   const rect = this.elt.getBoundingClientRect();
