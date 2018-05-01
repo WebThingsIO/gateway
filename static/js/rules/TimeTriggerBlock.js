@@ -65,6 +65,12 @@ TimeTriggerBlock.prototype.onUp = function(clientX, clientY) {
   if (this.role === 'effect') {
     this.remove();
   }
+  if (this.role === 'trigger') {
+    this.rule.setTrigger({
+      type: 'TimeTrigger',
+      time: TimeTriggerBlock.localToUTC(this.timeInput.value),
+    });
+  }
 };
 
 TimeTriggerBlock.leftPad = function(n) {

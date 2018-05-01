@@ -237,6 +237,7 @@ RulePartBlock.prototype.remove = function() {
     this.rule.setEffect(null);
     this.ruleEffectArea.classList.remove('inactive');
   }
+  this.role = '';
   window.removeEventListener('resize', this.onWindowResize);
 };
 
