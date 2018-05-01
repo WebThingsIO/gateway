@@ -117,9 +117,12 @@ const RuleUtils = {
 
 /**
  * Convert the rule's trigger's description to a human-readable string
- * @return {String}
+ * @return {String?}
  */
 Rule.prototype.toTriggerHumanDescription = function() {
+  if (!this.trigger) {
+    return null;
+  }
   if (this.trigger.type === 'TimeTrigger') {
     return `the time of day is ${
       TimeTriggerBlock.utcToLocal(this.trigger.time)}`;
@@ -129,6 +132,9 @@ Rule.prototype.toTriggerHumanDescription = function() {
     const triggerThing = this.gateway.things.filter(
       RuleUtils.byHref(this.trigger.thing.href)
     )[0];
+    if (!triggerThing) {
+      return null;
+    }
     return `${triggerThing.name} event "${this.trigger.event}" occurs`;
   }
 
@@ -136,6 +142,9 @@ Rule.prototype.toTriggerHumanDescription = function() {
   const triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
   )[0];
+  if (!triggerThing) {
+    return null;
+  }
 
   let triggerStr = `${triggerThing.name} `;
   if (this.trigger.type === 'BooleanTrigger') {
@@ -154,7 +163,7 @@ Rule.prototype.toTriggerHumanDescription = function() {
     triggerStr += this.trigger.value;
   } else {
     console.error('Unknown trigger type', this.trigger);
-    return '???';
+    return null;
   }
 
   return triggerStr;
@@ -162,19 +171,28 @@ Rule.prototype.toTriggerHumanDescription = function() {
 
 /**
  * Convert the rule's effect's description to a human-readable string
- * @return {String}
+ * @return {String?}
  */
 Rule.prototype.toEffectHumanDescription = function() {
+  if (!this.effect) {
+    return null;
+  }
   if (this.effect.type === 'ActionEffect') {
     const effectThing = this.gateway.things.filter(
       RuleUtils.byHref(this.effect.thing.href)
     )[0];
+    if (!effectThing) {
+      return null;
+    }
     return `do ${effectThing.name} action "${this.effect.action}"`;
   }
 
   const effectThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.effect.property)
   )[0];
+  if (!effectThing) {
+    return null;
+  }
 
   let effectStr = '';
   if (this.effect.property.name === 'on') {
@@ -210,10 +228,10 @@ Rule.prototype.toHumanDescription = function() {
   let effectStr = '???';
 
   if (this.trigger) {
-    triggerStr = this.toTriggerHumanDescription();
+    triggerStr = this.toTriggerHumanDescription() || triggerStr;
   }
   if (this.effect) {
-    effectStr = this.toEffectHumanDescription();
+    effectStr = this.toEffectHumanDescription() || effectStr;
   }
   return `If ${triggerStr} then ${effectStr}`;
 };
@@ -234,6 +252,15 @@ Rule.prototype.setTrigger = function(trigger) {
 Rule.prototype.setEffect = function(effect) {
   this.effect = effect;
   return this.update();
+};
+
+/**
+ * Whether the rule is a valid, functioning rule
+ * @return {boolean}
+ */
+Rule.prototype.valid = function() {
+  return !!(this.toTriggerHumanDescription() &&
+    this.toEffectHumanDescription());
 };
 
 module.exports = {Rule, RuleUtils};
