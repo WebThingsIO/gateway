@@ -78,6 +78,10 @@ const pluginsWeb = [
     test: /\.js$/,
     sourceMap: true,
   }),
+  new webpack.SourceMapDevToolPlugin({
+    test: /\.css$/,
+    filename: '[file].map',
+  }),
   new MiniCssExtractPlugin({
     filename: 'bundle/[hash]-[name].css',
   }),
@@ -246,7 +250,7 @@ const webpackWeb = {
     fs: 'empty',
   },
   plugins: pluginsWeb,
-  devtool: 'source-map',
+  devtool: 'eval',
 };
 
 module.exports = [
