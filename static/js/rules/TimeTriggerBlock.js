@@ -5,13 +5,12 @@ const RulePartBlock = require('./RulePartBlock');
  *
  * @constructor
  * @param {Element} ruleArea
- * @param {Rule} rule
- * @param {number} x
- * @param {number} y
+ * @param {Function} onPresentationChange
+ * @param {Function} onRuleChange
  */
-function TimeTriggerBlock(ruleArea, rule, x, y) {
-  RulePartBlock.call(this, ruleArea, rule,
-                     'Time of day', '/images/clock.svg', x, y);
+function TimeTriggerBlock(ruleArea, onPresentationChange, onRuleUpdate) {
+  RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleUpdate,
+                     'Time of day', '/images/clock.svg');
 
   const rulePartInfo = this.elt.querySelector('.rule-part-info');
 
@@ -32,10 +31,11 @@ function TimeTriggerBlock(ruleArea, rule, x, y) {
   });
 
   this.timeInput.addEventListener('change', () => {
-    this.rule.setTrigger({
+    this.rulePart = {trigger: {
       type: 'TimeTrigger',
       time: TimeTriggerBlock.localToUTC(this.timeInput.value),
-    });
+    }};
+    this.onRuleChange();
   });
 
   rulePartInfo.appendChild(this.timeInput);
@@ -47,6 +47,8 @@ TimeTriggerBlock.prototype = Object.create(RulePartBlock.prototype);
  * Initialize based on an existing partial rule
  */
 TimeTriggerBlock.prototype.setRulePart = function(rulePart) {
+  this.rulePart = rulePart;
+
   if (rulePart.trigger) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
@@ -66,10 +68,11 @@ TimeTriggerBlock.prototype.onUp = function(clientX, clientY) {
     this.remove();
   }
   if (this.role === 'trigger') {
-    this.rule.setTrigger({
+    this.rulePart = {trigger: {
       type: 'TimeTrigger',
       time: TimeTriggerBlock.localToUTC(this.timeInput.value),
-    });
+    }};
+    this.onRuleChange();
   }
 };
 

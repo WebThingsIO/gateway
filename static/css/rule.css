@@ -63,6 +63,7 @@
 #rule-view .rule-info {
   padding: 0;
   flex: 1;
+  height: 100%;
 }
 
 #rule-view .rule-info h1 {
@@ -177,6 +178,10 @@
   font-size: 0;
 }
 
+.rule-part-container.open {
+  z-index: 15;
+}
+
 .rule-part-container > .rule-part-block {
   margin: 0;
   border-radius: 1rem 0 0 1rem;
@@ -225,6 +230,11 @@
 .property-select-option.selected {
   position: relative;
   border-radius: 0 0 1rem 0;
+}
+
+.property-select.open {
+  transform: translate(0, 0);
+  z-index: 20;
 }
 
 .property-select.open > .property-select-option.selected {

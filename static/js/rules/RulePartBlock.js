@@ -6,20 +6,23 @@ const Utils = require('../utils');
  * `ruleArea` to change its role within `rule`
  * @constructor
  * @param {Element} ruleArea
- * @param {Rule} rule
+ * @param {Function} onPresentationChange
+ * @param {Function} onRuleChange
  * @param {String} name
  * @param {String} icon
  * @param {number} x
  * @param {number} y
  */
-function RulePartBlock(ruleArea, rule, name, icon, x, y) {
-  this.rule = rule;
+function RulePartBlock(ruleArea, onPresentationChange, onRuleChange, name,
+                       icon) {
+  this.onPresentationChange = onPresentationChange;
+  this.onRuleChange = onRuleChange;
   this.role = '';
+  this.rulePart = null;
 
   this.elt = document.createElement('div');
   this.elt.classList.add('rule-part-container');
 
-  this.snapToGrid(x, y);
   this.elt.innerHTML = `<div class="rule-part-block">
       <img class="rule-part-icon" src="${encodeURI(icon)}"/>
     </div>
@@ -41,9 +44,6 @@ function RulePartBlock(ruleArea, rule, name, icon, x, y) {
 
   this.ruleArea.appendChild(this.elt);
   this.draggable = new Draggable(this.elt, this.onDown, this.onMove, this.onUp);
-
-  this.onWindowResize = this.onWindowResize.bind(this);
-  window.addEventListener('resize', this.onWindowResize);
 
   const dragHint = document.getElementById('drag-hint');
   this.flexDir = window.getComputedStyle(dragHint).flexDirection;
@@ -73,7 +73,7 @@ RulePartBlock.prototype.onDown = function() {
     this.ruleEffectArea.classList.remove('inactive');
   }
 
-  this.rule.onUpdate();
+  this.onPresentationChange();
 };
 
 /**
@@ -145,7 +145,6 @@ RulePartBlock.prototype.onUp = function(clientX, clientY) {
       this.reset();
     } else {
       this.role = 'effect';
-      this.ruleEffectArea.classList.add('inactive');
     }
   }
 
@@ -153,7 +152,7 @@ RulePartBlock.prototype.onUp = function(clientX, clientY) {
     this.remove();
   }
 
-  this.rule.onUpdate();
+  this.onRuleChange();
 };
 
 /**
@@ -176,6 +175,7 @@ RulePartBlock.prototype.reset = function() {
  * Initialize based on an existing partial rule
  */
 RulePartBlock.prototype.setRulePart = function(rulePart) {
+  this.rulePart = rulePart;
   if (rulePart.trigger) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
@@ -183,15 +183,18 @@ RulePartBlock.prototype.setRulePart = function(rulePart) {
   } else if (rulePart.effect) {
     this.role = 'effect';
     this.rulePartBlock.classList.add('effect');
-    this.ruleEffectArea.classList.add('inactive');
   }
 };
 
 /**
- * Switch from row to column grid alignments if necessary when the window is
- * resized
+ * Snap to the center of the current area, aligning with siblings if part of
+ * a multi effect. If centered relative to a list of siblings, index and length
+ * specify this effect's relative location
+ *
+ * @param {number?} index - Centered relative to a list
+ * @param {number?} length
  */
-RulePartBlock.prototype.onWindowResize = function() {
+RulePartBlock.prototype.snapToCenter = function(index, length) {
   if (!this.role) {
     return;
   }
@@ -202,8 +205,15 @@ RulePartBlock.prototype.onWindowResize = function() {
   const areaRect = this.ruleArea.getBoundingClientRect();
   const rect = this.elt.getBoundingClientRect();
 
+  if (typeof index === 'undefined') {
+    index = 0;
+    length = 1;
+  }
+  const ratio = (index + 1) / (length + 1);
+
+
   if (flexDir === 'row') {
-    const centerY = areaRect.height / 2 - rect.height / 2;
+    const centerY = areaRect.height * ratio - rect.height / 2;
 
     let roleX = areaRect.width / 4 - rect.width / 2;
     if (this.role === 'effect') {
@@ -212,7 +222,7 @@ RulePartBlock.prototype.onWindowResize = function() {
 
     this.snapToGrid(roleX, centerY);
   } else if (flexDir === 'column') {
-    const centerX = areaRect.width / 2 - rect.width / 2;
+    const centerX = areaRect.width * ratio - rect.width / 2;
 
     let roleY = areaRect.height / 4 - rect.height / 2;
     if (this.role === 'effect') {
@@ -221,7 +231,7 @@ RulePartBlock.prototype.onWindowResize = function() {
 
     this.snapToGrid(centerX, roleY);
   }
-  this.rule.onUpdate();
+
   this.flexDir = flexDir;
 };
 
@@ -230,15 +240,14 @@ RulePartBlock.prototype.onWindowResize = function() {
  */
 RulePartBlock.prototype.remove = function() {
   this.ruleArea.removeChild(this.elt);
+  this.rulePart = null;
   if (this.role === 'trigger') {
-    this.rule.setTrigger(null);
     this.ruleTriggerArea.classList.remove('inactive');
   } else if (this.role === 'effect') {
-    this.rule.setEffect(null);
     this.ruleEffectArea.classList.remove('inactive');
   }
-  this.role = '';
-  window.removeEventListener('resize', this.onWindowResize);
+  this.role = 'removed';
+  this.onRuleChange();
 };
 
 module.exports = RulePartBlock;

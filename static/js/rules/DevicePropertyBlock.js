@@ -6,18 +6,19 @@ const RulePartBlock = require('./RulePartBlock');
  * drag-and-dropped within `ruleArea` to change its role within `rule`
  * @constructor
  * @param {Element} ruleArea
+ * @param {Function} onPresentationChange
+ * @param {Function} onRuleChange
  * @param {Rule} rule
  * @param {ThingDescription} thing
- * @param {number} x
- * @param {number} y
  */
-function DevicePropertyBlock(ruleArea, rule, thing, x, y) {
-  RulePartBlock.call(this, ruleArea, rule, thing.name,
-                     '/images/on-off-switch.svg', x, y);
+function DevicePropertyBlock(ruleArea, onPresentationChange, onRuleChange,
+                             thing) {
+  RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleChange,
+                     thing.name, '/images/on-off-switch.svg');
   this.thing = thing;
 
   const propertyInfo = this.elt.querySelector('.rule-part-info');
-  this.propertySelect = new PropertySelect(propertyInfo, rule, thing);
+  this.propertySelect = new PropertySelect(this, propertyInfo, thing);
 }
 
 DevicePropertyBlock.prototype = Object.create(RulePartBlock.prototype);

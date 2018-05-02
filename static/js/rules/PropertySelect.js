@@ -3,12 +3,12 @@
  * thing's properties. In a perfect world this would be a styled select, but
  * this is not a perfect world.
  * @constructor
+ * @param {DevicePropertyBlock} devicePropertyBlock
  * @param {Element} parent
- * @param {Rule} rule
  * @param {ThingDescription} thing
  */
-function PropertySelect(parent, rule, thing) {
-  this.rule = rule;
+function PropertySelect(devicePropertyBlock, parent, thing) {
+  this.devicePropertyBlock = devicePropertyBlock;
   this.thing = thing;
   this.role = '';
 
@@ -101,11 +101,11 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
           ruleFragment.trigger.levelType = 'GREATER';
         }
         ruleFragment.trigger.value = parseFloat(valueInput.value);
-        this.rule.setTrigger(ruleFragment.trigger);
       } else {
         ruleFragment.effect.value = parseFloat(valueInput.value);
-        this.rule.setEffect(ruleFragment.effect);
       }
+      this.devicePropertyBlock.rulePart = ruleFragment;
+      this.devicePropertyBlock.onRuleChange();
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
     });
   } else if (property.name === 'color') {
@@ -118,11 +118,11 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     elt.addEventListener('change', () => {
       if (ruleFragment.trigger) {
         ruleFragment.trigger.value = valueInput.value;
-        this.rule.setTrigger(ruleFragment.trigger);
       } else {
         ruleFragment.effect.value = valueInput.value;
-        this.rule.setEffect(ruleFragment.effect);
       }
+      this.devicePropertyBlock.rulePart = ruleFragment;
+      this.devicePropertyBlock.onRuleChange();
     });
   }
 
@@ -320,12 +320,11 @@ PropertySelect.prototype.onClick = function(e) {
       return;
     }
 
-    if (rulePart.trigger) {
-      this.rule.setTrigger(rulePart.trigger);
-    }
-    if (rulePart.effect) {
-      this.rule.setEffect(rulePart.effect);
-    }
+    this.devicePropertyBlock.rulePart = rulePart;
+    this.devicePropertyBlock.elt.classList.remove('open');
+    this.devicePropertyBlock.onRuleChange();
+  } else {
+    this.devicePropertyBlock.elt.classList.add('open');
   }
 };
 
