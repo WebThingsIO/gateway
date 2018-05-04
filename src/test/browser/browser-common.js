@@ -47,6 +47,7 @@ beforeAll(async () => {
 afterAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   await browser.end();
+  child.stdin.pause();
   child.kill();
 });
 
