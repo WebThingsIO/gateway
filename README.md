@@ -25,7 +25,7 @@ Under Linux:
 $ sudo apt-get install pkg-config
 ```
 
-Under OSX:
+Under OS X:
 
 [See here](http://macappstore.org/pkg-config/).
 
@@ -78,14 +78,23 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ### Install libusb and libudev (Linux only)
+
 ```
 $ sudo apt-get install libusb-1.0-0-dev libudev-dev
 ```
 
-### Install autoconf (Linux only, needed for building gifsicle dependency)
+### Install autoconf
+
+Under Linux:
 ```
 $ sudo apt-get install autoconf
 ```
+
+Under OS X:
+```
+$ brew install autoconf
+```
+
 ### Install git
 
 You'll need git to checkout the repositories.
