@@ -95,6 +95,18 @@ Under OS X:
 $ brew install autoconf
 ```
 
+### Install libpng (Linux only)
+
+Under x86-64 or x86 Linux:
+```
+$ sudo apt-get install libpng12-0
+```
+
+Under ARM Linux:
+```
+$ sudo apt-get install libpng-dev
+```
+
 ### Install git
 
 You'll need git to checkout the repositories.
@@ -243,6 +255,8 @@ These steps are required on Debian (where python points to python 2.7)
 apt install python-pip
 apt install python3-pip
 pip3 install git+https://github.com/mycroftai/adapt#egg=adapt-parser
+apt install firefox
+apt install openjdk-8-jre
 ```
 
 ## Running Tests
