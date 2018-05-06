@@ -52,6 +52,7 @@ sudo apt install -y \
   libffi-dev \
   libnanomsg-dev \
   libnanomsg4 \
+  libpng12-0 \
   libtool \
   libudev-dev \
   libusb-1.0-0-dev \

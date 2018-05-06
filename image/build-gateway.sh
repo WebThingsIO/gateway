@@ -2,9 +2,15 @@
 #
 # This script is expected to run inside a docker container which has the Raspberry Pi toolchain
 # and required prerequisites:
-#   - pkg-config
-#   - libusb-1.0-0-dev
 #   - libudev-dev
+#   - libpng-dev
+#   - autoconf
+#   - curl
+#   - pkg-config
+#   - python
+#   - python2.7
+#   - git
+#   - build-essential
 #
 # /build corresponds to the current directory when the docker container is run and it is expected
 # that the following directory structure has been setup:
@@ -78,8 +84,16 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 npm install -g yarn
 
-# Build the node modules, cross compiling any native code.
-(cd ${GATEWAY}; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm)
+# Build the node modules, compiling any native code with cross compiler.
+(cd ${GATEWAY}; yarn --ignore-scripts; ./image/rebuild-node-modules.sh cross --arch=${ARCH} --target_arch=arm; chmod -R +r node_modules)
+nvm unload
+
+# Build the node modules, compiling any native code with arm emulator.
+unset CC
+unset CXX
+export RPXC_UID=builder
+sudo chown -R 1000.1000 ${GATEWAY}/node_modules
+rpdo "cd ${GATEWAY} && source /home/builder/.nvm/nvm.sh && ./image/rebuild-node-modules.sh native"
 
 set -x
 
