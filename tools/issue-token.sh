@@ -19,7 +19,7 @@ function npm_package_is_installed {
 npm_package_is_installed ts-node
 npm_package_is_installed typescript
 
-// check if config directory exists
+# check if config directory exists
 if [[ -d config && -L config ]] ; then
   echo "symbolic config dir exists!"
 else
