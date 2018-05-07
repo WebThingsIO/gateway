@@ -40,7 +40,7 @@
   list-style-type: none;
   background-color: #48779a;
   border-radius: 0.5rem;
-  background-image: url('../images/right-arrow.png');
+  background-image: url('../optimized-images/right-arrow.png');
   background-size: auto 2rem;
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -60,31 +60,31 @@
 }
 
 #domain-settings-link {
-  background-image: url('../images/domain-icon.png');
+  background-image: url('../optimized-images/domain-icon.png');
 }
 
 #user-settings-link {
-  background-image: url('../images/users-icon.png');
+  background-image: url('../optimized-images/users-icon.png');
 }
 
 #adapter-settings-link {
-  background-image: url('../images/adapters-icon.png');
+  background-image: url('../optimized-images/adapters-icon.png');
 }
 
 #addon-settings-link {
-  background-image: url('../images/add-on.svg');
+  background-image: url('../optimized-images/add-on.svg');
 }
 
 #experiment-settings-link {
-  background-image: url('../images/experiments-icon.png');
+  background-image: url('../optimized-images/experiments-icon.png');
 }
 
 #update-settings-link {
-  background-image: url('../images/update-icon.svg');
+  background-image: url('../optimized-images/update-icon.svg');
 }
 
 #authorization-settings-link {
-  background-image: url(/images/authorization.svg);
+  background-image: url('../optimized-images/authorization.svg');
 }
 
 .settings-section {
@@ -221,15 +221,15 @@
 }
 
 .user-settings-header {
-  background-image: url('../images/user.svg');
+  background-image: url('../optimized-images/user.svg');
 }
 
 .adapter-settings-header {
-  background-image: url('../images/adapter-icon.png');
+  background-image: url('../optimized-images/adapter-icon.png');
 }
 
 .addon-settings-header {
-  background-image: url('../images/add-on.svg');
+  background-image: url('../optimized-images/add-on.svg');
 }
 
 .user-settings-name,
@@ -316,7 +316,7 @@
   background-position: 0.5em;
   padding-left: 4rem;
   margin-right: .8rem;
-  background-image: url('../images/settings-icon.png');
+  background-image: url('../optimized-images/settings-icon.png');
 }
 
 .addon-settings-config.hidden {
@@ -329,7 +329,7 @@
   background-position: 0.5em;
   padding-left: 4rem;
   margin-right: .8rem;
-  background-image: url('../images/update-icon.svg');
+  background-image: url('../optimized-images/update-icon.svg');
 }
 
 .addon-settings-update.hidden {
@@ -338,33 +338,33 @@
 
 .adapter-settings-disable,
 .addon-settings-disable {
-  background-image: url('../images/disable.svg');
+  background-image: url('../optimized-images/disable.svg');
 }
 
 .adapter-settings-enable,
 .addon-settings-enable {
-  background-image: url('../images/enable.svg');
+  background-image: url('../optimized-images/enable.svg');
 }
 
 .user-settings-edit {
-  background-image: url('../images/edit-plain.svg');
+  background-image: url('../optimized-images/edit-plain.svg');
 }
 
 .addon-settings-remove,
 .user-settings-remove {
   margin-right: .8rem;
-  background-image: url('../images/remove.svg');
+  background-image: url('../optimized-images/remove.svg');
 }
 
 .addon-discovery-settings-add {
-  background-image: url('../images/new.svg');
+  background-image: url('../optimized-images/new.svg');
 }
 
 #add-user-button,
 #discover-addons-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/add.svg');
+  background-image: url('../optimized-images/add.svg');
 }
 
 #user-settings-edit,
@@ -390,7 +390,7 @@
   height : 3rem;
   float: right;
   margin : 0.1rem 0;
-  background: url("../images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -407,15 +407,15 @@
 }
 
 #floorplan-experiment-item {
-  background-image: url('../images/floorplan-icon.png');
+  background-image: url('../optimized-images/floorplan-icon.png');
 }
 
 #speech-experiment-item {
-  background-image: url('../images/speech-icon.png');
+  background-image: url('../optimized-images/speech-icon.png');
 }
 
 #rules-experiment-item {
-  background-image: url('../images/rules-icon.png');
+  background-image: url('../optimized-images/rules-icon.png');
 }
 
 #update-now.hidden {
@@ -444,7 +444,7 @@
 .authorization-item {
   position: relative;
   padding-left: 12rem;
-  background-image: url(/images/authorization.svg);
+  background-image: url('../optimized-images/authorization.svg');
   background-size: 8rem auto;
   background-repeat: no-repeat;
   background-position: left 2rem center;
@@ -469,7 +469,7 @@
   transform: translateY(-50%);
   background-color: #48779a;
 
-  background-image: url(/images/stop-16.svg);
+  background-image: url('../optimized-images/stop-16.svg');
   background-position: 1rem;
   background-size: 1.2rem;
   background-repeat: no-repeat;

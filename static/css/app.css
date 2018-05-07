@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #speech-button {
   right: 2rem;
-  background-image: url('../images/microphone.svg');
+  background-image: url('../optimized-images/microphone.svg');
   top: 2rem;
 }
 
@@ -196,11 +196,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #menu-button {
-  background-image: url('../images/menu.svg');
+  background-image: url('../optimized-images/menu.svg');
 }
 
 #back-button {
-  background-image: url('../images/back.png');
+  background-image: url('../optimized-images/back.png');
 }
 
 #menu-button.hidden,
@@ -241,7 +241,7 @@ h1, h2, h3, h4, h5, h6 {
 .back-button {
   top: 2rem;
   left: 2rem;
-  background-image: url('../images/back.png');
+  background-image: url('../optimized-images/back.png');
 }
 
 #snackbar {

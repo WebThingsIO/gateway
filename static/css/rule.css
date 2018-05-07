@@ -86,7 +86,7 @@
 
 #rule-area {
   position: relative;
-  background: url(/images/background.png);
+  background: url('../optimized-images/background.png');
   flex: 1;
 }
 
