@@ -71,7 +71,7 @@
 .new-thing-icon {
   width: 6.4rem;
   height: 6.4rem;
-  background-image: url('../images/unknown-thing.png');
+  background-image: url('../optimized-images/unknown-thing.png');
   background-size: 6.4rem;
 }
 
@@ -116,23 +116,23 @@
 }
 
 .new-thing.on-off-switch .new-thing-icon {
-  background-image: url('../images/on-off-switch.png');
+  background-image: url('../optimized-images/on-off-switch.png');
 }
 
 .new-thing.binary-sensor .new-thing-icon {
-  background-image: url('../images/binary-sensor.png');
+  background-image: url('../optimized-images/binary-sensor.png');
 }
 
 .new-thing.on-off-light .new-thing-icon {
-  background-image: url('../images/bulb.png');
+  background-image: url('../optimized-images/bulb.png');
 }
 
 .new-thing.smart-plug .new-thing-icon {
-  background-image: url('../images/smart-plug.svg');
+  background-image: url('../optimized-images/smart-plug.svg');
 }
 
 .new-thing.web-thing .new-thing-icon {
-  background-image: url('../images/web-thing-icon.svg');
+  background-image: url('../optimized-images/web-thing-icon.svg');
 }
 
 #add-by-url-anchor:link,

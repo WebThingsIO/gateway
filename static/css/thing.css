@@ -18,7 +18,7 @@
   height: 12.8rem;
   background-size: 12.8rem;
   background-repeat: no-repeat;
-  background-image: url('../images/unknown-thing.png');
+  background-image: url('../optimized-images/unknown-thing.png');
 }
 
 .thing-details-link {
@@ -31,7 +31,7 @@
   background-size: 2.4rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../images/thing.svg');
+  background-image: url('../optimized-images/thing.svg');
   border: 1px solid white;
   border-radius: 2rem;
   width: 4rem;
@@ -83,29 +83,29 @@
 /* On/Off Switch */
 
 .on-off-switch .thing-icon {
-  background-image: url('../images/on-off-switch.png');
+  background-image: url('../optimized-images/on-off-switch.png');
 }
 
 .on-off-switch.on .thing-icon {
-  background-image: url('../images/on-off-switch-on.png');
+  background-image: url('../optimized-images/on-off-switch-on.png');
 }
 
 .on-off-switch.off .thing-icon {
-  background-image: url('../images/on-off-switch-off.png');
+  background-image: url('../optimized-images/on-off-switch-off.png');
 }
 
 /* Binary Sensor */
 
 .binary-sensor .thing-icon {
-  background-image: url('../images/binary-sensor.png');
+  background-image: url('../optimized-images/binary-sensor.png');
 }
 
 .binary-sensor.on .thing-icon {
-  background-image: url('../images/binary-sensor-on.png');
+  background-image: url('../optimized-images/binary-sensor-on.png');
 }
 
 .binary-sensor.off .thing-icon {
-  background-image: url('../images/binary-sensor-off.png');
+  background-image: url('../optimized-images/binary-sensor-off.png');
 }
 
 /* Multi Level Sensor */
@@ -130,15 +130,15 @@
 /* On/Off Light */
 
 .on-off-light .thing-icon {
-  background-image: url('../images/bulb.png');
+  background-image: url('../optimized-images/bulb.png');
 }
 
 .on-off-light.on .thing-icon {
-  background-image: url('../images/bulb-on.png');
+  background-image: url('../optimized-images/bulb-on.png');
 }
 
 .on-off-light.off .thing-icon {
-  background-image: url('../images/bulb-off.png');
+  background-image: url('../optimized-images/bulb-off.png');
 }
 
 /* Color Light */
@@ -326,16 +326,16 @@
   background-color: #89b6d6;
   background-size: 6.4rem;
   background-position: center 2rem;
-  background-image: url('../images/smart-plug-off.svg');
+  background-image: url('../optimized-images/smart-plug-off.svg');
 }
 
 .smart-plug.on .thing-icon, .smart-plug-container.on .thing-icon {
-  background-image: url('../images/smart-plug-on.svg');
+  background-image: url('../optimized-images/smart-plug-on.svg');
   background-color: #ffffff;
 }
 
 .smart-plug.off .thing-icon, .smart-plug-container.off .thing-icon {
-  background-image: url('../images/smart-plug-off.svg');
+  background-image: url('../optimized-images/smart-plug-off.svg');
 }
 
 .smart-plug-label {
@@ -381,7 +381,7 @@
   height : 3rem;
   float: right;
   margin : 0.1rem 0;
-  background: url("../images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 

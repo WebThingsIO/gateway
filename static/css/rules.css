@@ -29,7 +29,7 @@
   background-size: 3.2rem;
   background-repeat: no-repeat;
   background-position: 2rem;
-  background-image: url('../images/rules-icon.png');
+  background-image: url('../optimized-images/rules-icon.png');
 }
 
 .rule {
@@ -56,7 +56,7 @@
 
 .rule-preview {
   border-radius: 0.5rem 0.5rem 0 0;
-  background: url(/images/background-small.png);
+  background: url('../optimized-images/background-small.png');
   box-sizing: border-box;
   padding: 3rem;
   width: 100%;
@@ -130,7 +130,7 @@
   position: absolute;
   top: -1.8rem;
   right: -1.8rem;
-  background: url(/images/delete-button.png);
+  background: url('../optimized-images/delete-button.png');
   background-size: 3.6rem;
   width: 3.6rem;
   height: 3.6rem;
@@ -175,7 +175,7 @@
 #create-rule-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/add.svg');
+  background-image: url('../optimized-images/add.svg');
 }
 
 #create-rule-hint {

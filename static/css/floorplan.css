@@ -23,13 +23,13 @@
 #floorplan-edit-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/edit.svg');
+  background-image: url('../optimized-images/edit.svg');
 }
 
 #floorplan-done-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../images/done.svg');
+  background-image: url('../optimized-images/done.svg');
 }
 
 #floorplan-upload-form {
@@ -49,7 +49,7 @@
 
 #floorplan-upload-button {
   margin: 1rem;
-  background-image: url('../images/upload.png');
+  background-image: url('../optimized-images/upload.png');
   background-repeat: no-repeat;
   background-position: 0.75rem;
   background-size: 2.4rem;
@@ -57,7 +57,7 @@
 }
 
 #floorplan-upload-button.loading {
-  background-image: url('../images/loading.gif');
+  background-image: url('../optimized-images/loading.gif');
 }
 
 #floorplan-view .hint {
