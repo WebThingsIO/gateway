@@ -207,37 +207,12 @@ const webpackWeb = {
           /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         use: [
           {
-            loader: 'cache-loader',
-            options: {
-              cacheDirectory: 'build/.cache/image',
-            },
-          },
-          {
             loader: 'url-loader',
             options: {
               limit: 8000,
               fallback: 'file-loader',
               publicPath: '/images',
               outputPath: 'images',
-            },
-          },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              mozjpeg: {
-                progressive: true,
-                quality: 80,
-              },
-              pngquant: {
-                quality: '65-90',
-                speed: 4,
-              },
-              optipng: {
-                enabled: true,
-              },
-              gifsicle: {
-                interlaced: false,
-              },
             },
           },
         ],
