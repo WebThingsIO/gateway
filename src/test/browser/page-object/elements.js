@@ -8,7 +8,7 @@ class Elements {
   }
 
   defineDisplayedProperty(name, selector) {
-    // Create new Method which checks elements are displayed.
+    // Create new method which checks if elements are displayed.
     /**
      * @method hasName
      * @return boolean
@@ -24,8 +24,7 @@ class Elements {
       if (elements.value.length == 0) {
         return false;
       }
-      // We should check all elements are displayed,
-      // if selector muches multiple elements.
+      // Check that all elements are displayed which match the selector.
       return await elements.value.reduce(async (result, e) => {
         const isExisting = await this.browser.elementIdDisplayed(e.ELEMENT);
         return result && isExisting;
@@ -33,7 +32,7 @@ class Elements {
     };
   }
 
-  // Create new Method which waits elements are displayed.
+  // Create new method which waits for elements are displayed.
   defineWaitForProperty(name, selector) {
     /**
      * @method waitForName
@@ -53,7 +52,7 @@ class Elements {
     };
   }
 
-  // Create new Method which return element.
+  // Create new method which defines an HTML element.
   defineElement(name, selector) {
     /**
      * @method name
@@ -74,7 +73,7 @@ class Elements {
     this.defineWaitForProperty(name, selector);
   }
 
-  // Create new Method which return elements.
+  // Create new method which defines multiple HTML elements.
   defineElements(name, selector) {
     /**
      * @method name
