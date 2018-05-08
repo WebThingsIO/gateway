@@ -51,7 +51,7 @@ NewThingsController.ws('/', function(websocket) {
  * Handle POST requests to /new_things
  */
 NewThingsController.post('/', async (request, response) => {
-  if (!request.body || !request.body.url) {
+  if (!request.body || !request.body.hasOwnProperty('url')) {
     response.status(400).send('No URL in thing description');
     return;
   }

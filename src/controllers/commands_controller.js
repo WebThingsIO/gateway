@@ -85,7 +85,7 @@ function toText(res) {
  * thing API.
  */
 CommandsController.post('/', function(request, response) {
-  if (!request.body || typeof request.body.text === 'undefined') {
+  if (!request.body || !request.body.hasOwnProperty('text')) {
     response.status(400).send(JSON.stringify(
       {message: 'Text element not defined'}));
     return;
