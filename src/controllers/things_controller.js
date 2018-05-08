@@ -36,7 +36,7 @@ ThingsController.get('/', function(request, response) {
  * Handle creating a new thing.
  */
 ThingsController.post('/', async (request, response) => {
-  if (!request.body || !request.body.id) {
+  if (!request.body || !request.body.hasOwnProperty('id')) {
     response.status(400).send('No id in thing description');
     return;
   }
@@ -181,7 +181,8 @@ ThingsController.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController);
 ThingsController.patch('/:thingId', function(request, response) {
   const thingId = request.params.thingId;
   if (!request.body ||
-    !request.body.floorplanX || !request.body.floorplanY) {
+      !request.body.hasOwnProperty('floorplanX') ||
+      !request.body.hasOwnProperty('floorplanY')) {
     response.status(400).send('x and y properties needed to position Thing');
     return;
   }

@@ -35,7 +35,7 @@ AddonsController.get('/', async (request, response) => {
 AddonsController.put('/:addonName', async (request, response) => {
   const addonName = request.params.addonName;
 
-  if (!request.body || typeof request.body.enabled === 'undefined') {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Enabled property not defined');
     return;
   }

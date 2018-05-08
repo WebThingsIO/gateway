@@ -35,7 +35,7 @@ SettingsController.put(
   async (request, response) => {
     const experimentName = request.params.experimentName;
 
-    if (!request.body || typeof request.body.enabled === 'undefined') {
+    if (!request.body || !request.body.hasOwnProperty('enabled')) {
       response.status(400).send('Enabled property not defined');
       return;
     }
@@ -78,6 +78,12 @@ SettingsController.get(
   });
 
 SettingsController.post('/reclaim', async (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('subdomain')) {
+    response.statusMessage = 'Subdomain missing from request';
+    response.status(400).end();
+    return;
+  }
+
   const subdomain = request.body.subdomain;
 
   try {
@@ -92,6 +98,14 @@ SettingsController.post('/reclaim', async (request, response) => {
 });
 
 SettingsController.post('/subscribe', async (request, response) => {
+  if (!request.body ||
+      !request.body.hasOwnProperty('email') ||
+      !request.body.hasOwnProperty('subdomain')) {
+    response.statusMessage = 'Invalid request';
+    response.status(400).end();
+    return;
+  }
+
   const email = request.body.email.toLowerCase();
   const reclamationToken = request.body.reclamationToken;
   const subdomain = request.body.subdomain;
@@ -150,7 +164,7 @@ SettingsController.post('/subscribe', async (request, response) => {
   try {
     let subscribeUrl = `${config.get('ssltunnel.registration_endpoint')
     }/subscribe?name=${subdomain}&email=${email}`;
-    if (reclamationToken) {
+    if (typeof reclamationToken !== 'undefined') {
       subscribeUrl += `&reclamationToken=${reclamationToken.trim()}`;
     }
 
