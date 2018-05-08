@@ -13,16 +13,17 @@
 
 const config = require('config');
 const Constants = require('./constants');
-const EventEmitter = require('events').EventEmitter;
 const Deferred = require('./deferred');
+const EventEmitter = require('events').EventEmitter;
+const Platform = require('./platform');
 const Settings = require('./models/settings');
 const UserProfile = require('./user-profile');
+const Utils = require('./utils');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const semver = require('semver');
 const tar = require('tar');
-const Utils = require('./utils');
 const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
@@ -1076,7 +1077,7 @@ class AddonManager extends EventEmitter {
    */
   async updateAddons() {
     const api = config.get('addonManager.api');
-    const architecture = Utils.getArchitecture();
+    const architecture = Platform.getArchitecture();
     const addonPath = UserProfile.addonsDir;
     const available = {};
 

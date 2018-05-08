@@ -6,6 +6,7 @@
 const {server, chai} = require('../common');
 const pFinal = require('../promise-final');
 const Database = require('../../db');
+const Platform = require('../../platform');
 const {
   TEST_USER,
   createUser,
@@ -70,5 +71,69 @@ describe('settings/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('enabled');
     expect(res.body.enabled).toEqual(true);
+  });
+
+  it('Get platform info', async () => {
+    const res = await chai.request(server)
+      .get(`${Constants.SETTINGS_PATH}/system/platform`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('architecture');
+    expect(res.body).toHaveProperty('raspberryPi');
+    expect(res.body.architecture).toEqual(Platform.getArchitecture());
+    expect(res.body.raspberryPi).toEqual(Platform.isRaspberryPi());
+  });
+
+  it('Get SSH status', async () => {
+    const res = await chai.request(server)
+      .get(`${Constants.SETTINGS_PATH}/system/ssh`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('enabled');
+    expect(res.body.enabled).toEqual(false);
+  });
+
+  it('Toggle SSH', async () => {
+    const err = await pFinal(chai.request(server)
+      .put(`${Constants.SETTINGS_PATH}/system/ssh`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({enabled: true}));
+
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('Restart gateway', async () => {
+    const err = await pFinal(chai.request(server)
+      .post(`${Constants.SETTINGS_PATH}/system/actions`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({action: 'restartGateway'}));
+
+    expect(err.response.status).toEqual(500);
+  });
+
+  it('Restart system', async () => {
+    const err = await pFinal(chai.request(server)
+      .post(`${Constants.SETTINGS_PATH}/system/actions`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({action: 'restartSystem'}));
+
+    expect(err.response.status).toEqual(500);
+  });
+
+  it('Unknown platform action', async () => {
+    const err = await pFinal(chai.request(server)
+      .post(`${Constants.SETTINGS_PATH}/system/actions`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({action: 'thisIsFake'}));
+
+    expect(err.response.status).toEqual(400);
   });
 });
