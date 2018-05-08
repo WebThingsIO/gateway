@@ -50,13 +50,13 @@ describe('Thing', () => {
     const booleanProps = await detailPage.booleanProperties();
     expect(booleanProps.length).toEqual(1);
     const booleanValue = await booleanProps[0].getValue();
-    expect(booleanValue).toEqual('on');
+    expect(booleanValue).toBeTruthy();
 
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
     let numberValue = await numberProps[0].getValue();
-    expect(numberValue).toEqual('10');
-    await numberProps[0].setValue('20');
+    expect(numberValue).toEqual(10);
+    await numberProps[0].setValue(20);
     await waitForExpect(async () => {
       numberValue = await getProperty(desc.id, 'numberProp');
       expect(numberValue).toEqual(20);
@@ -112,7 +112,7 @@ describe('Thing', () => {
     const booleanProps = await detailPage.booleanProperties();
     expect(booleanProps.length).toEqual(1);
     const booleanValue = await booleanProps[0].getValue();
-    expect(booleanValue).toEqual('on');
+    expect(booleanValue).toBeTruthy();
     const booleanId = await booleanProps[0].getInputId();
     expect(booleanId).toEqual(
       `checkbox-${Utils.escapeHtmlForIdClass('spaced boolean')}`
@@ -121,7 +121,7 @@ describe('Thing', () => {
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
     const numberValue = await numberProps[0].getValue();
-    expect(numberValue).toEqual('10');
+    expect(numberValue).toEqual(10);
     const numberId = await numberProps[0].getInputId();
     expect(numberId).toEqual(
       `number-${Utils.escapeHtmlForIdClass('spaced number')}`

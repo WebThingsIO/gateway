@@ -27,7 +27,10 @@ class InputPropertySection extends Section {
   }
 
   async setValue(value) {
-    const text = await this.getValue();
+    let text = await this.getValue();
+    if (typeof text !== 'string') {
+      text = text.toString();
+    }
     const keys = [];
     for (let i = 0; i < text.length; i++) {
       keys.push(BACKSPACE_UNICODE);
@@ -66,7 +69,12 @@ class OnOffPropertySection extends InputPropertySection {
 class BooleanPropertySection extends InputPropertySection {
   async click() {
     // TODO
-    // browser.click method dose not work well.
+    // browser.click method does not work well.
+  }
+
+  async getValue() {
+    const stringValue = await super.getValue();
+    return stringValue === 'on';
   }
 }
 
@@ -74,6 +82,17 @@ class StringPropertySection extends InputPropertySection {
 }
 
 class NumberPropertySection extends InputPropertySection {
+  async setValue(number) {
+    if (typeof number !== 'string') {
+      number = number.toString();
+    }
+    await super.setValue(number);
+  }
+
+  async getValue() {
+    const stringValue = await super.getValue();
+    return Number(stringValue);
+  }
 }
 
 class ThingDetailPage extends Page {
