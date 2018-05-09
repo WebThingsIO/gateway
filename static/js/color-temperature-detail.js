@@ -21,9 +21,11 @@ function ColorTemperatureDetail(thing, min, max) {
 ColorTemperatureDetail.prototype.attach = function() {
   this.temperature =
     this.thing.element.querySelector('.color-temperature-input');
-  this.temperature.addEventListener('input', () => {
-    this.thing.updateColorTemperature(this.temperature.value);
-  });
+  if (typeof this.thing.updateColorTemperature === 'function') {
+    this.temperature.addEventListener('input', () => {
+      this.thing.updateColorTemperature(this.temperature.value);
+    });
+  }
   this.temperature.addEventListener('change', this.set.bind(this));
 };
 

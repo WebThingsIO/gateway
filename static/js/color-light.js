@@ -15,9 +15,7 @@ const ColorDetail = require('./color-detail');
 const OnOffDetail = require('./on-off-detail');
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
-const ThingDetailLayout = require('./thing-detail-layout');
 const ColorTemperatureDetail = require('./color-temperature-detail');
-const Utils = require('./utils');
 
 /**
  * ColorLight Constructor (extends OnOffSwitch).
@@ -26,18 +24,26 @@ const Utils = require('./utils');
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function ColorLight(description, format) {
-  if (format === 'htmlDetail') {
-    this.details = this.details || {};
-    this.details.on = new OnOffDetail(this);
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.on = {
+      href: description.properties.on.href,
+      detail: new OnOffDetail(this),
+    };
 
     if (description.properties.hasOwnProperty('color')) {
-      this.details.color = new ColorDetail(this);
+      this.displayedProperties.color = {
+        href: description.properties.color.href,
+        detail: new ColorDetail(this),
+      };
     } else if (description.properties.hasOwnProperty('colorTemperature')) {
       const prop = description.properties.colorTemperature;
       const min = prop.hasOwnProperty('min') ? prop.min : prop.minimum;
       const max = prop.hasOwnProperty('max') ? prop.max : prop.maximum;
-      this.details.colorTemperature =
-        new ColorTemperatureDetail(this, min, max);
+      this.displayedProperties.colorTemperature = {
+        href: prop.href,
+        detail: new ColorTemperatureDetail(this, min, max),
+      };
     }
   }
 
@@ -45,38 +51,27 @@ function ColorLight(description, format) {
   this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
                                   pngBaseIcon: '/images/bulb.png',
                                   thingCssClass: 'color-light-container',
+                                  thingDetailCssClass: 'color-light-container',
                                   addIconToView: false});
 
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
 
-  if (this.propertyDescriptions.hasOwnProperty('color')) {
-    this.colorPropertyUrl = new URL(this.propertyDescriptions.color.href,
-                                    this.href);
-  } else if (this.propertyDescriptions.hasOwnProperty('colorTemperature')) {
-    this.colorTemperaturePropertyUrl =
-      new URL(this.propertyDescriptions.colorTemperature.href, this.href);
-  }
-
-  this.updateStatus();
   this.colorLight = this.element.querySelector('.color-light');
   this.colorLightLabel = this.element.querySelector('.color-light-label');
   this.colorLightIconPath =
     this.element.querySelector('.color-light-icon-path');
 
   if (format === 'htmlDetail') {
-    for (const prop in this.details) {
-      this.details[prop].attach();
-    }
-
-    this.layout = new ThingDetailLayout(
-      this.element.querySelectorAll('.thing-detail-container'));
+    this.attachHtmlDetail();
   } else {
     this.colorLight.addEventListener('click', this.handleClick.bind(this));
   }
+
+  this.updateStatus();
+
   return this;
 }
 
@@ -144,79 +139,19 @@ ColorLight.prototype.iconView = function() {
 };
 
 /**
- * HTML view for Color bulb
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-ColorLight.prototype.htmlView = function() {
-  return `<div class="thing ${this.thingCssClass}">
-    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
-    ${this.iconView()}
-    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-  </div>`;
-};
-
-/**
- * HTML detail view for Color bulb
- */
-ColorLight.prototype.htmlDetailView = function() {
-  let detailsHTML = '';
-  for (const prop in this.details) {
-    detailsHTML += this.details[prop].view();
+ColorLight.prototype.updateProperty = function(name, value) {
+  if (name === 'on') {
+    this.updateOn(value);
   }
-
-  return `<div class="color-light-container">
-    <div class="thing">
-      ${this.iconView()}
-    </div>
-    ${detailsHTML}
-  </div>`;
-};
-
-/**
- * Update the status of the light.
- */
-ColorLight.prototype.updateStatus = function() {
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-
-  const promises = [];
-  promises.push(fetch(this.onPropertyUrl, opts));
-
-  if (this.hasOwnProperty('colorPropertyUrl')) {
-    promises.push(fetch(this.colorPropertyUrl, opts));
-  } else if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
-    promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
+  if (name === 'color') {
+    this.updateColor(value);
   }
-
-  Promise.all(promises).then((responses) => {
-    return Promise.all(responses.map((response) => {
-      return response.json();
-    }));
-  }).then((responses) => {
-    responses.forEach((response) => {
-      this.onPropertyStatus(response);
-    });
-  }).catch((error) => {
-    console.error(`Error fetching on/off switch status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-ColorLight.prototype.onPropertyStatus = function(data) {
-  if (data.hasOwnProperty('on')) {
-    this.updateOn(data.on);
-  }
-  if (data.hasOwnProperty('color')) {
-    this.updateColor(data.color);
-  }
-  if (data.hasOwnProperty('colorTemperature')) {
-    this.updateColorTemperature(data.colorTemperature);
+  if (name === 'colorTemperature') {
+    this.updateColorTemperature(value);
   }
 };
 
@@ -229,8 +164,8 @@ ColorLight.prototype.updateOn = function(on) {
   const onoff = on ? 'on' : 'off';
   this.colorLightLabel.textContent = onoff;
 
-  if (this.details) {
-    this.details.on.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.on.detail.update();
   }
 
   this.colorLight.style.background = on ? 'white' : '';
@@ -252,8 +187,8 @@ ColorLight.prototype.updateColor = function(color) {
     return;
   }
 
-  if (this.details) {
-    this.details.color.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.color.detail.update();
   }
 
   this.updateIcon();
@@ -263,7 +198,7 @@ ColorLight.prototype.setColor = function(color) {
   const payload = {
     color: color,
   };
-  fetch(this.colorPropertyUrl, {
+  fetch(this.displayedProperties.color.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: Object.assign(API.headers(), {
@@ -290,8 +225,8 @@ ColorLight.prototype.updateColorTemperature = function(temperature) {
     return;
   }
 
-  if (this.details) {
-    this.details.colorTemperature.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.colorTemperature.detail.update();
   }
 
   this.updateIcon();
@@ -305,7 +240,7 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
   const payload = {
     colorTemperature: temperature,
   };
-  fetch(this.colorTemperaturePropertyUrl, {
+  fetch(this.displayedProperties.colorTemperature.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: Object.assign(API.headers(), {

@@ -12,7 +12,6 @@
 
 const API = require('./api');
 const Thing = require('./thing');
-const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
 
 /**
@@ -22,7 +21,6 @@ const Utils = require('./utils');
  */
 const UnknownThing = function(description, format) {
   this.displayedProperties = this.displayedProperties || {};
-
   if (description.properties) {
     for (const name in description.properties) {
       const prop = description.properties[name];
@@ -59,71 +57,17 @@ const UnknownThing = function(description, format) {
     // For now the SVG view is just a link.
     return this;
   }
-  this.updateStatus();
 
   if (format === 'htmlDetail') {
-    for (const prop of Object.values(this.displayedProperties)) {
-      prop.detail.attach();
-    }
-
-    this.layout = new ThingDetailLayout(
-      this.element.querySelectorAll('.thing-detail-container'));
+    this.attachHtmlDetail();
   }
+
+  this.updateStatus();
 
   return this;
 };
 
 UnknownThing.prototype = Object.create(Thing.prototype);
-
-/**
- * Update the status of the unknown thing.
- */
-UnknownThing.prototype.updateStatus = function() {
-  const urls = Object.values(this.displayedProperties).map((v) => v.href);
-  if (urls.length === 0) {
-    return;
-  }
-
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-
-  const requests = urls.map((u) => fetch(u, opts));
-  Promise.all(requests).then((responses) => {
-    return Promise.all(responses.map((response) => {
-      return response.json();
-    }));
-  }).then((responses) => {
-    responses.forEach((response) => {
-      this.onPropertyStatus(response);
-    });
-  }).catch((error) => {
-    console.error(`Error fetching properties: ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-UnknownThing.prototype.onPropertyStatus = function(data) {
-  for (const prop in data) {
-    if (!this.displayedProperties.hasOwnProperty(prop)) {
-      continue;
-    }
-
-    const value = data[prop];
-    if (typeof value === 'undefined' || value === null) {
-      continue;
-    }
-
-    this.properties[prop] = value;
-    this.updateProperty(prop, value);
-  }
-};
 
 /**
  * Update the display for the provided property.
@@ -169,44 +113,9 @@ UnknownThing.prototype.setProperty = function(name, value) {
   });
 };
 
-/**
- * HTML view for unknown thing.
- */
-UnknownThing.prototype.htmlView = function() {
-  if (Object.keys(this.displayedProperties).length > 0) {
-    return `<div class="thing">
-      <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
-      <div class="unknown-thing">
-        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-      </div>
-      <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-    </div>`;
-  } else {
-    return `<div class="thing">
-      <div class="unknown-thing">
-        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-      </div>
-      <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-    </div>`;
-  }
-};
-
-/**
- * HTML detail view for unknown thing.
- */
-UnknownThing.prototype.htmlDetailView = function() {
-  let detailsHTML = '';
-  for (const prop in this.displayedProperties) {
-    detailsHTML += this.displayedProperties[prop].detail.view();
-  }
-
-  return `<div class="unknown-thing-container">
-    <div class="thing">
-      <div class="unknown-thing">
-        <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-      </div>
-    </div>
-    ${detailsHTML}
+UnknownThing.prototype.iconView = function() {
+  return `<div class="unknown-thing">
+  <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
   </div>`;
 };
 

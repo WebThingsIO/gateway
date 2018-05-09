@@ -15,8 +15,6 @@ const LevelDetail = require('./level-detail');
 const OnOffDetail = require('./on-off-detail');
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
-const ThingDetailLayout = require('./thing-detail-layout');
-const Utils = require('./utils');
 
 const MULTI_LEVEL_SWITCH_OFF_BAR = 'white';
 const MULTI_LEVEL_SWITCH_OFF_BLANK = '#89b6d6';
@@ -30,42 +28,43 @@ const MULTI_LEVEL_SWITCH_ON_BLANK = 'white';
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function MultiLevelSwitch(description, format, options) {
-  if (format === 'htmlDetail') {
-    this.details = this.details || {};
-    this.details.on = new OnOffDetail(this);
-    this.details.level = new LevelDetail(this);
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.on = {
+      href: description.properties.on.href,
+      detail: new OnOffDetail(this),
+    };
+    this.displayedProperties.level = {
+      href: description.properties.level.href,
+      detail: new LevelDetail(this),
+    };
   }
 
   const opts = options || {svgBaseIcon: '/images/level.svg',
                            pngBaseIcon: '/images/level.svg',
                            thingCssClass: '',
+                           thingDetailCssClass: '',
                            addIconToView: false};
-
   this.base = Thing;
   this.base(description, format, opts);
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  this.onPropertyUrl = new URL(this.propertyDescriptions.on.href, this.href);
-  this.levelPropertyUrl = new URL(this.propertyDescriptions.level.href,
-                                  this.href);
-
-  this.updateStatus();
 
   this.levelBar = this.element.querySelector('.level-bar');
   this.levelBarLabel = this.element.querySelector('.level-bar-label');
 
   if (format === 'htmlDetail') {
-    this.details.on.attach();
-    this.details.level.attach();
-
-    this.layout = new ThingDetailLayout(
-      this.element.querySelectorAll('.thing-detail-container'));
+    this.attachHtmlDetail();
   } else {
     this.element.querySelector('.level-bar-container')
       .addEventListener('click', this.handleClick.bind(this));
   }
+
+  this.updateStatus();
+
   return this;
 }
 
@@ -81,68 +80,16 @@ MultiLevelSwitch.prototype.iconView = function() {
 };
 
 /**
- * HTML view for multi level switch
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-MultiLevelSwitch.prototype.htmlView = function() {
-  return `<div class="thing ${this.thingCssClass}">
-    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
-    ${this.iconView()}
-    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-  </div>`;
-};
-
-/**
- * HTML detail view for multi level switch
- */
-MultiLevelSwitch.prototype.htmlDetailView = function() {
-  let details = '';
-  if (this.details) {
-    details = this.details.on.view() + this.details.level.view();
+MultiLevelSwitch.prototype.updateProperty = function(name, value) {
+  if (name === 'on') {
+    this.updateOn(value);
   }
-
-  return `<div>
-    <div class="thing ${this.thingCssClass}">
-      ${this.iconView()}
-      ${details}
-    </div>
-  </div>`;
-};
-
-/**
- * Update the status of the switch.
- */
-MultiLevelSwitch.prototype.updateStatus = function() {
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-
-  fetch(this.onPropertyUrl, opts).then((response) => {
-    return response.json();
-  }).then((response) => {
-    this.onPropertyStatus(response);
-    return fetch(this.levelPropertyUrl, opts);
-  }).then((response) => {
-    return response.json();
-  }).then((response) => {
-    this.onPropertyStatus(response);
-  }).catch((error) => {
-    console.error(`Error fetching multi level switch status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-MultiLevelSwitch.prototype.onPropertyStatus = function(data) {
-  if (data.hasOwnProperty('on')) {
-    this.updateOn(data.on);
-  }
-  if (data.hasOwnProperty('level')) {
-    this.updateLevel(data.level);
+  if (name === 'level') {
+    this.updateLevel(value);
   }
 };
 
@@ -158,8 +105,8 @@ MultiLevelSwitch.prototype.updateOn = function(on) {
     this.levelBarLabel.textContent = 'OFF';
   }
 
-  if (this.details) {
-    this.details.on.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.on.detail.update();
   }
 
   if (on) {
@@ -190,8 +137,8 @@ MultiLevelSwitch.prototype.updateLevel = function(level) {
     this.levelBarLabel.textContent = `${Math.round(level)}%`;
   }
 
-  if (this.details) {
-    this.details.level.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.level.detail.update();
   }
 };
 
@@ -203,7 +150,7 @@ MultiLevelSwitch.prototype.setLevel = function(level) {
   const payload = {
     level: level,
   };
-  fetch(this.levelPropertyUrl, {
+  fetch(this.displayedProperties.level.href, {
     method: 'PUT',
     body: JSON.stringify(payload),
     headers: Object.assign(API.headers(), {

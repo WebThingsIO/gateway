@@ -10,9 +10,7 @@
 
 'use strict';
 
-const API = require('./api');
 const Thing = require('./thing');
-const Utils = require('./utils');
 
 /**
  * MultiLevelSensor Constructor (extends Thing).
@@ -20,68 +18,51 @@ const Utils = require('./utils');
  * @param Object description Thing description object.
  */
 const MultiLevelSensor = function(description, format) {
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.level = {
+      href: description.properties.level.href,
+    };
+  }
+
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
                                   pngBaseIcon: '/images/binary-sensor.png',
                                   thingCssClass: 'multi-level-sensor',
+                                  thingDetailCssClass: 'multi-level-sensor',
                                   addIconToView: false});
+
   if (format == 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
-  // Parse level property URL
-  if (this.propertyDescriptions.level &&
-    this.propertyDescriptions.level.href) {
-    this.levelPropertyUrl =
-      new URL(this.propertyDescriptions.level.href, this.href);
-  }
+
   this.levelText = this.element.querySelector('.multi-level-sensor-text');
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
+  }
+
   this.updateStatus();
+
   return this;
 };
 
 MultiLevelSensor.prototype = Object.create(Thing.prototype);
 
 /**
- * Update the level status of the multi level sensor.
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-MultiLevelSensor.prototype.updateStatus = function() {
-  if (!this.levelPropertyUrl) {
+MultiLevelSensor.prototype.updateProperty = function(name, value) {
+  if (name !== 'level') {
     return;
   }
-  const opts = {
-    headers: {
-      Authorization: `Bearer ${API.jwt}`,
-      Accept: 'application/json',
-    },
-  };
-  fetch(this.levelPropertyUrl, opts).then((function(response) {
-    return response.json();
-  }).bind(this)).then((function(response) {
-    this.properties.level = response.level;
-    if (response.level === null) {
-      return;
-    }
-
-    this.showLevel(response.level);
-  }).bind(this)).catch(function(error) {
-    console.error(`Error fetching sensor level status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-MultiLevelSensor.prototype.onPropertyStatus = function(data) {
-  if (!data.hasOwnProperty('level')) {
+  this.properties.level = value;
+  if (value === null) {
     return;
   }
-  this.properties.level = data.level;
-  if (data.level === null) {
-    return;
-  }
-  this.showLevel(data.level);
+  this.showLevel(value);
 };
 
 /**
@@ -98,25 +79,6 @@ MultiLevelSensor.prototype.iconView = function() {
   }
 
   return `<div class="multi-level-sensor-text">${Math.round(level)}%</div>`;
-};
-
-/**
- * HTML view for Multi level sensor
- */
-MultiLevelSensor.prototype.htmlView = function() {
-  return `<div class="thing multi-level-sensor">
-    ${this.iconView()}
-    <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
-  </div>`;
-};
-
-/**
- * HTML detail view for Multi level sensor
- */
-MultiLevelSensor.prototype.htmlDetailView = function() {
-  return `<div class="thing multi-level-sensor">
-    ${this.iconView()}
-  </div>`;
 };
 
 module.exports = MultiLevelSensor;

@@ -17,8 +17,10 @@ function OnOffDetail(thing) {
 
 OnOffDetail.prototype.attach = function() {
   this.onOffSwitch = this.thing.element.querySelector('.switch-checkbox');
-  this.onOffSwitch.addEventListener('click',
-                                    this.thing.handleClick.bind(this.thing));
+  if (typeof this.thing.handleClick === 'function') {
+    this.onOffSwitch.addEventListener('click',
+                                      this.thing.handleClick.bind(this.thing));
+  }
   this.onOffLabel = this.thing.element.querySelector('.on-off-label');
 };
 

@@ -11,7 +11,6 @@
 
 'use strict';
 
-const API = require('./api');
 const ColorLight = require('./color-light');
 const LevelDetail = require('./level-detail');
 const MultiLevelSwitch = require('./multi-level-switch');
@@ -23,9 +22,12 @@ const MultiLevelSwitch = require('./multi-level-switch');
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function DimmableColorLight(description, format) {
-  if (format === 'htmlDetail') {
-    this.details = this.details || {};
-    this.details.level = new LevelDetail(this);
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.level = {
+      href: description.properties.level.href,
+      detail: new LevelDetail(this),
+    };
   }
 
   this.base = ColorLight;
@@ -36,10 +38,11 @@ function DimmableColorLight(description, format) {
     return this;
   }
 
-  this.levelPropertyUrl = new URL(this.propertyDescriptions.level.href,
-                                  this.href);
-
   this.colorLightLabel.classList.add('level-bar-label');
+
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
+  }
 
   this.updateStatus();
 
@@ -49,60 +52,26 @@ function DimmableColorLight(description, format) {
 DimmableColorLight.prototype = Object.create(ColorLight.prototype);
 
 /**
- * Update the status of the light.
+ * Update the display for the provided property.
+ * @param {string} name - name of the property
+ * @param {*} value - value of the property
  */
-DimmableColorLight.prototype.updateStatus = function() {
-  if (!this.levelPropertyUrl) {
-    return;
-  }
-
-  const opts = {
-    headers: API.headers(),
-  };
-
-  const promises = [];
-  promises.push(fetch(this.onPropertyUrl, opts));
-  promises.push(fetch(this.levelPropertyUrl, opts));
-
-  if (this.hasOwnProperty('colorPropertyUrl')) {
-    promises.push(fetch(this.colorPropertyUrl, opts));
-  } else if (this.hasOwnProperty('colorTemperaturePropertyUrl')) {
-    promises.push(fetch(this.colorTemperaturePropertyUrl, opts));
-  }
-
-  Promise.all(promises).then((responses) => {
-    return Promise.all(responses.map((response) => {
-      return response.json();
-    }));
-  }).then((responses) => {
-    responses.forEach((response) => {
-      this.onPropertyStatus(response);
-    });
-  }).catch((error) => {
-    console.error(`Error fetching on/off switch status ${error}`);
-  });
-};
-
-/**
- * Handle a 'propertyStatus' message
- * @param {Object} properties - property data
- */
-DimmableColorLight.prototype.onPropertyStatus = function(data) {
-  if (data.hasOwnProperty('on')) {
-    this.updateOn(data.on);
+DimmableColorLight.prototype.updateProperty = function(name, value) {
+  if (name === 'on') {
+    this.updateOn(value);
     if (this.properties.on) {
       this.colorLightLabel.textContent =
         `${Math.round(this.properties.level)}%`;
     }
   }
-  if (data.hasOwnProperty('color')) {
-    this.updateColor(data.color);
+  if (name === 'color') {
+    this.updateColor(value);
   }
-  if (data.hasOwnProperty('colorTemperature')) {
-    this.updateColorTemperature(data.colorTemperature);
+  if (name === 'colorTemperature') {
+    this.updateColorTemperature(value);
   }
-  if (data.hasOwnProperty('level')) {
-    this.updateLevel(data.level);
+  if (name === 'level') {
+    this.updateLevel(value);
   }
 };
 
@@ -115,8 +84,8 @@ DimmableColorLight.prototype.updateLevel = function(level) {
     this.colorLightLabel.textContent = `${Math.round(level)}%`;
   }
 
-  if (this.details) {
-    this.details.level.update();
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.level.detail.update();
   }
 };
 
