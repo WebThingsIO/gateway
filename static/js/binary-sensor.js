@@ -30,7 +30,8 @@ const BinarySensor = function(description, format) {
                                   pngBaseIcon: '/images/binary-sensor.png',
                                   thingCssClass: 'binary-sensor',
                                   thingDetailCssClass: 'binary-sensor',
-                                  addIconToView: false});
+                                  addIconToView: false,
+                                  haveDetailView: false});
 
   if (format == 'svg') {
     // For now the SVG view is just a link.

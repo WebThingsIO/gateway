@@ -32,6 +32,8 @@ const Thing = function(description, format, options) {
   this.format = format;
   this.addIconToView =
     typeof opts.addIconToView === 'boolean' ? opts.addIconToView : true;
+  this.haveDetailView =
+    typeof opts.haveDetailView === 'boolean' ? opts.haveDetailView : true;
 
   if (format == 'svg') {
     this.container = document.getElementById('floorplan-things');
@@ -103,11 +105,18 @@ Thing.prototype.iconView = function() {
 };
 
 /**
+ * HTML link for Thing Detail view
+ */
+Thing.prototype.detailLink = function() {
+  return `<a href="${encodeURI(this.href)}" class="thing-details-link"></a>`;
+};
+
+/**
  * HTML view for Thing.
  */
 Thing.prototype.htmlView = function() {
   return `<div class="thing ${this.thingCssClass}">
-    <a href="${encodeURI(this.href)}" class="thing-details-link"></a>
+    ${this.haveDetailView ? this.detailLink() : ''}
     ${this.iconView()}
     <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
   </div>`;

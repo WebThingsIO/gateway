@@ -34,7 +34,8 @@ const OnOffSwitch = function(description, format) {
                                   pngBaseIcon: '/images/on-off-switch.png',
                                   thingCssClass: 'on-off-switch',
                                   thingDetailCssClass: 'on-off-switch',
-                                  addIconToView: false});
+                                  addIconToView: false,
+                                  haveDetailView: false});
 
   if (format == 'svg') {
     // For now the SVG view is just a link.
