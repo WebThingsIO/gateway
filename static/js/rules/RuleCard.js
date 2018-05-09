@@ -16,8 +16,10 @@ function RuleCard(gateway, elt, id, desc) {
   this.rule = new Rule(gateway, desc);
 
   let checked = this.rule.enabled ? 'checked' : '';
+  let invalidWarning = '';
   if (!this.rule.valid()) {
     checked = '';
+    invalidWarning = '[INVALID] ';
     this.elt.classList.add('invalid');
   }
 
@@ -42,7 +44,7 @@ function RuleCard(gateway, elt, id, desc) {
       </div>
     </div>
     <div class="rule-info">
-      <h3>${Utils.escapeHtml(this.rule.name)}</h3>
+      <h3>${invalidWarning}${Utils.escapeHtml(this.rule.name)}</h3>
       <p>${Utils.escapeHtml(this.rule.toHumanDescription())}</p>
     </div>
     <form class="rule-switch switch">
