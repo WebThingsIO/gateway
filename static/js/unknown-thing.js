@@ -10,6 +10,7 @@
 
 'use strict';
 
+const ActionDetail = require('./action-detail');
 const API = require('./api');
 const Thing = require('./thing');
 const Utils = require('./utils');
@@ -46,6 +47,25 @@ const UnknownThing = function(description, format) {
 
         const obj = {href, detail, type: prop.type};
         this.displayedProperties[name] = obj;
+      }
+    }
+  }
+
+  this.displayedActions = this.displayedActions || {};
+  if (description.actions) {
+    let href;
+    for (const link of description.links) {
+      if (link.rel === 'actions') {
+        href = link.href;
+        break;
+      }
+    }
+
+    if (href) {
+      for (const name in description.actions) {
+        const action = description.actions[name];
+        const detail = new ActionDetail(this, name, action.input, href);
+        this.displayedActions[name] = {detail};
       }
     }
   }

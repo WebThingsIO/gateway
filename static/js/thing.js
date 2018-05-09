@@ -43,6 +43,7 @@ const Thing = function(description, format, options) {
     this.container = document.getElementById('things');
   }
   this.displayedProperties = this.displayedProperties || {};
+  this.displayedActions = this.displayedActions || {};
   this.properties = {};
   // Parse base URL of Thing
   if (description.href) {
@@ -80,11 +81,20 @@ const Thing = function(description, format, options) {
  */
 Thing.prototype.attachHtmlDetail = function() {
   for (const prop of Object.values(this.displayedProperties)) {
-    // only attach at first time.
+    // only attach the first time.
     if ((!prop.hasOwnProperty('attached') || !prop.attached) &&
           prop.hasOwnProperty('detail')) {
       prop.detail.attach();
       prop.attached = true;
+    }
+  }
+
+  for (const action of Object.values(this.displayedActions)) {
+    // only attach the first time.
+    if ((!action.hasOwnProperty('attached') || !action.attached) &&
+          action.hasOwnProperty('detail')) {
+      action.detail.attach();
+      action.attached = true;
     }
   }
 
@@ -127,9 +137,16 @@ Thing.prototype.htmlView = function() {
  */
 Thing.prototype.htmlDetailView = function() {
   let detailsHTML = '';
-  for (const prop in this.displayedProperties) {
-    if (this.displayedProperties[prop].hasOwnProperty('detail')) {
-      detailsHTML += this.displayedProperties[prop].detail.view();
+
+  for (const prop of Object.values(this.displayedProperties)) {
+    if (prop.hasOwnProperty('detail')) {
+      detailsHTML += prop.detail.view();
+    }
+  }
+
+  for (const action of Object.values(this.displayedActions)) {
+    if (action.hasOwnProperty('detail')) {
+      detailsHTML += action.detail.view();
     }
   }
 
