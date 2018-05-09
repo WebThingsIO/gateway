@@ -130,7 +130,7 @@ const AddThingScreen = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${API.jwt}`,
       },
-    }).then(function(response) {
+    }).then((response) => {
       if (response.ok) {
         this.actionUrl = null;
         console.log('Successfully cancelled pairing request.');
@@ -138,7 +138,7 @@ const AddThingScreen = {
         console.error(`Error cancelling pairing request ${
           response.statusText}`);
       }
-    }).catch(function(error) {
+    }).catch((error) => {
       console.error(`Error cancelling pairing request ${error}`);
     });
   },
