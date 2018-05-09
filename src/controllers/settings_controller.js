@@ -19,11 +19,11 @@ const config = require('config');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
-const TunnelService = require('../ssltunnel');
-const Settings = require('../models/settings');
 const Constants = require('../constants');
+const Platform = require('../platform');
+const Settings = require('../models/settings');
+const TunnelService = require('../ssltunnel');
 const UserProfile = require('../user-profile');
-const Utils = require('../utils');
 
 const SettingsController = PromiseRouter();
 
@@ -264,8 +264,61 @@ SettingsController.get('/addonsInfo', (request, response) => {
   response.json({
     url: config.get('addonManager.listUrl'),
     api: config.get('addonManager.api'),
-    architecture: Utils.getArchitecture(),
+    architecture: Platform.getArchitecture(),
   });
+});
+
+SettingsController.get('/system/platform', (request, response) => {
+  response.json({
+    architecture: Platform.getArchitecture(),
+    raspberryPi: Platform.isRaspberryPi(),
+  });
+});
+
+SettingsController.get('/system/ssh', (request, response) => {
+  response.json({enabled: Platform.isSshEnabled()});
+});
+
+SettingsController.put('/system/ssh', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Enabled property not defined');
+    return;
+  }
+
+  const enabled = request.body.enabled;
+  if (Platform.toggleSsh(enabled)) {
+    response.status(200).json({enabled});
+  } else {
+    response.status(400).send('Failed to toggle');
+  }
+});
+
+SettingsController.post('/system/actions', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('action')) {
+    response.status(400).send('Action property not defined');
+    return;
+  }
+
+  const action = request.body.action;
+  switch (action) {
+    case 'restartGateway':
+      if (Platform.restartGateway()) {
+        response.status(200).end();
+      } else {
+        response.status(500).send('Failed to restart gateway');
+      }
+      break;
+    case 'restartSystem':
+      if (Platform.restartSystem()) {
+        response.status(200).end();
+      } else {
+        response.status(500).send('Failed to restart system');
+      }
+      break;
+    default:
+      response.status(400).send('Unsupported action');
+      break;
+  }
 });
 
 module.exports = SettingsController;

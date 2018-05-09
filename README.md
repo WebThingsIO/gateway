@@ -296,6 +296,7 @@ $ jest src/test/{test-name}.js
   * **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
   * **`oauth-types.js`** - OAuth types
   * **`passwords.js`** - Password utilities
+  * **`platform.js`** - Platform-specific utilities
   * **`router.js`** - Routes app URLs to controllers
   * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
   * **`tunnel_setup.js`** - Express middleware to determine if the tunnel is set up
