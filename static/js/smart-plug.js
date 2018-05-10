@@ -98,7 +98,7 @@ SmartPlug.prototype = Object.create(OnOffSwitch.prototype);
 
 SmartPlug.prototype.iconView = function() {
   return `<div class="thing-icon">
-    <span class="smart-plug-label">...</span>
+    <span class="smart-plug-label">--</span>
     </div>`;
 };
 

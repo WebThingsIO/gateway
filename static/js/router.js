@@ -16,6 +16,7 @@ const Router = {
     page('/', '/things');
     page('/things', App.showThings.bind(App));
     page('/things/:thingId', App.showThings.bind(App));
+    page('/things/:thingId/actions/:actionName', App.showThings.bind(App));
     page('/settings', App.showSettings.bind(App));
     page('/settings/:section', App.showSettings.bind(App));
     page('/settings/:section/:subsection', App.showSettings.bind(App));

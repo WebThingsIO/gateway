@@ -68,7 +68,8 @@ const App = {
   },
 
   showThings: function(context) {
-    ThingsScreen.show(context.params.thingId || null);
+    ThingsScreen.show(context.params.thingId || null,
+                      context.params.actionName || null);
     this.selectView('things');
   },
 
