@@ -63,6 +63,12 @@ const App = {
     this.currentView = 'things';
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
+    this.overflowButton = document.getElementById('overflow-button');
+    this.overflowButton.addEventListener('click',
+                                         this.toggleOverflowMenu.bind(this));
+    this.overflowMenu = document.getElementById('overflow-menu');
+    this.messageArea = document.getElementById('message-area');
+    this.messageTimeout = null;
     Menu.init();
     Router.init();
   },
@@ -112,6 +118,57 @@ const App = {
 
   hideMenuButton: function() {
     this.menuButton.classList.add('hidden');
+  },
+
+  showOverflowButton: function() {
+    this.overflowButton.classList.remove('hidden');
+  },
+
+  hideOverflowButton: function() {
+    this.overflowButton.classList.add('hidden');
+  },
+
+  buildOverflowMenu: function(links) {
+    let items = '';
+
+    for (const link of links) {
+      items += `<a href="${link.href}">${link.name}</a>`;
+    }
+
+    this.overflowMenu.innerHTML = items;
+  },
+
+  toggleOverflowMenu: function() {
+    if (this.overflowMenu.classList.contains('hidden')) {
+      this.overflowMenu.classList.remove('hidden');
+    } else {
+      this.overflowMenu.classList.add('hidden');
+    }
+  },
+
+  showMessageArea: function() {
+    this.messageArea.classList.remove('hidden');
+  },
+
+  hideMessageArea: function() {
+    this.messageArea.classList.add('hidden');
+  },
+
+  showMessage: function(message, duration) {
+    if (this.messageTimeout !== null) {
+      clearTimeout(this.messageTimeout);
+      this.messageTimeout = null;
+    }
+
+    this.messageArea.innerHTML = message;
+    this.showMessageArea();
+
+    if (typeof duration === 'number') {
+      this.messageTimeout = setTimeout(() => {
+        this.messageTimeout = null;
+        this.hideMessageArea();
+      }, duration);
+    }
   },
 };
 
