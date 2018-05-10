@@ -437,6 +437,7 @@
   border-radius: 0.5rem;
   padding: 1rem;
   color: #fff;
+  z-index: 10;
 }
 
 .action-button:hover {
