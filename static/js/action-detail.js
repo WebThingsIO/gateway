@@ -17,9 +17,7 @@ function ActionDetail(thing, name, input, href) {
   this.name = name;
   this.input = input;
   this.href = href;
-  this.elementId =
-    `button-${Utils.escapeHtmlForIdClass(thing.id)
-    }-${Utils.escapeHtmlForIdClass(name)}`;
+  this.elementId = `action-button-${Utils.escapeHtmlForIdClass(name)}`;
 }
 
 ActionDetail.prototype.attach = function() {
@@ -30,7 +28,7 @@ ActionDetail.prototype.attach = function() {
 ActionDetail.prototype.view = function() {
   let inputLink, disabled, extraClass;
   if (typeof this.input !== 'undefined') {
-    const href = `${window.location.pathname}/action/${this.name}`;
+    const href = `${window.location.pathname}/actions/${this.name}`;
     inputLink =
       `<a href="${encodeURI(href)}" class="action-input-link">...</a>`;
     extraClass = 'advanced-action-button';
@@ -54,7 +52,7 @@ ActionDetail.prototype.view = function() {
     <div class="thing-detail action">
       <div class="thing-detail-contents">
         <button id="${this.elementId}" type="button"
-                class="action-button text-button ${extraClass}" ${disabled}>
+                class="action-button ${extraClass}" ${disabled}>
           ${Utils.escapeHtml(this.name)}
         </button>
         ${inputLink}

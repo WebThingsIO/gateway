@@ -119,8 +119,7 @@ ActionInputForm.prototype.render = function() {
 
   form += `
     <input id="action-submit-button" type="submit"
-           class="action-button text-button"
-           value="${Utils.escapeHtml(this.name)}">
+           class="action-button" value="${Utils.escapeHtml(this.name)}">
     </form></div>`;
 
   element.innerHTML = form;
@@ -176,6 +175,8 @@ ActionInputForm.prototype.handleSubmit = function(e) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+  }).then(() => {
+    window.history.back();
   }).catch((e) => {
     console.error(`Error performing action "${this.name}": ${e}`);
   });

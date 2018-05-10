@@ -426,17 +426,38 @@
 }
 
 .action-button {
+  background-color: #698ba4;
   text-transform: uppercase;
   height: 4rem;
   width: 8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #fff;
+}
+
+.action-button:hover {
+  background-color: #59768a;
+}
+
+.action-button:active {
+  background-color: #496071;
+}
+
+.action-button:disabled  {
+  background-color: #79a1bd;
+}
+
+.action-button::-moz-focus-inner {
+  border: 0;
 }
 
 .advanced-action-button {
   position: relative;
-  top: 1.2rem;
+  top: 1.4rem;
 }
 
 .action-input-link:link,
@@ -444,8 +465,15 @@
 .action-input-link:hover,
 .action-input-link:active {
   color: #fff;
+  font-size: 3rem;
+  display: block;
+  padding-bottom: 1.8rem;
   position: relative;
-  top: 1rem;
+  top: 1.6rem;
+  height:3rem;
+  width: 10rem;
+  margin-top: -2rem;
+  border-radius: 0 0 5rem 5rem;
 }
 
 .action-input {
