@@ -27,7 +27,7 @@ module.exports = {
   behindForwarding: true,
   addonManager: {
     api: 2,
-    listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json',
+    listUrl: 'https://api.mozilla-iot.org:8443/addons',
   },
   database: {
     removeBeforeOpen: false,
