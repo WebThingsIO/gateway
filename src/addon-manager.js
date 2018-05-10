@@ -27,6 +27,8 @@ const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
 
+const pkg = require('../package.json');
+
 let PluginClient, PluginServer;
 
 // Use webpack provided require for dynamic includes from the bundle  .
@@ -1086,7 +1088,9 @@ class AddonManager extends EventEmitter {
     console.log('Checking for add-on updates...');
 
     try {
-      const response = await fetch(config.get('addonManager.listUrl'));
+      const response = await fetch(
+        config.get('addonManager.listUrl'),
+        {headers: {'User-Agent': `mozilla-iot-gateway/${pkg.version}`}});
       const list = await response.json();
 
       for (const addon of list) {
