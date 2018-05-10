@@ -328,46 +328,15 @@ PropertySelect.prototype.onClick = function(e) {
   }
 };
 
-function deepEqual(a, b) {
-  if (typeof a !== typeof b) {
-    return false;
-  }
-  switch (typeof a) {
-    case 'boolean':
-    case 'number':
-    case 'string':
-    case 'undefined':
-      return a === b;
-    case 'object':
-      break;
-    default:
-      console.warn('unknown type', typeof a);
-      return false;
+function propertyEqual(a, b) {
+  if ((!a) && (!b)) {
+    return true;
   }
 
-  if (a === null) {
-    return b === null;
-  }
-
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-  for (const key of keysB) {
-    if (!a.hasOwnProperty(key)) {
-      return false;
-    }
-  }
-  for (const key of keysA) {
-    if (!b.hasOwnProperty(key)) {
-      return false;
-    }
-    if (!deepEqual(a[key], b[key])) {
-      return false;
-    }
-  }
-  return true;
+  return a && b &&
+    a.type === b.type &&
+    a.name === b.name &&
+    a.href === b.href;
 }
 
 function getProperty(ruleFragment) {
@@ -393,7 +362,7 @@ function ruleFragmentEqual(a, b) {
   const aProperty = getProperty(a);
   const bProperty = getProperty(b);
 
-  if (!deepEqual(aProperty, bProperty)) {
+  if (!propertyEqual(aProperty, bProperty)) {
     return false;
   }
 
