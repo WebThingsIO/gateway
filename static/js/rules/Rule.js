@@ -174,47 +174,76 @@ Rule.prototype.toTriggerHumanDescription = function() {
  * @return {String?}
  */
 Rule.prototype.toEffectHumanDescription = function() {
-  if (!this.effect) {
+  return this.singleEffectToHumanDescription(this.effect);
+};
+
+/**
+ * Convert an effect's description to a human-readable string
+ * @return {String?}
+ */
+Rule.prototype.singleEffectToHumanDescription = function(effect) {
+  if (!effect) {
     return null;
   }
-  if (this.effect.type === 'ActionEffect') {
+  if (effect.type === 'MultiEffect') {
+    let effectStr = '';
+    for (let i = 0; i < effect.effects.length; i++) {
+      if (i > 0) {
+        if (effect.effects.length > 2) {
+          effectStr += ',';
+        }
+        effectStr += ' ';
+        if (i === effect.effects.length - 1) {
+          effectStr += 'and ';
+        }
+      }
+      const singleStr = this.singleEffectToHumanDescription(effect.effects[i]);
+      if (!singleStr) {
+        return null;
+      }
+      effectStr += singleStr;
+    }
+    return effectStr;
+  }
+
+  if (effect.type === 'ActionEffect') {
     const effectThing = this.gateway.things.filter(
-      RuleUtils.byHref(this.effect.thing.href)
+      RuleUtils.byHref(effect.thing.href)
     )[0];
     if (!effectThing) {
       return null;
     }
-    return `do ${effectThing.name} action "${this.effect.action}"`;
+    return `do ${effectThing.name} action "${effect.action}"`;
   }
 
   const effectThing = this.gateway.things.filter(
-    RuleUtils.byProperty(this.effect.property)
+    RuleUtils.byProperty(effect.property)
   )[0];
   if (!effectThing) {
     return null;
   }
 
   let effectStr = '';
-  if (this.effect.property.name === 'on') {
+  if (effect.property.name === 'on') {
     effectStr = `turn ${effectThing.name} `;
-    if (this.effect.value) {
+    if (effect.value) {
       effectStr += 'on';
     } else {
       effectStr += 'off';
     }
-    if (this.effect.type === 'SET') {
+    if (effect.type === 'SET') {
       effectStr += ' permanently';
     }
     return effectStr;
   }
-  if (this.effect.type === 'SET') {
+  if (effect.type === 'SET') {
     effectStr += 'set ';
   } else {
     effectStr += 'pulse ';
   }
 
-  effectStr += `${effectThing.name} ${this.effect.property.name} to `;
-  effectStr += this.effect.value;
+  effectStr += `${effectThing.name} ${effect.property.name} to `;
+  effectStr += effect.value;
 
   return effectStr;
 };

@@ -177,6 +177,39 @@ const eventActionRule = {
   },
 };
 
+const multiRule = {
+  enabled: true,
+  trigger: {
+    property: {
+      name: 'on',
+      type: 'boolean',
+      href: '/things/light1/properties/on',
+    },
+    type: 'BooleanTrigger',
+    onValue: true,
+  },
+  effect: {
+    effects: [{
+      property: {
+        name: 'on',
+        type: 'boolean',
+        href: '/things/light2/properties/on',
+      },
+      type: 'PulseEffect',
+      value: true,
+    }, {
+      property: {
+        name: 'on',
+        type: 'boolean',
+        href: '/things/light3/properties/on',
+      },
+      type: 'PulseEffect',
+      value: true,
+    }],
+    type: 'MultiEffect',
+  },
+};
+
 describe('rules engine', function() {
   let ruleId = null, jwt, gatewayHref;
 
@@ -440,28 +473,28 @@ describe('rules engine', function() {
     });
   }
 
+  async function getOn(lightId) {
+    const res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    return res.body.on;
+  }
+
+  async function setOn(lightId, on) {
+    const res = await chai.request(server)
+      .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({on: on});
+    expect(res.status).toEqual(200);
+  }
+
   it('creates and simulates an off rule', async () => {
     // Both lights are on, light1 is turned off, turning light2 off. light2 is
     // turned on, light1 is turned off (double activation), turning light2 off.
     // light1 is turned on, turning light2 on.
-
-    async function getOn(lightId) {
-      const res = await chai.request(server)
-        .get(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
-        .set('Accept', 'application/json')
-        .set(...headerAuth(jwt));
-      expect(res.status).toEqual(200);
-      return res.body.on;
-    }
-
-    async function setOn(lightId, on) {
-      const res = await chai.request(server)
-        .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
-        .set('Accept', 'application/json')
-        .set(...headerAuth(jwt))
-        .send({on: on});
-      expect(res.status).toEqual(200);
-    }
 
     await setOn(thingLight1.id, true);
     await setOn(thingLight2.id, true);
@@ -522,6 +555,29 @@ describe('rules engine', function() {
     expect(res.body[0]).toHaveProperty('blink');
 
     // dispatch event get action
+    await deleteRule(ruleId);
+  });
+
+  it('creates and simulates a multi-effect rule', async () => {
+    const res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(multiRule);
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    await setOn(thingLight1.id, true);
+    await sleep(200);
+    expect(await getOn(thingLight2.id)).toEqual(true);
+    expect(await getOn(thingLight3.id)).toEqual(true);
+
+    await setOn(thingLight1.id, false);
+    await sleep(200);
+    expect(await getOn(thingLight2.id)).toEqual(false);
+    expect(await getOn(thingLight3.id)).toEqual(false);
+
     await deleteRule(ruleId);
   });
 });

@@ -54,10 +54,6 @@
   font-size: 1.6rem;
 }
 
-.rule-info p {
-  font-size: 1.2rem;
-}
-
 .rule-preview {
   border-radius: 0.5rem 0.5rem 0 0;
   background: url('../optimized-images/background-small.png');
@@ -85,6 +81,8 @@
   width: 66%;
   display: inline-block;
   vertical-align: bottom;
+  height: 30%;
+  overflow: hidden;
 }
 
 .rule-switch {
