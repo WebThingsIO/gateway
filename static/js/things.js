@@ -13,16 +13,17 @@
 const API = require('./api');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
-const UnknownThing = require('./unknown-thing');
-const OnOffSwitch = require('./on-off-switch');
 const BinarySensor = require('./binary-sensor');
 const ColorLight = require('./color-light');
-const DimmableLight = require('./dimmable-light');
 const DimmableColorLight = require('./dimmable-color-light');
-const OnOffLight = require('./on-off-light');
-const MultiLevelSwitch = require('./multi-level-switch');
+const DimmableLight = require('./dimmable-light');
+const EventList = require('./event-list');
 const MultiLevelSensor = require('./multi-level-sensor');
+const MultiLevelSwitch = require('./multi-level-switch');
+const OnOffLight = require('./on-off-light');
+const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
+const UnknownThing = require('./unknown-thing');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -30,6 +31,7 @@ const ThingsScreen = {
   NO_THINGS_MESSAGE: 'No devices yet. Click + to scan for available devices.',
   THING_NOT_FOUND_MESSAGE: 'Thing not found.',
   ACTION_NOT_FOUND_MESSAGE: 'Action not found.',
+  EVENTS_NOT_FOUND_MESSAGE: 'This thing has no events.',
 
   /**
    * Initialise Things Screen.
@@ -51,15 +53,19 @@ const ThingsScreen = {
    *
    * @param {String} thingId Optional thing ID to show, otherwise show all.
    * @param {String} actionName Optional action input form to show.
+   * @param {Boolean} events Whether or not to display the events screen.
    */
-  show: function(thingId, actionName) {
+  show: function(thingId, actionName, events) {
     if (thingId) {
       this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
+      this.thingTitleElement.classList.remove('hidden');
 
       if (actionName) {
         this.showActionInputForm(thingId, actionName);
+      } else if (events) {
+        this.showEvents(thingId);
       } else {
         this.showThing(thingId);
       }
@@ -82,6 +88,7 @@ const ThingsScreen = {
         Accept: 'application/json',
       },
     };
+
     // Fetch a list of things from the server
     fetch('/things', opts).then((response) => {
       return response.json();
@@ -150,6 +157,7 @@ const ThingsScreen = {
         Accept: 'application/json',
       },
     };
+
     // Fetch a thing from the server
     fetch(`/things/${encodeURIComponent(id)}`, opts).then((response) => {
       if (response.status == 404) {
@@ -236,6 +244,7 @@ const ThingsScreen = {
         Accept: 'application/json',
       },
     };
+
     // Fetch a thing from the server
     fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
       if (response.status == 404) {
@@ -297,6 +306,73 @@ const ThingsScreen = {
         this.thingsElement.innerHTML = '';
         new ActionInputForm(
           href, actionName, description.actions[actionName].input);
+      });
+    });
+  },
+
+  /**
+   * Display an events list.
+   *
+   * @param {String} thingId The ID of the Thing to show.
+   */
+  showEvents: function(thingId) {
+    const opts = {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    };
+
+    // Fetch a thing from the server
+    fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
+      if (response.status == 404) {
+        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+        return;
+      }
+
+      response.json().then((description) => {
+        if (!description) {
+          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+          return;
+        }
+
+        if (!description.hasOwnProperty('events')) {
+          this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
+          return;
+        }
+
+        let icon;
+        switch (description.type) {
+          case 'onOffSwitch':
+            icon = '/images/on-off-switch.png';
+            break;
+          case 'binarySensor':
+          case 'multiLevelSensor':
+            icon = '/images/binary-sensor.png';
+            break;
+          case 'onOffLight':
+          case 'onOffColorLight':
+          case 'dimmableLight':
+          case 'dimmableColorLight':
+            icon = '/images/bulb.png';
+            break;
+          case 'multiLevelSwitch':
+            icon = '/images/level.svg';
+            break;
+          case 'smartPlug':
+            icon = '/images/smart-plug.svg';
+            break;
+          default:
+            icon = '/images/unknown-thing.png';
+            break;
+        }
+
+        document.getElementById('thing-title-icon').src = icon;
+        document.getElementById('thing-title-name').innerText =
+          description.name;
+
+        this.thingsElement.innerHTML = '';
+        new EventList(description);
       });
     });
   },

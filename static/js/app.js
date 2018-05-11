@@ -74,8 +74,10 @@ const App = {
   },
 
   showThings: function(context) {
+    const events = context.pathname.split('/').pop() === 'events';
     ThingsScreen.show(context.params.thingId || null,
-                      context.params.actionName || null);
+                      context.params.actionName || null,
+                      events);
     this.selectView('things');
   },
 

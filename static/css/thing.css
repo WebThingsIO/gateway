@@ -549,3 +549,40 @@
   width: auto;
   margin-top: 2rem;
 }
+
+.event-list {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+  max-height: 100%;
+  text-align: left;
+}
+
+.event-item {
+  background-color: #5288af;
+  display: block;
+  font-size: 1.8rem;
+  list-style-type: none;
+  color: #fff;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 2rem;
+}
+
+.event-header {
+  width: 100%;
+}
+
+.event-name {
+  font-size: 2rem;
+}
+
+.event-time {
+  float: right;
+}
+
+.event-body {
+  padding-top: 1rem;
+}
