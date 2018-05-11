@@ -125,6 +125,7 @@ const App = {
   },
 
   hideOverflowButton: function() {
+    this.overflowMenu.classList.add('hidden');
     this.overflowButton.classList.add('hidden');
   },
 
