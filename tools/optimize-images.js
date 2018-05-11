@@ -15,12 +15,13 @@ try {
   if (e.code !== 'MODULE_NOT_FOUND') {
     throw e;
   }
-  console.error('You need to install dependencies:\n' +
-                'apt-get install libtool autoconf build-essential' +
-                '$ yarn global add imagemin imagemin-mozjpeg imagemin-svgo ' +
-                'imagemin-pngquant imagemin-optipng imagemin-gifsicle\n' +
-                '$ export NODE_PATH=`yarn global dir`/node_modules &&' +
-                `node ${process.argv[1]}`);
+  console.error(
+    'You need to install dependencies:\n\n' +
+    '$ sudo apt-get install libtool autoconf build-essential\n' +
+    '$ yarn global add imagemin imagemin-mozjpeg imagemin-svgo \\\n' +
+    '    imagemin-pngquant imagemin-optipng imagemin-gifsicle\n' +
+    '$ export NODE_PATH=$(yarn global dir)/node_modules && \\\n' +
+    `    node ${process.argv[1]}`);
   process.exit(1);
 }
 const path = require('path');

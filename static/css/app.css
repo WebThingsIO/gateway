@@ -174,11 +174,36 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
+#message-area {
+  position: fixed;
+  bottom: 3rem;
+  width: 33%;
+  left: calc(33% - 2rem);
+  background-color: rgba(76, 124, 160, 0.6);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+}
+
+#message-area.hidden {
+  transform: translateY(10rem);
+}
+
+@media only screen and (max-width: 730px) {
+  #message-area {
+    width: calc(100% - 10rem);
+    left: 3rem;
+  }
+}
+
+#overflow-button,
 #menu-button,
 #back-button {
   position: fixed;
-  top: 2rem;
-  left: 2rem;
   width: 5.6rem;
   height: 5.6rem;
   padding: 0;
@@ -195,6 +220,12 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
 }
 
+#menu-button,
+#back-button {
+  top: 2rem;
+  left: 2rem;
+}
+
 #menu-button {
   background-image: url('../optimized-images/menu.svg');
 }
@@ -203,22 +234,71 @@ h1, h2, h3, h4, h5, h6 {
   background-image: url('../optimized-images/back.png');
 }
 
+#overflow-button {
+  bottom: 2rem;
+  right: 2rem;
+  background-image: url('../optimized-images/overflow.svg');
+}
+
+#overflow-button.hidden,
 #menu-button.hidden,
 #back-button.hidden {
   display: none;
 }
 
+#overflow-button::-moz-focus-inner,
 #menu-button::-moz-focus-inner,
 #back-button::-moz-focus-inner {
   border: 0;
 }
 
+#overflow-button:hover,
 #menu-button:hover,
 #back-button:hover,
 #add-button:active,
 #create-rule-button:active,
 #discover-addons-button:active {
   opacity: 1;
+}
+
+#overflow-menu {
+  position: fixed;
+  bottom: 9rem;
+  right: 3rem;
+  background-color: #5288af;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transform: scale(1);
+  transition: transform 0.25s ease;
+  transform-origin: bottom right;
+}
+
+#overflow-menu::after {
+  content: "";
+  position: absolute;
+  bottom: -1rem;
+  right: 1rem;
+  border-width: 1rem 1rem 0;
+  border-style: solid;
+  border-color: #5288af transparent;
+  display: block;
+  width: 0;
+}
+
+#overflow-menu.hidden {
+  transform: scale(0);
+}
+
+#overflow-menu > a:link,
+#overflow-menu > a:visited,
+#overflow-menu > a:hover,
+#overflow-menu > a:active {
+  color: #fff;
+  font-size: 2rem;
+  display: block;
+  padding: 0.4rem;
+  text-decoration: none;
 }
 
 /* Dialog */
@@ -284,9 +364,6 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
-}
-
-.switch {
 }
 
 .switch-checkbox {
