@@ -65,6 +65,11 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
   }
 
   const property = getProperty(ruleFragment);
+  if (!property) {
+    this.updateOption(elt);
+    this.elt.appendChild(elt);
+    return;
+  }
 
   const stopPropagation = function(e) {
     e.stopPropagation();
@@ -139,6 +144,10 @@ PropertySelect.prototype.updateOption = function(optionElt) {
   }
 
   const property = getProperty(ruleFragment);
+  if (!property) {
+    return;
+  }
+
   const fragmentValue = ruleFragment.trigger ?
     ruleFragment.trigger.value :
     ruleFragment.effect.value;
