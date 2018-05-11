@@ -193,6 +193,13 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(10rem);
 }
 
+@media only screen and (max-width: 730px) {
+  #message-area {
+    width: calc(100% - 10rem);
+    left: 3rem;
+  }
+}
+
 #overflow-button,
 #menu-button,
 #back-button {
