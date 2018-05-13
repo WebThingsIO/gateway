@@ -11,6 +11,7 @@
 'use strict';
 
 const PromiseRouter = require('express-promise-router');
+const WebSocket = require('ws');
 const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
@@ -219,6 +220,11 @@ ThingsController.delete('/:thingId', function(request, response) {
  * Connect to receive messages from a Thing
  */
 ThingsController.ws('/:thingId/', function(websocket, request) {
+  // Since the Gateway have the asynchronous express middlewares, there is a
+  // possibility that the WebSocket have been closed.
+  if (websocket.readyState !== WebSocket.OPEN) {
+    return;
+  }
   const thingId = request.params.thingId;
   const subscribedEventNames = {};
 
@@ -290,6 +296,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
       websocket.ping();
     } catch (e) {
       // Do nothing. Let cleanup() handle things if necessary.
+      websocket.terminate();
     }
   }, 30 * 1000);
 

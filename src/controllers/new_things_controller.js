@@ -13,6 +13,7 @@
 
 const PromiseRouter = require('express-promise-router');
 const fetch = require('node-fetch');
+const WebSocket = require('ws');
 const Things = require('../models/things');
 
 const NewThingsController = PromiseRouter();
@@ -33,6 +34,11 @@ NewThingsController.get('/', function(request, response) {
  * Handle a WebSocket request on /new_things
  */
 NewThingsController.ws('/', function(websocket) {
+  // Since the Gateway have the asynchronous express middlewares, there is a
+  // possibility that the WebSocket have been closed.
+  if (websocket.readyState !== WebSocket.OPEN) {
+    return;
+  }
   console.log('Opened a new things socket');
   // Register the WebSocket with the Things model so new devices can be pushed
   // to the client as they are added.
