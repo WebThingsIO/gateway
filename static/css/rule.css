@@ -273,6 +273,10 @@
   margin-left: 0.6rem;
 }
 
+.property-select-option input[type="text"] {
+  width: 8rem;
+}
+
 .property-select-option input[type="number"],
 .property-select-option select {
   width: 3rem;

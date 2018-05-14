@@ -131,6 +131,22 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       this.devicePropertyBlock.rulePart = ruleFragment;
       this.devicePropertyBlock.onRuleChange();
     });
+  } else if (property.type === 'string') {
+    const valueInput = document.createElement('input');
+    valueInput.classList.add('value-input');
+    valueInput.type = 'text';
+    valueInput.addEventListener('click', stopPropagation);
+    elt.appendChild(valueInput);
+
+    elt.addEventListener('change', () => {
+      if (ruleFragment.trigger) {
+        ruleFragment.trigger.value = valueInput.value;
+      } else {
+        ruleFragment.effect.value = valueInput.value;
+      }
+      this.devicePropertyBlock.rulePart = ruleFragment;
+      this.devicePropertyBlock.onRuleChange();
+    });
   }
 
   this.updateOption(elt);
@@ -165,7 +181,7 @@ PropertySelect.prototype.updateOption = function(optionElt) {
       }
     }
     valueInput.value = fragmentValue;
-  } else if (property.name === 'color') {
+  } else if (property.name === 'color' || property.type === 'string') {
     valueInput.value = fragmentValue;
   }
 };
@@ -260,6 +276,15 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             type: 'PulseEffect',
             property: property,
             value: '#ffffff',
+          },
+        });
+      } else if (property.type === 'string') {
+        const name = Utils.capitalize(property.name);
+        this.addOption(name, {
+          effect: {
+            type: 'PulseEffect',
+            property: property,
+            value: 'text',
           },
         });
       } else if (property.type === 'number') {
