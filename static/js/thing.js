@@ -45,20 +45,42 @@ const Thing = function(description, format, options) {
   this.displayedProperties = this.displayedProperties || {};
   this.displayedActions = this.displayedActions || {};
   this.properties = {};
+
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
+    this.eventsHref = `${this.href.pathname}/events`;
     this.id = this.href.pathname.split('/').pop();
 
     const wsHref = this.href.href.replace(/^http/, 'ws');
     this.ws = new WebSocket(`${wsHref}?jwt=${API.jwt}`);
-    this.ws.addEventListener('message', function(event) {
+
+    // After the websocket is open, add subscriptions for all events.
+    this.ws.addEventListener('open', () => {
+      if (description.hasOwnProperty('events')) {
+        const msg = {
+          messageType: 'addEventSubscription',
+          data: {},
+        };
+
+        for (const name in description.events) {
+          msg.data[name] = {};
+        }
+
+        this.ws.send(JSON.stringify(msg));
+      }
+    });
+
+    this.ws.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
       if (message.messageType === 'propertyStatus') {
         this.onPropertyStatus(message.data);
+      } else if (message.messageType === 'event') {
+        this.onEvent(message.data);
       }
-    }.bind(this));
+    });
   }
+
   // Parse properties
   if (description.properties) {
     this.propertyDescriptions = {};
@@ -67,12 +89,32 @@ const Thing = function(description, format, options) {
       this.propertyDescriptions[propertyName] = property;
     }
   }
+
+  // Parse events
+  if (format === 'htmlDetail' &&
+      description.hasOwnProperty('events') &&
+      Object.keys(description.events).length > 0) {
+    this.displayEvents = true;
+    App.buildOverflowMenu([
+      {
+        href: this.eventsHref,
+        name: 'Event Log',
+      },
+    ]);
+    App.showOverflowButton();
+  } else {
+    this.displayEvents = false;
+    App.hideOverflowButton();
+  }
+
   this.element = this.render(format);
+
   // Only allow things to be removed from the HTML view for now.
   if (format != 'svg') {
     this.element.addEventListener('contextmenu',
                                   this.handleContextMenu.bind(this));
   }
+
   return this;
 };
 
@@ -285,7 +327,7 @@ Thing.prototype.handleContextMenu = function(e) {
 
 /**
  * Handle a 'propertyStatus' message.
- * @param {Object} properties - property data
+ * @param {Object} data Property data
  */
 Thing.prototype.onPropertyStatus = function(data) {
   for (const prop in data) {
@@ -300,6 +342,22 @@ Thing.prototype.onPropertyStatus = function(data) {
 
     this.properties[prop] = value;
     this.updateProperty(prop, value);
+  }
+};
+
+/**
+ * Handle an 'event' message.
+ * @param {Object} data Event data
+ */
+Thing.prototype.onEvent = function(data) {
+  if (!this.displayEvents) {
+    return;
+  }
+
+  for (const name in data) {
+    App.showMessage(
+      `<a href="${this.eventsHref}">${Utils.escapeHtml(name)}</a>`,
+      3000);
   }
 };
 
