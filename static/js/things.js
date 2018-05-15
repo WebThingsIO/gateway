@@ -11,6 +11,7 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const BinarySensor = require('./binary-sensor');
@@ -56,6 +57,8 @@ const ThingsScreen = {
    * @param {Boolean} events Whether or not to display the events screen.
    */
   show: function(thingId, actionName, events) {
+    App.hideOverflowButton();
+
     if (thingId) {
       this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
@@ -326,54 +329,52 @@ const ThingsScreen = {
     // Fetch a thing from the server
     fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
       if (response.status == 404) {
+        return Promise.resolve();
+      }
+
+      return response.json();
+    }).then((description) => {
+      if (!description) {
         this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
         return;
       }
 
-      response.json().then((description) => {
-        if (!description) {
-          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-          return;
-        }
+      if (!description.hasOwnProperty('events')) {
+        this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
+        return;
+      }
 
-        if (!description.hasOwnProperty('events')) {
-          this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
-          return;
-        }
+      let icon;
+      switch (description.type) {
+        case 'onOffSwitch':
+          icon = '/images/on-off-switch.png';
+          break;
+        case 'binarySensor':
+        case 'multiLevelSensor':
+          icon = '/images/binary-sensor.png';
+          break;
+        case 'onOffLight':
+        case 'onOffColorLight':
+        case 'dimmableLight':
+        case 'dimmableColorLight':
+          icon = '/images/bulb.png';
+          break;
+        case 'multiLevelSwitch':
+          icon = '/images/level.svg';
+          break;
+        case 'smartPlug':
+          icon = '/images/smart-plug.svg';
+          break;
+        default:
+          icon = '/images/unknown-thing.png';
+          break;
+      }
 
-        let icon;
-        switch (description.type) {
-          case 'onOffSwitch':
-            icon = '/images/on-off-switch.png';
-            break;
-          case 'binarySensor':
-          case 'multiLevelSensor':
-            icon = '/images/binary-sensor.png';
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            icon = '/images/bulb.png';
-            break;
-          case 'multiLevelSwitch':
-            icon = '/images/level.svg';
-            break;
-          case 'smartPlug':
-            icon = '/images/smart-plug.svg';
-            break;
-          default:
-            icon = '/images/unknown-thing.png';
-            break;
-        }
+      document.getElementById('thing-title-icon').src = icon;
+      document.getElementById('thing-title-name').innerText = description.name;
 
-        document.getElementById('thing-title-icon').src = icon;
-        document.getElementById('thing-title-name').innerText =
-          description.name;
-
-        this.thingsElement.innerHTML = '';
-        new EventList(description);
-      });
+      this.thingsElement.innerHTML = '';
+      new EventList(description);
     });
   },
 };

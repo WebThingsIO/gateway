@@ -65,7 +65,7 @@ const EventList = function(description) {
       const name = Object.keys(e)[0];
       const timestamp = new Date(e[name].timestamp);
       return Object.assign(e[name], {name, timestamp});
-    }).sort((a, b) => b.timestamp - a.timestamp).slice(0, this.limit);
+    }).sort((a, b) => b.timestamp - a.timestamp).slice(0, this.limit).reverse();
 
     // Build the list in descending order by date.
     for (const event of events) {
@@ -160,17 +160,20 @@ EventList.prototype.prependEvent = function(event) {
     body += '<br>';
   }
 
+  // Trim off the final '<br>'
+  body = body.substring(0, body.length - 4);
+
   const el = document.createElement('div');
 
   const item = `<li class="event-item">
     <div class="event-header">
       <span class="event-name">${Utils.escapeHtml(event.name)}</span>
-      <span class="event-time" original="${event.timestamp.toISOString()}"
+      <span class="event-time" data-original="${event.timestamp.toISOString()}"
             title="${event.timestamp.toLocaleString()}">
         ${Utils.fuzzyTime(event.timestamp)}
       </span>
     </div>
-    <div class="event-body">${body.substring(0, body.length - 4)}</div>
+    <div class="event-body">${body}</div>
   </li>`;
   el.innerHTML = item;
 
@@ -183,7 +186,7 @@ EventList.prototype.prependEvent = function(event) {
 
 EventList.prototype.updateTimestamps = function() {
   for (const el of this.element.querySelectorAll('.event-time')) {
-    el.innerText = Utils.fuzzyTime(new Date(el.attributes.original.value));
+    el.innerText = Utils.fuzzyTime(new Date(el.dataset.original));
   }
 };
 
