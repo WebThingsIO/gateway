@@ -153,6 +153,15 @@ accepts@~1.3.3, accepts@~1.3.4:
     mime-types "~2.1.16"
     negotiator "0.6.1"
 
+acme-v2@^1.0.2:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/acme-v2/-/acme-v2-1.0.6.tgz#eee5117bc70b99dde522adc4d44a61ac404b71ce"
+  dependencies:
+    request "^2.85.0"
+    rsa-compat "^1.3.0"
+  optionalDependencies:
+    bluebird "^3.5.1"
+
 acorn-dynamic-import@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/acorn-dynamic-import/-/acorn-dynamic-import-3.0.0.tgz#901ceee4c7faaef7e07ad2a47e890675da50a278"
@@ -1391,7 +1400,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.0.6, bluebird@^3.4.1, bluebird@^3.5.0:
+bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
@@ -3815,23 +3824,24 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-greenlock@^2.1.15:
-  version "2.1.15"
-  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.1.15.tgz#d920672c290cd917fe23eda707102e8ce5c71022"
+greenlock@^2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.2.11.tgz#178819f99f7e46a5d9c8136f59de5cd10c820060"
   dependencies:
+    acme-v2 "^1.0.2"
     asn1js "^1.2.12"
-    bluebird "^3.0.6"
     certpem "^1.0.0"
     homedir "^0.6.0"
-    le-acme-core "^2.0.5"
+    le-acme-core "^2.1.2"
     le-challenge-fs "^2.0.2"
     le-challenge-sni "^2.0.0"
-    le-sni-auto "^2.1.0"
+    le-sni-auto "^2.1.3"
     le-store-certbot "^2.0.3"
-    localhost.daplie.me-certificates "^1.3.0"
     node.extend "^1.1.5"
     pkijs "^1.3.27"
     rsa-compat "^1.2.1"
+  optionalDependencies:
+    bluebird "^3.5.1"
 
 grouped-queue@^0.3.0, grouped-queue@^0.3.3:
   version "0.3.3"
@@ -5294,16 +5304,16 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-le-acme-core@^2.0.5:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/le-acme-core/-/le-acme-core-2.1.1.tgz#82f1d0bc9e35002679891b9444e36a487971f12e"
+le-acme-core@^2.1.2:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/le-acme-core/-/le-acme-core-2.1.3.tgz#cfc67f72db81e818a4ffdc75ceb9cc17d5a5c5d4"
   dependencies:
     request "^2.74.0"
-    rsa-compat "^1.2.7"
+    rsa-compat "^1.3.2"
 
-"le-challenge-dns@https://github.com/mozilla-iot/le-challenge-dns":
-  version "2.1.0"
-  resolved "https://github.com/mozilla-iot/le-challenge-dns#795e52a9785fb7ee9392cf3fd929ca82c473bb0c"
+le-challenge-dns@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/le-challenge-dns/-/le-challenge-dns-2.3.2.tgz#dd39529c047911fa0e8cab207adf6e275f98ac34"
 
 le-challenge-fs@^2.0.2:
   version "2.0.8"
@@ -5317,17 +5327,17 @@ le-challenge-sni@^2.0.0:
   dependencies:
     le-tls-sni "^0.1.0"
 
-le-sni-auto@^2.1.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/le-sni-auto/-/le-sni-auto-2.1.1.tgz#ad5beb9d8cc8d84b1e128082c7072f84c43ca97b"
+le-sni-auto@^2.1.3:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/le-sni-auto/-/le-sni-auto-2.1.5.tgz#954e2a964dbe38d0d2c1c5400b388efca551e38a"
   dependencies:
-    bluebird "^3.4.1"
+    bluebird "^3.5.1"
 
-le-store-certbot@^2.0.3, "le-store-certbot@https://github.com/mozilla-iot/le-store-certbot/tarball/82b00d5d9d0e6b0b025203d11aedb34ca4803b92":
-  version "2.0.5"
-  resolved "https://github.com/mozilla-iot/le-store-certbot/tarball/82b00d5d9d0e6b0b025203d11aedb34ca4803b92#06862bc61d1ab8592843688690aa78fd29e846a5"
+le-store-certbot@^2.0.3:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/le-store-certbot/-/le-store-certbot-2.1.0.tgz#ad01490ad8a0db20708c14dd2fa7c41c7540806a"
   dependencies:
-    bluebird "^3.4.1"
+    bluebird "^3.5.1"
     fs-symlink "^1.2.1"
     mkdirp "^0.5.1"
     pyconf "^1.1.2"
@@ -5448,10 +5458,6 @@ loader-utils@^1.0.2, loader-utils@^1.1.0:
     big.js "^3.1.3"
     emojis-list "^2.0.0"
     json5 "^0.5.0"
-
-localhost.daplie.me-certificates@^1.3.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/localhost.daplie.me-certificates/-/localhost.daplie.me-certificates-1.4.0.tgz#feabf6f84a793adf08aea5123779402910139f11"
 
 locate-path@^2.0.0:
   version "2.0.0"
@@ -7070,9 +7076,9 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-pyconf@^1.1.2, "pyconf@https://github.com/mozilla-iot/node-config-python/tarball/254eb3beda4ec883738b322c6d1cdedd2a75c644":
-  version "1.1.2"
-  resolved "https://github.com/mozilla-iot/node-config-python/tarball/254eb3beda4ec883738b322c6d1cdedd2a75c644#e77828f7e08ae88464dbe004b9d5382a94e54e03"
+pyconf@^1.1.2:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/pyconf/-/pyconf-1.1.5.tgz#2d0904388a2babb4f37e8e51593451db50dba92b"
   dependencies:
     safe-replace "^1.0.2"
 
@@ -7500,7 +7506,7 @@ request@^2.79.0, request@~2.83.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-request@^2.81.0, request@^2.83.0:
+request@^2.81.0, request@^2.83.0, request@^2.85.0:
   version "2.85.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.85.0.tgz#5a03615a47c61420b3eb99b7dba204f83603e1fa"
   dependencies:
@@ -7641,6 +7647,15 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
 rsa-compat@^1.2.1, rsa-compat@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/rsa-compat/-/rsa-compat-1.2.7.tgz#7c4636de798885a9f3c90436ea3804e35b1684c8"
+  dependencies:
+    buffer-v6-polyfill "^1.0.3"
+    node-forge "^0.6.41"
+  optionalDependencies:
+    ursa "^0.9.4"
+
+rsa-compat@^1.3.0, rsa-compat@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/rsa-compat/-/rsa-compat-1.3.2.tgz#a822639fa18ac68a767d3f18c4a86c1dab1a91fa"
   dependencies:
     buffer-v6-polyfill "^1.0.3"
     node-forge "^0.6.41"
