@@ -103,26 +103,20 @@ SettingsController.post('/subscribe', async (request, response) => {
     response.status(400).end();
   }
 
-  // function to automatically agree and accept the ToS
-  function leAgree(opts, agreeCb) {
-    agreeCb(null, opts.tosUrl);
-  }
-
   const leStore = require('le-store-certbot').create({
     webrootPath: Constants.STATIC_PATH,
     configDir: path.join(UserProfile.baseDir, 'etc'),
     logsDir: path.join(UserProfile.baseDir, 'var', 'log'),
     workDir: path.join(UserProfile.baseDir, 'var', 'lib'),
-    debug: true,
   });
   const le = greenlock.create({
     server: greenlock.productionServerUrl,
     challengeType: 'dns-01',
     challenges: {'dns-01': leChallengeDns},
     approveDomains: [fulldomain],
-    agreeToTerms: leAgree,
-    debug: true,
+    agreeTos: true,
     store: leStore,
+    version: 'draft-11',
   });
 
   let token;

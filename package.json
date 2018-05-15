@@ -43,9 +43,11 @@
     "express-promise-router": "^3.0.1",
     "express-ws": "^3.0.0",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
-    "greenlock": "^2.1.15",
+    "greenlock": "^2.2.11",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
     "jsonwebtoken": "^8.1.0",
-    "le-challenge-dns": "https://github.com/mozilla-iot/le-challenge-dns",
+    "le-challenge-dns": "^2.3.2",
     "mkdirp": "^0.5.1",
     "mustache-express": "^1.2.5",
     "nanomsg": "^4.0.2",
@@ -101,9 +103,5 @@
     },
     "setupTestFrameworkScriptFile": "<rootDir>/src/test/common.js",
     "testEnvironment": "node"
-  },
-  "resolutions": {
-    "le-store-certbot": "https://github.com/mozilla-iot/le-store-certbot/tarball/82b00d5d9d0e6b0b025203d11aedb34ca4803b92",
-    "pyconf": "https://github.com/mozilla-iot/node-config-python/tarball/254eb3beda4ec883738b322c6d1cdedd2a75c644"
   }
 }
