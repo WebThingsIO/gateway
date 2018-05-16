@@ -153,4 +153,83 @@ describe('Thing', () => {
       `string-${Utils.escapeHtmlForIdClass('spaced string')}`
     );
   });
+
+  it('should render a onOffLight and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'onOffLight',
+         name: 'foofoo',
+         type: 'onOffLight',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForThings();
+       const things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeNull();
+     });
+
+  it('should render a onOffSwitch and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'onOffSwitch',
+         name: 'foofoo',
+         type: 'onOffSwitch',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeNull();
+     });
 });
