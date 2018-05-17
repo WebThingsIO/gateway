@@ -3,8 +3,9 @@ const {
   addThing,
   getProperty,
   setProperty,
-  waitForExpect,
 } = require('./test-utils');
+
+const {waitForExpect} = require('../../expect-utils');
 const ThingsPage = require('../page-object/things-page');
 
 const STATIC_JS_PATH = '../../../../static/js';
