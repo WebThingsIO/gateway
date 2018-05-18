@@ -139,6 +139,79 @@ describe('ArrayField', () => {
       expect(inputs[0].value).toEqual('bar');
     });
 
+    it('should remove a field from middle of the list', () => {
+      const {node} = createSchemaForm({
+        schema,
+        formData: ['foo', 'bar', 'foobar'],
+      });
+      let dropBtns = node.querySelectorAll('.btn-remove');
+
+      dropBtns[1].click();
+
+      let inputs = node.querySelectorAll('.field-string input[type=text]');
+      expect(inputs).toHaveLength(2);
+      expect(inputs[0].value).toEqual('foo');
+      expect(inputs[1].value).toEqual('foobar');
+      dropBtns = node.querySelectorAll('.btn-remove');
+      expect(dropBtns).toHaveLength(2);
+
+      dropBtns[1].click();
+      inputs = node.querySelectorAll('.field-string input[type=text]');
+      expect(inputs).toHaveLength(1);
+      expect(inputs[0].value).toEqual('foo');
+      dropBtns = node.querySelectorAll('.btn-remove');
+      expect(dropBtns).toHaveLength(1);
+    });
+
+    it('should remove a field from middle of the nested list', () => {
+      const schemaFormlexSchema = {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                bar: {type: 'string'},
+                baz: {type: 'string'},
+              },
+            },
+          },
+        },
+      };
+      const {node} = createSchemaForm({
+        schema: schemaFormlexSchema,
+        formData: {
+          foo: [
+            {bar: 'bar1', baz: 'baz1'},
+            {bar: 'bar2', baz: 'baz2'},
+            {bar: 'bar3', baz: 'baz3'},
+          ],
+        },
+      });
+
+      let dropBtns = node.querySelectorAll('.btn-remove');
+
+      dropBtns[1].click();
+
+      let inputs = node.querySelectorAll('.field-string input[type=text]');
+      expect(inputs).toHaveLength(4);
+      expect(inputs[0].value).toEqual('bar1');
+      expect(inputs[1].value).toEqual('baz1');
+      expect(inputs[2].value).toEqual('bar3');
+      expect(inputs[3].value).toEqual('baz3');
+      dropBtns = node.querySelectorAll('.btn-remove');
+      expect(dropBtns).toHaveLength(2);
+
+      dropBtns[1].click();
+      inputs = node.querySelectorAll('.field-string input[type=text]');
+      expect(inputs).toHaveLength(2);
+      expect(inputs[0].value).toEqual('bar1');
+      expect(inputs[1].value).toEqual('baz1');
+      dropBtns = node.querySelectorAll('.btn-remove');
+      expect(dropBtns).toHaveLength(1);
+    });
+
     it('should handle cleared field values in the array', () => {
       const schema = {
         type: 'array',
