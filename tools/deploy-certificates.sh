@@ -13,4 +13,10 @@ cp "${RENEWED_LINEAGE}/cert.pem" "${SSL_DIR}/certificate.pem"
 cp "${RENEWED_LINEAGE}/privkey.pem" "${SSL_DIR}/privatekey.pem"
 
 # Restart the gateway.
-systemctl restart mozilla-iot-gateway.service
+if [ -x "$(command -v systemctl)" ]; then
+    systemctl restart mozilla-iot-gateway.service
+elif [ -x "$(command -v sv)" ]; then
+    sv restart gateway
+else
+    echo "Could not automatically restart Mozilla IoT gateway service."
+fi
