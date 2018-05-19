@@ -71,9 +71,9 @@ accepts@~1.3.3, accepts@~1.3.4:
     mime-types "~2.1.16"
     negotiator "0.6.1"
 
-acme-v2@^1.0.2:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/acme-v2/-/acme-v2-1.0.6.tgz#eee5117bc70b99dde522adc4d44a61ac404b71ce"
+acme-v2@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/acme-v2/-/acme-v2-1.0.7.tgz#b928f3d13ca2f4dd77e68008812db5b807db5db7"
   dependencies:
     request "^2.85.0"
     rsa-compat "^1.3.0"
@@ -3451,22 +3451,19 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-greenlock@^2.2.11:
-  version "2.2.11"
-  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.2.11.tgz#178819f99f7e46a5d9c8136f59de5cd10c820060"
+greenlock@^2.2.16:
+  version "2.2.16"
+  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.2.16.tgz#4d7ae6b7cfe347357894e1ed2fcf9f7480234b90"
   dependencies:
-    acme-v2 "^1.0.2"
+    acme-v2 "^1.0.6"
     asn1js "^1.2.12"
     certpem "^1.0.0"
-    homedir "^0.6.0"
-    le-acme-core "^2.1.2"
     le-challenge-fs "^2.0.2"
-    le-challenge-sni "^2.0.0"
     le-sni-auto "^2.1.3"
-    le-store-certbot "^2.0.3"
+    le-store-certbot "^2.1.0"
     node.extend "^1.1.5"
     pkijs "^1.3.27"
-    rsa-compat "^1.2.1"
+    rsa-compat "^1.3.2"
   optionalDependencies:
     bluebird "^3.5.1"
 
@@ -3625,10 +3622,6 @@ homedir-polyfill@^1.0.1:
   resolved "https://registry.yarnpkg.com/homedir-polyfill/-/homedir-polyfill-1.0.1.tgz#4c2bbc8a758998feebf5ed68580f76d46768b4bc"
   dependencies:
     parse-passwd "^1.0.0"
-
-homedir@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/homedir/-/homedir-0.6.0.tgz#2b21db66bf08a6db38249a3eff52d7d18706af1e"
 
 hosted-git-info@^2.1.4:
   version "2.4.2"
@@ -4778,7 +4771,7 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-le-acme-core@^2.1.2:
+le-acme-core@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/le-acme-core/-/le-acme-core-2.1.3.tgz#cfc67f72db81e818a4ffdc75ceb9cc17d5a5c5d4"
   dependencies:
@@ -4795,19 +4788,13 @@ le-challenge-fs@^2.0.2:
   dependencies:
     mkdirp "^0.5.1"
 
-le-challenge-sni@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/le-challenge-sni/-/le-challenge-sni-2.0.1.tgz#4e262f1bf52cf1d181e64bc187776b7a68c8f417"
-  dependencies:
-    le-tls-sni "^0.1.0"
-
 le-sni-auto@^2.1.3:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/le-sni-auto/-/le-sni-auto-2.1.5.tgz#954e2a964dbe38d0d2c1c5400b388efca551e38a"
   dependencies:
     bluebird "^3.5.1"
 
-le-store-certbot@^2.0.3:
+le-store-certbot@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/le-store-certbot/-/le-store-certbot-2.1.0.tgz#ad01490ad8a0db20708c14dd2fa7c41c7540806a"
   dependencies:
@@ -4816,13 +4803,6 @@ le-store-certbot@^2.0.3:
     mkdirp "^0.5.1"
     pyconf "^1.1.2"
     safe-replace "^1.0.2"
-
-le-tls-sni@^0.1.0:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/le-tls-sni/-/le-tls-sni-0.1.4.tgz#785309a07b0ebb24190fe5ba615b9cc7685ce19c"
-  dependencies:
-    node-forge "^0.6.43"
-    rsa-compat "^1.2.7"
 
 leven@^2.1.0:
   version "2.1.0"
@@ -5476,7 +5456,7 @@ node-fetch@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.1.tgz#369ca70b82f50c86496104a6c776d274f4e4a2d4"
 
-node-forge@^0.6.41, node-forge@^0.6.43:
+node-forge@^0.6.41:
   version "0.6.49"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.6.49.tgz#f1ee95d5d74623938fe19d698aa5a26d54d2f60f"
 
@@ -6448,7 +6428,7 @@ replace-ext@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-1.0.0.tgz#de63128373fcbf7c3ccfa4de5a480c45a67958eb"
 
-request@2.81.0, request@^2.74.0:
+request@2.81.0:
   version "2.81.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
   dependencies:
@@ -6474,6 +6454,32 @@ request@2.81.0, request@^2.74.0:
     tough-cookie "~2.3.0"
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
+
+request@^2.74.0:
+  version "2.86.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.86.0.tgz#2b9497f449b0a32654c081a5cf426bbfb5bf5b69"
+  dependencies:
+    aws-sign2 "~0.7.0"
+    aws4 "^1.6.0"
+    caseless "~0.12.0"
+    combined-stream "~1.0.5"
+    extend "~3.0.1"
+    forever-agent "~0.6.1"
+    form-data "~2.3.1"
+    har-validator "~5.0.3"
+    hawk "~6.0.2"
+    http-signature "~1.2.0"
+    is-typedarray "~1.0.0"
+    isstream "~0.1.2"
+    json-stringify-safe "~5.0.1"
+    mime-types "~2.1.17"
+    oauth-sign "~0.8.2"
+    performance-now "^2.1.0"
+    qs "~6.5.1"
+    safe-buffer "^5.1.1"
+    tough-cookie "~2.3.3"
+    tunnel-agent "^0.6.0"
+    uuid "^3.1.0"
 
 request@^2.79.0:
   version "2.83.0"
@@ -6631,15 +6637,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^2.0.0"
     inherits "^2.0.1"
-
-rsa-compat@^1.2.1, rsa-compat@^1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/rsa-compat/-/rsa-compat-1.2.7.tgz#7c4636de798885a9f3c90436ea3804e35b1684c8"
-  dependencies:
-    buffer-v6-polyfill "^1.0.3"
-    node-forge "^0.6.41"
-  optionalDependencies:
-    ursa "^0.9.4"
 
 rsa-compat@^1.3.0, rsa-compat@^1.3.2:
   version "1.3.2"
