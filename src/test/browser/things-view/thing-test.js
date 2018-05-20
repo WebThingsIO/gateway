@@ -154,6 +154,75 @@ describe('Thing', () => {
     );
   });
 
+  it('should reset property value when setProperty is rejected', async () => {
+    const browser = getBrowser();
+    const desc = {
+      id: 'UnknownThings',
+      name: 'foofoo',
+      type: 'thing',
+      properties: {
+        numberProp: {
+          value: 10,
+          type: 'number',
+          unit: 'percent',
+          readOnly: true,
+        },
+        stringProp: {
+          value: 'bar',
+          type: 'string',
+          readOnly: true,
+        },
+        booleanProp: {
+          value: true,
+          type: 'boolean',
+          readOnly: true,
+        },
+      },
+    };
+    await addThing(desc);
+
+    const thingsPage = new ThingsPage(browser);
+    thingsPage.open();
+
+    await thingsPage.waitForThings();
+    const things = await thingsPage.things();
+    expect(things.length).toEqual(1);
+    const thingName = await things[0].thingName();
+    expect(thingName).toEqual('foofoo');
+
+    const detailPage = await things[0].openDetailPage();
+
+    await detailPage.waitForBooleanProperties();
+    const booleanProps = await detailPage.booleanProperties();
+    expect(booleanProps.length).toEqual(1);
+    const booleanValue = await booleanProps[0].getValue();
+    expect(booleanValue).toBeTruthy();
+
+    const numberProps = await detailPage.numberProperties();
+    expect(numberProps.length).toEqual(1);
+    let numberValue = await numberProps[0].getValue();
+    expect(numberValue).toEqual(10);
+    await numberProps[0].setValue(20);
+    await waitForExpect(async () => {
+      numberValue = await getProperty(desc.id, 'numberProp');
+      expect(numberValue).toEqual(10);
+      numberValue = await numberProps[0].getValue();
+      expect(numberValue).toEqual(10);
+    });
+
+    const stringProps = await detailPage.stringProperties();
+    expect(stringProps.length).toEqual(1);
+    let stringValue = await stringProps[0].getValue();
+    expect(stringValue).toEqual('bar');
+    await stringProps[0].setValue('foo');
+    await waitForExpect(async () => {
+      stringValue = await getProperty(desc.id, 'stringProp');
+      expect(stringValue).toEqual('bar');
+      stringValue = await stringProps[0].getValue();
+      expect(stringValue).toEqual('bar');
+    });
+  });
+
   it('should render a onOffLight and be able to change properties',
      async () => {
        const browser = getBrowser();

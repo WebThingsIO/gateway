@@ -124,10 +124,12 @@ UnknownThing.prototype.setProperty = function(name, value) {
     }),
   }).then((response) => {
     if (response.status === 200) {
-      this.updateProperty(name, value);
+      return response.json();
     } else {
-      console.error(`Status ${response.status} trying to set ${name}`);
+      throw new Error(`Status ${response.status} trying to set ${name}`);
     }
+  }).then((json) => {
+    this.updateProperty(name, json[name]);
   }).catch((error) => {
     console.error(`Error trying to set ${name}: ${error}`);
   });

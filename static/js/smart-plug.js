@@ -199,10 +199,12 @@ SmartPlug.prototype.setLevel = function(level) {
     }),
   }).then((response) => {
     if (response.status === 200) {
-      this.updateLevel(level);
+      return response.json();
     } else {
-      console.error(`Status ${response.status} trying to set level`);
+      throw new Error(`Status ${response.status} trying to set level`);
     }
+  }).then((json) => {
+    this.updateLevel(json.level);
   }).catch(function(error) {
     console.error(`Error trying to set level: ${error}`);
   });
