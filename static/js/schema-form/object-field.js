@@ -98,7 +98,7 @@ ObjectField.prototype.onPropertyChange = function(name, field) {
 };
 
 ObjectField.prototype.renderField = function(field) {
-  const id = Utils.escapeHtml(this.idSchema.$id);
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const description = this.retrievedSchema.description;
   let title = this.retrievedSchema.title ?
     this.retrievedSchema.title :

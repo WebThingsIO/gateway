@@ -68,7 +68,7 @@ SchemaField.prototype.getFieldType = function() {
 SchemaField.prototype.render = function() {
   const fieldType = this.getFieldType();
   const type = this.retrievedSchema.type;
-  const id = Utils.escapeHtml(this.idSchema.$id);
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const description = this.retrievedSchema.description;
   const classNames = [
     'form-group',

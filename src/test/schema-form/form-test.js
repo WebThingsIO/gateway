@@ -14,7 +14,7 @@ describe('Form', () => {
     it('should render a submit button', () => {
       const {node} = createSchemaForm({schema: {}});
 
-      expect(node.querySelectorAll('button[class=addon-config-button-apply]'))
+      expect(node.querySelectorAll('button[class=button-submit]'))
         .toHaveLength(1);
     });
   });
@@ -336,8 +336,8 @@ describe('Form', () => {
   });
 
 
-  describe('Apply button handler', () => {
-    it('should not call apply handler before change form state',
+  describe('Submit button handler', () => {
+    it('should not call submit handler before change form state',
        () => {
          const schema = {
            type: 'object',
@@ -354,60 +354,34 @@ describe('Form', () => {
            formData,
          });
 
-         expect(node.querySelector('.addon-config-button-apply').disabled)
+         expect(node.querySelector('.button-submit').disabled)
            .toBeTruthy();
        });
 
-    it('should call apply handler', (done) => {
+    it('should call submit handler', () => {
       const schema = {
         type: 'object',
         properties: {
           foo: {type: 'string'},
         },
       };
+      const onSubmit = sandbox.stub();
 
       const {node} = createSchemaForm({
         schema,
+        onSubmit,
       });
 
       const input = node.querySelector('input');
       input.value = 'bar';
       fireEvent(input, 'change');
 
-      sandbox.stub(console, 'error').callsFake((error) => {
-        expect(error).toContain('fetch is not defined');
-        done();
+      node.querySelector('.button-submit').click();
+
+      expect(onSubmit.calledOnce).toBeTruthy();
+      expect(onSubmit.getCall(0).args[0]).toEqual({
+        foo: 'bar',
       });
-
-      node.querySelector('.addon-config-button-apply').click();
-    });
-
-    it('should call scrollToTop on validation errors', () => {
-      const schema = {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string',
-            minLength: 8,
-          },
-        },
-      };
-
-      const {schemaForm, node} = createSchemaForm({
-        schema,
-      });
-
-      const input = node.querySelector('input');
-      input.value = 'short';
-      fireEvent(input, 'change');
-
-      sandbox.spy(schemaForm, 'scrollToTop');
-
-      node.querySelector('.addon-config-button-apply').click();
-
-      expect(schemaForm.scrollToTop.calledOnce).toBeTruthy();
-      expect(node.querySelector('.addon-config-button-apply').disabled)
-        .toBeTruthy();
     });
   });
 

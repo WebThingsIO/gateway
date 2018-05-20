@@ -2,7 +2,7 @@
   background: #305067;
 }
 
-.addons-form {
+#addon-config-settings .json-schema-form {
   top: 50%;
   color: #fff;
   font-size: 1.6rem;
@@ -11,7 +11,7 @@
   margin: 0 auto;
 }
 
-.addons-form legend {
+#addon-config-settings .json-schema-form legend {
   display: block;
   width: 100%;
   padding: 0;
@@ -22,45 +22,45 @@
   border-bottom: 1px solid #fff;
 }
 
-.addons-form fieldset {
+#addon-config-settings .json-schema-form fieldset {
   min-width: 0;
   padding: 0;
   margin: 0;
   border: 0;
 }
 
-.addons-form > p > .form-group {
+#addon-config-settings .json-schema-form > p > .form-group {
   padding-left: 0;
 }
 
-.addons-form > p > .form-group > fieldset > legend {
+#addon-config-settings .json-schema-form > p > .form-group > fieldset > legend {
   font-size: 2.5rem;
   border-bottom: none;
   padding-bottom: 2rem;
 }
 
-.addons-form > p > .form-group > fieldset > legend:before {
+#addon-config-settings .json-schema-form > p > .form-group > fieldset > legend:before {
   content: 'Configuring: ';
 }
 
-.addons-form .form-group {
+#addon-config-settings .json-schema-form .form-group {
   padding-left: 10px;
   margin-bottom: 1.5rem;
 }
 
-.addons-form .control-label {
+#addon-config-settings .json-schema-form .control-label {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.addons-form .field-description {
+#addon-config-settings .json-schema-form .field-description {
   margin-top: 0rem;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-.addons-form .form-control {
+#addon-config-settings .json-schema-form .form-control {
   display: block;
   width: 100%;
   height: 3rem;
@@ -71,25 +71,25 @@
   box-sizing: border-box;
 }
 
-.addons-form .checkbox{
+#addon-config-settings .json-schema-form .checkbox{
   height: 2.3rem;
   line-height: 2.3rem;
   margin-bottom: 0.5rem;
 }
 
-.addons-form input[type=checkbox] {
+#addon-config-settings .json-schema-form input[type=checkbox] {
   display: inline-block;
   vertical-align: middle;
   width: auto;
   margin-left: 0rem;
 }
 
-.addons-form .checkbox-title{
+#addon-config-settings .json-schema-form .checkbox-title{
   display: inline-block;
   vertical-align: middle;
 }
 
-.addons-form .title {
+#addon-config-settings .json-schema-form .title {
   font-size: 1.3rem;
   display: block;
   width: 12.8rem;
@@ -98,16 +98,16 @@
   margin: 0.5rem 0;
 }
 
-.addons-form .btn-form-tools:hover:enabled,
-.addons-form .btn-form-tools:active:enabled {
+#addon-config-settings .json-schema-form .btn-form-tools:hover:enabled,
+#addon-config-settings .json-schema-form .btn-form-tools:active:enabled {
   background-color: #658196;
 }
 
-.addons-form .btn-form-tools::-moz-focus-inner {
+#addon-config-settings .json-schema-form .btn-form-tools::-moz-focus-inner {
   border: 0;
 }
 
-.addons-form .btn-form-tools {
+#addon-config-settings .json-schema-form .btn-form-tools {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -125,18 +125,18 @@
   cursor: pointer;
 }
 
-.addons-form .btn-add {
+#addon-config-settings .json-schema-form .btn-add {
   background-image: url('../optimized-images/add_arrayfield.svg');
 }
 
-.addons-form .btn-remove {
+#addon-config-settings .json-schema-form .btn-remove {
   background-image: url('../optimized-images/clear_arrayfield.svg');
   position: absolute;
   bottom: 1.5rem;
   right: 1rem;
 }
 
-.addons-form .array-item-row {
+#addon-config-settings .json-schema-form .array-item-row {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.5rem;
@@ -144,33 +144,33 @@
   border-bottom: 1px solid #fff;
 }
 
-.addons-form .array-item-col {
+#addon-config-settings .json-schema-form .array-item-col {
   grid-column: span 6;
   grid-row: 1;
 }
 
-.addons-form .array-item-col-field {
+#addon-config-settings .json-schema-form .array-item-col-field {
   grid-column-start: span 5;
   grid-row: 1;
 }
 
-.addons-form .array-item-col-tool {
+#addon-config-settings .json-schema-form .array-item-col-tool {
   position: relative;
   grid-column: 6;
   grid-row: 1;
 }
 
-.addons-form .errors-field.hidden {
+#addon-config-settings .json-schema-form .errors-field.hidden {
   display: none;
 }
 
-#addon-config-settings .addons-form .errors-title {
+#addon-config-settings .json-schema-form .errors-title {
   margin: 0 auto;
   padding-bottom: 0.5rem;
   color: orange;
 }
 
-#addon-config-settings .addons-form .errors-list {
+#addon-config-settings .json-schema-form .errors-list {
   transform: translateY(0%);
   top: auto;
   margin: 0 auto;
@@ -181,7 +181,7 @@
   color: orange;
 }
 
-.addon-config-button-apply {
+#addon-config-settings .button-submit {
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
@@ -195,11 +195,11 @@
   color: #fff;
 }
 
-.addon-config-button-apply:hover,
-.addon-config-button-apply:active {
+#addon-config-settings .button-submit:hover,
+#addon-config-settings .button-submit:active {
   background-color: #658196;
 }
 
-.addon-config-button-apply::-moz-focus-inner {
+#addon-config-settings .button-submit::-moz-focus-inner {
   border: 0;
 }
