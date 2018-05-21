@@ -1,3 +1,5 @@
+const TIMEOUT_MS = 5000;
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -40,7 +42,7 @@ class Elements {
     this[`waitFor${capitalizeFirstLetter(name)}`] = async () => {
       const rootElement = this.rootElement;
       if (!rootElement) {
-        return await this.browser.waitForExist(selector);
+        return await this.browser.waitForExist(selector, TIMEOUT_MS);
       }
       return await this.browser.waitUntil(async () => {
         const elements = await this.browser.elementIdElements(
@@ -48,7 +50,7 @@ class Elements {
           selector
         );
         return elements.value.length > 0;
-      });
+      }, TIMEOUT_MS);
     };
   }
 

@@ -38,6 +38,15 @@ module.exports.getProperty = async function(id, property) {
   return res.body[property];
 };
 
+module.exports.setProperty = async function(id, property, value) {
+  const res = await chai.request(server)
+    .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
+    .set('Accept', 'application/json')
+    .set(...headerAuth(jwt))
+    .send({[property]: value});
+  return res.body[property];
+};
+
 module.exports.waitForExpect = function(expect) {
   return new Promise((resolve, reject) => {
     let wait = 2500;

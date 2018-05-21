@@ -6,13 +6,14 @@ class ThingSection extends Section {
     super(browser, rootElement);
     this.defineElement('name', '.thing-name');
     this.defineElement('detailLink', '.thing-details-link');
+    this.defineElement('clickable', '.thing-icon');
   }
 
   async click() {
     await this.waitClickable();
-    const rootElement = this.rootElement;
+    const clickable = await this.clickable();
     await this.browser.elementIdClick(
-      rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT
+      clickable.value ? clickable.value.ELEMENT : clickable.ELEMENT
     );
   }
 
@@ -57,6 +58,8 @@ class ThingsPage extends Page {
   constructor(browser) {
     super(browser, '/things');
     this.defineSections('things', '.thing', ThingSection);
+    this.defineSections('onThings', '.thing.on', ThingSection);
+    this.defineSections('offThings', '.thing.off', ThingSection);
   }
 
   async wait() {

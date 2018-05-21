@@ -68,13 +68,19 @@ class OnOffPropertySection extends InputPropertySection {
 
 class BooleanPropertySection extends InputPropertySection {
   async click() {
-    // TODO
-    // browser.click method does not work well.
+    // The following code not work.
+    const input = await this.input();
+    await this.browser.elementIdClick(
+      input.value ? input.value.ELEMENT : input.ELEMENT
+    );
   }
 
   async getValue() {
-    const stringValue = await super.getValue();
-    return stringValue === 'on';
+    const input = await this.input();
+    const data = await this.browser.elementIdSelected(
+      input.value ? input.value.ELEMENT : input.ELEMENT
+    );
+    return data.value;
   }
 }
 

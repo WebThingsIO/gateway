@@ -2,6 +2,7 @@ const {getBrowser} = require('../browser-common');
 const {
   addThing,
   getProperty,
+  setProperty,
   waitForExpect,
 } = require('./test-utils');
 const ThingsPage = require('../page-object/things-page');
@@ -42,15 +43,21 @@ describe('Thing', () => {
     const things = await thingsPage.things();
     expect(things.length).toEqual(1);
     const thingName = await things[0].thingName();
-    expect(thingName).toEqual('foofoo');
+    expect(thingName).toEqual(desc.name);
 
     const detailPage = await things[0].openDetailPage();
 
     await detailPage.waitForBooleanProperties();
+
     const booleanProps = await detailPage.booleanProperties();
     expect(booleanProps.length).toEqual(1);
-    const booleanValue = await booleanProps[0].getValue();
+    let booleanValue = await booleanProps[0].getValue();
     expect(booleanValue).toBeTruthy();
+    await setProperty(desc.id, 'booleanProp', false);
+    await waitForExpect(async () => {
+      booleanValue = await booleanProps[0].getValue();
+      expect(booleanValue).not.toBeTruthy();
+    });
 
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
@@ -61,6 +68,11 @@ describe('Thing', () => {
       numberValue = await getProperty(desc.id, 'numberProp');
       expect(numberValue).toEqual(20);
     });
+    await setProperty(desc.id, 'numberProp', 5);
+    await waitForExpect(async () => {
+      numberValue = await numberProps[0].getValue();
+      expect(numberValue).toEqual(5);
+    });
 
     const stringProps = await detailPage.stringProperties();
     expect(stringProps.length).toEqual(1);
@@ -70,6 +82,11 @@ describe('Thing', () => {
     await waitForExpect(async () => {
       stringValue = await getProperty(desc.id, 'stringProp');
       expect(stringValue).toEqual('foo');
+    });
+    await setProperty(desc.id, 'stringProp', 'foobar');
+    await waitForExpect(async () => {
+      stringValue = await stringProps[0].getValue();
+      expect(stringValue).toEqual('foobar');
     });
   });
 
@@ -104,7 +121,7 @@ describe('Thing', () => {
     const things = await thingsPage.things();
     expect(things.length).toEqual(1);
     const thingName = await things[0].thingName();
-    expect(thingName).toEqual('battery sensor');
+    expect(thingName).toEqual(desc.name);
 
     const detailPage = await things[0].openDetailPage();
 
@@ -136,4 +153,83 @@ describe('Thing', () => {
       `string-${Utils.escapeHtmlForIdClass('spaced string')}`
     );
   });
+
+  it('should render a onOffLight and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'onOffLight',
+         name: 'foofoo',
+         type: 'onOffLight',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForThings();
+       const things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeNull();
+     });
+
+  it('should render a onOffSwitch and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'onOffSwitch',
+         name: 'foofoo',
+         type: 'onOffSwitch',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeNull();
+     });
 });
