@@ -111,6 +111,10 @@ ArrayField.prototype.isItemRequired = function(itemSchema) {
   return itemSchema.type !== 'null';
 };
 
+ArrayField.prototype.itemFieldId = function(index) {
+  return `array_${this.idSchema.$id}_${index}`;
+};
+
 ArrayField.prototype.onDropIndexClick = function(field, index) {
   return function(event) {
     const schema = this.schema;
@@ -126,7 +130,7 @@ ArrayField.prototype.onDropIndexClick = function(field, index) {
     event.preventDefault();
 
     for (let i = 0; i < index; i++) {
-      const id = `${this.idSchema.$id}_${i}`;
+      const id = this.itemFieldId(i);
       const item = field.querySelector(`#${id}`);
 
       newItemsField.appendChild(item);
@@ -213,7 +217,9 @@ ArrayField.prototype.renderAddButton = function(field) {
 ArrayField.prototype.renderArrayFieldItem =
   function(field, itemData, index, itemSchema, canRemove) {
     const item = document.createElement('div');
+    const id = this.itemFieldId(index);
     item.className = 'array-item-row';
+    item.id = id;
     const hasToolbox = canRemove;
 
     if (hasToolbox) {
