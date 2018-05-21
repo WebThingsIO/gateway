@@ -2,8 +2,22 @@
 
 MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 
-if [ ! -f .post_upgrade_complete ]; then
-  ./tools/post-upgrade.sh
+is_docker_container() {
+  if [ -f /.dockerenv ]; then
+    return 0
+  fi
+
+  if grep -q ':\/docker\/' /proc/1/cgroup 2>&1; then
+    return 0
+  fi
+
+  return 1
+}
+
+if ! is_docker_container; then
+  if [ ! -f .post_upgrade_complete ]; then
+    ./tools/post-upgrade.sh
+  fi
 fi
 
 run_app() {
