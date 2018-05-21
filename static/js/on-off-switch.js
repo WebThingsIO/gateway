@@ -130,13 +130,15 @@ OnOffSwitch.prototype.turnOn = function() {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then((function(response) {
+  }).then((response) => {
     if (response.status == 200) {
-      this.onPropertyStatus({on: true});
+      return response.json();
     } else {
-      console.error(`Status ${response.status} trying to turn on switch`);
+      throw new Error(`Status ${response.status} trying to turn on switch`);
     }
-  }).bind(this)).catch(function(error) {
+  }).then((json) => {
+    this.onPropertyStatus(json);
+  }).catch((error) => {
     console.error(`Error trying to turn on switch: ${error}`);
   });
 };
@@ -158,13 +160,15 @@ OnOffSwitch.prototype.turnOff = function() {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then((function(response) {
+  }).then((response) => {
     if (response.status == 200) {
-      this.onPropertyStatus({on: false});
+      return response.json();
     } else {
-      console.error(`Status ${response.status} trying to turn off switch`);
+      throw new Error(`Status ${response.status} trying to turn off switch`);
     }
-  }).bind(this)).catch(function(error) {
+  }).then((json) => {
+    this.onPropertyStatus(json);
+  }).catch((error) => {
     console.error(`Error trying to turn off switch: ${error}`);
   });
 };

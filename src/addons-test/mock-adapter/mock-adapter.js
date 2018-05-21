@@ -28,6 +28,10 @@ class MockProperty extends Property {
    */
   setValue(value) {
     return new Promise((resolve, reject) => {
+      if (/^rejectProperty/.test(this.name)) {
+        reject();
+        return;
+      }
       super.setValue(value).then((updatedValue) => {
         resolve(updatedValue);
         this.device.notifyPropertyChanged(this);

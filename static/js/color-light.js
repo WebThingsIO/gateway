@@ -206,10 +206,12 @@ ColorLight.prototype.setColor = function(color) {
     }),
   }).then((response) => {
     if (response.status === 200) {
-      this.updateColor(color);
+      return response.json();
     } else {
-      console.error(`Status ${response.status} trying to set color`);
+      throw new Error(`Status ${response.status} trying to set color`);
     }
+  }).then((json) => {
+    this.updateColor(json.color);
   }).catch(function(error) {
     console.error(`Error trying to set color: ${error}`);
   });
@@ -248,11 +250,13 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
     }),
   }).then((response) => {
     if (response.status === 200) {
-      this.updateColorTemperature(temperature);
+      return response.json();
     } else {
-      console.error(
+      throw new Error(
         `Status ${response.status} trying to set color temperature`);
     }
+  }).then((json) => {
+    this.updateColorTemperature(json.colorTemperature);
   }).catch(function(error) {
     console.error(`Error trying to set color temperature: ${error}`);
   });
