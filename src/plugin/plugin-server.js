@@ -115,9 +115,10 @@ class PluginServer {
    */
   unregisterPlugin(pluginId) {
     this.plugins.delete(pluginId);
-    if (this.plugins.size == 0) {
-      this.ipcSocket.close();
-    }
+  }
+
+  shutdown() {
+    this.ipcSocket.close();
   }
 }
 
