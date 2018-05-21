@@ -17,15 +17,14 @@ const SchemaUtils = require('./schema-utils');
 const Validator = require('./validator');
 const SchemaField = require('./schema-field');
 const ErrorField = require('./error-field');
-const page = require('../lib/page');
 const Utils = require('../utils');
-const API = require('../api');
 
-function SchemaForm(schema, id, name, formData, options = {}) {
+function SchemaForm(schema, id, name, formData, onSubmit, options = {}) {
   this.definitions = schema.definitions;
   this.schema = schema;
   this.id = id;
   this.name = name;
+  this.onSubmit = onSubmit;
   this.idSchema = SchemaUtils.toIdSchema(schema,
                                          null,
                                          this.definitions,
@@ -33,6 +32,8 @@ function SchemaForm(schema, id, name, formData, options = {}) {
   this.formData = SchemaUtils.getDefaultFormState(schema,
                                                   formData,
                                                   this.definitions);
+  this.submitText =
+    options.hasOwnProperty('submitText') ? options.submitText : 'Submit';
   this.noValidate =
     options.hasOwnProperty('validate') ? !options.validate : false;
   this.liveValidate =
@@ -45,7 +46,7 @@ SchemaForm.prototype.onChange = function(formData) {
   let error = null;
   this.formData = formData;
 
-  this.applyButton.disabled = false;
+  this.submitButton.disabled = false;
 
   if (!this.noValidate && this.liveValidate) {
     const {errors} = this.validate(formData);
@@ -62,54 +63,40 @@ SchemaForm.prototype.validate = function(formData) {
   return Validator.validateFormData(formData, this.schema);
 };
 
-SchemaForm.prototype.scrollToTop = function() {
-  document.getElementById('addon-config-settings').scrollTop = 0;
-};
-
-SchemaForm.prototype.handleApply = function(e) {
+SchemaForm.prototype.handleSubmit = function(e) {
   const {errors} = this.validate(this.formData);
   const button = e.target;
   button.disabled = true;
 
-  if (errors.length > 0) {
-    this.scrollToTop();
-  } else {
-    this.applyButton.innerText = 'Applying...';
-    API.setAddonConfig(this.name, this.formData)
-      .then(() => {
-        page('/settings/addons');
-      })
-      .catch((err) => {
-        console.error(`Failed to set config add-on: ${this.name}\n${err}`);
-        this.errorField.render([err]);
-      });
+  if (this.onSubmit) {
+    this.onSubmit(this.formData, errors);
   }
 };
 
-SchemaForm.prototype.renderApplyButton = function() {
-  const applyButton = document.createElement('button');
-  applyButton.id = `addon-apply-${Utils.escapeHtml(this.id)}`;
-  applyButton.type = 'button';
-  applyButton.className = 'addon-config-button-apply';
-  applyButton.innerText = 'Apply';
-  applyButton.addEventListener('click', this.handleApply.bind(this));
-  applyButton.disabled = true;
+SchemaForm.prototype.renderSubmitButton = function() {
+  const submitButton = document.createElement('button');
+  submitButton.id = `submit-${Utils.escapeHtml(this.id)}`;
+  submitButton.type = 'button';
+  submitButton.className = 'button-submit';
+  submitButton.innerText = this.submitText;
+  submitButton.addEventListener('click', this.handleSubmit.bind(this));
+  submitButton.disabled = true;
 
-  this.applyButton = applyButton;
+  this.submitButton = submitButton;
 
-  return applyButton;
+  return submitButton;
 };
 
 SchemaForm.prototype.render = function() {
   const form = document.createElement('form');
-  form.className = 'addons-form';
+  form.className = 'json-schema-form';
   form.id = this.id;
   form.innerHTML = `<p></p>`;
 
   const p = form.querySelector('p');
 
-  const apply = this.renderApplyButton();
-  p.appendChild(apply);
+  const submit = this.renderSubmitButton();
+  p.appendChild(submit);
 
   const onChangeHandle = this.onChange.bind(this);
   const child = new SchemaField(

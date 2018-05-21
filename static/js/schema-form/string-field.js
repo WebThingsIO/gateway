@@ -55,7 +55,7 @@ StringField.prototype.onStringChange = function(event) {
 };
 
 StringField.prototype.render = function() {
-  const id = Utils.escapeHtml(this.idSchema.$id);
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const value = this.formData;
   const field = document.createElement('div');
 

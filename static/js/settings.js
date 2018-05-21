@@ -18,7 +18,7 @@ const Adapter = require('./adapter');
 const InstalledAddon = require('./installed-addon');
 const DiscoveredAddon = require('./discovered-addon');
 const User = require('./user');
-const SchemaForm = require('./addons-config/schema-form');
+const AddonConfig = require('./addon-config');
 const Utils = require('./utils');
 
 // eslint-disable-next-line no-unused-vars
@@ -452,16 +452,8 @@ const SettingsScreen = {
 
     promise.then(() => {
       this.addonConfigSettings.innerHTML = '';
-
       const addon = this.installedAddons.get(id);
-      const schema = addon.moziot.schema;
-      const config = addon.moziot.config;
-
-      const configForm = new SchemaForm(schema,
-                                        `addon-config-${id}`,
-                                        id,
-                                        config);
-      this.addonConfigSettings.appendChild(configForm.render());
+      new AddonConfig(id, addon);
     });
   },
 

@@ -78,7 +78,7 @@ NumberField.prototype.render = function() {
     field.innerHTML = `
       <input
       type="range"
-      id="${Utils.escapeHtml(id)}"
+      id="${Utils.escapeHtmlForIdClass(id)}"
       class="form-control"
       ${this.required ? 'required' : ''}
       ${this.readonly ? 'readonly' : ''}

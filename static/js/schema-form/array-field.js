@@ -266,7 +266,7 @@ ArrayField.prototype.renderArrayFieldItem =
 
 
 ArrayField.prototype.renderArrayFieldset = function() {
-  const id = Utils.escapeHtml(this.idSchema.$id);
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const description = this.schema.description;
 
   let title = this.schema.title ? this.schema.title : this.name;
@@ -354,7 +354,7 @@ ArrayField.prototype.renderFixedArray = function() {
 };
 
 ArrayField.prototype.renderMultiSelect = function() {
-  const id = Utils.escapeHtml(this.idSchema.$id);
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const items = this.formData;
   const schema = this.schema;
   const definitions = this.definitions;
