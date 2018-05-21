@@ -735,7 +735,11 @@ class AddonManager extends EventEmitter {
     }
 
     this.addonsLoaded = false;
-    return Promise.all(unloadPromises);
+    return Promise.all(unloadPromises).then(() => {
+      if (this.pluginServer) {
+        this.pluginServer.shutdown();
+      }
+    });
   }
 
   /**
