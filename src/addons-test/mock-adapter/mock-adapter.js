@@ -15,9 +15,6 @@ class MockProperty extends Property {
     super(device, name, propertyDescription);
     this.unit = propertyDescription.unit;
     this.description = propertyDescription.description;
-    this.readOnly = propertyDescription.hasOwnProperty('readOnly') ?
-      propertyDescription.readOnly :
-      false;
     this.setCachedValue(propertyDescription.value);
     this.device.notifyPropertyChanged(this);
   }
@@ -31,7 +28,7 @@ class MockProperty extends Property {
    */
   setValue(value) {
     return new Promise((resolve, reject) => {
-      if (this.readOnly) {
+      if (/^rejectProperty/.test(this.name)) {
         reject();
         return;
       }

@@ -161,21 +161,18 @@ describe('Thing', () => {
       name: 'foofoo',
       type: 'thing',
       properties: {
-        numberProp: {
+        rejectPropertyNum: {
           value: 10,
           type: 'number',
           unit: 'percent',
-          readOnly: true,
         },
-        stringProp: {
+        rejectPropertyStr: {
           value: 'bar',
           type: 'string',
-          readOnly: true,
         },
-        booleanProp: {
+        rejectPropertyBool: {
           value: true,
           type: 'boolean',
-          readOnly: true,
         },
       },
     };
@@ -204,7 +201,7 @@ describe('Thing', () => {
     expect(numberValue).toEqual(10);
     await numberProps[0].setValue(20);
     await waitForExpect(async () => {
-      numberValue = await getProperty(desc.id, 'numberProp');
+      numberValue = await getProperty(desc.id, 'rejectPropertyNum');
       expect(numberValue).toEqual(10);
       numberValue = await numberProps[0].getValue();
       expect(numberValue).toEqual(10);
@@ -216,7 +213,7 @@ describe('Thing', () => {
     expect(stringValue).toEqual('bar');
     await stringProps[0].setValue('foo');
     await waitForExpect(async () => {
-      stringValue = await getProperty(desc.id, 'stringProp');
+      stringValue = await getProperty(desc.id, 'rejectPropertyStr');
       expect(stringValue).toEqual('bar');
       stringValue = await stringProps[0].getValue();
       expect(stringValue).toEqual('bar');
