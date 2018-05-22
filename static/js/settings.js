@@ -340,18 +340,13 @@ const SettingsScreen = {
       });
     }
 
-    let resolveFunc = null, rejectFunc = null;
-
     this.fetchAddonDeferred = new Promise((resolve, reject) => {
-      resolveFunc = resolve;
-      rejectFunc = reject;
-    });
-
-    this.fetchAddonList().then(() => {
-      resolveFunc();
-    }).catch((e) => {
-      console.error(`Failed to parse add-ons list: ${e}`);
-      rejectFunc(e);
+      this.fetchAddonList().then(() => {
+        resolve();
+      }).catch((e) => {
+        console.error(`Failed to parse add-ons list: ${e}`);
+        reject(e);
+      });
     });
 
     return this.fetchAddonDeferred;
