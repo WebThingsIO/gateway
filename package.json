@@ -49,7 +49,7 @@
     "express-ws": "^3.0.0",
     "file-loader": "^1.1.11",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
-    "greenlock": "^2.2.16",
+    "greenlock": "^2.2.18",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jsonwebtoken": "^8.1.0",

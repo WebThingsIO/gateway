@@ -3824,9 +3824,9 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-greenlock@^2.2.16:
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.2.16.tgz#4d7ae6b7cfe347357894e1ed2fcf9f7480234b90"
+greenlock@^2.2.18:
+  version "2.2.18"
+  resolved "https://registry.yarnpkg.com/greenlock/-/greenlock-2.2.18.tgz#18b6a1f3d58ec89a50991bfb62e6d8f44fe8e749"
   dependencies:
     acme-v2 "^1.0.6"
     asn1js "^1.2.12"
@@ -3839,6 +3839,7 @@ greenlock@^2.2.16:
     rsa-compat "^1.3.2"
   optionalDependencies:
     bluebird "^3.5.1"
+    le-acme-core "^2.1.3"
 
 grouped-queue@^0.3.0, grouped-queue@^0.3.3:
   version "0.3.3"
@@ -5321,8 +5322,8 @@ le-sni-auto@^2.1.3:
     bluebird "^3.5.1"
 
 le-store-certbot@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/le-store-certbot/-/le-store-certbot-2.1.0.tgz#ad01490ad8a0db20708c14dd2fa7c41c7540806a"
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/le-store-certbot/-/le-store-certbot-2.1.2.tgz#bd4ef23f7a0abe7d23562b29bf632e5efa66dd69"
   dependencies:
     bluebird "^3.5.1"
     fs-symlink "^1.2.1"
