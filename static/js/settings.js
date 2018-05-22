@@ -49,6 +49,7 @@ const SettingsScreen = {
 
     this.availableAddons = new Map();
     this.installedAddons = new Map();
+    this.fetchAddonDeferred = null;
   },
 
   show: function(section, subsection, id) {
@@ -330,6 +331,32 @@ const SettingsScreen = {
     });
   },
 
+  getAddonList: function() {
+    // If already fetched addon list, return a promise cached.
+    if (this.fetchAddonDeferred) {
+      return this.fetchAddonDeferred.catch(() => {
+        this.fetchAddonDeferred = null;
+        return this.getAddonList();
+      });
+    }
+
+    let resolveFunc = null, rejectFunc = null;
+
+    this.fetchAddonDeferred = new Promise((resolve, reject) => {
+      resolveFunc = resolve;
+      rejectFunc = reject;
+    });
+
+    this.fetchAddonList().then(() => {
+      resolveFunc();
+    }).catch((e) => {
+      console.error(`Failed to parse add-ons list: ${e}`);
+      rejectFunc(e);
+    });
+
+    return this.fetchAddonDeferred;
+  },
+
   fetchAddonList: function() {
     const opts = {
       headers: API.headers(),
@@ -397,7 +424,7 @@ const SettingsScreen = {
           }
         }
       }
-    }).catch((e) => console.error(`Failed to parse add-ons list: ${e}`));
+    });
   },
 
   showAddonSettings: function() {
@@ -413,7 +440,7 @@ const SettingsScreen = {
       page('/settings/addons/discovered');
     });
 
-    this.fetchAddonList().then(() => {
+    this.getAddonList().then(() => {
       const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
@@ -443,14 +470,7 @@ const SettingsScreen = {
     this.addonConfigSettings.classList.remove('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
 
-    let promise;
-    if (this.installedAddons.size === 0 && this.availableAddons.size === 0) {
-      promise = this.fetchAddonList();
-    } else {
-      promise = Promise.resolve();
-    }
-
-    promise.then(() => {
+    this.getAddonList().then(() => {
       this.addonConfigSettings.innerHTML = '';
       const addon = this.installedAddons.get(id);
       new AddonConfig(id, addon);
@@ -464,14 +484,7 @@ const SettingsScreen = {
     this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.remove('hidden');
 
-    let promise;
-    if (this.installedAddons.size === 0 && this.availableAddons.size === 0) {
-      promise = this.fetchAddonList();
-    } else {
-      promise = Promise.resolve();
-    }
-
-    promise.then(() => {
+    this.getAddonList().then(() => {
       const addonList = document.getElementById('discovered-addons-list');
       addonList.innerHTML = '';
 
