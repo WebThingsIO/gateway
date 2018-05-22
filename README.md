@@ -18,6 +18,12 @@ If you have a Rasberry Pi, the easiest way to use the gateway is to [download an
 
 If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/mozilla-iot/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
 
+### Update Package Cache (Linux only)
+
+```
+$ sudo apt-get update
+```
+
 ### Install pkg-config
 
 Under Linux:
