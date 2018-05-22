@@ -1,5 +1,7 @@
 const {server, chai, mockAdapter} = require('../common');
 const Settings = require('../../models/settings');
+const {waitForExpect} = require('../expect-utils');
+const util = require('util');
 
 const pFinal = require('../promise-final');
 const {
@@ -467,12 +469,6 @@ describe('rules engine', function() {
     await webSocketClose(ws);
   });
 
-  function sleep(ms) {
-    return new Promise((res) => {
-      setTimeout(res, ms);
-    });
-  }
-
   async function getOn(lightId) {
     const res = await chai.request(server)
       .get(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
@@ -509,19 +505,22 @@ describe('rules engine', function() {
     const ruleId = res.body.id;
 
     await setOn(thingLight1.id, false);
-    await sleep(200);
-    expect(await getOn(thingLight2.id)).toEqual(false);
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight2.id)).toEqual(false);
+    });
 
     await setOn(thingLight2.id, true);
     expect(await getOn(thingLight2.id)).toEqual(true);
 
     await setOn(thingLight1.id, false);
-    await sleep(200);
-    expect(await getOn(thingLight2.id)).toEqual(false);
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight2.id)).toEqual(false);
+    });
 
     await setOn(thingLight1.id, true);
-    await sleep(200);
-    expect(await getOn(thingLight2.id)).toEqual(true);
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight2.id)).toEqual(true);
+    });
 
     await deleteRule(ruleId);
   });
@@ -536,23 +535,26 @@ describe('rules engine', function() {
     expect(res.body).toHaveProperty('id');
     const ruleId = res.body.id;
 
-    await sleep(200);
+    // Since the rule-engin uses the websocket API "ADD_EVENT_SUBSCRIPTION"
+    // for getting the Event, the websocket IO should process before add Event.
+    const setImmediatePromise = util.promisify(setImmediate);
+    await setImmediatePromise();
 
     Events.add(new Event('surge',
                          'oh no there is too much electricity',
                          thingLight1.id));
 
-    await sleep(200);
-
-    res = await chai.request(server)
-      .get(`${Constants.THINGS_PATH}/${thingLight1.id
-      }${Constants.ACTIONS_PATH}`)
-      .set('Accept', 'application/json')
-      .set(...headerAuth(jwt));
-    expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('blink');
+    await waitForExpect(async () => {
+      res = await chai.request(server)
+        .get(`${Constants.THINGS_PATH}/${thingLight1.id
+        }${Constants.ACTIONS_PATH}`)
+        .set('Accept', 'application/json')
+        .set(...headerAuth(jwt));
+      expect(res.status).toEqual(200);
+      expect(Array.isArray(res.body)).toBeTruthy();
+      expect(res.body.length).toEqual(1);
+      expect(res.body[0]).toHaveProperty('blink');
+    });
 
     // dispatch event get action
     await deleteRule(ruleId);
@@ -569,14 +571,16 @@ describe('rules engine', function() {
     const ruleId = res.body.id;
 
     await setOn(thingLight1.id, true);
-    await sleep(200);
-    expect(await getOn(thingLight2.id)).toEqual(true);
-    expect(await getOn(thingLight3.id)).toEqual(true);
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight2.id)).toEqual(true);
+      expect(await getOn(thingLight3.id)).toEqual(true);
+    });
 
     await setOn(thingLight1.id, false);
-    await sleep(200);
-    expect(await getOn(thingLight2.id)).toEqual(false);
-    expect(await getOn(thingLight3.id)).toEqual(false);
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight2.id)).toEqual(false);
+      expect(await getOn(thingLight3.id)).toEqual(false);
+    });
 
     await deleteRule(ruleId);
   });

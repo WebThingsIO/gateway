@@ -47,32 +47,6 @@ module.exports.setProperty = async function(id, property, value) {
   return res.body[property];
 };
 
-module.exports.waitForExpect = function(expect) {
-  return new Promise((resolve, reject) => {
-    let wait = 2500;
-    const interval = 500;
-    const sleep = (ms) => {
-      return new Promise((resolve) => setTimeout(() => resolve(), ms));
-    };
-    const retry = async () => {
-      try {
-        await expect();
-        resolve();
-        return;
-      } catch (err) {
-        wait -= interval;
-        if (wait <= 0) {
-          reject(err);
-          return;
-        }
-        await sleep(interval);
-        retry();
-      }
-    };
-    retry();
-  });
-};
-
 let stepNumber = 0;
 module.exports.saveStepScreen = async function(step) {
   let stepStr = stepNumber.toString();

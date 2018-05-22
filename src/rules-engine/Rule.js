@@ -24,9 +24,9 @@ class Rule {
   /**
    * Begin executing the rule
    */
-  start() {
-    this.trigger.start();
+  async start() {
     this.trigger.on(Events.STATE_CHANGED, this.onTriggerStateChanged);
+    await this.trigger.start();
   }
 
   /**
