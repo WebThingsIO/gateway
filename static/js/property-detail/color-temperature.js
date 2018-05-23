@@ -28,25 +28,22 @@ class ColorTemperatureDetail {
   }
 
   view() {
-    const temperature = this.thing.properties[this.name];
-
     return `
       <webthing-color-temperature-property min="${this.min}" max="${this.max}"
-        data-name="${Utils.escapeHtml(this.label)}"
-        value="${Utils.escapeHtml(temperature)}" id="${this.id}">
+        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-color-temperature-property>`;
   }
 
-  update() {
+  update(temperature) {
     if (!this.temperature) {
       return;
     }
 
-    if (this.thing.properties[this.name] == this.temperature.value) {
+    if (temperature == this.temperature.value) {
       return;
     }
 
-    this.temperature.value = this.thing.properties[this.name];
+    this.temperature.value = temperature;
   }
 
   set() {

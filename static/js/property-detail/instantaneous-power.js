@@ -20,13 +20,9 @@ class InstantaneousPowerDetail extends LabelDetail {
   }
 
   view() {
-    const name = Utils.escapeHtml(this.label);
-    const value = parseFloat(this.thing.properties[this.name]);
-    const data = value || 0;
-
     return `
-      <webthing-instantaneous-power-property data-value="${data}"
-        data-name="${name}" id="${this.id}">
+      <webthing-instantaneous-power-property data-value="0"
+        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-instantaneous-power-property>`;
   }
 }

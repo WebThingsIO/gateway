@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
 const page = require('./lib/page');
 const Utils = require('./utils');
 
@@ -78,7 +79,7 @@ const ContextMenu = {
     }
 
     this.headingText.textContent = e.detail.thingName;
-    this.thingUrl = e.detail.thingUrl;
+    this.thingId = e.detail.thingId;
     this.element.classList.remove('hidden');
 
     this.editContent.classList.add('hidden');
@@ -164,7 +165,7 @@ const ContextMenu = {
     this.headingIcon.src = '#';
     this.headingCustomIcon.classList.add('hidden');
     this.headingText.textContent = '';
-    this.thingUrl = '';
+    this.thingId = '';
   },
 
   handleTypeChange: function() {
@@ -312,22 +313,8 @@ const ContextMenu = {
    * Handle click on remove option.
    */
   handleRemove: function() {
-    fetch(this.thingUrl, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (response.ok) {
-        page('/things');
-      } else {
-        console.error(`Error removing thing: ${response.statusText}`);
-      }
-      this.hide();
-    }).catch((error) => {
-      console.error(`Error removing thing: ${error}`);
+    App.gatewayModel.removeThing(this.thingId).then(() => {
+      page('/things');
       this.hide();
     });
   },

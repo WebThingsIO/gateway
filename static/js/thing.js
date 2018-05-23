@@ -29,6 +29,7 @@ const StringDetail = require('./property-detail/string');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
 const VoltageDetail = require('./property-detail/voltage');
+const Constants = require('./constants');
 
 class Thing {
   /**
@@ -38,7 +39,7 @@ class Thing {
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    * @param {Object} options Options for building the view.
    */
-  constructor(description, format, options) {
+  constructor(model, description, format, options) {
     const opts = options || {};
     const defaults = {
       on: OnOffDetail,
@@ -54,6 +55,7 @@ class Thing {
 
     this.name = description.name;
     this.type = description.type;
+    this.model = model;
 
     if (Array.isArray(description['@type']) &&
         description['@type'].length > 0) {
@@ -388,64 +390,16 @@ class Thing {
    * @param {*} value Value of the property
    */
   setProperty(name, value) {
-    switch (this.displayedProperties[name].property.type) {
-      case 'number':
-        value = parseFloat(value);
-        break;
-      case 'integer':
-        value = parseInt(value);
-        break;
-      case 'boolean':
-        value = Boolean(value);
-        break;
-    }
-
-    const payload = {
-      [name]: value,
-    };
-    fetch(this.displayedProperties[name].href, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-      headers: Object.assign(API.headers(), {
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error(`Status ${response.status} trying to set ${name}`);
-      }
-    }).then((json) => {
-      this.updateProperty(name, json[name]);
-    }).catch((error) => {
-      console.error(`Error trying to set ${name}: ${error}`);
-    });
+    this.model.setProperty(name, value);
   }
 
   /**
    * Update the status of Thing.
    */
   updateStatus() {
-    const urls = Object.values(this.displayedProperties).map((v) => v.href);
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
-    const requests = urls.map((u) => fetch(u, opts));
-    Promise.all(requests).then((responses) => {
-      return Promise.all(responses.map((response) => {
-        return response.json();
-      }));
-    }).then((responses) => {
-      responses.forEach((response) => {
-        this.onPropertyStatus(response);
-      });
-    }).catch((error) => {
-      console.error(`Error fetching ${this.name} status: ${error}`);
-    });
+    this.model.subscribe(Constants.STATE_PROPERTIES,
+                         this.updateProperties);
+    this.model.subscribe(Constants.OCCUR_EVENT, this.onEvent);
   }
 
   /**
@@ -556,7 +510,7 @@ class Thing {
   handleRemove() {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
-        thingUrl: this.href.href,
+        thingId: this.id,
         thingName: this.name,
         thingIcon: this.baseIcon,
         action: 'remove',

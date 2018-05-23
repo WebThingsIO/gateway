@@ -27,16 +27,13 @@ class OnOffDetail {
   }
 
   view() {
-    const checked = this.thing.properties[this.name];
-
     return `
       <webthing-on-off-property data-name="${Utils.escapeHtml(this.label)}"
-        ${checked ? 'checked' : ''} id="${this.id}">
+        id="${this.id}">
       </webthing-on-off-property>`;
   }
 
-  update() {
-    const on = this.thing.properties[this.name];
+  update(on) {
     this.input.checked = on;
   }
 

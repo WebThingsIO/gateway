@@ -43,12 +43,12 @@ class StringDetail {
   /**
    * Update the detail view with the new property value.
    */
-  update() {
-    if (!this.input || this.thing.properties[this.name] == this.input.value) {
+  update(string) {
+    if (!this.input || string == this.input.value) {
       return;
     }
 
-    this.input.value = this.thing.properties[this.name];
+    this.input.value = string;
   }
 }
 

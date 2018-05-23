@@ -166,8 +166,7 @@ const AddThingScreen = {
   hide: function() {
     this.element.classList.add('hidden');
     this.requestCancelPairing();
-    const newEvent = new CustomEvent('_thingchange');
-    window.dispatchEvent(newEvent);
+    App.gatewayModel.updateThings();
   },
 
   showNewThing: function(thing) {

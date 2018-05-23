@@ -26,18 +26,17 @@ class ColorDetail {
   }
 
   view() {
-    const color = this.thing.properties[this.name];
     return `
       <webthing-color-property data-name="${Utils.escapeHtml(this.label)}"
-        value="${Utils.escapeHtml(color)}" id="${this.id}">
+        id="${this.id}">
       </webthing-color-property>`;
   }
 
-  update() {
-    if (this.thing.properties[this.name] == this.color.value) {
+  update(color) {
+    if (color == this.color.value) {
       return;
     }
-    this.color.value = this.thing.properties[this.name];
+    this.color.value = color;
   }
 
   set() {

@@ -1,6 +1,6 @@
 'use strict';
 
-function ThingDetailLayout(elements) {
+function ThingDetailLayout(parent, elements) {
   this.elements = elements;
   this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   this.svg.classList.add('thing-detail-layout-links');
@@ -13,7 +13,8 @@ function ThingDetailLayout(elements) {
 
   this.doLayout();
 
-  window.addEventListener('resize', this.doLayout);
+  parent.registerEventListener(window, 'resize',
+                               this.doLayout);
 }
 
 ThingDetailLayout.prototype.doLayout = function() {
