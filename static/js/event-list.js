@@ -125,43 +125,45 @@ EventList.prototype.prependEvent = function(event) {
 
   const schema = this.schema[event.name];
 
-  let data = event.data;
-  if (typeof data !== 'object' || Array.isArray(data)) {
-    data = {data};
-  }
-
   let body = '';
-  for (const name of Array.from(Object.keys(data)).sort()) {
-    if (!schema.hasOwnProperty(name)) {
-      continue;
+  let data = event.data;
+  if (data !== null) {
+    if (typeof data !== 'object' || Array.isArray(data)) {
+      data = {data};
     }
 
-    let value = data[name];
+    for (const name of Array.from(Object.keys(data)).sort()) {
+      if (!schema.hasOwnProperty(name)) {
+        continue;
+      }
 
-    switch (schema[name].type) {
-      case 'number':
-      case 'integer':
-        body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
-        if (schema[name].hasOwnProperty('unit')) {
-          body += ` ${schema[name].unit}`;
-        }
-        break;
-      case 'object':
-      case 'array':
-        value = JSON.stringify(value);
-        // eslint-ignore-next-line no-fallthrough
-      case 'boolean':
-      case 'string':
-      default:
-        body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
-        break;
+      let value = data[name];
+
+      switch (schema[name].type) {
+        case 'number':
+        case 'integer':
+          body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
+          if (schema[name].hasOwnProperty('unit')) {
+            body += ` ${schema[name].unit}`;
+          }
+          break;
+        case 'object':
+        case 'array':
+          value = JSON.stringify(value);
+          // eslint-ignore-next-line no-fallthrough
+        case 'boolean':
+        case 'string':
+        default:
+          body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
+          break;
+      }
+
+      body += '<br>';
     }
 
-    body += '<br>';
+    // Trim off the final '<br>'
+    body = body.substring(0, body.length - 4);
   }
-
-  // Trim off the final '<br>'
-  body = body.substring(0, body.length - 4);
 
   const el = document.createElement('div');
 
