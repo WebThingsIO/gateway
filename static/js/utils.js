@@ -9,6 +9,13 @@
 'use strict';
 
 const Utils = {
+  /**
+   * @param {String} str
+   * @return {String} the string with the first letter capitalized
+   */
+  capitalize: function(str) {
+    return str[0].toUpperCase() + str.substr(1);
+  },
   escapeHtml: function(text) {
     if (typeof (text) !== 'string') {
       text = `${text}`;
