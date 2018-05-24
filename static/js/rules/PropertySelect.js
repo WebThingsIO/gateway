@@ -1,3 +1,5 @@
+const Utils = require('../utils');
+
 /**
  * A hand-coded <select>-like element which allows the selection of one of a
  * thing's properties. In a perfect world this would be a styled select, but
@@ -196,7 +198,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         const triggerOff = Object.assign({}, triggerOn, {
           onValue: false,
         });
-        const onName = property.name[0].toUpperCase() + property.name.substr(1);
+        const onName = Utils.capitalize(property.name);
         let offName = `Not ${onName}`;
         if (property.name === 'on') {
           offName = 'Off';
@@ -241,10 +243,15 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         const effectOff = Object.assign({}, effectOn, {
           value: false,
         });
-        this.addOption('On', {
+        const onName = Utils.capitalize(property.name);
+        let offName = `Not ${onName}`;
+        if (property.name === 'on') {
+          offName = 'Off';
+        }
+        this.addOption(onName, {
           effect: effectOn,
         });
-        this.addOption('Off', {
+        this.addOption(offName, {
           effect: effectOff,
         });
       } else if (property.name === 'color') {
@@ -256,7 +263,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           },
         });
       } else if (property.type === 'number') {
-        const name = property.name[0].toUpperCase() + property.name.substr(1);
+        const name = Utils.capitalize(property.name);
         const max = property.maximum || property.max || 0;
         const min = property.minimum || property.min || 0;
         const value = (max + min) / 2;
