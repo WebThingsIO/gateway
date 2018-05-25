@@ -278,7 +278,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 3rem;
   background-color: #5288af;
   color: white;
-  padding: 1rem;
+  padding: 1rem 0;
   border-radius: 0.5rem;
   transform: scale(1);
   transition: transform 0.25s ease;
@@ -308,8 +308,22 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   font-size: 2rem;
   display: block;
-  padding: 0.4rem;
+  padding: 0.4rem 1rem;
   text-decoration: none;
+}
+
+#overflow-menu > a:hover {
+  background-color: #4d80a5;
+}
+
+#overflow-menu > a:active {
+  background-color: #48779a;
+}
+
+#overflow-menu > a > img {
+  height: 2rem;
+  padding-right: 1rem;
+  margin-bottom: -0.3rem;
 }
 
 /* Dialog */

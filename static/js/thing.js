@@ -89,29 +89,32 @@ const Thing = function(description, format, options) {
   }
 
   // Parse events
-  if (format === 'htmlDetail' &&
-      description.hasOwnProperty('events') &&
-      Object.keys(description.events).length > 0) {
-    this.displayEvents = true;
-    App.buildOverflowMenu([
-      {
+  if (format === 'htmlDetail') {
+    const menu = [];
+    if (description.hasOwnProperty('events') &&
+        Object.keys(description.events).length > 0) {
+      this.displayEvents = true;
+      menu.push({
         href: this.eventsHref,
         name: 'Event Log',
-      },
-    ]);
+      });
+    } else {
+      this.displayEvents = false;
+    }
+
+    menu.push({
+      listener: this.handleRemove.bind(this),
+      name: 'Remove',
+      icon: '/images/remove.svg',
+    });
+
+    App.buildOverflowMenu(menu);
     App.showOverflowButton();
   } else {
-    this.displayEvents = false;
     App.hideOverflowButton();
   }
 
   this.element = this.render(format);
-
-  // Only allow things to be removed from the HTML view for now.
-  if (format != 'svg') {
-    this.element.addEventListener('contextmenu',
-                                  this.handleContextMenu.bind(this));
-  }
 
   return this;
 };
@@ -306,14 +309,9 @@ Thing.prototype.render = function(format) {
 };
 
 /**
- * Handle a context menu event.
- *
- * Right click on desktop, long press on mobile.
- *
- * @param {Event} e contextmenu event.
+ * Handle a remove click event.
  */
-Thing.prototype.handleContextMenu = function(e) {
-  e.preventDefault(e);
+Thing.prototype.handleRemove = function() {
   const newEvent = new CustomEvent('_contextmenu', {
     detail: {
       thingUrl: this.href.href,
