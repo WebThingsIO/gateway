@@ -132,13 +132,31 @@ const App = {
   },
 
   buildOverflowMenu: function(links) {
-    let items = '';
+    this.overflowMenu.innerHTML = '';
 
     for (const link of links) {
-      items += `<a href="${link.href}">${link.name}</a>`;
-    }
+      const element = document.createElement('a');
+      element.innerText = link.name;
 
-    this.overflowMenu.innerHTML = items;
+      if (link.listener) {
+        element.href = '#';
+        element.addEventListener('click', (e) => {
+          e.preventDefault();
+          link.listener();
+        });
+      } else {
+        element.href = link.href;
+      }
+
+      if (link.icon) {
+        const image = document.createElement('img');
+        image.src = link.icon;
+        image.alt = `${link.name} icon`;
+        element.insertBefore(image, element.childNodes[0]);
+      }
+
+      this.overflowMenu.appendChild(element);
+    }
   },
 
   toggleOverflowMenu: function() {
