@@ -24,6 +24,7 @@ class DeviceProxy extends Device {
     this.name = deviceDict.name;
     this.type = deviceDict.type;
     this.description = deviceDict.description || '';
+    this.uiHref = deviceDict.uiHref || null;
 
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
