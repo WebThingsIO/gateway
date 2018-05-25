@@ -6,6 +6,10 @@ body.hidden {
   visibility: hidden;
 }
 
+#authorize-view {
+  overflow: auto;
+}
+
 .title-bar {
   text-align: center;
   width: 100%;
