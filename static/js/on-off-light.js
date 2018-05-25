@@ -34,8 +34,7 @@ function OnOffLight(description, format) {
                                   pngBaseIcon: '/images/bulb.png',
                                   thingCssClass: 'on-off-light',
                                   thingDetailCssClass: 'on-off-light',
-                                  addIconToView: false,
-                                  haveDetailView: false});
+                                  addIconToView: false});
 
   if (format == 'svg') {
     // For now the SVG view is just a link.
