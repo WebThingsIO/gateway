@@ -257,7 +257,7 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
 
        const detailPage = await things[0].openDetailPage();
-       expect(detailPage).toBeNull();
+       expect(detailPage).toBeTruthy();
      });
 
   it('should render a onOffSwitch and be able to change properties',
@@ -297,6 +297,6 @@ describe('Thing', () => {
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
-       expect(detailPage).toBeNull();
+       expect(detailPage).toBeTruthy();
      });
 });
