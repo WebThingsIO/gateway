@@ -89,7 +89,7 @@ const pluginsWeb = [
   new HtmlWebpackPlugin({
     inject: 'head',
     template: 'static/index.html',
-    chunks: ['style', 'check-user.js', 'app.js'],
+    chunks: ['style', 'app.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'static/signup/index.html',
@@ -99,13 +99,13 @@ const pluginsWeb = [
   new HtmlWebpackPlugin({
     template: 'static/login/index.html',
     filename: 'login/index.html',
-    chunks: ['check-user.js', 'login.js'],
+    chunks: ['login.js'],
   }),
   new HtmlWebpackPlugin({
     inject: 'head',
     template: 'src/views/authorize.mustache',
     filename: '../views/authorize.mustache',
-    chunks: ['check-user.js', 'authorize.js'],
+    chunks: ['authorize.js'],
   }),
   new HtmlWebpackPlugin({
     inject: 'head',
@@ -122,12 +122,11 @@ const pluginsWeb = [
 
 const webpackWeb = {
   entry: {
-    'app.js': './static/js/app.js',
-    'check-user.js': './static/js/check-user.js',
-    'create-user.js': './static/js/create-user.js',
-    'login.js': './static/js/login.js',
-    'authorize.js': './static/js/authorize.js',
-    'setup_subdomain.js': './static/js/setup_subdomain.js',
+    'app.js': ['./static/js/check-user.js', './static/js/app.js'],
+    'create-user.js': ['./static/js/create-user.js'],
+    'login.js': ['./static/js/check-user.js', './static/js/login.js'],
+    'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
+    'setup_subdomain.js': ['./static/js/setup_subdomain.js'],
     buildCss: [
       // css for static/index.html
       './static/css/app.css',
@@ -166,13 +165,21 @@ const webpackWeb = {
   module: {
     rules: [
       {
-        // schema-utils uses ES7 Spread Operator.
-        test: /schema-utils\.js$/,
+        test: /.\/static\/js\/.*\.js$/,
         use: [
           {
             loader: 'babel-loader',
             query: {
-              plugins: ['transform-object-rest-spread'],
+              babelrc: false,
+              presets: [
+                ['@babel/preset-env', {
+                  targets: {
+                    ie: 9,
+                  },
+                  useBuiltIns: 'usage',
+                }],
+              ],
+              plugins: ['@babel/plugin-syntax-dynamic-import'],
             },
           },
         ],
@@ -225,7 +232,7 @@ const webpackWeb = {
     fs: 'empty',
   },
   plugins: pluginsWeb,
-  devtool: 'eval',
+  devtool: 'source-map',
 };
 
 module.exports = [
