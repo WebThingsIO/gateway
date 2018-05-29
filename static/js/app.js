@@ -142,10 +142,14 @@ const App = {
         element.href = '#';
         element.addEventListener('click', (e) => {
           e.preventDefault();
+          this.toggleOverflowMenu();
           link.listener();
         });
       } else {
         element.href = link.href;
+        element.addEventListener('click', () => {
+          this.toggleOverflowMenu();
+        });
       }
 
       if (link.icon) {

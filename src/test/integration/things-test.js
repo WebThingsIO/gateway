@@ -133,7 +133,7 @@ describe('things/', function() {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(thingDescr.id);
+    expect(res.body.name).toEqual(thingDescr.name);
     delete thingDescr.id;
     expect(res.body).toMatchObject(thingDescr);
   });
@@ -146,6 +146,67 @@ describe('things/', function() {
       .set(...headerAuth(jwt)));
 
     expect(err.response.status).toEqual(404);
+  });
+
+  it('fail to rename a thing', async () => {
+    const thingDescr = Object.assign({}, piDescr);
+
+    await addDevice(thingDescr);
+    const res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual(thingDescr.name);
+
+    let err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({}));
+
+    expect(err.response.status).toEqual(400);
+
+    err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({name: '  \n  '}));
+
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('rename a thing', async () => {
+    const thingDescr = Object.assign({}, piDescr);
+
+    await addDevice(thingDescr);
+    let res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual(thingDescr.name);
+
+    res = await chai.request(server)
+      .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({name: 'new name'});
+
+    expect(res.status).toEqual(200);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${thingDescr.id}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual('new name');
   });
 
   it('GET a property of a thing', async () => {

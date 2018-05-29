@@ -109,12 +109,17 @@ const Thing = function(description, format, options) {
       menu.push({
         href: this.eventsHref,
         name: 'Event Log',
+        icon: '/images/rules-icon.png',
       });
     } else {
       this.displayEvents = false;
     }
 
     menu.push({
+      listener: this.handleEdit.bind(this),
+      name: 'Edit',
+      icon: '/images/edit-plain.svg',
+    }, {
       listener: this.handleRemove.bind(this),
       name: 'Remove',
       icon: '/images/remove.svg',
@@ -330,6 +335,21 @@ Thing.prototype.render = function(format) {
 };
 
 /**
+ * Handle an edit click event.
+ */
+Thing.prototype.handleEdit = function() {
+  const newEvent = new CustomEvent('_contextmenu', {
+    detail: {
+      thingUrl: this.href.href,
+      thingName: this.name,
+      thingIcon: this.pngBaseIcon,
+      action: 'edit',
+    },
+  });
+  window.dispatchEvent(newEvent);
+};
+
+/**
  * Handle a remove click event.
  */
 Thing.prototype.handleRemove = function() {
@@ -337,6 +357,8 @@ Thing.prototype.handleRemove = function() {
     detail: {
       thingUrl: this.href.href,
       thingName: this.name,
+      thingIcon: this.pngBaseIcon,
+      action: 'remove',
     },
   });
   window.dispatchEvent(newEvent);
