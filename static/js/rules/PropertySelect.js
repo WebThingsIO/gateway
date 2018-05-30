@@ -204,6 +204,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
     if (!property.name) {
       property.name = propName;
     }
+    const name = Utils.capitalize(property.name);
     if (role === 'trigger') {
       if (property.type === 'boolean') {
         const triggerOn = {
@@ -214,7 +215,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         const triggerOff = Object.assign({}, triggerOn, {
           onValue: false,
         });
-        const onName = Utils.capitalize(property.name);
+        const onName = name;
         let offName = `Not ${onName}`;
         if (property.name === 'on') {
           offName = 'Off';
@@ -225,17 +226,19 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(offName, {
           trigger: triggerOff,
         });
-      } else if (property.name === 'color') {
-        // TODO equality isn't a thing we check for
-        // this.addOption('Color', {
-        //   trigger: {
-        //     type: '???',
-        //     property: property,
-        //     onValue: null && (void 0)
-        //   }
-        // });
+      } else if (property.type === 'string') {
+        let value = '';
+        if (property.name === 'color') {
+          value = '#ffffff';
+        }
+        this.addOption(name, {
+          trigger: {
+            type: 'EqualityTrigger',
+            property: property,
+            value: value,
+          },
+        });
       } else if (property.type === 'number') {
-        const name = property.name[0].toUpperCase() + property.name.substr(1);
         const max = property.maximum || property.max || 0;
         const min = property.minimum || property.min || 0;
         const value = (max + min) / 2;
@@ -259,7 +262,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         const effectOff = Object.assign({}, effectOn, {
           value: false,
         });
-        const onName = Utils.capitalize(property.name);
+        const onName = name;
         let offName = `Not ${onName}`;
         if (property.name === 'on') {
           offName = 'Off';
@@ -271,7 +274,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           effect: effectOff,
         });
       } else if (property.name === 'color') {
-        this.addOption('Color', {
+        this.addOption(name, {
           effect: {
             type: 'PulseEffect',
             property: property,
@@ -279,7 +282,6 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           },
         });
       } else if (property.type === 'string') {
-        const name = Utils.capitalize(property.name);
         this.addOption(name, {
           effect: {
             type: 'PulseEffect',
@@ -288,7 +290,6 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           },
         });
       } else if (property.type === 'number') {
-        const name = Utils.capitalize(property.name);
         const max = property.maximum || property.max || 0;
         const min = property.minimum || property.min || 0;
         const value = (max + min) / 2;
