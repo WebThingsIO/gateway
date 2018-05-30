@@ -492,7 +492,7 @@ class Thing {
   handleEdit() {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
-        thingUrl: this.href.href,
+        thingId: this.id,
         thingName: this.name,
         thingIcon: this.baseIcon,
         action: 'edit',

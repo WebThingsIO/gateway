@@ -55,11 +55,11 @@ const FloorplanScreen = {
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
     this.uploadForm.addEventListener('submit', this.blackHole);
     this.fileInput.addEventListener('change', this.upload.bind(this));
-    this.updateThings = this.updateThings.bind(this);
+    this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
   },
 
-  updateThings: function(things) {
+  refreshThings: function(things) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
@@ -153,7 +153,10 @@ const FloorplanScreen = {
   show: function() {
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
-    App.gatewayModel.subscribe(Constants.UPDATE_THINGS, this.updateThings);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThings,
+      true);
   },
 
   /**

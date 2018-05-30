@@ -48,7 +48,7 @@ const ThingsScreen = {
     this.backButton.addEventListener('click', () => page(this.backRef));
     this.addButton.addEventListener('click',
                                     AddThingScreen.show.bind(AddThingScreen));
-    this.updateThings = this.updateThings.bind(this);
+    this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
   },
 
@@ -154,7 +154,7 @@ const ThingsScreen = {
     }
   },
 
-  updateThings: function(things) {
+  refreshThings: function(things) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
@@ -175,7 +175,11 @@ const ThingsScreen = {
    * Display all connected web things.
    */
   showThings: function() {
-    App.gatewayModel.subscribe(Constants.UPDATE_THINGS, this.updateThings);
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThings,
+      true);
   },
 
   /**
@@ -184,40 +188,47 @@ const ThingsScreen = {
    * @param {String} id The ID of the Thing to show.
    */
   showThing: function(id) {
-    let description;
-    App.gatewayModel.getThing(id).then((thing) => {
-      description = thing;
-      this.thingsElement.innerHTML = '';
-      return App.gatewayModel.getThingModel(id);
-    }).then((thingModel) => {
-      const thing = this.renderThing(thingModel, description, 'htmlDetail');
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
 
-      const iconEl = document.getElementById('thing-title-icon');
-      const customIconEl = document.getElementById('thing-title-custom-icon');
-      if (thing.iconHref && thing.selectedCapability === 'Custom') {
-        customIconEl.iconHref = thing.iconHref;
-        customIconEl.classList.remove('hidden');
-        iconEl.classList.add('hidden');
-      } else {
-        iconEl.src = thing.baseIcon;
-        iconEl.classList.remove('hidden');
-        customIconEl.classList.add('hidden');
-      }
+    this.refreshThing = () => {
+      let description;
+      App.gatewayModel.getThing(id).then((thing) => {
+        description = thing;
+        this.thingsElement.innerHTML = '';
+        return App.gatewayModel.getThingModel(id);
+      }).then((thingModel) => {
+        const thing = this.renderThing(thingModel, description, 'htmlDetail');
 
-      document.getElementById('thing-title-name').innerText = thing.name;
+        const iconEl = document.getElementById('thing-title-icon');
+        const customIconEl = document.getElementById('thing-title-custom-icon');
+        if (thing.iconHref && thing.selectedCapability === 'Custom') {
+          customIconEl.iconHref = thing.iconHref;
+          customIconEl.classList.remove('hidden');
+          iconEl.classList.add('hidden');
+        } else {
+          iconEl.src = thing.baseIcon;
+          iconEl.classList.remove('hidden');
+          customIconEl.classList.add('hidden');
+        }
 
-      const speechWrapper = document.getElementById('speech-wrapper');
-      if (speechWrapper.classList.contains('hidden')) {
-        this.thingTitleElement.classList.remove('speech-enabled');
-      } else {
-        this.thingTitleElement.classList.add('speech-enabled');
-      }
+        const speechWrapper = document.getElementById('speech-wrapper');
+        if (speechWrapper.classList.contains('hidden')) {
+          this.thingTitleElement.classList.remove('speech-enabled');
+        } else {
+          this.thingTitleElement.classList.add('speech-enabled');
+        }
 
-      this.thingTitleElement.classList.remove('hidden');
-    }).catch((e) => {
-      console.error(`Thing id ${id} not found ${e}`);
-      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-    });
+        this.thingTitleElement.classList.remove('hidden');
+
+        App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThing);
+      }).catch((e) => {
+        console.error(`Thing id ${id} not found ${e}`);
+        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+      });
+    };
+
+    this.refreshThing();
   },
 
   /**

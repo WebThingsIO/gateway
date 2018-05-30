@@ -18,7 +18,7 @@ class GatewayModel extends Model {
     this.thingModels = new Map();
     this.things = new Map();
     this.queue = Promise.resolve(true);
-    this.updateThings();
+    this.refreshThings();
     return this;
   }
 
@@ -30,11 +30,13 @@ class GatewayModel extends Model {
     return this.queue;
   }
 
-  subscribe(event, handler) {
+  subscribe(event, handler, immediate = false) {
     super.subscribe(event, handler);
     switch (event) {
-      case Constants.UPDATE_THINGS:
-        handler(this.things);
+      case Constants.REFRESH_THINGS:
+        if (immediate) {
+          handler(this.things);
+        }
         break;
       default:
         console.warn(`GatewayModel does not support event:${event}`);
@@ -54,7 +56,7 @@ class GatewayModel extends Model {
     if (this.thingModels.has(thingId) && this.things.has(thingId)) {
       return Promise.resolve(this.things.get(thingId));
     }
-    return this.updateThing(thingId).then(() => {
+    return this.refreshThing(thingId).then(() => {
       return this.things.get(thingId);
     });
   }
@@ -63,7 +65,7 @@ class GatewayModel extends Model {
     if (this.thingModels.has(thingId)) {
       return Promise.resolve(this.thingModels.get(thingId));
     }
-    return this.updateThing(thingId).then(() => {
+    return this.refreshThing(thingId).then(() => {
       return this.thingModels.get(thingId);
     });
   }
@@ -76,7 +78,7 @@ class GatewayModel extends Model {
    */
   removeThing(thingId) {
     if (!this.thingModels.has(thingId)) {
-      return Promise.reject();
+      return Promise.reject(`No Thing id:${thingId}`);
     }
     return this.addQueue(() => {
       if (!this.thingModels.has(thingId)) {
@@ -89,6 +91,28 @@ class GatewayModel extends Model {
     });
   }
 
+  /**
+   * Update the thing.
+   *
+   * @param {string} thingId - Id of the thing
+   * @param {object} updates - contents of update
+   */
+  updateThing(thingId, updates) {
+    if (!this.thingModels.has(thingId)) {
+      return Promise.reject(`No Thing id:${thingId}`);
+    }
+    return this.addQueue(() => {
+      if (!this.thingModels.has(thingId)) {
+        throw new Error(`Thing id:${thingId} allready removed`);
+      }
+      const thingModel = this.thingModels.get(thingId);
+      return thingModel.updateThing(updates).then(() => {
+        this.refreshThing(thingId);
+      });
+    });
+  }
+
+
   handleRemove(thingId) {
     if (this.thingModels.has(thingId)) {
       this.thingModels.get(thingId).cleanup();
@@ -97,10 +121,10 @@ class GatewayModel extends Model {
     if (this.things.has(thingId)) {
       this.things.delete(thingId);
     }
-    this.handleEvent(Constants.UPDATE_THINGS, this.things);
+    this.handleEvent(Constants.REFRESH_THINGS, this.things);
   }
 
-  updateThings() {
+  refreshThings() {
     const opts = {
       headers: {
         Authorization: `Bearer ${API.jwt}`,
@@ -120,14 +144,14 @@ class GatewayModel extends Model {
           const thingId = description.href.split('/').pop();
           this.setThing(thingId, description);
         });
-        this.handleEvent(Constants.UPDATE_THINGS, this.things);
+        this.handleEvent(Constants.REFRESH_THINGS, this.things);
       }).catch((e) => {
         console.error(`Get things failed ${e}`);
       });
     });
   }
 
-  updateThing(thingId) {
+  refreshThing(thingId) {
     const opts = {
       headers: {
         Authorization: `Bearer ${API.jwt}`,
@@ -148,7 +172,7 @@ class GatewayModel extends Model {
           throw new Error(`Unavailable Thing Description: ${description}`);
         }
         this.setThing(thingId, description);
-        this.handleEvent(Constants.UPDATE_THINGS, this.things);
+        this.handleEvent(Constants.REFRESH_THINGS, this.things);
       }).catch((e) => {
         console.error(`Get thing id:${thingId} failed ${e}`);
       });

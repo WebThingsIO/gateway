@@ -41,7 +41,7 @@ const ContextMenu = {
     this.label = document.getElementById('edit-thing-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
-    this.thingUrl = '';
+    this.thingId = '';
 
     // Add event listeners
     window.addEventListener('_contextmenu', this.show.bind(this));
@@ -280,23 +280,8 @@ const ContextMenu = {
     if (capability === 'Custom' && this.iconData) {
       body.iconData = this.iconData;
     }
-
-    fetch(this.thingUrl, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }).then((response) => {
-      if (response.ok) {
-        // reload the page to pick up capability changes
-        window.location.reload();
-        this.hide();
-      } else {
-        throw new Error(response.statusText);
-      }
+    App.gatewayModel.updateThing(this.thingId, body).then(() => {
+      this.hide();
     }).catch((error) => {
       console.error(`Error updating thing: ${error}`);
       this.label.innerText = 'Failed to save.';

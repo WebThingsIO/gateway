@@ -80,6 +80,34 @@ class ThingModel extends Model {
   }
 
   /**
+   * Update the thing.
+   */
+  updateThing(updates) {
+    return new Promise((resolve, reject) => {
+      fetch(this.href, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${API.jwt}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      }).then((response) => {
+        if (response.ok) {
+          console.log('Successfully updated Thing.');
+          resolve();
+        } else {
+          console.error(`Error updating thing ${response.statusText}`);
+          reject();
+        }
+      }).catch((error) => {
+        console.error(`Error updating thing ${error}`);
+        reject();
+      });
+    });
+  }
+
+  /**
    * Initialize websocket.
    */
   initWebsocket() {
