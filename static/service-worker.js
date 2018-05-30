@@ -1,8 +1,23 @@
 // based on
 // https://serviceworke.rs/strategy-cache-and-update_service-worker_doc.html
 
-const CACHE = 'mozilla-iot-cache-0.0.1';
+// eslint-disable-next-line no-undef
+const CACHE = `mozilla-iot-cache-${VERSION}`;
 const CACHE_PATH = /^\/bundle|^\/images|^\/optimized-images/;
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter((key) => {
+          return CACHE !== key;
+        }).map((key) => {
+          return caches.delete(key);
+        })
+      );
+    })
+  );
+});
 
 self.addEventListener('fetch', function(event) {
   const accept = event.request.headers.get('Accept');
