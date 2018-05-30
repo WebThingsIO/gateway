@@ -248,6 +248,17 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
 
         * Load `https://localhost:4443` in your web browser (or use the server's IP address if loading remotely). Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
 
+## Browser Support
+
+The Gateway supports the versions of the following browsers:
+* Firefox 52+
+* Chrome 43+
+* Edge 14+
+* Safari 10.1+
+* Opera 29+
+
+Because the Gateway uses [`Fetch API`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and [`WebSocket API`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) supported by the above versions.
+
 ## Debugging
 
 If you are using VS Code, simply use the "launch" target. It will build the gateway in debugger mode.

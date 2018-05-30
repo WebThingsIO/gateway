@@ -174,7 +174,12 @@ const webpackWeb = {
               presets: [
                 ['@babel/preset-env', {
                   targets: {
-                    ie: 9,
+                    chrome: '43',
+                    opera: '29',
+                    edge: '14',
+                    firefox: '52',
+                    safari: '10.1',
+                    ios: '10',
                   },
                   useBuiltIns: 'usage',
                 }],
