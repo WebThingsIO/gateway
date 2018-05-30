@@ -12,6 +12,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const uuid = require('uuid/v1');
 
 const externals = {};
 fs.readdirSync('node_modules')
@@ -68,10 +70,6 @@ const pluginsWeb = [
     {
       from: 'static/js/lib/*',
       to: path.join(__dirname, 'build/'),
-    },
-    {
-      from: 'static/service-worker.js',
-      to: path.join(__dirname, 'build/static'),
     },
   ]),
   new UglifyJsPlugin({
@@ -241,7 +239,43 @@ const webpackWeb = {
   devtool: 'source-map',
 };
 
+const pluginsSW = [
+  new webpack.BannerPlugin({
+    banner: `const VERSION = '${uuid()}'`,
+    raw: true,
+  }),
+  new ExtractTextPlugin(
+    {filename: 'service-worker.js',
+     allChunks: true}
+  ),
+];
+
+const webpackSW = {
+  entry: {
+    'service-worker.js': './static/service-worker.js',
+  },
+  mode: 'development',
+  target: 'webworker',
+  output: {
+    path: path.join(__dirname, 'build/static'),
+    filename: '[name]_',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: ExtractTextPlugin.extract({
+          use: 'raw-loader',
+        }),
+      },
+    ],
+  },
+  plugins: pluginsSW,
+  devtool: false,
+};
+
 module.exports = [
   webpackNode,
   webpackWeb,
+  webpackSW,
 ];
