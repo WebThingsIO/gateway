@@ -44,6 +44,18 @@ const Thing = function(description, format, options) {
   this.displayedActions = this.displayedActions || {};
   this.properties = {};
 
+  this.uiHref = null;
+  if (description.links) {
+    for (const link of description.links) {
+      if (link.rel === 'alternate' &&
+          link.mediaType === 'text/html' &&
+          link.href.startsWith('http')) {
+        this.uiHref = link.href;
+        break;
+      }
+    }
+  }
+
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
@@ -165,10 +177,19 @@ Thing.prototype.detailLink = function() {
 };
 
 /**
+ * HTML link for custom UI.
+ */
+Thing.prototype.uiLink = function() {
+  return `<a href="${this.uiHref}" class="thing-ui-link" target="_blank"
+             rel="noopener"></a>`;
+};
+
+/**
  * HTML view for Thing.
  */
 Thing.prototype.htmlView = function() {
   return `<div class="thing ${this.thingCssClass}">
+    ${this.uiHref ? this.uiLink() : ''}
     ${this.detailLink()}
     ${this.iconView()}
     <span class="thing-name">${Utils.escapeHtml(this.name)}</span>

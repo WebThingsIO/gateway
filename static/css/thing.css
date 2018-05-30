@@ -21,6 +21,23 @@
   background-image: url('../optimized-images/unknown-thing.png');
 }
 
+.thing-ui-link {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 10;
+  float: left;
+  background-color: #89b6d6;
+  background-size: 5rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../optimized-images/link-icon.svg');
+  border: 1px solid white;
+  border-radius: 2rem;
+  width: 4rem;
+  height: 4rem;
+}
+
 .thing-details-link {
   box-sizing: border-box;
   display: block;

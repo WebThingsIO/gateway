@@ -64,13 +64,28 @@ const Thing = function(id, description) {
       rel: 'events',
       href: `${this.href}/events`,
     },
-    {
-      rel: 'alternate',
-      mediaType: 'text/html',
-      href: this.href,
-    },
-    // TODO: add websocket URL
   ];
+
+  const uiLink = {
+    rel: 'alternate',
+    mediaType: 'text/html',
+    href: this.href,
+  };
+
+  if (description.hasOwnProperty('uiHref') && description.uiHref) {
+    uiLink.href = description.uiHref;
+  } else if (description.hasOwnProperty('links')) {
+    for (const link of description.links) {
+      if (link.rel === 'alternate' &&
+          link.mediaType === 'text/html' &&
+          link.href.startsWith('http')) {
+        uiLink.href = link.href;
+        break;
+      }
+    }
+  }
+
+  this.links.push(uiLink);
 
   for (const actionName in this.actions) {
     this.actions[actionName].href =
