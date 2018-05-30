@@ -26,7 +26,7 @@ const ThingsController = PromiseRouter();
 /**
  * Get a list of Things.
  */
-ThingsController.get('/', function(request, response) {
+ThingsController.get('/', (request, response) => {
   if (request.jwt.payload.role !== Constants.USER_TOKEN) {
     if (!request.jwt.payload.scope) {
       response.status(400).send('Token must contain scope');
@@ -36,7 +36,7 @@ ThingsController.get('/', function(request, response) {
         scope.split('/').length == 2 &&
         scope.split(':')[0] === Constants.THINGS_PATH) {
         Things.getThingDescriptions(request.get('Host'), request.secure)
-          .then(function(things) {
+          .then((things) => {
             response.status(200).json(things);
           });
       } else {
@@ -50,14 +50,14 @@ ThingsController.get('/', function(request, response) {
         Things.getListThingDescriptions(hrefs,
                                         request.get('Host'),
                                         request.secure)
-          .then(function(things) {
+          .then((things) => {
             response.status(200).json(things);
           });
       }
     }
   } else {
     Things.getThingDescriptions(request.get('Host'), request.secure)
-      .then(function(things) {
+      .then((things) => {
         response.status(200).json(things);
       });
   }
@@ -136,13 +136,13 @@ ThingsController.post('/', async (request, response) => {
 /**
  * Get a Thing.
  */
-ThingsController.get('/:thingId', function(request, response) {
+ThingsController.get('/:thingId', (request, response) => {
   const id = request.params.thingId;
   Things.getThingDescription(id, request.get('Host'), request.secure)
-    .then(function(thing) {
+    .then((thing) => {
       response.status(200).json(thing);
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.error(`Error getting thing description for thing with id ${id}`);
       console.error(`Error: ${error}`);
       response.status(404).send(error);
@@ -154,7 +154,7 @@ ThingsController.get('/:thingId', function(request, response) {
  */
 ThingsController.get(
   '/:thingId/properties/:propertyName',
-  function(request, response) {
+  (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
     AddonManager.getProperty(thingId, propertyName).then((value) => {
@@ -174,7 +174,7 @@ ThingsController.get(
  */
 ThingsController.put(
   '/:thingId/properties/:propertyName',
-  function(request, response) {
+  (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
     if (!request.body || typeof request.body[propertyName] === 'undefined') {
@@ -207,9 +207,9 @@ ThingsController.use(`/:thingId${Constants.ACTIONS_PATH}`, ActionsController);
 ThingsController.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController);
 
 /**
- * Modify a Thing.
+ * Modify a Thing's floorplan position.
  */
-ThingsController.patch('/:thingId', function(request, response) {
+ThingsController.patch('/:thingId', (request, response) => {
   const thingId = request.params.thingId;
   if (!request.body ||
       !request.body.hasOwnProperty('floorplanX') ||
@@ -223,15 +223,40 @@ ThingsController.patch('/:thingId', function(request, response) {
       request.body.floorplanX, request.body.floorplanY);
   }).then((description) => {
     response.status(200).json(description);
-  }).catch(function(e) {
-    response.status(500).send(`Failed to update thing ${thingId} ${e}`);
+  }).catch((e) => {
+    response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+  });
+});
+
+/**
+ * Modify a Thing.
+ */
+ThingsController.put('/:thingId', (request, response) => {
+  const thingId = request.params.thingId;
+  if (!request.body || !request.body.hasOwnProperty('name')) {
+    response.status(400).send('name parameter required');
+    return;
+  }
+
+  const name = request.body.name.trim();
+  if (name.length === 0) {
+    response.status(400).send('Invalid name');
+    return;
+  }
+
+  Things.getThing(thingId).then((thing) => {
+    return thing.setName(name);
+  }).then((description) => {
+    response.status(200).json(description);
+  }).catch((e) => {
+    response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
   });
 });
 
 /**
  * Remove a Thing.
  */
-ThingsController.delete('/:thingId', function(request, response) {
+ThingsController.delete('/:thingId', (request, response) => {
   const thingId = request.params.thingId;
   AddonManager.removeThing(thingId).
     then(() => {
@@ -249,7 +274,7 @@ ThingsController.delete('/:thingId', function(request, response) {
 /**
  * Connect to receive messages from a Thing
  */
-ThingsController.ws('/:thingId/', function(websocket, request) {
+ThingsController.ws('/:thingId/', (websocket, request) => {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
   if (websocket.readyState !== WebSocket.OPEN) {
@@ -259,21 +284,21 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   const subscribedEventNames = {};
 
   function sendMessage(message) {
-    websocket.send(message, function(err) {
+    websocket.send(message, (err) => {
       if (err) {
         console.error(`WebSocket sendMessage failed`, err);
       }
     });
   }
 
-  Things.getThing(thingId).then(function(thing) {
+  Things.getThing(thingId).then((thing) => {
     thing.registerWebsocket(websocket);
     thing.addEventSubscription(onEvent);
 
-    websocket.on('close', function() {
+    websocket.on('close', () => {
       thing.removeEventSubscription(onEvent);
     });
-  }).catch(function() {
+  }).catch(() => {
     console.error('WebSocket opened on nonexistent thing', thingId);
     sendMessage(JSON.stringify({
       messageType: Constants.ERROR,
@@ -321,7 +346,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
 
-  const heartbeatInterval = setInterval(function() {
+  const heartbeatInterval = setInterval(() => {
     try {
       websocket.ping();
     } catch (e) {
@@ -339,7 +364,7 @@ ThingsController.ws('/:thingId/', function(websocket, request) {
   websocket.on('error', cleanup);
   websocket.on('close', cleanup);
 
-  websocket.on('message', function(requestText) {
+  websocket.on('message', (requestText) => {
     let request = null;
     try {
       request = JSON.parse(requestText);

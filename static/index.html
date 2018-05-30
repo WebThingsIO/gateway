@@ -298,11 +298,25 @@
     <!-- Context Menu -->
     <div id="context-menu" class="hidden dialog">
       <button id="context-menu-back-button" class="back-button icon-button"></button>
-      <h1 id="context-menu-heading"></h1>
+      <div id="context-menu-heading">
+        <img id="context-menu-heading-icon" alt="Thing Title" src="#" />
+        <span id="context-menu-heading-text"></span>
+      </div>
       <div id="context-menu-content">
-        <button id="remove-thing-button" class="context-menu-button danger">
-          Remove
-        </button>
+        <div id="context-menu-content-edit" class="hidden">
+          <div id="edit-thing-icon"></div>
+          <div id="edit-thing-metadata">
+            <input type="text" id="edit-thing-name">
+          </div>
+          <button id="edit-thing-save-button" class="text-button">
+            Save
+          </button>
+        </div>
+        <div id="context-menu-content-remove" class="hidden">
+          <button id="remove-thing-button" class="context-menu-button danger">
+            Remove
+          </button>
+        </div>
       </div>
     </div>
 

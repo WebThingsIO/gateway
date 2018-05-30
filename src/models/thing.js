@@ -111,6 +111,17 @@ Thing.prototype.setCoordinates = function(x, y) {
 };
 
 /**
+ * Set the name of this Thing.
+ *
+ * @param {String} name The new name
+ * @return {Promise} A promise which resolves with the description set.
+ */
+Thing.prototype.setName = function(name) {
+  this.name = name;
+  return Database.updateThing(this.id, this.getDescription());
+};
+
+/**
  * Dispatch an event to all listeners subscribed to the Thing
  * @param {Event} event
  */
