@@ -250,14 +250,12 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
 
 ## Browser Support
 
-The Gateway supports the versions of the following browsers:
+The Gateway only supports the following browsers, due to its use of the [`Fetch API`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and [`WebSocket API`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API):
 * Firefox 52+
 * Chrome 43+
 * Edge 14+
 * Safari 10.1+
 * Opera 29+
-
-Because the Gateway uses [`Fetch API`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and [`WebSocket API`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) supported by the above versions.
 
 ## Debugging
 
