@@ -411,12 +411,14 @@ function ruleFragmentEqual(a, b) {
     return false;
   }
 
-  if (aProperty.type === 'boolean') {
-    if (aPart.type === 'BooleanTrigger') {
-      return aPart.onValue === bPart.onValue;
-    } else {
-      return aPart.value === bPart.value;
-    }
+  if (aProperty && aProperty.type === 'boolean') {
+    return aPart.onValue === bPart.onValue;
+  }
+  if (aPart.type === 'EventTrigger') {
+    return aPart.event === bPart.event;
+  }
+  if (aPart.type === 'ActionEffect') {
+    return aPart.action === bPart.action;
   }
   return true;
 }
