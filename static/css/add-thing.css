@@ -24,6 +24,8 @@
 .new-web-thing-cancel-button,
 .new-web-thing-submit-button,
 .new-web-thing-save-button,
+.new-thing-cancel-button,
+.new-thing-submit-button,
 .new-thing-save-button {
   height: 4rem;
   background-color: #7f93a1;
@@ -39,6 +41,12 @@
 .new-web-thing-save-button:disabled,
 .new-web-thing-save-button:disabled:hover,
 .new-web-thing-save-button:hover:active,
+.new-thing-cancel-button:disabled,
+.new-thing-cancel-button:disabled:hover,
+.new-thing-cancel-button:hover:active,
+.new-thing-submit-button:disabled,
+.new-thing-submit-button:disabled:hover,
+.new-thing-submit-button:hover:active,
 .new-thing-save-button:disabled,
 .new-thing-save-button:disabled:hover,
 .new-thing-save-button:hover:active {
@@ -78,13 +86,20 @@
 .new-thing-metadata {
   flex: 1;
   padding: 1rem 1rem 0 1rem;
+  text-align: left;
 }
 
 .new-web-thing-url,
 .new-web-thing-name,
+.new-thing-initial-name,
+.new-thing-pin-error,
 .new-thing-name {
   display: block;
   width: calc(100% - 1rem);
+}
+
+.new-thing-pin {
+  width: 14rem;
 }
 
 .new-web-thing-url:disabled,
@@ -103,6 +118,7 @@
   font-size: 1.5rem;
 }
 
+.new-thing-pin-error,
 .new-thing-type.error {
   color: orange;
 }
@@ -143,6 +159,7 @@
 }
 
 #add-by-url-anchor.hidden,
+.new-thing-pin-error.hidden,
 .new-thing .hidden {
   display: none;
 }

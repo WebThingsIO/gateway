@@ -26,6 +26,14 @@ class DeviceProxy extends Device {
     this.description = deviceDict.description || '';
     this.uiHref = deviceDict.uiHref || null;
 
+    if (deviceDict.hasOwnProperty('pin')) {
+      this.pinRequired = deviceDict.pin.required;
+      this.pinPattern = deviceDict.pin.pattern;
+    } else {
+      this.pinRequired = false;
+      this.pinPattern = null;
+    }
+
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
       const propertyProxy =

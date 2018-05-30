@@ -969,4 +969,32 @@ describe('things/', function() {
 
     await webSocketClose(ws);
   });
+
+  it('fail to set PIN for device', async () => {
+    await addDevice(piDescr);
+
+    const err = await pFinal(chai.request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({thingId: piDescr.id, pin: '0000'}));
+
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('set PIN for device', async () => {
+    await addDevice(piDescr);
+
+    const res = await chai.request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({thingId: piDescr.id, pin: '1234'});
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual(piDescr.name);
+    expect(res.body).toHaveProperty('type');
+    expect(res.body.type).toEqual(piDescr.type);
+  });
 });

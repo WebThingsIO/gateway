@@ -270,9 +270,8 @@ class AddonManager extends EventEmitter {
     if (device) {
       return device.getProperty(propertyName);
     }
-    return new Promise((resolve, reject) => {
-      reject(`getProperty: device: ${thingId} not found.`);
-    });
+
+    return Promise.reject(`getProperty: device: ${thingId} not found.`);
   }
 
   /**
@@ -285,9 +284,21 @@ class AddonManager extends EventEmitter {
     if (device) {
       return device.setProperty(propertyName, value);
     }
-    return new Promise((resolve, reject) => {
-      reject(`setProperty: device: ${thingId} not found.`);
-    });
+
+    return Promise.reject(`setProperty: device: ${thingId} not found.`);
+  }
+
+  /**
+   * @method setPin
+   * @returns a promise which resolves when the PIN has been set.
+   */
+  setPin(thingId, pin) {
+    const device = this.getDevice(thingId);
+    if (device) {
+      return device.adapter.setPin(thingId, pin);
+    }
+
+    return Promise.reject(`setPin: device ${thingId} not found.`);
   }
 
   /**
@@ -299,9 +310,8 @@ class AddonManager extends EventEmitter {
     if (device) {
       return device.requestAction(actionId, actionName, input);
     }
-    return new Promise((resolve, reject) => {
-      reject(`requestAction: device: ${thingId} not found.`);
-    });
+
+    return Promise.reject(`requestAction: device: ${thingId} not found.`);
   }
 
   /**
@@ -313,9 +323,8 @@ class AddonManager extends EventEmitter {
     if (device) {
       return device.removeAction(actionId, actionName);
     }
-    return new Promise((resolve, reject) => {
-      reject(`removeAction: device: ${thingId} not found.`);
-    });
+
+    return Promise.reject(`removeAction: device: ${thingId} not found.`);
   }
 
   /**

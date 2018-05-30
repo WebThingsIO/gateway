@@ -79,6 +79,36 @@ class AdapterProxy extends Adapter {
     return this.unloadCompletedPromise.promise;
   }
 
+  /**
+   * Set the PIN for the given device.
+   *
+   * @param {String} deviceId ID of the device
+   * @param {String} pin PIN to set
+   *
+   * @returns a promise which resolves when the PIN has been set.
+   */
+  setPin(deviceId, pin) {
+    return new Promise((resolve, reject) => {
+      console.log('AdapterProxy: setPin:', pin, 'for:', deviceId);
+
+      const device = this.getDevice(deviceId);
+      if (!device) {
+        reject('Device not found');
+        return;
+      }
+
+      const deferredSet = new Deferred();
+
+      deferredSet.promise.then((device) => {
+        resolve(device);
+      }).catch(() => {
+        reject();
+      });
+
+      this.sendMsg(Constants.SET_PIN, {deviceId, pin}, deferredSet);
+    });
+  }
+
   // The following methods are added to support using the
   // MockAdapter as a plugin.
 
