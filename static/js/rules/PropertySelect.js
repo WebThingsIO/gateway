@@ -115,37 +115,35 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       this.devicePropertyBlock.onRuleChange();
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
     });
-  } else if (property.name === 'color') {
-    const valueInput = document.createElement('input');
-    valueInput.classList.add('value-input');
-    valueInput.type = 'color';
-    valueInput.addEventListener('click', stopPropagation);
-    elt.appendChild(valueInput);
-
-    elt.addEventListener('change', () => {
-      if (ruleFragment.trigger) {
-        ruleFragment.trigger.value = valueInput.value;
-      } else {
-        ruleFragment.effect.value = valueInput.value;
-      }
-      this.devicePropertyBlock.rulePart = ruleFragment;
-      this.devicePropertyBlock.onRuleChange();
-    });
   } else if (property.type === 'string') {
     const valueInput = document.createElement('input');
     valueInput.classList.add('value-input');
-    valueInput.type = 'text';
+    if (property.name === 'color') {
+      valueInput.type = 'color';
+    } else {
+      valueInput.type = 'text';
+    }
     valueInput.addEventListener('click', stopPropagation);
     elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
+      let selected = false;
+      const dpbRulePart = this.devicePropertyBlock.rulePart;
       if (ruleFragment.trigger) {
         ruleFragment.trigger.value = valueInput.value;
+        selected = dpbRulePart.trigger &&
+          dpbRulePart.trigger.type === ruleFragment.trigger.type;
       } else {
         ruleFragment.effect.value = valueInput.value;
+        selected = dpbRulePart.effect &&
+          dpbRulePart.effect.type === ruleFragment.effect.type;
       }
-      this.devicePropertyBlock.rulePart = ruleFragment;
-      this.devicePropertyBlock.onRuleChange();
+      elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
+
+      if (selected) {
+        this.devicePropertyBlock.rulePart = ruleFragment;
+        this.devicePropertyBlock.onRuleChange();
+      }
     });
   }
 
