@@ -92,6 +92,16 @@ input[type="email"] {
   color: #fff;
 }
 
+.text-button-settings {
+  background-color: #597285;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #fff;
+}
+
+
 .text-button:hover, .text-button:active {
   background-color: #658196;
 }

@@ -37,12 +37,27 @@ module.exports = {
   },
   settings: {
     defaults: {
-      experiments: {
-        floorplan: {
-          enabled: true,
+      domain: {
+        localAccess: true,
+        mozillaTunnelService: true,
+        localControl: {
+          mdnsServiceType: "http",
+          mdnsServiceName: "Mozilla IoT Gateway",
+          mdnsServiceDomain: "MozillaIoTGateway",
+
+          mdnsTxt: {
+            desc: "A local IoT Gateway",
+            protocol: "http, https, Web Sockets",
+            power: "6 watts",
+          },
         },
-        rules: {
-          enabled: true,
+        experiments: {
+          floorplan: {
+            enabled: true,
+          },
+          rules: {
+            enabled: true,
+          },
         },
       },
     },

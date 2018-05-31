@@ -134,6 +134,23 @@ const API = {
     });
   },
 
+  addLocalDomain: function(domainName) {
+    const opts = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${window.API.jwt}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({domainName}),
+    };
+    return fetch('/users/', opts).then((res) => {
+      if (!res.ok) {
+        throw new Error('Failed to change domain name');
+      }
+    });
+  },
+
   deleteUser: function(id) {
     const opts = {
       method: 'DELETE',

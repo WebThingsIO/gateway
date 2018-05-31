@@ -3233,6 +3233,10 @@ dir-glob@^2.0.0:
     arrify "^1.0.1"
     path-type "^3.0.0"
 
+dnssd@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/dnssd/-/dnssd-0.3.3.tgz#55c89c9c4a988e04a3b17c234b238f5d165caef3"
+
 doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
