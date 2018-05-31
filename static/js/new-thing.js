@@ -167,6 +167,12 @@ NewThing.prototype.handlePinInput = function() {
   }
 
   this.submitButton.disabled = !valid;
+
+  if (valid) {
+    this.pinInput.setCustomValidity('');
+  } else {
+    this.pinInput.setCustomValidity('Invalid PIN');
+  }
 };
 
 NewThing.prototype.handleCancel = function() {
