@@ -125,6 +125,7 @@ const webpackWeb = {
     'app.js': ['./static/js/check-user.js', './static/js/app.js'],
     'create-user.js': ['./static/js/create-user.js'],
     'login.js': ['./static/js/check-user.js', './static/js/login.js'],
+    'check-user.js': ['./static/js/check-user.js'],
     'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
     'setup_subdomain.js': ['./static/js/setup_subdomain.js'],
     buildCss: [
