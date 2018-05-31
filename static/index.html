@@ -62,20 +62,32 @@
       <section id="domain-settings" class="hidden settings-section">
         <ul>
           <li class="domain-item">
-            <input id="domain-settings-local-checkbox" name="domain-settings" class="experiment-checkbox" type="checkbox">
-            <label for="domain-settings-local-checkbox">Local access (Using Service Discovery)</label>
-            <p class="domain-settings-description-small">Type the domain name you wish to use for the gateway below and click the 'update host name' button.</p>
-            <input type="text" id="domain-settings-local-name" name="gateway" placeholder="gateway"> . local
-            <br>
-            <button id="settings-domain-local-update" class="text-button" type="submit">Update host name</button>
+            <input id="domain-settings-local-checkbox" name="domain-settings"
+                   class="experiment-checkbox" type="checkbox">
+            <label for="domain-settings-local-checkbox">
+              Local access (Using Service Discovery)
+            </label>
+            <p class="domain-settings-description-small">
+              Type the domain name you wish to use for the gateway below and
+              click the 'update host name' button.
+            </p>
+            <input type="text" id="domain-settings-local-name" name="gateway"
+                   placeholder="gateway">
+            &nbsp;. local
+            <div id="domain-settings-error" class="domain-settings-error hidden"></div>
+            <button id="settings-domain-local-update" class="text-button"
+                    type="submit">
+              Update host name
+            </button>
           </li>
-          <div id="domain-settings-error" class="domain-settings-error hidden"></div>
           <li class="domain-item">
-            <p class="domain-settings-container">Remote Access (Uses Mozilla servers: mozilla-iot.org) </p>
-          <p id="domain-settings-tunnel-name" class="domain-settings-container"> . mozilla-iot.org </p>
-
-        </li>
-
+            <p class="domain-settings-container">
+              Remote Access (Uses Mozilla servers: mozilla-iot.org)
+            </p>
+            <p id="domain-settings-tunnel-name" class="domain-settings-container">
+              &nbsp;. mozilla-iot.org
+            </p>
+          </li>
 
           <!-- Removed until full integration of service discovery and tunnel endpoints
           <li class="domain-item">

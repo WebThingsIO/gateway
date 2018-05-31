@@ -149,18 +149,12 @@
 }
 
 .domain-settings-container {
-  position: relative;
-  color: #fff;
-  background-color: #48779a;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  color: #fff;
-  text-align: left;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.4rem;
-  max-width: 60rem;
   margin: 0 auto;
+  padding-bottom: 1rem;
+}
+
+.domain-settings-container:last-child {
+  padding-bottom: 0;
 }
 
 #user-settings ul,
@@ -294,7 +288,9 @@
 }
 
 .domain-settings-error {
-  color: orangered;
+  color: orange;
+  font-size: 1.2rem;
+  padding: 1rem 0;
 }
 
 .addon-settings-author {
