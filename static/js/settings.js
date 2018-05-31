@@ -158,16 +158,128 @@ const SettingsScreen = {
     const opts = {
       headers: API.headers(),
     };
+
+    const addDomainLocalButton =
+      document.getElementById('settings-domain-local-update');
+    addDomainLocalButton.addEventListener('click', () => {
+      this.onLocalDomainClick();
+    });
+
+    // Comented out until full integration of Dynamic tunnel creation
+    // with Service Discovery
+    // const addDomainTunnelButton =
+    //   document.getElementById('settings-domain-moz-tunnel-change');
+    //     addDomainTunnelButton.addEventListener('click', () => {
+    //     this.onTunnelDomainClick();
+    // });
+
     fetch('/settings/tunnelinfo', opts).then(function(response) {
-      return response.text();
+      return response.json();
     }).then(function(body) {
       if (body) {
-        document.getElementById('current-domain').innerText = body;
+        document.getElementById('domain-settings-local-name')
+          .value = body.localDomain;
+        document.getElementById('domain-settings-local-checkbox')
+          .checked = body.mDNSstate;
+        document.getElementById('domain-settings-tunnel-name')
+          .innerText = body.tunnelDomain;
       } else {
-        document.getElementById('current-domain').innerText = 'Not set.';
+        document.getElementById('domain-settings-local-name')
+          .value = 'Unknown state.';
+        document.getElementById('domain-settings-tunnel-name')
+          .value = 'Unknown state.';
       }
     });
   },
+
+  // The button controller to update the local domain settings.
+  // In menu -> Settings -> Domain
+  onLocalDomainClick: function() {
+    const localDomainCheckbox = document.getElementById(
+      'domain-settings-local-checkbox');
+    const localDomainName = document
+      .getElementById('domain-settings-local-name');
+    const error = document.getElementById('domain-settings-error');
+    const data = {local: {multicastDNSstate: localDomainCheckbox.checked,
+                          localDNSname: localDomainName.value}};
+
+    const opts = {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+
+    fetch('/settings/domain', opts)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(domainJson) {
+        // if the update was successful, we have a legit local domain and mDNS
+        // is active then redirect
+        if (domainJson.update && domainJson.localDomain.length > 0) {
+          if (domainJson.mDNSstate) {
+            window.location.href = domainJson.localDomain;
+          } else {
+            // the server says mDNS is switched off so redirect back to
+            // localhost
+            window.location.href = 'https://localhost:4443/';
+          }
+        } else {
+          error.classList.remove('hidden');
+          error.textContent = domainJson.error;
+          document.getElementById('domain-settings-local-name')
+            .value = domainJson.localDomain;
+        }
+      })
+      .catch(function(err) {
+        const errorMessage = `Error: ${err}`;
+        console.error(errorMessage);
+        error.classList.remove('hidden');
+        error.textContent = err;
+      });
+  },
+
+  // The button controller to update the mozilla tunnel domain settings.
+  // In menu -> Settings -> Domain. Removed until this feature is done
+  // at a future point.
+
+  // onTunnelDomainClick: function() {
+  //   var tunnelDomainCheckbox = document.getElementById(
+  //     'domain-settings-tunnel-checkbox');
+  //   var tunnelDomainName = document.getElementById(
+  //     'domain-settings-tunnel-name');
+  //   var tunnelDomainEmail = document.getElementById(
+  //     'domain-settings-tunnel-email');
+  //   console.log('* tunnel domain checkbox is: ' +
+  //                'tunnelDomainCheckbox.checked');
+  //
+  //   var data = {tunnelState: tunnelDomainCheckbox.checked,
+  //               tunnelDNSname: tunnelDomainName.value,
+  //               tunnelUserEmail: tunnelDomainEmail};
+  //   console.log('* json data to send is: ' + JSON.stringify(data));
+  //
+  //
+  //   fetch('/settings/setdomain', {
+  //     body: JSON.stringify({answer: "42"}),
+  //     headers: API.headers(),
+  //     method: 'POST'
+  //   })
+  //     .then(function (response) {
+  //     return response.json();
+  //   })
+  //     .then(function(domainJson){
+  //
+  //     console.log(domainJson);
+  //   })
+  //   .catch(function () {
+  //     console.log('Error');
+  //   });
+  //
+  // }
 
   showUserSettings: function() {
     this.userSettings.classList.remove('hidden');

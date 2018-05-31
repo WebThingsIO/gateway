@@ -13,6 +13,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const Database = require('../db');
 const Actions = require('../models/actions');
+const mDNSserver = require('../service_discovery_setup');
 const Things = require('../models/things');
 const UserProfile = require('../user-profile');
 const e2p = require('event-to-promise');
@@ -125,6 +126,7 @@ afterAll(async () => {
   await addonManager.unloadAddons();
   server.close();
   httpServer.close();
+  mDNSserver.server.startService(false);
   await Promise.all([
     e2p(server, 'close'),
     e2p(httpServer, 'close'),

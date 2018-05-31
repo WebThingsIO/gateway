@@ -58,9 +58,53 @@
           <li class="settings-item"><a id="authorization-settings-link" href="/settings/authorizations">Authorizations</a></li>
         </ul>
       </nav>
+
       <section id="domain-settings" class="hidden settings-section">
-        <div id="current-domain" class="settings-container"></div>
+        <ul>
+          <li class="domain-item">
+            <input id="domain-settings-local-checkbox" name="domain-settings"
+                   class="experiment-checkbox" type="checkbox">
+            <label for="domain-settings-local-checkbox">
+              Local access (Using Service Discovery)
+            </label>
+            <p class="domain-settings-description-small">
+              Type the domain name you wish to use for the gateway below and
+              click the 'update host name' button.
+            </p>
+            <input type="text" id="domain-settings-local-name" name="gateway"
+                   placeholder="gateway">
+            &nbsp;. local
+            <div id="domain-settings-error" class="domain-settings-error hidden"></div>
+            <button id="settings-domain-local-update" class="text-button"
+                    type="submit">
+              Update host name
+            </button>
+          </li>
+          <li class="domain-item">
+            <p class="domain-settings-container">
+              Remote Access (Uses Mozilla servers: mozilla-iot.org)
+            </p>
+            <p id="domain-settings-tunnel-name" class="domain-settings-container">
+              &nbsp;. mozilla-iot.org
+            </p>
+          </li>
+
+          <!-- Removed until full integration of service discovery and tunnel endpoints
+          <li class="domain-item">
+            <input id="domain-settings-tunnel-checkbox" name="domain-settings" class="experiment-checkbox" type="checkbox">
+            <label for="domain-settings-tunnel-checkbox">Use Mozilla IoT Tunnel Service (mozilla-iot.org) </label>
+            <p class="domain-settings-description-small">Choose a web address for your gateway e.g. "johns-house"</p>
+            <p><input type="text" id="domain-settings-tunnel-name" name="domain" placeholder="example">.mozilla-iot.org</p>
+            <p class="domain-settings-description-small">Input your email address to get your secure keys emailed to you.</p>
+            <input type="text" id="domain-settings-tunnel-email" name="email" placeholder="email address">
+            <br/>
+            <button id="settings-domain-moz-tunnel-change" class="text-button" type="submit">Request Change</button>
+          </li>
+          -->
+
+        </ul>
       </section>
+
       <section id="user-settings" class="hidden settings-section">
         <section id="user-settings-main" class="hidden settings-subsection">
           <ul id="users-list">

@@ -13,7 +13,7 @@ const UserProfile = require('./user-profile');
 UserProfile.init();
 const migration = UserProfile.migrate();
 
-// Dependencies
+// External Dependencies
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
@@ -25,8 +25,11 @@ const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
 const mustacheExpress = require('mustache-express');
+
+// Internal Dependencies
 const addonManager = require('./addon-manager');
 const db = require('./db');
+const mDNSserver = require('./service_discovery_setup');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const JSONWebToken = require('./models/jsonwebtoken');
@@ -48,6 +51,13 @@ const httpApp = createGatewayApp(httpServer);
 let httpsServer = createHttpsServer();
 let httpsApp = null;
 
+/**
+ * Creates an HTTPS server object, if successful. If there are no public and
+ * private keys stored for the tunnel service, null is returned.
+ *
+ * @param {}
+ * @return {Object|null} https server object if successful, else NULL
+ */
 function createHttpsServer() {
   if (!TunnelService.hasCertificates()) {
     return null;
@@ -84,7 +94,7 @@ function startHttpsGateway() {
       addonManager.loadAddons();
     });
     rulesEngineConfigure(httpsServer);
-    console.log('Listening on port', httpsServer.address().port);
+    console.log('HTTPS server listening on port', httpsServer.address().port);
     commandParserConfigure(httpsServer);
   });
 
@@ -110,7 +120,7 @@ function startHttpGateway() {
       addonManager.loadAddons();
     });
     rulesEngineConfigure(httpServer);
-    console.log('Listening on port', httpServer.address().port);
+    console.log('HTTP server listening on port', httpServer.address().port);
     commandParserConfigure(httpServer);
   });
 }
@@ -295,6 +305,7 @@ if (config.get('cli')) {
   process.on('SIGINT', function() {
     console.log('Control-C: unloading add-ons...');
     addonManager.unloadAddons();
+    mDNSserver.server.startService(false);
     TunnelService.stop();
     process.exit(0);
   });
@@ -305,6 +316,23 @@ TunnelService.switchToHttps = function() {
   stopHttpGateway();
   startHttpsGateway();
 };
+
+// This part starts our Service Discovery process.
+// We check to see if mDNS should be setup in default mode, or has a previous
+// user setup a unique domain. Then we start it.
+mDNSserver.getmDNSstate().then((state) => {
+  try {
+    mDNSserver.getmDNSconfig().then((mDNSconfig) => {
+      console.log(`DNS config is: ${mDNSconfig.host}`);
+      mDNSserver.server.changeProfile(mDNSconfig);
+      mDNSserver.server.startService(state);
+    });
+  } catch (err) {
+    // if we failed to startup mDNS it's not the end of the world log it
+    // and carry on
+    console.error(`Service Discover failed to start with error: ${err}`);
+  }
+});
 
 module.exports = { // for testing
   httpServer: httpServer,

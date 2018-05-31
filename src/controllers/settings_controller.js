@@ -24,6 +24,7 @@ const Platform = require('../platform');
 const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
 const UserProfile = require('../user-profile');
+const mDNSserver = require('../service_discovery_setup');
 
 const SettingsController = PromiseRouter();
 
@@ -238,19 +239,117 @@ SettingsController.post('/skiptunnel', async (request, response) => {
 
 SettingsController.get('/tunnelinfo', async (request, response) => {
   try {
+    // Check to see if we have a tunnel endpoint first
     const result = await Settings.get('tunneltoken');
+    let localDomain;
+    let mDNSstate;
+    let tunnelEndpoint;
+
     if (typeof result === 'object') {
-      const endpoint = `https://${result.name}.${
-        config.get('ssltunnel.domain')}`;
-      response.send(endpoint);
-      response.status(200).end();
+      console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
+                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
+      tunnelEndpoint =
+        `https://${result.name}.${config.get('ssltunnel.domain')}`;
     } else {
-      response.status(404).end();
+      tunnelEndpoint = 'Not set.';
     }
+
+    // Find out our default local DNS name Check for a previous name in the
+    // DB, if that does not exist use the default.
+    try {
+      mDNSstate = await Settings.get('multicastDNSstate');
+      localDomain = await Settings.get('localDNSname');
+      // If our DB is empty use defaults
+      if (typeof mDNSstate === 'undefined') {
+        mDNSstate = config.get(
+          'settings.defaults.domain.localAccess');
+      }
+      if (typeof localDomain === 'undefined') {
+        localDomain = config.get(
+          'settings.defaults.domain.localControl.mdnsServiceDomain');
+      }
+    } catch (err) {
+      // Catch this DB error. Since we don't know what state the mDNS process
+      // should be in make sure it's off
+      console.error(`Error getting DB entry for multicast from the DB: ${err}`);
+      localDomain = config.get(
+        'settings.defaults.domain.localControl.mdnsServiceDomain');
+    }
+
+    console.log(`Tunnel name is set to: ${tunnelEndpoint}`);
+    console.log(`Local mDNS Service Domain Name is: ${localDomain}`);
+    const localDomainSettings = {localDomain: localDomain,
+                                 mDNSstate: mDNSstate,
+                                 tunnelDomain: tunnelEndpoint};
+    response.send(localDomainSettings);
+    response.status(200).end();
   } catch (e) {
-    console.error('Failed to retrieve tunneltoken setting');
+    console.error('Failed to retrieve default settings for ' +
+      'tunneltoken or local service discovery setting');
     console.error(e);
     response.status(400).send(e);
+  }
+});
+
+/* This is responsible for controlling dynamically the local domain name
+ * settings (via mDNS) and changing or updating mozilla tunnel endpoints.
+ * The /domain endpoint is invoked from:
+ *   MainMenu -> Settings -> Doamin
+ *
+ * JSON data: {
+ *              local: {
+ *                multicastDNSstate: boolean,
+ *                localDNSname: string, - e.g. MyHome
+ *              },
+ *              mozillaTunnel: {
+ *                tunnel: boolean,
+ *                tunnelName: string, - e.g. MyName
+ *                tunnelEmail: string
+ *              }
+ *            }
+ */
+SettingsController.put('/domain', async (request, response) => {
+  if (!request.body ||
+      !request.body.hasOwnProperty('local') &&
+      !request.body.local.hasOwnProperty('localDNSname') ||
+      !request.body.local.hasOwnProperty('multicastDNSstate')) {
+    response.statusMessage = 'Invalid request.';
+    response.status(400).end();
+    return;
+  }
+  try {
+    const requestDomainName = request.body.local.localDNSname;
+    const requestState = request.body.local.multicastDNSstate;
+
+    mDNSserver.server.setLocalDomain(requestDomainName);
+    await Settings.set('localDNSname', mDNSserver.server.localDomain);
+    console.log('MDNS name is: ', mDNSserver.server.localDomain);
+
+    await Settings.set('multicastDNSstate', requestState);
+    mDNSserver.server.startService(requestState);
+    let protocol = ' http';
+    let port = config.get('ports.http');
+    if (request.secure) {
+      console.log('Updating mDNS domain name. Request is secure');
+      protocol = 'https';
+      port = config.get('ports.https');
+    } else {
+      console.log('Updating mDNS domain name. Request is not secure');
+      protocol = 'http';
+      port = config.get('ports.http');
+    }
+    const url = `${protocol}://${requestDomainName}.local:${port}`;
+    const localDomainSettings = {localDomain: url,
+                                 update: true,
+                                 mDNSstate: mDNSserver.server.serviceState};
+    response.status(200).json(localDomainSettings);
+  } catch (err) {
+    console.error(`Failed setting domain with: ${err} `);
+    const localDomainSettings = {localDomain: mDNSserver.server.localDomain,
+                                 update: false,
+                                 mDNSstate: mDNSserver.server.serviceState,
+                                 error: err.message};
+    response.status(400).json(localDomainSettings);
   }
 });
 

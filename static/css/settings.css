@@ -63,6 +63,23 @@
   background-image: url('../optimized-images/domain-icon.png');
 }
 
+#domain-settings-local-link {
+  background-image: url('../images/domain-icon.png');
+}
+
+#domain-settings-local-link {
+  background-image: url('../images/domain-icon.png');
+}
+
+#domain-settings-mozilla-link {
+  background-image: url('../images/domain-icon.png');
+}
+
+
+#domain-settings-mozilla-link {
+  background-image: url('../images/domain-icon.png');
+}
+
 #user-settings-link {
   background-image: url('../optimized-images/users-icon.png');
 }
@@ -131,9 +148,19 @@
   margin: 0 auto;
 }
 
+.domain-settings-container {
+  margin: 0 auto;
+  padding-bottom: 1rem;
+}
+
+.domain-settings-container:last-child {
+  padding-bottom: 0;
+}
+
 #user-settings ul,
 #adapter-settings ul,
 #addon-settings ul,
+#domain-settings ul,
 #experiment-settings ul,
 #update-settings ul,
 #authorization-settings ul {
@@ -151,6 +178,7 @@
 #user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
+#domain-settings ul li:last-child,
 #experiment-settings ul li:last-child,
 #update-settings ul li:last-child {
   margin-bottom: 3rem;
@@ -173,7 +201,7 @@
   display: none;
 }
 
-.experiment-item, .update-item, .authorization-item {
+.experiment-item, .update-item, .authorization-item, .domain-item {
   display: block;
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -247,9 +275,22 @@
 
 .user-settings-description,
 .adapter-settings-description,
-.addon-settings-description {
+.addon-settings-description,
+.domain-settings-description {
   display: block;
   color: #ccc;
+}
+
+.domain-settings-description-small {
+  display: block;
+  color: #ccc;
+  font-size: 1.4rem
+}
+
+.domain-settings-error {
+  color: orange;
+  font-size: 1.2rem;
+  padding: 1rem 0;
 }
 
 .addon-settings-author {
@@ -287,7 +328,8 @@
 .addon-discovery-settings-add,
 .addon-discovery-settings-installing,
 .addon-discovery-settings-install-failed,
-.addon-settings-remove {
+.addon-settings-remove,
+.domain-settings-save {
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
