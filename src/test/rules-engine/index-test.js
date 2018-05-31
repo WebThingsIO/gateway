@@ -63,6 +63,7 @@ const thingLight3 = {
     hue: {type: 'number', value: 0},
     sat: {type: 'number', value: 0},
     bri: {type: 'number', value: 100},
+    color: {type: 'string', value: '#ff7700'},
   },
 };
 
@@ -176,6 +177,30 @@ const eventActionRule = {
     thing: {
       href: '/things/light1',
     },
+  },
+};
+
+const equalityRule = {
+  enabled: true,
+  name: 'Equality Rule',
+  trigger: {
+    type: 'EqualityTrigger',
+    property: {
+      name: 'color',
+      type: 'string',
+      href:
+        '/things/light3/properties/color',
+    },
+    value: '#00ff77',
+  },
+  effect: {
+    property: {
+      name: 'on',
+      type: 'boolean',
+      href: '/things/light3/properties/on',
+    },
+    type: 'SetEffect',
+    value: true,
   },
 };
 
@@ -580,6 +605,31 @@ describe('rules engine', function() {
     await waitForExpect(async () => {
       expect(await getOn(thingLight2.id)).toEqual(false);
       expect(await getOn(thingLight3.id)).toEqual(false);
+    });
+
+    await deleteRule(ruleId);
+  });
+
+  it('creates and simulates two rules', async () => {
+    let res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(equalityRule);
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    res = await chai.request(server)
+      .put(`${Constants.THINGS_PATH}/light3/properties/color`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({color: '#00ff77'});
+    expect(res.status).toEqual(200);
+
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight3.id)).toEqual(true);
     });
 
     await deleteRule(ruleId);

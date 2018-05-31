@@ -23,6 +23,17 @@ const levelTrigger = {
   value: 120,
 };
 
+const equalityTrigger = {
+  property: {
+    name: 'color',
+    type: 'string',
+    href:
+      '/things/light2/properties/color',
+  },
+  type: 'EqualityTrigger',
+  value: '#ff7700',
+};
+
 describe('triggers', function() {
   it('should parse a BooleanTrigger', () => {
     const trigger = triggers.fromDescription(booleanTrigger);
@@ -32,6 +43,11 @@ describe('triggers', function() {
   it('should parse a LevelTrigger', () => {
     const trigger = triggers.fromDescription(levelTrigger);
     expect(trigger).toMatchObject(levelTrigger);
+  });
+
+  it('should parse an EqualityTrigger', () => {
+    const trigger = triggers.fromDescription(equalityTrigger);
+    expect(trigger).toMatchObject(equalityTrigger);
   });
 
   it('should reject an unknown trigger type', () => {

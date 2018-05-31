@@ -138,7 +138,6 @@ Rule.prototype.toTriggerHumanDescription = function() {
     return `${triggerThing.name} event "${this.trigger.event}" occurs`;
   }
 
-
   const triggerThing = this.gateway.things.filter(
     RuleUtils.byProperty(this.trigger.property)
   )[0];
@@ -161,6 +160,8 @@ Rule.prototype.toTriggerHumanDescription = function() {
       triggerStr += 'greater than ';
     }
     triggerStr += this.trigger.value;
+  } else if (this.trigger.type === 'EqualityTrigger') {
+    triggerStr += `${this.trigger.property.name} is ${this.trigger.value}`;
   } else {
     console.error('Unknown trigger type', this.trigger);
     return null;
