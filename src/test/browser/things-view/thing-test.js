@@ -279,7 +279,7 @@ describe('Thing', () => {
        const thingsPage = new ThingsPage(browser);
        thingsPage.open();
 
-       await thingsPage.waitForThings();
+       await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
@@ -294,6 +294,593 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'on', false);
        await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+     });
+
+  it('should render a dimmableLight and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'dimmableLight',
+         name: 'foofoo',
+         type: 'dimmableLight',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           level: {
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'level', 50);
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingLevelDisplayed();
+         expect(level).toEqual('50%');
+       });
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+
+       // We have to wait connecting websocket.
+       await detailPage.waitForOffThing();
+       const waitWensocketPromise = util.promisify(setImmediate);
+       await waitWensocketPromise();
+
+       // Check onOff property
+       const onOffProperty = await detailPage.onOffProperty();
+       let on = await onOffProperty.getValue();
+       expect(on).not.toBeTruthy();
+       await onOffProperty.click();
+       await waitForExpect(async () => {
+         on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+         on = await onOffProperty.getValue();
+         expect(on).toBeTruthy();
+       });
+       await setProperty(desc.id, 'on', false);
+       await waitForExpect(async () => {
+         on = await onOffProperty.getValue();
+         expect(on).not.toBeTruthy();
+       });
+
+       // Check level property
+       const levelProperty = await detailPage.levelProperty();
+       let level = await levelProperty.getValue();
+       expect(level).toEqual(50);
+       await levelProperty.setValue(20);
+       await waitForExpect(async () => {
+         level = await getProperty(desc.id, 'level');
+         expect(level).toEqual(20);
+         level = await levelProperty.getValue();
+         expect(level).toEqual(20);
+       });
+       await setProperty(desc.id, 'level', 60);
+       await waitForExpect(async () => {
+         level = await levelProperty.getValue();
+         expect(level).toEqual(60);
+       });
+     });
+
+  it('should render a onOffColorLight and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'onOffColorLight',
+         name: 'foofoo',
+         type: 'onOffColorLight',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           color: {
+             value: '#ffffff',
+             type: 'string',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'color', '#6789ab');
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingColorDisplayed();
+         expect(level).toEqual('#6789ab');
+       });
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+
+       // We have to wait connecting websocket.
+       await detailPage.waitForOffThing();
+       const waitWensocketPromise = util.promisify(setImmediate);
+       await waitWensocketPromise();
+
+       // Check onOff property
+       const onOffProperty = await detailPage.onOffProperty();
+       let on = await onOffProperty.getValue();
+       expect(on).not.toBeTruthy();
+       await onOffProperty.click();
+       await waitForExpect(async () => {
+         on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+         on = await onOffProperty.getValue();
+         expect(on).toBeTruthy();
+       });
+       await setProperty(desc.id, 'on', false);
+       await waitForExpect(async () => {
+         on = await onOffProperty.getValue();
+         expect(on).not.toBeTruthy();
+       });
+     });
+
+  it('should render a dimmableColorLight and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'dimmableColorLight',
+         name: 'foofoo',
+         type: 'dimmableColorLight',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           level: {
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+           color: {
+             value: '#ffffff',
+             type: 'string',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'level', 50);
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingLevelDisplayed();
+         expect(level).toEqual('50%');
+       });
+
+       await setProperty(desc.id, 'color', '#56789a');
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingColorDisplayed();
+         expect(level).toEqual('#56789a');
+       });
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+
+       // We have to wait connecting websocket.
+       await detailPage.waitForOffThing();
+       const waitWensocketPromise = util.promisify(setImmediate);
+       await waitWensocketPromise();
+
+       // Check onOff property
+       const onOffProperty = await detailPage.onOffProperty();
+       let on = await onOffProperty.getValue();
+       expect(on).not.toBeTruthy();
+       await onOffProperty.click();
+       await waitForExpect(async () => {
+         on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+         on = await onOffProperty.getValue();
+         expect(on).toBeTruthy();
+       });
+       await setProperty(desc.id, 'on', false);
+       await waitForExpect(async () => {
+         on = await onOffProperty.getValue();
+         expect(on).not.toBeTruthy();
+       });
+
+       // Check level property
+       const levelProperty = await detailPage.levelProperty();
+       let level = await levelProperty.getValue();
+       expect(level).toEqual(50);
+       await levelProperty.setValue(20);
+       await waitForExpect(async () => {
+         level = await getProperty(desc.id, 'level');
+         expect(level).toEqual(20);
+         level = await levelProperty.getValue();
+         expect(level).toEqual(20);
+       });
+       await setProperty(desc.id, 'level', 60);
+       await waitForExpect(async () => {
+         level = await levelProperty.getValue();
+         expect(level).toEqual(60);
+       });
+     });
+
+  it('should render a multiLevelSwitch and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'multiLevelSwitch',
+         name: 'foofoo',
+         type: 'multiLevelSwitch',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           level: {
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'level', 50);
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingLevelDisplayed();
+         expect(level).toEqual('50%');
+       });
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+
+       // We have to wait connecting websocket.
+       await detailPage.waitForOffThing();
+       const waitWensocketPromise = util.promisify(setImmediate);
+       await waitWensocketPromise();
+
+       // Check onOff property
+       const onOffProperty = await detailPage.onOffProperty();
+       let on = await onOffProperty.getValue();
+       expect(on).not.toBeTruthy();
+       await onOffProperty.click();
+       await waitForExpect(async () => {
+         on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+         on = await onOffProperty.getValue();
+         expect(on).toBeTruthy();
+       });
+       await setProperty(desc.id, 'on', false);
+       await waitForExpect(async () => {
+         on = await onOffProperty.getValue();
+         expect(on).not.toBeTruthy();
+       });
+
+       // Check level property
+       const levelProperty = await detailPage.levelProperty();
+       let level = await levelProperty.getValue();
+       expect(level).toEqual(50);
+       await levelProperty.setValue(20);
+       await waitForExpect(async () => {
+         level = await getProperty(desc.id, 'level');
+         expect(level).toEqual(20);
+         level = await levelProperty.getValue();
+         expect(level).toEqual(20);
+       });
+       await setProperty(desc.id, 'level', 60);
+       await waitForExpect(async () => {
+         level = await levelProperty.getValue();
+         expect(level).toEqual(60);
+       });
+     });
+
+  it('should render a smartPlug and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'smartPlug',
+         name: 'foofoo',
+         type: 'smartPlug',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           level: {
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+           instantaneousPower: {
+             value: 0,
+             type: 'number',
+             unit: 'watt',
+           },
+           voltage: {
+             value: 0,
+             type: 'number',
+             unit: 'volt',
+           },
+           current: {
+             value: 0,
+             type: 'number',
+             unit: 'ampere',
+           },
+           frequency: {
+             value: 0,
+             type: 'number',
+             unit: 'hertz',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await things[0].click();
+       await waitForExpect(async () => {
+         const on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+       });
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'instantaneousPower', 50);
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingPowerDisplayed();
+         expect(level).toEqual('50.00W');
+       });
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+
+       // Thing Detail View
+       // We have to wait connecting websocket.
+       await detailPage.waitForOffThing();
+       const waitWensocketPromise = util.promisify(setImmediate);
+       await waitWensocketPromise();
+
+       // Check onOff property
+       const onOffProperty = await detailPage.onOffProperty();
+       let on = await onOffProperty.getValue();
+       expect(on).not.toBeTruthy();
+       await onOffProperty.click();
+       await waitForExpect(async () => {
+         on = await getProperty(desc.id, 'on');
+         expect(on).toBeTruthy();
+         on = await onOffProperty.getValue();
+         expect(on).toBeTruthy();
+       });
+       await setProperty(desc.id, 'on', false);
+       await waitForExpect(async () => {
+         on = await onOffProperty.getValue();
+         expect(on).not.toBeTruthy();
+       });
+
+       // Check level property
+       const levelProperty = await detailPage.levelProperty();
+       let level = await levelProperty.getValue();
+       expect(level).toEqual(0);
+       await levelProperty.setValue(20);
+       await waitForExpect(async () => {
+         level = await getProperty(desc.id, 'level');
+         expect(level).toEqual(20);
+         level = await levelProperty.getValue();
+         expect(level).toEqual(20);
+       });
+       await setProperty(desc.id, 'level', 60);
+       await waitForExpect(async () => {
+         level = await levelProperty.getValue();
+         expect(level).toEqual(60);
+       });
+
+       // Check power property
+       const powerProperty = await detailPage.powerProperty();
+       let power = await powerProperty.getDisplayedText();
+       expect(power).toEqual('50.00W');
+       await setProperty(desc.id, 'instantaneousPower', 60);
+       await waitForExpect(async () => {
+         power = await powerProperty.getDisplayedText();
+         expect(power).toEqual('60.00W');
+       });
+
+       // Check voltage property
+       const voltageProperty = await detailPage.voltageProperty();
+       let voltage = await voltageProperty.getDisplayedText();
+       expect(voltage).toEqual('0V');
+       await setProperty(desc.id, 'voltage', 30);
+       await waitForExpect(async () => {
+         voltage = await voltageProperty.getDisplayedText();
+         expect(voltage).toEqual('30.00V');
+       });
+
+       // Check current property
+       const currentProperty = await detailPage.currentProperty();
+       let current = await currentProperty.getDisplayedText();
+       expect(current).toEqual('0A');
+       await setProperty(desc.id, 'current', 40);
+       await waitForExpect(async () => {
+         current = await currentProperty.getDisplayedText();
+         expect(current).toEqual('40.00A');
+       });
+
+       // Check current property
+       const frequencyProperty = await detailPage.frequencyProperty();
+       let frequency = await frequencyProperty.getDisplayedText();
+       expect(frequency).toEqual('0Hz');
+       await setProperty(desc.id, 'frequency', 10);
+       await waitForExpect(async () => {
+         frequency = await frequencyProperty.getDisplayedText();
+         expect(frequency).toEqual('10.00Hz');
+       });
+     });
+
+  it('should render a binarySensor and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'binarySensor',
+         name: 'foofoo',
+         type: 'binarySensor',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForOffThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await setProperty(desc.id, 'on', true);
+       await thingsPage.waitForOnThings();
+
+       await setProperty(desc.id, 'on', false);
+       await thingsPage.waitForOffThings();
+
+       things = await thingsPage.things();
+       const detailPage = await things[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+     });
+
+  it('should render a multiLevelSensor and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'multiLevelSensor',
+         name: 'foofoo',
+         type: 'multiLevelSensor',
+         properties: {
+           on: {
+             value: false,
+             type: 'boolean',
+           },
+           level: {
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       thingsPage.open();
+
+       await thingsPage.waitForThings();
+       let things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingName = await things[0].thingName();
+       expect(thingName).toEqual(desc.name);
+
+       await setProperty(desc.id, 'level', 50);
+       await waitForExpect(async () => {
+         things = await thingsPage.things();
+         const level = await things[0].thingLevelDisplayed();
+         expect(level).toEqual('50%');
+       });
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
