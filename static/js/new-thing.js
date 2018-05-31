@@ -22,151 +22,110 @@ const Utils = require('./utils');
 const NewThing = function(id, description) {
   this.id = id;
   this.description = description;
+  this.pinSet = false;
+  this.re = null;
+  if (description.hasOwnProperty('pin') && description.pin.pattern !== null) {
+    this.re = RegExp(description.pin.pattern);
+  }
+
   this.container = document.getElementById('new-things');
+  this.element = document.createElement('div');
+  this.element.classList.add('new-thing');
+  this.element.id = `new-thing-${Utils.escapeHtmlForIdClass(this.id)}`;
   this.render();
-  this.element =
-    document.getElementById(`new-thing-${Utils.escapeHtml(this.id)}`);
-  this.nameInput = this.element.getElementsByClassName('new-thing-name')[0];
-  this.saveButton = this.element.getElementsByClassName(
-    'new-thing-save-button')[0];
-  this.element.addEventListener('click', this.handleClick.bind(this));
+  this.container.appendChild(this.element);
+};
+
+NewThing.prototype.requiresPin = function() {
+  return this.description.hasOwnProperty('pin') &&
+    this.description.pin.required &&
+    !this.pinSet;
 };
 
 /**
  * HTML view for New Thing.
  */
-NewThing.prototype.view = function() {
-  switch (this.description.type) {
-    case 'binarySensor':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
-             `  class="new-thing binary-sensor">` +
-             `  <div class="new-thing-icon"></div>` +
-             `  <div class="new-thing-metadata">` +
-             `    <input type="text" class="new-thing-name" value="${
-               Utils.escapeHtml(this.description.name)}"></input>` +
-             `    <span class="new-thing-type">Binary Sensor</span>` +
-             `  </div>` +
-             `  <button class="new-thing-save-button text-button">` +
-             `    Save` +
-             `  </button>` +
-             `</div>`;
-    case 'multiLevelSensor':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
-             `  class="new-thing binary-sensor">` +
-             `  <div class="new-thing-icon"></div>` +
-             `  <div class="new-thing-metadata">` +
-             `    <input type="text" class="new-thing-name" value="${
-               Utils.escapeHtml(this.description.name)}"></input>` +
-             `    <span class="new-thing-type">Multi Level Sensor</span>` +
-             `  </div>` +
-             `  <button class="new-thing-save-button text-button">` +
-             `    Save` +
-             `  </button>` +
-             `</div>`;
-    case 'onOffLight':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                   class="new-thing on-off-light">
-         <div class="new-thing-icon"></div>
-         <div class="new-thing-metadata">
-           <input type="text" class="new-thing-name"
-                  value="${Utils.escapeHtml(this.description.name)}"/>
-           <span class="new-thing-type">On/Off Light</span>
-         </div>
-         <button class="new-thing-save-button text-button">
-           Save
-         </button>
-       </div>`;
-    case 'onOffColorLight':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                   class="new-thing on-off-light">
-         <div class="new-thing-icon"></div>
-         <div class="new-thing-metadata">
-           <input type="text" class="new-thing-name"
-                  value="${Utils.escapeHtml(this.description.name)}"/>
-           <span class="new-thing-type">Color Light</span>
-         </div>
-         <button class="new-thing-save-button text-button">
-           Save
-         </button>
-       </div>`;
-    case 'dimmableLight':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                   class="new-thing on-off-light">
-         <div class="new-thing-icon"></div>
-         <div class="new-thing-metadata">
-           <input type="text" class="new-thing-name"
-                  value="${Utils.escapeHtml(this.description.name)}"/>
-           <span class="new-thing-type">Dimmable Light</span>
-         </div>
-         <button class="new-thing-save-button text-button">
-           Save
-         </button>
-       </div>`;
-    case 'dimmableColorLight':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                   class="new-thing on-off-light">
-         <div class="new-thing-icon"></div>
-         <div class="new-thing-metadata">
-           <input type="text" class="new-thing-name"
-                  value="${Utils.escapeHtml(this.description.name)}"/>
-           <span class="new-thing-type">Dimmable Color Light</span>
-         </div>
-         <button class="new-thing-save-button text-button">
-           Save
-         </button>
-       </div>`;
-    case 'multiLevelSwitch':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
-             `  class="new-thing on-off-switch">` +
-             `  <div class="new-thing-icon"></div>` +
-             `  <div class="new-thing-metadata">` +
-             `    <input type="text" class="new-thing-name" value="${
-               Utils.escapeHtml(this.description.name)}"></input>` +
-             `    <span class="new-thing-type">Multi Level Switch</span>` +
-             `  </div>` +
-             `  <button class="new-thing-save-button text-button">` +
-             `    Save` +
-             `  </button>` +
-             `</div>`;
-    case 'onOffSwitch':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
-             `  class="new-thing on-off-switch">` +
-             `  <div class="new-thing-icon"></div>` +
-             `  <div class="new-thing-metadata">` +
-             `    <input type="text" class="new-thing-name" value="${
-               Utils.escapeHtml(this.description.name)}"></input>` +
-             `    <span class="new-thing-type">On/Off Switch</span>` +
-             `  </div>` +
-             `  <button class="new-thing-save-button text-button">` +
-             `    Save` +
-             `  </button>` +
-             `</div>`;
-    case 'smartPlug':
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"
-                   class="new-thing smart-plug">
-         <div class="new-thing-icon"></div>
-         <div class="new-thing-metadata">
-           <input type="text" class="new-thing-name"
-                  value="${Utils.escapeHtml(this.description.name)}"/>
-           <span class="new-thing-type">Smart Plug</span>
-         </div>
-         <button class="new-thing-save-button text-button">
-           Save
-         </button>
-       </div>`;
-    default:
-      return `<div id="new-thing-${Utils.escapeHtml(this.id)}"` +
-             `  class="new-thing">` +
-             `  <div class="new-thing-icon"></div>` +
-             `  <div class="new-thing-metadata">` +
-             `    <input type="text" class="new-thing-name" value="${
-               Utils.escapeHtml(this.description.name)}"></input>` +
-             `    <span class="new-thing-type">Unknown device type</span>` +
-             `  </div>` +
-             `  <button class="new-thing-save-button text-button">` +
-             `    Save` +
-             `  </button>` +
-             `</div>`;
+NewThing.prototype.buildView = function() {
+  if (this.requiresPin()) {
+    this.element.classList.add('pin-required');
+    this.element.innerHTML = `
+      <div class="new-thing-icon"></div>
+      <div class="new-thing-metadata">
+        <span class="new-thing-initial-name">
+          ${Utils.escapeHtml(this.description.name)}
+        </span>
+        <input type="text" class="new-thing-pin" required autofocus
+               placeholder="Enter PIN"/>
+        <span class="new-thing-pin-error hidden">Incorrect PIN</span>
+      </div>
+      <div class="new-thing-controls">
+        <button class="new-thing-cancel-button text-button">
+          Cancel
+        </button>
+        <button class="new-thing-submit-button text-button" disabled>
+          Submit
+        </button>
+      </div>`;
+  } else {
+    this.element.classList.remove('pin-required');
+
+    let cls = '', type = '';
+    switch (this.description.type) {
+      case 'binarySensor':
+        cls = 'binary-sensor';
+        type = 'Binary Sensor';
+        break;
+      case 'multiLevelSensor':
+        cls = 'binary-sensor';
+        type = 'Multi Level Sensor';
+        break;
+      case 'onOffLight':
+        cls = 'on-off-light';
+        type = 'On/Off Light';
+        break;
+      case 'onOffColorLight':
+        cls = 'on-off-light';
+        type = 'Color Light';
+        break;
+      case 'dimmableLight':
+        cls = 'on-off-light';
+        type = 'Dimmable Light';
+        break;
+      case 'dimmableColorLight':
+        cls = 'on-off-light';
+        type = 'Dimmable Color Light';
+        break;
+      case 'multiLevelSwitch':
+        cls = 'on-off-switch';
+        type = 'Multi Level Switch';
+        break;
+      case 'onOffSwitch':
+        cls = 'on-off-switch';
+        type = 'On/Off Switch';
+        break;
+      case 'smartPlug':
+        cls = 'smart-plug';
+        type = 'Smart Plug';
+        break;
+      default:
+        type = 'Unknown device type';
+        break;
+    }
+
+    if (cls) {
+      this.element.classList.add(cls);
+    }
+
+    this.element.innerHTML = `
+      <div class="new-thing-icon"></div>
+      <div class="new-thing-metadata">
+        <input type="text" class="new-thing-name"
+               value="${Utils.escapeHtml(this.description.name)}"/>
+        <span class="new-thing-type">${type}</span>
+      </div>
+      <button class="new-thing-save-button text-button">
+        Save
+      </button>`;
   }
 };
 
@@ -174,19 +133,87 @@ NewThing.prototype.view = function() {
  * Render New Thing view and add to DOM.
  */
 NewThing.prototype.render = function() {
-  this.container.insertAdjacentHTML('beforeend', this.view());
-};
+  this.buildView();
 
-/**
- * Handle click on a Thing.
- */
-NewThing.prototype.handleClick = function(event) {
-  if (event.target.classList.contains('new-thing-save-button')) {
-    this.save();
+  if (this.requiresPin()) {
+    this.pinInput = this.element.getElementsByClassName('new-thing-pin')[0];
+    this.pinError = this.element.getElementsByClassName(
+      'new-thing-pin-error')[0];
+    this.cancelButton = this.element.getElementsByClassName(
+      'new-thing-cancel-button')[0];
+    this.submitButton = this.element.getElementsByClassName(
+      'new-thing-submit-button')[0];
+
+    this.pinInput.addEventListener('input', this.handlePinInput.bind(this));
+    this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
+    this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
+  } else {
+    this.nameInput = this.element.getElementsByClassName('new-thing-name')[0];
+    this.saveButton = this.element.getElementsByClassName(
+      'new-thing-save-button')[0];
+
+    this.saveButton.addEventListener('click', this.handleSave.bind(this));
   }
 };
 
-NewThing.prototype.save = function() {
+NewThing.prototype.handlePinInput = function() {
+  const input = this.pinInput.value.trim();
+
+  let valid = false;
+  if (this.re !== null) {
+    valid = this.re.test(input);
+  } else {
+    valid = input.length > 0;
+  }
+
+  this.submitButton.disabled = !valid;
+
+  if (valid) {
+    this.pinInput.setCustomValidity('');
+  } else {
+    this.pinInput.setCustomValidity('Invalid PIN');
+  }
+};
+
+NewThing.prototype.handleCancel = function() {
+  this.container.removeChild(this.element);
+};
+
+NewThing.prototype.handleSubmit = function() {
+  const input = this.pinInput.value.trim();
+  this.submitButton.disabled = true;
+
+  fetch('/things', {
+    method: 'PATCH',
+    body: JSON.stringify({thingId: this.id, pin: input}),
+    headers: {
+      Authorization: `Bearer ${API.jwt}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => {
+    if (!response.ok) {
+      return response.text();
+    }
+
+    return response.json();
+  }).then((json) => {
+    if (typeof json === 'string') {
+      throw new Error(json);
+    }
+
+    this.pinError.classList.add('hidden');
+    this.description = json;
+    this.pinSet = true;
+    this.render();
+  }).catch((error) => {
+    console.error(`Failed to set PIN: ${error}`);
+    this.submitButton.disabled = false;
+    this.pinError.classList.remove('hidden');
+  });
+};
+
+NewThing.prototype.handleSave = function() {
   const thing = this.description;
   thing.id = this.id;
   thing.name = this.nameInput.value;
@@ -198,14 +225,14 @@ NewThing.prototype.save = function() {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then((function(response) {
+  }).then((response) => {
     return response.json();
-  }).bind(this)).then((function(json) {
+  }).then((json) => {
     console.log(`Successfully created thing ${json}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;
-  }).bind(this)).catch(function(error) {
+  }).catch((error) => {
     console.error(`Failed to save thing ${error}`);
   });
 };

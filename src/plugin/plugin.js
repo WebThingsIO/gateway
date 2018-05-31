@@ -54,6 +54,7 @@ class Plugin {
     this.nextId = 0;
     this.requestActionPromises = new Map();
     this.removeActionPromises = new Map();
+    this.setPinPromises = new Map();
   }
 
   asDict() {
@@ -131,6 +132,39 @@ class Plugin {
         }
         deferred.reject();
         this.removeActionPromises.delete(messageId);
+        return;
+      }
+      case Constants.SET_PIN_RESOLVED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.setPinPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        const adapter = this.adapters.get(msg.data.adapterId);
+        const deviceId = msg.data.device.id;
+        const device = new DeviceProxy(adapter, msg.data.device);
+        adapter.devices[deviceId] = device;
+        adapter.manager.devices[deviceId] = device;
+        deferred.resolve(msg.data.device);
+        this.setPinPromises.delete(messageId);
+        return;
+      }
+      case Constants.SET_PIN_REJECTED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.setPinPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.reject();
+        this.setPinPromises.delete(messageId);
         return;
       }
     }
@@ -317,6 +351,13 @@ class Plugin {
           this.removeActionPromises.set(data.messageId, deferred);
           break;
         }
+        case Constants.SET_PIN: {
+          // removeAction needs ID which is per message, because it
+          // can be called while waiting rejected or resolved.
+          data.messageId = this.generateMsgId();
+          this.setPinPromises.set(data.messageId, deferred);
+          break;
+        }
         default:
           break;
       }
@@ -342,6 +383,10 @@ class Plugin {
     this.removeActionPromises.forEach((promise, key) => {
       promise.reject();
       this.removeActionPromises.delete(key);
+    });
+    this.setPinPromises.forEach((promise, key) => {
+      promise.reject();
+      this.setPinPromises.delete(key);
     });
     this.ipcSocket.close();
   }

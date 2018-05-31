@@ -63,6 +63,28 @@ ThingsController.get('/', (request, response) => {
   }
 });
 
+ThingsController.patch('/', async (request, response) => {
+  if (!request.body ||
+      !request.body.hasOwnProperty('thingId') ||
+      !request.body.hasOwnProperty('pin') ||
+      !request.body.thingId ||
+      request.body.pin.trim().length === 0) {
+    response.status(400).send('Invalid request');
+    return;
+  }
+
+  const thingId = request.body.thingId;
+  const pin = request.body.pin.trim();
+
+  try {
+    const device = await AddonManager.setPin(thingId, pin);
+    response.status(200).json(device);
+  } catch (e) {
+    console.error(`Failed to set PIN for ${thingId}: ${e}`);
+    response.status(400).send(e);
+  }
+});
+
 /**
  * Handle creating a new thing.
  */

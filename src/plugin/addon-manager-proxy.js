@@ -261,7 +261,6 @@ class AddonManagerProxy extends EventEmitter {
           });
         break;
       }
-
       case Constants.REMOVE_ACTION: {
         const actionName = msg.data.actionName;
         const actionId = msg.data.actionId;
@@ -287,7 +286,31 @@ class AddonManagerProxy extends EventEmitter {
           });
         break;
       }
+      case Constants.SET_PIN: {
+        const pin = msg.data.pin;
+        const messageId = msg.data.messageId;
+        adapter.setPin(deviceId, pin)
+          .then(() => {
+            const dev = adapter.getDevice(deviceId);
+            this.pluginClient.sendNotification(
+              Constants.SET_PIN_RESOLVED, {
+                device: dev.asDict(),
+                messageId: messageId,
+                adapterId: adapter.id,
+              });
+          }).catch((err) => {
+            console.error(
+              `AddonManagerProxy: Failed to set PIN for device ${deviceId}`);
+            console.error(err);
 
+            this.pluginClient.sendNotification(
+              Constants.SET_PIN_REJECTED, {
+                deviceId: deviceId,
+                messageId: messageId,
+              });
+          });
+        break;
+      }
       case Constants.DEBUG_CMD:
         device.debugCmd(msg.data.cmd, msg.data.params);
         break;

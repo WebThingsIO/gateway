@@ -190,6 +190,16 @@ class MockAdapter extends Adapter {
     console.log('MockAdapter:', this.name, 'id', this.id,
                 'cancelRemoveThing(', device.id, ')');
   }
+
+  setPin(deviceId, pin) {
+    return new Promise((resolve, reject) => {
+      if (pin === '1234') {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  }
 }
 
 function loadMockAdapter(addonManager, manifest, _errorCallback) {

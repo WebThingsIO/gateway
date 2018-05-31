@@ -29,8 +29,8 @@ const NewWebThing = function() {
   this.description = null;
   this.container = document.getElementById('new-things');
   this.render();
-  this.element =
-    document.getElementById(`new-thing-${Utils.escapeHtml(this.originalId)}`);
+  this.element = document.getElementById(
+    `new-web-thing-${Utils.escapeHtmlForIdClass(this.originalId)}`);
   this.thingTypeLabel =
     this.element.getElementsByClassName('new-thing-type')[0];
   this.originLabel =
@@ -51,7 +51,8 @@ const NewWebThing = function() {
  */
 NewWebThing.prototype.view = function() {
   return `
-    <div id="new-thing-${this.originalId}" class="new-thing web-thing">
+    <div id="new-web-thing-${Utils.escapeHtmlForIdClass(this.originalId)}"
+         class="new-thing web-thing">
       <div class="new-thing-icon"></div>
       <div class="new-thing-metadata">
         <input type="text" class="new-web-thing-url"
