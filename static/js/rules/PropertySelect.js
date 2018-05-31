@@ -127,16 +127,16 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
-      let selected = false;
       const dpbRulePart = this.devicePropertyBlock.rulePart;
+      let selected = !dpbRulePart;
       if (ruleFragment.trigger) {
         ruleFragment.trigger.value = valueInput.value;
-        selected = dpbRulePart.trigger &&
-          dpbRulePart.trigger.type === ruleFragment.trigger.type;
+        selected = selected || (dpbRulePart.trigger &&
+          dpbRulePart.trigger.type === ruleFragment.trigger.type);
       } else {
         ruleFragment.effect.value = valueInput.value;
-        selected = dpbRulePart.effect &&
-          dpbRulePart.effect.type === ruleFragment.effect.type;
+        selected = selected || (dpbRulePart.effect &&
+          dpbRulePart.effect.type === ruleFragment.effect.type);
       }
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
 
