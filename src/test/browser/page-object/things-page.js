@@ -6,7 +6,11 @@ class ThingSection extends Section {
     super(browser, rootElement);
     this.defineElement('name', '.thing-name');
     this.defineElement('detailLink', '.thing-details-link');
-    this.defineElement('clickable', '.thing-icon');
+    this.defineElement('clickable',
+                       '.thing-icon,.level-bar-container,.color-light');
+    this.defineElement('level', '.level-bar-label,.multi-level-sensor-text');
+    this.defineElement('power', '.smart-plug-label');
+    this.defineElement('color', '.color-light-icon-path');
   }
 
   async click() {
@@ -31,6 +35,36 @@ class ThingSection extends Section {
       name.value ? name.value.ELEMENT : name.ELEMENT
     );
     return text.value;
+  }
+
+  async thingLevelDisplayed() {
+    const level = await this.level();
+    const text = await this.browser.elementIdText(
+      level.value ? level.value.ELEMENT : level.ELEMENT
+    );
+    return text.value;
+  }
+
+  async thingPowerDisplayed() {
+    const power = await this.power();
+    const text = await this.browser.elementIdText(
+      power.value ? power.value.ELEMENT : power.ELEMENT
+    );
+    return text.value;
+  }
+
+  async thingColorDisplayed() {
+    const color = await this.color();
+    const data = await this.browser.elementIdProperty(
+      color.value ? color.value.ELEMENT : color.ELEMENT,
+      'style'
+    );
+    const rgb = data.value.fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    const colorStyle = `#${
+      Number(rgb[1]).toString(16)}${
+      Number(rgb[2]).toString(16)}${
+      Number(rgb[3]).toString(16)}`;
+    return colorStyle;
   }
 
   async openDetailPage() {

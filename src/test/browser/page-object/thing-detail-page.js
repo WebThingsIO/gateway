@@ -1,6 +1,9 @@
 const {Page, Section} = require('./elements');
 const BACKSPACE_UNICODE = '\uE003';
 const ENTER_UNICODE = '\uE007';
+const ARROW_UP_UNICODE = '\uE013';
+const ARROW_DOWN_UNICODE = '\uE015';
+
 class InputPropertySection extends Section {
   constructor(browser, rootElement) {
     super(browser, rootElement);
@@ -52,27 +55,96 @@ class ColorTemperaturePropertySection extends InputPropertySection {
 }
 
 class LabelPropertySection extends Section {
-  async getDisplayedValue() {
+  async getDisplayedText() {
     const element = this.rootElement;
-    return await this.browser.elementIdText(
+    const data = await this.browser.elementIdText(
       element.value ? element.value.ELEMENT : element.ELEMENT
     );
+    return data.value;
   }
 }
 
 class LevelPropertySection extends InputPropertySection {
+  async setValue(value) {
+    const current = await this.getValue();
+    const diff = value - current;
+    let key;
+    if (diff > 0) {
+      key = ARROW_UP_UNICODE;
+    } else {
+      key = ARROW_DOWN_UNICODE;
+    }
+    const keys = [];
+    const stroke = Math.abs(diff);
+    for (let i = 0; i < stroke; i++) {
+      keys.push(key);
+    }
+    const input = await this.input();
+    await this.browser.elementIdValue(
+      input.value ? input.value.ELEMENT : input.ELEMENT,
+      keys
+    );
+  }
+
+  async getValue() {
+    const stringValue = await super.getValue();
+    return Number(stringValue);
+  }
 }
 
 class OnOffPropertySection extends InputPropertySection {
+  async click() {
+    await this.waitForClickable();
+    const element = this.rootElement;
+    await this.browser.elementIdClick(
+      element.value ? element.value.ELEMENT : element.ELEMENT
+    );
+  }
+
+  async waitForClickable() {
+    const element = this.rootElement;
+    await this.browser.waitUntil(async () => {
+      return await this.browser.elementIdDisplayed(
+        element.value ? element.value.ELEMENT : element.ELEMENT
+      );
+    }, 5000);
+    await this.browser.waitUntil(async () => {
+      return await this.browser.elementIdEnabled(
+        element.value ? element.value.ELEMENT : element.ELEMENT
+      );
+    }, 5000);
+  }
+
+  async getValue() {
+    const input = await this.input();
+    const data = await this.browser.elementIdSelected(
+      input.value ? input.value.ELEMENT : input.ELEMENT
+    );
+    return data.value;
+  }
 }
 
 class BooleanPropertySection extends InputPropertySection {
   async click() {
-    // The following code not work.
-    const input = await this.input();
+    await this.waitForClickable();
+    const element = this.rootElement;
     await this.browser.elementIdClick(
-      input.value ? input.value.ELEMENT : input.ELEMENT
+      element.value ? element.value.ELEMENT : element.ELEMENT
     );
+  }
+
+  async waitForClickable() {
+    const element = this.rootElement;
+    await this.browser.waitUntil(async () => {
+      return await this.browser.elementIdDisplayed(
+        element.value ? element.value.ELEMENT : element.ELEMENT
+      );
+    }, 5000);
+    await this.browser.waitUntil(async () => {
+      return await this.browser.elementIdEnabled(
+        element.value ? element.value.ELEMENT : element.ELEMENT
+      );
+    }, 5000);
   }
 
   async getValue() {
@@ -119,14 +191,39 @@ class ThingDetailPage extends Page {
 
     this.defineSection(
       'levelProperty',
-      '.level',
+      'form.level',
       LevelPropertySection
     );
 
     this.defineSection(
       'onOffProperty',
-      '.switch',
+      'form.switch',
       OnOffPropertySection
+    );
+
+    // For SmartPlug
+    this.defineSection(
+      'powerProperty',
+      `#label-instantaneousPower`,
+      LabelPropertySection
+    );
+
+    this.defineSection(
+      'voltageProperty',
+      `#label-voltage`,
+      LabelPropertySection
+    );
+
+    this.defineSection(
+      'currentProperty',
+      `#label-current`,
+      LabelPropertySection
+    );
+
+    this.defineSection(
+      'frequencyProperty',
+      `#label-frequency`,
+      LabelPropertySection
     );
 
     this.defineSections(
@@ -135,7 +232,7 @@ class ThingDetailPage extends Page {
       LabelPropertySection
     );
 
-    // UnknownThing
+    // For UnknownThing
     this.defineSections(
       'booleanProperties',
       '.boolean-switch',
@@ -151,6 +248,8 @@ class ThingDetailPage extends Page {
       '.number-input',
       NumberPropertySection
     );
+
+    this.defineElement('offThing', '.thing.off');
   }
 }
 

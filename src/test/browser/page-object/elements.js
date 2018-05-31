@@ -63,7 +63,8 @@ class Elements {
     this[name] = async () => {
       const rootElement = this.rootElement;
       if (!rootElement) {
-        return await this.browser.elements(selector).value[0];
+        const elements = await this.browser.elements(selector);
+        return elements.value[0];
       }
       return await this.browser.elementIdElement(
         rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
@@ -130,7 +131,8 @@ class Page extends Elements {
           selector
         );
       } else {
-        e = await this.browser.elements(selector).value[0];
+        const elements = await this.browser.elements(selector);
+        e = elements.value[0];
       }
       return new section(this.browser, e);
     };
