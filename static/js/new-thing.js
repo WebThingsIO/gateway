@@ -31,7 +31,7 @@ const NewThing = function(id, description) {
   this.container = document.getElementById('new-things');
   this.element = document.createElement('div');
   this.element.classList.add('new-thing');
-  this.element.id = Utils.escapeHtmlForIdClass(this.id);
+  this.element.id = `new-thing-${Utils.escapeHtmlForIdClass(this.id)}`;
   this.render();
   this.container.appendChild(this.element);
 };

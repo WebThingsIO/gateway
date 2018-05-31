@@ -131,6 +131,10 @@
   font-size: 1.3rem;
 }
 
+.new-thing.pin-required .new-thing-icon {
+  background-image: url('../optimized-images/security-icon.svg');
+}
+
 .new-thing.on-off-switch .new-thing-icon {
   background-image: url('../optimized-images/on-off-switch.png');
 }
