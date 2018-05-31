@@ -19,12 +19,10 @@ const RootController = express.Router();
 /**
  * Get the home page.
  */
-
-RootController.get('/', TunnelSetup.isTunnelSet,
-                   function(request, response) {
-                     response.sendFile('index.html', {
-                       root: Constants.BUILD_STATIC_PATH,
-                     });
-                   });
+RootController.get('/', TunnelSetup.isTunnelSet, function(request, response) {
+  response.sendFile('index.html', {
+    root: Constants.BUILD_STATIC_PATH,
+  });
+});
 
 module.exports = RootController;

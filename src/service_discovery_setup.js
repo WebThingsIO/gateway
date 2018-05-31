@@ -12,11 +12,10 @@
 const dnssd = require('dnssd');
 const config = require('config');
 const Settings = require('./models/settings');
+const TunnelService = require('./ssltunnel');
 
 // Internal dependencies
-
 const server = new DNSserviceDiscovery();
-
 
 /**
  * Our DNS Service Discovery object.
@@ -29,13 +28,17 @@ const server = new DNSserviceDiscovery();
  * quite early on since the starting process in app.js and parts of the UI in
  * settings_controller.js need to use its methods.
  *
- *
  * @param {}
  */
-
 function DNSserviceDiscovery() {
   this.serviceState = false;
-  this.port = config.get('ports.https');
+  if (process.env.NODE_ENV === 'test') {
+    this.port = 8080;
+  } else if (TunnelService.hasCertificates()) {
+    this.port = config.get('ports.https');
+  } else {
+    this.port = config.get('ports.http');
+  }
   this.localDomain = config.get(
     'settings.defaults.domain.localControl.mdnsServiceDomain');
   this.localName = config.get(
@@ -56,7 +59,6 @@ function DNSserviceDiscovery() {
   this.dnssdHandle.stop();
 }
 
-
 /**
  * A small helper method.
  *
@@ -66,17 +68,15 @@ function DNSserviceDiscovery() {
  * @param {boolean}: True starts the broadcast service.
  *                   False stops the broadcast service
  */
-
 DNSserviceDiscovery.prototype.startService = function(state) {
   this.serviceState = !!state;    // Make sure it's a boolean value
   if (this.serviceState) {
     this.dnssdHandle.start();
   } else {
-    this.dnssdHandle.stop();
+    this.dnssdHandle.stop(true);
   }
   console.log(`Service Discover state changed to: ${this.serviceState}`);
 };
-
 
 /**
  * A small helper method.
@@ -88,7 +88,6 @@ DNSserviceDiscovery.prototype.startService = function(state) {
  *
  * @param {string} local DNS name. e.g. 'Myhome-iot'
  */
-
 DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
   // Check any letter or number a-Z,A-Z, 0-9 and '-' any number of times with
   // a length less than 63
@@ -118,13 +117,12 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
     this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
                                            this.port, options);
   } else {
-    console.error(`Our Domain Name string did not match [a-z,A-Z,0-9,-]. \
-We got: ${localDomain}`);
-    throw new Error(`Invalid local domain name. It should only consist \
-of characters a-Z, A-Z, 0-9, or- `);
+    console.error('Our Domain Name string did not match [a-z,A-Z,0-9,-].',
+                  `We got: ${localDomain}`);
+    throw new Error('Invalid local domain name. It should only consist ' +
+                    'of characters a-Z, A-Z, 0-9, or- ');
   }
 };
-
 
 /**
  * changeProfile method.
@@ -137,18 +135,20 @@ of characters a-Z, A-Z, 0-9, or- `);
  * @return
  *
  * @param {object} newProfile
- *          e.g newProfile = { name: "Mozilla IoT Gateway",
- *                              host: "mozillaGateway",     // Local DNS name
- *                              txt: {  desc: "descriptive text",
- *                                      protocols:  "http, https, oauth2 etc..",
- *                                      power: "default power"
- *                                    }
- *                            }
+ *          e.g newProfile = {
+ *                             name: "Mozilla IoT Gateway",
+ *                             host: "mozillaGateway",     // Local DNS name
+ *                             txt: {
+ *                               desc: "descriptive text",
+ *                               protocols:  "http, https, oauth2 etc..",
+ *                               power: "default power"
+ *                             }
+ *                           }
  */
 DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
   try {
-    console.log(`Service Discovery is changing profile. The localDomain is \
-changed to: ${newProfile.host}`);
+    console.log('Service Discovery is changing profile. The localDomain is',
+                `changed to: ${newProfile.host}`);
     this.localName = newProfile.name;
     this.localDomain = newProfile.host;
     this.description = newProfile.txt.desc;
@@ -174,11 +174,10 @@ changed to: ${newProfile.host}`);
   } catch (err) {
     // We should never get here. Don't attempt to start service discovery
     // and log an error message. But allow the application to carry on
-    console.error('The service discovery services could not change profile ' +
-      'settings. The error is: ${err}');
+    console.error('The service discovery services could not change profile',
+                  `settings. The error is: ${err}`);
   }
 };
-
 
 /**
  * A small helper function.
@@ -188,13 +187,15 @@ changed to: ${newProfile.host}`);
  * will work for the calling application to use.
  *
  * @return: {Object} mDNS config options
- *          e.g Options = { name: "Mozilla IoT Gateway",
- *                         host: "mozillaGateway",     // Local DNS name
- *                         txt: {  desc: "descriptive text",
- *                                 protocols:  "http, https, oauth2 etc..",
- *                                 power: "default power"
- *                               }
- *                       }
+ *          e.g Options = {
+ *                          name: "Mozilla IoT Gateway",
+ *                          host: "mozillaGateway",     // Local DNS name
+ *                          txt: {
+ *                            desc: "descriptive text",
+ *                            protocols:  "http, https, oauth2 etc..",
+ *                            power: "default power"
+ *                          }
+ *                        }
  * This function searches /config or db.sqlite3 DB
  *
  * @param {}
@@ -227,12 +228,10 @@ async function getmDNSconfig() {
   } catch (err) {
     // We should never get here. Don't attempt to start service discovery
     // and log an error message. But allow the application to carry on
-
-    console.error(`The service discovery services could not find ' +
-      'configuration settings. The error is: ${err}`);
+    console.error('The service discovery services could not find',
+                  `configuration settings. The error is: ${err}`);
   }
 }
-
 
 /**
  * A small helper function.
@@ -256,18 +255,15 @@ async function getmDNSstate() {
   } catch (err) {
     // Catch this DB error. Since we don't know what state the mDNS process
     // should be in make sure it's off
-    console.error('Error getting DB entry for multicast DNS state from ' +
-      'the DB. Should be True or False', err);
+    console.error('Error getting DB entry for multicast DNS state from',
+                  'the DB. Should be True or False:', err);
 
     return config.get('settings.defaults.domain.localAccess');
   }
 }
-
 
 module.exports = {
   server: server,
   getmDNSconfig: getmDNSconfig,
   getmDNSstate: getmDNSstate,
 };
-
-

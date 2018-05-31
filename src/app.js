@@ -51,16 +51,13 @@ const httpApp = createGatewayApp(httpServer);
 let httpsServer = createHttpsServer();
 let httpsApp = null;
 
-
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
  * private keys stored for the tunnel service, null is returned.
  *
- *
  * @param {}
  * @return {Object|null} https server object if successful, else NULL
  */
-
 function createHttpsServer() {
   if (!TunnelService.hasCertificates()) {
     return null;
@@ -97,7 +94,7 @@ function startHttpsGateway() {
       addonManager.loadAddons();
     });
     rulesEngineConfigure(httpsServer);
-    console.log('HTTPS server listening on port ', httpsServer.address().port);
+    console.log('HTTPS server listening on port', httpsServer.address().port);
     commandParserConfigure(httpsServer);
   });
 
@@ -105,7 +102,7 @@ function startHttpsGateway() {
   httpServer.on('request', createRedirectApp(httpsServer.address().port));
   const httpPort = config.get('ports.http');
   httpServer.listen(httpPort, function() {
-    console.log('Redirector listening on port ', httpServer.address().port);
+    console.log('Redirector listening on port', httpServer.address().port);
   });
 }
 
@@ -308,6 +305,7 @@ if (config.get('cli')) {
   process.on('SIGINT', function() {
     console.log('Control-C: unloading add-ons...');
     addonManager.unloadAddons();
+    mDNSserver.server.startService(false);
     TunnelService.stop();
     process.exit(0);
   });

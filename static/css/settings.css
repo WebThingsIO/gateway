@@ -80,7 +80,6 @@
   background-image: url('../images/domain-icon.png');
 }
 
-
 #user-settings-link {
   background-image: url('../optimized-images/users-icon.png');
 }
@@ -163,7 +162,6 @@
   max-width: 60rem;
   margin: 0 auto;
 }
-
 
 #user-settings ul,
 #adapter-settings ul,

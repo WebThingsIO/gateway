@@ -246,10 +246,10 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
     let tunnelEndpoint;
 
     if (typeof result === 'object') {
-      console.log(`Tunnel domain found. Tunnel name is: ${result.name} and \
-tunnel domain is: ${config.get('ssltunnel.domain')}`);
-      tunnelEndpoint = `https://${result.name}.
-      ${config.get('ssltunnel.domain')}`;
+      console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
+                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
+      tunnelEndpoint =
+        `https://${result.name}.${config.get('ssltunnel.domain')}`;
     } else {
       tunnelEndpoint = 'Not set.';
     }
@@ -292,20 +292,22 @@ tunnel domain is: ${config.get('ssltunnel.domain')}`);
 });
 
 /* This is responsible for controlling dynamically the local domain name
-    settings (via mDNS) and changing or updating mozilla tunnel endpoints.
-    The /domain endpoint is invoked from:
-    MainMenu -> Settings -> Doamin
-
-    JSON data: { local: {
-                    multicastDNSstate: boolean,
-                    localDNSname: string, - e.g. MyHome
-                 mozillaTunnel: {
-                    tunnel: boolean,
-                    tunnelName: string, - e.g. MyName
-                    tunnelEmail: string
-                    }
+ * settings (via mDNS) and changing or updating mozilla tunnel endpoints.
+ * The /domain endpoint is invoked from:
+ *   MainMenu -> Settings -> Doamin
+ *
+ * JSON data: {
+ *              local: {
+ *                multicastDNSstate: boolean,
+ *                localDNSname: string, - e.g. MyHome
+ *              },
+ *              mozillaTunnel: {
+ *                tunnel: boolean,
+ *                tunnelName: string, - e.g. MyName
+ *                tunnelEmail: string
+ *              }
+ *            }
  */
-
 SettingsController.put('/domain', async (request, response) => {
   if (!request.body ||
       !request.body.hasOwnProperty('local') &&
@@ -350,7 +352,6 @@ SettingsController.put('/domain', async (request, response) => {
     response.status(400).json(localDomainSettings);
   }
 });
-
 
 SettingsController.get('/addonsInfo', (request, response) => {
   response.json({
@@ -412,6 +413,5 @@ SettingsController.post('/system/actions', (request, response) => {
       break;
   }
 });
-
 
 module.exports = SettingsController;

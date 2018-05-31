@@ -153,7 +153,6 @@ const SettingsScreen = {
     this.showBackButton();
   },
 
-
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
     const opts = {
@@ -193,10 +192,8 @@ const SettingsScreen = {
     });
   },
 
-
   // The button controller to update the local domain settings.
   // In menu -> Settings -> Domain
-
   onLocalDomainClick: function() {
     const localDomainCheckbox = document.getElementById(
       'domain-settings-local-checkbox');
@@ -215,7 +212,6 @@ const SettingsScreen = {
         'Content-Type': 'application/json',
       },
     };
-
 
     fetch('/settings/domain', opts)
       .then(function(response) {
