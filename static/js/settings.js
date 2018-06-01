@@ -160,7 +160,7 @@ const SettingsScreen = {
     };
 
     const addDomainLocalButton =
-      document.getElementById('settings-domain-local-update');
+      document.getElementById('domain-settings-local-update');
     addDomainLocalButton.addEventListener('click', () => {
       this.onLocalDomainClick();
     });

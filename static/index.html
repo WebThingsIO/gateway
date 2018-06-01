@@ -63,26 +63,23 @@
         <ul>
           <li class="domain-item">
             <input id="domain-settings-local-checkbox" name="domain-settings"
-                   class="experiment-checkbox" type="checkbox">
-            <label for="domain-settings-local-checkbox">
-              Local access (Using Service Discovery)
+              class="experiment-checkbox" type="checkbox">
+            <label id="domain-settings-local-label"
+              for="domain-settings-local-checkbox">
+              Local Access
             </label>
-            <p class="domain-settings-description-small">
-              Type the domain name you wish to use for the gateway below and
-              click the 'update host name' button.
-            </p>
             <input type="text" id="domain-settings-local-name" name="gateway"
-                   placeholder="gateway">
-            &nbsp;. local
+                   placeholder="gateway" />
+            <span id="domain-settings-local-suffix">.local</span>
             <div id="domain-settings-error" class="domain-settings-error hidden"></div>
-            <button id="settings-domain-local-update" class="text-button"
+            <button id="domain-settings-local-update" class="domain-settings-update text-button"
                     type="submit">
               Update host name
             </button>
           </li>
           <li class="domain-item">
             <p class="domain-settings-container">
-              Remote Access (Uses Mozilla servers: mozilla-iot.org)
+              Remote Access
             </p>
             <p id="domain-settings-tunnel-name" class="domain-settings-container">
               &nbsp;. mozilla-iot.org
