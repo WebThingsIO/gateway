@@ -43,7 +43,7 @@ module.exports = {
         localControl: {
           mdnsServiceType: "http",
           mdnsServiceName: "Mozilla IoT Gateway",
-          mdnsServiceDomain: "gateway",
+          mdnsServiceDomain: "mygateway",
 
           mdnsTxt: {
             desc: "Web of Things gateway",
