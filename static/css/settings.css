@@ -201,7 +201,7 @@
   display: none;
 }
 
-.experiment-item, .update-item, .authorization-item, .domain-item {
+.experiment-item, .update-item, .authorization-item {
   display: block;
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -219,7 +219,8 @@
 .adapter-item,
 .addon-item,
 .authorization-item,
-.discovered-addon-item {
+.discovered-addon-item,
+.domain-item {
   display: block;
   font-size: 1.8rem;
   list-style-type: none;
@@ -231,8 +232,13 @@
 .user-item,
 .adapter-item,
 .addon-item,
-.authorization-item {
+.authorization-item,
+.domain-item {
   background-color: #5288af;
+}
+
+.domain-item {
+  padding: 2rem;
 }
 
 .discovered-addon-item {
@@ -281,16 +287,31 @@
   color: #ccc;
 }
 
-.domain-settings-description-small {
-  display: block;
-  color: #ccc;
-  font-size: 1.4rem
+.domain-settings-error {
+  color: #ff9955;
+  font-size: 1.4rem;
+  padding: 0 0 1rem 0;
 }
 
-.domain-settings-error {
-  color: orange;
-  font-size: 1.2rem;
-  padding: 1rem 0;
+.domain-settings-error.hidden {
+  display: none;
+}
+
+#domain-settings-local-label {
+  display: block;
+}
+
+#domain-settings-local-name {
+  display: inline-block;
+  margin: 1.5rem auto;
+}
+
+#domain-settings-local-update {
+  display:block;
+}
+
+#domain-settings-tunnel-name {
+  font-size: 1.4rem;
 }
 
 .addon-settings-author {
@@ -328,8 +349,7 @@
 .addon-discovery-settings-add,
 .addon-discovery-settings-installing,
 .addon-discovery-settings-install-failed,
-.addon-settings-remove,
-.domain-settings-save {
+.addon-settings-remove {
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
@@ -344,7 +364,8 @@
 .addon-settings-update,
 .addon-settings-disable,
 .addon-settings-enable,
-.addon-settings-remove {
+.addon-settings-remove,
+.domain-settings-update {
   background-color: #48779a;
 }
 
@@ -448,6 +469,12 @@
   background-position: 0 -9rem;
 }
 
+#domain-settings-local-checkbox + label:before {
+  float: none;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
 #floorplan-experiment-item {
   background-image: url('../optimized-images/floorplan-icon.png');
 }
@@ -545,7 +572,7 @@
 }
 
 .user-form .error {
-  color: orange;
+  color: #ff9955;
 }
 
 .user-form input[type="text"],
