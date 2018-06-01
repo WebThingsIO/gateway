@@ -204,6 +204,53 @@ const equalityRule = {
   },
 };
 
+const complexTriggerRule = {
+  enabled: true,
+  name: 'Equality Rule',
+  trigger: {
+    type: 'MultiTrigger',
+    op: 'AND',
+    triggers: [{
+      type: 'BooleanTrigger',
+      property: {
+        name: 'on',
+        type: 'boolean',
+        href: '/things/light1/properties/on',
+      },
+      onValue: true,
+    }, {
+      type: 'MultiTrigger',
+      op: 'OR',
+      triggers: [{
+        type: 'BooleanTrigger',
+        property: {
+          name: 'on',
+          type: 'boolean',
+          href: '/things/light1/properties/on',
+        },
+        onValue: true,
+      }, {
+        type: 'BooleanTrigger',
+        property: {
+          name: 'on',
+          type: 'boolean',
+          href: '/things/light2/properties/on',
+        },
+        onValue: true,
+      }],
+    }],
+  },
+  effect: {
+    property: {
+      name: 'on',
+      type: 'boolean',
+      href: '/things/light3/properties/on',
+    },
+    type: 'SetEffect',
+    value: true,
+  },
+};
+
 const multiRule = {
   enabled: true,
   trigger: {
@@ -610,7 +657,7 @@ describe('rules engine', function() {
     await deleteRule(ruleId);
   });
 
-  it('creates and simulates two rules', async () => {
+  it('creates and simulates a string trigger rule', async () => {
     let res = await chai.request(server)
       .post(Constants.RULES_PATH)
       .set('Accept', 'application/json')
@@ -627,6 +674,26 @@ describe('rules engine', function() {
       .set(...headerAuth(jwt))
       .send({color: '#00ff77'});
     expect(res.status).toEqual(200);
+
+    await waitForExpect(async () => {
+      expect(await getOn(thingLight3.id)).toEqual(true);
+    });
+
+    await deleteRule(ruleId);
+  });
+
+  it('creates and simulates a multi trigger rule', async () => {
+    const res = await chai.request(server)
+      .post(Constants.RULES_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(complexTriggerRule);
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('id');
+    const ruleId = res.body.id;
+
+    await setOn(thingLight1.id, true);
 
     await waitForExpect(async () => {
       expect(await getOn(thingLight3.id)).toEqual(true);
