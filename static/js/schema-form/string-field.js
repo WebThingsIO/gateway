@@ -57,13 +57,14 @@ StringField.prototype.onStringChange = function(event) {
 StringField.prototype.render = function() {
   const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const value = this.formData;
-  const field = document.createElement('div');
+  const field = document.createElement('span');
 
   // list item
   if (SchemaUtils.isSelect(this.schema)) {
     const enumOptions = SchemaUtils.getOptionsList(this.schema);
     const selectedValue = value;
     let selectedAny = false;
+    field.className = 'field-list-wrapper';
 
     // User can select undefiend value on field not required.
     if (!this.required) {
@@ -99,6 +100,7 @@ StringField.prototype.render = function() {
       select.selectedIndex = -1;
     }
   } else {
+    field.className = 'field-string-wrapper';
     field.innerHTML = `
       <input
       id="${id}"

@@ -503,43 +503,60 @@
   padding: 3rem;
 }
 
-.action-input-title {
+.action-input .json-schema-form > .form-group > fieldset > legend {
   width: 100%;
   text-align: center;
   margin-top: -1rem;
   margin-bottom: 2rem;
   font-size: 2.8rem;
+  border: 0px;
 }
 
-.action-input-form {
+.action-input .field-description {
+  display: none;
+}
+
+.action-input .field-number,
+.action-input .field-string,
+.action-input .field-integer,
+.action-input .field-boolean,
+.action-input .checkboxes .checkbox{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
   grid-auto-rows: minmax(4rem, auto);
 }
 
-.action-input-name {
+.action-input .control-label,
+.action-input .checkbox-title {
   margin-top: .4rem;
   text-align: right;
+  grid-column: 1 / span 1;
   font-size: 2rem;
 }
 
-.action-input-unit {
-  margin-top: .6rem;
-  text-align: left;
+.action-input .field-boolean .checkbox,
+.action-input .field-range-wrapper,
+.action-input .field-string-wrapper,
+.action-input .field-list-wrapper {
+  grid-column: 2 / span 1;
 }
 
-.action-input-string,
-.action-input-number {
+.action-input .form-control {
   width: 95%;
   color: #333;
 }
 
-.action-input-checkbox {
-  display: none;
+.action-input .field-unit {
+  margin-top: .6rem;
+  grid-column: 3 / span 1;
+  text-align: left;
 }
 
-.action-input-checkbox + label:before {
+.action-input .checkbox .form-control,
+.action-input .checkbox .enum-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   content: "";
   display: inline-block;
   width  : 3rem;
@@ -549,22 +566,125 @@
   background-size: 3rem auto;
 }
 
-.action-input-checkbox:checked + label:before {
+.action-input .checkbox .form-control:checked,
+.action-input .checkbox .enum-control:checked {
   background-position: 0 -3rem;
 }
 
-.action-input-checkbox:disabled + label:before {
+.action-input .checkbox .form-control:disabled,
+.action-input .checkbox .enum-control:disabled {
   background-position: 0 -6rem;
 }
 
-.action-input-checkbox:checked:disabled + label:before {
+.action-input .checkbox .form-control:checked:disabled,
+.action-input .checkbox .enum-control:checked:disabled {
   background-position: 0 -9rem;
 }
 
-#action-submit-button {
-  grid-column: 2;
-  width: auto;
+.action-input .json-schema-form .btn-form-tools:hover:enabled,
+.action-input .json-schema-form .btn-form-tools:active:enabled {
+  background-color: #658196;
+}
+
+.action-input .json-schema-form .btn-form-tools::-moz-focus-inner {
+  border: 0;
+}
+
+.action-input .json-schema-form .btn-form-tools {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 0;
+  background-color: #597285;
+  color: #fff;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
+  cursor: pointer;
+}
+
+.action-input .json-schema-form .btn-add {
+  background-image: url('../optimized-images/add_arrayfield.svg');
+}
+
+.action-input .json-schema-form .btn-remove {
+  background-image: url('../optimized-images/clear_arrayfield.svg');
+  position: absolute;
+  bottom: 0.5rem;
+  right: 1rem;
+}
+
+.action-input .json-schema-form legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  line-height: inherit;
+  border: 0;
+  border-bottom: 1px solid #fff;
+}
+
+.action-input .json-schema-form .title {
+  font-size: 1.3rem;
+  display: block;
+  width: 12.8rem;
+  height: 3.6rem;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.action-input .json-schema-form .array-item-row {
+  position: relative;
+  border-bottom: 0px;
+}
+
+.action-input .json-schema-form .array-item-col-tool {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+.action-input .action-button {
+  width: 33%;
+}
+
+.action-input .button-submit-container {
+  text-align: center;
   margin-top: 2rem;
+}
+
+.action-input .json-schema-form fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.action-input .json-schema-form .errors-field.hidden {
+  display: none;
+}
+
+.action-input .json-schema-form .errors-title {
+  margin: 0 auto;
+  padding-bottom: 0.5rem;
+  color: orange;
+}
+
+.action-input .json-schema-form .errors-list {
+  transform: translateY(0%);
+  top: auto;
+  margin: 0 auto;
+  padding: 0rem;
+  padding-left: 1em;
+  text-indent: -1em;
+  list-style-position: inside;
+  color: orange;
 }
 
 .event-list {

@@ -70,43 +70,44 @@ SchemaField.prototype.render = function() {
   const type = this.retrievedSchema.type;
   const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const description = this.retrievedSchema.description;
-  const classNames = [
-    'form-group',
-    'field',
-    `field-${type}`,
-  ]
-    .join(' ')
-    .trim();
+  const unit = this.retrievedSchema.unit;
+
   let label = this.retrievedSchema.title || this.name;
   if (typeof label !== 'undefined' && label !== null) {
     label = Utils.escapeHtml(label);
     label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
   }
 
+  let displayUnit = true;
   let displayLabel = true;
   let displayDescription = true;
   if (type === 'array') {
+    displayUnit = false;
     displayLabel = displayDescription =
       SchemaUtils.isMultiSelect(this.schema, this.definitions);
   }
   if (type === 'object') {
+    displayUnit = false;
     displayLabel = displayDescription = false;
-  }
-  if (type === 'boolean') {
-    displayLabel = false;
   }
 
   const field = document.createElement('div');
-  field.className = classNames;
-  field.innerHTML =
-    (displayLabel && label ?
-      `<label class="control-label" htmlFor="${id}">${
-        label}</label>` :
-      '') +
-    (displayDescription && description ?
+  field.className = `form-group field-${type}`;
+
+  if (displayLabel && label) {
+    field.insertAdjacentHTML(
+      'beforeend',
+      `<label class="control-label" htmlFor="${id}">${label}</label>`
+    );
+  }
+
+  if (displayDescription && description) {
+    field.insertAdjacentHTML(
+      'beforeend',
       `<p id="${id}__description" class="field-description">${
-        Utils.escapeHtml(description)}</p>` :
-      '');
+        Utils.escapeHtml(description)}</p>`
+    );
+  }
 
   const child = new fieldType(
     this.schema,
@@ -120,6 +121,13 @@ SchemaField.prototype.render = function() {
     this.readonly).render();
 
   field.appendChild(child);
+
+  if (displayUnit && unit) {
+    field.insertAdjacentHTML(
+      'beforeend',
+      `<span class="field-unit">${Utils.escapeHtml(unit)}</span>`,
+    );
+  }
 
   return field;
 };

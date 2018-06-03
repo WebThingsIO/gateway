@@ -74,6 +74,8 @@ SchemaForm.prototype.handleSubmit = function(e) {
 };
 
 SchemaForm.prototype.renderSubmitButton = function() {
+  const container = document.createElement('div');
+  container.className = 'button-submit-container';
   const submitButton = document.createElement('button');
   submitButton.id = `submit-${Utils.escapeHtml(this.id)}`;
   submitButton.type = 'button';
@@ -83,20 +85,18 @@ SchemaForm.prototype.renderSubmitButton = function() {
   submitButton.disabled = true;
 
   this.submitButton = submitButton;
+  container.appendChild(submitButton);
 
-  return submitButton;
+  return container;
 };
 
 SchemaForm.prototype.render = function() {
   const form = document.createElement('form');
   form.className = 'json-schema-form';
   form.id = this.id;
-  form.innerHTML = `<p></p>`;
 
-  const p = form.querySelector('p');
-
-  const submit = this.renderSubmitButton();
-  p.appendChild(submit);
+  this.errorField = new ErrorField();
+  form.appendChild(this.errorField.render([]));
 
   const onChangeHandle = this.onChange.bind(this);
   const child = new SchemaField(
@@ -106,11 +106,10 @@ SchemaForm.prototype.render = function() {
     this.name,
     this.definitions,
     onChangeHandle).render();
+  form.appendChild(child);
 
-  this.errorField = new ErrorField();
-
-  p.insertBefore(child, p.firstChild);
-  p.insertBefore(this.errorField.render([]), p.firstChild);
+  const submit = this.renderSubmitButton();
+  form.appendChild(submit);
 
   return form;
 };
