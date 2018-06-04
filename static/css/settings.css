@@ -34,6 +34,7 @@
   padding-top: 0;
 }
 
+.developer-link-item,
 .settings-item {
   margin: 0;
   padding: 0;
@@ -43,9 +44,10 @@
   background-image: url('../optimized-images/right-arrow.png');
   background-size: auto 2rem;
   background-repeat: no-repeat;
-  background-position: right 1rem center;
+  background-position: right 2.8rem center;
 }
 
+.developer-link-item a,
 .settings-item a {
   display: block;
   margin: 1rem 0;
@@ -102,6 +104,10 @@
 
 #authorization-settings-link {
   background-image: url('../optimized-images/authorization.svg');
+}
+
+#developer-settings-link {
+  background-image: url('../optimized-images/developer-icon.svg');
 }
 
 .settings-section {
@@ -163,7 +169,8 @@
 #domain-settings ul,
 #experiment-settings ul,
 #update-settings ul,
-#authorization-settings ul {
+#authorization-settings ul,
+#developer-settings ul {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -201,7 +208,11 @@
   display: none;
 }
 
-.experiment-item, .update-item, .authorization-item {
+.developer-checkbox-item,
+.experiment-item,
+.update-item,
+.authorization-item,
+.domain-item {
   display: block;
   margin: 1rem 0;
   font-size: 1.8rem;
@@ -440,12 +451,14 @@
   padding: 2rem;
 }
 
+:root .developer-checkbox,
 :root .experiment-checkbox {
   /* original check box is pushed outside the viewport */
   position: absolute;
   left: -1000em;
 }
 
+:root .developer-checkbox + label:before,
 :root .experiment-checkbox + label:before {
   content: "";
   display: inline-block;
@@ -457,14 +470,17 @@
   background-size: 3rem auto;
 }
 
+:root .developer-checkbox:checked + label:before,
 :root .experiment-checkbox:checked + label:before {
   background-position: 0 -3rem;
 }
 
+:root .developer-checkbox:disabled + label:before,
 :root .experiment-checkbox:disabled + label:before {
   background-position: 0 -6rem;
 }
 
+:root .developer-checkbox:checked:disabled + label:before,
 :root .experiment-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
 }
@@ -473,6 +489,10 @@
   float: none;
   vertical-align: middle;
   margin-right: 0.5rem;
+}
+
+#enable-ssh-item {
+  background-image: url('../optimized-images/ssh-icon.svg');
 }
 
 #floorplan-experiment-item {
@@ -485,6 +505,14 @@
 
 #rules-experiment-item {
   background-image: url('../optimized-images/rules-icon.png');
+}
+
+#view-logs {
+  background-image: url('../optimized-images/rules-icon.png');
+}
+
+#new-local-authorization {
+  background-image: url('../optimized-images/authorization.svg');
 }
 
 #update-now.hidden {
@@ -519,14 +547,9 @@
   background-position: left 2rem center;
 }
 
-#no-authorizations, #new-local-authorization {
+#no-authorizations {
   background-image: none;
   padding-left: 5.5rem;
-}
-
-#new-local-authorization > a,
-#new-local-authorization > a:visited {
-  color: white;
 }
 
 .revoke-button {

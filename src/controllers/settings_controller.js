@@ -369,7 +369,10 @@ SettingsController.get('/system/platform', (request, response) => {
 });
 
 SettingsController.get('/system/ssh', (request, response) => {
-  response.json({enabled: Platform.isSshEnabled()});
+  response.json({
+    toggleImplemented: Platform.isToggleSshImplemented(),
+    enabled: Platform.isSshEnabled(),
+  });
 });
 
 SettingsController.put('/system/ssh', (request, response) => {

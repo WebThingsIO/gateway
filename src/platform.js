@@ -17,6 +17,15 @@ function getArchitecture() {
 }
 
 /**
+ * Determine whether or not the SSH toggle is implemented.
+ *
+ * @return {Boolean} indicating implementation status
+ */
+function isToggleSshImplemented() {
+  return isRaspberryPi();
+}
+
+/**
  * Determine whether or not SSH is enabled.
  *
  * @return {Boolean} indicating enablement status
@@ -58,6 +67,15 @@ function toggleSsh(enable) {
 }
 
 /**
+ * Determine whether or not gateway restart is implemented.
+ *
+ * @return {Boolean} indicating implementation status
+ */
+function isRestartGatewayImplemented() {
+  return isRaspberryPi();
+}
+
+/**
  * Restart the gateway process.
  *
  * @return {Boolean} indicating success
@@ -72,6 +90,15 @@ function restartGateway() {
   }
 
   return false;
+}
+
+/**
+ * Determine whether or not system restart is implemented.
+ *
+ * @return {Boolean} indicating implementation status
+ */
+function isRestartSystemImplemented() {
+  return isRaspberryPi();
 }
 
 /**
@@ -100,9 +127,12 @@ function isRaspberryPi() {
 
 module.exports = {
   getArchitecture,
+  isToggleSshImplemented,
   isSshEnabled,
   toggleSsh,
+  isRestartGatewayImplemented,
   restartGateway,
+  isRestartSystemImplemented,
   restartSystem,
   isRaspberryPi,
 };

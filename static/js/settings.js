@@ -45,6 +45,7 @@ const SettingsScreen = {
     this.updateSettings = document.getElementById('update-settings');
     this.authorizationSettings =
       document.getElementById('authorization-settings');
+    this.developerSettings = document.getElementById('developer-settings');
     this.backButton = document.getElementById('settings-back-button');
 
     this.availableAddons = new Map();
@@ -79,6 +80,7 @@ const SettingsScreen = {
     this.experimentSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
     this.authorizationSettings.classList.add('hidden');
+    this.developerSettings.classList.add('hidden');
   },
 
   hideMenu: function() {
@@ -144,6 +146,9 @@ const SettingsScreen = {
       case 'authorizations':
         this.showAuthorizationSettings();
         break;
+      case 'developer':
+        this.showDeveloperSettings();
+        break;
       default:
         console.error('Tried to display undefined section');
         return;
@@ -207,7 +212,7 @@ const SettingsScreen = {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
+        Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -818,6 +823,40 @@ const SettingsScreen = {
       }
     }).catch((err) => {
       console.warn('Unable to revoke', err);
+    });
+  },
+
+  showDeveloperSettings: function() {
+    this.developerSettings.classList.remove('hidden');
+    document.getElementById('view-logs').href = `/logs?jwt=${API.jwt}`;
+    const sshCheckbox = document.getElementById('enable-ssh-checkbox');
+
+    fetch('/settings/system/ssh', {
+      headers: API.headers(),
+    }).then((response) => {
+      return response.json();
+    }).then((body) => {
+      sshCheckbox.checked = body.enabled;
+      if (body.toggleImplemented) {
+        sshCheckbox.addEventListener('change', (e) => {
+          const value = e.target.checked ? true : false;
+          fetch('/settings/system/ssh', {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${API.jwt}`,
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({enabled: value}),
+          }).catch((e) => {
+            console.error(`Failed to toggle SSH: ${e}`);
+          });
+        });
+      } else {
+        sshCheckbox.disabled = true;
+      }
+    }).catch((e) => {
+      console.error(`Error getting SSH setting: ${e}`);
     });
   },
 };
