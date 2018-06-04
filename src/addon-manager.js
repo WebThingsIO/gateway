@@ -875,6 +875,10 @@ class AddonManager extends EventEmitter {
 
     try {
       const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`HTTP error status: ${res.status}`);
+      }
+
       const dest = fs.createWriteStream(destPath);
       await promisePipe(res.body, dest);
     } catch (e) {
