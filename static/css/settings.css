@@ -544,16 +544,8 @@
   background-image: url('../optimized-images/ssh-icon.svg');
 }
 
-#floorplan-experiment-item {
-  background-image: url('../optimized-images/floorplan-icon.png');
-}
-
 #speech-experiment-item {
   background-image: url('../optimized-images/speech-icon.png');
-}
-
-#rules-experiment-item {
-  background-image: url('../optimized-images/rules-icon.png');
 }
 
 #view-logs {

@@ -51,14 +51,6 @@ module.exports = {
             power: "6 watts",
           },
         },
-        experiments: {
-          floorplan: {
-            enabled: true,
-          },
-          rules: {
-            enabled: true,
-          },
-        },
       },
     },
   },

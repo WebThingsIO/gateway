@@ -29,9 +29,7 @@ const Menu = {
     this.items.rule = document.getElementById('rules-menu-item');
     this.currentItem = 'things';
 
-    this.getExperimentSetting('floorplan');
     this.getExperimentSetting('speech');
-    this.getExperimentSetting('rules');
   },
 
   /**
