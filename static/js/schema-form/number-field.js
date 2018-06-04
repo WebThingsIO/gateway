@@ -42,7 +42,6 @@ function NumberField(
 
 NumberField.prototype.onRangeChange = function(event) {
   const value = event.target.value;
-  this.rangeValue.textContent = value;
 
   const number = Number(value);
   this.formData = number;
@@ -73,11 +72,11 @@ NumberField.prototype.render = function() {
   // range item
   if (this.schema.hasOwnProperty('minimum') &&
     this.schema.hasOwnProperty('maximum')) {
-    const field = document.createElement('div');
+    const field = document.createElement('span');
     field.className = 'field-range-wrapper';
     field.innerHTML = `
       <input
-      type="range"
+      type="number"
       id="${Utils.escapeHtmlForIdClass(id)}"
       class="form-control"
       ${this.required ? 'required' : ''}
@@ -87,14 +86,11 @@ NumberField.prototype.render = function() {
       ${this.schema.multipleOf ? `step=${Number(this.schema.multipleOf)}` : ''}
       min=${Number(this.schema.minimum)}
       max=${Number(this.schema.maximum)}
-      />
-      <span class="range-view">${value}</span>`;
+      />`;
 
     const input = field.querySelector('input');
     input.onchange = this.onRangeChange.bind(this);
     input.oninput = this.onRangeChange.bind(this);
-
-    this.rangeValue = field.querySelector('span');
 
     return field;
   }

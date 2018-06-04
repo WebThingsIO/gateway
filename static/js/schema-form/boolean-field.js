@@ -49,24 +49,19 @@ BooleanField.prototype.onBooleanChange = function(event) {
 BooleanField.prototype.render = function() {
   const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   const value = this.formData;
-  const field = document.createElement('div');
+  const field = document.createElement('span');
   field.className = 'checkbox';
-
-  let title = this.schema.title ? this.schema.title : this.name;
-  title = Utils.escapeHtml(title);
-  title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
 
   field.innerHTML = `
     <input
     type="checkbox"
     id="${id}"
+    class="form-control"
     ${value ? 'checked' : ''}
     ${this.required ? 'required' : ''}
     ${this.readonly ? 'readonly' : ''}
     ${this.disabled ? 'disabled' : ''}
-    />
-    <span class="checkbox-title">${title}</span>
-    `;
+    />`;
 
   const input = field.querySelector(`#${id}`);
   input.onchange = this.onBooleanChange.bind(this);

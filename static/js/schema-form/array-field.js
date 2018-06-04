@@ -376,13 +376,14 @@ ArrayField.prototype.renderMultiSelect = function() {
     div.className = `checkbox ${disabledCls}`;
 
     div.innerHTML = `
+    <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
     <input
       type="checkbox"
+      class="enum-control"
       id="${id}_${index}"
       ${checked ? 'checked' : ''}
       ${this.disabled || this.readonly ? 'disabled' : ''}
     />
-    <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
     `;
 
     const input = div.querySelector('input');

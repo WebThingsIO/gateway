@@ -22,7 +22,8 @@ describe('BooleanField', () => {
       },
     });
 
-    expect(node.querySelector('.field span').textContent.trim()).toEqual('foo');
+    expect(node.querySelector('.field label').textContent.trim())
+      .toEqual('foo');
   });
 
   it('should render a single label', () => {
@@ -33,7 +34,7 @@ describe('BooleanField', () => {
       },
     });
 
-    expect(node.querySelectorAll('.field span')).toHaveLength(1);
+    expect(node.querySelectorAll('.field label')).toHaveLength(1);
   });
 
   it('should render a description', () => {

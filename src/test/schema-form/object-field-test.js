@@ -41,7 +41,7 @@ describe('ObjectField', () => {
     it('should render a default property label', () => {
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('.field-boolean span').textContent.trim())
+      expect(node.querySelector('.field-boolean label').textContent.trim())
         .toEqual('bar');
     });
 
