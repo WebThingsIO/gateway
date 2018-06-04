@@ -686,9 +686,7 @@ const SettingsScreen = {
     this.experimentSettings.classList.remove('hidden');
     this.titleName.innerText = 'Experiments';
     this.titleIcon.src = '/images/experiments-icon.png';
-    this.showExperimentCheckbox('floorplan', 'floorplan-experiment-checkbox');
     this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
-    this.showExperimentCheckbox('rules', 'rules-experiment-checkbox');
   },
 
   /**
