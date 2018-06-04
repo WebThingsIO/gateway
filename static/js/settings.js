@@ -28,6 +28,9 @@ const SettingsScreen = {
    * Initialise Settings Screen.
    */
   init: function() {
+    this.titleElement = document.getElementById('section-title');
+    this.titleName = document.getElementById('section-title-name');
+    this.titleIcon = document.getElementById('section-title-icon');
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
     this.userSettings = document.getElementById('user-settings');
@@ -55,6 +58,8 @@ const SettingsScreen = {
 
   show: function(section, subsection, id) {
     this.backButton.href = '/settings';
+    this.titleElement.classList.remove('hidden');
+    this.titleElement.classList.remove('dark');
 
     if (section) {
       this.showSection(section, subsection, id);
@@ -65,6 +70,8 @@ const SettingsScreen = {
 
   showMenu: function() {
     App.showMenuButton();
+    this.titleName.innerText = 'Settings';
+    this.titleIcon.src = '/images/settings-icon.png';
     this.hideBackButton();
     this.menu.classList.remove('hidden');
     this.domainSettings.classList.add('hidden');
@@ -160,6 +167,8 @@ const SettingsScreen = {
 
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Domain';
+    this.titleIcon.src = '/images/domain-icon.png';
     const opts = {
       headers: API.headers(),
     };
@@ -315,6 +324,8 @@ const SettingsScreen = {
     this.userSettingsEdit.classList.add('hidden');
     this.userSettingsAdd.classList.add('hidden');
     this.userSettingsMain.classList.remove('hidden');
+    this.titleName.innerText = 'Users';
+    this.titleIcon.src = '/images/users-icon.png';
 
     const addUserButton =
       document.getElementById('add-user-button');
@@ -338,6 +349,9 @@ const SettingsScreen = {
     this.userSettingsMain.classList.add('hidden');
     this.userSettingsAdd.classList.add('hidden');
     this.userSettingsEdit.classList.remove('hidden');
+    this.titleName.innerText = 'Edit User';
+    this.titleIcon.src = '/images/user.svg';
+    this.titleElement.classList.add('dark');
 
     API.getUser(id).then(function(user) {
       const form = document.getElementById('edit-user-form');
@@ -398,6 +412,9 @@ const SettingsScreen = {
     this.userSettingsMain.classList.add('hidden');
     this.userSettingsEdit.classList.add('hidden');
     this.userSettingsAdd.classList.remove('hidden');
+    this.titleName.innerText = 'Add User';
+    this.titleIcon.src = '/images/user.svg';
+    this.titleElement.classList.add('dark');
 
     const form = document.getElementById('add-user-form');
     const email = document.getElementById('user-settings-add-email');
@@ -445,6 +462,8 @@ const SettingsScreen = {
 
   showAdapterSettings: function() {
     this.adapterSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Adapters';
+    this.titleIcon.src = '/images/adapters-icon.png';
 
     const opts = {
       headers: API.headers(),
@@ -569,6 +588,8 @@ const SettingsScreen = {
     this.addonDiscoverySettings.classList.add('hidden');
     this.addonConfigSettings.classList.add('hidden');
     this.addonMainSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Add-ons';
+    this.titleIcon.src = '/images/add-on.svg';
 
     const discoverAddonsButton =
       document.getElementById('discover-addons-button');
@@ -605,6 +626,9 @@ const SettingsScreen = {
     this.addonMainSettings.classList.add('hidden');
     this.addonConfigSettings.classList.remove('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
+    this.titleName.innerText = `Configure ${id}`;
+    this.titleIcon.src = '/images/add-on.svg';
+    this.titleElement.classList.add('dark');
 
     this.getAddonList().then(() => {
       this.addonConfigSettings.innerHTML = '';
@@ -619,6 +643,9 @@ const SettingsScreen = {
     this.addonMainSettings.classList.add('hidden');
     this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.remove('hidden');
+    this.titleName.innerText = 'Discover New Add-ons';
+    this.titleIcon.src = '/images/add-on.svg';
+    this.titleElement.classList.add('dark');
 
     this.getAddonList().then(() => {
       const addonList = document.getElementById('discovered-addons-list');
@@ -657,6 +684,8 @@ const SettingsScreen = {
 
   showExperimentSettings: function() {
     this.experimentSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Experiments';
+    this.titleIcon.src = '/images/experiments-icon.png';
     this.showExperimentCheckbox('floorplan', 'floorplan-experiment-checkbox');
     this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
     this.showExperimentCheckbox('rules', 'rules-experiment-checkbox');
@@ -696,6 +725,8 @@ const SettingsScreen = {
 
   showUpdateSettings: function() {
     this.updateSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Updates';
+    this.titleIcon.src = '/images/update-icon.svg';
     const updateNow = document.getElementById('update-now');
 
     updateNow.addEventListener('click', this.onUpdateClick);
@@ -778,6 +809,8 @@ const SettingsScreen = {
 
   showAuthorizationSettings: function() {
     this.authorizationSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Authorizations';
+    this.titleIcon.src = '/images/authorization.svg';
 
     fetch('/authorizations', {
       headers: API.headers(),
@@ -852,6 +885,9 @@ const SettingsScreen = {
 
   showDeveloperSettings: function() {
     this.developerSettings.classList.remove('hidden');
+    this.titleName.innerText = 'Developer';
+    this.titleIcon.src = '/images/developer-icon.svg';
+
     document.getElementById('view-logs').href = `/logs?jwt=${API.jwt}`;
     const sshCheckbox = document.getElementById('enable-ssh-checkbox');
 

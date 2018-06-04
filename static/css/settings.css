@@ -8,17 +8,65 @@
   padding-top: 7.5rem;
   padding-bottom: 7.5rem;
   box-sizing: border-box;
-  overflow: auto;
+}
+
+#section-title.hidden {
+  display: none;
+}
+
+#section-title {
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  height: 9.6rem;
+  display: flex;
+  align-items: center;
+}
+
+#section-title.dark {
+  background-color: #305067;
+}
+
+#section-title-container {
+  white-space: nowrap;
+  overflow: hidden;
+  color: #fff;
+  text-overflow: ellipsis;
+  height: 100%;
+  line-height: 9.6rem;
+}
+
+#section-title-icon {
+  height: 4rem;
+  position: relative;
+  top: 1.3rem;
+  padding-right: 0.5rem;
+}
+
+#section-title-name {
+  font-size: 1.6rem;
+}
+
+#section-title-back-flex,
+#section-title-speech-flex {
+  flex: 1;
+  min-width: 9.6rem;
+  flex-shrink: 0;
+  height: 9.6rem;
+}
+
+#section-title-speech-flex {
+  flex: 1;
+  min-width: 0;
 }
 
 #settings-menu {
-  position: relative;
-  top: 50%;
-  transform: translate(0, -50%);
-  transition: transform 0.25s ease;
+  position: fixed;
+  top: 9.6rem;
   width: 100%;
   margin: 0 auto;
-  max-height: 100%;
+  height: calc(100% - 9.6rem);
 }
 
 #settings-menu.hidden {
@@ -127,9 +175,10 @@
 
 .settings-subsection {
   position: fixed;
+  top: 9.6rem;
   display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 9.6rem);
   padding: 0;
   box-sizing: border-box;
   overflow: auto;
@@ -270,7 +319,7 @@
 }
 
 .adapter-settings-header {
-  background-image: url('../optimized-images/adapter-icon.png');
+  background-image: url('../optimized-images/adapters-icon.png');
 }
 
 .addon-settings-header {
