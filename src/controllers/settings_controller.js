@@ -309,36 +309,37 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
  *            }
  */
 SettingsController.put('/domain', async (request, response) => {
-  if (!request.body ||
-      !request.body.hasOwnProperty('local') &&
-      !request.body.local.hasOwnProperty('localDNSname') ||
-      !request.body.local.hasOwnProperty('multicastDNSstate')) {
+  if (!request.body || !request.body.hasOwnProperty('local')) {
     response.statusMessage = 'Invalid request.';
     response.status(400).end();
     return;
   }
+
   try {
-    const requestDomainName = request.body.local.localDNSname;
-    const requestState = request.body.local.multicastDNSstate;
+    if (request.body.local.hasOwnProperty('localDNSname')) {
+      const requestDomainName = request.body.local.localDNSname;
+      await Settings.set('localDNSname', requestDomainName);
+      mDNSserver.server.setLocalDomain(requestDomainName);
+    } else if (request.body.local.hasOwnProperty('multicastDNSstate')) {
+      const requestState = request.body.local.multicastDNSstate;
+      await Settings.set('multicastDNSstate', requestState);
+      mDNSserver.server.startService(requestState);
+    } else {
+      response.statusMessage = 'Invalid request.';
+      response.status(400).end();
+      return;
+    }
 
-    mDNSserver.server.setLocalDomain(requestDomainName);
-    await Settings.set('localDNSname', mDNSserver.server.localDomain);
-    console.log('MDNS name is: ', mDNSserver.server.localDomain);
-
-    await Settings.set('multicastDNSstate', requestState);
-    mDNSserver.server.startService(requestState);
-    let protocol = ' http';
-    let port = config.get('ports.http');
+    let protocol, port;
     if (request.secure) {
-      console.log('Updating mDNS domain name. Request is secure');
       protocol = 'https';
       port = config.get('ports.https');
     } else {
-      console.log('Updating mDNS domain name. Request is not secure');
       protocol = 'http';
       port = config.get('ports.http');
     }
-    const url = `${protocol}://${requestDomainName}.local:${port}`;
+
+    const url = `${protocol}://${mDNSserver.server.localDomain}.local:${port}`;
     const localDomainSettings = {localDomain: url,
                                  update: true,
                                  mDNSstate: mDNSserver.server.serviceState};

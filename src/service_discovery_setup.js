@@ -116,6 +116,7 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
 
     this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
                                            this.port, options);
+    this.dnssdHandle.start();
   } else {
     console.error('Our Domain Name string did not match [a-z,A-Z,0-9,-].',
                   `We got: ${localDomain}`);

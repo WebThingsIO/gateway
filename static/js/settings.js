@@ -166,86 +166,110 @@ const SettingsScreen = {
 
     const addDomainLocalButton =
       document.getElementById('domain-settings-local-update');
-    addDomainLocalButton.addEventListener('click', () => {
-      this.onLocalDomainClick();
-    });
+    const localDomainName =
+        document.getElementById('domain-settings-local-name');
+    const tunnelDomainName =
+        document.getElementById('domain-settings-tunnel-name');
+
+    addDomainLocalButton.addEventListener(
+      'click', this.onLocalDomainClick.bind(this));
 
     // Comented out until full integration of Dynamic tunnel creation
     // with Service Discovery
     // const addDomainTunnelButton =
-    //   document.getElementById('settings-domain-moz-tunnel-change');
+    //   document.getElementById('domain-settings-moz-tunnel-change');
     //     addDomainTunnelButton.addEventListener('click', () => {
     //     this.onTunnelDomainClick();
     // });
 
-    fetch('/settings/tunnelinfo', opts).then(function(response) {
+    fetch('/settings/tunnelinfo', opts).then((response) => {
       return response.json();
-    }).then(function(body) {
+    }).then((body) => {
+      const localDomainCheckbox =
+        document.getElementById('domain-settings-local-checkbox');
+
       if (body) {
-        document.getElementById('domain-settings-local-name')
-          .value = body.localDomain;
-        document.getElementById('domain-settings-local-checkbox')
-          .checked = body.mDNSstate;
-        document.getElementById('domain-settings-tunnel-name')
-          .innerText = body.tunnelDomain;
+        localDomainCheckbox.checked = body.mDNSstate;
+        localDomainName.value = body.localDomain;
+        tunnelDomainName.innerText = body.tunnelDomain;
       } else {
-        document.getElementById('domain-settings-local-name')
-          .value = 'Unknown state.';
-        document.getElementById('domain-settings-tunnel-name')
-          .value = 'Unknown state.';
+        localDomainName.value = 'Unknown state.';
+        tunnelDomainName.innerText = 'Unknown state.';
       }
+
+      if (!localDomainCheckbox.checked) {
+        localDomainName.disabled = true;
+        addDomainLocalButton.disabled = true;
+      }
+
+      localDomainCheckbox.addEventListener(
+        'change', this.onLocalDomainCheckboxChange.bind(this));
+    });
+  },
+
+  onLocalDomainCheckboxChange: function(e) {
+    const error = document.getElementById('domain-settings-error');
+    const value = e.target.checked ? true : false;
+
+    fetch('/settings/domain', {
+      method: 'PUT',
+      body: JSON.stringify({local: {multicastDNSstate: value}}),
+      headers: {
+        Authorization: `Bearer ${window.API.jwt}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then(() => {
+      document.getElementById('domain-settings-local-update').disabled = !value;
+      document.getElementById('domain-settings-local-name').disabled = !value;
+      error.classList.add('hidden');
+    }).catch((err) => {
+      const errorMessage = `Error: ${err}`;
+      console.error(errorMessage);
+      error.classList.remove('hidden');
+      error.textContent = err;
+      e.target.checked = !value;
+      document.getElementById('domain-settings-local-update').disabled = value;
+      document.getElementById('domain-settings-local-name').disabled = value;
     });
   },
 
   // The button controller to update the local domain settings.
   // In menu -> Settings -> Domain
   onLocalDomainClick: function() {
-    const localDomainCheckbox = document.getElementById(
-      'domain-settings-local-checkbox');
-    const localDomainName = document
-      .getElementById('domain-settings-local-name');
+    const localDomainName =
+      document.getElementById('domain-settings-local-name');
     const error = document.getElementById('domain-settings-error');
-    const data = {local: {multicastDNSstate: localDomainCheckbox.checked,
-                          localDNSname: localDomainName.value}};
 
-    const opts = {
+    fetch('/settings/domain', {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify({local: {localDNSname: localDomainName.value}}),
       headers: {
         Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-    };
-
-    fetch('/settings/domain', opts)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(domainJson) {
-        // if the update was successful, we have a legit local domain and mDNS
-        // is active then redirect
-        if (domainJson.update && domainJson.localDomain.length > 0) {
-          if (domainJson.mDNSstate) {
-            window.location.href = domainJson.localDomain;
-          } else {
-            // the server says mDNS is switched off so redirect back to
-            // localhost
-            window.location.href = 'https://localhost:4443/';
-          }
-        } else {
-          error.classList.remove('hidden');
-          error.textContent = domainJson.error;
-          document.getElementById('domain-settings-local-name')
-            .value = domainJson.localDomain;
+    }).then((response) => {
+      return response.json();
+    }).then((domainJson) => {
+      // if the update was successful, we have a legit local domain and mDNS
+      // is active then redirect
+      if (domainJson.update && domainJson.localDomain.length > 0) {
+        if (domainJson.mDNSstate) {
+          window.location.href = domainJson.localDomain;
         }
-      })
-      .catch(function(err) {
-        const errorMessage = `Error: ${err}`;
-        console.error(errorMessage);
+      } else {
         error.classList.remove('hidden');
-        error.textContent = err;
-      });
+        error.textContent = domainJson.error;
+        document.getElementById('domain-settings-local-name')
+          .value = domainJson.localDomain;
+      }
+    }).catch((err) => {
+      const errorMessage = `Error: ${err}`;
+      console.error(errorMessage);
+      error.classList.remove('hidden');
+      error.textContent = err;
+    });
   },
 
   // The button controller to update the mozilla tunnel domain settings.
