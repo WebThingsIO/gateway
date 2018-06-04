@@ -54,6 +54,7 @@ html, body {
 body {
   padding: 0;
   background-color: #5d9bc7;
+  overflow: hidden;
 }
 
 section {

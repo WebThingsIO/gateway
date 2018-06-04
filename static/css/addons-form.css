@@ -34,13 +34,7 @@
 }
 
 #addon-config-settings .json-schema-form > p > .form-group > fieldset > legend {
-  font-size: 2.5rem;
-  border-bottom: none;
-  padding-bottom: 2rem;
-}
-
-#addon-config-settings .json-schema-form > p > .form-group > fieldset > legend:before {
-  content: 'Configuring: ';
+  display: none;
 }
 
 #addon-config-settings .json-schema-form .form-group {

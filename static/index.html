@@ -47,6 +47,15 @@
 
     <!-- Settings View -->
     <section data-view="settings" id="settings-view" class="hidden">
+      <div id="section-title" class="hidden">
+        <div id="section-title-back-flex"></div>
+        <div id="section-title-container">
+          <img id="section-title-icon" alt="Section Title" src="#" />
+          <span id="section-title-name"></span>
+        </div>
+        <div id="section-title-speech-flex"></div>
+      </div>
+
       <nav id="settings-menu" class="hidden">
         <ul>
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
@@ -173,18 +182,18 @@
       </section>
       <section id="experiment-settings" class="hidden settings-section">
         <ul>
-          <li id="floorplan-experiment-item" class="experiment-item">
-            <input id="floorplan-experiment-checkbox" class="experiment-checkbox" type="checkbox">
-            <label for="floorplan-experiment-checkbox">Floorplan</label>
+          <li id="rules-experiment-item" class="experiment-item">
+            <input id="rules-experiment-checkbox" class="experiment-checkbox" type="checkbox">
+            <label for="rules-experiment-checkbox">Rules Engine</label>
           </li>
           <li id="speech-experiment-item" class="experiment-item">
             <input id="speech-experiment-checkbox" class="experiment-checkbox"
                    type="checkbox">
             <label for="speech-experiment-checkbox">Speech Commands</label>
           </li>
-          <li id="rules-experiment-item" class="experiment-item">
-            <input id="rules-experiment-checkbox" class="experiment-checkbox" type="checkbox">
-            <label for="rules-experiment-checkbox">Rules</label>
+          <li id="floorplan-experiment-item" class="experiment-item">
+            <input id="floorplan-experiment-checkbox" class="experiment-checkbox" type="checkbox">
+            <label for="floorplan-experiment-checkbox">Floorplan UI</label>
           </li>
         </ul>
       </section>
