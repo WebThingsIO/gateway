@@ -225,9 +225,7 @@ describe('NumberField', () => {
         formData: 3.14,
       });
 
-      expect(node.querySelector('[type=range]').value)
-        .toEqual('3.14');
-      expect(node.querySelector('.range-view').textContent.trim())
+      expect(node.querySelector('[type=number]').value)
         .toEqual('3.14');
     });
 
@@ -237,13 +235,11 @@ describe('NumberField', () => {
         formData: 3.14,
       });
 
-      const input = node.querySelector('[type=range]');
+      const input = node.querySelector('[type=number]');
       input.value = '6.28';
       fireEvent(input, 'change');
 
       expect(schemaForm.formData).toEqual(6.28);
-      expect(node.querySelector('.range-view').textContent.trim())
-        .toEqual('6.28');
     });
 
     describe('Constraint attributes', () => {
@@ -251,7 +247,7 @@ describe('NumberField', () => {
 
       beforeEach(() => {
         const {node} = createSchemaForm({schema});
-        input = node.querySelector('[type=range]');
+        input = node.querySelector('[type=number]');
       });
 
       it('should support the minimum constraint', () => {
@@ -270,7 +266,7 @@ describe('NumberField', () => {
         };
 
         const {node} = createSchemaForm({schema});
-        input = node.querySelector('[type=range]');
+        input = node.querySelector('[type=number]');
 
         expect(input.getAttribute('min')).toEqual('0');
         expect(input.getAttribute('max')).toEqual('0');

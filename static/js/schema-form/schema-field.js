@@ -92,7 +92,7 @@ SchemaField.prototype.render = function() {
   }
 
   const field = document.createElement('div');
-  field.className = `form-group field-${type}`;
+  field.className = `form-group field field-${type}`;
 
   if (displayLabel && label) {
     field.insertAdjacentHTML(
