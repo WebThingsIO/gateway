@@ -345,7 +345,7 @@ const RuleScreen = {
   },
 
   partBlocksByRole: function() {
-    let triggerBlock = null;
+    const triggerBlocks = [];
     const effectBlocks = [];
 
     for (const partBlock of this.partBlocks) {
@@ -353,11 +353,7 @@ const RuleScreen = {
         continue;
       }
       if (partBlock.rulePart.trigger) {
-        if (triggerBlock) {
-          console.warn('There should only be one triggerBlock',
-                       this.partBlocks);
-        }
-        triggerBlock = partBlock;
+        triggerBlocks.push(partBlock);
       }
       if (partBlock.rulePart.effect) {
         effectBlocks.push(partBlock);
@@ -365,7 +361,7 @@ const RuleScreen = {
     }
 
     return {
-      triggerBlock,
+      triggerBlocks,
       effectBlocks,
     };
   },
@@ -375,13 +371,17 @@ const RuleScreen = {
       return partBlock.role !== 'removed';
     });
 
-    const {triggerBlock, effectBlocks} = this.partBlocksByRole();
+    const {triggerBlocks, effectBlocks} = this.partBlocksByRole();
 
-    if (triggerBlock) {
-      this.rule.trigger = triggerBlock.rulePart.trigger;
-    } else {
-      this.rule.trigger = null;
-    }
+    const triggers = triggerBlocks.map((triggerBlock) => {
+      return triggerBlock.rulePart.trigger;
+    });
+
+    this.rule.trigger = {
+      type: 'MultiTrigger',
+      op: 'OR', // TODO and/or swapping
+      triggers: triggers,
+    };
 
     const effects = effectBlocks.map((effectBlock) => {
       return effectBlock.rulePart.effect;
@@ -480,16 +480,37 @@ const RuleScreen = {
         // Create DevicePropertyBlocks from trigger and effect if applicable
         const centerX = areaRect.width / 2 - dpbRect.width / 2;
         const centerY = areaRect.height / 2 - dpbRect.height / 2;
-        if (this.rule.trigger) {
+
+        if (!this.rule.trigger) {
+          this.rule.trigger = {
+            type: 'MultiTrigger',
+            op: 'OR',
+            triggers: [],
+          };
+        }
+
+        if (this.rule.trigger.type !== 'MultiTrigger') {
+          this.rule.trigger = {
+            type: 'MultiTrigger',
+            op: 'OR',
+            triggers: [
+              this.rule.trigger,
+            ],
+          };
+        }
+
+        const triggers = this.rule.trigger.triggers;
+        for (let i = 0; i < triggers.length; i++) {
           if (flexDir === 'column') {
-            this.makeRulePartBlock('trigger', this.rule.trigger, centerX,
+            this.makeRulePartBlock('trigger', triggers[i], centerX,
                                    areaRect.height / 4 - dpbRect.height / 2);
           } else {
-            this.makeRulePartBlock('trigger', this.rule.trigger,
+            this.makeRulePartBlock('trigger', triggers[i],
                                    areaRect.width / 4 - dpbRect.width / 2,
                                    centerY);
           }
         }
+
         if (!this.rule.effect) {
           this.rule.effect = {
             type: 'MultiEffect',
@@ -539,11 +560,11 @@ const RuleScreen = {
     }
 
     if (this.rule) {
-      const {triggerBlock, effectBlocks} = this.partBlocksByRole();
+      const {triggerBlocks, effectBlocks} = this.partBlocksByRole();
 
-      if (triggerBlock) {
-        triggerBlock.snapToCenter();
-      }
+      triggerBlocks.forEach((triggerBlock, index) => {
+        triggerBlock.snapToCenter(index, triggerBlocks.length);
+      });
 
       effectBlocks.forEach((effectBlock, index) => {
         effectBlock.snapToCenter(index, effectBlocks.length);

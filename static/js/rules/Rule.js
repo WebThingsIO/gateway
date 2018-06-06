@@ -120,50 +120,86 @@ const RuleUtils = {
  * @return {String?}
  */
 Rule.prototype.toTriggerHumanDescription = function() {
-  if (!this.trigger) {
+  return this.singleTriggerToHumanDescription(this.trigger);
+};
+
+/**
+ * Convert a trigger's decsription to a human-readable string
+ * @param {Trigger} trigger
+ * @return {String?}
+ */
+Rule.prototype.singleTriggerToHumanDescription = function(trigger) {
+  if (!trigger) {
     return null;
   }
-  if (this.trigger.type === 'TimeTrigger') {
-    return `the time of day is ${
-      TimeTriggerBlock.utcToLocal(this.trigger.time)}`;
+
+  if (trigger.type === 'MultiTrigger') {
+    let triggerStr = '';
+    for (let i = 0; i < trigger.triggers.length; i++) {
+      if (i > 0) {
+        if (trigger.triggers.length > 2) {
+          triggerStr += ',';
+        }
+        triggerStr += ' ';
+        if (i === trigger.triggers.length - 1) {
+          if (trigger.op === 'AND') {
+            triggerStr += 'and ';
+          } else {
+            triggerStr += 'or ';
+          }
+        }
+      }
+      const singleStr =
+        this.singleTriggerToHumanDescription(trigger.triggers[i]);
+      if (!singleStr) {
+        return null;
+      }
+      triggerStr += singleStr;
+    }
+    return triggerStr;
   }
 
-  if (this.trigger.type === 'EventTrigger') {
+  if (trigger.type === 'TimeTrigger') {
+    return `the time of day is ${
+      TimeTriggerBlock.utcToLocal(trigger.time)}`;
+  }
+
+  if (trigger.type === 'EventTrigger') {
     const triggerThing = this.gateway.things.filter(
-      RuleUtils.byHref(this.trigger.thing.href)
+      RuleUtils.byHref(trigger.thing.href)
     )[0];
     if (!triggerThing) {
       return null;
     }
-    return `${triggerThing.name} event "${this.trigger.event}" occurs`;
+    return `${triggerThing.name} event "${trigger.event}" occurs`;
   }
 
   const triggerThing = this.gateway.things.filter(
-    RuleUtils.byProperty(this.trigger.property)
+    RuleUtils.byProperty(trigger.property)
   )[0];
   if (!triggerThing) {
     return null;
   }
 
   let triggerStr = `${triggerThing.name} `;
-  if (this.trigger.type === 'BooleanTrigger') {
+  if (trigger.type === 'BooleanTrigger') {
     triggerStr += 'is ';
-    if (!this.trigger.onValue) {
+    if (!trigger.onValue) {
       triggerStr += 'not ';
     }
-    triggerStr += this.trigger.property.name;
-  } else if (this.trigger.type === 'LevelTrigger') {
-    triggerStr += `${this.trigger.property.name} is `;
-    if (this.trigger.levelType === 'LESS') {
+    triggerStr += trigger.property.name;
+  } else if (trigger.type === 'LevelTrigger') {
+    triggerStr += `${trigger.property.name} is `;
+    if (trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
     } else {
       triggerStr += 'greater than ';
     }
-    triggerStr += this.trigger.value;
-  } else if (this.trigger.type === 'EqualityTrigger') {
-    triggerStr += `${this.trigger.property.name} is ${this.trigger.value}`;
+    triggerStr += trigger.value;
+  } else if (trigger.type === 'EqualityTrigger') {
+    triggerStr += `${trigger.property.name} is ${trigger.value}`;
   } else {
-    console.error('Unknown trigger type', this.trigger);
+    console.error('Unknown trigger type', trigger);
     return null;
   }
 
