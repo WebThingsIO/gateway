@@ -215,12 +215,17 @@ const RuleScreen = {
     const dragHint = document.getElementById('drag-hint');
     const flexDir = window.getComputedStyle(dragHint).flexDirection;
 
-    const triggerElt =
-      this.ruleArea.querySelector('.rule-part-block.trigger');
-    const triggerBlock = triggerElt.parentNode;
+    const triggerBlocks = Array.from(
+      this.ruleArea.querySelectorAll('.rule-part-block.trigger')
+    ).map((elt) => {
+      return elt.parentNode;
+    });
 
-    const effectElts =
-      this.ruleArea.querySelectorAll('.rule-part-block.effect');
+    const effectBlocks = Array.from(
+      this.ruleArea.querySelectorAll('.rule-part-block.effect')
+    ).map((elt) => {
+      return elt.parentNode;
+    });
 
     function transformToCoords(elt) {
       const re = /translate\((\d+)px, +(\d+)px\)/;
@@ -235,53 +240,103 @@ const RuleScreen = {
         y: y,
       };
     }
-    const triggerCoords = transformToCoords(triggerBlock);
 
-    const dpbRect = triggerBlock.getBoundingClientRect();
+    function triggerTransformToCoords(elt) {
+      const coords = transformToCoords(elt);
+      if (flexDir === 'column') {
+        coords.x += dpbRect.width / 2;
+        coords.y += dpbRect.height + 10;
+      } else {
+        coords.x += dpbRect.width + 10;
+        coords.y += dpbRect.height / 2;
+      }
+      return coords;
+    }
+
+    function effectTransformToCoords(elt) {
+      const coords = transformToCoords(elt);
+      if (flexDir === 'column') {
+        coords.x += dpbRect.width / 2;
+        coords.y -= 10;
+      } else {
+        coords.x -= 10;
+        coords.y += dpbRect.height / 2;
+      }
+      return coords;
+    }
+
+    const areaRect = this.ruleArea.getBoundingClientRect();
+    const center = {
+      x: areaRect.width / 2,
+      y: areaRect.height / 2,
+    };
+
+    const multiTrigger = triggerBlocks.length > 1;
+    const multiEffect = effectBlocks.length > 1;
+
+    const dpbRect = triggerBlocks[0].getBoundingClientRect();
 
     this.connection.innerHTML = '';
-    for (let i = 0; i < effectElts.length; i++) {
-      const effectBlock = effectElts[i].parentNode;
-      const effectCoords = transformToCoords(effectBlock);
 
-      let startX = triggerCoords.x + dpbRect.width + 10;
-      let startY = triggerCoords.y + dpbRect.height / 2;
-      let endX = effectCoords.x - 10;
-      let endY = effectCoords.y + dpbRect.height / 2;
-
-      if (flexDir === 'column') {
-        startX = triggerCoords.x + dpbRect.width / 2;
-        startY = triggerCoords.y + dpbRect.height + 10;
-        endX = effectCoords.x + dpbRect.width / 2;
-        endY = effectCoords.y - 10;
-      }
-
-      const midX = (startX + endX) / 2;
-
+    function makePath(start, end) {
+      const midX = (start.x + end.x) / 2;
       const pathDesc = [
-        'M', startX, startY,
-        'C', midX, startY, midX, endY, endX, endY,
+        'M', start.x, start.y,
+        'C', midX, start.y, midX, end.y, end.x, end.y,
       ].join(' ');
 
       const path =
         document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathDesc);
-      const circleTrigger =
-        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circleTrigger.classList.add('trigger');
-      circleTrigger.setAttribute('r', 6);
-      circleTrigger.setAttribute('cx', startX);
-      circleTrigger.setAttribute('cy', startY);
+
+      return path;
+    }
+
+    for (let i = 0; i < effectBlocks.length; i++) {
+      const effectCoords = effectTransformToCoords(effectBlocks[i]);
+
+      let start = center;
+      if (!multiTrigger) {
+        start = triggerTransformToCoords(triggerBlocks[0]);
+      }
+
       const circleEffect =
         document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circleEffect.classList.add('effect');
       circleEffect.setAttribute('r', 6);
-      circleEffect.setAttribute('cx', endX);
-      circleEffect.setAttribute('cy', endY);
+      circleEffect.setAttribute('cx', effectCoords.x);
+      circleEffect.setAttribute('cy', effectCoords.y);
 
-      this.connection.appendChild(path);
-      this.connection.appendChild(circleTrigger);
       this.connection.appendChild(circleEffect);
+
+      // Draw path unless there are multiple triggers with a single effect
+      if (!(multiTrigger && !multiEffect)) {
+        const path = makePath(start, effectCoords);
+        this.connection.appendChild(path);
+      }
+    }
+
+    for (let i = 0; i < triggerBlocks.length; i++) {
+      const triggerCoords = triggerTransformToCoords(triggerBlocks[i]);
+      const circleTrigger =
+        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circleTrigger.classList.add('trigger');
+      circleTrigger.setAttribute('r', 6);
+      circleTrigger.setAttribute('cx', triggerCoords.x);
+      circleTrigger.setAttribute('cy', triggerCoords.y);
+      this.connection.appendChild(circleTrigger);
+
+      if (!multiTrigger) {
+        // Path already drawn by effects
+        continue;
+      }
+
+      let end = center;
+      if (!multiEffect) {
+        end = effectTransformToCoords(effectBlocks[0]);
+      }
+      const path = makePath(triggerCoords, end);
+      this.connection.appendChild(path);
     }
   },
 
