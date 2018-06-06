@@ -67,6 +67,7 @@
   width: 100%;
   margin: 0 auto;
   height: calc(100% - 9.6rem);
+  overflow: auto;
 }
 
 #settings-menu.hidden {
