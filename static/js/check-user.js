@@ -36,7 +36,7 @@ function redirectUnauthed() {
     }
 
     if (window.location.pathname !== url.split('?')[0]) {
-      window.location.href = url;
+      window.location.replace(url);
     }
   });
 }
