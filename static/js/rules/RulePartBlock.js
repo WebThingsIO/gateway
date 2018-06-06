@@ -138,7 +138,6 @@ RulePartBlock.prototype.onUp = function(clientX, clientY) {
       this.reset();
     } else {
       this.role = 'trigger';
-      this.ruleTriggerArea.classList.add('inactive');
     }
   } else if (this.rulePartBlock.classList.contains('effect')) {
     if (this.ruleEffectArea.classList.contains('inactive')) {
@@ -179,7 +178,6 @@ RulePartBlock.prototype.setRulePart = function(rulePart) {
   if (rulePart.trigger) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
-    this.ruleTriggerArea.classList.add('inactive');
   } else if (rulePart.effect) {
     this.role = 'effect';
     this.rulePartBlock.classList.add('effect');
