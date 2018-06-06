@@ -293,6 +293,16 @@ const RuleScreen = {
       return path;
     }
 
+    if (multiTrigger && multiEffect) {
+      const circleCenter =
+        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circleCenter.classList.add('effect');
+      circleCenter.setAttribute('r', 6);
+      circleCenter.setAttribute('cx', center.x);
+      circleCenter.setAttribute('cy', center.y);
+      this.connection.appendChild(circleCenter);
+    }
+
     for (let i = 0; i < effectBlocks.length; i++) {
       const effectCoords = effectTransformToCoords(effectBlocks[i]);
 
