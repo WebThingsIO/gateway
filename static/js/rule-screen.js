@@ -56,6 +56,7 @@ const RuleScreen = {
 
     this.ruleName.addEventListener('blur', () => {
       this.rule.name = this.ruleName.textContent;
+      this.rule.update();
       this.onPresentationChange();
     });
 
