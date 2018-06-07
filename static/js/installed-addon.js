@@ -88,6 +88,7 @@ InstalledAddon.prototype.view = function() {
           class="text-button addon-settings-update ${updateButtonClass}">
           Update
         </button>
+        <span class="addon-settings-spacer"></span>
         <button id="addon-remove-${Utils.escapeHtml(this.name)}"
           class="text-button addon-settings-remove">
           Remove
