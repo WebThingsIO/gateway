@@ -31,7 +31,7 @@ Under Linux:
 $ sudo apt-get install pkg-config
 ```
 
-Under OS X:
+Under macOS:
 
 [See here](http://macappstore.org/pkg-config/).
 
@@ -96,7 +96,7 @@ Under Linux:
 $ sudo apt-get install autoconf
 ```
 
-Under OS X:
+Under macOS:
 ```
 $ brew install autoconf
 ```
