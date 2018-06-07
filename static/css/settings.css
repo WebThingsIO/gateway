@@ -448,7 +448,7 @@
 }
 
 .addon-settings-update {
-  background-size: 3rem;
+  background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
   padding-left: 4rem;
@@ -478,6 +478,22 @@
 .user-settings-remove {
   margin-right: .8rem;
   background-image: url('../optimized-images/remove.svg');
+}
+
+@media only screen and (max-width: 560px) {
+  .addon-settings-spacer {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .addon-settings-update {
+    margin-right: 0;
+    margin-left: .8rem;
+  }
+
+  .addon-settings-config {
+    margin-right: 0;
+  }
 }
 
 .addon-discovery-settings-add {
