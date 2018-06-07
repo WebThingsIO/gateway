@@ -7,52 +7,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 'use strict';
 
 const Utils = require('./utils');
 
-function OnOffDetail(thing) {
-  this.thing = thing;
-}
-
-OnOffDetail.prototype.attach = function() {
-  this.onOffSwitch = this.thing.element.querySelector('.switch-checkbox');
-  if (typeof this.thing.handleClick === 'function') {
-    this.onOffSwitch.addEventListener('click',
-                                      this.thing.handleClick.bind(this.thing));
+class OnOffDetail {
+  constructor(thing, name) {
+    this.thing = thing;
+    this.name = name;
+    this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
-  this.onOffLabel = this.thing.element.querySelector('.on-off-label');
-};
 
-OnOffDetail.prototype.view = function() {
-  const checked = this.thing.properties.on;
-  const onoff = checked ? 'on' : 'off';
-  const id = this.thing.id;
+  attach() {
+    this.onOffSwitch = this.thing.element.querySelector(`#${this.id}`);
+    if (typeof this.thing.handleClick === 'function') {
+      this.onOffSwitch.addEventListener(
+        'change', this.thing.handleClick.bind(this.thing));
+    }
+  }
 
-  return `<div class="thing-detail-container">
-    <div class="thing-detail on-off-switch-switch">
-      <div class="thing-detail-contents">
-        <form class="switch">
-          <input type="checkbox" id="switch-${Utils.escapeHtml(id)}"
-                 class="switch-checkbox" ${checked}/>
-          <label class="switch-slider" for="switch-${Utils.escapeHtml(id)}">
-          </label>
-        </form>
-        <div class="on-off-label">
-          ${onoff}
-        </div>
-      </div>
-    </div>
-    <div class="thing-detail-label">On/Off</div>
-  </div>`;
-};
+  view() {
+    const checked = this.thing.properties[this.name];
 
-OnOffDetail.prototype.update = function() {
-  const on = this.thing.properties.on;
-  if (this.onOffLabel && this.onOffSwitch) {
-    this.onOffLabel.textContent = on ? 'on' : 'off';
+    return `
+      <webthing-on-off-property data-name="On/Off" ${checked ? 'checked' : ''}
+        id="${this.id}">
+      </webthing-on-off-property>`;
+  }
+
+  update() {
+    const on = this.thing.properties[this.name];
     this.onOffSwitch.checked = on;
   }
-};
+}
 
 module.exports = OnOffDetail;

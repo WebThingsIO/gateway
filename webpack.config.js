@@ -70,6 +70,11 @@ const pluginsWeb = [
       from: 'static/js/lib/*',
       to: path.join(__dirname, 'build/'),
     },
+    {
+      from: 'node_modules/@webcomponents/webcomponentsjs/*-bundle.js*',
+      to: path.join(__dirname, 'build/static/js/lib/'),
+      flatten: true,
+    },
   ]),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,

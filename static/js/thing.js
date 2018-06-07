@@ -210,13 +210,15 @@ Thing.prototype.htmlDetailView = function() {
 
   for (const prop of Object.values(this.displayedProperties)) {
     if (prop.hasOwnProperty('detail')) {
-      detailsHTML += prop.detail.view();
+      detailsHTML +=
+        `<div class="thing-detail-container">${prop.detail.view()}</div>`;
     }
   }
 
   for (const action of Object.values(this.displayedActions)) {
     if (action.hasOwnProperty('detail')) {
-      detailsHTML += action.detail.view();
+      detailsHTML +=
+        `<div class="thing-detail-container">${action.detail.view()}</div>`;
     }
   }
 

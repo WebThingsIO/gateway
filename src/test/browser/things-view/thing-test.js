@@ -18,7 +18,7 @@ describe('Thing', () => {
      async () => {
        const browser = getBrowser();
        const desc = {
-         id: 'UnknownThings',
+         id: 'UnknownThing',
          name: 'foofoo',
          type: 'thing',
          properties: {
@@ -150,16 +150,16 @@ describe('Thing', () => {
     expect(booleanProps.length).toEqual(1);
     const booleanValue = await booleanProps[0].getValue();
     expect(booleanValue).toBeTruthy();
-    const booleanId = await booleanProps[0].getInputId();
+    const booleanId = await booleanProps[0].getId();
     expect(booleanId).toEqual(
-      `checkbox-${Utils.escapeHtmlForIdClass('spaced boolean')}`
+      `boolean-${Utils.escapeHtmlForIdClass('spaced boolean')}`
     );
 
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
     const numberValue = await numberProps[0].getValue();
     expect(numberValue).toEqual(10);
-    const numberId = await numberProps[0].getInputId();
+    const numberId = await numberProps[0].getId();
     expect(numberId).toEqual(
       `number-${Utils.escapeHtmlForIdClass('spaced number')}`
     );
@@ -168,7 +168,7 @@ describe('Thing', () => {
     expect(stringProps.length).toEqual(1);
     const stringValue = await stringProps[0].getValue();
     expect(stringValue).toEqual('foo');
-    const stringId = await stringProps[0].getInputId();
+    const stringId = await stringProps[0].getId();
     expect(stringId).toEqual(
       `string-${Utils.escapeHtmlForIdClass('spaced string')}`
     );
@@ -177,7 +177,7 @@ describe('Thing', () => {
   it('should reset property value when setProperty is rejected', async () => {
     const browser = getBrowser();
     const desc = {
-      id: 'UnknownThings',
+      id: 'UnknownThing',
       name: 'foofoo',
       type: 'thing',
       properties: {
@@ -582,7 +582,7 @@ describe('Thing', () => {
        });
 
        // Check level property
-       const levelProperty = await detailPage.levelProperty();
+       const levelProperty = await detailPage.brightnessProperty();
        let level = await levelProperty.getValue();
        expect(level).toEqual(50);
        await levelProperty.setValue(20);
@@ -804,41 +804,41 @@ describe('Thing', () => {
        // Check power property
        const powerProperty = await detailPage.powerProperty();
        let power = await powerProperty.getDisplayedText();
-       expect(power).toEqual('50.00W');
+       expect(power).toEqual('50 W');
        await setProperty(desc.id, 'instantaneousPower', 60);
        await waitForExpect(async () => {
          power = await powerProperty.getDisplayedText();
-         expect(power).toEqual('60.00W');
+         expect(power).toEqual('60 W');
        });
 
        // Check voltage property
        const voltageProperty = await detailPage.voltageProperty();
        let voltage = await voltageProperty.getDisplayedText();
-       expect(voltage).toEqual('0V');
+       expect(voltage).toEqual('0 V');
        await setProperty(desc.id, 'voltage', 30);
        await waitForExpect(async () => {
          voltage = await voltageProperty.getDisplayedText();
-         expect(voltage).toEqual('30.00V');
+         expect(voltage).toEqual('30 V');
        });
 
        // Check current property
        const currentProperty = await detailPage.currentProperty();
        let current = await currentProperty.getDisplayedText();
-       expect(current).toEqual('0A');
+       expect(current).toEqual('0.0 A');
        await setProperty(desc.id, 'current', 40);
        await waitForExpect(async () => {
          current = await currentProperty.getDisplayedText();
-         expect(current).toEqual('40.00A');
+         expect(current).toEqual('40.0 A');
        });
 
        // Check current property
        const frequencyProperty = await detailPage.frequencyProperty();
        let frequency = await frequencyProperty.getDisplayedText();
-       expect(frequency).toEqual('0Hz');
+       expect(frequency).toEqual('0 Hz');
        await setProperty(desc.id, 'frequency', 10);
        await waitForExpect(async () => {
          frequency = await frequencyProperty.getDisplayedText();
-         expect(frequency).toEqual('10.00Hz');
+         expect(frequency).toEqual('10 Hz');
        });
      });
 

@@ -10,28 +10,47 @@
 
 'use strict';
 
-const MultiLevelSwitch = require('./multi-level-switch');
+const API = require('./api');
+const BrightnessDetail = require('./brightness-detail');
+const OnOffLight = require('./on-off-light');
 
 /**
- * DimmableLight Constructor (extends MultiLevelSwitch).
+ * DimmableLight Constructor.
  *
  * @param Object description Thing description object.
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
 function DimmableLight(description, format) {
-  this.base = MultiLevelSwitch;
-  this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
-                                  pngBaseIcon: '/images/bulb.png',
-                                  thingCssClass: '',
-                                  thingDetailCssClass: '',
-                                  addIconToView: false});
+  this.displayedProperties = this.displayedProperties || {};
+  if (description.properties) {
+    this.displayedProperties.level = {
+      href: description.properties.level.href,
+      detail: new BrightnessDetail(this, 'level'),
+    };
+  }
 
-  this.container = this.element.querySelector('.dimmable-light');
+  this.base = OnOffLight;
+  this.base(description, format);
+
+  if (format == 'svg') {
+    // For now the SVG view is just a link.
+    return this;
+  }
+
+  this.levelBar = this.element.querySelector('.level-bar');
+  this.levelBarLabel = this.element.querySelector('.level-bar-label');
+  this.light = this.element.querySelector('.dimmable-light');
+
+  if (format === 'htmlDetail') {
+    this.attachHtmlDetail();
+  } else if (this.light) {
+    this.light.addEventListener('click', this.handleClick.bind(this));
+  }
 
   return this;
 }
 
-DimmableLight.prototype = Object.create(MultiLevelSwitch.prototype);
+DimmableLight.prototype = Object.create(OnOffLight.prototype);
 
 /**
  * Update the display for the provided property.
@@ -42,14 +61,37 @@ DimmableLight.prototype.updateProperty = function(name, value) {
   if (name === 'on') {
     this.updateOn(value);
     if (this.properties.on) {
-      this.container.classList.add('on');
+      this.light.classList.add('on');
       this.levelBarLabel.textContent = `${Math.round(this.properties.level)}%`;
     } else {
-      this.container.classList.remove('on');
+      this.light.classList.remove('on');
     }
   }
   if (name === 'level') {
     this.updateLevel(value);
+  }
+};
+
+DimmableLight.prototype.updateOn = function(on) {
+  this.properties.on = on;
+  if (on === null) {
+    return;
+  }
+
+  this.updateLevel(this.properties.level);
+
+  if (!on) {
+    this.levelBarLabel.textContent = 'OFF';
+  }
+
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.on.detail.update();
+  }
+
+  if (on) {
+    this.showOn();
+  } else {
+    this.showOff();
   }
 };
 
@@ -65,6 +107,33 @@ DimmableLight.prototype.updateLevel = function(level) {
   if (this.format === 'htmlDetail') {
     this.displayedProperties.level.detail.update();
   }
+};
+
+DimmableLight.prototype.setBrightness = function(level) {
+  if (typeof level === 'string') {
+    level = parseInt(level, 10);
+  }
+
+  const payload = {
+    level: level,
+  };
+  fetch(this.displayedProperties.level.href, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(`Status ${response.status} trying to set level`);
+    }
+  }).then((json) => {
+    this.updateLevel(json.level);
+  }).catch(function(error) {
+    console.error(`Error trying to set level: ${error}`);
+  });
 };
 
 DimmableLight.prototype.iconView = function() {
