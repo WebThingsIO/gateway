@@ -126,14 +126,6 @@
   background: rgba(255, 207, 138, 0.3);
 }
 
-.drag-hint.inactive {
-  background: rgba(127, 127, 127, 0.3);
-}
-
-.drag-hint.inactive > .drag-hint-container {
-  display: none;
-}
-
 .drag-hint-block.rule-part-block {
   background: none;
   border: 1px dashed #4a4a4a;
