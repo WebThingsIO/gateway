@@ -438,3 +438,17 @@
   border-radius: 0 0 1rem 0;
   border: 0;
 }
+
+.rule-part-block.trigger.inactive,
+.rule-part-block.effect.inactive {
+  background: #888;
+}
+
+#connection > path.active {
+  stroke: #5DBBFF;
+}
+
+#connection > circle.active {
+  fill: #5DBBFF;
+}
+

@@ -23,6 +23,8 @@ const RuleScreen = {
 
     this.onPresentationChange = this.onPresentationChange.bind(this);
     this.onRuleChange = this.onRuleChange.bind(this);
+    this.animate = this.animate.bind(this);
+    this.animateDelay = 750;
     this.rule = null;
     this.partBlocks = [];
 
@@ -293,16 +295,6 @@ const RuleScreen = {
       return path;
     }
 
-    if (multiTrigger && multiEffect) {
-      const circleCenter =
-        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circleCenter.classList.add('effect');
-      circleCenter.setAttribute('r', 6);
-      circleCenter.setAttribute('cx', center.x);
-      circleCenter.setAttribute('cy', center.y);
-      this.connection.appendChild(circleCenter);
-    }
-
     for (let i = 0; i < effectBlocks.length; i++) {
       const effectCoords = effectTransformToCoords(effectBlocks[i]);
 
@@ -323,6 +315,7 @@ const RuleScreen = {
       // Draw path unless there are multiple triggers with a single effect
       if (!(multiTrigger && !multiEffect)) {
         const path = makePath(start, effectCoords);
+        path.classList.add('effect');
         this.connection.appendChild(path);
       }
     }
@@ -347,7 +340,18 @@ const RuleScreen = {
         end = effectTransformToCoords(effectBlocks[0]);
       }
       const path = makePath(triggerCoords, end);
+      path.classList.add('trigger');
       this.connection.appendChild(path);
+    }
+
+    if (multiTrigger && multiEffect) {
+      const circleCenter =
+        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circleCenter.classList.add('center');
+      circleCenter.setAttribute('r', 6);
+      circleCenter.setAttribute('cx', center.x);
+      circleCenter.setAttribute('cy', center.y);
+      this.connection.appendChild(circleCenter);
     }
   },
 
@@ -586,6 +590,115 @@ const RuleScreen = {
 
   onScrollRightClick: function() {
     this.rulePartsList.scrollLeft += 128;
+  },
+
+  startAnimate: function() {
+    if (this.animateTimeout) {
+      clearTimeout(this.animateTimeout);
+    }
+    if (!this.rule || !this.rule.trigger || !this.rule.effect) {
+      return;
+    }
+    this.animateStep = -1;
+
+    this.ruleArea.querySelectorAll(
+      '.rule-part-block'
+    ).forEach((elt) => {
+      elt.classList.add('inactive');
+    });
+
+    setTimeout(this.animate, this.animateDelay);
+  },
+  animate: function() {
+    this.animateStep += 1;
+
+    if (this.animateStep > this.rule.trigger.triggers.length) {
+      this.stopAnimate();
+      return;
+    }
+
+    const triggerBlocks =
+      this.ruleArea.querySelectorAll('.rule-part-block.trigger');
+    const effectBlocks =
+      this.ruleArea.querySelectorAll('.rule-part-block.effect');
+    const triggerPaths = this.connection.querySelectorAll('path.trigger');
+    const effectPaths = this.connection.querySelectorAll('path.effect');
+    const triggerCircles = this.connection.querySelectorAll('circle.trigger');
+    const effectCircles = this.connection.querySelectorAll('circle.effect');
+    const centerCircle = this.connection.querySelector('circle.center');
+
+    function activate(index) {
+      triggerBlocks[index].classList.remove('inactive');
+      if (triggerPaths.length > 0) {
+        triggerPaths[index].classList.add('active');
+      }
+      triggerCircles[index].classList.add('active');
+    }
+
+    function deactivate(index) {
+      triggerBlocks[index].classList.add('inactive');
+      if (triggerPaths.length > 0) {
+        triggerPaths[index].classList.remove('active');
+      }
+      triggerCircles[index].classList.remove('active');
+    }
+
+    if (this.animateStep > 0) {
+      deactivate(this.animateStep - 1);
+    }
+
+    let andActive = false;
+
+    if (this.animateStep === this.rule.trigger.triggers.length) {
+      for (let i = 0; i < triggerBlocks.length; i++) {
+        activate(i);
+      }
+      andActive = true;
+    } else {
+      activate(this.animateStep);
+    }
+
+    if (andActive || this.rule.trigger.op === 'OR') {
+      effectBlocks.forEach(function(block) {
+        block.classList.remove('inactive');
+      });
+      if (centerCircle) {
+        centerCircle.classList.add('active');
+      }
+      effectPaths.forEach(function(path) {
+        path.classList.add('active');
+      });
+      effectCircles.forEach(function(circle) {
+        circle.classList.add('active');
+      });
+    } else {
+      effectBlocks.forEach(function(block) {
+        block.classList.add('inactive');
+      });
+      if (centerCircle) {
+        centerCircle.classList.remove('active');
+      }
+      effectPaths.forEach(function(path) {
+        path.classList.remove('active');
+      });
+      effectCircles.forEach(function(circle) {
+        circle.classList.remove('active');
+      });
+    }
+
+    this.animateTimeout = setTimeout(this.animate, this.animateDelay);
+  },
+  stopAnimate: function() {
+    this.ruleArea.querySelectorAll(
+      '.rule-part-block.inactive'
+    ).forEach((elt) => {
+      elt.classList.remove('inactive');
+    });
+    this.connection.querySelectorAll(
+      '.active'
+    ).forEach((elt) => {
+      elt.classList.remove('active');
+    });
   },
 };
 
