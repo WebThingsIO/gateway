@@ -304,7 +304,8 @@ Thing.prototype.svgView = function() {
   return `<g transform="translate(${this.x},${this.y})"
             dragx="${this.x}" dragy="${this.y}"
             class="floorplan-thing">
-            <a xlink:href="${encodeURI(this.href)}" class="svg-thing-link">
+            <a xlink:href="${encodeURI(this.href)}?referrer=%2Ffloorplan"
+               class="svg-thing-link">
               <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
               <image x="-2.5" y="-2.5" width="5" height="5"
                 xlink:href="${encodeURI(this.svgBaseIcon)}" />
