@@ -38,6 +38,8 @@ const FloorplanScreen = {
 
     this.view = document.getElementById('floorplan-view');
     this.floorplan = document.getElementById('floorplan');
+    this.backButton = document.getElementById('back-button');
+    this.menuButton = document.getElementById('menu-button');
     this.editButton = document.getElementById('floorplan-edit-button');
     this.doneButton = document.getElementById('floorplan-done-button');
     this.uploadForm = document.getElementById('floorplan-upload-form');
@@ -53,6 +55,9 @@ const FloorplanScreen = {
   },
 
   show: function() {
+    this.backButton.classList.add('hidden');
+    this.menuButton.classList.remove('hidden');
+
     const opts = {
       headers: {
         Authorization: `Bearer ${API.jwt}`,

@@ -10,6 +10,7 @@
 
 'use strict';
 
+const page = require('./lib/page');
 const API = require('./api');
 const App = require('./app');
 const ActionInputForm = require('./action-input-form');
@@ -43,8 +44,9 @@ const ThingsScreen = {
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
     this.backButton = document.getElementById('back-button');
+    this.backRef = '/things';
     window.addEventListener('_thingchange', this.showThings.bind(this));
-    this.backButton.addEventListener('click', () => window.history.back());
+    this.backButton.addEventListener('click', () => page(this.backRef));
     this.addButton.addEventListener('click',
                                     AddThingScreen.show.bind(AddThingScreen));
   },
@@ -57,6 +59,13 @@ const ThingsScreen = {
    * @param {Boolean} events Whether or not to display the events screen.
    */
   show: function(thingId, actionName, events) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('referrer')) {
+      this.backRef = params.get('referrer');
+    } else {
+      this.backRef = '/things';
+    }
+
     App.hideOverflowButton();
 
     if (thingId) {
