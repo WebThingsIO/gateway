@@ -64,6 +64,8 @@ const Router = {
       response.setHeader(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+      response.setHeader('Access-Control-Allow-Methods',
+                         'GET,HEAD,PUT,PATCH,POST,DELETE');
 
       // If request won't accept HTML but will accept JSON,
       // or is a WebSocket request, or is multipart/form-data
