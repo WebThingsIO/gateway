@@ -29,8 +29,10 @@ ActionDetail.prototype.view = function() {
   let inputLink, disabled, extraClass;
   if (typeof this.input !== 'undefined') {
     const href = `${window.location.pathname}/actions/${this.name}`;
+    const referrer = encodeURIComponent(window.location.pathname);
     inputLink =
-      `<a href="${encodeURI(href)}" class="action-input-link">...</a>`;
+      `<a href="${encodeURI(href)}?referrer=${referrer}"
+          class="action-input-link">...</a>`;
     extraClass = 'advanced-action-button';
 
     if (typeof this.input === 'object' &&

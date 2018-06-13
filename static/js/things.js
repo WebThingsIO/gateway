@@ -58,8 +58,8 @@ const ThingsScreen = {
    * @param {String} actionName Optional action input form to show.
    * @param {Boolean} events Whether or not to display the events screen.
    */
-  show: function(thingId, actionName, events) {
-    const params = new URLSearchParams(window.location.search);
+  show: function(thingId, actionName, events, queryString) {
+    const params = new URLSearchParams(`?${queryString || ''}`);
     if (params.has('referrer')) {
       this.backRef = params.get('referrer');
     } else {
