@@ -8,6 +8,7 @@ body.hidden {
 
 section {
   position: absolute;
+  overflow: auto;
 }
 
 a, a:visited {
