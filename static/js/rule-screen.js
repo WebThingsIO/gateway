@@ -382,6 +382,10 @@ const RuleScreen = {
   },
 
   onRuleChange: function() {
+    if (!this.rule) {
+      return;
+    }
+
     this.partBlocks = this.partBlocks.filter((partBlock) => {
       return partBlock.role !== 'removed';
     });
@@ -433,6 +437,8 @@ const RuleScreen = {
   },
 
   show: function(ruleId) {
+    this.rule = null;
+
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
