@@ -9,7 +9,6 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {CheckerPlugin} = require('awesome-typescript-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -72,10 +71,6 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/'),
     },
   ]),
-  new UglifyJsPlugin({
-    test: /\.js$/,
-    sourceMap: true,
-  }),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,
     filename: '[file].map',
