@@ -59,7 +59,8 @@ const Thing = function(description, format, options) {
   // Parse base URL of Thing
   if (description.href) {
     this.href = new URL(description.href, App.ORIGIN);
-    this.eventsHref = `${this.href.pathname}/events`;
+    this.eventsHref = `${this.href.pathname}/events?referrer=${
+      encodeURIComponent(this.href.pathname)}`;
     this.id = this.href.pathname.split('/').pop();
 
     const wsHref = this.href.href.replace(/^http/, 'ws');
