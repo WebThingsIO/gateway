@@ -20,7 +20,7 @@ class PropertyProxy extends Property {
     this.value = propertyDict.value;
 
     this.propertyChangedPromises = [];
-    this.propertyDict = {};
+    this.propertyDict = Object.assign({}, propertyDict);
   }
 
   asDict() {
