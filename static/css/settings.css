@@ -67,11 +67,13 @@
   width: 100%;
   margin: 0 auto;
   height: calc(100% - 9.6rem);
+  transition: transform 0.25s ease;
   overflow: auto;
 }
 
 #settings-menu.hidden {
-  transform: translate(-100%, -50%);
+  transform: translate(-100%, 0%);
+  overflow: hidden;
 }
 
 #settings-menu ul {
