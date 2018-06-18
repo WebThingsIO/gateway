@@ -23,7 +23,8 @@ LevelDetail.prototype.attach = function() {
       this.thing.updateLevel(this.level.value);
     });
   }
-  this.level.addEventListener('change', this.set.bind(this));
+  const setLevel = Utils.debounce(500, this.set.bind(this));
+  this.level.addEventListener('change', setLevel);
 };
 
 LevelDetail.prototype.view = function() {

@@ -85,6 +85,34 @@ const Utils = {
 
     return fuzzy;
   },
+  debounce: function(delay, callback) {
+    return Utils.throttle(delay, callback, true);
+  },
+  throttle: function(delay, callback, debounceMode = false) {
+    let timeout = null;
+    let lastExec = 0;
+    const throttleMode = !debounceMode;
+
+    return function wrapper() {
+      const elapsed = Number(new Date()) - lastExec;
+      const args = arguments;
+
+      const exec = () => {
+        lastExec = Number(new Date());
+        callback(args);
+      };
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      if (throttleMode === true && elapsed > delay) {
+        exec();
+      } else {
+        timeout = setTimeout(exec, debounceMode ? delay : delay - elapsed);
+      }
+    };
+  },
 };
 
 module.exports = Utils;
