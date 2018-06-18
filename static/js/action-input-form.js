@@ -18,6 +18,7 @@ const ActionInputForm = function(href, name, schema) {
   this.href = href;
   this.name = name;
   this.schema = schema;
+  this.inputs = {};
 
   this.element = this.render();
 
@@ -50,6 +51,7 @@ ActionInputForm.prototype.render = function() {
 
   for (const input of inputs) {
     const name = Utils.escapeHtmlForIdClass(input.name);
+    this.inputs[name] = input.name;
 
     form += `<span class="action-input-name">`;
     if (input.name !== '__default__') {
@@ -156,7 +158,7 @@ ActionInputForm.prototype.handleSubmit = function(e) {
       input = value;
       break;
     } else {
-      input[el.name] = value;
+      input[this.inputs[el.name]] = value;
     }
   }
 
