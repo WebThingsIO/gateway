@@ -52,8 +52,8 @@ describe('Thing', () => {
 
        // We have to wait connecting websocket.
        await detailPage.waitForBooleanProperties();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check boolean property
        const booleanProps = await detailPage.booleanProperties();
@@ -211,8 +211,8 @@ describe('Thing', () => {
 
     // We have to wait connecting websocket.
     await detailPage.waitForBooleanProperties();
-    const waitWensocketPromise = util.promisify(setImmediate);
-    await waitWensocketPromise();
+    const waitWebSocketPromise = util.promisify(setImmediate);
+    await waitWebSocketPromise();
 
     // Check boolean property
     const booleanProps = await detailPage.booleanProperties();
@@ -386,8 +386,8 @@ describe('Thing', () => {
 
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
@@ -476,8 +476,8 @@ describe('Thing', () => {
 
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
@@ -561,8 +561,8 @@ describe('Thing', () => {
 
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
@@ -652,8 +652,8 @@ describe('Thing', () => {
 
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
@@ -764,8 +764,8 @@ describe('Thing', () => {
        // Thing Detail View
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
-       const waitWensocketPromise = util.promisify(setImmediate);
-       await waitWensocketPromise();
+       const waitWebSocketPromise = util.promisify(setImmediate);
+       await waitWebSocketPromise();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
