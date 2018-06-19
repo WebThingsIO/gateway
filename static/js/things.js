@@ -109,7 +109,7 @@ const ThingsScreen = {
         this.thingsElement.innerHTML = this.NO_THINGS_MESSAGE;
       } else {
         this.thingsElement.innerHTML = '';
-        things.forEach(function(description) {
+        things.forEach((description) => {
           switch (description.type) {
             case 'onOffSwitch':
               console.log('rendering new on/off switch');

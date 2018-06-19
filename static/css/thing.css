@@ -68,7 +68,7 @@
   height: 10rem;
   border-radius: 5rem;
   border: 2px solid white;
-  background: #88B6D6;
+  background: #89B6D6;
   position: relative;
 }
 
@@ -219,8 +219,7 @@
   border: 2px solid white;
   text-align: center;
   transform: translate(0, 0); /* promote to layer to draw above links */
-
-  background: #88b6d6;
+  background: #89b6d6;
 }
 
 .unknown-thing {
@@ -247,10 +246,6 @@
 .thing-detail-layout-link {
   stroke: white;
   stroke-width: 2px;
-}
-
-.level-bar-container {
-  background: #88b6d6;
 }
 
 .on .level-bar-container,
@@ -328,7 +323,7 @@
 }
 
 .dimmable-light {
-  background: #88b6d6;
+  background: #89b6d6;
   fill: #fff;
 }
 

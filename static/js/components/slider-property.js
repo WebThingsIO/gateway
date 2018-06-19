@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseProperty = require('./base-property');
+const BaseComponent = require('./base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -27,7 +27,7 @@ template.innerHTML = `
       height: 10rem;
       border-radius: 5rem;
       border: 2px solid white;
-      background-color: #88b6d6;
+      background-color: #89b6d6;
       position: relative;
     }
 
@@ -67,7 +67,7 @@ template.innerHTML = `
   <div id="name" class="webthing-slider-property-name"></div>
 `;
 
-class SliderProperty extends BaseProperty {
+class SliderProperty extends BaseComponent {
   constructor() {
     super(template);
 

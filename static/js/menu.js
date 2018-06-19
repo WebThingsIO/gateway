@@ -38,13 +38,13 @@ const Menu = {
    * @param {String} experiment
    */
   getExperimentSetting: function(experiment) {
-    API.getExperimentSetting(experiment).then(function(value) {
+    API.getExperimentSetting(experiment).then((value) => {
       if (value) {
         Menu.showItem(experiment);
       } else {
         Menu.hideItem(experiment);
       }
-    }).catch(function(e) {
+    }).catch((e) => {
       console.log(`${experiment} experiment setting is not yet set ${e}`);
     });
   },

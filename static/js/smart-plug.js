@@ -71,25 +71,19 @@ function SmartPlug(description, format) {
 
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/smart-plug-off.svg',
-                                  pngBaseIcon: '/images/smart-plug.svg',
-                                  thingCssClass: 'smart-plug',
-                                  thingDetailCssClass: 'smart-plug-container',
-                                  addIconToView: false});
+                                  pngBaseIcon: '/images/smart-plug.svg'});
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
 
-  this.smartPlug = this.element.querySelector('.smart-plug');
-  this.smartPlugLabel =
-    this.element.querySelector('.smart-plug-label');
+  this.switch = this.element.querySelector('webthing-smart-plug-capability');
 
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
   } else {
-    this.element.querySelector('.thing-icon')
-      .addEventListener('click', this.handleClick.bind(this));
+    this.switch.addEventListener('click', this.handleClick.bind(this));
   }
 
   this.updateStatus();
@@ -99,22 +93,12 @@ function SmartPlug(description, format) {
 
 SmartPlug.prototype = Object.create(OnOffSwitch.prototype);
 
-SmartPlug.prototype.iconView = function() {
-  return `<div class="thing-icon">
-    <span class="smart-plug-label">--</span>
-    </div>`;
-};
-
 /**
  * Update the display for the provided property.
  * @param {string} name - name of the property
  * @param {*} value - value of the property
  */
 SmartPlug.prototype.updateProperty = function(name, value) {
-  if (!this.displayedProperties.hasOwnProperty(name)) {
-    return;
-  }
-
   switch (name) {
     case 'on':
       this.updateOn(value);
@@ -136,23 +120,22 @@ SmartPlug.prototype.updateProperty = function(name, value) {
 
 SmartPlug.prototype.updateOn = function(on) {
   this.properties.on = on;
+  if (on === null) {
+    return;
+  }
 
   if (this.format === 'htmlDetail') {
     this.displayedProperties.on.detail.update();
   }
 
-  if (this.displayedProperties.level) {
+  if (this.displayedProperties.hasOwnProperty('level')) {
     this.updateLevel(this.properties.level);
   }
 
   if (on) {
     this.showOn();
-    this.updatePower(this.properties.power);
   } else {
     this.showOff();
-    if (this.smartPlugLabel) {
-      this.smartPlugLabel.innerText = 'off';
-    }
   }
 };
 
@@ -161,27 +144,23 @@ SmartPlug.prototype.updateOn = function(on) {
  */
 SmartPlug.prototype.updatePower = function(power) {
   power = parseFloat(power);
-  this.properties.power = power;
+  this.properties.instantaneousPower = power;
+  this.switch.power = power;
 
-  if (this.smartPlugLabel) {
-    if (!this.properties.on) {
-      this.smartPlugLabel.innerText = 'off';
-    } else if (power) {
-      this.smartPlugLabel.innerText = `${power.toFixed(2)}W`;
-    } else {
-      this.smartPlugLabel.innerText = '0W';
-    }
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.instantaneousPower.detail.update();
   }
-
-  this.displayedProperties.instantaneousPower.detail.update();
 };
 
 /**
  * Show updated level.
  */
 SmartPlug.prototype.updateLevel = function(level) {
-  if (this.displayedProperties.hasOwnProperty('level')) {
-    this.properties.level = level;
+  level = parseInt(level, 10);
+  this.properties.level = level;
+
+  if (this.format === 'htmlDetail' &&
+      this.displayedProperties.hasOwnProperty('level')) {
     this.displayedProperties.level.detail.update();
   }
 };
@@ -211,9 +190,15 @@ SmartPlug.prototype.setLevel = function(level) {
     }
   }).then((json) => {
     this.updateLevel(json.level);
-  }).catch(function(error) {
+  }).catch((error) => {
     console.error(`Error trying to set level: ${error}`);
   });
+};
+
+SmartPlug.prototype.iconView = function() {
+  return `
+    <webthing-smart-plug-capability>
+    </webthing-smart-plug-capability>`;
 };
 
 module.exports = SmartPlug;

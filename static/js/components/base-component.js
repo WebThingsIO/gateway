@@ -1,7 +1,7 @@
 /**
- * BaseProperty
+ * BaseComponent
  *
- * A base property webcomponent class.
+ * A base webcomponent class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
  */
 'use strict';
 
-class BaseProperty extends HTMLElement {
+class BaseComponent extends HTMLElement {
   constructor(template) {
     super();
     this.attachShadow({mode: 'open'});
@@ -35,4 +35,4 @@ class BaseProperty extends HTMLElement {
   }
 }
 
-module.exports = BaseProperty;
+module.exports = BaseComponent;

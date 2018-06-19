@@ -17,7 +17,7 @@ class LabelDetail {
     this.thing = thing;
     this.name = name;
     this.friendlyName = friendlyName;
-    this.unit = unit;
+    this.unit = Utils.unitNameToAbbreviation(unit);
     this.precision = precision;
     this.id = `label-${Utils.escapeHtmlForIdClass(this.name)}`;
   }

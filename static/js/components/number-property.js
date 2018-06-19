@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseProperty = require('./base-property');
+const BaseComponent = require('./base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -27,7 +27,7 @@ template.innerHTML = `
       height: 10rem;
       border-radius: 5rem;
       border: 2px solid white;
-      background-color: #88b6d6;
+      background-color: #89b6d6;
       position: relative;
     }
 
@@ -84,7 +84,7 @@ template.innerHTML = `
   <div id="name" class="webthing-number-property-name"></div>
 `;
 
-class NumberProperty extends BaseProperty {
+class NumberProperty extends BaseComponent {
   constructor() {
     super(template);
 
@@ -193,8 +193,8 @@ class NumberProperty extends BaseProperty {
   }
 
   _setInputClass() {
-    const min = parseInt(this.min);
-    const max = parseInt(this.max);
+    const min = parseInt(this.min, 10);
+    const max = parseInt(this.max, 10);
 
     if (isNaN(min) || min === null || isNaN(max) || max === null) {
       this._input.classList.add('hide-spinner');

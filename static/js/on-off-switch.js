@@ -31,17 +31,14 @@ const OnOffSwitch = function(description, format) {
 
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/on-off-switch.svg',
-                                  pngBaseIcon: '/images/on-off-switch.png',
-                                  thingCssClass: 'on-off-switch',
-                                  thingDetailCssClass: 'on-off-switch',
-                                  addIconToView: false});
+                                  pngBaseIcon: '/images/on-off-switch.png'});
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
 
-  this.switch = this.element.querySelector('.thing-icon');
+  this.switch = this.element.querySelector('webthing-on-off-switch-capability');
 
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
@@ -62,14 +59,24 @@ OnOffSwitch.prototype = Object.create(Thing.prototype);
  * @param {*} value - value of the property
  */
 OnOffSwitch.prototype.updateProperty = function(name, value) {
-  if (name !== 'on') {
+  switch (name) {
+    case 'on':
+      this.updateOn(value);
+      break;
+  }
+};
+
+OnOffSwitch.prototype.updateOn = function(on) {
+  this.properties.on = on;
+  if (on === null) {
     return;
   }
-  this.properties.on = value;
-  if (value === null) {
-    return;
+
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.on.detail.update();
   }
-  if (value) {
+
+  if (on) {
     this.showOn();
   } else {
     this.showOff();
@@ -80,24 +87,21 @@ OnOffSwitch.prototype.updateProperty = function(name, value) {
  * Show on state.
  */
 OnOffSwitch.prototype.showOn = function() {
-  this.element.classList.remove('off');
-  this.element.classList.add('on');
+  this.switch.on = true;
 };
 
 /**
  * Show off state.
  */
 OnOffSwitch.prototype.showOff = function() {
-  this.element.classList.remove('on');
-  this.element.classList.add('off');
+  this.switch.on = false;
 };
 
 /**
  * Show transition state.
  */
 OnOffSwitch.prototype.showTransition = function() {
-  this.element.classList.remove('on');
-  this.element.classList.remove('off');
+  this.switch.on = null;
 };
 
 /**
@@ -170,6 +174,12 @@ OnOffSwitch.prototype.turnOff = function() {
   }).catch((error) => {
     console.error(`Error trying to turn off switch: ${error}`);
   });
+};
+
+OnOffSwitch.prototype.iconView = function() {
+  return `
+    <webthing-on-off-switch-capability>
+    </webthing-on-off-switch-capability>`;
 };
 
 module.exports = OnOffSwitch;

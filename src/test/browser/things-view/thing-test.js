@@ -407,20 +407,20 @@ describe('Thing', () => {
        });
 
        // Check level property
-       const levelProperty = await detailPage.levelProperty();
-       let level = await levelProperty.getValue();
-       expect(level).toEqual(50);
-       await levelProperty.setValue(20);
+       const brightnessProperty = await detailPage.brightnessProperty();
+       let brightness = await brightnessProperty.getValue();
+       expect(brightness).toEqual(50);
+       await brightnessProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'level');
-         expect(level).toEqual(20);
-         level = await levelProperty.getValue();
-         expect(level).toEqual(20);
+         brightness = await getProperty(desc.id, 'level');
+         expect(brightness).toEqual(20);
+         brightness = await brightnessProperty.getValue();
+         expect(brightness).toEqual(20);
        });
        await setProperty(desc.id, 'level', 60);
        await waitForExpect(async () => {
-         level = await levelProperty.getValue();
-         expect(level).toEqual(60);
+         brightness = await brightnessProperty.getValue();
+         expect(brightness).toEqual(60);
        });
      });
 
@@ -751,7 +751,7 @@ describe('Thing', () => {
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingPowerDisplayed();
-         expect(level).toEqual('50.00W');
+         expect(level).toEqual('50 W');
        });
 
        await setProperty(desc.id, 'on', false);
@@ -912,7 +912,7 @@ describe('Thing', () => {
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
-         expect(level).toEqual('50%');
+         expect(level).toEqual('50 %');
        });
 
        things = await thingsPage.things();

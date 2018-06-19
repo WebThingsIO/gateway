@@ -31,22 +31,19 @@ function OnOffLight(description, format) {
 
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/bulb.svg',
-                                  pngBaseIcon: '/images/bulb.png',
-                                  thingCssClass: 'on-off-light',
-                                  thingDetailCssClass: 'on-off-light',
-                                  addIconToView: false});
+                                  pngBaseIcon: '/images/bulb.png'});
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
 
-  this.light = this.element.querySelector('.thing-icon');
+  this.switch = this.element.querySelector('webthing-light-capability');
 
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
-  } else if (this.light) {
-    this.light.addEventListener('click', this.handleClick.bind(this));
+  } else {
+    this.switch.addEventListener('click', this.handleClick.bind(this));
   }
 
   this.updateStatus();
@@ -55,5 +52,11 @@ function OnOffLight(description, format) {
 }
 
 OnOffLight.prototype = Object.create(OnOffSwitch.prototype);
+
+OnOffLight.prototype.iconView = function() {
+  return `
+    <webthing-light-capability>
+    </webthing-light-capability>`;
+};
 
 module.exports = OnOffLight;

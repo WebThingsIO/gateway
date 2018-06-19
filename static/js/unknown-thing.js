@@ -77,7 +77,7 @@ const UnknownThing = function(description, format) {
   this.base = Thing;
   this.base(description, format);
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
@@ -140,9 +140,9 @@ UnknownThing.prototype.setProperty = function(name, value) {
 };
 
 UnknownThing.prototype.iconView = function() {
-  return `<div class="unknown-thing">
-    <img class="unknown-thing-icon" src="/images/unknown-thing.png" />
-  </div>`;
+  return `
+    <webthing-custom-capability>
+    </webthing-custom-capability>`;
 };
 
 module.exports = UnknownThing;

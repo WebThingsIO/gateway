@@ -23,10 +23,10 @@ function PropertySelect(devicePropertyBlock, parent, thing) {
   this.clearOptions();
 
   // Disable dragging started by clicking property select
-  this.elt.addEventListener('mousedown', function(e) {
+  this.elt.addEventListener('mousedown', (e) => {
     e.stopPropagation();
   });
-  this.elt.addEventListener('touchstart', function(e) {
+  this.elt.addEventListener('touchstart', (e) => {
     e.stopPropagation();
   });
 
@@ -73,7 +73,7 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     return;
   }
 
-  const stopPropagation = function(e) {
+  const stopPropagation = (e) => {
     e.stopPropagation();
   };
 

@@ -57,7 +57,7 @@ const Speech = {
       const displayNotification = function(msg, audio) {
         x.innerHTML = msg;
         x.className = 'show';
-        setTimeout(function() {
+        setTimeout(() => {
           x.className = x.className.replace('show', '');
         }, 3000);
         new Audio(`/audio/${encodeURIComponent(audio)}.mp3`).play();
@@ -66,7 +66,7 @@ const Speech = {
       document.getElementById('speech-button').style.backgroundImage =
         `url('/images/microphone.svg')`;
       // sort results to get the one with the highest confidence
-      const results = msg.data.sort(function(a, b) {
+      const results = msg.data.sort((a, b) => {
         return b.confidence - a.confidence;
       });
       if (results.length < 1) {
@@ -88,19 +88,19 @@ const Speech = {
       };
 
       let cmdError;
-      fetch('/commands', opts).then(function(response) {
+      fetch('/commands', opts).then((response) => {
         if (!response.ok) {
           cmdError = true;
         }
         return response.json();
-      }).then(function() {
+      }).then(() => {
         if (cmdError) {
           displayNotification('Sorry, the command wasn\'t found.', 'failure');
         } else {
           displayNotification('The command was successfully executed.',
                               'success');
         }
-      }).catch(function() {
+      }).catch(() => {
         displayNotification(
           'Sorry, we found a problem processing your command.',
           'failure');
@@ -208,7 +208,7 @@ const Speech = {
       }
     }
     // Update the visualization the next time we can
-    requestAnimationFrame(function() {
+    requestAnimationFrame(() => {
       api.visualize(analyzerNode);
     });
   },

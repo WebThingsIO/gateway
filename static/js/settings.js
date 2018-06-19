@@ -309,7 +309,7 @@ const SettingsScreen = {
   //     .then(function (response) {
   //     return response.json();
   //   })
-  //     .then(function(domainJson){
+  //     .then((domainJson) => {
   //
   //     console.log(domainJson);
   //   })
@@ -333,7 +333,7 @@ const SettingsScreen = {
       page('/settings/users/add');
     });
 
-    API.getAllUserInfo().then(function(users) {
+    API.getAllUserInfo().then((users) => {
       const usersList = document.getElementById('users-list');
       usersList.innerHTML = '';
 
@@ -353,7 +353,7 @@ const SettingsScreen = {
     this.titleIcon.src = '/images/user.svg';
     this.titleElement.classList.add('dark');
 
-    API.getUser(id).then(function(user) {
+    API.getUser(id).then((user) => {
       const form = document.getElementById('edit-user-form');
       const email = document.getElementById('user-settings-edit-email');
       const name = document.getElementById('user-settings-edit-name');
@@ -470,9 +470,9 @@ const SettingsScreen = {
     };
 
     // Fetch a list of adapters from the server
-    fetch('/adapters', opts).then(function(response) {
+    fetch('/adapters', opts).then((response) => {
       return response.json();
-    }).then(function(adapters) {
+    }).then((adapters) => {
       const noAdapters = document.getElementById('no-adapters');
       const adaptersList = document.getElementById('adapters-list');
       adaptersList.innerHTML = '';
@@ -660,23 +660,23 @@ const SettingsScreen = {
   showExperimentCheckbox: function(experiment, checkboxId) {
     const checkbox = document.getElementById(checkboxId);
     API.getExperimentSetting(experiment)
-      .then(function(value) {
+      .then((value) => {
         checkbox.checked = value;
       })
-      .catch(function(e) {
+      .catch((e) => {
         console.error(
           `Error getting ${experiment} experiment setting ${e}`);
       });
 
-    checkbox.addEventListener('change', function(e) {
+    checkbox.addEventListener('change', (e) => {
       const value = e.target.checked ? true : false;
-      API.setExperimentSetting(experiment, value).then(function() {
+      API.setExperimentSetting(experiment, value).then(() => {
         if (value) {
           Menu.showItem(experiment);
         } else {
           Menu.hideItem(experiment);
         }
-      }).catch(function(e) {
+      }).catch((e) => {
         console.error(`Failed to enable ${experiment} experiment: ${e}`);
       });
     });
@@ -701,7 +701,7 @@ const SettingsScreen = {
     }
 
     function parsePart(part) {
-      return parseInt(part);
+      return parseInt(part, 10);
     }
 
     const partsA = verA.split('.').map(parsePart);
@@ -738,7 +738,7 @@ const SettingsScreen = {
     const statusElt = document.getElementById('update-settings-status');
 
     const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest()]);
-    fetches.then(function(results) {
+    fetches.then((results) => {
       const status = results[0];
       const latest = results[1];
       let cmp = 0;
@@ -770,7 +770,7 @@ const SettingsScreen = {
       }
 
       statusElt.textContent = statusText;
-    }.bind(this));
+    });
   },
 
   onUpdateClick: function() {
@@ -781,17 +781,17 @@ const SettingsScreen = {
     fetch('/updates/update', {
       headers: API.headers(),
       method: 'POST',
-    }).then(function() {
+    }).then(() => {
       updateNow.textContent = 'In Progress';
       let isDown = false;
       function checkStatus() {
-        API.getUpdateStatus().then(function() {
+        API.getUpdateStatus().then(() => {
           if (isDown) {
             window.location.reload(true);
           } else {
             setTimeout(checkStatus, 5000);
           }
-        }).catch(function() {
+        }).catch(() => {
           if (!isDown) {
             updateNow.textContent = 'Restarting';
             isDown = true;
@@ -800,7 +800,7 @@ const SettingsScreen = {
         });
       }
       checkStatus();
-    }).catch(function() {
+    }).catch(() => {
       updateNow.textContent = 'Error';
     });
   },
@@ -812,7 +812,7 @@ const SettingsScreen = {
 
     fetch('/authorizations', {
       headers: API.headers(),
-    }).then(function(response) {
+    }).then((response) => {
       return response.json();
     }).then((clients) => {
       const authorizationsList = document.getElementById('authorizations');

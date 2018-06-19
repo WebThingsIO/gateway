@@ -66,7 +66,7 @@ ActionInputForm.prototype.render = function() {
 
     let unit = '<span class="action-input-unit">';
     if (input.hasOwnProperty('unit')) {
-      unit += Utils.escapeHtml(input.unit);
+      unit += Utils.escapeHtml(Utils.unitNameToAbbreviation(input.unit));
     }
     unit += '</span>';
 

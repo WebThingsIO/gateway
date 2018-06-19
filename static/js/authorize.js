@@ -62,7 +62,7 @@ function init(scope) {
   });
 
 
-  authorizeAllThings.addEventListener('change', function() {
+  authorizeAllThings.addEventListener('change', () => {
     const authorizeThings = document.querySelectorAll('.authorize-thing');
     for (const thingElt of authorizeThings) {
       const checkbox = thingElt.querySelector('.authorize-thing-included');
@@ -75,7 +75,7 @@ function init(scope) {
     }
   });
 
-  authorizeButton.addEventListener('click', function() {
+  authorizeButton.addEventListener('click', () => {
     let readWrite = 'read';
     if (authorizeReadWrite.selected) {
       readWrite = 'readwrite';

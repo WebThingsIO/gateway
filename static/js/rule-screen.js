@@ -41,7 +41,7 @@ const RuleScreen = {
       selection.addRange(range);
     };
     this.ruleNameCustomize.addEventListener('click', selectRuleName);
-    this.ruleName.addEventListener('dblclick', function(event) {
+    this.ruleName.addEventListener('dblclick', (event) => {
       event.preventDefault();
       selectRuleName();
     });
@@ -79,7 +79,7 @@ const RuleScreen = {
     });
 
     this.deleteConfirm.addEventListener('click', () => {
-      this.rule.delete().then(function() {
+      this.rule.delete().then(() => {
         page('/rules');
       });
     });
@@ -368,7 +368,7 @@ const RuleScreen = {
     if (ruleId !== 'new') {
       rulePromise = fetch(`/rules/${encodeURIComponent(ruleId)}`, {
         headers: API.headers(),
-      }).then(function(res) {
+      }).then((res) => {
         return res.json();
       });
     }
@@ -404,7 +404,7 @@ const RuleScreen = {
         this.rulePartsList.appendChild(elt);
       }
       this.onWindowResize();
-    }).then(function() {
+    }).then(() => {
       return rulePromise;
     }).then((ruleDesc) => {
       this.rule = new Rule(this.gateway, ruleDesc);

@@ -49,7 +49,7 @@ ArrayField.prototype.require = function(name) {
 };
 
 ArrayField.prototype.onChangeForIndex = function(index) {
-  return function(value) {
+  return (value) => {
     const newFormData = this.formData.map((item, i) => {
       // We need to treat undefined items as nulls to have validation.
       // See https://github.com/tdegrunt/jsonschema/issues/206
@@ -62,11 +62,11 @@ ArrayField.prototype.onChangeForIndex = function(index) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-  }.bind(this);
+  };
 };
 
 ArrayField.prototype.onSelectChange = function(value, all) {
-  return function(event) {
+  return (event) => {
     const checked = event.target.checked;
 
     if (checked) {
@@ -79,7 +79,7 @@ ArrayField.prototype.onSelectChange = function(value, all) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-  }.bind(this);
+  };
 };
 
 ArrayField.prototype.allowAdditionalItems = function() {
@@ -116,7 +116,7 @@ ArrayField.prototype.itemFieldId = function(index) {
 };
 
 ArrayField.prototype.onDropIndexClick = function(field, index) {
-  return function(event) {
+  return (event) => {
     const schema = this.schema;
     const itemsField = field.querySelector('div.array-items');
     let itemSchema = schema.items;
@@ -154,7 +154,7 @@ ArrayField.prototype.onDropIndexClick = function(field, index) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-  }.bind(this);
+  };
 };
 
 ArrayField.prototype.renderRemoveButton = function(field, index) {
@@ -167,7 +167,7 @@ ArrayField.prototype.renderRemoveButton = function(field, index) {
 };
 
 ArrayField.prototype.onAddClick = function(field) {
-  return function(event) {
+  return (event) => {
     const schema = this.schema;
     const definitions = this.definitions;
     const index = this.formData.length;
@@ -202,7 +202,7 @@ ArrayField.prototype.onAddClick = function(field) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-  }.bind(this);
+  };
 };
 
 ArrayField.prototype.renderAddButton = function(field) {
@@ -295,7 +295,7 @@ ArrayField.prototype.renderNormalArray = function() {
   const field = this.renderArrayFieldset();
   const itemsField = field.querySelector('div.array-items');
 
-  items.forEach(function(item, index) {
+  items.forEach((item, index) => {
     const itemField = this.renderArrayFieldItem(
       field,
       item,
@@ -303,7 +303,7 @@ ArrayField.prototype.renderNormalArray = function() {
       itemSchema,
       true);
     itemsField.appendChild(itemField);
-  }.bind(this));
+  });
 
   if (this.isAddable(items)) {
     const button = this.renderAddButton(field);
@@ -320,7 +320,7 @@ ArrayField.prototype.renderFixedArray = function() {
   const itemsField = field.querySelector('div.array-items');
 
   let items = this.formData;
-  const itemSchemas = schema.items.map(function(item, index) {
+  const itemSchemas = schema.items.map((item, index) => {
     return SchemaUtils.retrieveSchema(item, definitions, items[index]);
   });
 
@@ -329,7 +329,7 @@ ArrayField.prototype.renderFixedArray = function() {
     items = items.concat(new Array(itemSchemas.length - items.length));
   }
 
-  items.forEach(function(item, index) {
+  items.forEach((item, index) => {
     const additional = index >= itemSchemas.length;
     const canRemove = additional;
     const itemSchema = additional ?
@@ -343,7 +343,7 @@ ArrayField.prototype.renderFixedArray = function() {
       itemSchema,
       canRemove);
     itemsField.appendChild(itemField);
-  }.bind(this));
+  });
 
   if (this.allowAdditionalItems() && this.isAddable(items)) {
     const button = this.renderAddButton(field);
@@ -367,7 +367,7 @@ ArrayField.prototype.renderMultiSelect = function() {
   const field = document.createElement('fieldset');
   field.className = 'checkboxes';
 
-  enumOptions.forEach(function(option, index) {
+  enumOptions.forEach((option, index) => {
     const checked = items.indexOf(option.value) !== -1;
     const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
 
@@ -389,7 +389,7 @@ ArrayField.prototype.renderMultiSelect = function() {
     input.onchange = this.onSelectChange(option.value, all);
 
     field.appendChild(div);
-  }.bind(this));
+  });
 
   return field;
 };

@@ -53,13 +53,13 @@ ObjectField.prototype.require = function(name) {
 ObjectField.prototype.sortObject = function(obj) {
   const keys = Object.keys(obj).sort();
   const map = {};
-  keys.forEach(function(key) {
+  keys.forEach((key) => {
     let val = obj[key];
     if (typeof val === 'object') {
       val = this.sortObject(val);
     }
     map[key] = val;
-  }.bind(this));
+  });
   return map;
 };
 
@@ -70,7 +70,7 @@ ObjectField.prototype.isSameSchema = function(schema1, schema2) {
 };
 
 ObjectField.prototype.onPropertyChange = function(name, field) {
-  return function(value) {
+  return (value) => {
     const schema = this.schema;
     const newFormData = {};
     newFormData[name] = value;
@@ -94,7 +94,7 @@ ObjectField.prototype.onPropertyChange = function(name, field) {
     if (this.onChange) {
       this.onChange(this.formData);
     }
-  }.bind(this);
+  };
 };
 
 ObjectField.prototype.renderField = function(field) {
@@ -118,7 +118,7 @@ ObjectField.prototype.renderField = function(field) {
   // TODO support to specific properties order
   const orderedProperties = Object.keys(this.retrievedSchema.properties);
 
-  orderedProperties.forEach(function(name) {
+  orderedProperties.forEach((name) => {
     const childSchema = this.retrievedSchema.properties[name];
     const childIdPrefix = `${this.idSchema.$id}_${name}`;
     const childData = this.formData[name];
@@ -141,7 +141,7 @@ ObjectField.prototype.renderField = function(field) {
       this.readonly).render();
 
     field.appendChild(child);
-  }.bind(this));
+  });
 };
 
 ObjectField.prototype.render = function() {

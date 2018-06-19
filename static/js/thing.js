@@ -27,11 +27,7 @@ const Thing = function(description, format, options) {
   this.type = description.type;
   this.svgBaseIcon = opts.svgBaseIcon || '/images/unknown-thing.svg';
   this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
-  this.thingCssClass = opts.thingCssClass || '';
-  this.thingDetailCssClass = opts.thingDetailCssClass || '';
   this.format = format;
-  this.addIconToView =
-    typeof opts.addIconToView === 'boolean' ? opts.addIconToView : true;
 
   if (format == 'svg') {
     this.container = document.getElementById('floorplan-things');
@@ -167,12 +163,7 @@ Thing.prototype.attachHtmlDetail = function() {
  * HTML icon view for Thing.
  */
 Thing.prototype.iconView = function() {
-  let thingIcon = '<div class="thing-icon"></div>';
-  if (this.addIconToView) {
-    thingIcon =
-      `<img class="thing-icon" src="${encodeURI(this.pngBaseIcon)}"/>`;
-  }
-  return thingIcon;
+  return '<div class="thing-icon"></div>';
 };
 
 /**
@@ -194,7 +185,7 @@ Thing.prototype.uiLink = function() {
  * HTML view for Thing.
  */
 Thing.prototype.htmlView = function() {
-  return `<div class="thing ${this.thingCssClass}">
+  return `<div class="thing">
     ${this.uiHref ? this.uiLink() : ''}
     ${this.detailLink()}
     ${this.iconView()}
@@ -222,7 +213,7 @@ Thing.prototype.htmlDetailView = function() {
     }
   }
 
-  return `<div class="thing ${this.thingDetailCssClass}">
+  return `<div class="thing">
     ${this.iconView()}
     ${detailsHTML}
   </div>`;
@@ -326,13 +317,13 @@ Thing.prototype.render = function(format) {
   let element;
   if (format == 'svg') {
     element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    element.innerHTML = this.svgView();
+    element.innerHTML = this.svgView().trim();
   } else {
     element = document.createElement('div');
     if (format == 'htmlDetail') {
-      element.innerHTML = this.htmlDetailView();
+      element.innerHTML = this.htmlDetailView().trim();
     } else {
-      element.innerHTML = this.htmlView();
+      element.innerHTML = this.htmlView().trim();
     }
   }
   return this.container.appendChild(element.firstChild);

@@ -6,11 +6,25 @@ class ThingSection extends Section {
     super(browser, rootElement);
     this.defineElement('name', '.thing-name');
     this.defineElement('detailLink', '.thing-details-link');
-    this.defineElement('clickable',
-                       '.thing-icon,.level-bar-container,.color-light');
-    this.defineElement('level', '.level-bar-label,.multi-level-sensor-text');
-    this.defineElement('power', '.smart-plug-label');
-    this.defineElement('color', '.color-light-icon-path');
+    this.defineElement(
+      'clickable',
+      [
+        'webthing-light-capability > div',
+        'webthing-multi-level-switch-capability > div',
+        'webthing-on-off-switch-capability > div',
+        'webthing-smart-plug-capability > div',
+      ].join(',')
+    );
+    this.defineElement(
+      'level',
+      [
+        'webthing-light-capability',
+        'webthing-multi-level-sensor-capability',
+        'webthing-multi-level-switch-capability',
+      ].join(',')
+    );
+    this.defineElement('power', 'webthing-smart-plug-capability');
+    this.defineElement('color', 'webthing-light-capability > div > div > svg');
   }
 
   async click() {
@@ -92,8 +106,30 @@ class ThingsPage extends Page {
   constructor(browser) {
     super(browser, '/things');
     this.defineSections('things', '.thing', ThingSection);
-    this.defineSections('onThings', '.thing.on', ThingSection);
-    this.defineSections('offThings', '.thing.off', ThingSection);
+    this.defineSections(
+      'onThings',
+      [
+        'webthing-binary-sensor-capability',
+        'webthing-light-capability',
+        'webthing-multi-level-switch-capability',
+        'webthing-on-off-switch-capability',
+        'webthing-smart-plug-capability',
+      ].join(','),
+      ThingSection,
+      true
+    );
+    this.defineSections(
+      'offThings',
+      [
+        'webthing-binary-sensor-capability',
+        'webthing-light-capability',
+        'webthing-multi-level-switch-capability',
+        'webthing-on-off-switch-capability',
+        'webthing-smart-plug-capability',
+      ].join(','),
+      ThingSection,
+      false
+    );
   }
 
   async wait() {

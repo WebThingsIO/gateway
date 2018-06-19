@@ -235,7 +235,7 @@ const API = {
       method: 'PUT',
       body: body,
       headers: headers,
-    }).then(function(response) {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error(
           'Unexpected response code while setting add-on config');
@@ -258,7 +258,7 @@ const API = {
       method: 'PUT',
       body: JSON.stringify(payload),
       headers: headers,
-    }).then(function(response) {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error(
           'Unexpected response code while setting add-on setting');
@@ -283,7 +283,7 @@ const API = {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: headers,
-    }).then(function(response) {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error('Unexpected response code while installing add-on.');
       }
@@ -301,7 +301,7 @@ const API = {
     return fetch(`/addons/${encodeURIComponent(addonName)}`, {
       method: 'DELETE',
       headers: headers,
-    }).then(function(response) {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error(
           'Unexpected response code while uninstalling add-on.');
@@ -325,7 +325,7 @@ const API = {
       method: 'PATCH',
       body: JSON.stringify(payload),
       headers: headers,
-    }).then(function(response) {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error('Unexpected response code while updating add-on.');
       }
@@ -344,15 +344,15 @@ const API = {
         method: 'GET',
         headers: headers,
       })
-      .then(function(response) {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Error getting ${experimentName}`);
         }
 
         return response.json()
-          .then(function(json) {
+          .then((json) => {
             return json.enabled;
-          }).catch(function(e) {
+          }).catch((e) => {
             throw new Error(`Error getting ${experimentName} ${e}`);
           });
       });
@@ -374,7 +374,7 @@ const API = {
         body: JSON.stringify(payload),
         headers: headers,
       }
-    ).then(function(response) {
+    ).then((response) => {
       if (!response.ok) {
         throw new Error(
           'Unexpected response code while setting experiment setting');

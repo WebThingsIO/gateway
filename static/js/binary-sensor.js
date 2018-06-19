@@ -27,15 +27,14 @@ const BinarySensor = function(description, format) {
 
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
-                                  pngBaseIcon: '/images/binary-sensor.png',
-                                  thingCssClass: 'binary-sensor',
-                                  thingDetailCssClass: 'binary-sensor',
-                                  addIconToView: false});
+                                  pngBaseIcon: '/images/binary-sensor.png'});
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
+
+  this.switch = this.element.querySelector('webthing-binary-sensor-capability');
 
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
@@ -54,15 +53,20 @@ BinarySensor.prototype = Object.create(Thing.prototype);
  * @param {*} value - value of the property
  */
 BinarySensor.prototype.updateProperty = function(name, value) {
-  if (name !== 'on') {
-    return;
+  switch (name) {
+    case 'on':
+      this.updateOn(value);
+      break;
   }
-  this.properties.on = value;
-  if (value === null) {
+};
+
+BinarySensor.prototype.updateOn = function(on) {
+  this.properties.on = on;
+  if (on === null) {
     return;
   }
 
-  if (value) {
+  if (on) {
     this.showOn();
   } else {
     this.showOff();
@@ -73,16 +77,20 @@ BinarySensor.prototype.updateProperty = function(name, value) {
  * Show on state.
  */
 BinarySensor.prototype.showOn = function() {
-  this.element.classList.remove('off');
-  this.element.classList.add('on');
+  this.switch.on = true;
 };
 
 /**
  * Show off state.
  */
 BinarySensor.prototype.showOff = function() {
-  this.element.classList.remove('on');
-  this.element.classList.add('off');
+  this.switch.on = false;
+};
+
+BinarySensor.prototype.iconView = function() {
+  return `
+    <webthing-binary-sensor-capability>
+    </webthing-binary-sensor-capability>`;
 };
 
 module.exports = BinarySensor;
