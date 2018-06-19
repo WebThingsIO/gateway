@@ -59,17 +59,15 @@ const iotOptions = {
  * Local Variables for the Gateway Href and the Web Token since the
  * CommandsController will be posting to itself.
  */
-CommandsController.gatewayRef = '';
-CommandsController.jwt = '';
+CommandsController.gatewayHref = '';
 
 /**
  * Called by the app.js to configure the auth header and the address of the GW
  *  and the python interface since the CommandsController
  *  will be posting to itself.
  */
-CommandsController.configure = function(gatewayHref, jwt) {
+CommandsController.configure = function(gatewayHref) {
   CommandsController.gatewayHref = gatewayHref;
-  CommandsController.jwt = jwt;
 };
 
 /**
@@ -94,7 +92,7 @@ CommandsController.post('/', function(request, response) {
   const thingsUrl = CommandsController.gatewayHref +
   Constants.THINGS_PATH;
   thingsOptions.headers.Authorization = `Bearer ${
-    CommandsController.jwt}`;
+    request.jwt}`;
 
   fetch(thingsUrl, thingsOptions).then(toText)
     .then(function(thingBody) {
@@ -144,7 +142,7 @@ CommandsController.post('/', function(request, response) {
             }
             const iotUrl = CommandsController.gatewayHref + payload.href;
             iotOptions.headers.Authorization =
-              `Bearer ${CommandsController.jwt}`;
+              `Bearer ${request.jwt}`;
             // Returning 201 to signify that the command was mapped to an
             // intent and matched a 'thing' in our list.  Return a response to
             // caller with this status before the command finishes execution
