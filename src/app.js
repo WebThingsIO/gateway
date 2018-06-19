@@ -32,7 +32,6 @@ const db = require('./db');
 const mDNSserver = require('./service_discovery_setup');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
-const JSONWebToken = require('./models/jsonwebtoken');
 const Constants = require('./constants');
 
 // Causes a timestamp to be prepended to console log lines.
@@ -179,9 +178,7 @@ function commandParserConfigure(server) {
     protocol = 'http';
   }
   const gatewayHref = `${protocol}://127.0.0.1:${server.address().port}`;
-  JSONWebToken.issueToken(-1).then((jwt) => {
-    commandParser.configure(gatewayHref, jwt);
-  });
+  commandParser.configure(gatewayHref);
 }
 
 /**
