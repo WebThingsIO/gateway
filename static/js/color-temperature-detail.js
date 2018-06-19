@@ -12,54 +12,45 @@
 
 const Utils = require('./utils');
 
-function ColorTemperatureDetail(thing, min, max) {
-  this.thing = thing;
-  this.min = min;
-  this.max = max;
+class ColorTemperatureDetail {
+  constructor(thing, name, min, max) {
+    this.thing = thing;
+    this.name = name;
+    this.min = min;
+    this.max = max;
+    this.id = `color-temperature-${Utils.escapeHtmlForIdClass(this.name)}`;
+  }
+
+  attach() {
+    this.temperature = this.thing.element.querySelector(`#${this.id}`);
+    this.temperature.addEventListener('change', this.set.bind(this));
+  }
+
+  view() {
+    const temperature = this.thing.properties[this.name];
+
+    return `
+      <webthing-color-temperature-property min="${this.min}" max="${this.max}"
+        data-name="Color Temperature" value="${Utils.escapeHtml(temperature)}"
+        id="${this.id}">
+      </webthing-color-temperature-property>`;
+  }
+
+  update() {
+    if (!this.temperature) {
+      return;
+    }
+
+    if (this.thing.properties[this.name] == this.temperature.value) {
+      return;
+    }
+
+    this.temperature.value = this.thing.properties[this.name];
+  }
+
+  set() {
+    this.thing.setColorTemperature(this.temperature.value);
+  }
 }
-
-ColorTemperatureDetail.prototype.attach = function() {
-  this.temperature =
-    this.thing.element.querySelector('.color-temperature-input');
-  if (typeof this.thing.updateColorTemperature === 'function') {
-    this.temperature.addEventListener('input', () => {
-      this.thing.updateColorTemperature(this.temperature.value);
-    });
-  }
-  this.temperature.addEventListener('change', this.set.bind(this));
-};
-
-ColorTemperatureDetail.prototype.view = function() {
-  const temperature = this.thing.properties.colorTemperature;
-
-  return `<div class="thing-detail-container">
-    <div class="thing-detail">
-      <div class="thing-detail-contents">
-        <form class="color-temperature">
-          <input type="range" min="${this.min}" max="${this.max}"
-            value="${Utils.escapeHtml(temperature)}"
-            class="color-temperature-input"/>
-        </form>
-      </div>
-    </div>
-    <div class="thing-detail-label">Color Temperature</div>
-  </div>`;
-};
-
-ColorTemperatureDetail.prototype.update = function() {
-  if (!this.temperature) {
-    return;
-  }
-
-  if (this.thing.properties.colorTemperature == this.temperature.value) {
-    return;
-  }
-
-  this.temperature.value = this.thing.properties.colorTemperature;
-};
-
-ColorTemperatureDetail.prototype.set = function() {
-  this.thing.setColorTemperature(this.temperature.value);
-};
 
 module.exports = ColorTemperatureDetail;

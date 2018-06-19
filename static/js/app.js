@@ -212,6 +212,25 @@ RulesScreen = require('./rules-screen');
 RuleScreen = require('./rule-screen');
 Speech = require('./speech');
 
+// load web components
+require('./components/action');
+require('./components/base-property');
+require('./components/boolean-property');
+require('./components/brightness-property');
+require('./components/color-property');
+require('./components/color-temperature-property');
+require('./components/current-property');
+require('./components/frequency-property');
+require('./components/instantaneous-power-property');
+require('./components/label-property');
+require('./components/level-property');
+require('./components/number-property');
+require('./components/on-off-property');
+require('./components/slider-property');
+require('./components/string-property');
+require('./components/switch-property');
+require('./components/voltage-property');
+
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {
     scope: '/',

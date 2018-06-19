@@ -32,11 +32,11 @@ function MultiLevelSwitch(description, format, options) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this),
+      detail: new OnOffDetail(this, 'on'),
     };
     this.displayedProperties.level = {
       href: description.properties.level.href,
-      detail: new LevelDetail(this),
+      detail: new LevelDetail(this, 'level'),
     };
   }
 

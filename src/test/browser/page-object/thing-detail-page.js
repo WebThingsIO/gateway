@@ -8,7 +8,14 @@ class InputPropertySection extends Section {
   constructor(browser, rootElement) {
     super(browser, rootElement);
     this.defineElement('input', 'input');
+    this.defineElement('label', 'label');
     this.defineElement('form', 'form');
+  }
+
+  async getId() {
+    const data =
+      await this.browser.elementIdProperty(this.rootElement.ELEMENT, 'id');
+    return data.value;
   }
 
   async getInputId() {
@@ -60,11 +67,11 @@ class LabelPropertySection extends Section {
     const data = await this.browser.elementIdText(
       element.value ? element.value.ELEMENT : element.ELEMENT
     );
-    return data.value;
+    return data.value.split('\n')[0].trim();
   }
 }
 
-class LevelPropertySection extends InputPropertySection {
+class BrightnessPropertySection extends InputPropertySection {
   async setValue(value) {
     const current = await this.getValue();
     const diff = value - current;
@@ -92,10 +99,47 @@ class LevelPropertySection extends InputPropertySection {
   }
 }
 
+class LevelPropertySection extends InputPropertySection {
+  constructor(browser, rootElement) {
+    super(browser, rootElement);
+    this.defineElement('slider', '#slider');
+  }
+
+  async setValue(value) {
+    const current = await this.getValue();
+    const diff = value - current;
+    let key;
+    if (diff > 0) {
+      key = ARROW_UP_UNICODE;
+    } else {
+      key = ARROW_DOWN_UNICODE;
+    }
+    const keys = [];
+    const stroke = Math.abs(diff);
+    for (let i = 0; i < stroke; i++) {
+      keys.push(key);
+    }
+    const slider = await this.slider();
+    await this.browser.elementIdValue(
+      slider.value ? slider.value.ELEMENT : slider.ELEMENT,
+      keys
+    );
+  }
+
+  async getValue() {
+    const slider = await this.slider();
+    const data = await this.browser.elementIdProperty(
+      slider.value ? slider.value.ELEMENT : slider.ELEMENT,
+      'value'
+    );
+    return Number(data.value);
+  }
+}
+
 class OnOffPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
-    const element = this.rootElement;
+    const element = await this.label();
     await this.browser.elementIdClick(
       element.value ? element.value.ELEMENT : element.ELEMENT
     );
@@ -127,7 +171,7 @@ class OnOffPropertySection extends InputPropertySection {
 class BooleanPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
-    const element = this.rootElement;
+    const element = await this.label();
     await this.browser.elementIdClick(
       element.value ? element.value.ELEMENT : element.ELEMENT
     );
@@ -179,73 +223,79 @@ class ThingDetailPage extends Page {
 
     this.defineSection(
       'colorProperty',
-      '.color-light-color',
+      'webthing-color-property',
       ColorPropertySection
     );
 
     this.defineSection(
       'colorTemperatureProperty',
-      '.color-temperature',
+      'webthing-color-temperature-property',
       ColorTemperaturePropertySection
     );
 
     this.defineSection(
+      'brightnessProperty',
+      'webthing-brightness-property',
+      BrightnessPropertySection
+    );
+
+    this.defineSection(
       'levelProperty',
-      'form.level',
+      'webthing-level-property',
       LevelPropertySection
     );
 
     this.defineSection(
       'onOffProperty',
-      'form.switch',
+      'webthing-on-off-property',
       OnOffPropertySection
     );
 
     // For SmartPlug
     this.defineSection(
       'powerProperty',
-      `#label-instantaneousPower`,
+      `webthing-instantaneous-power-property`,
       LabelPropertySection
     );
 
     this.defineSection(
       'voltageProperty',
-      `#label-voltage`,
+      `webthing-voltage-property`,
       LabelPropertySection
     );
 
     this.defineSection(
       'currentProperty',
-      `#label-current`,
+      `webthing-current-property`,
       LabelPropertySection
     );
 
     this.defineSection(
       'frequencyProperty',
-      `#label-frequency`,
+      `webthing-frequency-property`,
       LabelPropertySection
     );
 
     this.defineSections(
       'labelProperties',
-      '.generic-label',
+      'webthing-label-property',
       LabelPropertySection
     );
 
     // For UnknownThing
     this.defineSections(
       'booleanProperties',
-      '.boolean-switch',
+      'webthing-boolean-property',
       BooleanPropertySection
     );
     this.defineSections(
       'stringProperties',
-      '.string-input',
+      'webthing-string-property',
       StringPropertySection
     );
     this.defineSections(
       'numberProperties',
-      '.number-input',
+      'webthing-number-property',
       NumberPropertySection
     );
 

@@ -1,5 +1,5 @@
 /**
- * Label Detail
+ * LabelDetail
  *
  * A bubble showing some basic information with no input.
  *
@@ -7,51 +7,44 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 'use strict';
 
 const Utils = require('./utils');
 
-function LabelDetail(thing, name, friendlyName, unit) {
-  this.thing = thing;
-  this.name = name;
-  this.friendlyName = friendlyName;
-  this.unit = unit;
-}
-
-LabelDetail.prototype.attach = function() {
-  this.label = this.thing.element.querySelector(
-    `#label-${Utils.escapeHtml(this.name)}`);
-};
-
-LabelDetail.prototype.view = function() {
-  const value = parseFloat(this.thing.properties[this.name]);
-  const data = value ?
-    `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
-    `0${Utils.escapeHtml(this.unit)}`;
-
-  return `<div class="thing-detail-container">
-    <div class="thing-detail label">
-      <div class="thing-detail-contents">
-        <div class="generic-label" id="label-${Utils.escapeHtml(this.name)}">
-          ${data}
-        </div>
-      </div>
-    </div>
-    <div class="thing-detail-label">
-      ${Utils.escapeHtml(this.friendlyName)}
-    </div>
-  </div>`;
-};
-
-LabelDetail.prototype.update = function() {
-  if (!this.label) {
-    return;
+class LabelDetail {
+  constructor(thing, name, friendlyName, unit, precision) {
+    this.thing = thing;
+    this.name = name;
+    this.friendlyName = friendlyName;
+    this.unit = unit;
+    this.precision = precision;
+    this.id = `label-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
-  const value = parseFloat(this.thing.properties[this.name]);
-  this.label.innerText = value ?
-    `${value.toFixed(2)}${Utils.escapeHtml(this.unit)}` :
-    `0${Utils.escapeHtml(this.unit)}`;
-};
+  attach() {
+    this.label = this.thing.element.querySelector(`#${this.id}`);
+  }
+
+  view() {
+    const name = Utils.escapeHtml(this.friendlyName);
+    const unit = Utils.escapeHtml(this.unit);
+    const value = parseFloat(this.thing.properties[this.name]);
+    const data = value || 0;
+
+    return `
+      <webthing-label-property data-value="${data}" data-name="${name}"
+        data-unit="${unit}" data-precision="${this.precision}" id="${this.id}">
+      </webthing-label-property>`;
+  }
+
+  update() {
+    if (!this.label) {
+      return;
+    }
+
+    this.label.value = parseFloat(this.thing.properties[this.name]) || 0;
+  }
+}
 
 module.exports = LabelDetail;

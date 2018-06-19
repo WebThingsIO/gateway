@@ -184,13 +184,9 @@
 
 /* Color Light */
 
-.on-off-label, .color-light-label {
+.color-light-label {
   text-transform: uppercase;
   font-weight: bold;
-}
-
-.on-off-label {
-  padding-top: 0.5rem;
 }
 
 .on .on-off-switch-switch {
@@ -251,19 +247,6 @@
 .thing-detail-layout-link {
   stroke: white;
   stroke-width: 2px;
-}
-
-.color-temperature,
-.level {
-  width: 8rem;
-  height: 8rem;
-}
-
-.color-temperature-input,
-.level-input {
-  width: 8rem;
-  margin: 0;
-  transform: rotate(-90deg) translate(-3rem, 0);
 }
 
 .level-bar-container {
@@ -390,11 +373,6 @@
   color: #5d9bc7;
 }
 
-.generic-label {
-  font-weight: bold;
-}
-
-.generic-string-input,
 .generic-number-input {
   width: 6rem;
   text-align: center;
@@ -471,27 +449,6 @@
 
 .action-button::-moz-focus-inner {
   border: 0;
-}
-
-.advanced-action-button {
-  position: relative;
-  top: 1.4rem;
-}
-
-.action-input-link:link,
-.action-input-link:visited,
-.action-input-link:hover,
-.action-input-link:active {
-  color: #fff;
-  font-size: 3rem;
-  display: block;
-  padding-bottom: 1.8rem;
-  position: relative;
-  top: 1.6rem;
-  height: 3rem;
-  width: 10rem;
-  margin-top: -2rem;
-  border-radius: 0 0 5rem 5rem;
 }
 
 .action-input {

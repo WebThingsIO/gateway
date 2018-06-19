@@ -12,8 +12,8 @@
 'use strict';
 
 const ColorLight = require('./color-light');
-const LevelDetail = require('./level-detail');
-const MultiLevelSwitch = require('./multi-level-switch');
+const DimmableLight = require('./dimmable-light');
+const BrightnessDetail = require('./brightness-detail');
 
 /**
  * DimmableColorLight Constructor (extends ColorLight).
@@ -26,7 +26,7 @@ function DimmableColorLight(description, format) {
   if (description.properties) {
     this.displayedProperties.level = {
       href: description.properties.level.href,
-      detail: new LevelDetail(this),
+      detail: new BrightnessDetail(this, 'level'),
     };
   }
 
@@ -43,8 +43,6 @@ function DimmableColorLight(description, format) {
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
   }
-
-  this.updateStatus();
 
   return this;
 }
@@ -92,8 +90,8 @@ DimmableColorLight.prototype.updateLevel = function(level) {
 /**
  * @param {number} level
  */
-DimmableColorLight.prototype.setLevel = function(level) {
-  MultiLevelSwitch.prototype.setLevel.call(this, level);
+DimmableColorLight.prototype.setBrightness = function(level) {
+  DimmableLight.prototype.setBrightness.call(this, level);
 };
 
 module.exports = DimmableColorLight;

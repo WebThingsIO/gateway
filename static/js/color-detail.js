@@ -12,40 +12,36 @@
 
 const Utils = require('./utils');
 
-function ColorDetail(thing) {
-  this.thing = thing;
+class ColorDetail {
+  constructor(thing, name) {
+    this.thing = thing;
+    this.name = name;
+    this.id = `color-${Utils.escapeHtmlForIdClass(this.name)}`;
+  }
+
+  attach() {
+    this.color = this.thing.element.querySelector(`#${this.id}`);
+    this.color.addEventListener('change', this.set.bind(this));
+  }
+
+  view() {
+    const color = this.thing.properties[this.name];
+    return `
+      <webthing-color-property data-name="Color"
+        value="${Utils.escapeHtml(color)}" id="${this.id}">
+      </webthing-color-property>`;
+  }
+
+  update() {
+    if (this.thing.properties[this.name] == this.color.value) {
+      return;
+    }
+    this.color.value = this.thing.properties[this.name];
+  }
+
+  set() {
+    this.thing.setColor(this.color.value);
+  }
 }
-
-ColorDetail.prototype.attach = function() {
-  this.color = this.thing.element.querySelector('.color-light-color');
-  if (typeof this.thing.updateColor === 'function') {
-    this.color.addEventListener('input', () => {
-      this.thing.updateColor(this.color.value);
-    });
-  }
-  this.color.addEventListener('change', this.set.bind(this));
-};
-
-ColorDetail.prototype.view = function() {
-  const color = this.thing.properties.color;
-  return `<div class="thing-detail-container">
-    <div class="thing-detail">
-      <input class="thing-detail-contents color-light-color" type="color"
-             value="${Utils.escapeHtml(color)}"/>
-    </div>
-    <div class="thing-detail-label">Color</div>
-  </div>`;
-};
-
-ColorDetail.prototype.update = function() {
-  if (this.thing.properties.color == this.color.value) {
-    return;
-  }
-  this.color.value = this.thing.properties.color;
-};
-
-ColorDetail.prototype.set = function() {
-  this.thing.setColor(this.color.value);
-};
 
 module.exports = ColorDetail;

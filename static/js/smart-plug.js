@@ -12,11 +12,14 @@
 'use strict';
 
 const API = require('./api');
-const LabelDetail = require('./label-detail');
+const CurrentDetail = require('./current-detail');
+const FrequencyDetail = require('./frequency-detail');
+const InstantaneousPowerDetail = require('./instantaneous-power-detail');
+const LevelDetail = require('./level-detail');
 const OnOffDetail = require('./on-off-detail');
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
-const LevelDetail = require('./level-detail');
+const VoltageDetail = require('./voltage-detail');
 
 /**
  * SmartPlug Constructor (extends OnOffSwitch).
@@ -29,39 +32,39 @@ function SmartPlug(description, format) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this),
+      detail: new OnOffDetail(this, 'on'),
     };
 
     this.displayedProperties.instantaneousPower = {
       href: description.properties.instantaneousPower.href,
-      detail: new LabelDetail(this, 'instantaneousPower', 'Power', 'W'),
+      detail: new InstantaneousPowerDetail(this, 'instantaneousPower', 'Power'),
     };
 
     if (description.properties.hasOwnProperty('voltage')) {
       this.displayedProperties.voltage = {
         href: description.properties.voltage.href,
-        detail: new LabelDetail(this, 'voltage', 'Voltage', 'V'),
+        detail: new VoltageDetail(this, 'voltage', 'Voltage'),
       };
     }
 
     if (description.properties.hasOwnProperty('current')) {
       this.displayedProperties.current = {
         href: description.properties.current.href,
-        detail: new LabelDetail(this, 'current', 'Current', 'A'),
+        detail: new CurrentDetail(this, 'current', 'Current'),
       };
     }
 
     if (description.properties.hasOwnProperty('frequency')) {
       this.displayedProperties.frequency = {
         href: description.properties.frequency.href,
-        detail: new LabelDetail(this, 'frequency', 'Frequency', 'Hz'),
+        detail: new FrequencyDetail(this, 'frequency', 'Frequency'),
       };
     }
 
     if (description.properties.hasOwnProperty('level')) {
       this.displayedProperties.level = {
         href: description.properties.level.href,
-        detail: new LevelDetail(this),
+        detail: new LevelDetail(this, 'level'),
       };
     }
   }
@@ -133,7 +136,10 @@ SmartPlug.prototype.updateProperty = function(name, value) {
 
 SmartPlug.prototype.updateOn = function(on) {
   this.properties.on = on;
-  this.displayedProperties.on.detail.update();
+
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.on.detail.update();
+  }
 
   if (this.displayedProperties.level) {
     this.updateLevel(this.properties.level);

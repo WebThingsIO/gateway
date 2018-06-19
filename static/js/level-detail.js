@@ -12,50 +12,42 @@
 
 const Utils = require('./utils');
 
-function LevelDetail(thing) {
-  this.thing = thing;
+class LevelDetail {
+  constructor(thing, name) {
+    this.thing = thing;
+    this.name = name;
+    this.id = `level-${Utils.escapeHtmlForIdClass(this.name)}`;
+  }
+
+  attach() {
+    this.level = this.thing.element.querySelector(`#${this.id}`);
+    const setLevel = Utils.debounce(500, this.set.bind(this));
+    this.level.addEventListener('change', setLevel);
+  }
+
+  view() {
+    const level = this.thing.properties[this.name];
+
+    return `
+      <webthing-level-property data-name="Level" min="0" max="100" step="1"
+        value="${Utils.escapeHtml(level)}" id="${this.id}">
+      </webthing-level-property>`;
+  }
+
+  update() {
+    if (!this.level) {
+      return;
+    }
+
+    if (this.thing.properties[this.name] == this.level.value) {
+      return;
+    }
+    this.level.value = this.thing.properties[this.name];
+  }
+
+  set() {
+    this.thing.setLevel(this.level.value);
+  }
 }
-
-LevelDetail.prototype.attach = function() {
-  this.level = this.thing.element.querySelector('.level-input');
-  if (typeof this.thing.updateLevel === 'function') {
-    this.level.addEventListener('input', () => {
-      this.thing.updateLevel(this.level.value);
-    });
-  }
-  const setLevel = Utils.debounce(500, this.set.bind(this));
-  this.level.addEventListener('change', setLevel);
-};
-
-LevelDetail.prototype.view = function() {
-  const level = this.thing.properties.level;
-
-  return `<div class="thing-detail-container">
-    <div class="thing-detail">
-      <div class="thing-detail-contents">
-        <form class="level">
-          <input type="range" min="0" max="100"
-            value="${Utils.escapeHtml(level)}" class="level-input"/>
-        </form>
-      </div>
-    </div>
-    <div class="thing-detail-label">Level</div>
-  </div>`;
-};
-
-LevelDetail.prototype.update = function() {
-  if (!this.level) {
-    return;
-  }
-
-  if (this.thing.properties.level == this.level.value) {
-    return;
-  }
-  this.level.value = this.thing.properties.level;
-};
-
-LevelDetail.prototype.set = function() {
-  this.thing.setLevel(this.level.value);
-};
 
 module.exports = LevelDetail;

@@ -10,9 +10,9 @@
 
 'use strict';
 
+const OnOffDetail = require('./on-off-detail');
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
-const OnOffDetail = require('./on-off-detail');
 
 /**
  * OnOffLight Constructor (extends OnOffSwitch).
@@ -25,7 +25,7 @@ function OnOffLight(description, format) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this),
+      detail: new OnOffDetail(this, 'on'),
     };
   }
 
@@ -45,7 +45,7 @@ function OnOffLight(description, format) {
 
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
-  } else {
+  } else if (this.light) {
     this.light.addEventListener('click', this.handleClick.bind(this));
   }
 

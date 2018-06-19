@@ -29,7 +29,7 @@ class MockProperty extends Property {
   setValue(value) {
     return new Promise((resolve, reject) => {
       if (/^rejectProperty/.test(this.name)) {
-        reject();
+        reject('Read-only property');
         return;
       }
       super.setValue(value).then((updatedValue) => {
