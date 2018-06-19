@@ -179,9 +179,12 @@ InstalledAddon.prototype.handleRemove = function() {
  */
 InstalledAddon.prototype.handleToggle = function(e) {
   const button = e.target;
-  this.enabled = !this.enabled;
-  API.setAddonSetting(this.name, this.enabled)
+  const enabled = !this.enabled;
+  API.setAddonSetting(this.name, enabled)
     .then(() => {
+      this.enabled = enabled;
+      const addon = this.installedAddonsMap.get(this.name);
+      addon.moziot.enabled = enabled;
       if (this.enabled) {
         button.innerText = 'Disable';
         button.classList.remove('addon-settings-enable');
