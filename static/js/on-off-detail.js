@@ -22,8 +22,11 @@ class OnOffDetail {
   attach() {
     this.onOffSwitch = this.thing.element.querySelector(`#${this.id}`);
     if (typeof this.thing.handleClick === 'function') {
-      this.onOffSwitch.addEventListener(
-        'change', this.thing.handleClick.bind(this.thing));
+      const handleClick = Utils.debounce(
+        500,
+        this.thing.handleClick.bind(this.thing)
+      );
+      this.onOffSwitch.addEventListener('change', handleClick);
     }
   }
 
