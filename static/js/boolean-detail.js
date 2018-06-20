@@ -24,9 +24,8 @@ class BooleanDetail {
    */
   attach() {
     this.input = this.thing.element.querySelector(`#${this.id}`);
-    this.input.addEventListener('change', () => {
-      this.thing.setProperty(this.name, this.input.checked);
-    });
+    const setChecked = Utils.debounce(500, this.set.bind(this));
+    this.input.addEventListener('change', setChecked);
   }
 
   /**
@@ -50,6 +49,10 @@ class BooleanDetail {
     }
 
     this.input.checked = this.thing.properties[this.name];
+  }
+
+  set() {
+    this.thing.setProperty(this.name, this.input.checked);
   }
 }
 

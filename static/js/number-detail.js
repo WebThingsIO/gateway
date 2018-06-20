@@ -28,9 +28,8 @@ class NumberDetail {
    */
   attach() {
     this.input = this.thing.element.querySelector(`#${this.id}`);
-    this.input.addEventListener('change', () => {
-      this.thing.setProperty(this.name, this.input.value);
-    });
+    const setNumber = Utils.debounce(500, this.set.bind(this));
+    this.input.addEventListener('change', setNumber);
   }
 
   /**
@@ -58,6 +57,10 @@ class NumberDetail {
     }
 
     this.input.value = this.thing.properties[this.name];
+  }
+
+  set() {
+    this.thing.setProperty(this.name, this.input.value);
   }
 }
 
