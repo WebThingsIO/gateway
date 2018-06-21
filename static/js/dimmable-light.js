@@ -27,11 +27,12 @@ function DimmableLight(description, format) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this, 'on'),
+      detail: new OnOffDetail(this, 'on', description.properties.on.label),
     };
     this.displayedProperties.level = {
       href: description.properties.level.href,
-      detail: new BrightnessDetail(this, 'level'),
+      detail: new BrightnessDetail(this, 'level',
+                                   description.properties.level.label),
     };
   }
 

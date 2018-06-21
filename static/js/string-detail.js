@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class StringDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || name;
     this.id = `string-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -34,7 +35,7 @@ class StringDetail {
    */
   view() {
     return `
-      <webthing-string-property data-name="${Utils.escapeHtml(this.name)}"
+      <webthing-string-property data-name="${Utils.escapeHtml(this.label)}"
         id="${this.id}">
       </webthing-string-property>`;
   }

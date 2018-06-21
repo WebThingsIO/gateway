@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class LevelDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || 'Level';
     this.id = `level-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -29,8 +30,9 @@ class LevelDetail {
     const level = this.thing.properties[this.name];
 
     return `
-      <webthing-level-property data-name="Level" min="0" max="100" step="1"
-        value="${Utils.escapeHtml(level)}" id="${this.id}">
+      <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
+        min="0" max="100" step="1" value="${Utils.escapeHtml(level)}"
+        id="${this.id}">
       </webthing-level-property>`;
   }
 

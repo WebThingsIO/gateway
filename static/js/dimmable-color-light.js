@@ -26,7 +26,8 @@ function DimmableColorLight(description, format) {
   if (description.properties) {
     this.displayedProperties.level = {
       href: description.properties.level.href,
-      detail: new BrightnessDetail(this, 'level'),
+      detail: new BrightnessDetail(this, 'level',
+                                   description.properties.level.label),
     };
   }
 

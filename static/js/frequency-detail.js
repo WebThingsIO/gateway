@@ -14,13 +14,13 @@ const LabelDetail = require('./label-detail');
 const Utils = require('./utils');
 
 class FrequencyDetail extends LabelDetail {
-  constructor(thing, name, friendlyName) {
-    super(thing, name, friendlyName, 'Hz', 0);
+  constructor(thing, name, label) {
+    super(thing, name, label || 'Frequency', 'Hz', 0);
     this.id = `frequency-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
-    const name = Utils.escapeHtml(this.friendlyName);
+    const name = Utils.escapeHtml(this.label);
     const value = parseFloat(this.thing.properties[this.name]);
     const data = value || 0;
 

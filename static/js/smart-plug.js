@@ -32,39 +32,45 @@ function SmartPlug(description, format) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this, 'on'),
+      detail: new OnOffDetail(this, 'on', description.properties.on.label),
     };
 
     this.displayedProperties.instantaneousPower = {
       href: description.properties.instantaneousPower.href,
-      detail: new InstantaneousPowerDetail(this, 'instantaneousPower', 'Power'),
+      detail: new InstantaneousPowerDetail(
+        this, 'instantaneousPower',
+        description.properties.instantaneousPower.label),
     };
 
     if (description.properties.hasOwnProperty('voltage')) {
       this.displayedProperties.voltage = {
         href: description.properties.voltage.href,
-        detail: new VoltageDetail(this, 'voltage', 'Voltage'),
+        detail: new VoltageDetail(this, 'voltage',
+                                  description.properties.voltage.label),
       };
     }
 
     if (description.properties.hasOwnProperty('current')) {
       this.displayedProperties.current = {
         href: description.properties.current.href,
-        detail: new CurrentDetail(this, 'current', 'Current'),
+        detail: new CurrentDetail(this, 'current',
+                                  description.properties.current.label),
       };
     }
 
     if (description.properties.hasOwnProperty('frequency')) {
       this.displayedProperties.frequency = {
         href: description.properties.frequency.href,
-        detail: new FrequencyDetail(this, 'frequency', 'Frequency'),
+        detail: new FrequencyDetail(this, 'frequency',
+                                    description.properties.frequency.label),
       };
     }
 
     if (description.properties.hasOwnProperty('level')) {
       this.displayedProperties.level = {
         href: description.properties.level.href,
-        detail: new LevelDetail(this, 'level'),
+        detail: new LevelDetail(this, 'level',
+                                description.properties.level.label),
       };
     }
   }

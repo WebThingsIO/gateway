@@ -13,10 +13,10 @@
 const Utils = require('./utils');
 
 class LabelDetail {
-  constructor(thing, name, friendlyName, unit, precision) {
+  constructor(thing, name, label, unit, precision) {
     this.thing = thing;
     this.name = name;
-    this.friendlyName = friendlyName;
+    this.label = label;
     this.unit = Utils.unitNameToAbbreviation(unit);
     this.precision = precision;
     this.id = `label-${Utils.escapeHtmlForIdClass(this.name)}`;
@@ -27,7 +27,7 @@ class LabelDetail {
   }
 
   view() {
-    const name = Utils.escapeHtml(this.friendlyName);
+    const name = Utils.escapeHtml(this.label);
     const unit = Utils.escapeHtml(this.unit);
     const value = parseFloat(this.thing.properties[this.name]);
     const data = value || 0;

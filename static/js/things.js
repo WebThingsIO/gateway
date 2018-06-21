@@ -316,8 +316,9 @@ const ThingsScreen = {
           description.name;
 
         this.thingsElement.innerHTML = '';
-        new ActionInputForm(
-          href, actionName, description.actions[actionName].input);
+        new ActionInputForm(href, actionName,
+                            description.actions[actionName].label,
+                            description.actions[actionName].input);
       });
     });
   },

@@ -32,6 +32,9 @@ const Thing = function(id, description) {
   this.id = id;
   this.name = description.name || '';
   this.type = description.type || '';
+  this['@context'] =
+    description['@context'] || 'https://iot.mozilla.org/schemas';
+  this['@type'] = description['@type'] || [];
   this.description = description.description || '';
   this.href = `${Constants.THINGS_PATH}/${this.id}`;
   this.properties = {};
@@ -170,6 +173,8 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
   return {
     name: this.name,
     type: this.type,
+    '@context': this['@context'],
+    '@type': this['@type'],
     description: this.description,
     href: this.href,
     properties: this.properties,
