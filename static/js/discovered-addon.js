@@ -40,7 +40,7 @@ DiscoveredAddon.prototype.view = function() {
     el = '<span class="addon-discovery-settings-added">Added</span>';
   } else {
     el = `
-      <button id="addon-install-${Utils.escapeHtml(this.name)}"
+      <button id="addon-install-${Utils.escapeHtmlForIdClass(this.name)}"
         class="text-button addon-discovery-settings-add">
         Add
       </button>`;
@@ -78,7 +78,7 @@ DiscoveredAddon.prototype.render = function() {
 
   if (!this.installed) {
     const button = document.getElementById(
-      `addon-install-${Utils.escapeHtml(this.name)}`);
+      `addon-install-${Utils.escapeHtmlForIdClass(this.name)}`);
     button.addEventListener('click', this.handleInstall.bind(this));
   }
 };
