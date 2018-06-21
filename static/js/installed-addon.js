@@ -29,6 +29,7 @@ const InstalledAddon = function(metadata, installedAddonsMap,
                                 availableAddonsMap, updateUrl, updateVersion,
                                 updateChecksum) {
   this.name = metadata.name;
+  this.displayName = metadata.display_name;
   this.description = metadata.description;
   this.author = metadata.author;
   this.homepage = metadata.homepage;
@@ -61,11 +62,14 @@ InstalledAddon.prototype.view = function() {
   const updateButtonClass = this.updateUrl ? '' : 'hidden';
   const configButtonClass = this.schema ? '' : 'hidden';
 
+  const name = this.displayName || this.name;
+
   return `
-    <li id="addon-item-${Utils.escapeHtml(this.name)}" class="addon-item">
+    <li id="addon-item-${Utils.escapeHtmlForIdClass(this.name)}"
+      class="addon-item">
       <div class="addon-settings-header">
         <span class="addon-settings-name">
-          ${Utils.escapeHtml(this.name)}
+          ${Utils.escapeHtml(name)}
         </span>
         <span class="addon-settings-version">
           ${Utils.escapeHtml(this.version)}
@@ -80,20 +84,20 @@ InstalledAddon.prototype.view = function() {
         </span>
       </div>
       <div class="addon-settings-controls">
-        <button id="addon-config-${Utils.escapeHtml(this.name)}"
+        <button id="addon-config-${Utils.escapeHtmlForIdClass(this.name)}"
           class="text-button addon-settings-config ${configButtonClass}">
           Configure
         </button>
-        <button id="addon-update-${Utils.escapeHtml(this.name)}"
+        <button id="addon-update-${Utils.escapeHtmlForIdClass(this.name)}"
           class="text-button addon-settings-update ${updateButtonClass}">
           Update
         </button>
         <span class="addon-settings-spacer"></span>
-        <button id="addon-remove-${Utils.escapeHtml(this.name)}"
+        <button id="addon-remove-${Utils.escapeHtmlForIdClass(this.name)}"
           class="text-button addon-settings-remove">
           Remove
         </button>
-        <button id="addon-toggle-${Utils.escapeHtml(this.name)}"
+        <button id="addon-toggle-${Utils.escapeHtmlForIdClass(this.name)}"
           class="text-button ${toggleButtonClass}">
           ${toggleButtonText}
         </button>
@@ -108,19 +112,19 @@ InstalledAddon.prototype.render = function() {
   this.container.insertAdjacentHTML('beforeend', this.view());
 
   const configButton = document.getElementById(
-    `addon-config-${Utils.escapeHtml(this.name)}`);
+    `addon-config-${Utils.escapeHtmlForIdClass(this.name)}`);
   configButton.addEventListener('click', this.handleConfig.bind(this));
 
   const updateButton = document.getElementById(
-    `addon-update-${Utils.escapeHtml(this.name)}`);
+    `addon-update-${Utils.escapeHtmlForIdClass(this.name)}`);
   updateButton.addEventListener('click', this.handleUpdate.bind(this));
 
   const removeButton = document.getElementById(
-    `addon-remove-${Utils.escapeHtml(this.name)}`);
+    `addon-remove-${Utils.escapeHtmlForIdClass(this.name)}`);
   removeButton.addEventListener('click', this.handleRemove.bind(this));
 
   const toggleButton = document.getElementById(
-    `addon-toggle-${Utils.escapeHtml(this.name)}`);
+    `addon-toggle-${Utils.escapeHtmlForIdClass(this.name)}`);
   toggleButton.addEventListener('click', this.handleToggle.bind(this));
 };
 
@@ -137,7 +141,8 @@ InstalledAddon.prototype.handleConfig = function() {
 InstalledAddon.prototype.handleUpdate = function(e) {
   const controlDiv = e.target.parentNode;
   const versionDiv = document.querySelector(
-    `#addon-item-${Utils.escapeHtml(this.name)} .addon-settings-version`);
+    `#addon-item-${Utils.escapeHtmlForIdClass(this.name)} ` +
+    '.addon-settings-version');
   const updating = document.createElement('span');
   updating.classList.add('addon-updating');
   updating.innerText = 'Updating...';
@@ -161,7 +166,7 @@ InstalledAddon.prototype.handleRemove = function() {
   API.uninstallAddon(this.name)
     .then(() => {
       const el = document.getElementById(
-        `addon-item-${Utils.escapeHtml(this.name)}`);
+        `addon-item-${Utils.escapeHtmlForIdClass(this.name)}`);
       el.parentNode.removeChild(el);
       this.installedAddonsMap.delete(this.name);
       const addon = this.availableAddonsMap.get(this.name);
