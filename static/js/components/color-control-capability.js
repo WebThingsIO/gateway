@@ -57,10 +57,7 @@ class ColorControlCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.color =
-      typeof this.dataset.color !== 'undefined' ?
-        this.dataset.color :
-        '#ffffff';
+    this.color = this.dataset.color || '#ffffff';
   }
 
   get color() {

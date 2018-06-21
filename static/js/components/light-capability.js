@@ -112,25 +112,22 @@ class LightCapability extends BaseComponent {
   connectedCallback() {
     this._haveBrightness =
       typeof this.dataset.haveBrightness !== 'undefined' ?
-        this.dataset.haveBrightness :
+        Boolean(this.dataset.haveBrightness) :
         false;
     this._haveColor =
       typeof this.dataset.haveColor !== 'undefined' ?
-        this.dataset.haveColor :
+        Boolean(this.dataset.haveColor) :
         false;
     this._haveColorTemperature =
       typeof this.dataset.haveColorTemperature !== 'undefined' ?
-        this.dataset.haveColorTemperature :
+        Boolean(this.dataset.haveColorTemperature) :
         false;
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
     this.brightness =
       typeof this.dataset.brightness !== 'undefined' ?
         this.dataset.brightness :
         false;
-    this.color =
-      typeof this.dataset.color !== 'undefined' ?
-        this.dataset.color :
-        OFF_FILL;
+    this.color = this.dataset.color || OFF_FILL;
     this.colorTemperature =
       typeof this.dataset.colorTemperature !== 'undefined' ?
         this.dataset.colorTemperature :

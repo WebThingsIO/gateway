@@ -804,41 +804,41 @@ describe('Thing', () => {
        // Check power property
        const powerProperty = await detailPage.powerProperty();
        let power = await powerProperty.getDisplayedText();
-       expect(power).toEqual('50 W');
+       expect(power).toEqual('50W');
        await setProperty(desc.id, 'instantaneousPower', 60);
        await waitForExpect(async () => {
          power = await powerProperty.getDisplayedText();
-         expect(power).toEqual('60 W');
+         expect(power).toEqual('60W');
        });
 
        // Check voltage property
        const voltageProperty = await detailPage.voltageProperty();
        let voltage = await voltageProperty.getDisplayedText();
-       expect(voltage).toEqual('0 V');
+       expect(voltage).toEqual('0V');
        await setProperty(desc.id, 'voltage', 30);
        await waitForExpect(async () => {
          voltage = await voltageProperty.getDisplayedText();
-         expect(voltage).toEqual('30 V');
+         expect(voltage).toEqual('30V');
        });
 
        // Check current property
        const currentProperty = await detailPage.currentProperty();
        let current = await currentProperty.getDisplayedText();
-       expect(current).toEqual('0.0 A');
+       expect(current).toEqual('0.0A');
        await setProperty(desc.id, 'current', 40);
        await waitForExpect(async () => {
          current = await currentProperty.getDisplayedText();
-         expect(current).toEqual('40.0 A');
+         expect(current).toEqual('40.0A');
        });
 
        // Check current property
        const frequencyProperty = await detailPage.frequencyProperty();
        let frequency = await frequencyProperty.getDisplayedText();
-       expect(frequency).toEqual('0 Hz');
+       expect(frequency).toEqual('0Hz');
        await setProperty(desc.id, 'frequency', 10);
        await waitForExpect(async () => {
          frequency = await frequencyProperty.getDisplayedText();
-         expect(frequency).toEqual('10 Hz');
+         expect(frequency).toEqual('10Hz');
        });
      });
 
@@ -912,7 +912,7 @@ describe('Thing', () => {
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
-         expect(level).toEqual('50 %');
+         expect(level).toEqual('50%');
        });
 
        things = await thingsPage.things();

@@ -45,9 +45,7 @@ template.innerHTML = `
   <div id="container" class="webthing-label-capability-container">
     <div id="contents" class="webthing-label-capability-contents">
       <span id="value" class="webthing-label-capability-value">
-      </span>
-      <span id="unit" class="webthing-label-capability-unit">
-      </span>
+      </span><span id="unit" class="webthing-label-capability-unit"></span>
     </div>
   </div>
 `;

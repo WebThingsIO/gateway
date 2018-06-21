@@ -53,8 +53,8 @@ template.innerHTML = `
   </style>
   <div id="container" class="webthing-label-property-container">
     <div id="contents" class="webthing-label-property-contents">
-      <span id="value" class="webthing-label-property-value"></span>
-      <span id="unit" class="webthing-label-property-unit"></span>
+      <span id="value" class="webthing-label-property-value">
+      </span><span id="unit" class="webthing-label-property-unit"></span>
     </div>
   </div>
   <div id="name" class="webthing-label-property-name"></div>

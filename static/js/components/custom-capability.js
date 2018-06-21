@@ -1,7 +1,7 @@
 /**
  * CustomCapability
  *
- * A bubble showing an on/off switch icon.
+ * A bubble showing a generic (or custom) icon.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
