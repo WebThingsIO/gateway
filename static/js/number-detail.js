@@ -17,7 +17,8 @@ class NumberDetail {
     this.thing = thing;
     this.name = name;
     this.type = type;
-    this.unit = typeof unit === 'undefined' ? null : unit;
+    this.unit =
+      typeof unit === 'undefined' ? null : Utils.unitNameToAbbreviation(unit);
     this.min = typeof min === 'undefined' ? null : min;
     this.max = typeof max === 'undefined' ? null : max;
     this.id = `number-${Utils.escapeHtmlForIdClass(this.name)}`;

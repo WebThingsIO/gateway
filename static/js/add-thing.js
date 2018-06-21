@@ -60,9 +60,9 @@ const AddThingScreen = {
 
     // Create a websocket to start listening for new things
     this.socket = new WebSocket(path);
-    this.socket.onmessage = (function(event) {
+    this.socket.onmessage = (event) => {
       this.showNewThing(JSON.parse(event.data));
-    }).bind(this);
+    };
 
     // Timeout, in seconds.
     const timeout = 60;
@@ -99,7 +99,7 @@ const AddThingScreen = {
       }, timeout * 1000);
 
       console.log(`Pairing request created with URL ${json.pair.href}`);
-    }).catch(function(error) {
+    }).catch((error) => {
       console.error(`Pairing request failed: ${error}`);
     });
   },

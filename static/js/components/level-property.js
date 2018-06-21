@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseProperty = require('./base-property');
+const BaseComponent = require('./base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -27,7 +27,7 @@ template.innerHTML = `
       height: 10rem;
       border-radius: 5rem;
       border: 2px solid white;
-      background-color: #88b6d6;
+      background-color: #89b6d6;
       position: relative;
     }
 
@@ -110,7 +110,7 @@ template.innerHTML = `
   <div id="name" class="webthing-level-property-name"></div>
 `;
 
-class LevelProperty extends BaseProperty {
+class LevelProperty extends BaseComponent {
   constructor() {
     super(template);
 
@@ -185,8 +185,8 @@ class LevelProperty extends BaseProperty {
   }
 
   set value(value) {
-    const min = parseInt(this.min);
-    const max = parseInt(this.max) - min;
+    const min = parseInt(this.min, 10);
+    const max = parseInt(this.max, 10) - min;
     const percent = Math.max(0, value - min) / max * 100;
 
     this._bar.style.width = `calc(${percent}% - 0.2rem)`;

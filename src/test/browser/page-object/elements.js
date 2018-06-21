@@ -35,7 +35,7 @@ class Elements {
   }
 
   // Create new method which waits for elements are displayed.
-  defineWaitForProperty(name, selector) {
+  defineWaitForProperty(name, selector, onValue) {
     /**
      * @method waitForName
      */
@@ -49,13 +49,29 @@ class Elements {
           rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
           selector
         );
-        return elements.value.length > 0;
+
+        if (typeof onValue === 'boolean') {
+          for (const el of elements.value) {
+            const data = await this.browser.elementIdProperty(
+              el.value ? el.value.ELEMENT : el.ELEMENT,
+              'on'
+            );
+
+            if (data.value === onValue) {
+              return true;
+            }
+          }
+
+          return false;
+        } else {
+          return elements.value.length > 0;
+        }
       }, TIMEOUT_MS);
     };
   }
 
   // Create new method which defines an HTML element.
-  defineElement(name, selector) {
+  defineElement(name, selector, onValue) {
     /**
      * @method name
      * @return element
@@ -73,11 +89,11 @@ class Elements {
     };
 
     this.defineDisplayedProperty(name, selector);
-    this.defineWaitForProperty(name, selector);
+    this.defineWaitForProperty(name, selector, onValue);
   }
 
   // Create new method which defines multiple HTML elements.
-  defineElements(name, selector) {
+  defineElements(name, selector, onValue) {
     /**
      * @method name
      * @return element
@@ -94,7 +110,7 @@ class Elements {
     };
 
     this.defineDisplayedProperty(name, selector);
-    this.defineWaitForProperty(name, selector);
+    this.defineWaitForProperty(name, selector, onValue);
   }
 }
 
@@ -116,8 +132,9 @@ class Page extends Elements {
    * @param {String} name
    * @param {String} selector
    * @param {Class Section} section
+   * @param {Boolean} onValue
    */
-  defineSection(name, selector, section) {
+  defineSection(name, selector, section, onValue) {
     /**
      * @method name
      * @return Section
@@ -138,7 +155,7 @@ class Page extends Elements {
     };
 
     this.defineDisplayedProperty(name, selector);
-    this.defineWaitForProperty(name, selector);
+    this.defineWaitForProperty(name, selector, onValue);
   }
 
   /**
@@ -146,8 +163,9 @@ class Page extends Elements {
    * @param {String} name
    * @param {String} selector
    * @param {Class Section} section
+   * @param {Boolean} onValue
    */
-  defineSections(name, selector, section) {
+  defineSections(name, selector, section, onValue) {
     /**
      * @method name
      * @return Array[Section]
@@ -167,7 +185,7 @@ class Page extends Elements {
     };
 
     this.defineDisplayedProperty(name, selector);
-    this.defineWaitForProperty(name, selector);
+    this.defineWaitForProperty(name, selector, onValue);
   }
 
   async open() {

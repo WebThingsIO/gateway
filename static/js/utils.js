@@ -26,7 +26,8 @@ const Utils = {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replace(/'/g, '&#039;')
+      .replace(/°/g, '&deg;');
   },
   escapeHtmlForIdClass: function(text) {
     if (typeof (text) !== 'string') {
@@ -39,7 +40,8 @@ const Utils = {
       .replace(/>/g, 'gt')
       .replace(/"/g, 'quot')
       .replace(/'/g, '039')
-      .replace(/\s/g, 'nbsp');
+      .replace(/\s/g, 'nbsp')
+      .replace(/°/g, 'deg');
   },
   fuzzyTime: function(date) {
     const now = new Date();
@@ -112,6 +114,51 @@ const Utils = {
         timeout = setTimeout(exec, debounceMode ? delay : delay - elapsed);
       }
     };
+  },
+  unitNameToAbbreviation: function(unit) {
+    switch (unit.toLowerCase()) {
+      case 'volt':
+      case 'volts':
+        return 'V';
+
+      case 'hertz':
+        return 'Hz';
+
+      case 'amp':
+      case 'amps':
+      case 'ampere':
+      case 'amperes':
+        return 'A';
+
+      case 'watt':
+      case 'watts':
+        return 'W';
+
+      case 'percent':
+        return '%';
+
+      case 'fahrenheit':
+        return '°F';
+
+      case 'celsius':
+        return '°C';
+
+      case 'kelvin':
+        return 'K';
+
+      case 'meter':
+      case 'meters':
+      case 'metre':
+      case 'metres':
+        return 'm';
+
+      case 'second':
+      case 'seconds':
+        return 's';
+
+      default:
+        return unit;
+    }
   },
 };
 

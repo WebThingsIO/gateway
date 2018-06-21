@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseProperty = require('./base-property');
+const BaseComponent = require('./base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -27,7 +27,7 @@ template.innerHTML = `
       height: 10rem;
       border-radius: 5rem;
       border: 2px solid white;
-      background-color: #88b6d6;
+      background-color: #89b6d6;
       position: relative;
     }
 
@@ -53,14 +53,14 @@ template.innerHTML = `
   </style>
   <div id="container" class="webthing-label-property-container">
     <div id="contents" class="webthing-label-property-contents">
-      <span id="value" class="webthing-label-property-value"></span>
-      <span id="unit" class="webthing-label-property-unit"></span>
+      <span id="value" class="webthing-label-property-value">
+      </span><span id="unit" class="webthing-label-property-unit"></span>
     </div>
   </div>
   <div id="name" class="webthing-label-property-name"></div>
 `;
 
-class LabelProperty extends BaseProperty {
+class LabelProperty extends BaseComponent {
   constructor() {
     super(template);
 
@@ -111,7 +111,7 @@ class LabelProperty extends BaseProperty {
   }
 
   set precision(value) {
-    this._precision = parseInt(value);
+    this._precision = parseInt(value, 10);
   }
 }
 

@@ -144,7 +144,7 @@ EventList.prototype.prependEvent = function(event) {
         case 'integer':
           body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
           if (schema[name].hasOwnProperty('unit')) {
-            body += ` ${schema[name].unit}`;
+            body += ` ${Utils.unitNameToAbbreviation(schema[name].unit)}`;
           }
           break;
         case 'object':

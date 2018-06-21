@@ -11,6 +11,7 @@
 'use strict';
 
 const Thing = require('./thing');
+const Utils = require('./utils');
 
 /**
  * MultiLevelSensor Constructor (extends Thing).
@@ -20,24 +21,26 @@ const Thing = require('./thing');
 const MultiLevelSensor = function(description, format) {
   this.displayedProperties = this.displayedProperties || {};
   if (description.properties) {
+    const unit =
+      Utils.unitNameToAbbreviation(description.properties.level.unit || '');
     this.displayedProperties.level = {
       href: description.properties.level.href,
+      unit: unit,
     };
   }
 
   this.base = Thing;
   this.base(description, format, {svgBaseIcon: '/images/binary-sensor.svg',
-                                  pngBaseIcon: '/images/binary-sensor.png',
-                                  thingCssClass: 'multi-level-sensor',
-                                  thingDetailCssClass: 'multi-level-sensor',
-                                  addIconToView: false});
+                                  pngBaseIcon: '/images/binary-sensor.png'});
 
-  if (format == 'svg') {
+  if (format === 'svg') {
     // For now the SVG view is just a link.
     return this;
   }
 
-  this.levelText = this.element.querySelector('.multi-level-sensor-text');
+  this.switch =
+    this.element.querySelector('webthing-multi-level-sensor-capability');
+
   if (format === 'htmlDetail') {
     this.attachHtmlDetail();
   }
@@ -55,30 +58,24 @@ MultiLevelSensor.prototype = Object.create(Thing.prototype);
  * @param {*} value - value of the property
  */
 MultiLevelSensor.prototype.updateProperty = function(name, value) {
-  if (name !== 'level') {
-    return;
+  switch (name) {
+    case 'level':
+      this.updateLevel(value);
+      break;
   }
-  this.properties.level = value;
-  if (value === null) {
-    return;
-  }
-  this.showLevel(value);
 };
 
-/**
- * Show level.
- */
-MultiLevelSensor.prototype.showLevel = function(level) {
-  this.levelText.innerText = `${Math.round(level)}%`;
+MultiLevelSensor.prototype.updateLevel = function(level) {
+  level = parseFloat(level);
+  this.properties.level = level;
+  this.switch.level = level;
 };
 
 MultiLevelSensor.prototype.iconView = function() {
-  let level = 0;
-  if (typeof this.properties.level !== 'undefined') {
-    level = this.properties.level;
-  }
-
-  return `<div class="multi-level-sensor-text">${Math.round(level)}%</div>`;
+  const unit = Utils.escapeHtml(this.displayedProperties.level.unit);
+  return `
+    <webthing-multi-level-sensor-capability data-unit="${unit}">
+    </webthing-multi-level-sensor-capability>`;
 };
 
 module.exports = MultiLevelSensor;

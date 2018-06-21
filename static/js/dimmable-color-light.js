@@ -33,17 +33,6 @@ function DimmableColorLight(description, format) {
   this.base = ColorLight;
   this.base(description, format);
 
-  if (format == 'svg') {
-    // For now the SVG view is just a link.
-    return this;
-  }
-
-  this.colorLightLabel.classList.add('level-bar-label');
-
-  if (format === 'htmlDetail') {
-    this.attachHtmlDetail();
-  }
-
   return this;
 }
 
@@ -55,43 +44,48 @@ DimmableColorLight.prototype = Object.create(ColorLight.prototype);
  * @param {*} value - value of the property
  */
 DimmableColorLight.prototype.updateProperty = function(name, value) {
-  if (name === 'on') {
-    this.updateOn(value);
-    if (this.properties.on) {
-      this.colorLightLabel.textContent =
-        `${Math.round(this.properties.level)}%`;
-    }
-  }
-  if (name === 'color') {
-    this.updateColor(value);
-  }
-  if (name === 'colorTemperature') {
-    this.updateColorTemperature(value);
-  }
-  if (name === 'level') {
-    this.updateLevel(value);
+  switch (name) {
+    case 'on':
+      this.updateOn(value);
+      break;
+    case 'level':
+      this.updateBrightness(value);
+      break;
+    case 'color':
+      this.updateColor(value);
+      break;
+    case 'colorTemperature':
+      this.updateColorTemperature(value);
+      break;
   }
 };
 
 /**
- * @param {number} level
+ * @param {number} brightness
  */
-DimmableColorLight.prototype.updateLevel = function(level) {
-  this.properties.level = level;
-  if (this.properties.on) {
-    this.colorLightLabel.textContent = `${Math.round(level)}%`;
-  }
-
-  if (this.format === 'htmlDetail') {
-    this.displayedProperties.level.detail.update();
-  }
+DimmableColorLight.prototype.updateBrightness = function(brightness) {
+  DimmableLight.prototype.updateBrightness.call(this, brightness);
 };
 
 /**
- * @param {number} level
+ * @param {number} brightness
  */
-DimmableColorLight.prototype.setBrightness = function(level) {
-  DimmableLight.prototype.setBrightness.call(this, level);
+DimmableColorLight.prototype.setBrightness = function(brightness) {
+  DimmableLight.prototype.setBrightness.call(this, brightness);
+};
+
+DimmableColorLight.prototype.iconView = function() {
+  if (this.displayedProperties.hasOwnProperty('color')) {
+    return `
+      <webthing-light-capability data-have-brightness="true"
+        data-have-color="true">
+      </webthing-light-capability>`;
+  } else if (this.displayedProperties.hasOwnProperty('colorTemperature')) {
+    return `
+      <webthing-light-capability data-have-brightness="true"
+        data-have-color-temperature="true">
+      </webthing-light-capability>`;
+  }
 };
 
 module.exports = DimmableColorLight;

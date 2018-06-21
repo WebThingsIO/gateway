@@ -105,7 +105,7 @@ describe('basic browser tests', function() {
 
     await browser.click('#back-button');
 
-    await browser.waitForExist('.unknown-thing', 2000);
+    await browser.waitForExist('webthing-custom-capability', 2000);
 
     things = (await browser.elements('.thing')).value;
     expect(things.length).toBe(2);

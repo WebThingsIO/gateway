@@ -95,7 +95,7 @@ function submitForm() {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  }).then(function(response) {
+  }).then((response) => {
     if (response.statusText.indexOf('UnavailableName') > -1) {
       if (response.statusText.indexOf('ReclamationPossible') > -1) {
         const text1 = document.createTextNode(
@@ -117,7 +117,7 @@ function submitForm() {
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
-          }).catch(function() {
+          }).catch(() => {
             displayMessage('Could not reclaim domain.', 'error');
           });
         };
@@ -143,18 +143,18 @@ function submitForm() {
     } else {
       return response.text();
     }
-  }).then(function(body) {
+  }).then((body) => {
     if (body) {
       displayMessage('Success! Please wait while we redirect you...',
                      'message');
-      setTimeout(function() {
+      setTimeout(() => {
         window.location.replace(body);
       }, 5000);
     } else {
       displayMessage('Error issuing certificate. Please try again.',
                      'error');
     }
-  }, function() {});
+  }, () => {});
 }
 
 subdomain.addEventListener('input', validateInput);
@@ -166,7 +166,7 @@ reclamationToken.addEventListener('keydown', submitOnEnter);
 
 createDomainButton.addEventListener('click', submitForm);
 
-skipAnchor.addEventListener('click', function() {
+skipAnchor.addEventListener('click', () => {
   // call the settings controller to skip the domain subscription
   displayMessage('Processing...', 'message');
   fetch('/settings/skiptunnel', {
@@ -174,16 +174,16 @@ skipAnchor.addEventListener('click', function() {
     headers: {
       Accept: 'application/json',
     },
-  }).then(function(response) {
+  }).then((response) => {
     if (response.ok) {
       displayMessage('Redirecting...', 'message');
-      setTimeout(function() {
+      setTimeout(() => {
         window.location.replace(`http://${window.location.host}`);
       }, 1000);
     } else {
       displayMessage(response.statusText, 'error');
     }
-  }).catch(function(error) {
+  }).catch((error) => {
     displayMessage(error, 'error');
   });
 

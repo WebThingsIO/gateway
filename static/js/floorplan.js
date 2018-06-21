@@ -65,9 +65,9 @@ const FloorplanScreen = {
       },
     };
     // Fetch a list of things from the server
-    fetch('/things', opts).then((function(response) {
+    fetch('/things', opts).then((response) => {
       return response.json();
-    }).bind(this)).then((function(things) {
+    }).then((things) => {
       this.things = [];
       this.thingsElement.innerHTML = '';
       if (things.length === 0) {
@@ -76,7 +76,7 @@ const FloorplanScreen = {
 
       let x = this.ORIGIN_X;
       const y = this.ORIGIN_Y;
-      things.forEach(function(description) {
+      things.forEach((description) => {
         if (!description.floorplanX || !description.floorplanY) {
           description.floorplanX = x;
           description.floorplanY = y;
@@ -125,7 +125,7 @@ const FloorplanScreen = {
             break;
         }
       }, this);
-    }).bind(this));
+    });
   },
 
   /**
@@ -143,7 +143,7 @@ const FloorplanScreen = {
     this.deselectThing = this.deselectThing.bind(this);
 
     // Disable hyperlinks for things
-    this.things.forEach(function(thing) {
+    this.things.forEach((thing) => {
       thing.element.addEventListener('click', this.blackHole);
       thing.element.addEventListener('mousedown', this.selectThing);
       thing.element.addEventListener('touchstart', this.selectThing);
@@ -168,7 +168,7 @@ const FloorplanScreen = {
     this.uploadForm.classList.add('hidden');
 
     // Re-enable hyperlinks for things
-    this.things.forEach(function(thing) {
+    this.things.forEach((thing) => {
       thing.element.removeEventListener('click', this.blackHole);
       thing.element.removeEventListener('mousedown', this.selectThing);
       thing.element.removeEventListener('touchstart', this.selectThing);
@@ -250,9 +250,9 @@ const FloorplanScreen = {
     point = point.matrixTransform(matrix.inverse());
 
     this.pointerOffsetX =
-      point.x - parseInt(this.selectedThing.getAttribute('dragx'));
+      point.x - parseInt(this.selectedThing.getAttribute('dragx'), 10);
     this.pointerOffsetY =
-      point.y - parseInt(this.selectedThing.getAttribute('dragy'));
+      point.y - parseInt(this.selectedThing.getAttribute('dragy'), 10);
   },
 
   /**
@@ -286,7 +286,7 @@ const FloorplanScreen = {
       } else {
         console.error(`Failed to move thing ${thingUrl}`);
       }
-    }).catch(function(e) {
+    }).catch((e) => {
       console.error(`Error trying to move thing ${thingUrl} ${e}`);
     });
 

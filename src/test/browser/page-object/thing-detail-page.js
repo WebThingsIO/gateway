@@ -299,7 +299,17 @@ class ThingDetailPage extends Page {
       NumberPropertySection
     );
 
-    this.defineElement('offThing', '.thing.off');
+    this.defineElement(
+      'offThing',
+      [
+        'webthing-binary-sensor-capability',
+        'webthing-light-capability',
+        'webthing-multi-level-switch-capability',
+        'webthing-on-off-switch-capability',
+        'webthing-smart-plug-capability',
+      ].join(','),
+      false
+    );
   }
 }
 

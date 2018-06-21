@@ -23,10 +23,10 @@ function TimeTriggerBlock(ruleArea, onPresentationChange, onRuleUpdate) {
   this.timeInput.classList.add('time-input');
 
   // Disable dragging started by clicking time input
-  this.timeInput.addEventListener('mousedown', function(e) {
+  this.timeInput.addEventListener('mousedown', (e) => {
     e.stopPropagation();
   });
-  this.timeInput.addEventListener('touchstart', function(e) {
+  this.timeInput.addEventListener('touchstart', (e) => {
     e.stopPropagation();
   });
 
@@ -88,7 +88,7 @@ TimeTriggerBlock.leftPad = function(n) {
 TimeTriggerBlock.utcToLocal = function(utcTime) {
   const timeParts = utcTime.split(':');
   const date = new Date();
-  date.setUTCHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+  date.setUTCHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
   const lp = TimeTriggerBlock.leftPad;
   return `${lp(date.getHours())}:${lp(date.getMinutes())}`;
 };
@@ -101,7 +101,7 @@ TimeTriggerBlock.utcToLocal = function(utcTime) {
 TimeTriggerBlock.localToUTC = function(localTime) {
   const timeParts = localTime.split(':');
   const date = new Date();
-  date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+  date.setHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
   const lp = TimeTriggerBlock.leftPad;
   return `${lp(date.getUTCHours())}:${lp(date.getUTCMinutes())}`;
 };
