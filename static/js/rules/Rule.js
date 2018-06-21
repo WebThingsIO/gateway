@@ -142,11 +142,18 @@ Rule.prototype.singleTriggerToHumanDescription = function(trigger) {
         }
         triggerStr += ' ';
         if (i === trigger.triggers.length - 1) {
-          if (trigger.op === 'AND') {
-            triggerStr += 'and ';
-          } else {
-            triggerStr += 'or ';
-          }
+          const andSelected = trigger.op === 'AND' ? 'selected' : '';
+          const orSelected = trigger.op === 'OR' ? 'selected' : '';
+
+          const selectHTML = `
+            <span class="triangle-select-container">
+              <select class="triangle-select">
+                <option ${andSelected}>and</option>
+                <option ${orSelected}>or</option>
+              </select>
+            </span>
+          `;
+          triggerStr += selectHTML;
         }
       }
       const singleStr =
@@ -268,19 +275,21 @@ Rule.prototype.singleEffectToHumanDescription = function(effect) {
     } else {
       effectStr += 'off';
     }
-    if (effect.type === 'SET') {
-      effectStr += ' permanently';
-    }
-    return effectStr;
-  }
-  if (effect.type === 'SET') {
-    effectStr += 'set ';
   } else {
-    effectStr += 'pulse ';
+    effectStr += `set ${effectThing.name} ${effect.property.name} to `;
+    effectStr += effect.value;
   }
-
-  effectStr += `${effectThing.name} ${effect.property.name} to `;
-  effectStr += effect.value;
+  const tempSelected = effect.type === 'PulseEffect' ? 'selected' : '';
+  const permSelected = effect.type === 'SetEffect' ? 'selected' : '';
+  const selectHTML = `
+    <span class="triangle-select-container">
+      <select class="triangle-select">
+        <option ${permSelected}>permanently</option>
+        <option ${tempSelected}>temporarily</option>
+      </select>
+    </span>
+  `;
+  effectStr += selectHTML;
 
   return effectStr;
 };
