@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class ColorTemperatureDetail {
-  constructor(thing, name, min, max) {
+  constructor(thing, name, label, min, max) {
     this.thing = thing;
     this.name = name;
+    this.label = label || 'Color Temperature';
     this.min = min;
     this.max = max;
     this.id = `color-temperature-${Utils.escapeHtmlForIdClass(this.name)}`;
@@ -31,8 +32,8 @@ class ColorTemperatureDetail {
 
     return `
       <webthing-color-temperature-property min="${this.min}" max="${this.max}"
-        data-name="Color Temperature" value="${Utils.escapeHtml(temperature)}"
-        id="${this.id}">
+        data-name="${Utils.escapeHtml(this.label)}"
+        value="${Utils.escapeHtml(temperature)}" id="${this.id}">
       </webthing-color-temperature-property>`;
   }
 

@@ -13,10 +13,11 @@
 const API = require('./api');
 const Utils = require('./utils');
 
-const ActionInputForm = function(href, name, schema) {
+const ActionInputForm = function(href, name, label, schema) {
   this.container = document.getElementById('things');
   this.href = href;
   this.name = name;
+  this.label = label || name;
   this.schema = schema;
   this.inputs = {};
 
@@ -30,7 +31,7 @@ ActionInputForm.prototype.render = function() {
   const element = document.createElement('div');
 
   let form = `<div class="action-input">
-    <div class="action-input-title">${Utils.escapeHtml(this.name)}</div>
+    <div class="action-input-title">${Utils.escapeHtml(this.label)}</div>
     <form class="action-input-form">`;
 
   const inputs = [];
@@ -121,7 +122,7 @@ ActionInputForm.prototype.render = function() {
 
   form += `
     <input id="action-submit-button" type="submit"
-           class="action-button" value="${Utils.escapeHtml(this.name)}">
+      class="action-button" value="Submit">
     </form></div>`;
 
   element.innerHTML = form;

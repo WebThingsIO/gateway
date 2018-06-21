@@ -32,18 +32,19 @@ const UnknownThing = function(description, format) {
         let detail;
         switch (prop.type) {
           case 'string':
-            detail = new StringDetail(this, name);
+            detail = new StringDetail(this, name, prop.label);
             break;
           case 'integer':
           case 'number': {
             const min = prop.hasOwnProperty('min') ? prop.min : prop.minimum;
             const max = prop.hasOwnProperty('max') ? prop.max : prop.maximum;
             detail =
-              new NumberDetail(this, name, prop.type, prop.unit, min, max);
+              new NumberDetail(this, name, prop.label, prop.type, prop.unit,
+                               min, max);
             break;
           }
           case 'boolean':
-            detail = new BooleanDetail(this, name);
+            detail = new BooleanDetail(this, name, prop.label);
             break;
           default:
             continue;
@@ -68,7 +69,8 @@ const UnknownThing = function(description, format) {
     if (href) {
       for (const name in description.actions) {
         const action = description.actions[name];
-        const detail = new ActionDetail(this, name, action.input, href);
+        const detail =
+          new ActionDetail(this, name, action.label, action.input, href);
         this.displayedActions[name] = {detail};
       }
     }

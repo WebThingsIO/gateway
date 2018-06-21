@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class NumberDetail {
-  constructor(thing, name, type, unit, min, max) {
+  constructor(thing, name, label, type, unit, min, max) {
     this.thing = thing;
     this.name = name;
+    this.label = label || name;
     this.type = type;
     this.unit =
       typeof unit === 'undefined' ? null : Utils.unitNameToAbbreviation(unit);
@@ -43,7 +44,7 @@ class NumberDetail {
     const step = this.type === 'number' ? 'any' : '1';
 
     return `
-      <webthing-number-property data-name="${Utils.escapeHtml(this.name)}"
+      <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
         data-unit="${unit}" ${min} ${max} value="0" step="${step}"
         id="${this.id}">
       </webthing-number-property>`;

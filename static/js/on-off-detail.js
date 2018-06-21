@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class OnOffDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || 'On/Off';
     this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -34,8 +35,8 @@ class OnOffDetail {
     const checked = this.thing.properties[this.name];
 
     return `
-      <webthing-on-off-property data-name="On/Off" ${checked ? 'checked' : ''}
-        id="${this.id}">
+      <webthing-on-off-property data-name="${Utils.escapeHtml(this.label)}"
+        ${checked ? 'checked' : ''} id="${this.id}">
       </webthing-on-off-property>`;
   }
 

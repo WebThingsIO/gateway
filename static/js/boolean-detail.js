@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class BooleanDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || name;
     this.id = `boolean-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -35,7 +36,7 @@ class BooleanDetail {
     const checked = this.thing.properties[this.name];
 
     return `
-      <webthing-boolean-property data-name="${Utils.escapeHtml(this.name)}"
+      <webthing-boolean-property data-name="${Utils.escapeHtml(this.label)}"
         ${checked ? 'checked' : ''} id="${this.id}">
       </webthing-boolean-property>`;
   }

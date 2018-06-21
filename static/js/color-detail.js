@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class ColorDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || 'Color';
     this.id = `color-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -27,7 +28,7 @@ class ColorDetail {
   view() {
     const color = this.thing.properties[this.name];
     return `
-      <webthing-color-property data-name="Color"
+      <webthing-color-property data-name="${Utils.escapeHtml(this.label)}"
         value="${Utils.escapeHtml(color)}" id="${this.id}">
       </webthing-color-property>`;
   }

@@ -14,9 +14,10 @@ const API = require('./api');
 const Utils = require('./utils');
 
 class ActionDetail {
-  constructor(thing, name, input, href) {
+  constructor(thing, name, label, input, href) {
     this.thing = thing;
     this.name = name;
+    this.label = label || name;
     this.input = input;
     this.href = href;
     this.id = `action-button-${Utils.escapeHtmlForIdClass(this.name)}`;
@@ -45,7 +46,7 @@ class ActionDetail {
 
     return `
       <webthing-action href="${href}" ${disabled} id="${this.id}"
-        data-name="${Utils.escapeHtml(this.name)}"
+        data-name="${Utils.escapeHtml(this.label)}"
       </webthing-action>`;
   }
 

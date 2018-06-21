@@ -28,13 +28,14 @@ function ColorLight(description, format) {
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
-      detail: new OnOffDetail(this, 'on'),
+      detail: new OnOffDetail(this, 'on', description.properties.on.label),
     };
 
     if (description.properties.hasOwnProperty('color')) {
       this.displayedProperties.color = {
         href: description.properties.color.href,
-        detail: new ColorDetail(this, 'color'),
+        detail: new ColorDetail(this, 'color',
+                                description.properties.color.label),
       };
     } else if (description.properties.hasOwnProperty('colorTemperature')) {
       const prop = description.properties.colorTemperature;
@@ -42,7 +43,9 @@ function ColorLight(description, format) {
       const max = prop.hasOwnProperty('max') ? prop.max : prop.maximum;
       this.displayedProperties.colorTemperature = {
         href: prop.href,
-        detail: new ColorTemperatureDetail(this, 'colorTemperature', min, max),
+        detail: new ColorTemperatureDetail(
+          this, 'colorTemperature',
+          description.properties.colorTemperature.label, min, max),
       };
     }
   }

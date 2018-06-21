@@ -13,9 +13,10 @@
 const Utils = require('./utils');
 
 class BrightnessDetail {
-  constructor(thing, name) {
+  constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
+    this.label = label || 'Brightness';
     this.id = `brightness-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -29,7 +30,7 @@ class BrightnessDetail {
     const brightness = this.thing.properties[this.name];
 
     return `
-      <webthing-brightness-property data-name="Brightness"
+      <webthing-brightness-property data-name="${Utils.escapeHtml(this.label)}"
         value="${Utils.escapeHtml(brightness)}" id="${this.id}">
       </webthing-brightness-property>`;
   }
