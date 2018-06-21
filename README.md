@@ -50,7 +50,7 @@ nvm allows you to easily install different versions of node. To install nvm:
 $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 ```
 
-Reinitialize the terminal session.
+Reinitialize your terminal session.
 
 ```
 $ . ~/.bashrc
