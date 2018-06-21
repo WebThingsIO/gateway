@@ -50,7 +50,13 @@ nvm allows you to easily install different versions of node. To install nvm:
 $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 ```
 
-Close and reopen your terminal window. Use nvm to install a LTS version of node and set the
+Reinitialize the terminal session.
+
+```
+$ . ~/.bashrc
+```
+
+Use nvm to install a LTS version of node and set the
 default version.
 
 ```
