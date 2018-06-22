@@ -5,7 +5,7 @@
 # For some reason NVM_DIR isn't set at this point
 export NVM_DIR=/home/pi/.nvm
 \. "$NVM_DIR/nvm.sh"  # This loads nvm
-NODE_VERSION="--lts"
+NODE_VERSION="--lts=carbon"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 # always use most recent version (lts)

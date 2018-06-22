@@ -13,7 +13,7 @@
 #   - /build/gateway                - git repository containing the gateway software
 
 NVM_VERSION="v0.33.8"
-NODE_VERSION="--lts"
+NODE_VERSION="--lts=carbon"
 
 GATEWAY=gateway
 OPEN_ZWAVE=OpenZWave/open-zwave

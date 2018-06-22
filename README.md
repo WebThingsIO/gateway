@@ -54,9 +54,9 @@ Close and reopen your terminal window. Use nvm to install a LTS version of node 
 default version.
 
 ```
-$ nvm install --lts
-$ nvm use --lts
-$ nvm alias default lts/*
+$ nvm install --lts=carbon
+$ nvm use --lts=carbon
+$ nvm alias default lts/carbon
 ```
 
 Verify that node and npm have been installed:
