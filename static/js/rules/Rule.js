@@ -140,8 +140,8 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
             const orSelected = trigger.op === 'OR' ? 'selected' : '';
 
             const selectHTML = `
-              <span class="triangle-select-container" id="rule-trigger-select">
-                <select class="triangle-select">
+              <span class="triangle-select-container">
+                <select class="triangle-select rule-trigger-select">
                   <option ${andSelected}>and</option>
                   <option ${orSelected}>or</option>
                 </select>
@@ -275,12 +275,12 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect, html,
   }
 
   if (html) {
-    const id = `rule-effect-select-${index}`;
     const tempSelected = effect.type === 'PulseEffect' ? 'selected' : '';
     const permSelected = effect.type === 'SetEffect' ? 'selected' : '';
     const selectHTML = `
-      <span class="triangle-select-container" id="${id}">
-        <select class="triangle-select">
+      <span class="triangle-select-container">
+        <select class="triangle-select rule-effect-select"
+                data-index="${index}">
           <option ${permSelected}>permanently</option>
           <option ${tempSelected}>temporarily</option>
         </select>

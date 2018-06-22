@@ -23,6 +23,7 @@ const RuleScreen = {
 
     this.onPresentationChange = this.onPresentationChange.bind(this);
     this.onRuleChange = this.onRuleChange.bind(this);
+    this.onRuleDescriptionInput = this.onRuleDescriptionInput.bind(this);
     this.animate = this.animate.bind(this);
     this.animateDelay = 750;
     this.rule = null;
@@ -63,6 +64,7 @@ const RuleScreen = {
     });
 
     this.ruleDescription = this.view.querySelector('.rule-info > p');
+    this.ruleDescription.addEventListener('input', this.onRuleDescriptionInput);
 
     this.rulePartsList = document.getElementById('rule-parts-list');
     this.onboardingHint = document.getElementById('onboarding-hint');
@@ -101,6 +103,33 @@ const RuleScreen = {
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener('resize', this.onWindowResize);
     this.onWindowResize();
+  },
+
+  /**
+   * Change the rule based on a change to its description's drop down menus
+   * @param {Event} event
+   */
+  onRuleDescriptionInput: function(event) {
+    const value = event.target.value;
+    if (event.target.classList.contains('rule-trigger-select')) {
+      console.log(value, this.rule.trigger.op);
+      if (value === 'and') {
+        this.rule.trigger.op = 'AND';
+      } else if (value === 'or') {
+        this.rule.trigger.op = 'OR';
+      }
+      console.log(value, this.rule.trigger.op);
+    } else if (event.target.classList.contains('rule-effect-select')) {
+      const index = parseInt(event.target.dataset.index);
+      if (value === 'permanently') {
+        this.rule.effect.effects[index].type = 'SetEffect';
+      } else if (value === 'temporarily') {
+        this.rule.effect.effects[index].type = 'PulseEffect';
+      }
+    } else {
+      console.warn('Unexpected input event', event);
+    }
+    this.onRuleChange();
   },
 
   /**
@@ -396,9 +425,14 @@ const RuleScreen = {
       return triggerBlock.rulePart.trigger;
     });
 
+    let op = 'OR';
+    if (this.rule.trigger) {
+      op = this.rule.trigger.op || op;
+    }
+
     this.rule.trigger = {
       type: 'MultiTrigger',
-      op: 'OR', // TODO and/or swapping
+      op: op,
       triggers: triggers,
     };
 
