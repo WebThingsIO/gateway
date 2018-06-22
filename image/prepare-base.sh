@@ -23,7 +23,7 @@
 # for complete instructions on creating a base image.
 
 NVM_VERSION="v0.33.8"
-NODE_VERSION="--lts"
+NODE_VERSION="--lts=carbon"
 
 sudo apt update -y
 sudo apt upgrade -y

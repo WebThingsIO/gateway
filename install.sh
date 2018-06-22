@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 NVM_VERSION="v0.33.8"
-NODE_VERSION="--lts"
+NODE_VERSION="--lts=carbon"
 
 cd /home/pi
 

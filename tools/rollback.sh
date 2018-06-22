@@ -49,12 +49,6 @@ function checkCounter() {
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
   systemctl stop mozilla-iot-gateway
-  # TODO: remove when gateway_old is not 0.3.1
-  if [ -f "gateway/.post_upgrade_complete" ]; then
-    # NB: using the nvm command-line tool fails because we are root
-    echo "v7.10.1" > /home/pi/.nvm/alias/default
-    rm gateway/.post_upgrade_complete
-  fi
   rm -fr gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
