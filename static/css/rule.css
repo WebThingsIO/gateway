@@ -452,3 +452,33 @@
   fill: #5DBBFF;
 }
 
+.triangle-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+
+  background: none;
+  color: white;
+  border: 0;
+  font-size: 1.8rem;
+}
+
+.triangle-select-container {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px solid white;
+}
+
+.triangle-select-container:after {
+  border-top: 0.6rem solid white;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  content: '';
+  position: absolute;
+  transform: translate(-50%, 0.2rem);
+  top: 100%;
+  left: 50%;
+  height: 0;
+  width: 0;
+}
