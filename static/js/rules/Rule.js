@@ -116,19 +116,12 @@ const RuleUtils = {
 };
 
 /**
- * Convert the rule's trigger's description to a human-readable string
- * @return {String?}
- */
-Rule.prototype.toTriggerHumanDescription = function() {
-  return this.singleTriggerToHumanDescription(this.trigger);
-};
-
-/**
  * Convert a trigger's decsription to a human-readable string
  * @param {Trigger} trigger
+ * @param {boolean} html - whether to generate an interface
  * @return {String?}
  */
-Rule.prototype.singleTriggerToHumanDescription = function(trigger) {
+Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
   if (!trigger) {
     return null;
   }
@@ -142,22 +135,26 @@ Rule.prototype.singleTriggerToHumanDescription = function(trigger) {
         }
         triggerStr += ' ';
         if (i === trigger.triggers.length - 1) {
-          const andSelected = trigger.op === 'AND' ? 'selected' : '';
-          const orSelected = trigger.op === 'OR' ? 'selected' : '';
+          if (html) {
+            const andSelected = trigger.op === 'AND' ? 'selected' : '';
+            const orSelected = trigger.op === 'OR' ? 'selected' : '';
 
-          const selectHTML = `
-            <span class="triangle-select-container">
-              <select class="triangle-select">
-                <option ${andSelected}>and</option>
-                <option ${orSelected}>or</option>
-              </select>
-            </span>
-          `;
-          triggerStr += selectHTML;
+            const selectHTML = `
+              <span class="triangle-select-container" id="rule-trigger-select">
+                <select class="triangle-select">
+                  <option ${andSelected}>and</option>
+                  <option ${orSelected}>or</option>
+                </select>
+              </span>
+            `;
+            triggerStr += selectHTML;
+          } else {
+            triggerStr += trigger.op === 'AND' ? 'and ' : 'or ';
+          }
         }
       }
       const singleStr =
-        this.singleTriggerToHumanDescription(trigger.triggers[i]);
+        this.singleTriggerToHumanRepresentation(trigger.triggers[i], html);
       if (!singleStr) {
         return null;
       }
@@ -214,18 +211,14 @@ Rule.prototype.singleTriggerToHumanDescription = function(trigger) {
 };
 
 /**
- * Convert the rule's effect's description to a human-readable string
- * @return {String?}
- */
-Rule.prototype.toEffectHumanDescription = function() {
-  return this.singleEffectToHumanDescription(this.effect);
-};
-
-/**
  * Convert an effect's description to a human-readable string
+ * @param {Effect} effect
+ * @param {boolean} html - whether to generate html
+ * @param {number} index - index within rule's effects
  * @return {String?}
  */
-Rule.prototype.singleEffectToHumanDescription = function(effect) {
+Rule.prototype.singleEffectToHumanRepresentation = function(effect, html,
+                                                            index) {
   if (!effect) {
     return null;
   }
@@ -241,7 +234,8 @@ Rule.prototype.singleEffectToHumanDescription = function(effect) {
           effectStr += 'and ';
         }
       }
-      const singleStr = this.singleEffectToHumanDescription(effect.effects[i]);
+      const singleStr =
+        this.singleEffectToHumanRepresentation(effect.effects[i], html, i);
       if (!singleStr) {
         return null;
       }
@@ -279,34 +273,61 @@ Rule.prototype.singleEffectToHumanDescription = function(effect) {
     effectStr += `set ${effectThing.name} ${effect.property.name} to `;
     effectStr += effect.value;
   }
-  const tempSelected = effect.type === 'PulseEffect' ? 'selected' : '';
-  const permSelected = effect.type === 'SetEffect' ? 'selected' : '';
-  const selectHTML = `
-    <span class="triangle-select-container">
-      <select class="triangle-select">
-        <option ${permSelected}>permanently</option>
-        <option ${tempSelected}>temporarily</option>
-      </select>
-    </span>
-  `;
-  effectStr += selectHTML;
+
+  if (html) {
+    const id = `rule-effect-select-${index}`;
+    const tempSelected = effect.type === 'PulseEffect' ? 'selected' : '';
+    const permSelected = effect.type === 'SetEffect' ? 'selected' : '';
+    const selectHTML = `
+      <span class="triangle-select-container" id="${id}">
+        <select class="triangle-select">
+          <option ${permSelected}>permanently</option>
+          <option ${tempSelected}>temporarily</option>
+        </select>
+      </span>
+    `;
+    effectStr += selectHTML;
+  } else {
+    effectStr += ' ';
+    effectStr += effect.type === 'PulseEffect' ? 'temporarily' : 'permanently';
+  }
 
   return effectStr;
+};
+/**
+ * Convert the rule's description to human-readable plain text
+ * @return {String}
+ */
+Rule.prototype.toHumanDescription = function() {
+  return this.toHumanRepresentation(false);
+};
+
+/**
+ * Convert the rule's description to a human-readable interface
+ * @return {String}
+ */
+Rule.prototype.toHumanInterface = function() {
+  return this.toHumanRepresentation(true);
 };
 
 /**
  * Convert the rule's description to a human-readable string
+ * @param {boolean} html - whether an html interface
  * @return {String}
  */
-Rule.prototype.toHumanDescription = function() {
+Rule.prototype.toHumanRepresentation = function(html) {
   let triggerStr = '???';
   let effectStr = '???';
 
   if (this.trigger) {
-    triggerStr = this.toTriggerHumanDescription() || triggerStr;
+    triggerStr =
+      this.singleTriggerToHumanRepresentation(this.trigger, html) ||
+      triggerStr;
   }
   if (this.effect) {
-    effectStr = this.toEffectHumanDescription() || effectStr;
+    effectStr =
+      this.singleEffectToHumanRepresentation(this.effect, html, 0) ||
+      effectStr;
   }
   return `If ${triggerStr} then ${effectStr}`;
 };
@@ -334,8 +355,8 @@ Rule.prototype.setEffect = function(effect) {
  * @return {boolean}
  */
 Rule.prototype.valid = function() {
-  return !!(this.toTriggerHumanDescription() &&
-    this.toEffectHumanDescription());
+  return !!(this.singleTriggerToHumanRepresentation(this.trigger, false) &&
+    this.singleEffectToHumanRepresentation(this.effect, false));
 };
 
 module.exports = {Rule, RuleUtils};

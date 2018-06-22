@@ -416,7 +416,7 @@ const RuleScreen = {
 
   onPresentationChange: function() {
     this.ruleName.textContent = this.rule.name || 'Rule Name';
-    this.ruleDescription.innerHTML = this.rule.toHumanDescription();
+    this.ruleDescription.innerHTML = this.rule.toHumanInterface();
     const valid = this.rule.valid();
     if (valid) {
       this.titleBar.classList.remove('invalid');
