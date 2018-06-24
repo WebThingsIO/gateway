@@ -16,6 +16,7 @@ const App = require('./app');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const BinarySensor = require('./binary-sensor');
+const ChoiceDetail = require('./choice-detail');
 const ColorLight = require('./color-light');
 const DimmableColorLight = require('./dimmable-color-light');
 const DimmableLight = require('./dimmable-light');
