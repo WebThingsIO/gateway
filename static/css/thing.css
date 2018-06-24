@@ -481,6 +481,16 @@
   text-align: left;
 }
 
+.action-input-enum {
+  height: 2.75rem;
+  background-color: #d2d9de;
+  border: none;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 1.6rem;
+  color: #333;
+}
+
 .action-input-string,
 .action-input-number {
   width: 95%;
