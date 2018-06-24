@@ -1,7 +1,7 @@
 /**
- * BooleanDetail
+ * BinaryDetail
  *
- * A generic boolean property detail.
+ * A generic binary property detail.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,12 +12,12 @@
 
 const Utils = require('./utils');
 
-class BooleanDetail {
+class BinaryDetail {
   constructor(thing, name, label) {
     this.thing = thing;
     this.name = name;
     this.label = label || name;
-    this.id = `boolean-${Utils.escapeHtmlForIdClass(this.name)}`;
+    this.id = `binary-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   /**
@@ -36,9 +36,9 @@ class BooleanDetail {
     const checked = this.thing.properties[this.name];
 
     return `
-      <webthing-boolean-property data-name="${Utils.escapeHtml(this.label)}"
+      <webthing-binary-property data-name="${Utils.escapeHtml(this.label)}"
         ${checked ? 'checked' : ''} id="${this.id}">
-      </webthing-boolean-property>`;
+      </webthing-binary-property>`;
   }
 
   /**
@@ -57,4 +57,4 @@ class BooleanDetail {
   }
 }
 
-module.exports = BooleanDetail;
+module.exports = BinaryDetail;

@@ -1,5 +1,5 @@
 /**
- * BooleanProperty
+ * BinaryProperty
  *
  * A bubble showing a checkbox.
  *
@@ -22,7 +22,7 @@ template.innerHTML = `
       font-size: 1.6rem;
     }
 
-    .webthing-boolean-property-container {
+    .webthing-binary-property-container {
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
@@ -31,18 +31,18 @@ template.innerHTML = `
       position: relative;
     }
 
-    .webthing-boolean-property-contents {
+    .webthing-binary-property-contents {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .webthing-boolean-property-checkbox {
+    .webthing-binary-property-checkbox {
       display: none;
     }
 
-    .webthing-boolean-property-checkbox + label {
+    .webthing-binary-property-checkbox + label {
       display: block;
       width: 3rem;
       height: 3rem;
@@ -50,19 +50,19 @@ template.innerHTML = `
       background-size: 3rem auto;
     }
 
-    .webthing-boolean-property-checkbox:checked + label {
+    .webthing-binary-property-checkbox:checked + label {
       background-position: 0 -3rem;
     }
 
-    .webthing-boolean-property-checkbox:disabled + label {
+    .webthing-binary-property-checkbox:disabled + label {
       background-position: 0 -6rem;
     }
 
-    .webthing-boolean-property-checkbox:checked:disabled + label {
+    .webthing-binary-property-checkbox:checked:disabled + label {
       background-position: 0 -9rem;
     }
 
-    .webthing-boolean-property-name {
+    .webthing-binary-property-name {
       text-align: center;
       max-width: 10rem;
       overflow-wrap: break-word;
@@ -70,21 +70,21 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-boolean-property-container">
-    <div id="contents" class="webthing-boolean-property-contents">
-      <form id="form" class="webthing-boolean-property-form">
+  <div id="container" class="webthing-binary-property-container">
+    <div id="contents" class="webthing-binary-property-contents">
+      <form id="form" class="webthing-binary-property-form">
         <input type="checkbox" id="checkbox"
-          class="webthing-boolean-property-checkbox">
+          class="webthing-binary-property-checkbox">
         <label id="label" for="checkbox"
-          class="webthing-boolean-property-label">
+          class="webthing-binary-property-label">
         </label>
       </form>
     </div>
   </div>
-  <div id="name" class="webthing-boolean-property-name"></div>
+  <div id="name" class="webthing-binary-property-name"></div>
 `;
 
-class BooleanProperty extends BaseComponent {
+class BinaryProperty extends BaseComponent {
   constructor() {
     super(template);
 
@@ -186,5 +186,5 @@ class BooleanProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-boolean-property', BooleanProperty);
-module.exports = BooleanProperty;
+window.customElements.define('webthing-binary-property', BinaryProperty);
+module.exports = BinaryProperty;

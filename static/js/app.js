@@ -215,8 +215,8 @@ Speech = require('./speech');
 // load web components
 require('./components/action');
 require('./components/base-component');
+require('./components/binary-property');
 require('./components/binary-sensor-capability');
-require('./components/boolean-property');
 require('./components/brightness-property');
 require('./components/color-control-capability');
 require('./components/color-property');

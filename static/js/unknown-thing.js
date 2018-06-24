@@ -12,7 +12,7 @@
 
 const API = require('./api');
 const ActionDetail = require('./action-detail');
-const BooleanDetail = require('./boolean-detail');
+const BinaryDetail = require('./binary-detail');
 const NumberDetail = require('./number-detail');
 const StringDetail = require('./string-detail');
 const Thing = require('./thing');
@@ -44,7 +44,7 @@ const UnknownThing = function(description, format) {
             break;
           }
           case 'boolean':
-            detail = new BooleanDetail(this, name, prop.label);
+            detail = new BinaryDetail(this, name, prop.label);
             break;
           default:
             continue;
