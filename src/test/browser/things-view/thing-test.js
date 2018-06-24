@@ -40,7 +40,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForThings();
        const things = await thingsPage.things();
@@ -135,7 +135,7 @@ describe('Thing', () => {
     await addThing(desc);
 
     const thingsPage = new ThingsPage(browser);
-    thingsPage.open();
+    await thingsPage.open();
 
     await thingsPage.waitForThings();
     const things = await thingsPage.things();
@@ -199,7 +199,7 @@ describe('Thing', () => {
     await addThing(desc);
 
     const thingsPage = new ThingsPage(browser);
-    thingsPage.open();
+    await thingsPage.open();
 
     await thingsPage.waitForThings();
     const things = await thingsPage.things();
@@ -271,7 +271,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        const things = await thingsPage.things();
@@ -310,7 +310,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -355,7 +355,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -445,7 +445,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -523,7 +523,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -621,7 +621,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -732,7 +732,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -859,7 +859,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
@@ -900,7 +900,7 @@ describe('Thing', () => {
        await addThing(desc);
 
        const thingsPage = new ThingsPage(browser);
-       thingsPage.open();
+       await thingsPage.open();
 
        await thingsPage.waitForThings();
        let things = await thingsPage.things();
