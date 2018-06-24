@@ -168,7 +168,7 @@ class OnOffPropertySection extends InputPropertySection {
   }
 }
 
-class BooleanPropertySection extends InputPropertySection {
+class BinaryPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
     const element = await this.label();
@@ -284,9 +284,9 @@ class ThingDetailPage extends Page {
 
     // For UnknownThing
     this.defineSections(
-      'booleanProperties',
-      'webthing-boolean-property',
-      BooleanPropertySection
+      'binaryProperties',
+      'webthing-binary-property',
+      BinaryPropertySection
     );
     this.defineSections(
       'stringProperties',

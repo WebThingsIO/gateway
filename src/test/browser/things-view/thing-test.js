@@ -31,7 +31,7 @@ describe('Thing', () => {
              value: 'bar',
              type: 'string',
            },
-           booleanProp: {
+           binaryProp: {
              value: true,
              type: 'boolean',
            },
@@ -51,26 +51,26 @@ describe('Thing', () => {
        const detailPage = await things[0].openDetailPage();
 
        // We have to wait connecting websocket.
-       await detailPage.waitForBooleanProperties();
+       await detailPage.waitForBinaryProperties();
        const waitWebSocketPromise = util.promisify(setImmediate);
        await waitWebSocketPromise();
 
-       // Check boolean property
-       const booleanProps = await detailPage.booleanProperties();
-       expect(booleanProps.length).toEqual(1);
-       let booleanValue = await booleanProps[0].getValue();
-       expect(booleanValue).toBeTruthy();
-       await booleanProps[0].click();
+       // Check binary property
+       const binaryProps = await detailPage.binaryProperties();
+       expect(binaryProps.length).toEqual(1);
+       let binaryValue = await binaryProps[0].getValue();
+       expect(binaryValue).toBeTruthy();
+       await binaryProps[0].click();
        await waitForExpect(async () => {
-         booleanValue = await getProperty(desc.id, 'booleanProp');
-         expect(booleanValue).not.toBeTruthy();
-         booleanValue = await booleanProps[0].getValue();
-         expect(booleanValue).not.toBeTruthy();
+         binaryValue = await getProperty(desc.id, 'binaryProp');
+         expect(binaryValue).not.toBeTruthy();
+         binaryValue = await binaryProps[0].getValue();
+         expect(binaryValue).not.toBeTruthy();
        });
-       await setProperty(desc.id, 'booleanProp', true);
+       await setProperty(desc.id, 'binaryProp', true);
        await waitForExpect(async () => {
-         booleanValue = await booleanProps[0].getValue();
-         expect(booleanValue).toBeTruthy();
+         binaryValue = await binaryProps[0].getValue();
+         expect(binaryValue).toBeTruthy();
        });
 
        // Check number property
@@ -126,7 +126,7 @@ describe('Thing', () => {
           value: 'foo',
           type: 'string',
         },
-        'spaced boolean': {
+        'spaced binary': {
           value: true,
           type: 'boolean',
         },
@@ -145,14 +145,14 @@ describe('Thing', () => {
 
     const detailPage = await things[0].openDetailPage();
 
-    await detailPage.waitForBooleanProperties();
-    const booleanProps = await detailPage.booleanProperties();
-    expect(booleanProps.length).toEqual(1);
-    const booleanValue = await booleanProps[0].getValue();
-    expect(booleanValue).toBeTruthy();
-    const booleanId = await booleanProps[0].getId();
-    expect(booleanId).toEqual(
-      `boolean-${Utils.escapeHtmlForIdClass('spaced boolean')}`
+    await detailPage.waitForBinaryProperties();
+    const binaryProps = await detailPage.binaryProperties();
+    expect(binaryProps.length).toEqual(1);
+    const binaryValue = await binaryProps[0].getValue();
+    expect(binaryValue).toBeTruthy();
+    const binaryId = await binaryProps[0].getId();
+    expect(binaryId).toEqual(
+      `binary-${Utils.escapeHtmlForIdClass('spaced binary')}`
     );
 
     const numberProps = await detailPage.numberProperties();
@@ -190,7 +190,7 @@ describe('Thing', () => {
           value: 'bar',
           type: 'string',
         },
-        rejectPropertyBool: {
+        rejectPropertyBinary: {
           value: true,
           type: 'boolean',
         },
@@ -210,21 +210,21 @@ describe('Thing', () => {
     const detailPage = await things[0].openDetailPage();
 
     // We have to wait connecting websocket.
-    await detailPage.waitForBooleanProperties();
+    await detailPage.waitForBinaryProperties();
     const waitWebSocketPromise = util.promisify(setImmediate);
     await waitWebSocketPromise();
 
-    // Check boolean property
-    const booleanProps = await detailPage.booleanProperties();
-    expect(booleanProps.length).toEqual(1);
-    let booleanValue = await booleanProps[0].getValue();
-    expect(booleanValue).toBeTruthy();
-    await booleanProps[0].click();
+    // Check binary property
+    const binaryProps = await detailPage.binaryProperties();
+    expect(binaryProps.length).toEqual(1);
+    let binaryValue = await binaryProps[0].getValue();
+    expect(binaryValue).toBeTruthy();
+    await binaryProps[0].click();
     await waitForExpect(async () => {
-      booleanValue = await getProperty(desc.id, 'rejectPropertyBool');
-      expect(booleanValue).toBeTruthy();
-      booleanValue = await booleanProps[0].getValue();
-      expect(booleanValue).toBeTruthy();
+      binaryValue = await getProperty(desc.id, 'rejectPropertyBinary');
+      expect(binaryValue).toBeTruthy();
+      binaryValue = await binaryProps[0].getValue();
+      expect(binaryValue).toBeTruthy();
     });
 
     // Check number property
