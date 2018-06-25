@@ -12,17 +12,14 @@
 
 const page = require('./lib/page');
 const API = require('./api');
-const App = require('./app');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
+const App = require('./app');
 const BinarySensor = require('./binary-sensor');
-const ColorLight = require('./color-light');
-const DimmableColorLight = require('./dimmable-color-light');
-const DimmableLight = require('./dimmable-light');
 const EventList = require('./event-list');
+const Light = require('./light');
 const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
-const OnOffLight = require('./on-off-light');
 const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
 const UnknownThing = require('./unknown-thing');
@@ -116,20 +113,11 @@ const ThingsScreen = {
               new OnOffSwitch(description);
               break;
             case 'onOffLight':
-              console.log('rendering new on/off light');
-              new OnOffLight(description);
-              break;
             case 'onOffColorLight':
-              console.log('rendering new color light');
-              new ColorLight(description);
-              break;
             case 'dimmableLight':
-              console.log('rendering new dimmable light');
-              new DimmableLight(description);
-              break;
             case 'dimmableColorLight':
-              console.log('rendering new dimmable color light');
-              new DimmableColorLight(description);
+              console.log('rendering new light');
+              new Light(description);
               break;
             case 'binarySensor':
               console.log('rendering new binary sensor');
@@ -197,20 +185,11 @@ const ThingsScreen = {
             thing = new MultiLevelSensor(description, 'htmlDetail');
             break;
           case 'onOffLight':
-            console.log('rendering new on/off light');
-            thing = new OnOffLight(description, 'htmlDetail');
-            break;
           case 'onOffColorLight':
-            console.log('rendering new color light');
-            thing = new ColorLight(description, 'htmlDetail');
-            break;
           case 'dimmableLight':
-            console.log('rendering new dimmable light');
-            thing = new DimmableLight(description, 'htmlDetail');
-            break;
           case 'dimmableColorLight':
-            console.log('rendering new dimmable color light');
-            thing = new DimmableColorLight(description, 'htmlDetail');
+            console.log('rendering new light');
+            thing = new Light(description, 'htmlDetail');
             break;
           case 'multiLevelSwitch':
             console.log('rendering new multi level switch');

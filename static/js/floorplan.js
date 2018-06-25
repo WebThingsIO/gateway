@@ -11,16 +11,13 @@
 'use strict';
 
 const API = require('./api');
-const UnknownThing = require('./unknown-thing');
-const OnOffSwitch = require('./on-off-switch');
 const BinarySensor = require('./binary-sensor');
-const ColorLight = require('./color-light');
-const DimmableLight = require('./dimmable-light');
-const DimmableColorLight = require('./dimmable-color-light');
-const OnOffLight = require('./on-off-light');
-const MultiLevelSwitch = require('./multi-level-switch');
+const Light = require('./light');
 const MultiLevelSensor = require('./multi-level-sensor');
+const MultiLevelSwitch = require('./multi-level-switch');
+const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
+const UnknownThing = require('./unknown-thing');
 
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {
@@ -88,20 +85,11 @@ const FloorplanScreen = {
             this.things.push(new OnOffSwitch(description, 'svg'));
             break;
           case 'onOffLight':
-            console.log('rendering new on/off light');
-            this.things.push(new OnOffLight(description, 'svg'));
-            break;
           case 'onOffColorLight':
-            console.log('rendering new color light');
-            this.things.push(new ColorLight(description, 'svg'));
-            break;
           case 'dimmableLight':
-            console.log('rendering new dimmable light');
-            this.things.push(new DimmableLight(description, 'svg'));
-            break;
           case 'dimmableColorLight':
-            console.log('rendering new dimmable color light');
-            this.things.push(new DimmableColorLight(description, 'svg'));
+            console.log('rendering new light');
+            this.things.push(new Light(description, 'svg'));
             break;
           case 'binarySensor':
             console.log('rendering new binary sensor');
