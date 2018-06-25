@@ -227,8 +227,7 @@ NewThing.prototype.handleSave = function() {
     },
   }).then((response) => {
     return response.json();
-  }).then((json) => {
-    console.log(`Successfully created thing ${json}`);
+  }).then(() => {
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;

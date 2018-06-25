@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class LabelDetail {
   constructor(thing, name, label, unit, precision) {

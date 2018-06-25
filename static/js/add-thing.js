@@ -97,8 +97,6 @@ const AddThingScreen = {
         this.pairingTimeout = null;
         this.requestCancelPairing();
       }, timeout * 1000);
-
-      console.log(`Pairing request created with URL ${json.pair.href}`);
     }).catch((error) => {
       console.error(`Pairing request failed: ${error}`);
     });
@@ -133,7 +131,6 @@ const AddThingScreen = {
     }).then((response) => {
       if (response.ok) {
         this.actionUrl = null;
-        console.log('Successfully cancelled pairing request.');
       } else {
         console.error(`Error cancelling pairing request ${
           response.statusText}`);

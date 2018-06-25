@@ -23,7 +23,6 @@ function UnsupportedField(schema) {
 }
 
 UnsupportedField.prototype.render = function() {
-  console.log(new Error().stack);
   const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
   const field = document.createElement('div');
 

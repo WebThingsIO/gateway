@@ -45,7 +45,7 @@ const Menu = {
         Menu.hideItem(experiment);
       }
     }).catch((e) => {
-      console.log(`${experiment} experiment setting is not yet set ${e}`);
+      console.warn(`${experiment} experiment setting is not yet set ${e}`);
     });
   },
 

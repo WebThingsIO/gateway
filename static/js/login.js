@@ -24,8 +24,6 @@ const API = require('./api');
 
     API.login(emailValue, passwordValue).
       then(() => {
-        console.log('~~~ log in success ~~~');
-
         const search = window.location.search;
         const match = search.match(/url=([^=&]+)/);
 

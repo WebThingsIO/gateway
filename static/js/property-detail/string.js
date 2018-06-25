@@ -10,13 +10,13 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class StringDetail {
-  constructor(thing, name, label) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || name;
+    this.label = property.label || name;
     this.id = `string-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

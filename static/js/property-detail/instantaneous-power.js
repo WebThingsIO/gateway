@@ -10,12 +10,12 @@
 
 'use strict';
 
-const LabelDetail = require('./label-detail');
-const Utils = require('./utils');
+const LabelDetail = require('./label');
+const Utils = require('../utils');
 
 class InstantaneousPowerDetail extends LabelDetail {
-  constructor(thing, name, label) {
-    super(thing, name, label || 'Power', 'W', 0);
+  constructor(thing, name, property) {
+    super(thing, name, property.label || 'Power', 'W', 0);
     this.id = `instantaneous-power-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

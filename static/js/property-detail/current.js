@@ -10,12 +10,12 @@
 
 'use strict';
 
-const LabelDetail = require('./label-detail');
-const Utils = require('./utils');
+const LabelDetail = require('./label');
+const Utils = require('../utils');
 
 class CurrentDetail extends LabelDetail {
-  constructor(thing, name, label) {
-    super(thing, name, label || 'Current', 'A', 1);
+  constructor(thing, name, property) {
+    super(thing, name, property.label || 'Current', 'A', 1);
     this.id = `current-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

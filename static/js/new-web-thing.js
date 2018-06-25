@@ -237,7 +237,6 @@ NewWebThing.prototype.save = function() {
       throw new Error(description);
     }
 
-    console.log(`Successfully created thing ${description}`);
     this.nameInput.disabled = true;
     this.saveButton.innerHTML = 'Saved';
     this.saveButton.disabled = true;

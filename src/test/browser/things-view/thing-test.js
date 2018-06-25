@@ -263,6 +263,7 @@ describe('Thing', () => {
          type: 'onOffLight',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
@@ -302,6 +303,7 @@ describe('Thing', () => {
          type: 'onOffSwitch',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
@@ -342,10 +344,12 @@ describe('Thing', () => {
          type: 'dimmableLight',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
            level: {
+             '@type': 'BrightnessProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
@@ -433,10 +437,12 @@ describe('Thing', () => {
          type: 'onOffColorLight',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
            color: {
+             '@type': 'ColorProperty',
              value: '#ffffff',
              type: 'string',
            },
@@ -506,15 +512,18 @@ describe('Thing', () => {
          type: 'dimmableColorLight',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
            level: {
+             '@type': 'BrightnessProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
            },
            color: {
+             '@type': 'ColorProperty',
              value: '#ffffff',
              type: 'string',
            },
@@ -608,10 +617,12 @@ describe('Thing', () => {
          type: 'multiLevelSwitch',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
            level: {
+             '@type': 'LevelProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
@@ -699,30 +710,36 @@ describe('Thing', () => {
          type: 'smartPlug',
          properties: {
            on: {
+             '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
            level: {
+             '@type': 'LevelProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
            },
            instantaneousPower: {
+             '@type': 'InstantaneousPowerProperty',
              value: 0,
              type: 'number',
              unit: 'watt',
            },
            voltage: {
+             '@type': 'VoltageProperty',
              value: 0,
              type: 'number',
              unit: 'volt',
            },
            current: {
+             '@type': 'CurrentProperty',
              value: 0,
              type: 'number',
              unit: 'ampere',
            },
            frequency: {
+             '@type': 'FrequencyProperty',
              value: 0,
              type: 'number',
              unit: 'hertz',
@@ -851,6 +868,7 @@ describe('Thing', () => {
          type: 'binarySensor',
          properties: {
            on: {
+             '@type': 'BooleanProperty',
              value: false,
              type: 'boolean',
            },
@@ -887,10 +905,12 @@ describe('Thing', () => {
          type: 'multiLevelSensor',
          properties: {
            on: {
+             '@type': 'BooleanProperty',
              value: false,
              type: 'boolean',
            },
            level: {
+             '@type': 'LevelProperty',
              value: 0,
              type: 'number',
              unit: 'percent',

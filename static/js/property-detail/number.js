@@ -10,18 +10,33 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class NumberDetail {
-  constructor(thing, name, label, type, unit, min, max) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || name;
-    this.type = type;
+    this.label = property.label || name;
+    this.type = property.type;
     this.unit =
-      typeof unit === 'undefined' ? null : Utils.unitNameToAbbreviation(unit);
-    this.min = typeof min === 'undefined' ? null : min;
-    this.max = typeof max === 'undefined' ? null : max;
+      property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
+
+    if (property.hasOwnProperty('min')) {
+      this.min = property.min;
+    } else if (property.hasOwnProperty('minimum')) {
+      this.min = property.minimum;
+    } else {
+      this.min = null;
+    }
+
+    if (property.hasOwnProperty('max')) {
+      this.max = property.max;
+    } else if (property.hasOwnProperty('maximum')) {
+      this.max = property.maximum;
+    } else {
+      this.max = null;
+    }
+
     this.id = `number-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

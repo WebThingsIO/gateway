@@ -37,7 +37,6 @@ const API = require('./api');
 
     API.createUser(nameValue, emailValue, passwordValue).
       then(() => {
-        console.log('~~~ create user success ~~~');
         window.location.href = '/';
       }).
       catch((err) => {

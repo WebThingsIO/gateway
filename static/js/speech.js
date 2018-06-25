@@ -72,10 +72,10 @@ const Speech = {
       if (results.length < 1) {
         displayNotification('Sorry, we couldn\'t understand your command.',
                             'failure');
-        console.log('Error: (results.length <= 1)');
+        console.error('Error: (results.length <= 1)');
         return;
       }
-      console.log(results[0].text, results[0].confidence);
+      console.debug(results[0].text, results[0].confidence);
       const opts = {
         method: 'POST',
         cache: 'default',
@@ -182,7 +182,7 @@ const Speech = {
       if (diameter < 0) {
         continue;
       }
-      // console.log(xPos, yPos, diameter - 10, diameter/2 - 10);
+
       // Display a bar for this value.
       let alpha = diameter / 500;
       if (alpha > 0.2) {

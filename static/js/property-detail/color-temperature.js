@@ -10,15 +10,15 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class ColorTemperatureDetail {
-  constructor(thing, name, label, min, max) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || 'Color Temperature';
-    this.min = min;
-    this.max = max;
+    this.label = property.label || 'Color Temperature';
+    this.min = property.hasOwnProperty('min') ? property.min : property.minimum;
+    this.max = property.hasOwnProperty('max') ? property.max : property.maximum;
     this.id = `color-temperature-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -50,7 +50,7 @@ class ColorTemperatureDetail {
   }
 
   set() {
-    this.thing.setColorTemperature(this.temperature.value);
+    this.thing.setProperty(this.name, this.temperature.value);
   }
 }
 

@@ -240,8 +240,6 @@ const API = {
         throw new Error(
           'Unexpected response code while setting add-on config');
       }
-
-      console.log(`Set ${addonName} config to ${body}`);
     });
   },
 
@@ -263,8 +261,6 @@ const API = {
         throw new Error(
           'Unexpected response code while setting add-on setting');
       }
-
-      console.log(`Set ${addonName} to ${enabled}`);
     });
   },
 
@@ -287,8 +283,6 @@ const API = {
       if (!response.ok) {
         throw new Error('Unexpected response code while installing add-on.');
       }
-
-      console.log(`Successfully installed ${addonName}`);
     });
   },
 
@@ -306,8 +300,6 @@ const API = {
         throw new Error(
           'Unexpected response code while uninstalling add-on.');
       }
-
-      console.log(`Successfully uninstalled ${addonName}`);
     });
   },
 
@@ -329,8 +321,6 @@ const API = {
       if (!response.ok) {
         throw new Error('Unexpected response code while updating add-on.');
       }
-
-      console.log(`Successfully updated ${addonName}`);
     });
   },
 
@@ -379,8 +369,6 @@ const API = {
         throw new Error(
           'Unexpected response code while setting experiment setting');
       }
-
-      console.log(`Set ${experimentName} to ${enabled}`);
     });
   },
 

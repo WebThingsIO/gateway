@@ -10,15 +10,15 @@
 
 'use strict';
 
-const API = require('./api');
-const Utils = require('./utils');
+const API = require('../api');
+const Utils = require('../utils');
 
 class ActionDetail {
-  constructor(thing, name, label, input, href) {
+  constructor(thing, name, action, href) {
     this.thing = thing;
     this.name = name;
-    this.label = label || name;
-    this.input = input;
+    this.label = action.label || name;
+    this.input = action.input;
     this.href = href;
     this.id = `action-button-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
