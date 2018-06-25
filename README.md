@@ -89,6 +89,14 @@ The following is required in order to let node use the Bluetooth adapter.
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
+### Install Bluetooth and BT Low Energy support libraries (Linux only)
+
+The following are required in order to install the Python modules that support Bluetooth
+
+```
+$ sudo apt-get install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev 
+```
+
 ### Install libusb and libudev (Linux only)
 
 ```

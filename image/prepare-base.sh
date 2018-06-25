@@ -49,7 +49,11 @@ sudo apt install -y \
   dnsmasq \
   git \
   hostapd \
+  libboost-python-dev \
+  libboost-thread-dev \
+  libbluetooth-dev \
   libffi-dev \
+  libglib2.0-dev \
   libnanomsg-dev \
   libnanomsg4 \
   libtool \
