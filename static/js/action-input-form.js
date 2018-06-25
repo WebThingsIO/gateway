@@ -71,6 +71,28 @@ ActionInputForm.prototype.render = function() {
     }
     unit += '</span>';
 
+    // list item
+    if (Array.isArray(input.enum) &&
+       (input.type === 'number' ||
+        input.type === 'integer' ||
+        input.type === 'string')) {
+      // User can select undefiend value on field not required.
+      if (required === '') {
+        input.enum.unshift('');
+      }
+
+      const selects = input.enum.map((value, i) => {
+        return `<option key="${i}" value="${Utils.escapeHtml(value)}">
+                  ${Utils.escapeHtml(value)}
+                </option>`;
+      });
+
+      form += `<select name="${name}" class="action-input-enum" ${required}>
+                 ${selects.join(' ')}
+               </select>${unit}`;
+      continue;
+    }
+
     switch (input.type) {
       case 'number':
       case 'integer': {
@@ -137,6 +159,33 @@ ActionInputForm.prototype.handleSubmit = function(e) {
     input = {};
   } else {
     input = null;
+  }
+
+  for (const el of this.element.getElementsByTagName('select')) {
+    if (el.value.length == 0) {
+      continue;
+    }
+
+    let schema;
+    if (el.name === '__default__') {
+      schema = this.schema;
+    } else {
+      schema = this.inputs[el.name];
+    }
+
+    let value;
+    if (schema.type === 'number') {
+      value = Number(el.value);
+    } else {
+      value = el.value;
+    }
+
+    if (el.name === '__default__') {
+      input = value;
+      break;
+    } else {
+      input[this.inputs[el.name]] = value;
+    }
   }
 
   for (const el of this.element.getElementsByTagName('input')) {
