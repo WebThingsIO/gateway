@@ -26,7 +26,7 @@ template.innerHTML = `
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
-      border: 2px solid white;
+      border: 0.2rem solid white;
       background-color: #89b6d6;
       position: relative;
     }

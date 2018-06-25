@@ -26,7 +26,6 @@
   display: block;
   position: relative;
   z-index: 10;
-  float: left;
   background-color: #89b6d6;
   background-size: 5rem;
   background-position: center;
@@ -36,6 +35,8 @@
   border-radius: 2rem;
   width: 4rem;
   height: 4rem;
+  top: 4rem;
+  margin-top: -4rem;
 }
 
 .thing-details-link {
@@ -43,7 +44,6 @@
   display: block;
   position: relative;
   z-index: 10;
-  float: right;
   background-color: #89b6d6;
   background-size: 2.4rem;
   background-position: center;
@@ -53,6 +53,9 @@
   border-radius: 2rem;
   width: 4rem;
   height: 4rem;
+  top: 4rem;
+  left: 8.8rem;
+  margin-top: -4rem;
 }
 
 .thing-detail-container {

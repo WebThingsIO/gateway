@@ -23,7 +23,7 @@ class LabelDetail {
   }
 
   attach() {
-    this.label = this.thing.element.querySelector(`#${this.id}`);
+    this.labelElement = this.thing.element.querySelector(`#${this.id}`);
   }
 
   view() {
@@ -43,7 +43,7 @@ class LabelDetail {
       return;
     }
 
-    this.label.value = parseFloat(this.thing.properties[this.name]) || 0;
+    this.labelElement.value = parseFloat(this.thing.properties[this.name]) || 0;
   }
 }
 
