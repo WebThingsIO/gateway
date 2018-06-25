@@ -50,7 +50,7 @@ sudo apt install -y \
   git \
   hostapd \
   libboost-python-dev \
-´ libboost-thread-dev \
+  libboost-thread-dev \
   libbluetooth-dev \
   libffi-dev \
   libglib2.0-dev \
