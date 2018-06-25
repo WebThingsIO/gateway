@@ -17,7 +17,7 @@ const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
-const UnknownThing = require('./unknown-thing');
+const Thing = require('./thing');
 
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {
@@ -81,35 +81,28 @@ const FloorplanScreen = {
         }
         switch (description.type) {
           case 'onOffSwitch':
-            console.log('rendering new on/off switch');
             this.things.push(new OnOffSwitch(description, 'svg'));
             break;
           case 'onOffLight':
           case 'onOffColorLight':
           case 'dimmableLight':
           case 'dimmableColorLight':
-            console.log('rendering new light');
             this.things.push(new Light(description, 'svg'));
             break;
           case 'binarySensor':
-            console.log('rendering new binary sensor');
             this.things.push(new BinarySensor(description, 'svg'));
             break;
           case 'multiLevelSensor':
-            console.log('rendering new multi level sensor');
             this.things.push(new MultiLevelSensor(description, 'svg'));
             break;
           case 'multiLevelSwitch':
-            console.log('rendering new multi level switch');
             this.things.push(new MultiLevelSwitch(description, 'svg'));
             break;
           case 'smartPlug':
-            console.log('rendering new smart plug');
             this.things.push(new SmartPlug(description, 'svg'));
             break;
           default:
-            console.log('rendering new thing');
-            this.things.push(new UnknownThing(description, 'svg'));
+            this.things.push(new Thing(description, 'svg'));
             break;
         }
       }, this);
@@ -197,7 +190,6 @@ const FloorplanScreen = {
     }).then((response) => {
       this.uploadButton.classList.remove('loading');
       if (response.ok) {
-        console.log('Successfully uploaded floorplan');
         fetch('/uploads/floorplan.svg', {
           method: 'GET',
           headers: headers,
@@ -269,9 +261,7 @@ const FloorplanScreen = {
         'Content-Type': 'application/json',
       },
     }).then((response) => {
-      if (response.ok) {
-        console.log(`Successfully moved thing to (${x},${y})`);
-      } else {
+      if (!response.ok) {
         console.error(`Failed to move thing ${thingUrl}`);
       }
     }).catch((e) => {

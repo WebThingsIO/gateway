@@ -10,13 +10,13 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class BrightnessDetail {
-  constructor(thing, name, label) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || 'Brightness';
+    this.label = property.label || 'Brightness';
     this.id = `brightness-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -47,7 +47,7 @@ class BrightnessDetail {
   }
 
   set() {
-    this.thing.setBrightness(this.brightness.value);
+    this.thing.setProperty(this.name, this.brightness.value);
   }
 }
 

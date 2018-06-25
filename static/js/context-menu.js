@@ -98,7 +98,6 @@ const ContextMenu = {
       body: JSON.stringify({name}),
     }).then((response) => {
       if (response.ok) {
-        console.log('Successfully updated Thing.');
         document.getElementById('thing-title-name').innerText = name;
       } else {
         console.error(`Error updating thing: ${response.statusText}`);
@@ -123,7 +122,6 @@ const ContextMenu = {
       },
     }).then((response) => {
       if (response.ok) {
-        console.log('Successfully removed Thing.');
         page('/things');
       } else {
         console.error(`Error removing thing: ${response.statusText}`);

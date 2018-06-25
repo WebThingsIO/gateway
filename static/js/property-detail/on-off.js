@@ -10,13 +10,13 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class OnOffDetail {
-  constructor(thing, name, label) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || 'On/Off';
+    this.label = property.label || 'On/Off';
     this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

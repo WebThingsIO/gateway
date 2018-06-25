@@ -534,7 +534,7 @@ const SettingsScreen = {
           const settings = JSON.parse(s.value);
           this.installedAddons.set(settings.name, settings);
         } catch (err) {
-          console.log(`Failed to parse add-on settings: ${err}`);
+          console.error(`Failed to parse add-on settings: ${err}`);
         }
       }
 

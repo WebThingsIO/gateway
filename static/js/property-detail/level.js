@@ -10,13 +10,13 @@
 
 'use strict';
 
-const Utils = require('./utils');
+const Utils = require('../utils');
 
 class LevelDetail {
-  constructor(thing, name, label) {
+  constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = label || 'Level';
+    this.label = property.label || 'Level';
     this.id = `level-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -48,7 +48,7 @@ class LevelDetail {
   }
 
   set() {
-    this.thing.setLevel(this.level.value);
+    this.thing.setProperty(this.name, this.level.value);
   }
 }
 

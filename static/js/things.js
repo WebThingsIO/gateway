@@ -22,7 +22,7 @@ const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
-const UnknownThing = require('./unknown-thing');
+const Thing = require('./thing');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -109,35 +109,28 @@ const ThingsScreen = {
         things.forEach((description) => {
           switch (description.type) {
             case 'onOffSwitch':
-              console.log('rendering new on/off switch');
               new OnOffSwitch(description);
               break;
             case 'onOffLight':
             case 'onOffColorLight':
             case 'dimmableLight':
             case 'dimmableColorLight':
-              console.log('rendering new light');
               new Light(description);
               break;
             case 'binarySensor':
-              console.log('rendering new binary sensor');
               new BinarySensor(description);
               break;
             case 'multiLevelSensor':
-              console.log('rendering new multi level sensor');
               new MultiLevelSensor(description);
               break;
             case 'multiLevelSwitch':
-              console.log('rendering new multi level switch');
               new MultiLevelSwitch(description);
               break;
             case 'smartPlug':
-              console.log('rendering new smart plug');
               new SmartPlug(description);
               break;
             default:
-              console.log('rendering new thing');
-              new UnknownThing(description);
+              new Thing(description);
               break;
           }
         });
@@ -173,37 +166,30 @@ const ThingsScreen = {
         let thing;
         switch (description.type) {
           case 'onOffSwitch':
-            console.log('rendering new on/off switch');
             thing = new OnOffSwitch(description, 'htmlDetail');
             break;
           case 'binarySensor':
-            console.log('rendering new binary sensor');
             thing = new BinarySensor(description, 'htmlDetail');
             break;
           case 'multiLevelSensor':
-            console.log('rendering new multi level sensor');
             thing = new MultiLevelSensor(description, 'htmlDetail');
             break;
           case 'onOffLight':
           case 'onOffColorLight':
           case 'dimmableLight':
           case 'dimmableColorLight':
-            console.log('rendering new light');
             thing = new Light(description, 'htmlDetail');
             break;
           case 'multiLevelSwitch':
-            console.log('rendering new multi level switch');
             thing = new MultiLevelSwitch(description, 'htmlDetail');
             break;
           case 'smartPlug':
-            console.log('rendering new smart plug');
             // eslint-disable-next-line no-unused-vars
             thing = new SmartPlug(description, 'htmlDetail');
             break;
           default:
-            console.log('rendering new thing');
             // eslint-disable-next-line no-unused-vars
-            thing = new UnknownThing(description, 'htmlDetail');
+            thing = new Thing(description, 'htmlDetail');
             break;
         }
 
