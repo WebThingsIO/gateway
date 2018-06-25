@@ -1,7 +1,7 @@
 /**
- * Color Bulb.
+ * Light
  *
- * UI element representing a bulb with control over its color
+ * UI element representing  Light.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,25 +11,34 @@
 'use strict';
 
 const API = require('./api');
+const BrightnessDetail = require('./brightness-detail');
 const ColorDetail = require('./color-detail');
+const ColorTemperatureDetail = require('./color-temperature-detail');
 const OnOffDetail = require('./on-off-detail');
 const OnOffSwitch = require('./on-off-switch');
 const Thing = require('./thing');
-const ColorTemperatureDetail = require('./color-temperature-detail');
 
 /**
- * ColorLight Constructor (extends OnOffSwitch).
+ * Light Constructor (extends OnOffSwitch).
  *
  * @param Object description Thing description object.
  * @param {String} format 'svg', 'html', or 'htmlDetail'.
  */
-function ColorLight(description, format) {
+function Light(description, format) {
   this.displayedProperties = this.displayedProperties || {};
   if (description.properties) {
     this.displayedProperties.on = {
       href: description.properties.on.href,
       detail: new OnOffDetail(this, 'on', description.properties.on.label),
     };
+
+    if (description.properties.hasOwnProperty('level')) {
+      this.displayedProperties.level = {
+        href: description.properties.level.href,
+        detail: new BrightnessDetail(this, 'level',
+                                     description.properties.level.label),
+      };
+    }
 
     if (description.properties.hasOwnProperty('color')) {
       this.displayedProperties.color = {
@@ -72,17 +81,20 @@ function ColorLight(description, format) {
   return this;
 }
 
-ColorLight.prototype = Object.create(OnOffSwitch.prototype);
+Light.prototype = Object.create(OnOffSwitch.prototype);
 
 /**
  * Update the display for the provided property.
  * @param {string} name - name of the property
  * @param {*} value - value of the property
  */
-ColorLight.prototype.updateProperty = function(name, value) {
+Light.prototype.updateProperty = function(name, value) {
   switch (name) {
     case 'on':
       this.updateOn(value);
+      break;
+    case 'level':
+      this.updateBrightness(value);
       break;
     case 'color':
       this.updateColor(value);
@@ -93,11 +105,13 @@ ColorLight.prototype.updateProperty = function(name, value) {
   }
 };
 
-ColorLight.prototype.updateOn = function(on) {
+Light.prototype.updateOn = function(on) {
   this.properties.on = on;
   if (on === null) {
     return;
   }
+
+  this.updateBrightness(this.properties.level);
 
   if (this.format === 'htmlDetail') {
     this.displayedProperties.on.detail.update();
@@ -110,7 +124,28 @@ ColorLight.prototype.updateOn = function(on) {
   }
 };
 
-ColorLight.prototype.updateColor = function(color) {
+/**
+ * @param {number} brightness
+ */
+Light.prototype.updateBrightness = function(brightness) {
+  if (!this.displayedProperties.hasOwnProperty('level')) {
+    return;
+  }
+
+  brightness = parseInt(brightness, 10);
+  this.properties.level = brightness;
+  this.switch.brightness = brightness;
+
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.level.detail.update();
+  }
+};
+
+Light.prototype.updateColor = function(color) {
+  if (!this.displayedProperties.hasOwnProperty('color')) {
+    return;
+  }
+
   this.properties.color = color;
   if (!color) {
     return;
@@ -123,7 +158,46 @@ ColorLight.prototype.updateColor = function(color) {
   }
 };
 
-ColorLight.prototype.setColor = function(color) {
+Light.prototype.updateColorTemperature = function(temperature) {
+  if (!this.displayedProperties.hasOwnProperty('colorTemperature')) {
+    return;
+  }
+
+  temperature = parseInt(temperature, 10);
+  this.properties.colorTemperature = temperature;
+  this.switch.colorTemperature = temperature;
+
+  if (this.format === 'htmlDetail') {
+    this.displayedProperties.colorTemperature.detail.update();
+  }
+};
+
+Light.prototype.setBrightness = function(brightness) {
+  brightness = parseInt(brightness, 10);
+
+  const payload = {
+    level: brightness,
+  };
+  fetch(this.displayedProperties.level.href, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: Object.assign(API.headers(), {
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(`Status ${response.status} trying to set level`);
+    }
+  }).then((json) => {
+    this.updateBrightness(json.level);
+  }).catch((error) => {
+    console.error(`Error trying to set level: ${error}`);
+  });
+};
+
+Light.prototype.setColor = function(color) {
   const payload = {
     color: color,
   };
@@ -146,17 +220,7 @@ ColorLight.prototype.setColor = function(color) {
   });
 };
 
-ColorLight.prototype.updateColorTemperature = function(temperature) {
-  temperature = parseInt(temperature, 10);
-  this.properties.colorTemperature = temperature;
-  this.switch.colorTemperature = temperature;
-
-  if (this.format === 'htmlDetail') {
-    this.displayedProperties.colorTemperature.detail.update();
-  }
-};
-
-ColorLight.prototype.setColorTemperature = function(temperature) {
+Light.prototype.setColorTemperature = function(temperature) {
   temperature = parseInt(temperature, 10);
 
   const payload = {
@@ -182,16 +246,22 @@ ColorLight.prototype.setColorTemperature = function(temperature) {
   });
 };
 
-ColorLight.prototype.iconView = function() {
+Light.prototype.iconView = function() {
+  let color = '';
   if (this.displayedProperties.hasOwnProperty('color')) {
-    return `
-      <webthing-light-capability data-have-color="true">
-      </webthing-light-capability>`;
+    color = 'data-have-color="true"';
   } else if (this.displayedProperties.hasOwnProperty('colorTemperature')) {
-    return `
-      <webthing-light-capability data-have-color-temperature="true">
-      </webthing-light-capability>`;
+    color = 'data-have-color-temperature="true"';
   }
+
+  let brightness = '';
+  if (this.displayedProperties.hasOwnProperty('level')) {
+    brightness = 'data-have-brightness="true"';
+  }
+
+  return `
+    <webthing-light-capability ${color} ${brightness}>
+    </webthing-light-capability>`;
 };
 
-module.exports = ColorLight;
+module.exports = Light;
