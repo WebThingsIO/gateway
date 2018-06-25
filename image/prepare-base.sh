@@ -49,7 +49,7 @@ sudo apt install -y \
   dnsmasq \
   git \
   hostapd \
-  libboost-pythón-dev \
+  libboost-python-dev \
 ´ libboost-thread-dev \
   libbluetooth-dev \
   libffi-dev \
