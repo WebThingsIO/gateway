@@ -23,10 +23,10 @@ template.innerHTML = `
     }
 
     .webthing-smart-plug-capability-icon {
-      width: 12.8rem;
-      height: 12.8rem;
+      width: 12.4rem;
+      height: 12.4rem;
       border-radius: 6.4rem;
-      border: 2px solid white;
+      border: 0.2rem solid white;
       background-size: 6.4rem;
       background-repeat: no-repeat;
       transform: translate(0);

@@ -116,7 +116,9 @@ SmartPlug.prototype.updateProperty = function(name, value) {
     case 'current':
     case 'frequency':
       this.properties[name] = value;
-      this.displayedProperties[name].detail.update();
+      if (this.format === 'htmlDetail') {
+        this.displayedProperties[name].detail.update();
+      }
       break;
     case 'level':
       this.updateLevel(value);
