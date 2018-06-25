@@ -34,14 +34,12 @@ const Utils = {
       text = `${text}`;
     }
 
-    return text
-      .replace(/&/g, 'amp')
-      .replace(/</g, 'lt')
-      .replace(/>/g, 'gt')
-      .replace(/"/g, 'quot')
-      .replace(/'/g, '039')
-      .replace(/\s/g, 'nbsp')
-      .replace(/°/g, 'deg');
+    text = text.replace(/[^_a-zA-Z0-9-]/g, '_');
+    if (/^[0-9-]/.test(text)) {
+      text = `_${text}`;
+    }
+
+    return text;
   },
   fuzzyTime: function(date) {
     const now = new Date();
