@@ -15,6 +15,9 @@ const {
 
 const Constants = require('../../constants');
 
+const OAuthClients = require('../../models/oauthclients').default;
+const JSONWebToken = require('../../models/jsonwebtoken');
+
 const TEST_THING = {
   id: 'test-1',
   type: 'onOffSwitch',
@@ -111,7 +114,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
   });
 
-  it('should return and error when a matching thing is not found', async () => {
+  it('should return an error when a matching thing is not found', async () => {
     const resp = [{
       name: 'Bathroom',
       type: 'onOffSwitch',
@@ -142,5 +145,43 @@ describe('command/', function() {
     } catch (err) {
       expect(err);
     }
+  });
+
+  it('should support accessing the commands API using a JWT', async () => {
+    const testClient = OAuthClients.get('test');
+    const accessToken = await JSONWebToken.issueOAuthToken(testClient, -1, {
+      role: Constants.ACCESS_TOKEN,
+      scope: '/things:readwrite',
+    });
+
+    const resp = [{
+      name: 'Kitchen',
+      type: 'onOffSwitch',
+      href: '/things/zwave-efbddb01-4',
+      properties: {
+        on: {
+          type: 'boolean',
+          href: '/things/zwave-efbddb01-4/properties/on',
+        },
+      },
+      actions: {},
+      events: {},
+    }];
+    nock('http://fake.host')
+      .get('/things')
+      .reply(200, resp);
+
+    nock('http://fake.host')
+      .put('/things/zwave-efbddb01-4/properties/on')
+      .reply(200, resp);
+    setupNock();
+
+    const res = await addDevice();
+    await chai.request(server)
+      .post(Constants.COMMANDS_PATH)
+      .set(...headerAuth(accessToken))
+      .set('Accept', 'application/json')
+      .send({text: 'turn on the kitchen'});
+    expect(res.status).toEqual(201);
   });
 });
