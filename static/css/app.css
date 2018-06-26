@@ -156,6 +156,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 12.5rem;
 }
 
+#menu-wordmark {
+  position: fixed;
+  top: 2.6rem;
+  left: 11rem;
+  height: 4.2rem;
+}
+
 #speech-button {
   right: 2rem;
   background-image: url('../optimized-images/microphone.svg');
