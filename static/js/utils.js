@@ -154,8 +154,82 @@ const Utils = {
       case 'seconds':
         return 's';
 
+      case 'millisecond':
+      case 'milliseconds':
+        return 'ms';
+
       default:
         return unit;
+    }
+  },
+  colorTemperatureToRGB: function(value) {
+    /**
+     * Algorithm found here:
+     * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+     */
+    value /= 100;
+
+    let r;
+    if (value <= 66) {
+      r = 255;
+    } else {
+      r = value - 60;
+      r = 329.698727446 * Math.pow(r, -0.1332047592);
+      r = Math.max(r, 0);
+      r = Math.min(r, 255);
+    }
+
+    let g;
+    if (value <= 66) {
+      g = value;
+      g = 99.4708025861 * Math.log(g) - 161.1195681661;
+    } else {
+      g = value - 60;
+      g = 288.1221695283 * Math.pow(g, -0.0755148492);
+    }
+
+    g = Math.max(g, 0);
+    g = Math.min(g, 255);
+
+    let b;
+    if (value >= 66) {
+      b = 255;
+    } else if (value <= 19) {
+      b = 0;
+    } else {
+      b = value - 10;
+      b = 138.5177312231 * Math.log(b) - 305.0447927307;
+      b = Math.max(b, 0);
+      b = Math.min(b, 255);
+    }
+
+    r = Math.round(r).toString(16);
+    g = Math.round(g).toString(16);
+    b = Math.round(b).toString(16);
+
+    return `#${r}${g}${b}`;
+  },
+  legacyTypeToCapabilities: function(type) {
+    switch (type) {
+      case 'binarySensor':
+        return ['BinarySensor'];
+      case 'multiLevelSensor':
+        // legacy multiLevelSensor includes an 'on' member
+        return ['BinarySensor', 'MultiLevelSensor'];
+      case 'onOffLight':
+      case 'dimmableLight':
+        return ['OnOffSwitch', 'Light'];
+      case 'onOffColorLight':
+      case 'dimmableColorLight':
+        return ['OnOffSwitch', 'Light', 'ColorControl'];
+      case 'multiLevelSwitch':
+        return ['OnOffSwitch', 'MultiLevelSwitch'];
+      case 'onOffSwitch':
+        return ['OnOffSwitch'];
+      case 'smartPlug':
+        return ['OnOffSwitch', 'SmartPlug', 'EnergyMonitor'];
+      default:
+        return [];
     }
   },
 };

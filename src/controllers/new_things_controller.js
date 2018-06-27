@@ -75,7 +75,8 @@ NewThingsController.post('/', async (request, response) => {
 
     // Verify some high level thing description properties.
     if (description.hasOwnProperty('name') &&
-        description.hasOwnProperty('type') &&
+        (description.hasOwnProperty('type') ||
+         description.hasOwnProperty('@type')) &&
         description.hasOwnProperty('properties')) {
       response.json(description);
     } else if (Array.isArray(description)) {

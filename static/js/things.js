@@ -16,6 +16,8 @@ const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const App = require('./app');
 const BinarySensor = require('./binary-sensor');
+const ColorControl = require('./color-control');
+const EnergyMonitor = require('./energy-monitor');
 const EventList = require('./event-list');
 const Light = require('./light');
 const MultiLevelSensor = require('./multi-level-sensor');
@@ -107,31 +109,63 @@ const ThingsScreen = {
       } else {
         this.thingsElement.innerHTML = '';
         things.forEach((description) => {
-          switch (description.type) {
-            case 'onOffSwitch':
-              new OnOffSwitch(description);
-              break;
-            case 'onOffLight':
-            case 'onOffColorLight':
-            case 'dimmableLight':
-            case 'dimmableColorLight':
-              new Light(description);
-              break;
-            case 'binarySensor':
-              new BinarySensor(description);
-              break;
-            case 'multiLevelSensor':
-              new MultiLevelSensor(description);
-              break;
-            case 'multiLevelSwitch':
-              new MultiLevelSwitch(description);
-              break;
-            case 'smartPlug':
-              new SmartPlug(description);
-              break;
-            default:
-              new Thing(description);
-              break;
+          if (description.selectedCapability) {
+            switch (description.selectedCapability) {
+              case 'OnOffSwitch':
+                new OnOffSwitch(description);
+                break;
+              case 'MultiLevelSwitch':
+                new MultiLevelSwitch(description);
+                break;
+              case 'ColorControl':
+                new ColorControl(description);
+                break;
+              case 'EnergyMonitor':
+                new EnergyMonitor(description);
+                break;
+              case 'BinarySensor':
+                new BinarySensor(description);
+                break;
+              case 'MultiLevelSensor':
+                new MultiLevelSensor(description);
+                break;
+              case 'SmartPlug':
+                new SmartPlug(description);
+                break;
+              case 'Light':
+                new Light(description);
+                break;
+              default:
+                new Thing(description);
+                break;
+            }
+          } else {
+            switch (description.type) {
+              case 'onOffSwitch':
+                new OnOffSwitch(description);
+                break;
+              case 'onOffLight':
+              case 'onOffColorLight':
+              case 'dimmableLight':
+              case 'dimmableColorLight':
+                new Light(description);
+                break;
+              case 'binarySensor':
+                new BinarySensor(description);
+                break;
+              case 'multiLevelSensor':
+                new MultiLevelSensor(description);
+                break;
+              case 'multiLevelSwitch':
+                new MultiLevelSwitch(description);
+                break;
+              case 'smartPlug':
+                new SmartPlug(description);
+                break;
+              default:
+                new Thing(description);
+                break;
+            }
           }
         });
       }
@@ -164,33 +198,63 @@ const ThingsScreen = {
         }
         this.thingsElement.innerHTML = '';
         let thing;
-        switch (description.type) {
-          case 'onOffSwitch':
-            thing = new OnOffSwitch(description, 'htmlDetail');
-            break;
-          case 'binarySensor':
-            thing = new BinarySensor(description, 'htmlDetail');
-            break;
-          case 'multiLevelSensor':
-            thing = new MultiLevelSensor(description, 'htmlDetail');
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            thing = new Light(description, 'htmlDetail');
-            break;
-          case 'multiLevelSwitch':
-            thing = new MultiLevelSwitch(description, 'htmlDetail');
-            break;
-          case 'smartPlug':
-            // eslint-disable-next-line no-unused-vars
-            thing = new SmartPlug(description, 'htmlDetail');
-            break;
-          default:
-            // eslint-disable-next-line no-unused-vars
-            thing = new Thing(description, 'htmlDetail');
-            break;
+        if (description.selectedCapability) {
+          switch (description.selectedCapability) {
+            case 'OnOffSwitch':
+              thing = new OnOffSwitch(description, 'htmlDetail');
+              break;
+            case 'MultiLevelSwitch':
+              thing = new MultiLevelSwitch(description, 'htmlDetail');
+              break;
+            case 'ColorControl':
+              thing = new ColorControl(description, 'htmlDetail');
+              break;
+            case 'EnergyMonitor':
+              thing = new EnergyMonitor(description, 'htmlDetail');
+              break;
+            case 'BinarySensor':
+              thing = new BinarySensor(description, 'htmlDetail');
+              break;
+            case 'MultiLevelSensor':
+              thing = new MultiLevelSensor(description, 'htmlDetail');
+              break;
+            case 'SmartPlug':
+              thing = new SmartPlug(description, 'htmlDetail');
+              break;
+            case 'Light':
+              thing = new Light(description, 'htmlDetail');
+              break;
+            default:
+              thing = new Thing(description, 'htmlDetail');
+              break;
+          }
+        } else {
+          switch (description.type) {
+            case 'onOffSwitch':
+              thing = new OnOffSwitch(description, 'htmlDetail');
+              break;
+            case 'binarySensor':
+              thing = new BinarySensor(description, 'htmlDetail');
+              break;
+            case 'multiLevelSensor':
+              thing = new MultiLevelSensor(description, 'htmlDetail');
+              break;
+            case 'onOffLight':
+            case 'onOffColorLight':
+            case 'dimmableLight':
+            case 'dimmableColorLight':
+              thing = new Light(description, 'htmlDetail');
+              break;
+            case 'multiLevelSwitch':
+              thing = new MultiLevelSwitch(description, 'htmlDetail');
+              break;
+            case 'smartPlug':
+              thing = new SmartPlug(description, 'htmlDetail');
+              break;
+            default:
+              thing = new Thing(description, 'htmlDetail');
+              break;
+          }
         }
 
         document.getElementById('thing-title-icon').src = thing.pngBaseIcon;

@@ -28,6 +28,7 @@ const ContextMenu = {
     this.saveButton = document.getElementById('edit-thing-save-button');
     this.thingIcon = document.getElementById('edit-thing-icon');
     this.nameInput = document.getElementById('edit-thing-name');
+    this.thingType = document.getElementById('edit-thing-type');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
     this.thingUrl = '';
@@ -43,6 +44,7 @@ const ContextMenu = {
         window.location.href = '/login';
       });
     });
+    this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
   },
 
   /**
@@ -60,7 +62,50 @@ const ContextMenu = {
     switch (e.detail.action) {
       case 'edit':
         this.nameInput.value = e.detail.thingName;
+        this.thingType.innerHTML = '';
         this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
+
+        for (const capability of e.detail.capabilities) {
+          const option = document.createElement('option');
+          option.value = capability;
+
+          if (e.detail.selectedCapability === capability) {
+            option.selected = true;
+          }
+
+          switch (capability) {
+            case 'OnOffSwitch':
+              option.innerText = 'On/Off Switch';
+              break;
+            case 'MultiLevelSwitch':
+              option.innerText = 'Multi Level Switch';
+              break;
+            case 'ColorControl':
+              option.innerText = 'Color Control';
+              break;
+            case 'EnergyMonitor':
+              option.innerText = 'Energy Monitor';
+              break;
+            case 'BinarySensor':
+              option.innerText = 'Binary Sensor';
+              break;
+            case 'MultiLevelSensor':
+              option.innerText = 'Multi Level Sensor';
+              break;
+            case 'SmartPlug':
+              option.innerText = 'Smart Plug';
+              break;
+            case 'Light':
+              option.innerText = 'Light';
+              break;
+            default:
+              option.innerText = capability;
+              break;
+          }
+
+          this.thingType.appendChild(option);
+        }
+
         this.editContent.classList.remove('hidden');
         break;
       case 'remove':
@@ -79,6 +124,39 @@ const ContextMenu = {
     this.thingUrl = '';
   },
 
+  handleTypeChange: function() {
+    const capability =
+      this.thingType.options[this.thingType.selectedIndex].value;
+
+    let image = '/optimized-images/unknown-thing.png';
+    switch (capability) {
+      case 'OnOffSwitch':
+      case 'MultiLevelSwitch':
+        image = '/optimized-images/on-off-switch.png';
+        break;
+      case 'ColorControl':
+        // TODO: image
+        break;
+      case 'EnergyMonitor':
+        // TODO: image
+        break;
+      case 'BinarySensor':
+      case 'MultiLevelSensor':
+        image = '/optimized-images/binary-sensor.png';
+        break;
+      case 'SmartPlug':
+        image = '/optimized-images/smart-plug.svg';
+        break;
+      case 'Light':
+        image = '/optimized-images/bulb.png';
+        break;
+      default:
+        break;
+    }
+
+    this.thingIcon.style.backgroundImage = `url("${image}")`;
+  },
+
   /**
    * Handle click on edit option.
    */
@@ -88,6 +166,11 @@ const ContextMenu = {
       return;
     }
 
+    let capability;
+    if (this.thingType.options.length > 0) {
+      capability = this.thingType.options[this.thingType.selectedIndex].value;
+    }
+
     fetch(this.thingUrl, {
       method: 'PUT',
       headers: {
@@ -95,10 +178,11 @@ const ContextMenu = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({name}),
+      body: JSON.stringify({name, selectedCapability: capability}),
     }).then((response) => {
       if (response.ok) {
-        document.getElementById('thing-title-name').innerText = name;
+        // reload the page to pick up capability changes
+        window.location.reload();
       } else {
         console.error(`Error updating thing: ${response.statusText}`);
       }

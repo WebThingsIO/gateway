@@ -53,6 +53,7 @@ const Thing = function(id, description) {
   }
   this.floorplanX = description.floorplanX;
   this.floorplanY = description.floorplanY;
+  this.selectedCapability = description.selectedCapability;
   this.websockets = [];
   this.links = [
     {
@@ -125,6 +126,17 @@ Thing.prototype.setName = function(name) {
 };
 
 /**
+ * Set the selected capability of this Thing.
+ *
+ * @param {String} capability The selected capability
+ * @return {Promise} A promise which resolves with the description set.
+ */
+Thing.prototype.setSelectedCapability = function(capability) {
+  this.selectedCapability = capability;
+  return Database.updateThing(this.id, this.getDescription());
+};
+
+/**
  * Dispatch an event to all listeners subscribed to the Thing
  * @param {Event} event
  */
@@ -180,9 +192,10 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
     properties: this.properties,
     actions: this.actions,
     events: this.events,
+    links: links,
     floorplanX: this.floorplanX,
     floorplanY: this.floorplanY,
-    links: links,
+    selectedCapability: this.selectedCapability,
   };
 };
 
