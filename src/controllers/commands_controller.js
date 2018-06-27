@@ -74,6 +74,9 @@ CommandsController.configure = function(gatewayHref) {
  * Helper function for converting fetch results to text
  */
 function toText(res) {
+  if (!res.ok) {
+    throw new Error(`${res.status}: ${res.statusText}`);
+  }
   return res.text();
 }
 
@@ -91,8 +94,7 @@ CommandsController.post('/', function(request, response) {
 
   const thingsUrl = CommandsController.gatewayHref +
   Constants.THINGS_PATH;
-  thingsOptions.headers.Authorization = `Bearer ${
-    request.jwt}`;
+  thingsOptions.headers.Authorization = request.headers.authorization;
 
   fetch(thingsUrl, thingsOptions).then(toText)
     .then(function(thingBody) {
@@ -141,10 +143,9 @@ CommandsController.post('/', function(request, response) {
               return;
             }
             const iotUrl = CommandsController.gatewayHref + payload.href;
-            iotOptions.headers.Authorization =
-              `Bearer ${request.jwt}`;
+            iotOptions.headers.Authorization = request.headers.authorization;
             // Returning 201 to signify that the command was mapped to an
-            // intent and matched a 'thing' in our list.  Return a response to
+            // intent and matched a 'thing' in our list. Return a response to
             // caller with this status before the command finishes execution
             // as the execution can take some time (e.g. blinds)
             response.status(201).json({message: 'Command Created'});
@@ -172,6 +173,9 @@ CommandsController.post('/', function(request, response) {
       });
     }).catch(function(err) {
       console.log(`error catch:${err}`);
+      response.status(500).send({
+        message: err,
+      });
     });
 });
 

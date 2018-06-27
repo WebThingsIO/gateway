@@ -5,6 +5,8 @@
 
 const nock = require('nock');
 
+const pFinal = require('../promise-final');
+const {waitForExpect} = require('../expect-utils');
 const {server, chai, mockAdapter} = require('../common');
 
 const {
@@ -33,8 +35,8 @@ describe('command/', function() {
     jwt = await createUser(server, TEST_USER);
 
     const commandParser = require('../../controllers/commands_controller.js');
-    const gatewayHref = 'http://fake.host';
-    commandParser.configure(gatewayHref, jwt);
+    const gatewayHref = `https://localhost:${server.address().port}`;
+    commandParser.configure(gatewayHref);
   });
 
   function setupNock() {
@@ -68,6 +70,15 @@ describe('command/', function() {
     return res;
   }
 
+  async function getOn(lightId) {
+    const res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    return res.body.on;
+  }
+
   it('should return 400 for POST with no text body', async () => {
     setupNock();
     try {
@@ -83,105 +94,53 @@ describe('command/', function() {
   });
 
   it('should understand a command to turn on a light', async () => {
-    const resp = [{
-      name: 'Kitchen',
-      type: 'onOffSwitch',
-      href: '/things/zwave-efbddb01-4',
-      properties: {
-        on: {
-          type: 'boolean',
-          href: '/things/zwave-efbddb01-4/properties/on',
-        },
-      },
-      actions: {},
-      events: {},
-    }];
-    nock('http://fake.host')
-      .get('/things')
-      .reply(200, resp);
-
-    nock('http://fake.host')
-      .put('/things/zwave-efbddb01-4/properties/on')
-      .reply(200, resp);
+    await addDevice();
     setupNock();
 
-    const res = await addDevice();
-    await chai.request(server)
+    const res = await chai.request(server)
       .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
       .send({text: 'turn on the kitchen'});
     expect(res.status).toEqual(201);
+
+    await waitForExpect(async () => {
+      expect(await getOn(TEST_THING.id)).toEqual(true);
+    });
   });
 
   it('should return an error when a matching thing is not found', async () => {
-    const resp = [{
-      name: 'Bathroom',
-      type: 'onOffSwitch',
-      href: '/things/zwave-efbddb01-4',
-      properties: {
-        on: {
-          type: 'boolean',
-          href: '/things/zwave-efbddb01-4/properties/on',
-        },
-      },
-      actions: {},
-      events: {},
-    }];
-    nock('http://fake.host')
-      .get('/things')
-      .reply(200, resp);
+    await addDevice();
     setupNock();
 
-    await addDevice();
+    const err = await pFinal(chai.request(server)
+      .post(Constants.COMMANDS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send({text: 'turn on the bathroom'}));
 
-    try {
-      await chai.request(server)
-        .post(Constants.COMMANDS_PATH)
-        .set(...headerAuth(jwt))
-        .set('Accept', 'application/json')
-        .send({text: 'turn on the bathroom'});
-      throw new Error('Should have failed to create new thing');
-    } catch (err) {
-      expect(err);
-    }
+    expect(err.response.status).toEqual(404);
   });
 
-  it('should support accessing the commands API using a JWT', async () => {
+  it('should support an OAuth-issued JWT', async () => {
+    await addDevice();
+    setupNock();
+
     const testClient = OAuthClients.get('test');
     const accessToken = await JSONWebToken.issueOAuthToken(testClient, -1, {
       role: Constants.ACCESS_TOKEN,
       scope: '/things:readwrite',
     });
 
-    const resp = [{
-      name: 'Kitchen',
-      type: 'onOffSwitch',
-      href: '/things/zwave-efbddb01-4',
-      properties: {
-        on: {
-          type: 'boolean',
-          href: '/things/zwave-efbddb01-4/properties/on',
-        },
-      },
-      actions: {},
-      events: {},
-    }];
-    nock('http://fake.host')
-      .get('/things')
-      .reply(200, resp);
-
-    nock('http://fake.host')
-      .put('/things/zwave-efbddb01-4/properties/on')
-      .reply(200, resp);
-    setupNock();
-
-    const res = await addDevice();
-    await chai.request(server)
+    const res = await chai.request(server)
       .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(accessToken))
       .set('Accept', 'application/json')
       .send({text: 'turn on the kitchen'});
     expect(res.status).toEqual(201);
+
+    await waitForExpect(async () => {
+      expect(await getOn(TEST_THING.id)).toEqual(true);
+    });
   });
 });
