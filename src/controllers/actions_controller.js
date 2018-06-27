@@ -73,6 +73,72 @@ ActionsController.get('/', function(request, response) {
 });
 
 /**
+ * Handle getting a list of actions.
+ */
+ActionsController.get('/:actionName', function(request, response) {
+  const actionName = request.params.actionName;
+  if (request.params.thingId) {
+    response.status(200).json(Actions.getByThing(request.params.thingId,
+                                                 actionName));
+  } else {
+    response.status(200).json(Actions.getGatewayActions(actionName));
+  }
+});
+
+/**
+ * Handle creating a new action.
+ */
+ActionsController.post('/:actionName', async (request, response) => {
+  const actionName = request.params.actionName;
+
+  const keys = Object.keys(request.body);
+  if (keys.length != 1) {
+    const err = 'Incorrect number of parameters.';
+    console.log(err, request.body);
+    response.status(400).send(err);
+    return;
+  }
+
+  if (actionName !== keys[0]) {
+    const err = `Action name must be ${actionName}`;
+    console.log(err, request.body);
+    response.status(400).send(err);
+    return;
+  }
+
+  const actionParams = request.body[actionName].input;
+  const thingId = request.params.thingId;
+  let action = null;
+
+  if (thingId) {
+    try {
+      const thing = await Things.getThing(thingId);
+      action = new Action(actionName, actionParams, thing);
+    } catch (e) {
+      console.error('Thing does not exist', thingId, e);
+      response.status(404).send(e);
+      return;
+    }
+  } else {
+    action = new Action(actionName, actionParams);
+  }
+
+  try {
+    if (thingId) {
+      await AddonManager.requestAction(
+        thingId, action.id, actionName, actionParams);
+    }
+    await Actions.add(action);
+
+    response.status(201).json({[actionName]: action.getDescription()});
+  } catch (e) {
+    console.error('Creating action', actionName, 'failed');
+    console.error(e);
+    response.status(400).send(e);
+  }
+});
+
+/**
  * Handle getting a particular action.
  */
 ActionsController.get('/:actionName/:actionId', function(request, response) {

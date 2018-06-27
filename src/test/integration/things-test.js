@@ -38,6 +38,11 @@ const TEST_THING = {
       type: 'boolean',
       value: false,
     },
+    percent: {
+      '@type': 'LevelProperty',
+      type: 'number',
+      value: 20,
+    },
   },
 };
 
@@ -219,6 +224,20 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('name');
     expect(res.body.name).toEqual('new name');
+  });
+
+  it('GET all properties of a thing', async () => {
+    await addDevice();
+    const res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/test-1/properties`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('power');
+    expect(res.body.power).toEqual(false);
+    expect(res.body).toHaveProperty('percent');
+    expect(res.body.percent).toEqual(20);
   });
 
   it('GET a property of a thing', async () => {
