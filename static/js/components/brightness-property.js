@@ -13,10 +13,10 @@ const SliderProperty = require('./slider-property');
 
 class BrightnessProperty extends SliderProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.min = '0';
     this.max = '100';
     this.step = '1';
+    super.connectedCallback();
   }
 }
 

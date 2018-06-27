@@ -13,9 +13,9 @@ const LabelProperty = require('./label-property');
 
 class CurrentProperty extends LabelProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'A';
     this.precision = 1;
+    super.connectedCallback();
   }
 }
 

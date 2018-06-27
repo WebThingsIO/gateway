@@ -71,14 +71,25 @@ class LabelProperty extends BaseComponent {
   }
 
   connectedCallback() {
-    this.name = this.dataset.name;
-    this.value =
-      typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
-    this.precision = typeof this.dataset.precision !== 'undefined' ?
-      this.dataset.precision :
-      0;
+    if (!this.name) {
+      this.name = this.dataset.name;
+    }
+
+    if (!this.value) {
+      this.value =
+        typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
+    }
+
+    if (!this.unit) {
+      this.unit =
+        typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    }
+
+    if (!this.precision) {
+      this.precision = typeof this.dataset.precision !== 'undefined' ?
+        this.dataset.precision :
+        0;
+    }
   }
 
   get name() {

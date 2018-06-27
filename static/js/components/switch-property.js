@@ -108,8 +108,13 @@ class SwitchProperty extends BaseComponent {
   }
 
   connectedCallback() {
-    this.name = this.dataset.name;
-    this.label = this.dataset.offLabel;
+    if (!this.name) {
+      this.name = this.dataset.name;
+    }
+
+    if (!this.label) {
+      this.label = this.dataset.offLabel;
+    }
 
     this._upgradeProperty('checked');
     this._upgradeProperty('disabled');

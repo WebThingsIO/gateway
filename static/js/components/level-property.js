@@ -130,9 +130,14 @@ class LevelProperty extends BaseComponent {
   }
 
   connectedCallback() {
-    this.name = this.dataset.name;
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    if (!this.name) {
+      this.name = this.dataset.name;
+    }
+
+    if (!this.unit) {
+      this.unit =
+        typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    }
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');

@@ -13,9 +13,9 @@ const LabelProperty = require('./label-property');
 
 class FrequencyProperty extends LabelProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'Hz';
     this.precision = 0;
+    super.connectedCallback();
   }
 }
 

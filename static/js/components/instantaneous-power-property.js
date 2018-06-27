@@ -13,9 +13,9 @@ const LabelProperty = require('./label-property');
 
 class InstantaneousPowerProperty extends LabelProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'W';
     this.precision = 0;
+    super.connectedCallback();
   }
 }
 
