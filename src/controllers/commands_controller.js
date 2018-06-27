@@ -74,6 +74,9 @@ CommandsController.configure = function(gatewayHref) {
  * Helper function for converting fetch results to text
  */
 function toText(res) {
+  if (!res.ok) {
+    throw new Error(`${res.status}: ${res.statusText}`);
+  }
   return res.text();
 }
 
@@ -172,6 +175,9 @@ CommandsController.post('/', function(request, response) {
       });
     }).catch(function(err) {
       console.log(`error catch:${err}`);
+      response.status(500).send({
+        message: err,
+      });
     });
 });
 
