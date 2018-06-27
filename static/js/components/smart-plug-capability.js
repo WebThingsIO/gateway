@@ -31,17 +31,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/smart-plug.svg');
+      background-image: url('/optimized-images/smart-plug-off.svg');
       background-position: center 2rem;
     }
 
     .webthing-smart-plug-capability-icon.on {
       background-color: white;
       background-image: url('/optimized-images/smart-plug-on.svg');
-    }
-
-    .webthing-smart-plug-capability-icon.off {
-      background-image: url('/optimized-images/smart-plug-off.svg');
     }
 
     .webthing-smart-plug-capability-label {
@@ -72,7 +68,7 @@ class SmartPlugCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
+    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
     this.power =
       typeof this.dataset.power !== 'undefined' ? this.dataset.power : false;
     this._icon.addEventListener('click', this._onClick);
@@ -89,12 +85,13 @@ class SmartPlugCapability extends BaseComponent {
   set on(value) {
     this._on = Boolean(value);
 
-    if (this._on) {
-      this._icon.classList.remove('off');
+    if (value === null) {
+      this._icon.classList.remove('on');
+      this._label.innerText = '...';
+    } else if (this._on) {
       this._icon.classList.add('on');
     } else {
       this._icon.classList.remove('on');
-      this._icon.classList.add('off');
       this._label.innerText = 'OFF';
     }
 

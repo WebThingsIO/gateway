@@ -13,9 +13,9 @@ const LabelProperty = require('./label-property');
 
 class VoltageProperty extends LabelProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'V';
     this.precision = 0;
+    super.connectedCallback();
   }
 }
 

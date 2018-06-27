@@ -13,9 +13,9 @@ const LabelCapability = require('./label-capability');
 
 class EnergyMonitorCapability extends LabelCapability {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'W';
     this.precision = 0;
+    super.connectedCallback();
   }
 
   get power() {

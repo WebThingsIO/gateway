@@ -61,14 +61,22 @@ class LabelCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.level =
-      typeof this.dataset.level !== 'undefined' ? this.dataset.level : 0;
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
-    this.precision =
-      typeof this.dataset.precision !== 'undefined' ?
-        this.dataset.precision :
-        0;
+    if (!this.level) {
+      this.level =
+        typeof this.dataset.level !== 'undefined' ? this.dataset.level : 0;
+    }
+
+    if (!this.unit) {
+      this.unit =
+        typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    }
+
+    if (!this.precision) {
+      this.precision =
+        typeof this.dataset.precision !== 'undefined' ?
+          this.dataset.precision :
+          0;
+    }
   }
 
   get level() {

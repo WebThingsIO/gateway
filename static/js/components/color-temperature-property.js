@@ -13,9 +13,9 @@ const LevelProperty = require('./level-property');
 
 class ColorTemperatureProperty extends LevelProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.unit = 'K';
     this.step = '1';
+    super.connectedCallback();
   }
 }
 

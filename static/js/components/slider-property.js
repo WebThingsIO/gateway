@@ -78,7 +78,9 @@ class SliderProperty extends BaseComponent {
   }
 
   connectedCallback() {
-    this.name = this.dataset.name;
+    if (!this.name) {
+      this.name = this.dataset.name;
+    }
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');

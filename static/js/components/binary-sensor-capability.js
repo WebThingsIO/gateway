@@ -49,10 +49,11 @@ class BinarySensorCapability extends BaseComponent {
     super(template);
 
     this._icon = this.shadowRoot.querySelector('#icon');
+    this._on = false;
   }
 
   connectedCallback() {
-    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
+    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
   }
 
   get on() {
@@ -60,15 +61,17 @@ class BinarySensorCapability extends BaseComponent {
   }
 
   set on(value) {
-    if (value === true) {
+    this._on = Boolean(value);
+
+    if (value === null) {
+      this._icon.classList.remove('on');
+      this._icon.classList.remove('off');
+    } else if (this._on) {
       this._icon.classList.remove('off');
       this._icon.classList.add('on');
-    } else if (value === false) {
-      this._icon.classList.remove('on');
-      this._icon.classList.add('off');
     } else {
       this._icon.classList.remove('on');
-      this._icon.classList.remove('off');
+      this._icon.classList.add('off');
     }
   }
 }

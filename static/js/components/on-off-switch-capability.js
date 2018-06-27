@@ -49,11 +49,12 @@ class OnOffSwitchCapability extends BaseComponent {
     super(template);
 
     this._icon = this.shadowRoot.querySelector('#icon');
+    this._on = false;
     this._onClick = this.__onClick.bind(this);
   }
 
   connectedCallback() {
-    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
+    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
     this._icon.addEventListener('click', this._onClick);
   }
 
@@ -62,10 +63,12 @@ class OnOffSwitchCapability extends BaseComponent {
   }
 
   get on() {
-    return this._icon.classList.contains('on');
+    return this._on;
   }
 
   set on(value) {
+    this._on = Boolean(value);
+
     if (value === true) {
       this._icon.classList.remove('off');
       this._icon.classList.add('on');

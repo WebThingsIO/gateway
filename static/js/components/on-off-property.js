@@ -13,9 +13,9 @@ const SwitchProperty = require('./switch-property');
 
 class OnOffProperty extends SwitchProperty {
   connectedCallback() {
-    super.connectedCallback();
     this.onLabel = 'On';
     this.offLabel = 'Off';
+    super.connectedCallback();
   }
 }
 
