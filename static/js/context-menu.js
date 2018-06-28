@@ -30,6 +30,9 @@ const ContextMenu = {
     this.thingIcon = document.getElementById('edit-thing-icon');
     this.nameInput = document.getElementById('edit-thing-name');
     this.thingType = document.getElementById('edit-thing-type');
+    this.customIcon = document.getElementById('edit-thing-custom-icon');
+    this.customIconLabel =
+      document.getElementById('edit-thing-custom-icon-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
     this.thingUrl = '';
@@ -46,12 +49,15 @@ const ContextMenu = {
       });
     });
     this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
+    this.customIcon.addEventListener('change',
+                                     this.handleIconUpload.bind(this));
   },
 
   /**
    * Show Context Menu.
    */
   show: function(e) {
+    this.iconData = null;
     this.headingIcon.src = e.detail.thingIcon;
     this.headingText.textContent = e.detail.thingName;
     this.thingUrl = e.detail.thingUrl;
@@ -62,11 +68,13 @@ const ContextMenu = {
 
     switch (e.detail.action) {
       case 'edit': {
+        this.customIconLabel.classList.add('hidden');
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
         this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
 
         const capabilities = Utils.sortCapabilities(e.detail.capabilities);
+        capabilities.push('Custom');
 
         for (const capability of capabilities) {
           const option = document.createElement('option');
@@ -74,6 +82,9 @@ const ContextMenu = {
 
           if (e.detail.selectedCapability === capability) {
             option.selected = true;
+            if (capability === 'Custom') {
+              this.customIconLabel.classList.remove('hidden');
+            }
           }
 
           switch (capability) {
@@ -100,6 +111,9 @@ const ContextMenu = {
               break;
             case 'Light':
               option.innerText = 'Light';
+              break;
+            case 'Custom':
+              option.innerText = 'Custom Thing';
               break;
             default:
               option.innerText = capability;
@@ -132,6 +146,7 @@ const ContextMenu = {
     const capability =
       this.thingType.options[this.thingType.selectedIndex].value;
 
+    this.customIconLabel.classList.add('hidden');
     let image = '/optimized-images/thing-icons/thing.png';
     switch (capability) {
       case 'OnOffSwitch':
@@ -158,11 +173,43 @@ const ContextMenu = {
       case 'Light':
         image = '/optimized-images/thing-icons/light.svg';
         break;
+      case 'Custom':
+        this.customIconLabel.classList.remove('hidden');
+        break;
       default:
         break;
     }
 
     this.thingIcon.style.backgroundImage = `url("${image}")`;
+  },
+
+  handleIconUpload: function() {
+    if (this.customIcon.files.length === 0) {
+      return;
+    }
+
+    const file = this.customIcon.files[0];
+    if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      if (e.target.error) {
+        console.error(e.target.error);
+        this.saveButton.disabled = false;
+        return;
+      }
+
+      this.iconData = {
+        mime: file.type,
+        data: btoa(e.target.result),
+      };
+      this.saveButton.disabled = false;
+    };
+
+    this.saveButton.disabled = true;
+    reader.readAsBinaryString(file);
   },
 
   /**
@@ -179,6 +226,12 @@ const ContextMenu = {
       capability = this.thingType.options[this.thingType.selectedIndex].value;
     }
 
+    const body = {name, selectedCapability: capability};
+
+    if (capability === 'Custom' && this.iconData) {
+      body.iconData = this.iconData;
+    }
+
     fetch(this.thingUrl, {
       method: 'PUT',
       headers: {
@@ -186,7 +239,7 @@ const ContextMenu = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({name, selectedCapability: capability}),
+      body: JSON.stringify(body),
     }).then((response) => {
       if (response.ok) {
         // reload the page to pick up capability changes

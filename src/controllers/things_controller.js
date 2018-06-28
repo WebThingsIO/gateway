@@ -281,6 +281,14 @@ ThingsController.put('/:thingId', async (request, response) => {
     }
   }
 
+  if (request.body.iconData) {
+    try {
+      await thing.setIcon(request.body.iconData, true);
+    } catch (e) {
+      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+    }
+  }
+
   let description;
   try {
     description = await thing.setName(name);
