@@ -253,7 +253,7 @@ ThingsController.patch('/:thingId', (request, response) => {
 /**
  * Modify a Thing.
  */
-ThingsController.put('/:thingId', (request, response) => {
+ThingsController.put('/:thingId', async (request, response) => {
   const thingId = request.params.thingId;
   if (!request.body || !request.body.hasOwnProperty('name')) {
     response.status(400).send('name parameter required');
@@ -266,13 +266,29 @@ ThingsController.put('/:thingId', (request, response) => {
     return;
   }
 
-  Things.getThing(thingId).then((thing) => {
-    return thing.setName(name);
-  }).then((description) => {
-    response.status(200).json(description);
-  }).catch((e) => {
+  let thing;
+  try {
+    thing = await Things.getThing(thingId);
+  } catch (e) {
+    response.status(500).send(`Failed to retrieve thing ${thingId}: ${e}`);
+  }
+
+  if (request.body.selectedCapability) {
+    try {
+      await thing.setSelectedCapability(request.body.selectedCapability);
+    } catch (e) {
+      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+    }
+  }
+
+  let description;
+  try {
+    description = await thing.setName(name);
+  } catch (e) {
     response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-  });
+  }
+
+  response.status(200).json(description);
 });
 
 /**

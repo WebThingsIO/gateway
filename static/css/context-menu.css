@@ -70,6 +70,27 @@
   width: calc(100% - 1rem);
 }
 
+#edit-thing-type {
+  display: block;
+  text-align: left;
+  color: #fff;
+  background-color: #7f93a1;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  width: 50%;
+  border: none;
+  border-radius: 0.5rem;
+  height: 3rem;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url('/optimized-images/select-arrow.svg');
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  background-position: calc(100% - 1rem);
+  padding-left: 1rem;
+}
+
 #edit-thing-save-button {
   height: 4rem;
   background-color: #7f93a1;

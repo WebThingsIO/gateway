@@ -12,6 +12,8 @@
 
 const API = require('./api');
 const BinarySensor = require('./binary-sensor');
+const ColorControl = require('./color-control');
+const EnergyMonitor = require('./energy-monitor');
 const Light = require('./light');
 const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
@@ -79,31 +81,64 @@ const FloorplanScreen = {
           description.floorplanY = y;
           x += this.THING_GAP; // increment x co-ordinate.
         }
-        switch (description.type) {
-          case 'onOffSwitch':
-            this.things.push(new OnOffSwitch(description, 'svg'));
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            this.things.push(new Light(description, 'svg'));
-            break;
-          case 'binarySensor':
-            this.things.push(new BinarySensor(description, 'svg'));
-            break;
-          case 'multiLevelSensor':
-            this.things.push(new MultiLevelSensor(description, 'svg'));
-            break;
-          case 'multiLevelSwitch':
-            this.things.push(new MultiLevelSwitch(description, 'svg'));
-            break;
-          case 'smartPlug':
-            this.things.push(new SmartPlug(description, 'svg'));
-            break;
-          default:
-            this.things.push(new Thing(description, 'svg'));
-            break;
+
+        if (description.selectedCapability) {
+          switch (description.selectedCapability) {
+            case 'OnOffSwitch':
+              this.things.push(new OnOffSwitch(description, 'svg'));
+              break;
+            case 'MultiLevelSwitch':
+              this.things.push(new MultiLevelSwitch(description, 'svg'));
+              break;
+            case 'ColorControl':
+              this.things.push(new ColorControl(description, 'svg'));
+              break;
+            case 'EnergyMonitor':
+              this.things.push(new EnergyMonitor(description, 'svg'));
+              break;
+            case 'BinarySensor':
+              this.things.push(new BinarySensor(description, 'svg'));
+              break;
+            case 'MultiLevelSensor':
+              this.things.push(new MultiLevelSensor(description, 'svg'));
+              break;
+            case 'SmartPlug':
+              this.things.push(new SmartPlug(description, 'svg'));
+              break;
+            case 'Light':
+              this.things.push(new Light(description, 'svg'));
+              break;
+            default:
+              this.things.push(new Thing(description, 'svg'));
+              break;
+          }
+        } else {
+          switch (description.type) {
+            case 'onOffSwitch':
+              this.things.push(new OnOffSwitch(description, 'svg'));
+              break;
+            case 'onOffLight':
+            case 'onOffColorLight':
+            case 'dimmableLight':
+            case 'dimmableColorLight':
+              this.things.push(new Light(description, 'svg'));
+              break;
+            case 'binarySensor':
+              this.things.push(new BinarySensor(description, 'svg'));
+              break;
+            case 'multiLevelSensor':
+              this.things.push(new MultiLevelSensor(description, 'svg'));
+              break;
+            case 'multiLevelSwitch':
+              this.things.push(new MultiLevelSwitch(description, 'svg'));
+              break;
+            case 'smartPlug':
+              this.things.push(new SmartPlug(description, 'svg'));
+              break;
+            default:
+              this.things.push(new Thing(description, 'svg'));
+              break;
+          }
         }
       }, this);
     });

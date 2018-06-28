@@ -44,6 +44,15 @@ class Thing {
 
     this.name = description.name;
     this.type = description.type;
+
+    if (Array.isArray(description['@type']) &&
+        description['@type'].length > 0) {
+      this['@type'] = description['@type'];
+    } else {
+      this['@type'] = Utils.legacyTypeToCapabilities(this.type);
+    }
+
+    this.selectedCapability = description.selectedCapability;
     this.svgBaseIcon = opts.svgBaseIcon || '/images/unknown-thing.svg';
     this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
     this.format = format;
@@ -508,6 +517,8 @@ class Thing {
         thingName: this.name,
         thingIcon: this.pngBaseIcon,
         action: 'edit',
+        capabilities: this['@type'],
+        selectedCapability: this.selectedCapability,
       },
     });
     window.dispatchEvent(newEvent);
