@@ -54,6 +54,8 @@ class NewThing {
       capabilities = Utils.legacyTypeToCapabilities(this.description.type);
     }
 
+    capabilities = Utils.sortCapabilities(capabilities);
+
     let cls = '', type = '';
     const options = [];
     for (let capability of capabilities) {

@@ -198,6 +198,8 @@ class NewWebThing {
         capabilities = Utils.legacyTypeToCapabilities(description.type);
       }
 
+      capabilities = Utils.sortCapabilities(capabilities);
+
       let cls = '';
       for (const capability of capabilities) {
         const option = document.createElement('option');

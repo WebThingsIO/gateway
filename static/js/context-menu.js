@@ -11,6 +11,7 @@
 
 const API = require('./api');
 const page = require('./lib/page');
+const Utils = require('./utils');
 
 // eslint-disable-next-line no-unused-vars
 const ContextMenu = {
@@ -60,12 +61,14 @@ const ContextMenu = {
     this.removeContent.classList.add('hidden');
 
     switch (e.detail.action) {
-      case 'edit':
+      case 'edit': {
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
         this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
 
-        for (const capability of e.detail.capabilities) {
+        const capabilities = Utils.sortCapabilities(e.detail.capabilities);
+
+        for (const capability of capabilities) {
           const option = document.createElement('option');
           option.value = capability;
 
@@ -108,6 +111,7 @@ const ContextMenu = {
 
         this.editContent.classList.remove('hidden');
         break;
+      }
       case 'remove':
         this.removeContent.classList.remove('hidden');
         break;

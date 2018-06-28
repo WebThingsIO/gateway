@@ -232,6 +232,35 @@ const Utils = {
         return [];
     }
   },
+  sortCapabilities: function(capabilities) {
+    // copy the array, as we're going to sort in place.
+    const list = capabilities.slice();
+
+    const priority = [
+      'SmartPlug',
+      'Light',
+      'MultiLevelSwitch',
+      'OnOffSwitch',
+      'ColorControl',
+      'EnergyMonitor',
+      'MultiLevelSensor',
+      'BinarySensor',
+    ];
+
+    list.sort((a, b) => {
+      if (!priority.includes(a) && !priority.includes(b)) {
+        return 0;
+      } else if (!priority.includes(a)) {
+        return 1;
+      } else if (!priority.includes(b)) {
+        return -1;
+      }
+
+      return priority.indexOf(a) - priority.indexOf(b);
+    });
+
+    return list;
+  },
 };
 
 module.exports = Utils;
