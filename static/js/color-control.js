@@ -10,10 +10,6 @@
 
 'use strict';
 
-const BrightnessDetail = require('./property-detail/brightness');
-const ColorDetail = require('./property-detail/color');
-const ColorTemperatureDetail = require('./property-detail/color-temperature');
-const OnOffDetail = require('./property-detail/on-off');
 const Thing = require('./thing');
 const Utils = require('./utils');
 
@@ -30,12 +26,6 @@ class ColorControl extends Thing {
       format,
       {
         // TODO: change icon
-      },
-      {
-        on: OnOffDetail,
-        level: BrightnessDetail,
-        color: ColorDetail,
-        colorTemperature: ColorTemperatureDetail,
       }
     );
   }

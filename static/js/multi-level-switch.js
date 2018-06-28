@@ -10,8 +10,6 @@
 
 'use strict';
 
-const LevelDetail = require('./property-detail/level');
-const OnOffDetail = require('./property-detail/on-off');
 const OnOffSwitch = require('./on-off-switch');
 
 class MultiLevelSwitch extends OnOffSwitch {
@@ -28,10 +26,6 @@ class MultiLevelSwitch extends OnOffSwitch {
       {
         svgBaseIcon: '/images/level.svg',
         pngBaseIcon: '/images/level.svg',
-      },
-      {
-        on: OnOffDetail,
-        level: LevelDetail,
       }
     );
   }

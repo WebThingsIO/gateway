@@ -11,7 +11,6 @@
 'use strict';
 
 const API = require('./api');
-const OnOffDetail = require('./property-detail/on-off');
 const Thing = require('./thing');
 
 class OnOffSwitch extends Thing {
@@ -21,20 +20,15 @@ class OnOffSwitch extends Thing {
    * @param {Object} description Thing description object.
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    * @param {Object} options Options for building the view.
-   * @param {Object} defaultProperties Legacy default properties.
    */
-  constructor(description, format, options, defaults) {
+  constructor(description, format, options) {
     options = options ||
       {
         svgBaseIcon: '/images/on-off-switch.svg',
         pngBaseIcon: '/images/on-off-switch.png',
       };
-    defaults = defaults ||
-      {
-        on: OnOffDetail,
-      };
 
-    super(description, format, options, defaults);
+    super(description, format, options);
 
     this.changing = false;
     this.icon.addEventListener('click', this.handleClick.bind(this));

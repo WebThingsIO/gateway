@@ -10,7 +10,6 @@
 
 'use strict';
 
-const OnOffDetail = require('./property-detail/on-off');
 const Thing = require('./thing');
 
 class BinarySensor extends Thing {
@@ -27,9 +26,6 @@ class BinarySensor extends Thing {
       {
         svgBaseIcon: '/images/binary-sensor.svg',
         pngBaseIcon: '/images/binary-sensor.png',
-      },
-      {
-        on: OnOffDetail,
       }
     );
   }

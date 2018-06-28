@@ -10,7 +10,6 @@
 
 'use strict';
 
-const LevelDetail = require('./property-detail/level');
 const Thing = require('./thing');
 const Utils = require('./utils');
 
@@ -28,9 +27,6 @@ class MultiLevelSensor extends Thing {
       {
         svgBaseIcon: '/images/binary-sensor.svg',
         pngBaseIcon: '/images/binary-sensor.png',
-      },
-      {
-        level: LevelDetail,
       }
     );
   }
