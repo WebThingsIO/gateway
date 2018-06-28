@@ -11,14 +11,7 @@
 
 'use strict';
 
-const CurrentDetail = require('./property-detail/current');
-const FrequencyDetail = require('./property-detail/frequency');
-const InstantaneousPowerDetail =
-  require('./property-detail/instantaneous-power');
-const LevelDetail = require('./property-detail/level');
-const OnOffDetail = require('./property-detail/on-off');
 const OnOffSwitch = require('./on-off-switch');
-const VoltageDetail = require('./property-detail/voltage');
 
 class SmartPlug extends OnOffSwitch {
   /**
@@ -34,14 +27,6 @@ class SmartPlug extends OnOffSwitch {
       {
         svgBaseIcon: '/images/smart-plug-off.svg',
         pngBaseIcon: '/images/smart-plug.svg',
-      },
-      {
-        on: OnOffDetail,
-        level: LevelDetail,
-        instantaneousPower: InstantaneousPowerDetail,
-        voltage: VoltageDetail,
-        current: CurrentDetail,
-        frequency: FrequencyDetail,
       }
     );
   }

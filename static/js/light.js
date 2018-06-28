@@ -10,10 +10,6 @@
 
 'use strict';
 
-const BrightnessDetail = require('./property-detail/brightness');
-const ColorDetail = require('./property-detail/color');
-const ColorTemperatureDetail = require('./property-detail/color-temperature');
-const OnOffDetail = require('./property-detail/on-off');
 const OnOffSwitch = require('./on-off-switch');
 
 class Light extends OnOffSwitch {
@@ -30,12 +26,6 @@ class Light extends OnOffSwitch {
       {
         svgBaseIcon: '/images/bulb.svg',
         pngBaseIcon: '/images/bulb.png',
-      },
-      {
-        on: OnOffDetail,
-        level: BrightnessDetail,
-        color: ColorDetail,
-        colorTemperature: ColorTemperatureDetail,
       }
     );
   }

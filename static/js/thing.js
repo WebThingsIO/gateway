@@ -36,11 +36,20 @@ class Thing {
    * @param {Object} description Thing description object.
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    * @param {Object} options Options for building the view.
-   * @param {Object} defaultProperties Legacy default properties.
    */
-  constructor(description, format, options, defaultProperties) {
+  constructor(description, format, options) {
     const opts = options || {};
-    const defaults = defaultProperties || {};
+    const defaults = {
+      on: OnOffDetail,
+      level: LevelDetail,
+      instantaneousPower: InstantaneousPowerDetail,
+      voltage: VoltageDetail,
+      current: CurrentDetail,
+      frequency: FrequencyDetail,
+      brightness: BrightnessDetail,
+      color: ColorDetail,
+      colorTemperature: ColorTemperatureDetail,
+    };
 
     this.name = description.name;
     this.type = description.type;
@@ -163,7 +172,12 @@ class Thing {
             break;
           default:
             if (defaults.hasOwnProperty(name)) {
-              detail = new defaults[name](this, name, property);
+              let detailType = defaults[name];
+              if (name === 'level' && this['@type'].includes('Light')) {
+                detailType = defaults.brightness;
+              }
+
+              detail = new detailType(this, name, property);
             } else {
               switch (property.type) {
                 case 'string':
