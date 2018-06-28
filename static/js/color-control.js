@@ -10,6 +10,10 @@
 
 'use strict';
 
+const BrightnessDetail = require('./property-detail/brightness');
+const ColorDetail = require('./property-detail/color');
+const ColorTemperatureDetail = require('./property-detail/color-temperature');
+const OnOffDetail = require('./property-detail/on-off');
 const Thing = require('./thing');
 const Utils = require('./utils');
 
@@ -20,10 +24,20 @@ class ColorControl extends Thing {
    * @param {Object} description Thing description object.
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    */
-  // eslint-disable-next-line no-useless-constructor
   constructor(description, format) {
-    super(description, format);
-    // TODO: change icon
+    super(
+      description,
+      format,
+      {
+        // TODO: change icon
+      },
+      {
+        on: OnOffDetail,
+        level: BrightnessDetail,
+        color: ColorDetail,
+        colorTemperature: ColorTemperatureDetail,
+      }
+    );
   }
 
   get icon() {

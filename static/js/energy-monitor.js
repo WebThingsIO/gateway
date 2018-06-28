@@ -10,7 +10,14 @@
 
 'use strict';
 
+const CurrentDetail = require('./property-detail/current');
+const FrequencyDetail = require('./property-detail/frequency');
+const InstantaneousPowerDetail =
+  require('./property-detail/instantaneous-power');
+const LevelDetail = require('./property-detail/level');
+const OnOffDetail = require('./property-detail/on-off');
 const Thing = require('./thing');
+const VoltageDetail = require('./property-detail/voltage');
 
 class EnergyMonitor extends Thing {
   /**
@@ -19,10 +26,22 @@ class EnergyMonitor extends Thing {
    * @param {Object} description Thing description object.
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    */
-  // eslint-disable-next-line no-useless-constructor
   constructor(description, format) {
-    super(description, format);
-    // TODO: change icon
+    super(
+      description,
+      format,
+      {
+        // TODO: change icon
+      },
+      {
+        on: OnOffDetail,
+        level: LevelDetail,
+        instantaneousPower: InstantaneousPowerDetail,
+        voltage: VoltageDetail,
+        current: CurrentDetail,
+        frequency: FrequencyDetail,
+      }
+    );
   }
 
   get icon() {
