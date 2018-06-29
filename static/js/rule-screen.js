@@ -105,6 +105,12 @@ const RuleScreen = {
     this.onWindowResize();
   },
 
+  getEffectType: function() {
+    const effectSelect =
+      this.ruleDescription.querySelector('.rule-effect-select');
+    return effectSelect.value === 'If' ? 'SetEffect' : 'PulseEffect';
+  },
+
   /**
    * Change the rule based on a change to its description's drop down menus
    * @param {Event} event
@@ -112,19 +118,15 @@ const RuleScreen = {
   onRuleDescriptionInput: function(event) {
     const value = event.target.value;
     if (event.target.classList.contains('rule-trigger-select')) {
-      console.log(value, this.rule.trigger.op);
       if (value === 'and') {
         this.rule.trigger.op = 'AND';
       } else if (value === 'or') {
         this.rule.trigger.op = 'OR';
       }
-      console.log(value, this.rule.trigger.op);
     } else if (event.target.classList.contains('rule-effect-select')) {
-      const index = parseInt(event.target.dataset.index);
-      if (value === 'permanently') {
-        this.rule.effect.effects[index].type = 'SetEffect';
-      } else if (value === 'temporarily') {
-        this.rule.effect.effects[index].type = 'PulseEffect';
+      const effectType = this.getEffectType();
+      for (let i = 0; i < this.rule.effect.effects.length; i++) {
+        this.rule.effect.effects[i].type = effectType;
       }
     } else {
       console.warn('Unexpected input event', event);
@@ -443,6 +445,11 @@ const RuleScreen = {
       type: 'MultiEffect',
       effects: effects,
     };
+    const effectType = this.getEffectType();
+    for (let i = 0; i < this.rule.effect.effects.length; i++) {
+      this.rule.effect.effects[i].type = effectType;
+    }
+
     this.rule.update();
 
     this.onPresentationChange();

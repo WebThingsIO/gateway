@@ -213,12 +213,9 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
 /**
  * Convert an effect's description to a human-readable string
  * @param {Effect} effect
- * @param {boolean} html - whether to generate html
- * @param {number} index - index within rule's effects
  * @return {String?}
  */
-Rule.prototype.singleEffectToHumanRepresentation = function(effect, html,
-                                                            index) {
+Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
   if (!effect) {
     return null;
   }
@@ -235,7 +232,7 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect, html,
         }
       }
       const singleStr =
-        this.singleEffectToHumanRepresentation(effect.effects[i], html, i);
+        this.singleEffectToHumanRepresentation(effect.effects[i]);
       if (!singleStr) {
         return null;
       }
@@ -273,25 +270,6 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect, html,
     effectStr += `set ${effectThing.name} ${effect.property.name} to `;
     effectStr += effect.value;
   }
-
-  if (html) {
-    const tempSelected = effect.type === 'PulseEffect' ? 'selected' : '';
-    const permSelected = effect.type === 'SetEffect' ? 'selected' : '';
-    const selectHTML = `
-      <span class="triangle-select-container">
-        <select class="triangle-select rule-effect-select"
-                data-index="${index}">
-          <option ${permSelected}>permanently</option>
-          <option ${tempSelected}>temporarily</option>
-        </select>
-      </span>
-    `;
-    effectStr += selectHTML;
-  } else {
-    effectStr += ' ';
-    effectStr += effect.type === 'PulseEffect' ? 'temporarily' : 'permanently';
-  }
-
   return effectStr;
 };
 /**
@@ -326,10 +304,25 @@ Rule.prototype.toHumanRepresentation = function(html) {
   }
   if (this.effect) {
     effectStr =
-      this.singleEffectToHumanRepresentation(this.effect, html, 0) ||
+      this.singleEffectToHumanRepresentation(this.effect) ||
       effectStr;
   }
-  return `If ${triggerStr} then ${effectStr}`;
+
+  const permanent = this.effect && this.effect.effects[0] &&
+    this.effect.effects[0].type == 'SetEffect';
+  let predicate = permanent ? 'If' : 'While';
+  if (html) {
+    const permSelected = permanent ? 'selected' : '';
+    const tempSelected = permanent ? '' : 'selected';
+    predicate = `<span class="triangle-select-container">
+      <select class="triangle-select rule-effect-select">
+        <option ${permSelected}>If</option>
+        <option ${tempSelected}>While</option>
+      </select>
+    </span>`;
+  }
+
+  return `${predicate} ${triggerStr}, ${effectStr}`;
 };
 
 /**
