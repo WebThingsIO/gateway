@@ -79,7 +79,7 @@
 .new-thing-icon {
   width: 6.4rem;
   height: 6.4rem;
-  background-image: url('../optimized-images/unknown-thing.png');
+  background-image: url('../optimized-images/thing-icons/thing.svg');
   background-size: 6.4rem;
 }
 
@@ -153,27 +153,43 @@
 }
 
 .new-thing.pin-required .new-thing-icon {
-  background-image: url('../optimized-images/security-icon.svg');
-}
-
-.new-thing.on-off-switch .new-thing-icon {
-  background-image: url('../optimized-images/on-off-switch.png');
-}
-
-.new-thing.binary-sensor .new-thing-icon {
-  background-image: url('../optimized-images/binary-sensor.png');
-}
-
-.new-thing.on-off-light .new-thing-icon {
-  background-image: url('../optimized-images/bulb.png');
-}
-
-.new-thing.smart-plug .new-thing-icon {
-  background-image: url('../optimized-images/smart-plug.svg');
+  background-image: url('../optimized-images/thing-icons/pin_required_icon.svg');
 }
 
 .new-thing.web-thing .new-thing-icon {
-  background-image: url('../optimized-images/web-thing-icon.svg');
+  background-image: url('../optimized-images/thing-icons/web_thing_icon.svg');
+}
+
+.new-thing.on-off-switch .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/on_off_switch.svg');
+}
+
+.new-thing.multi-level-switch .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/multi_level_switch.svg');
+}
+
+.new-thing.binary-sensor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/binary_sensor.svg');
+}
+
+.new-thing.multi-level-sensor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/multi_level_sensor.svg');
+}
+
+.new-thing.light .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/light.svg');
+}
+
+.new-thing.smart-plug .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/smart_plug.svg');
+}
+
+.new-thing.color-control .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/color_control.svg');
+}
+
+.new-thing.energy-monitor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/energy_monitor.svg');
 }
 
 #add-by-url-anchor:link,

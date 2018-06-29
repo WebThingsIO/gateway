@@ -30,15 +30,15 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #5d9bc7;
-      background-image: url('/optimized-images/on-off-switch.png');
+      background-image: url('/optimized-images/component-icons/on-off-switch.png');
     }
 
     .webthing-on-off-switch-capability-icon.on {
-      background-image: url('/optimized-images/on-off-switch-on.png');
+      background-image: url('/optimized-images/component-icons/on-off-switch-on.png');
     }
 
     .webthing-on-off-switch-capability-icon.off {
-      background-image: url('/optimized-images/on-off-switch-off.png');
+      background-image: url('/optimized-images/component-icons/on-off-switch-off.png');
     }
   </style>
   <div id="icon" class="webthing-on-off-switch-capability-icon"></div>

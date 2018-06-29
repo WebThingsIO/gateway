@@ -38,10 +38,10 @@ const Speech = {
       this.listening = false;
       this.stm.stop();
       document.getElementById('speech-button').style.backgroundImage =
-        `url('/images/microphone.svg')`;
+        `url('/optimized-images/microphone.svg')`;
     } else {
       document.getElementById('speech-button').style.backgroundImage =
-        `url('/images/microphone-active.svg')`;
+        `url('/optimized-images/microphone-active.svg')`;
       this.stm.listen();
       this.listening = true;
     }
@@ -64,7 +64,7 @@ const Speech = {
       };
       document.getElementById('stm-levels').classList.add('hidden');
       document.getElementById('speech-button').style.backgroundImage =
-        `url('/images/microphone.svg')`;
+        `url('/optimized-images/microphone.svg')`;
       // sort results to get the one with the highest confidence
       const results = msg.data.sort((a, b) => {
         return b.confidence - a.confidence;

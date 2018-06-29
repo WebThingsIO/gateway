@@ -14,7 +14,7 @@ const RulePartBlock = require('./RulePartBlock');
 function DevicePropertyBlock(ruleArea, onPresentationChange, onRuleChange,
                              thing) {
   RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleChange,
-                     thing.name, '/images/on-off-switch.svg');
+                     thing.name, '/optimized-images/on-off-switch.svg');
   this.thing = thing;
 
   const propertyInfo = this.elt.querySelector('.rule-part-info');

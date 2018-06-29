@@ -31,13 +31,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/smart-plug-off.svg');
+      background-image: url('/optimized-images/component-icons/smart-plug-off.svg');
       background-position: center 2rem;
     }
 
     .webthing-smart-plug-capability-icon.on {
       background-color: white;
-      background-image: url('/optimized-images/smart-plug-on.svg');
+      background-image: url('/optimized-images/component-icons/smart-plug-on.svg');
     }
 
     .webthing-smart-plug-capability-label {

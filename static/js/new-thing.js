@@ -66,15 +66,15 @@ class NewThing {
           break;
         case 'MultiLevelSwitch':
           type = 'Multi Level Switch';
-          cls = cls || 'on-off-switch';
+          cls = cls || 'multi-level-switch';
           break;
         case 'ColorControl':
           type = 'Color Control';
-          // TODO: cls
+          cls = cls || 'color-control';
           break;
         case 'EnergyMonitor':
           type = 'Energy Monitor';
-          // TODO: cls
+          cls = cls || 'energy-monitor';
           break;
         case 'BinarySensor':
           type = 'Binary Sensor';
@@ -82,7 +82,7 @@ class NewThing {
           break;
         case 'MultiLevelSensor':
           type = 'Multi Level Sensor';
-          cls = cls || 'binary-sensor';
+          cls = cls || 'multi-level-sensor';
           break;
         case 'SmartPlug':
           type = 'Smart Plug';
@@ -90,7 +90,7 @@ class NewThing {
           break;
         case 'Light':
           type = 'Light';
-          cls = cls || 'on-off-light';
+          cls = cls || 'light';
           break;
         default:
           type = capability;
@@ -257,33 +257,41 @@ class NewThing {
     let cls = '';
     switch (capability) {
       case 'OnOffSwitch':
-      case 'MultiLevelSwitch':
         cls = 'on-off-switch';
         break;
+      case 'MultiLevelSwitch':
+        cls = 'multi-level-switch';
+        break;
       case 'ColorControl':
-        // TODO: cls
+        cls = 'color-control';
         break;
       case 'EnergyMonitor':
-        // TODO: cls
+        cls = 'energy-monitor';
         break;
       case 'BinarySensor':
-      case 'MultiLevelSensor':
         cls = 'binary-sensor';
+        break;
+      case 'MultiLevelSensor':
+        cls = 'multi-level-sensor';
         break;
       case 'SmartPlug':
         cls = 'smart-plug';
         break;
       case 'Light':
-        cls = 'on-off-light';
+        cls = 'light';
         break;
       default:
         break;
     }
 
     this.element.classList.remove('on-off-switch',
+                                  'multi-level-switch',
+                                  'color-control',
+                                  'energy-monitor',
                                   'binary-sensor',
+                                  'multi-level-sensor',
                                   'smart-plug',
-                                  'on-off-light');
+                                  'light');
 
     if (cls) {
       this.element.classList.add(cls);

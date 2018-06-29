@@ -132,27 +132,31 @@ const ContextMenu = {
     const capability =
       this.thingType.options[this.thingType.selectedIndex].value;
 
-    let image = '/optimized-images/unknown-thing.png';
+    let image = '/optimized-images/thing-icons/thing.png';
     switch (capability) {
       case 'OnOffSwitch':
+        image = '/optimized-images/thing-icons/on_off_switch.svg';
+        break;
       case 'MultiLevelSwitch':
-        image = '/optimized-images/on-off-switch.png';
+        image = '/optimized-images/thing-icons/multi_level_switch.svg';
         break;
       case 'ColorControl':
-        // TODO: image
+        image = '/optimized-images/thing-icons/color_control.svg';
         break;
       case 'EnergyMonitor':
-        // TODO: image
+        image = '/optimized-images/thing-icons/energy_monitor.svg';
         break;
       case 'BinarySensor':
+        image = '/optimized-images/thing-icons/binary_sensor.svg';
+        break;
       case 'MultiLevelSensor':
-        image = '/optimized-images/binary-sensor.png';
+        image = '/optimized-images/thing-icons/multi_level_sensor.svg';
         break;
       case 'SmartPlug':
-        image = '/optimized-images/smart-plug.svg';
+        image = '/optimized-images/thing-icons/smart_plug.svg';
         break;
       case 'Light':
-        image = '/optimized-images/bulb.png';
+        image = '/optimized-images/thing-icons/light.svg';
         break;
       default:
         break;

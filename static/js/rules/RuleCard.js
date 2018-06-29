@@ -37,10 +37,10 @@ function RuleCard(gateway, elt, id, desc) {
     </div>
     <div class="rule-preview">
       <div class="rule-part-block trigger">
-        <img class="rule-part-icon" src="/images/onoff.svg"/>
+        <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
       </div>
       <div class="rule-part-block effect">
-        <img class="rule-part-icon" src="/images/onoff.svg"/>
+        <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
       </div>
     </div>
     <div class="rule-info">

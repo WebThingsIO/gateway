@@ -62,8 +62,7 @@ class Thing {
     }
 
     this.selectedCapability = description.selectedCapability;
-    this.svgBaseIcon = opts.svgBaseIcon || '/images/unknown-thing.svg';
-    this.pngBaseIcon = opts.pngBaseIcon || '/images/unknown-thing.png';
+    this.baseIcon = opts.baseIcon || '/optimized-images/thing-icons/thing.svg';
     this.format = format;
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
@@ -234,7 +233,7 @@ class Thing {
         menu.push({
           href: this.eventsHref,
           name: 'Event Log',
-          icon: '/images/rules-icon.png',
+          icon: '/optimized-images/rules-icon.png',
         });
       } else {
         this.displayEvents = false;
@@ -243,11 +242,11 @@ class Thing {
       menu.push({
         listener: this.handleEdit.bind(this),
         name: 'Edit',
-        icon: '/images/edit-plain.svg',
+        icon: '/optimized-images/edit-plain.svg',
       }, {
         listener: this.handleRemove.bind(this),
         name: 'Remove',
-        icon: '/images/remove.svg',
+        icon: '/optimized-images/remove.svg',
       });
 
       App.buildOverflowMenu(menu);
@@ -493,8 +492,8 @@ class Thing {
               <a xlink:href="${encodeURI(this.href)}?referrer=%2Ffloorplan"
                  class="svg-thing-link">
                 <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
-                <image x="-2.5" y="-2.5" width="5" height="5"
-                  xlink:href="${encodeURI(this.svgBaseIcon)}" />
+                <image x="-5" y="-5" width="10" height="10"
+                  xlink:href="${encodeURI(this.baseIcon)}" />
                 ${this.makeWrappedSVGText(this.name).outerHTML}
               </a>
             </g>`;
@@ -529,7 +528,7 @@ class Thing {
       detail: {
         thingUrl: this.href.href,
         thingName: this.name,
-        thingIcon: this.pngBaseIcon,
+        thingIcon: this.baseIcon,
         action: 'edit',
         capabilities: this['@type'],
         selectedCapability: this.selectedCapability,
@@ -546,7 +545,7 @@ class Thing {
       detail: {
         thingUrl: this.href.href,
         thingName: this.name,
-        thingIcon: this.pngBaseIcon,
+        thingIcon: this.baseIcon,
         action: 'remove',
       },
     });

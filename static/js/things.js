@@ -257,7 +257,7 @@ const ThingsScreen = {
           }
         }
 
-        document.getElementById('thing-title-icon').src = thing.pngBaseIcon;
+        document.getElementById('thing-title-icon').src = thing.baseIcon;
         document.getElementById('thing-title-name').innerText = thing.name;
 
         const speechWrapper = document.getElementById('speech-wrapper');
@@ -315,29 +315,63 @@ const ThingsScreen = {
         }
 
         let icon;
-        switch (description.type) {
-          case 'onOffSwitch':
-            icon = '/images/on-off-switch.png';
-            break;
-          case 'binarySensor':
-          case 'multiLevelSensor':
-            icon = '/images/binary-sensor.png';
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            icon = '/images/bulb.png';
-            break;
-          case 'multiLevelSwitch':
-            icon = '/images/level.svg';
-            break;
-          case 'smartPlug':
-            icon = '/images/smart-plug.svg';
-            break;
-          default:
-            icon = '/images/unknown-thing.png';
-            break;
+        if (description.selectedCapability) {
+          switch (description.selectedCapability) {
+            case 'OnOffSwitch':
+              icon = '/optimized-images/thing-icons/on_off_switch.svg';
+              break;
+            case 'MultiLevelSwitch':
+              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+              break;
+            case 'ColorControl':
+              icon = '/optimized-images/thing-icons/color_control.svg';
+              break;
+            case 'EnergyMonitor':
+              icon = '/optimized-images/thing-icons/energy_monitor.svg';
+              break;
+            case 'BinarySensor':
+              icon = '/optimized-images/thing-icons/binary_sensor.svg';
+              break;
+            case 'MultiLevelSensor':
+              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+              break;
+            case 'SmartPlug':
+              icon = '/optimized-images/thing-icons/smart_plug.svg';
+              break;
+            case 'Light':
+              icon = '/optimized-images/thing-icons/light.svg';
+              break;
+            case 'Custom':
+            default:
+              break;
+          }
+        } else {
+          switch (description.type) {
+            case 'onOffSwitch':
+              icon = '/optimized-images/thing-icons/on_off_switch.svg';
+              break;
+            case 'binarySensor':
+              icon = '/optimized-images/thing-icons/binary_sensor.svg';
+              break;
+            case 'multiLevelSensor':
+              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+              break;
+            case 'onOffLight':
+            case 'onOffColorLight':
+            case 'dimmableLight':
+            case 'dimmableColorLight':
+              icon = '/optimized-images/thing-icons/light.svg';
+              break;
+            case 'multiLevelSwitch':
+              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+              break;
+            case 'smartPlug':
+              icon = '/optimized-images/thing-icons/smart_plug.svg';
+              break;
+            default:
+              icon = '/optimized-images/thing-icons/thing.svg';
+              break;
+          }
         }
 
         document.getElementById('thing-title-icon').src = icon;
@@ -384,29 +418,63 @@ const ThingsScreen = {
       }
 
       let icon;
-      switch (description.type) {
-        case 'onOffSwitch':
-          icon = '/images/on-off-switch.png';
-          break;
-        case 'binarySensor':
-        case 'multiLevelSensor':
-          icon = '/images/binary-sensor.png';
-          break;
-        case 'onOffLight':
-        case 'onOffColorLight':
-        case 'dimmableLight':
-        case 'dimmableColorLight':
-          icon = '/images/bulb.png';
-          break;
-        case 'multiLevelSwitch':
-          icon = '/images/level.svg';
-          break;
-        case 'smartPlug':
-          icon = '/images/smart-plug.svg';
-          break;
-        default:
-          icon = '/images/unknown-thing.png';
-          break;
+      if (description.selectedCapability) {
+        switch (description.selectedCapability) {
+          case 'OnOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
+            break;
+          case 'MultiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'ColorControl':
+            icon = '/optimized-images/thing-icons/color_control.svg';
+            break;
+          case 'EnergyMonitor':
+            icon = '/optimized-images/thing-icons/energy_monitor.svg';
+            break;
+          case 'BinarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'MultiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'SmartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          case 'Light':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'Custom':
+          default:
+            break;
+        }
+      } else {
+        switch (description.type) {
+          case 'onOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
+            break;
+          case 'binarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'multiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'onOffLight':
+          case 'onOffColorLight':
+          case 'dimmableLight':
+          case 'dimmableColorLight':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'multiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'smartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          default:
+            icon = '/optimized-images/thing-icons/thing.svg';
+            break;
+        }
       }
 
       document.getElementById('thing-title-icon').src = icon;

@@ -24,14 +24,16 @@ class OnOffSwitch extends Thing {
   constructor(description, format, options) {
     options = options ||
       {
-        svgBaseIcon: '/images/on-off-switch.svg',
-        pngBaseIcon: '/images/on-off-switch.png',
+        baseIcon: '/optimized-images/thing-icons/on_off_switch.svg',
       };
 
     super(description, format, options);
 
     this.changing = false;
-    this.icon.addEventListener('click', this.handleClick.bind(this));
+
+    if (this.format !== 'svg') {
+      this.icon.addEventListener('click', this.handleClick.bind(this));
+    }
   }
 
   get icon() {

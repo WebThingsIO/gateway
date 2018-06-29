@@ -151,7 +151,7 @@ const RuleScreen = {
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block time-trigger-block">
-      <img class="rule-part-icon" src="/images/clock.svg"/>
+      <img class="rule-part-icon" src="/optimized-images/clock.svg"/>
     </div>
     <p>Clock</p>`;
 
@@ -168,7 +168,7 @@ const RuleScreen = {
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block device-block">
-      <img class="rule-part-icon" src="/images/onoff.svg"/>
+      <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
     </div>
     <p>${thing.name}</p>`;
 
