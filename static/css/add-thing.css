@@ -21,6 +21,14 @@
   color: #fff;
 }
 
+.new-thing-custom-icon-label {
+  appearance: button;
+  -moz-appearance: button;
+  -webkit-appearance: button;
+  font-size: 1.5rem;
+}
+
+.new-thing-custom-icon-label,
 .new-web-thing-cancel-button,
 .new-web-thing-submit-button,
 .new-web-thing-save-button,
@@ -32,6 +40,9 @@
   margin: 1.25rem 0;
 }
 
+.new-thing-custom-icon-label:disabled,
+.new-thing-custom-icon-label:disabled:hover,
+.new-thing-custom-icon-label:hover:active,
 .new-web-thing-cancel-button:disabled,
 .new-web-thing-cancel-button:disabled:hover,
 .new-web-thing-cancel-button:hover:active,
@@ -111,7 +122,7 @@
 }
 
 .new-thing-type {
-  display: block;
+  display: inline-block;
   text-align: left;
   color: #fff;
   background-color: #7f93a1;
@@ -120,7 +131,7 @@
   width: 50%;
   border: none;
   border-radius: 0.5rem;
-  height: 3rem;
+  height: 4rem;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
@@ -131,6 +142,7 @@
   padding-left: 1rem;
 }
 
+.new-thing-label,
 .new-web-thing-label {
   display: block;
   text-align: left;
@@ -140,15 +152,14 @@
 }
 
 .new-thing-pin-error,
+.new-thing-label.error,
 .new-web-thing-label.error {
   color: orange;
 }
 
 .new-web-thing-origin {
-  display: inline-block;
-  float: left;
+  display: block;
   color: #ccc;
-  margin-top: -1rem;
   font-size: 1.3rem;
 }
 
@@ -201,6 +212,7 @@
 
 #add-by-url-anchor.hidden,
 .new-thing-pin-error.hidden,
+.new-thing-label.hidden,
 .new-web-thing-label.hidden,
 .new-thing-type.hidden,
 .new-thing .hidden {

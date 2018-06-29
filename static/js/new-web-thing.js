@@ -24,15 +24,20 @@ class NewWebThing {
    * New Web Thing constructor.
    */
   constructor() {
-    this.id = getNewWebThingId();
+    this.id = `web-thing-${getNewWebThingId()}`;
     this.originalId = this.id;
     this.url = null;
+    this.iconData = null;
     this.description = null;
     this.container = document.getElementById('new-things');
     this.render();
     this.element = document.getElementById(
       `new-web-thing-${Utils.escapeHtmlForIdClass(this.originalId)}`);
     this.thingType = this.element.getElementsByClassName('new-thing-type')[0];
+    this.customIcon =
+      this.element.getElementsByClassName('new-thing-custom-icon')[0];
+    this.customIconLabel =
+      this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
     this.label =
       this.element.getElementsByClassName('new-web-thing-label')[0];
     this.originLabel =
@@ -48,12 +53,15 @@ class NewWebThing {
       this.element.getElementsByClassName('new-web-thing-save-button')[0];
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
+    this.customIcon.addEventListener('change',
+                                     this.handleIconUpload.bind(this));
   }
 
   /**
    * HTML view for New Web Thing.
    */
   view() {
+    const id = Utils.escapeHtmlForIdClass(`new-thing-custom-icon-${this.id}`);
     return `
       <div id="new-web-thing-${Utils.escapeHtmlForIdClass(this.originalId)}"
            class="new-thing web-thing">
@@ -62,9 +70,15 @@ class NewWebThing {
           <input type="text" class="new-web-thing-url"
             placeholder="Enter web thing URL"></input>
           <input type="text" class="new-web-thing-name hidden"></input>
-          <span class="new-web-thing-label">Web Thing</span>
-          <select class="new-thing-type hidden"></select>
           <span class="new-web-thing-origin hidden"></span>
+          <select class="new-thing-type hidden"></select>
+          <label for="${id}"
+            class="new-thing-custom-icon-label text-button hidden">
+            Choose icon...
+          </label>
+          <span class="new-web-thing-label">Web Thing</span>
+          <input type="file" class="new-thing-custom-icon hidden" id="${id}"
+            accept="image/jpeg,image/png,image/svg+xml">
           <div class="new-web-thing-controls">
             <button class="new-web-thing-cancel-button text-button">
               Cancel
@@ -90,6 +104,8 @@ class NewWebThing {
   handleTypeChange() {
     const capability =
       this.thingType.options[this.thingType.selectedIndex].value;
+
+    this.customIconLabel.classList.add('hidden');
 
     let cls = '';
     switch (capability) {
@@ -117,6 +133,9 @@ class NewWebThing {
       case 'Light':
         cls = 'light';
         break;
+      case 'Custom':
+        this.customIconLabel.classList.remove('hidden');
+        break;
       default:
         break;
     }
@@ -133,6 +152,43 @@ class NewWebThing {
     if (cls) {
       this.element.classList.add(cls);
     }
+  }
+
+  handleIconUpload() {
+    this.label.classList.add('hidden');
+
+    if (this.customIcon.files.length === 0) {
+      return;
+    }
+
+    const file = this.customIcon.files[0];
+    if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      this.label.innerText = 'Invalid file.';
+      this.label.classList.add('error');
+      this.label.clsssList.remove('hidden');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      if (e.target.error) {
+        console.error(e.target.error);
+        this.label.innerText = 'Failed to read file.';
+        this.label.classList.add('error');
+        this.label.clsssList.remove('hidden');
+        this.saveButton.disabled = false;
+        return;
+      }
+
+      this.iconData = {
+        mime: file.type,
+        data: btoa(e.target.result),
+      };
+      this.saveButton.disabled = false;
+    };
+
+    this.saveButton.disabled = true;
+    reader.readAsBinaryString(file);
   }
 
   /**
@@ -207,6 +263,9 @@ class NewWebThing {
       }
 
       capabilities = Utils.sortCapabilities(capabilities);
+      capabilities.push('Custom');
+
+      this.customIconLabel.classList.add('hidden');
 
       let cls = '';
       for (const capability of capabilities) {
@@ -246,6 +305,10 @@ class NewWebThing {
             option.innerText = 'Light';
             cls = cls || 'light';
             break;
+          case 'Custom':
+            option.innerText = 'Custom Thing';
+            cls = cls || (capabilities.length > 1 ? '' : ' ');
+            break;
           default:
             option.innerText = capability;
             cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -254,6 +317,10 @@ class NewWebThing {
 
         if (this.thingType.options.length === 0) {
           option.selected = true;
+
+          if (capability === 'Custom') {
+            this.customIconLabel.classList.remove('hidden');
+          }
         }
 
         this.thingType.appendChild(option);
@@ -281,6 +348,7 @@ class NewWebThing {
       this.saveButton.classList.remove('hidden');
       this.originLabel.classList.remove('hidden');
 
+      cls = cls.trim();
       if (cls) {
         this.element.classList.add(cls);
       }
@@ -292,6 +360,8 @@ class NewWebThing {
   }
 
   save() {
+    this.saveButton.disabled = true;
+
     const thing = this.description;
     thing.id = this.id;
     thing.name = this.nameInput.value;
@@ -300,6 +370,10 @@ class NewWebThing {
     if (this.thingType.options.length > 0) {
       thing.selectedCapability =
         this.thingType.options[this.thingType.selectedIndex].value;
+    }
+
+    if (thing.selectedCapability === 'Custom' && this.iconData) {
+      thing.iconData = this.iconData;
     }
 
     fetch('/things', {
@@ -324,13 +398,14 @@ class NewWebThing {
       this.thingType.disabled = true;
       this.nameInput.disabled = true;
       this.saveButton.innerHTML = 'Saved';
-      this.saveButton.disabled = true;
       this.cancelButton.classList.add('hidden');
     }).catch((error) => {
-      this.label.innerText = error.message;
-      this.label.classList.add('error');
-      this.reset();
       console.error('Failed to save web thing:', error.message);
+      this.label.innerText = 'Failed to save.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      this.saveButton.disabled = false;
+      this.reset();
     });
   }
 

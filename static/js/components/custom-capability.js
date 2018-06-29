@@ -31,6 +31,15 @@ template.innerHTML = `
       transform: translate(0);
       background-color: #5d9bc7;
     }
+
+    .webthing-custom-capability-icon.custom-icon {
+      width: 12.4rem;
+      height: 12.4rem;
+      border: 0.2rem solid white;
+      background-size: 6.4rem;
+      background-position: center;
+      background-color: #89b6d6;
+    }
   </style>
   <div id="icon" class="webthing-custom-capability-icon"></div>
 `;
@@ -55,8 +64,10 @@ class CustomCapability extends BaseComponent {
   set iconHref(value) {
     if (!value) {
       this._iconHref = '/optimized-images/component-icons/custom.png';
+      this._icon.classList.remove('custom-icon');
     } else {
       this._iconHref = value;
+      this._icon.classList.add('custom-icon');
     }
 
     this._icon.style.backgroundImage = `url("${this._iconHref}")`;

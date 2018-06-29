@@ -63,6 +63,7 @@
 #edit-thing-metadata {
   flex: 1;
   padding: 1rem 1rem 0 1rem;
+  text-align: left;
 }
 
 #edit-thing-name {
@@ -71,7 +72,7 @@
 }
 
 #edit-thing-type {
-  display: block;
+  display: inline-block;
   text-align: left;
   color: #fff;
   background-color: #7f93a1;
@@ -80,7 +81,7 @@
   width: 50%;
   border: none;
   border-radius: 0.5rem;
-  height: 3rem;
+  height: 4rem;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
@@ -91,8 +92,33 @@
   padding-left: 1rem;
 }
 
-#edit-thing-save-button {
+#edit-thing-custom-icon-label {
+  appearance: button;
+  -moz-appearance: button;
+  -webkit-appearance: button;
+  font-size: 1.5rem;
+}
+
+.edit-thing-button {
   height: 4rem;
   background-color: #7f93a1;
   margin: 1.25rem 0;
+}
+
+.edit-thing-button:disabled,
+.edit-thing-button:disabled:hover,
+.edit-thing-button:hover:active {
+  background-color: #597285;
+}
+
+#edit-thing-label {
+  display: block;
+  text-align: left;
+  color: #ccc;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+#edit-thing-label.error {
+  color: orange;
 }

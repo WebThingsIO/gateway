@@ -24,6 +24,7 @@ class NewThing {
     this.id = id;
     this.description = description;
     this.pinSet = false;
+    this.iconData = null;
     this.re = null;
     if (description.hasOwnProperty('pin') && description.pin.pattern !== null) {
       this.re = RegExp(description.pin.pattern);
@@ -55,8 +56,9 @@ class NewThing {
     }
 
     capabilities = Utils.sortCapabilities(capabilities);
+    capabilities.push('Custom');
 
-    let cls = '', type = '';
+    let cls = '', type = '', customIconClass = 'hidden';
     const options = [];
     for (let capability of capabilities) {
       switch (capability) {
@@ -92,6 +94,10 @@ class NewThing {
           type = 'Light';
           cls = cls || 'light';
           break;
+        case 'Custom':
+          type = 'Custom Thing';
+          cls = cls || (capabilities.length > 1 ? '' : ' ');
+          break;
         default:
           type = capability;
           cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -104,12 +110,17 @@ class NewThing {
       let selected = '';
       if (options.length === 0) {
         selected = 'selected';
+
+        if (capability === 'Custom') {
+          customIconClass = '';
+        }
       }
 
       options.push(
         `<option value="${capability}" ${selected}>${type}</option>`);
     }
 
+    cls = cls.trim();
     if (cls) {
       this.element.classList.add(cls);
     }
@@ -118,12 +129,20 @@ class NewThing {
       type = 'Unknown device type';
     }
 
+    const id = Utils.escapeHtmlForIdClass(`new-thing-custom-icon-${this.id}`);
     this.element.innerHTML = `
       <div class="new-thing-icon"></div>
       <div class="new-thing-metadata">
         <input type="text" class="new-thing-name"
                value="${Utils.escapeHtml(this.description.name)}"/>
         <select class="new-thing-type">${options.join('')}</select>
+        <label for="${id}"
+          class="new-thing-custom-icon-label text-button ${customIconClass}">
+          Choose icon...
+        </label>
+        <input type="file" class="new-thing-custom-icon hidden"
+          id="${id}" accept="image/jpeg,image/png,image/svg+xml">
+        <span class="new-thing-label"></span>
       </div>
       <button class="new-thing-save-button text-button">
         Save
@@ -186,10 +205,17 @@ class NewThing {
       this.saveButton = this.element.getElementsByClassName(
         'new-thing-save-button')[0];
       this.thingType = this.element.getElementsByClassName('new-thing-type')[0];
+      this.customIcon =
+        this.element.getElementsByClassName('new-thing-custom-icon')[0];
+      this.customIconLabel =
+        this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
+      this.label = this.element.getElementsByClassName('new-thing-label')[0];
 
       this.saveButton.addEventListener('click', this.handleSave.bind(this));
       this.thingType.addEventListener('change',
                                       this.handleTypeChange.bind(this));
+      this.customIcon.addEventListener('change',
+                                       this.handleIconUpload.bind(this));
     }
   }
 
@@ -254,6 +280,8 @@ class NewThing {
     const capability =
       this.thingType.options[this.thingType.selectedIndex].value;
 
+    this.customIconLabel.classList.add('hidden');
+
     let cls = '';
     switch (capability) {
       case 'OnOffSwitch':
@@ -280,6 +308,9 @@ class NewThing {
       case 'Light':
         cls = 'light';
         break;
+      case 'Custom':
+        this.customIconLabel.classList.remove('hidden');
+        break;
       default:
         break;
     }
@@ -298,7 +329,46 @@ class NewThing {
     }
   }
 
+  handleIconUpload() {
+    this.label.classList.add('hidden');
+
+    if (this.customIcon.files.length === 0) {
+      return;
+    }
+
+    const file = this.customIcon.files[0];
+    if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      this.label.innerText = 'Invalid file.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      if (e.target.error) {
+        console.error(e.target.error);
+        this.label.innerText = 'Failed to read file.';
+        this.label.classList.add('error');
+        this.label.classList.remove('hidden');
+        this.saveButton.disabled = false;
+        return;
+      }
+
+      this.iconData = {
+        mime: file.type,
+        data: btoa(e.target.result),
+      };
+      this.saveButton.disabled = false;
+    };
+
+    this.saveButton.disabled = true;
+    reader.readAsBinaryString(file);
+  }
+
   handleSave() {
+    this.saveButton.disabled = true;
+
     const thing = this.description;
     thing.id = this.id;
     thing.name = this.nameInput.value;
@@ -306,6 +376,10 @@ class NewThing {
     if (this.thingType.options.length > 0) {
       thing.selectedCapability =
         this.thingType.options[this.thingType.selectedIndex].value;
+    }
+
+    if (thing.selectedCapability === 'Custom' && this.iconData) {
+      thing.iconData = this.iconData;
     }
 
     fetch('/things', {
@@ -325,6 +399,10 @@ class NewThing {
       this.saveButton.disabled = true;
     }).catch((error) => {
       console.error(`Failed to save thing ${error}`);
+      this.label.innerText = 'Failed to save.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      this.saveButton.disabled = false;
     });
   }
 }

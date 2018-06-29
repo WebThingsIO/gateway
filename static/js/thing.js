@@ -62,6 +62,7 @@ class Thing {
     }
 
     this.selectedCapability = description.selectedCapability;
+    this.iconHref = description.iconHref || '';
     this.baseIcon = opts.baseIcon || '/optimized-images/thing-icons/thing.svg';
     this.format = format;
     this.displayedProperties = this.displayedProperties || {};
@@ -296,8 +297,9 @@ class Thing {
    * HTML icon view for Thing.
    */
   iconView() {
+    const href = `data-icon-href="${this.iconHref}"` || '';
     return `
-      <webthing-custom-capability>
+      <webthing-custom-capability ${href}>
       </webthing-custom-capability>`;
   }
 

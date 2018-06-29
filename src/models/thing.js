@@ -13,7 +13,11 @@
 const Constants = require('../constants');
 const Database = require('../db.js');
 const EventEmitter = require('events');
+const UserProfile = require('../user-profile');
 const WebSocket = require('ws');
+const fs = require('fs');
+const path = require('path');
+const tmp = require('tmp');
 
 /**
  * Thing constructor.
@@ -99,6 +103,13 @@ const Thing = function(id, description) {
   for (const eventName in this.events) {
     this.events[eventName].href = `${this.href}/events/${eventName}`;
   }
+
+  this.iconHref = null;
+  if (description.iconHref) {
+    this.iconHref = description.iconHref;
+  } else if (description.iconData) {
+    this.setIcon(description.iconData, false);
+  }
 };
 
 /**
@@ -123,6 +134,75 @@ Thing.prototype.setCoordinates = function(x, y) {
 Thing.prototype.setName = function(name) {
   this.name = name;
   return Database.updateThing(this.id, this.getDescription());
+};
+
+/**
+ * Set the custom icon for this Thing.
+ *
+ * @param {Object} iconData Base64-encoded icon and its mime-type.
+ * @param {Boolean} updateDatabase Whether or not to update the database after
+ *                                 setting.
+ */
+Thing.prototype.setIcon = function(iconData, updateDatabase) {
+  if (!iconData.data ||
+      !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
+    console.error('Invalid icon data:', iconData);
+    return;
+  }
+
+  if (this.iconHref) {
+    try {
+      fs.unlinkSync(path.join(UserProfile.baseDir, this.iconHref));
+    } catch (e) {
+      console.error('Failed to remove old icon:', e);
+      // continue
+    }
+
+    this.iconHref = null;
+  }
+
+  let extension;
+  switch (iconData.mime) {
+    case 'image/jpeg':
+      extension = '.jpg';
+      break;
+    case 'image/png':
+      extension = '.png';
+      break;
+    case 'image/svg+xml':
+      extension = '.svg';
+      break;
+  }
+
+  let tempfile;
+  try {
+    tempfile = tmp.fileSync({
+      mode: parseInt('0644', 8),
+      template: path.join(UserProfile.uploadsDir, `XXXXXX${extension}`),
+      detachDescriptor: true,
+      keep: true,
+    });
+
+    const data = Buffer.from(iconData.data, 'base64');
+    fs.writeFileSync(tempfile.fd, data);
+  } catch (e) {
+    console.error('Failed to write icon:', e);
+    if (tempfile) {
+      try {
+        fs.unlinkSync(tempfile.fd);
+      } catch (e) {
+        // pass
+      }
+    }
+
+    return;
+  }
+
+  this.iconHref = path.join('/uploads', path.basename(tempfile.name));
+
+  if (updateDatabase) {
+    return Database.updateThing(this.id, this.getDescription());
+  }
 };
 
 /**
@@ -196,6 +276,7 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
     floorplanX: this.floorplanX,
     floorplanY: this.floorplanY,
     selectedCapability: this.selectedCapability,
+    iconHref: this.iconHref,
   };
 };
 
@@ -207,6 +288,17 @@ Thing.prototype.registerWebsocket = function(ws) {
  * Remove and clean up the Thing
  */
 Thing.prototype.remove = function() {
+  if (this.iconHref) {
+    try {
+      fs.unlinkSync(path.join(UserProfile.baseDir, this.iconHref));
+    } catch (e) {
+      console.error('Failed to remove old icon:', e);
+      // continue
+    }
+
+    this.iconHref = null;
+  }
+
   this.websockets.forEach(function(ws) {
     if (ws.readyState === WebSocket.OPEN ||
         ws.readyState === WebSocket.CONNECTING) {
