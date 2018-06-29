@@ -15,7 +15,6 @@ const Database = require('../db.js');
 const EventEmitter = require('events');
 const UserProfile = require('../user-profile');
 const WebSocket = require('ws');
-const atob = require('atob');
 const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');
@@ -184,7 +183,8 @@ Thing.prototype.setIcon = function(iconData, updateDatabase) {
       keep: true,
     });
 
-    fs.writeFileSync(tempfile.fd, atob(iconData.data));
+    const data = Buffer.from(iconData.data, 'base64');
+    fs.writeFileSync(tempfile.fd, data);
   } catch (e) {
     console.error('Failed to write icon:', e);
     if (tempfile) {

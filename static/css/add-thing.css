@@ -142,6 +142,7 @@
   padding-left: 1rem;
 }
 
+.new-thing-label,
 .new-web-thing-label {
   display: block;
   text-align: left;
@@ -151,6 +152,7 @@
 }
 
 .new-thing-pin-error,
+.new-thing-label.error,
 .new-web-thing-label.error {
   color: orange;
 }
@@ -210,6 +212,7 @@
 
 #add-by-url-anchor.hidden,
 .new-thing-pin-error.hidden,
+.new-thing-label.hidden,
 .new-web-thing-label.hidden,
 .new-thing-type.hidden,
 .new-thing .hidden {

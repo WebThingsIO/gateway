@@ -142,6 +142,7 @@ class NewThing {
         </label>
         <input type="file" class="new-thing-custom-icon hidden"
           id="${id}" accept="image/jpeg,image/png,image/svg+xml">
+        <span class="new-thing-label"></span>
       </div>
       <button class="new-thing-save-button text-button">
         Save
@@ -208,6 +209,7 @@ class NewThing {
         this.element.getElementsByClassName('new-thing-custom-icon')[0];
       this.customIconLabel =
         this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
+      this.label = this.element.getElementsByClassName('new-thing-label')[0];
 
       this.saveButton.addEventListener('click', this.handleSave.bind(this));
       this.thingType.addEventListener('change',
@@ -328,12 +330,17 @@ class NewThing {
   }
 
   handleIconUpload() {
+    this.label.classList.add('hidden');
+
     if (this.customIcon.files.length === 0) {
       return;
     }
 
     const file = this.customIcon.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      this.label.innerText = 'Invalid file.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
       return;
     }
 
@@ -341,6 +348,9 @@ class NewThing {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
+        this.label.innerText = 'Failed to read file.';
+        this.label.classList.add('error');
+        this.label.classList.remove('hidden');
         this.saveButton.disabled = false;
         return;
       }
@@ -357,6 +367,8 @@ class NewThing {
   }
 
   handleSave() {
+    this.saveButton.disabled = true;
+
     const thing = this.description;
     thing.id = this.id;
     thing.name = this.nameInput.value;
@@ -387,6 +399,10 @@ class NewThing {
       this.saveButton.disabled = true;
     }).catch((error) => {
       console.error(`Failed to save thing ${error}`);
+      this.label.innerText = 'Failed to save.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      this.saveButton.disabled = false;
     });
   }
 }

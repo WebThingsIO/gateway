@@ -70,13 +70,13 @@ class NewWebThing {
           <input type="text" class="new-web-thing-url"
             placeholder="Enter web thing URL"></input>
           <input type="text" class="new-web-thing-name hidden"></input>
-          <span class="new-web-thing-label">Web Thing</span>
           <span class="new-web-thing-origin hidden"></span>
           <select class="new-thing-type hidden"></select>
           <label for="${id}"
             class="new-thing-custom-icon-label text-button hidden">
             Choose icon...
           </label>
+          <span class="new-web-thing-label">Web Thing</span>
           <input type="file" class="new-thing-custom-icon hidden" id="${id}"
             accept="image/jpeg,image/png,image/svg+xml">
           <div class="new-web-thing-controls">
@@ -155,12 +155,17 @@ class NewWebThing {
   }
 
   handleIconUpload() {
+    this.label.classList.add('hidden');
+
     if (this.customIcon.files.length === 0) {
       return;
     }
 
     const file = this.customIcon.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      this.label.innerText = 'Invalid file.';
+      this.label.classList.add('error');
+      this.label.clsssList.remove('hidden');
       return;
     }
 
@@ -168,6 +173,9 @@ class NewWebThing {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
+        this.label.innerText = 'Failed to read file.';
+        this.label.classList.add('error');
+        this.label.clsssList.remove('hidden');
         this.saveButton.disabled = false;
         return;
       }
@@ -352,6 +360,8 @@ class NewWebThing {
   }
 
   save() {
+    this.saveButton.disabled = true;
+
     const thing = this.description;
     thing.id = this.id;
     thing.name = this.nameInput.value;
@@ -388,13 +398,14 @@ class NewWebThing {
       this.thingType.disabled = true;
       this.nameInput.disabled = true;
       this.saveButton.innerHTML = 'Saved';
-      this.saveButton.disabled = true;
       this.cancelButton.classList.add('hidden');
     }).catch((error) => {
-      this.label.innerText = error.message;
-      this.label.classList.add('error');
-      this.reset();
       console.error('Failed to save web thing:', error.message);
+      this.label.innerText = 'Failed to save.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      this.saveButton.disabled = false;
+      this.reset();
     });
   }
 

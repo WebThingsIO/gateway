@@ -365,13 +365,15 @@
             <input type="text" id="edit-thing-name">
             <select id="edit-thing-type"></select>
             <label for="edit-thing-custom-icon"
-              id="edit-thing-custom-icon-label" class="text-button hidden">
+              id="edit-thing-custom-icon-label" class="edit-thing-button text-button hidden">
               Choose icon...
             </label>
             <input type="file" class="edit-thing-custom-icon hidden"
-              id="edit-thing-custom-icon" accept="image/*">
+              id="edit-thing-custom-icon"
+              accept="image/jpeg,image/png,image/svg+xml">
+            <span id="edit-thing-label" class="hidden"></span>
           </div>
-          <button id="edit-thing-save-button" class="text-button">
+          <button id="edit-thing-save-button" class="edit-thing-button text-button">
             Save
           </button>
         </div>

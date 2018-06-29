@@ -99,9 +99,26 @@
   font-size: 1.5rem;
 }
 
-#edit-thing-custom-icon-label,
-#edit-thing-save-button {
+.edit-thing-button {
   height: 4rem;
   background-color: #7f93a1;
   margin: 1.25rem 0;
+}
+
+.edit-thing-button:disabled,
+.edit-thing-button:disabled:hover,
+.edit-thing-button:hover:active {
+  background-color: #597285;
+}
+
+#edit-thing-label {
+  display: block;
+  text-align: left;
+  color: #ccc;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+#edit-thing-label.error {
+  color: orange;
 }

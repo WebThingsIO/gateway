@@ -33,6 +33,7 @@ const ContextMenu = {
     this.customIcon = document.getElementById('edit-thing-custom-icon');
     this.customIconLabel =
       document.getElementById('edit-thing-custom-icon-label');
+    this.label = document.getElementById('edit-thing-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
     this.thingUrl = '';
@@ -184,12 +185,17 @@ const ContextMenu = {
   },
 
   handleIconUpload: function() {
+    this.label.classList.add('hidden');
+
     if (this.customIcon.files.length === 0) {
       return;
     }
 
     const file = this.customIcon.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
+      this.label.innerText = 'Invalid file.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
       return;
     }
 
@@ -197,6 +203,9 @@ const ContextMenu = {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
+        this.label.innerText = 'Failed to read file.';
+        this.label.classList.add('error');
+        this.label.classList.remove('hidden');
         this.saveButton.disabled = false;
         return;
       }
@@ -216,6 +225,8 @@ const ContextMenu = {
    * Handle click on edit option.
    */
   handleEdit: function() {
+    this.saveButton.disabled = true;
+
     const name = this.nameInput.value.trim();
     if (name.length === 0) {
       return;
@@ -244,13 +255,16 @@ const ContextMenu = {
       if (response.ok) {
         // reload the page to pick up capability changes
         window.location.reload();
+        this.hide();
       } else {
-        console.error(`Error updating thing: ${response.statusText}`);
+        throw new Error(response.statusText);
       }
-      this.hide();
     }).catch((error) => {
-      console.error(`Error removing thing: ${error}`);
-      this.hide();
+      console.error(`Error updating thing: ${error}`);
+      this.label.innerText = 'Failed to save.';
+      this.label.classList.add('error');
+      this.label.classList.remove('hidden');
+      this.saveButton.disabled = false;
     });
   },
 

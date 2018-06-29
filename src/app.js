@@ -202,11 +202,14 @@ function createApp() {
   app.set('view engine', 'mustache');
   app.set('views', Constants.VIEWS_PATH);
 
+  // Use bodyParser to access the body of requests
   app.use(bodyParser.urlencoded({
     extended: false,
   }));
-  app.use(bodyParser.json());   // Use bodyParser to access the body of requests
-  app.use(fileUpload());        // Use fileUpload to handle multi-part uploads
+  app.use(bodyParser.json({limit: '1mb'}));
+
+  // Use fileUpload to handle multi-part uploads
+  app.use(fileUpload());
 
   return app;
 }
