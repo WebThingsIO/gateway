@@ -249,17 +249,26 @@ const RuleScreen = {
     const dragHint = document.getElementById('drag-hint');
     const flexDir = window.getComputedStyle(dragHint).flexDirection;
 
+    function isValidSelection(block) {
+      const selectedOption = block.querySelector('.selected');
+      console.log('selectedOption', selectedOption);
+      if (!selectedOption) {
+        return false;
+      }
+      return JSON.parse(selectedOption.dataset.ruleFragment);
+    }
+
     const triggerBlocks = Array.from(
       this.ruleArea.querySelectorAll('.rule-part-block.trigger')
     ).map((elt) => {
       return elt.parentNode;
-    });
+    }).filter(isValidSelection);
 
     const effectBlocks = Array.from(
       this.ruleArea.querySelectorAll('.rule-part-block.effect')
     ).map((elt) => {
       return elt.parentNode;
-    });
+    }).filter(isValidSelection);
 
     function transformToCoords(elt) {
       const re = /translate\((\d+)px, +(\d+)px\)/;
