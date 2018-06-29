@@ -54,7 +54,7 @@ class CustomCapability extends BaseComponent {
 
   set iconHref(value) {
     if (!value) {
-      this._iconHref = '/optimized-images/unknown-thing.png';
+      this._iconHref = '/optimized-images/component-icons/custom.png';
     } else {
       this._iconHref = value;
     }

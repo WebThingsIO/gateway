@@ -24,8 +24,7 @@ class MultiLevelSwitch extends OnOffSwitch {
       description,
       format,
       {
-        svgBaseIcon: '/images/level.svg',
-        pngBaseIcon: '/images/level.svg',
+        baseIcon: '/optimized-images/thing-icons/multi_level_switch.svg',
       }
     );
   }

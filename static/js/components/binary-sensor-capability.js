@@ -30,15 +30,15 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #5d9bc7;
-      background-image: url('/optimized-images/binary-sensor.png');
+      background-image: url('/optimized-images/component-icons/binary-sensor.png');
     }
 
     .webthing-binary-sensor-capability-icon.on {
-      background-image: url('/optimized-images/binary-sensor-on.png');
+      background-image: url('/optimized-images/component-icons/binary-sensor-on.png');
     }
 
     .webthing-binary-sensor-capability-icon.off {
-      background-image: url('/optimized-images/binary-sensor-off.png');
+      background-image: url('/optimized-images/component-icons/binary-sensor-off.png');
     }
   </style>
   <div id="icon" class="webthing-binary-sensor-capability-icon"></div>

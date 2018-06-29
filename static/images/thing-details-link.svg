@@ -1,22 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="508px" height="549px" viewBox="0 0 508 549" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
-    <title>thing-details-link</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="thing-details-link">
-            <circle id="Oval" fill="#FFFFFF" cx="254.5" cy="275.5" r="84.5"></circle>
-            <circle id="Oval-2" fill="#FFFFFF" cx="314" cy="76" r="50"></circle>
-            <circle id="Oval-2" fill="#FFFFFF" cx="414" cy="325" r="50"></circle>
-            <circle id="Oval-2" fill="#FFFFFF" cx="225" cy="465" r="50"></circle>
-            <circle id="Oval-2" fill="#FFFFFF" cx="85" cy="329" r="50"></circle>
-            <circle id="Oval-2" fill="#FFFFFF" cx="91" cy="126" r="50"></circle>
-            <path d="M313.5,76.5 L255.5,273.5" id="Line" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
-            <path d="M92.5,124.5 L256.5,270.5" id="Line-2" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
-            <path d="M81.5,329.5 L260.5,268.5" id="Line-3" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
-            <path d="M225.5,462.5 L256.5,266.5" id="Line-4" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
-            <path d="M415.5,324.5 L260.5,272.5" id="Line-5" stroke="#FFFFFF" stroke-width="16" stroke-linecap="square"></path>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg12376"
+   viewBox="0 0 32 32.000001"
+   height="32"
+   width="32">
+  <defs
+     id="defs12378" />
+  <metadata
+     id="metadata12381">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-1020.3621)"
+     id="layer1">
+    <path
+       id="path97759"
+       transform="translate(0,1020.3621)"
+       d="M 17.517578 1.7695312 A 3.3533037 3.3533037 0 0 0 14.164062 5.1230469 A 3.3533037 3.3533037 0 0 0 15.671875 7.9199219 L 14.535156 12.089844 A 5.5395312 5.5395312 0 0 0 13.976562 12.0625 A 5.5395312 5.5395312 0 0 0 10.728516 13.123047 L 6.3496094 9.1523438 A 3.3533037 3.3533037 0 0 0 6.7070312 7.6542969 A 3.3533037 3.3533037 0 0 0 3.3535156 4.3007812 A 3.3533037 3.3533037 0 0 0 0 7.6542969 A 3.3533037 3.3533037 0 0 0 3.3535156 11.007812 A 3.3533037 3.3533037 0 0 0 4.9609375 10.59375 L 9.3457031 14.570312 A 5.5395312 5.5395312 0 0 0 8.4375 17.601562 A 5.5395312 5.5395312 0 0 0 9.0761719 20.181641 L 6.1015625 22.599609 A 3.3533037 3.3533037 0 0 0 4.1972656 22.005859 A 3.3533037 3.3533037 0 0 0 0.84375 25.359375 A 3.3533037 3.3533037 0 0 0 4.1972656 28.712891 A 3.3533037 3.3533037 0 0 0 7.5488281 25.359375 A 3.3533037 3.3533037 0 0 0 7.3320312 24.175781 L 10.314453 21.751953 A 5.5395312 5.5395312 0 0 0 13.976562 23.140625 A 5.5395312 5.5395312 0 0 0 17.074219 22.1875 L 20.128906 25.291016 A 3.3533037 3.3533037 0 0 0 19.728516 26.876953 A 3.3533037 3.3533037 0 0 0 23.082031 30.230469 A 3.3533037 3.3533037 0 0 0 26.435547 26.876953 A 3.3533037 3.3533037 0 0 0 23.082031 23.523438 A 3.3533037 3.3533037 0 0 0 21.556641 23.890625 L 18.503906 20.789062 A 5.5395312 5.5395312 0 0 0 19.515625 17.601562 A 5.5395312 5.5395312 0 0 0 19.511719 17.466797 L 25.710938 16.179688 A 3.3533037 3.3533037 0 0 0 28.646484 17.919922 A 3.3533037 3.3533037 0 0 0 32 14.566406 A 3.3533037 3.3533037 0 0 0 28.646484 11.212891 A 3.3533037 3.3533037 0 0 0 25.3125 14.21875 L 19.101562 15.511719 A 5.5395312 5.5395312 0 0 0 16.455078 12.654297 L 17.591797 8.4746094 A 3.3533037 3.3533037 0 0 0 20.871094 5.1230469 A 3.3533037 3.3533037 0 0 0 17.517578 1.7695312 z "
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8.98721409;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+  </g>
 </svg>

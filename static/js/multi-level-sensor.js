@@ -25,8 +25,7 @@ class MultiLevelSensor extends Thing {
       description,
       format,
       {
-        svgBaseIcon: '/images/binary-sensor.svg',
-        pngBaseIcon: '/images/binary-sensor.png',
+        baseIcon: '/optimized-images/thing-icons/multi_level_sensor.svg',
       }
     );
   }

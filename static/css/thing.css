@@ -12,15 +12,6 @@
   vertical-align: bottom;
 }
 
-.thing-icon {
-  display: block;
-  width: 12.8rem;
-  height: 12.8rem;
-  background-size: 12.8rem;
-  background-repeat: no-repeat;
-  background-image: url('../optimized-images/unknown-thing.png');
-}
-
 .thing-ui-link {
   box-sizing: border-box;
   display: block;
@@ -48,7 +39,7 @@
   background-size: 2.4rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../optimized-images/thing.svg');
+  background-image: url('../optimized-images/thing-details-link.svg');
   border: 1px solid white;
   border-radius: 2rem;
   width: 4rem;
@@ -100,178 +91,16 @@
   margin: 0.5rem 0;
 }
 
-/* On/Off Switch */
-
-.on-off-switch .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/on-off-switch.png');
-}
-
-.on-off-switch.on .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/on-off-switch-on.png');
-}
-
-.on-off-switch.off .thing-icon {
-  background-image: url('../optimized-images/on-off-switch-off.png');
-}
-
-/* Binary Sensor */
-
-.binary-sensor .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/binary-sensor.png');
-}
-
-.binary-sensor.on .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/binary-sensor-on.png');
-}
-
-.binary-sensor.off .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/binary-sensor-off.png');
-}
-
-/* Multi Level Sensor */
-
-.multi-level-sensor-text {
-  box-sizing: border-box;
-  display: block;
-  width: 12.8rem;
-  height: 12.8rem;
-  padding-top: 4.2rem;
-  border-radius: 6.4rem;
-  border: 2px solid white;
-  text-align: center;
-  transform: translate(0, 0); /* promote to layer to draw above links */
-
-  font-size: 2.8rem;
-  font-weight: bold;
-  background: #89b6d6;
-  color: #fff;
-}
-
-/* On/Off Light */
-
-.on-off-light .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/bulb.png');
-}
-
-.on-off-light.on .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/bulb-on.png');
-}
-
-.on-off-light.off .thing-icon {
-  border-radius: 6.4rem;
-  transform: translate(0);
-  background-color: #5d9bc7;
-  background-image: url('../optimized-images/bulb-off.png');
-}
-
-/* Color Light */
-
-.color-light-label {
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.on .on-off-switch-switch {
-  background: white;
-  color: #5d9bc7;
-}
-
-.color-light-icon-path {
-  fill: #fff;
-  stroke: #fff;
-}
-
-.color-light.bright-color .color-light-icon-path {
-  stroke: #666;
-}
-
-.on .color-light {
-  color: #5d9bc7;
-}
-
-.unknown-thing,
-.dimmable-light,
-.color-light,
-.level-bar-container {
-  box-sizing: border-box;
-  display: block;
-  width: 12.8rem;
-  height: 12.8rem;
-  border-radius: 6.4rem;
-  border: 2px solid white;
-  text-align: center;
-  transform: translate(0, 0); /* promote to layer to draw above links */
-  background: #89b6d6;
-}
-
-.unknown-thing {
-  background: #5d9bc7;
-}
-
-.unknown-thing img,
-.dimmable-light-icon,
-.color-light-icon,
-.thing-detail-layout-links,
-.level-bar-info {
+.thing-detail-layout-links {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
 }
 
-.unknown-thing-icon {
-  display: block;
-  width: 12.8rem;
-  height: 12.8rem;
-}
-
 .thing-detail-layout-link {
   stroke: white;
   stroke-width: 2px;
-}
-
-.on .level-bar-container,
-.on .dimmable-light {
-  background: white;
-  color: #5d9bc7;
-}
-
-.level-bar {
-  width: 1rem;
-  height: 8rem;
-  border-radius: 0.6rem;
-  border: 0.2rem solid white;
-  margin: 0 auto;
-}
-
-.on .level-bar {
-  border-color: #5d9bc7;
-}
-
-.level-bar-label {
-  padding-top: 0.2rem;
-  font-weight: bold;
 }
 
 #thing-title.hidden {
@@ -323,67 +152,6 @@
 
 .speech-enabled > #thing-title-speech-flex {
   min-width: 9.6rem;
-}
-
-.dimmable-light {
-  background: #89b6d6;
-  fill: #fff;
-}
-
-.dimmable-light.on {
-  background: #fff;
-  fill: #5d9bc7;
-}
-
-/* Smart Plug */
-.smart-plug .thing-icon, .smart-plug-container .thing-icon {
-  box-sizing: border-box;
-  display: block;
-  width: 12.8rem;
-  height: 12.8rem;
-  border-radius: 6.4rem;
-  border: 2px solid white;
-  text-align: center;
-  transform: translate(0, 0); /* promote to layer to draw above links */
-  background-color: #89b6d6;
-  background-size: 6.4rem;
-  background-position: center 2rem;
-  background-image: url('../optimized-images/smart-plug-off.svg');
-}
-
-.smart-plug.on .thing-icon, .smart-plug-container.on .thing-icon {
-  background-image: url('../optimized-images/smart-plug-on.svg');
-  background-color: #ffffff;
-}
-
-.smart-plug.off .thing-icon, .smart-plug-container.off .thing-icon {
-  background-image: url('../optimized-images/smart-plug-off.svg');
-}
-
-.smart-plug-label {
-  text-transform: uppercase;
-  font-weight: bold;
-  display: block;
-  padding-top: 8.75rem;
-}
-
-.smart-plug.on .smart-plug-label, .smart-plug-container.on .smart-plug-label {
-  color: #5d9bc7;
-}
-
-.generic-number-input {
-  width: 6rem;
-  text-align: center;
-  color: #333;
-}
-
-.hide-number-spinner::-webkit-inner-spin-button,
-.hide-number-spinner::-webkit-outer-spin-button {
-  -webkit-appearance: textfield;
- }
-
-.hide-number-spinner {
-  -moz-appearance: textfield;
 }
 
 .generic-checkbox {

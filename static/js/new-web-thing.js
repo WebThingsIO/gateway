@@ -94,33 +94,41 @@ class NewWebThing {
     let cls = '';
     switch (capability) {
       case 'OnOffSwitch':
-      case 'MultiLevelSwitch':
         cls = 'on-off-switch';
         break;
+      case 'MultiLevelSwitch':
+        cls = 'multi-level-switch';
+        break;
       case 'ColorControl':
-        // TODO: cls
+        cls = 'color-control';
         break;
       case 'EnergyMonitor':
-        // TODO: cls
+        cls = 'energy-monitor';
         break;
       case 'BinarySensor':
-      case 'MultiLevelSensor':
         cls = 'binary-sensor';
+        break;
+      case 'MultiLevelSensor':
+        cls = 'multi-level-sensor';
         break;
       case 'SmartPlug':
         cls = 'smart-plug';
         break;
       case 'Light':
-        cls = 'on-off-light';
+        cls = 'light';
         break;
       default:
         break;
     }
 
     this.element.classList.remove('on-off-switch',
+                                  'multi-level-switch',
+                                  'color-control',
+                                  'energy-monitor',
                                   'binary-sensor',
+                                  'multi-level-sensor',
                                   'smart-plug',
-                                  'on-off-light');
+                                  'light');
 
     if (cls) {
       this.element.classList.add(cls);
@@ -212,15 +220,15 @@ class NewWebThing {
             break;
           case 'MultiLevelSwitch':
             option.innerText = 'Multi Level Switch';
-            cls = cls || 'on-off-switch';
+            cls = cls || 'multi-level-switch';
             break;
           case 'ColorControl':
             option.innerText = 'Color Control';
-            // TODO: cls
+            cls = cls || 'color-control';
             break;
           case 'EnergyMonitor':
             option.innerText = 'Energy Monitor';
-            // TODO: cls
+            cls = cls || 'energy-monitor';
             break;
           case 'BinarySensor':
             option.innerText = 'Binary Sensor';
@@ -228,7 +236,7 @@ class NewWebThing {
             break;
           case 'MultiLevelSensor':
             option.innerText = 'Multi Level Sensor';
-            cls = cls || 'binary-sensor';
+            cls = cls || 'multi-level-sensor';
             break;
           case 'SmartPlug':
             option.innerText = 'Smart Plug';
@@ -236,7 +244,7 @@ class NewWebThing {
             break;
           case 'Light':
             option.innerText = 'Light';
-            cls = cls || 'on-off-light';
+            cls = cls || 'light';
             break;
           default:
             option.innerText = capability;
@@ -334,8 +342,14 @@ class NewWebThing {
     this.urlInput.value = '';
     this.nameInput.value = '';
     this.originLabel.innerText = '';
-    this.element.classList.remove(
-      'binary-sensor', 'on-off-light', 'on-off-switch', 'smart-plug');
+    this.element.classList.remove('binary-sensor',
+                                  'multi-level-sensor',
+                                  'light',
+                                  'on-off-switch',
+                                  'multi-level-switch',
+                                  'color-control',
+                                  'energy-monitor',
+                                  'smart-plug');
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
     this.nameInput.classList.add('hidden');

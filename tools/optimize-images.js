@@ -15,6 +15,7 @@ try {
   if (e.code !== 'MODULE_NOT_FOUND') {
     throw e;
   }
+
   console.error(
     'You need to install dependencies:\n\n' +
     '$ sudo apt-get install libtool autoconf build-essential\n' +
@@ -22,29 +23,37 @@ try {
     '    imagemin-pngquant imagemin-optipng imagemin-gifsicle\n' +
     '$ export NODE_PATH=$(yarn global dir)/node_modules && \\\n' +
     `    node ${process.argv[1]}`);
+
   process.exit(1);
 }
+
 const path = require('path');
+
+const plugins = [
+  imageminMozjpeg({
+    progressive: true,
+    quality: 80,
+  }),
+  imageminSvgo(),
+  imageminPngquant({
+    quality: '65-90',
+  }),
+  imageminOptipng({
+    enabled: true,
+  }),
+  imageminGifsicle(),
+];
 
 const gatewayRoot = path.join(__dirname, '..');
 imagemin(
   [`${gatewayRoot}/static/images/*.{jpg,png,gif,svg}`],
-  `${gatewayRoot}/static/optimized-images/`, {
-    plugins: [
-      imageminMozjpeg({
-        progressive: true,
-        quality: 80,
-      }),
-      imageminSvgo(),
-      imageminPngquant({
-        quality: '65-90',
-      }),
-      imageminOptipng({
-        enabled: true,
-      }),
-      imageminGifsicle(),
-    ],
-  })
-  .then((files) => {
-    console.log(files);
-  });
+  `${gatewayRoot}/static/optimized-images/`,
+  {plugins}).then((files) => console.log(files));
+imagemin(
+  [`${gatewayRoot}/static/images/component-icons/*.{jpg,png,gif,svg}`],
+  `${gatewayRoot}/static/optimized-images/component-icons/`,
+  {plugins}).then((files) => console.log(files));
+imagemin(
+  [`${gatewayRoot}/static/images/thing-icons/*.{jpg,png,gif,svg}`],
+  `${gatewayRoot}/static/optimized-images/thing-icons/`,
+  {plugins}).then((files) => console.log(files));
