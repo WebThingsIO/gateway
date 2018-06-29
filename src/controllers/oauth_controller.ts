@@ -12,6 +12,7 @@ import * as express from 'express';
 import { URL } from 'url';
 import * as assert from 'assert';
 const JSONWebToken = require('../models/jsonwebtoken');
+const config = require('config');
 import * as Database from '../db';
 import {
   scopeValidSubset, Scope, ScopeAccess, ScopeRaw, ClientId, ClientRegistry
@@ -265,6 +266,7 @@ OAuthController.get('/local-token-service', async (request: express.Request, res
   let token = await handleAccessTokenRequest(request, response);
   if (token) {
     response.render('local-token-service', {
+      oauthPostToken: config.get('oauthPostToken'),
       token: token.access_token
     });
   }

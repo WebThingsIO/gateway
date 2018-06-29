@@ -123,6 +123,18 @@ let text = client.get("<span class="origin">https://gateway.local</span>/things"
         </div>
       </div>
     </section>
+    <script>
+if ({{oauthPostToken}}) {
+  window.addEventListener("message", function(ev) {
+   if (ev.origin !== 'file://') {
+     return;
+   }
+   if (ev.data.message === "token") {
+      ev.source.postMessage({ message: { token: "{{token}}" }}, "*");
+    }
+  });
+}
+    </script>
   </body>
 </html>
 
