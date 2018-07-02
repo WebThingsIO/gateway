@@ -9,6 +9,7 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
 
 // eslint-disable-next-line no-unused-vars
 const Speech = {
@@ -53,13 +54,8 @@ const Speech = {
    */
   listener: function(msg) {
     if (msg.state === 'result') {
-      const x = document.getElementById('snackbar');
       const displayNotification = function(msg, audio) {
-        x.innerHTML = msg;
-        x.className = 'show';
-        setTimeout(() => {
-          x.className = x.className.replace('show', '');
-        }, 3000);
+        App.showMessage(msg, 3000);
         new Audio(`/audio/${encodeURIComponent(audio)}.mp3`).play();
       };
       document.getElementById('stm-levels').classList.add('hidden');
