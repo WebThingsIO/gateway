@@ -223,3 +223,42 @@
   text-align: right;
   margin-top: -1rem;
 }
+
+@media only screen and (max-width: 800px) {
+  .new-thing-spacer {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .new-thing-type {
+    width: 100%;
+  }
+
+  .new-web-thing-controls {
+    margin-top: 0;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .new-thing-pin {
+    width: 6rem;
+  }
+}
+
+@media only screen and (min-width: 580px) and (max-width: 610px) {
+  .new-thing-pin {
+    width: 8rem;
+  }
+}
+
+@media only screen and (min-width: 610px) and (max-width: 660px) {
+  .new-thing-pin {
+    width: 10rem;
+  }
+}
+
+@media only screen and (min-width: 660px) and (max-width: 700px) {
+  .new-thing-pin {
+    width: 12rem;
+  }
+}

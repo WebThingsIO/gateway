@@ -175,6 +175,7 @@ const ContextMenu = {
         image = '/optimized-images/thing-icons/light.svg';
         break;
       case 'Custom':
+        image = '/optimized-images/thing-icons/thing.svg';
         this.customIconLabel.classList.remove('hidden');
         break;
       default:
