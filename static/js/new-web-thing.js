@@ -72,6 +72,7 @@ class NewWebThing {
           <input type="text" class="new-web-thing-name hidden"></input>
           <span class="new-web-thing-origin hidden"></span>
           <select class="new-thing-type hidden"></select>
+          <span class="new-thing-spacer"></span>
           <label for="${id}"
             class="new-thing-custom-icon-label text-button hidden">
             Choose icon...

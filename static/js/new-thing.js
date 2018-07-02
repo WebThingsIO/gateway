@@ -136,6 +136,7 @@ class NewThing {
         <input type="text" class="new-thing-name"
                value="${Utils.escapeHtml(this.description.name)}"/>
         <select class="new-thing-type">${options.join('')}</select>
+        <span class="new-thing-spacer"></span>
         <label for="${id}"
           class="new-thing-custom-icon-label text-button ${customIconClass}">
           Choose icon...

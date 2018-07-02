@@ -122,3 +122,18 @@
 #edit-thing-label.error {
   color: orange;
 }
+
+@media only screen and (max-width: 800px) {
+  #edit-thing-spacer {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  #edit-thing-type {
+    width: 100%;
+  }
+
+  #edit-thing-metadata {
+    padding-bottom: 1rem;
+  }
+}
