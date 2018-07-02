@@ -28,6 +28,7 @@ const RuleScreen = {
     this.animateDelay = 750;
     this.rule = null;
     this.partBlocks = [];
+    this.ruleEffectType = 'PulseEffect';
 
     this.view = document.getElementById('rule-view');
     this.titleBar = this.view.querySelector('.title-bar');
@@ -125,6 +126,7 @@ const RuleScreen = {
       }
     } else if (event.target.classList.contains('rule-effect-select')) {
       const effectType = this.getEffectType();
+      this.ruleEffectType = effectType;
       for (let i = 0; i < this.rule.effect.effects.length; i++) {
         this.rule.effect.effects[i].type = effectType;
       }
@@ -436,7 +438,7 @@ const RuleScreen = {
       return triggerBlock.rulePart.trigger;
     });
 
-    let op = 'OR';
+    let op = 'AND';
     if (this.rule.trigger) {
       op = this.rule.trigger.op || op;
     }
@@ -467,6 +469,17 @@ const RuleScreen = {
   onPresentationChange: function() {
     this.ruleName.textContent = this.rule.name || 'Rule Name';
     this.ruleDescription.innerHTML = this.rule.toHumanInterface();
+    const ruleEffectSelect =
+      this.ruleDescription.querySelector('.rule-effect-select');
+    if (this.rule.effect.effects.length === 0) {
+      ruleEffectSelect.value =
+        this.ruleEffectType === 'SetEffect' ? 'If' : 'While';
+    }
+    if (ruleEffectSelect.value === 'If') {
+      ruleEffectSelect.style.width = '1.8rem';
+    } else {
+      delete ruleEffectSelect.style.width;
+    }
     const valid = this.rule.valid();
     if (valid) {
       this.titleBar.classList.remove('invalid');
@@ -550,7 +563,7 @@ const RuleScreen = {
         if (!this.rule.trigger) {
           this.rule.trigger = {
             type: 'MultiTrigger',
-            op: 'OR',
+            op: 'AND',
             triggers: [],
           };
         }
@@ -558,7 +571,7 @@ const RuleScreen = {
         if (this.rule.trigger.type !== 'MultiTrigger') {
           this.rule.trigger = {
             type: 'MultiTrigger',
-            op: 'OR',
+            op: 'AND',
             triggers: [
               this.rule.trigger,
             ],
