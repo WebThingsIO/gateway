@@ -1,5 +1,6 @@
 const PropertySelect = require('./PropertySelect');
 const RulePartBlock = require('./RulePartBlock');
+const RuleUtils = require('./RuleUtils');
 
 /**
  * An element representing a device (`thing`) and a property. Can be
@@ -14,7 +15,7 @@ const RulePartBlock = require('./RulePartBlock');
 function DevicePropertyBlock(ruleArea, onPresentationChange, onRuleChange,
                              thing) {
   RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleChange,
-                     thing.name, '/optimized-images/on-off-switch.svg');
+                     thing.name, RuleUtils.icon(thing));
   this.thing = thing;
 
   const propertyInfo = this.elt.querySelector('.rule-part-info');

@@ -5,6 +5,7 @@
  */
 
 const API = require('../api');
+const RuleUtils = require('./RuleUtils');
 const TimeTriggerBlock = require('./TimeTriggerBlock');
 
 /**
@@ -98,21 +99,6 @@ Rule.prototype.toDescription = function() {
     trigger: this.trigger,
     effect: this.effect,
   };
-};
-
-// Helper function for selecting the thing corresponding to a property
-const RuleUtils = {
-  byProperty: function byProperty(property) {
-    return function(option) {
-      const optProp = option.properties[property.name];
-      return optProp && (optProp.href === property.href);
-    };
-  },
-  byHref: function byHref(href) {
-    return function(thing) {
-      return thing.href === href;
-    };
-  },
 };
 
 /**
@@ -353,4 +339,4 @@ Rule.prototype.valid = function() {
     this.singleEffectToHumanRepresentation(this.effect, false));
 };
 
-module.exports = {Rule, RuleUtils};
+module.exports = Rule;
