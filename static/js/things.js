@@ -257,7 +257,18 @@ const ThingsScreen = {
           }
         }
 
-        document.getElementById('thing-title-icon').src = thing.baseIcon;
+        const iconEl = document.getElementById('thing-title-icon');
+        const customIconEl = document.getElementById('thing-title-custom-icon');
+        if (thing.iconHref && thing.selectedCapability === 'Custom') {
+          customIconEl.iconHref = thing.iconHref;
+          customIconEl.classList.remove('hidden');
+          iconEl.classList.add('hidden');
+        } else {
+          iconEl.src = thing.baseIcon;
+          iconEl.classList.remove('hidden');
+          customIconEl.classList.add('hidden');
+        }
+
         document.getElementById('thing-title-name').innerText = thing.name;
 
         const speechWrapper = document.getElementById('speech-wrapper');
@@ -343,6 +354,7 @@ const ThingsScreen = {
               break;
             case 'Custom':
             default:
+              icon = '/optimized-images/thing-icons/thing.svg';
               break;
           }
         } else {
@@ -374,7 +386,19 @@ const ThingsScreen = {
           }
         }
 
-        document.getElementById('thing-title-icon').src = icon;
+        const iconEl = document.getElementById('thing-title-icon');
+        const customIconEl = document.getElementById('thing-title-custom-icon');
+        if (description.iconHref &&
+            description.selectedCapability === 'Custom') {
+          customIconEl.iconHref = description.iconHref;
+          customIconEl.classList.remove('hidden');
+          iconEl.classList.add('hidden');
+        } else {
+          iconEl.src = icon;
+          iconEl.classList.remove('hidden');
+          customIconEl.classList.add('hidden');
+        }
+
         document.getElementById('thing-title-name').innerText =
           description.name;
 
@@ -446,6 +470,7 @@ const ThingsScreen = {
             break;
           case 'Custom':
           default:
+            icon = '/optimized-images/thing-icons/thing.svg';
             break;
         }
       } else {
@@ -477,7 +502,18 @@ const ThingsScreen = {
         }
       }
 
-      document.getElementById('thing-title-icon').src = icon;
+      const iconEl = document.getElementById('thing-title-icon');
+      const customIconEl = document.getElementById('thing-title-custom-icon');
+      if (description.iconHref && description.selectedCapability === 'Custom') {
+        customIconEl.iconHref = description.iconHref;
+        customIconEl.classList.remove('hidden');
+        iconEl.classList.add('hidden');
+      } else {
+        iconEl.src = icon;
+        iconEl.classList.remove('hidden');
+        customIconEl.classList.add('hidden');
+      }
+
       document.getElementById('thing-title-name').innerText = description.name;
 
       this.thingsElement.innerHTML = '';

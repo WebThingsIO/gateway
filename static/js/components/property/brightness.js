@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const SliderProperty = require('./slider-property');
+const SliderProperty = require('./slider');
 
 class BrightnessProperty extends SliderProperty {
   connectedCallback() {

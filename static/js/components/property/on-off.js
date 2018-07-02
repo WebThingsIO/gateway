@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const SwitchProperty = require('./switch-property');
+const SwitchProperty = require('./switch');
 
 class OnOffProperty extends SwitchProperty {
   connectedCallback() {

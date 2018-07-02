@@ -24,7 +24,6 @@
 .new-thing-custom-icon-label {
   appearance: button;
   -moz-appearance: button;
-  -webkit-appearance: button;
   font-size: 1.5rem;
 }
 
@@ -90,7 +89,6 @@
 .new-thing-icon {
   width: 6.4rem;
   height: 6.4rem;
-  background-image: url('../optimized-images/thing-icons/thing.svg');
   background-size: 6.4rem;
 }
 

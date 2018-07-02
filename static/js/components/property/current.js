@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const LabelProperty = require('./label-property');
+const LabelProperty = require('./label');
 
 class CurrentProperty extends LabelProperty {
   connectedCallback() {

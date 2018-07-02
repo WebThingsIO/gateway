@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseComponent = require('./base-component');
+const BaseComponent = require('../base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `

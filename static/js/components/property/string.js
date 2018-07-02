@@ -1,7 +1,7 @@
 /**
- * SliderProperty
+ * StringProperty
  *
- * A bubble showing a slider.
+ * A bubble showing a text input.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseComponent = require('./base-component');
+const BaseComponent = require('../base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -22,7 +22,7 @@ template.innerHTML = `
       font-size: 1.6rem;
     }
 
-    .webthing-slider-property-container {
+    .webthing-string-property-container {
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
@@ -31,25 +31,27 @@ template.innerHTML = `
       position: relative;
     }
 
-    .webthing-slider-property-contents {
+    .webthing-string-property-contents {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .webthing-slider-property-form {
-      width: 8rem;
-      height: 8rem;
+    .webthing-string-property-input {
+      height: 1.75rem;
+      width: 6rem;
+      text-align: center;
+      background-color: #d2d9de;
+      color: #333;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      font-size: 1.6rem;
     }
 
-    .webthing-slider-property-slider {
-      width: 8rem;
-      margin: 0;
-      transform: rotate(-90deg) translate(-3rem, 0);
-    }
-
-    .webthing-slider-property-name {
+    .webthing-string-property-name {
       text-align: center;
       max-width: 10rem;
       overflow-wrap: break-word;
@@ -57,66 +59,41 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-slider-property-container">
-    <div id="contents" class="webthing-slider-property-contents">
-      <form id="form" class="webthing-slider-property-form">
-        <input type="range" id="slider" class="webthing-slider-property-slider">
+  <div id="container" class="webthing-string-property-container">
+    <div id="contents" class="webthing-string-property-contents">
+      <form id="form" class="webthing-string-property-form">
+        <input type="text" id="input" class="webthing-string-property-input">
       </form>
     </div>
   </div>
-  <div id="name" class="webthing-slider-property-name"></div>
+  <div id="name" class="webthing-string-property-name"></div>
 `;
 
-class SliderProperty extends BaseComponent {
+class StringProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#slider');
+    this._form = this.shadowRoot.querySelector('#form');
+    this._input = this.shadowRoot.querySelector('#input');
     this._name = this.shadowRoot.querySelector('#name');
 
-    this._onChange = this.__onChange.bind(this);
+    this._onSubmit = this.__onSubmit.bind(this);
+    this._onBlur = this.__onBlur.bind(this);
   }
 
   connectedCallback() {
-    if (!this.name) {
-      this.name = this.dataset.name;
-    }
+    this.name = this.dataset.name;
 
-    this._upgradeProperty('min');
-    this._upgradeProperty('max');
-    this._upgradeProperty('step');
     this._upgradeProperty('value');
     this._upgradeProperty('disabled');
 
-    this._input.addEventListener('change', this._onChange);
+    this._form.addEventListener('submit', this._onSubmit);
+    this._input.addEventListener('blur', this._onBlur);
   }
 
   disconnectedCallback() {
-    this._input.removeEventListener('change', this._onChange);
-  }
-
-  get min() {
-    return this._input.min;
-  }
-
-  set min(value) {
-    this._input.min = value;
-  }
-
-  get max() {
-    return this._input.max;
-  }
-
-  set max(value) {
-    this._input.max = value;
-  }
-
-  get step() {
-    return this._input.step;
-  }
-
-  set step(value) {
-    this._input.step = value;
+    this._form.removeEventListener('submit', this._onSubmit);
+    this._input.removeEventListener('blur', this._onBlur);
   }
 
   get value() {
@@ -150,7 +127,13 @@ class SliderProperty extends BaseComponent {
     this._name.innerText = value;
   }
 
-  __onChange(e) {
+  __onSubmit(e) {
+    e.preventDefault();
+    this._input.blur();
+    return false;
+  }
+
+  __onBlur(e) {
     e.preventDefault();
     this.value = e.target.value;
 
@@ -163,5 +146,5 @@ class SliderProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-slider-property', SliderProperty);
-module.exports = SliderProperty;
+window.customElements.define('webthing-string-property', StringProperty);
+module.exports = StringProperty;

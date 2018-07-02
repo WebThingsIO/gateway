@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const LabelCapability = require('./label-capability');
+const LabelCapability = require('./label');
 
 class EnergyMonitorCapability extends LabelCapability {
   connectedCallback() {

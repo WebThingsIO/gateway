@@ -9,8 +9,8 @@
  */
 'use strict';
 
-const BaseComponent = require('./base-component');
-const Utils = require('../utils');
+const BaseComponent = require('../base-component');
+const Utils = require('../../utils');
 
 const template = document.createElement('template');
 template.innerHTML = `
