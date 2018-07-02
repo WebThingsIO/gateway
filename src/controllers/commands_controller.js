@@ -117,8 +117,7 @@ CommandsController.post('/', function(request, response) {
               iotOptions.body = JSON.stringify({on:
               (payload.param2 == 'on') ? true : false});
               payload.href = obj.properties.on.href;
-            } else if ((payload.param3 != null) &&
-              (payload.param3 != '' && obj.properties.color != '')) {
+            } else if (payload.param3 && obj.properties.color) {
               const colorname_to_hue = {
                 red: '#FF0000',
                 orange: '#FFB300',
@@ -148,7 +147,10 @@ CommandsController.post('/', function(request, response) {
             // intent and matched a 'thing' in our list. Return a response to
             // caller with this status before the command finishes execution
             // as the execution can take some time (e.g. blinds)
-            response.status(201).json({message: 'Command Created'});
+            response.status(201).json({
+              message: 'Command Created',
+              payload: payload,
+            });
             fetch(iotUrl, iotOptions)
               .then(function() {
                 // In the future we may want to use WS to give a status of
@@ -167,7 +169,7 @@ CommandsController.post('/', function(request, response) {
             'Internal error determining intent'});
         });
       }).catch(function(error) {
-        console.log('Error parsing intent:', error);
+        console.log('Error training:', error);
         response.status(404).json({message:
           'Internal error determining intent'});
       });
