@@ -1,7 +1,7 @@
 /**
- * StringProperty
+ * ColorProperty
  *
- * A bubble showing a text input.
+ * A bubble showing a color input.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseComponent = require('./base-component');
+const BaseComponent = require('../base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -22,7 +22,7 @@ template.innerHTML = `
       font-size: 1.6rem;
     }
 
-    .webthing-string-property-container {
+    .webthing-color-property-container {
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
@@ -31,27 +31,14 @@ template.innerHTML = `
       position: relative;
     }
 
-    .webthing-string-property-contents {
+    .webthing-color-property-contents {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .webthing-string-property-input {
-      height: 1.75rem;
-      width: 6rem;
-      text-align: center;
-      background-color: #d2d9de;
-      color: #333;
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.5rem;
-      margin: 0.5rem 0;
-      font-size: 1.6rem;
-    }
-
-    .webthing-string-property-name {
+    .webthing-color-property-name {
       text-align: center;
       max-width: 10rem;
       overflow-wrap: break-word;
@@ -59,26 +46,22 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-string-property-container">
-    <div id="contents" class="webthing-string-property-contents">
-      <form id="form" class="webthing-string-property-form">
-        <input type="text" id="input" class="webthing-string-property-input">
-      </form>
+  <div id="container" class="webthing-color-property-container">
+    <div id="contents" class="webthing-color-property-contents">
+      <input type="color" id="color" class="webthing-color-property-color">
     </div>
   </div>
-  <div id="name" class="webthing-string-property-name"></div>
+  <div id="name" class="webthing-color-property-name"></div>
 `;
 
-class StringProperty extends BaseComponent {
+class ColorProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._form = this.shadowRoot.querySelector('#form');
-    this._input = this.shadowRoot.querySelector('#input');
+    this._input = this.shadowRoot.querySelector('#color');
     this._name = this.shadowRoot.querySelector('#name');
 
-    this._onSubmit = this.__onSubmit.bind(this);
-    this._onBlur = this.__onBlur.bind(this);
+    this._onChange = this.__onChange.bind(this);
   }
 
   connectedCallback() {
@@ -87,13 +70,11 @@ class StringProperty extends BaseComponent {
     this._upgradeProperty('value');
     this._upgradeProperty('disabled');
 
-    this._form.addEventListener('submit', this._onSubmit);
-    this._input.addEventListener('blur', this._onBlur);
+    this._input.addEventListener('change', this._onChange);
   }
 
   disconnectedCallback() {
-    this._form.removeEventListener('submit', this._onSubmit);
-    this._input.removeEventListener('blur', this._onBlur);
+    this._input.removeEventListener('change', this._onChange);
   }
 
   get value() {
@@ -127,13 +108,7 @@ class StringProperty extends BaseComponent {
     this._name.innerText = value;
   }
 
-  __onSubmit(e) {
-    e.preventDefault();
-    this._input.blur();
-    return false;
-  }
-
-  __onBlur(e) {
+  __onChange(e) {
     e.preventDefault();
     this.value = e.target.value;
 
@@ -146,5 +121,5 @@ class StringProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-string-property', StringProperty);
-module.exports = StringProperty;
+window.customElements.define('webthing-color-property', ColorProperty);
+module.exports = ColorProperty;

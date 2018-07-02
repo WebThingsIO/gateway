@@ -534,6 +534,7 @@ class Thing {
         action: 'edit',
         capabilities: this['@type'],
         selectedCapability: this.selectedCapability,
+        iconHref: this.iconHref,
       },
     });
     window.dispatchEvent(newEvent);

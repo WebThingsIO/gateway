@@ -25,12 +25,16 @@ const ContextMenu = {
     this.removeContent = document.getElementById('context-menu-content-remove');
     this.backButton = document.getElementById('context-menu-back-button');
     this.headingIcon = document.getElementById('context-menu-heading-icon');
+    this.headingCustomIcon =
+      document.getElementById('context-menu-heading-custom-icon');
     this.headingText = document.getElementById('context-menu-heading-text');
     this.saveButton = document.getElementById('edit-thing-save-button');
     this.thingIcon = document.getElementById('edit-thing-icon');
     this.nameInput = document.getElementById('edit-thing-name');
     this.thingType = document.getElementById('edit-thing-type');
     this.customIcon = document.getElementById('edit-thing-custom-icon');
+    this.customIconInput =
+      document.getElementById('edit-thing-custom-icon-input');
     this.customIconLabel =
       document.getElementById('edit-thing-custom-icon-label');
     this.label = document.getElementById('edit-thing-label');
@@ -50,8 +54,8 @@ const ContextMenu = {
       });
     });
     this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
-    this.customIcon.addEventListener('change',
-                                     this.handleIconUpload.bind(this));
+    this.customIconInput.addEventListener('change',
+                                          this.handleIconUpload.bind(this));
   },
 
   /**
@@ -59,7 +63,20 @@ const ContextMenu = {
    */
   show: function(e) {
     this.iconData = null;
-    this.headingIcon.src = e.detail.thingIcon;
+    this.customIcon.iconHref = '';
+
+    if (e.detail.iconHref) {
+      this.headingCustomIcon.classList.remove('hidden');
+      this.headingCustomIcon.iconHref = e.detail.iconHref;
+      this.headingIcon.classList.add('hidden');
+      this.customIcon.iconHref = e.detail.iconHref;
+    } else {
+      this.headingCustomIcon.classList.add('hidden');
+      this.headingIcon.classList.remove('hidden');
+      this.headingIcon.src = e.detail.thingIcon;
+      this.customIcon.iconHref = '';
+    }
+
     this.headingText.textContent = e.detail.thingName;
     this.thingUrl = e.detail.thingUrl;
     this.element.classList.remove('hidden');
@@ -69,10 +86,18 @@ const ContextMenu = {
 
     switch (e.detail.action) {
       case 'edit': {
-        this.customIconLabel.classList.add('hidden');
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
-        this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
+
+        if (e.detail.selectedCapability === 'Custom') {
+          this.thingIcon.style.backgroundImage = '';
+          this.customIconLabel.classList.remove('hidden');
+          this.customIcon.classList.remove('hidden');
+        } else {
+          this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
+          this.customIconLabel.classList.add('hidden');
+          this.customIcon.classList.add('hidden');
+        }
 
         const capabilities = Utils.sortCapabilities(e.detail.capabilities);
         capabilities.push('Custom');
@@ -83,9 +108,6 @@ const ContextMenu = {
 
           if (e.detail.selectedCapability === capability) {
             option.selected = true;
-            if (capability === 'Custom') {
-              this.customIconLabel.classList.remove('hidden');
-            }
           }
 
           switch (capability) {
@@ -138,7 +160,9 @@ const ContextMenu = {
    */
   hide: function() {
     this.element.classList.add('hidden');
+    this.headingIcon.classList.remove('hidden');
     this.headingIcon.src = '#';
+    this.headingCustomIcon.classList.add('hidden');
     this.headingText.textContent = '';
     this.thingUrl = '';
   },
@@ -148,7 +172,9 @@ const ContextMenu = {
       this.thingType.options[this.thingType.selectedIndex].value;
 
     this.customIconLabel.classList.add('hidden');
-    let image = '/optimized-images/thing-icons/thing.png';
+    this.customIcon.classList.add('hidden');
+
+    let image = '';
     switch (capability) {
       case 'OnOffSwitch':
         image = '/optimized-images/thing-icons/on_off_switch.svg';
@@ -175,24 +201,28 @@ const ContextMenu = {
         image = '/optimized-images/thing-icons/light.svg';
         break;
       case 'Custom':
-        image = '/optimized-images/thing-icons/thing.svg';
         this.customIconLabel.classList.remove('hidden');
+        this.customIcon.classList.remove('hidden');
         break;
       default:
         break;
     }
 
-    this.thingIcon.style.backgroundImage = `url("${image}")`;
+    if (image) {
+      this.thingIcon.style.backgroundImage = `url("${image}")`;
+    } else {
+      this.thingIcon.style.backgroundImage = '';
+    }
   },
 
   handleIconUpload: function() {
     this.label.classList.add('hidden');
 
-    if (this.customIcon.files.length === 0) {
+    if (this.customIconInput.files.length === 0) {
       return;
     }
 
-    const file = this.customIcon.files[0];
+    const file = this.customIconInput.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
       this.label.innerText = 'Invalid file.';
       this.label.classList.add('error');
@@ -216,6 +246,9 @@ const ContextMenu = {
         data: btoa(e.target.result),
       };
       this.saveButton.disabled = false;
+
+      this.customIcon.iconHref = URL.createObjectURL(file);
+      this.customIcon.classList.remove('hidden');
     };
 
     this.saveButton.disabled = true;

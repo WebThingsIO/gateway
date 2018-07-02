@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const LevelProperty = require('./level-property');
+const LevelProperty = require('./level');
 
 class ColorTemperatureProperty extends LevelProperty {
   connectedCallback() {

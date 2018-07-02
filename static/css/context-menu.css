@@ -6,6 +6,14 @@
   line-height: 9.6rem;
 }
 
+#context-menu-heading-custom-icon {
+  display: inline-block;
+  transform: scale(0.62);
+  position: relative;
+  top: 2.3rem;
+  left: 0.6rem;
+}
+
 #context-menu-heading-icon {
   height: 4rem;
   position: relative;
@@ -24,6 +32,7 @@
   transform: translateY(-50%);
 }
 
+#context-menu-heading .hidden,
 #context-menu-content .hidden {
   display: none;
 }
@@ -95,7 +104,6 @@
 #edit-thing-custom-icon-label {
   appearance: button;
   -moz-appearance: button;
-  -webkit-appearance: button;
   font-size: 1.5rem;
 }
 

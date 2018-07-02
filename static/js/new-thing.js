@@ -131,7 +131,10 @@ class NewThing {
 
     const id = Utils.escapeHtmlForIdClass(`new-thing-custom-icon-${this.id}`);
     this.element.innerHTML = `
-      <div class="new-thing-icon"></div>
+      <div class="new-thing-icon">
+        <webthing-custom-icon class="new-thing-custom-icon ${customIconClass}">
+        </webthing-custom-icon>
+      </div>
       <div class="new-thing-metadata">
         <input type="text" class="new-thing-name"
                value="${Utils.escapeHtml(this.description.name)}"/>
@@ -141,7 +144,7 @@ class NewThing {
           class="new-thing-custom-icon-label text-button ${customIconClass}">
           Choose icon...
         </label>
-        <input type="file" class="new-thing-custom-icon hidden"
+        <input type="file" class="new-thing-custom-icon-input hidden"
           id="${id}" accept="image/jpeg,image/png,image/svg+xml">
         <span class="new-thing-label"></span>
       </div>
@@ -208,6 +211,8 @@ class NewThing {
       this.thingType = this.element.getElementsByClassName('new-thing-type')[0];
       this.customIcon =
         this.element.getElementsByClassName('new-thing-custom-icon')[0];
+      this.customIconInput =
+        this.element.getElementsByClassName('new-thing-custom-icon-input')[0];
       this.customIconLabel =
         this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
       this.label = this.element.getElementsByClassName('new-thing-label')[0];
@@ -215,8 +220,8 @@ class NewThing {
       this.saveButton.addEventListener('click', this.handleSave.bind(this));
       this.thingType.addEventListener('change',
                                       this.handleTypeChange.bind(this));
-      this.customIcon.addEventListener('change',
-                                       this.handleIconUpload.bind(this));
+      this.customIconInput.addEventListener('change',
+                                            this.handleIconUpload.bind(this));
     }
   }
 
@@ -282,6 +287,7 @@ class NewThing {
       this.thingType.options[this.thingType.selectedIndex].value;
 
     this.customIconLabel.classList.add('hidden');
+    this.customIcon.classList.add('hidden');
 
     let cls = '';
     switch (capability) {
@@ -311,6 +317,7 @@ class NewThing {
         break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
+        this.customIcon.classList.remove('hidden');
         break;
       default:
         break;
@@ -333,11 +340,11 @@ class NewThing {
   handleIconUpload() {
     this.label.classList.add('hidden');
 
-    if (this.customIcon.files.length === 0) {
+    if (this.customIconInput.files.length === 0) {
       return;
     }
 
-    const file = this.customIcon.files[0];
+    const file = this.customIconInput.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
       this.label.innerText = 'Invalid file.';
       this.label.classList.add('error');
@@ -361,6 +368,9 @@ class NewThing {
         data: btoa(e.target.result),
       };
       this.saveButton.disabled = false;
+
+      this.customIcon.iconHref = URL.createObjectURL(file);
+      this.customIcon.classList.remove('hidden');
     };
 
     this.saveButton.disabled = true;

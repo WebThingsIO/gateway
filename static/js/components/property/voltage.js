@@ -1,7 +1,7 @@
 /**
- * FrequencyProperty
+ * VoltageProperty
  *
- * A bubble showing a frequency label.
+ * A bubble showing a voltage label.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,15 +9,15 @@
  */
 'use strict';
 
-const LabelProperty = require('./label-property');
+const LabelProperty = require('./label');
 
-class FrequencyProperty extends LabelProperty {
+class VoltageProperty extends LabelProperty {
   connectedCallback() {
-    this.unit = 'Hz';
+    this.unit = 'V';
     this.precision = 0;
     super.connectedCallback();
   }
 }
 
-window.customElements.define('webthing-frequency-property', FrequencyProperty);
-module.exports = FrequencyProperty;
+window.customElements.define('webthing-voltage-property', VoltageProperty);
+module.exports = VoltageProperty;

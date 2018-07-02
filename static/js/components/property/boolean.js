@@ -1,7 +1,7 @@
 /**
- * SwitchProperty
+ * BooleanProperty
  *
- * A bubble showing a switch.
+ * A bubble showing a checkbox.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const BaseComponent = require('./base-component');
+const BaseComponent = require('../base-component');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -22,7 +22,7 @@ template.innerHTML = `
       font-size: 1.6rem;
     }
 
-    .webthing-switch-property-container {
+    .webthing-boolean-property-container {
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
@@ -31,49 +31,38 @@ template.innerHTML = `
       position: relative;
     }
 
-    .webthing-switch-property-contents {
+    .webthing-boolean-property-contents {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .webthing-switch-property-switch {
+    .webthing-boolean-property-checkbox {
       display: none;
     }
 
-    .webthing-switch-property-slider {
+    .webthing-boolean-property-checkbox + label {
       display: block;
-      width: 5.5rem;
-      height: 2.2rem;
-      border-radius: 1.1rem;
-      background-color: #5d9bc7;
-      cursor: pointer;
-      transition: 0.1s;
+      width: 3rem;
+      height: 3rem;
+      background: url("/optimized-images/checkbox-sprite.png") no-repeat 0 0;
+      background-size: 3rem auto;
     }
 
-    .webthing-switch-property-slider::after {
-      content: "";
-      display: block;
-      width: 1.5rem;
-      height: 1.5rem;
-      border-radius: 50%;
-      background-color: white;
-      transform: translate(0.35rem, 0.35rem);
-      transition: 0.1s;
+    .webthing-boolean-property-checkbox:checked + label {
+      background-position: 0 -3rem;
     }
 
-    .webthing-switch-property-switch:checked + #slider::after {
-      transform: translate(3.65rem, 0.35rem);
+    .webthing-boolean-property-checkbox:disabled + label {
+      background-position: 0 -6rem;
     }
 
-    .webthing-switch-property-label {
-      padding-top: 0.5rem;
-      text-transform: uppercase;
-      font-weight: bold;
+    .webthing-boolean-property-checkbox:checked:disabled + label {
+      background-position: 0 -9rem;
     }
 
-    .webthing-switch-property-name {
+    .webthing-boolean-property-name {
       text-align: center;
       max-width: 10rem;
       overflow-wrap: break-word;
@@ -81,40 +70,33 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-switch-property-container">
-    <div id="contents" class="webthing-switch-property-contents">
-      <form>
-        <input type="checkbox" id="switch"
-          class="webthing-switch-property-switch">
-        <label id="slider" for="switch" class="webthing-switch-property-slider">
+  <div id="container" class="webthing-boolean-property-container">
+    <div id="contents" class="webthing-boolean-property-contents">
+      <form id="form" class="webthing-boolean-property-form">
+        <input type="checkbox" id="checkbox"
+          class="webthing-boolean-property-checkbox">
+        <label id="label" for="checkbox"
+          class="webthing-boolean-property-label">
         </label>
       </form>
-      <div id="label" class="webthing-switch-property-label"></div>
     </div>
   </div>
-  <div id="name" class="webthing-switch-property-name"></div>
+  <div id="name" class="webthing-boolean-property-name"></div>
 `;
 
-class SwitchProperty extends BaseComponent {
+class BooleanProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#switch');
+    this._input = this.shadowRoot.querySelector('#checkbox');
     this._name = this.shadowRoot.querySelector('#name');
-    this._label = this.shadowRoot.querySelector('#label');
 
     this._onClick = this.__onClick.bind(this);
     this._onKeyUp = this.__onKeyUp.bind(this);
   }
 
   connectedCallback() {
-    if (!this.name) {
-      this.name = this.dataset.name;
-    }
-
-    if (!this.label) {
-      this.label = this.dataset.offLabel;
-    }
+    this.name = this.dataset.name;
 
     this._upgradeProperty('checked');
     this._upgradeProperty('disabled');
@@ -141,7 +123,6 @@ class SwitchProperty extends BaseComponent {
     }
 
     this._input.checked = isChecked;
-    this._label.innerText = isChecked ? this.onLabel : this.offLabel;
   }
 
   get disabled() {
@@ -175,30 +156,6 @@ class SwitchProperty extends BaseComponent {
     this._name.innerText = value;
   }
 
-  get label() {
-    return this._label.innerText;
-  }
-
-  set label(value) {
-    this._label.innerText = value;
-  }
-
-  get onLabel() {
-    return this.dataset.onLabel;
-  }
-
-  set onLabel(label) {
-    this.dataset.onLabel = label;
-  }
-
-  get offLabel() {
-    return this.dataset.offLabel;
-  }
-
-  set offLabel(label) {
-    this.dataset.offLabel = label;
-  }
-
   __onKeyUp(e) {
     if (e.altKey) {
       return;
@@ -229,5 +186,5 @@ class SwitchProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-switch-property', SwitchProperty);
-module.exports = SwitchProperty;
+window.customElements.define('webthing-boolean-property', BooleanProperty);
+module.exports = BooleanProperty;

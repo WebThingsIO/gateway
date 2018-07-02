@@ -103,6 +103,7 @@
   stroke-width: 2px;
 }
 
+#thing-title-container .hidden,
 #thing-title.hidden {
   display: none;
 }
@@ -124,6 +125,14 @@
   text-overflow: ellipsis;
   height: 100%;
   line-height: 9.6rem;
+}
+
+#thing-title-custom-icon {
+  display: inline-block;
+  transform: scale(0.62);
+  position: relative;
+  top: 2.3rem;
+  left: 0.5rem;
 }
 
 #thing-title-icon {
