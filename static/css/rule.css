@@ -16,7 +16,7 @@
 #rule-view > .title-bar {
   box-sizing: border-box;
   width: 100%;
-  height: 9.6rem;
+  min-height: 9.6rem;
   padding-left: 9.6rem;
   display: flex;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -26,23 +26,6 @@
 
 #rule-view > .title-bar.invalid {
   background: #7f3939;
-}
-
-.rule-back-button {
-  border: 0;
-  background: #4a4a4a;
-  color: white;
-  width: 12rem;
-  height: 12rem;
-}
-
-.rule-back-button:active {
-  background: #222;
-}
-
-.rule-back-button > img {
-  margin: 4rem;
-  padding: 0;
 }
 
 #delete-button {
@@ -118,28 +101,24 @@
   position: relative;
 }
 
+#drag-hint p {
+  font-size: 1.8rem;
+}
+
 .drag-hint-trigger {
-  background: rgba(129, 184, 225, 0.3);
+  background: rgba(129, 184, 225, 0.7);
 }
 
 .drag-hint-effect {
-  background: rgba(255, 207, 138, 0.3);
+  background: rgba(255, 207, 138, 0.7);
 }
 
-.drag-hint.inactive {
-  background: rgba(127, 127, 127, 0.3);
-}
-
-.drag-hint.inactive > .drag-hint-container {
-  display: none;
-}
-
-.drag-hint-block.rule-part-block {
+.drag-hint-block {
   background: none;
-  border: 1px dashed #4a4a4a;
+  border: 2px dashed black;
   text-align: center;
-  line-height: 10rem;
-  font-size: 2.4rem;
+  line-height: 16rem;
+  font-size: 4rem;
   margin: 1.4rem auto;
 }
 
@@ -329,11 +308,7 @@
   transform: translate(-50%, -50%);
   padding: 0;
   margin: 0;
-  color: #4a4a4a;
-}
-
-.drag-hint > .drag-hint-container {
-  color: #4a4a4a;
+  color: black;
 }
 
 #rule-delete-overlay {
@@ -445,4 +420,48 @@
   font-size: 1.6rem;
   border-radius: 0 0 1rem 0;
   border: 0;
+}
+
+.rule-part-block.trigger.inactive,
+.rule-part-block.effect.inactive {
+  background: #888;
+}
+
+#connection > path.active {
+  stroke: #5DBBFF;
+}
+
+#connection > circle.active {
+  fill: #5DBBFF;
+}
+
+.triangle-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+
+  background: none;
+  color: white;
+  border: 0;
+  font-size: 1.8rem;
+}
+
+.triangle-select-container {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px solid white;
+}
+
+.triangle-select-container:after {
+  border-top: 0.6rem solid white;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  content: '';
+  position: absolute;
+  transform: translate(-50%, 0.2rem);
+  top: 100%;
+  left: 50%;
+  height: 0;
+  width: 0;
 }

@@ -14,7 +14,8 @@ class TimeTrigger extends Trigger {
   constructor(desc) {
     super();
     this.time = desc.time;
-    this.sendStateChanged = this.sendStateChanged.bind(this);
+    this.sendOn = this.sendOn.bind(this);
+    this.sendOff = this.sendOff.bind(this);
   }
 
   /**
@@ -48,12 +49,17 @@ class TimeTrigger extends Trigger {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.timeout = setTimeout(this.sendStateChanged,
+    this.timeout = setTimeout(this.sendOn,
                               nextTime.getTime() - Date.now());
   }
 
-  sendStateChanged() {
+  sendOn() {
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
+    this.timeout = setTimeout(this.sendOff, 10 * 1000);
+  }
+
+  sendOff() {
+    this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
     this.scheduleNext();
   }
 

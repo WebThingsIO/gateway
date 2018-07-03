@@ -34,6 +34,16 @@ const equalityTrigger = {
   value: '#ff7700',
 };
 
+const andTrigger = {
+  triggers: [
+    booleanTrigger,
+    levelTrigger,
+  ],
+  type: 'MultiTrigger',
+  op: 'AND',
+};
+
+
 describe('triggers', function() {
   it('should parse a BooleanTrigger', () => {
     const trigger = triggers.fromDescription(booleanTrigger);
@@ -48,6 +58,11 @@ describe('triggers', function() {
   it('should parse an EqualityTrigger', () => {
     const trigger = triggers.fromDescription(equalityTrigger);
     expect(trigger).toMatchObject(equalityTrigger);
+  });
+
+  it('should parse a MultiTrigger', () => {
+    const trigger = triggers.fromDescription(andTrigger);
+    expect(trigger).toMatchObject(andTrigger);
   });
 
   it('should reject an unknown trigger type', () => {

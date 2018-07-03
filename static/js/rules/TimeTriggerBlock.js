@@ -52,7 +52,6 @@ TimeTriggerBlock.prototype.setRulePart = function(rulePart) {
   if (rulePart.trigger) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
-    this.ruleTriggerArea.classList.add('inactive');
 
     this.timeInput.value = TimeTriggerBlock.utcToLocal(rulePart.trigger.time);
   }

@@ -35,8 +35,6 @@ function RulePartBlock(ruleArea, onPresentationChange, onRuleChange, name,
   this.rulePartBlock = this.elt.querySelector('.rule-part-block');
 
   this.ruleArea = ruleArea;
-  this.ruleTriggerArea = this.ruleArea.querySelector('.drag-hint-trigger');
-  this.ruleEffectArea = this.ruleArea.querySelector('.drag-hint-effect');
 
   this.onDown = this.onDown.bind(this);
   this.onMove = this.onMove.bind(this);
@@ -66,12 +64,6 @@ RulePartBlock.prototype.onDown = function() {
   deleteArea.classList.add('delete-active');
   this.elt.classList.add('dragging');
   this.ruleArea.classList.add('drag-location-hint');
-
-  if (this.role === 'trigger') {
-    this.ruleTriggerArea.classList.remove('inactive');
-  } else if (this.role === 'effect') {
-    this.ruleEffectArea.classList.remove('inactive');
-  }
 
   this.onPresentationChange();
 };
@@ -134,18 +126,9 @@ RulePartBlock.prototype.onUp = function(clientX, clientY) {
   this.ruleArea.classList.remove('drag-location-hint');
 
   if (this.rulePartBlock.classList.contains('trigger')) {
-    if (this.ruleTriggerArea.classList.contains('inactive')) {
-      this.reset();
-    } else {
-      this.role = 'trigger';
-      this.ruleTriggerArea.classList.add('inactive');
-    }
+    this.role = 'trigger';
   } else if (this.rulePartBlock.classList.contains('effect')) {
-    if (this.ruleEffectArea.classList.contains('inactive')) {
-      this.reset();
-    } else {
-      this.role = 'effect';
-    }
+    this.role = 'effect';
   }
 
   if (clientY > window.innerHeight - deleteAreaHeight) {
@@ -179,7 +162,6 @@ RulePartBlock.prototype.setRulePart = function(rulePart) {
   if (rulePart.trigger) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
-    this.ruleTriggerArea.classList.add('inactive');
   } else if (rulePart.effect) {
     this.role = 'effect';
     this.rulePartBlock.classList.add('effect');
@@ -241,11 +223,6 @@ RulePartBlock.prototype.snapToCenter = function(index, length) {
 RulePartBlock.prototype.remove = function() {
   this.ruleArea.removeChild(this.elt);
   this.rulePart = null;
-  if (this.role === 'trigger') {
-    this.ruleTriggerArea.classList.remove('inactive');
-  } else if (this.role === 'effect') {
-    this.ruleEffectArea.classList.remove('inactive');
-  }
   this.role = 'removed';
   this.onRuleChange();
 };

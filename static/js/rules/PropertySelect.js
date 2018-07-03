@@ -406,7 +406,11 @@ function ruleFragmentEqual(a, b) {
     return false;
   }
 
-  if (aPart.type !== bPart.type) {
+  if (aPart.type.match(/(Set|Pulse)Effect/)) {
+    if (!bPart.type.match(/(Set|Pulse)Effect/)) {
+      return false;
+    }
+  } else if (aPart.type !== bPart.type) {
     return false;
   }
 
