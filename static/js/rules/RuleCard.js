@@ -35,6 +35,8 @@ function RuleCard(gateway, elt, id, desc) {
     const thingTrigger = RuleUtils.thingFromPart(gateway, trigger);
     if (thingTrigger) {
       iconTrigger = RuleUtils.icon(thingTrigger);
+    } else if (trigger.type === 'TimeTrigger') {
+      iconTrigger = '/optimized-images/rule-icons/clock.svg';
     }
   }
 

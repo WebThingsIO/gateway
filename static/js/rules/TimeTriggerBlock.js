@@ -10,7 +10,7 @@ const RulePartBlock = require('./RulePartBlock');
  */
 function TimeTriggerBlock(ruleArea, onPresentationChange, onRuleUpdate) {
   RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleUpdate,
-                     'Time of day', '/optimized-images/clock.svg');
+                     'Time of day', '/optimized-images/rule-icons/clock.svg');
 
   const rulePartInfo = this.elt.querySelector('.rule-part-info');
 
