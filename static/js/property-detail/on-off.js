@@ -21,14 +21,9 @@ class OnOffDetail {
   }
 
   attach() {
-    this.onOffSwitch = this.thing.element.querySelector(`#${this.id}`);
-    if (typeof this.thing.handleClick === 'function') {
-      const handleClick = Utils.debounce(
-        500,
-        this.thing.handleClick.bind(this.thing)
-      );
-      this.onOffSwitch.addEventListener('change', handleClick);
-    }
+    this.input = this.thing.element.querySelector(`#${this.id}`);
+    const setOnOff = Utils.debounce(500, this.set.bind(this));
+    this.input.addEventListener('change', setOnOff);
   }
 
   view() {
@@ -42,7 +37,11 @@ class OnOffDetail {
 
   update() {
     const on = this.thing.properties[this.name];
-    this.onOffSwitch.checked = on;
+    this.input.checked = on;
+  }
+
+  set() {
+    this.thing.setProperty(this.name, this.input.checked);
   }
 }
 
