@@ -101,20 +101,24 @@
   position: relative;
 }
 
+#drag-hint p {
+  font-size: 1.8rem;
+}
+
 .drag-hint-trigger {
-  background: rgba(129, 184, 225, 0.3);
+  background: rgba(129, 184, 225, 0.7);
 }
 
 .drag-hint-effect {
-  background: rgba(255, 207, 138, 0.3);
+  background: rgba(255, 207, 138, 0.7);
 }
 
-.drag-hint-block.rule-part-block {
+.drag-hint-block {
   background: none;
-  border: 1px dashed #4a4a4a;
+  border: 2px dashed black;
   text-align: center;
-  line-height: 10rem;
-  font-size: 2.4rem;
+  line-height: 16rem;
+  font-size: 4rem;
   margin: 1.4rem auto;
 }
 
@@ -304,11 +308,7 @@
   transform: translate(-50%, -50%);
   padding: 0;
   margin: 0;
-  color: #4a4a4a;
-}
-
-.drag-hint > .drag-hint-container {
-  color: #4a4a4a;
+  color: black;
 }
 
 #rule-delete-overlay {
