@@ -12,7 +12,8 @@
 const API = require('./api');
 const DevicePropertyBlock = require('./rules/DevicePropertyBlock');
 const Gateway = require('./rules/Gateway');
-const {Rule, RuleUtils} = require('./rules/Rule');
+const Rule = require('./rules/Rule');
+const RuleUtils = require('./rules/RuleUtils');
 const TimeTriggerBlock = require('./rules/TimeTriggerBlock');
 const page = require('./lib/page');
 
@@ -187,7 +188,7 @@ const RuleScreen = {
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block time-trigger-block">
-      <img class="rule-part-icon" src="/optimized-images/clock.svg"/>
+      <img class="rule-part-icon" src="/optimized-images/rule-icons/clock.svg"/>
     </div>
     <p>Clock</p>`;
 
@@ -204,7 +205,7 @@ const RuleScreen = {
     elt.classList.add('rule-part');
 
     elt.innerHTML = `<div class="rule-part-block device-block">
-      <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
+      <img class="rule-part-icon" src="${RuleUtils.icon(thing)}"/>
     </div>
     <p>${thing.name}</p>`;
 
@@ -222,16 +223,7 @@ const RuleScreen = {
       block = new TimeTriggerBlock(this.ruleArea, this.onPresentationChange,
                                    this.onRuleChange);
     } else {
-      let thing = null;
-      if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
-        thing = this.gateway.things.filter(
-          RuleUtils.byHref(part.thing.href)
-        )[0];
-      } else {
-        thing = this.gateway.things.filter(
-          RuleUtils.byProperty(part.property)
-        )[0];
-      }
+      const thing = RuleUtils.thingFromPart(this.gateway, part);
       if (!thing) {
         return;
       }

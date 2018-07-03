@@ -1,4 +1,5 @@
-const {Rule} = require('./Rule');
+const Rule = require('./Rule');
+const RuleUtils = require('./RuleUtils');
 const page = require('../lib/page');
 const Utils = require('../utils');
 
@@ -23,6 +24,33 @@ function RuleCard(gateway, elt, id, desc) {
     this.elt.classList.add('invalid');
   }
 
+  let iconTrigger = '/optimized-images/rule-icons/thing.svg';
+  let iconEffect = '/optimized-images/rule-icons/thing.svg';
+
+  if (this.rule.trigger) {
+    let trigger = this.rule.trigger;
+    if (trigger.triggers && trigger.triggers.length > 0) {
+      trigger = trigger.triggers[0];
+    }
+    const thingTrigger = RuleUtils.thingFromPart(gateway, trigger);
+    if (thingTrigger) {
+      iconTrigger = RuleUtils.icon(thingTrigger);
+    } else if (trigger.type === 'TimeTrigger') {
+      iconTrigger = '/optimized-images/rule-icons/clock.svg';
+    }
+  }
+
+  if (this.rule.effect) {
+    let effect = this.rule.effect;
+    if (effect.effects && effect.effects.length > 0) {
+      effect = effect.effects[0];
+    }
+    const thingEffect = RuleUtils.thingFromPart(gateway, effect);
+    if (thingEffect) {
+      iconEffect = RuleUtils.icon(thingEffect);
+    }
+  }
+
   this.elt.innerHTML = `
     <div class="rule-edit-overlay">
       <div class="rule-delete-button"></div>
@@ -37,10 +65,10 @@ function RuleCard(gateway, elt, id, desc) {
     </div>
     <div class="rule-preview">
       <div class="rule-part-block trigger">
-        <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
+        <img class="rule-part-icon" src="${iconTrigger}"/>
       </div>
       <div class="rule-part-block effect">
-        <img class="rule-part-icon" src="/optimized-images/onoff.svg"/>
+        <img class="rule-part-icon" src="${iconEffect}"/>
       </div>
     </div>
     <div class="rule-info">

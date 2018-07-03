@@ -57,3 +57,7 @@ imagemin(
   [`${gatewayRoot}/static/images/thing-icons/*.{jpg,png,gif,svg}`],
   `${gatewayRoot}/static/optimized-images/thing-icons/`,
   {plugins}).then((files) => console.log(files));
+imagemin(
+  [`${gatewayRoot}/static/images/rule-icons/*.{jpg,png,gif,svg}`],
+  `${gatewayRoot}/static/optimized-images/rule-icons/`,
+  {plugins}).then((files) => console.log(files));
