@@ -28,23 +28,6 @@
   background: #7f3939;
 }
 
-.rule-back-button {
-  border: 0;
-  background: #4a4a4a;
-  color: white;
-  width: 12rem;
-  height: 12rem;
-}
-
-.rule-back-button:active {
-  background: #222;
-}
-
-.rule-back-button > img {
-  margin: 4rem;
-  padding: 0;
-}
-
 #delete-button {
   display: none; /* TODO */
   background: none;

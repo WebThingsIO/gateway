@@ -253,7 +253,6 @@ const RuleScreen = {
 
     function isValidSelection(block) {
       const selectedOption = block.querySelector('.selected');
-      console.log('selectedOption', selectedOption);
       if (!selectedOption) {
         return false;
       }
