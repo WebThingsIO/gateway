@@ -81,7 +81,7 @@ class OnOffSwitch extends Thing {
    * Handle a click on the on/off switch.
    */
   handleClick() {
-    const newValue = !this.properties[this.onProperty];
+    const newValue = !this.icon.on;
     this.icon.on = null;
     this.model.setProperty('on', newValue).catch((error) => {
       console.error(`Error trying to toggle switch: ${error}`);

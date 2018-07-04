@@ -56,14 +56,14 @@ class Model {
    * @param {string} event - an event
    * @param {*} state - a state which is pushed to handlers
    */
-  handleEvent(event, state) {
+  async handleEvent(event, state) {
     if (!this.handlers.has(event)) {
       return;
     }
     const eventHandlers = this.handlers.get(event);
     for (const handler of eventHandlers.keys()) {
       try {
-        handler(state);
+        await handler(state);
       } catch (e) {
         console.error(
           `Error occurs in handler event:${event} state:${state} ${e}`

@@ -10,7 +10,6 @@
 
 'use strict';
 
-const API = require('./api');
 const ActionDetail = require('./property-detail/action');
 const App = require('./app');
 const BooleanDetail = require('./property-detail/boolean');
@@ -56,6 +55,7 @@ class Thing {
     this.name = description.name;
     this.type = description.type;
     this.model = model;
+    this.listeners = [];
 
     if (Array.isArray(description['@type']) &&
         description['@type'].length > 0) {
@@ -70,7 +70,6 @@ class Thing {
     this.format = format;
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
-    this.properties = {};
 
     if (format === 'svg') {
       this.container = document.getElementById('floorplan-things');
@@ -98,34 +97,6 @@ class Thing {
       this.eventsHref = `${this.href.pathname}/events?referrer=${
         encodeURIComponent(this.href.pathname)}`;
       this.id = this.href.pathname.split('/').pop();
-
-      const wsHref = this.href.href.replace(/^http/, 'ws');
-      this.ws = new WebSocket(`${wsHref}?jwt=${API.jwt}`);
-
-      // After the websocket is open, add subscriptions for all events.
-      this.ws.addEventListener('open', () => {
-        if (description.hasOwnProperty('events')) {
-          const msg = {
-            messageType: 'addEventSubscription',
-            data: {},
-          };
-
-          for (const name in description.events) {
-            msg.data[name] = {};
-          }
-
-          this.ws.send(JSON.stringify(msg));
-        }
-      });
-
-      this.ws.addEventListener('message', (event) => {
-        const message = JSON.parse(event.data);
-        if (message.messageType === 'propertyStatus') {
-          this.onPropertyStatus(message.data);
-        } else if (message.messageType === 'event') {
-          this.onEvent(message.data);
-        }
-      });
     }
 
     // Parse properties
@@ -270,6 +241,8 @@ class Thing {
       this.attachHtmlDetail();
     }
 
+    this.onPropertyStatus = this.onPropertyStatus.bind(this);
+    this.onEvent = this.onEvent.bind(this);
     this.updateStatus();
   }
 
@@ -302,7 +275,7 @@ class Thing {
     }
 
     this.layout = new ThingDetailLayout(
-      this.element.querySelectorAll('.thing-detail-container'));
+      this, this.element.querySelectorAll('.thing-detail-container'));
   }
 
   /**
@@ -375,11 +348,9 @@ class Thing {
    * @param {*} value Value of the property
    */
   updateProperty(name, value) {
-    this.properties[name] = value;
-
     if (this.format === 'htmlDetail' &&
         this.displayedProperties.hasOwnProperty(name)) {
-      this.displayedProperties[name].detail.update();
+      this.displayedProperties[name].detail.update(value);
     }
   }
 
@@ -398,8 +369,32 @@ class Thing {
    */
   updateStatus() {
     this.model.subscribe(Constants.STATE_PROPERTIES,
-                         this.updateProperties);
+                         this.onPropertyStatus);
     this.model.subscribe(Constants.OCCUR_EVENT, this.onEvent);
+  }
+
+  /**
+   * Add event listener and store params to cleanup listeners
+   * @param {Element} element
+   * @param {Event} event
+   * @param {Function} handler
+   */
+  registerEventListener(element, event, handler) {
+    element.addEventListener(event, handler);
+    this.listeners.push({element, event, handler});
+  }
+
+  /**
+   * Cleanup added listeners and subscribed events
+   */
+  cleanup() {
+    let listenr;
+    while (typeof (listenr = this.listeners.pop()) !== 'undefined') {
+      listenr.element.removeEventListener(listenr.event, listenr.handler);
+    }
+    this.model.unsubscribe(Constants.STATE_PROPERTIES,
+                           this.onPropertyStatus);
+    this.model.unsubscribe(Constants.OCCUR_EVENT, this.onEvent);
   }
 
   /**
@@ -534,7 +529,6 @@ class Thing {
         continue;
       }
 
-      this.properties[prop] = value;
       this.updateProperty(prop, value);
     }
   }

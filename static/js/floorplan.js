@@ -153,6 +153,7 @@ const FloorplanScreen = {
   show: function() {
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
+    App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
     App.gatewayModel.subscribe(
       Constants.REFRESH_THINGS,
       this.refreshThings,

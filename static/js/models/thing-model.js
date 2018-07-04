@@ -180,7 +180,7 @@ class ThingModel extends Model {
    * @param {Object} events Event data
    */
   onEvent(events) {
-    this.handleEvent(Constants.OCCUR_EVENT, events);
+    return this.handleEvent(Constants.OCCUR_EVENT, events);
   }
 
   /**
@@ -278,7 +278,7 @@ class ThingModel extends Model {
 
       this.properties[prop] = value;
     }
-    this.handleEvent(Constants.STATE_PROPERTIES, this.properties);
+    return this.handleEvent(Constants.STATE_PROPERTIES, this.properties);
   }
 }
 

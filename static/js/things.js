@@ -112,6 +112,7 @@ const ThingsScreen = {
           break;
       }
     }
+    this.things.push(thing);
     return thing;
   },
 
@@ -176,6 +177,7 @@ const ThingsScreen = {
    */
   showThings: function() {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
+    App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
     App.gatewayModel.subscribe(
       Constants.REFRESH_THINGS,
       this.refreshThings,
@@ -190,10 +192,11 @@ const ThingsScreen = {
   showThing: function(id) {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
+    App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
 
     this.refreshThing = () => {
       let description;
-      App.gatewayModel.getThing(id).then((thing) => {
+      return App.gatewayModel.getThing(id).then((thing) => {
         description = thing;
         this.thingsElement.innerHTML = '';
         return App.gatewayModel.getThingModel(id);
@@ -211,6 +214,8 @@ const ThingsScreen = {
           iconEl.classList.remove('hidden');
           customIconEl.classList.add('hidden');
         }
+
+        document.getElementById('thing-title-name').innerText = thing.name;
 
         const speechWrapper = document.getElementById('speech-wrapper');
         if (speechWrapper.classList.contains('hidden')) {

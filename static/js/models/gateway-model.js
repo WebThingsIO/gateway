@@ -38,6 +38,8 @@ class GatewayModel extends Model {
           handler(this.things);
         }
         break;
+      case Constants.DELETE_THINGS:
+        break;
       default:
         console.warn(`GatewayModel does not support event:${event}`);
         break;
@@ -112,7 +114,6 @@ class GatewayModel extends Model {
     });
   }
 
-
   handleRemove(thingId) {
     if (this.thingModels.has(thingId)) {
       this.thingModels.get(thingId).cleanup();
@@ -121,7 +122,7 @@ class GatewayModel extends Model {
     if (this.things.has(thingId)) {
       this.things.delete(thingId);
     }
-    this.handleEvent(Constants.REFRESH_THINGS, this.things);
+    return this.handleEvent(Constants.DELETE_THINGS, this.things);
   }
 
   refreshThings() {
@@ -144,7 +145,7 @@ class GatewayModel extends Model {
           const thingId = description.href.split('/').pop();
           this.setThing(thingId, description);
         });
-        this.handleEvent(Constants.REFRESH_THINGS, this.things);
+        return this.handleEvent(Constants.REFRESH_THINGS, this.things);
       }).catch((e) => {
         console.error(`Get things failed ${e}`);
       });
@@ -172,7 +173,7 @@ class GatewayModel extends Model {
           throw new Error(`Unavailable Thing Description: ${description}`);
         }
         this.setThing(thingId, description);
-        this.handleEvent(Constants.REFRESH_THINGS, this.things);
+        return this.handleEvent(Constants.REFRESH_THINGS, this.things);
       }).catch((e) => {
         console.error(`Get thing id:${thingId} failed ${e}`);
       });

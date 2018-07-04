@@ -282,6 +282,7 @@ const ContextMenu = {
     }
     App.gatewayModel.updateThing(this.thingId, body).then(() => {
       this.hide();
+      this.saveButton.disabled = false;
     }).catch((error) => {
       console.error(`Error updating thing: ${error}`);
       this.label.innerText = 'Failed to save.';
@@ -300,6 +301,9 @@ const ContextMenu = {
   handleRemove: function() {
     App.gatewayModel.removeThing(this.thingId).then(() => {
       page('/things');
+      this.hide();
+    }).catch((error) => {
+      console.error(`Error removing thing: ${error}`);
       this.hide();
     });
   },
