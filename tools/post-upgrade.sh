@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Performs any necessary steps after the main upgrade process is complete.
 
