@@ -83,10 +83,11 @@ Follow the directions from [NodeJS](https://nodejs.org) to install on your platf
 
 ### Set up Bluetooth permissions
 
-The following is required in order to let node use the Bluetooth adapter.
+The following is required in order to let node and python3 use the Bluetooth adapter.
 
 ```
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+$ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 ```
 
 ### Install Bluetooth and BT Low Energy support libraries (Linux only)
