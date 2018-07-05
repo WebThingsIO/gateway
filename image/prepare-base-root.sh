@@ -11,8 +11,9 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
-# Allow node to use the Bluetooth adapter
+# Allow node and python3 to use the Bluetooth adapter
 setcap cap_net_raw+eip $(eval readlink -f `which node`)
+setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 # download and install the code
 wget https://github.com/mozilla-iot/gateway-wifi-setup/archive/master.zip
