@@ -3,7 +3,7 @@
 # Performs any necessary steps after the main upgrade process is complete.
 
 # For some reason NVM_DIR isn't set at this point
-export NVM_DIR=/home/pi/.nvm
+export NVM_DIR=${HOME}/.nvm
 \. "$NVM_DIR/nvm.sh"  # This loads nvm
 NODE_VERSION="--lts=carbon"
 nvm install ${NODE_VERSION}
@@ -20,7 +20,7 @@ sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
 
 # Install thing-url-adapter
-addons_dir=/home/pi/.mozilla-iot/addons
+addons_dir=${HOME}/.mozilla-iot/addons
 if [ ! -d "${addons_dir}/thing-url-adapter" ]; then
   mkdir -p "${addons_dir}"
   addon_list=$(curl "https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json")
