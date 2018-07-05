@@ -39,9 +39,6 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
-# Allow node to use the Bluetooth adapter
-sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
-
 # Install prequisite packages
 sudo apt install -y \
   autoconf \
@@ -71,6 +68,10 @@ sudo pip3 install "$_url"
 
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
 sudo pip3 install "$_url"
+
+# Allow node and python3 to use the Bluetooth adapter
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 git clone https://github.com/mozilla-iot/intent-parser "$HOME/mozilla-iot/intent-parser"
 
