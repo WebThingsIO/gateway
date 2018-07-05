@@ -143,6 +143,7 @@ class Action extends BaseComponent {
 
   __onClick(e) {
     e.preventDefault();
+    e.stopPropagation();
 
     if (this._href) {
       window.location.href = this._href;
