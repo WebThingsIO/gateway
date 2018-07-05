@@ -11,7 +11,7 @@
 import * as express from 'express';
 import { URL } from 'url';
 import * as assert from 'assert';
-import * as JSONWebToken from '../models/jsonwebtoken';
+const JSONWebToken = require('../models/jsonwebtoken');
 import * as Database from '../db';
 import {
   scopeValidSubset, Scope, ScopeAccess, ScopeRaw, ClientId, ClientRegistry
