@@ -78,13 +78,13 @@ class NewWebThing {
           <span class="new-web-thing-origin hidden"></span>
           <select class="new-thing-type hidden"></select>
           <span class="new-thing-spacer"></span>
+          <input type="file" class="new-thing-custom-icon-input hidden"
+            id="${id}" accept="image/jpeg,image/png,image/svg+xml">
           <label for="${id}"
             class="new-thing-custom-icon-label text-button hidden">
             Choose icon...
           </label>
           <span class="new-web-thing-label">Web Thing</span>
-          <input type="file" class="new-thing-custom-icon-input hidden"
-            id="${id}" accept="image/jpeg,image/png,image/svg+xml">
           <div class="new-web-thing-controls">
             <button class="new-web-thing-cancel-button text-button">
               Cancel
@@ -371,7 +371,11 @@ class NewWebThing {
   }
 
   save() {
+    this.thingType.disabled = true;
+    this.nameInput.disabled = true;
     this.saveButton.disabled = true;
+    this.customIconInput.disabled = true;
+    this.cancelButton.classList.add('hidden');
 
     const thing = this.description;
     thing.id = this.id;
@@ -406,16 +410,17 @@ class NewWebThing {
         throw new Error(description);
       }
 
-      this.thingType.disabled = true;
-      this.nameInput.disabled = true;
       this.saveButton.innerHTML = 'Saved';
-      this.cancelButton.classList.add('hidden');
     }).catch((error) => {
       console.error('Failed to save web thing:', error.message);
       this.label.innerText = 'Failed to save.';
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
+      this.thingType.disabled = false;
+      this.nameInput.disabled = false;
       this.saveButton.disabled = false;
+      this.customIconInput.disabled = false;
+      this.cancelButton.classList.remove('hidden');
       this.reset();
     });
   }

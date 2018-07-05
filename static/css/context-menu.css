@@ -113,6 +113,9 @@
   margin: 1.25rem 0;
 }
 
+.edit-thing-custom-icon-input:disabled + label,
+.edit-thing-custom-icon-input:disabled:hover + label,
+.edit-thing-custom-icon-input:hover:active + label,
 .edit-thing-button:disabled,
 .edit-thing-button:disabled:hover,
 .edit-thing-button:hover:active {
