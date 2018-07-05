@@ -141,6 +141,8 @@ class MultiLevelSwitchCapability extends BaseComponent {
 
   __onClick(e) {
     e.preventDefault();
+    e.stopPropagation();
+
     this.dispatchEvent(new CustomEvent('click', {
       bubbles: true,
     }));
