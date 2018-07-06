@@ -29,6 +29,23 @@ class EnergyMonitor extends Thing {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    this.powerProperty = null;
+
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (type === 'InstantaneousPowerProperty' ||
+          name === 'instantaneousPower') {
+        this.powerProperty = name;
+        break;
+      }
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-energy-monitor-capability');
   }
@@ -45,9 +62,7 @@ class EnergyMonitor extends Thing {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'InstantaneousPowerProperty' ||
-        name === 'instantaneousPower') {
+    if (name === this.powerProperty) {
       value = parseFloat(value);
       this.icon.power = value;
     }

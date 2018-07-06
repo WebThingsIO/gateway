@@ -259,6 +259,7 @@ class Thing {
       App.hideOverflowButton();
     }
 
+    this.findProperties();
     this.element = this.render(format);
 
     if (format === 'svg') {
@@ -268,6 +269,12 @@ class Thing {
     }
 
     this.updateStatus();
+  }
+
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
   }
 
   /**

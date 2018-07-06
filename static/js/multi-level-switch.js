@@ -29,6 +29,28 @@ class MultiLevelSwitch extends OnOffSwitch {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    super.findProperties();
+
+    this.levelProperty = null;
+    this.onProperty = null;
+
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (this.levelProperty === null &&
+          (type === 'LevelProperty' || name === 'level')) {
+        this.levelProperty = name;
+      } else if (this.onProperty === null &&
+                 (type === 'OnOffProperty' || name === 'on')) {
+        this.onProperty = name;
+      }
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-multi-level-switch-capability');
   }
@@ -45,10 +67,7 @@ class MultiLevelSwitch extends OnOffSwitch {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'OnOffProperty' || name === 'on') {
-      this.icon.on = !!value;
-    } else if (property['@type'] === 'LevelProperty' || name === 'level') {
+    if (name === this.levelProperty) {
       value = parseInt(value, 10);
       this.icon.level = value;
     }

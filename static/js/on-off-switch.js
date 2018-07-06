@@ -34,6 +34,22 @@ class OnOffSwitch extends Thing {
     }
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    this.onProperty = null;
+
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (type === 'BooleanProperty' || name === 'on') {
+        this.onProperty = name;
+        break;
+      }
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-on-off-switch-capability');
   }
@@ -50,8 +66,7 @@ class OnOffSwitch extends Thing {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'OnOffProperty' || name === 'on') {
+    if (name === this.onProperty) {
       this.icon.on = !!value;
     }
   }
@@ -60,13 +75,13 @@ class OnOffSwitch extends Thing {
    * Handle a click on the on/off switch.
    */
   handleClick() {
-    const newValue = !this.properties.on;
+    const newValue = !this.properties[this.onProperty];
     this.icon.on = null;
-    this.properties.on = null;
+    this.properties[this.onProperty] = null;
     const payload = {
       on: newValue,
     };
-    fetch(this.displayedProperties.on.href, {
+    fetch(this.displayedProperties[this.onProperty].href, {
       method: 'PUT',
       body: JSON.stringify(payload),
       headers: {

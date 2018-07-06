@@ -29,6 +29,22 @@ class BinarySensor extends Thing {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    this.onProperty = null;
+
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (type === 'BooleanProperty' || name === 'on') {
+        this.onProperty = name;
+        break;
+      }
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-binary-sensor-capability');
   }
@@ -45,8 +61,7 @@ class BinarySensor extends Thing {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'BooleanProperty' || name === 'on') {
+    if (name === this.onProperty) {
       this.icon.on = !!value;
     }
   }

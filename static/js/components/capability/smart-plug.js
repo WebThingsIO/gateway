@@ -62,12 +62,19 @@ class SmartPlugCapability extends BaseComponent {
 
     this._icon = this.shadowRoot.querySelector('#icon');
     this._label = this.shadowRoot.querySelector('#label');
+
+    this._havePower = false;
     this._on = false;
     this._power = 0;
+
     this._onClick = this.__onClick.bind(this);
   }
 
   connectedCallback() {
+    this._havePower =
+      typeof this.dataset.havePower !== 'undefined' ?
+        this.dataset.havePower :
+        false;
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
     this.power =
       typeof this.dataset.power !== 'undefined' ? this.dataset.power : false;
@@ -90,12 +97,15 @@ class SmartPlugCapability extends BaseComponent {
       this._label.innerText = '...';
     } else if (this._on) {
       this._icon.classList.add('on');
+      if (this._havePower) {
+        this.power = this._power;
+      } else {
+        this._label.innerText = 'ON';
+      }
     } else {
       this._icon.classList.remove('on');
       this._label.innerText = 'OFF';
     }
-
-    this.power = this._power;
   }
 
   get power() {
