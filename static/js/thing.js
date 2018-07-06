@@ -16,6 +16,7 @@ const BooleanDetail = require('./property-detail/boolean');
 const BrightnessDetail = require('./property-detail/brightness');
 const ColorDetail = require('./property-detail/color');
 const ColorTemperatureDetail = require('./property-detail/color-temperature');
+const Constants = require('./constants');
 const CurrentDetail = require('./property-detail/current');
 const EnumDetail = require('./property-detail/enum');
 const FrequencyDetail = require('./property-detail/frequency');
@@ -28,7 +29,6 @@ const StringDetail = require('./property-detail/string');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
 const VoltageDetail = require('./property-detail/voltage');
-const Constants = require('./constants');
 
 class Thing {
   /**

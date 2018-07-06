@@ -18,12 +18,20 @@ class ThingModel extends Model {
     this.name = description.name;
     this.type = description.type;
     this.properties = {};
+    this.events = [];
 
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
-      this.eventsHref = `${this.href.pathname}/events`;
       this.id = this.href.pathname.split('/').pop();
+    }
+
+    // Parse events URL
+    for (const link of description.links) {
+      if (link.rel === 'events') {
+        this.eventsHref = new URL(link.href, App.ORIGIN);
+        break;
+      }
     }
 
     // Parse properties
@@ -46,6 +54,7 @@ class ThingModel extends Model {
 
     this.initWebsocket();
 
+    this.updateEvents();
     this.updateProperties();
 
     return this;
@@ -176,14 +185,6 @@ class ThingModel extends Model {
   }
 
   /**
-   * Handle an 'event' message.
-   * @param {Object} events Event data
-   */
-  onEvent(events) {
-    return this.handleEvent(Constants.OCCUR_EVENT, events);
-  }
-
-  /**
    * Set value to the property.
    *
    * @param {string} name - name of the property
@@ -279,6 +280,45 @@ class ThingModel extends Model {
       this.properties[prop] = value;
     }
     return this.handleEvent(Constants.STATE_PROPERTIES, this.properties);
+  }
+
+  /**
+   * Get the list of existing events.
+   */
+  updateEvents() {
+    if (typeof this.eventsHref === 'undefined') {
+      return;
+    }
+
+    const opts = {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    };
+    return fetch(this.eventsHref, opts).then((response) => {
+      return response.json();
+    }).then((events) => {
+      this.events = events;
+    }).catch((e) => {
+      console.error(`Error fetching events: ${e}`);
+    });
+  }
+
+  /**
+   * Handle an 'event' message.
+   * @param {Object} events Event data
+   */
+  onEvent(data) {
+    const events = {};
+    for (const event in data) {
+      if (!this.eventDescriptions.hasOwnProperty(event)) {
+        continue;
+      }
+      events[event] = data[event];
+      this.events.push({[event]: data[event]});
+    }
+    return this.handleEvent(Constants.OCCUR_EVENT, events);
   }
 }
 

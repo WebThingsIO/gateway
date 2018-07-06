@@ -11,7 +11,6 @@
 'use strict';
 
 const page = require('./lib/page');
-const API = require('./api');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const App = require('./app');
@@ -187,20 +186,18 @@ const ThingsScreen = {
   /**
    * Display a single Thing.
    *
-   * @param {String} id The ID of the Thing to show.
+   * @param {String} thingId The ID of the Thing to show.
    */
-  showThing: function(id) {
+  showThing: function(thingId) {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
 
     this.refreshThing = () => {
-      let description;
-      return App.gatewayModel.getThing(id).then((thing) => {
-        description = thing;
+      return App.gatewayModel.getThing(thingId).then(async (description) => {
         this.thingsElement.innerHTML = '';
-        return App.gatewayModel.getThingModel(id);
-      }).then((thingModel) => {
+
+        const thingModel = await App.gatewayModel.getThingModel(thingId);
         const thing = this.renderThing(thingModel, description, 'htmlDetail');
 
         const iconEl = document.getElementById('thing-title-icon');
@@ -225,15 +222,17 @@ const ThingsScreen = {
         }
 
         this.thingTitleElement.classList.remove('hidden');
-
-        App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThing);
       }).catch((e) => {
-        console.error(`Thing id ${id} not found ${e}`);
+        console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
       });
     };
 
-    this.refreshThing();
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThing,
+      true
+    );
   },
 
   /**
@@ -243,123 +242,108 @@ const ThingsScreen = {
    * @param {String} actionName The name of the action to show.
    */
   showActionInputForm: function(thingId, actionName) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
+    App.gatewayModel.getThing(thingId).then((description) => {
+      this.thingsElement.innerHTML = '';
 
-    // Fetch a thing from the server
-    fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
-      if (response.status == 404) {
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+      if (!description.hasOwnProperty('actions') ||
+          !description.actions.hasOwnProperty(actionName) ||
+          !description.actions[actionName].hasOwnProperty('input')) {
+        this.thingsElement.innerHTML = this.ACTION_NOT_FOUND_MESSAGE;
         return;
       }
 
-      response.json().then((description) => {
-        if (!description) {
-          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-          return;
+      let href;
+      for (const link of description.links) {
+        if (link.rel === 'actions') {
+          href = link.href;
+          break;
         }
+      }
 
-        if (!description.hasOwnProperty('actions') ||
-            !description.actions.hasOwnProperty(actionName) ||
-            !description.actions[actionName].hasOwnProperty('input')) {
-          this.thingsElement.innerHTML = this.ACTION_NOT_FOUND_MESSAGE;
-          return;
-        }
-
-        let href;
-        for (const link of description.links) {
-          if (link.rel === 'actions') {
-            href = link.href;
+      let icon;
+      if (description.selectedCapability) {
+        switch (description.selectedCapability) {
+          case 'OnOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
             break;
-          }
+          case 'MultiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'ColorControl':
+            icon = '/optimized-images/thing-icons/color_control.svg';
+            break;
+          case 'EnergyMonitor':
+            icon = '/optimized-images/thing-icons/energy_monitor.svg';
+            break;
+          case 'BinarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'MultiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'SmartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          case 'Light':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'Custom':
+          default:
+            icon = '/optimized-images/thing-icons/thing.svg';
+            break;
         }
-
-        let icon;
-        if (description.selectedCapability) {
-          switch (description.selectedCapability) {
-            case 'OnOffSwitch':
-              icon = '/optimized-images/thing-icons/on_off_switch.svg';
-              break;
-            case 'MultiLevelSwitch':
-              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-              break;
-            case 'ColorControl':
-              icon = '/optimized-images/thing-icons/color_control.svg';
-              break;
-            case 'EnergyMonitor':
-              icon = '/optimized-images/thing-icons/energy_monitor.svg';
-              break;
-            case 'BinarySensor':
-              icon = '/optimized-images/thing-icons/binary_sensor.svg';
-              break;
-            case 'MultiLevelSensor':
-              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-              break;
-            case 'SmartPlug':
-              icon = '/optimized-images/thing-icons/smart_plug.svg';
-              break;
-            case 'Light':
-              icon = '/optimized-images/thing-icons/light.svg';
-              break;
-            case 'Custom':
-            default:
-              icon = '/optimized-images/thing-icons/thing.svg';
-              break;
-          }
-        } else {
-          switch (description.type) {
-            case 'onOffSwitch':
-              icon = '/optimized-images/thing-icons/on_off_switch.svg';
-              break;
-            case 'binarySensor':
-              icon = '/optimized-images/thing-icons/binary_sensor.svg';
-              break;
-            case 'multiLevelSensor':
-              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-              break;
-            case 'onOffLight':
-            case 'onOffColorLight':
-            case 'dimmableLight':
-            case 'dimmableColorLight':
-              icon = '/optimized-images/thing-icons/light.svg';
-              break;
-            case 'multiLevelSwitch':
-              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-              break;
-            case 'smartPlug':
-              icon = '/optimized-images/thing-icons/smart_plug.svg';
-              break;
-            default:
-              icon = '/optimized-images/thing-icons/thing.svg';
-              break;
-          }
+      } else {
+        switch (description.type) {
+          case 'onOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
+            break;
+          case 'binarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'multiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'onOffLight':
+          case 'onOffColorLight':
+          case 'dimmableLight':
+          case 'dimmableColorLight':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'multiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'smartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          default:
+            icon = '/optimized-images/thing-icons/thing.svg';
+            break;
         }
+      }
 
-        const iconEl = document.getElementById('thing-title-icon');
-        const customIconEl = document.getElementById('thing-title-custom-icon');
-        if (description.iconHref &&
-            description.selectedCapability === 'Custom') {
-          customIconEl.iconHref = description.iconHref;
-          customIconEl.classList.remove('hidden');
-          iconEl.classList.add('hidden');
-        } else {
-          iconEl.src = icon;
-          iconEl.classList.remove('hidden');
-          customIconEl.classList.add('hidden');
-        }
+      const iconEl = document.getElementById('thing-title-icon');
+      const customIconEl = document.getElementById('thing-title-custom-icon');
+      if (description.iconHref &&
+          description.selectedCapability === 'Custom') {
+        customIconEl.iconHref = description.iconHref;
+        customIconEl.classList.remove('hidden');
+        iconEl.classList.add('hidden');
+      } else {
+        iconEl.src = icon;
+        iconEl.classList.remove('hidden');
+        customIconEl.classList.add('hidden');
+      }
 
-        document.getElementById('thing-title-name').innerText =
-          description.name;
+      document.getElementById('thing-title-name').innerText =
+        description.name;
 
-        this.thingsElement.innerHTML = '';
-        new ActionInputForm(href, actionName,
-                            description.actions[actionName].label,
-                            description.actions[actionName].input);
-      });
+      this.thingsElement.innerHTML = '';
+      new ActionInputForm(href, actionName,
+                          description.actions[actionName].label,
+                          description.actions[actionName].input);
+    }).catch((e) => {
+      console.error(`Thing id ${thingId} not found ${e}`);
+      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
     });
   },
 
@@ -369,30 +353,17 @@ const ThingsScreen = {
    * @param {String} thingId The ID of the Thing to show.
    */
   showEvents: function(thingId) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
-    // Fetch a thing from the server
-    fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
-      if (response.status == 404) {
-        return Promise.resolve();
-      }
-
-      return response.json();
-    }).then((description) => {
-      if (!description) {
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-        return;
-      }
-
+    if (typeof this.eventList !== 'undefined') {
+      this.eventList.cleanup();
+    }
+    App.gatewayModel.getThing(thingId).then(async (description) => {
+      this.thingsElement.innerHTML = '';
       if (!description.hasOwnProperty('events')) {
         this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
         return;
       }
+
+      const thingModel = await App.gatewayModel.getThingModel(thingId);
 
       let icon;
       if (description.selectedCapability) {
@@ -470,7 +441,10 @@ const ThingsScreen = {
       document.getElementById('thing-title-name').innerText = description.name;
 
       this.thingsElement.innerHTML = '';
-      new EventList(description);
+      this.eventList = new EventList(thingModel, description);
+    }).catch((e) => {
+      console.error(`Thing id ${thingId} not found ${e}`);
+      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
     });
   },
 };
