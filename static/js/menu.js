@@ -21,6 +21,7 @@ const Menu = {
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.scrim.addEventListener('click', this.handleScrimClick.bind(this));
     this.items = {};
+    this.items.assistant = document.getElementById('assistant-menu-item');
     this.items.things = document.getElementById('things-menu-item');
     this.items.settings = document.getElementById('settings-menu-item');
     this.items.floorplan = document.getElementById('floorplan-menu-item');
@@ -29,6 +30,7 @@ const Menu = {
     this.items.rule = document.getElementById('rules-menu-item');
     this.currentItem = 'things';
 
+    this.getExperimentSetting('assistant');
     this.getExperimentSetting('speech');
   },
 

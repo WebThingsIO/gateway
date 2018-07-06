@@ -45,6 +45,10 @@
   display: none;
 }
 
+#main-menu #assistant-menu-item {
+  background-image: url('../optimized-images/assistant-icon.svg');
+}
+
 #main-menu #things-menu-item {
   background-image: url('../optimized-images/things-icon.png');
 }

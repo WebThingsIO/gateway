@@ -1,0 +1,11 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+#avatar {
+  display: block;
+  position: relative;
+  height: 256px;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+}

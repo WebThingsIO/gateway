@@ -129,6 +129,7 @@ const webpackWeb = {
     buildCss: [
       // css for static/index.html
       './static/css/app.css',
+      './static/css/assistant.css',
       './static/css/things.css',
       './static/css/menu.css',
       './static/css/add-thing.css',

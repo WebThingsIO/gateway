@@ -10,6 +10,8 @@
 'use strict';
 
 // eslint-disable-next-line prefer-const
+let AssistantScreen;
+// eslint-disable-next-line prefer-const
 let ThingsScreen;
 // eslint-disable-next-line prefer-const
 let AddThingScreen;
@@ -47,6 +49,7 @@ const App = {
   init: function() {
     AddThingScreen.init();
     ContextMenu.init();
+    AssistantScreen.init();
     ThingsScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
@@ -60,6 +63,7 @@ const App = {
     this.views.settings = document.getElementById('settings-view');
     this.views.rules = document.getElementById('rules-view');
     this.views.rule = document.getElementById('rule-view');
+    this.views.assistant = document.getElementById('assistant-view');
     this.currentView = 'things';
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
@@ -71,6 +75,11 @@ const App = {
     this.messageTimeout = null;
     Menu.init();
     Router.init();
+  },
+
+  showAssistant: function() {
+    AssistantScreen.show();
+    this.selectView('assistant');
   },
 
   showThings: function(context) {
@@ -201,6 +210,7 @@ const App = {
 module.exports = App;
 
 // avoid circular dependency
+AssistantScreen = require('./assistant');
 ThingsScreen = require('./things');
 AddThingScreen = require('./add-thing');
 Menu = require('./menu');
