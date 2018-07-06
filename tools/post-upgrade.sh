@@ -11,8 +11,9 @@ nvm use ${NODE_VERSION}
 # always use most recent version (lts)
 nvm alias default node
 
-# Allow node to use the Bluetooth adapter
+# Allow node and python3 to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 # Upgrade gateway-addon Python package
 _url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
