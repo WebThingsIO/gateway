@@ -563,6 +563,10 @@
   background-image: url('../optimized-images/ssh-icon.svg');
 }
 
+#assistant-experiment-item {
+  background-image: url('../optimized-images/assistant-icon.svg');
+}
+
 #speech-experiment-item {
   background-image: url('../optimized-images/speech-icon.png');
 }

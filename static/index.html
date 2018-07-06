@@ -13,6 +13,11 @@
     <script src="/js/lib/webcomponents-bundle.js"></script>
   </head>
   <body class="hidden">
+    <!-- Assistant View -->
+    <section data-view="assistant" id="assistant-view">
+      <img id="avatar" src="/optimized-images/fox.svg" />
+    </section>
+
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
       <div id="thing-title" class="hidden">
@@ -184,6 +189,11 @@
       </section>
       <section id="experiment-settings" class="hidden settings-section">
         <ul>
+          <li id="assistant-experiment-item" class="experiment-item">
+            <input id="assistant-experiment-checkbox" class="experiment-checkbox"
+                   type="checkbox">
+            <label for="assistant-experiment-checkbox">Smart Assistant</label>
+          </li>
           <li id="speech-experiment-item" class="experiment-item">
             <input id="speech-experiment-checkbox" class="experiment-checkbox"
                    type="checkbox">
@@ -313,6 +323,7 @@
     <nav id="main-menu" class="hidden">
       <img id="menu-wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
       <ul>
+        <li><a id="assistant-menu-item" href="/assistant" class="hidden" >Assistant</a></li>
         <li><a id="things-menu-item" href="/things" class="selected">Things</a></li>
         <li><a id="rules-menu-item" href="/rules">Rules</a></li>
         <li><a id="floorplan-menu-item" href="/floorplan">Floorplan</a></li>
