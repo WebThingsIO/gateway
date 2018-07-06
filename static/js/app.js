@@ -230,6 +230,7 @@ require('./components/property/brightness');
 require('./components/property/color');
 require('./components/property/color-temperature');
 require('./components/property/current');
+require('./components/property/enum');
 require('./components/property/frequency');
 require('./components/property/instantaneous-power');
 require('./components/property/label');
