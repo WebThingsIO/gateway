@@ -462,7 +462,7 @@ const RuleScreen = {
     this.ruleDescription.innerHTML = this.rule.toHumanInterface();
     const ruleEffectSelect =
       this.ruleDescription.querySelector('.rule-effect-select');
-    if (this.rule.effect.effects.length === 0) {
+    if (this.rule.effect && this.rule.effect.effects.length === 0) {
       ruleEffectSelect.value =
         this.ruleEffectType === 'SetEffect' ? 'If' : 'While';
     }
