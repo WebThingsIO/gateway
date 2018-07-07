@@ -9,7 +9,6 @@ const triggers = {
   EqualityTrigger: require('./EqualityTrigger'),
   EventTrigger: require('./EventTrigger'),
   LevelTrigger: require('./LevelTrigger'),
-  MultiTrigger: require('./MultiTrigger'),
   PropertyTrigger: require('./PropertyTrigger'),
   TimeTrigger: require('./TimeTrigger'),
   Trigger: require('./Trigger'),

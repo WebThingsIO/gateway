@@ -24,12 +24,8 @@ const RuleScreen = {
 
     this.onPresentationChange = this.onPresentationChange.bind(this);
     this.onRuleChange = this.onRuleChange.bind(this);
-    this.onRuleDescriptionInput = this.onRuleDescriptionInput.bind(this);
-    this.animate = this.animate.bind(this);
-    this.animateDelay = 750;
     this.rule = null;
     this.partBlocks = [];
-    this.ruleEffectType = 'PulseEffect';
 
     this.view = document.getElementById('rule-view');
     this.titleBar = this.view.querySelector('.title-bar');
@@ -61,12 +57,10 @@ const RuleScreen = {
 
     this.ruleName.addEventListener('blur', () => {
       this.rule.name = this.ruleName.textContent;
-      this.rule.update();
       this.onPresentationChange();
     });
 
     this.ruleDescription = this.view.querySelector('.rule-info > p');
-    this.ruleDescription.addEventListener('input', this.onRuleDescriptionInput);
 
     this.rulePartsList = document.getElementById('rule-parts-list');
     this.onboardingHint = document.getElementById('onboarding-hint');
@@ -105,36 +99,6 @@ const RuleScreen = {
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener('resize', this.onWindowResize);
     this.onWindowResize();
-  },
-
-  getEffectType: function() {
-    const effectSelect =
-      this.ruleDescription.querySelector('.rule-effect-select');
-    return effectSelect.value === 'If' ? 'SetEffect' : 'PulseEffect';
-  },
-
-  /**
-   * Change the rule based on a change to its description's drop down menus
-   * @param {Event} event
-   */
-  onRuleDescriptionInput: function(event) {
-    const value = event.target.value;
-    if (event.target.classList.contains('rule-trigger-select')) {
-      if (value === 'and') {
-        this.rule.trigger.op = 'AND';
-      } else if (value === 'or') {
-        this.rule.trigger.op = 'OR';
-      }
-    } else if (event.target.classList.contains('rule-effect-select')) {
-      const effectType = this.getEffectType();
-      this.ruleEffectType = effectType;
-      for (let i = 0; i < this.rule.effect.effects.length; i++) {
-        this.rule.effect.effects[i].type = effectType;
-      }
-    } else {
-      console.warn('Unexpected input event', event);
-    }
-    this.onRuleChange();
   },
 
   /**
@@ -243,25 +207,12 @@ const RuleScreen = {
     const dragHint = document.getElementById('drag-hint');
     const flexDir = window.getComputedStyle(dragHint).flexDirection;
 
-    function isValidSelection(block) {
-      const selectedOption = block.querySelector('.selected');
-      if (!selectedOption) {
-        return false;
-      }
-      return JSON.parse(selectedOption.dataset.ruleFragment);
-    }
+    const triggerElt =
+      this.ruleArea.querySelector('.rule-part-block.trigger');
+    const triggerBlock = triggerElt.parentNode;
 
-    const triggerBlocks = Array.from(
-      this.ruleArea.querySelectorAll('.rule-part-block.trigger')
-    ).map((elt) => {
-      return elt.parentNode;
-    }).filter(isValidSelection);
-
-    const effectBlocks = Array.from(
-      this.ruleArea.querySelectorAll('.rule-part-block.effect')
-    ).map((elt) => {
-      return elt.parentNode;
-    }).filter(isValidSelection);
+    const effectElts =
+      this.ruleArea.querySelectorAll('.rule-part-block.effect');
 
     function transformToCoords(elt) {
       const re = /translate\((\d+)px, +(\d+)px\)/;
@@ -276,115 +227,53 @@ const RuleScreen = {
         y: y,
       };
     }
+    const triggerCoords = transformToCoords(triggerBlock);
 
-    function triggerTransformToCoords(elt) {
-      const coords = transformToCoords(elt);
-      if (flexDir === 'column') {
-        coords.x += dpbRect.width / 2;
-        coords.y += dpbRect.height + 10;
-      } else {
-        coords.x += dpbRect.width + 10;
-        coords.y += dpbRect.height / 2;
-      }
-      return coords;
-    }
-
-    function effectTransformToCoords(elt) {
-      const coords = transformToCoords(elt);
-      if (flexDir === 'column') {
-        coords.x += dpbRect.width / 2;
-        coords.y -= 10;
-      } else {
-        coords.x -= 10;
-        coords.y += dpbRect.height / 2;
-      }
-      return coords;
-    }
-
-    const areaRect = this.ruleArea.getBoundingClientRect();
-    const center = {
-      x: areaRect.width / 2,
-      y: areaRect.height / 2,
-    };
-
-    const multiTrigger = triggerBlocks.length > 1;
-    const multiEffect = effectBlocks.length > 1;
-
-    const dpbRect = triggerBlocks[0].getBoundingClientRect();
+    const dpbRect = triggerBlock.getBoundingClientRect();
 
     this.connection.innerHTML = '';
+    for (let i = 0; i < effectElts.length; i++) {
+      const effectBlock = effectElts[i].parentNode;
+      const effectCoords = transformToCoords(effectBlock);
 
-    function makePath(start, end) {
-      const midX = (start.x + end.x) / 2;
+      let startX = triggerCoords.x + dpbRect.width + 10;
+      let startY = triggerCoords.y + dpbRect.height / 2;
+      let endX = effectCoords.x - 10;
+      let endY = effectCoords.y + dpbRect.height / 2;
+
+      if (flexDir === 'column') {
+        startX = triggerCoords.x + dpbRect.width / 2;
+        startY = triggerCoords.y + dpbRect.height + 10;
+        endX = effectCoords.x + dpbRect.width / 2;
+        endY = effectCoords.y - 10;
+      }
+
+      const midX = (startX + endX) / 2;
+
       const pathDesc = [
-        'M', start.x, start.y,
-        'C', midX, start.y, midX, end.y, end.x, end.y,
+        'M', startX, startY,
+        'C', midX, startY, midX, endY, endX, endY,
       ].join(' ');
 
       const path =
         document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathDesc);
-
-      return path;
-    }
-
-    for (let i = 0; i < effectBlocks.length; i++) {
-      const effectCoords = effectTransformToCoords(effectBlocks[i]);
-
-      let start = center;
-      if (!multiTrigger) {
-        start = triggerTransformToCoords(triggerBlocks[0]);
-      }
-
-      const circleEffect =
-        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circleEffect.classList.add('effect');
-      circleEffect.setAttribute('r', 6);
-      circleEffect.setAttribute('cx', effectCoords.x);
-      circleEffect.setAttribute('cy', effectCoords.y);
-
-      this.connection.appendChild(circleEffect);
-
-      // Draw path unless there are multiple triggers with a single effect
-      if (!(multiTrigger && !multiEffect)) {
-        const path = makePath(start, effectCoords);
-        path.classList.add('effect');
-        this.connection.appendChild(path);
-      }
-    }
-
-    for (let i = 0; i < triggerBlocks.length; i++) {
-      const triggerCoords = triggerTransformToCoords(triggerBlocks[i]);
       const circleTrigger =
         document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circleTrigger.classList.add('trigger');
       circleTrigger.setAttribute('r', 6);
-      circleTrigger.setAttribute('cx', triggerCoords.x);
-      circleTrigger.setAttribute('cy', triggerCoords.y);
-      this.connection.appendChild(circleTrigger);
-
-      if (!multiTrigger) {
-        // Path already drawn by effects
-        continue;
-      }
-
-      let end = center;
-      if (!multiEffect) {
-        end = effectTransformToCoords(effectBlocks[0]);
-      }
-      const path = makePath(triggerCoords, end);
-      path.classList.add('trigger');
-      this.connection.appendChild(path);
-    }
-
-    if (multiTrigger && multiEffect) {
-      const circleCenter =
+      circleTrigger.setAttribute('cx', startX);
+      circleTrigger.setAttribute('cy', startY);
+      const circleEffect =
         document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circleCenter.classList.add('center');
-      circleCenter.setAttribute('r', 6);
-      circleCenter.setAttribute('cx', center.x);
-      circleCenter.setAttribute('cy', center.y);
-      this.connection.appendChild(circleCenter);
+      circleEffect.classList.add('effect');
+      circleEffect.setAttribute('r', 6);
+      circleEffect.setAttribute('cx', endX);
+      circleEffect.setAttribute('cy', endY);
+
+      this.connection.appendChild(path);
+      this.connection.appendChild(circleTrigger);
+      this.connection.appendChild(circleEffect);
     }
   },
 
@@ -393,7 +282,7 @@ const RuleScreen = {
   },
 
   partBlocksByRole: function() {
-    const triggerBlocks = [];
+    let triggerBlock = null;
     const effectBlocks = [];
 
     for (const partBlock of this.partBlocks) {
@@ -401,7 +290,11 @@ const RuleScreen = {
         continue;
       }
       if (partBlock.rulePart.trigger) {
-        triggerBlocks.push(partBlock);
+        if (triggerBlock) {
+          console.warn('There should only be one triggerBlock',
+                       this.partBlocks);
+        }
+        triggerBlock = partBlock;
       }
       if (partBlock.rulePart.effect) {
         effectBlocks.push(partBlock);
@@ -409,36 +302,23 @@ const RuleScreen = {
     }
 
     return {
-      triggerBlocks,
+      triggerBlock,
       effectBlocks,
     };
   },
 
   onRuleChange: function() {
-    if (!this.rule) {
-      return;
-    }
-
     this.partBlocks = this.partBlocks.filter((partBlock) => {
       return partBlock.role !== 'removed';
     });
 
-    const {triggerBlocks, effectBlocks} = this.partBlocksByRole();
+    const {triggerBlock, effectBlocks} = this.partBlocksByRole();
 
-    const triggers = triggerBlocks.map((triggerBlock) => {
-      return triggerBlock.rulePart.trigger;
-    });
-
-    let op = 'AND';
-    if (this.rule.trigger) {
-      op = this.rule.trigger.op || op;
+    if (triggerBlock) {
+      this.rule.trigger = triggerBlock.rulePart.trigger;
+    } else {
+      this.rule.trigger = null;
     }
-
-    this.rule.trigger = {
-      type: 'MultiTrigger',
-      op: op,
-      triggers: triggers,
-    };
 
     const effects = effectBlocks.map((effectBlock) => {
       return effectBlock.rulePart.effect;
@@ -447,11 +327,6 @@ const RuleScreen = {
       type: 'MultiEffect',
       effects: effects,
     };
-    const effectType = this.getEffectType();
-    for (let i = 0; i < this.rule.effect.effects.length; i++) {
-      this.rule.effect.effects[i].type = effectType;
-    }
-
     this.rule.update();
 
     this.onPresentationChange();
@@ -459,18 +334,7 @@ const RuleScreen = {
 
   onPresentationChange: function() {
     this.ruleName.textContent = this.rule.name || 'Rule Name';
-    this.ruleDescription.innerHTML = this.rule.toHumanInterface();
-    const ruleEffectSelect =
-      this.ruleDescription.querySelector('.rule-effect-select');
-    if (this.rule.effect.effects.length === 0) {
-      ruleEffectSelect.value =
-        this.ruleEffectType === 'SetEffect' ? 'If' : 'While';
-    }
-    if (ruleEffectSelect.value === 'If') {
-      ruleEffectSelect.style.width = '1.8rem';
-    } else {
-      delete ruleEffectSelect.style.width;
-    }
+    this.ruleDescription.textContent = this.rule.toHumanDescription();
     const valid = this.rule.valid();
     if (valid) {
       this.titleBar.classList.remove('invalid');
@@ -491,8 +355,6 @@ const RuleScreen = {
   },
 
   show: function(ruleId) {
-    this.rule = null;
-
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
     if (ruleId !== 'new') {
@@ -502,6 +364,11 @@ const RuleScreen = {
         return res.json();
       });
     }
+
+    this.ruleArea.querySelector('.drag-hint-trigger')
+      .classList.remove('inactive');
+    this.ruleArea.querySelector('.drag-hint-effect')
+      .classList.remove('inactive');
 
     function remove(elt) {
       return elt.parentNode.removeChild(elt);
@@ -550,37 +417,16 @@ const RuleScreen = {
         // Create DevicePropertyBlocks from trigger and effect if applicable
         const centerX = areaRect.width / 2 - dpbRect.width / 2;
         const centerY = areaRect.height / 2 - dpbRect.height / 2;
-
-        if (!this.rule.trigger) {
-          this.rule.trigger = {
-            type: 'MultiTrigger',
-            op: 'AND',
-            triggers: [],
-          };
-        }
-
-        if (this.rule.trigger.type !== 'MultiTrigger') {
-          this.rule.trigger = {
-            type: 'MultiTrigger',
-            op: 'AND',
-            triggers: [
-              this.rule.trigger,
-            ],
-          };
-        }
-
-        const triggers = this.rule.trigger.triggers;
-        for (let i = 0; i < triggers.length; i++) {
+        if (this.rule.trigger) {
           if (flexDir === 'column') {
-            this.makeRulePartBlock('trigger', triggers[i], centerX,
+            this.makeRulePartBlock('trigger', this.rule.trigger, centerX,
                                    areaRect.height / 4 - dpbRect.height / 2);
           } else {
-            this.makeRulePartBlock('trigger', triggers[i],
+            this.makeRulePartBlock('trigger', this.rule.trigger,
                                    areaRect.width / 4 - dpbRect.width / 2,
                                    centerY);
           }
         }
-
         if (!this.rule.effect) {
           this.rule.effect = {
             type: 'MultiEffect',
@@ -630,11 +476,11 @@ const RuleScreen = {
     }
 
     if (this.rule) {
-      const {triggerBlocks, effectBlocks} = this.partBlocksByRole();
+      const {triggerBlock, effectBlocks} = this.partBlocksByRole();
 
-      triggerBlocks.forEach((triggerBlock, index) => {
-        triggerBlock.snapToCenter(index, triggerBlocks.length);
-      });
+      if (triggerBlock) {
+        triggerBlock.snapToCenter();
+      }
 
       effectBlocks.forEach((effectBlock, index) => {
         effectBlock.snapToCenter(index, effectBlocks.length);
@@ -650,115 +496,6 @@ const RuleScreen = {
 
   onScrollRightClick: function() {
     this.rulePartsList.scrollLeft += 128;
-  },
-
-  startAnimate: function() {
-    if (this.animateTimeout) {
-      clearTimeout(this.animateTimeout);
-    }
-    if (!this.rule || !this.rule.trigger || !this.rule.effect) {
-      return;
-    }
-    this.animateStep = -1;
-
-    this.ruleArea.querySelectorAll(
-      '.rule-part-block'
-    ).forEach((elt) => {
-      elt.classList.add('inactive');
-    });
-
-    setTimeout(this.animate, this.animateDelay);
-  },
-  animate: function() {
-    this.animateStep += 1;
-
-    if (this.animateStep > this.rule.trigger.triggers.length) {
-      this.stopAnimate();
-      return;
-    }
-
-    const triggerBlocks =
-      this.ruleArea.querySelectorAll('.rule-part-block.trigger');
-    const effectBlocks =
-      this.ruleArea.querySelectorAll('.rule-part-block.effect');
-    const triggerPaths = this.connection.querySelectorAll('path.trigger');
-    const effectPaths = this.connection.querySelectorAll('path.effect');
-    const triggerCircles = this.connection.querySelectorAll('circle.trigger');
-    const effectCircles = this.connection.querySelectorAll('circle.effect');
-    const centerCircle = this.connection.querySelector('circle.center');
-
-    function activate(index) {
-      triggerBlocks[index].classList.remove('inactive');
-      if (triggerPaths.length > 0) {
-        triggerPaths[index].classList.add('active');
-      }
-      triggerCircles[index].classList.add('active');
-    }
-
-    function deactivate(index) {
-      triggerBlocks[index].classList.add('inactive');
-      if (triggerPaths.length > 0) {
-        triggerPaths[index].classList.remove('active');
-      }
-      triggerCircles[index].classList.remove('active');
-    }
-
-    if (this.animateStep > 0) {
-      deactivate(this.animateStep - 1);
-    }
-
-    let andActive = false;
-
-    if (this.animateStep === this.rule.trigger.triggers.length) {
-      for (let i = 0; i < triggerBlocks.length; i++) {
-        activate(i);
-      }
-      andActive = true;
-    } else {
-      activate(this.animateStep);
-    }
-
-    if (andActive || this.rule.trigger.op === 'OR') {
-      effectBlocks.forEach(function(block) {
-        block.classList.remove('inactive');
-      });
-      if (centerCircle) {
-        centerCircle.classList.add('active');
-      }
-      effectPaths.forEach(function(path) {
-        path.classList.add('active');
-      });
-      effectCircles.forEach(function(circle) {
-        circle.classList.add('active');
-      });
-    } else {
-      effectBlocks.forEach(function(block) {
-        block.classList.add('inactive');
-      });
-      if (centerCircle) {
-        centerCircle.classList.remove('active');
-      }
-      effectPaths.forEach(function(path) {
-        path.classList.remove('active');
-      });
-      effectCircles.forEach(function(circle) {
-        circle.classList.remove('active');
-      });
-    }
-
-    this.animateTimeout = setTimeout(this.animate, this.animateDelay);
-  },
-  stopAnimate: function() {
-    this.ruleArea.querySelectorAll(
-      '.rule-part-block.inactive'
-    ).forEach((elt) => {
-      elt.classList.remove('inactive');
-    });
-    this.connection.querySelectorAll(
-      '.active'
-    ).forEach((elt) => {
-      elt.classList.remove('active');
-    });
   },
 };
 

@@ -32,8 +32,6 @@ DevicePropertyBlock.prototype.onUp = function(clientX, clientY) {
   RulePartBlock.prototype.onUp.call(this, clientX, clientY);
   if (this.role !== originalRole) {
     this.propertySelect.updateOptionsForRole(this.role);
-    this.rulePart = null;
-    this.onRuleChange();
   }
 };
 
