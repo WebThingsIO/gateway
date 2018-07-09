@@ -73,7 +73,7 @@ class SmartPlugCapability extends BaseComponent {
   connectedCallback() {
     this._havePower =
       typeof this.dataset.havePower !== 'undefined' ?
-        this.dataset.havePower :
+        this.dataset.havePower === 'true' :
         false;
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
     this.power =
