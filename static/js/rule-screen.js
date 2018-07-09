@@ -492,6 +492,7 @@ const RuleScreen = {
 
   show: function(ruleId) {
     this.rule = null;
+    this.ruleEffectType = 'PulseEffect';
 
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
