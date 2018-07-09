@@ -37,17 +37,27 @@ class ColorControl extends Thing {
     this.colorProperty = null;
     this.colorTemperatureProperty = null;
 
+    // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (this.colorProperty === null &&
-          (type === 'ColorProperty' || name === 'color')) {
+      if (this.colorProperty === null && type === 'ColorProperty') {
         this.colorProperty = name;
       } else if (this.colorTemperatureProperty === null &&
-                 (type === 'ColorTemperatureProperty' ||
-                  name === 'colorTemperature')) {
+                 type === 'ColorTemperatureProperty') {
         this.colorTemperatureProperty = name;
       }
+    }
+
+    // If necessary, match on name.
+    if (this.colorProperty === null &&
+        this.displayedProperties.hasOwnProperty('color')) {
+      this.colorProperty = 'color';
+    }
+
+    if (this.colorTemperatureProperty === null &&
+        this.displayedProperties.hasOwnProperty('colorTemperature')) {
+      this.colorTemperatureProperty = 'colorTemperature';
     }
   }
 

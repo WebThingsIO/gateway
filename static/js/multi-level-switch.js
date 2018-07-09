@@ -36,18 +36,21 @@ class MultiLevelSwitch extends OnOffSwitch {
     super.findProperties();
 
     this.levelProperty = null;
-    this.onProperty = null;
 
+    // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (this.levelProperty === null &&
-          (type === 'LevelProperty' || name === 'level')) {
+      if (type === 'LevelProperty') {
         this.levelProperty = name;
-      } else if (this.onProperty === null &&
-                 (type === 'OnOffProperty' || name === 'on')) {
-        this.onProperty = name;
+        break;
       }
+    }
+
+    // If necessary, match on name.
+    if (this.levelProperty === null &&
+        this.displayedProperties.hasOwnProperty('level')) {
+      this.levelProperty = 'level';
     }
   }
 

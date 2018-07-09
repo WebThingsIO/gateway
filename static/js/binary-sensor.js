@@ -35,13 +35,20 @@ class BinarySensor extends Thing {
   findProperties() {
     this.onProperty = null;
 
+    // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (type === 'BooleanProperty' || name === 'on') {
+      if (type === 'BooleanProperty') {
         this.onProperty = name;
         break;
       }
+    }
+
+    // If necessary, match on name.
+    if (this.onProperty === null &&
+        this.displayedProperties.hasOwnProperty('on')) {
+      this.onProperty = 'on';
     }
   }
 

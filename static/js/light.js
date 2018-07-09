@@ -39,20 +39,34 @@ class Light extends OnOffSwitch {
     this.colorProperty = null;
     this.colorTemperatureProperty = null;
 
+    // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (this.brightnessProperty === null &&
-          (type === 'BrightnessProperty' || name === 'level')) {
+      if (this.brightnessProperty === null && type === 'BrightnessProperty') {
         this.brightnessProperty = name;
-      } else if (this.colorProperty === null &&
-                 (type === 'ColorProperty' || name === 'color')) {
+      } else if (this.colorProperty === null && type === 'ColorProperty') {
         this.colorProperty = name;
       } else if (this.colorTemperatureProperty === null &&
-                 (type === 'ColorTemperatureProperty' ||
-                  name === 'colorTemperature')) {
+                 type === 'ColorTemperatureProperty') {
         this.colorTemperatureProperty = name;
       }
+    }
+
+    // If necessary, match on name.
+    if (this.brightnessProperty === null &&
+        this.displayedProperties.hasOwnProperty('level')) {
+      this.brightnessProperty = 'level';
+    }
+
+    if (this.colorProperty === null ||
+        this.displayedProperties.hasOwnProperty('color')) {
+      this.colorProperty = 'color';
+    }
+
+    if (this.colorTemperatureProperty === null &&
+        this.displayedProperties.hasOwnProperty('colorTemperature')) {
+      this.colorTemperatureProperty = 'colorTemperature';
     }
   }
 

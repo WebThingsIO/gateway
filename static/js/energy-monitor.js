@@ -35,14 +35,20 @@ class EnergyMonitor extends Thing {
   findProperties() {
     this.powerProperty = null;
 
+    // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (type === 'InstantaneousPowerProperty' ||
-          name === 'instantaneousPower') {
+      if (type === 'InstantaneousPowerProperty') {
         this.powerProperty = name;
         break;
       }
+    }
+
+    // If necessary, match on name.
+    if (this.powerProperty === null &&
+        this.displayedProperties.hasOwnProperty('instantaneousPower')) {
+      this.powerProperty = 'instantaneousPower';
     }
   }
 
