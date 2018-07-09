@@ -181,6 +181,13 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
 };
 
 /**
+ * Stop the node mDNS service.
+ */
+DNSserviceDiscovery.prototype.cleanup = function() {
+  this.dnssdHandle.stop(true);
+};
+
+/**
  * Look at settings that may be in the DB (set by the user) or default settings.
  * It will safely return a profile that will work for the calling application to
  * use.
