@@ -46,8 +46,8 @@ class LevelDetail {
   }
 
   view() {
-    const min = `min=${Utils.escapeHtml(this.min)}`;
-    const max = `max=${Utils.escapeHtml(this.max)}`;
+    const min = `min="${Utils.escapeHtml(this.min)}"`;
+    const max = `max="${Utils.escapeHtml(this.max)}"`;
     const unit = this.unit || '';
     const level = this.thing.properties[this.name];
 
