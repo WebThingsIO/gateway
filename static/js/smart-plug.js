@@ -30,6 +30,31 @@ class SmartPlug extends OnOffSwitch {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    super.findProperties();
+
+    this.powerProperty = null;
+
+    // Look for properties by type first.
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (type === 'InstantaneousPowerProperty') {
+        this.powerProperty = name;
+        break;
+      }
+    }
+
+    // If necessary, match on name.
+    if (this.powerProperty === null &&
+        this.displayedProperties.hasOwnProperty('instantaneousPower')) {
+      this.powerProperty = 'instantaneousPower';
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-smart-plug-capability');
   }
@@ -46,19 +71,20 @@ class SmartPlug extends OnOffSwitch {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'OnOffProperty' || name === 'on') {
-      this.icon.on = !!value;
-    } else if (property['@type'] === 'InstantaneousPowerProperty' ||
-               name === 'instantaneousPower') {
+    if (name === this.powerProperty) {
       value = parseFloat(value);
       this.icon.power = value;
     }
   }
 
   iconView() {
+    let power = '';
+    if (this.powerProperty !== null) {
+      power = 'data-have-power="true"';
+    }
+
     return `
-      <webthing-smart-plug-capability>
+      <webthing-smart-plug-capability ${power}>
       </webthing-smart-plug-capability>`;
   }
 }

@@ -29,6 +29,47 @@ class Light extends OnOffSwitch {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    super.findProperties();
+
+    this.brightnessProperty = null;
+    this.colorProperty = null;
+    this.colorTemperatureProperty = null;
+
+    // Look for properties by type first.
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (this.brightnessProperty === null && type === 'BrightnessProperty') {
+        this.brightnessProperty = name;
+      } else if (this.colorProperty === null && type === 'ColorProperty') {
+        this.colorProperty = name;
+      } else if (this.colorTemperatureProperty === null &&
+                 type === 'ColorTemperatureProperty') {
+        this.colorTemperatureProperty = name;
+      }
+    }
+
+    // If necessary, match on name.
+    if (this.brightnessProperty === null &&
+        this.displayedProperties.hasOwnProperty('level')) {
+      this.brightnessProperty = 'level';
+    }
+
+    if (this.colorProperty === null ||
+        this.displayedProperties.hasOwnProperty('color')) {
+      this.colorProperty = 'color';
+    }
+
+    if (this.colorTemperatureProperty === null &&
+        this.displayedProperties.hasOwnProperty('colorTemperature')) {
+      this.colorTemperatureProperty = 'colorTemperature';
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-light-capability');
   }
@@ -45,17 +86,12 @@ class Light extends OnOffSwitch {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'OnOffProperty' || name === 'on') {
-      this.icon.on = !!value;
-    } else if (property['@type'] === 'BrightnessProperty' ||
-               name === 'brightness') {
+    if (name === this.brightnessProperty) {
       value = parseInt(value, 10);
       this.icon.brightness = value;
-    } else if (property['@type'] === 'ColorProperty' || name === 'color') {
+    } else if (name === this.colorProperty) {
       this.icon.color = value;
-    } else if (property['@type'] === 'ColorTemperatureProperty' ||
-               name === 'colorTemperature') {
+    } else if (name === this.colorTemperatureProperty) {
       value = parseInt(value, 10);
       this.icon.colorTemperature = value;
     }
@@ -63,14 +99,14 @@ class Light extends OnOffSwitch {
 
   iconView() {
     let color = '';
-    if (this.displayedProperties.hasOwnProperty('color')) {
+    if (this.colorProperty !== null) {
       color = 'data-have-color="true"';
-    } else if (this.displayedProperties.hasOwnProperty('colorTemperature')) {
+    } else if (this.colorTemperatureProperty !== null) {
       color = 'data-have-color-temperature="true"';
     }
 
     let brightness = '';
-    if (this.displayedProperties.hasOwnProperty('level')) {
+    if (this.brightnessProperty !== null) {
       brightness = 'data-have-brightness="true"';
     }
 

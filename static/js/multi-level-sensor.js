@@ -30,6 +30,29 @@ class MultiLevelSensor extends Thing {
     );
   }
 
+  /**
+   * Find any properties required for this view.
+   */
+  findProperties() {
+    this.levelProperty = null;
+
+    // Look for properties by type first.
+    for (const name in this.displayedProperties) {
+      const type = this.displayedProperties[name].property['@type'];
+
+      if (type === 'LevelProperty') {
+        this.levelProperty = name;
+        break;
+      }
+    }
+
+    // If necessary, match on name.
+    if (this.levelProperty === null &&
+        this.displayedProperties.hasOwnProperty('level')) {
+      this.levelProperty = 'level';
+    }
+  }
+
   get icon() {
     return this.element.querySelector('webthing-multi-level-sensor-capability');
   }
@@ -46,8 +69,7 @@ class MultiLevelSensor extends Thing {
       return;
     }
 
-    const property = this.displayedProperties[name].property;
-    if (property['@type'] === 'LevelProperty' || name === 'level') {
+    if (name === this.levelProperty) {
       value = parseFloat(value);
       this.icon.level = value;
     }
