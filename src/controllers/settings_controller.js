@@ -24,7 +24,7 @@ const Platform = require('../platform');
 const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
 const UserProfile = require('../user-profile');
-const mDNSserver = require('../service_discovery_setup');
+const mDNSserver = require('../mdns-server');
 
 const SettingsController = PromiseRouter();
 
@@ -323,7 +323,7 @@ SettingsController.put('/domain', async (request, response) => {
     } else if (request.body.local.hasOwnProperty('multicastDNSstate')) {
       const requestState = request.body.local.multicastDNSstate;
       await Settings.set('multicastDNSstate', requestState);
-      mDNSserver.server.startService(requestState);
+      mDNSserver.server.setState(requestState);
     } else {
       response.statusMessage = 'Invalid request.';
       response.status(400).end();

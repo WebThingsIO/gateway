@@ -7,6 +7,7 @@
  */
 
 const child_process = require('child_process');
+const fs = require('fs');
 const process = require('process');
 
 /**
@@ -61,6 +62,77 @@ function toggleSsh(enable) {
     const proc = child_process.spawnSync(
       'sudo', ['raspi-config', 'nonint', 'do_ssh', arg]);
     return proc.status === 0;
+  }
+
+  return false;
+}
+
+/**
+ * Enable/disable the system's mDNS server, if possible.
+ *
+ * @param {Boolean} enable Whether or not mDNS should be enabled.
+ * @return {Boolean} indicating success
+ */
+function togglemDns(enable) {
+  if (isRaspberryPi()) {
+    const command = enable ? 'start' : 'stop';
+    const proc = child_process.spawnSync(
+      'sudo', ['systemctl', command, 'avahi-daemon.service']);
+    return proc.status === 0;
+  }
+
+  return false;
+}
+
+/**
+ * Set the system's hostname, if possible.
+ *
+ * @param {String} hostname The hostname to set
+ * @returns {Boolean} indicating success
+ */
+function setHostname(hostname) {
+  hostname = hostname.toLowerCase();
+  const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
+  const valid = re.test(hostname) && hostname.length <= 63;
+  if (!valid) {
+    return false;
+  }
+
+  if (isRaspberryPi()) {
+    // Read in the current hostname
+    let original = fs.readFileSync('/etc/hostname', 'utf8');
+    if (original) {
+      original = original.trim();
+    }
+
+    // Do this with sed, as it's the easiest way to write the file as root.
+    let proc = child_process.spawnSync(
+      'sudo', ['sed', '-i', '-e', `s/^.*$/${hostname}/`, '/etc/hostname']);
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync('sudo', ['hostname', hostname]);
+    if (proc.status !== 0) {
+      // Set the original hostname back
+      child_process.spawnSync(
+        'sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+
+      return false;
+    }
+
+    proc = child_process.spawnSync(
+      'sudo', ['systemctl', 'restart', 'avahi-daemon.service']);
+    if (proc.status !== 0) {
+      // Set the original hostname back
+      child_process.spawnSync(
+        'sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
+      child_process.spawnSync('sudo', ['hostname', original]);
+
+      return false;
+    }
+
+    return true;
   }
 
   return false;
@@ -130,6 +202,8 @@ module.exports = {
   isToggleSshImplemented,
   isSshEnabled,
   toggleSsh,
+  togglemDns,
+  setHostname,
   isRestartGatewayImplemented,
   restartGateway,
   isRestartSystemImplemented,

@@ -29,7 +29,7 @@ const mustacheExpress = require('mustache-express');
 // Internal Dependencies
 const addonManager = require('./addon-manager');
 const db = require('./db');
-const mDNSserver = require('./service_discovery_setup');
+const mDNSserver = require('./mdns-server');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const Constants = require('./constants');
@@ -305,7 +305,7 @@ if (config.get('cli')) {
   process.on('SIGINT', function() {
     console.log('Control-C: unloading add-ons...');
     addonManager.unloadAddons();
-    mDNSserver.server.startService(false);
+    mDNSserver.server.setState(false);
     TunnelService.stop();
     process.exit(0);
   });
@@ -325,7 +325,7 @@ mDNSserver.getmDNSstate().then((state) => {
     mDNSserver.getmDNSconfig().then((mDNSconfig) => {
       console.log(`DNS config is: ${mDNSconfig.host}`);
       mDNSserver.server.changeProfile(mDNSconfig);
-      mDNSserver.server.startService(state);
+      mDNSserver.server.setState(state);
     });
   } catch (err) {
     // if we failed to startup mDNS it's not the end of the world log it
