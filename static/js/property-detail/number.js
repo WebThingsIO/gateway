@@ -53,8 +53,8 @@ class NumberDetail {
    * Build the detail view.
    */
   view() {
-    const min = this.min === null ? '' : `min=${Utils.escapeHtml(this.min)}`;
-    const max = this.max === null ? '' : `max=${Utils.escapeHtml(this.max)}`;
+    const min = this.min === null ? '' : `min="${Utils.escapeHtml(this.min)}"`;
+    const max = this.max === null ? '' : `max="${Utils.escapeHtml(this.max)}"`;
     const unit = this.unit || '';
     const step = this.type === 'number' ? 'any' : '1';
 

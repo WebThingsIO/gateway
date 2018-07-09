@@ -17,6 +17,25 @@ class LevelDetail {
     this.thing = thing;
     this.name = name;
     this.label = property.label || 'Level';
+    this.unit =
+      property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
+
+    if (property.hasOwnProperty('min')) {
+      this.min = property.min;
+    } else if (property.hasOwnProperty('minimum')) {
+      this.min = property.minimum;
+    } else {
+      this.min = 0;
+    }
+
+    if (property.hasOwnProperty('max')) {
+      this.max = property.max;
+    } else if (property.hasOwnProperty('maximum')) {
+      this.max = property.maximum;
+    } else {
+      this.max = 100;
+    }
+
     this.id = `level-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -27,12 +46,15 @@ class LevelDetail {
   }
 
   view() {
+    const min = `min="${Utils.escapeHtml(this.min)}"`;
+    const max = `max="${Utils.escapeHtml(this.max)}"`;
+    const unit = this.unit || '';
     const level = this.thing.properties[this.name];
 
     return `
       <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
-        min="0" max="100" step="1" value="${Utils.escapeHtml(level)}"
-        id="${this.id}">
+        data-unit="${unit}" ${min} ${max} step="1"
+        value="${Utils.escapeHtml(level)}" id="${this.id}">
       </webthing-level-property>`;
   }
 
