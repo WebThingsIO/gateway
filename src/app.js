@@ -305,7 +305,7 @@ if (config.get('cli')) {
   process.on('SIGINT', function() {
     console.log('Control-C: unloading add-ons...');
     addonManager.unloadAddons();
-    mDNSserver.server.setState(false);
+    mDNSserver.server.cleanup();
     TunnelService.stop();
     process.exit(0);
   });
