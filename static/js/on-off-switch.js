@@ -29,8 +29,6 @@ class OnOffSwitch extends Thing {
 
     super(description, format, options);
 
-    this.changing = false;
-
     if (this.format !== 'svg') {
       this.icon.addEventListener('click', this.handleClick.bind(this));
     }
@@ -62,11 +60,6 @@ class OnOffSwitch extends Thing {
    * Handle a click on the on/off switch.
    */
   handleClick() {
-    if (this.changing) {
-      return;
-    }
-
-    this.changing = true;
     const newValue = !this.properties.on;
     this.icon.on = null;
     this.properties.on = null;
@@ -89,10 +82,8 @@ class OnOffSwitch extends Thing {
       }
     }).then((json) => {
       this.onPropertyStatus(json);
-      this.changing = false;
     }).catch((error) => {
       console.error(`Error trying to toggle switch: ${error}`);
-      this.changing = false;
     });
   }
 
