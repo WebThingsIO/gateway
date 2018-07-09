@@ -140,12 +140,12 @@ class NewThing {
                value="${Utils.escapeHtml(this.description.name)}"/>
         <select class="new-thing-type">${options.join('')}</select>
         <span class="new-thing-spacer"></span>
+        <input type="file" class="new-thing-custom-icon-input hidden"
+          id="${id}" accept="image/jpeg,image/png,image/svg+xml">
         <label for="${id}"
           class="new-thing-custom-icon-label text-button ${customIconClass}">
           Choose icon...
         </label>
-        <input type="file" class="new-thing-custom-icon-input hidden"
-          id="${id}" accept="image/jpeg,image/png,image/svg+xml">
         <span class="new-thing-label"></span>
       </div>
       <button class="new-thing-save-button text-button">
@@ -378,7 +378,10 @@ class NewThing {
   }
 
   handleSave() {
+    this.thingType.disabled = true;
+    this.nameInput.disabled = true;
     this.saveButton.disabled = true;
+    this.customIconInput.disabled = true;
 
     const thing = this.description;
     thing.id = this.id;
@@ -404,16 +407,16 @@ class NewThing {
     }).then((response) => {
       return response.json();
     }).then(() => {
-      this.thingType.disabled = true;
-      this.nameInput.disabled = true;
       this.saveButton.innerHTML = 'Saved';
-      this.saveButton.disabled = true;
     }).catch((error) => {
       console.error(`Failed to save thing ${error}`);
       this.label.innerText = 'Failed to save.';
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
+      this.thingType.disabled = false;
+      this.nameInput.disabled = false;
       this.saveButton.disabled = false;
+      this.customIconInput.disabled = false;
     });
   }
 }

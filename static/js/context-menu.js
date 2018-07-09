@@ -259,7 +259,10 @@ const ContextMenu = {
    * Handle click on edit option.
    */
   handleEdit: function() {
+    this.thingType.disabled = true;
+    this.nameInput.disabled = true;
     this.saveButton.disabled = true;
+    this.customIconInput.disabled = true;
 
     const name = this.nameInput.value.trim();
     if (name.length === 0) {
@@ -298,7 +301,10 @@ const ContextMenu = {
       this.label.innerText = 'Failed to save.';
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
+      this.thingType.disabled = false;
+      this.nameInput.disabled = false;
       this.saveButton.disabled = false;
+      this.customIconInput.disabled = false;
     });
   },
 

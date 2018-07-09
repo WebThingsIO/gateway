@@ -39,9 +39,9 @@
   margin: 1.25rem 0;
 }
 
-.new-thing-custom-icon-label:disabled,
-.new-thing-custom-icon-label:disabled:hover,
-.new-thing-custom-icon-label:hover:active,
+.new-thing-custom-icon-input:disabled + label,
+.new-thing-custom-icon-input:disabled:hover + label,
+.new-thing-custom-icon-input:hover:active + label,
 .new-web-thing-cancel-button:disabled,
 .new-web-thing-cancel-button:disabled:hover,
 .new-web-thing-cancel-button:hover:active,
