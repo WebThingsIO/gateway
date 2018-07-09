@@ -35,6 +35,4 @@ systemctl disable dnsmasq.service
 # install hostapd and dnsmasq config files 
 cp config/hostapd.conf /etc/hostapd/hostapd.conf
 cp config/dnsmasq.conf /etc/dnsmasq.conf
-sudo sh -c 'cat >> /etc/default/hostapd' << END
-DAEMON_CONF="/etc/hostapd/hostapd.conf"
-END
+echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' >> /etc/default/hostapd
