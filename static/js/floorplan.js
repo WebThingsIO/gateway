@@ -24,9 +24,11 @@ const Thing = require('./thing');
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {
 
-  ORIGIN_X: 7,    // X co-ordinate to start placing un-positioned things from.
-  ORIGIN_Y: 7,    // X co-ordinate to start placing un-positioned things from.
-  THING_GAP: 11, // Gap between unpositioned things along x axis.
+  ORIGIN_X: 6,    // X co-ordinate to start placing un-positioned things from.
+  ORIGIN_Y: 7,    // Y co-ordinate to start placing un-positioned things from.
+  MAX_X: 100,     // Max X range.
+  MAX_Y: 100,     // Max Y range.
+  THING_GAP: 11,  // Gap between unpositioned things along x axis.
 
   /**
   * Initialise Floorplan Screen.
@@ -74,12 +76,19 @@ const FloorplanScreen = {
       }
 
       let x = this.ORIGIN_X;
-      const y = this.ORIGIN_Y;
+      let y = this.ORIGIN_Y;
       things.forEach((description) => {
         if (!description.floorplanX || !description.floorplanY) {
           description.floorplanX = x;
           description.floorplanY = y;
           x += this.THING_GAP; // increment x co-ordinate.
+          if (x > this.MAX_X) {
+            x = this.ORIGIN_X;
+            y += this.THING_GAP;
+          }
+          if (y > this.MAX_Y) {
+            y = this.ORIGIN_Y;
+          }
         }
 
         if (description.selectedCapability) {
