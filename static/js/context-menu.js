@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
 const page = require('./lib/page');
 const Utils = require('./utils');
 
@@ -40,7 +41,7 @@ const ContextMenu = {
     this.label = document.getElementById('edit-thing-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
-    this.thingUrl = '';
+    this.thingId = '';
 
     // Add event listeners
     window.addEventListener('_contextmenu', this.show.bind(this));
@@ -78,7 +79,7 @@ const ContextMenu = {
     }
 
     this.headingText.textContent = e.detail.thingName;
-    this.thingUrl = e.detail.thingUrl;
+    this.thingId = e.detail.thingId;
     this.element.classList.remove('hidden');
 
     this.editContent.classList.add('hidden');
@@ -86,6 +87,10 @@ const ContextMenu = {
 
     switch (e.detail.action) {
       case 'edit': {
+        this.thingType.disabled = false;
+        this.nameInput.disabled = false;
+        this.saveButton.disabled = false;
+        this.customIconInput.disabled = false;
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
 
@@ -164,7 +169,7 @@ const ContextMenu = {
     this.headingIcon.src = '#';
     this.headingCustomIcon.classList.add('hidden');
     this.headingText.textContent = '';
-    this.thingUrl = '';
+    this.thingId = '';
   },
 
   handleTypeChange: function() {
@@ -279,23 +284,9 @@ const ContextMenu = {
     if (capability === 'Custom' && this.iconData) {
       body.iconData = this.iconData;
     }
-
-    fetch(this.thingUrl, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }).then((response) => {
-      if (response.ok) {
-        // reload the page to pick up capability changes
-        window.location.reload();
-        this.hide();
-      } else {
-        throw new Error(response.statusText);
-      }
+    App.gatewayModel.updateThing(this.thingId, body).then(() => {
+      this.hide();
+      this.saveButton.disabled = false;
     }).catch((error) => {
       console.error(`Error updating thing: ${error}`);
       this.label.innerText = 'Failed to save.';
@@ -312,19 +303,8 @@ const ContextMenu = {
    * Handle click on remove option.
    */
   handleRemove: function() {
-    fetch(this.thingUrl, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (response.ok) {
-        page('/things');
-      } else {
-        console.error(`Error removing thing: ${response.statusText}`);
-      }
+    App.gatewayModel.removeThing(this.thingId).then(() => {
+      page('/things');
       this.hide();
     }).catch((error) => {
       console.error(`Error removing thing: ${error}`);

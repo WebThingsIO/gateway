@@ -49,24 +49,22 @@ class LevelDetail {
     const min = `min="${Utils.escapeHtml(this.min)}"`;
     const max = `max="${Utils.escapeHtml(this.max)}"`;
     const unit = this.unit || '';
-    const level = this.thing.properties[this.name];
 
     return `
       <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" ${min} ${max} step="1"
-        value="${Utils.escapeHtml(level)}" id="${this.id}">
+        data-unit="${unit}" ${min} ${max} step="1" id="${this.id}">
       </webthing-level-property>`;
   }
 
-  update() {
+  update(level) {
     if (!this.level) {
       return;
     }
 
-    if (this.thing.properties[this.name] == this.level.value) {
+    if (level == this.level.value) {
       return;
     }
-    this.level.value = this.thing.properties[this.name];
+    this.level.value = level;
   }
 
   set() {

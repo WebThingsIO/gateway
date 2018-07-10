@@ -11,6 +11,8 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
+const Constants = require('./constants');
 const BinarySensor = require('./binary-sensor');
 const ColorControl = require('./color-control');
 const EnergyMonitor = require('./energy-monitor');
@@ -53,31 +55,25 @@ const FloorplanScreen = {
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
     this.uploadForm.addEventListener('submit', this.blackHole);
     this.fileInput.addEventListener('change', this.upload.bind(this));
+    this.refreshThings = this.refreshThings.bind(this);
+    this.things = [];
   },
 
-  show: function() {
-    this.backButton.classList.add('hidden');
-    this.menuButton.classList.remove('hidden');
+  refreshThings: function(things) {
+    let thing;
+    while (typeof (thing = this.things.pop()) !== 'undefined') {
+      thing.cleanup();
+    }
 
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-    // Fetch a list of things from the server
-    fetch('/things', opts).then((response) => {
-      return response.json();
-    }).then((things) => {
-      this.things = [];
-      this.thingsElement.innerHTML = '';
-      if (things.length === 0) {
-        return;
-      }
+    this.thingsElement.innerHTML = '';
+    if (things.length === 0) {
+      return;
+    }
 
-      let x = this.ORIGIN_X;
-      let y = this.ORIGIN_Y;
-      things.forEach((description) => {
+    let x = this.ORIGIN_X;
+    let y = this.ORIGIN_Y;
+    things.forEach((description, thingId) => {
+      App.gatewayModel.getThingModel(thingId).then((thingModel) => {
         if (!description.floorplanX || !description.floorplanY) {
           description.floorplanX = x;
           description.floorplanY = y;
@@ -90,67 +86,78 @@ const FloorplanScreen = {
             y = this.ORIGIN_Y;
           }
         }
-
+        let thing;
         if (description.selectedCapability) {
           switch (description.selectedCapability) {
             case 'OnOffSwitch':
-              this.things.push(new OnOffSwitch(description, 'svg'));
+              thing = new OnOffSwitch(thingModel, description, 'svg');
               break;
             case 'MultiLevelSwitch':
-              this.things.push(new MultiLevelSwitch(description, 'svg'));
+              thing = new MultiLevelSwitch(thingModel, description, 'svg');
               break;
             case 'ColorControl':
-              this.things.push(new ColorControl(description, 'svg'));
+              thing = new ColorControl(thingModel, description, 'svg');
               break;
             case 'EnergyMonitor':
-              this.things.push(new EnergyMonitor(description, 'svg'));
+              thing = new EnergyMonitor(thingModel, description, 'svg');
               break;
             case 'BinarySensor':
-              this.things.push(new BinarySensor(description, 'svg'));
+              thing = new BinarySensor(thingModel, description, 'svg');
               break;
             case 'MultiLevelSensor':
-              this.things.push(new MultiLevelSensor(description, 'svg'));
+              thing = new MultiLevelSensor(thingModel, description, 'svg');
               break;
             case 'SmartPlug':
-              this.things.push(new SmartPlug(description, 'svg'));
+              thing = new SmartPlug(thingModel, description, 'svg');
               break;
             case 'Light':
-              this.things.push(new Light(description, 'svg'));
+              thing = new Light(thingModel, description, 'svg');
               break;
             default:
-              this.things.push(new Thing(description, 'svg'));
+              thing = new Thing(thingModel, description, 'svg');
               break;
           }
         } else {
           switch (description.type) {
             case 'onOffSwitch':
-              this.things.push(new OnOffSwitch(description, 'svg'));
+              thing = new OnOffSwitch(thingModel, description, 'svg');
               break;
             case 'onOffLight':
             case 'onOffColorLight':
             case 'dimmableLight':
             case 'dimmableColorLight':
-              this.things.push(new Light(description, 'svg'));
+              thing = new Light(thingModel, description, 'svg');
               break;
             case 'binarySensor':
-              this.things.push(new BinarySensor(description, 'svg'));
+              thing = new BinarySensor(thingModel, description, 'svg');
               break;
             case 'multiLevelSensor':
-              this.things.push(new MultiLevelSensor(description, 'svg'));
+              thing = new MultiLevelSensor(thingModel, description, 'svg');
               break;
             case 'multiLevelSwitch':
-              this.things.push(new MultiLevelSwitch(description, 'svg'));
+              thing = new MultiLevelSwitch(thingModel, description, 'svg');
               break;
             case 'smartPlug':
-              this.things.push(new SmartPlug(description, 'svg'));
+              thing = new SmartPlug(thingModel, description, 'svg');
               break;
             default:
-              this.things.push(new Thing(description, 'svg'));
+              thing = new Thing(thingModel, description, 'svg');
               break;
           }
         }
-      }, this);
+        this.things.push(thing);
+      });
     });
+  },
+
+  show: function() {
+    this.backButton.classList.add('hidden');
+    this.menuButton.classList.remove('hidden');
+    App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThings,
+      true);
   },
 
   /**

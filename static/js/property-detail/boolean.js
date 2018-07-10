@@ -33,23 +33,21 @@ class BooleanDetail {
    * Build the detail view.
    */
   view() {
-    const checked = this.thing.properties[this.name];
-
     return `
       <webthing-boolean-property data-name="${Utils.escapeHtml(this.label)}"
-        ${checked ? 'checked' : ''} id="${this.id}">
+        id="${this.id}">
       </webthing-boolean-property>`;
   }
 
   /**
    * Update the detail view with the new property value.
    */
-  update() {
-    if (!this.input || this.thing.properties[this.name] == this.input.checked) {
+  update(bool) {
+    if (!this.input || bool == this.input.checked) {
       return;
     }
 
-    this.input.checked = this.thing.properties[this.name];
+    this.input.checked = bool;
   }
 
   set() {

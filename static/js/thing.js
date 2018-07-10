@@ -10,13 +10,13 @@
 
 'use strict';
 
-const API = require('./api');
 const ActionDetail = require('./property-detail/action');
 const App = require('./app');
 const BooleanDetail = require('./property-detail/boolean');
 const BrightnessDetail = require('./property-detail/brightness');
 const ColorDetail = require('./property-detail/color');
 const ColorTemperatureDetail = require('./property-detail/color-temperature');
+const Constants = require('./constants');
 const CurrentDetail = require('./property-detail/current');
 const EnumDetail = require('./property-detail/enum');
 const FrequencyDetail = require('./property-detail/frequency');
@@ -38,7 +38,7 @@ class Thing {
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    * @param {Object} options Options for building the view.
    */
-  constructor(description, format, options) {
+  constructor(model, description, format, options) {
     const opts = options || {};
     const defaults = {
       on: OnOffDetail,
@@ -54,6 +54,8 @@ class Thing {
 
     this.name = description.name;
     this.type = description.type;
+    this.model = model;
+    this.listeners = [];
 
     if (Array.isArray(description['@type']) &&
         description['@type'].length > 0) {
@@ -68,7 +70,6 @@ class Thing {
     this.format = format;
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
-    this.properties = {};
 
     if (format === 'svg') {
       this.container = document.getElementById('floorplan-things');
@@ -96,34 +97,6 @@ class Thing {
       this.eventsHref = `${this.href.pathname}/events?referrer=${
         encodeURIComponent(this.href.pathname)}`;
       this.id = this.href.pathname.split('/').pop();
-
-      const wsHref = this.href.href.replace(/^http/, 'ws');
-      this.ws = new WebSocket(`${wsHref}?jwt=${API.jwt}`);
-
-      // After the websocket is open, add subscriptions for all events.
-      this.ws.addEventListener('open', () => {
-        if (description.hasOwnProperty('events')) {
-          const msg = {
-            messageType: 'addEventSubscription',
-            data: {},
-          };
-
-          for (const name in description.events) {
-            msg.data[name] = {};
-          }
-
-          this.ws.send(JSON.stringify(msg));
-        }
-      });
-
-      this.ws.addEventListener('message', (event) => {
-        const message = JSON.parse(event.data);
-        if (message.messageType === 'propertyStatus') {
-          this.onPropertyStatus(message.data);
-        } else if (message.messageType === 'event') {
-          this.onEvent(message.data);
-        }
-      });
     }
 
     // Parse properties
@@ -268,6 +241,8 @@ class Thing {
       this.attachHtmlDetail();
     }
 
+    this.onPropertyStatus = this.onPropertyStatus.bind(this);
+    this.onEvent = this.onEvent.bind(this);
     this.updateStatus();
   }
 
@@ -300,7 +275,7 @@ class Thing {
     }
 
     this.layout = new ThingDetailLayout(
-      this.element.querySelectorAll('.thing-detail-container'));
+      this, this.element.querySelectorAll('.thing-detail-container'));
   }
 
   /**
@@ -373,11 +348,9 @@ class Thing {
    * @param {*} value Value of the property
    */
   updateProperty(name, value) {
-    this.properties[name] = value;
-
     if (this.format === 'htmlDetail' &&
         this.displayedProperties.hasOwnProperty(name)) {
-      this.displayedProperties[name].detail.update();
+      this.displayedProperties[name].detail.update(value);
     }
   }
 
@@ -388,64 +361,40 @@ class Thing {
    * @param {*} value Value of the property
    */
   setProperty(name, value) {
-    switch (this.displayedProperties[name].property.type) {
-      case 'number':
-        value = parseFloat(value);
-        break;
-      case 'integer':
-        value = parseInt(value);
-        break;
-      case 'boolean':
-        value = Boolean(value);
-        break;
-    }
-
-    const payload = {
-      [name]: value,
-    };
-    fetch(this.displayedProperties[name].href, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-      headers: Object.assign(API.headers(), {
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error(`Status ${response.status} trying to set ${name}`);
-      }
-    }).then((json) => {
-      this.updateProperty(name, json[name]);
-    }).catch((error) => {
-      console.error(`Error trying to set ${name}: ${error}`);
-    });
+    this.model.setProperty(name, value);
   }
 
   /**
    * Update the status of Thing.
    */
   updateStatus() {
-    const urls = Object.values(this.displayedProperties).map((v) => v.href);
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
+    this.model.subscribe(Constants.PROPERTY_STATUS,
+                         this.onPropertyStatus);
+    this.model.subscribe(Constants.EVENT_OCCURRED, this.onEvent);
+  }
 
-    const requests = urls.map((u) => fetch(u, opts));
-    Promise.all(requests).then((responses) => {
-      return Promise.all(responses.map((response) => {
-        return response.json();
-      }));
-    }).then((responses) => {
-      responses.forEach((response) => {
-        this.onPropertyStatus(response);
-      });
-    }).catch((error) => {
-      console.error(`Error fetching ${this.name} status: ${error}`);
-    });
+  /**
+   * Add event listener and store params to cleanup listeners
+   * @param {Element} element
+   * @param {Event} event
+   * @param {Function} handler
+   */
+  registerEventListener(element, event, handler) {
+    element.addEventListener(event, handler);
+    this.listeners.push({element, event, handler});
+  }
+
+  /**
+   * Cleanup added listeners and subscribed events
+   */
+  cleanup() {
+    let listenr;
+    while (typeof (listenr = this.listeners.pop()) !== 'undefined') {
+      listenr.element.removeEventListener(listenr.event, listenr.handler);
+    }
+    this.model.unsubscribe(Constants.PROPERTY_STATUS,
+                           this.onPropertyStatus);
+    this.model.unsubscribe(Constants.EVENT_OCCURRED, this.onEvent);
   }
 
   /**
@@ -538,7 +487,7 @@ class Thing {
   handleEdit() {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
-        thingUrl: this.href.href,
+        thingId: this.id,
         thingName: this.name,
         thingIcon: this.baseIcon,
         action: 'edit',
@@ -556,7 +505,7 @@ class Thing {
   handleRemove() {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
-        thingUrl: this.href.href,
+        thingId: this.id,
         thingName: this.name,
         thingIcon: this.baseIcon,
         action: 'remove',
@@ -580,7 +529,6 @@ class Thing {
         continue;
       }
 
-      this.properties[prop] = value;
       this.updateProperty(prop, value);
     }
   }

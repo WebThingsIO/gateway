@@ -12,6 +12,7 @@
 
 const API = require('../api');
 const Utils = require('../utils');
+const page = require('../lib/page');
 
 class ActionDetail {
   constructor(thing, name, action, href) {
@@ -29,12 +30,11 @@ class ActionDetail {
   }
 
   view() {
-    let href = '', disabled = '';
+    let disabled = '';
     if (typeof this.input !== 'undefined') {
       const base = `${window.location.pathname}/actions/${this.name}`;
       const referrer = encodeURIComponent(window.location.pathname);
-      href = `${encodeURI(base)}?referrer=${referrer}`;
-
+      this.inputPageRef = `${encodeURI(base)}?referrer=${referrer}`;
       if (typeof this.input === 'object' &&
           ((this.input.hasOwnProperty('required') &&
             Array.isArray(this.input.required) &&
@@ -45,25 +45,28 @@ class ActionDetail {
     }
 
     return `
-      <webthing-action href="${href}" ${disabled} id="${this.id}"
+      <webthing-action ${disabled} id="${this.id}"
         data-name="${Utils.escapeHtml(this.label)}"
       </webthing-action>`;
   }
 
   handleClick() {
     const input = {};
-
-    fetch(this.href, {
-      method: 'POST',
-      body: JSON.stringify({[this.name]: {input}}),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).catch((e) => {
-      console.error(`Error performing action "${this.name}": ${e}`);
-    });
+    if (typeof this.input === 'undefined') {
+      fetch(this.href, {
+        method: 'POST',
+        body: JSON.stringify({[this.name]: {input}}),
+        headers: {
+          Authorization: `Bearer ${API.jwt}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).catch((e) => {
+        console.error(`Error performing action "${this.name}": ${e}`);
+      });
+    } else {
+      page(this.inputPageRef);
+    }
   }
 }
 

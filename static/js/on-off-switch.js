@@ -10,7 +10,6 @@
 
 'use strict';
 
-const API = require('./api');
 const Thing = require('./thing');
 
 class OnOffSwitch extends Thing {
@@ -21,13 +20,13 @@ class OnOffSwitch extends Thing {
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    * @param {Object} options Options for building the view.
    */
-  constructor(description, format, options) {
+  constructor(model, description, format, options) {
     options = options ||
       {
         baseIcon: '/optimized-images/thing-icons/on_off_switch.svg',
       };
 
-    super(description, format, options);
+    super(model, description, format, options);
 
     if (this.format !== 'svg') {
       this.icon.addEventListener('click', this.handleClick.bind(this));
@@ -82,29 +81,9 @@ class OnOffSwitch extends Thing {
    * Handle a click on the on/off switch.
    */
   handleClick() {
-    const newValue = !this.properties[this.onProperty];
+    const newValue = !this.icon.on;
     this.icon.on = null;
-    this.properties[this.onProperty] = null;
-    const payload = {
-      on: newValue,
-    };
-    fetch(this.displayedProperties[this.onProperty].href, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (response.status == 200) {
-        return response.json();
-      } else {
-        throw new Error(`Status ${response.status} trying to toggle switch`);
-      }
-    }).then((json) => {
-      this.onPropertyStatus(json);
-    }).catch((error) => {
+    this.model.setProperty('on', newValue).catch((error) => {
       console.error(`Error trying to toggle switch: ${error}`);
     });
   }

@@ -11,7 +11,6 @@
 'use strict';
 
 const page = require('./lib/page');
-const API = require('./api');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const App = require('./app');
@@ -25,6 +24,7 @@ const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
+const Constants = require('./constants');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -44,10 +44,75 @@ const ThingsScreen = {
     this.menuButton = document.getElementById('menu-button');
     this.backButton = document.getElementById('back-button');
     this.backRef = '/things';
-    window.addEventListener('_thingchange', this.showThings.bind(this));
     this.backButton.addEventListener('click', () => page(this.backRef));
     this.addButton.addEventListener('click',
                                     AddThingScreen.show.bind(AddThingScreen));
+    this.refreshThings = this.refreshThings.bind(this);
+    this.things = [];
+  },
+
+  renderThing: function(thingModel, description, format) {
+    let thing;
+    if (description.selectedCapability) {
+      switch (description.selectedCapability) {
+        case 'OnOffSwitch':
+          thing = new OnOffSwitch(thingModel, description, format);
+          break;
+        case 'MultiLevelSwitch':
+          thing = new MultiLevelSwitch(thingModel, description, format);
+          break;
+        case 'ColorControl':
+          thing = new ColorControl(thingModel, description, format);
+          break;
+        case 'EnergyMonitor':
+          thing = new EnergyMonitor(thingModel, description, format);
+          break;
+        case 'BinarySensor':
+          thing = new BinarySensor(thingModel, description, format);
+          break;
+        case 'MultiLevelSensor':
+          thing = new MultiLevelSensor(thingModel, description, format);
+          break;
+        case 'SmartPlug':
+          thing = new SmartPlug(thingModel, description, format);
+          break;
+        case 'Light':
+          thing = new Light(thingModel, description, format);
+          break;
+        default:
+          thing = new Thing(thingModel, description, format);
+          break;
+      }
+    } else {
+      switch (description.type) {
+        case 'onOffSwitch':
+          thing = new OnOffSwitch(thingModel, description, format);
+          break;
+        case 'binarySensor':
+          thing = new BinarySensor(thingModel, description, format);
+          break;
+        case 'multiLevelSensor':
+          thing = new MultiLevelSensor(thingModel, description, format);
+          break;
+        case 'onOffLight':
+        case 'onOffColorLight':
+        case 'dimmableLight':
+        case 'dimmableColorLight':
+          thing = new Light(thingModel, description, format);
+          break;
+        case 'multiLevelSwitch':
+          thing = new MultiLevelSwitch(thingModel, description, format);
+          break;
+        case 'smartPlug':
+          thing = new SmartPlug(thingModel, description, format);
+          break;
+        default:
+          thing = new Thing(thingModel, description, format);
+          break;
+      }
+    }
+    this.things.push(thing);
+    return thing;
   },
 
   /**
@@ -89,173 +154,51 @@ const ThingsScreen = {
     }
   },
 
+  refreshThings: function(things) {
+    let thing;
+    while (typeof (thing = this.things.pop()) !== 'undefined') {
+      thing.cleanup();
+    }
+    if (things.length === 0) {
+      this.thingsElement.innerHTML = this.NO_THINGS_MESSAGE;
+    } else {
+      this.thingsElement.innerHTML = '';
+      things.forEach((description, thingId) => {
+        App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+          this.renderThing(thingModel, description);
+        });
+      });
+    }
+  },
+
   /**
    * Display all connected web things.
    */
   showThings: function() {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
-    // Fetch a list of things from the server
-    fetch('/things', opts).then((response) => {
-      return response.json();
-    }).then((things) => {
-      if (things.length === 0) {
-        this.thingsElement.innerHTML = this.NO_THINGS_MESSAGE;
-      } else {
-        this.thingsElement.innerHTML = '';
-        things.forEach((description) => {
-          if (description.selectedCapability) {
-            switch (description.selectedCapability) {
-              case 'OnOffSwitch':
-                new OnOffSwitch(description);
-                break;
-              case 'MultiLevelSwitch':
-                new MultiLevelSwitch(description);
-                break;
-              case 'ColorControl':
-                new ColorControl(description);
-                break;
-              case 'EnergyMonitor':
-                new EnergyMonitor(description);
-                break;
-              case 'BinarySensor':
-                new BinarySensor(description);
-                break;
-              case 'MultiLevelSensor':
-                new MultiLevelSensor(description);
-                break;
-              case 'SmartPlug':
-                new SmartPlug(description);
-                break;
-              case 'Light':
-                new Light(description);
-                break;
-              default:
-                new Thing(description);
-                break;
-            }
-          } else {
-            switch (description.type) {
-              case 'onOffSwitch':
-                new OnOffSwitch(description);
-                break;
-              case 'onOffLight':
-              case 'onOffColorLight':
-              case 'dimmableLight':
-              case 'dimmableColorLight':
-                new Light(description);
-                break;
-              case 'binarySensor':
-                new BinarySensor(description);
-                break;
-              case 'multiLevelSensor':
-                new MultiLevelSensor(description);
-                break;
-              case 'multiLevelSwitch':
-                new MultiLevelSwitch(description);
-                break;
-              case 'smartPlug':
-                new SmartPlug(description);
-                break;
-              default:
-                new Thing(description);
-                break;
-            }
-          }
-        });
-      }
-    });
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
+    App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThings,
+      true);
   },
 
   /**
    * Display a single Thing.
    *
-   * @param {String} id The ID of the Thing to show.
+   * @param {String} thingId The ID of the Thing to show.
    */
-  showThing: function(id) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
+  showThing: function(thingId) {
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
+    App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
 
-    // Fetch a thing from the server
-    fetch(`/things/${encodeURIComponent(id)}`, opts).then((response) => {
-      if (response.status == 404) {
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-        return;
-      }
-      response.json().then((description) => {
-        if (!description) {
-          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-          return;
-        }
+    this.refreshThing = () => {
+      return App.gatewayModel.getThing(thingId).then(async (description) => {
         this.thingsElement.innerHTML = '';
-        let thing;
-        if (description.selectedCapability) {
-          switch (description.selectedCapability) {
-            case 'OnOffSwitch':
-              thing = new OnOffSwitch(description, 'htmlDetail');
-              break;
-            case 'MultiLevelSwitch':
-              thing = new MultiLevelSwitch(description, 'htmlDetail');
-              break;
-            case 'ColorControl':
-              thing = new ColorControl(description, 'htmlDetail');
-              break;
-            case 'EnergyMonitor':
-              thing = new EnergyMonitor(description, 'htmlDetail');
-              break;
-            case 'BinarySensor':
-              thing = new BinarySensor(description, 'htmlDetail');
-              break;
-            case 'MultiLevelSensor':
-              thing = new MultiLevelSensor(description, 'htmlDetail');
-              break;
-            case 'SmartPlug':
-              thing = new SmartPlug(description, 'htmlDetail');
-              break;
-            case 'Light':
-              thing = new Light(description, 'htmlDetail');
-              break;
-            default:
-              thing = new Thing(description, 'htmlDetail');
-              break;
-          }
-        } else {
-          switch (description.type) {
-            case 'onOffSwitch':
-              thing = new OnOffSwitch(description, 'htmlDetail');
-              break;
-            case 'binarySensor':
-              thing = new BinarySensor(description, 'htmlDetail');
-              break;
-            case 'multiLevelSensor':
-              thing = new MultiLevelSensor(description, 'htmlDetail');
-              break;
-            case 'onOffLight':
-            case 'onOffColorLight':
-            case 'dimmableLight':
-            case 'dimmableColorLight':
-              thing = new Light(description, 'htmlDetail');
-              break;
-            case 'multiLevelSwitch':
-              thing = new MultiLevelSwitch(description, 'htmlDetail');
-              break;
-            case 'smartPlug':
-              thing = new SmartPlug(description, 'htmlDetail');
-              break;
-            default:
-              thing = new Thing(description, 'htmlDetail');
-              break;
-          }
-        }
+
+        const thingModel = await App.gatewayModel.getThingModel(thingId);
+        const thing = this.renderThing(thingModel, description, 'htmlDetail');
 
         const iconEl = document.getElementById('thing-title-icon');
         const customIconEl = document.getElementById('thing-title-custom-icon');
@@ -279,8 +222,17 @@ const ThingsScreen = {
         }
 
         this.thingTitleElement.classList.remove('hidden');
+      }).catch((e) => {
+        console.error(`Thing id ${thingId} not found ${e}`);
+        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
       });
-    });
+    };
+
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThing,
+      true
+    );
   },
 
   /**
@@ -290,123 +242,108 @@ const ThingsScreen = {
    * @param {String} actionName The name of the action to show.
    */
   showActionInputForm: function(thingId, actionName) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
+    App.gatewayModel.getThing(thingId).then((description) => {
+      this.thingsElement.innerHTML = '';
 
-    // Fetch a thing from the server
-    fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
-      if (response.status == 404) {
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+      if (!description.hasOwnProperty('actions') ||
+          !description.actions.hasOwnProperty(actionName) ||
+          !description.actions[actionName].hasOwnProperty('input')) {
+        this.thingsElement.innerHTML = this.ACTION_NOT_FOUND_MESSAGE;
         return;
       }
 
-      response.json().then((description) => {
-        if (!description) {
-          this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-          return;
+      let href;
+      for (const link of description.links) {
+        if (link.rel === 'actions') {
+          href = link.href;
+          break;
         }
+      }
 
-        if (!description.hasOwnProperty('actions') ||
-            !description.actions.hasOwnProperty(actionName) ||
-            !description.actions[actionName].hasOwnProperty('input')) {
-          this.thingsElement.innerHTML = this.ACTION_NOT_FOUND_MESSAGE;
-          return;
-        }
-
-        let href;
-        for (const link of description.links) {
-          if (link.rel === 'actions') {
-            href = link.href;
+      let icon;
+      if (description.selectedCapability) {
+        switch (description.selectedCapability) {
+          case 'OnOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
             break;
-          }
+          case 'MultiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'ColorControl':
+            icon = '/optimized-images/thing-icons/color_control.svg';
+            break;
+          case 'EnergyMonitor':
+            icon = '/optimized-images/thing-icons/energy_monitor.svg';
+            break;
+          case 'BinarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'MultiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'SmartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          case 'Light':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'Custom':
+          default:
+            icon = '/optimized-images/thing-icons/thing.svg';
+            break;
         }
-
-        let icon;
-        if (description.selectedCapability) {
-          switch (description.selectedCapability) {
-            case 'OnOffSwitch':
-              icon = '/optimized-images/thing-icons/on_off_switch.svg';
-              break;
-            case 'MultiLevelSwitch':
-              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-              break;
-            case 'ColorControl':
-              icon = '/optimized-images/thing-icons/color_control.svg';
-              break;
-            case 'EnergyMonitor':
-              icon = '/optimized-images/thing-icons/energy_monitor.svg';
-              break;
-            case 'BinarySensor':
-              icon = '/optimized-images/thing-icons/binary_sensor.svg';
-              break;
-            case 'MultiLevelSensor':
-              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-              break;
-            case 'SmartPlug':
-              icon = '/optimized-images/thing-icons/smart_plug.svg';
-              break;
-            case 'Light':
-              icon = '/optimized-images/thing-icons/light.svg';
-              break;
-            case 'Custom':
-            default:
-              icon = '/optimized-images/thing-icons/thing.svg';
-              break;
-          }
-        } else {
-          switch (description.type) {
-            case 'onOffSwitch':
-              icon = '/optimized-images/thing-icons/on_off_switch.svg';
-              break;
-            case 'binarySensor':
-              icon = '/optimized-images/thing-icons/binary_sensor.svg';
-              break;
-            case 'multiLevelSensor':
-              icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-              break;
-            case 'onOffLight':
-            case 'onOffColorLight':
-            case 'dimmableLight':
-            case 'dimmableColorLight':
-              icon = '/optimized-images/thing-icons/light.svg';
-              break;
-            case 'multiLevelSwitch':
-              icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-              break;
-            case 'smartPlug':
-              icon = '/optimized-images/thing-icons/smart_plug.svg';
-              break;
-            default:
-              icon = '/optimized-images/thing-icons/thing.svg';
-              break;
-          }
+      } else {
+        switch (description.type) {
+          case 'onOffSwitch':
+            icon = '/optimized-images/thing-icons/on_off_switch.svg';
+            break;
+          case 'binarySensor':
+            icon = '/optimized-images/thing-icons/binary_sensor.svg';
+            break;
+          case 'multiLevelSensor':
+            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
+            break;
+          case 'onOffLight':
+          case 'onOffColorLight':
+          case 'dimmableLight':
+          case 'dimmableColorLight':
+            icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'multiLevelSwitch':
+            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
+            break;
+          case 'smartPlug':
+            icon = '/optimized-images/thing-icons/smart_plug.svg';
+            break;
+          default:
+            icon = '/optimized-images/thing-icons/thing.svg';
+            break;
         }
+      }
 
-        const iconEl = document.getElementById('thing-title-icon');
-        const customIconEl = document.getElementById('thing-title-custom-icon');
-        if (description.iconHref &&
-            description.selectedCapability === 'Custom') {
-          customIconEl.iconHref = description.iconHref;
-          customIconEl.classList.remove('hidden');
-          iconEl.classList.add('hidden');
-        } else {
-          iconEl.src = icon;
-          iconEl.classList.remove('hidden');
-          customIconEl.classList.add('hidden');
-        }
+      const iconEl = document.getElementById('thing-title-icon');
+      const customIconEl = document.getElementById('thing-title-custom-icon');
+      if (description.iconHref &&
+          description.selectedCapability === 'Custom') {
+        customIconEl.iconHref = description.iconHref;
+        customIconEl.classList.remove('hidden');
+        iconEl.classList.add('hidden');
+      } else {
+        iconEl.src = icon;
+        iconEl.classList.remove('hidden');
+        customIconEl.classList.add('hidden');
+      }
 
-        document.getElementById('thing-title-name').innerText =
-          description.name;
+      document.getElementById('thing-title-name').innerText =
+        description.name;
 
-        this.thingsElement.innerHTML = '';
-        new ActionInputForm(href, actionName,
-                            description.actions[actionName].label,
-                            description.actions[actionName].input);
-      });
+      this.thingsElement.innerHTML = '';
+      new ActionInputForm(href, actionName,
+                          description.actions[actionName].label,
+                          description.actions[actionName].input);
+    }).catch((e) => {
+      console.error(`Thing id ${thingId} not found ${e}`);
+      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
     });
   },
 
@@ -416,30 +353,17 @@ const ThingsScreen = {
    * @param {String} thingId The ID of the Thing to show.
    */
   showEvents: function(thingId) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
-    // Fetch a thing from the server
-    fetch(`/things/${encodeURIComponent(thingId)}`, opts).then((response) => {
-      if (response.status == 404) {
-        return Promise.resolve();
-      }
-
-      return response.json();
-    }).then((description) => {
-      if (!description) {
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
-        return;
-      }
-
+    if (typeof this.eventList !== 'undefined') {
+      this.eventList.cleanup();
+    }
+    App.gatewayModel.getThing(thingId).then(async (description) => {
+      this.thingsElement.innerHTML = '';
       if (!description.hasOwnProperty('events')) {
         this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
         return;
       }
+
+      const thingModel = await App.gatewayModel.getThingModel(thingId);
 
       let icon;
       if (description.selectedCapability) {
@@ -517,7 +441,10 @@ const ThingsScreen = {
       document.getElementById('thing-title-name').innerText = description.name;
 
       this.thingsElement.innerHTML = '';
-      new EventList(description);
+      this.eventList = new EventList(thingModel, description);
+    }).catch((e) => {
+      console.error(`Thing id ${thingId} not found ${e}`);
+      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
     });
   },
 };

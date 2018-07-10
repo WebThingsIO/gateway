@@ -27,23 +27,21 @@ class BrightnessDetail {
   }
 
   view() {
-    const brightness = this.thing.properties[this.name];
-
     return `
       <webthing-brightness-property data-name="${Utils.escapeHtml(this.label)}"
-        value="${Utils.escapeHtml(brightness)}" id="${this.id}">
+        value="0" id="${this.id}">
       </webthing-brightness-property>`;
   }
 
-  update() {
+  update(brightness) {
     if (!this.brightness) {
       return;
     }
 
-    if (this.thing.properties[this.name] == this.brightness.value) {
+    if (brightness == this.brightness.value) {
       return;
     }
-    this.brightness.value = this.thing.properties[this.name];
+    this.brightness.value = brightness;
   }
 
   set() {

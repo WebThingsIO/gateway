@@ -12,6 +12,8 @@
 // eslint-disable-next-line prefer-const
 let AssistantScreen;
 // eslint-disable-next-line prefer-const
+let GatewayModel;
+// eslint-disable-next-line prefer-const
 let ThingsScreen;
 // eslint-disable-next-line prefer-const
 let AddThingScreen;
@@ -73,6 +75,7 @@ const App = {
     this.overflowMenu = document.getElementById('overflow-menu');
     this.messageArea = document.getElementById('message-area');
     this.messageTimeout = null;
+    this.gatewayModel = new GatewayModel();
     Menu.init();
     Router.init();
   },
@@ -211,6 +214,7 @@ module.exports = App;
 
 // avoid circular dependency
 AssistantScreen = require('./assistant');
+GatewayModel = require('./models/gateway-model');
 ThingsScreen = require('./things');
 AddThingScreen = require('./add-thing');
 Menu = require('./menu');

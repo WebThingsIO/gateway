@@ -19,8 +19,9 @@ class BinarySensor extends Thing {
    * @param {Object} description Thing description object.
    * @param {String} format 'svg', 'html', or 'htmlDetail'.
    */
-  constructor(description, format) {
+  constructor(model, description, format) {
     super(
+      model,
       description,
       format,
       {

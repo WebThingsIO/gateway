@@ -68,12 +68,12 @@ class NumberDetail {
   /**
    * Update the detail view with the new property value.
    */
-  update() {
-    if (!this.input || this.thing.properties[this.name] == this.input.value) {
+  update(number) {
+    if (!this.input || number == this.input.value) {
       return;
     }
 
-    this.input.value = this.thing.properties[this.name];
+    this.input.value = number;
   }
 
   set() {

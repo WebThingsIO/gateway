@@ -29,21 +29,18 @@ class LabelDetail {
   view() {
     const name = Utils.escapeHtml(this.label);
     const unit = Utils.escapeHtml(this.unit);
-    const value = parseFloat(this.thing.properties[this.name]);
-    const data = value || 0;
-
     return `
-      <webthing-label-property data-value="${data}" data-name="${name}"
+      <webthing-label-property data-value="0" data-name="${name}"
         data-unit="${unit}" data-precision="${this.precision}" id="${this.id}">
       </webthing-label-property>`;
   }
 
-  update() {
+  update(value) {
     if (!this.label) {
       return;
     }
 
-    this.labelElement.value = parseFloat(this.thing.properties[this.name]) || 0;
+    this.labelElement.value = parseFloat(value) || 0;
   }
 }
 
