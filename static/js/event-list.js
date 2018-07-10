@@ -57,7 +57,7 @@ const EventList = function(model, description) {
   }
 
   this.onEvent = this.onEvent.bind(this);
-  this.model.subscribe(Constants.OCCUR_EVENT, this.onEvent);
+  this.model.subscribe(Constants.EVENT_OCCURRED, this.onEvent);
 
   // Update event timestamps every 10 seconds.
   setInterval(() => this.updateTimestamps(), 10000);
@@ -75,7 +75,7 @@ EventList.prototype.onEvent = function(data) {
 };
 
 EventList.prototype.cleanup = function() {
-  this.model.unsubscribe(Constants.OCCUR_EVENT, this.onEvent);
+  this.model.unsubscribe(Constants.EVENT_OCCURRED, this.onEvent);
 };
 
 EventList.prototype.render = function() {

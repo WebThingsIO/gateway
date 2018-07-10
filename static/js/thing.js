@@ -368,9 +368,9 @@ class Thing {
    * Update the status of Thing.
    */
   updateStatus() {
-    this.model.subscribe(Constants.STATE_PROPERTIES,
+    this.model.subscribe(Constants.PROPERTY_STATUS,
                          this.onPropertyStatus);
-    this.model.subscribe(Constants.OCCUR_EVENT, this.onEvent);
+    this.model.subscribe(Constants.EVENT_OCCURRED, this.onEvent);
   }
 
   /**
@@ -392,9 +392,9 @@ class Thing {
     while (typeof (listenr = this.listeners.pop()) !== 'undefined') {
       listenr.element.removeEventListener(listenr.event, listenr.handler);
     }
-    this.model.unsubscribe(Constants.STATE_PROPERTIES,
+    this.model.unsubscribe(Constants.PROPERTY_STATUS,
                            this.onPropertyStatus);
-    this.model.unsubscribe(Constants.OCCUR_EVENT, this.onEvent);
+    this.model.unsubscribe(Constants.EVENT_OCCURRED, this.onEvent);
   }
 
   /**

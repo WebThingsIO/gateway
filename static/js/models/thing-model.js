@@ -171,9 +171,9 @@ class ThingModel extends Model {
   subscribe(event, handler) {
     super.subscribe(event, handler);
     switch (event) {
-      case Constants.OCCUR_EVENT:
+      case Constants.EVENT_OCCURRED:
         break;
-      case Constants.STATE_PROPERTIES:
+      case Constants.PROPERTY_STATUS:
         handler(this.properties);
         break;
       default:
@@ -277,7 +277,7 @@ class ThingModel extends Model {
 
       this.properties[prop] = value;
     }
-    return this.handleEvent(Constants.STATE_PROPERTIES, this.properties);
+    return this.handleEvent(Constants.PROPERTY_STATUS, this.properties);
   }
 
   /**
@@ -316,7 +316,7 @@ class ThingModel extends Model {
       events[event] = data[event];
       this.events.push({[event]: data[event]});
     }
-    return this.handleEvent(Constants.OCCUR_EVENT, events);
+    return this.handleEvent(Constants.EVENT_OCCURRED, events);
   }
 }
 
