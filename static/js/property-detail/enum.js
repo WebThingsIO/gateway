@@ -40,12 +40,12 @@ class EnumDetail {
       </webthing-enum-property>`;
   }
 
-  update() {
-    if (!this.select || this.thing.properties[this.name] == this.select.value) {
+  update(value) {
+    if (!this.select || value == this.select.value) {
       return;
     }
 
-    this.select.value = this.thing.properties[this.name];
+    this.select.value = value;
   }
 
   set() {

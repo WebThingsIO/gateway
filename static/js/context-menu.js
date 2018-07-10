@@ -87,6 +87,10 @@ const ContextMenu = {
 
     switch (e.detail.action) {
       case 'edit': {
+        this.thingType.disabled = false;
+        this.nameInput.disabled = false;
+        this.saveButton.disabled = false;
+        this.customIconInput.disabled = false;
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
 
