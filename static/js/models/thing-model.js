@@ -78,12 +78,11 @@ class ThingModel extends Model {
           this.cleanup();
           resolve();
         } else {
-          console.error(`Error removing thing ${response.statusText}`);
-          reject();
+          reject(`Failed removing thing ${response.statusText}`);
         }
       }).catch((error) => {
-        console.error(`Error removing thing ${error}`);
-        reject();
+        console.error(error);
+        reject('Error occurred while removing thing');
       });
     });
   }
@@ -106,12 +105,11 @@ class ThingModel extends Model {
           console.log('Successfully updated Thing.');
           resolve();
         } else {
-          console.error(`Error updating thing ${response.statusText}`);
-          reject();
+          reject(`Failed updating thing ${response.statusText}`);
         }
       }).catch((error) => {
-        console.error(`Error updating thing ${error}`);
-        reject();
+        console.error(error);
+        reject('Error occurred while updating thing');
       });
     });
   }
@@ -185,7 +183,7 @@ class ThingModel extends Model {
   }
 
   /**
-   * Set value to the property.
+   * Set value of the property.
    *
    * @param {string} name - name of the property
    * @param {*} value - value of the property
@@ -193,7 +191,7 @@ class ThingModel extends Model {
    */
   setProperty(name, value) {
     if (!this.propertyDescriptions.hasOwnProperty(name)) {
-      return Promise.reject();
+      return Promise.reject(`Unavailable property name ${name}`);
     }
 
     switch (this.propertyDescriptions[name].type) {
@@ -221,16 +219,16 @@ class ThingModel extends Model {
     };
 
     return fetch(property.href, opts).then((response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json();
       } else {
         throw new Error(`Status ${response.status} trying to set ${name}`);
       }
     }).then((json) => {
       this.onPropertyStatus(json);
-    }).catch(function(error) {
-      console.error(`Error trying to set ${name}: ${error}`);
-      throw new Error();
+    }).catch((error) => {
+      console.error(error);
+      throw new Error(`Error trying to set ${name}`);
     });
   }
 

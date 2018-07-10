@@ -84,7 +84,7 @@ class GatewayModel extends Model {
     }
     return this.addQueue(() => {
       if (!this.thingModels.has(thingId)) {
-        throw new Error(`Thing id:${thingId} allready removed`);
+        throw new Error(`Thing id:${thingId} already removed`);
       }
       const thingModel = this.thingModels.get(thingId);
       return thingModel.removeThing().then(() => {
@@ -105,7 +105,7 @@ class GatewayModel extends Model {
     }
     return this.addQueue(() => {
       if (!this.thingModels.has(thingId)) {
-        throw new Error(`Thing id:${thingId} allready removed`);
+        throw new Error(`Thing id:${thingId} already removed`);
       }
       const thingModel = this.thingModels.get(thingId);
       return thingModel.updateThing(updates).then(() => {
