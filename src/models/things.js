@@ -48,6 +48,17 @@ const Things = {
   },
 
   /**
+   * Get the names of all things.
+   *
+   * @return {Promise<Array>} which resolves with a list of all thing names.
+   */
+  getThingNames: function() {
+    return this.getThings().then(function(things) {
+      return Array.from(things.values()).map((t) => t.name);
+    });
+  },
+
+  /**
    * Get Thing Descriptions for all Things stored in the database.
    *
    * @param {String} reqHost request host, if coming via HTTP
@@ -189,6 +200,26 @@ const Things = {
       } else {
         throw new Error(`Unable to find thing with id: ${id}`);
       }
+    });
+  },
+
+  /**
+   * Get a Thing by its name.
+   *
+   * @param {String} name The name of the Thing to get.
+   * @return {Promise<Thing>} A Thing object.
+   */
+  getThingByName: function(name) {
+    name = name.toLowerCase();
+
+    return this.getThings().then(function(things) {
+      for (const thing of things.values()) {
+        if (thing.name.toLowerCase() === name) {
+          return thing;
+        }
+      }
+
+      throw new Error(`Unable to find thing with name: ${name}`);
     });
   },
 
