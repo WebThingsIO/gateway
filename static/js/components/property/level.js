@@ -145,6 +145,9 @@ class LevelProperty extends BaseComponent {
     this._upgradeProperty('value');
     this._upgradeProperty('disabled');
 
+    // Set the initial number input value so that both inputs are set properly.
+    this._number.value = this.value;
+
     this._slider.addEventListener('change', this._onChange);
     this._form.addEventListener('submit', this._onSubmit);
     this._number.addEventListener('blur', this._onBlur);
