@@ -94,7 +94,6 @@ function startHttpsGateway() {
     });
     rulesEngineConfigure(httpsServer);
     console.log('HTTPS server listening on port', httpsServer.address().port);
-    commandParserConfigure(httpsServer);
   });
 
   // Redirect HTTP to HTTPS
@@ -120,7 +119,6 @@ function startHttpGateway() {
     });
     rulesEngineConfigure(httpServer);
     console.log('HTTP server listening on port', httpServer.address().port);
-    commandParserConfigure(httpServer);
   });
 }
 
@@ -164,21 +162,6 @@ function getOptions() {
   }
 
   return options;
-}
-
-/**
- * The command parser talks to the server over the public HTTP/WS API,
- * the gateway needs to configure it with a JWT and a server address
- * @param {http.Server|https.Server} server
- */
-function commandParserConfigure(server) {
-  const commandParser = require('./controllers/commands_controller.js');
-  let protocol = 'https';
-  if (server instanceof http.Server) {
-    protocol = 'http';
-  }
-  const gatewayHref = `${protocol}://127.0.0.1:${server.address().port}`;
-  commandParser.configure(gatewayHref);
 }
 
 /**

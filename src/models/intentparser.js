@@ -9,31 +9,47 @@
  */
 'use strict';
 
+const CommandUtils = require('../command-utils');
 const net = require('net');
 const IntentParser = {
 
-  keyword: 'turn,switch,make,change',
-  type: 'on,off,red,orange,yellow,green,white,blue,purple,magenta,pink',
+  keyword: [
+    'turn',
+    'switch',
+    'make',
+    'change',
+    'set',
+    'dim',
+    'brighten',
+  ].join(','),
+
+  type: Object.keys(CommandUtils.colors).
+    concat(Object.keys(CommandUtils.percentages)).
+    concat([
+      'on',
+      'off',
+      'red',
+      'warmer',
+      'cooler',
+    ]).join(','),
 
   /**
   * Interface train the intent parser
   */
-  train: function(data) {
+  train: function(things) {
     return new Promise((resolve, reject) => {
       const socket_client = new net.Socket();
       socket_client.connect(5555, '127.0.0.1', function() {
-        let things = '';
-        for (const key of Object.keys(data)) {
-          things += `${data[key].name},`;
-        }
         console.log('Connected to intent parser server');
+
         socket_client.on('data', function(data) {
           console.log(`Training result:${data}`);
           resolve(data);
         });
-        socket_client.write(`t:${IntentParser.keyword
-        }|${IntentParser.type}|${
-          things.slice(0, -1)}`);
+
+        things = things.join(',');
+        socket_client.write(
+          `t:${IntentParser.keyword}|${IntentParser.type}|${things}`);
       });
       socket_client.on('error', function(data) {
         console.log(`Training error:${data}`);
@@ -58,9 +74,9 @@ const IntentParser = {
             resolve({
               cmd: 'IOT',
               href: '',
-              param: jsonBody.Location,
-              param2: jsonBody.Type,
-              param3: jsonBody.Type,
+              thing: jsonBody.Location,
+              keyword: jsonBody.Keyword,
+              value: jsonBody.Type,
             });
           }
         });
