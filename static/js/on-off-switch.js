@@ -43,7 +43,7 @@ class OnOffSwitch extends Thing {
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
-      if (type === 'BooleanProperty') {
+      if (type === 'OnOffProperty') {
         this.onProperty = name;
         break;
       }
@@ -83,7 +83,7 @@ class OnOffSwitch extends Thing {
   handleClick() {
     const newValue = !this.icon.on;
     this.icon.on = null;
-    this.model.setProperty('on', newValue).catch((error) => {
+    this.model.setProperty(this.onProperty, newValue).catch((error) => {
       console.error(`Error trying to toggle switch: ${error}`);
     });
   }

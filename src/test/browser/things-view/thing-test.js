@@ -14,13 +14,15 @@ const Utils = require(`${STATIC_JS_PATH}/utils`);
 
 
 describe('Thing', () => {
-  it('should render a unknown-thing and be able to change properties',
+  it('should render an unknown-thing and be able to change properties',
      async () => {
        const browser = getBrowser();
        const desc = {
          id: 'UnknownThing',
          name: 'foofoo',
          type: 'thing',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': [],
          properties: {
            numberProp: {
              value: 10,
@@ -110,12 +112,14 @@ describe('Thing', () => {
        });
      });
 
-  it('should render a thing with spaced property name', async () => {
+  it('should render a thing with spaced property names', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'spacedPropertyThings',
       name: 'battery sensor',
       type: 'thing',
+      '@context': 'https://iot.mozilla.org/schemas',
+      '@type': [],
       properties: {
         'spaced number': {
           value: 10,
@@ -180,6 +184,8 @@ describe('Thing', () => {
       id: 'UnknownThing',
       name: 'foofoo',
       type: 'thing',
+      '@context': 'https://iot.mozilla.org/schemas',
+      '@type': [],
       properties: {
         rejectPropertyNum: {
           value: 10,
@@ -254,15 +260,17 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a onOffLight and be able to change properties',
+  it('should render an onOffLight and be able to change properties',
      async () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffLight',
          name: 'foofoo',
          type: 'onOffLight',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch', 'Light'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
@@ -282,27 +290,29 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
      });
 
-  it('should render a onOffSwitch and be able to change properties',
+  it('should render an onOffSwitch and be able to change properties',
      async () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffSwitch',
          name: 'foofoo',
          type: 'onOffSwitch',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
@@ -322,12 +332,12 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -342,13 +352,15 @@ describe('Thing', () => {
          id: 'dimmableLight',
          name: 'foofoo',
          type: 'dimmableLight',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch', 'Light'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
-           level: {
+           brightness: {
              '@type': 'BrightnessProperty',
              value: 0,
              type: 'number',
@@ -369,19 +381,19 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'level', 50);
+       await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -399,12 +411,12 @@ describe('Thing', () => {
        expect(on).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'on');
+         on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
          on = await onOffProperty.getValue();
          expect(on).toBeTruthy();
        });
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
@@ -416,32 +428,34 @@ describe('Thing', () => {
        expect(brightness).toEqual(50);
        await brightnessProperty.setValue(20);
        await waitForExpect(async () => {
-         brightness = await getProperty(desc.id, 'level');
+         brightness = await getProperty(desc.id, 'brightness');
          expect(brightness).toEqual(20);
          brightness = await brightnessProperty.getValue();
          expect(brightness).toEqual(20);
        });
-       await setProperty(desc.id, 'level', 60);
+       await setProperty(desc.id, 'brightness', 60);
        await waitForExpect(async () => {
          brightness = await brightnessProperty.getValue();
          expect(brightness).toEqual(60);
        });
      });
 
-  it('should render a onOffColorLight and be able to change properties',
+  it('should render an onOffColorLight and be able to change properties',
      async () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffColorLight',
          name: 'foofoo',
          type: 'onOffColorLight',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
-           color: {
+           rgb: {
              '@type': 'ColorProperty',
              value: '#ffffff',
              type: 'string',
@@ -461,19 +475,19 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'color', '#6789ab');
+       await setProperty(desc.id, 'rgb', '#6789ab');
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#6789ab');
        });
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -491,12 +505,12 @@ describe('Thing', () => {
        expect(on).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'on');
+         on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
          on = await onOffProperty.getValue();
          expect(on).toBeTruthy();
        });
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
@@ -510,19 +524,21 @@ describe('Thing', () => {
          id: 'dimmableColorLight',
          name: 'foofoo',
          type: 'dimmableColorLight',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
-           level: {
+           brightness: {
              '@type': 'BrightnessProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
            },
-           color: {
+           rgb: {
              '@type': 'ColorProperty',
              value: '#ffffff',
              type: 'string',
@@ -542,26 +558,26 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'level', 50);
+       await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
 
-       await setProperty(desc.id, 'color', '#56789a');
+       await setProperty(desc.id, 'rgb', '#56789a');
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#56789a');
        });
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -579,12 +595,12 @@ describe('Thing', () => {
        expect(on).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'on');
+         on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
          on = await onOffProperty.getValue();
          expect(on).toBeTruthy();
        });
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
@@ -596,12 +612,12 @@ describe('Thing', () => {
        expect(level).toEqual(50);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'level');
+         level = await getProperty(desc.id, 'brightness');
          expect(level).toEqual(20);
          level = await levelProperty.getValue();
          expect(level).toEqual(20);
        });
-       await setProperty(desc.id, 'level', 60);
+       await setProperty(desc.id, 'brightness', 60);
        await waitForExpect(async () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
@@ -615,13 +631,15 @@ describe('Thing', () => {
          id: 'multiLevelSwitch',
          name: 'foofoo',
          type: 'multiLevelSwitch',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['OnOffSwitch', 'MultiLevelSwitch'],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
-           level: {
+           percent: {
              '@type': 'LevelProperty',
              value: 0,
              type: 'number',
@@ -642,19 +660,19 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'level', 50);
+       await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -672,12 +690,12 @@ describe('Thing', () => {
        expect(on).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'on');
+         on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
          on = await onOffProperty.getValue();
          expect(on).toBeTruthy();
        });
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
@@ -689,12 +707,12 @@ describe('Thing', () => {
        expect(level).toEqual(50);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'level');
+         level = await getProperty(desc.id, 'percent');
          expect(level).toEqual(20);
          level = await levelProperty.getValue();
          expect(level).toEqual(20);
        });
-       await setProperty(desc.id, 'level', 60);
+       await setProperty(desc.id, 'percent', 60);
        await waitForExpect(async () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
@@ -708,37 +726,44 @@ describe('Thing', () => {
          id: 'smartPlug',
          name: 'foofoo',
          type: 'smartPlug',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': [
+           'OnOffSwitch',
+           'MultiLevelSwitch',
+           'SmartPlug',
+           'EnergyMonitor',
+         ],
          properties: {
-           on: {
+           power: {
              '@type': 'OnOffProperty',
              value: false,
              type: 'boolean',
            },
-           level: {
+           percent: {
              '@type': 'LevelProperty',
              value: 0,
              type: 'number',
              unit: 'percent',
            },
-           instantaneousPower: {
+           energyPower: {
              '@type': 'InstantaneousPowerProperty',
              value: 0,
              type: 'number',
              unit: 'watt',
            },
-           voltage: {
+           energyVoltage: {
              '@type': 'VoltageProperty',
              value: 0,
              type: 'number',
              unit: 'volt',
            },
-           current: {
+           energyCurrent: {
              '@type': 'CurrentProperty',
              value: 0,
              type: 'number',
              unit: 'ampere',
            },
-           frequency: {
+           energyFrequency: {
              '@type': 'FrequencyProperty',
              value: 0,
              type: 'number',
@@ -759,19 +784,19 @@ describe('Thing', () => {
 
        await things[0].click();
        await waitForExpect(async () => {
-         const on = await getProperty(desc.id, 'on');
+         const on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'instantaneousPower', 50);
+       await setProperty(desc.id, 'energyPower', 50);
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingPowerDisplayed();
          expect(level).toEqual('50 W');
        });
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -790,12 +815,12 @@ describe('Thing', () => {
        expect(on).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'on');
+         on = await getProperty(desc.id, 'power');
          expect(on).toBeTruthy();
          on = await onOffProperty.getValue();
          expect(on).toBeTruthy();
        });
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
@@ -807,12 +832,12 @@ describe('Thing', () => {
        expect(level).toEqual(0);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'level');
+         level = await getProperty(desc.id, 'percent');
          expect(level).toEqual(20);
          level = await levelProperty.getValue();
          expect(level).toEqual(20);
        });
-       await setProperty(desc.id, 'level', 60);
+       await setProperty(desc.id, 'percent', 60);
        await waitForExpect(async () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
@@ -822,7 +847,7 @@ describe('Thing', () => {
        const powerProperty = await detailPage.powerProperty();
        let power = await powerProperty.getDisplayedText();
        expect(power).toEqual('50W');
-       await setProperty(desc.id, 'instantaneousPower', 60);
+       await setProperty(desc.id, 'energyPower', 60);
        await waitForExpect(async () => {
          power = await powerProperty.getDisplayedText();
          expect(power).toEqual('60W');
@@ -832,7 +857,7 @@ describe('Thing', () => {
        const voltageProperty = await detailPage.voltageProperty();
        let voltage = await voltageProperty.getDisplayedText();
        expect(voltage).toEqual('0V');
-       await setProperty(desc.id, 'voltage', 30);
+       await setProperty(desc.id, 'energyVoltage', 30);
        await waitForExpect(async () => {
          voltage = await voltageProperty.getDisplayedText();
          expect(voltage).toEqual('30V');
@@ -842,7 +867,7 @@ describe('Thing', () => {
        const currentProperty = await detailPage.currentProperty();
        let current = await currentProperty.getDisplayedText();
        expect(current).toEqual('0.0A');
-       await setProperty(desc.id, 'current', 40);
+       await setProperty(desc.id, 'energyCurrent', 40);
        await waitForExpect(async () => {
          current = await currentProperty.getDisplayedText();
          expect(current).toEqual('40.0A');
@@ -852,7 +877,7 @@ describe('Thing', () => {
        const frequencyProperty = await detailPage.frequencyProperty();
        let frequency = await frequencyProperty.getDisplayedText();
        expect(frequency).toEqual('0Hz');
-       await setProperty(desc.id, 'frequency', 10);
+       await setProperty(desc.id, 'energyFrequency', 10);
        await waitForExpect(async () => {
          frequency = await frequencyProperty.getDisplayedText();
          expect(frequency).toEqual('10Hz');
@@ -866,8 +891,10 @@ describe('Thing', () => {
          id: 'binarySensor',
          name: 'foofoo',
          type: 'binarySensor',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['BinarySensor'],
          properties: {
-           on: {
+           active: {
              '@type': 'BooleanProperty',
              value: false,
              type: 'boolean',
@@ -885,10 +912,10 @@ describe('Thing', () => {
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
 
-       await setProperty(desc.id, 'on', true);
+       await setProperty(desc.id, 'active', true);
        await thingsPage.waitForOnThings();
 
-       await setProperty(desc.id, 'on', false);
+       await setProperty(desc.id, 'active', false);
        await thingsPage.waitForOffThings();
 
        things = await thingsPage.things();
@@ -903,13 +930,15 @@ describe('Thing', () => {
          id: 'multiLevelSensor',
          name: 'foofoo',
          type: 'multiLevelSensor',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['MultiLevelSensor'],
          properties: {
-           on: {
+           active: {
              '@type': 'BooleanProperty',
              value: false,
              type: 'boolean',
            },
-           level: {
+           percent: {
              '@type': 'LevelProperty',
              value: 0,
              type: 'number',
@@ -928,7 +957,7 @@ describe('Thing', () => {
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
 
-       await setProperty(desc.id, 'level', 50);
+       await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
          things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();

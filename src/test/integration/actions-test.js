@@ -21,8 +21,14 @@ describe('actions/', function() {
     id: 'light',
     name: 'light',
     type: 'onOffLight',
+    '@context': 'https://iot.mozilla.org/schemas',
+    '@type': ['OnOffSwitch', 'Light'],
     properties: {
-      on: {type: 'boolean', value: false},
+      power: {
+        '@type': 'OnOffProperty',
+        type: 'boolean',
+        value: false,
+      },
     },
     actions: {
       blink: {
