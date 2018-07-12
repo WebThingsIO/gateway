@@ -57,6 +57,8 @@ const SettingsScreen = {
   },
 
   show: function(section, subsection, id) {
+    document.getElementById('speech-wrapper').classList.remove('assistant');
+
     this.backButton.href = '/settings';
     this.titleElement.classList.remove('hidden');
     this.titleElement.classList.remove('dark');
