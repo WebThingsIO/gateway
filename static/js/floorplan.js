@@ -167,7 +167,7 @@ const FloorplanScreen = {
 
   show: function() {
     window.addEventListener('resize', this.onResize);
-
+    document.getElementById('speech-wrapper').classList.remove('assistant');
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
