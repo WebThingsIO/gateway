@@ -159,7 +159,7 @@ const ThingsScreen = {
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
     }
-    if (things.length === 0) {
+    if (things.size === 0) {
       this.thingsElement.innerHTML = this.NO_THINGS_MESSAGE;
     } else {
       this.thingsElement.innerHTML = '';
