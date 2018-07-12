@@ -72,7 +72,7 @@ class Thing {
     this.displayedActions = this.displayedActions || {};
 
     if (format === 'svg') {
-      this.container = document.getElementById('floorplan-things');
+      this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
     } else {
@@ -235,9 +235,7 @@ class Thing {
     this.findProperties();
     this.element = this.render(format);
 
-    if (format === 'svg') {
-      return;
-    } else if (format === 'htmlDetail') {
+    if (format === 'htmlDetail') {
       this.attachHtmlDetail();
     }
 
@@ -447,17 +445,19 @@ class Thing {
    * SVG view for Thing.
    */
   svgView() {
-    return `<g transform="translate(${this.x},${this.y})"
-              dragx="${this.x}" dragy="${this.y}"
-              class="floorplan-thing">
-              <a xlink:href="${encodeURI(this.href)}?referrer=%2Ffloorplan"
-                 class="svg-thing-link">
-                <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
-                <image x="-5" y="-5" width="10" height="10"
-                  xlink:href="${encodeURI(this.baseIcon)}" />
-                ${this.makeWrappedSVGText(this.name).outerHTML}
-              </a>
-            </g>`;
+    return `<div
+        style="transform: translate(${this.x}vmin,${this.y}vmin) scale(0.5) translate(-50%, -50%)"
+        class="floorplan-thing"
+        data-x="${this.x}"
+        data-y="${this.y}"
+        data-href="${encodeURI(this.href)}"
+        >
+      <a href="${encodeURI(this.href)}?referrer=%2ffloorplan"
+         class="floorplan-thing-link">
+      </a>
+      ${this.iconView()}
+      <div class="floorplan-thing-name">${Utils.escapeHtml(this.name)}</div>
+    </div>`;
   }
 
   /**
@@ -466,17 +466,13 @@ class Thing {
    * @param {String} format 'svg' or 'html'.
    */
   render(format) {
-    let element;
+    const element = document.createElement('div');
     if (format == 'svg') {
-      element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       element.innerHTML = this.svgView().trim();
+    } else if (format == 'htmlDetail') {
+      element.innerHTML = this.htmlDetailView().trim();
     } else {
-      element = document.createElement('div');
-      if (format == 'htmlDetail') {
-        element.innerHTML = this.htmlDetailView().trim();
-      } else {
-        element.innerHTML = this.htmlView().trim();
-      }
+      element.innerHTML = this.htmlView().trim();
     }
     return this.container.appendChild(element.firstChild);
   }

@@ -20,6 +20,37 @@
   background-position: center;
 }
 
+.floorplan-thing {
+  position: absolute;
+  font-size: 2rem;
+  width: 12.8rem;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+.floorplan-thing-link {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.0);
+  z-index: 10;
+}
+
+#floorplan.editing .floorplan-thing-link {
+  display: none;
+}
+
+.floorplan-thing-name {
+  margin-top: 0.5rem;
+  max-height: 6rem;
+  overflow: hidden;
+}
+
 #floorplan-edit-button {
   bottom: 2rem;
   right: 2rem;
