@@ -491,6 +491,8 @@ const RuleScreen = {
   },
 
   show: function(ruleId) {
+    document.getElementById('speech-wrapper').classList.remove('assistant');
+
     this.rule = null;
     this.ruleEffectType = 'PulseEffect';
 
