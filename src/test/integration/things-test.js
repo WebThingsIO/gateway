@@ -30,8 +30,14 @@ const TEST_THING = {
   id: 'test-1',
   type: 'onOffSwitch',
   name: 'test-1',
+  '@context': 'https://iot.mozilla.org/schemas',
+  '@type': ['OnOffSwitch'],
   properties: {
-    on: {type: 'boolean', value: false},
+    power: {
+      '@type': 'OnOffProperty',
+      type: 'boolean',
+      value: false,
+    },
   },
 };
 
@@ -39,8 +45,14 @@ const piDescr = {
   id: 'pi-1',
   type: 'thing',
   name: 'pi-1',
+  '@context': 'https://iot.mozilla.org/schemas',
+  '@type': ['OnOffSwitch'],
   properties: {
-    on: {type: 'boolean', value: true},
+    power: {
+      '@type': 'OnOffProperty',
+      type: 'boolean',
+      value: true,
+    },
   },
   actions: {
     reboot: {
@@ -212,13 +224,13 @@ describe('things/', function() {
   it('GET a property of a thing', async () => {
     await addDevice();
     const res = await chai.request(server)
-      .get(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .get(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('on');
-    expect(res.body.on).toEqual(false);
+    expect(res.body).toHaveProperty('power');
+    expect(res.body.power).toEqual(false);
   });
 
   it('fail to GET a non-existant property of a thing', async () => {
@@ -232,7 +244,7 @@ describe('things/', function() {
 
   it('fail to GET a property of a non-existent thing', async () => {
     const err = await pFinal(chai.request(server)
-      .get(`${Constants.THINGS_PATH}/test-1a/properties/on`)
+      .get(`${Constants.THINGS_PATH}/test-1a/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt)));
     expect(err.response.status).toEqual(500);
@@ -241,7 +253,7 @@ describe('things/', function() {
   it('fail to set a property of a thing', async () => {
     await addDevice();
     const err = await pFinal(chai.request(server)
-      .put(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({}));
@@ -250,7 +262,7 @@ describe('things/', function() {
 
   it('fail to set a property of a thing', async () => {
     const err = await pFinal(chai.request(server)
-      .put(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({abc: true}));
@@ -260,26 +272,26 @@ describe('things/', function() {
   it('set a property of a thing', async () => {
     await addDevice();
     const on = await chai.request(server)
-      .put(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({on: true});
+      .send({power: true});
 
     expect(on.status).toEqual(200);
-    expect(on.body).toHaveProperty('on');
-    expect(on.body.on).toEqual(true);
+    expect(on.body).toHaveProperty('power');
+    expect(on.body.power).toEqual(true);
 
 
     // Flip it back to off...
     const off = await chai.request(server)
-      .put(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({on: false});
+      .send({power: false});
 
     expect(off.status).toEqual(200);
-    expect(off.body).toHaveProperty('on');
-    expect(off.body.on).toEqual(false);
+    expect(off.body).toHaveProperty('power');
+    expect(off.body.power).toEqual(false);
   });
 
   it('set x and y coordinates of a thing', async () => {
@@ -530,14 +542,14 @@ describe('things/', function() {
     const [messages, res] = await Promise.all([
       webSocketRead(ws, 1),
       chai.request(server)
-        .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/on`)
+        .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt))
-        .send({on: true}),
+        .send({power: true}),
     ]);
     expect(res.status).toEqual(200);
     expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
-    expect(messages[0].data.on).toEqual(true);
+    expect(messages[0].data.power).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -550,18 +562,18 @@ describe('things/', function() {
     await webSocketSend(ws, {
       messageType: Constants.SET_PROPERTY,
       data: {
-        on: true,
+        power: true,
       },
     });
 
     const on = await chai.request(server)
-      .get(`${Constants.THINGS_PATH}/test-1/properties/on`)
+      .get(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(on.status).toEqual(200);
-    expect(on.body).toHaveProperty('on');
-    expect(on.body.on).toEqual(true);
+    expect(on.body).toHaveProperty('power');
+    expect(on.body.power).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -647,23 +659,23 @@ describe('things/', function() {
        // WS correctly received both of test-1's statuses.
        const [res, messages] = await Promise.all([
          chai.request(server)
-           .put(`${Constants.THINGS_PATH}/${otherThingId}/properties/on`)
+           .put(`${Constants.THINGS_PATH}/${otherThingId}/properties/power`)
            .set('Accept', 'application/json')
            .set(...headerAuth(jwt))
-           .send({on: true}).then(() => {
+           .send({power: true}).then(() => {
              return chai.request(server)
                .put(`${Constants.THINGS_PATH}/${TEST_THING.id
-               }/properties/on`)
+               }/properties/power`)
                .set('Accept', 'application/json')
                .set(...headerAuth(jwt))
-               .send({on: true});
+               .send({power: true});
            }).then(() => {
              return chai.request(server)
                .put(`${Constants.THINGS_PATH}/${TEST_THING.id
-               }/properties/on`)
+               }/properties/power`)
                .set('Accept', 'application/json')
                .set(...headerAuth(jwt))
-               .send({on: false});
+               .send({power: false});
            }),
          webSocketRead(ws, 2),
        ]);
@@ -671,10 +683,10 @@ describe('things/', function() {
        expect(res.status).toEqual(200);
 
        expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[0].data.on).toEqual(true);
+       expect(messages[0].data.power).toEqual(true);
 
        expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[1].data.on).toEqual(false);
+       expect(messages[1].data.power).toEqual(false);
 
        await webSocketClose(ws);
      });

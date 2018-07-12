@@ -6,6 +6,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * Mapping of CSS color names (in human-readable form) to hex colors.
+ */
 const colors = {
   black: '#000000',
   silver: '#c0c0c0',
@@ -157,6 +160,9 @@ const colors = {
   'rebecca purple': '#663399',
 };
 
+/**
+ * Mapping of percentages (in human-readable form) to numbers.
+ */
 const percentages = {
   'zero percent': 0,
   'one percent': 1,
@@ -283,7 +289,30 @@ const percentages = {
   'one hundred percent': 100,
 };
 
+/**
+ * Find a property of a thing by its expected @type.
+ *
+ * @param {Object} thing Thing to search
+ * @param {String} type Expected @type value
+ * @param {String?} fallbackName Fallback name for legacy devices
+ * @returns {String} property name
+ */
+function findProperty(thing, propType, fallbackName) {
+  for (const prop in thing.properties) {
+    if (thing.properties[prop]['@type'] === propType) {
+      return prop;
+    }
+  }
+
+  if (thing.properties.hasOwnProperty(fallbackName)) {
+    return fallbackName;
+  }
+
+  return null;
+}
+
 module.exports = {
   colors,
   percentages,
+  findProperty,
 };

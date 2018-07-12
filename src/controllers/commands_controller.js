@@ -78,26 +78,38 @@ CommandsController.post('/', async (request, response) => {
   if (thing) {
     let propertyName, value;
 
-    if (payload.value === 'on' || payload.value === 'off') {
-      propertyName = 'on';
+    const properties = {
+      on: CommandUtils.findProperty(thing, 'OnOffProperty', 'on'),
+      color: CommandUtils.findProperty(thing, 'ColorProperty', 'color'),
+      colorTemperature: CommandUtils.findProperty(thing,
+                                                  'ColorTemperatureProperty',
+                                                  'colorTemperature'),
+      level: CommandUtils.findProperty(thing, 'LevelProperty', 'level'),
+      brightness: CommandUtils.findProperty(thing,
+                                            'BrightnessProperty',
+                                            'level'),
+    };
+
+    if (['on', 'off'].includes(payload.value) && properties.on) {
+      propertyName = properties.on;
       value = payload.value === 'on';
-    } else if ((payload.value === 'warmer' ||
-                payload.value === 'cooler') &&
-               thing.properties.colorTemperature) {
+    } else if (['warmer', 'cooler'].includes(payload.value) &&
+               properties.colorTemperature) {
+      propertyName = properties.colorTemperature;
+
       let current;
       try {
-        current = await AddonManager.getProperty(thing.id, 'colorTemperature');
+        current = await AddonManager.getProperty(thing.id, propertyName);
       } catch (e) {
         response.status(400).json({message: 'Failed to set property'});
         return;
       }
 
-      propertyName = 'colorTemperature';
       value = payload.value === 'warmer' ? current - 100 : current + 100;
-    } else if (((payload.keyword === 'dim' || payload.keyword === 'brighten') ||
+    } else if ((['dim', 'brighten'].includes(payload.keyword) ||
                 CommandUtils.percentages.hasOwnProperty(payload.value)) &&
-               thing.properties.level) {
-      propertyName = 'level';
+               properties.brightness) {
+      propertyName = properties.brightness;
 
       const percent =
         payload.value ? CommandUtils.percentages[payload.value] : 10;
@@ -107,7 +119,7 @@ CommandsController.post('/', async (request, response) => {
       } else if (payload.keyword === 'dim' || payload.keyword === 'brighten') {
         let current;
         try {
-          current = await AddonManager.getProperty(thing.id, 'level');
+          current = await AddonManager.getProperty(thing.id, propertyName);
         } catch (e) {
           response.status(400).json({message: 'Failed to set property'});
           return;
@@ -120,8 +132,8 @@ CommandsController.post('/', async (request, response) => {
         }
       }
     } else if (CommandUtils.colors.hasOwnProperty(payload.value) &&
-               thing.properties.color) {
-      propertyName = 'color';
+               properties.color) {
+      propertyName = properties.color;
       value = CommandUtils.colors[payload.value];
     } else {
       response.status(400).json({message: 'Command not found'});

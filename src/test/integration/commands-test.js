@@ -23,25 +23,31 @@ const JSONWebToken = require('../../models/jsonwebtoken');
 
 const TEST_THING = {
   id: 'test-1',
-  type: 'onOffSwitch',
+  type: 'dimmableColorLight',
   name: 'kitchen',
+  '@context': 'https://iot.mozilla.org/schemas',
+  '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
   properties: {
-    on: {
+    power: {
+      '@type': 'OnOffProperty',
       type: 'boolean',
       value: false,
     },
-    color: {
+    rgb: {
+      '@type': 'ColorProperty',
       type: 'string',
       value: '#ffffff',
     },
-    colorTemperature: {
+    temperature: {
+      '@type': 'ColorTemperatureProperty',
       type: 'number',
       minimum: 2000,
       maximum: 6500,
       value: 3000,
       unit: 'kelvin',
     },
-    level: {
+    brightness: {
+      '@type': 'BrightnessProperty',
       type: 'number',
       minimum: 0,
       maximum: 100,
@@ -123,7 +129,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'on')).toEqual(true);
+      expect(await getProperty(TEST_THING.id, 'power')).toEqual(true);
     });
 
     res = await chai.request(server)
@@ -134,7 +140,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'on')).toEqual(false);
+      expect(await getProperty(TEST_THING.id, 'power')).toEqual(false);
     });
   });
 
@@ -150,7 +156,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'color')).toEqual(
+      expect(await getProperty(TEST_THING.id, 'rgb')).toEqual(
         CommandUtils.colors.red);
     });
   });
@@ -167,8 +173,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'colorTemperature')).toEqual(
-        2900);
+      expect(await getProperty(TEST_THING.id, 'temperature')).toEqual(2900);
     });
 
     res = await chai.request(server)
@@ -179,8 +184,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'colorTemperature')).toEqual(
-        3000);
+      expect(await getProperty(TEST_THING.id, 'temperature')).toEqual(3000);
     });
   });
 
@@ -196,7 +200,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'level')).toEqual(60);
+      expect(await getProperty(TEST_THING.id, 'brightness')).toEqual(60);
     });
 
     res = await chai.request(server)
@@ -207,7 +211,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'level')).toEqual(50);
+      expect(await getProperty(TEST_THING.id, 'brightness')).toEqual(50);
     });
 
     res = await chai.request(server)
@@ -218,7 +222,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'level')).toEqual(20);
+      expect(await getProperty(TEST_THING.id, 'brightness')).toEqual(20);
     });
 
     res = await chai.request(server)
@@ -229,7 +233,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'level')).toEqual(70);
+      expect(await getProperty(TEST_THING.id, 'brightness')).toEqual(70);
     });
 
     res = await chai.request(server)
@@ -240,7 +244,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'level')).toEqual(43);
+      expect(await getProperty(TEST_THING.id, 'brightness')).toEqual(43);
     });
   });
 
@@ -275,7 +279,7 @@ describe('command/', function() {
     expect(res.status).toEqual(201);
 
     await waitForExpect(async () => {
-      expect(await getProperty(TEST_THING.id, 'on')).toEqual(true);
+      expect(await getProperty(TEST_THING.id, 'power')).toEqual(true);
     });
   });
 });

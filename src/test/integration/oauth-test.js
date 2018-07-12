@@ -24,8 +24,11 @@ const TEST_THING = {
   id: 'test-1',
   type: 'onOffSwitch',
   name: 'kitchen',
+  '@context': 'https://iot.mozilla.org/schemas',
+  '@type': ['OnOffSwitch'],
   properties: {
-    on: {
+    power: {
+      '@type': 'OnOffProperty',
       type: 'boolean',
       value: false,
     },
