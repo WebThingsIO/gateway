@@ -22,12 +22,17 @@
 
 .floorplan-thing {
   position: absolute;
-  font-size: 2rem;
+  font-size: 2.4rem;
   width: 12.8rem;
+  height: 12.8rem;
   text-align: center;
   color: white;
   cursor: pointer;
   user-select: none;
+}
+
+#floorplan.editing .floorplan-thing {
+  cursor: grab;
 }
 
 .floorplan-thing-link {
@@ -49,7 +54,14 @@
   margin-top: 0.5rem;
   max-height: 6rem;
   overflow: hidden;
+  display: none;
+  text-shadow: 0.1rem 0.1rem 0.2rem black;
 }
+
+#floorplan.editing .floorplan-thing-name {
+  display: block;
+}
+
 
 #floorplan-edit-button {
   bottom: 2rem;

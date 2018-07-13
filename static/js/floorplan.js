@@ -345,6 +345,7 @@ const FloorplanScreen = {
       point.x - parseFloat(this.selectedThing.dataset.x);
     this.pointerOffsetY =
       point.y - parseFloat(this.selectedThing.dataset.y);
+    this.selectedThing.style.cursor = 'grabbing';
   },
 
   /**
@@ -358,6 +359,7 @@ const FloorplanScreen = {
     const x = parseFloat(thing.dataset.x);
     const y = parseFloat(thing.dataset.y);
     const thingUrl = thing.dataset.href;
+    thing.style.cursor = '';
 
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
     const payload = {
@@ -422,7 +424,7 @@ const FloorplanScreen = {
    * @return {String}
    */
   makeTransform: function(x, y) {
-    const scaleFactor = 8 * this.vmin / 128;
+    const scaleFactor = 10 * this.vmin / 128;
     const translate = `translate(${x}vmin,${y}vmin)`;
     const scale = `scale(${scaleFactor})`;
     return `${translate} translate(-50%, -50%) ${scale}`;
