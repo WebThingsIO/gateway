@@ -653,7 +653,9 @@ const SettingsScreen = {
 
       Array.from(this.availableAddons.entries())
         .sort((a, b) => a[1].displayName.localeCompare(b[1].displayName))
-        .forEach((x) => new DiscoveredAddon(x[1]));
+        .forEach((x) => new DiscoveredAddon(x[1],
+                                            this.installedAddons,
+                                            this.availableAddons));
     });
   },
 

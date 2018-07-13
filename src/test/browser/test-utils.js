@@ -1,12 +1,12 @@
 const fs = require('fs');
-const Constants = require('../../../constants');
-const {server, chai, mockAdapter} = require('../../common');
-const {getBrowser} = require('../browser-common');
+const Constants = require('../../constants');
+const {server, chai, mockAdapter} = require('../common');
+const {getBrowser} = require('./browser-common');
 const {
   TEST_USER,
   createUser,
   headerAuth,
-} = require('../../user');
+} = require('../user');
 
 let jwt;
 
@@ -19,6 +19,26 @@ beforeEach(async () => {
   await browser.setValue('#password', TEST_USER.password);
   await browser.click('#login-button');
 });
+
+module.exports.getAddons = async function() {
+  const res = await chai.request(server)
+    .get(`${Constants.ADDONS_PATH}`)
+    .set('Accept', 'application/json')
+    .set(...headerAuth(jwt));
+
+  const installedAddons = new Map();
+  // Store a map of name->version.
+  for (const s of res.body) {
+    try {
+      const settings = JSON.parse(s.value);
+      installedAddons.set(settings.name, settings);
+    } catch (err) {
+      console.error(`Failed to parse add-on settings: ${err}`);
+    }
+  }
+  return installedAddons;
+};
+
 
 module.exports.addThing = async function(desc) {
   const {id} = desc;

@@ -144,7 +144,9 @@ AddonsController.post('/', async (request, response) => {
 
   try {
     await AddonManager.installAddonFromUrl(name, url, checksum, true);
-    response.sendStatus(200);
+    const key = `addons.${name}`;
+    const savedSettings = await Settings.get(key);
+    response.status(200).json(savedSettings);
   } catch (e) {
     response.status(400).send(e);
   }

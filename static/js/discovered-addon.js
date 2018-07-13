@@ -17,7 +17,8 @@ const Utils = require('./utils');
  *
  * @param Object description DiscoveredAddon metadata object.
  */
-const DiscoveredAddon = function(metadata) {
+const DiscoveredAddon = function(metadata, installedAddonsMap,
+                                 availableAddonsMap) {
   this.name = metadata.name;
   this.displayName = metadata.displayName;
   this.description = metadata.description;
@@ -27,6 +28,8 @@ const DiscoveredAddon = function(metadata) {
   this.url = metadata.url;
   this.checksum = metadata.checksum;
   this.installed = metadata.installed;
+  this.installedAddonsMap = installedAddonsMap;
+  this.availableAddonsMap = availableAddonsMap;
   this.container = document.getElementById('discovered-addons-list');
   this.render();
 };
@@ -93,9 +96,14 @@ DiscoveredAddon.prototype.handleInstall = function(e) {
   controlDiv.innerHTML = installing;
 
   API.installAddon(this.name, this.url, this.checksum)
-    .then(() => {
+    .then((settings) => {
       const el = '<span class="addon-discovery-settings-added">Added</span>';
       controlDiv.innerHTML = el;
+      const addon = this.availableAddonsMap.get(this.name);
+      if (addon) {
+        addon.installed = true;
+      }
+      this.installedAddonsMap.set(this.name, settings);
     })
     .catch((err) => {
       console.error(`Failed to install add-on: ${this.name}\n${err}`);
