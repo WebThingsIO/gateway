@@ -3,7 +3,7 @@ const {
   addThing,
   getProperty,
   setProperty,
-} = require('./test-utils');
+} = require('../test-utils');
 
 const {waitForExpect} = require('../../expect-utils');
 const ThingsPage = require('../page-object/things-page');

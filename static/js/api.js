@@ -283,6 +283,7 @@ const API = {
       if (!response.ok) {
         throw new Error('Unexpected response code while installing add-on.');
       }
+      return response.json();
     });
   },
 
