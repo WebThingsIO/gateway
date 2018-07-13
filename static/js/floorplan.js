@@ -90,58 +90,66 @@ const FloorplanScreen = {
         if (description.selectedCapability) {
           switch (description.selectedCapability) {
             case 'OnOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'svg');
+              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'MultiLevelSwitch':
-              thing = new MultiLevelSwitch(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'ColorControl':
-              thing = new ColorControl(thingModel, description, 'svg');
+              thing =
+                new ColorControl(thingModel, description, 'htmlFloorplan');
               break;
             case 'EnergyMonitor':
-              thing = new EnergyMonitor(thingModel, description, 'svg');
+              thing =
+                new EnergyMonitor(thingModel, description, 'htmlFloorplan');
               break;
             case 'BinarySensor':
-              thing = new BinarySensor(thingModel, description, 'svg');
+              thing =
+                new BinarySensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'MultiLevelSensor':
-              thing = new MultiLevelSensor(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'SmartPlug':
-              thing = new SmartPlug(thingModel, description, 'svg');
+              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
               break;
             case 'Light':
-              thing = new Light(thingModel, description, 'svg');
+              thing = new Light(thingModel, description, 'htmlFloorplan');
               break;
             default:
-              thing = new Thing(thingModel, description, 'svg');
+              thing = new Thing(thingModel, description, 'htmlFloorplan');
               break;
           }
         } else {
           switch (description.type) {
             case 'onOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'svg');
+              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'onOffLight':
             case 'onOffColorLight':
             case 'dimmableLight':
             case 'dimmableColorLight':
-              thing = new Light(thingModel, description, 'svg');
+              thing = new Light(thingModel, description, 'htmlFloorplan');
               break;
             case 'binarySensor':
-              thing = new BinarySensor(thingModel, description, 'svg');
+              thing =
+                new BinarySensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'multiLevelSensor':
-              thing = new MultiLevelSensor(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'multiLevelSwitch':
-              thing = new MultiLevelSwitch(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'smartPlug':
-              thing = new SmartPlug(thingModel, description, 'svg');
+              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
               break;
             default:
-              thing = new Thing(thingModel, description, 'svg');
+              thing = new Thing(thingModel, description, 'htmlFloorplan');
               break;
           }
         }

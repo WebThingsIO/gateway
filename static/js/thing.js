@@ -35,7 +35,7 @@ class Thing {
    * Thing constructor.
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'svg', 'html', or 'htmlDetail'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
@@ -71,7 +71,7 @@ class Thing {
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
 
-    if (format === 'svg') {
+    if (format === 'htmlFloorplan') {
       this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
@@ -396,55 +396,10 @@ class Thing {
   }
 
   /**
-   * Generate a wrapped svg text element containing the provided text
-   * @param {String} text
-   * @return {Element}
+   * HTML-based view for Thing on the floorplan
+   * @return {String}
    */
-  makeWrappedSVGText(text) {
-    const lineHeight = 2.5;
-    const lineWidth = 12;
-    const x = 0;
-    let y = 8;
-    let row = '';
-    const words = text.split(' ');
-
-    const textElt =
-      document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    textElt.setAttribute('x', x);
-    textElt.setAttribute('y', y);
-    textElt.setAttribute('text-anchor', 'middle');
-    textElt.classList.add('svg-thing-text');
-
-    function makeTSpan(textContent) {
-      const tspan =
-        document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-      tspan.setAttribute('x', x);
-      tspan.setAttribute('y', y);
-      tspan.textContent = textContent;
-      return tspan;
-    }
-
-    while (words.length > 0) {
-      const word = words.shift();
-      if (row.length + word.length + 1 < lineWidth) {
-        row += ` ${word}`;
-      } else {
-        textElt.appendChild(makeTSpan(row));
-        row = word;
-        y += lineHeight;
-      }
-    }
-    if (row) {
-      textElt.appendChild(makeTSpan(row));
-    }
-
-    return textElt;
-  }
-
-  /**
-   * SVG view for Thing.
-   */
-  svgView() {
+  htmlFloorplanView() {
     return `<div
         style="transform: translate(${this.x}vmin,${this.y}vmin) scale(0.5) translate(-50%, -50%)"
         class="floorplan-thing"
@@ -463,12 +418,12 @@ class Thing {
   /**
    * Render Thing view and add to DOM.
    *
-   * @param {String} format 'svg' or 'html'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    */
   render(format) {
     const element = document.createElement('div');
-    if (format == 'svg') {
-      element.innerHTML = this.svgView().trim();
+    if (format == 'htmlFloorplan') {
+      element.innerHTML = this.htmlFloorplanView().trim();
     } else if (format == 'htmlDetail') {
       element.innerHTML = this.htmlDetailView().trim();
     } else {
