@@ -401,7 +401,6 @@ class Thing {
    */
   htmlFloorplanView() {
     return `<div
-        style="transform: translate(${this.x}vmin,${this.y}vmin) scale(0.5) translate(-50%, -50%)"
         class="floorplan-thing"
         data-x="${this.x}"
         data-y="${this.y}"

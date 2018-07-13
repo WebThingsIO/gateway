@@ -50,6 +50,11 @@ const FloorplanScreen = {
     this.fileInput = document.getElementById('floorplan-file-input');
     this.thingsElement = this.floorplan;
 
+    this.updateVminRequest = null;
+    this.vmin = 1;
+    this.onResize = this.onResize.bind(this);
+    this.updateVmin = this.updateVmin.bind(this);
+
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.doneButton.addEventListener('click', this.done.bind(this));
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
@@ -159,6 +164,9 @@ const FloorplanScreen = {
   },
 
   show: function() {
+    window.addEventListener('resize', this.onResize);
+    this.updateVmin();
+
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
@@ -273,6 +281,36 @@ const FloorplanScreen = {
   },
 
   /**
+   * On resize schedule an update of vmin
+   */
+  onResize: function() {
+    if (!this.view.classList.contains('selected')) {
+      window.removeEventListener('resize', this.onResize);
+      return;
+    }
+    if (this.updateVminRequest) {
+      return;
+    }
+    this.updateVminRequest = window.requestAnimationFrame(this.updateVmin);
+  },
+
+  /**
+   * Update our manually calculated vmin unit
+   */
+  updateVmin: function() {
+    this.updateVminRequest = null;
+    const newVmin = Math.min(window.innerWidth, window.innerHeight) / 100;
+    this.vmin = newVmin;
+    console.log('updateVmin', newVmin);
+    this.things.forEach((thing) => {
+      const elt = thing.element;
+      elt.style.transform =
+        this.makeTransform(parseFloat(elt.dataset.x),
+                           parseFloat(elt.dataset.y));
+    });
+  },
+
+  /**
    * @param {{x: number,  y: number}} screenPoint - in pixels from top left of
    *                                  viewport
    * @return {{x: number, y: number}} point in vmin units from top left of
@@ -280,9 +318,8 @@ const FloorplanScreen = {
    */
   screenToRelVmin: function(screenPoint) {
     const thingsRect = this.thingsElement.getBoundingClientRect();
-    const vminScale = Math.min(window.innerWidth, window.innerHeight) / 100;
-    const dx = (screenPoint.x - thingsRect.left) / vminScale;
-    const dy = (screenPoint.y - thingsRect.right) / vminScale;
+    const dx = (screenPoint.x - thingsRect.left) / this.vmin;
+    const dy = (screenPoint.y - thingsRect.right) / this.vmin;
     return {
       x: dx,
       y: dy,
@@ -375,8 +412,20 @@ const FloorplanScreen = {
 
     this.selectedThing.dataset.x = point.x;
     this.selectedThing.dataset.y = point.y;
-    this.selectedThing.style =
-      `transform: translate(${point.x}vmin,${point.y}vmin) scale(0.5) translate(-50%, -50%)`;
+    this.selectedThing.style.transform = this.makeTransform(point.x, point.y);
+  },
+
+  /**
+   * Generate a css transform for a given pair of floorplan-relative coordinates
+   * @param {number} x
+   * @param {number} y
+   * @return {String}
+   */
+  makeTransform: function(x, y) {
+    const scaleFactor = 8 * this.vmin / 128;
+    const translate = `translate(${x}vmin,${y}vmin)`;
+    const scale = `scale(${scaleFactor})`;
+    return `${translate} translate(-50%, -50%) ${scale}`;
   },
 
   /*
