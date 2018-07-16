@@ -159,13 +159,14 @@ const FloorplanScreen = {
           }
         }
         this.things.push(thing);
+        // Dynamically layout all things including the one we just added
+        this.updateVmin();
       });
     });
   },
 
   show: function() {
     window.addEventListener('resize', this.onResize);
-    this.updateVmin();
 
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
