@@ -35,7 +35,7 @@ class Thing {
    * Thing constructor.
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'svg', 'html', or 'htmlDetail'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
@@ -71,8 +71,8 @@ class Thing {
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
 
-    if (format === 'svg') {
-      this.container = document.getElementById('floorplan-things');
+    if (format === 'htmlFloorplan') {
+      this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
     } else {
@@ -235,9 +235,7 @@ class Thing {
     this.findProperties();
     this.element = this.render(format);
 
-    if (format === 'svg') {
-      return;
-    } else if (format === 'htmlDetail') {
+    if (format === 'htmlDetail') {
       this.attachHtmlDetail();
     }
 
@@ -398,85 +396,37 @@ class Thing {
   }
 
   /**
-   * Generate a wrapped svg text element containing the provided text
-   * @param {String} text
-   * @return {Element}
+   * HTML-based view for Thing on the floorplan
+   * @return {String}
    */
-  makeWrappedSVGText(text) {
-    const lineHeight = 2.5;
-    const lineWidth = 12;
-    const x = 0;
-    let y = 8;
-    let row = '';
-    const words = text.split(' ');
-
-    const textElt =
-      document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    textElt.setAttribute('x', x);
-    textElt.setAttribute('y', y);
-    textElt.setAttribute('text-anchor', 'middle');
-    textElt.classList.add('svg-thing-text');
-
-    function makeTSpan(textContent) {
-      const tspan =
-        document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-      tspan.setAttribute('x', x);
-      tspan.setAttribute('y', y);
-      tspan.textContent = textContent;
-      return tspan;
-    }
-
-    while (words.length > 0) {
-      const word = words.shift();
-      if (row.length + word.length + 1 < lineWidth) {
-        row += ` ${word}`;
-      } else {
-        textElt.appendChild(makeTSpan(row));
-        row = word;
-        y += lineHeight;
-      }
-    }
-    if (row) {
-      textElt.appendChild(makeTSpan(row));
-    }
-
-    return textElt;
-  }
-
-  /**
-   * SVG view for Thing.
-   */
-  svgView() {
-    return `<g transform="translate(${this.x},${this.y})"
-              dragx="${this.x}" dragy="${this.y}"
-              class="floorplan-thing">
-              <a xlink:href="${encodeURI(this.href)}?referrer=%2Ffloorplan"
-                 class="svg-thing-link">
-                <circle cx="0" cy="0" r="5" class="svg-thing-icon" />
-                <image x="-5" y="-5" width="10" height="10"
-                  xlink:href="${encodeURI(this.baseIcon)}" />
-                ${this.makeWrappedSVGText(this.name).outerHTML}
-              </a>
-            </g>`;
+  htmlFloorplanView() {
+    return `<div
+        class="floorplan-thing"
+        data-x="${this.x}"
+        data-y="${this.y}"
+        data-href="${encodeURI(this.href)}"
+        >
+      <a href="${encodeURI(this.href)}?referrer=%2ffloorplan"
+         class="floorplan-thing-link">
+      </a>
+      ${this.iconView()}
+      <div class="floorplan-thing-name">${Utils.escapeHtml(this.name)}</div>
+    </div>`;
   }
 
   /**
    * Render Thing view and add to DOM.
    *
-   * @param {String} format 'svg' or 'html'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    */
   render(format) {
-    let element;
-    if (format == 'svg') {
-      element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      element.innerHTML = this.svgView().trim();
+    const element = document.createElement('div');
+    if (format == 'htmlFloorplan') {
+      element.innerHTML = this.htmlFloorplanView().trim();
+    } else if (format == 'htmlDetail') {
+      element.innerHTML = this.htmlDetailView().trim();
     } else {
-      element = document.createElement('div');
-      if (format == 'htmlDetail') {
-        element.innerHTML = this.htmlDetailView().trim();
-      } else {
-        element.innerHTML = this.htmlView().trim();
-      }
+      element.innerHTML = this.htmlView().trim();
     }
     return this.container.appendChild(element.firstChild);
   }

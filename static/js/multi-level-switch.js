@@ -17,7 +17,7 @@ class MultiLevelSwitch extends OnOffSwitch {
    * MultiLevelSwitch Constructor (extends OnOffSwitch).
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'svg', 'html', or 'htmlDetail'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    */
   constructor(model, description, format) {
     super(

@@ -17,7 +17,7 @@ class OnOffSwitch extends Thing {
    * OnOffSwitch Constructor (extends Thing).
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'svg', 'html', or 'htmlDetail'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
@@ -28,7 +28,7 @@ class OnOffSwitch extends Thing {
 
     super(model, description, format, options);
 
-    if (this.format !== 'svg') {
+    if (this.format !== 'htmlFloorplan') {
       this.icon.addEventListener('click', this.handleClick.bind(this));
     }
   }

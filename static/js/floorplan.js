@@ -48,7 +48,12 @@ const FloorplanScreen = {
     this.uploadForm = document.getElementById('floorplan-upload-form');
     this.uploadButton = document.getElementById('floorplan-upload-button');
     this.fileInput = document.getElementById('floorplan-file-input');
-    this.thingsElement = document.getElementById('floorplan-things');
+    this.thingsElement = this.floorplan;
+
+    this.updateVminRequest = null;
+    this.vmin = 1;
+    this.onResize = this.onResize.bind(this);
+    this.updateVmin = this.updateVmin.bind(this);
 
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.doneButton.addEventListener('click', this.done.bind(this));
@@ -90,67 +95,79 @@ const FloorplanScreen = {
         if (description.selectedCapability) {
           switch (description.selectedCapability) {
             case 'OnOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'svg');
+              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'MultiLevelSwitch':
-              thing = new MultiLevelSwitch(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'ColorControl':
-              thing = new ColorControl(thingModel, description, 'svg');
+              thing =
+                new ColorControl(thingModel, description, 'htmlFloorplan');
               break;
             case 'EnergyMonitor':
-              thing = new EnergyMonitor(thingModel, description, 'svg');
+              thing =
+                new EnergyMonitor(thingModel, description, 'htmlFloorplan');
               break;
             case 'BinarySensor':
-              thing = new BinarySensor(thingModel, description, 'svg');
+              thing =
+                new BinarySensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'MultiLevelSensor':
-              thing = new MultiLevelSensor(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'SmartPlug':
-              thing = new SmartPlug(thingModel, description, 'svg');
+              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
               break;
             case 'Light':
-              thing = new Light(thingModel, description, 'svg');
+              thing = new Light(thingModel, description, 'htmlFloorplan');
               break;
             default:
-              thing = new Thing(thingModel, description, 'svg');
+              thing = new Thing(thingModel, description, 'htmlFloorplan');
               break;
           }
         } else {
           switch (description.type) {
             case 'onOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'svg');
+              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'onOffLight':
             case 'onOffColorLight':
             case 'dimmableLight':
             case 'dimmableColorLight':
-              thing = new Light(thingModel, description, 'svg');
+              thing = new Light(thingModel, description, 'htmlFloorplan');
               break;
             case 'binarySensor':
-              thing = new BinarySensor(thingModel, description, 'svg');
+              thing =
+                new BinarySensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'multiLevelSensor':
-              thing = new MultiLevelSensor(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
               break;
             case 'multiLevelSwitch':
-              thing = new MultiLevelSwitch(thingModel, description, 'svg');
+              thing =
+                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
               break;
             case 'smartPlug':
-              thing = new SmartPlug(thingModel, description, 'svg');
+              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
               break;
             default:
-              thing = new Thing(thingModel, description, 'svg');
+              thing = new Thing(thingModel, description, 'htmlFloorplan');
               break;
           }
         }
         this.things.push(thing);
+        // Dynamically layout all things including the one we just added
+        this.updateVmin();
       });
     });
   },
 
   show: function() {
+    window.addEventListener('resize', this.onResize);
+
     this.backButton.classList.add('hidden');
     this.menuButton.classList.remove('hidden');
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
@@ -168,6 +185,7 @@ const FloorplanScreen = {
     this.editButton.classList.add('hidden');
     this.doneButton.classList.remove('hidden');
     this.uploadForm.classList.remove('hidden');
+    this.thingsElement.classList.add('editing');
 
     // Bind to this before adding listener to make it easier to remove.
     this.selectThing = this.selectThing.bind(this);
@@ -198,6 +216,7 @@ const FloorplanScreen = {
     this.doneButton.classList.add('hidden');
     this.editButton.classList.remove('hidden');
     this.uploadForm.classList.add('hidden');
+    this.thingsElement.classList.remove('editing');
 
     // Re-enable hyperlinks for things
     this.things.forEach((thing) => {
@@ -263,6 +282,52 @@ const FloorplanScreen = {
   },
 
   /**
+   * On resize schedule an update of vmin
+   */
+  onResize: function() {
+    if (!this.view.classList.contains('selected')) {
+      window.removeEventListener('resize', this.onResize);
+      return;
+    }
+    if (this.updateVminRequest) {
+      return;
+    }
+    this.updateVminRequest = window.requestAnimationFrame(this.updateVmin);
+  },
+
+  /**
+   * Update our manually calculated vmin unit
+   */
+  updateVmin: function() {
+    this.updateVminRequest = null;
+    const newVmin = Math.min(window.innerWidth, window.innerHeight) / 100;
+    this.vmin = newVmin;
+    console.log('updateVmin', newVmin);
+    this.things.forEach((thing) => {
+      const elt = thing.element;
+      elt.style.transform =
+        this.makeTransform(parseFloat(elt.dataset.x),
+                           parseFloat(elt.dataset.y));
+    });
+  },
+
+  /**
+   * @param {{x: number,  y: number}} screenPoint - in pixels from top left of
+   *                                  viewport
+   * @return {{x: number, y: number}} point in vmin units from top left of
+   *                                  thingsElement
+   */
+  screenToRelVmin: function(screenPoint) {
+    const thingsRect = this.thingsElement.getBoundingClientRect();
+    const dx = (screenPoint.x - thingsRect.left) / this.vmin;
+    const dy = (screenPoint.y - thingsRect.right) / this.vmin;
+    return {
+      x: dx,
+      y: dy,
+    };
+  },
+
+  /**
    * Select Thing.
    *
    * @param {Event} e mousedown or touchstart event.
@@ -271,19 +336,17 @@ const FloorplanScreen = {
     // Prevent interaction with HTML5 drag and drop
     e.preventDefault();
 
-    this.pointerOffsetX = 0;
-    this.pointerOffsetY = 0;
     this.selectedThing = e.currentTarget;
-    let point = this.thingsElement.createSVGPoint();
-    point.x = e.clientX || e.touches[0].clientX;
-    point.y = e.clientY || e.touches[0].clientY;
-    const matrix = this.thingsElement.getScreenCTM();
-    point = point.matrixTransform(matrix.inverse());
-
+    const screenPoint = {
+      x: e.clientX || e.touches[0].clientX,
+      y: e.clientY || e.touches[0].clientY,
+    };
+    const point = this.screenToRelVmin(screenPoint);
     this.pointerOffsetX =
-      point.x - parseInt(this.selectedThing.getAttribute('dragx'), 10);
+      point.x - parseFloat(this.selectedThing.dataset.x);
     this.pointerOffsetY =
-      point.y - parseInt(this.selectedThing.getAttribute('dragy'), 10);
+      point.y - parseFloat(this.selectedThing.dataset.y);
+    this.selectedThing.style.cursor = 'grabbing';
   },
 
   /**
@@ -294,9 +357,10 @@ const FloorplanScreen = {
       return;
     }
     const thing = this.selectedThing;
-    const x = thing.getAttribute('dragx');
-    const y = thing.getAttribute('dragy');
-    const thingUrl = thing.firstElementChild.getAttribute('xlink:href');
+    const x = parseFloat(thing.dataset.x);
+    const y = parseFloat(thing.dataset.y);
+    const thingUrl = thing.dataset.href;
+    thing.style.cursor = '';
 
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
     const payload = {
@@ -335,24 +399,36 @@ const FloorplanScreen = {
       return;
     }
 
-    let point = this.thingsElement.createSVGPoint();
-    point.x = e.clientX || e.touches[0].clientX;
-    point.y = e.clientY || e.touches[0].clientY;
-    const matrix = this.thingsElement.getScreenCTM();
-    point = point.matrixTransform(matrix.inverse());
+    const screenPoint = {
+      x: e.clientX || e.touches[0].clientX,
+      y: e.clientY || e.touches[0].clientY,
+    };
+
+    const point = this.screenToRelVmin(screenPoint);
     point.x -= this.pointerOffsetX;
     point.y -= this.pointerOffsetY;
 
     // Ensure Thing isn't moved outside the bounds of the floorplan.
-    if (point.x < this.O || point.x > 100 || point.y < 0 || point.y > 100) {
+    if (point.x < 0 || point.x > 100 || point.y < 0 || point.y > 100) {
       return;
     }
 
-    this.selectedThing.setAttribute('dragx', point.x);
-    this.selectedThing.setAttribute('dragy', point.y);
-    this.selectedThing.setAttribute(
-      'transform',
-      `translate(${point.x},${point.y})`);
+    this.selectedThing.dataset.x = point.x;
+    this.selectedThing.dataset.y = point.y;
+    this.selectedThing.style.transform = this.makeTransform(point.x, point.y);
+  },
+
+  /**
+   * Generate a css transform for a given pair of floorplan-relative coordinates
+   * @param {number} x
+   * @param {number} y
+   * @return {String}
+   */
+  makeTransform: function(x, y) {
+    const scaleFactor = 10 * this.vmin / 128;
+    const translate = `translate(${x}vmin,${y}vmin)`;
+    const scale = `scale(${scaleFactor})`;
+    return `${translate} translate(-50%, -50%) ${scale}`;
   },
 
   /*
@@ -362,6 +438,7 @@ const FloorplanScreen = {
    */
   blackHole: function(e) {
     e.preventDefault();
+    e.stopPropagation();
     return false;
   },
 };

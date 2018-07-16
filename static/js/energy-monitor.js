@@ -17,7 +17,7 @@ class EnergyMonitor extends Thing {
    * EnergyMonitor Constructor (extends Thing).
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'svg', 'html', or 'htmlDetail'.
+   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
    */
   constructor(model, description, format) {
     super(
