@@ -15,8 +15,6 @@
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/thing.css" />
     <link rel="stylesheet" type="text/css" href="/css/local-token-service.css" />
-
-    <script type="text/javascript" src="/js/lib/highlight-9.12.0.min.js"></script>
   </head>
   <body class="hidden">
     <img id="wordmark" src="../optimized-images/wordmark.svg" alt="Mozilla IoT"/>
@@ -125,18 +123,6 @@ let text = client.get("<span class="origin">https://gateway.local</span>/things"
         </div>
       </div>
     </section>
-    <script>
-/* global hljs */
-for (let origin of document.querySelectorAll('.origin')) {
-  origin.textContent = window.location.origin;
-}
-
-if (!window.location.origin.endsWith('.mozilla-iot.org')) {
-  document.body.classList.add('insecure');
-}
-
-hljs.initHighlightingOnLoad();
-    </script>
   </body>
 </html>
 

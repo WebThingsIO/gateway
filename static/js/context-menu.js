@@ -11,7 +11,7 @@
 
 const API = require('./api');
 const App = require('./app');
-const page = require('./lib/page');
+const page = require('page');
 const Utils = require('./utils');
 
 // eslint-disable-next-line no-unused-vars

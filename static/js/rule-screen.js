@@ -15,7 +15,7 @@ const Gateway = require('./rules/Gateway');
 const Rule = require('./rules/Rule');
 const RuleUtils = require('./rules/RuleUtils');
 const TimeTriggerBlock = require('./rules/TimeTriggerBlock');
-const page = require('./lib/page');
+const page = require('page');
 
 // eslint-disable-next-line no-unused-vars
 const RuleScreen = {

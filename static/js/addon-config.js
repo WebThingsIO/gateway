@@ -10,7 +10,7 @@
 'use strict';
 
 const SchemaForm = require('./schema-form/schema-form');
-const page = require('./lib/page');
+const page = require('page');
 const API = require('./api');
 
 /**

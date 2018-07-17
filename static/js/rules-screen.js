@@ -7,7 +7,7 @@
 const API = require('./api');
 const Gateway = require('./rules/Gateway');
 const RuleCard = require('./rules/RuleCard');
-const page = require('./lib/page');
+const page = require('page');
 
 'use strict';
 

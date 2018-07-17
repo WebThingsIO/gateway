@@ -11,7 +11,7 @@
 
 const API = require('./api');
 const Utils = require('./utils');
-const page = require('./lib/page');
+const page = require('page');
 
 /**
  * InstalledAddon constructor.

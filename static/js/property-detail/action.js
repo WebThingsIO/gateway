@@ -12,7 +12,7 @@
 
 const API = require('../api');
 const Utils = require('../utils');
-const page = require('../lib/page');
+const page = require('page');
 
 class ActionDetail {
   constructor(thing, name, action, href) {
