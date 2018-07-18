@@ -130,7 +130,7 @@ input[type="email"] {
   user-select: none;
   outline: 0;
   z-index: 100;
-  cursor: pointer;
+  cursor: default;
 }
 
 .icon-button::-moz-focus-inner {
@@ -246,7 +246,6 @@ h1, h2, h3, h4, h5, h6 {
   -ms-user-select: none;
   user-select: none;
   outline: 0;
-  cursor: pointer;
 }
 
 #menu-button,
@@ -377,7 +376,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 2.2rem;
   border-radius: 1.1rem;
   background: #5d9bc7;
-  cursor: pointer;
   transition: 0.1s;
 }
 

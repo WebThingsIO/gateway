@@ -48,7 +48,6 @@ template.innerHTML = `
       height: 2.2rem;
       border-radius: 1.1rem;
       background-color: #5d9bc7;
-      cursor: pointer;
       transition: 0.1s;
     }
 

@@ -116,7 +116,6 @@
   -ms-user-select: none;
   user-select: none;
   outline: 0;
-  cursor: pointer;
 }
 
 #addon-config-settings .json-schema-form .btn-add {
