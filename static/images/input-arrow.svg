@@ -1,4 +1,36 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 31.49 31.49" style="enable-background:new 0 0 31.49 31.49;" xml:space="preserve" width="512px" height="512px">
-<path d="M21.205,5.007c-0.429-0.444-1.143-0.444-1.587,0c-0.429,0.429-0.429,1.143,0,1.571l8.047,8.047H1.111  C0.492,14.626,0,15.118,0,15.737c0,0.619,0.492,1.127,1.111,1.127h26.554l-8.047,8.032c-0.429,0.444-0.429,1.159,0,1.587  c0.444,0.444,1.159,0.444,1.587,0l9.952-9.952c0.444-0.429,0.444-1.143,0-1.571L21.205,5.007z" fill="#7a7b7c"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg16204"
+   viewBox="0 0 16 16"
+   height="16"
+   width="16">
+  <defs
+     id="defs16206" />
+  <metadata
+     id="metadata16209">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-1036.3622)"
+     id="layer1">
+    <path
+       d="m 1.0408501,1043.2392 11.1878999,0 -4.8777001,-4.878 c -0.4517,-0.451 -0.4517,-1.084 0,-1.626 0.4516,-0.542 1.0839,-0.451 1.6259,0 l 6.6842001,6.865 c 0.4518,0.452 0.4518,1.084 0,1.626 l -6.7746001,6.774 c -0.1806,0.182 -0.4516,0.362 -0.8129,0.362 -0.3614,0 -0.5419,-0.08 -0.813,-0.362 -0.4516,-0.451 -0.4516,-1.083 0,-1.625 l 4.9681001,-4.878 -11.0975998,0 c -0.7226,0 -1.0839,-0.451 -1.0839,-1.084 0,-0.632 0.3613,-1.174 0.9935999,-1.174 z"
+       class="st0"
+       id="path15191-4"
+       style="opacity:0.49150002;fill:#000000;fill-opacity:1" />
+  </g>
 </svg>
