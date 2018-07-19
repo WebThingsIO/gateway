@@ -16,7 +16,7 @@
 const Validator = {};
 
 // Dynamic loading
-import(/* webpackChunkName: "ajv.min.js" */ '../lib/ajv.min').then((Ajv) => {
+import(/* webpackChunkName: "ajv.js" */ 'ajv').then((Ajv) => {
   Ajv = Ajv.default ? Ajv.default : Ajv;
 
   Validator._ajv = new Ajv({

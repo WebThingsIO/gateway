@@ -10,7 +10,7 @@
 
 'use strict';
 
-const page = require('./lib/page');
+const page = require('page');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const App = require('./app');

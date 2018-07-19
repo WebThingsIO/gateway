@@ -1,6 +1,6 @@
 const Rule = require('./Rule');
 const RuleUtils = require('./RuleUtils');
-const page = require('../lib/page');
+const page = require('page');
 const Utils = require('../utils');
 
 /**

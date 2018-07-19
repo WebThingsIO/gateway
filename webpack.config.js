@@ -106,10 +106,9 @@ const pluginsWeb = [
     chunks: ['authorize.js'],
   }),
   new HtmlWebpackPlugin({
-    inject: 'head',
     template: 'src/views/local-token-service.mustache',
     filename: '../views/local-token-service.mustache',
-    chunks: ['check-user.js'],
+    chunks: ['localtoken.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'src/views/tunnel_setup.mustache',
@@ -123,8 +122,8 @@ const webpackWeb = {
     'app.js': ['./static/js/check-user.js', './static/js/app.js'],
     'create-user.js': ['./static/js/create-user.js'],
     'login.js': ['./static/js/check-user.js', './static/js/login.js'],
-    'check-user.js': ['./static/js/check-user.js'],
     'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
+    'localtoken.js': ['./static/js/check-user.js', './static/js/localtoken.js'],
     'setup_subdomain.js': ['./static/js/setup_subdomain.js'],
     buildCss: [
       // css for static/index.html

@@ -227,6 +227,7 @@ RuleScreen = require('./rule-screen');
 Speech = require('./speech');
 
 // load web components
+require('@webcomponents/webcomponentsjs/webcomponents-bundle');
 require('./components/capability/binary-sensor');
 require('./components/capability/color-control');
 require('./components/capability/custom');
