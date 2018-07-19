@@ -29,6 +29,17 @@ const AssistantScreen = {
     this.textSubmit.addEventListener('click', this.handleSubmit.bind(this));
     this.speechButton.addEventListener('click', this.handleSpeech.bind(this));
     this.avatar.addEventListener('click', this.handleAvatarClick.bind(this));
+
+    this.stm = null;
+    // Dynamic loading
+    import(/* webpackChunkName: "stm_web.min.js" */
+      'speaktome-api/build/stm_web.min.js')
+      .then((SpeakToMe) => {
+        this.stm = SpeakToMe.default({
+          listener: this.listener.bind(this),
+        });
+      });
+    this.listening = false;
   },
 
   /**
@@ -127,11 +138,44 @@ const AssistantScreen = {
   },
 
   handleSpeech: function() {
+    if (this.listening) {
+      this.listening = false;
+      this.stm.stop();
+    } else {
+      this.stm.listen();
+      this.listening = true;
+    }
   },
 
   handleAvatarClick: function() {
     this.messages.innerHTML = '';
   },
+
+  /**
+   * Listener for the api. Receives a msg containing the current state
+   * @param msg
+   */
+  listener: function(msg) {
+    if (msg.state === 'result') {
+      // sort results to get the one with the highest confidence
+      const results = msg.data.sort((a, b) => {
+        return b.confidence - a.confidence;
+      });
+      if (results.length < 1) {
+        this.displayMessage('Sorry, I didn\'t get that.', 'incoming');
+        console.error('Error: (results.length <= 1)');
+        return;
+      }
+      console.debug(results[0].text, results[0].confidence);
+      // TODO: autocapitalize
+      this.displayMessage(results[0].text, 'outgoing');
+      this.submitCommand(results[0].text);
+    } else if (msg.state === 'ready') {
+      this.listening = false;
+    }
+  },
+
+
 };
 
 module.exports = AssistantScreen;
