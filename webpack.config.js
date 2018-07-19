@@ -106,7 +106,6 @@ const pluginsWeb = [
     chunks: ['authorize.js'],
   }),
   new HtmlWebpackPlugin({
-    inject: 'head',
     template: 'src/views/local-token-service.mustache',
     filename: '../views/local-token-service.mustache',
     chunks: ['localtoken.js'],
