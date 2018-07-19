@@ -9,6 +9,7 @@
 
 SCRIPT_NAME=$(basename $0)
 VERBOSE=0
+REMOVE_BASE_AFTER_UNZIP=0
 
 ###########################################################################
 #
@@ -25,13 +26,16 @@ usage() {
 #
 main() {
 
-  while getopts "g:o:v" opt "$@"; do
+  while getopts "g:o:rv" opt "$@"; do
     case $opt in
       g)
         GATEWAY_TARBALL=${OPTARG}
         ;;
       o)
         OPENZWAVE_TARBALL=${OPTARG}
+        ;;
+      r)
+	REMOVE_BASE_AFTER_UNZIP=1
         ;;
       v)
         VERBOSE=1
@@ -52,9 +56,10 @@ main() {
   fi
 
   if [ "${VERBOSE}" == "1" ]; then
-    echo "        Base Image: ${BASE_IMAGE}"
-    echo "   Gateway tarball: ${GATEWAY_TARBALL}"
-    echo "Open-ZWave tarball: ${OPENZWAVE_TARBALL}"
+    echo "             Base Image: ${BASE_IMAGE}"
+    echo "        Gateway tarball: ${GATEWAY_TARBALL}"
+    echo "     Open-ZWave tarball: ${OPENZWAVE_TARBALL}"
+    echo "Remove base after unzip: ${REMOVE_BASE_AFTER_UNZIP}"
   fi
 
   if [ ! -f "${BASE_IMAGE}" ]; then
@@ -76,12 +81,16 @@ main() {
     # Unzip the base image
     GATEWAY_IMAGE="${BASE_IMAGE/.zip/-final.img}"
     echo "Unzipping '${BASE_IMAGE}' to '${GATEWAY_IMAGE}'"
-    unzip -p ${BASE_IMAGE} > ${GATEWAY_IMAGE}
+    unzip -p "${BASE_IMAGE}" > "${GATEWAY_IMAGE}"
   else
     # Make a copy of the base image
     GATEWAY_IMAGE="${BASE_IMAGE/.img/-final.img}"
     echo "Copying '${BASE_IMAGE}' to '${GATEWAY_IMAGE}'"
     cp "${BASE_IMAGE}" "${GATEWAY_IMAGE}"
+  fi
+  if [ "${REMOVE_BASE_AFTER_UNZIP}" = "1" ]; then
+    echo "Removing base image: ${BASE_IMAGE}"
+    rm -f "${BASE_IMAGE}"
   fi
 
   # Figure out the device names that kpartx will create
