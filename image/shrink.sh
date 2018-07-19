@@ -5,7 +5,7 @@
 #
 # Example: shrink.fs /dev/sdd gateway-0.5.0.img 2400
 #
-# The last argument is optional and specifies the desrired size of the
+# The last argument is optional and specifies the desired size of the
 # resized filesystem in megabytes. If not provided, it will default to 2400.
 #
 # 2400 is suitable for use with the headless (lite) image. You'll need to
