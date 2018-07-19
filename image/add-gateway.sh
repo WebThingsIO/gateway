@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # This script takes a base image and adds the gateway code to make
 # the final gateway image.
@@ -17,7 +17,7 @@ REMOVE_BASE_AFTER_UNZIP=0
 #
 
 usage() {
-  echo "Usage: ${SCRIPT_NAME} [-v] BASE_IMAGE"
+  echo "Usage: ${SCRIPT_NAME} [-v] [-o openzwave-tarball] [-g gateway-tarall] BASE_IMAGE"
 }
 
 ###########################################################################
@@ -26,7 +26,7 @@ usage() {
 #
 main() {
 
-  while getopts "g:o:rv" opt "$@"; do
+  while getopts "g:ho:rv" opt "$@"; do
     case $opt in
       g)
         GATEWAY_TARBALL=${OPTARG}
@@ -35,10 +35,14 @@ main() {
         OPENZWAVE_TARBALL=${OPTARG}
         ;;
       r)
-	REMOVE_BASE_AFTER_UNZIP=1
+        REMOVE_BASE_AFTER_UNZIP=1
         ;;
       v)
         VERBOSE=1
+        ;;
+      h)
+        usage
+        exit 1
         ;;
       ?)
         echo "Unrecognized option: ${opt}"
@@ -77,14 +81,19 @@ main() {
     exit 1
   fi
 
+  GATEWAY_IMAGE="${BASE_IMAGE/-base/}"
+  if [ "${GATEWAY_IMAGE}" == "${BASE_IMAGE}" ]; then
+    echo "BASE image name doesn't have '-base' in it"
+    exit 1
+  fi
+
   if [[ "${BASE_IMAGE}" == *.zip ]]; then
     # Unzip the base image
-    GATEWAY_IMAGE="${BASE_IMAGE/.zip/-final.img}"
+    GATEWAY_IMAGE="${GATEWAY_IMAGE/.zip/.img}"
     echo "Unzipping '${BASE_IMAGE}' to '${GATEWAY_IMAGE}'"
     unzip -p "${BASE_IMAGE}" > "${GATEWAY_IMAGE}"
   else
     # Make a copy of the base image
-    GATEWAY_IMAGE="${BASE_IMAGE/.img/-final.img}"
     echo "Copying '${BASE_IMAGE}' to '${GATEWAY_IMAGE}'"
     cp "${BASE_IMAGE}" "${GATEWAY_IMAGE}"
   fi
@@ -249,9 +258,13 @@ END
     echo "Contents of ${ROOT_MOUNTPOINT}/usr/local/lib"
     ls -l ${ROOT_MOUNTPOINT}/usr/local/lib
   fi
+
+  df -h "${BOOT_MOUNTPOINT}"
+  df -h "${ROOT_MOUNTPOINT}"
+
   cleanup
 
-  echo "Created gateway image: ${GATEWAY_IMAGE}"
+  echo "Created gateway image:     ${GATEWAY_IMAGE}"
 }
 
 ###########################################################################
@@ -265,16 +278,18 @@ function cleanup() {
     sudo umount ${ROOT_MOUNTPOINT}
     ROOT_MOUNTED=0
   fi
-  if [ -d ${ROOT_MOUNTPOINT} ]; then
-    sudo rmdir ${ROOT_MOUNTPOINT}
+  if [ -n "${ROOT_MOUNTPOINT}" -a -d "${ROOT_MOUNTPOINT}" ]; then
+    echo "Removing root mountpoint ${ROOT_MOUNTPOINT}"
+    sudo rmdir "${ROOT_MOUNTPOINT}"
   fi
   if [ "${BOOT_MOUNTED}" == 1 ]; then
     echo "Unmounting ${BOOT_DEV}"
     sudo umount ${BOOT_MOUNTPOINT}
     BOOT_MOUNTED=0
   fi
-  if [ -d ${BOOT_MOUNTPOINT} ]; then
-    sudo rmdir ${BOOT_MOUNTPOINT}
+  if [ -n "${BOOT_MOUNTPOINT}" -a -d "${BOOT_MOUNTPOINT}" ]; then
+    echo "Removing boot mountpoint ${BOOT_MOUNTPOINT}"
+    sudo rmdir "${BOOT_MOUNTPOINT}"
   fi
   if [ "${LOOP_MOUNT_CREATED}" == 1 ]; then
     echo "Removing loop mounts"
