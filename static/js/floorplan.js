@@ -10,6 +10,7 @@
 
 'use strict';
 
+const page = require('page');
 const API = require('./api');
 const App = require('./app');
 const Constants = require('./constants');
@@ -55,6 +56,10 @@ const FloorplanScreen = {
     this.onResize = this.onResize.bind(this);
     this.updateVmin = this.updateVmin.bind(this);
 
+    this.interactTimeout = null;
+    this.onPointerDown = this.onPointerDown.bind(this);
+    this.onPointerUp = this.onPointerUp.bind(this);
+
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.doneButton.addEventListener('click', this.done.bind(this));
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
@@ -67,6 +72,7 @@ const FloorplanScreen = {
   refreshThings: function(things) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
+      this.removeInteract(thing);
       thing.cleanup();
     }
 
@@ -158,11 +164,29 @@ const FloorplanScreen = {
               break;
           }
         }
+        thing.element.dataset.index = this.things.length;
+        this.addInteract(thing);
         this.things.push(thing);
         // Dynamically layout all things including the one we just added
         this.updateVmin();
       });
     });
+  },
+
+  addInteract: function(thing) {
+    thing.element.addEventListener('click', this.blackHole);
+    thing.element.addEventListener('mousedown', this.onPointerDown);
+    thing.element.addEventListener('mouseup', this.onPointerUp);
+    thing.element.addEventListener('touchstart', this.onPointerDown);
+    thing.element.addEventListener('touchend', this.onPointerUp);
+  },
+
+  removeInteract: function(thing) {
+    thing.element.removeEventListener('click', this.blackHole);
+    thing.element.removeEventListener('mousedown', this.onPointerDown);
+    thing.element.removeEventListener('mouseup', this.onPointerUp);
+    thing.element.removeEventListener('touchstart', this.onPointerDown);
+    thing.element.removeEventListener('touchend', this.onPointerUp);
   },
 
   show: function() {
@@ -429,6 +453,37 @@ const FloorplanScreen = {
     const translate = `translate(${x}vmin,${y}vmin)`;
     const scale = `scale(${scaleFactor})`;
     return `${translate} translate(-50%, -50%) ${scale}`;
+  },
+
+  onPointerDown: function(event) {
+    // Prevent interaction with HTML5 drag and drop
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.selectedThing = event.currentTarget;
+    this.interactTimeout = setTimeout(() => {
+      if (this.selectedThing) {
+        page(`${this.selectedThing.dataset.href}?referrer=%2ffloorplan`);
+      }
+      this.interactTimeout = null;
+    }, 750);
+  },
+
+  onPointerUp: function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const thing = this.things[this.selectedThing.dataset.index];
+    if (this.interactTimeout) {
+      if (thing.handleClick) {
+        thing.handleClick();
+      } else if (this.selectedThing) {
+        page(`${this.selectedThing.dataset.href}?referrer=%2ffloorplan`);
+      }
+      clearTimeout(this.interactTimeout);
+      this.interactTimeout = null;
+    }
+    this.selectedThing = null;
   },
 
   /*
