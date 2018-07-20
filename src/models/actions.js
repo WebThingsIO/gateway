@@ -77,9 +77,15 @@ class Actions extends EventEmitter {
    * Get only the actions which are not associated with a specific thing and
    * therefore belong to the root Gateway
    */
-  getGatewayActions() {
+  getGatewayActions(actionName) {
     return this.getAll().filter((action) => {
       return !action.thingId;
+    }).filter((action) => {
+      if (actionName) {
+        return actionName === action.name;
+      }
+
+      return true;
     }).map((action) => {
       return {[action.name]: action.getDescription()};
     });
@@ -89,9 +95,15 @@ class Actions extends EventEmitter {
   /**
    * Get only the actions which are associated with a specific thing
    */
-  getByThing(thingId) {
+  getByThing(thingId, actionName) {
     return this.getAll().filter((action) => {
       return action.thingId === thingId;
+    }).filter((action) => {
+      if (actionName) {
+        return actionName === action.name;
+      }
+
+      return true;
     }).map((action) => {
       return {[action.name]: action.getDescription()};
     });

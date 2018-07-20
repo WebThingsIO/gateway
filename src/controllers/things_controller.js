@@ -172,6 +172,34 @@ ThingsController.get('/:thingId', (request, response) => {
 });
 
 /**
+ * Get the properties of a Thing.
+ */
+ThingsController.get('/:thingId/properties', async (request, response) => {
+  const thingId = request.params.thingId;
+
+  let thing;
+  try {
+    thing = await Things.getThing(thingId);
+  } catch (e) {
+    console.error('Failed to get thing:', e);
+    response.status(404).send(e);
+    return;
+  }
+
+  const result = {};
+  for (const name in thing.properties) {
+    try {
+      const value = await AddonManager.getProperty(thingId, name);
+      result[name] = value;
+    } catch (e) {
+      console.error(`Failed to get property ${name}:`, e);
+    }
+  }
+
+  response.status(200).json(result);
+});
+
+/**
  * Get a property of a Thing.
  */
 ThingsController.get(

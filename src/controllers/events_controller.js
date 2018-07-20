@@ -24,4 +24,18 @@ EventsController.get('/', function(request, response) {
   }
 });
 
+/**
+ * Handle getting a list of events.
+ */
+EventsController.get('/:eventName', function(request, response) {
+  const eventName = request.params.eventName;
+
+  if (request.params.thingId) {
+    response.status(200).json(Events.getByThing(request.params.thingId,
+                                                eventName));
+  } else {
+    response.status(200).json(Events.getGatewayEvents(eventName));
+  }
+});
+
 module.exports = EventsController;
