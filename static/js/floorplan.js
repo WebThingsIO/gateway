@@ -456,6 +456,12 @@ const FloorplanScreen = {
   },
 
   onPointerDown: function(event) {
+    if (this.thingsElement.classList.contains('editing')) {
+      return;
+    }
+    if (event.type === 'mousedown' && event.buttons !== 1) {
+      return;
+    }
     // Prevent interaction with HTML5 drag and drop
     event.preventDefault();
     event.stopPropagation();
@@ -470,6 +476,12 @@ const FloorplanScreen = {
   },
 
   onPointerUp: function(event) {
+    if (this.thingsElement.classList.contains('editing')) {
+      return;
+    }
+    if (!this.selectedThing) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
 
