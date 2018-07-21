@@ -1,0 +1,14 @@
+# WARNING: this docker file is *ONLY* for developer convenience
+# WARNING: for production deployment please consider supported project:
+# WARNING: https://github.com/mozilla-iot/gateway-docker
+
+version: "2"
+
+services:
+  web:
+    build: .
+    command: /root/mozilla-iot/gateway/run-app.sh
+    volumes:
+      - /root/mozilla-iot/gateway
+    ports:
+      - "8080:8080"
