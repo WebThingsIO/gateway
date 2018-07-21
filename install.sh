@@ -3,14 +3,22 @@
 NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts=carbon"
 
-cd /home/pi
+[ "$USER" != "" ] || USER="pi"
+[ "$HOME" != "" ] || HOME="/home/${USER}"
+cd "${HOME}"
 
 # Update the base packages that come with the system. This is required
 # so that we can install git
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install git -y
+sudo apt install -y \
+    build-essential \
+    curl \
+    git \
+    libcap2-bin \
+    python \
+    #eol
 
 mkdir -p mozilla-iot
 cd mozilla-iot
@@ -18,7 +26,7 @@ cd mozilla-iot
 # Install and configure nvm
 curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
-# but on the RPi, sourcing ~/.bashrc winds up being a no-op (when sourced
+# but on the target, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
