@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 
@@ -37,4 +38,4 @@ run_app() {
 }
 
 mkdir -p "${MOZIOT_HOME}/log"
-run_app > "${MOZIOT_HOME}/log/run-app.log" 2>&1
+run_app | tee "${MOZIOT_HOME}/log/run-app.log" 2>&1
