@@ -28,9 +28,15 @@ class ThingModel extends Model {
 
     // Parse events URL
     for (const link of description.links) {
-      if (link.rel === 'events') {
-        this.eventsHref = new URL(link.href, App.ORIGIN);
-        break;
+      switch (link.rel) {
+        case 'events':
+          this.eventsHref = new URL(link.href, App.ORIGIN);
+          break;
+        case 'properties':
+          this.propertiesHref = new URL(link.href, App.ORIGIN);
+          break;
+        default:
+          break;
       }
     }
 
@@ -236,7 +242,6 @@ class ThingModel extends Model {
    * Update the Properties of Thing.
    */
   updateProperties() {
-    const urls = Object.values(this.propertyDescriptions).map((v) => v.href);
     const opts = {
       headers: {
         Authorization: `Bearer ${API.jwt}`,
@@ -244,16 +249,29 @@ class ThingModel extends Model {
       },
     };
 
-    const requests = urls.map((u) => fetch(u, opts));
-    Promise.all(requests).then((responses) => {
-      return Promise.all(responses.map((response) => {
-        return response.json();
-      }));
-    }).then((responses) => {
-      let properties = {};
-      responses.forEach((response) => {
-        properties = Object.assign(properties, response);
+    let getPropertiesPromise;
+    if (typeof this.propertiesHref === 'undefined') {
+      const urls = Object.values(this.propertyDescriptions).map((v) => v.href);
+      const requests = urls.map((u) => fetch(u, opts));
+      getPropertiesPromise = Promise.all(requests).then((responses) => {
+        return Promise.all(responses.map((response) => {
+          return response.json();
+        }));
+      }).then((responses) => {
+        let properties = {};
+        responses.forEach((response) => {
+          properties = Object.assign(properties, response);
+        });
+        return properties;
       });
+    } else {
+      getPropertiesPromise =
+      fetch(this.propertiesHref, opts).then((response) => {
+        return response.json();
+      });
+    }
+
+    getPropertiesPromise.then((properties) => {
       this.onPropertyStatus(properties);
     }).catch((error) => {
       console.error(`Error fetching ${this.name} status: ${error}`);
