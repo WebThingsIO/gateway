@@ -97,6 +97,10 @@
   background-color: #a6c8e1;
 }
 
+#assistant-speech-button.active {
+  background-image: url('/optimized-images/microphone-icon-active.svg');
+}
+
 #assistant-text-input {
   width: calc(100% - 16rem);
   max-width: 30rem;
@@ -139,4 +143,17 @@
 
 #assistant-text-input:focus + #assistant-text-submit:hover {
   opacity: 1.0;
+}
+
+#assistant-stm-levels {
+  height: 16rem;
+  width: 16rem;
+  position: absolute;
+  padding: 0;
+  margin-left: -8rem;
+  margin-top: -5.1rem;
+}
+
+#assistant-stm-levels.hidden {
+  display: none;
 }

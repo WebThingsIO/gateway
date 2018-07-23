@@ -55,7 +55,7 @@ const App = {
     ThingsScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
-    Speech.init(this);
+    Speech.init();
     RulesScreen.init();
     RuleScreen.init();
 

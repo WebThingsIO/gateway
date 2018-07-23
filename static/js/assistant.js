@@ -21,25 +21,12 @@ const AssistantScreen = {
   init: function() {
     this.messages = document.getElementById('assistant-messages');
     this.avatar = document.getElementById('assistant-avatar');
-    this.speechButton = document.getElementById('assistant-speech-button');
     this.textInput = document.getElementById('assistant-text-input');
     this.textSubmit = document.getElementById('assistant-text-submit');
 
     this.textInput.addEventListener('keyup', this.handleInput.bind(this));
     this.textSubmit.addEventListener('click', this.handleSubmit.bind(this));
-    this.speechButton.addEventListener('click', this.handleSpeech.bind(this));
     this.avatar.addEventListener('click', this.handleAvatarClick.bind(this));
-
-    this.stm = null;
-    // Dynamic loading
-    import(/* webpackChunkName: "stm_web.min.js" */
-      'speaktome-api/build/stm_web.min.js')
-      .then((SpeakToMe) => {
-        this.stm = SpeakToMe.default({
-          listener: this.listener.bind(this),
-        });
-      });
-    this.listening = false;
   },
 
   /**
@@ -62,7 +49,7 @@ const AssistantScreen = {
       },
     };
 
-    fetch('/commands', opts).then((response) => {
+    return fetch('/commands', opts).then((response) => {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
@@ -98,12 +85,23 @@ const AssistantScreen = {
 
       const value = body.payload.value ? body.payload.value : '';
 
+      const message =
+        `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`;
       this.displayMessage(
-        `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`,
+        message,
         'incoming'
       );
+      return {
+        message,
+        success: true,
+      };
     }).catch(() => {
-      this.displayMessage('Sorry, I didn\'t understand.', 'incoming');
+      const message = 'Sorry, I didn\'t understand.';
+      this.displayMessage(message, 'incoming');
+      return {
+        message,
+        success: false,
+      };
     });
   },
 
@@ -150,32 +148,6 @@ const AssistantScreen = {
   handleAvatarClick: function() {
     this.messages.innerHTML = '';
   },
-
-  /**
-   * Listener for the api. Receives a msg containing the current state
-   * @param msg
-   */
-  listener: function(msg) {
-    if (msg.state === 'result') {
-      // sort results to get the one with the highest confidence
-      const results = msg.data.sort((a, b) => {
-        return b.confidence - a.confidence;
-      });
-      if (results.length < 1) {
-        this.displayMessage('Sorry, I didn\'t get that.', 'incoming');
-        console.error('Error: (results.length <= 1)');
-        return;
-      }
-      console.debug(results[0].text, results[0].confidence);
-      // TODO: autocapitalize
-      this.displayMessage(results[0].text, 'outgoing');
-      this.submitCommand(results[0].text);
-    } else if (msg.state === 'ready') {
-      this.listening = false;
-    }
-  },
-
-
 };
 
 module.exports = AssistantScreen;

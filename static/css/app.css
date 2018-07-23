@@ -169,6 +169,10 @@ h1, h2, h3, h4, h5, h6 {
   top: 2rem;
 }
 
+#speech-button.active {
+  background-image: url('../optimized-images/microphone-active.svg');
+}
+
 #speech-wrapper {
   box-sizing: border-box;
   z-index: 0;

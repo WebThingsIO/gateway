@@ -8,8 +8,8 @@
 
 'use strict';
 
-const API = require('./api');
 const App = require('./app');
+const AssistantScreen = require('./assistant');
 
 // eslint-disable-next-line no-unused-vars
 const Speech = {
@@ -17,8 +17,13 @@ const Speech = {
   /**
    * Initialise menu.
    */
-  init: function(app) {
-    app.speechButton = document.getElementById('speech-button');
+  init: function() {
+    this.wrapper = document.getElementById('speech-wrapper');
+    this.levels = document.getElementById('stm-levels');
+    this.assistantLevels = document.getElementById('assistant-stm-levels');
+    this.speechButtons = [];
+    this.addSpeechButton(document.getElementById('speech-button'));
+    this.addSpeechButton(document.getElementById('assistant-speech-button'));
     // Dynamic loading
     import(/* webpackChunkName: "stm_web.min.js" */
       'speaktome-api/build/stm_web.min.js')
@@ -26,23 +31,33 @@ const Speech = {
         this.stm = SpeakToMe.default({
           listener: this.listener.bind(this),
         });
-        app.speechButton.addEventListener('click', this.listen.bind(this));
       });
     this.listening = false;
   },
+
+  addSpeechButton: function(speechButton) {
+    speechButton.addEventListener('click', this.listen.bind(this));
+    this.speechButtons.push(speechButton);
+  },
+
 
   /**
   * Starts listening
   */
   listen: function() {
+    if (!this.stm) {
+      return;
+    }
     if (this.listening) {
       this.listening = false;
       this.stm.stop();
-      document.getElementById('speech-button').style.backgroundImage =
-        `url('/optimized-images/microphone.svg')`;
+      for (const speechButton of this.speechButtons) {
+        speechButton.classList.remove('active');
+      }
     } else {
-      document.getElementById('speech-button').style.backgroundImage =
-        `url('/optimized-images/microphone-active.svg')`;
+      for (const speechButton of this.speechButtons) {
+        speechButton.classList.add('active');
+      }
       this.stm.listen();
       this.listening = true;
     }
@@ -53,62 +68,55 @@ const Speech = {
    * @param msg
    */
   listener: function(msg) {
+    const assistantMode = this.wrapper.classList.contains('assistant');
     if (msg.state === 'result') {
       const displayNotification = function(msg, audio) {
         App.showMessage(msg, 3000);
         new Audio(`/audio/${encodeURIComponent(audio)}.mp3`).play();
       };
-      document.getElementById('stm-levels').classList.add('hidden');
-      document.getElementById('speech-button').style.backgroundImage =
-        `url('/optimized-images/microphone.svg')`;
+      this.assistantLevels.classList.add('hidden');
+      this.levels.classList.add('hidden');
+      for (const speechButton of this.speechButtons) {
+        speechButton.classList.remove('active');
+      }
       // sort results to get the one with the highest confidence
       const results = msg.data.sort((a, b) => {
         return b.confidence - a.confidence;
       });
       if (results.length < 1) {
-        displayNotification('Sorry, we couldn\'t understand your command.',
-                            'failure');
+        if (assistantMode) {
+          AssistantScreen.displayMessage('Sorry, I didn\'t get that.',
+                                         'incoming');
+        } else {
+          displayNotification('Sorry, I didn\'t get that',
+                              'failure');
+        }
+
         console.error('Error: (results.length <= 1)');
         return;
       }
       console.debug(results[0].text, results[0].confidence);
-      const opts = {
-        method: 'POST',
-        cache: 'default',
-        body: JSON.stringify({text: results[0].text}),
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      };
 
-      let cmdError;
-      fetch('/commands', opts).then((response) => {
-        if (!response.ok) {
-          cmdError = true;
-        }
-        return response.json();
-      }).then(() => {
-        if (cmdError) {
-          displayNotification('Sorry, the command wasn\'t found.', 'failure');
-        } else {
-          displayNotification('The command was successfully executed.',
-                              'success');
-        }
-      }).catch(() => {
-        displayNotification(
-          'Sorry, we found a problem processing your command.',
-          'failure');
+      AssistantScreen.displayMessage(results[0].text, 'outgoing');
+      const cmd = AssistantScreen.submitCommand(results[0].text);
+
+      if (assistantMode) {
+        return;
+      }
+
+      cmd.then(({message, success}) => {
+        displayNotification(message, success ? 'success' : 'failure');
       });
     } else if (msg.state === 'ready') {
       this.listening = false;
     } else if (msg.state === 'listening') {
       const mediaStream = this.stm.getmediaStream();
       if (mediaStream) {
-        document.getElementById('stm-levels')
-          .classList.remove('hidden');
-
+        if (assistantMode) {
+          this.assistantLevels.classList.remove('hidden');
+        } else {
+          this.levels.classList.remove('hidden');
+        }
         // Build the WebAudio graph we'll be using
         this.audioContext = new AudioContext();
         this.sourceNode = this.audioContext.
@@ -148,11 +156,19 @@ const Speech = {
     analyzerNode.fftSize = 64;
     const frequencyBins = new Float32Array(14);
 
-    // Clear the canvas
-    const levels = document.getElementById('stm-levels');
-    const xPos = levels.width / 2 + 78;
-    const yPos = levels.height / 2 - 40;
+    const assistantMode = this.wrapper.classList.contains('assistant');
+
+    let levels = this.levels;
+    let xPos = levels.width / 2;
+    let yPos = levels.height / 2;
+    if (assistantMode) {
+      levels = this.assistantLevels;
+    } else {
+      xPos += 75;
+      yPos -= 37;
+    }
     const context = levels.getContext('2d');
+    // Clear the canvas
     context.clearRect(0, 0, levels.width, levels.height);
 
     if (levels.classList.contains('hidden')) {
@@ -167,20 +183,30 @@ const Speech = {
     const skip = 2;
     const n = frequencyBins.length - skip;
     const dbRange = MAX_DB_LEVEL - MIN_DB_LEVEL;
+    let diameterMin = levels.height / 10;
+    let diameterMax = levels.height;
+    if (!assistantMode) {
+      diameterMin = 90;
+      diameterMax += 80;
+    }
 
     // Loop through the values and draw the bars
     context.strokeStyle = '#d1d2d3';
 
     for (let i = 0; i < n; i++) {
       const value = frequencyBins[i + skip];
-      const diameter =
+      let diameter =
         ((levels.height * (value - MIN_DB_LEVEL) / dbRange) * 3) - 70;
+      if (assistantMode) {
+        diameter = ((levels.height * (value - MIN_DB_LEVEL) / dbRange) * 3);
+      }
+
       if (diameter < 0) {
         continue;
       }
 
       // Display a bar for this value.
-      let alpha = diameter / 500;
+      let alpha = diameter / levels.height;
       if (alpha > 0.2) {
         alpha = 0.2;
       } else if (alpha < 0.1) {
@@ -189,17 +215,17 @@ const Speech = {
 
       context.lineWidth = alpha * alpha * 150;
       context.globalAlpha = alpha * alpha * 5;
-      context.beginPath();
-      context.ellipse(
-        xPos,
-        yPos,
-        diameter / 2,
-        diameter / 4,
-        0,
-        0,
-        2 * Math.PI
-      );
-      if (diameter > 90 && diameter < 360) {
+      if (diameter > diameterMin && diameter < diameterMax) {
+        context.beginPath();
+        context.ellipse(
+          xPos,
+          yPos,
+          diameter / 2,
+          diameter / 4,
+          0,
+          0,
+          2 * Math.PI
+        );
         context.stroke();
       }
     }
