@@ -33,6 +33,16 @@ const Speech = {
         });
       });
     this.listening = false;
+
+    window.requestAnimationFrame(() => {
+      const levelsStyle = window.getComputedStyle(this.levels);
+      this.levels.width = parseFloat(levelsStyle.width);
+      this.levels.height = parseFloat(levelsStyle.height);
+      const assistantLevelsStyle =
+        window.getComputedStyle(this.assistantLevels);
+      this.assistantLevels.width = parseFloat(assistantLevelsStyle.width);
+      this.assistantLevels.height = parseFloat(assistantLevelsStyle.height);
+    });
   },
 
   addSpeechButton: function(speechButton) {
@@ -159,13 +169,15 @@ const Speech = {
     const assistantMode = this.wrapper.classList.contains('assistant');
 
     let levels = this.levels;
-    let xPos = levels.width / 2;
-    let yPos = levels.height / 2;
     if (assistantMode) {
       levels = this.assistantLevels;
-    } else {
-      xPos += 75;
-      yPos -= 37;
+    }
+
+    let xPos = levels.width / 2;
+    let yPos = levels.height / 2;
+    if (!assistantMode) {
+      xPos = levels.width - 20 - 56 / 2;
+      yPos = 20 + 56 / 2;
     }
     const context = levels.getContext('2d');
     // Clear the canvas
@@ -184,10 +196,9 @@ const Speech = {
     const n = frequencyBins.length - skip;
     const dbRange = MAX_DB_LEVEL - MIN_DB_LEVEL;
     let diameterMin = levels.height / 10;
-    let diameterMax = levels.height;
+    const diameterMax = levels.height;
     if (!assistantMode) {
-      diameterMin = 90;
-      diameterMax += 80;
+      diameterMin = 60;
     }
 
     // Loop through the values and draw the bars
@@ -221,7 +232,7 @@ const Speech = {
           xPos,
           yPos,
           diameter / 2,
-          diameter / 4,
+          diameter / 2,
           0,
           0,
           2 * Math.PI
