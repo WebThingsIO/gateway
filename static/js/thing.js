@@ -406,9 +406,6 @@ class Thing {
         data-y="${this.y}"
         data-href="${encodeURI(this.href)}"
         >
-      <a href="${encodeURI(this.href)}?referrer=%2ffloorplan"
-         class="floorplan-thing-link">
-      </a>
       ${this.iconView()}
       <div class="floorplan-thing-name">${Utils.escapeHtml(this.name)}</div>
     </div>`;
