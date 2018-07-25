@@ -21,13 +21,11 @@ const AssistantScreen = {
   init: function() {
     this.messages = document.getElementById('assistant-messages');
     this.avatar = document.getElementById('assistant-avatar');
-    this.speechButton = document.getElementById('assistant-speech-button');
     this.textInput = document.getElementById('assistant-text-input');
     this.textSubmit = document.getElementById('assistant-text-submit');
 
     this.textInput.addEventListener('keyup', this.handleInput.bind(this));
     this.textSubmit.addEventListener('click', this.handleSubmit.bind(this));
-    this.speechButton.addEventListener('click', this.handleSpeech.bind(this));
     this.avatar.addEventListener('click', this.handleAvatarClick.bind(this));
   },
 
@@ -51,7 +49,7 @@ const AssistantScreen = {
       },
     };
 
-    fetch('/commands', opts).then((response) => {
+    return fetch('/commands', opts).then((response) => {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
@@ -87,12 +85,23 @@ const AssistantScreen = {
 
       const value = body.payload.value ? body.payload.value : '';
 
+      const message =
+        `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`;
       this.displayMessage(
-        `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`,
+        message,
         'incoming'
       );
+      return {
+        message,
+        success: true,
+      };
     }).catch(() => {
-      this.displayMessage('Sorry, I didn\'t understand.', 'incoming');
+      const message = 'Sorry, I didn\'t understand.';
+      this.displayMessage(message, 'incoming');
+      return {
+        message,
+        success: false,
+      };
     });
   },
 
@@ -127,6 +136,13 @@ const AssistantScreen = {
   },
 
   handleSpeech: function() {
+    if (this.listening) {
+      this.listening = false;
+      this.stm.stop();
+    } else {
+      this.stm.listen();
+      this.listening = true;
+    }
   },
 
   handleAvatarClick: function() {
