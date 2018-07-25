@@ -246,7 +246,7 @@ const RuleScreen = {
     function isValidSelection(block) {
       const selectedOption = block.querySelector('.selected');
       if (!selectedOption) {
-        return false;
+        return !!block.querySelector('.time-input');
       }
       return JSON.parse(selectedOption.dataset.ruleFragment);
     }
