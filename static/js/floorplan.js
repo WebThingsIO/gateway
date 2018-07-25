@@ -489,8 +489,6 @@ const FloorplanScreen = {
     if (this.interactTimeout) {
       if (thing.handleClick) {
         thing.handleClick();
-      } else if (this.selectedThing) {
-        page(`${this.selectedThing.dataset.href}?referrer=%2ffloorplan`);
       }
       clearTimeout(this.interactTimeout);
       this.interactTimeout = null;
