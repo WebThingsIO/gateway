@@ -289,6 +289,10 @@ const percentages = {
   'one hundred percent': 100,
 };
 
+for (let i = 0; i <= 100; i++) {
+  percentages[`${i}%`] = i;
+}
+
 /**
  * Find a property of a thing by its expected @type.
  *
