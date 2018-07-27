@@ -118,12 +118,13 @@ input[type="email"] {
   position: fixed;
   width: 5.6rem;
   height: 5.6rem;
+  border-radius: 2.8rem;
   padding: 0;
-  background-color: transparent;
+  background-color: #5d9bc7;
   border: none;
   background-size: cover;
   background-repeat: no-repeat;
-  opacity: 0.8;
+  opacity: 0.9;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
