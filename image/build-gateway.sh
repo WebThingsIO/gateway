@@ -80,7 +80,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 npm install -g yarn
 
 # Build the node modules, cross compiling any native code.
-(cd ${GATEWAY}; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm)
+(cd ${GATEWAY}; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm; node_modules/.bin/webpack)
 
 set -x
 
