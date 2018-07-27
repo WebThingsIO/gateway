@@ -2,6 +2,7 @@
 *.swp
 .DS_Store
 .nyc_output/
+.cache-loader/
 
 # Build artifacts
 /build
