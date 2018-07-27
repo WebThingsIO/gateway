@@ -2,16 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-@media only screen and (max-width: 730px) {
-   #things-view {
-     background: #5d9bc7;
-   }
- }
-
 #things-view {
   height: 100%;
-  padding-top: 7.5rem;
-  padding-bottom: 7.5rem;
   box-sizing: border-box;
 }
 
