@@ -234,25 +234,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
-#overflow-button,
-#menu-button,
-#back-button {
-  position: fixed;
-  width: 5.6rem;
-  height: 5.6rem;
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  background-size: cover;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  outline: 0;
-}
-
 #menu-button,
 #back-button {
   top: 2rem;
@@ -271,27 +252,6 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 2rem;
   right: 2rem;
   background-image: url('../optimized-images/overflow.svg');
-}
-
-#overflow-button.hidden,
-#menu-button.hidden,
-#back-button.hidden {
-  display: none;
-}
-
-#overflow-button::-moz-focus-inner,
-#menu-button::-moz-focus-inner,
-#back-button::-moz-focus-inner {
-  border: 0;
-}
-
-#overflow-button:hover,
-#menu-button:hover,
-#back-button:hover,
-#add-button:active,
-#create-rule-button:active,
-#discover-addons-button:active {
-  opacity: 1;
 }
 
 #overflow-menu {
