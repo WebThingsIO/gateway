@@ -50,7 +50,11 @@ const webpackNode = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        include: path.resolve(__dirname, 'src'),
+        use: [
+          'cache-loader',
+          'awesome-typescript-loader',
+        ],
       },
     ],
   },
@@ -165,7 +169,9 @@ const webpackWeb = {
     rules: [
       {
         test: /.\/static\/js\/.*\.js$/,
+        include: path.resolve(__dirname, 'static'),
         use: [
+          'cache-loader',
           {
             loader: 'babel-loader',
             query: {
@@ -190,7 +196,9 @@ const webpackWeb = {
       },
       {
         test: /\.css$/,
+        include: path.resolve(__dirname, 'static'),
         use: [
+          'cache-loader',
           {
             loader: MiniCssExtractPlugin.loader,
           },
@@ -204,19 +212,24 @@ const webpackWeb = {
       },
       {
         test: /\.html$/,
-        use: {
-          loader: 'html-loader',
-          options: {
-            attrs: ['img:src'],
-            root: path.join(__dirname, 'static'),
-            minimize: true,
+        use: [
+          'cache-loader',
+          {
+            loader: 'html-loader',
+            options: {
+              attrs: ['img:src'],
+              root: path.join(__dirname, 'static'),
+              minimize: true,
+            },
           },
-        },
+        ],
       },
       {
         test:
           /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        include: path.resolve(__dirname, 'static'),
         use: [
+          'cache-loader',
           {
             loader: 'url-loader',
             options: {
@@ -264,6 +277,7 @@ const webpackSW = {
     rules: [
       {
         test: /\.js$/,
+        include: path.resolve(__dirname, 'static'),
         use: ExtractTextPlugin.extract({
           use: 'raw-loader',
         }),
