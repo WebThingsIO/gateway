@@ -198,7 +198,6 @@ const webpackWeb = {
         test: /\.css$/,
         include: path.resolve(__dirname, 'static'),
         use: [
-          'cache-loader',
           {
             loader: MiniCssExtractPlugin.loader,
           },
