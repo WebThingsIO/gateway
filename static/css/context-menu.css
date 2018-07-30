@@ -51,6 +51,10 @@
   background-color: #ff5555;
 }
 
+#context-menu-back-button {
+  background-color: transparent;
+}
+
 #context-menu-content-edit {
   background-color: #597285;
   width: 50%;
