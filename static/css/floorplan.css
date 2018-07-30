@@ -4,6 +4,7 @@
 
 #floorplan-view.edit {
   background-color: #305067;
+  z-index: 50;
 }
 
 #floorplan {
@@ -77,6 +78,18 @@
   right: 2rem;
   background-image: url('../optimized-images/done.svg');
   background-color: transparent;
+}
+
+#floorplan-back-button {
+  top: 2rem;
+  left: 2rem;
+  background-image: url('../optimized-images/back.png');
+  background-color: transparent;
+  display: none;
+}
+
+#floorplan-view.edit #floorplan-back-button {
+  display: block;
 }
 
 #floorplan-upload-form {
