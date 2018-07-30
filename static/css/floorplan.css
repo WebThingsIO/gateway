@@ -76,6 +76,7 @@
   bottom: 2rem;
   right: 2rem;
   background-image: url('../optimized-images/done.svg');
+  background-color: transparent;
 }
 
 #floorplan-upload-form {
