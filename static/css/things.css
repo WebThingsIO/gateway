@@ -24,6 +24,10 @@
   margin: calc(2rem + 5.6rem) 0;
 }
 
+#things.single-thing {
+  top: calc(50% - 2rem - 5.6rem);
+}
+
 #add-button {
   bottom: 2rem;
   right: 2rem;
