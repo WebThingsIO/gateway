@@ -139,6 +139,7 @@ const ThingsScreen = {
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
       this.thingTitleElement.classList.remove('hidden');
+      this.thingsElement.classList.add('single-thing');
 
       if (actionName) {
         this.showActionInputForm(thingId, actionName);
@@ -152,6 +153,7 @@ const ThingsScreen = {
       this.menuButton.classList.remove('hidden');
       this.backButton.classList.add('hidden');
       this.thingTitleElement.classList.add('hidden');
+      this.thingsElement.classList.remove('single-thing');
       this.showThings();
     }
   },
