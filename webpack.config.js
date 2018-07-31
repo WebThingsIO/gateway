@@ -36,7 +36,7 @@ const webpackNode = {
   mode: 'development',
   target: 'node',
   node: {
-    __dirname: false,
+    __dirname: true,
     __filename: false,
   },
   resolve: {
