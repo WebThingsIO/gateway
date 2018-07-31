@@ -13,6 +13,8 @@ Handlebars.registerHelper('escapeQuotes', function(str) {
   return new Handlebars.SafeString(str.replace(/'/, '\\\''));
 });
 
+const templatesPath = path.join(__dirname, '../src/wifi-setup/templates');
+
 const WiFiSetupApp = {};
 WiFiSetupApp.create = function() {
   // The express server
@@ -26,7 +28,7 @@ WiFiSetupApp.create = function() {
   app.get('/', handleRoot);
   app.get('/wifi-setup', handleWiFiSetup);
   app.post('/connecting', handleConnecting);
-  app.use(express.static(path.join(__dirname, 'templates')));
+  app.use(express.static(templatesPath));
 
   return app;
 };
@@ -35,9 +37,12 @@ function getTemplate(filename) {
   return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
 }
 
-const wifiSetupTemplate = getTemplate('./templates/wifiSetup.hbs');
-const connectingTemplate = getTemplate('./templates/connecting.hbs');
-const hotspotTemplate = getTemplate('./templates/hotspot.hbs');
+const wifiSetupTemplate = getTemplate(
+  path.join(templatesPath, 'wifiSetup.hbs'));
+const connectingTemplate = getTemplate(
+  path.join(templatesPath, 'connecting.hbs'));
+const hotspotTemplate = getTemplate(
+  path.join(templatesPath, 'hotspot.hbs'));
 
 // When the client issues a GET request for the list of wifi networks
 // scan and return them
