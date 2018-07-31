@@ -1,5 +1,3 @@
-console.log('starting the wifi server');
-
 const express = require('express');
 const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
