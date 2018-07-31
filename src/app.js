@@ -33,6 +33,7 @@ const mDNSserver = require('./mdns-server');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const Constants = require('./constants');
+const {wifi, wifiSetupApp} = require('./wifi-setup');
 
 // Causes a timestamp to be prepended to console log lines.
 require('./log-timestamps');
@@ -124,6 +125,22 @@ function startHttpGateway() {
 
 function stopHttpGateway() {
   httpServer.removeListener('request', httpApp);
+}
+
+function startWiFiSetup() {
+  httpServer.on('request', wifiSetupApp);
+
+  let port = config.get('ports.http');
+  const options = getOptions();
+  if (typeof options.port === 'number') {
+    port = options.port;
+  }
+
+  httpServer.listen(port);
+}
+
+function stopWiFiSetup() {
+  httpServer.removeListener('request', wifiSetupApp);
 }
 
 function getOptions() {
@@ -257,23 +274,42 @@ function createRedirectApp(port) {
 }
 
 let serverStartup = Promise.resolve();
+let wifiPromise = Promise.resolve(true);
 
-// if we have the certificates installed, we start https
-if (TunnelService.hasCertificates()) {
-  serverStartup = TunnelService.userSkipped().then(function(res) {
-    if (res) {
-      startHttpGateway();
-    } else {
-      startHttpsGateway();
-      TunnelService.hasTunnelToken().then(function(result) {
-        if (result) {
-          TunnelService.start();
-        }
-      });
-    }
-  });
-} else {
-  startHttpGateway();
+if (process.argv.includes('--check-wifi')) {
+  wifiPromise = wifi.checkConnection();
+}
+
+wifiPromise.then((connected) => {
+  if (!connected) {
+    wifiSetupApp.onConnection = function() {
+      stopWiFiSetup();
+      startGateway();
+    };
+    startWiFiSetup();
+  } else {
+    startGateway();
+  }
+});
+
+function startGateway() {
+  // if we have the certificates installed, we start https
+  if (TunnelService.hasCertificates()) {
+    serverStartup = TunnelService.userSkipped().then(function(res) {
+      if (res) {
+        startHttpGateway();
+      } else {
+        startHttpsGateway();
+        TunnelService.hasTunnelToken().then(function(result) {
+          if (result) {
+            TunnelService.start();
+          }
+        });
+      }
+    });
+  } else {
+    startHttpGateway();
+  }
 }
 
 if (config.get('cli')) {
