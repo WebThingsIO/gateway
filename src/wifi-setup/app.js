@@ -4,8 +4,6 @@ const express = require('express');
 const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const os = require('os');
-const run = require('./run.js');
 const platform = require('./platform.js');
 const wifi = require('./wifi.js');
 const wait = require('./wait.js');
@@ -14,118 +12,6 @@ const path = require('path');
 Handlebars.registerHelper('escapeQuotes', function(str) {
   return new Handlebars.SafeString(str.replace(/'/, '\\\''));
 });
-
-// The Edison device can't scan for wifi networks while in AP mode, so
-// we've got to scan before we enter AP mode and save the results
-let preliminaryScanResults;
-
-// check if the device has a wifi adapter then scan for any currently available
-// networks
-wifi.getStatus()
-  .then(() => {
-    // Wait until we have a working wifi connection. Retry every 3 seconds up
-    // to 10 times. If we are connected, then start the Gateway client.
-    // If we never get a wifi connection, go into AP mode.
-    // Before we start, though, let the user know that something is happening
-    waitForWifi(20, 3000)
-      .then(() => {
-        return true;
-      })
-      .catch((err) => {
-        console.log('No wifi connection found. Starting the AP...', err);
-        startAP();
-        return false;
-      });
-  })
-  .catch((err) => {
-    console.error('Error checking wifi adapter presence', err);
-    return true;
-  });
-
-// Return a promise, then check every interval ms for a wifi connection.
-// Resolve the promise when we're connected. Or, if we aren't connected
-// after maxAttempts attempts, then reject the promise
-function waitForWifi(maxAttempts, interval) {
-  return new Promise(function(resolve, reject) {
-    let attempts = 0;
-
-    // first of all we query wpa_supplicant if there's a wifi AP configured
-    run(platform.listNetworks)
-      .then((out) => {
-        console.log('List Networks command executed:', out);
-        if (out.includes('\n0\t')) {
-          // there's at least one wifi AP configured. Let's wait to see if it
-          // will connect
-          check();
-        } else {
-          // No wifi AP configured. Let's skip the wait and start the setup
-          // immediately
-          reject();
-        }
-      })
-      .catch((err) => console.error('Error listing Networks:', err));
-
-
-    function check() {
-      attempts++;
-      console.log('check', attempts);
-      wifi.getStatus()
-        .then((status) => {
-          console.log(status);
-          if (status === 'COMPLETED') {
-            console.log('Wifi connection found. resolving');
-            checkForAddress();
-            console.log('resolved');
-          } else {
-            console.log('No wifi connection on attempt', attempts);
-            retryOrGiveUp();
-          }
-        })
-        .catch((err) => {
-          console.error('Error checking wifi on attempt', attempts, ':', err);
-          retryOrGiveUp();
-        });
-    }
-
-    function checkForAddress() {
-      const ifaces = os.networkInterfaces();
-
-      if (ifaces.hasOwnProperty('wlan0')) {
-        for (const addr of ifaces.wlan0) {
-          if (addr.family !== 'IPv4' || addr.internal) {
-            continue;
-          }
-
-          resolve();
-          return;
-        }
-      }
-
-      retryOrGiveUp();
-    }
-
-    function retryOrGiveUp() {
-      if (attempts >= maxAttempts) {
-        console.error('Giving up. No wifi available.');
-        reject();
-      } else {
-        setTimeout(check, interval);
-      }
-    }
-  });
-}
-
-function startAP() {
-  console.log('startAP');
-
-  // Scan for wifi networks now because we can't always scan once
-  // the AP is being broadcast, retrying up to 10 times
-  return wifi.scan(10).then((ssids) => {
-    preliminaryScanResults = ssids; // Remember ssids
-    console.log('No wifi found; entering AP mode');
-    return wifi.startAP(platform.ap_ip);
-  });
-}
 
 const WiFiSetupApp = {};
 WiFiSetupApp.create = function() {
@@ -138,7 +24,7 @@ WiFiSetupApp.create = function() {
   // Define the handler methods for the various URLs we handle
   app.get('/*', handleCaptive);
   app.get('/', handleRoot);
-  app.get('/wifi-setup', handleWifiSetup);
+  app.get('/wifi-setup', handleWiFiSetup);
   app.post('/connecting', handleConnecting);
   app.use(express.static(path.join(__dirname, 'templates')));
 
@@ -203,12 +89,12 @@ function handleRoot(request, response) {
     });
 }
 
-function handleWifiSetup(request, response) {
+function handleWiFiSetup(request, response) {
   wifi.scan().then((results) => {
     // On Edison, scanning will fail since we're in AP mode at this point
     // So we'll use the preliminary scan instead
     if (results.length === 0) {
-      results = preliminaryScanResults;
+      results = wifi.preliminaryScanResults;
     }
 
     // XXX
@@ -283,7 +169,7 @@ function handleConnecting(request, response) {
       }
     })
     .then(() => wifi.defineNetwork(ssid, password))
-    .then(() => waitForWifi(20, 3000))
+    .then(() => wifi.waitForWiFi(20, 3000))
     .then(() => wifi.broadcastBeacon())
     .then(() => {
       WiFiSetupApp.onConnection();
