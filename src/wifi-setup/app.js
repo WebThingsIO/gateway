@@ -16,22 +16,20 @@ Handlebars.registerHelper('escapeQuotes', function(str) {
 const templatesPath = path.join(__dirname, '../src/wifi-setup/templates');
 
 const WiFiSetupApp = {};
-WiFiSetupApp.create = function() {
-  // The express server
-  const app = express();
+// The express server
+const app = express();
 
-  // When we get POSTs, handle the body like this
-  app.use(bodyParser.urlencoded({extended: false}));
+// When we get POSTs, handle the body like this
+app.use(bodyParser.urlencoded({extended: false}));
 
-  // Define the handler methods for the various URLs we handle
-  app.get('/*', handleCaptive);
-  app.get('/', handleRoot);
-  app.get('/wifi-setup', handleWiFiSetup);
-  app.post('/connecting', handleConnecting);
-  app.use(express.static(templatesPath));
+// Define the handler methods for the various URLs we handle
+app.get('/*', handleCaptive);
+app.get('/', handleRoot);
+app.get('/wifi-setup', handleWiFiSetup);
+app.post('/connecting', handleConnecting);
+app.use(express.static(templatesPath));
 
-  return app;
-};
+WiFiSetupApp.onRequest = app;
 
 function getTemplate(filename) {
   return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
