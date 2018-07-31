@@ -157,6 +157,8 @@ function getOptions() {
     ['p', 'port=PORT', 'Specify the server port to use'],
     ['h', 'help', 'Display help' ],
     ['v', 'verbose', 'Show verbose output'],
+    ['', 'check-wifi',
+     'Run a connection check on the WiFi (only supported on RasPi)'],
   ]);
 
   const opt = getopt.parseSystem();
@@ -178,6 +180,9 @@ function getOptions() {
     options.port = parseInt(opt.options.port);
   }
 
+  if (opt.options['check-wifi']) {
+    options['check-wifi'] = opt.options['check-wifi'];
+  }
   return options;
 }
 
@@ -275,8 +280,9 @@ function createRedirectApp(port) {
 
 let serverStartup = Promise.resolve();
 let wifiPromise = Promise.resolve(true);
+const options = getOptions();
 
-if (process.argv.includes('--check-wifi')) {
+if (options['check-wifi']) {
   wifiPromise = wifi.checkConnection();
 }
 
