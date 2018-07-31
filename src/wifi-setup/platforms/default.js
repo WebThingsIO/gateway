@@ -31,11 +31,13 @@ module.exports = {
   // Note that we use different commands on Yocto systems than
   // we do on Raspbian systems
   startAP:
-    'ifconfig wlan0 $IP; systemctl start hostapd; systemctl start dnsmasq',
+    // eslint-disable-next-line
+    'sudo ifconfig wlan0 $IP; sudo systemctl start hostapd; sudo systemctl start dnsmasq',
 
   // Stop broadcasting an AP and attempt to reconnect to local wifi
   stopAP:
-    'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',
+    // eslint-disable-next-line
+    'sudo systemctl stop hostapd; sudo systemctl stop dnsmasq; sudo ifconfig wlan0 0.0.0.0',
 
   // Remove an existing network. Expects the network ID in the environment
   // variable ID.
@@ -60,5 +62,5 @@ module.exports = {
   // Broadcast an Eddystone beacon
   broadcastBeacon:
     // eslint-disable-next-line
-    'hciconfig hci0 up && hciconfig hci0 leadv 3 && hcitool -i hci0 cmd',
+    'sudo hciconfig hci0 up && sudo hciconfig hci0 leadv 3 && sudo hcitool -i hci0 cmd',
 };
