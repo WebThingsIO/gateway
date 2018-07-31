@@ -128,7 +128,7 @@ function stopHttpGateway() {
 }
 
 function startWiFiSetup() {
-  httpServer.on('request', wifiSetupApp);
+  httpServer.on('request', wifiSetupApp.onRequest);
 
   let port = config.get('ports.http');
   const options = getOptions();
@@ -140,7 +140,7 @@ function startWiFiSetup() {
 }
 
 function stopWiFiSetup() {
-  httpServer.removeListener('request', wifiSetupApp);
+  httpServer.removeListener('request', wifiSetupApp.onRequest);
 }
 
 function getOptions() {
