@@ -5,10 +5,6 @@ module.exports = {
 
   // ip to be used by the AP
   ap_ip: '192.168.220.1',
-  startGateway: 'systemctl start mozilla-iot-gateway',
-  stopGateway: 'systemctl stop mozilla-iot-gateway',
-  restartGateway: 'systemctl restart mozilla-iot-gateway',
-  stopWifiService: 'systemctl stop mozilla-gateway-wifi-setup',
 
   // A shell command that outputs the string "COMPLETED" if we are
   // connected to a wifi network and outputs something else otherwise
@@ -26,32 +22,43 @@ module.exports = {
 
   // A shell command that lists the names of known wifi networks, one
   // to a line.
-  getKnownNetworks: 'wpa_cli -iwlan0 list_networks | sed -e "1d" | awk \'BEGIN {FS="\\t"}; {print $2}\'',
+  getKnownNetworks:
+    // eslint-disable-next-line
+    'wpa_cli -iwlan0 list_networks | sed -e "1d" | awk \'BEGIN {FS="\\t"}; {print $2}\'',
 
   // Start broadcasting an access point.
   // The name of the AP is defined in a config file elsewhere
   // Note that we use different commands on Yocto systems than
   // we do on Raspbian systems
-  startAP: 'ifconfig wlan0 $IP; systemctl start hostapd; systemctl start dnsmasq',
+  startAP:
+    'ifconfig wlan0 $IP; systemctl start hostapd; systemctl start dnsmasq',
 
   // Stop broadcasting an AP and attempt to reconnect to local wifi
-  stopAP: 'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',
+  stopAP:
+    'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',
 
   // Remove an existing network. Expects the network ID in the environment
   // variable ID.
-  removeNetwork: 'wpa_cli -iwlan0 remove_network $ID && wpa_cli -iwlan0 save_config',
+  removeNetwork:
+    'wpa_cli -iwlan0 remove_network $ID && wpa_cli -iwlan0 save_config',
 
   // Define a new wifi network. Expects the network name and password
   // in the environment variables SSID and PSK.
-  defineNetwork: 'ID=`wpa_cli -iwlan0 add_network` && wpa_cli -iwlan0 set_network $ID ssid \\"$SSID\\" && wpa_cli -iwlan0 set_network $ID psk \\"$PSK\\" && wpa_cli -iwlan0 enable_network $ID && wpa_cli -iwlan0 save_config',
+  defineNetwork:
+    // eslint-disable-next-line
+    'ID=`wpa_cli -iwlan0 add_network` && wpa_cli -iwlan0 set_network $ID ssid \\"$SSID\\" && wpa_cli -iwlan0 set_network $ID psk \\"$PSK\\" && wpa_cli -iwlan0 enable_network $ID && wpa_cli -iwlan0 save_config',
 
   // Define a new open wifi network. Expects the network name
   // in the environment variable SSID.
-  defineOpenNetwork: 'ID=`wpa_cli -iwlan0 add_network` && wpa_cli -iwlan0 set_network $ID ssid \\"$SSID\\" && wpa_cli -iwlan0 set_network $ID key_mgmt NONE && wpa_cli -iwlan0 enable_network $ID && wpa_cli -iwlan0 save_config',
+  defineOpenNetwork:
+    // eslint-disable-next-line
+    'ID=`wpa_cli -iwlan0 add_network` && wpa_cli -iwlan0 set_network $ID ssid \\"$SSID\\" && wpa_cli -iwlan0 set_network $ID key_mgmt NONE && wpa_cli -iwlan0 enable_network $ID && wpa_cli -iwlan0 save_config',
 
   // Lists configured networks
   listNetworks: 'wpa_cli -iwlan0 list_networks',
 
   // Broadcast an Eddystone beacon
-  broadcastBeacon: 'hciconfig hci0 up && hciconfig hci0 leadv 3 && hcitool -i hci0 cmd',
+  broadcastBeacon:
+    // eslint-disable-next-line
+    'hciconfig hci0 up && hciconfig hci0 leadv 3 && hcitool -i hci0 cmd',
 };
