@@ -1,0 +1,306 @@
+<html>
+  <head>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1"/>
+    <meta charset="utf-8"/>
+    <style>
+      @font-face {
+        font-family: 'Zilla Slab';
+        font-weight: 400;
+        font-style: normal;
+        src: url("/fonts/ZillaSlab-Regular.woff2") format("woff2"), url("/fonts/ZillaSlab-Regular.woff") format("woff");
+      }
+      @font-face {
+        font-family: 'Zilla Slab';
+        font-weight: 700;
+        font-style: normal;
+        src: url("/fonts/ZillaSlab-Bold.woff2") format("woff2"), url("/fonts/ZillaSlab-Bold.woff") format("woff");
+      }
+      @font-face {
+        font-family: 'Zilla Slab';
+        font-weight: 400;
+        font-style: italic;
+        src: url("/fonts/ZillaSlab-RegularItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-RegularItalic.woff") format("woff");
+      }
+      @font-face {
+        font-family: 'Zilla Slab';
+        font-weight: 700;
+        font-style: italic;
+        src: url("/fonts/ZillaSlab-BoldItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-BoldItalic.woff") format("woff");
+      }
+      @font-face {
+        font-family: 'Open Sans';
+        font-weight: 400;
+        font-style: normal;
+        src: url("/fonts/opensans-regular.woff2") format("woff2"), url("/fonts/opensans-regular.woff") format("woff");
+      }
+      @font-face {
+        font-family: 'Open Sans';
+        font-weight: 700;
+        font-style: normal;
+        src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
+      }
+
+      h1 {
+        font-size: 3rem;
+        font-family: 'Zilla Slab', sans-serif;
+      }
+
+      h3 {
+        font-size: 2rem;
+        font-weight: normal;
+      }
+
+      label {
+        font-size: 2rem;
+        font-weight: normal;
+        margin-left: 0.8rem;
+      }
+
+      html {
+        font-size: 10px;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      body {
+        background-color: #305067;
+        color: #fff;
+        width: auto
+      }
+
+      #maindiv {
+        display: block;
+        text-align: center;
+        width: 100%;
+      }
+
+      #maindiv2 {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #step2 {
+        display: none;
+        width: 100%;
+      }
+
+      .backbtn {
+        margin: 2rem 2rem auto;
+        position: relative;
+        width: 6.4rem;
+        height: 6.4rem;
+        background-image: url('/back.png');
+        background-repeat: no-repeat;
+        background-color: #305067;
+        background-size: 6.4rem 6.4rem;
+        border: none;
+      }
+
+      .item {
+        display: block;
+        margin: 0 auto;
+        padding: 0.8rem;
+        width: 100%;
+        border: none;
+        max-width: 40rem;
+        background: #597285;
+        border-radius: 0.5rem;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .item.skip {
+        width: 10rem;
+      }
+
+      .item.connect {
+        width: 10rem;
+      }
+
+      .item.ssid {
+        height: 5rem;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+
+      .item.password{
+        height: 4rem;
+        text-align: left;
+        background-color: #c7d0d6;
+        color: #666666;
+      }
+
+      .item:hover,
+      .item:focus,
+      .item:active {
+        background: #748ea1;
+        color: #fff;
+      }
+
+      .item.password:hover,
+      .item.password:focus,
+      .item.password:active {
+        background-color: #c7d0d6;
+        color: #000;
+      }
+
+      .item.password::placeholder {
+        color: #666;
+      }
+
+      .item:focus {
+        outline: none;
+      }
+
+      #wordmark {
+        position: fixed;
+        bottom: 2rem;
+        left: 2rem;
+        width: 12.5rem;
+        z-index: -1;
+      }
+
+      #wifi-icon {
+        float: right;
+      }
+
+      #text-ssid {
+        float: left;
+        padding: .5rem 0 0 1rem;
+        font-size: large;
+        width: 32rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      #div-wifi-icon-2{
+        float: left;
+        height: 100%;
+        display: inline-block;
+      }
+
+      #img-wifi-icon-2 {
+        padding-top: 2rem;
+      }
+
+      #network-label {
+        top: 5rem;
+        left: 50%;
+        position: absolute;
+        display: inline-block;
+        height: 7rem;
+        transform: translate(-50%, -50%);
+      }
+
+      #div-wifi-text {
+        float: right;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1rem;
+      }
+
+      :root .showpassword-checkbox {
+        /* original check box is pushed outside the viewport */
+        position: absolute;
+        left: -1000em;
+      }
+
+      :root .showpassword-checkbox + label:before {
+        content: "";
+        display: inline-block;
+        width  : 3rem;
+        height : 3rem;
+        float: left;
+        margin : 0.1rem 0;
+        background: url("/checkbox-sprite.png") no-repeat 0 0;
+        background-size: 3rem auto;
+      }
+
+      :root .showpassword-checkbox:checked + label:before {
+        background-position: 0 -3rem;
+      }
+
+      :root .showpassword-checkbox:disabled + label:before {
+        background-position: 0 -6rem;
+      }
+
+      :root .showpassword-checkbox:checked:disabled + label:before {
+        background-position: 0 -9rem;
+      }
+    </style>
+    <script>
+      function selectssid(event, ssid) {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+        document.getElementById('selected-network').innerText = ssid;
+        document.getElementById('ssid').value = ssid;
+        document.getElementById('wordmark').style.display = 'none';
+        event.preventDefault();
+      }
+
+      function back(event) {
+        document.getElementById('step1').style.display = 'block';
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('wordmark').style.display = 'block';
+        event.preventDefault();
+      }
+
+      function skip(event) {
+        event.preventDefault();
+        document.getElementById('skip').value = '1';
+        document.getElementById('mainform').submit();
+      }
+
+      var mask = true;
+      function displaypassword() {
+        let tbx = document.getElementsByName('password')[0];
+        if(mask === true){
+          mask = false;
+          tbx.setAttribute('type', 'text');
+        } else {
+          mask = true;
+          tbx.setAttribute('type', 'password');
+        }
+      }
+    </script>
+    <title>Mozilla Gateway</title>
+  </head>
+  <body>
+    <form action="/connecting" method="post" id="mainform">
+      <div id="step1">
+        <div id="maindiv">
+          <h1>Welcome</h1>
+          <h3>Connect to a WiFi network?</h3><br>
+          {{#networks}}
+            <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}')" id="item"
+                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
+            </button>
+          {{/networks}}<br><br>
+          <button onclick="window.skip(event)" class="item skip">Skip</button>
+        </div>
+      </div>
+      <div id="step2">
+        <input type="button" class="backbtn" onclick="window.back(event)">
+        <div id='network-label'>
+          <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/wifi.svg'></div>
+          <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
+        </div>
+        <div id="maindiv2">
+          <input type="password" name="password" placeholder="WiFi Password"
+                 class="item password"><br>
+          <input onclick="window.displaypassword()" id="showpassword"
+                 type="checkbox" class="showpassword-checkbox">
+          <label for="showpassword">Show password</label><br><br>
+          <button id="connect" class="item connect">Connect</button>
+        </div>
+      </div>
+      <input id="ssid" name="ssid" type="hidden" value="">
+      <input id="skip" name="skip" type="hidden" value="">
+      <img id="wordmark" alt="Mozilla IoT" src="/moziot-wordmark.png" />
+    </form>
+  </body>
+</html>
