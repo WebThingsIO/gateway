@@ -28,6 +28,7 @@ const SettingsScreen = {
    * Initialise Settings Screen.
    */
   init: function() {
+    this.view = document.getElementById('settings-view');
     this.titleElement = document.getElementById('section-title');
     this.titleName = document.getElementById('section-title-name');
     this.titleIcon = document.getElementById('section-title-icon');
@@ -61,7 +62,7 @@ const SettingsScreen = {
 
     this.backButton.href = '/settings';
     this.titleElement.classList.remove('hidden');
-    this.titleElement.classList.remove('dark');
+    this.view.classList.remove('dark');
 
     if (section) {
       this.showSection(section, subsection, id);
@@ -353,7 +354,7 @@ const SettingsScreen = {
     this.userSettingsEdit.classList.remove('hidden');
     this.titleName.innerText = 'Edit User';
     this.titleIcon.src = '/optimized-images/user.svg';
-    this.titleElement.classList.add('dark');
+    this.view.classList.add('dark');
 
     API.getUser(id).then((user) => {
       const form = document.getElementById('edit-user-form');
@@ -416,7 +417,7 @@ const SettingsScreen = {
     this.userSettingsAdd.classList.remove('hidden');
     this.titleName.innerText = 'Add User';
     this.titleIcon.src = '/optimized-images/user.svg';
-    this.titleElement.classList.add('dark');
+    this.view.classList.add('dark');
 
     const form = document.getElementById('add-user-form');
     const email = document.getElementById('user-settings-add-email');
@@ -630,7 +631,7 @@ const SettingsScreen = {
     this.addonDiscoverySettings.classList.add('hidden');
     this.titleName.innerText = `Configure ${id}`;
     this.titleIcon.src = '/optimized-images/add-on.svg';
-    this.titleElement.classList.add('dark');
+    this.view.classList.add('dark');
 
     this.getAddonList().then(() => {
       this.addonConfigSettings.innerHTML = '';
@@ -647,7 +648,7 @@ const SettingsScreen = {
     this.addonDiscoverySettings.classList.remove('hidden');
     this.titleName.innerText = 'Discover New Add-ons';
     this.titleIcon.src = '/optimized-images/add-on.svg';
-    this.titleElement.classList.add('dark');
+    this.view.classList.add('dark');
 
     this.getAddonList().then(() => {
       const addonList = document.getElementById('discovered-addons-list');

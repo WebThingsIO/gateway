@@ -33,3 +33,7 @@
   right: 2rem;
   background-image: url('../optimized-images/add.svg');
 }
+
+#add-thing-back-button {
+  background-color: transparent;
+}
