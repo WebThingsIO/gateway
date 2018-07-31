@@ -33,7 +33,7 @@ run_app() {
   echo "npm version"
   npm --version
   echo "Starting gateway ..."
-  npm start --check-wifi
+  npm start -- --check-wifi
 }
 
 mkdir -p "${MOZIOT_HOME}/log"
