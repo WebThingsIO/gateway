@@ -145,8 +145,8 @@ OnCalendar=daily
 WantedBy=timers.target
 END
 
-# Disable the gateway service so that doesn't start up automatically on each boot.
-sudo systemctl disable mozilla-iot-gateway.service
+# Enable the gateway service so that it starts up automatically on each boot
+sudo systemctl enable mozilla-iot-gateway.service
 
 # Install required root packages
 sudo ./prepare-base-root.sh
