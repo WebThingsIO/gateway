@@ -8,24 +8,19 @@
 }
 
 #things-container {
+  position: relative;
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
-  max-height: 100%;
   height: 100%;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-#things {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  max-height: 100%;
-  margin: calc(2rem + 5.6rem) 0;
-}
-
-#things.single-thing {
-  top: calc(50% - 2rem - 5.6rem);
+.things-pad {
+  flex: 1 7.6rem;
+  min-height: 7.6rem;
 }
 
 #add-button {
