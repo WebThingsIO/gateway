@@ -11,7 +11,7 @@ Handlebars.registerHelper('escapeQuotes', function(str) {
   return new Handlebars.SafeString(str.replace(/'/, '\\\''));
 });
 
-const templatesPath = path.join(__dirname, '../src/wifi-setup/templates');
+const templatesPath = path.join(__dirname, '../../src/wifi-setup/templates');
 
 const WiFiSetupApp = {};
 // The express server
