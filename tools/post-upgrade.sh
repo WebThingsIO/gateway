@@ -36,4 +36,7 @@ if [ ! -d "${addons_dir}/thing-url-adapter" ]; then
   rm -rf "${tempdir}"
 fi
 
+sudo systemctl enable mozilla-iot-gateway.service
+sudo systemctl disable mozilla-gateway-wifi-setup.service
+
 touch .post_upgrade_complete
