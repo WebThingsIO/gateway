@@ -9035,8 +9035,8 @@ spdx-license-ids@^1.0.2:
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-1.2.2.tgz#c9df7a3424594ade6bd11900d596696dc06bac57"
 
 speaktome-api@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/speaktome-api/-/speaktome-api-0.2.0.tgz#05e04f59d98b7ce6fa521bfbac43b3cdd1077870"
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/speaktome-api/-/speaktome-api-0.2.1.tgz#4021621659126cbf6be1338a174b14927f56cfd7"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
