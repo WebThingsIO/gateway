@@ -251,7 +251,7 @@ function checkConnection() {
     // to 10 times. If we are connected, then start the Gateway client.
     // If we never get a wifi connection, go into AP mode.
     // Before we start, though, let the user know that something is happening
-    waitForWiFi(20, 3000).then(() => {
+    return waitForWiFi(20, 3000).then(() => {
       return true;
     }).catch((err) => {
       console.log('No wifi connection found. Starting the AP...', err);
