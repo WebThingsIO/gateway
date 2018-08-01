@@ -10,6 +10,11 @@
   box-sizing: border-box;
 }
 
+#settings-view.dark {
+  background-color: #305067;
+  z-index: 50;
+}
+
 #section-title.hidden {
   display: none;
 }
@@ -22,10 +27,6 @@
   height: 9.6rem;
   display: flex;
   align-items: center;
-}
-
-#section-title.dark {
-  background-color: #305067;
 }
 
 #section-title-container {
@@ -83,6 +84,10 @@
   margin: 0 auto;
   padding: 2rem;
   padding-top: 0;
+}
+
+#settings-back-button {
+  background-color: transparent;
 }
 
 .developer-link-item,

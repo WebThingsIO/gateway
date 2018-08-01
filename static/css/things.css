@@ -5,15 +5,8 @@
 #things-view {
   height: 100%;
   box-sizing: border-box;
-}
-
-#things-container {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #fff;
-  max-height: 100%;
-  height: 100%;
   overflow: auto;
+  padding: 7.6rem 0;
 }
 
 #things {
@@ -21,15 +14,15 @@
   top: 50%;
   transform: translateY(-50%);
   max-height: 100%;
-  margin: calc(2rem + 5.6rem) 0;
-}
-
-#things.single-thing {
-  top: calc(50% - 2rem - 5.6rem);
+  text-align: center;
 }
 
 #add-button {
   bottom: 2rem;
   right: 2rem;
   background-image: url('../optimized-images/add.svg');
+}
+
+#add-thing-back-button {
+  background-color: transparent;
 }
