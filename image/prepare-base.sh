@@ -277,4 +277,6 @@ END
 sudo chmod +x /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
 
+../tools/post-upgrade.sh
+
 echo "Done"
