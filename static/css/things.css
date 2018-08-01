@@ -5,22 +5,16 @@
 #things-view {
   height: 100%;
   box-sizing: border-box;
-}
-
-#things-container {
-  position: relative;
-  text-align: center;
-  font-size: 1.6rem;
-  color: #fff;
-  height: 100%;
   overflow: auto;
-  display: flex;
-  flex-direction: column;
+  padding: 7.6rem 0;
+  box-sizing: border-box;
 }
 
-.things-pad {
-  flex: 1 7.6rem;
-  min-height: 7.6rem;
+#things {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 100%;
 }
 
 #add-button {
