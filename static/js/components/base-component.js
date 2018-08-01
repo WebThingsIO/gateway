@@ -13,7 +13,16 @@ class BaseComponent extends HTMLElement {
   constructor(template) {
     super();
     this.attachShadow({mode: 'open'});
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    const templateClone = template.content.cloneNode(true);
+    // Detect whether ShadowRoot has been polyfilled on this browser
+    if (ShadowRoot.name !== 'ShadowRoot') {
+      const tagName = this.shadowRoot.host.tagName;
+      templateClone.querySelectorAll('style').forEach((style) => {
+        style.innerHTML = style.innerHTML.replace(/:host/g, tagName);
+      });
+    }
+
+    this.shadowRoot.appendChild(templateClone);
   }
 
   connectedCallback() {
