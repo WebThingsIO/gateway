@@ -1,3 +1,4 @@
+const config = require('config');
 const express = require('express');
 const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
@@ -125,7 +126,9 @@ function handleWiFiSetup(request, response) {
 
 function handleConnecting(request, response) {
   if (request.body.skip === '1') {
-    fs.closeSync(fs.openSync('wifiskip', 'w'));
+    const wifiskipPath = path.join(config.get('profileDir'), 'config',
+                                   'wifiskip');
+    fs.closeSync(fs.openSync(wifiskipPath, 'w'));
     console.log('skip wifi setup. stop the ap');
     response.send(connectingTemplate({skip: 'true'}));
     wifi.stopAP()
