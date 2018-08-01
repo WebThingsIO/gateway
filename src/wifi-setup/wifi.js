@@ -1,5 +1,7 @@
-const os = require('os');
+const config = require('config');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const run = require('./run.js');
 const platform = require('./platform.js');
 
@@ -243,7 +245,9 @@ function broadcastBeacon() {
 }
 
 function checkConnection() {
-  if (fs.existsSync('wifiskip')) {
+  const wifiskipPath = path.join(config.get('profileDir'), 'config',
+                                 'wifiskip');
+  if (fs.existsSync(wifiskipPath)) {
     return Promise.resolve(true);
   }
   return getStatus().then(() => {
