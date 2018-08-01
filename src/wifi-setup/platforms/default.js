@@ -18,7 +18,7 @@ module.exports = {
 
   // A Python script that scans for wifi networks and outputs the ssids in
   // order from best signal to worst signal, omitting hidden networks
-  scan: `sudo ${path.join(__dirname, '../src/wifi-setup/platforms/scan.py')}`,
+  scan: `sudo ${path.join(__dirname, './scan.py')}`,
 
   // A shell command that lists the names of known wifi networks, one
   // to a line.
