@@ -61,8 +61,6 @@ copy_prep_files() {
 
   sudo rm -f "${HOME_PI}"/prepare-base*.sh
   sudo cp "${SCRIPT_DIR}"/prepare-base*.sh "${HOME_PI}"
-  sudo mkdir -p "${HOME_PI}/config-wifi"
-  sudo cp "${SCRIPT_DIR}"/../config-wifi/* "${HOME_PI}/config-wifi"
   sudo chmod +x "${HOME_PI}"/prepare-base*.sh
 }
 
