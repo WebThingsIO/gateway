@@ -46,7 +46,7 @@ const FloorplanScreen = {
     this.menuButton = document.getElementById('menu-button');
     this.editButton = document.getElementById('floorplan-edit-button');
     this.doneButton = document.getElementById('floorplan-done-button');
-    this.backButton = document.getElementById('floorplan-back-button');
+    this.floorplanBackButton = document.getElementById('floorplan-back-button');
     this.uploadForm = document.getElementById('floorplan-upload-form');
     this.uploadButton = document.getElementById('floorplan-upload-button');
     this.fileInput = document.getElementById('floorplan-file-input');
@@ -63,7 +63,7 @@ const FloorplanScreen = {
 
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.doneButton.addEventListener('click', this.done.bind(this));
-    this.backButton.addEventListener('click', this.done.bind(this));
+    this.floorplanBackButton.addEventListener('click', this.done.bind(this));
     this.uploadButton.addEventListener('click', this.requestFile.bind(this));
     this.uploadForm.addEventListener('submit', this.blackHole);
     this.fileInput.addEventListener('change', this.upload.bind(this));
