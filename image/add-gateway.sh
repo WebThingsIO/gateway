@@ -206,6 +206,11 @@ main() {
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/thing-url-adapter"
     rm -rf "${tempdir}"
 
+    # Create the .post_upgrade_complete file so that it doesn't try
+    # to upgrade on the first boot.
+
+    sudo touch ${MOZILLA_IOT_DIR}/gateway/.post_upgrade_complete
+
     # Setup things so that the filesystem gets resized
     # on the next boot.
 
