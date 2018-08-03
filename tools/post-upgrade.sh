@@ -43,4 +43,6 @@ if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   touch "$HOME/.mozilla-iot/config/wifiskip"
 fi
 
+(cd "$HOME/mozilla-iot/intent-parser"; git pull)
+
 touch .post_upgrade_complete
