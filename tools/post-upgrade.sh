@@ -44,5 +44,6 @@ if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
 fi
 
 (cd "$HOME/mozilla-iot/intent-parser"; git pull)
+sudo systemctl restart mozilla-iot-gateway.intent-parser.service
 
 touch .post_upgrade_complete
