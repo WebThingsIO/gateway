@@ -87,11 +87,14 @@ template.innerHTML = `
 class NumberProperty extends BaseComponent {
   constructor() {
     super(template);
-
-    this._form = this.shadowRoot.querySelector('#form');
-    this._input = this.shadowRoot.querySelector('#input');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-number-property-form');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-number-property-input');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-number-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-number-property-name');
 
     this._onClick = this.__onClick.bind(this);
     this._onSubmit = this.__onSubmit.bind(this);

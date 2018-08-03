@@ -89,8 +89,10 @@ class Action extends BaseComponent {
   constructor() {
     super(template);
 
-    this._button = this.shadowRoot.querySelector('#button');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._button = this.shadowRoot.querySelector(
+      '.webthing-action-button');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-action-name');
     this._href = null;
 
     this._onClick = this.__onClick.bind(this);

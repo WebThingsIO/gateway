@@ -58,8 +58,10 @@ class ColorProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#color');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-color-property-color');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-color-property-name');
 
     this._onChange = this.__onChange.bind(this);
   }

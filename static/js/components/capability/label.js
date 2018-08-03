@@ -54,8 +54,10 @@ class LabelCapability extends BaseComponent {
   constructor() {
     super(template);
 
-    this._value = this.shadowRoot.querySelector('#value');
-    this._unit = this.shadowRoot.querySelector('#unit');
+    this._value = this.shadowRoot.querySelector(
+      '.webthing-label-capability-value');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-label-capability-unit');
     this._precision = 0;
     this._level = 0;
   }

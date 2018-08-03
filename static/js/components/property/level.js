@@ -114,14 +114,22 @@ class LevelProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._text = this.shadowRoot.querySelector('#text');
-    this._barContainer = this.shadowRoot.querySelector('#bar-container');
-    this._bar = this.shadowRoot.querySelector('#bar');
-    this._form = this.shadowRoot.querySelector('#form');
-    this._number = this.shadowRoot.querySelector('#number');
-    this._slider = this.shadowRoot.querySelector('#slider');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._text = this.shadowRoot.querySelector(
+      '.webthing-level-property-text');
+    this._barContainer = this.shadowRoot.querySelector(
+      '.webthing-level-property-bar-container');
+    this._bar = this.shadowRoot.querySelector(
+      '.webthing-level-property-bar');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-level-property-form');
+    this._number = this.shadowRoot.querySelector(
+      '.webthing-level-property-number');
+    this._slider = this.shadowRoot.querySelector(
+      '.webthing-level-property-slider');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-level-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-level-property-name');
 
     this._onChange = this.__onChange.bind(this);
     this._onClick = this.__onClick.bind(this);

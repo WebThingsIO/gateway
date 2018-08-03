@@ -71,8 +71,10 @@ class SliderProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#slider');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-slider-property-slider');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-slider-property-name');
 
     this._onChange = this.__onChange.bind(this);
   }

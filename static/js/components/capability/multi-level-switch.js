@@ -79,10 +79,12 @@ const ON_BLANK = 'white';
 class MultiLevelSwitchCapability extends BaseComponent {
   constructor() {
     super(template);
-
-    this._container = this.shadowRoot.querySelector('#container');
-    this._bar = this.shadowRoot.querySelector('#bar');
-    this._label = this.shadowRoot.querySelector('#label');
+    this._container = this.shadowRoot.querySelector(
+      '.webthing-multi-level-switch-capability-container');
+    this._bar = this.shadowRoot.querySelector(
+      '.webthing-multi-level-switch-capability-bar');
+    this._label = this.shadowRoot.querySelector(
+      '.webthing-multi-level-switch-capability-label');
     this._on = false;
     this._level = 0;
     this._onClick = this.__onClick.bind(this);

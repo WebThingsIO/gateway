@@ -64,9 +64,12 @@ class NumericLabelProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._name = this.shadowRoot.querySelector('#name');
-    this._value = this.shadowRoot.querySelector('#value');
-    this._unit = this.shadowRoot.querySelector('#unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-name');
+    this._value = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-value');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-unit');
     this._precision = 0;
   }
 

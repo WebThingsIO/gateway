@@ -64,9 +64,12 @@ class StringLabelProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._name = this.shadowRoot.querySelector('#name');
-    this._container = this.shadowRoot.querySelector('#container');
-    this._value = this.shadowRoot.querySelector('#value');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-container');
+    this._container = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-value');
+    this._value = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-value');
     this._inverted = false;
   }
 

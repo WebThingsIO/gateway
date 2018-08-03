@@ -73,9 +73,12 @@ class StringProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._form = this.shadowRoot.querySelector('#form');
-    this._input = this.shadowRoot.querySelector('#input');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-string-property-form');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-string-property-input');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-string-property-name');
 
     this._onSubmit = this.__onSubmit.bind(this);
     this._onBlur = this.__onBlur.bind(this);

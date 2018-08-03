@@ -77,9 +77,12 @@ class EnumProperty extends BaseComponent {
   constructor() {
     super(template);
 
-    this._select = this.shadowRoot.querySelector('#select');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._select = this.shadowRoot.querySelector(
+      '.webthing-enum-property-select');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-enum-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-enum-property-name');
 
     this._type = 'string';
 
