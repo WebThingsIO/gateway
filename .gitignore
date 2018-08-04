@@ -1,8 +1,10 @@
 # Standard artifacts
+*~
 *.swp
 .DS_Store
 .nyc_output/
 .cache-loader/
+tmp/
 
 # Build artifacts
 /build
