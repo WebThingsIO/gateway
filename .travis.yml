@@ -12,8 +12,8 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.9
-      - g++-4.9
+      - gcc-4.8
+      - g++-4.8
       - libudev-dev
 
 before_install:
@@ -24,8 +24,8 @@ before_install:
 
 env:
   global:
-    - CC=gcc-4.9
-    - CXX=g++-4.9
+    - CC=gcc-4.8
+    - CXX=g++-4.8
     - MOZIOT_HOME=/home/travis/.mozilla-iot/test
 
 script:
