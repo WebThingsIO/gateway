@@ -5,9 +5,9 @@
 #settings-view {
   background-color: #5d9bc7;
   height: 100%;
-  padding-top: 7.5rem;
-  padding-bottom: 7.5rem;
   box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 #settings-view.dark {
@@ -22,16 +22,15 @@
 #section-title {
   width: 100%;
   text-align: center;
-  position: fixed;
-  top: 0;
   height: 9.6rem;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
 #section-title-container {
   white-space: nowrap;
-  overflow: hidden;
   color: #fff;
   text-overflow: ellipsis;
   height: 100%;
@@ -60,21 +59,6 @@
 #section-title-speech-flex {
   flex: 1;
   min-width: 0;
-}
-
-#settings-menu {
-  position: fixed;
-  top: 9.6rem;
-  width: 100%;
-  margin: 0 auto;
-  height: calc(100% - 9.6rem);
-  transition: transform 0.25s ease;
-  overflow: auto;
-}
-
-#settings-menu.hidden {
-  transform: translate(-100%, 0%);
-  overflow: hidden;
 }
 
 #settings-menu ul {
@@ -166,30 +150,24 @@
   background-image: url('../optimized-images/developer-icon.svg');
 }
 
-.settings-section {
-  position: fixed;
+.settings-section, .settings-subsection {
+  position: absolute;
+  top: 50%;
+  transform: translate(0%, -50%);
   display: block;
   width: 100%;
   height: 100%;
   transition: transform 0.25s ease;
-  padding: 1.5rem;
+  padding: 7.6rem 1.5rem;
   box-sizing: border-box;
-  overflow: auto;
 }
 
 .settings-section.hidden {
-  transform: translateX(100%);
+  transform: translate(100%, -50%);
 }
 
-.settings-subsection {
-  position: fixed;
-  top: 9.6rem;
-  display: block;
-  width: 100%;
-  height: calc(100% - 9.6rem);
-  padding: 0;
-  box-sizing: border-box;
-  overflow: auto;
+#settings-menu.hidden {
+  transform: translate(-100%, -50%);
 }
 
 .settings-subsection.hidden {
