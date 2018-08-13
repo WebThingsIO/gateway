@@ -21,17 +21,18 @@ const Menu = {
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.scrim.addEventListener('click', this.handleScrimClick.bind(this));
     this.items = {};
-    this.items.assistant = document.getElementById('assistant-menu-item');
-    this.items.things = document.getElementById('things-menu-item');
-    this.items.settings = document.getElementById('settings-menu-item');
-    this.items.floorplan = document.getElementById('floorplan-menu-item');
-    this.items.speech = document.getElementById('speech-wrapper');
-    this.items.rules = document.getElementById('rules-menu-item');
-    this.items.rule = document.getElementById('rules-menu-item');
+    this.items.assistant = [
+      document.getElementById('assistant-menu-item'),
+      document.getElementById('speech-wrapper'),
+    ];
+    this.items.things = [document.getElementById('things-menu-item')];
+    this.items.settings = [document.getElementById('settings-menu-item')];
+    this.items.floorplan = [document.getElementById('floorplan-menu-item')];
+    this.items.rules = [document.getElementById('rules-menu-item')];
+    this.items.rule = [document.getElementById('rules-menu-item')];
     this.currentItem = 'things';
 
     this.getExperimentSetting('assistant');
-    this.getExperimentSetting('speech');
   },
 
   /**
@@ -111,8 +112,12 @@ const Menu = {
       console.error(`Tried to select a menu item that didnt exist ${item}`);
       return;
     }
-    this.items[this.currentItem].classList.remove('selected');
-    this.items[item].classList.add('selected');
+    for (const elt of this.items[this.currentItem]) {
+      elt.classList.remove('selected');
+    }
+    for (const elt of this.items[item]) {
+      elt.classList.add('selected');
+    }
     this.currentItem = item;
   },
 
@@ -120,14 +125,18 @@ const Menu = {
    * Enable a menu item.
    */
   showItem: function(item) {
-    this.items[item].classList.remove('hidden');
+    for (const elt of this.items[item]) {
+      elt.classList.remove('hidden');
+    }
   },
 
   /*
    * Disable a menu item.
    */
   hideItem: function(item) {
-    this.items[item].classList.add('hidden');
+    for (const elt of this.items[item]) {
+      elt.classList.add('hidden');
+    }
   },
 };
 

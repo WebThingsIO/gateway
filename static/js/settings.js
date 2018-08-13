@@ -692,7 +692,6 @@ const SettingsScreen = {
     this.titleName.innerText = 'Experiments';
     this.titleIcon.src = '/optimized-images/experiments-icon.png';
     this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
-    this.showExperimentCheckbox('speech', 'speech-experiment-checkbox');
   },
 
   /**
