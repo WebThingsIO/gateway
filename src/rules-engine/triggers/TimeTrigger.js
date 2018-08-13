@@ -55,7 +55,7 @@ class TimeTrigger extends Trigger {
 
   sendOn() {
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
-    this.timeout = setTimeout(this.sendOff, 10 * 1000);
+    this.timeout = setTimeout(this.sendOff, 60 * 1000);
   }
 
   sendOff() {
