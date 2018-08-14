@@ -10,6 +10,23 @@
     <title>Things Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
+    <style>
+      .fox { 
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .fox .fox-head {
+        position: absolute;
+      }
+      .fox .fox-body {
+        position: absolute;
+      }
+      .fox .fox-tail {
+        position: absolute;
+      }
+    </style>
   </head>
   <body class="hidden">
     <!-- Assistant View -->
@@ -17,7 +34,15 @@
       <div id="assistant-content">
         <div id="assistant-messages"></div>
         <div id="assistant-avatar">
+          <!--
           <img id="assistant-avatar-image" src="/optimized-images/fox.svg" />
+          -->
+          <div class="fox">
+            <img class="fox-body" src="images/fox-body.svg">
+            <img class="fox-head" src="images/fox-head.svg">
+            <object class="fox-tail" data="images/fox-tail-animated.svg" type="image/svg+xml">
+            </object>
+          </div>
         </div>
       </div>
       <div id="assistant-controls">
@@ -410,5 +435,25 @@
       </div>
     </div>
 
+    <script>
+      function follow(el) {
+        el.style.transformOrigin = 'top';
+        var maxRotate = 3; // deg
+
+        document.addEventListener('mousemove', e => {
+          let width = el.getBoundingClientRect().width;
+          let center = width / 2;
+          let left = el.getBoundingClientRect().left;
+          let curRelPosX = e.clientX - left;
+          let percent = (curRelPosX - center) / center;
+          let rotate = -(percent * maxRotate);
+          el.style.transform = 'rotateZ(' + rotate + 'deg)';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        follow(document.querySelector('.fox-head'));
+      });
+    </script>
   </body>
 </html>
