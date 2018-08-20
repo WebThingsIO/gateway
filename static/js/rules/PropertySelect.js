@@ -136,7 +136,8 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       } else {
         ruleFragment.effect.value = valueInput.value;
         selected = selected || (dpbRulePart.effect &&
-          dpbRulePart.effect.type === ruleFragment.effect.type);
+          dpbRulePart.effect.property.href ===
+          ruleFragment.effect.property.href);
       }
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
 
