@@ -186,6 +186,9 @@ const SettingsScreen = {
     addDomainLocalButton.addEventListener(
       'click', this.onLocalDomainClick.bind(this));
 
+    localDomainName.addEventListener(
+      'input', this.onLocalDomainNameChange.bind(this));
+
     // Comented out until full integration of Dynamic tunnel creation
     // with Service Discovery
     // const addDomainTunnelButton =
@@ -246,12 +249,23 @@ const SettingsScreen = {
     });
   },
 
+  onLocalDomainNameChange: function() {
+    const localDomainCheckbox =
+      document.getElementById('domain-settings-local-checkbox');
+    const localDomainButton =
+      document.getElementById('domain-settings-local-update');
+    localDomainButton.disabled = !localDomainCheckbox.checked;
+    localDomainButton.textContent = 'Update host name';
+  },
+
   // The button controller to update the local domain settings.
   // In menu -> Settings -> Domain
   onLocalDomainClick: function() {
     const localDomainName =
       document.getElementById('domain-settings-local-name');
     const error = document.getElementById('domain-settings-error');
+    const localDomainButton =
+      document.getElementById('domain-settings-local-update');
 
     fetch('/settings/domain', {
       method: 'PUT',
@@ -268,7 +282,8 @@ const SettingsScreen = {
       // is active then redirect
       if (domainJson.update && domainJson.localDomain.length > 0) {
         if (domainJson.mDNSstate) {
-          window.location.href = domainJson.localDomain;
+          localDomainButton.disabled = true;
+          localDomainButton.textContent = 'Update succeeded';
         }
       } else {
         error.classList.remove('hidden');
