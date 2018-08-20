@@ -296,7 +296,17 @@ Rule.prototype.toHumanRepresentation = function(html) {
 
   const effectExists = this.effect && this.effect.effects &&
     this.effect.effects.length > 0;
-  const permanent = effectExists && this.effect.effects[0].type == 'SetEffect';
+  let permanent = effectExists;
+  for (const effect of this.effect.effects) {
+    if (effect.type === 'SetEffect') {
+      permanent = true;
+      break;
+    }
+    if (effect.type === 'PulseEffect') {
+      permanent = false;
+      break;
+    }
+  }
   let predicate = permanent ? 'If' : 'While';
   if (html) {
     const permSelected = permanent ? 'selected' : '';
