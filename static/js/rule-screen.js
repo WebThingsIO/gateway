@@ -128,8 +128,10 @@ const RuleScreen = {
     } else if (event.target.classList.contains('rule-effect-select')) {
       const effectType = this.getEffectType();
       this.ruleEffectType = effectType;
-      for (let i = 0; i < this.rule.effect.effects.length; i++) {
-        this.rule.effect.effects[i].type = effectType;
+      for (const effect of this.rule.effect.effects) {
+        if (effect.type === 'SetEffect' || effect.type === 'PulseEffect') {
+          effect.type = effectType;
+        }
       }
     } else {
       console.warn('Unexpected input event', event);
@@ -448,8 +450,10 @@ const RuleScreen = {
       effects: effects,
     };
     const effectType = this.getEffectType();
-    for (let i = 0; i < this.rule.effect.effects.length; i++) {
-      this.rule.effect.effects[i].type = effectType;
+    for (const effect of this.rule.effect.effects) {
+      if (effect.type === 'SetEffect' || effect.type === 'PulseEffect') {
+        effect.type = effectType;
+      }
     }
 
     this.rule.update();
