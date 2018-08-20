@@ -214,7 +214,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #message-area.hidden {
-  transform: translateY(10rem);
+  transform: translateY(100%) translateY(4rem);
 }
 
 @media only screen and (max-width: 730px) {
