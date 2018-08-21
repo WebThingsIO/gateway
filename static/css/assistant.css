@@ -32,6 +32,20 @@
   overflow: auto;
 }
 
+#assistant-hint {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  max-width: 40%;
+  color: white;
+  font-size: 1.6rem;
+  transform: translateY(-50%);
+}
+
+#assistant-hint.hidden {
+  display: none;
+}
+
 .assistant-message-outgoing,
 .assistant-message-incoming {
   position: relative;

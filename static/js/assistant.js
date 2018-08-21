@@ -11,6 +11,8 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
+const Constants = require('./constants');
 
 // eslint-disable-next-line no-unused-vars
 const AssistantScreen = {
@@ -20,6 +22,7 @@ const AssistantScreen = {
    */
   init: function() {
     this.messages = document.getElementById('assistant-messages');
+    this.hint = document.getElementById('assistant-hint');
     this.avatar = document.getElementById('assistant-avatar');
     this.textInput = document.getElementById('assistant-text-input');
     this.textSubmit = document.getElementById('assistant-text-submit');
@@ -27,6 +30,8 @@ const AssistantScreen = {
     this.textInput.addEventListener('keyup', this.handleInput.bind(this));
     this.textSubmit.addEventListener('click', this.handleSubmit.bind(this));
     this.avatar.addEventListener('click', this.handleAvatarClick.bind(this));
+
+    this.refreshHint = this.refreshHint.bind(this);
   },
 
   /**
@@ -35,6 +40,47 @@ const AssistantScreen = {
   show: function() {
     document.getElementById('speech-wrapper').classList.add('assistant');
     this.messages.scrollTop = this.messages.scrollHeight;
+    if (this.messages.children.length === 0) {
+      this.hint.classList.remove('hidden');
+    } else {
+      this.hint.classList.add('hidden');
+    }
+
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshHint);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshHint,
+      true);
+  },
+
+  refreshHint: function(things) {
+    const commands = [];
+    things.forEach((thingDescr) => {
+      let types = thingDescr['@type'];
+      if (!types || types.length === 0) {
+        types = [thingDescr.selectedCapability];
+      }
+
+      for (const type of types) {
+        switch (type) {
+          case 'OnOffSwitch':
+            commands.push(`Turn the ${thingDescr.name} on`);
+            break;
+          case 'Light':
+            if (thingDescr.properties.level) {
+              commands.push(`Dim the ${thingDescr.name}`);
+            }
+            break;
+          case 'ColorControl':
+            commands.push(`Turn the ${thingDescr.name} red`);
+            break;
+        }
+      }
+    });
+    if (commands.length > 0) {
+      const command = commands[Math.floor(Math.random() * commands.length)];
+      this.hint.textContent = `Try saying commands like "${command}"`;
+    }
   },
 
   submitCommand: function(text) {
@@ -106,6 +152,7 @@ const AssistantScreen = {
   },
 
   displayMessage: function(text, direction) {
+    this.hint.classList.add('hidden');
     const cls =
       direction === 'incoming' ?
         'assistant-message-incoming' :
@@ -147,6 +194,7 @@ const AssistantScreen = {
 
   handleAvatarClick: function() {
     this.messages.innerHTML = '';
+    this.hint.classList.remove('hidden');
   },
 };
 
