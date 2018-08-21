@@ -150,8 +150,15 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
   }
 
   if (trigger.type === 'TimeTrigger') {
-    return `the time of day is ${
-      TimeTriggerBlock.utcToLocal(trigger.time)}`;
+    let text = `the time of day is`;
+    let firstEffect = this.effect;
+    if (firstEffect && firstEffect.type === 'MultiEffect') {
+      firstEffect = firstEffect.effects[0];
+    }
+    if (firstEffect && firstEffect.type === 'PulseEffect') {
+      text += ' exactly';
+    }
+    return `${text} ${TimeTriggerBlock.utcToLocal(trigger.time)}`;
   }
 
   if (trigger.type === 'EventTrigger') {
