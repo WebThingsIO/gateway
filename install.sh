@@ -24,6 +24,7 @@ mkdir -p mozilla-iot
 cd mozilla-iot
 
 # Install and configure nvm
+[ -e "${HOME}/.bashrc" ] || touch "${HOME}/.bashrc"
 curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the target, sourcing ~/.bashrc winds up being a no-op (when sourced
