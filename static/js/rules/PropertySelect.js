@@ -325,6 +325,9 @@ PropertySelect.prototype.addEventOptions = function() {
 
 PropertySelect.prototype.addActionOptions = function() {
   for (const name of Object.keys(this.thing.actions)) {
+    if (this.thing.actions[name].input) {
+      continue;
+    }
     const actionEffect = {
       type: 'ActionEffect',
       thing: {
