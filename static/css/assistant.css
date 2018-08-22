@@ -10,12 +10,16 @@
   flex-direction: column;
 }
 
+.title-bar > .assistant-header {
+  background-image: url('../optimized-images/assistant-icon.svg');
+}
+
 #assistant-content {
   flex: 1;
   display: flex;
-  padding-top: 8rem;
+  padding-top: 1rem;
   padding-bottom: 1rem;
-  max-height: calc(100% - 10rem);
+  max-height: calc(100% - 19.6rem);
   box-sizing: border-box;
 }
 

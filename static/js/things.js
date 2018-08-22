@@ -40,6 +40,7 @@ const ThingsScreen = {
   init: function() {
     this.thingsElement = document.getElementById('things');
     this.thingTitleElement = document.getElementById('thing-title');
+    this.thingsTitleElement = document.body.querySelector('.things-header');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
     this.backButton = document.getElementById('back-button');
@@ -139,6 +140,7 @@ const ThingsScreen = {
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
       this.thingTitleElement.classList.remove('hidden');
+      this.thingsTitleElement.classList.add('hidden');
       this.thingsElement.classList.add('single-thing');
 
       if (actionName) {
@@ -153,6 +155,7 @@ const ThingsScreen = {
       this.menuButton.classList.remove('hidden');
       this.backButton.classList.add('hidden');
       this.thingTitleElement.classList.add('hidden');
+      this.thingsTitleElement.classList.remove('hidden');
       this.thingsElement.classList.remove('single-thing');
       this.showThings();
     }
@@ -226,6 +229,7 @@ const ThingsScreen = {
         }
 
         this.thingTitleElement.classList.remove('hidden');
+        this.thingsTitleElement.classList.add('hidden');
       }).catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;

@@ -6,7 +6,7 @@
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
-  padding: 7.6rem 0;
+  padding-bottom: 7.6rem;
 }
 
 #things {
@@ -17,6 +17,14 @@
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
+}
+
+.title-bar > .things-header {
+  background-image: url('../optimized-images/things-icon.png');
+}
+
+.things-header.hidden {
+  display: none;
 }
 
 #add-button {
