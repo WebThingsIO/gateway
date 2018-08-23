@@ -63,15 +63,6 @@
 
     <!-- Settings View -->
     <section data-view="settings" id="settings-view" class="hidden">
-      <div id="section-title" class="hidden">
-        <div id="section-title-back-flex"></div>
-        <div id="section-title-container">
-          <img id="section-title-icon" alt="Section Title" src="#" />
-          <span id="section-title-name"></span>
-        </div>
-        <div id="section-title-speech-flex"></div>
-      </div>
-
       <nav id="settings-menu" class="hidden settings-section">
         <ul>
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
@@ -132,7 +123,6 @@
         <section id="user-settings-main" class="hidden settings-subsection">
           <ul id="users-list">
           </ul>
-          <button id="add-user-button" class="icon-button"></button>
         </section>
         <section id="user-settings-edit" class="hidden settings-subsection">
           <form id="edit-user-form" class="user-form">
@@ -177,7 +167,6 @@
         <section id="addon-main-settings" class="hidden settings-subsection">
           <ul id="installed-addons-list">
           </ul>
-          <button id="discover-addons-button" class="icon-button"></button>
         </section>
         <section id="addon-config-settings" class="hidden settings-subsection">
         </section>
@@ -236,6 +225,8 @@
         </ul>
       </section>
       <a href="/settings" id="settings-back-button" class="hidden back-button icon-button"></a>
+      <button id="discover-addons-button" class="icon-button hidden"></button>
+      <button id="add-user-button" class="icon-button hidden"></button>
     </section>
 
     <!-- Rules View -->
