@@ -29,7 +29,7 @@ const RuleScreen = {
     this.animateDelay = 750;
     this.rule = null;
     this.partBlocks = [];
-    this.ruleEffectType = 'PulseEffect';
+    this.ruleEffectType = 'SetEffect';
 
     this.view = document.getElementById('rule-view');
     this.titleBar = this.view.querySelector('.title-bar');
@@ -498,7 +498,7 @@ const RuleScreen = {
     document.getElementById('speech-wrapper').classList.remove('assistant');
 
     this.rule = null;
-    this.ruleEffectType = 'PulseEffect';
+    this.ruleEffectType = 'SetEffect';
 
     // Fetch the rule description from the Engine or default to null
     let rulePromise = Promise.resolve(null);
