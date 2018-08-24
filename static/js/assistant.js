@@ -79,7 +79,7 @@ const AssistantScreen = {
     });
     if (commands.length > 0) {
       const command = commands[Math.floor(Math.random() * commands.length)];
-      this.hint.textContent = `Try saying commands like "${command}"`;
+      this.hint.textContent = `Try commands like "${command}"`;
     }
   },
 
