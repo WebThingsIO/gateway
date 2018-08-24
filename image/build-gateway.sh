@@ -12,6 +12,8 @@
 #   - /build/Open-ZWave/open-zwave  - git repository containing the desired version of OpenZWave
 #   - /build/gateway                - git repository containing the gateway software
 
+set -e
+
 NVM_VERSION="v0.33.8"
 NODE_VERSION="--lts=carbon"
 
