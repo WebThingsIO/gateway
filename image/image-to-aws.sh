@@ -44,6 +44,10 @@ image_to_aws() {
   echo "Copying image files to '${AWS_DIR}'"
   aws s3 cp --acl=public-read "${IMG_FILENAME}.zip" "${AWS_DIR}"
   aws s3 cp --acl=public-read "${IMG_FILENAME}.zip.sha256sum" "${AWS_DIR}"
+
+  echo "AWS URLs"
+  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_DIR}/${IMG_FILENAME}.zip"
+  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_DIR}/${IMG_FILENAME}.zip.sha256sum"
 }
 
 ###########################################################################

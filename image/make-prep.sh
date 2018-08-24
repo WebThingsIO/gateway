@@ -432,7 +432,7 @@ main() {
 
   # Adding a sleep here helps ensure that the mounted directories are
   # not actually still in use.
-  sleep 1
+  sleep 3
 
   cleanup
 
