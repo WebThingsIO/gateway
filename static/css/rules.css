@@ -15,21 +15,7 @@
   font-weight: normal;
 }
 
-#rules-view .title-bar {
-  text-align: center;
-  line-height: 9.6rem;
-  height: 9.6rem;
-}
-
-.rules-header {
-  margin: 0 auto;
-  display: inline-block;
-  padding: 0;
-  padding-left: 6.8rem;
-  font-size: 1.8rem;
-  background-size: 3.2rem;
-  background-repeat: no-repeat;
-  background-position: 2rem;
+.title-bar > .rules-header {
   background-image: url('../optimized-images/rules-icon.png');
 }
 

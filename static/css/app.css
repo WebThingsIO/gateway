@@ -365,3 +365,27 @@ input:checked + .switch-slider:after {
 body.hidden {
   visibility: hidden;
 }
+
+.title-bar {
+  text-align: center;
+  width: 100%;
+  height: 9.6rem;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.title-bar > h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+  line-height: 9.6rem;
+
+  padding-left: 6.8rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  background-image: url('../optimized-images/authorization.svg');
+}
