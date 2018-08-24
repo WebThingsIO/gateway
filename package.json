@@ -1,6 +1,6 @@
 {
   "name": "things-gateway",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Web of Things gateway",
   "main": "app.js",
   "scripts": {
