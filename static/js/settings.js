@@ -67,7 +67,7 @@ const SettingsScreen = {
     this.insertTitleElement(this.userSettingsAdd, 'Add User',
                             '/optimized-images/user.svg');
     this.insertTitleElement(this.adapterSettings, 'Adapters',
-                            '/optimized-image/adapters-icon.png');
+                            '/optimized-images/adapters-icon.png');
     this.insertTitleElement(this.addonMainSettings, 'Add-ons',
                             '/optimized-images/add-on.svg');
     const addonConfigTitle =
@@ -103,7 +103,7 @@ const SettingsScreen = {
     elt.innerHTML = `
       <div class="section-title-back-flex"></div>
       <div class="section-title-container">
-        <img class="section-title-icon" alt="Section Title" src="${icon}" />
+        <img class="section-title-icon" alt="${name} Icon" src="${icon}" />
         <span class="section-title-name">${name}</span>
       </div>
       <div class="section-title-speech-flex"></div>

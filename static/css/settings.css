@@ -157,7 +157,8 @@
   width: 100%;
   height: 100%;
   transition: transform 0.25s ease;
-  padding: 0 1.5rem;
+  padding: 0;
+  padding-bottom: 9.6rem;
   box-sizing: border-box;
   overflow-y: scroll;
 }
@@ -210,13 +211,13 @@
 #update-settings ul,
 #authorization-settings ul,
 #developer-settings ul {
-  position: relative;
+  position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   box-sizing: border-box;
   width: 100%;
   max-width: 60rem;
-  margin: 0 auto;
   padding: 2rem;
   max-height: 100%;
 }
