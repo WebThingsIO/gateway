@@ -237,20 +237,25 @@
       }
     </style>
     <script>
-      function selectssid(event, ssid) {
-        document.getElementById('step1').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
-        document.getElementById('selected-network').innerText = ssid;
-        document.getElementById('ssid').value = ssid;
-        document.getElementById('wordmark').style.display = 'none';
+      function selectssid(event, ssid, passwordRequired) {
         event.preventDefault();
+        document.getElementById('ssid').value = ssid;
+
+        if (passwordRequired) {
+          document.getElementById('step1').style.display = 'none';
+          document.getElementById('step2').style.display = 'block';
+          document.getElementById('selected-network').innerText = ssid;
+          document.getElementById('wordmark').style.display = 'none';
+        } else {
+          document.getElementById('mainform').submit();
+        }
       }
 
       function back(event) {
+        event.preventDefault();
         document.getElementById('step1').style.display = 'block';
         document.getElementById('step2').style.display = 'none';
         document.getElementById('wordmark').style.display = 'block';
-        event.preventDefault();
       }
 
       function skip(event) {
@@ -259,10 +264,10 @@
         document.getElementById('mainform').submit();
       }
 
-      var mask = true;
+      let mask = true;
       function displaypassword() {
         let tbx = document.getElementsByName('password')[0];
-        if(mask === true){
+        if (mask === true) {
           mask = false;
           tbx.setAttribute('type', 'text');
         } else {
@@ -280,8 +285,8 @@
           <h1>Welcome</h1>
           <h3>Connect to a WiFi network?</h3><br>
           {{#networks}}
-            <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}')" id="item"
-                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
+            <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}', {{pwdRequired}})" id="item"
+                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{icon}}'>
             </button>
           {{/networks}}<br><br>
           <button onclick="window.skip(event)" class="item skip">Skip</button>

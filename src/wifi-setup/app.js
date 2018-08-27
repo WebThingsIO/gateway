@@ -112,11 +112,17 @@ function handleWiFiSetup(request, response) {
     if (results) {
       map1 = results.filter((x) => x.length > 7);
       map1 = map1.map((word) => {
-        let openorclosed = 'wifi-secure.svg';
+        let icon = 'wifi-secure.svg';
+        let pwdRequired = true;
         if (word.substring(3, 5).trim() !== 'on') {
-          openorclosed = 'wifi.svg';
+          icon = 'wifi.svg';
+          pwdRequired = false;
         }
-        return {pwd: openorclosed, ssid: word.substring(6)};
+        return {
+          icon,
+          pwdRequired,
+          ssid: word.substring(6),
+        };
       });
     }
 
