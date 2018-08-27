@@ -89,7 +89,7 @@ main() {
 
   if [[ "${BASE_IMAGE}" == *.zip ]]; then
     # Unzip the base image
-    GATEWAY_IMAGE="${GATEWAY_IMAGE/.zip/.img}"
+    GATEWAY_IMAGE="${GATEWAY_IMAGE/.img.zip/.img}"
     echo "Unzipping '${BASE_IMAGE}' to '${GATEWAY_IMAGE}'"
     unzip -p "${BASE_IMAGE}" > "${GATEWAY_IMAGE}"
   else
