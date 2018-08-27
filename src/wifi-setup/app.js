@@ -35,11 +35,11 @@ function getTemplate(filename) {
 }
 
 const wifiSetupTemplate = getTemplate(
-  path.join(templatesPath, 'wifiSetup.hbs'));
+  path.join(templatesPath, 'wifiSetup.handlebars'));
 const connectingTemplate = getTemplate(
-  path.join(templatesPath, 'connecting.hbs'));
+  path.join(templatesPath, 'connecting.handlebars'));
 const hotspotTemplate = getTemplate(
-  path.join(templatesPath, 'hotspot.hbs'));
+  path.join(templatesPath, 'hotspot.handlebars'));
 
 // When the client issues a GET request for the list of wifi networks
 // scan and return them

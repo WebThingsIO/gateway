@@ -24,7 +24,7 @@ const bodyParser = require('body-parser');
 const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
-const mustacheExpress = require('mustache-express');
+const expressHandlebars = require('express-handlebars');
 
 // Internal Dependencies
 const addonManager = require('./addon-manager');
@@ -203,8 +203,8 @@ function rulesEngineConfigure(server) {
 
 function createApp() {
   const app = express();
-  app.engine('mustache', mustacheExpress());
-  app.set('view engine', 'mustache');
+  app.engine('handlebars', expressHandlebars());
+  app.set('view engine', 'handlebars');
   app.set('views', Constants.VIEWS_PATH);
 
   // Use bodyParser to access the body of requests
