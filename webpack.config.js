@@ -105,18 +105,18 @@ const pluginsWeb = [
   }),
   new HtmlWebpackPlugin({
     inject: 'head',
-    template: 'src/views/authorize.mustache',
-    filename: '../views/authorize.mustache',
+    template: 'src/views/authorize.handlebars',
+    filename: '../views/authorize.handlebars',
     chunks: ['authorize.js'],
   }),
   new HtmlWebpackPlugin({
-    template: 'src/views/local-token-service.mustache',
-    filename: '../views/local-token-service.mustache',
+    template: 'src/views/local-token-service.handlebars',
+    filename: '../views/local-token-service.handlebars',
     chunks: ['localtoken.js'],
   }),
   new HtmlWebpackPlugin({
-    template: 'src/views/tunnel_setup.mustache',
-    filename: '../views/tunnel_setup.mustache',
+    template: 'src/views/tunnel_setup.handlebars',
+    filename: '../views/tunnel_setup.handlebars',
     chunks: ['setup_subdomain.js'],
   }),
 ];
