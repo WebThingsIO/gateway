@@ -96,7 +96,7 @@ class Thing {
       this.href = new URL(description.href, App.ORIGIN);
       this.eventsHref = `${this.href.pathname}/events?referrer=${
         encodeURIComponent(this.href.pathname)}`;
-      this.id = this.href.pathname.split('/').pop();
+      this.id = decodeURIComponent(this.href.pathname.split('/').pop());
     }
 
     // Parse properties
