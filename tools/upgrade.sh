@@ -11,26 +11,17 @@ if [ -z $gateway_archive_url ] || [ -z $node_modules_archive_url ]; then
   exit 1
 fi
 
-# bring down the gateway very early in the process so that it has time to
-# asynchronously finalize
-sudo systemctl stop mozilla-iot-gateway.service
-
 wget $gateway_archive_url
 wget $node_modules_archive_url
 
-gateway_old=./gateway
+./tools/pre-upgrade.sh
 
-# Copy all files from the current gateway to the upgraded gateway. This
-# includes tunneltoken, notunnel, any certificates, db.sqlite3, and
-# node_modules
-cp -r $gateway_old /tmp/gateway
-rm -fr /tmp/gateway/node_modules
+gateway_old=./gateway
 
 die() {
   sudo systemctl start mozilla-iot-gateway.service
   rm -f gateway-*.tar.gz
   rm -f node_modules-*.tar.gz
-  rm -fr /tmp/gateway
   exit -1
 }
 
@@ -57,14 +48,15 @@ extractCAArchive() {
   rm $archive_name
 }
 
-extractCAArchive gateway-*.tar.gz /tmp
-extractCAArchive node_modules-*.tar.gz /tmp/gateway
+# bring down the gateway very late in the process since it'll probably be fine
+sudo systemctl stop mozilla-iot-gateway.service
 
 rm -fr gateway_old
-
-mv $gateway_old gateway_old
-mv /tmp/gateway gateway
+mv gateway gateway_old
 touch gateway_old/package.json
+
+extractCAArchive gateway-*.tar.gz ./
+extractCAArchive node_modules-*.tar.gz gateway
 
 cd gateway
 ./tools/post-upgrade.sh
