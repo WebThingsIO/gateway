@@ -16,6 +16,7 @@ const AddThingScreen = require('./add-thing');
 const App = require('./app');
 const BinarySensor = require('./binary-sensor');
 const ColorControl = require('./color-control');
+const Constants = require('./constants');
 const EnergyMonitor = require('./energy-monitor');
 const EventList = require('./event-list');
 const Light = require('./light');
@@ -24,7 +25,6 @@ const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
-const Constants = require('./constants');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -202,7 +202,9 @@ const ThingsScreen = {
         this.thingsElement.innerHTML = '';
 
         const thingModel = await App.gatewayModel.getThingModel(thingId);
-        const thing = this.renderThing(thingModel, description, 'htmlDetail');
+        const thing = this.renderThing(thingModel,
+                                       description,
+                                       Constants.ThingFormat.EXPANDED);
 
         const iconEl = document.getElementById('thing-title-icon');
         const customIconEl = document.getElementById('thing-title-custom-icon');

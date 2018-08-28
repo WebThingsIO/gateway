@@ -99,70 +99,72 @@ const FloorplanScreen = {
             y = this.ORIGIN_Y;
           }
         }
+
+        const format = Constants.ThingFormat.LINK_ICON;
         let thing;
         if (description.selectedCapability) {
           switch (description.selectedCapability) {
             case 'OnOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
+              thing = new OnOffSwitch(thingModel, description, format);
               break;
             case 'MultiLevelSwitch':
               thing =
-                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
+                new MultiLevelSwitch(thingModel, description, format);
               break;
             case 'ColorControl':
               thing =
-                new ColorControl(thingModel, description, 'htmlFloorplan');
+                new ColorControl(thingModel, description, format);
               break;
             case 'EnergyMonitor':
               thing =
-                new EnergyMonitor(thingModel, description, 'htmlFloorplan');
+                new EnergyMonitor(thingModel, description, format);
               break;
             case 'BinarySensor':
               thing =
-                new BinarySensor(thingModel, description, 'htmlFloorplan');
+                new BinarySensor(thingModel, description, format);
               break;
             case 'MultiLevelSensor':
               thing =
-                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
+                new MultiLevelSensor(thingModel, description, format);
               break;
             case 'SmartPlug':
-              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
+              thing = new SmartPlug(thingModel, description, format);
               break;
             case 'Light':
-              thing = new Light(thingModel, description, 'htmlFloorplan');
+              thing = new Light(thingModel, description, format);
               break;
             default:
-              thing = new Thing(thingModel, description, 'htmlFloorplan');
+              thing = new Thing(thingModel, description, format);
               break;
           }
         } else {
           switch (description.type) {
             case 'onOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, 'htmlFloorplan');
+              thing = new OnOffSwitch(thingModel, description, format);
               break;
             case 'onOffLight':
             case 'onOffColorLight':
             case 'dimmableLight':
             case 'dimmableColorLight':
-              thing = new Light(thingModel, description, 'htmlFloorplan');
+              thing = new Light(thingModel, description, format);
               break;
             case 'binarySensor':
               thing =
-                new BinarySensor(thingModel, description, 'htmlFloorplan');
+                new BinarySensor(thingModel, description, format);
               break;
             case 'multiLevelSensor':
               thing =
-                new MultiLevelSensor(thingModel, description, 'htmlFloorplan');
+                new MultiLevelSensor(thingModel, description, format);
               break;
             case 'multiLevelSwitch':
               thing =
-                new MultiLevelSwitch(thingModel, description, 'htmlFloorplan');
+                new MultiLevelSwitch(thingModel, description, format);
               break;
             case 'smartPlug':
-              thing = new SmartPlug(thingModel, description, 'htmlFloorplan');
+              thing = new SmartPlug(thingModel, description, format);
               break;
             default:
-              thing = new Thing(thingModel, description, 'htmlFloorplan');
+              thing = new Thing(thingModel, description, format);
               break;
           }
         }
