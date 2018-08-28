@@ -20,12 +20,6 @@ wget $node_modules_archive_url
 
 gateway_old=./gateway
 
-# Copy all files from the current gateway to the upgraded gateway. This
-# includes tunneltoken, notunnel, any certificates, db.sqlite3, and
-# node_modules
-cp -r $gateway_old /tmp/gateway
-rm -fr /tmp/gateway/node_modules
-
 die() {
   sudo systemctl start mozilla-iot-gateway.service
   rm -f gateway-*.tar.gz
