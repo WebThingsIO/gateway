@@ -4,7 +4,7 @@ exports.REFRESH_THINGS = 'refreshThings';
 exports.DELETE_THINGS = 'deleteThings';
 
 exports.ThingFormat = {
-    INTERACTIVE: 0,
-    EXPANDED: 1,
-    LINK_ICON: 2,
+  INTERACTIVE: 0,
+  EXPANDED: 1,
+  LINK_ICON: 2,
 };
