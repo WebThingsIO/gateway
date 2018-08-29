@@ -17,7 +17,7 @@ class EnergyMonitor extends Thing {
    * EnergyMonitor Constructor (extends Thing).
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
+   * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
     super(

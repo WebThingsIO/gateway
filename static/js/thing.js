@@ -35,7 +35,7 @@ class Thing {
    * Thing constructor.
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
+   * @param {Number} format See Constants.ThingFormat
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
@@ -71,7 +71,7 @@ class Thing {
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};
 
-    if (format === 'htmlFloorplan') {
+    if (format === Constants.ThingFormat.LINK_ICON) {
       this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
@@ -182,7 +182,7 @@ class Thing {
       }
     }
 
-    if (format === 'htmlDetail') {
+    if (format === Constants.ThingFormat.EXPANDED) {
       // Parse actions
       if (description.actions) {
         let href;
@@ -235,8 +235,8 @@ class Thing {
     this.findProperties();
     this.element = this.render(format);
 
-    if (format === 'htmlDetail') {
-      this.attachHtmlDetail();
+    if (format === Constants.ThingFormat.EXPANDED) {
+      this.attachExpandedView();
     }
 
     this.onPropertyStatus = this.onPropertyStatus.bind(this);
@@ -253,7 +253,7 @@ class Thing {
   /**
    * HTML view for Thing.
    */
-  attachHtmlDetail() {
+  attachExpandedView() {
     for (const prop of Object.values(this.displayedProperties)) {
       // only attach the first time.
       if ((!prop.hasOwnProperty('attached') || !prop.attached) &&
@@ -304,7 +304,7 @@ class Thing {
   /**
    * HTML view for Thing.
    */
-  htmlView() {
+  interactiveView() {
     return `<div class="thing">
       ${this.uiHref ? this.uiLink() : ''}
       ${this.detailLink()}
@@ -316,7 +316,7 @@ class Thing {
   /**
    * HTML detail view for Thing.
    */
-  htmlDetailView() {
+  expandedView() {
     let detailsHTML = '';
 
     for (const prop of Object.values(this.displayedProperties)) {
@@ -346,7 +346,7 @@ class Thing {
    * @param {*} value Value of the property
    */
   updateProperty(name, value) {
-    if (this.format === 'htmlDetail' &&
+    if (this.format === Constants.ThingFormat.EXPANDED &&
         this.displayedProperties.hasOwnProperty(name)) {
       this.displayedProperties[name].detail.update(value);
     }
@@ -399,7 +399,7 @@ class Thing {
    * HTML-based view for Thing on the floorplan
    * @return {String}
    */
-  htmlFloorplanView() {
+  linkIconView() {
     return `<div
         class="floorplan-thing"
         data-x="${this.x}"
@@ -414,16 +414,16 @@ class Thing {
   /**
    * Render Thing view and add to DOM.
    *
-   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
+   * @param {Number} format See Constants.ThingFormat
    */
   render(format) {
     const element = document.createElement('div');
-    if (format == 'htmlFloorplan') {
-      element.innerHTML = this.htmlFloorplanView().trim();
-    } else if (format == 'htmlDetail') {
-      element.innerHTML = this.htmlDetailView().trim();
+    if (format == Constants.ThingFormat.LINK_ICON) {
+      element.innerHTML = this.linkIconView().trim();
+    } else if (format == Constants.ThingFormat.EXPANDED) {
+      element.innerHTML = this.expandedView().trim();
     } else {
-      element.innerHTML = this.htmlView().trim();
+      element.innerHTML = this.interactiveView().trim();
     }
     return this.container.appendChild(element.firstChild);
   }

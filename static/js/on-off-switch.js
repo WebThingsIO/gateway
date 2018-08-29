@@ -10,6 +10,7 @@
 
 'use strict';
 
+const Constants = require('./constants');
 const Thing = require('./thing');
 
 class OnOffSwitch extends Thing {
@@ -17,7 +18,7 @@ class OnOffSwitch extends Thing {
    * OnOffSwitch Constructor (extends Thing).
    *
    * @param {Object} description Thing description object.
-   * @param {String} format 'html', 'htmlDetail', or 'htmlFloorplan'
+   * @param {Number} format See Constants.ThingFormat
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
@@ -28,7 +29,7 @@ class OnOffSwitch extends Thing {
 
     super(model, description, format, options);
 
-    if (this.format !== 'htmlFloorplan') {
+    if (this.format !== Constants.ThingFormat.LINK_ICON) {
       this.icon.addEventListener('click', this.handleClick.bind(this));
     }
   }
