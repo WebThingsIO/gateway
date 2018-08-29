@@ -20,7 +20,7 @@ before_install:
   - ./tools/compile-openzwave.sh
   - git clone https://github.com/mozilla-iot/intent-parser
   - pyenv global 3.6
-  - pip install --user -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+  - pip install git+https://github.com/mycroftai/adapt#egg=adapt-parser
   - python intent-parser/intent-parser-server.py &
   - pyenv global 2.7
 
