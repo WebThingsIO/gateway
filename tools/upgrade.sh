@@ -11,13 +11,6 @@ if [ -z $gateway_archive_url ] || [ -z $node_modules_archive_url ]; then
   exit 1
 fi
 
-wget $gateway_archive_url
-wget $node_modules_archive_url
-
-./tools/pre-upgrade.sh
-
-gateway_old=./gateway
-
 die() {
   sudo systemctl start mozilla-iot-gateway.service
   rm -f gateway-*.tar.gz
@@ -48,8 +41,8 @@ extractCAArchive() {
   rm $archive_name
 }
 
-# bring down the gateway very late in the process since it'll probably be fine
-sudo systemctl stop mozilla-iot-gateway.service
+wget $gateway_archive_url
+wget $node_modules_archive_url
 
 rm -fr gateway_old
 mv gateway gateway_old
@@ -59,6 +52,11 @@ extractCAArchive gateway-*.tar.gz ./
 extractCAArchive node_modules-*.tar.gz gateway
 
 cd gateway
+./tools/pre-upgrade.sh
+
+# bring down the gateway very late in the process since it'll probably be fine
+sudo systemctl stop mozilla-iot-gateway.service
+
 ./tools/post-upgrade.sh
 
 sudo systemctl start mozilla-iot-gateway.service
