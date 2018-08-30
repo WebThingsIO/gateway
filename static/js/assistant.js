@@ -96,12 +96,18 @@ const AssistantScreen = {
     };
 
     return fetch('/commands', opts).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
+      return Promise.all([Promise.resolve(response.ok), response.json()]);
+    }).then((values) => {
+      const [ok, body] = values;
+      if (!ok) {
+        let error = 'Sorry, something went wrong.';
+        if (body.hasOwnProperty('message')) {
+          error = body.message;
+        }
+
+        throw new Error(error);
       }
 
-      return response.json();
-    }).then((body) => {
       let verb, preposition = '';
       switch (body.payload.keyword) {
         case 'make':
@@ -141,8 +147,8 @@ const AssistantScreen = {
         message,
         success: true,
       };
-    }).catch(() => {
-      const message = 'Sorry, I didn\'t understand.';
+    }).catch((e) => {
+      const message = e.message || 'Sorry, something went wrong.';
       this.displayMessage(message, 'incoming');
       return {
         message,
