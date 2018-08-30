@@ -160,7 +160,7 @@
   padding: 0;
   padding-bottom: 9.6rem;
   box-sizing: border-box;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .settings-subsection {
