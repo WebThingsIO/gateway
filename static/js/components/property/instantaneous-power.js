@@ -9,9 +9,9 @@
  */
 'use strict';
 
-const LabelProperty = require('./label');
+const NumericLabelProperty = require('./numeric-label');
 
-class InstantaneousPowerProperty extends LabelProperty {
+class InstantaneousPowerProperty extends NumericLabelProperty {
   connectedCallback() {
     this.unit = 'W';
     this.precision = 0;

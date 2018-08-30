@@ -9,9 +9,9 @@
  */
 'use strict';
 
-const LabelProperty = require('./label');
+const NumericLabelProperty = require('./numeric-label');
 
-class FrequencyProperty extends LabelProperty {
+class FrequencyProperty extends NumericLabelProperty {
   connectedCallback() {
     this.unit = 'Hz';
     this.precision = 0;

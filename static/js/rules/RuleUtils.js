@@ -18,6 +18,12 @@ const RuleUtils = {
           return '/optimized-images/rule-icons/smart_plug.svg';
         case 'Light':
           return '/optimized-images/rule-icons/light.svg';
+        case 'DoorSensor':
+          return '/optimized-images/rule-icons/door_sensor.svg';
+        case 'MotionSensor':
+          return '/optimized-images/rule-icons/motion_sensor.svg';
+        case 'PushButton':
+          return '/optimized-images/rule-icons/push_button.svg';
         default:
           return '/optimized-images/rule-icons/thing.svg';
       }

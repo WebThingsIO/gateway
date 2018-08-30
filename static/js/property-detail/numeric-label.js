@@ -1,7 +1,7 @@
 /**
- * LabelDetail
+ * NumericLabelDetail
  *
- * A bubble showing some basic information with no input.
+ * A bubble showing some basic numeric information with no input.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,7 @@
 
 const Utils = require('../utils');
 
-class LabelDetail {
+class NumericLabelDetail {
   constructor(thing, name, label, unit, precision) {
     this.thing = thing;
     this.name = name;
@@ -30,9 +30,9 @@ class LabelDetail {
     const name = Utils.escapeHtml(this.label);
     const unit = Utils.escapeHtml(this.unit);
     return `
-      <webthing-label-property data-value="0" data-name="${name}"
+      <webthing-numeric-label-property data-value="0" data-name="${name}"
         data-unit="${unit}" data-precision="${this.precision}" id="${this.id}">
-      </webthing-label-property>`;
+      </webthing-numeric-label-property>`;
   }
 
   update(value) {
@@ -44,4 +44,4 @@ class LabelDetail {
   }
 }
 
-module.exports = LabelDetail;
+module.exports = NumericLabelDetail;

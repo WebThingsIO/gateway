@@ -140,6 +140,15 @@ const ContextMenu = {
             case 'Light':
               option.innerText = 'Light';
               break;
+            case 'DoorSensor':
+              option.innerText = 'Door Sensor';
+              break;
+            case 'MotionSensor':
+              option.innerText = 'Motion Sensor';
+              break;
+            case 'PushButton':
+              option.innerText = 'Push Button';
+              break;
             case 'Custom':
               option.innerText = 'Custom Thing';
               break;
@@ -204,6 +213,15 @@ const ContextMenu = {
         break;
       case 'Light':
         image = '/optimized-images/thing-icons/light.svg';
+        break;
+      case 'DoorSensor':
+        image = '/optimized-images/thing-icons/door_sensor.svg';
+        break;
+      case 'MotionSensor':
+        image = '/optimized-images/thing-icons/motion_sensor.svg';
+        break;
+      case 'PushButton':
+        image = '/optimized-images/thing-icons/push_button.svg';
         break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');

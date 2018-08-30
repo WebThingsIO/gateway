@@ -16,11 +16,14 @@ const App = require('./app');
 const Constants = require('./constants');
 const BinarySensor = require('./binary-sensor');
 const ColorControl = require('./color-control');
+const DoorSensor = require('./door-sensor');
 const EnergyMonitor = require('./energy-monitor');
 const Light = require('./light');
+const MotionSensor = require('./motion-sensor');
 const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
+const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
 
@@ -132,6 +135,18 @@ const FloorplanScreen = {
               break;
             case 'Light':
               thing = new Light(thingModel, description, format);
+              break;
+            case 'DoorSensor':
+              thing =
+                new DoorSensor(thingModel, description, format);
+              break;
+            case 'MotionSensor':
+              thing =
+                new MotionSensor(thingModel, description, format);
+              break;
+            case 'PushButton':
+              thing =
+                new PushButton(thingModel, description, format);
               break;
             default:
               thing = new Thing(thingModel, description, format);

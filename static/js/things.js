@@ -17,12 +17,15 @@ const App = require('./app');
 const BinarySensor = require('./binary-sensor');
 const ColorControl = require('./color-control');
 const Constants = require('./constants');
+const DoorSensor = require('./door-sensor');
 const EnergyMonitor = require('./energy-monitor');
 const EventList = require('./event-list');
 const Light = require('./light');
+const MotionSensor = require('./motion-sensor');
 const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
+const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
 
@@ -78,6 +81,15 @@ const ThingsScreen = {
           break;
         case 'Light':
           thing = new Light(thingModel, description, format);
+          break;
+        case 'DoorSensor':
+          thing = new DoorSensor(thingModel, description, format);
+          break;
+        case 'MotionSensor':
+          thing = new MotionSensor(thingModel, description, format);
+          break;
+        case 'PushButton':
+          thing = new PushButton(thingModel, description, format);
           break;
         default:
           thing = new Thing(thingModel, description, format);
@@ -293,6 +305,15 @@ const ThingsScreen = {
           case 'Light':
             icon = '/optimized-images/thing-icons/light.svg';
             break;
+          case 'DoorSensor':
+            icon = '/optimized-images/thing-icons/door_sensor.svg';
+            break;
+          case 'MotionSensor':
+            icon = '/optimized-images/thing-icons/motion_sensor.svg';
+            break;
+          case 'PushButton':
+            icon = '/optimized-images/thing-icons/push_button.svg';
+            break;
           case 'Custom':
           default:
             icon = '/optimized-images/thing-icons/thing.svg';
@@ -397,6 +418,15 @@ const ThingsScreen = {
             break;
           case 'Light':
             icon = '/optimized-images/thing-icons/light.svg';
+            break;
+          case 'DoorSensor':
+            icon = '/optimized-images/thing-icons/door_sensor.svg';
+            break;
+          case 'MotionSensor':
+            icon = '/optimized-images/thing-icons/motion_sensor.svg';
+            break;
+          case 'PushButton':
+            icon = '/optimized-images/thing-icons/push_button.svg';
             break;
           case 'Custom':
           default:

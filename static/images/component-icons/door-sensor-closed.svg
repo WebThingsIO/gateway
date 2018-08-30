@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32.000001"
+   id="svg44089"
+   version="1.1">
+  <defs
+     id="defs44091" />
+  <metadata
+     id="metadata44094">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="stroke-width:0.62142873"
+     transform="matrix(0.06474613,0,0,0.06474613,1.4723595e-5,4.2255283e-6)"
+     id="g34609-4-6-8">
+    <path
+       id="path10794-3"
+       d="m 1671.7861,-615.77114 v 36.02234 h -114.2732 v 421.66109 l 114.2732,0.095 v 36.45956 l 208.6451,-37.55259 0.2182,-418.86673 z m 34.6055,230.57154 c 7.0073,0 12.6886,7.41357 12.6886,16.54747 0,9.14341 -5.6804,16.54747 -12.6886,16.54747 -7.0081,0 -12.6884,-7.40406 -12.6884,-16.54747 0,-9.1339 5.6812,-16.54747 12.6884,-16.54747 z m -114.9504,193.14253 v -353.68435 h 80.3449 v 353.75088 z"
+       style="fill:#5d9bc7;fill-opacity:1;stroke-width:1.00982177" />
+    <g
+       transform="translate(-2.0824951e-4,0.00102261)"
+       id="g1526">
+      <rect
+         y="44.851086"
+         x="92.696098"
+         height="404.53378"
+         width="308.84521"
+         id="rect42733-0"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#fafafa;stroke-width:22.19586754;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:13.77897358;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 104.84676,57.01442 V 437.19754 H 389.38474 V 57.01442 Z m 46.75907,172.05187 a 19.301107,19.341763 0 0 1 19.30116,19.34181 19.301107,19.341763 0 0 1 -19.30116,19.32281 19.301107,19.341763 0 0 1 -19.30116,-19.32281 19.301107,19.341763 0 0 1 19.30116,-19.34181 z"
+         id="rect42741-8" />
+    </g>
+  </g>
+</svg>

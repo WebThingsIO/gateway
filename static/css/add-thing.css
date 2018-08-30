@@ -201,6 +201,18 @@
   background-image: url('../optimized-images/thing-icons/energy_monitor.svg');
 }
 
+.new-thing.door-sensor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/door_sensor.svg');
+}
+
+.new-thing.motion-sensor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/motion_sensor.svg');
+}
+
+.new-thing.push-button .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/push_button.svg');
+}
+
 #add-by-url-anchor:link,
 #add-by-url-anchor:visited,
 #add-by-url-anchor:hover,
