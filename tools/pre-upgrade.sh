@@ -19,3 +19,6 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 _url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
 sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
+
+_url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
+sudo pip3 install -U "$_url"
