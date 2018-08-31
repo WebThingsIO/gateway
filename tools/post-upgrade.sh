@@ -19,7 +19,7 @@ if [ ! -d "${addons_dir}/thing-url-adapter" ]; then
 fi
 
 sudo systemctl enable mozilla-iot-gateway.service
-sudo systemctl disable mozilla-gateway-wifi-setup.service
+sudo systemctl disable mozilla-gateway-wifi-setup.service || true
 
 if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   touch "$HOME/.mozilla-iot/config/wifiskip"
