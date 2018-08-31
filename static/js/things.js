@@ -39,6 +39,8 @@ const ThingsScreen = {
    */
   init: function() {
     this.thingsElement = document.getElementById('things');
+    this.thingsHeaderElement =
+      document.getElementById('things-header-container');
     this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
@@ -138,6 +140,7 @@ const ThingsScreen = {
       this.addButton.classList.add('hidden');
       this.backButton.classList.remove('hidden');
       this.menuButton.classList.add('hidden');
+      this.thingsHeaderElement.classList.add('hidden');
       this.thingTitleElement.classList.remove('hidden');
       this.thingsElement.classList.add('single-thing');
 
@@ -152,6 +155,7 @@ const ThingsScreen = {
       this.addButton.classList.remove('hidden');
       this.menuButton.classList.remove('hidden');
       this.backButton.classList.add('hidden');
+      this.thingsHeaderElement.classList.remove('hidden');
       this.thingTitleElement.classList.add('hidden');
       this.thingsElement.classList.remove('single-thing');
       this.showThings();
@@ -227,6 +231,7 @@ const ThingsScreen = {
           this.thingTitleElement.classList.add('speech-enabled');
         }
 
+        this.thingsHeaderElement.classList.add('hidden');
         this.thingTitleElement.classList.remove('hidden');
       }).catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);

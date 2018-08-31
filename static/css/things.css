@@ -6,7 +6,32 @@
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
-  padding: 7.6rem 0;
+  padding: 0 0 7.6rem 0;
+}
+
+#things-view > .title-bar {
+  text-align: center;
+  line-height: 9.6rem;
+  height: 9.6rem;
+}
+
+#things-header {
+  margin: 0 auto;
+  display: inline-block;
+  padding: 0;
+  padding-left: 6.8rem;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: normal;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 3rem;
+  background-image: url('../optimized-images/things-icon.png');
+}
+
+#things-header-container.hidden {
+  display: none;
 }
 
 #things {

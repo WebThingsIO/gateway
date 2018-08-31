@@ -15,11 +15,14 @@
   <body class="hidden">
     <!-- Assistant View -->
     <section data-view="assistant" id="assistant-view">
+      <div class="title-bar">
+        <h3 id="assistant-header">Assistant</h3>
+      </div>
       <div id="assistant-content">
         <div id="assistant-messages"></div>
         <div id="assistant-hint"></div>
         <div id="assistant-avatar">
-          <img id="assistant-avatar-image" src="/optimized-images/fox.svg" />
+          <img id="assistant-avatar-image" src="/optimized-images/fox.svg" alt="Assistant Avatar" />
         </div>
       </div>
       <div id="assistant-controls">
@@ -32,6 +35,9 @@
 
     <!-- Things View -->
     <section data-view="things" class="selected" id="things-view">
+      <div id="things-header-container" class="title-bar">
+        <h3 id="things-header">Things</h3>
+      </div>
       <div id="thing-title" class="hidden">
         <div id="thing-title-back-flex"></div>
         <div id="thing-title-container">
