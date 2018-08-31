@@ -20,6 +20,7 @@ class ThingModel extends Model {
     this.properties = {};
     this.events = [];
     this.closingWs = false;
+    this.wsBackoff = 1000;
 
     // Parse base URL of Thing
     if (description.href) {
@@ -138,6 +139,9 @@ class ThingModel extends Model {
 
     // After the websocket is open, add subscriptions for all events.
     this.ws.addEventListener('open', () => {
+      // Reset the backoff period
+      this.wsBackoff = 1000;
+
       if (Object.keys(this.eventDescriptions).length == 0) {
         return;
       }
@@ -171,7 +175,10 @@ class ThingModel extends Model {
       this.ws.close();
       this.ws = null;
 
-      this.initWebsocket();
+      setTimeout(() => {
+        this.wsBackoff *= 2;
+        this.initWebsocket();
+      }, this.wsBackoff);
     };
 
     this.ws.addEventListener('message', onEvent);
