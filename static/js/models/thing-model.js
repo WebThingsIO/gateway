@@ -19,6 +19,8 @@ class ThingModel extends Model {
     this.type = description.type;
     this.properties = {};
     this.events = [];
+    this.closingWs = false;
+    this.wsBackoff = 1000;
 
     // Parse base URL of Thing
     if (description.href) {
@@ -124,14 +126,22 @@ class ThingModel extends Model {
    * Initialize websocket.
    */
   initWebsocket() {
+    if (this.closingWs) {
+      return;
+    }
+
     if (!this.hasOwnProperty('href')) {
       return;
     }
+
     const wsHref = this.href.href.replace(/^http/, 'ws');
     this.ws = new WebSocket(`${wsHref}?jwt=${API.jwt}`);
 
     // After the websocket is open, add subscriptions for all events.
     this.ws.addEventListener('open', () => {
+      // Reset the backoff period
+      this.wsBackoff = 1000;
+
       if (Object.keys(this.eventDescriptions).length == 0) {
         return;
       }
@@ -148,10 +158,13 @@ class ThingModel extends Model {
 
     const onEvent = (event) => {
       const message = JSON.parse(event.data);
-      if (message.messageType === 'propertyStatus') {
-        this.onPropertyStatus(message.data);
-      } else if (message.messageType === 'event') {
-        this.onEvent(message.data);
+      switch (message.messageType) {
+        case 'propertyStatus':
+          this.onPropertyStatus(message.data);
+          break;
+        case 'event':
+          this.onEvent(message.data);
+          break;
       }
     };
 
@@ -159,6 +172,13 @@ class ThingModel extends Model {
       this.ws.removeEventListener('message', onEvent);
       this.ws.removeEventListener('close', cleanup);
       this.ws.removeEventListener('error', cleanup);
+      this.ws.close();
+      this.ws = null;
+
+      setTimeout(() => {
+        this.wsBackoff *= 2;
+        this.initWebsocket();
+      }, this.wsBackoff);
     };
 
     this.ws.addEventListener('message', onEvent);
@@ -170,7 +190,14 @@ class ThingModel extends Model {
    * Cleanup objects.
    */
   cleanup() {
-    this.ws.close();
+    if (this.ws !== null) {
+      this.closingWs = true;
+
+      if (this.ws.readyState === WebSocket.OPEN) {
+        this.ws.close();
+      }
+    }
+
     super.cleanup();
   }
 
