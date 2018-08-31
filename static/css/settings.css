@@ -165,6 +165,7 @@
 
 .settings-subsection {
   display: block;
+  overflow-y: auto;
 }
 
 .settings-section.hidden {
