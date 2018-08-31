@@ -15,6 +15,9 @@ _remote=$(git remote get-url origin)
 git clone ./ gateway
 cd gateway
 git remote set-url origin "${_remote}"
+cp -r ../node_modules ./
+./node_modules/.bin/webpack
+rm -fr ./node_modules
 cd ..
 tar czf gateway.tar.gz gateway
 rm -fr gateway
