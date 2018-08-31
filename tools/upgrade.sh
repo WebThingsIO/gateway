@@ -44,19 +44,23 @@ extractCAArchive() {
 wget $gateway_archive_url
 wget $node_modules_archive_url
 
-rm -fr gateway_old
-mv gateway gateway_old
-touch gateway_old/package.json
+extractCAArchive gateway-*.tar.gz /tmp
+extractCAArchive node_modules-*.tar.gz /tmp/gateway
 
-extractCAArchive gateway-*.tar.gz ./
-extractCAArchive node_modules-*.tar.gz gateway
-
-cd gateway
+pushd /tmp/gateway
 ./tools/pre-upgrade.sh
+popd
 
 # bring down the gateway very late in the process since it'll probably be fine
 sudo systemctl stop mozilla-iot-gateway.service
 
+rm -fr gateway_old
+mv gateway gateway_old
+touch gateway_old/package.json
+mv /tmp/gateway gateway
+
+pushd gateway
 ./tools/post-upgrade.sh
+popd
 
 sudo systemctl start mozilla-iot-gateway.service
