@@ -150,7 +150,10 @@ InstalledAddon.prototype.handleUpdate = function(e) {
 
   API.updateAddon(this.name, this.updateUrl, this.updateChecksum)
     .then(() => {
-      versionDiv.innerText = this.updateVersion;
+      this.version = this.updateVersion;
+      const addon = this.installedAddonsMap.get(this.name);
+      addon.version = this.version;
+      versionDiv.innerText = this.version;
       updating.innerText = 'Updated';
     })
     .catch((err) => {
