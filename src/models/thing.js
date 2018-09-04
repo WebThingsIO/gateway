@@ -49,7 +49,7 @@ const Thing = function(id, description) {
   if (description.properties) {
     for (const propertyName in description.properties) {
       const property = description.properties[propertyName];
-      // Give the property a URL if it doesn't have one
+      // Give the property a URL
       property.href = `${Constants.THINGS_PATH}/${this.id
       }${Constants.PROPERTIES_PATH}/${propertyName}`;
       this.properties[propertyName] = property;
@@ -323,6 +323,89 @@ Thing.prototype.addAction = function(action) {
  */
 Thing.prototype.removeAction = function(action) {
   return this.actions.hasOwnProperty(action.name);
+};
+
+/**
+ * Update a thing from a description.
+ *
+ * Thing descriptions can change as new capabilities are developed, so this
+ * method allows us to update the stored thing description.
+ *
+ * @param {Object} description Thing description.
+ * @return {Promise} A promise which resolves with the description set.
+ */
+Thing.prototype.updateFromDescription = function(description) {
+  // Update type
+  this.type = description.type || '';
+
+  // Update @context
+  this['@context'] =
+    description['@context'] || 'https://iot.mozilla.org/schemas';
+
+  // Update @type
+  this['@type'] = description['@type'] || [];
+
+  // Update description
+  this.description = description.description || '';
+
+  // Update properties
+  this.properties = {};
+  if (description.properties) {
+    for (const propertyName in description.properties) {
+      const property = description.properties[propertyName];
+      // Give the property a URL
+      property.href = `${Constants.THINGS_PATH}/${this.id
+      }${Constants.PROPERTIES_PATH}/${propertyName}`;
+      this.properties[propertyName] = property;
+    }
+  }
+
+  // Update actions
+  this.actions = description.actions || {};
+  for (const actionName in this.actions) {
+    this.actions[actionName].href =
+      `${this.href}/actions/${actionName}`;
+  }
+
+  // Update events
+  this.events = description.events || {};
+  for (const eventName in this.events) {
+    this.events[eventName].href = `${this.href}/events/${eventName}`;
+  }
+
+  let uiLink = {
+    rel: 'alternate',
+    mediaType: 'text/html',
+    href: this.href,
+  };
+  for (const link of this.links) {
+    if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+      uiLink = link;
+      break;
+    }
+  }
+
+  // Update the UI href
+  if (description.hasOwnProperty('uiHref') && description.uiHref) {
+    uiLink.href = description.uiHref;
+  } else if (description.hasOwnProperty('links')) {
+    for (const link of description.links) {
+      if (link.rel === 'alternate' &&
+          link.mediaType === 'text/html' &&
+          link.href.startsWith('http')) {
+        uiLink.href = link.href;
+        break;
+      }
+    }
+  }
+
+  // If the previously selected capability is no longer present, reset it.
+  if (this.selectedCapability &&
+      !this['@type'].includes(this.selectedCapability)) {
+    this.selectedCapability = '';
+  }
+
+  return Database.updateThing(this.id, this.getDescription());
 };
 
 module.exports = Thing;

@@ -47,6 +47,8 @@ class MockDevice extends Device {
     super(adapter, id);
     this.name = deviceDescription.name;
     this.type = deviceDescription.type;
+    this['@context'] = deviceDescription['@context'];
+    this['@type'] = deviceDescription['@type'];
     this.description = deviceDescription.description;
     for (const propertyName in deviceDescription.properties) {
       const propertyDescription = deviceDescription.properties[propertyName];
