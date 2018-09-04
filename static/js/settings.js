@@ -535,7 +535,11 @@ const SettingsScreen = {
     });
   },
 
-  getAddonList: function() {
+  getAddonList: function(force) {
+    if (force) {
+      this.fetchAddonDeferred = null;
+    }
+
     // If already fetched addon list, return a promise cached.
     if (this.fetchAddonDeferred) {
       return this.fetchAddonDeferred.catch(() => {
@@ -634,7 +638,7 @@ const SettingsScreen = {
     this.addonMainSettings.classList.remove('hidden');
     this.discoverAddonsButton.classList.remove('hidden');
 
-    this.getAddonList().then(() => {
+    this.getAddonList(true).then(() => {
       const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
@@ -666,7 +670,7 @@ const SettingsScreen = {
     this.addonConfigTitleName.textContent = `Configure ${id}`;
     this.view.classList.add('dark');
 
-    this.getAddonList().then(() => {
+    this.getAddonList(false).then(() => {
       const existingForm =
         this.addonConfigSettings.querySelector('.json-schema-form');
       if (existingForm) {
@@ -685,7 +689,7 @@ const SettingsScreen = {
     this.addonDiscoverySettings.classList.remove('hidden');
     this.view.classList.add('dark');
 
-    this.getAddonList().then(() => {
+    this.getAddonList(false).then(() => {
       const addonList = document.getElementById('discovered-addons-list');
       addonList.innerHTML = '';
 
