@@ -20,15 +20,26 @@ If you're installing on a Raspberry Pi then you may need to set up the OS on the
 
 ### Update Package Cache (Linux only)
 
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get update
 ```
 
+Under Fedora Linux:
+```
+$ sudo dnf --refresh upgrade"
+```
+
 ### Install pkg-config
 
-Under Linux:
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install pkg-config
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install pkgconfig
 ```
 
 Under macOS:
@@ -37,9 +48,14 @@ Under macOS:
 
 ### Install curl (needed to install nvm)
 
-Under Linux:
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install curl
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install curl
 ```
 
 ### Install nvm (Recommended)
@@ -94,21 +110,38 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 The following are required in order to install the Python modules that support Bluetooth
 
+Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev 
+$ sudo apt-get install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install boost-python-devel boost-devel bluez-libs-devel glib2-devel
 ```
 
 ### Install libusb and libudev (Linux only)
 
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install libusb-1.0-0-dev libudev-dev
 ```
 
+Under Fedora Linux:
+```
+$ sudo dnf install libudev-devel libusb1-devel
+```
+
 ### Install autoconf
 
-Under Linux:
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install autoconf
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install autoconf
 ```
 
 Under macOS:
@@ -118,27 +151,45 @@ $ brew install autoconf
 
 ### Install libpng (Linux only)
 
-Under x86-64 or x86 Linux:
+Under x86-64 or x86 Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install libpng12-0
 ```
 
-Under ARM Linux:
+Under ARM Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install libpng-dev
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install libpng-devel
 ```
 
 ### Install git
 
 You'll need git to checkout the repositories.
 
-`$ sudo apt-get install git`
+Under Ubuntu/Debian Linux:
+```
+$ sudo apt-get install git
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install git
+```
 
 ### Install gcc (needed to build open-zwave)
 
-Under Linux:
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install build-essential
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf group install "C Development Tools and Libraries"
 ```
 
 ### Build and Install openzwave
@@ -232,6 +283,14 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
     ```
     $ yarn
     ```
+
+* Add Firewall exceptions (Fedora Linux Only)
+    *
+    ```
+    $ sudo firewall-cmd --zone=public --add-port=4443/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
+    ```
+
 
 * Set up domain:
     * If you plan to use Mozilla's provided tunneling service to set up a `*.mozilla-iot.org` domain:
