@@ -44,12 +44,13 @@ template.innerHTML = `
       font-weight: bold;
       text-transform: uppercase;
       padding-top: 8.75rem;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
     }
 
     .webthing-motion-sensor-capability-icon.motion
     .webthing-motion-sensor-capability-label {
       color: #5d9bc7;
+      font-size: 1.4rem;
     }
   </style>
   <div id="icon" class="webthing-motion-sensor-capability-icon">

@@ -44,12 +44,13 @@ template.innerHTML = `
       font-weight: bold;
       text-transform: uppercase;
       padding-top: 8.75rem;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
     }
 
     .webthing-door-sensor-capability-icon.open
     .webthing-door-sensor-capability-label {
       color: #5d9bc7;
+      font-size: 1.4rem;
     }
   </style>
   <div id="icon" class="webthing-door-sensor-capability-icon">
