@@ -140,7 +140,7 @@ describe('things/', function() {
   });
 
   it('GET a thing', async () => {
-    const thingDescr = Object.assign({}, piDescr);
+    const thingDescr = JSON.parse(JSON.stringify(piDescr));
 
     await addDevice(thingDescr);
     const res = await chai.request(server)
@@ -152,6 +152,7 @@ describe('things/', function() {
     expect(res.body).toHaveProperty('name');
     expect(res.body.name).toEqual(thingDescr.name);
     delete thingDescr.id;
+    delete thingDescr.properties.power.value;
     expect(res.body).toMatchObject(thingDescr);
   });
 
