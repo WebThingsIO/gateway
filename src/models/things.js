@@ -166,12 +166,16 @@ const Things = {
    * @param Object New Thing description
    */
   handleNewThing: function(newThing) {
-    this.getThing(newThing.id).catch(() => {
-      // If we don't already know about this thing, notify each open websocket
-      this.websockets.forEach(function(socket) {
-        socket.send(JSON.stringify(newThing));
+    this.getThing(newThing.id)
+      .then((thing) => {
+        return thing.updateFromDescription(newThing);
+      })
+      .catch(() => {
+        // If we don't already know about this thing, notify each open websocket
+        this.websockets.forEach(function(socket) {
+          socket.send(JSON.stringify(newThing));
+        });
       });
-    });
   },
 
   /**
