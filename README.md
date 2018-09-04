@@ -20,7 +20,7 @@ If you're installing on a Raspberry Pi then you may need to set up the OS on the
 
 ### Update Package Cache (Linux only)
 
-Under Ubuntu/Debian Linux
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get update
 ```
@@ -110,10 +110,11 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 The following are required in order to install the Python modules that support Bluetooth
 
-Under Ubuntu/Debian Linux
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev
 ```
+
 Under Fedora Linux:
 ```
 $ sudo dnf install boost-python-devel boost-devel bluez-libs-devel glib2-devel
@@ -121,7 +122,7 @@ $ sudo dnf install boost-python-devel boost-devel bluez-libs-devel glib2-devel
 
 ### Install libusb and libudev (Linux only)
 
-Under Ubuntu/Debian Linux
+Under Ubuntu/Debian Linux:
 ```
 $ sudo apt-get install libusb-1.0-0-dev libudev-dev
 ```
