@@ -24,7 +24,6 @@ class ThingSection extends Section {
       ].join(',')
     );
     this.defineElement('power', 'webthing-smart-plug-capability');
-    this.defineElement('color', 'webthing-light-capability > div > div > svg');
   }
 
   async click() {
@@ -68,12 +67,15 @@ class ThingSection extends Section {
   }
 
   async thingColorDisplayed() {
-    const color = await this.color();
-    const data = await this.browser.elementIdProperty(
-      color.value ? color.value.ELEMENT : color.ELEMENT,
-      'style'
-    );
-    const rgb = data.value.fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    // Function represented as string since otherwise mangling breaks it
+    const fill = await this.browser.execute(`
+      const wlc = document.querySelector('webthing-light-capability');
+      const icon =
+        wlc.shadowRoot.querySelector('.webthing-light-capability-icon');
+      return icon.style.fill;
+    `);
+
+    const rgb = fill.value.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
     const colorStyle = `#${
       Number(rgb[1]).toString(16)}${
       Number(rgb[2]).toString(16)}${
