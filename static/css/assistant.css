@@ -5,6 +5,27 @@
   display: none;
 }
 
+#assistant-view > .title-bar {
+  text-align: center;
+  line-height: 9.6rem;
+  height: 9.6rem;
+}
+
+#assistant-header {
+  margin: 0 auto;
+  display: inline-block;
+  padding: 0;
+  padding-left: 6.8rem;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: normal;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 3rem;
+  background-image: url('../optimized-images/assistant-icon.svg');
+}
+
 #assistant-view.selected {
   display: flex;
   flex-direction: column;
@@ -13,9 +34,8 @@
 #assistant-content {
   flex: 1;
   display: flex;
-  padding-top: 8rem;
   padding-bottom: 1rem;
-  max-height: calc(100% - 10rem);
+  max-height: calc(100% - 19.6rem);
   box-sizing: border-box;
 }
 
