@@ -9,6 +9,9 @@ for file in $(find "${MOZIOT_HOME}/etc/renewal" -type f -name '*.conf'); do
 
     # Disable OCSP stapling
     sed -i -e 's/^must_staple.*/must_staple = False/' "${file}"
+
+    # Fix webroot path
+    sed -i -e 's_gateway/static_gateway/build/static_' "${file}"
 done
 
 for file in $(find "${MOZIOT_HOME}/etc/accounts" -type f -name regr.json); do
