@@ -94,6 +94,18 @@ class NewThing {
           type = 'Light';
           cls = cls || 'light';
           break;
+        case 'DoorSensor':
+          type = 'Door Sensor';
+          cls = cls || 'door-sensor';
+          break;
+        case 'MotionSensor':
+          type = 'Motion Sensor';
+          cls = cls || 'motion-sensor';
+          break;
+        case 'PushButton':
+          type = 'Push Button';
+          cls = cls || 'push-button';
+          break;
         case 'Custom':
           type = 'Custom Thing';
           cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -315,6 +327,15 @@ class NewThing {
       case 'Light':
         cls = 'light';
         break;
+      case 'DoorSensor':
+        cls = 'door-sensor';
+        break;
+      case 'MotionSensor':
+        cls = 'motion-sensor';
+        break;
+      case 'PushButton':
+        cls = 'push-button';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -323,14 +344,19 @@ class NewThing {
         break;
     }
 
-    this.element.classList.remove('on-off-switch',
-                                  'multi-level-switch',
-                                  'color-control',
-                                  'energy-monitor',
-                                  'binary-sensor',
-                                  'multi-level-sensor',
-                                  'smart-plug',
-                                  'light');
+    this.element.classList.remove(
+      'on-off-switch',
+      'multi-level-switch',
+      'color-control',
+      'energy-monitor',
+      'binary-sensor',
+      'multi-level-sensor',
+      'smart-plug',
+      'light',
+      'door-sensor',
+      'motion-sensor',
+      'push-button'
+    );
 
     if (cls) {
       this.element.classList.add(cls);

@@ -1,7 +1,7 @@
 /**
- * LabelProperty
+ * NumericLabelProperty
  *
- * A bubble showing a label.
+ * A bubble showing a numeric label.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,7 +22,7 @@ template.innerHTML = `
       font-size: 1.6rem;
     }
 
-    .webthing-label-property-container {
+    .webthing-numeric-label-property-container {
       width: 10rem;
       height: 10rem;
       border-radius: 5rem;
@@ -31,19 +31,19 @@ template.innerHTML = `
       position: relative;
     }
 
-    .webthing-label-property-contents {
+    .webthing-numeric-label-property-contents {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .webthing-label-property-value,
-    .webthing-label-property-unit {
+    .webthing-numeric-label-property-value,
+    .webthing-numeric-label-property-unit {
       font-weight: bold;
     }
 
-    .webthing-label-property-name {
+    .webthing-numeric-label-property-name {
       text-align: center;
       max-width: 10rem;
       overflow-wrap: break-word;
@@ -51,16 +51,16 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-label-property-container">
-    <div id="contents" class="webthing-label-property-contents">
-      <span id="value" class="webthing-label-property-value">
-      </span><span id="unit" class="webthing-label-property-unit"></span>
+  <div id="container" class="webthing-numeric-label-property-container">
+    <div id="contents" class="webthing-numeric-label-property-contents">
+      <span id="value" class="webthing-numeric-label-property-value">
+      </span><span id="unit" class="webthing-numeric-label-property-unit"></span>
     </div>
   </div>
-  <div id="name" class="webthing-label-property-name"></div>
+  <div id="name" class="webthing-numeric-label-property-name"></div>
 `;
 
-class LabelProperty extends BaseComponent {
+class NumericLabelProperty extends BaseComponent {
   constructor() {
     super(template);
 
@@ -126,5 +126,6 @@ class LabelProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-label-property', LabelProperty);
-module.exports = LabelProperty;
+window.customElements.define('webthing-numeric-label-property',
+                             NumericLabelProperty);
+module.exports = NumericLabelProperty;

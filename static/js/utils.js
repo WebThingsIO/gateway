@@ -243,6 +243,9 @@ const Utils = {
       'OnOffSwitch',
       'ColorControl',
       'EnergyMonitor',
+      'DoorSensor',
+      'MotionSensor',
+      'PushButton',
       'MultiLevelSensor',
       'BinarySensor',
     ];

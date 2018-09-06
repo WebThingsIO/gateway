@@ -23,8 +23,11 @@ const FrequencyDetail = require('./property-detail/frequency');
 const InstantaneousPowerDetail =
   require('./property-detail/instantaneous-power');
 const LevelDetail = require('./property-detail/level');
+const MotionDetail = require('./property-detail/motion');
 const NumberDetail = require('./property-detail/number');
 const OnOffDetail = require('./property-detail/on-off');
+const OpenDetail = require('./property-detail/open');
+const PushedDetail = require('./property-detail/pushed');
 const StringDetail = require('./property-detail/string');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
@@ -143,6 +146,15 @@ class Thing {
             break;
           case 'FrequencyProperty':
             detail = new FrequencyDetail(this, name, property);
+            break;
+          case 'MotionProperty':
+            detail = new MotionDetail(this, name, property);
+            break;
+          case 'OpenProperty':
+            detail = new OpenDetail(this, name, property);
+            break;
+          case 'PushedProperty':
+            detail = new PushedDetail(this, name, property);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {

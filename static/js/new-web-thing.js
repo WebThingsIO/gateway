@@ -140,6 +140,15 @@ class NewWebThing {
       case 'Light':
         cls = 'light';
         break;
+      case 'DoorSensor':
+        cls = 'door-sensor';
+        break;
+      case 'MotionSensor':
+        cls = 'motion-sensor';
+        break;
+      case 'PushButton':
+        cls = 'push-button';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -148,14 +157,19 @@ class NewWebThing {
         break;
     }
 
-    this.element.classList.remove('on-off-switch',
-                                  'multi-level-switch',
-                                  'color-control',
-                                  'energy-monitor',
-                                  'binary-sensor',
-                                  'multi-level-sensor',
-                                  'smart-plug',
-                                  'light');
+    this.element.classList.remove(
+      'on-off-switch',
+      'multi-level-switch',
+      'color-control',
+      'energy-monitor',
+      'binary-sensor',
+      'multi-level-sensor',
+      'smart-plug',
+      'light',
+      'door-sensor',
+      'motion-sensor',
+      'push-button'
+    );
 
     if (cls) {
       this.element.classList.add(cls);
@@ -316,6 +330,18 @@ class NewWebThing {
             option.innerText = 'Light';
             cls = cls || 'light';
             break;
+          case 'DoorSensor':
+            option.innerText = 'Door Sensor';
+            cls = cls || 'door-sensor';
+            break;
+          case 'MotionSensor':
+            option.innerText = 'Motion Sensor';
+            cls = cls || 'motion-sensor';
+            break;
+          case 'PushButton':
+            option.innerText = 'Push Button';
+            cls = cls || 'push-button';
+            break;
           case 'Custom':
             option.innerText = 'Custom Thing';
             cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -433,14 +459,19 @@ class NewWebThing {
     this.urlInput.value = '';
     this.nameInput.value = '';
     this.originLabel.innerText = '';
-    this.element.classList.remove('binary-sensor',
-                                  'multi-level-sensor',
-                                  'light',
-                                  'on-off-switch',
-                                  'multi-level-switch',
-                                  'color-control',
-                                  'energy-monitor',
-                                  'smart-plug');
+    this.element.classList.remove(
+      'binary-sensor',
+      'multi-level-sensor',
+      'light',
+      'on-off-switch',
+      'multi-level-switch',
+      'color-control',
+      'energy-monitor',
+      'smart-plug',
+      'door-sensor',
+      'motion-sensor',
+      'push-button'
+    );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
     this.nameInput.classList.add('hidden');
