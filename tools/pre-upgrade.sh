@@ -20,5 +20,6 @@ _url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
 sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
 
+# Upgrade adapt-parser Python package
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
 sudo pip3 install -U "$_url"

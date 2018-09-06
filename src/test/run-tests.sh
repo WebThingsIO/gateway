@@ -9,8 +9,8 @@ if [ ! -f "${MOZIOT_TEST_HOME}/ssl/certificate.pem" ]; then
 fi
 
 # Check to see if the adapt module is installed
-if ! python -c 'import adapt'; then
-  pip install --user git+https://github.com/mycroftai/adapt#egg=adapt-parser
+if ! python3 -c 'import adapt'; then
+  pip3 install --user git+https://github.com/mycroftai/adapt#egg=adapt-parser
 fi
 
 # install or update the intent parser
@@ -35,7 +35,7 @@ function cleanup() {
 trap cleanup EXIT
 
 # Fire up the intent parser
-python "${MOZIOT_TEST_HOME}/intent-parser/intent-parser-server.py" &
+python3 "${MOZIOT_TEST_HOME}/intent-parser/intent-parser-server.py" &
 INTENT_SERVER_PID=$!
 
 # Run the tests
