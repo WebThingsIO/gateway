@@ -419,7 +419,11 @@ function ruleFragmentEqual(a, b) {
   }
 
   if (aProperty && aProperty.type === 'boolean') {
-    return aPart.onValue === bPart.onValue;
+    if (a.trigger) {
+      return aPart.onValue === bPart.onValue;
+    } else {
+      return aPart.value === bPart.value;
+    }
   }
   if (aPart.type === 'EventTrigger') {
     return aPart.event === bPart.event;
