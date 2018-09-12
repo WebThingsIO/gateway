@@ -8,6 +8,7 @@ const effects = {
   Effect: require('./Effect'),
   ActionEffect: require('./ActionEffect'),
   MultiEffect: require('./MultiEffect'),
+  NotificationEffect: require('./NotificationEffect'),
   SetEffect: require('./SetEffect'),
   PulseEffect: require('./PulseEffect'),
 };
