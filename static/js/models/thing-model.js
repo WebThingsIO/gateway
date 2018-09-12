@@ -83,6 +83,7 @@ class ThingModel extends Model {
       }).then((response) => {
         if (response.ok) {
           console.log('Successfully removed Thing.');
+          this.handleEvent(Constants.DELETE_THING, this.id);
           this.cleanup();
           resolve();
         } else {
@@ -165,6 +166,14 @@ class ThingModel extends Model {
         case 'event':
           this.onEvent(message.data);
           break;
+        case 'error':
+          // status 404 means that the Thing already removed.
+          if (message.data.status === '404 Not Found') {
+            console.log('Successfully removed Thing.');
+            this.handleEvent(Constants.DELETE_THING, this.id);
+            this.cleanup();
+          }
+          break;
       }
     };
 
@@ -190,10 +199,10 @@ class ThingModel extends Model {
    * Cleanup objects.
    */
   cleanup() {
+    this.closingWs = true;
     if (this.ws !== null) {
-      this.closingWs = true;
-
-      if (this.ws.readyState === WebSocket.OPEN) {
+      if (this.ws.readyState === WebSocket.OPEN ||
+          this.ws.readyState === WebSocket.CONNECTING) {
         this.ws.close();
       }
     }
@@ -208,6 +217,8 @@ class ThingModel extends Model {
         break;
       case Constants.PROPERTY_STATUS:
         handler(this.properties);
+        break;
+      case Constants.DELETE_THING:
         break;
       default:
         console.warn(`ThingModel does not support event:${event}`);

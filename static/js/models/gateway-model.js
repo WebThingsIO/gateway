@@ -49,6 +49,10 @@ class GatewayModel extends Model {
   setThing(thingId, description) {
     if (!this.thingModels.has(thingId)) {
       const thingModel = new ThingModel(description);
+      thingModel.subscribe(
+        Constants.DELETE_THING,
+        this.handleRemove.bind(this)
+      );
       this.thingModels.set(thingId, thingModel);
     }
     this.things.set(thingId, description);
@@ -87,9 +91,7 @@ class GatewayModel extends Model {
         throw new Error(`Thing id:${thingId} already removed`);
       }
       const thingModel = this.thingModels.get(thingId);
-      return thingModel.removeThing().then(() => {
-        this.handleRemove(thingId);
-      });
+      return thingModel.removeThing();
     });
   }
 
