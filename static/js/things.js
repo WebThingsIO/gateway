@@ -253,11 +253,7 @@ const ThingsScreen = {
       this.refreshThing,
       true
     );
-    App.gatewayModel.subscribe(
-      Constants.DELETE_THINGS,
-      this.refreshThing,
-      true
-    );
+    App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThing);
   },
 
   /**
