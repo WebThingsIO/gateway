@@ -6,6 +6,7 @@
 
 const assert = require('assert');
 const Effect = require('./Effect');
+const PushController = require('../../controllers/push_controller');
 
 /**
  * An Effect which creates a notification
@@ -42,7 +43,7 @@ class NotificationEffect extends Effect {
       return;
     }
 
-    console.log('do something?');
+    PushController.broadcastNotification(this.message);
   }
 }
 

@@ -42,3 +42,11 @@ self.addEventListener('fetch', function(event) {
     }
   })());
 });
+
+self.addEventListener('push', function(event) {
+  const payload = event.data ? event.data.text() : '';
+
+  event.waitUntil(self.registration.showNotification('Mozilla IoT Gateway', {
+    body: payload,
+  }));
+});

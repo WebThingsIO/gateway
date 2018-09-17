@@ -34,6 +34,8 @@ let RuleScreen;
 // eslint-disable-next-line prefer-const
 let Speech;
 
+const Notifications = require('./notifications');
+
 const App = {
   /**
    * Current server host.
@@ -268,6 +270,7 @@ if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {
     scope: '/',
   });
+  navigator.serviceWorker.ready.then(Notifications.onReady);
 }
 
 /**
