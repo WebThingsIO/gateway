@@ -128,6 +128,11 @@ const Router = {
     app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth,
             require('./controllers/logs_controller'));
 
+    const PushController = require('./controllers/push_controller');
+    PushController.init().then(() => {
+      app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth, PushController);
+    });
+
     app.use(API_PREFIX + Constants.OAUTH_PATH, nocache,
             require('./controllers/oauth_controller').default);
     app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nocache, auth,

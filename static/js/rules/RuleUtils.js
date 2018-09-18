@@ -52,6 +52,10 @@ const RuleUtils = {
   // Helper function for selecting the thing corresponding to a property
   byProperty: function byProperty(property) {
     return function(option) {
+      if (!property) {
+        console.warn('byProperty property undefined', new Error().stack);
+        return false;
+      }
       const optProp = option.properties[property.name];
       return optProp && (optProp.href === property.href);
     };

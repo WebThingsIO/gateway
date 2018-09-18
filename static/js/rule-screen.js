@@ -14,6 +14,7 @@ const DevicePropertyBlock = require('./rules/DevicePropertyBlock');
 const Gateway = require('./rules/Gateway');
 const Rule = require('./rules/Rule');
 const RuleUtils = require('./rules/RuleUtils');
+const NotificationEffectBlock = require('./rules/NotificationEffectBlock');
 const TimeTriggerBlock = require('./rules/TimeTriggerBlock');
 const page = require('page');
 
@@ -182,6 +183,26 @@ const RuleScreen = {
   },
 
   /**
+   * Instantiate a draggable NotificationEffectBlock from a template
+   * NotificationEffectBlock in the palette
+   * @param {Event} event
+   */
+  onNotificationEffectBlockDown: function(event) {
+    if (!this.rule) {
+      return;
+    }
+    const deviceRect = event.target.getBoundingClientRect();
+    const x = deviceRect.left;
+    const y = deviceRect.top;
+
+    const newBlock = new NotificationEffectBlock(
+      this.ruleArea, this.onPresentationChange, this.onRuleChange);
+    newBlock.snapToGrid(x, y);
+    newBlock.draggable.onDown(event);
+    this.partBlocks.push(newBlock);
+  },
+
+  /**
    * Create a block representing a time trigger
    * @return {Element}
    */
@@ -193,6 +214,22 @@ const RuleScreen = {
       <img class="rule-part-icon" src="/optimized-images/rule-icons/clock.svg"/>
     </div>
     <p>Clock</p>`;
+
+    return elt;
+  },
+
+  /**
+   * Create a block representing a notification effect
+   * @return {Element}
+   */
+  makeNotificationEffectBlock: function() {
+    const elt = document.createElement('div');
+    elt.classList.add('rule-part');
+
+    elt.innerHTML = `<div class="rule-part-block notification-effect-block">
+      <img class="rule-part-icon" src="/optimized-images/rule-icons/notification.svg"/>
+    </div>
+    <p>Notification</p>`;
 
     return elt;
   },
@@ -224,6 +261,10 @@ const RuleScreen = {
     if (part.type === 'TimeTrigger') {
       block = new TimeTriggerBlock(this.ruleArea, this.onPresentationChange,
                                    this.onRuleChange);
+    } else if (part.type === 'NotificationEffect') {
+      block = new NotificationEffectBlock(this.ruleArea,
+                                          this.onPresentationChange,
+                                          this.onRuleChange);
     } else {
       const thing = RuleUtils.thingFromPart(this.gateway, part);
       if (!thing) {
@@ -248,7 +289,8 @@ const RuleScreen = {
     function isValidSelection(block) {
       const selectedOption = block.querySelector('.selected');
       if (!selectedOption) {
-        return !!block.querySelector('.time-input');
+        return block.querySelector('.time-input') ||
+          block.querySelector('.message-input-container');
       }
       return JSON.parse(selectedOption.dataset.ruleFragment);
     }
@@ -526,6 +568,13 @@ const RuleScreen = {
                              this.onTimeTriggerBlockDown.bind(this));
     this.rulePartsList.appendChild(ttBlock);
 
+    const neBlock = this.makeNotificationEffectBlock();
+    neBlock.addEventListener('mousedown',
+                             this.onNotificationEffectBlockDown.bind(this));
+    neBlock.addEventListener('touchstart',
+                             this.onNotificationEffectBlockDown.bind(this));
+    this.rulePartsList.appendChild(neBlock);
+
     this.gateway.readThings().then((things) => {
       for (const thing of things) {
         const elt = this.makeDeviceBlock(thing);
@@ -768,5 +817,7 @@ const RuleScreen = {
     });
   },
 };
+
+window.RuleScreen = RuleScreen;
 
 module.exports = RuleScreen;

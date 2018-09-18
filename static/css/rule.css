@@ -185,7 +185,7 @@
   white-space: nowrap;
 }
 
-.property-select-option {
+.property-select-option, .message-input-container {
   background: #4a4a4a;
   height: 5rem;
   line-height: 5rem;
@@ -198,14 +198,18 @@
   cursor: default;
 }
 
-.property-select-name {
+.property-select-name, .message-input-label {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   flex: 1;
 }
 
-.property-select-option.selected {
+.message-input-label {
+  overflow: visible;
+}
+
+.property-select-option.selected, .message-input-container {
   position: relative;
   border-radius: 0 0 1rem 0;
 }
@@ -237,7 +241,8 @@
 }
 
 .property-select.open > .property-select-option,
-.property-select-option.selected {
+.property-select-option.selected,
+.message-input-container {
   display: flex;
   align-items: center;
 }
@@ -247,11 +252,13 @@
 }
 
 .property-select-option select,
-.property-select-option input {
+.property-select-option input,
+.message-input-container input {
   margin-left: 0.6rem;
 }
 
-.property-select-option input[type="text"] {
+.property-select-option input[type="text"],
+.message-input-container input[type="text"] {
   width: 8rem;
 }
 

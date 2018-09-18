@@ -239,48 +239,7 @@ SettingsController.post('/skiptunnel', async (request, response) => {
 
 SettingsController.get('/tunnelinfo', async (request, response) => {
   try {
-    // Check to see if we have a tunnel endpoint first
-    const result = await Settings.get('tunneltoken');
-    let localDomain;
-    let mDNSstate;
-    let tunnelEndpoint;
-
-    if (typeof result === 'object') {
-      console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
-                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
-      tunnelEndpoint =
-        `https://${result.name}.${config.get('ssltunnel.domain')}`;
-    } else {
-      tunnelEndpoint = 'Not set.';
-    }
-
-    // Find out our default local DNS name Check for a previous name in the
-    // DB, if that does not exist use the default.
-    try {
-      mDNSstate = await Settings.get('multicastDNSstate');
-      localDomain = await Settings.get('localDNSname');
-      // If our DB is empty use defaults
-      if (typeof mDNSstate === 'undefined') {
-        mDNSstate = config.get(
-          'settings.defaults.domain.localAccess');
-      }
-      if (typeof localDomain === 'undefined') {
-        localDomain = config.get(
-          'settings.defaults.domain.localControl.mdnsServiceDomain');
-      }
-    } catch (err) {
-      // Catch this DB error. Since we don't know what state the mDNS process
-      // should be in make sure it's off
-      console.error(`Error getting DB entry for multicast from the DB: ${err}`);
-      localDomain = config.get(
-        'settings.defaults.domain.localControl.mdnsServiceDomain');
-    }
-
-    console.log(`Tunnel name is set to: ${tunnelEndpoint}`);
-    console.log(`Local mDNS Service Domain Name is: ${localDomain}`);
-    const localDomainSettings = {localDomain: localDomain,
-                                 mDNSstate: mDNSstate,
-                                 tunnelDomain: tunnelEndpoint};
+    const localDomainSettings = await Settings.getTunnelInfo();
     response.send(localDomainSettings);
     response.status(200).end();
   } catch (e) {

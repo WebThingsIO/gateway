@@ -25,6 +25,7 @@ const TABLES = [
   'jsonwebtokens',
   'things',
   'settings',
+  'pushSubscriptions',
 ];
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
@@ -118,6 +119,11 @@ const Database = {
       'key TEXT PRIMARY KEY,' +
       'value TEXT' +
     ');');
+
+    this.db.run(`CREATE TABLE IF NOT EXISTS pushSubscriptions (
+      id INTEGER PRIMARY KEY,
+      subscription TEXT
+    );`);
   },
 
   /**
@@ -524,6 +530,54 @@ const Database = {
       keyId
     );
     return result.changes !== 0;
+  },
+
+  /**
+   * Store a new Push subscription
+   * @param {Object} subscription
+   * @return {Promise<number>} resolves to sub id
+   */
+  createPushSubscription: function(desc) {
+    return this.run(
+      'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
+      [JSON.stringify(desc)]
+    ).then((res) => {
+      return parseInt(res.lastID);
+    });
+  },
+
+  /**
+   * Get all push subscriptions
+   * @return {Promise<Array<PushSubscription>>}
+   */
+  getPushSubscriptions: function() {
+    return new Promise((resolve, reject) => {
+      this.db.all(
+        'SELECT id, subscription FROM pushSubscriptions',
+        [],
+        function(err, rows) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const subs = [];
+          for (const row of rows) {
+            const sub = JSON.parse(row.subscription);
+            sub.id = row.id;
+            subs.push(sub);
+          }
+          resolve(subs);
+        }
+      );
+    });
+  },
+
+  /**
+   * Delete a single subscription
+   * @param {number} id
+   */
+  deletePushSubscription: function(id) {
+    return this.run('DELETE FROM pushSubscriptions WHERE id = ?', [id]);
   },
 
   /**

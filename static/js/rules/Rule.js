@@ -227,6 +227,9 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
     return effectStr;
   }
 
+  if (effect.type === 'NotificationEffect') {
+    return `notify with message "${effect.message}"`;
+  }
   if (effect.type === 'ActionEffect') {
     const effectThing = this.gateway.things.filter(
       RuleUtils.byHref(effect.thing.href)
@@ -296,7 +299,7 @@ Rule.prototype.toHumanRepresentation = function(html) {
 
   const effectExists = this.effect && this.effect.effects &&
     this.effect.effects.length > 0;
-  let permanent = !effectExists; // Default to permanent
+  let permanent = true; // Default to permanent
   if (effectExists) {
     for (const effect of this.effect.effects) {
       if (effect.type === 'SetEffect') {
