@@ -67,8 +67,12 @@ class ColorProperty extends BaseComponent {
   connectedCallback() {
     this.name = this.dataset.name;
 
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
+
     this._upgradeProperty('value');
-    this._upgradeProperty('disabled');
 
     this._input.addEventListener('change', this._onChange);
   }
@@ -85,11 +89,11 @@ class ColorProperty extends BaseComponent {
     this._input.value = value;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._input.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._input.setAttribute('disabled', '');

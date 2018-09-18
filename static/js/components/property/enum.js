@@ -98,9 +98,12 @@ class EnumProperty extends BaseComponent {
       typeof this.dataset.choices !== 'undefined' ?
         JSON.parse(atob(this.dataset.choices)) :
         [];
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
 
     this._upgradeProperty('value');
-    this._upgradeProperty('disabled');
 
     this._select.addEventListener('change', this._onChange);
   }
@@ -132,11 +135,11 @@ class EnumProperty extends BaseComponent {
     this._select.value = value;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._select.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._select.setAttribute('disabled', '');

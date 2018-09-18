@@ -98,8 +98,12 @@ class BooleanProperty extends BaseComponent {
   connectedCallback() {
     this.name = this.dataset.name;
 
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
+
     this._upgradeProperty('checked');
-    this._upgradeProperty('disabled');
 
     this._input.addEventListener('click', this._onClick);
     this._input.addEventListener('keyup', this._onKeyUp);
@@ -125,11 +129,11 @@ class BooleanProperty extends BaseComponent {
     this._input.checked = isChecked;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._input.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._input.setAttribute('disabled', '');
@@ -172,7 +176,7 @@ class BooleanProperty extends BaseComponent {
   }
 
   _toggleChecked() {
-    if (this.disabled) {
+    if (this.readOnly) {
       return;
     }
 

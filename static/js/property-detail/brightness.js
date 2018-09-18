@@ -16,6 +16,7 @@ class BrightnessDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || 'Brightness';
     this.id = `brightness-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
@@ -27,9 +28,10 @@ class BrightnessDetail {
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
       <webthing-brightness-property data-name="${Utils.escapeHtml(this.label)}"
-        value="0" id="${this.id}">
+        value="0" id="${this.id}" ${readOnly}>
       </webthing-brightness-property>`;
   }
 

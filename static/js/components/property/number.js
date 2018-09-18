@@ -106,12 +106,15 @@ class NumberProperty extends BaseComponent {
       typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
     this.unit =
       typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');
     this._upgradeProperty('step');
     this._upgradeProperty('value');
-    this._upgradeProperty('disabled');
 
     this._form.addEventListener('submit', this._onSubmit);
     this._input.addEventListener('blur', this._onBlur);
@@ -160,11 +163,11 @@ class NumberProperty extends BaseComponent {
     this._input.value = value;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._input.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._input.setAttribute('disabled', '');

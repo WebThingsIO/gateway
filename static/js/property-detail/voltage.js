@@ -15,13 +15,20 @@ const Utils = require('../utils');
 
 class VoltageDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Voltage', 'V', 0);
+    super(thing,
+          name,
+          !!property.readOnly,
+          property.label || 'Voltage',
+          'V',
+          0);
     this.id = `voltage-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
-      <webthing-voltage-property data-value="0"
+      <webthing-voltage-property data-value="0" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-voltage-property>`;
   }

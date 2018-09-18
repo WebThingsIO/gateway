@@ -15,13 +15,18 @@ const Utils = require('../utils');
 
 class CurrentDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Current', 'A', 1);
+    super(thing,
+          name,
+          !!property.readOnly, property.label || 'Current',
+          'A',
+          1);
     this.id = `current-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
-      <webthing-current-property data-value="0"
+      <webthing-current-property data-value="0" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-current-property>`;
   }

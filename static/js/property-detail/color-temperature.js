@@ -16,6 +16,7 @@ class ColorTemperatureDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || 'Color Temperature';
     this.min = property.hasOwnProperty('min') ? property.min : property.minimum;
     this.max = property.hasOwnProperty('max') ? property.max : property.maximum;
@@ -28,9 +29,10 @@ class ColorTemperatureDetail {
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
       <webthing-color-temperature-property min="${this.min}" max="${this.max}"
-        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}" ${readOnly}>
       </webthing-color-temperature-property>`;
   }
 

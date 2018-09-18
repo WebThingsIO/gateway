@@ -15,13 +15,15 @@ const Utils = require('../utils');
 
 class PushedDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Pushed');
+    super(thing, name, !!property.readOnly, property.label || 'Pushed');
     this.id = `pushed-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
-      <webthing-pushed-property data-value="NOT PUSHED"
+      <webthing-pushed-property data-value="NOT PUSHED" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-pushed-property>`;
   }

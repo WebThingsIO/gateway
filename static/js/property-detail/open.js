@@ -15,13 +15,15 @@ const Utils = require('../utils');
 
 class OpenDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Open');
+    super(thing, name, !!property.readOnly, property.label || 'Open');
     this.id = `open-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
-      <webthing-open-property data-value="CLOSED"
+      <webthing-open-property data-value="CLOSED" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-open-property>`;
   }

@@ -16,6 +16,7 @@ class EnumDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || name;
     this.type = property.type;
     this.unit =
@@ -32,11 +33,12 @@ class EnumDetail {
 
   view() {
     const unit = this.unit || '';
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
       <webthing-enum-property data-name="${Utils.escapeHtml(this.label)}"
         data-unit="${unit}" data-choices="${btoa(JSON.stringify(this.choices))}"
-        data-type="${this.type}" id="${this.id}">
+        data-type="${this.type}" id="${this.id}" ${readOnly}>
       </webthing-enum-property>`;
   }
 

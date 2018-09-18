@@ -16,6 +16,7 @@ class OnOffDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || 'On/Off';
     this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
@@ -27,9 +28,11 @@ class OnOffDetail {
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-on-off-property data-name="${Utils.escapeHtml(this.label)}"
-        id="${this.id}">
+        id="${this.id}" ${readOnly}>
       </webthing-on-off-property>`;
   }
 

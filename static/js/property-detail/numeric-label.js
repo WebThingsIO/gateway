@@ -13,9 +13,10 @@
 const Utils = require('../utils');
 
 class NumericLabelDetail {
-  constructor(thing, name, label, unit, precision) {
+  constructor(thing, name, readOnly, label, unit, precision) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = readOnly;
     this.label = label;
     this.unit = Utils.unitNameToAbbreviation(unit);
     this.precision = precision;
@@ -29,9 +30,12 @@ class NumericLabelDetail {
   view() {
     const name = Utils.escapeHtml(this.label);
     const unit = Utils.escapeHtml(this.unit);
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-numeric-label-property data-value="0" data-name="${name}"
-        data-unit="${unit}" data-precision="${this.precision}" id="${this.id}">
+        data-unit="${unit}" data-precision="${this.precision}" id="${this.id}"
+        ${readOnly}>
       </webthing-numeric-label-property>`;
   }
 

@@ -16,6 +16,7 @@ class ColorDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || 'Color';
     this.id = `color-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
@@ -26,9 +27,10 @@ class ColorDetail {
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
       <webthing-color-property data-name="${Utils.escapeHtml(this.label)}"
-        id="${this.id}">
+        id="${this.id}" ${readOnly}>
       </webthing-color-property>`;
   }
 
