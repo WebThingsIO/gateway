@@ -18,7 +18,6 @@ const EventEmitter = require('events').EventEmitter;
 const DEBUG = false;
 
 class AddonManagerProxy extends EventEmitter {
-
   constructor(pluginClient) {
     super();
 
