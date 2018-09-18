@@ -399,6 +399,10 @@ class AddonManagerProxy extends EventEmitter {
     }
     this.pluginClient.sendNotification(Constants.PLUGIN_UNLOADED, {});
   }
+
+  sendError(message) {
+    this.pluginClient.sendNotification(Constants.PLUGIN_ERROR, {message});
+  }
 }
 
 module.exports = AddonManagerProxy;

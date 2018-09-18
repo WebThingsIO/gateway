@@ -84,9 +84,14 @@ async function loadAddon(addonPath, verbose) {
                   'from', addonPath);
       const addonLoader = dynamicRequire(addonPath);
       addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
+        const message =
+          `Failed to start ${manifest.display_name} add-on: ${errorStr}`;
         console.error('Failed to load', packageName, '-', errorStr);
-        addonManagerProxy.unloadPlugin();
-        process.exit(Constants.DONT_RESTART_EXIT_CODE);
+        addonManagerProxy.sendError(message);
+        setTimeout(() => {
+          addonManagerProxy.unloadPlugin();
+          process.exit(Constants.DONT_RESTART_EXIT_CODE);
+        }, 500);
       });
       resolve();
     }).catch((e) => {
