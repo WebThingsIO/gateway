@@ -64,7 +64,7 @@ class SwitchProperty extends BaseComponent {
       transition: 0.1s;
     }
 
-      .webthing-switch-property-switch:checked + .webthing-switch-property-slider::after {
+    .webthing-switch-property-switch:checked + .webthing-switch-property-slider::after {
       transform: translate(3.65rem, 0.35rem);
     }
 
@@ -85,9 +85,9 @@ class SwitchProperty extends BaseComponent {
   <div id="container" class="webthing-switch-property-container">
     <div id="contents" class="webthing-switch-property-contents">
       <form>
-          <input type="checkbox" id="switch-${BaseComponent.count}"
+        <input type="checkbox" id="switch-${BaseComponent.count}"
           class="webthing-switch-property-switch">
-          <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}" class="webthing-switch-property-slider">
+        <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}" class="webthing-switch-property-slider">
         </label>
       </form>
       <div id="label" class="webthing-switch-property-label"></div>
