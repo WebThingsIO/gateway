@@ -10,7 +10,8 @@ const RulePartBlock = require('./RulePartBlock');
  */
 function NotificationEffectBlock(ruleArea, onPresentationChange, onRuleUpdate) {
   RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleUpdate,
-                     'Notification', '/optimized-images/rule-icons/notification.svg');
+                     'Notification',
+                     '/optimized-images/rule-icons/notification.svg');
 
   const rulePartInfo = this.elt.querySelector('.rule-part-info');
 

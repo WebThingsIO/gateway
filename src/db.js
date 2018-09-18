@@ -25,6 +25,7 @@ const TABLES = [
   'jsonwebtokens',
   'things',
   'settings',
+  'pushSubscriptions',
 ];
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
@@ -545,6 +546,10 @@ const Database = {
     });
   },
 
+  /**
+   * Get all push subscriptions
+   * @return {Promise<Array<PushSubscription>>}
+   */
   getPushSubscriptions: function() {
     return new Promise((resolve, reject) => {
       this.db.all(
@@ -567,7 +572,11 @@ const Database = {
     });
   },
 
-  deletePushSubscriptions: function(id) {
+  /**
+   * Delete a single subscription
+   * @param {number} id
+   */
+  deletePushSubscription: function(id) {
     return this.run('DELETE FROM pushSubscriptions WHERE id = ?', [id]);
   },
 
