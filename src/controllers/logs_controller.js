@@ -8,6 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+const AddonManager = require('../addon-manager');
 const archiver = require('archiver');
 const express = require('express');
 const fs = require('fs');
@@ -15,6 +16,7 @@ const path = require('path');
 const jwtMiddleware = require('../jwt-middleware');
 const UserProfile = require('../user-profile');
 const Utils = require('../utils');
+const WebSocket = require('ws');
 
 const LogsController = express.Router();
 
@@ -76,6 +78,38 @@ LogsController.get('/zip', async (request, response) => {
   archive.pipe(response);
   archive.directory(UserProfile.logDir, 'logs');
   archive.finalize();
+});
+
+LogsController.ws('/', (websocket) => {
+  if (websocket.readyState !== WebSocket.OPEN) {
+    return;
+  }
+
+  const heartbeat = setInterval(() => {
+    try {
+      websocket.ping();
+    } catch (e) {
+      websocket.terminate();
+    }
+  }, 30 * 1000);
+
+  const onLog = (message) => {
+    websocket.send(JSON.stringify(message), (err) => {
+      if (err) {
+        console.error('WebSocket sendMessage failed:', err);
+      }
+    });
+  };
+
+  AddonManager.pluginServer.on('log', onLog);
+
+  const cleanup = () => {
+    AddonManager.pluginServer.removeListener('log', onLog);
+    clearInterval(heartbeat);
+  };
+
+  websocket.on('error', cleanup);
+  websocket.on('close', cleanup);
 });
 
 module.exports = LogsController;

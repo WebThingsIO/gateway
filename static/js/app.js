@@ -10,6 +10,8 @@
 'use strict';
 
 // eslint-disable-next-line prefer-const
+let API;
+// eslint-disable-next-line prefer-const
 let AssistantScreen;
 // eslint-disable-next-line prefer-const
 let GatewayModel;
@@ -76,8 +78,44 @@ const App = {
     this.messageArea = document.getElementById('message-area');
     this.messageTimeout = null;
     this.gatewayModel = new GatewayModel();
+
+    this.wsBackoff = 1000;
+    this.initWebSocket();
+
     Menu.init();
     Router.init();
+  },
+
+  initWebSocket() {
+    const path = `${this.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}`;
+    this.messageSocket = new WebSocket(path);
+
+    this.messageSocket.addEventListener('open', () => {
+      // Reset the backoff period
+      this.wsBackoff = 1000;
+    }, {once: true});
+
+    const onMessage = (msg) => {
+      const message = JSON.parse(msg.data);
+      this.showMessage(message.message, 5000);
+    };
+
+    const cleanup = () => {
+      this.messageSocket.removeEventListener('message', onMessage);
+      this.messageSocket.removeEventListener('close', cleanup);
+      this.messageSocket.removeEventListener('error', cleanup);
+      this.messageSocket.close();
+      this.messageSocket = null;
+
+      setTimeout(() => {
+        this.wsBackoff *= 2;
+        this.initWebSocket();
+      }, this.wsBackoff);
+    };
+
+    this.messageSocket.addEventListener('message', onMessage);
+    this.messageSocket.addEventListener('close', cleanup);
+    this.messageSocket.addEventListener('error', cleanup);
   },
 
   showAssistant: function() {
@@ -213,6 +251,7 @@ const App = {
 module.exports = App;
 
 // avoid circular dependency
+API = require('./api');
 AssistantScreen = require('./assistant');
 GatewayModel = require('./models/gateway-model');
 ThingsScreen = require('./things');

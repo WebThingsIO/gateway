@@ -209,6 +209,13 @@ class Plugin {
           });
         }
         return;
+
+      case Constants.PLUGIN_ERROR:
+        this.pluginServer.emit('log', {
+          severity: Constants.LogSeverity.ERROR,
+          message: msg.data.message,
+        });
+        return;
     }
 
     // The next switch deals with adapter level messages

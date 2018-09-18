@@ -18,7 +18,6 @@ const EventEmitter = require('events').EventEmitter;
 const DEBUG = false;
 
 class AddonManagerProxy extends EventEmitter {
-
   constructor(pluginClient) {
     super();
 
@@ -398,6 +397,10 @@ class AddonManagerProxy extends EventEmitter {
       }, 500);
     }
     this.pluginClient.sendNotification(Constants.PLUGIN_UNLOADED, {});
+  }
+
+  sendError(message) {
+    this.pluginClient.sendNotification(Constants.PLUGIN_ERROR, {message});
   }
 }
 

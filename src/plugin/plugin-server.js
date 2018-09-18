@@ -14,12 +14,13 @@
 'use strict';
 
 const Constants = require('../constants');
+const EventEmitter = require('events');
 const IpcSocket = require('./ipc');
 const Plugin = require('./plugin');
 
-class PluginServer {
-
+class PluginServer extends EventEmitter {
   constructor(addonManager, {verbose} = {}) {
+    super();
     this.manager = addonManager;
 
     this.verbose = verbose;
@@ -54,7 +55,6 @@ class PluginServer {
       console.log('PluginServer: Rcvd:', msg);
 
     switch (msg.messageType) {
-
       case Constants.REGISTER_PLUGIN: {
         const plugin = this.registerPlugin(msg.data.pluginId);
         this.ipcSocket.sendJson({

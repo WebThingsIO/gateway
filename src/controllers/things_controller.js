@@ -360,7 +360,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
   function sendMessage(message) {
     websocket.send(message, (err) => {
       if (err) {
-        console.error(`WebSocket sendMessage failed`, err);
+        console.error('WebSocket sendMessage failed', err);
       }
     });
   }

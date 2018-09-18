@@ -22,6 +22,10 @@ const path = require('path');
 // Open the database.
 db.open();
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function loadAddon(addonPath, verbose) {
   // Skip if there's no package.json file.
   const packageJson = path.join(addonPath, 'package.json');
@@ -50,14 +54,41 @@ async function loadAddon(addonPath, verbose) {
   }
   const packageName = manifest.name;
 
+  const pluginClient = new PluginClient(packageName, {verbose: verbose});
+
+  let addonManagerProxy;
+  const pluginClientPromise = pluginClient.register().then((proxy) => {
+    addonManagerProxy = proxy;
+  }).catch((e) => {
+    console.error(e);
+    const err = `Failed to register package: ${manifest.name} with gateway`;
+    return Promise.reject(err);
+  });
+
+  const fail = (message) => {
+    return pluginClientPromise.then(() => {
+      addonManagerProxy.sendError(message);
+      return sleep(200);
+    }).then(() => {
+      addonManagerProxy.unloadPlugin();
+      return sleep(200);
+    }).then(() => {
+      process.exit(Constants.DONT_RESTART_EXIT_CODE);
+    });
+  };
+
   // Verify API version.
   const apiVersion = config.get('addonManager.api');
   if (manifest.moziot.api.min > apiVersion ||
       manifest.moziot.api.max < apiVersion) {
-    return Promise.reject(
+    console.error(
       `API mismatch for package: ${manifest.name}\n` +
       `Current: ${apiVersion} ` +
       `Supported: ${manifest.moziot.api.min}-${manifest.moziot.api.max}`);
+
+    const message =
+      `Failed to start ${manifest.display_name} add-on: API version mismatch`;
+    return fail(message);
   }
 
   // Get any saved settings for this add-on.
@@ -72,29 +103,31 @@ async function loadAddon(addonPath, verbose) {
     newSettings.moziot.config = {};
   }
 
-  const pluginClient = new PluginClient(packageName, {verbose: verbose});
+  return pluginClientPromise.then(() => {
+    console.log('Loading add-on for', manifest.name, 'from', addonPath);
 
-  if (config.get('ipc.protocol') !== 'inproc') {
-    pluginClient.on('unloaded', () => process.exit(0));
-  }
-
-  return new Promise((resolve, reject) => {
-    pluginClient.register().then((addonManagerProxy) => {
-      console.log('Loading add-on for', manifest.name,
-                  'from', addonPath);
-      const addonLoader = dynamicRequire(addonPath);
+    let addonLoader;
+    try {
+      addonLoader = dynamicRequire(addonPath);
       addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
         console.error('Failed to load', packageName, '-', errorStr);
-        addonManagerProxy.unloadPlugin();
-        process.exit(Constants.DONT_RESTART_EXIT_CODE);
+        const message =
+          `Failed to start ${manifest.display_name} add-on: ${errorStr}`;
+        fail(message);
       });
-      resolve();
-    }).catch((e) => {
+
+      if (config.get('ipc.protocol') !== 'inproc') {
+        pluginClient.on('unloaded', () => {
+          sleep(500).then(() => process.exit(0));
+        });
+      }
+    } catch (e) {
       console.error(e);
-      const err =
-        `Failed to register package: ${manifest.name} with gateway`;
-      reject(err);
-    });
+      const message =
+        `Failed to start ${manifest.display_name} add-on: ${
+          e.toString().replace(/^Error:\s+/, '')}`;
+      return fail(message);
+    }
   });
 }
 
