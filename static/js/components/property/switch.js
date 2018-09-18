@@ -115,8 +115,12 @@ class SwitchProperty extends BaseComponent {
       this.label = this.dataset.offLabel;
     }
 
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
+
     this._upgradeProperty('checked');
-    this._upgradeProperty('disabled');
 
     this._input.addEventListener('click', this._onClick);
     this._input.addEventListener('keyup', this._onKeyUp);
@@ -143,11 +147,11 @@ class SwitchProperty extends BaseComponent {
     this._label.innerText = isChecked ? this.onLabel : this.offLabel;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._input.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._input.setAttribute('disabled', '');
@@ -214,7 +218,7 @@ class SwitchProperty extends BaseComponent {
   }
 
   _toggleChecked() {
-    if (this.disabled) {
+    if (this.readOnly) {
       return;
     }
 

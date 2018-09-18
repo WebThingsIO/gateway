@@ -16,6 +16,7 @@ class StringDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || name;
     this.id = `string-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
@@ -34,9 +35,11 @@ class StringDetail {
    * Build the detail view.
    */
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-string-property data-name="${Utils.escapeHtml(this.label)}"
-        id="${this.id}">
+        id="${this.id}" ${readOnly}>
       </webthing-string-property>`;
   }
 

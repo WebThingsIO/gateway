@@ -15,13 +15,19 @@ const Utils = require('../utils');
 
 class FrequencyDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Frequency', 'Hz', 0);
+    super(thing,
+          name,
+          !!property.readOnly,
+          property.label || 'Frequency',
+          'Hz',
+          0);
     this.id = `frequency-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
-      <webthing-frequency-property data-value="0"
+      <webthing-frequency-property data-value="0" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-frequency-property>`;
   }

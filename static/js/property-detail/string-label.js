@@ -13,9 +13,10 @@
 const Utils = require('../utils');
 
 class StringLabelDetail {
-  constructor(thing, name, label) {
+  constructor(thing, name, readOnly, label) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = readOnly;
     this.label = label;
     this.id = `label-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
@@ -26,9 +27,11 @@ class StringLabelDetail {
 
   view() {
     const name = Utils.escapeHtml(this.label);
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-string-label-property data-value="0" data-name="${name}"
-        id="${this.id}">
+        id="${this.id}" ${readOnly}>
       </webthing-string-label-property>`;
   }
 

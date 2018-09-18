@@ -15,13 +15,15 @@ const Utils = require('../utils');
 
 class MotionDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Motion');
+    super(thing, name, !!property.readOnly, property.label || 'Motion');
     this.id = `motion-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
-      <webthing-motion-property data-value="NO MOTION"
+      <webthing-motion-property data-value="NO MOTION" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-motion-property>`;
   }

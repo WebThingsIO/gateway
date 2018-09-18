@@ -16,6 +16,7 @@ class LevelDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || 'Level';
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
@@ -49,10 +50,11 @@ class LevelDetail {
     const min = `min="${Utils.escapeHtml(this.min)}"`;
     const max = `max="${Utils.escapeHtml(this.max)}"`;
     const unit = this.unit || '';
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
       <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" ${min} ${max} step="1" id="${this.id}">
+        data-unit="${unit}" ${min} ${max} step="1" id="${this.id}" ${readOnly}>
       </webthing-level-property>`;
   }
 

@@ -139,11 +139,15 @@ class LevelProperty extends BaseComponent {
         typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
     }
 
+    this.readOnly =
+      typeof this.dataset.readOnly !== 'undefined' ?
+        this.dataset.readOnly === 'true' :
+        false;
+
     this._upgradeProperty('min');
     this._upgradeProperty('max');
     this._upgradeProperty('step');
     this._upgradeProperty('value');
-    this._upgradeProperty('disabled');
 
     // Set the initial number input value so that both inputs are set properly.
     this._number.value = this.value;
@@ -203,11 +207,11 @@ class LevelProperty extends BaseComponent {
     this._number.value = value;
   }
 
-  get disabled() {
+  get readOnly() {
     return this._slider.hasAttribute('disabled');
   }
 
-  set disabled(value) {
+  set readOnly(value) {
     const isDisabled = Boolean(value);
     if (isDisabled) {
       this._form.classList.add('hidden');

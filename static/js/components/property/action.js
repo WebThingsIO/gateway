@@ -100,7 +100,6 @@ class Action extends BaseComponent {
     this.name = this.dataset.name;
 
     this._upgradeProperty('href');
-    this._upgradeProperty('disabled');
 
     this._button.addEventListener('click', this._onClick);
   }
@@ -115,21 +114,6 @@ class Action extends BaseComponent {
 
   set href(value) {
     this._href = value;
-  }
-
-  get disabled() {
-    return this._button.hasAttribute('disabled');
-  }
-
-  set disabled(value) {
-    const isDisabled = Boolean(value);
-    if (isDisabled) {
-      this._button.setAttribute('disabled', '');
-    } else {
-      this._button.removeAttribute('disabled');
-    }
-
-    this._button.disabled = isDisabled;
   }
 
   get name() {

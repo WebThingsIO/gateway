@@ -15,13 +15,14 @@ const Utils = require('../utils');
 
 class InstantaneousPowerDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, property.label || 'Power', 'W', 0);
+    super(thing, name, !!property.readOnly, property.label || 'Power', 'W', 0);
     this.id = `instantaneous-power-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
   view() {
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
-      <webthing-instantaneous-power-property data-value="0"
+      <webthing-instantaneous-power-property data-value="0" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-instantaneous-power-property>`;
   }

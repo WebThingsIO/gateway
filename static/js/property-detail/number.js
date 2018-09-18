@@ -16,6 +16,7 @@ class NumberDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
+    this.readOnly = !!property.readOnly;
     this.label = property.label || name;
     this.type = property.type;
     this.unit =
@@ -57,11 +58,12 @@ class NumberDetail {
     const max = this.max === null ? '' : `max="${Utils.escapeHtml(this.max)}"`;
     const unit = this.unit || '';
     const step = this.type === 'number' ? 'any' : '1';
+    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
       <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
         data-unit="${unit}" ${min} ${max} value="0" step="${step}"
-        id="${this.id}">
+        id="${this.id}" ${readOnly}>
       </webthing-number-property>`;
   }
 
