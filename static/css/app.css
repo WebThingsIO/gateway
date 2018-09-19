@@ -217,6 +217,12 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(100%) translateY(4rem);
 }
 
+#message-area.disconnected {
+  background-color: #374956;
+  z-index: 10001;
+  color: #ccc;
+}
+
 @media only screen and (max-width: 730px) {
   #message-area {
     width: calc(100% - 10rem);
@@ -364,4 +370,41 @@ input:checked + .switch-slider:after {
 
 body.hidden {
   visibility: hidden;
+}
+
+@keyframes show-scrim {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 0.5;
+  }
+}
+
+@keyframes hide-scrim {
+  from {
+      opacity: 0.5;
+      width: 100%;
+  }
+  to {
+      opacity: 0;
+      width: 100%;
+  }
+}
+
+#connectivity-scrim {
+  background-color: rgba(0, 0, 0);
+  opacity: 0.5;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  animation: show-scrim 0.25s ease 0s;
+  z-index: 1000;
+}
+
+#connectivity-scrim.hidden {
+  animation: hide-scrim 0.25s ease 0s;
+  width: 0%;
 }
