@@ -20,6 +20,9 @@ if (API.isLoggedIn()) {
         document.body.classList.remove('hidden');
       });
     }
+  }).catch(() => {
+    document.body.classList.remove('hidden');
+    document.getElementById('connectivity-scrim').classList.remove('hidden');
   });
 } else {
   redirectUnauthed();

@@ -3,7 +3,6 @@
 
 // eslint-disable-next-line no-undef
 const CACHE = `mozilla-iot-cache-${VERSION}`;
-const CACHE_PATH = /^\/bundle|^\/images|^\/optimized-images/;
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -22,24 +21,25 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', function(event) {
   const accept = event.request.headers.get('Accept');
   if (accept === 'application/json' || event.request.method !== 'GET' ||
-      event.request.mode !== 'no-cors') {
+      !['no-cors', 'navigate'].includes(event.request.mode)) {
     return;
   }
+
   const url = new URL(event.request.url);
-  if (url.origin !== location.origin ||
-      !url.pathname.match(CACHE_PATH)) {
+  if (url.origin !== location.origin || url.pathname.endsWith('.map')) {
     return;
   }
+
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     const matching = await cache.match(event.request);
     if (matching) {
       return matching;
-    } else {
-      const response = await fetch(event.request);
-      await cache.put(event.request, response.clone());
-      return response;
     }
+
+    const response = await fetch(event.request);
+    await cache.put(event.request, response.clone());
+    return response;
   })());
 });
 

@@ -253,7 +253,7 @@ const webpackWeb = {
 
 const pluginsSW = [
   new webpack.BannerPlugin({
-    banner: `const VERSION = '${uuid()}'`,
+    banner: `const VERSION = '${uuid()}';`,
     raw: true,
   }),
   new ExtractTextPlugin(
