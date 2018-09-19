@@ -961,7 +961,6 @@ ajv@^6.5.3:
 ajv@^6.5.5:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
-  integrity sha512-7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -2472,7 +2471,6 @@ codecov@^3.1.0:
 codem-isoboxer@0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/codem-isoboxer/-/codem-isoboxer-0.3.6.tgz#867f670459b881d44f39168d5ff2a8f14c16151d"
-  integrity sha512-LuO8/7LW6XuR5ERn1yavXAfodGRhuY2yP60JTZIw5yNYMCE5lUVbk3NFUCJxjnphQH+Xemp5hOGb1LgUXm00Xw==
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -2880,7 +2878,6 @@ dashdash@^1.12.0:
 dashjs@^2.9.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/dashjs/-/dashjs-2.9.2.tgz#56f60e08606838b9681515d5e5b26bfb45d0447d"
-  integrity sha512-a/hivdWbxn41E8rlQzPPMLphwCq80AW2zL916Wm386AFsUZb7gm1tbdxHuW52QOL1axYIrmV+v9nqnoCCGoImQ==
   dependencies:
     codem-isoboxer "0.3.6"
     fast-deep-equal "1.1.0"
@@ -3700,7 +3697,6 @@ extsprintf@^1.2.0:
 fast-deep-equal@1.1.0, fast-deep-equal@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
-  integrity sha1-wFNHeBfIa1HaqFPIHgWbcz0CNhQ=
 
 fast-deep-equal@^2.0.1:
   version "2.0.1"
@@ -4337,7 +4333,6 @@ highlightjs@^9.12.0:
 hls.js@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.11.0.tgz#a205fb61725d9d69bf6258984be3dc2ee829fa9e"
-  integrity sha512-qlCP7uBaHxF1iiP9xw8RFZ9Es9ZM5micqaMTp8P/2WYhd+CSmMMREH+taAzkQDu7u2nHBBd9yZyKgCjg3O3wSw==
   dependencies:
     string.prototype.endswith "^0.2.0"
     url-toolkit "^2.1.2"
@@ -4561,7 +4556,6 @@ import-local@^2.0.0:
 imsc@^1.0.1-rc.3:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/imsc/-/imsc-1.0.1.tgz#f82d0be1f73ad4242a459bd8bed81dac889e9972"
-  integrity sha512-Q45EauAGmaueWBOwhDB/WteSji1/pJH9GVjQsiAc5b9QDEUq9Z93HoRK+uBzgbIx5kkhOdloOdUGSIiDx74NIw==
   dependencies:
     sax "1.2.1"
 
@@ -6836,6 +6830,12 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
+pixelmatch@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/pixelmatch/-/pixelmatch-4.0.2.tgz#8f47dcec5011b477b67db03c243bc1f3085e8854"
+  dependencies:
+    pngjs "^3.0.0"
+
 pkg-dir@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-2.0.0.tgz#f6d5d1109e19d63edf428e0bd57e12777615334b"
@@ -6859,6 +6859,10 @@ pluralize@^7.0.0:
 pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
+
+pngjs@^3.0.0, pngjs@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
@@ -7619,7 +7623,6 @@ sane@^2.0.0:
 sax@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
-  integrity sha1-e45lYZCyKOgaZq6nSEgNgozS03o=
 
 sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
@@ -8105,7 +8108,6 @@ string-width@^2.0.0:
 string.prototype.endswith@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/string.prototype.endswith/-/string.prototype.endswith-0.2.0.tgz#a19c20dee51a98777e9a47e10f09be393b9bba75"
-  integrity sha1-oZwg3uUamHd+mkfhDwm+OTubunU=
 
 string.prototype.padend@^3.0.0:
   version "3.0.0"
@@ -8659,7 +8661,6 @@ url-loader@^1.1.2:
 url-toolkit@^2.1.2:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.6.tgz#6d03246499e519aad224c44044a4ae20544154f2"
-  integrity sha512-UaZ2+50am4HwrV2crR/JAf63Q4VvPYphe63WGeoJxeu8gmOm0qxPt+KsukfakPNrX9aymGNEkkaoICwn+OuvBw==
 
 url@^0.11.0, url@~0.11.0:
   version "0.11.0"

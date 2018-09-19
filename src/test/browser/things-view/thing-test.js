@@ -1,4 +1,4 @@
-const {getBrowser} = require('../browser-common');
+const {getBrowser, saveStepScreen} = require('../browser-common');
 const {
   addThing,
   getProperty,
@@ -49,6 +49,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        const detailPage = await things[0].openDetailPage();
 
@@ -74,6 +75,7 @@ describe('Thing', () => {
          booleanValue = await booleanProps[0].getValue();
          expect(booleanValue).toBeTruthy();
        });
+       await saveStepScreen();
 
        // Check number property
        const numberProps = await detailPage.numberProperties();
@@ -92,6 +94,7 @@ describe('Thing', () => {
          numberValue = await numberProps[0].getValue();
          expect(numberValue).toEqual(5);
        });
+       await saveStepScreen();
 
        // Check string property
        const stringProps = await detailPage.stringProperties();
@@ -110,6 +113,7 @@ describe('Thing', () => {
          stringValue = await stringProps[0].getValue();
          expect(stringValue).toEqual('foobar');
        });
+       await saveStepScreen();
      });
 
   it('should render a thing with spaced property names', async () => {
@@ -146,6 +150,7 @@ describe('Thing', () => {
     expect(things.length).toEqual(1);
     const thingName = await things[0].thingName();
     expect(thingName).toEqual(desc.name);
+    await saveStepScreen();
 
     const detailPage = await things[0].openDetailPage();
 
@@ -158,6 +163,7 @@ describe('Thing', () => {
     expect(booleanId).toEqual(
       `boolean-${Utils.escapeHtmlForIdClass('spaced boolean')}`
     );
+    await saveStepScreen();
 
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
@@ -167,6 +173,7 @@ describe('Thing', () => {
     expect(numberId).toEqual(
       `number-${Utils.escapeHtmlForIdClass('spaced number')}`
     );
+    await saveStepScreen();
 
     const stringProps = await detailPage.stringProperties();
     expect(stringProps.length).toEqual(1);
@@ -176,6 +183,7 @@ describe('Thing', () => {
     expect(stringId).toEqual(
       `string-${Utils.escapeHtmlForIdClass('spaced string')}`
     );
+    await saveStepScreen();
   });
 
   it('should reset property value when setProperty is rejected', async () => {
@@ -212,6 +220,7 @@ describe('Thing', () => {
     expect(things.length).toEqual(1);
     const thingName = await things[0].thingName();
     expect(thingName).toEqual('foofoo');
+    await saveStepScreen();
 
     const detailPage = await things[0].openDetailPage();
 
@@ -232,6 +241,7 @@ describe('Thing', () => {
       booleanValue = await booleanProps[0].getValue();
       expect(booleanValue).toBeTruthy();
     });
+    await saveStepScreen();
 
     // Check number property
     const numberProps = await detailPage.numberProperties();
@@ -245,6 +255,7 @@ describe('Thing', () => {
       numberValue = await numberProps[0].getValue();
       expect(numberValue).toEqual(10);
     });
+    await saveStepScreen();
 
     // Check string property
     const stringProps = await detailPage.stringProperties();
@@ -258,6 +269,7 @@ describe('Thing', () => {
       stringValue = await stringProps[0].getValue();
       expect(stringValue).toEqual('bar');
     });
+    await saveStepScreen();
   });
 
   it('should render an onOffLight and be able to change properties',
@@ -287,6 +299,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -294,12 +307,15 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
+       await saveStepScreen();
      });
 
   it('should render an onOffSwitch and be able to change properties',
@@ -329,6 +345,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -336,13 +353,16 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
+       await saveStepScreen();
      });
 
   it('should render a dimmableLight and be able to change properties',
@@ -378,6 +398,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -385,6 +406,7 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
@@ -392,9 +414,11 @@ describe('Thing', () => {
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
@@ -421,6 +445,7 @@ describe('Thing', () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
        });
+       await saveStepScreen();
 
        // Check level property
        const brightnessProperty = await detailPage.brightnessProperty();
@@ -438,6 +463,7 @@ describe('Thing', () => {
          brightness = await brightnessProperty.getValue();
          expect(brightness).toEqual(60);
        });
+       await saveStepScreen();
      });
 
   it('should render an onOffColorLight and be able to change properties',
@@ -472,6 +498,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -479,6 +506,7 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'rgb', '#6789ab');
        await waitForExpect(async () => {
@@ -486,9 +514,11 @@ describe('Thing', () => {
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#6789ab');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
@@ -515,6 +545,7 @@ describe('Thing', () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
        });
+       await saveStepScreen();
      });
 
   it('should render a dimmableColorLight and be able to change properties',
@@ -555,6 +586,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -562,6 +594,7 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
@@ -569,6 +602,7 @@ describe('Thing', () => {
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'rgb', '#56789a');
        await waitForExpect(async () => {
@@ -576,9 +610,11 @@ describe('Thing', () => {
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#56789a');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
@@ -588,6 +624,7 @@ describe('Thing', () => {
        await detailPage.waitForOffThing();
        const waitWebSocketPromise = util.promisify(setImmediate);
        await waitWebSocketPromise();
+       await saveStepScreen();
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
@@ -605,6 +642,7 @@ describe('Thing', () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
        });
+       await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.brightnessProperty();
@@ -622,6 +660,7 @@ describe('Thing', () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
        });
+       await saveStepScreen();
      });
 
   it('should render a multiLevelSwitch and be able to change properties',
@@ -657,6 +696,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -664,6 +704,7 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
@@ -671,13 +712,16 @@ describe('Thing', () => {
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
+       await saveStepScreen();
 
        // We have to wait connecting websocket.
        await detailPage.waitForOffThing();
@@ -700,6 +744,7 @@ describe('Thing', () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
        });
+       await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.levelProperty();
@@ -717,6 +762,7 @@ describe('Thing', () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
        });
+       await saveStepScreen();
      });
 
   it('should render a smartPlug and be able to change properties',
@@ -781,6 +827,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await things[0].click();
        await waitForExpect(async () => {
@@ -788,6 +835,7 @@ describe('Thing', () => {
          expect(on).toBeTruthy();
        });
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'energyPower', 50);
        await waitForExpect(async () => {
@@ -795,9 +843,11 @@ describe('Thing', () => {
          const level = await things[0].thingPowerDisplayed();
          expect(level).toEqual('50 W');
        });
+       await saveStepScreen();
 
        await setProperty(desc.id, 'power', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
@@ -825,6 +875,7 @@ describe('Thing', () => {
          on = await onOffProperty.getValue();
          expect(on).not.toBeTruthy();
        });
+       await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.levelProperty();
@@ -842,6 +893,7 @@ describe('Thing', () => {
          level = await levelProperty.getValue();
          expect(level).toEqual(60);
        });
+       await saveStepScreen();
 
        // Check power property
        const powerProperty = await detailPage.powerProperty();
@@ -852,6 +904,7 @@ describe('Thing', () => {
          power = await powerProperty.getDisplayedText();
          expect(power).toEqual('60W');
        });
+       await saveStepScreen();
 
        // Check voltage property
        const voltageProperty = await detailPage.voltageProperty();
@@ -862,6 +915,7 @@ describe('Thing', () => {
          voltage = await voltageProperty.getDisplayedText();
          expect(voltage).toEqual('30V');
        });
+       await saveStepScreen();
 
        // Check current property
        const currentProperty = await detailPage.currentProperty();
@@ -872,6 +926,7 @@ describe('Thing', () => {
          current = await currentProperty.getDisplayedText();
          expect(current).toEqual('40.0A');
        });
+       await saveStepScreen();
 
        // Check current property
        const frequencyProperty = await detailPage.frequencyProperty();
@@ -882,6 +937,7 @@ describe('Thing', () => {
          frequency = await frequencyProperty.getDisplayedText();
          expect(frequency).toEqual('10Hz');
        });
+       await saveStepScreen();
      });
 
   it('should render a binarySensor and be able to change properties',
@@ -911,16 +967,20 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await setProperty(desc.id, 'active', true);
        await thingsPage.waitForOnThings();
+       await saveStepScreen();
 
        await setProperty(desc.id, 'active', false);
        await thingsPage.waitForOffThings();
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
+       await saveStepScreen();
      });
 
   it('should render a multiLevelSensor and be able to change properties',
@@ -956,6 +1016,7 @@ describe('Thing', () => {
        expect(things.length).toEqual(1);
        const thingName = await things[0].thingName();
        expect(thingName).toEqual(desc.name);
+       await saveStepScreen();
 
        await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
@@ -963,9 +1024,11 @@ describe('Thing', () => {
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
+       await saveStepScreen();
 
        things = await thingsPage.things();
        const detailPage = await things[0].openDetailPage();
        expect(detailPage).toBeTruthy();
+       await saveStepScreen();
      });
 });

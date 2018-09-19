@@ -360,6 +360,13 @@ $ jest src/test/{test-name}.js
 ```
 (assumes you have the `jest` command on your `PATH`, otherwise use `./node_modules/jest/bin/jest.js`)
 
+To compare UI with parent branch:
+```
+$ npm run screenshots
+$ npm test
+```
+(if you have the screenshots in the folder `./browser-test-screenshots`, `npm test` should compare UI with screenshots stored)
+
 ## Source Code Structure
 
 * **`config/`** - Gateway configuration files
