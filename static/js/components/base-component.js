@@ -23,6 +23,7 @@ class BaseComponent extends HTMLElement {
     }
 
     this.shadowRoot.appendChild(templateClone);
+    BaseComponent.count++;
   }
 
   connectedCallback() {
@@ -44,4 +45,5 @@ class BaseComponent extends HTMLElement {
   }
 }
 
+BaseComponent.count = 0;
 module.exports = BaseComponent;

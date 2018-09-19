@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class SwitchProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -62,7 +64,7 @@ template.innerHTML = `
       transition: 0.1s;
     }
 
-    .webthing-switch-property-switch:checked + #slider::after {
+    .webthing-switch-property-switch:checked + .webthing-switch-property-slider::after {
       transform: translate(3.65rem, 0.35rem);
     }
 
@@ -83,9 +85,9 @@ template.innerHTML = `
   <div id="container" class="webthing-switch-property-container">
     <div id="contents" class="webthing-switch-property-contents">
       <form>
-        <input type="checkbox" id="switch"
+        <input type="checkbox" id="switch-${BaseComponent.count}"
           class="webthing-switch-property-switch">
-        <label id="slider" for="switch" class="webthing-switch-property-slider">
+        <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}" class="webthing-switch-property-slider">
         </label>
       </form>
       <div id="label" class="webthing-switch-property-label"></div>
@@ -93,15 +95,14 @@ template.innerHTML = `
   </div>
   <div id="name" class="webthing-switch-property-name"></div>
 `;
-
-class SwitchProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#switch');
-    this._name = this.shadowRoot.querySelector('#name');
-    this._label = this.shadowRoot.querySelector('#label');
-
+    this._input =
+      this.shadowRoot.querySelector('.webthing-switch-property-switch');
+    this._name =
+      this.shadowRoot.querySelector('.webthing-switch-property-name');
+    this._label =
+      this.shadowRoot.querySelector('.webthing-switch-property-label');
     this._onClick = this.__onClick.bind(this);
     this._onKeyUp = this.__onKeyUp.bind(this);
   }
