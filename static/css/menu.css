@@ -69,27 +69,27 @@
   background-image: url('../optimized-images/rules-icon.png');
 }
 
-@keyframes show-scrim{
-  from{
+@keyframes show-scrim {
+  from {
       opacity: 0;
   }
-  to{
+  to {
       opacity: 0.5;
   }
 }
 
-@keyframes hide-scrim{
-  from{
+@keyframes hide-scrim {
+  from {
       opacity: 0.5;
       width: 100%;
   }
-  to{
+  to {
       opacity: 0;
       width: 100%;
   }
 }
 
-#menu-scrim{
+#menu-scrim {
   background-color: rgba(0, 0, 0);
   opacity: 0.5;
   position: absolute;
