@@ -41,6 +41,8 @@ const Thing = function(id, description) {
   this['@type'] = description['@type'] || [];
   this.description = description.description || '';
   this.href = `${Constants.THINGS_PATH}/${this.id}`;
+  this.enum = description.enum || [];
+  this.readOnly = description.readOnly || false;
   this.properties = {};
   this.actions = description.actions || {};
   this.events = description.events || {};
@@ -277,6 +279,8 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
     floorplanY: this.floorplanY,
     selectedCapability: this.selectedCapability,
     iconHref: this.iconHref,
+    enum: this.enum,
+    readOnly: this.readOnly,
   };
 };
 
