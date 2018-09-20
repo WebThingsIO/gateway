@@ -9,32 +9,15 @@
  */
 
 const PromiseRouter = require('express-promise-router');
-const WebPush = require('web-push');
-const Database = require('../db');
-const Settings = require('../models/settings');
+const PushService = require('../push-service');
 
 const PushController = PromiseRouter();
-
-/**
- * Initialize the Push API, generating and storing a VAPID keypair if necessary
- */
-PushController.init = async () => {
-  let vapid = await Settings.get('push.vapid');
-  if (!vapid) {
-    vapid = WebPush.generateVAPIDKeys();
-    await Settings.set('push.vapid', vapid);
-  }
-  const {publicKey, privateKey} = vapid;
-
-  const {tunnelDomain} = await Settings.getTunnelInfo();
-  WebPush.setVapidDetails(tunnelDomain, publicKey, privateKey);
-};
 
 /**
  * Handle requests for the public key
  */
 PushController.get('/vapid-public-key', async (request, response) => {
-  const vapid = await Settings.get('push.vapid');
+  const vapid = await PushService.getVAPIDKeys();
   if (!vapid) {
     response.status(500).json({error: 'vapid not configured'});
     return;
@@ -43,18 +26,15 @@ PushController.get('/vapid-public-key', async (request, response) => {
 });
 
 PushController.post('/register', async (request, response) => {
-  await Database.createPushSubscription(request.body.subscription);
+  const subscription = request.body.subscription;
+  try {
+    await PushService.createPushSubscription(subscription);
+  } catch (err) {
+    console.error(`PushController: Failed to register ${subscription}`, err);
+    response.status(500).json({error: 'register failed'});
+    return;
+  }
   response.status(200).json({});
 });
-
-PushController.broadcastNotification = async (message) => {
-  const subscriptions = await Database.getPushSubscriptions();
-  for (const subscription of subscriptions) {
-    WebPush.sendNotification(subscription, message).catch((err) => {
-      console.warn('Push API error', err);
-      Database.deletePushSubscription(subscription.id);
-    });
-  }
-};
 
 module.exports = PushController;
