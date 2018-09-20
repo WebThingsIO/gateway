@@ -15,6 +15,7 @@ const fetch = require('node-fetch');
 const spawnSync = require('child_process').spawn;
 const Settings = require('./models/settings');
 const UserProfile = require('./user-profile');
+const PushService = require('./push-service');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -72,6 +73,9 @@ const TunnelService = {
         // Ping the registration server every hour.
         const delay = 60 * 60 * 1000;
         setInterval(() => this.pingRegistrationServer(), delay);
+
+        // Enable push service
+        PushService.init(`https://${endpoint}`);
       } else {
         console.error('tunneltoken not set');
         if (response) {
