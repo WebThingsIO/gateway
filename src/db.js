@@ -122,7 +122,7 @@ const Database = {
 
     this.db.run(`CREATE TABLE IF NOT EXISTS pushSubscriptions (
       id INTEGER PRIMARY KEY,
-      subscription TEXT
+      subscription TEXT UNIQUE
     );`);
   },
 
