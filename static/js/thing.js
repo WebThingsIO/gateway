@@ -164,7 +164,7 @@ class Thing {
               }
 
               detail = new detailType(this, name, property);
-            } else if (property.enum) {
+            } else if (property.enum && property.enum.length > 0) {
               detail = new EnumDetail(this, name, property);
             } else {
               switch (property.type) {
