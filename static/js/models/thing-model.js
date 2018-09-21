@@ -186,6 +186,9 @@ class ThingModel extends Model {
 
       setTimeout(() => {
         this.wsBackoff *= 2;
+        if (this.wsBackoff > 30000) {
+          this.wsBackoff = 30000;
+        }
         this.initWebsocket();
       }, this.wsBackoff);
     };

@@ -115,6 +115,9 @@ const App = {
 
       setTimeout(() => {
         this.wsBackoff *= 2;
+        if (this.wsBackoff > 30000) {
+          this.wsBackoff = 30000;
+        }
         this.initWebSocket();
       }, this.wsBackoff);
     };
