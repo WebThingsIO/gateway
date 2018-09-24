@@ -32,14 +32,17 @@ const pkg = require('../package.json');
 
 let PluginClient, PluginServer;
 
-// Use webpack provided require for dynamic includes from the bundle  .
-const dynamicRequire = (() => {
-  if (typeof __non_webpack_require__ !== 'undefined') {
-    // eslint-disable-next-line no-undef
-    return __non_webpack_require__;
-  }
-  return require;
-})();
+let dynamicRequire;
+if (config.get('ipc.protocol') === 'inproc') {
+  // Use webpack provided require for dynamic includes from the bundle  .
+  dynamicRequire = (() => {
+    if (typeof __non_webpack_require__ !== 'undefined') {
+      // eslint-disable-next-line no-undef
+      return __non_webpack_require__;
+    }
+    return require;
+  })();
+}
 
 /**
  * @class AddonManager
