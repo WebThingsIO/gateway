@@ -80,13 +80,16 @@ const App = {
     this.blockMessages = false;
     this.messageArea = document.getElementById('message-area');
     this.messageTimeout = null;
+
+    this.connectivityOverlay = document.getElementById('connectivity-scrim');
+    this.pingerInterval = null;
+    this.pingerLastStatus = null;
+    this.startPinger();
+
     this.gatewayModel = new GatewayModel();
 
     this.wsBackoff = 1000;
     this.initWebSocket();
-
-    this.connectivityOverlay = document.getElementById('connectivity-scrim');
-    this.startPinger();
 
     Menu.init();
     Router.init();
@@ -128,23 +131,31 @@ const App = {
   },
 
   startPinger() {
-    this.pingerInterval = setInterval(() => {
-      fetch(`${this.ORIGIN}/ping`, {headers: {Accept: 'application/json'}})
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Bad return status');
-          }
+    fetch(`${this.ORIGIN}/ping`, {headers: {Accept: 'application/json'}})
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Bad return status');
+        }
 
+        if (this.pingerLastStatus === 'offline') {
+          window.location.reload();
+        } else {
+          this.pingerLastStatus = 'online';
           this.connectivityOverlay.classList.add('hidden');
           this.messageArea.classList.remove('disconnected');
           this.hidePersistentMessage();
-        })
-        .catch(() => {
-          this.connectivityOverlay.classList.remove('hidden');
-          this.messageArea.classList.add('disconnected');
-          this.showPersistentMessage('Gateway Unreachable');
-        });
-    }, 30 * 1000);
+        }
+      })
+      .catch(() => {
+        this.connectivityOverlay.classList.remove('hidden');
+        this.messageArea.classList.add('disconnected');
+        this.showPersistentMessage('Gateway Unreachable');
+        this.pingerLastStatus = 'offline';
+      });
+
+    if (!this.pingerInterval) {
+      this.pingerInterval = setInterval(this.startPinger.bind(this), 30 * 1000);
+    }
   },
 
   showAssistant: function() {
