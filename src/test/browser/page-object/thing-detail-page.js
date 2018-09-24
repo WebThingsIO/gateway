@@ -102,7 +102,7 @@ class BrightnessPropertySection extends InputPropertySection {
 class LevelPropertySection extends InputPropertySection {
   constructor(browser, rootElement) {
     super(browser, rootElement);
-    this.defineElement('slider', '#slider');
+    this.defineElement('slider', '#slider-level-6');
   }
 
   async setValue(value) {

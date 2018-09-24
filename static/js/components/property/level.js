@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class LevelProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -93,25 +95,22 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-level-property-container">
-    <div id="contents" class="webthing-level-property-contents">
-      <div id="text" class="webthing-level-property-text hidden"></div>
-      <div id="bar-container"
+  <div id="container-${BaseComponent.count}" class="webthing-level-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-level-property-contents">
+      <div id="text-${BaseComponent.count}" class="webthing-level-property-text hidden"></div>
+      <div id="bar-container-${BaseComponent.count}"
         class="webthing-level-property-bar-container hidden">
-        <span id="bar" class="webthing-level-property-bar"></span>
+        <span id="bar-${BaseComponent.count}" class="webthing-level-property-bar"></span>
       </div>
-      <form id="form" class="webthing-level-property-form">
-        <input type="number" id="number" class="webthing-level-property-number">
-        <input type="range" id="slider" class="webthing-level-property-slider">
+      <form id="form-${BaseComponent.count}" class="webthing-level-property-form">
+        <input type="number" id="number-${BaseComponent.count}" class="webthing-level-property-number">
+        <input type="range" id="slider-level-${BaseComponent.count}" class="webthing-level-property-slider">
       </form>
-      <div id="unit" class="webthing-level-property-unit"></div>
+      <div id="unit-${BaseComponent.count}" class="webthing-level-property-unit"></div>
     </div>
   </div>
-  <div id="name" class="webthing-level-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-level-property-name"></div>
 `;
-
-class LevelProperty extends BaseComponent {
-  constructor() {
     super(template);
 
     this._text = this.shadowRoot.querySelector(

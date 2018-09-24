@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class ColorProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -46,16 +48,13 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-color-property-container">
-    <div id="contents" class="webthing-color-property-contents">
-      <input type="color" id="color" class="webthing-color-property-color">
+  <div id="container-${BaseComponent.count}" class="webthing-color-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-color-property-contents">
+      <input type="color" id="color-${BaseComponent.count}" class="webthing-color-property-color">
     </div>
   </div>
-  <div id="name" class="webthing-color-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-color-property-name"></div>
 `;
-
-class ColorProperty extends BaseComponent {
-  constructor() {
     super(template);
 
     this._input = this.shadowRoot.querySelector(

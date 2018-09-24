@@ -72,9 +72,9 @@ class BooleanProperty extends BaseComponent {
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-boolean-property-container">
-    <div id="contents" class="webthing-boolean-property-contents">
-      <form id="form" class="webthing-boolean-property-form">
+  <div id="container-${BaseComponent.count}" class="webthing-boolean-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-boolean-property-contents">
+      <form id="form-${BaseComponent.count}" class="webthing-boolean-property-form">
          <input type="checkbox" id="checkbox-${BaseComponent.count}"
             class="webthing-boolean-property-checkbox"/>
           <label class="webthing-boolean-property-label" for='checkbox-${BaseComponent.count}'>
@@ -82,7 +82,7 @@ class BooleanProperty extends BaseComponent {
       </form>
     </div>
   </div>
-  <div id="name" class="webthing-boolean-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-boolean-property-name"></div>
 `;
     super(template);
     this._input =
