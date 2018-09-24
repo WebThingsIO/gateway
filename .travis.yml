@@ -36,6 +36,7 @@ script:
   - ./tools/make-self-signed-cert.sh
   - ./node_modules/.bin/jest --runInBand --coverage
   - npm run yarn-check
+  - npm run dependencies-check
 
 after_script:
   - ./node_modules/.bin/codecov
