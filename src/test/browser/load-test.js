@@ -48,6 +48,18 @@ describe('basic browser tests', function() {
     const newUrl = await browser.getUrl();
     expect(newUrl.endsWith('/things')).toBeTruthy();
 
+    // Wait for the connectivity scrim to appear, then hide it (and wait for the
+    // transition to finish).
+    try {
+      await browser.waitForVisible('#connectivity-scrim');
+      browser.execute(() => {
+        document.getElementById('connectivity-scrim').classList.add('hidden');
+      });
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    } catch (_e) {
+      // If it didn't appear, just move on.
+    }
+
     await saveStepScreen('main-screen');
 
     await browser.click('#menu-button');
