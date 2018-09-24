@@ -9,6 +9,7 @@
     "mocha": "./src/test/run-tests.sh",
     "jest": "./src/test/run-tests.sh",
     "yarn-check": "./src/test/yarn-test.sh",
+    "dependencies-check": "./src/test/dependencies-test.sh",
     "cov": "jest --coverage",
     "start": "webpack && node build/gateway.js",
     "watch": "npm-run-all --parallel start watch:build",
