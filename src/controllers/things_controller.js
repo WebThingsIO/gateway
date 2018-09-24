@@ -232,17 +232,53 @@ ThingsController.put(
       return;
     }
     const value = request.body[propertyName];
-    AddonManager.setProperty(thingId, propertyName, value)
-      .then((updatedValue) => {
-        // Note: it's possible that updatedValue doesn't match value.
-        const result = {};
-        result[propertyName] = updatedValue;
-        response.status(200).json(result);
-      }).catch((error) => {
-        console.error('Error setting value for thingId:', thingId,
-                      'property:', propertyName,
-                      'value:', value);
-        response.status(500).send(error);
+    Things.getThingDescription(thingId, request.get('Host'), request.secure)
+      .then((thing) => {
+        if (!thing.properties.hasOwnProperty(propertyName)) {
+          response.status(404).send('Property not found');
+          return;
+        }
+
+        if (thing.properties[propertyName].readOnly) {
+          response.status(400).send('Read-only property');
+          return;
+        }
+
+        if (thing.properties[propertyName].hasOwnProperty('minimum') &&
+            value < thing.properties[propertyName].minimum) {
+          response.status(400).send(`Value less than minimum: ${
+            thing.properties[propertyName].minimum}`);
+          return;
+        }
+
+        if (thing.properties[propertyName].hasOwnProperty('maximum') &&
+            value > thing.properties[propertyName].maximum) {
+          response.status(400).send(`Value greater than maximum: ${
+            thing.properties[propertyName].maximum}`);
+          return;
+        }
+
+        if (thing.properties[propertyName].hasOwnProperty('enum') &&
+            thing.properties[propertyName].enum.length > 0 &&
+            !thing.properties[propertyName].enum.includes(value)) {
+          response.status(400).send('Invalid enum value');
+          return;
+        }
+
+        AddonManager.setProperty(thingId, propertyName, value)
+          .then((updatedValue) => {
+            // Note: it's possible that updatedValue doesn't match value.
+            const result = {};
+            result[propertyName] = updatedValue;
+            response.status(200).json(result);
+          }).catch((error) => {
+            console.error('Error setting value for thingId:', thingId,
+                          'property:', propertyName,
+                          'value:', value);
+            response.status(500).send(error);
+          });
+      }).catch(() => {
+        response.status(404).send('Thing not found');
       });
   });
 
