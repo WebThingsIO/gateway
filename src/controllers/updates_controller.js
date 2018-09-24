@@ -16,12 +16,19 @@ function readVersion(packagePath) {
         reject(err);
         return;
       }
-      const pkg = JSON.parse(data);
-      if (!semver.valid(pkg.version)) {
-        reject(new Error(`invalid gateway semver: ${pkg.version}`));
-        return;
+
+      try {
+        const pkgJson = JSON.parse(data);
+
+        if (!semver.valid(pkgJson.version)) {
+          reject(new Error(`Invalid gateway semver: ${pkgJson.version}`));
+          return;
+        }
+
+        resolve(pkgJson.version);
+      } catch (e) {
+        reject(e);
       }
-      resolve(pkg.version);
     });
   });
 }
@@ -105,19 +112,26 @@ UpdatesController.get('/status', async function(request, response) {
   // if (gateway_failed.version > thisversion) {
   //  update failed, last attempt was ctime of gateway_failed
   // }
-  const currentVersion = await readVersion('package.json');
+  const currentVersion = pkg.version;
+
   const oldStats = await stat('../gateway_old/package.json');
   let oldVersion = null;
+  if (oldStats) {
+    try {
+      oldVersion = await readVersion('../gateway_old/package.json');
+    } catch (e) {
+      console.error('Failed to read ../gateway_old/package.json:', e);
+    }
+  }
 
   const failedStats = await stat('../gateway_failed/package.json');
   let failedVersion = null;
-
-  if (oldStats) {
-    oldVersion = await readVersion('../gateway_old/package.json');
-  }
-
   if (failedStats) {
-    failedVersion = await readVersion('../gateway_failed/package.json');
+    try {
+      failedVersion = await readVersion('../gateway_failed/package.json');
+    } catch (e) {
+      console.error('Failed to read ../gateway_failed/package.json:', e);
+    }
   }
 
   if (failedVersion && semver.gt(failedVersion, currentVersion)) {
