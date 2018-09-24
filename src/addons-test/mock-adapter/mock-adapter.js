@@ -34,7 +34,6 @@ class MockProperty extends Property {
       }
       super.setValue(value).then((updatedValue) => {
         resolve(updatedValue);
-        this.device.notifyPropertyChanged(this);
       }).catch((err) => {
         reject(err);
       });

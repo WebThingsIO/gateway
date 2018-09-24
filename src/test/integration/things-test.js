@@ -46,6 +46,34 @@ const TEST_THING = {
   },
 };
 
+const VALIDATION_THING = {
+  id: 'validation-1',
+  name: 'validation-1',
+  '@context': 'https://iot.mozilla.org/schemas',
+  properties: {
+    readOnlyProp: {
+      type: 'boolean',
+      readOnly: true,
+      value: true,
+    },
+    minMaxProp: {
+      type: 'number',
+      minimum: 10,
+      maximum: 20,
+      value: 15,
+    },
+    enumProp: {
+      type: 'string',
+      enum: [
+        'val1',
+        'val2',
+        'val3',
+      ],
+      value: 'val2',
+    },
+  },
+};
+
 const piDescr = {
   id: 'pi-1',
   type: 'thing',
@@ -1028,5 +1056,108 @@ describe('things/', function() {
     expect(res.body.name).toEqual(piDescr.name);
     expect(res.body).toHaveProperty('type');
     expect(res.body.type).toEqual(piDescr.type);
+  });
+
+  it('fail to set read-only property', async () => {
+    await addDevice(VALIDATION_THING);
+
+    let res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/readOnlyProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('readOnlyProp');
+    expect(res.body.readOnlyProp).toEqual(true);
+
+    const err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/readOnlyProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({readOnlyProp: false}));
+    expect(err.response.status).toEqual(400);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/readOnlyProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('readOnlyProp');
+    expect(res.body.readOnlyProp).toEqual(true);
+  });
+
+  it('fail to set invalid number property value', async () => {
+    await addDevice(VALIDATION_THING);
+
+    let res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('minMaxProp');
+    expect(res.body.minMaxProp).toEqual(15);
+
+    let err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({minMaxProp: 0}));
+    expect(err.response.status).toEqual(400);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('minMaxProp');
+    expect(res.body.minMaxProp).toEqual(15);
+
+    err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({minMaxProp: 30}));
+    expect(err.response.status).toEqual(400);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('minMaxProp');
+    expect(res.body.minMaxProp).toEqual(15);
+  });
+
+  it('fail to set invalid enum property value', async () => {
+    await addDevice(VALIDATION_THING);
+
+    let res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/enumProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('enumProp');
+    expect(res.body.enumProp).toEqual('val2');
+
+    const err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/enumProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({enumProp: 'val0'}));
+    expect(err.response.status).toEqual(400);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/enumProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('enumProp');
+    expect(res.body.enumProp).toEqual('val2');
   });
 });
