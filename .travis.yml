@@ -1,10 +1,22 @@
 language: node_js
+
+node_js:
+  - 8
+  - 9
+  - 10
+
 cache:
   yarn: true
   directories:
     - open-zwave-master
 
 sudo: required
+
+env:
+  global:
+    - CC=gcc-4.9
+    - CXX=g++-4.9
+    - MOZIOT_HOME=/home/travis/.mozilla-iot/test
 
 addons:
   firefox: latest
@@ -17,20 +29,19 @@ addons:
       - libudev-dev
 
 before_install:
-  - ./tools/compile-openzwave.sh
+  - pyenv global system 3.6
+
+install:
   - git clone https://github.com/mozilla-iot/intent-parser
-  - pyenv global 3.6
   - pip3.6 install --user -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
   - python3.6 intent-parser/intent-parser-server.py &
-  - pyenv global 2.7
+  - ./tools/compile-openzwave.sh
 
-env:
-  global:
-    - CC=gcc-4.9
-    - CXX=g++-4.9
-    - MOZIOT_HOME=/home/travis/.mozilla-iot/test
+before_script:
+  - pyenv global system 2.7
 
 script:
+  - yarn
   - node ./node_modules/webpack/bin/webpack.js
   - npm run lint
   - ./tools/make-self-signed-cert.sh
@@ -39,8 +50,3 @@ script:
 
 after_script:
   - ./node_modules/.bin/codecov
-
-node_js:
-  - 8
-  - 9
-  - 10
