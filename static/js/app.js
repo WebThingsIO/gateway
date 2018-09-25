@@ -143,7 +143,10 @@ const App = {
           this.pingerLastStatus = 'online';
           this.connectivityOverlay.classList.add('hidden');
           this.messageArea.classList.remove('disconnected');
-          this.hidePersistentMessage();
+
+          if (this.messageArea.innerText === 'Gateway Unreachable') {
+            this.hidePersistentMessage();
+          }
         }
       })
       .catch(() => {
