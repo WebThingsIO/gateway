@@ -35,14 +35,21 @@ async function webSocketOpen(path, jwt) {
  * Read a known amount of messages from a websocket
  * @param {WebSocket} ws
  * @param {number} expectedMessages
+ * @param {boolean?} ignoreConnected - Whether or not to ignore 'connected'
+ *                   messages
  * @return {Array<Object>} read messages
  */
-async function webSocketRead(ws, expectedMessages) {
+async function webSocketRead(ws, expectedMessages, ignoreConnected = true) {
   const messages = [];
   while (messages.length < expectedMessages) {
     if (ws.unreadMessages.length > 0) {
       const data = ws.unreadMessages.shift();
       const parsed = JSON.parse(data);
+
+      if (ignoreConnected && parsed.messageType === 'connected') {
+        continue;
+      }
+
       messages.push(parsed);
     } else {
       await e2p(ws, 'message');
