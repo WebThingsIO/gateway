@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class StringLabelProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -54,19 +56,19 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-string-label-property-container">
-    <div id="value" class="webthing-string-label-property-value"></div>
+  <div id="container-${BaseComponent.count}" class="webthing-string-label-property-container">
+    <div id="value-${BaseComponent.count}" class="webthing-string-label-property-value"></div>
   </div>
-  <div id="name" class="webthing-string-label-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-string-label-property-name"></div>
 `;
-
-class StringLabelProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._name = this.shadowRoot.querySelector('#name');
-    this._container = this.shadowRoot.querySelector('#container');
-    this._value = this.shadowRoot.querySelector('#value');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-container');
+    this._container = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-value');
+    this._value = this.shadowRoot.querySelector(
+      '.webthing-string-label-property-value');
     this._inverted = false;
   }
 

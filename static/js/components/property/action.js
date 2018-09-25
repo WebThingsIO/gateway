@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class Action extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -77,20 +79,19 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-action-container">
-    <div id="contents" class="webthing-action-contents">
-      <button id="button" type="button" class="webthing-action-button"></button>
+  <div id="container-${BaseComponent.count}" class="webthing-action-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-action-contents">
+      <button id="button-${BaseComponent.count}" type="button" class="webthing-action-button"></button>
     </div>
   </div>
-  <div id="name" class="webthing-action-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-action-name"></div>
 `;
-
-class Action extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._button = this.shadowRoot.querySelector('#button');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._button = this.shadowRoot.querySelector(
+      '.webthing-action-button');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-action-name');
     this._href = null;
 
     this._onClick = this.__onClick.bind(this);

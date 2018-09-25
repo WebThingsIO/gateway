@@ -82,18 +82,18 @@ class SwitchProperty extends BaseComponent {
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-switch-property-container">
-    <div id="contents" class="webthing-switch-property-contents">
+  <div id="container-${BaseComponent.count}" class="webthing-switch-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-switch-property-contents">
       <form>
         <input type="checkbox" id="switch-${BaseComponent.count}"
           class="webthing-switch-property-switch">
         <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}" class="webthing-switch-property-slider">
         </label>
       </form>
-      <div id="label" class="webthing-switch-property-label"></div>
+      <div id="label-${BaseComponent.count}" class="webthing-switch-property-label"></div>
     </div>
   </div>
-  <div id="name" class="webthing-switch-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-switch-property-name"></div>
 `;
     super(template);
 

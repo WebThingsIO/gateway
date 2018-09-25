@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class EnumProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -64,22 +66,22 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-enum-property-container">
-    <div id="contents" class="webthing-enum-property-contents">
-      <select id="select" class="webthing-enum-property-select"></select>
-      <div id="unit" class="webthing-enum-property-unit"></div>
+  <div id="container-${BaseComponent.count}" class="webthing-enum-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-enum-property-contents">
+      <select id="select-${BaseComponent.count}" class="webthing-enum-property-select"></select>
+      <div id="unit-${BaseComponent.count}" class="webthing-enum-property-unit"></div>
     </div>
   </div>
-  <div id="name" class="webthing-enum-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-enum-property-name"></div>
 `;
-
-class EnumProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._select = this.shadowRoot.querySelector('#select');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._select = this.shadowRoot.querySelector(
+      '.webthing-enum-property-select');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-enum-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-enum-property-name');
 
     this._type = 'string';
 

@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class NumericLabelProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -51,22 +53,22 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-numeric-label-property-container">
-    <div id="contents" class="webthing-numeric-label-property-contents">
-      <span id="value" class="webthing-numeric-label-property-value">
-      </span><span id="unit" class="webthing-numeric-label-property-unit"></span>
+  <div id="container-${BaseComponent.count}" class="webthing-numeric-label-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-numeric-label-property-contents">
+      <span id="value-${BaseComponent.count}" class="webthing-numeric-label-property-value">
+      </span><span id="unit-${BaseComponent.count}" class="webthing-numeric-label-property-unit"></span>
     </div>
   </div>
-  <div id="name" class="webthing-numeric-label-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-numeric-label-property-name"></div>
 `;
-
-class NumericLabelProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._name = this.shadowRoot.querySelector('#name');
-    this._value = this.shadowRoot.querySelector('#value');
-    this._unit = this.shadowRoot.querySelector('#unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-name');
+    this._value = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-value');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-numeric-label-property-unit');
     this._precision = 0;
   }
 

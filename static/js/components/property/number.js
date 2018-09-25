@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class NumberProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -72,26 +74,27 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-number-property-container">
-    <div id="contents" class="webthing-number-property-contents">
-      <form id="form" class="webthing-number-property-form">
-        <input type="number" id="input"
+  <div id="container-${BaseComponent.count}" class="webthing-number-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-number-property-contents">
+      <form id="form-${BaseComponent.count}" class="webthing-number-property-form">
+        <input type="number" id="input-${BaseComponent.count}"
           class="webthing-number-property-input hide-spinner">
       </form>
-      <div id="unit" class="webthing-number-property-unit"></div>
+      <div id="unit-${BaseComponent.count}" class="webthing-number-property-unit"></div>
     </div>
   </div>
-  <div id="name" class="webthing-number-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-number-property-name"></div>
 `;
-
-class NumberProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._form = this.shadowRoot.querySelector('#form');
-    this._input = this.shadowRoot.querySelector('#input');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-number-property-form');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-number-property-input');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-number-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-number-property-name');
 
     this._onClick = this.__onClick.bind(this);
     this._onSubmit = this.__onSubmit.bind(this);

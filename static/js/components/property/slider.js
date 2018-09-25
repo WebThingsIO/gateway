@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class SliderProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -57,22 +59,21 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-slider-property-container">
-    <div id="contents" class="webthing-slider-property-contents">
-      <form id="form" class="webthing-slider-property-form">
-        <input type="range" id="slider" class="webthing-slider-property-slider">
+  <div id="container-${BaseComponent.count}" class="webthing-slider-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-slider-property-contents">
+      <form id="form-${BaseComponent.count}" class="webthing-slider-property-form">
+        <input type="range" id="slider-${BaseComponent.count}" class="webthing-slider-property-slider">
       </form>
     </div>
   </div>
-  <div id="name" class="webthing-slider-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-slider-property-name"></div>
 `;
-
-class SliderProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._input = this.shadowRoot.querySelector('#slider');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-slider-property-slider');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-slider-property-name');
 
     this._onChange = this.__onChange.bind(this);
   }

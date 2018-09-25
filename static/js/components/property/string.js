@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class StringProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -59,23 +61,23 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-string-property-container">
-    <div id="contents" class="webthing-string-property-contents">
-      <form id="form" class="webthing-string-property-form">
-        <input type="text" id="input" class="webthing-string-property-input">
+  <div id="container-${BaseComponent.count}" class="webthing-string-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-string-property-contents">
+      <form id="form-${BaseComponent.count}" class="webthing-string-property-form">
+        <input type="text" id="input-${BaseComponent.count}" class="webthing-string-property-input">
       </form>
     </div>
   </div>
-  <div id="name" class="webthing-string-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-string-property-name"></div>
 `;
-
-class StringProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._form = this.shadowRoot.querySelector('#form');
-    this._input = this.shadowRoot.querySelector('#input');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-string-property-form');
+    this._input = this.shadowRoot.querySelector(
+      '.webthing-string-property-input');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-string-property-name');
 
     this._onSubmit = this.__onSubmit.bind(this);
     this._onBlur = this.__onBlur.bind(this);

@@ -11,8 +11,10 @@
 
 const BaseComponent = require('../base-component');
 
-const template = document.createElement('template');
-template.innerHTML = `
+class LevelProperty extends BaseComponent {
+  constructor() {
+    const template = document.createElement('template');
+    template.innerHTML = `
   <style>
     :host {
       display: inline-block;
@@ -93,35 +95,40 @@ template.innerHTML = `
       display: inline-block;
     }
   </style>
-  <div id="container" class="webthing-level-property-container">
-    <div id="contents" class="webthing-level-property-contents">
-      <div id="text" class="webthing-level-property-text hidden"></div>
-      <div id="bar-container"
+  <div id="container-${BaseComponent.count}" class="webthing-level-property-container">
+    <div id="contents-${BaseComponent.count}" class="webthing-level-property-contents">
+      <div id="text-${BaseComponent.count}" class="webthing-level-property-text hidden"></div>
+      <div id="bar-container-${BaseComponent.count}"
         class="webthing-level-property-bar-container hidden">
-        <span id="bar" class="webthing-level-property-bar"></span>
+        <span id="bar-${BaseComponent.count}" class="webthing-level-property-bar"></span>
       </div>
-      <form id="form" class="webthing-level-property-form">
-        <input type="number" id="number" class="webthing-level-property-number">
-        <input type="range" id="slider" class="webthing-level-property-slider">
+      <form id="form-${BaseComponent.count}" class="webthing-level-property-form">
+        <input type="number" id="number-${BaseComponent.count}" class="webthing-level-property-number">
+        <input type="range" id="slider-level-${BaseComponent.count}" class="webthing-level-property-slider">
       </form>
-      <div id="unit" class="webthing-level-property-unit"></div>
+      <div id="unit-${BaseComponent.count}" class="webthing-level-property-unit"></div>
     </div>
   </div>
-  <div id="name" class="webthing-level-property-name"></div>
+  <div id="name-${BaseComponent.count}" class="webthing-level-property-name"></div>
 `;
-
-class LevelProperty extends BaseComponent {
-  constructor() {
     super(template);
 
-    this._text = this.shadowRoot.querySelector('#text');
-    this._barContainer = this.shadowRoot.querySelector('#bar-container');
-    this._bar = this.shadowRoot.querySelector('#bar');
-    this._form = this.shadowRoot.querySelector('#form');
-    this._number = this.shadowRoot.querySelector('#number');
-    this._slider = this.shadowRoot.querySelector('#slider');
-    this._unit = this.shadowRoot.querySelector('#unit');
-    this._name = this.shadowRoot.querySelector('#name');
+    this._text = this.shadowRoot.querySelector(
+      '.webthing-level-property-text');
+    this._barContainer = this.shadowRoot.querySelector(
+      '.webthing-level-property-bar-container');
+    this._bar = this.shadowRoot.querySelector(
+      '.webthing-level-property-bar');
+    this._form = this.shadowRoot.querySelector(
+      '.webthing-level-property-form');
+    this._number = this.shadowRoot.querySelector(
+      '.webthing-level-property-number');
+    this._slider = this.shadowRoot.querySelector(
+      '.webthing-level-property-slider');
+    this._unit = this.shadowRoot.querySelector(
+      '.webthing-level-property-unit');
+    this._name = this.shadowRoot.querySelector(
+      '.webthing-level-property-name');
 
     this._onChange = this.__onChange.bind(this);
     this._onClick = this.__onClick.bind(this);
