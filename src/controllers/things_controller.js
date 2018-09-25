@@ -401,25 +401,6 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
     });
   }
 
-  Things.getThing(thingId).then((thing) => {
-    thing.registerWebsocket(websocket);
-    thing.addEventSubscription(onEvent);
-
-    websocket.on('close', () => {
-      thing.removeEventSubscription(onEvent);
-    });
-  }).catch(() => {
-    console.error('WebSocket opened on nonexistent thing', thingId);
-    sendMessage(JSON.stringify({
-      messageType: Constants.ERROR,
-      data: {
-        status: '404 Not Found',
-        message: `Thing ${thingId} not found`,
-      },
-    }));
-    websocket.close();
-  });
-
   function onPropertyChanged(property) {
     if (property.device.id !== thingId) {
       return;
@@ -452,6 +433,34 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
       },
     }));
   }
+
+  function onConnected(connected) {
+    sendMessage(JSON.stringify({
+      messageType: Constants.CONNECTED,
+      data: connected,
+    }));
+  }
+
+  Things.getThing(thingId).then((thing) => {
+    thing.registerWebsocket(websocket);
+    thing.addEventSubscription(onEvent);
+    thing.addConnectedSubscription(onConnected);
+
+    websocket.on('close', () => {
+      thing.removeEventSubscription(onEvent);
+      thing.removeConnectedSubscription(onConnected);
+    });
+  }).catch(() => {
+    console.error('WebSocket opened on nonexistent thing', thingId);
+    sendMessage(JSON.stringify({
+      messageType: Constants.ERROR,
+      data: {
+        status: '404 Not Found',
+        message: `Thing ${thingId} not found`,
+      },
+    }));
+    websocket.close();
+  });
 
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);

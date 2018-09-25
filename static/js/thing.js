@@ -59,6 +59,7 @@ class Thing {
     this.type = description.type;
     this.model = model;
     this.listeners = [];
+    this.connected = this.model.connected;
 
     if (Array.isArray(description['@type']) &&
         description['@type'].length > 0) {
@@ -249,10 +250,15 @@ class Thing {
 
     if (format === Constants.ThingFormat.EXPANDED) {
       this.attachExpandedView();
+
+      if (!this.connected) {
+        App.showPersistentMessage('Disconnected');
+      }
     }
 
     this.onPropertyStatus = this.onPropertyStatus.bind(this);
     this.onEvent = this.onEvent.bind(this);
+    this.onConnected = this.onConnected.bind(this);
     this.updateStatus();
   }
 
@@ -378,9 +384,9 @@ class Thing {
    * Update the status of Thing.
    */
   updateStatus() {
-    this.model.subscribe(Constants.PROPERTY_STATUS,
-                         this.onPropertyStatus);
+    this.model.subscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
     this.model.subscribe(Constants.EVENT_OCCURRED, this.onEvent);
+    this.model.subscribe(Constants.CONNECTED, this.onConnected);
   }
 
   /**
@@ -398,13 +404,14 @@ class Thing {
    * Cleanup added listeners and subscribed events
    */
   cleanup() {
-    let listenr;
-    while (typeof (listenr = this.listeners.pop()) !== 'undefined') {
-      listenr.element.removeEventListener(listenr.event, listenr.handler);
+    let listener;
+    while (typeof (listener = this.listeners.pop()) !== 'undefined') {
+      listener.element.removeEventListener(listener.event, listener.handler);
     }
-    this.model.unsubscribe(Constants.PROPERTY_STATUS,
-                           this.onPropertyStatus);
+
+    this.model.unsubscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
     this.model.unsubscribe(Constants.EVENT_OCCURRED, this.onEvent);
+    this.model.unsubscribe(Constants.CONNECTED, this.onConnected);
   }
 
   /**
@@ -506,6 +513,28 @@ class Thing {
         `<a href="${this.eventsHref}">${Utils.escapeHtml(name)}</a>`,
         3000);
     }
+  }
+
+  /**
+   * Handle a 'connected' message.
+   * @param {boolean} connected - New connectivity state
+   */
+  onConnected(connected) {
+    this.connected = connected;
+
+    const opacity = connected ? 1 : 0.5;
+
+    if (this.format === Constants.ThingFormat.EXPANDED) {
+      this.layout.svg.style.opacity = opacity;
+
+      if (connected) {
+        App.hidePersistentMessage();
+      } else {
+        App.showPersistentMessage('Disconnected');
+      }
+    }
+
+    this.element.style.opacity = connected ? 1 : 0.5;
   }
 }
 

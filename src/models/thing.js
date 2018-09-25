@@ -44,6 +44,7 @@ const Thing = function(id, description) {
   this.properties = {};
   this.actions = description.actions || {};
   this.events = description.events || {};
+  this.connected = false;
   this.eventsDispatched = [];
   this.emitter = new EventEmitter();
   if (description.properties) {
@@ -245,6 +246,23 @@ Thing.prototype.removeEventSubscription = function(callback) {
 };
 
 /**
+ * Add a subscription to the Thing's connected state
+ * @param {Function} callback
+ */
+Thing.prototype.addConnectedSubscription = function(callback) {
+  this.emitter.on(Constants.CONNECTED, callback);
+  callback(this.connected);
+};
+
+/**
+ * Remove a subscription to the Thing's connected state
+ * @param {Function} callback
+ */
+Thing.prototype.removeConnectedSubscription = function(callback) {
+  this.emitter.removeListener(Constants.CONNECTED, callback);
+};
+
+/**
  * Get a JSON Thing Description for this Thing.
  *
  * @param {String} reqHost request host, if coming via HTTP
@@ -406,6 +424,16 @@ Thing.prototype.updateFromDescription = function(description) {
   }
 
   return Database.updateThing(this.id, this.getDescription());
+};
+
+/**
+ * Set the connected state of this thing.
+ *
+ * @param {boolean} connected - Whether or not the thing is connected
+ */
+Thing.prototype.setConnected = function(connected) {
+  this.connected = connected;
+  this.emitter.emit(Constants.CONNECTED, connected);
 };
 
 module.exports = Thing;

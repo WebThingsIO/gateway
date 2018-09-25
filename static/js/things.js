@@ -167,6 +167,11 @@ const ThingsScreen = {
       this.thingTitleElement.classList.add('hidden');
       this.thingsElement.classList.remove('single-thing');
       this.showThings();
+
+      const messageArea = document.getElementById('message-area');
+      if (App.blockMessages && messageArea.innerText === 'Disconnected') {
+        App.hidePersistentMessage();
+      }
     }
   },
 
