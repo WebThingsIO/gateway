@@ -522,19 +522,21 @@ class Thing {
   onConnected(connected) {
     this.connected = connected;
 
-    const opacity = connected ? 1 : 0.5;
-
     if (this.format === Constants.ThingFormat.EXPANDED) {
-      this.layout.svg.style.opacity = opacity;
-
       if (connected) {
+        this.layout.svg.classList.add('connected');
         App.hidePersistentMessage();
       } else {
+        this.layout.svg.classList.remove('connected');
         App.showPersistentMessage('Disconnected');
       }
     }
 
-    this.element.style.opacity = connected ? 1 : 0.5;
+    if (connected) {
+      this.element.classList.add('connected');
+    } else {
+      this.element.classList.remove('connected');
+    }
   }
 }
 

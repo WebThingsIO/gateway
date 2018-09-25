@@ -36,6 +36,10 @@
   opacity: 0.5;
 }
 
+.floorplan-thing.connected {
+  opacity: 1;
+}
+
 #floorplan.editing .floorplan-thing {
   cursor: grab;
 }
