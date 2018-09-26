@@ -17,9 +17,42 @@ function ThingDetailLayout(parent, elements) {
                                this.doLayout);
 }
 
+/**
+ * Adjust the X and Y coordinates such that the line ends on the outer radius
+ * of the circular icon.
+ *
+ * @param {number} angle - The calculated angle of the line
+ * @param {number} radius - The radius of the circular icon
+ * @return {Object} Object containing adjustments as such: {x, y}
+ */
+ThingDetailLayout.prototype.adjustXY = function(angle, radius) {
+  let x = 0, y = 0;
+  if (angle < (Math.PI / 2)) {
+    x = Math.cos(angle) * radius;
+    y = Math.sin(angle) * radius;
+  } else if (angle < Math.PI) {
+    const theta = Math.PI - angle;
+    x = -(Math.cos(theta) * radius);
+    y = Math.sin(theta) * radius;
+  } else if (angle < (3 * Math.PI / 2)) {
+    const theta = (3 * Math.PI / 2) - angle;
+    x = -(Math.sin(theta) * radius);
+    y = -(Math.cos(theta) * radius);
+  } else {
+    const theta = (2 * Math.PI) - angle;
+    x = Math.cos(theta) * radius;
+    y = -(Math.sin(theta) * radius);
+  }
+
+  return {x, y};
+};
+
 ThingDetailLayout.prototype.doLayout = function() {
   let xScale = 300;
   let yScale = 300;
+
+  const centerRadius = 64;
+  const outerRadius = 51;
 
   const angleStart = 0;
 
@@ -45,15 +78,26 @@ ThingDetailLayout.prototype.doLayout = function() {
     const x = xScale * Math.cos(angle);
     const y = yScale * Math.sin(angle);
 
+    let actualAngle = Math.atan2(y, x);
+    if (actualAngle < 0) {
+      actualAngle += 2 * Math.PI;
+    }
+
+    const point1Adjust = this.adjustXY(actualAngle, centerRadius);
+    const point2Adjust = this.adjustXY(
+      (actualAngle + Math.PI) % (2 * Math.PI),
+      outerRadius
+    );
+
     this.elements[i].style.transform = `translate(${x}px, ${y}px)`;
 
     const line =
         document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.classList.add('thing-detail-layout-link');
-    line.setAttribute('x1', xScale);
-    line.setAttribute('y1', yScale);
-    line.setAttribute('x2', x + xScale);
-    line.setAttribute('y2', y + yScale);
+    line.setAttribute('x1', xScale + point1Adjust.x);
+    line.setAttribute('y1', yScale + point1Adjust.y);
+    line.setAttribute('x2', x + xScale + point2Adjust.x);
+    line.setAttribute('y2', y + yScale + point2Adjust.y);
 
     this.svg.appendChild(line);
   }
