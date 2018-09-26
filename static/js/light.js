@@ -60,7 +60,7 @@ class Light extends OnOffSwitch {
       this.brightnessProperty = 'level';
     }
 
-    if (this.colorProperty === null ||
+    if (this.colorProperty === null &&
         this.displayedProperties.hasOwnProperty('color')) {
       this.colorProperty = 'color';
     }
