@@ -10,6 +10,11 @@
   color: white;
   box-sizing: border-box;
   vertical-align: bottom;
+  opacity: 0.5;
+}
+
+.thing.connected {
+  opacity: 1;
 }
 
 .thing-ui-link {
@@ -96,6 +101,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
+  opacity: 0.5;
+}
+
+.thing-detail-layout-links.connected {
+  opacity: 1;
 }
 
 .thing-detail-layout-link {

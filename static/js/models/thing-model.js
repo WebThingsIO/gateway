@@ -19,6 +19,7 @@ class ThingModel extends Model {
     this.type = description.type;
     this.properties = {};
     this.events = [];
+    this.connected = false;
     this.closingWs = false;
     this.wsBackoff = 1000;
 
@@ -166,6 +167,9 @@ class ThingModel extends Model {
         case 'event':
           this.onEvent(message.data);
           break;
+        case 'connected':
+          this.onConnected(message.data);
+          break;
         case 'error':
           // status 404 means that the Thing already removed.
           if (message.data.status === '404 Not Found') {
@@ -222,6 +226,9 @@ class ThingModel extends Model {
         handler(this.properties);
         break;
       case Constants.DELETE_THING:
+        break;
+      case Constants.CONNECTED:
+        handler(this.connected);
         break;
       default:
         console.warn(`ThingModel does not support event:${event}`);
@@ -376,6 +383,16 @@ class ThingModel extends Model {
       this.events.push({[event]: data[event]});
     }
     return this.handleEvent(Constants.EVENT_OCCURRED, events);
+  }
+
+  /**
+   * Handle a 'connected' message.
+   *
+   * @param {boolean} connected - Connected state
+   */
+  onConnected(connected) {
+    this.connected = connected;
+    return this.handleEvent(Constants.CONNECTED, connected);
   }
 }
 

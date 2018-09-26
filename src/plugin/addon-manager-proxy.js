@@ -43,6 +43,13 @@ class AddonManagerProxy extends EventEmitter {
                            Constants.EVENT, 'notification for', event.name);
       this.sendEventNotification(event);
     });
+
+    this.on(Constants.CONNECTED, ({device, connected}) => {
+      DEBUG && console.log('AddonManagerProxy: Got',
+                           Constants.CONNECTED, 'notification for',
+                           device.name);
+      this.sendConnectedNotification(device, connected);
+    });
   }
 
   /**
@@ -353,6 +360,18 @@ class AddonManagerProxy extends EventEmitter {
       adapterId: event.device.adapter.id,
       deviceId: event.device.id,
       event: event.asDict(),
+    });
+  }
+
+  /**
+   * @method sendConnectedNotification
+   * Sends a connected notification to the gateway.
+   */
+  sendConnectedNotification(device, connected) {
+    this.pluginClient.sendNotification(Constants.CONNECTED, {
+      adapterId: device.adapter.id,
+      deviceId: device.id,
+      connected,
     });
   }
 

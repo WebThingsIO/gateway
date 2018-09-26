@@ -153,6 +153,8 @@ const Things = {
    */
   createThing: function(id, description) {
     const thing = new Thing(id, description);
+    thing.connected = true;
+
     return Database.createThing(thing.id, thing.getDescription())
       .then(function(thingDesc) {
         this.things.set(thing.id, thing);
@@ -163,19 +165,41 @@ const Things = {
   /**
    * Handle a new Thing having been discovered.
    *
-   * @param Object New Thing description
+   * @param {Object} newThing - New Thing description
    */
   handleNewThing: function(newThing) {
-    this.getThing(newThing.id)
-      .then((thing) => {
-        return thing.updateFromDescription(newThing);
-      })
-      .catch(() => {
-        // If we don't already know about this thing, notify each open websocket
-        this.websockets.forEach(function(socket) {
-          socket.send(JSON.stringify(newThing));
-        });
+    this.getThing(newThing.id).then((thing) => {
+      thing.setConnected(true);
+      return thing.updateFromDescription(newThing);
+    }).catch(() => {
+      // If we don't already know about this thing, notify each open websocket
+      this.websockets.forEach(function(socket) {
+        socket.send(JSON.stringify(newThing));
       });
+    });
+  },
+
+  /**
+   * Handle a thing being removed by an adapter.
+   *
+   * @param {Object} thing - Thing which was removed
+   */
+  handleThingRemoved: function(thing) {
+    this.getThing(thing.id).then((thing) => {
+      thing.setConnected(false);
+    }).catch(() => {});
+  },
+
+  /**
+   * Handle a thing's connectivity state change.
+   *
+   * @param {string} thingId - ID of thing
+   * @param {boolean} connected - New connectivity state
+   */
+  handleConnected: function(thingId, connected) {
+    this.getThing(thingId).then((thing) => {
+      thing.setConnected(connected);
+    }).catch(() => {});
   },
 
   /**
@@ -263,8 +287,16 @@ const Things = {
   },
 };
 
-AddonManager.on(Constants.THING_ADDED, function(thing) {
+AddonManager.on(Constants.THING_ADDED, (thing) => {
   Things.handleNewThing(thing);
+});
+
+AddonManager.on(Constants.THING_REMOVED, (thing) => {
+  Things.handleThingRemoved(thing);
+});
+
+AddonManager.on(Constants.CONNECTED, ({device, connected}) => {
+  Things.handleConnected(device.id, connected);
 });
 
 module.exports = Things;

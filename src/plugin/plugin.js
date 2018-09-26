@@ -292,6 +292,13 @@ class Plugin {
         }
         break;
 
+      case Constants.CONNECTED:
+        device = adapter.getDevice(msg.data.deviceId);
+        if (device) {
+          device.connectedNotify(msg.data.connected);
+        }
+        break;
+
       case Constants.MOCK_ADAPTER_STATE_CLEARED:
         deferredMock = adapter.deferredMock;
         if (!deferredMock) {
