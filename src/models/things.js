@@ -153,6 +153,8 @@ const Things = {
    */
   createThing: function(id, description) {
     const thing = new Thing(id, description);
+    thing.connected = true;
+
     return Database.createThing(thing.id, thing.getDescription())
       .then(function(thingDesc) {
         this.things.set(thing.id, thing);
