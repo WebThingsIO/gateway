@@ -72,21 +72,21 @@ Reinitialize your terminal session.
 $ . ~/.bashrc
 ```
 
-Use nvm to install a LTS version of node and set the
-default version.
+Use nvm to install and use an LTS version of node and then set the
+default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
 
 ```
-$ nvm install --lts=carbon
-$ nvm use --lts=carbon
-$ nvm alias default lts/carbon
+$ nvm install
+$ nvm use
+$ nvm alias default $(node -v)
 ```
 
 Verify that node and npm have been installed:
 ```
-$ npm --version
-5.6.0
 $ node --version
-v8.9.4
+v8.12.0
+$ npm --version
+6.4.1
 ```
 
 Note: these versions might differ from the LTS version installed locally.
