@@ -46,6 +46,12 @@ class PropertyProxy extends Property {
   doPropertyChanged(propertyDict) {
     this.propertyDict = Object.assign({}, propertyDict);
     this.setCachedValue(propertyDict.value);
+    if (propertyDict.hasOwnProperty('minimum')) {
+      this.minimum = propertyDict.minimum;
+    }
+    if (propertyDict.hasOwnProperty('maximum')) {
+      this.maximum = propertyDict.maximum;
+    }
     while (this.propertyChangedPromises.length > 0) {
       const deferredChange = this.propertyChangedPromises.pop();
       deferredChange.resolve(propertyDict.value);
