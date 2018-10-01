@@ -434,6 +434,11 @@ class NewThing {
       return response.json();
     }).then(() => {
       this.saveButton.innerHTML = 'Saved';
+
+      const cancelButton = document.getElementById('add-thing-cancel-button');
+      if (cancelButton) {
+        cancelButton.textContent = 'Done';
+      }
     }).catch((error) => {
       console.error(`Failed to save thing ${error}`);
       this.label.innerText = 'Failed to save.';

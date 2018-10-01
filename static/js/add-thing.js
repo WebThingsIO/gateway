@@ -154,6 +154,8 @@ const AddThingScreen = {
       }
     });
 
+    this.cancelButton.textContent = 'Cancel';
+
     this.element.classList.remove('hidden');
     this.newThingsElement.innerHTML = '';
     this.visibleThings.clear();
