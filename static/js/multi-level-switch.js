@@ -77,6 +77,13 @@ class MultiLevelSwitch extends OnOffSwitch {
     }
   }
 
+  handleClick() {
+    // Only click to toggle if we have an on/off property
+    if (this.onProperty) {
+      super.handleClick();
+    }
+  }
+
   iconView() {
     return `
       <webthing-multi-level-switch-capability>
