@@ -91,7 +91,8 @@ class MultiLevelSwitchCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
+    // Default to on=true to display level
+    this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : true;
     this.level =
       typeof this.dataset.level !== 'undefined' ? this.dataset.level : false;
     this._container.addEventListener('click', this._onClick);
