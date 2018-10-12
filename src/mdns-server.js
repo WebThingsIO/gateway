@@ -52,9 +52,19 @@ function DNSserviceDiscovery() {
                power: this.power};
   const options = {name: this.localName, host: this.localDomain, txt};
 
+  this.handleError = (e) => {
+    console.debug(`mDNS error: ${e}`);
+    setTimeout(() => {
+      if (this.serviceState) {
+        this.dnssdHandle.start();
+      }
+    }, 10000);
+  };
+
   // Initialize our object and make sure it's not started on object creation.
   this.dnssdHandle =
     dnssd.Advertisement(dnssd.tcp('http'), this.port, options);
+  this.dnssdHandle.on('error', this.handleError);
   this.dnssdHandle.stop();
 }
 
@@ -118,6 +128,7 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
 
       this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
                                              this.port, options);
+      this.dnssdHandle.on('error', this.handleError);
       this.dnssdHandle.start();
     }
   } else {
@@ -166,6 +177,7 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
 
     this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
                                            this.port, options);
+    this.dnssdHandle.on('error', this.handleError);
 
     // Check to see if the profile should be active or not.
     if (this.serviceState) {
