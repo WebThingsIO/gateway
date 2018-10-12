@@ -20,6 +20,10 @@ const Notifications = {
         headers: API.headers(),
       });
       const vapid = await res.json();
+      if (vapid.error) {
+        console.error('Error getting vapid key:', vapid.error);
+        return;
+      }
       const convertedVapidKey = urlBase64ToUint8Array(vapid.publicKey);
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
