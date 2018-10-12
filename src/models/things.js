@@ -28,6 +28,11 @@ const Things = {
   websockets: [],
 
   /**
+   * The promise object returned by Database.getThings()
+   */
+  getThingsPromise: null,
+
+  /**
    * Get all Things known to the Gateway, initially loading them from the
    * database,
    *
@@ -37,7 +42,14 @@ const Things = {
     if (this.things.size > 0) {
       return Promise.resolve(this.things);
     }
-    return Database.getThings().then((things) => {
+    if (this.getThingsPromise) {
+      // We're still waiting for the database request.
+      return this.getThingsPromise.then((things) => {
+        return things;
+      });
+    }
+    this.getThingsPromise = Database.getThings().then((things) => {
+      this.getThingsPromise = null;
       // Update the map of Things
       this.things = new Map();
       things.forEach((thing) => {
@@ -45,6 +57,7 @@ const Things = {
       });
       return this.things;
     });
+    return this.getThingsPromise;
   },
 
   /**
