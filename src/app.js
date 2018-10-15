@@ -272,7 +272,7 @@ function createRedirectApp(port) {
       httpsUrl += `:${port}`;
     }
     httpsUrl += request.url;
-    response.redirect(301, httpsUrl);
+    response.redirect(307, httpsUrl);
   });
 
   return app;
