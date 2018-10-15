@@ -437,6 +437,11 @@ class NewWebThing {
       }
 
       this.saveButton.innerHTML = 'Saved';
+
+      const cancelButton = document.getElementById('add-thing-cancel-button');
+      if (cancelButton) {
+        cancelButton.textContent = 'Done';
+      }
     }).catch((error) => {
       console.error('Failed to save web thing:', error.message);
       this.label.innerText = 'Failed to save.';
