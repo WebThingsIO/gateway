@@ -87,7 +87,6 @@ class Property extends EventEmitter {
    * @return {Promise} resolves to property's value
    */
   async get() {
-    console.info('property get', this.name);
     const res = await fetch(await this.getHref(), {
       headers: Object.assign({
         Accept: 'application/json',
@@ -95,7 +94,6 @@ class Property extends EventEmitter {
     });
     const data = await res.json();
 
-    console.info('property got', data);
     return data[this.name];
   }
 
@@ -106,7 +104,6 @@ class Property extends EventEmitter {
   async set(value) {
     const data = {};
     data[this.name] = value;
-    console.info('property set', data);
     return fetch(await this.getHref(), {
       method: 'PUT',
       headers: Object.assign({
@@ -125,10 +122,6 @@ class Property extends EventEmitter {
   onMessage(msg) {
     if (msg.messageType === 'propertyStatus') {
       if (msg.data.hasOwnProperty(this.name)) {
-        console.info('emit', {
-          event: Events.VALUE_CHANGED,
-          data: msg.data[this.name],
-        });
         this.emit(Events.VALUE_CHANGED, msg.data[this.name]);
       }
     }
