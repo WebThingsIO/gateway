@@ -18,6 +18,7 @@ class EventTrigger extends Trigger {
     this.thing = desc.thing;
     this.event = desc.event;
     this.timeout = null;
+    this.subscribed = false;
     this.onMessage = this.onMessage.bind(this);
     this.thingConn = new ThingConnection(desc.thing.href, this.onMessage);
   }
@@ -37,6 +38,10 @@ class EventTrigger extends Trigger {
 
   async start() {
     await this.thingConn.start();
+    await this.subscribe();
+  }
+
+  async subscribe() {
     await this.thingConn.send(JSON.stringify({
       messageType: Constants.ADD_EVENT_SUBSCRIPTION,
       data: {
@@ -46,12 +51,20 @@ class EventTrigger extends Trigger {
   }
 
   onMessage(msg) {
-    if (msg.messageType !== 'event') {
+    if (msg.messageType === Constants.CONNECTED && !this.subscribed) {
+      if (msg.data) {
+        this.subscribe();
+      }
+    }
+
+    if (msg.messageType !== Constants.EVENT) {
       return;
     }
     if (!msg.data.hasOwnProperty(this.event)) {
       return;
     }
+
+    this.subscribed = true;
 
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
     if (this.timeout) {
