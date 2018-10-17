@@ -17,6 +17,7 @@ class EventTrigger extends Trigger {
     super();
     this.thing = desc.thing;
     this.event = desc.event;
+    this.timeout = null;
     this.onMessage = this.onMessage.bind(this);
     this.thingConn = new ThingConnection(desc.thing.href, this.onMessage);
   }
@@ -53,9 +54,17 @@ class EventTrigger extends Trigger {
     }
 
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(() => {
+      this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
+      this.timeout = null;
+    }, 500);
   }
 
   stop() {
+    clearTimeout(this.timeout);
     this.thingConn.stop();
   }
 }
