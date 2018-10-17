@@ -62,7 +62,7 @@ describe('logs/', function() {
       });
     expect(res.status).toEqual(200);
     expect(res.type).toBe('application/zip');
-    expect(Object.keys(res.body.files).length).toEqual(1);
+    expect(Object.keys(res.body.files).length).toEqual(2);
     const file = res.body.file('logs/test.log');
     expect(file).toBeTruthy();
     const data = await file.async('text');
