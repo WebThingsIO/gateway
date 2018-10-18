@@ -131,30 +131,36 @@ const App = {
   },
 
   startPinger() {
-    fetch(`${this.ORIGIN}/ping`, {headers: {Accept: 'application/json'}})
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Bad return status');
-        }
+    fetch(
+      `${this.ORIGIN}/ping`,
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+      }
+    ).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Bad return status: ${res.status}`);
+      }
 
-        if (this.pingerLastStatus === 'offline') {
-          window.location.reload();
-        } else {
-          this.pingerLastStatus = 'online';
-          this.connectivityOverlay.classList.add('hidden');
-          this.messageArea.classList.remove('disconnected');
+      if (this.pingerLastStatus === 'offline') {
+        window.location.reload();
+      } else {
+        this.pingerLastStatus = 'online';
+        this.connectivityOverlay.classList.add('hidden');
+        this.messageArea.classList.remove('disconnected');
 
-          if (this.messageArea.innerText === 'Gateway Unreachable') {
-            this.hidePersistentMessage();
-          }
+        if (this.messageArea.innerText === 'Gateway Unreachable') {
+          this.hidePersistentMessage();
         }
-      })
-      .catch(() => {
-        this.connectivityOverlay.classList.remove('hidden');
-        this.messageArea.classList.add('disconnected');
-        this.showPersistentMessage('Gateway Unreachable');
-        this.pingerLastStatus = 'offline';
-      });
+      }
+    }).catch((e) => {
+      console.error('Gateway unreachable:', e);
+      this.connectivityOverlay.classList.remove('hidden');
+      this.messageArea.classList.add('disconnected');
+      this.showPersistentMessage('Gateway Unreachable');
+      this.pingerLastStatus = 'offline';
+    });
 
     if (!this.pingerInterval) {
       this.pingerInterval = setInterval(this.startPinger.bind(this), 30 * 1000);
