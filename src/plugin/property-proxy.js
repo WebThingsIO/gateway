@@ -52,7 +52,7 @@ class PropertyProxy extends Property {
     if (propertyDict.hasOwnProperty('maximum')) {
       this.maximum = propertyDict.maximum;
     }
-    if(propertyDict.hasOwnProperty('enum')){
+    if (propertyDict.hasOwnProperty('enum')) {
       this.enum = propertyDict.enum;
     }
     while (this.propertyChangedPromises.length > 0) {
