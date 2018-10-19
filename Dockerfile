@@ -42,6 +42,23 @@ RUN echo "#log: ${project}: Preparing sources" \
   && ./gateway/install.sh \
   && sync
 
+ADD https://github.com/mozilla-iot/thing-url-adapter/archive/master.tar.gz /usr/local/src/thing-url-adapter.tar.gz
+WORKDIR /usr/local/src/
+RUN echo "#log: ${project}: Add addons sources" \
+  && set -x \
+  && mkdir -p /root/.mozilla-iot/addons/thing-url-adapter/.git \
+  && tar xvfz /usr/local/src/thing-url-adapter.tar.gz \
+     -C ${HOME}/.mozilla-iot/addons/thing-url-adapter \
+     --strip-components=1 \
+  && sync
+
+WORKDIR /usr/local/src/
+RUN echo "#log: ${project}: Add addons sources" \
+  && cd ${HOME}/.mozilla-iot/addons/thing-url-adapter \
+  && npm install -g yarn \
+  && yarn install \
+  && sync
+
 EXPOSE 8080
 WORKDIR /root/mozilla-iot/gateway
 CMD [ "./run-app.sh" ]
