@@ -25,6 +25,7 @@ const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
 const expressHandlebars = require('express-handlebars');
+const ipRegex = require('ip-regex');
 
 // Internal Dependencies
 const addonManager = require('./addon-manager');
@@ -272,7 +273,20 @@ function createRedirectApp(port) {
       httpsUrl += `:${port}`;
     }
     httpsUrl += request.url;
-    response.redirect(307, httpsUrl);
+
+    // If the request is for a bare hostname, a .local address, or an IP
+    // address, use a 307 redirect to prevent caching. For instance, if the
+    // browser caches a redirect for gateway.local to the HTTPS version, things
+    // will break after resetting/reflashing the gateway.
+    //
+    // Otherwise, use a 301 to help mitigate DNS hijacking.
+    if (request.hostname.indexOf('.') < 0 ||
+        request.hostname.endsWith('.local') ||
+        ipRegex({exact: true}).test(request.hostname)) {
+      response.redirect(307, httpsUrl);
+    } else {
+      response.redirect(301, httpsUrl);
+    }
   });
 
   return app;
