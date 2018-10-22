@@ -26,7 +26,8 @@ self.addEventListener('fetch', function(event) {
   }
 
   const url = new URL(event.request.url);
-  if (url.origin !== location.origin || url.pathname.endsWith('.map')) {
+  if (url.origin !== location.origin || url.pathname.endsWith('.map') ||
+      url.pathname.endsWith('floorplan.svg')) {
     return;
   }
 
