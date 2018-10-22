@@ -115,16 +115,7 @@ if (!console.constructor.hooked) {
 
     for (const func of FUNCS) {
       console[func] = function() {
-        const args = Array.from(arguments);
-        let message = args[0];
-        for (const arg of args.slice(1)) {
-          if (arg.hasOwnProperty('toString')) {
-            message += ` ${arg.toString()}`;
-          } else {
-            message += ` ${arg}`;
-          }
-        }
-        logger[func](message);
+        logger[func](format.apply(null, arguments));
       };
     }
 
