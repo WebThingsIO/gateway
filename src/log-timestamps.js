@@ -11,7 +11,34 @@
 
 'use strict';
 
+const winston = require('winston');
+const DailyRotateFile = require('winston-daily-rotate-file');
+const UserProfile = require('./user-profile');
 const format = require('util').format;
+
+const formatter = winston.format.printf((info) => {
+  return `${info.timestamp} ${info.level}: ${info.message}`;
+});
+const logger = winston.createLogger({
+  level: 'debug',
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.padLevels(),
+    winston.format.timestamp(),
+    formatter
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new DailyRotateFile({
+      dirname: UserProfile.logDir,
+      filename: 'run-app.log',
+      zippedArchive: false,
+      maxSize: '10m',
+      maxFiles: 10,
+    }),
+  ],
+  exitOnError: false,
+});
 
 function logPrefix() {
   const currTime = new Date();
@@ -84,13 +111,14 @@ if (!console.constructor.hooked) {
     // jest's CustomConsole doesn't provide a debug, so we skip it as well.
   } else {
     // This path is for the normal non-jest output
-    const FUNCS = ['log', 'info', 'debug', 'error', 'warn'];
+    const FUNCS = ['info', 'debug', 'error', 'warn', 'verbose', 'silly'];
 
     for (const func of FUNCS) {
-      const realFunc = console[func];
       console[func] = function() {
-        realFunc(logPrefix() + format.apply(null, arguments));
+        logger[func](format.apply(null, arguments));
       };
     }
+
+    console.log = console.info;
   }
 }

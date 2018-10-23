@@ -26,7 +26,8 @@ const LogsController = express.Router();
 LogsController.get('/', async (request, response) => {
   const jwt = jwtMiddleware.extractJWTHeader(request) ||
     jwtMiddleware.extractJWTQS(request);
-  const files = fs.readdirSync(UserProfile.logDir);
+  const files = fs.readdirSync(UserProfile.logDir)
+    .filter((f) => !f.startsWith('.'));
   files.sort();
 
   let content =
@@ -76,7 +77,14 @@ LogsController.get('/zip', async (request, response) => {
   response.attachment('logs.zip');
 
   archive.pipe(response);
-  archive.directory(UserProfile.logDir, 'logs');
+  fs.readdirSync(
+    UserProfile.logDir
+  ).map((f) => {
+    const fullPath = path.join(UserProfile.logDir, f);
+    if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile()) {
+      archive.file(fullPath, {name: path.join('logs', f)});
+    }
+  });
   archive.finalize();
 });
 

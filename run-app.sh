@@ -40,4 +40,4 @@ run_app() {
 }
 
 mkdir -p "${MOZIOT_HOME}/log"
-run_app | tee "${MOZIOT_HOME}/log/run-app.log" 2>&1
+run_app
