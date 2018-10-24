@@ -19,7 +19,7 @@ env:
     - MOZIOT_HOME=/home/travis/.mozilla-iot/test
 
 addons:
-  firefox: latest
+  firefox: "62.0"
   apt:
     sources:
       - ubuntu-toolchain-r-test
