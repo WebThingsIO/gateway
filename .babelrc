@@ -3,6 +3,7 @@
 
   "env": {
     "test": {
+      "presets": ["es2015"],
       "plugins": [
         "dynamic-import-node",
         "transform-object-rest-spread"
