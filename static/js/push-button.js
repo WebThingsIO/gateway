@@ -28,6 +28,38 @@ class PushButton extends Thing {
         baseIcon: '/optimized-images/thing-icons/push_button.svg',
       }
     );
+
+    this.pressedEventName = null;
+    this.doublePressedEventName = null;
+    this.longPressedEventName = null;
+
+    if (description.events) {
+      for (const name in description.events) {
+        switch (description.events[name]['@type']) {
+          case 'PressedEvent':
+            if (this.pressedEventName === null) {
+              this.pressedEventName = name;
+            }
+            break;
+          case 'DoublePressedEvent':
+            if (this.doublePressedEventName === null) {
+              this.doublePressedEventName = name;
+            }
+            break;
+          case 'LongPressedEvent':
+            if (this.longPressedEventName === null) {
+              this.longPressedEventName = name;
+            }
+            break;
+        }
+      }
+    }
+
+    // findProperties gets called as part of super(), so this.pushedProperty
+    // will already be defined at this point.
+    if (!this.pushedProperty) {
+      this.icon.pushed = false;
+    }
   }
 
   /**
@@ -65,6 +97,27 @@ class PushButton extends Thing {
 
     if (name === this.pushedProperty) {
       this.icon.pushed = !!value;
+    }
+  }
+
+  /**
+   * Handle an 'event' message.
+   *
+   * @param {Object} data - Event data
+   */
+  onEvent(data) {
+    super.onEvent(data);
+
+    if (!this.pushedProperty) {
+      for (const name in data) {
+        if (name === this.pressedEventName) {
+          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'single'}));
+        } else if (name === this.doublePressedEventName) {
+          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'double'}));
+        } else if (name === this.longPressedEventName) {
+          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'long'}));
+        }
+      }
     }
   }
 

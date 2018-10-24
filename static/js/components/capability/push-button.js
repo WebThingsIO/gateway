@@ -66,6 +66,8 @@ class PushButtonCapability extends BaseComponent {
     this._label = this.shadowRoot.querySelector('#label');
 
     this._pushed = false;
+    this._pressTimeout = null;
+    this.addEventListener('press', this._onPress.bind(this));
   }
 
   connectedCallback() {
@@ -90,6 +92,65 @@ class PushButtonCapability extends BaseComponent {
       this._icon.classList.remove('pushed');
       this._label.innerText = 'NOT PUSHED';
     }
+  }
+
+  _onPress(e) {
+    switch (e.detail) {
+      case 'single':
+        this._fireSinglePress();
+        break;
+      case 'double':
+        this._fireDoublePress();
+        break;
+      case 'long':
+        this._fireLongPress();
+        break;
+    }
+  }
+
+  _fireSinglePress() {
+    if (this._pressTimeout !== null) {
+      clearTimeout(this._pressTimeout);
+      this._pressTimeout = null;
+    }
+
+    this.pushed = true;
+    this._pressTimeout = setTimeout(() => {
+      this.pushed = false;
+      this._pressTimeout = null;
+    }, 300);
+  }
+
+  _fireDoublePress() {
+    if (this._pressTimeout !== null) {
+      clearTimeout(this._pressTimeout);
+      this._pressTimeout = null;
+    }
+
+    this.pushed = true;
+    this._pressTimeout = setTimeout(() => {
+      this.pushed = false;
+      this._pressTimeout = setTimeout(() => {
+        this.pushed = true;
+        this._pressTimeout = setTimeout(() => {
+          this.pushed = false;
+          this._pressTimeout = null;
+        }, 300);
+      }, 300);
+    }, 300);
+  }
+
+  _fireLongPress() {
+    if (this._pressTimeout !== null) {
+      clearTimeout(this._pressTimeout);
+      this._pressTimeout = null;
+    }
+
+    this.pushed = true;
+    this._pressTimeout = setTimeout(() => {
+      this.pushed = false;
+      this._pressTimeout = null;
+    }, 1500);
   }
 }
 
