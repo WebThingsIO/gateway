@@ -1,9 +1,9 @@
 {
-  "presets": [["es2015", {"modules": false}]],
+  "presets": [["env", {"modules": false}]],
 
   "env": {
     "test": {
-      "presets": ["es2015"],
+      "presets": ["env"],
       "plugins": [
         "dynamic-import-node",
         "transform-object-rest-spread"
