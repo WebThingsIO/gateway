@@ -19,6 +19,11 @@
       <p>Choose a secure web address for your gateway:</p>
       <input type="text" id="subdomain" placeholder="subdomain" required autofocus /><div id="label-subdomain">.{{domain}}</div>
       <input type="email" id="email" placeholder="Email" required /><br>
+      <div id="opt-in-group">
+        <input type="checkbox" id="opt-in" name="opt-in" checked>
+        <label for="opt-in"></label>
+        <span id="opt-in-info">Please send me more information about Mozilla IoT products from time to time.</span>
+      </div>
       <input type="text" id="reclamation-token" placeholder="Reclamation Token" /><br>
       <div id="error-setup" class="error hidden">
         An error occured when setting up the subdomain

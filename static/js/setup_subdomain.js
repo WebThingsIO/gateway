@@ -12,6 +12,7 @@
 
 const subdomain = document.getElementById('subdomain');
 const email = document.getElementById('email');
+const optIn = document.getElementById('opt-in');
 const reclamationToken = document.getElementById('reclamation-token');
 const createDomainButton = document.getElementById('create-domain-button');
 const skipAnchor = document.getElementById('skip-subdomain-anchor');
@@ -91,6 +92,7 @@ function submitForm() {
     email: email.value,
     subdomain: subdomain.value,
     reclamationToken: reclamationToken.value,
+    optout: !optIn.checked,
   };
   fetch('/settings/subscribe', {
     method: 'POST',
@@ -109,6 +111,7 @@ function submitForm() {
         reclaim.innerText = 'Click here';
         reclaim.href = '#';
         reclaim.onclick = () => {
+          document.getElementById('opt-in-group').style.display = 'none';
           reclamationToken.style.display = 'inline-block';
           reclamationToken.focus();
           errorMessage.innerHTML = 'Please check your email for a ' +
