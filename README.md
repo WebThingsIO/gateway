@@ -362,7 +362,6 @@ $ jest src/test/{test-name}.js
 ## Source Code Structure
 
 * **`config/`** - Gateway configuration files
-* **`doc/`** - Additional documentation
 * **`image/`** - Tools for building the Raspberry Pi image
 * **`src/`**
   * **`addons-test/`** - Add-ons used strictly for testing
@@ -372,22 +371,25 @@ $ jest src/test/{test-name}.js
   * **`rules-engine/`** - The rules engine
   * **`test/`** - Integration tests
   * **`views/`** - HTML views
+  * **`wifi-setup/`** - Initial WiFi setup code for Raspberry Pi
   * **`addon-loader.js`** - Script used for starting up Node-based add-ons
   * **`addon-manager.js`** - Manages add-ons (e.g. ZigBee, Z-Wave)
   * **`app.js`** - The main back end
   * **`app-instance.js`** - Application wrapper for integration tests
+  * **`command-utils.js`** - Utilities used by commands parser
   * **`constants.js`** - System-wide constants
   * **`db.js`** - Manages the SQLite3 database
   * **`deferred.js`** - Wraps up a promise in a slightly more convenient manner for passing around, or saving
   * **`ec-crypto.js`** - Elliptic curve helpers for the ES256 curve
   * **`jwt-middleware.js`** - Express middleware for determining authentication status
   * **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
+  * **`mdns-server.js`** - mDNS server
   * **`oauth-types.js`** - OAuth types
   * **`passwords.js`** - Password utilities
   * **`platform.js`** - Platform-specific utilities
+  * **`push-service.js`** - Push notification service
   * **`router.js`** - Routes app URLs to controllers
   * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
-  * **`tunnel_setup.js`** - Express middleware to determine if the tunnel is set up
   * **`user-profile.js`** - Manages persistent user data
   * **`utils.js`** - Various utility functions
 * **`static/`** - Static CSS, JavaScript & image resources for web app front end
