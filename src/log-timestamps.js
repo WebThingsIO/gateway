@@ -16,16 +16,25 @@ const DailyRotateFile = require('winston-daily-rotate-file');
 const UserProfile = require('./user-profile');
 const format = require('util').format;
 
-const formatter = winston.format.printf((info) => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
-});
+class CustomFormatter {
+  transform(info) {
+    const level = info.level.toUpperCase().padEnd(7, ' ');
+    info.message = `[${info.timestamp}] [${level}]: ${info.message}`;
+    return info;
+  }
+}
+
 const logger = winston.createLogger({
   level: 'debug',
   format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.padLevels(),
-    winston.format.timestamp(),
-    formatter
+    winston.format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss.SSS',
+    }),
+    new CustomFormatter(),
+    winston.format.colorize({
+      all: true,
+    }),
+    winston.format.printf((info) => info.message)
   ),
   transports: [
     new winston.transports.Console(),
