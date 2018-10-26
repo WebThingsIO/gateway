@@ -16,25 +16,48 @@ const DailyRotateFile = require('winston-daily-rotate-file');
 const UserProfile = require('./user-profile');
 const format = require('util').format;
 
-const formatter = winston.format.printf((info) => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
+class CustomFormatter {
+  transform(info) {
+    const level = info.level.toUpperCase().padEnd(7, ' ');
+    info.message = `${info.timestamp} ${level}: ${info.message}`;
+    return info;
+  }
+}
+
+const timestampFormat = winston.format.timestamp({
+  format: 'YYYY-MM-DD HH:mm:ss.SSS',
 });
+
 const logger = winston.createLogger({
   level: 'debug',
-  format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.padLevels(),
-    winston.format.timestamp(),
-    formatter
-  ),
   transports: [
-    new winston.transports.Console(),
+    new winston.transports.Console({
+      format: winston.format.combine(
+        timestampFormat,
+        new CustomFormatter(),
+        winston.format.colorize({
+          all: true,
+          colors: {
+            debug: 'white',
+            info: 'dim white',
+            warn: 'yellow',
+            error: 'red',
+          },
+        }),
+        winston.format.printf((info) => info.message)
+      ),
+    }),
     new DailyRotateFile({
       dirname: UserProfile.logDir,
       filename: 'run-app.log',
       zippedArchive: false,
       maxSize: '10m',
       maxFiles: 10,
+      format: winston.format.combine(
+        timestampFormat,
+        new CustomFormatter(),
+        winston.format.printf((info) => info.message)
+      ),
     }),
   ],
   exitOnError: false,
