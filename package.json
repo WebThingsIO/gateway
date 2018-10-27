@@ -37,11 +37,11 @@
     "config": "^2.0.1",
     "dnssd": "^0.4.1",
     "event-to-promise": "^0.8.0",
-    "express": "^4.16.3",
-    "express-fileupload": "^0.4.0",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.0.0",
     "express-handlebars": "^3.0.0",
-    "express-promise-router": "^3.0.2",
-    "express-ws": "^3.0.0",
+    "express-promise-router": "^3.0.3",
+    "express-ws": "^4.0.0",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "greenlock": "^2.2.19",
     "handlebars": "^4.0.12",
@@ -66,7 +66,7 @@
     "web-push": "^3.3.3",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.3.5",
-    "ws": "^5.2.0"
+    "ws": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.49",
