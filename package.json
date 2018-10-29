@@ -109,7 +109,7 @@
     "raw-loader": "^0.5.1",
     "selenium-standalone": "^6.15.3",
     "simple-oauth2": "^1.4.0",
-    "sinon": "^5.0.10",
+    "sinon": "^7.1.0",
     "speaktome-api": "^0.2.1",
     "style-loader": "^0.23.1",
     "ts-jest": "^23.10.4",
