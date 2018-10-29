@@ -175,8 +175,8 @@ function verifyClientAuthorization(client: ClientRegistry,
     return false;
   }
 
-  let clientId = decodeURIComponent(parts[0]);
-  let clientSecret = decodeURIComponent(parts[1]);
+  let clientId = decodeURIComponent(parts[0].replace(/\+/g, '%20'));
+  let clientSecret = decodeURIComponent(parts[1].replace(/\+/g, '%20'));
 
   if (client.id !== clientId || client.secret !== clientSecret) {
     let err: ErrorResponse<UnauthorizedClient> = {
