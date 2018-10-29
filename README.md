@@ -27,7 +27,7 @@ $ sudo apt-get update
 
 Under Fedora Linux:
 ```
-$ sudo dnf --refresh upgrade"
+$ sudo dnf --refresh upgrade
 ```
 
 ### Install pkg-config
