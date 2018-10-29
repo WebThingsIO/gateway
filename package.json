@@ -84,7 +84,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "cache-loader": "^1.2.2",
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "chai-http": "^3.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "codecov": "^3.1.0",
