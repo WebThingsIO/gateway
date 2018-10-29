@@ -17,6 +17,7 @@ env:
     - CC=gcc-4.9
     - CXX=g++-4.9
     - MOZIOT_HOME=/home/travis/.mozilla-iot/test
+    - NODE_TLS_REJECT_UNAUTHORIZED=0
 
 addons:
   firefox: "62.0"
