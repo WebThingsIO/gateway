@@ -538,11 +538,28 @@ const Database = {
    * @return {Promise<number>} resolves to sub id
    */
   createPushSubscription: function(desc) {
-    return this.run(
-      'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
-      [JSON.stringify(desc)]
+    const description = JSON.stringify(desc);
+
+    const insert = () => {
+      return this.run(
+        'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
+        [description]
+      ).then((res) => {
+        return parseInt(res.lastID);
+      });
+    };
+
+    return this.get(
+      'SELECT id FROM pushSubscriptions WHERE subscription = ?',
+      description
     ).then((res) => {
-      return parseInt(res.lastID);
+      if (typeof res === 'undefined') {
+        return insert();
+      }
+
+      return res.id;
+    }).catch(() => {
+      return insert();
     });
   },
 
