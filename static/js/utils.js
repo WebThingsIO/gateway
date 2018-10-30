@@ -150,6 +150,18 @@ const Utils = {
       case 'metres':
         return 'm';
 
+      case 'day':
+      case 'days':
+        return 'd';
+
+      case 'hour':
+      case 'hours':
+        return 'h';
+
+      case 'minute':
+      case 'minutes':
+        return 'min';
+
       case 'second':
       case 'seconds':
         return 's';
