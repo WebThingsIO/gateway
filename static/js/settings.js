@@ -54,7 +54,9 @@ const SettingsScreen = {
 
     this.availableAddons = new Map();
     this.installedAddons = new Map();
-    this.fetchAddonDeferred = null;
+    this.fetchInstalledAddonsDeferred = null;
+    this.fetchAvailableAddonsDeferred = null;
+    this.availableAddonsLastFetched = null;
 
     this.insertTitleElement(this.menu, 'Settings',
                             '/optimized-images/settings-icon.png');
@@ -535,41 +537,21 @@ const SettingsScreen = {
     });
   },
 
-  getAddonList: function(force) {
+  fetchInstalledAddonList: function(force) {
     if (force) {
-      this.fetchAddonDeferred = null;
+      this.fetchInstalledAddonsDeferred = null;
     }
 
-    // If already fetched addon list, return a promise cached.
-    if (this.fetchAddonDeferred) {
-      return this.fetchAddonDeferred.catch(() => {
-        this.fetchAddonDeferred = null;
-        return this.getAddonList();
+    if (this.fetchInstalledAddonsDeferred) {
+      return this.fetchInstalledAddonsDeferred.catch(() => {
+        this.fetchInstalledAddonsDeferred = null;
+        return this.fetchInstalledAddonList();
       });
     }
 
-    this.fetchAddonDeferred = new Promise((resolve, reject) => {
-      this.fetchAddonList().then(() => {
-        resolve();
-      }).catch((e) => {
-        console.error(`Failed to parse add-ons list: ${e}`);
-        reject(e);
-      });
-    });
-
-    return this.fetchAddonDeferred;
-  },
-
-  fetchAddonList: function() {
-    const opts = {
+    this.fetchInstalledAddonsDeferred = fetch('/addons', {
       headers: API.headers(),
-    };
-
-    let api = null, architecture = null;
-
-    // First, get the list of installed add-ons.
-    return fetch('/addons', opts).then((response) => {
-      this.installedAddons.clear();
+    }).then((response) => {
       return response.json();
     }).then((body) => {
       if (!body) {
@@ -577,6 +559,7 @@ const SettingsScreen = {
       }
 
       // Store a map of name->version.
+      this.installedAddons.clear();
       for (const s of body) {
         try {
           const settings = JSON.parse(s.value);
@@ -585,9 +568,34 @@ const SettingsScreen = {
           console.error(`Failed to parse add-on settings: ${err}`);
         }
       }
+    });
 
-      // Now, get the list of available add-ons.
-      return fetch('/settings/addonsInfo', opts);
+    return this.fetchInstalledAddonsDeferred;
+  },
+
+  fetchAvailableAddonList: function(force) {
+    // Force a refresh of this list every 5 minutes in order to pick up
+    // updates in long-running tabs.
+    if (!this.availableAddonsLastFetched ||
+        (new Date()) - this.availableAddonsLastFetched > 5 * 60 * 1000) {
+      force = true;
+    }
+
+    if (force) {
+      this.fetchAvailableAddonsDeferred = null;
+    }
+
+    if (this.fetchAvailableAddonsDeferred) {
+      return this.fetchAvailableAddonsDeferred.catch(() => {
+        this.fetchAvailableAddonsDeferred = null;
+        return this.fetchAvailableAddonList();
+      });
+    }
+
+    let api = null, architecture = null;
+
+    this.fetchAvailableAddonsDeferred = fetch('/settings/addonsInfo', {
+      headers: API.headers(),
     }).then((response) => {
       return response.json();
     }).then((data) => {
@@ -597,11 +605,12 @@ const SettingsScreen = {
 
       api = data.api;
       architecture = data.architecture;
+
       return fetch(data.url, {method: 'GET', cache: 'reload'});
     }).then((resp) => {
-      this.availableAddons.clear();
       return resp.json();
     }).then((body) => {
+      this.availableAddons.clear();
       for (const addon of body) {
         // Skip incompatible add-ons.
         if (addon.api.min > api || addon.api.max < api) {
@@ -628,6 +637,8 @@ const SettingsScreen = {
         }
       }
     });
+
+    return this.fetchAvailableAddonsDeferred;
   },
 
   showAddonSettings: function() {
@@ -638,27 +649,48 @@ const SettingsScreen = {
     this.addonMainSettings.classList.remove('hidden');
     this.discoverAddonsButton.classList.remove('hidden');
 
-    this.getAddonList(true).then(() => {
+    const components = new Map();
+
+    // First, get the list of installed add-ons. Do this separately so that the
+    // add-ons can be displayed when no internet connection is present.
+    this.fetchInstalledAddonList(true).then(() => {
       const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
       for (const name of Array.from(this.installedAddons.keys()).sort()) {
         const addon = this.installedAddons.get(name);
-        let updateUrl = null, updateVersion = null, updateChecksum = null;
+        components.set(
+          name,
+          new InstalledAddon(addon, this.installedAddons, this.availableAddons)
+        );
+      }
+
+      // Now, we can attempt to get the list of available add-ons.
+      return this.fetchAvailableAddonList(true);
+    }).then(() => {
+      // Compare versions of installed and available add-ons, signaling
+      // available updates where necessary.
+      for (const name of Array.from(this.installedAddons.keys()).sort()) {
+        const addon = this.installedAddons.get(name);
+
         if (this.availableAddons.has(name)) {
           const available = this.availableAddons.get(name);
           const cmp = this.compareSemver(addon.version, available.version);
+
           if (cmp < 0) {
-            updateUrl = available.url;
-            updateVersion = available.version;
-            updateChecksum = available.checksum;
+            const component = components.get(name);
+
+            if (component) {
+              component.setUpdateAvailable(
+                available.url,
+                available.version,
+                available.checksum
+              );
+            }
           }
         }
-
-        new InstalledAddon(addon, this.installedAddons, this.availableAddons,
-                           updateUrl, updateVersion, updateChecksum);
       }
-    });
+    }).catch(console.error);
   },
 
   showAddonConfigScreen: function(id) {
@@ -670,7 +702,8 @@ const SettingsScreen = {
     this.addonConfigTitleName.textContent = `Configure ${id}`;
     this.view.classList.add('dark');
 
-    this.getAddonList(false).then(() => {
+    // Force an update in case the add-on was previously updated.
+    this.fetchInstalledAddonList(true).then(() => {
       const existingForm =
         this.addonConfigSettings.querySelector('.json-schema-form');
       if (existingForm) {
@@ -678,7 +711,7 @@ const SettingsScreen = {
       }
       const addon = this.installedAddons.get(id);
       new AddonConfig(id, addon);
-    });
+    }).catch(console.error);
   },
 
   showDiscoveredAddonsScreen: function() {
@@ -689,7 +722,9 @@ const SettingsScreen = {
     this.addonDiscoverySettings.classList.remove('hidden');
     this.view.classList.add('dark');
 
-    this.getAddonList(false).then(() => {
+    this.fetchInstalledAddonList(false).then(() => {
+      return this.fetchAvailableAddonList(false);
+    }).then(() => {
       const addonList = document.getElementById('discovered-addons-list');
       addonList.innerHTML = '';
 
@@ -698,7 +733,7 @@ const SettingsScreen = {
         .forEach((x) => new DiscoveredAddon(x[1],
                                             this.installedAddons,
                                             this.availableAddons));
-    });
+    }).catch(console.error);
   },
 
   showExperimentCheckbox: function(experiment, checkboxId) {

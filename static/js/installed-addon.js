@@ -21,13 +21,9 @@ const page = require('page');
  *                 SettingsScreen.
  * @param {Object} availableAddonsMap Handle to the availableAddons map from
  *                 SettingsScreen.
- * @param {String} updateUrl URL for updated add-on package
- * @param {String} updateVersion Version of updated add-on package
- * @param {String} updateChecksum Checksum of the updated add-on package
  */
 const InstalledAddon = function(metadata, installedAddonsMap,
-                                availableAddonsMap, updateUrl, updateVersion,
-                                updateChecksum) {
+                                availableAddonsMap) {
   this.name = metadata.name;
   this.displayName = metadata.display_name;
   this.description = metadata.description;
@@ -37,9 +33,9 @@ const InstalledAddon = function(metadata, installedAddonsMap,
   this.enabled = metadata.moziot.enabled;
   this.config = metadata.moziot.config;
   this.schema = metadata.moziot.schema;
-  this.updateUrl = updateUrl;
-  this.updateVersion = updateVersion;
-  this.updateChecksum = updateChecksum;
+  this.updateUrl = null;
+  this.updateVersion = null;
+  this.updateChecksum = null;
   this.container = document.getElementById('installed-addons-list');
   this.installedAddonsMap = installedAddonsMap;
   this.availableAddonsMap = availableAddonsMap;
@@ -59,7 +55,6 @@ InstalledAddon.prototype.view = function() {
     toggleButtonClass = 'addon-settings-enable';
   }
 
-  const updateButtonClass = this.updateUrl ? '' : 'hidden';
   const configButtonClass = this.schema ? '' : 'hidden';
 
   const name = this.displayName || this.name;
@@ -89,7 +84,7 @@ InstalledAddon.prototype.view = function() {
           Configure
         </button>
         <button id="addon-update-${Utils.escapeHtmlForIdClass(this.name)}"
-          class="text-button addon-settings-update ${updateButtonClass}">
+          class="text-button addon-settings-update hidden">
           Update
         </button>
         <span class="addon-settings-spacer"></span>
@@ -126,6 +121,23 @@ InstalledAddon.prototype.render = function() {
   const toggleButton = document.getElementById(
     `addon-toggle-${Utils.escapeHtmlForIdClass(this.name)}`);
   toggleButton.addEventListener('click', this.handleToggle.bind(this));
+};
+
+/**
+ * Update the view to indicate that an update is available.
+ *
+ * @param {string} url - URL for updated add-on package
+ * @param {string} version - Version of updated add-on package
+ * @param {string} checksum - Checksum of the updated add-on package
+ */
+InstalledAddon.prototype.setUpdateAvailable = function(url, version, checksum) {
+  this.updateUrl = url;
+  this.updateVersion = version;
+  this.updateChecksum = checksum;
+
+  const button = document.getElementById(
+    `addon-update-${Utils.escapeHtmlForIdClass(this.name)}`);
+  button.classList.remove('hidden');
 };
 
 /**
