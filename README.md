@@ -284,10 +284,11 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
     ```
 
 * Add Firewall exceptions (Fedora Linux Only)
-    *
+
     ```
     $ sudo firewall-cmd --zone=public --add-port=4443/tcp --permanent
     $ sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=5353/udp --permanent
     ```
 
 
