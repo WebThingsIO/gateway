@@ -25,6 +25,7 @@ const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
 const UserProfile = require('../user-profile');
 const mDNSserver = require('../mdns-server');
+const pkg = require('../../package.json');
 
 const SettingsController = PromiseRouter();
 
@@ -318,6 +319,10 @@ SettingsController.get('/addonsInfo', (request, response) => {
     url: config.get('addonManager.listUrl'),
     api: config.get('addonManager.api'),
     architecture: Platform.getArchitecture(),
+    version: pkg.version,
+    nodeVersion: Platform.getNodeVersion(),
+    pythonVersions: Platform.getPythonVersions(),
+    testAddons: config.get('addonManager.testAddons'),
   });
 });
 

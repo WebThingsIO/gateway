@@ -27,6 +27,7 @@ const tar = require('tar');
 const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
+const {URLSearchParams} = require('url');
 
 const pkg = require('../package.json');
 
@@ -1095,36 +1096,42 @@ class AddonManager extends EventEmitter {
    * @returns A promise which is resolved when updating is complete.
    */
   async updateAddons() {
+    const url = config.get('addonManager.listUrl');
     const api = config.get('addonManager.api');
     const architecture = Platform.getArchitecture();
+    const version = pkg.version;
+    const nodeVersion = Platform.getNodeVersion();
+    const pythonVersions = Platform.getPythonVersions();
     const addonPath = UserProfile.addonsDir;
     const available = {};
 
     console.log('Checking for add-on updates...');
 
     try {
-      const response = await fetch(
-        config.get('addonManager.listUrl'),
-        {headers: {'User-Agent': `mozilla-iot-gateway/${pkg.version}`}});
+      const params = new URLSearchParams();
+      params.set('api', api);
+      params.set('arch', architecture);
+      params.set('version', version);
+      params.set('node', nodeVersion);
+
+      if (pythonVersions && pythonVersions.length > 0) {
+        params.set('python', pythonVersions.join(','));
+      }
+
+      const response = await fetch(`${url}?${params.toString()}`, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': `mozilla-iot-gateway/${version}`,
+        },
+      });
       const list = await response.json();
 
       for (const addon of list) {
-        // Skip incompatible add-ons.
-        if (addon.api.min > api || addon.api.max < api) {
-          continue;
-        }
-
-        // Only support architecture-compatible add-ons.
-        for (const arch in addon.packages) {
-          if (arch === 'any' || arch === architecture) {
-            available[addon.name] = {
-              version: addon.packages[arch].version,
-              url: addon.packages[arch].url,
-              checksum: addon.packages[arch].checksum,
-            };
-            break;
-          }
-        }
+        available[addon.name] = {
+          version: addon.version,
+          url: addon.url,
+          checksum: addon.checksum,
+        };
       }
     } catch (e) {
       console.error('Failed to parse add-on list.');

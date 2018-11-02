@@ -23,8 +23,10 @@ describe('Addon', () => {
 
     const discoverAddonPage =
          await addonSettingsPage.openDiscoverAddonPage();
-    addon = await discoverAddonPage.findAddon('Virtual Things');
-    expect(addon).not.toBeNull();
+    await waitForExpect(async () => {
+      addon = await discoverAddonPage.findAddon('Virtual Things');
+      expect(addon).not.toBeNull();
+    }, 10000);
 
     await addon.add();
     await browser.waitUntil(async () => {

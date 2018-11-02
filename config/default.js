@@ -28,6 +28,7 @@ module.exports = {
   addonManager: {
     api: 2,
     listUrl: 'https://api.mozilla-iot.org:8443/addons',
+    testAddons: false,
   },
   database: {
     removeBeforeOpen: false,
