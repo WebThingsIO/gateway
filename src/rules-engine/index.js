@@ -14,9 +14,6 @@ const JSONWebToken = require('../models/jsonwebtoken');
 const Rule = require('./Rule');
 
 const index = PromiseRouter();
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 const engine = new Engine();
 
 /**

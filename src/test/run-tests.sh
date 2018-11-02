@@ -39,4 +39,4 @@ python3 "${MOZIOT_TEST_HOME}/intent-parser/intent-parser-server.py" &
 INTENT_SERVER_PID=$!
 
 # Run the tests
-jest --runInBand "$@"
+NODE_TLS_REJECT_UNAUTHORIZED=0 jest --runInBand "$@"

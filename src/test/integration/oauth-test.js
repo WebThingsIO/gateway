@@ -79,7 +79,7 @@ describe('oauth/', function() {
         const token = oauth2.accessToken.create(result);
         res.json(token);
       }).catch((err) => {
-        res.status(400).json(err);
+        res.status(400).json(err.data.payload);
       });
     });
 
@@ -103,10 +103,22 @@ describe('oauth/', function() {
         secret: CLIENT_SECRET,
       },
       auth: {
-        tokenHost: `https://127.0.0.1:${server.address().port
-        }${Constants.OAUTH_PATH}`,
+        tokenHost: `https://127.0.0.1:${server.address().port}`,
+      },
+      options: {
+        authorizationMethod: 'body',
+      },
+      http: {
+        headers: {
+        },
       },
     }, configProvided || {});
+
+    const clientId = encodeURIComponent(config.client.id).replace(/%20/g, '+');
+    const clientSecret =
+      encodeURIComponent(config.client.secret).replace(/%20/g, '+');
+    const token = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    config.http.headers.Authorization = `Basic ${token}`;
 
     oauth2 = simpleOAuth2.create(config);
     customCallbackHandler = customCallbackHandlerProvided;
@@ -303,7 +315,7 @@ describe('oauth/', function() {
         const token = oauth2.accessToken.create(result);
         res.json(token);
       }).catch((err) => {
-        res.status(400).json(err.context);
+        res.status(400).json(err.data.payload);
       });
     });
 

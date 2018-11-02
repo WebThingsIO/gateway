@@ -4,9 +4,6 @@ const config = require('config');
 const fs = require('fs');
 const nanomsg = require('nanomsg');
 
-require('string.prototype.padstart').shim();
-require('string.prototype.padend').shim();
-
 const appInstance = require('../app-instance');
 
 const DEBUG = false;
