@@ -78,7 +78,7 @@ nvm use ${NODE_VERSION}
 npm install -g yarn
 
 # Build the node modules, cross compiling any native code.
-(cd ${GATEWAY}; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm; node_modules/.bin/webpack)
+(cd ${GATEWAY}; yarn --ignore-scripts --production; npm rebuild --arch=${ARCH} --target_arch=arm; node_modules/.bin/webpack)
 
 set -x
 
