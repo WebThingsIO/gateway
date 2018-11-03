@@ -145,7 +145,7 @@ const AddThingScreen = {
    */
   show: function() {
     this.addByUrlAnchor.classList.add('hidden');
-    SettingsScreen.fetchAddonList().then(() => {
+    SettingsScreen.fetchInstalledAddonList(true).then(() => {
       if (SettingsScreen.installedAddons.has('thing-url-adapter')) {
         const addon = SettingsScreen.installedAddons.get('thing-url-adapter');
         if (addon.moziot.enabled) {
