@@ -4,6 +4,7 @@ set -x
 
 MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 args=""
+start_task="start"
 
 is_docker_container() {
   if [ -f /.dockerenv ]; then
@@ -18,6 +19,7 @@ is_docker_container() {
 }
 if ! is_docker_container; then
   args="$args --check-wifi"
+  start_task="run-only"
   if [ ! -f .post_upgrade_complete ]; then
     ./tools/post-upgrade.sh
   fi
@@ -36,7 +38,7 @@ run_app() {
   echo "npm version"
   npm --version
   echo "Starting gateway ..."
-  npm start -- $args
+  npm run $start_task -- $args
 }
 
 mkdir -p "${MOZIOT_HOME}/log"

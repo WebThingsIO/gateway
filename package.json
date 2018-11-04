@@ -15,7 +15,8 @@
     "watch": "npm-run-all --parallel start watch:build",
     "watch:build": "webpack --watch",
     "debug-ide": "webpack && node --inspect=5858 build/gateway.js",
-    "debug": "webpack && node --inspect build/gateway.js"
+    "debug": "webpack && node --inspect build/gateway.js",
+    "run-only": "node build/gateway.js"
   },
   "repository": {
     "type": "git",
