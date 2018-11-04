@@ -1183,6 +1183,8 @@ class AddonManager extends EventEmitter {
           }
         }
       }
+
+      console.log('Finished updating add-ons');
     });
   }
 }
