@@ -18,6 +18,44 @@ function getArchitecture() {
 }
 
 /**
+ * Get the current node version.
+ */
+function getNodeVersion() {
+  return process.config.variables.node_module_version;
+}
+
+/**
+ * Get a list of installed Python versions.
+ */
+function getPythonVersions() {
+  const versions = new Set();
+  const parse = (output) => {
+    const parts = output.split(' ');
+    if (parts.length === 2) {
+      const match = parts[1].match(/^\d+\.\d+/);
+      if (match) {
+        versions.add(match[0]);
+      }
+    }
+  };
+
+  for (const bin of ['python', 'python2', 'python3']) {
+    const proc = child_process.spawnSync(
+      bin,
+      ['--version'],
+      {encoding: 'utf8'}
+    );
+
+    if (proc.status === 0) {
+      const output = proc.stdout || proc.stderr;
+      parse(output);
+    }
+  }
+
+  return Array.from(versions).sort();
+}
+
+/**
  * Determine whether or not the SSH toggle is implemented.
  *
  * @return {Boolean} indicating implementation status
@@ -199,6 +237,8 @@ function isRaspberryPi() {
 
 module.exports = {
   getArchitecture,
+  getNodeVersion,
+  getPythonVersions,
   isToggleSshImplemented,
   isSshEnabled,
   toggleSsh,

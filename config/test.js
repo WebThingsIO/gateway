@@ -20,7 +20,7 @@ module.exports = {
   },
   behindForwarding: false,
   addonManager: {
-    listUrl: 'https://raw.githubusercontent.com/mozilla-iot/addon-list/master/test.json',
+    testAddons: true,
   },
   ipc: {
     protocol: 'inproc',

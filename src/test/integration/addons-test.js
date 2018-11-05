@@ -17,7 +17,10 @@ const fetch = require('node-fetch');
 const jsonfile = require('jsonfile');
 const path = require('path');
 const pFinal = require('../promise-final');
+const Platform = require('../../platform');
+const pkg = require('../../../package.json');
 const UserProfile = require('../../user-profile');
+const {URLSearchParams} = require('url');
 
 const testManifestFilename = path.join(UserProfile.addonsDir,
                                        'test-adapter', 'package.json');
@@ -37,6 +40,17 @@ const testManifest = {
     enabled: true,
   },
 };
+
+const addonParams = new URLSearchParams();
+addonParams.set('api', config.get('addonManager.api'));
+addonParams.set('arch', Platform.getArchitecture());
+addonParams.set('version', pkg.version);
+addonParams.set('node', Platform.getNodeVersion());
+addonParams.set('python', Platform.getPythonVersions().join(','));
+addonParams.set('test', config.get('addonManager.testAddons') ? '1' : '0');
+
+const addonUrl =
+  `${config.get('addonManager.listUrl')}?${addonParams.toString()}`;
 
 function copyManifest(manifest) {
   // This essentially does a deep copy.
@@ -179,27 +193,24 @@ describe('addons', function() {
     expect(Array.isArray(res1.body)).toBe(true);
     expect(res1.body.length).toEqual(0);
 
-    const res2 = await fetch(config.get('addonManager.listUrl'));
+    const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
     expect(list[0]).toHaveProperty('name');
     expect(list[0]).toHaveProperty('display_name');
     expect(list[0]).toHaveProperty('description');
-    expect(list[0]).toHaveProperty('packages');
-    expect(list[0]).toHaveProperty('api');
-    expect(list[0].api).toHaveProperty('min');
-    expect(list[0].api).toHaveProperty('max');
-    expect(list[0].packages).toHaveProperty('any');
-    expect(list[0].packages.any).toHaveProperty('version');
-    expect(list[0].packages.any).toHaveProperty('url');
-    expect(list[0].packages.any).toHaveProperty('checksum');
+    expect(list[0]).toHaveProperty('author');
+    expect(list[0]).toHaveProperty('homepage');
+    expect(list[0]).toHaveProperty('url');
+    expect(list[0]).toHaveProperty('version');
+    expect(list[0]).toHaveProperty('checksum');
 
     const res3 = await pFinal(chai.request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({name: list[0].name,
-             url: list[0].packages.any.url,
+             url: list[0].url,
              checksum: 'invalid'}));
     expect(res3.status).toEqual(400);
   });
@@ -214,28 +225,34 @@ describe('addons', function() {
     expect(Array.isArray(res1.body)).toBe(true);
     expect(res1.body.length).toEqual(0);
 
-    const res2 = await fetch(config.get('addonManager.listUrl'));
+    const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
-    expect(list[0]).toHaveProperty('name');
-    expect(list[0]).toHaveProperty('display_name');
-    expect(list[0]).toHaveProperty('description');
-    expect(list[0]).toHaveProperty('packages');
-    expect(list[0]).toHaveProperty('api');
-    expect(list[0].api).toHaveProperty('min');
-    expect(list[0].api).toHaveProperty('max');
-    expect(list[0].packages).toHaveProperty('any');
-    expect(list[0].packages.any).toHaveProperty('version');
-    expect(list[0].packages.any).toHaveProperty('url');
-    expect(list[0].packages.any).toHaveProperty('checksum');
+
+    let addon = {};
+    for (const entry of list) {
+      if (entry.name === 'example-adapter') {
+        addon = entry;
+        break;
+      }
+    }
+
+    expect(addon).toHaveProperty('name');
+    expect(addon).toHaveProperty('display_name');
+    expect(addon).toHaveProperty('description');
+    expect(addon).toHaveProperty('author');
+    expect(addon).toHaveProperty('homepage');
+    expect(addon).toHaveProperty('url');
+    expect(addon).toHaveProperty('version');
+    expect(addon).toHaveProperty('checksum');
 
     const res3 = await chai.request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: list[0].name,
-             url: list[0].packages.any.url,
-             checksum: list[0].packages.any.checksum});
+      .send({name: addon.name,
+             url: addon.url,
+             checksum: addon.checksum});
     expect(res3.status).toEqual(200);
 
     const res4 = await chai.request(server)
@@ -246,7 +263,7 @@ describe('addons', function() {
     expect(res4.status).toEqual(200);
     expect(Array.isArray(res4.body)).toBe(true);
     expect(res4.body.length).toEqual(1);
-    expect(res4.body[0].key.indexOf(list[0].name) > -1).toBe(true);
+    expect(res4.body[0].key.indexOf(addon.name) > -1).toBe(true);
   });
 
   it('Uninstall an add-on', async () => {
