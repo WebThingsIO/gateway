@@ -77,18 +77,28 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     e.stopPropagation();
   };
 
-  if (property.type === 'number') {
-    let ltOption, gtOption;
+  if (property.type === 'number' || property.type === 'integer') {
+    let ltOption, gtOption, eqOption;
     if (ruleFragment.trigger) {
       ltOption = document.createElement('option');
       ltOption.textContent = '<';
       ltOption.classList.add('lt-option');
+
+      if (property.type === 'integer') {
+        eqOption = document.createElement('option');
+        eqOption.textContent = '=';
+        eqOption.classList.add('eq-option');
+      }
+
       gtOption = document.createElement('option');
       gtOption.textContent = '>';
       gtOption.classList.add('gt-option');
 
       const select = document.createElement('select');
       select.appendChild(ltOption);
+      if (property.type === 'integer') {
+        select.appendChild(eqOption);
+      }
       select.appendChild(gtOption);
       select.addEventListener('click', stopPropagation);
       elt.appendChild(select);
@@ -97,19 +107,27 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     const valueInput = document.createElement('input');
     valueInput.classList.add('value-input');
     valueInput.type = 'number';
+    valueInput.step = property.type === 'number' ? 'any' : '1';
     valueInput.addEventListener('click', stopPropagation);
     elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
+      const value = property.type === 'number' ?
+        parseFloat(valueInput.value) :
+        parseInt(valueInput.value, 10);
+      valueInput.value = value;
+
       if (ruleFragment.trigger) {
         if (ltOption.selected) {
           ruleFragment.trigger.levelType = 'LESS';
         } else if (gtOption.selected) {
           ruleFragment.trigger.levelType = 'GREATER';
+        } else if (property.type === 'integer' && eqOption.selected) {
+          ruleFragment.trigger.levelType = 'EQUAL';
         }
-        ruleFragment.trigger.value = parseFloat(valueInput.value);
+        ruleFragment.trigger.value = value;
       } else {
-        ruleFragment.effect.value = parseFloat(valueInput.value);
+        ruleFragment.effect.value = value;
       }
       this.devicePropertyBlock.rulePart = ruleFragment;
       this.devicePropertyBlock.onRuleChange();
@@ -171,10 +189,13 @@ PropertySelect.prototype.updateOption = function(optionElt) {
 
   const valueInput = optionElt.querySelector('.value-input');
 
-  if (property.type === 'number') {
+  if (property.type === 'number' || property.type === 'integer') {
     if (ruleFragment.trigger) {
       if (ruleFragment.trigger.levelType === 'GREATER') {
         optionElt.querySelector('.gt-option').setAttribute('selected', '');
+      } else if (property.type === 'integer' &&
+                 ruleFragment.trigger.levelType === 'EQUAL') {
+        optionElt.querySelector('.eq-option').setAttribute('selected', '');
       } else {
         optionElt.querySelector('.lt-option').setAttribute('selected', '');
       }
@@ -237,10 +258,10 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             value: value,
           },
         });
-      } else if (property.type === 'number') {
+      } else if (property.type === 'number' || property.type === 'integer') {
         const max = property.maximum || property.max || 0;
         const min = property.minimum || property.min || 0;
-        const value = (max + min) / 2;
+        const value = Math.round((max + min) / 2);
 
         this.addOption(name, {
           trigger: {
@@ -292,7 +313,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             value: 'text',
           },
         });
-      } else if (property.type === 'number') {
+      } else if (property.type === 'number' || property.type === 'integer') {
         const max = property.maximum || property.max || 0;
         const min = property.minimum || property.min || 0;
         const value = (max + min) / 2;

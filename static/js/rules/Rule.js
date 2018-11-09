@@ -182,6 +182,8 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
     triggerStr += `${trigger.property.name} is `;
     if (trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
+    } else if (trigger.levelType === 'EQUAL') {
+      triggerStr += 'equal to ';
     } else {
       triggerStr += 'greater than ';
     }

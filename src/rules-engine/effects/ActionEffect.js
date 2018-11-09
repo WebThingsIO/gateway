@@ -6,6 +6,7 @@
 
 const assert = require('assert');
 const fetch = require('node-fetch');
+const https = require('https');
 const Effect = require('./Effect');
 const Settings = require('../../models/settings');
 
@@ -62,6 +63,10 @@ class ActionEffect extends Effect {
     const href = `${await Settings.get('RulesEngine.gateway') + this.thing.href
     }/actions`;
     const jwt = await Settings.get('RulesEngine.jwt');
+    let agent = null;
+    if (href.startsWith('https')) {
+      agent = new https.Agent({rejectUnauthorized: false});
+    }
 
     const res = await fetch(href, {
       method: 'POST',
@@ -71,6 +76,7 @@ class ActionEffect extends Effect {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(descr),
+      agent,
     });
     if (!res.ok) {
       console.warn('Unable to dispatch action', res);

@@ -32,7 +32,7 @@ class ThingConnection {
     const gateway = await Settings.get('RulesEngine.gateway');
     const wsHref = `${gateway.replace(/^http/, 'ws') + this.href}?jwt=${jwt}`;
 
-    this.ws = new WebSocket(wsHref);
+    this.ws = new WebSocket(wsHref, {rejectUnauthorized: false});
     this.ws.on('message', this.onMessage);
     await e2p(this.ws, 'open');
 
