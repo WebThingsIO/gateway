@@ -25,7 +25,8 @@ const RuleUtils = {
         case 'PushButton':
           return '/optimized-images/rule-icons/push_button.svg';
         default:
-          return '/optimized-images/rule-icons/thing.svg';
+          return description.iconHref ||
+            '/optimized-images/rule-icons/thing.svg';
       }
     } else {
       switch (description.type) {
@@ -45,7 +46,8 @@ const RuleUtils = {
         case 'smartPlug':
           return '/optimized-images/rule-icons/smart_plug.svg';
         default:
-          return '/optimized-images/rule-icons/thing.svg';
+          return description.iconHref ||
+            '/optimized-images/rule-icons/thing.svg';
       }
     }
   },
