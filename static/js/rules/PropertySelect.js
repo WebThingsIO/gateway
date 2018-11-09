@@ -108,13 +108,28 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     valueInput.classList.add('value-input');
     valueInput.type = 'number';
     valueInput.step = property.type === 'number' ? 'any' : '1';
+    if (property.hasOwnProperty('minimum')) {
+      valueInput.min = `${property.minimum}`;
+    }
+    if (property.hasOwnProperty('maximum')) {
+      valueInput.max = `${property.maximum}`;
+    }
     valueInput.addEventListener('click', stopPropagation);
     elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
-      const value = property.type === 'number' ?
+      let value = property.type === 'number' ?
         parseFloat(valueInput.value) :
         parseInt(valueInput.value, 10);
+
+      if (property.hasOwnProperty('minimum')) {
+        value = Math.max(value, property.minimum);
+      }
+
+      if (property.hasOwnProperty('maximum')) {
+        value = Math.min(value, property.maximum);
+      }
+
       valueInput.value = value;
 
       if (ruleFragment.trigger) {
