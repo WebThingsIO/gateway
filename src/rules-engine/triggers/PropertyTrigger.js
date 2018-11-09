@@ -13,7 +13,7 @@ const Property = require('../Property');
  */
 class PropertyTrigger extends Trigger {
   constructor(desc) {
-    super();
+    super(desc);
     this.property = new Property(desc.property);
     this.onValueChanged = this.onValueChanged.bind(this);
   }

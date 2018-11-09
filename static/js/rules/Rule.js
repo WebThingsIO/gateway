@@ -161,7 +161,7 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
     if (!triggerThing) {
       return null;
     }
-    return `${triggerThing.name} event "${trigger.event}" occurs`;
+    return `${triggerThing.name} event "${trigger.label}" occurs`;
   }
 
   const triggerThing = this.gateway.things.filter(
@@ -177,9 +177,14 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
     if (!trigger.onValue) {
       triggerStr += 'not ';
     }
-    triggerStr += trigger.property.name;
+
+    if (trigger.property.name === 'on') {
+      triggerStr += 'on';
+    } else {
+      triggerStr += trigger.label;
+    }
   } else if (trigger.type === 'LevelTrigger') {
-    triggerStr += `${trigger.property.name} is `;
+    triggerStr += `${trigger.label} is `;
     if (trigger.levelType === 'LESS') {
       triggerStr += 'less than ';
     } else if (trigger.levelType === 'EQUAL') {
@@ -189,7 +194,7 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
     }
     triggerStr += trigger.value;
   } else if (trigger.type === 'EqualityTrigger') {
-    triggerStr += `${trigger.property.name} is ${trigger.value}`;
+    triggerStr += `${trigger.label} is ${trigger.value}`;
   } else {
     console.error('Unknown trigger type', trigger);
     return null;
@@ -239,7 +244,7 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
     if (!effectThing) {
       return null;
     }
-    return `do ${effectThing.name} action "${effect.action}"`;
+    return `do ${effectThing.name} action "${effect.label}"`;
   }
 
   const effectThing = this.gateway.things.filter(
@@ -258,7 +263,7 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
       effectStr += 'off';
     }
   } else {
-    effectStr += `set ${effectThing.name} ${effect.property.name} to `;
+    effectStr += `set ${effectThing.name} ${effect.label} to `;
     effectStr += effect.value;
   }
   return effectStr;

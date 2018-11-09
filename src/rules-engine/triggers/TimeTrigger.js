@@ -12,7 +12,7 @@ const Trigger = require('./Trigger');
  */
 class TimeTrigger extends Trigger {
   constructor(desc) {
-    super();
+    super(desc);
     this.time = desc.time;
     this.sendOn = this.sendOn.bind(this);
     this.sendOff = this.sendOff.bind(this);

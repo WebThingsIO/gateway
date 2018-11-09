@@ -224,20 +224,22 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
     if (!property.name) {
       property.name = propName;
     }
-    const name = Utils.capitalize(property.name);
+    const name = property.label || Utils.capitalize(property.name);
     if (role === 'trigger') {
       if (property.type === 'boolean') {
         const triggerOn = {
           type: 'BooleanTrigger',
           property: property,
           onValue: true,
+          label: name,
         };
         const triggerOff = Object.assign({}, triggerOn, {
           onValue: false,
         });
-        const onName = name;
+        let onName = name;
         let offName = `Not ${onName}`;
         if (property.name === 'on') {
+          onName = 'On';
           offName = 'Off';
         }
         this.addOption(onName, {
@@ -256,6 +258,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             type: 'EqualityTrigger',
             property: property,
             value: value,
+            label: name,
           },
         });
       } else if (property.type === 'number' || property.type === 'integer') {
@@ -269,6 +272,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             property: property,
             levelType: 'LESS',
             value: value,
+            label: name,
           },
         });
       }
@@ -282,13 +286,15 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           type: 'PulseEffect',
           property: property,
           value: true,
+          label: name,
         };
         const effectOff = Object.assign({}, effectOn, {
           value: false,
         });
-        const onName = name;
+        let onName = name;
         let offName = `Not ${onName}`;
         if (property.name === 'on') {
+          onName = 'On';
           offName = 'Off';
         }
         this.addOption(onName, {
@@ -303,6 +309,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             type: 'PulseEffect',
             property: property,
             value: '#ffffff',
+            label: name,
           },
         });
       } else if (property.type === 'string') {
@@ -311,6 +318,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             type: 'PulseEffect',
             property: property,
             value: 'text',
+            label: name,
           },
         });
       } else if (property.type === 'number' || property.type === 'integer') {
@@ -322,6 +330,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
             type: 'PulseEffect',
             property: property,
             value: value,
+            label: name,
           },
         });
       }
@@ -342,8 +351,9 @@ PropertySelect.prototype.addEventOptions = function() {
         href: this.thing.href,
       },
       event: name,
+      label: this.thing.events[name].label || name,
     };
-    this.addOption(`Event "${name}"`, {
+    this.addOption(`Event "${eventTrigger.label}"`, {
       trigger: eventTrigger,
     });
   }
@@ -360,9 +370,10 @@ PropertySelect.prototype.addActionOptions = function() {
         href: this.thing.href,
       },
       action: name,
+      label: this.thing.actions[name].label || name,
       parameters: {},
     };
-    this.addOption(`Action "${name}"`, {
+    this.addOption(`Action "${actionEffect.label}"`, {
       effect: actionEffect,
     });
   }
