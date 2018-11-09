@@ -107,7 +107,13 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     const valueInput = document.createElement('input');
     valueInput.classList.add('value-input');
     valueInput.type = 'number';
-    valueInput.step = property.type === 'number' ? 'any' : '1';
+    if (property.hasOwnProperty('multipleOf')) {
+      valueInput.step = `${property.multipleOf}`;
+    } else if (property.type === 'number') {
+      valueInput.step = 'any';
+    } else {
+      valueInput.step = '1';
+    }
     if (property.hasOwnProperty('minimum')) {
       valueInput.min = `${property.minimum}`;
     }
@@ -118,18 +124,19 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
     elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
-      let value = property.type === 'number' ?
-        parseFloat(valueInput.value) :
-        parseInt(valueInput.value, 10);
-
+      let value = parseFloat(valueInput.value);
+      if (property.hasOwnProperty('multipleOf')) {
+        value = Math.round(value / property.multipleOf) * property.multipleOf;
+      }
+      if (property.type === 'integer') {
+        value = parseInt(valueInput.value, 10);
+      }
       if (property.hasOwnProperty('minimum')) {
         value = Math.max(value, property.minimum);
       }
-
       if (property.hasOwnProperty('maximum')) {
         value = Math.min(value, property.maximum);
       }
-
       valueInput.value = value;
 
       if (ruleFragment.trigger) {

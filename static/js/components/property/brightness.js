@@ -12,12 +12,6 @@
 const SliderProperty = require('./slider');
 
 class BrightnessProperty extends SliderProperty {
-  connectedCallback() {
-    this.min = '0';
-    this.max = '100';
-    this.step = '1';
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-brightness-property',
