@@ -217,6 +217,8 @@
 .property-select.open {
   transform: translate(0, 0);
   z-index: 20;
+  max-height: 20rem;
+  overflow: auto;
 }
 
 .property-select.open > .property-select-option.selected {

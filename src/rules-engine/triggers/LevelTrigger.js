@@ -10,6 +10,7 @@ const PropertyTrigger = require('./PropertyTrigger');
 
 const LevelTriggerTypes = {
   LESS: 'LESS',
+  EQUAL: 'EQUAL',
   GREATER: 'GREATER',
 };
 
@@ -23,9 +24,12 @@ class LevelTrigger extends PropertyTrigger {
    */
   constructor(desc) {
     super(desc);
-    assert(this.property.type === 'number');
+    assert(this.property.type === 'number' || this.property.type === 'integer');
     assert(typeof desc.value === 'number');
     assert(LevelTriggerTypes[desc.levelType]);
+    if (desc.levelType === 'EQUAL') {
+      assert(this.property.type === 'integer');
+    }
 
     this.value = desc.value;
     this.levelType = desc.levelType;
@@ -54,6 +58,11 @@ class LevelTrigger extends PropertyTrigger {
     switch (this.levelType) {
       case LevelTriggerTypes.LESS:
         if (propValue < this.value) {
+          on = true;
+        }
+        break;
+      case LevelTriggerTypes.EQUAL:
+        if (propValue === this.value) {
           on = true;
         }
         break;
