@@ -6,6 +6,7 @@
 
 const assert = require('assert');
 const fetch = require('node-fetch');
+const https = require('https');
 const Settings = require('../models/settings');
 const EventEmitter = require('events').EventEmitter;
 const Events = require('./Events');
@@ -87,10 +88,17 @@ class Property extends EventEmitter {
    * @return {Promise} resolves to property's value
    */
   async get() {
-    const res = await fetch(await this.getHref(), {
+    const href = await this.getHref();
+    let agent = null;
+    if (href.startsWith('https')) {
+      agent = new https.Agent({rejectUnauthorized: false});
+    }
+
+    const res = await fetch(href, {
       headers: Object.assign({
         Accept: 'application/json',
       }, await this.headerAuth()),
+      agent,
     });
     const data = await res.json();
 
@@ -102,9 +110,15 @@ class Property extends EventEmitter {
    * @return {Promise} resolves if property is set to value
    */
   async set(value) {
+    const href = await this.getHref();
+    let agent = null;
+    if (href.startsWith('https')) {
+      agent = new https.Agent({rejectUnauthorized: false});
+    }
+
     const data = {};
     data[this.name] = value;
-    return fetch(await this.getHref(), {
+    return fetch(href, {
       method: 'PUT',
       headers: Object.assign({
         Accept: 'application/json',
@@ -112,6 +126,7 @@ class Property extends EventEmitter {
       }, await this.headerAuth()),
       body: JSON.stringify(data),
       cors: true,
+      agent,
     });
   }
 

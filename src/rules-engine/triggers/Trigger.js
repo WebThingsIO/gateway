@@ -10,9 +10,14 @@ const EventEmitter = require('events').EventEmitter;
  * whether to be active to the Rule's effect
  */
 class Trigger extends EventEmitter {
-  constructor() {
+  /**
+   * Create a Trigger based on a wire-format description with a property
+   * @param {TriggerDescription} desc
+   */
+  constructor(desc) {
     super();
     this.type = this.constructor.name;
+    this.label = desc.label;
   }
 
   /**
@@ -21,6 +26,7 @@ class Trigger extends EventEmitter {
   toDescription() {
     return {
       type: this.type,
+      label: this.label,
     };
   }
 }

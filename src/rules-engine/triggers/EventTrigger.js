@@ -14,7 +14,7 @@ const Trigger = require('./Trigger');
  */
 class EventTrigger extends Trigger {
   constructor(desc) {
-    super();
+    super(desc);
     this.thing = desc.thing;
     this.event = desc.event;
     this.timeout = null;
