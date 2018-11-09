@@ -252,6 +252,10 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         });
       }
     } else if (role === 'effect') {
+      if (property.readOnly) {
+        continue;
+      }
+
       if (property.type === 'boolean') {
         const effectOn = {
           type: 'PulseEffect',
