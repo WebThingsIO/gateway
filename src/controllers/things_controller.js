@@ -258,6 +258,13 @@ ThingsController.put(
           return;
         }
 
+        if (thing.properties[propertyName].hasOwnProperty('multipleOf') &&
+            value % thing.properties[propertyName].multipleOf !== 0) {
+          response.status(400).send(`Value is not a a multiple of: ${
+            thing.properties[propertyName].multipleOf}`);
+          return;
+        }
+
         if (thing.properties[propertyName].hasOwnProperty('enum') &&
             thing.properties[propertyName].enum.length > 0 &&
             !thing.properties[propertyName].enum.includes(value)) {

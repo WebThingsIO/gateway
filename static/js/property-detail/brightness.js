@@ -18,6 +18,31 @@ class BrightnessDetail {
     this.name = name;
     this.readOnly = !!property.readOnly;
     this.label = property.label || 'Brightness';
+
+    if (property.hasOwnProperty('min')) {
+      this.min = property.min;
+    } else if (property.hasOwnProperty('minimum')) {
+      this.min = property.minimum;
+    } else {
+      this.min = 0;
+    }
+
+    if (property.hasOwnProperty('max')) {
+      this.max = property.max;
+    } else if (property.hasOwnProperty('maximum')) {
+      this.max = property.maximum;
+    } else {
+      this.max = 100;
+    }
+
+    if (property.hasOwnProperty('multipleOf')) {
+      this.step = property.multipleOf;
+    } else if (property.type === 'number') {
+      this.step = 'any';
+    } else {
+      this.step = 1;
+    }
+
     this.id = `brightness-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -29,9 +54,11 @@ class BrightnessDetail {
 
   view() {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-brightness-property data-name="${Utils.escapeHtml(this.label)}"
-        value="0" id="${this.id}" ${readOnly}>
+        value="0" min="${this.min}" max="${this.max}" step="${this.step}"
+        id="${this.id}" ${readOnly}>
       </webthing-brightness-property>`;
   }
 

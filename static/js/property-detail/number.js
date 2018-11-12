@@ -38,6 +38,14 @@ class NumberDetail {
       this.max = null;
     }
 
+    if (property.hasOwnProperty('multipleOf')) {
+      this.step = property.multipleOf;
+    } else if (property.type === 'number') {
+      this.step = 'any';
+    } else {
+      this.step = 1;
+    }
+
     this.id = `number-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -54,15 +62,14 @@ class NumberDetail {
    * Build the detail view.
    */
   view() {
-    const min = this.min === null ? '' : `min="${Utils.escapeHtml(this.min)}"`;
-    const max = this.max === null ? '' : `max="${Utils.escapeHtml(this.max)}"`;
+    const min = this.min === null ? '' : `min="${this.min}"`;
+    const max = this.max === null ? '' : `max="${this.max}"`;
     const unit = this.unit || '';
-    const step = this.type === 'number' ? 'any' : '1';
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
       <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" ${min} ${max} value="0" step="${step}"
+        data-unit="${unit}" ${min} ${max} value="0" step="${this.step}"
         id="${this.id}" ${readOnly}>
       </webthing-number-property>`;
   }

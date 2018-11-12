@@ -71,6 +71,13 @@ const VALIDATION_THING = {
       ],
       value: 'val2',
     },
+    multipleProp: {
+      type: 'integer',
+      minimum: 0,
+      maximum: 600,
+      value: 10,
+      multipleOf: 5,
+    },
   },
 };
 
@@ -1130,6 +1137,47 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('minMaxProp');
     expect(res.body.minMaxProp).toEqual(15);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('multipleProp');
+    expect(res.body.multipleProp).toEqual(10);
+
+    err = await pFinal(chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({multipleProp: 3}));
+    expect(err.response.status).toEqual(400);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('multipleProp');
+    expect(res.body.multipleProp).toEqual(10);
+
+    res = await chai.request(server)
+      .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({multipleProp: 30});
+    expect(res.status).toEqual(200);
+
+    res = await chai.request(server)
+      .get(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('multipleProp');
+    expect(res.body.multipleProp).toEqual(30);
   });
 
   it('fail to set invalid enum property value', async () => {

@@ -97,7 +97,9 @@ ActionInputForm.prototype.render = function() {
       case 'number':
       case 'integer': {
         let step;
-        if (input.type === 'number') {
+        if (input.hasOwnProperty('multipleOf')) {
+          step = `${input.multipleOf}`;
+        } else if (input.type === 'number') {
           step = 'any';
         } else {
           step = '1';

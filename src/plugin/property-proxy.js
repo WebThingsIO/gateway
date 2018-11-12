@@ -52,6 +52,9 @@ class PropertyProxy extends Property {
     if (propertyDict.hasOwnProperty('maximum')) {
       this.maximum = propertyDict.maximum;
     }
+    if (propertyDict.hasOwnProperty('multipleOf')) {
+      this.multipleOf = propertyDict.multipleOf;
+    }
     if (propertyDict.hasOwnProperty('enum')) {
       this.enum = propertyDict.enum;
     }

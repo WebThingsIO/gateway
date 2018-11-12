@@ -20,6 +20,15 @@ class ColorTemperatureDetail {
     this.label = property.label || 'Color Temperature';
     this.min = property.hasOwnProperty('min') ? property.min : property.minimum;
     this.max = property.hasOwnProperty('max') ? property.max : property.maximum;
+
+    if (property.hasOwnProperty('multipleOf')) {
+      this.step = property.multipleOf;
+    } else if (property.type === 'number') {
+      this.step = 'any';
+    } else {
+      this.step = 1;
+    }
+
     this.id = `color-temperature-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -30,9 +39,11 @@ class ColorTemperatureDetail {
 
   view() {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+
     return `
       <webthing-color-temperature-property min="${this.min}" max="${this.max}"
-        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}" ${readOnly}>
+        data-name="${Utils.escapeHtml(this.label)}" step="${this.step}"
+        id="${this.id}" ${readOnly}>
       </webthing-color-temperature-property>`;
   }
 
