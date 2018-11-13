@@ -135,9 +135,13 @@ const Utils = {
       case 'percent':
         return '%';
 
+      case 'degree fahrenheit':
+      case 'degrees fahrenheit':
       case 'fahrenheit':
         return '°F';
 
+      case 'degree celsius':
+      case 'degrees celsius':
       case 'celsius':
         return '°C';
 
