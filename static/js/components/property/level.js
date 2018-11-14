@@ -270,7 +270,28 @@ class LevelProperty extends BaseComponent {
 
   __onChange(e) {
     e.preventDefault();
-    this.value = e.target.value;
+
+    let value = e.target.value;
+
+    let step = this.step;
+    if (step !== '' && step !== 'any') {
+      step = parseFloat(step);
+      value = Math.round(value / step) * step;
+    }
+
+    let min = this.min;
+    if (min !== '') {
+      min = parseFloat(min);
+      value = Math.max(min, value);
+    }
+
+    let max = this.max;
+    if (max !== '') {
+      max = parseFloat(max);
+      value = Math.min(max, value);
+    }
+
+    this.value = value;
 
     this.dispatchEvent(new CustomEvent('change', {
       detail: {
