@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const ec = require('../../ec-crypto');
 
 describe('JSONWebToken', function() {
-  it('should be able to round trip', () => {
+  it('should be able to round trip', async () => {
     const userId = 1;
-    const {sig, token} = JSONWebToken.create(userId);
+    const {sig, token} = await JSONWebToken.create(userId);
     const subject = new JSONWebToken(token);
 
-    const {sig: sig2} = JSONWebToken.create(userId);
+    const {sig: sig2} = await JSONWebToken.create(userId);
 
     expect(subject.verify(sig)).toBeTruthy();
     expect(subject.verify(sig2)).toEqual(false);
