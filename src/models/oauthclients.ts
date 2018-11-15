@@ -29,8 +29,7 @@ class OAuthClients {
         return client;
       }
     }
-    console.warn('Unable to find client: mismatched redirect_uri', clients,
-      redirectUri);
+    return clients[0];
   }
 
   async getAuthorized(userId: number): Promise<Array<ClientRegistry>> {
