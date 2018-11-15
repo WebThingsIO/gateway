@@ -103,11 +103,15 @@ class JSONWebToken {
     const keyId = uuid.v4();
     const tunnelInfo = await Settings.getTunnelInfo();
     const issuer = tunnelInfo.tunnelDomain;
-    const sig = jwt.sign(payload, pair.private, {
+    const options = {
       algorithm: ec.JWT_ALGORITHM,
       keyid: keyId,
-      issuer: issuer,
-    });
+    };
+    if (issuer) {
+      options.issuer = issuer;
+    }
+
+    const sig = jwt.sign(payload, pair.private, options);
 
     const token = {
       user,
