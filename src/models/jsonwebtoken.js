@@ -16,6 +16,7 @@ const assert = require('assert');
 
 const ec = require('../ec-crypto');
 const Database = require('../db');
+const Settings = require('./settings');
 
 const ROLE_USER_TOKEN = 'user_token';
 
@@ -58,7 +59,7 @@ class JSONWebToken {
    * @return {string} the JWT token signature.
    */
   static async issueToken(user) {
-    const {sig, token} = this.create(user);
+    const {sig, token} = await this.create(user);
     await Database.createJSONWebToken(token);
     return sig;
   }
@@ -73,7 +74,7 @@ class JSONWebToken {
    * @return {string} the JWT token signature.
    */
   static async issueOAuthToken(client, user, payload) {
-    const {sig, token} = this.create(user, Object.assign({
+    const {sig, token} = await this.create(user, Object.assign({
       client_id: client.id,
     }, payload));
     await Database.createJSONWebToken(token);
@@ -96,13 +97,16 @@ class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static create(user, payload = {role: ROLE_USER_TOKEN}) {
+  static async create(user, payload = {role: ROLE_USER_TOKEN}) {
     const pair = ec.generateKeyPair();
 
     const keyId = uuid.v4();
+    const tunnelInfo = await Settings.getTunnelInfo();
+    const issuer = tunnelInfo.tunnelDomain;
     const sig = jwt.sign(payload, pair.private, {
       algorithm: ec.JWT_ALGORITHM,
       keyid: keyId,
+      issuer: issuer,
     });
 
     const token = {

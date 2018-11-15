@@ -20,7 +20,7 @@ describe('db', () => {
     });
 
     it('should be able to insert and fetch a JWT', async () => {
-      const {token} = JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb.publicKey).toEqual(token.publicKey);
@@ -30,7 +30,7 @@ describe('db', () => {
     });
 
     it('should be unreachable after deleting user', async () => {
-      const {token} = JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb).toBeTruthy();
@@ -43,7 +43,7 @@ describe('db', () => {
     });
 
     it('should be able to cleanup single keys', async () => {
-      const {token} = JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.id);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb).toEqual(expect.objectContaining({
