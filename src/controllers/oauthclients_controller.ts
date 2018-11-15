@@ -32,7 +32,7 @@ OAuthClientsController.get('/', async (request: express.Request, response: expre
 
 OAuthClientsController.delete('/:clientId', async (request: express.Request, response: express.Response) => {
   let clientId = request.params.clientId;
-  if (!OAuthClients.get(clientId)) {
+  if (!OAuthClients.get(clientId, undefined)) {
     response.status(404).send('Client not found');
     return;
   }

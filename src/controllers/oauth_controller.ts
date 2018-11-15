@@ -118,7 +118,7 @@ function redirect(response: express.Response, baseURL: URL, params: {[key: strin
 
 function verifyClient(request: OAuthRequest, response: express.Response):
   ClientRegistry|null {
-  let client = OAuthClients.get(request.client_id);
+  let client = OAuthClients.get(request.client_id, request.redirect_uri);
   if (!client) {
     let err: ErrorResponse<UnauthorizedClient> = {
       error: 'unauthorized_client',
@@ -252,7 +252,7 @@ OAuthController.get('/authorize', async (request: express.Request, response: exp
 });
 
 OAuthController.get('/local-token-service', async (request: express.Request, response: express.Response) => {
-  let localClient: ClientRegistry = OAuthClients.get('local-token');
+  let localClient: ClientRegistry = OAuthClients.get('local-token', undefined)!;
   let tokenRequest: AccessTokenRequest = {
     grant_type: 'authorization_code',
     code: request.query.code,

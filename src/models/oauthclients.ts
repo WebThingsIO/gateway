@@ -4,16 +4,33 @@ const Database = require('../db');
 
 
 class OAuthClients {
-  private clients = new Map();
+  private clients: Map<string, Array<ClientRegistry>> = new Map();
   constructor() {
   }
 
   register(client: ClientRegistry) {
-    this.clients.set(client.id, client);
+    if (this.clients.get(client.id)) {
+      this.clients.get(client.id)!.push(client);
+    } else {
+      this.clients.set(client.id, [client]);
+    }
   }
 
-  get(id: string) {
-    return this.clients.get(id);
+  get(id: string, redirectUri: URL|undefined): ClientRegistry|undefined {
+    const clients = this.clients.get(id);
+    if (!clients) {
+      return;
+    }
+    if (!redirectUri) {
+      return clients[0];
+    }
+    for (let client of clients) {
+      if (client.redirect_uri.href === redirectUri.href) {
+        return client;
+      }
+    }
+    console.warn('Unable to find client: mismatched redirect_uri', clients,
+      redirectUri);
   }
 
   async getAuthorized(userId: number): Promise<Array<ClientRegistry>> {
@@ -30,7 +47,11 @@ class OAuthClients {
         await Database.deleteJSONWebTokenByKeyId(jwt.keyId);
         continue;
       }
-      authorized.set(payload.client_id, this.clients.get(payload.client_id));
+      const defaultClient = this.clients.get(payload.client_id)![0];
+      if (!defaultClient) {
+        continue;
+      }
+      authorized.set(payload.client_id, defaultClient);
     }
 
     return Array.from(authorized.values());
