@@ -104,32 +104,54 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       elt.appendChild(select);
     }
 
-    const valueInput = document.createElement('input');
-    valueInput.classList.add('value-input');
-    valueInput.type = 'number';
-    if (property.hasOwnProperty('multipleOf')) {
-      valueInput.step = `${property.multipleOf}`;
-    } else if (property.type === 'number') {
-      valueInput.step = 'any';
+    let valueInput, valueSelect;
+    if (property.hasOwnProperty('enum') && property.enum.length > 0) {
+      valueSelect = document.createElement('select');
+      valueSelect.classList.add('value-select');
+
+      for (const choice of property.enum) {
+        const option = document.createElement('option');
+        option.value = choice;
+        option.innerText = choice;
+        valueSelect.appendChild(option);
+      }
+
+      elt.appendChild(valueSelect);
     } else {
-      valueInput.step = '1';
+      valueInput = document.createElement('input');
+      valueInput.classList.add('value-input');
+      valueInput.type = 'number';
+      if (property.hasOwnProperty('multipleOf')) {
+        valueInput.step = `${property.multipleOf}`;
+      } else if (property.type === 'number') {
+        valueInput.step = 'any';
+      } else {
+        valueInput.step = '1';
+      }
+      if (property.hasOwnProperty('minimum')) {
+        valueInput.min = `${property.minimum}`;
+      }
+      if (property.hasOwnProperty('maximum')) {
+        valueInput.max = `${property.maximum}`;
+      }
+      valueInput.addEventListener('click', stopPropagation);
+      elt.appendChild(valueInput);
     }
-    if (property.hasOwnProperty('minimum')) {
-      valueInput.min = `${property.minimum}`;
-    }
-    if (property.hasOwnProperty('maximum')) {
-      valueInput.max = `${property.maximum}`;
-    }
-    valueInput.addEventListener('click', stopPropagation);
-    elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
-      let value = parseFloat(valueInput.value);
+      let value;
+      if (valueInput) {
+        value = parseFloat(valueInput.value);
+      } else {
+        value =
+          parseFloat(valueSelect.options[valueSelect.selectedIndex].value);
+      }
+
       if (property.hasOwnProperty('multipleOf')) {
         value = Math.round(value / property.multipleOf) * property.multipleOf;
       }
       if (property.type === 'integer') {
-        value = parseInt(valueInput.value, 10);
+        value = parseInt(value);
       }
       if (property.hasOwnProperty('minimum')) {
         value = Math.max(value, property.minimum);
@@ -137,7 +159,10 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       if (property.hasOwnProperty('maximum')) {
         value = Math.min(value, property.maximum);
       }
-      valueInput.value = value;
+
+      if (valueInput) {
+        valueInput.value = value;
+      }
 
       if (ruleFragment.trigger) {
         if (ltOption.selected) {
@@ -156,25 +181,47 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
     });
   } else if (property.type === 'string') {
-    const valueInput = document.createElement('input');
-    valueInput.classList.add('value-input');
-    if (property.name === 'color') {
-      valueInput.type = 'color';
+    let valueInput, valueSelect;
+    if (property.hasOwnProperty('enum') && property.enum.length > 0) {
+      valueSelect = document.createElement('select');
+      valueSelect.classList.add('value-select');
+
+      for (const choice of property.enum) {
+        const option = document.createElement('option');
+        option.value = choice;
+        option.innerText = choice;
+        valueSelect.appendChild(option);
+      }
+
+      elt.appendChild(valueSelect);
     } else {
-      valueInput.type = 'text';
+      valueInput = document.createElement('input');
+      valueInput.classList.add('value-input');
+      if (property.name === 'color') {
+        valueInput.type = 'color';
+      } else {
+        valueInput.type = 'text';
+      }
+      valueInput.addEventListener('click', stopPropagation);
+      elt.appendChild(valueInput);
     }
-    valueInput.addEventListener('click', stopPropagation);
-    elt.appendChild(valueInput);
 
     elt.addEventListener('change', () => {
+      let value;
+      if (valueInput) {
+        value = valueInput.value;
+      } else {
+        value = valueSelect.options[valueSelect.selectedIndex].value;
+      }
+
       const dpbRulePart = this.devicePropertyBlock.rulePart;
       let selected = !dpbRulePart;
       if (ruleFragment.trigger) {
-        ruleFragment.trigger.value = valueInput.value;
+        ruleFragment.trigger.value = value;
         selected = selected || (dpbRulePart.trigger &&
           dpbRulePart.trigger.type === ruleFragment.trigger.type);
       } else {
-        ruleFragment.effect.value = valueInput.value;
+        ruleFragment.effect.value = value;
         selected = selected || (dpbRulePart.effect &&
           dpbRulePart.effect.property.href ===
           ruleFragment.effect.property.href);
@@ -209,7 +256,8 @@ PropertySelect.prototype.updateOption = function(optionElt) {
     ruleFragment.trigger.value :
     ruleFragment.effect.value;
 
-  const valueInput = optionElt.querySelector('.value-input');
+  const input = optionElt.querySelector('.value-input') ||
+    optionElt.querySelector('.value-select');
 
   if (property.type === 'number' || property.type === 'integer') {
     if (ruleFragment.trigger) {
@@ -222,9 +270,9 @@ PropertySelect.prototype.updateOption = function(optionElt) {
         optionElt.querySelector('.lt-option').setAttribute('selected', '');
       }
     }
-    valueInput.value = fragmentValue;
+    input.value = fragmentValue;
   } else if (property.name === 'color' || property.type === 'string') {
-    valueInput.value = fragmentValue;
+    input.value = fragmentValue;
   }
 };
 
@@ -415,7 +463,6 @@ PropertySelect.prototype.onClick = function(e) {
 
     // We were open, so that was a click to select
     this.select(target);
-
 
     const rulePart = JSON.parse(target.dataset.ruleFragment);
     if (!rulePart) {
