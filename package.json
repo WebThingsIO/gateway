@@ -29,6 +29,7 @@
   },
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
+    "ajv": "^6.5.5",
     "archiver": "^3.0.0",
     "asn1.js": "^5.0.1",
     "bcryptjs": "^2.4.3",

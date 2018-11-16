@@ -10,18 +10,20 @@
 
 'use strict';
 
-const PromiseRouter = require('express-promise-router');
-const WebSocket = require('ws');
 const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
 const AddonManager = require('../addon-manager');
+const Ajv = require('ajv');
 const Constants = require('../constants');
 const EventsController = require('./events_controller');
-const Things = require('../models/things');
+const PromiseRouter = require('express-promise-router');
 const Settings = require('../models/settings');
+const Things = require('../models/things');
+const WebSocket = require('ws');
 
 const ThingsController = PromiseRouter();
+const ajv = new Ajv();
 
 /**
  * Get a list of Things.
@@ -244,31 +246,9 @@ ThingsController.put(
           return;
         }
 
-        if (thing.properties[propertyName].hasOwnProperty('minimum') &&
-            value < thing.properties[propertyName].minimum) {
-          response.status(400).send(`Value less than minimum: ${
-            thing.properties[propertyName].minimum}`);
-          return;
-        }
-
-        if (thing.properties[propertyName].hasOwnProperty('maximum') &&
-            value > thing.properties[propertyName].maximum) {
-          response.status(400).send(`Value greater than maximum: ${
-            thing.properties[propertyName].maximum}`);
-          return;
-        }
-
-        if (thing.properties[propertyName].hasOwnProperty('multipleOf') &&
-            value % thing.properties[propertyName].multipleOf !== 0) {
-          response.status(400).send(`Value is not a a multiple of: ${
-            thing.properties[propertyName].multipleOf}`);
-          return;
-        }
-
-        if (thing.properties[propertyName].hasOwnProperty('enum') &&
-            thing.properties[propertyName].enum.length > 0 &&
-            !thing.properties[propertyName].enum.includes(value)) {
-          response.status(400).send('Invalid enum value');
+        const valid = ajv.validate(thing.properties[propertyName], value);
+        if (!valid) {
+          response.status(400).send('Invalid property value');
           return;
         }
 
