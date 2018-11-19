@@ -116,6 +116,7 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
         valueSelect.appendChild(option);
       }
 
+      valueSelect.addEventListener('click', stopPropagation);
       elt.appendChild(valueSelect);
     } else {
       valueInput = document.createElement('input');
@@ -193,6 +194,7 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
         valueSelect.appendChild(option);
       }
 
+      valueSelect.addEventListener('click', stopPropagation);
       elt.appendChild(valueSelect);
     } else {
       valueInput = document.createElement('input');
