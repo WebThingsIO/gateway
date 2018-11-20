@@ -337,6 +337,10 @@ const API = {
       })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 404) {
+            return false;
+          }
+
           throw new Error(`Error getting ${experimentName}`);
         }
 
