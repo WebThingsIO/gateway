@@ -12,6 +12,7 @@
 
 'use strict';
 
+process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 const config = require('config');
 const fs = require('fs');
 const path = require('path');
@@ -189,15 +190,25 @@ const Profile = {
     }
 
     // Create a user config if one doesn't exist.
-    const userConfigPath = path.join(this.configDir, 'local.js');
-    if (!fs.existsSync(userConfigPath)) {
-      fs.writeFileSync(
-        userConfigPath, '\'use strict\';\n\nmodule.exports = {\n};');
+    const oldUserConfigPath = path.join(this.configDir, 'local.js');
+    const oldLocalConfigPath = path.join(this.gatewayDir, 'config', 'local.js');
+    const userConfigPath = path.join(this.configDir, 'local.json');
+
+    if (fs.existsSync(oldUserConfigPath)) {
+      const oldConfig = config.util.parseFile(oldUserConfigPath);
+      fs.writeFileSync(userConfigPath, JSON.stringify(oldConfig, null, 2));
+      fs.unlinkSync(oldUserConfigPath);
+    } else if (!fs.existsSync(userConfigPath)) {
+      fs.writeFileSync(userConfigPath, '{\n}');
     }
 
-    const localConfigPath = path.join(this.gatewayDir, 'config', 'local.js');
-    if (!fs.existsSync(localConfigPath)) {
-      fs.copyFileSync(userConfigPath, localConfigPath);
+    if (fs.existsSync(oldLocalConfigPath)) {
+      fs.unlinkSync(oldLocalConfigPath);
+    }
+
+    const localConfig = config.util.parseFile(userConfigPath);
+    if (localConfig) {
+      config.util.extendDeep(config, localConfig);
     }
 
     // Move anything that exists in ~/mozilla-iot, such as certbot configs.
