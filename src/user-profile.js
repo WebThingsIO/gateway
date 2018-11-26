@@ -194,12 +194,17 @@ const Profile = {
     const oldLocalConfigPath = path.join(this.gatewayDir, 'config', 'local.js');
     const userConfigPath = path.join(this.configDir, 'local.json');
 
+    if (!fs.existsSync(userConfigPath)) {
+      if (fs.existsSync(oldUserConfigPath)) {
+        const oldConfig = config.util.parseFile(oldUserConfigPath);
+        fs.writeFileSync(userConfigPath, JSON.stringify(oldConfig, null, 2));
+      } else {
+        fs.writeFileSync(userConfigPath, '{\n}');
+      }
+    }
+
     if (fs.existsSync(oldUserConfigPath)) {
-      const oldConfig = config.util.parseFile(oldUserConfigPath);
-      fs.writeFileSync(userConfigPath, JSON.stringify(oldConfig, null, 2));
       fs.unlinkSync(oldUserConfigPath);
-    } else if (!fs.existsSync(userConfigPath)) {
-      fs.writeFileSync(userConfigPath, '{\n}');
     }
 
     if (fs.existsSync(oldLocalConfigPath)) {
