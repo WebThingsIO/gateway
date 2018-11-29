@@ -245,11 +245,13 @@ function broadcastBeacon() {
 }
 
 function checkConnection() {
-  const wifiskipPath = path.join(config.get('profileDir'), 'config',
-                                 'wifiskip');
+  const profileDir = process.env.MOZIOT_HOME || config.get('profileDir');
+  const wifiskipPath = path.join(profileDir, 'config', 'wifiskip');
+
   if (fs.existsSync(wifiskipPath)) {
     return Promise.resolve(true);
   }
+
   return getStatus().then(() => {
     // Wait until we have a working wifi connection. Retry every 3 seconds up
     // to 10 times. If we are connected, then start the Gateway client.

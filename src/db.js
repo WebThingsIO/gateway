@@ -16,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const Passwords = require('./passwords');
 const assert = require('assert');
+const UserProfile = require('./user-profile');
 
 // Imported as a module so we use a relative path.
 const ThingsData = require('../static/things.json');
@@ -52,7 +53,7 @@ const Database = {
     if (process.env.NODE_ENV === 'test') {
       filename = ':memory:';
     } else {
-      filename = path.join(config.get('profileDir'), 'config', 'db.sqlite3');
+      filename = path.join(UserProfile.configDir, 'db.sqlite3');
 
       const removeBeforeOpen = config.get('database.removeBeforeOpen');
 
