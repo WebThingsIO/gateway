@@ -132,8 +132,8 @@ function handleWiFiSetup(request, response) {
 
 function handleConnecting(request, response) {
   if (request.body.skip === '1') {
-    const wifiskipPath = path.join(config.get('profileDir'), 'config',
-                                   'wifiskip');
+    const profileDir = process.env.MOZIOT_HOME || config.get('profileDir');
+    const wifiskipPath = path.join(profileDir, 'config', 'wifiskip');
     fs.closeSync(fs.openSync(wifiskipPath, 'w'));
     console.log('skip wifi setup. stop the ap');
     response.send(connectingTemplate({skip: 'true'}));

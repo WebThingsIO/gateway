@@ -20,13 +20,10 @@ const os = require('os');
 const mkdirp = require('mkdirp');
 const ncp = require('ncp');
 const rimraf = require('rimraf');
-const db = require('./db');
-const Settings = require('./models/settings');
-const Users = require('./models/users');
 
 const Profile = {
   init: function() {
-    this.baseDir = config.get('profileDir');
+    this.baseDir = process.env.MOZIOT_HOME || config.get('profileDir');
     this.configDir = path.join(this.baseDir, 'config');
     this.sslDir = path.join(this.baseDir, 'ssl');
     this.uploadsDir = path.join(this.baseDir, 'uploads');
@@ -100,6 +97,10 @@ const Profile = {
     if (fs.existsSync(oldDbPath)) {
       this.renameFile(oldDbPath, dbPath);
     }
+
+    const db = require('./db');
+    const Settings = require('./models/settings');
+    const Users = require('./models/users');
 
     // Open the database.
     db.open();
