@@ -46,6 +46,21 @@ class PropertyProxy extends Property {
   doPropertyChanged(propertyDict) {
     this.propertyDict = Object.assign({}, propertyDict);
     this.setCachedValue(propertyDict.value);
+    if (propertyDict.hasOwnProperty('label')) {
+      this.label = propertyDict.label;
+    }
+    if (propertyDict.hasOwnProperty('type')) {
+      this.type = propertyDict.type;
+    }
+    if (propertyDict.hasOwnProperty('@type')) {
+      this['@type'] = propertyDict['@type'];
+    }
+    if (propertyDict.hasOwnProperty('unit')) {
+      this.unit = propertyDict.unit;
+    }
+    if (propertyDict.hasOwnProperty('description')) {
+      this.description = propertyDict.description;
+    }
     if (propertyDict.hasOwnProperty('minimum')) {
       this.minimum = propertyDict.minimum;
     }
@@ -57,6 +72,9 @@ class PropertyProxy extends Property {
     }
     if (propertyDict.hasOwnProperty('enum')) {
       this.enum = propertyDict.enum;
+    }
+    if (propertyDict.hasOwnProperty('links')) {
+      this.links = propertyDict.links;
     }
     while (this.propertyChangedPromises.length > 0) {
       const deferredChange = this.propertyChangedPromises.pop();
