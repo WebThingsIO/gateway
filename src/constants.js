@@ -25,6 +25,7 @@ exports.SETTINGS_PATH = '/settings';
 exports.COMMANDS_PATH = '/commands';
 exports.UPDATES_PATH = '/updates';
 exports.UPLOADS_PATH = '/uploads';
+exports.MEDIA_PATH = '/media';
 exports.DEBUG_PATH = '/debug';
 exports.RULES_PATH = '/rules';
 exports.OAUTH_PATH = '/oauth';
