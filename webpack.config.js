@@ -79,6 +79,16 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/static/js/lib/'),
       flatten: true,
     },
+    {
+      from: 'node_modules/dashjs/dist/dash.all.min.js',
+      to: path.join(__dirname, 'build/static/js/lib/'),
+      flatten: true,
+    },
+    {
+      from: 'node_modules/hls.js/dist/hls.min.js',
+      to: path.join(__dirname, 'build/static/js/lib/'),
+      flatten: true,
+    },
   ]),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,

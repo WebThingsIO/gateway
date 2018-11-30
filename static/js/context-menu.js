@@ -149,6 +149,12 @@ const ContextMenu = {
             case 'PushButton':
               option.innerText = 'Push Button';
               break;
+            case 'VideoCamera':
+              option.innerText = 'Video Camera';
+              break;
+            case 'Camera':
+              option.innerText = 'Camera';
+              break;
             case 'Custom':
               option.innerText = 'Custom Thing';
               break;
@@ -222,6 +228,12 @@ const ContextMenu = {
         break;
       case 'PushButton':
         image = '/optimized-images/thing-icons/push_button.svg';
+        break;
+      case 'VideoCamera':
+        image = '/optimized-images/thing-icons/video_camera.svg';
+        break;
+      case 'Camera':
+        image = '/optimized-images/thing-icons/camera.svg';
         break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');

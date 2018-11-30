@@ -13,9 +13,10 @@
 const page = require('page');
 const API = require('./api');
 const App = require('./app');
-const Constants = require('./constants');
 const BinarySensor = require('./binary-sensor');
+const Camera = require('./camera');
 const ColorControl = require('./color-control');
+const Constants = require('./constants');
 const DoorSensor = require('./door-sensor');
 const EnergyMonitor = require('./energy-monitor');
 const Light = require('./light');
@@ -26,6 +27,7 @@ const OnOffSwitch = require('./on-off-switch');
 const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
+const VideoCamera = require('./video-camera');
 
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {
@@ -111,24 +113,19 @@ const FloorplanScreen = {
               thing = new OnOffSwitch(thingModel, description, format);
               break;
             case 'MultiLevelSwitch':
-              thing =
-                new MultiLevelSwitch(thingModel, description, format);
+              thing = new MultiLevelSwitch(thingModel, description, format);
               break;
             case 'ColorControl':
-              thing =
-                new ColorControl(thingModel, description, format);
+              thing = new ColorControl(thingModel, description, format);
               break;
             case 'EnergyMonitor':
-              thing =
-                new EnergyMonitor(thingModel, description, format);
+              thing = new EnergyMonitor(thingModel, description, format);
               break;
             case 'BinarySensor':
-              thing =
-                new BinarySensor(thingModel, description, format);
+              thing = new BinarySensor(thingModel, description, format);
               break;
             case 'MultiLevelSensor':
-              thing =
-                new MultiLevelSensor(thingModel, description, format);
+              thing = new MultiLevelSensor(thingModel, description, format);
               break;
             case 'SmartPlug':
               thing = new SmartPlug(thingModel, description, format);
@@ -137,16 +134,19 @@ const FloorplanScreen = {
               thing = new Light(thingModel, description, format);
               break;
             case 'DoorSensor':
-              thing =
-                new DoorSensor(thingModel, description, format);
+              thing = new DoorSensor(thingModel, description, format);
               break;
             case 'MotionSensor':
-              thing =
-                new MotionSensor(thingModel, description, format);
+              thing = new MotionSensor(thingModel, description, format);
               break;
             case 'PushButton':
-              thing =
-                new PushButton(thingModel, description, format);
+              thing = new PushButton(thingModel, description, format);
+              break;
+            case 'VideoCamera':
+              thing = new VideoCamera(thingModel, description, format);
+              break;
+            case 'Camera':
+              thing = new Camera(thingModel, description, format);
               break;
             default:
               thing = new Thing(thingModel, description, format);

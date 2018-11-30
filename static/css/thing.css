@@ -355,3 +355,74 @@
 .event-body {
   padding-top: 1rem;
 }
+
+.media-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.media-modal {
+  width: 90%;
+  position: relative;
+  top: 7.6rem;
+  max-height: calc(100% - 5.6rem);
+  left: 5%;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 560px) {
+  .media-modal {
+     width: 100%;
+     left: 0;
+  }
+}
+
+.media-modal-frame {
+  width: calc(100% - 3.2rem);
+  margin: 1.6rem;
+}
+
+.media-modal-image,
+.media-modal-video {
+  width: 100%;
+}
+
+.media-modal-close {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 10;
+  background-color: #89b6d6;
+  background-size: 1.6rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../optimized-images/close.svg');
+  border-radius: 1.6rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-bottom: -1.6rem;
+  float: right;
+  cursor: pointer;
+}
+
+.media-modal-refresh {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 10;
+  background-color: #89b6d6;
+  background-size: 1.6rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('../optimized-images/refresh.svg');
+  border-radius: 1.6rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-top: -3.2rem;
+  cursor: pointer;
+}

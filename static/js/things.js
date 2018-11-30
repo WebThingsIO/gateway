@@ -15,6 +15,7 @@ const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
 const App = require('./app');
 const BinarySensor = require('./binary-sensor');
+const Camera = require('./camera');
 const ColorControl = require('./color-control');
 const Constants = require('./constants');
 const DoorSensor = require('./door-sensor');
@@ -28,6 +29,7 @@ const OnOffSwitch = require('./on-off-switch');
 const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
 const Thing = require('./thing');
+const VideoCamera = require('./video-camera');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -90,6 +92,12 @@ const ThingsScreen = {
           break;
         case 'PushButton':
           thing = new PushButton(thingModel, description, format);
+          break;
+        case 'VideoCamera':
+          thing = new VideoCamera(thingModel, description, format);
+          break;
+        case 'Camera':
+          thing = new Camera(thingModel, description, format);
           break;
         default:
           thing = new Thing(thingModel, description, format);
@@ -322,6 +330,12 @@ const ThingsScreen = {
           case 'PushButton':
             icon = '/optimized-images/thing-icons/push_button.svg';
             break;
+          case 'VideoCamera':
+            icon = '/optimized-images/thing-icons/video_camera.svg';
+            break;
+          case 'Camera':
+            icon = '/optimized-images/thing-icons/camera.svg';
+            break;
           case 'Custom':
           default:
             icon = '/optimized-images/thing-icons/thing.svg';
@@ -435,6 +449,12 @@ const ThingsScreen = {
             break;
           case 'PushButton':
             icon = '/optimized-images/thing-icons/push_button.svg';
+            break;
+          case 'VideoCamera':
+            icon = '/optimized-images/thing-icons/video_camera.svg';
+            break;
+          case 'Camera':
+            icon = '/optimized-images/thing-icons/camera.svg';
             break;
           case 'Custom':
           default:

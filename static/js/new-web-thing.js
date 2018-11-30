@@ -149,6 +149,12 @@ class NewWebThing {
       case 'PushButton':
         cls = 'push-button';
         break;
+      case 'VideoCamera':
+        cls = 'video-camera';
+        break;
+      case 'Camera':
+        cls = 'camera';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -168,7 +174,9 @@ class NewWebThing {
       'light',
       'door-sensor',
       'motion-sensor',
-      'push-button'
+      'push-button',
+      'video-camera',
+      'camera'
     );
 
     if (cls) {
@@ -342,6 +350,14 @@ class NewWebThing {
             option.innerText = 'Push Button';
             cls = cls || 'push-button';
             break;
+          case 'VideoCamera':
+            option.innerText = 'Video Camera';
+            cls = cls || 'video-camera';
+            break;
+          case 'Camera':
+            option.innerText = 'Camera';
+            cls = cls || 'camera';
+            break;
           case 'Custom':
             option.innerText = 'Custom Thing';
             cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -475,7 +491,9 @@ class NewWebThing {
       'smart-plug',
       'door-sensor',
       'motion-sensor',
-      'push-button'
+      'push-button',
+      'video-camera',
+      'camera'
     );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
