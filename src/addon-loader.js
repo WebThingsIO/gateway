@@ -10,6 +10,9 @@
 
 'use strict';
 
+const UserProfile = require('./user-profile');
+UserProfile.init();
+
 const config = require('config');
 const Constants = require('./constants');
 const GetOpt = require('node-getopt');
