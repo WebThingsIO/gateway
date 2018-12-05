@@ -26,10 +26,21 @@ class Property extends EventEmitter {
     this.originator = new Error().stack;
 
     assert(desc.type);
-    assert(desc.href);
+    assert(desc.href || (desc.links && desc.links.length > 0));
 
     this.type = desc.type;
-    this.href = desc.href;
+
+    if (desc.href) {
+      this.href = desc.href;
+    } else {
+      for (const link of desc.links) {
+        if (!link.rel || link.rel === 'property') {
+          this.href = link.href;
+          break;
+        }
+      }
+    }
+
     if (desc.unit) {
       this.unit = desc.unit;
     }

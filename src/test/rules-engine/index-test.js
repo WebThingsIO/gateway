@@ -124,8 +124,7 @@ const numberTestRule = {
     property: {
       name: 'hue',
       type: 'number',
-      href:
-        '/things/light2/properties/hue',
+      href: '/things/light2/properties/hue',
     },
     type: 'LevelTrigger',
     levelType: 'GREATER',
@@ -149,8 +148,7 @@ const mixedTestRule = {
     property: {
       name: 'bri',
       type: 'number',
-      href:
-        '/things/light3/properties/bri',
+      href: '/things/light3/properties/bri',
     },
     type: 'LevelTrigger',
     levelType: 'LESS',
@@ -194,8 +192,7 @@ const equalityRule = {
     property: {
       name: 'color',
       type: 'string',
-      href:
-        '/things/light3/properties/color',
+      href: '/things/light3/properties/color',
     },
     value: '#00ff77',
   },

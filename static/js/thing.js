@@ -108,9 +108,16 @@ class Thing {
       this.propertyDescriptions = {};
       for (const name in description.properties) {
         const property = description.properties[name];
-        const href = property.href;
 
-        if (!property.href) {
+        let href;
+        for (const link of property.links) {
+          if (!link.rel || link.rel === 'property') {
+            href = link.href;
+            break;
+          }
+        }
+
+        if (!href) {
           continue;
         }
 

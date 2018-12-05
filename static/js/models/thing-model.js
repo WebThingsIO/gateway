@@ -272,7 +272,15 @@ class ThingModel extends Model {
       }),
     };
 
-    return fetch(property.href, opts).then((response) => {
+    let href;
+    for (const link of property.links) {
+      if (!link.rel || link.rel === 'property') {
+        href = link.href;
+        break;
+      }
+    }
+
+    return fetch(href, opts).then((response) => {
       if (response.ok) {
         return response.json();
       } else {
@@ -299,7 +307,13 @@ class ThingModel extends Model {
 
     let getPropertiesPromise;
     if (typeof this.propertiesHref === 'undefined') {
-      const urls = Object.values(this.propertyDescriptions).map((v) => v.href);
+      const urls = Object.values(this.propertyDescriptions).map((v) => {
+        for (const link of v.links) {
+          if (!link.rel || link.rel === 'property') {
+            return link.href;
+          }
+        }
+      });
       const requests = urls.map((u) => fetch(u, opts));
       getPropertiesPromise = Promise.all(requests).then((responses) => {
         return Promise.all(responses.map((response) => {

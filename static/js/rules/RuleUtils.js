@@ -59,7 +59,9 @@ const RuleUtils = {
         return false;
       }
       const optProp = option.properties[property.name];
-      return optProp && (optProp.href === property.href);
+      return optProp && optProp.links.filter((l) => {
+        return (!l.rel || l.rel === 'property') && l.href === property.href;
+      }).length > 0;
     };
   },
   // Helper function for selecting the thing corresponding to an href
