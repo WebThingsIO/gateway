@@ -14,7 +14,6 @@ const Action = require('../models/action');
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
 const AddonManager = require('../addon-manager');
-const Ajv = require('ajv');
 const Constants = require('../constants');
 const EventsController = require('./events_controller');
 const PromiseRouter = require('express-promise-router');
@@ -23,7 +22,6 @@ const Things = require('../models/things');
 const WebSocket = require('ws');
 
 const ThingsController = PromiseRouter();
-const ajv = new Ajv();
 
 /**
  * Get a list of Things.
@@ -206,19 +204,17 @@ ThingsController.get('/:thingId/properties', async (request, response) => {
  */
 ThingsController.get(
   '/:thingId/properties/:propertyName',
-  (request, response) => {
+  async (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
-    AddonManager.getProperty(thingId, propertyName).then((value) => {
+    try {
+      const value = await Things.getThingProperty(thingId, propertyName);
       const result = {};
       result[propertyName] = value;
       response.status(200).json(result);
-    }).catch((error) => {
-      console.error('Error getting value for thingId:', thingId,
-                    'property:', propertyName);
-      console.error(error);
-      response.status(500).send(error);
-    });
+    } catch (err) {
+      response.status(err.code).send(err.message);
+    }
   });
 
 /**
@@ -226,7 +222,7 @@ ThingsController.get(
  */
 ThingsController.put(
   '/:thingId/properties/:propertyName',
-  (request, response) => {
+  async (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
     if (!request.body || typeof request.body[propertyName] === 'undefined') {
@@ -234,39 +230,15 @@ ThingsController.put(
       return;
     }
     const value = request.body[propertyName];
-    Things.getThingDescription(thingId, request.get('Host'), request.secure)
-      .then((thing) => {
-        if (!thing.properties.hasOwnProperty(propertyName)) {
-          response.status(404).send('Property not found');
-          return;
-        }
-
-        if (thing.properties[propertyName].readOnly) {
-          response.status(400).send('Read-only property');
-          return;
-        }
-
-        const valid = ajv.validate(thing.properties[propertyName], value);
-        if (!valid) {
-          response.status(400).send('Invalid property value');
-          return;
-        }
-
-        AddonManager.setProperty(thingId, propertyName, value)
-          .then((updatedValue) => {
-            // Note: it's possible that updatedValue doesn't match value.
-            const result = {};
-            result[propertyName] = updatedValue;
-            response.status(200).json(result);
-          }).catch((error) => {
-            console.error('Error setting value for thingId:', thingId,
-                          'property:', propertyName,
-                          'value:', value);
-            response.status(500).send(error);
-          });
-      }).catch(() => {
-        response.status(404).send('Thing not found');
-      });
+    try {
+      const updatedValue = await Things.setThingProperty(thingId, propertyName,
+                                                         value);
+      const result = {};
+      result[propertyName] = updatedValue;
+      response.status(200).json(result);
+    } catch (e) {
+      response.status(e.code).send(e.message);
+    }
   });
 
 /**

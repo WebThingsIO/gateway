@@ -2,9 +2,9 @@ const effects = require('../../rules-engine/effects');
 
 const pulseEffect = {
   property: {
-    name: 'on',
     type: 'boolean',
-    href: '/things/light1/properties/on',
+    thing: 'light1',
+    id: 'on',
   },
   type: 'PulseEffect',
   value: true,
@@ -12,9 +12,9 @@ const pulseEffect = {
 
 const setEffect = {
   property: {
-    name: 'temp',
     type: 'number',
-    href: '/things/thermostat/properties/temp',
+    thing: 'thermostat',
+    id: 'temp',
     unit: 'celsius',
     description: 'thermostat setpoint',
   },
