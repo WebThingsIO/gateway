@@ -10,8 +10,8 @@
 
 'use strict';
 
-const Thing = require('./thing.js');
-const Database = require('../db.js');
+const Thing = require('./thing');
+const Database = require('../db');
 const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 

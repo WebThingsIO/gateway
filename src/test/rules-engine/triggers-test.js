@@ -4,8 +4,7 @@ const booleanTrigger = {
   property: {
     name: 'on',
     type: 'boolean',
-    href:
-      '/things/light1/properties/on',
+    href: '/things/light1/properties/on',
   },
   type: 'BooleanTrigger',
   onValue: true,
@@ -15,8 +14,7 @@ const levelTrigger = {
   property: {
     name: 'hue',
     type: 'number',
-    href:
-      '/things/light2/properties/hue',
+    href: '/things/light2/properties/hue',
   },
   type: 'LevelTrigger',
   levelType: 'LESS',
@@ -27,8 +25,7 @@ const equalityTrigger = {
   property: {
     name: 'color',
     type: 'string',
-    href:
-      '/things/light2/properties/color',
+    href: '/things/light2/properties/color',
   },
   type: 'EqualityTrigger',
   value: '#ff7700',

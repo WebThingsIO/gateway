@@ -50,9 +50,25 @@ const Thing = function(id, description) {
   if (description.properties) {
     for (const propertyName in description.properties) {
       const property = description.properties[propertyName];
+
+      if (property.hasOwnProperty('href')) {
+        delete property.href;
+      }
+
+      if (property.hasOwnProperty('links')) {
+        property.links = property.links.filter((link) => {
+          return link.rel && link.rel !== 'property';
+        });
+      } else {
+        property.links = [];
+      }
+
       // Give the property a URL
-      property.href = `${Constants.THINGS_PATH}/${this.id
-      }${Constants.PROPERTIES_PATH}/${propertyName}`;
+      property.links.push({
+        rel: 'property',
+        href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
+      });
+
       this.properties[propertyName] = property;
     }
   }
@@ -97,12 +113,47 @@ const Thing = function(id, description) {
   this.links.push(uiLink);
 
   for (const actionName in this.actions) {
-    this.actions[actionName].href =
-      `${this.href}/actions/${actionName}`;
+    const action = this.actions[actionName];
+
+    if (action.hasOwnProperty('href')) {
+      delete action.href;
+    }
+
+    if (action.hasOwnProperty('links')) {
+      action.links = action.links.filter((link) => {
+        return link.rel && link.rel !== 'action';
+      });
+    } else {
+      action.links = [];
+    }
+
+    // Give the action a URL
+    action.links.push({
+      rel: 'action',
+      href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
+    });
   }
 
   for (const eventName in this.events) {
-    this.events[eventName].href = `${this.href}/events/${eventName}`;
+    const event = this.events[eventName];
+
+    if (event.hasOwnProperty('href')) {
+      delete event.href;
+    }
+
+    if (event.hasOwnProperty('links')) {
+      event.links = event.links.filter((link) => {
+        return link.rel && link.rel !== 'event';
+      });
+    } else {
+      event.links = [];
+    }
+
+    // Give the event a URL
+    event.links.push({
+      rel: 'event',
+      href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
+    });
   }
 
   this.iconHref = null;
@@ -371,9 +422,24 @@ Thing.prototype.updateFromDescription = function(description) {
   if (description.properties) {
     for (const propertyName in description.properties) {
       const property = description.properties[propertyName];
+
+      if (property.hasOwnProperty('href')) {
+        delete property.href;
+      }
+
+      if (property.hasOwnProperty('links')) {
+        property.links = property.links.filter((link) => {
+          return link.rel && link.rel !== 'property';
+        });
+      } else {
+        property.links = [];
+      }
+
       // Give the property a URL
-      property.href = `${Constants.THINGS_PATH}/${this.id
-      }${Constants.PROPERTIES_PATH}/${propertyName}`;
+      property.links.push({
+        rel: 'property',
+        href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
+      });
       this.properties[propertyName] = property;
     }
   }
@@ -381,14 +447,49 @@ Thing.prototype.updateFromDescription = function(description) {
   // Update actions
   this.actions = description.actions || {};
   for (const actionName in this.actions) {
-    this.actions[actionName].href =
-      `${this.href}/actions/${actionName}`;
+    const action = this.actions[actionName];
+
+    if (action.hasOwnProperty('href')) {
+      delete action.href;
+    }
+
+    if (action.hasOwnProperty('links')) {
+      action.links = action.links.filter((link) => {
+        return link.rel && link.rel !== 'action';
+      });
+    } else {
+      action.links = [];
+    }
+
+    // Give the action a URL
+    action.links.push({
+      rel: 'action',
+      href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
+    });
   }
 
   // Update events
   this.events = description.events || {};
   for (const eventName in this.events) {
-    this.events[eventName].href = `${this.href}/events/${eventName}`;
+    const event = this.events[eventName];
+
+    if (event.hasOwnProperty('href')) {
+      delete event.href;
+    }
+
+    if (event.hasOwnProperty('links')) {
+      event.links = event.links.filter((link) => {
+        return link.rel && link.rel !== 'event';
+      });
+    } else {
+      event.links = [];
+    }
+
+    // Give the event a URL
+    event.links.push({
+      rel: 'event',
+      href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
+    });
   }
 
   let uiLink = {
