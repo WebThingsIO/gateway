@@ -69,7 +69,11 @@ const App = {
     ThingsScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
-    Speech.init();
+
+    if (navigator.mediaDevices && window.MediaRecorder) {
+      Speech.init();
+    }
+
     RulesScreen.init();
     RuleScreen.init();
 
