@@ -44,7 +44,7 @@ const Router = {
 
     // First look for a static file
     const staticHandler = express.static(Constants.BUILD_STATIC_PATH);
-    app.use('/uploads', express.static(UserProfile.uploadsDir));
+    app.use(Constants.UPLOADS_PATH, express.static(UserProfile.uploadsDir));
     app.use((request, response, next) => {
       if (request.path === '/' && request.accepts('html')) {
         // We need this to hit RootController.
@@ -86,6 +86,11 @@ const Router = {
     // Let OAuth handle its own rendering
     app.use(APP_PREFIX + Constants.OAUTH_PATH, nocache,
             require('./controllers/oauth_controller').default);
+
+    // Handle static media files before other static content. These must be
+    // authenticated.
+    app.use(APP_PREFIX + Constants.MEDIA_PATH, nocache, auth,
+            express.static(UserProfile.mediaDir));
 
     // Web app routes - send index.html and fall back to client side URL router
     app.use(`${APP_PREFIX}/*`, require('./controllers/root_controller'));

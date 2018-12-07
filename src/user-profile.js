@@ -27,6 +27,7 @@ const Profile = {
     this.configDir = path.join(this.baseDir, 'config');
     this.sslDir = path.join(this.baseDir, 'ssl');
     this.uploadsDir = path.join(this.baseDir, 'uploads');
+    this.mediaDir = path.join(this.baseDir, 'media');
     this.logDir = path.join(this.baseDir, 'log');
     this.gatewayDir = path.join(__dirname, '..');
 
