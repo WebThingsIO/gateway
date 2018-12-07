@@ -1,22 +1,10 @@
 const effects = require('../../rules-engine/effects');
 
-function transformEffect(effect) {
-  const transformed = JSON.parse(JSON.stringify(effect));
-  transformed.property.href = transformed.property.links[0].href;
-  delete transformed.property.links;
-  return transformed;
-}
-
 const pulseEffect = {
   property: {
     name: 'on',
     type: 'boolean',
-    links: [
-      {
-        rel: 'property',
-        href: '/things/light1/properties/on',
-      },
-    ],
+    href: '/things/light1/properties/on',
   },
   type: 'PulseEffect',
   value: true,
@@ -26,12 +14,7 @@ const setEffect = {
   property: {
     name: 'temp',
     type: 'number',
-    links: [
-      {
-        rel: 'property',
-        href: '/things/thermostat/properties/temp',
-      },
-    ],
+    href: '/things/thermostat/properties/temp',
     unit: 'celsius',
     description: 'thermostat setpoint',
   },
@@ -47,28 +30,20 @@ const bothEffect = {
   type: 'MultiEffect',
 };
 
-const transformedBothEffect = {
-  effects: [
-    transformEffect(pulseEffect),
-    transformEffect(setEffect),
-  ],
-  type: 'MultiEffect',
-};
-
 describe('effects', function() {
   it('should parse a PulseEffect', () => {
     const effect = effects.fromDescription(pulseEffect);
-    expect(effect).toMatchObject(transformEffect(pulseEffect));
+    expect(effect).toMatchObject(pulseEffect);
   });
 
   it('should parse a SetEffect', () => {
     const effect = effects.fromDescription(setEffect);
-    expect(effect).toMatchObject(transformEffect(setEffect));
+    expect(effect).toMatchObject(setEffect);
   });
 
   it('should parse a MultiEffect', () => {
     const effect = effects.fromDescription(bothEffect);
-    expect(effect).toMatchObject(transformedBothEffect);
+    expect(effect).toMatchObject(bothEffect);
   });
 
   it('should reject an unknown effect type', () => {

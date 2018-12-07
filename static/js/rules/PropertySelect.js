@@ -292,10 +292,21 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
   this.clearOptions();
 
   for (const propName of Object.keys(this.thing.properties)) {
-    const property = this.thing.properties[propName];
+    const property =
+      JSON.parse(JSON.stringify(this.thing.properties[propName]));
+
     if (!property.name) {
       property.name = propName;
     }
+
+    const links = property.links.filter((l) => !l.rel || l.rel === 'property');
+    if (links.length === 0) {
+      continue;
+    }
+
+    property.href = links[0].href;
+    delete property.links;
+
     const name = property.label || Utils.capitalize(property.name);
     if (role === 'trigger') {
       if (property.type === 'boolean') {

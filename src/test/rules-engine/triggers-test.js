@@ -1,22 +1,10 @@
 const triggers = require('../../rules-engine/triggers');
 
-function transformTrigger(trigger) {
-  const transformed = JSON.parse(JSON.stringify(trigger));
-  transformed.property.href = transformed.property.links[0].href;
-  delete transformed.property.links;
-  return transformed;
-}
-
 const booleanTrigger = {
   property: {
     name: 'on',
     type: 'boolean',
-    links: [
-      {
-        rel: 'property',
-        href: '/things/light1/properties/on',
-      },
-    ],
+    href: '/things/light1/properties/on',
   },
   type: 'BooleanTrigger',
   onValue: true,
@@ -26,12 +14,7 @@ const levelTrigger = {
   property: {
     name: 'hue',
     type: 'number',
-    links: [
-      {
-        rel: 'property',
-        href: '/things/light2/properties/hue',
-      },
-    ],
+    href: '/things/light2/properties/hue',
   },
   type: 'LevelTrigger',
   levelType: 'LESS',
@@ -42,12 +25,7 @@ const equalityTrigger = {
   property: {
     name: 'color',
     type: 'string',
-    links: [
-      {
-        rel: 'property',
-        href: '/things/light2/properties/color',
-      },
-    ],
+    href: '/things/light2/properties/color',
   },
   type: 'EqualityTrigger',
   value: '#ff7700',
@@ -62,34 +40,26 @@ const andTrigger = {
   op: 'AND',
 };
 
-const transformedAndTrigger = {
-  triggers: [
-    transformTrigger(booleanTrigger),
-    transformTrigger(levelTrigger),
-  ],
-  type: 'MultiTrigger',
-  op: 'AND',
-};
 
 describe('triggers', function() {
   it('should parse a BooleanTrigger', () => {
     const trigger = triggers.fromDescription(booleanTrigger);
-    expect(trigger).toMatchObject(transformTrigger(booleanTrigger));
+    expect(trigger).toMatchObject(booleanTrigger);
   });
 
   it('should parse a LevelTrigger', () => {
     const trigger = triggers.fromDescription(levelTrigger);
-    expect(trigger).toMatchObject(transformTrigger(levelTrigger));
+    expect(trigger).toMatchObject(levelTrigger);
   });
 
   it('should parse an EqualityTrigger', () => {
     const trigger = triggers.fromDescription(equalityTrigger);
-    expect(trigger).toMatchObject(transformTrigger(equalityTrigger));
+    expect(trigger).toMatchObject(equalityTrigger);
   });
 
   it('should parse a MultiTrigger', () => {
     const trigger = triggers.fromDescription(andTrigger);
-    expect(trigger).toMatchObject(transformedAndTrigger);
+    expect(trigger).toMatchObject(andTrigger);
   });
 
   it('should reject an unknown trigger type', () => {
