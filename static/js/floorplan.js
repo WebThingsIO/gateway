@@ -402,7 +402,7 @@ const FloorplanScreen = {
     const thing = this.selectedThing;
     const x = parseFloat(thing.dataset.x);
     const y = parseFloat(thing.dataset.y);
-    const thingUrl = thing.dataset.href;
+    const thingUrl = decodeURI(thing.dataset.href);
     thing.style.cursor = '';
 
     // HTTP PATCH request to set x and y co-ordinates of Thing in database.
