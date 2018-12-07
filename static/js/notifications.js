@@ -14,6 +14,10 @@ const API = require('./api');
 
 const Notifications = {
   onReady: async function(registration) {
+    if (!registration.pushManager) {
+      return;
+    }
+
     let subscription = await registration.pushManager.getSubscription();
     if (!subscription) {
       const res = await fetch('/push/vapid-public-key', {
