@@ -66,7 +66,7 @@ const Thing = function(id, description) {
       // Give the property a URL
       property.links.push({
         rel: 'property',
-        href: `${this.href}/properties/${propertyName}`,
+        href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
       });
 
       this.properties[propertyName] = property;
@@ -130,7 +130,7 @@ const Thing = function(id, description) {
     // Give the action a URL
     action.links.push({
       rel: 'action',
-      href: `${this.href}/actions/${actionName}`,
+      href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
     });
   }
 
@@ -152,7 +152,7 @@ const Thing = function(id, description) {
     // Give the event a URL
     event.links.push({
       rel: 'event',
-      href: `${this.href}/events/${eventName}`,
+      href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
     });
   }
 
@@ -438,7 +438,7 @@ Thing.prototype.updateFromDescription = function(description) {
       // Give the property a URL
       property.links.push({
         rel: 'property',
-        href: `${this.href}/properties/${propertyName}`,
+        href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
       });
       this.properties[propertyName] = property;
     }
@@ -464,7 +464,7 @@ Thing.prototype.updateFromDescription = function(description) {
     // Give the action a URL
     action.links.push({
       rel: 'action',
-      href: `${this.href}/actions/${actionName}`,
+      href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
     });
   }
 
@@ -488,7 +488,7 @@ Thing.prototype.updateFromDescription = function(description) {
     // Give the event a URL
     event.links.push({
       rel: 'event',
-      href: `${this.href}/events/${eventName}`,
+      href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
     });
   }
 
