@@ -87,9 +87,12 @@ const Router = {
     app.use(APP_PREFIX + Constants.OAUTH_PATH, nocache,
             require('./controllers/oauth_controller').default);
 
-    // Web app routes - send index.html and fall back to client side URL router
+    // Handle static media files before other static content. These must be
+    // authenticated.
     app.use(APP_PREFIX + Constants.MEDIA_PATH, nocache, auth,
             express.static(UserProfile.mediaDir));
+
+    // Web app routes - send index.html and fall back to client side URL router
     app.use(`${APP_PREFIX}/*`, require('./controllers/root_controller'));
 
     // Unauthenticated API routes
