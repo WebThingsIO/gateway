@@ -17,9 +17,9 @@ class ColorTemperatureDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || 'Color Temperature';
-    this.min = property.hasOwnProperty('min') ? property.min : property.minimum;
-    this.max = property.hasOwnProperty('max') ? property.max : property.maximum;
+    this.label = property.title || 'Color Temperature';
+    this.min = property.minimum;
+    this.max = property.maximum;
 
     if (property.hasOwnProperty('multipleOf')) {
       this.step = property.multipleOf;

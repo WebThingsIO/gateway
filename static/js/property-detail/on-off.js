@@ -17,7 +17,7 @@ class OnOffDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || 'On/Off';
+    this.label = property.title || 'On/Off';
     this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

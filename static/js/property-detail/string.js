@@ -17,7 +17,7 @@ class StringDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.id = `string-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

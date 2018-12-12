@@ -15,7 +15,7 @@ const Utils = require('../utils');
 
 class MotionDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.label || 'Motion');
+    super(thing, name, !!property.readOnly, property.title || 'Motion');
     this.id = `motion-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

@@ -18,7 +18,7 @@ class ImageDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.id = `image-${Utils.escapeHtmlForIdClass(this.name)}`;
 
     this.imageHref = null;

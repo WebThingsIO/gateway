@@ -18,7 +18,7 @@ class VoltageDetail extends NumericLabelDetail {
     super(thing,
           name,
           !!property.readOnly,
-          property.label || 'Voltage',
+          property.title || 'Voltage',
           'V',
           0);
     this.id = `voltage-${Utils.escapeHtmlForIdClass(this.name)}`;

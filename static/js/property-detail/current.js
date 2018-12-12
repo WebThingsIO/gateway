@@ -17,7 +17,8 @@ class CurrentDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
     super(thing,
           name,
-          !!property.readOnly, property.label || 'Current',
+          !!property.readOnly,
+          property.title || 'Current',
           'A',
           1);
     this.id = `current-${Utils.escapeHtmlForIdClass(this.name)}`;

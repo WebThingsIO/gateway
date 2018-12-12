@@ -15,7 +15,7 @@ const Utils = require('../utils');
 
 class OpenDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.label || 'Open');
+    super(thing, name, !!property.readOnly, property.title || 'Open');
     this.id = `open-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

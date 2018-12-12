@@ -18,7 +18,7 @@ class FrequencyDetail extends NumericLabelDetail {
     super(thing,
           name,
           !!property.readOnly,
-          property.label || 'Frequency',
+          property.title || 'Frequency',
           'Hz',
           0);
     this.id = `frequency-${Utils.escapeHtmlForIdClass(this.name)}`;
