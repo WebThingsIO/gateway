@@ -38,6 +38,7 @@ class VideoDetail {
     }
 
     this.expandVideo = this._expandVideo.bind(this);
+    this.positionButtons = this._positionButtons.bind(this);
   }
 
   /**
@@ -82,8 +83,16 @@ class VideoDetail {
       'click',
       () => {
         document.body.removeChild(element);
+        window.removeEventListener('resize', this.positionButtons);
       }
     );
+
+    element.querySelector('.media-modal-video').addEventListener(
+      'loadeddata',
+      this.positionButtons
+    );
+
+    window.addEventListener('resize', this.positionButtons);
 
     const video = document.querySelector('.media-modal-video');
 
@@ -126,6 +135,17 @@ class VideoDetail {
         video.play();
       });
     }
+  }
+
+  _positionButtons() {
+    const video = document.querySelector('.media-modal-video');
+    const close = document.querySelector('.media-modal-close');
+
+    const parentWidth = video.parentNode.offsetWidth;
+    const videoWidth = video.offsetWidth;
+    const sidePadding = (parentWidth - videoWidth) / 2;
+
+    close.style.right = `${sidePadding}px`;
   }
 }
 

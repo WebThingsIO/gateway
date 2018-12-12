@@ -32,6 +32,7 @@ class ImageDetail {
 
     this.expandImage = this._expandImage.bind(this);
     this.reloadImage = this._reloadImage.bind(this);
+    this.positionButtons = this._positionButtons.bind(this);
   }
 
   /**
@@ -70,12 +71,11 @@ class ImageDetail {
       </div>
       `;
 
-    document.body.appendChild(element);
-
     element.querySelector('.media-modal-close').addEventListener(
       'click',
       () => {
         document.body.removeChild(element);
+        window.removeEventListener('resize', this.positionButtons);
       }
     );
 
@@ -83,6 +83,15 @@ class ImageDetail {
       'click',
       this.reloadImage
     );
+
+    element.querySelector('.media-modal-image').addEventListener(
+      'load',
+      this.positionButtons
+    );
+
+    window.addEventListener('resize', this.positionButtons);
+
+    document.body.appendChild(element);
 
     this.reloadImage();
   }
@@ -109,6 +118,19 @@ class ImageDetail {
     }).catch((e) => {
       console.error(`Failed to load image: ${e}`);
     });
+  }
+
+  _positionButtons() {
+    const img = document.querySelector('.media-modal-image');
+    const close = document.querySelector('.media-modal-close');
+    const refresh = document.querySelector('.media-modal-refresh');
+
+    const parentWidth = img.parentNode.offsetWidth;
+    const imageWidth = img.offsetWidth;
+    const sidePadding = (parentWidth - imageWidth) / 2;
+
+    close.style.right = `${sidePadding}px`;
+    refresh.style.left = `${sidePadding}px`;
   }
 }
 

@@ -370,9 +370,10 @@
   width: 90%;
   position: relative;
   top: 7.6rem;
-  max-height: calc(100% - 5.6rem);
+  max-height: calc(100% - 7.6rem);
   left: 5%;
   overflow: auto;
+  text-align: center;
 }
 
 @media only screen and (max-width: 560px) {
@@ -383,13 +384,15 @@
 }
 
 .media-modal-frame {
-  width: calc(100% - 3.2rem);
+  max-width: calc(100% - 3.2rem);
+  max-height: calc(100% - 3.2rem);
   margin: 1.6rem;
 }
 
 .media-modal-image,
 .media-modal-video {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .media-modal-close {
