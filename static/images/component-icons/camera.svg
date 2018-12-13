@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32.000001"
+   id="svg16389"
+   version="1.1">
+  <defs
+     id="defs16391">
+    <clipPath
+       id="clipPath27913"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="-16995.246"
+         x="14447.59"
+         height="28.019884"
+         width="10.050467"
+         id="rect27915"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1;stroke-miterlimit:3.73333335;stroke-dasharray:none;stroke-opacity:1" />
+    </clipPath>
+  </defs>
+  <metadata
+     id="metadata16394">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     d="m 20.873846,17.968616 a 4.875,4.875 0 0 1 -4.874462,4.875077 4.875,4.875 0 0 1 -4.875077,-4.875077 4.875,4.875 0 0 1 4.875077,-4.875077 4.875,4.875 0 0 1 4.874462,4.875077 z M 8.8732313,4.0320002 c -1.315693,0 -2.37477,1.0578462 -2.37477,2.3735384 l 0,1.5624612 -2.498461,0 c -2.2160005,0 -4.00000055,1.784 -4.00000055,4.0000002 l 0,12 c 0,2.216 1.78400005,4 4.00000055,4 L 28,27.968 c 2.216,0 4,-1.784 4,-4 l 0,-12 C 32,9.7519998 30.216,7.9679998 28,7.9679998 l -2.501539,0 0,-1.5624612 c 0,-1.3156922 -1.057846,-2.3735384 -2.373538,-2.3735384 l -14.2516918,0 z M 27.929846,9.4670768 a 2.6652914,2.6652914 0 0 1 2.665846,2.6658462 2.6652914,2.6652914 0 0 1 -2.665846,2.664616 2.6652914,2.6652914 0 0 1 -2.664616,-2.664616 2.6652914,2.6652914 0 0 1 2.664616,-2.6658462 z M 16,11.217846 A 6.7499999,6.7499999 0 0 1 22.748307,17.968001 6.7499999,6.7499999 0 0 1 16,24.719385 6.7499999,6.7499999 0 0 1 9.2498463,17.968001 6.7499999,6.7499999 0 0 1 16,11.217846 Z"
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3.72794127;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:8.80000019;stroke-dasharray:29.82352938, 14.91176468;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+     id="circle28864" />
+</svg>

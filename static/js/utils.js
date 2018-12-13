@@ -253,6 +253,8 @@ const Utils = {
     const list = capabilities.slice();
 
     const priority = [
+      'VideoCamera',
+      'Camera',
       'SmartPlug',
       'Light',
       'MultiLevelSwitch',

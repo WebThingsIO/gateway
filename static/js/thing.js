@@ -20,6 +20,7 @@ const Constants = require('./constants');
 const CurrentDetail = require('./property-detail/current');
 const EnumDetail = require('./property-detail/enum');
 const FrequencyDetail = require('./property-detail/frequency');
+const ImageDetail = require('./property-detail/image');
 const InstantaneousPowerDetail =
   require('./property-detail/instantaneous-power');
 const LevelDetail = require('./property-detail/level');
@@ -31,6 +32,7 @@ const PushedDetail = require('./property-detail/pushed');
 const StringDetail = require('./property-detail/string');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
+const VideoDetail = require('./property-detail/video');
 const VoltageDetail = require('./property-detail/voltage');
 
 class Thing {
@@ -163,6 +165,12 @@ class Thing {
             break;
           case 'PushedProperty':
             detail = new PushedDetail(this, name, property);
+            break;
+          case 'ImageProperty':
+            detail = new ImageDetail(this, name, property);
+            break;
+          case 'VideoProperty':
+            detail = new VideoDetail(this, name, property);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {

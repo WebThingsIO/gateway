@@ -352,6 +352,7 @@ Speech = require('./speech');
 // load web components
 require('@webcomponents/webcomponentsjs/webcomponents-bundle');
 require('./components/capability/binary-sensor');
+require('./components/capability/camera');
 require('./components/capability/color-control');
 require('./components/capability/custom');
 require('./components/capability/door-sensor');
@@ -364,6 +365,7 @@ require('./components/capability/multi-level-switch');
 require('./components/capability/on-off-switch');
 require('./components/capability/push-button');
 require('./components/capability/smart-plug');
+require('./components/capability/video-camera');
 require('./components/icon/custom');
 require('./components/property/action');
 require('./components/property/boolean');
@@ -373,6 +375,7 @@ require('./components/property/color-temperature');
 require('./components/property/current');
 require('./components/property/enum');
 require('./components/property/frequency');
+require('./components/property/image');
 require('./components/property/instantaneous-power');
 require('./components/property/level');
 require('./components/property/motion');
@@ -385,7 +388,10 @@ require('./components/property/slider');
 require('./components/property/string');
 require('./components/property/string-label');
 require('./components/property/switch');
+require('./components/property/video');
 require('./components/property/voltage');
+require('dashjs/dist/dash.all.min');
+require('hls.js/dist/hls.min');
 
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {

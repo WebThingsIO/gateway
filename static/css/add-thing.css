@@ -213,6 +213,14 @@
   background-image: url('../optimized-images/thing-icons/push_button.svg');
 }
 
+.new-thing.video-camera .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/video_camera.svg');
+}
+
+.new-thing.camera .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/camera.svg');
+}
+
 #add-by-url-anchor:link,
 #add-by-url-anchor:visited,
 #add-by-url-anchor:hover,

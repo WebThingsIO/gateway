@@ -106,6 +106,14 @@ class NewThing {
           type = 'Push Button';
           cls = cls || 'push-button';
           break;
+        case 'VideoCamera':
+          type = 'Video Camera';
+          cls = cls || 'video-camera';
+          break;
+        case 'Camera':
+          type = 'Camera';
+          cls = cls || 'camera';
+          break;
         case 'Custom':
           type = 'Custom Thing';
           cls = cls || (capabilities.length > 1 ? '' : ' ');
@@ -336,6 +344,12 @@ class NewThing {
       case 'PushButton':
         cls = 'push-button';
         break;
+      case 'VideoCamera':
+        cls = 'video-camera';
+        break;
+      case 'Camera':
+        cls = 'camera';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -355,7 +369,9 @@ class NewThing {
       'light',
       'door-sensor',
       'motion-sensor',
-      'push-button'
+      'push-button',
+      'video-camera',
+      'camera'
     );
 
     if (cls) {
