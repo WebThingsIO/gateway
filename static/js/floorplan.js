@@ -19,6 +19,7 @@ const ColorControl = require('./color-control');
 const Constants = require('./constants');
 const DoorSensor = require('./door-sensor');
 const EnergyMonitor = require('./energy-monitor');
+const LeakSensor = require('./leak-sensor');
 const Light = require('./light');
 const MotionSensor = require('./motion-sensor');
 const MultiLevelSensor = require('./multi-level-sensor');
@@ -138,6 +139,9 @@ const FloorplanScreen = {
               break;
             case 'MotionSensor':
               thing = new MotionSensor(thingModel, description, format);
+              break;
+            case 'LeakSensor':
+              thing = new LeakSensor(thingModel, description, format);
               break;
             case 'PushButton':
               thing = new PushButton(thingModel, description, format);

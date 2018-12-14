@@ -22,6 +22,8 @@ const RuleUtils = {
           return '/optimized-images/rule-icons/door_sensor.svg';
         case 'MotionSensor':
           return '/optimized-images/rule-icons/motion_sensor.svg';
+        case 'LeakSensor':
+          return '/optimized-images/rule-icons/leak_sensor.svg';
         case 'PushButton':
           return '/optimized-images/rule-icons/push_button.svg';
         default:

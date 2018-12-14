@@ -146,6 +146,9 @@ const ContextMenu = {
             case 'MotionSensor':
               option.innerText = 'Motion Sensor';
               break;
+            case 'LeakSensor':
+              option.innerText = 'Leak Sensor';
+              break;
             case 'PushButton':
               option.innerText = 'Push Button';
               break;
@@ -225,6 +228,9 @@ const ContextMenu = {
         break;
       case 'MotionSensor':
         image = '/optimized-images/thing-icons/motion_sensor.svg';
+        break;
+      case 'LeakSensor':
+        image = '/optimized-images/thing-icons/leak_sensor.svg';
         break;
       case 'PushButton':
         image = '/optimized-images/thing-icons/push_button.svg';

@@ -146,6 +146,9 @@ class NewWebThing {
       case 'MotionSensor':
         cls = 'motion-sensor';
         break;
+      case 'LeakSensor':
+        cls = 'leak-sensor';
+        break;
       case 'PushButton':
         cls = 'push-button';
         break;
@@ -174,6 +177,7 @@ class NewWebThing {
       'light',
       'door-sensor',
       'motion-sensor',
+      'leak-sensor',
       'push-button',
       'video-camera',
       'camera'
@@ -346,6 +350,10 @@ class NewWebThing {
             option.innerText = 'Motion Sensor';
             cls = cls || 'motion-sensor';
             break;
+          case 'LeakSensor':
+            option.innerText = 'Leak Sensor';
+            cls = cls || 'leak-sensor';
+            break;
           case 'PushButton':
             option.innerText = 'Push Button';
             cls = cls || 'push-button';
@@ -491,6 +499,7 @@ class NewWebThing {
       'smart-plug',
       'door-sensor',
       'motion-sensor',
+      'leak-sensor',
       'push-button',
       'video-camera',
       'camera'

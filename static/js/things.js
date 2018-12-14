@@ -21,6 +21,7 @@ const Constants = require('./constants');
 const DoorSensor = require('./door-sensor');
 const EnergyMonitor = require('./energy-monitor');
 const EventList = require('./event-list');
+const LeakSensor = require('./leak-sensor');
 const Light = require('./light');
 const MotionSensor = require('./motion-sensor');
 const MultiLevelSensor = require('./multi-level-sensor');
@@ -89,6 +90,9 @@ const ThingsScreen = {
           break;
         case 'MotionSensor':
           thing = new MotionSensor(thingModel, description, format);
+          break;
+        case 'LeakSensor':
+          thing = new LeakSensor(thingModel, description, format);
           break;
         case 'PushButton':
           thing = new PushButton(thingModel, description, format);
@@ -327,6 +331,9 @@ const ThingsScreen = {
           case 'MotionSensor':
             icon = '/optimized-images/thing-icons/motion_sensor.svg';
             break;
+          case 'LeakSensor':
+            icon = '/optimized-images/thing-icons/leak_sensor.svg';
+            break;
           case 'PushButton':
             icon = '/optimized-images/thing-icons/push_button.svg';
             break;
@@ -447,6 +454,9 @@ const ThingsScreen = {
             break;
           case 'MotionSensor':
             icon = '/optimized-images/thing-icons/motion_sensor.svg';
+            break;
+          case 'LeakSensor':
+            icon = '/optimized-images/thing-icons/leak_sensor.svg';
             break;
           case 'PushButton':
             icon = '/optimized-images/thing-icons/push_button.svg';

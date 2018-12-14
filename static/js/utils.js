@@ -270,6 +270,7 @@ const Utils = {
       'EnergyMonitor',
       'DoorSensor',
       'MotionSensor',
+      'LeakSensor',
       'PushButton',
       'MultiLevelSensor',
       'BinarySensor',
