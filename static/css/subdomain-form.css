@@ -145,3 +145,10 @@ button::-moz-focus-inner {
   vertical-align: middle;
   padding-left: 2rem;
 }
+
+#opt-in-info > a:link,
+#opt-in-info > a:visited,
+#opt-in-info > a:hover,
+#opt-in-info > a:active {
+  color: white;
+}
