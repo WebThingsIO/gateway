@@ -506,12 +506,15 @@ describe('Form', () => {
           schema,
         });
 
-        const input = node.querySelector('input[type=text]');
+        const input = node.querySelector('input[type=number]');
         input.value = 'not a number';
         fireEvent(input, 'change');
 
         expect(node.querySelector('.error-item').textContent.trim()).toEqual(
-          '.field1 should be number',
+          // TODO: uncomment this when jsdom's validation is no longer broken.
+          // it doesn't set input.validity.badInput when it should.
+          // '.field1 should be number',
+          '.field1 is a required property'
         );
       });
 
@@ -521,15 +524,23 @@ describe('Form', () => {
           formData: {branch: 2},
         });
 
-        const input = node.querySelector('input[type=text]');
-        input.value = 'not a number';
-        fireEvent(input, 'change');
+        const field1 = node.querySelector('#root_field1');
+        field1.value = 'not a number';
+        fireEvent(field1, 'change');
+
+        const field2 = node.querySelector('#root_field2');
+        field2.value = 'not a number';
+        fireEvent(field2, 'change');
 
         const liNodes = node.querySelectorAll('.error-item');
         const errors = [].map.call(liNodes, (li) => li.textContent.trim());
 
         expect(errors).toEqual(expect.arrayContaining([
-          '.field1 should be number',
+          // TODO: uncomment this when jsdom's validation is no longer broken.
+          // it doesn't set input.validity.badInput when it should.
+          // '.field1 should be number',
+          // '.field2 should be number',
+          '.field1 is a required property',
           '.field2 is a required property',
         ]));
       });

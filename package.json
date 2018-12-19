@@ -29,7 +29,7 @@
   },
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
-    "ajv": "^6.5.5",
+    "ajv": "^6.6.2",
     "archiver": "^3.0.0",
     "asn1.js": "^5.0.1",
     "bcryptjs": "^2.4.3",
@@ -102,7 +102,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
-    "jsdom": "^12.2.0",
+    "jsdom": "^13.1.0",
     "jsonfile": "^5.0.0",
     "jszip": "^3.1.5",
     "mini-css-extract-plugin": "^0.4.4",

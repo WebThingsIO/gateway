@@ -45,7 +45,8 @@ StringField.prototype.toFormData = function(value) {
 
 StringField.prototype.onStringChange = function(event) {
   const value = event.target.value;
-  // If an user input nothing on required field, we should set undefined
+
+  // If a user input nothing on required field, we should set undefined
   // in order to raise error.
   this.formData = this.toFormData(value);
 
