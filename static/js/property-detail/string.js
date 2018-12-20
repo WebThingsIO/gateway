@@ -35,12 +35,17 @@ class StringDetail {
    * Build the detail view.
    */
   view() {
-    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
-
-    return `
-      <webthing-string-property data-name="${Utils.escapeHtml(this.label)}"
-        id="${this.id}" ${readOnly}>
-      </webthing-string-property>`;
+    if (this.readOnly) {
+      return `
+        <webthing-string-label-property
+          data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        </webthing-string-label-property>`;
+    } else {
+      return `
+        <webthing-string-property data-name="${Utils.escapeHtml(this.label)}"
+          id="${this.id}">
+        </webthing-string-property>`;
+    }
   }
 
   /**
