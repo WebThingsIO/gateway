@@ -366,12 +366,21 @@
   font-size: 1.4rem;
 }
 
+.addon-settings-license,
 .addon-settings-author {
   font-size: 1.4rem;
   font-style: italic;
   color: #ccc
 }
 
+.addon-settings-license {
+  float: right;
+}
+
+.addon-settings-license a:link,
+.addon-settings-license a:visited,
+.addon-settings-license a:hover,
+.addon-settings-license a:active,
 .addon-settings-author a:link,
 .addon-settings-author a:visited,
 .addon-settings-author a:hover,

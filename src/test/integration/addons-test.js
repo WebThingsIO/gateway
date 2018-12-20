@@ -14,6 +14,7 @@ const AddonManager = require('../../addon-manager');
 const config = require('config');
 const Constants = require('../../constants');
 const fetch = require('node-fetch');
+const fs = require('fs');
 const jsonfile = require('jsonfile');
 const path = require('path');
 const pFinal = require('../promise-final');
@@ -22,8 +23,11 @@ const pkg = require('../../../package.json');
 const UserProfile = require('../../user-profile');
 const {URLSearchParams} = require('url');
 
-const testManifestFilename = path.join(UserProfile.addonsDir,
-                                       'test-adapter', 'package.json');
+const testManifestFilename =
+  path.join(UserProfile.addonsDir, 'test-adapter', 'package.json');
+const sourceLicense = path.join(__dirname, '..', '..', '..', 'LICENSE');
+const destLicense =
+  path.join(UserProfile.addonsDir, 'settings-adapter', 'LICENSE');
 
 const testManifest = {
   name: 'test-adapter',
@@ -77,6 +81,11 @@ describe('addons', function() {
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
+  afterEach(async () => {
+    if (fs.existsSync(destLicense)) {
+      fs.unlinkSync(destLicense);
+    }
+  });
 
   it('Get the add-on list', async () => {
     try {
@@ -118,7 +127,6 @@ describe('addons', function() {
     }
 
     // Toggle on
-    console.log('enabling...');
     const res1 = await chai.request(server)
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
@@ -146,7 +154,6 @@ describe('addons', function() {
     expect(addonConfig1.moziot.enabled).toBe(true);
 
     // Toggle off
-    console.log('disabling...');
     const res3 = await chai.request(server)
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
@@ -172,6 +179,47 @@ describe('addons', function() {
 
     expect(addonConfig2).toHaveProperty('moziot');
     expect(addonConfig2.moziot.enabled).toBe(false);
+  });
+
+  it('Fail to get license for non-existent add-on', async () => {
+    const err = await pFinal(chai.request(server)
+      .get(`${Constants.ADDONS_PATH}/fake-adapter/license`)
+      .set(...headerAuth(jwt)));
+
+    expect(err.response.status).toEqual(404);
+  });
+
+  it('Fail to get non-existent add-on license', async () => {
+    try {
+      await AddonManager.loadAddon('settings-adapter');
+    } catch (_e) {
+      console.error(_e);
+      // pass intentionally
+    }
+
+    const err = await pFinal(chai.request(server)
+      .get(`${Constants.ADDONS_PATH}/settings-adapter/license`)
+      .set(...headerAuth(jwt)));
+
+    expect(err.response.status).toEqual(404);
+  });
+
+  it('Get add-on license', async () => {
+    fs.copyFileSync(sourceLicense, destLicense);
+
+    try {
+      await AddonManager.loadAddon('settings-adapter');
+    } catch (_e) {
+      console.error(_e);
+      // pass intentionally
+    }
+
+    const res = await chai.request(server)
+      .get(`${Constants.ADDONS_PATH}/settings-adapter/license`)
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.text.startsWith('Mozilla Public License')).toBeTruthy();
   });
 
   it('Install an invalid add-on', async () => {

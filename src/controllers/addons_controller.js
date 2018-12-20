@@ -1,6 +1,9 @@
 const PromiseRouter = require('express-promise-router');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');
+const UserProfile = require('../user-profile');
+const fs = require('fs');
+const path = require('path');
 
 const AddonsController = PromiseRouter();
 
@@ -29,6 +32,41 @@ AddonsController.get('/', async (request, response) => {
     console.error('Failed to get add-on settings.');
     console.error(e);
     response.status(400).send(e);
+  });
+});
+
+AddonsController.get('/:addonName/license', async (request, response) => {
+  const addonName = request.params.addonName;
+  const addonDir = path.join(UserProfile.addonsDir, addonName);
+
+  fs.readdir(addonDir, (err, files) => {
+    if (err) {
+      response.status(404).send(err);
+      return;
+    }
+
+    const licenses = files.filter((f) => {
+      return /^LICENSE(\..*)?$/.test(f) &&
+        fs.lstatSync(path.join(addonDir, f)).isFile();
+    });
+
+    if (licenses.length === 0) {
+      response.status(404).send('License not found');
+      return;
+    }
+
+    fs.readFile(
+      path.join(addonDir, licenses[0]),
+      {encoding: 'utf8'},
+      (err, data) => {
+        if (err) {
+          response.status(404).send(err);
+          return;
+        }
+
+        response.status(200).type('text/plain').send(data);
+      }
+    );
   });
 });
 

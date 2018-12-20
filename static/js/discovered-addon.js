@@ -24,6 +24,7 @@ const DiscoveredAddon = function(metadata, installedAddonsMap,
   this.description = metadata.description;
   this.author = metadata.author;
   this.homepage = metadata.homepage;
+  this.license = metadata.license;
   this.version = metadata.version;
   this.url = metadata.url;
   this.checksum = metadata.checksum;
@@ -64,6 +65,11 @@ DiscoveredAddon.prototype.view = function() {
         <span class="addon-settings-author">
           by <a href="${this.homepage}" target="_blank" rel="noopener">
             ${Utils.escapeHtml(this.author)}
+          </a>
+        </span>
+        <span class="addon-settings-license">
+          subject to <a href="${this.license}" target="_blank" rel="noopener">
+            license
           </a>
         </span>
       </div>
