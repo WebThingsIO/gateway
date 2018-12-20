@@ -62,16 +62,24 @@ class NumberDetail {
    * Build the detail view.
    */
   view() {
-    const min = this.min === null ? '' : `min="${this.min}"`;
-    const max = this.max === null ? '' : `max="${this.max}"`;
     const unit = this.unit || '';
-    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
-    return `
-      <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" ${min} ${max} value="0" step="${this.step}"
-        id="${this.id}" ${readOnly}>
-      </webthing-number-property>`;
+    if (this.readOnly) {
+      return `
+        <webthing-numeric-label-property
+          data-name="${Utils.escapeHtml(this.label)}" data-unit="${unit}"
+          data-precision="3" id="${this.id}">
+        </webthing-numeric-label-property>`;
+    } else {
+      const min = this.min === null ? '' : `min="${this.min}"`;
+      const max = this.max === null ? '' : `max="${this.max}"`;
+
+      return `
+        <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
+          data-unit="${unit}" ${min} ${max} value="0" step="${this.step}"
+          id="${this.id}">
+        </webthing-number-property>`;
+    }
   }
 
   /**
