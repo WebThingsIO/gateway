@@ -37,7 +37,7 @@ Database.prototype.getRules = function() {
     db.db.all(
       'SELECT id, description FROM rules',
       [],
-      function(err, rows) {
+      (err, rows) => {
         if (err) {
           reject(err);
           return;
