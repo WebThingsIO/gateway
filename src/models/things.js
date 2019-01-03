@@ -13,8 +13,8 @@
 const Ajv = require('ajv');
 
 const AddonManager = require('../addon-manager');
-const Database = require('../db.js');
-const Thing = require('./thing.js');
+const Database = require('../db');
+const Thing = require('./thing');
 const Constants = require('../constants');
 
 const ajv = new Ajv();

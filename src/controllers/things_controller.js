@@ -233,8 +233,9 @@ ThingsController.put(
     try {
       const updatedValue = await Things.setThingProperty(thingId, propertyName,
                                                          value);
-      const result = {};
-      result[propertyName] = updatedValue;
+      const result = {
+        [propertyName]: updatedValue,
+      };
       response.status(200).json(result);
     } catch (e) {
       response.status(e.code).send(e.message);
