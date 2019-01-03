@@ -53,7 +53,9 @@ TimeTriggerBlock.prototype.setRulePart = function(rulePart) {
     this.role = 'trigger';
     this.rulePartBlock.classList.add('trigger');
 
-    this.timeInput.value = TimeTriggerBlock.utcToLocal(rulePart.trigger.time);
+    setTimeout(() => {
+      this.timeInput.value = TimeTriggerBlock.utcToLocal(rulePart.trigger.time);
+    }, 0);
   }
 
   if (rulePart.effect) {
