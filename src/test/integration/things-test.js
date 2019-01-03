@@ -191,7 +191,7 @@ describe('things/', function() {
     expect(res.body).toMatchObject(thingDescr);
   });
 
-  it('fail to GET a non-existent thing', async () => {
+  it('fail to GET a nonexistent thing', async () => {
     await addDevice();
     const err = await pFinal(chai.request(server)
       .get(`${Constants.THINGS_PATH}/test-2`)
@@ -288,7 +288,8 @@ describe('things/', function() {
     expect(res.body.power).toEqual(false);
   });
 
-  it('fail to GET a non-existant property of a thing', async () => {
+  it('fail to GET a nonexistent property of a thing', async () => {
+    await addDevice();
     const err = await pFinal(chai.request(server)
       .get(`${Constants.THINGS_PATH}/test-1/properties/xyz`)
       .set('Accept', 'application/json')
@@ -297,7 +298,7 @@ describe('things/', function() {
     expect(err.response.status).toEqual(500);
   });
 
-  it('fail to GET a property of a non-existent thing', async () => {
+  it('fail to GET a property of a nonexistent thing', async () => {
     const err = await pFinal(chai.request(server)
       .get(`${Constants.THINGS_PATH}/test-1a/properties/power`)
       .set('Accept', 'application/json')

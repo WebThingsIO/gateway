@@ -4,9 +4,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
-const Constants = require('../../constants.js');
+const assert = require('assert');
 const Events = require('../Events');
-const ThingConnection = require('../ThingConnection');
+const Things = require('../../models/things');
 const Trigger = require('./Trigger');
 
 /**
@@ -15,12 +15,12 @@ const Trigger = require('./Trigger');
 class EventTrigger extends Trigger {
   constructor(desc) {
     super(desc);
+    assert(desc.thing);
     this.thing = desc.thing;
     this.event = desc.event;
     this.timeout = null;
-    this.subscribed = false;
-    this.onMessage = this.onMessage.bind(this);
-    this.thingConn = new ThingConnection(desc.thing.href, this.onMessage);
+    this.stopped = true;
+    this.onEvent = this.onEvent.bind(this);
   }
 
   /**
@@ -37,34 +37,18 @@ class EventTrigger extends Trigger {
   }
 
   async start() {
-    await this.thingConn.start();
-    await this.subscribe();
-  }
-
-  async subscribe() {
-    await this.thingConn.send(JSON.stringify({
-      messageType: Constants.ADD_EVENT_SUBSCRIPTION,
-      data: {
-        [this.event]: {},
-      },
-    }));
-  }
-
-  onMessage(msg) {
-    if (msg.messageType === Constants.CONNECTED && !this.subscribed) {
-      if (msg.data) {
-        this.subscribe();
-      }
-    }
-
-    if (msg.messageType !== Constants.EVENT) {
+    this.stopped = false;
+    const thing = await Things.getThing(this.thing);
+    if (this.stopped) {
       return;
     }
-    if (!msg.data.hasOwnProperty(this.event)) {
+    thing.addEventSubscription(this.onEvent);
+  }
+
+  onEvent(event) {
+    if (this.event !== event.name) {
       return;
     }
-
-    this.subscribed = true;
 
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
     if (this.timeout) {
@@ -77,8 +61,11 @@ class EventTrigger extends Trigger {
   }
 
   stop() {
+    this.stopped = true;
     clearTimeout(this.timeout);
-    this.thingConn.stop();
+    Things.getThing(this.thing).then((thing) => {
+      thing.removeEventSubscription(this.onEvent);
+    });
   }
 }
 
