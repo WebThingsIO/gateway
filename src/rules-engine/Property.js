@@ -62,15 +62,24 @@ class Property extends EventEmitter {
    * @return {Promise} resolves to property's value
    */
   async get() {
-    return await Things.getThingProperty(this.thing, this.id);
+    try {
+      return await Things.getThingProperty(this.thing, this.id);
+    } catch (e) {
+      console.warn('Rule get failed', e);
+    }
   }
 
   /**
    * @param {any} value
-   * @return {Promise} resolves if property is set to value
+   * @return {Promise} resolves when set is done
    */
-  async set(value) {
-    await Things.setThingProperty(this.thing, this.id, value);
+  set(value) {
+    return Things.setThingProperty(this.thing, this.id, value).catch((e) => {
+      console.warn('Rule set failed, retrying once', e);
+      return Things.setThingProperty(this.thing, this.id, value);
+    }).catch((e) => {
+      console.warn('Rule set failed completely', e);
+    });
   }
 
   async start() {
