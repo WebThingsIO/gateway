@@ -17,19 +17,15 @@ class BrightnessDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || 'Brightness';
+    this.label = property.title || 'Brightness';
 
-    if (property.hasOwnProperty('min')) {
-      this.min = property.min;
-    } else if (property.hasOwnProperty('minimum')) {
+    if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;
     } else {
       this.min = 0;
     }
 
-    if (property.hasOwnProperty('max')) {
-      this.max = property.max;
-    } else if (property.hasOwnProperty('maximum')) {
+    if (property.hasOwnProperty('maximum')) {
       this.max = property.maximum;
     } else {
       this.max = 100;

@@ -17,22 +17,18 @@ class NumberDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.type = property.type;
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
 
-    if (property.hasOwnProperty('min')) {
-      this.min = property.min;
-    } else if (property.hasOwnProperty('minimum')) {
+    if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;
     } else {
       this.min = null;
     }
 
-    if (property.hasOwnProperty('max')) {
-      this.max = property.max;
-    } else if (property.hasOwnProperty('maximum')) {
+    if (property.hasOwnProperty('maximum')) {
       this.max = property.maximum;
     } else {
       this.max = null;

@@ -17,7 +17,7 @@ class ColorDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || 'Color';
+    this.label = property.title || 'Color';
     this.id = `color-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

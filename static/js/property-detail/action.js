@@ -18,7 +18,7 @@ class ActionDetail {
   constructor(thing, name, action, href) {
     this.thing = thing;
     this.name = name;
-    this.label = action.label || name;
+    this.label = action.title || action.label || name;
     this.input = action.input;
     this.href = href;
     this.id = `action-button-${Utils.escapeHtmlForIdClass(this.name)}`;

@@ -17,7 +17,7 @@ class EnumDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.type = property.type;
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;

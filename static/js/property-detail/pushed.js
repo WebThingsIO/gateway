@@ -15,7 +15,7 @@ const Utils = require('../utils');
 
 class PushedDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.label || 'Pushed');
+    super(thing, name, !!property.readOnly, property.title || 'Pushed');
     this.id = `pushed-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
