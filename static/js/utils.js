@@ -27,7 +27,8 @@ const Utils = {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;')
-      .replace(/°/g, '&deg;');
+      .replace(/°/g, '&deg;')
+      .replace(/⋅/g, '&sdot;');
   },
   escapeHtmlForIdClass: function(text) {
     if (typeof (text) !== 'string') {
@@ -131,6 +132,12 @@ const Utils = {
       case 'watt':
       case 'watts':
         return 'W';
+
+      case 'kilowatt hour':
+      case 'kilowatt-hour':
+      case 'kilowatt hours':
+      case 'kilowatt-hours':
+        return 'kW⋅h';
 
       case 'percent':
         return '%';
