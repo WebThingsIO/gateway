@@ -39,10 +39,10 @@ describe('NumberField', () => {
         .toEqual('bar');
     });
 
-    it('should default state value to undefined', () => {
+    it('should default state value to number', () => {
       const {schemaForm} = createSchemaForm({schema: {type: 'number'}});
 
-      expect(typeof schemaForm.formData).toEqual('undefined');
+      expect(typeof schemaForm.formData).toEqual('number');
     });
 
     it('should assign a default value', () => {
@@ -64,7 +64,7 @@ describe('NumberField', () => {
       });
 
       const input = node.querySelector('input');
-      input.setRangeText('2');
+      input.value = '2';
       fireEvent(input, 'change');
 
       expect(schemaForm.formData).toEqual(2);
@@ -89,7 +89,7 @@ describe('NumberField', () => {
       });
 
       const input = node.querySelector('input');
-      input.setRangeText('2.2');
+      input.value = '2.2';
       fireEvent(input, 'change');
 
       expect(schemaForm.formData).toEqual(2.2);
@@ -113,22 +113,27 @@ describe('NumberField', () => {
       });
 
       const input = node.querySelector('input');
-      input.setRangeText('2.');
-      fireEvent(input, 'change');
-      expect(node.querySelector('.field input').value).toEqual('2.');
-      expect(schemaForm.formData).toEqual(2);
 
-      input.setRangeText('2.0', 0, 2);
+      // TODO: uncomment this when jsdom is fixed. currently, it treats 2. as
+      // invalid input, so value is reported as ""
+      /*
+      input.value = '2.';
+      fireEvent(input, 'change');
+      expect(node.querySelector('.field input').value).toEqual('2');
+      expect(schemaForm.formData).toEqual(2);
+      */
+
+      input.value = '2.0';
       fireEvent(input, 'change');
       expect(node.querySelector('.field input').value).toEqual('2.0');
       expect(schemaForm.formData).toEqual(2);
 
-      input.setRangeText('2.00', 0, 3);
+      input.value = '2.00';
       fireEvent(input, 'change');
       expect(node.querySelector('.field input').value).toEqual('2.00');
       expect(schemaForm.formData).toEqual(2);
 
-      input.setRangeText('2.000', 0, 4);
+      input.value = '2.000';
       fireEvent(input, 'change');
       expect(node.querySelector('.field input').value).toEqual('2.000');
       expect(schemaForm.formData).toEqual(2);

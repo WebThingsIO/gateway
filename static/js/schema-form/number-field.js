@@ -14,19 +14,17 @@
 'use strict';
 
 const SchemaUtils = require('./schema-utils');
-const StringField = require('./string-field');
 const Utils = require('../utils');
 
-function NumberField(
-  schema,
-  formData,
-  idSchema,
-  name,
-  definitions,
-  onChange,
-  required = false,
-  disabled = false,
-  readonly = false) {
+function NumberField(schema,
+                     formData,
+                     idSchema,
+                     name,
+                     definitions,
+                     onChange,
+                     required = false,
+                     disabled = false,
+                     readonly = false) {
   this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
   this.formData = formData;
   this.idSchema = idSchema;
@@ -40,25 +38,53 @@ function NumberField(
   return this;
 }
 
-NumberField.prototype.onRangeChange = function(event) {
-  const value = event.target.value;
-  this.rangeValue.textContent = value;
-
+NumberField.prototype.toFormData = function(value, validityState) {
   const number = Number(value);
-  this.formData = number;
-  if (this.onChange) {
-    this.onChange(this.formData);
+
+  // HTML number inputs will never give us an invalid value. Instead, they will
+  // give us an empty string when the input is invalid.
+  if (value === '') {
+    if (validityState) {
+      // If the value is empty and the field is marked as valid, that means
+      // the input is truly empty and is non-required.
+      if (!this.required && validityState.valid) {
+        // eslint-disable-next-line no-undefined
+        return undefined;
+      }
+
+      // If the value is empty and the field is marked as value missing, that
+      // means the input is truly empty and is required.
+      if (this.required &&
+          validityState.valueMissing &&
+          !validityState.badInput) {
+        // eslint-disable-next-line no-undefined
+        return undefined;
+      }
+
+      return '.';
+    } else {
+      console.log('returning .');
+      return '.';
+    }
+  } else if (isNaN(number)) {
+    // We should probably never hit this block unless HTML input validation is
+    // not working.
+    return '.';
   }
+
+  return number;
 };
 
-NumberField.prototype.onNumberChange = function(value) {
-  const number = Number(value);
+NumberField.prototype.onNumberChange = function(event) {
+  const value = event.target.value;
 
-  if (isNaN(number)) {
-    this.formData = value;
-  } else {
-    this.formData = number;
+  if (this.rangeValue) {
+    this.rangeValue.textContent = value;
   }
+
+  // If a user input nothing on required field, we should set undefined in
+  // order to raise error.
+  this.formData = this.toFormData(value, event.target.validity);
 
   if (this.onChange) {
     this.onChange(this.formData);
@@ -66,19 +92,21 @@ NumberField.prototype.onNumberChange = function(value) {
 };
 
 NumberField.prototype.render = function() {
-  const id = this.idSchema.$id;
+  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
   let value = Number(this.formData);
-  value = isNaN(value) ? 0 : value;
+  if (isNaN(value)) {
+    value = 0;
+  }
+  const field = document.createElement('div');
 
   // range item
   if (this.schema.hasOwnProperty('minimum') &&
-    this.schema.hasOwnProperty('maximum')) {
-    const field = document.createElement('div');
+      this.schema.hasOwnProperty('maximum')) {
     field.className = 'field-range-wrapper';
     field.innerHTML = `
       <input
       type="range"
-      id="${Utils.escapeHtmlForIdClass(id)}"
+      id="${id}"
       class="form-control"
       ${this.required ? 'required' : ''}
       ${this.readonly ? 'readonly' : ''}
@@ -90,26 +118,77 @@ NumberField.prototype.render = function() {
       />
       <span class="range-view">${value}</span>`;
 
-    const input = field.querySelector('input');
-    input.onchange = this.onRangeChange.bind(this);
-    input.oninput = this.onRangeChange.bind(this);
-
     this.rangeValue = field.querySelector('span');
+  } else if (SchemaUtils.isSelect(this.schema)) {
+    const enumOptions = SchemaUtils.getOptionsList(this.schema);
+    const selectedValue = value;
+    let selectedAny = false;
 
-    return field;
+    // User can select undefiend value on field not required.
+    if (!this.required) {
+      enumOptions.unshift({value: '', label: ''});
+    }
+
+    const selects = enumOptions.map(({value, label}, i) => {
+      const selected = selectedValue === this.toFormData(value);
+      selectedAny |= selected;
+
+      return `
+        <option
+        key="${i}"
+        value="${Utils.escapeHtml(value)}"
+        ${selected ? 'selected' : ''}>
+          ${Utils.escapeHtml(label)}
+        </option>`;
+    });
+
+    field.innerHTML = `
+      <select
+      id="${id}"
+      class="form-control"
+      ${this.required ? 'required' : ''}
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      >
+      ${selects.join(' ')}
+      </select>`;
+
+    if (!selectedAny) {
+      const select = field.querySelector(`#${id}`);
+      select.selectedIndex = -1;
+    }
+  } else {
+    let min = '', max = '', step = 'any';
+    if (this.schema.hasOwnProperty('minimum')) {
+      min = `min="${this.schema.minimum}"`;
+    }
+    if (this.schema.hasOwnProperty('maximum')) {
+      max = `max="${this.schema.maximum}"`;
+    }
+    if (this.schema.hasOwnProperty('multipleOf')) {
+      step = `${this.schema.multipleOf}`;
+    } else if (this.schema.type === 'integer') {
+      step = '1';
+    }
+
+    field.innerHTML = `
+      <input
+      id="${id}"
+      type="number"
+      class="form-control"
+      ${this.required ? 'required' : ''}
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      ${min} ${max} step="${step}"
+      value="${value == null ? '' : Utils.escapeHtml(value)}"
+      />`;
   }
 
-  const onNumberChangeHandle = this.onNumberChange.bind(this);
-  return new StringField(
-    this.schema,
-    this.formData,
-    this.idSchema,
-    this.name,
-    this.definitions,
-    onNumberChangeHandle,
-    this.required,
-    this.disabled,
-    this.readonly).render();
+  const input = field.querySelector(`#${id}`);
+  input.onchange = this.onNumberChange.bind(this);
+  input.oninput = this.onNumberChange.bind(this);
+
+  return field;
 };
 
 module.exports = NumberField;

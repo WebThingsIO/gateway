@@ -172,6 +172,8 @@
   text-indent: -1em;
   list-style-position: inside;
   color: orange;
+  position: relative;
+  left: auto;
 }
 
 #addon-config-settings .button-submit {

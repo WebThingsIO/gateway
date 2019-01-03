@@ -153,6 +153,8 @@ const SchemaUtils = {
                                                     conditionSchema);
         return errors.length === 0;
       }
+
+      return false;
     });
     if (validSubschemas.length !== 1) {
       console.warn(
@@ -364,10 +366,13 @@ const SchemaUtils = {
       // We need default value with a range form.
       case 'number':
       case 'integer':
-        if (typeof defaults === 'undefined' &&
-          schema.hasOwnProperty('minimum') &&
-          schema.hasOwnProperty('maximum')) {
-          defaults = schema.minimum;
+        if (typeof defaults === 'undefined') {
+          if (schema.hasOwnProperty('minimum') &&
+              schema.hasOwnProperty('maximum')) {
+            defaults = schema.minimum;
+          } else {
+            defaults = 0;
+          }
         }
         break;
 
