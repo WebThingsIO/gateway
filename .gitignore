@@ -10,10 +10,17 @@ tmp/
 /build
 node_modules/
 static/js/lib/stm_web.min.js
+yarn-error.log
+npm-debug.log
 
 # Run-time artifacts
 .node-persist/
 config/local.js
 static/uploads
 .post_upgrade_complete
+
+# Test artifacts
 /browser-test-output
+/browser-test-diff
+/browser-test-screenshots
+cache_node_modules/

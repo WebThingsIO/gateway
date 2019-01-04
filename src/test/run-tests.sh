@@ -34,6 +34,10 @@ function cleanup() {
 }
 trap cleanup EXIT
 
+# cleanup the previous outputs
+rm -rf "${SCRIPTDIR}/../../browser-test-output"
+rm -rf "${SCRIPTDIR}/../../browser-test-diff"
+
 # Fire up the intent parser
 python3 "${MOZIOT_TEST_HOME}/intent-parser/intent-parser-server.py" &
 INTENT_SERVER_PID=$!
