@@ -577,7 +577,7 @@ describe('ArrayField', () => {
         'fieldset .field-string input[type=text]'
       );
       const numInput = node.querySelector(
-        'fieldset .field-number input[type=text]'
+        'fieldset .field-number input[type=number]'
       );
       expect(strInput.id).toEqual('root_0');
       expect(numInput.id).toEqual('root_1');
@@ -589,7 +589,7 @@ describe('ArrayField', () => {
         'fieldset .field-string input[type=text]'
       );
       const numInput = node.querySelector(
-        'fieldset .field-number input[type=text]'
+        'fieldset .field-number input[type=number]'
       );
       expect(strInput.required).toEqual(true);
       expect(numInput.required).toEqual(true);
@@ -601,7 +601,7 @@ describe('ArrayField', () => {
         'fieldset .field-string input[type=text]'
       );
       const numInput = node.querySelector(
-        'fieldset .field-number input[type=text]'
+        'fieldset .field-number input[type=number]'
       );
       expect(strInput.value).toEqual('foo');
       expect(numInput.value).toEqual('42');
@@ -613,7 +613,7 @@ describe('ArrayField', () => {
         'fieldset .field-string input[type=text]'
       );
       const numInput = node.querySelector(
-        'fieldset .field-number input[type=text]'
+        'fieldset .field-number input[type=number]'
       );
 
       strInput.value = 'bar';

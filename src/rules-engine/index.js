@@ -5,12 +5,10 @@
  */
 
 const PromiseRouter = require('express-promise-router');
-const Settings = require('../models/settings');
 
 const APIError = require('./APIError');
 const Database = require('./Database');
 const Engine = require('./Engine');
-const JSONWebToken = require('../models/jsonwebtoken');
 const Rule = require('./Rule');
 
 const index = PromiseRouter();
@@ -87,10 +85,7 @@ index.delete('/:id', async function(req, res) {
   }
 });
 
-index.configure = async function(gatewayHref) {
-  await Settings.set('RulesEngine.gateway', gatewayHref);
-  await Settings.set('RulesEngine.jwt', await JSONWebToken.issueToken(-1));
-
+index.configure = async function() {
   await Database.open();
   await engine.getRules();
 };

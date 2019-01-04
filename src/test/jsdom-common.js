@@ -5,7 +5,7 @@ const {JSDOM} = require('jsdom');
 
 // Setup the jsdom environment
 const {document} =
-(new JSDOM('<!doctype html><html><body></body></html>')).window;
+  (new JSDOM('<!doctype html><html><body></body></html>')).window;
 global.document = document;
 global.window = document.defaultView;
 global.navigator = global.window.navigator;

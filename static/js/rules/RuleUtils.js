@@ -52,29 +52,30 @@ const RuleUtils = {
     }
   },
   // Helper function for selecting the thing corresponding to a property
-  byProperty: function byProperty(property) {
+  byProperty: function(property) {
     return function(option) {
       if (!property) {
         console.warn('byProperty property undefined', new Error().stack);
         return false;
       }
-      const optProp = option.properties[property.name];
+      const propHref = `/things/${property.thing}/properties/${property.id}`;
+      const optProp = option.properties[property.id];
       return optProp && optProp.links.filter((l) => {
-        return (!l.rel || l.rel === 'property') && l.href === property.href;
+        return (!l.rel || l.rel === 'property') && l.href === propHref;
       }).length > 0;
     };
   },
   // Helper function for selecting the thing corresponding to an href
-  byHref: function byHref(href) {
-    return function(thing) {
-      return thing.href === href;
+  byThing: function(thing) {
+    return function(otherThing) {
+      return otherThing.href === `/things/${thing}`;
     };
   },
   thingFromPart: function(gateway, part) {
     let thing = null;
     if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
       thing = gateway.things.filter(
-        RuleUtils.byHref(part.thing.href)
+        RuleUtils.byThing(part.thing)
       )[0];
     } else if (part.property) {
       thing = gateway.things.filter(
@@ -82,6 +83,12 @@ const RuleUtils = {
       )[0];
     }
     return thing;
+  },
+  extractProperty: function(href) {
+    return href.match(/properties\/([^/]+)/)[1];
+  },
+  extractThing: function(href) {
+    return href.match(/things\/([^/]+)/)[1];
   },
 };
 

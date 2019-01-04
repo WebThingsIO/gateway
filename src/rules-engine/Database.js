@@ -7,6 +7,7 @@
 'use strict';
 
 const db = require('../db.js');
+const DatabaseMigrate = require('./DatabaseMigrate');
 
 function Database() {
   if (!db.db) {
@@ -36,17 +37,25 @@ Database.prototype.getRules = function() {
     db.db.all(
       'SELECT id, description FROM rules',
       [],
-      function(err, rows) {
+      (err, rows) => {
         if (err) {
           reject(err);
           return;
         }
         const rules = {};
+        const updatePromises = [];
         for (const row of rows) {
-          const desc = JSON.parse(row.description);
+          let desc = JSON.parse(row.description);
+          const updatedDesc = DatabaseMigrate.migrate(desc);
+          if (updatedDesc) {
+            desc = updatedDesc;
+            updatePromises.push(this.updateRule(row.id, desc));
+          }
           rules[row.id] = desc;
         }
-        resolve(rules);
+        Promise.all(updatePromises).then(() => {
+          resolve(rules);
+        });
       }
     );
   });

@@ -15,7 +15,7 @@ const Utils = require('../utils');
 
 class InstantaneousPowerDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.label || 'Power', 'W', 0);
+    super(thing, name, !!property.readOnly, property.title || 'Power', 'W', 0);
     this.id = `instantaneous-power-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

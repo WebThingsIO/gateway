@@ -2,9 +2,9 @@ const triggers = require('../../rules-engine/triggers');
 
 const booleanTrigger = {
   property: {
-    name: 'on',
     type: 'boolean',
-    href: '/things/light1/properties/on',
+    thing: 'light1',
+    id: 'on',
   },
   type: 'BooleanTrigger',
   onValue: true,
@@ -12,9 +12,9 @@ const booleanTrigger = {
 
 const levelTrigger = {
   property: {
-    name: 'hue',
     type: 'number',
-    href: '/things/light2/properties/hue',
+    thing: 'light2',
+    id: 'hue',
   },
   type: 'LevelTrigger',
   levelType: 'LESS',
@@ -23,9 +23,9 @@ const levelTrigger = {
 
 const equalityTrigger = {
   property: {
-    name: 'color',
     type: 'string',
-    href: '/things/light2/properties/color',
+    thing: 'light2',
+    id: 'color',
   },
   type: 'EqualityTrigger',
   value: '#ff7700',

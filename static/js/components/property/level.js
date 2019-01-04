@@ -48,6 +48,14 @@ class LevelProperty extends BaseComponent {
       margin: 0 auto;
     }
 
+    .webthing-level-property-text,
+    .webthing-level-property-unit {
+      max-width: 8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .webthing-level-property-bar {
       height: 1rem;
       background-color: white;
@@ -210,6 +218,7 @@ class LevelProperty extends BaseComponent {
 
     this._bar.style.width = `calc(${percent}% - 0.2rem)`;
     this._text.innerText = value;
+    this._text.title = value;
     this._slider.value = value;
     this._number.value = value;
   }
@@ -254,6 +263,7 @@ class LevelProperty extends BaseComponent {
     this._unit.dataset.actual = value;
     if (value) {
       this._unit.innerText = value;
+      this._unit.title = value;
     } else {
       this._unit.innerHTML = '&nbsp;';
     }

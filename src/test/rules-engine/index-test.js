@@ -1,5 +1,4 @@
 const {server, chai, mockAdapter} = require('../common');
-const Settings = require('../../models/settings');
 const {waitForExpect} = require('../expect-utils');
 const util = require('util');
 
@@ -77,18 +76,18 @@ const testRule = {
   enabled: true,
   trigger: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light1/properties/on',
+      id: 'on',
+      thing: 'light1',
     },
     type: 'BooleanTrigger',
     onValue: true,
   },
   effect: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light2/properties/on',
+      thing: 'light2',
+      id: 'on',
     },
     type: 'PulseEffect',
     value: true,
@@ -99,18 +98,18 @@ const offRule = {
   enabled: true,
   trigger: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light1/properties/on',
+      thing: 'light1',
+      id: 'on',
     },
     type: 'BooleanTrigger',
     onValue: false,
   },
   effect: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light2/properties/on',
+      thing: 'light2',
+      id: 'on',
     },
     type: 'PulseEffect',
     value: false,
@@ -122,9 +121,9 @@ const numberTestRule = {
   name: 'Number Test Rule',
   trigger: {
     property: {
-      name: 'hue',
       type: 'number',
-      href: '/things/light2/properties/hue',
+      thing: 'light2',
+      id: 'hue',
     },
     type: 'LevelTrigger',
     levelType: 'GREATER',
@@ -132,9 +131,9 @@ const numberTestRule = {
   },
   effect: {
     property: {
-      name: 'bri',
       type: 'number',
-      href: '/things/light3/properties/bri',
+      thing: 'light3',
+      id: 'bri',
     },
     type: 'PulseEffect',
     value: 30,
@@ -146,9 +145,9 @@ const mixedTestRule = {
   name: 'Mixed Test Rule',
   trigger: {
     property: {
-      name: 'bri',
       type: 'number',
-      href: '/things/light3/properties/bri',
+      thing: 'light3',
+      id: 'bri',
     },
     type: 'LevelTrigger',
     levelType: 'LESS',
@@ -156,9 +155,9 @@ const mixedTestRule = {
   },
   effect: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light3/properties/on',
+      thing: 'light3',
+      id: 'on',
     },
     type: 'SetEffect',
     value: true,
@@ -170,17 +169,13 @@ const eventActionRule = {
   name: 'Event Action Rule',
   trigger: {
     type: 'EventTrigger',
+    thing: 'light1',
     event: 'surge',
-    thing: {
-      href: '/things/light1',
-    },
   },
   effect: {
     type: 'ActionEffect',
+    thing: 'light1',
     action: 'blink',
-    thing: {
-      href: '/things/light1',
-    },
   },
 };
 
@@ -190,17 +185,17 @@ const equalityRule = {
   trigger: {
     type: 'EqualityTrigger',
     property: {
-      name: 'color',
       type: 'string',
-      href: '/things/light3/properties/color',
+      thing: 'light3',
+      id: 'color',
     },
     value: '#00ff77',
   },
   effect: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light3/properties/on',
+      thing: 'light3',
+      id: 'on',
     },
     type: 'SetEffect',
     value: true,
@@ -216,9 +211,9 @@ const complexTriggerRule = {
     triggers: [{
       type: 'BooleanTrigger',
       property: {
-        name: 'on',
         type: 'boolean',
-        href: '/things/light1/properties/on',
+        thing: 'light1',
+        id: 'on',
       },
       onValue: true,
     }, {
@@ -227,17 +222,17 @@ const complexTriggerRule = {
       triggers: [{
         type: 'BooleanTrigger',
         property: {
-          name: 'on',
           type: 'boolean',
-          href: '/things/light1/properties/on',
+          thing: 'light1',
+          id: 'on',
         },
         onValue: true,
       }, {
         type: 'BooleanTrigger',
         property: {
-          name: 'on',
           type: 'boolean',
-          href: '/things/light2/properties/on',
+          thing: 'light2',
+          id: 'on',
         },
         onValue: true,
       }],
@@ -245,9 +240,9 @@ const complexTriggerRule = {
   },
   effect: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light3/properties/on',
+      thing: 'light3',
+      id: 'on',
     },
     type: 'SetEffect',
     value: true,
@@ -258,9 +253,9 @@ const multiRule = {
   enabled: true,
   trigger: {
     property: {
-      name: 'on',
       type: 'boolean',
-      href: '/things/light1/properties/on',
+      thing: 'light1',
+      id: 'on',
     },
     type: 'BooleanTrigger',
     onValue: true,
@@ -268,17 +263,17 @@ const multiRule = {
   effect: {
     effects: [{
       property: {
-        name: 'on',
         type: 'boolean',
-        href: '/things/light2/properties/on',
+        thing: 'light2',
+        id: 'on',
       },
       type: 'PulseEffect',
       value: true,
     }, {
       property: {
-        name: 'on',
         type: 'boolean',
-        href: '/things/light3/properties/on',
+        thing: 'light3',
+        id: 'on',
       },
       type: 'PulseEffect',
       value: true,
@@ -288,7 +283,7 @@ const multiRule = {
 };
 
 describe('rules engine', function() {
-  let ruleId = null, jwt, gatewayHref;
+  let ruleId = null, jwt;
 
   async function addDevice(desc) {
     const {id} = desc;
@@ -312,13 +307,6 @@ describe('rules engine', function() {
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-    // common.js clears settings after every test so we need to restore the
-    // rules engine's
-    await Settings.set('RulesEngine.jwt', jwt);
-    if (!gatewayHref) {
-      gatewayHref = await Settings.get('RulesEngine.gateway');
-    }
-    await Settings.set('RulesEngine.gateway', gatewayHref);
     await addDevice(thingLight1);
     await addDevice(thingLight2);
     await addDevice(thingLight3);

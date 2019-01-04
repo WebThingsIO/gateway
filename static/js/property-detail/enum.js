@@ -17,7 +17,7 @@ class EnumDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.type = property.type;
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
@@ -33,13 +33,40 @@ class EnumDetail {
 
   view() {
     const unit = this.unit || '';
-    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
-    return `
-      <webthing-enum-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" data-choices="${btoa(JSON.stringify(this.choices))}"
-        data-type="${this.type}" id="${this.id}" ${readOnly}>
-      </webthing-enum-property>`;
+    if (this.readOnly) {
+      if (this.type === 'number' || this.type === 'integer') {
+        let precision = 0;
+
+        // If the enum type is number, determine the precision from the
+        // precision of the choices.
+        if (this.type === 'number') {
+          for (const choice of this.choices) {
+            const decimal = `${choice}`.split('.')[1];
+            if (typeof decimal === 'string') {
+              precision = Math.max(precision, decimal.length);
+            }
+          }
+        }
+
+        return `
+          <webthing-numeric-label-property
+            data-name="${Utils.escapeHtml(this.label)}" data-unit="${unit}"
+            data-precision="${precision}" id="${this.id}">
+          </webthing-numeric-label-property>`;
+      } else {
+        return `
+          <webthing-string-label-property
+            data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+          </webthing-string-label-property>`;
+      }
+    } else {
+      return `
+        <webthing-enum-property data-name="${Utils.escapeHtml(this.label)}"
+          data-unit="${unit}" data-type="${this.type}" id="${this.id}"
+          data-choices="${btoa(JSON.stringify(this.choices))}">
+        </webthing-enum-property>`;
+    }
   }
 
   update(value) {

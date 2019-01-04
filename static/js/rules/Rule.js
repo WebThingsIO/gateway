@@ -156,7 +156,7 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
 
   if (trigger.type === 'EventTrigger') {
     const triggerThing = this.gateway.things.filter(
-      RuleUtils.byHref(trigger.thing.href)
+      RuleUtils.byThing(trigger.thing)
     )[0];
     if (!triggerThing) {
       return null;
@@ -239,7 +239,7 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
   }
   if (effect.type === 'ActionEffect') {
     const effectThing = this.gateway.things.filter(
-      RuleUtils.byHref(effect.thing.href)
+      RuleUtils.byThing(effect.thing)
     )[0];
     if (!effectThing) {
       return null;

@@ -46,8 +46,8 @@ class PropertyProxy extends Property {
   doPropertyChanged(propertyDict) {
     this.propertyDict = Object.assign({}, propertyDict);
     this.setCachedValue(propertyDict.value);
-    if (propertyDict.hasOwnProperty('label')) {
-      this.label = propertyDict.label;
+    if (propertyDict.hasOwnProperty('title')) {
+      this.title = propertyDict.title;
     }
     if (propertyDict.hasOwnProperty('type')) {
       this.type = propertyDict.type;

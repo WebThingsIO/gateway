@@ -5,12 +5,11 @@
  */
 
 const assert = require('assert');
-const fetch = require('node-fetch');
-const https = require('https');
-const Settings = require('../models/settings');
+const AddonManager = require('../addon-manager');
+const Constants = require('../constants');
+const Things = require('../models/things');
 const EventEmitter = require('events').EventEmitter;
 const Events = require('./Events');
-const ThingConnection = require('./ThingConnection');
 
 /**
  * Utility to support operations on Thing's properties
@@ -23,25 +22,22 @@ class Property extends EventEmitter {
   constructor(desc) {
     super();
 
-    this.originator = new Error().stack;
-
     assert(desc.type);
-    assert(desc.href);
+    assert(desc.thing);
+    assert(desc.id);
 
     this.type = desc.type;
-    this.href = desc.href;
+    this.thing = desc.thing;
+    this.id = desc.id;
+
     if (desc.unit) {
       this.unit = desc.unit;
     }
     if (desc.description) {
       this.description = desc.description;
     }
-    const parts = this.href.split('/');
-    this.name = parts[parts.length - 1];
 
-    this.onMessage = this.onMessage.bind(this);
-    const thingHref = this.href.split('/properties')[0];
-    this.thingConn = new ThingConnection(thingHref, this.onMessage);
+    this.onPropertyChanged = this.onPropertyChanged.bind(this);
   }
 
   /**
@@ -50,8 +46,8 @@ class Property extends EventEmitter {
   toDescription() {
     const desc = {
       type: this.type,
-      href: this.href,
-      name: this.name,
+      thing: this.thing,
+      id: this.id,
     };
     if (this.unit) {
       desc.unit = this.unit;
@@ -63,87 +59,46 @@ class Property extends EventEmitter {
   }
 
   /**
-   * @return {String} full property href
-   */
-  async getHref() {
-    const href = await Settings.get('RulesEngine.gateway') + this.href;
-    return href;
-  }
-
-  /**
-   * @return {Promise<Object>} headers for JWT bearer auth
-   */
-  async headerAuth() {
-    const jwt = await Settings.get('RulesEngine.jwt');
-    if (jwt) {
-      return {
-        Authorization: `Bearer ${jwt}`,
-      };
-    } else {
-      return {};
-    }
-  }
-
-  /**
    * @return {Promise} resolves to property's value
    */
   async get() {
-    const href = await this.getHref();
-    let agent = null;
-    if (href.startsWith('https')) {
-      agent = new https.Agent({rejectUnauthorized: false});
+    try {
+      return await Things.getThingProperty(this.thing, this.id);
+    } catch (e) {
+      console.warn('Rule get failed', e);
     }
-
-    const res = await fetch(href, {
-      headers: Object.assign({
-        Accept: 'application/json',
-      }, await this.headerAuth()),
-      agent,
-    });
-    const data = await res.json();
-
-    return data[this.name];
   }
 
   /**
    * @param {any} value
-   * @return {Promise} resolves if property is set to value
+   * @return {Promise} resolves when set is done
    */
-  async set(value) {
-    const href = await this.getHref();
-    let agent = null;
-    if (href.startsWith('https')) {
-      agent = new https.Agent({rejectUnauthorized: false});
-    }
-
-    const data = {};
-    data[this.name] = value;
-    return fetch(href, {
-      method: 'PUT',
-      headers: Object.assign({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }, await this.headerAuth()),
-      body: JSON.stringify(data),
-      cors: true,
-      agent,
+  set(value) {
+    return Things.setThingProperty(this.thing, this.id, value).catch((e) => {
+      console.warn('Rule set failed, retrying once', e);
+      return Things.setThingProperty(this.thing, this.id, value);
+    }).catch((e) => {
+      console.warn('Rule set failed completely', e);
     });
   }
 
   async start() {
-    await this.thingConn.start();
+    AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
   }
 
-  onMessage(msg) {
-    if (msg.messageType === 'propertyStatus') {
-      if (msg.data.hasOwnProperty(this.name)) {
-        this.emit(Events.VALUE_CHANGED, msg.data[this.name]);
-      }
+  onPropertyChanged(property) {
+    if (property.device.id !== this.thing) {
+      return;
     }
+    if (property.name !== this.id) {
+      return;
+    }
+    this.emit(Events.VALUE_CHANGED, property.value);
   }
 
   stop() {
-    this.thingConn.stop();
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
+                                this.onPropertyChanged);
   }
 }
 

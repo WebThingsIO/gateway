@@ -388,7 +388,8 @@ const ThingsScreen = {
 
       this.thingsElement.innerHTML = '';
       new ActionInputForm(href, actionName,
-                          description.actions[actionName].label,
+                          description.actions[actionName].title ||
+                            description.actions[actionName].label,
                           description.actions[actionName].input);
     }).catch((e) => {
       console.error(`Thing id ${thingId} not found ${e}`);

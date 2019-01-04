@@ -17,22 +17,18 @@ class NumberDetail {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.label || name;
+    this.label = property.title || name;
     this.type = property.type;
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
 
-    if (property.hasOwnProperty('min')) {
-      this.min = property.min;
-    } else if (property.hasOwnProperty('minimum')) {
+    if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;
     } else {
       this.min = null;
     }
 
-    if (property.hasOwnProperty('max')) {
-      this.max = property.max;
-    } else if (property.hasOwnProperty('maximum')) {
+    if (property.hasOwnProperty('maximum')) {
       this.max = property.maximum;
     } else {
       this.max = null;
@@ -62,16 +58,24 @@ class NumberDetail {
    * Build the detail view.
    */
   view() {
-    const min = this.min === null ? '' : `min="${this.min}"`;
-    const max = this.max === null ? '' : `max="${this.max}"`;
     const unit = this.unit || '';
-    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
-    return `
-      <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
-        data-unit="${unit}" ${min} ${max} value="0" step="${this.step}"
-        id="${this.id}" ${readOnly}>
-      </webthing-number-property>`;
+    if (this.readOnly) {
+      return `
+        <webthing-numeric-label-property
+          data-name="${Utils.escapeHtml(this.label)}" data-unit="${unit}"
+          data-precision="3" id="${this.id}">
+        </webthing-numeric-label-property>`;
+    } else {
+      const min = this.min === null ? '' : `min="${this.min}"`;
+      const max = this.max === null ? '' : `max="${this.max}"`;
+
+      return `
+        <webthing-number-property data-name="${Utils.escapeHtml(this.label)}"
+          data-unit="${unit}" ${min} ${max} value="0" step="${this.step}"
+          id="${this.id}">
+        </webthing-number-property>`;
+    }
   }
 
   /**

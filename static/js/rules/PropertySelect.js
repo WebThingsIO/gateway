@@ -1,4 +1,5 @@
 const Utils = require('../utils');
+const RuleUtils = require('./RuleUtils');
 
 /**
  * A hand-coded <select>-like element which allows the selection of one of a
@@ -225,8 +226,10 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
       } else {
         ruleFragment.effect.value = value;
         selected = selected || (dpbRulePart.effect &&
-          dpbRulePart.effect.property.href ===
-          ruleFragment.effect.property.href);
+          (dpbRulePart.effect.property.id ===
+           ruleFragment.effect.property.id) &&
+          (dpbRulePart.effect.property.thing ===
+           ruleFragment.effect.property.thing));
       }
       elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
 
@@ -304,10 +307,11 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
       continue;
     }
 
-    property.href = links[0].href;
+    property.id = RuleUtils.extractProperty(links[0].href);
+    property.thing = RuleUtils.extractThing(links[0].href);
     delete property.links;
 
-    const name = property.label || Utils.capitalize(property.name);
+    const name = property.title || Utils.capitalize(property.name);
     if (role === 'trigger') {
       if (property.type === 'boolean') {
         const triggerOn = {
@@ -345,8 +349,8 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           },
         });
       } else if (property.type === 'number' || property.type === 'integer') {
-        const max = property.maximum || property.max || 0;
-        const min = property.minimum || property.min || 0;
+        const max = property.maximum || 0;
+        const min = property.minimum || 0;
         const value = Math.round((max + min) / 2);
 
         this.addOption(name, {
@@ -405,8 +409,8 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
           },
         });
       } else if (property.type === 'number' || property.type === 'integer') {
-        const max = property.maximum || property.max || 0;
-        const min = property.minimum || property.min || 0;
+        const max = property.maximum || 0;
+        const min = property.minimum || 0;
         const value = (max + min) / 2;
         this.addOption(name, {
           effect: {
@@ -428,13 +432,13 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
 
 PropertySelect.prototype.addEventOptions = function() {
   for (const name of Object.keys(this.thing.events)) {
+    const label =
+      this.thing.events[name].title || this.thing.events[name].label || name;
     const eventTrigger = {
       type: 'EventTrigger',
-      thing: {
-        href: this.thing.href,
-      },
+      thing: RuleUtils.extractThing(this.thing.href),
       event: name,
-      label: this.thing.events[name].label || name,
+      label,
     };
     this.addOption(`Event "${eventTrigger.label}"`, {
       trigger: eventTrigger,
@@ -447,13 +451,13 @@ PropertySelect.prototype.addActionOptions = function() {
     if (this.thing.actions[name].input) {
       continue;
     }
+    const label =
+      this.thing.actions[name].title || this.thing.actions[name].label || name;
     const actionEffect = {
       type: 'ActionEffect',
-      thing: {
-        href: this.thing.href,
-      },
+      thing: RuleUtils.extractThing(this.thing.href),
       action: name,
-      label: this.thing.actions[name].label || name,
+      label,
       parameters: {},
     };
     this.addOption(`Action "${actionEffect.label}"`, {
@@ -497,8 +501,8 @@ function propertyEqual(a, b) {
 
   return a && b &&
     a.type === b.type &&
-    a.name === b.name &&
-    a.href === b.href;
+    a.id === b.id &&
+    a.thing === b.thing;
 }
 
 function getProperty(ruleFragment) {

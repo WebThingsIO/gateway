@@ -10,10 +10,14 @@
 
 'use strict';
 
-const Thing = require('./thing');
-const Database = require('../db');
+const Ajv = require('ajv');
+
 const AddonManager = require('../addon-manager');
+const Database = require('../db');
+const Thing = require('./thing');
 const Constants = require('../constants');
+
+const ajv = new Ajv();
 
 const Things = {
 
@@ -292,6 +296,80 @@ const Things = {
       thing.remove();
       this.things.delete(id);
     });
+  },
+
+  /**
+   * @param {String} thingId
+   * @param {String} propertyName
+   * @return {Promise<any>} resolves to value of property
+   */
+  getThingProperty: async function(thingId, propertyName) {
+    try {
+      return await AddonManager.getProperty(thingId, propertyName);
+    } catch (error) {
+      console.error('Error getting value for thingId:', thingId,
+                    'property:', propertyName);
+      console.error(error);
+      throw {
+        code: 500,
+        message: error,
+      };
+    }
+  },
+
+  /**
+   * @param {String} thingId
+   * @param {String} propertyName
+   * @param {any} value
+   * @return {Promise<any>} resolves to new value
+   */
+  setThingProperty: async function(thingId, propertyName, value) {
+    let thing;
+    try {
+      thing = await Things.getThingDescription(thingId, 'localhost', true);
+    } catch (e) {
+      throw {
+        code: 404,
+        message: 'Thing not found',
+      };
+    }
+
+    if (!thing.properties.hasOwnProperty(propertyName)) {
+      throw {
+        code: 404,
+        message: 'Property not found',
+      };
+    }
+
+    if (thing.properties[propertyName].readOnly) {
+      throw {
+        code: 400,
+        message: 'Read-only property',
+      };
+    }
+
+    const valid = ajv.validate(thing.properties[propertyName], value);
+    if (!valid) {
+      throw {
+        code: 400,
+        message: 'Invalid property value',
+      };
+    }
+
+    try {
+      const updatedValue = await AddonManager.setProperty(thingId,
+                                                          propertyName, value);
+      // Note: it's possible that updatedValue doesn't match value.
+      return updatedValue;
+    } catch (e) {
+      console.error('Error setting value for thingId:', thingId,
+                    'property:', propertyName,
+                    'value:', value);
+      throw {
+        code: 500,
+        message: e,
+      };
+    }
   },
 
   clearState: function() {
