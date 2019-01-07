@@ -102,7 +102,8 @@ SettingsController.post('/reclaim', async (request, response) => {
 SettingsController.post('/subscribe', async (request, response) => {
   if (!request.body ||
       !request.body.hasOwnProperty('email') ||
-      !request.body.hasOwnProperty('subdomain')) {
+      !request.body.hasOwnProperty('subdomain') ||
+      !request.body.hasOwnProperty('optout')) {
     response.statusMessage = 'Invalid request';
     response.status(400).end();
     return;
@@ -112,6 +113,7 @@ SettingsController.post('/subscribe', async (request, response) => {
   const reclamationToken = request.body.reclamationToken;
   const subdomain = request.body.subdomain;
   const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
+  const optout = request.body.optout ? 1 : 0;
 
   function returnError(message) {
     console.error(message);
@@ -206,7 +208,7 @@ SettingsController.post('/subscribe', async (request, response) => {
     if (!reclamationToken) {
       try {
         await fetch(`${config.get('ssltunnel.registration_endpoint')
-        }/setemail?token=${token}&email=${email}`);
+        }/setemail?token=${token}&email=${email}&optout=${optout}`);
         console.log('Online account created.');
       } catch (e) {
         // https://github.com/mozilla-iot/gateway/issues/358

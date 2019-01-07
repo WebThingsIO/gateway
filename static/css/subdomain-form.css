@@ -100,3 +100,55 @@ button::-moz-focus-inner {
   border: 0;
 }
 
+#opt-in-group {
+  padding-top: 2rem;
+  display: table;
+  width: 100%;
+}
+
+#opt-in {
+  position: absolute;
+  left: -1000em;
+}
+
+#opt-in + label:before {
+  content: "";
+  display: table-cell;
+  vertical-align: middle;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.1rem 0;
+  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
+}
+
+#opt-in:checked + label:before {
+  background-position: 0 -3rem;
+}
+
+#opt-in:disabled + label:before {
+  background-position: 0 -6rem;
+}
+
+#opt-in:checked:disabled + label:before {
+  background-position: 0 -9rem;
+}
+
+#opt-in-group > label {
+  margin: 2rem;
+}
+
+#opt-in-info {
+  text-align: left;
+  display: table-cell;
+  font-size: 1.4rem;
+  vertical-align: middle;
+  padding-left: 2rem;
+}
+
+#opt-in-info > a:link,
+#opt-in-info > a:visited,
+#opt-in-info > a:hover,
+#opt-in-info > a:active {
+  color: white;
+}
