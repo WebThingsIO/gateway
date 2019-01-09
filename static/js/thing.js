@@ -23,6 +23,7 @@ const FrequencyDetail = require('./property-detail/frequency');
 const ImageDetail = require('./property-detail/image');
 const InstantaneousPowerDetail =
   require('./property-detail/instantaneous-power');
+const LeakDetail = require('./property-detail/leak');
 const LevelDetail = require('./property-detail/level');
 const MotionDetail = require('./property-detail/motion');
 const NumberDetail = require('./property-detail/number');
@@ -162,6 +163,9 @@ class Thing {
             break;
           case 'OpenProperty':
             detail = new OpenDetail(this, name, property);
+            break;
+          case 'LeakProperty':
+            detail = new LeakDetail(this, name, property);
             break;
           case 'PushedProperty':
             detail = new PushedDetail(this, name, property);

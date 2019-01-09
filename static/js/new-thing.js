@@ -102,6 +102,10 @@ class NewThing {
           type = 'Motion Sensor';
           cls = cls || 'motion-sensor';
           break;
+        case 'LeakSensor':
+          type = 'Leak Sensor';
+          cls = cls || 'leak-sensor';
+          break;
         case 'PushButton':
           type = 'Push Button';
           cls = cls || 'push-button';
@@ -341,6 +345,9 @@ class NewThing {
       case 'MotionSensor':
         cls = 'motion-sensor';
         break;
+      case 'LeakSensor':
+        cls = 'leak-sensor';
+        break;
       case 'PushButton':
         cls = 'push-button';
         break;
@@ -369,6 +376,7 @@ class NewThing {
       'light',
       'door-sensor',
       'motion-sensor',
+      'leak-sensor',
       'push-button',
       'video-camera',
       'camera'
