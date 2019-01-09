@@ -137,11 +137,9 @@ function handleConnecting(request, response) {
     fs.closeSync(fs.openSync(wifiskipPath, 'w'));
     console.log('skip wifi setup. stop the ap');
     response.send(connectingTemplate({skip: 'true'}));
-    wifi.stopAP()
-      .then(() => wifi.broadcastBeacon())
-      .then(() => {
-        WiFiSetupApp.onConnection();
-      });
+    wifi.stopAP().then(() => {
+      WiFiSetupApp.onConnection();
+    });
     return;
   }
 
@@ -180,7 +178,6 @@ function handleConnecting(request, response) {
     })
     .then(() => wifi.defineNetwork(ssid, password))
     .then(() => wifi.waitForWiFi(20, 3000))
-    .then(() => wifi.broadcastBeacon())
     .then(() => {
       WiFiSetupApp.onConnection();
     })

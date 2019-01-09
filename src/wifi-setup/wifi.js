@@ -13,7 +13,6 @@ exports.stopAP = stopAP;
 exports.defineNetwork = defineNetwork;
 exports.removeNetwork = removeNetwork;
 exports.getKnownNetworks = getKnownNetworks;
-exports.broadcastBeacon = broadcastBeacon;
 exports.checkConnection = checkConnection;
 exports.waitForWiFi = waitForWiFi;
 
@@ -162,86 +161,6 @@ function removeNetwork(id) {
 function getKnownNetworks() {
   return run(platform.getKnownNetworks)
     .then((out) => out.length ? out.split('\n') : []);
-}
-
-/**
- * Broadcast a Bluetooth Eddystone beacon with the local IP address.
- */
-function broadcastBeacon() {
-  let cmd = platform.broadcastBeacon;
-
-  let ip = null;
-  const ifaces = os.networkInterfaces();
-
-  // Check out wlan0 first.
-  if (ifaces.hasOwnProperty('wlan0')) {
-    for (const addr of ifaces.wlan0) {
-      if (addr.family !== 'IPv4' || addr.internal) {
-        continue;
-      }
-
-      ip = addr.address;
-      break;
-    }
-  }
-
-  // If we didn't get an IP address, check out eth0.
-  if (ip === null && ifaces.hasOwnProperty('eth0')) {
-    for (const addr of ifaces.eth0) {
-      if (addr.family !== 'IPv4' || addr.internal) {
-        continue;
-      }
-
-      ip = addr.address;
-      break;
-    }
-  }
-
-  // If we still don't have an IP, bail.
-  if (ip === null) {
-    // Don't reject, as this isn't really critical.
-    return Promise.resolve();
-  }
-
-  // OGF + OCF
-  cmd += ' 0x08 0x0008';
-
-  // Length byte
-  const length1 = 14 + ip.length;
-  cmd += ` ${length1.toString(16)}`;
-
-  // Flags
-  cmd += ' 02 01 06';
-
-  // UUIDs
-  cmd += ' 03 03 aa fe';
-
-  // Length byte
-  const length2 = 6 + ip.length;
-  cmd += ` ${length2.toString(16)}`;
-
-  // Service data type value
-  cmd += ' 16';
-
-  // UUIDs
-  cmd += ' aa fe';
-
-  // Frame type
-  cmd += ' 10';
-
-  // TX power
-  cmd += ' 00';
-
-  // URL scheme
-  cmd += ' 02';
-
-  // URL
-  cmd += ` ${ip.split('').map((x) => x.charCodeAt(0).toString(16)).join(' ')}`;
-
-  // Trailer
-  cmd += ' 00 00 00 00 00 00 00 00';
-
-  return run(cmd);
 }
 
 function checkConnection() {
