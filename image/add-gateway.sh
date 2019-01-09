@@ -11,7 +11,12 @@ SCRIPT_NAME=$(basename $0)
 VERBOSE=0
 REMOVE_BASE_AFTER_UNZIP=0
 
+GATEWAY_VERSION='0.7.0'
 V8_VERSION='57'
+ARCHITECTURE='linux-arm'
+PYTHON_VERSIONS='2.7,3.5'
+ADDON_API='2'
+ADDON_LIST_URL='https://api.mozilla-iot.org:8443/addons'
 
 ###########################################################################
 #
@@ -29,13 +34,10 @@ usage() {
 get_addon_url() {
   addon_list=$1
   addon_name=$2
-  addon_version=$3
   url=$(echo "${addon_list}" | python3 -c \
     "import json, sys; \
     l = json.loads(sys.stdin.read()); \
-    print([[p['url'] for p in a['packages'] if p['architecture'] == 'linux-arm' \
-          and '${addon_version}' in p['language']['versions']] \
-          for a in l if a['name'] == '${addon_name}'][0][0]);")
+    print([p['url'] for p in l if p['name'] == '${addon_name}'][0]);")
   echo "${url}"
 }
 
@@ -201,17 +203,18 @@ main() {
 
     # Install default add-ons
     sudo mkdir -p "${ADDONS_DIR}"
-    addon_list=$(curl "https://raw.githubusercontent.com/mozilla-iot/addon-list/master/list.json")
+    params="?api=${ADDON_API}&arch=${ARCHITECTURE}&node=${V8_VERSION}&python=${PYTHON_VERSIONS}&version=${GATEWAY_VERSION}"
+    addon_list=$(curl "${ADDON_LIST_URL}${params}")
     tempdir=$(mktemp -d)
-    zigbee_url=$(get_addon_url "${addon_list}" 'zigbee-adapter' ${V8_VERSION})
+    zigbee_url=$(get_addon_url "${addon_list}" 'zigbee-adapter')
     curl -L -o "${tempdir}/zigbee-adapter.tgz" "${zigbee_url}"
     sudo tar xzf "${tempdir}/zigbee-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zigbee-adapter"
-    zwave_url=$(get_addon_url "${addon_list}" 'zwave-adapter' ${V8_VERSION})
+    zwave_url=$(get_addon_url "${addon_list}" 'zwave-adapter')
     curl -L -o "${tempdir}/zwave-adapter.tgz" "${zwave_url}"
     sudo tar xzf "${tempdir}/zwave-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/zwave-adapter"
-    thing_url=$(get_addon_url "${addon_list}" 'thing-url-adapter' ${V8_VERSION})
+    thing_url=$(get_addon_url "${addon_list}" 'thing-url-adapter')
     curl -L -o "${tempdir}/thing-url-adapter.tgz" "${thing_url}"
     sudo tar xzf "${tempdir}/thing-url-adapter.tgz" -C "${ADDONS_DIR}"
     sudo mv "${ADDONS_DIR}/package" "${ADDONS_DIR}/thing-url-adapter"
