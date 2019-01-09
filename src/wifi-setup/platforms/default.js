@@ -58,9 +58,4 @@ module.exports = {
 
   // Lists configured networks
   listNetworks: 'wpa_cli -iwlan0 list_networks',
-
-  // Broadcast an Eddystone beacon
-  broadcastBeacon:
-    // eslint-disable-next-line
-    'sudo hciconfig hci0 up && sudo hciconfig hci0 leadv 3 && sudo hcitool -i hci0 cmd',
 };
