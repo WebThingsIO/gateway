@@ -217,6 +217,10 @@
   background-image: url('../optimized-images/thing-icons/video_camera.svg');
 }
 
+.new-thing.temperature-sensor .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/temperature_sensor.svg');
+}
+
 .new-thing.camera .new-thing-icon {
   background-image: url('../optimized-images/thing-icons/camera.svg');
 }

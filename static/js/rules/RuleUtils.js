@@ -24,6 +24,8 @@ const RuleUtils = {
           return '/optimized-images/rule-icons/motion_sensor.svg';
         case 'PushButton':
           return '/optimized-images/rule-icons/push_button.svg';
+        case 'TemperatureSensor':
+          return '/optimized-images/rule-icons/temperature_sensor.svg';
         default:
           return description.iconHref ||
             '/optimized-images/rule-icons/thing.svg';
