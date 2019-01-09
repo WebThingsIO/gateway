@@ -374,7 +374,7 @@
 }
 
 .addon-settings-license {
-  float: right;
+  padding-left: 0.5rem;
 }
 
 .addon-settings-license a:link,

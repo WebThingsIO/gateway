@@ -68,9 +68,7 @@ DiscoveredAddon.prototype.view = function() {
           </a>
         </span>
         <span class="addon-settings-license">
-          subject to <a href="${this.license}" target="_blank" rel="noopener">
-            license
-          </a>
+          (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
         </span>
       </div>
       <div class="addon-settings-controls">
