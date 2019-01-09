@@ -29,6 +29,7 @@ const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
+const TemperatureSensor = require('./temperature-sensor');
 const Thing = require('./thing');
 const VideoCamera = require('./video-camera');
 
@@ -102,6 +103,9 @@ const ThingsScreen = {
           break;
         case 'Camera':
           thing = new Camera(thingModel, description, format);
+          break;
+        case 'TemperatureSensor':
+          thing = new TemperatureSensor(thingModel, description, format);
           break;
         default:
           thing = new Thing(thingModel, description, format);
@@ -343,6 +347,9 @@ const ThingsScreen = {
           case 'Camera':
             icon = '/optimized-images/thing-icons/camera.svg';
             break;
+          case 'TemperatureSensor':
+            icon = '/optimized-images/thing-icons/temperature_sensor.svg';
+            break;
           case 'Custom':
           default:
             icon = '/optimized-images/thing-icons/thing.svg';
@@ -466,6 +473,9 @@ const ThingsScreen = {
             break;
           case 'Camera':
             icon = '/optimized-images/thing-icons/camera.svg';
+            break;
+          case 'TemperatureSensor':
+            icon = '/optimized-images/thing-icons/temperature_sensor.svg';
             break;
           case 'Custom':
           default:

@@ -272,6 +272,7 @@ const Utils = {
       'MotionSensor',
       'LeakSensor',
       'PushButton',
+      'TemperatureSensor',
       'MultiLevelSensor',
       'BinarySensor',
     ];

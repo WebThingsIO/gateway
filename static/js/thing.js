@@ -31,6 +31,7 @@ const OnOffDetail = require('./property-detail/on-off');
 const OpenDetail = require('./property-detail/open');
 const PushedDetail = require('./property-detail/pushed');
 const StringDetail = require('./property-detail/string');
+const TemperatureDetail = require('./property-detail/temperature');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('./utils');
 const VideoDetail = require('./property-detail/video');
@@ -175,6 +176,9 @@ class Thing {
             break;
           case 'VideoProperty':
             detail = new VideoDetail(this, name, property);
+            break;
+          case 'TemperatureProperty':
+            detail = new TemperatureDetail(this, name, property);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {

@@ -27,6 +27,7 @@ const MultiLevelSwitch = require('./multi-level-switch');
 const OnOffSwitch = require('./on-off-switch');
 const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
+const TemperatureSensor = require('./temperature-sensor');
 const Thing = require('./thing');
 const VideoCamera = require('./video-camera');
 
@@ -151,6 +152,9 @@ const FloorplanScreen = {
               break;
             case 'Camera':
               thing = new Camera(thingModel, description, format);
+              break;
+            case 'TemperatureSensor':
+              thing = new TemperatureSensor(thingModel, description, format);
               break;
             default:
               thing = new Thing(thingModel, description, format);
