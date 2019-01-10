@@ -26,6 +26,10 @@ const RuleUtils = {
           return '/optimized-images/rule-icons/leak_sensor.svg';
         case 'PushButton':
           return '/optimized-images/rule-icons/push_button.svg';
+        case 'VideoCamera':
+          return '/optimized-images/rule-icons/video_camera.svg';
+        case 'Camera':
+          return '/optimized-images/rule-icons/camera.svg';
         case 'TemperatureSensor':
           return '/optimized-images/rule-icons/temperature_sensor.svg';
         default:
