@@ -73,6 +73,7 @@ const Router = {
       if (!request.accepts('html') && request.accepts('json') ||
           request.get('Upgrade') === 'websocket' ||
           request.is('multipart/form-data') ||
+          request.path.startsWith(Constants.ADDONS_PATH) ||
           request.path.startsWith(Constants.LOGS_PATH)) {
         request.url = API_PREFIX + request.url;
         next();

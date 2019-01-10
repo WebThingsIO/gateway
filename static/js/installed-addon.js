@@ -29,6 +29,8 @@ const InstalledAddon = function(metadata, installedAddonsMap,
   this.description = metadata.description;
   this.author = metadata.author;
   this.homepage = metadata.homepage;
+  this.license =
+    `/addons/${encodeURIComponent(this.name)}/license?jwt=${API.jwt}`;
   this.version = metadata.version;
   this.enabled = metadata.moziot.enabled;
   this.config = metadata.moziot.config;
@@ -76,6 +78,9 @@ InstalledAddon.prototype.view = function() {
           by <a href="${this.homepage}" target="_blank" rel="noopener">
             ${Utils.escapeHtml(this.author)}
           </a>
+        </span>
+        <span class="addon-settings-license">
+          (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
         </span>
       </div>
       <div class="addon-settings-controls">
