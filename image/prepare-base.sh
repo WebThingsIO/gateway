@@ -39,11 +39,12 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
-# Install prequisite packages
+# Install prerequisite packages
 sudo apt install -y \
   autoconf \
   certbot \
   dnsmasq \
+  ffmpeg \
   git \
   hostapd \
   libboost-python-dev \
@@ -276,5 +277,8 @@ END
 #       time.
 sudo chmod +x /etc/init.d/gateway-iptables.sh
 sudo update-rc.d gateway-iptables.sh defaults
+
+# Clean up the preparation scripts.
+sudo rm /home/pi/prepare-base{,-root}.sh
 
 echo "Done"

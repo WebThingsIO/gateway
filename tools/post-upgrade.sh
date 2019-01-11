@@ -2,6 +2,12 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
+# Install ffmpeg, if necessary
+if ! dpkg -s ffmpeg 2>/dev/null | grep -q '^Status.*installed'; then
+  sudo apt update -y
+  sudo apt install -y ffmpeg
+fi
+
 # Install thing-url-adapter
 addons_dir=${HOME}/.mozilla-iot/addons
 if [ ! -d "${addons_dir}/thing-url-adapter" ]; then
