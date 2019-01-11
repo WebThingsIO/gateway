@@ -94,7 +94,8 @@ const ContextMenu = {
         this.nameInput.value = e.detail.thingName;
         this.thingType.innerHTML = '';
 
-        if (e.detail.selectedCapability === 'Custom') {
+        if (!e.detail.selectedCapability ||
+            e.detail.selectedCapability === 'Custom') {
           this.thingIcon.style.backgroundImage = '';
           this.customIconLabel.classList.remove('hidden');
           this.customIcon.classList.remove('hidden');
