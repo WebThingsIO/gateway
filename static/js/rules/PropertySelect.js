@@ -448,7 +448,8 @@ PropertySelect.prototype.addEventOptions = function() {
 
 PropertySelect.prototype.addActionOptions = function() {
   for (const name of Object.keys(this.thing.actions)) {
-    if (this.thing.actions[name].input) {
+    if (this.thing.actions[name].input &&
+        Object.keys(this.thing.actions[name].input).length > 0) {
       continue;
     }
     const label =
