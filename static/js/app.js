@@ -36,6 +36,7 @@ let RuleScreen;
 // eslint-disable-next-line prefer-const
 let Speech;
 
+const shaka = require('shaka-player/dist/shaka-player.compiled');
 const Notifications = require('./notifications');
 
 const App = {
@@ -63,6 +64,9 @@ const App = {
    * Start Things Gateway app.
    */
   init: function() {
+    // Load the shaka player polyfills
+    shaka.polyfill.installAll();
+
     AddThingScreen.init();
     ContextMenu.init();
     AssistantScreen.init();
@@ -394,8 +398,6 @@ require('./components/property/switch');
 require('./components/property/temperature');
 require('./components/property/video');
 require('./components/property/voltage');
-require('dashjs/dist/dash.all.min');
-require('hls.js/dist/hls.min');
 
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {

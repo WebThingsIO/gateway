@@ -12,8 +12,8 @@
 'use strict';
 
 const API = require('../api');
-const Hls = require('hls.js/dist/hls.min');
 const Utils = require('../utils');
+const shaka = require('shaka-player/dist/shaka-player.compiled');
 
 class VideoDetail {
   constructor(thing, name, property) {
@@ -96,42 +96,18 @@ class VideoDetail {
 
     const video = document.querySelector('.media-modal-video');
 
-    if (this.dashHref) {
-      const player = window.dashjs.MediaPlayer().create();
-      player.extend('RequestModifier', () => {
-        return {
-          modifyRequestHeader: (xhr) => {
-            xhr.setRequestHeader('Authorization', `Bearer ${API.jwt}`);
-            return xhr;
-          },
-          modifyRequestURL: (url) => {
-            return url;
-          },
+    if (shaka.Player.isBrowserSupported() && (this.dashHref || this.hlsHref)) {
+      const player = new shaka.Player(video);
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers = {
+          Authorization: `Bearer ${API.jwt}`,
         };
       });
-      player.initialize(video, this.dashHref, true);
-    } else if (this.hlsHref) {
-      const config = Hls.DefaultConfig;
-      config.xhrSetup = (xhr) => {
-        xhr.setRequestHeader('Authorization', `Bearer ${API.jwt}`);
-      };
-      config.fetchSetup = (context, initParams) => {
-        return new Request(
-          context,
-          Object.assign(
-            initParams,
-            {
-              headers: {
-                Authorization: `Bearer ${API.jwt}`,
-              },
-            })
-        );
-      };
-      Hls.DefaultConfig = config;
-      const hls = new Hls();
-      hls.loadSource(this.hlsHref);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+
+      player.addEventListener('error', console.error);
+
+      player.load(this.dashHref || this.hlsHref).then(() => {
         video.play();
       });
     }

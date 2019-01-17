@@ -2474,10 +2474,6 @@ codecov@^3.1.0:
     request "^2.87.0"
     urlgrey "^0.4.4"
 
-codem-isoboxer@0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/codem-isoboxer/-/codem-isoboxer-0.3.6.tgz#867f670459b881d44f39168d5ff2a8f14c16151d"
-
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -2880,14 +2876,6 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
-
-dashjs@^2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/dashjs/-/dashjs-2.9.2.tgz#56f60e08606838b9681515d5e5b26bfb45d0447d"
-  dependencies:
-    codem-isoboxer "0.3.6"
-    fast-deep-equal "1.1.0"
-    imsc "^1.0.1-rc.3"
 
 data-urls@^1.0.0, data-urls@^1.1.0:
   version "1.1.0"
@@ -3700,7 +3688,7 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
-fast-deep-equal@1.1.0, fast-deep-equal@^1.0.0:
+fast-deep-equal@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
 
@@ -4336,13 +4324,6 @@ highlightjs@^9.12.0:
   version "9.12.0"
   resolved "https://registry.yarnpkg.com/highlightjs/-/highlightjs-9.12.0.tgz#9b84eb42a7aa8488eb69ac79fec44cf495bf72a1"
 
-hls.js@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.11.0.tgz#a205fb61725d9d69bf6258984be3dc2ee829fa9e"
-  dependencies:
-    string.prototype.endswith "^0.2.0"
-    url-toolkit "^2.1.2"
-
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
@@ -4558,12 +4539,6 @@ import-local@^2.0.0:
   dependencies:
     pkg-dir "^3.0.0"
     resolve-cwd "^2.0.0"
-
-imsc@^1.0.1-rc.3:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/imsc/-/imsc-1.0.1.tgz#f82d0be1f73ad4242a459bd8bed81dac889e9972"
-  dependencies:
-    sax "1.2.1"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -7633,10 +7608,6 @@ sane@^2.0.0:
   optionalDependencies:
     fsevents "^1.1.1"
 
-sax@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
-
 sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
@@ -7764,6 +7735,11 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+shaka-player@^2.5.0-beta2:
+  version "2.5.0-beta2"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.5.0-beta2.tgz#b1eedd1255aa059a2b51bf084ec5198288d538e9"
+  integrity sha512-x65ZTBFznldScB7SU7QmraA61c3b0YPfGiAd/3HPCUOeBLN5iOmy99TUzMu90dbP8auKbnJ+o9h1zwS8PDikaA==
 
 shebang-command@^1.2.0:
   version "1.2.0"
@@ -8118,10 +8094,6 @@ string-width@^2.0.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^3.0.0"
-
-string.prototype.endswith@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/string.prototype.endswith/-/string.prototype.endswith-0.2.0.tgz#a19c20dee51a98777e9a47e10f09be393b9bba75"
 
 string.prototype.padend@^3.0.0:
   version "3.0.0"
@@ -8679,10 +8651,6 @@ url-loader@^1.1.2:
     loader-utils "^1.1.0"
     mime "^2.0.3"
     schema-utils "^1.0.0"
-
-url-toolkit@^2.1.2:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.6.tgz#6d03246499e519aad224c44044a4ae20544154f2"
 
 url@^0.11.0, url@~0.11.0:
   version "0.11.0"
