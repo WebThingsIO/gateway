@@ -33,6 +33,7 @@ exports.OAUTHCLIENTS_PATH = '/authorizations';
 exports.LOGS_PATH = '/logs';
 exports.PUSH_PATH = '/push';
 exports.PING_PATH = '/ping';
+exports.PROXY_PATH = '/proxy';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');

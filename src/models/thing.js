@@ -13,6 +13,7 @@
 const Constants = require('../constants');
 const Database = require('../db.js');
 const EventEmitter = require('events');
+const Router = require('../router');
 const UserProfile = require('../user-profile');
 const WebSocket = require('ws');
 const fs = require('fs');
@@ -58,6 +59,13 @@ const Thing = function(id, description) {
       if (property.hasOwnProperty('links')) {
         property.links = property.links.filter((link) => {
           return link.rel && link.rel !== 'property';
+        }).map((link) => {
+          if (link.proxy) {
+            delete link.proxy;
+            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+          }
+
+          return link;
         });
       } else {
         property.links = [];
@@ -97,15 +105,30 @@ const Thing = function(id, description) {
     href: this.href,
   };
 
-  if (description.hasOwnProperty('uiHref') && description.uiHref) {
-    uiLink.href = description.uiHref;
-  } else if (description.hasOwnProperty('links')) {
+  if (description.hasOwnProperty('baseHref') && description.baseHref) {
+    Router.addProxyServer(this.id, description.baseHref);
+  }
+
+  if (description.hasOwnProperty('links')) {
     for (const link of description.links) {
-      if (link.rel === 'alternate' &&
-          link.mediaType === 'text/html' &&
-          link.href.startsWith('http')) {
-        uiLink.href = link.href;
-        break;
+      if (['properties', 'actions', 'events'].includes(link.rel)) {
+        continue;
+      }
+
+      if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+        if (link.proxy) {
+          delete link.proxy;
+          uiLink.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        } else {
+          uiLink.href = link.href;
+        }
+      } else {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        this.links.push(link);
       }
     }
   }
@@ -122,6 +145,13 @@ const Thing = function(id, description) {
     if (action.hasOwnProperty('links')) {
       action.links = action.links.filter((link) => {
         return link.rel && link.rel !== 'action';
+      }).map((link) => {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        return link;
       });
     } else {
       action.links = [];
@@ -144,6 +174,13 @@ const Thing = function(id, description) {
     if (event.hasOwnProperty('links')) {
       event.links = event.links.filter((link) => {
         return link.rel && link.rel !== 'event';
+      }).map((link) => {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        return link;
       });
     } else {
       event.links = [];
@@ -430,6 +467,13 @@ Thing.prototype.updateFromDescription = function(description) {
       if (property.hasOwnProperty('links')) {
         property.links = property.links.filter((link) => {
           return link.rel && link.rel !== 'property';
+        }).map((link) => {
+          if (link.proxy) {
+            delete link.proxy;
+            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+          }
+
+          return link;
         });
       } else {
         property.links = [];
@@ -456,6 +500,13 @@ Thing.prototype.updateFromDescription = function(description) {
     if (action.hasOwnProperty('links')) {
       action.links = action.links.filter((link) => {
         return link.rel && link.rel !== 'action';
+      }).map((link) => {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        return link;
       });
     } else {
       action.links = [];
@@ -480,6 +531,13 @@ Thing.prototype.updateFromDescription = function(description) {
     if (event.hasOwnProperty('links')) {
       event.links = event.links.filter((link) => {
         return link.rel && link.rel !== 'event';
+      }).map((link) => {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        return link;
       });
     } else {
       event.links = [];
@@ -504,16 +562,31 @@ Thing.prototype.updateFromDescription = function(description) {
     }
   }
 
+  if (description.hasOwnProperty('baseHref') && description.baseHref) {
+    Router.addProxyServer(this.id, description.baseHref);
+  }
+
   // Update the UI href
-  if (description.hasOwnProperty('uiHref') && description.uiHref) {
-    uiLink.href = description.uiHref;
-  } else if (description.hasOwnProperty('links')) {
+  if (description.hasOwnProperty('links')) {
     for (const link of description.links) {
-      if (link.rel === 'alternate' &&
-          link.mediaType === 'text/html' &&
-          link.href.startsWith('http')) {
-        uiLink.href = link.href;
-        break;
+      if (['properties', 'actions', 'events'].includes(link.rel)) {
+        continue;
+      }
+
+      if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+        if (link.proxy) {
+          delete link.proxy;
+          uiLink.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        } else {
+          uiLink.href = link.href;
+        }
+      } else {
+        if (link.proxy) {
+          delete link.proxy;
+          link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+        }
+
+        this.links.push(link);
       }
     }
   }

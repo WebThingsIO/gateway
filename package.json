@@ -48,6 +48,7 @@
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "greenlock": "^2.2.19",
     "handlebars": "^4.0.12",
+    "http-proxy": "^1.17.0",
     "ip-regex": "^3.0.0",
     "jsonwebtoken": "^8.3.0",
     "le-acme-core": "^2.1.3",

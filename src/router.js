@@ -18,6 +18,9 @@ const jwtMiddleware = require('./jwt-middleware');
 const auth = jwtMiddleware.middleware();
 const UserProfile = require('./user-profile');
 
+const API_PREFIX = '/api'; // A pseudo path to use for API requests
+const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
+
 /**
  * Router.
  */
@@ -26,8 +29,7 @@ const Router = {
    * Configure web app routes.
    */
   configure: function(app, options) {
-    const API_PREFIX = '/api'; // A pseudo path to use for API requests
-    const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
+    this.proxyController = require('./controllers/proxy_controller');
 
     // Compress all responses larger than 1kb
     app.use(compression());
@@ -67,22 +69,32 @@ const Router = {
       response.setHeader('Access-Control-Allow-Methods',
                          'GET,HEAD,PUT,PATCH,POST,DELETE');
 
+      // If this is a proxy request, skip everything and go straight there.
+      if (request.path.startsWith(Constants.PROXY_PATH)) {
+        request.url = APP_PREFIX + request.url;
+        next();
+
       // If request won't accept HTML but will accept JSON,
       // or is a WebSocket request, or is multipart/form-data
       // treat it as an API request
-      if (!request.accepts('html') && request.accepts('json') ||
-          request.get('Upgrade') === 'websocket' ||
-          request.is('multipart/form-data') ||
-          request.path.startsWith(Constants.ADDONS_PATH) ||
-          request.path.startsWith(Constants.LOGS_PATH)) {
+      } else if (!request.accepts('html') && request.accepts('json') ||
+                 request.get('Upgrade') === 'websocket' ||
+                 request.is('multipart/form-data') ||
+                 request.path.startsWith(Constants.ADDONS_PATH) ||
+                 request.path.startsWith(Constants.LOGS_PATH)) {
         request.url = API_PREFIX + request.url;
         next();
+
       // Otherwise treat it as an app request
       } else {
         request.url = APP_PREFIX + request.url;
         next();
       }
     });
+
+    // Handle proxied resources
+    app.use(APP_PREFIX + Constants.PROXY_PATH, nocache, auth,
+            this.proxyController);
 
     // Let OAuth handle its own rendering
     app.use(APP_PREFIX + Constants.OAUTH_PATH, nocache,
@@ -142,6 +154,14 @@ const Router = {
             require('./controllers/oauth_controller').default);
     app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nocache, auth,
             require('./controllers/oauthclients_controller').default);
+  },
+
+  addProxyServer(thingId, server) {
+    this.proxyController.addProxyServer(thingId, server);
+  },
+
+  removeProxyServer(thingId) {
+    this.proxyController.removeProxyServer(thingId);
   },
 };
 

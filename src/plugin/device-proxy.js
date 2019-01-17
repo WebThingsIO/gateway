@@ -27,7 +27,7 @@ class DeviceProxy extends Device {
       deviceDict['@context'] || 'https://iot.mozilla.org/schemas';
     this['@type'] = deviceDict['@type'] || [];
     this.description = deviceDict.description || '';
-    this.uiHref = deviceDict.uiHref || null;
+    this.baseHref = deviceDict.baseHref || null;
 
     if (deviceDict.hasOwnProperty('pin')) {
       this.pinRequired = deviceDict.pin.required;

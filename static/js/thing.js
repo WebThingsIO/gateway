@@ -11,6 +11,7 @@
 'use strict';
 
 const ActionDetail = require('./property-detail/action');
+const API = require('./api');
 const App = require('./app');
 const BooleanDetail = require('./property-detail/boolean');
 const BrightnessDetail = require('./property-detail/brightness');
@@ -92,7 +93,7 @@ class Thing {
       for (const link of description.links) {
         if (link.rel === 'alternate' &&
             link.mediaType === 'text/html' &&
-            link.href.startsWith('http')) {
+            link.href.startsWith('/proxy/')) {
           this.uiHref = link.href;
           break;
         }
@@ -338,8 +339,8 @@ class Thing {
    * HTML link for custom UI.
    */
   uiLink() {
-    return `<a href="${this.uiHref}" class="thing-ui-link" target="_blank"
-               rel="noopener"></a>`;
+    return `<a href="${this.uiHref}?jwt=${API.jwt}" class="thing-ui-link"
+              target="_blank" rel="noopener"></a>`;
   }
 
   /**

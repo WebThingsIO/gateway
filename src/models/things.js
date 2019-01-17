@@ -14,6 +14,7 @@ const Ajv = require('ajv');
 
 const AddonManager = require('../addon-manager');
 const Database = require('../db');
+const Router = require('../router');
 const Thing = require('./thing');
 const Constants = require('../constants');
 
@@ -288,6 +289,7 @@ const Things = {
    * @param String id ID to give Thing.
    */
   removeThing: function(id) {
+    Router.removeProxyServer(id);
     return Database.removeThing(id).then(() => {
       const thing = this.things.get(id);
       if (!thing) {
