@@ -429,3 +429,10 @@
   margin-top: -3.2rem;
   cursor: pointer;
 }
+
+.media-modal-error {
+  font-size: 2rem;
+  padding: 4rem;
+  color: white;
+  background-color: #5288af;
+}

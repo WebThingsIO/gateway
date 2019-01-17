@@ -67,15 +67,27 @@ class VideoDetail {
   _expandVideo() {
     const element = document.createElement('div');
     element.classList.add('media-modal-backdrop');
-    element.innerHTML = `
-      <div class="media-modal">
-        <div class="media-modal-close"></div>
-        <div class="media-modal-frame">
-          <video class="media-modal-video" controls autoplay></video>
-          </video>
+
+    if (!shaka.Player.isBrowserSupported()) {
+      element.innerHTML = `
+        <div class="media-modal">
+          <div class="media-modal-close"></div>
+          <div class="media-modal-frame media-modal-error">
+            Sorry, video is not supported in your browser.
+          </div>
         </div>
-      </div>
-      `;
+        `;
+    } else {
+      element.innerHTML = `
+        <div class="media-modal">
+          <div class="media-modal-close"></div>
+          <div class="media-modal-frame">
+            <video class="media-modal-video" controls autoplay></video>
+            </video>
+          </div>
+        </div>
+        `;
+    }
 
     document.body.appendChild(element);
 
@@ -87,16 +99,15 @@ class VideoDetail {
       }
     );
 
-    element.querySelector('.media-modal-video').addEventListener(
-      'loadeddata',
-      this.positionButtons
-    );
-
     window.addEventListener('resize', this.positionButtons);
 
-    const video = document.querySelector('.media-modal-video');
-
     if (shaka.Player.isBrowserSupported() && (this.dashHref || this.hlsHref)) {
+      element.querySelector('.media-modal-video').addEventListener(
+        'loadeddata',
+        this.positionButtons
+      );
+
+      const video = document.querySelector('.media-modal-video');
       const player = new shaka.Player(video);
 
       player.getNetworkingEngine().registerRequestFilter((type, request) => {
