@@ -20,6 +20,10 @@ const proxy = httpProxy.createProxyServer({
   changeOrigin: true,
 });
 
+proxy.on('error', (e) => {
+  console.debug('Proxy error:', e);
+});
+
 ProxyController.addProxyServer = (thingId, server) => {
   proxies.set(thingId, server);
 };
