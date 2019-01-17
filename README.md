@@ -76,8 +76,8 @@ Use nvm to install and use an LTS version of node and then set the
 default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
 
 ```
-$ nvm install --lts
-$ nvm use --lts
+$ nvm install
+$ nvm use
 $ nvm alias default $(node -v)
 ```
 
