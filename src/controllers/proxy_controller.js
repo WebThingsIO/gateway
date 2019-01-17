@@ -29,7 +29,7 @@ ProxyController.removeProxyServer = (thingId) => {
 };
 
 /**
- * Log out the user
+ * Proxy the request, if configured.
  */
 ProxyController.all('/:thingId/*', (request, response) => {
   const thingId = request.params.thingId;
