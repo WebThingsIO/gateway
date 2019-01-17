@@ -72,25 +72,6 @@ Reinitialize your terminal session.
 $ . ~/.bashrc
 ```
 
-Use nvm to install and use an LTS version of node and then set the
-default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
-
-```
-$ nvm install
-$ nvm use
-$ nvm alias default $(node -v)
-```
-
-Verify that node and npm have been installed:
-```
-$ node --version
-v8.12.0
-$ npm --version
-6.4.1
-```
-
-Note: these versions might differ from the LTS version installed locally.
-
 ### Install node (if you didn't use nvm)
 
 (If you already installed node via nvm you can skip this step)
@@ -274,6 +255,25 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
     ```
     $ cd gateway
     ```
+
+* If you have chosen to install nvm above, install and use an LTS version of node and then set the default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
+
+    ```
+    $ nvm install
+    $ nvm use
+    $ nvm alias default $(node -v)
+    ```
+
+* Verify that node and npm have been installed:
+
+    ```
+    $ node --version
+    v8.12.0
+    $ npm --version
+    6.4.1
+    ```
+
+    Note: these versions might differ from the LTS version installed locally.
 
 * Install dependencies:
     * **NOTE**: `yarn` is preferred but `npm install` will also work. To temporarily use `yarn` run `npx yarn` or for a permanent installation follow the
