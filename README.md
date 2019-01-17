@@ -153,7 +153,7 @@ $ brew install autoconf
 
 Under x86-64 or x86 Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libpng12-0
+$ sudo apt-get install libpng16-16
 ```
 
 Under ARM Ubuntu/Debian Linux:
