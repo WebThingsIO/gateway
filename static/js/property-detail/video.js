@@ -12,8 +12,8 @@
 'use strict';
 
 const API = require('../api');
-const Hls = require('hls.js/dist/hls.min');
 const Utils = require('../utils');
+const shaka = require('shaka-player/dist/shaka-player.compiled');
 
 class VideoDetail {
   constructor(thing, name, property) {
@@ -67,15 +67,27 @@ class VideoDetail {
   _expandVideo() {
     const element = document.createElement('div');
     element.classList.add('media-modal-backdrop');
-    element.innerHTML = `
-      <div class="media-modal">
-        <div class="media-modal-close"></div>
-        <div class="media-modal-frame">
-          <video class="media-modal-video" controls autoplay></video>
-          </video>
+
+    if (!shaka.Player.isBrowserSupported()) {
+      element.innerHTML = `
+        <div class="media-modal">
+          <div class="media-modal-close"></div>
+          <div class="media-modal-frame media-modal-error">
+            Sorry, video is not supported in your browser.
+          </div>
         </div>
-      </div>
-      `;
+        `;
+    } else {
+      element.innerHTML = `
+        <div class="media-modal">
+          <div class="media-modal-close"></div>
+          <div class="media-modal-frame">
+            <video class="media-modal-video" controls autoplay></video>
+            </video>
+          </div>
+        </div>
+        `;
+    }
 
     document.body.appendChild(element);
 
@@ -87,51 +99,26 @@ class VideoDetail {
       }
     );
 
-    element.querySelector('.media-modal-video').addEventListener(
-      'loadeddata',
-      this.positionButtons
-    );
-
     window.addEventListener('resize', this.positionButtons);
 
-    const video = document.querySelector('.media-modal-video');
+    if (shaka.Player.isBrowserSupported() && (this.dashHref || this.hlsHref)) {
+      element.querySelector('.media-modal-video').addEventListener(
+        'loadeddata',
+        this.positionButtons
+      );
 
-    if (this.dashHref) {
-      const player = window.dashjs.MediaPlayer().create();
-      player.extend('RequestModifier', () => {
-        return {
-          modifyRequestHeader: (xhr) => {
-            xhr.setRequestHeader('Authorization', `Bearer ${API.jwt}`);
-            return xhr;
-          },
-          modifyRequestURL: (url) => {
-            return url;
-          },
+      const video = document.querySelector('.media-modal-video');
+      const player = new shaka.Player(video);
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers = {
+          Authorization: `Bearer ${API.jwt}`,
         };
       });
-      player.initialize(video, this.dashHref, true);
-    } else if (this.hlsHref) {
-      const config = Hls.DefaultConfig;
-      config.xhrSetup = (xhr) => {
-        xhr.setRequestHeader('Authorization', `Bearer ${API.jwt}`);
-      };
-      config.fetchSetup = (context, initParams) => {
-        return new Request(
-          context,
-          Object.assign(
-            initParams,
-            {
-              headers: {
-                Authorization: `Bearer ${API.jwt}`,
-              },
-            })
-        );
-      };
-      Hls.DefaultConfig = config;
-      const hls = new Hls();
-      hls.loadSource(this.hlsHref);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+
+      player.addEventListener('error', console.error);
+
+      player.load(this.dashHref || this.hlsHref).then(() => {
         video.play();
       });
     }

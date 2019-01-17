@@ -80,12 +80,7 @@ const pluginsWeb = [
       flatten: true,
     },
     {
-      from: 'node_modules/dashjs/dist/dash.all.min.js',
-      to: path.join(__dirname, 'build/static/js/lib/'),
-      flatten: true,
-    },
-    {
-      from: 'node_modules/hls.js/dist/hls.min.js',
+      from: 'node_modules/shaka-player/dist/shaka-player.compiled.js',
       to: path.join(__dirname, 'build/static/js/lib/'),
       flatten: true,
     },
