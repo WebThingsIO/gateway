@@ -66,31 +66,6 @@ nvm allows you to easily install different versions of node. To install nvm:
 $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 ```
 
-Reinitialize your terminal session.
-
-```
-$ . ~/.bashrc
-```
-
-Use nvm to install and use an LTS version of node and then set the
-default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
-
-```
-$ nvm install
-$ nvm use
-$ nvm alias default $(node -v)
-```
-
-Verify that node and npm have been installed:
-```
-$ node --version
-v8.12.0
-$ npm --version
-6.4.1
-```
-
-Note: these versions might differ from the LTS version installed locally.
-
 ### Install node (if you didn't use nvm)
 
 (If you already installed node via nvm you can skip this step)
@@ -273,6 +248,31 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.g
 
     ```
     $ cd gateway
+    ```
+
+* Use nvm to install and use an LTS version of node and then set the default version. The **`.nvmrc`** file will be used by nvm to determine which version of node to install.
+
+    ```
+    $ nvm install
+    $ nvm use
+    $ nvm alias default $(node -v)
+    ```
+
+* Verify that node and npm have been installed:
+
+    ```
+    $ node --version
+    v8.12.0
+    $ npm --version
+    6.4.1
+    ```
+
+    Note: these versions might differ from the LTS version installed locally.
+
+* Reinitialize your terminal session.
+
+    ```
+    $ . ~/.bashrc
     ```
 
 * Install dependencies:
