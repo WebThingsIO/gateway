@@ -45,6 +45,11 @@ class DoorSensor extends Thing {
         break;
       }
     }
+
+    // If necessary, match on name.
+    if (this.openProperty === null && this.displayedProperties.open) {
+      this.openProperty = 'open';
+    }
   }
 
   get icon() {

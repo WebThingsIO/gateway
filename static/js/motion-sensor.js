@@ -45,6 +45,11 @@ class MotionSensor extends Thing {
         break;
       }
     }
+
+    // If necessary, match on name.
+    if (this.motionProperty === null && this.displayedProperties.motion) {
+      this.motionProperty = 'motion';
+    }
   }
 
   get icon() {
