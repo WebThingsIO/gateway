@@ -91,10 +91,14 @@ class Thing {
     this.uiHref = null;
     if (description.links) {
       for (const link of description.links) {
-        if (link.rel === 'alternate' &&
-            link.mediaType === 'text/html' &&
-            link.href.startsWith('/proxy/')) {
-          this.uiHref = link.href;
+        if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+          if (link.href.startsWith('/proxy/')) {
+            this.uiHref = `${link.href}?jwt=${API.jwt}`;
+          } else if (link.href.startsWith('http://') ||
+                     link.href.startsWith('https://')) {
+            this.uiHref = link.href;
+          }
+
           break;
         }
       }
@@ -339,7 +343,7 @@ class Thing {
    * HTML link for custom UI.
    */
   uiLink() {
-    return `<a href="${this.uiHref}?jwt=${API.jwt}" class="thing-ui-link"
+    return `<a href="${this.uiHref}" class="thing-ui-link"
               target="_blank" rel="noopener"></a>`;
   }
 
