@@ -63,11 +63,11 @@ class ImageDetail {
     element.classList.add('media-modal-backdrop');
     element.innerHTML = `
       <div class="media-modal">
-        <div class="media-modal-close"></div>
         <div class="media-modal-frame">
+          <div class="media-modal-close"></div>
           <img class="media-modal-image"></img>
+          <div class="media-modal-refresh"></div>
         </div>
-        <div class="media-modal-refresh"></div>
       </div>
       `;
 
@@ -75,6 +75,7 @@ class ImageDetail {
       'click',
       () => {
         document.body.removeChild(element);
+        document.querySelector('#things').style.display = 'block';
         window.removeEventListener('resize', this.positionButtons);
       }
     );
@@ -92,6 +93,7 @@ class ImageDetail {
     window.addEventListener('resize', this.positionButtons);
 
     document.body.appendChild(element);
+    document.querySelector('#things').style.display = 'none';
 
     this.reloadImage();
   }
@@ -126,11 +128,16 @@ class ImageDetail {
     const refresh = document.querySelector('.media-modal-refresh');
 
     const parentWidth = img.parentNode.offsetWidth;
+    const parentHeight = img.parentNode.offsetHeight;
     const imageWidth = img.offsetWidth;
-    const sidePadding = (parentWidth - imageWidth) / 2;
+    const imageHeight = img.offsetHeight;
+    const xPadding = (parentWidth - imageWidth) / 2;
+    const yPadding = (parentHeight - imageHeight) / 2;
 
-    close.style.right = `${sidePadding}px`;
-    refresh.style.left = `${sidePadding}px`;
+    close.style.right = `${xPadding}px`;
+    close.style.top = `${yPadding}px`;
+    refresh.style.left = `${xPadding}px`;
+    refresh.style.bottom = `${yPadding}px`;
   }
 }
 
