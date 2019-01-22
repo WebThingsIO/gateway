@@ -11,7 +11,7 @@ const RulePartBlock = require('./RulePartBlock');
 function NotificationEffectBlock(ruleArea, onPresentationChange, onRuleUpdate) {
   RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleUpdate,
                      'Notification',
-                     '/optimized-images/rule-icons/notification.svg');
+                     '/optimized-images/thing-icons/notification.svg');
 
   const rulePartInfo = this.elt.querySelector('.rule-part-info');
 

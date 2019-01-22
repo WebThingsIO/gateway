@@ -15,10 +15,21 @@
 }
 
 #context-menu-heading-icon {
+  display: inline-block;
+}
+
+#context-menu-heading-icon:not(.custom-thing) {
   height: 4rem;
+  width: 4rem;
+  border: 0.1rem solid white;
+  border-radius: 2rem;
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ffffff64;
   position: relative;
   top: 1.3rem;
-  padding-right: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 #context-menu-heading-text {
@@ -67,10 +78,15 @@
   border-radius: 0.5rem;
 }
 
-#edit-thing-icon {
-  width: 6.4rem;
-  height: 6.4rem;
-  background-size: 6.4rem;
+#edit-thing-icon:not(.custom-thing) {
+  width: 6.2rem;
+  height: 6.2rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ffffff64;
+  border: 0.1rem solid white;
+  border-radius: 3.2rem;
 }
 
 #edit-thing-metadata {

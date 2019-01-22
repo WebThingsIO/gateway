@@ -3,59 +3,59 @@ const RuleUtils = {
     if (description.selectedCapability) {
       switch (description.selectedCapability) {
         case 'OnOffSwitch':
-          return '/optimized-images/rule-icons/on_off_switch.svg';
+          return '/optimized-images/thing-icons/on_off_switch.svg';
         case 'MultiLevelSwitch':
-          return '/optimized-images/rule-icons/multi_level_switch.svg';
+          return '/optimized-images/thing-icons/multi_level_switch.svg';
         case 'ColorControl':
-          return '/optimized-images/rule-icons/color_control.svg';
+          return '/optimized-images/thing-icons/color_control.svg';
         case 'EnergyMonitor':
-          return '/optimized-images/rule-icons/energy_monitor.svg';
+          return '/optimized-images/thing-icons/energy_monitor.svg';
         case 'BinarySensor':
-          return '/optimized-images/rule-icons/binary_sensor.svg';
+          return '/optimized-images/thing-icons/binary_sensor.svg';
         case 'MultiLevelSensor':
-          return '/optimized-images/rule-icons/multi_level_sensor.svg';
+          return '/optimized-images/thing-icons/multi_level_sensor.svg';
         case 'SmartPlug':
-          return '/optimized-images/rule-icons/smart_plug.svg';
+          return '/optimized-images/thing-icons/smart_plug.svg';
         case 'Light':
-          return '/optimized-images/rule-icons/light.svg';
+          return '/optimized-images/thing-icons/light.svg';
         case 'DoorSensor':
-          return '/optimized-images/rule-icons/door_sensor.svg';
+          return '/optimized-images/thing-icons/door_sensor.svg';
         case 'MotionSensor':
-          return '/optimized-images/rule-icons/motion_sensor.svg';
+          return '/optimized-images/thing-icons/motion_sensor.svg';
         case 'LeakSensor':
-          return '/optimized-images/rule-icons/leak_sensor.svg';
+          return '/optimized-images/thing-icons/leak_sensor.svg';
         case 'PushButton':
-          return '/optimized-images/rule-icons/push_button.svg';
+          return '/optimized-images/thing-icons/push_button.svg';
         case 'VideoCamera':
-          return '/optimized-images/rule-icons/video_camera.svg';
+          return '/optimized-images/thing-icons/video_camera.svg';
         case 'Camera':
-          return '/optimized-images/rule-icons/camera.svg';
+          return '/optimized-images/thing-icons/camera.svg';
         case 'TemperatureSensor':
-          return '/optimized-images/rule-icons/temperature_sensor.svg';
+          return '/optimized-images/thing-icons/temperature_sensor.svg';
         default:
           return description.iconHref ||
-            '/optimized-images/rule-icons/thing.svg';
+            '/optimized-images/thing-icons/thing.svg';
       }
     } else {
       switch (description.type) {
         case 'onOffSwitch':
-          return '/optimized-images/rule-icons/on_off_switch.svg';
+          return '/optimized-images/thing-icons/on_off_switch.svg';
         case 'onOffLight':
         case 'onOffColorLight':
         case 'dimmableLight':
         case 'dimmableColorLight':
-          return '/optimized-images/rule-icons/light.svg';
+          return '/optimized-images/thing-icons/light.svg';
         case 'binarySensor':
-          return '/optimized-images/rule-icons/binary_sensor.svg';
+          return '/optimized-images/thing-icons/binary_sensor.svg';
         case 'multiLevelSensor':
-          return '/optimized-images/rule-icons/multi_level_sensor.svg';
+          return '/optimized-images/thing-icons/multi_level_sensor.svg';
         case 'multiLevelSwitch':
-          return '/optimized-images/rule-icons/multi_level_switch.svg';
+          return '/optimized-images/thing-icons/multi_level_switch.svg';
         case 'smartPlug':
-          return '/optimized-images/rule-icons/smart_plug.svg';
+          return '/optimized-images/thing-icons/smart_plug.svg';
         default:
           return description.iconHref ||
-            '/optimized-images/rule-icons/thing.svg';
+            '/optimized-images/thing-icons/thing.svg';
       }
     }
   },

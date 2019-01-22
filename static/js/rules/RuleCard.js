@@ -24,8 +24,8 @@ function RuleCard(gateway, elt, id, desc) {
     this.elt.classList.add('invalid');
   }
 
-  let iconTrigger = '/optimized-images/rule-icons/thing.svg';
-  let iconEffect = '/optimized-images/rule-icons/thing.svg';
+  let iconTrigger = '/optimized-images/thing-icons/thing.svg';
+  let iconEffect = '/optimized-images/thing-icons/thing.svg';
 
   if (this.rule.trigger) {
     let trigger = this.rule.trigger;
@@ -36,7 +36,7 @@ function RuleCard(gateway, elt, id, desc) {
     if (thingTrigger) {
       iconTrigger = RuleUtils.icon(thingTrigger);
     } else if (trigger.type === 'TimeTrigger') {
-      iconTrigger = '/optimized-images/rule-icons/clock.svg';
+      iconTrigger = '/optimized-images/thing-icons/clock.svg';
     }
   }
 
