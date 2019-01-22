@@ -71,30 +71,37 @@ class VideoDetail {
     if (!shaka.Player.isBrowserSupported()) {
       element.innerHTML = `
         <div class="media-modal">
-          <div class="media-modal-close"></div>
-          <div class="media-modal-frame media-modal-error">
-            Sorry, video is not supported in your browser.
+          <div class="media-modal-frame">
+            <div class="media-modal-close"></div>
+            <div class="media-modal-error">
+              Sorry, video is not supported in your browser.
+            </div>
           </div>
         </div>
         `;
     } else {
       element.innerHTML = `
         <div class="media-modal">
-          <div class="media-modal-close"></div>
           <div class="media-modal-frame">
+            <div class="media-modal-close"></div>
             <video class="media-modal-video" controls autoplay></video>
-            </video>
           </div>
         </div>
         `;
     }
 
     document.body.appendChild(element);
+    document.querySelector('#things').style.display = 'none';
+
+    if (!shaka.Player.isBrowserSupported()) {
+      this.positionButtons();
+    }
 
     element.querySelector('.media-modal-close').addEventListener(
       'click',
       () => {
         document.body.removeChild(element);
+        document.querySelector('#things').style.display = 'block';
         window.removeEventListener('resize', this.positionButtons);
       }
     );
@@ -125,14 +132,22 @@ class VideoDetail {
   }
 
   _positionButtons() {
-    const video = document.querySelector('.media-modal-video');
+    let video = document.querySelector('.media-modal-video');
+    if (!video) {
+      video = document.querySelector('.media-modal-error');
+    }
+
     const close = document.querySelector('.media-modal-close');
 
     const parentWidth = video.parentNode.offsetWidth;
+    const parentHeight = video.parentNode.offsetHeight;
     const videoWidth = video.offsetWidth;
-    const sidePadding = (parentWidth - videoWidth) / 2;
+    const videoHeight = video.offsetHeight;
+    const xPadding = (parentWidth - videoWidth) / 2;
+    const yPadding = (parentHeight - videoHeight) / 2;
 
-    close.style.right = `${sidePadding}px`;
+    close.style.right = `${xPadding}px`;
+    close.style.top = `${yPadding}px`;
   }
 }
 
