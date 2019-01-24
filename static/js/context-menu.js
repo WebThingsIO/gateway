@@ -112,7 +112,8 @@ const ContextMenu = {
           const option = document.createElement('option');
           option.value = capability;
 
-          if (e.detail.selectedCapability === capability) {
+          if (e.detail.selectedCapability === capability ||
+              (capability === 'Custom' && !e.detail.selectedCapability)) {
             option.selected = true;
           }
 
