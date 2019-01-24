@@ -49,7 +49,7 @@ sudo e2fsck -f ${DEV_PART2}
 sudo resize2fs ${DEV_PART2} ${NEW_SIZE_M}M
 
 # Calculate what the new smaller partition size will be
-FDISK_PART2="$(fdisk -l ${DEV} | grep ${DEV_PART2} | tr -s ' ')"
+FDISK_PART2="$(sudo fdisk -l ${DEV} | grep ${DEV_PART2} | tr -s ' ')"
 PART2_START="$(echo ${FDISK_PART2} | cut -d ' ' -f 2)"
 PART2_END="$(echo ${FDISK_PART2} | cut -d ' ' -f 3)"
 #echo "PART2_START = ${PART2_START}"
@@ -65,7 +65,7 @@ sudo parted ${DEV} ---pretend-input-tty resizepart 2 ${PART2_NEW_END}s Yes
 sudo e2fsck -f ${DEV_PART2}
 
 # Print it out for sanity
-fdisk -l ${DEV}
+sudo fdisk -l ${DEV}
 
 # Transfer the relevant portion of the filesystem
 sudo dd status=progress bs=512 count=${NEW_IMG_SIZE} if=${DEV} of=${IMG_FILENAME}
