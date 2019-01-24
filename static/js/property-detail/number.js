@@ -21,6 +21,7 @@ class NumberDetail {
     this.type = property.type;
     this.unit =
       property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
+    this.precision = property.type === 'integer' ? 0 : 3;
 
     if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;
@@ -64,7 +65,7 @@ class NumberDetail {
       return `
         <webthing-numeric-label-property
           data-name="${Utils.escapeHtml(this.label)}" data-unit="${unit}"
-          data-precision="3" id="${this.id}">
+          data-precision="${this.precision}" id="${this.id}">
         </webthing-numeric-label-property>`;
     } else {
       const min = this.min === null ? '' : `min="${this.min}"`;
