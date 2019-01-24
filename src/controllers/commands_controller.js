@@ -37,6 +37,9 @@ const AddonManager = require('../addon-manager');
 const CommandUtils = require('../command-utils');
 const IntentParser = require('../models/intentparser');
 const Things = require('../models/things');
+const WebSocket = require('ws');
+const db = require('../db');
+const JSONWebToken = require('../models/jsonwebtoken');
 
 const CommandsController = PromiseRouter();
 
@@ -52,37 +55,46 @@ CommandsController.post('/', async (request, response) => {
     return;
   }
 
+  db.insertCommand(request.body.text, 0);
+  if (CommandUtils.ws &&
+      typeof request.headers['skip-feedback'] === 'undefined') {
+    CommandUtils.ws.send(`{"command": "${request.body.text}",
+                         "direction": "0"}`);
+  }
+
   let names = await Things.getThingNames();
   names = names.map((n) => n.toLowerCase());
 
-  const internalError = () => {
+  const sendError = (message) => {
     response.status(400).json({
-      message: 'Sorry, something went wrong.',
+      message: message,
     });
+    db.insertCommand(message, 1);
+    if (CommandUtils.ws &&
+        typeof request.headers['skip-feedback'] === 'undefined') {
+      CommandUtils.ws.send(`{"command": "${message}",
+                           "direction": "1"}`);
+    }
+  };
+
+  const internalError = () => {
+    sendError('Sorry, something went wrong.');
   };
 
   const thingNotFound = () => {
-    response.status(400).json({
-      message: 'Sorry, that thing wasn\'t found.',
-    });
+    sendError('Sorry, that thing wasn\'t found.');
   };
 
   const invalidForDevice = () => {
-    response.status(400).json({
-      message: 'Sorry, I\'m afraid I can\'t do that.',
-    });
+    sendError('Sorry, I\'m afraid I can\'t do that.');
   };
 
   const invalidCommand = () => {
-    response.status(400).json({
-      message: 'Sorry, I didn\'t understand that.',
-    });
+    sendError('Sorry, I didn\'t understand that.');
   };
 
   const failedToSet = () => {
-    response.status(400).json({
-      message: 'Sorry, that didn\'t work.',
-    });
+    sendError('Sorry, that didn\'t work.');
   };
 
   try {
@@ -205,6 +217,35 @@ CommandsController.post('/', async (request, response) => {
   response.status(201).json({
     message: 'Command Created',
     payload: payload,
+  });
+});
+
+const wss = new WebSocket.Server({port: CommandUtils.wsSettings.port});
+wss.on('connection', function connection(ws, req) {
+  console.log('cc client connected');
+  const token = req.url.replace('/assistant?jwt=', '');
+  JSONWebToken.verifyJWT(token).then((token) => {
+    if (!token) {
+      ws.terminate();
+      return;
+    }
+
+    CommandUtils.ws = ws;
+    db.returnCommands().then((commands) => {
+      commands.forEach((command) => {
+        ws.send(`{"command": "${command.command}",
+          "direction": "${command.commandOrResponse}"}`);
+      });
+      return this.things;
+    });
+  });
+
+  ws.on('close', function incoming() {
+    console.log('commands connection closed');
+  });
+
+  ws.on('message', function incoming(message) {
+    console.log('received: from client %s', message);
   });
 });
 

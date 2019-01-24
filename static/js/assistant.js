@@ -32,6 +32,12 @@ const AssistantScreen = {
     this.avatar.addEventListener('click', this.handleAvatarClick.bind(this));
 
     this.refreshHint = this.refreshHint.bind(this);
+    this.ws = new WebSocket(`ws://${window.location.hostname}:9999/assistant?jwt=${API.jwt}`);
+    this.ws.addEventListener('message', function(data) {
+      const command = JSON.parse(data.data);
+      this.displayMessage(command.command,
+                          command.direction === '0' ? 'outgoing' : 'incoming');
+    }.bind(this));
   },
 
   /**
@@ -92,6 +98,7 @@ const AssistantScreen = {
         Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'Skip-Feedback': '1',
       },
     };
 

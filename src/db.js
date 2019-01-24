@@ -125,6 +125,14 @@ const Database = {
       id INTEGER PRIMARY KEY,
       subscription TEXT UNIQUE
     );`);
+
+    this.db.run(`CREATE TABLE IF NOT EXISTS commands (
+      id INTEGER PRIMARY KEY,
+      command TEXT,
+      commandOrResponse INTEGER,
+      timestamp DATETIME NOT NULL DEFAULT
+        (datetime(CURRENT_TIMESTAMP, 'localtime'))
+    );`);
   },
 
   /**
@@ -605,6 +613,48 @@ const Database = {
     return Promise.all(TABLES.map((t) => {
       return this.run(`DELETE FROM ${t}`);
     }));
+  },
+
+  /**
+   * Insert a command into the database
+   * @param {command} command
+   * @return {commandOrResponse} 0 for command received, 1 for response sent
+   */
+  insertCommand: async function(command, commandOrResponse) {
+    const result = await this.run(
+      'INSERT INTO commands (command, commandOrResponse) ' +
+      'VALUES (?, ?)',
+      [command, commandOrResponse]
+    );
+    return result.lastID;
+  },
+
+  /**
+   * Get all commands
+   * @return {Promise<Array<Commands>>}
+   */
+  returnCommands: function() {
+    return new Promise((resolve, reject) => {
+      this.db.all(
+        'select command, commandOrResponse, timestamp from commands',
+        [],
+        function(err, rows) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const commands = [];
+          for (const row of rows) {
+            const command = {};
+            command.command = row.command;
+            command.commandOrResponse = row.commandOrResponse;
+            command.timestamp = row.timestamp;
+            commands.push(command);
+          }
+          resolve(commands);
+        }
+      );
+    });
   },
 
   get: function(sql, ...params) {

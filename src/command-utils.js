@@ -160,6 +160,10 @@ const colors = {
   'rebecca purple': '#663399',
 };
 
+const wsSettings = {
+  port: 9999,
+};
+
 /**
  * Mapping of percentages (in human-readable form) to numbers.
  */
@@ -319,4 +323,5 @@ module.exports = {
   colors,
   percentages,
   findProperty,
+  wsSettings,
 };
