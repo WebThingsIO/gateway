@@ -328,6 +328,27 @@ main() {
     echo "        DD_DEV = ${DD_DEV}"
   fi
 
+  if [ ! -z "${DD_DEV}" ]; then
+    DD_NAME=$(basename ${DD_DEV})
+    if [[ "${DD_DEV:0:1}" != '/' ]]; then
+      DD_DEV="/dev/${DD_DEV}"
+    fi
+    REMOVABLE=$(cat /sys/block/${DD_NAME}/removable)
+    if [ "${REMOVABLE}" != "1" ]; then
+      echo "${DD_DEV} isn't a removable drive"
+      exit 1
+    fi
+    MEDIA_SIZE=$(cat /sys/block/${DD_NAME}/size)
+    if [ "${MEDIA_SIZE}" == "0" ]; then
+      echo "No media present at ${DD_DEV}"
+      exit 1
+    fi
+    if [ $(( ${MEDIA_SIZE} / 2048 / 1024 )) -gt 100 ]; then
+      echo "${DD_DEV} media size is larger than 100 Gb - wrong device?"
+      exit 1
+    fi
+  fi
+
   if [ ! -f "${IMG_FILENAME}" ]; then
     echo "IMG file: '${IMG_FILENAME}' is not a file."
     exit 1
