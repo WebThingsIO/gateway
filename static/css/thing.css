@@ -396,6 +396,7 @@
   box-sizing: border-box;
   display: block;
   position: absolute;
+  right: 0;
   z-index: 10;
   background-color: #89b6d6;
   background-size: 1.6rem;
@@ -405,7 +406,6 @@
   border-radius: 1.6rem;
   width: 3.2rem;
   height: 3.2rem;
-  float: right;
   cursor: pointer;
 }
 
