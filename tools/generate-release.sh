@@ -11,15 +11,21 @@ if [ ! -e "package.json" ]; then
   exit 1
 fi
 
-_remote=$(git remote get-url origin)
+npm install -g yarn
+
+git init .
+git config user.email "temporary@example.com"
+git config user.name "Temporary"
+git add .
+git commit -m "Temporary"
 git clone ./ gateway
-cd gateway
-git remote set-url origin "${_remote}"
+cd gateway || exit
+rm -fr .git
 cp -r ../node_modules ./
 yarn
 ./node_modules/.bin/webpack
 rm -fr ./node_modules
-cd ..
+cd .. || exit
 tar czf gateway.tar.gz gateway
 rm -fr gateway
 ./tools/create-release-archives.sh
