@@ -38,6 +38,7 @@ class Property extends EventEmitter {
     }
 
     this.onPropertyChanged = this.onPropertyChanged.bind(this);
+    this.onThingAdded = this.onThingAdded.bind(this);
   }
 
   /**
@@ -59,7 +60,7 @@ class Property extends EventEmitter {
   }
 
   /**
-   * @return {Promise} resolves to property's value
+   * @return {Promise} resolves to property's value or undefined if not found
    */
   async get() {
     try {
@@ -84,6 +85,33 @@ class Property extends EventEmitter {
 
   async start() {
     AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
+
+    try {
+      await this.getInitialValue();
+    } catch (_e) {
+      AddonManager.on(Constants.THING_ADDED, this.onThingAdded);
+    }
+  }
+
+  async getInitialValue() {
+    const initialValue = await this.get();
+    if (typeof initialValue === 'undefined') {
+      throw new Error('Did not get a real value');
+    }
+    this.emit(Events.VALUE_CHANGED, initialValue);
+  }
+
+  /**
+   * Listener for AddonManager's THING_ADDED event
+   * @param {String} thing - thing id
+   */
+  onThingAdded(thing) {
+    if (thing.id !== this.thing) {
+      return;
+    }
+    this.getInitialValue().catch((e) => {
+      console.warn('Rule property unable to get value', e);
+    });
   }
 
   onPropertyChanged(property) {
@@ -99,6 +127,8 @@ class Property extends EventEmitter {
   stop() {
     AddonManager.removeListener(Constants.PROPERTY_CHANGED,
                                 this.onPropertyChanged);
+    AddonManager.removeListener(Constants.THING_ADDED,
+                                this.onThingAdded);
   }
 }
 
