@@ -19,13 +19,13 @@ git config user.name "Temporary"
 git add .
 git commit -m "Temporary"
 git clone ./ gateway
-cd gateway || exit
+cd gateway || exit 1
 rm -fr .git
 cp -r ../node_modules ./
 yarn
 ./node_modules/.bin/webpack
 rm -fr ./node_modules
-cd .. || exit
+cd .. || exit 1
 tar czf gateway.tar.gz gateway
 rm -fr gateway
 ./tools/create-release-archives.sh
