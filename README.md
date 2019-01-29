@@ -191,6 +191,21 @@ You can run this on the command line as well so it has immediate effect. After
 running it, you should run `sudo ldconfig` again to make sure the configuration
 change goes through.
 
+### Install nanomsg
+
+#### Linux
+
+Under Ubuntu/Debian Linux:
+```
+$ sudo apt-get install libnanomsg4 libnanomsg-dev
+```
+
+#### Windows
+
+* Follow the directions from [nanomsg](https://github.com/nanomsg/nanomsg) to install in the same bitness as your Python 3.X.
+* If you want to build for 64-bit, you need to execute cmake with `-DCMAKE_GENERATOR_PLATFORM=x64`.
+* Add `C:\path\to\nanomsg\bin` to `PATH`.
+
 ### Install OpenSSL (Windows only)
 
 The Gateway depends on [`ursa`](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
@@ -207,20 +222,16 @@ Install Python 2.7 from [here](https://www.python.org/downloads/windows/).
 
 Enable "register extensions" on installing package, or associate file extension `.py` with python.
 
-### Install Python 3.X and packages (Optional, Windows only)
+### Install Python 3.X (Optional, Windows only)
 
 This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
 
-* Install Python 3.X (ideally 3.4+) from [here](https://www.python.org/downloads/windows/).
+* Install Python 3.4+ from [here](https://www.python.org/downloads/windows/).
   * Enable "Install launcher for all users" and "Add Python 3.X to PATH" on installing.
   * Enable `python3` command using the following.
 ```
 mklink "C:\path\to\python3\python3.exe" "C:\path\to\python3\python.exe"
 ```
-* Install nanomsg.
-  * Follow the directions from [nanomsg](https://github.com/nanomsg/nanomsg) to install in the same bitness as your Python 3.X.
-  * If you want to build for 64-bit, you need to execute cmake with `-DCMAKE_GENERATOR_PLATFORM=x64`.
-  * Add `C:\path\to\nanomsg\bin` to `PATH`.
 * Install nnpy
 ```
 git clone https://github.com/nanomsg/nnpy.git
@@ -233,10 +244,16 @@ include_dirs = C:\path\to\nanomsg\include\nanomsg
 library_dirs = C:\path\to\nanomsg\lib
 host_library = C:\path\to\nanomsg\bin\nanomsg.dll
 ```
-Execute the following command as an administrator.
+
+### Install Python Add-on Bindings (Optional)
+
+This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
+
+Execute the following command as sudo (Linux) or administrator (Windows).
+
 ```
-python3 -m pip install .
-python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python.git
+python2 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
+python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
 ```
 
 **Note:** 2018-04-12: `pip3` has an [issue](https://github.com/pypa/pip/issues/4251) with some languages.
