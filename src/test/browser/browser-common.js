@@ -1,4 +1,4 @@
-const webdriverio = require('webdriverio');
+const {remote} = require('webdriverio');
 const selenium = require('selenium-standalone');
 
 const {server} = require('../common');
@@ -7,7 +7,6 @@ const {compareImage} = require('./compare-images');
 const fs = require('fs');
 const path = require('path');
 
-const VIEWPORTSIZE = {width: 1280, height: 800};
 const TEST_OUTPUT_FOLDER = path.join(__dirname, '../../../browser-test-output');
 const SCREEN_SHOTS_FOLDER =
   path.join(__dirname, '../../../browser-test-screenshots');
@@ -15,7 +14,8 @@ const DIFF_IMAGES_FOLDER = path.join(__dirname, '../../../browser-test-diff');
 const compareImageDisabled = !fs.existsSync(SCREEN_SHOTS_FOLDER);
 
 const options = {
-  desiredCapabilities: {
+  logLevel: 'warn',
+  capabilities: {
     browserName: 'firefox',
     acceptInsecureCerts: true,
     'moz:firefoxOptions': {
@@ -49,16 +49,14 @@ beforeAll(async () => {
     });
   });
   options.baseUrl = `https://localhost:${server.address().port}`;
-  browser = webdriverio
-    .remote(options)
-    .init();
+  browser = await remote(options);
 
-  await browser.setViewportSize(VIEWPORTSIZE, true);
+  await browser.setWindowRect(null, null, 1280, 800);
 });
 
 afterAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-  await browser.end();
+  await browser.deleteSession();
   child.stdin.pause();
   child.kill();
 });

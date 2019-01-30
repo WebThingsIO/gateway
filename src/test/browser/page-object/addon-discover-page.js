@@ -10,19 +10,14 @@ class DiscoveredAddonSection extends Section {
 
   async getName() {
     const element = await this.name();
-    const data = await this.browser.elementIdText(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
-    return data.value;
+    return await element.getText();
   }
 
   async add() {
     await this.waitForAddButton();
 
     const element = await this.addButton();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 }
 
@@ -50,20 +45,15 @@ class AddonDiscoverPage extends Page {
     if (!await this.hasBackButton()) {
       return null;
     }
-    const backButton = await this.backButton();
-    const href = this.browser.elementIdAttribute(
-      backButton.value ? backButton.value.ELEMENT : backButton.ELEMENT,
-      'href'
-    );
+    const el = await this.backButton();
+    const href = await el.getAttribute('href');
 
-    await this.browser.elementIdClick(
-      backButton.value ? backButton.value.ELEMENT : backButton.ELEMENT
-    );
+    await el.click();
 
     // circular dependency
     const AddonSettingsPage = require('./addon-settings-page');
 
-    return new AddonSettingsPage(this.browser, href.value);
+    return new AddonSettingsPage(this.browser, href);
   }
 }
 

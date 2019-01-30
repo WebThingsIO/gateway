@@ -14,10 +14,15 @@ beforeEach(async () => {
   const browser = getBrowser();
   jwt = await createUser(server, TEST_USER);
   await browser.url('/');
-  await browser.waitForExist('#email', 5000);
-  await browser.setValue('#email', TEST_USER.email);
-  await browser.setValue('#password', TEST_USER.password);
-  await browser.click('#login-button');
+
+  const email = await browser.$('#email');
+  const password = await browser.$('#password');
+  const loginButton = await browser.$('#login-button');
+
+  await email.waitForExist(5000);
+  await email.setValue(TEST_USER.email);
+  await password.setValue(TEST_USER.password);
+  await loginButton.click();
 });
 
 module.exports.getAddons = async function() {

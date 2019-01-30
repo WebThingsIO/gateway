@@ -33,17 +33,24 @@ describe('basic browser tests', function() {
 
     await browser.url('/');
 
-    await browser.waitForExist('#name', 5000);
-    await browser.setValue('#name', 'Test User');
-    await browser.setValue('#email', 'test@example.com');
-    await browser.setValue('#password', 'rosebud');
-    await browser.setValue('#confirm-password', 'rosebud');
+    const name = await browser.$('#name');
+    const email = await browser.$('#email');
+    const password = await browser.$('#password');
+    const confirmPassword = await browser.$('#confirm-password');
+
+    await name.waitForExist(5000);
+    await name.setValue('Test User');
+    await email.setValue('test@example.com');
+    await password.setValue('rosebud');
+    await confirmPassword.setValue('rosebud');
 
     await saveStepScreen('create-user');
 
-    await browser.click('#create-user-button');
+    const createUserButton = await browser.$('#create-user-button');
+    await createUserButton.click();
 
-    await browser.waitForExist('#menu-button', 5000);
+    const menuButton = await browser.$('#menu-button');
+    await menuButton.waitForExist(5000);
 
     const newUrl = await browser.getUrl();
     expect(newUrl.endsWith('/things')).toBeTruthy();
@@ -51,7 +58,8 @@ describe('basic browser tests', function() {
     // Wait for the connectivity scrim to appear, then hide it (and wait for the
     // transition to finish).
     try {
-      await browser.waitForVisible('#connectivity-scrim');
+      const connectivityScrim = await browser.$('#connectivity-scrim');
+      await connectivityScrim.waitForDisplayed();
       browser.execute(() => {
         document.getElementById('connectivity-scrim').classList.add('hidden');
       });
@@ -62,68 +70,91 @@ describe('basic browser tests', function() {
 
     await saveStepScreen('main-screen');
 
-    await browser.click('#menu-button');
+    await menuButton.click();
     await saveStepScreen('menu-open');
 
-    await browser.click('#settings-menu-item');
+    const settingsMenuItem = await browser.$('#settings-menu-item');
+    await settingsMenuItem.click();
     await saveStepScreen('settings');
 
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
-      const width = await browser.getCssProperty('#menu-scrim.hidden', 'width');
+      const menuScrim = await browser.$('#menu-scrim.hidden');
+      const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
-    await browser.click('#addon-settings-link');
+
+    const addonSettingsLink = await browser.$('#addon-settings-link');
+    await addonSettingsLink.click();
     await saveStepScreen('addon-settings');
 
-    await browser.click('#discover-addons-button');
+    const discoverAddonsButton = await browser.$('#discover-addons-button');
+    await discoverAddonsButton.click();
     await saveStepScreen('discovering-addons');
 
-    await browser.waitForExist('#addon-install-virtual-things-adapter', 5000);
-    await browser.click('#addon-install-virtual-things-adapter');
-    await browser.waitForExist('.addon-discovery-settings-added', 5000);
+    const addonInstallVirtualThingsAdapter =
+      await browser.$('#addon-install-virtual-things-adapter');
+    await addonInstallVirtualThingsAdapter.waitForExist(5000);
+    await addonInstallVirtualThingsAdapter.click();
+
+    const addonDiscoverySettingsAdded =
+      await browser.$('.addon-discovery-settings-added');
+    await addonDiscoverySettingsAdded.waitForExist(5000);
     await saveStepScreen('adapter-added');
 
-    await browser.click('#settings-back-button');
-    await browser.click('#settings-back-button');
-    await browser.click('#menu-button');
-    await browser.click('#things-menu-item');
+    const settingsBackButton = await browser.$('#settings-back-button');
+    await settingsBackButton.click();
+    await settingsBackButton.click();
+    await menuButton.click();
+
+    const thingsMenuItem = await browser.$('#things-menu-item');
+    await thingsMenuItem.click();
 
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
-      const width = await browser.getCssProperty('#menu-scrim.hidden', 'width');
+      const menuScrim = await browser.$('#menu-scrim.hidden');
+      const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
-    await browser.waitForVisible('#add-button', 5000);
-    await browser.click('#add-button');
+
+    const addButton = await browser.$('#add-button');
+    await addButton.waitForDisplayed(5000);
+    await addButton.click();
     await saveStepScreen('add-things-list');
 
-    await browser.click('#new-thing-virtual-things-2 > .new-thing-save-button');
-    await browser.click('#new-thing-virtual-things-9 > .new-thing-save-button');
-    await browser.click('#add-thing-back-button');
+    const newThingVirtualThings2SaveButton =
+      await browser.$('#new-thing-virtual-things-2 > .new-thing-save-button');
+    const newThingVirtualThings9SaveButton =
+      await browser.$('#new-thing-virtual-things-9 > .new-thing-save-button');
+    await newThingVirtualThings2SaveButton.click();
+    await newThingVirtualThings9SaveButton.click();
+
+    const addThingBackButton = await browser.$('#add-thing-back-button');
+    await addThingBackButton.click();
     await saveStepScreen('things-list');
 
-    let things = (await browser.elements('.thing')).value;
+    let things = await browser.$$('.thing');
     expect(things.length).toBe(2);
-    await browser.elementIdClick(things[0].ELEMENT);
+    await things[0].click();
     await saveStepScreen('things-list-dcl-on');
 
-    let link = await browser.elementIdElement(things[0].ELEMENT,
-                                              '.thing-details-link');
-    await browser.elementIdClick(link.value.ELEMENT);
+    let link = await things[0].$('.thing-details-link');
+    await link.click();
     let detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-2')).toBeTruthy();
     await saveStepScreen('dimmable-color-light-detail');
 
-    await browser.click('#back-button');
+    const backButton = await browser.$('#back-button');
+    await backButton.click();
 
-    await browser.waitForExist('webthing-custom-capability', 2000);
+    const webthingCustomCapability =
+      await browser.$('webthing-custom-capability');
+    webthingCustomCapability.waitForExist(2000);
 
-    things = (await browser.elements('.thing')).value;
+    things = await browser.$$('.thing');
     expect(things.length).toBe(2);
-    link = await browser.elementIdElement(things[1].ELEMENT,
-                                          '.thing-details-link');
-    await browser.elementIdClick(link.value.ELEMENT);
+    link = await things[1].$('.thing-details-link');
+    await link.click();
     detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-9')).toBeTruthy();
     await saveStepScreen('unknown-thing-detail');

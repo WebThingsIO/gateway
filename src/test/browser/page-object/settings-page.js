@@ -8,26 +8,17 @@ class SettingSection extends Section {
   }
 
   async openSettingsPage() {
-    const element = this.rootElement;
-    const href = await this.browser.elementIdAttribute(
-      element.value ? element.value.ELEMENT : element.ELEMENT,
-      'href'
-    );
-    const id = await this.browser.elementIdAttribute(
-      element.value ? element.value.ELEMENT : element.ELEMENT,
-      'id'
-    );
+    const el = this.rootElement;
+    const href = await el.getAttribute('href');
+    const id = await el.getAttribute('id');
+    await el.click();
 
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
-
-    switch (id.value) {
+    switch (id) {
       case 'domain-settings-link':
       case 'user-settings-link':
         return null; // TODO
       case 'addon-settings-link':
-        return new AddonSettingsPage(this.browser, href.value);
+        return new AddonSettingsPage(this.browser, href);
       case 'adapter-settings-link':
       case 'update-settings-link':
       case 'authorization-settings-link':
@@ -59,8 +50,8 @@ class SettingsPage extends Page {
 
   async wait() {
     await this.browser.waitUntil(async () => {
-      const width = await this.browser
-        .getCssProperty('#menu-scrim.hidden', 'width');
+      const menuScrim = await this.browser.$('#menu-scrim.hidden');
+      const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
   }

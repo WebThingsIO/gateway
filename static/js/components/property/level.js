@@ -321,7 +321,7 @@ class LevelProperty extends BaseComponent {
 
   __onSubmit(e) {
     e.preventDefault();
-    this._input.blur();
+    this._form.blur();
     return false;
   }
 }
