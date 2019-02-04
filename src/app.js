@@ -37,6 +37,7 @@ const addonManager = require('./addon-manager');
 const Constants = require('./constants');
 const db = require('./db');
 const mDNSserver = require('./mdns-server');
+const metrics = require('./models/metrics');
 const platform = require('./platform');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
@@ -47,8 +48,9 @@ const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 // This is then used in other places (like src/addons/plugin/ipc.js)
 require('./app-instance');
 
-// Open the database
+// Open the databases
 db.open();
+metrics.open();
 
 const servers = {};
 servers.http = http.createServer();
