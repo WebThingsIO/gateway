@@ -12,6 +12,12 @@ class Metrics {
     this.db = null;
     this.data = {};
     this.onPropertyChanged = this.onPropertyChanged.bind(this);
+
+    AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
+  }
+
+  clear() {
+    this.data = {};
   }
 
   open() {
@@ -45,8 +51,6 @@ class Metrics {
     this.db.serialize(() => {
       this.createTables();
     });
-
-    AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
   }
 
   createTables() {
