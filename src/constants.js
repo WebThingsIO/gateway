@@ -31,6 +31,7 @@ exports.RULES_PATH = '/rules';
 exports.OAUTH_PATH = '/oauth';
 exports.OAUTHCLIENTS_PATH = '/authorizations';
 exports.LOGS_PATH = '/logs';
+exports.METRICS_PATH = '/metrics';
 exports.PUSH_PATH = '/push';
 exports.PING_PATH = '/ping';
 exports.PROXY_PATH = '/proxy';

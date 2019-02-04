@@ -11,6 +11,7 @@ const {
 } = require('../user');
 
 const Constants = require('../../constants');
+const Metrics = require('../../models/metrics');
 
 const thingLight1 = {
   id: 'light1',
@@ -59,31 +60,34 @@ describe('metrics/', function() {
       .put(`${Constants.THINGS_PATH}/${thingId}/properties/${propId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({propId: value});
+      .send({[propId]: value});
     expect(res.status).toEqual(200);
   }
 
 
   beforeEach(async () => {
+    Metrics.clear();
+
     jwt = await createUser(server, TEST_USER);
     await addDevice(thingLight1);
     await addDevice(thingLight2);
+    await populatePropertyData();
   });
 
-  const light1OnValues = [true, false, true, false];
-  const light1BriValues = [12, 34];
-  const light2BriValues = [0, 31];
+  const light1OnValues = [false, true, false, true, false];
+  const light1BriValues = [100, 12, 34];
+  const light2BriValues = [100, 0, 31];
 
   async function populatePropertyData() {
-    for (const value of light1OnValues.slice(0, light1OnValues.length - 1)) {
+    for (const value of light1OnValues.slice(1, light1OnValues.length - 1)) {
       await setProp('light1', 'on', value);
     }
 
-    for (const value of light1BriValues) {
+    for (const value of light1BriValues.slice(1)) {
       await setProp('light1', 'brightness', value);
     }
 
-    for (const value of light2BriValues) {
+    for (const value of light2BriValues.slice(1)) {
       await setProp('light2', 'brightness', value);
     }
 
@@ -95,10 +99,9 @@ describe('metrics/', function() {
   }
 
   it('gets all metrics', async () => {
-    await populatePropertyData();
-
     const res = await chai.request(server)
       .get(Constants.METRICS_PATH)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     const metrics = res.body;
@@ -114,10 +117,9 @@ describe('metrics/', function() {
   });
 
   it('gets one device\'s metrics', async () => {
-    await populatePropertyData();
-
     const res = await chai.request(server)
       .get(`${Constants.METRICS_PATH}/things/light1`)
+      .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
