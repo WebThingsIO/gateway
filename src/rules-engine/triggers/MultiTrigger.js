@@ -36,6 +36,9 @@ class MultiTrigger extends Trigger {
     });
 
     this.states = new Array(this.triggers.length);
+    for (let i = 0; i < this.states.length; i++) {
+      this.states[i] = false;
+    }
     this.state = false;
   }
 
