@@ -18,7 +18,6 @@ class EventTrigger extends Trigger {
     assert(desc.thing);
     this.thing = desc.thing;
     this.event = desc.event;
-    this.timeout = null;
     this.stopped = true;
     this.onEvent = this.onEvent.bind(this);
   }
@@ -51,18 +50,11 @@ class EventTrigger extends Trigger {
     }
 
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-    this.timeout = setTimeout(() => {
-      this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
-      this.timeout = null;
-    }, 500);
+    this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
   }
 
   stop() {
     this.stopped = true;
-    clearTimeout(this.timeout);
     Things.getThing(this.thing).then((thing) => {
       thing.removeEventSubscription(this.onEvent);
     });
