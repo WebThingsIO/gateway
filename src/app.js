@@ -76,11 +76,7 @@ function createHttpsServer() {
 }
 
 function startHttpsGateway() {
-  let port = config.get('ports.https');
-  const cliOptions = getOptions();
-  if (typeof cliOptions.port === 'number') {
-    port = cliOptions.port;
-  }
+  const port = config.get('ports.https');
 
   if (!httpsServer) {
     httpsServer = createHttpsServer();
@@ -109,11 +105,7 @@ function startHttpsGateway() {
 function startHttpGateway() {
   httpServer.on('request', httpApp);
 
-  let port = config.get('ports.http');
-  const options = getOptions();
-  if (typeof options.port === 'number') {
-    port = options.port;
-  }
+  const port = config.get('ports.http');
 
   httpServer.listen(port, function() {
     migration.then(function() {
@@ -131,11 +123,7 @@ function stopHttpGateway() {
 function startWiFiSetup() {
   httpServer.on('request', wifiSetupApp.onRequest);
 
-  let port = config.get('ports.http');
-  const options = getOptions();
-  if (typeof options.port === 'number') {
-    port = options.port;
-  }
+  const port = config.get('ports.http');
 
   httpServer.listen(port);
 }
@@ -155,11 +143,10 @@ function getOptions() {
   // Command line arguments
   const getopt = new GetOpt([
     ['d', 'debug', 'Enable debug features'],
-    ['p', 'port=PORT', 'Specify the server port to use'],
-    ['h', 'help', 'Display help' ],
+    ['h', 'help', 'Display help'],
     ['v', 'verbose', 'Show verbose output'],
-    ['', 'check-wifi',
-     'Run a connection check on the WiFi (only supported on RasPi)'],
+    // eslint-disable-next-line
+    ['', 'check-wifi', 'Run a connection check on the WiFi (only supported on RasPi)'],
   ]);
 
   const opt = getopt.parseSystem();
