@@ -8,6 +8,8 @@ const assert = require('assert');
 const Events = require('../Events');
 const Trigger = require('./Trigger');
 
+const DEBUG = false;
+
 const ops = {
   AND: 'AND',
   OR: 'OR',
@@ -26,6 +28,9 @@ class MultiTrigger extends Trigger {
     this.op = desc.op;
     const fromDescription = require('./index').fromDescription;
 
+    if (DEBUG) {
+      this.id = Math.floor(Math.random() * 1000);
+    }
     this.triggers = desc.triggers.map((trigger) => {
       return fromDescription(trigger);
     });
@@ -70,6 +75,10 @@ class MultiTrigger extends Trigger {
       } else if (this.op === ops.OR) {
         value = value || this.states[i];
       }
+    }
+    if (DEBUG) {
+      console.debug(
+        `MultiTrigger(${this.id}).onStateChanged(${triggerIndex}, ${state}) -> ${this.states}`);
     }
     if (value !== this.state) {
       this.state = value;
