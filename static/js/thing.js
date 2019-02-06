@@ -483,6 +483,7 @@ class Thing {
     element.firstChild.ondragover = this.handleDragOver.bind(this);
     element.firstChild.ondragenter = this.handleDragEnter.bind(this);
     element.firstChild.ondragleave = this.handleDragLeave.bind(this);
+    element.firstChild.ondragend = this.handleDragEnd.bind(this);
     element.firstChild.ondrop = this.handleDrop.bind(this);
 
     for (const node of this.container.childNodes.values()) {
@@ -606,6 +607,12 @@ class Thing {
       }).catch((e) => {
         console.error(`Error trying to arrange thing ${id}: ${e}`);
       });
+    });
+  }
+
+  handleDragEnd() {
+    this.container.childNodes.forEach((node) => {
+      node.classList.remove('drag-start', 'drag-end');
     });
   }
 

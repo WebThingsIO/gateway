@@ -459,7 +459,6 @@
 .drag-start::before {
   content: "";
   position: absolute;
-  top: 1rem;
   margin-left: -7.5rem;
   height: 17.4rem;
   border-left: 0.2rem dashed white;
@@ -468,8 +467,8 @@
 .drag-end::after {
   content: "";
   position: absolute;
-  top: 1rem;
   margin-left: 7.3rem;
+  margin-top: -17.4rem;
   height: 17.4rem;
   border-right: 0.2rem dashed white;
 }
