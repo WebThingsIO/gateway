@@ -67,7 +67,7 @@ const App = {
   init: function() {
     // Load the shaka player polyfills
     shaka.polyfill.installAll();
-    MobileDragDrop.polyfill({holdToTrag: true});
+    MobileDragDrop.polyfill({holdToDrag: true});
 
     AddThingScreen.init();
     ContextMenu.init();
