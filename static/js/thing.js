@@ -496,6 +496,7 @@ class Thing {
   }
 
   handleDragStart(e) {
+    e.target.style.cursor = 'grabbing';
     e.dataTransfer.setData('text', e.target.id);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
@@ -553,10 +554,6 @@ class Thing {
     e.preventDefault();
     e.stopPropagation();
 
-    this.container.childNodes.forEach((node) => {
-      node.classList.remove('drag-start', 'drag-end');
-    });
-
     let dropNode = e.target;
     while (!dropNode.classList || !dropNode.classList.contains('thing')) {
       dropNode = dropNode.parentNode;
@@ -613,6 +610,7 @@ class Thing {
   handleDragEnd() {
     this.container.childNodes.forEach((node) => {
       node.classList.remove('drag-start', 'drag-end');
+      node.style.cursor = 'grab';
     });
   }
 

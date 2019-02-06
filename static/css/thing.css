@@ -452,10 +452,6 @@
   cursor: grab;
 }
 
-[draggable]:active {
-  cursor: grabbing;
-}
-
 .drag-start::before {
   content: "";
   position: absolute;
