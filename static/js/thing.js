@@ -484,7 +484,6 @@ class Thing {
     element.firstChild.ondragenter = this.handleDragEnter.bind(this);
     element.firstChild.ondragleave = this.handleDragLeave.bind(this);
     element.firstChild.ondrop = this.handleDrop.bind(this);
-    element.firstChild.ondragend = this.handleDragEnd.bind(this);
 
     for (const node of this.container.childNodes.values()) {
       if (node.dataset.layoutIndex > this.layoutIndex) {
@@ -608,10 +607,6 @@ class Thing {
         console.error(`Error trying to arrange thing ${id}: ${e}`);
       });
     });
-  }
-
-  handleDragEnd(e) {
-    e.dataTransfer.clearData();
   }
 
   /**
