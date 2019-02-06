@@ -37,6 +37,7 @@ let RuleScreen;
 let Speech;
 
 const shaka = require('shaka-player/dist/shaka-player.compiled');
+const MobileDragDrop = require('mobile-drag-drop/index.min');
 const Notifications = require('./notifications');
 
 const App = {
@@ -66,6 +67,7 @@ const App = {
   init: function() {
     // Load the shaka player polyfills
     shaka.polyfill.installAll();
+    MobileDragDrop.polyfill({holdToTrag: true});
 
     AddThingScreen.init();
     ContextMenu.init();

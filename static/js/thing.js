@@ -481,6 +481,7 @@ class Thing {
     element.innerHTML = this.interactiveView().trim();
     element.firstChild.ondragstart = this.handleDragStart.bind(this);
     element.firstChild.ondragover = this.handleDragOver.bind(this);
+    element.firstChild.ondragenter = this.handleDragEnter.bind(this);
     element.firstChild.ondragleave = this.handleDragLeave.bind(this);
     element.firstChild.ondrop = this.handleDrop.bind(this);
     element.firstChild.ondragend = this.handleDragEnd.bind(this);
@@ -498,6 +499,10 @@ class Thing {
     e.dataTransfer.setData('text', e.target.id);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
+
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
   }
 
   handleDragOver(e) {
@@ -525,6 +530,10 @@ class Thing {
         dropNode.classList.add('drag-end');
       }
     }
+  }
+
+  handleDragEnter(e) {
+    e.preventDefault();
   }
 
   handleDragLeave(e) {
