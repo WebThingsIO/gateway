@@ -504,7 +504,7 @@ class Thing {
     e.preventDefault();
 
     this.container.childNodes.forEach((node) => {
-      node.classList.remove('drag-over');
+      node.classList.remove('drag-start', 'drag-end');
     });
 
     let dropNode = e.target;
@@ -513,8 +513,17 @@ class Thing {
     }
 
     if (dropNode) {
-      dropNode.classList.add('drag-over');
       e.dataTransfer.dropEffect = 'move';
+
+      const dropX = e.clientX;
+      const dropNodeStart = dropNode.getBoundingClientRect().x;
+      const dropNodeWidth = dropNode.getBoundingClientRect().width;
+
+      if ((dropX - dropNodeStart) < (dropNodeWidth / 2)) {
+        dropNode.classList.add('drag-start');
+      } else {
+        dropNode.classList.add('drag-end');
+      }
     }
   }
 
@@ -527,7 +536,7 @@ class Thing {
     }
 
     if (dropNode) {
-      dropNode.classList.remove('drag-over');
+      dropNode.classList.remove('drag-start', 'drag-end');
     }
   }
 
@@ -536,7 +545,7 @@ class Thing {
     e.stopPropagation();
 
     this.container.childNodes.forEach((node) => {
-      node.classList.remove('drag-over');
+      node.classList.remove('drag-start', 'drag-end');
     });
 
     let dropNode = e.target;
@@ -544,9 +553,7 @@ class Thing {
       dropNode = dropNode.parentNode;
     }
 
-    const dragNode = document.getElementById(
-      e.dataTransfer.getData('text/plain')
-    );
+    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
 
     if (!dropNode || !dragNode || dropNode.id === dragNode.id) {
       return;
@@ -595,10 +602,6 @@ class Thing {
   }
 
   handleDragEnd(e) {
-    const dragNode = document.getElementById(
-      e.dataTransfer.getData('text/plain')
-    );
-
     e.dataTransfer.clearData();
   }
 

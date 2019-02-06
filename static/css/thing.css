@@ -453,15 +453,10 @@
   cursor: grabbing;
 }
 
-.drag-over {
-  border: 0.2rem dashed white;
+.drag-start {
+  border-left: 0.2rem dashed white;
 }
 
-.drag-over:before {
-  content: '';
-  position: absolute;
-  border-left: 0.2rem dashed white;
-  height: 17.4rem;
-  z-index: 1;
-  margin-left: -0.1rem;
+.drag-end {
+  border-right: 0.2rem dashed white;
 }
