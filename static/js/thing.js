@@ -483,6 +483,7 @@ class Thing {
     element.firstChild.ondragover = this.handleDragOver.bind(this);
     element.firstChild.ondragleave = this.handleDragLeave.bind(this);
     element.firstChild.ondrop = this.handleDrop.bind(this);
+    element.firstChild.ondragend = this.handleDragEnd.bind(this);
 
     for (const node of this.container.childNodes.values()) {
       if (node.dataset.layoutIndex > this.layoutIndex) {
@@ -494,8 +495,9 @@ class Thing {
   }
 
   handleDragStart(e) {
-    e.dataTransfer.setData('text/plain', e.target.id);
+    e.dataTransfer.setData('text', e.target.id);
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.dropEffect = 'move';
   }
 
   handleDragOver(e) {
@@ -510,11 +512,7 @@ class Thing {
       dropNode = dropNode.parentNode;
     }
 
-    const dragNode = document.getElementById(
-      e.dataTransfer.getData('text/plain')
-    );
-
-    if (dropNode && dragNode && dropNode.id !== dragNode.id) {
+    if (dropNode) {
       dropNode.classList.add('drag-over');
       e.dataTransfer.dropEffect = 'move';
     }
@@ -594,6 +592,14 @@ class Thing {
         console.error(`Error trying to arrange thing ${id}: ${e}`);
       });
     });
+  }
+
+  handleDragEnd(e) {
+    const dragNode = document.getElementById(
+      e.dataTransfer.getData('text/plain')
+    );
+
+    e.dataTransfer.clearData();
   }
 
   /**
