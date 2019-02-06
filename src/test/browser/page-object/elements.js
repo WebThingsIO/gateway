@@ -18,17 +18,16 @@ class Elements {
     this[`has${capitalizeFirstLetter(name)}`] = async () => {
       const rootElement = this.rootElement;
       if (!rootElement) {
-        return await this.browser.isExisting(selector);
+        const el = await this.browser.$(selector);
+        return await el.isExisting();
       }
-      const elements = await this.browser.elementIdElements(
-        rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-        selector);
-      if (elements.value.length == 0) {
+      const elements = await rootElement.$$(selector);
+      if (elements.length == 0) {
         return false;
       }
       // Check that all elements are displayed which match the selector.
-      return await elements.value.reduce(async (result, e) => {
-        const isExisting = await this.browser.elementIdDisplayed(e.ELEMENT);
+      return await elements.reduce(async (result, e) => {
+        const isExisting = await e.isDisplayed();
         return result && isExisting;
       }, true);
     };
@@ -42,29 +41,24 @@ class Elements {
     this[`waitFor${capitalizeFirstLetter(name)}`] = async () => {
       const rootElement = this.rootElement;
       if (!rootElement) {
-        return await this.browser.waitForExist(selector, TIMEOUT_MS);
+        const el = await this.browser.$(selector);
+        return await el.waitForExist(TIMEOUT_MS);
       }
       return await this.browser.waitUntil(async () => {
-        const elements = await this.browser.elementIdElements(
-          rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-          selector
-        );
+        const elements = await rootElement.$$(selector);
 
         if (typeof onValue === 'boolean') {
-          for (const el of elements.value) {
-            const data = await this.browser.elementIdProperty(
-              el.value ? el.value.ELEMENT : el.ELEMENT,
-              'on'
-            );
+          for (const el of elements) {
+            const data = await el.getProperty('on');
 
-            if (data.value === onValue) {
+            if (data === onValue) {
               return true;
             }
           }
 
           return false;
         } else {
-          return elements.value.length > 0;
+          return elements.length > 0;
         }
       }, TIMEOUT_MS);
     };
@@ -77,15 +71,8 @@ class Elements {
      * @return element
      */
     this[name] = async () => {
-      const rootElement = this.rootElement;
-      if (!rootElement) {
-        const elements = await this.browser.elements(selector);
-        return elements.value[0];
-      }
-      return await this.browser.elementIdElement(
-        rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-        selector
-      );
+      const rootElement = this.rootElement || this.browser;
+      return await rootElement.$(selector);
     };
 
     this.defineDisplayedProperty(name, selector);
@@ -99,14 +86,8 @@ class Elements {
      * @return element
      */
     this[name] = async () => {
-      const rootElement = this.rootElement;
-      if (!rootElement) {
-        return await this.browser.elements(selector);
-      }
-      return await this.browser.elementIdElements(
-        rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-        selector
-      );
+      const rootElement = this.rootElement || this.browser;
+      return await rootElement.$$(selector);
     };
 
     this.defineDisplayedProperty(name, selector);
@@ -140,17 +121,8 @@ class Page extends Elements {
      * @return Section
      */
     this[name] = async () => {
-      let e = null;
-      const rootElement = this.rootElement;
-      if (rootElement) {
-        e = await this.browser.elementIdElement(
-          rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-          selector
-        );
-      } else {
-        const elements = await this.browser.elements(selector);
-        e = elements.value[0];
-      }
+      const rootElement = this.rootElement || this.browser;
+      const e = await rootElement.$(selector);
       return new section(this.browser, e);
     };
 
@@ -171,17 +143,9 @@ class Page extends Elements {
      * @return Array[Section]
      */
     this[name] = async () => {
-      let elements = null;
-      const rootElement = this.rootElement;
-      if (rootElement) {
-        elements = await this.browser.elementIdElements(
-          rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-          selector
-        );
-      } else {
-        elements = await this.browser.elements(selector);
-      }
-      return elements.value.map((e) => new section(this.browser, e));
+      const rootElement = this.rootElement || this.browser;
+      const elements = await rootElement.$$(selector);
+      return elements.map((e) => new section(this.browser, e));
     };
 
     this.defineDisplayedProperty(name, selector);

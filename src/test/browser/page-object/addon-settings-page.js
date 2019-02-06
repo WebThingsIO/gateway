@@ -14,37 +14,28 @@ class AddonSection extends Section {
 
   async getName() {
     const element = await this.name();
-    const data = await this.browser.elementIdText(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
-    return data.value;
+    return await element.getText();
   }
 
   async enable() {
     await this.waitForEnableButton();
 
     const element = await this.enableButton();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 
   async disable() {
     await this.waitForDisableButton();
 
     const element = await this.disableButton();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 
   async remove() {
     await this.waitForRemoveButton();
 
     const element = await this.removeButton();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 
   async configure() {
@@ -76,9 +67,7 @@ class AddonSettingsPage extends Page {
       return null;
     }
     const discover = await this.discover();
-    await this.browser.elementIdClick(
-      discover.value ? discover.value.ELEMENT : discover.ELEMENT
-    );
+    await discover.click();
 
     return new AddonDiscoverPage(this.browser, '/settings/addons/discovered');
   }

@@ -106,6 +106,9 @@ describe('Thing', () => {
          stringValue = await getProperty(desc.id, 'stringProp');
          expect(stringValue).toEqual('foo');
          stringValue = await stringProps[0].getValue();
+         if (stringValue !== 'foo') {
+           await stringProps[0].setValue('foo');
+         }
          expect(stringValue).toEqual('foo');
        });
        await setProperty(desc.id, 'stringProp', 'foobar');
@@ -219,7 +222,7 @@ describe('Thing', () => {
     const things = await thingsPage.things();
     expect(things.length).toEqual(1);
     const thingName = await things[0].thingName();
-    expect(thingName).toEqual('foofoo');
+    expect(thingName).toEqual(desc.name);
     await saveStepScreen();
 
     const detailPage = await things[0].openDetailPage();
@@ -884,6 +887,9 @@ describe('Thing', () => {
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
          level = await getProperty(desc.id, 'percent');
+         if (level !== 20) {
+           await levelProperty.setValue(20);
+         }
          expect(level).toEqual(20);
          level = await levelProperty.getValue();
          expect(level).toEqual(20);

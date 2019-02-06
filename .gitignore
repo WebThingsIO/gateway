@@ -24,3 +24,4 @@ static/uploads
 /browser-test-diff
 /browser-test-screenshots
 cache_node_modules/
+/coverage/

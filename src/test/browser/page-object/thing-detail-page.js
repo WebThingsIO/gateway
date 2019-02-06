@@ -13,27 +13,17 @@ class InputPropertySection extends Section {
   }
 
   async getId() {
-    const data =
-      await this.browser.elementIdProperty(this.rootElement.ELEMENT, 'id');
-    return data.value;
+    return await this.rootElement.getProperty('id');
   }
 
   async getInputId() {
     const input = await this.input();
-    const data = await this.browser.elementIdProperty(
-      input.value ? input.value.ELEMENT : input.ELEMENT,
-      'id'
-    );
-    return data.value;
+    return await input.getProperty('id');
   }
 
   async getValue() {
     const input = await this.input();
-    const data = await this.browser.elementIdProperty(
-      input.value ? input.value.ELEMENT : input.ELEMENT,
-      'value'
-    );
-    return data.value;
+    return await input.getProperty('value');
   }
 
   async setValue(value) {
@@ -48,10 +38,7 @@ class InputPropertySection extends Section {
     keys.push(value);
     keys.push(ENTER_UNICODE);
     const input = await this.input();
-    await this.browser.elementIdValue(
-      input.value ? input.value.ELEMENT : input.ELEMENT,
-      keys
-    );
+    await input.setValue(keys.join(''));
   }
 }
 
@@ -64,10 +51,8 @@ class ColorTemperaturePropertySection extends InputPropertySection {
 class LabelPropertySection extends Section {
   async getDisplayedText() {
     const element = this.rootElement;
-    const data = await this.browser.elementIdText(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
-    return data.value.split('\n')[0].trim();
+    const data = await element.getText();
+    return data.split('\n')[0].trim();
   }
 }
 
@@ -87,10 +72,7 @@ class BrightnessPropertySection extends InputPropertySection {
       keys.push(key);
     }
     const input = await this.input();
-    await this.browser.elementIdValue(
-      input.value ? input.value.ELEMENT : input.ELEMENT,
-      keys
-    );
+    await input.setValue(keys.join(''));
   }
 
   async getValue() {
@@ -120,19 +102,12 @@ class LevelPropertySection extends InputPropertySection {
       keys.push(key);
     }
     const slider = await this.slider();
-    await this.browser.elementIdValue(
-      slider.value ? slider.value.ELEMENT : slider.ELEMENT,
-      keys
-    );
+    await slider.addValue(keys.join(''));
   }
 
   async getValue() {
     const slider = await this.slider();
-    const data = await this.browser.elementIdProperty(
-      slider.value ? slider.value.ELEMENT : slider.ELEMENT,
-      'value'
-    );
-    return Number(data.value);
+    return Number(await slider.getProperty('value'));
   }
 }
 
@@ -140,31 +115,22 @@ class OnOffPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
     const element = await this.label();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 
   async waitForClickable() {
     const element = this.rootElement;
     await this.browser.waitUntil(async () => {
-      return await this.browser.elementIdDisplayed(
-        element.value ? element.value.ELEMENT : element.ELEMENT
-      );
+      return await element.isDisplayed();
     }, 5000);
     await this.browser.waitUntil(async () => {
-      return await this.browser.elementIdEnabled(
-        element.value ? element.value.ELEMENT : element.ELEMENT
-      );
+      return await element.isEnabled();
     }, 5000);
   }
 
   async getValue() {
     const input = await this.input();
-    const data = await this.browser.elementIdSelected(
-      input.value ? input.value.ELEMENT : input.ELEMENT
-    );
-    return data.value;
+    return await input.isSelected();
   }
 }
 
@@ -172,31 +138,22 @@ class BooleanPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
     const element = await this.label();
-    await this.browser.elementIdClick(
-      element.value ? element.value.ELEMENT : element.ELEMENT
-    );
+    await element.click();
   }
 
   async waitForClickable() {
     const element = this.rootElement;
     await this.browser.waitUntil(async () => {
-      return await this.browser.elementIdDisplayed(
-        element.value ? element.value.ELEMENT : element.ELEMENT
-      );
+      return await element.isDisplayed();
     }, 5000);
     await this.browser.waitUntil(async () => {
-      return await this.browser.elementIdEnabled(
-        element.value ? element.value.ELEMENT : element.ELEMENT
-      );
+      return await element.isEnabled();
     }, 5000);
   }
 
   async getValue() {
     const input = await this.input();
-    const data = await this.browser.elementIdSelected(
-      input.value ? input.value.ELEMENT : input.ELEMENT
-    );
-    return data.value;
+    return await input.isSelected();
   }
 }
 

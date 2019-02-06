@@ -29,41 +29,30 @@ class ThingSection extends Section {
   async click() {
     await this.waitClickable();
     const clickable = await this.clickable();
-    await this.browser.elementIdClick(
-      clickable.value ? clickable.value.ELEMENT : clickable.ELEMENT
-    );
+    await clickable.click();
   }
 
   async waitClickable() {
     await this.browser.waitUntil(async () => {
-      const width = await this.browser
-        .getCssProperty('#menu-scrim.hidden', 'width');
+      const menuScrim = await this.browser.$('#menu-scrim.hidden');
+      const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
   }
 
   async thingName() {
     const name = await this.name();
-    const text = await this.browser.elementIdText(
-      name.value ? name.value.ELEMENT : name.ELEMENT
-    );
-    return text.value;
+    return await name.getText();
   }
 
   async thingLevelDisplayed() {
     const level = await this.level();
-    const text = await this.browser.elementIdText(
-      level.value ? level.value.ELEMENT : level.ELEMENT
-    );
-    return text.value;
+    return await level.getText();
   }
 
   async thingPowerDisplayed() {
     const power = await this.power();
-    const text = await this.browser.elementIdText(
-      power.value ? power.value.ELEMENT : power.ELEMENT
-    );
-    return text.value;
+    return await power.getText();
   }
 
   async thingColorDisplayed() {
@@ -75,7 +64,7 @@ class ThingSection extends Section {
       return icon.style.fill;
     `);
 
-    const rgb = fill.value.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    const rgb = fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
     const colorStyle = `#${
       Number(rgb[1]).toString(16)}${
       Number(rgb[2]).toString(16)}${
@@ -89,16 +78,11 @@ class ThingSection extends Section {
     if (!hasLink) {
       return null;
     }
-    const rootElement = this.rootElement;
-    const href = this.browser.elementIdAttribute(
-      rootElement.value ? rootElement.value.ELEMENT : rootElement.ELEMENT,
-      'href'
-    );
+    const el = this.rootElement;
+    const href = await el.getAttribute('href');
 
     const detailLink = await this.detailLink();
-    await this.browser.elementIdClick(
-      detailLink.value ? detailLink.value.ELEMENT : detailLink.ELEMENT
-    );
+    await detailLink.click();
 
     return new ThingDetailPage(this.browser, href);
   }
@@ -136,8 +120,8 @@ class ThingsPage extends Page {
 
   async wait() {
     await this.browser.waitUntil(async () => {
-      const width = await this.browser
-        .getCssProperty('#menu-scrim.hidden', 'width');
+      const menuScrim = await this.browser.$('#menu-scrim.hidden');
+      const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
   }
