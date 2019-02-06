@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 .thing {
-  width: 12.8rem;
+  width: 13.2rem;
   text-align: center;
   margin: 1rem;
   display: inline-block;
@@ -442,4 +442,26 @@
   padding: 4rem;
   color: white;
   background-color: #5288af;
+}
+
+[draggable] {
+  user-select: none;
+  cursor: grab;
+}
+
+[draggable]:active {
+  cursor: grabbing;
+}
+
+.drag-over {
+  border: 0.2rem dashed white;
+}
+
+.drag-over:before {
+  content: '';
+  position: absolute;
+  border-left: 0.2rem dashed white;
+  height: 17.4rem;
+  z-index: 1;
+  margin-left: -0.1rem;
 }

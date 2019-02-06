@@ -30,6 +30,20 @@ const Utils = {
       .replace(/°/g, '&deg;')
       .replace(/⋅/g, '&sdot;');
   },
+  unescapeHtml: function(text) {
+    if (typeof (text) !== 'string') {
+      text = `${text}`;
+    }
+
+    return text
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'") // eslint-disable-line quotes
+      .replace(/&deg;/g, '°')
+      .replace(/&sdot;/g, '⋅');
+  },
   escapeHtmlForIdClass: function(text) {
     if (typeof (text) !== 'string') {
       text = `${text}`;

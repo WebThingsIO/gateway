@@ -253,25 +253,42 @@ ThingsController.use(`/:thingId${Constants.ACTIONS_PATH}`, ActionsController);
 ThingsController.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController);
 
 /**
- * Modify a Thing's floorplan position.
+ * Modify a Thing's floorplan position or layout index.
  */
-ThingsController.patch('/:thingId', (request, response) => {
+ThingsController.patch('/:thingId', async (request, response) => {
   const thingId = request.params.thingId;
-  if (!request.body ||
-      !request.body.hasOwnProperty('floorplanX') ||
-      !request.body.hasOwnProperty('floorplanY')) {
-    response.status(400).send('x and y properties needed to position Thing');
+  if (!request.body) {
+    response.status(400).send('request body missing');
     return;
   }
-  Things.getThing(thingId).then((thing) => {
-    // return
-    return thing.setCoordinates(
-      request.body.floorplanX, request.body.floorplanY);
-  }).then((description) => {
+
+  let thing;
+  try {
+    thing = await Things.getThing(thingId);
+  } catch (e) {
+    response.status(404).send('thing not found');
+    return;
+  }
+
+  let description;
+  try {
+    if (request.body.hasOwnProperty('floorplanX') &&
+        request.body.hasOwnProperty('floorplanY')) {
+      description = await thing.setCoordinates(
+        request.body.floorplanX,
+        request.body.floorplanY
+      );
+    } else if (request.body.hasOwnProperty('layoutIndex')) {
+      description = await thing.setLayoutIndex(request.body.layoutIndex);
+    } else {
+      response.status(400).send('request body missing required parameters');
+      return;
+    }
+
     response.status(200).json(description);
-  }).catch((e) => {
+  } catch (e) {
     response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-  });
+  }
 });
 
 /**
