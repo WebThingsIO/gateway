@@ -171,6 +171,11 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
     return null;
   }
 
+  const triggerProp = triggerThing.properties[trigger.property.id];
+  if (!triggerProp) {
+    return null;
+  }
+
   let triggerStr = `${triggerThing.name} `;
   if (trigger.type === 'BooleanTrigger') {
     triggerStr += 'is ';
@@ -178,7 +183,7 @@ Rule.prototype.singleTriggerToHumanRepresentation = function(trigger, html) {
       triggerStr += 'not ';
     }
 
-    if (trigger.property.name === 'on') {
+    if (trigger.property.id === 'on' || triggerProp.name === 'on') {
       triggerStr += 'on';
     } else {
       triggerStr += trigger.label;
@@ -254,8 +259,13 @@ Rule.prototype.singleEffectToHumanRepresentation = function(effect) {
     return null;
   }
 
+  const effectProp = effectThing.properties[effect.property.id];
+  if (!effectProp) {
+    return null;
+  }
+
   let effectStr = '';
-  if (effect.property.name === 'on') {
+  if (effectProp.name === 'on' || effect.property.id === 'on') {
     effectStr = `turn ${effectThing.name} `;
     if (effect.value) {
       effectStr += 'on';
