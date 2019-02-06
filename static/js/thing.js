@@ -501,6 +501,10 @@ class Thing {
   handleDragOver(e) {
     e.preventDefault();
 
+    this.container.childNodes.forEach((node) => {
+      node.classList.remove('drag-over');
+    });
+
     let dropNode = e.target;
     while (!dropNode.classList || !dropNode.classList.contains('thing')) {
       dropNode = dropNode.parentNode;
@@ -517,6 +521,8 @@ class Thing {
   }
 
   handleDragLeave(e) {
+    e.preventDefault();
+
     let dropNode = e.target;
     while (!dropNode.classList || !dropNode.classList.contains('thing')) {
       dropNode = dropNode.parentNode;
@@ -530,6 +536,10 @@ class Thing {
   handleDrop(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    this.container.childNodes.forEach((node) => {
+      node.classList.remove('drag-over');
+    });
 
     let dropNode = e.target;
     while (!dropNode.classList || !dropNode.classList.contains('thing')) {
@@ -560,8 +570,6 @@ class Thing {
         this.container.appendChild(dragNode);
       }
     }
-
-    dropNode.classList.remove('drag-over');
 
     this.container.childNodes.forEach((node, index) => {
       node.dataset.layoutIndex = index;
