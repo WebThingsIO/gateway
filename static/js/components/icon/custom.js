@@ -23,21 +23,15 @@ template.innerHTML = `
     }
 
     .webthing-custom-icon-icon {
-      width: 6.4rem;
-      height: 6.4rem;
-      background-size: 6.4rem;
-      background-repeat: no-repeat;
-      transform: translate(0);
-    }
-
-    .webthing-custom-icon-icon.custom-icon {
       width: 6.2rem;
       height: 6.2rem;
-      border-radius: 3.2rem;
-      border: 0.1rem solid white;
       background-size: 3.2rem;
       background-position: center;
+      background-repeat: no-repeat;
       background-color: #ffffff64;
+      transform: translate(0);
+      border-radius: 3.2rem;
+      border: 0.1rem solid white;
     }
   </style>
   <div id="icon" class="webthing-custom-icon-icon"></div>
@@ -61,14 +55,7 @@ class CustomIcon extends BaseComponent {
   }
 
   set iconHref(value) {
-    if (!value) {
-      this._iconHref = '/optimized-images/thing-icons/thing.svg';
-      this._icon.classList.remove('custom-icon');
-    } else {
-      this._iconHref = value;
-      this._icon.classList.add('custom-icon');
-    }
-
+    this._iconHref = value || '/optimized-images/thing-icons/thing.svg';
     this._icon.style.backgroundImage = `url("${this._iconHref}")`;
   }
 }

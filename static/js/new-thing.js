@@ -124,11 +124,11 @@ class NewThing {
           break;
         case 'Custom':
           type = 'Custom Thing';
-          cls = cls || (capabilities.length > 1 ? '' : ' ');
+          cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;
         default:
           type = capability;
-          cls = cls || (capabilities.length > 1 ? '' : ' ');
+          cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;
       }
 

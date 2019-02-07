@@ -86,10 +86,15 @@
   border-radius: 0.5rem;
 }
 
-.new-thing-icon {
-  width: 6.4rem;
-  height: 6.4rem;
-  background-size: 6.4rem;
+.new-thing:not(.custom-thing) .new-thing-icon {
+  width: 6.2rem;
+  height: 6.2rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ffffff64;
+  border: 0.1rem solid white;
+  border-radius: 3.2rem;
 }
 
 .new-thing-metadata {

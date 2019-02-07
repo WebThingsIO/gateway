@@ -5,15 +5,15 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg17774"
-   viewBox="0 0 63.999999 64.000001"
-   height="64"
-   width="64">
+   width="32"
+   height="32"
+   viewBox="0 0 32 32.000001"
+   id="svg44089"
+   version="1.1">
   <defs
-     id="defs17776" />
+     id="defs44091" />
   <metadata
-     id="metadata17779">
+     id="metadata44094">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -25,22 +25,12 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="g42943"
-     transform="translate(-7295.0103,17610.326)">
-    <circle
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:0.39215686;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="circle11473"
-       cx="7327.0103"
-       cy="-17578.326"
-       r="31.5" />
-    <g
-       id="g34609-4-6"
-       transform="matrix(0.06474613,0,0,0.06474613,7311.0103,-17594.326)"
-       style="stroke-width:0.62142873">
-      <path
-         style="fill:#ffffff;stroke-width:0.62142873"
-         d="M 199.725,0 V 36.025 H 85.211 v 421.66 l 114.514,0.094 v 36.459 L 408.81,456.683 409.026,37.816 Z m 34.679,230.574 c 7.022,0 12.715,7.408 12.715,16.545 0,9.139 -5.692,16.545 -12.715,16.545 -7.023,0 -12.715,-7.406 -12.715,-16.545 -0.001,-9.137 5.693,-16.545 12.715,-16.545 z M 119.211,423.713 V 70.025 h 80.514 v 353.753 z"
-         id="path34611-5-1" />
-    </g>
+     style="stroke-width:0.62142873"
+     transform="matrix(0.06474613,0,0,0.06474613,1.4723595e-5,4.2255283e-6)"
+     id="g34609-4-6-8">
+    <path
+       id="path34611-5-1-4"
+       d="M 199.725,0 V 36.025 H 85.211 v 421.66 l 114.514,0.094 v 36.459 L 408.81,456.683 409.026,37.816 Z m 34.679,230.574 c 7.022,0 12.715,7.408 12.715,16.545 0,9.139 -5.692,16.545 -12.715,16.545 -7.023,0 -12.715,-7.406 -12.715,-16.545 -0.001,-9.137 5.693,-16.545 12.715,-16.545 z M 119.211,423.713 V 70.025 h 80.514 v 353.753 z"
+       style="fill:#ffffff;stroke-width:0.62142873" />
   </g>
 </svg>

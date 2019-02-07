@@ -246,10 +246,11 @@ const ThingsScreen = {
         if (thing.iconHref && thing.selectedCapability === 'Custom') {
           customIconEl.iconHref = thing.iconHref;
           customIconEl.classList.remove('hidden');
-          iconEl.classList.add('hidden');
+          iconEl.style.backgroundImage = '';
+          iconEl.classList.add('custom-thing');
         } else {
-          iconEl.src = thing.baseIcon;
-          iconEl.classList.remove('hidden');
+          iconEl.style.backgroundImage = `url("${thing.baseIcon}")`;
+          iconEl.classList.remove('custom-thing');
           customIconEl.classList.add('hidden');
         }
 
@@ -390,10 +391,11 @@ const ThingsScreen = {
           description.selectedCapability === 'Custom') {
         customIconEl.iconHref = description.iconHref;
         customIconEl.classList.remove('hidden');
-        iconEl.classList.add('hidden');
+        iconEl.style.backgroundImage = '';
+        iconEl.classList.add('custom-thing');
       } else {
-        iconEl.src = icon;
-        iconEl.classList.remove('hidden');
+        iconEl.style.backgroundImage = `url("${icon}")`;
+        iconEl.classList.remove('custom-thing');
         customIconEl.classList.add('hidden');
       }
 
@@ -516,10 +518,11 @@ const ThingsScreen = {
       if (description.iconHref && description.selectedCapability === 'Custom') {
         customIconEl.iconHref = description.iconHref;
         customIconEl.classList.remove('hidden');
-        iconEl.classList.add('hidden');
+        iconEl.style.backgroundImage = '';
+        iconEl.classList.add('custom-thing');
       } else {
-        iconEl.src = icon;
-        iconEl.classList.remove('hidden');
+        iconEl.style.backgroundImage = `url("${icon}")`;
+        iconEl.classList.remove('custom-thing');
         customIconEl.classList.add('hidden');
       }
 

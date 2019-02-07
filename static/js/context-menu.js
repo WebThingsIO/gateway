@@ -69,12 +69,13 @@ const ContextMenu = {
     if (e.detail.iconHref) {
       this.headingCustomIcon.classList.remove('hidden');
       this.headingCustomIcon.iconHref = e.detail.iconHref;
-      this.headingIcon.classList.add('hidden');
+      this.headingIcon.classList.add('custom-thing');
+      this.headingIcon.style.backgroundImage = '';
       this.customIcon.iconHref = e.detail.iconHref;
     } else {
       this.headingCustomIcon.classList.add('hidden');
-      this.headingIcon.classList.remove('hidden');
-      this.headingIcon.src = e.detail.thingIcon;
+      this.headingIcon.classList.remove('custom-thing');
+      this.headingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
       this.customIcon.iconHref = '';
     }
 
@@ -96,10 +97,12 @@ const ContextMenu = {
 
         if (!e.detail.selectedCapability ||
             e.detail.selectedCapability === 'Custom') {
+          this.thingIcon.classList.add('custom-thing');
           this.thingIcon.style.backgroundImage = '';
           this.customIconLabel.classList.remove('hidden');
           this.customIcon.classList.remove('hidden');
         } else {
+          this.thingIcon.classList.remove('custom-thing');
           this.thingIcon.style.backgroundImage = `url("${e.detail.thingIcon}")`;
           this.customIconLabel.classList.add('hidden');
           this.customIcon.classList.add('hidden');
@@ -189,7 +192,6 @@ const ContextMenu = {
   hide: function() {
     this.element.classList.add('hidden');
     this.headingIcon.classList.remove('hidden');
-    this.headingIcon.src = '#';
     this.headingCustomIcon.classList.add('hidden');
     this.headingText.textContent = '';
     this.thingId = '';
@@ -258,8 +260,10 @@ const ContextMenu = {
     }
 
     if (image) {
+      this.thingIcon.classList.remove('custom-thing');
       this.thingIcon.style.backgroundImage = `url("${image}")`;
     } else {
+      this.thingIcon.classList.add('custom-thing');
       this.thingIcon.style.backgroundImage = '';
     }
   },

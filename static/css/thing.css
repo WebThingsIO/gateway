@@ -146,10 +146,21 @@
 }
 
 #thing-title-icon {
+  display: inline-block;
+}
+
+#thing-title-icon:not(.custom-thing) {
   height: 4rem;
+  width: 4rem;
+  border: 0.1rem solid white;
+  border-radius: 2rem;
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ffffff64;
   position: relative;
   top: 1.3rem;
-  padding-right: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 #thing-title-name {

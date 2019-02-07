@@ -376,11 +376,11 @@ class NewWebThing {
             break;
           case 'Custom':
             option.innerText = 'Custom Thing';
-            cls = cls || (capabilities.length > 1 ? '' : ' ');
+            cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
             break;
           default:
             option.innerText = capability;
-            cls = cls || (capabilities.length > 1 ? '' : ' ');
+            cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
             break;
         }
 
