@@ -456,7 +456,7 @@
   content: "";
   position: absolute;
   margin-left: -7.5rem;
-  height: 17.4rem;
+  height: 12.8rem;
   border-left: 0.2rem dashed white;
 }
 
@@ -465,6 +465,6 @@
   position: absolute;
   margin-left: 7.3rem;
   margin-top: -17.4rem;
-  height: 17.4rem;
+  height: 12.8rem;
   border-right: 0.2rem dashed white;
 }
