@@ -83,7 +83,7 @@ class NumberDetail {
    * Update the detail view with the new property value.
    */
   update(number) {
-    if (!this.input || number == this.input.value) {
+    if (!this.input) {
       return;
     }
 

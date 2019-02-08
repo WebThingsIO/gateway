@@ -63,9 +63,6 @@ class BrightnessDetail {
       return;
     }
 
-    if (brightness == this.brightness.value) {
-      return;
-    }
     this.brightness.value = brightness;
   }
 
