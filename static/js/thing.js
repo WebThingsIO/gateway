@@ -74,6 +74,7 @@ class Thing {
     }
 
     this.selectedCapability = description.selectedCapability;
+    this.layoutIndex = description.layoutIndex;
     this.iconHref = description.iconHref || '';
     this.baseIcon = opts.baseIcon || '/optimized-images/thing-icons/thing.svg';
     this.format = format;
@@ -351,7 +352,9 @@ class Thing {
    * HTML view for Thing.
    */
   interactiveView() {
-    return `<div class="thing">
+    const id = `thing-${Utils.escapeHtml(this.id)}`;
+    return `<div class="thing" draggable="true" id="${id}"
+      data-layout-index="${this.layoutIndex}">
       ${this.uiHref ? this.uiLink() : ''}
       ${this.detailLink()}
       ${this.iconView()}
@@ -467,12 +470,148 @@ class Thing {
     const element = document.createElement('div');
     if (format == Constants.ThingFormat.LINK_ICON) {
       element.innerHTML = this.linkIconView().trim();
-    } else if (format == Constants.ThingFormat.EXPANDED) {
-      element.innerHTML = this.expandedView().trim();
-    } else {
-      element.innerHTML = this.interactiveView().trim();
+      return this.container.appendChild(element.firstChild);
     }
+
+    if (format == Constants.ThingFormat.EXPANDED) {
+      element.innerHTML = this.expandedView().trim();
+      return this.container.appendChild(element.firstChild);
+    }
+
+    element.innerHTML = this.interactiveView().trim();
+    element.firstChild.ondragstart = this.handleDragStart.bind(this);
+    element.firstChild.ondragover = this.handleDragOver.bind(this);
+    element.firstChild.ondragenter = this.handleDragEnter.bind(this);
+    element.firstChild.ondragleave = this.handleDragLeave.bind(this);
+    element.firstChild.ondragend = this.handleDragEnd.bind(this);
+    element.firstChild.ondrop = this.handleDrop.bind(this);
+
+    for (const node of this.container.childNodes.values()) {
+      if (node.dataset.layoutIndex > this.layoutIndex) {
+        return this.container.insertBefore(element.firstChild, node);
+      }
+    }
+
     return this.container.appendChild(element.firstChild);
+  }
+
+  handleDragStart(e) {
+    e.target.style.cursor = 'grabbing';
+    e.dataTransfer.setData('text', e.target.id);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.dropEffect = 'move';
+
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+
+    this.container.childNodes.forEach((node) => {
+      node.classList.remove('drag-start', 'drag-end');
+    });
+
+    let dropNode = e.target;
+    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
+      dropNode = dropNode.parentNode;
+    }
+
+    if (dropNode) {
+      e.dataTransfer.dropEffect = 'move';
+
+      const dropX = e.clientX;
+      const dropNodeStart = dropNode.getBoundingClientRect().x;
+      const dropNodeWidth = dropNode.getBoundingClientRect().width;
+
+      if ((dropX - dropNodeStart) < (dropNodeWidth / 2)) {
+        dropNode.classList.add('drag-start');
+      } else {
+        dropNode.classList.add('drag-end');
+      }
+    }
+  }
+
+  handleDragEnter(e) {
+    e.preventDefault();
+  }
+
+  handleDragLeave(e) {
+    e.preventDefault();
+
+    let dropNode = e.target;
+    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
+      dropNode = dropNode.parentNode;
+    }
+
+    if (dropNode) {
+      dropNode.classList.remove('drag-start', 'drag-end');
+    }
+  }
+
+  handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let dropNode = e.target;
+    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
+      dropNode = dropNode.parentNode;
+    }
+
+    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+
+    if (!dropNode || !dragNode || dropNode.id === dragNode.id) {
+      return;
+    }
+
+    const dropX = e.clientX;
+    const dropNodeStart = dropNode.getBoundingClientRect().x;
+    const dropNodeWidth = dropNode.getBoundingClientRect().width;
+
+    this.container.removeChild(dragNode);
+
+    if ((dropX - dropNodeStart) < (dropNodeWidth / 2)) {
+      this.container.insertBefore(dragNode, dropNode);
+    } else {
+      const sibling = dropNode.nextSibling;
+      if (sibling) {
+        this.container.insertBefore(dragNode, sibling);
+      } else {
+        this.container.appendChild(dragNode);
+      }
+    }
+
+    this.container.childNodes.forEach((node, index) => {
+      node.dataset.layoutIndex = index;
+
+      const id = Utils.unescapeHtml(node.id).replace(/^thing-/, '');
+      const payload = {
+        layoutIndex: index,
+      };
+      fetch(`/things/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${API.jwt}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        if (!response.ok) {
+          console.error(`Failed to arrange thing ${id}`);
+        }
+      }).catch((e) => {
+        console.error(`Error trying to arrange thing ${id}: ${e}`);
+      });
+    });
+  }
+
+  handleDragEnd() {
+    this.container.childNodes.forEach((node) => {
+      node.classList.remove('drag-start', 'drag-end');
+      node.style.cursor = 'grab';
+    });
   }
 
   /**

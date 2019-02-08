@@ -55,11 +55,18 @@ const Things = {
     }
     this.getThingsPromise = Database.getThings().then((things) => {
       this.getThingsPromise = null;
+
       // Update the map of Things
       this.things = new Map();
-      things.forEach((thing) => {
+      things.forEach((thing, index) => {
+        // This should only happen on the first migration.
+        if (!thing.hasOwnProperty('layoutIndex')) {
+          thing.layoutIndex = index;
+        }
+
         this.things.set(thing.id, new Thing(thing.id, thing));
       });
+
       return this.things;
     });
     return this.getThingsPromise;
@@ -172,6 +179,7 @@ const Things = {
   createThing: function(id, description) {
     const thing = new Thing(id, description);
     thing.connected = true;
+    thing.layoutIndex = this.things.size;
 
     return Database.createThing(thing.id, thing.getDescription())
       .then(function(thingDesc) {
@@ -295,8 +303,17 @@ const Things = {
       if (!thing) {
         return;
       }
+
+      const index = thing.layoutIndex;
+
       thing.remove();
       this.things.delete(id);
+
+      this.things.forEach((t) => {
+        if (t.layoutIndex > index) {
+          t.setLayoutIndex(t.layoutIndex - 1);
+        }
+      });
     });
   },
 

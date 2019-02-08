@@ -82,6 +82,7 @@ const Thing = function(id, description) {
   }
   this.floorplanX = description.floorplanX;
   this.floorplanY = description.floorplanY;
+  this.layoutIndex = description.layoutIndex;
   this.selectedCapability = description.selectedCapability;
   this.websockets = [];
   this.links = [
@@ -211,6 +212,17 @@ const Thing = function(id, description) {
 Thing.prototype.setCoordinates = function(x, y) {
   this.floorplanX = x;
   this.floorplanY = y;
+  return Database.updateThing(this.id, this.getDescription());
+};
+
+/**
+ * Set the layout index for a Thing.
+ *
+ * @param {number} index The new layout index.
+ * @return {Promise} A promise which resolves with the description set.
+ */
+Thing.prototype.setLayoutIndex = function(index) {
+  this.layoutIndex = index;
   return Database.updateThing(this.id, this.getDescription());
 };
 
@@ -381,6 +393,7 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
     links: links,
     floorplanX: this.floorplanX,
     floorplanY: this.floorplanY,
+    layoutIndex: this.layoutIndex,
     selectedCapability: this.selectedCapability,
     iconHref: this.iconHref,
   };

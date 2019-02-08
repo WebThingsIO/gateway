@@ -21,6 +21,7 @@ template.innerHTML = `
       text-align: center;
       color: white;
       font-size: 1.6rem;
+      cursor: default;
     }
 
     .webthing-light-capability-container {

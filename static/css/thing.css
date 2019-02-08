@@ -443,3 +443,28 @@
   color: white;
   background-color: #5288af;
 }
+
+[draggable] {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.drag-start::before {
+  content: "";
+  position: absolute;
+  margin-left: -7.5rem;
+  height: 12.8rem;
+  border-left: 0.2rem dashed white;
+}
+
+.drag-end::after {
+  content: "";
+  position: absolute;
+  margin-left: 7.3rem;
+  margin-top: -17.4rem;
+  height: 12.8rem;
+  border-right: 0.2rem dashed white;
+}

@@ -149,6 +149,7 @@ const webpackWeb = {
       './static/css/rules.css',
       './static/css/rule.css',
       './static/css/addons-form.css',
+      './node_modules/mobile-drag-drop/default.css',
     ],
   },
   mode: 'development',
@@ -195,6 +196,21 @@ const webpackWeb = {
                 }],
               ],
               plugins: ['@babel/plugin-syntax-dynamic-import'],
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        include: path.resolve(__dirname, 'node_modules', 'mobile-drag-drop'),
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
             },
           },
         ],

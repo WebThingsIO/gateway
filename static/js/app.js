@@ -37,6 +37,8 @@ let RuleScreen;
 let Speech;
 
 const shaka = require('shaka-player/dist/shaka-player.compiled');
+const MobileDragDrop = require('mobile-drag-drop/index.min');
+const ScrollBehavior = require('mobile-drag-drop/scroll-behaviour.min');
 const Notifications = require('./notifications');
 
 const App = {
@@ -66,6 +68,11 @@ const App = {
   init: function() {
     // Load the shaka player polyfills
     shaka.polyfill.installAll();
+    MobileDragDrop.polyfill({
+      holdToDrag: 500,
+      // eslint-disable-next-line max-len
+      dragImageTranslateOverride: ScrollBehavior.scrollBehaviourDragImageTranslateOverride,
+    });
 
     AddThingScreen.init();
     ContextMenu.init();

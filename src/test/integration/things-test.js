@@ -350,6 +350,25 @@ describe('things/', function() {
     expect(off.body.power).toEqual(false);
   });
 
+  it('fail to set x and y coordinates of a non-existent thing', async () => {
+    const err = await pFinal(chai.request(server)
+      .patch(`${Constants.THINGS_PATH}/test-1`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({abc: true}));
+    expect(err.response.status).toEqual(404);
+  });
+
+  it('fail to set x and y coordinates of a thing', async () => {
+    await addDevice();
+    const err = await pFinal(chai.request(server)
+      .patch(`${Constants.THINGS_PATH}/test-1`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({abc: true}));
+    expect(err.response.status).toEqual(400);
+  });
+
   it('set x and y coordinates of a thing', async () => {
     await addDevice();
     const on = await chai.request(server)
@@ -365,13 +384,17 @@ describe('things/', function() {
     expect(on.body.floorplanY).toEqual(20);
   });
 
-  it('fail to set x and y coordinates of a thing', async () => {
-    const err = await pFinal(chai.request(server)
+  it('set layout index of a thing', async () => {
+    await addDevice();
+    const on = await chai.request(server)
       .patch(`${Constants.THINGS_PATH}/test-1`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({abc: true}));
-    expect(err.response.status).toEqual(400);
+      .send({layoutIndex: 15});
+
+    expect(on.status).toEqual(200);
+    expect(on.body).toHaveProperty('layoutIndex');
+    expect(on.body.layoutIndex).toEqual(15);
   });
 
   it('lists 0 new things after creating thing', async () => {

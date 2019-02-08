@@ -23,7 +23,7 @@ Gateway.prototype.readThings = function() {
   }).then((res) => {
     return res.json();
   }).then((things) => {
-    this.things = things;
+    this.things = things.sort((a, b) => a.layoutIndex - b.layoutIndex);
     return things;
   });
 };
