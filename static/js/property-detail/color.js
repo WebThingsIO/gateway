@@ -35,9 +35,10 @@ class ColorDetail {
   }
 
   update(color) {
-    if (color == this.color.value) {
+    if (!this.color) {
       return;
     }
+
     this.color.value = color;
   }
 

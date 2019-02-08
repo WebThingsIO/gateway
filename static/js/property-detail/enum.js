@@ -70,7 +70,7 @@ class EnumDetail {
   }
 
   update(value) {
-    if (!this.select || value == this.select.value) {
+    if (!this.select) {
       return;
     }
 

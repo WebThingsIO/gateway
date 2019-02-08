@@ -52,10 +52,6 @@ class ColorTemperatureDetail {
       return;
     }
 
-    if (temperature == this.temperature.value) {
-      return;
-    }
-
     this.temperature.value = temperature;
   }
 

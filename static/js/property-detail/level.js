@@ -66,9 +66,6 @@ class LevelDetail {
       return;
     }
 
-    if (level == this.level.value) {
-      return;
-    }
     this.level.value = level;
   }
 

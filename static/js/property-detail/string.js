@@ -52,7 +52,7 @@ class StringDetail {
    * Update the detail view with the new property value.
    */
   update(string) {
-    if (!this.input || string == this.input.value) {
+    if (!this.input) {
       return;
     }
 
