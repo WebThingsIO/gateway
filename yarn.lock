@@ -3639,7 +3639,7 @@ functional-red-black-tree@^1.0.1:
 
 "gateway-addon@https://github.com/mozilla-iot/gateway-addon-node":
   version "0.4.0"
-  resolved "https://github.com/mozilla-iot/gateway-addon-node#a776a2caf202c5220939f9490bb43bf4b57580e2"
+  resolved "https://github.com/mozilla-iot/gateway-addon-node#c9e71729ed073b88542a8832ac2f9585d6ae1d5c"
   dependencies:
     ajv "^6.4.0"
     sqlite3 "^4.0.0"

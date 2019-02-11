@@ -55,6 +55,7 @@ class Plugin {
     this.requestActionPromises = new Map();
     this.removeActionPromises = new Map();
     this.setPinPromises = new Map();
+    this.setCredentialsPromises = new Map();
   }
 
   asDict() {
@@ -165,6 +166,39 @@ class Plugin {
         }
         deferred.reject();
         this.setPinPromises.delete(messageId);
+        return;
+      }
+      case Constants.SET_CREDENTIALS_RESOLVED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.setCredentialsPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        const adapter = this.adapters.get(msg.data.adapterId);
+        const deviceId = msg.data.device.id;
+        const device = new DeviceProxy(adapter, msg.data.device);
+        adapter.devices[deviceId] = device;
+        adapter.manager.devices[deviceId] = device;
+        deferred.resolve(msg.data.device);
+        this.setCredentialsPromises.delete(messageId);
+        return;
+      }
+      case Constants.SET_CREDENTIALS_REJECTED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.setCredentialsPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.reject();
+        this.setCredentialsPromises.delete(messageId);
         return;
       }
     }
@@ -299,6 +333,48 @@ class Plugin {
         }
         break;
 
+      case Constants.PAIRING_PROMPT: {
+        let message = `${adapter.name}: `;
+        if (msg.data.hasOwnProperty('deviceId')) {
+          device = adapter.getDevice(msg.data.deviceId);
+          message += `(${device.name}): `;
+        }
+
+        message += msg.data.prompt;
+
+        const data = {
+          severity: Constants.LogSeverity.PROMPT,
+          message,
+        };
+
+        if (msg.data.hasOwnProperty('url')) {
+          data.url = msg.data.url;
+        }
+
+        this.pluginServer.emit('log', data);
+        return;
+      }
+      case Constants.UNPAIRING_PROMPT: {
+        let message = `${adapter.name}`;
+        if (msg.data.hasOwnProperty('deviceId')) {
+          device = adapter.getDevice(msg.data.deviceId);
+          message += ` (${device.name})`;
+        }
+
+        message += `: ${msg.data.prompt}`;
+
+        const data = {
+          severity: Constants.LogSeverity.PROMPT,
+          message,
+        };
+
+        if (msg.data.hasOwnProperty('url')) {
+          data.url = msg.data.url;
+        }
+
+        this.pluginServer.emit('log', data);
+        return;
+      }
       case Constants.MOCK_ADAPTER_STATE_CLEARED:
         deferredMock = adapter.deferredMock;
         if (!deferredMock) {
@@ -372,6 +448,13 @@ class Plugin {
           this.setPinPromises.set(data.messageId, deferred);
           break;
         }
+        case Constants.SET_CREDENTIALS: {
+          // removeAction needs ID which is per message, because it
+          // can be called while waiting rejected or resolved.
+          data.messageId = this.generateMsgId();
+          this.setCredentialsPromises.set(data.messageId, deferred);
+          break;
+        }
         default:
           break;
       }
@@ -401,6 +484,10 @@ class Plugin {
     this.setPinPromises.forEach((promise, key) => {
       promise.reject();
       this.setPinPromises.delete(key);
+    });
+    this.setCredentialsPromises.forEach((promise, key) => {
+      promise.reject();
+      this.setCredentialsPromises.delete(key);
     });
     this.ipcSocket.close();
   }

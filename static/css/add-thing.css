@@ -106,12 +106,15 @@
 .new-web-thing-url,
 .new-web-thing-name,
 .new-thing-initial-name,
+.new-thing-credentials-error,
 .new-thing-pin-error,
 .new-thing-name {
   display: block;
   width: calc(100% - 1rem);
 }
 
+.new-thing-username,
+.new-thing-password,
 .new-thing-pin {
   width: 14rem;
 }
@@ -154,6 +157,7 @@
   font-size: 1.5rem;
 }
 
+.new-thing-credentials-error,
 .new-thing-pin-error,
 .new-thing-label.error,
 .new-web-thing-label.error {
@@ -166,6 +170,7 @@
   font-size: 1.3rem;
 }
 
+.new-thing.credentials-required .new-thing-icon,
 .new-thing.pin-required .new-thing-icon {
   background-image: url('../optimized-images/thing-icons/pin_required_icon.svg');
 }
@@ -242,6 +247,7 @@
 }
 
 #add-by-url-anchor.hidden,
+.new-thing-credentials-error.hidden,
 .new-thing-pin-error.hidden,
 .new-thing-label.hidden,
 .new-web-thing-label.hidden,
@@ -271,24 +277,32 @@
 }
 
 @media only screen and (max-width: 580px) {
+  .new-thing-username,
+  .new-thing-password,
   .new-thing-pin {
     width: 6rem;
   }
 }
 
 @media only screen and (min-width: 580px) and (max-width: 610px) {
+  .new-thing-username,
+  .new-thing-password,
   .new-thing-pin {
     width: 8rem;
   }
 }
 
 @media only screen and (min-width: 610px) and (max-width: 660px) {
+  .new-thing-username,
+  .new-thing-password,
   .new-thing-pin {
     width: 10rem;
   }
 }
 
 @media only screen and (min-width: 660px) and (max-width: 700px) {
+  .new-thing-username,
+  .new-thing-password,
   .new-thing-pin {
     width: 12rem;
   }

@@ -38,6 +38,8 @@ class DeviceProxy extends Device {
       this.pinPattern = null;
     }
 
+    this.credentialsRequired = !!deviceDict.credentialsRequired;
+
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
       const propertyProxy =

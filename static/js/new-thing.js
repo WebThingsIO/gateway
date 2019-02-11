@@ -24,6 +24,7 @@ class NewThing {
     this.id = id;
     this.description = description;
     this.pinSet = false;
+    this.credentialsSet = false;
     this.iconData = null;
     this.re = null;
     if (description.hasOwnProperty('pin') && description.pin.pattern !== null) {
@@ -44,8 +45,13 @@ class NewThing {
       !this.pinSet;
   }
 
+  requiresCredentials() {
+    return this.description.credentialsRequired && !this.credentialsSet;
+  }
+
   buildStandardView() {
     this.element.classList.remove('pin-required');
+    this.element.classList.remove('credentials-required');
 
     let capabilities = [];
     if (Array.isArray(this.description['@type']) &&
@@ -203,12 +209,40 @@ class NewThing {
       </div>`;
   }
 
+  buildCredentialsView() {
+    this.element.classList.add('credentials-required');
+    this.element.innerHTML = `
+      <div class="new-thing-icon"></div>
+      <div class="new-thing-metadata">
+        <span class="new-thing-initial-name">
+          ${Utils.escapeHtml(this.description.name)}
+        </span>
+        <input type="text" class="new-thing-username" required autofocus
+               placeholder="Enter username"/>
+        <input type="password" class="new-thing-password" required
+               placeholder="Enter password"/>
+        <span class="new-thing-credentials-error hidden">
+          Incorrect credentials
+        </span>
+      </div>
+      <div class="new-thing-controls">
+        <button class="new-thing-cancel-button text-button">
+          Cancel
+        </button>
+        <button class="new-thing-submit-button text-button" disabled>
+          Submit
+        </button>
+      </div>`;
+  }
+
   /**
    * HTML view for New Thing.
    */
   buildView() {
     if (this.requiresPin()) {
       this.buildPinView();
+    } else if (this.requiresCredentials()) {
+      this.buildCredentialsView();
     } else {
       this.buildStandardView();
     }
@@ -230,6 +264,28 @@ class NewThing {
         'new-thing-submit-button')[0];
 
       this.pinInput.addEventListener('input', this.handlePinInput.bind(this));
+      this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
+      this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
+    } else if (this.requiresCredentials()) {
+      this.usernameInput =
+        this.element.getElementsByClassName('new-thing-username')[0];
+      this.passwordInput =
+        this.element.getElementsByClassName('new-thing-password')[0];
+      this.credentialsError = this.element.getElementsByClassName(
+        'new-thing-credentials-error')[0];
+      this.cancelButton = this.element.getElementsByClassName(
+        'new-thing-cancel-button')[0];
+      this.submitButton = this.element.getElementsByClassName(
+        'new-thing-submit-button')[0];
+
+      this.usernameInput.addEventListener(
+        'input',
+        this.handleCredentialsInput.bind(this)
+      );
+      this.passwordInput.addEventListener(
+        'input',
+        this.handleCredentialsInput.bind(this)
+      );
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
       this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     } else {
@@ -272,17 +328,33 @@ class NewThing {
     }
   }
 
+  handleCredentialsInput() {
+    const username = this.usernameInput.value;
+    const password = this.passwordInput.value;
+    this.submitButton.disabled = username.length === 0 || password.length === 0;
+  }
+
   handleCancel() {
     this.container.removeChild(this.element);
   }
 
   handleSubmit() {
-    const input = this.pinInput.value.trim();
     this.submitButton.disabled = true;
+
+    const data = {
+      thingId: this.id,
+    };
+
+    if (this.requiresPin()) {
+      data.pin = this.pinInput.value.trim();
+    } else if (this.requiresCredentials()) {
+      data.username = this.usernameInput.value;
+      data.password = this.passwordInput.value;
+    }
 
     fetch('/things', {
       method: 'PATCH',
-      body: JSON.stringify({thingId: this.id, pin: input}),
+      body: JSON.stringify(data),
       headers: {
         Authorization: `Bearer ${API.jwt}`,
         Accept: 'application/json',
@@ -299,14 +371,26 @@ class NewThing {
         throw new Error(json);
       }
 
-      this.pinError.classList.add('hidden');
       this.description = json;
-      this.pinSet = true;
+
+      if (this.requiresPin()) {
+        this.pinError.classList.add('hidden');
+        this.pinSet = true;
+      } else if (this.requiresCredentials()) {
+        this.credentialsError.classList.add('hidden');
+        this.credentialsSet = true;
+      }
+
       this.render();
     }).catch((error) => {
-      console.error(`Failed to set PIN: ${error}`);
+      console.error(`Failed to set PIN/credentials: ${error}`);
       this.submitButton.disabled = false;
-      this.pinError.classList.remove('hidden');
+
+      if (this.pinError) {
+        this.pinError.classList.remove('hidden');
+      } else if (this.credentialsError) {
+        this.credentialsError.classList.remove('hidden');
+      }
     });
   }
 
