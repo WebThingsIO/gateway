@@ -4007,7 +4007,7 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
 
-"gateway-addon@https://github.com/mozilla-iot/gateway-addon-node":
+"gateway-addon@https://github.com/mozilla-iot/gateway-addon-node#v0.4.0":
   version "0.4.0"
   resolved "https://github.com/mozilla-iot/gateway-addon-node#a776a2caf202c5220939f9490bb43bf4b57580e2"
   dependencies:
