@@ -53,6 +53,8 @@ const httpApp = createGatewayApp(httpServer);
 let httpsServer = createHttpsServer();
 let httpsApp = null;
 
+let certInterval = null;
+
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
  * private keys stored for the tunnel service, null is returned.
@@ -66,8 +68,12 @@ function createHttpsServer() {
   }
 
   // Try to renew certificates daily.
-  this.certInterval =
-    setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+  TunnelService.hasTunnelToken().then((res) => {
+    if (res) {
+      certInterval =
+        setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+    }
+  });
 
   // HTTPS server configuration
   const options = {
@@ -320,7 +326,7 @@ if (config.get('cli')) {
     addonManager.unloadAddons();
     mDNSserver.server.cleanup();
     TunnelService.stop();
-    if (this.certInterval) {
+    if (certInterval) {
       clearInterval(this.certInterval);
     }
     process.exit(0);
