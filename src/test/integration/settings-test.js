@@ -4,7 +4,6 @@
 /* globals it */
 
 const {server, chai} = require('../common');
-const pFinal = require('../promise-final');
 const Database = require('../../db');
 const Platform = require('../../platform');
 const {
@@ -23,21 +22,21 @@ describe('settings/', function() {
   });
 
   it('Fail to get a setting that hasnt been set', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.SETTINGS_PATH}/experiments/foo`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
+      .set(...headerAuth(jwt));
 
-    expect(err.response.status).toEqual(404);
+    expect(err.status).toEqual(404);
   });
 
   it('Fail to set a setting when missing data', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send());
-    expect(err.response.status).toEqual(400);
+      .send();
+    expect(err.status).toEqual(400);
   });
 
   it('Set a setting', async () => {
@@ -98,42 +97,42 @@ describe('settings/', function() {
   });
 
   it('Toggle SSH', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .put(`${Constants.SETTINGS_PATH}/system/ssh`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true}));
+      .send({enabled: true});
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('Restart gateway', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'restartGateway'}));
+      .send({action: 'restartGateway'});
 
-    expect(err.response.status).toEqual(500);
+    expect(err.status).toEqual(500);
   });
 
   it('Restart system', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'restartSystem'}));
+      .send({action: 'restartSystem'});
 
-    expect(err.response.status).toEqual(500);
+    expect(err.status).toEqual(500);
   });
 
   it('Unknown platform action', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'thisIsFake'}));
+      .send({action: 'thisIsFake'});
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 });

@@ -46,10 +46,11 @@ require('./app-instance');
 // Open the database
 db.open();
 
-const httpServer = http.createServer();
-const httpApp = createGatewayApp(httpServer);
+const servers = {};
+servers.http = http.createServer();
+const httpApp = createGatewayApp(servers.http);
 
-let httpsServer = createHttpsServer();
+servers.https = createHttpsServer();
 let httpsApp = null;
 
 /**
@@ -78,58 +79,73 @@ function createHttpsServer() {
 function startHttpsGateway() {
   const port = config.get('ports.https');
 
-  if (!httpsServer) {
-    httpsServer = createHttpsServer();
+  if (!servers.https) {
+    servers.https = createHttpsServer();
   }
 
-  httpsApp = createGatewayApp(httpsServer);
-  httpsServer.on('request', httpsApp);
+  httpsApp = createGatewayApp(servers.https);
+  servers.https.on('request', httpsApp);
+
+  const promises = [];
 
   // Start the HTTPS server
-  httpsServer.listen(port, function() {
-    migration.then(function() {
-      addonManager.loadAddons();
+  promises.push(new Promise((resolve) => {
+    servers.https.listen(port, function() {
+      migration.then(function() {
+        addonManager.loadAddons();
+      });
+      rulesEngineConfigure(servers.https);
+      console.log('HTTPS server listening on port',
+                  servers.https.address().port);
+      resolve();
     });
-    rulesEngineConfigure(httpsServer);
-    console.log('HTTPS server listening on port', httpsServer.address().port);
-  });
+  }));
 
   // Redirect HTTP to HTTPS
-  httpServer.on('request', createRedirectApp(httpsServer.address().port));
+  servers.http.on('request', createRedirectApp(servers.https.address().port));
   const httpPort = config.get('ports.http');
-  httpServer.listen(httpPort, function() {
-    console.log('Redirector listening on port', httpServer.address().port);
-  });
+
+  promises.push(new Promise((resolve) => {
+    servers.http.listen(httpPort, function() {
+      console.log('Redirector listening on port', servers.http.address().port);
+      resolve();
+    });
+  }));
+
+  return Promise.all(promises);
 }
 
 function startHttpGateway() {
-  httpServer.on('request', httpApp);
+  servers.http.on('request', httpApp);
 
   const port = config.get('ports.http');
 
-  httpServer.listen(port, function() {
-    migration.then(function() {
-      addonManager.loadAddons();
+  return new Promise((resolve) => {
+    servers.http.listen(port, function() {
+      migration.then(function() {
+        addonManager.loadAddons();
+      });
+      rulesEngineConfigure(servers.http);
+      console.log('HTTP server listening on port', servers.http.address().port);
+      resolve();
     });
-    rulesEngineConfigure(httpServer);
-    console.log('HTTP server listening on port', httpServer.address().port);
   });
 }
 
 function stopHttpGateway() {
-  httpServer.removeListener('request', httpApp);
+  servers.http.removeListener('request', httpApp);
 }
 
 function startWiFiSetup() {
-  httpServer.on('request', wifiSetupApp.onRequest);
+  servers.http.on('request', wifiSetupApp.onRequest);
 
   const port = config.get('ports.http');
 
-  httpServer.listen(port);
+  servers.http.listen(port);
 }
 
 function stopWiFiSetup() {
-  httpServer.removeListener('request', wifiSetupApp.onRequest);
+  servers.http.removeListener('request', wifiSetupApp.onRequest);
 }
 
 function getOptions() {
@@ -261,7 +277,9 @@ function createRedirectApp(port) {
   return app;
 }
 
-let serverStartup = Promise.resolve();
+const serverStartup = {
+  promise: Promise.resolve(),
+};
 let wifiPromise = Promise.resolve(true);
 const options = getOptions();
 
@@ -284,20 +302,21 @@ wifiPromise.then((connected) => {
 function startGateway() {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup = TunnelService.userSkipped().then(function(res) {
+    serverStartup.promise = TunnelService.userSkipped().then(function(res) {
       if (res) {
-        startHttpGateway();
-      } else {
-        startHttpsGateway();
+        return startHttpGateway();
+      }
+
+      return startHttpsGateway().then(() => {
         TunnelService.hasTunnelToken().then(function(result) {
           if (result) {
             TunnelService.start();
           }
         });
-      }
+      });
     });
   } else {
-    startHttpGateway();
+    serverStartup.promise = startHttpGateway();
   }
 }
 
@@ -343,7 +362,6 @@ mDNSserver.getmDNSstate().then((state) => {
 });
 
 module.exports = { // for testing
-  httpServer: httpServer,
-  server: httpsServer,
-  serverStartup: serverStartup,
+  servers,
+  serverStartup,
 };

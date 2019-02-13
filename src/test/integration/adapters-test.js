@@ -49,14 +49,10 @@ describe('adapters/', function() {
   it('fails to get a nonexistent adapter', async () => {
     const mockAdapterId = 'nonexistent-adapter';
 
-    try {
-      await chai.request(server)
-        .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
-        .set('Accept', 'application/json')
-        .set(...headerAuth(jwt));
-      throw new Error('request should fail');
-    } catch (err) {
-      expect(err.response.status).toEqual(404);
-    }
+    const err = await chai.request(server)
+      .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(404);
   });
 });

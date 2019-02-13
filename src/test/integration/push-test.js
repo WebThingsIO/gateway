@@ -5,7 +5,6 @@
 
 const {server, chai} = require('../common');
 const Database = require('../../db');
-const pFinal = require('../promise-final');
 const PushService = require('../../push-service');
 
 const {
@@ -24,12 +23,12 @@ describe('push/', () => {
   });
 
   it('Fail to get a vapid key with PushService not initialized', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.PUSH_PATH}/vapid-public-key`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
+      .set(...headerAuth(jwt));
 
-    expect(err.response.status).toEqual(500);
+    expect(err.status).toEqual(500);
   });
 
   it('Get a vapid key with PushService initialized', async () => {

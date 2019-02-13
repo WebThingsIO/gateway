@@ -5,7 +5,6 @@
 
 const nock = require('nock');
 
-const pFinal = require('../promise-final');
 const {waitForExpect} = require('../expect-utils');
 const {server, chai, mockAdapter} = require('../common');
 
@@ -105,16 +104,12 @@ describe('command/', function() {
 
   it('should return 400 for POST with no text body', async () => {
     setupNock();
-    try {
-      await chai.request(server)
-        .post(Constants.COMMANDS_PATH)
-        .set(...headerAuth(jwt))
-        .set('Accept', 'application/json')
-        .send();
-      throw new Error('Should have failed to create new thing');
-    } catch (err) {
-      expect(err.response.status).toEqual(400);
-    }
+    const err = await chai.request(server)
+      .post(Constants.COMMANDS_PATH)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send();
+    expect(err.status).toEqual(400);
   });
 
   it('should understand a command to turn a light on/off', async () => {
@@ -252,13 +247,13 @@ describe('command/', function() {
     await addDevice();
     setupNock();
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(Constants.COMMANDS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({text: 'turn on the bathroom light'}));
+      .send({text: 'turn on the bathroom light'});
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('should support an OAuth-issued JWT', async () => {

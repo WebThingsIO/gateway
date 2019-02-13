@@ -17,7 +17,6 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 const path = require('path');
-const pFinal = require('../promise-final');
 const Platform = require('../../platform');
 const pkg = require('../../../package.json');
 const UserProfile = require('../../user-profile');
@@ -109,13 +108,13 @@ describe('addons', function() {
   });
 
   it('Toggle a non-existent add-on', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .put(`${Constants.ADDONS_PATH}/nonexistent-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true}));
+      .send({enabled: true});
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('Toggle an add-on', async () => {
@@ -182,11 +181,11 @@ describe('addons', function() {
   });
 
   it('Fail to get license for non-existent add-on', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.ADDONS_PATH}/fake-adapter/license`)
-      .set(...headerAuth(jwt)));
+      .set(...headerAuth(jwt));
 
-    expect(err.response.status).toEqual(404);
+    expect(err.status).toEqual(404);
   });
 
   it('Fail to get non-existent add-on license', async () => {
@@ -197,11 +196,11 @@ describe('addons', function() {
       // pass intentionally
     }
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.ADDONS_PATH}/settings-adapter/license`)
-      .set(...headerAuth(jwt)));
+      .set(...headerAuth(jwt));
 
-    expect(err.response.status).toEqual(404);
+    expect(err.status).toEqual(404);
   });
 
   it('Get add-on license', async () => {
@@ -223,12 +222,12 @@ describe('addons', function() {
   });
 
   it('Install an invalid add-on', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: 'nonexistent-adapter'}));
-    expect(err.response.status).toEqual(400);
+      .send({name: 'nonexistent-adapter'});
+    expect(err.status).toEqual(400);
   });
 
   it('Install an add-on with an invalid checksum', async () => {
@@ -253,13 +252,13 @@ describe('addons', function() {
     expect(list[0]).toHaveProperty('version');
     expect(list[0]).toHaveProperty('checksum');
 
-    const res3 = await pFinal(chai.request(server)
+    const res3 = await chai.request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send({name: list[0].name,
              url: list[0].url,
-             checksum: 'invalid'}));
+             checksum: 'invalid'});
     expect(res3.status).toEqual(400);
   });
 
