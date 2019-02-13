@@ -66,7 +66,8 @@ function createHttpsServer() {
   }
 
   // Try to renew certificates daily.
-  setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+  this.certInterval =
+    setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
 
   // HTTPS server configuration
   const options = {
@@ -319,6 +320,9 @@ if (config.get('cli')) {
     addonManager.unloadAddons();
     mDNSserver.server.cleanup();
     TunnelService.stop();
+    if (this.certInterval) {
+      clearInterval(this.certInterval);
+    }
     process.exit(0);
   });
 }
