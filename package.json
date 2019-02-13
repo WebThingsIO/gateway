@@ -30,7 +30,7 @@
   },
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
-    "ajv": "^6.8.1",
+    "ajv": "^6.9.1",
     "archiver": "^3.0.0",
     "asn1.js": "^5.0.1",
     "bcryptjs": "^2.4.3",
@@ -47,7 +47,7 @@
     "express-ws": "^4.0.0",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "greenlock": "^2.6.7",
-    "handlebars": "^4.0.12",
+    "handlebars": "^4.1.0",
     "http-proxy": "^1.17.0",
     "ip-regex": "^4.0.0",
     "jsonwebtoken": "^8.4.0",
@@ -71,7 +71,7 @@
     "uuid": "^3.3.2",
     "web-push": "^3.3.3",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^3.6.0",
+    "winston-daily-rotate-file": "^3.7.0",
     "ws": "^6.1.3"
   },
   "devDependencies": {
@@ -94,7 +94,7 @@
     "chai": "^4.2.0",
     "chai-http": "^3.0.0",
     "clean-webpack-plugin": "^1.0.1",
-    "codecov": "^3.1.0",
+    "codecov": "^3.2.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
     "eslint": "^5.13.0",
@@ -121,10 +121,10 @@
     "speaktome-api": "^0.2.1",
     "style-loader": "^0.23.1",
     "ts-jest": "^23.10.5",
-    "typescript": "^3.3.1",
+    "typescript": "^3.3.3",
     "url-loader": "^1.1.2",
-    "webdriverio": "^5.4.13",
-    "webpack": "^4.29.1",
+    "webdriverio": "^5.4.17",
+    "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3"
   },
   "jest": {
