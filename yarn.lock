@@ -1939,10 +1939,6 @@ bindings@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
 
-bindings@^1.2.1:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.3.0.tgz#b346f6ecf6a95f5a815c5839fc7cdb22502f1ed7"
-
 bindings@^1.3.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.4.0.tgz#909efa49f2ebe07ecd3cb136778f665052040127"
@@ -2152,10 +2148,6 @@ buffer-from@1.x:
 buffer-from@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.0.tgz#87fcaa3a298358e0ade6e442cfce840740d1ad04"
-
-buffer-v6-polyfill@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/buffer-v6-polyfill/-/buffer-v6-polyfill-1.0.3.tgz#bc695c6f19d00a63e83338c36cd68f3f5dcba3e8"
 
 buffer-xor@^1.0.3:
   version "1.0.3"
@@ -5556,19 +5548,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-le-acme-core@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/le-acme-core/-/le-acme-core-2.1.4.tgz#4987d0d4238b47f29a5ac1b73a03ecb29e465b06"
-  integrity sha512-nJZGWHe7m+RK6phWHo8OftJ/oZSCnDdDe0dzwuhsbWJrDjNPT7KLWTxUSditOsGcubs9EW5NUKoj6B1HLbch+g==
-  dependencies:
-    request "^2.74.0"
-    rsa-compat "^1.3.2"
-
 le-challenge-dns@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/le-challenge-dns/-/le-challenge-dns-2.3.2.tgz#dd39529c047911fa0e8cab207adf6e275f98ac34"
 
-le-challenge-fs@^2.0.2:
+le-challenge-fs@^2.0.2, le-challenge-fs@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/le-challenge-fs/-/le-challenge-fs-2.0.8.tgz#b6d458a37f097e87df3d8b5ff67013737ab9d5a2"
   dependencies:
@@ -6179,10 +6163,6 @@ nan@^2.11.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
   integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
 
-nan@^2.3.3:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
-
 nan@^2.9.2, nan@~2.10.0:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
@@ -6306,10 +6286,6 @@ node-fetch@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
   integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
-
-node-forge@^0.6.41:
-  version "0.6.49"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.6.49.tgz#f1ee95d5d74623938fe19d698aa5a26d54d2f60f"
 
 node-forge@^0.7.6:
   version "0.7.6"
@@ -7463,32 +7439,6 @@ request@2.88.0, request@^2.87.0, request@^2.88.0:
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-request@^2.74.0:
-  version "2.86.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.86.0.tgz#2b9497f449b0a32654c081a5cf426bbfb5bf5b69"
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    hawk "~6.0.2"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-
 request@^2.83.0:
   version "2.85.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.85.0.tgz#5a03615a47c61420b3eb99b7dba204f83603e1fa"
@@ -7620,15 +7570,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
-
-rsa-compat@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/rsa-compat/-/rsa-compat-1.3.2.tgz#a822639fa18ac68a767d3f18c4a86c1dab1a91fa"
-  dependencies:
-    buffer-v6-polyfill "^1.0.3"
-    node-forge "^0.6.41"
-  optionalDependencies:
-    ursa "^0.9.4"
 
 rsa-compat@^1.9.2:
   version "1.9.2"
@@ -8731,13 +8672,6 @@ ursa-optional@^0.9.10:
   dependencies:
     bindings "^1.3.0"
     nan "^2.11.1"
-
-ursa@^0.9.4:
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/ursa/-/ursa-0.9.4.tgz#0a2abfb7dc4267f733b0f8f2fc7f2c895d40a413"
-  dependencies:
-    bindings "^1.2.1"
-    nan "^2.3.3"
 
 use@^3.1.0:
   version "3.1.0"

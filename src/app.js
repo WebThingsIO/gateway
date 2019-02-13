@@ -29,11 +29,12 @@ const ipRegex = require('ip-regex');
 
 // Internal Dependencies
 const addonManager = require('./addon-manager');
+const CertificateManager = require('./certificate-manager');
+const Constants = require('./constants');
 const db = require('./db');
 const mDNSserver = require('./mdns-server');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
-const Constants = require('./constants');
 const {wifi, wifiSetupApp} = require('./wifi-setup');
 
 // Causes a timestamp to be prepended to console log lines.
@@ -52,6 +53,8 @@ const httpApp = createGatewayApp(httpServer);
 let httpsServer = createHttpsServer();
 let httpsApp = null;
 
+let certInterval = null;
+
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
  * private keys stored for the tunnel service, null is returned.
@@ -63,6 +66,14 @@ function createHttpsServer() {
   if (!TunnelService.hasCertificates()) {
     return null;
   }
+
+  // Try to renew certificates daily.
+  TunnelService.hasTunnelToken().then((res) => {
+    if (res) {
+      certInterval =
+        setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+    }
+  });
 
   // HTTPS server configuration
   const options = {
@@ -226,24 +237,6 @@ function createGatewayApp(server) {
 function createRedirectApp(port) {
   const app = createApp();
 
-  // Allow LE challenges, used when renewing domain.
-  app.use(
-    /^\/\.well-known\/acme-challenge\/.*/,
-    function(request, response, next) {
-      if (request.method !== 'GET') {
-        response.sendStatus(403);
-        return;
-      }
-
-      const reqPath = path.join(Constants.BUILD_STATIC_PATH, request.path);
-      if (fs.existsSync(reqPath)) {
-        response.sendFile(reqPath);
-        return;
-      }
-
-      next();
-    });
-
   // Redirect based on https://https.cio.gov/apis/
   app.use(function(request, response) {
     if (request.method !== 'GET') {
@@ -333,6 +326,9 @@ if (config.get('cli')) {
     addonManager.unloadAddons();
     mDNSserver.server.cleanup();
     TunnelService.stop();
+    if (certInterval) {
+      clearInterval(this.certInterval);
+    }
     process.exit(0);
   });
 }

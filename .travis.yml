@@ -45,7 +45,7 @@ script:
   - node ./node_modules/webpack/bin/webpack.js
   - yarn run lint
   - ./tools/make-self-signed-cert.sh
-  - ./node_modules/.bin/jest --runInBand --coverage
+  - ./node_modules/.bin/jest --runInBand --coverage --detectOpenHandles
   - yarn run yarn-check
   - yarn run dependencies-check
 

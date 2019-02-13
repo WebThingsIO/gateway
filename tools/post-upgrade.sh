@@ -26,6 +26,7 @@ fi
 
 sudo systemctl enable mozilla-iot-gateway.service
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
+sudo systemctl disable mozilla-iot-gateway.renew-certificates.timer || true
 
 if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   touch "$HOME/.mozilla-iot/config/wifiskip"

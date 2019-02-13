@@ -11,12 +11,13 @@
 'use strict';
 
 const compression = require('compression');
-const express = require('express');
-const nocache = require('nocache')();
 const Constants = require('./constants');
+const express = require('express');
 const jwtMiddleware = require('./jwt-middleware');
-const auth = jwtMiddleware.middleware();
+const nocache = require('nocache')();
 const UserProfile = require('./user-profile');
+
+const auth = jwtMiddleware.middleware();
 
 const API_PREFIX = '/api'; // A pseudo path to use for API requests
 const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
@@ -55,6 +56,10 @@ const Router = {
         staticHandler(request, response, next);
       }
     });
+
+    // Allow LE challenges, used when renewing domain.
+    const acmeHandler = express.static(Constants.BUILD_STATIC_PATH);
+    app.use('/.well-known/acme-challenge', acmeHandler);
 
     // Content negotiation middleware
     app.use(function(request, response, next) {

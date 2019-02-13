@@ -42,7 +42,6 @@ nvm use ${NODE_VERSION}
 # Install prerequisite packages
 sudo apt install -y \
   autoconf \
-  certbot \
   dnsmasq \
   ffmpeg \
   git \
@@ -154,38 +153,6 @@ sudo ./prepare-base-root.sh
 
 # Check for an update every day.
 sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
-
-# Create the systemd certificate renewal service.
-sudo su -c 'cat > /etc/systemd/system/mozilla-iot-gateway.renew-certificates.service' <<END
-[Unit]
-Description=Mozilla IoT Gateway Certificate Renewer
-After=network.target
-
-[Service]
-Type=simple
-StandardOutput=journal
-StandardError=journal
-User=root
-# Edit this line, if needed, to specify where you installed the server
-WorkingDirectory=/home/pi/mozilla-iot/gateway
-# Edit this line, if needed, to set the correct path to the script
-ExecStart=/home/pi/mozilla-iot/gateway/tools/renew-certificates.sh
-END
-
-sudo su -c 'cat > /etc/systemd/system/mozilla-iot-gateway.renew-certificates.timer' <<END
-[Unit]
-Description=Run the Mozilla IoT Gateway certifate renewal service daily.
-
-[Timer]
-OnCalendar=daily
-
-[Install]
-WantedBy=timers.target
-END
-
-# Enable the certificate renewal service so that it starts up automatically on
-# each boot.
-sudo systemctl enable mozilla-iot-gateway.renew-certificates.timer
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.intent-parser.service' <<END
 [Unit]
