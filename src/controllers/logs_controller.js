@@ -104,7 +104,7 @@ LogsController.ws('/', (websocket) => {
   const onLog = (message) => {
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
-        console.error('WebSocket sendMessage failed:', err);
+        console.error(`WebSocket sendMessage failed: ${err}`);
       }
     });
   };
