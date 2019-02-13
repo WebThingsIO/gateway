@@ -2153,10 +2153,6 @@ buffer-from@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.0.tgz#87fcaa3a298358e0ade6e442cfce840740d1ad04"
 
-buffer-v6-polyfill@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/buffer-v6-polyfill/-/buffer-v6-polyfill-1.0.3.tgz#bc695c6f19d00a63e83338c36cd68f3f5dcba3e8"
-
 buffer-xor@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
@@ -5556,19 +5552,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-le-acme-core@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/le-acme-core/-/le-acme-core-2.1.4.tgz#4987d0d4238b47f29a5ac1b73a03ecb29e465b06"
-  integrity sha512-nJZGWHe7m+RK6phWHo8OftJ/oZSCnDdDe0dzwuhsbWJrDjNPT7KLWTxUSditOsGcubs9EW5NUKoj6B1HLbch+g==
-  dependencies:
-    request "^2.74.0"
-    rsa-compat "^1.3.2"
-
 le-challenge-dns@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/le-challenge-dns/-/le-challenge-dns-2.3.2.tgz#dd39529c047911fa0e8cab207adf6e275f98ac34"
 
-le-challenge-fs@^2.0.2:
+le-challenge-fs@^2.0.2, le-challenge-fs@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/le-challenge-fs/-/le-challenge-fs-2.0.8.tgz#b6d458a37f097e87df3d8b5ff67013737ab9d5a2"
   dependencies:
@@ -6306,10 +6294,6 @@ node-fetch@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
   integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
-
-node-forge@^0.6.41:
-  version "0.6.49"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.6.49.tgz#f1ee95d5d74623938fe19d698aa5a26d54d2f60f"
 
 node-forge@^0.7.6:
   version "0.7.6"
@@ -7463,32 +7447,6 @@ request@2.88.0, request@^2.87.0, request@^2.88.0:
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-request@^2.74.0:
-  version "2.86.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.86.0.tgz#2b9497f449b0a32654c081a5cf426bbfb5bf5b69"
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    hawk "~6.0.2"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-
 request@^2.83.0:
   version "2.85.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.85.0.tgz#5a03615a47c61420b3eb99b7dba204f83603e1fa"
@@ -7620,15 +7578,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
   dependencies:
     hash-base "^3.0.0"
     inherits "^2.0.1"
-
-rsa-compat@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/rsa-compat/-/rsa-compat-1.3.2.tgz#a822639fa18ac68a767d3f18c4a86c1dab1a91fa"
-  dependencies:
-    buffer-v6-polyfill "^1.0.3"
-    node-forge "^0.6.41"
-  optionalDependencies:
-    ursa "^0.9.4"
 
 rsa-compat@^1.9.2:
   version "1.9.2"
