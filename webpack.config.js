@@ -168,8 +168,10 @@ const webpackWeb = {
             loader: 'babel-loader',
             query: {
               babelrc: false,
+              sourceType: 'script',
               presets: [
                 ['@babel/preset-env', {
+                  modules: 'commonjs',
                   targets: {
                     chrome: '43',
                     opera: '29',

@@ -1093,13 +1093,13 @@ describe('things/', function() {
   it('fail to set credentials for device', async () => {
     await addDevice(piDescr);
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .patch(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({thingId: piDescr.id, username: 'fake', password: 'wrong'}));
+      .send({thingId: piDescr.id, username: 'fake', password: 'wrong'});
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('set credentials for device', async () => {
