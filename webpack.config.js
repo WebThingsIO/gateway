@@ -70,20 +70,6 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/'),
       ignore: ['*.js', '*/index.html'],
     },
-    {
-      from: 'static/js/lib/*',
-      to: path.join(__dirname, 'build/'),
-    },
-    {
-      from: 'node_modules/@webcomponents/webcomponentsjs/*-bundle.js*',
-      to: path.join(__dirname, 'build/static/js/lib/'),
-      flatten: true,
-    },
-    {
-      from: 'node_modules/shaka-player/dist/shaka-player.compiled.js',
-      to: path.join(__dirname, 'build/static/js/lib/'),
-      flatten: true,
-    },
   ]),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,
@@ -195,7 +181,7 @@ const webpackWeb = {
                   useBuiltIns: 'usage',
                 }],
               ],
-              plugins: ['@babel/plugin-syntax-dynamic-import'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread'],
             },
           },
         ],
