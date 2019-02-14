@@ -97,9 +97,10 @@ describe('basic browser tests', function() {
     await addonInstallVirtualThingsAdapter.waitForExist(5000);
     await addonInstallVirtualThingsAdapter.click();
 
+    // virtual-things-adapter is ~10MB, so it might take some time to install
     const addonDiscoverySettingsAdded =
       await browser.$('.addon-discovery-settings-added');
-    await addonDiscoverySettingsAdded.waitForExist(5000);
+    await addonDiscoverySettingsAdded.waitForExist(20000);
     await saveStepScreen('adapter-added');
 
     const settingsBackButton = await browser.$('#settings-back-button');
