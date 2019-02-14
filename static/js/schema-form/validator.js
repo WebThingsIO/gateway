@@ -13,17 +13,14 @@
 
 'use strict';
 
-const Validator = {};
+const Ajv = require('ajv');
 
-// Dynamic loading
-import(/* webpackChunkName: "ajv.js" */ 'ajv').then((Ajv) => {
-  Ajv = Ajv.default ? Ajv.default : Ajv;
-
-  Validator._ajv = new Ajv({
+const Validator = {
+  _ajv: new Ajv({
     errorDataPath: 'property',
     allErrors: true,
-  });
-});
+  }),
+};
 
 Validator._reEscapeChar = /\\(\\)?/g;
 Validator._rePropName = RegExp(

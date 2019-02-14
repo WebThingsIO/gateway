@@ -10,6 +10,7 @@
 
 const App = require('./app');
 const AssistantScreen = require('./assistant');
+const SpeakToMe = require('speaktome-api/build/stm_web.min');
 
 // eslint-disable-next-line no-unused-vars
 const Speech = {
@@ -24,14 +25,9 @@ const Speech = {
     this.speechButtons = [];
     this.addSpeechButton(document.getElementById('speech-button'));
     this.addSpeechButton(document.getElementById('assistant-speech-button'));
-    // Dynamic loading
-    import(/* webpackChunkName: "stm_web.min.js" */
-      'speaktome-api/build/stm_web.min.js')
-      .then((SpeakToMe) => {
-        this.stm = SpeakToMe.default({
-          listener: this.listener.bind(this),
-        });
-      });
+    this.stm = SpeakToMe({
+      listener: this.listener.bind(this),
+    });
     this.listening = false;
 
     window.requestAnimationFrame(() => {
