@@ -255,28 +255,25 @@ class NewThing {
     this.buildView();
 
     if (this.requiresPin()) {
-      this.pinInput = this.element.getElementsByClassName('new-thing-pin')[0];
-      this.pinError = this.element.getElementsByClassName(
-        'new-thing-pin-error')[0];
-      this.cancelButton = this.element.getElementsByClassName(
-        'new-thing-cancel-button')[0];
-      this.submitButton = this.element.getElementsByClassName(
-        'new-thing-submit-button')[0];
+      this.pinInput = this.element.querySelector('.new-thing-pin');
+      this.pinError = this.element.querySelector('.new-thing-pin-error');
+      this.cancelButton =
+        this.element.querySelector('.new-thing-cancel-button');
+      this.submitButton =
+        this.element.querySelector('.new-thing-submit-button');
 
       this.pinInput.addEventListener('input', this.handlePinInput.bind(this));
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
       this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     } else if (this.requiresCredentials()) {
-      this.usernameInput =
-        this.element.getElementsByClassName('new-thing-username')[0];
-      this.passwordInput =
-        this.element.getElementsByClassName('new-thing-password')[0];
-      this.credentialsError = this.element.getElementsByClassName(
-        'new-thing-credentials-error')[0];
-      this.cancelButton = this.element.getElementsByClassName(
-        'new-thing-cancel-button')[0];
-      this.submitButton = this.element.getElementsByClassName(
-        'new-thing-submit-button')[0];
+      this.usernameInput = this.element.querySelector('.new-thing-username');
+      this.passwordInput = this.element.querySelector('.new-thing-password');
+      this.credentialsError =
+        this.element.querySelector('.new-thing-credentials-error');
+      this.cancelButton =
+        this.element.querySelector('.new-thing-cancel-button');
+      this.submitButton =
+        this.element.querySelector('.new-thing-submit-button');
 
       this.usernameInput.addEventListener(
         'input',
@@ -289,17 +286,15 @@ class NewThing {
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
       this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     } else {
-      this.nameInput = this.element.getElementsByClassName('new-thing-name')[0];
-      this.saveButton = this.element.getElementsByClassName(
-        'new-thing-save-button')[0];
-      this.thingType = this.element.getElementsByClassName('new-thing-type')[0];
-      this.customIcon =
-        this.element.getElementsByClassName('new-thing-custom-icon')[0];
+      this.nameInput = this.element.querySelector('.new-thing-name');
+      this.saveButton = this.element.querySelector('.new-thing-save-button');
+      this.thingType = this.element.querySelector('.new-thing-type');
+      this.customIcon = this.element.querySelector('.new-thing-custom-icon');
       this.customIconInput =
-        this.element.getElementsByClassName('new-thing-custom-icon-input')[0];
+        this.element.querySelector('.new-thing-custom-icon-input');
       this.customIconLabel =
-        this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
-      this.label = this.element.getElementsByClassName('new-thing-label')[0];
+        this.element.querySelector('.new-thing-custom-icon-label');
+      this.label = this.element.querySelector('.new-thing-label');
 
       this.saveButton.addEventListener('click', this.handleSave.bind(this));
       this.thingType.addEventListener('change',
