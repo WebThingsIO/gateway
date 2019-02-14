@@ -29,7 +29,6 @@ const ipRegex = require('ip-regex');
 
 // Internal Dependencies
 const addonManager = require('./addon-manager');
-const CertificateManager = require('./certificate-manager');
 const Constants = require('./constants');
 const db = require('./db');
 const mDNSserver = require('./mdns-server');
@@ -53,8 +52,6 @@ const httpApp = createGatewayApp(httpServer);
 let httpsServer = createHttpsServer();
 let httpsApp = null;
 
-let certInterval = null;
-
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
  * private keys stored for the tunnel service, null is returned.
@@ -66,14 +63,6 @@ function createHttpsServer() {
   if (!TunnelService.hasCertificates()) {
     return null;
   }
-
-  // Try to renew certificates daily.
-  TunnelService.hasTunnelToken().then((res) => {
-    if (res) {
-      certInterval =
-        setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
-    }
-  });
 
   // HTTPS server configuration
   const options = {
@@ -326,9 +315,6 @@ if (config.get('cli')) {
     addonManager.unloadAddons();
     mDNSserver.server.cleanup();
     TunnelService.stop();
-    if (certInterval) {
-      clearInterval(this.certInterval);
-    }
     process.exit(0);
   });
 }
