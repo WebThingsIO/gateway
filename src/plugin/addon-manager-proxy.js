@@ -317,6 +317,33 @@ class AddonManagerProxy extends EventEmitter {
           });
         break;
       }
+      case Constants.SET_CREDENTIALS: {
+        const username = msg.data.username;
+        const password = msg.data.password;
+        const messageId = msg.data.messageId;
+        adapter.setCredentials(deviceId, username, password)
+          .then(() => {
+            const dev = adapter.getDevice(deviceId);
+            this.pluginClient.sendNotification(
+              Constants.SET_CREDENTIALS_RESOLVED, {
+                device: dev.asDict(),
+                messageId: messageId,
+                adapterId: adapter.id,
+              });
+          }).catch((err) => {
+            console.error(
+              `AddonManagerProxy: Failed to set credentials for device ${
+                deviceId}`);
+            console.error(err);
+
+            this.pluginClient.sendNotification(
+              Constants.SET_CREDENTIALS_REJECTED, {
+                deviceId: deviceId,
+                messageId: messageId,
+              });
+          });
+        break;
+      }
       case Constants.DEBUG_CMD:
         device.debugCmd(msg.data.cmd, msg.data.params);
         break;
@@ -325,6 +352,48 @@ class AddonManagerProxy extends EventEmitter {
         console.warn('AddonManagerProxy: unrecognized msg:', msg);
         break;
     }
+  }
+
+  /**
+   * @method sendPairingPrompt
+   * Send a prompt to the UI notifying the user to take some action.
+   */
+  sendPairingPrompt(adapter, prompt, url = null, device = null) {
+    const data = {
+      adapterId: adapter.id,
+      prompt: prompt,
+    };
+
+    if (url) {
+      data.url = url;
+    }
+
+    if (device) {
+      data.deviceId = device.id;
+    }
+
+    this.pluginClient.sendNotification(Constants.PAIRING_PROMPT, data);
+  }
+
+  /**
+   * @method sendUnpairingPrompt
+   * Send a prompt to the UI notifying the user to take some action.
+   */
+  sendUnpairingPrompt(adapter, prompt, url = null, device = null) {
+    const data = {
+      adapterId: adapter.id,
+      prompt: prompt,
+    };
+
+    if (url) {
+      data.url = url;
+    }
+
+    if (device) {
+      data.deviceId = device.id;
+    }
+
+    this.pluginClient.sendNotification(Constants.UNPAIRING_PROMPT, data);
   }
 
   /**

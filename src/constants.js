@@ -63,6 +63,7 @@ exports.MOCK_DEVICE_ADDED_REMOVED = 'mockDeviceAddedRemoved';
 exports.MOCK_DEVICE_ADD_REMOVE_FAILED = 'mockDeviceAddRemoveFailed';
 exports.PAIRING_TIMEOUT = 'pairingTimeout';
 exports.PAIR_MOCK_DEVICE = 'pairMockDevice';
+exports.PAIRING_PROMPT = 'pairingPrompt';
 exports.PLUGIN_ERROR = 'pluginError';
 exports.PLUGIN_UNLOADED = 'pluginUnloaded';
 exports.PROPERTY_CHANGED = 'propertyChanged';
@@ -79,6 +80,9 @@ exports.REQUEST_ACTION_RESOLVED = 'requestActionResolved';
 exports.SET_PIN = 'setPin';
 exports.SET_PIN_REJECTED = 'setPinRejected';
 exports.SET_PIN_RESOLVED = 'setPinResolved';
+exports.SET_CREDENTIALS = 'setCredentials';
+exports.SET_CREDENTIALS_REJECTED = 'setCredentialsRejected';
+exports.SET_CREDENTIALS_RESOLVED = 'setCredentialsResolved';
 exports.SET_PROPERTY = 'setProperty';
 exports.START_PAIRING = 'startPairing';
 exports.THING_ADDED = 'thingAdded';
@@ -86,6 +90,7 @@ exports.THING_REMOVED = 'thingRemoved';
 exports.UNLOAD_ADAPTER = 'unloadAdapter';
 exports.UNLOAD_PLUGIN = 'unloadPlugin';
 exports.UNPAIR_MOCK_DEVICE = 'unpairMockDevice';
+exports.UNPAIRING_PROMPT = 'unpairingPrompt';
 
 // Thing types
 exports.THING_TYPE_ON_OFF_SWITCH = 'onOffSwitch';
@@ -111,4 +116,5 @@ exports.LogSeverity = {
   INFO: 1,
   WARNING: 2,
   ERROR: 3,
+  PROMPT: 4,
 };

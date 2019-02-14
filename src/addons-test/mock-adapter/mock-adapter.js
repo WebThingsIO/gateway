@@ -201,6 +201,16 @@ class MockAdapter extends Adapter {
       }
     });
   }
+
+  setCredentials(deviceId, username, password) {
+    return new Promise((resolve, reject) => {
+      if (username === 'test-user' && password === 'Password-1234!') {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  }
 }
 
 function loadMockAdapter(addonManager, manifest, _errorCallback) {

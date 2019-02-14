@@ -33,26 +33,21 @@ class NewWebThing {
     this.render();
     this.element = document.getElementById(
       `new-web-thing-${Utils.escapeHtmlForIdClass(this.originalId)}`);
-    this.thingType = this.element.getElementsByClassName('new-thing-type')[0];
-    this.customIcon =
-      this.element.getElementsByClassName('new-thing-custom-icon')[0];
+    this.thingType = this.element.querySelector('.new-thing-type');
+    this.customIcon = this.element.querySelector('.new-thing-custom-icon');
     this.customIconInput =
-      this.element.getElementsByClassName('new-thing-custom-icon-input')[0];
+      this.element.querySelector('.new-thing-custom-icon-input');
     this.customIconLabel =
-      this.element.getElementsByClassName('new-thing-custom-icon-label')[0];
-    this.label =
-      this.element.getElementsByClassName('new-web-thing-label')[0];
-    this.originLabel =
-      this.element.getElementsByClassName('new-web-thing-origin')[0];
-    this.urlInput = this.element.getElementsByClassName('new-web-thing-url')[0];
-    this.nameInput =
-      this.element.getElementsByClassName('new-web-thing-name')[0];
+      this.element.querySelector('.new-thing-custom-icon-label');
+    this.label = this.element.querySelector('.new-web-thing-label');
+    this.originLabel = this.element.querySelector('.new-web-thing-origin');
+    this.urlInput = this.element.querySelector('.new-web-thing-url');
+    this.nameInput = this.element.querySelector('.new-web-thing-name');
     this.cancelButton =
-      this.element.getElementsByClassName('new-web-thing-cancel-button')[0];
+      this.element.querySelector('.new-web-thing-cancel-button');
     this.submitButton =
-      this.element.getElementsByClassName('new-web-thing-submit-button')[0];
-    this.saveButton =
-      this.element.getElementsByClassName('new-web-thing-save-button')[0];
+      this.element.querySelector('.new-web-thing-submit-button');
+    this.saveButton = this.element.querySelector('.new-web-thing-save-button');
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
     this.customIconInput.addEventListener('change',

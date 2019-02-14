@@ -1089,6 +1089,36 @@ describe('things/', function() {
     expect(res.body.type).toEqual(piDescr.type);
   });
 
+  it('fail to set credentials for device', async () => {
+    await addDevice(piDescr);
+
+    const err = await pFinal(chai.request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({thingId: piDescr.id, username: 'fake', password: 'wrong'}));
+
+    expect(err.response.status).toEqual(400);
+  });
+
+  it('set credentials for device', async () => {
+    await addDevice(piDescr);
+
+    const res = await chai.request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({thingId: piDescr.id,
+             username: 'test-user',
+             password: 'Password-1234!'});
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty('name');
+    expect(res.body.name).toEqual(piDescr.name);
+    expect(res.body).toHaveProperty('type');
+    expect(res.body.type).toEqual(piDescr.type);
+  });
+
   it('fail to set read-only property', async () => {
     await addDevice(VALIDATION_THING);
 

@@ -40,6 +40,7 @@ const shaka = require('shaka-player/dist/shaka-player.compiled');
 const MobileDragDrop = require('mobile-drag-drop/index.min');
 const ScrollBehavior = require('mobile-drag-drop/scroll-behaviour.min');
 const Notifications = require('./notifications');
+const Utils = require('./utils');
 
 const App = {
   /**
@@ -132,7 +133,8 @@ const App = {
 
     const onMessage = (msg) => {
       const message = JSON.parse(msg.data);
-      this.showMessage(message.message, 5000);
+
+      this.showMessage(message.message, 5000, message.url);
     };
 
     const cleanup = () => {
@@ -321,7 +323,7 @@ const App = {
     this.messageArea.classList.add('hidden');
   },
 
-  showMessage: function(message, duration) {
+  showMessage: function(message, duration, extraUrl = null) {
     if (this.messageTimeout !== null) {
       clearTimeout(this.messageTimeout);
       this.messageTimeout = null;
@@ -329,6 +331,13 @@ const App = {
 
     if (this.blockMessages) {
       return;
+    }
+
+    if (extraUrl) {
+      message += `<br><br>
+        <a href="${Utils.escapeHtml(extraUrl)}" target="_blank" rel="noopener">
+          More Information
+        </a>`;
     }
 
     this.messageArea.innerHTML = message;

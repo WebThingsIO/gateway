@@ -66,22 +66,44 @@ ThingsController.get('/', (request, response) => {
 ThingsController.patch('/', async (request, response) => {
   if (!request.body ||
       !request.body.hasOwnProperty('thingId') ||
-      !request.body.hasOwnProperty('pin') ||
-      !request.body.thingId ||
-      request.body.pin.trim().length === 0) {
+      !request.body.thingId) {
     response.status(400).send('Invalid request');
     return;
   }
 
   const thingId = request.body.thingId;
-  const pin = request.body.pin.trim();
 
-  try {
-    const device = await AddonManager.setPin(thingId, pin);
-    response.status(200).json(device);
-  } catch (e) {
-    console.error(`Failed to set PIN for ${thingId}: ${e}`);
-    response.status(400).send(e);
+  if (request.body.hasOwnProperty('pin') &&
+      request.body.pin.length > 0) {
+    const pin = request.body.pin;
+
+    try {
+      const device = await AddonManager.setPin(thingId, pin);
+      response.status(200).json(device);
+    } catch (e) {
+      console.error(`Failed to set PIN for ${thingId}: ${e}`);
+      response.status(400).send(e);
+    }
+  } else if (request.body.hasOwnProperty('username') &&
+             request.body.username.length > 0 &&
+             request.body.hasOwnProperty('password') &&
+             request.body.password.length > 0) {
+    const username = request.body.username;
+    const password = request.body.password;
+
+    try {
+      const device = await AddonManager.setCredentials(
+        thingId,
+        username,
+        password
+      );
+      response.status(200).json(device);
+    } catch (e) {
+      console.error(`Failed to set credentials for ${thingId}: ${e}`);
+      response.status(400).send(e);
+    }
+  } else {
+    response.status(400).send('Invalid request');
   }
 });
 

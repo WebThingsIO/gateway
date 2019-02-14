@@ -303,6 +303,19 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method setCredentials
+   * @returns a promise which resolves when the credentials have been set.
+   */
+  setCredentials(thingId, username, password) {
+    const device = this.getDevice(thingId);
+    if (device) {
+      return device.adapter.setCredentials(thingId, username, password);
+    }
+
+    return Promise.reject(`setCredentials: device ${thingId} not found.`);
+  }
+
+  /**
    * @method requestAction
    * @returns a promise which resolves when the action has been requested.
    */
