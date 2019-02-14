@@ -2,7 +2,6 @@ const {server, chai, mockAdapter} = require('../common');
 const {waitForExpect} = require('../expect-utils');
 const util = require('util');
 
-const pFinal = require('../promise-final');
 const {
   TEST_USER,
   createUser,
@@ -323,7 +322,7 @@ describe('rules engine', function() {
   });
 
   it('fails to create a rule', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(Constants.RULES_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
@@ -333,8 +332,8 @@ describe('rules engine', function() {
           type: 'Whatever',
         },
         effect: testRule.effect,
-      }));
-    expect(err.response.status).toEqual(400);
+      });
+    expect(err.status).toEqual(400);
   });
 
   it('creates a rule', async () => {
@@ -368,11 +367,11 @@ describe('rules engine', function() {
   });
 
   it('fails to get a nonexistent rule specifically', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.RULES_PATH}/1337`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(404);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(404);
   });
 
 
@@ -407,21 +406,21 @@ describe('rules engine', function() {
   });
 
   it('fails to delete a nonexistent rule', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .delete(`${Constants.RULES_PATH}/0`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send());
-    expect(err.response.status).toEqual(404);
+      .send();
+    expect(err.status).toEqual(404);
   });
 
   it('fails to modify a nonexistent rule', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .put(`${Constants.RULES_PATH}/0`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send(testRule));
-    expect(err.response.status).toEqual(404);
+      .send(testRule);
+    expect(err.status).toEqual(404);
   });
 
   it('creates and simulates a disabled rule', async () => {

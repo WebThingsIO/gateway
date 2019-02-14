@@ -77,8 +77,8 @@ expect.extend({
   },
 });
 
-const {server, httpServer, serverStartup} = require('../app');
-global.server = server;
+const {servers, serverStartup} = require('../app');
+global.server = servers.https;
 
 const addonManager = require('../addon-manager');
 
@@ -102,8 +102,10 @@ function removeTestManifest() {
 
 beforeAll(async () => {
   removeTestManifest();
+
   // The server may not be done with reading tunneltoken and related settings
-  await serverStartup;
+  await serverStartup.promise;
+  console.log(servers.http.address(), servers.https.address());
 
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
@@ -123,16 +125,19 @@ afterEach(async () => {
 
 afterAll(async () => {
   await addonManager.unloadAddons();
-  server.close();
-  httpServer.close();
+  servers.https.close();
+  servers.http.close();
   mDNSserver.server.setState(false);
   await Promise.all([
-    e2p(server, 'close'),
-    e2p(httpServer, 'close'),
+    e2p(servers.https, 'close'),
+    e2p(servers.http, 'close'),
   ]);
   removeTestManifest();
 });
 
 module.exports = {
-  mockAdapter, server, chai, httpServer,
+  mockAdapter,
+  server: servers.https,
+  chai,
+  httpServer: servers.http,
 };

@@ -26,7 +26,7 @@ beforeEach(async () => {
 });
 
 module.exports.getAddons = async function() {
-  const res = await chai.request(server)
+  const res = await chai.request(server).keepOpen()
     .get(`${Constants.ADDONS_PATH}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
@@ -47,7 +47,7 @@ module.exports.getAddons = async function() {
 
 module.exports.addThing = async function(desc) {
   const {id} = desc;
-  await chai.request(server)
+  await chai.request(server).keepOpen()
     .post(Constants.THINGS_PATH)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
@@ -56,7 +56,7 @@ module.exports.addThing = async function(desc) {
 };
 
 module.exports.getProperty = async function(id, property) {
-  const res = await chai.request(server)
+  const res = await chai.request(server).keepOpen()
     .get(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
@@ -64,7 +64,7 @@ module.exports.getProperty = async function(id, property) {
 };
 
 module.exports.setProperty = async function(id, property, value) {
-  const res = await chai.request(server)
+  const res = await chai.request(server).keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))

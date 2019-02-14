@@ -2,7 +2,6 @@ const express = require('express');
 const e2p = require('event-to-promise');
 const http = require('http');
 const JSONWebToken = require('../../models/jsonwebtoken');
-const pFinal = require('../promise-final');
 const simpleOAuth2 = require('simple-oauth2');
 const URL = require('url').URL;
 const qs = require('querystring');
@@ -19,6 +18,7 @@ const CLIENT_ID = 'test';
 const CLIENT_SECRET = 'super secret';
 const REQUEST_SCOPE = '/things:readwrite';
 const REQUEST_STATE = 'somethingrandom';
+const CLIENT_SERVER_PORT = 31338;
 
 const TEST_THING = {
   id: 'test-1',
@@ -40,7 +40,7 @@ describe('oauth/', function() {
 
   async function addDevice(desc = TEST_THING) {
     const {id} = desc;
-    const res = await chai.request(server)
+    const res = await chai.request(server).keepOpen()
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT))
@@ -56,10 +56,9 @@ describe('oauth/', function() {
 
   beforeAll(async () => {
     const client = express();
-    const port = 31338;
     client.get('/auth', (req, res) => {
       res.redirect(oauth2.authorizationCode.authorizeURL({
-        redirect_uri: `http://127.0.0.1:${port}/callback`,
+        redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
       }));
@@ -85,7 +84,7 @@ describe('oauth/', function() {
 
     clientServer = http.createServer();
     clientServer.on('request', client);
-    clientServer.listen(port);
+    clientServer.listen(CLIENT_SERVER_PORT);
     await e2p(clientServer, 'listening');
   });
 
@@ -97,6 +96,10 @@ describe('oauth/', function() {
   });
 
   function setupOAuth(configProvided, customCallbackHandlerProvided) {
+    if (!server.address()) {
+      server.listen(0);
+    }
+
     const config = Object.assign({
       client: {
         id: CLIENT_ID,
@@ -127,14 +130,14 @@ describe('oauth/', function() {
   it('performs simple authorization', async () => {
     setupOAuth();
 
-    let res = await chai.request(clientServer)
+    let res = await chai.request(clientServer).keepOpen()
       .get('/auth')
       .set('Accept', 'application/json');
     // expect that gateway is showing page for user to authorize
     expect(res.status).toEqual(200);
 
     // send the request that the page would send
-    res = await chai.request(server)
+    res = await chai.request(server).keepOpen()
       .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
@@ -153,11 +156,11 @@ describe('oauth/', function() {
     expect(res.status).toEqual(200);
 
     // Try using the access token on a forbidden path
-    let err = await pFinal(chai.request(server)
+    let err = await chai.request(server)
       .get(Constants.OAUTHCLIENTS_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(401);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(401);
 
     res = await chai.request(server)
       .get(Constants.OAUTHCLIENTS_PATH)
@@ -181,11 +184,11 @@ describe('oauth/', function() {
     expect(res.body.length).toEqual(0);
 
     // Try using the access token now that it's revoked
-    err = await pFinal(chai.request(server)
+    err = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(401);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(401);
   });
 
   it('fails authorization with an incorrect secret', async () => {
@@ -196,15 +199,14 @@ describe('oauth/', function() {
       },
     });
 
-    const res = await pFinal(
-      chai.request(clientServer)
-        .get('/auth')
-        .set('Accept', 'application/json'));
+    const res = await chai.request(clientServer).keepOpen()
+      .get('/auth')
+      .set('Accept', 'application/json');
     // expect that gateway is showing page for user to authorize
     expect(res.status).toEqual(200);
 
     // send the request that the page would send
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server).keepOpen()
       .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
@@ -212,10 +214,9 @@ describe('oauth/', function() {
         state: REQUEST_STATE,
       })}`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(userJWT)));
+      .set(...headerAuth(userJWT));
 
-
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('fails authorization with an unknown client', async () => {
@@ -226,12 +227,11 @@ describe('oauth/', function() {
       },
     });
 
-    const err = await pFinal(
-      chai.request(clientServer)
-        .get('/auth')
-        .set('Accept', 'application/json'));
+    const err = await chai.request(clientServer)
+      .get('/auth')
+      .set('Accept', 'application/json');
 
-    expect(err.response.status).toEqual(400);
+    expect(err.status).toEqual(400);
   });
 
   it('rejects client credential authorization', async () => {
@@ -263,6 +263,10 @@ describe('oauth/', function() {
       res.status(400).json(req.query);
     });
 
+    if (!clientServer.address()) {
+      clientServer.listen(CLIENT_SERVER_PORT);
+    }
+
     let oauthUrl = new URL(oauth2.authorizationCode.authorizeURL({
       redirect_uri: `http://127.0.0.1:${clientServer.address().port}/callback`,
       scope: 'potato',
@@ -271,10 +275,10 @@ describe('oauth/', function() {
 
     oauthUrl = oauthUrl.pathname + oauthUrl.search;
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(oauthUrl)
-      .set('Accept', 'application/json'));
-    expect(err.response.status).toEqual(400);
+      .set('Accept', 'application/json');
+    expect(err.status).toEqual(400);
   });
 
   it('rejects redirect_uri mismatch', async () => {
@@ -286,11 +290,11 @@ describe('oauth/', function() {
 
     oauthUrl = oauthUrl.pathname + oauthUrl.search;
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(oauthUrl)
-      .set('Accept', 'application/json'));
-    expect(err.response.status).toEqual(400);
-    expect(err.response.body.error).toEqual('invalid_request');
+      .set('Accept', 'application/json');
+    expect(err.status).toEqual(400);
+    expect(err.body.error).toEqual('invalid_request');
   });
 
   it('rejects user JWT in access token request', async () => {
@@ -319,7 +323,7 @@ describe('oauth/', function() {
       });
     });
 
-    const res = await chai.request(clientServer)
+    const res = await chai.request(clientServer).keepOpen()
       .get('/auth')
       .set('Accept', 'application/json');
 
@@ -327,7 +331,7 @@ describe('oauth/', function() {
     expect(res.status).toEqual(200);
 
     // send the request that the page would send
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
@@ -335,10 +339,10 @@ describe('oauth/', function() {
         state: REQUEST_STATE,
       })}`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(userJWT)));
+      .set(...headerAuth(userJWT));
 
-    expect(err.response.status).toEqual(400);
-    expect(err.response.body.error).toEqual('invalid_grant');
+    expect(err.status).toEqual(400);
+    expect(err.body.error).toEqual('invalid_grant');
   });
 
   it('restricts jwt scope', async () => {
@@ -371,11 +375,11 @@ describe('oauth/', function() {
     expect(res.body.length).toEqual(1);
     expect(res.body[0].href).toEqual('/things/test-1');
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .delete(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(401);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(401);
   });
 
   it('rejects use of authorization code as access token', async () => {
@@ -400,11 +404,11 @@ describe('oauth/', function() {
     const jwt = res.body;
     expect(jwt).toBeTruthy();
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(401);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(401);
   });
 });
 

@@ -1,6 +1,5 @@
 
 const {httpServer, chai} = require('../common');
-const pFinal = require('../promise-final');
 const {TEST_USER, headerAuth} = require('../user');
 const Constants = require('../../constants');
 
@@ -15,15 +14,15 @@ describe('http redirector', function() {
   });
   it('should not redirect an authorization-bearing request', async () => {
     const fakeJwt = 'fakeJwt';
-    const err = await pFinal(chai.request(httpServer)
+    const err = await chai.request(httpServer)
       .get(Constants.THINGS_PATH)
-      .set(...headerAuth(fakeJwt)));
-    expect(err.response.status).toBe(403);
+      .set(...headerAuth(fakeJwt));
+    expect(err.status).toBe(403);
   });
   it('should not redirect a login POST', async () => {
-    const err = await pFinal(chai.request(httpServer)
+    const err = await chai.request(httpServer)
       .post(Constants.LOGIN_PATH)
-      .send(TEST_USER));
-    expect(err.response.status).toBe(403);
+      .send(TEST_USER);
+    expect(err.status).toBe(403);
   });
 });

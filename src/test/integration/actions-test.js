@@ -10,8 +10,6 @@ const {
   headerAuth,
 } = require('../user');
 
-const pFinal = require('../promise-final');
-
 const Constants = require('../../constants');
 
 describe('actions/', function() {
@@ -77,36 +75,36 @@ describe('actions/', function() {
   });
 
   it('should fail to create a new action (empty body)', async () => {
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send());
-    expect(err.response.status).toEqual(400);
+      .send();
+    expect(err.status).toEqual(400);
   });
 
   it('should fail to create a new action (unknown name)', async () => {
     const descr = {
       potato: {},
     };
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(descr));
-    expect(err.response.status).toEqual(400);
+      .send(descr);
+    expect(err.status).toEqual(400);
   });
 
   it('should fail to create a new action (wrong name)', async () => {
     const descr = {
       potato: {},
     };
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(`${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(descr));
-    expect(err.response.status).toEqual(400);
+      .send(descr);
+    expect(err.status).toEqual(400);
   });
 
   it('should fail when plugin rejects requestAction', async () => {
@@ -115,12 +113,12 @@ describe('actions/', function() {
     const descr = {
       rejectRequest: {},
     };
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .post(`${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(descr));
-    expect(err.response.status).toEqual(400);
+      .send(descr);
+    expect(err.status).toEqual(400);
   });
 
   it('should list and retrieve the new action', async () => {
@@ -249,11 +247,11 @@ describe('actions/', function() {
 
   it('should error retrieving a nonexistent action', async () => {
     const actionId = 'foobarmissing';
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .get(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(404);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(404);
   });
 
   it('should remove an action', async () => {
@@ -296,11 +294,11 @@ describe('actions/', function() {
 
   it('should error removing a nonexistent action', async () => {
     const actionId = 555;
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .delete(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(404);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(404);
   });
 
   it('should fail when plugin rejects removeAction', async () => {
@@ -335,11 +333,11 @@ describe('actions/', function() {
 
     const actionHref = res.body[0].rejectRemove.href;
 
-    const err = await pFinal(chai.request(server)
+    const err = await chai.request(server)
       .delete(actionHref)
       .set('Accept', 'application/json')
-      .set(...headerAuth(jwt)));
-    expect(err.response.status).toEqual(400);
+      .set(...headerAuth(jwt));
+    expect(err.status).toEqual(400);
   });
 
   it('should succeed on an unpair of a nonexistent device', async () => {

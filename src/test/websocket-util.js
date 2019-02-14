@@ -10,6 +10,9 @@ const {server} = require('./common');
  * @return {WebSocket}
  */
 async function webSocketOpen(path, jwt) {
+  if (!server.address()) {
+    server.listen(0);
+  }
   const addr = server.address();
   const socketPath =
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
