@@ -9,7 +9,9 @@
  */
 
 const fs = require('fs');
+const CertificateManager = require('./certificate-manager');
 const config = require('config');
+const Deferred = require('./deferred');
 const path = require('path');
 const fetch = require('node-fetch');
 const spawnSync = require('child_process').spawn;
@@ -24,6 +26,9 @@ const TunnelService = {
   pagekiteProcess: null,
   tunneltoken: null,
   switchToHttps: null,
+  connected: new Deferred(),
+  pingInterval: null,
+  renewInterval: null,
 
   /*
    * Router middleware to check if we have a ssl tunnel set.
@@ -78,21 +83,22 @@ const TunnelService = {
                          this.tunneltoken.token}`],
                       {shell: true});
 
-        // TODO: we should replace the hardcoded secret by the token
-        // after change the server
         this.pagekiteProcess.stdout.on('data', (data) => {
           if (DEBUG) {
             console.log(`[pagekite] stdout: ${data}`);
           }
-          if (response) {
-            if (responseSent) {
-              return;
-            }
 
-            if (data.indexOf('err=Error in connect') > -1) {
+          const needToSend = response && !responseSent;
+
+          if (data.indexOf('err=Error in connect') > -1) {
+            this.connected.reject();
+            if (needToSend) {
               responseSent = true;
               response.status(400).end();
-            } else if (data.indexOf('connect=') > -1) {
+            }
+          } else if (data.indexOf('connect=') > -1) {
+            this.connected.resolve();
+            if (needToSend) {
               responseSent = true;
               response.send(urlredirect);
             }
@@ -105,12 +111,20 @@ const TunnelService = {
           console.log(`[pagekite] process exited with code ${code}`);
         });
 
-        // Ping the registration server every hour.
-        const delay = 60 * 60 * 1000;
-        setInterval(() => this.pingRegistrationServer(), delay);
+        this.connected.promise.then(() => {
+          // Ping the registration server every hour.
+          this.pingInterval =
+            setInterval(() => this.pingRegistrationServer(), 60 * 60 * 1000);
 
-        // Enable push service
-        PushService.init(`https://${endpoint}`);
+          // Enable push service
+          PushService.init(`https://${endpoint}`);
+
+          // Try to renew certificates immediately, then daily.
+          CertificateManager.renew().then(() => {
+            this.renewInterval =
+              setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+          });
+        }).catch(() => {});
       } else {
         console.error('tunneltoken not set');
         if (response) {
@@ -129,6 +143,14 @@ const TunnelService = {
 
   // method to stop pagekite process
   stop: function() {
+    if (this.pingInterval !== null) {
+      clearInterval(this.pingInterval);
+    }
+
+    if (this.renewInterval !== null) {
+      clearInterval(this.renewInterval);
+    }
+
     if (this.pagekiteProcess) {
       this.pagekiteProcess.kill('SIGHUP');
     }
@@ -158,11 +180,11 @@ const TunnelService = {
 
   // method to ping the registration server to track active domains
   pingRegistrationServer: function() {
-    fetch(`${config.get('ssltunnel.registration_endpoint')
-    }/ping?token=${this.tunneltoken.token}`)
-      .catch((e) => {
-        console.log('Failed to ping registration server:', e);
-      });
+    const url = `${config.get('ssltunnel.registration_endpoint')}` +
+      `/ping?token=${this.tunneltoken.token}`;
+    fetch(url).catch((e) => {
+      console.log('Failed to ping registration server:', e);
+    });
   },
 };
 
