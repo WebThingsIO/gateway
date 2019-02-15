@@ -80,9 +80,9 @@ describe('settings/', function() {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('architecture');
-    expect(res.body).toHaveProperty('raspberryPi');
+    expect(res.body).toHaveProperty('os');
     expect(res.body.architecture).toEqual(Platform.getArchitecture());
-    expect(res.body.raspberryPi).toEqual(Platform.isRaspberryPi());
+    expect(res.body.os).toEqual(Platform.getOS());
   });
 
   it('Get SSH status', async () => {
