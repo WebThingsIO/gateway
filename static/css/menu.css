@@ -69,6 +69,10 @@
   background-image: url('../optimized-images/rules-icon.png');
 }
 
+#main-menu #logs-menu-item {
+  background-image: url('../optimized-images/logs-icon.png');
+}
+
 @keyframes show-scrim {
   from {
       opacity: 0;
