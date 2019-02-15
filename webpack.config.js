@@ -154,7 +154,7 @@ const webpackWeb = {
       './static/css/rules-common.css',
       './static/css/rules.css',
       './static/css/rule.css',
-      './static/css/graphs.css',
+      './static/css/logs.css',
       './static/css/addons-form.css',
       './node_modules/mobile-drag-drop/default.css',
     ],

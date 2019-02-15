@@ -30,6 +30,7 @@ const Menu = {
     this.items.floorplan = [document.getElementById('floorplan-menu-item')];
     this.items.rules = [document.getElementById('rules-menu-item')];
     this.items.rule = [document.getElementById('rules-menu-item')];
+    this.items.logs = [document.getElementById('logs-menu-item')];
     this.currentItem = 'things';
 
     this.getExperimentSetting('assistant');

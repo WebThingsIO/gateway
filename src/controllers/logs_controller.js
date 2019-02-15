@@ -72,7 +72,7 @@ LogsController.get(`${Constants.THINGS_PATH}/:thingId`, async (request, response
 });
 
 const singlePropertyPath =
-  `${Constants.THINGS_PATH}/:thingId/${Constants.PROPERTIES_PATH}/:propertyName`;
+  `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}/:propertyName`;
 /**
  * Get a historical list of the values of a Thing's property
  */
@@ -81,9 +81,7 @@ LogsController.get(singlePropertyPath, async (request, response) => {
   const propertyName = request.params.propertyName;
   try {
     const values = await Logs.getProperty(thingId, propertyName);
-    const result = {};
-    result[propertyName] = values;
-    response.status(200).json(result);
+    response.status(200).json(values || []);
   } catch (err) {
     response.status(404).send(err);
   }

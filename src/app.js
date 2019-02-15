@@ -37,7 +37,7 @@ const addonManager = require('./addon-manager');
 const Constants = require('./constants');
 const db = require('./db');
 const mDNSserver = require('./mdns-server');
-const metrics = require('./models/metrics');
+const Logs = require('./models/logs');
 const platform = require('./platform');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
@@ -50,7 +50,7 @@ require('./app-instance');
 
 // Open the databases
 db.open();
-metrics.open();
+Logs.open();
 
 const servers = {};
 servers.http = http.createServer();
