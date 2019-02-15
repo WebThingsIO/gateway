@@ -22,6 +22,9 @@ module.exports = {
   addonManager: {
     testAddons: true,
   },
+  database: {
+    removeBeforeOpen: true,
+  },
   ipc: {
     protocol: 'inproc',
   },
