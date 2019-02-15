@@ -234,7 +234,7 @@ SettingsController.get('/addonsInfo', (request, response) => {
 SettingsController.get('/system/platform', (request, response) => {
   response.json({
     architecture: Platform.getArchitecture(),
-    raspberryPi: Platform.isRaspberryPi(),
+    os: Platform.getOS(),
   });
 });
 
