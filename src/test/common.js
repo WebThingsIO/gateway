@@ -12,6 +12,7 @@ process.env.NODE_ENV = 'test';
 
 const Database = require('../db');
 const Actions = require('../models/actions');
+const Events = require('../models/events');
 const mDNSserver = require('../mdns-server');
 const Things = require('../models/things');
 const UserProfile = require('../user-profile');
@@ -119,6 +120,7 @@ afterEach(async () => {
     await adapter.clearState();
   }
   Actions.clearState();
+  Events.clearState();
   Things.clearState();
   await Database.deleteEverything();
 });

@@ -91,16 +91,37 @@ const piDescr = {
       '@type': 'OnOffProperty',
       type: 'boolean',
       value: true,
+      links: [
+        {
+          rel: 'alternate',
+          href: '/properties/power',
+          proxy: true,
+        },
+      ],
     },
   },
   actions: {
     reboot: {
       description: 'Reboot the device',
+      links: [
+        {
+          rel: 'alternate',
+          href: '/actions/reboot',
+          proxy: true,
+        },
+      ],
     },
   },
   events: {
     reboot: {
       description: 'Going down for reboot',
+      links: [
+        {
+          rel: 'alternate',
+          href: '/events/reboot',
+          proxy: true,
+        },
+      ],
     },
   },
 };
@@ -187,9 +208,56 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('name');
     expect(res.body.name).toEqual(thingDescr.name);
+
+    // Fix up links
+    delete thingDescr.properties.power.links[0].proxy;
+    thingDescr.properties.power.links[0].href =
+      `${Constants.PROXY_PATH}/${thingDescr.id}${
+        thingDescr.properties.power.links[0].href}`;
+    thingDescr.properties.power.links.push({
+      rel: 'property',
+      href: `${Constants.THINGS_PATH}/${thingDescr.id}${
+        Constants.PROPERTIES_PATH}/power`,
+    });
+
+    delete thingDescr.actions.reboot.links[0].proxy;
+    thingDescr.actions.reboot.links[0].href =
+      `${Constants.PROXY_PATH}/${thingDescr.id}${
+        thingDescr.actions.reboot.links[0].href}`;
+    thingDescr.actions.reboot.links.push({
+      rel: 'action',
+      href: `${Constants.THINGS_PATH}/${thingDescr.id}${
+        Constants.ACTIONS_PATH}/reboot`,
+    });
+
+    delete thingDescr.events.reboot.links[0].proxy;
+    thingDescr.events.reboot.links[0].href =
+      `${Constants.PROXY_PATH}/${thingDescr.id}${
+        thingDescr.events.reboot.links[0].href}`;
+    thingDescr.events.reboot.links.push({
+      rel: 'event',
+      href: `${Constants.THINGS_PATH}/${thingDescr.id}${
+        Constants.EVENTS_PATH}/reboot`,
+    });
+
     delete thingDescr.id;
     delete thingDescr.properties.power.value;
+
     expect(res.body).toMatchObject(thingDescr);
+  });
+
+  it('GET a thing\'s proxied resources', async () => {
+    const thingDescr = JSON.parse(JSON.stringify(piDescr));
+
+    await addDevice(thingDescr);
+
+    const res = await chai.request(server)
+      .get(`${Constants.PROXY_PATH}/${thingDescr.id}/properties/power`)
+      .set('Accept', 'text/plain')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(res.text).toEqual('GET /properties/power');
   });
 
   it('fail to GET a nonexistent thing', async () => {
@@ -819,7 +887,85 @@ describe('things/', function() {
          messages[1].data[eventASecond.name].data).toEqual(eventASecond.data);
 
        await webSocketClose(ws);
-     });
+     }
+  );
+
+  it('should be able to retrieve events', async () => {
+    await addDevice();
+
+    let res = await chai.request(server)
+      .get(Constants.EVENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
+
+    res = await chai.request(server)
+      .get(`${Constants.EVENTS_PATH}/a`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
+
+    const thingBase = `${Constants.THINGS_PATH}/${TEST_THING.id}`;
+
+    res = await chai.request(server)
+      .get(thingBase + Constants.EVENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
+
+    res = await chai.request(server)
+      .get(`${thingBase}${Constants.EVENTS_PATH}/a`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(0);
+
+    const eventA = new Event('a', 'just a cool event', TEST_THING.id);
+    const eventB = new Event('b', 'just a boring event', TEST_THING.id);
+    await Events.add(eventA);
+    await Events.add(eventB);
+
+    res = await chai.request(server)
+      .get(thingBase + Constants.EVENTS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(2);
+    expect(res.body[0]).toHaveProperty('a');
+    expect(res.body[0].a).toHaveProperty('data');
+    expect(res.body[0].a.data).toBe('just a cool event');
+    expect(res.body[0].a).toHaveProperty('timestamp');
+    expect(res.body[1]).toHaveProperty('b');
+    expect(res.body[1].b).toHaveProperty('data');
+    expect(res.body[1].b.data).toBe('just a boring event');
+    expect(res.body[1].b).toHaveProperty('timestamp');
+
+    res = await chai.request(server)
+      .get(`${thingBase}${Constants.EVENTS_PATH}/a`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0]).toHaveProperty('a');
+    expect(res.body[0].a).toHaveProperty('data');
+    expect(res.body[0].a.data).toBe('just a cool event');
+    expect(res.body[0].a).toHaveProperty('timestamp');
+  });
 
   it('should receive thing\'s action status messages over websocket',
      async () => {

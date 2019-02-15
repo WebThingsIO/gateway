@@ -65,14 +65,18 @@ class Events {
    * Add a new event.
    *
    * @param {Object} event An Event object.
+   * @returns {Promise} Promise which resolves when the event has been added.
    */
   add(event) {
     this.events.push(event);
 
     if (event.thingId) {
-      Things.getThing(event.thingId).then(
-        (thing) => thing.dispatchEvent(event));
+      return Things.getThing(event.thingId).then((thing) => {
+        thing.dispatchEvent(event);
+      });
     }
+
+    return Promise.resolve();
   }
 }
 
