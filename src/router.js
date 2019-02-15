@@ -89,7 +89,7 @@ const Router = {
                  request.get('Upgrade') === 'websocket' ||
                  request.is('multipart/form-data') ||
                  request.path.startsWith(Constants.ADDONS_PATH) ||
-                 request.path.startsWith(Constants.LOGS_PATH)) {
+                 request.path.startsWith(Constants.INTERNAL_LOGS_PATH)) {
         request.url = API_PREFIX + request.url;
         next();
 
@@ -153,8 +153,8 @@ const Router = {
             require('./controllers/addons_controller'));
     app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth,
             require('./rules-engine/index.js'));
-    app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth,
-            require('./controllers/logs_controller'));
+    app.use(API_PREFIX + Constants.INTERNAL_LOGS_PATH, nocache, auth,
+            require('./controllers/internal_logs_controller'));
     app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth,
             require('./controllers/push_controller'));
     app.use(API_PREFIX + Constants.METRICS_PATH, nocache, auth,

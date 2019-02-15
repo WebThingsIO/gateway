@@ -16,7 +16,7 @@ const JSZip = require('jszip');
 const Constants = require('../../constants');
 const UserProfile = require('../../user-profile');
 
-describe('logs/', () => {
+describe('internal-logs/', () => {
   let jwt;
 
   beforeEach(async () => {
@@ -25,9 +25,9 @@ describe('logs/', () => {
                      'hello, world!');
   });
 
-  it('GET logs index', async () => {
+  it('GET internal-logs index', async () => {
     const res = await chai.request(server)
-      .get(Constants.LOGS_PATH)
+      .get(Constants.INTERNAL_LOGS_PATH)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.type).toBe('text/html');
@@ -36,7 +36,7 @@ describe('logs/', () => {
 
   it('GET test.log', async () => {
     const res = await chai.request(server)
-      .get(`${Constants.LOGS_PATH}/files/test.log`)
+      .get(`${Constants.INTERNAL_LOGS_PATH}/files/test.log`)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
     expect(res.type).toBe('text/plain');
@@ -45,7 +45,7 @@ describe('logs/', () => {
 
   it('GET logs.zip', async () => {
     const res = await chai.request(server)
-      .get(`${Constants.LOGS_PATH}/zip`)
+      .get(`${Constants.INTERNAL_LOGS_PATH}/zip`)
       .set(...headerAuth(jwt))
       .buffer()
       .parse((res, cb) => {
