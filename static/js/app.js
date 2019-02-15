@@ -34,6 +34,8 @@ let RulesScreen;
 // eslint-disable-next-line prefer-const
 let RuleScreen;
 // eslint-disable-next-line prefer-const
+let LogsScreen;
+// eslint-disable-next-line prefer-const
 let Speech;
 
 const shaka = require('shaka-player/dist/shaka-player.compiled');
@@ -89,6 +91,8 @@ const App = {
     RulesScreen.init();
     RuleScreen.init();
 
+    LogsScreen.init();
+
     this.views = [];
     this.views.things = document.getElementById('things-view');
     this.views.floorplan = document.getElementById('floorplan-view');
@@ -96,6 +100,7 @@ const App = {
     this.views.rules = document.getElementById('rules-view');
     this.views.rule = document.getElementById('rule-view');
     this.views.assistant = document.getElementById('assistant-view');
+    this.views.logs = document.getElementById('logs-view');
     this.currentView = 'things';
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
@@ -235,6 +240,11 @@ const App = {
     this.selectView('rule');
   },
 
+  showLogs: function() {
+    LogsScreen.show();
+    this.selectView('logs');
+  },
+
   selectView: function(view) {
     if (!this.views[view]) {
       console.error('Tried to select view that didnt exist');
@@ -367,6 +377,7 @@ FloorplanScreen = require('./views/floorplan');
 Router = require('./router');
 RulesScreen = require('./views/rules-screen');
 RuleScreen = require('./views/rule-screen');
+LogsScreen = require('./views/logs-screen');
 Speech = require('./speech');
 
 // load web components
