@@ -157,8 +157,8 @@ const Router = {
             require('./controllers/internal_logs_controller'));
     app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth,
             require('./controllers/push_controller'));
-    app.use(API_PREFIX + Constants.METRICS_PATH, nocache, auth,
-            require('./controllers/metrics_controller'));
+    app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth,
+            require('./controllers/logs_controller'));
 
     app.use(API_PREFIX + Constants.OAUTH_PATH, nocache,
             require('./controllers/oauth_controller').default);
