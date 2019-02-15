@@ -14,12 +14,8 @@ const config = require('config');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const path = require('path');
-const Passwords = require('./passwords');
 const assert = require('assert');
 const UserProfile = require('./user-profile');
-
-// Imported as a module so we use a relative path.
-const ThingsData = require('../static/things.json');
 
 const TABLES = [
   'users',
@@ -48,21 +44,14 @@ const Database = {
 
     // Don't pull this from user-profile.js, because that would cause a
     // circular dependency.
-    let filename;
-    let exists = false;
-    if (process.env.NODE_ENV === 'test') {
-      filename = ':memory:';
-    } else {
-      filename = path.join(UserProfile.configDir, 'db.sqlite3');
+    const filename = path.join(UserProfile.configDir, 'db.sqlite3');
 
-      const removeBeforeOpen = config.get('database.removeBeforeOpen');
-
-      // Check if database already exists
-      exists = fs.existsSync(filename);
-      if (exists && removeBeforeOpen) {
-        fs.unlinkSync(filename);
-        exists = false;
-      }
+    // Check if database already exists
+    let exists = fs.existsSync(filename);
+    const removeBeforeOpen = config.get('database.removeBeforeOpen');
+    if (exists && removeBeforeOpen) {
+      fs.unlinkSync(filename);
+      exists = false;
     }
 
     console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
@@ -138,33 +127,6 @@ const Database = {
    * Populate the database with default data.
    */
   populate: function() {
-    console.log('Populating database with default things...');
-    // Populate Things table
-    const insertSQL = this.db.prepare(
-      'INSERT INTO things (id, description) VALUES (?, ?)');
-    for (const thing of ThingsData) {
-      const thingId = thing.id;
-      delete thing.id;
-      insertSQL.run(thingId, JSON.stringify(thing));
-    }
-    insertSQL.finalize();
-
-    // Add default user if provided
-    const defaultUser = config.get('authentication.defaultUser');
-    if (defaultUser) {
-      const passwordHash = Passwords.hashSync(defaultUser.password);
-      this.db.run(
-        'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
-        [defaultUser.email.toLowerCase(), passwordHash, defaultUser.name],
-        function(error) {
-          if (error) {
-            console.error('Failed to save default user.');
-          } else {
-            console.log(`Saved default user ${defaultUser.email}`);
-          }
-        });
-    }
-
     // Add any settings provided.
     const generateSettings = function(obj, baseKey) {
       const settings = [];
@@ -199,7 +161,8 @@ const Database = {
             console.log(`Saved setting ${setting[0]} = ${
               setting[1]}`);
           }
-        });
+        }
+      );
     }
   },
 

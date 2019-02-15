@@ -8,7 +8,7 @@ const assert = require('assert');
 const Events = require('../Events');
 const Trigger = require('./Trigger');
 
-const DEBUG = false;
+const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 const ops = {
   AND: 'AND',

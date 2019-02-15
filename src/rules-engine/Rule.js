@@ -7,7 +7,7 @@ const effects = require('./effects');
 const triggers = require('./triggers');
 const Events = require('./Events');
 
-const DEBUG = false;
+const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 class Rule {
   /**
