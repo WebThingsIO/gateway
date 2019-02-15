@@ -1,7 +1,7 @@
 /**
- * Logs Controller.
+ * Internal logs Controller.
  *
- * Allows user to download current set of logs.
+ * Allows user to download current set of internal log files.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,6 +12,7 @@
 
 const AddonManager = require('../addon-manager');
 const archiver = require('archiver');
+const Constants = require('../constants');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -20,12 +21,12 @@ const UserProfile = require('../user-profile');
 const Utils = require('../utils');
 const WebSocket = require('ws');
 
-const LogsController = express.Router();
+const InternalLogsController = express.Router();
 
 /**
  * Generate an index of log files.
  */
-LogsController.get('/', async (request, response) => {
+InternalLogsController.get('/', async (request, response) => {
   const jwt = jwtMiddleware.extractJWTHeader(request) ||
     jwtMiddleware.extractJWTQS(request);
   const files = fs.readdirSync(UserProfile.logDir)
@@ -46,7 +47,7 @@ LogsController.get('/', async (request, response) => {
     if (fs.lstatSync(path.join(UserProfile.logDir, name)).isFile()) {
       content +=
         `${'<li>' +
-        `<a href="/logs/files/${encodeURIComponent(name)}?jwt=${jwt}">`}${
+        `<a href="${Constants.INTERNAL_LOGS_PATH}/files/${encodeURIComponent(name)}?jwt=${jwt}">`}${
           Utils.escapeHtml(name)
         }</a>` +
         `</li>`;
@@ -64,7 +65,7 @@ LogsController.get('/', async (request, response) => {
 /**
  * Static handler for log files.
  */
-LogsController.use(
+InternalLogsController.use(
   '/files',
   express.static(
     UserProfile.logDir,
@@ -82,7 +83,7 @@ LogsController.use(
 /**
  * Handle request for logs.zip.
  */
-LogsController.get('/zip', async (request, response) => {
+InternalLogsController.get('/zip', async (request, response) => {
   const archive = archiver('zip');
 
   archive.on('error', (err) => {
@@ -103,7 +104,7 @@ LogsController.get('/zip', async (request, response) => {
   archive.finalize();
 });
 
-LogsController.ws('/', (websocket) => {
+InternalLogsController.ws('/', (websocket) => {
   if (websocket.readyState !== WebSocket.OPEN) {
     return;
   }
@@ -135,4 +136,4 @@ LogsController.ws('/', (websocket) => {
   websocket.on('close', cleanup);
 });
 
-module.exports = LogsController;
+module.exports = InternalLogsController;
