@@ -11,7 +11,7 @@ const {
 } = require('../user');
 
 const Constants = require('../../constants');
-const Metrics = require('../../models/metrics');
+const Logs = require('../../models/logs');
 
 const thingLight1 = {
   id: 'light1',
@@ -41,7 +41,7 @@ const thingLight1 = {
 const thingLight2 = JSON.parse(
   JSON.stringify(thingLight1).replace(/light1/g, 'light2'));
 
-describe('metrics/', function() {
+describe('logs/', function() {
   let jwt;
 
   async function addDevice(desc) {
@@ -66,7 +66,7 @@ describe('metrics/', function() {
 
 
   beforeEach(async () => {
-    Metrics.clear();
+    Logs.clear();
 
     jwt = await createUser(server, TEST_USER);
     await addDevice(thingLight1);
@@ -98,37 +98,37 @@ describe('metrics/', function() {
     return data.value;
   }
 
-  it('gets all metrics', async () => {
+  it('gets all logs', async () => {
     const res = await chai.request(server)
-      .get(Constants.METRICS_PATH)
+      .get(Constants.LOGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    const metrics = res.body;
+    const logs = res.body;
 
-    expect(metrics.light1.on.map(value))
+    expect(logs.light1.on.map(value))
       .toEqual(light1OnValues);
 
-    expect(metrics.light1.brightness.map(value))
+    expect(logs.light1.brightness.map(value))
       .toEqual(light1BriValues);
 
-    expect(metrics.light2.brightness.map(value))
+    expect(logs.light2.brightness.map(value))
       .toEqual(light2BriValues);
   });
 
-  it('gets one device\'s metrics', async () => {
+  it('gets one device\'s logs', async () => {
     const res = await chai.request(server)
-      .get(`${Constants.METRICS_PATH}/things/light1`)
+      .get(`${Constants.LOGS_PATH}/things/light1`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    const metrics = res.body;
+    const logs = res.body;
 
-    expect(metrics.on.map(value))
+    expect(logs.on.map(value))
       .toEqual(light1OnValues);
 
-    expect(metrics.brightness.map(value))
+    expect(logs.brightness.map(value))
       .toEqual(light1BriValues);
   });
 });

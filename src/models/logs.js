@@ -7,7 +7,7 @@ const Constants = require('../constants');
 const Things = require('./things');
 const UserProfile = require('../user-profile');
 
-class Metrics {
+class Logs {
   constructor() {
     this.db = null;
     this.data = {};
@@ -34,7 +34,7 @@ class Metrics {
     if (process.env.NODE_ENV === 'test') {
       filename = ':memory:';
     } else {
-      filename = path.join(UserProfile.logDir, 'metrics.sqlite3');
+      filename = path.join(UserProfile.logDir, 'logs.sqlite3');
 
       // Check if database already exists
       exists = fs.existsSync(filename);
@@ -162,5 +162,5 @@ class Metrics {
   }
 }
 
-module.exports = new Metrics();
+module.exports = new Logs();
 
