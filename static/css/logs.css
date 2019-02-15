@@ -1,0 +1,73 @@
+@media only screen and (max-width: 730px) {
+  #logs-view {
+    background: #5d9bc7;
+  }
+}
+
+#logs-view {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  overflow: auto;
+}
+
+#logs-view h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+}
+
+#logs-view .title-bar {
+  text-align: center;
+  line-height: 9.6rem;
+  height: 9.6rem;
+}
+
+.logs-header {
+  margin: 0 auto;
+  display: inline-block;
+  padding: 0;
+  padding-left: 6.8rem;
+  font-size: 1.8rem;
+  background-size: 3.2rem;
+  background-repeat: no-repeat;
+  background-position: 2rem;
+  background-image: url('../optimized-images/logs-icon.png');
+}
+
+.logs-log-container {
+  position: relative;
+}
+
+.logs-log-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 2rem;
+  width: 12rem;
+  height: 12rem;
+}
+
+.create-log-button {
+  bottom: 2rem;
+  right: 2rem;
+  background-image: url('../optimized-images/add.svg');
+}
+
+.logs-graph-label {
+  stroke: white;
+}
+
+.logs-graph-axes {
+  stroke: white;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.logs-graph-line {
+  stroke: white;
+  stroke-width: 1px;
+  fill: none;
+}
+
+.logs-graph-fill {
+  fill: rgba(255, 255, 255, 0.1);
+}
