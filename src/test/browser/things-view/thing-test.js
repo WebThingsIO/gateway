@@ -14,7 +14,7 @@ const Utils = require(`${STATIC_JS_PATH}/utils`);
 
 
 describe('Thing', () => {
-  it('should render an unknown-thing and be able to change properties',
+  it('should render an unknown thing and be able to change properties',
      async () => {
        const browser = getBrowser();
        const desc = {
