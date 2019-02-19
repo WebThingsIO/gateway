@@ -9,6 +9,7 @@
 'use strict';
 
 const {Adapter, Device, Property} = require('gateway-addon');
+const express = require('express');
 
 class MockProperty extends Property {
   constructor(device, name, propertyDescription) {
@@ -49,6 +50,7 @@ class MockDevice extends Device {
     this['@context'] = deviceDescription['@context'];
     this['@type'] = deviceDescription['@type'];
     this.description = deviceDescription.description;
+    this.baseHref = `http://127.0.0.1:${adapter.port}`;
     for (const propertyName in deviceDescription.properties) {
       const propertyDescription = deviceDescription.properties[propertyName];
       const property =
@@ -92,6 +94,13 @@ class MockAdapter extends Adapter {
   constructor(addonManager, packageName) {
     super(addonManager, packageName, packageName);
     addonManager.addAdapter(this);
+
+    this.port = 12345;
+    this.app = express();
+    this.app.all('/*', (req, rsp) => {
+      rsp.send(`${req.method} ${req.path}`);
+    });
+    this.server = this.app.listen(this.port);
   }
 
   /**
@@ -210,6 +219,11 @@ class MockAdapter extends Adapter {
         reject();
       }
     });
+  }
+
+  unload() {
+    this.server.close();
+    return super.unload();
   }
 }
 

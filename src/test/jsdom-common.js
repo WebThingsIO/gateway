@@ -10,29 +10,19 @@ global.document = document;
 global.window = document.defaultView;
 global.navigator = global.window.navigator;
 
-const strage = {};
+const storage = {};
 global.localStorage = {
   getItem: function(key) {
-    const value = strage[key];
+    const value = storage[key];
     return typeof value === 'undefined' ? null : value;
   },
   setItem: function(key, value) {
-    strage[key] = value;
+    storage[key] = value;
   },
   removeItem: function(key) {
-    return delete strage[key];
+    return delete storage[key];
   },
 };
-
-expect.extend({
-  assert(value, message = 'expected condition to be truthy') {
-    const pass = !!value;
-    return {
-      pass,
-      message,
-    };
-  },
-});
 
 beforeEach(() => {
   global.sandbox = sinon.createSandbox();
