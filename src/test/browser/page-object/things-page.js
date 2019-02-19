@@ -9,10 +9,10 @@ class ThingSection extends Section {
     this.defineElement(
       'clickable',
       [
-        'webthing-light-capability > div',
-        'webthing-multi-level-switch-capability > div',
-        'webthing-on-off-switch-capability > div',
-        'webthing-smart-plug-capability > div',
+        'webthing-light-capability',
+        'webthing-multi-level-switch-capability',
+        'webthing-on-off-switch-capability',
+        'webthing-smart-plug-capability',
       ].join(',')
     );
     this.defineElement(

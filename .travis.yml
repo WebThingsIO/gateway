@@ -19,7 +19,7 @@ env:
     - NODE_TLS_REJECT_UNAUTHORIZED=0
 
 addons:
-  firefox: "62.0"
+  firefox: latest
   apt:
     sources:
       - ubuntu-toolchain-r-test

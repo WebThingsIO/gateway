@@ -1,51 +1,49 @@
 const {Page, Section} = require('./elements');
-const BACKSPACE_UNICODE = '\uE003';
-const ENTER_UNICODE = '\uE007';
-const ARROW_UP_UNICODE = '\uE013';
-const ARROW_DOWN_UNICODE = '\uE015';
 
 class InputPropertySection extends Section {
-  constructor(browser, rootElement) {
-    super(browser, rootElement);
-    this.defineElement('input', 'input');
-    this.defineElement('label', 'label');
-    this.defineElement('form', 'form');
-  }
-
   async getId() {
     return await this.rootElement.getProperty('id');
-  }
-
-  async getInputId() {
-    const input = await this.input();
-    return await input.getProperty('id');
-  }
-
-  async getValue() {
-    const input = await this.input();
-    return await input.getProperty('value');
-  }
-
-  async setValue(value) {
-    let text = await this.getValue();
-    if (typeof text !== 'string') {
-      text = text.toString();
-    }
-    const keys = [];
-    for (let i = 0; i < text.length; i++) {
-      keys.push(BACKSPACE_UNICODE);
-    }
-    keys.push(value);
-    keys.push(ENTER_UNICODE);
-    const input = await this.input();
-    await input.setValue(keys.join(''));
   }
 }
 
 class ColorPropertySection extends InputPropertySection {
+  async setValue(value) {
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-color-property');
+      const input = root.shadowRoot.querySelector('input[type="color"]');
+      input.focus();
+      input.value = \`${value}\`;
+      input.blur();
+    `);
+  }
+
+  async getValue() {
+    return await this.browser.execute(`
+      const el = document.querySelector('webthing-color-property');
+      return el.value;
+    `);
+  }
 }
 
 class ColorTemperaturePropertySection extends InputPropertySection {
+  async setValue(value) {
+    value = Number(value);
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-color-temperature-property');
+      const input = root.shadowRoot.querySelector('input[type="number"]');
+      input.focus();
+      input.value = ${value};
+      input.blur();
+    `);
+  }
+
+  async getValue() {
+    const val = await this.browser.execute(`
+      const el = document.querySelector('webthing-color-temperature-property');
+      return el.value;
+    `);
+    return Number(val);
+  }
 }
 
 class LabelPropertySection extends Section {
@@ -58,64 +56,53 @@ class LabelPropertySection extends Section {
 
 class BrightnessPropertySection extends InputPropertySection {
   async setValue(value) {
-    const current = await this.getValue();
-    const diff = value - current;
-    let key;
-    if (diff > 0) {
-      key = ARROW_UP_UNICODE;
-    } else {
-      key = ARROW_DOWN_UNICODE;
-    }
-    const keys = [];
-    const stroke = Math.abs(diff);
-    for (let i = 0; i < stroke; i++) {
-      keys.push(key);
-    }
-    const input = await this.input();
-    await input.setValue(keys.join(''));
+    value = Number(value);
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-brightness-property');
+      const input = root.shadowRoot.querySelector('input[type="range"]');
+      input.value = ${value};
+      input.dispatchEvent(new Event('change'));
+    `);
   }
 
   async getValue() {
-    const stringValue = await super.getValue();
-    return Number(stringValue);
+    const val = await this.browser.execute(`
+      const el = document.querySelector('webthing-brightness-property');
+      return el.value;
+    `);
+    return Number(val);
   }
 }
 
 class LevelPropertySection extends InputPropertySection {
-  constructor(browser, rootElement) {
-    super(browser, rootElement);
-    this.defineElement('slider', '#slider-level-6');
-  }
-
   async setValue(value) {
-    const current = await this.getValue();
-    const diff = value - current;
-    let key;
-    if (diff > 0) {
-      key = ARROW_UP_UNICODE;
-    } else {
-      key = ARROW_DOWN_UNICODE;
-    }
-    const keys = [];
-    const stroke = Math.abs(diff);
-    for (let i = 0; i < stroke; i++) {
-      keys.push(key);
-    }
-    const slider = await this.slider();
-    await slider.addValue(keys.join(''));
+    value = Number(value);
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-level-property');
+      const input = root.shadowRoot.querySelector('input[type="number"]');
+      input.focus();
+      input.value = ${value};
+      input.blur();
+    `);
   }
 
   async getValue() {
-    const slider = await this.slider();
-    return Number(await slider.getProperty('value'));
+    const val = await this.browser.execute(`
+      const el = document.querySelector('webthing-level-property');
+      return el.value;
+    `);
+    return Number(val);
   }
 }
 
 class OnOffPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
-    const element = await this.label();
-    await element.click();
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-on-off-property');
+      const label = root.shadowRoot.querySelector('label');
+      label.click();
+    `);
   }
 
   async waitForClickable() {
@@ -129,16 +116,21 @@ class OnOffPropertySection extends InputPropertySection {
   }
 
   async getValue() {
-    const input = await this.input();
-    return await input.isSelected();
+    return await this.browser.execute(`
+      const el = document.querySelector('webthing-on-off-property');
+      return el.value;
+    `);
   }
 }
 
 class BooleanPropertySection extends InputPropertySection {
   async click() {
     await this.waitForClickable();
-    const element = await this.label();
-    await element.click();
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-boolean-property');
+      const label = root.shadowRoot.querySelector('label');
+      label.click();
+    `);
   }
 
   async waitForClickable() {
@@ -152,25 +144,50 @@ class BooleanPropertySection extends InputPropertySection {
   }
 
   async getValue() {
-    const input = await this.input();
-    return await input.isSelected();
+    return await this.browser.execute(`
+      const el = document.querySelector('webthing-boolean-property');
+      return el.value;
+    `);
   }
 }
 
 class StringPropertySection extends InputPropertySection {
-}
-
-class NumberPropertySection extends InputPropertySection {
-  async setValue(number) {
-    if (typeof number !== 'string') {
-      number = number.toString();
-    }
-    await super.setValue(number);
+  async setValue(value) {
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-string-property');
+      const input = root.shadowRoot.querySelector('input[type="text"]');
+      input.focus();
+      input.value = \`${value}\`;
+      input.blur();
+    `);
   }
 
   async getValue() {
-    const stringValue = await super.getValue();
-    return Number(stringValue);
+    return await this.browser.execute(`
+      const el = document.querySelector('webthing-string-property');
+      return el.value;
+    `);
+  }
+}
+
+class NumberPropertySection extends InputPropertySection {
+  async setValue(value) {
+    value = Number(value);
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-number-property');
+      const input = root.shadowRoot.querySelector('input[type="number"]');
+      input.focus();
+      input.value = ${value};
+      input.blur();
+    `);
+  }
+
+  async getValue() {
+    const val = await this.browser.execute(`
+      const el = document.querySelector('webthing-number-property');
+      return el.value;
+    `);
+    return Number(val);
   }
 }
 
