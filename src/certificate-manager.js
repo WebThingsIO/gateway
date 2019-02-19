@@ -193,8 +193,10 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
 /**
  * Try to renew the certificates associated with this domain.
+ *
+ * @param {Object} server - HTTPS server handle
  */
-async function renew() {
+async function renew(server) {
   if (DEBUG) {
     console.debug('Starting renewal.');
   }
@@ -259,6 +261,13 @@ async function renew() {
     }
 
     writeCertificates(results);
+
+    if (server) {
+      const ctx = server._sharedCreds.context;
+      ctx.setCert(results.cert);
+      ctx.setKey(results.privkey);
+      ctx.addCACert(results.chain);
+    }
   } catch (err) {
     console.error('Renewal failed:', err);
   }

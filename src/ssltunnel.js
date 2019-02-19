@@ -29,6 +29,7 @@ const TunnelService = {
   connected: new Deferred(),
   pingInterval: null,
   renewInterval: null,
+  server: null,
 
   /*
    * Router middleware to check if we have a ssl tunnel set.
@@ -63,6 +64,11 @@ const TunnelService = {
       response.render('tunnel_setup',
                       {domain: config.get('ssltunnel.domain')});
     }
+  },
+
+  // Set a handle for the running https server, used when renewing certificates
+  setServerHandle: function(server) {
+    this.server = server;
   },
 
   // method that starts the client if the box has a registered tunnel
@@ -120,9 +126,10 @@ const TunnelService = {
           PushService.init(`https://${endpoint}`);
 
           // Try to renew certificates immediately, then daily.
-          CertificateManager.renew().then(() => {
-            this.renewInterval =
-              setInterval(CertificateManager.renew, 24 * 60 * 60 * 1000);
+          CertificateManager.renew(this.server).then(() => {
+            this.renewInterval = setInterval(() => {
+              CertificateManager.renew(this.server);
+            }, 24 * 60 * 60 * 1000);
           });
         }).catch(() => {});
       } else {
