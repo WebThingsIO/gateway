@@ -16,6 +16,7 @@ const CertificateManager = require('../certificate-manager');
 const config = require('config');
 const fetch = require('node-fetch');
 const mDNSserver = require('../mdns-server');
+const NetworkManager = require('../network-manager');
 const Platform = require('../platform');
 const pkg = require('../../package.json');
 const PromiseRouter = require('express-promise-router');
@@ -284,6 +285,47 @@ SettingsController.post('/system/actions', (request, response) => {
     default:
       response.status(400).send('Unsupported action');
       break;
+  }
+});
+
+SettingsController.get('/network/wan', (request, response) => {
+  response.json(NetworkManager.getWanMode());
+});
+
+SettingsController.put('/network/wan', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('mode')) {
+    response.status(400).send('Missing mode property');
+    return;
+  }
+
+  const mode = request.body.mode;
+  const options = request.body.options;
+
+  if (NetworkManager.setWanMode(mode, options)) {
+    response.status(200).end();
+  } else {
+    response.status(500).send('Failed to update WAN configuration');
+  }
+});
+
+SettingsController.get('/network/wireless', (request, response) => {
+  response.json(NetworkManager.getWirelessMode());
+});
+
+SettingsController.put('/network/wireless', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Missing enabled property');
+    return;
+  }
+
+  const enabled = request.body.enabled;
+  const mode = request.body.mode;
+  const options = request.body.options;
+
+  if (NetworkManager.setWirelessMode(enabled, mode, options)) {
+    response.status(200).end();
+  } else {
+    response.status(500).send('Failed to update wireless configuration');
   }
 });
 
