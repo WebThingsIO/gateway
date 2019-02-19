@@ -112,7 +112,7 @@ function startHttpsGateway() {
     });
   }));
 
-  return Promise.all(promises);
+  return Promise.all(promises).then(() => servers.https);
 }
 
 function startHttpGateway() {
@@ -307,9 +307,10 @@ function startGateway() {
         return startHttpGateway();
       }
 
-      return startHttpsGateway().then(() => {
+      return startHttpsGateway().then((server) => {
         TunnelService.hasTunnelToken().then(function(result) {
           if (result) {
+            TunnelService.setServerHandle(server);
             TunnelService.start();
           }
         });
@@ -341,7 +342,9 @@ if (config.get('cli')) {
 // function to stop running server and start https
 TunnelService.switchToHttps = function() {
   stopHttpGateway();
-  startHttpsGateway();
+  startHttpsGateway().then((server) => {
+    TunnelService.setServerHandle(server);
+  });
 };
 
 // This part starts our Service Discovery process.
