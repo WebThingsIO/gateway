@@ -96,10 +96,11 @@ class Log {
       return;
     }
     const thingName = thing.name;
-    const propertyName = thing.propertyDescriptions[this.propertyId].title;
+    this.property = thing.propertyDescriptions[this.propertyId];
+    const propertyName = this.property.title;
     this.name.textContent = `${thingName} ${propertyName}`;
 
-    const propertyUnit = thing.propertyDescriptions[this.propertyId].unit || '';
+    const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
 
     const res = await fetch(`/logs/things/${this.thingId}/properties/${this.propertyId}`, {
@@ -119,6 +120,26 @@ class Log {
   }
 
   valueBounds() {
+    if (this.property.unit === 'percent') {
+      return {
+        min: 0,
+        max: 100,
+      };
+    }
+    if (this.property.hasOwnProperty('minimum') &&
+        this.property.hasOwnProperty('maximum')) {
+      return {
+        min: this.property.minimum,
+        max: this.property.maximum,
+      };
+    }
+    if (this.property.type === 'boolean') {
+      return {
+        min: 0,
+        max: 1,
+      };
+    }
+
     if (this.rawPoints.length === 0) {
       return {min: 0, max: 1};
     }
@@ -142,6 +163,10 @@ class Log {
 
 
   redrawLog() {
+    if (!this.property) {
+      return;
+    }
+
     const bounds = this.valueBounds();
     const yMin = Math.min(0, bounds.min);
     const yMax = bounds.max;
@@ -192,12 +217,20 @@ class Log {
       yMinLabel = Math.floor(yMinLabel);
     }
 
-    let label = this.makeText(yMinLabel, this.xStart - this.margin / 4,
+    let labelText = `${yMinLabel}`;
+    if (this.property.type === 'boolean') {
+      labelText = this.propertyLabel(false);
+    }
+    let label = this.makeText(labelText, this.xStart - this.margin / 4,
                               yScale(yMinLabel), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
-    label = this.makeText(yMaxLabel, this.xStart - this.margin / 4,
+    labelText = `${yMaxLabel}`;
+    if (this.property.type === 'boolean') {
+      labelText = this.propertyLabel(true);
+    }
+    label = this.makeText(labelText, this.xStart - this.margin / 4,
                           yScale(yMaxLabel), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
@@ -216,6 +249,30 @@ class Log {
 
       xLabel += oneDayMs;
     }
+  }
+
+  /**
+   * Return a label for a property's value
+   */
+  propertyLabel(value) {
+    if (this.property.type === 'boolean') {
+      switch (this.property['@type']) {
+        case 'OnOffProperty':
+          return value ? 'ON' : 'OFF';
+        case 'MotionProperty':
+          return value ? 'MOTION' : 'NO MOTION';
+        case 'OpenProperty':
+          return value ? 'OPEN' : 'CLOSED';
+        case 'LeakProperty':
+          return value ? 'LEAK' : 'DRY';
+        case 'PushedProperty':
+          return value ? 'PUSHED' : 'NOT PUSHED';
+        case 'BooleanProperty':
+        default:
+          return value ? 'TRUE' : 'FALSE';
+      }
+    }
+    return `${value}`;
   }
 
   /**
