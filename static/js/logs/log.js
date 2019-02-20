@@ -183,12 +183,21 @@ class Log {
         this.xStart;
     };
 
-    const points = this.rawPoints.map((raw) => {
-      return {
-        x: xScale(raw.date.getTime()),
-        y: yScale(raw.value),
-      };
-    });
+    const points = [];
+    for (let i = 0; i < this.rawPoints.length; i++) {
+      const raw = this.rawPoints[i];
+      const x = xScale(raw.date.getTime());
+      const y = yScale(raw.value);
+      // Add a point so that the value steps down instead of gradually
+      // decreasing
+      if (i > 0 && x - points[i - 1].x > 5) {
+        points.push({
+          x,
+          y: points[i - 1].y,
+        });
+      }
+      points.push({x, y});
+    }
 
     if (points.length > 0) {
       const graphLine = this.makePath(points);
