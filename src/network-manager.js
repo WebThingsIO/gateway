@@ -11,8 +11,36 @@
 const child_process = require('child_process');
 const Platform = require('./platform');
 
-function stripQuotes(str) {
-  return str.replace(/^'+/, '').replace(/'+$/, '');
+/**
+ * Run `uci show {what}` and parse the output.
+ *
+ * @param {string} what - The thing to show
+ * @returns {Object} {success: ..., pairs: {key: value, ...}}
+ */
+function uciShow(what) {
+  let success = false;
+  const pairs = {};
+
+  const proc = child_process.spawnSync(
+    'uci',
+    ['show', what],
+    {encoding: 'utf8'}
+  );
+
+  success = proc.status === 0;
+
+  for (const line of proc.stdout.split('\n')) {
+    if (line.indexOf('=') < 0) {
+      continue;
+    }
+
+    const [key, value] = line.split('=', 2).map((s) => {
+      return s.replace(/^'+/, '').replace(/'+$/, '');
+    });
+    pairs[key] = value;
+  }
+
+  return {success, pairs};
 }
 
 /**
@@ -26,22 +54,12 @@ function getWanMode() {
 
   switch (Platform.getOS()) {
     case 'linux-openwrt': {
-      const proc = child_process.spawnSync(
-        'uci',
-        ['show', 'network.wan'],
-        {encoding: 'utf8'}
-      );
-      if (proc.status !== 0) {
+      const result = uciShow('network.wan');
+      if (!result.success) {
         return {mode, options};
       }
 
-      for (const line of proc.stdout.split('\n')) {
-        if (line.indexOf('=') < 0) {
-          continue;
-        }
-
-        const [key, value] = line.split('=', 2).map((s) => stripQuotes(s));
-
+      for (const [key, value] of Object.entries(result.pairs)) {
         // discard network.wan=interface
         if (!key.startsWith('network.wan.')) {
           continue;
@@ -115,24 +133,14 @@ function getWirelessMode() {
 
   switch (Platform.getOS()) {
     case 'linux-openwrt': {
-      let proc = child_process.spawnSync(
-        'uci',
-        ['show', 'wireless'],
-        {encoding: 'utf8'}
-      );
-      if (proc.status !== 0) {
+      let result = uciShow('wireless');
+      if (!result.success) {
         return {enabled, mode, options};
       }
 
       let device = null;
       let iface = null;
-      for (const line of proc.stdout.split('\n')) {
-        if (line.indexOf('=') < 0) {
-          continue;
-        }
-
-        const [key, value] = line.split('=', 2).map((s) => stripQuotes(s));
-
+      for (const [key, value] of Object.entries(result.pairs)) {
         // we're just looking for things like wireless.@wifi-iface[1].device
         if (key.endsWith('.device')) {
           iface = key.split('.device')[0];
@@ -145,33 +153,20 @@ function getWirelessMode() {
         return {enabled, mode, options};
       }
 
-      proc = child_process.spawnSync(
-        'uci',
-        ['show', `wireless.${device}.disabled`],
-        {encoding: 'utf8'}
-      );
-      if (proc.status !== 0) {
+      const key = `wireless.${device}.disabled`;
+      result = uciShow(key);
+      if (!result.success) {
         return {enabled, mode, options};
       }
 
-      enabled = proc.stdout.split('\n')[0].split('=')[1] === 0;
+      enabled = result.pairs[key] === 0;
 
-      proc = child_process.spawnSync(
-        'uci',
-        ['show', iface],
-        {encoding: 'utf8'}
-      );
-      if (proc.status !== 0) {
+      result = uciShow(iface);
+      if (!result.success) {
         return {enabled, mode, options};
       }
 
-      for (const line of proc.stdout.split('\n')) {
-        if (line.indexOf('=') < 0) {
-          continue;
-        }
-
-        const [key, value] = line.split('=', 2).map((s) => stripQuotes(s));
-
+      for (const [key, value] of Object.entries(result.pairs)) {
         // discard wireless.wifi-iface[0]=wifi-iface
         if (key.split('.').length <= 2) {
           continue;
@@ -200,23 +195,13 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
 
   switch (Platform.getOS()) {
     case 'linux-openwrt': {
-      let proc = child_process.spawnSync(
-        'uci',
-        ['show', 'wireless'],
-        {encoding: 'utf8'}
-      );
-      if (proc.status !== 0) {
+      const result = uciShow('wireless');
+      if (!result.success) {
         return false;
       }
 
       const ifaces = new Map();
-      for (const line of proc.stdout.split('\n')) {
-        if (line.indexOf('=') < 0) {
-          continue;
-        }
-
-        const [key, value] = line.split('=', 2).map((s) => stripQuotes(s));
-
+      for (const [key, value] of Object.entries(result.pairs)) {
         // we're just looking for things like wireless.@wifi-iface[1].device
         if (!key.endsWith('.device')) {
           continue;
@@ -227,7 +212,7 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
 
       for (const iface of ifaces.keys()) {
         const device = ifaces.get(iface);
-        proc = child_process.spawnSync(
+        let proc = child_process.spawnSync(
           'uci',
           ['set', `wireless.${device}.disabled=${enabled ? '0' : '1'}`]
         );
@@ -256,7 +241,7 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
         }
       }
 
-      proc = child_process.spawnSync('uci', ['commit', 'wireless']);
+      let proc = child_process.spawnSync('uci', ['commit', 'wireless']);
       if (proc.status !== 0) {
         return false;
       }
