@@ -17,6 +17,7 @@ const LogsScreen = {
     this.logsContainer = this.view.querySelector('.logs');
     this.logs = [
       new Log('virtual-things-2', 'level'),
+      new Log('virtual-things-2', 'on'),
       new Log('weather-8b8f279cfcc42b05f2b3cdfd4b0c7f9c5eac5b18',
               'temperature'),
       new Log('philips-hue-001788fffe4f2113-sensors-2',
