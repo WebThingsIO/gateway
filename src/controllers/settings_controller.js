@@ -288,6 +288,26 @@ SettingsController.post('/system/actions', (request, response) => {
   }
 });
 
+SettingsController.get('/network/lan', (request, response) => {
+  response.json(NetworkManager.getLanMode());
+});
+
+SettingsController.put('/network/lan', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('mode')) {
+    response.status(400).send('Missing mode property');
+    return;
+  }
+
+  const mode = request.body.mode;
+  const options = request.body.options;
+
+  if (NetworkManager.setLanMode(mode, options)) {
+    response.status(200).end();
+  } else {
+    response.status(500).send('Failed to update LAN configuration');
+  }
+});
+
 SettingsController.get('/network/wan', (request, response) => {
   response.json(NetworkManager.getWanMode());
 });

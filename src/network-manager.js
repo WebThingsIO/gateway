@@ -44,6 +44,89 @@ function uciShow(what) {
 }
 
 /**
+ * Get the LAN mode and options.
+ *
+ * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
+ */
+function getLanMode() {
+  let mode = null;
+  const options = {};
+
+  switch (Platform.getOS()) {
+    case 'linux-openwrt': {
+      const result = uciShow('network.lan');
+      if (!result.success) {
+        return {mode, options};
+      }
+
+      for (const [key, value] of Object.entries(result.pairs)) {
+        // discard network.lan=interface
+        if (!key.startsWith('network.lan.')) {
+          continue;
+        }
+
+        const opt = key.split('network.lan.')[1];
+        if (opt === 'proto') {
+          mode = value;
+        } else {
+          options[opt] = value;
+        }
+      }
+
+      return {mode, options};
+    }
+    default:
+      return {mode, options};
+  }
+}
+
+/**
+ * Set the LAN mode and options.
+ *
+ * @param {string} mode - static, dhcp, ...
+ * @param {Object?} options - options specific to LAN mode
+ * @returns {boolean} Boolean indicating success.
+ */
+function setLanMode(mode, options = {}) {
+  const valid = ['static', 'dhcp'];
+  if (!valid.includes(mode)) {
+    return false;
+  }
+
+  switch (Platform.getOS()) {
+    case 'linux-openwrt': {
+      let proc = child_process.spawnSync(
+        'uci',
+        ['set', `network.lan.proto=${mode}`]
+      );
+      if (proc.status !== 0) {
+        return false;
+      }
+
+      for (const [key, value] of Object.entries(options)) {
+        proc = child_process.spawnSync(
+          'uci',
+          ['set', `network.lan.${key}=${value}`]
+        );
+        if (proc.status !== 0) {
+          return false;
+        }
+      }
+
+      proc = child_process.spawnSync('uci', ['commit', 'network']);
+      if (proc.status !== 0) {
+        return false;
+      }
+
+      proc = child_process.spawnSync('/etc/init.d/network', ['reload']);
+      return proc.status === 0;
+    }
+    default:
+      return false;
+  }
+}
+
+/**
  * Get the WAN mode and options.
  *
  * @returns {Object} {mode: 'static|dhcp|pppoe|...', options: {...}}
@@ -126,6 +209,11 @@ function setWanMode(mode, options = {}) {
   }
 }
 
+/**
+ * Get the wireless mode and options.
+ *
+ * @returns {Object} {enabled: true|false, mode: 'ap|sta|...', options: {...}}
+ */
 function getWirelessMode() {
   let enabled = false;
   let mode = null;
@@ -187,6 +275,14 @@ function getWirelessMode() {
   }
 }
 
+/**
+ * Set the wireless mode and options.
+ *
+ * @param {boolean} enabled - whether or not wireless is enabled
+ * @param {string} mode - ap, sta, ...
+ * @param {Object?} options - options specific to wireless mode
+ * @returns {boolean} Boolean indicating success.
+ */
 function setWirelessMode(enabled, mode = 'ap', options = {}) {
   const valid = ['ap', 'sta'];
   if (enabled && !valid.includes(mode)) {
@@ -259,6 +355,8 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
 }
 
 module.exports = {
+  getLanMode,
+  setLanMode,
   getWanMode,
   setWanMode,
   getWirelessMode,
