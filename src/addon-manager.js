@@ -470,6 +470,28 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method addonEnabled
+   *
+   * Determine whether the add-on with the given package name is enabled.
+   *
+   * @param {string} packageName The package name of the add-on
+   * @returns {boolean} Boolean indicating enabled status.
+   */
+  async addonEnabled(packageName) {
+    const key = `addons.${packageName}`;
+    try {
+      const savedSettings = await Settings.get(key);
+      if (savedSettings && savedSettings.moziot) {
+        return savedSettings.moziot.enabled;
+      }
+
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /**
    * @method loadAddon
    *
    * Loads add-on with the given package name.
