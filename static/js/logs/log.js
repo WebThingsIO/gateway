@@ -154,7 +154,10 @@ class Log {
         min = value;
       }
     }
-    const margin = 0.1 * (max - min);
+    let margin = 0.1 * (max - min);
+    if (this.rawPoints.length === 1 || min === max) {
+      margin = 1;
+    }
     return {
       min: min - margin,
       max: max + margin,
