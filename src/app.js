@@ -37,7 +37,8 @@ const db = require('./db');
 const mDNSserver = require('./mdns-server');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
-const {wifi, wifiSetupApp} = require('./wifi-setup');
+const wifi = require('./wifi-setup/wifi');
+const wifiSetupApp = require('./wifi-setup/app');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/addons/plugin/ipc.js)

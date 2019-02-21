@@ -2,60 +2,43 @@ const config = require('config');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const run = require('./run.js');
-const platform = require('./platform.js');
+const platform = require('./platform');
 
-exports.getStatus = getStatus;
-exports.getConnectedNetwork = getConnectedNetwork;
-exports.scan = scan;
-exports.startAP = startAP;
-exports.stopAP = stopAP;
-exports.defineNetwork = defineNetwork;
-exports.removeNetwork = removeNetwork;
-exports.getKnownNetworks = getKnownNetworks;
-exports.checkConnection = checkConnection;
-exports.waitForWiFi = waitForWiFi;
-
-// The Edison device can't scan for wifi networks while in AP mode, so
-// we've got to scan before we enter AP mode and save the results. They're a
-// global variable because this code needs to ship
-exports.preliminaryScanResults = [];
-
+module.exports = {
+  getStatus,
+  scan,
+  startAP,
+  stopAP,
+  defineNetwork,
+  removeNetwork,
+  getKnownNetworks,
+  checkConnection,
+  waitForWiFi,
+  preliminaryScanResults: [],
+};
 
 /**
- * Determine whether we have a wifi connection with the `wpa_cli
- * status` command. This function returns a Promise that resolves to a
- * string.  On my Rasberry Pi, the string is "DISCONNECTED" or
- * "INACTIVE" when there is no connection and is "COMPLETED" when
- * there is a connection. There are other possible string values when
- * a connection is being established
+ * Get wifi connection status.
+ *
+ * @returns {object} {connected: true|false, ssid: '...'}
  */
 function getStatus() {
-  return run(platform.getStatus);
+  return platform.getStatus();
 }
 
 /**
- * Determine the ssid of the wifi network we are connected to.
- * This function returns a Promise that resolves to a string.
- * The string will be empty if not connected.
- */
-function getConnectedNetwork() {
-  return run(platform.getConnectedNetwork);
-}
-
-/**
- * Scan for available wifi networks using `iwlist wlan0 scan`.
- * Returns a Promise that resolves to an array of strings. Each string
- * is the ssid of a wifi network. They are sorted by signal strength from
- * strongest to weakest. On a Raspberry Pi, a scan seems to require root
- * privileges.
+ * Scan for available wifi networks.
  *
- * On a Raspberry Pi 3, this function works when the device is in AP mode.
- * The Intel Edison, however, cannot scan while in AP mode: iwlist fails
- * with an error. iwlist sometimes also fails with an error when the
- * hardware is busy, so this function will try multiple times if you
- * pass a number. If all attempts fail, the promise is resolved to
- * an empty array.
+ * @param {number?} numAttempts - Number of previous attempts to scan
+ * @returns {Object[]} List of networks:
+ *                     [
+ *                       {
+ *                         ssid: '...',
+ *                         quality: ...,
+ *                         encryption: true|false
+ *                       },
+ *                       ...
+ *                     ]
  */
 function scan(numAttempts) {
   numAttempts = numAttempts || 1;
@@ -65,102 +48,79 @@ function scan(numAttempts) {
     function tryScan() {
       attempts++;
 
-      _scan()
-        .then((out) => {
-          resolve(out.length ? out.split('\n') : []);
-        })
-        .catch((err) => {
-          console.error('Scan attempt', attempts, 'failed:',
-                        err.message || err);
+      const results = platform.scan();
+      if (results.length > 0) {
+        resolve(results);
+      } else {
+        console.error('Scan attempt', attempts, 'failed');
 
-          if (attempts >= numAttempts) {
-            console.error('Giving up. No scan results available.');
-            resolve([]);
-          } else {
-            console.error('Will try again in 3 seconds.');
-            setTimeout(tryScan, 3000);
-          }
-        });
+        if (attempts >= numAttempts) {
+          console.error('Giving up. No scan results available.');
+          resolve([]);
+        } else {
+          console.error('Will try again in 3 seconds.');
+          setTimeout(tryScan, 3000);
+        }
+      }
     }
 
     tryScan();
   });
-
-  function _scan() {
-    return run(platform.scan);
-  }
 }
 
 /**
  * Enable an access point that users can connect to to configure the device.
  *
- * This command runs different commands on Raspbery Pi Rasbian and Edison Yocto.
- *
- * It requires that hostapd and udhcpd are installed on the system but not
+ * This requires that hostapd and udhcpd are installed on the system but not
  * enabled, so that they do not automatically run when the device boots up.
- * It also requires that hostapd and udhcpd have appropriate config files
- * that define the ssid for the wifi network to be created, for example.
+ * This also requires that hostapd and udhcpd have appropriate config files
+ * that define the SSID for the wifi network to be created, for example.
  * Also, the udhcpd config file should be set up to work with the IP address
  * of the device.
  *
- * XXX
- * It would probably be better if the IP address, SSID and password were
- * options to this function rather than being hardcoded in system config
- * files. (Each device ought to be able to add a random number to its
- * SSID, for example, so that when you've got multiple devices they don't
- * all try to create the same network).
- *
- * This function returns a Promise that resolves when the necessary
- * commands have been run.  This does not necessarily mean that the AP
- * will be functional, however. The setup process might take a few
- * seconds to complete before the user will be able to see and connect
- * to the network.
+ * @returns {boolean} Boolean indicating success of the command.
  */
 function startAP(ip) {
-  return run(platform.startAP, {IP: ip});
+  return platform.startAP(ip);
 }
 
 /**
- * Like startAP(), but take the access point down, using platform-dependent
- * commands.
+ * Stop the running access point.
  *
- * Returns a promise that resolves when the commands have been run. At
- * this point, the AP should be in the process of stopping but may not
- * yet be completely down.
+ * @returns {boolean} Boolean indicating success of the command.
  */
 function stopAP() {
-  return run(platform.stopAP);
+  return platform.stopAP();
 }
 
 /**
- * This function uses wpa_cli to add the specified network ssid and password
- * to the wpa_supplicant.conf file. This assumes that wpa_supplicant is
- * configured to run automatically at boot time and is configured to work
- * with wpa_cli.
+ * Define a new network and connect to it.
  *
- * If the system is not connected to a wifi network, calling this
- * command with a valid ssid and password should cause it to connect.
+ * @param {string} ssid - SSID to configure
+ * @param {string?} psk - PSK to configure
+ * @returns {boolean} Boolean indicating success of the command.
  */
 function defineNetwork(ssid, password) {
-  return run(password ? platform.defineNetwork : platform.defineOpenNetwork, {
-    SSID: ssid,
-    PSK: password,
-  });
+  return platform.defineNetwork(ssid, password);
 }
 
 /**
- * This function uses wpa_cli to remove the network with the given ID.
+ * Remove a configured network.
+ *
+ * @param {number} id - ID of network
+ * @returns {boolean} Boolean indicating success of the command.
  */
 function removeNetwork(id) {
-  return run(platform.removeNetwork, {ID: id});
+  return platform.removeNetwork(id);
 }
 
 /**
- * Return a Promise that resolves to an array of known wifi network names
+ * Get a list of configured networks.
+ *
+ * @returns {String[]} List of network names.
  */
 function getKnownNetworks() {
-  return run(platform.getKnownNetworks)
-    .then((out) => out.length ? out.split('\n') : []);
+  return platform.getKnownNetworks();
 }
 
 function checkConnection() {
@@ -171,28 +131,22 @@ function checkConnection() {
     return Promise.resolve(true);
   }
 
-  return getStatus().then(() => {
-    // Wait until we have a working wifi connection. Retry every 3 seconds up
-    // to 10 times. If we are connected, then start the Gateway client.
-    // If we never get a wifi connection, go into AP mode.
-    // Before we start, though, let the user know that something is happening
-    return waitForWiFi(20, 3000).then(() => {
-      return true;
-    }).catch((err) => {
-      console.log('No wifi connection found. Starting the AP...', err);
-      // Scan for wifi networks now because we can't always scan once
-      // the AP is being broadcast, retrying up to 10 times
-      scan(10).then((ssids) => {
-        exports.preliminaryScanResults = ssids; // Remember ssids
-        console.log('No wifi found; entering AP mode');
-        startAP(platform.ap_ip);
-      });
-
-      return false;
-    });
-  }).catch((err) => {
-    console.error('Error checking wifi adapter presence', err);
+  // Wait until we have a working wifi connection. Retry every 3 seconds up
+  // to 20 times. If we are connected, then start the Gateway client.
+  // If we never get a wifi connection, go into AP mode.
+  return waitForWiFi(20, 3000).then(() => {
     return true;
+  }).catch((err) => {
+    console.log('No wifi connection found. Starting the AP...', err);
+    // Scan for wifi networks now because we can't always scan once
+    // the AP is being broadcast, retrying up to 10 times
+    scan(10).then((ssids) => {
+      module.exports.preliminaryScanResults = ssids;
+      console.log('No wifi found; entering AP mode');
+      startAP(config.get('wifi.ap_ip'));
+    });
+
+    return false;
   });
 }
 
@@ -204,41 +158,30 @@ function waitForWiFi(maxAttempts, interval) {
     let attempts = 0;
 
     // first of all we query wpa_supplicant if there's a wifi AP configured
-    run(platform.listNetworks)
-      .then((out) => {
-        console.log('List Networks command executed:', out);
-        if (out.includes('\n0\t')) {
-          // there's at least one wifi AP configured. Let's wait to see if it
-          // will connect
-          check();
-        } else {
-          // No wifi AP configured. Let's skip the wait and start the setup
-          // immediately
-          reject();
-        }
-      })
-      .catch((err) => console.error('Error listing Networks:', err));
-
+    const networks = getKnownNetworks();
+    console.log('List Networks command executed:', networks);
+    if (networks.length > 0) {
+      // there's at least one wifi AP configured. Let's wait to see if it
+      // will connect
+      check();
+    } else {
+      // No wifi AP configured. Let's skip the wait and start the setup
+      // immediately
+      reject();
+    }
 
     function check() {
       attempts++;
       console.log('check', attempts);
-      getStatus()
-        .then((status) => {
-          console.log(status);
-          if (status === 'COMPLETED') {
-            console.log('WiFi connection found. resolving');
-            checkForAddress();
-            console.log('resolved');
-          } else {
-            console.log('No wifi connection on attempt', attempts);
-            retryOrGiveUp();
-          }
-        })
-        .catch((err) => {
-          console.error('Error checking wifi on attempt', attempts, ':', err);
-          retryOrGiveUp();
-        });
+      const status = getStatus();
+      if (status.connected) {
+        console.log('WiFi connection found. resolving');
+        checkForAddress();
+        console.log('resolved');
+      } else {
+        console.log('No wifi connection on attempt', attempts);
+        retryOrGiveUp();
+      }
     }
 
     function checkForAddress() {

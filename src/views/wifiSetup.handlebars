@@ -95,7 +95,7 @@
         position: relative;
         width: 6.4rem;
         height: 6.4rem;
-        background-image: url('/back.png');
+        background-image: url('/optimized-images/back.png');
         background-repeat: no-repeat;
         background-color: #305067;
         background-size: 6.4rem 6.4rem;
@@ -163,7 +163,7 @@
         position: fixed;
         bottom: 2rem;
         left: 2rem;
-        width: 12.5rem;
+        height: 4.2rem;
         z-index: -1;
       }
 
@@ -220,7 +220,7 @@
         height : 3rem;
         float: left;
         margin : 0.1rem 0;
-        background: url("/checkbox-sprite.png") no-repeat 0 0;
+        background: url("/optimized-images/checkbox-sprite.png") no-repeat 0 0;
         background-size: 3rem auto;
       }
 
@@ -286,7 +286,7 @@
           <h3>Connect to a WiFi network?</h3><br>
           {{#networks}}
             <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}', {{pwdRequired}})" id="item"
-                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{icon}}'>
+                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='{{icon}}'>
             </button>
           {{/networks}}<br><br>
           <button onclick="window.skip(event)" class="item skip">Skip</button>
@@ -295,7 +295,7 @@
       <div id="step2">
         <input type="button" class="backbtn" onclick="window.back(event)">
         <div id='network-label'>
-          <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/wifi.svg'></div>
+          <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/optimized-images/wifi.svg'></div>
           <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
         </div>
         <div id="maindiv2">
@@ -309,7 +309,7 @@
       </div>
       <input id="ssid" name="ssid" type="hidden" value="">
       <input id="skip" name="skip" type="hidden" value="">
-      <img id="wordmark" alt="Mozilla IoT" src="/moziot-wordmark.png" />
+      <img id="wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
     </form>
   </body>
 </html>

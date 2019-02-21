@@ -70,6 +70,18 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/'),
       ignore: ['*.js', '*/index.html'],
     },
+    {
+      from: 'src/views/connecting.handlebars',
+      to: path.join(__dirname, 'build/views/'),
+    },
+    {
+      from: 'src/views/hotspot.handlebars',
+      to: path.join(__dirname, 'build/views/'),
+    },
+    {
+      from: 'src/views/wifiSetup.handlebars',
+      to: path.join(__dirname, 'build/views/'),
+    },
   ]),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,
