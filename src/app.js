@@ -13,6 +13,9 @@ const UserProfile = require('./user-profile');
 UserProfile.init();
 const migration = UserProfile.migrate();
 
+// Causes a timestamp to be prepended to console log lines.
+require('./log-timestamps');
+
 // External Dependencies
 const https = require('https');
 const http = require('http');
@@ -35,9 +38,6 @@ const mDNSserver = require('./mdns-server');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
 const {wifi, wifiSetupApp} = require('./wifi-setup');
-
-// Causes a timestamp to be prepended to console log lines.
-require('./log-timestamps');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/addons/plugin/ipc.js)

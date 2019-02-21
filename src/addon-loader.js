@@ -15,6 +15,7 @@ UserProfile.init();
 
 const config = require('config');
 const Constants = require('./constants');
+const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
 const PluginClient = require('./plugin/plugin-client');
 const db = require('./db');
@@ -133,15 +134,6 @@ async function loadAddon(addonPath, verbose) {
     }
   });
 }
-
-// Use webpack provided require for dynamic includes from the bundle  .
-const dynamicRequire = (() => {
-  if (typeof __non_webpack_require__ !== 'undefined') {
-    // eslint-disable-next-line no-undef
-    return __non_webpack_require__;
-  }
-  return require;
-})();
 
 // Get some decent error messages for unhandled rejections. This is
 // often just errors in the code.
