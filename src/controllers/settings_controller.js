@@ -306,6 +306,33 @@ SettingsController.post('/system/actions', (request, response) => {
   }
 });
 
+SettingsController.get('/network/dhcp', (request, response) => {
+  if (Platform.implemented('getDhcpStatus')) {
+    response.json({enabled: Platform.getDhcpStatus()});
+  } else {
+    response.status(500).send('DHCP status not implemented');
+  }
+});
+
+SettingsController.put('/network/dhcp', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Missing enabled property');
+    return;
+  }
+
+  const enabled = request.body.enabled;
+
+  if (Platform.implemented('setDhcpStatus')) {
+    if (Platform.setDhcpStatus(enabled)) {
+      response.status(200).end();
+    } else {
+      response.status(500).send('Failed to toggle DHCP');
+    }
+  } else {
+    response.status(500).send('Toggle DHCP not implemented');
+  }
+});
+
 SettingsController.get('/network/lan', (request, response) => {
   if (Platform.implemented('getLanMode')) {
     response.json(Platform.getLanMode());

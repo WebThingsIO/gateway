@@ -131,6 +131,8 @@ try {
 }
 
 const wrappedMethods = [
+  'getDhcpStatus',
+  'setDhcpStatus',
   'getHostname',
   'setHostname',
   'getLanMode',

@@ -133,6 +133,39 @@ function uciCommit(key) {
 }
 
 /**
+ * Get DHCP server status.
+ *
+ * @returns {boolean} Boolean indicating whether or not DHCP is enabled.
+ */
+function getDhcpStatus() {
+  const result = uciGet('dhcp.lan.ignore');
+  if (!result.success) {
+    return false;
+  }
+
+  return result.value === '0';
+}
+
+/**
+ * Set DHCP server status.
+ *
+ * @param {boolean} enabled - Whether or not to enable the DHCP server
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setDhcpStatus(enabled) {
+  if (!uciSet('dhcp.lan.ignore', enabled ? '0' : '1')) {
+    return false;
+  }
+
+  if (!uciCommit('dhcp')) {
+    return false;
+  }
+
+  const proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['reload']);
+  return proc.status === 0;
+}
+
+/**
  * Get the LAN mode and options.
  *
  * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
@@ -594,6 +627,8 @@ function restartSystem() {
 }
 
 module.exports = {
+  getDhcpStatus,
+  setDhcpStatus,
   getHostname,
   setHostname,
   getLanMode,
