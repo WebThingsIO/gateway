@@ -38,6 +38,7 @@
     "callsites": "^3.0.0",
     "compression": "^1.7.3",
     "config": "^3.0.1",
+    "csv-parse": "^4.3.3",
     "dnssd": "^0.4.1",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
