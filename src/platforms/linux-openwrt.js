@@ -169,22 +169,34 @@ function setDhcpServerStatus(enabled) {
     return false;
   }
 
-  let proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['stop']);
+  let proc = child_process.spawnSync(
+    '/etc/init.d/dnsmasq',
+    [enabled ? 'start' : 'stop']
+  );
   if (proc.status !== 0) {
     return false;
   }
 
-  proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['disable']);
+  proc = child_process.spawnSync(
+    '/etc/init.d/dnsmasq',
+    [enabled ? 'enable' : 'disable']
+  );
   if (proc.status !== 0) {
     return false;
   }
 
-  proc = child_process.spawnSync('/etc/init.d/odhcpd', ['stop']);
+  proc = child_process.spawnSync(
+    '/etc/init.d/odhcpd',
+    [enabled ? 'start' : 'stop']
+  );
   if (proc.status !== 0) {
     return false;
   }
 
-  proc = child_process.spawnSync('/etc/init.d/odhcpd', ['disable']);
+  proc = child_process.spawnSync(
+    '/etc/init.d/odhcpd',
+    [enabled ? 'enable' : 'disable']
+  );
   return proc.status === 0;
 }
 
