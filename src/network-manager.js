@@ -9,21 +9,49 @@
 'use strict';
 
 const child_process = require('child_process');
+const parse = require('csv-parse/lib/sync');
 const Platform = require('./platform');
 
 /**
- * Run `uci show {what}` and parse the output.
+ * Parse a value from `uci show` or `uci get`.
  *
- * @param {string} what - The thing to show
+ * @param {string} value - Value to parse
+ * @returns {string|string[]} Parsed value
+ */
+function parseUciValue(value) {
+  // uci's quote escaping is weird...
+  value = value.replace('\'\\\'\'', '\'\'');
+
+  // parse generates an array of arrays, since it's intended to parse multiple
+  // lines of CSV data
+  let values = parse(value, {quote: '\'', escape: '\''});
+
+  if (values.length === 0 || values[0].length === 0) {
+    return '';
+  }
+
+  values = values[0];
+
+  if (values.length === 1) {
+    return values[0];
+  }
+
+  return values;
+}
+
+/**
+ * Run `uci show {key}` and parse the output.
+ *
+ * @param {string} key - The key to show
  * @returns {Object} {success: ..., pairs: {key: value, ...}}
  */
-function uciShow(what) {
+function uciShow(key) {
   let success = false;
   const pairs = {};
 
   const proc = child_process.spawnSync(
     'uci',
-    ['show', what],
+    ['-d', ',', 'show', key],
     {encoding: 'utf8'}
   );
 
@@ -34,13 +62,148 @@ function uciShow(what) {
       continue;
     }
 
-    const [key, value] = line.split('=', 2).map((s) => {
-      return s.replace(/^'+/, '').replace(/'+$/, '');
-    });
-    pairs[key] = value;
+    // eslint-disable-next-line prefer-const
+    let [k, v] = line.split('=', 2);
+    v = parseUciValue(v);
+
+    pairs[k] = v;
   }
 
   return {success, pairs};
+}
+
+/**
+ * Run `uci get {key}` and parse the output.
+ *
+ * @param {string} key - The key to get
+ * @returns {Object} {success: ..., value: ...}
+ */
+function uciGet(key) {
+  const proc = child_process.spawnSync(
+    'uci',
+    ['-d', ',', 'get', key],
+    {encoding: 'utf8'}
+  );
+
+  const success = proc.status === 0;
+  const value = parseUciValue(proc.stdout);
+
+  return {success, value};
+}
+
+/**
+ * Run `uci set {key}`.
+ *
+ * @param {string} key - The key to set
+ * @param {string|string[]} value - The value(s) to set
+ * @returns {boolean} Whether or not the command was successful
+ */
+function uciSet(key, value) {
+  let success = false;
+
+  if (Array.isArray(value)) {
+    let proc = child_process.spawnSync('uci', ['delete', key]);
+    if (proc.status === 0) {
+      for (const v of value) {
+        proc = child_process.spawnSync('uci', ['add_list', `${key}=${v}`]);
+        if (proc.status !== 0) {
+          break;
+        }
+      }
+
+      success = true;
+    }
+  } else {
+    const proc = child_process.spawnSync('uci', ['set', `${key}=${value}`]);
+    success = proc.status === 0;
+  }
+
+  return success;
+}
+
+/**
+ * Run `uci commit {key}`.
+ *
+ * @param {string} key - The key to commit
+ * @returns {boolean} Whether or not the command was successful
+ */
+function uciCommit(key) {
+  const proc = child_process.spawnSync('uci', ['commit', key]);
+  return proc.status === 0;
+}
+
+/**
+ * Get the LAN mode and options.
+ *
+ * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
+ */
+function getLanMode() {
+  let mode = null;
+  const options = {};
+
+  switch (Platform.getOS()) {
+    case 'linux-openwrt': {
+      const result = uciShow('network.lan');
+      if (!result.success) {
+        return {mode, options};
+      }
+
+      for (const [key, value] of Object.entries(result.pairs)) {
+        // discard network.lan=interface
+        if (!key.startsWith('network.lan.')) {
+          continue;
+        }
+
+        const opt = key.split('network.lan.')[1];
+        if (opt === 'proto') {
+          mode = value;
+        } else {
+          options[opt] = value;
+        }
+      }
+
+      return {mode, options};
+    }
+    default:
+      return {mode, options};
+  }
+}
+
+/**
+ * Set the LAN mode and options.
+ *
+ * @param {string} mode - static, dhcp, ...
+ * @param {Object?} options - options specific to LAN mode
+ * @returns {boolean} Boolean indicating success.
+ */
+function setLanMode(mode, options = {}) {
+  const valid = ['static', 'dhcp'];
+  if (!valid.includes(mode)) {
+    return false;
+  }
+
+  switch (Platform.getOS()) {
+    case 'linux-openwrt': {
+      if (!uciSet('network.lan.proto', mode)) {
+        return false;
+      }
+
+      for (const [key, value] of Object.entries(options)) {
+        if (!uciSet(`network.lan.${key}`, value)) {
+          return false;
+        }
+      }
+
+      if (!uciCommit('network')) {
+        return false;
+      }
+
+      const proc = child_process.spawnSync('/etc/init.d/network', ['reload']);
+      return proc.status === 0;
+    }
+    default:
+      return false;
+  }
 }
 
 /**
@@ -95,30 +258,21 @@ function setWanMode(mode, options = {}) {
 
   switch (Platform.getOS()) {
     case 'linux-openwrt': {
-      let proc = child_process.spawnSync(
-        'uci',
-        ['set', `network.wan.proto=${mode}`]
-      );
-      if (proc.status !== 0) {
+      if (!uciSet('network.wan.proto', mode)) {
         return false;
       }
 
       for (const [key, value] of Object.entries(options)) {
-        proc = child_process.spawnSync(
-          'uci',
-          ['set', `network.wan.${key}=${value}`]
-        );
-        if (proc.status !== 0) {
+        if (!uciSet(`network.wan.${key}`, value)) {
           return false;
         }
       }
 
-      proc = child_process.spawnSync('uci', ['commit', 'network']);
-      if (proc.status !== 0) {
+      if (!uciCommit('network')) {
         return false;
       }
 
-      proc = child_process.spawnSync('/etc/init.d/network', ['reload']);
+      const proc = child_process.spawnSync('/etc/init.d/network', ['reload']);
       return proc.status === 0;
     }
     default:
@@ -126,6 +280,11 @@ function setWanMode(mode, options = {}) {
   }
 }
 
+/**
+ * Get the wireless mode and options.
+ *
+ * @returns {Object} {enabled: true|false, mode: 'ap|sta|...', options: {...}}
+ */
 function getWirelessMode() {
   let enabled = false;
   let mode = null;
@@ -154,12 +313,12 @@ function getWirelessMode() {
       }
 
       const key = `wireless.${device}.disabled`;
-      result = uciShow(key);
+      result = uciGet(key);
       if (!result.success) {
         return {enabled, mode, options};
       }
 
-      enabled = result.pairs[key] === 0;
+      enabled = result.value === '0';
 
       result = uciShow(iface);
       if (!result.success) {
@@ -187,6 +346,14 @@ function getWirelessMode() {
   }
 }
 
+/**
+ * Set the wireless mode and options.
+ *
+ * @param {boolean} enabled - whether or not wireless is enabled
+ * @param {string} mode - ap, sta, ...
+ * @param {Object?} options - options specific to wireless mode
+ * @returns {boolean} Boolean indicating success.
+ */
 function setWirelessMode(enabled, mode = 'ap', options = {}) {
   const valid = ['ap', 'sta'];
   if (enabled && !valid.includes(mode)) {
@@ -212,40 +379,28 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
 
       for (const iface of ifaces.keys()) {
         const device = ifaces.get(iface);
-        let proc = child_process.spawnSync(
-          'uci',
-          ['set', `wireless.${device}.disabled=${enabled ? '0' : '1'}`]
-        );
-        if (proc.status !== 0) {
+        if (!uciSet(`wireless.${device}.disabled`, enabled ? '0' : '1')) {
           return false;
         }
 
         if (enabled) {
-          proc = child_process.spawnSync(
-            'uci',
-            ['set', `${iface}.mode=${mode}`]
-          );
-          if (proc.status !== 0) {
+          if (!uciSet(`${iface}.mode`, mode)) {
             return false;
           }
 
           for (const [key, value] of Object.entries(options)) {
-            proc = child_process.spawnSync(
-              'uci',
-              ['set', `${iface}.${key}=${value}`]
-            );
-            if (proc.status !== 0) {
+            if (!uciSet(`${iface}.${key}`, value)) {
               return false;
             }
           }
         }
       }
 
-      let proc = child_process.spawnSync('uci', ['commit', 'wireless']);
-      if (proc.status !== 0) {
+      if (!uciCommit('wireless')) {
         return false;
       }
 
+      let proc;
       if (enabled) {
         proc = child_process.spawnSync('wifi');
       } else {
@@ -259,6 +414,8 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
 }
 
 module.exports = {
+  getLanMode,
+  setLanMode,
   getWanMode,
   setWanMode,
   getWirelessMode,
