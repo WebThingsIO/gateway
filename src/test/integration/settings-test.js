@@ -103,7 +103,7 @@ describe('settings/', function() {
       .set(...headerAuth(jwt))
       .send({enabled: true});
 
-    expect(err.status).toEqual(400);
+    expect(err.status).toEqual(500);
   });
 
   it('Restart gateway', async () => {

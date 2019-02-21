@@ -14,6 +14,7 @@
 const config = require('config');
 const Constants = require('./constants');
 const Deferred = require('./deferred');
+const dynamicRequire = require('./dynamic-require');
 const EventEmitter = require('events').EventEmitter;
 const Platform = require('./platform');
 const Settings = require('./models/settings');
@@ -32,15 +33,6 @@ const {URLSearchParams} = require('url');
 const pkg = require('../package.json');
 
 let PluginClient, PluginServer;
-
-// Use webpack provided require for dynamic includes from the bundle  .
-const dynamicRequire = (() => {
-  if (typeof __non_webpack_require__ !== 'undefined') {
-    // eslint-disable-next-line no-undef
-    return __non_webpack_require__;
-  }
-  return require;
-})();
 
 /**
  * @class AddonManager

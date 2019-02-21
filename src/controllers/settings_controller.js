@@ -16,7 +16,6 @@ const CertificateManager = require('../certificate-manager');
 const config = require('config');
 const fetch = require('node-fetch');
 const mDNSserver = require('../mdns-server');
-const NetworkManager = require('../network-manager');
 const Platform = require('../platform');
 const pkg = require('../../package.json');
 const PromiseRouter = require('express-promise-router');
@@ -240,9 +239,15 @@ SettingsController.get('/system/platform', (request, response) => {
 });
 
 SettingsController.get('/system/ssh', (request, response) => {
+  const toggleImplemented = Platform.implemented('setSshStatus');
+  let enabled = false;
+  if (Platform.implemented('getSshStatus')) {
+    enabled = Platform.getSshStatus();
+  }
+
   response.json({
-    toggleImplemented: Platform.isToggleSshImplemented(),
-    enabled: Platform.isSshEnabled(),
+    toggleImplemented,
+    enabled,
   });
 });
 
@@ -252,11 +257,16 @@ SettingsController.put('/system/ssh', (request, response) => {
     return;
   }
 
-  const enabled = request.body.enabled;
-  if (Platform.toggleSsh(enabled)) {
-    response.status(200).json({enabled});
+  const toggleImplemented = Platform.implemented('setSshStatus');
+  if (toggleImplemented) {
+    const enabled = request.body.enabled;
+    if (Platform.setSshStatus(enabled)) {
+      response.status(200).json({enabled});
+    } else {
+      response.status(400).send('Failed to toggle SSH');
+    }
   } else {
-    response.status(400).send('Failed to toggle');
+    response.status(500).send('Toggle SSH not implemented');
   }
 });
 
@@ -269,17 +279,25 @@ SettingsController.post('/system/actions', (request, response) => {
   const action = request.body.action;
   switch (action) {
     case 'restartGateway':
-      if (Platform.restartGateway()) {
-        response.status(200).end();
+      if (Platform.implemented('restartGateway')) {
+        if (Platform.restartGateway()) {
+          response.status(200).end();
+        } else {
+          response.status(500).send('Failed to restart gateway');
+        }
       } else {
-        response.status(500).send('Failed to restart gateway');
+        response.status(500).send('Restart gateway not implemented');
       }
       break;
     case 'restartSystem':
-      if (Platform.restartSystem()) {
-        response.status(200).end();
+      if (Platform.implemented('restartSystem')) {
+        if (Platform.restartSystem()) {
+          response.status(200).end();
+        } else {
+          response.status(500).send('Failed to restart system');
+        }
       } else {
-        response.status(500).send('Failed to restart system');
+        response.status(500).send('Restart system not implemented');
       }
       break;
     default:
@@ -289,7 +307,11 @@ SettingsController.post('/system/actions', (request, response) => {
 });
 
 SettingsController.get('/network/lan', (request, response) => {
-  response.json(NetworkManager.getLanMode());
+  if (Platform.implemented('getLanMode')) {
+    response.json(Platform.getLanMode());
+  } else {
+    response.status(500).send('LAN mode not implemented');
+  }
 });
 
 SettingsController.put('/network/lan', (request, response) => {
@@ -301,15 +323,23 @@ SettingsController.put('/network/lan', (request, response) => {
   const mode = request.body.mode;
   const options = request.body.options;
 
-  if (NetworkManager.setLanMode(mode, options)) {
-    response.status(200).end();
+  if (Platform.implemented('setLanMode')) {
+    if (Platform.setLanMode(mode, options)) {
+      response.status(200).end();
+    } else {
+      response.status(500).send('Failed to update LAN configuration');
+    }
   } else {
-    response.status(500).send('Failed to update LAN configuration');
+    response.status(500).send('Setting LAN mode not implemented');
   }
 });
 
 SettingsController.get('/network/wan', (request, response) => {
-  response.json(NetworkManager.getWanMode());
+  if (Platform.implemented('getWanMode')) {
+    response.json(Platform.getWanMode());
+  } else {
+    response.status(500).send('WAN mode not implemented');
+  }
 });
 
 SettingsController.put('/network/wan', (request, response) => {
@@ -321,15 +351,23 @@ SettingsController.put('/network/wan', (request, response) => {
   const mode = request.body.mode;
   const options = request.body.options;
 
-  if (NetworkManager.setWanMode(mode, options)) {
-    response.status(200).end();
+  if (Platform.implemented('setWanMode')) {
+    if (Platform.setWanMode(mode, options)) {
+      response.status(200).end();
+    } else {
+      response.status(500).send('Failed to update WAN configuration');
+    }
   } else {
-    response.status(500).send('Failed to update WAN configuration');
+    response.status(500).send('Setting WAN mode not implemented');
   }
 });
 
 SettingsController.get('/network/wireless', (request, response) => {
-  response.json(NetworkManager.getWirelessMode());
+  if (Platform.implemented('getWirelessMode')) {
+    response.json(Platform.getWirelessMode());
+  } else {
+    response.status(500).send('Wireless mode not implemented');
+  }
 });
 
 SettingsController.put('/network/wireless', (request, response) => {
@@ -342,10 +380,14 @@ SettingsController.put('/network/wireless', (request, response) => {
   const mode = request.body.mode;
   const options = request.body.options;
 
-  if (NetworkManager.setWirelessMode(enabled, mode, options)) {
-    response.status(200).end();
+  if (Platform.implemented('setWirelessMode')) {
+    if (Platform.setWirelessMode(enabled, mode, options)) {
+      response.status(200).end();
+    } else {
+      response.status(500).send('Failed to update wireless configuration');
+    }
   } else {
-    response.status(500).send('Failed to update wireless configuration');
+    response.status(500).send('Setting wireless mode not implemented');
   }
 });
 

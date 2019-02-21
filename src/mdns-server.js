@@ -55,17 +55,19 @@ function DNSserviceDiscovery() {
   this.handleError = (e) => {
     console.debug(`mDNS error: ${e}`);
     setTimeout(() => {
-      if (this.serviceState) {
+      if (this.serviceState && this.dnssdHandle) {
         this.dnssdHandle.start();
       }
     }, 10000);
   };
 
-  // Initialize our object and make sure it's not started on object creation.
-  this.dnssdHandle =
-    dnssd.Advertisement(dnssd.tcp('http'), this.port, options);
-  this.dnssdHandle.on('error', this.handleError);
-  this.dnssdHandle.stop();
+  if (!Platform.implemented('setMdnsStatus')) {
+    // Initialize our object and make sure it's not started on object creation.
+    this.dnssdHandle =
+      dnssd.Advertisement(dnssd.tcp('http'), this.port, options);
+    this.dnssdHandle.on('error', this.handleError);
+    this.dnssdHandle.stop();
+  }
 }
 
 /**
@@ -77,16 +79,20 @@ function DNSserviceDiscovery() {
 DNSserviceDiscovery.prototype.setState = function(state) {
   this.serviceState = !!state;    // Make sure it's a boolean value
 
-  const success = Platform.togglemDns(state);
-  if (!success) {
-    if (this.serviceState) {
-      this.dnssdHandle.start();
-    } else {
-      this.dnssdHandle.stop(true);
-    }
+  let success = true;
+  if (Platform.implemented('setMdnsStatus')) {
+    success = Platform.setMdnsStatus(state);
+  } else if (this.serviceState) {
+    this.dnssdHandle.start();
+  } else {
+    this.dnssdHandle.stop(true);
   }
 
-  console.log(`Service Discovery: state changed to: ${this.serviceState}`);
+  if (success) {
+    console.log(`Service Discovery: state changed to: ${this.serviceState}`);
+  } else {
+    console.error('Service Discovery: failed to change state');
+  }
 };
 
 /**
@@ -107,11 +113,12 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
 
   if (valid) {
     // Change our object data member and stop the old service first.
-    console.log(`Service Discovery: localDomain changed to: ${localDomain} `);
     this.localDomain = localDomain;
 
-    const success = Platform.setHostname(this.localDomain);
-    if (!success) {
+    let success = true;
+    if (Platform.implemented('setHostname')) {
+      success = Platform.setHostname(this.localDomain);
+    } else if (!Platform.implemented('setMdnsStatus')) {
       this.dnssdHandle.stop();
 
       // Now let's start a new service with the new name.
@@ -130,6 +137,12 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
                                              this.port, options);
       this.dnssdHandle.on('error', this.handleError);
       this.dnssdHandle.start();
+    }
+
+    if (success) {
+      console.log(`Service Discovery: local domain changed to: ${localDomain}`);
+    } else {
+      console.error('Service Discovery: failed to set local domain');
     }
   } else {
     console.error('Service Discovery:',
@@ -175,15 +188,17 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
                      host: this.localDomain,
                      txt: txt};
 
-    this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
-                                           this.port, options);
-    this.dnssdHandle.on('error', this.handleError);
+    if (!Platform.implemented('setMdnsStatus')) {
+      this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
+                                             this.port, options);
+      this.dnssdHandle.on('error', this.handleError);
 
-    // Check to see if the profile should be active or not.
-    if (this.serviceState) {
-      this.dnssdHandle.start();
-    } else {
-      this.dnssdHandle.stop();
+      // Check to see if the profile should be active or not.
+      if (this.serviceState) {
+        this.dnssdHandle.start();
+      } else {
+        this.dnssdHandle.stop();
+      }
     }
   } catch (err) {
     // We should never get here. Don't attempt to start service discovery
@@ -196,7 +211,9 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
  * Stop the node mDNS service.
  */
 DNSserviceDiscovery.prototype.cleanup = function() {
-  this.dnssdHandle.stop(true);
+  if (!Platform.implemented('setMdnsStatus') && this.dnssdHandle) {
+    this.dnssdHandle.stop(true);
+  }
 };
 
 /**
