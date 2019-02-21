@@ -239,10 +239,10 @@ SettingsController.get('/system/platform', (request, response) => {
 });
 
 SettingsController.get('/system/ssh', (request, response) => {
-  const toggleImplemented = Platform.implemented('setSshStatus');
+  const toggleImplemented = Platform.implemented('setSshServerStatus');
   let enabled = false;
-  if (Platform.implemented('getSshStatus')) {
-    enabled = Platform.getSshStatus();
+  if (Platform.implemented('getSshServerStatus')) {
+    enabled = Platform.getSshServerStatus();
   }
 
   response.json({
@@ -257,10 +257,10 @@ SettingsController.put('/system/ssh', (request, response) => {
     return;
   }
 
-  const toggleImplemented = Platform.implemented('setSshStatus');
+  const toggleImplemented = Platform.implemented('setSshServerStatus');
   if (toggleImplemented) {
     const enabled = request.body.enabled;
-    if (Platform.setSshStatus(enabled)) {
+    if (Platform.setSshServerStatus(enabled)) {
       response.status(200).json({enabled});
     } else {
       response.status(400).send('Failed to toggle SSH');
@@ -303,6 +303,33 @@ SettingsController.post('/system/actions', (request, response) => {
     default:
       response.status(400).send('Unsupported action');
       break;
+  }
+});
+
+SettingsController.get('/network/dhcp', (request, response) => {
+  if (Platform.implemented('getDhcpServerStatus')) {
+    response.json({enabled: Platform.getDhcpServerStatus()});
+  } else {
+    response.status(500).send('DHCP status not implemented');
+  }
+});
+
+SettingsController.put('/network/dhcp', (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Missing enabled property');
+    return;
+  }
+
+  const enabled = request.body.enabled;
+
+  if (Platform.implemented('setDhcpServerStatus')) {
+    if (Platform.setDhcpServerStatus(enabled)) {
+      response.status(200).end();
+    } else {
+      response.status(500).send('Failed to toggle DHCP');
+    }
+  } else {
+    response.status(500).send('Toggle DHCP not implemented');
   }
 });
 

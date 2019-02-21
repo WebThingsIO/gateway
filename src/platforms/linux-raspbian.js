@@ -16,7 +16,7 @@ const fs = require('fs');
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
  */
-function getSshStatus() {
+function getSshServerStatus() {
   const proc = child_process.spawnSync(
     'sudo',
     ['raspi-config', 'nonint', 'get_ssh'],
@@ -36,7 +36,7 @@ function getSshStatus() {
  * @param {boolean} enabled - Whether or not to enable the SSH server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setSshStatus(enabled) {
+function setSshServerStatus(enabled) {
   const arg = enabled ? '1' : '0';
   const proc = child_process.spawnSync(
     'sudo',
@@ -50,7 +50,7 @@ function setSshStatus(enabled) {
  *
  * @returns {boolean} Boolean indicating whether or not mDNS is enabled.
  */
-function getMdnsStatus() {
+function getMdnsServerStatus() {
   const proc = child_process.spawnSync(
     'sudo',
     ['systemctl', 'is-active', 'avahi-daemon.service']
@@ -64,7 +64,7 @@ function getMdnsStatus() {
  * @param {boolean} enabled - Whether or not to enable the mDNS server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setMdnsStatus(enabled) {
+function setMdnsServerStatus(enabled) {
   const command = enabled ? 'start' : 'stop';
   const proc = child_process.spawnSync(
     'sudo',
@@ -170,10 +170,10 @@ function restartSystem() {
 module.exports = {
   getHostname,
   setHostname,
-  getMdnsStatus,
-  setMdnsStatus,
-  getSshStatus,
-  setSshStatus,
+  getMdnsServerStatus,
+  setMdnsServerStatus,
+  getSshServerStatus,
+  setSshServerStatus,
   restartGateway,
   restartSystem,
 };
