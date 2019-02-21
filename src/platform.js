@@ -131,16 +131,16 @@ try {
 }
 
 const wrappedMethods = [
-  'getDhcpStatus',
-  'setDhcpStatus',
+  'getDhcpServerStatus',
+  'setDhcpServerStatus',
   'getHostname',
   'setHostname',
   'getLanMode',
   'setLanMode',
-  'getMdnsStatus',
-  'setMdnsStatus',
-  'getSshStatus',
-  'setSshStatus',
+  'getMdnsServerStatus',
+  'setMdnsServerStatus',
+  'getSshServerStatus',
+  'setSshServerStatus',
   'getWanMode',
   'setWanMode',
   'getWirelessMode',

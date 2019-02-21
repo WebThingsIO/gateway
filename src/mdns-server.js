@@ -61,7 +61,7 @@ function DNSserviceDiscovery() {
     }, 10000);
   };
 
-  if (!Platform.implemented('setMdnsStatus')) {
+  if (!Platform.implemented('setMdnsServerStatus')) {
     // Initialize our object and make sure it's not started on object creation.
     this.dnssdHandle =
       dnssd.Advertisement(dnssd.tcp('http'), this.port, options);
@@ -80,8 +80,8 @@ DNSserviceDiscovery.prototype.setState = function(state) {
   this.serviceState = !!state;    // Make sure it's a boolean value
 
   let success = true;
-  if (Platform.implemented('setMdnsStatus')) {
-    success = Platform.setMdnsStatus(state);
+  if (Platform.implemented('setMdnsServerStatus')) {
+    success = Platform.setMdnsServerStatus(state);
   } else if (this.serviceState) {
     this.dnssdHandle.start();
   } else {
@@ -118,7 +118,7 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
     let success = true;
     if (Platform.implemented('setHostname')) {
       success = Platform.setHostname(this.localDomain);
-    } else if (!Platform.implemented('setMdnsStatus')) {
+    } else if (!Platform.implemented('setMdnsServerStatus')) {
       this.dnssdHandle.stop();
 
       // Now let's start a new service with the new name.
@@ -188,7 +188,7 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
                      host: this.localDomain,
                      txt: txt};
 
-    if (!Platform.implemented('setMdnsStatus')) {
+    if (!Platform.implemented('setMdnsServerStatus')) {
       this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
                                              this.port, options);
       this.dnssdHandle.on('error', this.handleError);
@@ -211,7 +211,7 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
  * Stop the node mDNS service.
  */
 DNSserviceDiscovery.prototype.cleanup = function() {
-  if (!Platform.implemented('setMdnsStatus') && this.dnssdHandle) {
+  if (!Platform.implemented('setMdnsServerStatus') && this.dnssdHandle) {
     this.dnssdHandle.stop(true);
   }
 };

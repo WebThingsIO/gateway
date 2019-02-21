@@ -137,7 +137,7 @@ function uciCommit(key) {
  *
  * @returns {boolean} Boolean indicating whether or not DHCP is enabled.
  */
-function getDhcpStatus() {
+function getDhcpServerStatus() {
   const result = uciGet('dhcp.lan.ignore');
   if (!result.success) {
     return false;
@@ -152,8 +152,16 @@ function getDhcpStatus() {
  * @param {boolean} enabled - Whether or not to enable the DHCP server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setDhcpStatus(enabled) {
+function setDhcpServerStatus(enabled) {
   if (!uciSet('dhcp.lan.ignore', enabled ? '0' : '1')) {
+    return false;
+  }
+
+  if (!uciSet('dhcp.lan.dhcpv6', enabled ? 'server' : 'disabled')) {
+    return false;
+  }
+
+  if (!uciSet('dhcp.lan.ra', enabled ? 'server' : 'disabled')) {
     return false;
   }
 
@@ -161,7 +169,22 @@ function setDhcpStatus(enabled) {
     return false;
   }
 
-  const proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['reload']);
+  let proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['stop']);
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync('/etc/init.d/dnsmasq', ['disable']);
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync('/etc/init.d/odhcpd', ['stop']);
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync('/etc/init.d/odhcpd', ['disable']);
   return proc.status === 0;
 }
 
@@ -415,7 +438,7 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
  */
-function getSshStatus() {
+function getSshServerStatus() {
   let service = null;
   for (const svc of ['/etc/init.d/dropbear',
                      '/etc/init.d/sshd']) {
@@ -439,7 +462,7 @@ function getSshStatus() {
  * @param {boolean} enabled - Whether or not to enable the SSH server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setSshStatus(enabled) {
+function setSshServerStatus(enabled) {
   let service = null;
   for (const svc of ['/etc/init.d/dropbear',
                      '/etc/init.d/sshd']) {
@@ -467,7 +490,7 @@ function setSshStatus(enabled) {
  *
  * @returns {boolean} Boolean indicating whether or not mDNS is enabled.
  */
-function getMdnsStatus() {
+function getMdnsServerStatus() {
   let service = null;
   for (const svc of ['/etc/init.d/mdnsd',
                      '/etc/init.d/avahi-daemon',
@@ -492,7 +515,7 @@ function getMdnsStatus() {
  * @param {boolean} enabled - Whether or not to enable the mDNS server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setMdnsStatus(enabled) {
+function setMdnsServerStatus(enabled) {
   let service = null;
   for (const svc of ['/etc/init.d/mdnsd',
                      '/etc/init.d/avahi-daemon',
@@ -627,16 +650,16 @@ function restartSystem() {
 }
 
 module.exports = {
-  getDhcpStatus,
-  setDhcpStatus,
+  getDhcpServerStatus,
+  setDhcpServerStatus,
   getHostname,
   setHostname,
   getLanMode,
   setLanMode,
-  getMdnsStatus,
-  setMdnsStatus,
-  getSshStatus,
-  setSshStatus,
+  getMdnsServerStatus,
+  setMdnsServerStatus,
+  getSshServerStatus,
+  setSshServerStatus,
   getWanMode,
   setWanMode,
   getWirelessMode,
