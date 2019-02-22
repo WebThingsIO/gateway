@@ -1,20 +1,29 @@
-const config = require('config');
-const express = require('express');
-const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
+const config = require('config');
+const Constants = require('../constants');
+const express = require('express');
 const fs = require('fs');
-const platform = require('./platform.js');
-const wifi = require('./wifi.js');
-const wait = require('./wait.js');
+const Handlebars = require('handlebars');
+const mDNSserver = require('../mdns-server');
 const path = require('path');
+const Settings = require('../models/settings');
+const sleep = require('../sleep');
+const wifi = require('./wifi');
 
+// Build templates
 Handlebars.registerHelper('escapeQuotes', function(str) {
   return new Handlebars.SafeString(str.replace(/'/, '\\\''));
 });
 
-const templatesPath = path.join(__dirname, '../../src/wifi-setup/templates');
+function getTemplate(name) {
+  const filename = path.join(Constants.VIEWS_PATH, name);
+  return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
+}
 
-const WiFiSetupApp = {};
+const wifiSetupTemplate = getTemplate('wifiSetup.handlebars');
+const connectingTemplate = getTemplate('connecting.handlebars');
+const hotspotTemplate = getTemplate('hotspot.handlebars');
+
 // The express server
 const app = express();
 
@@ -26,71 +35,81 @@ app.get('/*', handleCaptive);
 app.get('/', handleRoot);
 app.get('/wifi-setup', handleWiFiSetup);
 app.post('/connecting', handleConnecting);
-app.use(express.static(templatesPath));
+app.use(express.static(Constants.BUILD_STATIC_PATH));
 
-WiFiSetupApp.onRequest = app;
+const WiFiSetupApp = {
+  onRequest: app,
+};
 
-function getTemplate(filename) {
-  return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
-}
-
-const wifiSetupTemplate = getTemplate(
-  path.join(templatesPath, 'wifiSetup.handlebars'));
-const connectingTemplate = getTemplate(
-  path.join(templatesPath, 'connecting.handlebars'));
-const hotspotTemplate = getTemplate(
-  path.join(templatesPath, 'hotspot.handlebars'));
-
-// When the client issues a GET request for the list of wifi networks
-// scan and return them
-
-// this function handles requests for captive portals
+/**
+ * Handle captive portal requests.
+ */
 function handleCaptive(request, response, next) {
-  console.log('handleCaptive', request.path);
-  if (request.path === '/hotspot.html') {
-    console.log('sending hotspot.html');
-    response.send(hotspotTemplate({ap_ip: platform.ap_ip}));
-  } else if (request.path === '/hotspot-detect.html' ||
-    request.path === '/connecttest.txt') {
-    console.log('ios or osx captive portal request', request.path);
-    if (request.get('User-Agent').includes('CaptiveNetworkSupport') ||
-        request.get('User-Agent').includes('Microsoft NCSI')) {
-      console.log('windows captive portal request');
-      response.redirect(302, `http://${platform.ap_ip}/hotspot.html`);
-    } else {
-      response.redirect(302, `http://${platform.ap_ip}/wifi-setup`);
+  console.log('wifi-setup: handleCaptive:', request.path);
+
+  switch (request.path) {
+    case '/hotspot.html':
+      // WISPr XML response
+      response.send(hotspotTemplate({ap_ip: config.get('wifi.ap_ip')}));
+      break;
+    case '/hotspot-detect.html':        // iOS/macOS
+    case '/library/test/success.html':  // iOS/macOS
+    case '/connecttest.txt': {          // Windows
+      const ua = request.get('User-Agent');
+
+      // These 2 user-agents expect a WISPr XML response
+      if (ua.includes('CaptiveNetworkSupport') ||
+          ua.includes('Microsoft NCSI')) {
+        response.redirect(
+          302,
+          `http://${config.get('wifi.ap_ip')}/hotspot.html`
+        );
+        break;
+      }
+
+      // otherwise, fall through
     }
-  } else if (request.path === '/generate_204' || request.path === '/fwlink/') {
-    console.log('android captive portal request');
-    response.redirect(302, `http://${platform.ap_ip}/wifi-setup`);
-  } else if (request.path === '/redirect') {
-    console.log('redirect - send setup for windows');
-    response.redirect(302, `http://${platform.ap_ip}/wifi-setup`);
-  } else {
-    console.log('skipping.');
-    next();
+    // eslint-disable-next-line no-fallthrough
+    case '/kindle-wifi/wifistub.html':  // Kindle
+    case '/generate_204':               // Android, Chrome
+    case '/fwlink/':                    // Windows
+    case '/redirect':                   // Windows
+    case '/success.txt':                // Firefox
+      // Redirect to the wifi setup page
+      response.redirect(302, `http://${config.get('wifi.ap_ip')}/wifi-setup`);
+      break;
+    default:
+      console.log('wifi-setup: handleCaptive: unknown path, skipping.');
+      next();
+      break;
   }
 }
 
-// This function handles requests for the root URL '/'.
-// We display a different page depending on what stage of setup we're at
+/**
+ * Handle requests to the root URL. We display a different page depending on
+ * what stage of setup we're at.
+ */
 function handleRoot(request, response) {
-  wifi.getStatus().then((status) => {
+  const status = wifi.getStatus();
+
+  if (!status.connected) {
     // If we don't have a wifi connection yet, display the wifi setup page
-    if (status !== 'COMPLETED') {
-      console.log('no wifi connection; redirecting to wifiSetup');
-      response.redirect('/wifi-setup');
-    } else {
-      // Otherwise, look to see if we have an oauth token yet
-      console.log('wifi setup complete; redirecting /status');
-      response.redirect('/status');
-    }
-  })
-    .catch((e) => {
-      console.error(e);
-    });
+    console.log(
+      'wifi-setup: handleRoot: no wifi connection; redirecting to wifiSetup'
+    );
+    response.redirect('/wifi-setup');
+  } else {
+    // Otherwise, look to see if we have an oauth token yet
+    console.log(
+      'wifi-setup: handleRoot: wifi setup complete; redirecting /status'
+    );
+    response.redirect('/status');
+  }
 }
 
+/**
+ * Handle requests to /wifi-setup.
+ */
 function handleWiFiSetup(request, response) {
   wifi.scan().then((results) => {
     // On Edison, scanning will fail since we're in AP mode at this point
@@ -108,82 +127,92 @@ function handleWiFiSetup(request, response) {
     // to do the right thing if there are two entries for the same ssid.
     // If not, we could modify wifi.defineNetwork() to overwrite rather than
     // just adding.
-    let map1 = [];
+    let networks = [];
     if (results) {
-      map1 = results.filter((x) => x.length > 7);
-      map1 = map1.map((word) => {
-        let icon = 'wifi-secure.svg';
-        let pwdRequired = true;
-        if (word.substring(3, 5).trim() !== 'on') {
-          icon = 'wifi.svg';
-          pwdRequired = false;
-        }
+      networks = results.sort((a, b) => b.quality - a.quality).map((result) => {
+        const icon = result.encryption ? 'wifi-secure.svg' : 'wifi.svg';
         return {
-          icon,
-          pwdRequired,
-          ssid: word.substring(6),
+          icon: `/optimized-images/${icon}`,
+          pwdRequired: result.encryption,
+          ssid: result.ssid,
         };
       });
     }
 
-    response.send(wifiSetupTemplate({networks: map1}));
+    response.send(wifiSetupTemplate({networks}));
   });
 }
 
+/**
+ * Handle requests to /connecting.
+ */
 function handleConnecting(request, response) {
-  if (request.body.skip === '1') {
-    const profileDir = process.env.MOZIOT_HOME || config.get('profileDir');
-    const wifiskipPath = path.join(profileDir, 'config', 'wifiskip');
-    fs.closeSync(fs.openSync(wifiskipPath, 'w'));
-    console.log('skip wifi setup. stop the ap');
-    response.send(connectingTemplate({skip: 'true'}));
-    wifi.stopAP().then(() => {
-      WiFiSetupApp.onConnection();
-    });
-    return;
-  }
+  mDNSserver.getmDNSconfig().then((mDNSconfig) => {
+    const domain = mDNSconfig.host;
+    const skip = request.body.skip === '1';
 
-  const ssid = request.body.ssid.trim();
-  const password = request.body.password.trim();
+    if (skip) {
+      console.log(
+        'wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.'
+      );
 
-  // XXX
-  // We can come back here from the status page if the user defines
-  // more than one network. We always need to call defineNetwork(), but
-  // only need to call stopAP() if we're actually in ap mode.
-  //
-  // Also, if we're not in AP mode, then we should just redirect to
-  // /status instead of sending the connecting template.
-  //
-  response.send(connectingTemplate({skip: 'false'}));
+      Settings.set('wifiskip', true).catch((e) => {
+        console.error(
+          'wifi-setup: handleConnecting: failed to store wifiskip:', e
+        );
+      }).then(() => {
+        response.send(connectingTemplate({skip: `${skip}`, domain}));
+        wifi.stopAP();
+        WiFiSetupApp.onConnection();
+      });
+      return;
+    }
 
-  // Wait before switching networks to make sure the response gets through.
-  // And also wait to be sure that the access point is fully down before
-  // defining the new network. If I only wait two seconds here, it seems
-  // like the Edison takes a really long time to bring up the new network
-  // but a 5 second wait seems to work better.
-  wait(2000)
-    .then(() => wifi.stopAP())
-    .then(() => wait(5000))
-    .then(() => wifi.getKnownNetworks())
-    .then((networks) => {
-      const index = networks.indexOf(ssid);
-      if (index >= 0) {
-        // Remove the existing network. We should be able to update this with
-        // `wpa_cli -iwlan0 new_password <id> "<psk>"`, but that doesn't seem
-        // to actually work.
-        return wifi.removeNetwork(index);
-      } else {
-        return Promise.resolve();
-      }
-    })
-    .then(() => wifi.defineNetwork(ssid, password))
-    .then(() => wifi.waitForWiFi(20, 3000))
-    .then(() => {
-      WiFiSetupApp.onConnection();
-    })
-    .catch((error) => {
-      console.log('General Error:', error);
-    });
+    const ssid = request.body.ssid.trim();
+    const password = request.body.password.trim();
+
+    // XXX
+    // We can come back here from the status page if the user defines
+    // more than one network. We always need to call defineNetwork(), but
+    // only need to call stopAP() if we're actually in ap mode.
+    //
+    // Also, if we're not in AP mode, then we should just redirect to
+    // /status instead of sending the connecting template.
+    response.send(connectingTemplate({skip: `${skip}`, domain}));
+
+    // Wait before switching networks to make sure the response gets through.
+    // And also wait to be sure that the access point is fully down before
+    // defining the new network. If I only wait two seconds here, it seems
+    // like the Edison takes a really long time to bring up the new network
+    // but a 5 second wait seems to work better.
+    sleep(2000)
+      .then(() => {
+        wifi.stopAP();
+        return sleep(5000);
+      })
+      .then(() => {
+        const networks = wifi.getKnownNetworks();
+        const index = networks.indexOf(ssid);
+        if (index >= 0) {
+          wifi.removeNetwork(index);
+        }
+
+        if (!wifi.defineNetwork(ssid, password)) {
+          console.error(
+            'wifi-setup: handleConnecting: failed to define network'
+          );
+        } else {
+          return wifi.waitForWiFi(20, 3000).then(() => {
+            WiFiSetupApp.onConnection();
+          });
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.error('wifi-setup: handleConnecting: general error:', error);
+        }
+      });
+  });
 }
 
 module.exports = WiFiSetupApp;

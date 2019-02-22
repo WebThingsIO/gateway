@@ -107,33 +107,51 @@ const Profile = {
     db.open();
 
     // Normalize user email addresses
-    Users.getUsers().then((users) => {
-      users.forEach((user) => {
-        // Call editUser with the same user, as it will normalize the email
-        // for us and save it.
-        Users.editUser(user);
-      });
-    });
+    pending.push(
+      Users.getUsers().then((users) => {
+        users.forEach((user) => {
+          // Call editUser with the same user, as it will normalize the email
+          // for us and save it.
+          Users.editUser(user);
+        });
+      })
+    );
 
     // Move the tunneltoken into the database.
     const ttPath = path.join(this.gatewayDir, 'tunneltoken');
     if (fs.existsSync(ttPath)) {
       const token = JSON.parse(fs.readFileSync(ttPath));
-      Settings.set('tunneltoken', token).then(() => {
-        fs.unlinkSync(ttPath);
-      }).catch((e) => {
-        throw e;
-      });
+      pending.push(
+        Settings.set('tunneltoken', token).then(() => {
+          fs.unlinkSync(ttPath);
+        }).catch((e) => {
+          throw e;
+        })
+      );
     }
 
     // Move the notunnel setting into the database.
     const ntPath = path.join(this.gatewayDir, 'notunnel');
     if (fs.existsSync(ntPath)) {
-      Settings.set('notunnel', true).then(() => {
-        fs.unlinkSync(ntPath);
-      }).catch((e) => {
-        throw e;
-      });
+      pending.push(
+        Settings.set('notunnel', true).then(() => {
+          fs.unlinkSync(ntPath);
+        }).catch((e) => {
+          throw e;
+        })
+      );
+    }
+
+    // Move the wifiskip setting into the database.
+    const wsPath = path.join(this.configDir, 'wifiskip');
+    if (fs.existsSync(wsPath)) {
+      pending.push(
+        Settings.set('wifiskip', true).then(() => {
+          fs.unlinkSync(wsPath);
+        }).catch((e) => {
+          throw e;
+        })
+      );
     }
 
     // Move certificates, if necessary.
@@ -171,7 +189,7 @@ const Profile = {
 
     const oldSslDir = path.join(this.gatewayDir, 'ssl');
     if (fs.existsSync(oldSslDir)) {
-      rimraf(oldSslDir, (err) => {
+      rimraf.sync(oldSslDir, (err) => {
         if (err) {
           throw err;
         }

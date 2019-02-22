@@ -20,15 +20,12 @@ const GetOpt = require('node-getopt');
 const PluginClient = require('./plugin/plugin-client');
 const db = require('./db');
 const Settings = require('./models/settings');
+const sleep = require('./sleep');
 const fs = require('fs');
 const path = require('path');
 
 // Open the database.
 db.open();
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 async function loadAddon(addonPath, verbose) {
   // Skip if there's no package.json file.
