@@ -47,6 +47,91 @@ function setDhcpServerStatus(enabled) {
 }
 
 /**
+ * Get the LAN mode and options.
+ *
+ * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
+ */
+function getLanMode() {
+  let mode = 'static';
+  const options = {};
+
+  if (!fs.existsSync('/etc/network/interfaces.d/eth0')) {
+    mode = 'dhcp';
+    return {mode, options};
+  }
+
+  const data = fs.readFileSync('/etc/network/interfaces.d/eth0', 'utf8');
+  for (const line of data.trim().split('\n')) {
+    const parts = line.trim().split(' ').filter((s) => s.length > 0);
+
+    switch (parts[0]) {
+      case 'iface':
+        mode = parts[3];
+        break;
+      case 'address':
+        options.ipaddr = parts[1];
+        break;
+      case 'netmask':
+        options.netmask = parts[1];
+        break;
+      case 'gateway':
+        options.gateway = parts[1];
+        break;
+      case 'dns-nameservers':
+        options.dns = parts.slice(1);
+        break;
+    }
+  }
+
+  return {mode, options};
+}
+
+/**
+ * Set the LAN mode and options.
+ *
+ * @param {string} mode - static, dhcp, ...
+ * @param {Object?} options - options specific to LAN mode
+ * @returns {boolean} Boolean indicating success.
+ */
+function setLanMode(mode, options = {}) {
+  const valid = ['static', 'dhcp'];
+  if (!valid.includes(mode)) {
+    return false;
+  }
+
+  let entry = `auto eth0\niface eth0 inet ${mode}\n`;
+  if (options.ipaddr) {
+    entry += `    address ${options.ipaddr}\n`;
+  }
+  if (options.netmask) {
+    entry += `    netmask ${options.netmask}\n`;
+  }
+  if (options.gateway) {
+    entry += `    gateway ${options.gateway}\n`;
+  }
+  if (options.dns) {
+    entry += `    dns-nameservers ${options.dns.join(' ')}\n`;
+  }
+
+  fs.writeFileSync('/tmp/eth0', entry);
+
+  let proc = child_process.spawnSync(
+    'sudo',
+    ['mv', '/tmp/eth0', '/etc/network/interfaces.d/']
+  );
+
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'restart', 'networking.service']
+  );
+  return proc.status === 0;
+}
+
+/**
  * Get SSH server status.
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
@@ -225,6 +310,8 @@ module.exports = {
   setDhcpServerStatus,
   getHostname,
   setHostname,
+  getLanMode,
+  setLanMode,
   getMdnsServerStatus,
   setMdnsServerStatus,
   getSshServerStatus,
