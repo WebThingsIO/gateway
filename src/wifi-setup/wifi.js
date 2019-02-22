@@ -3,19 +3,9 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const platform = require('./platform');
+const UserProfile = require('../user-profile');
 
-module.exports = {
-  getStatus,
-  scan,
-  startAP,
-  stopAP,
-  defineNetwork,
-  removeNetwork,
-  getKnownNetworks,
-  checkConnection,
-  waitForWiFi,
-  preliminaryScanResults: [],
-};
+const preliminaryScanResults = [];
 
 /**
  * Get wifi connection status.
@@ -30,15 +20,15 @@ function getStatus() {
  * Scan for available wifi networks.
  *
  * @param {number?} numAttempts - Number of previous attempts to scan
- * @returns {Object[]} List of networks:
- *                     [
- *                       {
- *                         ssid: '...',
- *                         quality: ...,
- *                         encryption: true|false
- *                       },
- *                       ...
- *                     ]
+ * @returns {Promise<Object[]>} Promise which resolves to the list of networks:
+ *                              [
+ *                                {
+ *                                  ssid: '...',
+ *                                  quality: ...,
+ *                                  encryption: true|false
+ *                                },
+ *                                ...
+ *                              ]
  */
 function scan(numAttempts) {
   numAttempts = numAttempts || 1;
@@ -52,13 +42,15 @@ function scan(numAttempts) {
       if (results.length > 0) {
         resolve(results);
       } else {
-        console.error('Scan attempt', attempts, 'failed');
+        console.log('wifi-setup: scan: Scan attempt', attempts, 'failed');
 
         if (attempts >= numAttempts) {
-          console.error('Giving up. No scan results available.');
+          console.error(
+            'wifi-setup: scan: Giving up. No scan results available.'
+          );
           resolve([]);
         } else {
-          console.error('Will try again in 3 seconds.');
+          console.log('wifi-setup: scan: Will try again in 3 seconds.');
           setTimeout(tryScan, 3000);
         }
       }
@@ -123,63 +115,84 @@ function getKnownNetworks() {
   return platform.getKnownNetworks();
 }
 
+/**
+ * Determine whether or not we already have a connection.
+ *
+ * @returns {Promise} Promise which resolves to true/false, indicating whether
+ *                    or not we have a connection.
+ */
 function checkConnection() {
-  const profileDir = process.env.MOZIOT_HOME || config.get('profileDir');
-  const wifiskipPath = path.join(profileDir, 'config', 'wifiskip');
+  const wifiskipPath = path.join(UserProfile.configDir, 'wifiskip');
 
   if (fs.existsSync(wifiskipPath)) {
     return Promise.resolve(true);
   }
 
   // Wait until we have a working wifi connection. Retry every 3 seconds up
-  // to 20 times. If we are connected, then start the Gateway client.
-  // If we never get a wifi connection, go into AP mode.
+  // to 20 times. If we never get a wifi connection, go into AP mode.
   return waitForWiFi(20, 3000).then(() => {
     return true;
   }).catch((err) => {
-    console.log('No wifi connection found. Starting the AP...', err);
+    if (err) {
+      console.error('wifi-setup: checkConnection: Error waiting:', err);
+    }
+
     // Scan for wifi networks now because we can't always scan once
     // the AP is being broadcast, retrying up to 10 times
     scan(10).then((ssids) => {
-      module.exports.preliminaryScanResults = ssids;
-      console.log('No wifi found; entering AP mode');
-      startAP(config.get('wifi.ap_ip'));
+      // Update the existing preliminaryScanResults reference
+      preliminaryScanResults.splice(0, preliminaryScanResults.length);
+      Array.prototype.push.apply(preliminaryScanResults, ssids);
+
+      console.log(
+        'wifi-setup: checkConnection: No wifi connection found, starting the AP'
+      );
+
+      if (!startAP(config.get('wifi.ap_ip'))) {
+        console.error('wifi-setup: checkConnection: failed to start AP');
+      }
     });
 
     return false;
   });
 }
 
-// Return a promise, then check every interval ms for a wifi connection.
-// Resolve the promise when we're connected. Or, if we aren't connected
-// after maxAttempts attempts, then reject the promise
+/**
+ * Wait for a wifi connection.
+ *
+ * @param {number} maxAttempts - Maximum number of attempts
+ * @param {number} interval - Interval at which to check, in milliseconds
+ * @returns {Promise} Promise which resolves when we're connected. If we
+ *                    aren't connected after maxAttempts attempts, then the
+ *                    promise is rejected.
+ */
 function waitForWiFi(maxAttempts, interval) {
   return new Promise(function(resolve, reject) {
     let attempts = 0;
 
-    // first of all we query wpa_supplicant if there's a wifi AP configured
+    // first, see if any networks are already configured
     const networks = getKnownNetworks();
-    console.log('List Networks command executed:', networks);
     if (networks.length > 0) {
-      // there's at least one wifi AP configured. Let's wait to see if it
-      // will connect
+      // there's at least one wifi network configured. Let's wait to see if it
+      // will connect.
+      console.log('wifi-setup: waitForWiFi: networks exist:', networks);
       check();
     } else {
-      // No wifi AP configured. Let's skip the wait and start the setup
-      // immediately
+      // No wifi network configured. Let's skip the wait and start the setup
+      // immediately.
       reject();
     }
 
     function check() {
       attempts++;
-      console.log('check', attempts);
       const status = getStatus();
       if (status.connected) {
-        console.log('WiFi connection found. resolving');
+        console.log('wifi-setup: waitForWifi: connection found');
         checkForAddress();
-        console.log('resolved');
       } else {
-        console.log('No wifi connection on attempt', attempts);
+        console.log(
+          'wifi-setup: waitForWifi: No wifi connection on attempt', attempts
+        );
         retryOrGiveUp();
       }
     }
@@ -203,7 +216,7 @@ function waitForWiFi(maxAttempts, interval) {
 
     function retryOrGiveUp() {
       if (attempts >= maxAttempts) {
-        console.error('Giving up. No wifi available.');
+        console.error('wifi-setup: waitForWiFi: No wifi available, giving up.');
         reject();
       } else {
         setTimeout(check, interval);
@@ -211,3 +224,16 @@ function waitForWiFi(maxAttempts, interval) {
     }
   });
 }
+
+module.exports = {
+  getStatus,
+  scan,
+  startAP,
+  stopAP,
+  defineNetwork,
+  removeNetwork,
+  getKnownNetworks,
+  checkConnection,
+  waitForWiFi,
+  preliminaryScanResults,
+};
