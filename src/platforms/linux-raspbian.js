@@ -12,6 +12,41 @@ const child_process = require('child_process');
 const fs = require('fs');
 
 /**
+ * Get DHCP server status.
+ *
+ * @returns {boolean} Boolean indicating whether or not DHCP is enabled.
+ */
+function getDhcpServerStatus() {
+  const proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'is-active', 'dnsmasq.service']
+  );
+  return proc.status === 0;
+}
+
+/**
+ * Set DHCP server status.
+ *
+ * @param {boolean} enabled - Whether or not to enable the DHCP server
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setDhcpServerStatus(enabled) {
+  let proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', enabled ? 'start' : 'stop', 'dnsmasq.service']
+  );
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', enabled ? 'enable' : 'disable', 'dnsmasq.service']
+  );
+  return proc.status === 0;
+}
+
+/**
  * Get SSH server status.
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
@@ -65,10 +100,17 @@ function getMdnsServerStatus() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function setMdnsServerStatus(enabled) {
-  const command = enabled ? 'start' : 'stop';
-  const proc = child_process.spawnSync(
+  let proc = child_process.spawnSync(
     'sudo',
-    ['systemctl', command, 'avahi-daemon.service']
+    ['systemctl', enabled ? 'start' : 'stop', 'avahi-daemon.service']
+  );
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', enabled ? 'enable' : 'disable', 'avahi-daemon.service']
   );
   return proc.status === 0;
 }
@@ -144,7 +186,7 @@ function setHostname(hostname) {
       '-i',
       '-E',
       '-e',
-      `s/(127\\.0\\.0\\.1[ \\t]+)${original}/\\1${hostname}/g`,
+      `s/(127\\.0\\.1\\.1[ \\t]+)${original}/\\1${hostname}/g`,
       '/etc/hosts',
     ]
   );
@@ -179,6 +221,8 @@ function restartSystem() {
 }
 
 module.exports = {
+  getDhcpServerStatus,
+  setDhcpServerStatus,
   getHostname,
   setHostname,
   getMdnsServerStatus,
