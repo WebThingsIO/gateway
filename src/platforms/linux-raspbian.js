@@ -137,7 +137,18 @@ function setHostname(hostname) {
     return false;
   }
 
-  return true;
+  proc = child_process.spawnSync(
+    'sudo',
+    [
+      'sed',
+      '-i',
+      '-E',
+      '-e',
+      `s/(127\\.0\\.0\\.1[ \\t]+)${original}/\\1${hostname}/g`,
+      '/etc/hosts',
+    ]
+  );
+  return proc.status === 0;
 }
 
 /**

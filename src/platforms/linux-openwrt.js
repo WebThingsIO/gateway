@@ -579,34 +579,24 @@ function setHostname(hostname) {
     return false;
   }
 
-  let proc = child_process.spawnSync(
-    'uci',
-    ['set', `system.@system[0].hostname='${hostname}'`]
-  );
+  if (!uciSet('system.@system[0].hostname', hostname)) {
+    return false;
+  }
+
+  if (!uciCommit('system')) {
+    return false;
+  }
+
+  let proc = child_process.spawnSync('/etc/init.d/system', ['reload']);
   if (proc.status !== 0) {
     return false;
   }
 
-  proc = child_process.spawnSync('uci', ['commit', 'system']);
-  if (proc.status !== 0) {
+  if (!uciSet('network.lan.hostname', hostname)) {
     return false;
   }
 
-  proc = child_process.spawnSync('/etc/init.d/system', ['reload']);
-  if (proc.status !== 0) {
-    return false;
-  }
-
-  proc = child_process.spawnSync(
-    'uci',
-    ['set', `network.lan.hostname='${hostname}'`]
-  );
-  if (proc.status !== 0) {
-    return false;
-  }
-
-  proc = child_process.spawnSync('uci', ['commit', 'network']);
-  if (proc.status !== 0) {
+  if (!uciCommit('network')) {
     return false;
   }
 
