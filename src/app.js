@@ -285,7 +285,7 @@ let wifiPromise = Promise.resolve(true);
 const options = getOptions();
 
 if (options['check-wifi']) {
-  wifiPromise = wifi.checkConnection();
+  wifiPromise = migration.then(() => wifi.checkConnection());
 }
 
 wifiPromise.then((connected) => {

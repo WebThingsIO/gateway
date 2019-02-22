@@ -1,9 +1,7 @@
 const config = require('config');
-const fs = require('fs');
 const os = require('os');
-const path = require('path');
 const platform = require('./platform');
-const UserProfile = require('../user-profile');
+const Settings = require('../models/settings');
 
 const preliminaryScanResults = [];
 
@@ -122,38 +120,38 @@ function getKnownNetworks() {
  *                    or not we have a connection.
  */
 function checkConnection() {
-  const wifiskipPath = path.join(UserProfile.configDir, 'wifiskip');
-
-  if (fs.existsSync(wifiskipPath)) {
-    return Promise.resolve(true);
-  }
-
-  // Wait until we have a working wifi connection. Retry every 3 seconds up
-  // to 20 times. If we never get a wifi connection, go into AP mode.
-  return waitForWiFi(20, 3000).then(() => {
-    return true;
-  }).catch((err) => {
-    if (err) {
-      console.error('wifi-setup: checkConnection: Error waiting:', err);
+  return Settings.get('wifiskip').catch(() => false).then((skipped) => {
+    if (skipped) {
+      return Promise.resolve(true);
     }
 
-    // Scan for wifi networks now because we can't always scan once
-    // the AP is being broadcast, retrying up to 10 times
-    scan(10).then((ssids) => {
-      // Update the existing preliminaryScanResults reference
-      preliminaryScanResults.splice(0, preliminaryScanResults.length);
-      Array.prototype.push.apply(preliminaryScanResults, ssids);
-
-      console.log(
-        'wifi-setup: checkConnection: No wifi connection found, starting the AP'
-      );
-
-      if (!startAP(config.get('wifi.ap_ip'))) {
-        console.error('wifi-setup: checkConnection: failed to start AP');
+    // Wait until we have a working wifi connection. Retry every 3 seconds up
+    // to 20 times. If we never get a wifi connection, go into AP mode.
+    return waitForWiFi(20, 3000).then(() => {
+      return true;
+    }).catch((err) => {
+      if (err) {
+        console.error('wifi-setup: checkConnection: Error waiting:', err);
       }
-    });
 
-    return false;
+      // Scan for wifi networks now because we can't always scan once
+      // the AP is being broadcast, retrying up to 10 times
+      scan(10).then((ssids) => {
+        // Update the existing preliminaryScanResults reference
+        preliminaryScanResults.splice(0, preliminaryScanResults.length);
+        Array.prototype.push.apply(preliminaryScanResults, ssids);
+
+        console.log(
+          'wifi-setup: checkConnection: No wifi connection found, starting AP'
+        );
+
+        if (!startAP(config.get('wifi.ap_ip'))) {
+          console.error('wifi-setup: checkConnection: failed to start AP');
+        }
+      });
+
+      return false;
+    });
   });
 }
 

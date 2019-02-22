@@ -88,7 +88,10 @@ module.exports = {
         continue;
       }
 
-      networks.push(line.split('\t')[1]);
+      const ssid = line.split('\t')[1];
+      if (ssid) {
+        networks.push(ssid);
+      }
     }
 
     return networks;
@@ -156,18 +159,22 @@ module.exports = {
 
     const id = proc.stdout.trim();
 
+    ssid = ssid.replace('"', '\\"');
     proc = child_process.spawnSync(
       'wpa_cli',
-      ['-i', 'wlan0', 'set_network', id, 'ssid', ssid]
+      // the ssid argument MUST be quoted
+      ['-i', 'wlan0', 'set_network', id, 'ssid', `"${ssid}"`]
     );
     if (proc.status !== 0) {
       return false;
     }
 
     if (psk) {
+      psk = psk.replace('"', '\\"');
       proc = child_process.spawnSync(
         'wpa_cli',
-        ['-i', 'wlan0', 'set_network', id, 'psk', psk]
+        // the psk argument MUST be quoted
+        ['-i', 'wlan0', 'set_network', id, 'psk', `"${psk}"`]
       );
     } else {
       proc = child_process.spawnSync(

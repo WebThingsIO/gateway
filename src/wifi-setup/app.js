@@ -6,8 +6,8 @@ const fs = require('fs');
 const Handlebars = require('handlebars');
 const mDNSserver = require('../mdns-server');
 const path = require('path');
+const Settings = require('../models/settings');
 const sleep = require('../sleep');
-const UserProfile = require('../user-profile');
 const wifi = require('./wifi');
 
 // Build templates
@@ -49,31 +49,33 @@ function handleCaptive(request, response, next) {
 
   switch (request.path) {
     case '/hotspot.html':
+      // WISPr XML response
       response.send(hotspotTemplate({ap_ip: config.get('wifi.ap_ip')}));
       break;
-    case '/hotspot-detect.html':
-    case '/connecttest.txt': {
-      // Windows, macOS, iOS
+    case '/hotspot-detect.html':        // iOS/macOS
+    case '/library/test/success.html':  // iOS/macOS
+    case '/connecttest.txt': {          // Windows
       const ua = request.get('User-Agent');
+
+      // These 2 user-agents expect a WISPr XML response
       if (ua.includes('CaptiveNetworkSupport') ||
           ua.includes('Microsoft NCSI')) {
         response.redirect(
           302,
           `http://${config.get('wifi.ap_ip')}/hotspot.html`
         );
-      } else {
-        response.redirect(302, `http://${config.get('wifi.ap_ip')}/wifi-setup`);
+        break;
       }
 
-      break;
+      // otherwise, fall through
     }
-    case '/generate_204':
-    case '/fwlink/':
-      // Android
-      response.redirect(302, `http://${config.get('wifi.ap_ip')}/wifi-setup`);
-      break;
-    case '/redirect':
-      // Windows
+    // eslint-disable-next-line no-fallthrough
+    case '/kindle-wifi/wifistub.html':  // Kindle
+    case '/generate_204':               // Android, Chrome
+    case '/fwlink/':                    // Windows
+    case '/redirect':                   // Windows
+    case '/success.txt':                // Firefox
+      // Redirect to the wifi setup page
       response.redirect(302, `http://${config.get('wifi.ap_ip')}/wifi-setup`);
       break;
     default:
@@ -153,11 +155,16 @@ function handleConnecting(request, response) {
       console.log(
         'wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.'
       );
-      const wifiskipPath = path.join(UserProfile.configDir, 'wifiskip');
-      fs.closeSync(fs.openSync(wifiskipPath, 'w'));
-      response.send(connectingTemplate({skip: `${skip}`, domain}));
-      wifi.stopAP();
-      WiFiSetupApp.onConnection();
+
+      Settings.set('wifiskip', true).catch((e) => {
+        console.error(
+          'wifi-setup: handleConnecting: failed to store wifiskip:', e
+        );
+      }).then(() => {
+        response.send(connectingTemplate({skip: `${skip}`, domain}));
+        wifi.stopAP();
+        WiFiSetupApp.onConnection();
+      });
       return;
     }
 
@@ -190,11 +197,15 @@ function handleConnecting(request, response) {
           wifi.removeNetwork(index);
         }
 
-        return wifi.defineNetwork(ssid, password);
-      })
-      .then(() => wifi.waitForWiFi(20, 3000))
-      .then(() => {
-        WiFiSetupApp.onConnection();
+        if (!wifi.defineNetwork(ssid, password)) {
+          console.error(
+            'wifi-setup: handleConnecting: failed to define network'
+          );
+        } else {
+          return wifi.waitForWiFi(20, 3000).then(() => {
+            WiFiSetupApp.onConnection();
+          });
+        }
       })
       .catch((error) => {
         if (error) {
