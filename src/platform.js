@@ -108,8 +108,8 @@ module.exports = {
 };
 
 // Wrap platform-specific methods
-function wrapPlatform(platform, fn, ...params) {
-  return () => {
+function wrapPlatform(platform, fn) {
+  return (...params) => {
     if (platform === null) {
       throw new NotImplementedError(fn);
     }
