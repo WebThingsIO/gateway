@@ -92,7 +92,7 @@ function handleCaptive(request, response, next) {
 function handleRoot(request, response) {
   const status = wifi.getStatus();
 
-  if (!status.connected) {
+  if (!(status.enabled && status.mode === 'sta')) {
     // If we don't have a wifi connection yet, display the wifi setup page
     console.log(
       'wifi-setup: handleRoot: no wifi connection; redirecting to wifiSetup'
@@ -191,12 +191,6 @@ function handleConnecting(request, response) {
         return sleep(5000);
       })
       .then(() => {
-        const networks = wifi.getKnownNetworks();
-        const index = networks.indexOf(ssid);
-        if (index >= 0) {
-          wifi.removeNetwork(index);
-        }
-
         if (!wifi.defineNetwork(ssid, password)) {
           console.error(
             'wifi-setup: handleConnecting: failed to define network'

@@ -1,6 +1,7 @@
+const child_process = require('child_process');
 const config = require('config');
 const os = require('os');
-const platform = require('./platform');
+const platform = require('../platform');
 const Settings = require('../models/settings');
 
 const preliminaryScanResults = [];
@@ -8,10 +9,10 @@ const preliminaryScanResults = [];
 /**
  * Get wifi connection status.
  *
- * @returns {object} {connected: true|false, ssid: '...'}
+ * @returns {object} {enabled: true|false, mode: 'ap|sta', options{...}}
  */
 function getStatus() {
-  return platform.getStatus();
+  return platform.getWirelessMode();
 }
 
 /**
@@ -36,7 +37,7 @@ function scan(numAttempts) {
     function tryScan() {
       attempts++;
 
-      const results = platform.scan();
+      const results = _scan();
       if (results.length > 0) {
         resolve(results);
       } else {
@@ -58,6 +59,79 @@ function scan(numAttempts) {
   });
 }
 
+function _scan() {
+  const proc = child_process.spawnSync(
+    'sudo',
+    ['iwlist', 'scanning'],
+    {encoding: 'utf8'}
+  );
+
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  const lines = proc.stdout
+    .split('\n')
+    .filter((l) => l.startsWith(' '))
+    .map((l) => l.trim());
+
+  const cells = [];
+  let cell = {};
+
+  for (const line of lines) {
+    // New cell, start over
+    if (line.startsWith('Cell ')) {
+      if (cell.hasOwnProperty('ssid') &&
+          cell.hasOwnProperty('quality') &&
+          cell.hasOwnProperty('encryption') &&
+          cell.ssid.length > 0) {
+        cells.push(cell);
+      }
+
+      cell = {};
+    }
+
+    if (line.startsWith('ESSID:')) {
+      cell.ssid = line.substring(7, line.length - 1);
+    }
+
+    if (line.startsWith('Quality=')) {
+      cell.quality = parseInt(line.split(' ')[0].split('=')[1].split('/')[0]);
+    }
+
+    if (line.startsWith('Encryption key:')) {
+      cell.encryption = line.split(':')[1] === 'on';
+    }
+  }
+
+  return cells;
+}
+
+function _getKnownNetworks() {
+  const proc = child_process.spawnSync(
+    'wpa_cli',
+    ['-i', 'wlan0', 'list_networks'],
+    {encoding: 'utf8'}
+  );
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  const networks = [];
+  for (const line of proc.stdout.trim().split('\n')) {
+    if (line.startsWith('network')) {
+      continue;
+    }
+
+    const ssid = line.split('\t')[1];
+    if (ssid) {
+      networks.push(ssid);
+    }
+  }
+
+  return networks;
+}
+
 /**
  * Enable an access point that users can connect to to configure the device.
  *
@@ -71,7 +145,13 @@ function scan(numAttempts) {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function startAP(ip) {
-  return platform.startAP(ip);
+  if (!platform.setWirelessMode(true,
+                                'ap',
+                                {ssid: 'Mozilla IoT Gateway', ipaddr: ip})) {
+    return false;
+  }
+
+  return platform.setDhcpServerStatus(true);
 }
 
 /**
@@ -80,7 +160,11 @@ function startAP(ip) {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function stopAP() {
-  return platform.stopAP();
+  if (!platform.setWirelessMode(false, 'ap')) {
+    return false;
+  }
+
+  return platform.setDhcpServerStatus(false);
 }
 
 /**
@@ -91,26 +175,7 @@ function stopAP() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function defineNetwork(ssid, password) {
-  return platform.defineNetwork(ssid, password);
-}
-
-/**
- * Remove a configured network.
- *
- * @param {number} id - ID of network
- * @returns {boolean} Boolean indicating success of the command.
- */
-function removeNetwork(id) {
-  return platform.removeNetwork(id);
-}
-
-/**
- * Get a list of configured networks.
- *
- * @returns {String[]} List of network names.
- */
-function getKnownNetworks() {
-  return platform.getKnownNetworks();
+  return platform.setWirelessMode(true, 'sta', {ssid, key: password});
 }
 
 /**
@@ -169,7 +234,7 @@ function waitForWiFi(maxAttempts, interval) {
     let attempts = 0;
 
     // first, see if any networks are already configured
-    const networks = getKnownNetworks();
+    const networks = _getKnownNetworks();
     if (networks.length > 0) {
       // there's at least one wifi network configured. Let's wait to see if it
       // will connect.
@@ -184,7 +249,7 @@ function waitForWiFi(maxAttempts, interval) {
     function check() {
       attempts++;
       const status = getStatus();
-      if (status.connected) {
+      if (status.enabled && status.mode === 'sta') {
         console.log('wifi-setup: waitForWifi: connection found');
         checkForAddress();
       } else {
@@ -229,8 +294,6 @@ module.exports = {
   startAP,
   stopAP,
   defineNetwork,
-  removeNetwork,
-  getKnownNetworks,
   checkConnection,
   waitForWiFi,
   preliminaryScanResults,
