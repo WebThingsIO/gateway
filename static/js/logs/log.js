@@ -1,5 +1,4 @@
 // const Thing = require('../thing');
-const API = require('../api');
 const App = require('../app');
 const Utils = require('../utils');
 
@@ -26,7 +25,6 @@ class Log {
     // Get in the name and webcomponent
     this.name = document.createElement('h3');
     this.name.classList.add('logs-log-name');
-    this.name.textContent = `${this.thingId}.${this.propertyId}`;
     const thingContainer = document.createElement('div');
     // new Thing(thingContainer); // TODO
 
@@ -50,11 +48,9 @@ class Log {
 
     this.graph.appendChild(axesPath);
 
-    this.yAxisLabel = this.makeText('W', this.xStart - this.margin / 4,
+    this.yAxisLabel = this.makeText('', this.xStart - this.margin / 4,
                                     this.height / 2, 'end', 'middle');
     this.yAxisLabel.classList.add('logs-graph-label');
-    // const timeLabels = this.makeText('why', (this.xStart + this.width -
-    // this.margin) / 2, this.height / 2, 'left');
 
     this.graph.appendChild(this.yAxisLabel);
 
@@ -83,13 +79,13 @@ class Log {
     return elt;
   }
 
-  async reload() {
-    await this.load();
+  async reload(data) {
+    await this.load(data);
     this.redrawLog();
     // fetch data render graph
   }
 
-  async load() {
+  async load(data) {
     const thing = await App.gatewayModel.getThingModel(this.thingId);
     if (!thing) {
       // be sad
@@ -103,10 +99,6 @@ class Log {
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
 
-    const res = await fetch(`/logs/things/${this.thingId}/properties/${this.propertyId}`, {
-      headers: API.headers(),
-    });
-    const data = await res.json();
     if (!data || !data.length) {
       this.rawPoints = [];
       return;
@@ -164,15 +156,25 @@ class Log {
     };
   }
 
-
   redrawLog() {
     if (!this.property) {
       return;
     }
 
     const bounds = this.valueBounds();
-    const yMin = Math.min(0, bounds.min);
-    const yMax = bounds.max;
+    let yMin = Math.min(0, bounds.min);
+    let yMax = bounds.max;
+    console.log(this.property, yMin, yMax);
+    // Preserve 3 significant figures (not using toPrecision since that does
+    // scientific notation)
+    const lowestPowerOf10ToPreserve =
+      Math.pow(10, Math.ceil(Math.log(yMax - yMin) / Math.LN10) - 3);
+    yMax = Math.ceil(yMax / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
+    yMin = Math.floor(yMin / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
+    console.log('now', yMin, yMax);
+
     const yScale = (y) => {
       return this.height - this.margin - (y - yMin) / (yMax - yMin) *
         this.graphHeight;
@@ -203,6 +205,12 @@ class Log {
     }
 
     if (points.length > 0) {
+      // Make sure the data extends to the present
+      points.push({
+        x: this.graphWidth + this.xStart,
+        y: points[points.length - 1].y,
+      });
+
       const graphLine = this.makePath(points);
       graphLine.classList.add('logs-graph-line');
 
@@ -222,28 +230,26 @@ class Log {
       this.graph.appendChild(graphLine);
     }
 
-    let yMinLabel = yMin;
-    let yMaxLabel = yMax;
-    if (Math.abs(yMax - yMin) > 1) {
-      yMaxLabel = Math.floor(yMaxLabel);
-      yMinLabel = Math.floor(yMinLabel);
-    }
-
-    let labelText = `${yMinLabel}`;
+    const places = Math.max(0, 2 - Math.log(yMax - yMin) / Math.LN10);
+    let labelText = yMin.toFixed(places);
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(false);
+    } else if (Math.floor(yMin) === yMin) {
+      labelText = yMin.toFixed(0);
     }
     let label = this.makeText(labelText, this.xStart - this.margin / 4,
-                              yScale(yMinLabel), 'end', 'middle');
+                              yScale(yMin), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
-    labelText = `${yMaxLabel}`;
+    labelText = yMax.toFixed(places);
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(true);
+    } else if (Math.floor(yMax) === yMax) {
+      labelText = yMax.toFixed(0);
     }
     label = this.makeText(labelText, this.xStart - this.margin / 4,
-                          yScale(yMaxLabel), 'end', 'middle');
+                          yScale(yMax), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
