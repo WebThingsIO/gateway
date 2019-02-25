@@ -49,7 +49,7 @@ domain=local
 # a lease time. If you have more than one network, you will need to
 # repeat this for each network on which you want to supply DHCP
 # service.
-dhcp-range=192.168.220.2,192.168.220.10,2h
+dhcp-range=192.168.220.100,192.168.220.250,12h
 
 # Override the default route supplied by dnsmasq, which assumes the
 # router is the same machine as the one running dnsmasq.
