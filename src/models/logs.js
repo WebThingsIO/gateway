@@ -188,7 +188,6 @@ class Logs {
 
   async loadMetrics(out, table, transformer) {
     const rows = await this.all(`SELECT id, value, date FROM ${table}`);
-    console.log('loadMetrics', this.idToDescr, rows);
     for (const row of rows) {
       const descr = JSON.parse(this.idToDescr[row.id]);
       if (!out.hasOwnProperty(descr.thing)) {
@@ -211,7 +210,6 @@ class Logs {
     await this.loadMetrics(out, METRICS_NUMBER);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value);
     await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value));
-    console.log('getAll', out);
     return out;
   }
 
