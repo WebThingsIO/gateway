@@ -278,7 +278,7 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     }
   }
 
-  // Then, disable hostapd. It will either need to be off or reconfigured, so
+  // Then, stop hostapd. It will either need to be off or reconfigured, so
   // this is valid in both modes.
   proc = child_process.spawnSync(
     'sudo',
@@ -288,16 +288,12 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     return false;
   }
 
-  proc = child_process.spawnSync(
-    'sudo',
-    ['systemctl', 'disable', 'hostapd.service']
-  );
-  if (proc.status !== 0) {
-    return false;
-  }
-
   if (!enabled) {
-    return true;
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'disable', 'hostapd.service']
+    );
+    return proc.status === 0;
   }
 
   // Now, set the IP address back to a sane state
@@ -364,6 +360,14 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     if (proc.status !== 0) {
       return false;
     }
+
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'disable', 'hostapd.service']
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
   } else {
     let config = 'interface=wlan0\n';
     config += 'driver=nl80211\n';
@@ -391,14 +395,6 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     proc = child_process.spawnSync(
       'sudo',
       ['systemctl', 'start', 'hostapd.service']
-    );
-    if (proc.status !== 0) {
-      return false;
-    }
-
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'enable', 'hostapd.service']
     );
     if (proc.status !== 0) {
       return false;
