@@ -357,10 +357,10 @@ function getWirelessMode() {
   const key = `wireless.${device}.disabled`;
   result = uciGet(key);
   if (!result.success) {
-    return {enabled, mode, options};
+    enabled = true;
+  } else {
+    enabled = result.value === '0';
   }
-
-  enabled = result.value === '0';
 
   result = uciShow(iface);
   if (!result.success) {
@@ -376,6 +376,8 @@ function getWirelessMode() {
     const opt = key.split('.')[2];
     if (opt === 'mode') {
       mode = value;
+    } else if (opt === 'disabled') {
+      enabled = enabled && (value === '0');
     } else {
       options[opt] = value;
     }

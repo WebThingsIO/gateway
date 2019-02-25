@@ -132,6 +132,289 @@ function setLanMode(mode, options = {}) {
 }
 
 /**
+ * Get the wireless mode and options.
+ *
+ * @returns {Object} {enabled: true|false, mode: 'ap|sta|...', options: {...}}
+ */
+function getWirelessMode() {
+  let enabled = false, mode = '', cipher = '', mgmt = '';
+  const options = {};
+
+  let proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'is-active', 'hostapd.service']
+  );
+  if (proc.status === 0) {
+    mode = 'ap';
+    enabled = true;
+
+    const data = fs.readFileSync('/etc/hostapd/hostapd.conf', 'utf8');
+    if (data) {
+      for (const line of data.split('\n')) {
+        if (line.startsWith('#')) {
+          continue;
+        }
+
+        const [key, value] = line.split('=', 2);
+        switch (key) {
+          case 'ssid':
+            options.ssid = value;
+            break;
+          case 'wpa':
+            switch (value) {
+              case '0':
+                mgmt = 'none';
+                break;
+              case '1':
+                mgmt = 'psk';
+                break;
+              case '2':
+                mgmt = 'psk2';
+                break;
+            }
+            break;
+          case 'wpa_passphrase':
+            options.key = value;
+            break;
+          case 'wpa_pairwise':
+            if (value.indexOf('TKIP') >= 0) {
+              cipher += '+tkip';
+            }
+            if (value.indexOf('CCMP') >= 0) {
+              cipher += '+ccmp';
+            }
+            break;
+        }
+      }
+    }
+  } else {
+    mode = 'sta';
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      ['-i', 'wlan0', 'status'],
+      {encoding: 'utf8'}
+    );
+
+    if (proc.status !== 0) {
+      return {enabled, mode, options};
+    }
+
+    for (const line of proc.stdout.split('\n')) {
+      const [key, value] = line.split('=', 2);
+      switch (key) {
+        case 'wpa_state':
+          enabled = line.split('=')[1] === 'COMPLETED';
+          break;
+        case 'ssid':
+          options.ssid = line.substring(5);
+          break;
+        case 'key_mgmt':
+          switch (value) {
+            case 'WPA2-PSK':
+              mgmt = 'psk2';
+              break;
+            default:
+              mgmt = value.toLowerCase();
+              break;
+          }
+          break;
+        case 'pairwise_cipher':
+          if (value.indexOf('TKIP') >= 0) {
+            cipher += '+tkip';
+          }
+          if (value.indexOf('CCMP') >= 0) {
+            cipher += '+ccmp';
+          }
+          break;
+      }
+    }
+  }
+
+  if (mgmt) {
+    options.encryption = mgmt;
+
+    if (mgmt !== 'none' && cipher) {
+      options.encryption += cipher;
+    }
+  }
+
+  return {enabled, mode, options};
+}
+
+/**
+ * Set the wireless mode and options.
+ *
+ * @param {boolean} enabled - whether or not wireless is enabled
+ * @param {string} mode - ap, sta, ...
+ * @param {Object?} options - options specific to wireless mode
+ * @returns {boolean} Boolean indicating success.
+ */
+function setWirelessMode(enabled, mode = 'ap', options = {}) {
+  const valid = ['ap', 'sta'];
+  if (enabled && !valid.includes(mode)) {
+    return false;
+  }
+
+  // First, remove existing networks
+  let proc = child_process.spawnSync(
+    'wpa_cli',
+    ['-i', 'wlan0', 'list_networks'],
+    {encoding: 'utf8'}
+  );
+  if (proc.status === 0) {
+    const networks = proc.stdout.split('\n')
+      .filter((l) => !l.startsWith('network'))
+      .map((l) => l.split(' ')[0])
+      .reverse();
+
+    for (const id of networks) {
+      proc = child_process.spawnSync(
+        'wpa_cli',
+        ['-i', 'wlan0', 'remove_network', id]
+      );
+      if (proc.status !== 0) {
+        console.log('Failed to remove network with id:', id);
+      }
+    }
+  }
+
+  // Then, stop hostapd. It will either need to be off or reconfigured, so
+  // this is valid in both modes.
+  proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'stop', 'hostapd.service']
+  );
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  if (!enabled) {
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'disable', 'hostapd.service']
+    );
+    return proc.status === 0;
+  }
+
+  // Now, set the IP address back to a sane state
+  proc = child_process.spawnSync(
+    'sudo',
+    ['ifconfig', 'wlan0', '0.0.0.0']
+  );
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  if (mode === 'sta') {
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      ['-i', 'wlan0', 'add_network'],
+      {encoding: 'utf8'}
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    const id = proc.stdout.trim();
+
+    options.ssid = options.ssid.replace('"', '\\"');
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      // the ssid argument MUST be quoted
+      ['-i', 'wlan0', 'set_network', id, 'ssid', `"${options.ssid}"`]
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    if (options.key) {
+      options.key = options.key.replace('"', '\\"');
+      proc = child_process.spawnSync(
+        'wpa_cli',
+        // the psk argument MUST be quoted
+        ['-i', 'wlan0', 'set_network', id, 'psk', `"${options.key}"`]
+      );
+    } else {
+      proc = child_process.spawnSync(
+        'wpa_cli',
+        ['-i', 'wlan0', 'set_network', id, 'key_mgmt', 'NONE']
+      );
+    }
+
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      ['-i', 'wlan0', 'enable_network', id]
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      ['-i', 'wlan0', 'save_config']
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'disable', 'hostapd.service']
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+  } else {
+    let config = 'interface=wlan0\n';
+    config += 'driver=nl80211\n';
+    config += 'hw_mode=g\n';
+    config += 'channel=6\n';
+    config += `ssid=${options.ssid}\n`;
+
+    if (options.key) {
+      config += 'wpa=2\n';
+      config += `wpa_passphrase=${options.key}\n`;
+      config += 'wpa_pairwise=CCMP\n';
+    }
+
+    fs.writeFileSync('/tmp/hostapd.conf', config);
+
+    proc = child_process.spawnSync(
+      'sudo',
+      ['mv', '/tmp/hostapd.conf', '/etc/hostapd/hostapd.conf']
+    );
+
+    if (proc.status !== 0) {
+      return false;
+    }
+
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'start', 'hostapd.service']
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+  }
+
+  if (options.ipaddr) {
+    proc = child_process.spawnSync(
+      'sudo',
+      ['ifconfig', 'wlan0', options.ipaddr]
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Get SSH server status.
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
@@ -316,6 +599,8 @@ module.exports = {
   setMdnsServerStatus,
   getSshServerStatus,
   setSshServerStatus,
+  getWirelessMode,
+  setWirelessMode,
   restartGateway,
   restartSystem,
 };
