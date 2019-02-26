@@ -33,10 +33,10 @@ const IntentParser = {
     ]),
 
   buildMessage: function(data) {
-    data = JSON.stringify(data);
+    data = Buffer.from(JSON.stringify(data));
     const buffer = Buffer.alloc(4 + data.length);
     buffer.writeUInt32BE(data.length, 0);
-    buffer.write(data, 4);
+    data.copy(buffer, 4);
     return buffer;
   },
 
