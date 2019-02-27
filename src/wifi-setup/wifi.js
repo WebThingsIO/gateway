@@ -16,6 +16,24 @@ function getStatus() {
 }
 
 /**
+ * Get the SSID of the hotspot.
+ *
+ * @returns {string} SSID
+ */
+function getHotspotSsid() {
+  const base = config.get('wifi.ap.ssid_base');
+  const mac = platform.getMacAddress('wlan0');
+  if (!mac) {
+    return base;
+  }
+
+  // Get the last 2 octets of the MAC and create a simple string, e.g. 9E28
+  const id = mac.split(':').slice(4).join('').toUpperCase();
+
+  return `${base} ${id}`;
+}
+
+/**
  * Scan for available wifi networks.
  *
  * @param {number?} numAttempts - Number of previous attempts to scan
@@ -142,12 +160,12 @@ function _getKnownNetworks() {
  * Also, the udhcpd config file should be set up to work with the IP address
  * of the device.
  *
+ * @param {string} ipaddr - IP address of AP
  * @returns {boolean} Boolean indicating success of the command.
  */
-function startAP(ip) {
-  if (!platform.setWirelessMode(true,
-                                'ap',
-                                {ssid: 'Mozilla IoT Gateway', ipaddr: ip})) {
+function startAP(ipaddr) {
+  const ssid = getHotspotSsid();
+  if (!platform.setWirelessMode(true, 'ap', {ssid, ipaddr})) {
     return false;
   }
 
@@ -210,7 +228,7 @@ function checkConnection() {
           'wifi-setup: checkConnection: No wifi connection found, starting AP'
         );
 
-        if (!startAP(config.get('wifi.ap_ip'))) {
+        if (!startAP(config.get('wifi.ap.ipaddr'))) {
           console.error('wifi-setup: checkConnection: failed to start AP');
         }
       });
@@ -297,4 +315,5 @@ module.exports = {
   checkConnection,
   waitForWiFi,
   preliminaryScanResults,
+  getHotspotSsid,
 };

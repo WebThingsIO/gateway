@@ -48,10 +48,15 @@ function handleCaptive(request, response, next) {
   console.log('wifi-setup: handleCaptive:', request.path);
 
   switch (request.path) {
-    case '/hotspot.html':
+    case '/hotspot.html': {
       // WISPr XML response
-      response.send(hotspotTemplate({ap_ip: config.get('wifi.ap_ip')}));
+      const ssid = wifi.getHotspotSsid();
+      response.send(hotspotTemplate({
+        ap_ssid: ssid,
+        ap_ip: config.get('wifi.ap.ipaddr'),
+      }));
       break;
+    }
     case '/hotspot-detect.html':        // iOS/macOS
     case '/library/test/success.html':  // iOS/macOS
     case '/connecttest.txt': {          // Windows
@@ -62,7 +67,7 @@ function handleCaptive(request, response, next) {
           ua.includes('Microsoft NCSI')) {
         response.redirect(
           302,
-          `http://${config.get('wifi.ap_ip')}/hotspot.html`
+          `http://${config.get('wifi.ap.ipaddr')}/hotspot.html`
         );
         break;
       }
@@ -76,7 +81,10 @@ function handleCaptive(request, response, next) {
     case '/redirect':                   // Windows
     case '/success.txt':                // Firefox
       // Redirect to the wifi setup page
-      response.redirect(302, `http://${config.get('wifi.ap_ip')}/wifi-setup`);
+      response.redirect(
+        302,
+        `http://${config.get('wifi.ap.ipaddr')}/wifi-setup`
+      );
       break;
     default:
       console.log('wifi-setup: handleCaptive: unknown path, skipping.');
