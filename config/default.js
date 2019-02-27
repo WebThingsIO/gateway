@@ -69,6 +69,9 @@ module.exports = {
   bcryptRounds: 2,
   updateUrl: 'https://api.mozilla-iot.org:8443/releases',
   wifi: {
-    ap_ip: '192.168.220.1',
+    ap: {
+      ipaddr: '192.168.220.1',
+      ssid_base: 'Mozilla IoT Gateway',
+    },
   },
 };

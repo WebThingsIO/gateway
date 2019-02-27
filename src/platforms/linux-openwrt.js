@@ -653,6 +653,21 @@ function restartSystem() {
   return proc.status === 0;
 }
 
+/**
+ * Get the MAC address of a network device.
+ *
+ * @param {string} device - The network device, e.g. wlan0
+ * @returns {string|null} MAC address, or null on error
+ */
+function getMacAddress(device) {
+  const addrFile = `/sys/class/net/${device}/address`;
+  if (!fs.existsSync(addrFile)) {
+    return null;
+  }
+
+  return fs.readFileSync(addrFile, 'utf8').trim();
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -660,6 +675,7 @@ module.exports = {
   setHostname,
   getLanMode,
   setLanMode,
+  getMacAddress,
   getMdnsServerStatus,
   setMdnsServerStatus,
   getSshServerStatus,
