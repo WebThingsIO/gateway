@@ -195,7 +195,8 @@ class Log {
       const y = yScale(raw.value);
       // Add a point so that the value steps down instead of gradually
       // decreasing
-      if (i > 0 && x - points[i - 1].x > 5) {
+      if (i > 0 && (x - points[i - 1].x > 5 ||
+          this.property.type === 'boolean')) {
         points.push({
           x,
           y: points[i - 1].y,
