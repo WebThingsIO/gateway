@@ -70,8 +70,8 @@ module.exports = {
   updateUrl: 'https://api.mozilla-iot.org:8443/releases',
   wifi: {
     ap: {
-      ipaddr: '192.168.220.1',
-      ssid_base: 'Mozilla IoT Gateway',
+      ipaddr: '192.168.2.1',
+      ssid_base: 'Things Gateway',
     },
   },
 };

@@ -18,7 +18,6 @@ is_docker_container() {
   return 1
 }
 if ! is_docker_container; then
-  args="$args --check-wifi"
   start_task="run-only"
   if [ ! -f .post_upgrade_complete ]; then
     ./tools/post-upgrade.sh
