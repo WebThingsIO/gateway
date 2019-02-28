@@ -113,7 +113,7 @@ function handleRoot(request, response) {
   } else {
     // Otherwise, look to see if we have an oauth token yet
     console.log(
-      'wifi-setup: handleRoot: wifi setup complete; redirecting /status'
+      'wifi-setup: handleRoot: wifi setup complete; redirecting to /status'
     );
     response.redirect('/status');
   }
