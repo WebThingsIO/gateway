@@ -75,11 +75,19 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/views/'),
     },
     {
+      from: 'src/views/creating.handlebars',
+      to: path.join(__dirname, 'build/views/'),
+    },
+    {
       from: 'src/views/hotspot.handlebars',
       to: path.join(__dirname, 'build/views/'),
     },
     {
-      from: 'src/views/wifiSetup.handlebars',
+      from: 'src/views/router-setup.handlebars',
+      to: path.join(__dirname, 'build/views/'),
+    },
+    {
+      from: 'src/views/wifi-setup.handlebars',
       to: path.join(__dirname, 'build/views/'),
     },
   ]),
@@ -118,8 +126,8 @@ const pluginsWeb = [
     chunks: ['localtoken.js'],
   }),
   new HtmlWebpackPlugin({
-    template: 'src/views/tunnel_setup.handlebars',
-    filename: '../views/tunnel_setup.handlebars',
+    template: 'src/views/tunnel-setup.handlebars',
+    filename: '../views/tunnel-setup.handlebars',
     chunks: ['setup_subdomain.js'],
   }),
 ];

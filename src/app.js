@@ -35,10 +35,11 @@ const addonManager = require('./addon-manager');
 const Constants = require('./constants');
 const db = require('./db');
 const mDNSserver = require('./mdns-server');
+const platform = require('./platform');
 const Router = require('./router');
 const TunnelService = require('./ssltunnel');
-const wifi = require('./wifi-setup/wifi');
-const wifiSetupApp = require('./wifi-setup/app');
+const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
+const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 
 // The following causes an instance of AppInstance to be created.
 // This is then used in other places (like src/addons/plugin/ipc.js)
@@ -138,7 +139,7 @@ function stopHttpGateway() {
 }
 
 function startWiFiSetup() {
-  servers.http.on('request', wifiSetupApp.onRequest);
+  servers.http.on('request', WiFiSetupApp.onRequest);
 
   const port = config.get('ports.http');
 
@@ -146,7 +147,19 @@ function startWiFiSetup() {
 }
 
 function stopWiFiSetup() {
-  servers.http.removeListener('request', wifiSetupApp.onRequest);
+  servers.http.removeListener('request', WiFiSetupApp.onRequest);
+}
+
+function startRouterSetup() {
+  servers.http.on('request', RouterSetupApp.onRequest);
+
+  const port = config.get('ports.http');
+
+  servers.http.listen(port);
+}
+
+function stopRouterSetup() {
+  servers.http.removeListener('request', RouterSetupApp.onRequest);
 }
 
 function getOptions() {
@@ -162,8 +175,6 @@ function getOptions() {
     ['d', 'debug', 'Enable debug features'],
     ['h', 'help', 'Display help'],
     ['v', 'verbose', 'Show verbose output'],
-    // eslint-disable-next-line
-    ['', 'check-wifi', 'Run a connection check on the WiFi (only supported on RasPi)'],
   ]);
 
   const opt = getopt.parseSystem();
@@ -185,9 +196,6 @@ function getOptions() {
     options.port = parseInt(opt.options.port);
   }
 
-  if (opt.options['check-wifi']) {
-    options['check-wifi'] = opt.options['check-wifi'];
-  }
   return options;
 }
 
@@ -281,24 +289,42 @@ function createRedirectApp(port) {
 const serverStartup = {
   promise: Promise.resolve(),
 };
-let wifiPromise = Promise.resolve(true);
-const options = getOptions();
 
-if (options['check-wifi']) {
-  wifiPromise = migration.then(() => wifi.checkConnection());
-}
-
-wifiPromise.then((connected) => {
-  if (!connected) {
-    wifiSetupApp.onConnection = function() {
-      stopWiFiSetup();
-      startGateway();
-    };
-    startWiFiSetup();
-  } else {
+switch (platform.getOS()) {
+  case 'linux-raspbian':
+    migration.then(() => {
+      return isWiFiConfigured();
+    }).then((configured) => {
+      if (!configured) {
+        WiFiSetupApp.onConnection = function() {
+          stopWiFiSetup();
+          startGateway();
+        };
+        startWiFiSetup();
+      } else {
+        startGateway();
+      }
+    });
+    break;
+  case 'linux-openwrt':
+    migration.then(() => {
+      return isRouterConfigured();
+    }).then((configured) => {
+      if (!configured) {
+        RouterSetupApp.onConnection = function() {
+          stopRouterSetup();
+          startGateway();
+        };
+        startRouterSetup();
+      } else {
+        startGateway();
+      }
+    });
+    break;
+  default:
     startGateway();
-  }
-});
+    break;
+}
 
 function startGateway() {
   // if we have the certificates installed, we start https

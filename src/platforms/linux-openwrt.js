@@ -421,6 +421,10 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
       return false;
     }
 
+    if (!uciSet(`${iface}.disabled`, enabled ? '0' : '1')) {
+      return false;
+    }
+
     if (enabled) {
       if (!uciSet(`${iface}.mode`, mode)) {
         return false;

@@ -61,7 +61,7 @@ const TunnelService = {
 
       // if there are no certs installed,
       // we display the cert setup page to the user
-      response.render('tunnel_setup',
+      response.render('tunnel-setup',
                       {domain: config.get('ssltunnel.domain')});
     }
   },

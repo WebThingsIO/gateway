@@ -89,30 +89,18 @@
         margin: 4rem;
       }
     </style>
-    <title>Connecting - Things Gateway</title>
+    <title>Creating - Things Gateway</title>
   </head>
   <body>
     <div id="maindiv">
-      <h1 id="title">Connecting to Wi-Fi...</h1>
+      <h1 id="title">Creating Wi-Fi network...</h1>
       <h3 id="content">
-        Please ensure you are connected to the same network and then navigate
-        to <a class="gateway-link" href="http://{{domain}}.local" target="_blank" rel="noopener">{{domain}}.local</a>
-        in your web browser to continue setup.
+        Please connect to {{ap_ssid}} with the password you just created.
       </h3>
       <div id="warning">
-        Note: If you are unable to load {{domain}}.local, look up the gateway's
-        IP address on your router.
+        Note: If setup doesn't continue automatically, navigate to
+        {{domain}}.local or {{ap_ip}} in your web browser.
       </div>
     </div>
-    <script>
-      if ({{skip}}) {
-        document.getElementById('title').innerHTML = 'WiFi setup skipped';
-        document.getElementById('content').innerHTML =
-          'The gateway is now being started. Navigate to ' +
-          '<a class="gateway-link" href="http://gateway.local" target="_blank" rel="noopener">gateway.local</a> ' +
-          'in your web browser while connected to same network as the ' +
-          'gateway to continue setup.';
-      }
-    </script>
   </body>
 </html>

@@ -45,14 +45,9 @@
         src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
       }
 
-      h1 {
+      h3 {
         font-size: 3rem;
         font-family: 'Zilla Slab', sans-serif;
-      }
-
-      h3 {
-        font-size: 2rem;
-        font-weight: normal;
       }
 
       label {
@@ -61,15 +56,14 @@
         margin-left: 0.8rem;
       }
 
-      html {
+      html, body {
         font-size: 10px;
         font-family: 'Open Sans', sans-serif;
-      }
-
-      body {
         background-color: #305067;
         color: #fff;
-        width: auto
+        width: 100%;
+        height: 100%;
+        margin: 0;
       }
 
       #maindiv {
@@ -104,59 +98,46 @@
 
       .item {
         display: block;
-        margin: 0 auto;
-        padding: 0.8rem;
+        margin: 1rem auto;
         width: 100%;
+        max-width: 30rem;
+        text-decoration: none;
         border: none;
-        max-width: 40rem;
-        background: #597285;
         border-radius: 0.5rem;
+        font-size: 1.6rem;
+      }
+
+      .item.skip,
+      .item.connect {
+        width: auto;
+        background: #597285;
+        padding: 1rem 4rem;
         color: #fff;
         text-align: center;
-        text-decoration: none;
       }
 
-      .item.skip {
-        width: 10rem;
-      }
-
-      .item.connect {
-        width: 10rem;
+      .item.ssid:hover,
+      .item.skip:hover,
+      .item.connect:hover {
+        background-color: #658196;
       }
 
       .item.ssid {
+        max-width: 40rem;
         height: 5rem;
         margin-bottom: 1rem;
         text-align: left;
-      }
-
-      .item.password{
-        height: 4rem;
-        text-align: left;
-        background-color: #c7d0d6;
-        color: #666666;
-      }
-
-      .item:hover,
-      .item:focus,
-      .item:active {
-        background: #748ea1;
+        background: #597285;
+        padding: 0.8rem;
         color: #fff;
       }
 
-      .item.password:hover,
-      .item.password:focus,
-      .item.password:active {
-        background-color: #c7d0d6;
+      .item.password {
         color: #000;
-      }
-
-      .item.password::placeholder {
-        color: #666;
-      }
-
-      .item:focus {
-        outline: none;
+        height: 2.3rem;
+        text-align: left;
+        background-color: #d2d9de;
+        padding: 0.5rem;
       }
 
       #wordmark {
@@ -181,10 +162,12 @@
         white-space: nowrap;
       }
 
-      #div-wifi-icon-2{
+      #div-wifi-icon-2 {
         float: left;
         height: 100%;
         display: inline-block;
+        position: relative;
+        top: 1.2rem;
       }
 
       #img-wifi-icon-2 {
@@ -276,40 +259,44 @@
         }
       }
     </script>
-    <title>Mozilla Gateway</title>
+    <title>WiFi Setup - Things Gateway</title>
   </head>
   <body>
     <form action="/connecting" method="post" id="mainform">
       <div id="step1">
         <div id="maindiv">
-          <h1>Welcome</h1>
-          <h3>Connect to a WiFi network?</h3><br>
+          <h3>Connect to a WiFi network?</h3>
+          <br>
           {{#networks}}
-            <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}', {{pwdRequired}})" id="item"
-                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='{{icon}}'>
+            <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}', {{pwdRequired}})"
+                    class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id="wifi-icon" src="{{icon}}" alt="Wi-Fi Network">
             </button>
-          {{/networks}}<br><br>
+          {{/networks}}
+          <br>
+          <br>
           <button onclick="window.skip(event)" class="item skip">Skip</button>
         </div>
       </div>
       <div id="step2">
         <input type="button" class="backbtn" onclick="window.back(event)">
-        <div id='network-label'>
-          <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/optimized-images/wifi.svg'></div>
-          <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
+        <div id="network-label">
+          <div id="div-wifi-icon-2"><img id="img-wifi-icon-2" src="/optimized-images/wifi.svg" alt="Wi-Fi Network"></div>
+          <div id="div-wifi-text"><h3 id="selected-network">{selected network}</h3></div>
         </div>
         <div id="maindiv2">
-          <input type="password" name="password" placeholder="WiFi Password"
-                 class="item password"><br>
+          <input type="password" name="password" placeholder="Password"
+                 class="item password" minlength="8">
           <input onclick="window.displaypassword()" id="showpassword"
                  type="checkbox" class="showpassword-checkbox">
-          <label for="showpassword">Show password</label><br><br>
-          <button id="connect" class="item connect">Connect</button>
+          <label for="showpassword">Show password</label>
+          <br>
+          <br>
+          <input type="submit" name="connect" value="Connect" class="item connect">
         </div>
       </div>
       <input id="ssid" name="ssid" type="hidden" value="">
       <input id="skip" name="skip" type="hidden" value="">
-      <img id="wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
+      <img id="wordmark" alt="Things Gateway by Mozilla" src="/optimized-images/wordmark.svg" />
     </form>
   </body>
 </html>
