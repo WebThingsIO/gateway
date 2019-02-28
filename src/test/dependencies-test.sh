@@ -11,11 +11,10 @@ GATEWAYSRC=${GATEWAYDIR}/build/gateway.js
 rm -rf ${TMPDIR}
 mkdir -p ${TMPDIR}
 cp ${GATEWAYDIR}/package.json ${TMPDIR}/
-cp ${GATEWAYDIR}/yarn.lock ${TMPDIR}/
 cd ${TMPDIR}
 
 # install only production dependencies
-yarn install --production
+npm install --production
 
 # Correct modules used by Gateway.
 REQUIRE_MODULES=$(cat ${GATEWAYSRC} | sed -n -e 's/^.*\(require([^)]*)\).*$/\1/gp')

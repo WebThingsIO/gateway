@@ -293,11 +293,9 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#e
     Note: these versions might differ from the LTS version installed locally.
 
 * Install dependencies:
-    * **NOTE**: `yarn` is preferred but `npm install` will also work. To temporarily use `yarn` run `npx yarn` or for a permanent installation follow the
-    [directions for your OS](https://yarnpkg.com/en/docs/install).
 
     ```
-    $ yarn
+    $ npm install
     ```
 
 * Add Firewall exceptions (Fedora Linux Only)

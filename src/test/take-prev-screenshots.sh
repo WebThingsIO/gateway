@@ -5,7 +5,7 @@ SCRIPTDIR=$(dirname ""$0"")
 end(){
   # Return node_modules
   if [ -n "$DIFF" ]; then
-    yarn --cwd "${SCRIPTDIR}/../../"
+    cd "${SCRIPTDIR}/../../" && npm install
   fi
 
   # Return current branch
@@ -20,10 +20,10 @@ CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 PARENT_BRANCH=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}')
 git checkout ${PARENT_BRANCH}
 
-# Check if should run yarn
-DIFF=$(git diff ${CURRENT_BRANCH} ${PARENT_BRANCH} yarn.lock)
+# Check if should run npm
+DIFF=$(git diff ${CURRENT_BRANCH} ${PARENT_BRANCH} package-lock.json)
 if [ -n "$DIFF" ]; then
-  yarn --cwd "${SCRIPTDIR}/../../"
+  cd "${SCRIPTDIR}/../../" && npm install
 fi
 
 # Cleanup the previous outputs

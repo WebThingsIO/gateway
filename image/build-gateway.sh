@@ -75,16 +75,14 @@ export NVM_DIR="$HOME/.nvm"
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
 
-npm install -g yarn
-
 # Install development-specific node modules and prerun webpack
-(cd ${GATEWAY}; rm -rf node_modules; yarn --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm; node_modules/.bin/webpack)
+(cd ${GATEWAY}; rm -rf node_modules; npm install --ignore-scripts; npm rebuild --arch=${ARCH} --target_arch=arm; node_modules/.bin/webpack)
 
 echo "DEV_BUILD=${DEV_BUILD}"
 if [ "${DEV_BUILD}" != "1" ]; then
   # Clear out node_modules just in case then build only the modules we'll use in
   # the image, cross compiling any native code.
-  (cd ${GATEWAY}; rm -rf node_modules; yarn --ignore-scripts --production; npm rebuild --arch=${ARCH} --target_arch=arm)
+  (cd ${GATEWAY}; rm -rf node_modules; npm install --ignore-scripts --production; npm rebuild --arch=${ARCH} --target_arch=arm)
 fi
 
 set -x

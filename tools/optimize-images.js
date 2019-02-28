@@ -19,9 +19,9 @@ try {
   console.error(
     'You need to install dependencies:\n\n' +
     '$ sudo apt-get install libtool autoconf build-essential\n' +
-    '$ yarn global add imagemin imagemin-mozjpeg imagemin-svgo \\\n' +
+    '$ npm install -g imagemin imagemin-mozjpeg imagemin-svgo \\\n' +
     '    imagemin-pngquant imagemin-optipng imagemin-gifsicle\n' +
-    '$ export NODE_PATH=$(yarn global dir)/node_modules && \\\n' +
+    '$ export NODE_PATH=$(npm root -g) && \\\n' +
     `    node ${process.argv[1]}`);
 
   process.exit(1);
