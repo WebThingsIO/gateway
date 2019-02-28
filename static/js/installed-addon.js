@@ -27,7 +27,11 @@ const InstalledAddon = function(metadata, installedAddonsMap,
   this.name = metadata.name;
   this.displayName = metadata.display_name;
   this.description = metadata.description;
-  this.author = metadata.author;
+  if (typeof metadata.author === 'object') {
+    this.author = metadata.author.name;
+  } else {
+    this.author = metadata.author.split('<')[0].trim();
+  }
   this.homepage = metadata.homepage;
   this.license =
     `/addons/${encodeURIComponent(this.name)}/license?jwt=${API.jwt}`;
