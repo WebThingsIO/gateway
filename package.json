@@ -9,7 +9,7 @@
     "screenshots": "./src/test/take-prev-screenshots.sh",
     "mocha": "./src/test/run-tests.sh",
     "jest": "./src/test/run-tests.sh",
-    "yarn-check": "./src/test/yarn-test.sh",
+    "npm-check": "./src/test/npm-test.sh",
     "dependencies-check": "./src/test/dependencies-test.sh",
     "cov": "NODE_TLS_REJECT_UNAUTHORIZED=0 jest --coverage",
     "start": "webpack --display errors-only && node build/gateway.js",

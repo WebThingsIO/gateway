@@ -5,7 +5,6 @@ node_js:
   - 10
 
 cache:
-  yarn: true
   directories:
     - open-zwave-master
 
@@ -41,13 +40,12 @@ before_script:
   - pyenv global system 2.7
 
 script:
-  - yarn
-  - node ./node_modules/webpack/bin/webpack.js
-  - yarn run lint
+  - npm install
+  - ./node_modules/.bin/webpack
+  - npm run lint
   - ./tools/make-self-signed-cert.sh
   - ./node_modules/.bin/jest --runInBand --coverage --detectOpenHandles
-  - yarn run yarn-check
-  - yarn run dependencies-check
+  - npm run dependencies-check
 
 after_script:
   - ./node_modules/.bin/codecov

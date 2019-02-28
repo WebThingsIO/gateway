@@ -10,7 +10,6 @@ tmp/
 /build
 node_modules/
 static/js/lib/stm_web.min.js
-yarn-error.log
 npm-debug.log
 
 # Run-time artifacts

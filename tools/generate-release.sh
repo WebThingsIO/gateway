@@ -11,8 +11,6 @@ if [ ! -e "package.json" ]; then
   exit 1
 fi
 
-npm install -g yarn
-
 git init .
 git config user.email "temporary@example.com"
 git config user.name "Temporary"
@@ -22,7 +20,7 @@ git clone ./ gateway
 cd gateway || exit 1
 rm -fr .git
 cp -r ../node_modules ./
-yarn
+npm install
 ./node_modules/.bin/webpack
 rm -fr ./node_modules
 cd .. || exit 1
