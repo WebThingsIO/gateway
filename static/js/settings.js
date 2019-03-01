@@ -12,6 +12,7 @@
 
 const App = require('./app');
 const API = require('./api');
+const ipRegex = require('ip-regex')({exact: true});
 const Menu = require('./menu');
 const page = require('page');
 const Adapter = require('./adapter');
@@ -28,6 +29,7 @@ const SettingsScreen = {
    * Initialise Settings Screen.
    */
   init: function() {
+    this.elements = {};
     this.view = document.getElementById('settings-view');
     this.menu = document.getElementById('settings-menu');
     this.domainSettings = document.getElementById('domain-settings');
@@ -97,6 +99,377 @@ const SettingsScreen = {
     this.addUserButton.addEventListener('click', () => {
       page('/settings/users/add');
     });
+
+    this.setupNetworkElements();
+  },
+
+  // eslint-disable max-len
+  setupNetworkElements: function() {
+    // Find all elements
+    this.elements.network = {
+      main: document.getElementById('network-settings'),
+      client: {
+        main: document.getElementById('network-settings-client'),
+        ethernet: {
+          main: document.getElementById('network-settings-ethernet'),
+          configure: document.getElementById('network-settings-list-item-ethernet-configure'),
+          mode: document.getElementById('network-settings-ethernet-mode'),
+          ipLabel: document.getElementById('network-settings-ethernet-ip-label'),
+          ip: document.getElementById('network-settings-ethernet-ip'),
+          netmaskLabel: document.getElementById('network-settings-ethernet-netmask-label'),
+          netmask: document.getElementById('network-settings-ethernet-netmask'),
+          gatewayLabel: document.getElementById('network-settings-ethernet-gateway-label'),
+          gateway: document.getElementById('network-settings-ethernet-gateway'),
+          done: document.getElementById('network-settings-ethernet-done'),
+        },
+        wifi: {
+          main: document.getElementById('network-settings-wifi'),
+          configure: document.getElementById('network-settings-list-item-wifi-configure'),
+          list: document.getElementById('network-settings-wifi-network-list'),
+          wrap: document.getElementById('network-settings-wifi-wrap'),
+          password: document.getElementById('network-settings-wifi-password'),
+          showPassword: document.getElementById('network-settings-wifi-show-password'),
+          connect: document.getElementById('network-settings-wifi-connect'),
+        },
+      },
+      router: {
+        main: document.getElementById('network-settings-router'),
+        wan: {
+          main: document.getElementById('network-settings-wan'),
+          configure: document.getElementById('network-settings-list-item-wan-configure'),
+          mode: document.getElementById('network-settings-wan-mode'),
+          ipLabel: document.getElementById('network-settings-wan-ip-label'),
+          ip: document.getElementById('network-settings-wan-ip'),
+          netmaskLabel: document.getElementById('network-settings-wan-netmask-label'),
+          netmask: document.getElementById('network-settings-wan-netmask'),
+          gatewayLabel: document.getElementById('network-settings-wan-gateway-label'),
+          gateway: document.getElementById('network-settings-wan-gateway'),
+          usernameLabel: document.getElementById('network-settings-wan-username-label'),
+          username: document.getElementById('network-settings-wan-username'),
+          passwordLabel: document.getElementById('network-settings-wan-password-label'),
+          password: document.getElementById('network-settings-wan-password'),
+          done: document.getElementById('network-settings-wan-done'),
+        },
+        lan: {
+          main: document.getElementById('network-settings-lan'),
+          configure: document.getElementById('network-settings-list-item-lan-configure'),
+          ip: document.getElementById('network-settings-lan-ip'),
+          netmask: document.getElementById('network-settings-lan-netmask'),
+          dhcp: document.getElementById('network-settings-lan-dhcp'),
+          done: document.getElementById('network-settings-lan-done'),
+        },
+        wlan: {
+          main: document.getElementById('network-settings-wlan'),
+          configure: document.getElementById('network-settings-list-item-wlan-configure'),
+          enable: document.getElementById('network-settings-wlan-enable'),
+          ssid: document.getElementById('network-settings-wlan-ssid'),
+          password: document.getElementById('network-settings-wlan-password'),
+          showPassword: document.getElementById('network-settings-wlan-show-password'),
+          done: document.getElementById('network-settings-wlan-done'),
+        },
+      },
+    };
+
+    // Set up title elements
+    this.insertTitleElement(
+      this.elements.network.client.main,
+      'Network',
+      '/optimized-images/network.svg'
+    );
+    this.insertTitleElement(
+      this.elements.network.client.ethernet.main,
+      'Ethernet',
+      '/optimized-images/ethernet.svg'
+    );
+    this.elements.network.client.wifi.title = this.insertTitleElement(
+      this.elements.network.client.wifi.main,
+      'Wi-Fi',
+      '/optimized-images/wifi.svg'
+    ).querySelector('.section-title-name');
+    this.insertTitleElement(
+      this.elements.network.router.main,
+      'Network',
+      '/optimized-images/network.svg'
+    );
+    this.insertTitleElement(
+      this.elements.network.router.wan.main,
+      'Internet (WAN)',
+      '/optimized-images/internet.svg'
+    );
+    this.insertTitleElement(
+      this.elements.network.router.lan.main,
+      'Home Network (LAN)',
+      '/optimized-images/network.svg'
+    );
+    this.insertTitleElement(
+      this.elements.network.router.wlan.main,
+      'Wi-Fi (WLAN)',
+      '/optimized-images/wifi.svg'
+    );
+
+    // Set up "Configure" button handlers
+    this.elements.network.client.ethernet.configure.addEventListener(
+      'click',
+      () => page('/settings/network/ethernet')
+    );
+    this.elements.network.client.wifi.configure.addEventListener(
+      'click',
+      () => page('/settings/network/wifi')
+    );
+    this.elements.network.router.wan.configure.addEventListener(
+      'click',
+      () => page('/settings/network/wan')
+    );
+    this.elements.network.router.lan.configure.addEventListener(
+      'click',
+      () => page('/settings/network/lan')
+    );
+    this.elements.network.router.wlan.configure.addEventListener(
+      'click',
+      () => page('/settings/network/wlan')
+    );
+
+    // Ethernet config
+    const ethernetEls = [
+      this.elements.network.client.ethernet.ipLabel,
+      this.elements.network.client.ethernet.ip,
+      this.elements.network.client.ethernet.netmaskLabel,
+      this.elements.network.client.ethernet.netmask,
+      this.elements.network.client.ethernet.gatewayLabel,
+      this.elements.network.client.ethernet.gateway,
+    ];
+    const validateEthernet = () => {
+      const valid =
+        this.elements.network.client.ethernet.mode.value === 'dhcp' ||
+        (ipRegex.test(this.elements.network.client.ethernet.ip.value) &&
+         ipRegex.test(this.elements.network.client.ethernet.netmask.value) &&
+         ipRegex.test(this.elements.network.client.ethernet.gateway.value));
+
+      this.elements.network.client.ethernet.done.disabled = !valid;
+    };
+    this.elements.network.client.ethernet.ip.addEventListener(
+      'input',
+      validateEthernet
+    );
+    this.elements.network.client.ethernet.netmask.addEventListener(
+      'input',
+      validateEthernet
+    );
+    this.elements.network.client.ethernet.gateway.addEventListener(
+      'input',
+      validateEthernet
+    );
+    this.elements.network.client.ethernet.mode.addEventListener(
+      'change',
+      (ev) => {
+        validateEthernet();
+        if (ev.target.value === 'static') {
+          ethernetEls.forEach((el) => el.classList.remove('hidden'));
+        } else {
+          ethernetEls.forEach((el) => el.classList.add('hidden'));
+        }
+      }
+    );
+    this.elements.network.client.ethernet.mode.value = 'dhcp';
+    ethernetEls.forEach((el) => el.classList.add('hidden'))
+
+    this.elements.network.client.ethernet.done.addEventListener(
+      'click',
+      () => {
+        // TODO
+      }
+    );
+
+    // Wi-Fi config
+    this.elements.network.client.wifi.showPassword.addEventListener(
+      'change',
+      (ev) => {
+        if (ev.target.checked) {
+          this.elements.network.client.wifi.password.setAttribute(
+            'type',
+            'text'
+          );
+        } else {
+          this.elements.network.client.wifi.password.setAttribute(
+            'type',
+            'password'
+          );
+        }
+      }
+    );
+    const validateWifi = () => {
+      const valid =
+        this.elements.network.client.wifi.password.value.length >= 8;
+
+      this.elements.network.client.wifi.connect.disabled = !valid;
+    };
+    this.elements.network.client.wifi.password.addEventListener(
+      'input',
+      validateWifi
+    );
+    this.elements.network.client.wifi.connect.addEventListener(
+      'click',
+      () => {
+        // TODO
+      }
+    );
+    validateWifi();
+
+    // WAN config
+    const validateWan = () => {
+      const valid =
+        this.elements.network.router.wan.mode.value === 'dhcp' ||
+        (this.elements.network.router.wan.mode.value === 'static' &&
+         ipRegex.test(this.elements.network.router.wan.ip.value) &&
+         ipRegex.test(this.elements.network.router.wan.netmask.value) &&
+         ipRegex.test(this.elements.network.router.wan.gateway.value)) ||
+        (this.elements.network.router.wan.mode.value === 'pppoe' &&
+         this.elements.network.router.wan.username.value.length > 0 &&
+         this.elements.network.router.wan.password.value.length > 0);
+
+      this.elements.network.router.wan.done.disabled = !valid;
+    };
+    this.elements.network.router.wan.ip.addEventListener(
+      'input',
+      validateWan
+    );
+    this.elements.network.router.wan.netmask.addEventListener(
+      'input',
+      validateWan
+    );
+    this.elements.network.router.wan.gateway.addEventListener(
+      'input',
+      validateWan
+    );
+    this.elements.network.router.wan.username.addEventListener(
+      'input',
+      validateWan
+    );
+    this.elements.network.router.wan.password.addEventListener(
+      'input',
+      validateWan
+    );
+    const wanStaticEls = [
+      this.elements.network.router.wan.ipLabel,
+      this.elements.network.router.wan.ip,
+      this.elements.network.router.wan.netmaskLabel,
+      this.elements.network.router.wan.netmask,
+      this.elements.network.router.wan.gatewayLabel,
+      this.elements.network.router.wan.gateway,
+    ];
+    const wanPppoeEls = [
+      this.elements.network.router.wan.usernameLabel,
+      this.elements.network.router.wan.username,
+      this.elements.network.router.wan.passwordLabel,
+      this.elements.network.router.wan.password,
+    ];
+    this.elements.network.router.wan.mode.addEventListener(
+      'change',
+      (ev) => {
+        validateWan();
+        switch (ev.target.value) {
+          case 'dhcp':
+            wanStaticEls.forEach((el) => el.classList.add('hidden'));
+            wanPppoeEls.forEach((el) => el.classList.add('hidden'));
+            break;
+          case 'static':
+            wanStaticEls.forEach((el) => el.classList.remove('hidden'));
+            wanPppoeEls.forEach((el) => el.classList.add('hidden'));
+            break;
+          case 'pppoe':
+            wanStaticEls.forEach((el) => el.classList.add('hidden'));
+            wanPppoeEls.forEach((el) => el.classList.remove('hidden'));
+            break;
+        }
+      }
+    );
+    this.elements.network.router.wan.mode.value = 'dhcp';
+    wanStaticEls.forEach((el) => el.classList.add('hidden'))
+    wanPppoeEls.forEach((el) => el.classList.add('hidden'))
+
+    this.elements.network.router.wan.done.addEventListener(
+      'click',
+      () => {
+        // TODO
+      }
+    );
+
+    // LAN config
+    const validateLan = () => {
+      const valid =
+        ipRegex.test(this.elements.network.router.lan.ip.value) &&
+        ipRegex.test(this.elements.network.router.lan.netmask.value);
+
+      this.elements.network.router.lan.done.disabled = !valid;
+    };
+    this.elements.network.router.lan.ip.addEventListener(
+      'input',
+      validateLan
+    );
+    this.elements.network.router.lan.netmask.addEventListener(
+      'input',
+      validateLan
+    );
+    this.elements.network.router.lan.done.addEventListener(
+      'click',
+      () => {
+        // TODO
+      }
+    );
+    validateLan();
+
+    // WLAN config
+    const validateWlan = () => {
+      const valid =
+        this.elements.network.router.wlan.ssid.value.length > 0 &&
+        this.elements.network.router.wlan.ssid.value.length <= 32 &&
+        this.elements.network.router.wlan.password.value.length >= 8;
+
+      this.elements.network.router.wlan.done.disabled = !valid;
+    };
+    this.elements.network.router.wlan.ssid.addEventListener(
+      'input',
+      validateWlan
+    );
+    this.elements.network.router.wlan.password.addEventListener(
+      'input',
+      validateWlan
+    );
+    this.elements.network.router.wlan.showPassword.addEventListener(
+      'change',
+      (ev) => {
+        if (ev.target.checked) {
+          this.elements.network.router.wlan.password.setAttribute(
+            'type',
+            'text'
+          );
+        } else {
+          this.elements.network.router.wlan.password.setAttribute(
+            'type',
+            'password'
+          );
+        }
+      }
+    );
+    this.elements.network.router.wlan.done.addEventListener(
+      'click',
+      () => {
+        // TODO
+      }
+    );
+    validateWlan();
+  },
+  // eslint-enable max-len
+
+  hideNetworkElements: function() {
+    this.elements.network.main.classList.add('hidden');
+    this.elements.network.client.main.classList.add('hidden');
+    this.elements.network.client.ethernet.main.classList.add('hidden');
+    this.elements.network.client.wifi.main.classList.add('hidden');
+    this.elements.network.router.main.classList.add('hidden');
+    this.elements.network.router.wan.main.classList.add('hidden');
+    this.elements.network.router.lan.main.classList.add('hidden');
+    this.elements.network.router.wlan.main.classList.add('hidden');
   },
 
   insertTitleElement: (section, name, icon) => {
@@ -149,6 +522,7 @@ const SettingsScreen = {
     this.developerSettings.classList.add('hidden');
     this.discoverAddonsButton.classList.add('hidden');
     this.addUserButton.classList.add('hidden');
+    this.hideNetworkElements();
   },
 
   hideMenu: function() {
@@ -167,6 +541,32 @@ const SettingsScreen = {
     switch (section) {
       case 'domain':
         this.showDomainSettings();
+        break;
+      case 'network':
+        if (subsection) {
+          switch (subsection) {
+            case 'ethernet':
+              this.showEthernetSettings();
+              break;
+            case 'wifi':
+              this.showWifiSettings();
+              break;
+            case 'wan':
+              this.showWanSettings();
+              break;
+            case 'lan':
+              this.showLanSettings();
+              break;
+            case 'wlan':
+              this.showWlanSettings();
+              break;
+            default:
+              console.error('Tried to display undefined subsection');
+              return;
+          }
+        } else {
+          this.showNetworkSettings();
+        }
         break;
       case 'users':
         if (subsection) {
@@ -377,6 +777,81 @@ const SettingsScreen = {
   //   });
   //
   // }
+
+  showNetworkSettings: function() {
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+
+    fetch('/settings/system/platform', {
+      headers: API.headers(),
+    }).then((res) => {
+      return res.json();
+    }).then((body) => {
+      switch (body.os) {
+        case 'linux-raspbian':
+          this.elements.network.client.main.classList.remove('hidden');
+          break;
+        case 'linux-openwrt':
+          this.elements.network.router.main.classList.remove('hidden');
+          break;
+        default:
+          console.log('Not displaying network settings for OS:', body.os);
+          break;
+      }
+    }).catch((e) => {
+      console.error(`Error getting platform setting: ${e}`);
+    });
+  },
+
+  showEthernetSettings: function() {
+    this.backButton.href = '/settings/network';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.client.ethernet.main.classList.remove('hidden');
+
+    // TODO: load ethernet settings
+  },
+
+  showWifiSettings: function() {
+    this.backButton.href = '/settings/network';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.client.wifi.main.classList.remove('hidden');
+
+    // TODO: load wifi settings
+  },
+
+  showWanSettings: function() {
+    this.backButton.href = '/settings/network';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.router.wan.main.classList.remove('hidden');
+
+    // TODO: load wan settings
+  },
+
+  showLanSettings: function() {
+    this.backButton.href = '/settings/network';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.router.lan.main.classList.remove('hidden');
+
+    // TODO: load lan settings
+  },
+
+  showWlanSettings: function() {
+    this.backButton.href = '/settings/network';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.router.wlan.main.classList.remove('hidden');
+
+    // TODO: load wlan settings
+  },
 
   showUserSettings: function() {
     this.userSettings.classList.remove('hidden');
