@@ -972,7 +972,25 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.client.ethernet.main.classList.remove('hidden');
 
-    // TODO: load ethernet settings
+    fetch('/settings/network/lan', {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      this.elements.network.client.ethernet.mode.value = body.mode || 'dhcp';
+      this.elements.network.client.ethernet.ip.value = body.ipdaddr || '';
+      this.elements.network.client.ethernet.netmask.value = body.netmask || '';
+      this.elements.network.client.ethernet.gateway.value = body.gateway || '';
+    }).catch((e) => {
+      console.error(`Failed to get ethernet config: ${e}`);
+    });
   },
 
   showWifiSettings: function() {
@@ -982,7 +1000,7 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.client.wifi.main.classList.remove('hidden');
 
-    // TODO: load wifi settings
+    // TODO: scan for wifi networks
   },
 
   showWanSettings: function() {
@@ -992,7 +1010,27 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.router.wan.main.classList.remove('hidden');
 
-    // TODO: load wan settings
+    fetch('/settings/network/wan', {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      this.elements.network.router.wan.mode.value = body.mode || 'dhcp';
+      this.elements.network.router.wan.ip.value = body.ipdaddr || '';
+      this.elements.network.router.wan.netmask.value = body.netmask || '';
+      this.elements.network.router.wan.gateway.value = body.gateway || '';
+      this.elements.network.router.wan.username.value = body.username || '';
+      this.elements.network.router.wan.password.value = body.password || '';
+    }).catch((e) => {
+      console.error(`Failed to get WAN config: ${e}`);
+    });
   },
 
   showLanSettings: function() {
@@ -1003,6 +1041,39 @@ const SettingsScreen = {
     this.elements.network.router.lan.main.classList.remove('hidden');
 
     // TODO: load lan settings
+    fetch('/settings/network/lan', {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      this.elements.network.router.lan.ip.value = body.ipdaddr || '192.168.2.1';
+      this.elements.network.router.lan.netmask.value =
+        body.netmask || '255.255.255.0';
+
+      return fetch('/settings/network/dhcp', {
+        headers: {
+          Authorization: `Bearer ${API.jwt}`,
+          Accept: 'application/json',
+        },
+      });
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      this.elements.network.router.lan.dhcp.checked = body.enabled;
+    }).catch((e) => {
+      console.error(`Failed to get LAN config: ${e}`);
+    });
   },
 
   showWlanSettings: function() {
@@ -1012,7 +1083,24 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.router.wlan.main.classList.remove('hidden');
 
-    // TODO: load wlan settings
+    fetch('/settings/network/wireless', {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      this.elements.network.router.wlan.enable.checked = body.enabled;
+      this.elements.network.router.wlan.ssid.value = body.ssid || '';
+      this.elements.network.router.wlan.password.value = body.key || '';
+    }).catch((e) => {
+      console.error(`Failed to get WLAN config: ${e}`);
+    });
   },
 
   showUserSettings: function() {
