@@ -211,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 2rem;
   transform: translateY(0);
   transition: transform 0.25s ease;
-  z-index: 10;
+  z-index: 100;
 }
 
 #message-area.hidden {
