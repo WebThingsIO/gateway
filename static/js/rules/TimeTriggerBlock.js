@@ -77,16 +77,14 @@ TimeTriggerBlock.prototype.onUp = function(clientX, clientY) {
   }
 };
 
-TimeTriggerBlock.leftPad = function(n) {
-  return n.toString().padStart(2, '0');
-};
+TimeTriggerBlock.leftPad = n => n.toString().padStart(2, '0');
 
 /**
  * Convert from a utc time string to one in the local timezone
  * @param {String} utcTime - formatted HH:MM
  * @return {String}
  */
-TimeTriggerBlock.utcToLocal = function(utcTime) {
+TimeTriggerBlock.utcToLocal = utcTime => {
   const timeParts = utcTime.split(':');
   const date = new Date();
   date.setUTCHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
@@ -99,7 +97,7 @@ TimeTriggerBlock.utcToLocal = function(utcTime) {
  * @param {String} localTime - formatted HH:MM
  * @return {String}
  */
-TimeTriggerBlock.localToUTC = function(localTime) {
+TimeTriggerBlock.localToUTC = localTime => {
   const timeParts = localTime.split(':');
   const date = new Date();
   date.setHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
