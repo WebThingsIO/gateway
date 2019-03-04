@@ -228,13 +228,13 @@ const API = {
       'Content-Type': 'application/json',
     };
     const payload = {
-      config: config,
+      config,
     };
     const body = JSON.stringify(payload);
     return fetch(`/addons/${encodeURIComponent(addonName)}/config`, {
       method: 'PUT',
-      body: body,
-      headers: headers,
+      body,
+      headers,
     }).then((response) => {
       if (!response.ok) {
         throw new Error(
@@ -250,12 +250,12 @@ const API = {
       'Content-Type': 'application/json',
     };
     const payload = {
-      enabled: enabled,
+      enabled,
     };
     return fetch(`/addons/${encodeURIComponent(addonName)}`, {
       method: 'PUT',
       body: JSON.stringify(payload),
-      headers: headers,
+      headers,
     }).then((response) => {
       if (!response.ok) {
         throw new Error(
@@ -278,7 +278,7 @@ const API = {
     return fetch('/addons', {
       method: 'POST',
       body: JSON.stringify(payload),
-      headers: headers,
+      headers,
     }).then((response) => {
       if (!response.ok) {
         throw new Error('Unexpected response code while installing add-on.');
@@ -295,7 +295,7 @@ const API = {
     };
     return fetch(`/addons/${encodeURIComponent(addonName)}`, {
       method: 'DELETE',
-      headers: headers,
+      headers,
     }).then((response) => {
       if (!response.ok) {
         throw new Error(
@@ -317,7 +317,7 @@ const API = {
     return fetch(`/addons/${encodeURIComponent(addonName)}`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
-      headers: headers,
+      headers,
     }).then((response) => {
       if (!response.ok) {
         throw new Error('Unexpected response code while updating add-on.');
@@ -333,7 +333,7 @@ const API = {
     return fetch(
       `/settings/experiments/${encodeURIComponent(experimentName)}`, {
         method: 'GET',
-        headers: headers,
+        headers,
       })
       .then((response) => {
         if (!response.ok) {
@@ -360,14 +360,14 @@ const API = {
       'Content-Type': 'application/json',
     };
     const payload = {
-      enabled: enabled,
+      enabled,
     };
     return fetch(
       `/settings/experiments/${encodeURIComponent(experimentName)}`,
       {
         method: 'PUT',
         body: JSON.stringify(payload),
-        headers: headers,
+        headers,
       }
     ).then((response) => {
       if (!response.ok) {
