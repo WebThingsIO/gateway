@@ -566,7 +566,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
           data: {
             status: '400 Bad Request',
             message: `Unknown messageType: ${request.messageType}`,
-            rrequest,
+            request,
           },
         }));
         break;
