@@ -109,8 +109,8 @@ const Settings = {
     console.log(`Tunnel name is set to: ${tunnelEndpoint}`);
     console.log(`Local mDNS Service Domain Name is: ${localDomain}`);
     return {
-      localDomain: localDomain,
-      mDNSstate: mDNSstate,
+      localDomain,
+      mDNSstate,
       tunnelDomain: tunnelEndpoint,
     };
   },
