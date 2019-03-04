@@ -316,7 +316,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
       if (property.type === 'boolean') {
         const triggerOn = {
           type: 'BooleanTrigger',
-          property: property,
+          property,
           onValue: true,
           label: name,
         };
@@ -343,8 +343,8 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(name, {
           trigger: {
             type: 'EqualityTrigger',
-            property: property,
-            value: value,
+            property,
+            value,
             label: name,
           },
         });
@@ -356,9 +356,9 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(name, {
           trigger: {
             type: 'LevelTrigger',
-            property: property,
+            property,
             levelType: 'LESS',
-            value: value,
+            value,
             label: name,
           },
         });
@@ -371,7 +371,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
       if (property.type === 'boolean') {
         const effectOn = {
           type: 'PulseEffect',
-          property: property,
+          property,
           value: true,
           label: name,
         };
@@ -394,7 +394,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(name, {
           effect: {
             type: 'PulseEffect',
-            property: property,
+            property,
             value: '#ffffff',
             label: name,
           },
@@ -403,7 +403,7 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(name, {
           effect: {
             type: 'PulseEffect',
-            property: property,
+            property,
             value: 'text',
             label: name,
           },
@@ -415,8 +415,8 @@ PropertySelect.prototype.updateOptionsForRole = function(role) {
         this.addOption(name, {
           effect: {
             type: 'PulseEffect',
-            property: property,
-            value: value,
+            property,
+            value,
             label: name,
           },
         });
