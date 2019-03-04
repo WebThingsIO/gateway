@@ -13,10 +13,8 @@ const Utils = {
    * @param {String} str
    * @return {String} the string with the first letter capitalized
    */
-  capitalize: function(str) {
-    return str[0].toUpperCase() + str.substr(1);
-  },
-  escapeHtml: function(text) {
+  capitalize: str => str[0].toUpperCase() + str.substr(1),
+  escapeHtml: text => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -30,7 +28,7 @@ const Utils = {
       .replace(/°/g, '&deg;')
       .replace(/⋅/g, '&sdot;');
   },
-  unescapeHtml: function(text) {
+  unescapeHtml: text => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -44,7 +42,7 @@ const Utils = {
       .replace(/&deg;/g, '°')
       .replace(/&sdot;/g, '⋅');
   },
-  escapeHtmlForIdClass: function(text) {
+  escapeHtmlForIdClass: text => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -56,7 +54,7 @@ const Utils = {
 
     return text;
   },
-  fuzzyTime: function(date) {
+  fuzzyTime: date => {
     const now = new Date();
     const delta = Math.round((now - date) / 1000);
 
@@ -100,10 +98,8 @@ const Utils = {
 
     return fuzzy;
   },
-  debounce: function(delay, callback) {
-    return Utils.throttle(delay, callback, true);
-  },
-  throttle: function(delay, callback, debounceMode = false) {
+  debounce: (delay, callback) => Utils.throttle(delay, callback, true),
+  throttle: (delay, callback, debounceMode = false) => {
     let timeout = null;
     let lastExec = 0;
     const throttleMode = !debounceMode;
@@ -128,7 +124,7 @@ const Utils = {
       }
     };
   },
-  unitNameToAbbreviation: function(unit) {
+  unitNameToAbbreviation: unit => {
     switch (unit.toLowerCase()) {
       case 'volt':
       case 'volts':
@@ -199,7 +195,7 @@ const Utils = {
         return unit;
     }
   },
-  colorTemperatureToRGB: function(value) {
+  colorTemperatureToRGB: value => {
     /**
      * Algorithm found here:
      * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
@@ -246,7 +242,7 @@ const Utils = {
 
     return `#${r}${g}${b}`;
   },
-  legacyTypeToCapabilities: function(type) {
+  legacyTypeToCapabilities: type => {
     switch (type) {
       case 'binarySensor':
         return ['BinarySensor'];
@@ -269,7 +265,7 @@ const Utils = {
         return [];
     }
   },
-  sortCapabilities: function(capabilities) {
+  sortCapabilities: capabilities => {
     // copy the array, as we're going to sort in place.
     const list = capabilities.slice();
 
