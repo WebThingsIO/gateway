@@ -46,7 +46,7 @@ function ObjectField(
 ObjectField.prototype.require = function(name) {
   return (
     Array.isArray(this.retrievedSchema.required) &&
-    this.retrievedSchema.required.indexOf(name) !== -1
+    this.retrievedSchema.required.includes(name)
   );
 };
 
