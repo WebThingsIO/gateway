@@ -25,7 +25,7 @@ beforeEach(async () => {
   await loginButton.click();
 });
 
-module.exports.getAddons = async function() {
+module.exports.getAddons = async () => {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.ADDONS_PATH}`)
     .set('Accept', 'application/json')
@@ -45,7 +45,7 @@ module.exports.getAddons = async function() {
 };
 
 
-module.exports.addThing = async function(desc) {
+module.exports.addThing = async desc => {
   const {id} = desc;
   await chai.request(server).keepOpen()
     .post(Constants.THINGS_PATH)
@@ -55,7 +55,7 @@ module.exports.addThing = async function(desc) {
   await mockAdapter().addDevice(id, desc);
 };
 
-module.exports.getProperty = async function(id, property) {
+module.exports.getProperty = async (id, property) => {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
@@ -63,7 +63,7 @@ module.exports.getProperty = async function(id, property) {
   return res.body[property];
 };
 
-module.exports.setProperty = async function(id, property, value) {
+module.exports.setProperty = async (id, property, value) => {
   const res = await chai.request(server).keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
@@ -73,7 +73,7 @@ module.exports.setProperty = async function(id, property, value) {
 };
 
 let stepNumber = 0;
-module.exports.saveStepScreen = async function(step) {
+module.exports.saveStepScreen = async step => {
   let stepStr = stepNumber.toString();
   if (stepStr.length < 2) {
     stepStr = `0${stepStr}`;
