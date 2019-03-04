@@ -75,7 +75,7 @@ async function loadSettingsAdapterWithManifest(manifest) {
   }
 }
 
-describe('addons', function() {
+describe('addons', () => {
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
