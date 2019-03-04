@@ -224,8 +224,17 @@
   max-height: 100%;
 }
 
+.network-settings-wrap ul {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  padding: 9.6rem 2rem;
+  max-height: 100%;
+}
+
 #network-settings-client ul li:last-child,
 #network-settings-router ul li:last-child,
+.network-settings-wrap ul li:last-child,
 #user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
@@ -271,6 +280,7 @@
 }
 
 .network-item,
+.wireless-network-item,
 .user-item,
 .adapter-item,
 .addon-item,
@@ -286,6 +296,7 @@
 }
 
 .network-item,
+.wireless-network-item,
 .user-item,
 .adapter-item,
 .addon-item,
@@ -332,6 +343,7 @@
   padding: 2rem;
 }
 
+.wireless-network-item,
 .discovered-addon-item {
   background-color: #597285;
 }
@@ -707,7 +719,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-.network-settings-wrap,
 .user-form {
   top: 50%;
   transform: translateY(calc(-50% - 6rem));
@@ -723,6 +734,14 @@
 .network-settings-wrap {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  top: 50%;
+  transform: translateY(calc(-50% - 6rem));
+  position: relative;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
 }
 
 #network-settings-wifi .network-settings-wrap {
@@ -748,6 +767,44 @@
   display: block;
   grid-column: 2 / 3;
   margin: 2rem auto 1rem 1rem;
+}
+
+.wireless-network-item {
+  text-align: left;
+  height: 7rem;
+}
+
+.wireless-network-item:hover {
+  background-color: #658196;
+}
+
+.wireless-network-info {
+  display: inline-block;
+  width: calc(100% - 8.8rem);
+  padding-left: 1.8rem;
+  text-align: left;
+  line-height: 7rem;
+}
+
+.wireless-network-info.configured {
+  line-height: 3rem;
+  padding-top: 0.5rem;
+}
+
+.wireless-network-info-connected {
+  color: #8dd35f !important;
+}
+
+.wireless-network-info-disconnected {
+  color: #ff9955 !important;
+}
+
+.wireless-network-icon {
+  position: relative;
+  right: 1.8rem;
+  top: 1.8rem;
+  height: 3.4rem;
+  float: right;
 }
 
 .network-settings-wrap input[type="password"],

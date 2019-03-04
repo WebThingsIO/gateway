@@ -128,7 +128,7 @@ try {
   platform = dynamicRequire(path.resolve(path.join(__dirname,
                                                    'platforms',
                                                    getOS())));
-} catch (e) {
+} catch (_) {
   console.error(`Failed to import platform utilities for ${getOS()}`);
   platform = null;
 }
@@ -151,6 +151,7 @@ const wrappedMethods = [
   'setWirelessMode',
   'restartGateway',
   'restartSystem',
+  'scanWirelessNetworks',
 ];
 
 for (const method of wrappedMethods) {

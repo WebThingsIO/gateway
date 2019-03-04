@@ -367,6 +367,7 @@ function getWirelessMode() {
     return {enabled, mode, options};
   }
 
+  const networks = [];
   for (const [key, value] of Object.entries(result.pairs)) {
     // discard wireless.wifi-iface[0]=wifi-iface
     if (key.split('.').length <= 2) {
@@ -380,7 +381,15 @@ function getWirelessMode() {
       enabled = enabled && (value === '0');
     } else {
       options[opt] = value;
+
+      if (opt === 'ssid') {
+        networks.push(value);
+      }
     }
+  }
+
+  if (mode === 'sta') {
+    options.networks = networks;
   }
 
   return {enabled, mode, options};
@@ -672,6 +681,78 @@ function getMacAddress(device) {
   return fs.readFileSync(addrFile, 'utf8').trim();
 }
 
+/**
+ * Scan for visible wireless networks.
+ *
+ * @returns {Object[]} List of networks as objects:
+ *                     [
+ *                       {
+ *                         ssid: '...',
+ *                         quality: <number>,
+ *                         encryption: true|false,
+ *                       },
+ *                       ...
+ *                     ]
+ */
+function scanWirelessNetworks() {
+  const status = getWirelessMode();
+
+  const proc = child_process.spawnSync(
+    'iwlist',
+    ['scanning'],
+    {encoding: 'utf8'}
+  );
+
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  const lines = proc.stdout
+    .split('\n')
+    .filter((l) => l.startsWith(' '))
+    .map((l) => l.trim());
+
+  const cells = [];
+  let cell = {};
+
+  for (const line of lines) {
+    // New cell, start over
+    if (line.startsWith('Cell ')) {
+      if (cell.hasOwnProperty('ssid') &&
+          cell.hasOwnProperty('quality') &&
+          cell.hasOwnProperty('encryption') &&
+          cell.ssid.length > 0) {
+        if (status.mode === 'sta' && status.options.networks &&
+            status.options.networks.includes(cell.ssid)) {
+          cell.configured = true;
+          cell.connected = status.enabled;
+        } else {
+          cell.configured = false;
+          cell.connected = false;
+        }
+
+        cells.push(cell);
+      }
+
+      cell = {};
+    }
+
+    if (line.startsWith('ESSID:')) {
+      cell.ssid = line.substring(7, line.length - 1);
+    }
+
+    if (line.startsWith('Quality=')) {
+      cell.quality = parseInt(line.split(' ')[0].split('=')[1].split('/')[0]);
+    }
+
+    if (line.startsWith('Encryption key:')) {
+      cell.encryption = line.split(':')[1] === 'on';
+    }
+  }
+
+  return cells.sort((a, b) => b.quality - a.quality);
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -690,4 +771,5 @@ module.exports = {
   setWirelessMode,
   restartGateway,
   restartSystem,
+  scanWirelessNetworks,
 };

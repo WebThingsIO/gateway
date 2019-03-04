@@ -10,17 +10,18 @@
 
 'use strict';
 
-const App = require('./app');
+const Adapter = require('./adapter');
 const API = require('./api');
+const App = require('./app');
+const AddonConfig = require('./addon-config');
+const DiscoveredAddon = require('./discovered-addon');
+const InstalledAddon = require('./installed-addon');
 const ipRegex = require('ip-regex')({exact: true});
 const Menu = require('./menu');
 const page = require('page');
-const Adapter = require('./adapter');
-const InstalledAddon = require('./installed-addon');
-const DiscoveredAddon = require('./discovered-addon');
 const User = require('./user');
-const AddonConfig = require('./addon-config');
 const Utils = require('./utils');
+const WirelessNetwork = require('./wireless-network');
 
 // eslint-disable-next-line no-unused-vars
 const SettingsScreen = {
@@ -711,7 +712,11 @@ const SettingsScreen = {
               this.showEthernetSettings();
               break;
             case 'wifi':
-              this.showWifiSettings();
+              if (id && id === 'configure') {
+                this.showWifiConfigure();
+              } else {
+                this.showWifiSettings();
+              }
               break;
             case 'wan':
               this.showWanSettings();
@@ -997,10 +1002,35 @@ const SettingsScreen = {
     this.backButton.href = '/settings/network';
     this.view.classList.add('dark');
     this.hideNetworkElements();
+    this.elements.network.client.wifi.wrap.classList.add('hidden');
+    this.elements.network.client.wifi.list.classList.remove('hidden');
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.client.wifi.main.classList.remove('hidden');
 
-    // TODO: scan for wifi networks
+    fetch('/settings/network/wireless/networks', {
+      headers: {
+        Authorization: `Bearer ${API.jwt}`,
+        Accept: 'application/json',
+      },
+    }).then((res) => {
+      return res.json();
+    }).then((body) => {
+      this.elements.network.client.wifi.list.innerHTML = '';
+      body.forEach((network) => new WirelessNetwork(network));
+    }).catch((e) => {
+      console.error(`Failed to scan for wireless networks: ${e}`);
+    });
+  },
+
+  showWifiConfigure: function() {
+    this.backButton.href = '/settings/network/wifi';
+    this.view.classList.add('dark');
+    this.hideNetworkElements();
+    this.elements.network.client.wifi.password.value = '';
+    this.elements.network.client.wifi.list.classList.add('hidden');
+    this.elements.network.client.wifi.wrap.classList.remove('hidden');
+    this.elements.network.main.classList.remove('hidden');
+    this.elements.network.client.wifi.main.classList.remove('hidden');
   },
 
   showWanSettings: function() {
@@ -1040,7 +1070,6 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.router.lan.main.classList.remove('hidden');
 
-    // TODO: load lan settings
     fetch('/settings/network/lan', {
       headers: {
         Authorization: `Bearer ${API.jwt}`,
