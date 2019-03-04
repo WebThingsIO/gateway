@@ -138,7 +138,7 @@ UpdatesController.get('/status', async (request, response) => {
     response.send({
       success: false,
       version: currentVersion,
-      failedVersion: failedVersion,
+      failedVersion,
       timestamp: failedStats.ctime,
     });
   } else {
@@ -149,8 +149,8 @@ UpdatesController.get('/status', async (request, response) => {
     response.send({
       success: true,
       version: currentVersion,
-      oldVersion: oldVersion,
-      timestamp: timestamp,
+      oldVersion,
+      timestamp,
     });
   }
 });
