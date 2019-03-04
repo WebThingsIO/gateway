@@ -60,7 +60,7 @@ const API = {
     });
   },
 
-  createUser: function(name, email, password) {
+  createUser: (name, email, password) => {
     const opts = {
       method: 'POST',
       headers: {
@@ -83,7 +83,7 @@ const API = {
     });
   },
 
-  getUser: function(id) {
+  getUser: id => {
     const opts = {
       headers: {
         Accept: 'application/json',
@@ -98,7 +98,7 @@ const API = {
     });
   },
 
-  addUser: function(name, email, password) {
+  addUser: (name, email, password) => {
     const opts = {
       method: 'POST',
       headers: {
@@ -117,7 +117,7 @@ const API = {
     });
   },
 
-  editUser: function(id, name, email, password, newPassword) {
+  editUser: (id, name, email, password, newPassword) => {
     const opts = {
       method: 'PUT',
       headers: {
@@ -134,7 +134,7 @@ const API = {
     });
   },
 
-  addLocalDomain: function(domainName) {
+  addLocalDomain: domainName => {
     const opts = {
       method: 'POST',
       headers: {
@@ -151,7 +151,7 @@ const API = {
     });
   },
 
-  deleteUser: function(id) {
+  deleteUser: id => {
     const opts = {
       method: 'DELETE',
       headers: {
@@ -166,7 +166,7 @@ const API = {
     });
   },
 
-  getAllUserInfo: function() {
+  getAllUserInfo: () => {
     const opts = {
       headers: {
         Accept: 'application/json',
@@ -181,7 +181,7 @@ const API = {
     });
   },
 
-  login: function(email, password) {
+  login: (email, password) => {
     const opts = {
       method: 'POST',
       headers: {
@@ -221,7 +221,7 @@ const API = {
     });
   },
 
-  setAddonConfig: function(addonName, config) {
+  setAddonConfig: (addonName, config) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -243,7 +243,7 @@ const API = {
     });
   },
 
-  setAddonSetting: function(addonName, enabled) {
+  setAddonSetting: (addonName, enabled) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -264,7 +264,7 @@ const API = {
     });
   },
 
-  installAddon: function(addonName, addonUrl, addonChecksum) {
+  installAddon: (addonName, addonUrl, addonChecksum) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -287,7 +287,7 @@ const API = {
     });
   },
 
-  uninstallAddon: function(addonName) {
+  uninstallAddon: addonName => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -304,7 +304,7 @@ const API = {
     });
   },
 
-  updateAddon: function(addonName, addonUrl, addonChecksum) {
+  updateAddon: (addonName, addonUrl, addonChecksum) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -325,7 +325,7 @@ const API = {
     });
   },
 
-  getExperimentSetting: function(experimentName) {
+  getExperimentSetting: experimentName => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -353,7 +353,7 @@ const API = {
       });
   },
 
-  setExperimentSetting: function(experimentName, enabled) {
+  setExperimentSetting: (experimentName, enabled) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
