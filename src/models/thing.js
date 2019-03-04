@@ -390,7 +390,7 @@ Thing.prototype.getDescription = function(reqHost, reqSecure) {
     properties: this.properties,
     actions: this.actions,
     events: this.events,
-    links: links,
+    links,
     floorplanX: this.floorplanX,
     floorplanY: this.floorplanY,
     layoutIndex: this.layoutIndex,
