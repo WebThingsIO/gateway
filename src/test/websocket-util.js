@@ -72,7 +72,7 @@ async function webSocketSend(ws, message) {
   }
 
   await new Promise((resolve) => {
-    ws.send(message, function() {
+    ws.send(message, () => {
       resolve();
     });
   });
