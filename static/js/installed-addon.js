@@ -152,7 +152,7 @@ InstalledAddon.prototype.setUpdateAvailable = function(url, version, checksum) {
 /**
  * Handle a click on the config button.
  */
-InstalledAddon.prototype.handleConfig = function() {
+InstalledAddon.prototype.handleConfig = () => {
   page(`/settings/addons/config/${this.name}`);
 };
 
