@@ -16,7 +16,7 @@ const JSZip = require('jszip');
 const Constants = require('../../constants');
 const UserProfile = require('../../user-profile');
 
-describe('logs/', function() {
+describe('logs/', () => {
   let jwt;
 
   beforeEach(async () => {
