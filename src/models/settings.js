@@ -23,12 +23,10 @@ const Settings = {
    *
    * @param {String} key Key of setting to get.
    */
-  get: function(key) {
-    return Database.getSetting(key).catch(function(e) {
+  get: key => Database.getSetting(key).catch(e => {
       console.error('Failed to get', key);
       throw e;
-    });
-  },
+    }),
 
   /**
    * Set a setting.
@@ -36,47 +34,41 @@ const Settings = {
    * @param {String} key Key of setting to set.
    * @param value Value to set key to.
    */
-  set: function(key, value) {
-    return Database.setSetting(key, value).then(function() {
+  set: (key, value) => Database.setSetting(key, value).then(() => {
       if (DEBUG) {
         console.log('Set', key, 'to',
                     util.inspect(value, {breakLength: Infinity}));
       }
       return value;
-    }).catch(function(e) {
+    }).catch(e => {
       console.error('Failed to set', key, 'to',
                     util.inspect(value, {breakLength: Infinity}));
       throw e;
-    });
-  },
+    }),
 
   /**
    * Delete a setting.
    *
    * @param {String} key Key of setting to delete.
    */
-  delete: function(key) {
-    return Database.deleteSetting(key).catch(function(e) {
+  delete: key => Database.deleteSetting(key).catch(e => {
       console.error('Failed to delete', key);
       throw e;
-    });
-  },
+    }),
 
   /**
    * Get an object of all add-on-related settings.
    */
-  getAddonSettings: function() {
-    return Database.getAddonSettings().catch(function(e) {
+  getAddonSettings: () => Database.getAddonSettings().catch(e => {
       console.error('Failed to get add-on settings');
       throw e;
-    });
-  },
+    }),
 
   /**
    * Get an object of all tunnel settings
    * @return {localDomain, mDNSstate, tunnelDomain}
    */
-  getTunnelInfo: async function() {
+  getTunnelInfo: async () => {
     // Check to see if we have a tunnel endpoint first
     const result = await Settings.get('tunneltoken');
     let localDomain;
