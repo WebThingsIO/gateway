@@ -45,7 +45,7 @@ fetch(config.get('updateUrl'),
       if (nodeModulesUrl && gatewayUrl) {
         exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
              {cwd: '..'},
-             function(err, stdout, stderr) {
+             (err, stdout, stderr) => {
                if (err) {
                  console.error('Upgrade failed', err, stdout, stderr);
                } else {
