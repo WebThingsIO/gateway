@@ -504,7 +504,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
         data: {
           status: '400 Bad Request',
           message: `Thing ${thingId} not found`,
-          request: request,
+          request,
         },
       }));
       return;
@@ -523,7 +523,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
             data: {
               status: '400 Bad Request',
               message: err,
-              request: request,
+              request,
             },
           }));
         });
@@ -552,7 +552,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
               data: {
                 status: '400 Bad Request',
                 message: err.message,
-                request: request,
+                request,
               },
             }));
           });
@@ -566,7 +566,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
           data: {
             status: '400 Bad Request',
             message: `Unknown messageType: ${request.messageType}`,
-            request: request,
+            rrequest,
           },
         }));
         break;
