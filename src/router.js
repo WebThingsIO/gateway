@@ -62,7 +62,7 @@ const Router = {
     app.use('/.well-known/acme-challenge', acmeHandler);
 
     // Content negotiation middleware
-    app.use(function(request, response, next) {
+    app.use((request, response, next) => {
       // Inform the browser that content negotiation is taking place
       response.setHeader('Vary', 'Accept');
 
