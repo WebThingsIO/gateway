@@ -11,9 +11,7 @@ const platform = require('./platform');
 const sleep = require('./sleep');
 
 // Build templates
-Handlebars.registerHelper('escapeQuotes', function(str) {
-  return new Handlebars.SafeString(str.replace(/'/, '\\\''));
-});
+Handlebars.registerHelper('escapeQuotes', str => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
 
 function getTemplate(name) {
   const filename = path.join(Constants.VIEWS_PATH, name);
@@ -269,7 +267,7 @@ function checkConnection() {
  *                    promise is rejected.
  */
 function waitForWiFi(maxAttempts, interval) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     let attempts = 0;
     check();
 
