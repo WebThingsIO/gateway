@@ -112,7 +112,7 @@ AddonsController.put('/:addonName', async (request, response) => {
       await AddonManager.unloadAddon(addonName);
     }
 
-    response.status(200).json({enabled: enabled});
+    response.status(200).json({enabled});
   } catch (e) {
     console.error(`Failed to toggle add-on ${addonName}`);
     console.error(e);
