@@ -528,7 +528,7 @@ const FloorplanScreen = {
    *
    * @param {Event} e Event to black hole.
    */
-  blackHole: function(e) {
+  blackHole: e => {
     e.preventDefault();
     e.stopPropagation();
     return false;
