@@ -316,8 +316,8 @@ const RuleScreen = {
       const x = parseFloat(matches[1]);
       const y = parseFloat(matches[2]);
       return {
-        x: x,
-        y: y,
+        x,
+        y,
       };
     }
 
@@ -480,8 +480,8 @@ const RuleScreen = {
 
     this.rule.trigger = {
       type: 'MultiTrigger',
-      op: op,
-      triggers: triggers,
+      op,
+      triggers,
     };
 
     const effects = effectBlocks.map((effectBlock) => {
@@ -489,7 +489,7 @@ const RuleScreen = {
     });
     this.rule.effect = {
       type: 'MultiEffect',
-      effects: effects,
+      effects,
     };
     const effectType = this.getEffectType();
     for (const effect of this.rule.effect.effects) {
