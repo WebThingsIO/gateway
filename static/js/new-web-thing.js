@@ -14,7 +14,7 @@ const API = require('./api');
 const Utils = require('./utils');
 
 let idCounter = -1;
-const getNewWebThingId = function() {
+const getNewWebThingId = () => {
   idCounter += 1;
   return idCounter;
 };
