@@ -3,7 +3,7 @@ const {httpServer, chai} = require('../common');
 const {TEST_USER, headerAuth} = require('../user');
 const Constants = require('../../constants');
 
-describe('http redirector', function() {
+describe('http redirector', () => {
   it('should redirect GET /', async () => {
     const res = await chai.request(httpServer)
       .get('/');
