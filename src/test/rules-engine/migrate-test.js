@@ -52,7 +52,7 @@ const newRule = {
   },
 };
 
-describe('rule migrate', function() {
+describe('rule migrate', () => {
   it('should correctly migrate a rule', () => {
     const newOldRule = DatabaseMigrate.migrate(oldRule);
     expect(newOldRule).toMatchObject(newRule);
