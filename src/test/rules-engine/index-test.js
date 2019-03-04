@@ -281,7 +281,7 @@ const multiRule = {
   },
 };
 
-describe('rules engine', function() {
+describe('rules engine', () => {
   let ruleId = null, jwt;
 
   async function addDevice(desc) {
