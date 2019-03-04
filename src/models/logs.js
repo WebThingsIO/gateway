@@ -186,8 +186,13 @@ class Logs {
   onAction() {
   }
 
-  async loadMetrics(out, table, transformer) {
-    const rows = await this.all(`SELECT id, value, date FROM ${table}`);
+  async loadMetrics(out, table, transformer, id) {
+    let rows = [];
+    if (typeof id === 'undefined') {
+      rows = await this.all(`SELECT id, value, date FROM ${table}`);
+    } else {
+      rows = await this.all(`SELECT id, value, date FROM ${table} WHERE id=?`, id);
+    }
     for (const row of rows) {
       const descr = JSON.parse(this.idToDescr[row.id]);
       if (!out.hasOwnProperty(descr.thing)) {
@@ -219,8 +224,15 @@ class Logs {
   }
 
   async getProperty(thingId, propertyName) {
-    const all = await this.getAll();
-    return all[thingId][propertyName];
+    const descr = this.propertyDescr(thingId, propertyName);
+    const out = {};
+    const id = this.descrToId[descr];
+    // TODO determine property type to only do one of these
+    await this.loadMetrics(out, METRICS_NUMBER, null, id);
+    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id);
+    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value),
+                           id);
+    return out[thingId][propertyName];
   }
 
   all(sql, ...params) {

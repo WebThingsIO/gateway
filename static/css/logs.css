@@ -69,5 +69,28 @@
 }
 
 .logs-graph-fill {
+  fill: rgba(255, 255, 255, 0.4);
+}
+
+.logs-graph-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.1rem;
+  line-height: 0.5rem;
+  background: rgba(93, 155, 199, 0.9);
+  pointer-events: none;
+}
+
+.logs-graph-point-highlight {
+  fill: white;
+  stroke: none;
+}
+
+.logs-graph-point-highlight {
   fill: rgba(255, 255, 255, 0.1);
+  stroke: none;
 }
