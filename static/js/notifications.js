@@ -40,7 +40,7 @@ const Notifications = {
         'Content-Type': 'application/json',
       }, API.headers()),
       body: JSON.stringify({
-        subscription: subscription,
+        subscription,
       }),
     });
   },
