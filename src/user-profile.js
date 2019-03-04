@@ -41,7 +41,7 @@ const Profile = {
   /**
    * Manually copy, then unlink, to prevent issues with cross-device renames.
    */
-  renameFile: function(src, dst) {
+  renameFile: (src, dst) => {
     fs.copyFileSync(src, dst);
     fs.unlinkSync(src);
   },
@@ -49,8 +49,7 @@ const Profile = {
   /**
    * Manually copy, then remove, to prevent issues with cross-device renames.
    */
-  renameDir: function(src, dst) {
-    return new Promise((resolve, reject) => {
+  renameDir: (src, dst) => new Promise((resolve, reject) => {
       ncp(src, dst, (e) => {
         if (e) {
           reject(e);
@@ -66,8 +65,7 @@ const Profile = {
           resolve();
         });
       });
-    });
-  },
+    }),
 
   /**
    * Migrate from old locations to new ones
