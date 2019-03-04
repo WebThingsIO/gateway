@@ -15,9 +15,12 @@ class Log {
     this.height = 120;
     this.graphHeight = this.height - 2 * this.margin;
     this.graphWidth = this.width - this.xStart - this.margin;
-
     this.elt = document.createElement('div');
     this.elt.classList.add('logs-log-container');
+
+    this.onPointerMove = this.onPointerMove.bind(this);
+    this.onPointerUp = this.onPointerUp.bind(this);
+
     this.drawSkeleton();
   }
 
@@ -38,6 +41,8 @@ class Log {
     this.graph.classList.add('logs-graph');
     this.graph.style.width = `${this.width}px`;
     this.graph.style.height = `${this.height}px`;
+    this.graph.addEventListener('mousemove', this.onPointerMove);
+    this.graph.addEventListener('mouseleave', this.onPointerUp);
 
     const axesPath = this.makePath([
       {x: this.xStart, y: this.margin},
@@ -45,18 +50,30 @@ class Log {
       {x: this.width - this.margin, y: this.height - this.margin},
     ]);
     axesPath.classList.add('logs-graph-axes');
-
     this.graph.appendChild(axesPath);
 
     this.yAxisLabel = this.makeText('', this.xStart - this.margin / 4,
                                     this.height / 2, 'end', 'middle');
     this.yAxisLabel.classList.add('logs-graph-label');
-
     this.graph.appendChild(this.yAxisLabel);
 
-    // Draw axes
-    // Draw labels if applicable
+    this.progress = document.createElementNS('http://www.w3.org/2000/svg',
+                                             'rect');
+    this.progress.classList.add('logs-graph-progress');
+    this.progress.setAttribute('x', this.xStart);
+    this.progress.setAttribute('y', this.margin);
+    this.progress.setAttribute('width', 0);
+    this.progress.setAttribute('height', this.height - 2 * this.margin);
+
     this.elt.appendChild(this.graph);
+
+    this.tooltip = document.createElement('div');
+    this.tooltip.classList.add('logs-graph-tooltip');
+    this.tooltipValue = document.createElement('p');
+    this.tooltipDate = document.createElement('p');
+    this.tooltip.appendChild(this.tooltipValue);
+    this.tooltip.appendChild(this.tooltipDate);
+    this.elt.appendChild(this.tooltip);
   }
 
   makePath(points) {
@@ -103,12 +120,18 @@ class Log {
       this.rawPoints = [];
       return;
     }
-    this.rawPoints = data.map(function(point) {
-      return {
+    this.rawPoints = [];
+    for (let i = 0; i < data.length; i++) {
+      const point = data[i];
+      if (point.date < this.start.getTime() ||
+          point.date > this.end.getTime()) {
+        continue;
+      }
+      this.rawPoints.push({
         value: point.value,
-        date: new Date(point.date),
-      };
-    });
+        time: point.date,
+      });
+    }
   }
 
   valueBounds() {
@@ -156,6 +179,36 @@ class Log {
     };
   }
 
+  timeToX(time) {
+    const startTime = this.start.getTime();
+    const endTime = this.end.getTime();
+    return (time - startTime) / (endTime - startTime) * this.graphWidth +
+      this.xStart;
+  }
+
+  xToTime(x) {
+    const startTime = this.start.getTime();
+    const endTime = this.end.getTime();
+    return (x - this.xStart) / this.graphWidth * (endTime - startTime) +
+      startTime;
+  }
+
+  valueToY(value) {
+    // TODO consolidate with yScale
+    const bounds = this.valueBounds();
+    let valueMin = Math.min(0, bounds.min);
+    let valueMax = bounds.max;
+    const lowestPowerOf10ToPreserve =
+      Math.pow(10, Math.ceil(Math.log(valueMax - valueMin) / Math.LN10) - 3);
+    valueMax = Math.ceil(valueMax / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
+    valueMin = Math.floor(valueMin / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
+
+    return this.height - this.margin -
+      (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
+  }
+
   redrawLog() {
     if (!this.property) {
       return;
@@ -180,23 +233,16 @@ class Log {
         this.graphHeight;
     };
 
-    const startTime = this.start.getTime();
-    const endTime = this.end.getTime();
-
-    const xScale = (x) => {
-      return (x - startTime) / (endTime - startTime) * this.graphWidth +
-        this.xStart;
-    };
-
     const points = [];
+    console.log('waaaaa', this.property);
     for (let i = 0; i < this.rawPoints.length; i++) {
       const raw = this.rawPoints[i];
-      const x = xScale(raw.date.getTime());
+      const x = this.timeToX(raw.time);
       const y = yScale(raw.value);
       // Add a point so that the value steps down instead of gradually
       // decreasing
-      if (i > 0 && (x - points[i - 1].x > 5 ||
-          this.property.type === 'boolean')) {
+      if (i > 0 && (this.property.type === 'boolean' ||
+          this.property.type === 'integer')) {
         points.push({
           x,
           y: points[i - 1].y,
@@ -254,14 +300,14 @@ class Log {
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
-    let xLabel = this.floorDate(new Date(startTime)).getTime();
+    let xLabel = this.floorDate(new Date(this.start.getTime())).getTime();
     const oneDayMs = 24 * 60 * 60 * 1000;
-    if (xLabel < startTime) {
+    if (xLabel < this.start.getTime()) {
       xLabel += oneDayMs;
     }
-    while (xLabel < endTime) {
+    while (xLabel < this.end.getTime()) {
       const text = new Date(xLabel).getDate();
-      label = this.makeText(text, xScale(xLabel),
+      label = this.makeText(text, this.timeToX(xLabel),
                             this.height - this.margin, 'middle', 'hanging');
       label.classList.add('logs-graph-label');
       this.graph.appendChild(label);
@@ -304,6 +350,91 @@ class Log {
     date.setMinutes(0);
     date.setSeconds(0);
     return date;
+  }
+
+  nearestPoint(time) {
+    let start = 0;
+    let end = this.rawPoints.length - 1;
+    let mid = 0;
+    while (end > start) {
+      mid = Math.floor((start + end) / 2);
+      if (this.rawPoints[mid].time < time) {
+        start = mid + 1;
+      } else if (this.rawPoints[mid].time > time) {
+        end = mid - 1;
+      } else {
+        break;
+      }
+    }
+
+    let nearestPoint = this.rawPoints[mid];
+    const diff = time - nearestPoint.time;
+
+    if (diff > 0 && mid < this.rawPoints.length - 1) {
+      const otherDiff = time - this.rawPoints[mid + 1].time;
+      if (Math.abs(diff) > Math.abs(otherDiff)) {
+        nearestPoint = this.rawPoints[mid + 1];
+      }
+    }
+    if (diff < 0 && mid > 0) {
+      const otherDiff = time - this.rawPoints[mid - 1].time;
+      if (Math.abs(diff) > Math.abs(otherDiff)) {
+        nearestPoint = this.rawPoints[mid - 1];
+      }
+    }
+
+    const closenessBuffer = this.xToTime(48) - this.xToTime(0);
+    console.log('maybe', nearestPoint, time, closenessBuffer,
+                Math.abs(time - nearestPoint.time));
+    if (Math.abs(time - nearestPoint.time) < closenessBuffer) {
+      return nearestPoint;
+    }
+    return null;
+  }
+
+  onPointerMove(event) {
+    const time = this.xToTime(event.clientX);
+    console.log(event.clientX, time);
+    if (time < this.start.getTime() || time > this.end.getTime()) {
+      this.removeTooltip();
+      return;
+    }
+
+    const point = this.nearestPoint(time);
+    if (!point) {
+      this.removeTooltip();
+      return;
+    }
+    const x = this.timeToX(point.time);
+    const y = this.valueToY(point.value);
+    this.tooltip.style.display = 'block';
+    this.tooltip.style.transform = `translate(${x}px,${y}px)`;
+    this.tooltipValue.textContent = point.value;
+    const dateParts = new Date(point.time).toDateString().split(' ');
+    this.tooltipDate.textContent = `${dateParts[1]} ${dateParts[2]}`;
+
+    if (!this.pointHighlight) {
+      this.pointHighlight =
+        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      this.pointHighlight.classList.add('logs-graph-point-highlight');
+      this.pointHighlight.setAttribute('r', 3);
+      this.graph.appendChild(this.pointHighlight);
+    }
+    this.pointHighlight.setAttribute('cx', x);
+    this.pointHighlight.setAttribute('cy', y);
+  }
+
+  onPointerUp() {
+    this.removeTooltip();
+  }
+
+
+  removeTooltip() {
+    this.tooltip.style.display = 'none';
+    if (this.pointHighlight) {
+      this.pointHighlight.parentNode.removeChild(this.pointHighlight);
+      this.pointHighlight = null;
+    }
   }
 }
 
