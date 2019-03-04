@@ -12,7 +12,7 @@ const page = require('page');
 
 // eslint-disable-next-line no-unused-vars
 const Router = {
-  init: function() {
+  init: () => {
     page('/', '/things');
     page('/assistant', App.showAssistant.bind(App));
     page('/things', App.showThings.bind(App));
