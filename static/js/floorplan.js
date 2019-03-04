@@ -307,13 +307,13 @@ const FloorplanScreen = {
     fetch('/uploads', {
       method: 'POST',
       body: formData,
-      headers: headers,
+      headers,
     }).then((response) => {
       this.uploadButton.classList.remove('loading');
       if (response.ok) {
         fetch('/uploads/floorplan.svg', {
           method: 'GET',
-          headers: headers,
+          headers,
           // Make sure we update the cache with the new floorplan
           cache: 'reload',
         }).then(() => {
