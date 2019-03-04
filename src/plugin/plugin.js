@@ -70,7 +70,7 @@ class Plugin {
         return adapter.asDict();
       }),
       exec: this.exec,
-      pid: pid,
+      pid,
     };
   }
 
