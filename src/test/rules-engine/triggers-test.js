@@ -41,7 +41,7 @@ const andTrigger = {
 };
 
 
-describe('triggers', function() {
+describe('triggers', () => {
   it('should parse a BooleanTrigger', () => {
     const trigger = triggers.fromDescription(booleanTrigger);
     expect(trigger).toMatchObject(booleanTrigger);
