@@ -36,7 +36,7 @@ const UploadsController = express.Router();
 /**
  * Upload a file.
  */
-UploadsController.post('/', function(request, response) {
+UploadsController.post('/', (request, response) => {
   if (!request.files || !request.files.file) {
     return response.status(500).send('No file provided for upload');
   }
@@ -50,7 +50,7 @@ UploadsController.post('/', function(request, response) {
   }
 
   const file = request.files.file;
-  file.mv(FLOORPLAN_PATH, function(error) {
+  file.mv(FLOORPLAN_PATH, error => {
     if (error) {
       // On error, try to copy the fallback.
       try {
