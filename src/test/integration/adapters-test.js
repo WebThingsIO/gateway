@@ -12,7 +12,7 @@ const {
 
 const Constants = require('../../constants');
 
-describe('adapters/', function() {
+describe('adapters/', () => {
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
