@@ -100,7 +100,7 @@ const SchemaUtils = {
     const required = Array.isArray(schema.required) ?
       Array.from(new Set([...schema.required, ...additionallyRequired])) :
       additionallyRequired;
-    return {...schema, required: required};
+    return {...schema, required};
   },
 
   withDependentSchema: (
