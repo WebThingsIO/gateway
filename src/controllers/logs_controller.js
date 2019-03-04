@@ -20,7 +20,14 @@ const Logs = require('../models/logs');
 const LogsController = PromiseRouter();
 
 /**
- * Get all the currently logged properties
+ * Get a list of all currently logged properties
+ */
+LogsController.get('/.schema', async (request, response) => {
+  const schema = await Logs.getSchema();
+  response.status(200).json(schema);
+});
+/**
+ * Get all the values of the currently logged properties
  */
 LogsController.get('/', async (request, response) => {
   // if (request.jwt.payload.role !== Constants.USER_TOKEN) {

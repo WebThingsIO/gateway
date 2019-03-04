@@ -235,6 +235,20 @@ class Logs {
     return out[thingId][propertyName];
   }
 
+  async getSchema() {
+    await this.loadKnownMetrics();
+    const schema = [];
+    for (const id in this.idToDescr) {
+      const descr = JSON.parse(this.idToDescr[id]);
+      schema.push({
+        id,
+        thing: descr.thing,
+        property: descr.property,
+      });
+    }
+    return schema;
+  }
+
   all(sql, ...params) {
     return new Promise((accept, reject) => {
       params.push(function(err, rows) {
