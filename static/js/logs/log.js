@@ -1,4 +1,5 @@
 // const Thing = require('../thing');
+const API = require('../api');
 const App = require('../app');
 const Utils = require('../utils');
 
@@ -63,7 +64,7 @@ class Log {
     this.progress.setAttribute('x', this.xStart);
     this.progress.setAttribute('y', this.margin);
     this.progress.setAttribute('width', 0);
-    this.progress.setAttribute('height', this.height - 2 * this.margin);
+    this.progress.setAttribute('height', this.graphHeight);
 
     this.elt.appendChild(this.graph);
 
@@ -96,13 +97,13 @@ class Log {
     return elt;
   }
 
-  async reload(data) {
-    await this.load(data);
+  async reload() {
+    await this.load();
     this.redrawLog();
     // fetch data render graph
   }
 
-  async load(data) {
+  async load() {
     const thing = await App.gatewayModel.getThingModel(this.thingId);
     if (!thing) {
       // be sad
@@ -116,6 +117,7 @@ class Log {
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
 
+    const data = await this.fetchRawPoints();
     if (!data || !data.length) {
       this.rawPoints = [];
       return;
@@ -132,6 +134,43 @@ class Log {
         time: point.date,
       });
     }
+  }
+
+  fetchRawPoints() {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const start = Date.now();
+      const onProgress = (event) => {
+        if (event.lengthComputable) {
+          const width = event.loaded / event.total * this.graphWidth;
+          this.progress.setAttribute('width', width);
+        } else {
+          // Oscillate between 0 width and max width starting at 0
+          const width = (1 - Math.cos((Date.now() - start) / 3000)) / 2 *
+            this.graphWidth;
+          this.progress.setAttribute('width', width);
+        }
+      };
+      const onLoad = () => {
+        xhr.removeEventListener('progress', onProgress);
+        xhr.removeEventListener('load', onLoad);
+        this.progress.setAttribute('width', 0);
+        try {
+          resolve(JSON.parse(xhr.responseText));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      xhr.addEventListener('progress', onProgress);
+      xhr.addEventListener('load', onLoad);
+      xhr.open('GET',
+               `/logs/things/${this.thingId}/properties/${this.propertyId}`);
+      const headers = API.headers();
+      for (const name in headers) {
+        xhr.setRequestHeader(name, headers[name]);
+      }
+      xhr.send(null);
+    });
   }
 
   valueBounds() {
@@ -393,6 +432,9 @@ class Log {
   }
 
   onPointerMove(event) {
+    if (!this.rawPoints) {
+      return;
+    }
     const time = this.xToTime(event.clientX);
     console.log(event.clientX, time);
     if (time < this.start.getTime() || time > this.end.getTime()) {

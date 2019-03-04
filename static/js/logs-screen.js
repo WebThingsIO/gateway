@@ -33,28 +33,17 @@ const LogsScreen = {
   },
 
   reload: function() {
-    fetch(`/logs/`, {headers: API.headers()}).then((res) => {
+    fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
-    }).then((data) => {
-      window.debugData = data;
-      for (const thingId in data) {
-        for (const propId in data[thingId]) {
-          if (!this.logs[thingId]) {
-            this.logs[thingId] = {};
-          }
-          let log = this.logs[thingId][propId];
-          if (!log) {
-            const firstData = data[thingId][propId][0];
-            if (!firstData ||
-                !['boolean', 'number'].includes(typeof firstData.value)) {
-              continue;
-            }
-            log = new Log(thingId, propId);
-            this.logs[thingId][propId] = log;
-            this.logsContainer.appendChild(log.elt);
-          }
-          log.reload(data[thingId][propId]);
+    }).then((schema) => {
+      for (const logInfo of schema) {
+        if (this.logs[logInfo.id]) {
+          continue;
         }
+        const log = new Log(logInfo.thing, logInfo.property);
+        this.logs[logInfo.id] = log;
+        this.logsContainer.appendChild(log.elt);
+        log.reload();
       }
     });
   },
