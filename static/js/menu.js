@@ -40,7 +40,7 @@ const Menu = {
    * experiment is enabled
    * @param {String} experiment
    */
-  getExperimentSetting: function(experiment) {
+  getExperimentSetting: experiment => {
     API.getExperimentSetting(experiment).then((value) => {
       if (value) {
         Menu.showItem(experiment);
