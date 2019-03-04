@@ -92,8 +92,8 @@ function startHttpsGateway() {
 
   // Start the HTTPS server
   promises.push(new Promise((resolve) => {
-    servers.https.listen(port, function() {
-      migration.then(function() {
+    servers.https.listen(port, () => {
+      migration.then(() => {
         addonManager.loadAddons();
       });
       rulesEngineConfigure(servers.https);
@@ -108,7 +108,7 @@ function startHttpsGateway() {
   const httpPort = config.get('ports.http');
 
   promises.push(new Promise((resolve) => {
-    servers.http.listen(httpPort, function() {
+    servers.http.listen(httpPort, () => {
       console.log('Redirector listening on port', servers.http.address().port);
       resolve();
     });
@@ -123,8 +123,8 @@ function startHttpGateway() {
   const port = config.get('ports.http');
 
   return new Promise((resolve) => {
-    servers.http.listen(port, function() {
-      migration.then(function() {
+    servers.http.listen(port, () => {
+      migration.then(() => {
         addonManager.loadAddons();
       });
       rulesEngineConfigure(servers.http);
@@ -252,7 +252,7 @@ function createRedirectApp(port) {
   const app = createApp();
 
   // Redirect based on https://https.cio.gov/apis/
-  app.use(function(request, response) {
+  app.use((request, response) => {
     if (request.method !== 'GET') {
       response.sendStatus(403);
       return;
@@ -296,7 +296,7 @@ switch (platform.getOS()) {
       return isWiFiConfigured();
     }).then((configured) => {
       if (!configured) {
-        WiFiSetupApp.onConnection = function() {
+        WiFiSetupApp.onConnection = () => {
           stopWiFiSetup();
           startGateway();
         };
@@ -311,7 +311,7 @@ switch (platform.getOS()) {
       return isRouterConfigured();
     }).then((configured) => {
       if (!configured) {
-        RouterSetupApp.onConnection = function() {
+        RouterSetupApp.onConnection = () => {
           stopRouterSetup();
           startGateway();
         };
@@ -329,13 +329,13 @@ switch (platform.getOS()) {
 function startGateway() {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup.promise = TunnelService.userSkipped().then(function(res) {
+    serverStartup.promise = TunnelService.userSkipped().then(res => {
       if (res) {
         return startHttpGateway();
       }
 
       return startHttpsGateway().then((server) => {
-        TunnelService.hasTunnelToken().then(function(result) {
+        TunnelService.hasTunnelToken().then(result => {
           if (result) {
             TunnelService.setServerHandle(server);
             TunnelService.start();
@@ -357,7 +357,7 @@ if (config.get('cli')) {
   });
 
   // Do graceful shutdown when Control-C is pressed.
-  process.on('SIGINT', function() {
+  process.on('SIGINT', () => {
     console.log('Control-C: unloading add-ons...');
     addonManager.unloadAddons();
     mDNSserver.server.cleanup();
@@ -367,7 +367,7 @@ if (config.get('cli')) {
 }
 
 // function to stop running server and start https
-TunnelService.switchToHttps = function() {
+TunnelService.switchToHttps = () => {
   stopHttpGateway();
   startHttpsGateway().then((server) => {
     TunnelService.setServerHandle(server);
