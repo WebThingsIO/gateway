@@ -30,7 +30,7 @@ const bothEffect = {
   type: 'MultiEffect',
 };
 
-describe('effects', function() {
+describe('effects', () => {
   it('should parse a PulseEffect', () => {
     const effect = effects.fromDescription(pulseEffect);
     expect(effect).toMatchObject(pulseEffect);
