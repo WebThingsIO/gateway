@@ -418,7 +418,7 @@ Thing.prototype.remove = function() {
     this.iconHref = null;
   }
 
-  this.websockets.forEach(function(ws) {
+  this.websockets.forEach(ws => {
     if (ws.readyState === WebSocket.OPEN ||
         ws.readyState === WebSocket.CONNECTING) {
       ws.close();
