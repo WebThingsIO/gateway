@@ -30,30 +30,30 @@ if (debugJasmine) {
   // trying to debug interactions between the various jest processes
   // which are running the tests.
   jasmine.getEnv().addReporter({
-    jasmineStarted: function(_suiteInfo) {
+    jasmineStarted: _suiteInfo => {
       const process = require('process');
       console.log('=====', process.pid, 'jasmineStarted =====');
     },
-    jasmineDone: function() {
+    jasmineDone: () => {
       const process = require('process');
       console.log('=====', process.pid, 'jasmineDone =====');
     },
-    suiteStarted: function(result) {
+    suiteStarted: result => {
       const process = require('process');
       console.log('=====', process.pid, 'suiteStarted',
                   result.description, '=====');
     },
-    suiteDone: function(result) {
+    suiteDone: result => {
       const process = require('process');
       console.log('=====', process.pid, 'suiteDone',
                   result.description, '=====');
     },
-    specStarted: function(result) {
+    specStarted: result => {
       const process = require('process');
       console.log('=====', process.pid, 'specStarted',
                   result.description, '=====');
     },
-    specDone: function(result) {
+    specDone: result => {
       const process = require('process');
       console.log('=====', process.pid, 'specDone',
                   result.description, '=====');
