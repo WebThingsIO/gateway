@@ -19,7 +19,7 @@ const User = function(id, email, password, name) {
   this.name = name;
 };
 
-User.generate = async function(email, rawPassword, name) {
+User.generate = async (email, rawPassword, name) => {
   const hash = await Passwords.hash(rawPassword);
   return new User(null, email, hash, name);
 };
