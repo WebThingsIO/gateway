@@ -62,7 +62,7 @@ class WirelessNetwork {
   }
 
   /**
-   * Render WirelessNetworkview and add to DOM.
+   * Render WirelessNetwork view and add to DOM.
    */
   render() {
     const ul = document.createElement('ul');
