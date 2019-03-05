@@ -163,8 +163,9 @@ class Log {
       };
       xhr.addEventListener('progress', onProgress);
       xhr.addEventListener('load', onLoad);
-      xhr.open('GET',
-               `/logs/things/${this.thingId}/properties/${this.propertyId}`);
+      let url = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
+      url += `?start=${this.start.getTime()}&end=${this.end.getTime()}`;
+      xhr.open('GET', url);
       const headers = API.headers();
       for (const name in headers) {
         xhr.setRequestHeader(name, headers[name]);
@@ -451,9 +452,14 @@ class Log {
     const y = this.valueToY(point.value);
     this.tooltip.style.display = 'block';
     this.tooltip.style.transform = `translate(${x}px,${y}px)`;
-    this.tooltipValue.textContent = point.value;
-    const dateParts = new Date(point.time).toDateString().split(' ');
-    this.tooltipDate.textContent = `${dateParts[1]} ${dateParts[2]}`;
+
+    const unit = Utils.unitNameToAbbreviation(this.property.unit || '');
+    this.tooltipValue.textContent = `${point.value} ${unit}`;
+
+    // const dateParts = new Date(point.time).toDateString().split(' ');
+    // this.tooltipDate.textContent = `${dateParts[1]} ${dateParts[2]}`;
+    const dateParts = new Date(point.time).toTimeString().split(' ');
+    this.tooltipDate.textContent = `${dateParts[0]}`;
 
     if (!this.pointHighlight) {
       this.pointHighlight =
