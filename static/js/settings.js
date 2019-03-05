@@ -285,7 +285,13 @@ const SettingsScreen = {
 
     this.elements.network.client.ethernet.done.addEventListener(
       'click',
-      () => {
+      (ev) => {
+        ev.target.disabled = true;
+        App.showMessage(
+          'Changing network settings. This may take a minute.',
+          3000
+        );
+
         const body = {
           mode: this.elements.network.client.ethernet.mode.value,
         };
@@ -312,9 +318,11 @@ const SettingsScreen = {
           }
 
           page('/settings/network');
+          ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage('Failed to configure ethernet.', 3000);
           console.error(`Failed to set ethernet config: ${e}`);
+          ev.target.disabled = false;
         });
       }
     );
@@ -348,7 +356,13 @@ const SettingsScreen = {
     );
     this.elements.network.client.wifi.connect.addEventListener(
       'click',
-      () => {
+      (ev) => {
+        ev.target.disabled = true;
+        App.showMessage(
+          'Changing network settings. This may take a minute.',
+          3000
+        );
+
         const body = {
           enabled: true,
           mode: 'sta',
@@ -372,9 +386,11 @@ const SettingsScreen = {
           }
 
           page('/settings/network');
+          ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage('Failed to configure wi-fi.', 3000);
           console.error(`Failed to set wi-fi config: ${e}`);
+          ev.target.disabled = false;
         });
       }
     );
@@ -454,7 +470,13 @@ const SettingsScreen = {
 
     this.elements.network.router.wan.done.addEventListener(
       'click',
-      () => {
+      (ev) => {
+        ev.target.disabled = true;
+        App.showMessage(
+          'Changing network settings. This may take a minute.',
+          3000
+        );
+
         const body = {
           mode: this.elements.network.router.wan.mode.value,
         };
@@ -486,9 +508,11 @@ const SettingsScreen = {
           }
 
           page('/settings/network');
+          ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage('Failed to configure WAN.', 3000);
           console.error(`Failed to set WAN config: ${e}`);
+          ev.target.disabled = false;
         });
       }
     );
@@ -511,7 +535,13 @@ const SettingsScreen = {
     );
     this.elements.network.router.lan.done.addEventListener(
       'click',
-      () => {
+      (ev) => {
+        ev.target.disabled = true;
+        App.showMessage(
+          'Changing network settings. This may take a minute.',
+          3000
+        );
+
         const lanBody = {
           mode: 'static',
           options: {
@@ -552,9 +582,11 @@ const SettingsScreen = {
           }
 
           page('/settings/network');
+          ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage('Failed to configure LAN.', 3000);
           console.error(`Failed to set LAN config: ${e}`);
+          ev.target.disabled = false;
         });
       }
     );
@@ -595,7 +627,13 @@ const SettingsScreen = {
     );
     this.elements.network.router.wlan.done.addEventListener(
       'click',
-      () => {
+      (ev) => {
+        ev.target.disabled = true;
+        App.showMessage(
+          'Changing network settings. This may take a minute.',
+          3000
+        );
+
         const body = {
           enabled: this.elements.network.router.wlan.enable.checked,
           mode: 'ap',
@@ -622,9 +660,11 @@ const SettingsScreen = {
           }
 
           page('/settings/network');
+          ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage('Failed to configure WLAN.', 3000);
           console.error(`Failed to set WLAN config: ${e}`);
+          ev.target.disabled = false;
         });
       }
     );
