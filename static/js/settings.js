@@ -109,6 +109,9 @@ const SettingsScreen = {
     // Find all elements
     this.elements.network = {
       main: document.getElementById('network-settings'),
+      unsupported: {
+        main: document.getElementById('network-settings-unsupported'),
+      },
       client: {
         main: document.getElementById('network-settings-client'),
         ethernet: {
@@ -173,6 +176,11 @@ const SettingsScreen = {
     };
 
     // Set up title elements
+    this.insertTitleElement(
+      this.elements.network.unsupported.main,
+      'Network',
+      '/optimized-images/network.svg'
+    );
     this.insertTitleElement(
       this.elements.network.client.main,
       'Network',
@@ -626,6 +634,7 @@ const SettingsScreen = {
 
   hideNetworkElements: function() {
     this.elements.network.main.classList.add('hidden');
+    this.elements.network.unsupported.main.classList.add('hidden');
     this.elements.network.client.main.classList.add('hidden');
     this.elements.network.client.ethernet.main.classList.add('hidden');
     this.elements.network.client.wifi.main.classList.add('hidden');
@@ -962,7 +971,7 @@ const SettingsScreen = {
           this.elements.network.router.main.classList.remove('hidden');
           break;
         default:
-          console.log('Not displaying network settings for OS:', body.os);
+          this.elements.network.unsupported.main.classList.remove('hidden');
           break;
       }
     }).catch((e) => {

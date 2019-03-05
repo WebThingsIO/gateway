@@ -240,6 +240,7 @@
   margin-bottom: 3rem;
 }
 
+#network-settings-unsupported-text,
 #no-adapters {
   text-align: center;
   position: relative;
@@ -250,6 +251,14 @@
   padding: 2rem;
   color: white;
   font-size: 2rem;
+}
+
+#no-adapters {
+  transform: translateY(calc(-50% - 4.8rem));
+}
+
+#network-settings-unsupported-text {
+  transform: translateY(calc(-50% - 9.6rem));
 }
 
 #no-adapters.hidden,
