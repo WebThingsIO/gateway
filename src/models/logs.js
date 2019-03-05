@@ -186,12 +186,39 @@ class Logs {
   onAction() {
   }
 
-  async loadMetrics(out, table, transformer, id) {
+  async loadMetrics(out, table, transformer, id, start, end) {
     let rows = [];
-    if (typeof id === 'undefined') {
-      rows = await this.all(`SELECT id, value, date FROM ${table}`);
+    const conditions = [];
+    if (typeof id === 'number') {
+      conditions.push({
+        condition: 'id = ?',
+        param: id,
+      });
+    }
+    if (start || start === 0) {
+      conditions.push({
+        condition: 'date > ?',
+        param: start,
+      });
+    }
+    if (end) {
+      conditions.push({
+        condition: 'date < ?',
+        param: end,
+      });
+    }
+
+    let query = `SELECT id, value, date FROM ${table}`;
+    if (conditions.length > 0) {
+      query += ' WHERE ';
+      query += conditions.map((cond) => {
+        return cond.condition;
+      }).join(' AND ');
+      rows = await this.all(query, conditions.map((cond) => {
+        return cond.param;
+      }));
     } else {
-      rows = await this.all(`SELECT id, value, date FROM ${table} WHERE id=?`, id);
+      rows = await this.all(query);
     }
     for (const row of rows) {
       const descr = JSON.parse(this.idToDescr[row.id]);
@@ -209,29 +236,31 @@ class Logs {
     }
   }
 
-
-  async getAll() {
+  async getAll(start, end) {
     const out = {};
-    await this.loadMetrics(out, METRICS_NUMBER);
-    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value);
-    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value));
+    await this.loadMetrics(out, METRICS_NUMBER, null, null, start, end);
+    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null,
+                           start, end);
+    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value),
+                           null, start, end);
     return out;
   }
 
-  async get(thingId) {
-    const all = await this.getAll();
+  async get(thingId, start, end) {
+    const all = await this.getAll(start, end);
     return all[thingId];
   }
 
-  async getProperty(thingId, propertyName) {
+  async getProperty(thingId, propertyName, start, end) {
     const descr = this.propertyDescr(thingId, propertyName);
     const out = {};
     const id = this.descrToId[descr];
     // TODO determine property type to only do one of these
-    await this.loadMetrics(out, METRICS_NUMBER, null, id);
-    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id);
+    await this.loadMetrics(out, METRICS_NUMBER, null, id, start, end);
+    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id, start,
+                           end);
     await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value),
-                           id);
+                           id, start, end);
     return out[thingId][propertyName];
   }
 
@@ -250,6 +279,7 @@ class Logs {
   }
 
   all(sql, ...params) {
+    console.log('db.all', sql, params);
     return new Promise((accept, reject) => {
       params.push(function(err, rows) {
         if (err) {
