@@ -16,7 +16,7 @@ module.exports = {
    * @param {String} fname File path
    * @returns A checksum as a lower case hex string.
    */
-  hashFile: fname => {
+  hashFile: (fname) => {
     const hash = crypto.createHash('sha256');
 
     let fd;
@@ -47,7 +47,7 @@ module.exports = {
   /**
    * Escape text such that it's safe to be placed in HTML.
    */
-  escapeHtml: text => {
+  escapeHtml: (text) => {
     if (typeof text !== 'string') {
       text = `${text}`;
     }
