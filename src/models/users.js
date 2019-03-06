@@ -19,7 +19,7 @@ const Users = {
    * @return {Promise} Promise which resolves to user object
    *   or false if user doesn't exist.
    */
-  getUser: email => Database.getUser(email).then((result) => {
+  getUser: (email) => Database.getUser(email).then((result) => {
       if (!result) {
         return false;
       }
@@ -35,7 +35,7 @@ const Users = {
    * @return {Promise} Promise which resolves to user object
    *   or false if user doesn't exist.
    */
-  getUserById: async id => {
+  getUserById: async (id) => {
     if (typeof id !== 'number') {
       id = parseInt(id, 10);
       if (isNaN(id)) {
@@ -78,7 +78,7 @@ const Users = {
    * @param {User} user to edit
    * @return {Promise} Promise which resolves when operation is complete.
    */
-  editUser: async user => {
+  editUser: async (user) => {
     user.email = user.email.toLowerCase();
     await Database.editUser(user);
   },
@@ -88,7 +88,7 @@ const Users = {
    * @param {Number} userId
    * @return {Promise} Promise which resolves when operation is complete.
    */
-  deleteUser: async userId => {
+  deleteUser: async (userId) => {
     if (typeof userId !== 'number') {
       userId = parseInt(userId, 10);
       if (isNaN(userId)) {
