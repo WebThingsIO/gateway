@@ -101,7 +101,7 @@ ArrayField.prototype.isAddable = function(formItems) {
   return addable;
 };
 
-ArrayField.prototype.isItemRequired = itemSchema => {
+ArrayField.prototype.isItemRequired = (itemSchema) => {
   if (Array.isArray(itemSchema.type)) {
     // While we don't yet support composite/nullable jsonschema types, it's
     // future-proof to check for requirement against these.
@@ -111,7 +111,7 @@ ArrayField.prototype.isItemRequired = itemSchema => {
   return itemSchema.type !== 'null';
 };
 
-ArrayField.prototype.itemFieldId = index => `array_${this.idSchema.$id}_${index}`;
+ArrayField.prototype.itemFieldId = (index) => `array_${this.idSchema.$id}_${index}`;
 
 ArrayField.prototype.onDropIndexClick = function(field, index) {
   return (event) => {
