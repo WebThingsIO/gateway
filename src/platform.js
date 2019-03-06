@@ -157,4 +157,4 @@ for (const method of wrappedMethods) {
   module.exports[method] = wrapPlatform(platform, method);
 }
 
-module.exports.implemented = fn => platform && platform.hasOwnProperty(fn);
+module.exports.implemented = (fn) => platform && platform.hasOwnProperty(fn);
