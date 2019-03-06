@@ -18,7 +18,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   const accept = event.request.headers.get('Accept');
   if (accept === 'application/json' || event.request.method !== 'GET' ||
       !['no-cors', 'navigate'].includes(event.request.mode)) {
@@ -44,7 +44,7 @@ self.addEventListener('fetch', event => {
   })());
 });
 
-self.addEventListener('push', event => {
+self.addEventListener('push', (event) => {
   const payload = event.data ? event.data.text() : '';
 
   event.waitUntil(self.registration.showNotification('Mozilla IoT Gateway', {
