@@ -245,7 +245,7 @@ PropertySelect.prototype.addOption = function(name, ruleFragment, selected) {
   this.elt.appendChild(elt);
 };
 
-PropertySelect.prototype.updateOption = optionElt => {
+PropertySelect.prototype.updateOption = (optionElt) => {
   const ruleFragment = JSON.parse(optionElt.dataset.ruleFragment);
 
   if (!ruleFragment) {
