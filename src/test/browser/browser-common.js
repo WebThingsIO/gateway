@@ -31,7 +31,7 @@ beforeAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   // Starting up and interacting with a browser takes forever
   await new Promise((res, rej) => {
-    selenium.install(err => {
+    selenium.install((err) => {
       if (err) {
         rej(err);
       } else {
