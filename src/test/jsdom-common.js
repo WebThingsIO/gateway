@@ -12,14 +12,14 @@ global.navigator = global.window.navigator;
 
 const storage = {};
 global.localStorage = {
-  getItem: key => {
+  getItem: (key) => {
     const value = storage[key];
     return typeof value === 'undefined' ? null : value;
   },
   setItem: (key, value) => {
     storage[key] = value;
   },
-  removeItem: key => delete storage[key],
+  removeItem: (key) => delete storage[key],
 };
 
 beforeEach(() => {
