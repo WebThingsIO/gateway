@@ -138,7 +138,7 @@ const TunnelService = {
           response.status(400).end();
         }
       }
-    }).catch(e => {
+    }).catch((e) => {
       console.error('Failed to get tunneltoken setting');
       console.error(e);
 
