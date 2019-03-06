@@ -50,7 +50,7 @@ UploadsController.post('/', (request, response) => {
   }
 
   const file = request.files.file;
-  file.mv(FLOORPLAN_PATH, error => {
+  file.mv(FLOORPLAN_PATH, (error) => {
     if (error) {
       // On error, try to copy the fallback.
       try {
