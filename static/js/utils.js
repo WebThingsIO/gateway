@@ -13,8 +13,8 @@ const Utils = {
    * @param {String} str
    * @return {String} the string with the first letter capitalized
    */
-  capitalize: str => str[0].toUpperCase() + str.substr(1),
-  escapeHtml: text => {
+  capitalize: (str) => str[0].toUpperCase() + str.substr(1),
+  escapeHtml: (text) => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -28,7 +28,7 @@ const Utils = {
       .replace(/°/g, '&deg;')
       .replace(/⋅/g, '&sdot;');
   },
-  unescapeHtml: text => {
+  unescapeHtml: (text) => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -42,7 +42,7 @@ const Utils = {
       .replace(/&deg;/g, '°')
       .replace(/&sdot;/g, '⋅');
   },
-  escapeHtmlForIdClass: text => {
+  escapeHtmlForIdClass: (text) => {
     if (typeof (text) !== 'string') {
       text = `${text}`;
     }
@@ -54,7 +54,7 @@ const Utils = {
 
     return text;
   },
-  fuzzyTime: date => {
+  fuzzyTime: (date) => {
     const now = new Date();
     const delta = Math.round((now - date) / 1000);
 
@@ -124,7 +124,7 @@ const Utils = {
       }
     };
   },
-  unitNameToAbbreviation: unit => {
+  unitNameToAbbreviation: (unit) => {
     switch (unit.toLowerCase()) {
       case 'volt':
       case 'volts':
@@ -195,7 +195,7 @@ const Utils = {
         return unit;
     }
   },
-  colorTemperatureToRGB: value => {
+  colorTemperatureToRGB: (value) => {
     /**
      * Algorithm found here:
      * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
@@ -242,7 +242,7 @@ const Utils = {
 
     return `#${r}${g}${b}`;
   },
-  legacyTypeToCapabilities: type => {
+  legacyTypeToCapabilities: (type) => {
     switch (type) {
       case 'binarySensor':
         return ['BinarySensor'];
@@ -265,7 +265,7 @@ const Utils = {
         return [];
     }
   },
-  sortCapabilities: capabilities => {
+  sortCapabilities: (capabilities) => {
     // copy the array, as we're going to sort in place.
     const list = capabilities.slice();
 
