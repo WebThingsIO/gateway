@@ -179,18 +179,18 @@ const SchemaUtils = {
 
   mergeSchemas: (schema1, schema2) => SchemaUtils.mergeObjects(schema1, schema2, true),
 
-  isConstant: schema => (
+  isConstant: (schema) => (
       (Array.isArray(schema.enum) && schema.enum.length === 1) ||
       schema.hasOwnProperty('const')
     ),
 
-  isFixedItems: schema => (
+  isFixedItems: (schema) => (
       Array.isArray(schema.items) &&
       schema.items.length > 0 &&
       schema.items.every((item) => SchemaUtils.isObject(item))
     ),
 
-  isObject: thing => typeof thing === 'object' &&
+  isObject: (thing) => typeof thing === 'object' &&
       thing !== null && !Array.isArray(thing),
 
   isSelect: (_schema, definitions = {}) => {
@@ -212,7 +212,7 @@ const SchemaUtils = {
     return SchemaUtils.isSelect(schema.items, definitions);
   },
 
-  toConstant: schema => {
+  toConstant: (schema) => {
     if (Array.isArray(schema.enum) && schema.enum.length === 1) {
       return schema.enum[0];
     } else if (schema.hasOwnProperty('const')) {
@@ -268,7 +268,7 @@ const SchemaUtils = {
     }, acc);
   },
 
-  optionsList: schema => {
+  optionsList: (schema) => {
     if (schema.enum) {
       return schema.enum.map((value, i) => {
         const label = (schema.enumNames && schema.enumNames[i]) ||
@@ -398,7 +398,7 @@ const SchemaUtils = {
     return formData || defaults;
   },
 
-  getOptionsList: schema => {
+  getOptionsList: (schema) => {
     if (schema.enum) {
       return schema.enum.map((value, i) => {
         const label = (schema.enumNames && schema.enumNames[i]) ||
