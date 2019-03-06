@@ -11,7 +11,7 @@ const platform = require('./platform');
 const sleep = require('./sleep');
 
 // Build templates
-Handlebars.registerHelper('escapeQuotes', str => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
+Handlebars.registerHelper('escapeQuotes', (str) => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
 
 function getTemplate(name) {
   const filename = path.join(Constants.VIEWS_PATH, name);
