@@ -25,7 +25,7 @@ function Draggable(elt, afterDown, afterMove, afterUp) {
  * @param {MouseEvent|TouchEvent} event
  * @return {{clientX: number, clientY: number}}
  */
-Draggable.prototype.getClientCoords = event => {
+Draggable.prototype.getClientCoords = (event) => {
   if (event.type.startsWith('touch')) {
     return {
       clientX: event.changedTouches[0].clientX,
