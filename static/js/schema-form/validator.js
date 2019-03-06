@@ -37,7 +37,7 @@ Validator._rePropName = RegExp(
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
   , 'g');
 
-Validator._toPath = string => {
+Validator._toPath = (string) => {
   const result = [];
   string.replace(
     Validator._rePropName,
@@ -53,7 +53,7 @@ Validator._toPath = string => {
   return result;
 };
 
-Validator._toErrorSchema = errors => {
+Validator._toErrorSchema = (errors) => {
   // Transforms a ajv validation errors list:
   // [
   //   {dataPath: ".level1.level2[2].level3", message: "err a"},
