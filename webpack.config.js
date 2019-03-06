@@ -16,8 +16,8 @@ const uuid = require('uuid/v1');
 
 const externals = {};
 fs.readdirSync('node_modules')
-  .filter(x => !['.bin'].includes(x))
-  .forEach(mod => {
+  .filter((x) => !['.bin'].includes(x))
+  .forEach((mod) => {
     externals[mod] = `commonjs ${mod}`;
   });
 
