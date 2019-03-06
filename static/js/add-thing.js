@@ -178,7 +178,7 @@ const AddThingScreen = {
     }
   },
 
-  showNewWebThing: e => {
+  showNewWebThing: (e) => {
     e.preventDefault();
     new NewWebThing();
   },
