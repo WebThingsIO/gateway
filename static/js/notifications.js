@@ -13,7 +13,7 @@
 const API = require('./api');
 
 const Notifications = {
-  onReady: async registration => {
+  onReady: async (registration) => {
     if (!registration.pushManager) {
       return;
     }
