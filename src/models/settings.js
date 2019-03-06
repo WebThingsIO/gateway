@@ -23,7 +23,7 @@ const Settings = {
    *
    * @param {String} key Key of setting to get.
    */
-  get: key => Database.getSetting(key).catch(e => {
+  get: (key) => Database.getSetting(key).catch((e) => {
       console.error('Failed to get', key);
       throw e;
     }),
@@ -40,7 +40,7 @@ const Settings = {
                     util.inspect(value, {breakLength: Infinity}));
       }
       return value;
-    }).catch(e => {
+    }).catch((e) => {
       console.error('Failed to set', key, 'to',
                     util.inspect(value, {breakLength: Infinity}));
       throw e;
@@ -51,7 +51,7 @@ const Settings = {
    *
    * @param {String} key Key of setting to delete.
    */
-  delete: key => Database.deleteSetting(key).catch(e => {
+  delete: (key) => Database.deleteSetting(key).catch((e) => {
       console.error('Failed to delete', key);
       throw e;
     }),
@@ -59,7 +59,7 @@ const Settings = {
   /**
    * Get an object of all add-on-related settings.
    */
-  getAddonSettings: () => Database.getAddonSettings().catch(e => {
+  getAddonSettings: () => Database.getAddonSettings().catch((e) => {
       console.error('Failed to get add-on settings');
       throw e;
     }),
