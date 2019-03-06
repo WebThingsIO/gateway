@@ -20,7 +20,7 @@ module.exports = {
    * @param {String} password
    * @return {Promise<String>} hashed password
    */
-  hash: password => bcrypt.hash(password, rounds),
+  hash: (password) => bcrypt.hash(password, rounds),
 
   /**
    * Hash a password synchronously.
@@ -29,7 +29,7 @@ module.exports = {
    * @param {String} password
    * @return {String} hashed password
    */
-  hashSync: password => bcrypt.hashSync(password, rounds),
+  hashSync: (password) => bcrypt.hashSync(password, rounds),
 
   /**
    * Compare two password hashes asynchronously
