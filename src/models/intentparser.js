@@ -32,7 +32,7 @@ const IntentParser = {
       'cooler',
     ]),
 
-  buildMessage: data => {
+  buildMessage: (data) => {
     data = Buffer.from(JSON.stringify(data));
     const buffer = Buffer.alloc(4 + data.length);
     buffer.writeUInt32BE(data.length, 0);
@@ -43,12 +43,12 @@ const IntentParser = {
   /**
   * Interface train the intent parser
   */
-  train: things => new Promise((resolve, reject) => {
+  train: (things) => new Promise((resolve, reject) => {
       const socket_client = new net.Socket();
       socket_client.connect(5555, '127.0.0.1', () => {
         console.log('Connected to intent parser server');
 
-        socket_client.on('data', data => {
+        socket_client.on('data', (data) => {
           console.log(`Training result: ${data}`);
           try {
             const response = JSON.parse(data);
@@ -75,7 +75,7 @@ const IntentParser = {
           },
         }));
       });
-      socket_client.on('error', data => {
+      socket_client.on('error', (data) => {
         console.log(`Training error: ${data}`);
         reject('Failed to train intent parser.');
       });
@@ -84,10 +84,10 @@ const IntentParser = {
   /**
   * Interface to query the intent parser
   */
-  query: query => new Promise((resolve, reject) => {
+  query: (query) => new Promise((resolve, reject) => {
       const socket_client = new net.Socket();
       socket_client.connect(5555, '127.0.0.1', () => {
-        socket_client.on('data', data => {
+        socket_client.on('data', (data) => {
           console.log(`Query result: ${data}`);
           try {
             const response = JSON.parse(data);
@@ -116,7 +116,7 @@ const IntentParser = {
           data: query,
         }));
       });
-      socket_client.on('error', data => {
+      socket_client.on('error', (data) => {
         console.log(`Query error: ${data}`);
         reject('Failed to query intent parser.');
       });
