@@ -1,6 +1,6 @@
 const sleep = require('../sleep');
 
-module.exports.waitForExpect = expect => new Promise((resolve, reject) => {
+module.exports.waitForExpect = (expect) => new Promise((resolve, reject) => {
     let wait = 2500;
     const interval = 500;
     const retry = async () => {
