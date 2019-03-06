@@ -275,7 +275,7 @@ const SettingsScreen = {
     });
   },
 
-  onLocalDomainCheckboxChange: e => {
+  onLocalDomainCheckboxChange: (e) => {
     const error = document.getElementById('domain-settings-error');
     const value = e.target.checked ? true : false;
 
@@ -935,7 +935,7 @@ const SettingsScreen = {
     });
   },
 
-  revokeAuthorization: event => {
+  revokeAuthorization: (event) => {
     const revoke = event.target;
     if (!revoke.dataset.clientId) {
       console.warn('Missing clientId on revoke', revoke);
