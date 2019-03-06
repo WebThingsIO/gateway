@@ -239,7 +239,7 @@ const RuleScreen = {
    * @param {ThingDescription} thing
    * @return {Element}
    */
-  makeDeviceBlock: thing => {
+  makeDeviceBlock: (thing) => {
     const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
@@ -775,29 +775,29 @@ const RuleScreen = {
     }
 
     if (andActive || this.rule.trigger.op === 'OR') {
-      effectBlocks.forEach(block => {
+      effectBlocks.forEach((block) => {
         block.classList.remove('inactive');
       });
       if (centerCircle) {
         centerCircle.classList.add('active');
       }
-      effectPaths.forEach(path => {
+      effectPaths.forEach((path) => {
         path.classList.add('active');
       });
-      effectCircles.forEach(circle => {
+      effectCircles.forEach((circle) => {
         circle.classList.add('active');
       });
     } else {
-      effectBlocks.forEach(block => {
+      effectBlocks.forEach((block) => {
         block.classList.add('inactive');
       });
       if (centerCircle) {
         centerCircle.classList.remove('active');
       }
-      effectPaths.forEach(path => {
+      effectPaths.forEach((path) => {
         path.classList.remove('active');
       });
-      effectCircles.forEach(circle => {
+      effectCircles.forEach((circle) => {
         circle.classList.remove('active');
       });
     }
