@@ -83,7 +83,7 @@ const API = {
     });
   },
 
-  getUser: id => {
+  getUser: (id) => {
     const opts = {
       headers: {
         Accept: 'application/json',
@@ -134,7 +134,7 @@ const API = {
     });
   },
 
-  addLocalDomain: domainName => {
+  addLocalDomain: (domainName) => {
     const opts = {
       method: 'POST',
       headers: {
@@ -151,7 +151,7 @@ const API = {
     });
   },
 
-  deleteUser: id => {
+  deleteUser: (id) => {
     const opts = {
       method: 'DELETE',
       headers: {
@@ -287,7 +287,7 @@ const API = {
     });
   },
 
-  uninstallAddon: addonName => {
+  uninstallAddon: (addonName) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
@@ -325,7 +325,7 @@ const API = {
     });
   },
 
-  getExperimentSetting: experimentName => {
+  getExperimentSetting: (experimentName) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,
       Accept: 'application/json',
