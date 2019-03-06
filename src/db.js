@@ -153,7 +153,7 @@ const Database = {
       this.db.run(
         'INSERT INTO settings (key, value) VALUES (?, ?)',
         [setting[0], setting[1]],
-        error => {
+        (error) => {
           if (error) {
             console.error(`Failed to insert setting ${
               setting[0]}`);
@@ -203,7 +203,7 @@ const Database = {
       db.run(
         'INSERT INTO things (id, description) VALUES (?, ?)',
         [id, JSON.stringify(description)],
-        error => {
+        (error) => {
           if (error) {
             reject(error);
           } else {
@@ -225,7 +225,7 @@ const Database = {
       db.run(
         'UPDATE things SET description=? WHERE id=?',
         [JSON.stringify(description), id],
-        error => {
+        (error) => {
           if (error) {
             reject(error);
           } else {
@@ -243,7 +243,7 @@ const Database = {
   removeThing: function(id) {
     return new Promise((function(resolve, reject) {
       const db = this.db;
-      db.run('DELETE FROM things WHERE id = ?', id, error => {
+      db.run('DELETE FROM things WHERE id = ?', id, (error) => {
         if (error) {
           reject(error);
         } else {
