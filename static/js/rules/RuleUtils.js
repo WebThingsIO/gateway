@@ -1,5 +1,5 @@
 const RuleUtils = {
-  icon: description => {
+  icon: (description) => {
     if (description.selectedCapability) {
       switch (description.selectedCapability) {
         case 'OnOffSwitch':
@@ -60,7 +60,7 @@ const RuleUtils = {
     }
   },
   // Helper function for selecting the thing corresponding to a property
-  byProperty: property => option => {
+  byProperty: (property) => (option) => {
       if (!property) {
         console.warn('byProperty property undefined', new Error().stack);
         return false;
@@ -72,7 +72,7 @@ const RuleUtils = {
       }).length > 0;
     },
   // Helper function for selecting the thing corresponding to an href
-  byThing: thing => otherThing => otherThing.href === `/things/${thing}`,
+  byThing: (thing) => (otherThing) => otherThing.href === `/things/${thing}`,
   thingFromPart: (gateway, part) => {
     let thing = null;
     if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
@@ -86,8 +86,8 @@ const RuleUtils = {
     }
     return thing;
   },
-  extractProperty: href => href.match(/properties\/([^/]+)/)[1],
-  extractThing: href => href.match(/things\/([^/]+)/)[1],
+  extractProperty: (href) => href.match(/properties\/([^/]+)/)[1],
+  extractThing: (href) => href.match(/things\/([^/]+)/)[1],
 };
 
 module.exports = RuleUtils;
