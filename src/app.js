@@ -329,13 +329,13 @@ switch (platform.getOS()) {
 function startGateway() {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup.promise = TunnelService.userSkipped().then(res => {
+    serverStartup.promise = TunnelService.userSkipped().then((res) => {
       if (res) {
         return startHttpGateway();
       }
 
       return startHttpsGateway().then((server) => {
-        TunnelService.hasTunnelToken().then(result => {
+        TunnelService.hasTunnelToken().then((result) => {
           if (result) {
             TunnelService.setServerHandle(server);
             TunnelService.start();
