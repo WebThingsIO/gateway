@@ -47,20 +47,20 @@ const SchemaUtils = {
       // Retrieve the referenced schema definition.
       const $refSchema =
         SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
-        // Drop the $ref property of the source schema.
-        // eslint-disable-next-line no-unused-vars
-      const {$ref, ...localSchema} = schema;
+      // Drop the $ref property of the source schema.
+      // eslint-disable-next-line no-unused-vars
+      const { $ref, ...localSchema } = schema;
       // Update referenced schema definition with local schema properties.
-      return SchemaUtils.retrieveSchema({...$refSchema, ...localSchema},
-                                        definitions,
-                                        formData);
+      return SchemaUtils.retrieveSchema({ ...$refSchema, ...localSchema },
+        definitions,
+        formData);
     } else if (schema.hasOwnProperty('dependencies')) {
       const resolvedSchema = SchemaUtils.resolveDependencies(schema,
-                                                             definitions,
-                                                             formData);
+        definitions,
+        formData);
       return SchemaUtils.retrieveSchema(resolvedSchema,
-                                        definitions,
-                                        formData);
+        definitions,
+        formData);
     } else {
       return schema;
     }
@@ -68,7 +68,7 @@ const SchemaUtils = {
 
   resolveDependencies: (schema, definitions, formData) => {
     // Drop the dependencies from the source schema.
-    const {dependencies = {}, ...localSchema} = schema;
+    const { dependencies = {}, ...localSchema } = schema;
     let resolvedSchema = localSchema;
     // Process dependencies updating the local schema properties as
     // appropriate.
@@ -80,13 +80,13 @@ const SchemaUtils = {
       const dependencyValue = dependencies[dependencyKey];
       if (Array.isArray(dependencyValue)) {
         resolvedSchema = SchemaUtils.withDependentProperties(resolvedSchema,
-                                                             dependencyValue);
+          dependencyValue);
       } else if (SchemaUtils.isObject(dependencyValue)) {
         resolvedSchema = SchemaUtils.withDependentSchema(resolvedSchema,
-                                                         definitions,
-                                                         formData,
-                                                         dependencyKey,
-                                                         dependencyValue
+          definitions,
+          formData,
+          dependencyKey,
+          dependencyValue
         );
       }
     }
@@ -100,7 +100,7 @@ const SchemaUtils = {
     const required = Array.isArray(schema.required) ?
       Array.from(new Set([...schema.required, ...additionallyRequired])) :
       additionallyRequired;
-    return {...schema, required};
+    return { ...schema, required };
   },
 
   withDependentSchema: (
@@ -110,7 +110,7 @@ const SchemaUtils = {
     dependencyKey,
     dependencyValue
   ) => {
-    const {oneOf, ...dependentSchema} = SchemaUtils.retrieveSchema(
+    const { oneOf, ...dependentSchema } = SchemaUtils.retrieveSchema(
       dependencyValue,
       definitions,
       formData
@@ -119,10 +119,10 @@ const SchemaUtils = {
     return typeof oneOf === 'undefined' ?
       schema :
       SchemaUtils.withExactlyOneSubschema(schema,
-                                          definitions,
-                                          formData,
-                                          dependencyKey,
-                                          oneOf);
+        definitions,
+        formData,
+        dependencyKey,
+        oneOf);
   },
 
   withExactlyOneSubschema: (
@@ -141,7 +141,7 @@ const SchemaUtils = {
       if (!subschema.properties) {
         return false;
       }
-      const {[dependencyKey]: conditionPropertySchema} = subschema.properties;
+      const { [dependencyKey]: conditionPropertySchema } = subschema.properties;
       if (conditionPropertySchema) {
         const conditionSchema = {
           type: 'object',
@@ -149,8 +149,8 @@ const SchemaUtils = {
             [dependencyKey]: conditionPropertySchema,
           },
         };
-        const {errors} = Validator.validateFormData(formData,
-                                                    conditionSchema);
+        const { errors } = Validator.validateFormData(formData,
+          conditionSchema);
         return errors.length === 0;
       }
 
@@ -159,7 +159,7 @@ const SchemaUtils = {
     if (validSubschemas.length !== 1) {
       console.warn(
         'ignoring oneOf in dependencies because there isn\'t ' +
-          'exactly one subschema that is valid'
+        'exactly one subschema that is valid'
       );
       return schema;
     }
@@ -170,7 +170,7 @@ const SchemaUtils = {
       [dependencyKey]: conditionPropertySchema,
       ...dependentSubschema
     } = subschema.properties;
-    const dependentSchema = {...subschema, properties: dependentSubschema};
+    const dependentSchema = { ...subschema, properties: dependentSubschema };
     return SchemaUtils.mergeSchemas(
       schema,
       SchemaUtils.retrieveSchema(dependentSchema, definitions, formData)
@@ -180,18 +180,18 @@ const SchemaUtils = {
   mergeSchemas: (schema1, schema2) => SchemaUtils.mergeObjects(schema1, schema2, true),
 
   isConstant: (schema) => (
-      (Array.isArray(schema.enum) && schema.enum.length === 1) ||
-      schema.hasOwnProperty('const')
-    ),
+    (Array.isArray(schema.enum) && schema.enum.length === 1) ||
+    schema.hasOwnProperty('const')
+  ),
 
   isFixedItems: (schema) => (
-      Array.isArray(schema.items) &&
-      schema.items.length > 0 &&
-      schema.items.every((item) => SchemaUtils.isObject(item))
-    ),
+    Array.isArray(schema.items) &&
+    schema.items.length > 0 &&
+    schema.items.every((item) => SchemaUtils.isObject(item))
+  ),
 
   isObject: (thing) => typeof thing === 'object' &&
-      thing !== null && !Array.isArray(thing),
+    thing !== null && !Array.isArray(thing),
 
   isSelect: (_schema, definitions = {}) => {
     const schema = SchemaUtils.retrieveSchema(_schema, definitions);
@@ -228,8 +228,8 @@ const SchemaUtils = {
     };
     if ('$ref' in schema) {
       const _schema = SchemaUtils.retrieveSchema(schema,
-                                                 definitions,
-                                                 formData);
+        definitions,
+        formData);
       return SchemaUtils.toIdSchema(_schema, id, definitions, formData);
     }
     if ('items' in schema && !schema.items.$ref) {
@@ -242,9 +242,9 @@ const SchemaUtils = {
       const field = schema.properties[name];
       const fieldId = `${idSchema.$id}_${name}`;
       idSchema[name] = SchemaUtils.toIdSchema(field,
-                                              fieldId,
-                                              definitions,
-                                              formData[name]);
+        fieldId,
+        definitions,
+        formData[name]);
     }
     return idSchema;
   },
@@ -273,14 +273,14 @@ const SchemaUtils = {
       return schema.enum.map((value, i) => {
         const label = (schema.enumNames && schema.enumNames[i]) ||
           String(value);
-        return {label, value};
+        return { label, value };
       });
     } else {
       const altSchemas = schema.oneOf || schema.anyOf;
       return altSchemas.map((schema) => {
         const value = SchemaUtils.toConstant(schema);
         const label = schema.title || String(value);
-        return {label, value};
+        return { label, value };
       });
     }
   },
@@ -360,7 +360,7 @@ const SchemaUtils = {
       case 'integer':
         if (typeof defaults === 'undefined') {
           if (schema.hasOwnProperty('minimum') &&
-              schema.hasOwnProperty('maximum')) {
+            schema.hasOwnProperty('maximum')) {
             defaults = schema.minimum;
           } else {
             defaults = 0;
@@ -403,14 +403,14 @@ const SchemaUtils = {
       return schema.enum.map((value, i) => {
         const label = (schema.enumNames && schema.enumNames[i]) ||
           String(value);
-        return {label, value};
+        return { label, value };
       });
     } else {
       const altSchemas = schema.oneOf || schema.anyOf;
       return altSchemas.map((schema) => {
         const value = SchemaUtils.toConstant(schema);
         const label = schema.title || String(value);
-        return {label, value};
+        return { label, value };
       });
     }
   },

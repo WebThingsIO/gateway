@@ -32,7 +32,7 @@ Database.prototype.open = () => {
  * @return {Promise<Map<number, RuleDescription>>} resolves to a map of rule id
  * to rule
  */
-Database.prototype.getRules = function() {
+Database.prototype.getRules = function () {
   return new Promise((resolve, reject) => {
     db.db.all(
       'SELECT id, description FROM rules',
@@ -67,11 +67,11 @@ Database.prototype.getRules = function() {
  * @return {Promise<number>} resolves to rule id
  */
 Database.prototype.createRule = (desc) => db.run(
-    'INSERT INTO rules (description) VALUES (?)',
-    [JSON.stringify(desc)]
-  ).then((res) => {
-    return parseInt(res.lastID);
-  });
+  'INSERT INTO rules (description) VALUES (?)',
+  [JSON.stringify(desc)]
+).then((res) => {
+  return parseInt(res.lastID);
+});
 
 /**
  * Update an existing rule
@@ -80,9 +80,9 @@ Database.prototype.createRule = (desc) => db.run(
  * @return {Promise}
  */
 Database.prototype.updateRule = (id, desc) => db.run(
-    'UPDATE rules SET description = ? WHERE id = ?',
-    [JSON.stringify(desc), id]
-  );
+  'UPDATE rules SET description = ? WHERE id = ?',
+  [JSON.stringify(desc), id]
+);
 
 /**
  * Delete an existing rule

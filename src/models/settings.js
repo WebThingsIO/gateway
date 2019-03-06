@@ -24,9 +24,9 @@ const Settings = {
    * @param {String} key Key of setting to get.
    */
   get: (key) => Database.getSetting(key).catch((e) => {
-      console.error('Failed to get', key);
-      throw e;
-    }),
+    console.error('Failed to get', key);
+    throw e;
+  }),
 
   /**
    * Set a setting.
@@ -35,16 +35,16 @@ const Settings = {
    * @param value Value to set key to.
    */
   set: (key, value) => Database.setSetting(key, value).then(() => {
-      if (DEBUG) {
-        console.log('Set', key, 'to',
-                    util.inspect(value, {breakLength: Infinity}));
-      }
-      return value;
-    }).catch((e) => {
-      console.error('Failed to set', key, 'to',
-                    util.inspect(value, {breakLength: Infinity}));
-      throw e;
-    }),
+    if (DEBUG) {
+      console.log('Set', key, 'to',
+        util.inspect(value, { breakLength: Infinity }));
+    }
+    return value;
+  }).catch((e) => {
+    console.error('Failed to set', key, 'to',
+      util.inspect(value, { breakLength: Infinity }));
+    throw e;
+  }),
 
   /**
    * Delete a setting.
@@ -52,17 +52,17 @@ const Settings = {
    * @param {String} key Key of setting to delete.
    */
   delete: (key) => Database.deleteSetting(key).catch((e) => {
-      console.error('Failed to delete', key);
-      throw e;
-    }),
+    console.error('Failed to delete', key);
+    throw e;
+  }),
 
   /**
    * Get an object of all add-on-related settings.
    */
   getAddonSettings: () => Database.getAddonSettings().catch((e) => {
-      console.error('Failed to get add-on settings');
-      throw e;
-    }),
+    console.error('Failed to get add-on settings');
+    throw e;
+  }),
 
   /**
    * Get an object of all tunnel settings
@@ -77,7 +77,7 @@ const Settings = {
 
     if (typeof result === 'object') {
       console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
-                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
+        `tunnel domain is: ${config.get('ssltunnel.domain')}`);
       tunnelEndpoint =
         `https://${result.name}.${config.get('ssltunnel.domain')}`;
     } else {

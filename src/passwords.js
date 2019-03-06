@@ -37,7 +37,8 @@ module.exports = {
    * @param {String} passwordHash - the expected hash
    * @return {Promise<boolean>} If the hashes are equal
    */
-  compare: (passwordText, passwordHash) => bcrypt.compare(passwordText, passwordHash),
+  compare: (passwordText, passwordHash) =>
+    bcrypt.compare(passwordText, passwordHash),
 
   /**
    * Compare two password hashes
@@ -45,5 +46,6 @@ module.exports = {
    * @param {String} passwordHash - the expected hash
    * @return {boolean} If the hashes are equal
    */
-  compareSync: (passwordText, passwordHash) => bcrypt.compareSync(passwordText, passwordHash),
+  compareSync: (passwordText, passwordHash) =>
+    bcrypt.compareSync(passwordText, passwordHash),
 };

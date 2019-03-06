@@ -22,7 +22,7 @@ const ncp = require('ncp');
 const rimraf = require('rimraf');
 
 const Profile = {
-  init: function() {
+  init: function () {
     this.baseDir = process.env.MOZIOT_HOME || config.get('profileDir');
     this.configDir = path.join(this.baseDir, 'config');
     this.sslDir = path.join(this.baseDir, 'ssl');
@@ -50,28 +50,28 @@ const Profile = {
    * Manually copy, then remove, to prevent issues with cross-device renames.
    */
   renameDir: (src, dst) => new Promise((resolve, reject) => {
-      ncp(src, dst, (e) => {
-        if (e) {
-          reject(e);
+    ncp(src, dst, (e) => {
+      if (e) {
+        reject(e);
+        return;
+      }
+
+      rimraf(src, (err) => {
+        if (err) {
+          reject(err);
           return;
         }
 
-        rimraf(src, (err) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          resolve();
-        });
+        resolve();
       });
-    }),
+    });
+  }),
 
   /**
    * Migrate from old locations to new ones
    * @return {Promise} resolved when migration is complete
    */
-  migrate: function() {
+  migrate: function () {
     const pending = [];
     // Create all required profile directories.
     if (!fs.existsSync(this.configDir)) {
@@ -197,7 +197,7 @@ const Profile = {
     // Move old uploads, if necessary.
     const oldUploadsDir = path.join(this.gatewayDir, 'static', 'uploads');
     if (fs.existsSync(oldUploadsDir) &&
-        fs.lstatSync(oldUploadsDir).isDirectory()) {
+      fs.lstatSync(oldUploadsDir).isDirectory()) {
       const fnames = fs.readdirSync(oldUploadsDir);
       for (const fname of fnames) {
         this.renameFile(
@@ -249,7 +249,7 @@ const Profile = {
     if (process.env.NODE_ENV !== 'test') {
       const oldAddonsDir = path.join(this.gatewayDir, 'build', 'addons');
       if (fs.existsSync(oldAddonsDir) &&
-          fs.lstatSync(oldAddonsDir).isDirectory()) {
+        fs.lstatSync(oldAddonsDir).isDirectory()) {
         const fnames = fs.readdirSync(oldAddonsDir);
         for (const fname of fnames) {
           const oldFname = path.join(oldAddonsDir, fname);

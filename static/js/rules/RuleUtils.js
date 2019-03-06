@@ -61,16 +61,16 @@ const RuleUtils = {
   },
   // Helper function for selecting the thing corresponding to a property
   byProperty: (property) => (option) => {
-      if (!property) {
-        console.warn('byProperty property undefined', new Error().stack);
-        return false;
-      }
-      const propHref = `/things/${property.thing}/properties/${property.id}`;
-      const optProp = option.properties[property.id];
-      return optProp && optProp.links.filter((l) => {
-        return (!l.rel || l.rel === 'property') && l.href === propHref;
-      }).length > 0;
-    },
+    if (!property) {
+      console.warn('byProperty property undefined', new Error().stack);
+      return false;
+    }
+    const propHref = `/things/${property.thing}/properties/${property.id}`;
+    const optProp = option.properties[property.id];
+    return optProp && optProp.links.filter((l) => {
+      return (!l.rel || l.rel === 'property') && l.href === propHref;
+    }).length > 0;
+  },
   // Helper function for selecting the thing corresponding to an href
   byThing: (thing) => (otherThing) => otherThing.href === `/things/${thing}`,
   thingFromPart: (gateway, part) => {
