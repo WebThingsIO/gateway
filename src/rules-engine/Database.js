@@ -66,7 +66,7 @@ Database.prototype.getRules = function() {
  * @param {RuleDescription} desc
  * @return {Promise<number>} resolves to rule id
  */
-Database.prototype.createRule = desc => db.run(
+Database.prototype.createRule = (desc) => db.run(
     'INSERT INTO rules (description) VALUES (?)',
     [JSON.stringify(desc)]
   ).then((res) => {
@@ -89,6 +89,6 @@ Database.prototype.updateRule = (id, desc) => db.run(
  * @param {number} id
  * @return {Promise}
  */
-Database.prototype.deleteRule = id => db.run('DELETE FROM rules WHERE id = ?', [id]);
+Database.prototype.deleteRule = (id) => db.run('DELETE FROM rules WHERE id = ?', [id]);
 
 module.exports = new Database();
