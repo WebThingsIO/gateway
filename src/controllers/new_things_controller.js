@@ -22,9 +22,9 @@ const NewThingsController = PromiseRouter();
  * Handle GET requests to /new_things
  */
 NewThingsController.get('/', (request, response) => {
-  Things.getNewThings().then(newThings => {
+  Things.getNewThings().then((newThings) => {
     response.json(newThings);
-  }).catch(error => {
+  }).catch((error) => {
     console.error(`Error getting a list of new things from adapters ${error}`);
     response.status(500).send(error);
   });
@@ -33,7 +33,7 @@ NewThingsController.get('/', (request, response) => {
 /**
  * Handle a WebSocket request on /new_things
  */
-NewThingsController.ws('/', websocket => {
+NewThingsController.ws('/', (websocket) => {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
   if (websocket.readyState !== WebSocket.OPEN) {
@@ -45,10 +45,10 @@ NewThingsController.ws('/', websocket => {
   Things.registerWebsocket(websocket);
   // Send a list of things the adapter manager already knows about
   Things.getNewThings().then(function(newThings) {
-    newThings.forEach(newThing => {
+    newThings.forEach((newThing) => {
       websocket.send(JSON.stringify(newThing));
     }, this);
-  }).catch(error => {
+  }).catch((error) => {
     console.error(`Error getting a list of new things from adapters ${error}`);
   });
 });
