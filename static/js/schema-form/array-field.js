@@ -111,7 +111,9 @@ ArrayField.prototype.isItemRequired = (itemSchema) => {
   return itemSchema.type !== 'null';
 };
 
-ArrayField.prototype.itemFieldId = (index) => `array_${this.idSchema.$id}_${index}`;
+ArrayField.prototype.itemFieldId = function(index) {
+  return `array_${this.idSchema.$id}_${index}`;
+};
 
 ArrayField.prototype.onDropIndexClick = function(field, index) {
   return (event) => {
