@@ -37,12 +37,12 @@ const Settings = {
   set: (key, value) => Database.setSetting(key, value).then(() => {
     if (DEBUG) {
       console.log('Set', key, 'to',
-        util.inspect(value, { breakLength: Infinity }));
+                  util.inspect(value, {breakLength: Infinity}));
     }
     return value;
   }).catch((e) => {
     console.error('Failed to set', key, 'to',
-      util.inspect(value, { breakLength: Infinity }));
+                  util.inspect(value, {breakLength: Infinity}));
     throw e;
   }),
 
@@ -77,7 +77,7 @@ const Settings = {
 
     if (typeof result === 'object') {
       console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
-        `tunnel domain is: ${config.get('ssltunnel.domain')}`);
+                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
       tunnelEndpoint =
         `https://${result.name}.${config.get('ssltunnel.domain')}`;
     } else {

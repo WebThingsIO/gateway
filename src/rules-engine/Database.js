@@ -32,7 +32,7 @@ Database.prototype.open = () => {
  * @return {Promise<Map<number, RuleDescription>>} resolves to a map of rule id
  * to rule
  */
-Database.prototype.getRules = function () {
+Database.prototype.getRules = function() {
   return new Promise((resolve, reject) => {
     db.db.all(
       'SELECT id, description FROM rules',
@@ -89,6 +89,7 @@ Database.prototype.updateRule = (id, desc) => db.run(
  * @param {number} id
  * @return {Promise}
  */
+// eslint-disable-next-line max-len
 Database.prototype.deleteRule = (id) => db.run('DELETE FROM rules WHERE id = ?', [id]);
 
 module.exports = new Database();

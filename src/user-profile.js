@@ -22,7 +22,7 @@ const ncp = require('ncp');
 const rimraf = require('rimraf');
 
 const Profile = {
-  init: function () {
+  init: function() {
     this.baseDir = process.env.MOZIOT_HOME || config.get('profileDir');
     this.configDir = path.join(this.baseDir, 'config');
     this.sslDir = path.join(this.baseDir, 'ssl');
@@ -71,7 +71,7 @@ const Profile = {
    * Migrate from old locations to new ones
    * @return {Promise} resolved when migration is complete
    */
-  migrate: function () {
+  migrate: function() {
     const pending = [];
     // Create all required profile directories.
     if (!fs.existsSync(this.configDir)) {

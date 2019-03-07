@@ -20,11 +20,11 @@ const Users = {
    *   or false if user doesn't exist.
    */
   getUser: (email) => Database.getUser(email).then((result) => {
-      if (!result) {
-        return false;
-      }
-      return new User(result.id, result.email, result.password, result.name);
-    }),
+    if (!result) {
+      return false;
+    }
+    return new User(result.id, result.email, result.password, result.name);
+  }),
 
   getCount: () => Database.getUserCount(),
 
@@ -55,10 +55,10 @@ const Users = {
    * @return {Promise<Array<User>>}
    */
   getUsers: () => Database.getUsers().then((userRows) => {
-      return userRows.map((row) => {
-        return new User(row.id, row.email, row.password, row.name);
-      });
-    }),
+    return userRows.map((row) => {
+      return new User(row.id, row.email, row.password, row.name);
+    });
+  }),
 
   /**
    * Create a new User

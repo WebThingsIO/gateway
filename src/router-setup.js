@@ -11,8 +11,8 @@ const platform = require('./platform');
 const sleep = require('./sleep');
 
 // Build templates
-Handlebars.registerHelper('escapeQuotes', (str) =>
-  new Handlebars.SafeString(str.replace(/'/, '\\\'')));
+// eslint-disable-next-line max-len
+Handlebars.registerHelper('escapeQuotes', (str) => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
 
 function getTemplate(name) {
   const filename = path.join(Constants.VIEWS_PATH, name);
@@ -27,7 +27,7 @@ const hotspotTemplate = getTemplate('hotspot.handlebars');
 const app = express();
 
 // When we get POSTs, handle the body like this
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Define the handler methods for the various URLs we handle
 app.get('/*', handleCaptive);
@@ -121,7 +121,7 @@ function handleRoot(request, response) {
  */
 function handleRouterSetup(request, response) {
   const ssid = getHotspotSsid();
-  response.send(routerSetupTemplate({ ssid }));
+  response.send(routerSetupTemplate({ssid}));
 }
 
 /**
@@ -199,7 +199,7 @@ function getHotspotSsid() {
  */
 function startAP(ipaddr) {
   const ssid = getHotspotSsid();
-  return platform.setWirelessMode(true, 'ap', { ssid, ipaddr });
+  return platform.setWirelessMode(true, 'ap', {ssid, ipaddr});
 }
 
 /**

@@ -12,7 +12,7 @@
 
 const Passwords = require('../passwords');
 
-const User = function (id, email, password, name) {
+const User = function(id, email, password, name) {
   this.id = id;
   this.email = email;
   this.password = password; // Hashed
@@ -29,7 +29,7 @@ User.generate = async (email, rawPassword, name) => {
  *
  * @return {Object} JSON description of user.
  */
-User.prototype.getDescription = function () {
+User.prototype.getDescription = function() {
   return {
     id: this.id,
     email: this.email,

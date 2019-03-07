@@ -50,9 +50,9 @@ const TunnelService = {
 
       // then we check if we have certificates installed
       if ((fs.existsSync(path.join(UserProfile.sslDir,
-        'certificate.pem')) &&
+                                   'certificate.pem')) &&
         fs.existsSync(path.join(UserProfile.sslDir,
-          'privatekey.pem'))) ||
+                                'privatekey.pem'))) ||
         notunnel) {
         // if certs are installed,
         // then we don't need to do anything and return
@@ -62,17 +62,17 @@ const TunnelService = {
       // if there are no certs installed,
       // we display the cert setup page to the user
       response.render('tunnel-setup',
-        { domain: config.get('ssltunnel.domain') });
+                      {domain: config.get('ssltunnel.domain')});
     }
   },
 
   // Set a handle for the running https server, used when renewing certificates
-  setServerHandle: function (server) {
+  setServerHandle: function(server) {
     this.server = server;
   },
 
   // method that starts the client if the box has a registered tunnel
-  start: function (response, urlredirect) {
+  start: function(response, urlredirect) {
     Settings.get('tunneltoken').then((result) => {
       if (typeof result === 'object') {
         let responseSent = false;
@@ -81,13 +81,13 @@ const TunnelService = {
           config.get('ssltunnel.domain')}`;
         this.pagekiteProcess =
           spawnSync(config.get('ssltunnel.pagekite_cmd'),
-            ['--clean', `--frontend=${endpoint}:${
-              config.get('ssltunnel.port')}`,
-              `--service_on=https:${endpoint
-              }:localhost:${
-              config.get('ports.https')}:${
-              this.tunneltoken.token}`],
-            { shell: true });
+                    ['--clean', `--frontend=${endpoint}:${
+                      config.get('ssltunnel.port')}`,
+                     `--service_on=https:${endpoint
+                     }:localhost:${
+                       config.get('ports.https')}:${
+                       this.tunneltoken.token}`],
+                    {shell: true});
 
         this.pagekiteProcess.stdout.on('data', (data) => {
           if (DEBUG) {
@@ -149,7 +149,7 @@ const TunnelService = {
   },
 
   // method to stop pagekite process
-  stop: function () {
+  stop: function() {
     if (this.pingInterval !== null) {
       clearInterval(this.pingInterval);
     }
@@ -164,8 +164,8 @@ const TunnelService = {
   },
 
   // method to check if the box has certificates
-  hasCertificates: () =>
-    fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
+  // eslint-disable-next-line max-len
+  hasCertificates: () => fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
     fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
 
   // method to check if the box has a registered tunnel
