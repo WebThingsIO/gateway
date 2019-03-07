@@ -25,6 +25,10 @@ global.chai = chai;
 
 const debugJasmine = false;
 
+// Default timeout is 5 seconds, but that's too short for some of the browser
+// tests.
+jest.setTimeout(60 * 1000);
+
 if (debugJasmine) {
   // The following debug code can prove to be very useful when
   // trying to debug interactions between the various jest processes

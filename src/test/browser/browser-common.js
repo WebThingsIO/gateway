@@ -7,6 +7,7 @@ const {compareImage} = require('./compare-images');
 const fs = require('fs');
 const path = require('path');
 
+const BROWSER_TIMEOUT_INTERVAL = 60 * 1000;
 const TEST_OUTPUT_FOLDER = path.join(__dirname, '../../../browser-test-output');
 const SCREEN_SHOTS_FOLDER =
   path.join(__dirname, '../../../browser-test-screenshots');
@@ -28,7 +29,7 @@ const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 let child;
 let browser;
 beforeAll(async () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = BROWSER_TIMEOUT_INTERVAL;
   // Starting up and interacting with a browser takes forever
   await new Promise((res, rej) => {
     selenium.install((err) => {
@@ -52,13 +53,13 @@ beforeAll(async () => {
   browser = await remote(options);
 
   await browser.setWindowRect(null, null, 1280, 800);
-});
+}, BROWSER_TIMEOUT_INTERVAL);
 
 afterAll(async () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   await browser.deleteSession();
   child.stdin.pause();
   child.kill();
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 });
 
 function getBrowser() {
