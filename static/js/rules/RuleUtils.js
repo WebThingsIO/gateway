@@ -1,5 +1,5 @@
 const RuleUtils = {
-  icon: function(description) {
+  icon: (description) => {
     if (description.selectedCapability) {
       switch (description.selectedCapability) {
         case 'OnOffSwitch':
@@ -60,26 +60,20 @@ const RuleUtils = {
     }
   },
   // Helper function for selecting the thing corresponding to a property
-  byProperty: function(property) {
-    return function(option) {
-      if (!property) {
-        console.warn('byProperty property undefined', new Error().stack);
-        return false;
-      }
-      const propHref = `/things/${property.thing}/properties/${property.id}`;
-      const optProp = option.properties[property.id];
-      return optProp && optProp.links.filter((l) => {
-        return (!l.rel || l.rel === 'property') && l.href === propHref;
-      }).length > 0;
-    };
+  byProperty: (property) => (option) => {
+    if (!property) {
+      console.warn('byProperty property undefined', new Error().stack);
+      return false;
+    }
+    const propHref = `/things/${property.thing}/properties/${property.id}`;
+    const optProp = option.properties[property.id];
+    return optProp && optProp.links.filter((l) => {
+      return (!l.rel || l.rel === 'property') && l.href === propHref;
+    }).length > 0;
   },
   // Helper function for selecting the thing corresponding to an href
-  byThing: function(thing) {
-    return function(otherThing) {
-      return otherThing.href === `/things/${thing}`;
-    };
-  },
-  thingFromPart: function(gateway, part) {
+  byThing: (thing) => (otherThing) => otherThing.href === `/things/${thing}`,
+  thingFromPart: (gateway, part) => {
     let thing = null;
     if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
       thing = gateway.things.filter(
@@ -92,12 +86,8 @@ const RuleUtils = {
     }
     return thing;
   },
-  extractProperty: function(href) {
-    return href.match(/properties\/([^/]+)/)[1];
-  },
-  extractThing: function(href) {
-    return href.match(/things\/([^/]+)/)[1];
-  },
+  extractProperty: (href) => href.match(/properties\/([^/]+)/)[1],
+  extractThing: (href) => href.match(/things\/([^/]+)/)[1],
 };
 
 module.exports = RuleUtils;

@@ -99,7 +99,7 @@ const SettingsScreen = {
     });
   },
 
-  insertTitleElement: function(section, name, icon) {
+  insertTitleElement: (section, name, icon) => {
     const elt = document.createElement('div');
     elt.classList.add('section-title');
     elt.innerHTML = `
@@ -275,7 +275,7 @@ const SettingsScreen = {
     });
   },
 
-  onLocalDomainCheckboxChange: function(e) {
+  onLocalDomainCheckboxChange: (e) => {
     const error = document.getElementById('domain-settings-error');
     const value = e.target.checked ? true : false;
 
@@ -304,7 +304,7 @@ const SettingsScreen = {
 
   // The button controller to update the local domain settings.
   // In menu -> Settings -> Domain
-  onLocalDomainClick: function() {
+  onLocalDomainClick: () => {
     const localDomainName =
       document.getElementById('domain-settings-local-name');
     const error = document.getElementById('domain-settings-error');
@@ -742,7 +742,7 @@ const SettingsScreen = {
     }).catch(console.error);
   },
 
-  showExperimentCheckbox: function(experiment, checkboxId) {
+  showExperimentCheckbox: (experiment, checkboxId) => {
     const checkbox = document.getElementById(checkboxId);
     API.getExperimentSetting(experiment)
       .then((value) => {
@@ -778,7 +778,7 @@ const SettingsScreen = {
    * @param {String} verB
    * @return {number} 0 if verA == verB, -1 if verA < verB, 1 if verA > verB
    */
-  compareSemver: function(verA, verB) {
+  compareSemver: (verA, verB) => {
     if (verA === verB) {
       return 0;
     }
@@ -935,7 +935,7 @@ const SettingsScreen = {
     });
   },
 
-  revokeAuthorization: function(event) {
+  revokeAuthorization: (event) => {
     const revoke = event.target;
     if (!revoke.dataset.clientId) {
       console.warn('Missing clientId on revoke', revoke);

@@ -84,7 +84,7 @@ class Rule {
  * @param {RuleDescription} desc
  * @return {Rule}
  */
-Rule.fromDescription = function(desc) {
+Rule.fromDescription = (desc) => {
   const trigger = triggers.fromDescription(desc.trigger);
   const effect = effects.fromDescription(desc.effect);
   const rule = new Rule(desc.enabled, trigger, effect);

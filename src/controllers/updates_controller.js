@@ -10,8 +10,8 @@ const pkg = require('../../package.json');
 const UpdatesController = PromiseRouter();
 
 function readVersion(packagePath) {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(packagePath, {encoding: 'utf8'}, function(err, data) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(packagePath, {encoding: 'utf8'}, (err, data) => {
       if (err) {
         reject(err);
         return;
@@ -34,8 +34,8 @@ function readVersion(packagePath) {
 }
 
 function stat(path) {
-  return new Promise(function(resolve, reject) {
-    fs.stat(path, function(err, stats) {
+  return new Promise((resolve, reject) => {
+    fs.stat(path, (err, stats) => {
       if (err) {
         if (err.code === 'ENOENT') {
           resolve(null);
@@ -65,7 +65,7 @@ function cacheLatestInsert(response, value) {
 /**
  * Send the client an object describing the latest release
  */
-UpdatesController.get('/latest', async function(request, response) {
+UpdatesController.get('/latest', async (request, response) => {
   const etag = request.get('If-None-Match');
   if (etag) {
     if (cacheLatest.tag === etag &&
@@ -106,7 +106,7 @@ UpdatesController.get('/latest', async function(request, response) {
 /**
  * Send an object describing the update status of the gateway
  */
-UpdatesController.get('/status', async function(request, response) {
+UpdatesController.get('/status', async (request, response) => {
   // gateway, gateway_failed, gateway_old
   // oldVersion -> gateway_old's package.json version
   // if (gateway_failed.version > thisversion) {
@@ -138,7 +138,7 @@ UpdatesController.get('/status', async function(request, response) {
     response.send({
       success: false,
       version: currentVersion,
-      failedVersion: failedVersion,
+      failedVersion,
       timestamp: failedStats.ctime,
     });
   } else {
@@ -149,13 +149,13 @@ UpdatesController.get('/status', async function(request, response) {
     response.send({
       success: true,
       version: currentVersion,
-      oldVersion: oldVersion,
-      timestamp: timestamp,
+      oldVersion,
+      timestamp,
     });
   }
 });
 
-UpdatesController.post('/update', async function(request, response) {
+UpdatesController.post('/update', async (request, response) => {
   childProcess.exec('sudo systemctl start ' +
     'mozilla-iot-gateway.check-for-update.service');
 

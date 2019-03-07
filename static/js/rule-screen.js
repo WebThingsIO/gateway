@@ -206,7 +206,7 @@ const RuleScreen = {
    * Create a block representing a time trigger
    * @return {Element}
    */
-  makeTimeTriggerBlock: function() {
+  makeTimeTriggerBlock: () => {
     const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
@@ -222,7 +222,7 @@ const RuleScreen = {
    * Create a block representing a notification effect
    * @return {Element}
    */
-  makeNotificationEffectBlock: function() {
+  makeNotificationEffectBlock: () => {
     const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
@@ -239,7 +239,7 @@ const RuleScreen = {
    * @param {ThingDescription} thing
    * @return {Element}
    */
-  makeDeviceBlock: function(thing) {
+  makeDeviceBlock: (thing) => {
     const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
@@ -316,8 +316,8 @@ const RuleScreen = {
       const x = parseFloat(matches[1]);
       const y = parseFloat(matches[2]);
       return {
-        x: x,
-        y: y,
+        x,
+        y,
       };
     }
 
@@ -480,8 +480,8 @@ const RuleScreen = {
 
     this.rule.trigger = {
       type: 'MultiTrigger',
-      op: op,
-      triggers: triggers,
+      op,
+      triggers,
     };
 
     const effects = effectBlocks.map((effectBlock) => {
@@ -489,7 +489,7 @@ const RuleScreen = {
     });
     this.rule.effect = {
       type: 'MultiEffect',
-      effects: effects,
+      effects,
     };
     const effectType = this.getEffectType();
     for (const effect of this.rule.effect.effects) {
@@ -775,29 +775,29 @@ const RuleScreen = {
     }
 
     if (andActive || this.rule.trigger.op === 'OR') {
-      effectBlocks.forEach(function(block) {
+      effectBlocks.forEach((block) => {
         block.classList.remove('inactive');
       });
       if (centerCircle) {
         centerCircle.classList.add('active');
       }
-      effectPaths.forEach(function(path) {
+      effectPaths.forEach((path) => {
         path.classList.add('active');
       });
-      effectCircles.forEach(function(circle) {
+      effectCircles.forEach((circle) => {
         circle.classList.add('active');
       });
     } else {
-      effectBlocks.forEach(function(block) {
+      effectBlocks.forEach((block) => {
         block.classList.add('inactive');
       });
       if (centerCircle) {
         centerCircle.classList.remove('active');
       }
-      effectPaths.forEach(function(path) {
+      effectPaths.forEach((path) => {
         path.classList.remove('active');
       });
-      effectCircles.forEach(function(circle) {
+      effectCircles.forEach((circle) => {
         circle.classList.remove('active');
       });
     }

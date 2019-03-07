@@ -30,8 +30,7 @@ const User = function(metadata) {
 /**
  * HTML view for User.
  */
-User.prototype.view = function() {
-  return `
+User.prototype.view = () => `
     <li id="user-item-${Utils.escapeHtml(this.id)}" class="user-item">
       <div class="user-settings-header">
         <span class="user-settings-name">${Utils.escapeHtml(this.name)}</span>
@@ -50,7 +49,6 @@ User.prototype.view = function() {
         </button>
       </div>
     </li>`;
-};
 
 /**
  * Render User view and add to DOM.
@@ -91,7 +89,7 @@ User.prototype.handleRemove = function() {
 /**
  * Handle a click on the edit button.
  */
-User.prototype.handleEdit = function() {
+User.prototype.handleEdit = () => {
   page(`/settings/users/edit/${encodeURIComponent(this.id)}`);
 };
 

@@ -13,7 +13,7 @@
 const API = require('./api');
 
 const Notifications = {
-  onReady: async function(registration) {
+  onReady: async (registration) => {
     if (!registration.pushManager) {
       return;
     }
@@ -40,7 +40,7 @@ const Notifications = {
         'Content-Type': 'application/json',
       }, API.headers()),
       body: JSON.stringify({
-        subscription: subscription,
+        subscription,
       }),
     });
   },

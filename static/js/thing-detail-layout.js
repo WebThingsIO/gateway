@@ -25,7 +25,7 @@ function ThingDetailLayout(parent, elements) {
  * @param {number} radius - The radius of the circular icon
  * @return {Object} Object containing adjustments as such: {x, y}
  */
-ThingDetailLayout.prototype.adjustXY = function(angle, radius) {
+ThingDetailLayout.prototype.adjustXY = (angle, radius) => {
   let x = 0, y = 0;
   if (angle < (Math.PI / 2)) {
     x = Math.cos(angle) * radius;

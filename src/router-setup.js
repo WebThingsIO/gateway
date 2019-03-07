@@ -11,9 +11,8 @@ const platform = require('./platform');
 const sleep = require('./sleep');
 
 // Build templates
-Handlebars.registerHelper('escapeQuotes', function(str) {
-  return new Handlebars.SafeString(str.replace(/'/, '\\\''));
-});
+// eslint-disable-next-line max-len
+Handlebars.registerHelper('escapeQuotes', (str) => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
 
 function getTemplate(name) {
   const filename = path.join(Constants.VIEWS_PATH, name);
@@ -64,7 +63,7 @@ function handleCaptive(request, response, next) {
 
       // These 2 user-agents expect a WISPr XML response
       if (ua.includes('CaptiveNetworkSupport') ||
-          ua.includes('Microsoft NCSI')) {
+        ua.includes('Microsoft NCSI')) {
         response.redirect(
           302,
           `http://${config.get('wifi.ap.ipaddr')}/hotspot.html`
@@ -269,7 +268,7 @@ function checkConnection() {
  *                    promise is rejected.
  */
 function waitForWiFi(maxAttempts, interval) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     let attempts = 0;
     check();
 

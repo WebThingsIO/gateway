@@ -1,6 +1,6 @@
 const Settings = require('../../models/settings');
 
-describe('Settings', function() {
+describe('Settings', () => {
   it('should be able to round trip', async () => {
     const key = 'yes.it is a.Setting';
     const value = {something: 'complicated'};

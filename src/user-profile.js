@@ -41,7 +41,7 @@ const Profile = {
   /**
    * Manually copy, then unlink, to prevent issues with cross-device renames.
    */
-  renameFile: function(src, dst) {
+  renameFile: (src, dst) => {
     fs.copyFileSync(src, dst);
     fs.unlinkSync(src);
   },
@@ -49,25 +49,23 @@ const Profile = {
   /**
    * Manually copy, then remove, to prevent issues with cross-device renames.
    */
-  renameDir: function(src, dst) {
-    return new Promise((resolve, reject) => {
-      ncp(src, dst, (e) => {
-        if (e) {
-          reject(e);
+  renameDir: (src, dst) => new Promise((resolve, reject) => {
+    ncp(src, dst, (e) => {
+      if (e) {
+        reject(e);
+        return;
+      }
+
+      rimraf(src, (err) => {
+        if (err) {
+          reject(err);
           return;
         }
 
-        rimraf(src, (err) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          resolve();
-        });
+        resolve();
       });
     });
-  },
+  }),
 
   /**
    * Migrate from old locations to new ones
@@ -199,7 +197,7 @@ const Profile = {
     // Move old uploads, if necessary.
     const oldUploadsDir = path.join(this.gatewayDir, 'static', 'uploads');
     if (fs.existsSync(oldUploadsDir) &&
-        fs.lstatSync(oldUploadsDir).isDirectory()) {
+      fs.lstatSync(oldUploadsDir).isDirectory()) {
       const fnames = fs.readdirSync(oldUploadsDir);
       for (const fname of fnames) {
         this.renameFile(
@@ -251,7 +249,7 @@ const Profile = {
     if (process.env.NODE_ENV !== 'test') {
       const oldAddonsDir = path.join(this.gatewayDir, 'build', 'addons');
       if (fs.existsSync(oldAddonsDir) &&
-          fs.lstatSync(oldAddonsDir).isDirectory()) {
+        fs.lstatSync(oldAddonsDir).isDirectory()) {
         const fnames = fs.readdirSync(oldAddonsDir);
         for (const fname of fnames) {
           const oldFname = path.join(oldAddonsDir, fname);

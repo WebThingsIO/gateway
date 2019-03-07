@@ -37,11 +37,11 @@ Validator._rePropName = RegExp(
   '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
   , 'g');
 
-Validator._toPath = function(string) {
+Validator._toPath = (string) => {
   const result = [];
   string.replace(
     Validator._rePropName,
-    function(match, expression, quote, subString) {
+    (match, expression, quote, subString) => {
       let key = match;
       if (quote) {
         key = subString.replace(Validator._reEscapeChar, '$1');
@@ -53,7 +53,7 @@ Validator._toPath = function(string) {
   return result;
 };
 
-Validator._toErrorSchema = function(errors) {
+Validator._toErrorSchema = (errors) => {
   // Transforms a ajv validation errors list:
   // [
   //   {dataPath: ".level1.level2[2].level3", message: "err a"},
@@ -95,7 +95,7 @@ Validator._toErrorSchema = function(errors) {
   }, {});
 };
 
-Validator.validateFormData = function(formData, schema) {
+Validator.validateFormData = (formData, schema) => {
   if (Validator.hasOwnProperty('_ajv')) {
     Validator._ajv.validate(schema, formData);
     let errors = Validator._ajv.errors;

@@ -130,7 +130,7 @@ DNSserviceDiscovery.prototype.setLocalDomain = function(localDomain) {
       const options = {
         name: this.localName,
         host: this.localDomain,
-        txt: txt,
+        txt,
       };
 
       this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
@@ -186,7 +186,7 @@ DNSserviceDiscovery.prototype.changeProfile = function(newProfile) {
                  power: this.power};
     const options = {name: this.localName,
                      host: this.localDomain,
-                     txt: txt};
+                     txt};
 
     if (!Platform.implemented('setMdnsServerStatus')) {
       this.dnssdHandle = dnssd.Advertisement(dnssd.tcp('http'),
@@ -255,7 +255,7 @@ async function getmDNSconfig() {
       'settings.defaults.domain.localControl.mdnsTxt.desc');
 
     const txt = {desc: description, protocols: locProtocols, power: powerCons};
-    const options = {name: locName, host: mDNSserviceDomain, txt: txt};
+    const options = {name: locName, host: mDNSserviceDomain, txt};
 
     return options;
   } catch (err) {
@@ -293,7 +293,7 @@ async function getmDNSstate() {
 }
 
 module.exports = {
-  server: server,
-  getmDNSconfig: getmDNSconfig,
-  getmDNSstate: getmDNSstate,
+  server,
+  getmDNSconfig,
+  getmDNSstate,
 };

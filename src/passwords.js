@@ -20,9 +20,7 @@ module.exports = {
    * @param {String} password
    * @return {Promise<String>} hashed password
    */
-  hash: function(password) {
-    return bcrypt.hash(password, rounds);
-  },
+  hash: (password) => bcrypt.hash(password, rounds),
 
   /**
    * Hash a password synchronously.
@@ -31,9 +29,7 @@ module.exports = {
    * @param {String} password
    * @return {String} hashed password
    */
-  hashSync: function(password) {
-    return bcrypt.hashSync(password, rounds);
-  },
+  hashSync: (password) => bcrypt.hashSync(password, rounds),
 
   /**
    * Compare two password hashes asynchronously
@@ -41,9 +37,8 @@ module.exports = {
    * @param {String} passwordHash - the expected hash
    * @return {Promise<boolean>} If the hashes are equal
    */
-  compare: function(passwordText, passwordHash) {
-    return bcrypt.compare(passwordText, passwordHash);
-  },
+  // eslint-disable-next-line max-len
+  compare: (passwordText, passwordHash) => bcrypt.compare(passwordText, passwordHash),
 
   /**
    * Compare two password hashes
@@ -51,7 +46,6 @@ module.exports = {
    * @param {String} passwordHash - the expected hash
    * @return {boolean} If the hashes are equal
    */
-  compareSync: function(passwordText, passwordHash) {
-    return bcrypt.compareSync(passwordText, passwordHash);
-  },
+  // eslint-disable-next-line max-len
+  compareSync: (passwordText, passwordHash) => bcrypt.compareSync(passwordText, passwordHash),
 };

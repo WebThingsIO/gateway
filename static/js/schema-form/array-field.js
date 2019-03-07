@@ -44,7 +44,7 @@ function ArrayField(
 ArrayField.prototype.require = function(name) {
   return (
     Array.isArray(this.schema.required) &&
-    this.schema.required.indexOf(name) !== -1
+    this.schema.required.includes(name)
   );
 };
 
@@ -101,7 +101,7 @@ ArrayField.prototype.isAddable = function(formItems) {
   return addable;
 };
 
-ArrayField.prototype.isItemRequired = function(itemSchema) {
+ArrayField.prototype.isItemRequired = (itemSchema) => {
   if (Array.isArray(itemSchema.type)) {
     // While we don't yet support composite/nullable jsonschema types, it's
     // future-proof to check for requirement against these.
@@ -368,7 +368,7 @@ ArrayField.prototype.renderMultiSelect = function() {
   field.className = 'checkboxes';
 
   enumOptions.forEach((option, index) => {
-    const checked = items.indexOf(option.value) !== -1;
+    const checked = items.includes(option.value);
     const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
 
     const div = document.createElement('div');

@@ -637,7 +637,7 @@ class AddonManager extends EventEmitter {
       return Promise.reject(err);
     }
 
-    const errorCallback = function(packageName, errorStr) {
+    const errorCallback = (packageName, errorStr) => {
       console.error('Failed to load', packageName, '-', errorStr);
     };
 
@@ -691,7 +691,7 @@ class AddonManager extends EventEmitter {
     const addonPath = UserProfile.addonsDir;
 
     // Search add-ons directory
-    fs.readdir(addonPath, async function(err, files) {
+    fs.readdir(addonPath, async (err, files) => {
       if (err) {
         // This should probably never happen.
         console.error('Failed to search add-ons directory');

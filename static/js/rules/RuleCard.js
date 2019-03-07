@@ -105,7 +105,7 @@ function RuleCard(gateway, elt, id, desc) {
   this.editOverlay = this.elt.querySelector('.rule-edit-overlay');
 }
 
-RuleCard.prototype.onEditButtonClick = function() {
+RuleCard.prototype.onEditButtonClick = () => {
   page(`/rules/${encodeURIComponent(this.rule.id)}`);
 };
 

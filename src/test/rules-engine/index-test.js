@@ -281,7 +281,7 @@ const multiRule = {
   },
 };
 
-describe('rules engine', function() {
+describe('rules engine', () => {
   let ruleId = null, jwt;
 
   async function addDevice(desc) {
@@ -545,7 +545,7 @@ describe('rules engine', function() {
       .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({on: on});
+      .send({on});
     expect(res.status).toEqual(200);
   }
 

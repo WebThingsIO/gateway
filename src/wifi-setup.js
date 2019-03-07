@@ -253,8 +253,7 @@ function getHotspotSsid() {
  *                                ...
  *                              ]
  */
-function scan(numAttempts) {
-  numAttempts = numAttempts || 1;
+function scan(numAttempts = 1) {
   return new Promise(function(resolve) {
     let attempts = 0;
 

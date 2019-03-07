@@ -12,7 +12,7 @@ const {
 
 const Constants = require('../../constants');
 
-describe('actions/', function() {
+describe('actions/', () => {
   let jwt;
 
   const thingLight = {

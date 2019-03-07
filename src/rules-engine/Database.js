@@ -19,7 +19,7 @@ function Database() {
 /**
  * Open the database
  */
-Database.prototype.open = function() {
+Database.prototype.open = () => {
   const rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
     id INTEGER PRIMARY KEY,
     description TEXT
@@ -66,14 +66,12 @@ Database.prototype.getRules = function() {
  * @param {RuleDescription} desc
  * @return {Promise<number>} resolves to rule id
  */
-Database.prototype.createRule = function(desc) {
-  return db.run(
-    'INSERT INTO rules (description) VALUES (?)',
-    [JSON.stringify(desc)]
-  ).then((res) => {
-    return parseInt(res.lastID);
-  });
-};
+Database.prototype.createRule = (desc) => db.run(
+  'INSERT INTO rules (description) VALUES (?)',
+  [JSON.stringify(desc)]
+).then((res) => {
+  return parseInt(res.lastID);
+});
 
 /**
  * Update an existing rule
@@ -81,20 +79,17 @@ Database.prototype.createRule = function(desc) {
  * @param {RuleDescription} desc
  * @return {Promise}
  */
-Database.prototype.updateRule = function(id, desc) {
-  return db.run(
-    'UPDATE rules SET description = ? WHERE id = ?',
-    [JSON.stringify(desc), id]
-  );
-};
+Database.prototype.updateRule = (id, desc) => db.run(
+  'UPDATE rules SET description = ? WHERE id = ?',
+  [JSON.stringify(desc), id]
+);
 
 /**
  * Delete an existing rule
  * @param {number} id
  * @return {Promise}
  */
-Database.prototype.deleteRule = function(id) {
-  return db.run('DELETE FROM rules WHERE id = ?', [id]);
-};
+// eslint-disable-next-line max-len
+Database.prototype.deleteRule = (id) => db.run('DELETE FROM rules WHERE id = ?', [id]);
 
 module.exports = new Database();

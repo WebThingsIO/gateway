@@ -5,7 +5,7 @@
 
 const Plugin = require('../../plugin/plugin');
 
-describe('plugins/', function() {
+describe('plugins/', () => {
   it('Test the plugin start mechanism (good exec)', async () => {
     // The use of the mock adapter already tests most of the methods in the
     // Plugin class. However it doesn't test the start method, so we add

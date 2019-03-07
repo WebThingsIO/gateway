@@ -3,7 +3,7 @@ const fs = require('fs');
 const {getBrowser} = require('./browser-common');
 const AddonManager = require('../../addon-manager');
 
-describe('basic browser tests', function() {
+describe('basic browser tests', () => {
   afterEach(async () => {
     try {
       await AddonManager.uninstallAddon('virtual-things-adapter', true, false);

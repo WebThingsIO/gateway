@@ -38,7 +38,7 @@ const TunnelService = {
    * @param {Object} response Express response object.
    * @param {Object} next Next middleware.
    */
-  isTunnelSet: async function(request, response, next) {
+  isTunnelSet: async (request, response, next) => {
     // If ssl tunnel is disabled, continue
     if (!config.get('ssltunnel.enabled')) {
       return next();
@@ -51,9 +51,9 @@ const TunnelService = {
       // then we check if we have certificates installed
       if ((fs.existsSync(path.join(UserProfile.sslDir,
                                    'certificate.pem')) &&
-           fs.existsSync(path.join(UserProfile.sslDir,
-                                   'privatekey.pem'))) ||
-          notunnel) {
+        fs.existsSync(path.join(UserProfile.sslDir,
+                                'privatekey.pem'))) ||
+        notunnel) {
         // if certs are installed,
         // then we don't need to do anything and return
         return next();
@@ -80,14 +80,14 @@ const TunnelService = {
         const endpoint = `${result.name}.${
           config.get('ssltunnel.domain')}`;
         this.pagekiteProcess =
-            spawnSync(config.get('ssltunnel.pagekite_cmd'),
-                      ['--clean', `--frontend=${endpoint}:${
-                        config.get('ssltunnel.port')}`,
-                       `--service_on=https:${endpoint
-                       }:localhost:${
-                         config.get('ports.https')}:${
-                         this.tunneltoken.token}`],
-                      {shell: true});
+          spawnSync(config.get('ssltunnel.pagekite_cmd'),
+                    ['--clean', `--frontend=${endpoint}:${
+                      config.get('ssltunnel.port')}`,
+                     `--service_on=https:${endpoint
+                     }:localhost:${
+                       config.get('ports.https')}:${
+                       this.tunneltoken.token}`],
+                    {shell: true});
 
         this.pagekiteProcess.stdout.on('data', (data) => {
           if (DEBUG) {
@@ -131,14 +131,14 @@ const TunnelService = {
               CertificateManager.renew(this.server);
             }, 24 * 60 * 60 * 1000);
           });
-        }).catch(() => {});
+        }).catch(() => { });
       } else {
         console.error('tunneltoken not set');
         if (response) {
           response.status(400).end();
         }
       }
-    }).catch(function(e) {
+    }).catch((e) => {
       console.error('Failed to get tunneltoken setting');
       console.error(e);
 
@@ -164,19 +164,18 @@ const TunnelService = {
   },
 
   // method to check if the box has certificates
-  hasCertificates: function() {
-    return fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
-      fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem'));
-  },
+  // eslint-disable-next-line max-len
+  hasCertificates: () => fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
+    fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
 
   // method to check if the box has a registered tunnel
-  hasTunnelToken: async function() {
+  hasTunnelToken: async () => {
     const tunneltoken = await Settings.get('tunneltoken');
     return typeof tunneltoken === 'object';
   },
 
   // method to check if user skipped the ssl tunnel setup
-  userSkipped: async function() {
+  userSkipped: async () => {
     const notunnel = await Settings.get('notunnel');
     if (typeof notunnel === 'boolean' && notunnel) {
       return true;
@@ -186,7 +185,7 @@ const TunnelService = {
   },
 
   // method to ping the registration server to track active domains
-  pingRegistrationServer: function() {
+  pingRegistrationServer: () => {
     const url = `${config.get('ssltunnel.registration_endpoint')}` +
       `/ping?token=${this.tunneltoken.token}`;
     fetch(url).catch((e) => {

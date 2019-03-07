@@ -71,7 +71,7 @@ Adapter.prototype.render = function() {
 /**
  * Handle a click on the enable/disable button.
  */
-Adapter.prototype.handleToggle = function() {
+Adapter.prototype.handleToggle = () => {
 };
 
 module.exports = Adapter;

@@ -3,7 +3,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const ec = require('../../ec-crypto');
 
-describe('JSONWebToken', function() {
+describe('JSONWebToken', () => {
   it('should be able to round trip', async () => {
     const userId = 1;
     const {sig, token} = await JSONWebToken.create(userId);

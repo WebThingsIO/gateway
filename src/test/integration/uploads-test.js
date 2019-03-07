@@ -13,7 +13,7 @@ const {
   headerAuth,
 } = require('../user');
 
-describe('uploads/', function() {
+describe('uploads/', () => {
   let jwt;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);

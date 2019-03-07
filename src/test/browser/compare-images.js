@@ -11,7 +11,7 @@ const pixelmatch = require('pixelmatch');
  *
  * @return {Promise(Number)} Num of pixels differed.
  */
-exports.compareImage = function(source, target, output) {
+exports.compareImage = (source, target, output) => {
   const image1 = fs.createReadStream(source).pipe(new PNG());
   const image2 = fs.createReadStream(target).pipe(new PNG());
 
