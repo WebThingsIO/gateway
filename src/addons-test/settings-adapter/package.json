@@ -2,6 +2,7 @@
   "name": "settings-adapter",
   "version": "0.2.1",
   "description": "Settings test adapter plugin for Mozilla IoT Gateway",
+  "author": "Mozilla IoT",
   "main": "index.js",
   "keywords": [
     "mozilla",
