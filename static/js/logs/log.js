@@ -148,7 +148,7 @@ class Log {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
       const fractionDone = (lastPoint.time - this.start.getTime()) /
         (this.end.getTime() - this.start.getTime());
-      const width = Math.floor(fractionDone * 0.95 + 0.05 * this.graphWidth);
+      const width = Math.floor((fractionDone * 0.95 + 0.05) * this.graphWidth);
       if (width > this.progressWidth) {
         this.progress.setAttribute('width', width);
         this.progressWidth = width;
