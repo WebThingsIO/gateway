@@ -870,6 +870,11 @@
   border: 0;
 }
 
+.network-button:disabled {
+  background-color: #597285;
+  opacity: 0.5;
+}
+
 .network-settings-wrap .hidden,
 .user-form .hidden {
   display: none !important;
@@ -879,7 +884,7 @@
   display: inline-block;
   text-align: left;
   color: #fff;
-  background-color: #7f93a1;
+  background-color: #597285;
   font-size: 1.5rem;
   border: none;
   border-radius: 0.5rem;
