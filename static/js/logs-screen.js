@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('./api');
+const App = require('./app');
 const Log = require('./logs/log');
 
 const LogsScreen = {
@@ -43,9 +44,48 @@ const LogsScreen = {
         const log = new Log(logInfo.thing, logInfo.property);
         this.logs[logInfo.id] = log;
         this.logsContainer.appendChild(log.elt);
-        log.reload();
+        log.load();
       }
+      this.streamAll();
     });
+  },
+
+  streamAll: function() {
+    if (this.messageSocket) {
+      return;
+    }
+    console.log('startzo', window.performance.now());
+    const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}`;
+    this.messageSocket = new WebSocket(path);
+
+    let really = false;
+    const onMessage = (msg) => {
+      if (!really) {
+        console.log('yikes', window.performance.now());
+        really = true;
+      }
+      const message = JSON.parse(msg.data);
+      if (this.logs.hasOwnProperty(message.id)) {
+        this.logs[message.id].addRawPoint(message);
+      }
+    };
+
+    const cleanup = () => {
+      this.messageSocket.removeEventListener('message', onMessage);
+      this.messageSocket.removeEventListener('close', cleanup);
+      this.messageSocket.removeEventListener('error', cleanup);
+      this.messageSocket.close();
+      this.messageSocket = null;
+
+      console.log('donezo', window.performance.now());
+      for (const id in this.logs) {
+        this.logs[id].redraw();
+      }
+    };
+
+    this.messageSocket.addEventListener('message', onMessage);
+    this.messageSocket.addEventListener('close', cleanup);
+    this.messageSocket.addEventListener('error', cleanup);
   },
 
   onWindowResize: function() {

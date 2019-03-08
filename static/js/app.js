@@ -128,7 +128,7 @@ const App = {
   },
 
   initWebSocket() {
-    const path = `${this.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}`;
+    const path = `${this.ORIGIN.replace(/^http/, 'ws')}/internal-logs?jwt=${API.jwt}`;
     this.messageSocket = new WebSocket(path);
 
     this.messageSocket.addEventListener('open', () => {

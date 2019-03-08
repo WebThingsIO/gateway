@@ -186,26 +186,20 @@ class Logs {
   onAction() {
   }
 
-  async loadMetrics(out, table, transformer, id, start, end) {
-    let rows = [];
+  buildQuery(table, id, start, end) {
     const conditions = [];
+    const params = [];
     if (typeof id === 'number') {
-      conditions.push({
-        condition: 'id = ?',
-        param: id,
-      });
+      conditions.push('id = ?');
+      params.push(id);
     }
     if (start || start === 0) {
-      conditions.push({
-        condition: 'date > ?',
-        param: start,
-      });
+      conditions.push('date > ?');
+      params.push(start);
     }
     if (end) {
-      conditions.push({
-        condition: 'date < ?',
-        param: end,
-      });
+      conditions.push('date < ?');
+      params.push(end);
     }
 
     let query = `SELECT id, value, date FROM ${table}`;
@@ -214,12 +208,17 @@ class Logs {
       query += conditions.map((cond) => {
         return cond.condition;
       }).join(' AND ');
-      rows = await this.all(query, conditions.map((cond) => {
-        return cond.param;
-      }));
-    } else {
-      rows = await this.all(query);
     }
+    return {
+      query,
+      params,
+    };
+  }
+
+  async loadMetrics(out, table, transformer, id, start, end) {
+    const {query, params} = this.buildQuery(table, id, start, end);
+    const rows = await this.all(query, params);
+
     for (const row of rows) {
       const descr = JSON.parse(this.idToDescr[row.id]);
       if (!out.hasOwnProperty(descr.thing)) {
@@ -276,6 +275,43 @@ class Logs {
       });
     }
     return schema;
+  }
+
+  streamMetrics(callback, table, transformer, id, start, end) {
+    const {query, params} = this.buildQuery(table, id, start, end);
+    let touch = false;
+    return new Promise((resolve, reject) => {
+      this.db.each(query, params, (err, row) => {
+        if (!touch) {
+          console.log('beep boop begin');
+          touch = true;
+        }
+        if (err) {
+          reject(err);
+          return;
+        }
+        const value = transformer ? transformer(row.value) : row.value;
+        callback({
+          id: row.id,
+          value: value,
+          date: row.date,
+        });
+      }, () => {
+        console.log('another each touches the beacon');
+        resolve();
+      });
+    });
+  }
+
+  async streamAll(callback, start, end) {
+    // Stream all three in parallel, which should look cool
+    await Promise.all([
+      this.streamMetrics(callback, METRICS_NUMBER, null, null, start, end),
+      this.streamMetrics(callback, METRICS_BOOLEAN,
+                         (value) => !!value, null, start, end),
+      this.streamMetrics(callback, METRICS_OTHER,
+                         (value) => JSON.parse(value), null, start, end),
+    ]);
   }
 
   all(sql, ...params) {
