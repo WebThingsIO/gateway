@@ -143,6 +143,7 @@ const wrappedMethods = [
   'getMacAddress',
   'getMdnsServerStatus',
   'setMdnsServerStatus',
+  'getNetworkAddresses',
   'getSshServerStatus',
   'setSshServerStatus',
   'getWanMode',

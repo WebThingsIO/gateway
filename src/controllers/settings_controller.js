@@ -426,4 +426,12 @@ SettingsController.put('/network/wireless', (request, response) => {
   }
 });
 
+SettingsController.get('/network/addresses', (request, response) => {
+  if (Platform.implemented('getNetworkAddresses')) {
+    response.json(Platform.getNetworkAddresses());
+  } else {
+    response.status(500).send('Network addresses not implemented');
+  }
+});
+
 module.exports = SettingsController;

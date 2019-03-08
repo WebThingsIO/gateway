@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+const os = require('os');
 
 /**
  * Get DHCP server status.
@@ -696,6 +697,57 @@ function scanWirelessNetworks() {
   return cells.sort((a, b) => b.quality - a.quality);
 }
 
+/**
+ * Get the current addresses for wifi, LAN, and WAN.
+ *
+ * @returns {Object} Address object:
+ *                   {
+ *                     wan: '...',
+ *                     lan: '...',
+ *                     wlan: {
+ *                       ip: '...',
+ *                       ssid: '...',
+ *                     }
+ *                   }
+ */
+function getNetworkAddresses() {
+  const result = {
+    wan: '',
+    lan: '',
+    wlan: {
+      ip: '',
+      ssid: '',
+    },
+  };
+
+  const interfaces = os.networkInterfaces();
+
+  if (interfaces.eth0) {
+    for (const addr of interfaces.eth0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.lan = addr.address;
+        break;
+      }
+    }
+  }
+
+  if (interfaces.wlan0) {
+    for (const addr of interfaces.wlan0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wlan.ip = addr.address;
+        break;
+      }
+    }
+  }
+
+  const status = getWirelessMode();
+  if (status.enabled && status.options) {
+    result.wlan.ssid = status.options.ssid;
+  }
+
+  return result;
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -706,6 +758,7 @@ module.exports = {
   getMacAddress,
   getMdnsServerStatus,
   setMdnsServerStatus,
+  getNetworkAddresses,
   getSshServerStatus,
   setSshServerStatus,
   getWirelessMode,

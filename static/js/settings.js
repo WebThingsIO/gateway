@@ -116,6 +116,7 @@ const SettingsScreen = {
         main: document.getElementById('network-settings-client'),
         ethernet: {
           main: document.getElementById('network-settings-ethernet'),
+          mainIp: document.getElementById('network-settings-list-item-ethernet-ip'),
           configure: document.getElementById('network-settings-list-item-ethernet-configure'),
           mode: document.getElementById('network-settings-ethernet-mode'),
           ipLabel: document.getElementById('network-settings-ethernet-ip-label'),
@@ -128,6 +129,8 @@ const SettingsScreen = {
         },
         wifi: {
           main: document.getElementById('network-settings-wifi'),
+          mainSsid: document.getElementById('network-settings-list-item-wifi-ssid'),
+          mainIp: document.getElementById('network-settings-list-item-wifi-ip'),
           configure: document.getElementById('network-settings-list-item-wifi-configure'),
           list: document.getElementById('network-settings-wifi-network-list'),
           wrap: document.getElementById('network-settings-wifi-wrap'),
@@ -141,6 +144,7 @@ const SettingsScreen = {
         main: document.getElementById('network-settings-router'),
         wan: {
           main: document.getElementById('network-settings-wan'),
+          mainIp: document.getElementById('network-settings-list-item-wan-ip'),
           configure: document.getElementById('network-settings-list-item-wan-configure'),
           mode: document.getElementById('network-settings-wan-mode'),
           ipLabel: document.getElementById('network-settings-wan-ip-label'),
@@ -157,6 +161,7 @@ const SettingsScreen = {
         },
         lan: {
           main: document.getElementById('network-settings-lan'),
+          mainIp: document.getElementById('network-settings-list-item-lan-ip'),
           configure: document.getElementById('network-settings-list-item-lan-configure'),
           ip: document.getElementById('network-settings-lan-ip'),
           netmask: document.getElementById('network-settings-lan-netmask'),
@@ -165,6 +170,7 @@ const SettingsScreen = {
         },
         wlan: {
           main: document.getElementById('network-settings-wlan'),
+          mainSsid: document.getElementById('network-settings-list-item-wlan-ssid'),
           configure: document.getElementById('network-settings-list-item-wlan-configure'),
           enable: document.getElementById('network-settings-wlan-enable'),
           ssid: document.getElementById('network-settings-wlan-ssid'),
@@ -1019,6 +1025,24 @@ const SettingsScreen = {
           this.elements.network.unsupported.main.classList.remove('hidden');
           break;
       }
+
+      return fetch('/settings/network/addresses', {
+        headers: API.headers(),
+      });
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error status: ${res.status}`);
+      }
+
+      return res.json();
+    }).then((body) => {
+      console.log(body);
+      this.elements.network.client.ethernet.mainIp.innerText = body.lan;
+      this.elements.network.router.lan.mainIp.innerText = body.lan;
+      this.elements.network.client.wifi.mainIp.innerText = body.wlan.ip;
+      this.elements.network.client.wifi.mainSsid.innerText = body.wlan.ssid;
+      this.elements.network.router.wlan.mainSsid.innerText = body.wlan.ssid;
+      this.elements.network.router.wan.mainIp.innerText = body.wan;
     }).catch((e) => {
       console.error(`Error getting platform setting: ${e}`);
     });

@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const parse = require('csv-parse/lib/sync');
 
 /**
@@ -753,6 +754,82 @@ function scanWirelessNetworks() {
   return cells.sort((a, b) => b.quality - a.quality);
 }
 
+/**
+ * Get the current addresses for wifi, LAN, and WAN.
+ *
+ * @returns {Object} Address object:
+ *                   {
+ *                     wan: '...',
+ *                     lan: '...',
+ *                     wlan: {
+ *                       ip: '...',
+ *                       ssid: '...',
+ *                     }
+ *                   }
+ */
+function getNetworkAddresses() {
+  const result = {
+    wan: '',
+    lan: '',
+    wlan: {
+      ip: '',
+      ssid: '',
+    },
+  };
+
+  const interfaces = os.networkInterfaces();
+  const res = uciShow('network.lan');
+  if (!res.success) {
+    return res;
+  }
+
+  const lanType = res.pairs['network.lan.type'];
+  let lanIface = res.pairs['network.lan.ifname'];
+  if (lanType && lanType[1] === 'bridge') {
+    lanIface = 'br-lan';
+  }
+
+  if (lanIface && interfaces[lanIface]) {
+    for (const addr of interfaces[lanIface]) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.lan = addr.address;
+        break;
+      }
+    }
+  }
+
+  const wanType = res.pairs['network.wan.type'];
+  let wanIface = res.pairs['network.wan.ifname'];
+  if (wanType && wanType[1] === 'bridge') {
+    wanIface = 'br-wan';
+  }
+
+  if (wanIface && interfaces[wanIface]) {
+    for (const addr of interfaces[wanIface]) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wan = addr.address;
+        break;
+      }
+    }
+  }
+
+  if (interfaces.wlan0) {
+    for (const addr of interfaces.wlan0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wlan.ip = addr.address;
+        break;
+      }
+    }
+  }
+
+  const status = getWirelessMode();
+  if (status.enabled && status.options) {
+    result.wlan.ssid = status.options.ssid;
+  }
+
+  return result;
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -763,6 +840,7 @@ module.exports = {
   getMacAddress,
   getMdnsServerStatus,
   setMdnsServerStatus,
+  getNetworkAddresses,
   getSshServerStatus,
   setSshServerStatus,
   getWanMode,
