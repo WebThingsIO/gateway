@@ -64,9 +64,11 @@ const LogsScreen = {
         console.log('yikes', window.performance.now());
         really = true;
       }
-      const message = JSON.parse(msg.data);
-      if (this.logs.hasOwnProperty(message.id)) {
-        this.logs[message.id].addRawPoint(message);
+      const messages = JSON.parse(msg.data);
+      for (const message of messages) {
+        if (this.logs.hasOwnProperty(message.id)) {
+          this.logs[message.id].addRawPoint(message);
+        }
       }
     };
 

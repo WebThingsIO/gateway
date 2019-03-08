@@ -7,7 +7,7 @@ class Log {
     this.thingId = thingId;
     this.propertyId = propertyId;
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    this.end = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
+    this.end = new Date(Date.now());
 
     this.margin = 20;
     this.xStart = 120 + 2 * this.margin;

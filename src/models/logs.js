@@ -186,7 +186,7 @@ class Logs {
   onAction() {
   }
 
-  buildQuery(table, id, start, end) {
+  buildQuery(table, id, start, end, limit) {
     const conditions = [];
     const params = [];
     if (typeof id === 'number') {
@@ -205,9 +205,10 @@ class Logs {
     let query = `SELECT id, value, date FROM ${table}`;
     if (conditions.length > 0) {
       query += ' WHERE ';
-      query += conditions.map((cond) => {
-        return cond.condition;
-      }).join(' AND ');
+      query += conditions.join(' AND ');
+    }
+    if (limit) {
+      query += ` LIMIT ${limit}`;
     }
     return {
       query,
@@ -277,30 +278,39 @@ class Logs {
     return schema;
   }
 
-  streamMetrics(callback, table, transformer, id, start, end) {
-    const {query, params} = this.buildQuery(table, id, start, end);
-    let touch = false;
-    return new Promise((resolve, reject) => {
-      this.db.each(query, params, (err, row) => {
-        if (!touch) {
-          console.log('beep boop begin');
-          touch = true;
-        }
-        if (err) {
-          reject(err);
-          return;
-        }
+  async streamMetrics(callback, table, transformer, id, start, end) {
+    console.log('start streamMetrics');
+    const MAX_ROWS = 100;
+    start = start || 0;
+    end = end || Date.now();
+
+    let queryCompleted = false;
+    while (!queryCompleted) {
+      const {query, params} = this.buildQuery(table, id, start, end, MAX_ROWS);
+      const rows = await this.all(query, params);
+      if (!this.aaaa) {
+        console.log('first all done');
+        this.aaaa = true;
+      }
+      if (rows.length < MAX_ROWS) {
+        queryCompleted = true;
+      }
+      callback(rows.map((row) => {
         const value = transformer ? transformer(row.value) : row.value;
-        callback({
+        return {
           id: row.id,
           value: value,
           date: row.date,
-        });
-      }, () => {
-        console.log('another each touches the beacon');
-        resolve();
-      });
-    });
+        };
+      }));
+      if (!queryCompleted) {
+        const lastRow = rows[rows.length - 1];
+        start = lastRow.date;
+        if (start >= end) {
+          queryCompleted = true;
+        }
+      }
+    }
   }
 
   async streamAll(callback, start, end) {
@@ -315,7 +325,6 @@ class Logs {
   }
 
   all(sql, ...params) {
-    console.log('db.all', sql, params);
     return new Promise((accept, reject) => {
       params.push(function(err, rows) {
         if (err) {
