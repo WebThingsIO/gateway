@@ -111,9 +111,9 @@ LogsController.ws('/', (websocket) => {
     }
   }, 30 * 1000);
 
-  function streamMetric(metric) {
+  function streamMetric(metrics) {
     try {
-      websocket.send(JSON.stringify(metric), (_err) => {});
+      websocket.send(JSON.stringify(metrics), (_err) => {});
     } catch (_e) {
       // Just don't let it crash anything
     }
