@@ -133,22 +133,17 @@ class Log {
     // }
   }
 
-  addRawPoints(points) {
-    if (points.length === 0) {
+  addRawPoint(point) {
+    if (point.date < this.start.getTime() ||
+        point.date > this.end.getTime()) {
       return;
     }
+    this.rawPoints.push({
+      value: point.value,
+      time: point.date,
+    });
 
-    for (const point of points) {
-      if (point.date < this.start.getTime() ||
-          point.date > this.end.getTime()) {
-        continue;
-      }
-      this.rawPoints.push({
-        value: point.value,
-        time: point.date,
-      });
-    }
-
+    // TODO debounce this
     if (this.rawPoints.length > 2) {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
       const fractionDone = (lastPoint.time - this.start.getTime()) /
