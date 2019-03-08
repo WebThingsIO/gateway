@@ -96,7 +96,7 @@ const pluginsWeb = [
   new MiniCssExtractPlugin({
     filename: 'bundle/[hash]-[name].css',
   }),
-  new CleanWebpackPlugin(['build/static/bundle']),
+  new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     inject: 'head',
     template: 'static/index.html',
