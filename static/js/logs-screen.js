@@ -18,6 +18,8 @@ const LogsScreen = {
     this.view = document.getElementById('logs-view');
     this.logsContainer = this.view.querySelector('.logs');
     this.logs = {};
+    this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    this.end = new Date(Date.now());
     //  new Log('virtual-things-2', 'level'),
     //  new Log('virtual-things-2', 'on'),
     //  new Log('weather-8b8f279cfcc42b05f2b3cdfd4b0c7f9c5eac5b18',
@@ -41,7 +43,8 @@ const LogsScreen = {
         if (this.logs[logInfo.id]) {
           continue;
         }
-        const log = new Log(logInfo.thing, logInfo.property);
+        const log = new Log(logInfo.thing, logInfo.property, this.start,
+                            this.end);
         this.logs[logInfo.id] = log;
         this.logsContainer.appendChild(log.elt);
         log.load();
@@ -54,16 +57,11 @@ const LogsScreen = {
     if (this.messageSocket) {
       return;
     }
-    console.log('startzo', window.performance.now());
-    const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}`;
+    const timeBounds = `start=${this.start.getTime()}&end=${this.end.getTime()}`;
+    const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}&${timeBounds}`;
     this.messageSocket = new WebSocket(path);
 
-    let really = false;
     const onMessage = (msg) => {
-      if (!really) {
-        console.log('yikes', window.performance.now());
-        really = true;
-      }
       const messages = JSON.parse(msg.data);
       for (const message of messages) {
         if (this.logs.hasOwnProperty(message.id)) {
