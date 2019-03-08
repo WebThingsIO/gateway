@@ -13,7 +13,6 @@
 const PromiseRouter = require('express-promise-router');
 const WebSocket = require('ws');
 
-const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const Logs = require('../models/logs');
 
@@ -112,23 +111,25 @@ LogsController.ws('/', (websocket) => {
     }
   }, 30 * 1000);
 
-  function onLog(message) {
-    websocket.send(JSON.stringify(message), (err) => {
-      if (err) {
-        console.error('WebSocket sendMessage failed:', err);
-      }
-    });
+  function streamMetric(metric) {
+    try {
+      websocket.send(JSON.stringify(metric), (_err) => {});
+    } catch (_e) {
+      // Just don't let it crash anything
+    }
   }
 
-  AddonManager.pluginServer.on('log', onLog);
-
   const cleanup = () => {
-    AddonManager.pluginServer.removeListener('log', onLog);
     clearInterval(heartbeat);
   };
+
+  Logs.streamAll(streamMetric).then(() => {
+    cleanup();
+    // like eventually send more property values and things like that
+    websocket.close();
+  });
 
   websocket.on('error', cleanup);
   websocket.on('close', cleanup);
 });
-
 module.exports = LogsController;

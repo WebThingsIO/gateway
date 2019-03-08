@@ -11,10 +11,12 @@
 'use strict';
 
 const archiver = require('archiver');
-const Constants = require('../constants');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+
+const AddonManager = require('../addon-manager');
+const Constants = require('../constants');
 const jwtMiddleware = require('../jwt-middleware');
 const UserProfile = require('../user-profile');
 const Utils = require('../utils');
@@ -100,6 +102,38 @@ InternalLogsController.get('/zip', async (request, response) => {
     }
   });
   archive.finalize();
+});
+
+InternalLogsController.ws('/', (websocket) => {
+  if (websocket.readyState !== WebSocket.OPEN) {
+    return;
+  }
+
+  const heartbeat = setInterval(() => {
+    try {
+      websocket.ping();
+    } catch (e) {
+      websocket.terminate();
+    }
+  }, 30 * 1000);
+
+  function onLog(message) {
+    websocket.send(JSON.stringify(message), (err) => {
+      if (err) {
+        console.error('WebSocket sendMessage failed:', err);
+      }
+    });
+  }
+
+  AddonManager.pluginServer.on('log', onLog);
+
+  const cleanup = () => {
+    AddonManager.pluginServer.removeListener('log', onLog);
+    clearInterval(heartbeat);
+  };
+
+  websocket.on('error', cleanup);
+  websocket.on('close', cleanup);
 });
 
 module.exports = InternalLogsController;

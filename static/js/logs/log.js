@@ -1,5 +1,4 @@
 // const Thing = require('../thing');
-const API = require('../api');
 const App = require('../app');
 const Utils = require('../utils');
 
@@ -8,7 +7,7 @@ class Log {
     this.thingId = thingId;
     this.propertyId = propertyId;
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    this.end = new Date();
+    this.end = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
 
     this.margin = 20;
     this.xStart = 120 + 2 * this.margin;
@@ -18,6 +17,7 @@ class Log {
     this.graphWidth = this.width - this.xStart - this.margin;
     this.elt = document.createElement('div');
     this.elt.classList.add('logs-log-container');
+    this.rawPoints = [];
 
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
@@ -63,8 +63,11 @@ class Log {
     this.progress.classList.add('logs-graph-progress');
     this.progress.setAttribute('x', this.xStart);
     this.progress.setAttribute('y', this.margin);
-    this.progress.setAttribute('width', 0);
+    this.progressWidth = Math.floor(0.05 * this.graphWidth);
+    this.progress.setAttribute('width', this.progressWidth);
     this.progress.setAttribute('height', this.graphHeight);
+
+    this.graph.appendChild(this.progress);
 
     this.elt.appendChild(this.graph);
 
@@ -97,12 +100,6 @@ class Log {
     return elt;
   }
 
-  async reload() {
-    await this.load();
-    this.redrawLog();
-    // fetch data render graph
-  }
-
   async load() {
     const thing = await App.gatewayModel.getThingModel(this.thingId);
     if (!thing) {
@@ -117,25 +114,47 @@ class Log {
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
 
-    const data = await this.fetchRawPoints();
-    if (!data || !data.length) {
-      this.rawPoints = [];
-      return;
-    }
-    this.rawPoints = [];
-    for (let i = 0; i < data.length; i++) {
-      const point = data[i];
-      if (point.date < this.start.getTime() ||
-          point.date > this.end.getTime()) {
-        continue;
-      }
-      this.rawPoints.push({
-        value: point.value,
-        time: point.date,
-      });
-    }
+    // const data = await this.fetchRawPoints();
+    // if (!data || !data.length) {
+    //   this.rawPoints = [];
+    //   return;
+    // }
+    // this.rawPoints = [];
+    // for (let i = 0; i < data.length; i++) {
+    //   const point = data[i];
+    //   if (point.date < this.start.getTime() ||
+    //       point.date > this.end.getTime()) {
+    //     continue;
+    //   }
+    //   this.rawPoints.push({
+    //     value: point.value,
+    //     time: point.date,
+    //   });
+    // }
   }
 
+  addRawPoint(point) {
+    if (point.date < this.start.getTime() ||
+        point.date > this.end.getTime()) {
+      return;
+    }
+    this.rawPoints.push({
+      value: point.value,
+      time: point.date,
+    });
+    if (this.rawPoints.length > 2) {
+      const fractionDone = (point.date - this.start.getTime()) /
+        (this.end.getTime() - this.start.getTime());
+      const width = Math.floor(fractionDone * this.graphWidth);
+      if (width > this.progressWidth) {
+        this.progress.setAttribute('width', width);
+        this.progressWidth = width;
+      }
+    }
+    // update progress bar
+  }
+
+  /*
   fetchRawPoints() {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -173,6 +192,7 @@ class Log {
       xhr.send(null);
     });
   }
+  */
 
   valueBounds() {
     if (this.property.unit === 'percent') {
@@ -249,10 +269,13 @@ class Log {
       (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
   }
 
-  redrawLog() {
+  redraw() {
     if (!this.property) {
       return;
     }
+
+    this.progress.setAttribute('width', 0);
+    this.progressWidth = 0;
 
     const bounds = this.valueBounds();
     let yMin = Math.min(0, bounds.min);
@@ -433,11 +456,10 @@ class Log {
   }
 
   onPointerMove(event) {
-    if (!this.rawPoints) {
+    if (!this.rawPoints || this.rawPoints.length === 0) {
       return;
     }
     const time = this.xToTime(event.clientX);
-    console.log(event.clientX, time);
     if (time < this.start.getTime() || time > this.end.getTime()) {
       this.removeTooltip();
       return;
