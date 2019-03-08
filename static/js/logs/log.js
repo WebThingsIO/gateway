@@ -3,11 +3,11 @@ const App = require('../app');
 const Utils = require('../utils');
 
 class Log {
-  constructor(thingId, propertyId) {
+  constructor(thingId, propertyId, start, end) {
     this.thingId = thingId;
     this.propertyId = propertyId;
-    this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    this.end = new Date(Date.now());
+    this.start = start;
+    this.end = end;
 
     this.margin = 20;
     this.xStart = 120 + 2 * this.margin;
@@ -133,19 +133,27 @@ class Log {
     // }
   }
 
-  addRawPoint(point) {
-    if (point.date < this.start.getTime() ||
-        point.date > this.end.getTime()) {
+  addRawPoints(points) {
+    if (points.length === 0) {
       return;
     }
-    this.rawPoints.push({
-      value: point.value,
-      time: point.date,
-    });
+
+    for (const point of points) {
+      if (point.date < this.start.getTime() ||
+          point.date > this.end.getTime()) {
+        continue;
+      }
+      this.rawPoints.push({
+        value: point.value,
+        time: point.date,
+      });
+    }
+
     if (this.rawPoints.length > 2) {
-      const fractionDone = (point.date - this.start.getTime()) /
+      const lastPoint = this.rawPoints[this.rawPoints.length - 1];
+      const fractionDone = (lastPoint.time - this.start.getTime()) /
         (this.end.getTime() - this.start.getTime());
-      const width = Math.floor(fractionDone * this.graphWidth);
+      const width = Math.floor(fractionDone * 0.95 + 0.05 * this.graphWidth);
       if (width > this.progressWidth) {
         this.progress.setAttribute('width', width);
         this.progressWidth = width;

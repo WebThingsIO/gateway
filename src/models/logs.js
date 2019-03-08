@@ -279,8 +279,7 @@ class Logs {
   }
 
   async streamMetrics(callback, table, transformer, id, start, end) {
-    console.log('start streamMetrics');
-    const MAX_ROWS = 100;
+    const MAX_ROWS = 10000;
     start = start || 0;
     end = end || Date.now();
 
@@ -288,10 +287,6 @@ class Logs {
     while (!queryCompleted) {
       const {query, params} = this.buildQuery(table, id, start, end, MAX_ROWS);
       const rows = await this.all(query, params);
-      if (!this.aaaa) {
-        console.log('first all done');
-        this.aaaa = true;
-      }
       if (rows.length < MAX_ROWS) {
         queryCompleted = true;
       }
