@@ -41,6 +41,7 @@ const LogsScreen = {
     }).then((schema) => {
       for (const logInfo of schema) {
         if (this.logs[logInfo.id]) {
+          this.logs[logInfo.id].clearPoints();
           continue;
         }
         const log = new Log(logInfo.thing, logInfo.property, this.start,
@@ -77,7 +78,6 @@ const LogsScreen = {
       this.messageSocket.close();
       this.messageSocket = null;
 
-      console.log('donezo', window.performance.now());
       for (const id in this.logs) {
         this.logs[id].redraw();
       }

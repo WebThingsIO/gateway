@@ -8,6 +8,8 @@ class Log {
     this.propertyId = propertyId;
     this.start = start;
     this.end = end;
+    this.logStart = start;
+    this.logEnd = end;
 
     this.margin = 20;
     this.xStart = 120 + 2 * this.margin;
@@ -113,24 +115,10 @@ class Log {
 
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
+  }
 
-    // const data = await this.fetchRawPoints();
-    // if (!data || !data.length) {
-    //   this.rawPoints = [];
-    //   return;
-    // }
-    // this.rawPoints = [];
-    // for (let i = 0; i < data.length; i++) {
-    //   const point = data[i];
-    //   if (point.date < this.start.getTime() ||
-    //       point.date > this.end.getTime()) {
-    //     continue;
-    //   }
-    //   this.rawPoints.push({
-    //     value: point.value,
-    //     time: point.date,
-    //   });
-    // }
+  clearPoints() {
+    this.rawPoints = [];
   }
 
   addRawPoint(point) {
@@ -143,7 +131,7 @@ class Log {
       time: point.date,
     });
 
-    // TODO debounce this
+    // update progress bar
     if (this.rawPoints.length > 2) {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
       const fractionDone = (lastPoint.time - this.start.getTime()) /
@@ -154,48 +142,7 @@ class Log {
         this.progressWidth = width;
       }
     }
-    // update progress bar
   }
-
-  /*
-  fetchRawPoints() {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      const start = Date.now();
-      const onProgress = (event) => {
-        if (event.lengthComputable) {
-          const width = event.loaded / event.total * this.graphWidth;
-          this.progress.setAttribute('width', width);
-        } else {
-          // Oscillate between 0 width and max width starting at 0
-          const width = (1 - Math.cos((Date.now() - start) / 3000)) / 2 *
-            this.graphWidth;
-          this.progress.setAttribute('width', width);
-        }
-      };
-      const onLoad = () => {
-        xhr.removeEventListener('progress', onProgress);
-        xhr.removeEventListener('load', onLoad);
-        this.progress.setAttribute('width', 0);
-        try {
-          resolve(JSON.parse(xhr.responseText));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      xhr.addEventListener('progress', onProgress);
-      xhr.addEventListener('load', onLoad);
-      let url = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
-      url += `?start=${this.start.getTime()}&end=${this.end.getTime()}`;
-      xhr.open('GET', url);
-      const headers = API.headers();
-      for (const name in headers) {
-        xhr.setRequestHeader(name, headers[name]);
-      }
-      xhr.send(null);
-    });
-  }
-  */
 
   valueBounds() {
     if (this.property.unit === 'percent') {
@@ -277,30 +224,32 @@ class Log {
       return;
     }
 
+    this.removeAll('.logs-graph-line');
+    this.removeAll('.logs-graph-fill');
+    this.removeAll('.logs-graph-label');
+
+
     this.progress.setAttribute('width', 0);
     this.progressWidth = 0;
 
     const bounds = this.valueBounds();
-    let yMin = Math.min(0, bounds.min);
-    let yMax = bounds.max;
-    console.log(this.property, yMin, yMax);
+    let valueMin = Math.min(0, bounds.min);
+    let valueMax = bounds.max;
     // Preserve 3 significant figures (not using toPrecision since that does
     // scientific notation)
     const lowestPowerOf10ToPreserve =
-      Math.pow(10, Math.ceil(Math.log(yMax - yMin) / Math.LN10) - 3);
-    yMax = Math.ceil(yMax / lowestPowerOf10ToPreserve) *
+      Math.pow(10, Math.ceil(Math.log(valueMax - valueMin) / Math.LN10) - 3);
+    valueMax = Math.ceil(valueMax / lowestPowerOf10ToPreserve) *
       lowestPowerOf10ToPreserve;
-    yMin = Math.floor(yMin / lowestPowerOf10ToPreserve) *
+    valueMin = Math.floor(valueMin / lowestPowerOf10ToPreserve) *
       lowestPowerOf10ToPreserve;
-    console.log('now', yMin, yMax);
 
-    const yScale = (y) => {
-      return this.height - this.margin - (y - yMin) / (yMax - yMin) *
-        this.graphHeight;
+    const yScale = (value) => {
+      return this.height - this.margin -
+        (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
     };
 
     const points = [];
-    console.log('waaaaa', this.property);
     for (let i = 0; i < this.rawPoints.length; i++) {
       const raw = this.rawPoints[i];
       const x = this.timeToX(raw.time);
@@ -343,26 +292,26 @@ class Log {
       this.graph.appendChild(graphLine);
     }
 
-    const places = Math.max(0, 2 - Math.log(yMax - yMin) / Math.LN10);
-    let labelText = yMin.toFixed(places);
+    const places = Math.max(0, 2 - Math.log(valueMax - valueMin) / Math.LN10);
+    let labelText = valueMin.toFixed(places);
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(false);
-    } else if (Math.floor(yMin) === yMin) {
-      labelText = yMin.toFixed(0);
+    } else if (Math.floor(valueMin) === valueMin) {
+      labelText = valueMin.toFixed(0);
     }
     let label = this.makeText(labelText, this.xStart - this.margin / 4,
-                              yScale(yMin), 'end', 'middle');
+                              yScale(valueMin), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
-    labelText = yMax.toFixed(places);
+    labelText = valueMax.toFixed(places);
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(true);
-    } else if (Math.floor(yMax) === yMax) {
-      labelText = yMax.toFixed(0);
+    } else if (Math.floor(valueMax) === valueMax) {
+      labelText = valueMax.toFixed(0);
     }
     label = this.makeText(labelText, this.xStart - this.margin / 4,
-                          yScale(yMax), 'end', 'middle');
+                          yScale(valueMax), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
@@ -380,6 +329,13 @@ class Log {
 
       xLabel += oneDayMs;
     }
+  }
+
+  removeAll(selector) {
+    console.log('removeAll', selector);
+    this.graph.querySelectorAll(selector).forEach((child) => {
+      child.parentNode.removeChild(child);
+    });
   }
 
   /**
@@ -450,8 +406,6 @@ class Log {
     }
 
     const closenessBuffer = this.xToTime(48) - this.xToTime(0);
-    console.log('maybe', nearestPoint, time, closenessBuffer,
-                Math.abs(time - nearestPoint.time));
     if (Math.abs(time - nearestPoint.time) < closenessBuffer) {
       return nearestPoint;
     }
