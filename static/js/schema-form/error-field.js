@@ -13,40 +13,42 @@
 
 'use strict';
 
-function ErrorField() {
-  const field = document.createElement('div');
-  field.className = 'errors-field hidden';
+class ErrorField {
+  constructor() {
+    const field = document.createElement('div');
+    field.className = 'errors-field hidden';
 
-  field.innerHTML = `
-    <div>
-      <h3 class="errors-title">Errors</h3>
-    </div>
-    <ul class="errors-list">
-    </ul>`;
+    field.innerHTML = `
+      <div>
+        <h3 class="errors-title">Errors</h3>
+      </div>
+      <ul class="errors-list">
+      </ul>`;
 
-  this.field = field;
-  this.errorlist = field.querySelector('ul');
+    this.field = field;
+    this.errorlist = field.querySelector('ul');
 
-  return this;
-}
-
-ErrorField.prototype.render = function(errors) {
-  if (errors.length > 0) {
-    const errorHtml = errors.map((error) => {
-      return `
-          <li class="error-item">
-            ${(`${error.dataPath} ${error.message}`).trim()}
-          </li>`;
-    });
-
-    this.errorlist.innerHTML = errorHtml.join(' ');
-
-    this.field.classList.remove('hidden');
-  } else {
-    this.field.classList.add('hidden');
+    return this;
   }
 
-  return this.field;
-};
+  render(errors) {
+    if (errors.length > 0) {
+      const errorHtml = errors.map((error) => {
+        return `
+            <li class="error-item">
+              ${(`${error.dataPath} ${error.message}`).trim()}
+            </li>`;
+      });
+
+      this.errorlist.innerHTML = errorHtml.join(' ');
+
+      this.field.classList.remove('hidden');
+    } else {
+      this.field.classList.add('hidden');
+    }
+
+    return this.field;
+  }
+}
 
 module.exports = ErrorField;
