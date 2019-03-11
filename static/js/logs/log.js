@@ -2,6 +2,8 @@
 const App = require('../app');
 const Utils = require('../utils');
 
+const RIGHT_MOUSE_BUTTON = 2;
+
 class Log {
   constructor(thingId, propertyId, start, end) {
     this.thingId = thingId;
@@ -21,8 +23,12 @@ class Log {
     this.elt.classList.add('logs-log-container');
     this.rawPoints = [];
 
+    this.onPointerDown = this.onPointerDown.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
+    this.onPointerLeave = this.onPointerLeave.bind(this);
+    this.mouseDown = false;
+    this.dragStart = -1;
 
     this.drawSkeleton();
   }
@@ -44,8 +50,11 @@ class Log {
     this.graph.classList.add('logs-graph');
     this.graph.style.width = `${this.width}px`;
     this.graph.style.height = `${this.height}px`;
+    this.graph.addEventListener('mousedown', this.onPointerDown);
     this.graph.addEventListener('mousemove', this.onPointerMove);
-    this.graph.addEventListener('mouseleave', this.onPointerUp);
+    this.graph.addEventListener('mouseup', this.onPointerUp);
+    this.graph.addEventListener('mouseleave', this.onPointerLeave);
+    this.graph.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const axesPath = this.makePath([
       {x: this.xStart, y: this.margin},
@@ -70,6 +79,18 @@ class Log {
     this.progress.setAttribute('height', this.graphHeight);
 
     this.graph.appendChild(this.progress);
+
+    this.selectionHighlight =
+      document.createElementNS('http://www.w3.org/2000/svg',
+                               'rect');
+    this.selectionHighlight.classList.add('logs-graph-selection-highlight');
+    this.selectionHighlight.setAttribute('x', this.xStart);
+    this.selectionHighlight.setAttribute('y', this.margin);
+    this.selectionHighlight.setAttribute('width', 0);
+    this.selectionHighlight.setAttribute('height', this.graphHeight);
+
+    this.graph.appendChild(this.selectionHighlight);
+
 
     this.elt.appendChild(this.graph);
 
@@ -122,10 +143,6 @@ class Log {
   }
 
   addRawPoint(point) {
-    if (point.date < this.start.getTime() ||
-        point.date > this.end.getTime()) {
-      return;
-    }
     this.rawPoints.push({
       value: point.value,
       time: point.date,
@@ -134,8 +151,9 @@ class Log {
     // update progress bar
     if (this.rawPoints.length > 2) {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
-      const fractionDone = (lastPoint.time - this.start.getTime()) /
+      let fractionDone = (lastPoint.time - this.start.getTime()) /
         (this.end.getTime() - this.start.getTime());
+      fractionDone = Math.min(fractionDone, 1);
       const width = Math.floor((fractionDone * 0.95 + 0.05) * this.graphWidth);
       if (width > this.progressWidth) {
         this.progress.setAttribute('width', width);
@@ -252,19 +270,23 @@ class Log {
     const points = [];
     for (let i = 0; i < this.rawPoints.length; i++) {
       const raw = this.rawPoints[i];
+      if (raw.time < this.start.getTime() || raw.time > this.end.getTime()) {
+        continue;
+      }
       const x = this.timeToX(raw.time);
       const y = yScale(raw.value);
       // Add a point so that the value steps down instead of gradually
       // decreasing
-      if (i > 0 && (this.property.type === 'boolean' ||
+      if (points.length > 0 && (this.property.type === 'boolean' ||
           this.property.type === 'integer')) {
         points.push({
           x,
-          y: points[i - 1].y,
+          y: points[points.length - 1].y,
         });
       }
       points.push({x, y});
     }
+    console.log('so I drew', points.length, 'points');
 
     if (points.length > 0) {
       // Make sure the data extends to the present
@@ -412,11 +434,56 @@ class Log {
     return null;
   }
 
-  onPointerMove(event) {
-    if (!this.rawPoints || this.rawPoints.length === 0) {
+  constrainTime(time) {
+    if (time < this.start.getTime()) {
+      return this.start.getTime();
+    } else if (time > this.end.getTime()) {
+      return this.end.getTime();
+    }
+    return time;
+  }
+
+  onPointerDown(event) {
+    event.preventDefault();
+
+    if (event.button === RIGHT_MOUSE_BUTTON) {
       return;
     }
-    const time = this.xToTime(event.clientX);
+
+    this.dragStart = this.constrainTime(this.xToTime(event.clientX));
+    this.pointerDown = true;
+  }
+
+  onPointerMove(event) {
+    event.preventDefault();
+    if (this.pointerDown) {
+      this.drawHighlight(event.clientX);
+    } else {
+      this.drawTooltip(event.clientX);
+    }
+  }
+
+  drawHighlight(clientX) {
+    const dragStartX = this.timeToX(this.dragStart);
+    let minX = Math.min(dragStartX, clientX);
+    let maxX = Math.max(dragStartX, clientX);
+
+    minX = Math.max(minX, this.xStart);
+    maxX = Math.min(maxX, this.graphWidth + this.xStart);
+
+    this.selectionHighlight.setAttribute('x', minX);
+    this.selectionHighlight.setAttribute('width', maxX - minX);
+  }
+
+  removeHighlight() {
+    this.selectionHighlight.setAttribute('width', 0);
+  }
+
+  drawTooltip(clientX) {
+    if (!this.property || !this.rawPoints || this.rawPoints.length === 0) {
+      return;
+    }
+    const time = this.xToTime(clientX);
     if (time < this.start.getTime() || time > this.end.getTime()) {
       this.removeTooltip();
       return;
@@ -451,10 +518,34 @@ class Log {
     this.pointHighlight.setAttribute('cy', y);
   }
 
-  onPointerUp() {
+  onPointerLeave() {
     this.removeTooltip();
+    this.removeHighlight();
+    this.pointerDown = false;
   }
 
+  onPointerUp(event) {
+    event.preventDefault();
+    this.removeHighlight();
+
+    if (this.pointerDown) {
+      this.pointerDown = false;
+      const dragEnd = this.constrainTime(this.xToTime(event.clientX));
+      if (this.dragStart < dragEnd) {
+        this.start = new Date(this.dragStart);
+        this.end = new Date(dragEnd);
+      } else {
+        this.start = new Date(dragEnd);
+        this.end = new Date(this.dragStart);
+      }
+      this.redraw();
+    }
+    if (event.button === RIGHT_MOUSE_BUTTON) {
+      this.start = this.logStart;
+      this.end = this.logEnd;
+      this.redraw();
+    }
+  }
 
   removeTooltip() {
     this.tooltip.style.display = 'none';
