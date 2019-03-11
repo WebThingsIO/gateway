@@ -16,62 +16,62 @@
 const SchemaUtils = require('./schema-utils');
 const Utils = require('../utils');
 
-function BooleanField(schema,
-                      formData,
-                      idSchema,
-                      name,
-                      definitions,
-                      onChange,
-                      required = false,
-                      disabled = false,
-                      readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
-  this.formData = formData;
-  this.idSchema = idSchema;
-  this.name = name;
-  this.definitions = definitions;
-  this.onChange = onChange;
-  this.required = required;
-  this.disabled = disabled;
-  this.readonly = readonly;
-
-  return this;
-}
-
-BooleanField.prototype.onBooleanChange = function(event) {
-  this.formData = event.target.checked;
-
-  if (this.onChange) {
-    this.onChange(this.formData);
+class BooleanField {
+  constructor(schema,
+              formData,
+              idSchema,
+              name,
+              definitions,
+              onChange,
+              required = false,
+              disabled = false,
+              readonly = false) {
+    this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
+    this.formData = formData;
+    this.idSchema = idSchema;
+    this.name = name;
+    this.definitions = definitions;
+    this.onChange = onChange;
+    this.required = required;
+    this.disabled = disabled;
+    this.readonly = readonly;
   }
-};
 
-BooleanField.prototype.render = function() {
-  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-  const value = this.formData;
-  const field = document.createElement('div');
-  field.className = 'checkbox';
+  onBooleanChange(event) {
+    this.formData = event.target.checked;
 
-  let title = this.schema.title ? this.schema.title : this.name;
-  title = Utils.escapeHtml(title);
-  title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
+    if (this.onChange) {
+      this.onChange(this.formData);
+    }
+  }
 
-  field.innerHTML = `
-    <input
-    type="checkbox"
-    id="${id}"
-    ${value ? 'checked' : ''}
-    ${this.required ? 'required' : ''}
-    ${this.readonly ? 'readonly' : ''}
-    ${this.disabled ? 'disabled' : ''}
-    />
-    <span class="checkbox-title">${title}</span>
-    `;
+  render() {
+    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+    const value = this.formData;
+    const field = document.createElement('div');
+    field.className = 'checkbox';
 
-  const input = field.querySelector(`#${id}`);
-  input.onchange = this.onBooleanChange.bind(this);
+    let title = this.schema.title ? this.schema.title : this.name;
+    title = Utils.escapeHtml(title);
+    title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
 
-  return field;
-};
+    field.innerHTML = `
+      <input
+      type="checkbox"
+      id="${id}"
+      ${value ? 'checked' : ''}
+      ${this.required ? 'required' : ''}
+      ${this.readonly ? 'readonly' : ''}
+      ${this.disabled ? 'disabled' : ''}
+      />
+      <span class="checkbox-title">${title}</span>
+      `;
+
+    const input = field.querySelector(`#${id}`);
+    input.onchange = this.onBooleanChange.bind(this);
+
+    return field;
+  }
+}
 
 module.exports = BooleanField;

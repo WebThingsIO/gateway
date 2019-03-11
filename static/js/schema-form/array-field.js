@@ -18,204 +18,201 @@ const SchemaField = require('./schema-field');
 const Utils = require('../utils');
 const UnsupportedField = require('./unsupported-field');
 
-function ArrayField(
-  schema,
-  formData,
-  idSchema,
-  name,
-  definitions,
-  onChange,
-  required = false,
-  disabled = false,
-  readonly = false) {
-  this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
-  this.formData = Array.isArray(formData) ? formData : [];
-  this.idSchema = idSchema;
-  this.name = name;
-  this.definitions = definitions;
-  this.onChange = onChange;
-  this.required = required;
-  this.disabled = disabled;
-  this.readonly = readonly;
-
-  return this;
-}
-
-ArrayField.prototype.require = function(name) {
-  return (
-    Array.isArray(this.schema.required) &&
-    this.schema.required.includes(name)
-  );
-};
-
-ArrayField.prototype.onChangeForIndex = function(index) {
-  return (value) => {
-    const newFormData = this.formData.map((item, i) => {
-      // We need to treat undefined items as nulls to have validation.
-      // See https://github.com/tdegrunt/jsonschema/issues/206
-      const jsonValue = typeof value === 'undefined' ? null : value;
-      return index === i ? jsonValue : item;
-    });
-
-    this.formData = newFormData;
-
-    if (this.onChange) {
-      this.onChange(this.formData);
-    }
-  };
-};
-
-ArrayField.prototype.onSelectChange = function(value, all) {
-  return (event) => {
-    const checked = event.target.checked;
-
-    if (checked) {
-      this.formData.push(value);
-      this.formData.sort((a, b) => all.indexOf(a) > all.indexOf(b));
-    } else {
-      this.formData = this.formData.filter((v) => v !== value);
-    }
-
-    if (this.onChange) {
-      this.onChange(this.formData);
-    }
-  };
-};
-
-ArrayField.prototype.allowAdditionalItems = function() {
-  const schema = this.schema;
-  if (schema.additionalItems === true) {
-    console.warn('additionalItems=true is currently not supported');
-  }
-  return SchemaUtils.isObject(schema.additionalItems);
-};
-
-ArrayField.prototype.isAddable = function(formItems) {
-  const schema = this.schema;
-  let addable = true;
-
-  if (typeof schema.maxItems !== 'undefined') {
-    addable = formItems.length < schema.maxItems;
+class ArrayField {
+  constructor(schema,
+              formData,
+              idSchema,
+              name,
+              definitions,
+              onChange,
+              required = false,
+              disabled = false,
+              readonly = false) {
+    this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
+    this.formData = Array.isArray(formData) ? formData : [];
+    this.idSchema = idSchema;
+    this.name = name;
+    this.definitions = definitions;
+    this.onChange = onChange;
+    this.required = required;
+    this.disabled = disabled;
+    this.readonly = readonly;
   }
 
-  return addable;
-};
-
-ArrayField.prototype.isItemRequired = (itemSchema) => {
-  if (Array.isArray(itemSchema.type)) {
-    // While we don't yet support composite/nullable jsonschema types, it's
-    // future-proof to check for requirement against these.
-    return !itemSchema.type.includes('null');
+  require(name) {
+    return (
+      Array.isArray(this.schema.required) &&
+      this.schema.required.includes(name)
+    );
   }
-  // All non-null array item types are inherently required by design
-  return itemSchema.type !== 'null';
-};
 
-ArrayField.prototype.itemFieldId = function(index) {
-  return `array_${this.idSchema.$id}_${index}`;
-};
+  onChangeForIndex(index) {
+    return (value) => {
+      const newFormData = this.formData.map((item, i) => {
+        // We need to treat undefined items as nulls to have validation.
+        // See https://github.com/tdegrunt/jsonschema/issues/206
+        const jsonValue = typeof value === 'undefined' ? null : value;
+        return index === i ? jsonValue : item;
+      });
 
-ArrayField.prototype.onDropIndexClick = function(field, index) {
-  return (event) => {
+      this.formData = newFormData;
+
+      if (this.onChange) {
+        this.onChange(this.formData);
+      }
+    };
+  }
+
+  onSelectChange(value, all) {
+    return (event) => {
+      const checked = event.target.checked;
+
+      if (checked) {
+        this.formData.push(value);
+        this.formData.sort((a, b) => all.indexOf(a) > all.indexOf(b));
+      } else {
+        this.formData = this.formData.filter((v) => v !== value);
+      }
+
+      if (this.onChange) {
+        this.onChange(this.formData);
+      }
+    };
+  }
+
+  allowAdditionalItems() {
     const schema = this.schema;
-    const itemsField = field.querySelector('div.array-items');
-    let itemSchema = schema.items;
-    if (SchemaUtils.isFixedItems(schema) &&
-      this.allowAdditionalItems(schema)) {
-      itemSchema = schema.additionalItems;
+    if (schema.additionalItems === true) {
+      console.warn('additionalItems=true is currently not supported');
+    }
+    return SchemaUtils.isObject(schema.additionalItems);
+  }
+
+  isAddable(formItems) {
+    const schema = this.schema;
+    let addable = true;
+
+    if (typeof schema.maxItems !== 'undefined') {
+      addable = formItems.length < schema.maxItems;
     }
 
-    const newItemsField = itemsField.cloneNode(false);
+    return addable;
+  }
 
-    event.preventDefault();
-
-    for (let i = 0; i < index; i++) {
-      const id = this.itemFieldId(i);
-      const item = field.querySelector(`#${id}`);
-
-      newItemsField.appendChild(item);
+  isItemRequired(itemSchema) {
+    if (Array.isArray(itemSchema.type)) {
+      // While we don't yet support composite/nullable jsonschema types, it's
+      // future-proof to check for requirement against these.
+      return !itemSchema.type.includes('null');
     }
+    // All non-null array item types are inherently required by design
+    return itemSchema.type !== 'null';
+  }
 
-    for (let i = index + 1; i < this.formData.length; i++) {
-      const newItem = this.renderArrayFieldItem(
+  itemFieldId(index) {
+    return `array_${this.idSchema.$id}_${index}`;
+  }
+
+  onDropIndexClick(field, index) {
+    return (event) => {
+      const schema = this.schema;
+      const itemsField = field.querySelector('div.array-items');
+      let itemSchema = schema.items;
+      if (SchemaUtils.isFixedItems(schema) &&
+        this.allowAdditionalItems(schema)) {
+        itemSchema = schema.additionalItems;
+      }
+
+      const newItemsField = itemsField.cloneNode(false);
+
+      event.preventDefault();
+
+      for (let i = 0; i < index; i++) {
+        const id = this.itemFieldId(i);
+        const item = field.querySelector(`#${id}`);
+
+        newItemsField.appendChild(item);
+      }
+
+      for (let i = index + 1; i < this.formData.length; i++) {
+        const newItem = this.renderArrayFieldItem(
+          field,
+          this.formData[i],
+          i - 1,
+          itemSchema,
+          true);
+
+        newItemsField.appendChild(newItem);
+      }
+
+      this.formData = this.formData.filter((_, i) => i !== index);
+
+      field.replaceChild(newItemsField, itemsField);
+
+      if (this.onChange) {
+        this.onChange(this.formData);
+      }
+    };
+  }
+
+  renderRemoveButton(field, index) {
+    const button = document.createElement('button');
+    button.className = 'btn-remove btn-form-tools';
+    button.disabled = this.disabled || this.readonly;
+    button.onclick = this.onDropIndexClick(field, index);
+
+    return button;
+  }
+
+  onAddClick(field) {
+    return (event) => {
+      const schema = this.schema;
+      const definitions = this.definitions;
+      const index = this.formData.length;
+      const itemsField = field.querySelector('div.array-items');
+
+      event.preventDefault();
+
+      let itemSchema = schema.items;
+      if (SchemaUtils.isFixedItems(schema) &&
+        this.allowAdditionalItems(schema)) {
+        itemSchema = schema.additionalItems;
+      }
+
+      const value = SchemaUtils.getDefaultFormState(
+        itemSchema,
+        // eslint-disable-next-line no-undefined
+        undefined,
+        definitions
+      );
+
+      this.formData.push(value);
+
+      const itemField = this.renderArrayFieldItem(
         field,
-        this.formData[i],
-        i - 1,
+        value,
+        index,
         itemSchema,
         true);
 
-      newItemsField.appendChild(newItem);
-    }
+      itemsField.appendChild(itemField);
 
-    this.formData = this.formData.filter((_, i) => i !== index);
+      if (this.onChange) {
+        this.onChange(this.formData);
+      }
+    };
+  }
 
-    field.replaceChild(newItemsField, itemsField);
+  renderAddButton(field) {
+    const button = document.createElement('button');
+    button.className = 'btn-add btn-form-tools';
+    button.disabled = this.disabled || this.readonly;
+    button.onclick = this.onAddClick(field);
 
-    if (this.onChange) {
-      this.onChange(this.formData);
-    }
-  };
-};
+    return button;
+  }
 
-ArrayField.prototype.renderRemoveButton = function(field, index) {
-  const button = document.createElement('button');
-  button.className = 'btn-remove btn-form-tools';
-  button.disabled = this.disabled || this.readonly;
-  button.onclick = this.onDropIndexClick(field, index);
-
-  return button;
-};
-
-ArrayField.prototype.onAddClick = function(field) {
-  return (event) => {
-    const schema = this.schema;
-    const definitions = this.definitions;
-    const index = this.formData.length;
-    const itemsField = field.querySelector('div.array-items');
-
-    event.preventDefault();
-
-    let itemSchema = schema.items;
-    if (SchemaUtils.isFixedItems(schema) &&
-      this.allowAdditionalItems(schema)) {
-      itemSchema = schema.additionalItems;
-    }
-
-    const value = SchemaUtils.getDefaultFormState(
-      itemSchema,
-      // eslint-disable-next-line no-undefined
-      undefined,
-      definitions
-    );
-
-    this.formData.push(value);
-
-    const itemField = this.renderArrayFieldItem(
-      field,
-      value,
-      index,
-      itemSchema,
-      true);
-
-    itemsField.appendChild(itemField);
-
-    if (this.onChange) {
-      this.onChange(this.formData);
-    }
-  };
-};
-
-ArrayField.prototype.renderAddButton = function(field) {
-  const button = document.createElement('button');
-  button.className = 'btn-add btn-form-tools';
-  button.disabled = this.disabled || this.readonly;
-  button.onclick = this.onAddClick(field);
-
-  return button;
-};
-
-ArrayField.prototype.renderArrayFieldItem =
-  function(field, itemData, index, itemSchema, canRemove) {
+  renderArrayFieldItem(field, itemData, index, itemSchema, canRemove) {
     const item = document.createElement('div');
     const id = this.itemFieldId(index);
     item.className = 'array-item-row';
@@ -262,157 +259,157 @@ ArrayField.prototype.renderArrayFieldItem =
     childField.appendChild(child);
 
     return item;
-  };
-
-
-ArrayField.prototype.renderArrayFieldset = function() {
-  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-  const description = this.schema.description;
-
-  let title = this.schema.title ? this.schema.title : this.name;
-  title = Utils.escapeHtml(title);
-
-  const field = document.createElement('fieldset');
-
-  field.innerHTML =
-    `${(title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
-    (description ?
-      `<p id="${id}__description" class="field-description">
-      ${Utils.escapeHtml(description)}</p>` :
-      '')
-    }<div class="array-items"></div>`;
-
-  return field;
-};
-
-ArrayField.prototype.renderNormalArray = function() {
-  const schema = this.schema;
-  const definitions = this.definitions;
-  const items = this.formData;
-  const itemSchema = SchemaUtils.retrieveSchema(schema.items,
-                                                definitions,
-                                                items);
-  const field = this.renderArrayFieldset();
-  const itemsField = field.querySelector('div.array-items');
-
-  items.forEach((item, index) => {
-    const itemField = this.renderArrayFieldItem(
-      field,
-      item,
-      index,
-      itemSchema,
-      true);
-    itemsField.appendChild(itemField);
-  });
-
-  if (this.isAddable(items)) {
-    const button = this.renderAddButton(field);
-    field.appendChild(button);
   }
 
-  return field;
-};
+  renderArrayFieldset() {
+    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+    const description = this.schema.description;
 
-ArrayField.prototype.renderFixedArray = function() {
-  const schema = this.schema;
-  const definitions = this.definitions;
-  const field = this.renderArrayFieldset();
-  const itemsField = field.querySelector('div.array-items');
+    let title = this.schema.title ? this.schema.title : this.name;
+    title = Utils.escapeHtml(title);
 
-  let items = this.formData;
-  const itemSchemas = schema.items.map((item, index) => {
-    return SchemaUtils.retrieveSchema(item, definitions, items[index]);
-  });
+    const field = document.createElement('fieldset');
 
-  if (!items || items.length < itemSchemas.length) {
-    items = items || [];
-    items = items.concat(new Array(itemSchemas.length - items.length));
+    field.innerHTML =
+      `${(title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
+      (description ?
+        `<p id="${id}__description" class="field-description">
+        ${Utils.escapeHtml(description)}</p>` :
+        '')
+      }<div class="array-items"></div>`;
+
+    return field;
   }
 
-  items.forEach((item, index) => {
-    const additional = index >= itemSchemas.length;
-    const canRemove = additional;
-    const itemSchema = additional ?
-      SchemaUtils.retrieveSchema(schema.additionalItems, definitions) :
-      itemSchemas[index];
+  renderNormalArray() {
+    const schema = this.schema;
+    const definitions = this.definitions;
+    const items = this.formData;
+    const itemSchema = SchemaUtils.retrieveSchema(schema.items,
+                                                  definitions,
+                                                  items);
+    const field = this.renderArrayFieldset();
+    const itemsField = field.querySelector('div.array-items');
 
-    const itemField = this.renderArrayFieldItem(
-      field,
-      item,
-      index,
-      itemSchema,
-      canRemove);
-    itemsField.appendChild(itemField);
-  });
+    items.forEach((item, index) => {
+      const itemField = this.renderArrayFieldItem(
+        field,
+        item,
+        index,
+        itemSchema,
+        true);
+      itemsField.appendChild(itemField);
+    });
 
-  if (this.allowAdditionalItems() && this.isAddable(items)) {
-    const button = this.renderAddButton(field);
-    field.appendChild(button);
+    if (this.isAddable(items)) {
+      const button = this.renderAddButton(field);
+      field.appendChild(button);
+    }
+
+    return field;
   }
 
-  return field;
-};
+  renderFixedArray() {
+    const schema = this.schema;
+    const definitions = this.definitions;
+    const field = this.renderArrayFieldset();
+    const itemsField = field.querySelector('div.array-items');
 
-ArrayField.prototype.renderMultiSelect = function() {
-  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-  const items = this.formData;
-  const schema = this.schema;
-  const definitions = this.definitions;
-  const itemsSchema = SchemaUtils.retrieveSchema(schema.items,
-                                                 definitions,
-                                                 items);
-  const enumOptions = SchemaUtils.optionsList(itemsSchema);
-  const all = enumOptions.map(({value}) => value);
+    let items = this.formData;
+    const itemSchemas = schema.items.map((item, index) => {
+      return SchemaUtils.retrieveSchema(item, definitions, items[index]);
+    });
 
-  const field = document.createElement('fieldset');
-  field.className = 'checkboxes';
+    if (!items || items.length < itemSchemas.length) {
+      items = items || [];
+      items = items.concat(new Array(itemSchemas.length - items.length));
+    }
 
-  enumOptions.forEach((option, index) => {
-    const checked = items.includes(option.value);
-    const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
+    items.forEach((item, index) => {
+      const additional = index >= itemSchemas.length;
+      const canRemove = additional;
+      const itemSchema = additional ?
+        SchemaUtils.retrieveSchema(schema.additionalItems, definitions) :
+        itemSchemas[index];
 
-    const div = document.createElement('div');
+      const itemField = this.renderArrayFieldItem(
+        field,
+        item,
+        index,
+        itemSchema,
+        canRemove);
+      itemsField.appendChild(itemField);
+    });
 
-    div.className = `checkbox ${disabledCls}`;
+    if (this.allowAdditionalItems() && this.isAddable(items)) {
+      const button = this.renderAddButton(field);
+      field.appendChild(button);
+    }
 
-    div.innerHTML = `
-    <input
-      type="checkbox"
-      id="${id}_${index}"
-      ${checked ? 'checked' : ''}
-      ${this.disabled || this.readonly ? 'disabled' : ''}
-    />
-    <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
-    `;
-
-    const input = div.querySelector('input');
-    input.onchange = this.onSelectChange(option.value, all);
-
-    field.appendChild(div);
-  });
-
-  return field;
-};
-
-ArrayField.prototype.render = function() {
-  const schema = this.schema;
-
-  if (!schema.hasOwnProperty('items')) {
-    return new UnsupportedField(schema).render();
-  }
-  if (SchemaUtils.isFixedItems(schema)) {
-    return this.renderFixedArray();
-  }
-  /*
-  if (SchemaUtils.isFilesArray(schema, this.uiSchema, this.definitions)) {
-    return this.renderFiles();
-  }
-  */
-  if (SchemaUtils.isMultiSelect(schema, this.definitions)) {
-    return this.renderMultiSelect();
+    return field;
   }
 
-  return this.renderNormalArray();
-};
+  renderMultiSelect() {
+    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+    const items = this.formData;
+    const schema = this.schema;
+    const definitions = this.definitions;
+    const itemsSchema = SchemaUtils.retrieveSchema(schema.items,
+                                                   definitions,
+                                                   items);
+    const enumOptions = SchemaUtils.optionsList(itemsSchema);
+    const all = enumOptions.map(({value}) => value);
+
+    const field = document.createElement('fieldset');
+    field.className = 'checkboxes';
+
+    enumOptions.forEach((option, index) => {
+      const checked = items.includes(option.value);
+      const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
+
+      const div = document.createElement('div');
+
+      div.className = `checkbox ${disabledCls}`;
+
+      div.innerHTML = `
+      <input
+        type="checkbox"
+        id="${id}_${index}"
+        ${checked ? 'checked' : ''}
+        ${this.disabled || this.readonly ? 'disabled' : ''}
+      />
+      <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
+      `;
+
+      const input = div.querySelector('input');
+      input.onchange = this.onSelectChange(option.value, all);
+
+      field.appendChild(div);
+    });
+
+    return field;
+  }
+
+  render() {
+    const schema = this.schema;
+
+    if (!schema.hasOwnProperty('items')) {
+      return new UnsupportedField(schema).render();
+    }
+    if (SchemaUtils.isFixedItems(schema)) {
+      return this.renderFixedArray();
+    }
+    /*
+    if (SchemaUtils.isFilesArray(schema, this.uiSchema, this.definitions)) {
+      return this.renderFiles();
+    }
+    */
+    if (SchemaUtils.isMultiSelect(schema, this.definitions)) {
+      return this.renderMultiSelect();
+    }
+
+    return this.renderNormalArray();
+  }
+}
 
 module.exports = ArrayField;

@@ -15,21 +15,21 @@
 
 const Utils = require('../utils');
 
-function UnsupportedField(schema) {
-  // XXX render json as string so dev can inspect faulty subschema
-  this.schema = schema;
+class UnsupportedField {
+  constructor(schema) {
+    // XXX render json as string so dev can inspect faulty subschema
+    this.schema = schema;
+  }
 
-  return this;
+  render() {
+    const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
+    const field = document.createElement('div');
+
+    field.className = 'unsupported-field';
+    field.innerHTML = `Unsupported field schema ${schema}.`;
+
+    return field;
+  }
 }
-
-UnsupportedField.prototype.render = function() {
-  const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
-  const field = document.createElement('div');
-
-  field.className = 'unsupported-field';
-  field.innerHTML = `Unsupported field schema ${schema}.`;
-
-  return field;
-};
 
 module.exports = UnsupportedField;

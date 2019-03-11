@@ -12,39 +12,38 @@ const RuleUtils = require('./RuleUtils');
  * @param {Rule} rule
  * @param {ThingDescription} thing
  */
-function DevicePropertyBlock(ruleArea, onPresentationChange, onRuleChange,
-                             thing) {
-  RulePartBlock.call(this, ruleArea, onPresentationChange, onRuleChange,
-                     thing.name, RuleUtils.icon(thing));
-  this.thing = thing;
+class DevicePropertyBlock extends RulePartBlock {
+  constructor(ruleArea, onPresentationChange, onRuleChange, thing) {
+    super(ruleArea, onPresentationChange, onRuleChange, thing.name,
+          RuleUtils.icon(thing));
+    this.thing = thing;
 
-  const propertyInfo = this.elt.querySelector('.rule-part-info');
-  this.propertySelect = new PropertySelect(this, propertyInfo, thing);
-}
-
-DevicePropertyBlock.prototype = Object.create(RulePartBlock.prototype);
-
-/**
- * On mouse up during a drag
- */
-DevicePropertyBlock.prototype.onUp = function(clientX, clientY) {
-  const originalRole = this.role;
-  RulePartBlock.prototype.onUp.call(this, clientX, clientY);
-  if (this.role !== originalRole) {
-    this.propertySelect.updateOptionsForRole(this.role);
-    this.rulePart = null;
-    this.onRuleChange();
+    const propertyInfo = this.elt.querySelector('.rule-part-info');
+    this.propertySelect = new PropertySelect(this, propertyInfo, thing);
   }
-};
 
-/**
- * Initialize based on an existing partial rule
- */
-DevicePropertyBlock.prototype.setRulePart = function(rulePart) {
-  RulePartBlock.prototype.setRulePart.call(this, rulePart);
+  /**
+   * On mouse up during a drag
+   */
+  onUp(clientX, clientY) {
+    const originalRole = this.role;
+    super.onUp(clientX, clientY);
+    if (this.role !== originalRole) {
+      this.propertySelect.updateOptionsForRole(this.role);
+      this.rulePart = null;
+      this.onRuleChange();
+    }
+  }
 
-  this.propertySelect.updateOptionsForRole(this.role);
-  this.propertySelect.selectByRuleFragment(rulePart);
-};
+  /**
+   * Initialize based on an existing partial rule
+   */
+  setRulePart(rulePart) {
+    super.setRulePart(rulePart);
+
+    this.propertySelect.updateOptionsForRole(this.role);
+    this.propertySelect.selectByRuleFragment(rulePart);
+  }
+}
 
 module.exports = DevicePropertyBlock;

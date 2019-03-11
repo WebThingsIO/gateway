@@ -12,29 +12,31 @@
 
 const Passwords = require('../passwords');
 
-const User = function(id, email, password, name) {
-  this.id = id;
-  this.email = email;
-  this.password = password; // Hashed
-  this.name = name;
-};
+class User {
+  constructor(id, email, password, name) {
+    this.id = id;
+    this.email = email;
+    this.password = password; // Hashed
+    this.name = name;
+  }
 
-User.generate = async (email, rawPassword, name) => {
-  const hash = await Passwords.hash(rawPassword);
-  return new User(null, email, hash, name);
-};
+  static async generate(email, rawPassword, name) {
+    const hash = await Passwords.hash(rawPassword);
+    return new User(null, email, hash, name);
+  }
 
-/**
- * Get a JSON description for this user.
- *
- * @return {Object} JSON description of user.
- */
-User.prototype.getDescription = function() {
-  return {
-    id: this.id,
-    email: this.email,
-    name: this.name,
-  };
-};
+  /**
+   * Get a JSON description for this user.
+   *
+   * @return {Object} JSON description of user.
+   */
+  getDescription() {
+    return {
+      id: this.id,
+      email: this.email,
+      name: this.name,
+    };
+  }
+}
 
 module.exports = User;

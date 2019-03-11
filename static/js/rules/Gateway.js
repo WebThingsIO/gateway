@@ -9,23 +9,25 @@ const API = require('../api');
 /**
  * A remote Gateway
  */
-function Gateway() {
-  this.things = null;
-}
+class Gateway {
+  constructor() {
+    this.things = null;
+  }
 
-/**
- * Read the list of Things managed by the gateway
- * @return {Promise<Array<ThingDescription>>}
- */
-Gateway.prototype.readThings = function() {
-  return fetch('/things', {
-    headers: API.headers(),
-  }).then((res) => {
-    return res.json();
-  }).then((things) => {
-    this.things = things.sort((a, b) => a.layoutIndex - b.layoutIndex);
-    return things;
-  });
-};
+  /**
+   * Read the list of Things managed by the gateway
+   * @return {Promise<Array<ThingDescription>>}
+   */
+  readThings() {
+    return fetch('/things', {
+      headers: API.headers(),
+    }).then((res) => {
+      return res.json();
+    }).then((things) => {
+      this.things = things.sort((a, b) => a.layoutIndex - b.layoutIndex);
+      return things;
+    });
+  }
+}
 
 module.exports = Gateway;

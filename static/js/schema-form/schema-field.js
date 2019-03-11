@@ -25,104 +25,103 @@ let ObjectField;
 // eslint-disable-next-line prefer-const
 let ArrayField;
 
-function SchemaField(
-  schema,
-  formData,
-  idSchema,
-  name,
-  definitions,
-  onChange,
-  required = false,
-  disabled = false,
-  readonly = false) {
-  this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
-                                                    definitions,
-                                                    formData);
-  this.schema = schema;
-  this.formData = formData;
-  this.idSchema = idSchema;
-  this.name = name;
-  this.definitions = definitions;
-  this.onChange = onChange;
-  this.required = required;
-  this.disabled = disabled;
-  this.readonly = readonly;
+class SchemaField {
+  constructor(schema,
+              formData,
+              idSchema,
+              name,
+              definitions,
+              onChange,
+              required = false,
+              disabled = false,
+              readonly = false) {
+    this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
+                                                      definitions,
+                                                      formData);
+    this.schema = schema;
+    this.formData = formData;
+    this.idSchema = idSchema;
+    this.name = name;
+    this.definitions = definitions;
+    this.onChange = onChange;
+    this.required = required;
+    this.disabled = disabled;
+    this.readonly = readonly;
+  }
 
-  return this;
+  getFieldType() {
+    const FIELD_TYPES = {
+      array: ArrayField,
+      boolean: BooleanField,
+      integer: NumberField,
+      number: NumberField,
+      object: ObjectField,
+      string: StringField,
+    };
+
+    const field = FIELD_TYPES[this.retrievedSchema.type];
+    return field ? field : UnsupportedField;
+  }
+
+  render() {
+    const fieldType = this.getFieldType();
+    const type = this.retrievedSchema.type;
+    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+    const description = this.retrievedSchema.description;
+    const classNames = [
+      'form-group',
+      'field',
+      `field-${type}`,
+    ]
+      .join(' ')
+      .trim();
+    let label = this.retrievedSchema.title || this.name;
+    if (typeof label !== 'undefined' && label !== null) {
+      label = Utils.escapeHtml(label);
+      label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
+    }
+
+    let displayLabel = true;
+    let displayDescription = true;
+    if (type === 'array') {
+      displayLabel = displayDescription =
+        SchemaUtils.isMultiSelect(this.schema, this.definitions);
+    }
+    if (type === 'object') {
+      displayLabel = displayDescription = false;
+    }
+    if (type === 'boolean') {
+      displayLabel = false;
+    }
+
+    const field = document.createElement('div');
+    field.className = classNames;
+    field.innerHTML =
+      (displayLabel && label ?
+        `<label class="control-label" htmlFor="${id}">${
+          label}</label>` :
+        '') +
+      (displayDescription && description ?
+        `<p id="${id}__description" class="field-description">${
+          Utils.escapeHtml(description)}</p>` :
+        '');
+
+    const child = new fieldType(
+      this.schema,
+      this.formData,
+      this.idSchema,
+      this.name,
+      this.definitions,
+      this.onChange,
+      this.required,
+      this.disabled,
+      this.readonly).render();
+
+    field.appendChild(child);
+
+    return field;
+  }
 }
-
-SchemaField.prototype.getFieldType = function() {
-  const FIELD_TYPES = {
-    array: ArrayField,
-    boolean: BooleanField,
-    integer: NumberField,
-    number: NumberField,
-    object: ObjectField,
-    string: StringField,
-  };
-
-  const field = FIELD_TYPES[this.retrievedSchema.type];
-  return field ? field : UnsupportedField;
-};
-
-SchemaField.prototype.render = function() {
-  const fieldType = this.getFieldType();
-  const type = this.retrievedSchema.type;
-  const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-  const description = this.retrievedSchema.description;
-  const classNames = [
-    'form-group',
-    'field',
-    `field-${type}`,
-  ]
-    .join(' ')
-    .trim();
-  let label = this.retrievedSchema.title || this.name;
-  if (typeof label !== 'undefined' && label !== null) {
-    label = Utils.escapeHtml(label);
-    label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
-  }
-
-  let displayLabel = true;
-  let displayDescription = true;
-  if (type === 'array') {
-    displayLabel = displayDescription =
-      SchemaUtils.isMultiSelect(this.schema, this.definitions);
-  }
-  if (type === 'object') {
-    displayLabel = displayDescription = false;
-  }
-  if (type === 'boolean') {
-    displayLabel = false;
-  }
-
-  const field = document.createElement('div');
-  field.className = classNames;
-  field.innerHTML =
-    (displayLabel && label ?
-      `<label class="control-label" htmlFor="${id}">${
-        label}</label>` :
-      '') +
-    (displayDescription && description ?
-      `<p id="${id}__description" class="field-description">${
-        Utils.escapeHtml(description)}</p>` :
-      '');
-
-  const child = new fieldType(
-    this.schema,
-    this.formData,
-    this.idSchema,
-    this.name,
-    this.definitions,
-    this.onChange,
-    this.required,
-    this.disabled,
-    this.readonly).render();
-
-  field.appendChild(child);
-
-  return field;
-};
 
 module.exports = SchemaField;
 
