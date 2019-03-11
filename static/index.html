@@ -67,6 +67,7 @@
       <nav id="settings-menu" class="hidden settings-section">
         <ul>
           <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
+          <li class="settings-item"><a id="network-settings-link" href="/settings/network">Network</a></li>
           <li class="settings-item"><a id="user-settings-link" href="/settings/users">Users</a></li>
           <li class="settings-item"><a id="addon-settings-link" href="/settings/addons">Add-ons</a></li>
           <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters">Adapters</a></li>
@@ -118,6 +119,208 @@
           -->
 
         </ul>
+      </section>
+
+      <section id="network-settings" class="hidden settings-section">
+        <section id="network-settings-unsupported" class="hidden settings-subsection">
+          <div id="network-settings-unsupported-text">
+            Network settings are not supported for this platform.
+          </div>
+        </section>
+        <section id="network-settings-client" class="hidden settings-subsection">
+          <ul class="network-settings-list">
+            <li class="network-item">
+              <img src="/optimized-images/ethernet.svg" alt="Ethernet"
+                class="network-settings-list-item-icon" />
+              <div class="network-settings-list-item-container-2">
+                <div class="network-settings-list-item-header">Ethernet</div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-ethernet-ip">
+                </div>
+              </div>
+              <button class="network-settings-list-item-button text-button"
+                id="network-settings-list-item-ethernet-configure">
+                Configure
+              </button>
+            </li>
+            <li class="network-item">
+              <img src="/optimized-images/wifi.svg" alt="Wi-Fi"
+                class="network-settings-list-item-icon" />
+              <div class="network-settings-list-item-container-3">
+                <div class="network-settings-list-item-header">Wi-Fi</div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-wifi-ssid">
+                </div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-wifi-ip">
+                </div>
+              </div>
+              <button class="network-settings-list-item-button text-button"
+                id="network-settings-list-item-wifi-configure">
+                Configure
+              </button>
+            </li>
+          </ul>
+        </section>
+        <section id="network-settings-router" class="hidden settings-subsection">
+          <ul class="network-settings-list">
+            <li class="network-item">
+              <img src="/optimized-images/internet.svg" alt="Internet"
+                class="network-settings-list-item-icon" />
+              <div class="network-settings-list-item-container-2">
+                <div class="network-settings-list-item-header">
+                  Internet (WAN)
+                </div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-wan-ip">
+                </div>
+              </div>
+              <button class="network-settings-list-item-button text-button"
+                id="network-settings-list-item-wan-configure">
+                Configure
+              </button>
+            </li>
+            <li class="network-item">
+              <img src="/optimized-images/network.svg" alt="Home Network"
+                class="network-settings-list-item-icon" />
+              <div class="network-settings-list-item-container-2">
+                <div class="network-settings-list-item-header">
+                  Home Network (LAN)
+                </div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-lan-ip">
+                </div>
+              </div>
+              <button class="network-settings-list-item-button text-button"
+                id="network-settings-list-item-lan-configure">
+                Configure
+              </button>
+            </li>
+            <li class="network-item">
+              <img src="/optimized-images/wifi.svg" alt="Wi-Fi"
+                class="network-settings-list-item-icon" />
+              <div class="network-settings-list-item-container-2">
+                <div class="network-settings-list-item-header">
+                  Wi-Fi (WLAN)
+                </div>
+                <div class="network-settings-list-item-detail"
+                  id="network-settings-list-item-wlan-ssid">
+                </div>
+              </div>
+              <button class="network-settings-list-item-button text-button"
+                id="network-settings-list-item-wlan-configure">
+                Configure
+              </button>
+            </li>
+          </ul>
+        </section>
+        <section id="network-settings-ethernet" class="hidden settings-subsection">
+          <div class="network-settings-wrap">
+            <span>IP address</span>
+            <select id="network-settings-ethernet-mode" class="network-select">
+              <option value="dhcp">Automatic (DHCP)</option>
+              <option value="static">Manual (Static IP)</option>
+            </select>
+            <span id="network-settings-ethernet-ip-label">Static IP address</span>
+            <input id="network-settings-ethernet-ip" class="network-text"
+                   type="text">
+            <span id="network-settings-ethernet-netmask-label">Network mask</span>
+            <input id="network-settings-ethernet-netmask" class="network-text"
+                   type="text">
+            <span id="network-settings-ethernet-gateway-label">Gateway</span>
+            <input id="network-settings-ethernet-gateway" class="network-text"
+                   type="text">
+            <button id="network-settings-ethernet-done" class="network-button text-button">
+              Done
+            </button>
+          </div>
+        </section>
+        <section id="network-settings-wifi" class="hidden settings-subsection">
+          <div class="network-settings-wrap">
+            <ul id="network-settings-wifi-network-list">
+            </ul>
+            <div id="network-settings-wifi-wrap">
+              <input id="network-settings-wifi-ssid" type="hidden">
+              <input id="network-settings-wifi-password" class="network-password"
+                     type="password" placeholder="Password">
+              <input id="network-settings-wifi-show-password" class="network-checkbox"
+                     type="checkbox">
+              <label for="network-settings-wifi-show-password"></label>
+              <span>Show password</span>
+              <button id="network-settings-wifi-connect" class="network-button text-button">
+                Connect
+              </button>
+            </div>
+          </div>
+        </section>
+        <section id="network-settings-wan" class="hidden settings-subsection">
+          <div class="network-settings-wrap">
+            <span>Mode</span>
+            <select id="network-settings-wan-mode" class="network-select">
+              <option value="dhcp">Automatic (DHCP)</option>
+              <option value="static">Manual (Static IP)</option>
+              <option value="pppoe">Bridge (PPPoE)</option>
+            </select>
+            <span id="network-settings-wan-ip-label">IP address</span>
+            <input id="network-settings-wan-ip" class="network-text"
+                   type="text">
+            <span id="network-settings-wan-netmask-label">Network mask</span>
+            <input id="network-settings-wan-netmask" class="network-text"
+                   type="text">
+            <span id="network-settings-wan-gateway-label">Gateway</span>
+            <input id="network-settings-wan-gateway" class="network-text"
+                   type="text">
+            <span id="network-settings-wan-username-label">Username</span>
+            <input id="network-settings-wan-username" class="network-text"
+                   type="text">
+            <span id="network-settings-wan-password-label">Password</span>
+            <input id="network-settings-wan-password" class="network-password"
+                   type="password">
+            <button id="network-settings-wan-done" class="network-button text-button">
+              Done
+            </button>
+          </div>
+        </section>
+        <section id="network-settings-lan" class="hidden settings-subsection">
+          <div class="network-settings-wrap">
+            <span>Router IP address</span>
+            <input id="network-settings-lan-ip" class="network-text"
+                   type="text">
+            <span>Network mask</span>
+            <input id="network-settings-lan-netmask" class="network-text"
+                   type="text">
+            <span>DHCP server</span>
+            <input id="network-settings-lan-dhcp" class="network-checkbox"
+                   type="checkbox">
+            <label for="network-settings-lan-dhcp"></label>
+            <button id="network-settings-lan-done" class="network-button text-button">
+              Done
+            </button>
+          </div>
+        </section>
+        <section id="network-settings-wlan" class="hidden settings-subsection">
+          <div class="network-settings-wrap">
+            <span>Enable Wi-Fi</span>
+            <input id="network-settings-wlan-enable" class="network-checkbox"
+                   type="checkbox">
+            <label for="network-settings-wlan-enable"></label>
+            <span>Network name (SSID)</span>
+            <input id="network-settings-wlan-ssid" class="network-text"
+                   type="text">
+            <span>Password</span>
+            <input id="network-settings-wlan-password" class="network-password"
+                   type="password">
+            <div id="network-settings-wlan-show-password-wrap">
+              <input id="network-settings-wlan-show-password" class="network-checkbox"
+                     type="checkbox">
+              <label for="network-settings-wlan-show-password"></label>
+              <span>Show password</span>
+            </div>
+            <button id="network-settings-wlan-done" class="network-button text-button">
+              Done
+            </button>
+          </div>
+        </section>
       </section>
 
       <section id="user-settings" class="hidden settings-section">

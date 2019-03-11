@@ -1,5 +1,4 @@
 const bodyParser = require('body-parser');
-const child_process = require('child_process');
 const config = require('config');
 const Constants = require('./constants');
 const express = require('express');
@@ -141,7 +140,7 @@ function handleWiFiSetup(request, response) {
     // just adding.
     let networks = [];
     if (results) {
-      networks = results.sort((a, b) => b.quality - a.quality).map((result) => {
+      networks = results.map((result) => {
         const icon = result.encryption ? 'wifi-secure.svg' : 'wifi.svg';
         return {
           icon: `/optimized-images/${icon}`,
@@ -260,7 +259,7 @@ function scan(numAttempts = 1) {
     function tryScan() {
       attempts++;
 
-      const results = _scan();
+      const results = platform.scanWirelessNetworks();
       if (results.length > 0) {
         resolve(results);
       } else {
@@ -280,79 +279,6 @@ function scan(numAttempts = 1) {
 
     tryScan();
   });
-}
-
-function _scan() {
-  const proc = child_process.spawnSync(
-    'sudo',
-    ['iwlist', 'scanning'],
-    {encoding: 'utf8'}
-  );
-
-  if (proc.status !== 0) {
-    return [];
-  }
-
-  const lines = proc.stdout
-    .split('\n')
-    .filter((l) => l.startsWith(' '))
-    .map((l) => l.trim());
-
-  const cells = [];
-  let cell = {};
-
-  for (const line of lines) {
-    // New cell, start over
-    if (line.startsWith('Cell ')) {
-      if (cell.hasOwnProperty('ssid') &&
-          cell.hasOwnProperty('quality') &&
-          cell.hasOwnProperty('encryption') &&
-          cell.ssid.length > 0) {
-        cells.push(cell);
-      }
-
-      cell = {};
-    }
-
-    if (line.startsWith('ESSID:')) {
-      cell.ssid = line.substring(7, line.length - 1);
-    }
-
-    if (line.startsWith('Quality=')) {
-      cell.quality = parseInt(line.split(' ')[0].split('=')[1].split('/')[0]);
-    }
-
-    if (line.startsWith('Encryption key:')) {
-      cell.encryption = line.split(':')[1] === 'on';
-    }
-  }
-
-  return cells;
-}
-
-function _getKnownNetworks() {
-  const proc = child_process.spawnSync(
-    'wpa_cli',
-    ['-i', 'wlan0', 'list_networks'],
-    {encoding: 'utf8'}
-  );
-  if (proc.status !== 0) {
-    return [];
-  }
-
-  const networks = [];
-  for (const line of proc.stdout.trim().split('\n')) {
-    if (line.startsWith('network')) {
-      continue;
-    }
-
-    const ssid = line.split('\t')[1];
-    if (ssid) {
-      networks.push(ssid);
-    }
-  }
-
-  return networks;
 }
 
 /**
@@ -457,11 +383,15 @@ function waitForWiFi(maxAttempts, interval) {
     let attempts = 0;
 
     // first, see if any networks are already configured
-    const networks = _getKnownNetworks();
-    if (networks.length > 0) {
+    const status = platform.getWirelessMode();
+    if (status.options && status.options.networks &&
+        status.options.networks.length > 0) {
       // there's at least one wifi network configured. Let's wait to see if it
       // will connect.
-      console.log('wifi-setup: waitForWiFi: networks exist:', networks);
+      console.log(
+        'wifi-setup: waitForWiFi: networks exist:',
+        status.options.networks
+      );
       check();
     } else {
       // No wifi network configured. Let's skip the wait and start the setup

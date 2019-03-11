@@ -108,17 +108,12 @@
   background-image: url('../optimized-images/domain-icon.png');
 }
 
-#domain-settings-local-link {
-  background-image: url('../optimized-images/domain-icon.png');
-}
-
 #domain-settings-mozilla-link {
   background-image: url('../optimized-images/domain-icon.png');
 }
 
-
-#domain-settings-mozilla-link {
-  background-image: url('../optimized-images/domain-icon.png');
+#network-settings-link {
+  background-image: url('../optimized-images/network.svg');
 }
 
 #user-settings-link {
@@ -204,6 +199,8 @@
   padding-bottom: 0;
 }
 
+#network-settings-client ul,
+#network-settings-router ul,
 #user-settings ul,
 #adapter-settings ul,
 #addon-settings ul,
@@ -223,6 +220,17 @@
   max-height: 100%;
 }
 
+.network-settings-wrap ul {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  padding: 9.6rem 2rem;
+  max-height: 100%;
+}
+
+#network-settings-client ul li:last-child,
+#network-settings-router ul li:last-child,
+.network-settings-wrap ul li:last-child,
 #user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
@@ -232,6 +240,7 @@
   margin-bottom: 3rem;
 }
 
+#network-settings-unsupported-text,
 #no-adapters {
   text-align: center;
   position: relative;
@@ -242,6 +251,14 @@
   padding: 2rem;
   color: white;
   font-size: 2rem;
+}
+
+#no-adapters {
+  transform: translateY(calc(-50% - 4.8rem));
+}
+
+#network-settings-unsupported-text {
+  transform: translateY(calc(-50% - 9.6rem));
 }
 
 #no-adapters.hidden,
@@ -267,6 +284,8 @@
   background-repeat: no-repeat;
 }
 
+.network-item,
+.wireless-network-item,
 .user-item,
 .adapter-item,
 .addon-item,
@@ -281,6 +300,8 @@
   margin-bottom: 1rem;
 }
 
+.network-item,
+.wireless-network-item,
 .user-item,
 .adapter-item,
 .addon-item,
@@ -289,10 +310,45 @@
   background-color: #5288af;
 }
 
+.network-item {
+  display: flex;
+}
+
+.network-settings-list-item-icon {
+  height: 6rem;
+  padding: 2rem 2rem;
+}
+
+.network-settings-list-item-container-2,
+.network-settings-list-item-container-3 {
+  flex: 1;
+  height: 6rem;
+  line-height: 2rem;
+}
+
+.network-settings-list-item-container-2 {
+  margin-top: 3rem;
+}
+
+.network-settings-list-item-container-3 {
+  margin-top: 2rem;
+}
+
+.network-settings-list-item-detail {
+  color: #ccc;
+}
+
+.network-settings-list-item-button {
+  background-image: url('../optimized-images/settings-icon.png');
+  height: 4.2rem;
+  margin: 2.9rem 2rem;
+}
+
 .domain-item {
   padding: 2rem;
 }
 
+.wireless-network-item,
 .discovered-addon-item {
   background-color: #597285;
 }
@@ -395,12 +451,14 @@
   text-align: right;
 }
 
+.network-settings-list-item-button,
 .user-settings-controls button,
 .adapter-settings-controls button,
 .addon-settings-controls button {
   font-size: 1.8rem;
 }
 
+.network-settings-list-item-button,
 .user-settings-edit,
 .user-settings-remove,
 .adapter-settings-disable,
@@ -417,6 +475,7 @@
   padding-left: 4rem;
 }
 
+.network-settings-list-item-button,
 .user-settings-edit,
 .user-settings-remove,
 .adapter-settings-disable,
@@ -518,11 +577,39 @@
   padding: 2rem;
 }
 
+:root .network-checkbox,
 :root .developer-checkbox,
 :root .experiment-checkbox {
   /* original check box is pushed outside the viewport */
   position: absolute;
   left: -1000em;
+}
+
+#network-settings-wifi-show-password + label:before {
+  float: none;
+  margin: -1rem 1rem -1rem -0.5rem;
+}
+
+#network-settings-wlan-show-password-wrap span,
+#network-settings-wifi .network-settings-wrap span {
+  width: 14rem;
+  display: inline-block;
+  text-align: left;
+}
+
+#network-settings-wlan-show-password-wrap span {
+  margin-left: -2rem;
+}
+
+:root .network-checkbox + label:before {
+  content: "";
+  display: inline-block;
+  width  : 3rem;
+  height : 3rem;
+  float: left;
+  margin: 1rem;
+  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
 }
 
 :root .developer-checkbox + label:before,
@@ -537,16 +624,19 @@
   background-size: 3rem auto;
 }
 
+:root .network-checkbox:checked + label:before,
 :root .developer-checkbox:checked + label:before,
 :root .experiment-checkbox:checked + label:before {
   background-position: 0 -3rem;
 }
 
+:root .network-checkbox:disabled + label:before,
 :root .developer-checkbox:disabled + label:before,
 :root .experiment-checkbox:disabled + label:before {
   background-position: 0 -6rem;
 }
 
+:root .network-checkbox:checked:disabled + label:before,
 :root .developer-checkbox:checked:disabled + label:before,
 :root .experiment-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
@@ -646,6 +736,85 @@
   margin: 0 auto;
 }
 
+.network-settings-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  top: 50%;
+  transform: translateY(calc(-50% - 6rem));
+  position: relative;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+#network-settings-wifi .network-settings-wrap {
+  display: block;
+}
+
+#network-settings-wifi .network-settings-wrap button {
+  margin: 3rem auto;
+}
+
+#network-settings-wifi .network-settings-wrap input {
+  margin: 1rem auto;
+}
+
+.network-settings-wrap span {
+  font-size: 1.6rem;
+  color: #fff;
+  margin-top: 1.4rem;
+  text-align: right;
+}
+
+.network-button {
+  display: block;
+  grid-column: 2 / 3;
+  margin: 2rem auto 1rem 1rem;
+}
+
+.wireless-network-item {
+  text-align: left;
+  height: 7rem;
+}
+
+.wireless-network-item:hover {
+  background-color: #658196;
+}
+
+.wireless-network-info {
+  display: inline-block;
+  width: calc(100% - 8.8rem);
+  padding-left: 1.8rem;
+  text-align: left;
+  line-height: 7rem;
+}
+
+.wireless-network-info.configured {
+  line-height: 3rem;
+  padding-top: 0.5rem;
+}
+
+.wireless-network-info-connected {
+  color: #8dd35f !important;
+}
+
+.wireless-network-info-disconnected {
+  color: #ff9955 !important;
+}
+
+.wireless-network-icon {
+  position: relative;
+  right: 1.8rem;
+  top: 1.8rem;
+  height: 3.4rem;
+  float: right;
+}
+
+.network-settings-wrap input[type="password"],
+.network-settings-wrap input[type="text"],
+.network-select,
 .user-form input {
   display: block;
   width: 18rem;
@@ -661,6 +830,8 @@
   color: #ff9955;
 }
 
+.network-settings-wrap input[type="text"],
+.network-settings-wrap input[type="password"],
 .user-form input[type="text"],
 .user-form input[type="password"],
 .user-form input[type="email"] {
@@ -669,9 +840,15 @@
   border: none;
   border-radius: 0.5rem;
   padding: 0.5rem;
+}
+
+.user-form input[type="text"],
+.user-form input[type="password"],
+.user-form input[type="email"] {
   margin: 1rem auto;
 }
 
+.network-button,
 .user-form button {
   font-size: 1.6rem;
   background-color: #597285;
@@ -681,15 +858,47 @@
   color: #fff;
 }
 
+.network-button:hover,
+.network-button:active,
 .user-form button:hover,
 .user-form button:active {
   background-color: #658196;
 }
 
+.network-button::-moz-focus-inner,
 .user-form button::-moz-focus-inner {
   border: 0;
 }
 
+.network-button:disabled {
+  background-color: #597285;
+  opacity: 0.5;
+}
+
+.network-settings-wrap .hidden,
 .user-form .hidden {
-  display: none;
+  display: none !important;
+}
+
+.network-select {
+  display: inline-block;
+  text-align: left;
+  color: #fff;
+  background-color: #597285;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  height: 4rem;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url('/optimized-images/select-arrow.svg');
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  background-position: calc(100% - 1rem);
+  padding-left: 1rem;
+}
+
+#network-settings-wlan-show-password-wrap {
+  grid-column: 2 / 3;
 }

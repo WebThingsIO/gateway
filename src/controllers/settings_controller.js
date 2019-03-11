@@ -397,6 +397,14 @@ SettingsController.get('/network/wireless', (request, response) => {
   }
 });
 
+SettingsController.get('/network/wireless/networks', (request, response) => {
+  if (Platform.implemented('scanWirelessNetworks')) {
+    response.json(Platform.scanWirelessNetworks());
+  } else {
+    response.status(500).send('Wireless scanning not implemented');
+  }
+});
+
 SettingsController.put('/network/wireless', (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Missing enabled property');
@@ -415,6 +423,14 @@ SettingsController.put('/network/wireless', (request, response) => {
     }
   } else {
     response.status(500).send('Setting wireless mode not implemented');
+  }
+});
+
+SettingsController.get('/network/addresses', (request, response) => {
+  if (Platform.implemented('getNetworkAddresses')) {
+    response.json(Platform.getNetworkAddresses());
+  } else {
+    response.status(500).send('Network addresses not implemented');
   }
 });
 

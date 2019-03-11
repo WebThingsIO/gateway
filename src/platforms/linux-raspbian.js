@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+const os = require('os');
 
 /**
  * Get DHCP server status.
@@ -226,6 +227,27 @@ function getWirelessMode() {
             cipher += '+ccmp';
           }
           break;
+      }
+    }
+
+    proc = child_process.spawnSync(
+      'wpa_cli',
+      ['-i', 'wlan0', 'list_networks'],
+      {encoding: 'utf8'}
+    );
+    if (proc.status !== 0) {
+      return {enabled, mode, options};
+    }
+
+    options.networks = [];
+    for (const line of proc.stdout.trim().split('\n')) {
+      if (line.startsWith('network')) {
+        continue;
+      }
+
+      const ssid = line.split('\t')[1];
+      if (ssid) {
+        options.networks.push(ssid);
       }
     }
   }
@@ -603,6 +625,129 @@ function getMacAddress(device) {
   return fs.readFileSync(addrFile, 'utf8').trim();
 }
 
+/**
+ * Scan for visible wireless networks.
+ *
+ * @returns {Object[]} List of networks as objects:
+ *                     [
+ *                       {
+ *                         ssid: '...',
+ *                         quality: <number>,
+ *                         encryption: true|false,
+ *                       },
+ *                       ...
+ *                     ]
+ */
+function scanWirelessNetworks() {
+  const status = getWirelessMode();
+
+  const proc = child_process.spawnSync(
+    'sudo',
+    ['iwlist', 'scanning'],
+    {encoding: 'utf8'}
+  );
+
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  const lines = proc.stdout
+    .split('\n')
+    .filter((l) => l.startsWith(' '))
+    .map((l) => l.trim());
+
+  const cells = [];
+  let cell = {};
+
+  for (const line of lines) {
+    // New cell, start over
+    if (line.startsWith('Cell ')) {
+      if (cell.hasOwnProperty('ssid') &&
+          cell.hasOwnProperty('quality') &&
+          cell.hasOwnProperty('encryption') &&
+          cell.ssid.length > 0) {
+        if (status.mode === 'sta' && status.options.networks &&
+            status.options.networks.includes(cell.ssid)) {
+          cell.configured = true;
+          cell.connected = status.enabled;
+        } else {
+          cell.configured = false;
+          cell.connected = false;
+        }
+
+        cells.push(cell);
+      }
+
+      cell = {};
+    }
+
+    if (line.startsWith('ESSID:')) {
+      cell.ssid = line.substring(7, line.length - 1);
+    }
+
+    if (line.startsWith('Quality=')) {
+      cell.quality = parseInt(line.split(' ')[0].split('=')[1].split('/')[0]);
+    }
+
+    if (line.startsWith('Encryption key:')) {
+      cell.encryption = line.split(':')[1] === 'on';
+    }
+  }
+
+  return cells.sort((a, b) => b.quality - a.quality);
+}
+
+/**
+ * Get the current addresses for wifi, LAN, and WAN.
+ *
+ * @returns {Object} Address object:
+ *                   {
+ *                     wan: '...',
+ *                     lan: '...',
+ *                     wlan: {
+ *                       ip: '...',
+ *                       ssid: '...',
+ *                     }
+ *                   }
+ */
+function getNetworkAddresses() {
+  const result = {
+    wan: '',
+    lan: '',
+    wlan: {
+      ip: '',
+      ssid: '',
+    },
+  };
+
+  const interfaces = os.networkInterfaces();
+
+  if (interfaces.eth0) {
+    for (const addr of interfaces.eth0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.lan = addr.address;
+        break;
+      }
+    }
+  }
+
+  if (interfaces.wlan0) {
+    for (const addr of interfaces.wlan0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wlan.ip = addr.address;
+        break;
+      }
+    }
+  }
+
+  const status = getWirelessMode();
+  if (status.enabled && status.options) {
+    result.wlan.ssid = status.options.ssid;
+  }
+
+  return result;
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -613,10 +758,12 @@ module.exports = {
   getMacAddress,
   getMdnsServerStatus,
   setMdnsServerStatus,
+  getNetworkAddresses,
   getSshServerStatus,
   setSshServerStatus,
   getWirelessMode,
   setWirelessMode,
   restartGateway,
   restartSystem,
+  scanWirelessNetworks,
 };

@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const parse = require('csv-parse/lib/sync');
 
 /**
@@ -367,6 +368,7 @@ function getWirelessMode() {
     return {enabled, mode, options};
   }
 
+  const networks = [];
   for (const [key, value] of Object.entries(result.pairs)) {
     // discard wireless.wifi-iface[0]=wifi-iface
     if (key.split('.').length <= 2) {
@@ -380,7 +382,15 @@ function getWirelessMode() {
       enabled = enabled && (value === '0');
     } else {
       options[opt] = value;
+
+      if (opt === 'ssid') {
+        networks.push(value);
+      }
     }
+  }
+
+  if (mode === 'sta') {
+    options.networks = networks;
   }
 
   return {enabled, mode, options};
@@ -672,6 +682,154 @@ function getMacAddress(device) {
   return fs.readFileSync(addrFile, 'utf8').trim();
 }
 
+/**
+ * Scan for visible wireless networks.
+ *
+ * @returns {Object[]} List of networks as objects:
+ *                     [
+ *                       {
+ *                         ssid: '...',
+ *                         quality: <number>,
+ *                         encryption: true|false,
+ *                       },
+ *                       ...
+ *                     ]
+ */
+function scanWirelessNetworks() {
+  const status = getWirelessMode();
+
+  const proc = child_process.spawnSync(
+    'iwlist',
+    ['scanning'],
+    {encoding: 'utf8'}
+  );
+
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  const lines = proc.stdout
+    .split('\n')
+    .filter((l) => l.startsWith(' '))
+    .map((l) => l.trim());
+
+  const cells = [];
+  let cell = {};
+
+  for (const line of lines) {
+    // New cell, start over
+    if (line.startsWith('Cell ')) {
+      if (cell.hasOwnProperty('ssid') &&
+          cell.hasOwnProperty('quality') &&
+          cell.hasOwnProperty('encryption') &&
+          cell.ssid.length > 0) {
+        if (status.mode === 'sta' && status.options.networks &&
+            status.options.networks.includes(cell.ssid)) {
+          cell.configured = true;
+          cell.connected = status.enabled;
+        } else {
+          cell.configured = false;
+          cell.connected = false;
+        }
+
+        cells.push(cell);
+      }
+
+      cell = {};
+    }
+
+    if (line.startsWith('ESSID:')) {
+      cell.ssid = line.substring(7, line.length - 1);
+    }
+
+    if (line.startsWith('Quality=')) {
+      cell.quality = parseInt(line.split(' ')[0].split('=')[1].split('/')[0]);
+    }
+
+    if (line.startsWith('Encryption key:')) {
+      cell.encryption = line.split(':')[1] === 'on';
+    }
+  }
+
+  return cells.sort((a, b) => b.quality - a.quality);
+}
+
+/**
+ * Get the current addresses for wifi, LAN, and WAN.
+ *
+ * @returns {Object} Address object:
+ *                   {
+ *                     wan: '...',
+ *                     lan: '...',
+ *                     wlan: {
+ *                       ip: '...',
+ *                       ssid: '...',
+ *                     }
+ *                   }
+ */
+function getNetworkAddresses() {
+  const result = {
+    wan: '',
+    lan: '',
+    wlan: {
+      ip: '',
+      ssid: '',
+    },
+  };
+
+  const interfaces = os.networkInterfaces();
+  const res = uciShow('network.lan');
+  if (!res.success) {
+    return res;
+  }
+
+  const lanType = res.pairs['network.lan.type'];
+  let lanIface = res.pairs['network.lan.ifname'];
+  if (lanType && lanType[1] === 'bridge') {
+    lanIface = 'br-lan';
+  }
+
+  if (lanIface && interfaces[lanIface]) {
+    for (const addr of interfaces[lanIface]) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.lan = addr.address;
+        break;
+      }
+    }
+  }
+
+  const wanType = res.pairs['network.wan.type'];
+  let wanIface = res.pairs['network.wan.ifname'];
+  if (wanType && wanType[1] === 'bridge') {
+    wanIface = 'br-wan';
+  }
+
+  if (wanIface && interfaces[wanIface]) {
+    for (const addr of interfaces[wanIface]) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wan = addr.address;
+        break;
+      }
+    }
+  }
+
+  if (interfaces.wlan0) {
+    for (const addr of interfaces.wlan0) {
+      if (!addr.internal && addr.family === 'IPv4') {
+        result.wlan.ip = addr.address;
+        break;
+      }
+    }
+  }
+
+  const status = getWirelessMode();
+  if (status.enabled && status.options) {
+    result.wlan.ssid = status.options.ssid;
+  }
+
+  return result;
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -682,6 +840,7 @@ module.exports = {
   getMacAddress,
   getMdnsServerStatus,
   setMdnsServerStatus,
+  getNetworkAddresses,
   getSshServerStatus,
   setSshServerStatus,
   getWanMode,
@@ -690,4 +849,5 @@ module.exports = {
   setWirelessMode,
   restartGateway,
   restartSystem,
+  scanWirelessNetworks,
 };
