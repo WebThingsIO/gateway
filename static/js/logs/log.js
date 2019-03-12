@@ -245,6 +245,7 @@ class Log {
     this.removeAll('.logs-graph-line');
     this.removeAll('.logs-graph-fill');
     this.removeAll('.logs-graph-label');
+    this.removeAll('.logs-graph-tick');
 
 
     this.progress.setAttribute('width', 0);
@@ -286,7 +287,6 @@ class Log {
       }
       points.push({x, y});
     }
-    console.log('so I drew', points.length, 'points');
 
     if (points.length > 0) {
       // Make sure the data extends to the present
@@ -338,23 +338,46 @@ class Log {
     this.graph.appendChild(label);
 
     let xLabel = this.floorDate(new Date(this.start.getTime())).getTime();
-    const oneDayMs = 24 * 60 * 60 * 1000;
-    if (xLabel < this.start.getTime()) {
-      xLabel += oneDayMs;
-    }
-    while (xLabel < this.end.getTime()) {
-      const text = new Date(xLabel).getDate();
-      label = this.makeText(text, this.timeToX(xLabel),
-                            this.height - this.margin, 'middle', 'hanging');
-      label.classList.add('logs-graph-label');
-      this.graph.appendChild(label);
+    const oneHourMs = 60 * 60 * 1000;
+    let i = 0;
+    const hourWidth = this.graphWidth / (this.end.getTime() -
+                                         this.start.getTime()) * oneHourMs;
 
-      xLabel += oneDayMs;
+    while (xLabel < this.end.getTime()) {
+      if (xLabel > this.start.getTime()) {
+        const x = this.timeToX(xLabel);
+        let tickHeight = 5;
+        if (i % 24 === 0) {
+          // Big label of date
+          const text = new Date(xLabel).getDate();
+          label = this.makeText(text, x,
+                                this.height - this.margin, 'middle', 'hanging');
+          label.classList.add('logs-graph-label');
+          this.graph.appendChild(label);
+          tickHeight *= 2;
+        } else if (hourWidth > 24) {
+          // Big label of hour
+          const text = `${new Date(xLabel).getHours()}:00`;
+          label = this.makeText(text, x,
+                                this.height - this.margin, 'middle', 'hanging');
+          label.classList.add('logs-graph-label');
+          this.graph.appendChild(label);
+        }
+        // Make a tick
+        const tick = this.makePath([
+          {x, y: this.height - this.margin},
+          {x, y: this.height - this.margin - tickHeight},
+        ]);
+        tick.classList.add('logs-graph-tick');
+        this.graph.appendChild(tick);
+      }
+
+      xLabel += oneHourMs;
+      i += 1;
     }
   }
 
   removeAll(selector) {
-    console.log('removeAll', selector);
     this.graph.querySelectorAll(selector).forEach((child) => {
       child.parentNode.removeChild(child);
     });
