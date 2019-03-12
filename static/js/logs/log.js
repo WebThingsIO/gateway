@@ -531,6 +531,10 @@ class Log {
     if (this.pointerDown) {
       this.pointerDown = false;
       const dragEnd = this.constrainTime(this.xToTime(event.clientX));
+      if (Math.abs(dragEnd - this.dragStart) < 30 * 1000) {
+        // Drag was way too small (<30s)
+        return;
+      }
       if (this.dragStart < dragEnd) {
         this.start = new Date(this.dragStart);
         this.end = new Date(dragEnd);
