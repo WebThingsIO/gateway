@@ -64,7 +64,11 @@
 
 .logs-graph-line {
   stroke: white;
-  stroke-width: 1px;
+  fill: none;
+}
+
+.logs-graph-tick {
+  stroke: rgba(255, 255, 255, 0.8);
   fill: none;
 }
 
