@@ -276,10 +276,23 @@ class Log {
       }
       const x = this.timeToX(raw.time);
       const y = yScale(raw.value);
+
+      if (points.length === 0) {
+        let value = y;
+        if (i > 0) {
+          value = yScale(this.rawPoints[i - 1].value);
+        }
+        // Make sure the data extends to the past
+        points.push({
+          x: this.xStart,
+          y: value,
+        });
+      }
+
       // Add a point so that the value steps down instead of gradually
       // decreasing
-      if (points.length > 0 && (this.property.type === 'boolean' ||
-          this.property.type === 'integer')) {
+      if (this.property.type === 'boolean' ||
+          this.property.type === 'integer') {
         points.push({
           x,
           y: points[points.length - 1].y,
