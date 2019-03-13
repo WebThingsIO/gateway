@@ -11,6 +11,7 @@
 'use strict';
 
 const page = require('page');
+const Alarm = require('../schema-impl/capability/alarm');
 const API = require('../api');
 const App = require('../app');
 const BinarySensor = require('../schema-impl/capability/binary-sensor');
@@ -158,6 +159,9 @@ const FloorplanScreen = {
               break;
             case 'TemperatureSensor':
               thing = new TemperatureSensor(thingModel, description, format);
+              break;
+            case 'Alarm':
+              thing = new Alarm(thingModel, description, format);
               break;
             default:
               thing = new Thing(thingModel, description, format);

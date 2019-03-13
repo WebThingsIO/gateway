@@ -128,6 +128,10 @@ class NewThing {
           type = 'Temperature Sensor';
           cls = cls || 'temperature-sensor';
           break;
+        case 'Alarm':
+          type = 'Alarm';
+          cls = cls || 'alarm';
+          break;
         case 'Custom':
           type = 'Custom Thing';
           cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
@@ -443,6 +447,9 @@ class NewThing {
       case 'TemperatureSensor':
         cls = 'temperature-sensor';
         break;
+      case 'Alarm':
+        cls = 'alarm';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -466,7 +473,8 @@ class NewThing {
       'push-button',
       'video-camera',
       'camera',
-      'temperature-sensor'
+      'temperature-sensor',
+      'alarm'
     );
 
     if (cls) {

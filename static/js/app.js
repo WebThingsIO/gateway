@@ -371,6 +371,7 @@ Speech = require('./speech');
 
 // load web components
 require('@webcomponents/webcomponentsjs/webcomponents-bundle');
+require('./components/capability/alarm');
 require('./components/capability/binary-sensor');
 require('./components/capability/camera');
 require('./components/capability/color-control');
@@ -390,6 +391,7 @@ require('./components/capability/temperature-sensor');
 require('./components/capability/video-camera');
 require('./components/icon/custom');
 require('./components/property/action');
+require('./components/property/alarm');
 require('./components/property/boolean');
 require('./components/property/brightness');
 require('./components/property/color');

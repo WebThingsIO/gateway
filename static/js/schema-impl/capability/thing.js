@@ -11,6 +11,7 @@
 'use strict';
 
 const ActionDetail = require('../property/action');
+const AlarmDetail = require('../property/alarm');
 const API = require('../../api');
 const App = require('../../app');
 const BooleanDetail = require('../property/boolean');
@@ -184,6 +185,9 @@ class Thing {
             break;
           case 'TemperatureProperty':
             detail = new TemperatureDetail(this, name, property);
+            break;
+          case 'AlarmProperty':
+            detail = new AlarmDetail(this, name, property);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {
