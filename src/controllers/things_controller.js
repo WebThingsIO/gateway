@@ -368,12 +368,15 @@ ThingsController.put('/:thingId', async (request, response) => {
 ThingsController.delete('/:thingId', (request, response) => {
   const thingId = request.params.thingId;
   AddonManager.removeThing(thingId).
-    then(() => {
-      Things.removeThing(thingId).then(() => {
-        console.log(`Successfully deleted ${thingId} from database.`);
+    // removedThingId isn't necessarily the same as thingId (for example,
+    // with the ZWave adapter, the user could request to remove one thing,
+    // but actually push the button on a different thing).
+    then((removedThingId) => {
+      Things.removeThing(removedThingId).then(() => {
+        console.log(`Successfully deleted ${removedThingId} from database.`);
         response.status(204).send();
       }).catch((e) => {
-        response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
+        response.status(500).send(`Failed to remove thing ${removedThingId}: ${e}`);
       });
     }).catch((e) => {
       response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
