@@ -9,7 +9,7 @@
 'use strict';
 
 const App = require('./app');
-const AssistantScreen = require('./assistant');
+const AssistantScreen = require('./views/assistant');
 const SpeakToMe = require('speaktome-api/build/stm_web.min');
 
 // eslint-disable-next-line no-unused-vars

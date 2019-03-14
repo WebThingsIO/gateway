@@ -356,17 +356,17 @@ module.exports = App;
 
 // avoid circular dependency
 API = require('./api');
-AssistantScreen = require('./assistant');
+AssistantScreen = require('./views/assistant');
 GatewayModel = require('./models/gateway-model');
-ThingsScreen = require('./things');
-AddThingScreen = require('./add-thing');
-Menu = require('./menu');
+ThingsScreen = require('./views/things');
+AddThingScreen = require('./views/add-thing');
+Menu = require('./views/menu');
 ContextMenu = require('./context-menu');
-SettingsScreen = require('./settings');
-FloorplanScreen = require('./floorplan');
+SettingsScreen = require('./views/settings');
+FloorplanScreen = require('./views/floorplan');
 Router = require('./router');
-RulesScreen = require('./rules-screen');
-RuleScreen = require('./rule-screen');
+RulesScreen = require('./views/rules-screen');
+RuleScreen = require('./views/rule-screen');
 Speech = require('./speech');
 
 // load web components
