@@ -121,12 +121,12 @@ const pluginsWeb = [
   new HtmlWebpackPlugin({
     template: 'src/views/local-token-service.handlebars',
     filename: '../views/local-token-service.handlebars',
-    chunks: ['localtoken.js'],
+    chunks: ['local-token.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'src/views/tunnel-setup.handlebars',
     filename: '../views/tunnel-setup.handlebars',
-    chunks: ['setup_subdomain.js'],
+    chunks: ['setup-subdomain.js'],
   }),
 ];
 
@@ -136,8 +136,11 @@ const webpackWeb = {
     'create-user.js': ['./static/js/create-user.js'],
     'login.js': ['./static/js/check-user.js', './static/js/login.js'],
     'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
-    'localtoken.js': ['./static/js/check-user.js', './static/js/localtoken.js'],
-    'setup_subdomain.js': ['./static/js/setup_subdomain.js'],
+    'local-token.js': [
+      './static/js/check-user.js',
+      './static/js/local-token.js',
+    ],
+    'setup-subdomain.js': ['./static/js/setup-subdomain.js'],
     buildCss: [
       // css for static/index.html
       './static/css/app.css',
