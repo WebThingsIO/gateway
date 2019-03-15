@@ -50,7 +50,6 @@ const webpackNode = {
         test: /\.tsx?$/,
         include: path.resolve(__dirname, 'src'),
         use: [
-          'cache-loader',
           'awesome-typescript-loader',
         ],
       },
@@ -184,7 +183,6 @@ const webpackWeb = {
         test: /.\/static\/js\/.*\.js$/,
         include: path.resolve(__dirname, 'static'),
         use: [
-          'cache-loader',
           {
             loader: 'babel-loader',
             query: {
@@ -242,7 +240,6 @@ const webpackWeb = {
       {
         test: /\.html$/,
         use: [
-          'cache-loader',
           {
             loader: 'html-loader',
             options: {
@@ -258,7 +255,6 @@ const webpackWeb = {
           /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         include: path.resolve(__dirname, 'static'),
         use: [
-          'cache-loader',
           {
             loader: 'url-loader',
             options: {
