@@ -237,7 +237,7 @@ class Log {
       (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
   }
 
-  redraw() {
+  redraw(newStartX, newEndX) {
     if (!this.property) {
       return;
     }
@@ -246,7 +246,6 @@ class Log {
     this.removeAll('.logs-graph-fill');
     this.removeAll('.logs-graph-label');
     this.removeAll('.logs-graph-tick');
-
 
     this.progress.setAttribute('width', 0);
     this.progressWidth = 0;
@@ -301,6 +300,8 @@ class Log {
       points.push({x, y});
     }
 
+    let graphLine, graphFill;
+
     if (points.length > 0) {
       // Make sure the data extends to the present
       points.push({
@@ -308,7 +309,7 @@ class Log {
         y: points[points.length - 1].y,
       });
 
-      const graphLine = this.makePath(points);
+      graphLine = this.makePath(points);
       graphLine.classList.add('logs-graph-line');
 
       points.unshift({
@@ -320,7 +321,7 @@ class Log {
         y: this.height - this.margin,
       });
 
-      const graphFill = this.makePath(points);
+      graphFill = this.makePath(points);
       graphFill.classList.add('logs-graph-fill');
 
       this.graph.appendChild(graphFill);
@@ -387,6 +388,22 @@ class Log {
 
       xLabel += oneHourMs;
       i += 1;
+    }
+
+
+    if (typeof graphLine !== 'undefined' &&
+        typeof newEndX !== 'undefined') {
+      const xScale = (newEndX - newStartX) / this.graphWidth;
+      const transformX = newStartX - this.xStart * xScale;
+      const transform = `translate(${transformX}px,0) scale(${xScale}, 1)`;
+
+      graphLine.style.transform = transform;
+      graphFill.style.transform = transform;
+
+      setTimeout(function() {
+        graphLine.style.transform = '';
+        graphFill.style.transform = '';
+      }, 0);
     }
   }
 
@@ -571,18 +588,24 @@ class Log {
         // Drag was way too small (<30s)
         return;
       }
+      let newStart, newEnd;
       if (this.dragStart < dragEnd) {
-        this.start = new Date(this.dragStart);
-        this.end = new Date(dragEnd);
+        newStart = new Date(this.dragStart);
+        newEnd = new Date(dragEnd);
       } else {
-        this.start = new Date(dragEnd);
-        this.end = new Date(this.dragStart);
+        newStart = new Date(dragEnd);
+        newEnd = new Date(this.dragStart);
       }
-      this.redraw();
+      const newStartX = this.timeToX(newStart.getTime());
+      const newEndX = this.timeToX(newEnd.getTime());
+      this.start = newStart;
+      this.end = newEnd;
+      this.redraw(newStartX, newEndX);
     }
     if (event.button === RIGHT_MOUSE_BUTTON) {
       this.start = this.logStart;
       this.end = this.logEnd;
+      // TODO clip and then do a zoom out animation as well
       this.redraw();
     }
   }
