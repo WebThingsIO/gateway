@@ -50,7 +50,6 @@ const webpackNode = {
         test: /\.tsx?$/,
         include: path.resolve(__dirname, 'src'),
         use: [
-          'cache-loader',
           'awesome-typescript-loader',
         ],
       },
@@ -184,7 +183,6 @@ const webpackWeb = {
         test: /.\/static\/js\/.*\.js$/,
         include: path.resolve(__dirname, 'static'),
         use: [
-          'cache-loader',
           {
             loader: 'babel-loader',
             query: {
