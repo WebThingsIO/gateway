@@ -38,7 +38,7 @@ const TunnelService = {
    * @param {Object} response Express response object.
    * @param {Object} next Next middleware.
    */
-  isTunnelSet: async (request, response, next) => {
+  isTunnelSet: async function(request, response, next) {
     // If ssl tunnel is disabled, continue
     if (!config.get('ssltunnel.enabled')) {
       return next();
@@ -51,9 +51,9 @@ const TunnelService = {
       // then we check if we have certificates installed
       if ((fs.existsSync(path.join(UserProfile.sslDir,
                                    'certificate.pem')) &&
-        fs.existsSync(path.join(UserProfile.sslDir,
-                                'privatekey.pem'))) ||
-        notunnel) {
+           fs.existsSync(path.join(UserProfile.sslDir,
+                                   'privatekey.pem'))) ||
+          notunnel) {
         // if certs are installed,
         // then we don't need to do anything and return
         return next();
@@ -131,7 +131,7 @@ const TunnelService = {
               CertificateManager.renew(this.server);
             }, 24 * 60 * 60 * 1000);
           });
-        }).catch(() => { });
+        }).catch(() => {});
       } else {
         console.error('tunneltoken not set');
         if (response) {
@@ -164,18 +164,19 @@ const TunnelService = {
   },
 
   // method to check if the box has certificates
-  // eslint-disable-next-line max-len
-  hasCertificates: () => fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
-    fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
+  hasCertificates: function() {
+    return fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
+      fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem'));
+  },
 
   // method to check if the box has a registered tunnel
-  hasTunnelToken: async () => {
+  hasTunnelToken: async function() {
     const tunneltoken = await Settings.get('tunneltoken');
     return typeof tunneltoken === 'object';
   },
 
   // method to check if user skipped the ssl tunnel setup
-  userSkipped: async () => {
+  userSkipped: async function() {
     const notunnel = await Settings.get('notunnel');
     if (typeof notunnel === 'boolean' && notunnel) {
       return true;
@@ -185,7 +186,7 @@ const TunnelService = {
   },
 
   // method to ping the registration server to track active domains
-  pingRegistrationServer: () => {
+  pingRegistrationServer: function() {
     const url = `${config.get('ssltunnel.registration_endpoint')}` +
       `/ping?token=${this.tunneltoken.token}`;
     fetch(url).catch((e) => {
