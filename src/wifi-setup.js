@@ -2,33 +2,26 @@ const bodyParser = require('body-parser');
 const config = require('config');
 const Constants = require('./constants');
 const express = require('express');
-const fs = require('fs');
-const Handlebars = require('handlebars');
+const expressHandlebars = require('express-handlebars');
 const mDNSserver = require('./mdns-server');
 const os = require('os');
-const path = require('path');
 const platform = require('./platform');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 
 const preliminaryScanResults = [];
 
-// Build templates
-Handlebars.registerHelper('escapeQuotes', function(str) {
-  return new Handlebars.SafeString(str.replace(/'/, '\\\''));
+const hbs = expressHandlebars.create({
+  helpers: {
+    escapeQuotes: (str) => `${str}`.replace(/'/, '\\\''),
+  },
 });
-
-function getTemplate(name) {
-  const filename = path.join(Constants.VIEWS_PATH, name);
-  return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
-}
-
-const wifiSetupTemplate = getTemplate('wifi-setup.handlebars');
-const connectingTemplate = getTemplate('connecting.handlebars');
-const hotspotTemplate = getTemplate('hotspot.handlebars');
 
 // The express server
 const app = express();
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', Constants.VIEWS_PATH);
 
 // When we get POSTs, handle the body like this
 app.use(bodyParser.urlencoded({extended: false}));
@@ -54,10 +47,13 @@ function handleCaptive(request, response, next) {
     case '/hotspot.html': {
       // WISPr XML response
       const ssid = getHotspotSsid();
-      response.send(hotspotTemplate({
-        ap_ssid: ssid,
-        ap_ip: config.get('wifi.ap.ipaddr'),
-      }));
+      response.render(
+        'hotspot',
+        {
+          ap_ssid: ssid,
+          ap_ip: config.get('wifi.ap.ipaddr'),
+        }
+      );
       break;
     }
     case '/hotspot-detect.html':        // iOS/macOS
@@ -150,7 +146,7 @@ function handleWiFiSetup(request, response) {
       });
     }
 
-    response.send(wifiSetupTemplate({networks}));
+    response.render('wifi-setup', {networks});
   });
 }
 
@@ -172,7 +168,13 @@ function handleConnecting(request, response) {
           'wifi-setup: handleConnecting: failed to store wifiskip:', e
         );
       }).then(() => {
-        response.send(connectingTemplate({skip: `${skip}`, domain}));
+        response.render(
+          'connecting',
+          {
+            skip: `${skip}`,
+            domain,
+          }
+        );
         stopAP();
         WiFiSetupApp.onConnection();
       });
@@ -189,7 +191,13 @@ function handleConnecting(request, response) {
     //
     // Also, if we're not in AP mode, then we should just redirect to
     // /status instead of sending the connecting template.
-    response.send(connectingTemplate({skip: `${skip}`, domain}));
+    response.render(
+      'connecting',
+      {
+        skip: `${skip}`,
+        domain,
+      }
+    );
 
     // Wait before switching networks to make sure the response gets through.
     // And also wait to be sure that the access point is fully down before
