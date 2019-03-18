@@ -25,6 +25,43 @@ LogsController.get('/.schema', async (request, response) => {
   const schema = await Logs.getSchema();
   response.status(200).json(schema);
 });
+
+/**
+ * Register a new metric
+ */
+LogsController.post('/', async (request, response) => {
+  const descr = request.body.descr;
+  const maxAge = request.body.maxAge;
+  if (!descr || typeof maxAge !== 'number') {
+    response.status(400).send('Invalid descr or maxAge property');
+    return;
+  }
+  let normalizedDescr = '';
+  switch (descr.type) {
+    case 'property':
+      normalizedDescr = Logs.propertyDescr(descr.thing, descr.property);
+      break;
+    case 'action':
+      normalizedDescr = Logs.actionDescr(descr.thing, descr.action);
+      break;
+    case 'event':
+      normalizedDescr = Logs.eventDescr(descr.thing, descr.event);
+      break;
+    default:
+      response.status(400).send('Invalid descr type');
+      return;
+  }
+
+  try {
+    await Logs.registerMetric(normalizedDescr, maxAge);
+    response.status(200).send({
+      descr: normalizedDescr,
+    });
+  } catch (e) {
+    response.status(500).send(`Internal error: ${e}`);
+  }
+});
+
 /**
  * Get all the values of the currently logged properties
  */
