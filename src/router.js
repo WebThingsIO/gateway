@@ -35,12 +35,15 @@ const Router = {
     // Compress all responses larger than 1kb
     app.use(compression());
 
-    // Enable HSTS
     app.use((request, response, next) => {
+      // Enable HSTS
       if (request.protocol === 'https') {
         response.set('Strict-Transport-Security',
                      'max-age=31536000; includeSubDomains');
       }
+
+      // Disable embedding
+      response.set('Content-Security-Policy', 'frame-ancestors \'none\'');
 
       next();
     });
