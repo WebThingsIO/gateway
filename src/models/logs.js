@@ -78,7 +78,8 @@ class Logs {
     // an integer referenced by the metric tables
     return this.run(`CREATE TABLE IF NOT EXISTS metricIds (
       id INTEGER PRIMARY KEY ASC,
-      descr TEXT
+      descr TEXT,
+      maxAge INTEGER
     );`, []);
   }
 
@@ -103,9 +104,10 @@ class Logs {
   }
 
   async loadKnownMetrics() {
-    const rows = await this.all('SELECT id, descr FROM metricIds');
+    const rows = await this.all('SELECT id, descr, maxAge FROM metricIds');
     for (const row of rows) {
-      this.idToDescr[row.id] = row.descr;
+      this.idToDescr[row.id] = JSON.parse(row.descr);
+      this.idToDescr[row.id].maxAge = row.maxAge;
       this.descrToId[row.descr] = row.id;
     }
   }
@@ -134,10 +136,10 @@ class Logs {
     });
   }
 
-  async registerMetric(descr) {
+  async registerMetric(descr, maxAge) {
     const result = await this.run(
-      'INSERT INTO metricIds (descr) VALUES (?)',
-      [descr]
+      'INSERT INTO metricIds (descr, maxAge) VALUES (?)',
+      [descr, maxAge]
     );
     const id = result.lastID;
     this.idToDescr[id] = descr;
@@ -146,6 +148,13 @@ class Logs {
   }
 
   async insertMetric(descr, rawValue, date) {
+    let id = -1;
+    if (this.descrToId.hasOwnProperty(descr)) {
+      id = this.descrToId[descr];
+    } else {
+      return;
+    }
+
     let table = METRICS_OTHER;
     let value = rawValue;
 
@@ -159,13 +168,6 @@ class Logs {
       default:
         value = JSON.stringify(rawValue);
         break;
-    }
-
-    let id = -1;
-    if (this.descrToId.hasOwnProperty(descr)) {
-      id = this.descrToId[descr];
-    } else {
-      id = await this.registerMetric(descr);
     }
 
     await this.run(
@@ -221,7 +223,7 @@ class Logs {
     const rows = await this.all(query, params);
 
     for (const row of rows) {
-      const descr = JSON.parse(this.idToDescr[row.id]);
+      const descr = this.idToDescr[row.id];
       if (!out.hasOwnProperty(descr.thing)) {
         out[descr.thing] = {};
       }
@@ -268,7 +270,7 @@ class Logs {
     await this.loadKnownMetrics();
     const schema = [];
     for (const id in this.idToDescr) {
-      const descr = JSON.parse(this.idToDescr[id]);
+      const descr = this.idToDescr[id];
       schema.push({
         id,
         thing: descr.thing,
