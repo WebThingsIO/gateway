@@ -239,6 +239,10 @@
   background-image: url('../optimized-images/thing-icons/camera.svg');
 }
 
+.new-thing.alarm .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/alarm.svg');
+}
+
 #add-by-url-anchor:link,
 #add-by-url-anchor:visited,
 #add-by-url-anchor:hover,

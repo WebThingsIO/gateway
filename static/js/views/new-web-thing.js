@@ -156,6 +156,9 @@ class NewWebThing {
       case 'TemperatureSensor':
         cls = 'temperature-sensor';
         break;
+      case 'Alarm':
+        cls = 'alarm';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -179,7 +182,8 @@ class NewWebThing {
       'push-button',
       'video-camera',
       'camera',
-      'temperature-sensor'
+      'temperature-sensor',
+      'alarm'
     );
 
     if (cls) {
@@ -369,6 +373,10 @@ class NewWebThing {
             option.innerText = 'Temperature Sensor';
             cls = cls || 'temperature-sensor';
             break;
+          case 'Alarm':
+            option.innerText = 'Alarm';
+            cls = cls || 'alarm';
+            break;
           case 'Custom':
             option.innerText = 'Custom Thing';
             cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
@@ -506,7 +514,8 @@ class NewWebThing {
       'push-button',
       'video-camera',
       'camera',
-      'temperature-sensor'
+      'temperature-sensor',
+      'alarm'
     );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');

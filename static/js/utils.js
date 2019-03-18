@@ -284,6 +284,7 @@ const Utils = {
       'PushButton',
       'TemperatureSensor',
       'MultiLevelSensor',
+      'Alarm',
       'BinarySensor',
     ];
 

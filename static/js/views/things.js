@@ -13,6 +13,7 @@
 const page = require('page');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
+const Alarm = require('../schema-impl/capability/alarm');
 const App = require('../app');
 const BinarySensor = require('../schema-impl/capability/binary-sensor');
 const Camera = require('../schema-impl/capability/camera');
@@ -109,6 +110,9 @@ const ThingsScreen = {
           break;
         case 'TemperatureSensor':
           thing = new TemperatureSensor(thingModel, description, format);
+          break;
+        case 'Alarm':
+          thing = new Alarm(thingModel, description, format);
           break;
         default:
           thing = new Thing(thingModel, description, format);
@@ -354,6 +358,9 @@ const ThingsScreen = {
           case 'TemperatureSensor':
             icon = '/optimized-images/thing-icons/temperature_sensor.svg';
             break;
+          case 'Alarm':
+            icon = '/optimized-images/thing-icons/alarm.svg';
+            break;
           case 'Custom':
           default:
             icon = '/optimized-images/thing-icons/thing.svg';
@@ -481,6 +488,9 @@ const ThingsScreen = {
             break;
           case 'TemperatureSensor':
             icon = '/optimized-images/thing-icons/temperature_sensor.svg';
+            break;
+          case 'Alarm':
+            icon = '/optimized-images/thing-icons/alarm.svg';
             break;
           case 'Custom':
           default:

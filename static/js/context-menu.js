@@ -166,6 +166,9 @@ const ContextMenu = {
             case 'TemperatureSensor':
               option.innerText = 'Temperature Sensor';
               break;
+            case 'Alarm':
+              option.innerText = 'Alarm';
+              break;
             case 'Custom':
               option.innerText = 'Custom Thing';
               break;
@@ -250,6 +253,9 @@ const ContextMenu = {
         break;
       case 'TemperatureSensor':
         image = '/optimized-images/thing-icons/temperature_sensor.svg';
+        break;
+      case 'Alarm':
+        image = '/optimized-images/thing-icons/alarm.svg';
         break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
