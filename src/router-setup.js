@@ -2,29 +2,23 @@ const bodyParser = require('body-parser');
 const config = require('config');
 const Constants = require('./constants');
 const express = require('express');
-const fs = require('fs');
-const Handlebars = require('handlebars');
+const expressHandlebars = require('express-handlebars');
 const mDNSserver = require('./mdns-server');
 const os = require('os');
-const path = require('path');
 const platform = require('./platform');
 const sleep = require('./sleep');
 
-// Build templates
-// eslint-disable-next-line max-len
-Handlebars.registerHelper('escapeQuotes', (str) => new Handlebars.SafeString(str.replace(/'/, '\\\'')));
-
-function getTemplate(name) {
-  const filename = path.join(Constants.VIEWS_PATH, name);
-  return Handlebars.compile(fs.readFileSync(filename, 'utf8'));
-}
-
-const routerSetupTemplate = getTemplate('router-setup.handlebars');
-const creatingTemplate = getTemplate('creating.handlebars');
-const hotspotTemplate = getTemplate('hotspot.handlebars');
+const hbs = expressHandlebars.create({
+  helpers: {
+    escapeQuotes: (str) => `${str}`.replace(/'/, '\\\''),
+  },
+});
 
 // The express server
 const app = express();
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.set('views', Constants.VIEWS_PATH);
 
 // When we get POSTs, handle the body like this
 app.use(bodyParser.urlencoded({extended: false}));
@@ -50,10 +44,13 @@ function handleCaptive(request, response, next) {
     case '/hotspot.html': {
       // WISPr XML response
       const ssid = getHotspotSsid();
-      response.send(hotspotTemplate({
-        ap_ssid: ssid,
-        ap_ip: config.get('wifi.ap.ipaddr'),
-      }));
+      response.render(
+        'hotspot',
+        {
+          ap_ssid: ssid,
+          ap_ip: config.get('wifi.ap.ipaddr'),
+        }
+      );
       break;
     }
     case '/hotspot-detect.html':        // iOS/macOS
@@ -63,7 +60,7 @@ function handleCaptive(request, response, next) {
 
       // These 2 user-agents expect a WISPr XML response
       if (ua.includes('CaptiveNetworkSupport') ||
-        ua.includes('Microsoft NCSI')) {
+          ua.includes('Microsoft NCSI')) {
         response.redirect(
           302,
           `http://${config.get('wifi.ap.ipaddr')}/hotspot.html`
@@ -121,7 +118,7 @@ function handleRoot(request, response) {
  */
 function handleRouterSetup(request, response) {
   const ssid = getHotspotSsid();
-  response.send(routerSetupTemplate({ssid}));
+  response.render('router-setup', {ssid});
 }
 
 /**
@@ -133,11 +130,14 @@ function handleCreating(request, response) {
     const ssid = request.body.ssid.trim();
     const password = request.body.password.trim();
 
-    response.send(creatingTemplate({
-      domain,
-      ap_ip: config.get('wifi.ap.ipaddr'),
-      ap_ssid: ssid,
-    }));
+    response.render(
+      'creating',
+      {
+        domain,
+        ap_ip: config.get('wifi.ap.ipaddr'),
+        ap_ssid: ssid,
+      }
+    );
 
     // Wait before switching networks to make sure the response gets through.
     // And also wait to be sure that the access point is fully down before
