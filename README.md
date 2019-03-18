@@ -22,7 +22,7 @@ If you're installing on a Raspberry Pi then you may need to set up the OS on the
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get update
+$ sudo apt update
 ```
 
 Under Fedora Linux:
@@ -34,7 +34,7 @@ $ sudo dnf --refresh upgrade
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install pkg-config
+$ sudo apt install pkg-config
 ```
 
 Under Fedora Linux:
@@ -43,14 +43,15 @@ $ sudo dnf install pkgconfig
 ```
 
 Under macOS:
-
-[See here](http://macappstore.org/pkg-config/).
+```
+$ brew install pkg-config
+```
 
 ### Install curl (needed to install nvm)
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install curl
+$ sudo apt install curl
 ```
 
 Under Fedora Linux:
@@ -63,7 +64,7 @@ $ sudo dnf install curl
 nvm allows you to easily install different versions of node. To install nvm:
 
 ```
-$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 ```
 
 Reinitialize your terminal session.
@@ -78,7 +79,7 @@ $ . ~/.bashrc
 
 Follow the directions from [NodeJS](https://nodejs.org) to install on your platform.
 
-### Set up Bluetooth permissions
+### Set up Bluetooth permissions (Linux only)
 
 The following is required in order to let node and python3 use the Bluetooth adapter.
 
@@ -93,7 +94,7 @@ The following are required in order to install the Python modules that support B
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev
+$ sudo apt install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev
 ```
 
 Under Fedora Linux:
@@ -105,7 +106,7 @@ $ sudo dnf install boost-python-devel boost-devel bluez-libs-devel glib2-devel
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libusb-1.0-0-dev libudev-dev
+$ sudo apt install libusb-1.0-0-dev libudev-dev
 ```
 
 Under Fedora Linux:
@@ -117,7 +118,7 @@ $ sudo dnf install libudev-devel libusb1-devel
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install autoconf
+$ sudo apt install autoconf
 ```
 
 Under Fedora Linux:
@@ -134,12 +135,12 @@ $ brew install autoconf
 
 Under x86-64 or x86 Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libpng16-16
+$ sudo apt install libpng16-16
 ```
 
 Under ARM Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libpng-dev
+$ sudo apt install libpng-dev
 ```
 
 Under Fedora Linux:
@@ -153,7 +154,7 @@ You'll need git to checkout the repositories.
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install git
+$ sudo apt install git
 ```
 
 Under Fedora Linux:
@@ -165,7 +166,7 @@ $ sudo dnf install git
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install build-essential
+$ sudo apt install build-essential
 ```
 
 Under Fedora Linux:
@@ -176,7 +177,6 @@ $ sudo dnf group install "C Development Tools and Libraries"
 ### Build and Install openzwave
 
 ```
-$ cd
 $ git clone https://github.com/OpenZWave/open-zwave.git
 $ cd open-zwave
 $ CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make && sudo CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make install
@@ -197,7 +197,7 @@ change goes through.
 
 Under Ubuntu/Debian Linux:
 ```
-$ sudo apt-get install libnanomsg4 libnanomsg-dev
+$ sudo apt install libnanomsg4 libnanomsg-dev
 ```
 
 #### Windows
@@ -263,7 +263,6 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#e
 * Clone the GitHub repository (or fork it first):
 
     ```
-    $ cd
     $ git clone https://github.com/mozilla-iot/gateway.git
     ```
 
@@ -285,7 +284,7 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#e
 
     ```
     $ node --version
-    v8.12.0
+    v8.15.1
     $ npm --version
     6.4.1
     ```
@@ -356,11 +355,8 @@ If you are not using VS Code, run `npm run debug` and it will build the gateway 
 
 These steps are required on Debian (where python points to python 2.7)
 ```
-apt install python-pip
-apt install python3-pip
-pip3 install git+https://github.com/mycroftai/adapt#egg=adapt-parser
-apt install firefox
-apt install openjdk-8-jre
+$ sudo apt install python-pip python3-pip firefox openjdk-8-jre
+$ sudo python3 -m pip install git+https://github.com/mycroftai/adapt#egg=adapt-parser
 ```
 
 ## Running Tests
@@ -390,19 +386,21 @@ $ npm test
   * **`addons-test/`** - Add-ons used strictly for testing
   * **`controllers/`** - App URL routes and their logic
   * **`models/`** - Data model and business logic
+  * **`platforms/`** - Platform-specific functionality
   * **`plugin/`** - Utility classes and methods used by add-ons
   * **`rules-engine/`** - The rules engine
   * **`test/`** - Integration tests
   * **`views/`** - HTML views
-  * **`wifi-setup/`** - Initial WiFi setup code for Raspberry Pi
   * **`addon-loader.js`** - Script used for starting up Node-based add-ons
   * **`addon-manager.js`** - Manages add-ons (e.g. ZigBee, Z-Wave)
   * **`app.js`** - The main back end
   * **`app-instance.js`** - Application wrapper for integration tests
+  * **`certificate-manager.js`** - Certificate registration and renewal, via Let's Encrypt
   * **`command-utils.js`** - Utilities used by commands parser
   * **`constants.js`** - System-wide constants
   * **`db.js`** - Manages the SQLite3 database
   * **`deferred.js`** - Wraps up a promise in a slightly more convenient manner for passing around, or saving
+  * **`dynamic-require.js`** - Small utility to require code from file system, rather than webpacked bundle
   * **`ec-crypto.js`** - Elliptic curve helpers for the ES256 curve
   * **`jwt-middleware.js`** - Express middleware for determining authentication status
   * **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
@@ -412,9 +410,12 @@ $ npm test
   * **`platform.js`** - Platform-specific utilities
   * **`push-service.js`** - Push notification service
   * **`router.js`** - Routes app URLs to controllers
+  * **`router-setup.js`** - Initial router setup code for OpenWrt
+  * **`sleep.js`** - Small utility to implement a promise-based sleep
   * **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
   * **`user-profile.js`** - Manages persistent user data
   * **`utils.js`** - Various utility functions
+  * **`wifi-setup.js`** - Initial Wi-Fi setup code for Raspbian
 * **`static/`** - Static CSS, JavaScript & image resources for web app front end
 * **`tools/`** - Helpful utilities (not part of the build)
 * **`package.json`** - npm module manifest
