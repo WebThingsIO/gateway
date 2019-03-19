@@ -36,18 +36,7 @@ nvm use ${NODE_VERSION}
 # Allow node to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
-# Download, build, and install OpenZWave
-sudo apt install libusb-1.0-0-dev libudev-dev -y
-if [ ! -d "open-zwave" ]; then
-    git clone https://github.com/OpenZWave/open-zwave.git --depth 1
-fi
-cd open-zwave
-make
-sudo make install
-sudo ldconfig /usr/local/lib
-
 # Download and install the required node modules
-cd ..
 if [ ! -d "gateway" ]; then
     git clone https://github.com/moziot/gateway.git
 fi

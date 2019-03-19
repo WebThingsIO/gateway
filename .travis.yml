@@ -4,10 +4,6 @@ node_js:
   - 8
   - 10
 
-cache:
-  directories:
-    - open-zwave-master
-
 sudo: required
 
 env:
@@ -34,7 +30,6 @@ install:
   - git clone https://github.com/mozilla-iot/intent-parser
   - pip3.6 install --user -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
   - python3.6 intent-parser/intent-parser-server.py &
-  - ./tools/compile-openzwave.sh
 
 before_script:
   - pyenv global system 2.7
