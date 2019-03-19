@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 @media only screen and (max-width: 730px) {
   #logs-view {
     background: #5d9bc7;
@@ -102,4 +106,25 @@
 .logs-graph-progress, .logs-graph-selection-highlight {
   fill: rgba(255, 255, 255, 0.1);
   stroke: none;
+}
+
+
+#create-log-content {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #597285;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 1.6rem;
+  justify-content: center;
+  align-content: center;
+  font-size: 1.5rem;
+}
+
+.create-log-label {
+  align-self: center;
+  text-align: right;
 }
