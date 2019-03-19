@@ -576,6 +576,34 @@
       </div>
     </div>
 
+    <!-- Create Log Screen -->
+    <div id="create-log-screen" class="dialog">
+      <button id="create-log-back-button" class="back-button icon-button"></button>
+      <div id="create-log-content">
+        <div class="create-log-label">
+          Device
+        </div>
+        <div class="create-log-input">
+          <select class="create-log-device arrow-select" aria-label="Log Device"></select>
+        </div>
+        <div class="create-log-label">
+          Property
+        </div>
+        <div class="create-log-input">
+          <select class="create-log-property arrow-select" aria-label="Log Property"></select>
+        </div>
+        <div class="create-log-label">
+          Retention
+        </div>
+        <div class="create-log-input">
+          <input type="number" class="create-log-retention-duration" aria-label="Log Retention Length" />
+          days
+        </div>
+        <div class="create-log-spacer"></div>
+        <button id="create-log-button" class="text-button">Save</button>
+      </div>
+    </div>
+
     <!-- Context Menu -->
     <div id="context-menu" class="hidden dialog">
       <button id="context-menu-back-button" class="back-button icon-button"></button>
@@ -594,7 +622,7 @@
           </div>
           <div id="edit-thing-metadata">
             <input type="text" id="edit-thing-name">
-            <select id="edit-thing-type"></select>
+            <select id="edit-thing-type" class="arrow-select"></select>
             <span id="edit-thing-spacer"></span>
             <input type="file" class="edit-thing-custom-icon-input hidden"
               id="edit-thing-custom-icon-input"

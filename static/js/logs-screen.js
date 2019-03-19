@@ -33,6 +33,12 @@ const LogsScreen = {
 
   show: function() {
     this.reload();
+
+    App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
+    App.gatewayModel.subscribe(
+      Constants.REFRESH_THINGS,
+      this.refreshThings,
+      true);
   },
 
   reload: function() {
@@ -86,6 +92,9 @@ const LogsScreen = {
     this.messageSocket.addEventListener('message', onMessage);
     this.messageSocket.addEventListener('close', cleanup);
     this.messageSocket.addEventListener('error', cleanup);
+  },
+
+  refreshThings: function() {
   },
 
   onWindowResize: function() {
