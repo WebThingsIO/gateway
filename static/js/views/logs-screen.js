@@ -9,29 +9,27 @@
  */
 'use strict';
 
-const API = require('./api');
-const App = require('./app');
-const Log = require('./logs/log');
+const API = require('../api');
+const App = require('../app');
+const Constants = require('../app');
+const Log = require('../logs/log');
 
-const LogsScreen = {
-  init: function() {
-    this.view = document.getElementById('logs-view');
-    this.logsContainer = this.view.querySelector('.logs');
+class LogsScreen {
+  constructor() {
     this.logs = {};
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     this.end = new Date(Date.now());
-    //  new Log('virtual-things-2', 'level'),
-    //  new Log('virtual-things-2', 'on'),
-    //  new Log('weather-8b8f279cfcc42b05f2b3cdfd4b0c7f9c5eac5b18',
-    //          'temperature'),
-    //  new Log('philips-hue-001788fffe4f2113-sensors-2',
-    //          'temperature'),
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener('resize', this.onWindowResize);
-    this.onWindowResize();
-  },
+  }
 
-  show: function() {
+  init() {
+    this.view = document.getElementById('logs-view');
+    this.logsContainer = this.view.querySelector('.logs');
+    this.onWindowResize();
+  }
+
+  show() {
     this.reload();
 
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
@@ -39,9 +37,9 @@ const LogsScreen = {
       Constants.REFRESH_THINGS,
       this.refreshThings,
       true);
-  },
+  }
 
-  reload: function() {
+  reload() {
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
     }).then((schema) => {
@@ -58,9 +56,9 @@ const LogsScreen = {
       }
       this.streamAll();
     });
-  },
+  }
 
-  streamAll: function() {
+  streamAll() {
     if (this.messageSocket) {
       return;
     }
@@ -92,13 +90,13 @@ const LogsScreen = {
     this.messageSocket.addEventListener('message', onMessage);
     this.messageSocket.addEventListener('close', cleanup);
     this.messageSocket.addEventListener('error', cleanup);
-  },
+  }
 
-  refreshThings: function() {
-  },
+  refreshThings() {
+  }
 
-  onWindowResize: function() {
-  },
-};
+  onWindowResize() {
+  }
+}
 
-module.exports = LogsScreen;
+module.exports = new LogsScreen();
