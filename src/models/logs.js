@@ -138,7 +138,7 @@ class Logs {
 
   async registerMetric(descr, maxAge) {
     const result = await this.run(
-      'INSERT INTO metricIds (descr, maxAge) VALUES (?)',
+      'INSERT INTO metricIds (descr, maxAge) VALUES (?, ?)',
       [descr, maxAge]
     );
     const id = result.lastID;
