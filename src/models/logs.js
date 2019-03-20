@@ -17,8 +17,14 @@ class Logs {
     this.idToDescr = {};
     this.descrToId = {};
     this.onPropertyChanged = this.onPropertyChanged.bind(this);
+    this.clearOldMetrics = this.clearOldMetrics.bind(this);
 
     AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
+
+    setTimeout(() => {
+      // Clear out old metrics every hour
+      setInterval(this.clearOldMetrics, 60 * 60 * 1000);
+    }, 6 * 1000);
   }
 
   clear() {
@@ -319,6 +325,25 @@ class Logs {
       this.streamMetrics(callback, METRICS_OTHER,
                          (value) => JSON.parse(value), null, start, end),
     ]);
+  }
+
+  async clearOldMetrics() {
+    await this.loadKnownMetrics();
+    for (const id in this.idToDescr) {
+      const descr = this.idToDescr[id];
+      if (descr.maxAge <= 0) {
+        continue;
+      }
+      const date = new Date(Date.now() - descr.maxAge);
+      await Promise.all([
+        METRICS_NUMBER,
+        METRICS_BOOLEAN,
+        METRICS_OTHER,
+      ].map((table) => {
+        return this.run(`DELETE FROM ${table} WHERE id = ? AND date < ?`,
+                        [id, date]);
+      }));
+    }
   }
 
   all(sql, ...params) {
