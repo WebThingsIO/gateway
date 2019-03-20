@@ -577,7 +577,7 @@
     </div>
 
     <!-- Create Log Screen -->
-    <div id="create-log-screen" class="dialog">
+    <div id="create-log-screen" class="hidden dialog">
       <button id="create-log-back-button" class="back-button icon-button"></button>
       <div id="create-log-content">
         <div class="create-log-label">
@@ -596,11 +596,11 @@
           Retention
         </div>
         <div class="create-log-input">
-          <input type="number" class="create-log-retention-duration" aria-label="Log Retention Length" min="1" max="7" value="7"/>
+          <input type="number" class="create-log-retention-duration" aria-label="Log Retention Length" min="1" value="7"/>
           days
         </div>
         <div class="create-log-spacer"></div>
-        <button id="create-log-button" class="text-button">Save</button>
+        <button id="create-log-save-button" class="text-button">Save</button>
       </div>
     </div>
 

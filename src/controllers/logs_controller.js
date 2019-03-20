@@ -120,16 +120,13 @@ const singlePropertyPath =
  * Get a historical list of the values of a Thing's property
  */
 LogsController.get(singlePropertyPath, async (request, response) => {
-  console.log('get singleProp start', Date.now());
   const thingId = request.params.thingId;
   const propertyName = request.params.propertyName;
   try {
     const values = await Logs.getProperty(thingId, propertyName,
                                           request.params.start,
                                           request.params.end);
-    console.log('get singleProp getProp end', Date.now());
     response.status(200).json(values || []);
-    console.log('get singleProp jsonification end', Date.now());
   } catch (err) {
     response.status(404).send(err);
   }

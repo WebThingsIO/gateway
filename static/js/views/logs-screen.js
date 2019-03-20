@@ -11,7 +11,7 @@
 
 const API = require('../api');
 const App = require('../app');
-const Constants = require('../app');
+const Constants = require('../constants');
 const Log = require('../logs/log');
 
 class LogsScreen {
@@ -19,12 +19,30 @@ class LogsScreen {
     this.logs = {};
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     this.end = new Date(Date.now());
+    this.refreshThings = this.refreshThings.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.toggleCreateLog = this.toggleCreateLog.bind(this);
+    this.onCreateLogDeviceSelect = this.onCreateLogDeviceSelect.bind(this);
+    this.onCreateLog = this.onCreateLog.bind(this);
     window.addEventListener('resize', this.onWindowResize);
   }
 
   init() {
     this.view = document.getElementById('logs-view');
+    this.createLogScreen = document.getElementById('create-log-screen');
+    this.createLogHint = document.querySelector('.create-log-hint');
+    this.createLogDevice = document.querySelector('.create-log-device');
+    this.createLogDevice.addEventListener('change',
+                                          this.onCreateLogDeviceSelect);
+    this.createLogProperty = document.querySelector('.create-log-property');
+    this.createLogSaveButton =
+      document.getElementById('create-log-save-button');
+    this.createLogSaveButton.addEventListener('click', this.onCreateLog);
+
+    this.createLogButton = document.querySelector('.create-log-button');
+    this.createLogButton.addEventListener('click', this.toggleCreateLog);
+    this.createLogRetention =
+      document.querySelector('.create-log-retention-duration');
     this.logsContainer = this.view.querySelector('.logs');
     this.onWindowResize();
   }
@@ -54,7 +72,14 @@ class LogsScreen {
         this.logsContainer.appendChild(log.elt);
         log.load();
       }
+      if (!schema || schema.length === 0) {
+        this.createLogHint.classList.remove('hidden');
+      } else {
+        this.createLogHint.classList.add('hidden');
+      }
       this.streamAll();
+    }).catch((e) => {
+      console.error('Unable to fetch schema', e);
     });
   }
 
@@ -92,7 +117,64 @@ class LogsScreen {
     this.messageSocket.addEventListener('error', cleanup);
   }
 
-  refreshThings() {
+  refreshThings(things) {
+    this.createLogDevice.innerHTML = '';
+    this.things = things;
+    things.forEach((description, thingId) => {
+      const opt = document.createElement('option');
+      opt.innerText = description.name;
+      opt.value = thingId;
+      this.createLogDevice.appendChild(opt);
+    });
+    this.onCreateLogDeviceSelect();
+  }
+
+  onCreateLogDeviceSelect() {
+    const thing = this.things.get(this.createLogDevice.value);
+    if (!thing) {
+      return;
+    }
+    function capitalize(str) {
+      return str[0].toLocaleUpperCase() + str.slice(1);
+    }
+
+    this.createLogProperty.innerHTML = '';
+    for (const propId in thing.properties) {
+      const opt = document.createElement('option');
+      opt.innerText = thing.properties[propId].title ||
+        capitalize(propId);
+      opt.value = propId;
+      this.createLogProperty.appendChild(opt);
+    }
+  }
+
+  toggleCreateLog() {
+    this.createLogScreen.classList.toggle('hidden');
+  }
+
+  onCreateLog() {
+    const dayToMs = 24 * 60 * 60 * 1000;
+
+    fetch('/logs', {
+      method: 'POST',
+      headers: Object.assign(API.headers(),
+                             {'Content-Type': 'application/json'}),
+      body: JSON.stringify({
+        descr: {
+          type: 'property',
+          thing: this.createLogDevice.value,
+          property: this.createLogProperty.value,
+        },
+        maxAge: this.createLogRetention.value * dayToMs,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        this.toggleCreateLog();
+        this.createLogHint.classList.add('hidden');
+      } else {
+        // do the alert thing
+      }
+    });
   }
 
   onWindowResize() {

@@ -131,7 +131,7 @@
   text-align: right;
 }
 
-#create-log-button {
+#create-log-save-button {
   height: 4rem;
   max-width: 9rem;
   font-size: 1.5rem;
@@ -139,11 +139,34 @@
   margin: 1.25rem 0;
 }
 
-#create-log-button:hover:active {
-  background-color: #597285;
+#create-log-save-button:hover  {
+  background-color: #97aebf;
+}
+
+#create-log-save-button:active {
+  background-color: #d2d9de;
 }
 
 .create-log-retention-duration {
   max-width: 4rem;
   text-align: center;
 }
+
+.create-log-device, .create-log-property {
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.create-log-hint {
+  text-align: center;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.create-log-hint.hidden {
+  display: none;
+}
+
