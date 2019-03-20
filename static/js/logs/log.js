@@ -16,7 +16,7 @@ class Log {
     this.margin = 20;
     this.xStart = 120 + 2 * this.margin;
     this.width = window.innerWidth - 2 * this.margin;
-    this.height = 120;
+    this.height = 200;
     this.graphHeight = this.height - 2 * this.margin;
     this.graphWidth = this.width - this.xStart - this.margin;
     this.elt = document.createElement('div');
