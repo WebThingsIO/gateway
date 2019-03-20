@@ -108,17 +108,19 @@
   stroke: none;
 }
 
-
 #create-log-content {
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: #597285;
+  max-width: 64rem;
+  border-radius: 0.5rem;
 
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 1.6rem;
+  grid-template-columns: 1fr 1.618fr;
+  grid-gap: 0.8rem 1.6rem;
+  padding: 1.6rem;
   justify-content: center;
   align-content: center;
   font-size: 1.5rem;
@@ -127,4 +129,21 @@
 .create-log-label {
   align-self: center;
   text-align: right;
+}
+
+#create-log-button {
+  height: 4rem;
+  max-width: 9rem;
+  font-size: 1.5rem;
+  background-color: #7f93a1;
+  margin: 1.25rem 0;
+}
+
+#create-log-button:hover:active {
+  background-color: #597285;
+}
+
+.create-log-retention-duration {
+  max-width: 4rem;
+  text-align: center;
 }
