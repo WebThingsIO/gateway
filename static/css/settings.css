@@ -656,6 +656,10 @@
   background-image: url('../optimized-images/assistant-icon.svg');
 }
 
+#logs-experiment-item {
+  background-image: url('../optimized-images/logs-icon.png');
+}
+
 #speech-experiment-item {
   background-image: url('../optimized-images/speech-icon.png');
 }
