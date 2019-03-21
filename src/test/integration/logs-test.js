@@ -103,10 +103,6 @@ describe('logs/', function() {
     await populatePropertyData();
   });
 
-  afterAll(async () => {
-    Logs.close();
-  });
-
   const light1OnValues = [false, true, false, true, false];
   const light1BriValues = [100, 12, 34];
   const light2BriValues = [100, 0, 31];

@@ -38,7 +38,11 @@ class Logs {
   }
 
   close() {
-    this.db.close();
+    if (this.db) {
+      this.db.close();
+      this.db = null;
+    }
+
     AddonManager.removeListener(Constants.PROPERTY_CHANGED,
                                 this.onPropertyChanged);
     clearInterval(this.clearOldMetricsInterval);
