@@ -55,6 +55,34 @@ describe('logs/', function() {
     return res;
   }
 
+  async function createLog(thing, property) {
+    const body = {
+      descr: {
+        type: 'property',
+        thing: thing,
+        property: property,
+      },
+      maxAge: 60 * 60 * 1000,
+    };
+
+    const res = await chai.request(server)
+      .post(`${Constants.LOGS_PATH}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .set('Content-Type', 'application/json')
+      .send(body);
+    expect(res.status).toEqual(200);
+  }
+
+  async function createAllLogs() {
+    for (const prop in thingLight1.properties) {
+      await createLog(thingLight1.id, prop);
+    }
+    for (const prop in thingLight2.properties) {
+      await createLog(thingLight2.id, prop);
+    }
+  }
+
   async function setProp(thingId, propId, value) {
     const res = await chai.request(server)
       .put(`${Constants.THINGS_PATH}/${thingId}/properties/${propId}`)
@@ -69,6 +97,7 @@ describe('logs/', function() {
     Logs.clear();
 
     jwt = await createUser(server, TEST_USER);
+    await createAllLogs();
     await addDevice(thingLight1);
     await addDevice(thingLight2);
     await populatePropertyData();
