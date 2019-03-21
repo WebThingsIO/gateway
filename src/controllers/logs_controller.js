@@ -159,7 +159,8 @@ LogsController.ws('/', (websocket) => {
 
   Logs.streamAll(streamMetric).then(() => {
     cleanup();
-    // like eventually send more property values and things like that
+    // Eventually send dynamic property value updates for the graphs to update
+    // in real time
     websocket.close();
   });
 

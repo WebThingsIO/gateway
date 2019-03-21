@@ -136,6 +136,10 @@ class Log {
 
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
+
+    if (this.rawPoints.length > 0) {
+      this.redraw();
+    }
   }
 
   clearPoints() {
