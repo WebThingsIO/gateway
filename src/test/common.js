@@ -13,6 +13,7 @@ process.env.NODE_ENV = 'test';
 const Database = require('../db');
 const Actions = require('../models/actions');
 const Events = require('../models/events');
+const Logs = require('../models/logs');
 const mDNSserver = require('../mdns-server');
 const Things = require('../models/things');
 const UserProfile = require('../user-profile');
@@ -126,6 +127,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
+  Logs.close();
   await addonManager.unloadAddons();
   servers.https.close();
   servers.http.close();
