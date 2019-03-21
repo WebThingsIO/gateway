@@ -37,6 +37,13 @@ class Logs {
     }));
   }
 
+  close() {
+    this.db.close();
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
+                                this.onPropertyChanged);
+    clearInterval(this.clearOldMetricsInterval);
+  }
+
   open() {
     // Get all things, create table if not exists
     // If the database is already open, just return.
