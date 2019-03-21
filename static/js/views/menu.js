@@ -34,6 +34,7 @@ const Menu = {
     this.currentItem = 'things';
 
     this.getExperimentSetting('assistant');
+    this.getExperimentSetting('logs');
   },
 
   /**
