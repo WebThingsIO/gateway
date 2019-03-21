@@ -125,47 +125,56 @@ class Logs {
   }
 
   propertyDescr(thingId, propId) {
-    return JSON.stringify({
+    return {
       type: 'property',
       thing: thingId,
       property: propId,
-    });
+    };
   }
 
   actionDescr(thingId, actionId) {
-    return JSON.stringify({
+    return {
       type: 'action',
       thing: thingId,
       action: actionId,
-    });
+    };
   }
 
   eventDescr(thingId, eventId) {
-    return JSON.stringify({
+    return {
       type: 'event',
       thing: thingId,
       event: eventId,
-    });
+    };
   }
 
-  async registerMetric(descr, maxAge) {
+  /**
+   * @param {Object} rawDescr
+   * @param {number} maxAge
+   */
+  async registerMetric(rawDescr, maxAge) {
+    const descr = JSON.stringify(rawDescr);
     const result = await this.run(
       'INSERT INTO metricIds (descr, maxAge) VALUES (?, ?)',
       [descr, maxAge]
     );
     const id = result.lastID;
-    this.idToDescr[id] = descr;
+    this.idToDescr[id] = Object.assign({maxAge}, rawDescr);
     this.descrToId[descr] = id;
     return id;
   }
 
-  async insertMetric(descr, rawValue, date) {
-    let id = -1;
-    if (this.descrToId.hasOwnProperty(descr)) {
-      id = this.descrToId[descr];
-    } else {
+  /**
+   * @param {Object} rawDescr
+   * @param {any} rawValue
+   * @param {Date} date
+   */
+  async insertMetric(rawDescr, rawValue, date) {
+    const descr = JSON.stringify(rawDescr);
+    if (!this.descrToId.hasOwnProperty(descr)) {
       return;
     }
+    const id = this.descrToId[descr];
 
     let table = METRICS_OTHER;
     let value = rawValue;
