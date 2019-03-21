@@ -171,6 +171,7 @@ class LogsScreen {
       if (res.ok) {
         this.toggleCreateLog();
         this.createLogHint.classList.add('hidden');
+        this.reload();
       } else {
         // do the alert thing
       }
