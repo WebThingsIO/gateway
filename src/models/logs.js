@@ -21,10 +21,9 @@ class Logs {
 
     AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
 
-    setTimeout(() => {
-      // Clear out old metrics every hour
+    // Clear out old metrics every hour
+    this.clearOldMetricsInterval =
       setInterval(this.clearOldMetrics, 60 * 60 * 1000);
-    }, 6 * 1000);
   }
 
   clear() {
