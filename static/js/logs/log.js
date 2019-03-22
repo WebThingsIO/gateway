@@ -226,19 +226,24 @@ class Log {
   }
 
   valueToY(value) {
-    // TODO consolidate with yScale
-    const bounds = this.valueBounds();
-    let valueMin = Math.min(0, bounds.min);
-    let valueMax = bounds.max;
-    const lowestPowerOf10ToPreserve =
-      Math.pow(10, Math.ceil(Math.log(valueMax - valueMin) / Math.LN10) - 3);
-    valueMax = Math.ceil(valueMax / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
-    valueMin = Math.floor(valueMin / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
-
     return this.height - this.margin -
-      (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
+      (value - this.valueMin) /
+      (this.valueMax - this.valueMin) * this.graphHeight;
+  }
+
+  determineBounds() {
+    const bounds = this.valueBounds();
+    this.valueMin = Math.min(0, bounds.min);
+    this.valueMax = bounds.max;
+    // Preserve 3 significant figures (not using toPrecision since that does
+    // scientific notation)
+    const lowestPowerOf10ToPreserve = Math.pow(
+      10,
+      Math.ceil(Math.log(this.valueMax - this.valueMin) / Math.LN10) - 3);
+    this.valueMax = Math.ceil(this.valueMax / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
+    this.valueMin = Math.floor(this.valueMin / lowestPowerOf10ToPreserve) *
+      lowestPowerOf10ToPreserve;
   }
 
   redraw(newStartX, newEndX) {
@@ -254,22 +259,7 @@ class Log {
     this.progress.setAttribute('width', 0);
     this.progressWidth = 0;
 
-    const bounds = this.valueBounds();
-    let valueMin = Math.min(0, bounds.min);
-    let valueMax = bounds.max;
-    // Preserve 3 significant figures (not using toPrecision since that does
-    // scientific notation)
-    const lowestPowerOf10ToPreserve =
-      Math.pow(10, Math.ceil(Math.log(valueMax - valueMin) / Math.LN10) - 3);
-    valueMax = Math.ceil(valueMax / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
-    valueMin = Math.floor(valueMin / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
-
-    const yScale = (value) => {
-      return this.height - this.margin -
-        (value - valueMin) / (valueMax - valueMin) * this.graphHeight;
-    };
+    this.determineBounds();
 
     const points = [];
     for (let i = 0; i < this.rawPoints.length; i++) {
@@ -278,12 +268,12 @@ class Log {
         continue;
       }
       const x = this.timeToX(raw.time);
-      const y = yScale(raw.value);
+      const y = this.valueToY(raw.value);
 
       if (points.length === 0) {
         let value = y;
         if (i > 0) {
-          value = yScale(this.rawPoints[i - 1].value);
+          value = this.valueToY(this.rawPoints[i - 1].value);
         }
         // Make sure the data extends to the past
         points.push({
@@ -332,68 +322,9 @@ class Log {
       this.graph.appendChild(graphLine);
     }
 
-    const places = Math.max(0, 2 - Math.log(valueMax - valueMin) / Math.LN10);
-    let labelText = valueMin.toFixed(places);
-    if (this.property.type === 'boolean') {
-      labelText = this.propertyLabel(false);
-    } else if (Math.floor(valueMin) === valueMin) {
-      labelText = valueMin.toFixed(0);
-    }
-    let label = this.makeText(labelText, this.xStart - this.margin / 4,
-                              yScale(valueMin), 'end', 'middle');
-    label.classList.add('logs-graph-label');
-    this.graph.appendChild(label);
+    this.drawYTicks();
 
-    labelText = valueMax.toFixed(places);
-    if (this.property.type === 'boolean') {
-      labelText = this.propertyLabel(true);
-    } else if (Math.floor(valueMax) === valueMax) {
-      labelText = valueMax.toFixed(0);
-    }
-    label = this.makeText(labelText, this.xStart - this.margin / 4,
-                          yScale(valueMax), 'end', 'middle');
-    label.classList.add('logs-graph-label');
-    this.graph.appendChild(label);
-
-    let xLabel = this.floorDate(new Date(this.start.getTime())).getTime();
-    const oneHourMs = 60 * 60 * 1000;
-    let i = 0;
-    const hourWidth = this.graphWidth / (this.end.getTime() -
-                                         this.start.getTime()) * oneHourMs;
-
-    while (xLabel < this.end.getTime()) {
-      if (xLabel > this.start.getTime()) {
-        const x = this.timeToX(xLabel);
-        let tickHeight = 5;
-        if (i % 24 === 0) {
-          // Big label of date
-          const text = new Date(xLabel).getDate();
-          label = this.makeText(text, x,
-                                this.height - this.margin, 'middle', 'hanging');
-          label.classList.add('logs-graph-label');
-          this.graph.appendChild(label);
-          tickHeight *= 2;
-        } else if (hourWidth > 24) {
-          // Big label of hour
-          const text = `${new Date(xLabel).getHours()}:00`;
-          label = this.makeText(text, x,
-                                this.height - this.margin, 'middle', 'hanging');
-          label.classList.add('logs-graph-label');
-          this.graph.appendChild(label);
-        }
-        // Make a tick
-        const tick = this.makePath([
-          {x, y: this.height - this.margin},
-          {x, y: this.height - this.margin - tickHeight},
-        ]);
-        tick.classList.add('logs-graph-tick');
-        this.graph.appendChild(tick);
-      }
-
-      xLabel += oneHourMs;
-      i += 1;
-    }
-
+    this.drawXTicks();
 
     if (typeof graphLine !== 'undefined' &&
         typeof newEndX !== 'undefined') {
@@ -411,11 +342,112 @@ class Log {
     }
   }
 
+  timeToLabel(time) {
+    const date = new Date(time);
+    if (date.getHours() === 0 && date.getMinutes() === 0) {
+      // TODO check if we're in m/d or d/m
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    }
+    let minutes = `${date.getMinutes()}`;
+    if (minutes.length < 2) {
+      minutes = `0${minutes}`;
+    }
+    return `${date.getHours()}:${minutes}`;
+  }
+
+  valueToLabel(value) {
+    const places = Math.max(
+      0,
+      2 - Math.log(this.valueMax - this.valueMin) / Math.LN10);
+    let labelText = value.toFixed(places);
+    if (this.property.type === 'boolean') {
+      labelText = this.propertyLabel(value);
+    } else if (Math.floor(value) === value) {
+      labelText = value.toFixed(0);
+    }
+    return labelText;
+  }
+
   removeAll(selector) {
     this.graph.querySelectorAll(selector).forEach((child) => {
       child.parentNode.removeChild(child);
     });
   }
+
+  drawYTicks() {
+    let label = this.makeText(this.valueToLabel(this.valueMin),
+                              this.xStart - this.margin / 4,
+                              this.valueToY(this.valueMin), 'end', 'middle');
+    label.classList.add('logs-graph-label');
+    this.graph.appendChild(label);
+
+    label = this.makeText(this.valueToLabel(this.valueMax),
+                          this.xStart - this.margin / 4,
+                          this.valueToY(this.valueMax), 'end', 'middle');
+    label.classList.add('logs-graph-label');
+    this.graph.appendChild(label);
+  }
+
+  drawXTicks() {
+    const oneMinuteMs = 60 * 1000;
+    const oneHourMs = 60 * oneMinuteMs;
+    const oneDayMs = 24 * oneHourMs;
+
+    const reasonableTicks = [
+      oneDayMs, 12 * oneHourMs, oneHourMs, 15 * oneMinuteMs, 5 * oneMinuteMs,
+      oneMinuteMs,
+    ];
+
+    let i;
+    for (i = 1; i < reasonableTicks.length - 1; i++) {
+      const trialTick = reasonableTicks[i];
+      const tickWidth = this.timeToX(trialTick) - this.timeToX(0);
+      if (tickWidth < 48) {
+        break;
+      }
+    }
+
+    const tickIncrement = reasonableTicks[i];
+    const bigTickIncrement = reasonableTicks[i - 1];
+
+    const tickWidth = this.timeToX(tickIncrement) - this.timeToX(0);
+
+    const flooredStart = this.floorDate(
+      new Date(this.start.getTime())).getTime();
+    let time = flooredStart;
+    while (time < this.end.getTime()) {
+      if (time > this.start.getTime()) {
+        const x = this.timeToX(time);
+        let tickHeight = 5;
+        if ((time - flooredStart) % bigTickIncrement === 0) {
+          // Big label of date
+          const text = this.timeToLabel(time);
+          const label = this.makeText(text, x, this.height - this.margin,
+                                      'middle', 'hanging');
+          label.classList.add('logs-graph-label');
+          this.graph.appendChild(label);
+          tickHeight *= 2;
+        } else if (tickWidth > 48) {
+          // Big label if the small ticks are wider than expected
+          const text = this.timeToLabel(time);
+          const label = this.makeText(text, x, this.height - this.margin,
+                                      'middle', 'hanging');
+          label.classList.add('logs-graph-label');
+          this.graph.appendChild(label);
+        }
+        // Make a tick
+        const tick = this.makePath([
+          {x, y: this.height - this.margin},
+          {x, y: this.height - this.margin - tickHeight},
+        ]);
+        tick.classList.add('logs-graph-tick');
+        this.graph.appendChild(tick);
+      }
+
+      time += tickIncrement;
+    }
+  }
+
 
   /**
    * Return a label for a property's value
@@ -450,6 +482,7 @@ class Log {
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
+    date.setMilliseconds(0);
     return date;
   }
 
