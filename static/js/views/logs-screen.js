@@ -17,6 +17,7 @@ const Log = require('../logs/log');
 class LogsScreen {
   constructor() {
     this.logs = {};
+    this.logDescr = null;
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     this.end = new Date(Date.now());
     this.refreshThings = this.refreshThings.bind(this);
@@ -47,7 +48,8 @@ class LogsScreen {
     this.onWindowResize();
   }
 
-  show() {
+  show(logDescr) {
+    this.logDescr = logDescr;
     this.reload();
 
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
@@ -61,13 +63,29 @@ class LogsScreen {
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
     }).then((schema) => {
+      const soloView = !!this.logDescr;
+
       for (const logInfo of schema) {
-        if (this.logs[logInfo.id]) {
-          this.logs[logInfo.id].clearPoints();
+        let log = this.logs[logInfo.id];
+
+        let included = true;
+        if (soloView) {
+          included = logInfo.thing === this.logDescr.thing &&
+            logInfo.property === this.logDescr.property;
+        }
+
+        if (log) {
+          this.logsContainer.removeChild(log.elt);
+          delete this.logs[logInfo.id];
+        }
+
+        if (!included) {
           continue;
         }
-        const log = new Log(logInfo.thing, logInfo.property, this.start,
-                            this.end);
+
+        log = new Log(logInfo.thing, logInfo.property, this.start, this.end,
+                      soloView);
+
         this.logs[logInfo.id] = log;
         this.logsContainer.appendChild(log.elt);
         log.load();
@@ -88,7 +106,13 @@ class LogsScreen {
       return;
     }
     const timeBounds = `start=${this.start.getTime()}&end=${this.end.getTime()}`;
-    const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs?jwt=${API.jwt}&${timeBounds}`;
+    const query = `jwt=${API.jwt}&${timeBounds}`;
+    let subPath = '';
+    if (this.thing) {
+      subPath = `things/${this.thing}/properties/${this.property}`;
+    }
+
+    const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs/${subPath}?${query}`;
     this.messageSocket = new WebSocket(path);
 
     const onMessage = (msg) => {

@@ -240,8 +240,17 @@ const App = {
     this.selectView('rule');
   },
 
-  showLogs: function() {
-    LogsScreen.show();
+  showLogs: function(context) {
+    if (context.params.thingId) {
+      const descr = {
+        thing: context.params.thingId,
+        property: context.params.propId,
+        type: 'property',
+      };
+      LogsScreen.show(descr);
+    } else {
+      LogsScreen.show();
+    }
     this.selectView('logs');
   },
 
