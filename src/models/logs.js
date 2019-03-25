@@ -201,6 +201,26 @@ class Logs {
     );
   }
 
+  /**
+   * Remove a metric with all its associated data
+   * @param {Object} rawDescr
+   */
+  async unregisterMetric(rawDescr) {
+    const descr = JSON.stringify(rawDescr);
+    const id = this.descrToId[descr];
+    await Promise.all([
+      'metricIds',
+      METRICS_NUMBER,
+      METRICS_BOOLEAN,
+      METRICS_OTHER,
+    ].map((table) => {
+      return this.run(`DELETE FROM ${table} WHERE id = ?`,
+                      [id]);
+    }));
+    delete this.descrToId[descr];
+    delete this.idToDescr[id];
+  }
+
   onPropertyChanged(property) {
     const thingId = property.device.id;
     const descr = this.propertyDescr(thingId, property.name);
