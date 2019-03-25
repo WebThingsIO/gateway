@@ -163,7 +163,7 @@ describe('logs/', function() {
 
   it('deletes a log', async () => {
     let res = await chai.request(server)
-      .delete(`${Constants.LOGS_PATH}/things/light1`)
+      .delete(`${Constants.LOGS_PATH}/things/light1/properties/on`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -175,7 +175,10 @@ describe('logs/', function() {
     expect(res.status).toEqual(200);
     const logs = res.body;
 
-    expect(logs.light1).toBeFalsy();
+    expect(logs.light1.on).toBeFalsy();
+
+    expect(logs.light1.brightness.map(value))
+      .toEqual(light1BriValues);
 
     expect(logs.light2.brightness.map(value))
       .toEqual(light2BriValues);
