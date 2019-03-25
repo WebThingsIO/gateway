@@ -5,22 +5,21 @@ const Utils = require('../utils');
 const RIGHT_MOUSE_BUTTON = 2;
 
 class Log {
-  constructor(thingId, propertyId, start, end) {
+  constructor(thingId, propertyId, start, end, soloView) {
     this.thingId = thingId;
     this.propertyId = propertyId;
     this.start = start;
     this.end = end;
     this.logStart = start;
     this.logEnd = end;
+    this.soloView = soloView;
 
-    this.margin = 20;
-    this.xStart = 120 + 2 * this.margin;
-    this.width = window.innerWidth - 2 * this.margin;
-    this.height = 200;
-    this.graphHeight = this.height - 2 * this.margin;
-    this.graphWidth = this.width - this.xStart - this.margin;
+    this.dimension();
     this.elt = document.createElement('div');
     this.elt.classList.add('logs-log-container');
+    if (this.soloView) {
+      this.elt.classList.add('logs-log-container-solo-view');
+    }
     this.rawPoints = [];
 
     this.onPointerDown = this.onPointerDown.bind(this);
@@ -33,18 +32,35 @@ class Log {
     this.drawSkeleton();
   }
 
-  drawSkeleton() {
-    // Get in the name and webcomponent
-    this.name = document.createElement('h3');
-    this.name.classList.add('logs-log-name');
-    const thingContainer = document.createElement('div');
-    // new Thing(thingContainer); // TODO
+  dimension() {
+    if (this.soloView) {
+      this.margin = 96;
+      this.xStart = this.margin + 20;
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+    } else {
+      this.margin = 20;
+      this.xStart = 120 + 2 * this.margin;
+      this.width = window.innerWidth - 2 * this.margin;
+      this.height = 200;
+    }
+    this.graphHeight = this.height - 2 * this.margin;
+    this.graphWidth = this.width - this.xStart - this.margin;
+  }
 
-    const infoContainer = document.createElement('div');
-    infoContainer.classList.add('logs-log-info');
-    infoContainer.appendChild(this.name);
-    infoContainer.appendChild(thingContainer);
-    this.elt.appendChild(infoContainer);
+  drawSkeleton() {
+    if (!this.soloView) {
+      // Get in the name and webcomponent
+      this.name = document.createElement('h3');
+      this.name.classList.add('logs-log-name');
+      const thingContainer = document.createElement('div');
+      // new Thing(thingContainer); // TODO
+      const infoContainer = document.createElement('div');
+      infoContainer.classList.add('logs-log-info');
+      infoContainer.appendChild(this.name);
+      infoContainer.appendChild(thingContainer);
+      this.elt.appendChild(infoContainer);
+    }
 
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.graph.classList.add('logs-graph');
@@ -132,7 +148,12 @@ class Log {
     const thingName = thing.name;
     this.property = thing.propertyDescriptions[this.propertyId];
     const propertyName = this.property.title;
-    this.name.textContent = `${thingName} ${propertyName}`;
+    const formattedName = `${thingName} ${propertyName}`;
+    if (this.soloView) {
+      document.querySelector('.logs-header').textContent = formattedName;
+    } else {
+      this.name.textContent = formattedName;
+    }
 
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
