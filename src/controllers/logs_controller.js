@@ -132,6 +132,21 @@ LogsController.get(singlePropertyPath, async (request, response) => {
   }
 });
 
+LogsController.delete(singlePropertyPath, async (request, response) => {
+  const thingId = request.params.thingId;
+  const propertyName = request.params.propertyName;
+  const normalizedDescr = Logs.propertyDescr(thingId, propertyName);
+
+  try {
+    await Logs.unregisterMetric(normalizedDescr);
+    response.status(200).send({
+      descr: normalizedDescr,
+    });
+  } catch (e) {
+    response.status(500).send(`Internal error: ${e}`);
+  }
+});
+
 LogsController.ws('/', (websocket) => {
   if (websocket.readyState !== WebSocket.OPEN) {
     return;

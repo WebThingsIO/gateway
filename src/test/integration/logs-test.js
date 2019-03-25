@@ -160,5 +160,25 @@ describe('logs/', function() {
     expect(logs.brightness.map(value))
       .toEqual(light1BriValues);
   });
+
+  it('deletes a log', async () => {
+    let res = await chai.request(server)
+      .delete(`${Constants.LOGS_PATH}/things/light1`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
+    res = await chai.request(server)
+      .get(Constants.LOGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+    const logs = res.body;
+
+    expect(logs.light1).toBeFalsy();
+
+    expect(logs.light2.brightness.map(value))
+      .toEqual(light2BriValues);
+  });
 });
 
