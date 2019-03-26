@@ -162,7 +162,7 @@ Under Fedora Linux:
 $ sudo dnf install git
 ```
 
-### Install gcc (needed to build open-zwave)
+### Install gcc
 
 Under Ubuntu/Debian Linux:
 ```
@@ -173,23 +173,6 @@ Under Fedora Linux:
 ```
 $ sudo dnf group install "C Development Tools and Libraries"
 ```
-
-### Build and Install openzwave
-
-```
-$ git clone https://github.com/OpenZWave/open-zwave.git
-$ cd open-zwave
-$ CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make && sudo CFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 make install
-$ sudo ldconfig
-```
-
-Note: You may need to manually add `/usr/local/lib` to your `LD_LIBRARY_PATH` enviroment variable by adding the following to your `~/.profile` file:
-
-`export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH`
-
-You can run this on the command line as well so it has immediate effect. After
-running it, you should run `sudo ldconfig` again to make sure the configuration
-change goes through.
 
 ### Install nanomsg
 
@@ -392,7 +375,7 @@ $ npm test
   * **`test/`** - Integration tests
   * **`views/`** - HTML views
   * **`addon-loader.js`** - Script used for starting up Node-based add-ons
-  * **`addon-manager.js`** - Manages add-ons (e.g. ZigBee, Z-Wave)
+  * **`addon-manager.js`** - Manages add-ons (e.g. Zigbee, Z-Wave)
   * **`app.js`** - The main back end
   * **`app-instance.js`** - Application wrapper for integration tests
   * **`certificate-manager.js`** - Certificate registration and renewal, via Let's Encrypt
