@@ -185,3 +185,13 @@
   display: none;
 }
 
+#log-remove-dialog {
+  text-align: center;
+}
+
+.log-remove-container {
+  text-align: center;
+  position: relative;
+  top: calc(50% - 3.8rem);
+  transform: translateY(-50%);
+}
