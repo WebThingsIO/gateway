@@ -67,6 +67,10 @@
   background-image: url('../optimized-images/add.svg');
 }
 
+.create-log-button.hidden {
+  display: none;
+}
+
 .logs-graph-label {
   stroke: white;
 }
