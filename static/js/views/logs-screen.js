@@ -60,11 +60,32 @@ class LogsScreen {
   }
 
   reload() {
+    const soloView = !!this.logDescr;
+
+    if (soloView) {
+      const menu = [
+        // {
+        //   listener: this.handleEdit.bind(this),
+        //   name: 'Edit',
+        //   icon: '/optimized-images/edit-plain.svg',
+        // },
+        {
+          listener: this.handleRemove.bind(this),
+          name: 'Remove',
+          icon: '/optimized-images/remove.svg',
+        },
+      ];
+      App.buildOverflowMenu(menu);
+      App.showOverflowButton();
+      this.createLogButton.classList.add('hidden');
+    } else {
+      App.hideOverflowButton();
+      this.createLogButton.classList.remove('hidden');
+    }
+
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
     }).then((schema) => {
-      const soloView = !!this.logDescr;
-
       for (const logInfo of schema) {
         let log = this.logs[logInfo.id];
 
@@ -203,6 +224,12 @@ class LogsScreen {
   }
 
   onWindowResize() {
+  }
+
+  handleEdit() {
+  }
+
+  handleRemove() {
   }
 }
 
