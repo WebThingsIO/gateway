@@ -25,6 +25,8 @@ class LogsScreen {
     this.toggleCreateLog = this.toggleCreateLog.bind(this);
     this.onCreateLogDeviceSelect = this.onCreateLogDeviceSelect.bind(this);
     this.onCreateLog = this.onCreateLog.bind(this);
+    this.hideRemoveDialog = this.hideRemoveDialog.bind(this);
+    this.onRemoveConfirm = this.onRemoveConfirm.bind(this);
     window.addEventListener('resize', this.onWindowResize);
   }
 
@@ -45,6 +47,14 @@ class LogsScreen {
     this.createLogRetention =
       document.querySelector('.create-log-retention-duration');
     this.logsContainer = this.view.querySelector('.logs');
+    this.logsHeader = document.querySelector('.logs-header');
+    this.logRemoveDialog = document.getElementById('log-remove-dialog');
+    this.logRemoveButton = document.getElementById('log-remove-button');
+    this.logRemoveButton.addEventListener('click', this.onRemoveConfirm);
+    this.logRemoveName = document.getElementById('log-remove-name');
+    this.logRemoveBackButton =
+      document.getElementById('log-remove-back-button');
+    this.logRemoveBackButton.addEventListener('click', this.hideRemoveDialog);
     this.onWindowResize();
   }
 
@@ -230,6 +240,35 @@ class LogsScreen {
   }
 
   handleRemove() {
+    this.logRemoveName.textContent = this.logsHeader.textContent;
+
+    this.logRemoveDialog.classList.remove('hidden');
+  }
+
+  hideRemoveDialog() {
+    this.logRemoveDialog.classList.add('hidden');
+  }
+
+  onRemoveConfirm() {
+    this.hideRemoveDialog();
+    if (!this.logDescr) {
+      console.warn('Ignoring attempt to remove log from logs view');
+      return;
+    }
+    const thing = this.logDescr.thing;
+    const property = this.logDescr.property;
+    const path = `/logs/things/${thing}/properties/${property}`;
+    fetch(path, {
+      method: 'DELETE',
+      headers: API.headers(),
+    }).then((res) => {
+      if (!res.ok) {
+        console.warn('Unable to remove log', res);
+      } else {
+        // TODO use page('/logs');
+        window.location.href = '/logs';
+      }
+    });
   }
 }
 
