@@ -748,6 +748,16 @@ function getNetworkAddresses() {
   return result;
 }
 
+/**
+ * Update the gateway and the system.
+ *
+ * @returns {Promise} Promise which resolves when the update is complete.
+ */
+function update() {
+  // TODO: replace external update mechanism with this function, if possible
+  return Promise.resolve();
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -766,4 +776,5 @@ module.exports = {
   restartGateway,
   restartSystem,
   scanWirelessNetworks,
+  update,
 };

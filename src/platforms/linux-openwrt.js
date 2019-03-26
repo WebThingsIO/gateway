@@ -830,6 +830,54 @@ function getNetworkAddresses() {
   return result;
 }
 
+/**
+ * Update the gateway and the system.
+ *
+ * @returns {Promise} Promise which resolves when the update is complete.
+ */
+function update() {
+  return new Promise((resolve, reject) => {
+    let proc = child_process.spawnSync('opkg', ['update']);
+
+    if (proc.status !== 0) {
+      reject('opkg update failed');
+      return;
+    }
+
+    proc = child_process.spawnSync(
+      'opkg',
+      ['list-upgradable'],
+      {encoding: 'utf8'}
+    );
+
+    if (proc.status !== 0) {
+      reject('opkg list-upgradable failed');
+      return;
+    }
+
+    const packages = proc.stdout
+      .split('\n')
+      .map((l) => l.split(' ')[0]);
+
+    if (packages.length === 0) {
+      // nothing to update
+      resolve();
+      return;
+    }
+
+    packages.unshift('upgrade');
+
+    proc = child_process.spawnSync('opkg', packages);
+
+    if (proc.status !== 0) {
+      reject('opkg upgrade failed');
+      return;
+    }
+
+    resolve();
+  });
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -850,4 +898,5 @@ module.exports = {
   restartGateway,
   restartSystem,
   scanWirelessNetworks,
+  update,
 };
