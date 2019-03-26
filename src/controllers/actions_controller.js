@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 const PromiseRouter = require('express-promise-router');
 const Action = require('../models/action');
 const Actions = require('../models/actions');

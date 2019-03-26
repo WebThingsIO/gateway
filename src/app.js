@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 // Set up the user profile.
 const UserProfile = require('./user-profile');
 UserProfile.init();

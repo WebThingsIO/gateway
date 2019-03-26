@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 const WebPush = require('web-push');
 const Settings = require('./models/settings');
 const Database = require('./db');

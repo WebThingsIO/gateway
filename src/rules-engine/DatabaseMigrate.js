@@ -1,3 +1,5 @@
+'use strict';
+
 function extractProperty(href) {
   return href.match(/properties\/([^/]+)/)[1];
 }

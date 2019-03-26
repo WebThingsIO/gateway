@@ -1,3 +1,5 @@
+'use strict';
+
 import { URL } from 'url';
 import {Scope, ClientId, ClientRegistry} from '../oauth-types';
 const Database = require('../db');
