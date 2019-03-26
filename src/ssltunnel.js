@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 const fs = require('fs');
 const CertificateManager = require('./certificate-manager');
 const config = require('config');

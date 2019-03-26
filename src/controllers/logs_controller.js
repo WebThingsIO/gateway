@@ -8,6 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 const AddonManager = require('../addon-manager');
 const archiver = require('archiver');
 const express = require('express');

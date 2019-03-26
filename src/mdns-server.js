@@ -6,6 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 // External dependencies
 const config = require('config');
 const dnssd = require('dnssd');

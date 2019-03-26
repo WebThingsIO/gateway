@@ -4,6 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
 
+'use strict';
+
 const assert = require('assert');
 const Events = require('../Events');
 const PropertyTrigger = require('./PropertyTrigger');

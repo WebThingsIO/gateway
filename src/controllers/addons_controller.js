@@ -1,3 +1,5 @@
+'use strict';
+
 const PromiseRouter = require('express-promise-router');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');

@@ -6,6 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+'use strict';
+
 /**
  * Mapping of CSS color names (in human-readable form) to hex colors.
  */
