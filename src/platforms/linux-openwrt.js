@@ -861,7 +861,10 @@ function update() {
 
     if (packages.length === 0) {
       // nothing to update
-      resolve();
+      resolve({
+        rebootRequired: false,
+        gatewayRestartRequired: false,
+      });
       return;
     }
 
@@ -874,7 +877,21 @@ function update() {
       return;
     }
 
-    resolve();
+    const rebootRequired = packages.filter((p) => {
+      return p === 'kernel' || p.startsWith('kmod-');
+    }).length > 0;
+
+    const gatewayRestartRequired = packages.filter((p) => {
+      return [
+        'node-mozilla-iot-gateway',
+        'node',
+      ].includes(p);
+    }).length > 0;
+
+    resolve({
+      rebootRequired,
+      gatewayRestartRequired,
+    });
   });
 }
 

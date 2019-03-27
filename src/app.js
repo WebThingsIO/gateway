@@ -62,7 +62,15 @@ if (process.env.NODE_ENV !== 'test') {
   // Start the updater
   updaterInterval = setInterval(
     () => {
-      platform.update().catch((e) => {
+      platform.update().then((res) => {
+        if (res.rebootRequired) {
+          // TODO: schedule reboot: platform.restartSystem()
+        }
+
+        if (res.gatewayRestartRequired) {
+          platform.restartGateway();
+        }
+      }).catch((e) => {
         console.error('Failed to update:', e);
       });
     },

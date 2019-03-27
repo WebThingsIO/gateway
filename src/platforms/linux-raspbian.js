@@ -755,7 +755,10 @@ function getNetworkAddresses() {
  */
 function update() {
   // TODO: replace external update mechanism with this function, if possible
-  return Promise.resolve();
+  return Promise.resolve({
+    rebootRequired: false,
+    gatewayRestartRequired: false,
+  });
 }
 
 module.exports = {
