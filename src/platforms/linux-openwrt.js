@@ -830,6 +830,71 @@ function getNetworkAddresses() {
   return result;
 }
 
+/**
+ * Update the gateway and the system.
+ *
+ * @returns {Promise} Promise which resolves when the update is complete.
+ */
+function update() {
+  return new Promise((resolve, reject) => {
+    let proc = child_process.spawnSync('opkg', ['update']);
+
+    if (proc.status !== 0) {
+      reject('opkg update failed');
+      return;
+    }
+
+    proc = child_process.spawnSync(
+      'opkg',
+      ['list-upgradable'],
+      {encoding: 'utf8'}
+    );
+
+    if (proc.status !== 0) {
+      reject('opkg list-upgradable failed');
+      return;
+    }
+
+    const packages = proc.stdout
+      .split('\n')
+      .map((l) => l.split(' ')[0]);
+
+    if (packages.length === 0) {
+      // nothing to update
+      resolve({
+        rebootRequired: false,
+        gatewayRestartRequired: false,
+      });
+      return;
+    }
+
+    packages.unshift('upgrade');
+
+    proc = child_process.spawnSync('opkg', packages);
+
+    if (proc.status !== 0) {
+      reject('opkg upgrade failed');
+      return;
+    }
+
+    const rebootRequired = packages.filter((p) => {
+      return p === 'kernel' || p.startsWith('kmod-');
+    }).length > 0;
+
+    const gatewayRestartRequired = packages.filter((p) => {
+      return [
+        'node-mozilla-iot-gateway',
+        'node',
+      ].includes(p);
+    }).length > 0;
+
+    resolve({
+      rebootRequired,
+      gatewayRestartRequired,
+    });
+  });
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -850,4 +915,5 @@ module.exports = {
   restartGateway,
   restartSystem,
   scanWirelessNetworks,
+  update,
 };

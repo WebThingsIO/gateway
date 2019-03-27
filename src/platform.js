@@ -155,6 +155,7 @@ const wrappedMethods = [
   'restartGateway',
   'restartSystem',
   'scanWirelessNetworks',
+  'update',
 ];
 
 for (const method of wrappedMethods) {
