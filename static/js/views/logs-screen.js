@@ -13,6 +13,7 @@ const API = require('../api');
 const App = require('../app');
 const Constants = require('../constants');
 const Log = require('../logs/log');
+const page = require('page');
 const Utils = require('../utils');
 
 class LogsScreen {
@@ -97,26 +98,28 @@ class LogsScreen {
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
     }).then((schema) => {
-      for (const logInfo of schema) {
-        let log = this.logs[logInfo.id];
+      this.logsContainer.innerHTML = '';
+      for (const id in this.logs) {
+        const log = this.logs[id];
+        if (log.elt.parentNode) {
+          log.elt.parentNode.removeChild(log.elt);
+        }
+        delete this.logs[id];
+      }
 
+      for (const logInfo of schema) {
         let included = true;
         if (soloView) {
           included = logInfo.thing === this.logDescr.thing &&
             logInfo.property === this.logDescr.property;
         }
 
-        if (log) {
-          this.logsContainer.removeChild(log.elt);
-          delete this.logs[logInfo.id];
-        }
-
         if (!included) {
           continue;
         }
 
-        log = new Log(logInfo.thing, logInfo.property, this.start, this.end,
-                      soloView);
+        const log = new Log(logInfo.thing, logInfo.property, this.start,
+                            this.end, soloView);
 
         this.logs[logInfo.id] = log;
         this.logsContainer.appendChild(log.elt);
@@ -264,8 +267,7 @@ class LogsScreen {
       if (!res.ok) {
         App.showMessage('Server error: unable to remove log', 5000);
       } else {
-        // TODO use page('/logs');
-        window.location.href = '/logs';
+        page('/logs');
       }
     });
   }
