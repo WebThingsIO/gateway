@@ -95,7 +95,7 @@ LogsController.get('/', async (request, response) => {
   //     }
   //   }
   // } else
-  const logs = await Logs.getAll(request.params.start, request.params.end);
+  const logs = await Logs.getAll(request.query.start, request.query.end);
   response.status(200).json(logs);
 });
 
@@ -105,7 +105,7 @@ LogsController.get('/', async (request, response) => {
 LogsController.get(`${Constants.THINGS_PATH}/:thingId`, async (request, response) => {
   const id = request.params.thingId;
   try {
-    const logs = await Logs.get(id, request.params.start, request.params.end);
+    const logs = await Logs.get(id, request.query.start, request.query.end);
     response.status(200).json(logs);
   } catch (error) {
     console.error(`Error getting logs for thing with id ${id}`);
@@ -124,8 +124,8 @@ LogsController.get(singlePropertyPath, async (request, response) => {
   const propertyName = request.params.propertyName;
   try {
     const values = await Logs.getProperty(thingId, propertyName,
-                                          request.params.start,
-                                          request.params.end);
+                                          request.query.start,
+                                          request.query.end);
     response.status(200).json(values || []);
   } catch (err) {
     response.status(404).send(err);
