@@ -13,6 +13,7 @@ const API = require('../api');
 const App = require('../app');
 const Constants = require('../constants');
 const Log = require('../logs/log');
+const Utils = require('../utils');
 
 class LogsScreen {
   constructor() {
@@ -189,15 +190,12 @@ class LogsScreen {
     if (!thing) {
       return;
     }
-    function capitalize(str) {
-      return str[0].toLocaleUpperCase() + str.slice(1);
-    }
 
     this.createLogProperty.innerHTML = '';
     for (const propId in thing.properties) {
       const opt = document.createElement('option');
       opt.innerText = thing.properties[propId].title ||
-        capitalize(propId);
+        Utils.capitalize(propId);
       opt.value = propId;
       this.createLogProperty.appendChild(opt);
     }
