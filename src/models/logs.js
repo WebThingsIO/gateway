@@ -1,3 +1,4 @@
+const config = require('config');
 const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
@@ -55,15 +56,13 @@ class Logs {
       return;
     }
 
-    let filename;
-    let exists = false;
-    if (process.env.NODE_ENV === 'test') {
-      filename = ':memory:';
-    } else {
-      filename = path.join(UserProfile.logDir, 'logs.sqlite3');
+    const filename = path.join(UserProfile.logDir, 'logs.sqlite3');
 
-      // Check if database already exists
-      exists = fs.existsSync(filename);
+    let exists = fs.existsSync(filename);
+    const removeBeforeOpen = config.get('database.removeBeforeOpen');
+    if (exists && removeBeforeOpen) {
+      fs.unlinkSync(filename);
+      exists = false;
     }
 
     console.log(exists ? 'Opening' : 'Creating', 'database:', filename);
@@ -74,8 +73,7 @@ class Logs {
     // but it's better than crashing.
     this.db.configure('busyTimeout', 10000);
 
-    this.db.serialize(() => {
-      this.createTables();
+    this.createTables().then(() => {
       this.loadKnownMetrics();
     });
   }
