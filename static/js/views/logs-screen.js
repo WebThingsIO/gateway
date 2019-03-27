@@ -129,6 +129,7 @@ class LogsScreen {
       }
       this.streamAll();
     }).catch((e) => {
+      App.showMessage('Server error: unable to retrieve logs', 5000);
       console.error('Unable to fetch schema', e);
     });
   }
@@ -226,7 +227,7 @@ class LogsScreen {
         this.createLogHint.classList.add('hidden');
         this.reload();
       } else {
-        // do the alert thing
+        App.showMessage('Server error: unable to create log', 5000);
       }
     });
   }
@@ -261,7 +262,7 @@ class LogsScreen {
       headers: API.headers(),
     }).then((res) => {
       if (!res.ok) {
-        console.warn('Unable to remove log', res);
+        App.showMessage('Server error: unable to remove log', 5000);
       } else {
         // TODO use page('/logs');
         window.location.href = '/logs';
