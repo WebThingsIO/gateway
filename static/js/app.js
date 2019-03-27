@@ -1,5 +1,5 @@
 /**
- * Things Gateway App.
+ * WebThings Gateway App.
  *
  * Front end main script.
  *
@@ -64,7 +64,7 @@ const App = {
   PING_INTERVAL: 20 * 1000,
 
   /**
-   * Start Things Gateway app.
+   * Start WebThings Gateway app.
    */
   init: function() {
     // Load the shaka player polyfills

@@ -78,7 +78,7 @@ git clone https://github.com/mozilla-iot/intent-parser "$HOME/mozilla-iot/intent
 # Create the service file needed by systemctl
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.service' <<END
 [Unit]
-Description=Mozilla IoT Gateway Client
+Description=Mozilla WebThings Gateway Client
 After=network.target
 OnFailure=mozilla-iot-gateway.update-rollback.service
 
@@ -102,7 +102,7 @@ END
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.update-rollback.service' <<END
 [Unit]
-Description=Mozilla IoT Gateway Client Update Rollback
+Description=Mozilla WebThings Gateway Client Update Rollback
 After=network.target
 
 [Service]
@@ -119,7 +119,7 @@ END
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.check-for-update.service' <<END
 [Unit]
-Description=Mozilla IoT Gateway Client Update Checker
+Description=Mozilla WebThings Gateway Client Update Checker
 After=network.target
 
 [Service]
@@ -136,7 +136,7 @@ END
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.check-for-update.timer' <<END
 [Unit]
-Description=Run the Mozilla IoT Gateway update checker daily
+Description=Run the Mozilla WebThings Gateway update checker daily
 
 [Timer]
 OnCalendar=daily
@@ -156,7 +156,7 @@ sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
 
 sudo sh -c 'cat > /etc/systemd/system/mozilla-iot-gateway.intent-parser.service' <<END
 [Unit]
-Description=Mozilla IoT Gateway Intent Parser
+Description=Mozilla WebThings Gateway Intent Parser
 After=network.target
 OnFailure=mozilla-iot-gateway.update-rollback.service
 

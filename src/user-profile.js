@@ -1,5 +1,5 @@
 /**
- * Things Gateway user profile.
+ * WebThings Gateway user profile.
  *
  * The user profile lives outside of the source tree to allow for things like
  * data persistence with Docker, as well as the ability to easily switch

@@ -1,5 +1,5 @@
 # rules-engine
-Things Gateway Rules Engine
+WebThings Gateway Rules Engine
 
 The rules engine takes a list of rules and communicates with the gateway to
 translate the rules into effects on things.

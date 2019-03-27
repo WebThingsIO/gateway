@@ -1,5 +1,5 @@
 /*
- * Things Gateway App.
+ * WebThings Gateway App.
  *
  * Back end main script.
  *

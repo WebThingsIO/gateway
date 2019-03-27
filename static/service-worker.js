@@ -47,7 +47,10 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', (event) => {
   const payload = event.data ? event.data.text() : '';
 
-  event.waitUntil(self.registration.showNotification('Mozilla IoT Gateway', {
-    body: payload,
-  }));
+  event.waitUntil(
+    self.registration.showNotification(
+      'Mozilla WebThings Gateway',
+      {body: payload}
+    )
+  );
 });
