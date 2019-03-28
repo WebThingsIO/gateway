@@ -609,9 +609,10 @@ class Log {
     const y = this.valueToY(point.value);
     this.tooltip.style.display = 'block';
     this.tooltip.style.transform = `translate(${x}px,${y}px)`;
+    const valueLabel = this.valueToLabel(point.value);
 
     const unit = Utils.unitNameToAbbreviation(this.property.unit || '');
-    this.tooltipValue.textContent = `${point.value} ${unit}`;
+    this.tooltipValue.textContent = `${valueLabel} ${unit}`;
 
     // const dateParts = new Date(point.time).toDateString().split(' ');
     // this.tooltipDate.textContent = `${dateParts[1]} ${dateParts[2]}`;
