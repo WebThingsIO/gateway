@@ -93,6 +93,7 @@ class LogsScreen {
     } else {
       App.hideOverflowButton();
       this.createLogButton.classList.remove('hidden');
+      this.logsHeader.textContent = 'Logs';
     }
 
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
