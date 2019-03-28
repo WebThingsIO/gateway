@@ -11,6 +11,7 @@
 
 const API = require('./api');
 const App = require('./app');
+const Icons = require('./icons');
 const page = require('page');
 const Utils = require('./utils');
 
@@ -208,61 +209,11 @@ const ContextMenu = {
     this.customIcon.classList.add('hidden');
 
     let image = '';
-    switch (capability) {
-      case 'OnOffSwitch':
-        image = '/optimized-images/thing-icons/on_off_switch.svg';
-        break;
-      case 'MultiLevelSwitch':
-        image = '/optimized-images/thing-icons/multi_level_switch.svg';
-        break;
-      case 'ColorControl':
-        image = '/optimized-images/thing-icons/color_control.svg';
-        break;
-      case 'EnergyMonitor':
-        image = '/optimized-images/thing-icons/energy_monitor.svg';
-        break;
-      case 'BinarySensor':
-        image = '/optimized-images/thing-icons/binary_sensor.svg';
-        break;
-      case 'MultiLevelSensor':
-        image = '/optimized-images/thing-icons/multi_level_sensor.svg';
-        break;
-      case 'SmartPlug':
-        image = '/optimized-images/thing-icons/smart_plug.svg';
-        break;
-      case 'Light':
-        image = '/optimized-images/thing-icons/light.svg';
-        break;
-      case 'DoorSensor':
-        image = '/optimized-images/thing-icons/door_sensor.svg';
-        break;
-      case 'MotionSensor':
-        image = '/optimized-images/thing-icons/motion_sensor.svg';
-        break;
-      case 'LeakSensor':
-        image = '/optimized-images/thing-icons/leak_sensor.svg';
-        break;
-      case 'PushButton':
-        image = '/optimized-images/thing-icons/push_button.svg';
-        break;
-      case 'VideoCamera':
-        image = '/optimized-images/thing-icons/video_camera.svg';
-        break;
-      case 'Camera':
-        image = '/optimized-images/thing-icons/camera.svg';
-        break;
-      case 'TemperatureSensor':
-        image = '/optimized-images/thing-icons/temperature_sensor.svg';
-        break;
-      case 'Alarm':
-        image = '/optimized-images/thing-icons/alarm.svg';
-        break;
-      case 'Custom':
-        this.customIconLabel.classList.remove('hidden');
-        this.customIcon.classList.remove('hidden');
-        break;
-      default:
-        break;
+    if (capability === 'Custom') {
+      this.customIconLabel.classList.remove('hidden');
+      this.customIcon.classList.remove('hidden');
+    } else if (Icons.capabilityHasIcon(capability)) {
+      image = Icons.capabilityToIcon(capability);
     }
 
     if (image) {

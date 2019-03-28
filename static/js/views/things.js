@@ -22,6 +22,7 @@ const Constants = require('../constants');
 const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
 const EventList = require('./event-list');
+const Icons = require('../icons');
 const LeakSensor = require('../schema-impl/capability/leak-sensor');
 const Light = require('../schema-impl/capability/light');
 const MotionSensor = require('../schema-impl/capability/motion-sensor');
@@ -312,87 +313,9 @@ const ThingsScreen = {
 
       let icon;
       if (description.selectedCapability) {
-        switch (description.selectedCapability) {
-          case 'OnOffSwitch':
-            icon = '/optimized-images/thing-icons/on_off_switch.svg';
-            break;
-          case 'MultiLevelSwitch':
-            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-            break;
-          case 'ColorControl':
-            icon = '/optimized-images/thing-icons/color_control.svg';
-            break;
-          case 'EnergyMonitor':
-            icon = '/optimized-images/thing-icons/energy_monitor.svg';
-            break;
-          case 'BinarySensor':
-            icon = '/optimized-images/thing-icons/binary_sensor.svg';
-            break;
-          case 'MultiLevelSensor':
-            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-            break;
-          case 'SmartPlug':
-            icon = '/optimized-images/thing-icons/smart_plug.svg';
-            break;
-          case 'Light':
-            icon = '/optimized-images/thing-icons/light.svg';
-            break;
-          case 'DoorSensor':
-            icon = '/optimized-images/thing-icons/door_sensor.svg';
-            break;
-          case 'MotionSensor':
-            icon = '/optimized-images/thing-icons/motion_sensor.svg';
-            break;
-          case 'LeakSensor':
-            icon = '/optimized-images/thing-icons/leak_sensor.svg';
-            break;
-          case 'PushButton':
-            icon = '/optimized-images/thing-icons/push_button.svg';
-            break;
-          case 'VideoCamera':
-            icon = '/optimized-images/thing-icons/video_camera.svg';
-            break;
-          case 'Camera':
-            icon = '/optimized-images/thing-icons/camera.svg';
-            break;
-          case 'TemperatureSensor':
-            icon = '/optimized-images/thing-icons/temperature_sensor.svg';
-            break;
-          case 'Alarm':
-            icon = '/optimized-images/thing-icons/alarm.svg';
-            break;
-          case 'Custom':
-          default:
-            icon = '/optimized-images/thing-icons/thing.svg';
-            break;
-        }
+        icon = Icons.capabilityToIcon(description.selectedCapability);
       } else {
-        switch (description.type) {
-          case 'onOffSwitch':
-            icon = '/optimized-images/thing-icons/on_off_switch.svg';
-            break;
-          case 'binarySensor':
-            icon = '/optimized-images/thing-icons/binary_sensor.svg';
-            break;
-          case 'multiLevelSensor':
-            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            icon = '/optimized-images/thing-icons/light.svg';
-            break;
-          case 'multiLevelSwitch':
-            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-            break;
-          case 'smartPlug':
-            icon = '/optimized-images/thing-icons/smart_plug.svg';
-            break;
-          default:
-            icon = '/optimized-images/thing-icons/thing.svg';
-            break;
-        }
+        icon = Icons.typeToIcon(description.type);
       }
 
       const iconEl = document.getElementById('thing-title-icon');
@@ -443,87 +366,9 @@ const ThingsScreen = {
 
       let icon;
       if (description.selectedCapability) {
-        switch (description.selectedCapability) {
-          case 'OnOffSwitch':
-            icon = '/optimized-images/thing-icons/on_off_switch.svg';
-            break;
-          case 'MultiLevelSwitch':
-            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-            break;
-          case 'ColorControl':
-            icon = '/optimized-images/thing-icons/color_control.svg';
-            break;
-          case 'EnergyMonitor':
-            icon = '/optimized-images/thing-icons/energy_monitor.svg';
-            break;
-          case 'BinarySensor':
-            icon = '/optimized-images/thing-icons/binary_sensor.svg';
-            break;
-          case 'MultiLevelSensor':
-            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-            break;
-          case 'SmartPlug':
-            icon = '/optimized-images/thing-icons/smart_plug.svg';
-            break;
-          case 'Light':
-            icon = '/optimized-images/thing-icons/light.svg';
-            break;
-          case 'DoorSensor':
-            icon = '/optimized-images/thing-icons/door_sensor.svg';
-            break;
-          case 'MotionSensor':
-            icon = '/optimized-images/thing-icons/motion_sensor.svg';
-            break;
-          case 'LeakSensor':
-            icon = '/optimized-images/thing-icons/leak_sensor.svg';
-            break;
-          case 'PushButton':
-            icon = '/optimized-images/thing-icons/push_button.svg';
-            break;
-          case 'VideoCamera':
-            icon = '/optimized-images/thing-icons/video_camera.svg';
-            break;
-          case 'Camera':
-            icon = '/optimized-images/thing-icons/camera.svg';
-            break;
-          case 'TemperatureSensor':
-            icon = '/optimized-images/thing-icons/temperature_sensor.svg';
-            break;
-          case 'Alarm':
-            icon = '/optimized-images/thing-icons/alarm.svg';
-            break;
-          case 'Custom':
-          default:
-            icon = '/optimized-images/thing-icons/thing.svg';
-            break;
-        }
+        icon = Icons.capabilityToIcon(description.selectedCapability);
       } else {
-        switch (description.type) {
-          case 'onOffSwitch':
-            icon = '/optimized-images/thing-icons/on_off_switch.svg';
-            break;
-          case 'binarySensor':
-            icon = '/optimized-images/thing-icons/binary_sensor.svg';
-            break;
-          case 'multiLevelSensor':
-            icon = '/optimized-images/thing-icons/multi_level_sensor.svg';
-            break;
-          case 'onOffLight':
-          case 'onOffColorLight':
-          case 'dimmableLight':
-          case 'dimmableColorLight':
-            icon = '/optimized-images/thing-icons/light.svg';
-            break;
-          case 'multiLevelSwitch':
-            icon = '/optimized-images/thing-icons/multi_level_switch.svg';
-            break;
-          case 'smartPlug':
-            icon = '/optimized-images/thing-icons/smart_plug.svg';
-            break;
-          default:
-            icon = '/optimized-images/thing-icons/thing.svg';
-            break;
-        }
+        icon = Icons.typeToIcon(description.type);
       }
 
       const iconEl = document.getElementById('thing-title-icon');
