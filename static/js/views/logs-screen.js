@@ -20,6 +20,7 @@ class LogsScreen {
   constructor() {
     this.logs = {};
     this.logDescr = null;
+    this.resizeTimeout = null;
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     this.end = new Date(Date.now());
     this.refreshThings = this.refreshThings.bind(this);
@@ -237,6 +238,17 @@ class LogsScreen {
   }
 
   onWindowResize() {
+    if (this.resizeTimeout) {
+      window.clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      for (const id in this.logs) {
+        this.logs[id].dimension();
+        this.logs[id].drawSkeleton();
+        this.logs[id].redraw();
+      }
+      this.resizeTimeout = null;
+    }, 100);
   }
 
   handleEdit() {

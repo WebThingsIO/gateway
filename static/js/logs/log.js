@@ -49,10 +49,16 @@ class Log {
   }
 
   drawSkeleton() {
+    this.removeAll('.logs-log-info');
+    this.removeAll('.logs-graph');
+    this.removeAll('.logs-graph-tooltip');
+
     if (!this.soloView) {
       // Get in the name and webcomponent
-      this.name = document.createElement('h3');
-      this.name.classList.add('logs-log-name');
+      if (!this.name) {
+        this.name = document.createElement('h3');
+        this.name.classList.add('logs-log-name');
+      }
       const thingContainer = document.createElement('div');
       // new Thing(thingContainer); // TODO
       const infoContainer = document.createElement('div');
@@ -376,10 +382,11 @@ class Log {
     return `${date.getHours()}:${minutes}`;
   }
 
-  valueToLabel(value) {
+  valueToLabel(value, bonusPlaces) {
+    bonusPlaces = bonusPlaces || 0;
     const places = Math.max(
       0,
-      2 - Math.log(this.valueMax - this.valueMin) / Math.LN10);
+      2 + bonusPlaces - Math.log(this.valueMax - this.valueMin) / Math.LN10);
     let labelText = value.toFixed(places);
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(value);
@@ -390,7 +397,7 @@ class Log {
   }
 
   removeAll(selector) {
-    this.graph.querySelectorAll(selector).forEach((child) => {
+    this.elt.querySelectorAll(selector).forEach((child) => {
       child.parentNode.removeChild(child);
     });
   }
@@ -609,7 +616,7 @@ class Log {
     const y = this.valueToY(point.value);
     this.tooltip.style.display = 'block';
     this.tooltip.style.transform = `translate(${x}px,${y}px)`;
-    const valueLabel = this.valueToLabel(point.value);
+    const valueLabel = this.valueToLabel(point.value, 2);
 
     const unit = Utils.unitNameToAbbreviation(this.property.unit || '');
     this.tooltipValue.textContent = `${valueLabel} ${unit}`;
