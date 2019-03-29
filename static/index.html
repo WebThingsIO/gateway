@@ -602,8 +602,11 @@
           Retention
         </div>
         <div class="create-log-input">
-          <input type="number" class="create-log-retention-duration" aria-label="Log Retention Length" min="1" value="7"/>
-          days
+          <input type="number" class="create-log-retention-duration-number" aria-label="Log Retention Length" min="1" value="7"/>
+          <select class="create-log-retention-duration-unit arrow-select" aria-label="Log Retention Unit">
+            <option value="hours">Hours</option>
+            <option value="days" selected>Days</option>
+            <option value="weeks">Weeks</option>
         </div>
         <div class="create-log-spacer"></div>
         <button id="create-log-save-button" class="text-button">Save</button>

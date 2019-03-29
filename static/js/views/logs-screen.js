@@ -47,8 +47,10 @@ class LogsScreen {
 
     this.createLogButton = document.querySelector('.create-log-button');
     this.createLogButton.addEventListener('click', this.toggleCreateLog);
-    this.createLogRetention =
-      document.querySelector('.create-log-retention-duration');
+    this.createLogRetentionNumber =
+      document.querySelector('.create-log-retention-duration-number');
+    this.createLogRetentionUnit =
+      document.querySelector('.create-log-retention-duration-unit');
     this.logsContainer = this.view.querySelector('.logs');
     this.logsHeader = document.querySelector('.logs-header');
     this.logRemoveDialog = document.getElementById('log-remove-dialog');
@@ -212,7 +214,23 @@ class LogsScreen {
   }
 
   onCreateLog() {
-    const dayToMs = 24 * 60 * 60 * 1000;
+    const hourToMs = 60 * 60 * 1000;
+    const dayToMs = 24 * hourToMs;
+    const weekToMs = 7 * dayToMs;
+
+    let maxAge = this.createLogRetentionNumber.value;
+    switch (this.createLogRetentionUnit.value) {
+      case 'hours':
+        maxAge *= hourToMs;
+        break;
+      case 'days':
+      default:
+        maxAge *= dayToMs;
+        break;
+      case 'weeks':
+        maxAge *= weekToMs;
+        break;
+    }
 
     fetch('/logs', {
       method: 'POST',
@@ -224,7 +242,7 @@ class LogsScreen {
           thing: this.createLogDevice.value,
           property: this.createLogProperty.value,
         },
-        maxAge: this.createLogRetention.value * dayToMs,
+        maxAge,
       }),
     }).then((res) => {
       if (res.ok) {
