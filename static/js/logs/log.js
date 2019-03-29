@@ -90,7 +90,7 @@ class Log {
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.graph.classList.add('logs-graph');
     this.graph.style.width = `${this.width}px`;
-    this.graph.style.height = `${this.height}px`;
+    this.graph.style.height = `${this.height + this.scrollHeight}px`;
     this.graph.addEventListener('mousedown', this.onPointerDown);
     this.graph.addEventListener('mousemove', this.onPointerMove);
     this.graph.addEventListener('mouseup', this.onPointerUp);
@@ -478,6 +478,39 @@ class Log {
   }
 
   drawYTicks() {
+    if (this.property.type !== 'boolean') {
+      const incForTenTicks =
+        Math.pow(10, Math.floor(Math.log(this.valueMax - this.valueMin) /
+                                Math.LN10) - 1);
+      let value = this.valueMin + incForTenTicks;
+      let i = 1;
+      while (value < this.valueMax) {
+        const y = this.valueToY(value);
+        let tickLength = 5;
+        if (i % 5 === 0) {
+          tickLength *= 1.5;
+        }
+        // Make a tick
+        const tick = this.makePath([
+          {x: this.xStart, y},
+          {x: this.xStart + tickLength, y},
+        ]);
+        tick.classList.add('logs-graph-tick');
+        this.graph.appendChild(tick);
+
+        value += incForTenTicks;
+        i += 1;
+      }
+    }
+
+    // Make a final tick at valueMax, nudge it by 1 due to 2px width
+    const tick = this.makePath([
+      {x: this.xStart - 1, y: this.valueToY(this.valueMax) - 1},
+      {x: this.xStart + 10, y: this.valueToY(this.valueMax) - 1},
+    ]);
+    tick.classList.add('logs-graph-tick', 'logs-graph-tick-big');
+    this.graph.appendChild(tick);
+
     let label = this.makeText(this.valueToLabel(this.valueMin),
                               this.xStart - 5,
                               this.valueToY(this.valueMin), 'end', 'middle');
