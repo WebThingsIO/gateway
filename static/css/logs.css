@@ -39,9 +39,14 @@
 
 .logs-log-container {
   position: relative;
-  padding: 3rem 0;
+  padding: 0;
+  padding-bottom: 2rem;
   width: 100%;
   overflow: hidden;
+}
+
+.logs-log-container:last-child {
+  padding-bottom: 9.6rem;
 }
 
 .logs-log-container-solo-view {
