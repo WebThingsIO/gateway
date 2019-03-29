@@ -300,6 +300,11 @@ class Log {
     if (this.rawPoints.length === 1 || min === max) {
       margin = 1;
     }
+    // If there are no values less than zero make the lower bound zero for
+    // aesthetic reasons (e.g. power consumption)
+    if (min >= 0 && min - margin < 0) {
+      min = margin;
+    }
     return {
       min: min - margin,
       max: max + margin,
