@@ -52,8 +52,9 @@ class Log {
       this.yMargin = 30;
       this.xStart = this.xMargin + 20;
       this.width = window.innerWidth;
-      this.height = window.innerHeight - 96 - this.yMargin * 2;
       this.scrollHeight = 30;
+      this.height = window.innerHeight - 96 - this.yMargin * 2 -
+        this.scrollHeight;
     } else {
       this.xMargin = 96;
       this.yMargin = 20;
