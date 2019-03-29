@@ -141,6 +141,25 @@
   transform: translate(0, 0) scale(1);
 }
 
+.logs-scroll-bar {
+  fill: #80b1d3;
+  stroke: none;
+}
+
+.logs-scroll-control {
+  fill: #c6dceb;
+  stroke: none;
+  cursor: grab;
+}
+
+.logs-scroll-button {
+  fill: white;
+  stroke: white;
+  stroke-linejoin: round;
+  stroke-width: 0.6rem;
+  cursor: pointer;
+}
+
 .logs-graph-tooltip {
   position: absolute;
   top: 0;
