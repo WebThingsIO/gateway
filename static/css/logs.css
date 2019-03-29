@@ -53,12 +53,29 @@
 }
 
 .logs-log-info {
-  position: absolute;
-  top: 0;
-  left: 0;
   margin: 2rem;
-  width: 12rem;
-  height: 20rem;
+  text-decoration: none;
+}
+
+.logs-log-icon {
+  display: inline-block;
+  height: 2.4rem;
+  width: 2.4rem;
+  border: 0.1rem solid white;
+  border-radius: 1.2rem;
+  background-size: 1.2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #ffffff64;
+  position: relative;
+  top: 0.7rem;
+  margin-right: 0.5rem;
+}
+
+.logs-log-name {
+  font-size: 1.6rem;
+  display: inline;
+  color: white;
 }
 
 .create-log-button {
