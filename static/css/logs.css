@@ -103,6 +103,10 @@
   display: none;
 }
 
+#create-log-back-button {
+  background-color: transparent;
+}
+
 .logs-graph-label {
   stroke: white;
 }
@@ -225,9 +229,17 @@
   text-align: center;
 }
 
+#log-remove-back-button {
+  background: transparent;
+}
+
 .log-remove-container {
   text-align: center;
   position: relative;
   top: calc(50% - 3.8rem);
   transform: translateY(-50%);
+}
+
+#logs-back-button.hidden {
+  display: none;
 }
