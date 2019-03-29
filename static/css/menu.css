@@ -70,7 +70,7 @@
 }
 
 #main-menu #logs-menu-item {
-  background-image: url('../optimized-images/logs-icon.png');
+  background-image: url('../optimized-images/logs-icon.svg');
 }
 
 @keyframes show-scrim {
