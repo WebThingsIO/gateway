@@ -38,6 +38,8 @@ class Log {
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
     this.onPointerLeave = this.onPointerLeave.bind(this);
+    this.scrollLeft = this.scrollLeft.bind(this);
+    this.scrollRight = this.scrollRight.bind(this);
     this.mouseDown = false;
     this.dragStart = -1;
 
@@ -51,12 +53,14 @@ class Log {
       this.xStart = this.xMargin + 20;
       this.width = window.innerWidth;
       this.height = window.innerHeight - 96 - this.yMargin * 2;
+      this.scrollHeight = 30;
     } else {
       this.xMargin = 96;
       this.yMargin = 20;
       this.xStart = this.xMargin + 20;
       this.width = window.innerWidth;
       this.height = 200;
+      this.scrollHeight = 30;
     }
     this.graphHeight = this.height - 2 * this.yMargin;
     this.graphWidth = this.width - this.xStart - this.xMargin;
@@ -132,6 +136,7 @@ class Log {
 
     this.graph.appendChild(this.selectionHighlight);
 
+    this.drawScrollBar();
 
     this.elt.appendChild(this.graph);
 
@@ -180,11 +185,14 @@ class Log {
     this.elt.appendChild(this.weekDropdown);
   }
 
-  makePath(points) {
+  makePath(points, close) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const text = ['M', points[0].x, points[0].y];
     for (let i = 1; i < points.length; i++) {
       text.push('L', points[i].x, points[i].y);
+    }
+    if (close) {
+      text.push('Z');
     }
     path.setAttribute('d', text.join(' '));
     return path;
@@ -311,16 +319,16 @@ class Log {
     };
   }
 
-  timeToX(time) {
-    const startTime = this.start.getTime();
-    const endTime = this.end.getTime();
+  timeToX(time, customStartTime, customEndTime) {
+    const startTime = customStartTime || this.start.getTime();
+    const endTime = customEndTime || this.end.getTime();
     return (time - startTime) / (endTime - startTime) * this.graphWidth +
       this.xStart;
   }
 
-  xToTime(x) {
-    const startTime = this.start.getTime();
-    const endTime = this.end.getTime();
+  xToTime(x, customStartTime, customEndTime) {
+    const startTime = customStartTime || this.start.getTime();
+    const endTime = customEndTime || this.end.getTime();
     return (x - this.xStart) / this.graphWidth * (endTime - startTime) +
       startTime;
   }
@@ -423,8 +431,9 @@ class Log {
     }
 
     this.drawYTicks();
-
     this.drawXTicks();
+
+    this.updateScrollBar();
 
     if (typeof graphLine !== 'undefined' &&
         typeof newEndX !== 'undefined') {
@@ -584,6 +593,97 @@ class Log {
     }
   }
 
+  drawScrollBar() {
+    const barHeight = 16;
+    const barY = this.height + this.scrollHeight / 2 - barHeight / 2;
+
+    this.scrollBar = document.createElementNS('http://www.w3.org/2000/svg',
+                                              'rect');
+    this.scrollBar.classList.add('logs-scroll-bar');
+    this.scrollBar.setAttribute('x', this.xStart);
+    this.scrollBar.setAttribute('y', barY);
+    this.scrollBar.setAttribute('width', this.graphWidth);
+    this.scrollBar.setAttribute('height', barHeight);
+    this.graph.appendChild(this.scrollBar);
+
+    this.scrollControl =
+      document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    this.scrollControl.classList.add('logs-scroll-control');
+    this.scrollControl.setAttribute('y', barY);
+    this.scrollControl.setAttribute('height', barHeight);
+    this.graph.appendChild(this.scrollControl);
+
+    const equiTri = 1 / Math.sqrt(3);
+    const buttonScale = 16;
+    const margin = 8;
+    const barCenter = barY + barHeight / 2;
+
+    this.scrollButtonLeft = this.makePath([
+      {x: this.xStart - buttonScale - margin, y: barCenter},
+      {x: this.xStart - margin, y: barCenter - buttonScale * equiTri},
+      {x: this.xStart - margin, y: barCenter + buttonScale * equiTri},
+    ], true);
+    this.scrollButtonLeft.classList.add('logs-scroll-button');
+    this.scrollButtonLeft.addEventListener('click', this.scrollLeft);
+    this.graph.appendChild(this.scrollButtonLeft);
+
+    const barEnd = this.xStart + this.graphWidth + margin;
+    this.scrollButtonRight = this.makePath([
+      {x: barEnd + buttonScale, y: barCenter},
+      {x: barEnd, y: barCenter - buttonScale * equiTri},
+      {x: barEnd, y: barCenter + buttonScale * equiTri},
+    ], true);
+    this.scrollButtonRight.classList.add('logs-scroll-button');
+    this.scrollButtonRight.addEventListener('click', this.scrollRight);
+    this.graph.appendChild(this.scrollButtonRight);
+  }
+
+  updateScrollBar() {
+    let controlStart = this.timeToX(this.start.getTime(), this.logStart,
+                                    this.logEnd);
+    let controlEnd = this.timeToX(this.end.getTime(), this.logStart,
+                                  this.logEnd);
+
+    // Make sure control is wide enough to tap
+    if (controlEnd - controlStart < 16) {
+      controlEnd = controlStart + 16;
+      if (controlEnd > this.xStart + this.graphWidth) {
+        controlEnd = this.xStart + this.graphWidth;
+        controlStart = controlEnd - 16;
+      }
+    }
+
+    this.scrollControl.setAttribute('x', controlStart);
+    this.scrollControl.setAttribute('width', controlEnd - controlStart);
+  }
+
+  scrollLeft() {
+    const width = this.end.getTime() - this.start.getTime();
+    this.scroll(-width / 2);
+  }
+
+  scrollRight() {
+    const width = this.end.getTime() - this.start.getTime();
+    this.scroll(width / 2);
+  }
+
+  scroll(amount) {
+    let newStart = this.start.getTime() + amount;
+    let newEnd = this.end.getTime() + amount;
+    const width = newEnd - newStart;
+    if (amount < 0 && newStart < this.logStart.getTime()) {
+      newStart = this.logStart.getTime();
+      newEnd = newStart + width;
+    } else if (amount > 0 && newEnd > this.logEnd.getTime()) {
+      newEnd = this.logEnd.getTime();
+      newStart = newEnd - width;
+    }
+    const newStartX = this.timeToX(newStart);
+    const newEndX = this.timeToX(newEnd);
+    this.start = new Date(newStart);
+    this.end = new Date(newEnd);
+    this.redraw(newStartX, newEndX);
+  }
 
   /**
    * Return a label for a property's value
