@@ -39,6 +39,7 @@
 
 .logs-log-container {
   position: relative;
+  padding: 3rem 0;
 }
 
 .logs-log-container-solo-view {
@@ -46,9 +47,9 @@
   top: 0;
   left: 0;
   margin: 0;
-  padding: 0;
+  padding: 9.6rem 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 9.6rem * 2);
   overflow: hidden;
 }
 
@@ -76,6 +77,20 @@
   font-size: 1.6rem;
   display: inline;
   color: white;
+}
+
+.logs-log-week-dropdown {
+  position: absolute;
+  right: 2rem;
+  top: 2.6rem;
+  width: 9rem;
+  height: 2.6rem;
+  background-color: #5288af;
+}
+
+.logs-log-container-solo-view .logs-log-week-dropdown {
+  top: 9.6rem;
+  right: 9.6rem;
 }
 
 .create-log-button {

@@ -47,10 +47,10 @@ class Log {
   dimension() {
     if (this.soloView) {
       this.xMargin = 96;
-      this.yMargin = 96;
+      this.yMargin = 30;
       this.xStart = this.xMargin + 20;
       this.width = window.innerWidth;
-      this.height = window.innerHeight;
+      this.height = window.innerHeight - 96 - this.yMargin * 2;
     } else {
       this.xMargin = 96;
       this.yMargin = 20;
@@ -66,6 +66,7 @@ class Log {
     this.removeAll('.logs-log-info');
     this.removeAll('.logs-graph');
     this.removeAll('.logs-graph-tooltip');
+    this.removeAll('.logs-log-week-dropdown');
 
     if (!this.soloView) {
       // Get in the name and webcomponent
@@ -83,6 +84,8 @@ class Log {
       this.infoContainer.appendChild(this.name);
       this.elt.appendChild(this.infoContainer);
     }
+
+    this.createWeekDropdown();
 
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.graph.classList.add('logs-graph');
@@ -139,6 +142,42 @@ class Log {
     this.tooltip.appendChild(this.tooltipValue);
     this.tooltip.appendChild(this.tooltipDate);
     this.elt.appendChild(this.tooltip);
+  }
+
+  createWeekDropdown() {
+    this.weekDropdown = document.createElement('select');
+    this.weekDropdown.classList.add('logs-log-week-dropdown', 'arrow-select');
+    const oneHourMs = 60 * 60 * 1000;
+    const oneDayMs = 24 * oneHourMs;
+    const oneWeekMs = 7 * oneDayMs;
+    const options = [
+      {name: 'Hour', value: oneHourMs},
+      {name: 'Day', value: oneDayMs},
+      {name: 'Week', value: oneWeekMs},
+    ];
+    for (const opt of options) {
+      const option = document.createElement('option');
+      option.textContent = opt.name;
+      option.value = opt.value;
+      if (opt.name === 'Week') {
+        option.setAttribute('selected', true);
+      }
+      this.weekDropdown.appendChild(option);
+    }
+    this.weekDropdown.addEventListener('change', () => {
+      let newEnd = this.end.getTime();
+      let newStart = newEnd - this.weekDropdown.value;
+      if (newStart < this.logStart.getTime()) {
+        newStart = this.logStart.getTime();
+        newEnd = newStart + this.weekDropdown.value;
+      }
+      const newStartX = this.timeToX(newStart);
+      const newEndX = this.timeToX(newEnd);
+      this.start = new Date(newStart);
+      this.end = new Date(newEnd);
+      this.redraw(newStartX, newEndX);
+    });
+    this.elt.appendChild(this.weekDropdown);
   }
 
   makePath(points) {
