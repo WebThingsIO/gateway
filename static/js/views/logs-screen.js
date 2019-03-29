@@ -51,6 +51,10 @@ class LogsScreen {
       document.querySelector('.create-log-retention-duration-number');
     this.createLogRetentionUnit =
       document.querySelector('.create-log-retention-duration-unit');
+    this.createLogBackButton =
+      document.getElementById('create-log-back-button');
+    this.createLogBackButton.addEventListener('click', this.toggleCreateLog);
+
     this.logsContainer = this.view.querySelector('.logs');
     this.logsHeader = document.querySelector('.logs-header');
     this.logRemoveDialog = document.getElementById('log-remove-dialog');
@@ -60,6 +64,11 @@ class LogsScreen {
     this.logRemoveBackButton =
       document.getElementById('log-remove-back-button');
     this.logRemoveBackButton.addEventListener('click', this.hideRemoveDialog);
+    this.logsBackButton =
+      document.getElementById('logs-back-button');
+    this.logsBackButton.addEventListener('click', () => {
+      page('/logs');
+    });
     this.onWindowResize();
   }
 
@@ -93,9 +102,11 @@ class LogsScreen {
       App.buildOverflowMenu(menu);
       App.showOverflowButton();
       this.createLogButton.classList.add('hidden');
+      this.logsBackButton.classList.remove('hidden');
     } else {
       App.hideOverflowButton();
       this.createLogButton.classList.remove('hidden');
+      this.logsBackButton.classList.add('hidden');
       this.logsHeader.textContent = 'Logs';
     }
 
