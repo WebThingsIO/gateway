@@ -163,6 +163,10 @@
   text-align: right;
 }
 
+.create-log-retention-duration-number {
+  width: 5rem;
+}
+
 #create-log-save-button {
   height: 4rem;
   max-width: 9rem;
