@@ -11,6 +11,7 @@
 'use strict';
 
 const App = require('../app');
+const Icons = require('../icons');
 const Utils = require('../utils');
 
 const RIGHT_MOUSE_BUTTON = 2;
@@ -67,16 +68,18 @@ class Log {
     if (!this.soloView) {
       // Get in the name and webcomponent
       if (!this.name) {
-        this.name = document.createElement('h3');
+        this.name = document.createElement('div');
         this.name.classList.add('logs-log-name');
       }
-      const thingContainer = document.createElement('div');
-      // new Thing(thingContainer); // TODO
-      const infoContainer = document.createElement('div');
-      infoContainer.classList.add('logs-log-info');
-      infoContainer.appendChild(this.name);
-      infoContainer.appendChild(thingContainer);
-      this.elt.appendChild(infoContainer);
+      if (!this.icon) {
+        this.icon = document.createElement('div');
+        this.icon.classList.add('logs-log-icon');
+      }
+      this.infoContainer = document.createElement('a');
+      this.infoContainer.classList.add('logs-log-info');
+      this.infoContainer.appendChild(this.icon);
+      this.infoContainer.appendChild(this.name);
+      this.elt.appendChild(this.infoContainer);
     }
 
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -157,19 +160,32 @@ class Log {
   }
 
   async load() {
-    const thing = await App.gatewayModel.getThingModel(this.thingId);
-    if (!thing) {
+    const thing = await App.gatewayModel.getThing(this.thingId);
+    const thingModel = await App.gatewayModel.getThingModel(this.thingId);
+    if (!thing || !thingModel) {
       // be sad
       return;
     }
     const thingName = thing.name;
-    this.property = thing.propertyDescriptions[this.propertyId];
+    this.property = thingModel.propertyDescriptions[this.propertyId];
     const propertyName = this.property.title;
     const formattedName = `${thingName} ${propertyName}`;
     if (this.soloView) {
       document.querySelector('.logs-header').textContent = formattedName;
     } else {
       this.name.textContent = formattedName;
+    }
+
+    if (!this.soloView) {
+      let iconUrl = '';
+      if (thing.selectedCapability) {
+        iconUrl = Icons.capabilityToIcon(thing.selectedCapability);
+      } else {
+        iconUrl = Icons.typeToIcon(thing.type);
+      }
+      this.icon.style.backgroundImage = `url(${iconUrl})`;
+      const detailUrl = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
+      this.infoContainer.setAttribute('href', detailUrl);
     }
 
     const propertyUnit = this.property.unit || '';
