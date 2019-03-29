@@ -457,14 +457,16 @@ class Log {
 
   valueToLabel(value, bonusPlaces) {
     bonusPlaces = bonusPlaces || 0;
-    const places = Math.max(
-      0,
-      2 + bonusPlaces - Math.log(this.valueMax - this.valueMin) / Math.LN10);
-    let labelText = value.toFixed(places);
+    let labelText;
     if (this.property.type === 'boolean') {
       labelText = this.propertyLabel(value);
     } else if (Math.floor(value) === value) {
       labelText = value.toFixed(0);
+    } else {
+      const places = Math.max(
+        0,
+        2 + bonusPlaces - Math.log(this.valueMax - this.valueMin) / Math.LN10);
+      labelText = value.toFixed(places);
     }
     return labelText;
   }
