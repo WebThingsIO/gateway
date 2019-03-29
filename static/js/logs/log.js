@@ -46,18 +46,20 @@ class Log {
 
   dimension() {
     if (this.soloView) {
-      this.margin = 96;
-      this.xStart = this.margin + 20;
+      this.xMargin = 96;
+      this.yMargin = 96;
+      this.xStart = this.xMargin + 20;
       this.width = window.innerWidth;
       this.height = window.innerHeight;
     } else {
-      this.margin = 20;
-      this.xStart = 120 + 2 * this.margin;
-      this.width = window.innerWidth - 2 * this.margin;
+      this.xMargin = 96;
+      this.yMargin = 20;
+      this.xStart = this.xMargin + 20;
+      this.width = window.innerWidth;
       this.height = 200;
     }
-    this.graphHeight = this.height - 2 * this.margin;
-    this.graphWidth = this.width - this.xStart - this.margin;
+    this.graphHeight = this.height - 2 * this.yMargin;
+    this.graphWidth = this.width - this.xStart - this.xMargin;
   }
 
   drawSkeleton() {
@@ -93,14 +95,14 @@ class Log {
     this.graph.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const axesPath = this.makePath([
-      {x: this.xStart, y: this.margin},
-      {x: this.xStart, y: this.height - this.margin},
-      {x: this.width - this.margin, y: this.height - this.margin},
+      {x: this.xStart, y: this.yMargin},
+      {x: this.xStart, y: this.height - this.yMargin},
+      {x: this.width - this.xMargin, y: this.height - this.yMargin},
     ]);
     axesPath.classList.add('logs-graph-axes');
     this.graph.appendChild(axesPath);
 
-    this.yAxisLabel = this.makeText('', this.xStart - this.margin / 4,
+    this.yAxisLabel = this.makeText('', this.xStart - 5,
                                     this.height / 2, 'end', 'middle');
     this.yAxisLabel.classList.add('logs-graph-label');
     this.graph.appendChild(this.yAxisLabel);
@@ -109,7 +111,7 @@ class Log {
                                              'rect');
     this.progress.classList.add('logs-graph-progress');
     this.progress.setAttribute('x', this.xStart);
-    this.progress.setAttribute('y', this.margin);
+    this.progress.setAttribute('y', this.yMargin);
     this.progressWidth = Math.floor(0.05 * this.graphWidth);
     this.progress.setAttribute('width', this.progressWidth);
     this.progress.setAttribute('height', this.graphHeight);
@@ -121,7 +123,7 @@ class Log {
                                'rect');
     this.selectionHighlight.classList.add('logs-graph-selection-highlight');
     this.selectionHighlight.setAttribute('x', this.xStart);
-    this.selectionHighlight.setAttribute('y', this.margin);
+    this.selectionHighlight.setAttribute('y', this.yMargin);
     this.selectionHighlight.setAttribute('width', 0);
     this.selectionHighlight.setAttribute('height', this.graphHeight);
 
@@ -280,7 +282,7 @@ class Log {
   }
 
   valueToY(value) {
-    return this.height - this.margin -
+    return this.height - this.yMargin -
       (value - this.valueMin) /
       (this.valueMax - this.valueMin) * this.graphHeight;
   }
@@ -362,11 +364,11 @@ class Log {
 
       points.unshift({
         x: points[0].x,
-        y: this.height - this.margin,
+        y: this.height - this.yMargin,
       });
       points.push({
         x: points[points.length - 1].x,
-        y: this.height - this.margin,
+        y: this.height - this.yMargin,
       });
 
       graphFill = this.makePath(points);
@@ -431,13 +433,13 @@ class Log {
 
   drawYTicks() {
     let label = this.makeText(this.valueToLabel(this.valueMin),
-                              this.xStart - this.margin / 4,
+                              this.xStart - 5,
                               this.valueToY(this.valueMin), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
     label = this.makeText(this.valueToLabel(this.valueMax),
-                          this.xStart - this.margin / 4,
+                          this.xStart - 5,
                           this.valueToY(this.valueMax), 'end', 'middle');
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
@@ -477,7 +479,7 @@ class Log {
         if ((time - flooredStart) % bigTickIncrement === 0) {
           // Big label of date
           const text = this.timeToLabel(time);
-          const label = this.makeText(text, x, this.height - this.margin,
+          const label = this.makeText(text, x, this.height - this.yMargin + 2,
                                       'middle', 'hanging');
           label.classList.add('logs-graph-label');
           this.graph.appendChild(label);
@@ -485,15 +487,15 @@ class Log {
         } else if (tickWidth > 48) {
           // Big label if the small ticks are wider than expected
           const text = this.timeToLabel(time);
-          const label = this.makeText(text, x, this.height - this.margin,
+          const label = this.makeText(text, x, this.height - this.yMargin + 2,
                                       'middle', 'hanging');
           label.classList.add('logs-graph-label');
           this.graph.appendChild(label);
         }
         // Make a tick
         const tick = this.makePath([
-          {x, y: this.height - this.margin},
-          {x, y: this.height - this.margin - tickHeight},
+          {x, y: this.height - this.yMargin},
+          {x, y: this.height - this.yMargin - tickHeight},
         ]);
         tick.classList.add('logs-graph-tick');
         this.graph.appendChild(tick);
