@@ -113,7 +113,7 @@
 
 .logs-graph-axes {
   stroke: white;
-  stroke-width: 2px;
+  stroke-width: 0.2rem;
   fill: none;
 }
 
@@ -125,6 +125,11 @@
 .logs-graph-tick {
   stroke: rgba(255, 255, 255, 0.8);
   fill: none;
+}
+
+.logs-graph-tick-big {
+  stroke: white;
+  stroke-width: 0.2rem;
 }
 
 .logs-graph-fill {
