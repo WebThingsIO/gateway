@@ -640,10 +640,11 @@ class Log {
   }
 
   updateScrollBar() {
-    let controlStart = this.timeToX(this.start.getTime(), this.logStart,
-                                    this.logEnd);
-    let controlEnd = this.timeToX(this.end.getTime(), this.logStart,
-                                  this.logEnd);
+    let controlStart = this.timeToX(this.start.getTime(),
+                                    this.logStart.getTime(),
+                                    this.logEnd.getTime());
+    let controlEnd = this.timeToX(this.end.getTime(), this.logStart.getTime(),
+                                  this.logEnd.getTime());
 
     // Make sure control is wide enough to tap
     if (controlEnd - controlStart < 16) {
@@ -771,20 +772,31 @@ class Log {
   }
 
   onPointerDown(event) {
+    console.log('onPointerDown', event);
     event.preventDefault();
 
     if (event.button === RIGHT_MOUSE_BUTTON) {
       return;
     }
 
-    this.dragStart = this.constrainTime(this.xToTime(event.clientX));
-    this.pointerDown = true;
+    if (event.target.classList.contains('logs-scroll-control')) {
+      this.scrolling = true;
+      this.dragging = false;
+      const controlX = parseFloat(this.scrollControl.getAttribute('x'));
+      this.scrollOffset = event.clientX - controlX;
+    } else {
+      this.dragging = true;
+      this.scrolling = false;
+      this.dragStart = this.constrainTime(this.xToTime(event.clientX));
+    }
   }
 
   onPointerMove(event) {
     event.preventDefault();
-    if (this.pointerDown) {
+    if (this.dragging) {
       this.drawHighlight(event.clientX);
+    } else if (this.scrolling) {
+      this.scrollControl.setAttribute('x', event.clientX - this.scrollOffset);
     } else {
       this.drawTooltip(event.clientX);
     }
@@ -849,15 +861,21 @@ class Log {
   onPointerLeave() {
     this.removeTooltip();
     this.removeHighlight();
-    this.pointerDown = false;
+    if (this.scrolling) {
+      this.finishScrolling();
+    }
+    this.dragging = false;
+    this.scrolling = false;
   }
 
   onPointerUp(event) {
     event.preventDefault();
     this.removeHighlight();
 
-    if (this.pointerDown) {
-      this.pointerDown = false;
+    if (this.scrolling) {
+      this.finishScrolling();
+    } else if (this.dragging) {
+      this.dragging = false;
       const dragEnd = this.constrainTime(this.xToTime(event.clientX));
       if (Math.abs(dragEnd - this.dragStart) < 30 * 1000) {
         // Drag was way too small (<30s)
@@ -883,6 +901,15 @@ class Log {
       // TODO clip and then do a zoom out animation as well
       this.redraw();
     }
+  }
+
+  finishScrolling() {
+    this.scrolling = false;
+    const controlX = parseFloat(this.scrollControl.getAttribute('x'));
+    const controlTime = this.xToTime(controlX, this.logStart.getTime(),
+                                     this.logEnd.getTime());
+    const delta = controlTime - this.start.getTime();
+    this.scroll(delta);
   }
 
   removeTooltip() {
