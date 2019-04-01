@@ -47,7 +47,7 @@ module.exports = {
           mdnsServiceDomain: os.hostname(),
 
           mdnsTxt: {
-            desc: 'Mozilla WebThings Gateway',
+            desc: 'Web of Things Gateway',
             protocol: 'http, https, Web Sockets',
             power: '6 watts',
           },

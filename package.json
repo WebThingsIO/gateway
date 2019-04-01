@@ -1,7 +1,7 @@
 {
-  "name": "things-gateway",
+  "name": "webthings-gateway",
   "version": "0.7.0",
-  "description": "WebThings gateway",
+  "description": "Web of Things gateway",
   "main": "src/app.js",
   "scripts": {
     "test": "webpack && npm run lint && npm run mocha",

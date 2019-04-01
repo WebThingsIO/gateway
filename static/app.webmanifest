@@ -1,9 +1,9 @@
 {
   "name": "WebThings Gateway",
-  "short_name": "Things",
+  "short_name": "WebThings",
   "start_url": ".",
   "display": "standalone",
-  "description": "Mozilla WebThings Gateway",
+  "description": "Web of Things Gateway",
   "icons": [{
     "src": "images/icon.png",
     "sizes": "256x256",
