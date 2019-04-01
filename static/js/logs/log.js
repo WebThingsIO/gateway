@@ -177,11 +177,9 @@ class Log {
         newStart = this.logStart.getTime();
         newEnd = newStart + this.weekDropdown.value;
       }
-      const newStartX = this.timeToX(newStart);
-      const newEndX = this.timeToX(newEnd);
       this.start = new Date(newStart);
       this.end = new Date(newEnd);
-      this.redraw(newStartX, newEndX);
+      this.redraw();
     });
     this.elt.appendChild(this.weekDropdown);
   }
@@ -355,7 +353,7 @@ class Log {
       lowestPowerOf10ToPreserve;
   }
 
-  redraw(newStartX, newEndX) {
+  redraw() {
     if (!this.property) {
       return;
     }
@@ -435,21 +433,6 @@ class Log {
     this.drawXTicks();
 
     this.updateScrollBar();
-
-    if (typeof graphLine !== 'undefined' &&
-        typeof newEndX !== 'undefined') {
-      const xScale = (newEndX - newStartX) / this.graphWidth;
-      const transformX = newStartX - this.xStart * xScale;
-      const transform = `translate(${transformX}px,0) scale(${xScale}, 1)`;
-
-      graphLine.style.transform = transform;
-      graphFill.style.transform = transform;
-
-      setTimeout(function() {
-        graphLine.style.transform = '';
-        graphFill.style.transform = '';
-      }, 0);
-    }
   }
 
   timeToLabel(time) {
@@ -680,11 +663,9 @@ class Log {
       newEnd = this.logEnd.getTime();
       newStart = newEnd - width;
     }
-    const newStartX = this.timeToX(newStart);
-    const newEndX = this.timeToX(newEnd);
     this.start = new Date(newStart);
     this.end = new Date(newEnd);
-    this.redraw(newStartX, newEndX);
+    this.redraw();
   }
 
   /**
@@ -889,11 +870,9 @@ class Log {
         newStart = new Date(dragEnd);
         newEnd = new Date(this.dragStart);
       }
-      const newStartX = this.timeToX(newStart.getTime());
-      const newEndX = this.timeToX(newEnd.getTime());
       this.start = newStart;
       this.end = newEnd;
-      this.redraw(newStartX, newEndX);
+      this.redraw();
     }
     if (event.button === RIGHT_MOUSE_BUTTON) {
       this.start = this.logStart;
