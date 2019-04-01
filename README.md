@@ -1,4 +1,4 @@
-# Things Gateway by Mozilla
+# WebThings Gateway by Mozilla
 
 [![Build Status](https://travis-ci.org/mozilla-iot/gateway.svg?branch=master)](https://travis-ci.org/mozilla-iot/gateway)
 [![codecov](https://codecov.io/gh/mozilla-iot/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-iot/gateway)

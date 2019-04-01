@@ -9,7 +9,7 @@ systemctl disable dnsmasq.service
 cat > /etc/hostapd/hostapd.conf <<END
 interface=wlan0
 driver=nl80211
-ssid=Mozilla IoT Gateway
+ssid=WebThings Gateway
 hw_mode=g
 # or 1 or 11
 channel=6

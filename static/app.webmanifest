@@ -1,9 +1,9 @@
 {
-  "name": "Things Gateway",
-  "short_name": "Things",
+  "name": "WebThings Gateway",
+  "short_name": "WebThings",
   "start_url": ".",
   "display": "standalone",
-  "description": "Web of Things gateway",
+  "description": "Web of Things Gateway",
   "icons": [{
     "src": "images/icon.png",
     "sizes": "256x256",

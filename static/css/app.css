@@ -155,14 +155,14 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
-  width: 16rem;
+  height: 3.6rem;
 }
 
 #menu-wordmark {
   position: fixed;
-  top: 2.6rem;
-  left: 11rem;
-  height: 4.2rem;
+  top: 3rem;
+  left: 10rem;
+  height: 3.6rem;
 }
 
 #speech-button {

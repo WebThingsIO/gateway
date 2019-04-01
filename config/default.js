@@ -1,5 +1,5 @@
 /*
- * Things Gateway Default Configuration.
+ * WebThings Gateway Default Configuration.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -43,11 +43,11 @@ module.exports = {
         mozillaTunnelService: true,
         localControl: {
           mdnsServiceType: 'http',
-          mdnsServiceName: 'Mozilla IoT Gateway',
+          mdnsServiceName: 'Mozilla WebThings Gateway',
           mdnsServiceDomain: os.hostname(),
 
           mdnsTxt: {
-            desc: 'Web of Things gateway',
+            desc: 'Web of Things Gateway',
             protocol: 'http, https, Web Sockets',
             power: '6 watts',
           },
@@ -71,7 +71,7 @@ module.exports = {
   wifi: {
     ap: {
       ipaddr: '192.168.2.1',
-      ssid_base: 'Things Gateway',
+      ssid_base: 'WebThings Gateway',
     },
   },
 };

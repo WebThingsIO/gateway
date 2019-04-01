@@ -1,5 +1,5 @@
 /**
- * Things Gateway Database.
+ * WebThings Gateway Database.
  *
  * Stores a list of Things connected to the gateway.
  *

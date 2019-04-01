@@ -163,8 +163,8 @@ class DNSserviceDiscovery {
    *
    * @param {object} newProfile For example:
    *   newProfile = {
-   *     name: "Mozilla IoT Gateway",
-   *     host: "mozillaGateway",     // Local DNS name
+   *     name: "WebThings Gateway",
+   *     host: "gateway",     // Local DNS name
    *     txt: {
    *       desc: "descriptive text",
    *       protocols:  "http, https, oauth2 etc..",
@@ -228,8 +228,8 @@ class DNSserviceDiscovery {
  *
  * @return: {Object} mDNS config options, for example:
  *   Options = {
- *     name: "Mozilla IoT Gateway",
- *     host: "mozillaGateway",     // Local DNS name
+ *     name: "WebThings Gateway",
+ *     host: "gateway",     // Local DNS name
  *     txt: {
  *       desc: "descriptive text",
  *       protocols:  "http, https, oauth2 etc..",

@@ -37,7 +37,7 @@ LogsController.get('/', async (request, response) => {
     '<html lang="en">' +
     '<head>' +
     '<meta charset="utf-8">' +
-    '<title>Things Gateway - Logs</title>' +
+    '<title>Logs - WebThings Gateway</title>' +
     '</head>' +
     '<body>' +
     '<ul>';
