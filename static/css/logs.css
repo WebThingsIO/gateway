@@ -213,8 +213,13 @@
   text-align: right;
 }
 
-.create-log-retention-duration-number {
+input[type="number"].create-log-retention-duration-number {
   width: 5rem;
+  height: 3rem;
+}
+
+.create-log-retention-duration-unit {
+  width: 9rem;
 }
 
 #create-log-save-button {
@@ -241,6 +246,7 @@
 .create-log-device, .create-log-property {
   width: 100%;
   margin-right: 1rem;
+  max-width: 24rem;
 }
 
 .create-log-hint {
