@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* globals expect */
+/* globals expect, jest */
 
 process.env.NODE_ENV = 'test';
 
@@ -138,6 +138,9 @@ afterAll(async () => {
   ]);
   removeTestManifest();
 });
+
+// Some tests take really long if Travis is having a bad day
+jest.setTimeout(60000);
 
 module.exports = {
   mockAdapter,
