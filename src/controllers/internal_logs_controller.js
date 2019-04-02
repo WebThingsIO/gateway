@@ -97,7 +97,8 @@ InternalLogsController.get('/zip', async (request, response) => {
     UserProfile.logDir
   ).map((f) => {
     const fullPath = path.join(UserProfile.logDir, f);
-    if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile()) {
+    if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile() &&
+        f !== 'logs.sqlite3') {
       archive.file(fullPath, {name: path.join('logs', f)});
     }
   });
