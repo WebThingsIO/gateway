@@ -777,7 +777,16 @@ class Log {
     if (this.dragging) {
       this.drawHighlight(event.clientX);
     } else if (this.scrolling) {
-      this.scrollControl.setAttribute('x', event.clientX - this.scrollOffset);
+      let newX = event.clientX - this.scrollOffset;
+      const scrollControlWidth =
+        parseFloat(this.scrollControl.getAttribute('width'));
+      const maxX = this.xStart + this.graphWidth - scrollControlWidth;
+      if (newX < this.xStart) {
+        newX = this.xStart;
+      } else if (newX > maxX) {
+        newX = maxX;
+      }
+      this.scrollControl.setAttribute('x', newX);
     } else {
       this.drawTooltip(event.clientX);
     }
