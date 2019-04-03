@@ -85,7 +85,7 @@ if (config.get('oauthTestClients')) {
   );
 
   oauthClients.register(
-    new ClientRegistry(new URL('http://localhost:8888'), 'mycroft',
+    new ClientRegistry(new URL('http://localhost:8888/callback'), 'mycroft',
                        'Mycroft', 'bDaQN6yDgI0GlvJL2UVcIAb4M8c', '/things:readwrite')
   );
 }
