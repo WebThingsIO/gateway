@@ -16,7 +16,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
 # Upgrade gateway-addon Python package
-_url="git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon"
+_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.8.0#egg=gateway_addon"
 sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
 
