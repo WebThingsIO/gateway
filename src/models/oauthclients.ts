@@ -87,4 +87,19 @@ oauthClients.register(
                      'Local Token Service', 'super secret',
                      '/things:readwrite')
 );
+
+oauthClients.register(
+  new ClientRegistry(new URL('https://api.mycroft.ai/v1/auth/callback'), 'mycroft',
+                     'Mycroft', 'bDaQN6yDgI0GlvJL2UVcIAb4M8c', '/things:readwrite')
+);
+
+oauthClients.register(
+  new ClientRegistry(new URL('https://api-test.mycroft.ai/v1/auth/callback'), 'mycroft',
+                     'Mycroft', 'bDaQN6yDgI0GlvJL2UVcIAb4M8c', '/things:readwrite')
+);
+
+oauthClients.register(
+  new ClientRegistry(new URL('http://localhost:8888'), 'mycroft',
+                     'Mycroft', 'bDaQN6yDgI0GlvJL2UVcIAb4M8c', '/things:readwrite')
+);
 export default oauthClients;
