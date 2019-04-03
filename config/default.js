@@ -74,4 +74,5 @@ module.exports = {
       ssid_base: 'WebThings Gateway',
     },
   },
+  oauthTestClients: false,
 };

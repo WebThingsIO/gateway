@@ -28,4 +28,5 @@ module.exports = {
   ipc: {
     protocol: 'inproc',
   },
+  oauthTestClients: true,
 };
