@@ -64,7 +64,20 @@ LogsController.get('/', async (request, response) => {
 /**
  * Static handler for log files.
  */
-LogsController.use('/files', express.static(UserProfile.logDir));
+LogsController.use(
+  '/files',
+  express.static(
+    UserProfile.logDir,
+    {
+      setHeaders: (res, filepath) => {
+        const base = path.basename(filepath);
+        if (base.startsWith('run-app.log')) {
+          res.set('Content-Type', 'text/plain');
+        }
+      },
+    }
+  )
+);
 
 /**
  * Handle request for logs.zip.
