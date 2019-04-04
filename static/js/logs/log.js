@@ -438,8 +438,7 @@ class Log {
   timeToLabel(time) {
     const date = new Date(time);
     if (date.getHours() === 0 && date.getMinutes() === 0) {
-      // TODO check if we're in m/d or d/m
-      return `${date.getMonth() + 1}/${date.getDate()}`;
+      return `${date.getDate()}`;
     }
     let minutes = `${date.getMinutes()}`;
     if (minutes.length < 2) {
