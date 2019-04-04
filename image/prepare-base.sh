@@ -107,6 +107,6 @@ sudo systemctl enable mozilla-iot-gateway.intent-parser.service
 sudo update-rc.d gateway-iptables defaults
 
 # Clean up the preparation script and config files.
-sudo rm /home/pi/prepare-base.sh /home/pi/etc
+sudo rm -rf /home/pi/prepare-base.sh /home/pi/etc
 
 echo "Done"
