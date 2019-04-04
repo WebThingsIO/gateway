@@ -210,37 +210,7 @@ main() {
 
     sudo touch ${MOZILLA_IOT_DIR}/gateway/.post_upgrade_complete
 
-    # Setup things so that the filesystem gets resized
-    # on the next boot.
-
-    sudo sh -c "cat > '${ETC_DIR}/init.d/resize2fs_once'" <<'END'
-#!/bin/sh
-### BEGIN INIT INFO
-# Provides:          resize2fs_once
-# Required-Start:
-# Required-Stop:
-# Default-Start: 3
-# Default-Stop:
-# Short-Description: Resize the root filesystem to fill partition
-# Description:
-### END INIT INFO
-. /lib/lsb/init-functions
-case "$1" in
-  start)
-    log_daemon_msg "Starting resize2fs_once"
-    ROOT_DEV=$(findmnt / -o source -n) &&
-    resize2fs $ROOT_DEV &&
-    update-rc.d resize2fs_once remove &&
-    rm /etc/init.d/resize2fs_once &&
-    log_end_msg $?
-    ;;
-  *)
-    echo "Usage: $0 start" >&2
-    exit 3
-    ;;
-esac
-END
-    sudo chmod +x "${ETC_DIR}/init.d/resize2fs_once"
+    # Setup things so that the filesystem gets resized on the next boot.
     sudo ln -s "../init.d/resize2fs_once" "${ETC_DIR}/rc3.d/S01resize2fs_once"
 
     if ! grep -q 'init_resize.sh' ${CMDLINE} ; then

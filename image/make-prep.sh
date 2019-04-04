@@ -55,13 +55,14 @@ END
 # Copies the prepare-base.sh and prepare-base-root.sh files to the image
 #
 copy_prep_files() {
-  echo "Copying prepare-base scripts"
+  echo "Copying prepare-base scripts and config files"
 
   HOME_PI="${ROOT_MOUNTPOINT}/home/pi"
 
   sudo rm -f "${HOME_PI}"/prepare-base*.sh
-  sudo cp "${SCRIPT_DIR}"/prepare-base*.sh "${HOME_PI}"
-  sudo chmod +x "${HOME_PI}"/prepare-base*.sh
+  sudo cp "${SCRIPT_DIR}"/prepare-base.sh "${HOME_PI}"
+  sudo cp -r "${SCRIPT_DIR}"/etc "${HOME_PI}"
+  sudo chmod +x "${HOME_PI}"/prepare-base.sh
 }
 
 ###########################################################################
@@ -69,7 +70,6 @@ copy_prep_files() {
 # Enables the serial console
 #
 enable_serial_console() {
-
   CONFIG=${BOOT_MOUNTPOINT}/config.txt
   if grep -q "enable_uart=1" ${CONFIG} ; then
     echo "Serial console appears to already be enabled"
