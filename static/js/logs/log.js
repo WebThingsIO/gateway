@@ -753,7 +753,6 @@ class Log {
   }
 
   onPointerDown(event) {
-    console.log('onPointerDown', event);
     event.preventDefault();
 
     if (event.button === RIGHT_MOUSE_BUTTON) {
@@ -766,6 +765,12 @@ class Log {
       const controlX = parseFloat(this.scrollControl.getAttribute('x'));
       this.scrollOffset = event.clientX - controlX;
     } else {
+      const rect = this.graph.getBoundingClientRect();
+      const localY = event.clientY - rect.top;
+      if (localY > this.graphHeight + this.yMargin) {
+        // Actually clicking the background
+        return;
+      }
       this.dragging = true;
       this.scrolling = false;
       this.dragStart = this.constrainTime(this.xToTime(event.clientX));
