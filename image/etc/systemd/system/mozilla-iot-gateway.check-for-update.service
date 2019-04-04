@@ -1,0 +1,13 @@
+[Unit]
+Description=Mozilla WebThings Gateway Client Update Checker
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=pi
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/gateway
+# Edit this line, if needed, to set the correct path to the script
+ExecStart=/home/pi/mozilla-iot/gateway/tools/check-for-update.sh

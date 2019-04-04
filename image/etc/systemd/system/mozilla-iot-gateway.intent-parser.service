@@ -1,0 +1,19 @@
+[Unit]
+Description=Mozilla WebThings Gateway Intent Parser
+After=network.target
+OnFailure=mozilla-iot-gateway.update-rollback.service
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=pi
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/intent-parser
+# Edit this line, if needed, to set the correct path to node
+ExecStart=/home/pi/mozilla-iot/intent-parser/intent-parser-server.py
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Run the Mozilla WebThings Gateway update checker daily
+
+[Timer]
+OnCalendar=daily
+
+[Install]
+WantedBy=timers.target
