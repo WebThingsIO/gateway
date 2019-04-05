@@ -704,7 +704,11 @@ class Log {
     return date;
   }
 
-  nearestPoint(time) {
+  nearestPoint(localX, localY) {
+    const time = this.xToTime(localX);
+    if (time < this.start.getTime() || time > this.end.getTime()) {
+      return null;
+    }
     let start = 0;
     let end = this.rawPoints.length - 1;
     let mid = 0;
@@ -719,27 +723,24 @@ class Log {
       }
     }
 
-    let nearestPoint = this.rawPoints[mid];
-    const diff = time - nearestPoint.time;
+    let nearestPoint = null;
+    let nearestDSq = 2 * 50 * 50;
 
-    if (diff > 0 && mid < this.rawPoints.length - 1) {
-      const otherDiff = time - this.rawPoints[mid + 1].time;
-      if (Math.abs(diff) > Math.abs(otherDiff)) {
-        nearestPoint = this.rawPoints[mid + 1];
+    // Trial the five nearest points
+    for (let i = mid - 2; i < mid + 3; i++) {
+      if (i < 0 || i > this.rawPoints.length - 1) {
+        continue;
       }
-    }
-    if (diff < 0 && mid > 0) {
-      const otherDiff = time - this.rawPoints[mid - 1].time;
-      if (Math.abs(diff) > Math.abs(otherDiff)) {
-        nearestPoint = this.rawPoints[mid - 1];
+      const dx = this.timeToX(this.rawPoints[i].time) - localX;
+      const dy = this.valueToY(this.rawPoints[i].value) - localY;
+      const diffSq = dx * dx + dy * dy;
+      if (diffSq > nearestDSq) {
+        continue;
       }
+      nearestDSq = diffSq;
+      nearestPoint = this.rawPoints[i];
     }
-
-    const closenessBuffer = this.xToTime(48) - this.xToTime(0);
-    if (Math.abs(time - nearestPoint.time) < closenessBuffer) {
-      return nearestPoint;
-    }
-    return null;
+    return nearestPoint;
   }
 
   constrainTime(time) {
@@ -792,7 +793,8 @@ class Log {
       }
       this.scrollControl.setAttribute('x', newX);
     } else {
-      this.drawTooltip(event.clientX);
+      const rect = this.graph.getBoundingClientRect();
+      this.drawTooltip(event.clientX - rect.left, event.clientY - rect.top);
     }
   }
 
@@ -812,17 +814,12 @@ class Log {
     this.selectionHighlight.setAttribute('width', 0);
   }
 
-  drawTooltip(clientX) {
+  drawTooltip(localX, localY) {
     if (!this.property || !this.rawPoints || this.rawPoints.length === 0) {
       return;
     }
-    const time = this.xToTime(clientX);
-    if (time < this.start.getTime() || time > this.end.getTime()) {
-      this.removeTooltip();
-      return;
-    }
 
-    const point = this.nearestPoint(time);
+    const point = this.nearestPoint(localX, localY);
     if (!point) {
       this.removeTooltip();
       return;
