@@ -46,9 +46,9 @@ class Log {
     this.onPointerLeave = this.onPointerLeave.bind(this);
     this.scrollLeft = this.scrollLeft.bind(this);
     this.scrollRight = this.scrollRight.bind(this);
-    this.mouseDown = false;
     this.pointerState = {};
     this.prevPointerState = {};
+    this.touchTooltipTimeout = null;
 
     this.drawSkeleton();
   }
@@ -109,6 +109,9 @@ class Log {
     this.graph.addEventListener('mousemove', this.onPointerMove);
     this.graph.addEventListener('mouseup', this.onPointerUp);
     this.graph.addEventListener('mouseleave', this.onPointerLeave);
+    this.graph.addEventListener('touchstart', this.onPointerDown);
+    this.graph.addEventListener('touchmove', this.onPointerMove);
+    this.graph.addEventListener('touchend', this.onPointerUp);
     this.graph.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const axesPath = this.makePath([
@@ -371,6 +374,7 @@ class Log {
     this.removeAll('.logs-graph-fill');
     this.removeAll('.logs-graph-label');
     this.removeAll('.logs-graph-tick');
+    this.removeTooltip();
 
     this.progress.setAttribute('width', 0);
     this.progressWidth = 0;
@@ -766,10 +770,23 @@ class Log {
     this.pointerState = pointerState;
   }
 
+  convertTouchEvent(event) {
+    event.isTouch = false;
+    if (event.targetTouches) {
+      if (event.targetTouches.length > 0) {
+        event.clientX = event.targetTouches[0].clientX;
+        event.clientY = event.targetTouches[0].clientY;
+        event.isTouch = true;
+      }
+    }
+  }
+
   onPointerDown(event) {
     event.preventDefault();
 
-    if (event.button === RIGHT_MOUSE_BUTTON) {
+    this.convertTouchEvent(event);
+
+    if (event.buttons === RIGHT_MOUSE_BUTTON) {
       return;
     }
 
@@ -779,6 +796,13 @@ class Log {
         action: SCROLLING,
         scrollOffset: event.clientX - controlX,
       });
+    } else if (event.isTouch) {
+      const rect = this.graph.getBoundingClientRect();
+      this.drawTooltip(event.clientX - rect.left, event.clientY - rect.top);
+      clearTimeout(this.touchTooltipTimeout);
+      this.touchTooltipTimeout = setTimeout(() => {
+        this.removeTooltip();
+      }, 5000);
     } else {
       const rect = this.graph.getBoundingClientRect();
       const localY = event.clientY - rect.top;
@@ -795,6 +819,9 @@ class Log {
 
   onPointerMove(event) {
     event.preventDefault();
+
+    this.convertTouchEvent(event);
+
     // Restore a drag interrupted by the pointer leaving
     if (event.buttons === LEFT_MOUSE_BUTTON &&
         this.prevPointerState.action &&
@@ -882,6 +909,8 @@ class Log {
 
   onPointerUp(event) {
     event.preventDefault();
+    this.convertTouchEvent(event);
+
     this.removeHighlight();
 
     if (this.pointerState.action === SCROLLING) {
