@@ -212,8 +212,14 @@ class LogsScreen {
 
     this.createLogProperty.innerHTML = '';
     for (const propId in thing.properties) {
+      const prop = thing.properties[propId];
+      if (prop.type !== 'boolean' &&
+          prop.type !== 'number' &&
+          prop.type !== 'integer') {
+        continue;
+      }
       const opt = document.createElement('option');
-      opt.innerText = thing.properties[propId].title ||
+      opt.innerText = prop.title ||
         Utils.capitalize(propId);
       opt.value = propId;
       this.createLogProperty.appendChild(opt);
