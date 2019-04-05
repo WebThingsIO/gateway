@@ -14,7 +14,13 @@ const App = require('../app');
 const Icons = require('../icons');
 const Utils = require('../utils');
 
+const LEFT_MOUSE_BUTTON = 1;
 const RIGHT_MOUSE_BUTTON = 2;
+
+// Scrolling using the scroll control bar
+const SCROLLING = 1;
+// Dragging a window on the graph itself
+const DRAGGING = 2;
 
 class Log {
   constructor(thingId, propertyId, start, end, soloView) {
@@ -41,7 +47,8 @@ class Log {
     this.scrollLeft = this.scrollLeft.bind(this);
     this.scrollRight = this.scrollRight.bind(this);
     this.mouseDown = false;
-    this.dragStart = -1;
+    this.pointerState = {};
+    this.prevPointerState = {};
 
     this.drawSkeleton();
   }
@@ -752,6 +759,11 @@ class Log {
     return time;
   }
 
+  setPointerState(pointerState) {
+    this.prevPointerState = this.pointerState;
+    this.pointerState = pointerState;
+  }
+
   onPointerDown(event) {
     event.preventDefault();
 
@@ -760,10 +772,11 @@ class Log {
     }
 
     if (event.target.classList.contains('logs-scroll-control')) {
-      this.scrolling = true;
-      this.dragging = false;
       const controlX = parseFloat(this.scrollControl.getAttribute('x'));
-      this.scrollOffset = event.clientX - controlX;
+      this.setPointerState({
+        action: SCROLLING,
+        scrollOffset: event.clientX - controlX,
+      });
     } else {
       const rect = this.graph.getBoundingClientRect();
       const localY = event.clientY - rect.top;
@@ -771,18 +784,25 @@ class Log {
         // Actually clicking the background
         return;
       }
-      this.dragging = true;
-      this.scrolling = false;
-      this.dragStart = this.constrainTime(this.xToTime(event.clientX));
+      this.setPointerState({
+        action: DRAGGING,
+        dragStart: this.constrainTime(this.xToTime(event.clientX)),
+      });
     }
   }
 
   onPointerMove(event) {
     event.preventDefault();
-    if (this.dragging) {
+    // Restore a drag interrupted by the pointer leaving
+    if (event.buttons === LEFT_MOUSE_BUTTON &&
+        this.prevPointerState.action &&
+        !this.pointerState.action) {
+      this.setPointerState(this.prevPointerState);
+    }
+    if (this.pointerState.action === DRAGGING) {
       this.drawHighlight(event.clientX);
-    } else if (this.scrolling) {
-      let newX = event.clientX - this.scrollOffset;
+    } else if (this.pointerState.action === SCROLLING) {
+      let newX = event.clientX - this.pointerState.scrollOffset;
       const scrollControlWidth =
         parseFloat(this.scrollControl.getAttribute('width'));
       const maxX = this.xStart + this.graphWidth - scrollControlWidth;
@@ -799,7 +819,7 @@ class Log {
   }
 
   drawHighlight(clientX) {
-    const dragStartX = this.timeToX(this.dragStart);
+    const dragStartX = this.timeToX(this.pointerState.dragStart);
     let minX = Math.min(dragStartX, clientX);
     let maxX = Math.max(dragStartX, clientX);
 
@@ -852,33 +872,32 @@ class Log {
   onPointerLeave() {
     this.removeTooltip();
     this.removeHighlight();
-    if (this.scrolling) {
+    if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
     }
-    this.dragging = false;
-    this.scrolling = false;
+    this.setPointerState({});
   }
 
   onPointerUp(event) {
     event.preventDefault();
     this.removeHighlight();
 
-    if (this.scrolling) {
+    if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
-    } else if (this.dragging) {
-      this.dragging = false;
+    } else if (this.pointerState.action === DRAGGING) {
       const dragEnd = this.constrainTime(this.xToTime(event.clientX));
-      if (Math.abs(dragEnd - this.dragStart) < 30 * 1000) {
+      if (Math.abs(dragEnd - this.pointerState.dragStart) < 30 * 1000) {
         // Drag was way too small (<30s)
+        this.setPointerState({});
         return;
       }
       let newStart, newEnd;
-      if (this.dragStart < dragEnd) {
-        newStart = new Date(this.dragStart);
+      if (this.pointerState.dragStart < dragEnd) {
+        newStart = new Date(this.pointerState.dragStart);
         newEnd = new Date(dragEnd);
       } else {
         newStart = new Date(dragEnd);
-        newEnd = new Date(this.dragStart);
+        newEnd = new Date(this.pointerState.dragStart);
       }
       this.start = newStart;
       this.end = newEnd;
@@ -890,10 +909,10 @@ class Log {
       this.weekDropdown.value = 7 * 24 * 60 * 60 * 1000;
       this.redraw();
     }
+    this.setPointerState({});
   }
 
   finishScrolling() {
-    this.scrolling = false;
     const controlX = parseFloat(this.scrollControl.getAttribute('x'));
     const controlTime = this.xToTime(controlX, this.logStart.getTime(),
                                      this.logEnd.getTime());
