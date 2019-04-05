@@ -224,7 +224,7 @@ class LogsScreen {
     this.createLogScreen.classList.toggle('hidden');
   }
 
-  onCreateLog() {
+  async onCreateLog() {
     const hourToMs = 60 * 60 * 1000;
     const dayToMs = 24 * hourToMs;
     const weekToMs = 7 * dayToMs;
@@ -243,7 +243,7 @@ class LogsScreen {
         break;
     }
 
-    fetch('/logs', {
+    const res = await fetch('/logs', {
       method: 'POST',
       headers: Object.assign(API.headers(),
                              {'Content-Type': 'application/json'}),
@@ -255,15 +255,21 @@ class LogsScreen {
         },
         maxAge,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        this.toggleCreateLog();
-        this.createLogHint.classList.add('hidden');
-        this.reload();
-      } else {
-        App.showMessage('Server error: unable to create log', 5000);
-      }
     });
+
+    if (res.ok) {
+      this.toggleCreateLog();
+      this.createLogHint.classList.add('hidden');
+      this.reload();
+      return;
+    }
+
+    try {
+      const message = await res.text();
+      App.showMessage(`Unable to create log: ${message}`, 5000);
+    } catch (_) {
+      App.showMessage('Unable to create log', 5000);
+    }
   }
 
   onWindowResize() {
