@@ -14,7 +14,6 @@ const METRICS_OTHER = 'metricsOther';
 class Logs {
   constructor() {
     this.db = null;
-    this.data = {};
     this.idToDescr = {};
     this.descrToId = {};
     this.onPropertyChanged = this.onPropertyChanged.bind(this);
@@ -28,6 +27,8 @@ class Logs {
   }
 
   clear() {
+    this.idToDescr = {};
+    this.descrToId = {};
     return Promise.all([
       METRICS_NUMBER,
       METRICS_BOOLEAN,
