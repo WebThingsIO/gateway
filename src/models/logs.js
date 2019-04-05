@@ -156,6 +156,9 @@ class Logs {
    */
   async registerMetric(rawDescr, maxAge) {
     const descr = JSON.stringify(rawDescr);
+    if (this.descrToId.hasOwnProperty(descr)) {
+      return;
+    }
     const result = await this.run(
       'INSERT INTO metricIds (descr, maxAge) VALUES (?, ?)',
       [descr, maxAge]

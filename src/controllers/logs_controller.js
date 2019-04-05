@@ -53,12 +53,16 @@ LogsController.post('/', async (request, response) => {
   }
 
   try {
-    await Logs.registerMetric(normalizedDescr, maxAge);
+    const id = await Logs.registerMetric(normalizedDescr, maxAge);
+    if (typeof id === 'undefined') {
+      response.status(400).send('Log already exists');
+      return;
+    }
     response.status(200).send({
       descr: normalizedDescr,
     });
   } catch (e) {
-    response.status(500).send(`Internal error: ${e}`);
+    response.status(500).send(`Error registering: ${e.message}`);
   }
 });
 
