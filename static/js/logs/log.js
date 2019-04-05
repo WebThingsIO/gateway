@@ -62,6 +62,7 @@ class Log {
       this.scrollHeight = 30;
       this.height = window.innerHeight - 96 - this.yMargin * 2 -
         this.scrollHeight;
+      this.yPadding = 0;
     } else {
       this.xMargin = 96;
       this.yMargin = 20;
@@ -69,6 +70,7 @@ class Log {
       this.width = window.innerWidth;
       this.height = 200;
       this.scrollHeight = 30;
+      this.yPadding = 20;
     }
     this.graphHeight = this.height - 2 * this.yMargin;
     this.graphWidth = this.width - this.xStart - this.xMargin;
@@ -102,7 +104,7 @@ class Log {
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.graph.classList.add('logs-graph');
     this.graph.style.width = `${this.width}px`;
-    this.graph.style.height = `${this.height + this.scrollHeight}px`;
+    this.graph.style.height = `${this.height + this.scrollHeight + this.yPadding}px`;
     this.graph.addEventListener('mousedown', this.onPointerDown);
     this.graph.addEventListener('mousemove', this.onPointerMove);
     this.graph.addEventListener('mouseup', this.onPointerUp);
