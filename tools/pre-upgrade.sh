@@ -11,6 +11,11 @@ nvm use ${NODE_VERSION}
 # always use most recent version (lts)
 nvm alias default node
 
+# Clean up old node versions
+for version in $(nvm ls --no-colors | grep '^ ' | awk '{ print $1 }'); do
+    nvm uninstall "${version/^v/}"
+done
+
 # Allow node and python3 to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
