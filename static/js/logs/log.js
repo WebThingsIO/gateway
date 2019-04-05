@@ -54,20 +54,22 @@ class Log {
   }
 
   dimension() {
+    this.xMargin = 96;
+    this.xStart = this.xMargin + 20;
+    if (window.innerWidth < 800) {
+      this.xMargin = 72;
+      this.xStart = 48;
+    }
+    this.width = window.innerWidth;
+
     if (this.soloView) {
-      this.xMargin = 96;
       this.yMargin = 30;
-      this.xStart = this.xMargin + 20;
-      this.width = window.innerWidth;
       this.scrollHeight = 30;
+      this.yPadding = 30;
       this.height = window.innerHeight - 96 - this.yMargin * 2 -
-        this.scrollHeight;
-      this.yPadding = 0;
+        this.scrollHeight - this.yPadding;
     } else {
-      this.xMargin = 96;
       this.yMargin = 20;
-      this.xStart = this.xMargin + 20;
-      this.width = window.innerWidth;
       this.height = 200;
       this.scrollHeight = 30;
       this.yPadding = 20;
