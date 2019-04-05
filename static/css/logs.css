@@ -40,7 +40,6 @@
 .logs-log-container {
   position: relative;
   padding: 0;
-  padding-bottom: 2rem;
   width: 100%;
   overflow: hidden;
 }
