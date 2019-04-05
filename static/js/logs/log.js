@@ -887,7 +887,7 @@ class Log {
     if (event.button === RIGHT_MOUSE_BUTTON) {
       this.start = this.logStart;
       this.end = this.logEnd;
-      // TODO clip and then do a zoom out animation as well
+      this.weekDropdown.value = 7 * 24 * 60 * 60 * 1000;
       this.redraw();
     }
   }
