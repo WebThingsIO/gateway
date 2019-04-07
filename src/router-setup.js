@@ -249,11 +249,11 @@ function checkConnection() {
     }
 
     console.log(
-      'wifi-setup: checkConnection: No wifi connection found, starting AP'
+      'router-setup: checkConnection: No wifi connection found, starting AP'
     );
 
     if (!startAP(config.get('wifi.ap.ipaddr'))) {
-      console.error('wifi-setup: checkConnection: failed to start AP');
+      console.error('router-setup: checkConnection: failed to start AP');
     }
 
     return false;
