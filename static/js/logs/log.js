@@ -385,6 +385,9 @@ class Log {
   }
 
   determineBounds() {
+    if (this.hasOwnProperty('valueMin')) {
+      return;
+    }
     const bounds = this.valueBounds();
     this.valueMin = Math.min(0, bounds.min);
     this.valueMax = bounds.max;
@@ -425,20 +428,16 @@ class Log {
     }
 
     const points = [];
-    let leftIndex = 0;
-    let rightIndex = this.rawPoints.length - 1;
-    for (let i = 0; i < this.rawPoints.length; i++) {
+    let startIndex = this.nearestIndex(this.start.getTime()) - 1;
+    startIndex = Math.max(0, startIndex);
+    const leftIndex = Math.max(0, startIndex - 1);
+
+    let endIndex = this.nearestIndex(this.end.getTime()) + 1;
+    endIndex = Math.min(endIndex, this.rawPoints.length - 1);
+    const rightIndex = Math.min(endIndex + 1, this.rawPoints.length - 1);
+
+    for (let i = startIndex; i <= endIndex; i++) {
       const raw = this.rawPoints[i];
-      if (raw.time < this.start.getTime()) {
-        leftIndex = i;
-        continue;
-      }
-      if (raw.time > this.end.getTime()) {
-        if (i < rightIndex) {
-          rightIndex = i;
-        }
-        continue;
-      }
 
       const x = this.timeToX(raw.time);
       const y = this.valueToY(raw.value);
@@ -802,11 +801,7 @@ class Log {
     return date;
   }
 
-  nearestPoint(localX, localY) {
-    const time = this.xToTime(localX);
-    if (time < this.start.getTime() || time > this.end.getTime()) {
-      return null;
-    }
+  nearestIndex(time) {
     let start = 0;
     let end = this.rawPoints.length - 1;
     let mid = 0;
@@ -820,6 +815,16 @@ class Log {
         break;
       }
     }
+    return mid;
+  }
+
+  nearestPoint(localX, localY) {
+    const time = this.xToTime(localX);
+    if (time < this.start.getTime() || time > this.end.getTime()) {
+      return null;
+    }
+
+    const mid = this.nearestIndex(time);
 
     let nearestPoint = null;
     let nearestDSq = 2 * 50 * 50;
@@ -926,6 +931,7 @@ class Log {
         newX = maxX;
       }
       this.scrollControl.setAttribute('x', newX);
+      this.finishScrolling();
     } else {
       const rect = this.graph.getBoundingClientRect();
       this.drawTooltip(event.clientX - rect.left, event.clientY - rect.top);
