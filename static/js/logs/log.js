@@ -200,9 +200,13 @@ class Log {
 
   makePath(points, close) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const text = ['M', points[0].x, points[0].y];
+    const text = [
+      'M', Math.round(points[0].x).toString(),
+      Math.round(points[0].y).toString(),
+    ];
     for (let i = 1; i < points.length; i++) {
-      text.push('L', points[i].x, points[i].y);
+      text.push('L', Math.round(points[i].x).toString(),
+                Math.round(points[i].y).toString());
     }
     if (close) {
       text.push('Z');
