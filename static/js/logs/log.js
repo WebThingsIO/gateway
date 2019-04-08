@@ -289,13 +289,6 @@ class Log {
         max: 100,
       };
     }
-    if (this.property.hasOwnProperty('minimum') &&
-        this.property.hasOwnProperty('maximum')) {
-      return {
-        min: this.property.minimum,
-        max: this.property.maximum,
-      };
-    }
     if (this.property.type === 'boolean') {
       return {
         min: 0,
@@ -304,8 +297,12 @@ class Log {
     }
 
     if (this.rawPoints.length === 0) {
-      return {min: 0, max: 1};
+      return {
+        min: this.property.minimum || 0,
+        max: this.property.maximum || 1,
+      };
     }
+
     let min = this.rawPoints[0].value;
     let max = min;
     for (let i = 1; i < this.rawPoints.length; i++) {
@@ -317,6 +314,23 @@ class Log {
         min = value;
       }
     }
+
+    if (this.property.hasOwnProperty('minimum') &&
+        this.property.hasOwnProperty('maximum')) {
+      const propMin = this.property.minimum;
+      const propMax = this.property.maximum;
+      // If the description's min and max aren't ridiculously out of proportion
+      // use them since they likely have good properties
+      if ((propMax - propMin) / (max - min + 0.001) < 3 &&
+         min >= propMin &&
+         max <= propMax) {
+        return {
+          min: propMin,
+          max: propMax,
+        };
+      }
+    }
+
     let margin = 0.1 * (max - min);
     if (this.rawPoints.length === 1 || min === max) {
       margin = 1;
