@@ -8,6 +8,7 @@ const expressHandlebars = require('express-handlebars');
 const mDNSserver = require('./mdns-server');
 const os = require('os');
 const platform = require('./platform');
+const Settings = require('./models/settings');
 const sleep = require('./sleep');
 
 const hbs = expressHandlebars.create({
@@ -150,7 +151,10 @@ function handleCreating(request, response) {
         return sleep(5000);
       })
       .then(() => {
-        if (!defineNetwork(ssid, password)) {
+        return defineNetwork(ssid, password);
+      })
+      .then((success) => {
+        if (!success) {
           console.error(
             'router-setup: handleCreating: failed to define network'
           );
@@ -218,18 +222,24 @@ function stopAP() {
  *
  * @param {string} ssid - SSID to configure
  * @param {string?} psk - PSK to configure
- * @returns {boolean} Boolean indicating success of the command.
+ * @returns {Promise} Promise which resolves to a boolean indicating success of
+ *                    the command.
  */
 function defineNetwork(ssid, password) {
-  return platform.setWirelessMode(
-    true,
-    'ap',
-    {
-      ssid,
-      key: password,
-      encryption: 'psk2',
-    }
-  );
+  return Settings.set('router.configured', true).then(() => {
+    return platform.setWirelessMode(
+      true,
+      'ap',
+      {
+        ssid,
+        key: password,
+        encryption: 'psk2',
+      }
+    );
+  }).catch((e) => {
+    console.error('Error defining network:', e);
+    return false;
+  });
 }
 
 /**
@@ -239,25 +249,33 @@ function defineNetwork(ssid, password) {
  *                    or not we have a connection.
  */
 function checkConnection() {
-  // Wait until we have a working wifi connection. Retry every 3 seconds up
-  // to 20 times. If we never get a wifi connection, go into AP mode.
-  return waitForWiFi(20, 3000).then(() => {
-    return true;
-  }).catch((err) => {
-    if (err) {
-      console.error('router-setup: checkConnection: Error waiting:', err);
-    }
+  return Settings.get('router.configured')
+    .catch(() => false)
+    .then((configured) => {
+      if (configured) {
+        return true;
+      }
 
-    console.log(
-      'wifi-setup: checkConnection: No wifi connection found, starting AP'
-    );
+      // Wait until we have a working wifi connection. Retry every 3 seconds up
+      // to 20 times. If we never get a wifi connection, go into AP mode.
+      return waitForWiFi(20, 3000).then(() => {
+        return true;
+      }).catch((err) => {
+        if (err) {
+          console.error('router-setup: checkConnection: Error waiting:', err);
+        }
 
-    if (!startAP(config.get('wifi.ap.ipaddr'))) {
-      console.error('wifi-setup: checkConnection: failed to start AP');
-    }
+        console.log(
+          'wifi-setup: checkConnection: No wifi connection found, starting AP'
+        );
 
-    return false;
-  });
+        if (!startAP(config.get('wifi.ap.ipaddr'))) {
+          console.error('wifi-setup: checkConnection: failed to start AP');
+        }
+
+        return false;
+      });
+    });
 }
 
 /**
