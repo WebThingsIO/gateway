@@ -80,6 +80,7 @@ sudo chown -R root:root ./etc
 sudo cp -r ./etc /
 
 # disable hostapd and dnsmasq auto start
+sudo systemctl unmask hostapd.service
 sudo systemctl disable hostapd.service
 sudo systemctl disable dnsmasq.service
 
