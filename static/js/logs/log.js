@@ -430,14 +430,24 @@ class Log {
     const points = [];
     let startIndex = this.nearestIndex(this.start.getTime()) - 1;
     startIndex = Math.max(0, startIndex);
-    const leftIndex = Math.max(0, startIndex - 1);
+    let leftIndex = Math.max(0, startIndex - 1);
 
     let endIndex = this.nearestIndex(this.end.getTime()) + 1;
     endIndex = Math.min(endIndex, this.rawPoints.length - 1);
-    const rightIndex = Math.min(endIndex + 1, this.rawPoints.length - 1);
+    let rightIndex = Math.min(endIndex + 1, this.rawPoints.length - 1);
 
     for (let i = startIndex; i <= endIndex; i++) {
       const raw = this.rawPoints[i];
+      if (raw.time < this.start.getTime()) {
+        leftIndex = i;
+        continue;
+      }
+      if (raw.time > this.end.getTime()) {
+        if (i < rightIndex) {
+          rightIndex = i;
+        }
+        continue;
+      }
 
       const x = this.timeToX(raw.time);
       const y = this.valueToY(raw.value);
