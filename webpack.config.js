@@ -201,6 +201,7 @@ const webpackWeb = {
                     ios: '10',
                   },
                   useBuiltIns: 'usage',
+                  corejs: 3,
                 }],
               ],
               plugins: ['@babel/plugin-proposal-object-rest-spread'],

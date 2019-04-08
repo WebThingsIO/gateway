@@ -8,6 +8,7 @@
 
 'use strict';
 
+const ACME = require('acme-v2/compat').ACME;
 const config = require('config');
 const Constants = require('./constants');
 const fetch = require('node-fetch');
@@ -87,33 +88,35 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     version: 'v02',
     renewWithin: 14 * 24 * 60 * 60 * 1000,  // 2 weeks
     renewBy: 10 * 24 * 60 * 60 * 1000,      // 10 days
+    acme: ACME.create({debug: DEBUG, skipChallengeTest: true}),
     debug: DEBUG,
   });
 
   let token;
-  leChallenge.leDnsResponse =
-    (challenge, keyAuthorization, keyAuthDigest) => {
-      // Promise to be resolved when LE has the DNS challenge ready for us.
-      return new Promise((resolve, reject) => {
-        // Now that we have a challenge, we call our registration server to
-        // setup the TXT record
-        fetch(
-          `${endpoint}/dnsconfig?token=${token}&challenge=${keyAuthDigest}`
-        ).then((res) => {
-          return res.text();
-        }).then(() => {
-          if (DEBUG) {
-            console.debug('Set DNS token on registration server');
-          }
+  leChallenge.set = (args) => {
+    const authorization = args.challenge.dnsAuthorization;
 
-          resolve('Success!');
-        }).catch((e) => {
-          console.error('Failed to set DNS token on registration server:', e);
-          callback(e);
-          reject(e);
-        });
+    // Promise to be resolved when LE has the DNS challenge ready for us.
+    return new Promise((resolve, reject) => {
+      // Now that we have a challenge, we call our registration server to
+      // setup the TXT record
+      fetch(
+        `${endpoint}/dnsconfig?token=${token}&challenge=${authorization}`
+      ).then((res) => {
+        return res.text();
+      }).then(() => {
+        if (DEBUG) {
+          console.debug('Set DNS token on registration server');
+        }
+
+        resolve(null);
+      }).catch((e) => {
+        console.error('Failed to set DNS token on registration server:', e);
+        callback(e);
+        reject(e);
       });
-    };
+    });
+  };
 
   let jsonToken;
   try {
@@ -240,6 +243,7 @@ async function renew(server) {
     version: 'v02',
     renewWithin: 14 * 24 * 60 * 60 * 1000,  // 2 weeks
     renewBy: 10 * 24 * 60 * 60 * 1000,      // 10 days
+    acme: ACME.create({debug: DEBUG, skipChallengeTest: true}),
     debug: DEBUG,
   });
 
