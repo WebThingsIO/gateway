@@ -301,10 +301,18 @@ class Log {
     }
 
     if (this.rawPoints.length === 0) {
-      return {
-        min: this.property.minimum || 0,
-        max: this.property.maximum || 1,
-      };
+      if (this.property.hasOwnProperty('minimum') &&
+          this.property.hasOwnProperty('maximum')) {
+        return {
+          min: this.property.minimum,
+          max: this.property.maximum,
+        };
+      } else {
+        return {
+          min: 0,
+          max: 1,
+        };
+      }
     }
 
     let min = this.rawPoints[0].value;
@@ -326,8 +334,8 @@ class Log {
       // If the description's min and max aren't ridiculously out of proportion
       // use them since they likely have good properties
       if ((propMax - propMin) / (max - min + 0.001) < 3 &&
-         min >= propMin &&
-         max <= propMax) {
+          min >= propMin &&
+          max <= propMax) {
         return {
           min: propMin,
           max: propMax,
