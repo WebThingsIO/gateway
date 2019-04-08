@@ -14,7 +14,13 @@ const App = require('../app');
 const Icons = require('../icons');
 const Utils = require('../utils');
 
+const LEFT_MOUSE_BUTTON = 1;
 const RIGHT_MOUSE_BUTTON = 2;
+
+// Scrolling using the scroll control bar
+const SCROLLING = 1;
+// Dragging a window on the graph itself
+const DRAGGING = 2;
 
 class Log {
   constructor(thingId, propertyId, start, end, soloView) {
@@ -40,28 +46,33 @@ class Log {
     this.onPointerLeave = this.onPointerLeave.bind(this);
     this.scrollLeft = this.scrollLeft.bind(this);
     this.scrollRight = this.scrollRight.bind(this);
-    this.mouseDown = false;
-    this.dragStart = -1;
+    this.pointerState = {};
+    this.prevPointerState = {};
+    this.touchTooltipTimeout = null;
 
     this.drawSkeleton();
   }
 
   dimension() {
+    this.xMargin = 96;
+    this.xStart = this.xMargin + 20;
+    if (window.innerWidth < 800) {
+      this.xMargin = 72;
+      this.xStart = 48;
+    }
+    this.width = window.innerWidth;
+
     if (this.soloView) {
-      this.xMargin = 96;
       this.yMargin = 30;
-      this.xStart = this.xMargin + 20;
-      this.width = window.innerWidth;
       this.scrollHeight = 30;
+      this.yPadding = 30;
       this.height = window.innerHeight - 96 - this.yMargin * 2 -
-        this.scrollHeight;
+        this.scrollHeight - this.yPadding;
     } else {
-      this.xMargin = 96;
       this.yMargin = 20;
-      this.xStart = this.xMargin + 20;
-      this.width = window.innerWidth;
       this.height = 200;
       this.scrollHeight = 30;
+      this.yPadding = 20;
     }
     this.graphHeight = this.height - 2 * this.yMargin;
     this.graphWidth = this.width - this.xStart - this.xMargin;
@@ -95,11 +106,14 @@ class Log {
     this.graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.graph.classList.add('logs-graph');
     this.graph.style.width = `${this.width}px`;
-    this.graph.style.height = `${this.height + this.scrollHeight}px`;
+    this.graph.style.height = `${this.height + this.scrollHeight + this.yPadding}px`;
     this.graph.addEventListener('mousedown', this.onPointerDown);
     this.graph.addEventListener('mousemove', this.onPointerMove);
     this.graph.addEventListener('mouseup', this.onPointerUp);
     this.graph.addEventListener('mouseleave', this.onPointerLeave);
+    this.graph.addEventListener('touchstart', this.onPointerDown);
+    this.graph.addEventListener('touchmove', this.onPointerMove);
+    this.graph.addEventListener('touchend', this.onPointerUp);
     this.graph.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const axesPath = this.makePath([
@@ -362,6 +376,7 @@ class Log {
     this.removeAll('.logs-graph-fill');
     this.removeAll('.logs-graph-label');
     this.removeAll('.logs-graph-tick');
+    this.removeTooltip();
 
     this.progress.setAttribute('width', 0);
     this.progressWidth = 0;
@@ -704,7 +719,11 @@ class Log {
     return date;
   }
 
-  nearestPoint(time) {
+  nearestPoint(localX, localY) {
+    const time = this.xToTime(localX);
+    if (time < this.start.getTime() || time > this.end.getTime()) {
+      return null;
+    }
     let start = 0;
     let end = this.rawPoints.length - 1;
     let mid = 0;
@@ -719,27 +738,24 @@ class Log {
       }
     }
 
-    let nearestPoint = this.rawPoints[mid];
-    const diff = time - nearestPoint.time;
+    let nearestPoint = null;
+    let nearestDSq = 2 * 50 * 50;
 
-    if (diff > 0 && mid < this.rawPoints.length - 1) {
-      const otherDiff = time - this.rawPoints[mid + 1].time;
-      if (Math.abs(diff) > Math.abs(otherDiff)) {
-        nearestPoint = this.rawPoints[mid + 1];
+    // Trial the five nearest points
+    for (let i = mid - 2; i < mid + 3; i++) {
+      if (i < 0 || i > this.rawPoints.length - 1) {
+        continue;
       }
-    }
-    if (diff < 0 && mid > 0) {
-      const otherDiff = time - this.rawPoints[mid - 1].time;
-      if (Math.abs(diff) > Math.abs(otherDiff)) {
-        nearestPoint = this.rawPoints[mid - 1];
+      const dx = this.timeToX(this.rawPoints[i].time) - localX;
+      const dy = this.valueToY(this.rawPoints[i].value) - localY;
+      const diffSq = dx * dx + dy * dy;
+      if (diffSq > nearestDSq) {
+        continue;
       }
+      nearestDSq = diffSq;
+      nearestPoint = this.rawPoints[i];
     }
-
-    const closenessBuffer = this.xToTime(48) - this.xToTime(0);
-    if (Math.abs(time - nearestPoint.time) < closenessBuffer) {
-      return nearestPoint;
-    }
-    return null;
+    return nearestPoint;
   }
 
   constrainTime(time) {
@@ -751,18 +767,44 @@ class Log {
     return time;
   }
 
+  setPointerState(pointerState) {
+    this.prevPointerState = this.pointerState;
+    this.pointerState = pointerState;
+  }
+
+  convertTouchEvent(event) {
+    event.isTouch = false;
+    if (event.targetTouches) {
+      if (event.targetTouches.length > 0) {
+        event.clientX = event.targetTouches[0].clientX;
+        event.clientY = event.targetTouches[0].clientY;
+        event.isTouch = true;
+      }
+    }
+  }
+
   onPointerDown(event) {
     event.preventDefault();
 
-    if (event.button === RIGHT_MOUSE_BUTTON) {
+    this.convertTouchEvent(event);
+
+    if (event.buttons === RIGHT_MOUSE_BUTTON) {
       return;
     }
 
     if (event.target.classList.contains('logs-scroll-control')) {
-      this.scrolling = true;
-      this.dragging = false;
       const controlX = parseFloat(this.scrollControl.getAttribute('x'));
-      this.scrollOffset = event.clientX - controlX;
+      this.setPointerState({
+        action: SCROLLING,
+        scrollOffset: event.clientX - controlX,
+      });
+    } else if (event.isTouch) {
+      const rect = this.graph.getBoundingClientRect();
+      this.drawTooltip(event.clientX - rect.left, event.clientY - rect.top);
+      clearTimeout(this.touchTooltipTimeout);
+      this.touchTooltipTimeout = setTimeout(() => {
+        this.removeTooltip();
+      }, 5000);
     } else {
       const rect = this.graph.getBoundingClientRect();
       const localY = event.clientY - rect.top;
@@ -770,18 +812,28 @@ class Log {
         // Actually clicking the background
         return;
       }
-      this.dragging = true;
-      this.scrolling = false;
-      this.dragStart = this.constrainTime(this.xToTime(event.clientX));
+      this.setPointerState({
+        action: DRAGGING,
+        dragStart: this.constrainTime(this.xToTime(event.clientX)),
+      });
     }
   }
 
   onPointerMove(event) {
     event.preventDefault();
-    if (this.dragging) {
+
+    this.convertTouchEvent(event);
+
+    // Restore a drag interrupted by the pointer leaving
+    if (event.buttons === LEFT_MOUSE_BUTTON &&
+        this.prevPointerState.action &&
+        !this.pointerState.action) {
+      this.setPointerState(this.prevPointerState);
+    }
+    if (this.pointerState.action === DRAGGING) {
       this.drawHighlight(event.clientX);
-    } else if (this.scrolling) {
-      let newX = event.clientX - this.scrollOffset;
+    } else if (this.pointerState.action === SCROLLING) {
+      let newX = event.clientX - this.pointerState.scrollOffset;
       const scrollControlWidth =
         parseFloat(this.scrollControl.getAttribute('width'));
       const maxX = this.xStart + this.graphWidth - scrollControlWidth;
@@ -792,12 +844,13 @@ class Log {
       }
       this.scrollControl.setAttribute('x', newX);
     } else {
-      this.drawTooltip(event.clientX);
+      const rect = this.graph.getBoundingClientRect();
+      this.drawTooltip(event.clientX - rect.left, event.clientY - rect.top);
     }
   }
 
   drawHighlight(clientX) {
-    const dragStartX = this.timeToX(this.dragStart);
+    const dragStartX = this.timeToX(this.pointerState.dragStart);
     let minX = Math.min(dragStartX, clientX);
     let maxX = Math.max(dragStartX, clientX);
 
@@ -812,17 +865,12 @@ class Log {
     this.selectionHighlight.setAttribute('width', 0);
   }
 
-  drawTooltip(clientX) {
+  drawTooltip(localX, localY) {
     if (!this.property || !this.rawPoints || this.rawPoints.length === 0) {
       return;
     }
-    const time = this.xToTime(clientX);
-    if (time < this.start.getTime() || time > this.end.getTime()) {
-      this.removeTooltip();
-      return;
-    }
 
-    const point = this.nearestPoint(time);
+    const point = this.nearestPoint(localX, localY);
     if (!point) {
       this.removeTooltip();
       return;
@@ -855,33 +903,34 @@ class Log {
   onPointerLeave() {
     this.removeTooltip();
     this.removeHighlight();
-    if (this.scrolling) {
+    if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
     }
-    this.dragging = false;
-    this.scrolling = false;
+    this.setPointerState({});
   }
 
   onPointerUp(event) {
     event.preventDefault();
+    this.convertTouchEvent(event);
+
     this.removeHighlight();
 
-    if (this.scrolling) {
+    if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
-    } else if (this.dragging) {
-      this.dragging = false;
+    } else if (this.pointerState.action === DRAGGING) {
       const dragEnd = this.constrainTime(this.xToTime(event.clientX));
-      if (Math.abs(dragEnd - this.dragStart) < 30 * 1000) {
+      if (Math.abs(dragEnd - this.pointerState.dragStart) < 30 * 1000) {
         // Drag was way too small (<30s)
+        this.setPointerState({});
         return;
       }
       let newStart, newEnd;
-      if (this.dragStart < dragEnd) {
-        newStart = new Date(this.dragStart);
+      if (this.pointerState.dragStart < dragEnd) {
+        newStart = new Date(this.pointerState.dragStart);
         newEnd = new Date(dragEnd);
       } else {
         newStart = new Date(dragEnd);
-        newEnd = new Date(this.dragStart);
+        newEnd = new Date(this.pointerState.dragStart);
       }
       this.start = newStart;
       this.end = newEnd;
@@ -890,13 +939,13 @@ class Log {
     if (event.button === RIGHT_MOUSE_BUTTON) {
       this.start = this.logStart;
       this.end = this.logEnd;
-      // TODO clip and then do a zoom out animation as well
+      this.weekDropdown.value = 7 * 24 * 60 * 60 * 1000;
       this.redraw();
     }
+    this.setPointerState({});
   }
 
   finishScrolling() {
-    this.scrolling = false;
     const controlX = parseFloat(this.scrollControl.getAttribute('x'));
     const controlTime = this.xToTime(controlX, this.logStart.getTime(),
                                      this.logEnd.getTime());
