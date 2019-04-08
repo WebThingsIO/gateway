@@ -60,7 +60,7 @@ servers.https = createHttpsServer();
 let httpsApp = null;
 
 let updaterInterval = null;
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && platform.implemented('update')) {
   // Start the updater
   updaterInterval = setInterval(
     () => {
