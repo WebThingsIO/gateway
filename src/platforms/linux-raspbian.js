@@ -421,6 +421,14 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     if (proc.status !== 0) {
       return false;
     }
+
+    proc = child_process.spawnSync(
+      'sudo',
+      ['systemctl', 'enable', 'hostapd.service']
+    );
+    if (proc.status !== 0) {
+      return false;
+    }
   }
 
   if (options.ipaddr) {
