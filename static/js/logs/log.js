@@ -366,6 +366,20 @@ class Log {
       (this.valueMax - this.valueMin) * this.graphHeight;
   }
 
+  interpolate(pointA, pointB, x) {
+    if (pointB.x - pointA.x === 0) {
+      return {
+        x,
+        y: pointA.y,
+      };
+    }
+    const m = (pointB.y - pointA.y) / (pointB.x - pointA.x);
+    return {
+      x,
+      y: m * (x - pointA.x) + pointA.y,
+    };
+  }
+
   determineBounds() {
     const bounds = this.valueBounds();
     this.valueMin = Math.min(0, bounds.min);
@@ -397,71 +411,122 @@ class Log {
 
     this.determineBounds();
 
-    const points = [];
-    for (let i = 0; i < this.rawPoints.length; i++) {
-      const raw = this.rawPoints[i];
-      if (raw.time < this.start.getTime() || raw.time > this.end.getTime()) {
-        continue;
-      }
-      const x = this.timeToX(raw.time);
-      const y = this.valueToY(raw.value);
-
-      if (points.length === 0) {
-        let value = y;
-        if (i > 0) {
-          value = this.valueToY(this.rawPoints[i - 1].value);
-        }
-        // Make sure the data extends to the past
-        points.push({
-          x: this.xStart,
-          y: value,
-        });
-      }
-
-      // Add a point so that the value steps down instead of gradually
-      // decreasing
-      if (this.property.type === 'boolean' ||
-          this.property.type === 'integer') {
-        points.push({
-          x,
-          y: points[points.length - 1].y,
-        });
-      }
-      points.push({x, y});
-    }
-
-    let graphLine, graphFill;
-
-    if (points.length > 0) {
-      // Make sure the data extends to the present
-      points.push({
-        x: this.graphWidth + this.xStart,
-        y: points[points.length - 1].y,
-      });
-
-      graphLine = this.makePath(points);
-      graphLine.classList.add('logs-graph-line');
-
-      points.unshift({
-        x: points[0].x,
-        y: this.height - this.yMargin,
-      });
-      points.push({
-        x: points[points.length - 1].x,
-        y: this.height - this.yMargin,
-      });
-
-      graphFill = this.makePath(points);
-      graphFill.classList.add('logs-graph-fill');
-
-      this.graph.appendChild(graphFill);
-      this.graph.appendChild(graphLine);
-    }
-
     this.drawYTicks();
     this.drawXTicks();
 
     this.updateScrollBar();
+
+    if (this.rawPoints.length === 0) {
+      return;
+    }
+
+    const points = [];
+    let leftIndex = 0;
+    let rightIndex = this.rawPoints.length - 1;
+    for (let i = 0; i < this.rawPoints.length; i++) {
+      const raw = this.rawPoints[i];
+      if (raw.time < this.start.getTime()) {
+        leftIndex = i;
+        continue;
+      }
+      if (raw.time > this.end.getTime()) {
+        if (i < rightIndex) {
+          rightIndex = i;
+        }
+        continue;
+      }
+
+      const x = this.timeToX(raw.time);
+      const y = this.valueToY(raw.value);
+
+      if (points.length > 0) {
+        // Add a point so that the value steps down instead of gradually
+        // decreasing
+        if (this.property.type === 'boolean' ||
+            this.property.type === 'integer') {
+          points.push({
+            x,
+            y: points[points.length - 1].y,
+          });
+        }
+      }
+
+      points.push({x, y});
+    }
+
+    // Extend to left
+    const leftPoint = {
+      x: this.timeToX(this.rawPoints[leftIndex].time),
+      y: this.valueToY(this.rawPoints[leftIndex].value),
+    };
+
+    if (this.property.type === 'boolean' ||
+        this.property.type === 'integer') {
+      // Add a point so that the value steps down instead of gradually
+      // decreasing
+      points.unshift({
+        x: this.xStart,
+        y: leftPoint.y,
+      }, {
+        x: points.length > 0 ? points[0].x : this.xStart + this.graphWidth,
+        y: leftPoint.y,
+      });
+    } else if (points.length > 0) {
+      const borderPoint = this.interpolate(leftPoint, points[0],
+                                           this.xStart);
+      points.unshift(borderPoint);
+    }
+
+    // Extend to right
+
+    const rightPoint = {
+      x: this.timeToX(this.rawPoints[rightIndex].time),
+      y: this.valueToY(this.rawPoints[rightIndex].value),
+    };
+
+    if (this.property.type === 'boolean' ||
+        this.property.type === 'integer') {
+      // Add a point so that the value steps down instead of gradually
+      // decreasing
+      points.push({
+        x: points[points.length - 1].x,
+        y: rightPoint.y,
+      }, {
+        x: this.xStart + this.graphWidth,
+        y: rightPoint.y,
+      });
+    } else if (points.length > 0) {
+      const borderPoint = this.interpolate(points[points.length - 1],
+                                           rightPoint,
+                                           this.xStart + this.graphWidth);
+      points.push(borderPoint);
+    } else {
+      const borderLeftPoint = this.interpolate(leftPoint,
+                                               rightPoint,
+                                               this.xStart);
+      const borderRightPoint = this.interpolate(leftPoint,
+                                                rightPoint,
+                                                this.xStart + this.graphWidth);
+      points.push(borderLeftPoint, borderRightPoint);
+    }
+
+    const graphLine = this.makePath(points);
+    graphLine.classList.add('logs-graph-line');
+
+    points.unshift({
+      x: points[0].x,
+      y: this.height - this.yMargin,
+    });
+    points.push({
+      x: points[points.length - 1].x,
+      y: this.height - this.yMargin,
+    });
+
+    const graphFill = this.makePath(points);
+    graphFill.classList.add('logs-graph-fill');
+
+    this.graph.appendChild(graphFill);
+    this.graph.appendChild(graphLine);
   }
 
   timeToLabel(time) {
