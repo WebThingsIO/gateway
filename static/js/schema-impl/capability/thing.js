@@ -604,6 +604,8 @@ class Thing {
         if (!response.ok) {
           console.error(`Failed to arrange thing ${id}`);
         }
+
+        App.gatewayModel.refreshThings();
       }).catch((e) => {
         console.error(`Error trying to arrange thing ${id}: ${e}`);
       });
