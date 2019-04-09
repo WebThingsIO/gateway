@@ -109,6 +109,10 @@ async function register(email, reclamationToken, subdomain, fulldomain,
           console.debug('Set DNS token on registration server');
         }
 
+        // Let's wait a few seconds for changes to propagate on the registration
+        // server and its database.
+        return new Promise((r) => setTimeout(r, 5000));
+      }).then(() => {
         resolve(null);
       }).catch((e) => {
         console.error('Failed to set DNS token on registration server:', e);
