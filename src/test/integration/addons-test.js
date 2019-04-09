@@ -30,6 +30,7 @@ const destLicense =
 
 const testManifest = {
   name: 'test-adapter',
+  display_name: 'Test',
   version: '0',
   files: [
     'index.js',
