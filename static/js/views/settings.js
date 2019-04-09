@@ -1387,9 +1387,9 @@ const SettingsScreen = {
         noAdapters.classList.add('hidden');
         adaptersList.classList.remove('hidden');
 
-        for (const metadata of adapters) {
-          new Adapter(metadata);
-        }
+        adapters
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .forEach((metadata) => new Adapter(metadata));
       }
     });
   },
@@ -1520,13 +1520,14 @@ const SettingsScreen = {
       const addonList = document.getElementById('installed-addons-list');
       addonList.innerHTML = '';
 
-      for (const name of Array.from(this.installedAddons.keys()).sort()) {
-        const addon = this.installedAddons.get(name);
-        components.set(
-          name,
-          new InstalledAddon(addon, this.installedAddons, this.availableAddons)
-        );
-      }
+      Array.from(this.installedAddons.entries())
+        .sort((a, b) => a[1].display_name.localeCompare(b[1].display_name))
+        .forEach((x) => {
+          components.set(
+            x[0],
+            new InstalledAddon(x[1], this.installedAddons, this.availableAddons)
+          );
+        });
 
       // Now, we can attempt to get the list of available add-ons.
       return this.fetchAvailableAddonList(true);
