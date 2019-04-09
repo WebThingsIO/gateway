@@ -1387,9 +1387,9 @@ const SettingsScreen = {
         noAdapters.classList.add('hidden');
         adaptersList.classList.remove('hidden');
 
-        for (const metadata of adapters) {
-          new Adapter(metadata);
-        }
+        adapters
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .forEach((metadata) => new Adapter(metadata));
       }
     });
   },
