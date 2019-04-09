@@ -30,7 +30,7 @@ InternalLogsController.get('/', async (request, response) => {
   const jwt = jwtMiddleware.extractJWTHeader(request) ||
     jwtMiddleware.extractJWTQS(request);
   const files = fs.readdirSync(UserProfile.logDir)
-    .filter((f) => !f.startsWith('.'));
+    .filter((f) => !f.startsWith('.') && f !== 'logs.sqlite3');
   files.sort();
 
   let content =
