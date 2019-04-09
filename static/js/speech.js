@@ -10,7 +10,12 @@
 
 const App = require('./app');
 const AssistantScreen = require('./views/assistant');
-const SpeakToMe = require('speaktome-api/build/stm_web.min');
+let SpeakToMe;
+try {
+  SpeakToMe = require('speaktome-api/build/stm_web.min');
+} catch (e) {
+  console.warn('Error requiring STM', e);
+}
 
 // eslint-disable-next-line no-unused-vars
 const Speech = {
@@ -25,9 +30,11 @@ const Speech = {
     this.speechButtons = [];
     this.addSpeechButton(document.getElementById('speech-button'));
     this.addSpeechButton(document.getElementById('assistant-speech-button'));
-    this.stm = SpeakToMe({
-      listener: this.listener.bind(this),
-    });
+    if (SpeakToMe) {
+      this.stm = SpeakToMe({
+        listener: this.listener.bind(this),
+      });
+    }
     this.listening = false;
 
     window.requestAnimationFrame(() => {
@@ -52,6 +59,7 @@ const Speech = {
   */
   listen: function() {
     if (!this.stm) {
+      App.showMessage('Current browser does not support speech', 3000);
       return;
     }
     if (this.listening) {
