@@ -470,7 +470,7 @@ function getSshServerStatus() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function setSshServerStatus(enabled) {
-  const arg = enabled ? '1' : '0';
+  const arg = enabled ? '0' : '1';
   const proc = child_process.spawnSync(
     'sudo',
     ['raspi-config', 'nonint', 'do_ssh', arg]
