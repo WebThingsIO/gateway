@@ -82,7 +82,6 @@ class Log {
     this.removeAll('.logs-log-info');
     this.removeAll('.logs-graph');
     this.removeAll('.logs-graph-tooltip');
-    this.removeAll('.logs-log-week-dropdown');
 
     if (!this.soloView) {
       // Get in the name and webcomponent
@@ -165,6 +164,9 @@ class Log {
   }
 
   createWeekDropdown() {
+    if (this.weekDropdown) {
+      return;
+    }
     this.weekDropdown = document.createElement('select');
     this.weekDropdown.classList.add('logs-log-week-dropdown', 'arrow-select');
     const oneHourMs = 60 * 60 * 1000;
@@ -179,12 +181,12 @@ class Log {
       const option = document.createElement('option');
       option.textContent = opt.name;
       option.value = opt.value;
-      if (opt.name === 'Week') {
+      if (opt.name === 'Day') {
         option.setAttribute('selected', true);
       }
       this.weekDropdown.appendChild(option);
     }
-    this.weekDropdown.addEventListener('change', () => {
+    const onChange = () => {
       let newEnd = this.end.getTime();
       let newStart = newEnd - this.weekDropdown.value;
       if (newStart < this.logStart.getTime()) {
@@ -194,7 +196,9 @@ class Log {
       this.start = new Date(newStart);
       this.end = new Date(newEnd);
       this.redraw();
-    });
+    };
+    this.weekDropdown.addEventListener('change', onChange);
+    onChange();
     this.elt.appendChild(this.weekDropdown);
   }
 
