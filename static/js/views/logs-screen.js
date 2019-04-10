@@ -114,7 +114,6 @@ class LogsScreen {
     fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
       return res.json();
     }).then((schema) => {
-      this.logsContainer.innerHTML = '';
       for (const id in this.logs) {
         const log = this.logs[id];
         if (log.elt.parentNode) {
