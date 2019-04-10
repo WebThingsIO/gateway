@@ -751,6 +751,7 @@
   width: 100%;
   max-width: 60rem;
   margin: 0 auto;
+  max-height: 100%;
 }
 
 #network-settings-wifi .network-settings-wrap {
