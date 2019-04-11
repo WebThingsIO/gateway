@@ -10,6 +10,7 @@
 
 'use strict';
 
+const config = require('config');
 const compression = require('compression');
 const Constants = require('./constants');
 const express = require('express');
@@ -43,7 +44,11 @@ const Router = {
       }
 
       // Disable embedding
-      response.set('Content-Security-Policy', 'frame-ancestors \'none\'');
+      response.set('Content-Security-Policy',
+                   config.get('oauthPostToken') ?
+                     'frame-ancestors filesystem:' :
+                     'frame-ancestors \'none\''
+      );
 
       next();
     });
