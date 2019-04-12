@@ -23,13 +23,13 @@ const SCROLLING = 1;
 const DRAGGING = 2;
 
 class Log {
-  constructor(thingId, propertyId, start, end, soloView) {
+  constructor(thingId, propertyId, logStart, logEnd, soloView) {
     this.thingId = thingId;
     this.propertyId = propertyId;
-    this.start = start;
-    this.end = end;
-    this.logStart = start;
-    this.logEnd = end;
+    this.logStart = logStart;
+    this.logEnd = logEnd;
+    this.start = new Date(this.logEnd.getTime() - 24 * 60 * 60 * 1000);
+    this.end = this.logEnd;
     this.soloView = soloView;
 
     this.dimension();
@@ -50,6 +50,7 @@ class Log {
     this.prevPointerState = {};
     this.touchTooltipTimeout = null;
 
+    this.restoreWindow();
     this.drawSkeleton();
   }
 
@@ -177,14 +178,21 @@ class Log {
       {name: 'Day', value: oneDayMs},
       {name: 'Week', value: oneWeekMs},
     ];
+    const currentValue = this.end.getTime() - this.start.getTime();
+    let anySelected = false;
     for (const opt of options) {
       const option = document.createElement('option');
       option.textContent = opt.name;
       option.value = opt.value;
-      if (opt.name === 'Day') {
+      if (opt.value === currentValue) {
         option.setAttribute('selected', true);
+        anySelected = true;
       }
       this.weekDropdown.appendChild(option);
+    }
+    if (!anySelected) {
+      const dayOption = this.weekDropdown.childNodes[1];
+      dayOption.setAttribute('selected', true);
     }
     const onChange = () => {
       let newEnd = this.end.getTime();
@@ -196,9 +204,9 @@ class Log {
       this.start = new Date(newStart);
       this.end = new Date(newEnd);
       this.redraw();
+      this.storeWindow();
     };
     this.weekDropdown.addEventListener('change', onChange);
-    onChange();
     this.elt.appendChild(this.weekDropdown);
   }
 
@@ -763,11 +771,13 @@ class Log {
   scrollLeft() {
     const width = this.end.getTime() - this.start.getTime();
     this.scroll(-width / 2);
+    this.storeWindow();
   }
 
   scrollRight() {
     const width = this.end.getTime() - this.start.getTime();
     this.scroll(width / 2);
+    this.storeWindow();
   }
 
   scroll(amount) {
@@ -1016,6 +1026,7 @@ class Log {
     this.removeHighlight();
     if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
+      this.storeWindow();
     }
     this.setPointerState({});
   }
@@ -1054,6 +1065,7 @@ class Log {
       this.redraw();
     }
     this.setPointerState({});
+    this.storeWindow();
   }
 
   finishScrolling() {
@@ -1070,6 +1082,34 @@ class Log {
       this.pointHighlight.parentNode.removeChild(this.pointHighlight);
       this.pointHighlight = null;
     }
+  }
+
+  restoreWindow() {
+    const storageId = `Logs.${this.thingId}.${this.propertyId}`;
+    const dataRaw = window.localStorage.getItem(storageId);
+    if (!dataRaw) {
+      return;
+    }
+    try {
+      const data = JSON.parse(dataRaw);
+      if (!data.start || !data.end) {
+        return;
+      }
+      const start = parseInt(data.start);
+      const end = parseInt(data.end);
+      this.start = new Date(start);
+      this.end = new Date(end);
+    } catch (e) {
+      console.warn('Unexpected junk in window storage', e);
+    }
+  }
+
+  storeWindow() {
+    const storageId = `Logs.${this.thingId}.${this.propertyId}`;
+    window.localStorage.setItem(storageId, JSON.stringify({
+      start: this.start.getTime(),
+      end: this.end.getTime(),
+    }));
   }
 }
 
