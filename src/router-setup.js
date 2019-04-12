@@ -256,25 +256,11 @@ function checkConnection() {
         return true;
       }
 
-      // Wait until we have a working wifi connection. Retry every 3 seconds up
-      // to 20 times. If we never get a wifi connection, go into AP mode.
-      return waitForWiFi(20, 3000).then(() => {
-        return true;
-      }).catch((err) => {
-        if (err) {
-          console.error('router-setup: checkConnection: Error waiting:', err);
-        }
+      if (!startAP(config.get('wifi.ap.ipaddr'))) {
+        console.error('router-setup: checkConnection: failed to start AP');
+      }
 
-        console.log(
-          'router-setup: checkConnection: No wifi connection found, starting AP'
-        );
-
-        if (!startAP(config.get('wifi.ap.ipaddr'))) {
-          console.error('router-setup: checkConnection: failed to start AP');
-        }
-
-        return false;
-      });
+      return false;
     });
 }
 
