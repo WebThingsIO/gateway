@@ -246,7 +246,8 @@ class Log {
     }
     const thingName = thing.name;
     this.property = thingModel.propertyDescriptions[this.propertyId];
-    const propertyName = this.property.title;
+    const propertyName = this.property.title ||
+      Utils.capitalize(this.propertyId);
     const formattedName = `${thingName} ${propertyName}`;
     if (this.soloView) {
       document.querySelector('.logs-header').textContent = formattedName;
