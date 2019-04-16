@@ -165,6 +165,9 @@ LogsController.ws('/', (websocket) => {
   }, 30 * 1000);
 
   function streamMetric(metrics) {
+    if (!metrics || metrics.length === 0) {
+      return;
+    }
     try {
       websocket.send(JSON.stringify(metrics), (_err) => {});
     } catch (_e) {
