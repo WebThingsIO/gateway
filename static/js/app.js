@@ -138,8 +138,9 @@ const App = {
 
     const onMessage = (msg) => {
       const message = JSON.parse(msg.data);
-
-      this.showMessage(message.message, 5000, message.url);
+      if (message && message.message) {
+        this.showMessage(message.message, 5000, message.url);
+      }
     };
 
     const cleanup = () => {
