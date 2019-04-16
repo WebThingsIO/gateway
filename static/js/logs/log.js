@@ -905,11 +905,10 @@ class Log {
   }
 
   onPointerDown(event) {
-    event.preventDefault();
-
     this.convertTouchEvent(event);
 
     if (event.buttons === RIGHT_MOUSE_BUTTON) {
+      event.preventDefault();
       return;
     }
 
@@ -941,7 +940,9 @@ class Log {
   }
 
   onPointerMove(event) {
-    event.preventDefault();
+    if (event.buttons || this.pointerState.action === SCROLLING) {
+      event.preventDefault();
+    }
 
     this.convertTouchEvent(event);
 
@@ -1033,7 +1034,10 @@ class Log {
   }
 
   onPointerUp(event) {
-    event.preventDefault();
+    if (event.buttons) {
+      event.preventDefault();
+    }
+
     this.convertTouchEvent(event);
 
     this.removeHighlight();
