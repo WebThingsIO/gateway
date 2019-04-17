@@ -96,6 +96,9 @@ class Log {
       }
       this.infoContainer = document.createElement('a');
       this.infoContainer.classList.add('logs-log-info');
+      const detailUrl = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
+      this.infoContainer.setAttribute('href', detailUrl);
+
       this.infoContainer.appendChild(this.icon);
       this.infoContainer.appendChild(this.name);
       this.elt.appendChild(this.infoContainer);
@@ -263,8 +266,6 @@ class Log {
         iconUrl = Icons.typeToIcon(thing.type);
       }
       this.icon.style.backgroundImage = `url(${iconUrl})`;
-      const detailUrl = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
-      this.infoContainer.setAttribute('href', detailUrl);
     }
 
     const propertyUnit = this.property.unit || '';
