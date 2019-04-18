@@ -349,6 +349,12 @@ function checkConnection() {
       return Promise.resolve(true);
     }
 
+    // If wifi wasn't skipped, but there is an ethernet connection, just move on
+    const addresses = platform.getNetworkAddresses();
+    if (addresses.lan) {
+      return Promise.resolve(true);
+    }
+
     // Wait until we have a working wifi connection. Retry every 3 seconds up
     // to 20 times. If we never get a wifi connection, go into AP mode.
     return waitForWiFi(20, 3000).then(() => {
