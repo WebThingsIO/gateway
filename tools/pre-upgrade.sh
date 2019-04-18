@@ -28,3 +28,7 @@ sudo pip3 install -U "$_url"
 # Upgrade adapt-parser Python package
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
 sudo pip3 install -U "$_url"
+
+sudo chown -R root:root "image/etc"
+sudo cp -r "image/etc" /
+sudo chown -R $(id -u):$(id -g) "image/etc"
