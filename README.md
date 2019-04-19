@@ -100,7 +100,7 @@ $ sudo apt install libboost-python-dev libboost-thread-dev libbluetooth-dev libg
 
 Under Fedora Linux:
 ```
-$ sudo dnf install boost-python-devel boost-devel bluez-libs-devel glib2-devel
+$ sudo dnf install boost-python2-devel boost-python3-devel boost-devel bluez-libs-devel glib2-devel
 ```
 
 ### Install libusb and libudev (Linux only)
