@@ -65,7 +65,12 @@
   box-sizing: border-box;
 }
 
-#addon-config-settings .json-schema-form .checkbox{
+#addon-config-settings .json-schema-form .form-control:disabled {
+  background-color: #597285;
+  color: #fff;
+}
+
+#addon-config-settings .json-schema-form .checkbox {
   height: 2.3rem;
   line-height: 2.3rem;
   margin-bottom: 0.5rem;
@@ -78,7 +83,7 @@
   margin-left: 0rem;
 }
 
-#addon-config-settings .json-schema-form .checkbox-title{
+#addon-config-settings .json-schema-form .checkbox-title {
   display: inline-block;
   vertical-align: middle;
 }

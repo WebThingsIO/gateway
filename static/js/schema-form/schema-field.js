@@ -34,7 +34,7 @@ class SchemaField {
               onChange,
               required = false,
               disabled = false,
-              readonly = false) {
+              readOnly = false) {
     this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
                                                       definitions,
                                                       formData);
@@ -46,7 +46,7 @@ class SchemaField {
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
-    this.readonly = readonly;
+    this.readOnly = readOnly;
   }
 
   getFieldType() {
@@ -115,7 +115,7 @@ class SchemaField {
       this.onChange,
       this.required,
       this.disabled,
-      this.readonly).render();
+      this.readOnly).render();
 
     field.appendChild(child);
 

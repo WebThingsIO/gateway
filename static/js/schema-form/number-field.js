@@ -25,7 +25,7 @@ class NumberField {
               onChange,
               required = false,
               disabled = false,
-              readonly = false) {
+              readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -34,7 +34,7 @@ class NumberField {
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
-    this.readonly = readonly;
+    this.readOnly = readOnly;
   }
 
   toFormData(value, validityState) {
@@ -108,8 +108,7 @@ class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         value=${value == null ? '' : value}
         ${this.schema.multipleOf ? `step=${Number(this.schema.multipleOf)}` : ''}
         min=${Number(this.schema.minimum)}
@@ -146,8 +145,7 @@ class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         >
         ${selects.join(' ')}
         </select>`;
@@ -176,8 +174,7 @@ class NumberField {
         type="number"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.readonly ? 'readonly' : ''}
-        ${this.disabled ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         ${min} ${max} step="${step}"
         value="${value == null ? '' : Utils.escapeHtml(value)}"
         />`;
