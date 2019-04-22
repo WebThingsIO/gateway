@@ -27,7 +27,7 @@ class ArrayField {
               onChange,
               required = false,
               disabled = false,
-              readonly = false) {
+              readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = Array.isArray(formData) ? formData : [];
     this.idSchema = idSchema;
@@ -36,7 +36,7 @@ class ArrayField {
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
-    this.readonly = readonly;
+    this.readOnly = readOnly;
   }
 
   require(name) {
@@ -158,7 +158,7 @@ class ArrayField {
   renderRemoveButton(field, index) {
     const button = document.createElement('button');
     button.className = 'btn-remove btn-form-tools';
-    button.disabled = this.disabled || this.readonly;
+    button.disabled = this.disabled || this.readOnly;
     button.onclick = this.onDropIndexClick(field, index);
 
     return button;
@@ -206,7 +206,7 @@ class ArrayField {
   renderAddButton(field) {
     const button = document.createElement('button');
     button.className = 'btn-add btn-form-tools';
-    button.disabled = this.disabled || this.readonly;
+    button.disabled = this.disabled || this.readOnly;
     button.onclick = this.onAddClick(field);
 
     return button;
@@ -253,8 +253,8 @@ class ArrayField {
       this.definitions,
       this.onChangeForIndex(index),
       this.isItemRequired(itemSchema),
-      this.disabled,
-      this.readonly).render();
+      itemSchema.disabled,
+      itemSchema.readOnly).render();
 
     childField.appendChild(child);
 
@@ -365,7 +365,7 @@ class ArrayField {
 
     enumOptions.forEach((option, index) => {
       const checked = items.includes(option.value);
-      const disabledCls = this.disabled || this.readonly ? 'disabled' : '';
+      const disabledCls = (this.disabled || this.readOnly) ? 'disabled' : '';
 
       const div = document.createElement('div');
 
@@ -376,7 +376,7 @@ class ArrayField {
         type="checkbox"
         id="${id}_${index}"
         ${checked ? 'checked' : ''}
-        ${this.disabled || this.readonly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
       <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
       `;

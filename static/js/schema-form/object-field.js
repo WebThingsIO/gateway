@@ -26,7 +26,7 @@ class ObjectField {
               onChange,
               required = false,
               disabled = false,
-              readonly = false) {
+              readOnly = false) {
     this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
                                                       definitions,
                                                       formData);
@@ -38,10 +38,10 @@ class ObjectField {
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
-    this.readonly = readonly;
+    this.readOnly = readOnly;
   }
 
-  require(name) {
+  isRequired(name) {
     return (
       Array.isArray(this.retrievedSchema.required) &&
       this.retrievedSchema.required.includes(name)
@@ -134,9 +134,9 @@ class ObjectField {
         name,
         this.definitions,
         this.onPropertyChange(name, field),
-        this.require(name),
-        this.disabled,
-        this.readonly).render();
+        this.isRequired(name),
+        childSchema.disabled,
+        childSchema.readOnly).render();
 
       field.appendChild(child);
     });

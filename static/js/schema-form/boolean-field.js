@@ -25,7 +25,7 @@ class BooleanField {
               onChange,
               required = false,
               disabled = false,
-              readonly = false) {
+              readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -34,7 +34,7 @@ class BooleanField {
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
-    this.readonly = readonly;
+    this.readOnly = readOnly;
   }
 
   onBooleanChange(event) {
@@ -61,8 +61,7 @@ class BooleanField {
       id="${id}"
       ${value ? 'checked' : ''}
       ${this.required ? 'required' : ''}
-      ${this.readonly ? 'readonly' : ''}
-      ${this.disabled ? 'disabled' : ''}
+      ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
       <span class="checkbox-title">${title}</span>
       `;
