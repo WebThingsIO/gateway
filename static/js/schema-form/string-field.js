@@ -88,7 +88,7 @@ class StringField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         >
         ${selects.join(' ')}
         </select>`;
@@ -104,7 +104,7 @@ class StringField {
         type="text"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         value="${value == null ? '' : Utils.escapeHtml(value)}"
         />`;
     }

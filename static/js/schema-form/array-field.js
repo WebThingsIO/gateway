@@ -365,7 +365,7 @@ class ArrayField {
 
     enumOptions.forEach((option, index) => {
       const checked = items.includes(option.value);
-      const disabledCls = this.disabled || this.readOnly ? 'disabled' : '';
+      const disabledCls = (this.disabled || this.readOnly) ? 'disabled' : '';
 
       const div = document.createElement('div');
 
@@ -376,7 +376,7 @@ class ArrayField {
         type="checkbox"
         id="${id}_${index}"
         ${checked ? 'checked' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
       <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
       `;

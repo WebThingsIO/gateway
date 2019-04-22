@@ -61,7 +61,7 @@ class BooleanField {
       id="${id}"
       ${value ? 'checked' : ''}
       ${this.required ? 'required' : ''}
-      ${this.disabled || this.readOnly ? 'disabled' : ''}
+      ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
       <span class="checkbox-title">${title}</span>
       `;

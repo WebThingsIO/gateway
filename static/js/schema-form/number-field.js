@@ -108,7 +108,7 @@ class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         value=${value == null ? '' : value}
         ${this.schema.multipleOf ? `step=${Number(this.schema.multipleOf)}` : ''}
         min=${Number(this.schema.minimum)}
@@ -145,7 +145,7 @@ class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         >
         ${selects.join(' ')}
         </select>`;
@@ -174,7 +174,7 @@ class NumberField {
         type="number"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${this.disabled || this.readOnly ? 'disabled' : ''}
+        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         ${min} ${max} step="${step}"
         value="${value == null ? '' : Utils.escapeHtml(value)}"
         />`;
