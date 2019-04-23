@@ -136,6 +136,8 @@ try {
 }
 
 const wrappedMethods = [
+  'getCaptivePortalStatus',
+  'setCaptivePortalStatus',
   'getDhcpServerStatus',
   'setDhcpServerStatus',
   'getHostname',

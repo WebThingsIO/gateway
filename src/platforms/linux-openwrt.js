@@ -9,6 +9,7 @@
 'use strict';
 
 const child_process = require('child_process');
+const config = require('config');
 const fs = require('fs');
 const os = require('os');
 const parse = require('csv-parse/lib/sync');
@@ -16,16 +17,27 @@ const parse = require('csv-parse/lib/sync');
 /**
  * Parse a value from `uci show` or `uci get`.
  *
+ * If asArray is true, then the result will always be an array, even
+ * if there are fewer than 2 objects returned.
+ *
  * @param {string} value - Value to parse
- * @returns {string|string[]} Parsed value
+ * @param {object} - optional arguments
+ * @returns {string|string[]} - parsed value(s)
  */
-function parseUciValue(value) {
+function parseUciValue(value, {asArray = false} = {}) {
   // uci's quote escaping is weird...
   value = value.replace('\'\\\'\'', '\'\'');
 
   // parse generates an array of arrays, since it's intended to parse multiple
   // lines of CSV data
-  let values = parse(value, {quote: '\'', escape: '\''});
+  let values = parse(value, {delimiter: '|', quote: '\'', escape: '\''});
+
+  if (asArray) {
+    if (values.length === 0) {
+      return [];
+    }
+    return values[0];
+  }
 
   if (values.length === 0 || values[0].length === 0) {
     return '';
@@ -52,7 +64,7 @@ function uciShow(key) {
 
   const proc = child_process.spawnSync(
     'uci',
-    ['-d', ',', 'show', key],
+    ['-d', '|', 'show', key],
     {encoding: 'utf8'}
   );
 
@@ -79,15 +91,15 @@ function uciShow(key) {
  * @param {string} key - The key to get
  * @returns {Object} {success: ..., value: ...}
  */
-function uciGet(key) {
+function uciGet(key, {asArray = false} = {}) {
   const proc = child_process.spawnSync(
     'uci',
-    ['-d', ',', 'get', key],
+    ['-d', '|', 'get', key],
     {encoding: 'utf8'}
   );
 
   const success = proc.status === 0;
-  const value = parseUciValue(proc.stdout);
+  const value = parseUciValue(proc.stdout, {asArray});
 
   return {success, value};
 }
@@ -100,26 +112,27 @@ function uciGet(key) {
  * @returns {boolean} Whether or not the command was successful
  */
 function uciSet(key, value) {
-  let success = false;
-
   if (Array.isArray(value)) {
-    let proc = child_process.spawnSync('uci', ['delete', key]);
-    if (proc.status === 0) {
-      for (const v of value) {
-        proc = child_process.spawnSync('uci', ['add_list', `${key}=${v}`]);
-        if (proc.status !== 0) {
-          break;
-        }
+    // Failing to delete a nonexistent key is fine.
+    child_process.spawnSync('uci', ['delete', key]);
+    for (const v of value) {
+      const proc = child_process.spawnSync('uci', ['add_list', `${key}=${v}`]);
+      if (proc.status !== 0) {
+        console.error(`uciSet: failed to add_list: ${key}=${v}`);
+        return false;
       }
-
-      success = true;
     }
+  } else if (value === null) {
+    // Failing to delete a nonexistent key is fine.
+    child_process.spawnSync('uci', ['delete', key]);
   } else {
     const proc = child_process.spawnSync('uci', ['set', `${key}=${value}`]);
-    success = proc.status === 0;
+    if (proc.status !== 0) {
+      console.error(`uciSet: failed to set: ${key}=${value}`);
+      return false;
+    }
   }
-
-  return success;
+  return true;
 }
 
 /**
@@ -130,7 +143,195 @@ function uciSet(key, value) {
  */
 function uciCommit(key) {
   const proc = child_process.spawnSync('uci', ['commit', key]);
-  return proc.status === 0;
+  if (proc.status !== 0) {
+    console.error(`uci commit ${key} failed`);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Runs iptables rules to redirect one port to another.
+ *
+ * @param {number} add - true to add redirection, false to remove
+ * @param {string} ipaddr - IP Address to redirect from
+ * @param {number} fromPort - The port to redirect from
+ * @param {number} totPort - The port to redirect to
+ * @returns {boolean} Whether or not the command was successful
+ */
+function redirectTcpPort(add, ipaddr, fromPort, toPort) {
+  const cmd = 'iptables';
+  let args = [
+    '-t', 'mangle',
+    add ? '-A' : '-D', 'PREROUTING',
+    '-p', 'tcp',
+    '--dst', ipaddr,
+    '--dport', fromPort,
+    '-j', 'MARK',
+    '--set-mark', '1',
+  ];
+  let proc = child_process.spawnSync(cmd, args);
+  if (proc.status !== 0) {
+    console.error(`redirectTcpPort: ${cmd} ${args} failed:`,
+                  proc.status);
+    return false;
+  }
+
+  args = [
+    '-t', 'nat',
+    add ? '-A' : '-D', 'PREROUTING',
+    '-p', 'tcp',
+    '--dst', ipaddr,
+    '--dport', fromPort,
+    '-j', 'REDIRECT',
+    '--to-port', toPort,
+  ];
+  proc = child_process.spawnSync(cmd, args);
+  if (proc.status !== 0) {
+    console.error(`redirectTcpPort: ${cmd} ${args} failed:`,
+                  proc.status);
+    return false;
+  }
+
+  args = [
+    add ? '-I' : '-D', 'INPUT',
+    '-m', 'conntrack',
+    '--ctstate', 'NEW',
+    '-m', 'tcp',
+    '-p', 'tcp',
+    '--dport', toPort,
+    '-m', 'mark',
+    '--mark', '1',
+    '-j', 'ACCEPT',
+  ];
+  proc = child_process.spawnSync(cmd, args);
+  if (proc.status !== 0) {
+    console.error(`redirectTcpPort: ${cmd} ${args} failed:`,
+                  proc.status);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Tests to see if the iptables redirection rules have been setup or not.
+ *
+ * @param {string} ipaddr - IP Address to check
+ * @param {number} fromPort - The port to redirect from
+ * @param {number} totPort - The port to redirect to
+ * @returns {boolean} Whether or not the command was successful
+ */
+function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
+  const cmd = 'iptables';
+  const args = [
+    '-t', 'nat',
+    '--list-rules',
+  ];
+  const proc = child_process.spawnSync(cmd, args, {encoding: 'utf8'});
+  if (proc.status !== 0) {
+    console.error(`isRedirectedTcpPort: ${cmd} ${args} failed:`, proc.status);
+    return false;
+  }
+
+  // The line we're looking for should look something like this (note that
+  // what's shown below is all on a single line):
+  //  -A PREROUTING -p tcp -m tcp --dst 192.168.2.1 --dport 80
+  //  -j REDIRECT --to-ports 8080
+
+  const dst = `--dst ${ipaddr}`;
+  const dport = `--dport ${fromPort}`;
+  const toports = `--to-ports ${toPort}`;
+
+  for (const line of proc.stdout.split('\n')) {
+    if (line.indexOf('-j REDIRECT') >= 0 &&
+        line.indexOf(dst) >= 0 &&
+        line.indexOf(dport) >= 0 &&
+        line.indexOf(toports) >= 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Get Captive Portal status.
+ *
+ * @returns {boolean} Boolean indicating whether or not captive portal is
+ *                    enabled.
+ */
+
+function getCaptivePortalStatus() {
+  const result = uciGet('dhcp.@dnsmasq[0].address', {asArray: true});
+  if (!result.success) {
+    return false;
+  }
+
+  for (const value of result.value) {
+    if (value.startsWith('/#/')) {
+      // The pattern /#/IP-ADDRESS is the make all host names resolve
+      // to IP-ADDRESS pattern used in setCaptivePortalStatus.
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Set Captive Portal status.
+ * @param {boolean} enabled - Whether or not to enable the DHCP server
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setCaptivePortalStatus(enabled, options = {}) {
+  const httpPort = config.get('ports.http');
+  const httpsPort = config.get('ports.https');
+  if (enabled) {
+    if (!isRedirectedTcpPort(options.ipaddr, 80, httpPort)) {
+      if (!redirectTcpPort(enabled, options.ipaddr, 80, httpPort)) {
+        return false;
+      }
+    }
+    if (!isRedirectedTcpPort(443, httpsPort)) {
+      if (!redirectTcpPort(enabled, options.ipaddr, 443, httpsPort)) {
+        return false;
+      }
+    }
+  }
+
+  const result = uciGet('dhcp.@dnsmasq[0].address', {asArray: true});
+  let addresses = [];
+  if (result.success) {
+    addresses = result.value;
+  } else {
+    addresses = [];
+  }
+  addresses = addresses.filter((value) => {
+    return !value.startsWith('/#/');
+  });
+
+  if (enabled) {
+    addresses.unshift(`/#/${options.ipaddr}`);
+  }
+  // If addresses is an empty array, then uciSet will wind up deleting
+  // the entry.
+  if (!uciSet('dhcp.@dnsmasq[0].address', addresses)) {
+    return false;
+  }
+
+  if (!uciCommit('dhcp')) {
+    return false;
+  }
+
+  if (options.restart) {
+    const cmd = '/etc/init.d/dnsmasq';
+    const args = ['reload'];
+    const proc = child_process.spawnSync(cmd, args);
+    if (proc.status !== 0) {
+      console.error(`setCaptivePortalStatus: ${cmd} ${args} failed`);
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -153,7 +354,7 @@ function getDhcpServerStatus() {
  * @param {boolean} enabled - Whether or not to enable the DHCP server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setDhcpServerStatus(enabled) {
+function setDhcpServerStatus(enabled, options = {}) {
   if (!uciSet('dhcp.lan.ignore', enabled ? '0' : '1')) {
     return false;
   }
@@ -166,39 +367,45 @@ function setDhcpServerStatus(enabled) {
     return false;
   }
 
+  if (!uciSet('dhcp.lan.dhcp_option', [`3,${options.ipaddr}`,
+                                       `6,${options.ipaddr}`])) {
+    return false;
+  }
+
   if (!uciCommit('dhcp')) {
     return false;
   }
 
-  let proc = child_process.spawnSync(
-    '/etc/init.d/dnsmasq',
-    [enabled ? 'start' : 'stop']
-  );
+  let cmd = '/etc/init.d/dnsmasq';
+  let args = [enabled ? 'start' : 'stop'];
+  let proc = child_process.spawnSync(cmd, args);
   if (proc.status !== 0) {
+    console.error(`setDhcpServerStatus: ${cmd} ${args} failed`);
     return false;
   }
 
-  proc = child_process.spawnSync(
-    '/etc/init.d/dnsmasq',
-    [enabled ? 'enable' : 'disable']
-  );
+  args = [enabled ? 'enable' : 'disable'];
+  proc = child_process.spawnSync(cmd, args);
   if (proc.status !== 0) {
+    console.error(`setDhcpServerStatus: ${cmd} ${args} failed`);
     return false;
   }
 
-  proc = child_process.spawnSync(
-    '/etc/init.d/odhcpd',
-    [enabled ? 'start' : 'stop']
-  );
+  cmd = '/etc/init.d/odhcpd';
+  args = [enabled ? 'start' : 'stop'];
+  proc = child_process.spawnSync(cmd, args);
   if (proc.status !== 0) {
+    console.error(`setDhcpServerStatus: ${cmd} ${args} failed`);
     return false;
   }
 
-  proc = child_process.spawnSync(
-    '/etc/init.d/odhcpd',
-    [enabled ? 'enable' : 'disable']
-  );
-  return proc.status === 0;
+  args = [enabled ? 'enable' : 'disable'];
+  proc = child_process.spawnSync(cmd, args);
+  if (proc.status !== 0) {
+    console.error(`setDhcpServerStatus: ${cmd} ${args} failed`);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -242,6 +449,7 @@ function getLanMode() {
 function setLanMode(mode, options = {}) {
   const valid = ['static', 'dhcp'];
   if (!valid.includes(mode)) {
+    console.error(`setLanMode: Invalid mode: ${mode}`);
     return false;
   }
 
@@ -259,8 +467,14 @@ function setLanMode(mode, options = {}) {
     return false;
   }
 
-  const proc = child_process.spawnSync('/etc/init.d/network', ['reload']);
-  return proc.status === 0;
+  const cmd = '/etc/init.d/network';
+  const args = ['reload'];
+  const proc = child_process.spawnSync(cmd, args);
+  if (proc.status !== 0) {
+    console.error(`setLanMode: ${cmd} ${args} failed: ${proc.status}`);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -307,8 +521,22 @@ function setWanMode(mode, options = {}) {
     return false;
   }
 
+  const result = uciGet('network.wan');
+  if (!result.success) {
+    if (!uciSet('network.wan', 'interface')) {
+      return false;
+    }
+  }
+
   if (!uciSet('network.wan.proto', mode)) {
     return false;
+  }
+
+  // TODO: Setting ifname to eth0 is RPi specific. This will change based
+  //       on the router. For example, on the Turris Omnia, eth1 is the WAN
+  //       port.
+  if (!options.hasOwnProperty('ifname')) {
+    options.ifname = 'eth0';
   }
 
   for (const [key, value] of Object.entries(options)) {
@@ -896,6 +1124,8 @@ function update() {
 }
 
 module.exports = {
+  getCaptivePortalStatus,
+  setCaptivePortalStatus,
   getDhcpServerStatus,
   setDhcpServerStatus,
   getHostname,

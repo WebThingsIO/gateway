@@ -6,10 +6,11 @@ const Constants = require('./constants');
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mDNSserver = require('./mdns-server');
-const os = require('os');
 const platform = require('./platform');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
+
+const DEBUG = false;
 
 const hbs = expressHandlebars.create({
   helpers: {
@@ -97,29 +98,19 @@ function handleCaptive(request, response, next) {
  * what stage of setup we're at.
  */
 function handleRoot(request, response) {
-  const status = platform.getWirelessMode();
-
-  if (!(status.enabled && status.mode === 'ap')) {
-    // If we don't have the router configured yet, display the router setup page
-    console.log(
-      'router-setup: handleRoot: router unconfigured; redirecting to ' +
-      'router-setup'
-    );
-    response.redirect('/router-setup');
-  } else {
-    // Otherwise, look to see if we have an oauth token yet
-    console.log(
-      'router-setup: handleRoot: router configuration complete; redirecting ' +
-      'to /status'
-    );
-    response.redirect('/status');
-  }
+  // We don't have the router configured yet, display the router setup page
+  console.log(
+    'router-setup: handleRoot: router unconfigured; redirecting to ' +
+    'router-setup'
+  );
+  response.redirect('/router-setup');
 }
 
 /**
  * Handle requests to /router-setup.
  */
 function handleRouterSetup(request, response) {
+  DEBUG && console.log('router-setup: handleRouterSetup:', request.path);
   const ssid = getHotspotSsid();
   response.render('router-setup', {ssid});
 }
@@ -128,6 +119,7 @@ function handleRouterSetup(request, response) {
  * Handle requests to /creating.
  */
 function handleCreating(request, response) {
+  DEBUG && console.log('router-setup: handleCreating:', request.path);
   mDNSserver.getmDNSconfig().then((mDNSconfig) => {
     const domain = mDNSconfig.host;
     const ssid = request.body.ssid.trim();
@@ -147,7 +139,7 @@ function handleCreating(request, response) {
     // defining the new network.
     sleep(2000)
       .then(() => {
-        stopAP();
+        stopCaptivePortal();
         return sleep(5000);
       })
       .then(() => {
@@ -160,6 +152,7 @@ function handleCreating(request, response) {
           );
         } else {
           return waitForWiFi(20, 3000).then(() => {
+            DEBUG && console.log('router-setup: setup complete');
             RouterSetupApp.onConnection();
           });
         }
@@ -203,9 +196,35 @@ function getHotspotSsid() {
  * @param {string} ipaddr - IP address of AP
  * @returns {boolean} Boolean indicating success of the command.
  */
-function startAP(ipaddr) {
+function startCaptivePortal(ipaddr) {
+  DEBUG && console.log('router-setup: startCaptivePortal ipaddr:', ipaddr);
   const ssid = getHotspotSsid();
-  return platform.setWirelessMode(true, 'ap', {ssid, ipaddr});
+
+  // We need the LAN to be configured to have a static IP address,
+  // and run dnsmasq (DHCP server and DNS server).
+
+  const ifname = null;
+  const netmask = '255.255.255.0';
+
+  if (!platform.setLanMode('static', {ipaddr, ifname, netmask})) {
+    console.error('router-setup: startCaptivePortal: setLanMode failed');
+    return false;
+  }
+  if (!platform.setCaptivePortalStatus(true, {ipaddr, restart: false})) {
+    console.error('router-setup: startCaptivePortal:',
+                  'setCaptivePortalStatus failed');
+    return false;
+  }
+  if (!platform.setDhcpServerStatus(true, {ipaddr})) {
+    console.error('router-setup: startCaptivePortal:',
+                  'setDhcpServerStatus failed');
+    return false;
+  }
+  if (!platform.setWirelessMode(true, 'ap', {ssid})) {
+    console.error('router-setup: startCaptivePortal: setWirelessMode failed');
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -213,8 +232,11 @@ function startAP(ipaddr) {
  *
  * @returns {boolean} Boolean indicating success of the command.
  */
-function stopAP() {
-  return platform.setWirelessMode(false, 'ap');
+function stopCaptivePortal() {
+  DEBUG && console.log('router-setup: stopCaptivePortal');
+  let result = platform.setCaptivePortalStatus(false, {restart: true});
+  result &= platform.setWirelessMode(false, 'ap');
+  return result;
 }
 
 /**
@@ -226,6 +248,10 @@ function stopAP() {
  *                    the command.
  */
 function defineNetwork(ssid, password) {
+  DEBUG && console.log('router-setup: defineNetwork ssid:', ssid);
+
+  platform.setWanMode('dhcp');
+
   return Settings.set('router.configured', true).then(() => {
     return platform.setWirelessMode(
       true,
@@ -237,7 +263,7 @@ function defineNetwork(ssid, password) {
       }
     );
   }).catch((e) => {
-    console.error('Error defining network:', e);
+    console.error('router-setup: Error defining network:', e);
     return false;
   });
 }
@@ -252,12 +278,15 @@ function checkConnection() {
   return Settings.get('router.configured')
     .catch(() => false)
     .then((configured) => {
+      DEBUG && console.log('router-setup: checkConnection configured:',
+                           configured);
       if (configured) {
         return true;
       }
 
-      if (!startAP(config.get('wifi.ap.ipaddr'))) {
-        console.error('router-setup: checkConnection: failed to start AP');
+      if (!startCaptivePortal(config.get('wifi.ap.ipaddr'))) {
+        console.error('router-setup: checkConnection:',
+                      'failed to start Captive Portal');
       }
 
       return false;
@@ -283,7 +312,11 @@ function waitForWiFi(maxAttempts, interval) {
       const status = platform.getWirelessMode();
       if (status.enabled && status.mode === 'ap') {
         console.log('router-setup: waitForWifi: connection found');
-        checkForAddress();
+
+        // For the traditional router setup, we have a statically assigned
+        // address so we can skip checking for the address.
+        // checkForAddress();
+        resolve();
       } else {
         console.log(
           'router-setup: waitForWifi: No wifi connection on attempt', attempts
@@ -292,6 +325,9 @@ function waitForWiFi(maxAttempts, interval) {
       }
     }
 
+    /*
+     * We'll eventually want this function back for supporting DHCP client
+     *
     function checkForAddress() {
       const ifaces = os.networkInterfaces();
 
@@ -308,6 +344,7 @@ function waitForWiFi(maxAttempts, interval) {
 
       retryOrGiveUp();
     }
+    */
 
     function retryOrGiveUp() {
       if (attempts >= maxAttempts) {
