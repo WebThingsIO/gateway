@@ -250,8 +250,6 @@ function stopCaptivePortal() {
 function defineNetwork(ssid, password) {
   DEBUG && console.log('router-setup: defineNetwork ssid:', ssid);
 
-  // TODO: eth0 is RPi specific and will be different for each potential
-  //       modem that we'd use.
   platform.setWanMode('dhcp');
 
   return Settings.set('router.configured', true).then(() => {
