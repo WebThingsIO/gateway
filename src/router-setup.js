@@ -152,7 +152,7 @@ function handleCreating(request, response) {
           );
         } else {
           return waitForWiFi(20, 3000).then(() => {
-            DEBUG && console.log('WiFi setup complete');
+            DEBUG && console.log('router-setup: setup complete');
             RouterSetupApp.onConnection();
           });
         }
@@ -207,19 +207,21 @@ function startCaptivePortal(ipaddr) {
   const netmask = '255.255.255.0';
 
   if (!platform.setLanMode('static', {ipaddr, ifname, netmask})) {
-    console.error('startCaptivePortal: setLanMode failed');
+    console.error('router-setup: startCaptivePortal: setLanMode failed');
     return false;
   }
   if (!platform.setCaptivePortalStatus(true, {ipaddr, restart: false})) {
-    console.error('startCaptivePortal: setCaptivePortalStatus failed');
+    console.error('router-setup: startCaptivePortal:',
+                  'setCaptivePortalStatus failed');
     return false;
   }
   if (!platform.setDhcpServerStatus(true, {ipaddr})) {
-    console.error('startCaptivePortal: setDhcpServerStatus failed');
+    console.error('router-setup: startCaptivePortal:',
+                  'setDhcpServerStatus failed');
     return false;
   }
   if (!platform.setWirelessMode(true, 'ap', {ssid})) {
-    console.error('startCaptivePortal: setWirelessMode failed');
+    console.error('router-setup: startCaptivePortal: setWirelessMode failed');
     return false;
   }
   return true;
@@ -250,7 +252,7 @@ function defineNetwork(ssid, password) {
 
   // TODO: eth0 is RPi specific and will be different for each potential
   //       modem that we'd use.
-  platform.setWanMode('dhcp', {ifname: 'eth0'});
+  platform.setWanMode('dhcp');
 
   return Settings.set('router.configured', true).then(() => {
     return platform.setWirelessMode(
@@ -263,7 +265,7 @@ function defineNetwork(ssid, password) {
       }
     );
   }).catch((e) => {
-    console.error('Error defining network:', e);
+    console.error('router-setup: Error defining network:', e);
     return false;
   });
 }

@@ -17,16 +17,27 @@ const parse = require('csv-parse/lib/sync');
 /**
  * Parse a value from `uci show` or `uci get`.
  *
+ * If asArray is true, then the result will always be an array, even
+ * if there are fewer than 2 objects returned.
+ *
  * @param {string} value - Value to parse
- * @returns {string|string[]} Parsed value
+ * @param {object} - optional arguments
+ * @returns {string|string[]} - parsed value(s)
  */
-function parseUciValue(value) {
+function parseUciValue(value, {asArray = false} = {}) {
   // uci's quote escaping is weird...
   value = value.replace('\'\\\'\'', '\'\'');
 
   // parse generates an array of arrays, since it's intended to parse multiple
   // lines of CSV data
   let values = parse(value, {delimiter: '|', quote: '\'', escape: '\''});
+
+  if (asArray) {
+    if (values.length === 0) {
+      return [];
+    }
+    return values[0];
+  }
 
   if (values.length === 0 || values[0].length === 0) {
     return '';
@@ -39,28 +50,6 @@ function parseUciValue(value) {
   }
 
   return values;
-}
-
-/**
- * Parse a value from `uci show` or `uci get`.
- *
- * Always returns an array.
- *
- * @param {string} value - Value to parse
- * @returns {string|string[]} Parsed value
- */
-function parseUciValueAsArray(value) {
-  // uci's quote escaping is weird...
-  value = value.replace('\'\\\'\'', '\'\'');
-
-  // parse generates an array of arrays, since it's intended to parse multiple
-  // lines of CSV data
-  const values = parse(value, {delimiter: '|', quote: '\'', escape: '\''});
-
-  if (values.length === 0) {
-    return [];
-  }
-  return values[0];
 }
 
 /**
@@ -102,7 +91,7 @@ function uciShow(key) {
  * @param {string} key - The key to get
  * @returns {Object} {success: ..., value: ...}
  */
-function uciGet(key) {
+function uciGet(key, {asArray = false} = {}) {
   const proc = child_process.spawnSync(
     'uci',
     ['-d', '|', 'get', key],
@@ -110,28 +99,7 @@ function uciGet(key) {
   );
 
   const success = proc.status === 0;
-  const value = parseUciValue(proc.stdout);
-
-  return {success, value};
-}
-
-/**
- * Run `uci get {key}` and parse the output.
- *
- * Similar to uciGet but always returns an array.
- *
- * @param {string} key - The key to get
- * @returns {Object} {success: ..., value: [...]}
- */
-function uciGetAsArray(key) {
-  const proc = child_process.spawnSync(
-    'uci',
-    ['-d', '|', 'get', key],
-    {encoding: 'utf8'}
-  );
-
-  const success = proc.status === 0;
-  const value = parseUciValueAsArray(proc.stdout);
+  const value = parseUciValue(proc.stdout, {asArray});
 
   return {success, value};
 }
@@ -145,7 +113,7 @@ function uciGetAsArray(key) {
  */
 function uciSet(key, value) {
   if (Array.isArray(value)) {
-    // Failing to delete a non-existant key is fine.
+    // Failing to delete a nonexistent key is fine.
     child_process.spawnSync('uci', ['delete', key]);
     for (const v of value) {
       const proc = child_process.spawnSync('uci', ['add_list', `${key}=${v}`]);
@@ -155,7 +123,7 @@ function uciSet(key, value) {
       }
     }
   } else if (value === null) {
-    // Failing to delete a non-existant key is fine.
+    // Failing to delete a nonexistent key is fine.
     child_process.spawnSync('uci', ['delete', key]);
   } else {
     const proc = child_process.spawnSync('uci', ['set', `${key}=${value}`]);
@@ -192,7 +160,7 @@ function uciCommit(key) {
  * @returns {boolean} Whether or not the command was successful
  */
 function redirectTcpPort(add, ipaddr, fromPort, toPort) {
-  let cmd = 'iptables';
+  const cmd = 'iptables';
   let args = [
     '-t', 'mangle',
     add ? '-A' : '-D', 'PREROUTING',
@@ -209,7 +177,6 @@ function redirectTcpPort(add, ipaddr, fromPort, toPort) {
     return false;
   }
 
-  cmd = 'iptables';
   args = [
     '-t', 'nat',
     add ? '-A' : '-D', 'PREROUTING',
@@ -226,7 +193,6 @@ function redirectTcpPort(add, ipaddr, fromPort, toPort) {
     return false;
   }
 
-  cmd = 'iptables';
   args = [
     add ? '-I' : '-D', 'INPUT',
     '-m', 'conntrack',
@@ -267,8 +233,10 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
     return false;
   }
 
-  // The line we're looking for should look like this:
-  //  -A PREROUTING -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 8080
+  // The line we're looking for should look something like this (note that
+  // what's shown below is all on a single line):
+  //  -A PREROUTING -p tcp -m tcp --dst 192.168.2.1 --dport 80
+  //  -j REDIRECT --to-ports 8080
 
   const dst = `--dst ${ipaddr}`;
   const dport = `--dport ${fromPort}`;
@@ -293,7 +261,7 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
  */
 
 function getCaptivePortalStatus() {
-  const result = uciGetAsArray('dhcp.@dnsmasq[0].address');
+  const result = uciGet('dhcp.@dnsmasq[0].address', {asArray: true});
   if (!result.success) {
     return false;
   }
@@ -329,11 +297,10 @@ function setCaptivePortalStatus(enabled, options = {}) {
     }
   }
 
-  const result = uciGetAsArray('dhcp.@dnsmasq[0].address');
+  const result = uciGet('dhcp.@dnsmasq[0].address', {asArray: true});
   let addresses = [];
   if (result.success) {
     addresses = result.value;
-    console.log(`uciGetAsArray returned: ${result.value}`);
   } else {
     addresses = [];
   }
@@ -417,7 +384,6 @@ function setDhcpServerStatus(enabled, options = {}) {
     return false;
   }
 
-  cmd = '/etc/init.d/dnsmasq';
   args = [enabled ? 'enable' : 'disable'];
   proc = child_process.spawnSync(cmd, args);
   if (proc.status !== 0) {
@@ -433,7 +399,6 @@ function setDhcpServerStatus(enabled, options = {}) {
     return false;
   }
 
-  cmd = '/etc/init.d/odhcpd';
   args = [enabled ? 'enable' : 'disable'];
   proc = child_process.spawnSync(cmd, args);
   if (proc.status !== 0) {
@@ -565,6 +530,13 @@ function setWanMode(mode, options = {}) {
 
   if (!uciSet('network.wan.proto', mode)) {
     return false;
+  }
+
+  // TODO: Setting ifname to eth0 is RPi specific. This will change based
+  //       on the router. For example, on the Turris Omnia, eth1 is the WAN
+  //       port.
+  if (!options.hasOwnProperty('ifname')) {
+    options.ifname = 'eth0';
   }
 
   for (const [key, value] of Object.entries(options)) {
