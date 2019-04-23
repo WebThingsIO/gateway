@@ -82,6 +82,24 @@ describe('oauth/', function() {
       });
     });
 
+    client.get('/bonus-entry', (req, res) => {
+      if (customCallbackHandler) {
+        customCallbackHandler(req, res);
+        return;
+      }
+
+      const code = req.query.code;
+      expect(code).toBeTruthy();
+      expect(req.query.state).toEqual('somethingrandom');
+
+      oauth2.authorizationCode.getToken({code: code}).then((result) => {
+        const token = oauth2.accessToken.create(result);
+        res.json(Object.assign({bonus: true}, token));
+      }).catch((err) => {
+        res.status(400).json(err.data.payload);
+      });
+    });
+
     clientServer = http.createServer();
     clientServer.on('request', client);
     clientServer.listen(CLIENT_SERVER_PORT);
@@ -295,6 +313,32 @@ describe('oauth/', function() {
       .set('Accept', 'application/json');
     expect(err.status).toEqual(400);
     expect(err.body.error).toEqual('invalid_request');
+  });
+
+  it('allows secondary redirect_uri', async () => {
+    setupOAuth();
+
+    // send the request that the page would send
+    let res = await chai.request(server).keepOpen()
+      .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
+        response_type: 'code',
+        client_id: CLIENT_ID,
+        redirect_uri: `http://127.0.0.1:${clientServer.address().port}/bonus-entry`,
+        scope: REQUEST_SCOPE,
+        state: REQUEST_STATE,
+      })}`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+
+    expect(res.body.bonus).toBeTruthy();
+
+    const jwt = res.body.token.access_token;
+    // Try using the access token
+    res = await chai.request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
   });
 
   it('rejects user JWT in access token request', async () => {
