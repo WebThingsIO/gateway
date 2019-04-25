@@ -63,9 +63,7 @@ class DiscoveredAddon {
             ${Utils.escapeHtml(this.description)}
           </span>
           <span class="addon-settings-author">
-            by <a href="${this.homepage}" target="_blank" rel="noopener">
-              ${Utils.escapeHtml(this.author)}
-            </a>
+            by <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
           <span class="addon-settings-license">
             (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
