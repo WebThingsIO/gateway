@@ -154,6 +154,7 @@ const wrappedMethods = [
   'setWanMode',
   'getWirelessMode',
   'setWirelessMode',
+  'checkConnection',
   'restartGateway',
   'restartSystem',
   'scanWirelessNetworks',

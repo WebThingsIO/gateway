@@ -174,12 +174,14 @@ function getHotspotSsid() {
   const base = config.get('wifi.ap.ssid_base');
   const mac = platform.getMacAddress('wlan0');
   if (!mac) {
+    DEBUG && console.log('getHotSpotSsid: returning', base);
     return base;
   }
 
   // Get the last 2 octets of the MAC and create a simple string, e.g. 9E28
   const id = mac.split(':').slice(4).join('').toUpperCase();
 
+  DEBUG && console.log('getHotSpotSsid: returning', `${base} ${id}`);
   return `${base} ${id}`;
 }
 
@@ -197,8 +199,17 @@ function getHotspotSsid() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function startCaptivePortal(ipaddr) {
-  DEBUG && console.log('router-setup: startCaptivePortal ipaddr:', ipaddr);
+  console.log('router-setup: startCaptivePortal ipaddr:', ipaddr);
   const ssid = getHotspotSsid();
+
+  // Set the WAN mode to be DHCP. By doing this here, it allows us to get
+  // an IP address and allows NTP to set the time by the time we get to
+  // registering the tunnel.
+
+  const wanMode = platform.getWanMode();
+  if (wanMode.mode != 'dhcp') {
+    platform.setWanMode('dhcp');
+  }
 
   // We need the LAN to be configured to have a static IP address,
   // and run dnsmasq (DHCP server and DNS server).
@@ -220,7 +231,8 @@ function startCaptivePortal(ipaddr) {
                   'setDhcpServerStatus failed');
     return false;
   }
-  if (!platform.setWirelessMode(true, 'ap', {ssid})) {
+  const encryption = 'none';
+  if (!platform.setWirelessMode(true, 'ap', {ssid, encryption})) {
     console.error('router-setup: startCaptivePortal: setWirelessMode failed');
     return false;
   }
@@ -233,7 +245,7 @@ function startCaptivePortal(ipaddr) {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function stopCaptivePortal() {
-  DEBUG && console.log('router-setup: stopCaptivePortal');
+  console.log('router-setup: stopCaptivePortal');
   let result = platform.setCaptivePortalStatus(false, {restart: true});
   result &= platform.setWirelessMode(false, 'ap');
   return result;
@@ -248,9 +260,12 @@ function stopCaptivePortal() {
  *                    the command.
  */
 function defineNetwork(ssid, password) {
-  DEBUG && console.log('router-setup: defineNetwork ssid:', ssid);
+  console.log('router-setup: defineNetwork ssid:', ssid);
 
-  platform.setWanMode('dhcp');
+  const wanMode = platform.getWanMode();
+  if (wanMode.mode != 'dhcp') {
+    platform.setWanMode('dhcp');
+  }
 
   return Settings.set('router.configured', true).then(() => {
     return platform.setWirelessMode(
@@ -278,17 +293,14 @@ function checkConnection() {
   return Settings.get('router.configured')
     .catch(() => false)
     .then((configured) => {
-      DEBUG && console.log('router-setup: checkConnection configured:',
-                           configured);
       if (configured) {
-        return true;
+        return platform.checkConnection();
       }
 
       if (!startCaptivePortal(config.get('wifi.ap.ipaddr'))) {
         console.error('router-setup: checkConnection:',
                       'failed to start Captive Portal');
       }
-
       return false;
     });
 }

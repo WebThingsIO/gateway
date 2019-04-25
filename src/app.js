@@ -164,6 +164,7 @@ function stopHttpGateway() {
 }
 
 function startWiFiSetup() {
+  console.log('Starting WiFi setup');
   servers.http.on('request', WiFiSetupApp.onRequest);
 
   const port = config.get('ports.http');
@@ -172,10 +173,12 @@ function startWiFiSetup() {
 }
 
 function stopWiFiSetup() {
+  console.log('Stopping WiFi Setup');
   servers.http.removeListener('request', WiFiSetupApp.onRequest);
 }
 
 function startRouterSetup() {
+  console.log('Starting Router Setup');
   servers.http.on('request', RouterSetupApp.onRequest);
 
   const port = config.get('ports.http');
@@ -184,6 +187,7 @@ function startRouterSetup() {
 }
 
 function stopRouterSetup() {
+  console.log('Stopping Router Setup');
   servers.http.removeListener('request', RouterSetupApp.onRequest);
 }
 
