@@ -114,7 +114,8 @@
 }
 
 .logs-graph-label {
-  stroke: white;
+  fill: white;
+  stroke: none;
 }
 
 .logs-graph-axes {
@@ -140,6 +141,7 @@
 
 .logs-graph-fill {
   fill: rgba(255, 255, 255, 0.4);
+  stroke: none;
 }
 
 .logs-graph-line, .logs-graph-fill {
