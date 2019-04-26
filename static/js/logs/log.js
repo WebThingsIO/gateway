@@ -600,6 +600,8 @@ class Log {
   }
 
   drawYTicks() {
+    this.graph.appendChild(this.yAxisLabel);
+
     if (this.property.type !== 'boolean') {
       const incForTenTicks =
         Math.pow(10, Math.floor(Math.log(this.valueMax - this.valueMin) /
