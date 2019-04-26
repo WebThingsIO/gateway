@@ -274,6 +274,9 @@ const Things = {
       }
 
       throw new Error(`Unable to find thing with title: ${title}`);
+    }).catch((e) => {
+      console.warn('Unexpected thing retrieval error', e);
+      return null;
     });
   },
 

@@ -108,37 +108,41 @@ const AssistantScreen = {
         throw new Error(error);
       }
 
-      let verb, preposition = '';
-      switch (body.payload.keyword) {
-        case 'make':
-          verb = 'making';
-          break;
-        case 'change':
-          verb = 'changing';
-          break;
-        case 'set':
-          verb = 'setting';
-          preposition = 'to ';
-          break;
-        case 'dim':
-          verb = 'dimming';
-          preposition = 'by ';
-          break;
-        case 'brighten':
-          verb = 'brightening';
-          preposition = 'by ';
-          break;
-        case 'turn':
-        case 'switch':
-        default:
-          verb = `${body.payload.keyword}ing`;
-          break;
+      let message = body.message;
+
+      if (!message) {
+        let verb, preposition = '';
+        switch (body.payload.keyword) {
+          case 'make':
+            verb = 'making';
+            break;
+          case 'change':
+            verb = 'changing';
+            break;
+          case 'set':
+            verb = 'setting';
+            preposition = 'to ';
+            break;
+          case 'dim':
+            verb = 'dimming';
+            preposition = 'by ';
+            break;
+          case 'brighten':
+            verb = 'brightening';
+            preposition = 'by ';
+            break;
+          case 'turn':
+          case 'switch':
+          default:
+            verb = `${body.payload.keyword}ing`;
+            break;
+        }
+
+        const value = body.payload.value ? body.payload.value : '';
+
+        message =
+          `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`;
       }
-
-      const value = body.payload.value ? body.payload.value : '';
-
-      const message =
-        `OK, ${verb} the ${body.payload.thing} ${preposition}${value}.`;
       this.displayMessage(
         message,
         'incoming'

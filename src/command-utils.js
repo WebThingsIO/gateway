@@ -8,6 +8,66 @@
 
 'use strict';
 
+const booleans = {
+  on: {
+    value: true,
+    '@type': null,
+    negation: 'off',
+  },
+  off: {
+    value: false,
+    '@type': null,
+    negation: 'on',
+  },
+  motion: {
+    value: true,
+    '@type': 'MotionProperty',
+    negation: 'no motion',
+    verb: 'detects',
+  },
+  'no motion': {
+    value: false,
+    '@type': 'MotionProperty',
+    negation: 'motion',
+    verb: 'detects',
+  },
+  open: {
+    value: true,
+    '@type': 'OpenProperty',
+    negation: 'closed',
+  },
+  closed: {
+    value: false,
+    '@type': 'OpenProperty',
+    negation: 'open',
+  },
+  leak: {
+    value: true,
+    '@type': 'LeakProperty',
+    negation: 'dry',
+  },
+  leaking: {
+    value: true,
+    '@type': 'LeakProperty',
+    negation: 'dry',
+  },
+  dry: {
+    value: false,
+    '@type': 'LeakProperty',
+    negation: 'leaking',
+  },
+  pushed: {
+    value: true,
+    '@type': 'PushedProperty',
+    negation: 'not pushed',
+  },
+  'not pushed': {
+    value: false,
+    '@type': 'PushedProperty',
+    negation: 'pushed',
+  },
+};
+
 /**
  * Mapping of CSS color names (in human-readable form) to hex colors.
  */
@@ -295,6 +355,12 @@ for (let i = 0; i <= 100; i++) {
   percentages[`${i}%`] = i;
 }
 
+const plurals = {
+  devices: [],
+  things: [],
+  lights: ['Light'],
+};
+
 /**
  * Find a property of a thing by its expected @type.
  *
@@ -318,7 +384,9 @@ function findProperty(thing, propType, fallbackName) {
 }
 
 module.exports = {
+  booleans,
   colors,
   percentages,
+  plurals,
   findProperty,
 };
