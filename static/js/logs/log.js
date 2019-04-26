@@ -23,7 +23,8 @@ const SCROLLING = 1;
 const DRAGGING = 2;
 
 class Log {
-  constructor(thingId, propertyId, logStart, logEnd, soloView) {
+  constructor(logWindows, thingId, propertyId, logStart, logEnd, soloView) {
+    this.logWindows = logWindows;
     this.thingId = thingId;
     this.propertyId = propertyId;
     this.logStart = logStart;
@@ -1091,31 +1092,25 @@ class Log {
   }
 
   restoreWindow() {
-    const storageId = `Logs.${this.thingId}.${this.propertyId}`;
-    const dataRaw = window.localStorage.getItem(storageId);
-    if (!dataRaw) {
+    const storageId = `${this.thingId}.${this.propertyId}`;
+    const data = this.logWindows[storageId];
+    if (!data || !data.start || !data.end) {
       return;
     }
-    try {
-      const data = JSON.parse(dataRaw);
-      if (!data.start || !data.end) {
-        return;
-      }
-      const start = parseInt(data.start);
-      const end = parseInt(data.end);
-      this.start = new Date(start);
-      this.end = new Date(end);
-    } catch (e) {
-      console.warn('Unexpected junk in window storage', e);
+    if (data.start < this.logStart.getTime() ||
+        data.end > this.logEnd.getTime()) {
+      return;
     }
+    this.start = new Date(data.start);
+    this.end = new Date(data.end);
   }
 
   storeWindow() {
-    const storageId = `Logs.${this.thingId}.${this.propertyId}`;
-    window.localStorage.setItem(storageId, JSON.stringify({
+    const storageId = `${this.thingId}.${this.propertyId}`;
+    this.logWindows[storageId] = {
       start: this.start.getTime(),
       end: this.end.getTime(),
-    }));
+    };
   }
 }
 
