@@ -192,7 +192,17 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     }
   } catch (err) {
     console.error('Registration failed:', err);
-    callback(err.detail || err.message.substring(0, err.message.indexOf('\n')));
+
+    let e;
+    if (err.detail) {
+      e = err.detail;
+    } else if (err.message) {
+      e = err.message.substring(0, err.message.indexOf('\n'));
+    } else {
+      e = err;
+    }
+
+    callback(e);
   }
 
   callback();
