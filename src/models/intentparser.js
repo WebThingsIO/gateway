@@ -12,7 +12,7 @@
 const CommandUtils = require('../command-utils');
 const net = require('net');
 const IntentParser = {
-  keywords: [
+  keywordsSet: [
     'turn',
     'switch',
     'make',
@@ -22,12 +22,21 @@ const IntentParser = {
     'brighten',
   ],
 
+  keywordsGet: [
+    'is',
+    'what is',
+  ],
+
+  keywordsGetLog: [
+    'when',
+    'was',
+    'how long',
+  ],
+
   types: Object.keys(CommandUtils.colors).
     concat(Object.keys(CommandUtils.percentages)).
+    concat(Object.keys(CommandUtils.booleans)).
     concat([
-      'on',
-      'off',
-      'red',
       'warmer',
       'cooler',
     ]),
@@ -69,7 +78,8 @@ const IntentParser = {
       socket_client.write(IntentParser.buildMessage({
         command: 'train',
         data: {
-          keywords: IntentParser.keywords,
+          keywords: IntentParser.keywordsSet.concat(
+            IntentParser.keywordsGet),
           types: IntentParser.types,
           locations: things,
         },

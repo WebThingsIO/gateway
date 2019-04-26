@@ -8,6 +8,9 @@
  *  Turn <tag> <on|off>
  *  Shut <tag> <on|off>
  *  Shut the <tag> light <on|off>
+ *  When was <tag> last <boolean>
+ *  Is <tag> <boolean>
+ *  Is <tag> not <boolean>
  *
  * <tag> must match the .name property of one of the /things objects
  *  in order for the command to be executed.
@@ -40,6 +43,42 @@ const Things = require('../models/things');
 
 const CommandsController = PromiseRouter();
 
+function internalError(response) {
+  response.status(400).json({
+    message: 'Sorry, something went wrong.',
+  });
+}
+
+function thingNotFound(response, name) {
+  response.status(400).json({
+    message: `Sorry, the thing ${name} wasn't found.`,
+  });
+}
+
+function invalidForDevice(response) {
+  response.status(400).json({
+    message: 'Sorry, I\'m afraid I can\'t do that.',
+  });
+}
+
+function propertyNotFound(response, thing, property) {
+  response.status(400).json({
+    message: `Sorry, the thing ${thing} has no property ${property}.`,
+  });
+}
+
+function invalidCommand(response) {
+  response.status(400).json({
+    message: 'Sorry, I didn\'t understand that.',
+  });
+}
+
+function failedToSet(response) {
+  response.status(400).json({
+    message: 'Sorry, that didn\'t work.',
+  });
+}
+
 /**
  * Parses the intent for a text sentence and sends to the intent parser to
  * determine intent. Then executes the intent as an action on the thing API.
@@ -53,43 +92,14 @@ CommandsController.post('/', async (request, response) => {
   }
 
   let titles = await Things.getThingTitles();
+  titles = titles.concat(Object.keys(CommandUtils.plurals));
   titles = titles.map((t) => t.toLowerCase());
-
-  const internalError = () => {
-    response.status(400).json({
-      message: 'Sorry, something went wrong.',
-    });
-  };
-
-  const thingNotFound = () => {
-    response.status(400).json({
-      message: 'Sorry, that thing wasn\'t found.',
-    });
-  };
-
-  const invalidForDevice = () => {
-    response.status(400).json({
-      message: 'Sorry, I\'m afraid I can\'t do that.',
-    });
-  };
-
-  const invalidCommand = () => {
-    response.status(400).json({
-      message: 'Sorry, I didn\'t understand that.',
-    });
-  };
-
-  const failedToSet = () => {
-    response.status(400).json({
-      message: 'Sorry, that didn\'t work.',
-    });
-  };
 
   try {
     await IntentParser.train(titles);
   } catch (e) {
     console.log('Error training:', e);
-    internalError();
+    internalError(response);
     return;
   }
 
@@ -98,7 +108,7 @@ CommandsController.post('/', async (request, response) => {
     payload = await IntentParser.query(request.body.text);
   } catch (e) {
     console.log('Error parsing intent:', e);
-    invalidCommand();
+    invalidCommand(response);
     return;
   }
 
@@ -106,11 +116,9 @@ CommandsController.post('/', async (request, response) => {
   const thing = await Things.getThingByTitle(title);
 
   if (!thing) {
-    thingNotFound();
+    thingNotFound(response, name);
     return;
   }
-
-  let propertyName, value;
 
   const properties = {
     on: CommandUtils.findProperty(thing, 'OnOffProperty', 'on'),
@@ -124,9 +132,31 @@ CommandsController.post('/', async (request, response) => {
                                           'level'),
   };
 
+  for (const name in CommandUtils.booleans) {
+    const bool = CommandUtils.booleans[name];
+    if (!bool.value || !bool['@type']) {
+      continue;
+    }
+    if (!properties[name]) {
+      properties[name] = CommandUtils.findProperty(thing, bool['@type'], name);
+    }
+  }
+
+  if (IntentParser.keywordsSet.includes(payload.keyword)) {
+    await handleSet(payload, thing, properties, response);
+  } else if (IntentParser.keywordsGet.includes(payload.keyword)) {
+    await handleGet(payload, thing, properties, response);
+  } else {
+    invalidCommand(response);
+  }
+});
+
+async function handleSet(payload, thing, properties, response) {
+  let propertyName, value;
+
   if (['on', 'off'].includes(payload.value)) {
     if (!properties.on) {
-      invalidForDevice();
+      invalidForDevice(response);
       return;
     }
 
@@ -134,7 +164,7 @@ CommandsController.post('/', async (request, response) => {
     value = payload.value === 'on';
   } else if (['warmer', 'cooler'].includes(payload.value)) {
     if (!properties.colorTemperature) {
-      invalidForDevice();
+      invalidForDevice(response);
       return;
     }
 
@@ -144,7 +174,7 @@ CommandsController.post('/', async (request, response) => {
     try {
       current = await AddonManager.getProperty(thing.id, propertyName);
     } catch (e) {
-      failedToSet();
+      failedToSet(response);
       return;
     }
 
@@ -152,7 +182,7 @@ CommandsController.post('/', async (request, response) => {
   } else if (['dim', 'brighten'].includes(payload.keyword) ||
              CommandUtils.percentages.hasOwnProperty(payload.value)) {
     if (!properties.brightness) {
-      invalidForDevice();
+      invalidForDevice(response);
       return;
     }
 
@@ -168,7 +198,7 @@ CommandsController.post('/', async (request, response) => {
       try {
         current = await AddonManager.getProperty(thing.id, propertyName);
       } catch (e) {
-        failedToSet();
+        failedToSet(response);
         return;
       }
 
@@ -180,21 +210,21 @@ CommandsController.post('/', async (request, response) => {
     }
   } else if (CommandUtils.colors.hasOwnProperty(payload.value)) {
     if (!properties.color) {
-      invalidForDevice();
+      invalidForDevice(response);
       return;
     }
 
     propertyName = properties.color;
     value = CommandUtils.colors[payload.value];
   } else {
-    invalidCommand();
+    invalidCommand(response);
     return;
   }
 
   try {
     await AddonManager.setProperty(thing.id, propertyName, value);
   } catch (e) {
-    failedToSet();
+    failedToSet(response);
     return;
   }
 
@@ -203,9 +233,43 @@ CommandsController.post('/', async (request, response) => {
   // caller with this status before the command finishes execution
   // as the execution can take some time (e.g. blinds)
   response.status(201).json({
-    message: 'Command Created',
     payload: payload,
   });
-});
+}
+
+async function handleGet(payload, thing, properties, response) {
+  if (CommandUtils.booleans[payload.value]) {
+    const bool = CommandUtils.booleans[payload.value];
+
+    let prop = properties[payload.value];
+    let negated = false;
+    if (!prop && !bool.value) {
+      prop = properties[bool.negation];
+      negated = true;
+    }
+
+    if (!prop) {
+      propertyNotFound(response, payload.thing, payload.value);
+      return;
+    }
+
+    let value = await AddonManager.getProperty(thing.id, prop);
+    if (negated) {
+      value = !value;
+    }
+
+    const valueStr = value ? payload.value : bool.negation;
+    const verb = bool.verb || 'is';
+    const answer = value ? 'Yes' : 'No';
+    response.status(201).json({
+      message: `${answer}, the ${payload.thing} ${verb} ${valueStr}.`,
+      payload: payload,
+    });
+    return;
+  }
+  response.status(400).json({
+    message: `I don't feel like dealing with thing ${payload.thing} property ${payload.value} today`,
+  });
+}
 
 module.exports = CommandsController;
