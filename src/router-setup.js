@@ -125,6 +125,11 @@ function handleCreating(request, response) {
     const ssid = request.body.ssid.trim();
     const password = request.body.password.trim();
 
+    if (ssid.length < 1 || ssid.length > 32 || password.length < 8) {
+      response.status(400).send('Invalid parameters.');
+      return;
+    }
+
     response.render(
       'creating',
       {
