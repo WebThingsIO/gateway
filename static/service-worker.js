@@ -29,7 +29,7 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin ||
       url.pathname.endsWith('.map') ||
       url.pathname.endsWith('floorplan.svg') ||
-      url.pathname.startsWith('/logs/files/')) {
+      url.pathname.startsWith('/internal-logs')) {
     return;
   }
 
