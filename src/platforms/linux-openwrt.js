@@ -295,7 +295,7 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
 /**
  * Get Architecture
  *
- * @param {string} default architecture detcted by the gateway.
+ * @param {string} default architecture detected by the gateway.
  * @returns {string} Architecture to use.
  */
 
