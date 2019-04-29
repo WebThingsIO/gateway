@@ -174,14 +174,14 @@ function getHotspotSsid() {
   const base = config.get('wifi.ap.ssid_base');
   const mac = platform.getMacAddress('wlan0');
   if (!mac) {
-    DEBUG && console.log('getHotSpotSsid: returning', base);
+    DEBUG && console.log('router-setup: getHotSpotSsid: returning', base);
     return base;
   }
 
   // Get the last 2 octets of the MAC and create a simple string, e.g. 9E28
   const id = mac.split(':').slice(4).join('').toUpperCase();
 
-  DEBUG && console.log('getHotSpotSsid: returning', `${base} ${id}`);
+  DEBUG && console.log('router-setup: getHotSpotSsid: returning', `${base} ${id}`);
   return `${base} ${id}`;
 }
 
@@ -199,7 +199,7 @@ function getHotspotSsid() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function startCaptivePortal(ipaddr) {
-  console.log('router-setup: startCaptivePortal ipaddr:', ipaddr);
+  console.log('router-setup: startCaptivePortal: ipaddr:', ipaddr);
   const ssid = getHotspotSsid();
 
   // Set the WAN mode to be DHCP. By doing this here, it allows us to get
@@ -260,7 +260,7 @@ function stopCaptivePortal() {
  *                    the command.
  */
 function defineNetwork(ssid, password) {
-  console.log('router-setup: defineNetwork ssid:', ssid);
+  console.log('router-setup: defineNetwork: ssid:', ssid);
 
   const wanMode = platform.getWanMode();
   if (wanMode.mode != 'dhcp') {

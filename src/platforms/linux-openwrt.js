@@ -205,9 +205,10 @@ function uciCommit(label, key) {
  * @returns {boolean} Whether or not the command was successful
  */
 function redirectTcpPort(add, ipaddr, fromPort, toPort) {
+  const action = add ? 'Redirecting' : 'Removing redirection';
+  console.log(`${action} from ${fromPort} to ${toPort} (for ${ipaddr})`);
+
   const label = 'redirectTcpPort';
-  DEBUG && console.log(`${label}: add:`, add, 'ipaddr:', ipaddr,
-                       'fromPort:', fromPort, 'toPort:', toPort);
 
   let proc = spawnSync(label, 'iptables', [
     '-t', 'mangle',
@@ -537,7 +538,7 @@ function getWanMode() {
 
   for (const [key, value] of Object.entries(result.pairs)) {
     // discard network.wan=interface
-    if (!key.startsWith('network.wana.')) {
+    if (!key.startsWith('network.wan.')) {
       continue;
     }
 
