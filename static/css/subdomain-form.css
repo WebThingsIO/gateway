@@ -41,6 +41,12 @@ body {
   margin: 1rem auto;
 }
 
+#create-domain-button:disabled,
+#create-domain-button:disabled:hover,
+#create-domain-button:hover:active {
+  background-color: #658196;
+}
+
 #label-subdomain {
   display: inline-block;
   padding-left: 0.5rem;

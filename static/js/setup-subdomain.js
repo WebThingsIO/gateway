@@ -61,10 +61,24 @@ function validateEmail() {
 }
 
 /**
+ * Ensure that the reclamation token is valid.
+ */
+function validateToken() {
+  if (reclamationToken.offsetParent === null) {
+    return true;
+  }
+
+  const val = reclamationToken.value;
+  // eslint-disable-next-line max-len
+  const re = new RegExp(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/);
+  return re.test(val);
+}
+
+/**
  * Ensure that all inputs are valid.
  */
 function validateInput() {
-  if (validateDomain() && validateEmail()) {
+  if (validateDomain() && validateEmail() && validateToken()) {
     createDomainButton.disabled = false;
   } else {
     createDomainButton.disabled = true;
@@ -76,7 +90,8 @@ function validateInput() {
  * valid.
  */
 function submitOnEnter(evt) {
-  if (evt.key === 'Enter' && validateDomain() && validateEmail()) {
+  if (evt.key === 'Enter' && validateDomain() && validateEmail() &&
+      validateToken()) {
     submitForm();
   }
 }
@@ -85,6 +100,7 @@ function submitOnEnter(evt) {
  * Submit the form.
  */
 function submitForm() {
+  createDomainButton.disabled = true;
   displayMessage('Processing...', 'message');
 
   // Call the settings controller to subscribe the domain in the gateway.
@@ -103,6 +119,8 @@ function submitForm() {
     },
   }).then((response) => {
     if (response.statusText.indexOf('UnavailableName') > -1) {
+      validateInput();
+
       if (response.statusText.indexOf('ReclamationPossible') > -1) {
         const text1 = document.createTextNode(
           'It looks like you\'ve already registered that subdomain. ');
@@ -142,10 +160,12 @@ function submitForm() {
         displayMessage('This subdomain is already being used. ' +
                        'Please choose a different one.',
                        'error');
+        createDomainButton.disabled = false;
         return Promise.reject();
       }
     } else if (response.statusText.indexOf('ReclamationTokenMismatch') > -1) {
       displayMessage('Invalid reclamation token.', 'error');
+      createDomainButton.disabled = false;
       return Promise.reject();
     } else {
       return response.text();
@@ -160,12 +180,14 @@ function submitForm() {
     } else {
       displayMessage('Error issuing certificate. Please try again.',
                      'error');
+      createDomainButton.disabled = false;
     }
   }, () => {});
 }
 
 subdomain.addEventListener('input', validateInput);
 email.addEventListener('input', validateInput);
+reclamationToken.addEventListener('input', validateInput);
 
 subdomain.addEventListener('keydown', submitOnEnter);
 email.addEventListener('keydown', submitOnEnter);
@@ -174,8 +196,10 @@ reclamationToken.addEventListener('keydown', submitOnEnter);
 createDomainButton.addEventListener('click', submitForm);
 
 skipAnchor.addEventListener('click', () => {
-  // call the settings controller to skip the domain subscription
+  createDomainButton.disabled = true;
   displayMessage('Processing...', 'message');
+
+  // call the settings controller to skip the domain subscription
   fetch('/settings/skiptunnel', {
     method: 'POST',
     headers: {
