@@ -60,7 +60,12 @@ function getOS() {
  * Get the current architecture as "os-machine", i.e. darwin-x64.
  */
 function getArchitecture() {
-  return `${process.platform}-${process.arch}`;
+  const defaultArchitecture = `${process.platform}-${process.arch}`;
+  try {
+    return platform.getPlatformArchitecture(defaultArchitecture);
+  } catch (e) {
+    return defaultArchitecture;
+  }
 }
 
 /**
@@ -136,6 +141,7 @@ try {
 }
 
 const wrappedMethods = [
+  'getPlatformArchitecture',
   'getCaptivePortalStatus',
   'setCaptivePortalStatus',
   'getDhcpServerStatus',

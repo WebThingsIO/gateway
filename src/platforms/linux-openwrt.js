@@ -293,6 +293,17 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
 }
 
 /**
+ * Get Architecture
+ *
+ * @param {string} default architecture detcted by the gateway.
+ * @returns {string} Architecture to use.
+ */
+
+function getPlatformArchitecture(defaultArchitecture) {
+  return `openwrt-${defaultArchitecture}`;
+}
+
+/**
  * Get Captive Portal status.
  *
  * @returns {boolean} Boolean indicating whether or not captive portal is
@@ -1238,6 +1249,7 @@ function update() {
 }
 
 module.exports = {
+  getPlatformArchitecture,
   getCaptivePortalStatus,
   setCaptivePortalStatus,
   getDhcpServerStatus,
