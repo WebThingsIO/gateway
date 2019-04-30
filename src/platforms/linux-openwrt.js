@@ -1136,7 +1136,7 @@ function getNetworkAddresses() {
 
   const lanType = res.pairs['network.lan.type'];
   let lanIface = res.pairs['network.lan.ifname'];
-  if (lanType && lanType[1] === 'bridge') {
+  if (lanType === 'bridge') {
     lanIface = 'br-lan';
   }
 
@@ -1151,7 +1151,7 @@ function getNetworkAddresses() {
 
   const wanType = res.pairs['network.wan.type'];
   let wanIface = res.pairs['network.wan.ifname'];
-  if (wanType && wanType[1] === 'bridge') {
+  if (wanType === 'bridge') {
     wanIface = 'br-wan';
   }
 
