@@ -1036,7 +1036,6 @@ const SettingsScreen = {
 
       return res.json();
     }).then((body) => {
-      console.log(body);
       this.elements.network.client.ethernet.mainIp.innerText = body.lan;
       this.elements.network.router.lan.mainIp.innerText = body.lan;
       this.elements.network.client.wifi.mainIp.innerText = body.wlan.ip;
@@ -1226,8 +1225,8 @@ const SettingsScreen = {
       return res.json();
     }).then((body) => {
       this.elements.network.router.wlan.enable.checked = body.enabled;
-      this.elements.network.router.wlan.ssid.value = body.ssid || '';
-      this.elements.network.router.wlan.password.value = body.key || '';
+      this.elements.network.router.wlan.ssid.value = body.options.ssid || '';
+      this.elements.network.router.wlan.password.value = body.options.key || '';
     }).catch((e) => {
       console.error(`Failed to get WLAN config: ${e}`);
     }).then(() => {
