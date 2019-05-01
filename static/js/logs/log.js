@@ -524,12 +524,13 @@ class Log {
         this.property.type === 'integer') {
       // Add a point so that the value steps down instead of gradually
       // decreasing
+      const lastPoint = points[points.length - 1];
       points.push({
-        x: points[points.length - 1].x,
-        y: rightPoint.y,
+        x: lastPoint.x,
+        y: lastPoint.y,
       }, {
         x: this.xStart + this.graphWidth,
-        y: rightPoint.y,
+        y: lastPoint.y,
       });
     } else if (points.length > 0) {
       const borderPoint = this.interpolate(points[points.length - 1],
