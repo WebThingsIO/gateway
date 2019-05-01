@@ -50,6 +50,7 @@ class Plugin {
     this.restart = true;
     this.restartDelay = 0;
     this.lastRestart = 0;
+    this.pendingRestart = null;
     this.unloadCompletedPromise = null;
     this.unloadedRcvdPromise = null;
 
@@ -475,6 +476,10 @@ class Plugin {
    * Does cleanup required to allow the test suite to complete cleanly.
    */
   shutdown() {
+    if (this.pendingRestart) {
+      clearTimeout(this.pendingRestart);
+    }
+    this.restart = false;
     this.requestActionPromises.forEach((promise, key) => {
       promise.reject();
       this.requestActionPromises.delete(key);
@@ -555,6 +560,9 @@ class Plugin {
           this.restart = false;
           this.process.p = null;
         } else {
+          if (this.pendingRestart) {
+            return;
+          }
           if (this.restartDelay < 30 * 1000) {
             this.restartDelay += 1000;
           }
@@ -563,10 +571,22 @@ class Plugin {
           }
           console.log('Plugin:', this.pluginId, 'died, code =', code,
                       'restarting after', this.restartDelay);
-          setTimeout(() => {
-            this.lastRestart = Date.now();
-            this.start();
-          }, this.restartDelay);
+          const doRestart = () => {
+            if (this.restart) {
+              this.lastRestart = Date.now();
+              this.pendingRestart = null;
+              this.start();
+            } else {
+              this.process.p = null;
+            }
+          };
+          if (this.restartDelay > 0) {
+            this.pendingRestart = setTimeout(doRestart, this.restartDelay);
+          } else {
+            // Restart immediately so that test code can access
+            // process.p
+            doRestart();
+          }
         }
       } else {
         this.process.p = null;
