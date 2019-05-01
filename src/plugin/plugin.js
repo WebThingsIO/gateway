@@ -48,6 +48,8 @@ class Plugin {
     this.process = {p: null};
 
     this.restart = true;
+    this.restartDelay = 0;
+    this.lastRestart = 0;
     this.unloadCompletedPromise = null;
     this.unloadedRcvdPromise = null;
 
@@ -553,9 +555,18 @@ class Plugin {
           this.restart = false;
           this.process.p = null;
         } else {
+          if (this.restartDelay < 30 * 1000) {
+            this.restartDelay += 1000;
+          }
+          if (this.lastRestart + 60 * 1000 < Date.now()) {
+            this.restartDelay = 0;
+          }
           console.log('Plugin:', this.pluginId, 'died, code =', code,
-                      'restarting...');
-          this.start();
+                      'restarting after', this.restartDelay);
+          setTimeout(() => {
+            this.lastRestart = Date.now();
+            this.start();
+          }, this.restartDelay);
         }
       } else {
         this.process.p = null;
