@@ -872,8 +872,14 @@ class Log {
       if (i < 0 || i > this.rawPoints.length - 1) {
         continue;
       }
-      const dx = this.timeToX(this.rawPoints[i].time) - localX;
-      const dy = this.valueToY(this.rawPoints[i].value) - localY;
+      if (this.rawPoints[i].time < this.start.getTime() ||
+          this.rawPoints[i].time > this.end.getTime()) {
+        continue;
+      }
+      const pointX = this.timeToX(this.rawPoints[i].time);
+      const pointY = this.valueToY(this.rawPoints[i].value);
+      const dx = pointX - localX;
+      const dy = pointY - localY;
       const diffSq = dx * dx + dy * dy;
       if (diffSq > nearestDSq) {
         continue;
