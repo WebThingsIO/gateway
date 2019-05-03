@@ -48,6 +48,7 @@ exports.ACTION_STATUS = 'actionStatus';
 exports.ADAPTER_ADDED = 'adapterAdded';
 exports.ADAPTER_UNLOADED = 'adapterUnloaded';
 exports.ADD_ADAPTER = 'addAdapter';
+exports.ADD_NOTIFIER = 'addNotifier';
 exports.ADD_EVENT_SUBSCRIPTION = 'addEventSubscription';
 exports.ADD_MOCK_DEVICE = 'addMockDevice';
 exports.CANCEL_PAIRING = 'cancelPairing';
@@ -59,9 +60,18 @@ exports.EVENT = 'event';
 exports.ERROR = 'error';
 exports.HANDLE_DEVICE_ADDED = 'handleDeviceAdded';
 exports.HANDLE_DEVICE_REMOVED = 'handleDeviceRemoved';
+exports.HANDLE_OUTLET_ADDED = 'handleOutletAdded';
+exports.HANDLE_OUTLET_REMOVED = 'handleOutletRemoved';
 exports.MOCK_ADAPTER_STATE_CLEARED = 'mockAdapterStateCleared';
 exports.MOCK_DEVICE_ADDED_REMOVED = 'mockDeviceAddedRemoved';
 exports.MOCK_DEVICE_ADD_REMOVE_FAILED = 'mockDeviceAddRemoveFailed';
+exports.NOTIFY = 'notify';
+exports.NOTIFY_REJECTED = 'notifyRejected';
+exports.NOTIFY_RESOLVED = 'notifyResolved';
+exports.NOTIFIER_ADDED = 'notifierAdded';
+exports.NOTIFIER_UNLOADED = 'notifierUnloaded';
+exports.OUTLET_ADDED = 'outletAdded';
+exports.OUTLET_REMOVED = 'outletRemoved';
 exports.PAIRING_TIMEOUT = 'pairingTimeout';
 exports.PAIR_MOCK_DEVICE = 'pairMockDevice';
 exports.PAIRING_PROMPT = 'pairingPrompt';
@@ -89,6 +99,7 @@ exports.START_PAIRING = 'startPairing';
 exports.THING_ADDED = 'thingAdded';
 exports.THING_REMOVED = 'thingRemoved';
 exports.UNLOAD_ADAPTER = 'unloadAdapter';
+exports.UNLOAD_NOTIFIER = 'unloadNotifier';
 exports.UNLOAD_PLUGIN = 'unloadPlugin';
 exports.UNPAIR_MOCK_DEVICE = 'unpairMockDevice';
 exports.UNPAIRING_PROMPT = 'unpairingPrompt';
@@ -103,6 +114,12 @@ exports.THING_TYPE_ON_OFF_LIGHT = 'onOffLight';
 exports.THING_TYPE_DIMMABLE_LIGHT = 'dimmableLight';
 exports.THING_TYPE_ON_OFF_COLOR_LIGHT = 'onOffColorLight';
 exports.THING_TYPE_DIMMABLE_COLOR_LIGHT = 'dimmableColorLight';
+
+exports.NotificationLevel = {
+  LOW: 0,
+  NORMAL: 1,
+  HIGH: 2,
+};
 
 // OAuth things
 exports.ACCESS_TOKEN = 'access_token';

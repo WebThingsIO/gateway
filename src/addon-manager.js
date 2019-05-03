@@ -44,7 +44,9 @@ class AddonManager extends EventEmitter {
   constructor() {
     super();
     this.adapters = new Map();
+    this.notifiers = new Map();
     this.devices = {};
+    this.outlets = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.addonsLoaded = false;
@@ -78,6 +80,24 @@ class AddonManager extends EventEmitter {
       this.deferredWaitForAdapter.delete(adapter.id);
       deferredWait.resolve(adapter);
     }
+  }
+
+  addNotifier(notifier) {
+    if (!notifier.name) {
+      notifier.name = notifier.constructor.name;
+    }
+
+    this.notifiers.set(notifier.id, notifier);
+
+    /**
+     * Notifier added event.
+     *
+     * This is event is emitted whenever a new notifier is loaded.
+     *
+     * @event notifierAdded
+     * @type {Adapter}
+     */
+    this.emit(Constants.NOTIFIER_ADDED, notifier);
   }
 
   /**
@@ -178,6 +198,32 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method getNotifiers
+   * @returns Returns a Map of the loaded notifiers. The dictionary
+   *          key corresponds to the notifier id.
+   */
+  getNotifiers() {
+    return this.notifiers;
+  }
+
+  /**
+   * @method getNotifier
+   * @returns Returns the notifier with the indicated id.
+   */
+  getNotifier(notifierId) {
+    return this.notifiers.get(notifierId);
+  }
+
+  /**
+   * @method getNotifiersByPackageName
+   * @returns Returns a list of loaded notifiers with the given package name.
+   */
+  getNotifiersByPackageName(packageName) {
+    return Array.from(this.notifiers.values()).filter(
+      (n) => n.getPackageName() === packageName);
+  }
+
+  /**
    * @method getDevice
    * @returns Returns the device with the indicated id.
    */
@@ -192,6 +238,23 @@ class AddonManager extends EventEmitter {
    */
   getDevices() {
     return this.devices;
+  }
+
+  /**
+   * @method getOutlet
+   * @returns Returns the outlet with the indicated id.
+   */
+  getOutlet(id) {
+    return this.outlets[id];
+  }
+
+  /**
+   * @method getOutlets
+   * @returns Returns an dictionary of all of the known outlets.
+   *          The dictionary key corresponds to the outlet id.
+   */
+  getOutlets() {
+    return this.outlets;
   }
 
   /**
@@ -279,6 +342,19 @@ class AddonManager extends EventEmitter {
     }
 
     return Promise.reject(`setProperty: device: ${thingId} not found.`);
+  }
+
+  /**
+   * @method notify
+   * @returns a promise which resolves when the outlet has been notified.
+   */
+  notify(outletId, title, message, level) {
+    const outlet = this.getOutlet(outletId);
+    if (outlet) {
+      return outlet.notify(title, message, level);
+    }
+
+    return Promise.reject(`notify: outlet: ${outletId} not found.`);
   }
 
   /**
@@ -373,7 +449,7 @@ class AddonManager extends EventEmitter {
 
   /**
    * @method handleDeviceRemoved
-   * Called when the indicated device has been removed an adapter.
+   * Called when the indicated device has been removed by an adapter.
    */
   handleDeviceRemoved(device) {
     delete this.devices[device.id];
@@ -382,7 +458,7 @@ class AddonManager extends EventEmitter {
     /**
      * Thing removed event.
      *
-     * This event is emitted whenever a new thing is removed.
+     * This event is emitted whenever a thing is removed.
      *
      * @event thingRemoved
      * @type  {Thing}
@@ -394,6 +470,43 @@ class AddonManager extends EventEmitter {
       this.deferredRemove = null;
       deferredRemove.resolve(device.id);
     }
+  }
+
+  /**
+   * @method handleOutletAdded
+   *
+   * Called when the indicated outlet has been added to a notifier.
+   */
+  handleOutletAdded(outlet) {
+    this.outlets[outlet.id] = outlet;
+
+    /**
+     * Outlet added event.
+     *
+     * This event is emitted whenever a new outlet is added.
+     *
+     * @event outletAdded
+     * @type {Outlet}
+     */
+    this.emit(Constants.OUTLET_ADDED, outlet.asDict());
+  }
+
+  /**
+   * @method handleOutletRemoved
+   * Called when the indicated outlet has been removed by a notifier.
+   */
+  handleOutletRemoved(outlet) {
+    delete this.outlets[outlet.id];
+
+    /**
+     * Outlet removed event.
+     *
+     * This event is emitted whenever an outlet is removed.
+     *
+     * @event outletRemoved
+     * @type {Outlet}
+     */
+    this.emit(Constants.OUTLET_REMOVED, outlet.asDict());
   }
 
   /**
@@ -769,9 +882,15 @@ class AddonManager extends EventEmitter {
     }
 
     const unloadPromises = [];
+
     // unload the adapters in the reverse of the order that they were loaded.
     for (const adapterId of Array.from(this.adapters.keys()).reverse()) {
       unloadPromises.push(this.unloadAdapter(adapterId));
+    }
+
+    // unload the notifiers in the reverse of the order that they were loaded.
+    for (const notifierId of Array.from(this.notifiers.keys()).reverse()) {
+      unloadPromises.push(this.unloadNotifier(notifierId));
     }
 
     this.addonsLoaded = false;
@@ -807,6 +926,30 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method unloadNotifier
+   * Unload the given notifier.
+   *
+   * @param {String} id The ID of the notifier to unload.
+   * @returns A promise which is resolved when the notifier is unloaded.
+   */
+  unloadNotifier(id) {
+    if (!this.addonsLoaded) {
+      // The add-ons are not currently loaded, no need to unload.
+      return Promise.resolve();
+    }
+
+    const notifier = this.getNotifier(id);
+    if (typeof notifier === 'undefined') {
+      // This notifier wasn't loaded.
+      return Promise.resolve();
+    }
+
+    console.log('Unloading', notifier.name);
+    this.notifiers.delete(notifier.id);
+    return notifier.unload();
+  }
+
+  /**
    * @method unloadAddon
    * Unload add-on with the given package name.
    *
@@ -828,6 +971,9 @@ class AddonManager extends EventEmitter {
 
     const adapters = this.getAdaptersByPackageName(packageName);
     const adapterIds = adapters.map((a) => a.id);
+    const notifiers = this.getNotifiersByPackageName(packageName);
+    const notifierIds = notifiers.map((n) => n.id);
+
     const unloadPromises = [];
     if (adapters.length > 0) {
       for (const a of adapters) {
@@ -835,7 +981,17 @@ class AddonManager extends EventEmitter {
         unloadPromises.push(a.unload());
         this.adapters.delete(a.id);
       }
-    } else if (plugin) {
+    }
+
+    if (notifiers.length > 0) {
+      for (const n of notifiers) {
+        console.log('Unloading', n.name);
+        unloadPromises.push(n.unload());
+        this.notifiers.delete(n.id);
+      }
+    }
+
+    if (adapters.length === 0 && notifiers.length === 0 && plugin) {
       // If there are no adapters, manually unload the plugin, otherwise it
       // will just restart. Note that if the addon is disabled, then
       // there might not be a plugin either.
@@ -854,6 +1010,13 @@ class AddonManager extends EventEmitter {
         for (const deviceId of Object.keys(this.devices)) {
           if (adapterIds.includes(this.devices[deviceId].adapter.id)) {
             this.handleDeviceRemoved(this.devices[deviceId]);
+          }
+        }
+
+        // Remove outlets owned by this add-on.
+        for (const outletId of Object.keys(this.outlets)) {
+          if (notifierIds.includes(this.outlets[outletId].notifier.id)) {
+            this.handleOutletRemoved(this.outlets[outletId]);
           }
         }
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);

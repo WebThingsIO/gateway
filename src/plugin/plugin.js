@@ -18,9 +18,11 @@ const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
 const IpcSocket = require('./ipc');
+const NotifierProxy = require('./notifier-proxy');
+const OutletProxy = require('./outlet-proxy');
+const path = require('path');
 const readline = require('readline');
 const spawn = require('child_process').spawn;
-const path = require('path');
 const UserProfile = require('../user-profile');
 
 const DEBUG = false;
@@ -33,6 +35,7 @@ class Plugin {
     this.logPrefix = pluginId.replace('-adapter', '');
 
     this.adapters = new Map();
+    this.notifiers = new Map();
     this.ipcBaseAddr = `gateway.plugin.${this.pluginId}`;
 
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
@@ -56,6 +59,7 @@ class Plugin {
     this.removeActionPromises = new Map();
     this.setPinPromises = new Map();
     this.setCredentialsPromises = new Map();
+    this.notifyPromises = new Map();
   }
 
   asDict() {
@@ -68,6 +72,9 @@ class Plugin {
       ipcBaseAddr: this.ipcBaseAddr,
       adapters: Array.from(this.adapters.values()).map((adapter) => {
         return adapter.asDict();
+      }),
+      notifiers: Array.from(this.notifiers.values()).map((notifier) => {
+        return notifier.asDict();
       }),
       exec: this.exec,
       pid,
@@ -133,6 +140,34 @@ class Plugin {
         }
         deferred.reject();
         this.removeActionPromises.delete(messageId);
+        return;
+      }
+      case Constants.NOTIFY_RESOLVED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.notifyPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.resolve();
+        this.notifyPromises.delete(messageId);
+        return;
+      }
+      case Constants.NOTIFY_REJECTED: {
+        const messageId = msg.data.messageId;
+        const deferred = this.notifyPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.reject();
+        this.notifyPromises.delete(messageId);
         return;
       }
       case Constants.SET_PIN_RESOLVED: {
@@ -204,7 +239,8 @@ class Plugin {
     }
 
     const adapterId = msg.data.adapterId;
-    let adapter;
+    const notifierId = msg.data.notifierId;
+    let adapter, notifier;
 
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
@@ -216,6 +252,16 @@ class Plugin {
                                    this);
         this.adapters.set(adapterId, adapter);
         this.pluginServer.addAdapter(adapter);
+        return;
+
+      case Constants.ADD_NOTIFIER:
+        notifier = new NotifierProxy(this.pluginServer.manager,
+                                     notifierId,
+                                     msg.data.name,
+                                     msg.data.packageName,
+                                     this);
+        this.notifiers.set(notifierId, notifier);
+        this.pluginServer.addNotifier(notifier);
         return;
 
       case Constants.PLUGIN_UNLOADED:
@@ -255,14 +301,23 @@ class Plugin {
     // The next switch deals with adapter level messages
 
     adapter = this.adapters.get(adapterId);
-    if (!adapter) {
+    if (adapterId && !adapter) {
       console.error('Plugin:', this.pluginId,
                     'Unrecognized adapter:', adapterId,
                     'Ignoring msg:', msg);
       return;
     }
 
+    notifier = this.notifiers.get(notifierId);
+    if (notifierId && !notifier) {
+      console.error('Plugin:', this.pluginId,
+                    'Unrecognized notifier:', notifierId,
+                    'Ignoring msg:', msg);
+      return;
+    }
+
     let device;
+    let outlet;
     let property;
     let deferredMock;
 
@@ -287,6 +342,20 @@ class Plugin {
         }
         break;
 
+      case Constants.NOTIFIER_UNLOADED:
+        this.notifiers.delete(notifierId);
+        if (this.notifiers.size == 0) {
+          // We've unloaded the last notifier for the plugin, now unload
+          // the plugin.
+          this.unload();
+          this.unloadCompletedPromise = notifier.unloadCompletedPromise;
+          notifier.unloadCompletedPromise = null;
+        } else if (notifier.unloadCompletedPromise) {
+          notifier.unloadCompletedPromise.resolve();
+          notifier.unloadCompletedPromise = null;
+        }
+        break;
+
       case Constants.HANDLE_DEVICE_ADDED:
         device = new DeviceProxy(adapter, msg.data);
         adapter.handleDeviceAdded(device);
@@ -296,6 +365,18 @@ class Plugin {
         device = adapter.getDevice(msg.data.id);
         if (device) {
           adapter.handleDeviceRemoved(device);
+        }
+        break;
+
+      case Constants.HANDLE_OUTLET_ADDED:
+        outlet = new OutletProxy(notifier, msg.data);
+        notifier.handleOutletAdded(outlet);
+        break;
+
+      case Constants.HANDLE_OUTLET_REMOVED:
+        outlet = notifier.getOutlet(msg.data.id);
+        if (outlet) {
+          notifier.handleOutletRemoved(outlet);
         }
         break;
 
@@ -441,6 +522,11 @@ class Plugin {
           this.removeActionPromises.set(data.messageId, deferred);
           break;
         }
+        case Constants.NOTIFY: {
+          data.messageId = this.generateMsgId();
+          this.notifyPromises.set(data.messageId, deferred);
+          break;
+        }
         case Constants.SET_PIN: {
           // removeAction needs ID which is per message, because it
           // can be called while waiting rejected or resolved.
@@ -488,6 +574,10 @@ class Plugin {
     this.setCredentialsPromises.forEach((promise, key) => {
       promise.reject();
       this.setCredentialsPromises.delete(key);
+    });
+    this.notifyPromises.forEach((promise, key) => {
+      promise.reject();
+      this.notifyPromises.delete(key);
     });
     this.ipcSocket.close();
   }

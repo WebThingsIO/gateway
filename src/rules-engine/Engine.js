@@ -91,7 +91,7 @@ class Engine {
   deleteRule(ruleId) {
     if (!this.rules[ruleId]) {
       return Promise.reject(
-        new Error(`Rule ${ruleId} already does not exist`));
+        new Error(`Rule ${ruleId} does not exist`));
     }
     return Database.deleteRule(ruleId).then(() => {
       this.rules[ruleId].stop();
