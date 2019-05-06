@@ -37,10 +37,19 @@ class PluginServer extends EventEmitter {
   /**
    * @method addAdapter
    *
-   * Tells the adapter manager about new adapters added via a plugin.
+   * Tells the add-on manager about new adapters added via a plugin.
    */
   addAdapter(adapter) {
     this.manager.addAdapter(adapter);
+  }
+
+  /**
+   * @method addNotifier
+   *
+   * Tells the add-on manager about new notifiers added via a plugin.
+   */
+  addNotifier(notifier) {
+    this.manager.addNotifier(notifier);
   }
 
   /**

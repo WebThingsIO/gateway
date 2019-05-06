@@ -22,6 +22,7 @@ class AddonManagerProxy extends EventEmitter {
     super();
 
     this.adapters = new Map();
+    this.notifiers = new Map();
     this.pluginClient = pluginClient;
 
     this.on(Constants.PROPERTY_CHANGED, (property) => {
@@ -70,6 +71,23 @@ class AddonManagerProxy extends EventEmitter {
   }
 
   /**
+   * @method addNotifier
+   *
+   * Adds a notifier to the collection of notifiers managed by AddonManager.
+   */
+  addNotifier(notifier) {
+    const notifierId = notifier.id;
+    DEBUG && console.log('AddonManagerProxy: addNotifier:', notifierId);
+
+    this.notifiers.set(notifierId, notifier);
+    this.pluginClient.sendNotification(Constants.ADD_NOTIFIER, {
+      notifierId: notifier.getId(),
+      name: notifier.getName(),
+      packageName: notifier.getPackageName(),
+    });
+  }
+
+  /**
    * @method handleDeviceAdded
    *
    * Called when the indicated device has been added to an adapter.
@@ -84,7 +102,7 @@ class AddonManagerProxy extends EventEmitter {
 
   /**
    * @method handleDeviceRemoved
-   * Called when the indicated device has been removed an adapter.
+   * Called when the indicated device has been removed from an adapter.
    */
   handleDeviceRemoved(device) {
     DEBUG && console.log('AddonManagerProxy: handleDeviceRemoved:',
@@ -93,6 +111,33 @@ class AddonManagerProxy extends EventEmitter {
       Constants.HANDLE_DEVICE_REMOVED, {
         adapterId: device.adapter.id,
         id: device.id,
+      });
+  }
+
+  /**
+   * @method handleOutletAdded
+   *
+   * Called when the indicated outlet has been added to a notifier.
+   */
+  handleOutletAdded(outlet) {
+    DEBUG && console.log('AddonManagerProxy: handleOutletAdded:', outlet.id);
+    const outletDict = outlet.asDict();
+    outletDict.notifierId = outlet.notifier.id;
+    this.pluginClient.sendNotification(
+      Constants.HANDLE_OUTLET_ADDED, outletDict);
+  }
+
+  /**
+   * @method handleOutletRemoved
+   * Called when the indicated outlet has been removed from a notifier.
+   */
+  handleOutletRemoved(outlet) {
+    DEBUG && console.log('AddonManagerProxy: handleOutletRemoved:',
+                         outlet.id);
+    this.pluginClient.sendNotification(
+      Constants.HANDLE_OUTLET_REMOVED, {
+        notifierId: outlet.notifier.id,
+        id: outlet.id,
       });
   }
 
@@ -110,7 +155,55 @@ class AddonManagerProxy extends EventEmitter {
         return;
     }
 
-    // The second switch covers adapter messages. i.e. don't have a deviceId.
+    // Next, handle notifier messages.
+    if (msg.data.hasOwnProperty('notifierId')) {
+      const notifierId = msg.data.notifierId;
+      const notifier = this.notifiers.get(notifierId);
+      if (!notifier) {
+        console.error('AddonManagerProxy: Unrecognized notifier:', notifierId);
+        console.error('AddonManagerProxy: Ignoring msg:', msg);
+        return;
+      }
+
+      switch (msg.messageType) {
+        case Constants.UNLOAD_NOTIFIER:
+          notifier.unload().then(() => {
+            this.notifiers.delete(notifierId);
+            this.pluginClient.sendNotification(Constants.NOTIFIER_UNLOADED, {
+              notifierId: notifier.id,
+            });
+          });
+          break;
+        case Constants.NOTIFY: {
+          const outletId = msg.data.outletId;
+          const outlet = notifier.getOutlet(outletId);
+          if (!outlet) {
+            console.error('AddonManagerProxy: No such outlet:', outletId);
+            console.error('AddonManagerProxy: Ignoring msg:', msg);
+            return;
+          }
+
+          outlet.notify(msg.data.title, msg.data.message, msg.data.level)
+            .then(() => {
+              this.pluginClient.sendNotification(
+                Constants.NOTIFY_RESOLVED, {
+                  messageId: msg.data.messageId,
+                });
+            }).catch((err) => {
+              console.error('AddonManagerProxy: Failed to notify outlet:', err);
+              this.pluginClient.sendNotification(
+                Constants.NOTIFY_REJECTED, {
+                  messageId: msg.data.messageId,
+                });
+            });
+          break;
+        }
+      }
+
+      return;
+    }
+
+    // The next switch covers adapter messages. i.e. don't have a deviceId.
     // or don't need a device object.
 
     const adapterId = msg.data.adapterId;
