@@ -1520,7 +1520,11 @@ const SettingsScreen = {
       addonList.innerHTML = '';
 
       Array.from(this.installedAddons.entries())
-        .sort((a, b) => a[1].display_name.localeCompare(b[1].display_name))
+        .sort((a, b) => {
+          const aName = a[1].display_name || a[1].name || '';
+          const bName = b[1].display_name || b[1].name || '';
+          return aName.localeCompare(bName);
+        })
         .forEach((x) => {
           components.set(
             x[0],
