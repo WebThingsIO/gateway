@@ -29,8 +29,10 @@ class InstalledAddon {
     this.description = metadata.description;
     if (typeof metadata.author === 'object') {
       this.author = metadata.author.name;
-    } else {
+    } else if (typeof metadata.author === 'string') {
       this.author = metadata.author.split('<')[0].trim();
+    } else {
+      this.author = 'Unknown';
     }
     this.homepage = metadata.homepage;
     this.license =
