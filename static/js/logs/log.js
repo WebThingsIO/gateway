@@ -11,6 +11,7 @@
 'use strict';
 
 const App = require('../app');
+const Constants = require('../constants');
 const Icons = require('../icons');
 const Utils = require('../utils');
 
@@ -41,6 +42,8 @@ class Log {
     }
     this.rawPoints = [];
 
+    this.onPropertyStatus = this.onPropertyStatus.bind(this);
+
     this.onPointerDown = this.onPointerDown.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
@@ -50,6 +53,8 @@ class Log {
     this.pointerState = {};
     this.prevPointerState = {};
     this.touchTooltipTimeout = null;
+
+    this.liveScrollUpdate = this.liveScrollUpdate.bind(this);
 
     this.restoreWindow();
     this.drawSkeleton();
@@ -174,10 +179,12 @@ class Log {
     }
     this.weekDropdown = document.createElement('select');
     this.weekDropdown.classList.add('logs-log-week-dropdown', 'arrow-select');
-    const oneHourMs = 60 * 60 * 1000;
+    const oneMinuteMs = 60 * 1000;
+    const oneHourMs = 60 * oneMinuteMs;
     const oneDayMs = 24 * oneHourMs;
     const oneWeekMs = 7 * oneDayMs;
     const options = [
+      {name: 'Minute', value: oneMinuteMs},
       {name: 'Hour', value: oneHourMs},
       {name: 'Day', value: oneDayMs},
       {name: 'Week', value: oneWeekMs},
@@ -195,8 +202,7 @@ class Log {
       this.weekDropdown.appendChild(option);
     }
     if (!anySelected) {
-      const dayOption = this.weekDropdown.childNodes[1];
-      dayOption.setAttribute('selected', true);
+      this.weekDropdown.value = oneDayMs;
     }
     const onChange = () => {
       let newEnd = this.end.getTime();
@@ -217,12 +223,12 @@ class Log {
   makePath(points, close) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const text = [
-      'M', Math.round(points[0].x).toString(),
-      Math.round(points[0].y).toString(),
+      'M', points[0].x.toFixed(1),
+      points[0].y.toFixed(1),
     ];
     for (let i = 1; i < points.length; i++) {
-      text.push('L', Math.round(points[i].x).toString(),
-                Math.round(points[i].y).toString());
+      text.push('L', points[i].x.toFixed(1),
+                points[i].y.toFixed(1));
     }
     if (close) {
       text.push('Z');
@@ -243,13 +249,13 @@ class Log {
 
   async load() {
     const thing = await App.gatewayModel.getThing(this.thingId);
-    const thingModel = await App.gatewayModel.getThingModel(this.thingId);
-    if (!thing || !thingModel) {
+    this.thingModel = await App.gatewayModel.getThingModel(this.thingId);
+    if (!thing || !this.thingModel) {
       // be sad
       return;
     }
     const thingName = thing.name;
-    this.property = thingModel.propertyDescriptions[this.propertyId];
+    this.property = this.thingModel.propertyDescriptions[this.propertyId];
     const propertyName = this.property.title ||
       Utils.capitalize(this.propertyId);
     const formattedName = `${thingName} ${propertyName}`;
@@ -271,6 +277,8 @@ class Log {
 
     const propertyUnit = this.property.unit || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
+
+    this.thingModel.subscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
 
     if (this.rawPoints.length > 0) {
       this.redraw();
@@ -564,6 +572,11 @@ class Log {
 
     this.graph.appendChild(graphFill);
     this.graph.appendChild(graphLine);
+
+    if (!this.liveScrollFrameRequest) {
+      this.liveScrollFrameRequest =
+        window.requestAnimationFrame(this.liveScrollUpdate);
+    }
   }
 
   timeToLabel(time) {
@@ -1057,8 +1070,8 @@ class Log {
       this.finishScrolling();
     } else if (this.pointerState.action === DRAGGING) {
       const dragEnd = this.constrainTime(this.xToTime(event.clientX));
-      if (Math.abs(dragEnd - this.pointerState.dragStart) < 30 * 1000) {
-        // Drag was way too small (<30s)
+      if (Math.abs(dragEnd - this.pointerState.dragStart) < 10 * 1000) {
+        // Drag was way too small (<10s)
         this.setPointerState({});
         return;
       }
@@ -1120,6 +1133,58 @@ class Log {
       start: this.start.getTime(),
       end: this.end.getTime(),
     };
+  }
+
+  onPropertyStatus(properties) {
+    if (!this.property || !properties.hasOwnProperty(this.propertyId)) {
+      return;
+    }
+    const lastPoint = this.rawPoints[this.rawPoints.length - 1];
+    if (!lastPoint || properties[this.propertyId] === lastPoint.value) {
+      return;
+    }
+    const now = Date.now();
+    this.addRawPoint({
+      value: properties[this.propertyId],
+      date: now,
+    });
+    if (!this.pointerState.action) {
+      const initialDiff = this.logEnd.getTime() - this.end.getTime();
+      this.logEnd.setTime(now);
+      if (initialDiff < 10 * 1000) {
+        const advancement = now - this.end.getTime();
+        this.start.setTime(this.start.getTime() + advancement);
+        this.end.setTime(this.end.getTime() + advancement);
+      }
+      this.redraw();
+    }
+  }
+
+  liveScrollUpdate() {
+    if (this.pointerState.action) {
+      this.liveScrollFrameRequest = null;
+      return;
+    }
+    const now = Date.now();
+    const nowX = this.timeToX(now);
+    const logEndX = this.timeToX(this.logEnd.getTime());
+    if (nowX - logEndX < 1) {
+      this.liveScrollFrameRequest =
+        window.requestAnimationFrame(this.liveScrollUpdate);
+      return;
+    }
+    this.logEnd.setTime(now);
+    // Advance window only if it is reasonably close to the present
+    const closeToWindow = (this.end.getTime() - this.start.getTime()) / 20;
+    if (now - this.end.getTime() < closeToWindow) {
+      const diff = now - this.end.getTime();
+      this.end.setTime(this.end.getTime() + diff);
+      this.start.setTime(this.start.getTime() + diff);
+    }
+    this.redraw();
+
+    this.liveScrollFrameRequest =
+      window.requestAnimationFrame(this.liveScrollUpdate);
   }
 }
 
