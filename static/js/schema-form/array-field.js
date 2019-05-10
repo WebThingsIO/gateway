@@ -110,7 +110,7 @@ class ArrayField {
   }
 
   itemFieldId(index) {
-    return `array_${this.idSchema.$id}_${index}`;
+    return `array_${Utils.escapeHtmlForIdClass(this.idSchema.$id)}_${index}`;
   }
 
   onDropIndexClick(field, index) {
