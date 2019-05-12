@@ -53,6 +53,21 @@ async function loadAddon(addonPath, verbose) {
       `Failed to parse package.json: ${packageJson}\n${e}`;
     return Promise.reject(err);
   }
+
+  // Verify API version.
+  const apiVersion = config.get('addonManager.api');
+  if (manifest.moziot.api.min > apiVersion ||
+      manifest.moziot.api.max < apiVersion) {
+    console.error(
+      `API mismatch for package: ${manifest.name}\n` +
+      `Current: ${apiVersion} ` +
+      `Supported: ${manifest.moziot.api.min}-${manifest.moziot.api.max}`);
+
+    const err =
+      `Failed to start ${manifest.display_name} add-on: API version mismatch`;
+    return Promise.reject(err);
+  }
+
   const packageName = manifest.name;
 
   const pluginClient = new PluginClient(packageName, {verbose});
@@ -77,20 +92,6 @@ async function loadAddon(addonPath, verbose) {
       process.exit(Constants.DONT_RESTART_EXIT_CODE);
     });
   };
-
-  // Verify API version.
-  const apiVersion = config.get('addonManager.api');
-  if (manifest.moziot.api.min > apiVersion ||
-      manifest.moziot.api.max < apiVersion) {
-    console.error(
-      `API mismatch for package: ${manifest.name}\n` +
-      `Current: ${apiVersion} ` +
-      `Supported: ${manifest.moziot.api.min}-${manifest.moziot.api.max}`);
-
-    const message =
-      `Failed to start ${manifest.display_name} add-on: API version mismatch`;
-    return fail(message);
-  }
 
   // Get any saved settings for this add-on.
   const key = `addons.${manifest.name}`;
