@@ -28,7 +28,7 @@ const RuleScreen = {
     this.onRuleDescriptionInput = this.onRuleDescriptionInput.bind(this);
     this.onAnimatePlayStopClick = this.onAnimatePlayStopClick.bind(this);
     this.animate = this.animate.bind(this);
-    this.animateDelay = 750;
+    this.animateDelay = 1000;
     this.rule = null;
     this.partBlocks = [];
     this.ruleEffectType = 'SetEffect';
@@ -739,8 +739,10 @@ const RuleScreen = {
   },
   animate: function() {
     this.animateStep += 1;
+    const animateIndex = this.animateStep >> 1;
+    const animateOffPhase = !!(this.animateStep & 1);
 
-    if (this.animateStep > this.rule.trigger.triggers.length) {
+    if (animateIndex > this.rule.trigger.triggers.length) {
       this.stopAnimate();
       return;
     }
@@ -771,22 +773,34 @@ const RuleScreen = {
       triggerCircles[index].classList.remove('active');
     }
 
-    if (this.animateStep > 0) {
-      deactivate(this.animateStep - 1);
-    }
-
-    let andActive = false;
-
-    if (this.animateStep === this.rule.trigger.triggers.length) {
-      for (let i = 0; i < triggerBlocks.length; i++) {
-        activate(i);
+    if (animateOffPhase) {
+      if (animateIndex === triggerBlocks.length) {
+        for (let i = 0; i < triggerBlocks.length; i++) {
+          deactivate(i);
+        }
+      } else {
+        deactivate(animateIndex);
       }
-      andActive = true;
-    } else {
-      activate(this.animateStep);
+    } else if (animateIndex > 0) {
+      deactivate(animateIndex - 1);
     }
 
-    if (andActive || this.rule.trigger.op === 'OR') {
+    const andActive = animateIndex === triggerBlocks.length ||
+      triggerBlocks.length === 1;
+
+    if (!animateOffPhase) {
+      if (animateIndex === this.rule.trigger.triggers.length) {
+        for (let i = 0; i < triggerBlocks.length; i++) {
+          activate(i);
+        }
+      } else {
+        activate(animateIndex);
+      }
+    }
+
+    const active = (!animateOffPhase) || this.getEffectType() === 'SetEffect';
+
+    if (active && (andActive || this.rule.trigger.op === 'OR')) {
       effectBlocks.forEach((block) => {
         block.classList.remove('inactive');
       });
@@ -814,7 +828,11 @@ const RuleScreen = {
       });
     }
 
-    this.animateTimeout = setTimeout(this.animate, this.animateDelay);
+    let animateDelay = this.animateDelay;
+    if (animateOffPhase) {
+      animateDelay /= 1.5;
+    }
+    this.animateTimeout = setTimeout(this.animate, animateDelay);
   },
   stopAnimate: function() {
     if (this.animateTimeout) {
