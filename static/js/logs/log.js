@@ -775,11 +775,18 @@ class Log {
                                   this.logEnd.getTime());
 
     // Make sure control is wide enough to tap
-    if (controlEnd - controlStart < 16) {
-      controlEnd = controlStart + 16;
+    const minWidth = 16;
+    if (controlEnd - controlStart < minWidth) {
+      const mid = (controlEnd + controlStart) / 2;
+      controlStart = mid - minWidth / 2;
+      controlEnd = mid + minWidth / 2;
       if (controlEnd > this.xStart + this.graphWidth) {
         controlEnd = this.xStart + this.graphWidth;
-        controlStart = controlEnd - 16;
+        controlStart = controlEnd - minWidth;
+      }
+      if (controlStart < this.xStart) {
+        controlStart = this.xStart;
+        controlEnd = controlStart + minWidth;
       }
     }
 
@@ -1099,9 +1106,19 @@ class Log {
 
   finishScrolling() {
     const controlX = parseFloat(this.scrollControl.getAttribute('x'));
-    const controlTime = this.xToTime(controlX, this.logStart.getTime(),
-                                     this.logEnd.getTime());
-    const delta = controlTime - this.start.getTime();
+    const controlWidth = parseFloat(this.scrollControl.getAttribute('width'));
+
+    const controlCenter = controlX + controlWidth / 2;
+    const controlXStart = this.xStart + controlWidth / 2;
+    const controlGraphWidth = this.graphWidth - controlWidth;
+    const windowWidth = this.end.getTime() - this.start.getTime();
+    const logMidStart = this.logStart.getTime() + windowWidth / 2;
+    const logMidEnd = this.logEnd.getTime() - windowWidth / 2;
+    const controlTime = (controlCenter - controlXStart) / controlGraphWidth *
+      (logMidEnd - logMidStart) + logMidStart;
+
+    const centerTime = this.start.getTime() + windowWidth / 2;
+    const delta = controlTime - centerTime;
     this.scroll(delta);
   }
 
