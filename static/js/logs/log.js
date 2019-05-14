@@ -1192,14 +1192,13 @@ class Log {
         window.requestAnimationFrame(this.liveScrollUpdate);
       return;
     }
-    this.logEnd.setTime(now);
-    // Advance window only if it is reasonably close to the present
     const closeToWindow = (this.end.getTime() - this.start.getTime()) / 20;
-    if (now - this.end.getTime() < closeToWindow) {
+    if (this.logEnd.getTime() - this.end.getTime() < closeToWindow) {
       const diff = now - this.end.getTime();
       this.end.setTime(this.end.getTime() + diff);
       this.start.setTime(this.start.getTime() + diff);
     }
+    this.logEnd.setTime(now);
     this.redraw();
 
     this.liveScrollFrameRequest =
