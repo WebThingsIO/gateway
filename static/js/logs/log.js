@@ -1204,6 +1204,18 @@ class Log {
     this.liveScrollFrameRequest =
       window.requestAnimationFrame(this.liveScrollUpdate);
   }
+
+  remove() {
+    if (this.elt.parentNode) {
+      this.elt.parentNode.removeChild(this.elt);
+    }
+    this.thingModel.unsubscribe(Constants.PROPERTY_STATUS,
+                                this.onPropertyStatus);
+    if (this.liveScrollFrameRequest) {
+      window.cancelAnimationFrame(this.liveScrollFrameRequest);
+      this.liveScrollFrameRequest = null;
+    }
+  }
 }
 
 module.exports = Log;
