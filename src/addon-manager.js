@@ -685,7 +685,11 @@ class AddonManager extends EventEmitter {
         const lines = data.trim().split(/\r?\n/);
         for (const line of lines) {
           const checksum = line.slice(0, 64);
-          const filename = line.slice(64).trimLeft();
+          let filename = line.slice(64).trimLeft();
+
+          if (filename.startsWith('*')) {
+            filename = filename.substring(1);
+          }
 
           if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
             const err =
