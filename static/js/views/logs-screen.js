@@ -88,6 +88,7 @@ class LogsScreen {
   }
 
   reload() {
+    this.end = new Date(Date.now());
     const soloView = !!this.logDescr;
 
     if (soloView) {
@@ -186,6 +187,7 @@ class LogsScreen {
       this.messageSocket = null;
 
       for (const id in this.logs) {
+        this.logs[id].loading = false;
         this.logs[id].redraw();
       }
     };
