@@ -43,6 +43,10 @@
   background: #777;
 }
 
+.title-bar.invalid > .rule-preview-button {
+  display: none;
+}
+
 .rule-preview-button {
   top: 2rem;
   right: 2rem;

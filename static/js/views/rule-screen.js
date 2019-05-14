@@ -723,7 +723,7 @@ const RuleScreen = {
     if (this.animateTimeout) {
       clearTimeout(this.animateTimeout);
     }
-    if (!this.rule || !this.rule.trigger || !this.rule.effect) {
+    if (!this.rule || !this.rule.valid()) {
       return;
     }
     this.animateStep = -1;
