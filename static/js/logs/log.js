@@ -33,6 +33,7 @@ class Log {
     this.start = new Date(this.logEnd.getTime() - 24 * 60 * 60 * 1000);
     this.end = this.logEnd;
     this.soloView = soloView;
+    this.loading = true;
 
     this.dimension();
     this.elt = document.createElement('div');
@@ -296,7 +297,7 @@ class Log {
     });
 
     // update progress bar
-    if (this.rawPoints.length > 2) {
+    if (this.loading && this.rawPoints.length > 2) {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
       let fractionDone = (lastPoint.time - this.start.getTime()) /
         (this.end.getTime() - this.start.getTime());
@@ -1155,11 +1156,12 @@ class Log {
   }
 
   onPropertyStatus(properties) {
-    if (!this.property || !properties.hasOwnProperty(this.propertyId)) {
+    if (this.loading || !this.property ||
+        !properties.hasOwnProperty(this.propertyId)) {
       return;
     }
     const lastPoint = this.rawPoints[this.rawPoints.length - 1];
-    if (!lastPoint || properties[this.propertyId] === lastPoint.value) {
+    if (lastPoint && properties[this.propertyId] === lastPoint.value) {
       return;
     }
     const now = Date.now();
