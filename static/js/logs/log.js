@@ -584,11 +584,12 @@ class Log {
     if (date.getHours() === 0 && date.getMinutes() === 0) {
       return `${date.getDate()}`;
     }
-    let minutes = `${date.getMinutes()}`;
-    if (minutes.length < 2) {
-      minutes = `0${minutes}`;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    if (date.getSeconds() === 0) {
+      return `${date.getHours()}:${minutes}`;
     }
-    return `${date.getHours()}:${minutes}`;
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${date.getHours()}:${minutes}:${seconds}`;
   }
 
   valueToLabel(value, bonusPlaces) {
@@ -663,13 +664,14 @@ class Log {
   }
 
   drawXTicks() {
-    const oneMinuteMs = 60 * 1000;
+    const oneSecondMs = 1000;
+    const oneMinuteMs = 60 * oneSecondMs;
     const oneHourMs = 60 * oneMinuteMs;
     const oneDayMs = 24 * oneHourMs;
 
     const reasonableTicks = [
       oneDayMs, 12 * oneHourMs, oneHourMs, 15 * oneMinuteMs, 5 * oneMinuteMs,
-      oneMinuteMs,
+      oneMinuteMs, 10 * oneSecondMs, oneSecondMs,
     ];
 
     let i;
