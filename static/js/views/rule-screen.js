@@ -26,6 +26,7 @@ const RuleScreen = {
     this.onPresentationChange = this.onPresentationChange.bind(this);
     this.onRuleChange = this.onRuleChange.bind(this);
     this.onRuleDescriptionInput = this.onRuleDescriptionInput.bind(this);
+    this.onAnimatePlayStopClick = this.onAnimatePlayStopClick.bind(this);
     this.animate = this.animate.bind(this);
     this.animateDelay = 750;
     this.rule = null;
@@ -37,6 +38,8 @@ const RuleScreen = {
     this.ruleArea = document.getElementById('rule-area');
     this.ruleName = this.view.querySelector('.rule-name');
     this.ruleNameCustomize = this.view.querySelector('.rule-name-customize');
+    this.animatePlayStop = this.view.querySelector('.rule-preview-button');
+    this.animatePlayStop.addEventListener('click', this.onAnimatePlayStopClick);
 
     const selectRuleName = () => {
       // Select all of ruleName, https://stackoverflow.com/questions/6139107/
@@ -708,6 +711,14 @@ const RuleScreen = {
     this.rulePartsList.scrollLeft += 128;
   },
 
+  onAnimatePlayStopClick: function() {
+    if (this.animatePlayStop.classList.contains('stop')) {
+      this.stopAnimate();
+    } else {
+      this.startAnimate();
+    }
+  },
+
   startAnimate: function() {
     if (this.animateTimeout) {
       clearTimeout(this.animateTimeout);
@@ -722,6 +733,7 @@ const RuleScreen = {
     ).forEach((elt) => {
       elt.classList.add('inactive');
     });
+    this.animatePlayStop.classList.add('stop');
 
     setTimeout(this.animate, this.animateDelay);
   },
@@ -805,6 +817,10 @@ const RuleScreen = {
     this.animateTimeout = setTimeout(this.animate, this.animateDelay);
   },
   stopAnimate: function() {
+    if (this.animateTimeout) {
+      clearTimeout(this.animateTimeout);
+      this.animateTimeout = null;
+    }
     this.ruleArea.querySelectorAll(
       '.rule-part-block.inactive'
     ).forEach((elt) => {
@@ -815,6 +831,7 @@ const RuleScreen = {
     ).forEach((elt) => {
       elt.classList.remove('active');
     });
+    this.animatePlayStop.classList.remove('stop');
   },
 };
 
