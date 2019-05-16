@@ -28,10 +28,10 @@ class Log {
     this.logWindows = logWindows;
     this.thingId = thingId;
     this.propertyId = propertyId;
-    this.logStart = logStart;
-    this.logEnd = logEnd;
+    this.logStart = new Date(logStart.getTime());
+    this.logEnd = new Date(logEnd.getTime());
     this.start = new Date(this.logEnd.getTime() - 24 * 60 * 60 * 1000);
-    this.end = this.logEnd;
+    this.end = new Date(this.logEnd.getTime());
     this.soloView = soloView;
     this.loading = true;
 
@@ -1190,21 +1190,27 @@ class Log {
     const nowX = this.timeToX(now);
     const logEndX = this.timeToX(this.logEnd.getTime());
     if (nowX - logEndX < 1) {
+      // Must move window forwards by one pixel
       this.liveScrollFrameRequest =
         window.requestAnimationFrame(this.liveScrollUpdate);
       return;
     }
-    const closeToWindow = (this.end.getTime() - this.start.getTime()) / 20;
+    const closeToWindow = (this.end.getTime() - this.start.getTime()) / 10;
+    let redraw = false;
     if (this.logEnd.getTime() - this.end.getTime() < closeToWindow) {
       const diff = now - this.end.getTime();
       this.end.setTime(this.end.getTime() + diff);
       this.start.setTime(this.start.getTime() + diff);
+      redraw = true;
     }
     this.logEnd.setTime(now);
-    this.redraw();
 
     this.liveScrollFrameRequest =
       window.requestAnimationFrame(this.liveScrollUpdate);
+
+    if (redraw) {
+      this.redraw();
+    }
   }
 
   remove() {
