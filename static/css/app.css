@@ -55,6 +55,7 @@ body {
   padding: 0;
   background-color: #5d9bc7;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 section {
