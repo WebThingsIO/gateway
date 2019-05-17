@@ -38,7 +38,7 @@ function displayMessage(errorMsg, type) {
  */
 function validateDomain() {
   const val = subdomain.value.toLowerCase();
-  const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
+  const re = new RegExp(/^\s*([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\s*$/);
   const nsRegex = new RegExp(/^ns\d*$/);
   if (!re.test(val) ||
       nsRegex.test(val) ||
@@ -56,7 +56,7 @@ function validateDomain() {
 function validateEmail() {
   const val = email.value;
   // eslint-disable-next-line max-len
-  const re = new RegExp(/^[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]$/, 'i');
+  const re = new RegExp(/^\s*[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]\s*$/, 'i');
   return re.test(val) && val.length <= 254;
 }
 
@@ -70,7 +70,7 @@ function validateToken() {
 
   const val = reclamationToken.value;
   // eslint-disable-next-line max-len
-  const re = new RegExp(/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/);
+  const re = new RegExp(/^\s*[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\s*$/);
   return re.test(val);
 }
 
@@ -105,9 +105,9 @@ function submitForm() {
 
   // Call the settings controller to subscribe the domain in the gateway.
   const action = {
-    email: email.value,
-    subdomain: subdomain.value,
-    reclamationToken: reclamationToken.value,
+    email: email.value.trim(),
+    subdomain: subdomain.value.trim(),
+    reclamationToken: reclamationToken.value.trim(),
     optout: !optIn.checked,
   };
   fetch('/settings/subscribe', {

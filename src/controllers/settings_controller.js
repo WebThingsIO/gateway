@@ -104,9 +104,9 @@ SettingsController.post('/subscribe', async (request, response) => {
     return;
   }
 
-  const email = request.body.email.toLowerCase();
-  const reclamationToken = request.body.reclamationToken;
-  const subdomain = request.body.subdomain;
+  const email = request.body.email.trim().toLowerCase();
+  const reclamationToken = request.body.reclamationToken.trim().toLowerCase();
+  const subdomain = request.body.subdomain.trim().toLowerCase();
   const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
   const optout = request.body.optout ? 1 : 0;
 
