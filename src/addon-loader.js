@@ -68,31 +68,6 @@ async function loadAddon(addonPath, verbose) {
     return Promise.reject(err);
   }
 
-  const packageName = manifest.name;
-
-  const pluginClient = new PluginClient(packageName, {verbose});
-
-  let addonManagerProxy;
-  const pluginClientPromise = pluginClient.register().then((proxy) => {
-    addonManagerProxy = proxy;
-  }).catch((e) => {
-    console.error(e);
-    const err = `Failed to register package: ${manifest.name} with gateway`;
-    return Promise.reject(err);
-  });
-
-  const fail = (message) => {
-    return pluginClientPromise.then(() => {
-      addonManagerProxy.sendError(message);
-      return sleep(200);
-    }).then(() => {
-      addonManagerProxy.unloadPlugin();
-      return sleep(200);
-    }).then(() => {
-      process.exit(Constants.DONT_RESTART_EXIT_CODE);
-    });
-  };
-
   // Get any saved settings for this add-on.
   const key = `addons.${manifest.name}`;
   const savedSettings = await Settings.get(key);
@@ -105,32 +80,47 @@ async function loadAddon(addonPath, verbose) {
     newSettings.moziot.config = {};
   }
 
-  return pluginClientPromise.then(() => {
-    console.log('Loading add-on for', manifest.name, 'from', addonPath);
+  const pluginClient = new PluginClient(manifest.name, {verbose});
 
-    let addonLoader;
-    try {
-      addonLoader = dynamicRequire(addonPath);
-      addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
-        console.error('Failed to load', packageName, '-', errorStr);
-        const message =
-          `Failed to start ${manifest.display_name} add-on: ${errorStr}`;
-        fail(message);
-      });
 
-      if (config.get('ipc.protocol') !== 'inproc') {
-        pluginClient.on('unloaded', () => {
-          sleep(500).then(() => process.exit(0));
-        });
-      }
-    } catch (e) {
+  return pluginClient.register()
+    .catch((e) => {
       console.error(e);
-      const message =
+      const err = `Failed to register package: ${manifest.name} with gateway`;
+      return Promise.reject(err);
+    })
+    .then((addonManagerProxy) => {
+      console.log('Loading add-on for', manifest.name, 'from', addonPath);
+      try {
+        const addonLoader = dynamicRequire(addonPath);
+        addonLoader(addonManagerProxy, newSettings, (packageName, errorStr) => {
+          console.error('Failed to load', packageName, '-', errorStr);
+          const message =
+          `Failed to start ${manifest.display_name} add-on: ${errorStr}`;
+          fail(addonManagerProxy, message);
+        });
+
+        if (config.get('ipc.protocol') !== 'inproc') {
+          pluginClient.on('unloaded', () => {
+            sleep(500).then(() => process.exit(0));
+          });
+        }
+      } catch (e) {
+        console.error(e);
+        const message =
         `Failed to start ${manifest.display_name} add-on: ${
           e.toString().replace(/^Error:\s+/, '')}`;
-      return fail(message);
-    }
-  });
+        return fail(addonManagerProxy, message);
+      }
+    });
+}
+
+async function fail(addonManagerProxy, message) {
+  addonManagerProxy.sendError(message);
+  await sleep(200);
+  addonManagerProxy.unloadPlugin();
+  await sleep(200);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 
 // Get some decent error messages for unhandled rejections. This is
