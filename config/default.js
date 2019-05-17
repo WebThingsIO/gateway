@@ -44,7 +44,7 @@ module.exports = {
         localControl: {
           mdnsServiceType: 'http',
           mdnsServiceName: 'Mozilla WebThings Gateway',
-          mdnsServiceDomain: os.hostname(),
+          mdnsServiceDomain: os.hostname().split('.')[0],
 
           mdnsTxt: {
             desc: 'Web of Things Gateway',
