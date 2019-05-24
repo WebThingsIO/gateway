@@ -17,7 +17,8 @@
   box-sizing: border-box;
   width: 100%;
   min-height: 9.6rem;
-  padding: 0 9.6rem;
+  padding: 0;
+  padding-left: 9.6rem;
   display: flex;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   z-index: 10;
@@ -43,14 +44,11 @@
   background: #777;
 }
 
-.title-bar.invalid > .rule-preview-button {
-  display: none;
-}
-
 .rule-preview-button {
   top: 2rem;
   right: 2rem;
   background-image: url('../optimized-images/play.svg');
+  display: none;
 }
 
 .rule-preview-button.stop {
