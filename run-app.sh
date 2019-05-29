@@ -28,7 +28,7 @@ run_app() {
   export NVM_DIR="$HOME/.nvm"
   [ ! -s "$NVM_DIR/nvm.sh" ] || \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-  if [! is_docker_container]; then
+  if [ ! is_docker_container ]; then
     sudo /sbin/ldconfig
   else
     /sbin/ldconfig
