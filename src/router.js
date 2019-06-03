@@ -91,6 +91,7 @@ const Router = {
       // or is a WebSocket request, or is multipart/form-data
       // treat it as an API request
       } else if (!request.accepts('html') && request.accepts('json') ||
+                 request.headers['content-type'] === 'application/json' ||
                  request.get('Upgrade') === 'websocket' ||
                  request.is('multipart/form-data') ||
                  request.path.startsWith(Constants.ADDONS_PATH) ||
