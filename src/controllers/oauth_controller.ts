@@ -153,6 +153,9 @@ function extractClientInfo(request: express.Request, response: express.Response)
     {clientId: string, clientSecret: string}|undefined {
   let authorization = request.headers.authorization;
   if (!authorization) {
+    if (!request.body.client_id) {
+      return;
+    }
     return {
       clientId: request.body.client_id,
       clientSecret: request.body.client_secret,
