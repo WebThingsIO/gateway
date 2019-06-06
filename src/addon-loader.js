@@ -110,7 +110,7 @@ async function loadAddon(addonPath, verbose) {
         const message =
         `Failed to start ${manifest.display_name} add-on: ${
           e.toString().replace(/^Error:\s+/, '')}`;
-        return fail(addonManagerProxy, message);
+        fail(addonManagerProxy, message);
       }
     });
 }
