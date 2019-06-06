@@ -113,7 +113,8 @@ describe('oauth/', function() {
     clientServer = null;
   });
 
-  function setupOAuth(configProvided, customCallbackHandlerProvided, authorizationMethod='body') {
+  function setupOAuth(configProvided, customCallbackHandlerProvided,
+                      authorizationMethod = 'body') {
     if (!server.address()) {
       server.listen(0);
     }
