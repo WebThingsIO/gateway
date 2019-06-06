@@ -113,7 +113,7 @@ describe('oauth/', function() {
     clientServer = null;
   });
 
-  function setupOAuth(configProvided, customCallbackHandlerProvided) {
+  function setupOAuth(configProvided, customCallbackHandlerProvided, authorizationMethod='body') {
     if (!server.address()) {
       server.listen(0);
     }
@@ -127,19 +127,13 @@ describe('oauth/', function() {
         tokenHost: `https://127.0.0.1:${server.address().port}`,
       },
       options: {
-        authorizationMethod: 'body',
+        authorizationMethod,
       },
       http: {
         headers: {
         },
       },
     }, configProvided || {});
-
-    const clientId = encodeURIComponent(config.client.id).replace(/%20/g, '+');
-    const clientSecret =
-      encodeURIComponent(config.client.secret).replace(/%20/g, '+');
-    const token = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-    config.http.headers.Authorization = `Basic ${token}`;
 
     oauth2 = simpleOAuth2.create(config);
     customCallbackHandler = customCallbackHandlerProvided;
@@ -389,8 +383,8 @@ describe('oauth/', function() {
     expect(err.body.error).toEqual('invalid_grant');
   });
 
-  it('restricts jwt scope', async () => {
-    setupOAuth();
+  it('restricts jwt scope and allows header authMethod', async () => {
+    setupOAuth(null, null, 'header');
     await addDevice();
 
     // send the request that the page would send
