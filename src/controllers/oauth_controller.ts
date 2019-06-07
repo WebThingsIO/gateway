@@ -149,9 +149,19 @@ function verifyClient(request: OAuthRequest, response: express.Response):
   return client;
 }
 
-function verifyClientAuthorization(client: ClientRegistry,
-  request: express.Request, response: express.Response): boolean {
+function extractClientInfo(request: express.Request, response: express.Response):
+    {clientId: string, clientSecret: string}|undefined {
   let authorization = request.headers.authorization;
+  if (!authorization) {
+    if (!request.body.client_id) {
+      return;
+    }
+    return {
+      clientId: request.body.client_id,
+      clientSecret: request.body.client_secret,
+    };
+  }
+
   if (typeof authorization !== 'string' || !authorization.startsWith('Basic ')) {
     let err: ErrorResponse<UnauthorizedClient> = {
       error: 'unauthorized_client',
@@ -159,7 +169,7 @@ function verifyClientAuthorization(client: ClientRegistry,
     };
 
     response.status(400).json(err);
-    return false;
+    return;
   }
 
   let userPassB64 = authorization.substring('Basic '.length);
@@ -173,23 +183,13 @@ function verifyClientAuthorization(client: ClientRegistry,
     };
 
     response.status(400).json(err);
-    return false;
+    return;
   }
 
-  let clientId = decodeURIComponent(parts[0].replace(/\+/g, '%20'));
-  let clientSecret = decodeURIComponent(parts[1].replace(/\+/g, '%20'));
-
-  if (client.id !== clientId || client.secret !== clientSecret) {
-    let err: ErrorResponse<UnauthorizedClient> = {
-      error: 'unauthorized_client',
-      error_description: 'authorization header mismatch',
-    };
-
-    response.status(400).json(err);
-    return false;
-  }
-
-  return true;
+  return {
+    clientId: decodeURIComponent(parts[0].replace(/\+/g, '%20')),
+    clientSecret: decodeURIComponent(parts[1].replace(/\+/g, '%20')),
+  };
 }
 
 function verifyAuthorizationRequest(authRequest: AuthorizationRequest,
@@ -340,11 +340,22 @@ OAuthController.post('/token', async (request: express.Request, response: expres
 async function handleAccessTokenRequest(request: express.Request, response: express.Response):
     Promise<AccessTokenSuccessResponse|undefined> {
   const requestData = request.body;
+  let reqClientInfo = extractClientInfo(request, response);
+  if (!reqClientInfo) {
+    let err: ErrorResponse<UnauthorizedClient> = {
+      error: 'unauthorized_client',
+      error_description: 'client info missing or malformed',
+    };
+
+    response.status(400).json(err);
+    return;
+  }
+
   let tokenRequest: AccessTokenRequest = {
     grant_type: requestData.grant_type,
     code: requestData.code,
     redirect_uri: requestData.redirect_uri && new URL(requestData.redirect_uri),
-    client_id: requestData.client_id
+    client_id: reqClientInfo.clientId,
   };
 
   let client = verifyClient(tokenRequest, response);
@@ -352,9 +363,17 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     return;
   }
 
-  if (!verifyClientAuthorization(client, request, response)) {
+  if (client.id !== reqClientInfo.clientId ||
+      client.secret !== reqClientInfo.clientSecret) {
+    let err: ErrorResponse<UnauthorizedClient> = {
+      error: 'unauthorized_client',
+      error_description: 'client info mismatch',
+    };
+
+    response.status(400).json(err);
     return;
   }
+
   let tokenData = await JSONWebToken.verifyJWT(tokenRequest.code);
   if (!tokenData) {
     let err: AccessTokenErrorResponse = {
