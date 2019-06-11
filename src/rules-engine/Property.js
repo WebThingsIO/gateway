@@ -112,7 +112,7 @@ class Property extends EventEmitter {
       return;
     }
     this.getInitialValue().catch((e) => {
-      console.warn('Rule property unable to get value', e);
+      console.warn('Rule property unable to get initial value:', e.message);
     });
   }
 
