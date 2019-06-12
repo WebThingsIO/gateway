@@ -356,10 +356,6 @@ class ThingModel extends Model {
         continue;
       }
 
-      if (this.properties[prop] === value) {
-        continue;
-      }
-
       this.properties[prop] = value;
       updatedProperties[prop] = value;
     }
