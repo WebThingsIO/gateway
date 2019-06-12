@@ -345,6 +345,7 @@ class ThingModel extends Model {
    * @param {Object} data Property data
    */
   onPropertyStatus(data) {
+    const updatedProperties = {};
     for (const prop in data) {
       if (!this.propertyDescriptions.hasOwnProperty(prop)) {
         continue;
@@ -356,8 +357,9 @@ class ThingModel extends Model {
       }
 
       this.properties[prop] = value;
+      updatedProperties[prop] = value;
     }
-    return this.handleEvent(Constants.PROPERTY_STATUS, this.properties);
+    return this.handleEvent(Constants.PROPERTY_STATUS, updatedProperties);
   }
 
   /**
