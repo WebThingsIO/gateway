@@ -24,8 +24,7 @@ const SCROLLING = 1;
 const DRAGGING = 2;
 
 class Log {
-  constructor(logWindows, thingId, propertyId, logStart, logEnd, soloView) {
-    this.logWindows = logWindows;
+  constructor(thingId, propertyId, logStart, logEnd, soloView) {
     this.thingId = thingId;
     this.propertyId = propertyId;
     this.logStart = new Date(logStart.getTime());
@@ -57,7 +56,6 @@ class Log {
 
     this.liveScrollUpdate = this.liveScrollUpdate.bind(this);
 
-    this.restoreWindow();
     this.drawSkeleton();
   }
 
@@ -215,7 +213,6 @@ class Log {
       this.start = new Date(newStart);
       this.end = new Date(newEnd);
       this.redraw();
-      this.storeWindow();
     };
     this.weekDropdown.addEventListener('change', onChange);
     this.elt.appendChild(this.weekDropdown);
@@ -800,13 +797,11 @@ class Log {
   scrollLeft() {
     const width = this.end.getTime() - this.start.getTime();
     this.scroll(-width / 2);
-    this.storeWindow();
   }
 
   scrollRight() {
     const width = this.end.getTime() - this.start.getTime();
     this.scroll(width / 2);
-    this.storeWindow();
   }
 
   scroll(amount) {
@@ -1062,7 +1057,6 @@ class Log {
     this.removeHighlight();
     if (this.pointerState.action === SCROLLING) {
       this.finishScrolling();
-      this.storeWindow();
     }
     this.setPointerState({});
   }
@@ -1104,7 +1098,6 @@ class Log {
       this.redraw();
     }
     this.setPointerState({});
-    this.storeWindow();
   }
 
   finishScrolling() {
@@ -1131,28 +1124,6 @@ class Log {
       this.pointHighlight.parentNode.removeChild(this.pointHighlight);
       this.pointHighlight = null;
     }
-  }
-
-  restoreWindow() {
-    const storageId = `${this.thingId}.${this.propertyId}`;
-    const data = this.logWindows[storageId];
-    if (!data || !data.start || !data.end) {
-      return;
-    }
-    if (data.start < this.logStart.getTime() ||
-        data.end > this.logEnd.getTime()) {
-      return;
-    }
-    this.start = new Date(data.start);
-    this.end = new Date(data.end);
-  }
-
-  storeWindow() {
-    const storageId = `${this.thingId}.${this.propertyId}`;
-    this.logWindows[storageId] = {
-      start: this.start.getTime(),
-      end: this.end.getTime(),
-    };
   }
 
   onPropertyStatus(properties) {
