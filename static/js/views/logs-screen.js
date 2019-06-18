@@ -19,7 +19,6 @@ const Utils = require('../utils');
 class LogsScreen {
   constructor() {
     this.logs = {};
-    this.logWindows = {};
     this.logDescr = null;
     this.resizeTimeout = null;
     this.start = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -137,7 +136,7 @@ class LogsScreen {
           continue;
         }
 
-        const log = new Log(this.logWindows, logInfo.thing, logInfo.property,
+        const log = new Log(logInfo.thing, logInfo.property,
                             this.start, this.end, soloView);
 
         this.logs[logInfo.id] = log;
