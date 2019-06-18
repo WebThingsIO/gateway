@@ -48,10 +48,10 @@ class PulseEffect extends PropertyEffect {
       // Activate the effect and save our current state to revert to upon
       // deactivation
       this.property.get().then((value) => {
-        if (value !== this.value) {
-          this.oldValue = value;
-        } else {
-          this.oldValue = null;
+        this.oldValue = value;
+        // Always set to the opposite (always toggle)
+        if (typeof value === 'boolean') {
+          this.oldValue = !this.value;
         }
         this.on = true;
         return this.property.set(this.value);
