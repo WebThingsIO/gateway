@@ -86,12 +86,14 @@ class MultiLevelSwitch extends OnOffSwitch {
   }
 
   iconView() {
-    let unit = '%', min = 0, max = 100;
+    let unit = '', min = 0, max = 100;
 
     if (this.levelProperty) {
       const prop = this.displayedProperties[this.levelProperty].property;
 
-      unit = prop.unit || '%';
+      if (prop.hasOwnProperty('unit')) {
+        unit = prop.unit;
+      }
 
       if (prop.hasOwnProperty('minimum')) {
         min = prop.minimum;

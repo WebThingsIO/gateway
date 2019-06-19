@@ -100,7 +100,7 @@ class MultiLevelSwitchCapability extends BaseComponent {
     this.level =
       typeof this.dataset.level !== 'undefined' ? this.dataset.level : this.min;
     this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '%';
+      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
 
     if (typeof this._min === 'undefined') {
       this._min = 0;

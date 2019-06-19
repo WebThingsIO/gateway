@@ -80,7 +80,11 @@ class MultiLevelSensor extends Thing {
     let unit = '';
 
     if (this.levelProperty) {
-      unit = this.displayedProperties[this.levelProperty].property.unit || '';
+      const prop = this.displayedProperties[this.levelProperty].property;
+
+      if (prop.hasOwnProperty('unit')) {
+        unit = prop.unit;
+      }
     }
 
     unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(unit));
