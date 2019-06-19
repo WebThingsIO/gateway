@@ -78,11 +78,12 @@ class MultiLevelSensor extends Thing {
 
   iconView() {
     let unit = '';
-    for (const name in this.displayedProperties) {
-      const property = this.displayedProperties[name].property;
-      if (name === 'level' || property['@type'] === 'LevelProperty') {
-        unit = property.unit || '';
-        break;
+
+    if (this.levelProperty) {
+      const prop = this.displayedProperties[this.levelProperty].property;
+
+      if (prop.hasOwnProperty('unit')) {
+        unit = prop.unit;
       }
     }
 
