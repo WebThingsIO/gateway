@@ -11,12 +11,12 @@
 const booleans = {
   on: {
     value: true,
-    '@type': null,
+    '@type': 'OnOffProperty',
     negation: 'off',
   },
   off: {
     value: false,
-    '@type': null,
+    '@type': 'OnOffProperty',
     negation: 'on',
   },
   motion: {

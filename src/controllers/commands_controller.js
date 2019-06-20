@@ -51,7 +51,7 @@ function internalError(response) {
 
 function thingNotFound(response, name) {
   response.status(400).json({
-    message: `Sorry, the thing ${name} wasn't found.`,
+    message: `Sorry, I couldn't find ${name}.`,
   });
 }
 
@@ -63,7 +63,7 @@ function invalidForDevice(response) {
 
 function propertyNotFound(response, thing, property) {
   response.status(400).json({
-    message: `Sorry, the thing ${thing} has no property ${property}.`,
+    message: `Sorry, that thing has no property named ${property}.`,
   });
 }
 
@@ -134,7 +134,7 @@ CommandsController.post('/', async (request, response) => {
 
   for (const name in CommandUtils.booleans) {
     const bool = CommandUtils.booleans[name];
-    if (!bool.value || !bool['@type']) {
+    if (!bool.hasOwnProperty('value') || !bool['@type']) {
       continue;
     }
     if (!properties[name]) {
