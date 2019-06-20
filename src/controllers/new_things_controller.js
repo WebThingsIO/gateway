@@ -74,10 +74,11 @@ NewThingsController.post('/', async (request, response) => {
     const description = await res.json();
 
     // Verify some high level thing description properties.
-    if (description.hasOwnProperty('name') &&
-        (description.hasOwnProperty('type') ||
-         description.hasOwnProperty('@type')) &&
-        description.hasOwnProperty('properties')) {
+    if ((description.hasOwnProperty('title') ||
+         description.hasOwnProperty('name')) &&  // backwards compat
+        (description.hasOwnProperty('properties') ||
+         description.hasOwnProperty('actions') ||
+         description.hasOwnProperty('events'))) {
       response.json(description);
     } else if (Array.isArray(description)) {
       response.status(400).send('Web things must be added individually');

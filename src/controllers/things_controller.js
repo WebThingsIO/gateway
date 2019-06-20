@@ -157,7 +157,7 @@ ThingsController.post('/', async (request, response) => {
 
   try {
     const thing = await Things.createThing(id, description, webthing);
-    console.log(`Successfully created new thing ${thing.name}`);
+    console.log(`Successfully created new thing ${thing.title}`);
     response.status(201).send(thing);
   } catch (error) {
     console.error('Error saving new thing', id, description);
@@ -318,14 +318,14 @@ ThingsController.patch('/:thingId', async (request, response) => {
  */
 ThingsController.put('/:thingId', async (request, response) => {
   const thingId = request.params.thingId;
-  if (!request.body || !request.body.hasOwnProperty('name')) {
-    response.status(400).send('name parameter required');
+  if (!request.body || !request.body.hasOwnProperty('title')) {
+    response.status(400).send('title parameter required');
     return;
   }
 
-  const name = request.body.name.trim();
-  if (name.length === 0) {
-    response.status(400).send('Invalid name');
+  const title = request.body.title.trim();
+  if (title.length === 0) {
+    response.status(400).send('Invalid title');
     return;
   }
 
@@ -354,7 +354,7 @@ ThingsController.put('/:thingId', async (request, response) => {
 
   let description;
   try {
-    description = await thing.setName(name);
+    description = await thing.setTitle(title);
   } catch (e) {
     response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
   }

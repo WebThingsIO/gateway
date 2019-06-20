@@ -4,7 +4,7 @@ const ThingDetailPage = require('./thing-detail-page');
 class ThingSection extends Section {
   constructor(browser, rootElement) {
     super(browser, rootElement);
-    this.defineElement('name', '.thing-name');
+    this.defineElement('title', '.thing-title');
     this.defineElement('detailLink', '.thing-details-link');
     this.defineElement(
       'clickable',
@@ -40,9 +40,9 @@ class ThingSection extends Section {
     }, 5000);
   }
 
-  async thingName() {
-    const name = await this.name();
-    return await name.getText();
+  async thingTitle() {
+    const title = await this.title();
+    return await title.getText();
   }
 
   async thingLevelDisplayed() {

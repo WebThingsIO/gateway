@@ -52,8 +52,8 @@ CommandsController.post('/', async (request, response) => {
     return;
   }
 
-  let names = await Things.getThingNames();
-  names = names.map((n) => n.toLowerCase());
+  let titles = await Things.getThingTitles();
+  titles = titles.map((t) => t.toLowerCase());
 
   const internalError = () => {
     response.status(400).json({
@@ -86,7 +86,7 @@ CommandsController.post('/', async (request, response) => {
   };
 
   try {
-    await IntentParser.train(names);
+    await IntentParser.train(titles);
   } catch (e) {
     console.log('Error training:', e);
     internalError();
@@ -102,8 +102,8 @@ CommandsController.post('/', async (request, response) => {
     return;
   }
 
-  const name = payload.thing;
-  const thing = await Things.getThingByName(name);
+  const title = payload.thing;
+  const thing = await Things.getThingByTitle(title);
 
   if (!thing) {
     thingNotFound();

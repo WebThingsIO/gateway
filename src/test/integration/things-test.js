@@ -28,7 +28,7 @@ const Events = require('../../models/events');
 const TEST_THING = {
   id: 'test-1',
   type: 'onOffSwitch',
-  name: 'test-1',
+  title: 'test-1',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
@@ -47,7 +47,7 @@ const TEST_THING = {
 
 const VALIDATION_THING = {
   id: 'validation-1',
-  name: 'validation-1',
+  title: 'validation-1',
   '@context': 'https://iot.mozilla.org/schemas',
   properties: {
     readOnlyProp: {
@@ -83,7 +83,7 @@ const VALIDATION_THING = {
 const piDescr = {
   id: 'pi-1',
   type: 'thing',
-  name: 'pi-1',
+  title: 'pi-1',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
@@ -149,7 +149,7 @@ describe('things/', function() {
   function makeDescr(id) {
     return {
       id: id,
-      name: id,
+      title: id,
       properties: {},
     };
   }
@@ -206,8 +206,8 @@ describe('things/', function() {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(thingDescr.name);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual(thingDescr.title);
 
     // Fix up links
     delete thingDescr.properties.power.links[0].proxy;
@@ -280,8 +280,8 @@ describe('things/', function() {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(thingDescr.name);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual(thingDescr.title);
 
     let err = await chai.request(server)
       .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
@@ -295,7 +295,7 @@ describe('things/', function() {
       .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: '  \n  '});
+      .send({title: '  \n  '});
 
     expect(err.status).toEqual(400);
   });
@@ -310,14 +310,14 @@ describe('things/', function() {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(thingDescr.name);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual(thingDescr.title);
 
     res = await chai.request(server)
       .put(`${Constants.THINGS_PATH}/${thingDescr.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: 'new name'});
+      .send({title: 'new title'});
 
     expect(res.status).toEqual(200);
 
@@ -327,8 +327,8 @@ describe('things/', function() {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual('new name');
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual('new title');
   });
 
   it('GET all properties of a thing', async () => {
@@ -795,7 +795,7 @@ describe('things/', function() {
        const otherThingId = 'test-7';
        await addDevice(Object.assign({}, TEST_THING, {
          id: otherThingId,
-         name: otherThingId,
+         title: otherThingId,
        }));
        const ws =
          await webSocketOpen(`${Constants.THINGS_PATH}/${TEST_THING.id}`, jwt);
@@ -1230,8 +1230,8 @@ describe('things/', function() {
       .send({thingId: piDescr.id, pin: '1234'});
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(piDescr.name);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual(piDescr.title);
     expect(res.body).toHaveProperty('type');
     expect(res.body.type).toEqual(piDescr.type);
   });
@@ -1260,8 +1260,8 @@ describe('things/', function() {
              password: 'Password-1234!'});
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('name');
-    expect(res.body.name).toEqual(piDescr.name);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body.title).toEqual(piDescr.title);
     expect(res.body).toHaveProperty('type');
     expect(res.body.type).toEqual(piDescr.type);
   });

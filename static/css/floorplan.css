@@ -59,7 +59,7 @@
   display: none;
 }
 
-.floorplan-thing-name {
+.floorplan-thing-title {
   margin-top: 0.5rem;
   max-height: 6rem;
   overflow: hidden;
@@ -67,7 +67,7 @@
   text-shadow: 0.1rem 0.1rem 0.2rem black;
 }
 
-#floorplan.editing .floorplan-thing-name {
+#floorplan.editing .floorplan-thing-title {
   display: block;
 }
 

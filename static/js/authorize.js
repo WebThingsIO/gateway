@@ -53,7 +53,7 @@ function init(scope) {
           type="checkbox" ${included ? 'checked' : ''}
           ${global ? 'disabled' : ''}/>
         <label for="authorize-thing-included-${checkboxIndex}">
-          ${Utils.escapeHtml(thing.name)}
+          ${Utils.escapeHtml(thing.title)}
         </label>`;
       checkboxIndex += 1;
 

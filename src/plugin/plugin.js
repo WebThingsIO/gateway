@@ -421,7 +421,7 @@ class Plugin {
         let message = `${adapter.name}: `;
         if (msg.data.hasOwnProperty('deviceId')) {
           device = adapter.getDevice(msg.data.deviceId);
-          message += `(${device.name}): `;
+          message += `(${device.title}): `;
         }
 
         message += msg.data.prompt;
@@ -442,7 +442,7 @@ class Plugin {
         let message = `${adapter.name}`;
         if (msg.data.hasOwnProperty('deviceId')) {
           device = adapter.getDevice(msg.data.deviceId);
-          message += ` (${device.name})`;
+          message += ` (${device.title})`;
         }
 
         message += `: ${msg.data.prompt}`;

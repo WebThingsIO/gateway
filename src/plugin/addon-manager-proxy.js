@@ -48,7 +48,7 @@ class AddonManagerProxy extends EventEmitter {
     this.on(Constants.CONNECTED, ({device, connected}) => {
       DEBUG && console.log('AddonManagerProxy: Got',
                            Constants.CONNECTED, 'notification for',
-                           device.name);
+                           device.title);
       this.sendConnectedNotification(device, connected);
     });
   }
