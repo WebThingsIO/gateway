@@ -42,7 +42,7 @@ class NewWebThing {
     this.label = this.element.querySelector('.new-web-thing-label');
     this.originLabel = this.element.querySelector('.new-web-thing-origin');
     this.urlInput = this.element.querySelector('.new-web-thing-url');
-    this.nameInput = this.element.querySelector('.new-web-thing-name');
+    this.titleInput = this.element.querySelector('.new-web-thing-title');
     this.cancelButton =
       this.element.querySelector('.new-web-thing-cancel-button');
     this.submitButton =
@@ -69,7 +69,7 @@ class NewWebThing {
         <div class="new-thing-metadata">
           <input type="text" class="new-web-thing-url"
             placeholder="Enter web thing URL"></input>
-          <input type="text" class="new-web-thing-name hidden"></input>
+          <input type="text" class="new-web-thing-title hidden"></input>
           <span class="new-web-thing-origin hidden"></span>
           <select class="new-thing-type hidden"></select>
           <span class="new-thing-spacer"></span>
@@ -412,10 +412,10 @@ class NewWebThing {
       this.label.classList.remove('error');
       this.label.classList.add('hidden');
       this.thingType.classList.remove('hidden');
-      this.nameInput.value = description.name;
+      this.titleInput.value = description.title;
       this.originLabel.innerText = `from ${urlObj.host}`;
       this.urlInput.classList.add('hidden');
-      this.nameInput.classList.remove('hidden');
+      this.titleInput.classList.remove('hidden');
       this.submitButton.classList.add('hidden');
       this.saveButton.classList.remove('hidden');
       this.originLabel.classList.remove('hidden');
@@ -433,14 +433,14 @@ class NewWebThing {
 
   save() {
     this.thingType.disabled = true;
-    this.nameInput.disabled = true;
+    this.titleInput.disabled = true;
     this.saveButton.disabled = true;
     this.customIconInput.disabled = true;
     this.cancelButton.classList.add('hidden');
 
     const thing = this.description;
     thing.id = this.id;
-    thing.name = this.nameInput.value;
+    thing.title = this.titleInput.value;
     thing.webthingUrl = this.url;
 
     if (this.thingType.options.length > 0) {
@@ -483,7 +483,7 @@ class NewWebThing {
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       this.thingType.disabled = false;
-      this.nameInput.disabled = false;
+      this.titleInput.disabled = false;
       this.saveButton.disabled = false;
       this.customIconInput.disabled = false;
       this.cancelButton.classList.remove('hidden');
@@ -497,7 +497,7 @@ class NewWebThing {
     this.id = this.originalId;
 
     this.urlInput.value = '';
-    this.nameInput.value = '';
+    this.titleInput.value = '';
     this.originLabel.innerText = '';
     this.element.classList.remove(
       'binary-sensor',
@@ -519,7 +519,7 @@ class NewWebThing {
     );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
-    this.nameInput.classList.add('hidden');
+    this.titleInput.classList.add('hidden');
     this.submitButton.classList.remove('hidden');
     this.saveButton.classList.add('hidden');
     this.originLabel.classList.add('hidden');

@@ -19,7 +19,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'UnknownThing',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'thing',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': [],
@@ -47,8 +47,8 @@ describe('Thing', () => {
        await thingsPage.waitForThings();
        const things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        const detailPage = await things[0].openDetailPage();
@@ -123,7 +123,7 @@ describe('Thing', () => {
     const browser = getBrowser();
     const desc = {
       id: 'spacedPropertyThings',
-      name: 'battery sensor',
+      title: 'battery sensor',
       type: 'thing',
       '@context': 'https://iot.mozilla.org/schemas',
       '@type': [],
@@ -151,8 +151,8 @@ describe('Thing', () => {
     await thingsPage.waitForThings();
     const things = await thingsPage.things();
     expect(things.length).toEqual(1);
-    const thingName = await things[0].thingName();
-    expect(thingName).toEqual(desc.name);
+    const thingTitle = await things[0].thingTitle();
+    expect(thingTitle).toEqual(desc.title);
     await saveStepScreen();
 
     const detailPage = await things[0].openDetailPage();
@@ -193,7 +193,7 @@ describe('Thing', () => {
     const browser = getBrowser();
     const desc = {
       id: 'UnknownThing',
-      name: 'foofoo',
+      title: 'foofoo',
       type: 'thing',
       '@context': 'https://iot.mozilla.org/schemas',
       '@type': [],
@@ -221,8 +221,8 @@ describe('Thing', () => {
     await thingsPage.waitForThings();
     const things = await thingsPage.things();
     expect(things.length).toEqual(1);
-    const thingName = await things[0].thingName();
-    expect(thingName).toEqual(desc.name);
+    const thingTitle = await things[0].thingTitle();
+    expect(thingTitle).toEqual(desc.title);
     await saveStepScreen();
 
     const detailPage = await things[0].openDetailPage();
@@ -280,7 +280,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffLight',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'onOffLight',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch', 'Light'],
@@ -300,8 +300,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        const things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -326,7 +326,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffSwitch',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'onOffSwitch',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch'],
@@ -346,8 +346,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -373,7 +373,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'dimmableLight',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'dimmableLight',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch', 'Light'],
@@ -399,8 +399,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -474,7 +474,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'onOffColorLight',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'onOffColorLight',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
@@ -499,8 +499,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -556,7 +556,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'dimmableColorLight',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'dimmableColorLight',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
@@ -587,8 +587,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -671,7 +671,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'multiLevelSwitch',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'multiLevelSwitch',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch', 'MultiLevelSwitch'],
@@ -697,8 +697,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -773,7 +773,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'smartPlug',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'smartPlug',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': [
@@ -828,8 +828,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await things[0].click();
@@ -951,7 +951,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'binarySensor',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'binarySensor',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['BinarySensor'],
@@ -971,8 +971,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await setProperty(desc.id, 'active', true);
@@ -994,7 +994,7 @@ describe('Thing', () => {
        const browser = getBrowser();
        const desc = {
          id: 'multiLevelSensor',
-         name: 'foofoo',
+         title: 'foofoo',
          type: 'multiLevelSensor',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['MultiLevelSensor'],
@@ -1020,8 +1020,8 @@ describe('Thing', () => {
        await thingsPage.waitForThings();
        let things = await thingsPage.things();
        expect(things.length).toEqual(1);
-       const thingName = await things[0].thingName();
-       expect(thingName).toEqual(desc.name);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
        await saveStepScreen();
 
        await setProperty(desc.id, 'percent', 50);

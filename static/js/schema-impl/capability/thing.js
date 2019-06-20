@@ -60,7 +60,7 @@ class Thing {
       colorTemperature: ColorTemperatureDetail,
     };
 
-    this.name = description.name;
+    this.title = description.title;
     this.type = description.type;
     this.model = model;
     this.listeners = [];
@@ -361,7 +361,7 @@ class Thing {
       ${this.uiHref ? this.uiLink() : ''}
       ${this.detailLink()}
       ${this.iconView()}
-      <span class="thing-name">${Utils.escapeHtml(this.name)}</span>
+      <span class="thing-title">${Utils.escapeHtml(this.title)}</span>
     </div>`;
   }
 
@@ -460,7 +460,7 @@ class Thing {
         data-href="${encodeURI(this.href)}"
         >
       ${this.iconView()}
-      <div class="floorplan-thing-name">${Utils.escapeHtml(this.name)}</div>
+      <div class="floorplan-thing-title">${Utils.escapeHtml(this.title)}</div>
     </div>`;
   }
 
@@ -626,7 +626,7 @@ class Thing {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
         thingId: this.id,
-        thingName: this.name,
+        thingTitle: this.title,
         thingIcon: this.baseIcon,
         action: 'edit',
         capabilities: this['@type'],
@@ -644,7 +644,7 @@ class Thing {
     const newEvent = new CustomEvent('_contextmenu', {
       detail: {
         thingId: this.id,
-        thingName: this.name,
+        thingTitle: this.title,
         thingIcon: this.baseIcon,
         action: 'remove',
       },

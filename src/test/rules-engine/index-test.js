@@ -20,7 +20,7 @@ const {
 
 const thingLight1 = {
   id: 'light1',
-  name: 'light1',
+  title: 'light1',
   type: 'onOffSwitch',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
@@ -44,7 +44,7 @@ const thingLight1 = {
 
 const thingLight2 = {
   id: 'light2',
-  name: 'light2',
+  title: 'light2',
   type: 'onOffSwitch',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
@@ -58,7 +58,7 @@ const thingLight2 = {
 
 const thingLight3 = {
   id: 'light3',
-  name: 'light3',
+  title: 'light3',
   type: 'onOffSwitch',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],

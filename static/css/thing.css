@@ -86,7 +86,7 @@
   display: inline-block;
 }
 
-.thing-name {
+.thing-title {
   color: white;
   font-size: 1.3rem;
   display: block;
@@ -163,7 +163,7 @@
   margin-right: 0.5rem;
 }
 
-#thing-title-name {
+#thing-title-title {
   font-size: 1.6rem;
 }
 

@@ -252,7 +252,7 @@ class Log {
       // be sad
       return;
     }
-    const thingName = thing.name;
+    const thingName = thing.title;
     this.property = this.thingModel.propertyDescriptions[this.propertyId];
     const propertyName = this.property.title ||
       Utils.capitalize(this.propertyId);

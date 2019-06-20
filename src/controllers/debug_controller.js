@@ -23,17 +23,17 @@ addonManager.on(Constants.ADAPTER_ADDED, (adapter) => {
 
 addonManager.on(Constants.THING_ADDED, (thing) => {
   console.log('debug: Got:', Constants.THING_ADDED,
-              'notification for', thing.name);
+              'notification for', thing.title);
 });
 
 addonManager.on(Constants.THING_REMOVED, (thing) => {
   console.log('debug: Got:', Constants.THING_REMOVED,
-              'notification for', thing.name);
+              'notification for', thing.title);
 });
 
 addonManager.on(Constants.PROPERTY_CHANGED, (property) => {
   console.log('debug: Got:', Constants.PROPERTY_CHANGED,
-              'notification for:', property.device.name,
+              'notification for:', property.device.title,
               'property:', property.name,
               'value:', property.value);
 });

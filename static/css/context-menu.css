@@ -95,7 +95,7 @@
   text-align: left;
 }
 
-#edit-thing-name {
+#edit-thing-title {
   display: block;
   width: calc(100% - 1rem);
 }

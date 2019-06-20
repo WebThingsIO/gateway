@@ -32,7 +32,7 @@ const ContextMenu = {
     this.headingText = document.getElementById('context-menu-heading-text');
     this.saveButton = document.getElementById('edit-thing-save-button');
     this.thingIcon = document.getElementById('edit-thing-icon');
-    this.nameInput = document.getElementById('edit-thing-name');
+    this.titleInput = document.getElementById('edit-thing-title');
     this.thingType = document.getElementById('edit-thing-type');
     this.customIcon = document.getElementById('edit-thing-custom-icon');
     this.customIconInput =
@@ -80,7 +80,7 @@ const ContextMenu = {
       this.customIcon.iconHref = '';
     }
 
-    this.headingText.textContent = e.detail.thingName;
+    this.headingText.textContent = e.detail.thingTitle;
     this.thingId = e.detail.thingId;
     this.element.classList.remove('hidden');
 
@@ -90,10 +90,10 @@ const ContextMenu = {
     switch (e.detail.action) {
       case 'edit': {
         this.thingType.disabled = false;
-        this.nameInput.disabled = false;
+        this.titleInput.disabled = false;
         this.saveButton.disabled = false;
         this.customIconInput.disabled = false;
-        this.nameInput.value = e.detail.thingName;
+        this.titleInput.value = e.detail.thingTitle;
         this.thingType.innerHTML = '';
 
         if (!e.detail.selectedCapability ||
@@ -270,12 +270,12 @@ const ContextMenu = {
    */
   handleEdit: function() {
     this.thingType.disabled = true;
-    this.nameInput.disabled = true;
+    this.titleInput.disabled = true;
     this.saveButton.disabled = true;
     this.customIconInput.disabled = true;
 
-    const name = this.nameInput.value.trim();
-    if (name.length === 0) {
+    const title = this.titleInput.value.trim();
+    if (title.length === 0) {
       return;
     }
 
@@ -284,7 +284,7 @@ const ContextMenu = {
       capability = this.thingType.options[this.thingType.selectedIndex].value;
     }
 
-    const body = {name, selectedCapability: capability};
+    const body = {title, selectedCapability: capability};
 
     if (capability === 'Custom' && this.iconData) {
       body.iconData = this.iconData;
@@ -298,7 +298,7 @@ const ContextMenu = {
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       this.thingType.disabled = false;
-      this.nameInput.disabled = false;
+      this.titleInput.disabled = false;
       this.saveButton.disabled = false;
       this.customIconInput.disabled = false;
     });

@@ -162,7 +162,7 @@ class Rule {
       if (!triggerThing) {
         return null;
       }
-      return `${triggerThing.name} event "${trigger.label}" occurs`;
+      return `${triggerThing.title} event "${trigger.label}" occurs`;
     }
 
     const triggerThing = this.gateway.things.filter(
@@ -177,7 +177,7 @@ class Rule {
       return null;
     }
 
-    let triggerStr = `${triggerThing.name} `;
+    let triggerStr = `${triggerThing.title} `;
     if (trigger.type === 'BooleanTrigger') {
       triggerStr += 'is ';
       if (!trigger.onValue) {
@@ -250,7 +250,7 @@ class Rule {
       if (!effectThing) {
         return null;
       }
-      return `do ${effectThing.name} action "${effect.label}"`;
+      return `do ${effectThing.title} action "${effect.label}"`;
     }
 
     const effectThing = this.gateway.things.filter(
@@ -267,14 +267,14 @@ class Rule {
 
     let effectStr = '';
     if (effectProp.name === 'on' || effect.property.id === 'on') {
-      effectStr = `turn ${effectThing.name} `;
+      effectStr = `turn ${effectThing.title} `;
       if (effect.value) {
         effectStr += 'on';
       } else {
         effectStr += 'off';
       }
     } else {
-      effectStr += `set ${effectThing.name} ${effect.label} to `;
+      effectStr += `set ${effectThing.title} ${effect.label} to `;
       effectStr += effect.value;
     }
     return effectStr;

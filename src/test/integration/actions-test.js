@@ -17,7 +17,7 @@ describe('actions/', () => {
 
   const thingLight = {
     id: 'light',
-    name: 'light',
+    title: 'light',
     type: 'onOffLight',
     '@context': 'https://iot.mozilla.org/schemas',
     '@type': ['OnOffSwitch', 'Light'],

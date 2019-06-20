@@ -23,7 +23,7 @@ const CLIENT_SERVER_PORT = 31338;
 const TEST_THING = {
   id: 'test-1',
   type: 'onOffSwitch',
-  name: 'kitchen',
+  title: 'kitchen',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
   properties: {

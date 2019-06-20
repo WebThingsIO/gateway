@@ -15,7 +15,7 @@ const Constants = require('../constants');
 class ThingModel extends Model {
   constructor(description) {
     super();
-    this.name = description.name;
+    this.title = description.title;
     this.type = description.type;
     this.properties = {};
     this.events = [];
@@ -336,7 +336,7 @@ class ThingModel extends Model {
     getPropertiesPromise.then((properties) => {
       this.onPropertyStatus(properties);
     }).catch((error) => {
-      console.error(`Error fetching ${this.name} status: ${error}`);
+      console.error(`Error fetching ${this.title} status: ${error}`);
     });
   }
 

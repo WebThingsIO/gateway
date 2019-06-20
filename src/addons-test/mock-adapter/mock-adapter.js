@@ -45,7 +45,7 @@ class MockProperty extends Property {
 class MockDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
-    this.name = deviceDescription.name;
+    this.title = deviceDescription.title;
     this.type = deviceDescription.type;
     this['@context'] = deviceDescription['@context'];
     this['@type'] = deviceDescription['@type'];
@@ -164,7 +164,7 @@ class MockAdapter extends Adapter {
 
   // eslint-disable-next-line no-unused-vars
   startPairing(timeoutSeconds) {
-    console.log('MockAdapter:', this.name, 'id', this.id, 'pairing started');
+    console.log('MockAdapter:', this.title, 'id', this.id, 'pairing started');
     if (this.pairDeviceId) {
       const deviceId = this.pairDeviceId;
       const deviceDescription = this.pairDeviceDescription;
@@ -180,12 +180,12 @@ class MockAdapter extends Adapter {
   }
 
   cancelPairing() {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('MockAdapter:', this.title, 'id', this.id,
                 'pairing cancelled');
   }
 
   removeThing(device) {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('MockAdapter:', this.title, 'id', this.id,
                 'removeThing(', device.id, ') started');
 
     this.removeDevice(device.id).then(() => {
@@ -197,7 +197,7 @@ class MockAdapter extends Adapter {
   }
 
   cancelRemoveThing(device) {
-    console.log('MockAdapter:', this.name, 'id', this.id,
+    console.log('MockAdapter:', this.title, 'id', this.id,
                 'cancelRemoveThing(', device.id, ')');
   }
 

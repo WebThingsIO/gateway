@@ -73,13 +73,13 @@ const Things = {
   },
 
   /**
-   * Get the names of all things.
+   * Get the titles of all things.
    *
-   * @return {Promise<Array>} which resolves with a list of all thing names.
+   * @return {Promise<Array>} which resolves with a list of all thing titles.
    */
-  getThingNames: function() {
+  getThingTitles: function() {
     return this.getThings().then(function(things) {
-      return Array.from(things.values()).map((t) => t.name);
+      return Array.from(things.values()).map((t) => t.title);
     });
   },
 
@@ -258,22 +258,22 @@ const Things = {
   },
 
   /**
-   * Get a Thing by its name.
+   * Get a Thing by its title.
    *
-   * @param {String} name The name of the Thing to get.
+   * @param {String} title The title of the Thing to get.
    * @return {Promise<Thing>} A Thing object.
    */
-  getThingByName: function(name) {
-    name = name.toLowerCase();
+  getThingByTitle: function(title) {
+    title = title.toLowerCase();
 
     return this.getThings().then(function(things) {
       for (const thing of things.values()) {
-        if (thing.name.toLowerCase() === name) {
+        if (thing.title.toLowerCase() === title) {
           return thing;
         }
       }
 
-      throw new Error(`Unable to find thing with name: ${name}`);
+      throw new Error(`Unable to find thing with title: ${title}`);
     });
   },
 

@@ -104,11 +104,11 @@
 }
 
 .new-web-thing-url,
-.new-web-thing-name,
-.new-thing-initial-name,
+.new-web-thing-title,
+.new-thing-initial-title,
 .new-thing-credentials-error,
 .new-thing-pin-error,
-.new-thing-name {
+.new-thing-title {
   display: block;
   width: calc(100% - 1rem);
 }
@@ -120,8 +120,8 @@
 }
 
 .new-web-thing-url:disabled,
-.new-web-thing-name:disabled,
-.new-thing-name:disabled {
+.new-web-thing-title:disabled,
+.new-thing-title:disabled {
   background-color: #597285;
   color: #fff;
   padding: 0;

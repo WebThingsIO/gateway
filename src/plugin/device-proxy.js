@@ -21,7 +21,7 @@ class DeviceProxy extends Device {
   constructor(adapter, deviceDict) {
     super(adapter, deviceDict.id);
 
-    this.name = deviceDict.name;
+    this.title = deviceDict.title;
     this.type = deviceDict.type;
     this['@context'] =
       deviceDict['@context'] || 'https://iot.mozilla.org/schemas';
@@ -50,7 +50,7 @@ class DeviceProxy extends Device {
     // Copy over any extra device fields which might be useful for debugging.
     this.deviceDict = {};
     for (const field in deviceDict) {
-      if (['id', 'name', 'type', 'description', 'properties', 'actions',
+      if (['id', 'title', 'type', 'description', 'properties', 'actions',
            'events', '@type', '@context', 'links'].includes(field)) {
         continue;
       }

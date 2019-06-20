@@ -174,8 +174,8 @@ class NewThing {
         </webthing-custom-icon>
       </div>
       <div class="new-thing-metadata">
-        <input type="text" class="new-thing-name"
-               value="${Utils.escapeHtml(this.description.name)}"/>
+        <input type="text" class="new-thing-title"
+               value="${Utils.escapeHtml(this.description.title)}"/>
         <select class="new-thing-type">${options.join('')}</select>
         <span class="new-thing-spacer"></span>
         <input type="file" class="new-thing-custom-icon-input hidden"
@@ -196,8 +196,8 @@ class NewThing {
     this.element.innerHTML = `
       <div class="new-thing-icon"></div>
       <div class="new-thing-metadata">
-        <span class="new-thing-initial-name">
-          ${Utils.escapeHtml(this.description.name)}
+        <span class="new-thing-initial-title">
+          ${Utils.escapeHtml(this.description.title)}
         </span>
         <input type="text" class="new-thing-pin" required autofocus
                placeholder="Enter PIN"/>
@@ -218,8 +218,8 @@ class NewThing {
     this.element.innerHTML = `
       <div class="new-thing-icon"></div>
       <div class="new-thing-metadata">
-        <span class="new-thing-initial-name">
-          ${Utils.escapeHtml(this.description.name)}
+        <span class="new-thing-initial-title">
+          ${Utils.escapeHtml(this.description.title)}
         </span>
         <input type="text" class="new-thing-username" required autofocus
                placeholder="Enter username"/>
@@ -290,7 +290,7 @@ class NewThing {
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
       this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     } else {
-      this.nameInput = this.element.querySelector('.new-thing-name');
+      this.titleInput = this.element.querySelector('.new-thing-title');
       this.saveButton = this.element.querySelector('.new-thing-save-button');
       this.thingType = this.element.querySelector('.new-thing-type');
       this.customIcon = this.element.querySelector('.new-thing-custom-icon');
@@ -524,13 +524,13 @@ class NewThing {
 
   handleSave() {
     this.thingType.disabled = true;
-    this.nameInput.disabled = true;
+    this.titleInput.disabled = true;
     this.saveButton.disabled = true;
     this.customIconInput.disabled = true;
 
     const thing = this.description;
     thing.id = this.id;
-    thing.name = this.nameInput.value;
+    thing.title = this.titleInput.value;
 
     if (this.thingType.options.length > 0) {
       thing.selectedCapability =
@@ -564,7 +564,7 @@ class NewThing {
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       this.thingType.disabled = false;
-      this.nameInput.disabled = false;
+      this.titleInput.disabled = false;
       this.saveButton.disabled = false;
       this.customIconInput.disabled = false;
     });

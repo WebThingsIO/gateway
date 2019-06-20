@@ -262,7 +262,7 @@ const ThingsScreen = {
           customIconEl.classList.add('hidden');
         }
 
-        document.getElementById('thing-title-name').innerText = thing.name;
+        document.getElementById('thing-title-title').innerText = thing.title;
 
         const speechWrapper = document.getElementById('speech-wrapper');
         if (speechWrapper.classList.contains('hidden')) {
@@ -332,8 +332,8 @@ const ThingsScreen = {
         customIconEl.classList.add('hidden');
       }
 
-      document.getElementById('thing-title-name').innerText =
-        description.name;
+      document.getElementById('thing-title-title').innerText =
+        description.title;
 
       this.thingsElement.innerHTML = '';
       new ActionInputForm(href, actionName,
@@ -384,7 +384,8 @@ const ThingsScreen = {
         customIconEl.classList.add('hidden');
       }
 
-      document.getElementById('thing-title-name').innerText = description.name;
+      document.getElementById('thing-title-title').innerText =
+        description.title;
 
       this.thingsElement.innerHTML = '';
       this.eventList = new EventList(thingModel, description);
