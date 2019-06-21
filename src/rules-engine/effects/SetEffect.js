@@ -20,8 +20,14 @@ class SetEffect extends PropertyEffect {
   constructor(desc) {
     super(desc);
     this.value = desc.value;
-    assert(typeof this.value === this.property.type,
-           'setpoint and property must be same type');
+    if (typeof this.value === 'number') {
+      assert(this.property.type === 'number' ||
+             this.property.type === 'integer',
+             'setpoint and property must be compatible types');
+    } else {
+      assert(typeof this.value === this.property.type,
+             'setpoint and property must be same type');
+    }
     this.on = false;
   }
 
