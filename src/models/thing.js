@@ -370,18 +370,7 @@ class Thing {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    */
   getDescription(reqHost, reqSecure) {
-    const links = JSON.parse(JSON.stringify(this.links));
-
-    if (typeof reqHost !== 'undefined') {
-      const wsLink = {
-        rel: 'alternate',
-        href: `${reqSecure ? 'wss' : 'ws'}://${reqHost}${this.href}`,
-      };
-
-      links.push(wsLink);
-    }
-
-    return {
+    const desc = {
       title: this.title,
       type: this.type,
       '@context': this['@context'],
@@ -391,13 +380,27 @@ class Thing {
       properties: this.properties,
       actions: this.actions,
       events: this.events,
-      links,
+      links: JSON.parse(JSON.stringify(this.links)),
       floorplanX: this.floorplanX,
       floorplanY: this.floorplanY,
       layoutIndex: this.layoutIndex,
       selectedCapability: this.selectedCapability,
       iconHref: this.iconHref,
     };
+
+    if (typeof reqHost !== 'undefined') {
+      const wsLink = {
+        rel: 'alternate',
+        href: `${reqSecure ? 'wss' : 'ws'}://${reqHost}${this.href}`,
+      };
+
+      desc.links.push(wsLink);
+
+      desc.id = `${reqSecure ? 'https' : 'http'}://${reqHost}${this.href}`;
+      desc.base = `${reqSecure ? 'https' : 'http'}://${reqHost}/`;
+    }
+
+    return desc;
   }
 
   registerWebsocket(ws) {
