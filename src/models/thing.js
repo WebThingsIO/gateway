@@ -405,9 +405,9 @@ class Thing {
           authorization: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
           token: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/token`,
           scopes: [
-            `${this.href}.readwrite`,
+            `${this.href}:readwrite`,
             this.href,
-            `${Constants.THINGS_PATH}.readwrite`,
+            `${Constants.THINGS_PATH}:readwrite`,
             Constants.THINGS_PATH,
           ],
         },
