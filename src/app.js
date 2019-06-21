@@ -103,11 +103,22 @@ function createHttpsServer() {
   return https.createServer(options);
 }
 
+let httpsAttempts = 10;
 function startHttpsGateway() {
   const port = config.get('ports.https');
 
   if (!servers.https) {
     servers.https = createHttpsServer();
+    if (!servers.https) {
+      httpsAttempts -= 1;
+      if (httpsAttempts < 0) {
+        console.error('Unable to create HTTPS server after several tries');
+        gracefulExit();
+        process.exit(-1);
+      }
+      setTimeout(startHttpsGateway, 5000);
+      return;
+    }
   }
 
   httpsApp = createGatewayApp(servers.https);
@@ -377,6 +388,17 @@ function startGateway() {
   }
 }
 
+function gracefulExit() {
+  addonManager.unloadAddons();
+  mDNSserver.server.cleanup();
+  TunnelService.stop();
+
+  if (updaterInterval !== null) {
+    clearInterval(updaterInterval);
+    updaterInterval = null;
+  }
+}
+
 if (config.get('cli')) {
   // Get some decent error messages for unhandled rejections. This is
   // often just errors in the code.
@@ -387,16 +409,8 @@ if (config.get('cli')) {
 
   // Do graceful shutdown when Control-C is pressed.
   process.on('SIGINT', () => {
-    console.log('Control-C: unloading add-ons...');
-    addonManager.unloadAddons();
-    mDNSserver.server.cleanup();
-    TunnelService.stop();
-
-    if (updaterInterval !== null) {
-      clearInterval(updaterInterval);
-      updaterInterval = null;
-    }
-
+    console.log('Control-C: Exiting gracefully');
+    gracefulExit();
     process.exit(0);
   });
 }
