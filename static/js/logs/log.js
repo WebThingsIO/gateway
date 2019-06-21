@@ -370,7 +370,7 @@ class Log {
     }
     // If there are no values less than zero make the lower bound zero for
     // aesthetic reasons (e.g. power consumption)
-    if (min >= 0 && min - margin < 0) {
+    if (min >= 0 && min - 3 * margin < 0) {
       min = margin;
     }
     return {
@@ -418,7 +418,7 @@ class Log {
       return;
     }
     const bounds = this.valueBounds();
-    this.valueMin = Math.min(0, bounds.min);
+    this.valueMin = bounds.min;
     this.valueMax = bounds.max;
     // Preserve 3 significant figures (not using toPrecision since that does
     // scientific notation)
