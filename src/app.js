@@ -103,7 +103,7 @@ function createHttpsServer() {
   return https.createServer(options);
 }
 
-let httpsAttempts = 10;
+let httpsAttempts = 5;
 function startHttpsGateway() {
   const port = config.get('ports.https');
 
@@ -114,9 +114,9 @@ function startHttpsGateway() {
       if (httpsAttempts < 0) {
         console.error('Unable to create HTTPS server after several tries');
         gracefulExit();
-        process.exit(-1);
+        process.exit(0);
       }
-      setTimeout(startHttpsGateway, 5000);
+      setTimeout(startHttpsGateway, 4000);
       return;
     }
   }
