@@ -398,6 +398,21 @@ class Thing {
 
       desc.id = `${reqSecure ? 'https' : 'http'}://${reqHost}${this.href}`;
       desc.base = `${reqSecure ? 'https' : 'http'}://${reqHost}/`;
+      desc.securityDefinitions = {
+        oauth2_sc: {
+          scheme: 'oauth2',
+          flow: 'code',
+          authorization: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
+          token: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/token`,
+          scopes: [
+            `${this.href}.readwrite`,
+            this.href,
+            `${Constants.THINGS_PATH}.readwrite`,
+            Constants.THINGS_PATH,
+          ],
+        },
+      };
+      desc.security = 'oauth2_sc';
     }
 
     return desc;
