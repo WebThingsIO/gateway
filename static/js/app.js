@@ -43,6 +43,7 @@ const MobileDragDrop = require('mobile-drag-drop/index.min');
 const ScrollBehavior = require('mobile-drag-drop/scroll-behaviour.min');
 const Notifications = require('./notifications');
 const Utils = require('./utils');
+const Fluent = require('./fluent');
 
 const App = {
   /**
@@ -125,6 +126,7 @@ const App = {
 
     Menu.init();
     Router.init();
+    Fluent.init();
   },
 
   initWebSocket() {
