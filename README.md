@@ -183,6 +183,7 @@ Under Ubuntu/Debian Linux:
 ```
 $ sudo apt install libnanomsg4 libnanomsg-dev
 ```
+Note: you may need to use libnanomsg5 instead of libnanomsg4 (under Debian buster, for example)
 
 #### Windows
 
