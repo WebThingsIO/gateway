@@ -52,7 +52,7 @@ sudo apt install -y \
   libffi-dev \
   libglib2.0-dev \
   libnanomsg-dev \
-  libnanomsg4 \
+  libnanomsg5 \
   libtool \
   libudev-dev \
   libusb-1.0-0-dev \
