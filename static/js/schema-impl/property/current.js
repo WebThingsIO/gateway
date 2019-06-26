@@ -22,13 +22,21 @@ class CurrentDetail extends NumericLabelDetail {
           'A',
           1);
     this.id = `current-${Utils.escapeHtmlForIdClass(this.name)}`;
+
+    if (property.hasOwnProperty('multipleOf') &&
+        `${property.multipleOf}`.includes('.')) {
+      this.precision = `${property.multipleOf}`.split('.')[1].length;
+    } else {
+      this.precision = 1;
+    }
   }
 
   view() {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
     return `
       <webthing-current-property data-value="0" ${readOnly}
-        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        data-name="${Utils.escapeHtml(this.label)}" data-unit="${this.unit}"
+        data-precision="${this.precision}" id="${this.id}">
       </webthing-current-property>`;
   }
 }

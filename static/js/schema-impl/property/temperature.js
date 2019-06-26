@@ -22,6 +22,13 @@ class TemperatureDetail extends NumericLabelDetail {
           property.unit || 'degree celsius',
           0);
     this.id = `temperature-${Utils.escapeHtmlForIdClass(this.name)}`;
+
+    if (property.hasOwnProperty('multipleOf') &&
+        `${property.multipleOf}`.includes('.')) {
+      this.precision = `${property.multipleOf}`.split('.')[1].length;
+    } else {
+      this.precision = 0;
+    }
   }
 
   view() {
@@ -30,7 +37,7 @@ class TemperatureDetail extends NumericLabelDetail {
     return `
       <webthing-temperature-property data-value="0" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" data-unit="${this.unit}"
-        id="${this.id}">
+        data-precision="${this.precision}" id="${this.id}">
       </webthing-temperature-property>`;
   }
 }

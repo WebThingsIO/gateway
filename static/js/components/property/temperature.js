@@ -12,10 +12,6 @@
 const NumericLabelProperty = require('./numeric-label');
 
 class TemperatureProperty extends NumericLabelProperty {
-  connectedCallback() {
-    this.precision = 0;
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-temperature-property',

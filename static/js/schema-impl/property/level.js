@@ -33,8 +33,10 @@ class LevelDetail {
       this.max = 100;
     }
 
+    this.precision = null;
     if (property.hasOwnProperty('multipleOf')) {
       this.step = property.multipleOf;
+      this.precision = `${property.multipleOf}`.split('.')[1].length;
     } else if (property.type === 'number') {
       this.step = 'any';
     } else {
@@ -53,11 +55,13 @@ class LevelDetail {
   view() {
     const unit = this.unit || '';
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+    const precision =
+    this.precision !== null ? `data-precision="${this.precision}"` : '';
 
     return `
       <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
         data-unit="${unit}" min="${this.min}" max="${this.max}"
-        step="${this.step}" id="${this.id}" ${readOnly}>
+        step="${this.step}" id="${this.id}" ${readOnly} ${precision}>
       </webthing-level-property>`;
   }
 

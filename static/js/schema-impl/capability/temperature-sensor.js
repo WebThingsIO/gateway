@@ -53,14 +53,23 @@ class TemperatureSensor extends Thing {
       this.temperatureProperty = 'temperature';
     }
 
-    if (this.temperatureProperty) {
-      this.unit = Utils.unitNameToAbbreviation(
-        this.displayedProperties[this.temperatureProperty].property.unit
-      );
-    }
+    this.precision = 0;
+    this.unit = 'degree celsius';
 
-    if (!this.unit) {
-      this.unit = Utils.unitNameToAbbreviation('degree celsius');
+    if (this.temperatureProperty) {
+      const property =
+        this.displayedProperties[this.temperatureProperty].property;
+
+      if (property.hasOwnProperty('multipleOf') &&
+          `${property.multipleOf}`.includes('.')) {
+        this.precision = `${property.multipleOf}`.split('.')[1].length;
+      }
+
+      if (property.hasOwnProperty('unit')) {
+        this.unit = property.unit;
+      }
+    } else {
+      this.precision = 0;
     }
   }
 
@@ -87,9 +96,10 @@ class TemperatureSensor extends Thing {
   }
 
   iconView() {
+    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
     return `
-      <webthing-temperature-sensor-capability
-        data-unit="${Utils.escapeHtml(this.unit)}">
+      <webthing-temperature-sensor-capability data-unit="${unit}"
+        data-precision="${this.precision}">
       </webthing-temperature-sensor-capability>`;
   }
 }

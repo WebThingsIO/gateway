@@ -12,11 +12,6 @@
 const NumericLabelProperty = require('./numeric-label');
 
 class CurrentProperty extends NumericLabelProperty {
-  connectedCallback() {
-    this.unit = 'A';
-    this.precision = 1;
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-current-property', CurrentProperty);

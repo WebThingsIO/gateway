@@ -12,11 +12,6 @@
 const NumericLabelProperty = require('./numeric-label');
 
 class VoltageProperty extends NumericLabelProperty {
-  connectedCallback() {
-    this.unit = 'V';
-    this.precision = 0;
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-voltage-property', VoltageProperty);
