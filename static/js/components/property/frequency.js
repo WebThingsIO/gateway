@@ -12,11 +12,6 @@
 const NumericLabelProperty = require('./numeric-label');
 
 class FrequencyProperty extends NumericLabelProperty {
-  connectedCallback() {
-    this.unit = 'Hz';
-    this.precision = 0;
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-frequency-property', FrequencyProperty);

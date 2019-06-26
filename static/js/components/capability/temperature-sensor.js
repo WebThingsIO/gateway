@@ -56,6 +56,7 @@ class TemperatureSensorCapability extends BaseComponent {
     this._label = this.shadowRoot.querySelector('#label');
 
     this._temperature = 0;
+    this._precision = 0;
     this._unit = '';
   }
 
@@ -64,6 +65,12 @@ class TemperatureSensorCapability extends BaseComponent {
       typeof this.dataset.unit !== 'undefined' ?
         this.dataset.unit :
         Utils.unitNameToAbbreviation('degree celsius');
+
+    this.precision =
+      typeof this.dataset.precision !== 'undefined' ?
+        this.dataset.precision :
+        0;
+
     this.temperature =
       typeof this.dataset.temperature !== 'undefined' ?
         this.dataset.temperature :
@@ -78,13 +85,22 @@ class TemperatureSensorCapability extends BaseComponent {
     this._unit = value;
   }
 
+  get precision() {
+    return this._precision;
+  }
+
+  set precision(value) {
+    this._precision = parseInt(value, 10);
+  }
+
   get temperature() {
     return this._temperature;
   }
 
   set temperature(value) {
     this._temperature = Number(value);
-    this._label.innerHTML = `${Math.round(this._temperature)}${this.unit}`;
+    this._label.innerHTML =
+      `${this._temperature.toFixed(this.precision)}${this.unit}`;
   }
 }
 

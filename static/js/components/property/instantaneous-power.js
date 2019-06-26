@@ -12,11 +12,6 @@
 const NumericLabelProperty = require('./numeric-label');
 
 class InstantaneousPowerProperty extends NumericLabelProperty {
-  connectedCallback() {
-    this.unit = 'W';
-    this.precision = 0;
-    super.connectedCallback();
-  }
 }
 
 window.customElements.define('webthing-instantaneous-power-property',

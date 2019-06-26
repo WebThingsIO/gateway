@@ -11,6 +11,7 @@
 'use strict';
 
 const Thing = require('./thing');
+const Utils = require('../../utils');
 
 class EnergyMonitor extends Thing {
   /**
@@ -51,6 +52,22 @@ class EnergyMonitor extends Thing {
         this.displayedProperties.hasOwnProperty('instantaneousPower')) {
       this.powerProperty = 'instantaneousPower';
     }
+
+    this.precision = 0;
+    this.unit = 'watt';
+
+    if (this.powerProperty) {
+      const property = this.displayedProperties[this.powerProperty].property;
+
+      if (property.hasOwnProperty('multipleOf') &&
+          `${property.multipleOf}`.includes('.')) {
+        this.precision = `${property.multipleOf}`.split('.')[1].length;
+      }
+
+      if (property.hasOwnProperty('unit')) {
+        this.unit = property.unit;
+      }
+    }
   }
 
   get icon() {
@@ -76,8 +93,10 @@ class EnergyMonitor extends Thing {
   }
 
   iconView() {
+    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
     return `
-      <webthing-energy-monitor-capability>
+      <webthing-energy-monitor-capability data-unit="${unit}"
+        data-precision="${this.precision}">
       </webthing-energy-monitor-capability>`;
   }
 }

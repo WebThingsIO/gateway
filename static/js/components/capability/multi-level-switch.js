@@ -88,6 +88,7 @@ class MultiLevelSwitchCapability extends BaseComponent {
       '.webthing-multi-level-switch-capability-label');
     this._on = false;
     this._level = 0;
+    this._precision = 0;
     this._onClick = this.__onClick.bind(this);
   }
 
@@ -101,6 +102,10 @@ class MultiLevelSwitchCapability extends BaseComponent {
       typeof this.dataset.level !== 'undefined' ? this.dataset.level : this.min;
     this.unit =
       typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    this.precision =
+      typeof this.dataset.precision !== 'undefined' ?
+        this.dataset.precision :
+        0;
 
     if (typeof this._min === 'undefined') {
       this._min = 0;
@@ -162,7 +167,8 @@ class MultiLevelSwitchCapability extends BaseComponent {
     if (this._on) {
       bar = ON_BAR;
       blank = ON_BLANK;
-      this._label.innerText = `${Math.round(this._level)}${this.unit}`;
+      this._label.innerHTML =
+        `${this._level.toFixed(this.precision)}${this.unit}`;
     } else {
       bar = OFF_BAR;
       blank = OFF_BLANK;
@@ -181,6 +187,14 @@ class MultiLevelSwitchCapability extends BaseComponent {
 
   set unit(value) {
     this._unit = value;
+  }
+
+  get precision() {
+    return this._precision;
+  }
+
+  set precision(value) {
+    this._precision = parseInt(value, 10);
   }
 
   __onClick(e) {

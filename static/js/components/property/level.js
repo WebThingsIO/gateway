@@ -154,6 +154,11 @@ class LevelProperty extends BaseComponent {
         typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
     }
 
+    this._precision = null;
+    if (!this.precision && typeof this.dataset.precision !== 'undefined') {
+      this.precision = this.dataset.precision;
+    }
+
     this.readOnly =
       typeof this.dataset.readOnly !== 'undefined' ?
         this.dataset.readOnly === 'true' :
@@ -216,6 +221,10 @@ class LevelProperty extends BaseComponent {
     const max = parseInt(this.max, 10) - min;
     const percent = Math.max(0, value - min) / max * 100;
 
+    if (this.precision !== null) {
+      value = value.toFixed(this.precision);
+    }
+
     this._bar.style.width = `calc(${percent}% - 0.2rem)`;
     this._text.innerText = value;
     this._text.title = value;
@@ -268,6 +277,14 @@ class LevelProperty extends BaseComponent {
       this._unit.innerHTML = '&nbsp;';
     }
     this._setUnitClass();
+  }
+
+  get precision() {
+    return this._precision;
+  }
+
+  set precision(value) {
+    this._precision = parseInt(value, 10);
   }
 
   _setUnitClass() {

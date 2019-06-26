@@ -12,6 +12,7 @@
 'use strict';
 
 const OnOffSwitch = require('./on-off-switch');
+const Utils = require('../../utils');
 
 class SmartPlug extends OnOffSwitch {
   /**
@@ -54,6 +55,22 @@ class SmartPlug extends OnOffSwitch {
         this.displayedProperties.hasOwnProperty('instantaneousPower')) {
       this.powerProperty = 'instantaneousPower';
     }
+
+    this.precision = 0;
+    this.unit = 'watt';
+
+    if (this.powerProperty) {
+      const property = this.displayedProperties[this.powerProperty].property;
+
+      if (property.hasOwnProperty('multipleOf') &&
+          `${property.multipleOf}`.includes('.')) {
+        this.precision = `${property.multipleOf}`.split('.')[1].length;
+      }
+
+      if (property.hasOwnProperty('unit')) {
+        this.unit = property.unit;
+      }
+    }
   }
 
   get icon() {
@@ -79,9 +96,12 @@ class SmartPlug extends OnOffSwitch {
   }
 
   iconView() {
+    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
     let power = '';
     if (this.powerProperty !== null) {
       power = 'data-have-power="true"';
+      power += ` data-precision="${this.precision}"`;
+      power += ` data-unit="${unit}"`;
     }
 
     return `
