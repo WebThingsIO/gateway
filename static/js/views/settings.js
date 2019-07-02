@@ -1494,6 +1494,7 @@ const SettingsScreen = {
           version: addon.version,
           url: addon.url,
           checksum: addon.checksum,
+          type: addon.type,
           installed: this.installedAddons.has(addon.name),
         };
         this.availableAddons.set(addon.name, entry);
