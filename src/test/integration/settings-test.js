@@ -1,8 +1,5 @@
 'use strict';
 
-/* Tell jshint about mocha globals, and  */
-/* globals it */
-
 const {server, chai} = require('../common');
 const Database = require('../../db');
 const Platform = require('../../platform');

@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals it */
-
 const config = require('config');
 const nock = require('nock');
 const {URL} = require('url');

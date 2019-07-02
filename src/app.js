@@ -440,7 +440,8 @@ mDNSserver.getmDNSstate().then((state) => {
   }
 });
 
-module.exports = { // for testing
+// for testing
+module.exports = {
   servers,
   serverStartup,
 };
