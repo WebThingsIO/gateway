@@ -15,6 +15,7 @@ const Gateway = require('../rules/Gateway');
 const Rule = require('../rules/Rule');
 const RuleUtils = require('../rules/RuleUtils');
 const NotificationEffectBlock = require('../rules/NotificationEffectBlock');
+const NotifierOutletBlock = require('../rules/NotifierOutletBlock');
 const TimeTriggerBlock = require('../rules/TimeTriggerBlock');
 const page = require('page');
 
@@ -165,12 +166,10 @@ const RuleScreen = {
   },
 
   /**
-   * Instantiate a draggable TimeTriggerBlock from a template
-   * TimeTriggerBlock
-   * in the palette
+   * Instantiate a draggable block from a template in the palette
    * @param {Event} event
    */
-  onTimeTriggerBlockDown: function(event) {
+  onBlockDown: function(builder, event) {
     if (!this.rule) {
       return;
     }
@@ -178,78 +177,27 @@ const RuleScreen = {
     const x = deviceRect.left;
     const y = deviceRect.top;
 
-    const newBlock = new TimeTriggerBlock(
-      this.ruleArea, this.onPresentationChange, this.onRuleChange);
+    const newBlock = builder();
     newBlock.snapToGrid(x, y);
     newBlock.draggable.onDown(event);
     this.partBlocks.push(newBlock);
   },
 
   /**
-   * Instantiate a draggable NotificationEffectBlock from a template
-   * NotificationEffectBlock in the palette
-   * @param {Event} event
-   */
-  onNotificationEffectBlockDown: function(event) {
-    if (!this.rule) {
-      return;
-    }
-    const deviceRect = event.target.getBoundingClientRect();
-    const x = deviceRect.left;
-    const y = deviceRect.top;
-
-    const newBlock = new NotificationEffectBlock(
-      this.ruleArea, this.onPresentationChange, this.onRuleChange);
-    newBlock.snapToGrid(x, y);
-    newBlock.draggable.onDown(event);
-    this.partBlocks.push(newBlock);
-  },
-
-  /**
-   * Create a block representing a time trigger
+   * Create a palette block
+   * @param {string} cssClasses - CSS classes to apply to the block
+   * @param {string} iconUrl - URL of icon image
+   * @param {string} name
    * @return {Element}
    */
-  makeTimeTriggerBlock: () => {
+  makeBlock: (cssClasses, iconUrl, name) => {
     const elt = document.createElement('div');
     elt.classList.add('rule-part');
 
-    elt.innerHTML = `<div class="rule-part-block time-trigger-block">
-      <img class="rule-part-icon" src="/optimized-images/thing-icons/clock.svg"/>
+    elt.innerHTML = `<div class="rule-part-block ${cssClasses}">
+      <img class="rule-part-icon" src="${iconUrl}"/>
     </div>
-    <p>Clock</p>`;
-
-    return elt;
-  },
-
-  /**
-   * Create a block representing a notification effect
-   * @return {Element}
-   */
-  makeNotificationEffectBlock: () => {
-    const elt = document.createElement('div');
-    elt.classList.add('rule-part');
-
-    elt.innerHTML = `<div class="rule-part-block notification-effect-block">
-      <img class="rule-part-icon" src="/optimized-images/thing-icons/notification.svg"/>
-    </div>
-    <p>Notification</p>`;
-
-    return elt;
-  },
-
-  /**
-   * Create a device-block from a thing
-   * @param {ThingDescription} thing
-   * @return {Element}
-   */
-  makeDeviceBlock: (thing) => {
-    const elt = document.createElement('div');
-    elt.classList.add('rule-part');
-
-    elt.innerHTML = `<div class="rule-part-block device-block">
-      <img class="rule-part-icon" src="${RuleUtils.icon(thing)}"/>
-    </div>
-    <p>${thing.name}</p>`;
+    <p>${name}</p>`;
 
     return elt;
   },
@@ -293,7 +241,8 @@ const RuleScreen = {
       const selectedOption = block.querySelector('.selected');
       if (!selectedOption) {
         return block.querySelector('.time-input') ||
-          block.querySelector('.message-input-container');
+          block.querySelector('.message-input-container') ||
+          block.querySelector('.open-button');
       }
       return JSON.parse(selectedOption.dataset.ruleFragment);
     }
@@ -309,6 +258,11 @@ const RuleScreen = {
     ).map((elt) => {
       return elt.parentNode;
     }).filter(isValidSelection);
+
+    if (triggerBlocks.length === 0 || effectBlocks.length === 0) {
+      console.log('WHY', triggerBlocks, effectBlocks);
+      return;
+    }
 
     function transformToCoords(elt) {
       const re = /translate\((\d+)px, +(\d+)px\)/;
@@ -564,23 +518,59 @@ const RuleScreen = {
     });
 
     this.rulePartsList.querySelectorAll('.rule-part').forEach(remove);
-    const ttBlock = this.makeTimeTriggerBlock();
-    ttBlock.addEventListener('mousedown',
-                             this.onTimeTriggerBlockDown.bind(this));
-    ttBlock.addEventListener('touchstart',
-                             this.onTimeTriggerBlockDown.bind(this));
+
+    const createNotificationEffectBlock = () => {
+      return new NotificationEffectBlock(
+        this.ruleArea, this.onPresentationChange, this.onRuleChange);
+    };
+    const createTimeTriggerBlock = () => {
+      return new TimeTriggerBlock(
+        this.ruleArea, this.onPresentationChange, this.onRuleChange);
+    };
+    const createNotifierOutletBlock = (notifier, outlet) => {
+      return () => {
+        return new NotifierOutletBlock(
+          this.ruleArea, this.onPresentationChange, this.onRuleChange,
+          notifier, outlet);
+      };
+    };
+
+    const ttBlock = this.makeBlock('time-trigger-block',
+                                   '/optimized-images/thing-icons/clock.svg',
+                                   'Clock');
+    const onTimeTriggerBlockDown =
+      this.onBlockDown.bind(this, createTimeTriggerBlock);
+    ttBlock.addEventListener('mousedown', onTimeTriggerBlockDown);
+    ttBlock.addEventListener('touchstart', onTimeTriggerBlockDown);
     this.rulePartsList.appendChild(ttBlock);
 
-    const neBlock = this.makeNotificationEffectBlock();
-    neBlock.addEventListener('mousedown',
-                             this.onNotificationEffectBlockDown.bind(this));
-    neBlock.addEventListener('touchstart',
-                             this.onNotificationEffectBlockDown.bind(this));
+    const neBlock = this.makeBlock(
+      'notification-effect-block',
+      '/optimized-images/thing-icons/notification.svg',
+      'Notification');
+    const onNotificationEffectBlockDown =
+      this.onBlockDown.bind(this, createNotificationEffectBlock);
+    neBlock.addEventListener('mousedown', onNotificationEffectBlockDown);
+    neBlock.addEventListener('touchstart', onNotificationEffectBlockDown);
     this.rulePartsList.appendChild(neBlock);
+
+    const noBlock = this.makeBlock(
+      'notifier-outlet-block',
+      '/optimized-images/thing-icons/notification.svg',
+      'Test Outlet');
+    const onNotifierOutletBlockDown =
+      this.onBlockDown.bind(
+        this,
+        createNotifierOutletBlock({}, {name: 'Test Outlet'}));
+    noBlock.addEventListener('mousedown', onNotifierOutletBlockDown);
+    noBlock.addEventListener('touchstart', onNotifierOutletBlockDown);
+    this.rulePartsList.appendChild(noBlock);
+
 
     this.gateway.readThings().then((things) => {
       for (const thing of things) {
-        const elt = this.makeDeviceBlock(thing);
+        const elt = this.makeBlock('device-block', RuleUtils.icon(thing),
+                                   thing.name);
         elt.addEventListener('mousedown',
                              this.onDeviceBlockDown.bind(this, thing));
         elt.addEventListener('touchstart',
