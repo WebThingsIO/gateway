@@ -256,7 +256,13 @@ function rulesEngineConfigure(server) {
 
 function createApp() {
   const app = express();
-  app.engine('handlebars', expressHandlebars());
+  app.engine(
+    'handlebars',
+    expressHandlebars({
+      defaultLayout: undefined, // eslint-disable-line no-undefined
+      layoutsDir: Constants.VIEWS_PATH,
+    })
+  );
   app.set('view engine', 'handlebars');
   app.set('views', Constants.VIEWS_PATH);
 
@@ -440,7 +446,8 @@ mDNSserver.getmDNSstate().then((state) => {
   }
 });
 
-module.exports = { // for testing
+// for testing
+module.exports = {
   servers,
   serverStartup,
 };

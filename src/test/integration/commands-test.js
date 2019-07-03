@@ -1,8 +1,5 @@
 'use strict';
 
-/* Tell jshint about mocha globals, and  */
-/* globals it */
-
 const nock = require('nock');
 
 const {waitForExpect} = require('../expect-utils');

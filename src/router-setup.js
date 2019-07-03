@@ -16,6 +16,8 @@ const hbs = expressHandlebars.create({
   helpers: {
     escapeQuotes: (str) => `${str}`.replace(/'/, '\\\''),
   },
+  defaultLayout: undefined, // eslint-disable-line no-undefined
+  layoutsDir: Constants.VIEWS_PATH,
 });
 
 // The express server

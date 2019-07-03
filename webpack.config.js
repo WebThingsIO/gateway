@@ -2,17 +2,16 @@
  * Wepback configuration for the node server.
  */
 
-const path = require('path');
-const fs = require('fs');
-
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {CheckerPlugin} = require('awesome-typescript-loader');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const fs = require('fs');
+const path = require('path');
 const uuid = require('uuid/v1');
+const webpack = require('webpack');
 
 const externals = {};
 fs.readdirSync('node_modules')
@@ -61,6 +60,9 @@ const webpackNode = {
 };
 
 const pluginsWeb = [
+  new CleanWebpackPlugin({
+    cleanOnceBeforeBuildPatterns: ['**/*', '!service-worker.js*'],
+  }),
   new CopyWebpackPlugin([
     {
       from: 'static/**/*',
@@ -95,7 +97,6 @@ const pluginsWeb = [
   new MiniCssExtractPlugin({
     filename: 'bundle/[hash]-[name].css',
   }),
-  new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     inject: 'head',
     template: 'static/index.html',

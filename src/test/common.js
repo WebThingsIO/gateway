@@ -6,8 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* globals expect, jest */
-
 process.env.NODE_ENV = 'test';
 
 const Database = require('../db');
