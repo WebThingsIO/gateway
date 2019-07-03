@@ -38,6 +38,7 @@ app.use(express.static(Constants.BUILD_STATIC_PATH));
 
 const RouterSetupApp = {
   onRequest: app,
+  onSetupComplete: stopSecondaryCaptivePortal,
 };
 
 /**
@@ -160,6 +161,13 @@ function handleCreating(request, response) {
         } else {
           return waitForWiFi(20, 3000).then(() => {
             DEBUG && console.log('router-setup: setup complete');
+            if (!startSecondaryCaptivePortal(config.get('wifi.ap.ipaddr'))) {
+              // if this fails, just log it and continue
+              console.error(
+                'router-setup: handleCreating:',
+                'failed to start secondary captive portal'
+              );
+            }
             RouterSetupApp.onConnection();
           });
         }
@@ -256,6 +264,27 @@ function stopCaptivePortal() {
   let result = platform.setCaptivePortalStatus(false, {restart: true});
   result &= platform.setWirelessMode(false, 'ap');
   return result;
+}
+
+/**
+ * Enable a captive portal that will redirect users to the domain setup page.
+ *
+ * @param {string} ipaddr - IP address of AP
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function startSecondaryCaptivePortal(ipaddr) {
+  console.log('router-setup: startSecondaryCaptivePortal: ipaddr:', ipaddr);
+  return platform.setCaptivePortalStatus(true, {ipaddr, restart: true});
+}
+
+/**
+ * Stop the secondary captive portal.
+ *
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function stopSecondaryCaptivePortal() {
+  console.log('router-setup: stopSecondaryCaptivePortal');
+  return platform.setCaptivePortalStatus(false, {restart: true});
 }
 
 /**
