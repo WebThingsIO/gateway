@@ -3,6 +3,7 @@
 const bodyParser = require('body-parser');
 const config = require('config');
 const Constants = require('./constants');
+const dns = require('dns');
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const mDNSserver = require('./mdns-server');
@@ -40,6 +41,8 @@ const RouterSetupApp = {
   onRequest: app,
   onSetupComplete: stopSecondaryCaptivePortal,
 };
+
+let registrationServerAddr = null, leServerAddr = null;
 
 /**
  * Handle captive portal requests.
@@ -161,13 +164,15 @@ function handleCreating(request, response) {
         } else {
           return waitForWiFi(20, 3000).then(() => {
             DEBUG && console.log('router-setup: setup complete');
-            if (!startSecondaryCaptivePortal(config.get('wifi.ap.ipaddr'))) {
-              // if this fails, just log it and continue
-              console.error(
-                'router-setup: handleCreating:',
-                'failed to start secondary captive portal'
-              );
-            }
+            return startSecondaryCaptivePortal(config.get('wifi.ap.ipaddr'));
+          }).catch((err) => {
+            // if this fails, just log it and continue
+            console.error(
+              'router-setup: handleCreating:',
+              'failed to start secondary captive portal:',
+              err
+            );
+          }).then(() => {
             RouterSetupApp.onConnection();
           });
         }
@@ -274,7 +279,65 @@ function stopCaptivePortal() {
  */
 function startSecondaryCaptivePortal(ipaddr) {
   console.log('router-setup: startSecondaryCaptivePortal: ipaddr:', ipaddr);
-  return platform.setCaptivePortalStatus(true, {ipaddr, restart: true});
+
+  return Promise.all([
+    new Promise((resolve, reject) => {
+      dns.resolve4('api.mozilla-iot.org', (err, addresses) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (addresses.length === 0) {
+          reject('No address found for api.mozilla-iot.org');
+          return;
+        }
+
+        registrationServerAddr = addresses[0];
+        resolve();
+      });
+    }),
+    new Promise((resolve, reject) => {
+      dns.resolve4('acme-v02.api.letsencrypt.org', (err, addresses) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (addresses.length === 0) {
+          reject('No address found for acme-v02.api.letsencrypt.org');
+          return;
+        }
+
+        leServerAddr = addresses[0];
+        resolve();
+      });
+    }),
+  ]).then(() => {
+    const result = platform.setCaptivePortalStatus(
+      true,
+      {
+        ipaddr,
+        restart: true,
+        manualDnsAddresses: [
+          {
+            host: 'api.mozilla-iot.org',
+            address: registrationServerAddr,
+          },
+          {
+            host: 'acme-v02.api.letsencrypt.org',
+            address: leServerAddr,
+          },
+        ],
+      }
+    );
+
+    if (result) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Failed to start captive portal');
+  });
 }
 
 /**
@@ -284,7 +347,22 @@ function startSecondaryCaptivePortal(ipaddr) {
  */
 function stopSecondaryCaptivePortal() {
   console.log('router-setup: stopSecondaryCaptivePortal');
-  return platform.setCaptivePortalStatus(false, {restart: true});
+  return platform.setCaptivePortalStatus(
+    false,
+    {
+      restart: true,
+      manualDnsAddresses: [
+        {
+          host: 'api.mozilla-iot.org',
+          address: registrationServerAddr,
+        },
+        {
+          host: 'acme-v02.api.letsencrypt.org',
+          address: leServerAddr,
+        },
+      ],
+    }
+  );
 }
 
 /**
