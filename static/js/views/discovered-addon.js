@@ -26,6 +26,7 @@ class DiscoveredAddon {
     this.homepage = metadata.homepage;
     this.license = metadata.license;
     this.version = metadata.version;
+    this.type = metadata.type || 'adapter';
     this.url = metadata.url;
     this.checksum = metadata.checksum;
     this.installed = metadata.installed;
@@ -52,7 +53,7 @@ class DiscoveredAddon {
 
     return `
       <li class="discovered-addon-item">
-        <div class="addon-settings-header">
+        <div class="addon-settings-header ${Utils.escapeHtmlForIdClass(this.type)}">
           <span class="addon-settings-name">
             ${Utils.escapeHtml(this.displayName)}
           </span>

@@ -38,6 +38,7 @@ class InstalledAddon {
     this.license =
       `/addons/${encodeURIComponent(this.name)}/license?jwt=${API.jwt}`;
     this.version = metadata.version;
+    this.type = metadata.moziot.type || 'adapter';
     this.enabled = metadata.moziot.enabled;
     this.config = metadata.moziot.config;
     this.schema = metadata.moziot.schema;
@@ -70,7 +71,7 @@ class InstalledAddon {
     return `
       <li id="addon-item-${Utils.escapeHtmlForIdClass(this.name)}"
         class="addon-item">
-        <div class="addon-settings-header">
+        <div class="addon-settings-header ${Utils.escapeHtmlForIdClass(this.type)}">
           <span class="addon-settings-name">
             ${Utils.escapeHtml(name)}
           </span>

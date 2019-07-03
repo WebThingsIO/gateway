@@ -374,6 +374,22 @@
   background-image: url('../optimized-images/add-on.svg');
 }
 
+.addon-settings-header.adapter {
+  background-image: url('../optimized-images/adapters-icon.png');
+}
+
+.addon-settings-header.notifier {
+  background-image: url('../optimized-images/thing-icons/notification.svg');
+}
+
+.addon-settings-header.extension {
+  /* TODO */
+}
+
+.addon-settings-header.service {
+  /* TODO */
+}
+
 .user-settings-name,
 .adapter-settings-name {
   display: block;
