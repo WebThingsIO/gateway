@@ -84,6 +84,9 @@ class PropertySelect {
     this.onClick = this.onClick.bind(this);
     this.elt.addEventListener('click', this.onClick);
 
+    this.onDocumentClick = this.onDocumentClick.bind(this);
+    document.body.addEventListener('click', this.onDocumentClick);
+
     this.clearOptions();
 
     // Disable dragging started by clicking property select
@@ -593,6 +596,29 @@ class PropertySelect {
       }
     }
     optionElt.classList.add('selected');
+  }
+
+  /**
+   * Close when the user clicks off of the dropdown
+   * @param {Event} e
+   */
+  onDocumentClick(e) {
+    if (!this.elt.classList.contains('open')) {
+      return;
+    }
+    let node = e.target;
+    while (node) {
+      if (node === this.elt) {
+        return;
+      }
+      node = node.parentNode;
+    }
+    this.elt.classList.remove('open');
+  }
+
+  remove() {
+    this.elt.removeEventListener('click', this.onClick);
+    document.body.removeEventListener('click', this.onDocumentClick);
   }
 }
 
