@@ -1129,7 +1129,7 @@ function getNetworkAddresses() {
   };
 
   const interfaces = os.networkInterfaces();
-  const res = uciShow(label, 'network.lan');
+  const res = uciShow(label, 'network');
   if (!res.success) {
     return res;
   }
