@@ -17,6 +17,7 @@ exports.PROPERTIES_PATH = '/properties';
 exports.NEW_THINGS_PATH = '/new_things';
 exports.ADAPTERS_PATH = '/adapters';
 exports.ADDONS_PATH = '/addons';
+exports.NOTIFIERS_PATH = '/notifiers';
 exports.ACTIONS_PATH = '/actions';
 exports.EVENTS_PATH = '/events';
 exports.LOGIN_PATH = '/login';
