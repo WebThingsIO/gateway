@@ -7,7 +7,9 @@ class NotifierOutletBlock extends RulePartBlock {
           '/optimized-images/thing-icons/notification.svg');
 
     const configureContainer = this.elt.querySelector('.rule-part-info');
-    this.dropdown = new BlockConfigureDropdown(this, configureContainer);
+    this.onConfiguration = this.onConfiguration.bind(this);
+    this.dropdown = new BlockConfigureDropdown(this, configureContainer,
+                                               this.onConfiguration);
     this.dropdown.addValue({
       id: 'title',
       title: 'Title',
@@ -25,6 +27,18 @@ class NotifierOutletBlock extends RulePartBlock {
       minimum: 0,
       maximum: 2,
     });
+  }
+
+  onConfiguration(config) {
+    this.rulePart = {effect: {
+      type: 'NotifierOutletEffect',
+      notifier: this.notifier.id,
+      outlet: this.outlet.id,
+      title: config.title,
+      message: config.message,
+      level: config.level,
+    }};
+    this.onRuleChange();
   }
 
   remove() {
