@@ -210,7 +210,7 @@ AddonsController.patch('/:addonName', async (request, response) => {
 
   try {
     await AddonManager.uninstallAddon(name, true, false);
-    await AddonManager.installAddonFromUrl(name, url, checksum, true);
+    await AddonManager.installAddonFromUrl(name, url, checksum, false);
     response.sendStatus(200);
   } catch (e) {
     console.error(`Failed to update add-on: ${name}\n${e}`);
