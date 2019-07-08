@@ -901,11 +901,6 @@ class AddonManager extends EventEmitter {
     }
 
     this.addonsLoaded = false;
-    return Promise.all(unloadPromises).then(() => {
-      if (this.pluginServer) {
-        this.pluginServer.shutdown();
-      }
-    });
 
     if (this.updateTimeout) {
       clearTimeout(this.updateTimeout);
@@ -914,6 +909,12 @@ class AddonManager extends EventEmitter {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
+
+    return Promise.all(unloadPromises).then(() => {
+      if (this.pluginServer) {
+        this.pluginServer.shutdown();
+      }
+    });
   }
 
   /**
