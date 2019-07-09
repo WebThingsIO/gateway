@@ -153,7 +153,7 @@ if (opt.argv.length != 1) {
 }
 const addonPath = opt.argv[0];
 
-loadAddon(addonPath, opt.verbose).catch((err) => {
+loadAddon(addonPath, opt.options.verbose).catch((err) => {
   console.error(err);
   process.exit(Constants.DONT_RESTART_EXIT_CODE);
 });
