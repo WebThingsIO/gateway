@@ -6,11 +6,24 @@ const Constants = require('../constants');
 
 const NotifiersController = PromiseRouter();
 
+/**
+ * Helper function to cut down on unnecessary API round trips
+ * @param {Notifier} notifier
+ * @return {Object}
+ */
+function notifierAsDictWithOutlets(notifier) {
+  const notifierDict = notifier.asDict();
+  const outlets = notifier.getOutlets();
+  notifierDict.outlets = Array.from(Object.values(outlets)).map((outlet) => {
+    return outlet.asDict();
+  });
+  return notifierDict;
+}
+
 NotifiersController.get('/', async (request, response) => {
   const notifiers = AddonManager.getNotifiers();
-  const notifierList = Array.from(notifiers.values()).map((notifier) => {
-    return notifier.asDict();
-  });
+  const notifierList = Array.from(notifiers.values())
+    .map(notifierAsDictWithOutlets);
   response.status(200).json(notifierList);
 });
 
@@ -18,7 +31,7 @@ NotifiersController.get('/:notifierId', async (request, response) => {
   const notifierId = request.params.notifierId;
   const notifier = AddonManager.getNotifier(notifierId);
   if (notifier) {
-    response.status(200).send(notifier.asDict());
+    response.status(200).send(notifierAsDictWithOutlets(notifier));
   } else {
     response.status(404).send(`Notifier "${notifierId}" not found.`);
   }
