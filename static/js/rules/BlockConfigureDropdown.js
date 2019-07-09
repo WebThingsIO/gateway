@@ -19,6 +19,8 @@ class BlockConfigureDropdown {
     this.onDocumentClick = this.onDocumentClick.bind(this);
     document.body.addEventListener('click', this.onDocumentClick);
 
+    this.valueElts = {};
+
     this.addValue({
       openButton: true,
       id: null,
@@ -45,6 +47,7 @@ class BlockConfigureDropdown {
   addValue(schema) {
     const elt = document.createElement('div');
     elt.classList.add('property-select-option');
+    elt.dataset.schema = JSON.stringify(schema);
     if (schema.openButton) {
       elt.classList.add('open-button');
     }
@@ -72,6 +75,8 @@ class BlockConfigureDropdown {
         }
 
         valueSelect.addEventListener('click', stopPropagation);
+        valueSelect.value = schema.value;
+        this.valueElts[schema.id] = valueSelect;
         elt.appendChild(valueSelect);
       } else {
         valueInput = document.createElement('input');
@@ -91,6 +96,8 @@ class BlockConfigureDropdown {
           valueInput.max = `${schema.maximum}`;
         }
         valueInput.addEventListener('click', stopPropagation);
+        valueInput.value = schema.value;
+        this.valueElts[schema.id] = valueInput;
         elt.appendChild(valueInput);
       }
 
@@ -119,12 +126,10 @@ class BlockConfigureDropdown {
         if (valueInput) {
           valueInput.value = value;
         }
-        this.block.onValueChange(schema.id, value);
       });
     } else if (schema.type === 'string') {
-      let valueInput, valueSelect;
       if (schema.hasOwnProperty('enum') && schema.enum.length > 0) {
-        valueSelect = document.createElement('select');
+        const valueSelect = document.createElement('select');
         valueSelect.classList.add('value-select');
 
         for (const choice of schema.enum) {
@@ -135,9 +140,11 @@ class BlockConfigureDropdown {
         }
 
         valueSelect.addEventListener('click', stopPropagation);
+        valueSelect.value = schema.value;
+        this.valueElts[schema.id] = valueSelect;
         elt.appendChild(valueSelect);
       } else {
-        valueInput = document.createElement('input');
+        const valueInput = document.createElement('input');
         valueInput.classList.add('value-input');
         if (schema.id === 'color') {
           valueInput.type = 'color';
@@ -145,18 +152,10 @@ class BlockConfigureDropdown {
           valueInput.type = 'text';
         }
         valueInput.addEventListener('click', stopPropagation);
+        valueInput.value = schema.value;
+        this.valueElts[schema.id] = valueInput;
         elt.appendChild(valueInput);
       }
-
-      elt.addEventListener('change', () => {
-        let value;
-        if (valueInput) {
-          value = valueInput.value;
-        } else {
-          value = valueSelect.options[valueSelect.selectedIndex].value;
-        }
-        this.block.onValueChange(name, value);
-      });
     }
 
     this.elt.appendChild(elt);
@@ -186,6 +185,33 @@ class BlockConfigureDropdown {
       node = node.parentNode;
     }
     this.elt.classList.remove('open');
+    this.onCommit();
+  }
+
+  onCommit() {
+    const values = {};
+
+    for (const key in this.valueElts) {
+      const elt = this.valueElts[key];
+      if (elt.tagName === 'SELECT') {
+        let value = elt.options[elt.selectedIndex].value;
+        const schema = JSON.parse(elt.parentNode.dataset.schema);
+        if (schema.type === 'integer') {
+          value = parseInt(value);
+        } else if (schema.type === 'number') {
+          value = parseFloat(value);
+        }
+        values[key] = value;
+      } else {
+        values[key] = elt.value;
+      }
+    }
+
+    this.block.updateValues(values);
+  }
+
+  setValue(id, value) {
+    this.valueElts[id].value = value;
   }
 
   remove() {
