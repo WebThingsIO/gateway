@@ -639,6 +639,7 @@ const RuleScreen = {
   },
 
   showNotifierOutletBlocks: async function() {
+    const notifiers = await this.gateway.readNotifiers();
     const createNotifierOutletBlock = (notifier, outlet) => {
       return () => {
         return new NotifierOutletBlock(
@@ -647,8 +648,6 @@ const RuleScreen = {
       };
     };
 
-    const res = await fetch('/notifiers', {headers: API.headers()});
-    const notifiers = await res.json();
     for (const notifier of notifiers) {
       for (const outlet of notifier.outlets) {
         const noBlock = this.makeBlock(
