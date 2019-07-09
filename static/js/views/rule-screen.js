@@ -493,7 +493,7 @@ const RuleScreen = {
     }
   },
 
-  show: function(ruleId) {
+  show: async function(ruleId) {
     document.getElementById('speech-wrapper').classList.remove('assistant');
 
     this.rule = null;
@@ -519,6 +519,96 @@ const RuleScreen = {
 
     this.rulePartsList.querySelectorAll('.rule-part').forEach(remove);
 
+    this.showSimpleBlocks();
+    await this.showNotifierOutletBlocks();
+    await this.showDeviceBlocks();
+    this.onWindowResize();
+
+    const ruleDesc = await rulePromise;
+
+    this.rule = new Rule(this.gateway, ruleDesc);
+
+    this.ruleArea.querySelectorAll('.rule-part-container').forEach(remove);
+
+    if (ruleDesc) {
+      const dragHint = document.getElementById('drag-hint');
+      const flexDir = window.getComputedStyle(dragHint).flexDirection;
+
+      const areaRect = this.ruleArea.getBoundingClientRect();
+      const rem = 10;
+      const dpbRect = {
+        width: 30 * rem,
+        height: 10 * rem,
+      };
+
+      // Create DevicePropertyBlocks from trigger and effect if applicable
+      const centerX = areaRect.width / 2 - dpbRect.width / 2;
+      const centerY = areaRect.height / 2 - dpbRect.height / 2;
+
+      if (!this.rule.trigger) {
+        this.rule.trigger = {
+          type: 'MultiTrigger',
+          op: 'AND',
+          triggers: [],
+        };
+      }
+
+      if (this.rule.trigger.type !== 'MultiTrigger') {
+        this.rule.trigger = {
+          type: 'MultiTrigger',
+          op: 'AND',
+          triggers: [
+            this.rule.trigger,
+          ],
+        };
+      }
+
+      const triggers = this.rule.trigger.triggers;
+      for (let i = 0; i < triggers.length; i++) {
+        if (flexDir === 'column') {
+          this.makeRulePartBlock('trigger', triggers[i], centerX,
+                                 areaRect.height / 4 - dpbRect.height / 2);
+        } else {
+          this.makeRulePartBlock('trigger', triggers[i],
+                                 areaRect.width / 4 - dpbRect.width / 2,
+                                 centerY);
+        }
+      }
+
+      if (!this.rule.effect) {
+        this.rule.effect = {
+          type: 'MultiEffect',
+          effects: [],
+        };
+      }
+
+      if (this.rule.effect.type !== 'MultiEffect') {
+        this.rule.effect = {
+          type: 'MultiEffect',
+          effects: [
+            this.rule.effect,
+          ],
+        };
+      }
+
+      const effects = this.rule.effect.effects;
+      for (let i = 0; i < effects.length; i++) {
+        if (flexDir === 'column') {
+          this.makeRulePartBlock('effect', effects[i], centerX,
+                                 areaRect.height * 3 / 4 - dpbRect.height /
+                                 2);
+        } else {
+          this.makeRulePartBlock('effect', effects[i],
+                                 areaRect.width * 3 / 4 - dpbRect.width / 2,
+                                 centerY);
+        }
+      }
+    }
+    this.onWindowResize();
+    this.onRuleChange();
+  },
+
+  showSimpleBlocks: function() {
     const createNotificationEffectBlock = () => {
       return new NotificationEffectBlock(
         this.ruleArea, this.onPresentationChange, this.onRuleChange);
@@ -526,13 +616,6 @@ const RuleScreen = {
     const createTimeTriggerBlock = () => {
       return new TimeTriggerBlock(
         this.ruleArea, this.onPresentationChange, this.onRuleChange);
-    };
-    const createNotifierOutletBlock = (notifier, outlet) => {
-      return () => {
-        return new NotifierOutletBlock(
-          this.ruleArea, this.onPresentationChange, this.onRuleChange,
-          notifier, outlet);
-      };
     };
 
     const ttBlock = this.makeBlock('time-trigger-block',
@@ -547,121 +630,53 @@ const RuleScreen = {
     const neBlock = this.makeBlock(
       'notification-effect-block',
       '/optimized-images/thing-icons/notification.svg',
-      'Notification');
+      'Browser Notification');
     const onNotificationEffectBlockDown =
       this.onBlockDown.bind(this, createNotificationEffectBlock);
     neBlock.addEventListener('mousedown', onNotificationEffectBlockDown);
     neBlock.addEventListener('touchstart', onNotificationEffectBlockDown);
     this.rulePartsList.appendChild(neBlock);
+  },
 
-    const noBlock = this.makeBlock(
-      'notifier-outlet-block',
-      '/optimized-images/thing-icons/notification.svg',
-      'Test Outlet');
-    const onNotifierOutletBlockDown =
-      this.onBlockDown.bind(
-        this,
-        createNotifierOutletBlock({}, {name: 'Test Outlet'}));
-    noBlock.addEventListener('mousedown', onNotifierOutletBlockDown);
-    noBlock.addEventListener('touchstart', onNotifierOutletBlockDown);
-    this.rulePartsList.appendChild(noBlock);
+  showNotifierOutletBlocks: async function() {
+    const createNotifierOutletBlock = (notifier, outlet) => {
+      return () => {
+        return new NotifierOutletBlock(
+          this.ruleArea, this.onPresentationChange, this.onRuleChange,
+          notifier, outlet);
+      };
+    };
 
-
-    this.gateway.readThings().then((things) => {
-      for (const thing of things) {
-        const elt = this.makeBlock('device-block', RuleUtils.icon(thing),
-                                   thing.name);
-        elt.addEventListener('mousedown',
-                             this.onDeviceBlockDown.bind(this, thing));
-        elt.addEventListener('touchstart',
-                             this.onDeviceBlockDown.bind(this, thing));
-        this.rulePartsList.appendChild(elt);
+    const res = await fetch('/notifiers', {headers: API.headers()});
+    const notifiers = await res.json();
+    for (const notifier of notifiers) {
+      for (const outlet of notifier.outlets) {
+        const noBlock = this.makeBlock(
+          'notifier-outlet-block',
+          '/optimized-images/thing-icons/notification.svg',
+          outlet.name);
+        const onNotifierOutletBlockDown =
+          this.onBlockDown.bind(
+            this,
+            createNotifierOutletBlock(notifier, outlet));
+        noBlock.addEventListener('mousedown', onNotifierOutletBlockDown);
+        noBlock.addEventListener('touchstart', onNotifierOutletBlockDown);
+        this.rulePartsList.appendChild(noBlock);
       }
-      this.onWindowResize();
-    }).then(() => {
-      return rulePromise;
-    }).then((ruleDesc) => {
-      this.rule = new Rule(this.gateway, ruleDesc);
+    }
+  },
 
-      this.ruleArea.querySelectorAll('.rule-part-container').forEach(remove);
-
-      if (ruleDesc) {
-        const dragHint = document.getElementById('drag-hint');
-        const flexDir = window.getComputedStyle(dragHint).flexDirection;
-
-        const areaRect = this.ruleArea.getBoundingClientRect();
-        const rem = 10;
-        const dpbRect = {
-          width: 30 * rem,
-          height: 10 * rem,
-        };
-
-        // Create DevicePropertyBlocks from trigger and effect if applicable
-        const centerX = areaRect.width / 2 - dpbRect.width / 2;
-        const centerY = areaRect.height / 2 - dpbRect.height / 2;
-
-        if (!this.rule.trigger) {
-          this.rule.trigger = {
-            type: 'MultiTrigger',
-            op: 'AND',
-            triggers: [],
-          };
-        }
-
-        if (this.rule.trigger.type !== 'MultiTrigger') {
-          this.rule.trigger = {
-            type: 'MultiTrigger',
-            op: 'AND',
-            triggers: [
-              this.rule.trigger,
-            ],
-          };
-        }
-
-        const triggers = this.rule.trigger.triggers;
-        for (let i = 0; i < triggers.length; i++) {
-          if (flexDir === 'column') {
-            this.makeRulePartBlock('trigger', triggers[i], centerX,
-                                   areaRect.height / 4 - dpbRect.height / 2);
-          } else {
-            this.makeRulePartBlock('trigger', triggers[i],
-                                   areaRect.width / 4 - dpbRect.width / 2,
-                                   centerY);
-          }
-        }
-
-        if (!this.rule.effect) {
-          this.rule.effect = {
-            type: 'MultiEffect',
-            effects: [],
-          };
-        }
-
-        if (this.rule.effect.type !== 'MultiEffect') {
-          this.rule.effect = {
-            type: 'MultiEffect',
-            effects: [
-              this.rule.effect,
-            ],
-          };
-        }
-
-        const effects = this.rule.effect.effects;
-        for (let i = 0; i < effects.length; i++) {
-          if (flexDir === 'column') {
-            this.makeRulePartBlock('effect', effects[i], centerX,
-                                   areaRect.height * 3 / 4 - dpbRect.height /
-                                   2);
-          } else {
-            this.makeRulePartBlock('effect', effects[i],
-                                   areaRect.width * 3 / 4 - dpbRect.width / 2,
-                                   centerY);
-          }
-        }
-      }
-      this.onWindowResize();
-      this.onRuleChange();
-    });
+  showDeviceBlocks: async function() {
+    const things = await this.gateway.readThings();
+    for (const thing of things) {
+      const elt = this.makeBlock('device-block', RuleUtils.icon(thing),
+                                 thing.name);
+      elt.addEventListener('mousedown',
+                           this.onDeviceBlockDown.bind(this, thing));
+      elt.addEventListener('touchstart',
+                           this.onDeviceBlockDown.bind(this, thing));
+      this.rulePartsList.appendChild(elt);
+    }
   },
 
   onWindowResize: function() {
