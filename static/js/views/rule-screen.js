@@ -216,6 +216,30 @@ const RuleScreen = {
       block = new NotificationEffectBlock(this.ruleArea,
                                           this.onPresentationChange,
                                           this.onRuleChange);
+    } else if (part.type === 'NotifierOutletEffect') {
+      const notifier = this.gateway.notifiers
+        .filter((notifier) => notifier.id === part.notifier)[0];
+      if (!notifier) {
+        return;
+      }
+      const outlet = notifier.outlets
+        .filter((outlet) => outlet.id === part.outlet)[0];
+      if (!outlet) {
+        return;
+      }
+
+      block = new NotifierOutletBlock(
+        this.ruleArea,
+        this.onPresentationChange,
+        this.onRuleChange,
+        notifier,
+        outlet,
+        {
+          title: part.title,
+          message: part.message,
+          level: part.level,
+        },
+      );
     } else {
       const thing = RuleUtils.thingFromPart(this.gateway, part);
       if (!thing) {
