@@ -197,6 +197,10 @@ const Utils = {
       case 'milliseconds':
         return 'ms';
 
+      case 'foot':
+      case 'feet':
+        return 'ft';
+
       default:
         return unit;
     }
