@@ -284,7 +284,6 @@ const RuleScreen = {
     }).filter(isValidSelection);
 
     if (triggerBlocks.length === 0 || effectBlocks.length === 0) {
-      console.log('WHY', triggerBlocks, effectBlocks);
       return;
     }
 
