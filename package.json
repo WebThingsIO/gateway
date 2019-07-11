@@ -30,7 +30,7 @@
   },
   "homepage": "https://iot.mozilla.org",
   "dependencies": {
-    "ajv": "^6.10.0",
+    "ajv": "^6.10.1",
     "archiver": "^3.0.0",
     "asn1.js": "^5.2.0",
     "bcryptjs": "^2.4.3",
@@ -70,19 +70,19 @@
     "web-push": "^3.3.5",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0",
-    "ws": "^7.0.1"
+    "ws": "^7.1.0"
   },
   "optionalDependencies": {
     "ursa": "^0.9.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-env": "^7.5.4",
     "@types/asn1js": "^0.0.1",
     "@types/express": "^4.17.0",
-    "@types/node": "^12.0.10",
+    "@types/node": "^12.6.2",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "awesome-typescript-loader": "^5.2.1",
     "babel-eslint": "^10.0.2",
@@ -105,7 +105,7 @@
     "jest": "^24.8.0",
     "jsdom": "^15.1.1",
     "jsonfile": "^5.0.0",
-    "jszip": "^3.2.1",
+    "jszip": "^3.2.2",
     "mini-css-extract-plugin": "^0.7.0",
     "mobile-drag-drop": "^2.3.0-rc.1",
     "nock": "^10.0.6",
@@ -115,16 +115,16 @@
     "pngjs": "^3.4.0",
     "raw-loader": "^1.0.0",
     "selenium-standalone": "^6.16.0",
-    "shaka-player": "^2.5.2",
+    "shaka-player": "^2.5.3",
     "simple-oauth2": "^2.2.1",
     "sinon": "^7.3.2",
     "speaktome-api": "^0.2.1",
     "style-loader": "^0.23.1",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.2",
+    "typescript": "^3.5.3",
     "url-loader": "^2.0.1",
-    "webdriverio": "^5.10.9",
-    "webpack": "^4.35.2",
+    "webdriverio": "^5.11.2",
+    "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"
   },
   "jest": {
