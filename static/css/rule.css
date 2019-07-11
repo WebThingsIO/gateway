@@ -277,7 +277,7 @@
 
 .property-select-option input[type="text"],
 .message-input-container input[type="text"] {
-  width: 8rem;
+  width: 7rem;
 }
 
 .property-select-option input[type="number"],
@@ -289,6 +289,11 @@
   border-radius: 0;
   border-bottom: 1px solid white;
   font-size: 1.6rem;
+}
+
+.property-select-option select {
+  width: auto;
+  flex: 1;
 }
 
 .property-select-option input[type="number"] {
