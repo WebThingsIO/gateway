@@ -17,6 +17,34 @@ const parse = require('csv-parse/lib/sync');
 const DEBUG = false;
 
 /**
+ * Parses a text file looking for key/value pairs.
+ *
+ * @param {string} filename - name of the file to read
+ * @param {string} key - key value to look for
+ * @returns {string} - value that was looked up, or undefined
+ */
+function readValueFromFile(filename, key) {
+  const data = fs.readFileSync(filename, 'utf8');
+  const lines = data.split(/\n/);
+  for (const line of lines) {
+    const fields = line.split('=');
+    if (fields.length == 2 && fields[0] == key) {
+      let val = fields[1];
+      if (val.length >= 2 && val[0] == '\'' && val[val.length - 1] == '\'') {
+        // The /etc/openwrt_release file uses single quotes around all of
+        // the values, so we strip those off. None of the values we expect
+        // to be parsed should have embedded quotes, so we don't bother
+        // trying to unescape.
+        val = val.substring(1, val.length - 1);
+      }
+      return val;
+    }
+  }
+}
+
+const DISTRIB_ARCH = readValueFromFile('/etc/openwrt_release', 'DISTRIB_ARCH');
+
+/**
  * Spawns a process, and captures the output.
  *
  * @param {string} label - label to use for debug messages
@@ -300,7 +328,10 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
  */
 
 function getPlatformArchitecture(defaultArchitecture) {
-  return `openwrt-${defaultArchitecture}`;
+  if (DISTRIB_ARCH) {
+    return `openwrt-linux-${DISTRIB_ARCH}`;
+  }
+  return `openwrt-unknown-${defaultArchitecture}`;
 }
 
 /**
