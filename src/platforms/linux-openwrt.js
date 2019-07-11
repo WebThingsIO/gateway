@@ -331,7 +331,7 @@ function getPlatformArchitecture(defaultArchitecture) {
   if (DISTRIB_ARCH) {
     return `openwrt-linux-${DISTRIB_ARCH}`;
   }
-  return `openwrt-unknown-${defaultArchitecture}`;
+  return `openwrt-linux-unknown`;
 }
 
 /**
