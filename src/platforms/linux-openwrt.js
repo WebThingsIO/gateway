@@ -327,7 +327,7 @@ function isRedirectedTcpPort(ipaddr, fromPort, toPort) {
  * @returns {string} Architecture to use.
  */
 
-function getPlatformArchitecture(defaultArchitecture) {
+function getPlatformArchitecture(_defaultArchitecture) {
   if (DISTRIB_ARCH) {
     return `openwrt-linux-${DISTRIB_ARCH}`;
   }
