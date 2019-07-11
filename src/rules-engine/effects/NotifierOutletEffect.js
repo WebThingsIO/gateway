@@ -68,7 +68,9 @@ class NotifierOutletEffect extends Effect {
       return;
     }
 
-    outlet.notify(this.title, this.message, this.level);
+    outlet.notify(this.title, this.message, this.level).catch((e) => {
+      console.warn(`Outlet "${this.outlet}" of notifier "${this.notifier}" unable to notify`, e);
+    });
   }
 }
 
