@@ -1,6 +1,6 @@
 {
   "name": "webthings-gateway",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Web of Things gateway",
   "main": "src/app.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "body-parser": "^1.19.0",
     "callsites": "^3.1.0",
     "compression": "^1.7.4",
-    "config": "^3.1.0",
+    "config": "^3.2.0",
     "csv-parse": "^4.4.3",
     "dnssd": "^0.4.1",
     "express": "^4.17.1",
@@ -46,7 +46,7 @@
     "express-handlebars": "^3.1.0",
     "express-promise-router": "^3.0.3",
     "express-ws": "^4.0.0",
-    "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
+    "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node#v0.9.0",
     "greenlock": "^2.8.2",
     "http-proxy": "^1.17.0",
     "ip-regex": "^4.1.0",
@@ -69,7 +69,7 @@
     "uuid": "^3.3.2",
     "web-push": "^3.3.5",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^3.9.0",
+    "winston-daily-rotate-file": "^3.10.0",
     "ws": "^7.1.0"
   },
   "optionalDependencies": {
