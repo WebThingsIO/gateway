@@ -397,7 +397,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForOffThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -413,7 +413,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
@@ -423,8 +423,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
 
        // We have to wait connecting websocket.
@@ -497,7 +497,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForOffThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -513,7 +513,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'rgb', '#6789ab');
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#6789ab');
        });
@@ -523,8 +523,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
 
        // We have to wait connecting websocket.
@@ -585,7 +585,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForOffThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -601,7 +601,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'brightness', 50);
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
@@ -609,7 +609,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'rgb', '#56789a');
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingColorDisplayed();
          expect(level).toEqual('#56789a');
        });
@@ -619,8 +619,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
 
        // We have to wait connecting websocket.
@@ -695,7 +695,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForOffThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -711,7 +711,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
@@ -721,8 +721,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
        await saveStepScreen();
 
@@ -826,7 +826,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForOffThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -842,7 +842,7 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'energyPower', 50);
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingPowerDisplayed();
          expect(level).toEqual('50 W');
        });
@@ -852,8 +852,8 @@ describe('Thing', () => {
        await thingsPage.waitForOffThings();
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
 
        // Thing Detail View
@@ -1018,7 +1018,7 @@ describe('Thing', () => {
        await thingsPage.open();
 
        await thingsPage.waitForThings();
-       let things = await thingsPage.things();
+       const things = await thingsPage.things();
        expect(things.length).toEqual(1);
        const thingTitle = await things[0].thingTitle();
        expect(thingTitle).toEqual(desc.title);
@@ -1026,14 +1026,14 @@ describe('Thing', () => {
 
        await setProperty(desc.id, 'percent', 50);
        await waitForExpect(async () => {
-         things = await thingsPage.things();
+         const things = await thingsPage.things();
          const level = await things[0].thingLevelDisplayed();
          expect(level).toEqual('50%');
        });
        await saveStepScreen();
 
-       things = await thingsPage.things();
-       const detailPage = await things[0].openDetailPage();
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
        expect(detailPage).toBeTruthy();
        await saveStepScreen();
      });
