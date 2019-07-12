@@ -12,6 +12,7 @@ const API = require('../api');
 class Gateway {
   constructor() {
     this.things = null;
+    this.notifiers = null;
   }
 
   /**
@@ -27,6 +28,12 @@ class Gateway {
       this.things = things.sort((a, b) => a.layoutIndex - b.layoutIndex);
       return things;
     });
+  }
+
+  async readNotifiers() {
+    const res = await fetch('/notifiers', {headers: API.headers()});
+    this.notifiers = await res.json();
+    return this.notifiers;
   }
 }
 

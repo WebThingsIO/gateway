@@ -44,6 +44,11 @@ class DevicePropertyBlock extends RulePartBlock {
     this.propertySelect.updateOptionsForRole(this.role);
     this.propertySelect.selectByRuleFragment(rulePart);
   }
+
+  remove() {
+    super.remove();
+    this.propertySelect.remove();
+  }
 }
 
 module.exports = DevicePropertyBlock;

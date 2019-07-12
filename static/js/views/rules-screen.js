@@ -68,7 +68,10 @@ const RulesScreen = {
   show: function() {
     document.getElementById('speech-wrapper').classList.remove('assistant');
 
-    this.gateway.readThings().then(() => {
+    Promise.all([
+      this.gateway.readThings(),
+      this.gateway.readNotifiers(),
+    ]).then(() => {
       return this.readRules();
     });
   },

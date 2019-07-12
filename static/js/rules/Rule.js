@@ -241,7 +241,20 @@ class Rule {
     }
 
     if (effect.type === 'NotificationEffect') {
-      return `notify with message "${effect.message}"`;
+      return `send a browser notification`;
+    }
+    if (effect.type === 'NotifierOutletEffect') {
+      const notifier = this.gateway.notifiers
+        .filter((notifier) => notifier.id === effect.notifier)[0];
+      if (!notifier) {
+        return null;
+      }
+      const outlet = notifier.outlets
+        .filter((outlet) => outlet.id === effect.outlet)[0];
+      if (!outlet) {
+        return null;
+      }
+      return `send a notification through ${outlet.name}`;
     }
     if (effect.type === 'ActionEffect') {
       const effectThing = this.gateway.things.filter(
