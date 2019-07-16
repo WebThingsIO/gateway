@@ -201,7 +201,7 @@ class LogsScreen {
     this.things = things;
     things.forEach((description, thingId) => {
       const opt = document.createElement('option');
-      opt.innerText = description.name;
+      opt.innerText = description.title;
       opt.value = thingId;
       this.createLogDevice.appendChild(opt);
     });

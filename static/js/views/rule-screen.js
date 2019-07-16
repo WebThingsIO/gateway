@@ -692,7 +692,7 @@ const RuleScreen = {
     const things = await this.gateway.readThings();
     for (const thing of things) {
       const elt = this.makeBlock('device-block', RuleUtils.icon(thing),
-                                 thing.name);
+                                 thing.title);
       elt.addEventListener('mousedown',
                            this.onDeviceBlockDown.bind(this, thing));
       elt.addEventListener('touchstart',
