@@ -33,10 +33,13 @@ class LevelDetail {
       this.max = 100;
     }
 
-    this.precision = null;
+    this.precision = 0;
     if (property.hasOwnProperty('multipleOf')) {
       this.step = property.multipleOf;
-      this.precision = `${property.multipleOf}`.split('.')[1].length;
+
+      if (`${property.multipleOf}`.includes('.')) {
+        this.precision = `${property.multipleOf}`.split('.')[1].length;
+      }
     } else if (property.type === 'number') {
       this.step = 'any';
     } else {
@@ -55,13 +58,12 @@ class LevelDetail {
   view() {
     const unit = this.unit || '';
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
-    const precision =
-    this.precision !== null ? `data-precision="${this.precision}"` : '';
 
     return `
       <webthing-level-property data-name="${Utils.escapeHtml(this.label)}"
         data-unit="${unit}" min="${this.min}" max="${this.max}"
-        step="${this.step}" id="${this.id}" ${readOnly} ${precision}>
+        step="${this.step}" id="${this.id}" ${readOnly}
+        data-precision="${this.precision}">
       </webthing-level-property>`;
   }
 
