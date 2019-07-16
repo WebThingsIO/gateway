@@ -664,7 +664,7 @@ function scanWirelessNetworks() {
     .filter((l) => l.startsWith(' '))
     .map((l) => l.trim());
 
-  const cells = [];
+  const cells = new Map();
   let cell = {};
 
   for (const line of lines) {
@@ -683,7 +683,15 @@ function scanWirelessNetworks() {
           cell.connected = false;
         }
 
-        cells.push(cell);
+        // If there are two networks with the same SSID, but one is encrypted
+        // and the other is not, we need to keep both.
+        const key = `${cell.ssid}-${cell.encryption}`;
+        if (cells.has(key)) {
+          const stored = cells.get(key);
+          stored.quality = Math.max(stored.quality, cell.quality);
+        } else {
+          cells.set(key, cell);
+        }
       }
 
       cell = {};
@@ -702,7 +710,7 @@ function scanWirelessNetworks() {
     }
   }
 
-  return cells.sort((a, b) => b.quality - a.quality);
+  return Array.from(cells.values()).sort((a, b) => b.quality - a.quality);
 }
 
 /**
