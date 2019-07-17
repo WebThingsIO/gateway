@@ -676,7 +676,7 @@ const RuleScreen = {
         const noBlock = this.makeBlock(
           'notifier-outlet-block',
           '/optimized-images/thing-icons/notification.svg',
-          outlet.name);
+          `${outlet.name} Notification`);
         const onNotifierOutletBlockDown =
           this.onBlockDown.bind(
             this,

@@ -4,7 +4,8 @@ const BlockConfigureDropdown = require('./BlockConfigureDropdown');
 class NotifierOutletBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate, notifier, outlet,
               values) {
-    super(ruleArea, onPresentationChange, onRuleUpdate, outlet.name,
+    super(ruleArea, onPresentationChange, onRuleUpdate,
+          `${outlet.name} Notification`,
           '/optimized-images/thing-icons/notification.svg');
 
     this.notifier = notifier;
