@@ -1302,7 +1302,7 @@ class AddonManager extends EventEmitter {
    * @returns A promise which is resolved when updating is complete.
    */
   async updateAddons() {
-    const url = config.get('addonManager.listUrl');
+    const urls = config.get('addonManager.listUrls');
     const api = config.get('addonManager.api');
     const architecture = Platform.getArchitecture();
     const version = pkg.version;
@@ -1324,15 +1324,29 @@ class AddonManager extends EventEmitter {
         params.set('python', pythonVersions.join(','));
       }
 
-      const response = await fetch(`${url}?${params.toString()}`, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': `mozilla-iot-gateway/${version}`,
-        },
-      });
-      const list = await response.json();
+      const map = new Map();
 
-      for (const addon of list) {
+      for (const url of urls) {
+        const response = await fetch(`${url}?${params.toString()}`, {
+          headers: {
+            Accept: 'application/json',
+            'User-Agent': `mozilla-iot-gateway/${version}`,
+          },
+        });
+
+        const addons = await response.json();
+        for (const addon of addons) {
+          // Check for duplicates, keep newest.
+          if (map.has(addon.name) &&
+              semver.gte(map.get(addon.name).version, addon.version)) {
+            continue;
+          }
+
+          map.set(addon.name, addon);
+        }
+      }
+
+      for (const addon of map.values()) {
         available[addon.name] = {
           version: addon.version,
           url: addon.url,

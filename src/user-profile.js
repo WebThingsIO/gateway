@@ -229,6 +229,31 @@ const Profile = {
       fs.unlinkSync(oldLocalConfigPath);
     }
 
+    // Handle any config migrations
+    if (fs.existsSync(userConfigPath)) {
+      const cfg = JSON.parse(fs.readFileSync(userConfigPath));
+      let changed = false;
+
+      // addonManager.listUrl -> addonManager.listUrls
+      if (cfg.hasOwnProperty('addonManager') &&
+          cfg.addonManager.hasOwnProperty('listUrl')) {
+        if (cfg.addonManager.hasOwnProperty('listUrls')) {
+          cfg.addonManager.listUrls.push(cfg.addonManager.listUrl);
+          cfg.addonManager.listUrls =
+            Array.from(new Set(cfg.addonManager.listUrls));
+        } else {
+          cfg.addonManager.listUrls = [cfg.addonManager.listUrl];
+        }
+
+        delete cfg.addonManager.listUrl;
+        changed = true;
+      }
+
+      if (changed) {
+        fs.writeFileSync(userConfigPath, JSON.stringify(cfg, null, 2));
+      }
+    }
+
     const localConfig = config.util.parseFile(userConfigPath);
     if (localConfig) {
       config.util.extendDeep(config, localConfig);

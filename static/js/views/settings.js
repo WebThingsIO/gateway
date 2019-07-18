@@ -1453,7 +1453,7 @@ const SettingsScreen = {
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      if (!data || !data.url || !data.api || !data.architecture ||
+      if (!data || !data.urls || !data.api || !data.architecture ||
           !data.version || !data.nodeVersion) {
         return;
       }
@@ -1472,32 +1472,55 @@ const SettingsScreen = {
         params.set('test', '1');
       }
 
-      return fetch(`${data.url}?${params.toString()}`, {
-        method: 'GET',
-        cache: 'reload',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-    }).then((resp) => {
-      return resp.json();
-    }).then((body) => {
+      const promises = [];
+
+      for (const url of data.urls) {
+        promises.push(fetch(`${url}?${params.toString()}`, {
+          method: 'GET',
+          cache: 'reload',
+          headers: {
+            Accept: 'application/json',
+          },
+        }));
+      }
+
+      return Promise.all(promises);
+    }).then((responses) => {
+      const promises = [];
+
+      for (const resp of responses) {
+        promises.push(resp.json());
+      }
+
+      return Promise.all(promises);
+    }).then((bodies) => {
       this.availableAddons.clear();
-      for (const addon of body) {
-        const entry = {
-          name: addon.name,
-          displayName: addon.display_name,
-          description: addon.description,
-          author: addon.author,
-          homepage: addon.homepage,
-          license: addon.license,
-          version: addon.version,
-          url: addon.url,
-          checksum: addon.checksum,
-          type: addon.type,
-          installed: this.installedAddons.has(addon.name),
-        };
-        this.availableAddons.set(addon.name, entry);
+
+      for (const body of bodies) {
+        for (const addon of body) {
+          const entry = {
+            name: addon.name,
+            displayName: addon.display_name,
+            description: addon.description,
+            author: addon.author,
+            homepage: addon.homepage,
+            license: addon.license,
+            version: addon.version,
+            url: addon.url,
+            checksum: addon.checksum,
+            type: addon.type,
+            installed: this.installedAddons.has(addon.name),
+          };
+
+          // Check for duplicates, keep newest.
+          if (this.availableAddons.has(addon.name) &&
+              this.compareSemver(this.availableAddons.get(addon.name).version,
+                                 entry.version) >= 0) {
+            continue;
+          }
+
+          this.availableAddons.set(addon.name, entry);
+        }
       }
     });
 
