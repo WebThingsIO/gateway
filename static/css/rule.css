@@ -282,7 +282,7 @@
 
 .property-select-option input[type="number"],
 .property-select-option select {
-  width: 3rem;
+  width: 4rem;
   background: #4a4a4a;
   color: white;
   border: 0;
