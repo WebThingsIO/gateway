@@ -51,7 +51,7 @@ addonParams.set('python', Platform.getPythonVersions().join(','));
 addonParams.set('test', config.get('addonManager.testAddons') ? '1' : '0');
 
 const addonUrl =
-  `${config.get('addonManager.listUrl')}?${addonParams.toString()}`;
+  `${config.get('addonManager.listUrls')[0]}?${addonParams.toString()}`;
 
 function copyManifest(manifest) {
   // This essentially does a deep copy.
