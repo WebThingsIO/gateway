@@ -268,7 +268,7 @@ async function handleGet(payload, thing, properties, response) {
     return;
   }
   response.status(400).json({
-    message: `I don't feel like dealing with thing ${payload.thing} property ${payload.value} today`,
+    message: `Sorry, that thing's property ${payload.value} is currently unsupported`,
   });
 }
 
