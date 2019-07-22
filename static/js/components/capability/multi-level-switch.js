@@ -89,6 +89,7 @@ class MultiLevelSwitchCapability extends BaseComponent {
     this._on = false;
     this._level = 0;
     this._precision = 0;
+    this._unit = '';
     this._onClick = this.__onClick.bind(this);
   }
 
