@@ -125,6 +125,10 @@ const Utils = {
     };
   },
   unitNameToAbbreviation: (unit) => {
+    if (!unit) {
+      return '';
+    }
+
     switch (unit.toLowerCase()) {
       case 'volt':
       case 'volts':
