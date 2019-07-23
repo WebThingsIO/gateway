@@ -56,6 +56,7 @@ exports.CANCEL_PAIRING = 'cancelPairing';
 exports.CANCEL_REMOVE_THING = 'cancelRemoveThing';
 exports.CLEAR_MOCK_ADAPTER_STATE = 'clearMockAdapterState';
 exports.CONNECTED = 'connected';
+exports.REMOVED = 'removed';
 exports.DEBUG_CMD = 'debugCmd';
 exports.EVENT = 'event';
 exports.ERROR = 'error';

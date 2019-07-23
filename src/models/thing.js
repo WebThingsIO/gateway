@@ -15,7 +15,6 @@ const Database = require('../db.js');
 const EventEmitter = require('events');
 const Router = require('../router');
 const UserProfile = require('../user-profile');
-const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');
@@ -85,7 +84,6 @@ class Thing {
     this.floorplanY = description.floorplanY;
     this.layoutIndex = description.layoutIndex;
     this.selectedCapability = description.selectedCapability;
-    this.websockets = [];
     this.links = [
       {
         rel: 'properties',
@@ -364,6 +362,23 @@ class Thing {
   }
 
   /**
+   * Add a subscription to the Thing's removed state
+   * @param {Function} callback
+   */
+  addRemovedSubscription(callback) {
+    this.emitter.on(Constants.REMOVED, callback);
+  }
+
+  /**
+   * Remove a subscription to the Thing's removed state
+   * @param {Function} callback
+   */
+  removeRemovedSubscription(callback) {
+    this.emitter.removeListener(Constants.REMOVED, callback);
+  }
+
+
+  /**
    * Get a JSON Thing Description for this Thing.
    *
    * @param {String} reqHost request host, if coming via HTTP
@@ -418,10 +433,6 @@ class Thing {
     return desc;
   }
 
-  registerWebsocket(ws) {
-    this.websockets.push(ws);
-  }
-
   /**
    * Remove and clean up the Thing
    */
@@ -437,12 +448,7 @@ class Thing {
       this.iconHref = null;
     }
 
-    this.websockets.forEach((ws) => {
-      if (ws.readyState === WebSocket.OPEN ||
-          ws.readyState === WebSocket.CONNECTING) {
-        ws.close();
-      }
-    });
+    this.emitter.emit(Constants.REMOVED, true);
   }
 
   /**
