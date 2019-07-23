@@ -40,6 +40,7 @@ const mDNSserver = require('./mdns-server');
 const Logs = require('./models/logs');
 const platform = require('./platform');
 const Router = require('./router');
+const sleep = require('./sleep');
 const TunnelService = require('./ssltunnel');
 const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
@@ -116,8 +117,8 @@ function startHttpsGateway() {
         gracefulExit();
         process.exit(0);
       }
-      setTimeout(startHttpsGateway, 4000);
-      return;
+
+      return sleep(4000).then(startHttpsGateway);
     }
   }
 

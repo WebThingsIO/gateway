@@ -30,6 +30,8 @@ run_app() {
 
   if [ ! is_docker_container ]; then
     sudo /sbin/ldconfig
+
+    (sudo timedatectl set-local-rtc 0 && sudo timedatectl set-ntp 1) || true
   ### removed temporarily to fix docker containers ###
   # else
   #   /sbin/ldconfig
