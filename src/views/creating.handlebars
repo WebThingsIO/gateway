@@ -97,12 +97,13 @@
     <div id="maindiv">
       <h1 id="title">Creating Wi-Fi network...</h1>
       <h3 id="content">
-        Please connect to {{ap_ssid}} with the password you just created.
+        Please connect to {{ap_ssid}} with the password you just created, then
+        navigate to
+        <a class="gateway-link" href="http://{{domain}}.local" target="_blank" rel="noopener">{{domain}}.local</a>
+        or
+        <a class="gateway-link" href="http://{{ap_ip}}" target="_blank" rel="noopener">{{ap_ip}}</a>
+        in your web browser.
       </h3>
-      <div id="warning">
-        Note: If setup doesn't continue automatically, navigate to
-        {{domain}}.local or {{ap_ip}} in your web browser.
-      </div>
     </div>
   </body>
 </html>
