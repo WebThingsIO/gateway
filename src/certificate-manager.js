@@ -203,6 +203,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     }
 
     callback(e);
+    return;
   }
 
   callback();
