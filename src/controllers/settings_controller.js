@@ -19,7 +19,6 @@ const mDNSserver = require('../mdns-server');
 const Platform = require('../platform');
 const pkg = require('../../package.json');
 const PromiseRouter = require('express-promise-router');
-const {RouterSetupApp} = require('../router-setup');
 const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
 
@@ -136,11 +135,6 @@ SettingsController.post('/subscribe', async (request, response) => {
 SettingsController.post('/skiptunnel', async (request, response) => {
   try {
     await Settings.set('notunnel', true);
-
-    if (Platform.getOS() === 'linux-openwrt') {
-      RouterSetupApp.onSetupComplete();
-    }
-
     response.status(200).end();
   } catch (e) {
     console.error('Failed to set notunnel setting.');
