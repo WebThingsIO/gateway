@@ -386,7 +386,10 @@ ThingsController.delete('/:thingId', (request, response) => {
 /**
  * Connect to receive messages from a Thing
  */
-ThingsController.ws('/:thingId/', (websocket, request) => {
+ThingsController.ws('/:thingId/', websocketHandler);
+ThingsController.ws('/', websocketHandler);
+
+function websocketHandler(websocket, request) {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
   if (websocket.readyState !== WebSocket.OPEN) {
@@ -404,10 +407,11 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
   }
 
   function onPropertyChanged(property) {
-    if (property.device.id !== thingId) {
+    if (typeof thingId !== 'undefined' && property.device.id !== thingId) {
       return;
     }
     sendMessage(JSON.stringify({
+      id: property.device.id,
       messageType: Constants.PROPERTY_STATUS,
       data: {
         [property.name]: property.value,
@@ -417,6 +421,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
 
   function onActionStatus(action) {
     sendMessage(JSON.stringify({
+      id: action.thingId,
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
@@ -429,6 +434,7 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
       return;
     }
     sendMessage(JSON.stringify({
+      id: event.thingId,
       messageType: Constants.EVENT,
       data: {
         [event.name]: event.getDescription(),
@@ -436,33 +442,51 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
     }));
   }
 
-  function onConnected(connected) {
+  function onConnected(id, connected) {
     sendMessage(JSON.stringify({
+      id,
       messageType: Constants.CONNECTED,
       data: connected,
     }));
   }
 
-  Things.getThing(thingId).then((thing) => {
-    thing.registerWebsocket(websocket);
+  function addThing(thing) {
     thing.addEventSubscription(onEvent);
-    thing.addConnectedSubscription(onConnected);
+    const onConn = onConnected.bind(this, thing.id);
+    thing.addConnectedSubscription(onConn);
 
-    websocket.on('close', () => {
+    const onRem = () => {
       thing.removeEventSubscription(onEvent);
-      thing.removeConnectedSubscription(onConnected);
+      thing.removeConnectedSubscription(onConn);
+      if (typeof thingId !== 'undefined' &&
+          (websocket.readyState === WebSocket.OPEN ||
+           websocket.readyState === WebSocket.CONNECTING)) {
+        websocket.close();
+      }
+    };
+    websocket.on('close', onRem);
+    thing.addRemovedSubscription(onRem);
+  }
+
+  if (typeof thingId !== 'undefined') {
+    Things.getThing(thingId).then((thing) => {
+      addThing(thing);
+    }).catch(() => {
+      console.error('WebSocket opened on nonexistent thing', thingId);
+      sendMessage(JSON.stringify({
+        messageType: Constants.ERROR,
+        data: {
+          status: '404 Not Found',
+          message: `Thing ${thingId} not found`,
+        },
+      }));
+      websocket.close();
     });
-  }).catch(() => {
-    console.error('WebSocket opened on nonexistent thing', thingId);
-    sendMessage(JSON.stringify({
-      messageType: Constants.ERROR,
-      data: {
-        status: '404 Not Found',
-        message: `Thing ${thingId} not found`,
-      },
-    }));
-    websocket.close();
-  });
+  } else {
+    Things.getThings().then((things) => {
+      things.forEach(addThing);
+    });
+  }
 
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
   Actions.on(Constants.ACTION_STATUS, onActionStatus);
@@ -500,13 +524,26 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
       return;
     }
 
-    const device = AddonManager.getDevice(thingId);
+    const id = request.id || thingId;
+    if (typeof id === 'undefined') {
+      sendMessage(JSON.stringify({
+        messageType: Constants.ERROR,
+        data: {
+          status: '400 Bad Request',
+          message: 'Missing thing id',
+          request,
+        },
+      }));
+      return;
+    }
+
+    const device = AddonManager.getDevice(id);
     if (!device) {
       sendMessage(JSON.stringify({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
-          message: `Thing ${thingId} not found`,
+          message: `Thing ${id} not found`,
           request,
         },
       }));
@@ -576,6 +613,6 @@ ThingsController.ws('/:thingId/', (websocket, request) => {
       }
     }
   });
-});
+}
 
 module.exports = ThingsController;
