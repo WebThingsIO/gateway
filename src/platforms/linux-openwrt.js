@@ -378,7 +378,6 @@ function setCaptivePortalStatus(enabled, options = {}) {
         return false;
       }
     }
-
     if (!isRedirectedTcpPort(httpsSrcPort, httpsDstPort)) {
       if (!redirectTcpPort(enabled, options.ipaddr,
                            httpsSrcPort, httpsDstPort)) {
@@ -396,27 +395,12 @@ function setCaptivePortalStatus(enabled, options = {}) {
     addresses = [];
   }
   addresses = addresses.filter((value) => {
-    if (options.manualDnsAddresses) {
-      for (const opt of options.manualDnsAddresses) {
-        if (value.startsWith(`/${opt.host}/`)) {
-          return false;
-        }
-      }
-    }
-
     return !value.startsWith('/#/');
   });
 
   if (enabled) {
-    if (options.manualDnsAddresses) {
-      for (const opt of options.manualDnsAddresses) {
-        addresses.unshift(`/${opt.host}/${opt.address}`);
-      }
-    }
-
     addresses.unshift(`/#/${options.ipaddr}`);
   }
-
   // If addresses is an empty array, then uciSet will wind up deleting
   // the entry.
   if (!uciSet(label, 'dhcp.@dnsmasq[0].address', addresses)) {

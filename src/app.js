@@ -424,11 +424,6 @@ if (config.get('cli')) {
 // function to stop running server and start https
 TunnelService.switchToHttps = () => {
   stopHttpGateway();
-
-  if (platform.getOS() === 'linux-openwrt') {
-    RouterSetupApp.onSetupComplete();
-  }
-
   startHttpsGateway().then((server) => {
     TunnelService.setServerHandle(server);
   });
