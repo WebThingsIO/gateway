@@ -439,6 +439,15 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     if (proc.status !== 0) {
       return false;
     }
+
+    if (mode === 'ap') {
+      // set up a default route when running in AP mode. ignore errors here and
+      // just try to move on.
+      child_process.spawnSync(
+        'sudo',
+        ['ip', 'route', 'add', 'default', 'via', options.ipaddr, 'dev', 'wlan0']
+      );
+    }
   }
 
   return true;
