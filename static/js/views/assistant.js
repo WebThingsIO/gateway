@@ -64,15 +64,15 @@ const AssistantScreen = {
       for (const type of types) {
         switch (type) {
           case 'OnOffSwitch':
-            commands.push(`Turn the ${thingDescr.name} on`);
+            commands.push(`Turn the ${thingDescr.title} on`);
             break;
           case 'Light':
             if (thingDescr.properties.level) {
-              commands.push(`Dim the ${thingDescr.name}`);
+              commands.push(`Dim the ${thingDescr.title}`);
             }
             break;
           case 'ColorControl':
-            commands.push(`Turn the ${thingDescr.name} red`);
+            commands.push(`Turn the ${thingDescr.title} red`);
             break;
         }
       }
