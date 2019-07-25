@@ -20,15 +20,6 @@ done
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
-# Upgrade gateway-addon Python package
-_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.8.0#egg=gateway_addon"
-sudo pip2 install -U "$_url"
-sudo pip3 install -U "$_url"
-
-# Upgrade adapt-parser Python package
-_url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
-sudo pip3 install -U "$_url"
-
 sudo chown -R root:root "image/etc"
 sudo cp -r "image/etc" /
 sudo chown -R $(id -u):$(id -g) "image/etc"
