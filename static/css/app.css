@@ -168,12 +168,12 @@ h1, h2, h3, h4, h5, h6 {
 
 #speech-button {
   right: 2rem;
-  background-image: url('../optimized-images/microphone.svg');
+  background: no-repeat center/100% url('../optimized-images/microphone.svg');
   top: 2rem;
 }
 
 #speech-button.active {
-  background-image: url('../optimized-images/microphone-active.svg');
+  background: no-repeat center/100% url('../optimized-images/microphone-active.svg');
 }
 
 #speech-wrapper {
@@ -250,17 +250,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #menu-button {
-  background-image: url('../optimized-images/menu.svg');
+  background: no-repeat center/100% url('../optimized-images/menu.svg');
 }
 
 #back-button {
-  background-image: url('../optimized-images/back.png');
+  background: no-repeat center/100% url('../optimized-images/back.png');
 }
 
 #overflow-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../optimized-images/overflow.svg');
+  background: no-repeat center/100% url('../optimized-images/overflow.svg');
 }
 
 #overflow-menu {
@@ -337,7 +337,7 @@ h1, h2, h3, h4, h5, h6 {
 .back-button {
   top: 2rem;
   left: 2rem;
-  background-image: url('../optimized-images/back.png');
+  background: no-repeat center/100% url('../optimized-images/back.png');
 }
 
 .switch-checkbox {
