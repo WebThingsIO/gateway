@@ -19,6 +19,7 @@ const leChallengeFs = require('le-challenge-fs');
 const leStoreCertbot = require('le-store-certbot');
 const path = require('path');
 const Settings = require('./models/settings');
+const {URLSearchParams} = require('url');
 const UserProfile = require('./user-profile');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
@@ -98,10 +99,14 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
     // Promise to be resolved when LE has the DNS challenge ready for us.
     return new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.set('token', token);
+      params.set('challenge', authorization);
+
       // Now that we have a challenge, we call our registration server to
       // setup the TXT record
       fetch(
-        `${endpoint}/dnsconfig?token=${token}&challenge=${authorization}`
+        `${endpoint}/dnsconfig?${params.toString()}`
       ).then((res) => {
         return res.text();
       }).then(() => {
@@ -124,11 +129,15 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
   let jsonToken;
   try {
-    let subscribeUrl = `${endpoint}/subscribe?name=${subdomain}&email=${email}`;
+    const params = new URLSearchParams();
+    params.set('name', subdomain);
+    params.set('email', email);
+
     if (reclamationToken) {
-      subscribeUrl += `&reclamationToken=${reclamationToken.trim()}`;
+      params.set('reclamationToken', reclamationToken.trim());
     }
 
+    const subscribeUrl = `${endpoint}/subscribe?${params.toString()}`;
     const res = await fetch(subscribeUrl);
     const body = await res.text();
 
@@ -173,9 +182,13 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
     // Now we associate user's email with the subdomain, unless it was reclaimed
     if (!reclamationToken) {
+      const params = new URLSearchParams();
+      params.set('token', token);
+      params.set('email', email);
+      params.set('optout', optout);
+
       try {
-        await fetch(`${endpoint}/setemail?token=${token}&email=${email
-        }&optout=${optout}`);
+        await fetch(`${endpoint}/setemail?${params.toString()}`);
 
         if (DEBUG) {
           console.debug('Set email on server.');
