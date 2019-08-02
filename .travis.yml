@@ -24,7 +24,9 @@ addons:
       - libudev-dev
 
 before_install:
-  - pyenv global system 3.6
+  - pyenv install 2.7
+  - pyenv install 3.6.3
+  - pyenv global system 3.6.3
 
 install:
   - git clone https://github.com/mozilla-iot/intent-parser
