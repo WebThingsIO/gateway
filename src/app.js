@@ -173,6 +173,7 @@ function startHttpGateway() {
 
 function stopHttpGateway() {
   servers.http.removeListener('request', httpApp);
+  servers.http.close();
 }
 
 function startWiFiSetup() {
