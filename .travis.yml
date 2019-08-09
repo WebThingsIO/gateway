@@ -1,40 +1,31 @@
+dist: bionic
 language: node_js
 
 node_js:
   - 8
   - 10
+  - 12
 
 sudo: required
 
 env:
   global:
-    - CC=gcc-4.9
-    - CXX=g++-4.9
     - MOZIOT_HOME=/home/travis/.mozilla-iot/test
     - NODE_TLS_REJECT_UNAUTHORIZED=0
 
 addons:
   firefox: latest
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.9
-      - g++-4.9
-      - libudev-dev
 
 before_install:
-  - pyenv install 2.7
-  - pyenv install 3.6.3
-  - pyenv global system 3.6.3
+  - pyenv global system 3.7.1  # pre-installed in the bionic image
 
 install:
   - git clone https://github.com/mozilla-iot/intent-parser
-  - pip3.6 install --user -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
-  - python3.6 intent-parser/intent-parser-server.py &
+  - pip3.7 install --user -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+  - python3.7 intent-parser/intent-parser-server.py &
 
 before_script:
-  - pyenv global system 2.7
+  - pyenv global system 2.7.15  # pre-installed in the bionic image
 
 script:
   - npm install
