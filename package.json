@@ -1,6 +1,6 @@
 {
   "name": "webthings-gateway",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Web of Things gateway",
   "main": "src/app.js",
   "scripts": {
