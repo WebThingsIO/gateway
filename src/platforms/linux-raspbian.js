@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
+const ipRegex = require('ip-regex');
 const os = require('os');
 
 /**
@@ -97,6 +98,14 @@ function getLanMode() {
 function setLanMode(mode, options = {}) {
   const valid = ['static', 'dhcp'];
   if (!valid.includes(mode)) {
+    return false;
+  }
+
+  const regex = ipRegex({exact: true});
+  if ((options.ipaddr && !regex.test(options.ipaddr)) ||
+      (options.netmask && !regex.test(options.netmask)) ||
+      (options.gateway && !regex.test(options.gateway)) ||
+      (options.dns && options.dns.filter((d) => !regex.test(d)).length > 0)) {
     return false;
   }
 
@@ -274,6 +283,11 @@ function getWirelessMode() {
 function setWirelessMode(enabled, mode = 'ap', options = {}) {
   const valid = ['ap', 'sta'];
   if (enabled && !valid.includes(mode)) {
+    return false;
+  }
+
+  const regex = ipRegex({exact: true});
+  if (options.ipaddr && !regex.test(options.ipaddr)) {
     return false;
   }
 
