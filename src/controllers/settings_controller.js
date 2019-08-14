@@ -15,6 +15,7 @@
 const CertificateManager = require('../certificate-manager');
 const config = require('config');
 const fetch = require('node-fetch');
+const jwtMiddleware = require('../jwt-middleware');
 const mDNSserver = require('../mdns-server');
 const Platform = require('../platform');
 const pkg = require('../../package.json');
@@ -22,6 +23,7 @@ const PromiseRouter = require('express-promise-router');
 const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
 
+const auth = jwtMiddleware.middleware();
 const SettingsController = PromiseRouter();
 
 /**
@@ -29,6 +31,7 @@ const SettingsController = PromiseRouter();
  */
 SettingsController.put(
   '/experiments/:experimentName',
+  auth,
   async (request, response) => {
     const experimentName = request.params.experimentName;
 
@@ -56,6 +59,7 @@ SettingsController.put(
  */
 SettingsController.get(
   '/experiments/:experimentName',
+  auth,
   async (request, response) => {
     const experimentName = request.params.experimentName;
 
@@ -143,7 +147,7 @@ SettingsController.post('/skiptunnel', async (request, response) => {
   }
 });
 
-SettingsController.get('/tunnelinfo', async (request, response) => {
+SettingsController.get('/tunnelinfo', auth, async (request, response) => {
   try {
     const localDomainSettings = await Settings.getTunnelInfo();
     response.send(localDomainSettings);
@@ -173,7 +177,7 @@ SettingsController.get('/tunnelinfo', async (request, response) => {
  *              }
  *            }
  */
-SettingsController.put('/domain', async (request, response) => {
+SettingsController.put('/domain', auth, async (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('local')) {
     response.statusMessage = 'Invalid request.';
     response.status(400).end();
@@ -219,7 +223,7 @@ SettingsController.put('/domain', async (request, response) => {
   }
 });
 
-SettingsController.get('/addonsInfo', (request, response) => {
+SettingsController.get('/addonsInfo', auth, (request, response) => {
   response.json({
     urls: config.get('addonManager.listUrls'),
     api: config.get('addonManager.api'),
@@ -231,14 +235,14 @@ SettingsController.get('/addonsInfo', (request, response) => {
   });
 });
 
-SettingsController.get('/system/platform', (request, response) => {
+SettingsController.get('/system/platform', auth, (request, response) => {
   response.json({
     architecture: Platform.getArchitecture(),
     os: Platform.getOS(),
   });
 });
 
-SettingsController.get('/system/ssh', (request, response) => {
+SettingsController.get('/system/ssh', auth, (request, response) => {
   const toggleImplemented = Platform.implemented('setSshServerStatus');
   let enabled = false;
   if (Platform.implemented('getSshServerStatus')) {
@@ -251,7 +255,7 @@ SettingsController.get('/system/ssh', (request, response) => {
   });
 });
 
-SettingsController.put('/system/ssh', (request, response) => {
+SettingsController.put('/system/ssh', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Enabled property not defined');
     return;
@@ -270,7 +274,7 @@ SettingsController.put('/system/ssh', (request, response) => {
   }
 });
 
-SettingsController.post('/system/actions', (request, response) => {
+SettingsController.post('/system/actions', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('action')) {
     response.status(400).send('Action property not defined');
     return;
@@ -306,7 +310,7 @@ SettingsController.post('/system/actions', (request, response) => {
   }
 });
 
-SettingsController.get('/network/dhcp', (request, response) => {
+SettingsController.get('/network/dhcp', auth, (request, response) => {
   if (Platform.implemented('getDhcpServerStatus')) {
     response.json({enabled: Platform.getDhcpServerStatus()});
   } else {
@@ -314,7 +318,7 @@ SettingsController.get('/network/dhcp', (request, response) => {
   }
 });
 
-SettingsController.put('/network/dhcp', (request, response) => {
+SettingsController.put('/network/dhcp', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Missing enabled property');
     return;
@@ -333,7 +337,7 @@ SettingsController.put('/network/dhcp', (request, response) => {
   }
 });
 
-SettingsController.get('/network/lan', (request, response) => {
+SettingsController.get('/network/lan', auth, (request, response) => {
   if (Platform.implemented('getLanMode')) {
     response.json(Platform.getLanMode());
   } else {
@@ -341,7 +345,7 @@ SettingsController.get('/network/lan', (request, response) => {
   }
 });
 
-SettingsController.put('/network/lan', (request, response) => {
+SettingsController.put('/network/lan', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('mode')) {
     response.status(400).send('Missing mode property');
     return;
@@ -361,7 +365,7 @@ SettingsController.put('/network/lan', (request, response) => {
   }
 });
 
-SettingsController.get('/network/wan', (request, response) => {
+SettingsController.get('/network/wan', auth, (request, response) => {
   if (Platform.implemented('getWanMode')) {
     response.json(Platform.getWanMode());
   } else {
@@ -369,7 +373,7 @@ SettingsController.get('/network/wan', (request, response) => {
   }
 });
 
-SettingsController.put('/network/wan', (request, response) => {
+SettingsController.put('/network/wan', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('mode')) {
     response.status(400).send('Missing mode property');
     return;
@@ -389,7 +393,7 @@ SettingsController.put('/network/wan', (request, response) => {
   }
 });
 
-SettingsController.get('/network/wireless', (request, response) => {
+SettingsController.get('/network/wireless', auth, (request, response) => {
   if (Platform.implemented('getWirelessMode')) {
     response.json(Platform.getWirelessMode());
   } else {
@@ -397,15 +401,19 @@ SettingsController.get('/network/wireless', (request, response) => {
   }
 });
 
-SettingsController.get('/network/wireless/networks', (request, response) => {
-  if (Platform.implemented('scanWirelessNetworks')) {
-    response.json(Platform.scanWirelessNetworks());
-  } else {
-    response.status(500).send('Wireless scanning not implemented');
+SettingsController.get(
+  '/network/wireless/networks',
+  auth,
+  (request, response) => {
+    if (Platform.implemented('scanWirelessNetworks')) {
+      response.json(Platform.scanWirelessNetworks());
+    } else {
+      response.status(500).send('Wireless scanning not implemented');
+    }
   }
-});
+);
 
-SettingsController.put('/network/wireless', (request, response) => {
+SettingsController.put('/network/wireless', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Missing enabled property');
     return;
@@ -426,7 +434,7 @@ SettingsController.put('/network/wireless', (request, response) => {
   }
 });
 
-SettingsController.get('/network/addresses', (request, response) => {
+SettingsController.get('/network/addresses', auth, (request, response) => {
   if (Platform.implemented('getNetworkAddresses')) {
     response.json(Platform.getNetworkAddresses());
   } else {
