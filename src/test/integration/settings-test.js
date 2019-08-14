@@ -13,9 +13,9 @@ const Constants = require('../../constants');
 describe('settings/', () => {
   let jwt;
   beforeEach(async () => {
-    jwt = await createUser(server, TEST_USER);
     // Clear settings storage
     await Database.deleteEverything();
+    jwt = await createUser(server, TEST_USER);
   });
 
   it('Fail to get a setting that hasnt been set', async () => {
