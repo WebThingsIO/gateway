@@ -18,6 +18,7 @@ class GatewayModel extends Model {
     this.thingModels = new Map();
     this.things = new Map();
     this.queue = Promise.resolve(true);
+    // this.connectWebSocket();
     this.refreshThings();
     return this;
   }
@@ -125,6 +126,18 @@ class GatewayModel extends Model {
       this.things.delete(thingId);
     }
     return this.handleEvent(Constants.DELETE_THINGS, this.things);
+  }
+
+  connectWebSocket() {
+    const wsHref = this.href.href.replace(/^http/, 'ws');
+    return this.addQueue(() => {
+      return new Promise((resolve) => {
+        this.ws = new WebSocket(wsHref);
+        this.ws.addEventListener('open', () => {
+          resolve();
+        });
+      });
+    });
   }
 
   refreshThings() {
