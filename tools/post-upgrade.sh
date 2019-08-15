@@ -2,10 +2,16 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
+sudo apt update -y
+
 # Install ffmpeg, if necessary
 if ! dpkg -s ffmpeg 2>/dev/null | grep -q '^Status.*installed'; then
-  sudo apt update -y
   sudo apt install -y ffmpeg
+fi
+
+# Install mosquitto, if necessary
+if ! dpkg -s mosquitto 2>/dev/null | grep -q '^Status.*installed'; then
+  sudo apt install -y mosquitto
 fi
 
 # Install thing-url-adapter
