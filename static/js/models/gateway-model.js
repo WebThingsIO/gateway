@@ -8,17 +8,21 @@
 'use strict';
 
 const API = require('../api');
-const Model = require('./model');
-const ThingModel = require('./thing-model');
+const Utils = require('../utils');
 const Constants = require('../constants');
+const Model = require('./model');
+const ReopeningWebSocket = require('./reopening-web-socket');
+const ThingModel = require('./thing-model');
 
 class GatewayModel extends Model {
   constructor() {
     super();
     this.thingModels = new Map();
     this.things = new Map();
+    this.connectedThings = new Map();
+    this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
-    // this.connectWebSocket();
+    this.connectWebSocket();
     this.refreshThings();
     return this;
   }
@@ -49,11 +53,14 @@ class GatewayModel extends Model {
 
   setThing(thingId, description) {
     if (!this.thingModels.has(thingId)) {
-      const thingModel = new ThingModel(description);
+      const thingModel = new ThingModel(description, this.ws);
       thingModel.subscribe(
         Constants.DELETE_THING,
         this.handleRemove.bind(this)
       );
+      if (this.connectedThings.has(thingId)) {
+        thingModel.onConnected(this.connectedThings.get(thingId));
+      }
       this.thingModels.set(thingId, thingModel);
     }
     this.things.set(thingId, description);
@@ -129,15 +136,20 @@ class GatewayModel extends Model {
   }
 
   connectWebSocket() {
-    const wsHref = this.href.href.replace(/^http/, 'ws');
-    return this.addQueue(() => {
-      return new Promise((resolve) => {
-        this.ws = new WebSocket(wsHref);
-        this.ws.addEventListener('open', () => {
-          resolve();
-        });
-      });
-    });
+    const thingsHref = `${window.location.origin}/things?jwt=${API.jwt}`;
+    const wsHref = thingsHref.replace(/^http/, 'ws');
+    this.ws = new ReopeningWebSocket(wsHref);
+    this.ws.addEventListener('message', this.onMessage);
+  }
+
+  onMessage(event) {
+    const message = JSON.parse(event.data);
+
+    if (message.messageType !== 'connected') {
+      return;
+    }
+    this.connectedThings.set(Utils.descriptionIdToModelId(message.id),
+                             message.data);
   }
 
   refreshThings() {
