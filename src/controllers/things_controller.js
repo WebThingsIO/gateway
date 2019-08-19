@@ -24,6 +24,14 @@ const WebSocket = require('ws');
 const ThingsController = PromiseRouter();
 
 /**
+ * Connect to receive messages from a Thing or all Things
+ *
+ * Note that these must precede the normal routes to allow express-ws to work
+ */
+ThingsController.ws('/:thingId/', websocketHandler);
+ThingsController.ws('/', websocketHandler);
+
+/**
  * Get a list of Things.
  */
 ThingsController.get('/', (request, response) => {
@@ -382,12 +390,6 @@ ThingsController.delete('/:thingId', (request, response) => {
       response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
     });
 });
-
-/**
- * Connect to receive messages from a Thing
- */
-ThingsController.ws('/:thingId/', websocketHandler);
-ThingsController.ws('/', websocketHandler);
 
 function websocketHandler(websocket, request) {
   // Since the Gateway have the asynchronous express middlewares, there is a
