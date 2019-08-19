@@ -14,10 +14,11 @@ const Constants = require('../constants');
 const ReopeningWebSocket = require('./reopening-web-socket');
 
 class ThingModel extends Model {
-  constructor(description) {
+  constructor(description, ws) {
     super();
     this.title = description.title;
     this.type = description.type;
+    this.descrId = description.id;
     this.properties = {};
     this.events = [];
     this.connected = false;
@@ -60,7 +61,7 @@ class ThingModel extends Model {
       }
     }
 
-    this.initWebsocket();
+    this.initWebSocket(ws);
 
     this.updateEvents();
     this.updateProperties();
@@ -126,13 +127,19 @@ class ThingModel extends Model {
   /**
    * Initialize websocket.
    */
-  initWebsocket() {
+  initWebSocket(globalWs) {
     if (!this.hasOwnProperty('href')) {
       return;
     }
 
-    const wsHref = this.href.href.replace(/^http/, 'ws');
-    this.ws = new ReopeningWebSocket(`${wsHref}?jwt=${API.jwt}`);
+    if (globalWs) {
+      this.ws = globalWs;
+      this.personalWebSocket = false;
+    } else {
+      const wsHref = this.href.href.replace(/^http/, 'ws');
+      this.ws = new ReopeningWebSocket(`${wsHref}?jwt=${API.jwt}`);
+      this.personalWebSocket = true;
+    }
 
     // After the websocket is open, add subscriptions for all events.
     this.ws.addEventListener('open', () => {
@@ -140,6 +147,7 @@ class ThingModel extends Model {
         return;
       }
       const msg = {
+        id: this.descrId,
         messageType: 'addEventSubscription',
         data: {},
       };
@@ -149,9 +157,11 @@ class ThingModel extends Model {
       this.ws.send(JSON.stringify(msg));
     });
 
-
     const onEvent = (event) => {
       const message = JSON.parse(event.data);
+      if (message.hasOwnProperty('id') && message.id !== this.descrId) {
+        return;
+      }
       switch (message.messageType) {
         case 'propertyStatus':
           this.onPropertyStatus(message.data);
@@ -180,7 +190,9 @@ class ThingModel extends Model {
    * Cleanup objects.
    */
   cleanup() {
-    this.ws.closePermanently();
+    if (this.personalWebSocket) {
+      this.ws.closePermanently();
+    }
     super.cleanup();
   }
 
