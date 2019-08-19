@@ -400,8 +400,19 @@ function websocketHandler(websocket, request) {
   const thingId = request.params.thingId;
   const subscribedEventNames = {};
 
-  function sendMessage(message) {
-    websocket.send(message, (err) => {
+  async function sendMessage(message) {
+    // Convert from internal id to external id
+    if (message.hasOwnProperty('id')) {
+      try {
+        const descr = await Things.getThingDescription(message.id,
+                                                       request.get('Host'),
+                                                       request.secure);
+        message.id = descr.id;
+      } catch (_e) {
+        return;
+      }
+    }
+    websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error(`WebSocket sendMessage failed: ${err}`);
       }
@@ -412,44 +423,44 @@ function websocketHandler(websocket, request) {
     if (typeof thingId !== 'undefined' && property.device.id !== thingId) {
       return;
     }
-    sendMessage(JSON.stringify({
+    sendMessage({
       id: property.device.id,
       messageType: Constants.PROPERTY_STATUS,
       data: {
         [property.name]: property.value,
       },
-    }));
+    });
   }
 
   function onActionStatus(action) {
-    sendMessage(JSON.stringify({
+    sendMessage({
       id: action.thingId,
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
       },
-    }));
+    });
   }
 
   function onEvent(event) {
     if (!subscribedEventNames[event.name]) {
       return;
     }
-    sendMessage(JSON.stringify({
+    sendMessage({
       id: event.thingId,
       messageType: Constants.EVENT,
       data: {
         [event.name]: event.getDescription(),
       },
-    }));
+    });
   }
 
   function onConnected(id, connected) {
-    sendMessage(JSON.stringify({
+    sendMessage({
       id,
       messageType: Constants.CONNECTED,
       data: connected,
-    }));
+    });
   }
 
   function addThing(thing) {
@@ -475,13 +486,13 @@ function websocketHandler(websocket, request) {
       addThing(thing);
     }).catch(() => {
       console.error('WebSocket opened on nonexistent thing', thingId);
-      sendMessage(JSON.stringify({
+      sendMessage({
         messageType: Constants.ERROR,
         data: {
           status: '404 Not Found',
           message: `Thing ${thingId} not found`,
         },
-      }));
+      });
       websocket.close();
     });
   } else {
@@ -516,39 +527,39 @@ function websocketHandler(websocket, request) {
     try {
       request = JSON.parse(requestText);
     } catch (e) {
-      sendMessage(JSON.stringify({
+      sendMessage({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
           message: 'Parsing request failed',
         },
-      }));
+      });
       return;
     }
 
     const id = request.id || thingId;
     if (typeof id === 'undefined') {
-      sendMessage(JSON.stringify({
+      sendMessage({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
           message: 'Missing thing id',
           request,
         },
-      }));
+      });
       return;
     }
 
     const device = AddonManager.getDevice(id);
     if (!device) {
-      sendMessage(JSON.stringify({
+      sendMessage({
         messageType: Constants.ERROR,
         data: {
           status: '400 Bad Request',
           message: `Thing ${id} not found`,
           request,
         },
-      }));
+      });
       return;
     }
 
@@ -560,14 +571,14 @@ function websocketHandler(websocket, request) {
         });
         Promise.all(setRequests).catch((err) => {
           // If any set fails, send an error
-          sendMessage(JSON.stringify({
+          sendMessage({
             messageType: Constants.ERROR,
             data: {
               status: '400 Bad Request',
               message: err,
               request,
             },
-          }));
+          });
         });
         break;
       }
@@ -589,28 +600,28 @@ function websocketHandler(websocket, request) {
                 thingId, action.id, actionName, actionParams);
             });
           }).catch((err) => {
-            sendMessage(JSON.stringify({
+            sendMessage({
               messageType: Constants.ERROR,
               data: {
                 status: '400 Bad Request',
                 message: err.message,
                 request,
               },
-            }));
+            });
           });
         }
         break;
       }
 
       default: {
-        sendMessage(JSON.stringify({
+        sendMessage({
           messageType: Constants.ERROR,
           data: {
             status: '400 Bad Request',
             message: `Unknown messageType: ${request.messageType}`,
             request,
           },
-        }));
+        });
         break;
       }
     }
