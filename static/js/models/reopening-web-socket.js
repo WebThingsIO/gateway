@@ -13,6 +13,7 @@ class ReopeningWebSocket {
     this.href = href;
     this.ws = null;
     this.closing = false;
+    this.opening = false;
 
     this.onOpen = this.onOpen.bind(this);
     this.onMessage = this.onMessage.bind(this);
@@ -30,6 +31,7 @@ class ReopeningWebSocket {
     if (this.closing) {
       return;
     }
+    this.opening = true;
     this.ws = new WebSocket(this.href);
     this.ws.addEventListener('open', this.onOpen, {once: true});
     this.ws.addEventListener('message', this.onMessage);
@@ -46,11 +48,17 @@ class ReopeningWebSocket {
       throw new Error(`Event ${name} not supported`);
     }
 
+    if (name === 'open' && !this.opening) {
+      // readyState would cause race condition
+      listener();
+    }
+
     this.listeners[name].push(listener);
   }
 
   onOpen() {
     this.backoff = 1000;
+    this.opening = false;
     for (const listener of this.listeners.open) {
       listener();
     }
