@@ -617,11 +617,11 @@ function websocketHandler(websocket, request) {
       case Constants.REQUEST_ACTION: {
         for (const actionName in request.data) {
           const actionParams = request.data[actionName].input;
-          Things.getThing(thingId).then((thing) => {
+          Things.getThing(id).then((thing) => {
             const action = new Action(actionName, actionParams, thing);
             return Actions.add(action).then(() => {
               return AddonManager.requestAction(
-                thingId, action.id, actionName, actionParams);
+                id, action.id, actionName, actionParams);
             });
           }).catch((err) => {
             sendMessage({
