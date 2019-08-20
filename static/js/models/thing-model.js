@@ -11,7 +11,6 @@ const API = require('../api');
 const App = require('../app');
 const Model = require('./model');
 const Constants = require('../constants');
-const ReopeningWebSocket = require('./reopening-web-socket');
 
 class ThingModel extends Model {
   constructor(description, ws) {
@@ -132,14 +131,7 @@ class ThingModel extends Model {
       return;
     }
 
-    if (globalWs) {
-      this.ws = globalWs;
-      this.personalWebSocket = false;
-    } else {
-      const wsHref = this.href.href.replace(/^http/, 'ws');
-      this.ws = new ReopeningWebSocket(`${wsHref}?jwt=${API.jwt}`);
-      this.personalWebSocket = true;
-    }
+    this.ws = globalWs;
 
     // After the websocket is open, add subscriptions for all events.
     this.ws.addEventListener('open', () => {
@@ -184,16 +176,6 @@ class ThingModel extends Model {
     };
 
     this.ws.addEventListener('message', onEvent);
-  }
-
-  /**
-   * Cleanup objects.
-   */
-  cleanup() {
-    if (this.personalWebSocket) {
-      this.ws.closePermanently();
-    }
-    super.cleanup();
   }
 
   subscribe(event, handler) {
