@@ -472,15 +472,8 @@ function websocketHandler(websocket, request) {
   let thingCleanups = {};
   function addThing(thing) {
     thing.addEventSubscription(onEvent);
-    const onConn = onConnected.bind(this, thing.id);
+    const onConn = onConnected.bind(null, thing.id);
     thing.addConnectedSubscription(onConn);
-
-    const thingCleanup = () => {
-      thing.removeEventSubscription(onEvent);
-      thing.removeConnectedSubscription(onConn);
-      thing.removeRemovedSubscription(onRem);
-    };
-    thingCleanups[thing.id] = thingCleanup;
     const onRem = () => {
       if (thingCleanups[thing.id]) {
         thingCleanups[thing.id]();
@@ -493,6 +486,13 @@ function websocketHandler(websocket, request) {
       }
     };
     thing.addRemovedSubscription(onRem);
+
+    const thingCleanup = () => {
+      thing.removeEventSubscription(onEvent);
+      thing.removeConnectedSubscription(onConn);
+      thing.removeRemovedSubscription(onRem);
+    };
+    thingCleanups[thing.id] = thingCleanup;
   }
 
   if (typeof thingId !== 'undefined') {
