@@ -433,16 +433,22 @@ function websocketHandler(websocket, request) {
   }
 
   function onActionStatus(action) {
-    if (typeof thingId !== 'undefined' && action.thingId !== thingId) {
+    if (action.hasOwnProperty('thingId') &&
+        typeof thingId !== 'undefined' &&
+        action.thingId !== thingId) {
       return;
     }
-    sendMessage({
-      id: action.thingId,
+
+    const message = {
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
       },
-    });
+    };
+    if (action.hasOwnProperty('thingId')) {
+      message.id = action.thingId;
+    }
+    sendMessage(message);
   }
 
   function onEvent(event) {
