@@ -433,6 +433,9 @@ function websocketHandler(websocket, request) {
   }
 
   function onActionStatus(action) {
+    if (typeof thingId !== 'undefined' && action.thingId !== thingId) {
+      return;
+    }
     sendMessage({
       id: action.thingId,
       messageType: Constants.ACTION_STATUS,
@@ -443,6 +446,9 @@ function websocketHandler(websocket, request) {
   }
 
   function onEvent(event) {
+    if (typeof thingId !== 'undefined' && event.thingId !== thingId) {
+      return;
+    }
     if (!subscribedEventNames[event.name]) {
       return;
     }
