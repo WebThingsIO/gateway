@@ -33,7 +33,7 @@ class ReopeningWebSocket {
     }
     this.opening = true;
     this.ws = new WebSocket(this.href);
-    this.ws.addEventListener('open', this.onOpen, {once: true});
+    this.ws.addEventListener('open', this.onOpen);
     this.ws.addEventListener('message', this.onMessage);
     this.ws.addEventListener('close', this.reopen);
     this.ws.addEventListener('error', this.reopn);
@@ -71,6 +71,7 @@ class ReopeningWebSocket {
   }
 
   reopen() {
+    this.ws.removeEventListener('open', this.onOpen);
     this.ws.removeEventListener('message', this.onMessage);
     this.ws.removeEventListener('close', this.reopen);
     this.ws.removeEventListener('error', this.reopen);
@@ -95,6 +96,7 @@ class ReopeningWebSocket {
     this.listeners = {};
 
     if (this.ws) {
+      this.ws.removeEventListener('open', this.onOpen);
       this.ws.removeEventListener('message', this.onMessage);
       this.ws.removeEventListener('close', this.reopen);
       this.ws.removeEventListener('error', this.reopen);
