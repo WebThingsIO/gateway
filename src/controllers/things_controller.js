@@ -463,21 +463,29 @@ function websocketHandler(websocket, request) {
     });
   }
 
+  let thingCleanups = {};
   function addThing(thing) {
     thing.addEventSubscription(onEvent);
     const onConn = onConnected.bind(this, thing.id);
     thing.addConnectedSubscription(onConn);
 
-    const onRem = () => {
+    const thingCleanup = () => {
       thing.removeEventSubscription(onEvent);
       thing.removeConnectedSubscription(onConn);
+      thing.removeRemovedSubscription(onRem);
+    };
+    thingCleanups[thing.id] = thingCleanup;
+    const onRem = () => {
+      if (thingCleanups[thing.id]) {
+        thingCleanups[thing.id]();
+        delete thingCleanups[thing.id];
+      }
       if (typeof thingId !== 'undefined' &&
           (websocket.readyState === WebSocket.OPEN ||
            websocket.readyState === WebSocket.CONNECTING)) {
         websocket.close();
       }
     };
-    websocket.on('close', onRem);
     thing.addRemovedSubscription(onRem);
   }
 
@@ -516,6 +524,10 @@ function websocketHandler(websocket, request) {
   const cleanup = () => {
     AddonManager.removeListener(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
+    for (const id in thingCleanups) {
+      thingCleanups[id]();
+    }
+    thingCleanups = {};
     clearInterval(heartbeatInterval);
   };
 
