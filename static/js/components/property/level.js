@@ -217,6 +217,8 @@ class LevelProperty extends BaseComponent {
   }
 
   set value(value) {
+    value = Number(value);
+
     const min = parseInt(this.min, 10);
     const max = parseInt(this.max, 10) - min;
     const percent = Math.max(0, value - min) / max * 100;
