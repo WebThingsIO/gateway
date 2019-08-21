@@ -68,6 +68,10 @@ class SwitchProperty extends BaseComponent {
       transform: translate(3.65rem, 0.35rem);
     }
 
+    .webthing-switch-property-switch:disabled + .webthing-switch-property-slider {
+      opacity: 0.5;
+    }
+
     .webthing-switch-property-label {
       padding-top: 0.5rem;
       text-transform: uppercase;
