@@ -513,6 +513,7 @@ function websocketHandler(websocket, request) {
       sendMessage({
         messageType: Constants.ERROR,
         data: {
+          code: 404,
           status: '404 Not Found',
           message: `Thing ${thingId} not found`,
         },
@@ -560,6 +561,7 @@ function websocketHandler(websocket, request) {
       sendMessage({
         messageType: Constants.ERROR,
         data: {
+          code: 400,
           status: '400 Bad Request',
           message: 'Parsing request failed',
         },
@@ -572,6 +574,7 @@ function websocketHandler(websocket, request) {
       sendMessage({
         messageType: Constants.ERROR,
         data: {
+          code: 400,
           status: '400 Bad Request',
           message: 'Missing thing id',
           request,
@@ -585,6 +588,7 @@ function websocketHandler(websocket, request) {
       sendMessage({
         messageType: Constants.ERROR,
         data: {
+          code: 400,
           status: '400 Bad Request',
           message: `Thing ${id} not found`,
           request,
@@ -604,6 +608,7 @@ function websocketHandler(websocket, request) {
           sendMessage({
             messageType: Constants.ERROR,
             data: {
+              code: 400,
               status: '400 Bad Request',
               message: err,
               request,
@@ -633,6 +638,7 @@ function websocketHandler(websocket, request) {
             sendMessage({
               messageType: Constants.ERROR,
               data: {
+                code: 400,
                 status: '400 Bad Request',
                 message: err.message,
                 request,
@@ -647,6 +653,7 @@ function websocketHandler(websocket, request) {
         sendMessage({
           messageType: Constants.ERROR,
           data: {
+            code: 400,
             status: '400 Bad Request',
             message: `Unknown messageType: ${request.messageType}`,
             request,
