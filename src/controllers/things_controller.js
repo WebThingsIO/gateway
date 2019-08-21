@@ -501,6 +501,10 @@ function websocketHandler(websocket, request) {
     thingCleanups[thing.id] = thingCleanup;
   }
 
+  function onThingAdded(thing) {
+    addThing(thing);
+  }
+
   if (typeof thingId !== 'undefined') {
     Things.getThing(thingId).then((thing) => {
       addThing(thing);
@@ -519,6 +523,7 @@ function websocketHandler(websocket, request) {
     Things.getThings().then((things) => {
       things.forEach(addThing);
     });
+    Things.on(Constants.THING_ADDED, onThingAdded);
   }
 
   AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
@@ -534,6 +539,7 @@ function websocketHandler(websocket, request) {
   }, 30 * 1000);
 
   const cleanup = () => {
+    Things.removeListener(Constants.THING_ADDED, onThingAdded);
     AddonManager.removeListener(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
     for (const id in thingCleanups) {
