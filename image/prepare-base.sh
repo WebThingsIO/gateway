@@ -56,6 +56,7 @@ sudo apt install -y \
   libtool \
   libudev-dev \
   libusb-1.0-0-dev \
+  mosquitto \
   policykit-1 \
   python-pip \
   python3-pip \
