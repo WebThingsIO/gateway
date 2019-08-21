@@ -32,22 +32,28 @@ END
 
 ###########################################################################
 #
-# Writes the image file to the sdcard
+# Writes the image file to the the AWS storage container
 #
 image_to_aws() {
-  if [[ "${IMG_FILENAME}" = *base* ]]; then
+  FILENAME="$1"
+  if [[ "${FILENAME}" = *base* ]]; then
     AWS_SUBDIR="base"
   else
     AWS_SUBDIR="images"
   fi
   AWS_DIR="s3://mozillagatewayimages/${AWS_SUBDIR}/"
+  FILENAME_SHA256SUM="${FILENAME}.sha256sum"
+  if [ ! -f "${FILENAME_SHA256SUM}" ]; then
+    echo "Creating ${FILENAME_SHA256SUM}"
+    sha256sum "${FILENAME}" > "${FILENAME_SHA256SUM}"
+  fi
   echo "Copying image files to '${AWS_DIR}'"
-  aws s3 cp --acl=public-read "${IMG_FILENAME}.zip" "${AWS_DIR}"
-  aws s3 cp --acl=public-read "${IMG_FILENAME}.zip.sha256sum" "${AWS_DIR}"
-
+  aws s3 cp --acl=public-read "${FILENAME}" "${AWS_DIR}"
+  aws s3 cp --acl=public-read "${FILENAME_SHA256SUM}" "${AWS_DIR}"
   echo "AWS URLs"
-  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_SUBDIR}/${IMG_FILENAME}.zip"
-  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_SUBDIR}/${IMG_FILENAME}.zip.sha256sum"
+  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_SUBDIR}/${FILENAME}"
+  echo "https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${AWS_SUBDIR}/${FILENAME_SHA256SUM}"
+
 }
 
 ###########################################################################
@@ -72,8 +78,6 @@ zip_image() {
   echo "Creating ${IMG_FILENAME}.zip"
   rm -f "${IMG_FILENAME}.zip"
   zip "${IMG_FILENAME}.zip" "${IMG_FILENAME}"
-  echo "Creating ${IMG_FILENAME}.zip.sha256sum"
-  sha256sum "${IMG_FILENAME}.zip" > "${IMG_FILENAME}.zip.sha256sum"
 }
 
 ###########################################################################
@@ -160,14 +164,21 @@ main() {
     read_image
   fi
 
+  if [[ "${IMG_FILENAME}" = *.tar.gz ]]; then
+    DO_ZIP=0
+  fi
+
   if [ "${DO_ZIP}" == 1 ]; then
     if [ ! -f "${IMG_FILENAME}" ]; then
       echo "IMG file: '${IMG_FILENAME}' is not a file."
       exit 1
     fi
     zip_image
+    FILENAME="${IMG_FILENAME}.zip"
+  else
+    FILENAME="${IMG_FILENAME}"
   fi
-  image_to_aws
+  image_to_aws "${FILENAME}"
 }
 
 main "$@"
