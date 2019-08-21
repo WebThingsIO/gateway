@@ -11,6 +11,7 @@
 'use strict';
 
 const Ajv = require('ajv');
+const EventEmitter = require('events');
 
 const AddonManager = require('../addon-manager');
 const Database = require('../db');
@@ -36,6 +37,15 @@ const Things = {
    * The promise object returned by Database.getThings()
    */
   getThingsPromise: null,
+
+  /**
+   * An EventEmitter used to bubble up added things
+   *
+   * Note that this differs from AddonManager's THING_ADDED because that thing
+   * added is when the addon discovers a thing, not when the model is
+   * instantiated
+   */
+  emitter: new EventEmitter(),
 
   /**
    * Get all Things known to the Gateway, initially loading them from the
@@ -182,10 +192,11 @@ const Things = {
     thing.layoutIndex = this.things.size;
 
     return Database.createThing(thing.id, thing.getDescription())
-      .then(function(thingDesc) {
+      .then((thingDesc) => {
         this.things.set(thing.id, thing);
+        this.emitter.emit(Constants.THING_ADDED, thing);
         return thingDesc;
-      }.bind(this));
+      });
   },
 
   /**
@@ -391,9 +402,18 @@ const Things = {
     }
   },
 
+  on: function(name, listener) {
+    this.emitter.on(name, listener);
+  },
+
+  removeListener: function(name, listener) {
+    this.emitter.removeListener(name, listener);
+  },
+
   clearState: function() {
     this.websockets = [];
     this.things = new Map();
+    this.emitter.removeAllListeners();
   },
 };
 
