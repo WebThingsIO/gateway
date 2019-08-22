@@ -23,7 +23,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field label').textContent.trim())
+      expect(node.querySelector('.field .control-label').textContent.trim())
         .toEqual('foo');
     });
 
@@ -126,7 +126,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field label').textContent.trim())
+      expect(node.querySelector('.field .control-label').textContent.trim())
         .toEqual('foo');
     });
 

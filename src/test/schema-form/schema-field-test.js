@@ -21,7 +21,7 @@ describe('SchemaField', () => {
 
     it('should render label by default', () => {
       const {node} = createSchemaForm({schema});
-      expect(node.querySelectorAll('label')).toHaveLength(1);
+      expect(node.querySelectorAll('.control-label')).toHaveLength(1);
     });
   });
 

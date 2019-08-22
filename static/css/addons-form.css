@@ -77,15 +77,30 @@
 }
 
 #addon-config-settings .json-schema-form input[type=checkbox] {
-  display: inline-block;
-  vertical-align: middle;
-  width: auto;
-  margin-left: 0rem;
+  position: absolute;
+  left: -1000em;
 }
 
-#addon-config-settings .json-schema-form .checkbox-title {
+#addon-config-settings .json-schema-form input[type=checkbox] + label:before {
+  content: "";
   display: inline-block;
-  vertical-align: middle;
+  width: 3rem;
+  height: 3rem;
+  margin-top: -0.25rem;
+  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
+}
+
+#addon-config-settings .json-schema-form input[type=checkbox]:checked + label:before {
+  background-position: 0 -3rem;
+}
+
+#addon-config-settings .json-schema-form input[type=checkbox]:disabled + label:before {
+  background-position: 0 -6rem;
+}
+
+#addon-config-settings .json-schema-form input[type=checkbox]:checked:disabled + label:before {
+  background-position: 0 -9rem;
 }
 
 #addon-config-settings .json-schema-form .title {

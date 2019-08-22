@@ -51,10 +51,6 @@ class BooleanField {
     const field = document.createElement('div');
     field.className = 'checkbox';
 
-    let title = this.schema.title ? this.schema.title : this.name;
-    title = Utils.escapeHtml(title);
-    title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
-
     field.innerHTML = `
       <input
       type="checkbox"
@@ -63,7 +59,7 @@ class BooleanField {
       ${this.required ? 'required' : ''}
       ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
-      <span class="checkbox-title">${title}</span>
+      <label for="${id}"></span>
       `;
 
     const input = field.querySelector(`#${id}`);

@@ -90,16 +90,13 @@ class SchemaField {
     if (type === 'object') {
       displayLabel = displayDescription = false;
     }
-    if (type === 'boolean') {
-      displayLabel = false;
-    }
 
     const field = document.createElement('div');
     field.className = classNames;
     field.innerHTML =
       (displayLabel && label ?
-        `<label class="control-label" htmlFor="${id}">${
-          label}</label>` :
+        `<div id="${id}__label" class="control-label">${
+          label}</div>` :
         '') +
       (displayDescription && description ?
         `<p id="${id}__description" class="field-description">${
