@@ -41,8 +41,9 @@ describe('ObjectField', () => {
     it('should render a default property label', () => {
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('.field-boolean span').textContent.trim())
-        .toEqual('bar');
+      expect(
+        node.querySelector('.field-boolean .control-label').textContent.trim()
+      ).toEqual('bar');
     });
 
     it('should render a string property', () => {
@@ -77,8 +78,9 @@ describe('ObjectField', () => {
       expect(
         node.querySelector('input[type=text]').getAttribute('required')
       ).toEqual('');
-      expect(node.querySelector('.field-string label').textContent.trim())
-        .toEqual('Foo*');
+      expect(
+        node.querySelector('.field-string .control-label').textContent.trim()
+      ).toEqual('Foo*');
     });
 
     it('should fill fields with form data', () => {
