@@ -1,5 +1,5 @@
-const FluentDOM = require('fluent-dom');
-const Fluent = require('fluent');
+const FluentDOM = require('@fluent/dom');
+const Fluent = require('@fluent/bundle');
 
 const availableLanguages = {
   'en-US': ['/fluent/en-US/main.ftl'],
@@ -18,7 +18,7 @@ async function *generateBundles(_resourceIds) {
   for (const link of links) {
     const res = await fetch(link);
     const text = await res.text();
-    bundle.addResource(Fluent.FluentResource.fromString(text));
+    bundle.addResource(new Fluent.FluentResource(text));
   }
   yield bundle;
 }
