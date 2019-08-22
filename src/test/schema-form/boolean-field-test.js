@@ -22,7 +22,9 @@ describe('BooleanField', () => {
       },
     });
 
-    expect(node.querySelector('.field .control-label').textContent.trim()).toEqual('foo');
+    expect(
+      node.querySelector('.field .control-label').textContent.trim()
+    ).toEqual('foo');
   });
 
   it('should render a single label', () => {

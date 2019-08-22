@@ -51,10 +51,6 @@ class BooleanField {
     const field = document.createElement('div');
     field.className = 'checkbox';
 
-    let title = this.schema.title ? this.schema.title : this.name;
-    title = Utils.escapeHtml(title);
-    title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
-
     field.innerHTML = `
       <input
       type="checkbox"
