@@ -63,7 +63,7 @@ class BooleanField {
       ${this.required ? 'required' : ''}
       ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
-      <span class="checkbox-title">${title}</span>
+      <label for="${id}"></span>
       `;
 
     const input = field.querySelector(`#${id}`);
