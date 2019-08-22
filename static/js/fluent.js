@@ -8,7 +8,7 @@ const availableLanguages = {
 
 async function *generateBundles(_resourceIds) {
   // const links = document.querySelectorAll('link[rel="localization"]');
-  let language = 'es-MX'; // navigator.language;
+  let language = 'en-US'; // navigator.language;
   let links = availableLanguages[language];
   if (!links) {
     language = 'en-US';
