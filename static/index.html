@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#75AACF">
-    <title>WebThings Gateway</title>
+    <title data-l10n-id="webthings-gateway">WebThings Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
     <link rel="apple-touch-icon-precomposed" href="/optimized-images/icon.png" type="image/png">
@@ -18,14 +18,16 @@
       <div id="assistant-content">
         <div id="assistant-messages"></div>
         <div id="assistant-hint"></div>
-        <div id="assistant-avatar">
-          <img id="assistant-avatar-image" alt="Assistant Avatar" src="/optimized-images/fox.svg" />
+        <div id="assistant-avatar" data-l10n-id="assistant-avatar">
+          <img data-l10n-id="assistant-avatar-image"
+               id="assistant-avatar-image" src="/optimized-images/fox.svg" />
         </div>
       </div>
       <div id="assistant-controls">
         <button id="assistant-speech-button" class="icon-button"></button>
         <canvas id="assistant-stm-levels" class="hidden"></canvas>
-        <input id="assistant-text-input" type="text" placeholder="How can I help?">
+        <input id="assistant-text-input" type="text"
+               data-l10n-id="assistant-controls-text-input" />
         <button id="assistant-text-submit"></button>
       </div>
     </section>
@@ -52,8 +54,8 @@
       <div id="floorplan">
       </div>
       <form id="floorplan-upload-form" class="hidden">
-        <button id="floorplan-upload-button" class="text-button">Upload floorplan...</button>
-        <div class="hint">(.svg recommended)</div>
+        <button id="floorplan-upload-button" class="text-button" data-l10n-id="upload-floorplan"></button>
+        <div class="hint" data-l10n-id="upload-floorplan-hint"></div>
       </form>
       <button id="floorplan-back-button" class="icon-button"></button>
       <button id="floorplan-edit-button" class="icon-button"></button>
@@ -66,15 +68,15 @@
     <section data-view="settings" id="settings-view" class="hidden">
       <nav id="settings-menu" class="hidden settings-section">
         <ul>
-          <li class="settings-item"><a id="domain-settings-link" href="/settings/domain">Domain</a></li>
-          <li class="settings-item"><a id="network-settings-link" href="/settings/network">Network</a></li>
-          <li class="settings-item"><a id="user-settings-link" href="/settings/users">Users</a></li>
-          <li class="settings-item"><a id="addon-settings-link" href="/settings/addons">Add-ons</a></li>
-          <!-- <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters">Adapters</a></li> -->
-          <li class="settings-item"><a id="update-settings-link" href="/settings/updates">Updates</a></li>
-          <li class="settings-item"><a id="authorization-settings-link" href="/settings/authorizations">Authorizations</a></li>
-          <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments">Experiments</a></li>
-          <li class="settings-item"><a id="developer-settings-link" href="/settings/developer">Developer</a></li>
+          <li class="settings-item"><a id="domain-settings-link" href="/settings/domain" data-l10n-id="settings-domain"></a></li>
+          <li class="settings-item"><a id="network-settings-link" href="/settings/network" data-l10n-id="settings-network"></a></li>
+          <li class="settings-item"><a id="user-settings-link" href="/settings/users" data-l10n-id="settings-users"></a></li>
+          <li class="settings-item"><a id="addon-settings-link" href="/settings/addons" data-l10n-id="settings-add-ons"></a></li>
+          <!-- <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters" data-l10n-id="settings-adapters"></a></li> -->
+          <li class="settings-item"><a id="update-settings-link" href="/settings/updates" data-l10n-id="settings-updates"></a></li>
+          <li class="settings-item"><a id="authorization-settings-link" href="/settings/authorizations" data-l10n-id="settings-authorizations"></a></li>
+          <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments" data-l10n-id="settings-experiments"></a></li>
+          <li class="settings-item"><a id="developer-settings-link" href="/settings/developer" data-l10n-id="settings-developer"></a></li>
         </ul>
       </nav>
 
@@ -84,21 +86,20 @@
             <input id="domain-settings-local-checkbox" name="domain-settings"
               class="experiment-checkbox" type="checkbox">
             <label id="domain-settings-local-label"
+              data-l10n-id="domain-settings-local-label"
               for="domain-settings-local-checkbox">
-              Local Access
             </label>
             <input type="text" id="domain-settings-local-name" name="gateway"
                    placeholder="gateway" />
             <span id="domain-settings-local-suffix">.local</span>
             <div id="domain-settings-error" class="domain-settings-error hidden"></div>
             <button id="domain-settings-local-update" class="domain-settings-update text-button"
+                    data-l10n-id="domain-settings-local-update"
                     type="submit">
-              Update host name
             </button>
           </li>
           <li class="domain-item">
-            <p class="domain-settings-container">
-              Remote Access
+            <p class="domain-settings-container" data-l10n-id="domain-settings-remote-access">
             </p>
             <p id="domain-settings-tunnel-name" class="domain-settings-container">
               &nbsp;. mozilla-iot.org
@@ -123,31 +124,32 @@
 
       <section id="network-settings" class="hidden settings-section">
         <section id="network-settings-unsupported" class="hidden settings-subsection">
-          <div id="network-settings-unsupported-text">
-            Network settings are not supported for this platform.
+          <div id="network-settings-unsupported-text" data-l10n-id="network-settings-unsupported">
           </div>
         </section>
         <section id="network-settings-client" class="hidden settings-subsection">
           <ul class="network-settings-list">
             <li class="network-item">
-              <img src="/optimized-images/ethernet.svg" alt="Ethernet"
+              <img src="/optimized-images/ethernet.svg"
+                data-l10n-id="network-item-ethernet-image"
                 class="network-settings-list-item-icon" />
               <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header">Ethernet</div>
+                <div class="network-settings-list-item-header" data-l10n-id="network-settings-ethernet"></div>
                 <div class="network-settings-list-item-detail"
                   id="network-settings-list-item-ethernet-ip">
                 </div>
               </div>
               <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-ethernet-configure">
-                Configure
+                id="network-settings-list-item-ethernet-configure"
+                data-l10n-id="network-settings-configure">
               </button>
             </li>
             <li class="network-item">
-              <img src="/optimized-images/wifi.svg" alt="Wi-Fi"
+              <img src="/optimized-images/wifi.svg"
+                data-l10n-id="network-item-wifi-image"
                 class="network-settings-list-item-icon" />
               <div class="network-settings-list-item-container-3">
-                <div class="network-settings-list-item-header">Wi-Fi</div>
+                <div class="network-settings-list-item-header" data-l10n-id="network-settings-wifi"></div>
                 <div class="network-settings-list-item-detail"
                   id="network-settings-list-item-wifi-ssid">
                 </div>
@@ -156,8 +158,8 @@
                 </div>
               </div>
               <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-wifi-configure">
-                Configure
+                id="network-settings-list-item-wifi-configure"
+                data-l10n-id="network-settings-configure">
               </button>
             </li>
           </ul>
@@ -165,73 +167,75 @@
         <section id="network-settings-router" class="hidden settings-subsection">
           <ul class="network-settings-list">
             <li class="network-item">
-              <img src="/optimized-images/internet.svg" alt="Internet"
+              <img src="/optimized-images/internet.svg"
+                data-l10n-id="network-settings-internet-image"
                 class="network-settings-list-item-icon" />
               <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header">
-                  Internet (WAN)
+                <div class="network-settings-list-item-header"
+                     data-l10n-id="network-settings-internet-wan">
                 </div>
                 <div class="network-settings-list-item-detail"
                   id="network-settings-list-item-wan-ip">
                 </div>
               </div>
               <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-wan-configure">
-                Configure
+                id="network-settings-list-item-wan-configure"
+                data-l10n-id="network-settings-configure">
               </button>
             </li>
             <li class="network-item">
-              <img src="/optimized-images/network.svg" alt="Home Network"
+              <img src="/optimized-images/network.svg"
+                data-l10n-id="network-settings-home-network-image"
                 class="network-settings-list-item-icon" />
               <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header">
-                  Home Network (LAN)
+                <div class="network-settings-list-item-header"
+                     data-l10n-id="network-settings-home-network-lan">
                 </div>
                 <div class="network-settings-list-item-detail"
                   id="network-settings-list-item-lan-ip">
                 </div>
               </div>
               <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-lan-configure">
-                Configure
+                id="network-settings-list-item-lan-configure"
+                data-l10n-id="network-settings-configure">
               </button>
             </li>
             <li class="network-item">
-              <img src="/optimized-images/wifi.svg" alt="Wi-Fi"
+              <img src="/optimized-images/wifi.svg"
+                data-l10n-id="network-settings-wifi-image"
                 class="network-settings-list-item-icon" />
               <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header">
-                  Wi-Fi (WLAN)
+                <div class="network-settings-list-item-header"
+                     data-l10n-id="network-settings-wifi-wlan">
                 </div>
                 <div class="network-settings-list-item-detail"
                   id="network-settings-list-item-wlan-ssid">
                 </div>
               </div>
               <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-wlan-configure">
-                Configure
+                id="network-settings-list-item-wlan-configure"
+                data-l10n-id="network-settings-configure">
               </button>
             </li>
           </ul>
         </section>
         <section id="network-settings-ethernet" class="hidden settings-subsection">
           <div class="network-settings-wrap">
-            <span>IP address</span>
+            <span data-l10n-id="network-settings-ip-address"></span>
             <select id="network-settings-ethernet-mode" class="network-select">
-              <option value="dhcp">Automatic (DHCP)</option>
-              <option value="static">Manual (Static IP)</option>
+              <option value="dhcp" data-l10n-id="network-settings-dhcp"></option>
+              <option value="static" data-l10n-id="network-settings-static"></option>
             </select>
-            <span id="network-settings-ethernet-ip-label">Static IP address</span>
+            <span id="network-settings-ethernet-ip-label" data-l10n-id="network-settings-static-ip-address"></span>
             <input id="network-settings-ethernet-ip" class="network-text"
                    type="text">
-            <span id="network-settings-ethernet-netmask-label">Network mask</span>
+            <span id="network-settings-ethernet-netmask-label" data-l10n-id="network-settings-network-mask"></span>
             <input id="network-settings-ethernet-netmask" class="network-text"
                    type="text">
-            <span id="network-settings-ethernet-gateway-label">Gateway</span>
+            <span id="network-settings-ethernet-gateway-label" data-l10n-id="network-settings-gateway"></span>
             <input id="network-settings-ethernet-gateway" class="network-text"
                    type="text">
-            <button id="network-settings-ethernet-done" class="network-button text-button">
-              Done
+            <button id="network-settings-ethernet-done" class="network-button text-button" data-l10n-id="network-settings-done">
             </button>
           </div>
         </section>
@@ -242,13 +246,13 @@
             <div id="network-settings-wifi-wrap">
               <input id="network-settings-wifi-ssid" type="hidden">
               <input id="network-settings-wifi-password" class="network-password"
-                     type="password" placeholder="Password">
+                     type="password" data-l10n-id="network-settings-wifi-password">
               <input id="network-settings-wifi-show-password" class="network-checkbox"
                      type="checkbox">
               <label for="network-settings-wifi-show-password"></label>
-              <span>Show password</span>
-              <button id="network-settings-wifi-connect" class="network-button text-button">
-                Connect
+              <span data-l10n-id="network-settings-show-password">Show password</span>
+              <button id="network-settings-wifi-connect" class="network-button text-button"
+                      data-l10n-id="network-settings-wifi-connect">
               </button>
             </div>
           </div>
@@ -257,67 +261,65 @@
           <div class="network-settings-wrap">
             <span>Mode</span>
             <select id="network-settings-wan-mode" class="network-select">
-              <option value="dhcp">Automatic (DHCP)</option>
-              <option value="static">Manual (Static IP)</option>
-              <option value="pppoe">Bridge (PPPoE)</option>
+              <option value="dhcp" data-l10n-id="network-settings-dhcp"></option>
+              <option value="static" data-l10n-id="network-settings-static"></option>
+              <option value="pppoe" data-l10n-id="network-settings-pppoe"></option>
             </select>
-            <span id="network-settings-wan-ip-label">IP address</span>
+            <span id="network-settings-wan-ip-label" data-l10n-id="network-settings-ip-address"></span>
             <input id="network-settings-wan-ip" class="network-text"
                    type="text">
-            <span id="network-settings-wan-netmask-label">Network mask</span>
+            <span id="network-settings-wan-netmask-label" data-l10n-id="network-settings-network-mask"></span>
             <input id="network-settings-wan-netmask" class="network-text"
                    type="text">
-            <span id="network-settings-wan-gateway-label">Gateway</span>
+            <span id="network-settings-wan-gateway-label" data-l10n-id="network-settings-gateway"></span>
             <input id="network-settings-wan-gateway" class="network-text"
                    type="text">
-            <span id="network-settings-wan-username-label">Username</span>
+            <span id="network-settings-wan-username-label" data-l10n-id="network-settings-username"></span>
             <input id="network-settings-wan-username" class="network-text"
                    type="text">
-            <span id="network-settings-wan-password-label">Password</span>
+            <span id="network-settings-wan-password-label" data-l10n-id="network-settings-assword"></span>
             <input id="network-settings-wan-password" class="network-password"
                    type="password">
-            <button id="network-settings-wan-done" class="network-button text-button">
-              Done
+            <button id="network-settings-wan-done" class="network-button text-button" data-l10n-id="network-settings-done">
             </button>
           </div>
         </section>
         <section id="network-settings-lan" class="hidden settings-subsection">
           <div class="network-settings-wrap">
-            <span>Router IP address</span>
+            <span data-l10n-id="network-settings-router-ip"></span>
             <input id="network-settings-lan-ip" class="network-text"
                    type="text">
-            <span>Network mask</span>
+            <span data-l10n-id="network-settings-network-mask"></span>
             <input id="network-settings-lan-netmask" class="network-text"
                    type="text">
-            <span>DHCP server</span>
+            <span data-l10n-id="network-settings-dhcp-server"></span>
             <input id="network-settings-lan-dhcp" class="network-checkbox"
                    type="checkbox">
             <label for="network-settings-lan-dhcp"></label>
-            <button id="network-settings-lan-done" class="network-button text-button">
-              Done
+            <button id="network-settings-lan-done" class="network-button text-button" data-l10n-id="network-settings-done">
             </button>
           </div>
         </section>
         <section id="network-settings-wlan" class="hidden settings-subsection">
           <div class="network-settings-wrap">
-            <span>Enable Wi-Fi</span>
+            <span data-l10n-id="network-settings-enable-wifi"></span>
             <input id="network-settings-wlan-enable" class="network-checkbox"
                    type="checkbox">
             <label for="network-settings-wlan-enable"></label>
-            <span>Network name (SSID)</span>
+            <span data-l10n-id="network-settings-network-name"></span>
             <input id="network-settings-wlan-ssid" class="network-text"
                    type="text">
-            <span>Password</span>
+            <span data-l10n-id="network-settings-password"></span>
             <input id="network-settings-wlan-password" class="network-password"
                    type="password">
             <div id="network-settings-wlan-show-password-wrap">
               <input id="network-settings-wlan-show-password" class="network-checkbox"
                      type="checkbox">
               <label for="network-settings-wlan-show-password"></label>
-              <span>Show password</span>
+              <span data-l10n-id="network-settings-show-password"></span>
             </div>
-            <button id="network-settings-wlan-done" class="network-button text-button">
-              Done
+            <button id="network-settings-wlan-done" class="network-button text-button"
+                    data-l10n-id="network-settings-done">
             </button>
           </div>
         </section>
@@ -331,39 +333,39 @@
         <section id="user-settings-edit" class="hidden settings-subsection">
           <form id="edit-user-form" class="user-form">
             <input type="text" id="user-settings-edit-name" name="name"
-              placeholder="Name" required>
+              required data-l10n-id="user-settings-input-name">
             <input type="email" id="user-settings-edit-email" name="email"
-              placeholder="Email" required>
+              required data-l10n-id="user-settings-input-email">
             <input type="password" id="user-settings-edit-password"
-              name="password" placeholder="Password" required>
+              required data-l10n-id="user-settings-input-password">
             <input type="password" id="user-settings-edit-new-password"
-              name="confirm-password" placeholder="New Password (Optional)">
+              name="confirm-password" data-l10n-id="user-settings-input-new-password">
             <input type="password" id="user-settings-edit-confirm-password"
-              name="confirm-password" placeholder="Confirm New Password">
-            <div id="user-settings-edit-password-mismatch" class="error hidden">
-              Passwords do not match
+              name="confirm-password" data-l10n-id="user-settings-input-confirm-new-password">
+            <div id="user-settings-edit-password-mismatch" class="error hidden"
+              data-l10n-id="user-settings-password-mismatch">
             </div>
             <div id="user-settings-edit-error" class="error hidden"></div>
             <button id="user-settings-edit-save" class="user-settings-save"
-              type="submit">Save</button>
+              data-l10n-id="user-settings-save" type="submit"></button>
           </form>
         </section>
         <section id="user-settings-add" class="hidden settings-subsection">
           <form id="add-user-form" class="user-form">
             <input type="text" id="user-settings-add-name" name="name"
-              placeholder="Name" required>
+              data-l10n-id="user-settings-input-name" required>
             <input type="email" id="user-settings-add-email" name="email"
-              placeholder="Email" required>
+              data-l10n-id="user-settings-input-email" required>
             <input type="password" id="user-settings-add-password"
-              name="password" placeholder="Password" required>
+              name="password" data-l10n-id="user-settings-input-password" required>
             <input type="password" id="user-settings-add-confirm-password"
-              name="confirm-password" placeholder="Confirm Password" required>
-            <div id="user-settings-add-password-mismatch" class="error hidden">
-              Passwords do not match
+              name="confirm-password" data-l10n-id="user-settings-input-confirm-password" required>
+            <div id="user-settings-add-password-mismatch" class="error hidden"
+              data-l10n-id="user-settings-password-mismatch">
             </div>
             <div id="user-settings-add-error" class="error hidden"></div>
             <button id="user-settings-add-save" class="user-settings-save"
-              type="submit">Save</button>
+              type="submit" data-l10n-id="user-settings-save">Save</button>
           </form>
         </section>
       </section>
@@ -380,13 +382,14 @@
         </section>
       </section>
       <section id="adapter-settings" class="hidden settings-section">
-        <div id="no-adapters">No adapters present.</div>
+        <div id="no-adapters" data-l10n-id="adapter-settings-no-adapters"></div>
         <ul id="adapters-list" class="hidden">
         </ul>
       </section>
       <section id="authorization-settings" class="hidden settings-section">
         <ul id="authorizations">
-          <li id="no-authorizations" class="hidden authorization-item">No authorizations.</li>
+          <li id="no-authorizations" class="hidden authorization-item"
+              data-l10n-id="authorization-settings-no-authorizations"></li>
         </ul>
       </section>
       <section id="experiment-settings" class="hidden settings-section">
@@ -394,12 +397,12 @@
           <li id="assistant-experiment-item" class="experiment-item">
             <input id="assistant-experiment-checkbox" class="experiment-checkbox"
                    type="checkbox">
-            <label for="assistant-experiment-checkbox">Smart Assistant</label>
+            <label for="assistant-experiment-checkbox" data-l10n-id="experiment-settings-smart-assistant"></label>
           </li>
           <li id="logs-experiment-item" class="experiment-item">
             <input id="logs-experiment-checkbox" class="experiment-checkbox"
                    type="checkbox">
-            <label for="logs-experiment-checkbox">Logs</label>
+            <label for="logs-experiment-checkbox" data-l10n-id="experiment-settings-logs"></label>
           </li>
 
         </ul>
@@ -409,7 +412,7 @@
           <!-- TODO(hobinjk): allow disabling automatic updates -->
           <li class="update-item" id="up-to-date-container">
             <p id="update-settings-up-to-date"></p>
-            <button id="update-now" class="text-button hidden">Update Now</button>
+            <button id="update-now" class="text-button hidden" data-l10n-id="update-settings-update-now"></button>
           </li>
           <li class="update-item">
             <p id="update-settings-version"></p>
@@ -421,15 +424,16 @@
         <ul>
           <li id="enable-ssh-item" class="developer-checkbox-item">
             <input id="enable-ssh-checkbox" class="developer-checkbox" type="checkbox">
-            <label for="enable-ssh-checkbox">Enable SSH</label>
+            <label for="enable-ssh-checkbox" data-l10n-id="developer-settings-enable-ssh"></label>
           </li>
           <li class="developer-link-item">
-            <a id="view-internal-logs" href="#" target="_blank" rel="noopener">View Internal Logs</a>
+            <a id="view-internal-logs" href="#" target="_blank" rel="noopener"
+               data-l10n-id="developer-settings-view-internal-logs"></a>
           </li>
           <li class="developer-link-item">
             <a id="new-local-authorization"
-               href="/oauth/authorize?response_type=code&client_id=local-token&scope=/things:readwrite&state=asdf">
-              Create local authorization
+               href="/oauth/authorize?response_type=code&client_id=local-token&scope=/things:readwrite&state=asdf"
+               data-l10n-id="developer-settings-create-local-authorization">
             </a>
           </li>
         </ul>
@@ -442,11 +446,10 @@
     <!-- Rules View -->
     <section data-view="rules" id="rules-view" class="hidden">
       <div class="title-bar">
-        <h3 class="rules-header">Rules</h3>
+        <h3 class="rules-header" data-l10n-id="rules"></h3>
       </div>
       <div id="rules">
-        <div id="create-rule-hint" class="hidden">
-          No rules created. Click + to create a rule.
+        <div id="create-rule-hint" class="hidden" data-l10n-id="rules-create-rule-hint">
         </div>
       </div>
       <button id="create-rule-button" class="icon-button"></button>
@@ -457,34 +460,36 @@
         <a href="/rules" class="back-button icon-button"></a>
         <div class="rule-info">
           <h1>
-            <span class="rule-name">Rule Name</span>
-            <img src="/optimized-images/customize-16.svg" alt="Customize Rule Name" class="rule-name-customize"/>
+            <span class="rule-name" data-l10n-id="rules-rule-name"></span>
+            <img src="/optimized-images/customize-16.svg"
+                 data-l10n-id="rules-customize-rule-name-icon"
+                 class="rule-name-customize"/>
           </h1>
-          <p>Rule Description</p>
+          <p data-l10n-id="rules-rule-description"></p>
         </div>
-        <button class="rule-preview-button icon-button" alt="Preview"></button>
+        <button class="rule-preview-button icon-button" data-l10n-id="rules-preview-button"></button>
         <button id="delete-button">
-          <img src="/optimized-images/delete-16.svg" alt="Delete" width="40" height="40"/>
+          <img src="/optimized-images/delete-16.svg" data-l10n-id="rules-delete-icon" width="40" height="40"/>
         </button>
       </div>
       <div id="rule-area">
         <div id="onboarding-hint">
          <div class="drag-hint">
             <div class="drag-hint-container">
-              <h2>Drag your devices here to start creating a rule</h2>
+              <h2 data-l10n-id="rules-drag-hint"></h2>
             </div>
           </div>
         </div>
         <div id="drag-hint">
           <div class="drag-hint-trigger drag-hint">
             <div class="drag-hint-container">
-              <p>Add device as input</p>
+              <p data-l10n-id="rules-drag-input-hint"></p>
               <div class="drag-hint-block">+</div>
             </div>
           </div>
           <div class="drag-hint-effect drag-hint">
             <div class="drag-hint-container">
-              <p>Add device as output</p>
+              <p data-l10n-id="rules-drag-output-hint"></p>
               <div class="drag-hint-block">+</div>
             </div>
           </div>
@@ -495,25 +500,25 @@
       </div>
       <div id="rule-parts-list-container">
         <button id="rule-parts-list-scroll-left">
-          <img class="scroll-icon" alt="Scroll Left" src="/optimized-images/arrowhead-left-16.svg"/>
+          <img class="scroll-icon" data-l10n-id="rules-scroll-left" src="/optimized-images/arrowhead-left-16.svg"/>
         </button>
         <button id="rule-parts-list-scroll-right">
-          <img class="scroll-icon" alt="Scroll Right" src="/optimized-images/arrowhead-right-16.svg"/>
+          <img class="scroll-icon" data-l10n-id="rules-scroll-right" src="/optimized-images/arrowhead-right-16.svg"/>
         </button>
         <div id="delete-area">
           <div class="delete-container">
-            <h2 class="delete-prompt">Drop devices here to disconnect</h2>
+            <h2 class="delete-prompt" data-l10n-id="rules-delete-prompt"></h2>
           </div>
         </div>
         <div id="rule-parts-list"></div>
       </div>
       <div id="rule-delete-overlay">
         <div class="rule-delete-dialog">
-          <p>Are you sure you want to remove this rule permanently?</p>
+          <p data-l10n-id="rules-delete-dialog"></p>
           <input class="rule-delete-cancel-button" type="button"
-                 value="Cancel"/>
+                 value="Cancel" data-l10n-id="rules-delete-cancel"/>
           <input class="rule-delete-confirm-button" type="button"
-                 value="Remove Rule"/>
+                 value="Remove Rule" data-l10n-id="rules-delete-confirm"/>
         </div>
       </div>
     </section>
@@ -521,11 +526,10 @@
     <!-- Logs View -->
     <section data-view="logs" id="logs-view" class="hidden">
       <div class="title-bar">
-        <h3 class="logs-header">Logs</h3>
+        <h3 class="logs-header" data-l10n-id="logs"></h3>
       </div>
       <div class="logs">
-        <div class="create-log-hint hidden">
-          No logs created. Click + to create a log.
+        <div class="create-log-hint hidden" data-l10n-id="logs-create-log-hint">
         </div>
       </div>
       <button class="create-log-button icon-button"></button>
@@ -540,7 +544,7 @@
     <!-- Menu -->
     <div id="menu-scrim" class="hidden"></div>
     <nav id="main-menu" class="hidden">
-      <img id="menu-wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
+      <img id="menu-wordmark" data-l10n-id="mozilla-iot" src="/optimized-images/wordmark.svg" />
       <ul>
         <li><a id="assistant-menu-item" data-l10n-id="assistant-menu-item" href="/assistant" class="hidden" ></a></li>
         <li><a id="things-menu-item" data-l10n-id="things-menu-item" href="/things" class="selected"></a></li>
@@ -571,16 +575,18 @@
       <button id="add-thing-back-button" class="back-button icon-button"></button>
       <div id="add-thing-content">
         <p id="add-thing-status">
-          <img class="spinner" alt="Scanning" src="/optimized-images/loading.gif" />Scanning for new devices...
+        <img class="spinner" data-l10n-id="add-thing-scanning-icon" src="/optimized-images/loading.gif" /><span data-l10n-id="add-thing-scanning"></span>
         </p>
         <p id="add-adapters-hint" class="hidden">
-          No new things found. Try <a id="add-adapters-hint-anchor" href="/settings/addons">adding some add-ons</a>.
+          <span data-l10n-id="add-thing-add-adapters-hint"></span>
+          <a id="add-adapters-hint-anchor" href="/settings/addons"
+             data-l10n-id="add-thing-add-adapters-hint-anchor"></a>
         </p>
         <div id="new-things"></div>
         <p id="add-by-url">
-          <a id="add-by-url-anchor" href="#" class="hidden">Add by URL...</a>
+          <a id="add-by-url-anchor" href="#" class="hidden" data-l10n-id="add-thing-add-by-url"></a>
         </p>
-        <button id="add-thing-cancel-button" class="text-button">Done</button>
+        <button id="add-thing-cancel-button" class="text-button" data-l10n-id="add-thing-done"></button>
       </div>
     </div>
 
@@ -588,30 +594,27 @@
     <div id="create-log-screen" class="hidden dialog">
       <button id="create-log-back-button" class="back-button icon-button"></button>
       <div id="create-log-content">
-        <div class="create-log-label">
-          Device
+        <div class="create-log-label" data-l10n-id="logs-device">
         </div>
         <div class="create-log-input">
-          <select class="create-log-device arrow-select" aria-label="Log Device"></select>
+          <select class="create-log-device arrow-select"  data-l10n-id="logs-property-device"></select>
         </div>
-        <div class="create-log-label">
-          Property
-        </div>
-        <div class="create-log-input">
-          <select class="create-log-property arrow-select" aria-label="Log Property"></select>
-        </div>
-        <div class="create-log-label">
-          Retention
+        <div class="create-log-label" data-l10n-id="logs-property">
         </div>
         <div class="create-log-input">
-          <input type="number" class="create-log-retention-duration-number" aria-label="Log Retention Length" min="1" value="7"/>
-          <select class="create-log-retention-duration-unit arrow-select" aria-label="Log Retention Unit">
-            <option value="hours">Hours</option>
-            <option value="days" selected>Days</option>
-            <option value="weeks">Weeks</option>
+           <select class="create-log-property arrow-select" data-l10n-id="logs-property-select"></select>
+        </div>
+        <div class="create-log-label" data-l10n-id="logs-retention">
+        </div>
+        <div class="create-log-input">
+          <input type="number" class="create-log-retention-duration-number" data-l10n-id="logs-retention-length" min="1" value="7"/>
+          <select class="create-log-retention-duration-unit arrow-select" data-l10n-id="logs-retention-unit">
+            <option value="hours" data-l10n-id="logs-hours"></option>
+            <option value="days" data-l10n-id="logs-days" selected></option>
+            <option value="weeks" data-l10n-id="logs-weeks"></option>
         </div>
         <div class="create-log-spacer"></div>
-        <button id="create-log-save-button" class="text-button">Save</button>
+        <button id="create-log-save-button" class="text-button" data-l10n-id="logs-save"></button>
       </div>
     </div>
 
@@ -639,18 +642,18 @@
               id="edit-thing-custom-icon-input"
               accept="image/jpeg,image/png,image/svg+xml">
             <label for="edit-thing-custom-icon-input"
-              id="edit-thing-custom-icon-label" class="edit-thing-button text-button hidden">
-              Choose icon...
+              id="edit-thing-custom-icon-label" class="edit-thing-button text-button hidden"
+              data-l10n-id="context-menu-choose-icon">
             </label>
             <span id="edit-thing-label" class="hidden"></span>
           </div>
-          <button id="edit-thing-save-button" class="edit-thing-button text-button">
-            Save
+          <button id="edit-thing-save-button" class="edit-thing-button text-button"
+            data-l10n-id="context-menu-save">
           </button>
         </div>
         <div id="context-menu-content-remove" class="hidden">
-          <button id="remove-thing-button" class="context-menu-button danger">
-            Remove
+          <button id="remove-thing-button" class="context-menu-button danger"
+            data-l10n-id="context-menu-remove">
           </button>
         </div>
       </div>
@@ -658,10 +661,8 @@
 
     <div id="log-remove-dialog" class="hidden dialog">
       <div class="log-remove-container">
-        <p>Removing the log <span id="log-remove-name"></span> will also remove
-        all of its data. Are you sure you want to remove it?</p>
-        <button id="log-remove-button" class="context-menu-button danger">
-          Remove
+        <p data-l10n-id="logs-remove-dialog"></p>
+        <button id="log-remove-button" class="context-menu-button danger" data-l10n-id="logs-remove">
         </button>
       </div>
       <button id="log-remove-back-button" class="back-button icon-button"></button>
