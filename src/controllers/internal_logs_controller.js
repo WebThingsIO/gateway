@@ -14,6 +14,8 @@ const archiver = require('archiver');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const PromiseRouter = require('express-promise-router');
+const WebSocket = require('ws');
 
 const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
@@ -21,7 +23,7 @@ const jwtMiddleware = require('../jwt-middleware');
 const UserProfile = require('../user-profile');
 const Utils = require('../utils');
 
-const InternalLogsController = express.Router();
+const InternalLogsController = PromiseRouter();
 
 /**
  * Generate an index of log files.
