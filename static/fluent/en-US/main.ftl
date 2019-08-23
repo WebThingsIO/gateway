@@ -133,8 +133,9 @@ logs-hours = Hours
 logs-days = Days
 logs-weeks = Weeks
 logs-save = Save
-logs-remove-dialog = Removing the log <span id="log-remove-name"></span> will also remove
-  all of its data. Are you sure you want to remove it?
+logs-remove-dialog-title = Removing
+logs-remove-dialog-warning = Removing the log will also remove all of its data.
+  Are you sure you want to remove it?
 logs-remove = Remove
 
 add-thing-scanning-icon =
