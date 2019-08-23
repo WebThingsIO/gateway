@@ -1,3 +1,5 @@
+webthings-gateway = WebThings Gateway
+
 assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Rules
@@ -29,15 +31,15 @@ domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
 
 network-settings-unsupported = Network settings are not supported for this platform.
-network-item-ethernet-image =
+network-settings-ethernet-image =
   .alt = Ethernet
 network-settings-ethernet = Ethernet
-network-item-wifi-image =
+network-settings-wifi-image =
   .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-item-home-network-image =
+network-settings-home-network-image =
   .alt = Home Network
-network-item-internet-image =
+network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Configure
 network-settings-internet-wan = Internet (WAN)
@@ -46,7 +48,7 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP address
 network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (Static IP)
-network-settings-bridge = Bridge (PPPoE)
+network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Static IP address
 network-settings-network-mask = Network mask
 network-settings-gateway = Gateway
@@ -62,17 +64,17 @@ network-settings-dhcp-server = DHCP server
 network-settings-enable-wifi = Enable Wi-Fi
 network-settings-network-name = Network name (SSID)
 
-user-settings-input-name
+user-settings-input-name =
   .placeholder = Name
-user-settings-input-email
+user-settings-input-email =
   .placeholder = Email
-user-settings-input-password
+user-settings-input-password =
   .placeholder = Password
-user-settings-input-new-password
+user-settings-input-new-password =
   .placeholder = New Password (Optional)
-user-settings-input-confirm-new-password
+user-settings-input-confirm-new-password =
   .placeholder = Confirm New Password
-user-settings-input-confirm-password
+user-settings-input-confirm-password =
   .placeholder = Confirm Password
 user-settings-password-mismatch = Passwords do not match
 user-settings-save = Save
@@ -120,7 +122,7 @@ logs-device = Device
 logs-device-select =
   .aria-label = Log Device
 logs-property = Property
-logs-property-select
+logs-property-select =
   .aria-label = Log Property
 logs-retention = Retention
 logs-retention-length =
