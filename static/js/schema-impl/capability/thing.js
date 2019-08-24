@@ -22,6 +22,7 @@ const Constants = require('../../constants');
 const CurrentDetail = require('../property/current');
 const EnumDetail = require('../property/enum');
 const FrequencyDetail = require('../property/frequency');
+const fluent = require('../../fluent');
 const ImageDetail = require('../property/image');
 const InstantaneousPowerDetail = require('../property/instantaneous-power');
 const LeakDetail = require('../property/leak');
@@ -254,7 +255,7 @@ class Thing {
         this.displayEvents = true;
         menu.push({
           href: this.eventsHref,
-          name: 'Event Log',
+          name: fluent.getMessage('event-log'),
           icon: '/optimized-images/rules-icon.png',
         });
       } else {
@@ -263,11 +264,11 @@ class Thing {
 
       menu.push({
         listener: this.handleEdit.bind(this),
-        name: 'Edit',
+        name: fluent.getMessage('edit'),
         icon: '/optimized-images/edit-plain.svg',
       }, {
         listener: this.handleRemove.bind(this),
-        name: 'Remove',
+        name: fluent.getMessage('remove'),
         icon: '/optimized-images/remove.svg',
       });
 
@@ -284,7 +285,7 @@ class Thing {
       this.attachExpandedView();
 
       if (!this.connected) {
-        App.showPersistentMessage('Disconnected');
+        App.showPersistentMessage(fluent.getMesssage('disconnected'));
       }
     }
 
@@ -700,7 +701,7 @@ class Thing {
         App.hidePersistentMessage();
       } else {
         this.layout.svg.classList.remove('connected');
-        App.showPersistentMessage('Disconnected');
+        App.showPersistentMessage(fluent.getMessage('disconnected'));
       }
     }
 

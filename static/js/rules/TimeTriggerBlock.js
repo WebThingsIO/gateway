@@ -1,4 +1,5 @@
 const RulePartBlock = require('./RulePartBlock');
+const fluent = require('../fluent');
 
 /**
  * An element representing a time-based trigger
@@ -10,7 +11,8 @@ const RulePartBlock = require('./RulePartBlock');
  */
 class TimeTriggerBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate) {
-    super(ruleArea, onPresentationChange, onRuleUpdate, 'Time of day',
+    super(ruleArea, onPresentationChange, onRuleUpdate,
+          fluent.getMessage('rule-time-title'),
           '/optimized-images/thing-icons/clock.svg');
 
     const rulePartInfo = this.elt.querySelector('.rule-part-info');

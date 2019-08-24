@@ -12,10 +12,12 @@
 
 const StringLabelDetail = require('./string-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class OpenDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.title || 'Open');
+    super(thing, name, !!property.readOnly,
+          property.title || fluent.getMessage('open'));
     this.id = `open-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -23,7 +25,8 @@ class OpenDetail extends StringLabelDetail {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
-      <webthing-open-property data-value="CLOSED" ${readOnly}
+      <webthing-open-property
+        data-value="${fluent.getMessage('closed')}" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-open-property>`;
   }
@@ -33,7 +36,9 @@ class OpenDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ? 'OPEN' : 'CLOSED';
+    this.labelElement.value = value ?
+      fluent.getMessage('open') :
+      fluent.getMessage('closed');
     this.labelElement.inverted = value;
   }
 }

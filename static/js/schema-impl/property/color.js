@@ -11,13 +11,14 @@
 'use strict';
 
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class ColorDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.title || 'Color';
+    this.label = property.title || fluent.getMessage('color');
     this.id = `color-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

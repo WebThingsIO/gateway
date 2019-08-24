@@ -1,4 +1,5 @@
 const RulePartBlock = require('./RulePartBlock');
+const fluent = require('../fluent');
 
 /**
  * An element representing a notification effect
@@ -10,7 +11,8 @@ const RulePartBlock = require('./RulePartBlock');
  */
 class NotificationEffectBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate) {
-    super(ruleArea, onPresentationChange, onRuleUpdate, 'Notification',
+    super(ruleArea, onPresentationChange, onRuleUpdate,
+          fluent.getMessage('rule-notification'),
           '/optimized-images/thing-icons/notification.svg');
 
     const rulePartInfo = this.elt.querySelector('.rule-part-info');
@@ -20,7 +22,7 @@ class NotificationEffectBlock extends RulePartBlock {
 
     const label = document.createElement('span');
     label.classList.add('message-input-label');
-    label.textContent = 'Message';
+    label.dataset.l10nId = 'notification-message';
     messageInputContainer.appendChild(label);
 
     this.messageInput = document.createElement('input');

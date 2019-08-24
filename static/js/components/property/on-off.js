@@ -10,11 +10,12 @@
 'use strict';
 
 const SwitchProperty = require('./switch');
+const fluent = require('../../fluent');
 
 class OnOffProperty extends SwitchProperty {
   connectedCallback() {
-    this.onLabel = 'On';
-    this.offLabel = 'Off';
+    this.onLabel = fluent.getMessage('on');
+    this.offLabel = fluent.getMessage('off');
     super.connectedCallback();
   }
 }

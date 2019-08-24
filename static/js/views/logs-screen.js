@@ -12,6 +12,7 @@
 const API = require('../api');
 const App = require('../app');
 const Constants = require('../constants');
+const fluent = require('../fluent');
 const Log = require('../logs/log');
 const page = require('page');
 const Utils = require('../utils');
@@ -99,7 +100,7 @@ class LogsScreen {
         // },
         {
           listener: this.handleRemove.bind(this),
-          name: 'Remove',
+          name: fluent.getMessage('remove'),
           icon: '/optimized-images/remove.svg',
         },
       ];
@@ -281,9 +282,9 @@ class LogsScreen {
 
     try {
       const message = await res.text();
-      App.showMessage(`Unable to create log: ${message}`, 5000);
+      App.showMessage(`${fluent.getMessage('logs-unable-to-create')}: ${message}`, 5000);
     } catch (_) {
-      App.showMessage('Unable to create log', 5000);
+      App.showMessage(fluent.getMessage('logs-unable-to-create'), 5000);
     }
   }
 
@@ -328,7 +329,7 @@ class LogsScreen {
       headers: API.headers(),
     }).then((res) => {
       if (!res.ok) {
-        App.showMessage('Server error: unable to remove log', 5000);
+        App.showMessage(fluent.getMessage('logs-server-remove-error'), 5000);
       } else {
         page('/logs');
       }

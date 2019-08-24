@@ -8,6 +8,8 @@
 
 'use strict';
 
+const fluent = require('./fluent');
+
 const Utils = {
   /**
    * @param {String} str
@@ -67,33 +69,33 @@ const Utils = {
 
     let fuzzy;
     if (delta < 5) {
-      fuzzy = 'now';
+      fuzzy = fluent.getMessage('utils-now');
     } else if (delta < minute) {
-      fuzzy = `${delta} secs ago`;
+      fuzzy = `${delta} ${fluent.getMessage('utils-secs-ago')}`;
     } else if (delta < 2 * minute) {
-      fuzzy = '1 min ago';
+      fuzzy = `1 ${fluent.getMessage('util-min-ago')}`;
     } else if (delta < hour) {
-      fuzzy = `${Math.floor(delta / minute)} mins ago`;
+      fuzzy = `${Math.floor(delta / minute)} ${fluent.getMessage('utils-mins-ago')}`;
     } else if (delta < 2 * hour) {
-      fuzzy = '1 hour ago';
+      fuzzy = `1 ${fluent.getMessage('utils-hour-ago')}`;
     } else if (delta < day) {
-      fuzzy = `${Math.floor(delta / hour)} hours ago`;
+      fuzzy = `${Math.floor(delta / hour)} ${fluent.getMessage('utils-hours ago')}`;
     } else if (delta < 2 * day) {
-      fuzzy = '1 day ago';
+      fuzzy = `1 ${fluent.getMessage('utils-day-ago')}`;
     } else if (delta < week) {
-      fuzzy = `${Math.floor(delta / day)} days ago`;
+      fuzzy = `${Math.floor(delta / day)} ${fluent.getMessage('utils-days-ago')}`;
     } else if (delta < 2 * week) {
-      fuzzy = '1 week ago';
+      fuzzy = `1 ${fluent.getMessage('utils-week-ago')}`;
     } else if (delta < month) {
-      fuzzy = `${Math.floor(delta / week)} weeks ago`;
+      fuzzy = `${Math.floor(delta / week)} ${fluent.getMessage('utils-weeks-ago')}`;
     } else if (delta < 2 * month) {
-      fuzzy = '1 month ago';
+      fuzzy = `1 ${fluent.getMessage('utils-month-ago')}`;
     } else if (delta < year) {
-      fuzzy = `${Math.floor(delta / month)} months ago`;
+      fuzzy = `${Math.floor(delta / month)} ${fluent.getMessage('utils-months-ago')}`;
     } else if (delta < 2 * year) {
-      fuzzy = '1 year ago';
+      fuzzy = `1 ${fluent.getMessage('utils-year-ago')}`;
     } else {
-      fuzzy = `${Math.floor(delta / year)} years ago`;
+      fuzzy = `${Math.floor(delta / year)} ${fluent.getMessage('utils-years-ago')}`;
     }
 
     return fuzzy;
@@ -132,78 +134,78 @@ const Utils = {
     switch (unit.toLowerCase()) {
       case 'volt':
       case 'volts':
-        return 'V';
+        return fluent.getMessage('abbrev-volt');
 
       case 'hertz':
-        return 'Hz';
+        return fluent.getMessage('abbrev-hertz');
 
       case 'amp':
       case 'amps':
       case 'ampere':
       case 'amperes':
-        return 'A';
+        return fluent.getMessage('abbrev-amp');
 
       case 'watt':
       case 'watts':
-        return 'W';
+        return fluent.getMessage('abbrev-watt');
 
       case 'kilowatt hour':
       case 'kilowatt-hour':
       case 'kilowatt hours':
       case 'kilowatt-hours':
-        return 'kW⋅h';
+        return fluent.getMessage('abbrev-kilowatt-hour');
 
       case 'percent':
-        return '%';
+        return fluent.getMessage('abbrev-percent');
 
       case 'degree fahrenheit':
       case 'degrees fahrenheit':
       case 'fahrenheit':
-        return '°F';
+        return fluent.getMessage('abbrev-fahrenheit');
 
       case 'degree celsius':
       case 'degrees celsius':
       case 'celsius':
-        return '°C';
+        return fluent.getMessage('abbrev-celsius');
 
       case 'kelvin':
-        return 'K';
+        return fluent.getMessage('abbrev-kelvin');
 
       case 'meter':
       case 'meters':
       case 'metre':
       case 'metres':
-        return 'm';
+        return fluent.getMessage('abbrev-meter');
 
       case 'kilometer':
       case 'kilometers':
       case 'kilometre':
       case 'kilometres':
-        return 'km';
+        return fluent.getMessage('abbrev-kilometer');
 
       case 'day':
       case 'days':
-        return 'd';
+        return fluent.getMessage('abbrev-day');
 
       case 'hour':
       case 'hours':
-        return 'h';
+        return fluent.getMessage('abbrev-hour');
 
       case 'minute':
       case 'minutes':
-        return 'min';
+        return fluent.getMessage('abbrev-minute');
 
       case 'second':
       case 'seconds':
-        return 's';
+        return fluent.getMessage('abbrev-second');
 
       case 'millisecond':
       case 'milliseconds':
-        return 'ms';
+        return fluent.getMessage('abbrev-millisecond');
 
       case 'foot':
       case 'feet':
-        return 'ft';
+        return fluent.getMessage('abbrev-foot');
 
       default:
         return unit;

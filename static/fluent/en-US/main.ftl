@@ -151,3 +151,233 @@ context-menu-save = Save
 context-menu-remove = Remove
 
 mozilla-iot = Mozilla IoT
+
+errors = Errors
+submit = Submit
+alarm = Alarm
+pushed = Pushed
+not-pushed = Not Pushed
+on-off = On/Off
+on = On
+off = Off
+power = Power
+voltage = Voltage
+temperature = Temperature
+degree-celsius = degree celsius
+current = Current
+frequency = Frequency
+color = Color
+brightness = Brightness
+leak = Leak
+dry = Dry
+color-temperature = Color Temperature
+video-unsupported = Sorry, video is not supported in your browser.
+motion = Motion
+no-motion = No Motion
+open = Open
+closed = Closed
+event-log = Event Log
+edit = Edit
+remove = Remove
+disconnected = Disconnected
+processing = Processing...
+
+reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
+click-here = click here
+check-email-for-token = Please check your email for a reclamation token and paste it above.
+reclaim-failed = Could not reclaim domain.
+subdomain-already-used = This subdomain is already being used. Please choose a different one.
+invalid-reclamation-token = Invalid reclamation token.
+domain-success = Success! Please wait while we redirect you...
+issuing-error = Error issuing certificate. Please try again.
+redirecting = Redirecting...
+
+OnOffSwitch = On/Off Switch
+MultiLevelSwitch = Multi Level Switch
+ColorControl = Color Control
+EnergyMonitor = Energy Monitor
+BinarySensor = Binary Sensor
+MultiLevelSensor = Multi Level Sensor
+SmartPlug = Smart Plug
+Light = Light
+DoorSensor = Door Sensor
+MotionSensor = Motion Sensor
+LeakSensor = Leak Sensor
+PushButton = Push Button
+VideoCamera = Video Camera
+Camera = Camera
+TemperatureSensor = Temperature Sensor
+Alarm = Alarm
+Custom = Custom Thing
+
+invalid-file = Invalid file.
+failed-read-file = Failed to read file.
+failed-save = Failed to save.
+
+speech-unsupported = Current browser does not support speech
+speech-didnt-get = Sorry, I didn't get that.
+
+ok = Ok
+unknown = ...
+
+minute = Minute
+hour = Hour
+day = Day
+week = Week
+
+true = True
+false = False
+
+rule-invalid = Invalid
+rule-delete-prompt = Are you sure you want to remove this rule permanently?
+rule-delete-cancel-button =
+  .value = Cancel
+rule-delete-confirm-button =
+  .value = Remove Rule
+rule-select-property = Select Property
+rule-not = Not
+rule-event = Event
+rule-action = Action
+rule-configure = Configure...
+rule-time-title = Time of day
+rule-notification = Notification
+notification-title = Title
+notification-message = Message
+notification-level = Level
+notification-low = Low
+notification-normal = Normal
+notification-high = High
+rule-name = Rule Name
+# ehhhhh
+rule-and = and
+rule-or = or
+rule-time-of-day-is = the time of day is
+rule-event-lower = event
+rule-event-occurs = occurs
+
+utils-now = now
+utils-secs-ago = secs ago
+utils-min-ago = min ago
+utils-mins-ago = mins ago
+utils-hour-ago = hour ago
+utils-hours-ago = hours ago
+utils-day-ago = day ago
+utils-days-ago = days ago
+utils-week-ago = week ago
+utils-weeks-ago = weeks ago
+utils-month-ago = month ago
+utils-months-ago = months ago
+utils-year-ago = year ago
+utils-years-ago = years ago
+
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F;
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
+
+unknown-device-type = Unknown device type
+new-thing-choose-icon = Choose icon...
+new-thing-save = Save
+new-thing-pin =
+  .placeholder = Enter PIN
+new-thing-pin-error = Incorrect PIN
+new-thing-pin-invalid = Invalid PIN
+new-thing-cancel = Cancel
+new-thing-submit = Submit
+new-thing-username =
+  .placeholder = Enter username
+new-thing-password =
+  .placeholder = Enter password
+new-thing-credentials-error = Incorrect credentials
+new-thing-saved = Saved
+new-thing-done = Done
+
+no-things = No devices yet. Click + to scan for available devices.
+thing-not-found = Thing not found.
+action-not-found = Action not found.
+events-not-found = This thing has no events.
+
+author-unknown = Unknown
+disable = Disable
+enable = Enable
+by = by
+addon-configure = Configure
+addon-update = Update
+addon-remove = Remove
+addon-updating = Updating...
+addon-updated = Updated
+addon-update-failed = Failed
+
+addon-config-applying = Applying...
+addon-config-apply = Apply
+
+add-thing-cancel = Cancel
+
+logs-unable-to-create = Unable to create log
+logs-server-remove-error = Server error: unable to remove log
+
+new-web-thing-url =
+  .placeholder = Enter web thing URL
+new-web-thing-label = Web Thing
+loading = Loading...
+new-web-thing-multiple = Multiple web things found
+new-web-thing-from = from
+
+addon-discovery-added = Added
+addon-discovery-add = Add
+addon-discovery-installing = Installing...
+addon-discovery-failed = Failed
+
+wireless-connected = Connected
+wireless-icon =
+  .alt = Wi-Fi Network
+
+settings = Settings
+domain = Domain
+users = Users
+edit-user = Edit User
+add-user = Add User
+adapters = Adapters
+addons = Add-ons
+addon-config = Configure Add-on
+addon-discovery = Discover New Add-ons
+experiments = Experiments
+updates = Updates
+authorizations = Authorizations
+developer = Developer
+network = Network
+ethernet = Ethernet
+wifi = Wi-Fi
+network-settings-changing = Changing network settings. This may take a minute.
+failed-ethernet-configure = Failed to configure ethernet.
+failed-wifi-configure = Failed to configure wi-fi.
+failed-wan-configure = Failed to configure WAN.
+failed-lan-configure = Failed to configure LAN.
+failed-wlan-configure = Failed to configure WLAN.
+icon = Icon
+unknown-state = Unknown state.
+error = Error
+update-available = New version available
+update-up-to-date = Your system is up to date
+last-update = Last update
+current-version = Current version
+failed = Failed
+never = Never
+in-progress = In Progress
+restarting = Restarting
+
+gateway-unreachable = Gateway Unreachable
+more-information = More Information

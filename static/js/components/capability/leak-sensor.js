@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -83,13 +84,13 @@ class LeakSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('leak');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._leak) {
       this._icon.classList.add('leak');
-      this._label.innerText = 'LEAK';
+      this._label.innerText = fluent.getMessage('leak');
     } else {
       this._icon.classList.remove('leak');
-      this._label.innerText = 'DRY';
+      this._label.innerText = fluent.getMessage('dry');
     }
   }
 }

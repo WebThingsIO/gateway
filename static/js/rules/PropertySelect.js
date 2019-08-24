@@ -1,3 +1,4 @@
+const fluent = require('../fluent');
 const Utils = require('../utils');
 const RuleUtils = require('./RuleUtils');
 
@@ -105,7 +106,7 @@ class PropertySelect {
    */
   clearOptions() {
     this.elt.innerHTML = '';
-    this.addOption('Select Property', null, true);
+    this.addOption(fluent.getMessage('rule-select-property'), null, true);
   }
 
   /**
@@ -391,10 +392,10 @@ class PropertySelect {
             onValue: false,
           });
           let onName = name;
-          let offName = `Not ${onName}`;
+          let offName = `${fluent.getMessage('rule-not')} ${onName}`;
           if (property.name === 'on') {
-            onName = 'On';
-            offName = 'Off';
+            onName = fluent.getMessage('on');
+            offName = fluent.getMessage('off');
           }
           this.addOption(onName, {
             trigger: triggerOn,
@@ -446,10 +447,10 @@ class PropertySelect {
             value: false,
           });
           let onName = name;
-          let offName = `Not ${onName}`;
+          let offName = `${fluent.getMessage('rule-not')} ${onName}`;
           if (property.name === 'on') {
-            onName = 'On';
-            offName = 'Off';
+            onName = fluent.getMessage('on');
+            offName = fluent.getMessage('off');
           }
           this.addOption(onName, {
             effect: effectOn,
@@ -507,7 +508,7 @@ class PropertySelect {
         event: name,
         label,
       };
-      this.addOption(`Event "${eventTrigger.label}"`, {
+      this.addOption(`${fluent.getMessage('rule-event')} "${eventTrigger.label}"`, {
         trigger: eventTrigger,
       });
     }
@@ -528,7 +529,7 @@ class PropertySelect {
         label,
         parameters: {},
       };
-      this.addOption(`Action "${actionEffect.label}"`, {
+      this.addOption(`${fluent.getMessage('rule-action')} "${actionEffect.label}"`, {
         effect: actionEffect,
       });
     }

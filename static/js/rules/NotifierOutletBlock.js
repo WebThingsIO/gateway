@@ -1,11 +1,12 @@
 const RulePartBlock = require('./RulePartBlock');
 const BlockConfigureDropdown = require('./BlockConfigureDropdown');
+const fluent = require('../fluent');
 
 class NotifierOutletBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate, notifier, outlet,
               values) {
     super(ruleArea, onPresentationChange, onRuleUpdate,
-          `${outlet.name} Notification`,
+          `${outlet.name} ${fluent.getMessage('rule-notification')}`,
           '/optimized-images/thing-icons/notification.svg');
 
     this.notifier = notifier;
@@ -25,20 +26,24 @@ class NotifierOutletBlock extends RulePartBlock {
     this.dropdown = new BlockConfigureDropdown(this, configureContainer);
     this.dropdown.addValue({
       id: 'title',
-      title: 'Title',
+      title: fluent.getMessage('notification-title'),
       type: 'string',
       value: this.values.title,
     });
     this.dropdown.addValue({
       id: 'message',
-      title: 'Message',
+      title: fluent.getMessage('notification-message'),
       type: 'string',
       value: this.values.message,
     });
-    this.levels = ['Low', 'Normal', 'High'];
+    this.levels = [
+      fluent.getMessage('notification-low'),
+      fluent.getMessage('notification-normal'),
+      fluent.getMessage('notification-high'),
+    ];
     this.dropdown.addValue({
       id: 'level',
-      title: 'Level',
+      title: fluent.getMessage('notification-level'),
       type: 'string',
       enum: this.levels,
       value: this.levels[this.values.level],

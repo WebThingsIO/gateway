@@ -2,6 +2,7 @@ const Rule = require('./Rule');
 const RuleUtils = require('./RuleUtils');
 const page = require('page');
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 class RuleCard {
   /**
@@ -21,7 +22,7 @@ class RuleCard {
     let invalidWarning = '';
     if (!this.rule.valid()) {
       checked = '';
-      invalidWarning = '[INVALID] ';
+      invalidWarning = `[${fluent.getMessage('rule-invalid').toLocaleUpperCase()}] `;
       this.elt.classList.add('invalid');
     }
 
@@ -57,11 +58,11 @@ class RuleCard {
         <div class="rule-delete-button"></div>
         <input class="rule-edit-button" type="button" value="Edit Rule"/>
         <div class="rule-delete-dialog">
-          <p>Are you sure you want to remove this rule permanently?</p>
+          <p data-l10n-id="rule-delete-prompt"></p>
           <input class="rule-delete-cancel-button" type="button"
-                 value="Cancel"/>
+                 data-l10n-id="rule-delete-cancel-button" />
           <input class="rule-delete-confirm-button" type="button"
-                 value="Remove Rule"/>
+                 data-l10n-id="rule-delete-confirm-button" />
         </div>
       </div>
       <div class="rule-preview">

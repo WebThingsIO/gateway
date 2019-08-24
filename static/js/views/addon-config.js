@@ -12,6 +12,7 @@
 const SchemaForm = require('../schema-form/schema-form');
 const page = require('page');
 const API = require('../api');
+const fluent = require('../fluent');
 
 class AddonConfig {
   /**
@@ -37,7 +38,8 @@ class AddonConfig {
     if (errors.length > 0) {
       this.scrollToTop();
     } else {
-      this.configForm.submitButton.innerText = 'Applying...';
+      this.configForm.submitButton.innerText =
+        fluent.getMessage('addon-config-applying');
       API.setAddonConfig(this.id, formData)
         .then(() => {
           page('/settings/addons');
@@ -45,7 +47,8 @@ class AddonConfig {
         .catch((err) => {
           console.error(`Failed to set config add-on: ${this.name}\n${err}`);
           this.configForm.errorField.render([err]);
-          this.configForm.submitButton.innerText = 'Apply';
+          this.configForm.submitButton.innerText =
+            fluent.getMessage('addon-config-apply');
         });
     }
   }
@@ -54,12 +57,13 @@ class AddonConfig {
    * Render AddonConfig view and add to DOM.
    */
   render() {
-    this.configForm = new SchemaForm(this.schema,
-                                     `addon-config-${this.id}`,
-                                     this.name,
-                                     this.config,
-                                     this.handleApply.bind(this),
-                                     {submitText: 'Apply'});
+    this.configForm = new SchemaForm(
+      this.schema,
+      `addon-config-${this.id}`,
+      this.name,
+      this.config,
+      this.handleApply.bind(this),
+      {submitText: fluent.getMessage('addon-config-apply')});
     this.container.appendChild(this.configForm.render());
   }
 }

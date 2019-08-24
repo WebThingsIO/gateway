@@ -12,13 +12,14 @@
 
 const NumericLabelDetail = require('./numeric-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class VoltageDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
     super(thing,
           name,
           !!property.readOnly,
-          property.title || 'Voltage',
+          property.title || fluent.getMessage('voltage'),
           'V',
           0);
     this.id = `voltage-${Utils.escapeHtmlForIdClass(this.name)}`;

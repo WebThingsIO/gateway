@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -83,13 +84,13 @@ class AlarmCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('alarm');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._alarm) {
       this._icon.classList.add('alarm');
-      this._label.innerText = 'ALARM';
+      this._label.innerText = fluent.getMessage('alarm');
     } else {
       this._icon.classList.remove('alarm');
-      this._label.innerText = 'OK';
+      this._label.innerText = fluent.getMessage('ok');
     }
   }
 }

@@ -34,7 +34,7 @@ class SchemaForm {
                                                     formData,
                                                     this.definitions);
     this.submitText =
-      options.hasOwnProperty('submitText') ? options.submitText : 'Submit';
+      options.hasOwnProperty('submitText') ? options.submitText : '';
     this.noValidate =
       options.hasOwnProperty('validate') ? !options.validate : false;
     this.liveValidate =
@@ -77,7 +77,11 @@ class SchemaForm {
     submitButton.id = `submit-${Utils.escapeHtml(this.id)}`;
     submitButton.type = 'button';
     submitButton.className = 'button-submit';
-    submitButton.innerText = this.submitText;
+    if (this.submitText) {
+      submitButton.innerText = this.submitText;
+    } else {
+      submitButton.dataset.l10nId = 'submit';
+    }
     submitButton.addEventListener('click', this.handleSubmit.bind(this));
     submitButton.disabled = true;
 

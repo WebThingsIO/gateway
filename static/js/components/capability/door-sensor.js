@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -82,13 +83,13 @@ class DoorSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('open');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._open) {
       this._icon.classList.add('open');
-      this._label.innerText = 'OPEN';
+      this._label.innerText = fluent.getMessage('open');
     } else {
       this._icon.classList.remove('open');
-      this._label.innerText = 'CLOSED';
+      this._label.innerText = fluent.getMessage('closed');
     }
   }
 }

@@ -10,6 +10,8 @@
 
 'use strict';
 
+const fluent = require('./fluent');
+
 const subdomain = document.getElementById('subdomain');
 const email = document.getElementById('email');
 const optIn = document.getElementById('opt-in');
@@ -101,7 +103,7 @@ function submitOnEnter(evt) {
  */
 function submitForm() {
   createDomainButton.disabled = true;
-  displayMessage('Processing...', 'message');
+  displayMessage(fluent.getMessage('processing'), 'message');
 
   // Call the settings controller to subscribe the domain in the gateway.
   const action = {
@@ -122,18 +124,16 @@ function submitForm() {
       validateInput();
 
       if (response.statusText.indexOf('ReclamationPossible') > -1) {
-        const text1 = document.createTextNode(
-          'It looks like you\'ve already registered that subdomain. ');
-        const text2 = document.createTextNode(' to reclaim it.');
+        const text1 = document.createElement('span');
+        text1.dataset.l10nId = 'reclaim-prompt';
         const reclaim = document.createElement('a');
-        reclaim.innerText = 'Click here';
+        reclaim.dataset.l10nId = 'click-here';
         reclaim.href = '#';
         reclaim.onclick = () => {
           document.getElementById('opt-in-group').style.display = 'none';
           reclamationToken.style.display = 'inline-block';
           reclamationToken.focus();
-          errorMessage.innerHTML = 'Please check your email for a ' +
-            'reclamation token and paste it above.';
+          errorMessage.textContent = fluent.getMessage('check-email-for-token');
 
           fetch('/settings/reclaim', {
             method: 'POST',
@@ -143,28 +143,26 @@ function submitForm() {
               'Content-Type': 'application/json',
             },
           }).catch(() => {
-            displayMessage('Could not reclaim domain.', 'error');
+            displayMessage(fluent.getMessage('reclaim-failed'), 'error');
           });
         };
 
         errorMessage.innerHTML = '';
         errorMessage.appendChild(text1);
         errorMessage.appendChild(reclaim);
-        errorMessage.appendChild(text2);
 
         errorMessage.classList.remove('hidden');
         errorMessage.classList.remove('message');
         errorMessage.classList.add('error');
         return Promise.reject();
       } else {
-        displayMessage('This subdomain is already being used. ' +
-                       'Please choose a different one.',
+        displayMessage(fluent.getMessage('subdomain-already-used'),
                        'error');
         createDomainButton.disabled = false;
         return Promise.reject();
       }
     } else if (response.statusText.indexOf('ReclamationTokenMismatch') > -1) {
-      displayMessage('Invalid reclamation token.', 'error');
+      displayMessage(fluent.getMessage('invalid-reclamation-token'), 'error');
       createDomainButton.disabled = false;
       return Promise.reject();
     } else {
@@ -172,13 +170,13 @@ function submitForm() {
     }
   }).then((body) => {
     if (body) {
-      displayMessage('Success! Please wait while we redirect you...',
+      displayMessage(fluent.getMessage('domain-success'),
                      'message');
       setTimeout(() => {
         window.location.replace(body);
       }, 5000);
     } else {
-      displayMessage('Error issuing certificate. Please try again.',
+      displayMessage(fluent.getMessage('issuing-error'),
                      'error');
       createDomainButton.disabled = false;
     }
@@ -197,7 +195,7 @@ createDomainButton.addEventListener('click', submitForm);
 
 skipAnchor.addEventListener('click', () => {
   createDomainButton.disabled = true;
-  displayMessage('Processing...', 'message');
+  displayMessage(fluent.getMessage('processing'), 'message');
 
   // call the settings controller to skip the domain subscription
   fetch('/settings/skiptunnel', {
@@ -207,7 +205,7 @@ skipAnchor.addEventListener('click', () => {
     },
   }).then((response) => {
     if (response.ok) {
-      displayMessage('Redirecting...', 'message');
+      displayMessage(fluent.getMessage('redirecting'), 'message');
       setTimeout(() => {
         window.location.replace(`http://${window.location.host}`);
       }, 1000);

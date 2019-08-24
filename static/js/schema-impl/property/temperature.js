@@ -12,13 +12,14 @@
 
 const NumericLabelDetail = require('./numeric-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class TemperatureDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
     super(thing,
           name,
           !!property.readOnly,
-          property.title || 'Temperature',
+          property.title || fluent.getMessage('temperature'),
           property.unit || 'degree celsius',
           0);
     this.id = `temperature-${Utils.escapeHtmlForIdClass(this.name)}`;

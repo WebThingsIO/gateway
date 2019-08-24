@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -95,17 +96,17 @@ class SmartPlugCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('on');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._on) {
       this._icon.classList.add('on');
       if (this._havePower) {
         this.power = this._power;
       } else {
-        this._label.innerText = 'ON';
+        this._label.innerText = fluent.getMessage('on');
       }
     } else {
       this._icon.classList.remove('on');
-      this._label.innerText = 'OFF';
+      this._label.innerText = fluent.getMessage('off');
     }
   }
 
