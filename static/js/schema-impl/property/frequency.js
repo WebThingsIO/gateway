@@ -12,13 +12,14 @@
 
 const NumericLabelDetail = require('./numeric-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class FrequencyDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
     super(thing,
           name,
           !!property.readOnly,
-          property.title || 'Frequency',
+          property.title || fluent.getMessage('frequency'),
           'Hz',
           0);
     this.id = `frequency-${Utils.escapeHtmlForIdClass(this.name)}`;

@@ -10,6 +10,8 @@
 
 const App = require('./app');
 const AssistantScreen = require('./views/assistant');
+const fluent = require('./fluent');
+
 let SpeakToMe;
 try {
   SpeakToMe = require('speaktome-api/build/stm_web.min');
@@ -59,7 +61,7 @@ const Speech = {
   */
   listen: function() {
     if (!this.stm) {
-      App.showMessage('Current browser does not support speech', 3000);
+      App.showMessage(fluent.getMessage('speech-unsupported'), 3000);
       return;
     }
     if (this.listening) {
@@ -99,10 +101,10 @@ const Speech = {
       });
       if (results.length < 1) {
         if (assistantMode) {
-          AssistantScreen.displayMessage('Sorry, I didn\'t get that.',
+          AssistantScreen.displayMessage(fluent.getMessage('speech-didnt-get'),
                                          'incoming');
         } else {
-          displayNotification('Sorry, I didn\'t get that',
+          displayNotification(fluent.getMessage('speech-didnt-get'),
                               'failure');
         }
 

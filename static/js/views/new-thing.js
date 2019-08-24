@@ -12,6 +12,7 @@
 
 const API = require('../api');
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 class NewThing {
   /**
@@ -67,77 +68,60 @@ class NewThing {
     let cls = '', type = '', customIconClass = 'hidden';
     const options = [];
     for (let capability of capabilities) {
+      type = fluent.getMessage(capability) || capability;
       switch (capability) {
         case 'OnOffSwitch':
-          type = 'On/Off Switch';
           cls = cls || 'on-off-switch';
           break;
         case 'MultiLevelSwitch':
-          type = 'Multi Level Switch';
           cls = cls || 'multi-level-switch';
           break;
         case 'ColorControl':
-          type = 'Color Control';
           cls = cls || 'color-control';
           break;
         case 'EnergyMonitor':
-          type = 'Energy Monitor';
           cls = cls || 'energy-monitor';
           break;
         case 'BinarySensor':
-          type = 'Binary Sensor';
           cls = cls || 'binary-sensor';
           break;
         case 'MultiLevelSensor':
-          type = 'Multi Level Sensor';
           cls = cls || 'multi-level-sensor';
           break;
         case 'SmartPlug':
-          type = 'Smart Plug';
           cls = cls || 'smart-plug';
           break;
         case 'Light':
-          type = 'Light';
           cls = cls || 'light';
           break;
         case 'DoorSensor':
-          type = 'Door Sensor';
           cls = cls || 'door-sensor';
           break;
         case 'MotionSensor':
-          type = 'Motion Sensor';
           cls = cls || 'motion-sensor';
           break;
         case 'LeakSensor':
-          type = 'Leak Sensor';
           cls = cls || 'leak-sensor';
           break;
         case 'PushButton':
-          type = 'Push Button';
           cls = cls || 'push-button';
           break;
         case 'VideoCamera':
-          type = 'Video Camera';
           cls = cls || 'video-camera';
           break;
         case 'Camera':
-          type = 'Camera';
           cls = cls || 'camera';
           break;
         case 'TemperatureSensor':
-          type = 'Temperature Sensor';
           cls = cls || 'temperature-sensor';
           break;
         case 'Alarm':
-          type = 'Alarm';
           cls = cls || 'alarm';
           break;
         case 'Custom':
-          type = 'Custom Thing';
           cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;
         default:
-          type = capability;
           cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;
       }
@@ -164,7 +148,7 @@ class NewThing {
     }
 
     if (!type) {
-      type = 'Unknown device type';
+      type = fluent.getMessage('unknown-device-type');
     }
 
     const id = Utils.escapeHtmlForIdClass(`new-thing-custom-icon-${this.id}`);
@@ -181,13 +165,13 @@ class NewThing {
         <input type="file" class="new-thing-custom-icon-input hidden"
           id="${id}" accept="image/jpeg,image/png,image/svg+xml">
         <label for="${id}"
-          class="new-thing-custom-icon-label text-button ${customIconClass}">
-          Choose icon...
+          class="new-thing-custom-icon-label text-button ${customIconClass}"
+          data-l10n-id="new-thing-choose-icon">
         </label>
         <span class="new-thing-label"></span>
       </div>
-      <button class="new-thing-save-button text-button">
-        Save
+      <button class="new-thing-save-button text-button"
+              data-l10n-id="new-thing-save">
       </button>`;
   }
 
@@ -200,15 +184,16 @@ class NewThing {
           ${Utils.escapeHtml(this.description.title)}
         </span>
         <input type="text" class="new-thing-pin" required autofocus
-               placeholder="Enter PIN"/>
-        <span class="new-thing-pin-error hidden">Incorrect PIN</span>
+               data-l10n-id="new-thing-pin"/>
+        <span class="new-thing-pin-error hidden"
+              data-l10n-id="new-thing-pin-error"></span>
       </div>
       <div class="new-thing-controls">
-        <button class="new-thing-cancel-button text-button">
-          Cancel
+        <button class="new-thing-cancel-button text-button"
+                data-l10n-id="new-thing-cancel">
         </button>
-        <button class="new-thing-submit-button text-button" disabled>
-          Submit
+        <button class="new-thing-submit-button text-button"
+                data-l10n-id="new-thing-submit" disabled>
         </button>
       </div>`;
   }
@@ -222,19 +207,19 @@ class NewThing {
           ${Utils.escapeHtml(this.description.title)}
         </span>
         <input type="text" class="new-thing-username" required autofocus
-               placeholder="Enter username"/>
+               data-l10n-id="new-thing-username"/>
         <input type="password" class="new-thing-password" required
-               placeholder="Enter password"/>
-        <span class="new-thing-credentials-error hidden">
-          Incorrect credentials
+               data-l10n-id="new-thing-password"/>
+        <span class="new-thing-credentials-error hidden"
+              data-l10n-id="new-thing-credentials-error">
         </span>
       </div>
       <div class="new-thing-controls">
-        <button class="new-thing-cancel-button text-button">
-          Cancel
+        <button class="new-thing-cancel-button text-button"
+                data-l10n-id="new-thing-cancel">
         </button>
-        <button class="new-thing-submit-button text-button" disabled>
-          Submit
+        <button class="new-thing-submit-button text-button" disabled
+                data-l10n-id="new-thing-submit">
         </button>
       </div>`;
   }
@@ -323,7 +308,8 @@ class NewThing {
     if (valid) {
       this.pinInput.setCustomValidity('');
     } else {
-      this.pinInput.setCustomValidity('Invalid PIN');
+      this.pinInput.setCustomValidity(
+        fluent.getMessage('new-thing-pin-invalid'));
     }
   }
 
@@ -491,7 +477,7 @@ class NewThing {
 
     const file = this.customIconInput.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
-      this.label.innerText = 'Invalid file.';
+      this.label.dataset.l10nId = 'invalid-file';
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       return;
@@ -501,7 +487,7 @@ class NewThing {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
-        this.label.innerText = 'Failed to read file.';
+        this.label.dataset.l10nId = 'failed-read-file';
         this.label.classList.add('error');
         this.label.classList.remove('hidden');
         this.saveButton.disabled = false;
@@ -552,15 +538,15 @@ class NewThing {
     }).then((response) => {
       return response.json();
     }).then(() => {
-      this.saveButton.innerHTML = 'Saved';
+      this.saveButton.textContent = fluent.getMessage('new-thing-saved');
 
       const cancelButton = document.getElementById('add-thing-cancel-button');
       if (cancelButton) {
-        cancelButton.textContent = 'Done';
+        cancelButton.textContent = fluent.getMessage('new-thing-done');
       }
     }).catch((error) => {
       console.error(`Failed to save thing ${error}`);
-      this.label.innerText = 'Failed to save.';
+      this.label.innerText = fluent.getMessage('failed-save');
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       this.thingType.disabled = false;

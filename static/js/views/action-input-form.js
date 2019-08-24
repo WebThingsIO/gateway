@@ -148,7 +148,7 @@ class ActionInputForm {
 
     form += `
       <input id="action-submit-button" type="submit"
-        class="action-button" value="Submit">
+        class="action-button" data-l10n-id="submit">
       </form></div>`;
 
     element.innerHTML = form;

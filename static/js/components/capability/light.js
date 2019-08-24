@@ -11,6 +11,7 @@
 
 const BaseComponent = require('../base-component');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -84,7 +85,7 @@ template.innerHTML = `
              1.014,0.058 1.8285,0.8977 1.8285,1.9283 z" />
         </g>
       </svg>
-      <div id="label" class="webthing-light-capability-label">OFF</div>
+      <div id="label" class="webthing-light-capability-label">--</div>
     </div>
   </div>
 `;
@@ -157,9 +158,9 @@ class LightCapability extends BaseComponent {
     if (this._haveBrightness) {
       this.brightness = this._brightness;
     } else if (this._on) {
-      this._label.innerText = 'ON';
+      this._label.innerText = fluent.getMessage('on');
     } else {
-      this._label.innerText = 'OFF';
+      this._label.innerText = fluent.getMessage('off');
     }
 
     if (this._haveColor) {
@@ -187,7 +188,7 @@ class LightCapability extends BaseComponent {
     if (this._on) {
       this._label.innerText = `${Math.round(this._brightness)}%`;
     } else {
-      this._label.innerText = 'OFF';
+      this._label.innerText = fluent.getMessage('off');
     }
   }
 

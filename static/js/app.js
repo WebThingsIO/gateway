@@ -43,7 +43,7 @@ const MobileDragDrop = require('mobile-drag-drop/index.min');
 const ScrollBehavior = require('mobile-drag-drop/scroll-behaviour.min');
 const Notifications = require('./notifications');
 const Utils = require('./utils');
-const Fluent = require('./fluent');
+const fluent = require('./fluent');
 
 const App = {
   /**
@@ -126,7 +126,7 @@ const App = {
 
     Menu.init();
     Router.init();
-    Fluent.init();
+    fluent.init();
   },
 
   initWebSocket() {
@@ -187,7 +187,8 @@ const App = {
         this.connectivityOverlay.classList.add('hidden');
         this.messageArea.classList.remove('disconnected');
 
-        if (this.messageArea.innerText === 'Gateway Unreachable') {
+        if (this.messageArea.innerText ===
+            fluent.getMessage('gateway-unreachable')) {
           this.hidePersistentMessage();
         }
       }
@@ -196,7 +197,7 @@ const App = {
       if (++this.failedPings >= this.MAX_PING_FAILURES) {
         this.connectivityOverlay.classList.remove('hidden');
         this.messageArea.classList.add('disconnected');
-        this.showPersistentMessage('Gateway Unreachable');
+        this.showPersistentMessage(fluent.getMessage('gateway-unreachable'));
         this.pingerLastStatus = 'offline';
       }
     });
@@ -309,7 +310,7 @@ const App = {
       if (link.icon) {
         const image = document.createElement('img');
         image.src = link.icon;
-        image.alt = `${link.name} icon`;
+        image.alt = `${link.name} ${fluent.getMessage('icon')}`;
         element.insertBefore(image, element.childNodes[0]);
       }
 
@@ -357,8 +358,7 @@ const App = {
 
     if (extraUrl) {
       message += `<br><br>
-        <a href="${Utils.escapeHtml(extraUrl)}" target="_blank" rel="noopener">
-          More Information
+        <a href="${Utils.escapeHtml(extraUrl)}" target="_blank" rel="noopener" data-l10n-id="more-information">
         </a>`;
     }
 

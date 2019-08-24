@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -85,13 +86,13 @@ class PushButtonCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('pushed');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._pushed) {
       this._icon.classList.add('pushed');
-      this._label.innerText = 'PUSHED';
+      this._label.innerText = fluent.getMessage('pushed');
     } else {
       this._icon.classList.remove('pushed');
-      this._label.innerText = 'NOT PUSHED';
+      this._label.innerText = fluent.getMessage('not-pushed');
     }
   }
 

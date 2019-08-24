@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -83,13 +84,13 @@ class MotionSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('motion');
-      this._label.innerText = '...';
+      this._label.innerText = fluent.getMessage('unknown');
     } else if (this._motion) {
       this._icon.classList.add('motion');
-      this._label.innerText = 'MOTION';
+      this._label.innerText = fluent.getMessage('motion');
     } else {
       this._icon.classList.remove('motion');
-      this._label.innerText = 'NO MOTION';
+      this._label.innerText = fluent.getMessage('no-motion');
     }
   }
 }

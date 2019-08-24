@@ -12,13 +12,14 @@
 
 const NumericLabelDetail = require('./numeric-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class CurrentDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
     super(thing,
           name,
           !!property.readOnly,
-          property.title || 'Current',
+          property.title || fluent.getMessage('current'),
           'A',
           1);
     this.id = `current-${Utils.escapeHtmlForIdClass(this.name)}`;

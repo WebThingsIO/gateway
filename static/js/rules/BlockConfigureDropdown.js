@@ -1,3 +1,5 @@
+const fluent = require('../fluent');
+
 class BlockConfigureDropdown {
   /**
    * A hand-coded <select>-like element which allows the configuration of
@@ -24,7 +26,7 @@ class BlockConfigureDropdown {
     this.addValue({
       openButton: true,
       id: null,
-      title: 'Configure...',
+      title: fluent.getMessage('rule-configure'),
       type: null,
     });
 

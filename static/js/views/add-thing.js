@@ -11,6 +11,7 @@
 
 const API = require('../api');
 const App = require('../app');
+const fluent = require('../fluent');
 const NewThing = require('./new-thing');
 const NewWebThing = require('./new-web-thing');
 const SettingsScreen = require('./settings');
@@ -154,7 +155,7 @@ const AddThingScreen = {
       }
     });
 
-    this.cancelButton.textContent = 'Cancel';
+    this.cancelButton.textContent = fluent.getMessage('add-thing-cancel');
 
     this.element.classList.remove('hidden');
     this.newThingsElement.innerHTML = '';

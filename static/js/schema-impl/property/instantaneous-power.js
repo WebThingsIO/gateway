@@ -12,10 +12,12 @@
 
 const NumericLabelDetail = require('./numeric-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class InstantaneousPowerDetail extends NumericLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.title || 'Power', 'W', 0);
+    super(thing, name, !!property.readOnly,
+          property.title || fluent.getMessage('power'), 'W', 0);
     this.id = `instantaneous-power-${Utils.escapeHtmlForIdClass(this.name)}`;
 
     if (property.hasOwnProperty('multipleOf') &&

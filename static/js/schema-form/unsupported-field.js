@@ -24,9 +24,16 @@ class UnsupportedField {
   render() {
     const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
     const field = document.createElement('div');
-
     field.className = 'unsupported-field';
-    field.innerHTML = `Unsupported field schema ${schema}.`;
+
+    const fieldMessage = document.createElement('span');
+    fieldMessage.dataset.l10nId = 'unsupported-field';
+
+    const schemaMessage = document.createElement('span');
+    schemaMessage.innerHTML = schema;
+
+    field.appendChild(fieldMessage);
+    field.appendChild(schemaMessage);
 
     return field;
   }

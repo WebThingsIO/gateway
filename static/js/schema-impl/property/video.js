@@ -73,8 +73,7 @@ class VideoDetail {
         <div class="media-modal">
           <div class="media-modal-frame">
             <div class="media-modal-close"></div>
-            <div class="media-modal-error">
-              Sorry, video is not supported in your browser.
+            <div class="media-modal-error" data-l10n-id="video-unsupported">
             </div>
           </div>
         </div>

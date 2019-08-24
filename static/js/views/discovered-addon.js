@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('../api');
+const fluent = require('../fluent');
 const Utils = require('../utils');
 
 class DiscoveredAddon {
@@ -42,12 +43,12 @@ class DiscoveredAddon {
   view() {
     let el;
     if (this.installed) {
-      el = '<span class="addon-discovery-settings-added">Added</span>';
+      el = `<span class="addon-discovery-settings-added" data-l10n-id="addon-discovery-added"></span>`;
     } else {
       el = `
         <button id="addon-install-${Utils.escapeHtmlForIdClass(this.name)}"
-          class="text-button addon-discovery-settings-add">
-          Add
+          class="text-button addon-discovery-settings-add"
+          data-l10n-id="addon-discovery-add">
         </button>`;
     }
 
@@ -64,7 +65,7 @@ class DiscoveredAddon {
             ${Utils.escapeHtml(this.description)}
           </span>
           <span class="addon-settings-author">
-            by <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
+            ${fluent.getMessage('by')} <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
           <span class="addon-settings-license">
             (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
@@ -95,12 +96,14 @@ class DiscoveredAddon {
   handleInstall(e) {
     const controlDiv = e.target.parentNode;
     const installing =
-      '<span class="addon-discovery-settings-installing">Installing...</span>';
+      `<span class="addon-discovery-settings-installing"
+             data-l10n-id="addon-discovery-installing"></span>`;
     controlDiv.innerHTML = installing;
 
     API.installAddon(this.name, this.url, this.checksum)
       .then((settings) => {
-        const el = '<span class="addon-discovery-settings-added">Added</span>';
+        const el = `<span class="addon-discovery-settings-added"
+          data-l10n-id="addon-discovery-added"></span>`;
         controlDiv.innerHTML = el;
         const addon = this.availableAddonsMap.get(this.name);
         if (addon) {
@@ -111,7 +114,8 @@ class DiscoveredAddon {
       .catch((err) => {
         console.error(`Failed to install add-on: ${this.name}\n${err}`);
         const el =
-          '<span class="addon-discovery-settings-install-failed">Failed</span>';
+          `<span class="addon-discovery-settings-install-failed"
+                 data-l10n-id="addon-discovery-failed"></span>`;
         controlDiv.innerHTML = el;
       });
   }

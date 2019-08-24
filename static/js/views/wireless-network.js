@@ -40,10 +40,10 @@ class WirelessNetwork {
 
       if (this.connected) {
         connectedDiv =
-          `<div class="wireless-network-info-connected">Connected</div>`;
+          `<div class="wireless-network-info-connected" data-l10n-id="wireless-connected"></div>`;
       } else {
         connectedDiv =
-          `<div class="wireless-network-info-disconnected">Connected</div>`;
+          `<div class="wireless-network-info-disconnected" data-l10n-id="wireless-connected"></div>`;
       }
     }
 
@@ -57,7 +57,7 @@ class WirelessNetwork {
           </div>
           ${connectedDiv}
         </div>
-        <img class="wireless-network-icon" src="${img}" alt="Wi-Fi Network">
+        <img class="wireless-network-icon" src="${img}" data-l10n-id="wireless-icon">
       </li>`;
   }
 

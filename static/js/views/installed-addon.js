@@ -10,6 +10,7 @@
 'use strict';
 
 const API = require('../api');
+const fluent = require('../fluent');
 const Utils = require('../utils');
 const page = require('page');
 
@@ -32,7 +33,7 @@ class InstalledAddon {
     } else if (typeof metadata.author === 'string') {
       this.author = metadata.author.split('<')[0].trim();
     } else {
-      this.author = 'Unknown';
+      this.author = fluent.getMessage('author-unknown');
     }
     this.homepage = metadata.homepage;
     this.license =
@@ -57,10 +58,10 @@ class InstalledAddon {
   view() {
     let toggleButtonText, toggleButtonClass;
     if (this.enabled) {
-      toggleButtonText = 'Disable';
+      toggleButtonText = fluent.getMessage('disable');
       toggleButtonClass = 'addon-settings-disable';
     } else {
-      toggleButtonText = 'Enable';
+      toggleButtonText = fluent.getMessage('enable');
       toggleButtonClass = 'addon-settings-enable';
     }
 
@@ -82,7 +83,7 @@ class InstalledAddon {
             ${Utils.escapeHtml(this.description)}
           </span>
           <span class="addon-settings-author">
-            by <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
+            ${fluent.getMessage('by')} <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
           <span class="addon-settings-license">
             (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
@@ -90,17 +91,17 @@ class InstalledAddon {
         </div>
         <div class="addon-settings-controls">
           <button id="addon-config-${Utils.escapeHtmlForIdClass(this.name)}"
-            class="text-button addon-settings-config ${configButtonClass}">
-            Configure
+            class="text-button addon-settings-config ${configButtonClass}"
+            data-l10n-id="addon-configure">
           </button>
           <button id="addon-update-${Utils.escapeHtmlForIdClass(this.name)}"
-            class="text-button addon-settings-update hidden">
-            Update
+            class="text-button addon-settings-update hidden"
+            data-l10n-id="addon-update">
           </button>
           <span class="addon-settings-spacer"></span>
           <button id="addon-remove-${Utils.escapeHtmlForIdClass(this.name)}"
-            class="text-button addon-settings-remove">
-            Remove
+            class="text-button addon-settings-remove"
+            data-l10n-id="addon-remove">
           </button>
           <button id="addon-toggle-${Utils.escapeHtmlForIdClass(this.name)}"
             class="text-button ${toggleButtonClass}">
@@ -167,7 +168,7 @@ class InstalledAddon {
       '.addon-settings-version');
     const updating = document.createElement('span');
     updating.classList.add('addon-updating');
-    updating.innerText = 'Updating...';
+    updating.innerText = fluent.getMessage('addon-updating');
     controlDiv.replaceChild(updating, e.target);
 
     API.updateAddon(this.name, this.updateUrl, this.updateChecksum)
@@ -176,11 +177,11 @@ class InstalledAddon {
         const addon = this.installedAddonsMap.get(this.name);
         addon.version = this.version;
         versionDiv.innerText = this.version;
-        updating.innerText = 'Updated';
+        updating.innerText = fluent.getMessage('addon-updated');
       })
       .catch((err) => {
         console.error(`Failed to update add-on: ${this.name}\n${err}`);
-        updating.innerText = 'Failed';
+        updating.innerText = fluent.getMessage('addon-update-failed');
       });
   }
 
@@ -216,11 +217,11 @@ class InstalledAddon {
         const addon = this.installedAddonsMap.get(this.name);
         addon.moziot.enabled = enabled;
         if (this.enabled) {
-          button.innerText = 'Disable';
+          button.innerText = fluent.getMessage('disable');
           button.classList.remove('addon-settings-enable');
           button.classList.add('addon-settings-disable');
         } else {
-          button.innerText = 'Enable';
+          button.innerText = fluent.getMessage('enable');
           button.classList.remove('addon-settings-disable');
           button.classList.add('addon-settings-enable');
         }

@@ -11,13 +11,14 @@
 'use strict';
 
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class OnOffDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.title || 'On/Off';
+    this.label = property.title || fluent.getMessage('on-off');
     this.id = `on-off-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

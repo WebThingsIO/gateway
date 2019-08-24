@@ -20,6 +20,7 @@ async function *generateBundles(_resourceIds) {
     const text = await res.text();
     bundle.addResource(new Fluent.FluentResource(text));
   }
+  window.buns.push(bundle);
   yield bundle;
 }
 
@@ -29,6 +30,9 @@ function init() {
   l10n.connectRoot(document.documentElement);
   l10n.translateRoots();
 }
+
+window.l10n = l10n;
+window.buns = [];
 
 module.exports = {
   l10n,

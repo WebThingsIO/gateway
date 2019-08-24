@@ -20,7 +20,7 @@ class ErrorField {
 
     field.innerHTML = `
       <div>
-        <h3 class="errors-title">Errors</h3>
+        <h3 class="errors-title" data-l10n-id="errors"></h3>
       </div>
       <ul class="errors-list">
       </ul>`;

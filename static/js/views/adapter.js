@@ -47,7 +47,8 @@ class Adapter {
           </span>
         </div>
         <div class="adapter-settings-controls">
-          <!--button id="adapter-toggle-${Utils.escapeHtml(this.id)}"
+          <!-- add fluent if this is uncommented
+            button id="adapter-toggle-${Utils.escapeHtml(this.id)}"
             class="text-button ${buttonClass}"
             adapterEnabled="${Utils.escapeHtml(this.ready)}">
             ${buttonText}

@@ -15,6 +15,7 @@ const API = require('../api');
 const App = require('../app');
 const AddonConfig = require('./addon-config');
 const DiscoveredAddon = require('./discovered-addon');
+const fluent = require('../fluent');
 const InstalledAddon = require('./installed-addon');
 const ipRegex = require('ip-regex')({exact: true});
 const Menu = require('./menu');
@@ -61,37 +62,42 @@ const SettingsScreen = {
     this.fetchAvailableAddonsDeferred = null;
     this.availableAddonsLastFetched = null;
 
-    this.insertTitleElement(this.menu, 'Settings',
+    this.insertTitleElement(this.menu, fluent.getMessage('settings'),
                             '/optimized-images/settings-icon.png');
-    this.insertTitleElement(this.domainSettings, 'Domain',
+    this.insertTitleElement(this.domainSettings, fluent.getMessage('domain'),
                             '/optimized-images/domain-icon.png');
-    this.insertTitleElement(this.userSettingsMain, 'Users',
+    this.insertTitleElement(this.userSettingsMain, fluent.getMessage('users'),
                             '/optimized-images/users-icon.png');
-    this.insertTitleElement(this.userSettingsEdit, 'Edit User',
+    this.insertTitleElement(this.userSettingsEdit,
+                            fluent.getMessage('edit-user'),
                             '/optimized-images/user.svg');
-    this.insertTitleElement(this.userSettingsAdd, 'Add User',
+    this.insertTitleElement(this.userSettingsAdd, fluent.getMessage('add-user'),
                             '/optimized-images/user.svg');
-    this.insertTitleElement(this.adapterSettings, 'Adapters',
+    this.insertTitleElement(this.adapterSettings, fluent.getMessage('adapters'),
                             '/optimized-images/adapters-icon.png');
-    this.insertTitleElement(this.addonMainSettings, 'Add-ons',
+    this.insertTitleElement(this.addonMainSettings, fluent.getMessage('addons'),
                             '/optimized-images/add-on.svg');
     const addonConfigTitle =
       this.insertTitleElement(this.addonConfigSettings,
-                              'Configure Add-on',
+                              fluent.getMessage('addon-config'),
                               '/optimized-images/add-on.svg');
     this.addonConfigTitleName =
       addonConfigTitle.querySelector('.section-title-name');
 
     this.insertTitleElement(this.addonDiscoverySettings,
-                            'Discover New Add-ons',
+                            fluent.getMessage('addon-discovery'),
                             '/optimized-images/add-on.svg');
-    this.insertTitleElement(this.experimentSettings, 'Experiments',
+    this.insertTitleElement(this.experimentSettings,
+                            fluent.getMessage('experiments'),
                             '/optimized-images/experiments-icon.png');
-    this.insertTitleElement(this.updateSettings, 'Updates',
+    this.insertTitleElement(this.updateSettings,
+                            fluent.getMessage('updates'),
                             '/optimized-images/update-icon.svg');
-    this.insertTitleElement(this.authorizationSettings, 'Authorizations',
+    this.insertTitleElement(this.authorizationSettings,
+                            fluent.getMessage('authorizations'),
                             '/optimized-images/authorization.svg');
-    this.insertTitleElement(this.developerSettings, 'Developer',
+    this.insertTitleElement(this.developerSettings,
+                            fluent.getMessage('developer'),
                             '/optimized-images/developer-icon.svg');
 
     this.discoverAddonsButton.addEventListener('click', () => {
@@ -184,42 +190,42 @@ const SettingsScreen = {
     // Set up title elements
     this.insertTitleElement(
       this.elements.network.unsupported.main,
-      'Network',
+      fluent.getMessage('network'),
       '/optimized-images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.client.main,
-      'Network',
+      fluent.getMessage('network'),
       '/optimized-images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.client.ethernet.main,
-      'Ethernet',
+      fluent.getMessage('network-settings-ethernet'),
       '/optimized-images/ethernet.svg'
     );
     this.elements.network.client.wifi.title = this.insertTitleElement(
       this.elements.network.client.wifi.main,
-      'Wi-Fi',
+      fluent.getMessage('network-settings-wifi'),
       '/optimized-images/wifi.svg'
     ).querySelector('.section-title-name');
     this.insertTitleElement(
       this.elements.network.router.main,
-      'Network',
+      fluent.getMessage('network'),
       '/optimized-images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.wan.main,
-      'Internet (WAN)',
+      fluent.getMessage('network-settings-internet-wan'),
       '/optimized-images/internet.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.lan.main,
-      'Home Network (LAN)',
+      fluent.getMessage('network-settings-home-network-lan'),
       '/optimized-images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.wlan.main,
-      'Wi-Fi (WLAN)',
+      fluent.getMessage('network-settings-wifi-wlan'),
       '/optimized-images/wifi.svg'
     );
 
@@ -285,7 +291,7 @@ const SettingsScreen = {
       (ev) => {
         ev.target.disabled = true;
         App.showMessage(
-          'Changing network settings. This may take a minute.',
+          fluent.getMessage('network-settings-changing'),
           3000
         );
 
@@ -317,7 +323,7 @@ const SettingsScreen = {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
-          App.showMessage('Failed to configure ethernet.', 3000);
+          App.showMessage(fluent.getMessage('failed-ethernet-configure'), 3000);
           console.error(`Failed to set ethernet config: ${e}`);
           ev.target.disabled = false;
         });
@@ -350,7 +356,7 @@ const SettingsScreen = {
       (ev) => {
         ev.target.disabled = true;
         App.showMessage(
-          'Changing network settings. This may take a minute.',
+          fluent.getMessage('network-settings-changing'),
           3000
         );
 
@@ -379,7 +385,7 @@ const SettingsScreen = {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
-          App.showMessage('Failed to configure wi-fi.', 3000);
+          App.showMessage(fluent.getMessage('failed-wifi-configure'), 3000);
           console.error(`Failed to set wi-fi config: ${e}`);
           ev.target.disabled = false;
         });
@@ -451,7 +457,7 @@ const SettingsScreen = {
       (ev) => {
         ev.target.disabled = true;
         App.showMessage(
-          'Changing network settings. This may take a minute.',
+          fluent.getMessage('network-settings-changing'),
           3000
         );
 
@@ -488,7 +494,7 @@ const SettingsScreen = {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
-          App.showMessage('Failed to configure WAN.', 3000);
+          App.showMessage(fluent.getMessage('failed-wan-configure'), 3000);
           console.error(`Failed to set WAN config: ${e}`);
           ev.target.disabled = false;
         });
@@ -509,7 +515,7 @@ const SettingsScreen = {
       (ev) => {
         ev.target.disabled = true;
         App.showMessage(
-          'Changing network settings. This may take a minute.',
+          fluent.getMessage('network-settings-changing'),
           3000
         );
 
@@ -555,7 +561,7 @@ const SettingsScreen = {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
-          App.showMessage('Failed to configure LAN.', 3000);
+          App.showMessage(fluent.getMessage('failed-lan-configure'), 3000);
           console.error(`Failed to set LAN config: ${e}`);
           ev.target.disabled = false;
         });
@@ -593,7 +599,7 @@ const SettingsScreen = {
       (ev) => {
         ev.target.disabled = true;
         App.showMessage(
-          'Changing network settings. This may take a minute.',
+          fluent.getMessage('network-settings-changing'),
           3000
         );
 
@@ -625,7 +631,7 @@ const SettingsScreen = {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
-          App.showMessage('Failed to configure WLAN.', 3000);
+          App.showMessage(fluent.getMessage('failed-configure-wlan'), 3000);
           console.error(`Failed to set WLAN config: ${e}`);
           ev.target.disabled = false;
         });
@@ -701,7 +707,7 @@ const SettingsScreen = {
     elt.innerHTML = `
       <div class="section-title-back-flex"></div>
       <div class="section-title-container">
-        <img class="section-title-icon" alt="${name} Icon" src="${icon}" />
+        <img class="section-title-icon" alt="${name} ${fluent.getMessage('icon')}" src="${icon}" />
         <span class="section-title-name">${name}</span>
       </div>
       <div class="section-title-speech-flex"></div>
@@ -888,8 +894,8 @@ const SettingsScreen = {
         localDomainName.value = body.localDomain;
         tunnelDomainName.innerText = body.tunnelDomain;
       } else {
-        localDomainName.value = 'Unknown state.';
-        tunnelDomainName.innerText = 'Unknown state.';
+        localDomainName.value = fluent.getMessage('unknown-state');
+        tunnelDomainName.innerText = fluent.getMessage('unknown-state');
       }
 
       if (!localDomainCheckbox.checked) {
@@ -919,7 +925,7 @@ const SettingsScreen = {
       document.getElementById('domain-settings-local-name').disabled = !value;
       error.classList.add('hidden');
     }).catch((err) => {
-      const errorMessage = `Error: ${err}`;
+      const errorMessage = `${fluent.getMessage('error')}: ${err}`;
       console.error(errorMessage);
       error.classList.remove('hidden');
       error.textContent = err;
@@ -960,7 +966,7 @@ const SettingsScreen = {
           .value = domainJson.localDomain;
       }
     }).catch((err) => {
-      const errorMessage = `Error: ${err}`;
+      const errorMessage = `${fluent.getMessage('error')}: ${err}`;
       console.error(errorMessage);
       error.classList.remove('hidden');
       error.textContent = err;
@@ -1714,26 +1720,26 @@ const SettingsScreen = {
       }
       if (cmp < 0) {
         // Update available
-        upToDateElt.textContent = 'New version available';
+        upToDateElt.textContent = fluent.getMessage('update-available');
         updateNow.classList.remove('hidden');
         updateNow.classList.remove('disabled');
       } else {
         // All up to date!
-        upToDateElt.textContent = 'Your system is up to date';
+        upToDateElt.textContent = fluent.getMessage('update-up-to-date');
         updateNow.classList.add('hidden');
       }
       versionElt.textContent =
-        `Current version: ${Utils.escapeHtml(status.version)}`;
-      let statusText = 'Last update: ';
+        `${fluent.getMessage('current-version')}: ${Utils.escapeHtml(status.version)}`;
+      let statusText = `${fluent.getMesssage('last-update')}: `;
 
       if (status.timestamp) {
         statusText += new Date(status.timestamp).toString();
 
         if (!status.success) {
-          statusText += ' (failed)';
+          statusText += ` (${fluent.getMessage('failed')})`;
         }
       } else {
-        statusText += 'Never';
+        statusText += fluent.getMessage('never');
       }
 
       statusElt.textContent = statusText;
@@ -1749,7 +1755,7 @@ const SettingsScreen = {
       headers: API.headers(),
       method: 'POST',
     }).then(() => {
-      updateNow.textContent = 'In Progress';
+      updateNow.textContent = fluent.getMessage('in-progress');
       let isDown = false;
       function checkStatus() {
         API.getUpdateStatus().then(() => {
@@ -1760,7 +1766,7 @@ const SettingsScreen = {
           }
         }).catch(() => {
           if (!isDown) {
-            updateNow.textContent = 'Restarting';
+            updateNow.textContent = fluent.getMessage('restarting');
             isDown = true;
           }
           setTimeout(checkStatus, 5000);
@@ -1768,7 +1774,7 @@ const SettingsScreen = {
       }
       checkStatus();
     }).catch(() => {
-      updateNow.textContent = 'Error';
+      updateNow.textContent = fluent.getMessage('error');
     });
   },
 

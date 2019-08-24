@@ -11,13 +11,14 @@
 'use strict';
 
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class BrightnessDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.title || 'Brightness';
+    this.label = property.title || fluent.getMessage('brightness');
 
     if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;

@@ -22,6 +22,7 @@ const Constants = require('../constants');
 const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
 const EventList = require('./event-list');
+const fluent = require('../fluent');
 const Icons = require('../icons');
 const LeakSensor = require('../schema-impl/capability/leak-sensor');
 const Light = require('../schema-impl/capability/light');
@@ -40,12 +41,6 @@ const VideoCamera = require('../schema-impl/capability/video-camera');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
-
-  NO_THINGS_MESSAGE: 'No devices yet. Click + to scan for available devices.',
-  THING_NOT_FOUND_MESSAGE: 'Thing not found.',
-  ACTION_NOT_FOUND_MESSAGE: 'Action not found.',
-  EVENTS_NOT_FOUND_MESSAGE: 'This thing has no events.',
-
   /**
    * Initialise Things Screen.
    */
@@ -193,7 +188,8 @@ const ThingsScreen = {
       this.showThings();
 
       const messageArea = document.getElementById('message-area');
-      if (App.blockMessages && messageArea.innerText === 'Disconnected') {
+      if (App.blockMessages &&
+          messageArea.innerText === fluent.getMessage('disconnected')) {
         App.hidePersistentMessage();
       }
     }
@@ -205,7 +201,7 @@ const ThingsScreen = {
       thing.cleanup();
     }
     if (things.size === 0) {
-      this.thingsElement.innerHTML = this.NO_THINGS_MESSAGE;
+      this.thingsElement.innerHTML = fluent.getMessage('no-things');
     } else {
       this.thingsElement.innerHTML = '';
       things.forEach((description, thingId) => {
@@ -274,7 +270,7 @@ const ThingsScreen = {
         this.thingTitleElement.classList.remove('hidden');
       }).catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
-        this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+        this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
       });
     };
 
@@ -299,7 +295,7 @@ const ThingsScreen = {
       if (!description.hasOwnProperty('actions') ||
           !description.actions.hasOwnProperty(actionName) ||
           !description.actions[actionName].hasOwnProperty('input')) {
-        this.thingsElement.innerHTML = this.ACTION_NOT_FOUND_MESSAGE;
+        this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
         return;
       }
 
@@ -342,7 +338,7 @@ const ThingsScreen = {
                           description.actions[actionName].input);
     }).catch((e) => {
       console.error(`Thing id ${thingId} not found ${e}`);
-      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+      this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
     });
   },
 
@@ -358,7 +354,7 @@ const ThingsScreen = {
     App.gatewayModel.getThing(thingId).then(async (description) => {
       this.thingsElement.innerHTML = '';
       if (!description.hasOwnProperty('events')) {
-        this.thingsElement.innerHTML = this.EVENTS_NOT_FOUND_MESSAGE;
+        this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
         return;
       }
 
@@ -391,7 +387,7 @@ const ThingsScreen = {
       this.eventList = new EventList(thingModel, description);
     }).catch((e) => {
       console.error(`Thing id ${thingId} not found ${e}`);
-      this.thingsElement.innerHTML = this.THING_NOT_FOUND_MESSAGE;
+      this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
     });
   },
 };

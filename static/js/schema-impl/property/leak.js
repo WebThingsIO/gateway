@@ -12,10 +12,12 @@
 
 const StringLabelDetail = require('./string-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class LeakDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.title || 'Leak');
+    super(thing, name, !!property.readOnly,
+          property.title || fluent.getMessage('leak'));
     this.id = `leak-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -23,7 +25,8 @@ class LeakDetail extends StringLabelDetail {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
-      <webthing-leak-property data-value="DRY" ${readOnly}
+      <webthing-leak-property
+        data-value="${fluent.getMessage('dry')}" ${readOnly}
         data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
       </webthing-leak-property>`;
   }
@@ -33,7 +36,9 @@ class LeakDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ? 'LEAK' : 'DRY';
+    this.labelElement.value = value ?
+      fluent.getMessage('leak') :
+      fluent.getMessage('dry');
     this.labelElement.inverted = value;
   }
 }

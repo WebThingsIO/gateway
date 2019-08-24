@@ -14,6 +14,7 @@ const App = require('../app');
 const Constants = require('../constants');
 const Icons = require('../icons');
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 const LEFT_MOUSE_BUTTON = 1;
 const RIGHT_MOUSE_BUTTON = 2;
@@ -183,10 +184,10 @@ class Log {
     const oneDayMs = 24 * oneHourMs;
     const oneWeekMs = 7 * oneDayMs;
     const options = [
-      {name: 'Minute', value: oneMinuteMs},
-      {name: 'Hour', value: oneHourMs},
-      {name: 'Day', value: oneDayMs},
-      {name: 'Week', value: oneWeekMs},
+      {name: fluent.getMessage('minute'), value: oneMinuteMs},
+      {name: fluent.getMessage('hour'), value: oneHourMs},
+      {name: fluent.getMessage('day'), value: oneDayMs},
+      {name: fluent.getMessage('week'), value: oneWeekMs},
     ];
     const currentValue = this.end.getTime() - this.start.getTime();
     let anySelected = false;
@@ -594,7 +595,7 @@ class Log {
     bonusPlaces = bonusPlaces || 0;
     let labelText;
     if (this.property.type === 'boolean') {
-      labelText = this.propertyLabel(value);
+      labelText = this.propertyLabel(value).toLocaleUpperCase();
     } else if (Math.floor(value) === value) {
       labelText = value.toFixed(0);
     } else {
@@ -827,18 +828,30 @@ class Log {
     if (this.property.type === 'boolean') {
       switch (this.property['@type']) {
         case 'OnOffProperty':
-          return value ? 'ON' : 'OFF';
+          return value ?
+            fluent.getMessage('on') :
+            fluent.getMessage('off');
         case 'MotionProperty':
-          return value ? 'MOTION' : 'NO MOTION';
+          return value ?
+            fluent.getMessage('motion') :
+            fluent.getMessage('no-motion');
         case 'OpenProperty':
-          return value ? 'OPEN' : 'CLOSED';
+          return value ?
+            fluent.getMessage('open') :
+            fluent.getMessage('closed');
         case 'LeakProperty':
-          return value ? 'LEAK' : 'DRY';
+          return value ?
+            fluent.getMessage('leak') :
+            fluent.getMessage('dry');
         case 'PushedProperty':
-          return value ? 'PUSHED' : 'NOT PUSHED';
+          return value ?
+            fluent.getMessage('pushed') :
+            fluent.getMessage('not-pushed');
         case 'BooleanProperty':
         default:
-          return value ? 'TRUE' : 'FALSE';
+          return value ?
+            fluent.getMessage('true') :
+            fluent.getMessage('false');
       }
     }
     return `${value}`;

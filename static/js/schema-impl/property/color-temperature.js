@@ -11,13 +11,14 @@
 'use strict';
 
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class ColorTemperatureDetail {
   constructor(thing, name, property) {
     this.thing = thing;
     this.name = name;
     this.readOnly = !!property.readOnly;
-    this.label = property.title || 'Color Temperature';
+    this.label = property.title || fluent.getMessage('color-temperature');
     this.min = property.minimum;
     this.max = property.maximum;
 

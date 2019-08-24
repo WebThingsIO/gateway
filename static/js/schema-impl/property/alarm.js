@@ -12,10 +12,12 @@
 
 const StringLabelDetail = require('./string-label');
 const Utils = require('../../utils');
+const fluent = require('../../fluent');
 
 class AlarmDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly, property.title || 'Alarm');
+    super(thing, name, !!property.readOnly,
+          property.title || fluent.getMessage('alarm'));
     this.id = `alarm-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

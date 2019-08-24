@@ -14,6 +14,7 @@ const App = require('./app');
 const Icons = require('./icons');
 const page = require('page');
 const Utils = require('./utils');
+const fluent = require('./fluent');
 
 // eslint-disable-next-line no-unused-vars
 const ContextMenu = {
@@ -123,55 +124,23 @@ const ContextMenu = {
 
           switch (capability) {
             case 'OnOffSwitch':
-              option.innerText = 'On/Off Switch';
-              break;
             case 'MultiLevelSwitch':
-              option.innerText = 'Multi Level Switch';
-              break;
             case 'ColorControl':
-              option.innerText = 'Color Control';
-              break;
             case 'EnergyMonitor':
-              option.innerText = 'Energy Monitor';
-              break;
             case 'BinarySensor':
-              option.innerText = 'Binary Sensor';
-              break;
             case 'MultiLevelSensor':
-              option.innerText = 'Multi Level Sensor';
-              break;
             case 'SmartPlug':
-              option.innerText = 'Smart Plug';
-              break;
             case 'Light':
-              option.innerText = 'Light';
-              break;
             case 'DoorSensor':
-              option.innerText = 'Door Sensor';
-              break;
             case 'MotionSensor':
-              option.innerText = 'Motion Sensor';
-              break;
             case 'LeakSensor':
-              option.innerText = 'Leak Sensor';
-              break;
             case 'PushButton':
-              option.innerText = 'Push Button';
-              break;
             case 'VideoCamera':
-              option.innerText = 'Video Camera';
-              break;
             case 'Camera':
-              option.innerText = 'Camera';
-              break;
             case 'TemperatureSensor':
-              option.innerText = 'Temperature Sensor';
-              break;
             case 'Alarm':
-              option.innerText = 'Alarm';
-              break;
             case 'Custom':
-              option.innerText = 'Custom Thing';
+              option.innerText = fluent.getMessage(capability);
               break;
             default:
               option.innerText = capability;
@@ -234,7 +203,7 @@ const ContextMenu = {
 
     const file = this.customIconInput.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
-      this.label.innerText = 'Invalid file.';
+      this.label.innerText = fluent.getMessage('invalid-file');
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       return;
@@ -244,7 +213,7 @@ const ContextMenu = {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
-        this.label.innerText = 'Failed to read file.';
+        this.label.innerText = fluent.getMessage('failed-read-file');
         this.label.classList.add('error');
         this.label.classList.remove('hidden');
         this.saveButton.disabled = false;
@@ -294,7 +263,7 @@ const ContextMenu = {
       this.saveButton.disabled = false;
     }).catch((error) => {
       console.error(`Error updating thing: ${error}`);
-      this.label.innerText = 'Failed to save.';
+      this.label.innerText = fluent.getMessage('failed-save');
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       this.thingType.disabled = false;
