@@ -70,6 +70,7 @@ const App = {
    * Start WebThings Gateway app.
    */
   init: function() {
+    fluent.init();
     // Load the shaka player polyfills
     shaka.polyfill.installAll();
     MobileDragDrop.polyfill({
@@ -126,7 +127,6 @@ const App = {
 
     Menu.init();
     Router.init();
-    fluent.init();
   },
 
   initWebSocket() {
@@ -452,5 +452,7 @@ if (navigator.serviceWorker) {
   */
 window.addEventListener('load', function app_onLoad() {
   window.removeEventListener('load', app_onLoad);
-  App.init();
+  fluent.load().then(() => {
+    App.init();
+  });
 });

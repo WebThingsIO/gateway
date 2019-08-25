@@ -6,7 +6,9 @@ const availableLanguages = {
   'es-MX': ['/fluent/es-MX/main.ftl'],
 };
 
-async function *generateBundles(_resourceIds) {
+let bundle;
+
+async function load() {
   // const links = document.querySelectorAll('link[rel="localization"]');
   let language = 'en-US'; // navigator.language;
   let links = availableLanguages[language];
@@ -14,13 +16,18 @@ async function *generateBundles(_resourceIds) {
     language = 'en-US';
     links = availableLanguages[language];
   }
-  const bundle = new Fluent.FluentBundle(language);
+  bundle = new Fluent.FluentBundle(language);
   for (const link of links) {
     const res = await fetch(link);
     const text = await res.text();
     bundle.addResource(new Fluent.FluentResource(text));
   }
-  window.buns.push(bundle);
+}
+
+async function *generateBundles(_resourceIds) {
+  if (!bundle) {
+    await load();
+  }
   yield bundle;
 }
 
@@ -31,10 +38,18 @@ function init() {
   l10n.translateRoots();
 }
 
-window.l10n = l10n;
-window.buns = [];
+function getMessage(id) {
+  const obj = bundle.getMessage(id);
+  if (!obj) {
+    console.warn('Missing id', id);
+    return `<${id}>`;
+  }
+  return obj.value;
+}
 
 module.exports = {
+  load,
   l10n,
   init,
+  getMessage,
 };
