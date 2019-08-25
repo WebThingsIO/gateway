@@ -62,6 +62,7 @@ template.innerHTML = `
     .webthing-multi-level-switch-capability-label {
       padding-top: 0.2rem;
       font-weight: bold;
+      text-transform: uppercase;
     }
   </style>
   <div id="container" class="webthing-multi-level-switch-capability-container">
