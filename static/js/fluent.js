@@ -18,9 +18,13 @@ async function load() {
   }
   bundle = new Fluent.FluentBundle(language);
   for (const link of links) {
-    const res = await fetch(link);
-    const text = await res.text();
-    bundle.addResource(new Fluent.FluentResource(text));
+    try {
+      const res = await fetch(link);
+      const text = await res.text();
+      bundle.addResource(new Fluent.FluentResource(text));
+    } catch (e) {
+      console.warn('Unable to download language pack', e);
+    }
   }
 }
 
