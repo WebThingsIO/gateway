@@ -1,10 +1,10 @@
 #!/bin/bash
-set -e
-set -x
+
+set -e -x
 
 MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 args=""
-start_task="start"
+start_task="run-only"
 
 is_docker_container() {
   if [ -f /.dockerenv ]; then
@@ -17,36 +17,37 @@ is_docker_container() {
 
   return 1
 }
-if ! is_docker_container; then
-  start_task="run-only"
-  if [ ! -f .post_upgrade_complete ]; then
-    ./tools/post-upgrade.sh
-  fi
-fi
 
 run_app() {
-  export NVM_DIR="$HOME/.nvm"
-  [ ! -s "$NVM_DIR/nvm.sh" ] || \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  export NVM_DIR="${HOME}/.nvm"
+  [ ! -s "${NVM_DIR}/nvm.sh" ] || \. "${NVM_DIR}/nvm.sh"  # This loads nvm
 
   if [ ! is_docker_container ]; then
     sudo /sbin/ldconfig
 
     (sudo timedatectl set-local-rtc 0 && sudo timedatectl set-ntp 1) || true
-  ### removed temporarily to fix docker containers ###
-  # else
-  #   /sbin/ldconfig
   fi
 
+  if [ -n "$(which nvm)" ]; then
+    echo "nvm version"
+    nvm --version
+  else
+    echo "Using system's node instead of nvm"
+  fi
 
-  echo "nvm version"
-  nvm --version || echo "Use system's node insead of nvm"
   echo "node version"
   node --version
   echo "npm version"
   npm --version
   echo "Starting gateway ..."
-  npm run $start_task -- $args
+  npm run "${start_task}" -- $args
 }
+
+if ! is_docker_container; then
+  if [ ! -f .post_upgrade_complete ]; then
+    ./tools/post-upgrade.sh
+  fi
+fi
 
 mkdir -p "${MOZIOT_HOME}/log"
 run_app
