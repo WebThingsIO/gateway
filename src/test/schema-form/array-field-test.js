@@ -6,8 +6,8 @@ describe('ArrayField', () => {
     it('should warn on missing items descriptor', () => {
       const {node} = createSchemaForm({schema: {type: 'array'}});
 
-      expect(node.querySelector('.field-array > .unsupported-field')
-        .textContent.trim()).toContain('Unsupported field schema');
+      expect(node.querySelector('.field-array > .unsupported-field'))
+        .toBeTruthy();
     });
   });
 
