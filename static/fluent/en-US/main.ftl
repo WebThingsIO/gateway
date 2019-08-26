@@ -381,3 +381,5 @@ restarting = Restarting
 
 gateway-unreachable = Gateway Unreachable
 more-information = More Information
+
+unsupported-field = Unsupported field schema
