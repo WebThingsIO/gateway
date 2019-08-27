@@ -129,25 +129,5 @@
     "webdriverio": "^5.12.4",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7"
-  },
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "testMatch": [
-      "**/test/**/*-test.(ts|tsx|js)"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/test/common.js"
-    ],
-    "testEnvironment": "node"
   }
 }
