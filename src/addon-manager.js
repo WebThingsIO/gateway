@@ -1330,7 +1330,7 @@ class AddonManager extends EventEmitter {
         const response = await fetch(`${url}?${params.toString()}`, {
           headers: {
             Accept: 'application/json',
-            'User-Agent': `mozilla-iot-gateway/${version}`,
+            'User-Agent': Utils.getGatewayUserAgent(),
           },
         });
 

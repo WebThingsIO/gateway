@@ -69,6 +69,15 @@ function getArchitecture() {
 }
 
 /**
+ * Determine whether or not we're running inside Docker.
+ */
+function isDocker() {
+  return fs.existsSync('/.dockerenv') ||
+    (fs.existsSync('/proc/1/cgroup') &&
+     fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0);
+}
+
+/**
  * Get the current node version.
  */
 function getNodeVersion() {
@@ -112,6 +121,7 @@ module.exports = {
   getNodeVersion,
   getOS,
   getPythonVersions,
+  isDocker,
   NotImplementedError,
 };
 
