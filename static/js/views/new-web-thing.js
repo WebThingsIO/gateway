@@ -313,7 +313,7 @@ class NewWebThing {
       for (const capability of capabilities) {
         const option = document.createElement('option');
         option.value = capability;
-        option.innerText = fluent.getMessage(capability) || capability;
+        option.innerText = fluent.getMessageStrict(capability) || capability;
         switch (capability) {
           case 'OnOffSwitch':
             cls = cls || 'on-off-switch';

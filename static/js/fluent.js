@@ -42,13 +42,23 @@ function init() {
   l10n.translateRoots();
 }
 
-function getMessage(id) {
+/**
+ * @return {string|null} Translation of unit or null if not contained in bundle
+ */
+function getMessageStrict(id) {
   const obj = bundle.getMessage(id);
   if (!obj) {
     console.warn('Missing id', id);
-    return `<${id}>`;
+    return null;
   }
   return obj.value;
+}
+
+/**
+ * @return {string} Translation of unit or unit's id for debugging purposes
+ */
+function getMessage(id) {
+  return getMessageStrict(id) || `<${id}>`;
 }
 
 module.exports = {
@@ -56,4 +66,5 @@ module.exports = {
   l10n,
   init,
   getMessage,
+  getMessageStrict,
 };
