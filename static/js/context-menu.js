@@ -122,30 +122,7 @@ const ContextMenu = {
             option.selected = true;
           }
 
-          switch (capability) {
-            case 'OnOffSwitch':
-            case 'MultiLevelSwitch':
-            case 'ColorControl':
-            case 'EnergyMonitor':
-            case 'BinarySensor':
-            case 'MultiLevelSensor':
-            case 'SmartPlug':
-            case 'Light':
-            case 'DoorSensor':
-            case 'MotionSensor':
-            case 'LeakSensor':
-            case 'PushButton':
-            case 'VideoCamera':
-            case 'Camera':
-            case 'TemperatureSensor':
-            case 'Alarm':
-            case 'Custom':
-              option.innerText = fluent.getMessage(capability);
-              break;
-            default:
-              option.innerText = capability;
-              break;
-          }
+          option.innerText = fluent.getMessageStrict(capability) || capability;
 
           this.thingType.appendChild(option);
         }
