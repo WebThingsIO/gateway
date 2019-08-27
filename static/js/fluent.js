@@ -3,19 +3,23 @@ const Fluent = require('@fluent/bundle');
 
 const availableLanguages = {
   'en-US': ['/fluent/en-US/main.ftl'],
-  'es-MX': ['/fluent/es-MX/main.ftl'],
+  en: ['/fluent/en-US/main.ftl'],
+  // for example: `'es-MX': ['/fluent/es-MX/main.ftl'],`
 };
 
 let bundle;
 
 async function load() {
-  // const links = document.querySelectorAll('link[rel="localization"]');
-  let language = 'en-US'; // navigator.language;
-  let links = availableLanguages[language];
-  if (!links) {
-    language = 'en-US';
-    links = availableLanguages[language];
+  let language = navigator.language;
+  if (!availableLanguages.hasOwnProperty(language)) {
+    const primary = language.split('-')[0];
+    if (availableLanguages.hasOwnProperty(primary)) {
+      language = primary;
+    } else {
+      language = 'en-US';
+    }
   }
+  const links = availableLanguages[language];
   bundle = new Fluent.FluentBundle(language);
   for (const link of links) {
     try {
