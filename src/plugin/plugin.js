@@ -14,6 +14,7 @@
 const AdapterProxy = require('./adapter-proxy');
 const config = require('config');
 const Constants = require('../constants');
+const db = require('../db');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
@@ -22,14 +23,17 @@ const NotifierProxy = require('./notifier-proxy');
 const OutletProxy = require('./outlet-proxy');
 const path = require('path');
 const readline = require('readline');
+const Settings = require('../models/settings');
 const spawn = require('child_process').spawn;
 const UserProfile = require('../user-profile');
 
 const DEBUG = false;
 
+db.open();
+
 class Plugin {
 
-  constructor(pluginId, pluginServer) {
+  constructor(pluginId, pluginServer, forceEnable = false) {
     this.pluginId = pluginId;
     this.pluginServer = pluginServer;
     this.logPrefix = pluginId.replace('-adapter', '');
@@ -44,6 +48,8 @@ class Plugin {
     this.ipcSocket.bind();
     this.exec = '';
     this.execPath = '.';
+    this.forceEnable = forceEnable;
+    this.startPromise = null;
 
     // Make this a nested object such that if the Plugin object is reused,
     // i.e. the plugin is disabled and quickly re-enabled, the gateway process
@@ -590,98 +596,122 @@ class Plugin {
   }
 
   start() {
-    const execArgs = {
-      nodeLoader: `node ${path.join(UserProfile.gatewayDir,
-                                    'src',
-                                    'addon-loader.js')}`,
-      name: this.pluginId,
-      path: this.execPath,
-    };
-    const execCmd = format(this.exec, execArgs);
+    const key = `addons.${this.pluginId}`;
 
-    DEBUG && console.log('  Launching:', execCmd);
-
-    // If we need embedded spaces, then consider changing to use the npm
-    // module called splitargs
-    this.restart = true;
-    const args = execCmd.split(' ');
-    this.process.p = spawn(
-      args[0],
-      args.slice(1),
-      {
-        env: Object.assign(process.env,
-                           {
-                             MOZIOT_HOME: UserProfile.baseDir,
-                             NODE_PATH: path.join(UserProfile.gatewayDir,
-                                                  'node_modules'),
-                           }),
-      }
-    );
-
-    this.process.p.on('error', (err) => {
-      // We failed to spawn the process. This most likely means that the
-      // exec string is malformed somehow. Report the error but don't try
-      // restarting.
-      this.restart = false;
-      console.error('Failed to start plugin', this.pluginId);
-      console.error('Command:', this.exec);
-      console.error(err);
-    });
-
-    this.stdoutReadline = readline.createInterface({
-      input: this.process.p.stdout,
-    });
-    this.stdoutReadline.on('line', (line) => {
-      console.log(`${this.logPrefix}: ${line}`);
-    });
-
-    this.stderrReadline = readline.createInterface({
-      input: this.process.p.stderr,
-    });
-    this.stderrReadline.on('line', (line) => {
-      console.error(`${this.logPrefix}: ${line}`);
-    });
-
-    this.process.p.on('exit', (code) => {
-      if (this.restart) {
-        if (code == Constants.DONT_RESTART_EXIT_CODE) {
-          console.log('Plugin:', this.pluginId, 'died, code =', code,
-                      'NOT restarting...');
-          this.restart = false;
-          this.process.p = null;
-        } else {
-          if (this.pendingRestart) {
-            return;
-          }
-          if (this.restartDelay < 30 * 1000) {
-            this.restartDelay += 1000;
-          }
-          if (this.lastRestart + 60 * 1000 < Date.now()) {
-            this.restartDelay = 0;
-          }
-          console.log('Plugin:', this.pluginId, 'died, code =', code,
-                      'restarting after', this.restartDelay);
-          const doRestart = () => {
-            if (this.restart) {
-              this.lastRestart = Date.now();
-              this.pendingRestart = null;
-              this.start();
-            } else {
-              this.process.p = null;
-            }
-          };
-          if (this.restartDelay > 0) {
-            this.pendingRestart = setTimeout(doRestart, this.restartDelay);
-          } else {
-            // Restart immediately so that test code can access
-            // process.p
-            doRestart();
-          }
-        }
-      } else {
+    this.startPromise = Settings.get(key).then((savedSettings) => {
+      if (!this.forceEnable &&
+          (!savedSettings ||
+           !savedSettings.moziot ||
+           !savedSettings.moziot.enabled)) {
+        console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
+        this.restart = false;
         this.process.p = null;
+        return;
       }
+
+      const execArgs = {
+        nodeLoader: `node ${path.join(UserProfile.gatewayDir,
+                                      'src',
+                                      'addon-loader.js')}`,
+        name: this.pluginId,
+        path: this.execPath,
+      };
+      const execCmd = format(this.exec, execArgs);
+
+      DEBUG && console.log('  Launching:', execCmd);
+
+      // If we need embedded spaces, then consider changing to use the npm
+      // module called splitargs
+      this.restart = true;
+      const args = execCmd.split(' ');
+      this.process.p = spawn(
+        args[0],
+        args.slice(1),
+        {
+          env: Object.assign(process.env,
+                             {
+                               MOZIOT_HOME: UserProfile.baseDir,
+                               NODE_PATH: path.join(UserProfile.gatewayDir,
+                                                    'node_modules'),
+                             }),
+        }
+      );
+
+      this.process.p.on('error', (err) => {
+        // We failed to spawn the process. This most likely means that the
+        // exec string is malformed somehow. Report the error but don't try
+        // restarting.
+        this.restart = false;
+        console.error('Failed to start plugin', this.pluginId);
+        console.error('Command:', this.exec);
+        console.error(err);
+      });
+
+      this.stdoutReadline = readline.createInterface({
+        input: this.process.p.stdout,
+      });
+      this.stdoutReadline.on('line', (line) => {
+        console.log(`${this.logPrefix}: ${line}`);
+      });
+
+      this.stderrReadline = readline.createInterface({
+        input: this.process.p.stderr,
+      });
+      this.stderrReadline.on('line', (line) => {
+        console.error(`${this.logPrefix}: ${line}`);
+      });
+
+      this.process.p.on('exit', (code) => {
+        if (this.restart) {
+          if (code == Constants.DONT_RESTART_EXIT_CODE) {
+            console.log('Plugin:', this.pluginId, 'died, code =', code,
+                        'NOT restarting...');
+            this.restart = false;
+            this.process.p = null;
+          } else {
+            if (this.pendingRestart) {
+              return;
+            }
+            if (this.restartDelay < 30 * 1000) {
+              this.restartDelay += 1000;
+            }
+            if (this.lastRestart + 60 * 1000 < Date.now()) {
+              this.restartDelay = 0;
+            }
+            if (this.restartDelay > 30000) {
+              // If we've restarted 30 times in a row, this is probably just
+              // not going to work, so bail out.
+              console.log(`Giving up on restarting plugin ${this.pluginId}`);
+              this.restart = false;
+              this.process.p = null;
+              return;
+            }
+            console.log('Plugin:', this.pluginId, 'died, code =', code,
+                        'restarting after', this.restartDelay);
+            const doRestart = () => {
+              if (this.restart) {
+                this.lastRestart = Date.now();
+                this.pendingRestart = null;
+                this.start();
+              } else {
+                this.process.p = null;
+              }
+            };
+            if (this.restartDelay > 0) {
+              this.pendingRestart = setTimeout(doRestart, this.restartDelay);
+            } else {
+              // Restart immediately so that test code can access
+              // process.p
+              doRestart();
+            }
+          }
+        } else {
+          this.process.p = null;
+        }
+      });
     });
+
+    return this.startPromise;
   }
 
   unload() {

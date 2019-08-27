@@ -8,9 +8,10 @@ describe('plugins/', () => {
     // Plugin class. However it doesn't test the start method, so we add
     // some tests here to do that.
 
-    const plugin = new Plugin('plugin-start-test', null);
+    const plugin = new Plugin('plugin-start-test', null, true);
     plugin.exec = 'node -e process.exit(42);';
-    plugin.start();
+    await plugin.start();
+
     // Normally, the plugin mechanism would try to restart the plugin
     // when it exits, so we set restart to false to prevent that.
     plugin.restart = false;
@@ -27,9 +28,9 @@ describe('plugins/', () => {
   });
 
   it('Test the plugin start mechanism (bad exec)', async () => {
-    const plugin = new Plugin('plugin-start-test', null);
+    const plugin = new Plugin('plugin-start-test', null, true);
     plugin.exec = './something-that-doesnt-exist';
-    plugin.start();
+    await plugin.start();
     const promise = new Promise((resolve) => {
       plugin.process.p.on('error', (err) => {
         console.log('Got err.code', err.code);
@@ -43,22 +44,23 @@ describe('plugins/', () => {
   });
 
   it('Test the plugin restart mechanism', async () => {
-    const plugin = new Plugin('plugin-start-test', null);
+    const plugin = new Plugin('plugin-start-test', null, true);
     plugin.exec = 'node -e process.exit(42);';
-    plugin.start();
+    await plugin.start();
 
     // setup a different exit code the next time it restarts
     plugin.exec = 'node -e process.exit(43);';
 
     const code = await new Promise((resolve) => {
-      plugin.process.p.on('exit', (code) => {
-        console.log('Got exit code', code);
+      plugin.process.p.on('exit', async (code) => {
+        console.log('Got first exit code:', code);
         if (code == 42) {
           plugin.restart = false;
+          await plugin.startPromise;
           // When the process was restarted plugin.process will have
           // been reassigned, so we need to re-register the exit handler.
           plugin.process.p.on('exit', (code) => {
-            console.log('Got exit code', code);
+            console.log('Got second exit code:', code);
             resolve(code);
           });
         }
