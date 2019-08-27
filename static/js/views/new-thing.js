@@ -68,7 +68,7 @@ class NewThing {
     let cls = '', type = '', customIconClass = 'hidden';
     const options = [];
     for (let capability of capabilities) {
-      type = fluent.getMessage(capability) || capability;
+      type = fluent.getMessageStrict(capability) || capability;
       switch (capability) {
         case 'OnOffSwitch':
           cls = cls || 'on-off-switch';
