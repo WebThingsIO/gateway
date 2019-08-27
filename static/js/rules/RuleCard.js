@@ -26,8 +26,8 @@ class RuleCard {
       this.elt.classList.add('invalid');
     }
 
-    let iconTrigger = '/optimized-images/thing-icons/thing.svg';
-    let iconEffect = '/optimized-images/thing-icons/thing.svg';
+    let iconTrigger = fluent.getMessage('thing-icons-thing-src');
+    let iconEffect = fluent.getMessage('thing-icons-thing-src');
 
     if (this.rule.trigger) {
       let trigger = this.rule.trigger;

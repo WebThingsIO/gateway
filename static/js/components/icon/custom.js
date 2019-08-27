@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -55,7 +56,7 @@ class CustomIcon extends BaseComponent {
   }
 
   set iconHref(value) {
-    this._iconHref = value || '/optimized-images/thing-icons/thing.svg';
+    this._iconHref = value || fluent.getMessage('thing-icons-thing-src');
     this._icon.style.backgroundImage = `url("${this._iconHref}")`;
   }
 }

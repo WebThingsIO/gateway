@@ -10,43 +10,50 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
-const template = document.createElement('template');
-template.innerHTML = `
-  <style>
-    :host {
-      display: block;
-      contain: content;
-      text-align: center;
-      color: white;
-      font-size: 1.6rem;
-      cursor: default;
-    }
+let template;
+function createTemplate() {
+  template = document.createElement('template');
+  template.innerHTML = `
+    <style>
+      :host {
+        display: block;
+        contain: content;
+        text-align: center;
+        color: white;
+        font-size: 1.6rem;
+        cursor: default;
+      }
 
-    .webthing-binary-sensor-capability-icon {
-      width: 12.8rem;
-      height: 12.8rem;
-      border-radius: 6.4rem;
-      background-size: 12.8rem;
-      background-repeat: no-repeat;
-      transform: translate(0);
-      background-color: #5d9bc7;
-      background-image: url('/optimized-images/component-icons/binary-sensor.png');
-    }
+      .webthing-binary-sensor-capability-icon {
+        width: 12.8rem;
+        height: 12.8rem;
+        border-radius: 6.4rem;
+        background-size: 12.8rem;
+        background-repeat: no-repeat;
+        transform: translate(0);
+        background-color: #5d9bc7;
+        background-image: url('/optimized-images/component-icons/binary-sensor.png');
+      }
 
-    .webthing-binary-sensor-capability-icon.on {
-      background-image: url('/optimized-images/component-icons/binary-sensor-on.png');
-    }
+      .webthing-binary-sensor-capability-icon.on {
+        background-image: url('${fluent.getMessage('component-icons-binary-sensor-on-src')}');
+      }
 
-    .webthing-binary-sensor-capability-icon.off {
-      background-image: url('/optimized-images/component-icons/binary-sensor-off.png');
-    }
-  </style>
-  <div id="icon" class="webthing-binary-sensor-capability-icon"></div>
-`;
+      .webthing-binary-sensor-capability-icon.off {
+        background-image: url('${fluent.getMessage('component-icons-binary-sensor-off-src')}');
+      }
+    </style>
+    <div id="icon" class="webthing-binary-sensor-capability-icon"></div>
+  `;
+}
 
 class BinarySensorCapability extends BaseComponent {
   constructor() {
+    if (!template) {
+      createTemplate();
+    }
     super(template);
 
     this._icon = this.shadowRoot.querySelector('#icon');

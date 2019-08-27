@@ -77,7 +77,7 @@ class Thing {
     this.selectedCapability = description.selectedCapability;
     this.layoutIndex = description.layoutIndex;
     this.iconHref = description.iconHref || '';
-    this.baseIcon = opts.baseIcon || '/optimized-images/thing-icons/thing.svg';
+    this.baseIcon = opts.baseIcon || fluent.getMessage('thing-icons-thing-src');
     this.format = format;
     this.displayedProperties = this.displayedProperties || {};
     this.displayedActions = this.displayedActions || {};

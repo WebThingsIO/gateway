@@ -10,6 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
+const fluent = require('../../fluent');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -64,7 +65,7 @@ class CustomCapability extends BaseComponent {
 
   set iconHref(value) {
     if (!value) {
-      this._iconHref = '/optimized-images/component-icons/custom.png';
+      this._iconHref = fluent.getMessage('component-icons-custom-src');
       this._icon.classList.remove('custom-icon');
     } else {
       this._iconHref = value;
