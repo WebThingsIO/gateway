@@ -10,10 +10,14 @@
 
 'use strict';
 
-const defaultIcon = '/optimized-images/thing-icons/thing.svg';
+const fluent = require('./fluent');
+
+function defaultIcon() {
+  return fluent.getMessage('thing-icons-thing-src');
+}
 
 function capabilityHasIcon(capability) {
-  return capabilityToIcon(capability) !== defaultIcon;
+  return capabilityToIcon(capability) !== defaultIcon();
 }
 
 function capabilityToIcon(capability) {
@@ -52,12 +56,12 @@ function capabilityToIcon(capability) {
       return '/optimized-images/thing-icons/alarm.svg';
     case 'Custom':
     default:
-      return defaultIcon;
+      return defaultIcon();
   }
 }
 
 function typeHasIcon(type) {
-  return typeToIcon(type) !== defaultIcon;
+  return typeToIcon(type) !== defaultIcon();
 }
 
 function typeToIcon(type) {
@@ -78,7 +82,7 @@ function typeToIcon(type) {
     case 'smartPlug':
       return '/optimized-images/thing-icons/smart_plug.svg';
     default:
-      return defaultIcon;
+      return defaultIcon();
   }
 }
 
