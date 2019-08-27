@@ -3,8 +3,9 @@ const Fluent = require('@fluent/bundle');
 
 const availableLanguages = {
   'en-US': ['/fluent/en-US/main.ftl'],
+  // 'es-MX': ['/fluent/es-MX/main.ftl'],
   en: ['/fluent/en-US/main.ftl'],
-  // for example: `'es-MX': ['/fluent/es-MX/main.ftl'],`
+  it: ['/fluent/it/main.ftl'],
 };
 
 let bundle;
