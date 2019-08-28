@@ -10,6 +10,8 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
+const platform = require('./platform');
+const pkg = require('../package.json');
 
 module.exports = {
   /**
@@ -60,5 +62,13 @@ module.exports = {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+  },
+
+  getGatewayUserAgent: () => {
+    const primary = `mozilla-iot-gateway/${pkg.version}`;
+    const secondary = `(${platform.getArchitecture()}; ${platform.getOS()})`;
+    const tertiary = platform.isDocker() ? ' (docker)' : '';
+
+    return `${primary} ${secondary}${tertiary}`;
   },
 };
