@@ -9,38 +9,30 @@
 # WARNING: for production deployment please consider supported project:
 # WARNING: https://github.com/mozilla-iot/gateway-docker
 
-FROM debian:stable
+FROM debian:buster
 LABEL maintainer="p.coval@samsung.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL en_US.UTF-8
 ENV LANG ${LC_ALL}
 
-RUN echo "#log: Configuring locales" \
+RUN echo "#log: Configuring locales and setting up system" \
   && set -x \
-  && apt-get update -y \
-  && apt-get install -y locales \
+  && apt update \
+  && apt install -y locales sudo \
   && echo "${LC_ALL} UTF-8" | tee /etc/locale.gen \
   && locale-gen ${LC_ALL} \
   && dpkg-reconfigure locales \
-  && sync
+  && apt clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV project mozilla-iot
-
-RUN echo "#log: ${project}: Setup system" \
-  && set -x \
-  && apt-get update -y \
-  && apt-get install -y \
-  sudo \
-  && apt-get clean \
-  && sync
 
 ADD . /root/mozilla-iot/gateway
 WORKDIR /root/mozilla-iot/gateway/..
 RUN echo "#log: ${project}: Preparing sources" \
   && set -x \
-  && ./gateway/install.sh \
-  && sync
+  && ./gateway/install.sh
 
 EXPOSE 8080
 WORKDIR /root/mozilla-iot/gateway
