@@ -10,14 +10,13 @@ cd "${HOME}"
 # so that we can install git
 
 sudo apt update
-sudo apt upgrade -y
+sudo apt dist-upgrade -y
 sudo apt install -y \
     build-essential \
     curl \
     git \
     libcap2-bin \
-    python \
-    #eol
+    python
 
 mkdir -p mozilla-iot
 cd mozilla-iot
@@ -38,18 +37,13 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 # Download and install the required node modules
 if [ ! -d "gateway" ]; then
-    git clone https://github.com/moziot/gateway.git
+    git clone https://github.com/mozilla-iot/gateway.git
 fi
 cd gateway
 npm install .
+./node_modules/.bin/webpack
 
 # Create a self-signed cert. This is temporary (for development).
 #if [ ! -f "certificate.pem" ]; then
 #    ./tools/make-self-signed-cert.sh
 #fi
-
-echo "###################################################################"
-echo "#"
-echo "# Please reboot to properly activate NVM and the iptables rules."
-echo "#"
-echo "###################################################################"
