@@ -1,0 +1,55 @@
+name: gateway
+version: git
+summary: Things Gateway.
+description: Web of Things gateway.
+
+confinement: strict
+grade: stable
+base: core18
+
+apps:
+  gateway:
+    command: env TMPDIR=$XDG_RUNTIME_DIR desktop-launch $SNAP/gateway
+    plugs:
+      - desktop
+      - desktop-legacy
+      - home
+      - x11
+      - browser-support
+      - network
+      - gsettings
+      - pulseaudio
+      - opengl
+
+parts:
+  gateway:
+    plugin: nodejs
+    node-engine: "12.4.0"
+    build-packages:
+      - pkg-config
+      - curl 
+      - git
+      - build-essential
+    stage-packages:
+      - libboost-python-dev 
+      - libboost-thread-dev 
+      - libbluetooth-dev 
+      - libglib2.0-dev
+      - libusb-1.0-0-dev 
+      - libudev-dev
+      - autoconf
+      - libpng16-16
+      - libnanomsg4 
+      - libnanomsg-dev
+      - libgconf2-4
+      - libnotify4
+      - libnspr4
+      - libnss3
+      - libpcre3
+      - libpulse0
+      - libxss1
+      - libxtst6
+
+    source: dist/linux-unpacked
+    after:
+      - desktop-gtk3
