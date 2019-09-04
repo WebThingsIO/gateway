@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#75AACF">
-    <title>Authorization Request - WebThings Gateway</title>
+    <title data-l10n-id="authorize-title">Authorization Request - WebThings Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
@@ -15,30 +15,29 @@
     <link rel="stylesheet" type="text/css" href="/css/authorize.css" />
   </head>
   <body class="hidden">
-    <img id="wordmark" src="../optimized-images/wordmark.svg" alt="Mozilla IoT"/>
+    <img id="wordmark" src="../optimized-images/wordmark.svg" data-l10n-id="wordmark"/>
 
     <!-- OAuth Authorization -->
     <section id="authorize-view" class="selected">
       <div class="title-bar">
         <a href="/settings/developer" id="back-button" class="back-button icon-button"></a>
-        <h1>Authorization Request</h1>
+        <h1 data-l10n-id="authorize-authorization-request"></h1>
       </div>
 
       <form id="authorize-form" method="get" action="allow">
-        <p><b>{{name}}</b> would like to access your gateway to
+        <p><b>{{name}}</b> <span data-l10n-id="authorize-would-like"></span>
           <span class="authorize-select-container">
             <select class="authorize-select">
-              <option id="authorize-readwrite">monitor and control</option>
-              <option id="authorize-read">monitor</option>
+              <option id="authorize-readwrite" data-l10n-id="authorize-monitor-and-control"></option>
+              <option id="authorize-read" data-l10n-id="authorize-monitor"></option>
             </select>
           </span>
-        devices.</p>
-        <p><small>from {{domain}}</small></p>
+          <span data-l10n-id="authorize-devices"></span></p>
+        <p><small><span data-l10n-id="authorize-from"></span> {{domain}}</small></p>
         <ul id="authorize-things">
           <li class="authorize-all-things">
             <input id="authorize-all-things" type="checkbox" class="generic-checkbox">
-            <label for="authorize-all-things">
-              Allow for all Things
+            <label for="authorize-all-things" data-l10n-id="authorize-allow-all">
             </label>
           </li>
         </ul>
@@ -50,10 +49,9 @@
         <input name="redirect_uri" value="{{request.redirect_uri}}" type="hidden">
         <input id="jwt" name="jwt" value="" type="hidden">
 
-        <input id="authorize-button" type="submit" value="Allow" class="text-button" disabled>
-        <a id="cancel-button" href="/" class="text-button">Deny</a>
+        <input id="authorize-button" type="submit" data-l10n-id="authorize-allow" class="text-button" disabled>
+        <a id="cancel-button" href="/" class="text-button" data-l10n-id="authorize-deny"></a>
       </form>
     </section>
   </body>
 </html>
-

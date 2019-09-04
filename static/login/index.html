@@ -7,19 +7,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#75AACF">
-    <title>Login - WebThings Gateway</title>
+    <title data-l10n-id="login-title">Login - WebThings Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
   </head>
   <body>
-    <img id="wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
+    <img id="wordmark" data-l10n-id="wordmark" src="/optimized-images/wordmark.svg" />
     <form id="login-form" class="user-form" method="post">
-      <input type="email" id="email" name="email" placeholder="Email" autofocus>
-      <input type="password" id="password" name="password" placeholder="Password">
+      <input type="email" id="email" name="email" data-l10n-id="user-settings-input-email" autofocus>
+      <input type="password" id="password" name="password" data-l10n-id="user-settings-input-password">
       <div id="error-submission" class="error hidden"></div>
-      <button id="login-button" type="submit">Log in</button>
+      <button id="login-button" data-l10n-id="login-log-in" type="submit"></button>
     </form>
   </body>
 </html>

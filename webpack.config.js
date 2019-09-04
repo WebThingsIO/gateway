@@ -103,9 +103,19 @@ const pluginsWeb = [
     chunks: ['style', 'app.js'],
   }),
   new HtmlWebpackPlugin({
+    template: 'src/views/connecting.handlebars',
+    filename: '../views/connecting.handlebars',
+    chunks: ['connecting.js'],
+  }),
+  new HtmlWebpackPlugin({
     template: 'static/signup/index.html',
     filename: 'signup/index.html',
     chunks: ['create-user.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'src/views/creating.handlebars',
+    filename: '../views/creating.handlebars',
+    chunks: ['creating.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'static/login/index.html',
@@ -124,23 +134,37 @@ const pluginsWeb = [
     chunks: ['local-token.js'],
   }),
   new HtmlWebpackPlugin({
+    template: 'src/views/router-setup.handlebars',
+    filename: '../views/router-setup.handlebars',
+    chunks: ['router-setup.js'],
+  }),
+  new HtmlWebpackPlugin({
     template: 'src/views/tunnel-setup.handlebars',
     filename: '../views/tunnel-setup.handlebars',
     chunks: ['setup-subdomain.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'src/views/wifi-setup.handlebars',
+    filename: '../views/wifi-setup.handlebars',
+    chunks: ['wifi-setup.js'],
   }),
 ];
 
 const webpackWeb = {
   entry: {
     'app.js': ['./static/js/check-user.js', './static/js/app.js'],
+    'connecting.js': ['./static/js/connecting.js'],
     'create-user.js': ['./static/js/create-user.js'],
+    'creating.js': ['./static/js/creating.js'],
     'login.js': ['./static/js/check-user.js', './static/js/login.js'],
     'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
     'local-token.js': [
       './static/js/check-user.js',
       './static/js/local-token.js',
     ],
+    'router-setup.js': ['./static/js/router-setup.js'],
     'setup-subdomain.js': ['./static/js/setup-subdomain.js'],
+    'wifi-setup.js': ['./static/js/wifi-setup.js'],
     buildCss: [
       // css for static/index.html
       './static/css/app.css',

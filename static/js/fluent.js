@@ -50,20 +50,20 @@ function init() {
 /**
  * @return {string|null} Translation of unit or null if not contained in bundle
  */
-function getMessageStrict(id) {
-  const obj = bundle.getMessage(id);
+function getMessageStrict(id, vars = {}) {
+  const obj = bundle.getMessage(id, vars);
   if (!obj) {
     console.warn('Missing id', id);
     return null;
   }
-  return obj.value;
+  return bundle.formatPattern(obj.value, vars);
 }
 
 /**
  * @return {string} Translation of unit or unit's id for debugging purposes
  */
-function getMessage(id) {
-  return getMessageStrict(id) || `<${id}>`;
+function getMessage(id, vars = {}) {
+  return getMessageStrict(id, vars) || `<${id}>`;
 }
 
 module.exports = {

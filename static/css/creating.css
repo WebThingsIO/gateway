@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'Zilla Slab';
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/ZillaSlab-Regular.woff2") format("woff2"), url("/fonts/ZillaSlab-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: 'Zilla Slab';
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/ZillaSlab-Bold.woff2") format("woff2"), url("/fonts/ZillaSlab-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: 'Zilla Slab';
+  font-weight: 400;
+  font-style: italic;
+  src: url("/fonts/ZillaSlab-RegularItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-RegularItalic.woff") format("woff");
+}
+@font-face {
+  font-family: 'Zilla Slab';
+  font-weight: 700;
+  font-style: italic;
+  src: url("/fonts/ZillaSlab-BoldItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-BoldItalic.woff") format("woff");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/opensans-regular.woff2") format("woff2"), url("/fonts/opensans-regular.woff") format("woff");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
+}
+
+h1 {
+  font-size: 5rem;
+  font-family: 'Zilla Slab', sans-serif;
+}
+
+h3 {
+  font-size: 1.6rem;
+  font-weight: normal;
+}
+
+html {
+  font-size: 10px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: #305067;
+  color: #fff;
+  width: auto;
+}
+
+#maindiv {
+  position: absolute;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 60rem;
+}
+
+.gateway-link:link,
+.gateway-link:visited,
+.gateway-link:hover,
+.gateway-link:active {
+  color: #fff;
+}
+
+#warning {
+  background-color: #597285;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  margin: 4rem;
+}

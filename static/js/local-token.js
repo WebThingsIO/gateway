@@ -1,11 +1,19 @@
+const fluent = require('./fluent');
 const hljs = require('highlightjs/highlight.pack.min');
 
-for (const origin of document.querySelectorAll('.origin')) {
-  origin.textContent = window.location.origin;
-}
+window.addEventListener('load', function app_onLoad() {
+  window.removeEventListener('load', app_onLoad);
+  fluent.load().then(() => {
+    fluent.init();
 
-if (!window.location.origin.endsWith('.mozilla-iot.org')) {
-  document.body.classList.add('insecure');
-}
+    for (const origin of document.querySelectorAll('.origin')) {
+      origin.textContent = window.location.origin;
+    }
 
-hljs.initHighlightingOnLoad();
+    if (!window.location.origin.endsWith('.mozilla-iot.org')) {
+      document.body.classList.add('insecure');
+    }
+
+    hljs.initHighlightingOnLoad();
+  });
+});
