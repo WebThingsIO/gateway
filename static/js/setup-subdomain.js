@@ -124,10 +124,11 @@ function submitForm() {
       validateInput();
 
       if (response.statusText.indexOf('ReclamationPossible') > -1) {
-        const text1 = document.createElement('span');
-        text1.dataset.l10nId = 'reclaim-prompt';
+        const text1 = document.createTextNode(
+          `${fluent.getMessage('reclaim-prompt')} `
+        );
         const reclaim = document.createElement('a');
-        reclaim.dataset.l10nId = 'click-here';
+        reclaim.innerText = `${fluent.getMessage('click-here')}.`;
         reclaim.href = '#';
         reclaim.onclick = () => {
           document.getElementById('opt-in-group').style.display = 'none';
