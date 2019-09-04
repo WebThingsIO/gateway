@@ -15,6 +15,10 @@ is_docker_container() {
     return 0
   fi
 
+  if [ -d /pantavisor ]; then
+    return 0
+  fi
+
   return 1
 }
 
