@@ -14,6 +14,7 @@
 'use strict';
 
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 class UnsupportedField {
   constructor(schema) {
@@ -27,7 +28,7 @@ class UnsupportedField {
     field.className = 'unsupported-field';
 
     const fieldMessage = document.createElement('span');
-    fieldMessage.dataset.l10nId = 'unsupported-field';
+    fieldMessage.innerText = fluent.getMessage('unsupported-field');
 
     const schemaMessage = document.createElement('span');
     schemaMessage.innerHTML = schema;

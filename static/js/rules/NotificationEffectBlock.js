@@ -22,7 +22,7 @@ class NotificationEffectBlock extends RulePartBlock {
 
     const label = document.createElement('span');
     label.classList.add('message-input-label');
-    label.dataset.l10nId = 'notification-message';
+    label.innerText = fluent.getMessage('notification-message');
     messageInputContainer.appendChild(label);
 
     this.messageInput = document.createElement('input');

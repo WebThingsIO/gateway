@@ -18,6 +18,7 @@ const Validator = require('./validator');
 const SchemaField = require('./schema-field');
 const ErrorField = require('./error-field');
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 class SchemaForm {
   constructor(schema, id, name, formData, onSubmit, options = {}) {
@@ -80,7 +81,7 @@ class SchemaForm {
     if (this.submitText) {
       submitButton.innerText = this.submitText;
     } else {
-      submitButton.dataset.l10nId = 'submit';
+      submitButton.innerText = fluent.getMessage('submit');
     }
     submitButton.addEventListener('click', this.handleSubmit.bind(this));
     submitButton.disabled = true;

@@ -477,7 +477,7 @@ class NewThing {
 
     const file = this.customIconInput.files[0];
     if (!['image/jpeg', 'image/png', 'image/svg+xml'].includes(file.type)) {
-      this.label.dataset.l10nId = 'invalid-file';
+      this.label.innerText = fluent.getMessage('invalid-file');
       this.label.classList.add('error');
       this.label.classList.remove('hidden');
       return;
@@ -487,7 +487,7 @@ class NewThing {
     reader.onloadend = (e) => {
       if (e.target.error) {
         console.error(e.target.error);
-        this.label.dataset.l10nId = 'failed-read-file';
+        this.label.innerText = fluent.getMessage('failed-read-file');
         this.label.classList.add('error');
         this.label.classList.remove('hidden');
         this.saveButton.disabled = false;
