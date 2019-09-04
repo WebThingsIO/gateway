@@ -1,5 +1,11 @@
+# Main Title
 webthings-gateway = WebThings Gateway
 
+# Wordmark
+wordmark =
+  .alt = Mozilla IoT
+
+## Menu Items
 assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Rules
@@ -8,14 +14,17 @@ floorplan-menu-item = Floorplan
 settings-menu-item = Settings
 log-out-button = Log out
 
+## Assistant
 assistant-avatar-image =
   .alt = Assistant Avatar
 assistant-controls-text-input =
   .placeholder = How can I help?
 
+## Floorplan
 upload-floorplan = Upload floorplan...
 upload-floorplan-hint = (.svg recommended)
 
+## Top-Level Settings
 settings-domain = Domain
 settings-network = Network
 settings-users = Users
@@ -26,10 +35,12 @@ settings-authorizations = Authorizations
 settings-experiments = Experiments
 settings-developer = Developer
 
+## Domain Settings
 domain-settings-local-label = Local Access
 domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
 
+## Network Settings
 network-settings-unsupported = Network settings are not supported for this platform.
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -63,7 +74,17 @@ network-settings-router-ip = Router IP address
 network-settings-dhcp-server = DHCP server
 network-settings-enable-wifi = Enable Wi-Fi
 network-settings-network-name = Network name (SSID)
+wireless-connected = Connected
+wireless-icon =
+  .alt = Wi-Fi Network
+network-settings-changing = Changing network settings. This may take a minute.
+failed-ethernet-configure = Failed to configure ethernet.
+failed-wifi-configure = Failed to configure wi-fi.
+failed-wan-configure = Failed to configure WAN.
+failed-lan-configure = Failed to configure LAN.
+failed-wlan-configure = Failed to configure WLAN.
 
+## User Settings
 user-settings-input-name =
   .placeholder = Name
 user-settings-input-email =
@@ -79,19 +100,33 @@ user-settings-input-confirm-password =
 user-settings-password-mismatch = Passwords do not match
 user-settings-save = Save
 
+## Adapter Settings
 adapter-settings-no-adapters = No adapters present.
 
+## Authorization Settings
 authorization-settings-no-authorizations = No authorizations.
 
+## Experiment Settings
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Logs
 
+## Update Settings
 update-settings-update-now = Update Now
+update-available = New version available
+update-up-to-date = Your system is up to date
+last-update = Last update
+current-version = Current version
+failed = Failed
+never = Never
+in-progress = In Progress
+restarting = Restarting
 
+## Developer Settings
 developer-settings-enable-ssh = Enable SSH
 developer-settings-view-internal-logs = View Internal Logs
 developer-settings-create-local-authorization = Create local authorization
 
+## Rules
 rules = Rules
 rules-create-rule-hint = No rules created. Click + to create a rule.
 rules-rule-name = Rule Name
@@ -115,7 +150,33 @@ rules-delete-cancel =
   .value = Cancel
 rules-delete-confirm =
   .value = Remove Rule
+rule-invalid = Invalid
+rule-delete-prompt = Are you sure you want to remove this rule permanently?
+rule-delete-cancel-button =
+  .value = Cancel
+rule-delete-confirm-button =
+  .value = Remove Rule
+rule-select-property = Select Property
+rule-not = Not
+rule-event = Event
+rule-action = Action
+rule-configure = Configure...
+rule-time-title = Time of day
+rule-notification = Notification
+notification-title = Title
+notification-message = Message
+notification-level = Level
+notification-low = Low
+notification-normal = Normal
+notification-high = High
+rule-name = Rule Name
+rule-and = and
+rule-or = or
+rule-time-of-day-is = the time of day is
+rule-event-lower = event
+rule-event-occurs = occurs
 
+## Logs
 logs = Logs
 logs-create-log-hint = No logs created. Click + to create a log.
 logs-device = Device
@@ -137,7 +198,10 @@ logs-remove-dialog-title = Removing
 logs-remove-dialog-warning = Removing the log will also remove all of its data.
   Are you sure you want to remove it?
 logs-remove = Remove
+logs-unable-to-create = Unable to create log
+logs-server-remove-error = Server error: unable to remove log
 
+## Add New Things
 add-thing-scanning-icon =
   .alt = Scanning
 add-thing-scanning = Scanning for new devices...
@@ -145,54 +209,14 @@ add-thing-add-adapters-hint = No new things found. Try
 add-thing-add-adapters-hint-anchor = adding some add-ons.
 add-thing-add-by-url = Add by URL...
 add-thing-done = Done
+add-thing-cancel = Cancel
 
+## Context Menu
 context-menu-choose-icon = Choose icon...
 context-menu-save = Save
 context-menu-remove = Remove
 
-wordmark =
-  .alt = Mozilla IoT
-
-errors = Errors
-submit = Submit
-alarm = Alarm
-pushed = Pushed
-not-pushed = Not Pushed
-on-off = On/Off
-on = On
-off = Off
-power = Power
-voltage = Voltage
-temperature = Temperature
-degree-celsius = degree celsius
-current = Current
-frequency = Frequency
-color = Color
-brightness = Brightness
-leak = Leak
-dry = Dry
-color-temperature = Color Temperature
-video-unsupported = Sorry, video is not supported in your browser.
-motion = Motion
-no-motion = No Motion
-open = Open
-closed = Closed
-event-log = Event Log
-edit = Edit
-remove = Remove
-disconnected = Disconnected
-processing = Processing...
-
-reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
-click-here = click here
-check-email-for-token = Please check your email for a reclamation token and paste it above.
-reclaim-failed = Could not reclaim domain.
-subdomain-already-used = This subdomain is already being used. Please choose a different one.
-invalid-reclamation-token = Invalid reclamation token.
-domain-success = Success! Please wait while we redirect you...
-issuing-error = Error issuing certificate. Please try again.
-redirecting = Redirecting...
-
+## Capabilities
 OnOffSwitch = On/Off Switch
 MultiLevelSwitch = Multi Level Switch
 ColorControl = Color Control
@@ -211,51 +235,45 @@ TemperatureSensor = Temperature Sensor
 Alarm = Alarm
 Custom = Custom Thing
 
-invalid-file = Invalid file.
-failed-read-file = Failed to read file.
-failed-save = Failed to save.
+## Properties
+alarm = Alarm
+pushed = Pushed
+not-pushed = Not Pushed
+on-off = On/Off
+on = On
+off = Off
+power = Power
+voltage = Voltage
+temperature = Temperature
+current = Current
+frequency = Frequency
+color = Color
+brightness = Brightness
+leak = Leak
+dry = Dry
+color-temperature = Color Temperature
+video-unsupported = Sorry, video is not supported in your browser.
+motion = Motion
+no-motion = No Motion
+open = Open
+closed = Closed
 
-speech-unsupported = Current browser does not support speech
-speech-didnt-get = Sorry, I didn't get that.
+## Domain Setup
+reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
+click-here = click here
+check-email-for-token = Please check your email for a reclamation token and paste it above.
+reclaim-failed = Could not reclaim domain.
+subdomain-already-used = This subdomain is already being used. Please choose a different one.
+invalid-reclamation-token = Invalid reclamation token.
+domain-success = Success! Please wait while we redirect you...
+issuing-error = Error issuing certificate. Please try again.
+redirecting = Redirecting...
 
-ok = Ok
-unknown = ...
-
-minute = Minute
-hour = Hour
-day = Day
-week = Week
-
+## Booleans
 true = True
 false = False
 
-rule-invalid = Invalid
-rule-delete-prompt = Are you sure you want to remove this rule permanently?
-rule-delete-cancel-button =
-  .value = Cancel
-rule-delete-confirm-button =
-  .value = Remove Rule
-rule-select-property = Select Property
-rule-not = Not
-rule-event = Event
-rule-action = Action
-rule-configure = Configure...
-rule-time-title = Time of day
-rule-notification = Notification
-notification-title = Title
-notification-message = Message
-notification-level = Level
-notification-low = Low
-notification-normal = Normal
-notification-high = High
-rule-name = Rule Name
-# ehhhhh
-rule-and = and
-rule-or = or
-rule-time-of-day-is = the time of day is
-rule-event-lower = event
-rule-event-occurs = occurs
-
+## Time
 utils-now = now
 utils-secs-ago = secs ago
 utils-min-ago = min ago
@@ -270,7 +288,12 @@ utils-month-ago = month ago
 utils-months-ago = months ago
 utils-year-ago = year ago
 utils-years-ago = years ago
+minute = Minute
+hour = Hour
+day = Day
+week = Week
 
+## Unit Abbreviations
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -289,6 +312,7 @@ abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
 
+## New Thing View
 unknown-device-type = Unknown device type
 new-thing-choose-icon = Choose icon...
 new-thing-save = Save
@@ -306,11 +330,21 @@ new-thing-credentials-error = Incorrect credentials
 new-thing-saved = Saved
 new-thing-done = Done
 
+## New Web Thing View
+new-web-thing-url =
+  .placeholder = Enter web thing URL
+new-web-thing-label = Web Thing
+loading = Loading...
+new-web-thing-multiple = Multiple web things found
+new-web-thing-from = from
+
+## Empty div Messages
 no-things = No devices yet. Click + to scan for available devices.
 thing-not-found = Thing not found.
 action-not-found = Action not found.
 events-not-found = This thing has no events.
 
+## Add-on Settings
 author-unknown = Unknown
 disable = Disable
 enable = Enable
@@ -321,31 +355,14 @@ addon-remove = Remove
 addon-updating = Updating...
 addon-updated = Updated
 addon-update-failed = Failed
-
 addon-config-applying = Applying...
 addon-config-apply = Apply
-
-add-thing-cancel = Cancel
-
-logs-unable-to-create = Unable to create log
-logs-server-remove-error = Server error: unable to remove log
-
-new-web-thing-url =
-  .placeholder = Enter web thing URL
-new-web-thing-label = Web Thing
-loading = Loading...
-new-web-thing-multiple = Multiple web things found
-new-web-thing-from = from
-
 addon-discovery-added = Added
 addon-discovery-add = Add
 addon-discovery-installing = Installing...
 addon-discovery-failed = Failed
 
-wireless-connected = Connected
-wireless-icon =
-  .alt = Wi-Fi Network
-
+## Page Titles
 settings = Settings
 domain = Domain
 users = Users
@@ -362,29 +379,26 @@ developer = Developer
 network = Network
 ethernet = Ethernet
 wifi = Wi-Fi
-network-settings-changing = Changing network settings. This may take a minute.
-failed-ethernet-configure = Failed to configure ethernet.
-failed-wifi-configure = Failed to configure wi-fi.
-failed-wan-configure = Failed to configure WAN.
-failed-lan-configure = Failed to configure LAN.
-failed-wlan-configure = Failed to configure WLAN.
 icon = Icon
+
+## Speech
+speech-unsupported = Current browser does not support speech
+speech-didnt-get = Sorry, I didn't get that.
+
+## Errors
 unknown-state = Unknown state.
 error = Error
-update-available = New version available
-update-up-to-date = Your system is up to date
-last-update = Last update
-current-version = Current version
-failed = Failed
-never = Never
-in-progress = In Progress
-restarting = Restarting
-
+errors = Errors
 gateway-unreachable = Gateway Unreachable
 more-information = More Information
+invalid-file = Invalid file.
+failed-read-file = Failed to read file.
+failed-save = Failed to save.
 
+## Schema Form
 unsupported-field = Unsupported field schema
 
+## Icon Sources
 component-icons-custom-src = /optimized-images/component-icons/custom.png
 component-icons-on-off-switch-src = /optimized-images/component-icons/on-off-switch.png
 component-icons-on-off-switch-on-src = /optimized-images/component-icons/on-off-switch-on.png
@@ -392,3 +406,13 @@ component-icons-on-off-switch-off-src = /optimized-images/component-icons/on-off
 component-icons-binary-sensor-on-src = /optimized-images/component-icons/binary-sensor-on.png
 component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary-sensor-off.png
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
+
+## General Terms
+ok = Ok
+unknown = ...
+event-log = Event Log
+edit = Edit
+remove = Remove
+disconnected = Disconnected
+processing = Processing...
+submit = Submit

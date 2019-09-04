@@ -1,5 +1,11 @@
+# Main Title
 webthings-gateway = WebThings Gateway
 
+# Wordmark
+wordmark =
+  .alt = Mozilla IoT
+
+## Menu Items
 assistant-menu-item = Assistente
 things-menu-item = Things
 rules-menu-item = Regole
@@ -8,14 +14,17 @@ floorplan-menu-item = Piano terra
 settings-menu-item = Impostazioni
 log-out-button = Disconnettersi
 
+## Assistant
 assistant-avatar-image =
   .alt = Assistente Avatar
 assistant-controls-text-input =
   .placeholder = Come posso aiutare?
 
+## Floorplan
 upload-floorplan = Carica planimetria...
 upload-floorplan-hint = (.svg raccomandato)
 
+## Top-Level Settings
 settings-domain = Dominio
 settings-network = Rete
 settings-users = Utenti
@@ -26,10 +35,12 @@ settings-authorizations = Autorizzazioni
 settings-experiments = Esperimenti
 settings-developer = Developer
 
+## Domain Settings
 domain-settings-local-label = Accesso locale
 domain-settings-local-update = Aggiorna nome host
 domain-settings-remote-access = Accesso remoto
 
+## Network Settings
 network-settings-unsupported = Le impostazioni di rete non sono supportate per questa piattaforma 
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -64,6 +75,7 @@ network-settings-dhcp-server = Server DHCP
 network-settings-enable-wifi = Abilita Wi-Fi
 network-settings-network-name = Nome di rete (SSID)
 
+## User Settings
 user-settings-input-name =
   .placeholder = Nome
 user-settings-input-email =
@@ -79,19 +91,25 @@ user-settings-input-confirm-password =
 user-settings-password-mismatch = Le passwords non corrispondono
 user-settings-save = Salvare
 
+## Adapter Settings
 adapter-settings-no-adapters = Nessun adattatore presente
 
+## Authorization Settings
 authorization-settings-no-authorizations = Nessuna autorizzazione
 
+## Experiment Settings
 experiment-settings-smart-assistant = Smart Assistente
 experiment-settings-logs = Registri
 
+## Update Settings
 update-settings-update-now = Aggiorna ora
 
+## Developer Settings
 developer-settings-enable-ssh = Abilita SSH
 developer-settings-view-internal-logs = Visualizza registri interni
 developer-settings-create-local-authorization = Crea autorizzazione locale
 
+## Rules
 rules = Regole
 rules-create-rule-hint = Nessuna regola creata. Fai clic su + per creare una regola.
 rules-rule-name = Nome regola
@@ -116,6 +134,7 @@ rules-delete-cancel =
 rules-delete-confirm =
   .value = Rimuovi regola
 
+## Logs
 logs = Registri
 logs-create-log-hint = Nessun registro creato. Fai clic su + per creare un registro.
 logs-device = Dispositivo
@@ -138,6 +157,7 @@ logs-remove-dialog-warning = La rimozione del registro rimuoverà anche tutti i 
  Sei sicuro di volerlo rimuovere?
 logs-remove = Rimuovere
 
+## Add New Things
 add-thing-scanning-icon =
   .alt = Scansione
 add-thing-scanning = Scansione per nuovi dispositivi...
@@ -146,8 +166,7 @@ add-thing-add-adapters-hint-anchor = ad aggiungere alcuni componenti aggiuntivi.
 add-thing-add-by-url = Aggiungi per URL...
 add-thing-done = Fatto
 
+## Context Menu
 context-menu-choose-icon = Scegli icona...
 context-menu-save = Salvare
 context-menu-remove = Rimuovere
-
-mozilla-iot = Mozilla IoT
