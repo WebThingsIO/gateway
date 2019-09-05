@@ -74,7 +74,8 @@ function getArchitecture() {
 function isDocker() {
   return fs.existsSync('/.dockerenv') ||
     (fs.existsSync('/proc/1/cgroup') &&
-     fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0);
+     fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
+    fs.existsSync('/pantavisor');
 }
 
 /**
