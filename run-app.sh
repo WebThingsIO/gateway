@@ -6,12 +6,16 @@ MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
 args=""
 start_task="run-only"
 
-is_docker_container() {
+is_container() {
   if [ -f /.dockerenv ]; then
     return 0
   fi
 
   if grep -q ':\/docker\/' /proc/1/cgroup 2>&1; then
+    return 0
+  fi
+
+  if [ -d /pantavisor ]; then
     return 0
   fi
 
@@ -22,7 +26,7 @@ run_app() {
   export NVM_DIR="${HOME}/.nvm"
   [ ! -s "${NVM_DIR}/nvm.sh" ] || \. "${NVM_DIR}/nvm.sh"  # This loads nvm
 
-  if [ ! is_docker_container ]; then
+  if [ ! is_container ]; then
     sudo /sbin/ldconfig
 
     (sudo timedatectl set-local-rtc 0 && sudo timedatectl set-ntp 1) || true
@@ -43,7 +47,7 @@ run_app() {
   npm run "${start_task}" -- $args
 }
 
-if ! is_docker_container; then
+if ! is_container; then
   if [ ! -f .post_upgrade_complete ]; then
     ./tools/post-upgrade.sh
   fi
