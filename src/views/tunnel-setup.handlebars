@@ -6,34 +6,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Choose Web Address - WebThings Gateway</title>
+    <title data-l10n-id="tunnel-setup-title">Choose Web Address - WebThings Gateway</title>
     <link rel="manifest" href="../app.webmanifest">
     <link rel="icon" href="../optimized-images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/subdomain-form.css" />
   </head>
   <body>
-    <img id="wordmark" src="../optimized-images/wordmark.svg" alt="Mozilla IoT"/>
+    <img id="wordmark" src="../optimized-images/wordmark.svg" data-l10n-id="wordmark"/>
     <form id="create-subdomain-form" class="subdomain-form">
-      <h1>Welcome</h1>
-      <p>Choose a secure web address for your gateway:</p>
-      <input type="text" id="subdomain" placeholder="subdomain" required autofocus /><div id="label-subdomain">.{{domain}}</div>
-      <input type="email" id="email" placeholder="Email" required /><br>
+      <h1 data-l10n-id="tunnel-setup-welcome"></h1>
+      <p data-l10n-id="tunnel-setup-choose-address"></p>
+      <input type="text" id="subdomain" data-l10n-id="tunnel-setup-input-subdomain" required autofocus /><div id="label-subdomain">.{{domain}}</div>
+      <input type="email" id="email" data-l10n-id="user-settings-input-email" required /><br>
       <div id="opt-in-group">
         <input type="checkbox" id="opt-in" name="opt-in" checked>
         <label for="opt-in"></label>
-        <span id="opt-in-info">
-          Please keep me updated about new features and contribution opportunities.
-          <a href="https://www.mozilla.org/en-US/privacy/">Privacy Policy</a>
-        </span>
+        <div id="opt-in-info">
+          <span data-l10n-id="tunnel-setup-opt-in"></span>
+          <br>
+          <a href="https://www.mozilla.org/en-US/privacy/" data-l10n-id="tunnel-setup-privacy-policy"></a>
+        </div>
       </div>
-      <input type="text" id="reclamation-token" placeholder="Reclamation Token" /><br>
-      <div id="error-setup" class="error hidden">
-        An error occured when setting up the subdomain
-      </div><br>
-      <button id="create-domain-button" type="button" disabled>Create</button>
+      <input type="text" id="reclamation-token" data-l10n-id="tunnel-setup-input-reclamation-token" /><br>
+      <div id="error-setup" class="error hidden" data-l10n-id="tunnel-setup-error"></div>
+      <br>
+      <button id="create-domain-button" type="button" data-l10n-id="tunnel-setup-create" disabled></button>
       <div>
-        <a id="skip-subdomain-anchor" href="#">Skip</a>
+        <a id="skip-subdomain-anchor" href="#" data-l10n-id="tunnel-setup-skip"></a>
       </div>
     </form>
   </body>

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#75AACF">
-    <title>Local Token Service - WebThings Gateway</title>
+    <title data-l10n-id="local-token-title">Local Token Service - WebThings Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
 
@@ -17,24 +17,23 @@
     <link rel="stylesheet" type="text/css" href="/css/local-token-service.css" />
   </head>
   <body class="hidden">
-    <img id="wordmark" src="../optimized-images/wordmark.svg" alt="Mozilla IoT"/>
+    <img id="wordmark" src="../optimized-images/wordmark.svg" data-l10n-id="wordmark"/>
 
     <!-- OAuth Authorization -->
     <section class="selected">
       <div class="title-bar">
         <a href="/" class="back-button icon-button"></a>
-        <h1>Local Token Service</h1>
+        <h1 data-l10n-id="local-token-header"></h1>
       </div>
 
       <div class="main-container">
-        Your local token is this <a href="https://jwt.io/">JSON Web Token</a>:
+        <span data-l10n-id="local-token-your-token"></span> <a href="https://jwt.io/" data-l10n-id="local-token-jwt"></a>:
         <br/>
         <br/>
         <code id="token">{{token}}</code>
         <br/>
-        Use it with <a
-        href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization">Bearer-type
-        Authorization</a> to talk to the Gateway securely.
+        <span data-l10n-id="local-token-use-it"></span> <a
+        href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization" data-l10n-id="local-token-bearer-type"></a>.
         <br/>
         <br/>
         <div class="code-example">
@@ -137,4 +136,3 @@ if ({{oauthPostToken}}) {
     </script>
   </body>
 </html>
-

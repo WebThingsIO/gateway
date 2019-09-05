@@ -38,8 +38,6 @@
         <div id="thing-title-back-flex"></div>
         <div id="thing-title-container">
           <div id="thing-title-icon">
-            <webthing-custom-icon id="thing-title-custom-icon" class="hidden">
-            </webthing-custom-icon>
           </div>
           <span id="thing-title-title"></span>
         </div>
@@ -90,7 +88,7 @@
               for="domain-settings-local-checkbox">
             </label>
             <input type="text" id="domain-settings-local-name" name="gateway"
-                   placeholder="gateway" />
+                   data-l10n-id="domain-settings-local-name" />
             <span id="domain-settings-local-suffix">.local</span>
             <div id="domain-settings-error" class="domain-settings-error hidden"></div>
             <button id="domain-settings-local-update" class="domain-settings-update text-button"
@@ -623,16 +621,12 @@
       <button id="context-menu-back-button" class="back-button icon-button"></button>
       <div id="context-menu-heading">
         <div id="context-menu-heading-icon">
-          <webthing-custom-icon id="context-menu-heading-custom-icon" class="hidden">
-          </webthing-custom-icon>
         </div>
         <span id="context-menu-heading-text"></span>
       </div>
       <div id="context-menu-content">
         <div id="context-menu-content-edit" class="hidden">
           <div id="edit-thing-icon">
-            <webthing-custom-icon id="edit-thing-custom-icon" class="hidden">
-            </webthing-custom-icon>
           </div>
           <div id="edit-thing-metadata">
             <input type="text" id="edit-thing-title">

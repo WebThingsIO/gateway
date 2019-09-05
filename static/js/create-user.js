@@ -10,8 +10,9 @@
 'use strict';
 
 const API = require('./api');
+const fluent = require('./fluent');
 
-(function() {
+function setupForm() {
   const form = document.getElementById('create-user-form');
   const email = document.getElementById('email');
   const password = document.getElementById('password');
@@ -45,4 +46,12 @@ const API = require('./api');
         console.error(err);
       });
   });
-})();
+}
+
+window.addEventListener('load', function app_onLoad() {
+  window.removeEventListener('load', app_onLoad);
+  fluent.load().then(() => {
+    fluent.init();
+    setupForm();
+  });
+});

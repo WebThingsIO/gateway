@@ -7,28 +7,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#75AACF">
-    <title>Create User - WebThings Gateway</title>
+    <title data-l10n-id="signup-title">Create User - WebThings Gateway</title>
     <link rel="manifest" href="/app.webmanifest">
     <link rel="icon" href="/optimized-images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
   </head>
   <body>
-    <img id="wordmark" alt="Mozilla IoT" src="/optimized-images/wordmark.svg" />
+    <img id="wordmark" data-l10n-id="wordmark" src="/optimized-images/wordmark.svg" />
     <form id="create-user-form" class="user-form">
-      <h1>Welcome</h1>
-      <p>Create your first user account:</p>
-      <input type="text" name="name" placeholder="Name" id="name" required autofocus>
-      <input type="email" name="email" placeholder="Email" id="email" required>
+      <h1 data-l10n-id="signup-welcome"></h1>
+      <p data-l10n-id="signup-create-account"></p>
+      <input type="text" name="name" data-l10n-id="user-settings-input-name" id="name" required autofocus>
+      <input type="email" name="email" data-l10n-id="user-settings-input-email" id="email" required>
       <input id="password" type="password" name="password"
-             placeholder="Password" required>
+        data-l10n-id="user-settings-input-password" required>
       <input id="confirm-password" type="password" name="confirm-password"
-             placeholder="Confirm Password" required>
-      <div id="error-password-mismatch" class="error hidden">
-        Passwords do not match
+        data-l10n-id="user-settings-input-confirm-password" required>
+      <div id="error-password-mismatch" class="error hidden"
+        data-l10n-id="signup-password-mismatch">
       </div>
       <div id="error-submission" class="error hidden"></div>
-      <button id="create-user-button" type="submit">Next</button>
+      <button id="create-user-button" data-l10n-id="signup-next" type="submit"></button>
     </form>
   </body>
 </html>

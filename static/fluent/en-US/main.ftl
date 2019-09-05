@@ -39,6 +39,8 @@ settings-developer = Developer
 domain-settings-local-label = Local Access
 domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
+domain-settings-local-name =
+  .placeholder = gateway
 
 ## Network Settings
 network-settings-unsupported = Network settings are not supported for this platform.
@@ -406,6 +408,96 @@ component-icons-on-off-switch-off-src = /optimized-images/component-icons/on-off
 component-icons-binary-sensor-on-src = /optimized-images/component-icons/binary-sensor-on.png
 component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary-sensor-off.png
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
+
+## Login Page
+login-title = Login - WebThings Gateway
+login-log-in = Log in
+
+## Create First User Page
+signup-title = Create User - WebThings Gateway
+signup-welcome = Welcome
+signup-create-account = Create your first user account:
+signup-password-mismatch = Passwords do not match
+signup-next = Next
+
+## Tunnel Setup Page
+tunnel-setup-title = Choose Web Address - WebThings Gateway
+tunnel-setup-welcome = Welcome
+tunnel-setup-choose-address = Choose a secure web address for your gateway:
+tunnel-setup-input-subdomain =
+  .placeholder = subdomain
+tunnel-setup-opt-in = Please keep me updated about new features and contribution opportunities.
+tunnel-setup-privacy-policy = Privacy Policy
+tunnel-setup-input-reclamation-token =
+  .placeholder = Reclamation Token
+tunnel-setup-error = An error occurred while setting up the subdomain.
+tunnel-setup-create = Create
+tunnel-setup-skip = Skip
+
+## Authorize Page
+authorize-title = Authorization Request - WebThings Gateway
+authorize-authorization-request = Authorization Request
+authorize-would-like = would like to access your gateway to
+authorize-devices = devices.
+authorize-from = from
+authorize-monitor-and-control = monitor and control
+authorize-monitor = monitor
+authorize-allow-all = Allow for all Things
+authorize-allow =
+  .value = Allow
+authorize-deny = Deny
+
+## Local Token Page
+local-token-title = Local Token Service - WebThings Gateway
+local-token-header = Local Token Service
+local-token-your-token = Your local token is this
+local-token-jwt = JSON Web Token
+local-token-use-it = Use it to talk to the gateway securely, with
+local-token-bearer-type = Bearer-type Authorization
+
+## Router Setup Page
+router-setup-title = Router Setup - WebThings Gateway
+router-setup-header = Create a new Wi-Fi network
+router-setup-input-ssid =
+  .placeholder = Network name
+router-setup-input-password =
+  .placeholder = Password
+router-setup-input-confirm-password =
+  .placeholder = Confirm password
+router-setup-create =
+  .value = Create
+router-setup-password-mismatch = Passwords must match
+
+## Wi-Fi Setup Page
+wifi-setup-title = Wi-Fi Setup - WebThings Gateway
+wifi-setup-header = Connect to a Wi-Fi network?
+wifi-setup-input-password =
+  .placeholder = Password
+wifi-setup-show-password = Show password
+wifi-setup-connect =
+  .value = Connect
+wifi-setup-network-icon =
+  .alt = Wi-Fi Network
+wifi-setup-skip = Skip
+
+## Connecting to Wi-Fi Page
+connecting-title = Connecting to Wi-Fi - WebThings Gateway
+connecting-header = Connecting to Wi-Fi...
+connecting-connect = Please ensure you are connected to the same network and
+ then navigate to { $gateway-link } in your web browser to continue setup.
+connecting-warning = Note: If you are unable to load { $domain }, look up the
+ gateway's IP address on your router.
+connecting-header-skipped = Wi-Fi setup skipped
+connecting-skipped = The gateway is now being started. Navigate to
+ { $gateway-link } in your web browser while connected to the same network as
+ the gateway to continue setup.
+
+## Creating Wi-Fi Network Page
+creating-title = Creating Wi-Fi Network - WebThings Gateway
+creating-header = Creating Wi-Fi network...
+creating-content = Please connect to { $ssid } with the password you just
+ created, then navigate to { $gateway-link } or { $ip-link } in your web
+ browser.
 
 ## General Terms
 ok = Ok

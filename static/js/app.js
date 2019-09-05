@@ -71,6 +71,18 @@ const App = {
    */
   init: function() {
     fluent.init();
+
+    // after loading fluent, we need to add a couple extra DOM elements
+    document.querySelector('#thing-title-icon').innerHTML = `
+      <webthing-custom-icon id="thing-title-custom-icon" class="hidden">
+      </webthing-custom-icon>`;
+    document.querySelector('#context-menu-heading-icon').innerHTML = `
+      <webthing-custom-icon id="context-menu-heading-custom-icon" class="hidden">
+      </webthing-custom-icon>`;
+    document.querySelector('#edit-thing-icon').innerHTML = `
+      <webthing-custom-icon id="edit-thing-custom-icon" class="hidden">
+      </webthing-custom-icon>`;
+
     // Load the shaka player polyfills
     shaka.polyfill.installAll();
     MobileDragDrop.polyfill({

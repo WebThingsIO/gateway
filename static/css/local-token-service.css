@@ -62,6 +62,7 @@ code {
   display: block;
   padding: 2rem;
   background: #305067;
+  overflow-x: auto;
 }
 
 span.insecure {
