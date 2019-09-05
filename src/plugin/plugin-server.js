@@ -17,6 +17,7 @@ const Constants = require('../constants');
 const EventEmitter = require('events');
 const IpcSocket = require('./ipc');
 const Plugin = require('./plugin');
+const UserProfile = require('../user-profile');
 
 class PluginServer extends EventEmitter {
   constructor(addonManager, {verbose} = {}) {
@@ -71,6 +72,13 @@ class PluginServer extends EventEmitter {
           data: {
             pluginId: msg.data.pluginId,
             ipcBaseAddr: plugin.ipcBaseAddr,
+            userProfile: {
+              baseDir: UserProfile.baseDir,
+              configDir: UserProfile.configDir,
+              mediaDir: UserProfile.mediaDir,
+              logDir: UserProfile.logDir,
+              gatewayDir: UserProfile.gatewayDir,
+            },
           },
         });
         break;
