@@ -24,6 +24,7 @@ class AddonManagerProxy extends EventEmitter {
     this.adapters = new Map();
     this.notifiers = new Map();
     this.pluginClient = pluginClient;
+    this.userProfile = pluginClient.userProfile;
 
     this.on(Constants.PROPERTY_CHANGED, (property) => {
       DEBUG && console.log('AddonManagerProxy: Got',

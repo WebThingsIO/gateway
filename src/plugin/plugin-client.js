@@ -36,6 +36,7 @@ class PluginClient extends EventEmitter {
     }
 
     if (msg.messageType === Constants.REGISTER_PLUGIN_REPLY) {
+      this.userProfile = msg.data.userProfile;
       this.addonManager = new AddonManagerProxy(this);
 
       // Now that we're registered with the server, open the plugin
