@@ -359,24 +359,6 @@ const Database = {
   },
 
   /**
-   * Get a list of add-on-related settings.
-   *
-   * @return {Promise<Array<Setting>>} resolves with a list of setting objects
-   */
-  getAddonSettings: async function() {
-    return new Promise((resolve, reject) => {
-      this.db.all('SELECT * FROM settings WHERE key LIKE "addons.%"',
-                  (err, rows) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(rows);
-                    }
-                  });
-    });
-  },
-
-  /**
    * Create a user
    * @param {User} user
    * @return {Promise<User>}

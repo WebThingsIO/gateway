@@ -26,11 +26,9 @@ class InstalledAddon {
    */
   constructor(metadata, installedAddonsMap, availableAddonsMap) {
     this.name = metadata.name;
-    this.displayName = metadata.display_name;
+    this.displayName = metadata.displayName;
     this.description = metadata.description;
-    if (typeof metadata.author === 'object') {
-      this.author = metadata.author.name;
-    } else if (typeof metadata.author === 'string') {
+    if (typeof metadata.author === 'string') {
       this.author = metadata.author.split('<')[0].trim();
     } else {
       this.author = fluent.getMessage('author-unknown');
@@ -39,10 +37,9 @@ class InstalledAddon {
     this.license =
       `/addons/${encodeURIComponent(this.name)}/license?jwt=${API.jwt}`;
     this.version = metadata.version;
-    this.type = metadata.moziot.type || 'adapter';
-    this.enabled = metadata.moziot.enabled;
-    this.config = metadata.moziot.config;
-    this.schema = metadata.moziot.schema;
+    this.type = metadata.type;
+    this.enabled = metadata.enabled;
+    this.schema = metadata.schema;
     this.updateUrl = null;
     this.updateVersion = null;
     this.updateChecksum = null;
@@ -215,7 +212,7 @@ class InstalledAddon {
       .then(() => {
         this.enabled = enabled;
         const addon = this.installedAddonsMap.get(this.name);
-        addon.moziot.enabled = enabled;
+        addon.enabled = enabled;
         if (this.enabled) {
           button.innerText = fluent.getMessage('disable');
           button.classList.remove('addon-settings-enable');

@@ -57,14 +57,6 @@ const Settings = {
   }),
 
   /**
-   * Get an object of all add-on-related settings.
-   */
-  getAddonSettings: () => Database.getAddonSettings().catch((e) => {
-    console.error('Failed to get add-on settings');
-    throw e;
-  }),
-
-  /**
    * Get an object of all tunnel settings
    * @return {localDomain, mDNSstate, tunnelDomain}
    */

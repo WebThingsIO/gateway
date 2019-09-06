@@ -10,31 +10,7 @@ const path = require('path');
 const AddonsController = PromiseRouter();
 
 AddonsController.get('/', async (request, response) => {
-  Settings.getAddonSettings().then((result) => {
-    if (typeof result === 'undefined') {
-      response.status(404).json([]);
-    } else {
-      const installedAddons = [];
-      for (const setting of result) {
-        // Remove the leading 'addons.' from the settings key to get the
-        // package name.
-        const packageName = setting.key.substr(setting.key.indexOf('.') + 1);
-        if (packageName.length <= 0) {
-          continue;
-        }
-
-        if (AddonManager.isAddonInstalled(packageName)) {
-          installedAddons.push(setting);
-        }
-      }
-
-      response.status(200).json(installedAddons);
-    }
-  }).catch((e) => {
-    console.error('Failed to get add-on settings.');
-    console.error(e);
-    response.status(400).send(e);
-  });
+  response.status(200).json(Array.from(AddonManager.installedAddons.values()));
 });
 
 AddonsController.get('/:addonName/license', async (request, response) => {
@@ -82,41 +58,30 @@ AddonsController.put('/:addonName', async (request, response) => {
 
   const enabled = request.body.enabled;
 
-  const key = `addons.${addonName}`;
-
-  let current;
-  try {
-    current = await Settings.get(key);
-    if (typeof current === 'undefined') {
-      throw new Error('Setting is undefined.');
-    }
-  } catch (e) {
-    console.error(`Failed to get current settings for add-on ${addonName}`);
-    console.error(e);
-    response.status(400).send(e);
-    return;
-  }
-
-  current.moziot.enabled = enabled;
-  try {
-    await Settings.set(key, current);
-  } catch (e) {
-    console.error(`Failed to set settings for add-on ${addonName}`);
-    console.error(e);
-    response.status(400).send(e);
-    return;
-  }
-
   try {
     if (enabled) {
-      await AddonManager.loadAddon(addonName);
+      await AddonManager.enableAddon(addonName);
     } else {
-      await AddonManager.unloadAddon(addonName);
+      await AddonManager.disableAddon(addonName);
     }
 
     response.status(200).json({enabled});
   } catch (e) {
     console.error(`Failed to toggle add-on ${addonName}`);
+    console.error(e);
+    response.status(400).send(e);
+  }
+});
+
+AddonsController.get('/:addonName/config', async (request, response) => {
+  const addonName = request.params.addonName;
+  const key = `addons.config.${addonName}`;
+
+  try {
+    const config = await Settings.get(key);
+    response.status(200).json(config || {});
+  } catch (e) {
+    console.error(`Failed to get config for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
   }
@@ -131,27 +96,12 @@ AddonsController.put('/:addonName/config', async (request, response) => {
   }
 
   const config = request.body.config;
+  const key = `addons.config.${addonName}`;
 
-  const key = `addons.${addonName}`;
-
-  let current;
   try {
-    current = await Settings.get(key);
-    if (typeof current === 'undefined') {
-      throw new Error('Setting is undefined.');
-    }
+    await Settings.set(key, config);
   } catch (e) {
-    console.error(`Failed to get current settings for add-on ${addonName}`);
-    console.error(e);
-    response.status(400).send(e);
-    return;
-  }
-
-  current.moziot.config = config;
-  try {
-    await Settings.set(key, current);
-  } catch (e) {
-    console.error(`Failed to set settings for add-on ${addonName}`);
+    console.error(`Failed to set config for add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
     return;
@@ -166,7 +116,7 @@ AddonsController.put('/:addonName/config', async (request, response) => {
 
     response.status(200).json({config});
   } catch (e) {
-    console.error(`Failed to apply config add-on ${addonName}`);
+    console.error(`Failed to restart add-on ${addonName}`);
     console.error(e);
     response.status(400).send(e);
   }
@@ -188,8 +138,8 @@ AddonsController.post('/', async (request, response) => {
   try {
     await AddonManager.installAddonFromUrl(name, url, checksum, true);
     const key = `addons.${name}`;
-    const savedSettings = await Settings.get(key);
-    response.status(200).json(savedSettings);
+    const obj = await Settings.get(key);
+    response.status(200).json(obj);
   } catch (e) {
     response.status(400).send(e);
   }

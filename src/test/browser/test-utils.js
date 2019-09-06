@@ -34,12 +34,7 @@ module.exports.getAddons = async () => {
   const installedAddons = new Map();
   // Store a map of name->version.
   for (const s of res.body) {
-    try {
-      const settings = JSON.parse(s.value);
-      installedAddons.set(settings.name, settings);
-    } catch (err) {
-      console.error(`Failed to parse add-on settings: ${err}`);
-    }
+    installedAddons.set(s.name, s);
   }
   return installedAddons;
 };

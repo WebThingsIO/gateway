@@ -221,6 +221,22 @@ const API = {
     });
   },
 
+  getAddonConfig: (addonName) => {
+    const headers = {
+      Authorization: `Bearer ${API.jwt}`,
+      Accept: 'application/json',
+    };
+    return fetch(`/addons/${encodeURIComponent(addonName)}/config`, {
+      headers,
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          'Unexpected response code while getting add-on config');
+      }
+      return response.json();
+    });
+  },
+
   setAddonConfig: (addonName, config) => {
     const headers = {
       Authorization: `Bearer ${API.jwt}`,

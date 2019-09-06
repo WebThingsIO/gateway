@@ -50,7 +50,7 @@ class AddonManager extends EventEmitter {
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.addonsLoaded = false;
-    this.installedAddons = new Set();
+    this.installedAddons = new Map();
     this.deferredWaitForAdapter = new Map();
     this.pluginServer = null;
     this.updateTimeout = null;
@@ -585,17 +585,33 @@ class AddonManager extends EventEmitter {
    * @returns {boolean} Boolean indicating enabled status.
    */
   async addonEnabled(packageName) {
-    const key = `addons.${packageName}`;
-    try {
-      const savedSettings = await Settings.get(key);
-      if (savedSettings && savedSettings.moziot) {
-        return savedSettings.moziot.enabled;
-      }
-
-      return false;
-    } catch (_) {
-      return false;
+    if (this.installedAddons.has(packageName)) {
+      return this.installedAddons.get(packageName).enabled;
     }
+
+    return false;
+  }
+
+  async enableAddon(packageName) {
+    if (!this.installedAddons.has(packageName)) {
+      throw new Error('Package not installed.');
+    }
+
+    const obj = this.installedAddons.get(packageName);
+    obj.enabled = true;
+    await Settings.set(`addons.${packageName}`, obj);
+    await this.loadAddon(packageName);
+  }
+
+  async disableAddon(packageName) {
+    if (!this.installedAddons.has(packageName)) {
+      throw new Error('Package not installed.');
+    }
+
+    const obj = this.installedAddons.get(packageName);
+    obj.enabled = false;
+    await Settings.set(`addons.${packageName}`, obj);
+    await this.unloadAddon(packageName);
   }
 
   /**
@@ -727,30 +743,61 @@ class AddonManager extends EventEmitter {
     }
 
     // Get any saved settings for this add-on.
+    let enabled = false;
     const key = `addons.${manifest.name}`;
-    const savedSettings = await Settings.get(key);
-    const newSettings = Object.assign({}, manifest);
-    if (savedSettings) {
-      // Overwrite config and enablement values.
-      newSettings.moziot.enabled = savedSettings.moziot.enabled;
-      newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
-                                                savedSettings.moziot.config);
-    } else {
-      if (!manifest.moziot.hasOwnProperty('enabled')) {
-        newSettings.moziot.enabled = false;
-      }
+    const configKey = `addons.config.${manifest.name}`;
+    try {
+      const savedSettings = await Settings.get(key);
 
-      if (!newSettings.moziot.hasOwnProperty('config')) {
-        newSettings.moziot.config = {};
+      // If the old-style data is stored in the database, we need to transition
+      // to the new format.
+      if (savedSettings.hasOwnProperty('moziot')) {
+        if (savedSettings.moziot.hasOwnProperty('enabled')) {
+          enabled = savedSettings.moziot.enabled;
+        }
+
+        if (savedSettings.moziot.hasOwnProperty('config')) {
+          await Settings.set(configKey, savedSettings.moziot.config);
+        }
+      } else if (savedSettings.hasOwnProperty('enabled')) {
+        enabled = savedSettings.enabled;
       }
+    } catch (_e) {
+      // pass
+    }
+
+    if (process.env.NODE_ENV === 'test' && manifest.moziot.enabled) {
+      enabled = true;
     }
 
     // Update the settings database.
-    await Settings.set(key, newSettings);
-    this.installedAddons.add(packageName);
+    const obj = {
+      name: manifest.name,
+      displayName: manifest.display_name,
+      description: manifest.description,
+      author: manifest.author,
+      homepage: manifest.homepage,
+      version: manifest.version,
+      type: manifest.moziot.type || 'adapter',
+      exec: manifest.moziot.exec,
+      enabled: enabled,
+    };
+
+    if (typeof manifest.author === 'object') {
+      obj.author = manifest.author.name;
+    } else if (typeof manifest.author === 'string') {
+      obj.author = manifest.author.split('<')[0].trim();
+    }
+
+    if (manifest.moziot.hasOwnProperty('schema')) {
+      obj.schema = manifest.moziot.schema;
+    }
+
+    await Settings.set(key, obj);
+    this.installedAddons.set(packageName, obj);
 
     // If this add-on is not explicitly enabled, move on.
-    if (!newSettings.moziot.enabled) {
+    if (!enabled) {
       const err = `Package not enabled: ${manifest.name}`;
       console.log(err);
       return Promise.reject(err);
@@ -759,6 +806,30 @@ class AddonManager extends EventEmitter {
     const errorCallback = (packageName, errorStr) => {
       console.error('Failed to load', packageName, '-', errorStr);
     };
+
+    // Now, we need to build an object so that add-ons which rely on things
+    // being passed in can function properly.
+    const newSettings = {
+      name: obj.name,
+      display_name: obj.displayName,
+      moziot: {
+        exec: obj.exec,
+      },
+    };
+
+    if (obj.schema) {
+      newSettings.moziot.schema = obj.schema;
+    }
+
+    const savedConfig = await Settings.get(configKey);
+    if (savedConfig) {
+      newSettings.moziot.config = savedConfig;
+    } else if (manifest.moziot.hasOwnProperty('config')) {
+      await Settings.set(configKey, manifest.moziot.config);
+      newSettings.moziot.config = manifest.moziot.config;
+    } else {
+      newSettings.moziot.config = {};
+    }
 
     // Load the add-on
     console.log('Loading add-on:', manifest.name);
@@ -1191,24 +1262,22 @@ class AddonManager extends EventEmitter {
 
     // Update the saved settings (if any) and enable the add-on
     const key = `addons.${packageName}`;
-    let savedSettings = await Settings.get(key);
-    if (savedSettings) {
+    let obj = await Settings.get(key);
+    if (obj) {
       // Only enable if we're supposed to. Otherwise, keep whatever the current
       // setting is.
       if (enable) {
-        savedSettings.moziot.enabled = true;
+        obj.enabled = true;
       }
     } else {
       // If this add-on is brand new, use the passed-in enable flag.
-      savedSettings = {
-        moziot: {
-          enabled: enable,
-        },
+      obj = {
+        enabled: enable,
       };
     }
-    await Settings.set(key, savedSettings);
+    await Settings.set(key, obj);
 
-    if (savedSettings.moziot.enabled) {
+    if (enable) {
       // Now, load the add-on
       try {
         await this.loadAddon(packageName);
@@ -1258,10 +1327,10 @@ class AddonManager extends EventEmitter {
     // Update the saved settings and disable the add-on
     if (disable) {
       const key = `addons.${packageName}`;
-      const savedSettings = await Settings.get(key);
-      if (savedSettings) {
-        savedSettings.moziot.enabled = false;
-        await Settings.set(key, savedSettings);
+      const obj = await Settings.get(key);
+      if (obj) {
+        obj.enabled = false;
+        await Settings.set(key, obj);
       }
     }
 

@@ -22,8 +22,7 @@ class AddonConfig {
    * @param {Object} metadata metadata object.
    */
   constructor(id, metadata) {
-    this.schema = metadata.moziot.schema;
-    this.config = metadata.moziot.config;
+    this.schema = metadata.schema;
     this.id = id;
     this.name = metadata.name;
     this.container = document.getElementById('addon-config-settings');
@@ -45,7 +44,9 @@ class AddonConfig {
           page('/settings/addons');
         })
         .catch((err) => {
-          console.error(`Failed to set config add-on: ${this.name}\n${err}`);
+          console.error(
+            `Failed to set config for add-on: ${this.name}\n${err}`
+          );
           this.configForm.errorField.render([err]);
           this.configForm.submitButton.innerText =
             fluent.getMessage('addon-config-apply');
@@ -57,14 +58,20 @@ class AddonConfig {
    * Render AddonConfig view and add to DOM.
    */
   render() {
-    this.configForm = new SchemaForm(
-      this.schema,
-      `addon-config-${this.id}`,
-      this.name,
-      this.config,
-      this.handleApply.bind(this),
-      {submitText: fluent.getMessage('addon-config-apply')});
-    this.container.appendChild(this.configForm.render());
+    API.getAddonConfig(this.id)
+      .then((config) => {
+        this.configForm = new SchemaForm(
+          this.schema,
+          `addon-config-${this.id}`,
+          this.name,
+          config,
+          this.handleApply.bind(this),
+          {submitText: fluent.getMessage('addon-config-apply')});
+        this.container.appendChild(this.configForm.render());
+      })
+      .catch((err) => {
+        console.error(`Failed to get config for add-on: ${this.name}\n${err}`);
+      });
   }
 }
 

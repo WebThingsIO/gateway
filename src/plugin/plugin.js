@@ -600,9 +600,7 @@ class Plugin {
 
     this.startPromise = Settings.get(key).then((savedSettings) => {
       if (!this.forceEnable &&
-          (!savedSettings ||
-           !savedSettings.moziot ||
-           !savedSettings.moziot.enabled)) {
+          (!savedSettings || !savedSettings.enabled)) {
         console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
         this.restart = false;
         this.process.p = null;
