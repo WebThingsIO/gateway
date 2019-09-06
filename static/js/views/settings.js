@@ -1424,8 +1424,7 @@ const SettingsScreen = {
       this.installedAddons.clear();
       for (const s of body) {
         try {
-          const settings = JSON.parse(s.value);
-          this.installedAddons.set(settings.name, settings);
+          this.installedAddons.set(s.name, s);
         } catch (err) {
           console.error(`Failed to parse add-on settings: ${err}`);
         }

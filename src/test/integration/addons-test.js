@@ -99,10 +99,8 @@ describe('addons', () => {
 
     expect(res.status).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body[0]).toHaveProperty('value');
-    expect(JSON.parse(res.body[0].value)).toHaveProperty('name');
-    expect(JSON.parse(res.body[0].value)).toHaveProperty('description');
-    expect(JSON.parse(res.body[0].value)).toHaveProperty('moziot');
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0]).toHaveProperty('description');
   });
 
   it('Toggle a non-existent add-on', async () => {
@@ -141,14 +139,14 @@ describe('addons', () => {
     expect(res2.status).toEqual(200);
     let addonConfig1;
     for (const cfg of res2.body) {
-      if (cfg.key.indexOf('settings-adapter') > -1) {
-        addonConfig1 = JSON.parse(cfg.value);
+      if (cfg.name == 'settings-adapter') {
+        addonConfig1 = cfg;
         break;
       }
     }
 
-    expect(addonConfig1).toHaveProperty('moziot');
-    expect(addonConfig1.moziot.enabled).toBe(true);
+    expect(addonConfig1).toHaveProperty('enabled');
+    expect(addonConfig1.enabled).toBe(true);
 
     // Toggle off
     const res3 = await chai.request(server)
@@ -168,14 +166,14 @@ describe('addons', () => {
     expect(res4.status).toEqual(200);
     let addonConfig2;
     for (const cfg of res4.body) {
-      if (cfg.key.indexOf('settings-adapter') > -1) {
-        addonConfig2 = JSON.parse(cfg.value);
+      if (cfg.name == 'settings-adapter') {
+        addonConfig2 = cfg;
         break;
       }
     }
 
-    expect(addonConfig2).toHaveProperty('moziot');
-    expect(addonConfig2.moziot.enabled).toBe(false);
+    expect(addonConfig2).toHaveProperty('enabled');
+    expect(addonConfig2.enabled).toBe(false);
   });
 
   it('Fail to get license for non-existent add-on', async () => {
@@ -236,26 +234,30 @@ describe('addons', () => {
 
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
-    expect(res1.body.length).toEqual(0);
+    expect(
+      res1.body.filter((a) => a.name === 'example-adapter').length
+    ).toEqual(0);
 
     const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
-    expect(list[0]).toHaveProperty('name');
-    expect(list[0]).toHaveProperty('display_name');
-    expect(list[0]).toHaveProperty('description');
-    expect(list[0]).toHaveProperty('author');
-    expect(list[0]).toHaveProperty('homepage');
-    expect(list[0]).toHaveProperty('url');
-    expect(list[0]).toHaveProperty('version');
-    expect(list[0]).toHaveProperty('checksum');
+
+    const addon = list.find((a) => a.name === 'example-adapter');
+    expect(addon).toHaveProperty('name');
+    expect(addon).toHaveProperty('display_name');
+    expect(addon).toHaveProperty('description');
+    expect(addon).toHaveProperty('author');
+    expect(addon).toHaveProperty('homepage');
+    expect(addon).toHaveProperty('url');
+    expect(addon).toHaveProperty('version');
+    expect(addon).toHaveProperty('checksum');
 
     const res3 = await chai.request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({name: list[0].name,
-             url: list[0].url,
+      .send({name: addon.name,
+             url: addon.url,
              checksum: 'invalid'});
     expect(res3.status).toEqual(400);
   });
@@ -268,20 +270,15 @@ describe('addons', () => {
 
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
-    expect(res1.body.length).toEqual(0);
+    expect(
+      res1.body.filter((a) => a.name === 'example-adapter').length
+    ).toEqual(0);
 
     const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
 
-    let addon = {};
-    for (const entry of list) {
-      if (entry.name === 'example-adapter') {
-        addon = entry;
-        break;
-      }
-    }
-
+    const addon = list.find((a) => a.name === 'example-adapter');
     expect(addon).toHaveProperty('name');
     expect(addon).toHaveProperty('display_name');
     expect(addon).toHaveProperty('description');
@@ -307,8 +304,9 @@ describe('addons', () => {
 
     expect(res4.status).toEqual(200);
     expect(Array.isArray(res4.body)).toBe(true);
-    expect(res4.body.length).toEqual(1);
-    expect(res4.body[0].key.indexOf(addon.name) > -1).toBe(true);
+    expect(
+      res4.body.filter((a) => a.name === 'example-adapter').length
+    ).toEqual(1);
   });
 
   it('Uninstall an add-on', async () => {
@@ -326,8 +324,9 @@ describe('addons', () => {
 
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
-    expect(res1.body.length).toEqual(1);
-    expect(res1.body[0].key.indexOf('example-adapter') > -1).toBe(true);
+    expect(
+      res1.body.filter((a) => a.name === 'example-adapter').length
+    ).toEqual(1);
 
     const res2 = await chai.request(server)
       .delete(`${Constants.ADDONS_PATH}/example-adapter`)
@@ -342,7 +341,9 @@ describe('addons', () => {
 
     expect(res3.status).toEqual(200);
     expect(Array.isArray(res3.body)).toBe(true);
-    expect(res3.body.length).toEqual(0);
+    expect(
+      res3.body.filter((a) => a.name === 'example-adapter').length
+    ).toEqual(0);
   });
 
   it('Validate valid package.json loads fine', async () => {

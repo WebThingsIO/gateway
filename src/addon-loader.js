@@ -70,18 +70,27 @@ async function loadAddon(addonPath, verbose) {
 
   // Get any saved settings for this add-on.
   const key = `addons.${manifest.name}`;
-  const savedSettings = await Settings.get(key);
-  const newSettings = Object.assign({}, manifest);
-  if (savedSettings) {
-    // Overwrite config values.
-    newSettings.moziot.config = Object.assign(manifest.moziot.config || {},
-                                              savedSettings.moziot.config);
-  } else if (!newSettings.moziot.hasOwnProperty('config')) {
-    newSettings.moziot.config = {};
+  const configKey = `addons.config.${manifest.name}`;
+  const obj = await Settings.get(key);
+
+  const newSettings = {
+    name: obj.name,
+    display_name: obj.displayName,
+    moziot: {
+      exec: obj.exec,
+    },
+  };
+
+  if (obj.schema) {
+    newSettings.moziot.schema = obj.schema;
+  }
+
+  const savedConfig = await Settings.get(configKey);
+  if (savedConfig) {
+    newSettings.moziot.config = savedConfig;
   }
 
   const pluginClient = new PluginClient(manifest.name, {verbose});
-
 
   return pluginClient.register()
     .catch((e) => {
