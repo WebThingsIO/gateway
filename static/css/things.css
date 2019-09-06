@@ -22,7 +22,7 @@
 #add-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../optimized-images/add.svg');
+  background: no-repeat center/100% url('../optimized-images/add.svg');
 }
 
 #add-thing-back-button {
