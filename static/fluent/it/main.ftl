@@ -39,6 +39,8 @@ settings-developer = Developer
 domain-settings-local-label = Accesso locale
 domain-settings-local-update = Aggiorna nome host
 domain-settings-remote-access = Accesso remoto
+domain-settings-local-name =
+  .placeholder =
 
 ## Network Settings
 network-settings-unsupported = Le impostazioni di rete non sono supportate per questa piattaforma 
@@ -74,6 +76,15 @@ network-settings-router-ip = Indirizzo IP del router
 network-settings-dhcp-server = Server DHCP
 network-settings-enable-wifi = Abilita Wi-Fi
 network-settings-network-name = Nome di rete (SSID)
+wireless-connected =
+wireless-icon =
+  .alt =
+network-settings-changing =
+failed-ethernet-configure =
+failed-wifi-configure =
+failed-wan-configure =
+failed-lan-configure =
+failed-wlan-configure =
 
 ## User Settings
 user-settings-input-name =
@@ -103,6 +114,14 @@ experiment-settings-logs = Registri
 
 ## Update Settings
 update-settings-update-now = Aggiorna ora
+update-available =
+update-up-to-date =
+last-update =
+current-version =
+failed =
+never =
+in-progress =
+restarting =
 
 ## Developer Settings
 developer-settings-enable-ssh = Abilita SSH
@@ -133,6 +152,31 @@ rules-delete-cancel =
   .value = Annulla
 rules-delete-confirm =
   .value = Rimuovi regola
+rule-invalid =
+rule-delete-prompt =
+rule-delete-cancel-button =
+  .value =
+rule-delete-confirm-button =
+  .value =
+rule-select-property =
+rule-not =
+rule-event =
+rule-action =
+rule-configure =
+rule-time-title =
+rule-notification =
+notification-title =
+notification-message =
+notification-level =
+notification-low =
+notification-normal =
+notification-high =
+rule-name =
+rule-and =
+rule-or =
+rule-time-of-day-is =
+rule-event-lower =
+rule-event-occurs =
 
 ## Logs
 logs = Registri
@@ -156,6 +200,8 @@ logs-remove-dialog-title = Rimozione
 logs-remove-dialog-warning = La rimozione del registro rimuoverà anche tutti i suoi dati.
  Sei sicuro di volerlo rimuovere?
 logs-remove = Rimuovere
+logs-unable-to-create =
+logs-server-remove-error =
 
 ## Add New Things
 add-thing-scanning-icon =
@@ -165,8 +211,294 @@ add-thing-add-adapters-hint = Non sono state trovate nuove cose. Provare
 add-thing-add-adapters-hint-anchor = ad aggiungere alcuni componenti aggiuntivi.
 add-thing-add-by-url = Aggiungi per URL...
 add-thing-done = Fatto
+add-thing-cancel =
 
 ## Context Menu
 context-menu-choose-icon = Scegli icona...
 context-menu-save = Salvare
 context-menu-remove = Rimuovere
+
+## Capabilities
+OnOffSwitch =
+MultiLevelSwitch =
+ColorControl =
+EnergyMonitor =
+BinarySensor =
+MultiLevelSensor =
+SmartPlug =
+Light =
+DoorSensor =
+MotionSensor =
+LeakSensor =
+PushButton =
+VideoCamera =
+Camera =
+TemperatureSensor =
+Alarm =
+Custom =
+
+## Properties
+alarm =
+pushed =
+not-pushed =
+on-off =
+on =
+off =
+power =
+voltage =
+temperature =
+current =
+frequency =
+color =
+brightness =
+leak =
+dry =
+color-temperature =
+video-unsupported =
+motion =
+no-motion =
+open =
+closed =
+
+## Domain Setup
+reclaim-prompt =
+click-here =
+check-email-for-token =
+reclaim-failed =
+subdomain-already-used =
+invalid-reclamation-token =
+domain-success =
+issuing-error =
+redirecting =
+
+## Booleans
+true =
+false =
+
+## Time
+utils-now =
+utils-secs-ago =
+utils-min-ago =
+utils-mins-ago =
+utils-hour-ago =
+utils-hours-ago =
+utils-day-ago =
+utils-days-ago =
+utils-week-ago =
+utils-weeks-ago =
+utils-month-ago =
+utils-months-ago =
+utils-year-ago =
+utils-years-ago =
+minute =
+hour =
+day =
+week =
+
+## Unit Abbreviations
+abbrev-volt =
+abbrev-hertz =
+abbrev-amp =
+abbrev-watt =
+abbrev-kilowatt-hour =
+abbrev-percent =
+abbrev-fahrenheit =
+abbrev-celsius =
+abbrev-kelvin =
+abbrev-meter =
+abbrev-kilometer =
+abbrev-day =
+abbrev-hour =
+abbrev-minute =
+abbrev-second =
+abbrev-millisecond =
+abbrev-foot =
+
+## New Thing View
+unknown-device-type =
+new-thing-choose-icon =
+new-thing-save =
+new-thing-pin =
+  .placeholder =
+new-thing-pin-error =
+new-thing-pin-invalid =
+new-thing-cancel =
+new-thing-submit =
+new-thing-username =
+  .placeholder =
+new-thing-password =
+  .placeholder =
+new-thing-credentials-error =
+new-thing-saved =
+new-thing-done =
+
+## New Web Thing View
+new-web-thing-url =
+  .placeholder =
+new-web-thing-label =
+loading =
+new-web-thing-multiple =
+new-web-thing-from =
+
+## Empty div Messages
+no-things =
+thing-not-found =
+action-not-found =
+events-not-found =
+
+## Add-on Settings
+author-unknown =
+disable =
+enable =
+by =
+addon-configure =
+addon-update =
+addon-remove =
+addon-updating =
+addon-updated =
+addon-update-failed =
+addon-config-applying =
+addon-config-apply =
+addon-discovery-added =
+addon-discovery-add =
+addon-discovery-installing =
+addon-discovery-failed =
+
+## Page Titles
+settings =
+domain =
+users =
+edit-user =
+add-user =
+adapters =
+addons =
+addon-config =
+addon-discovery =
+experiments =
+updates =
+authorizations =
+developer =
+network =
+ethernet =
+wifi =
+icon =
+
+## Speech
+speech-unsupported =
+speech-didnt-get =
+
+## Errors
+unknown-state =
+error =
+errors =
+gateway-unreachable =
+more-information =
+invalid-file =
+failed-read-file =
+failed-save =
+
+## Schema Form
+unsupported-field =
+
+## Icon Sources
+component-icons-custom-src =
+component-icons-on-off-switch-src =
+component-icons-on-off-switch-on-src =
+component-icons-on-off-switch-off-src =
+component-icons-binary-sensor-on-src =
+component-icons-binary-sensor-off-src =
+thing-icons-thing-src =
+
+## Login Page
+login-title =
+login-log-in =
+
+## Create First User Page
+signup-title =
+signup-welcome =
+signup-create-account =
+signup-password-mismatch =
+signup-next =
+
+## Tunnel Setup Page
+tunnel-setup-title =
+tunnel-setup-welcome =
+tunnel-setup-choose-address =
+tunnel-setup-input-subdomain =
+  .placeholder =
+tunnel-setup-opt-in =
+tunnel-setup-privacy-policy =
+tunnel-setup-input-reclamation-token =
+  .placeholder =
+tunnel-setup-error =
+tunnel-setup-create =
+tunnel-setup-skip =
+
+## Authorize Page
+authorize-title =
+authorize-authorization-request =
+authorize-would-like =
+authorize-devices =
+authorize-from =
+authorize-monitor-and-control =
+authorize-monitor =
+authorize-allow-all =
+authorize-allow =
+  .value =
+authorize-deny =
+
+## Local Token Page
+local-token-title =
+local-token-header =
+local-token-your-token =
+local-token-jwt =
+local-token-use-it =
+local-token-bearer-type =
+
+## Router Setup Page
+router-setup-title =
+router-setup-header =
+router-setup-input-ssid =
+  .placeholder =
+router-setup-input-password =
+  .placeholder =
+router-setup-input-confirm-password =
+  .placeholder =
+router-setup-create =
+  .value =
+router-setup-password-mismatch =
+
+## Wi-Fi Setup Page
+wifi-setup-title =
+wifi-setup-header =
+wifi-setup-input-password =
+  .placeholder =
+wifi-setup-show-password =
+wifi-setup-connect =
+  .value =
+wifi-setup-network-icon =
+  .alt =
+wifi-setup-skip =
+
+## Connecting to Wi-Fi Page
+connecting-title =
+connecting-header =
+connecting-connect =
+connecting-warning =
+connecting-header-skipped =
+connecting-skipped =
+
+## Creating Wi-Fi Network Page
+creating-title =
+creating-header =
+creating-content =
+
+## General Terms
+ok =
+unknown =
+event-log =
+edit =
+remove =
+disconnected =
+processing =
+submit =
