@@ -11,6 +11,7 @@
 
 'use strict';
 
+const AddonUtils = require('./addon-utils');
 const config = require('config');
 const Constants = require('./constants');
 const Deferred = require('./deferred');
@@ -512,71 +513,6 @@ class AddonManager extends EventEmitter {
   }
 
   /**
-   * @method validateManifestObject
-   *
-   * Verifies one level of an object, and recurses as required.
-   */
-  validateManifestObject(prefix, object, template) {
-    for (const key in template) {
-      if (key in object) {
-        const objectVal = object[key];
-        const templateVal = template[key];
-        if (typeof objectVal !== typeof templateVal) {
-          return `Expecting ${prefix}${key} to have type: ${
-            typeof templateVal}, found: ${typeof objectVal}`;
-        }
-        if (typeof objectVal === 'object') {
-          if (Array.isArray(objectVal)) {
-            if (templateVal.length > 0) {
-              const expectedType = typeof templateVal[0];
-              for (const val of objectVal) {
-                if (typeof val !== expectedType) {
-                  return `Expecting all values in ${prefix}${key} to be of ` +
-                    `type ${expectedType}`;
-                }
-              }
-            }
-          } else {
-            const err = this.validateManifestObject(`${prefix + key}.`,
-                                                    objectVal, templateVal);
-            if (err) {
-              return err;
-            }
-          }
-        }
-      } else {
-        return `Manifest is missing: ${prefix}${key}`;
-      }
-    }
-  }
-
-  /**
-   * @method validateManifest
-   *
-   * Verifies that the manifest looks valid. We only need to validate
-   * fields that we actually use.
-   */
-  validateManifest(manifest) {
-    const manifestTemplate = {
-      name: '',
-      version: '',
-      files: [''],
-      moziot: {
-        api: {
-          min: 0,
-          max: 0,
-        },
-      },
-    };
-    if (config.get('ipc.protocol') !== 'inproc') {
-      // If we're not using in-process plugins, then
-      // we also need the exec keyword to exist.
-      manifestTemplate.moziot.exec = '';
-    }
-    return this.validateManifestObject('', manifest, manifestTemplate);
-  }
-
-  /**
    * @method addonEnabled
    *
    * Determine whether the add-on with the given package name is enabled.
@@ -625,122 +561,8 @@ class AddonManager extends EventEmitter {
   async loadAddon(packageName) {
     const addonPath = path.join(UserProfile.addonsDir, packageName);
 
-    // Skip if there's no package.json file.
-    const packageJson = path.join(addonPath, 'package.json');
-    if (!fs.lstatSync(packageJson).isFile()) {
-      const err = `package.json not found: ${packageJson}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    // Read the package.json file.
-    let data;
-    try {
-      data = fs.readFileSync(packageJson);
-    } catch (e) {
-      const err =
-        `Failed to read package.json: ${packageJson}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    let manifest;
-    try {
-      manifest = JSON.parse(data);
-    } catch (e) {
-      const err =
-        `Failed to parse package.json: ${packageJson}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    // Verify that the name in the package matches the packageName
-    if (manifest.name != packageName) {
-      const err = `Name from package.json "${manifest.name}" doesn't ` +
-                  `match the name from list.json "${packageName}"`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    // Verify the files list in the package.
-    if (!manifest.hasOwnProperty('files') || manifest.files.length === 0) {
-      const err = `files property missing for package ${manifest.name}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    if (fs.existsSync(path.join(addonPath, '.git'))) {
-      // This looks like a git repository, so we'll skip checking the
-      // SHA256SUMS file.
-      const sha256SumsIndex = manifest.files.indexOf('SHA256SUMS');
-      if (sha256SumsIndex >= 0) {
-        manifest.files.splice(sha256SumsIndex, 1);
-        console.log(`Not checking SHA256SUMS file for ${manifest.name} ` +
-        'since a .git directory was detected');
-      }
-    }
-
-    for (let fname of manifest.files) {
-      fname = path.join(addonPath, fname);
-      if (!fs.existsSync(fname)) {
-        const err = `Package ${manifest.name} missing file: ${fname}`;
-        console.error(err);
-        return Promise.reject(err);
-      }
-    }
-
-    // If a SHA256SUMS file is present, verify it. This file is of the format:
-    // <checksum> <filename>
-    //
-    // To generate a file of this type, you can use:
-    //   `rm -f SHA256SUMS && sha256sum file1 file2 ... > SHA256SUMS`
-    // To verify, use:
-    //   `sha256sum --check SHA256SUMS`
-    if (manifest.files.includes('SHA256SUMS')) {
-      const sumsFile = path.join(addonPath, 'SHA256SUMS');
-      try {
-        const data = fs.readFileSync(sumsFile, 'utf8');
-        const lines = data.trim().split(/\r?\n/);
-        for (const line of lines) {
-          const checksum = line.slice(0, 64);
-          let filename = line.slice(64).trimLeft();
-
-          if (filename.startsWith('*')) {
-            filename = filename.substring(1);
-          }
-
-          if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
-            const err =
-              `Checksum failed in package ${manifest.name}: ${filename}`;
-            console.error(err);
-            return Promise.reject(err);
-          }
-        }
-      } catch (e) {
-        const err =
-          `Failed to read SHA256SUMS for package ${manifest.name}: ${e}`;
-        console.error(err);
-        return Promise.reject(err);
-      }
-    }
-
-    // Verify that important fields exist in the manifest
-    const err = this.validateManifest(manifest);
-    if (err) {
-      return Promise.reject(
-        `Error found in manifest for ${packageName}\n${err}`);
-    }
-
-    // Verify API version.
-    const apiVersion = config.get('addonManager.api');
-    if (manifest.moziot.api.min > apiVersion ||
-        manifest.moziot.api.max < apiVersion) {
-      const err = `API mismatch for package: ${manifest.name}\nCurrent: ${
-        apiVersion} Supported: ${manifest.moziot.api.min}-${
-        manifest.moziot.api.max}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
+    // Let errors from loading the manifest bubble up.
+    const [manifest, cfg] = AddonUtils.loadManifest(packageName);
 
     // Get any saved settings for this add-on.
     let enabled = false;
@@ -766,89 +588,60 @@ class AddonManager extends EventEmitter {
       // pass
     }
 
-    if (process.env.NODE_ENV === 'test' && manifest.moziot.enabled) {
+    if (process.env.NODE_ENV === 'test' && manifest.enabled) {
       enabled = true;
     }
 
-    // Update the settings database.
-    const obj = {
-      name: manifest.name,
-      displayName: manifest.display_name,
-      description: manifest.description,
-      author: manifest.author,
-      homepage: manifest.homepage,
-      version: manifest.version,
-      type: manifest.moziot.type || 'adapter',
-      exec: manifest.moziot.exec,
-      enabled: enabled,
-    };
+    manifest.enabled = enabled;
 
-    if (typeof manifest.author === 'object') {
-      obj.author = manifest.author.name;
-    } else if (typeof manifest.author === 'string') {
-      obj.author = manifest.author.split('<')[0].trim();
-    }
-
-    if (manifest.moziot.hasOwnProperty('schema')) {
-      obj.schema = manifest.moziot.schema;
-    }
-
-    await Settings.set(key, obj);
-    this.installedAddons.set(packageName, obj);
+    await Settings.set(key, manifest);
+    this.installedAddons.set(packageName, manifest);
 
     // If this add-on is not explicitly enabled, move on.
     if (!enabled) {
-      const err = `Package not enabled: ${manifest.name}`;
-      console.log(err);
-      return Promise.reject(err);
+      throw new Error(`Add-on not enabled: ${manifest.name}`);
     }
 
-    const errorCallback = (packageName, errorStr) => {
-      console.error('Failed to load', packageName, '-', errorStr);
+    const errorCallback = (packageName, err) => {
+      console.error(`Failed to load add-on ${packageName}:`, err);
     };
 
     // Now, we need to build an object so that add-ons which rely on things
     // being passed in can function properly.
     const newSettings = {
-      name: obj.name,
-      display_name: obj.displayName,
+      name: manifest.name,
+      display_name: manifest.displayName,
       moziot: {
-        exec: obj.exec,
+        exec: manifest.exec,
       },
     };
 
-    if (obj.schema) {
-      newSettings.moziot.schema = obj.schema;
+    if (manifest.schema) {
+      newSettings.moziot.schema = manifest.schema;
     }
 
     const savedConfig = await Settings.get(configKey);
     if (savedConfig) {
       newSettings.moziot.config = savedConfig;
-    } else if (manifest.moziot.hasOwnProperty('config')) {
-      await Settings.set(configKey, manifest.moziot.config);
-      newSettings.moziot.config = manifest.moziot.config;
     } else {
-      newSettings.moziot.config = {};
+      newSettings.moziot.config = cfg;
     }
 
     // Load the add-on
-    console.log('Loading add-on:', manifest.name);
+    console.log(`Loading add-on: ${manifest.name}`);
     if (config.get('ipc.protocol') === 'inproc') {
       // This is a special case where we load the adapter directly
       // into the gateway, but we use IPC comms to talk to the
       // add-on (i.e. for testing)
-      const pluginClient = new PluginClient(manifest.name,
-                                            {verbose: false});
+      const pluginClient = new PluginClient(manifest.name, {verbose: false});
       try {
         const addonManagerProxy = await pluginClient.register();
-        console.log('Loading add-on', manifest.name, 'as plugin');
         const addonLoader = dynamicRequire(addonPath);
         addonLoader(addonManagerProxy, newSettings, errorCallback);
       } catch (e) {
-        const err =
-          `Failed to register package with gateway: ${manifest.name}\n${e}`;
-        console.error(err);
-        return Promise.reject(err);
+        throw new Error(
+          `Failed to register add-on ${manifest.name} with gateway: ${e}`
+        );
       }
     } else {
       // This is the normal plugin adapter case, tell the PluginServer
@@ -897,7 +690,7 @@ class AddonManager extends EventEmitter {
         }
 
         addonManager.loadAddon(addonName).catch((err) => {
-          console.error(`Failed to load add-on: ${addonName}\n${err}`);
+          console.error(`Failed to load add-on ${addonName}:`, err);
         });
       }
     });
