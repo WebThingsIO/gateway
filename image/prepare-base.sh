@@ -5,7 +5,7 @@
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.*
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # The base image (tested with 2017-04-10-raspbian-jessie-lite.img)
 # will be fairly out of date, so we update all of the packages.
