@@ -28,6 +28,7 @@ const destLicense =
 const testManifest = {
   name: 'test-adapter',
   display_name: 'Test',
+  description: 'An adapter for integration tests',
   version: '0',
   files: [
     'index.js',
