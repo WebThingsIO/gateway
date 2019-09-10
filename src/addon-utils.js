@@ -7,10 +7,15 @@
 'use strict';
 
 const config = require('config');
+const find = require('find');
 const fs = require('fs');
+const pkg = require('../package.json');
 const path = require('path');
+const semver = require('semver');
 const UserProfile = require('./user-profile');
 const Utils = require('./utils');
+
+const MANIFEST_VERSION = 1;
 
 /**
  * Verify one level of an object, recursing as required.
@@ -87,6 +92,40 @@ function validatePackageJson(manifest) {
     // If we're not using in-process plugins, then we also need the exec
     // keyword to exist.
     manifestTemplate.moziot.exec = '';
+  }
+
+  return validateObject('', manifest, manifestTemplate);
+}
+
+/**
+ * Verify that a manifest.json looks valid. We only need to validate fields
+ * which we actually use.
+ *
+ * @param {object} manifest - The parsed manifest.json manifest
+ *
+ * @returns {string?} Error string, or undefined if no error.
+ */
+function validateManifestJson(manifest) {
+  const manifestTemplate = {
+    author: '',
+    description: '',
+    gateway_specific_settings: {
+      webthings: {
+        primary_type: '',
+      },
+    },
+    homepage_url: '',
+    id: '',
+    license: '',
+    manifest_version: 0,
+    name: '',
+    version: '',
+  };
+
+  if (config.get('ipc.protocol') !== 'inproc') {
+    // If we're not using in-process plugins, then we also need the exec
+    // keyword to exist.
+    manifestTemplate.gateway_specific_settings.webthings.exec = '';
   }
 
   return validateObject('', manifest, manifestTemplate);
@@ -245,7 +284,164 @@ function loadPackageJson(packageName) {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifestJson(_packageName) {
+function loadManifestJson(packageName) {
+  const addonPath = path.join(UserProfile.addonsDir, packageName);
+
+  // Read the package.json file.
+  let data;
+  try {
+    data = fs.readFileSync(path.join(addonPath, 'manifest.json'));
+  } catch (e) {
+    throw new Error(
+      `Failed to read manifest.json for add-on ${packageName}: ${e}`
+    );
+  }
+
+  // Parse as JSON
+  let manifest;
+  try {
+    manifest = JSON.parse(data);
+  } catch (e) {
+    throw new Error(
+      `Failed to parse manifest.json for add-on: ${packageName}: ${e}`
+    );
+  }
+
+  // First, verify manifest version.
+  if (manifest.manifest_version !== MANIFEST_VERSION) {
+    throw new Error(
+      `Manifest version ${manifest.manifest_version} for add-on ${packageName
+      } does not match expected version ${MANIFEST_VERSION}`
+    );
+  }
+
+  // Verify that the id in the package matches the packageName
+  if (manifest.id != packageName) {
+    const err = `ID from manifest .json "${manifest.name}" doesn't ` +
+                `match the name from list.json "${packageName}"`;
+    throw new Error(err);
+  }
+
+  // If the add-on is not a git repository, check the SHA256SUMS file.
+  if (!fs.existsSync(path.join(addonPath, '.git'))) {
+    const sumsFile = path.resolve(path.join(addonPath, 'SHA256SUMS'));
+
+    if (fs.existsSync(sumsFile)) {
+      const sums = new Map();
+
+      try {
+        const data = fs.readFileSync(sumsFile, 'utf8');
+        const lines = data.trim().split(/\r?\n/);
+        for (const line of lines) {
+          const checksum = line.slice(0, 64);
+          let filename = line.slice(64).trimLeft();
+
+          if (filename.startsWith('*')) {
+            filename = filename.substring(1);
+          }
+
+          filename = path.resolve(path.join(addonPath, filename));
+          if (!fs.existsSync(filename)) {
+            throw new Error(
+              `File ${filename} missing for add-on ${packageName}`
+            );
+          }
+
+          sums.set(filename, checksum);
+        }
+      } catch (e) {
+        throw new Error(
+          `Failed to read SHA256SUMS for add-on ${packageName}: ${e}`
+        );
+      }
+
+      find.fileSync(addonPath).forEach((fname) => {
+        fname = path.resolve(fname);
+
+        if (fname === sumsFile) {
+          return;
+        }
+
+        if (!sums.has(fname)) {
+          throw new Error(
+            `No checksum found for file ${fname} in add-on ${packageName}`
+          );
+        }
+
+        if (Utils.hashFile(fname) !== sums.get(fname)) {
+          throw new Error(
+            `Checksum failed for file ${fname} in add-on ${packageName}`
+          );
+        }
+      });
+    } else if (process.env.NODE_ENV !== 'test') {
+      throw new Error(`SHA256SUMS file missing for add-on ${packageName}`);
+    }
+  }
+
+  // Verify that important fields exist in the manifest
+  const err = validateManifestJson(manifest);
+  if (err) {
+    throw new Error(
+      `Error found in manifest for add-on ${packageName}: ${err}`
+    );
+  }
+
+  // Verify gateway version.
+  let min = manifest.gateway_specific_settings.webthings.strict_min_version;
+  let max = manifest.gateway_specific_settings.webthings.strict_max_version;
+
+  if (typeof min === 'string') {
+    min = semver.coerce(min);
+    if (semver.lt(pkg.version, min)) {
+      throw new Error(
+        `Gateway version ${pkg.version} is lower than minimum version ${min
+        } supported by add-on ${packageName}`
+      );
+    }
+  }
+  if (typeof max === 'string') {
+    max = semver.coerce(max);
+    if (semver.gt(pkg.version, max)) {
+      throw new Error(
+        `Gateway version ${pkg.version} is higher than maximum version ${max
+        } supported by add-on ${packageName}`
+      );
+    }
+  }
+
+  const obj = {
+    name: manifest.id,
+    author: manifest.author,
+    displayName: manifest.name,
+    description: manifest.description,
+    homepage: manifest.homepage_url,
+    version: manifest.version,
+    type: manifest.gateway_specific_settings.webthings.primary_type,
+    exec: manifest.gateway_specific_settings.webthings.exec,
+    enabled: false,
+  };
+
+  let cfg = {};
+  if (manifest.hasOwnProperty('options')) {
+    if (manifest.options.hasOwnProperty('defaults')) {
+      cfg = manifest.options.default;
+    }
+
+    if (manifest.options.hasOwnProperty('schema')) {
+      obj.schema = manifest.options.schema;
+    }
+  }
+
+  if (process.env.NODE_ENV === 'test' &&
+      manifest.gateway_specific_settings.webthings.enabled) {
+    obj.enabled = true;
+  }
+
+  return [
+    obj,
+    cfg,
+  ];
 }
 
 /**

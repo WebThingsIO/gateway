@@ -1,6 +1,6 @@
 {
   "name": "webthings-gateway",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Web of Things gateway",
   "main": "src/app.js",
   "scripts": {
@@ -49,6 +49,7 @@
     "express-handlebars": "^3.1.0",
     "express-promise-router": "^3.0.3",
     "express-ws": "^4.0.0",
+    "find": "^0.3.0",
     "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "http-proxy": "^1.17.0",
     "ip-regex": "^4.1.0",
