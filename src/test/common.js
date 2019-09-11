@@ -90,13 +90,22 @@ function mockAdapter() {
 global.mockAdapter = mockAdapter;
 
 function removeTestManifest() {
-  const testManifestFilename = path.join(UserProfile.addonsDir,
-                                         'test-adapter', 'package.json');
-  if (fs.existsSync(testManifestFilename)) {
-    console.log('Removing', testManifestFilename);
-    fs.unlinkSync(testManifestFilename);
+  const testPackageJsonFilename =
+    path.join(UserProfile.addonsDir, 'test-adapter', 'package.json');
+  if (fs.existsSync(testPackageJsonFilename)) {
+    console.log('Removing', testPackageJsonFilename);
+    fs.unlinkSync(testPackageJsonFilename);
   } else {
-    console.log('No need to remove', testManifestFilename);
+    console.log('No need to remove', testPackageJsonFilename);
+  }
+
+  const testManifestJsonFilename =
+    path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
+  if (fs.existsSync(testManifestJsonFilename)) {
+    console.log('Removing', testManifestJsonFilename);
+    fs.unlinkSync(testManifestJsonFilename);
+  } else {
+    console.log('No need to remove', testManifestJsonFilename);
   }
 }
 
