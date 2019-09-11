@@ -424,7 +424,7 @@ function loadManifestJson(packageName) {
 
   let cfg = {};
   if (manifest.hasOwnProperty('options')) {
-    if (manifest.options.hasOwnProperty('defaults')) {
+    if (manifest.options.hasOwnProperty('default')) {
       cfg = manifest.options.default;
     }
 
