@@ -266,7 +266,7 @@ function loadPackageJson(packageName) {
     obj.schema = manifest.moziot.schema;
   }
 
-  if (process.env.NODE_ENV === 'test' && manifest.moziot.enabled) {
+  if (manifest.moziot.enabled) {
     obj.enabled = true;
   }
 
@@ -433,8 +433,7 @@ function loadManifestJson(packageName) {
     }
   }
 
-  if (process.env.NODE_ENV === 'test' &&
-      manifest.gateway_specific_settings.webthings.enabled) {
+  if (manifest.gateway_specific_settings.webthings.enabled) {
     obj.enabled = true;
   }
 
