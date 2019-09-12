@@ -15,6 +15,7 @@ const semver = require('semver');
 const UserProfile = require('./user-profile');
 const Utils = require('./utils');
 
+const API_VERSION = 2;
 const MANIFEST_VERSION = 1;
 
 /**
@@ -236,11 +237,10 @@ function loadPackageJson(packageName) {
   }
 
   // Verify API version.
-  const apiVersion = config.get('addonManager.api');
-  if (manifest.moziot.api.min > apiVersion ||
-      manifest.moziot.api.max < apiVersion) {
+  if (manifest.moziot.api.min > API_VERSION ||
+      manifest.moziot.api.max < API_VERSION) {
     const err = `API mismatch for add-on ${packageName}: Current: ${
-      apiVersion} Supported: ${manifest.moziot.api.min}-${
+      API_VERSION} Supported: ${manifest.moziot.api.min}-${
       manifest.moziot.api.max}`;
     throw new Error(err);
   }

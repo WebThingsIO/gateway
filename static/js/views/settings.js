@@ -1458,13 +1458,12 @@ const SettingsScreen = {
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      if (!data || !data.urls || !data.api || !data.architecture ||
-          !data.version || !data.nodeVersion) {
+      if (!data || !data.urls || !data.architecture || !data.version ||
+          !data.nodeVersion) {
         return;
       }
 
       const params = new URLSearchParams();
-      params.set('api', data.api);
       params.set('arch', data.architecture);
       params.set('version', data.version);
       params.set('node', data.nodeVersion);

@@ -1165,7 +1165,6 @@ class AddonManager extends EventEmitter {
    */
   async updateAddons() {
     const urls = config.get('addonManager.listUrls');
-    const api = config.get('addonManager.api');
     const architecture = Platform.getArchitecture();
     const version = pkg.version;
     const nodeVersion = Platform.getNodeVersion();
@@ -1177,7 +1176,6 @@ class AddonManager extends EventEmitter {
 
     try {
       const params = new URLSearchParams();
-      params.set('api', api);
       params.set('arch', architecture);
       params.set('version', version);
       params.set('node', nodeVersion);

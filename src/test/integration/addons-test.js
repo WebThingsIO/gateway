@@ -66,7 +66,6 @@ const testManifestJson = {
 };
 
 const addonParams = new URLSearchParams();
-addonParams.set('api', config.get('addonManager.api'));
 addonParams.set('arch', Platform.getArchitecture());
 addonParams.set('version', pkg.version);
 addonParams.set('node', Platform.getNodeVersion());

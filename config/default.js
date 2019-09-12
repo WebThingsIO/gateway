@@ -26,7 +26,6 @@ module.exports = {
   // port-free urls
   behindForwarding: true,
   addonManager: {
-    api: 2,
     listUrls: [
       'https://api.mozilla-iot.org:8443/addons',
     ],
