@@ -226,7 +226,6 @@ SettingsController.put('/domain', auth, async (request, response) => {
 SettingsController.get('/addonsInfo', auth, (request, response) => {
   response.json({
     urls: config.get('addonManager.listUrls'),
-    api: config.get('addonManager.api'),
     architecture: Platform.getArchitecture(),
     version: pkg.version,
     nodeVersion: Platform.getNodeVersion(),

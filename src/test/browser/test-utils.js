@@ -34,7 +34,7 @@ module.exports.getAddons = async () => {
   const installedAddons = new Map();
   // Store a map of name->version.
   for (const s of res.body) {
-    installedAddons.set(s.name, s);
+    installedAddons.set(s.id, s);
   }
   return installedAddons;
 };

@@ -13,9 +13,9 @@ AddonsController.get('/', async (request, response) => {
   response.status(200).json(Array.from(AddonManager.installedAddons.values()));
 });
 
-AddonsController.get('/:addonName/license', async (request, response) => {
-  const addonName = request.params.addonName;
-  const addonDir = path.join(UserProfile.addonsDir, addonName);
+AddonsController.get('/:addonId/license', async (request, response) => {
+  const addonId = request.params.addonId;
+  const addonDir = path.join(UserProfile.addonsDir, addonId);
 
   fs.readdir(addonDir, (err, files) => {
     if (err) {
@@ -48,8 +48,8 @@ AddonsController.get('/:addonName/license', async (request, response) => {
   });
 });
 
-AddonsController.put('/:addonName', async (request, response) => {
-  const addonName = request.params.addonName;
+AddonsController.put('/:addonId', async (request, response) => {
+  const addonId = request.params.addonId;
 
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
     response.status(400).send('Enabled property not defined');
@@ -60,35 +60,35 @@ AddonsController.put('/:addonName', async (request, response) => {
 
   try {
     if (enabled) {
-      await AddonManager.enableAddon(addonName);
+      await AddonManager.enableAddon(addonId);
     } else {
-      await AddonManager.disableAddon(addonName);
+      await AddonManager.disableAddon(addonId);
     }
 
     response.status(200).json({enabled});
   } catch (e) {
-    console.error(`Failed to toggle add-on ${addonName}`);
+    console.error(`Failed to toggle add-on ${addonId}`);
     console.error(e);
     response.status(400).send(e);
   }
 });
 
-AddonsController.get('/:addonName/config', async (request, response) => {
-  const addonName = request.params.addonName;
-  const key = `addons.config.${addonName}`;
+AddonsController.get('/:addonId/config', async (request, response) => {
+  const addonId = request.params.addonId;
+  const key = `addons.config.${addonId}`;
 
   try {
     const config = await Settings.get(key);
     response.status(200).json(config || {});
   } catch (e) {
-    console.error(`Failed to get config for add-on ${addonName}`);
+    console.error(`Failed to get config for add-on ${addonId}`);
     console.error(e);
     response.status(400).send(e);
   }
 });
 
-AddonsController.put('/:addonName/config', async (request, response) => {
-  const addonName = request.params.addonName;
+AddonsController.put('/:addonId/config', async (request, response) => {
+  const addonId = request.params.addonId;
 
   if (!request.body || !request.body.hasOwnProperty('config')) {
     response.status(400).send('Config property not defined');
@@ -96,27 +96,27 @@ AddonsController.put('/:addonName/config', async (request, response) => {
   }
 
   const config = request.body.config;
-  const key = `addons.config.${addonName}`;
+  const key = `addons.config.${addonId}`;
 
   try {
     await Settings.set(key, config);
   } catch (e) {
-    console.error(`Failed to set config for add-on ${addonName}`);
+    console.error(`Failed to set config for add-on ${addonId}`);
     console.error(e);
     response.status(400).send(e);
     return;
   }
 
   try {
-    await AddonManager.unloadAddon(addonName, true);
+    await AddonManager.unloadAddon(addonId, true);
 
-    if (await AddonManager.addonEnabled(addonName)) {
-      await AddonManager.loadAddon(addonName);
+    if (await AddonManager.addonEnabled(addonId)) {
+      await AddonManager.loadAddon(addonId);
     }
 
     response.status(200).json({config});
   } catch (e) {
-    console.error(`Failed to restart add-on ${addonName}`);
+    console.error(`Failed to restart add-on ${addonId}`);
     console.error(e);
     response.status(400).send(e);
   }
@@ -124,20 +124,20 @@ AddonsController.put('/:addonName/config', async (request, response) => {
 
 AddonsController.post('/', async (request, response) => {
   if (!request.body ||
-      !request.body.hasOwnProperty('name') ||
+      !request.body.hasOwnProperty('id') ||
       !request.body.hasOwnProperty('url') ||
       !request.body.hasOwnProperty('checksum')) {
     response.status(400).send('Missing required parameter(s).');
     return;
   }
 
-  const name = request.body.name;
+  const id = request.body.id;
   const url = request.body.url;
   const checksum = request.body.checksum;
 
   try {
-    await AddonManager.installAddonFromUrl(name, url, checksum, true);
-    const key = `addons.${name}`;
+    await AddonManager.installAddonFromUrl(id, url, checksum, true);
+    const key = `addons.${id}`;
     const obj = await Settings.get(key);
     response.status(200).json(obj);
   } catch (e) {
@@ -145,8 +145,8 @@ AddonsController.post('/', async (request, response) => {
   }
 });
 
-AddonsController.patch('/:addonName', async (request, response) => {
-  const name = request.params.addonName;
+AddonsController.patch('/:addonId', async (request, response) => {
+  const id = request.params.addonId;
 
   if (!request.body ||
       !request.body.hasOwnProperty('url') ||
@@ -159,23 +159,23 @@ AddonsController.patch('/:addonName', async (request, response) => {
   const checksum = request.body.checksum;
 
   try {
-    await AddonManager.uninstallAddon(name, true, false);
-    await AddonManager.installAddonFromUrl(name, url, checksum, false);
+    await AddonManager.uninstallAddon(id, true, false);
+    await AddonManager.installAddonFromUrl(id, url, checksum, false);
     response.sendStatus(200);
   } catch (e) {
-    console.error(`Failed to update add-on: ${name}\n${e}`);
+    console.error(`Failed to update add-on: ${id}\n${e}`);
     response.status(400).send(e);
   }
 });
 
-AddonsController.delete('/:addonName', async (request, response) => {
-  const addonName = request.params.addonName;
+AddonsController.delete('/:addonId', async (request, response) => {
+  const addonId = request.params.addonId;
 
   try {
-    await AddonManager.uninstallAddon(addonName, false, true);
+    await AddonManager.uninstallAddon(addonId, false, true);
     response.sendStatus(200);
   } catch (e) {
-    console.error(`Failed to uninstall add-on: ${addonName}\n${e}`);
+    console.error(`Failed to uninstall add-on: ${addonId}\n${e}`);
     response.status(400).send(e);
   }
 });

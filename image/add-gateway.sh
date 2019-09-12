@@ -11,11 +11,10 @@ SCRIPT_NAME=$(basename $0)
 VERBOSE=0
 REMOVE_BASE_AFTER_UNZIP=0
 
-GATEWAY_VERSION='0.9.0'
+GATEWAY_VERSION='0.10.0'
 V8_VERSION='57'
 ARCHITECTURE='linux-arm'
 PYTHON_VERSIONS='2.7,3.5'
-ADDON_API='2'
 ADDON_LIST_URL='https://api.mozilla-iot.org:8443/addons'
 
 ###########################################################################
@@ -37,7 +36,7 @@ get_addon_url() {
   url=$(echo "${addon_list}" | python3 -c \
     "import json, sys; \
     l = json.loads(sys.stdin.read()); \
-    print([p['url'] for p in l if p['name'] == '${addon_name}'][0]);")
+    print([p['url'] for p in l if p['id'] == '${addon_name}'][0]);")
   echo "${url}"
 }
 
@@ -188,7 +187,7 @@ main() {
 
     # Install default add-ons
     sudo mkdir -p "${ADDONS_DIR}"
-    params="?api=${ADDON_API}&arch=${ARCHITECTURE}&node=${V8_VERSION}&python=${PYTHON_VERSIONS}&version=${GATEWAY_VERSION}"
+    params="?arch=${ARCHITECTURE}&node=${V8_VERSION}&python=${PYTHON_VERSIONS}&version=${GATEWAY_VERSION}"
     addon_list=$(curl "${ADDON_LIST_URL}${params}")
     tempdir=$(mktemp -d)
     zigbee_url=$(get_addon_url "${addon_list}" 'zigbee-adapter')

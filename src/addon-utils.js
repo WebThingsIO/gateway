@@ -15,6 +15,7 @@ const semver = require('semver');
 const UserProfile = require('./user-profile');
 const Utils = require('./utils');
 
+const API_VERSION = 2;
 const MANIFEST_VERSION = 1;
 
 /**
@@ -134,13 +135,13 @@ function validateManifestJson(manifest) {
 /**
  * Load an add-on manifest from a legacy package.json file.
  *
- * @param {string} packageName - The name of the package, e.g. example-adapter
+ * @param {string} packageId - The ID of the package, e.g. example-adapter
  *
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadPackageJson(packageName) {
-  const addonPath = path.join(UserProfile.addonsDir, packageName);
+function loadPackageJson(packageId) {
+  const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   // Read the package.json file.
   let data;
@@ -148,7 +149,7 @@ function loadPackageJson(packageName) {
     data = fs.readFileSync(path.join(addonPath, 'package.json'));
   } catch (e) {
     throw new Error(
-      `Failed to read package.json for add-on ${packageName}: ${e}`
+      `Failed to read package.json for add-on ${packageId}: ${e}`
     );
   }
 
@@ -158,20 +159,20 @@ function loadPackageJson(packageName) {
     manifest = JSON.parse(data);
   } catch (e) {
     throw new Error(
-      `Failed to parse package.json for add-on: ${packageName}: ${e}`
+      `Failed to parse package.json for add-on: ${packageId}: ${e}`
     );
   }
 
-  // Verify that the name in the package matches the packageName
-  if (manifest.name != packageName) {
+  // Verify that the name in the package matches the packageId
+  if (manifest.name != packageId) {
     const err = `Name from package.json "${manifest.name}" doesn't ` +
-                `match the name from list.json "${packageName}"`;
+                `match the ID from list.json "${packageId}"`;
     throw new Error(err);
   }
 
   // Verify the files list in the package.
   if (!manifest.hasOwnProperty('files') || manifest.files.length === 0) {
-    throw new Error(`files property missing for add-on ${packageName}`);
+    throw new Error(`files property missing for add-on ${packageId}`);
   }
 
   // If the add-on is a git repository, skip checking the SHA256SUMS file.
@@ -180,7 +181,7 @@ function loadPackageJson(packageName) {
     if (sha256SumsIndex >= 0) {
       manifest.files.splice(sha256SumsIndex, 1);
       console.log(
-        `Not checking SHA256SUMS file for ${packageName} since a .git`,
+        `Not checking SHA256SUMS file for ${packageId} since a .git`,
         'directory was detected'
       );
     }
@@ -190,7 +191,7 @@ function loadPackageJson(packageName) {
   for (let fname of manifest.files) {
     fname = path.join(addonPath, fname);
     if (!fs.existsSync(fname)) {
-      throw new Error(`Add-on ${packageName} is missing file: ${fname}`);
+      throw new Error(`Add-on ${packageId} is missing file: ${fname}`);
     }
   }
 
@@ -216,13 +217,13 @@ function loadPackageJson(packageName) {
 
         if (Utils.hashFile(path.join(addonPath, filename)) !== checksum) {
           throw new Error(
-            `Checksum failed in add-on ${packageName}: ${filename}`
+            `Checksum failed in add-on ${packageId}: ${filename}`
           );
         }
       }
     } catch (e) {
       throw new Error(
-        `Failed to read SHA256SUMS for add-on ${packageName}: ${e}`
+        `Failed to read SHA256SUMS for add-on ${packageId}: ${e}`
       );
     }
   }
@@ -231,27 +232,26 @@ function loadPackageJson(packageName) {
   const err = validatePackageJson(manifest);
   if (err) {
     throw new Error(
-      `Error found in manifest for add-on ${packageName}: ${err}`
+      `Error found in manifest for add-on ${packageId}: ${err}`
     );
   }
 
   // Verify API version.
-  const apiVersion = config.get('addonManager.api');
-  if (manifest.moziot.api.min > apiVersion ||
-      manifest.moziot.api.max < apiVersion) {
-    const err = `API mismatch for add-on ${packageName}: Current: ${
-      apiVersion} Supported: ${manifest.moziot.api.min}-${
+  if (manifest.moziot.api.min > API_VERSION ||
+      manifest.moziot.api.max < API_VERSION) {
+    const err = `API mismatch for add-on ${packageId}: Current: ${
+      API_VERSION} Supported: ${manifest.moziot.api.min}-${
       manifest.moziot.api.max}`;
     throw new Error(err);
   }
 
   const obj = {
-    name: manifest.name,
-    displayName: manifest.display_name,
+    id: manifest.name,
+    name: manifest.display_name,
     description: manifest.description,
-    homepage: manifest.homepage,
+    homepage_url: manifest.homepage,
     version: manifest.version,
-    type: manifest.moziot.type || 'adapter',
+    primary_type: manifest.moziot.type || 'adapter',
     exec: manifest.moziot.exec,
     enabled: false,
   };
@@ -279,13 +279,13 @@ function loadPackageJson(packageName) {
 /**
  * Load an add-on manifest from a manifest.json file.
  *
- * @param {string} packageName - The name of the package, e.g. example-adapter
+ * @param {string} packageId - The ID of the package, e.g. example-adapter
  *
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifestJson(packageName) {
-  const addonPath = path.join(UserProfile.addonsDir, packageName);
+function loadManifestJson(packageId) {
+  const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   // Read the package.json file.
   let data;
@@ -293,7 +293,7 @@ function loadManifestJson(packageName) {
     data = fs.readFileSync(path.join(addonPath, 'manifest.json'));
   } catch (e) {
     throw new Error(
-      `Failed to read manifest.json for add-on ${packageName}: ${e}`
+      `Failed to read manifest.json for add-on ${packageId}: ${e}`
     );
   }
 
@@ -303,22 +303,22 @@ function loadManifestJson(packageName) {
     manifest = JSON.parse(data);
   } catch (e) {
     throw new Error(
-      `Failed to parse manifest.json for add-on: ${packageName}: ${e}`
+      `Failed to parse manifest.json for add-on: ${packageId}: ${e}`
     );
   }
 
   // First, verify manifest version.
   if (manifest.manifest_version !== MANIFEST_VERSION) {
     throw new Error(
-      `Manifest version ${manifest.manifest_version} for add-on ${packageName
+      `Manifest version ${manifest.manifest_version} for add-on ${packageId
       } does not match expected version ${MANIFEST_VERSION}`
     );
   }
 
-  // Verify that the id in the package matches the packageName
-  if (manifest.id != packageName) {
-    const err = `ID from manifest .json "${manifest.name}" doesn't ` +
-                `match the name from list.json "${packageName}"`;
+  // Verify that the id in the package matches the packageId
+  if (manifest.id != packageId) {
+    const err = `ID from manifest .json "${manifest.id}" doesn't ` +
+                `match the ID from list.json "${packageId}"`;
     throw new Error(err);
   }
 
@@ -343,7 +343,7 @@ function loadManifestJson(packageName) {
           filename = path.resolve(path.join(addonPath, filename));
           if (!fs.existsSync(filename)) {
             throw new Error(
-              `File ${filename} missing for add-on ${packageName}`
+              `File ${filename} missing for add-on ${packageId}`
             );
           }
 
@@ -351,7 +351,7 @@ function loadManifestJson(packageName) {
         }
       } catch (e) {
         throw new Error(
-          `Failed to read SHA256SUMS for add-on ${packageName}: ${e}`
+          `Failed to read SHA256SUMS for add-on ${packageId}: ${e}`
         );
       }
 
@@ -364,18 +364,18 @@ function loadManifestJson(packageName) {
 
         if (!sums.has(fname)) {
           throw new Error(
-            `No checksum found for file ${fname} in add-on ${packageName}`
+            `No checksum found for file ${fname} in add-on ${packageId}`
           );
         }
 
         if (Utils.hashFile(fname) !== sums.get(fname)) {
           throw new Error(
-            `Checksum failed for file ${fname} in add-on ${packageName}`
+            `Checksum failed for file ${fname} in add-on ${packageId}`
           );
         }
       });
     } else if (process.env.NODE_ENV !== 'test') {
-      throw new Error(`SHA256SUMS file missing for add-on ${packageName}`);
+      throw new Error(`SHA256SUMS file missing for add-on ${packageId}`);
     }
   }
 
@@ -383,7 +383,7 @@ function loadManifestJson(packageName) {
   const err = validateManifestJson(manifest);
   if (err) {
     throw new Error(
-      `Error found in manifest for add-on ${packageName}: ${err}`
+      `Error found in manifest for add-on ${packageId}: ${err}`
     );
   }
 
@@ -396,7 +396,7 @@ function loadManifestJson(packageName) {
     if (semver.lt(pkg.version, min)) {
       throw new Error(
         `Gateway version ${pkg.version} is lower than minimum version ${min
-        } supported by add-on ${packageName}`
+        } supported by add-on ${packageId}`
       );
     }
   }
@@ -405,19 +405,19 @@ function loadManifestJson(packageName) {
     if (semver.gt(pkg.version, max)) {
       throw new Error(
         `Gateway version ${pkg.version} is higher than maximum version ${max
-        } supported by add-on ${packageName}`
+        } supported by add-on ${packageId}`
       );
     }
   }
 
   const obj = {
-    name: manifest.id,
+    id: manifest.id,
     author: manifest.author,
-    displayName: manifest.name,
+    name: manifest.name,
     description: manifest.description,
-    homepage: manifest.homepage_url,
+    homepage_url: manifest.homepage_url,
     version: manifest.version,
-    type: manifest.gateway_specific_settings.webthings.primary_type,
+    primary_type: manifest.gateway_specific_settings.webthings.primary_type,
     exec: manifest.gateway_specific_settings.webthings.exec,
     enabled: false,
   };
@@ -446,22 +446,24 @@ function loadManifestJson(packageName) {
 /**
  * Load the manifest for a given package.
  *
+ * @param {string} packageId - The ID of the package, e.g. example-adapter
+ *
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifest(packageName) {
-  const addonPath = path.join(UserProfile.addonsDir, packageName);
+function loadManifest(packageId) {
+  const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   if (fs.existsSync(path.join(addonPath, 'manifest.json'))) {
-    return loadManifestJson(packageName);
+    return loadManifestJson(packageId);
   }
 
   if (fs.existsSync(path.join(addonPath, 'package.json'))) {
-    console.warn(`manifest.json did not exist for add-on ${packageName}`);
-    return loadPackageJson(packageName);
+    console.warn(`manifest.json did not exist for add-on ${packageId}`);
+    return loadPackageJson(packageId);
   }
 
-  throw new Error(`No manifest found for add-on ${packageName}`);
+  throw new Error(`No manifest found for add-on ${packageId}`);
 }
 
 module.exports = {
