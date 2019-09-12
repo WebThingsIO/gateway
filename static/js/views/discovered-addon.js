@@ -20,14 +20,14 @@ class DiscoveredAddon {
    * @param Object description DiscoveredAddon metadata object.
    */
   constructor(metadata, installedAddonsMap, availableAddonsMap) {
+    this.id = metadata.id;
     this.name = metadata.name;
-    this.displayName = metadata.displayName;
     this.description = metadata.description;
     this.author = metadata.author;
-    this.homepage = metadata.homepage;
-    this.license = metadata.license;
+    this.homepageUrl = metadata.homepage_url;
+    this.licenseUrl = metadata.license_url;
     this.version = metadata.version;
-    this.type = metadata.type || 'adapter';
+    this.primaryType = metadata.primary_type;
     this.url = metadata.url;
     this.checksum = metadata.checksum;
     this.installed = metadata.installed;
@@ -46,7 +46,7 @@ class DiscoveredAddon {
       el = `<span class="addon-discovery-settings-added" data-l10n-id="addon-discovery-added"></span>`;
     } else {
       el = `
-        <button id="addon-install-${Utils.escapeHtmlForIdClass(this.name)}"
+        <button id="addon-install-${Utils.escapeHtmlForIdClass(this.id)}"
           class="text-button addon-discovery-settings-add"
           data-l10n-id="addon-discovery-add">
         </button>`;
@@ -54,9 +54,9 @@ class DiscoveredAddon {
 
     return `
       <li class="discovered-addon-item">
-        <div class="addon-settings-header ${Utils.escapeHtmlForIdClass(this.type)}">
+        <div class="addon-settings-header ${Utils.escapeHtmlForIdClass(this.primaryType)}">
           <span class="addon-settings-name">
-            ${Utils.escapeHtml(this.displayName)}
+            ${Utils.escapeHtml(this.name)}
           </span>
           <span class="addon-settings-version">
             ${Utils.escapeHtml(this.version)}
@@ -65,10 +65,10 @@ class DiscoveredAddon {
             ${Utils.escapeHtml(this.description)}
           </span>
           <span class="addon-settings-author">
-            ${fluent.getMessage('by')} <a href="${this.homepage}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
+            ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
           <span class="addon-settings-license">
-            (<a href="${this.license}" target="_blank" rel="noopener">license</a>)
+            (<a href="${this.licenseUrl}" target="_blank" rel="noopener">license</a>)
           </span>
         </div>
         <div class="addon-settings-controls">
@@ -85,7 +85,7 @@ class DiscoveredAddon {
 
     if (!this.installed) {
       const button = document.getElementById(
-        `addon-install-${Utils.escapeHtmlForIdClass(this.name)}`);
+        `addon-install-${Utils.escapeHtmlForIdClass(this.id)}`);
       button.addEventListener('click', this.handleInstall.bind(this));
     }
   }
@@ -100,19 +100,19 @@ class DiscoveredAddon {
              data-l10n-id="addon-discovery-installing"></span>`;
     controlDiv.innerHTML = installing;
 
-    API.installAddon(this.name, this.url, this.checksum)
+    API.installAddon(this.id, this.url, this.checksum)
       .then((settings) => {
         const el = `<span class="addon-discovery-settings-added"
           data-l10n-id="addon-discovery-added"></span>`;
         controlDiv.innerHTML = el;
-        const addon = this.availableAddonsMap.get(this.name);
+        const addon = this.availableAddonsMap.get(this.id);
         if (addon) {
           addon.installed = true;
         }
-        this.installedAddonsMap.set(this.name, settings);
+        this.installedAddonsMap.set(this.id, settings);
       })
       .catch((err) => {
-        console.error(`Failed to install add-on: ${this.name}\n${err}`);
+        console.error(`Failed to install add-on: ${this.id}\n${err}`);
         const el =
           `<span class="addon-discovery-settings-install-failed"
                  data-l10n-id="addon-discovery-failed"></span>`;

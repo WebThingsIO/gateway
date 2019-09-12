@@ -1420,11 +1420,11 @@ const SettingsScreen = {
         return;
       }
 
-      // Store a map of name->version.
+      // Store a map of id->version.
       this.installedAddons.clear();
       for (const s of body) {
         try {
-          this.installedAddons.set(s.name, s);
+          this.installedAddons.set(s.id, s);
         } catch (err) {
           console.error(`Failed to parse add-on settings: ${err}`);
         }
@@ -1503,27 +1503,27 @@ const SettingsScreen = {
       for (const body of bodies) {
         for (const addon of body) {
           const entry = {
+            id: addon.id,
             name: addon.name,
-            displayName: addon.display_name,
             description: addon.description,
             author: addon.author,
-            homepage: addon.homepage,
-            license: addon.license,
+            homepage_url: addon.homepage_url,
+            license_url: addon.license_url,
             version: addon.version,
             url: addon.url,
             checksum: addon.checksum,
             type: addon.type,
-            installed: this.installedAddons.has(addon.name),
+            installed: this.installedAddons.has(addon.id),
           };
 
           // Check for duplicates, keep newest.
-          if (this.availableAddons.has(addon.name) &&
-              this.compareSemver(this.availableAddons.get(addon.name).version,
+          if (this.availableAddons.has(addon.id) &&
+              this.compareSemver(this.availableAddons.get(addon.id).version,
                                  entry.version) >= 0) {
             continue;
           }
 
-          this.availableAddons.set(addon.name, entry);
+          this.availableAddons.set(addon.id, entry);
         }
       }
     });
@@ -1549,8 +1549,8 @@ const SettingsScreen = {
 
       Array.from(this.installedAddons.entries())
         .sort((a, b) => {
-          const aName = a[1].display_name || a[1].name || '';
-          const bName = b[1].display_name || b[1].name || '';
+          const aName = a[1].name || a[1].id || '';
+          const bName = b[1].name || b[1].id || '';
           return aName.localeCompare(bName);
         })
         .forEach((x) => {
@@ -1565,15 +1565,15 @@ const SettingsScreen = {
     }).then(() => {
       // Compare versions of installed and available add-ons, signaling
       // available updates where necessary.
-      for (const name of Array.from(this.installedAddons.keys()).sort()) {
-        const addon = this.installedAddons.get(name);
+      for (const id of Array.from(this.installedAddons.keys()).sort()) {
+        const addon = this.installedAddons.get(id);
 
-        if (this.availableAddons.has(name)) {
-          const available = this.availableAddons.get(name);
+        if (this.availableAddons.has(id)) {
+          const available = this.availableAddons.get(id);
           const cmp = this.compareSemver(addon.version, available.version);
 
           if (cmp < 0) {
-            const component = components.get(name);
+            const component = components.get(id);
 
             if (component) {
               component.setUpdateAvailable(
@@ -1624,7 +1624,7 @@ const SettingsScreen = {
       addonList.innerHTML = '';
 
       Array.from(this.availableAddons.entries())
-        .sort((a, b) => a[1].displayName.localeCompare(b[1].displayName))
+        .sort((a, b) => a[1].name.localeCompare(b[1].name))
         .forEach((x) => new DiscoveredAddon(x[1],
                                             this.installedAddons,
                                             this.availableAddons));
