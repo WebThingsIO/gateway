@@ -18,6 +18,12 @@ const Utils = require('./utils');
 const API_VERSION = 2;
 const MANIFEST_VERSION = 1;
 
+// Setting this flag will force every file present in an add-on's directory to
+// have a checksum in the SHA256SUMS file. However, several add-ons currently
+// write files directly into their directories. When we resolve all of those
+// issues, this flag can be flipped.
+const ENFORCE_STRICT_SHA_CHECK = false;
+
 /**
  * Verify one level of an object, recursing as required.
  *
@@ -363,9 +369,13 @@ function loadManifestJson(packageId) {
         }
 
         if (!sums.has(fname)) {
-          throw new Error(
-            `No checksum found for file ${fname} in add-on ${packageId}`
-          );
+          if (ENFORCE_STRICT_SHA_CHECK) {
+            throw new Error(
+              `No checksum found for file ${fname} in add-on ${packageId}`
+            );
+          } else {
+            return;
+          }
         }
 
         if (Utils.hashFile(fname) !== sums.get(fname)) {
