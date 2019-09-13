@@ -588,7 +588,7 @@ class AddonManager extends EventEmitter {
       // pass
     }
 
-    if (process.env.NODE_ENV === 'test' && manifest.enabled) {
+    if (manifest.enabled) {
       enabled = true;
     }
 
@@ -1070,7 +1070,8 @@ class AddonManager extends EventEmitter {
     }
     await Settings.set(key, obj);
 
-    if (enable) {
+    // If the add-on was previously enabled, load the add-on
+    if (obj.enabled) {
       // Now, load the add-on
       try {
         await this.loadAddon(packageId);
