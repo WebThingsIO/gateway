@@ -391,7 +391,7 @@ function loadManifestJson(packageId) {
   let min = manifest.gateway_specific_settings.webthings.strict_min_version;
   let max = manifest.gateway_specific_settings.webthings.strict_max_version;
 
-  if (typeof min === 'string') {
+  if (typeof min === 'string' && min !== '*') {
     min = semver.coerce(min);
     if (semver.lt(pkg.version, min)) {
       throw new Error(
@@ -400,7 +400,7 @@ function loadManifestJson(packageId) {
       );
     }
   }
-  if (typeof max === 'string') {
+  if (typeof max === 'string' && max !== '*') {
     max = semver.coerce(max);
     if (semver.gt(pkg.version, max)) {
       throw new Error(
