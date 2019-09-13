@@ -48,6 +48,7 @@ class AddonManager extends EventEmitter {
     this.notifiers = new Map();
     this.devices = {};
     this.outlets = {};
+    this.extensions = {};
     this.deferredAdd = null;
     this.deferredRemove = null;
     this.addonsLoaded = false;
@@ -224,6 +225,27 @@ class AddonManager extends EventEmitter {
   getNotifiersByPackageId(packageId) {
     return Array.from(this.notifiers.values()).filter(
       (n) => n.getPackageName() === packageId);
+  }
+
+  /**
+   * @method getExtensions
+   * @returns Returns a Map of the loaded extensions. The dictionary
+   *          key corresponds to the extension ID.
+   */
+  getExtensions() {
+    return this.extensions;
+  }
+
+  /**
+   * @method getExtensionsByPackageId
+   * @returns Returns a Map of loaded extensions with the given package ID.
+   */
+  getExtensionsByPackageId(packageId) {
+    if (this.extensions.hasOwnProperty(packageId)) {
+      return this.extensions[packageId];
+    }
+
+    return {};
   }
 
   /**
@@ -602,6 +624,17 @@ class AddonManager extends EventEmitter {
       throw new Error(`Add-on not enabled: ${manifest.id}`);
     }
 
+    if (manifest.content_scripts && manifest.web_accessible_resources) {
+      this.extensions[manifest.id] = {
+        extensions: manifest.content_scripts,
+        resources: manifest.web_accessible_resources,
+      };
+    }
+
+    if (!manifest.exec && config.get('ipc.protocol') !== 'inproc') {
+      return;
+    }
+
     const errorCallback = (packageId, err) => {
       console.error(`Failed to load add-on ${packageId}:`, err);
     };
@@ -841,6 +874,10 @@ class AddonManager extends EventEmitter {
     if (!this.addonsLoaded) {
       // The add-ons are not currently loaded, no need to unload.
       return Promise.resolve();
+    }
+
+    if (this.extensions.hasOwnProperty(packageId)) {
+      delete this.extensions[packageId];
     }
 
     const plugin = this.getPlugin(packageId);

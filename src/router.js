@@ -56,6 +56,8 @@ const Router = {
     // First look for a static file
     const staticHandler = express.static(Constants.BUILD_STATIC_PATH);
     app.use(Constants.UPLOADS_PATH, express.static(UserProfile.uploadsDir));
+    app.use(Constants.EXTENSIONS_PATH, nocache,
+            require('./controllers/extensions_controller'));
     app.use((request, response, next) => {
       if (request.path === '/' && request.accepts('html')) {
         // We need this to hit RootController.

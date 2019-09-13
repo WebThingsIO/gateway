@@ -28,6 +28,7 @@ const Router = {
     page('/rules/:rule', App.showRule.bind(App));
     page('/logs', App.showLogs.bind(App));
     page('/logs/things/:thingId/properties/:propId', App.showLogs.bind(App));
+    page('/extensions/:extensionId', App.showExtension.bind(App));
     page();
   },
 };

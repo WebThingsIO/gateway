@@ -129,9 +129,11 @@ function validateManifestJson(manifest) {
     version: '',
   };
 
-  if (config.get('ipc.protocol') !== 'inproc') {
-    // If we're not using in-process plugins, then we also need the exec
-    // keyword to exist.
+  if (config.get('ipc.protocol') !== 'inproc' &&
+      // eslint-disable-next-line max-len
+      manifest.gateway_specific_settings.webthings.primary_type !== 'extension') {
+    // If we're not using in-process plugins, and this is not an extension,
+    // then we also need the exec keyword to exist.
     manifestTemplate.gateway_specific_settings.webthings.exec = '';
   }
 
@@ -429,6 +431,8 @@ function loadManifestJson(packageId) {
     version: manifest.version,
     primary_type: manifest.gateway_specific_settings.webthings.primary_type,
     exec: manifest.gateway_specific_settings.webthings.exec,
+    content_scripts: manifest.content_scripts,
+    web_accessible_resources: manifest.web_accessible_resources,
     enabled: false,
   };
 

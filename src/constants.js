@@ -36,6 +36,7 @@ exports.LOGS_PATH = '/logs';
 exports.PUSH_PATH = '/push';
 exports.PING_PATH = '/ping';
 exports.PROXY_PATH = '/proxy';
+exports.EXTENSIONS_PATH = '/extensions';
 // Remember we end up in the build/* directory so these paths looks slightly
 // different than you might expect.
 exports.STATIC_PATH = path.join(__dirname, '../static');
