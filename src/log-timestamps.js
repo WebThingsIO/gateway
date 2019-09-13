@@ -49,7 +49,9 @@ const logger = winston.createLogger({
     }),
     new DailyRotateFile({
       dirname: UserProfile.logDir,
-      filename: 'run-app.log',
+      filename: 'run-app.log.%DATE%',
+      symlinkName: 'run-app.log',
+      createSymlink: true,
       zippedArchive: false,
       maxSize: '10m',
       maxFiles: 10,
