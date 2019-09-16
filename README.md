@@ -1,6 +1,6 @@
 # WebThings Gateway by Mozilla
 
-[![Build Status](https://travis-ci.org/mozilla-iot/gateway.svg?branch=master)](https://travis-ci.org/mozilla-iot/gateway)
+[![Build Status](https://github.com/mozilla-iot/gateway/workflows/Node.js%20application/badge.svg)](https://github.com/mozilla-iot/gateway/workflows/Node.js%20application)
 [![codecov](https://codecov.io/gh/mozilla-iot/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-iot/gateway)
 [![dependencies](https://david-dm.org/mozilla-iot/gateway.svg)](https://david-dm.org/mozilla-iot/gateway)
 [![devDependencies](https://david-dm.org/mozilla-iot/gateway/dev-status.svg)](https://david-dm.org/mozilla-iot/gateway?type=dev)

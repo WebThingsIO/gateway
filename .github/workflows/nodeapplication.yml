@@ -1,0 +1,50 @@
+name: Node.js application
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_version: [8, 10, 12]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Install system dependencies
+        run: |
+          sudo apt -qq update
+          sudo apt install -y firefox python python-setuptools python3 python3-setuptools
+      - name: Start intent parser
+        run: |
+          git clone https://github.com/mozilla-iot/intent-parser
+          python3 -m pip install --user -e git+https://github.com/mycroftai/adapt#egg=adapter-parser
+          (python3 intent-parser/intent-parser-server.py &) &
+      - name: Install node dependencies
+        run: |
+          npm install
+      - name: Run build
+        run: |
+          ./node_modules/.bin/webpack
+      - name: Lint with eslint
+        run: |
+          npm run lint
+      - name: Run integration tests
+        run: |
+          ./tools/make-self-signed-cert.sh
+          ./node_modules/.bin/jest --runInBand --coverage --detectOpenHandles
+          ./node_modules/.bin/codecov
+        env:
+          MOZIOT_HOME: "${HOME}/.mozilla-iot/test"
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+      - name: Check dependencies
+        run: |
+          npm run dependencies-check
