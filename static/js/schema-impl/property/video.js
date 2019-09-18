@@ -24,6 +24,7 @@ class VideoDetail {
 
     this.dashHref = null;
     this.hlsHref = null;
+    this.player = null;
 
     for (const link of property.links) {
       if (link.rel === 'alternate') {
@@ -99,6 +100,11 @@ class VideoDetail {
     element.querySelector('.media-modal-close').addEventListener(
       'click',
       () => {
+        if (this.player) {
+          this.player.destroy();
+          this.player = null;
+        }
+
         document.body.removeChild(element);
         document.querySelector('#things').style.display = 'block';
         window.removeEventListener('resize', this.positionButtons);
@@ -114,18 +120,24 @@ class VideoDetail {
       );
 
       const video = document.querySelector('.media-modal-video');
-      const player = new shaka.Player(video);
+      this.player = new shaka.Player(video);
 
-      player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        request.headers = {
-          Authorization: `Bearer ${API.jwt}`,
-        };
+      this.player.getNetworkingEngine().registerRequestFilter(
+        (type, request) => {
+          request.headers = {
+            Authorization: `Bearer ${API.jwt}`,
+          };
+        }
+      );
+
+      this.player.addEventListener('error', (e) => {
+        console.error('Error playing video:', e);
       });
 
-      player.addEventListener('error', console.error);
-
-      player.load(this.dashHref || this.hlsHref).then(() => {
+      this.player.load(this.dashHref || this.hlsHref).then(() => {
         video.play();
+      }).catch((e) => {
+        console.error('Error loading video:', e);
       });
     }
   }
