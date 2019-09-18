@@ -1030,7 +1030,7 @@ class AddonManager extends EventEmitter {
     }
 
     const cleanup = () => {
-      if (fs.lstatSync(addonPath).isDirectory()) {
+      if (fs.existsSync(addonPath) && fs.lstatSync(addonPath).isDirectory()) {
         rimraf(addonPath, {glob: false}, (e) => {
           if (e) {
             console.error(`Error removing ${packageId}: ${e}`);
@@ -1110,7 +1110,7 @@ class AddonManager extends EventEmitter {
     });
 
     // Remove the package from the file system
-    if (fs.lstatSync(addonPath).isDirectory()) {
+    if (fs.existsSync(addonPath) && fs.lstatSync(addonPath).isDirectory()) {
       rimraf(addonPath, {glob: false}, (e) => {
         if (e) {
           console.error(`Error removing ${packageId}: ${e}`);

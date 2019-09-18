@@ -1047,7 +1047,9 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
 
     const actionDescr = {
-      reboot: {},
+      reboot: {
+        input: {},
+      },
     };
 
     res = await chai.request(server)

@@ -302,7 +302,9 @@ describe('actions/', () => {
     const {id} = thingLight;
     await addDevice(thingLight);
     const descr = {
-      rejectRemove: {},
+      rejectRemove: {
+        input: {},
+      },
     };
 
     const basePath = `${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`;
