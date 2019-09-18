@@ -1728,7 +1728,7 @@ const SettingsScreen = {
       }
       versionElt.textContent =
         `${fluent.getMessage('current-version')}: ${Utils.escapeHtml(status.version)}`;
-      let statusText = `${fluent.getMesssage('last-update')}: `;
+      let statusText = `${fluent.getMessage('last-update')}: `;
 
       if (status.timestamp) {
         statusText += new Date(status.timestamp).toString();

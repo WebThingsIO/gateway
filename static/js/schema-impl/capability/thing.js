@@ -285,7 +285,7 @@ class Thing {
       this.attachExpandedView();
 
       if (!this.connected) {
-        App.showPersistentMessage(fluent.getMesssage('disconnected'));
+        App.showPersistentMessage(fluent.getMessage('disconnected'));
       }
     }
 
