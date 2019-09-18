@@ -31,6 +31,13 @@ ActionsController.post('/', async (request, response) => {
   }
 
   const actionName = keys[0];
+
+  if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
+                                            'input')) {
+    response.status(400).send('Missing input');
+    return;
+  }
+
   const actionParams = request.body[actionName].input;
   const thingId = request.params.thingId;
   let action = null;
@@ -105,6 +112,12 @@ ActionsController.post('/:actionName', async (request, response) => {
     const err = `Action name must be ${actionName}`;
     console.log(err, request.body);
     response.status(400).send(err);
+    return;
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
+                                            'input')) {
+    response.status(400).send('Missing input');
     return;
   }
 
