@@ -11,6 +11,7 @@
   background-color: #5288af;
   margin: 0;
   transition: transform 0.25s ease;
+  z-index: 1000;
 }
 
 #main-menu.hidden {
@@ -105,6 +106,7 @@
   height: 100%;
   width: 100%;
   animation: show-scrim 0.25s ease 0s;
+  z-index: 999;
 }
 
 #menu-scrim.hidden {

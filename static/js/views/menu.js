@@ -8,6 +8,7 @@
 'use strict';
 
 const API = require('../api');
+const Utils = require('../utils');
 
 // eslint-disable-next-line no-unused-vars
 const Menu = {
@@ -32,6 +33,7 @@ const Menu = {
     this.items.rule = [document.getElementById('rules-menu-item')];
     this.items.logs = [document.getElementById('logs-menu-item')];
     this.currentItem = 'things';
+    this.menuButton = document.getElementById('menu-button');
 
     this.getExperimentSetting('assistant');
     this.getExperimentSetting('logs');
@@ -60,6 +62,7 @@ const Menu = {
   show: function() {
     this.element.classList.remove('hidden');
     this.scrim.classList.remove('hidden');
+    this.menuButton.classList.add('menu-shown');
     this.hidden = false;
   },
 
@@ -69,6 +72,7 @@ const Menu = {
   hide: function() {
     this.element.classList.add('hidden');
     this.scrim.classList.add('hidden');
+    this.menuButton.classList.remove('menu-shown');
     this.hidden = true;
   },
 
@@ -111,7 +115,7 @@ const Menu = {
    */
   selectItem: function(item) {
     if (!this.items[item]) {
-      console.error(`Tried to select a menu item that didnt exist ${item}`);
+      console.error('Tried to select a menu item that didn\'t exist', item);
       return;
     }
     for (const elt of this.items[this.currentItem]) {
@@ -139,6 +143,35 @@ const Menu = {
     for (const elt of this.items[item]) {
       elt.classList.add('hidden');
     }
+  },
+
+  /**
+   * Add a new menu item for an extension.
+   */
+  addExtensionItem: function(extensionId, name) {
+    const escapedId = Utils.escapeHtmlForIdClass(extensionId);
+
+    const logoutItem = document.getElementById('logout').parentNode;
+    const list = document.querySelector('#main-menu > ul');
+
+    const newItem = document.createElement('li');
+    const newLink = document.createElement('a');
+    newLink.id = `extension-${escapedId}-menu-item`;
+    newLink.href = `/extensions/${encodeURIComponent(extensionId)}`;
+    newLink.innerText = name;
+
+    const newSection = document.createElement('section');
+    newSection.id = `extension-${escapedId}-view`;
+    newSection.dataset.view = `extension-${escapedId}`;
+    newSection.classList.add('hidden');
+
+    newItem.appendChild(newLink);
+    list.insertBefore(newItem, logoutItem);
+    document.body.appendChild(newSection);
+
+    this.items[newSection.id] = [newLink];
+
+    return newSection;
   },
 };
 

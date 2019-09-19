@@ -408,8 +408,17 @@ const API = {
       return res.json();
     });
   },
+
+  getExtensions: function() {
+    return fetch('/extensions', {
+      headers: this.headers(),
+    }).then((res) => {
+      return res.json();
+    });
+  },
 };
 
+// Elevate this to the window level.
 window.API = API;
 
 module.exports = API;

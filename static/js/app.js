@@ -38,6 +38,7 @@ let LogsScreen;
 // eslint-disable-next-line prefer-const
 let Speech;
 
+const page = require('page');
 const shaka = require('shaka-player/dist/shaka-player.compiled');
 const MobileDragDrop = require('mobile-drag-drop/index.min');
 const ScrollBehavior = require('mobile-drag-drop/scroll-behaviour.min');
@@ -115,7 +116,7 @@ const App = {
     this.views.rule = document.getElementById('rule-view');
     this.views.assistant = document.getElementById('assistant-view');
     this.views.logs = document.getElementById('logs-view');
-    this.currentView = 'things';
+    this.currentView = this.views.things;
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
     this.overflowButton = document.getElementById('overflow-button');
@@ -137,8 +138,36 @@ const App = {
     this.wsBackoff = 1000;
     this.initWebSocket();
 
+    this.extensions = {};
+
     Menu.init();
     Router.init();
+
+    API.getExtensions().then((extensions) => {
+      for (const [key, value] of Object.entries(extensions)) {
+        for (const extension of value) {
+          if (extension.css) {
+            for (const path of extension.css) {
+              const link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.type = 'text/css';
+              link.href = `/extensions/${encodeURIComponent(key)}/${path}`;
+
+              document.head.appendChild(link);
+            }
+          }
+
+          if (extension.js) {
+            for (const path of extension.js) {
+              const script = document.createElement('script');
+              script.src = `/extensions/${encodeURIComponent(key)}/${path}`;
+
+              document.head.appendChild(script);
+            }
+          }
+        }
+      }
+    });
   },
 
   initWebSocket() {
@@ -270,15 +299,46 @@ const App = {
     this.selectView('logs');
   },
 
+  registerExtension: function(extension) {
+    this.extensions[extension.id] = extension;
+  },
+
+  showExtension: function(context) {
+    const extensionId = context.params.extensionId;
+
+    if (this.extensions.hasOwnProperty(extensionId)) {
+      this.extensions[extensionId].show();
+      this.selectView(
+        `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
+      );
+    } else {
+      console.warn('Unknown extension:', extensionId);
+      page('/things');
+    }
+  },
+
   selectView: function(view) {
-    if (!this.views[view]) {
-      console.error('Tried to select view that didnt exist');
+    let el = null;
+    if (view.startsWith('extension-')) {
+      // load extensions at runtime
+      el = document.getElementById(view);
+    } else {
+      el = this.views[view];
+    }
+
+    if (!el) {
+      console.error('Tried to select view that didn\'t exist:', view);
       return;
     }
-    this.views[this.currentView].classList.remove('selected');
-    this.views[view].classList.add('selected');
+
+    this.currentView.classList.add('hidden');
+    this.currentView.classList.remove('selected');
+
+    el.classList.remove('hidden');
+    el.classList.add('selected');
+
     Menu.selectItem(view);
-    this.currentView = view;
+    this.currentView = el;
   },
 
   showMenuButton: function() {
@@ -451,6 +511,8 @@ require('./components/property/switch');
 require('./components/property/temperature');
 require('./components/property/video');
 require('./components/property/voltage');
+
+require('./extension');
 
 if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js', {

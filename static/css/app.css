@@ -249,6 +249,10 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 0;
 }
 
+#menu-button.menu-shown {
+  z-index: 1000;
+}
+
 #menu-button {
   background: no-repeat center/100% url('../optimized-images/menu.svg');
 }
