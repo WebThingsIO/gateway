@@ -237,7 +237,6 @@ This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https:/
 Execute the following command as sudo (Linux) or administrator (Windows).
 
 ```
-python2 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
 python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
 ```
 

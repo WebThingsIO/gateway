@@ -16,8 +16,10 @@ fi
 
 # Upgrade gateway-addon Python package
 _url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.9.0#egg=gateway_addon"
-sudo pip2 install -U "$_url"
 sudo pip3 install -U "$_url"
+
+# Uninstall py2 version of gateway-addon, if present
+sudo pip2 uninstall -y gateway_addon || true
 
 # Upgrade adapt-parser Python package
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
