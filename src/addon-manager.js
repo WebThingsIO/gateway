@@ -46,6 +46,7 @@ class AddonManager extends EventEmitter {
     super();
     this.adapters = new Map();
     this.notifiers = new Map();
+    this.apiHandlers = new Map();
     this.devices = {};
     this.outlets = {};
     this.extensions = {};
@@ -99,9 +100,23 @@ class AddonManager extends EventEmitter {
      * This is event is emitted whenever a new notifier is loaded.
      *
      * @event notifierAdded
-     * @type {Adapter}
+     * @type {Notifier}
      */
     this.emit(Constants.NOTIFIER_ADDED, notifier);
+  }
+
+  addAPIHandler(handler) {
+    this.apiHandlers.set(handler.packageName, handler);
+
+    /**
+     * API Handler added event.
+     *
+     * This is event is emitted whenever a new API handler is loaded.
+     *
+     * @event apiHandlerAdded
+     * @type {APIHandler}
+     */
+    this.emit(Constants.API_HANDLER_ADDED, handler);
   }
 
   /**
@@ -225,6 +240,23 @@ class AddonManager extends EventEmitter {
   getNotifiersByPackageId(packageId) {
     return Array.from(this.notifiers.values()).filter(
       (n) => n.getPackageName() === packageId);
+  }
+
+  /**
+   * @method getAPIHandlers
+   * @returns Returns a Map of the loaded API handlers. The dictionary
+   *          key corresponds to the package ID.
+   */
+  getAPIHandlers() {
+    return this.apiHandlers;
+  }
+
+  /**
+   * @method getAPIHandler
+   * @returns Returns the API handler with the given package ID.
+   */
+  getAPIHandler(packageId) {
+    return this.apiHandlers.get(packageId);
   }
 
   /**
@@ -797,6 +829,12 @@ class AddonManager extends EventEmitter {
       unloadPromises.push(this.unloadNotifier(notifierId));
     }
 
+    // unload the API handlers in the reverse of the order that they were
+    // loaded.
+    for (const packageName of Array.from(this.apiHandlers.keys()).reverse()) {
+      unloadPromises.push(this.unloadAPIHandler(packageName));
+    }
+
     this.addonsLoaded = false;
 
     if (this.updateTimeout) {
@@ -863,6 +901,30 @@ class AddonManager extends EventEmitter {
   }
 
   /**
+   * @method unloadAPIHandler
+   * Unload the given API handler.
+   *
+   * @param {string} packageId The ID of the package the handler belongs to.
+   * @returns A promise which is resolved when the handler is unloaded.
+   */
+  unloadAPIHandler(packageId) {
+    if (!this.addonsLoaded) {
+      // The add-ons are not currently loaded, no need to unload.
+      return Promise.resolve();
+    }
+
+    const handler = this.getAPIHandler(packageId);
+    if (typeof handler === 'undefined') {
+      // This handler wasn't loaded.
+      return Promise.resolve();
+    }
+
+    console.log('Unloading', handler.packageName);
+    this.apiHandlers.delete(packageId);
+    return handler.unload();
+  }
+
+  /**
    * @method unloadAddon
    * Unload add-on with the given package ID.
    *
@@ -890,6 +952,7 @@ class AddonManager extends EventEmitter {
     const adapterIds = adapters.map((a) => a.id);
     const notifiers = this.getNotifiersByPackageId(packageId);
     const notifierIds = notifiers.map((n) => n.id);
+    const apiHandler = this.getAPIHandler(packageId);
 
     const unloadPromises = [];
     if (adapters.length > 0) {
@@ -908,10 +971,17 @@ class AddonManager extends EventEmitter {
       }
     }
 
-    if (adapters.length === 0 && notifiers.length === 0 && plugin) {
-      // If there are no adapters, manually unload the plugin, otherwise it
-      // will just restart. Note that if the addon is disabled, then
-      // there might not be a plugin either.
+    if (apiHandler) {
+      console.log('Unloading API handler', packageId);
+      unloadPromises.push(apiHandler.unload());
+      this.apiHandlers.delete(packageId);
+    }
+
+    if (adapters.length === 0 && notifiers.length === 0 && !apiHandler &&
+        plugin) {
+      // If there are no adapters, notifiers, or API handlers, manually unload
+      // the plugin, otherwise it will just restart. Note that if the addon is
+      // disabled, then there might not be a plugin either.
       plugin.unload();
     }
 

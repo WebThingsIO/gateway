@@ -54,6 +54,15 @@ class PluginServer extends EventEmitter {
   }
 
   /**
+   * @method addAPIHandler
+   *
+   * Tells the add-on manager about new API handlers added via a plugin.
+   */
+  addAPIHandler(handler) {
+    this.manager.addAPIHandler(handler);
+  }
+
+  /**
    * @method onMsg
    *
    * Called when the plugin server receives an adapter manager IPC message

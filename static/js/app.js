@@ -301,6 +301,17 @@ const App = {
 
   registerExtension: function(extension) {
     this.extensions[extension.id] = extension;
+
+    // Go ahead and draw a <section> for this extension to draw to, if it so
+    // chooses.
+    const escapedId = Utils.escapeHtmlForIdClass(extension.id);
+    const newSection = document.createElement('section');
+    newSection.id = `extension-${escapedId}-view`;
+    newSection.dataset.view = `extension-${escapedId}`;
+    newSection.classList.add('hidden');
+    document.body.appendChild(newSection);
+
+    return newSection;
   },
 
   showExtension: function(context) {
