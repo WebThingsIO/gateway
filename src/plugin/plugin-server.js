@@ -75,6 +75,7 @@ class PluginServer extends EventEmitter {
             userProfile: {
               baseDir: UserProfile.baseDir,
               configDir: UserProfile.configDir,
+              dataDir: UserProfile.dataDir,
               mediaDir: UserProfile.mediaDir,
               logDir: UserProfile.logDir,
               gatewayDir: UserProfile.gatewayDir,
