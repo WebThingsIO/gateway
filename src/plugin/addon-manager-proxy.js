@@ -11,6 +11,7 @@
 
 'use strict';
 
+const {APIRequest, APIResponse} = require('gateway-addon');
 const config = require('config');
 const Constants = require('../constants');
 const EventEmitter = require('events').EventEmitter;
@@ -23,6 +24,7 @@ class AddonManagerProxy extends EventEmitter {
 
     this.adapters = new Map();
     this.notifiers = new Map();
+    this.apiHandlers = new Map();
     this.pluginClient = pluginClient;
     this.userProfile = pluginClient.userProfile;
 
@@ -89,6 +91,21 @@ class AddonManagerProxy extends EventEmitter {
   }
 
   /**
+   * @method addAPIHandler
+   *
+   * Adds a new API handler.
+   */
+  addAPIHandler(handler) {
+    const packageName = handler.getPackageName();
+    DEBUG && console.log('AddonManagerProxy: addAPIHandler:', packageName);
+
+    this.apiHandlers.set(packageName, handler);
+    this.pluginClient.sendNotification(Constants.ADD_API_HANDLER, {
+      packageName,
+    });
+  }
+
+  /**
    * @method handleDeviceAdded
    *
    * Called when the indicated device has been added to an adapter.
@@ -149,11 +166,66 @@ class AddonManagerProxy extends EventEmitter {
   onMsg(msg) {
     DEBUG && console.log('AddonManagerProxy: Rcvd:', msg);
 
-    // The first switch covers unload plugin.
     switch (msg.messageType) {
       case Constants.UNLOAD_PLUGIN:
         this.unloadPlugin();
         return;
+
+      case Constants.UNLOAD_API_HANDLER: {
+        const packageName = msg.data.packageName;
+        const handler = this.apiHandlers.get(packageName);
+        if (!handler) {
+          console.error(
+            'AddonManagerProxy: Unrecognized handler:',
+            packageName
+          );
+          console.error('AddonManagerProxy: Ignoring msg:', msg);
+          return;
+        }
+
+        handler.unload().then(() => {
+          this.apiHandlers.delete(packageName);
+          this.pluginClient.sendNotification(Constants.API_HANDLER_UNLOADED, {
+            packageName,
+          });
+        });
+        return;
+      }
+      case Constants.API_REQUEST: {
+        const packageName = msg.data.packageName;
+        const handler = this.apiHandlers.get(packageName);
+        if (!handler) {
+          console.error(
+            'AddonManagerProxy: Unrecognized handler:',
+            packageName
+          );
+          console.error('AddonManagerProxy: Ignoring msg:', msg);
+          return;
+        }
+
+        const request = new APIRequest(msg.data.request);
+        handler.handleRequest(request)
+          .then((response) => {
+            this.pluginClient.sendNotification(Constants.API_RESPONSE, {
+              messageId: msg.data.messageId,
+              response,
+            });
+          }).catch((err) => {
+            console.error(
+              'AddonManagerProxy: Failed to handle API request:',
+              err
+            );
+            this.pluginClient.sendNotification(Constants.API_RESPONSE, {
+              messageId: msg.data.messageId,
+              response: new APIResponse({
+                status: 500,
+                contentType: 'text/plain',
+                content: `${err}`,
+              }),
+            });
+          });
+        return;
+      }
     }
 
     // Next, handle notifier messages.

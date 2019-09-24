@@ -13,7 +13,7 @@ const Menu = require('./views/menu');
 class Extension {
   constructor(id) {
     this.id = id;
-    App.registerExtension(this);
+    this.view = App.registerExtension(this);
   }
 
   /**
@@ -24,7 +24,7 @@ class Extension {
    * @returns {Node} Node object which the extension can draw content to.
    */
   addMenuEntry(name) {
-    return Menu.addExtensionItem(this.id, name);
+    return Menu.addExtensionItem(this, name);
   }
 
   /**

@@ -148,30 +148,22 @@ const Menu = {
   /**
    * Add a new menu item for an extension.
    */
-  addExtensionItem: function(extensionId, name) {
-    const escapedId = Utils.escapeHtmlForIdClass(extensionId);
+  addExtensionItem: function(extension, name) {
+    const escapedId = Utils.escapeHtmlForIdClass(extension.id);
+
+    const newLink = document.createElement('a');
+    newLink.id = `extension-${escapedId}-menu-item`;
+    newLink.href = `/extensions/${encodeURIComponent(extension.id)}`;
+    newLink.innerText = name;
+
+    const newItem = document.createElement('li');
+    newItem.appendChild(newLink);
 
     const logoutItem = document.getElementById('logout').parentNode;
     const list = document.querySelector('#main-menu > ul');
-
-    const newItem = document.createElement('li');
-    const newLink = document.createElement('a');
-    newLink.id = `extension-${escapedId}-menu-item`;
-    newLink.href = `/extensions/${encodeURIComponent(extensionId)}`;
-    newLink.innerText = name;
-
-    const newSection = document.createElement('section');
-    newSection.id = `extension-${escapedId}-view`;
-    newSection.dataset.view = `extension-${escapedId}`;
-    newSection.classList.add('hidden');
-
-    newItem.appendChild(newLink);
     list.insertBefore(newItem, logoutItem);
-    document.body.appendChild(newSection);
 
-    this.items[newSection.id] = [newLink];
-
-    return newSection;
+    this.items[extension.view.id] = [newLink];
   },
 };
 

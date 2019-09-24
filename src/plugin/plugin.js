@@ -12,6 +12,7 @@
 'use strict';
 
 const AdapterProxy = require('./adapter-proxy');
+const APIHandlerProxy = require('./api-handler-proxy');
 const config = require('config');
 const Constants = require('../constants');
 const db = require('../db');
@@ -40,6 +41,7 @@ class Plugin {
 
     this.adapters = new Map();
     this.notifiers = new Map();
+    this.apiHandlers = new Map();
     this.ipcBaseAddr = `gateway.plugin.${this.pluginId}`;
 
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
@@ -69,6 +71,7 @@ class Plugin {
     this.setPinPromises = new Map();
     this.setCredentialsPromises = new Map();
     this.notifyPromises = new Map();
+    this.apiRequestPromises = new Map();
   }
 
   asDict() {
@@ -245,11 +248,25 @@ class Plugin {
         this.setCredentialsPromises.delete(messageId);
         return;
       }
+      case Constants.API_RESPONSE: {
+        const messageId = msg.data.messageId;
+        const deferred = this.apiRequestPromises.get(messageId);
+        if (typeof messageId === 'undefined' ||
+            typeof deferred === 'undefined') {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized message id:', messageId,
+                        'Ignoring msg:', msg);
+          return;
+        }
+        deferred.resolve(msg.data.response);
+        this.apiRequestPromises.delete(messageId);
+        return;
+      }
     }
 
     const adapterId = msg.data.adapterId;
     const notifierId = msg.data.notifierId;
-    let adapter, notifier;
+    let adapter, notifier, apiHandler;
 
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
@@ -273,6 +290,40 @@ class Plugin {
         this.pluginServer.addNotifier(notifier);
         return;
 
+      case Constants.ADD_API_HANDLER:
+        apiHandler = new APIHandlerProxy(this.pluginServer.manager,
+                                         msg.data.packageName,
+                                         this);
+        this.apiHandlers.set(msg.data.packageName, apiHandler);
+        this.pluginServer.addAPIHandler(apiHandler);
+        return;
+
+      case Constants.API_HANDLER_UNLOADED: {
+        const packageName = msg.data.packageName;
+        const handler = this.handlers.get(packageName);
+
+        if (!handler) {
+          console.error('Plugin:', this.pluginId,
+                        'Unrecognized API handler:', packageName,
+                        'Ignoring msg:', msg);
+          return;
+        }
+
+        this.apiHandlers.delete(packageName);
+        if (this.adapters.size === 0 &&
+            this.notifiers.size === 0 &&
+            this.apiHandlers.size === 0) {
+          // We've unloaded everything for the plugin, now unload the plugin.
+          this.unload();
+          this.unloadCompletedPromise = handler.unloadCompletedPromise;
+          handler.unloadCompletedPromise = null;
+        } else if (handler.unloadCompletedPromise) {
+          handler.unloadCompletedPromise.resolve();
+          handler.unloadCompletedPromise = null;
+        }
+
+        return;
+      }
       case Constants.PLUGIN_UNLOADED:
         this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
@@ -334,9 +385,10 @@ class Plugin {
 
       case Constants.ADAPTER_UNLOADED:
         this.adapters.delete(adapterId);
-        if (this.adapters.size == 0) {
-          // We've unloaded the last adapter for the plugin, now unload
-          // the plugin.
+        if (this.adapters.size === 0 &&
+            this.notifiers.size === 0 &&
+            this.apiHandlers.size === 0) {
+          // We've unloaded everything for the plugin, now unload the plugin.
 
           // We may need to reevaluate this, and only auto-unload
           // the plugin for the MockAdapter. For plugins which
@@ -353,9 +405,10 @@ class Plugin {
 
       case Constants.NOTIFIER_UNLOADED:
         this.notifiers.delete(notifierId);
-        if (this.notifiers.size == 0) {
-          // We've unloaded the last notifier for the plugin, now unload
-          // the plugin.
+        if (this.adapters.size === 0 &&
+            this.notifiers.size === 0 &&
+            this.apiHandlers.size === 0) {
+          // We've unloaded everything for the plugin, now unload the plugin.
           this.unload();
           this.unloadCompletedPromise = notifier.unloadCompletedPromise;
           notifier.unloadCompletedPromise = null;
@@ -550,6 +603,11 @@ class Plugin {
           this.setCredentialsPromises.set(data.messageId, deferred);
           break;
         }
+        case Constants.API_REQUEST: {
+          data.messageId = this.generateMsgId();
+          this.apiRequestPromises.set(data.messageId, deferred);
+          break;
+        }
         default:
           break;
       }
@@ -591,6 +649,10 @@ class Plugin {
     this.notifyPromises.forEach((promise, key) => {
       promise.reject();
       this.notifyPromises.delete(key);
+    });
+    this.apiRequestPromises.forEach((promise, key) => {
+      promise.reject();
+      this.apiRequestPromises.delete(key);
     });
     this.ipcSocket.close();
   }

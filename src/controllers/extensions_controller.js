@@ -1,6 +1,7 @@
 'use strict';
 
 const AddonManager = require('../addon-manager');
+const {APIRequest} = require('gateway-addon');
 const UserProfile = require('../user-profile');
 const express = require('express');
 const fs = require('fs');
@@ -19,6 +20,48 @@ ExtensionsController.get('/', auth, (request, response) => {
   response.status(200).json(map);
 });
 
+/**
+ * Extension API handler.
+ */
+ExtensionsController.all(
+  '/:extensionId/api/*',
+  auth,
+  async (request, response) => {
+    const extensionId = request.params.extensionId;
+    const apiHandler = AddonManager.getAPIHandler(extensionId);
+    if (!apiHandler) {
+      response.status(404).send(`Extension "${extensionId}" not found.`);
+      return;
+    }
+
+    const req = new APIRequest({
+      method: request.method,
+      path: `/${request.path.split('/').slice(3).join('/')}`,
+      query: request.query,
+      body: request.body,
+    });
+
+    try {
+      const rsp = await apiHandler.handleRequest(req);
+      response.status(rsp.status);
+
+      if (rsp.contentType && rsp.content !== null) {
+        response.type(rsp.contentType);
+        response.send(rsp.content);
+      } else {
+        response.end();
+      }
+    } catch (e) {
+      console.error('Error calling API handler:', e);
+      response.status(500).send(e);
+    }
+  }
+);
+
+/**
+ * Static resource handler for extensions. This is intentionally
+ * unauthenticated, since we're just loading static content.
+ */
 ExtensionsController.get('/:extensionId/*', (request, response) => {
   const extensionId = request.params.extensionId;
   const relPath = request.path.split('/').slice(2).join('/');
