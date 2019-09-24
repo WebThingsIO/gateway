@@ -12,6 +12,7 @@
 'use strict';
 
 const AddonUtils = require('./addon-utils');
+const appInstance = require('./app-instance');
 const config = require('config');
 const Constants = require('./constants');
 const Deferred = require('./deferred');
@@ -698,9 +699,36 @@ class AddonManager extends EventEmitter {
       // This is a special case where we load the adapter directly
       // into the gateway, but we use IPC comms to talk to the
       // add-on (i.e. for testing)
-      const pluginClient = new PluginClient(manifest.id, {verbose: false});
+      const pluginClient = new PluginClient(
+        manifest.id,
+        'inproc',
+        appInstance.get(),
+        {verbose: false}
+      );
       try {
         const addonManagerProxy = await pluginClient.register();
+
+        // Set up an unload handler.
+        //
+        // When we're testing, we run in the same process and we need to close
+        // the sockets before the adapter.unload promise is resolved. So we
+        // hook into the plugin unloadedRcvdPromise.
+        addonManagerProxy.onUnload = () => {
+          const plugin = this.getPlugin(manifest.id);
+          if (plugin && plugin.unloadedRcvdPromise) {
+            plugin.unloadedRcvdPromise.promise.then((socketsClosedPromise) => {
+              pluginClient.unload();
+              socketsClosedPromise.resolve();
+            });
+          } else {
+            // Wait a small amount of time to allow the pluginUnloaded message
+            // to be processed by the server before closing.
+            setTimeout(() => {
+              pluginClient.unload();
+            }, 500);
+          }
+        };
+
         const addonLoader = dynamicRequire(addonPath);
         addonLoader(addonManagerProxy, newSettings, errorCallback);
       } catch (e) {
@@ -728,7 +756,7 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    PluginClient = require('./plugin/plugin-client');
+    PluginClient = require('gateway-addon').PluginClient;
     PluginServer = require('./plugin/plugin-server');
 
     this.pluginServer = new PluginServer(this, {verbose: false});
