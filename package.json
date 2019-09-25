@@ -56,7 +56,6 @@
     "ip-regex": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "mkdirp": "^0.5.1",
-    "nanomsg": "^4.1.0",
     "ncp": "^2.0.0",
     "nocache": "^2.1.0",
     "node-fetch": "^2.6.0",
