@@ -27,6 +27,7 @@ const Profile = {
       process.env.MOZIOT_HOME || config.get('profileDir')
     );
     this.configDir = path.join(this.baseDir, 'config');
+    this.dataDir = path.join(this.baseDir, 'data');
     this.sslDir = path.join(this.baseDir, 'ssl');
     this.uploadsDir = path.join(this.baseDir, 'uploads');
     this.mediaDir = path.join(this.baseDir, 'media');
@@ -78,6 +79,9 @@ const Profile = {
     // Create all required profile directories.
     if (!fs.existsSync(this.configDir)) {
       mkdirp.sync(this.configDir);
+    }
+    if (!fs.existsSync(this.dataDir)) {
+      mkdirp.sync(this.dataDir);
     }
     if (!fs.existsSync(this.sslDir)) {
       mkdirp.sync(this.sslDir);

@@ -668,6 +668,16 @@ class AddonManager extends EventEmitter {
       return;
     }
 
+    const dataPath = path.join(UserProfile.dataDir, manifest.id);
+    try {
+      // Create the add-on data directory, if necessary
+      if (!fs.existsSync(dataPath)) {
+        fs.mkdirSync(dataPath);
+      }
+    } catch (e) {
+      console.error(`Failed to create add-on data directory ${dataPath}:`, e);
+    }
+
     const errorCallback = (packageId, err) => {
       console.error(`Failed to load add-on ${packageId}:`, err);
     };
