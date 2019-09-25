@@ -628,16 +628,16 @@ class AddonManager extends EventEmitter {
 
       // If the old-style data is stored in the database, we need to transition
       // to the new format.
-      if (savedSettings.hasOwnProperty('moziot')) {
-        if (savedSettings.moziot.hasOwnProperty('enabled')) {
-          enabled = savedSettings.moziot.enabled;
-        }
-
-        if (savedSettings.moziot.hasOwnProperty('config')) {
-          await Settings.set(configKey, savedSettings.moziot.config);
-        }
+      if (savedSettings.hasOwnProperty('moziot') &&
+          savedSettings.moziot.hasOwnProperty('enabled')) {
+        enabled = savedSettings.moziot.enabled;
       } else if (savedSettings.hasOwnProperty('enabled')) {
         enabled = savedSettings.enabled;
+      }
+
+      if (savedSettings.hasOwnProperty('moziot') &&
+          savedSettings.moziot.hasOwnProperty('config')) {
+        await Settings.set(configKey, savedSettings.moziot.config);
       }
     } catch (_e) {
       // pass
