@@ -90,7 +90,7 @@ SettingsController.post('/reclaim', async (request, response) => {
   try {
     await fetch(`${config.get('ssltunnel.registration_endpoint')
     }/reclaim?name=${subdomain}`);
-    response.status(200).end();
+    response.status(200).json({});
   } catch (e) {
     console.error(e);
     response.statusMessage = `Error reclaiming domain - ${e}`;
@@ -119,8 +119,9 @@ SettingsController.post('/subscribe', async (request, response) => {
       response.statusMessage = `Error issuing certificate - ${err}`;
       response.status(400).end();
     } else {
-      const endpoint =
-        `https://${subdomain}.${config.get('ssltunnel.domain')}`;
+      const endpoint = {
+        url: `https://${subdomain}.${config.get('ssltunnel.domain')}`,
+      };
       TunnelService.start(response, endpoint);
       TunnelService.switchToHttps();
     }
@@ -139,7 +140,7 @@ SettingsController.post('/subscribe', async (request, response) => {
 SettingsController.post('/skiptunnel', async (request, response) => {
   try {
     await Settings.set('notunnel', true);
-    response.status(200).end();
+    response.status(200).json({});
   } catch (e) {
     console.error('Failed to set notunnel setting.');
     console.error(e);
@@ -150,8 +151,7 @@ SettingsController.post('/skiptunnel', async (request, response) => {
 SettingsController.get('/tunnelinfo', auth, async (request, response) => {
   try {
     const localDomainSettings = await Settings.getTunnelInfo();
-    response.send(localDomainSettings);
-    response.status(200).end();
+    response.status(200).json(localDomainSettings);
   } catch (e) {
     console.error('Failed to retrieve default settings for ' +
       'tunneltoken or local service discovery setting');
@@ -284,7 +284,7 @@ SettingsController.post('/system/actions', auth, (request, response) => {
     case 'restartGateway':
       if (Platform.implemented('restartGateway')) {
         if (Platform.restartGateway()) {
-          response.status(200).end();
+          response.status(200).json({});
         } else {
           response.status(500).send('Failed to restart gateway');
         }
@@ -295,7 +295,7 @@ SettingsController.post('/system/actions', auth, (request, response) => {
     case 'restartSystem':
       if (Platform.implemented('restartSystem')) {
         if (Platform.restartSystem()) {
-          response.status(200).end();
+          response.status(200).json({});
         } else {
           response.status(500).send('Failed to restart system');
         }
@@ -327,7 +327,7 @@ SettingsController.put('/network/dhcp', auth, (request, response) => {
 
   if (Platform.implemented('setDhcpServerStatus')) {
     if (Platform.setDhcpServerStatus(enabled)) {
-      response.status(200).end();
+      response.status(200).json({});
     } else {
       response.status(500).send('Failed to toggle DHCP');
     }
@@ -355,7 +355,7 @@ SettingsController.put('/network/lan', auth, (request, response) => {
 
   if (Platform.implemented('setLanMode')) {
     if (Platform.setLanMode(mode, options)) {
-      response.status(200).end();
+      response.status(200).json({});
     } else {
       response.status(500).send('Failed to update LAN configuration');
     }
@@ -383,7 +383,7 @@ SettingsController.put('/network/wan', auth, (request, response) => {
 
   if (Platform.implemented('setWanMode')) {
     if (Platform.setWanMode(mode, options)) {
-      response.status(200).end();
+      response.status(200).json({});
     } else {
       response.status(500).send('Failed to update WAN configuration');
     }
@@ -424,7 +424,7 @@ SettingsController.put('/network/wireless', auth, (request, response) => {
 
   if (Platform.implemented('setWirelessMode')) {
     if (Platform.setWirelessMode(enabled, mode, options)) {
-      response.status(200).end();
+      response.status(200).json({});
     } else {
       response.status(500).send('Failed to update wireless configuration');
     }

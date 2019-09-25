@@ -270,25 +270,7 @@ class NewWebThing {
       return;
     }
 
-    fetch('/new_things', {
-      method: 'POST',
-      body: JSON.stringify({url}),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        return response.text();
-      }
-
-      return response.json();
-    }).then((description) => {
-      if (typeof description === 'string') {
-        throw new Error(description);
-      }
-
+    API.addWebThing(url).then((description) => {
       // We don't support other gateways from this interface
       if (Array.isArray(description)) {
         this.label.innerText = fluent.getMessage('new-web-thing-multiple');
@@ -436,25 +418,7 @@ class NewWebThing {
       thing.iconData = this.iconData;
     }
 
-    fetch('/things', {
-      method: 'POST',
-      body: JSON.stringify(thing),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        return response.text();
-      }
-
-      return response.json();
-    }).then((description) => {
-      if (typeof description === 'string') {
-        throw new Error(description);
-      }
-
+    API.addThing(thing).then(() => {
       this.saveButton.innerHTML = fluent.getMessage('new-thing-saved');
 
       const cancelButton = document.getElementById('add-thing-cancel-button');

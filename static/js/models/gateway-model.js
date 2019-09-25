@@ -153,21 +153,8 @@ class GatewayModel extends Model {
   }
 
   refreshThings() {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
     return this.addQueue(() => {
-      return fetch('/things', opts).then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(`response status:${response.statusText}`);
-        }
-      }).then((things) => {
+      return API.getThings().then((things) => {
         things.forEach((description) => {
           const thingId = description.href.split('/').pop();
           this.setThing(thingId, description);
@@ -180,22 +167,8 @@ class GatewayModel extends Model {
   }
 
   refreshThing(thingId) {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
     return this.addQueue(() => {
-      return fetch(`/things/${encodeURIComponent(thingId)}`,
-                   opts).then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(`response status:${response.statusText}`);
-        }
-      }).then((description) => {
+      return API.getThing(thingId).then((description) => {
         if (!description) {
           throw new Error(`Unavailable Thing Description: ${description}`);
         }

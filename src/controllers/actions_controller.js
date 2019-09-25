@@ -198,7 +198,7 @@ ActionsController.delete(
       return;
     }
 
-    response.status(204).end();
+    response.sendStatus(204);
   });
 
 module.exports = ActionsController;

@@ -161,7 +161,7 @@ AddonsController.patch('/:addonId', async (request, response) => {
   try {
     await AddonManager.uninstallAddon(id, true, false);
     await AddonManager.installAddonFromUrl(id, url, checksum, false);
-    response.sendStatus(200);
+    response.status(200).json({});
   } catch (e) {
     console.error(`Failed to update add-on: ${id}\n${e}`);
     response.status(400).send(e);
@@ -173,7 +173,7 @@ AddonsController.delete('/:addonId', async (request, response) => {
 
   try {
     await AddonManager.uninstallAddon(addonId, false, true);
-    response.sendStatus(200);
+    response.sendStatus(204);
   } catch (e) {
     console.error(`Failed to uninstall add-on: ${addonId}\n${e}`);
     response.status(400).send(e);

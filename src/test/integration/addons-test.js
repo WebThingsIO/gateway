@@ -379,7 +379,7 @@ describe('addons', () => {
       .delete(`${Constants.ADDONS_PATH}/example-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(res2.status).toEqual(200);
+    expect(res2.status).toEqual(204);
 
     const res3 = await chai.request(server)
       .get(Constants.ADDONS_PATH)

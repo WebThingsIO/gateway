@@ -163,7 +163,7 @@ UpdatesController.post('/update', async (request, response) => {
   childProcess.exec('sudo systemctl start ' +
     'mozilla-iot-gateway.check-for-update.service');
 
-  response.end();
+  response.json({});
 });
 
 module.exports = UpdatesController;

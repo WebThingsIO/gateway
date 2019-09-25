@@ -20,10 +20,7 @@ const Notifications = {
 
     let subscription = await registration.pushManager.getSubscription();
     if (!subscription) {
-      const res = await fetch('/push/vapid-public-key', {
-        headers: API.headers(),
-      });
-      const vapid = await res.json();
+      const vapid = await API.getPushKey();
       if (vapid.error) {
         console.error('Error getting vapid key:', vapid.error);
         return;
@@ -34,15 +31,7 @@ const Notifications = {
         applicationServerKey: convertedVapidKey,
       });
     }
-    await fetch('/push/register', {
-      method: 'post',
-      headers: Object.assign({
-        'Content-Type': 'application/json',
-      }, API.headers()),
-      body: JSON.stringify({
-        subscription,
-      }),
-    });
+    await API.pushSubscribe(subscription);
   },
 };
 

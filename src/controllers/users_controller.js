@@ -124,7 +124,7 @@ UsersController.put('/:userId', auth, async (request, response) => {
   user.name = body.name;
 
   await Users.editUser(user);
-  response.sendStatus(200);
+  response.status(200).json({});
 });
 
 /**
@@ -134,7 +134,7 @@ UsersController.delete('/:userId', auth, async (request, response) => {
   const userId = request.params.userId;
 
   await Users.deleteUser(userId);
-  response.sendStatus(200);
+  response.sendStatus(204);
 });
 
 module.exports = UsersController;

@@ -68,24 +68,7 @@ const AddThingScreen = {
     // Timeout, in seconds.
     const timeout = 60;
 
-    const action = {
-      pair: {
-        input: {
-          timeout,
-        },
-      },
-    };
-    fetch('/actions', {
-      method: 'POST',
-      body: JSON.stringify(action),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      return response.json();
-    }).then((json) => {
+    API.startPairing(timeout).then((json) => {
       this.actionUrl = json.pair.href;
 
       this.pairingTimeout = setTimeout(() => {
@@ -122,20 +105,9 @@ const AddThingScreen = {
     if (!url) {
       return;
     }
-    fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${API.jwt}`,
-      },
-    }).then((response) => {
-      if (response.ok) {
-        this.actionUrl = null;
-      } else {
-        console.error(`Error cancelling pairing request ${
-          response.statusText}`);
-      }
+
+    API.cancelPairing(url).then(() => {
+      this.actionUrl = null;
     }).catch((error) => {
       console.error(`Error cancelling pairing request ${error}`);
     });
@@ -149,7 +121,7 @@ const AddThingScreen = {
     SettingsScreen.fetchInstalledAddonList(true).then(() => {
       if (SettingsScreen.installedAddons.has('thing-url-adapter')) {
         const addon = SettingsScreen.installedAddons.get('thing-url-adapter');
-        if (addon.moziot.enabled) {
+        if (addon.enabled) {
           this.addByUrlAnchor.classList.remove('hidden');
         }
       }

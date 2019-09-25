@@ -307,19 +307,7 @@ const SettingsScreen = {
           };
         }
 
-        fetch('/settings/network/lan', {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${API.jwt}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
+        API.setLanSettings(body).then(() => {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
@@ -369,19 +357,7 @@ const SettingsScreen = {
           },
         };
 
-        fetch('/settings/network/wireless', {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${API.jwt}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
+        API.setWlanSettings(body).then(() => {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
@@ -478,19 +454,7 @@ const SettingsScreen = {
           };
         }
 
-        fetch('/settings/network/wan', {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${API.jwt}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
+        API.setWanSettings(body).then(() => {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
@@ -531,33 +495,9 @@ const SettingsScreen = {
           enabled: this.elements.network.router.lan.dhcp.checked,
         };
 
-        fetch('/settings/network/lan', {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${API.jwt}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(lanBody),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
-          return fetch('/settings/network/dhcp', {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${API.jwt}`,
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dhcpBody),
-          });
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
+        API.setLanSettings(lanBody).then(() => {
+          return API.setDhcpSettings(dhcpBody);
+        }).then(() => {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
@@ -615,19 +555,7 @@ const SettingsScreen = {
           };
         }
 
-        fetch('/settings/network/wireless', {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${API.jwt}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Error status: ${res.status}`);
-          }
-
+        API.setWlanSettings(body).then(() => {
           page('/settings/network');
           ev.target.disabled = false;
         }).catch((e) => {
@@ -861,9 +789,6 @@ const SettingsScreen = {
 
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
-    const opts = {
-      headers: API.headers(),
-    };
 
     const addDomainLocalButton =
       document.getElementById('domain-settings-local-update');
@@ -883,9 +808,7 @@ const SettingsScreen = {
     //     this.onTunnelDomainClick();
     // });
 
-    fetch('/settings/tunnelinfo', opts).then((response) => {
-      return response.json();
-    }).then((body) => {
+    API.getTunnelInfo().then((body) => {
       const localDomainCheckbox =
         document.getElementById('domain-settings-local-checkbox');
 
@@ -912,15 +835,7 @@ const SettingsScreen = {
     const error = document.getElementById('domain-settings-error');
     const value = e.target.checked ? true : false;
 
-    fetch('/settings/domain', {
-      method: 'PUT',
-      body: JSON.stringify({local: {multicastDNSstate: value}}),
-      headers: {
-        Authorization: `Bearer ${window.API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then(() => {
+    API.setDomainSettings({local: {multicastDNSstate: value}}).then(() => {
       document.getElementById('domain-settings-local-update').disabled = !value;
       document.getElementById('domain-settings-local-name').disabled = !value;
       error.classList.add('hidden');
@@ -942,35 +857,26 @@ const SettingsScreen = {
       document.getElementById('domain-settings-local-name');
     const error = document.getElementById('domain-settings-error');
 
-    fetch('/settings/domain', {
-      method: 'PUT',
-      body: JSON.stringify({local: {localDNSname: localDomainName.value}}),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      return response.json();
-    }).then((domainJson) => {
-      // if the update was successful, we have a legit local domain and mDNS
-      // is active then redirect
-      if (domainJson.update && domainJson.localDomain.length > 0) {
-        if (domainJson.mDNSstate) {
-          App.showMessage('Update succeeded.', 3000);
+    API.setDomainSettings({local: {localDNSname: localDomainName.value}})
+      .then((domainJson) => {
+        // if the update was successful, we have a legit local domain and mDNS
+        // is active then redirect
+        if (domainJson.update && domainJson.localDomain.length > 0) {
+          if (domainJson.mDNSstate) {
+            App.showMessage('Update succeeded.', 3000);
+          }
+        } else {
+          error.classList.remove('hidden');
+          error.textContent = domainJson.error;
+          document.getElementById('domain-settings-local-name')
+            .value = domainJson.localDomain;
         }
-      } else {
+      }).catch((err) => {
+        const errorMessage = `${fluent.getMessage('error')}: ${err}`;
+        console.error(errorMessage);
         error.classList.remove('hidden');
-        error.textContent = domainJson.error;
-        document.getElementById('domain-settings-local-name')
-          .value = domainJson.localDomain;
-      }
-    }).catch((err) => {
-      const errorMessage = `${fluent.getMessage('error')}: ${err}`;
-      console.error(errorMessage);
-      error.classList.remove('hidden');
-      error.textContent = err;
-    });
+        error.textContent = err;
+      });
   },
 
   // The button controller to update the mozilla tunnel domain settings.
@@ -1015,11 +921,7 @@ const SettingsScreen = {
     this.hideNetworkElements();
     this.elements.network.main.classList.remove('hidden');
 
-    fetch('/settings/system/platform', {
-      headers: API.headers(),
-    }).then((res) => {
-      return res.json();
-    }).then((body) => {
+    API.getPlatform().then((body) => {
       switch (body.os) {
         case 'linux-raspbian':
           this.elements.network.client.main.classList.remove('hidden');
@@ -1029,19 +931,15 @@ const SettingsScreen = {
           break;
         default:
           this.elements.network.unsupported.main.classList.remove('hidden');
-          break;
+          return Promise.resolve(null);
       }
 
-      return fetch('/settings/network/addresses', {
-        headers: API.headers(),
-      });
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
+      return API.getNetworkAddresses();
     }).then((body) => {
+      if (!body) {
+        return;
+      }
+
       this.elements.network.client.ethernet.mainIp.innerText = body.lan;
       this.elements.network.router.lan.mainIp.innerText = body.lan;
       this.elements.network.client.wifi.mainIp.innerText = body.wlan.ip;
@@ -1064,18 +962,7 @@ const SettingsScreen = {
 
     this.elements.network.client.ethernet.main.classList.remove('hidden');
 
-    fetch('/settings/network/lan', {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
-    }).then((body) => {
+    API.getLanSettings().then((body) => {
       this.elements.network.client.ethernet.mode.value = body.mode || 'dhcp';
       this.elements.network.client.ethernet.ip.value = body.ipdaddr || '';
       this.elements.network.client.ethernet.netmask.value =
@@ -1097,14 +984,7 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.client.wifi.main.classList.remove('hidden');
 
-    fetch('/settings/network/wireless/networks', {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    }).then((res) => {
-      return res.json();
-    }).then((body) => {
+    API.getWirelessNetworks().then((body) => {
       this.elements.network.client.wifi.list.innerHTML = '';
       body.forEach((network) => new WirelessNetwork(network));
     }).catch((e) => {
@@ -1136,18 +1016,7 @@ const SettingsScreen = {
 
     this.elements.network.router.wan.main.classList.remove('hidden');
 
-    fetch('/settings/network/wan', {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
-    }).then((body) => {
+    API.getWanSettings().then((body) => {
       this.elements.network.router.wan.mode.value = body.mode || 'dhcp';
       this.elements.network.router.wan.ip.value = body.ipdaddr || '';
       this.elements.network.router.wan.netmask.value = body.netmask || '';
@@ -1174,34 +1043,12 @@ const SettingsScreen = {
 
     this.elements.network.router.lan.main.classList.remove('hidden');
 
-    fetch('/settings/network/lan', {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
-    }).then((body) => {
+    API.getLanSettings().then((body) => {
       this.elements.network.router.lan.ip.value = body.ipdaddr || '192.168.2.1';
       this.elements.network.router.lan.netmask.value =
         body.netmask || '255.255.255.0';
 
-      return fetch('/settings/network/dhcp', {
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-        },
-      });
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
+      return API.getDhcpSettings();
     }).then((body) => {
       this.elements.network.router.lan.dhcp.checked = body.enabled;
     }).catch((e) => {
@@ -1218,18 +1065,7 @@ const SettingsScreen = {
     this.elements.network.main.classList.remove('hidden');
     this.elements.network.router.wlan.main.classList.remove('hidden');
 
-    fetch('/settings/network/wireless', {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error status: ${res.status}`);
-      }
-
-      return res.json();
-    }).then((body) => {
+    API.getWlanSettings().then((body) => {
       this.elements.network.router.wlan.enable.checked = body.enabled;
       this.elements.network.router.wlan.ssid.value = body.options.ssid || '';
       this.elements.network.router.wlan.password.value = body.options.key || '';
@@ -1373,14 +1209,8 @@ const SettingsScreen = {
   showAdapterSettings: function() {
     this.adapterSettings.classList.remove('hidden');
 
-    const opts = {
-      headers: API.headers(),
-    };
-
     // Fetch a list of adapters from the server
-    fetch('/adapters', opts).then((response) => {
-      return response.json();
-    }).then((adapters) => {
+    API.getAdapters().then((adapters) => {
       const noAdapters = document.getElementById('no-adapters');
       const adaptersList = document.getElementById('adapters-list');
       adaptersList.innerHTML = '';
@@ -1411,25 +1241,22 @@ const SettingsScreen = {
       });
     }
 
-    this.fetchInstalledAddonsDeferred = fetch('/addons', {
-      headers: API.headers(),
-    }).then((response) => {
-      return response.json();
-    }).then((body) => {
-      if (!body) {
-        return;
-      }
-
-      // Store a map of id->version.
-      this.installedAddons.clear();
-      for (const s of body) {
-        try {
-          this.installedAddons.set(s.id, s);
-        } catch (err) {
-          console.error(`Failed to parse add-on settings: ${err}`);
+    this.fetchInstalledAddonsDeferred =
+      API.getInstalledAddons().then((body) => {
+        if (!body) {
+          return;
         }
-      }
-    });
+
+        // Store a map of id->version.
+        this.installedAddons.clear();
+        for (const s of body) {
+          try {
+            this.installedAddons.set(s.id, s);
+          } catch (err) {
+            console.error(`Failed to parse add-on settings: ${err}`);
+          }
+        }
+      });
 
     return this.fetchInstalledAddonsDeferred;
   },
@@ -1453,11 +1280,7 @@ const SettingsScreen = {
       });
     }
 
-    this.fetchAvailableAddonsDeferred = fetch('/settings/addonsInfo', {
-      headers: API.headers(),
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
+    this.fetchAvailableAddonsDeferred = API.getAddonsInfo().then((data) => {
       if (!data || !data.urls || !data.architecture || !data.version ||
           !data.nodeVersion) {
         return;
@@ -1512,7 +1335,7 @@ const SettingsScreen = {
             version: addon.version,
             url: addon.url,
             checksum: addon.checksum,
-            type: addon.type,
+            primary_type: addon.primary_type,
             installed: this.installedAddons.has(addon.id),
           };
 
@@ -1749,10 +1572,7 @@ const SettingsScreen = {
     updateNow.removeEventListener('click', this.onUpdateClick);
     updateNow.classList.add('disabled');
 
-    fetch('/updates/update', {
-      headers: API.headers(),
-      method: 'POST',
-    }).then(() => {
+    API.startUpdate().then(() => {
       updateNow.textContent = fluent.getMessage('in-progress');
       let isDown = false;
       function checkStatus() {
@@ -1779,11 +1599,7 @@ const SettingsScreen = {
   showAuthorizationSettings: function() {
     this.authorizationSettings.classList.remove('hidden');
 
-    fetch('/authorizations', {
-      headers: API.headers(),
-    }).then((response) => {
-      return response.json();
-    }).then((clients) => {
+    API.getAuthorizations().then((clients) => {
       const authorizationsList = document.getElementById('authorizations');
       const noAuthorizations = document.getElementById('no-authorizations');
 
@@ -1833,10 +1649,7 @@ const SettingsScreen = {
     }
     const clientId = revoke.dataset.clientId;
 
-    fetch(`/authorizations/${encodeURIComponent(clientId)}`, {
-      headers: API.headers(),
-      method: 'DELETE',
-    }).then(() => {
+    API.revokeAuthorization(clientId).then(() => {
       const authorization = revoke.parentNode;
       const authorizationsList = authorization.parentNode;
       authorizationsList.removeChild(authorization);
@@ -1856,24 +1669,12 @@ const SettingsScreen = {
     document.getElementById('view-internal-logs').href = `/internal-logs?jwt=${API.jwt}`;
     const sshCheckbox = document.getElementById('enable-ssh-checkbox');
 
-    fetch('/settings/system/ssh', {
-      headers: API.headers(),
-    }).then((response) => {
-      return response.json();
-    }).then((body) => {
+    API.getSshStatus().then((body) => {
       sshCheckbox.checked = body.enabled;
       if (body.toggleImplemented) {
         sshCheckbox.addEventListener('change', (e) => {
           const value = e.target.checked ? true : false;
-          fetch('/settings/system/ssh', {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${API.jwt}`,
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({enabled: value}),
-          }).catch((e) => {
+          API.setSshStatus(value).catch((e) => {
             console.error(`Failed to toggle SSH: ${e}`);
           });
         });

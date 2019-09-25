@@ -108,14 +108,7 @@ class ImageDetail {
       return;
     }
 
-    fetch(this.imageHref, {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-      },
-      cache: 'reload',
-    }).then((res) => {
-      return res.blob();
-    }).then((data) => {
+    API.loadImage(this.imageHref).then((data) => {
       img.src = URL.createObjectURL(data);
     }).catch((e) => {
       console.error(`Failed to load image: ${e}`);

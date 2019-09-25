@@ -117,9 +117,7 @@ class LogsScreen {
       this.logsHeader.textContent = 'Logs';
     }
 
-    fetch(`/logs/.schema`, {headers: API.headers()}).then((res) => {
-      return res.json();
-    }).then((schema) => {
+    API.getLogs().then((schema) => {
       for (const id in this.logs) {
         const log = this.logs[id];
         log.remove();
@@ -260,32 +258,29 @@ class LogsScreen {
         break;
     }
 
-    const res = await fetch('/logs', {
-      method: 'POST',
-      headers: Object.assign(API.headers(),
-                             {'Content-Type': 'application/json'}),
-      body: JSON.stringify({
-        descr: {
-          type: 'property',
-          thing: this.createLogDevice.value,
-          property: this.createLogProperty.value,
-        },
-        maxAge,
-      }),
+    API.addLog({
+      descr: {
+        type: 'property',
+        thing: this.createLogDevice.value,
+        property: this.createLogProperty.value,
+      },
+      maxAge,
+    }).then(([ok, body]) => {
+      if (ok) {
+        this.createLogHint.classList.add('hidden');
+        this.hideCreateLog();
+        return;
+      }
+
+      if (body) {
+        App.showMessage(
+          `${fluent.getMessage('logs-unable-to-create')}: ${body}`,
+          5000
+        );
+      } else {
+        App.showMessage(fluent.getMessage('logs-unable-to-create'), 5000);
+      }
     });
-
-    if (res.ok) {
-      this.createLogHint.classList.add('hidden');
-      this.hideCreateLog();
-      return;
-    }
-
-    try {
-      const message = await res.text();
-      App.showMessage(`${fluent.getMessage('logs-unable-to-create')}: ${message}`, 5000);
-    } catch (_) {
-      App.showMessage(fluent.getMessage('logs-unable-to-create'), 5000);
-    }
   }
 
   onWindowResize() {
@@ -323,16 +318,10 @@ class LogsScreen {
     }
     const thing = this.logDescr.thing;
     const property = this.logDescr.property;
-    const path = `/logs/things/${thing}/properties/${property}`;
-    fetch(path, {
-      method: 'DELETE',
-      headers: API.headers(),
-    }).then((res) => {
-      if (!res.ok) {
-        App.showMessage(fluent.getMessage('logs-server-remove-error'), 5000);
-      } else {
-        page('/logs');
-      }
+    API.deleteLog(thing, property).then(() => {
+      page('/logs');
+    }).catch(() => {
+      App.showMessage(fluent.getMessage('logs-server-remove-error'), 5000);
     });
   }
 }

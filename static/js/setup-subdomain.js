@@ -10,6 +10,7 @@
 
 'use strict';
 
+const API = require('./api');
 const fluent = require('./fluent');
 
 function setupForm() {
@@ -107,81 +108,59 @@ function setupForm() {
     displayMessage(fluent.getMessage('processing'), 'message');
 
     // Call the settings controller to subscribe the domain in the gateway.
-    const action = {
-      email: email.value.trim(),
-      subdomain: subdomain.value.trim(),
-      reclamationToken: reclamationToken.value.trim(),
-      optout: !optIn.checked,
-    };
-    fetch('/settings/subscribe', {
-      method: 'POST',
-      body: JSON.stringify(action),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (response.statusText.indexOf('UnavailableName') > -1) {
-        validateInput();
-
-        if (response.statusText.indexOf('ReclamationPossible') > -1) {
-          const text1 = document.createTextNode(
-            `${fluent.getMessage('reclaim-prompt')} `
-          );
-          const reclaim = document.createElement('a');
-          reclaim.innerText = `${fluent.getMessage('click-here')}.`;
-          reclaim.href = '#';
-          reclaim.onclick = () => {
-            document.getElementById('opt-in-group').style.display = 'none';
-            reclamationToken.style.display = 'inline-block';
-            reclamationToken.focus();
-            errorMessage.textContent =
-              fluent.getMessage('check-email-for-token');
-
-            fetch('/settings/reclaim', {
-              method: 'POST',
-              body: JSON.stringify({subdomain: subdomain.value}),
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-            }).catch(() => {
-              displayMessage(fluent.getMessage('reclaim-failed'), 'error');
-            });
-          };
-
-          errorMessage.innerHTML = '';
-          errorMessage.appendChild(text1);
-          errorMessage.appendChild(reclaim);
-
-          errorMessage.classList.remove('hidden');
-          errorMessage.classList.remove('message');
-          errorMessage.classList.add('error');
-          return Promise.reject();
-        } else {
-          displayMessage(fluent.getMessage('subdomain-already-used'),
-                         'error');
-          createDomainButton.disabled = false;
-          return Promise.reject();
-        }
-      } else if (response.statusText.indexOf('ReclamationTokenMismatch') > -1) {
-        displayMessage(fluent.getMessage('invalid-reclamation-token'), 'error');
-        createDomainButton.disabled = false;
-        return Promise.reject();
-      } else {
-        return response.text();
-      }
-    }).then((body) => {
-      if (body) {
-        displayMessage(fluent.getMessage('domain-success'),
-                       'message');
+    API.setupTunnel(
+      email.value.trim(),
+      subdomain.value.trim(),
+      reclamationToken.value.trim(),
+      !optIn.checked,
+    ).then(([ok, body]) => {
+      if (ok) {
+        displayMessage(fluent.getMessage('domain-success'), 'message');
         setTimeout(() => {
-          window.location.replace(body);
+          window.location.replace(body.url);
         }, 5000);
       } else {
-        displayMessage(fluent.getMessage('issuing-error'),
-                       'error');
         createDomainButton.disabled = false;
+
+        if (body.indexOf('UnavailableName') > -1) {
+          validateInput();
+
+          if (body.indexOf('ReclamationPossible') > -1) {
+            const text1 = document.createTextNode(
+              `${fluent.getMessage('reclaim-prompt')} `
+            );
+            const reclaim = document.createElement('a');
+            reclaim.innerText = `${fluent.getMessage('click-here')}.`;
+            reclaim.href = '#';
+            reclaim.onclick = () => {
+              document.getElementById('opt-in-group').style.display = 'none';
+              reclamationToken.style.display = 'inline-block';
+              reclamationToken.focus();
+              errorMessage.textContent =
+                fluent.getMessage('check-email-for-token');
+
+              API.reclaimDomain(subdomain.value).catch(() => {
+                displayMessage(fluent.getMessage('reclaim-failed'), 'error');
+              });
+            };
+
+            errorMessage.innerHTML = '';
+            errorMessage.appendChild(text1);
+            errorMessage.appendChild(reclaim);
+
+            errorMessage.classList.remove('hidden');
+            errorMessage.classList.remove('message');
+            errorMessage.classList.add('error');
+          } else {
+            displayMessage(fluent.getMessage('subdomain-already-used'),
+                           'error');
+          }
+        } else if (body.indexOf('ReclamationTokenMismatch') > -1) {
+          displayMessage(fluent.getMessage('invalid-reclamation-token'),
+                         'error');
+        } else {
+          displayMessage(fluent.getMessage('issuing-error'), 'error');
+        }
       }
     }, () => {});
   }
@@ -201,19 +180,14 @@ function setupForm() {
     displayMessage(fluent.getMessage('processing'), 'message');
 
     // call the settings controller to skip the domain subscription
-    fetch('/settings/skiptunnel', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-      },
-    }).then((response) => {
-      if (response.ok) {
+    API.skipTunnel().then(([ok, body]) => {
+      if (ok) {
         displayMessage(fluent.getMessage('redirecting'), 'message');
         setTimeout(() => {
           window.location.replace(`http://${window.location.host}`);
         }, 1000);
       } else {
-        displayMessage(response.statusText, 'error');
+        displayMessage(body, 'error');
       }
     }).catch((error) => {
       displayMessage(error, 'error');

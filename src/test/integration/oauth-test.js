@@ -187,7 +187,7 @@ describe('oauth/', function() {
       .delete(`${Constants.OAUTHCLIENTS_PATH}/${CLIENT_ID}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT));
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
 
     res = await chai.request(server)
       .get(Constants.OAUTHCLIENTS_PATH)

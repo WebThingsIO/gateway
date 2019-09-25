@@ -218,20 +218,12 @@ class ActionInputForm {
 
     let body;
     if (input) {
-      body = JSON.stringify({[this.name]: {input}});
+      body = {[this.name]: {input}};
     } else {
-      body = JSON.stringify({[this.name]: {}});
+      body = {[this.name]: {input: {}}};
     }
 
-    fetch(this.href, {
-      method: 'POST',
-      body,
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then(() => {
+    API.postJson(this.href, body).then(() => {
       window.history.back();
     }).catch((e) => {
       console.error(`Error performing action "${this.name}": ${e}`);
