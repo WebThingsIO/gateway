@@ -13,13 +13,14 @@
 
 const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
+const appInstance = require('../app-instance');
 const config = require('config');
 const Constants = require('../constants');
 const db = require('../db');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
-const IpcSocket = require('./ipc');
+const {IpcSocket} = require('gateway-addon');
 const NotifierProxy = require('./notifier-proxy');
 const OutletProxy = require('./outlet-proxy');
 const path = require('path');
@@ -45,8 +46,10 @@ class Plugin {
     this.ipcBaseAddr = `gateway.plugin.${this.pluginId}`;
 
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
+                                   config.get('ipc.protocol'),
                                    this.ipcBaseAddr,
-                                   this.onMsg.bind(this));
+                                   this.onMsg.bind(this),
+                                   appInstance.get());
     this.ipcSocket.bind();
     this.exec = '';
     this.execPath = '.';

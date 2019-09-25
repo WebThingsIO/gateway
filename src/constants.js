@@ -92,6 +92,7 @@ exports.REGISTER_PLUGIN_REPLY = 'registerPluginReply';
 exports.REMOVE_ACTION = 'removeAction';
 exports.REMOVE_ACTION_REJECTED = 'removeActionRejected';
 exports.REMOVE_ACTION_RESOLVED = 'removeActionResolved';
+exports.REMOVE_MOCK_DEVICE = 'removeMockDevice';
 exports.REMOVE_THING = 'removeThing';
 exports.REQUEST_ACTION = 'requestAction';
 exports.REQUEST_ACTION_REJECTED = 'requestActionRejected';

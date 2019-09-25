@@ -17,7 +17,7 @@ const config = require('config');
 const Constants = require('./constants');
 const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
-const PluginClient = require('./plugin/plugin-client');
+const {PluginClient} = require('gateway-addon');
 const db = require('./db');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
@@ -53,7 +53,12 @@ async function loadAddon(addonPath, verbose) {
     newSettings.moziot.config = {};
   }
 
-  const pluginClient = new PluginClient(packageName, {verbose});
+  const pluginClient = new PluginClient(
+    packageName,
+    config.get('ipc.protocol'),
+    null,
+    {verbose}
+  );
 
   return pluginClient.register()
     .catch((e) => {

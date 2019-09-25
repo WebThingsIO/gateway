@@ -13,9 +13,11 @@
 
 'use strict';
 
+const appInstance = require('../app-instance');
+const config = require('config');
 const Constants = require('../constants');
 const EventEmitter = require('events');
-const IpcSocket = require('./ipc');
+const {IpcSocket} = require('gateway-addon');
 const Plugin = require('./plugin');
 const UserProfile = require('../user-profile');
 
@@ -28,8 +30,10 @@ class PluginServer extends EventEmitter {
     this.plugins = new Map();
 
     this.ipcSocket = new IpcSocket('PluginServer', 'rep',
+                                   config.get('ipc.protocol'),
                                    'gateway.addonManager',
-                                   this.onMsg.bind(this));
+                                   this.onMsg.bind(this),
+                                   appInstance.get());
     this.ipcSocket.bind();
     this.verbose &&
       console.log('Server bound to', this.ipcSocket.ipcAddr);
