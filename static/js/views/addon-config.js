@@ -25,6 +25,7 @@ class AddonConfig {
     this.schema = metadata.schema;
     this.id = id;
     this.name = metadata.name;
+    this.primaryType = metadata.primary_type;
     this.container = document.getElementById('addon-config-settings');
     this.render();
   }
@@ -58,6 +59,20 @@ class AddonConfig {
    * Render AddonConfig view and add to DOM.
    */
   render() {
+    const icon = this.container.querySelector('.section-title-icon');
+    switch (this.primaryType) {
+      case 'adapter':
+        icon.src = '/optimized-images/adapters-icon.png';
+        break;
+      case 'notifier':
+        icon.src = '/optimized-images/thing-icons/notification.svg';
+        break;
+      case 'extension':
+      default:
+        icon.src = '/optimized-images/add-on.svg';
+        break;
+    }
+
     API.getAddonConfig(this.id)
       .then((config) => {
         this.configForm = new SchemaForm(
