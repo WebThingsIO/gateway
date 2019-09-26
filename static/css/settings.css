@@ -370,7 +370,8 @@
   background-image: url('../optimized-images/adapters-icon.png');
 }
 
-.addon-settings-header {
+.addon-settings-header,
+.addon-settings-header.extension {
   background-image: url('../optimized-images/add-on.svg');
 }
 
@@ -380,10 +381,6 @@
 
 .addon-settings-header.notifier {
   background-image: url('../optimized-images/thing-icons/notification.svg');
-}
-
-.addon-settings-header.extension {
-  /* TODO */
 }
 
 .addon-settings-header.service {
