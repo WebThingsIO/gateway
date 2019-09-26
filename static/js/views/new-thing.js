@@ -326,10 +326,7 @@ class NewThing {
   handleSubmit() {
     this.submitButton.disabled = true;
 
-    const data = {
-      thingId: this.id,
-    };
-
+    const data = {};
     if (this.requiresPin()) {
       data.pin = this.pinInput.value.trim();
     } else if (this.requiresCredentials()) {
@@ -337,26 +334,8 @@ class NewThing {
       data.password = this.passwordInput.value;
     }
 
-    fetch('/things', {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        return response.text();
-      }
-
-      return response.json();
-    }).then((json) => {
-      if (typeof json === 'string') {
-        throw new Error(json);
-      }
-
-      this.description = json;
+    API.setThingCredentials(this.id, data).then((description) => {
+      this.description = description;
 
       if (this.requiresPin()) {
         this.pinError.classList.add('hidden');
@@ -527,17 +506,7 @@ class NewThing {
       thing.iconData = this.iconData;
     }
 
-    fetch('/things', {
-      method: 'POST',
-      body: JSON.stringify(thing),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      return response.json();
-    }).then(() => {
+    API.addThing(thing).then(() => {
       this.saveButton.textContent = fluent.getMessage('new-thing-saved');
 
       const cancelButton = document.getElementById('add-thing-cancel-button');

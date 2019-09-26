@@ -39,7 +39,7 @@ OAuthClientsController.delete('/:clientId', async (request: express.Request, res
   let user = (request as any).jwt.user;
 
   await OAuthClients.revokeClientAuthorization(user, clientId);
-  response.sendStatus(200);
+  response.sendStatus(204);
 });
 
 export default OAuthClientsController;

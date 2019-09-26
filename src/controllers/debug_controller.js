@@ -62,7 +62,7 @@ debugController.get('/addNewThing', (request, response) => {
   }, () => {
     console.log('debugController: addNewThing cancelled');
   });
-  response.status(204).send();
+  response.sendStatus(204);
 });
 
 /**
@@ -70,7 +70,7 @@ debugController.get('/addNewThing', (request, response) => {
  */
 debugController.get('/cancelAddNewThing', (request, response) => {
   addonManager.cancelAddNewThing();
-  response.status(204).send();
+  response.sendStatus(204);
 });
 
 /**
@@ -79,7 +79,7 @@ debugController.get('/cancelAddNewThing', (request, response) => {
 debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
   const thingId = request.params.thingId;
   addonManager.cancelRemoveThing(thingId);
-  response.status(204).send();
+  response.sendStatus(204);
 });
 
 /**

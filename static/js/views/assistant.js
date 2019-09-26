@@ -84,21 +84,7 @@ const AssistantScreen = {
   },
 
   submitCommand: function(text) {
-    const opts = {
-      method: 'POST',
-      cache: 'default',
-      body: JSON.stringify({text}),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
-
-    return fetch('/commands', opts).then((response) => {
-      return Promise.all([Promise.resolve(response.ok), response.json()]);
-    }).then((values) => {
-      const [ok, body] = values;
+    return API.submitAssistantCommand(text).then(([ok, body]) => {
       if (!ok) {
         let error = 'Sorry, something went wrong.';
         if (body.hasOwnProperty('message')) {

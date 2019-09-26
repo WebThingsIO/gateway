@@ -700,6 +700,7 @@ class AddonManager extends EventEmitter {
     if (savedConfig) {
       newSettings.moziot.config = savedConfig;
     } else {
+      await Settings.set(configKey, cfg);
       newSettings.moziot.config = cfg;
     }
 

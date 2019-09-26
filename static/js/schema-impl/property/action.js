@@ -53,15 +53,7 @@ class ActionDetail {
   handleClick() {
     const input = {};
     if (typeof this.input === 'undefined') {
-      fetch(this.href, {
-        method: 'POST',
-        body: JSON.stringify({[this.name]: {input}}),
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).catch((e) => {
+      API.postJson(this.href, {[this.name]: {input}}).catch((e) => {
         console.error(`Error performing action "${this.name}": ${e}`);
       });
     } else {

@@ -29,9 +29,7 @@ const RulesScreen = {
    * @return {Promise<Array<RuleDescription>>}
    */
   readRules: function readRules() {
-    return fetch('/rules', {headers: API.headers()}).then((res) => {
-      return res.json();
-    }).then((fetchedRules) => {
+    return API.getRules().then((fetchedRules) => {
       this.rulesList.querySelectorAll('.rule').forEach((elt) => {
         elt.parentNode.removeChild(elt);
       });

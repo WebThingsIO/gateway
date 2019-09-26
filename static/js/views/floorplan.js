@@ -303,36 +303,15 @@ const FloorplanScreen = {
    * @param {Event} e A change event on the file input.
    */
   upload: function(e) {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
     this.uploadButton.classList.add('loading');
-    const headers = {
-      Authorization: `Bearer ${API.jwt}`,
-    };
 
-    fetch('/uploads', {
-      method: 'POST',
-      body: formData,
-      headers,
-    }).then((response) => {
+    API.uploadFloorplan(e.target.files[0]).then(() => {
       this.uploadButton.classList.remove('loading');
-      if (response.ok) {
-        fetch('/uploads/floorplan.svg', {
-          method: 'GET',
-          headers,
-          // Make sure we update the cache with the new floorplan
-          cache: 'reload',
-        }).then(() => {
-          // Add a timestamp to the background image to force image reload
-          const timestamp = Date.now();
-          this.floorplan.setAttribute(
-            'style',
-            `background-image: url("/uploads/floorplan.svg?t=${timestamp}")`);
-        });
-      } else {
-        console.error('Failed to upload floorplan');
-      }
+
+      API.loadImage('/uploads/floorplan.svg').then((data) => {
+        this.floorplan.style.backgroundImage =
+          `url(${URL.createObjectURL(data)})`;
+      });
     }).catch((error) => {
       this.uploadButton.classList.remove('loading');
       console.error(`Failed to upload floorplan ${error}`);
@@ -420,26 +399,10 @@ const FloorplanScreen = {
     const thingUrl = decodeURI(thing.dataset.href);
     thing.style.cursor = '';
 
-    // HTTP PATCH request to set x and y co-ordinates of Thing in database.
-    const payload = {
-      floorplanX: x,
-      floorplanY: y,
-    };
-    fetch(thingUrl, {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      if (!response.ok) {
-        console.error(`Failed to move thing ${thingUrl}`);
-      }
-    }).catch((e) => {
-      console.error(`Error trying to move thing ${thingUrl} ${e}`);
-    });
+    API.setThingFloorplanPosition(thingUrl.split('/').slice(-1)[0], x, y)
+      .catch((e) => {
+        console.error(`Error trying to move thing ${thingUrl} ${e}`);
+      });
 
     // Reset co-ordinates
     this.selectedThing = null;

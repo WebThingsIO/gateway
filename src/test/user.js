@@ -80,7 +80,7 @@ async function deleteUser(server, jwt, userId) {
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
     .send();
-  if (res.status !== 200) {
+  if (res.status !== 204) {
     throw res;
   }
   return res;

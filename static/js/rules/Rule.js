@@ -43,26 +43,17 @@ class Rule {
     if (this.onUpdate) {
       this.onUpdate();
     }
+
     const desc = this.toDescription();
     if (!desc) {
       return Promise.reject('invalid description');
     }
 
-    const fetchOptions = {
-      headers: API.headers(),
-      method: 'PUT',
-      body: JSON.stringify(desc),
-    };
-    fetchOptions.headers['Content-Type'] = 'application/json';
-
     let request = null;
     if (typeof this.id !== 'undefined') {
-      request = fetch(`/rules/${encodeURIComponent(this.id)}`, fetchOptions);
+      request = API.updateRule(this.id, desc);
     } else {
-      fetchOptions.method = 'POST';
-      request = fetch('/rules/', fetchOptions).then((res) => {
-        return res.json();
-      }).then((rule) => {
+      request = API.addRule(desc).then((rule) => {
         this.id = rule.id;
       });
     }
@@ -74,16 +65,11 @@ class Rule {
    * @return {Promise}
    */
   delete() {
-    const fetchOptions = {
-      headers: API.headers(),
-      method: 'DELETE',
-    };
-
     if (typeof this.id === 'undefined') {
       return;
     }
 
-    return fetch(`/rules/${encodeURIComponent(this.id)}`, fetchOptions);
+    return API.deleteRule(this.id);
   }
 
   /**

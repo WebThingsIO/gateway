@@ -15,7 +15,7 @@ const express = require('express');
 const PingController = express.Router();
 
 PingController.get('/', (request, response) => {
-  response.status(204).end();
+  response.sendStatus(204);
 });
 
 module.exports = PingController;

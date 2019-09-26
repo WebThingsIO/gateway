@@ -262,7 +262,7 @@ OAuthController.get('/local-token-service', async (request: express.Request, res
   };
   request.body = tokenRequest;
   request.headers.authorization = 'Basic ' +
-    new Buffer(localClient.id + ':' + localClient.secret).toString('base64');
+    Buffer.from(localClient.id + ':' + localClient.secret).toString('base64');
   let token = await handleAccessTokenRequest(request, response);
   if (token) {
     response.render('local-token-service', {

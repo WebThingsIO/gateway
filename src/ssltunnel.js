@@ -102,13 +102,13 @@ const TunnelService = {
             this.connected.reject();
             if (needToSend) {
               responseSent = true;
-              response.status(400).end();
+              response.sendStatus(400);
             }
           } else if (data.indexOf('connect=') > -1) {
             this.connected.resolve();
             if (needToSend) {
               responseSent = true;
-              response.send(urlredirect);
+              response.status(200).json(urlredirect);
             }
           }
         });

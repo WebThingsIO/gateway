@@ -72,27 +72,9 @@ class ThingModel extends Model {
    * Remove the thing.
    */
   removeThing() {
-    return new Promise((resolve, reject) => {
-      fetch(this.href, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-        if (response.ok) {
-          console.log('Successfully removed Thing.');
-          this.handleEvent(Constants.DELETE_THING, this.id);
-          this.cleanup();
-          resolve();
-        } else {
-          reject(`Failed removing thing ${response.statusText}`);
-        }
-      }).catch((error) => {
-        console.error(error);
-        reject('Error occurred while removing thing');
-      });
+    return API.removeThing(this.id).then(() => {
+      this.handleEvent(Constants.DELETE_THING, this.id);
+      this.cleanup();
     });
   }
 
@@ -100,27 +82,7 @@ class ThingModel extends Model {
    * Update the thing.
    */
   updateThing(updates) {
-    return new Promise((resolve, reject) => {
-      fetch(this.href, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updates),
-      }).then((response) => {
-        if (response.ok) {
-          console.log('Successfully updated Thing.');
-          resolve();
-        } else {
-          reject(`Failed updating thing ${response.statusText}`);
-        }
-      }).catch((error) => {
-        console.error(error);
-        reject('Error occurred while updating thing');
-      });
-    });
+    return API.updateThing(this.id, updates);
   }
 
   /**
@@ -225,13 +187,6 @@ class ThingModel extends Model {
     const payload = {
       [name]: value,
     };
-    const opts = {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-      headers: Object.assign(API.headers(), {
-        'Content-Type': 'application/json',
-      }),
-    };
 
     let href;
     for (const link of property.links) {
@@ -241,13 +196,7 @@ class ThingModel extends Model {
       }
     }
 
-    return fetch(href, opts).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error(`Status ${response.status} trying to set ${name}`);
-      }
-    }).then((json) => {
+    return API.putJson(href, payload).then((json) => {
       this.onPropertyStatus(json);
     }).catch((error) => {
       console.error(error);
@@ -259,13 +208,6 @@ class ThingModel extends Model {
    * Update the Properties of Thing.
    */
   updateProperties() {
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-
     let getPropertiesPromise;
     if (typeof this.propertiesHref === 'undefined') {
       const urls = Object.values(this.propertyDescriptions).map((v) => {
@@ -275,12 +217,8 @@ class ThingModel extends Model {
           }
         }
       });
-      const requests = urls.map((u) => fetch(u, opts));
+      const requests = urls.map((u) => API.getJson(u));
       getPropertiesPromise = Promise.all(requests).then((responses) => {
-        return Promise.all(responses.map((response) => {
-          return response.json();
-        }));
-      }).then((responses) => {
         let properties = {};
         responses.forEach((response) => {
           properties = Object.assign(properties, response);
@@ -288,10 +226,7 @@ class ThingModel extends Model {
         return properties;
       });
     } else {
-      getPropertiesPromise =
-      fetch(this.propertiesHref, opts).then((response) => {
-        return response.json();
-      });
+      getPropertiesPromise = API.getJson(this.propertiesHref);
     }
 
     getPropertiesPromise.then((properties) => {
@@ -331,15 +266,7 @@ class ThingModel extends Model {
       return;
     }
 
-    const opts = {
-      headers: {
-        Authorization: `Bearer ${API.jwt}`,
-        Accept: 'application/json',
-      },
-    };
-    return fetch(this.eventsHref, opts).then((response) => {
-      return response.json();
-    }).then((events) => {
+    return API.getJson(this.eventsHref).then((events) => {
       this.events = events;
     }).catch((e) => {
       console.error(`Error fetching events: ${e}`);

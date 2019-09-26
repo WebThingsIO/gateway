@@ -22,7 +22,7 @@ const LogOutController = new Router();
 LogOutController.post('/', async (request, response) => {
   const {jwt} = request;
   await JSONWebToken.revokeToken(jwt.keyId);
-  response.sendStatus(200);
+  response.status(200).json({});
 });
 
 module.exports = LogOutController;

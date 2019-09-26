@@ -590,22 +590,7 @@ class Thing {
       node.dataset.layoutIndex = index;
 
       const id = Utils.unescapeHtml(node.id).replace(/^thing-/, '');
-      const payload = {
-        layoutIndex: index,
-      };
-      fetch(`/things/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(payload),
-        headers: {
-          Authorization: `Bearer ${API.jwt}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-        if (!response.ok) {
-          console.error(`Failed to arrange thing ${id}`);
-        }
-
+      API.setThingLayoutIndex(id, index).then(() => {
         App.gatewayModel.refreshThings();
       }).catch((e) => {
         console.error(`Error trying to arrange thing ${id}: ${e}`);

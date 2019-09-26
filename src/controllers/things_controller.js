@@ -342,6 +342,7 @@ ThingsController.put('/:thingId', async (request, response) => {
     thing = await Things.getThing(thingId);
   } catch (e) {
     response.status(500).send(`Failed to retrieve thing ${thingId}: ${e}`);
+    return;
   }
 
   if (request.body.selectedCapability) {
@@ -349,6 +350,7 @@ ThingsController.put('/:thingId', async (request, response) => {
       await thing.setSelectedCapability(request.body.selectedCapability);
     } catch (e) {
       response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+      return;
     }
   }
 
@@ -357,6 +359,7 @@ ThingsController.put('/:thingId', async (request, response) => {
       await thing.setIcon(request.body.iconData, true);
     } catch (e) {
       response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+      return;
     }
   }
 
@@ -365,6 +368,7 @@ ThingsController.put('/:thingId', async (request, response) => {
     description = await thing.setTitle(title);
   } catch (e) {
     response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+    return;
   }
 
   response.status(200).json(description);
@@ -382,7 +386,7 @@ ThingsController.delete('/:thingId', (request, response) => {
     then((removedThingId) => {
       Things.removeThing(removedThingId).then(() => {
         console.log(`Successfully deleted ${removedThingId} from database.`);
-        response.status(204).send();
+        response.sendStatus(204);
       }).catch((e) => {
         response.status(500).send(`Failed to remove thing ${removedThingId}: ${e}`);
       });

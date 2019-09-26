@@ -41,11 +41,7 @@ function init(scope) {
     authorizeAllThings.setAttribute('checked', '');
   }
 
-  fetch('/things', {
-    headers: API.headers(),
-  }).then((res) => {
-    return res.json();
-  }).then((things) => {
+  API.getThings().then((things) => {
     let checkboxIndex = 0;
     for (const thing of things) {
       const included = global || (scope.indexOf(thing.href) >= 0);

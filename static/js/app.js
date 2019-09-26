@@ -208,18 +208,7 @@ const App = {
   },
 
   startPinger() {
-    fetch(
-      `${this.ORIGIN}/ping`,
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      }
-    ).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Bad return status: ${res.status}`);
-      }
-
+    API.ping().then(() => {
       if (this.pingerLastStatus === 'offline') {
         window.location.reload();
       } else {
