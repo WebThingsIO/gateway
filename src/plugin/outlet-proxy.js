@@ -9,7 +9,7 @@
 
 'use strict';
 
-const Constants = require('../constants');
+const {MessageType} = require('gateway-addon').Constants;
 const {Outlet, Deferred} = require('gateway-addon');
 
 class OutletProxy extends Outlet {
@@ -33,12 +33,15 @@ class OutletProxy extends Outlet {
       });
 
       this.notifier.sendMsg(
-        Constants.NOTIFY, {
+        MessageType.OUTLET_NOTIFY_REQUEST,
+        {
           outletId: this.id,
           title,
           message,
           level,
-        }, deferredSet);
+        },
+        deferredSet
+      );
     });
   }
 }

@@ -9,9 +9,9 @@
 
 'use strict';
 
-const Constants = require('../constants');
 const Deferred = require('../deferred');
 const {Property} = require('gateway-addon');
+const {MessageType} = require('gateway-addon').Constants;
 
 class PropertyProxy extends Property {
   constructor(device, propertyName, propertyDict) {
@@ -91,11 +91,13 @@ class PropertyProxy extends Property {
   setValue(value) {
     return new Promise((resolve, reject) => {
       this.device.adapter.sendMsg(
-        Constants.SET_PROPERTY, {
+        MessageType.DEVICE_SET_PROPERTY_COMMAND,
+        {
           deviceId: this.device.id,
           propertyName: this.name,
           propertyValue: value,
-        });
+        }
+      );
 
       // TODO: Add a timeout
 

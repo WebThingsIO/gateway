@@ -11,9 +11,9 @@
 
 'use strict';
 
-const {Notifier} = require('gateway-addon');
-const Constants = require('../constants');
 const Deferred = require('../deferred');
+const {MessageType} = require('gateway-addon').Constants;
+const {Notifier} = require('gateway-addon');
 const OutletProxy = require('./outlet-proxy');
 
 /**
@@ -44,7 +44,7 @@ class NotifierProxy extends Notifier {
       return Promise.reject();
     }
     this.unloadCompletedPromise = new Deferred();
-    this.sendMsg(Constants.UNLOAD_NOTIFIER, {});
+    this.sendMsg(MessageType.NOTIFIER_UNLOAD_REQUEST, {});
     return this.unloadCompletedPromise.promise;
   }
 

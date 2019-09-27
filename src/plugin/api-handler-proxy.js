@@ -12,8 +12,8 @@
 'use strict';
 
 const {APIHandler} = require('gateway-addon');
-const Constants = require('../constants');
 const Deferred = require('../deferred');
+const {MessageType} = require('gateway-addon').Constants;
 
 /**
  * Class used to describe an API handler from the perspective of the gateway.
@@ -41,7 +41,7 @@ class APIHandlerProxy extends APIHandler {
       });
 
       this.sendMsg(
-        Constants.API_REQUEST,
+        MessageType.API_HANDLER_API_REQUEST,
         {
           packageName: this.packageName,
           request,
@@ -62,7 +62,7 @@ class APIHandlerProxy extends APIHandler {
       return Promise.reject();
     }
     this.unloadCompletedPromise = new Deferred();
-    this.sendMsg(Constants.UNLOAD_API_HANDLER, {});
+    this.sendMsg(MessageType.API_HANDLER_UNLOAD_REQUEST, {});
     return this.unloadCompletedPromise.promise;
   }
 }

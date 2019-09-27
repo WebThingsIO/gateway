@@ -11,10 +11,11 @@
 
 const Actions = require('../models/actions');
 const Constants = require('../constants');
+const {Device, Deferred} = require('gateway-addon');
 const Event = require('../models/event');
 const Events = require('../models/events');
+const {MessageType} = require('gateway-addon').Constants;
 const PropertyProxy = require('./property-proxy');
-const {Device, Deferred} = require('gateway-addon');
 
 class DeviceProxy extends Device {
 
@@ -78,7 +79,8 @@ class DeviceProxy extends Device {
 
   debugCmd(cmd, params) {
     this.adapter.sendMsg(
-      Constants.DEBUG_CMD, {
+      MessageType.DEVICE_DEBUG_COMMAND,
+      {
         deviceId: this.id,
         cmd: cmd,
         params: params,
@@ -108,12 +110,15 @@ class DeviceProxy extends Device {
       });
 
       this.adapter.sendMsg(
-        Constants.REQUEST_ACTION, {
+        MessageType.DEVICE_REQUEST_ACTION_REQUEST,
+        {
           deviceId: this.id,
           actionName,
           actionId,
           input,
-        }, deferredSet);
+        },
+        deferredSet
+      );
     });
   }
 
@@ -139,12 +144,19 @@ class DeviceProxy extends Device {
       });
 
       this.adapter.sendMsg(
-        Constants.REMOVE_ACTION, {
+        MessageType.DEVICE_REMOVE_ACTION_REQUEST,
+        {
           deviceId: this.id,
           actionName,
           actionId,
-        }, deferredSet);
+        },
+        deferredSet
+      );
     });
+  }
+
+  notifyPropertyChanged(property) {
+    this.adapter.manager.emit(Constants.PROPERTY_CHANGED, property);
   }
 
   actionNotify(action) {
@@ -152,10 +164,16 @@ class DeviceProxy extends Device {
     if (a) {
       a.update(action);
     }
+    this.adapter.manager.emit(Constants.ACTION_STATUS, action);
   }
 
   eventNotify(event) {
     Events.add(new Event(event.name, event.data, this.id, event.timestamp));
+    this.adapter.manager.emit(Constants.EVENT, event);
+  }
+
+  connectedNotify(connected) {
+    this.adapter.manager.emit(Constants.CONNECTED, {device: this, connected});
   }
 }
 
