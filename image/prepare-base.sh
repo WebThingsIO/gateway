@@ -41,6 +41,7 @@ nvm use ${NODE_VERSION}
 
 # Install prerequisite packages
 sudo apt install -y \
+  arping \
   autoconf \
   dnsmasq \
   ffmpeg \
