@@ -594,7 +594,7 @@ class AddonManager extends EventEmitter {
     await this.loadAddon(packageId);
   }
 
-  async disableAddon(packageId) {
+  async disableAddon(packageId, wait = false) {
     if (!this.installedAddons.has(packageId)) {
       throw new Error('Package not installed.');
     }
@@ -602,7 +602,7 @@ class AddonManager extends EventEmitter {
     const obj = this.installedAddons.get(packageId);
     obj.enabled = false;
     await Settings.set(`addons.${packageId}`, obj);
-    await this.unloadAddon(packageId);
+    await this.unloadAddon(packageId, wait);
   }
 
   /**

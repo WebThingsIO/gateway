@@ -62,7 +62,7 @@ AddonsController.put('/:addonId', async (request, response) => {
     if (enabled) {
       await AddonManager.enableAddon(addonId);
     } else {
-      await AddonManager.disableAddon(addonId);
+      await AddonManager.disableAddon(addonId, true);
     }
 
     response.status(200).json({enabled});
