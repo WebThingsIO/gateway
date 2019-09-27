@@ -14,7 +14,6 @@ const UserProfile = require('./user-profile');
 UserProfile.init();
 
 const config = require('config');
-const Constants = require('./constants');
 const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
 const {PluginClient} = require('gateway-addon');
@@ -22,6 +21,7 @@ const db = require('./db');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 const path = require('path');
+const {DONT_RESTART_EXIT_CODE} = require('gateway-addon').Constants;
 
 // Open the database.
 db.open();
@@ -97,7 +97,7 @@ async function fail(addonManagerProxy, message) {
   await sleep(200);
   addonManagerProxy.unloadPlugin();
   await sleep(200);
-  process.exit(Constants.DONT_RESTART_EXIT_CODE);
+  process.exit(DONT_RESTART_EXIT_CODE);
 }
 
 // Get some decent error messages for unhandled rejections. This is
@@ -121,16 +121,16 @@ if (opt.options.verbose) {
 
 if (opt.options.help) {
   getopt.showHelp();
-  process.exit(Constants.DONT_RESTART_EXIT_CODE);
+  process.exit(DONT_RESTART_EXIT_CODE);
 }
 
 if (opt.argv.length != 1) {
   console.error('Expecting a single package to load');
-  process.exit(Constants.DONT_RESTART_EXIT_CODE);
+  process.exit(DONT_RESTART_EXIT_CODE);
 }
 const addonPath = opt.argv[0];
 
 loadAddon(addonPath, opt.options.verbose).catch((err) => {
   console.error(err);
-  process.exit(Constants.DONT_RESTART_EXIT_CODE);
+  process.exit(DONT_RESTART_EXIT_CODE);
 });

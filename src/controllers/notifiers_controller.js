@@ -1,8 +1,8 @@
 'use strict';
 
-const PromiseRouter = require('express-promise-router');
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
+const {NotificationLevel} = require('gateway-addon').Constants;
+const PromiseRouter = require('express-promise-router');
 
 const NotifiersController = PromiseRouter();
 
@@ -73,7 +73,7 @@ NotifiersController.post(`/:notifierId/outlets/:outletId/notification`, async (r
     response.status(400).send(`Title and message must be strings`);
     return;
   }
-  const levels = Object.values(Constants.NotificationLevel);
+  const levels = Object.values(NotificationLevel);
   if (!levels.includes(level)) {
     response.status(400).send(`Level must be one of ${JSON.stringify(levels)}`);
     return;

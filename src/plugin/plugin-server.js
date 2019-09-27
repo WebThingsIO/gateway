@@ -15,9 +15,9 @@
 
 const appInstance = require('../app-instance');
 const config = require('config');
-const Constants = require('../constants');
 const EventEmitter = require('events');
 const {IpcSocket} = require('gateway-addon');
+const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
 const UserProfile = require('../user-profile');
 
@@ -78,10 +78,10 @@ class PluginServer extends EventEmitter {
       console.log('PluginServer: Rcvd:', msg);
 
     switch (msg.messageType) {
-      case Constants.REGISTER_PLUGIN: {
+      case MessageType.PLUGIN_REGISTER_REQUEST: {
         const plugin = this.registerPlugin(msg.data.pluginId);
         this.ipcSocket.sendJson({
-          messageType: Constants.REGISTER_PLUGIN_REPLY,
+          messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
           data: {
             pluginId: msg.data.pluginId,
             ipcBaseAddr: plugin.ipcBaseAddr,

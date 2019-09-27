@@ -12,9 +12,9 @@
 'use strict';
 
 const {Adapter} = require('gateway-addon');
-const Constants = require('../constants');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
+const {MessageType} = require('gateway-addon').Constants;
 
 const DEBUG = false;
 
@@ -35,25 +35,40 @@ class AdapterProxy extends Adapter {
   startPairing(timeoutSeconds) {
     DEBUG && console.log('AdapterProxy: startPairing',
                          this.name, 'id', this.id);
-    this.sendMsg(Constants.START_PAIRING, {timeout: timeoutSeconds});
+    this.sendMsg(
+      MessageType.ADAPTER_START_PAIRING_COMMAND,
+      {
+        timeout: timeoutSeconds,
+      }
+    );
   }
 
   cancelPairing() {
     DEBUG && console.log('AdapterProxy: cancelPairing',
                          this.name, 'id', this.id);
-    this.sendMsg(Constants.CANCEL_PAIRING, {});
+    this.sendMsg(MessageType.ADAPTER_CANCEL_PAIRING_COMMAND, {});
   }
 
   removeThing(device) {
     DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
                          'removeThing:', device.id);
-    this.sendMsg(Constants.REMOVE_THING, {deviceId: device.id});
+    this.sendMsg(
+      MessageType.ADAPTER_REMOVE_DEVICE_REQUEST,
+      {
+        deviceId: device.id,
+      }
+    );
   }
 
   cancelRemoveThing(device) {
     DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
                          'cancelRemoveThing:', device.id);
-    this.sendMsg(Constants.CANCEL_REMOVE_THING, {deviceId: device.id});
+    this.sendMsg(
+      MessageType.ADAPTER_CANCEL_REMOVE_DEVICE_COMMAND,
+      {
+        deviceId: device.id,
+      }
+    );
   }
 
   sendMsg(methodType, data, deferred) {
@@ -73,9 +88,12 @@ class AdapterProxy extends Adapter {
       return Promise.reject();
     }
     this.unloadCompletedPromise = new Deferred();
-    this.sendMsg(Constants.UNLOAD_ADAPTER, {
-      adapterId: this.id,
-    });
+    this.sendMsg(
+      MessageType.ADAPTER_UNLOAD_REQUEST,
+      {
+        adapterId: this.id,
+      }
+    );
     return this.unloadCompletedPromise.promise;
   }
 
@@ -105,7 +123,14 @@ class AdapterProxy extends Adapter {
         reject();
       });
 
-      this.sendMsg(Constants.SET_PIN, {deviceId, pin}, deferredSet);
+      this.sendMsg(
+        MessageType.DEVICE_SET_PIN_REQUEST,
+        {
+          deviceId,
+          pin,
+        },
+        deferredSet
+      );
     });
   }
 
@@ -137,9 +162,15 @@ class AdapterProxy extends Adapter {
         reject();
       });
 
-      this.sendMsg(Constants.SET_CREDENTIALS,
-                   {deviceId, username, password},
-                   deferredSet);
+      this.sendMsg(
+        MessageType.DEVICE_SET_CREDENTIALS_REQUEST,
+        {
+          deviceId,
+          username,
+          password,
+        },
+        deferredSet
+      );
     });
   }
 
@@ -153,9 +184,12 @@ class AdapterProxy extends Adapter {
       return Promise.reject(err);
     }
     this.deferredMock = new Deferred();
-    this.sendMsg(Constants.CLEAR_MOCK_ADAPTER_STATE, {
-      adapterId: this.id,
-    });
+    this.sendMsg(
+      MessageType.MOCK_ADAPTER_CLEAR_STATE_REQUEST,
+      {
+        adapterId: this.id,
+      }
+    );
     return this.deferredMock.promise;
   }
 
@@ -175,10 +209,13 @@ class AdapterProxy extends Adapter {
     this.devices[deviceId] = new DeviceProxy(this, deviceDescription);
 
     this.deferredMock = new Deferred();
-    this.sendMsg(Constants.ADD_MOCK_DEVICE, {
-      deviceId: deviceId,
-      deviceDescr: deviceDescription,
-    });
+    this.sendMsg(
+      MessageType.MOCK_ADAPTER_ADD_DEVICE_REQUEST,
+      {
+        deviceId: deviceId,
+        deviceDescr: deviceDescription,
+      }
+    );
     return this.deferredMock.promise;
   }
 
@@ -193,23 +230,32 @@ class AdapterProxy extends Adapter {
     // We need the actual device object when we resolve the promise
     // so we stash it here since it gets removed under our feet.
     this.deferredMock.device = this.getDevice(deviceId);
-    this.sendMsg(Constants.REMOVE_MOCK_DEVICE, {
-      deviceId: deviceId,
-    });
+    this.sendMsg(
+      MessageType.MOCK_ADAPTER_REMOVE_DEVICE_REQUEST,
+      {
+        deviceId: deviceId,
+      }
+    );
     return this.deferredMock.promise;
   }
 
   pairDevice(deviceId, deviceDescription) {
-    this.sendMsg(Constants.PAIR_MOCK_DEVICE, {
-      deviceId: deviceId,
-      deviceDescr: deviceDescription,
-    });
+    this.sendMsg(
+      MessageType.MOCK_ADAPTER_PAIR_DEVICE_COMMAND,
+      {
+        deviceId: deviceId,
+        deviceDescr: deviceDescription,
+      }
+    );
   }
 
   unpairDevice(deviceId) {
-    this.sendMsg(Constants.UNPAIR_MOCK_DEVICE, {
-      deviceId: deviceId,
-    });
+    this.sendMsg(
+      MessageType.MOCK_ADAPTER_UNPAIR_DEVICE_COMMAND,
+      {
+        deviceId: deviceId,
+      }
+    );
   }
 }
 
