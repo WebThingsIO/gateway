@@ -14,6 +14,11 @@ if ! dpkg -s mosquitto 2>/dev/null | grep -q '^Status.*installed'; then
   sudo apt install -y mosquitto
 fi
 
+# Install arping, if necessary
+if ! dpkg -s arping 2>/dev/null | grep -q '^Status.*installed'; then
+  sudo apt install -y arping
+fi
+
 # Upgrade gateway-addon Python package
 _url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.9.0#egg=gateway_addon"
 sudo pip3 install -U "$_url"
