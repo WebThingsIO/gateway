@@ -204,11 +204,14 @@ class InstalledAddon {
   handleToggle(e) {
     const button = e.target;
     const enabled = !this.enabled;
+    button.disabled = true;
+
     API.setAddonSetting(this.id, enabled)
       .then(() => {
         this.enabled = enabled;
         const addon = this.installedAddonsMap.get(this.id);
         addon.enabled = enabled;
+
         if (this.enabled) {
           button.innerText = fluent.getMessage('disable');
           button.classList.remove('addon-settings-enable');
@@ -218,9 +221,12 @@ class InstalledAddon {
           button.classList.remove('addon-settings-disable');
           button.classList.add('addon-settings-enable');
         }
+
+        button.disabled = false;
       })
       .catch((err) => {
         console.error(`Failed to toggle add-on: ${this.id}\n${err}`);
+        button.disabled = false;
       });
   }
 }
