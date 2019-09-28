@@ -62,6 +62,7 @@ LogsController.post('/', async (request, response) => {
       descr: normalizedDescr,
     });
   } catch (e) {
+    console.error('Failed to register log:', e);
     response.status(500).send(`Error registering: ${e.message}`);
   }
 });
@@ -99,8 +100,13 @@ LogsController.get('/', async (request, response) => {
   //     }
   //   }
   // } else
-  const logs = await Logs.getAll(request.query.start, request.query.end);
-  response.status(200).json(logs);
+  try {
+    const logs = await Logs.getAll(request.query.start, request.query.end);
+    response.status(200).json(logs);
+  } catch (e) {
+    console.error('Failed to get logs:', e);
+    response.status(500).send(`Internal error: ${e}`);
+  }
 });
 
 /**
@@ -147,6 +153,7 @@ LogsController.delete(singlePropertyPath, async (request, response) => {
       descr: normalizedDescr,
     });
   } catch (e) {
+    console.error('Failed to delete log:', e);
     response.status(500).send(`Internal error: ${e}`);
   }
 });
