@@ -37,8 +37,8 @@ ExtensionsController.all(
     const req = new APIRequest({
       method: request.method,
       path: `/${request.path.split('/').slice(3).join('/')}`,
-      query: request.query,
-      body: request.body,
+      query: request.query || {},
+      body: request.body || {},
     });
 
     try {

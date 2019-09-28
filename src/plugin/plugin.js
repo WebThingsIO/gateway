@@ -386,7 +386,7 @@ class Plugin {
         break;
 
       case MessageType.DEVICE_ADDED_NOTIFICATION:
-        device = new DeviceProxy(adapter, msg.data);
+        device = new DeviceProxy(adapter, msg.data.device);
         adapter.handleDeviceAdded(device);
         break;
 
@@ -403,7 +403,7 @@ class Plugin {
         break;
 
       case MessageType.OUTLET_REMOVED_NOTIFICATION:
-        outlet = notifier.getOutlet(msg.data.id);
+        outlet = notifier.getOutlet(msg.data.outletId);
         if (outlet) {
           notifier.handleOutletRemoved(outlet);
         }
