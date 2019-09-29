@@ -191,6 +191,15 @@ Note: you may need to use libnanomsg5 instead of libnanomsg4 (under Debian buste
 * If you want to build for 64-bit, you need to execute cmake with `-DCMAKE_GENERATOR_PLATFORM=x64`.
 * Add `C:\path\to\nanomsg\bin` to `PATH`.
 
+#### MacOS
+
+Under macOS:
+```
+$ brew install nanomsg
+```
+
+
+
 ### Install OpenSSL (Windows only)
 
 The Gateway depends on [`ursa`](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
@@ -234,7 +243,7 @@ host_library = C:\path\to\nanomsg\bin\nanomsg.dll
 
 This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
 
-Execute the following command as sudo (Linux) or administrator (Windows).
+Execute the following command. On Linux, use sudo. On Windows, run as administrator.
 
 ```
 python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
