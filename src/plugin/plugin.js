@@ -267,7 +267,7 @@ class Plugin {
 
       case MessageType.API_HANDLER_UNLOAD_RESPONSE: {
         const packageName = msg.data.packageName;
-        const handler = this.handlers.get(packageName);
+        const handler = this.apiHandlers.get(packageName);
 
         if (!handler) {
           console.error('Plugin:', this.pluginId,
@@ -398,7 +398,7 @@ class Plugin {
         break;
 
       case MessageType.OUTLET_ADDED_NOTIFICATION:
-        outlet = new OutletProxy(notifier, msg.data);
+        outlet = new OutletProxy(notifier, msg.data.outlet);
         notifier.handleOutletAdded(outlet);
         break;
 

@@ -1135,7 +1135,9 @@ describe('things/', function() {
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
-          reboot: {},
+          reboot: {
+            input: {},
+          },
         },
       }),
       webSocketRead(ws, 1),

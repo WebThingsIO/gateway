@@ -1045,6 +1045,10 @@ class AddonManager extends EventEmitter {
             this.handleOutletRemoved(this.outlets[outletId]);
           }
         }
+
+        if (this.extensions.hasOwnProperty(packageId)) {
+          delete this.extensions[packageId];
+        }
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
 
