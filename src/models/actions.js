@@ -49,7 +49,7 @@ class Actions extends EventEmitter {
    * @returns {integer} An id.
    */
   generateId() {
-    return ++this.nextId;
+    return `${++this.nextId}`;
   }
 
   /**
