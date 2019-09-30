@@ -19,6 +19,7 @@ const EventEmitter = require('events');
 const {IpcSocket} = require('gateway-addon');
 const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
+const pkg = require('../../package.json');
 const UserProfile = require('../user-profile');
 
 class PluginServer extends EventEmitter {
@@ -85,6 +86,7 @@ class PluginServer extends EventEmitter {
           data: {
             pluginId: msg.data.pluginId,
             ipcBaseAddr: plugin.ipcBaseAddr,
+            gatewayVersion: pkg.version,
             userProfile: {
               baseDir: UserProfile.baseDir,
               configDir: UserProfile.configDir,
