@@ -31,7 +31,7 @@ const Notifications = {
         applicationServerKey: convertedVapidKey,
       });
     }
-    await API.pushSubscribe(subscription);
+    await API.pushSubscribe({subscription});
   },
 };
 
