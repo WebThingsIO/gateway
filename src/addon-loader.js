@@ -35,8 +35,8 @@ async function loadAddon(addonPath, verbose) {
   const obj = await Settings.get(key);
 
   const newSettings = {
-    name: obj.name,
-    display_name: obj.displayName,
+    name: obj.id,
+    display_name: obj.name,
     moziot: {
       exec: obj.exec,
     },
@@ -74,7 +74,7 @@ async function loadAddon(addonPath, verbose) {
           console.error(`Failed to start add-on ${packageName}:`, err);
           fail(
             addonManagerProxy,
-            `Failed to start add-on ${obj.displayName}: ${err}`
+            `Failed to start add-on ${obj.name}: ${err}`
           );
         });
 
@@ -85,7 +85,7 @@ async function loadAddon(addonPath, verbose) {
         }
       } catch (e) {
         console.error(e);
-        const message = `Failed to start add-on ${obj.displayName}: ${
+        const message = `Failed to start add-on ${obj.name}: ${
           e.toString().replace(/^Error:\s+/, '')}`;
         fail(addonManagerProxy, message);
       }
