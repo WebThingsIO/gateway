@@ -214,16 +214,19 @@ class LogsScreen {
         }
       }
     });
+    this.createLogSaveButton.disabled =
+      this.createLogDevice.childNodes.length === 0;
     this.onCreateLogDeviceSelect();
   }
 
   onCreateLogDeviceSelect() {
+    this.createLogProperty.innerHTML = '';
+
     const thing = this.things.get(this.createLogDevice.value);
     if (!thing) {
       return;
     }
 
-    this.createLogProperty.innerHTML = '';
     for (const propId in thing.properties) {
       const prop = thing.properties[propId];
       if (prop.type !== 'boolean' &&

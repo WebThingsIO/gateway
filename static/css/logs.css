@@ -231,6 +231,11 @@ input[type="number"].create-log-retention-duration-number {
   margin: 1.25rem 0;
 }
 
+#create-log-save-button:disabled,
+#create-log-save-button:disabled:hover {
+  background-color: #8dbee0;
+}
+
 #create-log-save-button:hover  {
   background-color: #97aebf;
 }
