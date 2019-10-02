@@ -199,10 +199,20 @@ class LogsScreen {
     this.createLogDevice.innerHTML = '';
     this.things = things;
     things.forEach((description, thingId) => {
-      const opt = document.createElement('option');
-      opt.innerText = description.title;
-      opt.value = thingId;
-      this.createLogDevice.appendChild(opt);
+      for (const propId in description.properties) {
+        const prop = description.properties[propId];
+
+        // Only add an option for the device if it has loggable properties.
+        if (prop.type === 'boolean' ||
+            prop.type === 'number' ||
+            prop.type === 'integer') {
+          const opt = document.createElement('option');
+          opt.innerText = description.title;
+          opt.value = thingId;
+          this.createLogDevice.appendChild(opt);
+          break;
+        }
+      }
     });
     this.onCreateLogDeviceSelect();
   }
