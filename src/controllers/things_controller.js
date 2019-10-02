@@ -144,15 +144,15 @@ ThingsController.post('/', async (request, response) => {
   if (description.hasOwnProperty('webthingUrl')) {
     webthing = true;
 
-    const key = 'addons.thing-url-adapter';
+    const key = 'addons.config.thing-url-adapter';
     try {
-      const current = await Settings.get(key);
-      if (typeof current === 'undefined') {
+      const config = await Settings.get(key);
+      if (typeof config === 'undefined') {
         throw new Error('Setting is undefined.');
       }
 
-      current.moziot.config.urls.push(description.webthingUrl);
-      await Settings.set(key, current);
+      config.urls.push(description.webthingUrl);
+      await Settings.set(key, config);
     } catch (e) {
       console.error('Failed to update settings for thing-url-adapter');
       console.error(e);
