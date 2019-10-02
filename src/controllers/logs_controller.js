@@ -124,39 +124,48 @@ LogsController.get(`${Constants.THINGS_PATH}/:thingId`, async (request, response
   }
 });
 
+const missingPropertyPath =
+  `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}`;
 const singlePropertyPath =
   `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}/:propertyName`;
+
 /**
  * Get a historical list of the values of a Thing's property
  */
-LogsController.get(singlePropertyPath, async (request, response) => {
-  const thingId = request.params.thingId;
-  const propertyName = request.params.propertyName;
-  try {
-    const values = await Logs.getProperty(thingId, propertyName,
-                                          request.query.start,
-                                          request.query.end);
-    response.status(200).json(values || []);
-  } catch (err) {
-    response.status(404).send(err);
+LogsController.get(
+  [missingPropertyPath, singlePropertyPath],
+  async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName || '';
+    try {
+      const values = await Logs.getProperty(thingId, propertyName,
+                                            request.query.start,
+                                            request.query.end);
+      response.status(200).json(values || []);
+    } catch (err) {
+      response.status(404).send(err);
+    }
   }
-});
+);
 
-LogsController.delete(singlePropertyPath, async (request, response) => {
-  const thingId = request.params.thingId;
-  const propertyName = request.params.propertyName;
-  const normalizedDescr = Logs.propertyDescr(thingId, propertyName);
+LogsController.delete(
+  [missingPropertyPath, singlePropertyPath],
+  async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName || '';
+    const normalizedDescr = Logs.propertyDescr(thingId, propertyName);
 
-  try {
-    await Logs.unregisterMetric(normalizedDescr);
-    response.status(200).send({
-      descr: normalizedDescr,
-    });
-  } catch (e) {
-    console.error('Failed to delete log:', e);
-    response.status(500).send(`Internal error: ${e}`);
+    try {
+      await Logs.unregisterMetric(normalizedDescr);
+      response.status(200).send({
+        descr: normalizedDescr,
+      });
+    } catch (e) {
+      console.error('Failed to delete log:', e);
+      response.status(500).send(`Internal error: ${e}`);
+    }
   }
-});
+);
 
 LogsController.ws('/', (websocket) => {
   if (websocket.readyState !== WebSocket.OPEN) {

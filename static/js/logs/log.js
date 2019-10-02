@@ -255,8 +255,8 @@ class Log {
     }
     const thingName = thing.title;
     this.property = this.thingModel.propertyDescriptions[this.propertyId];
-    const propertyName = this.property.title ||
-      Utils.capitalize(this.propertyId);
+    const propertyName = (this.property && this.property.title) ||
+      (this.propertyId && Utils.capitalize(this.propertyId)) || '';
     const formattedName = `${thingName} ${propertyName}`;
     if (this.soloView) {
       document.querySelector('.logs-header').textContent = formattedName;
@@ -274,7 +274,7 @@ class Log {
       this.icon.style.backgroundImage = `url(${iconUrl})`;
     }
 
-    const propertyUnit = this.property.unit || '';
+    const propertyUnit = (this.property && this.property.unit) || '';
     this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
 
     this.thingModel.subscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);

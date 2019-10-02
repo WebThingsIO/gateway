@@ -278,7 +278,7 @@ const App = {
     if (context.params.thingId) {
       const descr = {
         thing: context.params.thingId,
-        property: context.params.propId,
+        property: context.params.propId || '',
         type: 'property',
       };
       LogsScreen.show(descr);
