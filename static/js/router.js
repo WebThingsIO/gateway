@@ -27,6 +27,7 @@ const Router = {
     page('/rules', App.showRules.bind(App));
     page('/rules/:rule', App.showRule.bind(App));
     page('/logs', App.showLogs.bind(App));
+    page('/logs/things/:thingId/properties', App.showLogs.bind(App));
     page('/logs/things/:thingId/properties/:propId', App.showLogs.bind(App));
     page('/extensions/:extensionId', App.showExtension.bind(App));
     page();
