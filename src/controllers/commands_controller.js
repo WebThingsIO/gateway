@@ -55,12 +55,6 @@ function thingNotFound(response, name) {
   });
 }
 
-function invalidForDevice(response) {
-  response.status(400).json({
-    message: 'Sorry, I\'m afraid I can\'t do that.',
-  });
-}
-
 function propertyNotFound(response, thing, property) {
   response.status(400).json({
     message: `Sorry, that thing has no property named ${property}.`,
@@ -156,7 +150,7 @@ async function handleSet(payload, thing, properties, response) {
 
   if (['on', 'off'].includes(payload.value)) {
     if (!properties.on) {
-      invalidForDevice(response);
+      propertyNotFound(response, payload.thing, 'on');
       return;
     }
 
@@ -164,7 +158,7 @@ async function handleSet(payload, thing, properties, response) {
     value = payload.value === 'on';
   } else if (['warmer', 'cooler'].includes(payload.value)) {
     if (!properties.colorTemperature) {
-      invalidForDevice(response);
+      propertyNotFound(response, payload.thing, 'color temperature');
       return;
     }
 
@@ -182,7 +176,7 @@ async function handleSet(payload, thing, properties, response) {
   } else if (['dim', 'brighten'].includes(payload.keyword) ||
              CommandUtils.percentages.hasOwnProperty(payload.value)) {
     if (!properties.brightness) {
-      invalidForDevice(response);
+      propertyNotFound(response, payload.thing, 'brightness');
       return;
     }
 
@@ -210,7 +204,7 @@ async function handleSet(payload, thing, properties, response) {
     }
   } else if (CommandUtils.colors.hasOwnProperty(payload.value)) {
     if (!properties.color) {
-      invalidForDevice(response);
+      propertyNotFound(response, payload.thing, 'color');
       return;
     }
 
