@@ -119,6 +119,7 @@ const App = {
     this.currentView = this.views.things;
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
+    this.extensionBackButton = document.getElementById('extension-back-button');
     this.overflowButton = document.getElementById('overflow-button');
     this.overflowButton.addEventListener('click',
                                          this.toggleOverflowMenu.bind(this));
@@ -239,11 +240,13 @@ const App = {
   },
 
   showAssistant: function() {
+    this.hideExtensionBackButton();
     AssistantScreen.show();
     this.selectView('assistant');
   },
 
   showThings: function(context) {
+    this.hideExtensionBackButton();
     const events = context.pathname.split('/').pop() === 'events';
     ThingsScreen.show(context.params.thingId || null,
                       context.params.actionName || null,
@@ -253,6 +256,7 @@ const App = {
   },
 
   showSettings: function(context) {
+    this.hideExtensionBackButton();
     SettingsScreen.show(context.params.section || null,
                         context.params.subsection || null,
                         context.params.id || null);
@@ -260,21 +264,25 @@ const App = {
   },
 
   showFloorplan: function() {
+    this.hideExtensionBackButton();
     FloorplanScreen.show();
     this.selectView('floorplan');
   },
 
   showRules: function() {
+    this.hideExtensionBackButton();
     RulesScreen.show();
     this.selectView('rules');
   },
 
   showRule: function(context) {
+    this.hideExtensionBackButton();
     RuleScreen.show(context.params.rule);
     this.selectView('rule');
   },
 
   showLogs: function(context) {
+    this.hideExtensionBackButton();
     if (context.params.thingId) {
       const descr = {
         thing: context.params.thingId,
@@ -304,10 +312,11 @@ const App = {
   },
 
   showExtension: function(context) {
+    this.hideExtensionBackButton();
     const extensionId = context.params.extensionId;
 
     if (this.extensions.hasOwnProperty(extensionId)) {
-      this.extensions[extensionId].show();
+      this.extensions[extensionId].show(context);
       this.selectView(
         `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
       );
@@ -356,6 +365,11 @@ const App = {
   hideOverflowButton: function() {
     this.overflowMenu.classList.add('hidden');
     this.overflowButton.classList.add('hidden');
+  },
+
+  hideExtensionBackButton: function() {
+    this.extensionBackButton.classList.add('hidden');
+    this.extensionBackButton.href = '/things';
   },
 
   buildOverflowMenu: function(links) {

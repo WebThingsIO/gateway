@@ -115,7 +115,10 @@ const Menu = {
    */
   selectItem: function(item) {
     if (!this.items[item]) {
-      console.error('Tried to select a menu item that didn\'t exist', item);
+      if (!item.startsWith('extension-')) {
+        console.error('Tried to select a menu item that didn\'t exist:', item);
+      }
+
       return;
     }
     for (const elt of this.items[this.currentItem]) {
