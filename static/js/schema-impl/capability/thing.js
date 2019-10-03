@@ -97,7 +97,8 @@ class Thing {
           if (link.href.startsWith('/proxy/')) {
             this.uiHref = `${link.href}?jwt=${API.jwt}`;
           } else if (link.href.startsWith('http://') ||
-                     link.href.startsWith('https://')) {
+                     link.href.startsWith('https://') ||
+                     link.href.startsWith('/extensions/')) {
             this.uiHref = link.href;
           }
 
@@ -348,6 +349,11 @@ class Thing {
    * HTML link for custom UI.
    */
   uiLink() {
+    // If this is an internal link, don't open a new tab.
+    if (this.uiHref.startsWith('/extensions/')) {
+      return `<a href="${this.uiHref}" class="thing-ui-link"></a>`;
+    }
+
     return `<a href="${this.uiHref}" class="thing-ui-link"
               target="_blank" rel="noopener"></a>`;
   }
