@@ -652,6 +652,14 @@ class AddonManager extends EventEmitter {
     await Settings.set(key, manifest);
     this.installedAddons.set(packageId, manifest);
 
+    // Get the saved config. If there is none, populate the database with the
+    // defaults.
+    let savedConfig = await Settings.get(configKey);
+    if (!savedConfig) {
+      await Settings.set(configKey, cfg);
+      savedConfig = cfg;
+    }
+
     // If this add-on is not explicitly enabled, move on.
     if (!enabled) {
       throw new Error(`Add-on not enabled: ${manifest.id}`);
@@ -696,12 +704,8 @@ class AddonManager extends EventEmitter {
       newSettings.moziot.schema = manifest.schema;
     }
 
-    const savedConfig = await Settings.get(configKey);
     if (savedConfig) {
       newSettings.moziot.config = savedConfig;
-    } else {
-      await Settings.set(configKey, cfg);
-      newSettings.moziot.config = cfg;
     }
 
     // Load the add-on
