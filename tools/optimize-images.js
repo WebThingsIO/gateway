@@ -36,7 +36,7 @@ const plugins = [
   }),
   imageminSvgo(),
   imageminPngquant({
-    quality: '65-90',
+    quality: [0.65, 0.9],
   }),
   imageminOptipng({
     enabled: true,
@@ -47,17 +47,29 @@ const plugins = [
 const gatewayRoot = path.join(__dirname, '..');
 imagemin(
   [`${gatewayRoot}/static/images/*.{jpg,png,gif,svg}`],
-  `${gatewayRoot}/static/optimized-images/`,
-  {plugins}).then((files) => console.log(files));
+  {
+    destination: `${gatewayRoot}/static/optimized-images/`,
+    plugins,
+  }
+).then((files) => console.log(files));
 imagemin(
   [`${gatewayRoot}/static/images/component-icons/*.{jpg,png,gif,svg}`],
-  `${gatewayRoot}/static/optimized-images/component-icons/`,
-  {plugins}).then((files) => console.log(files));
+  {
+    destination: `${gatewayRoot}/static/optimized-images/component-icons/`,
+    plugins,
+  }
+).then((files) => console.log(files));
 imagemin(
   [`${gatewayRoot}/static/images/thing-icons/*.{jpg,png,gif,svg}`],
-  `${gatewayRoot}/static/optimized-images/thing-icons/`,
-  {plugins}).then((files) => console.log(files));
+  {
+    destination: `${gatewayRoot}/static/optimized-images/thing-icons/`,
+    plugins,
+  }
+).then((files) => console.log(files));
 imagemin(
   [`${gatewayRoot}/static/images/rule-icons/*.{jpg,png,gif,svg}`],
-  `${gatewayRoot}/static/optimized-images/rule-icons/`,
-  {plugins}).then((files) => console.log(files));
+  {
+    destination: `${gatewayRoot}/static/optimized-images/rule-icons/`,
+    plugins,
+  }
+).then((files) => console.log(files));
