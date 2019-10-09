@@ -43,15 +43,21 @@ class EnumProperty extends BaseComponent {
     .webthing-enum-property-select {
       height: 3rem;
       width: 7rem;
-      text-align: center;
-      text-align-last: center;
+      text-align: left;
       background-color: #d2d9de;
       color: #333;
       border: none;
       border-radius: 0.5rem;
       padding: 0.5rem;
       margin: 0.5rem 0;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url('/optimized-images/select-arrow-dark.svg');
+      background-repeat: no-repeat;
+      background-size: 1.25rem;
+      background-position: calc(100% - 0.5rem);
     }
 
     .webthing-enum-property-unit.hidden {
@@ -84,6 +90,8 @@ class EnumProperty extends BaseComponent {
       '.webthing-enum-property-name');
 
     this._type = 'string';
+
+    this._upperCaseOptions = false;
 
     this._onChange = this.__onChange.bind(this);
   }
@@ -187,7 +195,13 @@ class EnumProperty extends BaseComponent {
     for (const choice of value) {
       const option = document.createElement('option');
       option.value = choice;
-      option.innerText = choice;
+
+      if (this._upperCaseOptions) {
+        option.innerText = choice.toUpperCase();
+      } else {
+        option.innerText = choice;
+      }
+
       this._select.appendChild(option);
     }
   }

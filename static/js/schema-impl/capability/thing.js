@@ -23,6 +23,7 @@ const CurrentDetail = require('../property/current');
 const EnumDetail = require('../property/enum');
 const FrequencyDetail = require('../property/frequency');
 const fluent = require('../../fluent');
+const HeatingCoolingDetail = require('../property/heating-cooling');
 const ImageDetail = require('../property/image');
 const InstantaneousPowerDetail = require('../property/instantaneous-power');
 const LeakDetail = require('../property/leak');
@@ -33,7 +34,9 @@ const OnOffDetail = require('../property/on-off');
 const OpenDetail = require('../property/open');
 const PushedDetail = require('../property/pushed');
 const StringDetail = require('../property/string');
+const TargetTemperatureDetail = require('../property/target-temperature');
 const TemperatureDetail = require('../property/temperature');
+const ThermostatModeDetail = require('../property/thermostat-mode');
 const ThingDetailLayout = require('./thing-detail-layout');
 const Utils = require('../../utils');
 const VideoDetail = require('../property/video');
@@ -190,6 +193,15 @@ class Thing {
             break;
           case 'AlarmProperty':
             detail = new AlarmDetail(this, name, property);
+            break;
+          case 'TargetTemperatureProperty':
+            detail = new TargetTemperatureDetail(this, name, property);
+            break;
+          case 'ThermostatModeProperty':
+            detail = new ThermostatModeDetail(this, name, property);
+            break;
+          case 'HeatingCoolingProperty':
+            detail = new HeatingCoolingDetail(this, name, property);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {

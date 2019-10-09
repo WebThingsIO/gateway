@@ -161,6 +161,9 @@ class NewWebThing {
       case 'Alarm':
         cls = 'alarm';
         break;
+      case 'Thermostat':
+        cls = 'thermostat';
+        break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
         this.customIcon.classList.remove('hidden');
@@ -344,6 +347,9 @@ class NewWebThing {
             break;
           case 'Alarm':
             cls = cls || 'alarm';
+            break;
+          case 'Thermostat':
+            cls = cls || 'thermostat';
             break;
           case 'Custom':
             cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
