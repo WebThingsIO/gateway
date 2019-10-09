@@ -31,6 +31,7 @@ const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
 const {URLSearchParams} = require('url');
+const {ncp} = require('ncp');
 
 const pkg = require('../package.json');
 
@@ -1112,9 +1113,7 @@ class AddonManager extends EventEmitter {
           console.error(`Error removing temp directory: ${tempPath}\n${e}`);
         }
       });
-      const err = `Failed to download add-on: ${id}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
+      throw new Error(`Failed to download add-on: ${id}\n${e}`);
     }
 
     if (Utils.hashFile(destPath) !== checksum.toLowerCase()) {
@@ -1123,9 +1122,7 @@ class AddonManager extends EventEmitter {
           console.error(`Error removing temp directory: ${tempPath}\n${e}`);
         }
       });
-      const err = `Checksum did not match for add-on: ${id}`;
-      console.error(err);
-      return Promise.reject(err);
+      throw new Error(`Checksum did not match for add-on: ${id}`);
     }
 
     let success = false, err;
@@ -1143,8 +1140,7 @@ class AddonManager extends EventEmitter {
     });
 
     if (!success) {
-      console.error(err);
-      return Promise.reject(err);
+      throw err;
     }
   }
 
@@ -1158,54 +1154,47 @@ class AddonManager extends EventEmitter {
    */
   async installAddon(packageId, packagePath, enable) {
     if (!this.addonsLoaded) {
-      const err =
-        'Cannot install add-on before other add-ons have been loaded.';
-      console.error(err);
-      return Promise.reject(err);
+      throw new Error(
+        'Cannot install add-on before other add-ons have been loaded.'
+      );
     }
 
     if (!fs.lstatSync(packagePath).isFile()) {
-      const err = `Cannot extract invalid path: ${packagePath}`;
-      console.error(err);
-      return Promise.reject(err);
+      throw new Error(`Cannot extract invalid path: ${packagePath}`);
     }
 
-    const addonPath = path.join(UserProfile.addonsDir, packageId);
-
-    try {
-      // Create the add-on directory, if necessary
-      if (!fs.existsSync(addonPath)) {
-        fs.mkdirSync(addonPath);
-      }
-    } catch (e) {
-      const err = `Failed to create add-on directory: ${addonPath}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
-    }
-
-    const cleanup = () => {
-      if (fs.existsSync(addonPath) && fs.lstatSync(addonPath).isDirectory()) {
-        rimraf(addonPath, {glob: false}, (e) => {
-          if (e) {
-            console.error(`Error removing ${packageId}: ${e}`);
-          }
-        });
-      }
-    };
-
-    console.log(`Expanding add-on ${packagePath} into ${addonPath}`);
+    console.log(`Expanding add-on ${packagePath}`);
 
     try {
       // Try to extract the tarball
-      await tar.x({file: packagePath, strip: 1, cwd: addonPath}, ['package']);
+      await tar.x({
+        file: packagePath,
+        cwd: path.dirname(packagePath),
+      }, ['package']);
     } catch (e) {
-      // Clean up if extraction failed
-      cleanup();
-
-      const err = `Failed to extract package: ${packagePath}\n${e}`;
-      console.error(err);
-      return Promise.reject(err);
+      throw new Error(`Failed to extract package: ${e}`);
     }
+
+    // In case we're updating, go ahead and uninstall the existing add-on now
+    await this.uninstallAddon(packageId, true, false);
+
+    const addonPath = path.join(UserProfile.addonsDir, packageId);
+
+    // Copy the package into the proper place
+    await new Promise((resolve, reject) => {
+      ncp(
+        path.join(path.dirname(packagePath), 'package'),
+        addonPath,
+        {stopOnErr: true},
+        (err) => {
+          if (err) {
+            reject(`Failed to move package: ${err}`);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
 
     // Update the saved settings (if any) and enable the add-on
     const key = `addons.${packageId}`;
@@ -1230,9 +1219,7 @@ class AddonManager extends EventEmitter {
       try {
         await this.loadAddon(packageId);
       } catch (e) {
-        // Clean up if loading failed
-        cleanup();
-        return Promise.reject(`Failed to load add-on: ${packageId}\n${e}`);
+        throw new Error(`Failed to load add-on ${packageId}: ${e}`);
       }
     }
   }
@@ -1265,10 +1252,14 @@ class AddonManager extends EventEmitter {
 
     // Remove the package from the file system
     if (fs.existsSync(addonPath) && fs.lstatSync(addonPath).isDirectory()) {
-      rimraf(addonPath, {glob: false}, (e) => {
-        if (e) {
-          console.error(`Error removing ${packageId}: ${e}`);
-        }
+      await new Promise((resolve, reject) => {
+        rimraf(addonPath, {glob: false}, (e) => {
+          if (e) {
+            reject(`Error removing ${packageId}: ${e}`);
+          } else {
+            resolve();
+          }
+        });
       });
     }
 
@@ -1415,7 +1406,6 @@ class AddonManager extends EventEmitter {
         if (available.hasOwnProperty(addonId) &&
             semver.lt(manifest.version, available[addonId].version)) {
           try {
-            await this.uninstallAddon(addonId, true, false);
             await this.installAddonFromUrl(addonId,
                                            available[addonId].url,
                                            available[addonId].checksum,
