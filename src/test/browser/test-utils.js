@@ -69,7 +69,7 @@ module.exports.setProperty = async (id, property, value) => {
 
 let stepNumber = 0;
 module.exports.saveStepScreen = async (step) => {
-  let stepStr = stepNumber.toString();
+  let stepStr = (stepNumber++).toString();
   if (stepStr.length < 2) {
     stepStr = `0${stepStr}`;
   }
@@ -79,5 +79,4 @@ module.exports.saveStepScreen = async (step) => {
   }
   await getBrowser().saveScreenshot(
     `browser-test-output/${step}-${stepStr}.png`);
-  stepNumber += 1;
 };

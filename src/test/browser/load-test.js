@@ -18,7 +18,7 @@ describe('basic browser tests', () => {
 
     let stepNumber = 0;
     async function saveStepScreen(step) {
-      let stepStr = stepNumber.toString();
+      let stepStr = (stepNumber++).toString();
       if (stepStr.length < 2) {
         stepStr = `0${stepStr}`;
       }
@@ -28,7 +28,6 @@ describe('basic browser tests', () => {
       }
       await browser.saveScreenshot(
         `browser-test-output/${stepStr}-${step}.png`);
-      stepNumber += 1;
     }
 
     await browser.url('/');

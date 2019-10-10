@@ -14,6 +14,7 @@ describe('plugins/', () => {
 
     // Normally, the plugin mechanism would try to restart the plugin
     // when it exits, so we set restart to false to prevent that.
+    // eslint-disable-next-line require-atomic-updates
     plugin.restart = false;
     const promise = new Promise((resolve) => {
       plugin.process.p.on('exit', (code) => {
@@ -49,6 +50,7 @@ describe('plugins/', () => {
     await plugin.start();
 
     // setup a different exit code the next time it restarts
+    // eslint-disable-next-line require-atomic-updates
     plugin.exec = 'node -e process.exit(43);';
 
     const code = await new Promise((resolve) => {

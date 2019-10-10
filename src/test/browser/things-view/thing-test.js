@@ -61,60 +61,60 @@ describe('Thing', () => {
        // Check boolean property
        const booleanProps = await detailPage.booleanProperties();
        expect(booleanProps.length).toEqual(1);
-       let booleanValue = await booleanProps[0].getValue();
+       const booleanValue = await booleanProps[0].getValue();
        expect(booleanValue).toBeTruthy();
        await booleanProps[0].click();
        await waitForExpect(async () => {
-         booleanValue = await getProperty(desc.id, 'booleanProp');
-         expect(booleanValue).not.toBeTruthy();
-         booleanValue = await booleanProps[0].getValue();
-         expect(booleanValue).not.toBeTruthy();
+         const val1 = await getProperty(desc.id, 'booleanProp');
+         expect(val1).not.toBeTruthy();
+         const val2 = await booleanProps[0].getValue();
+         expect(val2).not.toBeTruthy();
        });
        await setProperty(desc.id, 'booleanProp', true);
        await waitForExpect(async () => {
-         booleanValue = await booleanProps[0].getValue();
-         expect(booleanValue).toBeTruthy();
+         const val3 = await booleanProps[0].getValue();
+         expect(val3).toBeTruthy();
        });
        await saveStepScreen();
 
        // Check number property
        const numberProps = await detailPage.numberProperties();
        expect(numberProps.length).toEqual(1);
-       let numberValue = await numberProps[0].getValue();
+       const numberValue = await numberProps[0].getValue();
        expect(numberValue).toEqual(10);
        await numberProps[0].setValue(20);
        await waitForExpect(async () => {
-         numberValue = await getProperty(desc.id, 'numberProp');
-         expect(numberValue).toEqual(20);
-         numberValue = await numberProps[0].getValue();
-         expect(numberValue).toEqual(20);
+         const val1 = await getProperty(desc.id, 'numberProp');
+         expect(val1).toEqual(20);
+         const val2 = await numberProps[0].getValue();
+         expect(val2).toEqual(20);
        });
        await setProperty(desc.id, 'numberProp', 5);
        await waitForExpect(async () => {
-         numberValue = await numberProps[0].getValue();
-         expect(numberValue).toEqual(5);
+         const val3 = await numberProps[0].getValue();
+         expect(val3).toEqual(5);
        });
        await saveStepScreen();
 
        // Check string property
        const stringProps = await detailPage.stringProperties();
        expect(stringProps.length).toEqual(1);
-       let stringValue = await stringProps[0].getValue();
+       const stringValue = await stringProps[0].getValue();
        expect(stringValue).toEqual('bar');
        await stringProps[0].setValue('foo');
        await waitForExpect(async () => {
-         stringValue = await getProperty(desc.id, 'stringProp');
-         expect(stringValue).toEqual('foo');
-         stringValue = await stringProps[0].getValue();
-         if (stringValue !== 'foo') {
+         const val1 = await getProperty(desc.id, 'stringProp');
+         expect(val1).toEqual('foo');
+         const val2 = await stringProps[0].getValue();
+         if (val2 !== 'foo') {
            await stringProps[0].setValue('foo');
          }
-         expect(stringValue).toEqual('foo');
+         expect(val2).toEqual('foo');
        });
        await setProperty(desc.id, 'stringProp', 'foobar');
        await waitForExpect(async () => {
-         stringValue = await stringProps[0].getValue();
-         expect(stringValue).toEqual('foobar');
+         const val3 = await stringProps[0].getValue();
+         expect(val3).toEqual('foobar');
        });
        await saveStepScreen();
      });
@@ -235,42 +235,42 @@ describe('Thing', () => {
     // Check boolean property
     const booleanProps = await detailPage.booleanProperties();
     expect(booleanProps.length).toEqual(1);
-    let booleanValue = await booleanProps[0].getValue();
+    const booleanValue = await booleanProps[0].getValue();
     expect(booleanValue).toBeTruthy();
     await booleanProps[0].click();
     await waitForExpect(async () => {
-      booleanValue = await getProperty(desc.id, 'rejectPropertyBool');
-      expect(booleanValue).toBeTruthy();
-      booleanValue = await booleanProps[0].getValue();
-      expect(booleanValue).toBeTruthy();
+      const val1 = await getProperty(desc.id, 'rejectPropertyBool');
+      expect(val1).toBeTruthy();
+      const val2 = await booleanProps[0].getValue();
+      expect(val2).toBeTruthy();
     });
     await saveStepScreen();
 
     // Check number property
     const numberProps = await detailPage.numberProperties();
     expect(numberProps.length).toEqual(1);
-    let numberValue = await numberProps[0].getValue();
+    const numberValue = await numberProps[0].getValue();
     expect(numberValue).toEqual(10);
     await numberProps[0].setValue(20);
     await waitForExpect(async () => {
-      numberValue = await getProperty(desc.id, 'rejectPropertyNum');
-      expect(numberValue).toEqual(10);
-      numberValue = await numberProps[0].getValue();
-      expect(numberValue).toEqual(10);
+      const val1 = await getProperty(desc.id, 'rejectPropertyNum');
+      expect(val1).toEqual(10);
+      const val2 = await numberProps[0].getValue();
+      expect(val2).toEqual(10);
     });
     await saveStepScreen();
 
     // Check string property
     const stringProps = await detailPage.stringProperties();
     expect(stringProps.length).toEqual(1);
-    let stringValue = await stringProps[0].getValue();
+    const stringValue = await stringProps[0].getValue();
     expect(stringValue).toEqual('bar');
     await stringProps[0].setValue('foo');
     await waitForExpect(async () => {
-      stringValue = await getProperty(desc.id, 'rejectPropertyStr');
-      expect(stringValue).toEqual('bar');
-      stringValue = await stringProps[0].getValue();
-      expect(stringValue).toEqual('bar');
+      const val1 = await getProperty(desc.id, 'rejectPropertyStr');
+      expect(val1).toEqual('bar');
+      const val2 = await stringProps[0].getValue();
+      expect(val2).toEqual('bar');
     });
     await saveStepScreen();
   });
@@ -434,37 +434,37 @@ describe('Thing', () => {
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
-       let on = await onOffProperty.getValue();
-       expect(on).not.toBeTruthy();
+       const on1 = await onOffProperty.getValue();
+       expect(on1).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'power');
-         expect(on).toBeTruthy();
-         on = await onOffProperty.getValue();
-         expect(on).toBeTruthy();
+         const on2 = await getProperty(desc.id, 'power');
+         expect(on2).toBeTruthy();
+         const on3 = await onOffProperty.getValue();
+         expect(on3).toBeTruthy();
        });
        await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
-         on = await onOffProperty.getValue();
-         expect(on).not.toBeTruthy();
+         const on4 = await onOffProperty.getValue();
+         expect(on4).not.toBeTruthy();
        });
        await saveStepScreen();
 
        // Check level property
        const brightnessProperty = await detailPage.brightnessProperty();
-       let brightness = await brightnessProperty.getValue();
-       expect(brightness).toEqual(50);
+       const brightness1 = await brightnessProperty.getValue();
+       expect(brightness1).toEqual(50);
        await brightnessProperty.setValue(20);
        await waitForExpect(async () => {
-         brightness = await getProperty(desc.id, 'brightness');
-         expect(brightness).toEqual(20);
-         brightness = await brightnessProperty.getValue();
-         expect(brightness).toEqual(20);
+         const brightness2 = await getProperty(desc.id, 'brightness');
+         expect(brightness2).toEqual(20);
+         const brightness3 = await brightnessProperty.getValue();
+         expect(brightness3).toEqual(20);
        });
        await setProperty(desc.id, 'brightness', 60);
        await waitForExpect(async () => {
-         brightness = await brightnessProperty.getValue();
-         expect(brightness).toEqual(60);
+         const brightness4 = await brightnessProperty.getValue();
+         expect(brightness4).toEqual(60);
        });
        await saveStepScreen();
      });
@@ -534,19 +534,19 @@ describe('Thing', () => {
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
-       let on = await onOffProperty.getValue();
-       expect(on).not.toBeTruthy();
+       const on1 = await onOffProperty.getValue();
+       expect(on1).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'power');
-         expect(on).toBeTruthy();
-         on = await onOffProperty.getValue();
-         expect(on).toBeTruthy();
+         const on2 = await getProperty(desc.id, 'power');
+         expect(on2).toBeTruthy();
+         const on3 = await onOffProperty.getValue();
+         expect(on3).toBeTruthy();
        });
        await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
-         on = await onOffProperty.getValue();
-         expect(on).not.toBeTruthy();
+         const on4 = await onOffProperty.getValue();
+         expect(on4).not.toBeTruthy();
        });
        await saveStepScreen();
      });
@@ -631,37 +631,37 @@ describe('Thing', () => {
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
-       let on = await onOffProperty.getValue();
-       expect(on).not.toBeTruthy();
+       const on1 = await onOffProperty.getValue();
+       expect(on1).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'power');
-         expect(on).toBeTruthy();
-         on = await onOffProperty.getValue();
-         expect(on).toBeTruthy();
+         const on2 = await getProperty(desc.id, 'power');
+         expect(on2).toBeTruthy();
+         const on3 = await onOffProperty.getValue();
+         expect(on3).toBeTruthy();
        });
        await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
-         on = await onOffProperty.getValue();
-         expect(on).not.toBeTruthy();
+         const on4 = await onOffProperty.getValue();
+         expect(on4).not.toBeTruthy();
        });
        await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.brightnessProperty();
-       let level = await levelProperty.getValue();
-       expect(level).toEqual(50);
+       const level1 = await levelProperty.getValue();
+       expect(level1).toEqual(50);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'brightness');
-         expect(level).toEqual(20);
-         level = await levelProperty.getValue();
-         expect(level).toEqual(20);
+         const level2 = await getProperty(desc.id, 'brightness');
+         expect(level2).toEqual(20);
+         const level3 = await levelProperty.getValue();
+         expect(level3).toEqual(20);
        });
        await setProperty(desc.id, 'brightness', 60);
        await waitForExpect(async () => {
-         level = await levelProperty.getValue();
-         expect(level).toEqual(60);
+         const level4 = await levelProperty.getValue();
+         expect(level4).toEqual(60);
        });
        await saveStepScreen();
      });
@@ -733,37 +733,37 @@ describe('Thing', () => {
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
-       let on = await onOffProperty.getValue();
-       expect(on).not.toBeTruthy();
+       const on1 = await onOffProperty.getValue();
+       expect(on1).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'power');
-         expect(on).toBeTruthy();
-         on = await onOffProperty.getValue();
-         expect(on).toBeTruthy();
+         const on2 = await getProperty(desc.id, 'power');
+         expect(on2).toBeTruthy();
+         const on3 = await onOffProperty.getValue();
+         expect(on3).toBeTruthy();
        });
        await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
-         on = await onOffProperty.getValue();
-         expect(on).not.toBeTruthy();
+         const on4 = await onOffProperty.getValue();
+         expect(on4).not.toBeTruthy();
        });
        await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.levelProperty();
-       let level = await levelProperty.getValue();
-       expect(level).toEqual(50);
+       const level1 = await levelProperty.getValue();
+       expect(level1).toEqual(50);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'percent');
-         expect(level).toEqual(20);
-         level = await levelProperty.getValue();
-         expect(level).toEqual(20);
+         const level2 = await getProperty(desc.id, 'percent');
+         expect(level2).toEqual(20);
+         const level3 = await levelProperty.getValue();
+         expect(level3).toEqual(20);
        });
        await setProperty(desc.id, 'percent', 60);
        await waitForExpect(async () => {
-         level = await levelProperty.getValue();
-         expect(level).toEqual(60);
+         const level4 = await levelProperty.getValue();
+         expect(level4).toEqual(60);
        });
        await saveStepScreen();
      });
@@ -864,84 +864,84 @@ describe('Thing', () => {
 
        // Check onOff property
        const onOffProperty = await detailPage.onOffProperty();
-       let on = await onOffProperty.getValue();
-       expect(on).not.toBeTruthy();
+       const on1 = await onOffProperty.getValue();
+       expect(on1).not.toBeTruthy();
        await onOffProperty.click();
        await waitForExpect(async () => {
-         on = await getProperty(desc.id, 'power');
-         expect(on).toBeTruthy();
-         on = await onOffProperty.getValue();
-         expect(on).toBeTruthy();
+         const on2 = await getProperty(desc.id, 'power');
+         expect(on2).toBeTruthy();
+         const on3 = await onOffProperty.getValue();
+         expect(on3).toBeTruthy();
        });
        await setProperty(desc.id, 'power', false);
        await waitForExpect(async () => {
-         on = await onOffProperty.getValue();
-         expect(on).not.toBeTruthy();
+         const on4 = await onOffProperty.getValue();
+         expect(on4).not.toBeTruthy();
        });
        await saveStepScreen();
 
        // Check level property
        const levelProperty = await detailPage.levelProperty();
-       let level = await levelProperty.getValue();
-       expect(level).toEqual(0);
+       const level1 = await levelProperty.getValue();
+       expect(level1).toEqual(0);
        await levelProperty.setValue(20);
        await waitForExpect(async () => {
-         level = await getProperty(desc.id, 'percent');
-         if (level !== 20) {
+         const level2 = await getProperty(desc.id, 'percent');
+         if (level2 !== 20) {
            await levelProperty.setValue(20);
          }
-         expect(level).toEqual(20);
-         level = await levelProperty.getValue();
-         expect(level).toEqual(20);
+         expect(level2).toEqual(20);
+         const level3 = await levelProperty.getValue();
+         expect(level3).toEqual(20);
        });
        await setProperty(desc.id, 'percent', 60);
        await waitForExpect(async () => {
-         level = await levelProperty.getValue();
-         expect(level).toEqual(60);
+         const level4 = await levelProperty.getValue();
+         expect(level4).toEqual(60);
        });
        await saveStepScreen();
 
        // Check power property
        const powerProperty = await detailPage.powerProperty();
-       let power = await powerProperty.getDisplayedText();
-       expect(power).toEqual('50W');
+       const power1 = await powerProperty.getDisplayedText();
+       expect(power1).toEqual('50W');
        await setProperty(desc.id, 'energyPower', 60);
        await waitForExpect(async () => {
-         power = await powerProperty.getDisplayedText();
-         expect(power).toEqual('60W');
+         const power2 = await powerProperty.getDisplayedText();
+         expect(power2).toEqual('60W');
        });
        await saveStepScreen();
 
        // Check voltage property
        const voltageProperty = await detailPage.voltageProperty();
-       let voltage = await voltageProperty.getDisplayedText();
-       expect(voltage).toEqual('0V');
+       const voltage1 = await voltageProperty.getDisplayedText();
+       expect(voltage1).toEqual('0V');
        await setProperty(desc.id, 'energyVoltage', 30);
        await waitForExpect(async () => {
-         voltage = await voltageProperty.getDisplayedText();
-         expect(voltage).toEqual('30V');
+         const voltage2 = await voltageProperty.getDisplayedText();
+         expect(voltage2).toEqual('30V');
        });
        await saveStepScreen();
 
        // Check current property
        const currentProperty = await detailPage.currentProperty();
-       let current = await currentProperty.getDisplayedText();
-       expect(current).toEqual('0.0A');
+       const current1 = await currentProperty.getDisplayedText();
+       expect(current1).toEqual('0.0A');
        await setProperty(desc.id, 'energyCurrent', 40);
        await waitForExpect(async () => {
-         current = await currentProperty.getDisplayedText();
-         expect(current).toEqual('40.0A');
+         const current2 = await currentProperty.getDisplayedText();
+         expect(current2).toEqual('40.0A');
        });
        await saveStepScreen();
 
        // Check current property
        const frequencyProperty = await detailPage.frequencyProperty();
-       let frequency = await frequencyProperty.getDisplayedText();
-       expect(frequency).toEqual('0Hz');
+       const frequency1 = await frequencyProperty.getDisplayedText();
+       expect(frequency1).toEqual('0Hz');
        await setProperty(desc.id, 'energyFrequency', 10);
        await waitForExpect(async () => {
-         frequency = await frequencyProperty.getDisplayedText();
-         expect(frequency).toEqual('10Hz');
+         const frequency2 = await frequencyProperty.getDisplayedText();
+         expect(frequency2).toEqual('10Hz');
        });
        await saveStepScreen();
      });

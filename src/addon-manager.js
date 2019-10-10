@@ -620,9 +620,8 @@ class AddonManager extends EventEmitter {
     const [manifest, cfg] = AddonUtils.loadManifest(packageId);
 
     // Get any saved settings for this add-on.
-    let enabled = false;
-    const key = `addons.${manifest.id}`;
-    const configKey = `addons.config.${manifest.id}`;
+    const key = `addons.${packageId}`;
+    const configKey = `addons.config.${packageId}`;
     try {
       const savedSettings = await Settings.get(key);
 
@@ -630,9 +629,9 @@ class AddonManager extends EventEmitter {
       // to the new format.
       if (savedSettings.hasOwnProperty('moziot') &&
           savedSettings.moziot.hasOwnProperty('enabled')) {
-        enabled = savedSettings.moziot.enabled;
+        manifest.enabled = savedSettings.moziot.enabled;
       } else if (savedSettings.hasOwnProperty('enabled')) {
-        enabled = savedSettings.enabled;
+        manifest.enabled = savedSettings.enabled;
       }
 
       if (savedSettings.hasOwnProperty('moziot') &&
@@ -642,12 +641,6 @@ class AddonManager extends EventEmitter {
     } catch (_e) {
       // pass
     }
-
-    if (manifest.enabled) {
-      enabled = true;
-    }
-
-    manifest.enabled = enabled;
 
     await Settings.set(key, manifest);
     this.installedAddons.set(packageId, manifest);
@@ -661,7 +654,7 @@ class AddonManager extends EventEmitter {
     }
 
     // If this add-on is not explicitly enabled, move on.
-    if (!enabled) {
+    if (!manifest.enabled) {
       throw new Error(`Add-on not enabled: ${manifest.id}`);
     }
 

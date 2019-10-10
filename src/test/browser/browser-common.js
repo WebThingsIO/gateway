@@ -115,7 +115,7 @@ afterEach(async () => {
 
 async function saveStepScreen(stepStr) {
   if (typeof stepStr !== 'string') {
-    stepStr = stepNumber.toString();
+    stepStr = (stepNumber++).toString();
     if (stepStr.length < 2) {
       stepStr = `0${stepStr}`;
     }
@@ -131,7 +131,6 @@ async function saveStepScreen(stepStr) {
   const output = `${stepName}-${stepStr}.png`;
   await browser.saveScreenshot(path.join(TEST_OUTPUT_FOLDER, output));
   screenShots.push(output);
-  stepNumber += 1;
 }
 
 module.exports = {getBrowser, saveStepScreen, server};
