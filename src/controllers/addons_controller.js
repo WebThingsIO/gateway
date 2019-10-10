@@ -159,7 +159,6 @@ AddonsController.patch('/:addonId', async (request, response) => {
   const checksum = request.body.checksum;
 
   try {
-    await AddonManager.uninstallAddon(id, true, false);
     await AddonManager.installAddonFromUrl(id, url, checksum, false);
     response.status(200).json({});
   } catch (e) {

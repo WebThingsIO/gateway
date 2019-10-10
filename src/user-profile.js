@@ -18,7 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const mkdirp = require('mkdirp');
-const ncp = require('ncp');
+const {ncp} = require('ncp');
 const rimraf = require('rimraf');
 
 const Profile = {
