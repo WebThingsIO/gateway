@@ -149,6 +149,23 @@ Under Fedora Linux:
 $ sudo dnf install libpng-devel
 ```
 
+### Install libffi
+
+Under Ubuntu/Debian Linux:
+```
+$ sudo apt install libffi-dev
+```
+
+Under Fedora Linux:
+```
+$ sudo dnf install libffi-devel
+```
+
+Under macOS:
+```
+$ brew install libffi
+```
+
 ### Install git
 
 You'll need git to checkout the repositories.
