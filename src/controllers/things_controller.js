@@ -411,6 +411,7 @@ function websocketHandler(websocket, request) {
         const descr = await Things.getThingDescription(message.id,
                                                        request.get('Host'),
                                                        request.secure);
+        // eslint-disable-next-line require-atomic-updates
         message.id = descr.id;
       } catch (_e) {
         return;

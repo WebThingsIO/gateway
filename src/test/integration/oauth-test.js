@@ -110,6 +110,7 @@ describe('oauth/', function() {
     clientServer.close();
     oauth2 = null;
     await e2p(clientServer, 'close');
+    // eslint-disable-next-line require-atomic-updates
     clientServer = null;
   });
 

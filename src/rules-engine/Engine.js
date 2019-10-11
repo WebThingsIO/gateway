@@ -59,6 +59,7 @@ class Engine {
    */
   async addRule(rule) {
     const id = await Database.createRule(rule.toDescription());
+    // eslint-disable-next-line require-atomic-updates
     rule.id = id;
     this.rules[id] = rule;
     await rule.start();

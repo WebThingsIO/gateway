@@ -12,6 +12,7 @@ describe('db', () => {
     beforeEach(async () => {
       const email = `test-${uuid.v4()}@example.com`;
       user = await User.generate(email, password, 'test');
+      // eslint-disable-next-line require-atomic-updates
       user.id = await Database.createUser(user);
     });
 

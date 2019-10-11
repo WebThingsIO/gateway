@@ -18,33 +18,34 @@ describe('Addon', () => {
     await saveStepScreen();
 
     const addonSettings = await settingsPage.addon();
-    let addonSettingsPage = await addonSettings.openSettingsPage();
-    let addon = await addonSettingsPage.findAddon('Virtual Things');
-    expect(addon).toBeNull();
+    const addonSettingsPage1 = await addonSettings.openSettingsPage();
+    const addon1 = await addonSettingsPage1.findAddon('Virtual Things');
+    expect(addon1).toBeNull();
     await saveStepScreen();
 
     const discoverAddonPage =
-         await addonSettingsPage.openDiscoverAddonPage();
+         await addonSettingsPage1.openDiscoverAddonPage();
     await waitForExpect(async () => {
-      addon = await discoverAddonPage.findAddon('Virtual Things');
-      expect(addon).not.toBeNull();
+      const addon2 = await discoverAddonPage.findAddon('Virtual Things');
+      expect(addon2).not.toBeNull();
     }, 10000);
     await saveStepScreen();
 
-    await addon.add();
+    const addon3 = await discoverAddonPage.findAddon('Virtual Things');
+    await addon3.add();
     await browser.waitUntil(async () => {
-      addon = await discoverAddonPage.findAddon('Virtual Things');
-      return await addon.hasAdded();
+      const addon4 = await discoverAddonPage.findAddon('Virtual Things');
+      return await addon4.hasAdded();
     }, 30000);
     await saveStepScreen();
 
-    addonSettingsPage = await discoverAddonPage.back();
+    const addonSettingsPage2 = await discoverAddonPage.back();
     await waitForExpect(async () => {
-      addon = await addonSettingsPage.findAddon('Virtual Things');
-      expect(addon).not.toBeNull();
+      const addon5 = await addonSettingsPage2.findAddon('Virtual Things');
+      expect(addon5).not.toBeNull();
+      expect(await addon5.hasDisableButton()).toBeTruthy();
+      expect(await addon5.hasRemoveButton()).toBeTruthy();
     });
-    expect(await addon.hasDisableButton()).toBeTruthy();
-    expect(await addon.hasRemoveButton()).toBeTruthy();
     await saveStepScreen();
 
     const addons = await getAddons();
