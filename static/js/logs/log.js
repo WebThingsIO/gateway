@@ -1201,8 +1201,13 @@ class Log {
     if (this.elt.parentNode) {
       this.elt.parentNode.removeChild(this.elt);
     }
-    this.thingModel.unsubscribe(Constants.PROPERTY_STATUS,
-                                this.onPropertyStatus);
+
+    // this model can get in a weird state if the thing is removed
+    if (this.thingModel) {
+      this.thingModel.unsubscribe(Constants.PROPERTY_STATUS,
+                                  this.onPropertyStatus);
+    }
+
     if (this.liveScrollFrameRequest) {
       window.cancelAnimationFrame(this.liveScrollFrameRequest);
       this.liveScrollFrameRequest = null;
