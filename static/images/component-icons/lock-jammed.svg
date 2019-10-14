@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="32"
+   height="32"
+   viewBox="0 0 8.4666665 8.4666669"
+   version="1.1"
+   id="svg20491">
+  <defs
+     id="defs20485" />
+  <metadata
+     id="metadata20488">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="matrix(0.75000002,0,0,0.75000002,1.0583333,1.0583331)"
+     id="g23272">
+    <path
+       style="fill:#5d9bc7;fill-opacity:1;stroke:none;stroke-width:0.38572454"
+       d="M 1.0806913,3.562556 H 7.3859758 V 8.4666665 H 1.0806913 Z"
+       id="rect18605-2-7" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#5d9bc7;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.13153136;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 4.2324219,0 C 3.424651,0 2.6842071,0.43231707 2.1953125,1.125 1.7064179,1.8176829 1.4375,2.7606744 1.4375,3.8847656 a 0.56582226,0.56582226 0 1 0 1.1308594,0 c 0,-0.9418176 0.2326239,-1.6566454 0.5507812,-2.1074218 0.3181574,-0.4507765 0.6895749,-0.6464844 1.1132813,-0.6464844 0.4237065,0 0.797077,0.1957079 1.1152343,0.6464844 0.3181574,0.4507764 0.5507813,1.1656042 0.5507813,2.1074218 a 0.56582226,0.56582226 0 1 0 1.1308594,0 C 7.0292969,2.7606745 6.7603789,1.8176829 6.2714844,1.125 5.7825898,0.43231705 5.0401928,0 4.2324219,0 Z"
+       id="path18607-7-0" />
+    <path
+       transform="matrix(0.14514271,0,0,0.14480708,-3540.3717,2447.0725)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2.36811352;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 24432.737,-16848.004 h -22.442 l 11.221,-19.435 z"
+       id="path18637-1-1" />
+    <g
+       aria-label="!"
+       style="font-style:normal;font-weight:normal;font-size:2.05990076px;line-height:0%;font-family:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#5d9bc7;fill-opacity:1;stroke:none;stroke-width:0.1716584px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text18641-4-9">
+      <path
+         d="M 4.4083614,6.426172 H 4.1095972 L 4.0471506,5.2298905 H 4.4708081 Z M 4.0422528,6.8449317 q 0,-0.1028533 0.0551,-0.1555043 0.0551,-0.052651 0.1604021,-0.052651 0.1016288,0 0.1567288,0.053876 0.056324,0.053875 0.056324,0.1542799 0,0.096731 -0.056324,0.1530555 -0.056324,0.0551 -0.1567288,0.0551 -0.1028533,0 -0.1591777,-0.053876 -0.056324,-0.0551 -0.056324,-0.1542801 z"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.50766063px;line-height:1.25;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Bold';text-align:center;text-anchor:middle;fill:#5d9bc7;fill-opacity:1;stroke-width:0.1716584px"
+         id="path22566" />
+    </g>
+  </g>
+</svg>

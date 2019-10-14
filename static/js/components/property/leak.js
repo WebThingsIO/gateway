@@ -12,6 +12,10 @@
 const StringLabelProperty = require('./string-label');
 
 class LeakProperty extends StringLabelProperty {
+  connectedCallback() {
+    this.uppercase = true;
+    super.connectedCallback();
+  }
 }
 
 window.customElements.define('webthing-leak-property', LeakProperty);

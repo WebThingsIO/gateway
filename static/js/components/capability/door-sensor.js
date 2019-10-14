@@ -83,7 +83,7 @@ class DoorSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('open');
-      this._label.innerText = fluent.getMessage('unknown');
+      this._label.innerText = fluent.getMessage('ellipses');
     } else if (this._open) {
       this._icon.classList.add('open');
       this._label.innerText = fluent.getMessage('open');

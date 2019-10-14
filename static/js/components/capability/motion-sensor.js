@@ -84,7 +84,7 @@ class MotionSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('motion');
-      this._label.innerText = fluent.getMessage('unknown');
+      this._label.innerText = fluent.getMessage('ellipses');
     } else if (this._motion) {
       this._icon.classList.add('motion');
       this._label.innerText = fluent.getMessage('motion');

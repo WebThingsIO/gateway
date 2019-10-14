@@ -12,6 +12,10 @@
 const StringLabelProperty = require('./string-label');
 
 class OpenProperty extends StringLabelProperty {
+  connectedCallback() {
+    this.uppercase = true;
+    super.connectedCallback();
+  }
 }
 
 window.customElements.define('webthing-open-property', OpenProperty);

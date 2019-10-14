@@ -12,7 +12,7 @@
 const BaseComponent = require('../base-component');
 
 class Action extends BaseComponent {
-  constructor() {
+  constructor(opts) {
     const template = document.createElement('template');
     template.innerHTML = `
   <style>
@@ -53,6 +53,9 @@ class Action extends BaseComponent {
       padding: 1rem;
       color: #fff;
       z-index: 10;
+      background-size: 3rem;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     .webthing-action-button:hover {
@@ -87,6 +90,7 @@ class Action extends BaseComponent {
   <div id="name-${BaseComponent.count}" class="webthing-action-name"></div>
 `;
     super(template);
+    this.opts = opts;
 
     this._button = this.shadowRoot.querySelector(
       '.webthing-action-button');
@@ -122,7 +126,12 @@ class Action extends BaseComponent {
   }
 
   set name(value) {
-    this._button.innerText = value;
+    if (this.opts.icon) {
+      this._button.style.backgroundImage = `url('${this.opts.icon}')`;
+    } else {
+      this._button.innerText = value;
+    }
+
     this._name.innerText = value;
   }
 

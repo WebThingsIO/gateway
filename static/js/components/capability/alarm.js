@@ -84,7 +84,7 @@ class AlarmCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('alarm');
-      this._label.innerText = fluent.getMessage('unknown');
+      this._label.innerText = fluent.getMessage('ellipses');
     } else if (this._alarm) {
       this._icon.classList.add('alarm');
       this._label.innerText = fluent.getMessage('alarm');

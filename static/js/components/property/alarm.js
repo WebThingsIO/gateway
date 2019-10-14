@@ -12,6 +12,10 @@
 const StringLabelProperty = require('./string-label');
 
 class AlarmProperty extends StringLabelProperty {
+  connectedCallback() {
+    this.uppercase = true;
+    super.connectedCallback();
+  }
 }
 
 window.customElements.define('webthing-alarm-property', AlarmProperty);

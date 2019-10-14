@@ -48,6 +48,10 @@ class StringLabelProperty extends BaseComponent {
       font-size: 1.4rem;
     }
 
+    .webthing-string-label-property-value.uppercase {
+      text-transform: uppercase;
+    }
+
     .webthing-string-label-property-name {
       text-align: center;
       max-width: 10rem;
@@ -86,6 +90,10 @@ class StringLabelProperty extends BaseComponent {
       typeof this.dataset.inverted !== 'undefined' ?
         this.dataset.inverted === 'true' :
         false;
+
+    if (this.uppercase) {
+      this._value.classList.add('uppercase');
+    }
   }
 
   get name() {

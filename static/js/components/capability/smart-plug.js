@@ -96,7 +96,7 @@ class SmartPlugCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('on');
-      this._label.innerText = fluent.getMessage('unknown');
+      this._label.innerText = fluent.getMessage('ellipses');
     } else if (this._on) {
       this._icon.classList.add('on');
       if (this._havePower) {

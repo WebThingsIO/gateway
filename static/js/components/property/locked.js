@@ -1,7 +1,7 @@
 /**
- * MotionProperty
+ * LockedProperty
  *
- * A bubble showing a motion label.
+ * A bubble showing a locked label.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,12 +11,12 @@
 
 const StringLabelProperty = require('./string-label');
 
-class MotionProperty extends StringLabelProperty {
+class LockedProperty extends StringLabelProperty {
   connectedCallback() {
     this.uppercase = true;
     super.connectedCallback();
   }
 }
 
-window.customElements.define('webthing-motion-property', MotionProperty);
-module.exports = MotionProperty;
+window.customElements.define('webthing-locked-property', LockedProperty);
+module.exports = LockedProperty;

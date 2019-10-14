@@ -247,6 +247,10 @@
   background-image: url('../optimized-images/thing-icons/thermostat.svg');
 }
 
+.new-thing.lock .new-thing-icon {
+  background-image: url('../optimized-images/thing-icons/lock.svg');
+}
+
 #add-by-url-anchor:link,
 #add-by-url-anchor:visited,
 #add-by-url-anchor:hover,
