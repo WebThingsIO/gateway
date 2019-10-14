@@ -56,6 +56,8 @@ function capabilityToIcon(capability) {
       return '/optimized-images/thing-icons/alarm.svg';
     case 'Thermostat':
       return '/optimized-images/thing-icons/thermostat.svg';
+    case 'Lock':
+      return '/optimized-images/thing-icons/lock.svg';
     case 'Custom':
     default:
       return defaultIcon();

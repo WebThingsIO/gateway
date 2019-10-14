@@ -235,6 +235,8 @@ VideoCamera = Video Camera
 Camera = Camera
 TemperatureSensor = Temperature Sensor
 Alarm = Alarm
+Thermostat = Thermostat
+Lock = Lock
 Custom = Custom Thing
 
 ## Properties
@@ -259,6 +261,10 @@ motion = Motion
 no-motion = No Motion
 open = Open
 closed = Closed
+locked = Locked
+unlocked = Unlocked
+jammed = Jammed
+unknown = Unknown
 
 ## Domain Setup
 reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
@@ -501,7 +507,7 @@ creating-content = Please connect to { $ssid } with the password you just
 
 ## General Terms
 ok = Ok
-unknown = ...
+ellipses = ...
 event-log = Event Log
 edit = Edit
 remove = Remove

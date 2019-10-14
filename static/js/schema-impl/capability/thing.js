@@ -10,7 +10,7 @@
 
 'use strict';
 
-const ActionDetail = require('../property/action');
+const ActionDetail = require('../action/action');
 const AlarmDetail = require('../property/alarm');
 const API = require('../../api');
 const App = require('../../app');
@@ -28,6 +28,8 @@ const ImageDetail = require('../property/image');
 const InstantaneousPowerDetail = require('../property/instantaneous-power');
 const LeakDetail = require('../property/leak');
 const LevelDetail = require('../property/level');
+const LockActionDetail = require('../action/lock');
+const LockedDetail = require('../property/locked');
 const MotionDetail = require('../property/motion');
 const NumberDetail = require('../property/number');
 const OnOffDetail = require('../property/on-off');
@@ -38,6 +40,7 @@ const TargetTemperatureDetail = require('../property/target-temperature');
 const TemperatureDetail = require('../property/temperature');
 const ThermostatModeDetail = require('../property/thermostat-mode');
 const ThingDetailLayout = require('./thing-detail-layout');
+const UnlockActionDetail = require('../action/unlock');
 const Utils = require('../../utils');
 const VideoDetail = require('../property/video');
 const VoltageDetail = require('../property/voltage');
@@ -203,6 +206,9 @@ class Thing {
           case 'HeatingCoolingProperty':
             detail = new HeatingCoolingDetail(this, name, property);
             break;
+          case 'LockedProperty':
+            detail = new LockedDetail(this, name, property);
+            break;
           default:
             if (defaults.hasOwnProperty(name)) {
               let detailType = defaults[name];
@@ -255,9 +261,21 @@ class Thing {
         if (href) {
           for (const name in description.actions) {
             const action = description.actions[name];
-            this.displayedActions[name] = {
-              detail: new ActionDetail(this, name, action, href),
-            };
+
+            let detail;
+            switch (action['@type']) {
+              case 'LockAction':
+                detail = new LockActionDetail(this, name, action, href);
+                break;
+              case 'UnlockAction':
+                detail = new UnlockActionDetail(this, name, action, href);
+                break;
+              default:
+                detail = new ActionDetail(this, name, action, href);
+                break;
+            }
+
+            this.displayedActions[name] = {detail};
           }
         }
       }

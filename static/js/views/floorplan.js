@@ -22,6 +22,7 @@ const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
 const LeakSensor = require('../schema-impl/capability/leak-sensor');
 const Light = require('../schema-impl/capability/light');
+const Lock = require('../schema-impl/capability/lock');
 const MotionSensor = require('../schema-impl/capability/motion-sensor');
 const MultiLevelSensor =
   require('../schema-impl/capability/multi-level-sensor');
@@ -166,6 +167,9 @@ const FloorplanScreen = {
               break;
             case 'Thermostat':
               thing = new Thermostat(thingModel, description, format);
+              break;
+            case 'Lock':
+              thing = new Lock(thingModel, description, format);
               break;
             default:
               thing = new Thing(thingModel, description, format);

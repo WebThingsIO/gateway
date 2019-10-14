@@ -286,6 +286,7 @@ const Utils = {
     const list = capabilities.slice();
 
     const priority = [
+      'Lock',
       'Thermostat',
       'VideoCamera',
       'Camera',

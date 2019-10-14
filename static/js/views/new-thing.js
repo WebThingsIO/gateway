@@ -121,6 +121,9 @@ class NewThing {
         case 'Thermostat':
           cls = cls || 'thermostat';
           break;
+        case 'Lock':
+          cls = cls || 'lock';
+          break;
         case 'Custom':
           cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;
@@ -420,6 +423,9 @@ class NewThing {
         break;
       case 'Thermostat':
         cls = 'thermostat';
+        break;
+      case 'Lock':
+        cls = 'lock';
         break;
       case 'Custom':
         this.customIconLabel.classList.remove('hidden');
