@@ -132,6 +132,10 @@
   background-image: url('../optimized-images/experiments-icon.png');
 }
 
+#localization-settings-link {
+  background-image: url('../optimized-images/localization-icon.svg');
+}
+
 #update-settings-link {
   background-image: url('../optimized-images/update-icon.svg');
 }
@@ -206,6 +210,7 @@
 #addon-settings ul,
 #domain-settings ul,
 #experiment-settings ul,
+#localization-settings ul,
 #update-settings ul,
 #authorization-settings ul,
 #developer-settings ul {
@@ -236,6 +241,7 @@
 #addon-settings ul li:last-child,
 #domain-settings ul li:last-child,
 #experiment-settings ul li:last-child,
+#localization-settings ul li:last-child,
 #update-settings ul li:last-child {
   margin-bottom: 3rem;
 }
@@ -268,6 +274,7 @@
 
 .developer-checkbox-item,
 .experiment-item,
+.localization-item,
 .update-item,
 .authorization-item,
 .domain-item {
@@ -586,6 +593,32 @@
   background-color: #305067;
 }
 
+.localization-item {
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+.localization-item-header {
+  padding-bottom: 2rem;
+}
+
+.localization-item-content {
+  width: 100%;
+  display: grid;
+  grid-gap: 0 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.localization-item-content > span {
+  grid-column: 1 / 2;
+  padding-top: 1.6rem;
+  text-align: right;
+}
+
+.localization-item-content > select {
+  grid-column: 2 / 4;
+}
+
 .update-item {
   padding: 2rem;
 }
@@ -689,6 +722,7 @@
   display: none;
 }
 
+#localization-settings > .settings-container,
 #update-settings > .settings-container {
   font-size: 1.8rem;
 }
@@ -839,6 +873,13 @@
   margin: 1rem;
 }
 
+.localization-select {
+  display: block;
+  width: calc(100% - 1rem);
+  max-width: 30rem;
+  margin: 1rem;
+}
+
 .user-settings-save {
   display: block;
   margin: 1rem auto;
@@ -898,6 +939,7 @@
   display: none !important;
 }
 
+.localization-select,
 .network-select {
   display: inline-block;
   text-align: left;

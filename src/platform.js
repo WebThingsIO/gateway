@@ -176,6 +176,12 @@ const wrappedMethods = [
   'restartSystem',
   'scanWirelessNetworks',
   'update',
+  'getValidTimezones',
+  'getTimezone',
+  'setTimezone',
+  'getValidWirelessCountries',
+  'getWirelessCountry',
+  'setWirelessCountry',
 ];
 
 for (const method of wrappedMethods) {

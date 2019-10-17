@@ -36,7 +36,8 @@ class TimeTriggerBlock extends RulePartBlock {
     this.timeInput.addEventListener('change', () => {
       this.rulePart = {trigger: {
         type: 'TimeTrigger',
-        time: TimeTriggerBlock.localToUTC(this.timeInput.value),
+        time: this.timeInput.value,
+        localized: true,
       }};
       this.onRuleChange();
     });
@@ -55,8 +56,7 @@ class TimeTriggerBlock extends RulePartBlock {
       this.rulePartBlock.classList.add('trigger');
 
       setTimeout(() => {
-        this.timeInput.value =
-          TimeTriggerBlock.utcToLocal(rulePart.trigger.time);
+        this.timeInput.value = rulePart.trigger.time;
       }, 0);
     }
 
@@ -73,7 +73,7 @@ class TimeTriggerBlock extends RulePartBlock {
     if (this.role === 'trigger') {
       this.rulePart = {trigger: {
         type: 'TimeTrigger',
-        time: TimeTriggerBlock.localToUTC(this.timeInput.value),
+        time: this.timeInput.value,
       }};
       this.onRuleChange();
     }
@@ -81,32 +81,6 @@ class TimeTriggerBlock extends RulePartBlock {
 
   static leftPad(n) {
     return n.toString().padStart(2, '0');
-  }
-
-  /**
-   * Convert from a utc time string to one in the local timezone
-   * @param {String} utcTime - formatted HH:MM
-   * @return {String}
-   */
-  static utcToLocal(utcTime) {
-    const timeParts = utcTime.split(':');
-    const date = new Date();
-    date.setUTCHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
-    const lp = TimeTriggerBlock.leftPad;
-    return `${lp(date.getHours())}:${lp(date.getMinutes())}`;
-  }
-
-  /**
-   * Convert from a local time string to one in UTC
-   * @param {String} localTime - formatted HH:MM
-   * @return {String}
-   */
-  static localToUTC(localTime) {
-    const timeParts = localTime.split(':');
-    const date = new Date();
-    date.setHours(parseInt(timeParts[0], 10), parseInt(timeParts[1], 10));
-    const lp = TimeTriggerBlock.leftPad;
-    return `${lp(date.getUTCHours())}:${lp(date.getUTCMinutes())}`;
   }
 }
 

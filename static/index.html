@@ -71,6 +71,7 @@
           <li class="settings-item"><a id="user-settings-link" href="/settings/users" data-l10n-id="settings-users"></a></li>
           <li class="settings-item"><a id="addon-settings-link" href="/settings/addons" data-l10n-id="settings-add-ons"></a></li>
           <!-- <li class="settings-item"><a id="adapter-settings-link" href="/settings/adapters" data-l10n-id="settings-adapters"></a></li> -->
+          <li class="settings-item"><a id="localization-settings-link" href="/settings/localization" data-l10n-id="settings-localization"></a></li>
           <li class="settings-item"><a id="update-settings-link" href="/settings/updates" data-l10n-id="settings-updates"></a></li>
           <li class="settings-item"><a id="authorization-settings-link" href="/settings/authorizations" data-l10n-id="settings-authorizations"></a></li>
           <li class="settings-item"><a id="experiment-settings-link" href="/settings/experiments" data-l10n-id="settings-experiments"></a></li>
@@ -403,6 +404,31 @@
             <label for="logs-experiment-checkbox" data-l10n-id="experiment-settings-logs"></label>
           </li>
 
+        </ul>
+      </section>
+      <section id="localization-settings" class="hidden settings-section">
+        <ul>
+          <li class="localization-item" id="language-region-container">
+            <div class="localization-item-header" data-l10n-id="localization-settings-language-region"></div>
+            <div class="localization-item-content">
+              <span data-l10n-id="localization-settings-country"></span>
+              <select id="localization-settings-country" class="localization-select"></select>
+              <span data-l10n-id="localization-settings-timezone"></span>
+              <select id="localization-settings-timezone" class="localization-select"></select>
+              <span data-l10n-id="localization-settings-language"></span>
+              <select id="localization-settings-language" class="localization-select"></select>
+            </div>
+          </li>
+          <li class="localization-item" id="units-container">
+            <div class="localization-item-header" data-l10n-id="localization-settings-units"></div>
+            <div class="localization-item-content">
+              <span data-l10n-id="localization-settings-units-temperature"></span>
+              <select id="localization-settings-units-temperature" class="localization-select">
+                <option value="celsius" data-l10n-id="localization-settings-units-temperature-celsius"></option>
+                <option value="fahrenheit" data-l10n-id="localization-settings-units-temperature-fahrenheit"></option>
+              </select>
+            </div>
+          </li>
         </ul>
       </section>
       <section id="update-settings" class="hidden settings-section">

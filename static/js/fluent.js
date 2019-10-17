@@ -1,3 +1,4 @@
+const API = require('./api');
 const FluentDOM = require('@fluent/dom');
 const Fluent = require('@fluent/bundle');
 
@@ -8,10 +9,14 @@ const availableLanguages = {
   it: ['/fluent/it/main.ftl'],
 };
 
+let language;
+let englishBundle;
 let bundle;
 
 async function load() {
-  let language = navigator.language;
+  const response = await API.getLanguage();
+
+  language = response.current || navigator.language;
   if (!availableLanguages.hasOwnProperty(language)) {
     const primary = language.split('-')[0];
     if (availableLanguages.hasOwnProperty(primary)) {
@@ -20,6 +25,12 @@ async function load() {
       language = 'en-US';
     }
   }
+
+  if (language !== response.current) {
+    // don't bother waiting for this, it's not super important
+    API.setLanguage(language);
+  }
+
   const links = availableLanguages[language];
   bundle = new Fluent.FluentBundle(language);
   for (const link of links) {
@@ -28,7 +39,23 @@ async function load() {
       const text = await res.text();
       bundle.addResource(new Fluent.FluentResource(text));
     } catch (e) {
-      console.warn('Unable to download language pack', e);
+      console.warn('Unable to download language pack:', e);
+    }
+  }
+
+  if (language === 'en-US') {
+    englishBundle = bundle;
+  } else {
+    const englishLinks = availableLanguages['en-US'];
+    englishBundle = new Fluent.FluentBundle('en-US');
+    for (const link of englishLinks) {
+      try {
+        const res = await fetch(link);
+        const text = await res.text();
+        englishBundle.addResource(new Fluent.FluentResource(text));
+      } catch (e) {
+        console.warn('Unable to download English language pack:', e);
+      }
     }
   }
 }
@@ -37,7 +64,7 @@ async function *generateBundles(_resourceIds) {
   if (!bundle) {
     await load();
   }
-  yield bundle;
+  yield *[bundle, englishBundle];
 }
 
 const l10n = new FluentDOM.DOMLocalization([], generateBundles);
@@ -60,10 +87,39 @@ function getMessageStrict(id, vars = {}) {
 }
 
 /**
+ * @return {string|null} Translation of unit or null if not contained in bundle
+ */
+function getEnglishMessageStrict(id, vars = {}) {
+  const obj = englishBundle.getMessage(id, vars);
+  if (!obj) {
+    console.warn('Missing id', id);
+    return null;
+  }
+  return englishBundle.formatPattern(obj.value, vars);
+}
+
+/**
  * @return {string} Translation of unit or unit's id for debugging purposes
  */
 function getMessage(id, vars = {}) {
-  return getMessageStrict(id, vars) || `<${id}>`;
+  let msg = getMessageStrict(id, vars);
+  if (msg) {
+    return msg;
+  }
+
+  msg = getEnglishMessageStrict(id, vars);
+  if (msg) {
+    return msg;
+  }
+
+  return `<${id}>`;
+}
+
+/**
+ * @return {string} The user's chosen language.
+ */
+function getLanguage() {
+  return language;
 }
 
 module.exports = {
@@ -72,4 +128,5 @@ module.exports = {
   init,
   getMessage,
   getMessageStrict,
+  getLanguage,
 };
