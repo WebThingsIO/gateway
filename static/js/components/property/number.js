@@ -186,6 +186,19 @@ class NumberProperty extends BaseComponent {
   }
 
   set value(value) {
+    let step = this.step;
+    if (step !== '' && step !== 'any') {
+      step = parseFloat(step);
+      value = Math.round(value / step) * step;
+
+      let precision = 0;
+      if (`${step}`.includes('.')) {
+        precision = `${step}`.split('.')[1].length;
+      }
+
+      value = value.toFixed(precision);
+    }
+
     this._input.value = value;
   }
 
