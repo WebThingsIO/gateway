@@ -569,6 +569,38 @@ const API = {
       }
     });
   },
+
+  getCountry() {
+    return this.getJson('/settings/localization/country');
+  },
+
+  setCountry(country) {
+    return this.putJson('/settings/localization/country', {country});
+  },
+
+  getTimezone() {
+    return this.getJson('/settings/localization/timezone');
+  },
+
+  setTimezone(zone) {
+    return this.putJson('/settings/localization/timezone', {zone});
+  },
+
+  getLanguage() {
+    return this.getJson('/settings/localization/language');
+  },
+
+  setLanguage(language) {
+    return this.putJson('/settings/localization/language', {language});
+  },
+
+  getUnits() {
+    return this.getJson('/settings/localization/units');
+  },
+
+  setUnits(units) {
+    return this.putJson('/settings/localization/units', units);
+  },
 };
 
 // Elevate this to the window level.

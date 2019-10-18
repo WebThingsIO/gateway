@@ -10,6 +10,7 @@
 
 const child_process = require('child_process');
 const config = require('config');
+const countryList = require('country-list');
 const fs = require('fs');
 const ipRegex = require('ip-regex');
 const os = require('os');
@@ -1306,6 +1307,168 @@ function update() {
   });
 }
 
+/**
+ * Get a list of all valid timezones for the system.
+ *
+ * @returns {string[]} List of timezones.
+ */
+function getValidTimezones() {
+  const tzdata = '/usr/lib/lua/luci/sys/zoneinfo/tzdata.lua';
+  if (!fs.existsSync(tzdata)) {
+    return [];
+  }
+
+  try {
+    const data = fs.readFileSync(tzdata, 'utf8');
+    const zones = data.split('\n')
+      .filter((l) => l.startsWith('\t{'))
+      .map((l) => l.split('\'')[1])
+      .sort();
+
+    return zones;
+  } catch (e) {
+    console.error('Failed to read zone file:', e);
+  }
+
+  return [];
+}
+
+/**
+ * Get the current timezone.
+ *
+ * @returns {string} Name of timezone.
+ */
+function getTimezone() {
+  const label = 'getTimezone';
+  const result = uciGet(label, 'system.@system[0].zonename');
+  if (!result.success) {
+    DEBUG && console.log(`${label}: getTimezone returning ''`);
+    return '';
+  }
+
+  DEBUG && console.log(`${label}: getTimezone returning '${result.value}'`);
+  return result.value;
+}
+
+/**
+ * Set the current timezone.
+ *
+ * @param {string} zone - The timezone to set
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setTimezone(zone) {
+  const label = 'setTimezone';
+
+  const tzdata = '/usr/lib/lua/luci/sys/zoneinfo/tzdata.lua';
+  if (!fs.existsSync(tzdata)) {
+    return [];
+  }
+
+  let zones;
+  try {
+    const data = fs.readFileSync(tzdata, 'utf8');
+    zones = data.split('\n')
+      .filter((l) => l.startsWith('\t{'))
+      .map((l) => {
+        const fields = l.split('\'');
+        return [fields[1], fields[3]];
+      });
+  } catch (e) {
+    console.error('Failed to read zone file:', e);
+    return false;
+  }
+
+  const data = zones.find((z) => z[0] === zone);
+  if (!data) {
+    return false;
+  }
+
+  if (!uciSet(label, 'system.@system[0].zonename', data[0])) {
+    return false;
+  }
+
+  if (!uciSet(label, 'system.@system[0].timezone', data[1])) {
+    return false;
+  }
+
+  if (!uciCommit(label, 'system')) {
+    return false;
+  }
+
+  const proc = spawnSync(label, '/etc/init.d/system', ['reload']);
+  return proc.status === 0;
+}
+
+/**
+ * Get a list of all valid wi-fi countries for the system.
+ *
+ * @returns {string[]} list of countries.
+ */
+function getValidWirelessCountries() {
+  const label = 'getValidWirelessCountries';
+  const proc = spawnSync(label, 'iwinfo', ['wlan0', 'countrylist']);
+
+  if (proc.status !== 0) {
+    return [];
+  }
+
+  return proc.stdout.split('\n')
+    .map((l) => l.split(/\s+/g)[1])
+    .filter((l) => typeof l === 'string' && l !== '00')
+    .map((l) => countryList.getName(l))
+    .sort();
+}
+
+/**
+ * Get the wi-fi country code.
+ *
+ * @returns {string} Country.
+ */
+function getWirelessCountry() {
+  const label = 'getWirelessCountry';
+  const proc = spawnSync(label, 'iwinfo', ['wlan0', 'countrylist']);
+
+  if (proc.status !== 0) {
+    return '';
+  }
+
+  const selected = proc.stdout.split('\n').find((l) => l.startsWith('*'));
+  if (!selected) {
+    return '';
+  }
+
+  const code = selected.split(/\s+/g)[1];
+  return countryList.getName(code) || '';
+}
+
+/**
+ * Set the wi-fi country code.
+ *
+ * @param {string} country - The country code to set
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setWirelessCountry(country) {
+  const label = 'setWirelessCountry';
+  let proc = spawnSync(label, 'iwinfo', ['wlan0', 'countrylist']);
+
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  const countries = proc.stdout.split('\n')
+    .map((l) => l.split(/\s+/g)[1])
+    .filter((l) => typeof l === 'string' && l !== '00')
+    .map((l) => [l, countryList.getName(l)]);
+
+  const data = countries.find((c) => c[1] === country);
+  if (!data) {
+    return false;
+  }
+
+  proc = spawnSync(label, 'iw', ['reg', 'set', data[0]]);
+  return proc.status === 0;
+}
+
 module.exports = {
   getPlatformArchitecture,
   getCaptivePortalStatus,
@@ -1331,4 +1494,10 @@ module.exports = {
   restartSystem,
   scanWirelessNetworks,
   update,
+  getValidTimezones,
+  getTimezone,
+  setTimezone,
+  getValidWirelessCountries,
+  getWirelessCountry,
+  setWirelessCountry,
 };

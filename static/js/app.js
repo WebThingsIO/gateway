@@ -68,6 +68,13 @@ const App = {
   PING_INTERVAL: 20 * 1000,
 
   /**
+   * Some global settings.
+   */
+  LANGUAGE: 'en-US',
+  TIMEZONE: 'UTC',
+  UNITS: {},
+
+  /**
    * Start WebThings Gateway app.
    */
   init: function() {
@@ -549,6 +556,13 @@ if (navigator.serviceWorker) {
 window.addEventListener('load', function app_onLoad() {
   window.removeEventListener('load', app_onLoad);
   fluent.load().then(() => {
+    return API.getUnits();
+  }).then((response) => {
+    App.UNITS = response || App.UNITS;
+    return API.getTimezone();
+  }).then((response) => {
+    App.TIMEZONE = response.current || App.TIMEZONE;
+    App.LANGUAGE = fluent.getLanguage() || App.LANGUAGE;
     App.init();
   });
 });

@@ -6,7 +6,6 @@
 
 const API = require('../api');
 const RuleUtils = require('./RuleUtils');
-const TimeTriggerBlock = require('./TimeTriggerBlock');
 
 class Rule {
   /**
@@ -137,8 +136,7 @@ class Rule {
     }
 
     if (trigger.type === 'TimeTrigger') {
-      return `the time of day is ${
-        TimeTriggerBlock.utcToLocal(trigger.time)}`;
+      return `the time of day is ${trigger.time}`;
     }
 
     if (trigger.type === 'EventTrigger') {

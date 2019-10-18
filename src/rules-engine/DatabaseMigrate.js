@@ -8,6 +8,32 @@ function extractThing(href) {
   return href.match(/things\/([^/]+)/)[1];
 }
 
+function migrateTimeTrigger(trigger) {
+  if (trigger.localized) {
+    return;
+  }
+
+  // If the time trigger has not been localized, it's still in UTC time
+  const parts = trigger.time.split(':');
+  let hours = parseInt(parts[0], 10);
+  let minutes = parseInt(parts[1], 10);
+
+  // Convert from UTC to local
+  const oldTime = new Date();
+  const offset = oldTime.getTimezoneOffset();
+  oldTime.setUTCHours(hours, minutes, 0, 0);
+  const newTime = new Date(oldTime + (offset * 60 * 1000));
+
+  hours = newTime.getHours().toString().padStart(2, '0');
+  minutes = newTime.getMinutes().toString().padStart(2, '0');
+
+  return {
+    type: 'TimeTrigger',
+    time: `${hours}:${minutes}`,
+    localized: true,
+  };
+}
+
 function migrateProperty(prop) {
   if (!prop.href) {
     return;
@@ -54,7 +80,13 @@ function migratePart(part) {
     });
   }
 
-  if (part.property) {
+  if (part.type === 'TimeTrigger') {
+    const newTrigger = migrateTimeTrigger(part);
+    if (newTrigger) {
+      changed = true;
+      Object.assign(newPart, newTrigger);
+    }
+  } else if (part.property) {
     const newProp = migrateProperty(part.property);
     if (newProp) {
       changed = true;
@@ -67,9 +99,11 @@ function migratePart(part) {
     }
     newPart.thing = newThing || part.thing;
   }
+
   if (!changed) {
     return;
   }
+
   return newPart;
 }
 

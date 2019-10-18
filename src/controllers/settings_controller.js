@@ -14,11 +14,15 @@
 
 const CertificateManager = require('../certificate-manager');
 const config = require('config');
+const Constants = require('../constants');
 const fetch = require('node-fetch');
+const fs = require('fs');
+const ISO6391 = require('iso-639-1');
 const jwtMiddleware = require('../jwt-middleware');
 const mDNSserver = require('../mdns-server');
-const Platform = require('../platform');
+const path = require('path');
 const pkg = require('../../package.json');
+const Platform = require('../platform');
 const PromiseRouter = require('express-promise-router');
 const Settings = require('../models/settings');
 const TunnelService = require('../ssltunnel');
@@ -440,5 +444,153 @@ SettingsController.get('/network/addresses', auth, (request, response) => {
     response.status(500).send('Network addresses not implemented');
   }
 });
+
+SettingsController.get('/localization/country', auth, (request, response) => {
+  let valid = [];
+  if (Platform.implemented('getValidWirelessCountries')) {
+    valid = Platform.getValidWirelessCountries();
+  }
+
+  let current = '';
+  if (Platform.implemented('getWirelessCountry')) {
+    current = Platform.getWirelessCountry();
+  }
+
+  const setImplemented = Platform.implemented('setWirelessCountry');
+  response.json({valid, current, setImplemented});
+});
+
+SettingsController.put('/localization/country', auth, (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('country')) {
+    response.status(400).send('Missing country property');
+    return;
+  }
+
+  if (Platform.implemented('setWirelessCountry')) {
+    if (Platform.setWirelessCountry(request.body.country)) {
+      response.status(200).json({});
+    } else {
+      response.status(500).send('Failed to update country');
+    }
+  } else {
+    response.status(500).send('Setting country not implemented');
+  }
+});
+
+SettingsController.get('/localization/timezone', auth, (request, response) => {
+  let valid = [];
+  if (Platform.implemented('getValidTimezones')) {
+    valid = Platform.getValidTimezones();
+  }
+
+  let current = '';
+  if (Platform.implemented('getTimezone')) {
+    current = Platform.getTimezone();
+  }
+
+  const setImplemented = Platform.implemented('setTimezone');
+  response.json({valid, current, setImplemented});
+});
+
+SettingsController.put('/localization/timezone', auth, (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('zone')) {
+    response.status(400).send('Missing zone property');
+    return;
+  }
+
+  if (Platform.implemented('setTimezone')) {
+    if (Platform.setTimezone(request.body.zone)) {
+      response.status(200).json({});
+    } else {
+      response.status(500).send('Failed to update timezone');
+    }
+  } else {
+    response.status(500).send('Setting timezone not implemented');
+  }
+});
+
+SettingsController.get(
+  '/localization/language',
+  auth,
+  async (request, response) => {
+    const fluentDir = path.join(Constants.BUILD_STATIC_PATH, 'fluent');
+    const valid = [];
+    try {
+      for (const dirname of fs.readdirSync(fluentDir)) {
+        const [language, country] = dirname.split('-');
+
+        valid.push({
+          code: dirname,
+          name: `${ISO6391.getName(language)}${country ? ` (${country})` : ''}`,
+        });
+      }
+
+      valid.sort((a, b) => a.name.localeCompare(b.name));
+    } catch (_) {
+      response.status(500).send('Failed to retrieve list of languages');
+      return;
+    }
+
+    try {
+      const current = await Settings.get('localization.language');
+      response.json({valid, current});
+    } catch (_) {
+      response.status(500).send('Failed to get current language');
+    }
+  }
+);
+
+SettingsController.put(
+  '/localization/language',
+  auth,
+  async (request, response) => {
+    if (!request.body || !request.body.hasOwnProperty('language')) {
+      response.status(400).send('Missing language property');
+      return;
+    }
+
+    try {
+      await Settings.set('localization.language', request.body.language);
+      response.json({});
+    } catch (_) {
+      response.status(500).send('Failed to set language');
+    }
+  }
+);
+
+SettingsController.get(
+  '/localization/units',
+  auth,
+  async (request, response) => {
+    let temperature;
+
+    try {
+      temperature = await Settings.get('localization.units.temperature');
+    } catch (e) {
+      // pass
+    }
+
+    response.json({
+      temperature: temperature || 'celsius',
+    });
+  }
+);
+
+SettingsController.put(
+  '/localization/units',
+  auth,
+  async (request, response) => {
+    for (const [key, value] of Object.entries(request.body)) {
+      try {
+        await Settings.set(`localization.units.${key}`, value);
+      } catch (_) {
+        response.status(500).send('Failed to set unit');
+        return;
+      }
+    }
+
+    response.json({});
+  }
+);
 
 module.exports = SettingsController;

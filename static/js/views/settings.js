@@ -50,6 +50,8 @@ const SettingsScreen = {
     this.discoverAddonsButton =
       document.getElementById('discover-addons-button');
     this.experimentSettings = document.getElementById('experiment-settings');
+    this.localizationSettings =
+      document.getElementById('localization-settings');
     this.updateSettings = document.getElementById('update-settings');
     this.authorizationSettings =
       document.getElementById('authorization-settings');
@@ -90,6 +92,9 @@ const SettingsScreen = {
     this.insertTitleElement(this.experimentSettings,
                             fluent.getMessage('experiments'),
                             '/optimized-images/experiments-icon.png');
+    this.insertTitleElement(this.localizationSettings,
+                            fluent.getMessage('localization'),
+                            '/optimized-images/localization-icon.svg');
     this.insertTitleElement(this.updateSettings,
                             fluent.getMessage('updates'),
                             '/optimized-images/update-icon.svg');
@@ -108,7 +113,56 @@ const SettingsScreen = {
     });
 
     this.setupNetworkElements();
+    this.setupLocalizationElements();
   },
+
+  /* eslint-disable max-len */
+  setupLocalizationElements: function() {
+    this.elements.localization = {
+      country: document.getElementById('localization-settings-country'),
+      timezone: document.getElementById('localization-settings-timezone'),
+      language: document.getElementById('localization-settings-language'),
+      units: {
+        temperature: document.getElementById('localization-settings-units-temperature'),
+      },
+    };
+
+    this.elements.localization.country.addEventListener(
+      'change',
+      (ev) => {
+        API.setCountry(ev.target.value)
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.timezone.addEventListener(
+      'change',
+      (ev) => {
+        API.setTimezone(ev.target.value)
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.language.addEventListener(
+      'change',
+      (ev) => {
+        API.setLanguage(ev.target.value)
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.units.temperature.addEventListener(
+      'change',
+      (ev) => {
+        API.setUnits({temperature: ev.target.value})
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+  },
+  /* eslint-enable max-len */
 
   /* eslint-disable max-len */
   setupNetworkElements: function() {
@@ -674,6 +728,7 @@ const SettingsScreen = {
     this.addonConfigSettings.classList.add('hidden');
     this.addonDiscoverySettings.classList.add('hidden');
     this.experimentSettings.classList.add('hidden');
+    this.localizationSettings.classList.add('hidden');
     this.updateSettings.classList.add('hidden');
     this.authorizationSettings.classList.add('hidden');
     this.developerSettings.classList.add('hidden');
@@ -768,6 +823,9 @@ const SettingsScreen = {
         break;
       case 'experiments':
         this.showExperimentSettings();
+        break;
+      case 'localization':
+        this.showLocalizationSettings();
         break;
       case 'updates':
         this.showUpdateSettings();
@@ -1515,6 +1573,73 @@ const SettingsScreen = {
       return 1;
     }
     return 0;
+  },
+
+  showLocalizationSettings: function() {
+    this.localizationSettings.classList.remove('hidden');
+
+    const countrySelect = this.elements.localization.country;
+    countrySelect.innerHTML = '';
+    countrySelect.disabled = true;
+
+    API.getCountry().then((response) => {
+      for (const country of response.valid) {
+        const option = document.createElement('option');
+        option.value = country;
+        option.innerText = country;
+
+        if (country === response.current) {
+          option.selected = 'selected';
+        }
+
+        countrySelect.appendChild(option);
+      }
+
+      countrySelect.disabled = !response.setImplemented;
+    }).catch(console.error);
+
+    const timezoneSelect = this.elements.localization.timezone;
+    timezoneSelect.innerHTML = '';
+    timezoneSelect.disabled = true;
+
+    API.getTimezone().then((response) => {
+      for (const zone of response.valid) {
+        const option = document.createElement('option');
+        option.value = zone;
+        option.innerText = zone;
+
+        if (zone === response.current) {
+          option.selected = 'selected';
+        }
+
+        timezoneSelect.appendChild(option);
+      }
+
+      timezoneSelect.disabled = !response.setImplemented;
+    }).catch(console.error);
+
+    const languageSelect = this.elements.localization.language;
+    languageSelect.innerHTML = '';
+
+    API.getLanguage().then((response) => {
+      for (const lang of response.valid) {
+        const option = document.createElement('option');
+        option.value = lang.code;
+        option.innerText = lang.name;
+
+        if (lang.code === response.current) {
+          option.selected = 'selected';
+        }
+
+        languageSelect.appendChild(option);
+      }
+    }).catch(console.error);
+
+    const temperatureSelect = this.elements.localization.units.temperature;
+
+    API.getUnits().then((response) => {
+      temperatureSelect.value = response.temperature;
+    }).catch(console.error);
   },
 
   showUpdateSettings: function() {

@@ -30,6 +30,7 @@ settings-network = Network
 settings-users = Users
 settings-add-ons = Add-ons
 settings-adapters = Adapters
+settings-localization = Localization
 settings-updates = Updates
 settings-authorizations = Authorizations
 settings-experiments = Experiments
@@ -111,6 +112,16 @@ authorization-settings-no-authorizations = No authorizations.
 ## Experiment Settings
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Logs
+
+## Location Settings
+localization-settings-language-region = Language & Region
+localization-settings-country = Country
+localization-settings-timezone = Timezone
+localization-settings-language = Language
+localization-settings-units = Units
+localization-settings-units-temperature = Temperature
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 update-settings-update-now = Update Now
@@ -381,6 +392,7 @@ addons = Add-ons
 addon-config = Configure Add-on
 addon-discovery = Discover New Add-ons
 experiments = Experiments
+localization = Localization
 updates = Updates
 authorizations = Authorizations
 developer = Developer
