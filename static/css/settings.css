@@ -78,7 +78,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background-color: #48779a;
+  background-color: #5288af;
   border-radius: 0.5rem;
   background-image: url('../optimized-images/right-arrow.png');
   background-size: auto 2rem;
@@ -283,7 +283,7 @@
   font-size: 1.8rem;
   padding: 2rem 2rem 2rem 5.5rem;
   list-style-type: none;
-  background-color: #48779a;
+  background-color: #5288af;
   color: #fff;
   border-radius: 0.5rem;
   background-position: 1rem;
@@ -436,6 +436,7 @@
 
 #domain-settings-local-update {
   display:block;
+  font-size: 1.8rem;
 }
 
 #domain-settings-tunnel-name {
@@ -957,6 +958,11 @@
   background-size: 1.25rem;
   background-position: calc(100% - 1rem);
   padding-left: 1rem;
+}
+
+.localization-select:disabled,
+.network-select:disabled {
+  background-color: #48779a;
 }
 
 #network-settings-wlan-show-password-wrap {

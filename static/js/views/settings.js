@@ -1595,7 +1595,8 @@ const SettingsScreen = {
         countrySelect.appendChild(option);
       }
 
-      countrySelect.disabled = !response.setImplemented;
+      countrySelect.disabled =
+        !response.setImplemented || response.valid.length === 0;
     }).catch(console.error);
 
     const timezoneSelect = this.elements.localization.timezone;
@@ -1615,7 +1616,8 @@ const SettingsScreen = {
         timezoneSelect.appendChild(option);
       }
 
-      timezoneSelect.disabled = !response.setImplemented;
+      timezoneSelect.disabled =
+        !response.setImplemented || response.valid.length === 0;
     }).catch(console.error);
 
     const languageSelect = this.elements.localization.language;
