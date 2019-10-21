@@ -73,7 +73,7 @@ const Utils = {
     } else if (delta < minute) {
       fuzzy = `${delta} ${fluent.getMessage('utils-secs-ago')}`;
     } else if (delta < 2 * minute) {
-      fuzzy = `1 ${fluent.getMessage('util-min-ago')}`;
+      fuzzy = `1 ${fluent.getMessage('utils-min-ago')}`;
     } else if (delta < hour) {
       fuzzy = `${Math.floor(delta / minute)} ${fluent.getMessage('utils-mins-ago')}`;
     } else if (delta < 2 * hour) {
@@ -125,91 +125,6 @@ const Utils = {
         timeout = setTimeout(exec, debounceMode ? delay : delay - elapsed);
       }
     };
-  },
-  unitNameToAbbreviation: (unit) => {
-    if (!unit) {
-      return '';
-    }
-
-    switch (unit.toLowerCase()) {
-      case 'volt':
-      case 'volts':
-        return fluent.getMessage('abbrev-volt');
-
-      case 'hertz':
-        return fluent.getMessage('abbrev-hertz');
-
-      case 'amp':
-      case 'amps':
-      case 'ampere':
-      case 'amperes':
-        return fluent.getMessage('abbrev-amp');
-
-      case 'watt':
-      case 'watts':
-        return fluent.getMessage('abbrev-watt');
-
-      case 'kilowatt hour':
-      case 'kilowatt-hour':
-      case 'kilowatt hours':
-      case 'kilowatt-hours':
-        return fluent.getMessage('abbrev-kilowatt-hour');
-
-      case 'percent':
-        return fluent.getMessage('abbrev-percent');
-
-      case 'degree fahrenheit':
-      case 'degrees fahrenheit':
-      case 'fahrenheit':
-        return fluent.getMessage('abbrev-fahrenheit');
-
-      case 'degree celsius':
-      case 'degrees celsius':
-      case 'celsius':
-        return fluent.getMessage('abbrev-celsius');
-
-      case 'kelvin':
-        return fluent.getMessage('abbrev-kelvin');
-
-      case 'meter':
-      case 'meters':
-      case 'metre':
-      case 'metres':
-        return fluent.getMessage('abbrev-meter');
-
-      case 'kilometer':
-      case 'kilometers':
-      case 'kilometre':
-      case 'kilometres':
-        return fluent.getMessage('abbrev-kilometer');
-
-      case 'day':
-      case 'days':
-        return fluent.getMessage('abbrev-day');
-
-      case 'hour':
-      case 'hours':
-        return fluent.getMessage('abbrev-hour');
-
-      case 'minute':
-      case 'minutes':
-        return fluent.getMessage('abbrev-minute');
-
-      case 'second':
-      case 'seconds':
-        return fluent.getMessage('abbrev-second');
-
-      case 'millisecond':
-      case 'milliseconds':
-        return fluent.getMessage('abbrev-millisecond');
-
-      case 'foot':
-      case 'feet':
-        return fluent.getMessage('abbrev-foot');
-
-      default:
-        return unit;
-    }
   },
   colorTemperatureToRGB: (value) => {
     /**
@@ -329,6 +244,50 @@ const Utils = {
   descriptionIdToModelId: function(longId) {
     const parts = longId.split('/');
     return parts[parts.length - 1];
+  },
+
+  /**
+   * Adjust an input value to match schema bounds.
+   *
+   * @param {number} value - Value to adjust
+   * @returns {number} Adjusted value
+   */
+  adjustInputValue: function(value, schema) {
+    if (typeof value !== 'number') {
+      return value;
+    }
+
+    let multipleOf = schema.multipleOf;
+    if (typeof multipleOf !== 'number' && schema.type === 'integer') {
+      multipleOf = 1;
+    }
+
+    if (typeof multipleOf === 'number') {
+      value = Math.round(value / multipleOf) * multipleOf;
+
+      // Deal with floating point nonsense
+      if (`${multipleOf}`.includes('.')) {
+        const precision = `${multipleOf}`.split('.')[1].length;
+        value = Number(value.toFixed(precision));
+      }
+    }
+
+    if (schema.hasOwnProperty('minimum')) {
+      value = Math.max(value, schema.minimum);
+    }
+
+    if (schema.hasOwnProperty('maximum')) {
+      value = Math.min(value, schema.maximum);
+    }
+
+    // If there is an enum, match the closest enum value
+    if (schema.hasOwnProperty('enum')) {
+      value = schema.enum.sort(
+        (a, b) => Math.abs(a - value) - Math.abs(b - value)
+      )[0];
+    }
+
+    return value;
   },
 };
 

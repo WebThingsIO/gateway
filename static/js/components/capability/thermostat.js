@@ -10,7 +10,7 @@
 'use strict';
 
 const BaseComponent = require('../base-component');
-const Utils = require('../../utils');
+const Units = require('../../units');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -101,7 +101,7 @@ class ThermostatCapability extends BaseComponent {
     this.unit =
       typeof this.dataset.unit !== 'undefined' ?
         this.dataset.unit :
-        Utils.unitNameToAbbreviation('degree celsius');
+        Units.nameToAbbreviation('degree celsius');
 
     this.precision =
       typeof this.dataset.precision !== 'undefined' ?

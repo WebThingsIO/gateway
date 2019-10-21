@@ -11,6 +11,7 @@
 'use strict';
 
 const Thing = require('./thing');
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class Thermostat extends Thing {
@@ -65,7 +66,7 @@ class Thermostat extends Thing {
 
     if (this.temperatureProperty) {
       const property =
-        this.displayedProperties[this.temperatureProperty].property;
+        this.displayedProperties[this.temperatureProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
           `${property.multipleOf}`.includes('.')) {
@@ -90,7 +91,7 @@ class Thermostat extends Thing {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;
@@ -105,7 +106,7 @@ class Thermostat extends Thing {
   }
 
   iconView() {
-    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
+    const unit = Utils.escapeHtml(Units.nameToAbbreviation(this.unit));
     return `
       <webthing-thermostat-capability data-unit="${unit}"
         data-precision="${this.precision}">

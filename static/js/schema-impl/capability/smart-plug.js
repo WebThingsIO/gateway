@@ -12,6 +12,7 @@
 'use strict';
 
 const OnOffSwitch = require('./on-off-switch');
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class SmartPlug extends OnOffSwitch {
@@ -60,7 +61,8 @@ class SmartPlug extends OnOffSwitch {
     this.unit = 'watt';
 
     if (this.powerProperty) {
-      const property = this.displayedProperties[this.powerProperty].property;
+      const property =
+        this.displayedProperties[this.powerProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
           `${property.multipleOf}`.includes('.')) {
@@ -83,7 +85,7 @@ class SmartPlug extends OnOffSwitch {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;
@@ -96,7 +98,7 @@ class SmartPlug extends OnOffSwitch {
   }
 
   iconView() {
-    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
+    const unit = Utils.escapeHtml(Units.nameToAbbreviation(this.unit));
     let power = '';
     if (this.powerProperty !== null) {
       power = 'data-have-power="true"';

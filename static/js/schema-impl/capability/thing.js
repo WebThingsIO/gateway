@@ -41,6 +41,7 @@ const TemperatureDetail = require('../property/temperature');
 const ThermostatModeDetail = require('../property/thermostat-mode');
 const ThingDetailLayout = require('./thing-detail-layout');
 const UnlockActionDetail = require('../action/unlock');
+const Units = require('../../units');
 const Utils = require('../../utils');
 const VideoDetail = require('../property/video');
 const VoltageDetail = require('../property/voltage');
@@ -123,9 +124,38 @@ class Thing {
 
     // Parse properties
     if (description.properties) {
-      this.propertyDescriptions = {};
       for (const name in description.properties) {
         const property = description.properties[name];
+
+        // Convert units, if necessary
+        const convertedProperty = JSON.parse(JSON.stringify(property));
+        if (property.unit) {
+          const newUnit = Units.convert(0, property.unit).unit;
+          if (newUnit !== property.unit) {
+            convertedProperty.unit = newUnit;
+
+            if (property.hasOwnProperty('minimum')) {
+              convertedProperty.minimum =
+                Units.convert(property.minimum, property.unit).value;
+            }
+
+            if (property.hasOwnProperty('maximum')) {
+              convertedProperty.maximum =
+                Units.convert(property.maximum, property.unit).value;
+            }
+
+            if (property.hasOwnProperty('enum')) {
+              convertedProperty.enum =
+                property.enum.map((v) => Units.convert(v, property.unit).value);
+            }
+
+            if (property.hasOwnProperty('multipleOf')) {
+              // just delete this, as it's not really meaningful during
+              // conversions
+              delete convertedProperty.multipleOf;
+            }
+          }
+        }
 
         let href;
         for (const link of property.links) {
@@ -139,75 +169,74 @@ class Thing {
           continue;
         }
 
-        this.propertyDescriptions[name] = property;
-
         let detail;
         switch (property['@type']) {
           case 'BooleanProperty':
-            detail = new BooleanDetail(this, name, property);
+            detail = new BooleanDetail(this, name, convertedProperty);
             break;
           case 'OnOffProperty':
-            detail = new OnOffDetail(this, name, property);
+            detail = new OnOffDetail(this, name, convertedProperty);
             break;
           case 'LevelProperty':
-            detail = new LevelDetail(this, name, property);
+            detail = new LevelDetail(this, name, convertedProperty);
             break;
           case 'BrightnessProperty':
-            detail = new BrightnessDetail(this, name, property);
+            detail = new BrightnessDetail(this, name, convertedProperty);
             break;
           case 'ColorProperty':
-            detail = new ColorDetail(this, name, property);
+            detail = new ColorDetail(this, name, convertedProperty);
             break;
           case 'ColorTemperatureProperty':
-            detail = new ColorTemperatureDetail(this, name, property);
+            detail = new ColorTemperatureDetail(this, name, convertedProperty);
             break;
           case 'InstantaneousPowerProperty':
-            detail = new InstantaneousPowerDetail(this, name, property);
+            detail =
+              new InstantaneousPowerDetail(this, name, convertedProperty);
             break;
           case 'CurrentProperty':
-            detail = new CurrentDetail(this, name, property);
+            detail = new CurrentDetail(this, name, convertedProperty);
             break;
           case 'VoltageProperty':
-            detail = new VoltageDetail(this, name, property);
+            detail = new VoltageDetail(this, name, convertedProperty);
             break;
           case 'FrequencyProperty':
-            detail = new FrequencyDetail(this, name, property);
+            detail = new FrequencyDetail(this, name, convertedProperty);
             break;
           case 'MotionProperty':
-            detail = new MotionDetail(this, name, property);
+            detail = new MotionDetail(this, name, convertedProperty);
             break;
           case 'OpenProperty':
-            detail = new OpenDetail(this, name, property);
+            detail = new OpenDetail(this, name, convertedProperty);
             break;
           case 'LeakProperty':
-            detail = new LeakDetail(this, name, property);
+            detail = new LeakDetail(this, name, convertedProperty);
             break;
           case 'PushedProperty':
-            detail = new PushedDetail(this, name, property);
+            detail = new PushedDetail(this, name, convertedProperty);
             break;
           case 'ImageProperty':
-            detail = new ImageDetail(this, name, property);
+            detail = new ImageDetail(this, name, convertedProperty);
             break;
           case 'VideoProperty':
-            detail = new VideoDetail(this, name, property);
+            detail = new VideoDetail(this, name, convertedProperty);
             break;
           case 'TemperatureProperty':
-            detail = new TemperatureDetail(this, name, property);
+            detail = new TemperatureDetail(this, name, convertedProperty);
             break;
           case 'AlarmProperty':
-            detail = new AlarmDetail(this, name, property);
+            detail = new AlarmDetail(this, name, convertedProperty);
             break;
           case 'TargetTemperatureProperty':
-            detail = new TargetTemperatureDetail(this, name, property);
+            detail = new TargetTemperatureDetail(this, name, convertedProperty);
             break;
           case 'ThermostatModeProperty':
-            detail = new ThermostatModeDetail(this, name, property);
+            detail = new ThermostatModeDetail(this, name, convertedProperty);
             break;
           case 'HeatingCoolingProperty':
-            detail = new HeatingCoolingDetail(this, name, property);
+            detail = new HeatingCoolingDetail(this, name, convertedProperty);
             break;
           case 'LockedProperty':
-            detail = new LockedDetail(this, name, property);
+            detail = new LockedDetail(this, name, convertedProperty);
             break;
           default:
             if (defaults.hasOwnProperty(name)) {
@@ -216,20 +245,20 @@ class Thing {
                 detailType = defaults.brightness;
               }
 
-              detail = new detailType(this, name, property);
+              detail = new detailType(this, name, convertedProperty);
             } else if (property.enum) {
-              detail = new EnumDetail(this, name, property);
+              detail = new EnumDetail(this, name, convertedProperty);
             } else {
               switch (property.type) {
                 case 'string':
-                  detail = new StringDetail(this, name, property);
+                  detail = new StringDetail(this, name, convertedProperty);
                   break;
                 case 'integer':
                 case 'number':
-                  detail = new NumberDetail(this, name, property);
+                  detail = new NumberDetail(this, name, convertedProperty);
                   break;
                 case 'boolean':
-                  detail = new BooleanDetail(this, name, property);
+                  detail = new BooleanDetail(this, name, convertedProperty);
                   break;
                 default:
                   console.warn('Unable to build property detail for:',
@@ -243,6 +272,7 @@ class Thing {
           href,
           detail,
           property,
+          convertedProperty,
         };
       }
     }
@@ -435,10 +465,20 @@ class Thing {
    * @param {*} value Value of the property
    */
   updateProperty(name, value) {
-    if (this.format === Constants.ThingFormat.EXPANDED &&
-        this.displayedProperties.hasOwnProperty(name)) {
-      this.displayedProperties[name].detail.update(value);
+    if (this.displayedProperties.hasOwnProperty(name)) {
+      // Convert units, if necessary
+      value = Units.convert(
+        value,
+        this.displayedProperties[name].property.unit,
+        this.displayedProperties[name].convertedProperty.unit
+      ).value;
+
+      if (this.format === Constants.ThingFormat.EXPANDED) {
+        this.displayedProperties[name].detail.update(value);
+      }
     }
+
+    return value;
   }
 
   /**
@@ -448,6 +488,17 @@ class Thing {
    * @param {*} value Value of the property
    */
   setProperty(name, value) {
+    // Convert units, if necessary
+    value = Units.convert(
+      value,
+      this.displayedProperties[name].convertedProperty.unit,
+      this.displayedProperties[name].property.unit
+    ).value;
+
+    // Adjust the value to match property limits
+    const property = this.displayedProperties[name].property;
+    value = Utils.adjustInputValue(value, property);
+
     this.model.setProperty(name, value);
   }
 
