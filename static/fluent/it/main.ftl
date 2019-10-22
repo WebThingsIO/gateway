@@ -30,6 +30,7 @@ settings-network = Rete
 settings-users = Utenti
 settings-add-ons = Add-ons
 settings-adapters = Adattatori
+settings-localization =
 settings-updates = Updates
 settings-authorizations = Autorizzazioni
 settings-experiments = Esperimenti
@@ -111,6 +112,16 @@ authorization-settings-no-authorizations = Nessuna autorizzazione
 ## Experiment Settings
 experiment-settings-smart-assistant = Smart Assistente
 experiment-settings-logs = Registri
+
+## Localization Settings
+localization-settings-language-region =
+localization-settings-country =
+localization-settings-timezone =
+localization-settings-language =
+localization-settings-units =
+localization-settings-units-temperature =
+localization-settings-units-temperature-celsius =
+localization-settings-units-temperature-fahrenheit =
 
 ## Update Settings
 update-settings-update-now = Aggiorna ora
@@ -235,6 +246,8 @@ VideoCamera =
 Camera =
 TemperatureSensor =
 Alarm =
+Thermostat =
+Lock =
 Custom =
 
 ## Properties
@@ -259,6 +272,10 @@ motion =
 no-motion =
 open =
 closed =
+locked =
+unlocked =
+jammed =
+unknown =
 
 ## Domain Setup
 reclaim-prompt =
@@ -375,6 +392,7 @@ addons =
 addon-config =
 addon-discovery =
 experiments =
+localization =
 updates =
 authorizations =
 developer =
@@ -495,7 +513,7 @@ creating-content =
 
 ## General Terms
 ok =
-unknown =
+ellipses =
 event-log =
 edit =
 remove =

@@ -113,7 +113,7 @@ authorization-settings-no-authorizations = No authorizations.
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Logs
 
-## Location Settings
+## Localization Settings
 localization-settings-language-region = Language & Region
 localization-settings-country = Country
 localization-settings-timezone = Timezone
