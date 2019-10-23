@@ -2,7 +2,6 @@
 #
 # Takes the gateway archive (created by rpi-image-builder) and creates
 # release archives.
-# the final gateway image.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,7 +22,7 @@ usage() {
 
 ###########################################################################
 #
-# Parses command line arguments and run the program.
+# Parses command line arguments and runs the program.
 #
 main() {
 
