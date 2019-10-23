@@ -1,5 +1,6 @@
 const fs = require('fs');
 
+const {waitForExpect} = require('../expect-utils');
 const {getBrowser} = require('./browser-common');
 const AddonManager = require('../../addon-manager');
 
@@ -51,8 +52,10 @@ describe('basic browser tests', () => {
     const menuButton = await browser.$('#menu-button');
     await menuButton.waitForExist(5000);
 
-    const newUrl = await browser.getUrl();
-    expect(newUrl.endsWith('/things')).toBeTruthy();
+    await waitForExpect(async () => {
+      const newUrl = await browser.getUrl();
+      expect(newUrl.endsWith('/things')).toBeTruthy();
+    });
 
     // Wait for the connectivity scrim to appear, then hide it (and wait for the
     // transition to finish).

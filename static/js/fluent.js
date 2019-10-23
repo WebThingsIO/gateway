@@ -20,7 +20,7 @@ async function load() {
     // keep going
   }
 
-  language = response.current || navigator.language;
+  language = response.current || navigator.language || 'en-US';
   if (!availableLanguages.hasOwnProperty(language)) {
     const primary = language.split('-')[0];
     if (availableLanguages.hasOwnProperty(primary)) {
@@ -82,6 +82,11 @@ function init() {
  * @return {string|null} Translation of unit or null if not contained in bundle
  */
 function getMessageStrict(id, vars = {}) {
+  if (!bundle) {
+    console.warn('Bundle not yet loaded');
+    return null;
+  }
+
   const obj = bundle.getMessage(id, vars);
   if (!obj) {
     console.warn('Missing id', id);
@@ -94,6 +99,11 @@ function getMessageStrict(id, vars = {}) {
  * @return {string|null} Translation of unit or null if not contained in bundle
  */
 function getEnglishMessageStrict(id, vars = {}) {
+  if (!englishBundle) {
+    console.warn('Bundle not yet loaded');
+    return null;
+  }
+
   const obj = englishBundle.getMessage(id, vars);
   if (!obj) {
     console.warn('Missing id', id);

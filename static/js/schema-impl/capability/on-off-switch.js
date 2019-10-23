@@ -76,6 +76,8 @@ class OnOffSwitch extends Thing {
     if (name === this.onProperty) {
       this.icon.on = !!value;
     }
+
+    return value;
   }
 
   /**
