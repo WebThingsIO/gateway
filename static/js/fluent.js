@@ -13,7 +13,12 @@ let englishBundle;
 let bundle;
 
 async function load() {
-  const response = await API.getLanguage();
+  let response = {};
+  try {
+    response = await API.getLanguage();
+  } catch (_) {
+    // keep going
+  }
 
   language = response.current || navigator.language;
   if (!availableLanguages.hasOwnProperty(language)) {
@@ -27,7 +32,7 @@ async function load() {
 
   if (language !== response.current) {
     // don't bother waiting for this, it's not super important
-    API.setLanguage(language);
+    API.setLanguage(language).catch(() => {});
   }
 
   const links = availableLanguages[language];
