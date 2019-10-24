@@ -80,3 +80,16 @@ module.exports.saveStepScreen = async (step) => {
   await getBrowser().saveScreenshot(
     `browser-test-output/${step}-${stepStr}.png`);
 };
+
+module.exports.escapeHtmlForIdClass = (text) => {
+  if (typeof (text) !== 'string') {
+    text = `${text}`;
+  }
+
+  text = text.replace(/[^_a-zA-Z0-9-]/g, '_');
+  if (/^[0-9-]/.test(text)) {
+    text = `_${text}`;
+  }
+
+  return text;
+};

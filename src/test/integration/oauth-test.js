@@ -75,8 +75,8 @@ describe('oauth/', function() {
       expect(req.query.state).toEqual('somethingrandom');
 
       oauth2.authorizationCode.getToken({code: code}).then((result) => {
-        const token = oauth2.accessToken.create(result);
-        res.json(token);
+        const {token} = oauth2.accessToken.create(result);
+        res.json({token});
       }).catch((err) => {
         res.status(400).json(err.data.payload);
       });
@@ -93,8 +93,8 @@ describe('oauth/', function() {
       expect(req.query.state).toEqual('somethingrandom');
 
       oauth2.authorizationCode.getToken({code: code}).then((result) => {
-        const token = oauth2.accessToken.create(result);
-        res.json(Object.assign({bonus: true}, token));
+        const {token} = oauth2.accessToken.create(result);
+        res.json(Object.assign({bonus: true}, {token}));
       }).catch((err) => {
         res.status(400).json(err.data.payload);
       });
@@ -132,8 +132,7 @@ describe('oauth/', function() {
         authorizationMethod,
       },
       http: {
-        headers: {
-        },
+        headers: {},
       },
     }, configProvided || {});
 

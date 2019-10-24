@@ -1,5 +1,6 @@
 'use strict';
 
+const fetch = require('node-fetch');
 const sinon = require('sinon');
 const {JSDOM} = require('jsdom');
 
@@ -21,6 +22,7 @@ global.localStorage = {
   },
   removeItem: (key) => delete storage[key],
 };
+global.fetch = fetch;
 
 beforeEach(() => {
   global.sandbox = sinon.createSandbox();

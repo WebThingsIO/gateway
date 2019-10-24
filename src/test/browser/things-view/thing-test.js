@@ -1,6 +1,7 @@
 const {getBrowser, saveStepScreen} = require('../browser-common');
 const {
   addThing,
+  escapeHtmlForIdClass,
   getProperty,
   setProperty,
 } = require('../test-utils');
@@ -8,9 +9,6 @@ const {
 const {waitForExpect} = require('../../expect-utils');
 const ThingsPage = require('../page-object/things-page');
 const util = require('util');
-
-const STATIC_JS_PATH = '../../../../static/js';
-const Utils = require(`${STATIC_JS_PATH}/utils`);
 
 
 describe('Thing', () => {
@@ -164,7 +162,7 @@ describe('Thing', () => {
     expect(booleanValue).toBeTruthy();
     const booleanId = await booleanProps[0].getId();
     expect(booleanId).toEqual(
-      `boolean-${Utils.escapeHtmlForIdClass('spaced boolean')}`
+      `boolean-${escapeHtmlForIdClass('spaced boolean')}`
     );
     await saveStepScreen();
 
@@ -174,7 +172,7 @@ describe('Thing', () => {
     expect(numberValue).toEqual(10);
     const numberId = await numberProps[0].getId();
     expect(numberId).toEqual(
-      `number-${Utils.escapeHtmlForIdClass('spaced number')}`
+      `number-${escapeHtmlForIdClass('spaced number')}`
     );
     await saveStepScreen();
 
@@ -184,7 +182,7 @@ describe('Thing', () => {
     expect(stringValue).toEqual('foo');
     const stringId = await stringProps[0].getId();
     expect(stringId).toEqual(
-      `string-${Utils.escapeHtmlForIdClass('spaced string')}`
+      `string-${escapeHtmlForIdClass('spaced string')}`
     );
     await saveStepScreen();
   });

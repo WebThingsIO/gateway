@@ -271,6 +271,10 @@ class Logs {
 
     for (const row of rows) {
       const descr = this.idToDescr[row.id];
+      if (!descr) {
+        console.error('Failed to load row:', row);
+        continue;
+      }
       if (!out.hasOwnProperty(descr.thing)) {
         out[descr.thing] = {};
       }
