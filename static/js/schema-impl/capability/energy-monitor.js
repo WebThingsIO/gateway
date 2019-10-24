@@ -11,6 +11,7 @@
 'use strict';
 
 const Thing = require('./thing');
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class EnergyMonitor extends Thing {
@@ -57,7 +58,8 @@ class EnergyMonitor extends Thing {
     this.unit = 'watt';
 
     if (this.powerProperty) {
-      const property = this.displayedProperties[this.powerProperty].property;
+      const property =
+        this.displayedProperties[this.powerProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
           `${property.multipleOf}`.includes('.')) {
@@ -80,7 +82,7 @@ class EnergyMonitor extends Thing {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;
@@ -93,7 +95,7 @@ class EnergyMonitor extends Thing {
   }
 
   iconView() {
-    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
+    const unit = Utils.escapeHtml(Units.nameToAbbreviation(this.unit));
     return `
       <webthing-energy-monitor-capability data-unit="${unit}"
         data-precision="${this.precision}">

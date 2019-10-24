@@ -238,7 +238,8 @@ class NumberProperty extends BaseComponent {
     const min = parseInt(this.min, 10);
     const max = parseInt(this.max, 10);
 
-    if (isNaN(min) || min === null || isNaN(max) || max === null) {
+    if (isNaN(min) || min === null || isNaN(max) || max === null ||
+        this.step === '' || this.step === 'any') {
       this._input.classList.add('hide-spinner');
 
       if (this._haveClickListener) {

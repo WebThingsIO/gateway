@@ -11,6 +11,7 @@
 'use strict';
 
 const Thing = require('./thing');
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class MultiLevelSensor extends Thing {
@@ -57,7 +58,8 @@ class MultiLevelSensor extends Thing {
     this.unit = '';
 
     if (this.levelProperty) {
-      const property = this.displayedProperties[this.levelProperty].property;
+      const property =
+        this.displayedProperties[this.levelProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
           `${property.multipleOf}`.includes('.')) {
@@ -80,7 +82,7 @@ class MultiLevelSensor extends Thing {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;
@@ -93,7 +95,7 @@ class MultiLevelSensor extends Thing {
   }
 
   iconView() {
-    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
+    const unit = Utils.escapeHtml(Units.nameToAbbreviation(this.unit));
     return `
       <webthing-multi-level-sensor-capability data-unit="${unit}"
         data-precision="${this.precision}">

@@ -90,7 +90,7 @@ class Action extends BaseComponent {
   <div id="name-${BaseComponent.count}" class="webthing-action-name"></div>
 `;
     super(template);
-    this.opts = opts;
+    this.opts = opts || {};
 
     this._button = this.shadowRoot.querySelector(
       '.webthing-action-button');

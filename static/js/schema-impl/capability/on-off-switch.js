@@ -67,7 +67,7 @@ class OnOffSwitch extends Thing {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;

@@ -12,6 +12,7 @@
 
 const App = require('../app');
 const Constants = require('../constants');
+const Units = require('../units');
 const Utils = require('../utils');
 
 class EventList {
@@ -106,14 +107,15 @@ class EventList {
           continue;
         }
 
-        let value = data[name];
+        // eslint-disable-next-line prefer-const
+        let {value, unit} = Units.convert(data[name], schema[name].unit);
 
         switch (schema[name].type) {
           case 'number':
           case 'integer':
             body += `${Utils.escapeHtml(name)}: ${Utils.escapeHtml(value)}`;
-            if (schema[name].hasOwnProperty('unit')) {
-              body += ` ${Utils.unitNameToAbbreviation(schema[name].unit)}`;
+            if (unit) {
+              body += ` ${Units.nameToAbbreviation(unit)}`;
             }
             break;
           case 'object':

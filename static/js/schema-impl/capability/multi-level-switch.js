@@ -11,6 +11,7 @@
 'use strict';
 
 const OnOffSwitch = require('./on-off-switch');
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class MultiLevelSwitch extends OnOffSwitch {
@@ -61,7 +62,8 @@ class MultiLevelSwitch extends OnOffSwitch {
     this.maximum = 100;
 
     if (this.levelProperty) {
-      const property = this.displayedProperties[this.levelProperty].property;
+      const property =
+        this.displayedProperties[this.levelProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
           `${property.multipleOf}`.includes('.')) {
@@ -92,7 +94,7 @@ class MultiLevelSwitch extends OnOffSwitch {
    * @param {*} value - value of the property
    */
   updateProperty(name, value) {
-    super.updateProperty(name, value);
+    value = super.updateProperty(name, value);
 
     if (!this.displayedProperties.hasOwnProperty(name)) {
       return;
@@ -112,7 +114,7 @@ class MultiLevelSwitch extends OnOffSwitch {
   }
 
   iconView() {
-    const unit = Utils.escapeHtml(Utils.unitNameToAbbreviation(this.unit));
+    const unit = Utils.escapeHtml(Units.nameToAbbreviation(this.unit));
     return `
       <webthing-multi-level-switch-capability data-unit="${unit}"
         data-precision="${this.precision}" min="${this.minimum}"

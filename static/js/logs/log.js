@@ -13,6 +13,7 @@
 const App = require('../app');
 const Constants = require('../constants');
 const Icons = require('../icons');
+const Units = require('../units');
 const Utils = require('../utils');
 const fluent = require('../fluent');
 
@@ -274,8 +275,9 @@ class Log {
       this.icon.style.backgroundImage = `url(${iconUrl})`;
     }
 
-    const propertyUnit = (this.property && this.property.unit) || '';
-    this.yAxisLabel.textContent = Utils.unitNameToAbbreviation(propertyUnit);
+    const propertyUnit =
+      Units.convert(0, (this.property && this.property.unit) || '').unit;
+    this.yAxisLabel.textContent = Units.nameToAbbreviation(propertyUnit);
 
     this.thingModel.subscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
 
@@ -290,7 +292,7 @@ class Log {
 
   addRawPoint(point) {
     this.rawPoints.push({
-      value: point.value,
+      value: Units.convert(point.value, this.property.unit).value,
       time: point.date,
     });
 
@@ -326,8 +328,8 @@ class Log {
       if (this.property.hasOwnProperty('minimum') &&
           this.property.hasOwnProperty('maximum')) {
         return {
-          min: this.property.minimum,
-          max: this.property.maximum,
+          min: Units.convert(this.property.minimum, this.property.unit).value,
+          max: Units.convert(this.property.maximum, this.property.unit).value,
         };
       } else {
         return {
@@ -351,8 +353,10 @@ class Log {
 
     if (this.property.hasOwnProperty('minimum') &&
         this.property.hasOwnProperty('maximum')) {
-      const propMin = this.property.minimum;
-      const propMax = this.property.maximum;
+      const propMin =
+        Units.convert(this.property.minimum, this.property.unit).value;
+      const propMax =
+        Units.convert(this.property.maximum, this.property.unit).value;
       // If the description's min and max aren't ridiculously out of proportion
       // use them since they likely have good properties
       if ((propMax - propMin) / (max - min + 0.001) < 3 &&
@@ -1046,7 +1050,9 @@ class Log {
     this.tooltip.style.transform = `translate(${x}px,${y}px)`;
     const valueLabel = this.valueToLabel(point.value, 2);
 
-    const unit = Utils.unitNameToAbbreviation(this.property.unit || '');
+    const unit = Units.nameToAbbreviation(
+      Units.convert(0, this.property.unit || '').unit
+    );
     this.tooltipValue.textContent = `${valueLabel} ${unit}`;
 
     // const dateParts = new Date(point.time).toDateString().split(' ');

@@ -10,6 +10,7 @@
 
 'use strict';
 
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class EnumDetail {
@@ -20,7 +21,7 @@ class EnumDetail {
     this.label = property.title || name;
     this.type = property.type;
     this.unit =
-      property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
+      property.unit ? Units.nameToAbbreviation(property.unit) : null;
     this.choices = property.enum;
     this.id = `enum-${Utils.escapeHtmlForIdClass(this.name)}`;
   }

@@ -11,6 +11,7 @@
 'use strict';
 
 const API = require('../api');
+const Units = require('../units');
 const Utils = require('../utils');
 
 class ActionInputForm {
@@ -69,25 +70,28 @@ class ActionInputForm {
 
       let unit = '<span class="action-input-unit">';
       if (input.hasOwnProperty('unit')) {
-        unit += Utils.escapeHtml(Utils.unitNameToAbbreviation(input.unit));
+        unit += Utils.escapeHtml(
+          Units.nameToAbbreviation(Units.convert(0, input.unit).unit)
+        );
       }
       unit += '</span>';
 
       // list item
       if (Array.isArray(input.enum) &&
-         (input.type === 'number' ||
-          input.type === 'integer' ||
-          input.type === 'string')) {
-        // User can select undefiend value on field not required.
-        if (required === '') {
-          input.enum.unshift('');
-        }
-
-        const selects = input.enum.map((value, i) => {
-          return `<option key="${i}" value="${Utils.escapeHtml(value)}">
+          (input.type === 'number' ||
+           input.type === 'integer' ||
+           input.type === 'string')) {
+        const selects = input.enum.map((value) => {
+          value = Units.convert(value, input.unit).value;
+          return `<option value="${Utils.escapeHtml(value)}">
                     ${Utils.escapeHtml(value)}
                   </option>`;
         });
+
+        // User can select undefined value on optional field.
+        if (required === '') {
+          selects.unshift('<option value=""></option>');
+        }
 
         form += `<select name="${name}" class="action-input-enum" ${required}>
                    ${selects.join(' ')}
@@ -98,8 +102,10 @@ class ActionInputForm {
       switch (input.type) {
         case 'number':
         case 'integer': {
+          const convert = Units.convert(0, input.unit).unit !== input.unit;
+
           let step;
-          if (input.hasOwnProperty('multipleOf')) {
+          if (input.hasOwnProperty('multipleOf') && !convert) {
             step = `${input.multipleOf}`;
           } else if (input.type === 'number') {
             step = 'any';
@@ -109,12 +115,12 @@ class ActionInputForm {
 
           let min = '';
           if (input.hasOwnProperty('minimum')) {
-            min = `min="${input.minimum}"`;
+            min = `min="${Units.convert(input.minimum, input.unit)}"`;
           }
 
           let max = '';
           if (input.hasOwnProperty('maximum')) {
-            max = `max="${input.maximum}"`;
+            max = `max="${Units.convert(input.maximum, input.unit)}"`;
           }
 
           const numberClass = min && max ? '' : 'hide-number-spinner';
@@ -174,7 +180,7 @@ class ActionInputForm {
       if (el.name === '__default__') {
         schema = this.schema;
       } else {
-        schema = this.inputs[el.name];
+        schema = this.schema.properties[el.name];
       }
 
       let value;
@@ -183,6 +189,16 @@ class ActionInputForm {
       } else {
         value = el.value;
       }
+
+      // convert value back
+      value = Units.convert(
+        value,
+        Units.convert(0, schema.unit).unit,
+        schema.unit
+      ).value;
+
+      // Adjust the value to match limits
+      value = Utils.adjustInputValue(value, schema);
 
       if (el.name === '__default__') {
         input = value;
@@ -207,6 +223,23 @@ class ActionInputForm {
       } else {
         continue;
       }
+
+      let schema;
+      if (el.name === '__default__') {
+        schema = this.schema;
+      } else {
+        schema = this.schema.properties[el.name];
+      }
+
+      // convert value back
+      value = Units.convert(
+        value,
+        Units.convert(0, schema.unit).unit,
+        schema.unit
+      ).value;
+
+      // Adjust the value to match limits
+      value = Utils.adjustInputValue(value, schema);
 
       if (el.name === '__default__') {
         input = value;

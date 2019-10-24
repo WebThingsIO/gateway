@@ -10,6 +10,7 @@
 
 'use strict';
 
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class NumberDetail {
@@ -20,7 +21,7 @@ class NumberDetail {
     this.label = property.title || name;
     this.type = property.type;
     this.unit =
-      property.unit ? Utils.unitNameToAbbreviation(property.unit) : null;
+      property.unit ? Units.nameToAbbreviation(property.unit) : null;
 
     if (property.type === 'integer') {
       this.precision = 0;

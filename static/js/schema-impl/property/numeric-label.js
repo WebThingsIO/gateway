@@ -10,6 +10,7 @@
 
 'use strict';
 
+const Units = require('../../units');
 const Utils = require('../../utils');
 
 class NumericLabelDetail {
@@ -18,7 +19,7 @@ class NumericLabelDetail {
     this.name = name;
     this.readOnly = readOnly;
     this.label = label;
-    this.unit = Utils.unitNameToAbbreviation(unit);
+    this.unit = Units.nameToAbbreviation(unit);
     this.precision = precision;
     this.id = `label-${Utils.escapeHtmlForIdClass(this.name)}`;
   }

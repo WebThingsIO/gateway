@@ -571,7 +571,7 @@ SettingsController.get(
     }
 
     response.json({
-      temperature: temperature || 'celsius',
+      temperature: temperature || 'degree celsius',
     });
   }
 );
