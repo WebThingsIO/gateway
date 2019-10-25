@@ -51,6 +51,10 @@ class SettingsPage extends Page {
   async wait() {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
+      if (!menuScrim) {
+        return false;
+      }
+
       const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
