@@ -1,4 +1,4 @@
-const TIMEOUT_MS = 5000;
+const TIMEOUT_MS = 15000;
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

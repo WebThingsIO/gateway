@@ -35,7 +35,7 @@ class ThingSection extends Section {
   async waitClickable() {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
-      if (!menuScrim) {
+      if (!menuScrim || !menuScrim.isExisting()) {
         return false;
       }
 
@@ -125,7 +125,7 @@ class ThingsPage extends Page {
   async wait() {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
-      if (!menuScrim) {
+      if (!menuScrim || !menuScrim.isExisting()) {
         return false;
       }
 
