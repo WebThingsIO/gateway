@@ -35,6 +35,10 @@ describe('Addon', () => {
     await addon3.add();
     await browser.waitUntil(async () => {
       const addon4 = await discoverAddonPage.findAddon('Virtual Things');
+      if (!addon4) {
+        return false;
+      }
+
       return await addon4.hasAdded();
     }, 30000);
     await saveStepScreen();

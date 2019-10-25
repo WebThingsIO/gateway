@@ -82,6 +82,10 @@ describe('basic browser tests', () => {
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
       const menuScrim = await browser.$('#menu-scrim.hidden');
+      if (!menuScrim) {
+        return false;
+      }
+
       const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
@@ -116,6 +120,10 @@ describe('basic browser tests', () => {
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
       const menuScrim = await browser.$('#menu-scrim.hidden');
+      if (!menuScrim) {
+        return false;
+      }
+
       const width = await menuScrim.getCSSProperty('width');
       return width && width.parsed && width.parsed.value === 0;
     }, 5000);
