@@ -1,6 +1,6 @@
 const API = require('./api');
-const FluentDOM = require('@fluent/dom');
-const Fluent = require('@fluent/bundle');
+const FluentDOM = require('@fluent/dom/compat');
+const Fluent = require('@fluent/bundle/compat');
 
 const availableLanguages = {
   'en-US': ['/fluent/en-US/main.ftl'],
