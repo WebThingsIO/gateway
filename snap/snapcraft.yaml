@@ -10,21 +10,14 @@ base: core18
 apps:
   gateway:
     command: env TMPDIR=$XDG_RUNTIME_DIR desktop-launch $SNAP/gateway
-    plugs:
-      - desktop
-      - desktop-legacy
+    plugs: 
       - home
-      - x11
       - browser-support
-      - network
-      - gsettings
-      - pulseaudio
-      - opengl
-
+      
 parts:
   gateway:
     plugin: nodejs
-    node-engine: "12.4.0"
+    nodejs-version: "8.16.0"
     build-packages:
       - pkg-config
       - curl 
@@ -50,6 +43,6 @@ parts:
       - libxss1
       - libxtst6
 
-    source: dist/linux-unpacked
+    source: 
     after:
       - desktop-gtk3
