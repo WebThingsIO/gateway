@@ -82,7 +82,7 @@ describe('basic browser tests', () => {
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
       const menuScrim = await browser.$('#menu-scrim.hidden');
-      if (!menuScrim) {
+      if (!menuScrim || !menuScrim.isExisting()) {
         return false;
       }
 
@@ -120,7 +120,7 @@ describe('basic browser tests', () => {
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
       const menuScrim = await browser.$('#menu-scrim.hidden');
-      if (!menuScrim) {
+      if (!menuScrim || !menuScrim.isExisting()) {
         return false;
       }
 

@@ -9,6 +9,7 @@ const {
 
 const Constants = require('../../constants');
 const Logs = require('../../models/logs');
+const sleep = require('../../sleep');
 
 const thingLight1 = {
   id: 'light1',
@@ -87,6 +88,9 @@ describe('logs/', function() {
       .set(...headerAuth(jwt))
       .send({[propId]: value});
     expect(res.status).toEqual(200);
+
+    // sleep just a bit to allow events to fire in the gateway
+    await sleep(200);
   }
 
 
