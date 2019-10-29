@@ -36,7 +36,7 @@ class StringLabelDetail {
   }
 
   update(value) {
-    if (!this.label) {
+    if (!this.labelElement) {
       return;
     }
 
