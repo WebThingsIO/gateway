@@ -44,7 +44,7 @@ domain-settings-local-name =
   .placeholder = gateway
 
 ## Network Settings
-network-settings-unsupported = Le impostazioni di rete non sono supportate per questa piattaforma 
+network-settings-unsupported = Le impostazioni di rete non sono supportate per questa piattaforma
 network-settings-ethernet-image =
   .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -84,7 +84,7 @@ network-settings-changing = Modifica delle impostazioni di rete. Questo potrebbe
 failed-ethernet-configure = Impossibile configurare Ethernet.
 failed-wifi-configure = Impossibile configurare Wi-Fi.
 failed-wan-configure = Impossibile configurare WAN.
-failed-lan-configure = Impossibile configurare  LAN.
+failed-lan-configure = Impossibile configurare LAN.
 failed-wlan-configure = Impossibile configurare WLAN.
 
 ## User Settings
@@ -158,7 +158,7 @@ rules-scroll-left =
 rules-scroll-right =
   .alt = Scorri verso destra
 rules-delete-prompt = Rilascia qui i dispositivi per disconnetterti
-rules-delete-dialog = Sei sicuro di voler rimuovere questa regola in modo permanente? 
+rules-delete-dialog = Sei sicuro di voler rimuovere questa regola in modo permanente?
 rules-delete-cancel =
   .value = Annulla
 rules-delete-confirm =
@@ -335,7 +335,7 @@ abbrev-foot = ft
 unknown-device-type = Tipo di dispositivo sconosciuto
 new-thing-choose-icon = Scegli icona...
 new-thing-save = Salva
-new-thing-pin = 
+new-thing-pin =
   .placeholder = Inserisci pin
 new-thing-pin-error = PIN scorretto
 new-thing-pin-invalid = PIN non valido
@@ -442,11 +442,11 @@ signup-next = Il prossimo
 tunnel-setup-title = Scegli Indirizzo Web - WebThings Gateway
 tunnel-setup-welcome = Benvenuto
 tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il suo gateway:
-tunnel-setup-input-subdomain = 
+tunnel-setup-input-subdomain =
   .placeholder = sottodominio
 tunnel-setup-opt-in = Tienimi aggiornato sulle nuove funzionalità e sulle opportunità di contributo.
 tunnel-setup-privacy-policy = Politica sulla riservatezza
-tunnel-setup-input-reclamation-token = 
+tunnel-setup-input-reclamation-token =
   .placeholder = Token di bonifica
 tunnel-setup-error = Si è verificato un errore durante l'impostazione del sottodominio.
 tunnel-setup-create = Creare
@@ -461,7 +461,7 @@ authorize-from = da
 authorize-monitor-and-control = Monitorare e controllare
 authorize-monitor = monitorare
 authorize-allow-all = Consenti a tutte Things
-authorize-allow = 
+authorize-allow =
   .value = Permettere
 authorize-deny = Negare
 
@@ -476,44 +476,44 @@ local-token-bearer-type = Bearer-type autorizzazione
 ## Router Setup Page
 router-setup-title = Configurazione del router - WebThings Gateway
 router-setup-header = Crea una nuova rete Wi-Fi
-router-setup-input-ssid = 
+router-setup-input-ssid =
   .placeholder = Nome della rete
-router-setup-input-password = 
+router-setup-input-password =
   .placeholder = Password
-router-setup-input-confirm-password = 
+router-setup-input-confirm-password =
   .placeholder = Conferma password
-router-setup-create = 
+router-setup-create =
   .value = Creare
 router-setup-password-mismatch = Le password devono essere identiche
 
 ## Wi-Fi Setup Page
 wifi-setup-title = Configurazione Wi-Fi - WebThings Gateway
 wifi-setup-header = Connettersi a una rete Wi-Fi?
-wifi-setup-input-password = 
+wifi-setup-input-password =
   .placeholder = Password
 wifi-setup-show-password = Mostra password
-wifi-setup-connect = 
+wifi-setup-connect =
   .value = Collegare
-wifi-setup-network-icon = 
+wifi-setup-network-icon =
   .alt = Rete Wi-Fi
 wifi-setup-skip = Salta
 
 ## Connecting to Wi-Fi Page
 connecting-title = Connessione al Wi-Fi - WebThings Gateway
 connecting-header = Connessione al Wi-Fi...
-connecting-connect = Effettuare una connessione alla stessa rete e 
- quindi va a {$ gateway-link} nel suo browser web per continuare l'installazione.
-connecting-warning = Se non riesci a caricare {$ domain}, inserisci l'indirizzo IP del gateway.
+connecting-connect = Effettuare una connessione alla stessa rete e
+ quindi va a { $gateway-link } nel suo browser web per continuare l'installazione.
+connecting-warning = Se non riesci a caricare { $domain }, inserisci l'indirizzo IP del gateway.
 connecting-header-skipped = Configurazione Wi-Fi ignorata
 connecting-skipped = Il gateway è in fase di avvio. Navigare verso
- {$ gateway-link} nel suo browser web per continuare l'installazione. 
+ { $gateway-link } nel suo browser web per continuare l'installazione.
  (Con connessione di rete uguale al gateway.)
 
 ## Creating Wi-Fi Network Page
 creating-title = Creazione della rete Wi-Fi - WebThings Gateway
 creating-header = Creazione della rete Wi-Fi...
-creating-content = Effettua una connessione a {$ ssid} con la password che ha appena
- creato, quindi va a {$ gateway-link} o {$ ip-link} nel suo Web
+creating-content = Effettua una connessione a { $ssid } con la password che ha appena
+ creato, quindi va a { $gateway-link } o { $ip-link } nel suo Web
  browser.
 
 ## General Terms
