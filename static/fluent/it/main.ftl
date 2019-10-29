@@ -402,121 +402,126 @@ wifi = Wi-Fi
 icon = Icona
 
 ## Speech
-speech-unsupported = 
-speech-didnt-get = 
+speech-unsupported = Il browser corrente non supporta il parlato.
+speech-didnt-get = Mi dispiace, non l'ho capito.
 
 ## Errors
-unknown-state =
-error =
-errors =
-gateway-unreachable =
-more-information =
-invalid-file =
-failed-read-file =
-failed-save =
+unknown-state = Stato sconosciuto.
+error = Errore
+errors = Errori
+gateway-unreachable = Gateway non raggiungibile
+more-information = Maggiori informazioni
+invalid-file = File non valido
+failed-read-file = Impossibile leggere il file.
+failed-save = Impossibile salvare il file.
 
 ## Schema Form
-unsupported-field =
+unsupported-field = Schema non supportato
 
 ## Icon Sources
-component-icons-custom-src =
-component-icons-on-off-switch-src =
-component-icons-on-off-switch-on-src =
-component-icons-on-off-switch-off-src =
-component-icons-binary-sensor-on-src =
-component-icons-binary-sensor-off-src =
-thing-icons-thing-src =
+component-icons-custom-src = /optimized-images/component-icons/custom.png
+component-icons-on-off-switch-src = /optimized-images/component-icons/on-off-switch.png
+component-icons-on-off-switch-on-src = /optimized-images/component-icons/on-off-switch-on.png
+component-icons-on-off-switch-off-src = /optimized-images/component-icons/on-off-switch-off.png
+component-icons-binary-sensor-on-src = /optimized-images/component-icons/binary-sensor-on.png
+component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary-sensor-off.png
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title =
-login-log-in =
+login-title = Accesso - WebThings Gateway
+login-log-in = Accesso
 
 ## Create First User Page
-signup-title =
-signup-welcome =
-signup-create-account =
-signup-password-mismatch =
-signup-next =
+signup-title = Crea utente - WebThings Gateway
+signup-welcome = Benvenuto
+signup-create-account = Crea il suo primo account utente:
+signup-password-mismatch = Le password non corrispondono
+signup-next = Il prossimo
 
 ## Tunnel Setup Page
-tunnel-setup-title =
-tunnel-setup-welcome =
-tunnel-setup-choose-address =
-tunnel-setup-input-subdomain =
-  .placeholder =
-tunnel-setup-opt-in =
-tunnel-setup-privacy-policy =
-tunnel-setup-input-reclamation-token =
-  .placeholder =
-tunnel-setup-error =
-tunnel-setup-create =
-tunnel-setup-skip =
+tunnel-setup-title = Scegli Indirizzo Web - WebThings Gateway
+tunnel-setup-welcome = Benvenuto
+tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il suo gateway:
+tunnel-setup-input-subdomain = 
+  .placeholder = sottodominio
+tunnel-setup-opt-in = Tienimi aggiornato sulle nuove funzionalità e sulle opportunità di contributo.
+tunnel-setup-privacy-policy = Politica sulla riservatezza
+tunnel-setup-input-reclamation-token = 
+  .placeholder = Token di bonifica
+tunnel-setup-error = Si è verificato un errore durante l'impostazione del sottodominio.
+tunnel-setup-create = Creare
+tunnel-setup-skip = Salta
 
 ## Authorize Page
-authorize-title =
-authorize-authorization-request =
-authorize-would-like =
-authorize-devices =
-authorize-from =
-authorize-monitor-and-control =
-authorize-monitor =
-authorize-allow-all =
-authorize-allow =
-  .value =
-authorize-deny =
+authorize-title = Richiesta di autorizzazione - WebThings Gateway
+authorize-authorization-request = Richiesta di autorizzazione
+authorize-would-like = Vorresti accedere al suo gateway
+authorize-devices = dispositivi
+authorize-from = da
+authorize-monitor-and-control = Monitorare e controllare
+authorize-monitor = monitorare
+authorize-allow-all = Consenti a tutte Things
+authorize-allow = 
+  .value = Permettere
+authorize-deny = Negare
 
 ## Local Token Page
-local-token-title =
-local-token-header =
-local-token-your-token =
-local-token-jwt =
-local-token-use-it =
-local-token-bearer-type =
+local-token-title = Servizio token locale - WebThings Gateway
+local-token-header = Servizio token locale
+local-token-your-token = Il token locale è questo
+local-token-jwt = JSON Web Token
+local-token-use-it = Usalo per parlare in modo sicuro con il gateway, con
+local-token-bearer-type = Bearer-type autorizzazione
 
 ## Router Setup Page
-router-setup-title =
-router-setup-header =
-router-setup-input-ssid =
-  .placeholder =
-router-setup-input-password =
-  .placeholder =
-router-setup-input-confirm-password =
-  .placeholder =
-router-setup-create =
-  .value =
-router-setup-password-mismatch =
+router-setup-title = Configurazione del router - WebThings Gateway
+router-setup-header = Crea una nuova rete Wi-Fi
+router-setup-input-ssid = 
+  .placeholder = Nome della rete
+router-setup-input-password = 
+  .placeholder = Password
+router-setup-input-confirm-password = 
+  .placeholder = Conferma password
+router-setup-create = 
+  .value = Creare
+router-setup-password-mismatch = Le password devono essere identiche
 
 ## Wi-Fi Setup Page
-wifi-setup-title =
-wifi-setup-header =
-wifi-setup-input-password =
-  .placeholder =
-wifi-setup-show-password =
-wifi-setup-connect =
-  .value =
-wifi-setup-network-icon =
-  .alt =
-wifi-setup-skip =
+wifi-setup-title = Configurazione Wi-Fi - WebThings Gateway
+wifi-setup-header = Connettersi a una rete Wi-Fi?
+wifi-setup-input-password = 
+  .placeholder = Password
+wifi-setup-show-password = Mostra password
+wifi-setup-connect = 
+  .value = Collegare
+wifi-setup-network-icon = 
+  .alt = Rete Wi-Fi
+wifi-setup-skip = Salta
 
 ## Connecting to Wi-Fi Page
-connecting-title =
-connecting-header =
-connecting-connect =
-connecting-warning =
-connecting-header-skipped =
-connecting-skipped =
+connecting-title = Connessione al Wi-Fi - WebThings Gateway
+connecting-header = Connessione al Wi-Fi...
+connecting-connect = Effettuare una connessione alla stessa rete e 
+ quindi va a {$ gateway-link} nel suo browser web per continuare l'installazione.
+connecting-warning = Se non riesci a caricare {$ domain}, inserisci l'indirizzo IP del gateway.
+connecting-header-skipped = Configurazione Wi-Fi ignorata
+connecting-skipped = Il gateway è in fase di avvio. Navigare verso
+ {$ gateway-link} nel suo browser web per continuare l'installazione. 
+ (Con connessione di rete uguale al gateway.)
 
 ## Creating Wi-Fi Network Page
-creating-title =
-creating-header =
-creating-content =
+creating-title = Creazione della rete Wi-Fi - WebThings Gateway
+creating-header = Creazione della rete Wi-Fi...
+creating-content = Effettua una connessione a {$ ssid} con la password che ha appena
+ creato, quindi va a {$ gateway-link} o {$ ip-link} nel suo Web
+ browser.
 
 ## General Terms
-ok =
-ellipses =
-event-log =
-edit =
-remove =
-disconnected =
-processing =
-submit =
+ok = Ok
+ellipses = ...
+event-log = Registro eventi
+edit = Modificare
+remove = Rimuovere
+disconnected = Scollegato
+processing = In lavorazione...
+submit = Sottoscrivi
