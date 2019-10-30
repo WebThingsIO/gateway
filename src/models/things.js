@@ -57,12 +57,12 @@ const Things = {
     if (this.things.size > 0) {
       return Promise.resolve(this.things);
     }
+
     if (this.getThingsPromise) {
       // We're still waiting for the database request.
-      return this.getThingsPromise.then((things) => {
-        return things;
-      });
+      return this.getThingsPromise;
     }
+
     this.getThingsPromise = Database.getThings().then((things) => {
       this.getThingsPromise = null;
 
@@ -79,6 +79,7 @@ const Things = {
 
       return this.things;
     });
+
     return this.getThingsPromise;
   },
 

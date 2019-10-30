@@ -15,6 +15,7 @@ const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
 const appInstance = require('../app-instance');
 const config = require('config');
+const Constants = require('../constants');
 const db = require('../db');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
@@ -27,6 +28,7 @@ const path = require('path');
 const readline = require('readline');
 const Settings = require('../models/settings');
 const spawn = require('child_process').spawn;
+const Things = require('../models/things');
 const UserProfile = require('../user-profile');
 const {
   DONT_RESTART_EXIT_CODE,
@@ -237,7 +239,7 @@ class Plugin {
 
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
-      case MessageType.ADAPTER_ADDED_NOTIFICATION:
+      case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         adapter = new AdapterProxy(this.pluginServer.manager,
                                    adapterId,
                                    msg.data.name,
@@ -245,8 +247,24 @@ class Plugin {
                                    this);
         this.adapters.set(adapterId, adapter);
         this.pluginServer.addAdapter(adapter);
-        return;
 
+        // Tell the adapter about all saved things
+        const send = (thing) => {
+          adapter.sendMsg(
+            MessageType.DEVICE_SAVED_NOTIFICATION,
+            {
+              deviceId: thing.id,
+              device: thing.getDescription(),
+            }
+          );
+        };
+
+        Things.getThings().then((things) => {
+          things.forEach(send);
+        });
+        Things.on(Constants.THING_ADDED, send);
+        return;
+      }
       case MessageType.NOTIFIER_ADDED_NOTIFICATION:
         notifier = new NotifierProxy(this.pluginServer.manager,
                                      notifierId,
