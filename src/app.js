@@ -41,6 +41,7 @@ const Logs = require('./models/logs');
 const platform = require('./platform');
 const Router = require('./router');
 const sleep = require('./sleep');
+const Things = require('./models/things');
 const TunnelService = require('./ssltunnel');
 const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
@@ -131,6 +132,9 @@ function startHttpsGateway() {
   promises.push(new Promise((resolve) => {
     servers.https.listen(port, () => {
       migration.then(() => {
+        // load existing things from the database
+        return Things.getThings();
+      }).then(() => {
         addonManager.loadAddons();
       });
       rulesEngineConfigure(servers.https);
@@ -162,6 +166,9 @@ function startHttpGateway() {
   return new Promise((resolve) => {
     servers.http.listen(port, () => {
       migration.then(() => {
+        // load existing things from the database
+        return Things.getThings();
+      }).then(() => {
         addonManager.loadAddons();
       });
       rulesEngineConfigure(servers.http);
