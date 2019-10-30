@@ -64,7 +64,7 @@ sudo apt install -y \
   sqlite3
 
 # Install Python add-on bindings
-_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.9.0#egg=gateway_addon"
+_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.0#egg=gateway_addon"
 sudo pip3 install "$_url"
 
 _url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
