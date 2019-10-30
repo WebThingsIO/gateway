@@ -18,25 +18,53 @@ class AlarmDetail extends StringLabelDetail {
   constructor(thing, name, property) {
     super(thing, name, !!property.readOnly,
           property.title || fluent.getMessage('alarm'));
+    this.readOnly = !!property.readOnly;
     this.id = `alarm-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
-  view() {
-    const readOnly = this.readOnly ? 'data-read-only="true"' : '';
+  attach() {
+    super.attach();
 
-    return `
-      <webthing-alarm-property data-value="OK" ${readOnly}
-        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
-      </webthing-alarm-property>`;
+    if (!this.readOnly) {
+      this.input = this.labelElement;
+      const setChecked = Utils.debounce(500, this.set.bind(this));
+      this.input.addEventListener('change', setChecked);
+    }
+  }
+
+  view() {
+    if (this.readOnly) {
+      return `
+        <webthing-alarm-property data-value="OK"
+          data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        </webthing-alarm-property>`;
+    } else {
+      return `
+        <webthing-boolean-property
+          data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        </webthing-boolean-property>`;
+    }
   }
 
   update(value) {
-    if (!this.label) {
+    if (!this.labelElement) {
       return;
     }
 
-    this.labelElement.value = value ? 'ALARM' : 'OK';
-    this.labelElement.inverted = value;
+    if (this.readOnly) {
+      this.labelElement.value = value ? 'ALARM' : 'OK';
+      this.labelElement.inverted = value;
+    } else {
+      if (value == this.input.checked) {
+        return;
+      }
+
+      this.input.checked = value;
+    }
+  }
+
+  set() {
+    this.thing.setProperty(this.name, this.input.checked);
   }
 }
 
