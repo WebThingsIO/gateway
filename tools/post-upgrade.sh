@@ -20,7 +20,7 @@ if ! dpkg -s arping 2>/dev/null | grep -q '^Status.*installed'; then
 fi
 
 # Upgrade gateway-addon Python package
-_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.9.0#egg=gateway_addon"
+_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.0#egg=gateway_addon"
 sudo pip3 install -U "$_url"
 
 # Uninstall py2 version of gateway-addon, if present
