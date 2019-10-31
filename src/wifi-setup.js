@@ -11,8 +11,6 @@ const platform = require('./platform');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 
-const preliminaryScanResults = [];
-
 const hbs = expressHandlebars.create({
   helpers: {
     escapeQuotes: (str) => `${str}`.replace(/'/, '\\\''),
@@ -123,12 +121,6 @@ function handleRoot(request, response) {
  */
 function handleWiFiSetup(request, response) {
   scan().then((results) => {
-    // On Edison, scanning will fail since we're in AP mode at this point
-    // So we'll use the preliminary scan instead
-    if (results.length === 0) {
-      results = preliminaryScanResults;
-    }
-
     // XXX
     // To handle the case where the user entered a bad password and we are
     // not connected, we should show the networks we know about, and modify
@@ -253,7 +245,6 @@ function getHotspotSsid() {
 /**
  * Scan for available wifi networks.
  *
- * @param {number?} numAttempts - Number of previous attempts to scan
  * @returns {Promise<Object[]>} Promise which resolves to the list of networks:
  *                              [
  *                                {
@@ -264,7 +255,9 @@ function getHotspotSsid() {
  *                                ...
  *                              ]
  */
-function scan(numAttempts = 1) {
+function scan() {
+  const maxAttempts = 5;
+
   return new Promise(function(resolve) {
     let attempts = 0;
 
@@ -277,7 +270,7 @@ function scan(numAttempts = 1) {
       } else {
         console.log('wifi-setup: scan: Scan attempt', attempts, 'failed');
 
-        if (attempts >= numAttempts) {
+        if (attempts >= maxAttempts) {
           console.error(
             'wifi-setup: scan: Giving up. No scan results available.'
           );
@@ -366,21 +359,13 @@ function checkConnection() {
         console.error('wifi-setup: checkConnection: Error waiting:', err);
       }
 
-      // Scan for wifi networks now because we can't always scan once
-      // the AP is being broadcast, retrying up to 10 times
-      scan(10).then((ssids) => {
-        // Update the existing preliminaryScanResults reference
-        preliminaryScanResults.splice(0, preliminaryScanResults.length);
-        Array.prototype.push.apply(preliminaryScanResults, ssids);
+      console.log(
+        'wifi-setup: checkConnection: No wifi connection found, starting AP'
+      );
 
-        console.log(
-          'wifi-setup: checkConnection: No wifi connection found, starting AP'
-        );
-
-        if (!startAP(config.get('wifi.ap.ipaddr'))) {
-          console.error('wifi-setup: checkConnection: failed to start AP');
-        }
-      });
+      if (!startAP(config.get('wifi.ap.ipaddr'))) {
+        console.error('wifi-setup: checkConnection: failed to start AP');
+      }
 
       return false;
     });
