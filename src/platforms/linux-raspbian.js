@@ -687,12 +687,15 @@ function scanWirelessNetworks() {
     .filter((l) => l.startsWith(' '))
     .map((l) => l.trim());
 
+  // Add an empty line so we don't miss the last cell.
+  lines.push('');
+
   const cells = new Map();
   let cell = {};
 
   for (const line of lines) {
     // New cell, start over
-    if (line.startsWith('Cell ')) {
+    if (line.startsWith('Cell ') || line.length === 0) {
       if (cell.hasOwnProperty('ssid') &&
           cell.hasOwnProperty('quality') &&
           cell.hasOwnProperty('encryption') &&

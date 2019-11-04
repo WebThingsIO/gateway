@@ -262,7 +262,7 @@ function stopCaptivePortal() {
  * Define a new network.
  *
  * @param {string} ssid - SSID to configure
- * @param {string?} psk - PSK to configure
+ * @param {string?} password - PSK to configure
  * @returns {Promise} Promise which resolves to a boolean indicating success of
  *                    the command.
  */
