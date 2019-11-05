@@ -1469,6 +1469,17 @@ function setWirelessCountry(country) {
   return proc.status === 0;
 }
 
+/**
+ * Get the NTP synchronization status.
+ *
+ * @returns {boolean} Boolean indicating whether or not the time has been
+ *                    synchronized.
+ */
+function getNtpStatus() {
+  // This file is created by ntpd-hotplug after the time is synchronized
+  return fs.existsSync('/var/state/dnsmasqsec');
+}
+
 module.exports = {
   getPlatformArchitecture,
   getCaptivePortalStatus,
@@ -1500,4 +1511,5 @@ module.exports = {
   getValidWirelessCountries,
   getWirelessCountry,
   setWirelessCountry,
+  getNtpStatus,
 };

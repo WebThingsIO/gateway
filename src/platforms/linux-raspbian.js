@@ -967,6 +967,33 @@ function setWirelessCountry(country) {
   return proc.status === 0;
 }
 
+/**
+ * Get the NTP synchronization status.
+ *
+ * @returns {boolean} Boolean indicating whether or not the time has been
+ *                    synchronized.
+ */
+function getNtpStatus() {
+  const proc = child_process.spawnSync(
+    'timedatectl',
+    ['status'],
+    {encoding: 'utf8'}
+  );
+
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  const lines = proc.stdout.split('\n').map((l) => l.trim());
+  const status = lines.find((l) => l.startsWith('System clock synchronized:'));
+
+  if (!status) {
+    return false;
+  }
+
+  return status.split(':')[1].trim() === 'yes';
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -992,4 +1019,5 @@ module.exports = {
   getValidWirelessCountries,
   getWirelessCountry,
   setWirelessCountry,
+  getNtpStatus,
 };

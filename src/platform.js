@@ -182,6 +182,7 @@ const wrappedMethods = [
   'getValidWirelessCountries',
   'getWirelessCountry',
   'setWirelessCountry',
+  'getNtpStatus',
 ];
 
 for (const method of wrappedMethods) {
