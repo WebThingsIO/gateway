@@ -21,6 +21,7 @@ function setupForm() {
   const createDomainButton = document.getElementById('create-domain-button');
   const skipAnchor = document.getElementById('skip-subdomain-anchor');
   const errorMessage = document.getElementById('error-setup');
+  const ntpMessage = document.getElementById('ntp-warning');
 
   function displayMessage(errorMsg, type) {
     errorMessage.innerHTML = errorMsg;
@@ -33,6 +34,28 @@ function setupForm() {
       errorMessage.classList.add('error');
     }
   }
+
+  function pollNtp() {
+    API.getNtpStatus().then((body) => {
+      if (body.statusImplemented) {
+        if (body.synchronized) {
+          ntpMessage.classList.add('hidden');
+        } else {
+          ntpMessage.classList.remove('hidden');
+
+          // poll again in 5 seconds
+          setTimeout(pollNtp, 5000);
+        }
+      }
+    }).catch((e) => {
+      console.error('Error polling NTP status:', e);
+
+      // poll again in 5 seconds
+      setTimeout(pollNtp, 5000);
+    });
+  }
+
+  pollNtp();
 
   /**
    * Ensure that subdomain is valid:

@@ -25,6 +25,10 @@ body {
   margin: 1rem;
 }
 
+#ntp-warning {
+  padding-bottom: 1rem;
+}
+
 #skip-subdomain-anchor {
   text-decoration: none;
 }

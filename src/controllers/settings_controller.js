@@ -80,7 +80,8 @@ SettingsController.get(
       console.error(e);
       response.status(400).send(e);
     }
-  });
+  }
+);
 
 SettingsController.post('/reclaim', async (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('subdomain')) {
@@ -311,6 +312,20 @@ SettingsController.post('/system/actions', auth, (request, response) => {
       response.status(400).send('Unsupported action');
       break;
   }
+});
+
+SettingsController.get('/system/ntp', (request, response) => {
+  const statusImplemented = Platform.implemented('getNtpStatus');
+
+  let synchronized = false;
+  if (statusImplemented) {
+    synchronized = Platform.getNtpStatus();
+  }
+
+  response.json({
+    statusImplemented,
+    synchronized,
+  });
 });
 
 SettingsController.get('/network/dhcp', auth, (request, response) => {

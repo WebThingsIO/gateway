@@ -451,6 +451,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Si è verificato un errore durante l'impostazione del sottodominio.
 tunnel-setup-create = Creare
 tunnel-setup-skip = Salta
+tunnel-setup-time-sync =
 
 ## Authorize Page
 authorize-title = Richiesta di autorizzazione - WebThings Gateway

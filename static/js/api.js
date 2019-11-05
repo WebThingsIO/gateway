@@ -525,6 +525,10 @@ const API = {
     return this.putJson('/settings/network/dhcp', settings);
   },
 
+  getNtpStatus() {
+    return this.getJson('/settings/system/ntp');
+  },
+
   getSshStatus() {
     return this.getJson('/settings/system/ssh');
   },

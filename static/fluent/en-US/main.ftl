@@ -451,6 +451,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = An error occurred while setting up the subdomain.
 tunnel-setup-create = Create
 tunnel-setup-skip = Skip
+tunnel-setup-time-sync = Waiting for system clock to be set from the Internet. Domain registration is likely to fail until this completes.
 
 ## Authorize Page
 authorize-title = Authorization Request - WebThings Gateway
