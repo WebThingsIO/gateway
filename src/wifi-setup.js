@@ -325,7 +325,7 @@ function stopAP() {
  * Define a new network and connect to it.
  *
  * @param {string} ssid - SSID to configure
- * @param {string?} psk - PSK to configure
+ * @param {string?} password - PSK to configure
  * @returns {boolean} Boolean indicating success of the command.
  */
 function defineNetwork(ssid, password) {
