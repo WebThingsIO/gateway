@@ -259,6 +259,8 @@ class Plugin {
           );
         };
 
+        adapter.eventHandlers[Constants.THING_ADDED] = send;
+
         Things.getThings().then((things) => {
           things.forEach(send);
         });
@@ -368,7 +370,12 @@ class Plugin {
 
     switch (msg.messageType) {
 
-      case MessageType.ADAPTER_UNLOAD_RESPONSE:
+      case MessageType.ADAPTER_UNLOAD_RESPONSE: {
+        const handler = adapter.eventHandlers[Constants.THING_ADDED];
+        if (handler) {
+          Things.removeListener(Constants.THING_ADDED, handler);
+        }
+
         this.adapters.delete(adapterId);
         if (this.adapters.size === 0 &&
             this.notifiers.size === 0 &&
@@ -387,7 +394,7 @@ class Plugin {
           adapter.unloadCompletedPromise = null;
         }
         break;
-
+      }
       case MessageType.NOTIFIER_UNLOAD_RESPONSE:
         this.notifiers.delete(notifierId);
         if (this.adapters.size === 0 &&

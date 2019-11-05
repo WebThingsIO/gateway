@@ -30,6 +30,7 @@ class AdapterProxy extends Adapter {
     this.plugin = plugin;
     this.deferredMock = null;
     this.unloadCompletedPromise = null;
+    this.eventHandlers = {};
   }
 
   startPairing(timeoutSeconds) {
