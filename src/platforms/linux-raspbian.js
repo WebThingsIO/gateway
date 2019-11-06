@@ -994,6 +994,19 @@ function getNtpStatus() {
   return status.split(':')[1].trim() === 'yes';
 }
 
+/**
+ * Restart the NTP sync service.
+ *
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function restartNtpSync() {
+  const proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'restart', 'systemd-timesyncd.service']
+  );
+  return proc.status === 0;
+}
+
 module.exports = {
   getDhcpServerStatus,
   setDhcpServerStatus,
@@ -1020,4 +1033,5 @@ module.exports = {
   getWirelessCountry,
   setWirelessCountry,
   getNtpStatus,
+  restartNtpSync,
 };

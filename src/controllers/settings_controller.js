@@ -328,6 +328,18 @@ SettingsController.get('/system/ntp', (request, response) => {
   });
 });
 
+SettingsController.post('/system/ntp', (request, response) => {
+  if (Platform.implemented('restartNtpSync')) {
+    if (Platform.restartNtpSync()) {
+      response.status(200).json({});
+    } else {
+      response.status(500).send('Failed to restart NTP sync');
+    }
+  } else {
+    response.status(500).send('Restart NTP sync not implemented');
+  }
+});
+
 SettingsController.get('/network/dhcp', auth, (request, response) => {
   if (Platform.implemented('getDhcpServerStatus')) {
     response.json({enabled: Platform.getDhcpServerStatus()});

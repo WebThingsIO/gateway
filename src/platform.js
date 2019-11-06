@@ -183,6 +183,7 @@ const wrappedMethods = [
   'getWirelessCountry',
   'setWirelessCountry',
   'getNtpStatus',
+  'restartNtpSync',
 ];
 
 for (const method of wrappedMethods) {

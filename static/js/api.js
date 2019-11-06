@@ -529,6 +529,10 @@ const API = {
     return this.getJson('/settings/system/ntp');
   },
 
+  restartNtpSync() {
+    return this.postJson('/settings/system/ntp', {});
+  },
+
   getSshStatus() {
     return this.getJson('/settings/system/ssh');
   },
