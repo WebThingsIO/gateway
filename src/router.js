@@ -67,10 +67,6 @@ const Router = {
       }
     });
 
-    // Allow LE challenges, used when renewing domain.
-    const acmeHandler = express.static(Constants.BUILD_STATIC_PATH);
-    app.use('/.well-known/acme-challenge', acmeHandler);
-
     // Content negotiation middleware
     app.use((request, response, next) => {
       // Inform the browser that content negotiation is taking place

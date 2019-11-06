@@ -1,5 +1,5 @@
 /**
- * MozIoT Gateway Tunnelservice.
+ * Gateway tunnel service.
  *
  * Manages the tunnel service.
  *
@@ -127,11 +127,13 @@ const TunnelService = {
           // Enable push service
           PushService.init(`https://${endpoint}`);
 
+          const renew = () => {
+            return CertificateManager.renew(this.server).catch(() => {});
+          };
+
           // Try to renew certificates immediately, then daily.
-          CertificateManager.renew(this.server).then(() => {
-            this.renewInterval = setInterval(() => {
-              CertificateManager.renew(this.server);
-            }, 24 * 60 * 60 * 1000);
+          renew().then(() => {
+            this.renewInterval = setInterval(renew, 24 * 60 * 60 * 1000);
           });
         }).catch(() => {});
       } else {

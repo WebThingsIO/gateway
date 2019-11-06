@@ -10,10 +10,8 @@
 
 const acme = require('acme-client');
 const config = require('config');
-const Constants = require('./constants');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 const path = require('path');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
@@ -246,6 +244,14 @@ async function renew(server) {
     // pass. move on to renewal.
   }
 
+  let tunnelToken;
+  try {
+    tunnelToken = await Settings.get('tunneltoken');
+  } catch (e) {
+    console.error('Tunnel token not set!');
+    return;
+  }
+
   /**
    * Function used to satisfy an ACME challenge
    *
@@ -255,15 +261,25 @@ async function renew(server) {
    * @returns {Promise}
    */
   const challengeCreateFn = async (_authz, challenge, keyAuthorization) => {
-    const dname =
-      path.join(Constants.BUILD_STATIC_PATH, '.well-known', 'acme-challenge');
+    const params = new URLSearchParams();
+    params.set('token', tunnelToken.token);
+    params.set('challenge', keyAuthorization);
 
-    if (!fs.existsSync(dname)) {
-      mkdirp.sync(dname);
+    // Now that we have a challenge, we call our registration server to
+    // setup the TXT record
+    const endpoint = config.get('ssltunnel.registration_endpoint');
+    const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to set DNS token on server: ${response.status}`);
     }
 
-    const fname = path.join(dname, challenge.token);
-    fs.writeFileSync(fname, keyAuthorization);
+    if (DEBUG) {
+      console.debug('Set DNS token on registration server');
+    }
+
+    // Let's wait a few seconds for changes to propagate on the registration
+    // server and its database.
+    await sleep(2500);
   };
 
   /**
@@ -274,18 +290,9 @@ async function renew(server) {
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeRemoveFn = async (_authz, challenge, _keyAuthorization) => {
-    const fname = path.join(Constants.BUILD_STATIC_PATH, challenge.token);
-    fs.unlinkSync(fname);
+  const challengeRemoveFn = async (_authz, _challenge, _keyAuthorization) => {
+    // do nothing for now
   };
-
-  let tunnelToken;
-  try {
-    tunnelToken = await Settings.get('tunneltoken');
-  } catch (e) {
-    console.error('Tunnel token not set!');
-    return;
-  }
 
   const domain = `${tunnelToken.name}.${config.get('ssltunnel.domain')}`;
 
@@ -306,7 +313,7 @@ async function renew(server) {
       csr,
       email: config.get('ssltunnel.certemail'),
       termsOfServiceAgreed: true,
-      challengePriority: ['http-01'],
+      challengePriority: ['dns-01'],
       challengeCreateFn,
       challengeRemoveFn,
     });
