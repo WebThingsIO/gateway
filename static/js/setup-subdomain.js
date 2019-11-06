@@ -35,6 +35,7 @@ function setupForm() {
     }
   }
 
+  let haveRestartedNtp = false;
   function pollNtp() {
     API.getNtpStatus().then((body) => {
       if (body.statusImplemented) {
@@ -42,6 +43,13 @@ function setupForm() {
           ntpMessage.classList.add('hidden');
         } else {
           ntpMessage.classList.remove('hidden');
+
+          if (!haveRestartedNtp) {
+            API.restartNtpSync().catch((e) => {
+              console.error('Failed to restart NTP sync:', e);
+            });
+            haveRestartedNtp = true;
+          }
 
           // poll again in 5 seconds
           setTimeout(pollNtp, 5000);

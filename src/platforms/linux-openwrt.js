@@ -1480,6 +1480,17 @@ function getNtpStatus() {
   return fs.existsSync('/var/state/dnsmasqsec');
 }
 
+/**
+ * Restart the NTP sync service.
+ *
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function restartNtpSync() {
+  const label = 'restartNtpSync';
+  const proc = spawnSync(label, '/etc/init.d/sysntpd', ['restart']);
+  return proc.status === 0;
+}
+
 module.exports = {
   getPlatformArchitecture,
   getCaptivePortalStatus,
@@ -1512,4 +1523,5 @@ module.exports = {
   getWirelessCountry,
   setWirelessCountry,
   getNtpStatus,
+  restartNtpSync,
 };
