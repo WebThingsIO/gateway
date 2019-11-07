@@ -147,7 +147,10 @@ try {
                                                    'platforms',
                                                    getOS())));
 } catch (_) {
-  console.error(`Failed to import platform utilities for ${getOS()}`);
+  console.log(
+    `Failed to import platform utilities for ${getOS()}.`,
+    'Network and system configuration features will be disabled.'
+  );
   platform = null;
 }
 
