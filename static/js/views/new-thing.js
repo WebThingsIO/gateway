@@ -451,7 +451,9 @@ class NewThing {
       'video-camera',
       'camera',
       'temperature-sensor',
-      'alarm'
+      'alarm',
+      'thermostat',
+      'lock'
     );
 
     if (cls) {
