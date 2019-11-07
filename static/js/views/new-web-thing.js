@@ -122,6 +122,9 @@ class NewWebThing {
       case 'ColorControl':
         cls = 'color-control';
         break;
+      case 'ColorSensor':
+        cls = 'color-sensor';
+        break;
       case 'EnergyMonitor':
         cls = 'energy-monitor';
         break;
@@ -179,6 +182,7 @@ class NewWebThing {
       'on-off-switch',
       'multi-level-switch',
       'color-control',
+      'color-sensor',
       'energy-monitor',
       'binary-sensor',
       'multi-level-sensor',
@@ -313,6 +317,9 @@ class NewWebThing {
             break;
           case 'ColorControl':
             cls = cls || 'color-control';
+            break;
+          case 'ColorSensor':
+            cls = cls || 'color-sensor';
             break;
           case 'EnergyMonitor':
             cls = cls || 'energy-monitor';
@@ -468,6 +475,7 @@ class NewWebThing {
       'on-off-switch',
       'multi-level-switch',
       'color-control',
+      'color-sensor',
       'energy-monitor',
       'smart-plug',
       'door-sensor',

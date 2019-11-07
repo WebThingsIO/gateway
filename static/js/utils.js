@@ -210,6 +210,7 @@ const Utils = {
       'MultiLevelSwitch',
       'OnOffSwitch',
       'ColorControl',
+      'ColorSensor',
       'EnergyMonitor',
       'DoorSensor',
       'MotionSensor',

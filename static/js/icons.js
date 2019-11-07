@@ -27,6 +27,7 @@ function capabilityToIcon(capability) {
     case 'MultiLevelSwitch':
       return '/optimized-images/thing-icons/multi_level_switch.svg';
     case 'ColorControl':
+    case 'ColorSensor':
       return '/optimized-images/thing-icons/color_control.svg';
     case 'EnergyMonitor':
       return '/optimized-images/thing-icons/energy_monitor.svg';

@@ -203,6 +203,7 @@
   background-image: url('../optimized-images/thing-icons/smart_plug.svg');
 }
 
+.new-thing.color-sensor .new-thing-icon,
 .new-thing.color-control .new-thing-icon {
   background-image: url('../optimized-images/thing-icons/color_control.svg');
 }

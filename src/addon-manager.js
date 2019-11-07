@@ -1353,7 +1353,7 @@ class AddonManager extends EventEmitter {
         };
       }
     } catch (e) {
-      console.error('Failed to parse add-on list.');
+      console.error('Failed to parse add-on list:', e);
       return;
     }
 
