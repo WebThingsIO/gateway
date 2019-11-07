@@ -191,7 +191,9 @@ class NewWebThing {
       'video-camera',
       'camera',
       'temperature-sensor',
-      'alarm'
+      'alarm',
+      'thermostat',
+      'lock'
     );
 
     if (cls) {
@@ -475,7 +477,9 @@ class NewWebThing {
       'video-camera',
       'camera',
       'temperature-sensor',
-      'alarm'
+      'alarm',
+      'thermostat',
+      'lock'
     );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
