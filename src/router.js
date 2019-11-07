@@ -156,7 +156,7 @@ const Router = {
     app.use(API_PREFIX + Constants.ADDONS_PATH, nocache, auth,
             require('./controllers/addons_controller'));
     app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth,
-            require('./rules-engine/index.js'));
+            require('./rules-engine/index'));
     app.use(API_PREFIX + Constants.INTERNAL_LOGS_PATH, nocache, auth,
             require('./controllers/internal_logs_controller'));
     app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth,
