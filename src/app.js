@@ -137,7 +137,7 @@ function startHttpsGateway() {
       }).then(() => {
         addonManager.loadAddons();
       });
-      rulesEngineConfigure(servers.https);
+      rulesEngineConfigure();
       console.log('HTTPS server listening on port',
                   servers.https.address().port);
       resolve();
@@ -171,7 +171,7 @@ function startHttpGateway() {
       }).then(() => {
         addonManager.loadAddons();
       });
-      rulesEngineConfigure(servers.http);
+      rulesEngineConfigure();
       console.log('HTTP server listening on port', servers.http.address().port);
       resolve();
     });
@@ -249,18 +249,11 @@ function getOptions() {
 }
 
 /**
- * Because the rules engine talks to the server over the public HTTP/WS API,
- * the gateway needs to configure it with a JWT and a server address
- * @param {http.Server|https.Server} server
+ * Set up the rules engine.
  */
-function rulesEngineConfigure(server) {
-  const rulesEngine = require('./rules-engine/index.js');
-  let protocol = 'https';
-  if (server instanceof http.Server) {
-    protocol = 'http';
-  }
-  const gatewayHref = `${protocol}://127.0.0.1:${server.address().port}`;
-  rulesEngine.configure(gatewayHref);
+function rulesEngineConfigure() {
+  const rulesEngine = require('./rules-engine/index');
+  rulesEngine.configure();
 }
 
 function createApp() {
