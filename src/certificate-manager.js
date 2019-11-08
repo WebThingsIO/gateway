@@ -101,6 +101,30 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     return;
   }
 
+  // Now we associate user's email with the subdomain, unless it was reclaimed
+  if (!reclamationToken) {
+    const params = new URLSearchParams();
+    params.set('token', token);
+    params.set('email', email);
+    params.set('optout', optout);
+
+    try {
+      await fetch(`${endpoint}/setemail?${params.toString()}`);
+
+      if (DEBUG) {
+        console.debug('Set email on server.');
+      }
+    } catch (e) {
+      console.error('Failed to set email on server:', e);
+
+      // https://github.com/mozilla-iot/gateway/issues/358
+      // we should store this error and display to the user on
+      // settings page to allow him to retry
+      callback(e);
+      return;
+    }
+  }
+
   /**
    * Function used to satisfy an ACME challenge
    *
@@ -185,30 +209,6 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
   if (DEBUG) {
     console.debug('Registration success!');
-  }
-
-  // Now we associate user's email with the subdomain, unless it was reclaimed
-  if (!reclamationToken) {
-    const params = new URLSearchParams();
-    params.set('token', token);
-    params.set('email', email);
-    params.set('optout', optout);
-
-    try {
-      await fetch(`${endpoint}/setemail?${params.toString()}`);
-
-      if (DEBUG) {
-        console.debug('Set email on server.');
-      }
-    } catch (e) {
-      console.error('Failed to set email on server:', e);
-
-      // https://github.com/mozilla-iot/gateway/issues/358
-      // we should store this error and display to the user on
-      // settings page to allow him to retry
-      callback(e);
-      return;
-    }
   }
 
   callback();
