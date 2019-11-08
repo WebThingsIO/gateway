@@ -99,12 +99,14 @@ const TunnelService = {
           const needToSend = response && !responseSent;
 
           if (data.indexOf('err=Error in connect') > -1) {
+            console.error('PageKite failed to connect');
             this.connected.reject();
             if (needToSend) {
               responseSent = true;
               response.sendStatus(400);
             }
           } else if (data.indexOf('connect=') > -1) {
+            console.log('PageKite connected!');
             this.connected.resolve();
             if (needToSend) {
               responseSent = true;
@@ -143,8 +145,7 @@ const TunnelService = {
         }
       }
     }).catch((e) => {
-      console.error('Failed to get tunneltoken setting');
-      console.error(e);
+      console.error('Failed to get tunneltoken setting:', e);
 
       if (response) {
         response.status(400).send(e);
