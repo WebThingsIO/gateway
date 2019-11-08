@@ -103,7 +103,7 @@ SettingsController.post('/reclaim', async (request, response) => {
   }
 });
 
-SettingsController.post('/subscribe', async (request, response) => {
+SettingsController.post('/subscribe', async (request, response, next) => {
   if (!request.body ||
       !request.body.hasOwnProperty('email') ||
       !request.body.hasOwnProperty('subdomain') ||
@@ -112,6 +112,13 @@ SettingsController.post('/subscribe', async (request, response) => {
     response.status(400).end();
     return;
   }
+
+  // increase the timeout for this request, as registration can take a while
+  request.setTimeout(5 * 60 * 1000, () => {
+    const err = new Error('Request Timeout');
+    err.status = 408;
+    next(err);
+  });
 
   const email = request.body.email.trim().toLowerCase();
   const reclamationToken = request.body.reclamationToken.trim().toLowerCase();
