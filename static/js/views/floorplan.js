@@ -351,7 +351,6 @@ const FloorplanScreen = {
     this.updateVminRequest = null;
     const newVmin = Math.min(window.innerWidth, window.innerHeight) / 100;
     this.vmin = newVmin;
-    console.log('updateVmin', newVmin);
     this.things.forEach((thing) => {
       const elt = thing.element;
       elt.style.transform =
