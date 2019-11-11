@@ -79,6 +79,9 @@ class NewThing {
         case 'ColorControl':
           cls = cls || 'color-control';
           break;
+        case 'ColorSensor':
+          cls = cls || 'color-sensor';
+          break;
         case 'EnergyMonitor':
           cls = cls || 'energy-monitor';
           break;
@@ -381,6 +384,9 @@ class NewThing {
         break;
       case 'ColorControl':
         cls = 'color-control';
+        break;
+      case 'ColorSensor':
+        cls = 'color-sensor';
         break;
       case 'EnergyMonitor':
         cls = 'energy-monitor';

@@ -17,6 +17,7 @@ const App = require('../app');
 const BinarySensor = require('../schema-impl/capability/binary-sensor');
 const Camera = require('../schema-impl/capability/camera');
 const ColorControl = require('../schema-impl/capability/color-control');
+const ColorSensor = require('../schema-impl/capability/color-sensor');
 const Constants = require('../constants');
 const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
@@ -125,6 +126,9 @@ const FloorplanScreen = {
               break;
             case 'ColorControl':
               thing = new ColorControl(thingModel, description, format);
+              break;
+            case 'ColorSensor':
+              thing = new ColorSensor(thingModel, description, format);
               break;
             case 'EnergyMonitor':
               thing = new EnergyMonitor(thingModel, description, format);

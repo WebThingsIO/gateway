@@ -494,6 +494,7 @@ require('./components/capability/alarm');
 require('./components/capability/binary-sensor');
 require('./components/capability/camera');
 require('./components/capability/color-control');
+require('./components/capability/color-sensor');
 require('./components/capability/custom');
 require('./components/capability/door-sensor');
 require('./components/capability/energy-monitor');
