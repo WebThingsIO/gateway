@@ -181,7 +181,10 @@ class InstalledAddon {
   /**
    * Handle a click on the remove button.
    */
-  handleRemove() {
+  handleRemove(e) {
+    const button = e.target;
+    button.disabled = true;
+
     API.uninstallAddon(this.id)
       .then(() => {
         const el = document.getElementById(
@@ -195,6 +198,7 @@ class InstalledAddon {
       })
       .catch((e) => {
         console.error(`Failed to uninstall add-on: ${this.id}\n${e}`);
+        button.disabled = false;
       });
   }
 
