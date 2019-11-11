@@ -261,8 +261,6 @@ class ActionInputForm {
     }).catch((e) => {
       console.error(`Error performing action "${this.name}": ${e}`);
     });
-
-    return false;
   }
 }
 
