@@ -124,6 +124,7 @@ const App = {
     this.views.assistant = document.getElementById('assistant-view');
     this.views.logs = document.getElementById('logs-view');
     this.currentView = this.views.things;
+    this.displayedExtension = null;
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
     this.extensionBackButton = document.getElementById('extension-back-button');
@@ -327,6 +328,7 @@ const App = {
       this.selectView(
         `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
       );
+      this.displayedExtension = extensionId;
     } else {
       console.warn('Unknown extension:', extensionId);
       page('/things');
@@ -349,12 +351,20 @@ const App = {
 
     this.currentView.classList.add('hidden');
     this.currentView.classList.remove('selected');
+    if (this.displayedExtension !== null &&
+        this.extensions.hasOwnProperty(this.displayedExtension)) {
+      this.extensions[this.displayedExtension].hide();
+    }
 
     el.classList.remove('hidden');
     el.classList.add('selected');
 
     Menu.selectItem(view);
     this.currentView = el;
+
+    if (!view.startsWith('extension-')) {
+      this.displayedExtension = null;
+    }
   },
 
   showMenuButton: function() {

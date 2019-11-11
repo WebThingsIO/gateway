@@ -40,6 +40,19 @@ class Extension {
     console.log(`Extension ${this.id} is being shown.`);
   }
 
+  /**
+   * Hide the extension content.
+   *
+   * The content will be hidden for you, but this callback can be used to do
+   * any required unloading steps.
+   */
+  hide() {
+    console.log(`Extension ${this.id} is being hidden.`);
+  }
+
+  /**
+   * Show the top-level menu button, rather than the back button.
+   */
   showMenuButton() {
     App.showMenuButton();
 
@@ -47,6 +60,9 @@ class Extension {
     backButton.classList.add('hidden');
   }
 
+  /**
+   * Show the top-level back button, rather than the menu button.
+   */
   showBackButton(href) {
     App.hideMenuButton();
 
