@@ -179,6 +179,7 @@ class NumberProperty extends BaseComponent {
 
   set step(value) {
     this._input.step = value;
+    this._setInputClass();
   }
 
   get value() {
