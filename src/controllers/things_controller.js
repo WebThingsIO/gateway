@@ -405,18 +405,6 @@ function websocketHandler(websocket, request) {
   const subscribedEventNames = {};
 
   async function sendMessage(message) {
-    // Convert from internal id to external id
-    if (message.hasOwnProperty('id')) {
-      try {
-        const descr = await Things.getThingDescription(message.id,
-                                                       request.get('Host'),
-                                                       request.secure);
-        // eslint-disable-next-line require-atomic-updates
-        message.id = descr.id;
-      } catch (_e) {
-        return;
-      }
-    }
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error(`WebSocket sendMessage failed: ${err}`);

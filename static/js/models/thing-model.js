@@ -101,7 +101,7 @@ class ThingModel extends Model {
         return;
       }
       const msg = {
-        id: this.descrId,
+        id: this.id,
         messageType: 'addEventSubscription',
         data: {},
       };
@@ -113,7 +113,7 @@ class ThingModel extends Model {
 
     const onEvent = (event) => {
       const message = JSON.parse(event.data);
-      if (message.hasOwnProperty('id') && message.id !== this.descrId) {
+      if (message.hasOwnProperty('id') && message.id !== this.id) {
         return;
       }
       switch (message.messageType) {
