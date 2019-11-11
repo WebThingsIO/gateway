@@ -233,6 +233,7 @@ context-menu-remove = Rimuovere
 OnOffSwitch = Interruttore acceso spento
 MultiLevelSwitch = Interruttore multi livello
 ColorControl = Controllo del colore
+ColorSensor = Sensore di colore
 EnergyMonitor = Sensore energia
 BinarySensor = Sensore binario
 MultiLevelSensor = Sensore multi livello

@@ -233,6 +233,7 @@ context-menu-remove = Remove
 OnOffSwitch = On/Off Switch
 MultiLevelSwitch = Multi Level Switch
 ColorControl = Color Control
+ColorSensor = Color Sensor
 EnergyMonitor = Energy Monitor
 BinarySensor = Binary Sensor
 MultiLevelSensor = Multi Level Sensor
