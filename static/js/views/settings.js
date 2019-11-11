@@ -416,7 +416,7 @@ const SettingsScreen = {
           ev.target.disabled = false;
         }).catch((e) => {
           App.showMessage(fluent.getMessage('failed-wifi-configure'), 3000);
-          console.error(`Failed to set wi-fi config: ${e}`);
+          console.error(`Failed to set Wi-Fi config: ${e}`);
           ev.target.disabled = false;
         });
       }
