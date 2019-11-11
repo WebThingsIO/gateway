@@ -63,6 +63,8 @@ async function register(email, reclamationToken, subdomain, fulldomain,
   if (DEBUG) {
     console.debug('Starting registration:', email, reclamationToken, subdomain,
                   fulldomain, optout);
+  } else {
+    console.log('Starting registration');
   }
 
   const endpoint = config.get('ssltunnel.registration_endpoint');
@@ -83,10 +85,13 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     const jsonToken = await res.json();
 
     if (DEBUG) {
-      console.debug('Sent subscription to server:', jsonToken);
+      console.debug('Sent subscription to registration server:', jsonToken);
+    } else {
+      console.log('Sent subscription to registration server');
     }
 
     if (jsonToken.error) {
+      console.log('Error received from registration server:', jsonToken.error);
       callback(jsonToken.error);
       return;
     }
@@ -110,10 +115,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
     try {
       await fetch(`${endpoint}/setemail?${params.toString()}`);
-
-      if (DEBUG) {
-        console.debug('Set email on server.');
-      }
+      console.log('Set email on server.');
     } catch (e) {
       console.error('Failed to set email on server:', e);
 
@@ -145,9 +147,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
       throw new Error(`Failed to set DNS token on server: ${response.status}`);
     }
 
-    if (DEBUG) {
-      console.debug('Set DNS token on registration server');
-    }
+    console.log('Set DNS token on registration server');
 
     // Let's wait a few seconds for changes to propagate on the registration
     // server and its database.
@@ -189,9 +189,11 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     });
 
     if (DEBUG) {
-      console.log('Private Key:', key.toString());
-      console.log('CSR:', csr.toString());
-      console.log('Certificate(s):', cert.toString());
+      console.debug('Private Key:', key.toString());
+      console.debug('CSR:', csr.toString());
+      console.debug('Certificate(s):', cert.toString());
+    } else {
+      console.log('Received certificate from Let\'s Encrypt');
     }
 
     const chain = cert
@@ -201,16 +203,14 @@ async function register(email, reclamationToken, subdomain, fulldomain,
       .map((s) => `${s}\n`);
 
     writeCertificates(chain[0], key.toString(), chain.join('\n'));
+    console.log('Wrote certificates to file system');
   } catch (e) {
     console.error('Failed to generate certificate:', e);
     callback(e);
     return;
   }
 
-  if (DEBUG) {
-    console.debug('Registration success!');
-  }
-
+  console.log('Registration success!');
   callback();
 }
 
@@ -220,9 +220,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
  * @param {Object} server - HTTPS server handle
  */
 async function renew(server) {
-  if (DEBUG) {
-    console.debug('Starting renewal.');
-  }
+  console.log('Starting certificate renewal.');
 
   // Check if we need to renew yet
   try {
@@ -234,10 +232,7 @@ async function renew(server) {
 
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
     if (info.notAfter - now >= oneWeek) {
-      if (DEBUG) {
-        console.debug('Certificate not yet due for renewal.');
-      }
-
+      console.log('Certificate not yet due for renewal.');
       return;
     }
   } catch (_e) {
@@ -273,9 +268,7 @@ async function renew(server) {
       throw new Error(`Failed to set DNS token on server: ${response.status}`);
     }
 
-    if (DEBUG) {
-      console.debug('Set DNS token on registration server');
-    }
+    console.log('Set DNS token on registration server');
 
     // Let's wait a few seconds for changes to propagate on the registration
     // server and its database.
@@ -322,6 +315,8 @@ async function renew(server) {
       console.log('Private Key:', key.toString());
       console.log('CSR:', csr.toString());
       console.log('Certificate(s):', cert.toString());
+    } else {
+      console.log('Received certificate from Let\'s Encrypt');
     }
 
     const chain = cert
@@ -331,6 +326,7 @@ async function renew(server) {
       .map((s) => `${s}\n`);
 
     writeCertificates(chain[0], key.toString(), chain.join('\n'));
+    console.log('Wrote certificates to file system');
 
     if (server) {
       const ctx = server._sharedCreds.context;
@@ -343,9 +339,7 @@ async function renew(server) {
     return;
   }
 
-  if (DEBUG) {
-    console.debug('Renewal success!');
-  }
+  console.log('Renewal success!');
 }
 
 module.exports = {
