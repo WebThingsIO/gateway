@@ -9,6 +9,7 @@ const availableLanguages = {
   'fr-CA': ['/fluent/fr-CA/main.ftl'],
   'fr-FR': ['/fluent/fr-FR/main.ftl'],
   it: ['/fluent/it/main.ftl'],
+  nl: ['/fluent/nl-NL/main.ftl'],
   pl: ['/fluent/pl/main.ftl'],
 };
 
