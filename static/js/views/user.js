@@ -71,7 +71,10 @@ class User {
   /**
    * Handle a click on the remove button.
    */
-  handleRemove() {
+  handleRemove(e) {
+    const button = e.target;
+    button.disabled = true;
+
     API.deleteUser(this.id)
       .then(() => {
         const el = document.getElementById(
@@ -86,6 +89,7 @@ class User {
       })
       .catch((err) => {
         console.error(`Failed to delete user: ${this.email}\n${err}`);
+        button.disabled = false;
       });
   }
 

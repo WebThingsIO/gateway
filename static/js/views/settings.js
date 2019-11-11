@@ -112,57 +112,33 @@ const SettingsScreen = {
       page('/settings/users/add');
     });
 
+    this.setupDomainElements();
     this.setupNetworkElements();
+    this.setupUserElements();
     this.setupLocalizationElements();
+    this.setupUpdateElements();
+    this.setupExperimentElements();
+    this.setupDeveloperElements();
   },
 
-  /* eslint-disable max-len */
-  setupLocalizationElements: function() {
-    this.elements.localization = {
-      country: document.getElementById('localization-settings-country'),
-      timezone: document.getElementById('localization-settings-timezone'),
-      language: document.getElementById('localization-settings-language'),
-      units: {
-        temperature: document.getElementById('localization-settings-units-temperature'),
-      },
+  setupDomainElements: function() {
+    this.elements.domain = {
+      update: document.getElementById('domain-settings-local-update'),
+      localName: document.getElementById('domain-settings-local-name'),
+      localCheckbox: document.getElementById('domain-settings-local-checkbox'),
+      tunnelName: document.getElementById('domain-settings-tunnel-name'),
     };
 
-    this.elements.localization.country.addEventListener(
-      'change',
-      (ev) => {
-        API.setCountry(ev.target.value)
-          .catch(console.error);
-      }
+    this.elements.domain.update.addEventListener(
+      'click',
+      this.onLocalDomainClick.bind(this)
     );
 
-    this.elements.localization.timezone.addEventListener(
+    this.elements.domain.localCheckbox.addEventListener(
       'change',
-      (ev) => {
-        API.setTimezone(ev.target.value)
-          .then(() => window.location.reload())
-          .catch(console.error);
-      }
-    );
-
-    this.elements.localization.language.addEventListener(
-      'change',
-      (ev) => {
-        API.setLanguage(ev.target.value)
-          .then(() => window.location.reload())
-          .catch(console.error);
-      }
-    );
-
-    this.elements.localization.units.temperature.addEventListener(
-      'change',
-      (ev) => {
-        API.setUnits({temperature: ev.target.value})
-          .then(() => window.location.reload())
-          .catch(console.error);
-      }
+      this.onLocalDomainCheckboxChange.bind(this)
     );
   },
-  /* eslint-enable max-len */
 
   /* eslint-disable max-len */
   setupNetworkElements: function() {
@@ -623,6 +599,179 @@ const SettingsScreen = {
   },
   /* eslint-enable max-len */
 
+  /* eslint-disable max-len */
+  setupUserElements: function() {
+    this.elements.user = {
+      edit: {
+        save: document.getElementById('user-settings-edit-save'),
+        form: document.getElementById('edit-user-form'),
+        id: document.getElementById('user-settings-edit-id'),
+        email: document.getElementById('user-settings-edit-email'),
+        name: document.getElementById('user-settings-edit-name'),
+        password: document.getElementById('user-settings-edit-password'),
+        newPassword: document.getElementById('user-settings-edit-new-password'),
+        confirmPassword: document.getElementById('user-settings-edit-confirm-password'),
+        passwordMismatch: document.getElementById('user-settings-edit-password-mismatch'),
+        error: document.getElementById('user-settings-edit-error'),
+      },
+      add: {
+        save: document.getElementById('user-settings-add-save'),
+        form: document.getElementById('add-user-form'),
+        email: document.getElementById('user-settings-add-email'),
+        name: document.getElementById('user-settings-add-name'),
+        password: document.getElementById('user-settings-add-password'),
+        confirmPassword: document.getElementById('user-settings-add-confirm-password'),
+        passwordMismatch: document.getElementById('user-settings-add-password-mismatch'),
+        error: document.getElementById('user-settings-add-error'),
+      },
+    };
+
+    this.elements.user.edit.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      this.elements.user.edit.save.disabled = true;
+      this.elements.user.edit.error.classList.add('hidden');
+      if (this.elements.user.edit.newPassword.value !== '' &&
+          this.elements.user.edit.newPassword.value !==
+            this.elements.user.edit.confirmPassword.value) {
+        this.elements.user.edit.passwordMismatch.classList.remove('hidden');
+        return;
+      } else {
+        this.elements.user.edit.passwordMismatch.classList.add('hidden');
+      }
+
+      const id = parseInt(this.elements.user.edit.id.value, 10);
+      const emailValue = this.elements.user.edit.email.value;
+      const nameValue = this.elements.user.edit.name.value;
+      const passwordValue = this.elements.user.edit.password.value;
+      const newPasswordValue =
+        this.elements.user.edit.newPassword.value !== '' ?
+          this.elements.user.edit.newPassword.value :
+          null;
+
+      API.editUser(id, nameValue, emailValue, passwordValue, newPasswordValue)
+        .then(() => {
+          this.elements.user.edit.save.disabled = false;
+          page('/settings/users');
+        })
+        .catch((err) => {
+          this.elements.user.edit.save.disabled = false;
+          this.elements.user.edit.error.classList.remove('hidden');
+          this.elements.user.edit.error.textContent = err.message;
+          console.error(err);
+        });
+    });
+
+    this.elements.user.add.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      this.elements.user.add.save.disabled = true;
+      this.elements.user.add.error.classList.add('hidden');
+      if (this.elements.user.add.password.value !==
+            this.elements.user.add.confirmPassword.value) {
+        this.elements.user.add.passwordMismatch.classList.remove('hidden');
+        return;
+      } else {
+        this.elements.user.add.passwordMismatch.classList.add('hidden');
+      }
+
+      const emailValue = this.elements.user.add.email.value;
+      const nameValue = this.elements.user.add.name.value;
+      const passwordValue = this.elements.user.add.password.value;
+
+      API.addUser(nameValue, emailValue, passwordValue)
+        .then(() => {
+          this.elements.user.add.save.disabled = false;
+          page('/settings/users');
+        })
+        .catch((err) => {
+          this.elements.user.add.save.disabled = false;
+          this.elements.user.add.error.classList.remove('hidden');
+          this.elements.user.add.error.textContent = err.message;
+          console.error(err);
+        });
+    });
+  },
+  /* eslint-enable max-len */
+
+  /* eslint-disable max-len */
+  setupLocalizationElements: function() {
+    this.elements.localization = {
+      country: document.getElementById('localization-settings-country'),
+      timezone: document.getElementById('localization-settings-timezone'),
+      language: document.getElementById('localization-settings-language'),
+      units: {
+        temperature: document.getElementById('localization-settings-units-temperature'),
+      },
+    };
+
+    this.elements.localization.country.addEventListener(
+      'change',
+      (ev) => {
+        API.setCountry(ev.target.value)
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.timezone.addEventListener(
+      'change',
+      (ev) => {
+        API.setTimezone(ev.target.value)
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.language.addEventListener(
+      'change',
+      (ev) => {
+        API.setLanguage(ev.target.value)
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+
+    this.elements.localization.units.temperature.addEventListener(
+      'change',
+      (ev) => {
+        API.setUnits({temperature: ev.target.value})
+          .then(() => window.location.reload())
+          .catch(console.error);
+      }
+    );
+  },
+  /* eslint-enable max-len */
+
+  setupUpdateElements: function() {
+    this.elements.update = {
+      updateNow: document.getElementById('update-now'),
+    };
+
+    this.elements.update.updateNow.addEventListener(
+      'click',
+      this.onUpdateClick
+    );
+  },
+
+  setupExperimentElements: function() {
+    this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
+    this.showExperimentCheckbox('logs', 'logs-experiment-checkbox');
+  },
+
+  setupDeveloperElements: function() {
+    this.elements.developer = {
+      sshCheckbox: document.getElementById('enable-ssh-checkbox'),
+      logsLink: document.getElementById('view-internal-logs'),
+    };
+
+    this.elements.developer.sshCheckbox.addEventListener('change', (e) => {
+      const value = e.target.checked;
+      API.setSshStatus(value).catch((e) => {
+        console.error(`Failed to toggle SSH: ${e}`);
+      });
+    });
+  },
+
   validateEthernet: function() {
     const valid =
       this.elements.network.client.ethernet.mode.value === 'dhcp' ||
@@ -848,16 +997,6 @@ const SettingsScreen = {
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
 
-    const addDomainLocalButton =
-      document.getElementById('domain-settings-local-update');
-    const localDomainName =
-        document.getElementById('domain-settings-local-name');
-    const tunnelDomainName =
-        document.getElementById('domain-settings-tunnel-name');
-
-    addDomainLocalButton.addEventListener(
-      'click', this.onLocalDomainClick.bind(this));
-
     // Comented out until full integration of Dynamic tunnel creation
     // with Service Discovery
     // const addDomainTunnelButton =
@@ -867,25 +1006,21 @@ const SettingsScreen = {
     // });
 
     API.getTunnelInfo().then((body) => {
-      const localDomainCheckbox =
-        document.getElementById('domain-settings-local-checkbox');
-
       if (body) {
-        localDomainCheckbox.checked = body.mDNSstate;
-        localDomainName.value = body.localDomain;
-        tunnelDomainName.innerText = body.tunnelDomain;
+        this.elements.domain.localCheckbox.checked = body.mDNSstate;
+        this.elements.domain.localName.value = body.localDomain;
+        this.elements.domain.tunnelName.innerText = body.tunnelDomain;
       } else {
-        localDomainName.value = fluent.getMessage('unknown-state');
-        tunnelDomainName.innerText = fluent.getMessage('unknown-state');
+        this.elements.domain.localName.value =
+          fluent.getMessage('unknown-state');
+        this.elements.domain.tunnelName.innerText =
+          fluent.getMessage('unknown-state');
       }
 
-      if (!localDomainCheckbox.checked) {
-        localDomainName.disabled = true;
-        addDomainLocalButton.disabled = true;
+      if (!this.elements.domain.localCheckbox.checked) {
+        this.elements.domain.localName.disabled = true;
+        this.elements.domain.update.disabled = true;
       }
-
-      localDomainCheckbox.addEventListener(
-        'change', this.onLocalDomainCheckboxChange.bind(this));
     });
   },
 
@@ -1159,56 +1294,14 @@ const SettingsScreen = {
     this.userSettingsEdit.classList.remove('hidden');
     this.view.classList.add('dark');
 
+    this.elements.user.edit.id.value = id;
     API.getUser(id).then((user) => {
-      const form = document.getElementById('edit-user-form');
-      const email = document.getElementById('user-settings-edit-email');
-      const name = document.getElementById('user-settings-edit-name');
-      const password = document.getElementById('user-settings-edit-password');
-      const newPassword =
-        document.getElementById('user-settings-edit-new-password');
-      const confirmPassword =
-        document.getElementById('user-settings-edit-confirm-password');
-      const passwordMismatch =
-        document.getElementById('user-settings-edit-password-mismatch');
-      const error = document.getElementById('user-settings-edit-error');
-
-      email.value = user.email;
-      name.value = user.name;
-      password.value = '';
-      newPassword.value = '';
-      confirmPassword.value = '';
-      name.focus();
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        error.classList.add('hidden');
-        if (newPassword.value !== '' &&
-            newPassword.value !== confirmPassword.value) {
-          passwordMismatch.classList.remove('hidden');
-          return;
-        } else {
-          passwordMismatch.classList.add('hidden');
-        }
-
-        const emailValue = email.value;
-        const nameValue = name.value;
-        const passwordValue = password.value;
-        const newPasswordValue =
-          newPassword.value !== '' ? newPassword.value : null;
-
-        API.editUser(id, nameValue, emailValue, passwordValue,
-                     newPasswordValue)
-          .then(() => {
-            page('/settings/users');
-          })
-          .catch((err) => {
-            error.classList.remove('hidden');
-            error.textContent = err.message;
-            console.error(err);
-          });
-
-        return false;
-      });
+      this.elements.user.edit.email.value = user.email;
+      this.elements.user.edit.name.value = user.name;
+      this.elements.user.edit.password.value = '';
+      this.elements.user.edit.newPassword.value = '';
+      this.elements.user.edit.confirmPassword.value = '';
+      this.elements.user.edit.name.focus();
     });
   },
 
@@ -1220,48 +1313,11 @@ const SettingsScreen = {
     this.userSettingsAdd.classList.remove('hidden');
     this.view.classList.add('dark');
 
-    const form = document.getElementById('add-user-form');
-    const email = document.getElementById('user-settings-add-email');
-    const name = document.getElementById('user-settings-add-name');
-    const password = document.getElementById('user-settings-add-password');
-    const confirmPassword =
-      document.getElementById('user-settings-add-confirm-password');
-    const passwordMismatch =
-      document.getElementById('user-settings-add-password-mismatch');
-    const error = document.getElementById('user-settings-add-error');
-
-    email.value = '';
-    name.value = '';
-    password.value = '';
-    confirmPassword.value = '';
-    name.focus();
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      error.classList.add('hidden');
-      if (password.value !== confirmPassword.value) {
-        passwordMismatch.classList.remove('hidden');
-        return;
-      } else {
-        passwordMismatch.classList.add('hidden');
-      }
-
-      const emailValue = email.value;
-      const nameValue = name.value;
-      const passwordValue = password.value;
-
-      API.addUser(nameValue, emailValue, passwordValue)
-        .then(() => {
-          page('/settings/users');
-        })
-        .catch((err) => {
-          error.classList.remove('hidden');
-          error.textContent = err.message;
-          console.error(err);
-        });
-
-      return false;
-    });
+    this.elements.user.add.email.value = '';
+    this.elements.user.add.name.value = '';
+    this.elements.user.add.password.value = '';
+    this.elements.user.add.confirmPassword.value = '';
+    this.elements.user.add.name.focus();
   },
 
   showAdapterSettings: function() {
@@ -1539,8 +1595,6 @@ const SettingsScreen = {
 
   showExperimentSettings: function() {
     this.experimentSettings.classList.remove('hidden');
-    this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
-    this.showExperimentCheckbox('logs', 'logs-experiment-checkbox');
   },
 
   /**
@@ -1646,9 +1700,6 @@ const SettingsScreen = {
 
   showUpdateSettings: function() {
     this.updateSettings.classList.remove('hidden');
-    const updateNow = document.getElementById('update-now');
-
-    updateNow.addEventListener('click', this.onUpdateClick);
     this.fetchUpdateInfo();
   },
 
@@ -1793,20 +1844,12 @@ const SettingsScreen = {
   showDeveloperSettings: function() {
     this.developerSettings.classList.remove('hidden');
 
-    document.getElementById('view-internal-logs').href = `/internal-logs?jwt=${API.jwt}`;
-    const sshCheckbox = document.getElementById('enable-ssh-checkbox');
+    this.elements.developer.logsLink.href = `/internal-logs?jwt=${API.jwt}`;
 
     API.getSshStatus().then((body) => {
-      sshCheckbox.checked = body.enabled;
-      if (body.toggleImplemented) {
-        sshCheckbox.addEventListener('change', (e) => {
-          const value = e.target.checked ? true : false;
-          API.setSshStatus(value).catch((e) => {
-            console.error(`Failed to toggle SSH: ${e}`);
-          });
-        });
-      } else {
-        sshCheckbox.disabled = true;
+      this.elements.developer.sshCheckbox.checked = body.enabled;
+      if (!body.toggleImplemented) {
+        this.elements.developer.sshCheckbox.disabled = true;
       }
     }).catch((e) => {
       console.error(`Error getting SSH setting: ${e}`);
