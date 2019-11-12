@@ -32,7 +32,7 @@
   "dependencies": {
     "@fluent/bundle": "^0.14.0",
     "@fluent/dom": "^0.6.0",
-    "acme-client": "^3.2.0",
+    "acme-client": "https://github.com/publishlab/node-acme-client#7bb000d561cda8e31e3dc82e6f499d947dd92a0e",
     "ajv": "^6.10.2",
     "archiver": "^3.1.1",
     "asn1.js": "^5.2.0",
