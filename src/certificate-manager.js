@@ -314,9 +314,9 @@ async function renew(server) {
     });
 
     if (DEBUG) {
-      console.log('Private Key:', key.toString());
-      console.log('CSR:', csr.toString());
-      console.log('Certificate(s):', cert.toString());
+      console.debug('Private Key:', key.toString());
+      console.debug('CSR:', csr.toString());
+      console.debug('Certificate(s):', cert.toString());
     } else {
       console.log('Received certificate from Let\'s Encrypt');
     }
