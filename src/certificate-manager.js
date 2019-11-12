@@ -307,6 +307,7 @@ async function renew(server) {
       csr,
       email: config.get('ssltunnel.certemail'),
       termsOfServiceAgreed: true,
+      skipChallengeVerification: true,
       challengePriority: ['dns-01'],
       challengeCreateFn,
       challengeRemoveFn,
