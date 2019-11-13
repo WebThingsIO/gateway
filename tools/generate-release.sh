@@ -8,7 +8,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 SCRIPT_NAME=$(basename $0)
-SCRIPT_DIR=$(dirname $0)
+SCRIPT_DIR=$(readlink -f $(dirname $0))
 VERBOSE=0
 OUTPUT_DIRECTORY='ota'
 
