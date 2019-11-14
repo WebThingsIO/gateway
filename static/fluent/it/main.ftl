@@ -21,7 +21,7 @@ assistant-controls-text-input =
   .placeholder = Come posso aiutare?
 
 ## Floorplan
-upload-floorplan = Carica planimetria...
+upload-floorplan = Carica planimetria…
 upload-floorplan-hint = (.svg raccomandato)
 
 ## Top-Level Settings
@@ -217,15 +217,15 @@ logs-server-remove-error = Errore del server: impossibile rimuovere il registro
 ## Add New Things
 add-thing-scanning-icon =
   .alt = Scansione
-add-thing-scanning = Scansione per nuovi dispositivi...
+add-thing-scanning = Scansione per nuovi dispositivi…
 add-thing-add-adapters-hint = Non sono state trovate nuove cose. Provare
 add-thing-add-adapters-hint-anchor = ad aggiungere alcuni componenti aggiuntivi.
-add-thing-add-by-url = Aggiungi per URL...
+add-thing-add-by-url = Aggiungi per URL…
 add-thing-done = Fatto
 add-thing-cancel = Annulla
 
 ## Context Menu
-context-menu-choose-icon = Scegli icona...
+context-menu-choose-icon = Scegli icona…
 context-menu-save = Salvare
 context-menu-remove = Rimuovere
 
@@ -285,9 +285,9 @@ check-email-for-token = Controlla la sua e-mail per un token di recupero e incol
 reclaim-failed = Impossibile recuperare il dominio.
 subdomain-already-used = Questo sottodominio è già in uso. Per favore scegline uno diverso.
 invalid-reclamation-token = Token di recupero non valido.
-domain-success = Successo! Per favore attendi di essere reindirizzato...
+domain-success = Successo! Per favore attendi di essere reindirizzato…
 issuing-error = Errore durante l'emissione del certificato. Per favore, riprova.
-redirecting = Reindirizzamento...
+redirecting = Reindirizzamento…
 
 ## Booleans
 true = Vero
@@ -334,7 +334,7 @@ abbrev-foot = ft
 
 ## New Thing View
 unknown-device-type = Tipo di dispositivo sconosciuto
-new-thing-choose-icon = Scegli icona...
+new-thing-choose-icon = Scegli icona…
 new-thing-save = Salva
 new-thing-pin =
   .placeholder = Inserisci pin
@@ -354,7 +354,7 @@ new-thing-done = Fatto
 new-web-thing-url =
   .placeholder = Inserisci l'URL della web thing
 new-web-thing-label = Web Thing
-loading = Caricamento in corso...
+loading = Caricamento in corso…
 new-web-thing-multiple = Molti web things
 new-web-thing-from = da
 
@@ -429,18 +429,18 @@ component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title = Accesso - WebThings Gateway
+login-title = Accesso — WebThings Gateway
 login-log-in = Accesso
 
 ## Create First User Page
-signup-title = Crea utente - WebThings Gateway
+signup-title = Crea utente — WebThings Gateway
 signup-welcome = Benvenuto
 signup-create-account = Crea il suo primo account utente:
 signup-password-mismatch = Le password non corrispondono
 signup-next = Il prossimo
 
 ## Tunnel Setup Page
-tunnel-setup-title = Scegli Indirizzo Web - WebThings Gateway
+tunnel-setup-title = Scegli Indirizzo Web — WebThings Gateway
 tunnel-setup-welcome = Benvenuto
 tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il suo gateway:
 tunnel-setup-input-subdomain =
@@ -455,7 +455,7 @@ tunnel-setup-skip = Salta
 tunnel-setup-time-sync = In attesa che l’orologio di sistema venga impostato da Internet. È probabile che la registrazione del dominio non riesca fino al completamento.
 
 ## Authorize Page
-authorize-title = Richiesta di autorizzazione - WebThings Gateway
+authorize-title = Richiesta di autorizzazione — WebThings Gateway
 authorize-authorization-request = Richiesta di autorizzazione
 authorize-would-like = Vorresti accedere al suo gateway
 authorize-devices = dispositivi
@@ -468,7 +468,7 @@ authorize-allow =
 authorize-deny = Negare
 
 ## Local Token Page
-local-token-title = Servizio token locale - WebThings Gateway
+local-token-title = Servizio token locale — WebThings Gateway
 local-token-header = Servizio token locale
 local-token-your-token = Il token locale è questo
 local-token-jwt = JSON Web Token
@@ -476,7 +476,7 @@ local-token-use-it = Usalo per parlare in modo sicuro con il gateway, con
 local-token-bearer-type = Bearer-type autorizzazione
 
 ## Router Setup Page
-router-setup-title = Configurazione del router - WebThings Gateway
+router-setup-title = Configurazione del router — WebThings Gateway
 router-setup-header = Crea una nuova rete Wi-Fi
 router-setup-input-ssid =
   .placeholder = Nome della rete
@@ -489,7 +489,7 @@ router-setup-create =
 router-setup-password-mismatch = Le password devono essere identiche
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Configurazione Wi-Fi - WebThings Gateway
+wifi-setup-title = Configurazione Wi-Fi — WebThings Gateway
 wifi-setup-header = Connettersi a una rete Wi-Fi?
 wifi-setup-input-password =
   .placeholder = Password
@@ -501,8 +501,8 @@ wifi-setup-network-icon =
 wifi-setup-skip = Salta
 
 ## Connecting to Wi-Fi Page
-connecting-title = Connessione al Wi-Fi - WebThings Gateway
-connecting-header = Connessione al Wi-Fi...
+connecting-title = Connessione al Wi-Fi — WebThings Gateway
+connecting-header = Connessione al Wi-Fi…
 connecting-connect = Effettuare una connessione alla stessa rete e
  quindi va a { $gateway-link } nel suo browser web per continuare l'installazione.
 connecting-warning = Se non riesci a caricare { $domain }, inserisci l'indirizzo IP del gateway.
@@ -512,18 +512,18 @@ connecting-skipped = Il gateway è in fase di avvio. Navigare verso
  (Con connessione di rete uguale al gateway.)
 
 ## Creating Wi-Fi Network Page
-creating-title = Creazione della rete Wi-Fi - WebThings Gateway
-creating-header = Creazione della rete Wi-Fi...
+creating-title = Creazione della rete Wi-Fi — WebThings Gateway
+creating-header = Creazione della rete Wi-Fi…
 creating-content = Effettua una connessione a { $ssid } con la password che ha appena
  creato, quindi va a { $gateway-link } o { $ip-link } nel suo Web
  browser.
 
 ## General Terms
 ok = Ok
-ellipses = ...
+ellipsis = …
 event-log = Registro eventi
 edit = Modificare
 remove = Rimuovere
 disconnected = Scollegato
-processing = In lavorazione...
+processing = In lavorazione…
 submit = Sottoscrivi

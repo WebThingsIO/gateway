@@ -105,7 +105,7 @@ class LockCapability extends BaseComponent {
     this._icon.classList.add(value);
 
     if (value === 'unknown') {
-      value = 'ellipses';
+      value = 'ellipsis';
     }
 
     this._label.innerText = fluent.getMessage(value);
