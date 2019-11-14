@@ -86,7 +86,7 @@ class PushButtonCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('pushed');
-      this._label.innerText = fluent.getMessage('ellipses');
+      this._label.innerText = fluent.getMessage('ellipsis');
     } else if (this._pushed) {
       this._icon.classList.add('pushed');
       this._label.innerText = fluent.getMessage('pushed');

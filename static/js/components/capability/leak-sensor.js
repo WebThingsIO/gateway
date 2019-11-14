@@ -84,7 +84,7 @@ class LeakSensorCapability extends BaseComponent {
 
     if (value === null) {
       this._icon.classList.remove('leak');
-      this._label.innerText = fluent.getMessage('ellipses');
+      this._label.innerText = fluent.getMessage('ellipsis');
     } else if (this._leak) {
       this._icon.classList.add('leak');
       this._label.innerText = fluent.getMessage('leak');

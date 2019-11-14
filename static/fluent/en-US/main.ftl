@@ -21,7 +21,7 @@ assistant-controls-text-input =
   .placeholder = How can I help?
 
 ## Floorplan
-upload-floorplan = Upload floorplan...
+upload-floorplan = Upload floorplan…
 upload-floorplan-hint = (.svg recommended)
 
 ## Top-Level Settings
@@ -173,7 +173,7 @@ rule-select-property = Select Property
 rule-not = Not
 rule-event = Event
 rule-action = Action
-rule-configure = Configure...
+rule-configure = Configure…
 rule-time-title = Time of day
 rule-notification = Notification
 notification-title = Title
@@ -217,15 +217,15 @@ logs-server-remove-error = Server error: unable to remove log
 ## Add New Things
 add-thing-scanning-icon =
   .alt = Scanning
-add-thing-scanning = Scanning for new devices...
+add-thing-scanning = Scanning for new devices…
 add-thing-add-adapters-hint = No new things found. Try
 add-thing-add-adapters-hint-anchor = adding some add-ons.
-add-thing-add-by-url = Add by URL...
+add-thing-add-by-url = Add by URL…
 add-thing-done = Done
 add-thing-cancel = Cancel
 
 ## Context Menu
-context-menu-choose-icon = Choose icon...
+context-menu-choose-icon = Choose icon…
 context-menu-save = Save
 context-menu-remove = Remove
 
@@ -285,9 +285,9 @@ check-email-for-token = Please check your email for a reclamation token and past
 reclaim-failed = Could not reclaim domain.
 subdomain-already-used = This subdomain is already being used. Please choose a different one.
 invalid-reclamation-token = Invalid reclamation token.
-domain-success = Success! Please wait while we redirect you...
+domain-success = Success! Please wait while we redirect you…
 issuing-error = Error issuing certificate. Please try again.
-redirecting = Redirecting...
+redirecting = Redirecting…
 
 ## Booleans
 true = True
@@ -334,7 +334,7 @@ abbrev-foot = ft
 
 ## New Thing View
 unknown-device-type = Unknown device type
-new-thing-choose-icon = Choose icon...
+new-thing-choose-icon = Choose icon…
 new-thing-save = Save
 new-thing-pin =
   .placeholder = Enter PIN
@@ -354,7 +354,7 @@ new-thing-done = Done
 new-web-thing-url =
   .placeholder = Enter web thing URL
 new-web-thing-label = Web Thing
-loading = Loading...
+loading = Loading…
 new-web-thing-multiple = Multiple web things found
 new-web-thing-from = from
 
@@ -372,14 +372,14 @@ by = by
 addon-configure = Configure
 addon-update = Update
 addon-remove = Remove
-addon-updating = Updating...
+addon-updating = Updating…
 addon-updated = Updated
 addon-update-failed = Failed
-addon-config-applying = Applying...
+addon-config-applying = Applying…
 addon-config-apply = Apply
 addon-discovery-added = Added
 addon-discovery-add = Add
-addon-discovery-installing = Installing...
+addon-discovery-installing = Installing…
 addon-discovery-failed = Failed
 
 ## Page Titles
@@ -429,18 +429,18 @@ component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title = Login - WebThings Gateway
+login-title = Login — WebThings Gateway
 login-log-in = Log in
 
 ## Create First User Page
-signup-title = Create User - WebThings Gateway
+signup-title = Create User — WebThings Gateway
 signup-welcome = Welcome
 signup-create-account = Create your first user account:
 signup-password-mismatch = Passwords do not match
 signup-next = Next
 
 ## Tunnel Setup Page
-tunnel-setup-title = Choose Web Address - WebThings Gateway
+tunnel-setup-title = Choose Web Address — WebThings Gateway
 tunnel-setup-welcome = Welcome
 tunnel-setup-choose-address = Choose a secure web address for your gateway:
 tunnel-setup-input-subdomain =
@@ -455,7 +455,7 @@ tunnel-setup-skip = Skip
 tunnel-setup-time-sync = Waiting for system clock to be set from the Internet. Domain registration is likely to fail until this completes.
 
 ## Authorize Page
-authorize-title = Authorization Request - WebThings Gateway
+authorize-title = Authorization Request — WebThings Gateway
 authorize-authorization-request = Authorization Request
 authorize-would-like = would like to access your gateway to
 authorize-devices = devices.
@@ -468,7 +468,7 @@ authorize-allow =
 authorize-deny = Deny
 
 ## Local Token Page
-local-token-title = Local Token Service - WebThings Gateway
+local-token-title = Local Token Service — WebThings Gateway
 local-token-header = Local Token Service
 local-token-your-token = Your local token is this
 local-token-jwt = JSON Web Token
@@ -476,7 +476,7 @@ local-token-use-it = Use it to talk to the gateway securely, with
 local-token-bearer-type = Bearer-type Authorization
 
 ## Router Setup Page
-router-setup-title = Router Setup - WebThings Gateway
+router-setup-title = Router Setup — WebThings Gateway
 router-setup-header = Create a new Wi-Fi network
 router-setup-input-ssid =
   .placeholder = Network name
@@ -489,7 +489,7 @@ router-setup-create =
 router-setup-password-mismatch = Passwords must match
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Wi-Fi Setup - WebThings Gateway
+wifi-setup-title = Wi-Fi Setup — WebThings Gateway
 wifi-setup-header = Connect to a Wi-Fi network?
 wifi-setup-input-password =
   .placeholder = Password
@@ -501,8 +501,8 @@ wifi-setup-network-icon =
 wifi-setup-skip = Skip
 
 ## Connecting to Wi-Fi Page
-connecting-title = Connecting to Wi-Fi - WebThings Gateway
-connecting-header = Connecting to Wi-Fi...
+connecting-title = Connecting to Wi-Fi — WebThings Gateway
+connecting-header = Connecting to Wi-Fi…
 connecting-connect = Please ensure you are connected to the same network and
  then navigate to { $gateway-link } in your web browser to continue setup.
 connecting-warning = Note: If you are unable to load { $domain }, look up the
@@ -513,18 +513,18 @@ connecting-skipped = The gateway is now being started. Navigate to
  the gateway to continue setup.
 
 ## Creating Wi-Fi Network Page
-creating-title = Creating Wi-Fi Network - WebThings Gateway
-creating-header = Creating Wi-Fi network...
+creating-title = Creating Wi-Fi Network — WebThings Gateway
+creating-header = Creating Wi-Fi network…
 creating-content = Please connect to { $ssid } with the password you just
  created, then navigate to { $gateway-link } or { $ip-link } in your web
  browser.
 
 ## General Terms
 ok = Ok
-ellipses = ...
+ellipsis = …
 event-log = Event Log
 edit = Edit
 remove = Remove
 disconnected = Disconnected
-processing = Processing...
+processing = Processing…
 submit = Submit
