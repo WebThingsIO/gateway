@@ -10,7 +10,7 @@ assistant-menu-item = Asystent
 things-menu-item = Rzeczy
 rules-menu-item = Reguły
 logs-menu-item = Wykresy
-floorplan-menu-item = Plan
+floorplan-menu-item = Plan Pomieszczeń
 settings-menu-item = Ustawienia
 log-out-button = Wyloguj
 
@@ -21,13 +21,13 @@ assistant-controls-text-input =
   .placeholder = Jak mogę pomóc?
 
 ## Floorplan
-upload-floorplan = Prześlij plan...
+upload-floorplan = Prześlij plan pomieszczeń...
 upload-floorplan-hint = (.svg zalecane)
 
 ## Top-Level Settings
 settings-domain = Domena
 settings-network = Sieć
-settings-users = Użytkownik
+settings-users = Użytkownicy
 settings-add-ons = Dodatki
 settings-adapters = Adaptery
 settings-localization = Lokalizacja
@@ -81,7 +81,7 @@ wireless-connected = Połączono
 wireless-icon =
   .alt = Sieć Wi-Fi
 network-settings-changing = Zmiana ustawień sieciowych. To może chwilę potrwać.
-failed-ethernet-configure = Niepowodzenie konfiguracji Ethernetu.
+failed-ethernet-configure = Konfiguracja Ethernetu nie powiodła się.
 failed-wifi-configure = Konfiguracja Wi-Fi nie powiodła się.
 failed-wan-configure = Konfiguracja WAN nie powiodła się.
 failed-lan-configure = Konfiguracja LAN nie powiodła się.
@@ -120,8 +120,8 @@ localization-settings-timezone = Strefa czasowa
 localization-settings-language = Język
 localization-settings-units = Jednostki
 localization-settings-units-temperature = Temperatura
-localization-settings-units-temperature-celsius = Temperatura Celsjusza (°C)
-localization-settings-units-temperature-fahrenheit = Temperatura Fahrenheita (°F)
+localization-settings-units-temperature-celsius = Stopnie Celsjusza (°C)
+localization-settings-units-temperature-fahrenheit = Stopnie Fahrenheita (°F)
 
 ## Update Settings
 update-settings-update-now = Aktualizuj teraz
@@ -158,11 +158,11 @@ rules-scroll-left =
 rules-scroll-right =
   .alt = Przewiń w prawo
 rules-delete-prompt = Upuść urządzenie tutaj, aby rozłączyć
-rules-delete-dialog = Czy na pewno chcesz trwale usunąć te reguły?
+rules-delete-dialog = Czy na pewno chcesz trwale usunąć tę regułę?
 rules-delete-cancel =
   .value = Anuluj
 rules-delete-confirm =
-  .value = Usuń Reguły
+  .value = Usuń Regułę
 rule-invalid = Niepoprawna
 rule-delete-prompt = Czy na pewno chcesz trwale usunąć tę regułę?
 rule-delete-cancel-button =
@@ -174,7 +174,7 @@ rule-not = Nie
 rule-event = Zdarzenie
 rule-action = Akcja
 rule-configure = Konfiguruj...
-rule-time-title = Godzina
+rule-time-title = Czas
 rule-notification = Powiadomienie
 notification-title = Tytuł
 notification-message = Wiadomość
@@ -211,8 +211,8 @@ logs-remove-dialog-title = Usuwanie
 logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych.
   Czy na pewno chcesz go usunąć?
 logs-remove = Usuń
-logs-unable-to-create = Nie można utworzyć dziennika
-logs-server-remove-error = Błąd serwera: nie można usunąć dziennika
+logs-unable-to-create = Nie można utworzyć wykresu
+logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
 
 ## Add New Things
 add-thing-scanning-icon =
