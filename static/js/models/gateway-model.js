@@ -156,7 +156,7 @@ class GatewayModel extends Model {
     return this.addQueue(() => {
       return API.getThings().then((things) => {
         things.forEach((description) => {
-          const thingId = description.href.split('/').pop();
+          const thingId = decodeURIComponent(description.href.split('/').pop());
           this.setThing(thingId, description);
         });
         return this.handleEvent(Constants.REFRESH_THINGS, this.things);

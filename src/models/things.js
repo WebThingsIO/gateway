@@ -165,13 +165,14 @@ const Things = {
       connectedThings.forEach(function(connectedThing) {
         if (!storedThings.has(connectedThing.id)) {
           connectedThing.href =
-           `${Constants.THINGS_PATH}/${connectedThing.id}`;
+           `${Constants.THINGS_PATH}/${encodeURIComponent(connectedThing.id)}`;
           if (connectedThing.properties) {
             for (const propertyName in connectedThing.properties) {
               const property = connectedThing.properties[propertyName];
-              property.href = `${Constants.THINGS_PATH
-              }/${connectedThing.id
-              }${Constants.PROPERTIES_PATH}/${propertyName}`;
+              property.href = `${Constants.THINGS_PATH}/${
+                encodeURIComponent(connectedThing.id)}${
+                Constants.PROPERTIES_PATH}/${
+                encodeURIComponent(propertyName)}`;
             }
           }
           newThings.push(connectedThing);

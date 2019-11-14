@@ -228,7 +228,7 @@ class ActionInputForm {
       if (el.name === '__default__') {
         schema = this.schema;
       } else {
-        schema = this.schema.properties[el.name];
+        schema = this.schema.properties[this.inputs[el.name]];
       }
 
       // convert value back
