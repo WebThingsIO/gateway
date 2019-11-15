@@ -513,7 +513,7 @@ connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
 creating-title = Neues Wi-Fi-Netzwerk anlegen - WebThings Gateway
 creating-header = Neues Wi-Fi-Netzwerk wird angelegt...
 creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort 
- aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } starten.
+ aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 
 ## General Terms
 ok = OK
