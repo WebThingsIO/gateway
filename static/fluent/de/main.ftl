@@ -10,18 +10,18 @@ assistant-menu-item = Assistent
 things-menu-item = Dinge
 rules-menu-item = Regeln
 logs-menu-item = Protokolle
-floorplan-menu-item = Lageplan
+floorplan-menu-item = Raumplan
 settings-menu-item = Einstellungen
 log-out-button = Ausloggen
 
 ## Assistant
 assistant-avatar-image =
-  .alt = Assistent Avatar
+  .alt = Assistent-Avatar
 assistant-controls-text-input =
   .placeholder = Wie kann ich helfen?
 
 ## Floorplan
-upload-floorplan = Lageplan aktualisieren...
+upload-floorplan = Raumplan aktualisieren...
 upload-floorplan-hint = (.svg empfohlen)
 
 ## Top-Level Settings
@@ -57,13 +57,13 @@ network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Konfigurieren
 network-settings-internet-wan = Internet (WAN)
-network-settings-home-network-lan = Heimneztzwerk (LAN)
+network-settings-home-network-lan = Heimnetzwerk (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
-network-settings-ip-address = IP Adresse
+network-settings-ip-address = IP-Adresse
 network-settings-dhcp = Automatisch (DHCP)
 network-settings-static = Manuell (Statische IP)
 network-settings-pppoe = Bridge (PPPoE)
-network-settings-static-ip-address = Statische IP Adresse
+network-settings-static-ip-address = Statische IP-Adresse
 network-settings-network-mask = Netzwerkmaske
 network-settings-gateway = Gateway
 network-settings-done = Erledigt
@@ -73,13 +73,13 @@ network-settings-show-password = Passwort anzeigen
 network-settings-connect = Verbinden
 network-settings-username = Benutzername
 network-settings-password = Passwort
-network-settings-router-ip = Router IP Adresse
-network-settings-dhcp-server = DHCP Server
+network-settings-router-ip = Router-IP-Adresse
+network-settings-dhcp-server = DHCP-Server
 network-settings-enable-wifi = Wi-Fi aktivieren
-network-settings-network-name = Netwerkname (SSID)
+network-settings-network-name = Netwerkname
 wireless-connected = Verbunden
 wireless-icon =
-  .alt = Wi-Fi Netzwerk
+  .alt = Wi-Fi-Netzwerk
 network-settings-changing = Netzwerkeinstellungen werden aktualisiert. Dies kann eine Minute dauern.
 failed-ethernet-configure = Konfiguration der Ethernet-Verbindung fehlgeschlagen.
 failed-wifi-configure = Konfiguration der Wi-Fi-Verbindung fehlgeschlagen.
@@ -157,7 +157,7 @@ rules-scroll-left =
   .alt = Links scrollen
 rules-scroll-right =
   .alt = Rechts scrollen
-rules-delete-prompt = Gerät hier fallen lassen um es zu  löschen
+rules-delete-prompt = Gerät hier fallen lassen um es zu löschen
 rules-delete-dialog = Soll das Gerät dauerhalt aus der Regel entfernt werden?
 rules-delete-cancel =
   .value = Abbrechen
@@ -230,12 +230,12 @@ context-menu-save = Speichern
 context-menu-remove = Löschen
 
 ## Capabilities
-OnOffSwitch = Ein/Aus Schalter
+OnOffSwitch = Ein/Aus-Schalter
 MultiLevelSwitch = Mehrfachschalter
 ColorControl = Farbsteuerung
 EnergyMonitor = Energie-Monitor
 BinarySensor = Binärer Sensor
-MultiLevelSensor = Mehrfachssensor
+MultiLevelSensor = Mehrfachsensor
 SmartPlug = Zwischenstecker
 Light = Licht
 DoorSensor = Türsensor
@@ -286,7 +286,7 @@ subdomain-already-used = Diese Subdomain ist bereits in Gebrauch. Bitte einen an
 invalid-reclamation-token = Ungültiges Reclaim-Token.
 domain-success = Erfolgreich! Es wird weitergeleitet...
 issuing-error = Zertifikat konnte nicht erstellt werden. Bitte erneut versuchen.
-redirecting = Redirecting...
+redirecting = Weiterleiten...
 
 ## Booleans
 true = Wahr
@@ -385,7 +385,7 @@ addon-discovery-failed = Fehlgeschlagen
 settings = Einstellungen
 domain = Domäne
 users = Benutzer
-edit-user = Benutzer anpassen
+edit-user = Benutzer bearbeiten
 add-user = Benutzer hinzufügen
 adapters = Adapter
 addons = Erweiterungen
@@ -409,7 +409,7 @@ speech-didnt-get = Sorry, das habe ich nicht verstanden.
 unknown-state = Unbekannter Zustand.
 error = Fehler
 errors = Fehler
-gateway-unreachable = Gateway unerreichbar
+gateway-unreachable = Gateway nicht erreichbar
 more-information = Mehr Informationen
 invalid-file = Ungültige Datei.
 failed-read-file = Datei nicht lesbar.
@@ -444,7 +444,7 @@ tunnel-setup-welcome = Willkommen
 tunnel-setup-choose-address = Sichere URL für das Gateway:
 tunnel-setup-input-subdomain =
   .placeholder = Subdomain
-tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkiten zunm Mitmachen erhalten.
+tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkeiten zunm Mitmachen erhalten.
 tunnel-setup-privacy-policy = Datenschutz
 tunnel-setup-input-reclamation-token =
   .placeholder = Reclaim-Token
@@ -458,7 +458,7 @@ authorize-authorization-request = Authorisierungsanfrage
 authorize-would-like = möchte auf das Gateway zugreifen zum 
 authorize-devices = Geräte.
 authorize-from = von
-authorize-monitor-and-control = Übewachen und kontrollieren
+authorize-monitor-and-control = Überwachen und kontrollieren
 authorize-monitor = Überwachen
 authorize-allow-all = Für alle Geräte erlauben
 authorize-allow =
@@ -470,12 +470,12 @@ local-token-title = Dienst für lokale Token - WebThings Gateway
 local-token-header = Dienst für lokale Token
 local-token-your-token = Das lokale Zugriffstoken ist
 local-token-jwt = JSON Web Token
-local-token-use-it = Zuglriff auf das Gateway über
+local-token-use-it = Zugriff auf das Gateway über
 local-token-bearer-type = Bearer-type Authorisierung
 
 ## Router Setup Page
-router-setup-title = Router Setup - WebThings Gateway
-router-setup-header = Neues Wi-Fi Netzwerk erzeugen
+router-setup-title = Router-Setup - WebThings Gateway
+router-setup-header = Neues Wi-Fi-Netzwerk erzeugen
 router-setup-input-ssid =
   .placeholder = Netzwerkname
 router-setup-input-password =
@@ -487,36 +487,36 @@ router-setup-create =
 router-setup-password-mismatch = Passwörter sind nicht gleich
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Wi-Fi Setup - WebThings Gateway
-wifi-setup-header = Mit Wi-Fi Netzwerk verbinden?
+wifi-setup-title = Wi-Fi-Setup - WebThings Gateway
+wifi-setup-header = Mit Wi-Fi-Netzwerk verbinden?
 wifi-setup-input-password =
   .placeholder = Passwort
 wifi-setup-show-password = Passwort anzeigen
 wifi-setup-connect =
   .value = Verbinden
 wifi-setup-network-icon =
-  .alt = Wi-Fi Netzwerk
+  .alt = Wi-Fi-Netzwerk
 wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
-connecting-title = Wi-Fi Verbindung herstellen - WebThings Gateway
+connecting-title = Wi-Fi-Verbindung herstellen - WebThings Gateway
 connecting-header = Verbindung wird hergestellt...
 connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und 
  das Setup unter { $gateway-link } im Webbrowser fortsetzen.
-connecting-warning = Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP Adresse
+connecting-warning = Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP-Adresse
  des Gateways in den Routereinstellungen nachgeschlagen werden.
-connecting-header-skipped = Wi-Fi Setup abgebrochen
+connecting-header-skipped = Wi-Fi-Setup abgebrochen
 connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
  { $gateway-link } getätigt werden.
 
 ## Creating Wi-Fi Network Page
-creating-title = Neues Wi-Fi Netzwerk anlegen - WebThings Gateway
-creating-header = Neues Wi-Fi Netzwerk wird anlegt...
+creating-title = Neues Wi-Fi-Netzwerk anlegen - WebThings Gateway
+creating-header = Neues Wi-Fi-Netzwerk wird angelegt...
 creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort 
  aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } starten.
 
 ## General Terms
-ok = Ok
+ok = OK
 ellipses = ...
 event-log = Ereignisprotokoll
 edit = Editieren
