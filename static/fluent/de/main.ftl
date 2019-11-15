@@ -32,14 +32,14 @@ settings-add-ons = Erweiterungen
 settings-adapters = Adapter
 settings-localization = Lokalisierung
 settings-updates = Aktualisierungen
-settings-authorizations = Authorisierungen
+settings-authorizations = Zugänge
 settings-experiments = Experimente
 settings-developer = Entwickler
 
 ## Domain Settings
 domain-settings-local-label = Lokaler Zugriff
 domain-settings-local-update = Hostnamen aktualisieren
-domain-settings-remote-access = Zugriff übers Web
+domain-settings-remote-access = Fernzugriff
 domain-settings-local-name =
   .placeholder = Gateway
 
@@ -50,7 +50,7 @@ network-settings-ethernet-image =
 network-settings-ethernet = Kabelverbindung
 network-settings-wifi-image =
   .alt = Kabellose Verbindung
-network-settings-wifi = Kabellose Verbindung
+network-settings-wifi = Drahtlosverbindung
 network-settings-home-network-image =
   .alt = Heimnetzwerk
 network-settings-internet-image =
@@ -100,7 +100,7 @@ user-settings-input-confirm-new-password =
   .placeholder = Neues Passwort bestätigen
 user-settings-input-confirm-password =
   .placeholder = Passwort bestätigen
-user-settings-password-mismatch = Passwörter sind nicht gleich
+user-settings-password-mismatch = Passwörter stimmen nicht überein
 user-settings-save = Speichern
 
 ## Adapter Settings
@@ -137,7 +137,7 @@ restarting = Neustarten
 ## Developer Settings
 developer-settings-enable-ssh = SSH aktivieren
 developer-settings-view-internal-logs = Interne Protokolle ansehen
-developer-settings-create-local-authorization = Lokale Authorisierung erstellen
+developer-settings-create-local-authorization = Lokalen Zugang erstellen
 
 ## Rules
 rules = Regeln
@@ -257,10 +257,10 @@ not-pushed = Nicht gedrückt
 on-off = Ein/Aus
 on = Ein
 off = Aus
-power = Strom
+power = Leistung
 voltage = Spannung
 temperature = Temperatur
-current = Aktuell
+current = Stromstärke
 frequency = Frequenz
 color = Farbe
 brightness = Helligkeit
@@ -403,7 +403,7 @@ icon = Bild
 
 ## Speech
 speech-unsupported = Der Browser unterstützt keine Sprachausgabe
-speech-didnt-get = Sorry, das habe ich nicht verstanden.
+speech-didnt-get = Entschuldigung, das habe ich nicht verstanden.
 
 ## Errors
 unknown-state = Unbekannter Zustand.
