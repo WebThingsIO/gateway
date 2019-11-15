@@ -17,7 +17,6 @@ class ThingModel extends Model {
     super();
     this.title = description.title;
     this.type = description.type;
-    this.descrId = description.id;
     this.properties = {};
     this.events = [];
     this.connected = false;
@@ -25,7 +24,7 @@ class ThingModel extends Model {
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
-      this.id = this.href.pathname.split('/').pop();
+      this.id = decodeURIComponent(this.href.pathname.split('/').pop());
     }
 
     // Parse events URL

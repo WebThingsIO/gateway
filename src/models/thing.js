@@ -41,7 +41,7 @@ class Thing {
       description['@context'] || 'https://iot.mozilla.org/schemas';
     this['@type'] = description['@type'] || [];
     this.description = description.description || '';
-    this.href = `${Constants.THINGS_PATH}/${this.id}`;
+    this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
     this.properties = {};
     this.actions = description.actions || {};
     this.events = description.events || {};
@@ -62,7 +62,7 @@ class Thing {
           }).map((link) => {
             if (link.proxy) {
               delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
             }
 
             return link;
@@ -74,7 +74,7 @@ class Thing {
         // Give the property a URL
         property.links.push({
           rel: 'property',
-          href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
 
         this.properties[propertyName] = property;
@@ -118,14 +118,14 @@ class Thing {
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
-            uiLink.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           } else {
             uiLink.href = link.href;
           }
         } else {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           this.links.push(link);
@@ -148,7 +148,7 @@ class Thing {
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -160,7 +160,7 @@ class Thing {
       // Give the action a URL
       action.links.push({
         rel: 'action',
-        href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
+        href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
 
@@ -177,7 +177,7 @@ class Thing {
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -189,7 +189,7 @@ class Thing {
       // Give the event a URL
       event.links.push({
         rel: 'event',
-        href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
+        href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
       });
     }
 
@@ -508,7 +508,7 @@ class Thing {
           }).map((link) => {
             if (link.proxy) {
               delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
             }
 
             return link;
@@ -520,7 +520,7 @@ class Thing {
         // Give the property a URL
         property.links.push({
           rel: 'property',
-          href: `${this.href}${Constants.PROPERTIES_PATH}/${propertyName}`,
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
         this.properties[propertyName] = property;
       }
@@ -541,7 +541,7 @@ class Thing {
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -553,7 +553,7 @@ class Thing {
       // Give the action a URL
       action.links.push({
         rel: 'action',
-        href: `${this.href}${Constants.ACTIONS_PATH}/${actionName}`,
+        href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
 
@@ -572,7 +572,7 @@ class Thing {
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -584,7 +584,7 @@ class Thing {
       // Give the event a URL
       event.links.push({
         rel: 'event',
-        href: `${this.href}${Constants.EVENTS_PATH}/${eventName}`,
+        href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
       });
     }
 
@@ -614,14 +614,14 @@ class Thing {
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
-            uiLink.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           } else {
             uiLink.href = link.href;
           }
         } else {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${this.id}${link.href}`;
+            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           this.links.push(link);

@@ -46,7 +46,7 @@ class ActionDetail {
 
     return `
       <webthing-action ${disabled} id="${this.id}"
-        data-name="${Utils.escapeHtml(this.label)}"
+        data-name="${Utils.escapeHtml(this.label)}">
       </webthing-action>`;
   }
 

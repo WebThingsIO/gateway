@@ -402,7 +402,7 @@ class Thing {
    * HTML link for Thing Detail view
    */
   detailLink() {
-    return `<a href="${encodeURI(this.href)}" class="thing-details-link"></a>`;
+    return `<a href="${this.href}" class="thing-details-link"></a>`;
   }
 
   /**
@@ -545,7 +545,7 @@ class Thing {
         class="floorplan-thing"
         data-x="${this.x}"
         data-y="${this.y}"
-        data-href="${encodeURI(this.href)}"
+        data-href="${this.href}"
         >
       ${this.iconView()}
       <div class="floorplan-thing-title">${Utils.escapeHtml(this.title)}</div>
