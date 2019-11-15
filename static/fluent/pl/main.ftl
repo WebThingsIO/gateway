@@ -21,7 +21,7 @@ assistant-controls-text-input =
   .placeholder = Jak mogę pomóc?
 
 ## Floorplan
-upload-floorplan = Prześlij plan pomieszczeń...
+upload-floorplan = Prześlij plan pomieszczeń…
 upload-floorplan-hint = (.svg zalecane)
 
 ## Top-Level Settings
@@ -173,7 +173,7 @@ rule-select-property = Wybierz Właściwość
 rule-not = Nie
 rule-event = Zdarzenie
 rule-action = Akcja
-rule-configure = Konfiguruj...
+rule-configure = Konfiguruj…
 rule-time-title = Czas
 rule-notification = Powiadomienie
 notification-title = Tytuł
@@ -217,15 +217,15 @@ logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
 ## Add New Things
 add-thing-scanning-icon =
   .alt = Skanowanie
-add-thing-scanning = Skanowanie w poszukiwaniu nowych urządzeń...
+add-thing-scanning = Skanowanie w poszukiwaniu nowych urządzeń…
 add-thing-add-adapters-hint = Nie znaleziono żadnych nowych rzeczy. Spróbuj
 add-thing-add-adapters-hint-anchor = dodać rozszerzenia.
-add-thing-add-by-url = Dodaj przez URL...
+add-thing-add-by-url = Dodaj przez URL…
 add-thing-done = Gotowe
 add-thing-cancel = Anuluj
 
 ## Context Menu
-context-menu-choose-icon = Wybierz ikonę...
+context-menu-choose-icon = Wybierz ikonę…
 context-menu-save = Zapisz
 context-menu-remove = Usuń
 
@@ -285,9 +285,9 @@ check-email-for-token = Sprawdź swój e-mail w poszukiwaniu tokenu odzyskiwania
 reclaim-failed = Nie można odzyskać subdomeny.
 subdomain-already-used = Ta subdomena jest już zajęta. Proszę wybierz inną.
 invalid-reclamation-token = Nieprawidłowy token.
-domain-success = Udało się! Poczekaj na przekierowanie...
+domain-success = Udało się! Poczekaj na przekierowanie…
 issuing-error = Błąd podczas wydawania certyfikatu. Proszę spróbuj ponownie.
-redirecting = Przekierowywanie...
+redirecting = Przekierowywanie…
 
 ## Booleans
 true = Prawda
@@ -334,7 +334,7 @@ abbrev-foot = ft
 
 ## New Thing View
 unknown-device-type = Nieznany typ urządzenia
-new-thing-choose-icon = Wybierz ikonę...
+new-thing-choose-icon = Wybierz ikonę…
 new-thing-save = Zapisz
 new-thing-pin =
   .placeholder = Wpisz PIN
@@ -354,7 +354,7 @@ new-thing-done = Gotowe
 new-web-thing-url =
   .placeholder = Wprowadź adres URL rzeczy
 new-web-thing-label = Web Thing
-loading = Ładowanie...
+loading = Ładowanie…
 new-web-thing-multiple = Znaleziono wiele rzeczy
 new-web-thing-from = z
 
@@ -372,14 +372,14 @@ by = przez
 addon-configure = Konfiguruj
 addon-update = Aktualizuj
 addon-remove = Usuń
-addon-updating = Aktualizowanie...
+addon-updating = Aktualizowanie…
 addon-updated = Zaktualizowano
 addon-update-failed = Niepowodzenie
-addon-config-applying = Stosowanie...
+addon-config-applying = Stosowanie…
 addon-config-apply = Zastosuj
 addon-discovery-added = Dodano
 addon-discovery-add = Dodaj
-addon-discovery-installing = Instalowanie...
+addon-discovery-installing = Instalowanie…
 addon-discovery-failed = Niepowodzenie
 
 ## Page Titles
@@ -429,18 +429,18 @@ component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title = Logowanie - WebThings Gateway
+login-title = Logowanie — WebThings Gateway
 login-log-in = Zaloguj się
 
 ## Create First User Page
-signup-title = Stwórz użytkownika - WebThings Gateway
+signup-title = Stwórz użytkownika — WebThings Gateway
 signup-welcome = Witamy
 signup-create-account = Utwórz swoje pierwsze konto użytkownika:
 signup-password-mismatch = Hasła są niezgodne
 signup-next = Następny
 
 ## Tunnel Setup Page
-tunnel-setup-title = Wybierz Adres Internetowy - WebThings Gateway
+tunnel-setup-title = Wybierz Adres Internetowy — WebThings Gateway
 tunnel-setup-welcome = Witamy
 tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
 tunnel-setup-input-subdomain =
@@ -455,7 +455,7 @@ tunnel-setup-skip = Pomiń
 tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie, dopóki synchronizacja czasu nie nastąpi.
 
 ## Authorize Page
-authorize-title = Wniosek o Autoryzację - WebThings Gateway
+authorize-title = Wniosek o Autoryzację — WebThings Gateway
 authorize-authorization-request = Wniosek o autoryzację
 authorize-would-like = chce uzyskać dostęp do twojej bramy do
 authorize-devices = urządzenia.
@@ -468,7 +468,7 @@ authorize-allow =
 authorize-deny = Zabroń
 
 ## Local Token Page
-local-token-title = Usługa Tokenów Lokalnych - WebThings Gateway
+local-token-title = Usługa Tokenów Lokalnych — WebThings Gateway
 local-token-header =  Usługa Tokenów Lokalnych
 local-token-your-token = Twój lokalny token jest następujący
 local-token-jwt = JSON Web Token
@@ -476,7 +476,7 @@ local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pom
 local-token-bearer-type = Autoryzacji na okaziciela
 
 ## Router Setup Page
-router-setup-title = Konfiguracja Routera - WebThings Gateway
+router-setup-title = Konfiguracja Routera — WebThings Gateway
 router-setup-header = Stwórz nową sieć Wi-Fi
 router-setup-input-ssid =
   .placeholder = Nazwa sieci
@@ -489,7 +489,7 @@ router-setup-create =
 router-setup-password-mismatch = Hasła są niezgodne
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Konfiguracja Wi-Fi - WebThings Gateway
+wifi-setup-title = Konfiguracja Wi-Fi — WebThings Gateway
 wifi-setup-header = Połączyć się z siecią Wi-Fi?
 wifi-setup-input-password =
   .placeholder = Hasło
@@ -501,24 +501,24 @@ wifi-setup-network-icon =
 wifi-setup-skip = Pomiń
 
 ## Connecting to Wi-Fi Page
-connecting-title = Łączenie z Wi-Fi - WebThings Gateway
-connecting-header = Łączenie z Wi-Fi...
+connecting-title = Łączenie z Wi-Fi — WebThings Gateway
+connecting-header = Łączenie z Wi-Fi…
 connecting-connect = Upewnij się, że jesteś połączony do tej samej sieci co brama i przejdź do { $gateway-link } w przeglądarce internetowej, aby kontynuować konfigurację.
 connecting-warning = Uwaga: jeśli nie można załadować { $domain }, sprawdź adres IP bramy rzeczy na routerze.
 connecting-header-skipped = Konfiguracja Wi-Fi została pominięta
 connecting-skipped = Brama jest teraz uruchamiana. Po podłączeniu do tej samej sieci co brama przejdź pod adres { $gateway-link } w swojej przeglądarce internetowej aby kontynuować konfigurację.
 
 ## Creating Wi-Fi Network Page
-creating-title = Tworzenie Sieci Wi-Fi - WebThings Gateway
-creating-header = Tworzenie Sieci Wi-Fi...
+creating-title = Tworzenie Sieci Wi-Fi — WebThings Gateway
+creating-header = Tworzenie Sieci Wi-Fi…
 creating-content = Połącz się z { $ssid } wprowadzając hasło które właśnie utworzyłeś, a następnie przejdź do { $gateway-link } lub { $ip-link } w swojej przeglądarce internetowej.
 
 ## General Terms
 ok = Ok
-ellipses = ...
+ellipsis = …
 event-log = Dziennik Zdarzeń
 edit = Edytuj
 remove = Usuń
 disconnected = Rozłączony
-processing = Przetwarzanie...
+processing = Przetwarzanie…
 submit = Zatwierdź
