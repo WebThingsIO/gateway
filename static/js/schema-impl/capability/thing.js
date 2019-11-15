@@ -117,8 +117,15 @@ class Thing {
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
-      this.eventsHref = `${this.href.pathname}/events?referrer=${
-        encodeURIComponent(this.href.pathname)}`;
+      // double-encode slashes to make page.js happy
+      const params = new URLSearchParams();
+      params.set(
+        'referrer',
+        encodeURIComponent(this.href.pathname.replace(/%2F/g, '%252F'))
+      );
+      this.eventsHref =
+        `${this.href.pathname.replace(/%2F/g, '%252F')}/events?${
+          params.toString()}`;
       this.id = decodeURIComponent(this.href.pathname.split('/').pop());
     }
 
@@ -402,7 +409,9 @@ class Thing {
    * HTML link for Thing Detail view
    */
   detailLink() {
-    return `<a href="${this.href}" class="thing-details-link"></a>`;
+    // double-encode slashes to make page.js happy
+    return `<a href="${this.href.pathname.replace(/%2F/g, '%252F')}"
+      class="thing-details-link"></a>`;
   }
 
   /**
@@ -541,11 +550,12 @@ class Thing {
    * @return {String}
    */
   linkIconView() {
+    // double-encode slashes to make page.js happy
     return `<div
         class="floorplan-thing"
         data-x="${this.x}"
         data-y="${this.y}"
-        data-href="${this.href}"
+        data-href="${this.href.pathname.replace(/%2F/g, '%252F')}"
         >
       ${this.iconView()}
       <div class="floorplan-thing-title">${Utils.escapeHtml(this.title)}</div>

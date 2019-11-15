@@ -32,9 +32,15 @@ class ActionDetail {
   view() {
     let disabled = '';
     if (typeof this.input !== 'undefined') {
-      const base = `${window.location.pathname}/actions/${this.name}`;
-      const referrer = encodeURIComponent(window.location.pathname);
-      this.inputPageRef = `${encodeURI(base)}?referrer=${referrer}`;
+      // double-encode slashes to make page.js happy
+      const base = `${window.location.pathname}/actions/${
+        encodeURIComponent(this.name).replace(/%2F/g, '%252F')}`;
+      const params = new URLSearchParams();
+      params.set(
+        'referrer',
+        encodeURIComponent(window.location.pathname)
+      );
+      this.inputPageRef = `${base}?${params.toString()}`;
       if (typeof this.input === 'object' &&
           ((this.input.hasOwnProperty('required') &&
             Array.isArray(this.input.required) &&

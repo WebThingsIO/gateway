@@ -245,16 +245,6 @@ const Utils = {
 
     return list;
   },
-  /**
-   * Convert from a long description id (href) to a thing model id (just the
-   * last part of the href)
-   * @param {string} longId
-   * @return {string}
-   */
-  descriptionIdToModelId: function(longId) {
-    const parts = longId.split('/');
-    return parts[parts.length - 1];
-  },
 
   /**
    * Adjust an input value to match schema bounds.

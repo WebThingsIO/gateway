@@ -102,8 +102,13 @@ class Log {
         this.icon.classList.add('logs-log-icon');
       }
       this.infoContainer = document.createElement('a');
+      // double-encode slashes to make page.js happy
       this.infoContainer.classList.add('logs-log-info');
-      const detailUrl = `/logs/things/${this.thingId}/properties/${this.propertyId}`;
+      const detailUrl =
+        `/logs/things/${
+          encodeURIComponent(this.thingId).replace(/%2F/g, '%252F')
+        }/properties/${
+          encodeURIComponent(this.propertyId).replace(/%2F/g, '%252F')}`;
       this.infoContainer.setAttribute('href', detailUrl);
 
       this.infoContainer.appendChild(this.icon);

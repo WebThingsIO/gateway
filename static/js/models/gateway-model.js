@@ -8,7 +8,6 @@
 'use strict';
 
 const API = require('../api');
-const Utils = require('../utils');
 const Constants = require('../constants');
 const Model = require('./model');
 const ReopeningWebSocket = require('./reopening-web-socket');
@@ -148,8 +147,7 @@ class GatewayModel extends Model {
     if (message.messageType !== 'connected') {
       return;
     }
-    this.connectedThings.set(Utils.descriptionIdToModelId(message.id),
-                             message.data);
+    this.connectedThings.set(message.id, message.data);
   }
 
   refreshThings() {

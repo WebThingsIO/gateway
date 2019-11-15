@@ -477,7 +477,7 @@ const FloorplanScreen = {
     this.selectedThing = event.currentTarget;
     this.interactTimeout = setTimeout(() => {
       if (this.selectedThing) {
-        page(`${this.selectedThing.dataset.href}?referrer=%2ffloorplan`);
+        page(`${this.selectedThing.dataset.href}?referrer=%2Ffloorplan`);
       }
       this.interactTimeout = null;
     }, 750);
