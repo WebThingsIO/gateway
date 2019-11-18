@@ -295,19 +295,41 @@ false = Falso
 
 ## Time
 utils-now = adesso
-utils-secs-ago = secondi fa
-utils-min-ago = minuto fa
-utils-mins-ago = minuti fa
-utils-hour-ago = ora fa
-utils-hours-ago = ore fa
-utils-day-ago = giorno fa
-utils-days-ago = giorni fa
-utils-week-ago = settimana fa
-utils-weeks-ago = settimane fa
-utils-month-ago = mese fa
-utils-months-ago = mesi fa
-utils-year-ago = anno fa
-utils-years-ago = anni fa
+utils-seconds-ago =
+  { $value ->
+      [one] { $value } secondo fa
+      *[other] { $value } secondi fa
+  }
+utils-minutes-ago =
+  { $value ->
+      [one] { $value } minuto fa
+      *[other] { $value } minuti fa
+  }
+utils-hours-ago =
+  { $value ->
+      [one] { $value } ora fa
+      *[other] { $value } ore fa
+  }
+utils-days-ago =
+  { $value ->
+      [one] { $value } giorno fa
+      *[other] { $value } giorni fa
+  }
+utils-weeks-ago =
+  { $value ->
+      [one] { $value } settimana fa
+      *[other] { $value } settimane fa
+  }
+utils-months-ago =
+  { $value ->
+      [one] { $value } mese fa
+      *[other] { $value } mesi fa
+  }
+utils-years-ago =
+  { $value ->
+      [one] { $value } anno fa
+      *[other] { $value } anni fa
+  }
 minute = Minuto
 hour = Ora
 day = Giorno

@@ -71,31 +71,40 @@ const Utils = {
     if (delta < 5) {
       fuzzy = fluent.getMessage('utils-now');
     } else if (delta < minute) {
-      fuzzy = `${delta} ${fluent.getMessage('utils-secs-ago')}`;
-    } else if (delta < 2 * minute) {
-      fuzzy = `1 ${fluent.getMessage('utils-min-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-seconds-ago',
+        {value: delta}
+      );
     } else if (delta < hour) {
-      fuzzy = `${Math.floor(delta / minute)} ${fluent.getMessage('utils-mins-ago')}`;
-    } else if (delta < 2 * hour) {
-      fuzzy = `1 ${fluent.getMessage('utils-hour-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-minutes-ago',
+        {value: Math.floor(delta / minute)}
+      );
     } else if (delta < day) {
-      fuzzy = `${Math.floor(delta / hour)} ${fluent.getMessage('utils-hours ago')}`;
-    } else if (delta < 2 * day) {
-      fuzzy = `1 ${fluent.getMessage('utils-day-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-hours ago',
+        {value: Math.floor(delta / hour)}
+      );
     } else if (delta < week) {
-      fuzzy = `${Math.floor(delta / day)} ${fluent.getMessage('utils-days-ago')}`;
-    } else if (delta < 2 * week) {
-      fuzzy = `1 ${fluent.getMessage('utils-week-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-days-ago',
+        {value: Math.floor(delta / day)}
+      );
     } else if (delta < month) {
-      fuzzy = `${Math.floor(delta / week)} ${fluent.getMessage('utils-weeks-ago')}`;
-    } else if (delta < 2 * month) {
-      fuzzy = `1 ${fluent.getMessage('utils-month-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-weeks-ago',
+        {value: Math.floor(delta / week)}
+      );
     } else if (delta < year) {
-      fuzzy = `${Math.floor(delta / month)} ${fluent.getMessage('utils-months-ago')}`;
-    } else if (delta < 2 * year) {
-      fuzzy = `1 ${fluent.getMessage('utils-year-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-months-ago',
+        {value: Math.floor(delta / month)}
+      );
     } else {
-      fuzzy = `${Math.floor(delta / year)} ${fluent.getMessage('utils-years-ago')}`;
+      fuzzy = fluent.getMessage(
+        'utils-years-ago',
+        {value: Math.floor(delta / year)}
+      );
     }
 
     return fuzzy;
