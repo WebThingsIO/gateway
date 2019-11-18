@@ -73,6 +73,8 @@ class Events {
     if (event.thingId) {
       return Things.getThing(event.thingId).then((thing) => {
         thing.dispatchEvent(event);
+      }).catch(() => {
+        console.warn('Received event for unknown thing:', event.thingId);
       });
     }
 

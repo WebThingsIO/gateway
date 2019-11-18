@@ -204,7 +204,7 @@ class Actions extends EventEmitter {
             throw `Invalid thing action name: "${action.name}"`;
           }
         }).catch((err) => {
-          console.error('Error removing thing action', err);
+          console.error('Error removing thing action:', err);
         });
       } else {
         switch (action.name) {
