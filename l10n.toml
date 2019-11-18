@@ -1,0 +1,13 @@
+basepath = "."
+
+locales = [
+  "it",
+]
+
+branches = [
+  "master",
+]
+
+[[paths]]
+  reference = "static/fluent/en-US/main.ftl"
+  l10n = "static/fluent/{locale}/main.ftl"
