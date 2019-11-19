@@ -295,19 +295,52 @@ false = Fałsz
 
 ## Time
 utils-now = teraz
-utils-secs-ago = sekund temu
-utils-min-ago = minutę temu
-utils-mins-ago = minut temu
-utils-hour-ago = godzinę temu
-utils-hours-ago = godzin temu
-utils-day-ago = dzień temu
-utils-days-ago = dni temu
-utils-week-ago = tydzień temu
-utils-weeks-ago = tygodni temu
-utils-month-ago = miesiąc temu
-utils-months-ago = miesięcy temu
-utils-year-ago = rok temu
-utils-years-ago = lata temu
+utils-seconds-ago =
+  { $value ->
+      [one] { $value } sekundę temu
+      [many] { $value } sekund temu
+      *[other] { $value } sekundy temu
+  }
+utils-minutes-ago =
+  { $value ->
+      [one] { $value } minutę temu
+      [many] { $value } minut temu
+      *[other] { $value } minuty temu
+  }
+utils-hours-ago =
+  { $value ->
+      [one] { $value } godzinę temu
+      [many] { $value } godzin temu
+      *[other] { $value } godziny temu
+  }
+utils-days-ago =
+  { $value ->
+      [one] { $value } dzień temu
+      [few] { $value } dni temu
+      [many] { $value } dni temu
+      *[other] { $value } dnia temu
+  }
+utils-weeks-ago =
+  { $value ->
+      [one] { $value } tydzień temu
+      [few] { $value } tygodnie temu
+      [many] { $value } tygodni temu
+      *[other] { $value } tygodnia temu
+  }
+utils-months-ago =
+  { $value ->
+      [one] { $value } miesiąc temu
+      [few] { $value } miesiące temu
+      [many] { $value } miesięcy temu
+      *[other] { $value } miesiąca temu
+  }
+utils-years-ago =
+  { $value ->
+      [one] { $value } rok temu
+      [few] { $value } lata temu
+      [many] { $value } lat temu
+      *[other] { $value } roku temu
+  }
 minute = Minuta
 hour = Godzina
 day = Dzień
