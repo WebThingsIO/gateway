@@ -3,6 +3,7 @@ const FluentDOM = require('@fluent/dom/compat');
 const Fluent = require('@fluent/bundle/compat');
 
 const availableLanguages = {
+  de: ['/fluent/de/main.ftl'],
   'en-US': ['/fluent/en-US/main.ftl'],
   en: ['/fluent/en-US/main.ftl'],
   'fr-CA': ['/fluent/fr-CA/main.ftl'],
