@@ -21,7 +21,7 @@ assistant-controls-text-input =
   .placeholder = Hoe kan ik helpen?
 
 ## Floorplan
-upload-floorplan = Upload plattegrond...
+upload-floorplan = Upload plattegrond…
 upload-floorplan-hint = (.svg aanbevolen)
 
 ## Top-Level Settings
@@ -173,7 +173,7 @@ rule-select-property = Selecteer Eigenschap
 rule-not = Niet
 rule-event = Gebeurtenis
 rule-action = Actie
-rule-configure = Instellen...
+rule-configure = Instellen…
 rule-time-title = Tijd
 rule-notification = Melding
 notification-title = Titel
@@ -217,15 +217,15 @@ logs-server-remove-error = Server error: kan log niet verwijderen
 ## Add New Things
 add-thing-scanning-icon =
   .alt = Zoeken
-add-thing-scanning = Nieuwe apparaten zoeken...
+add-thing-scanning = Nieuwe apparaten zoeken…
 add-thing-add-adapters-hint = Geen apparaten gevonden. Probeer
 add-thing-add-adapters-hint-anchor = add-ons toe te voegen
-add-thing-add-by-url = Toevoegen met URL...
+add-thing-add-by-url = Toevoegen met URL…
 add-thing-done = Klaar
 add-thing-cancel = Annuleren
 
 ## Context Menu
-context-menu-choose-icon = Kies icoon...
+context-menu-choose-icon = Kies icoon…
 context-menu-save = Opslaan
 context-menu-remove = Verwijderen
 
@@ -233,6 +233,7 @@ context-menu-remove = Verwijderen
 OnOffSwitch = Aan/Uit-schakelaar
 MultiLevelSwitch = Schakelaar met niveaus
 ColorControl = Kleur Instelling
+ColorSensor = Kleur Sensor
 EnergyMonitor = Energiemonitor
 BinarySensor = Binaire Sensor
 MultiLevelSensor = Sensor met niveaus
@@ -284,9 +285,9 @@ check-email-for-token = In je mail ontvang je een token voor het opeisen. Plak d
 reclaim-failed = Kan domein niet opeisen.
 subdomain-already-used = Dit subodmein is al in gebruik. Kies een andere.
 invalid-reclamation-token = Ongeldig opeis-token.
-domain-success = Gelukt! We verwijzen je browser door...
+domain-success = Gelukt! We verwijzen je browser door…
 issuing-error = Fout met het certificaat ophalen. Probeer het opnieuw.
-redirecting = Doorsturen...
+redirecting = Doorsturen…
 
 ## Booleans
 true = Ja
@@ -317,7 +318,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
-abbrev-kilowatt-hour = kWh
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -333,7 +334,7 @@ abbrev-foot = ft
 
 ## New Thing View
 unknown-device-type = Onbekend apparaattype
-new-thing-choose-icon = Kies icoon...
+new-thing-choose-icon = Kies icoon…
 new-thing-save = Opslaan
 new-thing-pin =
   .placeholder = Voer PIN-code in
@@ -353,7 +354,7 @@ new-thing-done = Klaar
 new-web-thing-url =
   .placeholder = Web thing URL
 new-web-thing-label = Web Thing
-loading = Laden...
+loading = Laden…
 new-web-thing-multiple = Meerdere web things gevonden
 new-web-thing-from = van
 
@@ -371,14 +372,14 @@ by = door
 addon-configure = Instellen
 addon-update = Update
 addon-remove = Verwijderen
-addon-updating = Updaten...
+addon-updating = Updaten…
 addon-updated = Geupdatet
 addon-update-failed = Mislukt
-addon-config-applying = Toepassen...
+addon-config-applying = Toepassen…
 addon-config-apply = Toepassen
 addon-discovery-added = Toegevoegd
 addon-discovery-add = Toevoegen
-addon-discovery-installing = Installeren...
+addon-discovery-installing = Installeren…
 addon-discovery-failed = Mislukt
 
 ## Page Titles
@@ -428,18 +429,18 @@ component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title = Login - WebThings Gateway
+login-title = Login — WebThings Gateway
 login-log-in = Aanmelden
 
 ## Create First User Page
-signup-title = Gebruiker Toevoegen - WebThings Gateway
+signup-title = Gebruiker Toevoegen — WebThings Gateway
 signup-welcome = Welkom
 signup-create-account = Maak je eerste gebruiker aan:
 signup-password-mismatch = Wachtwoorden zijn niet gelijk
 signup-next = Volgende
 
 ## Tunnel Setup Page
-tunnel-setup-title = Kies webadres - WebThings Gateway
+tunnel-setup-title = Kies webadres — WebThings Gateway
 tunnel-setup-welcome = Welkom
 tunnel-setup-choose-address = Kies een beveiligd webadres voor je gateway:
 tunnel-setup-input-subdomain =
@@ -467,7 +468,7 @@ authorize-allow =
 authorize-deny = Weigeren
 
 ## Local Token Page
-local-token-title = Lokale Token Dienst - WebThings Gateway
+local-token-title = Lokale Token Dienst — WebThings Gateway
 local-token-header = Lokale Token Dienst
 local-token-your-token = Je lokale token is
 local-token-jwt = JSON Web Token
@@ -475,7 +476,7 @@ local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met
 local-token-bearer-type = Bearer-type Autorisatie
 
 ## Router Setup Page
-router-setup-title = Router Instellingen - WebThings Gateway
+router-setup-title = Router Instellingen — WebThings Gateway
 router-setup-header = Maak een Wi-Fi-verbinding
 router-setup-input-ssid =
   .placeholder = Netwerk naam
@@ -488,7 +489,7 @@ router-setup-create =
 router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Wi-Fi Instellingen - WebThings Gateway
+wifi-setup-title = Wi-Fi Instellingen — WebThings Gateway
 wifi-setup-header = Verbinden met Wi-Fi-netwerk?
 wifi-setup-input-password =
   .placeholder = Wachtwoord
@@ -500,8 +501,8 @@ wifi-setup-network-icon =
 wifi-setup-skip = Overslaan
 
 ## Connecting to Wi-Fi Page
-connecting-title = Verbinden met Wi-Fi - WebThings Gateway
-connecting-header = Verbinden met Wi-Fi...
+connecting-title = Verbinden met Wi-Fi — WebThings Gateway
+connecting-header = Verbinden met Wi-Fi…
 connecting-connect = Controleer of je verbonden bent met het zelfde netwerk en
  navigeer dan naar { $gateway-link } in je webbrowser om de installatie af te maken.
 connecting-warning = Let op: Als je { $domain } niet kunt laden, controleer
@@ -512,17 +513,17 @@ connecting-skipped = De gateway wordt opgestart. Navigeer naar
  om de installatie af te maken.
 
 ## Creating Wi-Fi Network Page
-creating-title = Wi-Fi-netwerk Maken - WebThings Gateway
-creating-header = Wi-Fi-netwerk maken...
+creating-title = Wi-Fi-netwerk Maken — WebThings Gateway
+creating-header = Wi-Fi-netwerk maken…
 creating-content = Verbind met { $ssid } en het ingestelde wachtwoord,
  navigeer daarna naar { $gateway-link } of { $ip-link } in je webbrowser.
 
 ## General Terms
 ok = Ok
-ellipses = ...
+ellipsis = …
 event-log = Gebeurtenissen Log
 edit = Bewerken
 remove = Verwijderen
 disconnected = Ontkoppelen
-processing = Verwerken...
+processing = Verwerken…
 submit = Verstuur
