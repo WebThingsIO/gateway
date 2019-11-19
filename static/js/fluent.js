@@ -6,6 +6,7 @@ const availableLanguages = {
   'en-US': ['/fluent/en-US/main.ftl'],
   en: ['/fluent/en-US/main.ftl'],
   'fr-CA': ['/fluent/fr-CA/main.ftl'],
+  'fr-FR': ['/fluent/fr-FR/main.ftl'],
   it: ['/fluent/it/main.ftl'],
   pl: ['/fluent/pl/main.ftl'],
 };
