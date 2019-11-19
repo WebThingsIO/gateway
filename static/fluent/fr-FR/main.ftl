@@ -343,7 +343,7 @@ abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
-abbrev-kelvin = °K
+abbrev-kelvin = K
 abbrev-meter = m
 abbrev-kilometer = km
 abbrev-day = j
@@ -536,7 +536,7 @@ creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que 
 
 ## General Terms
 ok = OK
-ellipsis =…
+ellipsis = …
 event-log = Journal des événements
 edit = Modifier
 remove = Supprimer
