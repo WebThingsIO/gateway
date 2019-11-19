@@ -295,19 +295,41 @@ false = Falsch
 
 ## Time
 utils-now = jetzt
-utils-secs-ago = Sekunden her
-utils-min-ago = Minute her
-utils-mins-ago = Minuten her
-utils-hour-ago = Stunde her
-utils-hours-ago = Stunden her
-utils-day-ago = Tag her
-utils-days-ago = Tage her
-utils-week-ago = Woche her
-utils-weeks-ago = Wochen her
-utils-month-ago = Monat her
-utils-months-ago = Monate her
-utils-year-ago = Jahr her
-utils-years-ago = Jahre her
+utils-seconds-ago =
+  { $value ->
+      [one] vor einer Sekunde
+      *[other] vor { $value } Sekunden
+  }
+utils-minutes-ago =
+  { $value ->
+      [one] vor einer Minute
+      *[other] vor { $value } Minuten
+  }
+utils-hours-ago =
+  { $value ->
+      [one] vor einer Stunde
+      *[other] vor { $value } Stunden
+  }
+utils-days-ago =
+  { $value ->
+      [one] vor einem Tag
+      *[other] vor { $value } Tagen
+  }
+utils-weeks-ago =
+  { $value ->
+      [one] vor einer Woche
+      *[other] vor { $value } Wochen
+  }
+utils-months-ago =
+  { $value ->
+      [one] vor einem Monat
+      *[other] vor { $value } Monaten
+  }
+utils-years-ago =
+  { $value ->
+      [one] vor einem Jahr
+      *[other] vor { $value } Jahr
+  }
 minute = Minute
 hour = Stunde
 day = Tag
@@ -452,6 +474,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Ein Fehler ist beim Erstellen der Subdomain aufgetreten.
 tunnel-setup-create = Erzeugen
 tunnel-setup-skip = Überspringen
+tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das Internet. Das Registrieren der Subdomain schlägt wahrscheinlich fehl, bis dies abgeschlossen ist.
 
 ## Authorize Page
 authorize-title = Authorisierungsanfrage - WebThings Gateway
