@@ -49,8 +49,8 @@ network-settings-ethernet-image =
   .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wifi
-network-settings-wifi = Wifi
+  .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
   .alt = Réseau domestique
 network-settings-internet-image =
@@ -58,7 +58,7 @@ network-settings-internet-image =
 network-settings-configure = Configurer
 network-settings-internet-wan = Internet (WAN)
 network-settings-home-network-lan = Réseau domestique (LAN)
-network-settings-wifi-wlan = Wifi (WLAN)
+network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
 network-settings-dhcp = Automatique (DHCP)
 network-settings-static = Manuel (IP statique)
@@ -75,14 +75,14 @@ network-settings-username = Nom d'utilisateur
 network-settings-password = Mot de passe
 network-settings-router-ip = Adresse IP du routeur
 network-settings-dhcp-server = Serveur DHCP
-network-settings-enable-wifi = Activer le wifi
+network-settings-enable-wifi = Activer le Wi-Fi
 network-settings-network-name = Nom réseau (SSID)
 wireless-connected = Connecté
 wireless-icon =
-  .alt = Réseau Wifi
+  .alt = Réseau Wi-Fi
 network-settings-changing = Modification des paramètres réseau en cours. Veuillez patienter.
 failed-ethernet-configure = Échec de configurer l'Ethernet.
-failed-wifi-configure = Échec de configurer le wifi.
+failed-wifi-configure = Échec de configurer le Wi-Fi.
 failed-wan-configure = Échec de configurer le WAN.
 failed-lan-configure = Échec de configurer le LAN.
 failed-wlan-configure = Échec de configurer le WLAN.
@@ -224,7 +224,7 @@ add-thing-done = Terminé
 add-thing-cancel = Annuler
 
 ## Context Menu
-context-menu-choose-icon = Sélectionner  l'icône…
+context-menu-choose-icon = Sélectionner l'icône…
 context-menu-save = Enregistrer
 context-menu-remove = Supprimer
 
@@ -420,7 +420,7 @@ authorizations = Autorisations
 developer = Développeurs
 network = Réseau
 ethernet = Ethernet
-wifi = Wifi
+wifi = Wi-Fi
 icon = Icône
 
 ## Speech
@@ -497,7 +497,7 @@ local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
 router-setup-title = Configuration du routeur — WebThings Gateway
-router-setup-header = Créer un réseau wifi
+router-setup-header = Créer un réseau Wi-Fi
 router-setup-input-ssid =
   .placeholder = Nom du réseau
 router-setup-input-password =
@@ -509,15 +509,15 @@ router-setup-create =
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Configuration wifi — WebThings Gateway
-wifi-setup-header = Connecter à une réseau wifi ?
+wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
+wifi-setup-header = Connecter à une réseau Wi-Fi ?
 wifi-setup-input-password =
   .placeholder = Mot de passe
 wifi-setup-show-password = Afficher le mot de passe
 wifi-setup-connect =
   .value = Connecter
 wifi-setup-network-icon =
-  .alt = Réseau wifi
+  .alt = Réseau Wi-Fi
 wifi-setup-skip = Ignorer
 
 ## Connecting to Wi-Fi Page
@@ -525,12 +525,12 @@ connecting-title = Connexion en cours — WebThings Gateway
 connecting-header = Connexion en cours…
 connecting-connect = Assurer que vous êtes connecté au même réseau puis naviguer vers { $gateway-link } pour continuer la configuration.
 connecting-warning = Si vous ne pouvez charger { $domain }, trouver l'adresse IP dans votre routeur.
-connecting-header-skipped = Configuration wifi ignoré.
+connecting-header-skipped = Configuration Wi-Fi ignoré.
 connecting-skipped = La gateway démarre. Reste connecté au même réseau, puis naviguer vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
-creating-title = Création du réseau wifi en cours — WebThings Gateway
-creating-header = Création du réseau wifi en cours…
+creating-title = Création du réseau Wi-Fi en cours — WebThings Gateway
+creating-header = Création du réseau Wi-Fi en cours…
 creating-content = Connecter à { $ssid } avec le mot de passe que vous avez créé, puis naviguer à { $gateway-link } ou { $ip-link } dans votre navigateur.
 
 ## General Terms
