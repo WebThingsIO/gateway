@@ -1,4 +1,4 @@
-﻿# Main Title
+# Main Title
 webthings-gateway = WebThings Gateway
 
 # Wordmark
@@ -351,7 +351,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
-abbrev-kilowatt-hour = kWh
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
