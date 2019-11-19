@@ -1,7 +1,9 @@
 basepath = "."
 
 locales = [
+  "fr-CA",
   "it",
+  "pl",
 ]
 
 branches = [
