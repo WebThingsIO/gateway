@@ -21,7 +21,7 @@ assistant-controls-text-input =
   .placeholder = Wie kann ich helfen?
 
 ## Floorplan
-upload-floorplan = Raumplan aktualisieren...
+upload-floorplan = Raumplan aktualisieren…
 upload-floorplan-hint = (.svg empfohlen)
 
 ## Top-Level Settings
@@ -173,7 +173,7 @@ rule-select-property = Merkmal wählen
 rule-not = Nicht
 rule-event = Ereignis
 rule-action = Aktion
-rule-configure = Konfigurieren...
+rule-configure = Konfigurieren…
 rule-time-title = Tageszeit
 rule-notification = Benachrichtigung
 notification-title = Titel
@@ -217,15 +217,15 @@ logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt wer
 ## Add New Things
 add-thing-scanning-icon =
   .alt = Suche
-add-thing-scanning = Es wird nach neuen Geräten gesucht...
-add-thing-add-adapters-hint = Keine neuen Geräte gefunden. 
+add-thing-scanning = Es wird nach neuen Geräten gesucht…
+add-thing-add-adapters-hint = Keine neuen Geräte gefunden.
 add-thing-add-adapters-hint-anchor = Neue Erweiterungen hinzufügen.
-add-thing-add-by-url = Via URL hinzufügen...
+add-thing-add-by-url = Via URL hinzufügen…
 add-thing-done = Erledigt
 add-thing-cancel = Abbrechen
 
 ## Context Menu
-context-menu-choose-icon = Bild wählen...
+context-menu-choose-icon = Bild wählen…
 context-menu-save = Speichern
 context-menu-remove = Löschen
 
@@ -233,6 +233,7 @@ context-menu-remove = Löschen
 OnOffSwitch = Ein/Aus-Schalter
 MultiLevelSwitch = Mehrfachschalter
 ColorControl = Farbsteuerung
+ColorSensor = Farmsensor
 EnergyMonitor = Energie-Monitor
 BinarySensor = Binärer Sensor
 MultiLevelSensor = Mehrfachsensor
@@ -284,9 +285,9 @@ check-email-for-token = Bitte das Reclaim-Token aus der verschickten E-Mail oben
 reclaim-failed = Subdomain konnte nicht wiederhergestellt werden.
 subdomain-already-used = Diese Subdomain ist bereits in Gebrauch. Bitte einen anderen Namen wählen.
 invalid-reclamation-token = Ungültiges Reclaim-Token.
-domain-success = Erfolgreich! Es wird weitergeleitet...
+domain-success = Erfolgreich! Es wird weitergeleitet…
 issuing-error = Zertifikat konnte nicht erstellt werden. Bitte erneut versuchen.
-redirecting = Weiterleiten...
+redirecting = Weiterleiten…
 
 ## Booleans
 true = Wahr
@@ -333,7 +334,7 @@ abbrev-foot = Fuß
 
 ## New Thing View
 unknown-device-type = Unbekannter Gerätetyp
-new-thing-choose-icon = Bild wählen...
+new-thing-choose-icon = Bild wählen…
 new-thing-save = Speichern
 new-thing-pin =
   .placeholder = PIN eingeben
@@ -353,7 +354,7 @@ new-thing-done = Erledigt
 new-web-thing-url =
   .placeholder = URL des Web Things eingeben
 new-web-thing-label = Web Thing
-loading = Laden...
+loading = Laden…
 new-web-thing-multiple = Mehrere Web Things gefunden
 new-web-thing-from = von
 
@@ -371,14 +372,14 @@ by = von
 addon-configure = Konfigurieren
 addon-update = Aktualisieren
 addon-remove = Löschen
-addon-updating = Aktualisierung läuft...
+addon-updating = Aktualisierung läuft…
 addon-updated = Aktualisiert
 addon-update-failed = Fehlgeschlagen
-addon-config-applying = Anwenden...
+addon-config-applying = Anwenden…
 addon-config-apply = Anwenden
 addon-discovery-added = Hinzugefügt
 addon-discovery-add = Hinzufügen
-addon-discovery-installing = Installieren...
+addon-discovery-installing = Installieren…
 addon-discovery-failed = Fehlgeschlagen
 
 ## Page Titles
@@ -455,7 +456,7 @@ tunnel-setup-skip = Überspringen
 ## Authorize Page
 authorize-title = Authorisierungsanfrage - WebThings Gateway
 authorize-authorization-request = Authorisierungsanfrage
-authorize-would-like = möchte auf das Gateway zugreifen zum 
+authorize-would-like = möchte auf das Gateway zugreifen zum
 authorize-devices = Geräte.
 authorize-from = von
 authorize-monitor-and-control = Überwachen und kontrollieren
@@ -500,8 +501,8 @@ wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
 connecting-title = Wi-Fi-Verbindung herstellen - WebThings Gateway
-connecting-header = Verbindung wird hergestellt...
-connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und 
+connecting-header = Verbindung wird hergestellt…
+connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und
  das Setup unter { $gateway-link } im Webbrowser fortsetzen.
 connecting-warning = Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP-Adresse
  des Gateways in den Routereinstellungen nachgeschlagen werden.
@@ -511,16 +512,16 @@ connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
 
 ## Creating Wi-Fi Network Page
 creating-title = Neues Wi-Fi-Netzwerk anlegen - WebThings Gateway
-creating-header = Neues Wi-Fi-Netzwerk wird angelegt...
-creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort 
+creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
+creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
  aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 
 ## General Terms
 ok = OK
-ellipses = ...
+ellipsis = …
 event-log = Ereignisprotokoll
 edit = Editieren
 remove = Löschen
 disconnected = Nicht verbunden
-processing = Bitte warten...
+processing = Bitte warten…
 submit = Absenden
