@@ -51,7 +51,7 @@
     "express-promise-router": "^3.0.3",
     "express-ws": "^4.0.0",
     "find": "^0.3.0",
-    "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node#v0.10.0",
+    "gateway-addon": "https://github.com/mozilla-iot/gateway-addon-node",
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.0",
     "ip-regex": "^4.1.0",
