@@ -31,14 +31,18 @@ const RuleUtils = {
       console.warn('byProperty property undefined', new Error().stack);
       return false;
     }
-    const propHref = `/things/${property.thing}/properties/${property.id}`;
+    const propHref =
+      `/things/${encodeURIComponent(property.thing)}/properties/${
+        encodeURIComponent(property.id)}`;
     const optProp = option.properties[property.id];
     return optProp && optProp.links.filter((l) => {
       return (!l.rel || l.rel === 'property') && l.href === propHref;
     }).length > 0;
   },
   // Helper function for selecting the thing corresponding to an href
-  byThing: (thing) => (otherThing) => otherThing.href === `/things/${thing}`,
+  byThing: (thing) => (otherThing) => {
+    return otherThing.href === `/things/${encodeURIComponent(thing)}`;
+  },
   thingFromPart: (gateway, part) => {
     let thing = null;
     if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
@@ -52,8 +56,10 @@ const RuleUtils = {
     }
     return thing;
   },
-  extractProperty: (href) => href.match(/properties\/([^/]+)/)[1],
-  extractThing: (href) => href.match(/things\/([^/]+)/)[1],
+  extractProperty: (href) => {
+    return decodeURIComponent(href.match(/properties\/([^/]+)/)[1]);
+  },
+  extractThing: (href) => decodeURIComponent(href.match(/things\/([^/]+)/)[1]),
 };
 
 module.exports = RuleUtils;
