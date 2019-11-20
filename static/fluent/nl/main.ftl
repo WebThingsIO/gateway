@@ -295,19 +295,41 @@ false = Nee
 
 ## Time
 utils-now = nu
-utils-secs-ago = sec geleden
-utils-min-ago = min geleden
-utils-mins-ago = min geleden
-utils-hour-ago = uur geleden
-utils-hours-ago = uur geleden
-utils-day-ago = dag geleden
-utils-days-ago = dagen geleden
-utils-week-ago = week geleden
-utils-weeks-ago = weken geleden
-utils-month-ago = maand geleden
-utils-months-ago = maanden geleden
-utils-year-ago = jaar geleden
-utils-years-ago = jaren geleden
+utils-seconds-ago =
+  { $value ->
+      [one] { $value } seconde geleden
+      *[other] { $value } seconden geleden
+  }
+utils-minutes-ago =
+  { $value ->
+      [one] { $value } minuut geleden
+      *[other] { $value } minuten geleden
+  }
+utils-hours-ago =
+  { $value ->
+      [one] { $value } uur geleden
+      *[other] { $value } uur geleden
+  }
+utils-days-ago =
+  { $value ->
+      [one] { $value } dag geleden
+      *[other] { $value } dagen geleden
+  }
+utils-weeks-ago =
+  { $value ->
+      [one] { $value } week geleden
+      *[other] { $value } weken geleden
+  }
+utils-months-ago =
+  { $value ->
+      [one] { $value } maand geleden
+      *[other] { $value } maanden geleden
+  }
+utils-years-ago =
+  { $value ->
+      [one] { $value } jaar geleden
+      *[other] { $value } jaar geleden
+  }
 minute = Minuut
 hour = Uur
 day = Dag
