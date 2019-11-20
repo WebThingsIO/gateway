@@ -441,12 +441,6 @@ failed-save = Échec d'enregistrer.
 unsupported-field = Schéma non pris en charge
 
 ## Icon Sources
-component-icons-custom-src = /optimized-images/component-icons/custom.png
-component-icons-on-off-switch-src = /optimized-images/component-icons/on-off-switch.png
-component-icons-on-off-switch-on-src = /optimized-images/component-icons/on-off-switch-on.png
-component-icons-on-off-switch-off-src = /optimized-images/component-icons/on-off-switch-off.png
-component-icons-binary-sensor-on-src = /optimized-images/component-icons/binary-sensor-on.png
-component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary-sensor-off.png
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
