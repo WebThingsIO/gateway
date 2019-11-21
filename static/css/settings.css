@@ -610,7 +610,7 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-.localization-item-content > span {
+.localization-item-content > label {
   grid-column: 1 / 2;
   padding-top: 1.6rem;
   text-align: right;
@@ -814,6 +814,7 @@
   margin: 1rem auto;
 }
 
+.network-settings-wrap label:not(.checkbox),
 .network-settings-wrap span {
   font-size: 1.6rem;
   color: #fff;

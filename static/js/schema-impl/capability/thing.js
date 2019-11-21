@@ -411,7 +411,7 @@ class Thing {
   detailLink() {
     // double-encode slashes to make page.js happy
     return `<a href="${this.href.pathname.replace(/%2F/g, '%252F')}"
-      class="thing-details-link"></a>`;
+      class="thing-details-link" data-l10n-id="thing-details"></a>`;
   }
 
   /**
