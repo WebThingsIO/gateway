@@ -250,6 +250,7 @@ Alarm = Alarm
 Thermostat = Thermostat
 Lock = Lock
 Custom = Custom Thing
+Thing = Thing
 
 ## Properties
 alarm = Alarm
@@ -277,6 +278,8 @@ locked = Locked
 unlocked = Unlocked
 jammed = Jammed
 unknown = Unknown
+active = Active
+inactive = Inactive
 
 ## Domain Setup
 reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
@@ -442,12 +445,6 @@ failed-save = Failed to save.
 unsupported-field = Unsupported field schema
 
 ## Icon Sources
-component-icons-custom-src = /optimized-images/component-icons/custom.png
-component-icons-on-off-switch-src = /optimized-images/component-icons/on-off-switch.png
-component-icons-on-off-switch-on-src = /optimized-images/component-icons/on-off-switch-on.png
-component-icons-on-off-switch-off-src = /optimized-images/component-icons/on-off-switch-off.png
-component-icons-binary-sensor-on-src = /optimized-images/component-icons/binary-sensor-on.png
-component-icons-binary-sensor-off-src = /optimized-images/component-icons/binary-sensor-off.png
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page

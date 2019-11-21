@@ -25,25 +25,31 @@ template.innerHTML = `
     }
 
     .webthing-custom-capability-icon {
-      width: 12.8rem;
-      height: 12.8rem;
-      border-radius: 6.4rem;
-      background-size: 12.8rem;
-      background-repeat: no-repeat;
-      transform: translate(0);
-      background-color: #5d9bc7;
-    }
-
-    .webthing-custom-capability-icon.custom-icon {
       width: 12.4rem;
       height: 12.4rem;
+      border-radius: 6.4rem;
       border: 0.2rem solid white;
       background-size: 6.4rem;
-      background-position: center;
+      background-repeat: no-repeat;
+      transform: translate(0);
       background-color: #89b6d6;
+      background-position: center;
+    }
+
+    .webthing-custom-capability-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      padding-top: 5.2rem;
+    }
+
+    .webthing-custom-capability-icon.custom-icon
+    .webthing-custom-capability-label {
+      display: none;
     }
   </style>
-  <div id="icon" class="webthing-custom-capability-icon"></div>
+  <div id="icon" class="webthing-custom-capability-icon">
+    <div id="label" class="webthing-custom-capability-label"></div>
+  </div>
 `;
 
 class CustomCapability extends BaseComponent {
@@ -51,6 +57,9 @@ class CustomCapability extends BaseComponent {
     super(template);
 
     this._icon = this.shadowRoot.querySelector('#icon');
+    this._label = this.shadowRoot.querySelector('#label');
+
+    this._label.innerText = fluent.getMessage('Thing');
     this._iconHref = '';
   }
 
@@ -65,14 +74,14 @@ class CustomCapability extends BaseComponent {
 
   set iconHref(value) {
     if (!value) {
-      this._iconHref = fluent.getMessage('component-icons-custom-src');
+      this._iconHref = '';
+      this._icon.style.backgroundImage = '';
       this._icon.classList.remove('custom-icon');
     } else {
       this._iconHref = value;
+      this._icon.style.backgroundImage = `url("${this._iconHref}")`;
       this._icon.classList.add('custom-icon');
     }
-
-    this._icon.style.backgroundImage = `url("${this._iconHref}")`;
   }
 }
 

@@ -12,51 +12,59 @@
 const BaseComponent = require('../base-component');
 const fluent = require('../../fluent');
 
-let template;
-function createTemplate() {
-  template = document.createElement('template');
-  template.innerHTML = `
-    <style>
-      :host {
-        display: block;
-        contain: content;
-        text-align: center;
-        color: white;
-        font-size: 1.6rem;
-        cursor: default;
-      }
+const template = document.createElement('template');
+template.innerHTML = `
+  <style>
+    :host {
+      display: block;
+      contain: content;
+      text-align: center;
+      color: white;
+      font-size: 1.6rem;
+      cursor: default;
+    }
 
-      .webthing-on-off-switch-capability-icon {
-        width: 12.8rem;
-        height: 12.8rem;
-        border-radius: 6.4rem;
-        background-size: 12.8rem;
-        background-repeat: no-repeat;
-        transform: translate(0);
-        background-color: #5d9bc7;
-        background-image: url('${fluent.getMessage('component-icons-on-off-switch-src')}');
-      }
+    .webthing-on-off-switch-capability-icon {
+      width: 12.4rem;
+      height: 12.4rem;
+      border-radius: 6.4rem;
+      border: 0.2rem solid white;
+      background-size: 6.4rem;
+      background-repeat: no-repeat;
+      transform: translate(0);
+      background-color: #89b6d6;
+      background-image: url('/optimized-images/component-icons/on-off-switch-off.svg');
+      background-position: center 2rem;
+    }
 
-      .webthing-on-off-switch-capability-icon.on {
-        background-image: url('${fluent.getMessage('component-icons-on-off-switch-on-src')}');
-      }
+    .webthing-on-off-switch-capability-icon.on {
+      background-color: white;
+      background-image: url('/optimized-images/component-icons/on-off-switch-on.svg');
+    }
 
-      .webthing-on-off-switch-capability-icon.off {
-        background-image: url('${fluent.getMessage('component-icons-on-off-switch-off-src')}');
-      }
-    </style>
-    <div id="icon" class="webthing-on-off-switch-capability-icon"></div>
-  `;
-}
+    .webthing-on-off-switch-capability-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      padding-top: 8.75rem;
+    }
+
+    .webthing-on-off-switch-capability-icon.on
+    .webthing-on-off-switch-capability-label {
+      color: #5d9bc7;
+    }
+  </style>
+  <div id="icon" class="webthing-on-off-switch-capability-icon">
+    <div id="label" class="webthing-on-off-switch-capability-label">--</div>
+  </div>
+`;
 
 class OnOffSwitchCapability extends BaseComponent {
   constructor() {
-    if (!template) {
-      createTemplate();
-    }
     super(template);
 
     this._icon = this.shadowRoot.querySelector('#icon');
+    this._label = this.shadowRoot.querySelector('#label');
+
     this._on = false;
     this._onClick = this.__onClick.bind(this);
   }
@@ -78,14 +86,14 @@ class OnOffSwitchCapability extends BaseComponent {
     this._on = Boolean(value);
 
     if (value === true) {
-      this._icon.classList.remove('off');
       this._icon.classList.add('on');
+      this._label.innerText = fluent.getMessage('on');
     } else if (value === false) {
       this._icon.classList.remove('on');
-      this._icon.classList.add('off');
+      this._label.innerText = fluent.getMessage('off');
     } else {
       this._icon.classList.remove('on');
-      this._icon.classList.remove('off');
+      this._label.innerText = fluent.getMessage('ellipsis');
     }
   }
 
