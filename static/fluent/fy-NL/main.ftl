@@ -49,8 +49,8 @@ network-settings-ethernet-image =
   .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wifi
-network-settings-wifi = Wifi
+  .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
   .alt = Thúsnetwurk
 network-settings-internet-image =
@@ -58,7 +58,7 @@ network-settings-internet-image =
 network-settings-configure = Konfigurearje
 network-settings-internet-wan = Ynternet (WAN)
 network-settings-home-network-lan = Thúsnetwurk (LAN)
-network-settings-wifi-wlan = Wifi (WLAN)
+network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adres
 network-settings-dhcp = Automatysk (DHCP)
 network-settings-static = Hânmjittich (Statysk IP-adres)
@@ -75,14 +75,14 @@ network-settings-username = Brûkersnamme
 network-settings-password = Wachtwurd
 network-settings-router-ip = IP-adres router
 network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Wifi ynskeakelje
+network-settings-enable-wifi = Wi-Fi ynskeakelje
 network-settings-network-name = Netwurknamme (SSID)
 wireless-connected = Ferbûn
 wireless-icon =
-  .alt = Wifi-netwurk
+  .alt = Wi-Fi-netwurk
 network-settings-changing = Netwurkynstellingen wizigje. Dit kan efkes duorje.
 failed-ethernet-configure = Ethernet ynstelle mislearre.
-failed-wifi-configure = Wifi ynstelle mislearre.
+failed-wifi-configure = Wi-Fi ynstelle mislearre.
 failed-wan-configure = WAN ynstelle mislearre.
 failed-lan-configure = LAN ynstelle mislearre.
 failed-wlan-configure = WLAN ynstelle mislearre.
@@ -340,7 +340,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
-abbrev-kilowatt-hour = kWh
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -421,7 +421,7 @@ authorizations = Autorisaasjes
 developer = Untwikkeler
 network = Netwurk
 ethernet = Ethernet
-wifi = Wifi
+wifi = Wi-Fi
 icon = Piktogram
 
 ## Speech
@@ -493,7 +493,7 @@ local-token-bearer-type = Bearer-type-autorisaasje
 
 ## Router Setup Page
 router-setup-title = Routerynstellingen — WebThings Gateway
-router-setup-header = Meitsje in wifi-ferbining
+router-setup-header = Meitsje in Wi-Fi-ferbining
 router-setup-input-ssid =
   .placeholder = Netwurknamme
 router-setup-input-password =
@@ -505,32 +505,32 @@ router-setup-create =
 router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Wifi-ynstellingen — WebThings Gateway
-wifi-setup-header = Ferbine mei wifi-netwurk?
+wifi-setup-title = Wi-Fi-ynstellingen — WebThings Gateway
+wifi-setup-header = Ferbine mei Wi-Fi-netwurk?
 wifi-setup-input-password =
   .placeholder = Wachtwurd
 wifi-setup-show-password = Wachtwurd toane
 wifi-setup-connect =
   .value = Ferbine
 wifi-setup-network-icon =
-  .alt = Wifi-netwurk
+  .alt = Wi-Fi-netwurk
 wifi-setup-skip = Oerslaan
 
 ## Connecting to Wi-Fi Page
-connecting-title = Ferbine mei wifi — WebThings Gateway
-connecting-header = Ferbine mei wifi…
+connecting-title = Ferbine mei Wi-Fi — WebThings Gateway
+connecting-header = Ferbine mei Wi-Fi…
 connecting-connect = Kontrolearje oft jo ferbûn binne mei itselde netwurk en
  navigearje dan nei { $gateway-link } yn jo webbrowser om de ynstallaasje te foltôgjen.
 connecting-warning = Let op: As jo { $domain } net lade kinne, kontrolearje
  it IP-adres fan de gateway yn jo router.
-connecting-header-skipped = Ynstallaasje wifi oersloegen
+connecting-header-skipped = Ynstallaasje Wi-Fi oersloegen
 connecting-skipped = De gateway wurdt opstart. Navigearje nei
  { $gateway-link } yn jo webbrowser, wylst jo ferbûn binne mei itselde netwurk,
  om de ynstallaasje te foltôgjen.
 
 ## Creating Wi-Fi Network Page
-creating-title = Wifi-netwurk meitsje — WebThings Gateway
-creating-header = Wifi-netwurk meitsje…
+creating-title = Wi-Fi-netwurk meitsje — WebThings Gateway
+creating-header = Wi-Fi-netwurk meitsje…
 creating-content = Ferbyn mei { $ssid } en it ynstelde wachtwurd,
  navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
 
