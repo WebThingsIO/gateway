@@ -1,0 +1,16 @@
+name: webthings-gateway
+version: '0.10.0'
+summary: WebThings Gateway by Mozilla
+description: Directly monitor and control your home over the web.
+grade: devel
+base: core18
+confinement: devmode
+
+parts:
+  webthings-gateway:
+    source: .
+    plugin: nodejs
+    nodejs-package-manager: npm
+    nodejs-version: 8.16.2
+    build-packages:
+    - git
