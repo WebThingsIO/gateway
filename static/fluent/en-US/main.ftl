@@ -14,6 +14,12 @@ floorplan-menu-item = Floorplan
 settings-menu-item = Settings
 log-out-button = Log out
 
+## Things
+thing-details =
+  .aria-label = View Properties
+add-things =
+  .aria-label = Add New Things
+
 ## Assistant
 assistant-avatar-image =
   .alt = Assistant Avatar
@@ -57,6 +63,7 @@ network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Configure
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Mode
 network-settings-home-network-lan = Home Network (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP address
@@ -88,6 +95,8 @@ failed-lan-configure = Failed to configure LAN.
 failed-wlan-configure = Failed to configure WLAN.
 
 ## User Settings
+create-user =
+  .aria-label = Add New User
 user-settings-input-name =
   .placeholder = Name
 user-settings-input-email =
@@ -140,6 +149,8 @@ developer-settings-view-internal-logs = View Internal Logs
 developer-settings-create-local-authorization = Create local authorization
 
 ## Rules
+add-rule =
+  .aria-label = Create New Rule
 rules = Rules
 rules-create-rule-hint = No rules created. Click + to create a rule.
 rules-rule-name = Rule Name
@@ -190,6 +201,8 @@ rule-event-lower = event
 rule-event-occurs = occurs
 
 ## Logs
+add-log =
+  .aria-label = Create New Log
 logs = Logs
 logs-create-log-hint = No logs created. Click + to create a log.
 logs-device = Device
@@ -208,8 +221,7 @@ logs-days = Days
 logs-weeks = Weeks
 logs-save = Save
 logs-remove-dialog-title = Removing
-logs-remove-dialog-warning = Removing the log will also remove all of its data.
-  Are you sure you want to remove it?
+logs-remove-dialog-warning = Removing the log will also remove all of its data. Are you sure you want to remove it?
 logs-remove = Remove
 logs-unable-to-create = Unable to create log
 logs-server-remove-error = Server error: unable to remove log
@@ -390,6 +402,8 @@ action-not-found = Action not found.
 events-not-found = This thing has no events.
 
 ## Add-on Settings
+add-addons =
+  .aria-label = Find New Add-ons
 author-unknown = Unknown
 disable = Disable
 enable = Enable
@@ -522,21 +536,15 @@ wifi-setup-skip = Skip
 ## Connecting to Wi-Fi Page
 connecting-title = Connecting to Wi-Fi — WebThings Gateway
 connecting-header = Connecting to Wi-Fi…
-connecting-connect = Please ensure you are connected to the same network and
- then navigate to { $gateway-link } in your web browser to continue setup.
-connecting-warning = Note: If you are unable to load { $domain }, look up the
- gateway's IP address on your router.
+connecting-connect = Please ensure you are connected to the same network and then navigate to { $gateway-link } in your web browser to continue setup.
+connecting-warning = Note: If you are unable to load { $domain }, look up the gateway's IP address on your router.
 connecting-header-skipped = Wi-Fi setup skipped
-connecting-skipped = The gateway is now being started. Navigate to
- { $gateway-link } in your web browser while connected to the same network as
- the gateway to continue setup.
+connecting-skipped = The gateway is now being started. Navigate to { $gateway-link } in your web browser while connected to the same network as the gateway to continue setup.
 
 ## Creating Wi-Fi Network Page
 creating-title = Creating Wi-Fi Network — WebThings Gateway
 creating-header = Creating Wi-Fi network…
-creating-content = Please connect to { $ssid } with the password you just
- created, then navigate to { $gateway-link } or { $ip-link } in your web
- browser.
+creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
 ## General Terms
 ok = Ok
@@ -547,3 +555,19 @@ remove = Remove
 disconnected = Disconnected
 processing = Processing…
 submit = Submit
+
+## Top-Level Buttons
+menu-button =
+  .aria-label = Menu
+back-button =
+  .aria-label = Back
+overflow-button =
+  .aria-label = Additional Actions
+speech-button =
+  .aria-label = Listen for Speech
+submit-button =
+  .aria-label = Submit
+edit-button =
+  .aria-label = Edit
+save-button =
+  .aria-label = Save
