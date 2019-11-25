@@ -250,6 +250,7 @@ Alarm = Alarm
 Thermostat = Termostat
 Lock = Zamek
 Custom = Specjalna Rzecz
+Thing = Rzecz
 
 ## Properties
 alarm = Alarm
@@ -277,6 +278,8 @@ locked = Zablokowany
 unlocked = Odblokowany
 jammed = Zaklinowany
 unknown = Nieznany
+active = Aktywny
+inactive = Nieaktywny
 
 ## Domain Setup
 reclaim-prompt = Wygląda na to, że już zarejestrowałeś tę subdomenę. Aby ją odzyskać
