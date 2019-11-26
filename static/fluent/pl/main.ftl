@@ -14,6 +14,12 @@ floorplan-menu-item = Plan Pomieszczeń
 settings-menu-item = Ustawienia
 log-out-button = Wyloguj
 
+## Things
+thing-details =
+  .aria-label = Wyświetl Właściwości
+add-things =
+  .aria-label = Dodaj Nowe Rzeczy
+
 ## Assistant
 assistant-avatar-image =
   .alt = Awatar Asystenta
@@ -57,6 +63,7 @@ network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Konfiguruj
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Tryb
 network-settings-home-network-lan = Sieć Domowa (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adres IP
@@ -88,6 +95,8 @@ failed-lan-configure = Konfiguracja LAN nie powiodła się.
 failed-wlan-configure = Konfiguracja WLAN nie powiodła się.
 
 ## User Settings
+create-user =
+  .aria-label = Dodaj Nowego Użytkownika
 user-settings-input-name =
   .placeholder = Imię
 user-settings-input-email =
@@ -140,6 +149,8 @@ developer-settings-view-internal-logs = Wyświetl Dzienniki Wewnętrzne
 developer-settings-create-local-authorization = Utwórz autoryzację lokalną
 
 ## Rules
+add-rule =
+  .aria-label = Utwórz Nową Regułę
 rules = Reguły
 rules-create-rule-hint = Nie utworzono reguł. Kliknij +, aby utworzyć regułę.
 rules-rule-name = Nazwa Reguły
@@ -190,6 +201,8 @@ rule-event-lower = zdarzenie
 rule-event-occurs = ma miejsce
 
 ## Logs
+add-log =
+  .aria-label = Utwórz Nowy Wykres
 logs = Wykresy
 logs-create-log-hint = Nie utworzono wykresów. Kliknij +, aby utworzyć wykres.
 logs-device = Urządzenie
@@ -208,8 +221,7 @@ logs-days = Dni
 logs-weeks = Tygodnie
 logs-save = Zapisz
 logs-remove-dialog-title = Usuwanie
-logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych.
-  Czy na pewno chcesz go usunąć?
+logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych. Czy na pewno chcesz go usunąć?
 logs-remove = Usuń
 logs-unable-to-create = Nie można utworzyć wykresu
 logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
@@ -401,6 +413,8 @@ action-not-found = Akcja nie znaleziona.
 events-not-found = Ta rzecz nie ma zdarzeń.
 
 ## Add-on Settings
+add-addons =
+ .aria-label = Znajdź Nowe Dodatki
 author-unknown = Nieznany
 disable = Wyłącz
 enable = Włącz
@@ -552,3 +566,19 @@ remove = Usuń
 disconnected = Rozłączony
 processing = Przetwarzanie…
 submit = Zatwierdź
+
+## Top-Level Buttons
+menu-button =
+  .aria-label = Menu
+back-button =
+  .aria-label = Wstecz
+overflow-button =
+  .aria-label = Dodatkowe Działania
+speech-button =
+  .aria-label = Słuchaj Mowy
+submit-button =
+  .aria-label = Zatwierdź
+edit-button =
+  .aria-label = Edytuj
+save-button =
+  .aria-label = Zapisz
