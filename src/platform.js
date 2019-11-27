@@ -47,7 +47,7 @@ function getOS() {
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
     const lsb_release = proc.stdout.toString().trim();
-    if ((lsb_release === 'Debian') || (lsb_release === 'Raspbian')) {
+    if (lsb_release === 'Debian' || lsb_release === 'Raspbian') {
       return 'linux-debian';
     }
   }
