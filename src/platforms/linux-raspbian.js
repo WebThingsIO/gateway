@@ -158,7 +158,15 @@ function getWirelessMode() {
     mode = 'ap';
     enabled = true;
 
-    const data = fs.readFileSync('/etc/hostapd/hostapd.conf', 'utf8');
+    let data = null;
+    try {
+      data = fs.readFileSync('/etc/hostapd/hostapd.conf', 'utf8');
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        throw err;
+      }
+    }
+
     if (data) {
       for (const line of data.split('\n')) {
         if (line.startsWith('#')) {
