@@ -34,11 +34,13 @@ class NotImplementedError extends Error {
  *                        * openbsd
  *                        * sunos
  *                        * win32
+ *                        * linux-debian
  *                        * linux-raspbian
  *                        * linux-openwrt
  *                        * linux-unknown
  */
 function getOS() {
+  return 'linux-debian';
   const platform = process.platform;
   if (platform !== 'linux') {
     return platform;
@@ -47,8 +49,12 @@ function getOS() {
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
     const lsb_release = proc.stdout.toString().trim();
-    if (lsb_release === 'Debian' || lsb_release === 'Raspbian') {
+    if (lsb_release === 'Debian') {
       return 'linux-debian';
+    }
+
+    if (lsb_release === 'Raspbian') {
+      return 'linux-raspbian';
     }
   }
 

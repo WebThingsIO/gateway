@@ -1116,6 +1116,7 @@ const SettingsScreen = {
 
     API.getPlatform().then((body) => {
       switch (body.os) {
+        case 'linux-debian':
         case 'linux-raspbian':
           this.elements.network.client.main.classList.remove('hidden');
           break;
