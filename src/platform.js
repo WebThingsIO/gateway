@@ -40,7 +40,6 @@ class NotImplementedError extends Error {
  *                        * linux-unknown
  */
 function getOS() {
-  return 'linux-debian';
   const platform = process.platform;
   if (platform !== 'linux') {
     return platform;
