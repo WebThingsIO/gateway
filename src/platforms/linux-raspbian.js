@@ -10,7 +10,7 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
-//const ipRegex = require('ip-regex');
+const ipRegex = require('ip-regex');
 const os = require('os');
 
 /**
