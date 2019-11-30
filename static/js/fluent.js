@@ -13,6 +13,7 @@ const availableLanguages = {
   nl: ['/fluent/nl/main.ftl'],
   pl: ['/fluent/pl/main.ftl'],
   ru: ['/fluent/ru/main.ftl'],
+  sr: ['/fluent/sr/main.ftl'],
 };
 
 let language;

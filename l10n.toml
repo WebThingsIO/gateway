@@ -9,6 +9,7 @@ locales = [
   "nl",
   "pl",
   "ru",
+  "sr",
 ]
 
 branches = [
