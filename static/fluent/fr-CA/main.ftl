@@ -36,7 +36,7 @@ settings-network = Réseau
 settings-users = Utilisateurs
 settings-add-ons = Composants additionnels
 settings-adapters = Adaptateurs
-settings-localization = Localisation
+settings-localization = Géolocalisation
 settings-updates = Mises à jour
 settings-authorizations = Autorisations
 settings-experiments = Expériences
@@ -47,7 +47,7 @@ domain-settings-local-label = Accès local
 domain-settings-local-update = Modifiez nom d’hôte
 domain-settings-remote-access = Accès à distance
 domain-settings-local-name =
-  .placeholder = gateway
+  .placeholder = Gateway
 
 ## Network Settings
 network-settings-unsupported = Les paramètres de réseau ne sont pas pris en charge sur cette plateforme.
@@ -449,7 +449,7 @@ speech-didnt-get = Désolé, je ne vous ai pas compris.
 unknown-state = État inconnu.
 error = Erreur
 errors = Erreurs
-gateway-unreachable = Passerelle inaccessible
+gateway-unreachable = Gateway inaccessible
 more-information = Plus d’informations
 invalid-file = Fichier non valide.
 failed-read-file = Échec de lecture du fichier.
@@ -475,7 +475,7 @@ signup-next = Suivant
 ## Tunnel Setup Page
 tunnel-setup-title = Sélectionner une adresse web — WebThings Gateway
 tunnel-setup-welcome = Bienvenue
-tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
+tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre Gateway :
 tunnel-setup-input-subdomain =
   .placeholder = sous-domaine
 tunnel-setup-opt-in = M’informe des nouvelles fonctionnalités ou des opportunités de contributions.
@@ -490,7 +490,7 @@ tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge
 ## Authorize Page
 authorize-title = Demande d’autorisation — WebThings Gateway
 authorize-authorization-request = Demande d’autorisation
-authorize-would-like = veut accéder à votre passerelle pour
+authorize-would-like = veut accéder à votre Gateway pour
 authorize-devices = périphériques.
 authorize-from = de
 authorize-monitor-and-control = surveiller et contrôler
@@ -505,7 +505,7 @@ local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
 local-token-jwt =  jeton Web JSON
-local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec
+local-token-use-it = L’utiliser pour communiquer avec votre Gateway en toute sécurité avec
 local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
@@ -539,7 +539,7 @@ connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
 connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
 connecting-header-skipped = Configuration Wi-Fi ignoré.
-connecting-skipped = La passerelle démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
+connecting-skipped = La Gateway démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
 creating-title = Création du réseau Wi-Fi en cours — WebThings Gateway
