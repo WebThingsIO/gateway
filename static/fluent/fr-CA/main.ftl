@@ -14,6 +14,12 @@ floorplan-menu-item = Plan d'étage
 settings-menu-item = Paramètres
 log-out-button = Déconnexion
 
+## Things
+thing-details = 
+  .aria-label = Afficher les propriétés
+add-things =
+  .aria-label = Ajouter un Thing
+
 ## Assistant
 assistant-avatar-image =
   .alt = Avatar d'assistant
@@ -57,6 +63,7 @@ network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Configurer
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Mode
 network-settings-home-network-lan = Réseau domestique (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
@@ -88,7 +95,9 @@ failed-lan-configure = Échec de configuration du réseau domestique.
 failed-wlan-configure = Échec de configuration du WLAN.
 
 ## User Settings
-user-settings-input-name =
+create-user =
+  .aria-label = Ajouter un utilisateur
+user-settings-input-name = 
   .placeholder = Nom
 user-settings-input-email =
   .placeholder = Courriel
@@ -140,6 +149,8 @@ developer-settings-view-internal-logs = Afficher les journaux internes
 developer-settings-create-local-authorization = Créer une autorisation locale
 
 ## Rules
+add-rule =
+  .aria-label = Créer un règle
 rules = Règles
 rules-create-rule-hint = Aucune règle créée. Cliquer sur + pour la créer.
 rules-rule-name = Nom du règle
@@ -190,6 +201,8 @@ rule-event-lower = événement
 rule-event-occurs = à lieu
 
 ## Logs
+add-log =
+  .aria-label = Créer un journal
 logs = Journaux
 logs-create-log-hint = Aucun journal créé. Cliquer sur + pour le créer.
 logs-device = Périphérique
@@ -249,6 +262,7 @@ Alarm = Alarme
 Thermostat = Thermostat
 Lock = Verrou
 Custom = Thing personnalisé
+Thing = Thing
 
 ## Properties
 alarm = Alarme
@@ -276,6 +290,8 @@ locked = Barré
 unlocked = Débarré
 jammed = Bourré
 unknown = Inconnu
+active = Actif
+inactive = Inactif
 
 ## Domain Setup
 reclaim-prompt = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer,
@@ -284,7 +300,7 @@ check-email-for-token = Veuillez consulter votre courriel pour le jeton de récl
 reclaim-failed = Impossible de réclamer le domaine.
 subdomain-already-used = Ce sous-domaine est déjà utilisé. Veuillez en choisir un autre.
 invalid-reclamation-token = Jeton de réclamation non valide.
-domain-success = Succè ! Patientez pendant la redirection…
+domain-success = Succès ! Patientez pendant la redirection…
 issuing-error = Impossible de délivrer un certificat. Veuillez réessayer.
 redirecting = Redirection en cours…
 
@@ -386,6 +402,8 @@ action-not-found = Action non trouvée.
 events-not-found = Cette thing n'a aucun événement.
 
 ## Add-on Settings
+add-addons = 
+  .aria-label = Découvrir de nouveaux composants additionnels
 author-unknown = Inconnu
 disable = Désactiver
 enable = Activer
@@ -504,7 +522,7 @@ router-setup-create =
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
+wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
 wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
   .placeholder = Mot de passe
@@ -537,3 +555,19 @@ remove = Supprimer
 disconnected = Déconnecté
 processing = Traitement en cours…
 submit = Envoyer
+
+## Top-Level Buttons
+menu-button =
+  .aria-label = Menu
+back-button =
+  .aria-label = Retour
+overflow-button =
+  .aria-label = Actions supplémentaires
+speech-button =
+  .aria-label = Écoutez la voix
+submit-button =
+  .aria-label = Envoyer
+edit-button =
+  .aria-label = Edit
+save-button =
+  .aria-label = Enregistrer
