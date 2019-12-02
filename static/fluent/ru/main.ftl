@@ -301,37 +301,37 @@ utils-now = сейчас
 utils-seconds-ago =
   { $value ->
       [one] { $value } секунду назад
-      *[other] { $value } секунд назад
+     *[other] { $value } секунд назад
   }
 utils-minutes-ago =
   { $value ->
       [one] { $value } минуту назад
-      *[other] { $value } минут назад
+     *[other] { $value } минут назад
   }
 utils-hours-ago =
   { $value ->
       [one] { $value } час назад
-      *[other] { $value } часов назад
+     *[other] { $value } часов назад
   }
 utils-days-ago =
   { $value ->
       [one] { $value } день назад
-      *[other] { $value } дней назад
+     *[other] { $value } дней назад
   }
 utils-weeks-ago =
   { $value ->
       [one] { $value } неделю назад
-      *[other] { $value } недель назад
+     *[other] { $value } недель назад
   }
 utils-months-ago =
   { $value ->
       [one] { $value } месяц назад
-      *[other] { $value } месяцев назад
+     *[other] { $value } месяцев назад
   }
 utils-years-ago =
   { $value ->
       [one] { $value } год назад
-      *[other] { $value } лет назад
+     *[other] { $value } лет назад
   }
 minute = минут
 hour = часов

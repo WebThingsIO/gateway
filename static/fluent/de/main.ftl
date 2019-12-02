@@ -298,37 +298,37 @@ utils-now = jetzt
 utils-seconds-ago =
   { $value ->
       [one] vor einer Sekunde
-      *[other] vor { $value } Sekunden
+     *[other] vor { $value } Sekunden
   }
 utils-minutes-ago =
   { $value ->
       [one] vor einer Minute
-      *[other] vor { $value } Minuten
+     *[other] vor { $value } Minuten
   }
 utils-hours-ago =
   { $value ->
       [one] vor einer Stunde
-      *[other] vor { $value } Stunden
+     *[other] vor { $value } Stunden
   }
 utils-days-ago =
   { $value ->
       [one] vor einem Tag
-      *[other] vor { $value } Tagen
+     *[other] vor { $value } Tagen
   }
 utils-weeks-ago =
   { $value ->
       [one] vor einer Woche
-      *[other] vor { $value } Wochen
+     *[other] vor { $value } Wochen
   }
 utils-months-ago =
   { $value ->
       [one] vor einem Monat
-      *[other] vor { $value } Monaten
+     *[other] vor { $value } Monaten
   }
 utils-years-ago =
   { $value ->
       [one] vor einem Jahr
-      *[other] vor { $value } Jahr
+     *[other] vor { $value } Jahr
   }
 minute = Minute
 hour = Stunde

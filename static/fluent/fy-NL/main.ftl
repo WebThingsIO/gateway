@@ -298,37 +298,37 @@ utils-now = no
 utils-seconds-ago =
   { $value ->
       [one] { $value } sekonde lyn
-      *[other] { $value } sekonden lyn
+     *[other] { $value } sekonden lyn
   }
 utils-minutes-ago =
   { $value ->
       [one] { $value } minút lyn
-      *[other] { $value } minuten lyn
+     *[other] { $value } minuten lyn
   }
 utils-hours-ago =
   { $value ->
       [one] { $value } oer lyn
-      *[other] { $value } oer lyn
+     *[other] { $value } oer lyn
   }
 utils-days-ago =
   { $value ->
       [one] { $value } dei lyn
-      *[other] { $value } dagen lyn
+     *[other] { $value } dagen lyn
   }
 utils-weeks-ago =
   { $value ->
       [one] { $value } wike lyn
-      *[other] { $value } wiken lyn
+     *[other] { $value } wiken lyn
   }
 utils-months-ago =
   { $value ->
       [one] { $value } moanne lyn
-      *[other] { $value } moannen lyn
+     *[other] { $value } moannen lyn
   }
 utils-years-ago =
   { $value ->
       [one] { $value } jier lyn
-      *[other] { $value } jier lyn
+     *[other] { $value } jier lyn
   }
 minute = Minút
 hour = Oer

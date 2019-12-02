@@ -298,37 +298,37 @@ utils-now = nu
 utils-seconds-ago =
   { $value ->
       [one] { $value } seconde geleden
-      *[other] { $value } seconden geleden
+     *[other] { $value } seconden geleden
   }
 utils-minutes-ago =
   { $value ->
       [one] { $value } minuut geleden
-      *[other] { $value } minuten geleden
+     *[other] { $value } minuten geleden
   }
 utils-hours-ago =
   { $value ->
       [one] { $value } uur geleden
-      *[other] { $value } uur geleden
+     *[other] { $value } uur geleden
   }
 utils-days-ago =
   { $value ->
       [one] { $value } dag geleden
-      *[other] { $value } dagen geleden
+     *[other] { $value } dagen geleden
   }
 utils-weeks-ago =
   { $value ->
       [one] { $value } week geleden
-      *[other] { $value } weken geleden
+     *[other] { $value } weken geleden
   }
 utils-months-ago =
   { $value ->
       [one] { $value } maand geleden
-      *[other] { $value } maanden geleden
+     *[other] { $value } maanden geleden
   }
 utils-years-ago =
   { $value ->
       [one] { $value } jaar geleden
-      *[other] { $value } jaar geleden
+     *[other] { $value } jaar geleden
   }
 minute = Minuut
 hour = Uur

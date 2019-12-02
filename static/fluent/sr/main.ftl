@@ -314,43 +314,43 @@ utils-seconds-ago =
   { $value ->
       [one] { $value } секунд
       [few] { $value } секунде
-      *[other] пре { $value } секунди
+     *[other] пре { $value } секунди
   }
 utils-minutes-ago =
   { $value ->
       [one] пре { $value } минут
       [few] пре { $value } минута
-      *[other] пре { $value } минута
+     *[other] пре { $value } минута
   }
 utils-hours-ago =
   { $value ->
       [one] пре { $value } сата
       [few] пре { $value } сата
-      *[other] пре { $value } сати
+     *[other] пре { $value } сати
   }
 utils-days-ago =
   { $value ->
       [one] пре { $value } дан
       [few] пре { $value } дана
-      *[other] пре { $value } дана
+     *[other] пре { $value } дана
   }
 utils-weeks-ago =
   { $value ->
       [one] пре { $value } недеље
       [few] пре { $value } недеље
-      *[other] пре { $value } недеља
+     *[other] пре { $value } недеља
   }
 utils-months-ago =
   { $value ->
       [one] пре { $value } месеца
       [few] пре { $value } месеца
-      *[other] пре { $value } месеци
+     *[other] пре { $value } месеци
   }
 utils-years-ago =
   { $value ->
       [one] пре { $value } године
       [few] пре { $value } године
-      *[other] пре { $value } година
+     *[other] пре { $value } година
   }
 minute = минут
 hour = сат

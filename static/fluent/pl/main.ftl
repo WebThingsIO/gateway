@@ -314,47 +314,47 @@ utils-seconds-ago =
   { $value ->
       [one] { $value } sekundę temu
       [many] { $value } sekund temu
-      *[other] { $value } sekundy temu
+     *[other] { $value } sekundy temu
   }
 utils-minutes-ago =
   { $value ->
       [one] { $value } minutę temu
       [many] { $value } minut temu
-      *[other] { $value } minuty temu
+     *[other] { $value } minuty temu
   }
 utils-hours-ago =
   { $value ->
       [one] { $value } godzinę temu
       [many] { $value } godzin temu
-      *[other] { $value } godziny temu
+     *[other] { $value } godziny temu
   }
 utils-days-ago =
   { $value ->
       [one] { $value } dzień temu
       [few] { $value } dni temu
       [many] { $value } dni temu
-      *[other] { $value } dnia temu
+     *[other] { $value } dnia temu
   }
 utils-weeks-ago =
   { $value ->
       [one] { $value } tydzień temu
       [few] { $value } tygodnie temu
       [many] { $value } tygodni temu
-      *[other] { $value } tygodnia temu
+     *[other] { $value } tygodnia temu
   }
 utils-months-ago =
   { $value ->
       [one] { $value } miesiąc temu
       [few] { $value } miesiące temu
       [many] { $value } miesięcy temu
-      *[other] { $value } miesiąca temu
+     *[other] { $value } miesiąca temu
   }
 utils-years-ago =
   { $value ->
       [one] { $value } rok temu
       [few] { $value } lata temu
       [many] { $value } lat temu
-      *[other] { $value } roku temu
+     *[other] { $value } roku temu
   }
 minute = Minuta
 hour = Godzina
