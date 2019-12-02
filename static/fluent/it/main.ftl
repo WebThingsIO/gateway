@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistente
 things-menu-item = Things
 rules-menu-item = Regole
@@ -15,16 +16,19 @@ settings-menu-item = Impostazioni
 log-out-button = Disconnettersi
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Avatar assistente
 assistant-controls-text-input =
   .placeholder = Come posso aiutare?
 
 ## Floorplan
+
 upload-floorplan = Carica planimetria…
 upload-floorplan-hint = (.svg raccomandato)
 
 ## Top-Level Settings
+
 settings-domain = Dominio
 settings-network = Rete
 settings-users = Utenti
@@ -37,6 +41,7 @@ settings-experiments = Esperimenti
 settings-developer = Sviluppo
 
 ## Domain Settings
+
 domain-settings-local-label = Accesso locale
 domain-settings-local-update = Aggiorna nome host
 domain-settings-remote-access = Accesso remoto
@@ -44,6 +49,7 @@ domain-settings-local-name =
   .placeholder = gateway
 
 ## Network Settings
+
 network-settings-unsupported = Le impostazioni di rete non sono supportate per questa piattaforma
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -88,6 +94,7 @@ failed-lan-configure = Impossibile configurare LAN.
 failed-wlan-configure = Impossibile configurare WLAN.
 
 ## User Settings
+
 user-settings-input-name =
   .placeholder = Nome
 user-settings-input-email =
@@ -104,16 +111,20 @@ user-settings-password-mismatch = Le password non corrispondono
 user-settings-save = Salva
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = Nessun adattatore presente
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = Nessuna autorizzazione
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Assistente smart
 experiment-settings-logs = Registri
 
 ## Localization Settings
+
 localization-settings-language-region = Lingua e regione
 localization-settings-country = Nazione
 localization-settings-timezone = Fuso orario
@@ -124,6 +135,7 @@ localization-settings-units-temperature-celsius = Temperatura Celsius
 localization-settings-units-temperature-fahrenheit = Temperatura Fahrenheit
 
 ## Update Settings
+
 update-settings-update-now = Aggiorna ora
 update-available = Aggiornamento disponibile
 update-up-to-date = Il sistema è aggiornato
@@ -135,11 +147,13 @@ in-progress = In corso
 restarting = Riprendi
 
 ## Developer Settings
+
 developer-settings-enable-ssh = Attiva SSH
 developer-settings-view-internal-logs = Visualizza registri interni
 developer-settings-create-local-authorization = Crea autorizzazione locale
 
 ## Rules
+
 rules = Regole
 rules-create-rule-hint = Nessuna regola creata. Fai clic su + per creare una regola.
 rules-rule-name = Nome regola
@@ -190,6 +204,7 @@ rule-event-lower = evento
 rule-event-occurs = verifica
 
 ## Logs
+
 logs = Registri
 logs-create-log-hint = Nessun registro creato. Fai clic su + per creare un registro.
 logs-device = Dispositivo
@@ -214,6 +229,7 @@ logs-unable-to-create = Impossibile creare il registro
 logs-server-remove-error = Errore del server: impossibile rimuovere il registro
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Ricerca
 add-thing-scanning = Ricerca di nuovi dispositivi…
@@ -224,11 +240,13 @@ add-thing-done = Fatto
 add-thing-cancel = Annulla
 
 ## Context Menu
+
 context-menu-choose-icon = Scegli icona…
 context-menu-save = Salva
 context-menu-remove = Rimuovi
 
 ## Capabilities
+
 OnOffSwitch = Interruttore acceso/spento
 MultiLevelSwitch = Interruttore multi livello
 ColorControl = Controllo del colore
@@ -251,6 +269,7 @@ Lock = Serratura
 Custom = Personalizzato
 
 ## Properties
+
 alarm = Allarme
 pushed = Spinto
 not-pushed = Non spinto
@@ -278,6 +297,7 @@ jammed = Inceppato
 unknown = Sconosciuto
 
 ## Domain Setup
+
 reclaim-prompt = Sembra che questo sottodominio sia già stato registrato. Per recuperarlo
 click-here = fai clic qui
 check-email-for-token = Controlla l’e-mail per un token di recupero e incollalo sopra.
@@ -289,10 +309,12 @@ issuing-error = Errore durante l’emissione del certificato. Riprova.
 redirecting = Reindirizzamento…
 
 ## Booleans
+
 true = Vero
 false = Falso
 
 ## Time
+
 utils-now = adesso
 utils-seconds-ago =
   { $value ->
@@ -335,6 +357,7 @@ day = Giorno
 week = Settimana
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -354,6 +377,7 @@ abbrev-millisecond = ms
 abbrev-foot = ft
 
 ## New Thing View
+
 unknown-device-type = Tipo di dispositivo sconosciuto
 new-thing-choose-icon = Scegli icona…
 new-thing-save = Salva
@@ -372,6 +396,7 @@ new-thing-saved = Salvato
 new-thing-done = Fatto
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Inserisci l’URL del l’oggetto web
 new-web-thing-label = Oggetto web
@@ -380,12 +405,14 @@ new-web-thing-multiple = Diversi oggetti web rilevati
 new-web-thing-from = da
 
 ## Empty div Messages
+
 no-things = Nessun dispositivo. Fai clic su + per cercare i dispositivi disponibili.
 thing-not-found = Oggetto web non trovato.
 action-not-found = Azione non trovata.
 events-not-found = Questo oggetto non ha eventi.
 
 ## Add-on Settings
+
 author-unknown = Sconosciuto
 disable = Disattiva
 enable = Abilita
@@ -404,6 +431,7 @@ addon-discovery-installing = Installazione in corso…
 addon-discovery-failed = Non riuscito
 
 ## Page Titles
+
 settings = Impostazioni
 domain = Dominio
 users = Utenti
@@ -424,10 +452,12 @@ wifi = Wi-Fi
 icon = Icona
 
 ## Speech
+
 speech-unsupported = Il browser corrente non supporta i comandi vocali.
 speech-didnt-get = Mi dispiace, non ho capito.
 
 ## Errors
+
 unknown-state = Stato sconosciuto.
 error = Errore
 errors = Errori
@@ -438,16 +468,20 @@ failed-read-file = Impossibile leggere il file.
 failed-save = Impossibile salvare il file.
 
 ## Schema Form
+
 unsupported-field = Schema non supportato
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Accesso — WebThings Gateway
 login-log-in = Accesso
 
 ## Create First User Page
+
 signup-title = Crea utente — WebThings Gateway
 signup-welcome = Benvenuto
 signup-create-account = Crea il tuo primo account utente:
@@ -455,6 +489,7 @@ signup-password-mismatch = Le password non corrispondono
 signup-next = Successivo
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Scegli indirizzo web — WebThings Gateway
 tunnel-setup-welcome = Benvenuto
 tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il suo gateway:
@@ -470,6 +505,7 @@ tunnel-setup-skip = Ignora
 tunnel-setup-time-sync = In attesa che l’orologio di sistema venga impostato da Internet. È possibile che la registrazione del dominio non riesca fino al completamento dell’operazione.
 
 ## Authorize Page
+
 authorize-title = Richiesta di autorizzazione — WebThings Gateway
 authorize-authorization-request = Richiesta di autorizzazione
 authorize-would-like = Vorresti accedere al gateway
@@ -483,6 +519,7 @@ authorize-allow =
 authorize-deny = Nega
 
 ## Local Token Page
+
 local-token-title = Servizio token locale — WebThings Gateway
 local-token-header = Servizio token locale
 local-token-your-token = Il token locale è:
@@ -491,6 +528,7 @@ local-token-use-it = Usalo per comunicare in modo sicuro con il gateway, con
 local-token-bearer-type = autorizzazione Bearer-type
 
 ## Router Setup Page
+
 router-setup-title = Configurazione del router — WebThings Gateway
 router-setup-header = Crea una nuova rete Wi-Fi
 router-setup-input-ssid =
@@ -504,6 +542,7 @@ router-setup-create =
 router-setup-password-mismatch = Le password devono essere identiche
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Configurazione Wi-Fi — WebThings Gateway
 wifi-setup-header = Connettersi a una rete Wi-Fi?
 wifi-setup-input-password =
@@ -516,6 +555,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Ignora
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Connessione al Wi-Fi — WebThings Gateway
 connecting-header = Connessione al Wi-Fi…
 connecting-connect = Assicursi di essere connessi alla stessa rete e aprire { $gateway-link } nel browser per proseguire l’installazione.
@@ -524,11 +564,13 @@ connecting-header-skipped = Configurazione Wi-Fi ignorata
 connecting-skipped = Il gateway è in fase di avvio. Connettersi alla stessa rete del gateway e aprire { $gateway-link } nel browser per proseguire l’installazione.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Creazione della rete Wi-Fi — WebThings Gateway
 creating-header = Creazione della rete Wi-Fi…
 creating-content = Connettersi a { $ssid } con la password appena creata, quindi aprire { $gateway-link } o { $ip-link } nel browser.
 
 ## General Terms
+
 ok = OK
 ellipsis = …
 event-log = Registro eventi

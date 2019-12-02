@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Rules
@@ -15,22 +16,26 @@ settings-menu-item = Settings
 log-out-button = Log out
 
 ## Things
+
 thing-details =
   .aria-label = View Properties
 add-things =
   .aria-label = Add New Things
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Assistant Avatar
 assistant-controls-text-input =
   .placeholder = How can I help?
 
 ## Floorplan
+
 upload-floorplan = Upload floorplan…
 upload-floorplan-hint = (.svg recommended)
 
 ## Top-Level Settings
+
 settings-domain = Domain
 settings-network = Network
 settings-users = Users
@@ -43,6 +48,7 @@ settings-experiments = Experiments
 settings-developer = Developer
 
 ## Domain Settings
+
 domain-settings-local-label = Local Access
 domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
@@ -50,6 +56,7 @@ domain-settings-local-name =
   .placeholder = gateway
 
 ## Network Settings
+
 network-settings-unsupported = Network settings are not supported for this platform.
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -95,6 +102,7 @@ failed-lan-configure = Failed to configure LAN.
 failed-wlan-configure = Failed to configure WLAN.
 
 ## User Settings
+
 create-user =
   .aria-label = Add New User
 user-settings-input-name =
@@ -113,16 +121,20 @@ user-settings-password-mismatch = Passwords do not match
 user-settings-save = Save
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = No adapters present.
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = No authorizations.
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Logs
 
 ## Localization Settings
+
 localization-settings-language-region = Language & Region
 localization-settings-country = Country
 localization-settings-timezone = Timezone
@@ -133,6 +145,7 @@ localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
+
 update-settings-update-now = Update Now
 update-available = New version available
 update-up-to-date = Your system is up to date
@@ -144,11 +157,13 @@ in-progress = In Progress
 restarting = Restarting
 
 ## Developer Settings
+
 developer-settings-enable-ssh = Enable SSH
 developer-settings-view-internal-logs = View Internal Logs
 developer-settings-create-local-authorization = Create local authorization
 
 ## Rules
+
 add-rule =
   .aria-label = Create New Rule
 rules = Rules
@@ -201,6 +216,7 @@ rule-event-lower = event
 rule-event-occurs = occurs
 
 ## Logs
+
 add-log =
   .aria-label = Create New Log
 logs = Logs
@@ -227,6 +243,7 @@ logs-unable-to-create = Unable to create log
 logs-server-remove-error = Server error: unable to remove log
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Scanning
 add-thing-scanning = Scanning for new devices…
@@ -237,11 +254,13 @@ add-thing-done = Done
 add-thing-cancel = Cancel
 
 ## Context Menu
+
 context-menu-choose-icon = Choose icon…
 context-menu-save = Save
 context-menu-remove = Remove
 
 ## Capabilities
+
 OnOffSwitch = On/Off Switch
 MultiLevelSwitch = Multi Level Switch
 ColorControl = Color Control
@@ -265,6 +284,7 @@ Custom = Custom Thing
 Thing = Thing
 
 ## Properties
+
 alarm = Alarm
 pushed = Pushed
 not-pushed = Not Pushed
@@ -294,6 +314,7 @@ active = Active
 inactive = Inactive
 
 ## Domain Setup
+
 reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
 click-here = click here
 check-email-for-token = Please check your email for a reclamation token and paste it above.
@@ -305,10 +326,12 @@ issuing-error = Error issuing certificate. Please try again.
 redirecting = Redirecting…
 
 ## Booleans
+
 true = True
 false = False
 
 ## Time
+
 utils-now = now
 utils-seconds-ago =
   { $value ->
@@ -351,6 +374,7 @@ day = Day
 week = Week
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -370,6 +394,7 @@ abbrev-millisecond = ms
 abbrev-foot = ft
 
 ## New Thing View
+
 unknown-device-type = Unknown device type
 new-thing-choose-icon = Choose icon…
 new-thing-save = Save
@@ -388,6 +413,7 @@ new-thing-saved = Saved
 new-thing-done = Done
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Enter web thing URL
 new-web-thing-label = Web Thing
@@ -396,12 +422,14 @@ new-web-thing-multiple = Multiple web things found
 new-web-thing-from = from
 
 ## Empty div Messages
+
 no-things = No devices yet. Click + to scan for available devices.
 thing-not-found = Thing not found.
 action-not-found = Action not found.
 events-not-found = This thing has no events.
 
 ## Add-on Settings
+
 add-addons =
   .aria-label = Find New Add-ons
 author-unknown = Unknown
@@ -422,6 +450,7 @@ addon-discovery-installing = Installing…
 addon-discovery-failed = Failed
 
 ## Page Titles
+
 settings = Settings
 domain = Domain
 users = Users
@@ -442,10 +471,12 @@ wifi = Wi-Fi
 icon = Icon
 
 ## Speech
+
 speech-unsupported = Current browser does not support speech
 speech-didnt-get = Sorry, I didn't get that.
 
 ## Errors
+
 unknown-state = Unknown state.
 error = Error
 errors = Errors
@@ -456,16 +487,20 @@ failed-read-file = Failed to read file.
 failed-save = Failed to save.
 
 ## Schema Form
+
 unsupported-field = Unsupported field schema
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Login — WebThings Gateway
 login-log-in = Log in
 
 ## Create First User Page
+
 signup-title = Create User — WebThings Gateway
 signup-welcome = Welcome
 signup-create-account = Create your first user account:
@@ -473,6 +508,7 @@ signup-password-mismatch = Passwords do not match
 signup-next = Next
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Choose Web Address — WebThings Gateway
 tunnel-setup-welcome = Welcome
 tunnel-setup-choose-address = Choose a secure web address for your gateway:
@@ -488,6 +524,7 @@ tunnel-setup-skip = Skip
 tunnel-setup-time-sync = Waiting for system clock to be set from the Internet. Domain registration is likely to fail until this completes.
 
 ## Authorize Page
+
 authorize-title = Authorization Request — WebThings Gateway
 authorize-authorization-request = Authorization Request
 authorize-would-like = would like to access your gateway to
@@ -501,6 +538,7 @@ authorize-allow =
 authorize-deny = Deny
 
 ## Local Token Page
+
 local-token-title = Local Token Service — WebThings Gateway
 local-token-header = Local Token Service
 local-token-your-token = Your local token is this
@@ -509,6 +547,7 @@ local-token-use-it = Use it to talk to the gateway securely, with
 local-token-bearer-type = Bearer-type Authorization
 
 ## Router Setup Page
+
 router-setup-title = Router Setup — WebThings Gateway
 router-setup-header = Create a new Wi-Fi network
 router-setup-input-ssid =
@@ -522,6 +561,7 @@ router-setup-create =
 router-setup-password-mismatch = Passwords must match
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Wi-Fi Setup — WebThings Gateway
 wifi-setup-header = Connect to a Wi-Fi network?
 wifi-setup-input-password =
@@ -534,6 +574,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Skip
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Connecting to Wi-Fi — WebThings Gateway
 connecting-header = Connecting to Wi-Fi…
 connecting-connect = Please ensure you are connected to the same network and then navigate to { $gateway-link } in your web browser to continue setup.
@@ -542,11 +583,13 @@ connecting-header-skipped = Wi-Fi setup skipped
 connecting-skipped = The gateway is now being started. Navigate to { $gateway-link } in your web browser while connected to the same network as the gateway to continue setup.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Creating Wi-Fi Network — WebThings Gateway
 creating-header = Creating Wi-Fi network…
 creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
 ## General Terms
+
 ok = Ok
 ellipsis = …
 event-log = Event Log
@@ -557,6 +600,7 @@ processing = Processing…
 submit = Submit
 
 ## Top-Level Buttons
+
 menu-button =
   .aria-label = Menu
 back-button =
