@@ -11,20 +11,20 @@ assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Règles
 logs-menu-item = Journaux
-floorplan-menu-item = Plan d'étage
+floorplan-menu-item = Plan d’étage
 settings-menu-item = Paramètres
 log-out-button = Déconnexion
 
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Avatar d'assistant
+  .alt = Avatar d’assistant
 assistant-controls-text-input =
   .placeholder = Comment puis-je vous aider ?
 
 ## Floorplan
 
-upload-floorplan = Envoyer un plan d'étage…
+upload-floorplan = Envoyer un plan d’étage…
 upload-floorplan-hint = (.svg recommandé)
 
 ## Top-Level Settings
@@ -43,7 +43,7 @@ settings-developer = Développeur
 ## Domain Settings
 
 domain-settings-local-label = Accès local
-domain-settings-local-update = Modifiez nom d'hôte
+domain-settings-local-update = Modifiez nom d’hôte
 domain-settings-remote-access = Accès à distance
 domain-settings-local-name =
   .placeholder = gateway
@@ -77,7 +77,7 @@ network-settings-wifi-password =
   .placeholder = Mot de passe
 network-settings-show-password = Montrer mot de passe
 network-settings-connect = Se connecter
-network-settings-username = Nom d'utilisateur
+network-settings-username = Nom d’utilisateur
 network-settings-password = Mot de passe
 network-settings-router-ip = Adresse IP du routeur
 network-settings-dhcp-server = Serveur DHCP
@@ -165,7 +165,7 @@ rules-preview-button =
 rules-delete-icon =
   .alt = Supprimer
 rules-drag-hint = Faire glisser les périphériques ici pour créer une règle
-rules-drag-input-hint = Ajouter un périphérique d'entrée
+rules-drag-input-hint = Ajouter un périphérique d’entrée
 rules-drag-output-hint = Ajouter un périphérique de sortie
 rules-scroll-left =
   .alt = Défiler vers la gauche
@@ -199,7 +199,7 @@ notification-high = Élevé
 rule-name = Nom de la règle
 rule-and = et
 rule-or = ou
-rule-time-of-day-is = l'heure est
+rule-time-of-day-is = l’heure est
 rule-event-lower = événement
 rule-event-occurs = à lieu
 
@@ -234,14 +234,14 @@ add-thing-scanning-icon =
   .alt = Recherche
 add-thing-scanning = Recherche de nouveaux périphériques…
 add-thing-add-adapters-hint = Rien de nouveau trouvé. Essayez
-add-thing-add-adapters-hint-anchor = d'installer des composants additionnels
+add-thing-add-adapters-hint-anchor = d’installer des composants additionnels
 add-thing-add-by-url = Ajouter par URL…
 add-thing-done = Terminé
 add-thing-cancel = Annuler
 
 ## Context Menu
 
-context-menu-choose-icon = Sélectionner l'icône…
+context-menu-choose-icon = Sélectionner l’icône…
 context-menu-save = Enregistrer
 context-menu-remove = Supprimer
 
@@ -251,7 +251,7 @@ OnOffSwitch = Interrupteur marche/arrêt
 MultiLevelSwitch = Interrupteur multi-niveaux
 ColorControl = Contrôle de couleur
 ColorSensor = Capteur de couleur
-EnergyMonitor = Dispositif de surveillance d'énergie
+EnergyMonitor = Dispositif de surveillance d’énergie
 BinarySensor = Capteur binaire
 MultiLevelSensor = Capteur multi-niveaux
 SmartPlug = Prise intelligente
@@ -379,7 +379,7 @@ abbrev-foot = pi
 ## New Thing View
 
 unknown-device-type = Type de périphérique inconnu
-new-thing-choose-icon = Sélectionner  l'icône…
+new-thing-choose-icon = Sélectionner l’icône…
 new-thing-save = Enregistrer
 new-thing-pin =
   .placeholder = Entrer le NIP
@@ -388,17 +388,17 @@ new-thing-pin-invalid = NIP non valide
 new-thing-cancel = Annuler
 new-thing-submit = Soumettre
 new-thing-username =
-  .placeholder = Entrer le nom d'utilisateur
+  .placeholder = Entrer le nom d’utilisateur
 new-thing-password =
   .placeholder = Entrer le mot de passe
-new-thing-credentials-error = Informations d'identification non valides
+new-thing-credentials-error = Informations d’identification non valides
 new-thing-saved = Enregistré
 new-thing-done = Terminé
 
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Entrer l'URL de la WebThing
+  .placeholder = Entrer l’URL de la WebThing
 new-web-thing-label = WebThing
 loading = Chargement…
 new-web-thing-multiple = Plusieurs WebThings trouvées
@@ -409,7 +409,7 @@ new-web-thing-from = de
 no-things = Aucun périphérique. Cliquer sur + analyser les périphériques disponibles.
 thing-not-found = Thing non trouvé.
 action-not-found = Action non trouvée.
-events-not-found = Cette thing n'a aucun événement.
+events-not-found = Cette thing n’a aucun événement.
 
 ## Add-on Settings
 
@@ -435,7 +435,7 @@ addon-discovery-failed = Échec
 settings = Paramètres
 domain = Domaine
 users = Utilisateurs
-edit-user = Modifier l'utilisateur
+edit-user = Modifier l’utilisateur
 add-user = Ajouter un utilisateur
 adapters = Adaptateurs
 addons = Composants additionnels
@@ -462,10 +462,10 @@ unknown-state = État inconnu.
 error = Erreur
 errors = Erreurs
 gateway-unreachable = Passerelle inaccessible
-more-information = Plus d'informations
+more-information = Plus d’informations
 invalid-file = Fichier non valide.
 failed-read-file = Échec de lecture du fichier.
-failed-save = Échec d'enregistrement.
+failed-save = Échec d’enregistrement.
 
 ## Schema Form
 
@@ -495,19 +495,19 @@ tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
   .placeholder = sous-domaine
-tunnel-setup-opt-in = Veuillez m'informer des nouvelles fonctionnalités ou des opportunités de contributions.
+tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de contributions.
 tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
   .placeholder = Jeton de récupération
 tunnel-setup-error = Une erreur est survenue en créant la sous-domaine.
 tunnel-setup-create = Créer
 tunnel-setup-skip = Ignorer
-tunnel-setup-time-sync = En attente de connexion pour mettre à jour l'horloge système depuis Internet. L'enregistrement du domaine risque de ne pas fonctionner tant que l'horloge n'est pas à jour.
+tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge système depuis Internet. L’enregistrement du domaine risque de ne pas fonctionner tant que l’horloge n’est pas à jour.
 
 ## Authorize Page
 
-authorize-title = Demande d'autorisation — WebThings Gateway
-authorize-authorization-request = Demande d'autorisation
+authorize-title = Demande d’autorisation — WebThings Gateway
+authorize-authorization-request = Demande d’autorisation
 authorize-would-like = veut accéder à votre passerelle pour
 authorize-devices = périphériques.
 authorize-from = de
@@ -523,8 +523,8 @@ authorize-deny = Refuser
 local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
-local-token-jwt =  jeton Web JSON
-local-token-use-it = L'utiliser pour communiquer avec votre passerelle en toute sécurité avec
+local-token-jwt = jeton Web JSON
+local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec
 local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
@@ -559,7 +559,7 @@ wifi-setup-skip = Ignorer
 connecting-title = Connexion en cours — WebThings Gateway
 connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
-connecting-warning = Si vous ne pouvez charger { $domain }, trouver l'adresse IP dans votre routeur.
+connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
 connecting-header-skipped = Configuration Wi-Fi ignoré.
 connecting-skipped = La passerelle démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 

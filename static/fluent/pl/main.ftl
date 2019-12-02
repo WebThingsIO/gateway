@@ -551,7 +551,7 @@ authorize-deny = Zabroń
 ## Local Token Page
 
 local-token-title = Usługa Tokenów Lokalnych — WebThings Gateway
-local-token-header =  Usługa Tokenów Lokalnych
+local-token-header = Usługa Tokenów Lokalnych
 local-token-your-token = Twój lokalny token jest następujący
 local-token-jwt = JSON Web Token
 local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą

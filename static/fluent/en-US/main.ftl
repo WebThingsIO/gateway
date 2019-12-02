@@ -315,7 +315,7 @@ inactive = Inactive
 
 ## Domain Setup
 
-reclaim-prompt = It looks like you've already registered that subdomain. To reclaim it
+reclaim-prompt = It looks like you’ve already registered that subdomain. To reclaim it
 click-here = click here
 check-email-for-token = Please check your email for a reclamation token and paste it above.
 reclaim-failed = Could not reclaim domain.
@@ -473,7 +473,7 @@ icon = Icon
 ## Speech
 
 speech-unsupported = Current browser does not support speech
-speech-didnt-get = Sorry, I didn't get that.
+speech-didnt-get = Sorry, I didn’t get that.
 
 ## Errors
 
@@ -578,7 +578,7 @@ wifi-setup-skip = Skip
 connecting-title = Connecting to Wi-Fi — WebThings Gateway
 connecting-header = Connecting to Wi-Fi…
 connecting-connect = Please ensure you are connected to the same network and then navigate to { $gateway-link } in your web browser to continue setup.
-connecting-warning = Note: If you are unable to load { $domain }, look up the gateway's IP address on your router.
+connecting-warning = Note: If you are unable to load { $domain }, look up the gateway’s IP address on your router.
 connecting-header-skipped = Wi-Fi setup skipped
 connecting-skipped = The gateway is now being started. Navigate to { $gateway-link } in your web browser while connected to the same network as the gateway to continue setup.
 

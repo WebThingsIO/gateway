@@ -396,7 +396,7 @@ abbrev-foot = pi
 ## New Thing View
 
 unknown-device-type = Type de périphérique inconnu
-new-thing-choose-icon = Sélectionner  l’icône…
+new-thing-choose-icon = Sélectionner l’icône…
 new-thing-save = Enregistrer
 new-thing-pin =
   .placeholder = Entrer le NIP
@@ -542,7 +542,7 @@ authorize-deny = Refuser
 local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
-local-token-jwt =  jeton Web JSON
+local-token-jwt = jeton Web JSON
 local-token-use-it = L’utiliser pour communiquer avec votre Gateway en toute sécurité avec
 local-token-bearer-type = « Bearer-type Authorization »
 
