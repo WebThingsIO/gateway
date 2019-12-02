@@ -1,9 +1,22 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = WebThings Gateway
+-mozilla-iot-brand = Mozilla IoT
+
 # Main Title
-webthings-gateway = WebThings Gateway
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -mozilla-iot-brand }
 
 ## Menu Items
 
@@ -489,12 +502,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Connexion — WebThings Gateway
+login-title = Connexion — { -webthings-gateway-brand }
 login-log-in = Connexion
 
 ## Create First User Page
 
-signup-title = Créer un utilisateur — WebThings Gateway
+signup-title = Créer un utilisateur — { -webthings-gateway-brand }
 signup-welcome = Bienvenue
 signup-create-account = Créer votre premier utilisateur :
 signup-password-mismatch = Les mots de passe ne correspondent pas
@@ -502,7 +515,7 @@ signup-next = Suivant
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Sélectionner une adresse web — WebThings Gateway
+tunnel-setup-title = Sélectionner une adresse web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
@@ -518,7 +531,7 @@ tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge
 
 ## Authorize Page
 
-authorize-title = Demande d’autorisation — WebThings Gateway
+authorize-title = Demande d’autorisation — { -webthings-gateway-brand }
 authorize-authorization-request = Demande d’autorisation
 authorize-monitor-and-control = surveiller et contrôler
 authorize-monitor = surveiller
@@ -529,14 +542,14 @@ authorize-deny = Refuser
 
 ## Local Token Page
 
-local-token-title = Service de jeton locale — WebThings Gateway
+local-token-title = Service de jeton locale — { -webthings-gateway-brand }
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est <a data-l10n-name="local-token-jwt">jeton Web JSON</a>.
 local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
 
 ## Router Setup Page
 
-router-setup-title = Configuration du routeur — WebThings Gateway
+router-setup-title = Configuration du routeur — { -webthings-gateway-brand }
 router-setup-header = Créer un réseau Wi-Fi
 router-setup-input-ssid =
   .placeholder = Nom du réseau
@@ -550,7 +563,7 @@ router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
+wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }
 wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
   .placeholder = Mot de passe
@@ -563,7 +576,7 @@ wifi-setup-skip = Ignorer
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Connexion en cours — WebThings Gateway
+connecting-title = Connexion en cours — { -webthings-gateway-brand }
 connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
 connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
@@ -572,7 +585,7 @@ connecting-skipped = La passerelle démarre. Restez connecté au même réseau, 
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Création du réseau Wi-Fi en cours — WebThings Gateway
+creating-title = Création du réseau Wi-Fi en cours — { -webthings-gateway-brand }
 creating-header = Création du réseau Wi-Fi en cours…
 creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
 

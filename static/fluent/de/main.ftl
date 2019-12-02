@@ -1,9 +1,22 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = WebThings Gateway
+-mozilla-iot-brand = Mozilla IoT
+
 # Main Title
-webthings-gateway = WebThings Gateway
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -mozilla-iot-brand }
 
 ## Menu Items
 
@@ -471,12 +484,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Login - WebThings Gateway
+login-title = Login — { -webthings-gateway-brand }
 login-log-in = Anmelden
 
 ## Create First User Page
 
-signup-title = Benutzer anlegen - WebThings Gateway
+signup-title = Benutzer anlegen — { -webthings-gateway-brand }
 signup-welcome = Willkommen
 signup-create-account = Ersten Benutzer anlegen:
 signup-password-mismatch = Passwörter sind nicht gleich
@@ -484,7 +497,7 @@ signup-next = Weiter
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Subdomain wählen - WebThings Gateway
+tunnel-setup-title = Subdomain wählen — { -webthings-gateway-brand }
 tunnel-setup-welcome = Willkommen
 tunnel-setup-choose-address = Sichere URL für das Gateway:
 tunnel-setup-input-subdomain =
@@ -500,7 +513,7 @@ tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das 
 
 ## Authorize Page
 
-authorize-title = Authorisierungsanfrage - WebThings Gateway
+authorize-title = Authorisierungsanfrage — { -webthings-gateway-brand }
 authorize-authorization-request = Authorisierungsanfrage
 authorize-monitor-and-control = Überwachen und kontrollieren
 authorize-monitor = Überwachen
@@ -511,14 +524,14 @@ authorize-deny = Ablehnen
 
 ## Local Token Page
 
-local-token-title = Dienst für lokale Token - WebThings Gateway
+local-token-title = Dienst für lokale Token — { -webthings-gateway-brand }
 local-token-header = Dienst für lokale Token
 local-token-your-token = Das lokale Zugriffstoken ist <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
 local-token-use-it = Zugriff auf das Gateway über <a data-l10n-name="local-token-bearer-type">Bearer-type Authorisierung</a>
 
 ## Router Setup Page
 
-router-setup-title = Router-Setup - WebThings Gateway
+router-setup-title = Router-Setup — { -webthings-gateway-brand }
 router-setup-header = Neues Wi-Fi-Netzwerk erzeugen
 router-setup-input-ssid =
   .placeholder = Netzwerkname
@@ -532,7 +545,7 @@ router-setup-password-mismatch = Passwörter sind nicht gleich
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi-Setup - WebThings Gateway
+wifi-setup-title = Wi-Fi-Setup — { -webthings-gateway-brand }
 wifi-setup-header = Mit Wi-Fi-Netzwerk verbinden?
 wifi-setup-input-password =
   .placeholder = Passwort
@@ -545,7 +558,7 @@ wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Wi-Fi-Verbindung herstellen - WebThings Gateway
+connecting-title = Wi-Fi-Verbindung herstellen — { -webthings-gateway-brand }
 connecting-header = Verbindung wird hergestellt…
 connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und
  das Setup unter { $gateway-link } im Webbrowser fortsetzen.
@@ -557,7 +570,7 @@ connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Neues Wi-Fi-Netzwerk anlegen - WebThings Gateway
+creating-title = Neues Wi-Fi-Netzwerk anlegen — { -webthings-gateway-brand }
 creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
 creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
  aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.

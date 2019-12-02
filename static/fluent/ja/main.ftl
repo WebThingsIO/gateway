@@ -44,7 +44,7 @@ assistant-controls-text-input =
 
 ## Floorplan
 
-upload-floorplan = 間取り図をアップロード...
+upload-floorplan = 間取り図をアップロード…
 upload-floorplan-hint = (.svg 推奨)
 
 ## Top-Level Settings
@@ -212,7 +212,7 @@ rule-select-property = プロパティを選択してください
 rule-not = Not
 rule-event = イベント
 rule-action = アクション
-rule-configure = 設定変更...
+rule-configure = 設定変更…
 rule-time-title = 日時
 rule-notification = 通知
 notification-title = タイトル
@@ -254,15 +254,15 @@ logs-server-remove-error = サーバーエラー: ログを削除できません
 
 add-thing-scanning-icon =
   .alt = スキャン中
-add-thing-scanning = 新しいデバイスをスキャン中...
+add-thing-scanning = 新しいデバイスをスキャン中…
 add-thing-add-adapters-hint = 新しい Thing は見つかりませんでした。<a data-l10n-name="add-thing-add-adapters-hint-anchor">アドオンを追加してみてください</a>。
-add-thing-add-by-url = URL を指定して追加...
+add-thing-add-by-url = URL を指定して追加…
 add-thing-done = 完了
 add-thing-cancel = キャンセル
 
 ## Context Menu
 
-context-menu-choose-icon = アイコンを選択...
+context-menu-choose-icon = アイコンを選択…
 context-menu-save = 保存
 context-menu-remove = 削除
 
@@ -327,9 +327,9 @@ check-email-for-token = メールアドレスに送信された再利用トー�
 reclaim-failed = ドメインを再利用できませんでした。
 subdomain-already-used = このサブドメインはすでに使用されています。別のサブドメインを指定してください。
 invalid-reclamation-token = 無効な再利用トークンです。
-domain-success = 完了しました。リダイレクトする間しばらくお待ちください...
+domain-success = 完了しました。リダイレクトする間しばらくお待ちください…
 issuing-error = 証明書の発行でエラーが発生しました。もう一度試してください。
-redirecting = リダイレクト中...
+redirecting = リダイレクト中…
 
 ## Booleans
 
@@ -402,7 +402,7 @@ abbrev-foot = ft
 ## New Thing View
 
 unknown-device-type = デバイスの種類が不明です
-new-thing-choose-icon = アイコンを選択...
+new-thing-choose-icon = アイコンを選択…
 new-thing-save = 保存
 new-thing-pin =
   .placeholder = PIN を入力
@@ -423,7 +423,7 @@ new-thing-done = 完了
 new-web-thing-url =
   .placeholder = Web Thing の URL を入力
 new-web-thing-label = Web Thing
-loading = 読み込み中...
+loading = 読み込み中…
 new-web-thing-multiple = 複数の Web Thing が見つかりました
 new-web-thing-from = 場所
 
@@ -445,14 +445,14 @@ by = 作者:
 addon-configure = 設定変更
 addon-update = 更新
 addon-remove = 削除
-addon-updating = 更新中...
+addon-updating = 更新中…
 addon-updated = 更新しました
 addon-update-failed = 失敗しました
-addon-config-applying = 適用中...
+addon-config-applying = 適用中…
 addon-config-apply = 適用
 addon-discovery-added = 追加しました
 addon-discovery-add = 追加
-addon-discovery-installing = インストール中...
+addon-discovery-installing = インストール中…
 addon-discovery-failed = 失敗しました
 
 ## Page Titles
@@ -577,7 +577,7 @@ wifi-setup-skip = スキップ
 ## Connecting to Wi-Fi Page
 
 connecting-title = Wi-Fi への接続 — { -webthings-gateway-brand }
-connecting-header = Wi-Fi に接続中...
+connecting-header = Wi-Fi に接続中…
 connecting-connect = 同じネットワークに接続し、ウェブブラウザーで { $gateway-link } を開いてゲートウェイのセットアップを続けてください。
 connecting-warning = 注記: { $domain } を読み込めない場合は、ご使用のルーターのゲートウェイの IP アドレスを調べてください。
 connecting-header-skipped = Wi-Fi セットアップをスキップしました
@@ -586,18 +586,18 @@ connecting-skipped = ゲートウェイの動作を開始しました。同じ�
 ## Creating Wi-Fi Network Page
 
 creating-title = Wi-Fi ネットワークの作成 — { -webthings-gateway-brand }
-creating-header = Wi-Fi ネットワークを作成中...
+creating-header = Wi-Fi ネットワークを作成中…
 creating-content = 作成したパスワードを入力して { $ssid } に接続し、ウェブブラウザーで { $gateway-link } または { $ip-link } を開いてください。
 
 ## General Terms
 
 ok = OK
-ellipsis = ...
+ellipsis = …
 event-log = イベントログ
 edit = 編集
 remove = 削除
 disconnected = 切断しました
-processing = 処理中...
+processing = 処理中…
 submit = 送信
 
 ## Top-Level Buttons

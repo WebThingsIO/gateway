@@ -1,9 +1,22 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = { -webthings-gateway-brand }
+-mozilla-iot-brand = { -mozilla-iot-brand }
+
 # Main Title
-webthings-gateway = WebThings мрежни пролаз
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -mozilla-iot-brand }
 
 ## Menu Items
 
@@ -496,12 +509,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Пријава — WebThings мрежни пролаз
+login-title = Пријава — { -webthings-gateway-brand }
 login-log-in = Пријави ме
 
 ## Create First User Page
 
-signup-title = Направи корисника — WebThings мрежни пролаз
+signup-title = Направи корисника — { -webthings-gateway-brand }
 signup-welcome = Добро дошли
 signup-create-account = Направите ваш први кориснички налог:
 signup-password-mismatch = Лозинке се не подударају
@@ -509,7 +522,7 @@ signup-next = Следеће
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Изаберите веб адресу — WebThings мрежни пролаз
+tunnel-setup-title = Изаберите веб адресу — { -webthings-gateway-brand }
 tunnel-setup-welcome = Добро дошли
 tunnel-setup-choose-address = Изаберите безбедну веб адресу за ваш мрежни пролаз:
 tunnel-setup-input-subdomain =
@@ -525,7 +538,7 @@ tunnel-setup-time-sync = Чекам да се системско време по
 
 ## Authorize Page
 
-authorize-title = Захтев за пуномоћје — WebThings мрежни пролаз
+authorize-title = Захтев за пуномоћје — { -webthings-gateway-brand }
 authorize-authorization-request = Захтев за пуномоћје
 authorize-monitor-and-control = надгледао и управљао
 authorize-monitor = управљао
@@ -536,14 +549,14 @@ authorize-deny = Одбиј
 
 ## Local Token Page
 
-local-token-title = Услуга локалног жетона — WebThings мрежни пролаз
+local-token-title = Услуга локалног жетона — { -webthings-gateway-brand }
 local-token-header = Услуга локалног жетона
 local-token-your-token = Ово је ваш локални жетон <a data-l10n-name="local-token-jwt">JSON веб жетон</a>.
 local-token-use-it = Користите га за безбедну комуникацију са овим мрежним пролазом, уз <a data-l10n-name="local-token-bearer-type">Bearer-type пуномоћје</a>.
 
 ## Router Setup Page
 
-router-setup-title = Подешавање рутера — WebThings мрежни пролаз
+router-setup-title = Подешавање рутера — { -webthings-gateway-brand }
 router-setup-header = Направите нову бежичну мрежу
 router-setup-input-ssid =
   .placeholder = Назив мреже
@@ -557,7 +570,7 @@ router-setup-password-mismatch = Лозинке се морају подудар
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Подешавање бежичне — WebThings мрежни пролаз
+wifi-setup-title = Подешавање бежичне — { -webthings-gateway-brand }
 wifi-setup-header = Повезати се на бежичну (вај-фај) мрежу?
 wifi-setup-input-password =
   .placeholder = Лозинка
@@ -570,7 +583,7 @@ wifi-setup-skip = Прескочи
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Повезивање на бежичну — WebThings мрежни пролаз
+connecting-title = Повезивање на бежичну — { -webthings-gateway-brand }
 connecting-header = Повезујем се на бежичну мрежу…
 connecting-connect = Постарајте се да сте повезани на исту мрежу и онда отворите { $gateway-link } у вашем веб прегледачу за наставак подешавања.
 connecting-warning = Напомена: Уколико не можете да учитате страницу { $domain }, потражите ИП адресу вашег мрежног пролаза на вашем рутеру.
@@ -579,7 +592,7 @@ connecting-skipped = Мрежни пролаз се управо покреће.
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Стварање бежичне мреже — WebThings мрежни пролаз
+creating-title = Стварање бежичне мреже — { -webthings-gateway-brand }
 creating-header = Правим бежичну мрежу…
 creating-content = Повежите се на мрежу { $ssid } са лозинком коју сте управо направили, па онда отворите страницу { $gateway-link } или ИП адресу { $ip-link } у вашем веб прегледачу.
 

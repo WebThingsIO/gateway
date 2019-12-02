@@ -1,9 +1,22 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = WebThings Gateway
+-mozilla-iot-brand = Mozilla IoT
+
 # Main Title
-webthings-gateway = WebThings Gateway
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -mozilla-iot-brand }
 
 ## Menu Items
 
@@ -471,12 +484,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Aanmelden — WebThings Gateway
+login-title = Aanmelden — { -webthings-gateway-brand }
 login-log-in = Aanmelden
 
 ## Create First User Page
 
-signup-title = Gebruiker toevoegen — WebThings Gateway
+signup-title = Gebruiker toevoegen — { -webthings-gateway-brand }
 signup-welcome = Welkom
 signup-create-account = Maak uw eerste gebruiker aan:
 signup-password-mismatch = Wachtwoorden zijn niet gelijk
@@ -484,7 +497,7 @@ signup-next = Volgende
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Kies webadres — WebThings Gateway
+tunnel-setup-title = Kies webadres — { -webthings-gateway-brand }
 tunnel-setup-welcome = Welkom
 tunnel-setup-choose-address = Kies een beveiligd webadres voor uw gateway:
 tunnel-setup-input-subdomain =
@@ -500,7 +513,7 @@ tunnel-setup-time-sync = Wacht op het instellen van de klok via internet. Domein
 
 ## Authorize Page
 
-authorize-title = Autorisatieaanvraag- WebThings Gateway
+authorize-title = Autorisatieaanvraag- { -webthings-gateway-brand }
 authorize-authorization-request = Autorisatieaanvraag
 authorize-monitor-and-control = bekijken en instellen
 authorize-monitor = bekijken
@@ -511,14 +524,14 @@ authorize-deny = Weigeren
 
 ## Local Token Page
 
-local-token-title = Lokale tokendienst — WebThings Gateway
+local-token-title = Lokale tokendienst — { -webthings-gateway-brand }
 local-token-header = Lokale tokendienst
 local-token-your-token = Je lokale token is <a data-l10n-name="local-token-jwt">JSON Web-token</a>.
 local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
 
 ## Router Setup Page
 
-router-setup-title = Routerinstellingen — WebThings Gateway
+router-setup-title = Routerinstellingen — { -webthings-gateway-brand }
 router-setup-header = Maak een Wi-Fi-verbinding
 router-setup-input-ssid =
   .placeholder = Netwerknaam
@@ -532,7 +545,7 @@ router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi-instellingen — WebThings Gateway
+wifi-setup-title = Wi-Fi-instellingen — { -webthings-gateway-brand }
 wifi-setup-header = Verbinden met Wi-Fi-netwerk?
 wifi-setup-input-password =
   .placeholder = Wachtwoord
@@ -545,7 +558,7 @@ wifi-setup-skip = Overslaan
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Verbinden met Wi-Fi — WebThings Gateway
+connecting-title = Verbinden met Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Verbinden met Wi-Fi…
 connecting-connect = Controleer of u verbonden bent met hetzelfde netwerk en
  navigeer dan naar { $gateway-link } in uw webbrowser om de installatie te voltooien.
@@ -558,7 +571,7 @@ connecting-skipped = De gateway wordt opgestart. Navigeer naar
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi-netwerk maken — WebThings Gateway
+creating-title = Wi-Fi-netwerk maken — { -webthings-gateway-brand }
 creating-header = Wi-Fi-netwerk maken…
 creating-content = Verbind met { $ssid } en het ingestelde wachtwoord,
  navigeer daarna naar { $gateway-link } of { $ip-link } in uw webbrowser.
