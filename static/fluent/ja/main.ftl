@@ -260,9 +260,8 @@ logs-server-remove-error = サーバーエラー: ログを削除できません
 add-thing-scanning-icon =
   .alt = スキャン中
 add-thing-scanning = 新しいデバイスをスキャン中...
-add-thing-add-adapters-hint = 新しい Thing は見つかりませんでした。
-add-thing-add-adapters-hint-anchor = アドオンを追加してください。
-add-thing-add-by-url = アドオンの URL で追加...
+add-thing-add-adapters-hint = 新しい Thing は見つかりませんでした。<a data-l10n-name="add-thing-add-adapters-hint-anchor">アドオンを追加してみてください</a>。
+add-thing-add-by-url = URL を指定して追加...
 add-thing-done = 完了
 add-thing-cancel = キャンセル
 
