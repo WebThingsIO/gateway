@@ -538,9 +538,6 @@ tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internet
 
 authorize-title = Wniosek o Autoryzację — WebThings Gateway
 authorize-authorization-request = Wniosek o autoryzację
-authorize-would-like = chce uzyskać dostęp do twojej bramy do
-authorize-devices = urządzenia.
-authorize-from = z
 authorize-monitor-and-control = monitorowania i kontroli
 authorize-monitor = monitorowania
 authorize-allow-all = Pozwól dla wszystkich Rzeczy

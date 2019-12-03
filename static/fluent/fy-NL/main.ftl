@@ -509,9 +509,6 @@ tunnel-setup-time-sync = Wacht op it ynstellen fan de klok fia ynternet. Domeinr
 
 authorize-title = Autorisaasje-oanfraach — WebThings Gateway
 authorize-authorization-request = Autorisaasje-oanfraach
-authorize-would-like = wol graach tagong ta jo gateway
-authorize-devices = apparaten.
-authorize-from = fan/út
 authorize-monitor-and-control = besjen en ynstelle
 authorize-monitor = besjen
 authorize-allow-all = Tastean foar alle Things

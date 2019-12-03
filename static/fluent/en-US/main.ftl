@@ -527,9 +527,10 @@ tunnel-setup-time-sync = Waiting for system clock to be set from the Internet. D
 
 authorize-title = Authorization Request — WebThings Gateway
 authorize-authorization-request = Authorization Request
-authorize-would-like = would like to access your gateway to
-authorize-devices = devices.
-authorize-from = from
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> would like to access your gateway to <<function>> devices.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = from <<domain>>
 authorize-monitor-and-control = monitor and control
 authorize-monitor = monitor
 authorize-allow-all = Allow for all Things
