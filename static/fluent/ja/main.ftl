@@ -1,11 +1,25 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = { -webthings-gateway-brand }
+-mozilla-iot-brand = { -mozilla-iot-brand }
+
 # Main Title
-webthings-gateway = WebThings Gateway
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -mozilla-iot-brand }
 
 ## Menu Items
+
 assistant-menu-item = アシスタント
 things-menu-item = Thing
 rules-menu-item = ルール
@@ -15,22 +29,26 @@ settings-menu-item = 環境設定
 log-out-button = ログアウト
 
 ## Things
+
 thing-details =
   .aria-label = プロパティを表示
 add-things =
   .aria-label = 新しい Thing を追加
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = アシスタントアバター
 assistant-controls-text-input =
   .placeholder = How can I help?
 
 ## Floorplan
+
 upload-floorplan = 間取り図をアップロード...
 upload-floorplan-hint = (.svg 推奨)
 
 ## Top-Level Settings
+
 settings-domain = ドメイン
 settings-network = ネットワーク
 settings-users = ユーザー
@@ -43,6 +61,7 @@ settings-experiments = 実験
 settings-developer = 開発者向け
 
 ## Domain Settings
+
 domain-settings-local-label = ローカルアクセス
 domain-settings-local-update = ホスト名を更新
 domain-settings-remote-access = リモートアクセス
@@ -50,6 +69,7 @@ domain-settings-local-name =
   .placeholder = ゲートウェイ
 
 ## Network Settings
+
 network-settings-unsupported = このプラットフォームはネットワーク設定をサポートしていません。
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -95,6 +115,7 @@ failed-lan-configure = LAN の設定変更に失敗しました。
 failed-wlan-configure = WLAN の設定変更に失敗しました。
 
 ## User Settings
+
 create-user =
   .aria-label = 新しいユーザーを追加
 user-settings-input-name =
@@ -113,16 +134,20 @@ user-settings-password-mismatch = パスワードが一致しません
 user-settings-save = 保存
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = アダプターがありません。
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = 認証情報がありません。
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = スマートアシスタント
 experiment-settings-logs = ログ
 
 ## Localization Settings
+
 localization-settings-language-region = 言語と地域
 localization-settings-country = 国
 localization-settings-timezone = タイムゾーン
@@ -133,6 +158,7 @@ localization-settings-units-temperature-celsius = 摂氏 (℃)
 localization-settings-units-temperature-fahrenheit = 華氏 (℉)
 
 ## Update Settings
+
 update-settings-update-now = 今すぐ更新
 update-available = 新しいバージョンに更新できます
 update-up-to-date = ご使用のシステムは最新です
@@ -144,11 +170,13 @@ in-progress = 更新中
 restarting = 再起動中
 
 ## Developer Settings
+
 developer-settings-enable-ssh = SSH を有効化
 developer-settings-view-internal-logs = 内部ログを表示
 developer-settings-create-local-authorization = ローカルの認証情報を作成
 
 ## Rules
+
 add-rule =
   .aria-label = 新しいルールを作成
 rules = Rules
@@ -201,6 +229,7 @@ rule-event-lower = イベント
 rule-event-occurs = 繰り返し
 
 ## Logs
+
 add-log =
   .aria-label = 新しいログを作成
 logs = ログ
@@ -227,6 +256,7 @@ logs-unable-to-create = ログを作成できません
 logs-server-remove-error = サーバーエラー: ログを削除できません
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = スキャン中
 add-thing-scanning = 新しいデバイスをスキャン中...
@@ -237,11 +267,13 @@ add-thing-done = 完了
 add-thing-cancel = キャンセル
 
 ## Context Menu
+
 context-menu-choose-icon = アイコンを選択...
 context-menu-save = 保存
 context-menu-remove = 削除
 
 ## Capabilities
+
 OnOffSwitch = On/Off スイッチ
 MultiLevelSwitch = マルチレベルスイッチ
 ColorControl = カラーコントロール
@@ -265,6 +297,7 @@ Custom = カスタム Thing
 Thing = Thing
 
 ## Properties
+
 alarm = アラーム
 pushed = 押されました
 not-pushed = 押されていません
@@ -294,9 +327,8 @@ active = 動作しています
 inactive = 停止しています
 
 ## Domain Setup
-reclaim-prompt = サブドメインをすでに登録済みのようです。これを再利用するには
-	It looks like you've already registered that subdomain. To reclaim it
-click-here = ここをクリックしてください
+
+tunnel-setup-reclaim-domain = サブドメインをすでに登録済みのようです。これを再利用するには <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">ここをクリックしてください</a>。
 check-email-for-token = メールアドレスに送信された再利用トークンを確認し、上記に貼り付けてください。
 reclaim-failed = ドメインを再利用できませんでした。
 subdomain-already-used = このサブドメインはすでに使用されています。別のサブドメインを指定してください。
@@ -306,45 +338,47 @@ issuing-error = 証明書の発行でエラーが発生しました。もう一�
 redirecting = リダイレクト中...
 
 ## Booleans
+
 true = 真
 false = 偽
 
 ## Time
+
 utils-now = 直前
 utils-seconds-ago =
   { $value ->
       [one] { $value } 秒前
-      *[other] { $value } 秒前
+     *[other] { $value } 秒前
   }
 utils-minutes-ago =
   { $value ->
       [one] { $value } 分前
-      *[other] { $value } 分前
+     *[other] { $value } 分前
   }
 utils-hours-ago =
   { $value ->
       [one] { $value } 時間前
-      *[other] { $value } 時間前
+     *[other] { $value } 時間前
   }
 utils-days-ago =
   { $value ->
       [one] { $value } 日前
-      *[other] { $value } 日前
+     *[other] { $value } 日前
   }
 utils-weeks-ago =
   { $value ->
       [one] { $value } 週間前
-      *[other] { $value } 週間前
+     *[other] { $value } 週間前
   }
 utils-months-ago =
   { $value ->
       [one] { $value } か月前
-      *[other] { $value } か月前
+     *[other] { $value } か月前
   }
 utils-years-ago =
   { $value ->
       [one] { $value } 年前
-      *[other] { $value } 年前
+     *[other] { $value } 年前
   }
 minute = 分
 hour = 時間
@@ -352,6 +386,7 @@ day = 日
 week = 週間
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -371,6 +406,7 @@ abbrev-millisecond = ms
 abbrev-foot = ft
 
 ## New Thing View
+
 unknown-device-type = デバイスの種類が不明です
 new-thing-choose-icon = アイコンを選択...
 new-thing-save = 保存
@@ -389,6 +425,7 @@ new-thing-saved = 保存しました
 new-thing-done = 完了
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Web Thing の URL を入力
 new-web-thing-label = Web Thing
@@ -397,12 +434,14 @@ new-web-thing-multiple = 複数の Web Thing が見つかりました
 new-web-thing-from = 場所
 
 ## Empty div Messages
+
 no-things = まだデバイスがありません。+ 記号をクリックして利用可能なデバイスをスキャンしてください。
 thing-not-found = Thing が見つかりませんでした。
 action-not-found = アクションが見つかりませんでした。
 events-not-found = この Thing にはイベントがありません。
 
 ## Add-on Settings
+
 add-addons =
   .aria-label = 新しいアドオンを検索
 author-unknown = 不明
@@ -423,6 +462,7 @@ addon-discovery-installing = インストール中...
 addon-discovery-failed = 失敗しました
 
 ## Page Titles
+
 settings = 環境設定
 domain = ドメイン
 users = ユーザー
@@ -443,10 +483,12 @@ wifi = Wi-Fi
 icon = アイコン
 
 ## Speech
+
 speech-unsupported = 現在のブラウザーはスピーチをサポートしていません
 speech-didnt-get = スピーチの内容を認識できませんでした。
 
 ## Errors
+
 unknown-state = 状態不明
 error = エラー
 errors = エラー
@@ -457,24 +499,29 @@ failed-read-file = ファイルの読み込みに失敗しました。
 failed-save = 保存に失敗しました。
 
 ## Schema Form
+
 unsupported-field = 未サポートのフィールドスキーマ
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
-login-title = ログイン — WebThings Gateway
+
+login-title = ログイン — { -webthings-gateway-brand }
 login-log-in = ログイン
 
 ## Create First User Page
-signup-title = ユーザー作成 — WebThings Gateway
+
+signup-title = ユーザー作成 — { -webthings-gateway-brand }
 signup-welcome = ようこそ
 signup-create-account = 最初のユーザーアカウントを作成:
 signup-password-mismatch = パスワードが一致しません
 signup-next = 次へ
 
 ## Tunnel Setup Page
-tunnel-setup-title = ウェブアドレスの指定 — WebThings Gateway
+
+tunnel-setup-title = ウェブアドレスの指定 — { -webthings-gateway-brand }
 tunnel-setup-welcome = ようこそ
 tunnel-setup-choose-address = ゲートウェイの安全なウェブアドレスを指定してください:
 tunnel-setup-input-subdomain =
@@ -489,7 +536,8 @@ tunnel-setup-skip = スキップ
 tunnel-setup-time-sync = システムの時計をインターネット時刻から設定しています。この設定が完了するまでドメイン登録はできません。
 
 ## Authorize Page
-authorize-title = 認証要求 — WebThings Gateway
+
+authorize-title = 認証要求 — { -webthings-gateway-brand }
 authorize-authorization-request = 認証要求
 authorize-would-like = はゲートウェイが
 authorize-devices = デバイスへのアクセスを求めます。
@@ -502,15 +550,15 @@ authorize-allow =
 authorize-deny = 拒否
 
 ## Local Token Page
-local-token-title = ローカルトークンサービス — WebThings Gateway
+
+local-token-title = ローカルトークンサービス — { -webthings-gateway-brand }
 local-token-header = ローカルトークンサービス
-local-token-your-token = あなたのローカルトークンは、この
-local-token-jwt = JSON Web Token です。
-local-token-use-it = このトークンは次の認証でゲートウェイと安全に通信するために使用します:
-local-token-bearer-type = Bearer 認証
+local-token-your-token = あなたのローカルトークンは、この <a data-l10n-name="local-token-jwt">JSON Web Token</a> です:
+local-token-use-it = このトークンを使用して <a data-l10n-name="local-token-bearer-type">持参人認証</a> (Bearer-type Authorization) でゲートウェイと安全に通信します。
 
 ## Router Setup Page
-router-setup-title = ルーターのセットアップ — WebThings Gateway
+
+router-setup-title = ルーターのセットアップ — { -webthings-gateway-brand }
 router-setup-header = 新しい Wi-Fi ネットワークの作成
 router-setup-input-ssid =
   .placeholder = ネットワーク名
@@ -523,7 +571,8 @@ router-setup-create =
 router-setup-password-mismatch = パスワードが一致しません
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Wi-Fi セットアップ — WebThings Gateway
+
+wifi-setup-title = Wi-Fi セットアップ — { -webthings-gateway-brand }
 wifi-setup-header = Wi-Fi ネットワークに接続しますか？
 wifi-setup-input-password =
   .placeholder = パスワード
@@ -535,7 +584,8 @@ wifi-setup-network-icon =
 wifi-setup-skip = スキップ
 
 ## Connecting to Wi-Fi Page
-connecting-title = Wi-Fi への接続 — WebThings Gateway
+
+connecting-title = Wi-Fi への接続 — { -webthings-gateway-brand }
 connecting-header = Wi-Fi に接続中...
 connecting-connect = 同じネットワークに接続し、ウェブブラウザーで { $gateway-link } を開いてゲートウェイのセットアップを続けてください。
 connecting-warning = 注記: { $domain } を読み込めない場合は、ご使用のルーターのゲートウェイの IP アドレスを調べてください。
@@ -543,11 +593,13 @@ connecting-header-skipped = Wi-Fi セットアップをスキップしました
 connecting-skipped = ゲートウェイの動作を開始しました。同じネットワークへの接続中にウェブブラウザーで { $gateway-link } を開いてゲートウェイのセットアップを続けてください。
 
 ## Creating Wi-Fi Network Page
-creating-title = Wi-Fi ネットワークの作成 — WebThings Gateway
+
+creating-title = Wi-Fi ネットワークの作成 — { -webthings-gateway-brand }
 creating-header = Wi-Fi ネットワークを作成中...
 creating-content = 作成したパスワードを入力して { $ssid } に接続し、ウェブブラウザーで { $gateway-link } または { $ip-link } を開いてください。
 
 ## General Terms
+
 ok = OK
 ellipsis = ...
 event-log = イベントログ
@@ -558,6 +610,7 @@ processing = 処理中...
 submit = 送信
 
 ## Top-Level Buttons
+
 menu-button =
   .aria-label = メニュー
 back-button =
