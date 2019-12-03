@@ -247,8 +247,7 @@ logs-server-remove-error = Erreur du serveur : Impossible de supprimer le jour
 add-thing-scanning-icon =
   .alt = Recherche
 add-thing-scanning = Recherche de nouveaux périphériques…
-add-thing-add-adapters-hint = Rien de nouveau trouvé. Essayez
-add-thing-add-adapters-hint-anchor = d’installer des composants additionnels
+add-thing-add-adapters-hint = Rien de nouveau trouvé. Essayez <a data-l10n-name="add-thing-add-adapters-hint-anchor">d’installer des composants additionnels</a>.
 add-thing-add-by-url = Ajouter par URL…
 add-thing-done = Terminé
 add-thing-cancel = Annuler
@@ -315,8 +314,7 @@ inactive = Inactif
 
 ## Domain Setup
 
-reclaim-prompt = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer,
-click-here = cliquez ici
+tunnel-setup-reclaim-domain = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">cliquez ici</a>.
 check-email-for-token = Veuillez consulter votre courriel pour le jeton de réclamation et le coller au-dessus.
 reclaim-failed = Impossible de réclamer le domaine.
 subdomain-already-used = Ce sous-domaine est déjà utilisé. Veuillez en choisir un autre.
@@ -541,10 +539,8 @@ authorize-deny = Refuser
 
 local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
-local-token-your-token = Votre jeton local est
-local-token-jwt = jeton Web JSON
-local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec
-local-token-bearer-type = « Bearer-type Authorization »
+local-token-your-token = Votre jeton local est <a data-l10n-name="local-token-jwt">jeton Web JSON</a>.
+local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
 
 ## Router Setup Page
 

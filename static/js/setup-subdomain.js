@@ -21,9 +21,11 @@ function setupForm() {
   const createDomainButton = document.getElementById('create-domain-button');
   const skipAnchor = document.getElementById('skip-subdomain-anchor');
   const errorMessage = document.getElementById('error-setup');
+  const reclaimMessage = document.getElementById('error-reclaim');
   const ntpMessage = document.getElementById('ntp-warning');
 
   function displayMessage(errorMsg, type) {
+    reclaimMessage.classList.add('hidden');
     errorMessage.innerHTML = errorMsg;
     errorMessage.classList.remove('hidden');
     if (type === 'message') {
@@ -157,31 +159,22 @@ function setupForm() {
           validateInput();
 
           if (body.indexOf('ReclamationPossible') > -1) {
-            const text1 = document.createTextNode(
-              `${fluent.getMessage('reclaim-prompt')} `
-            );
-            const reclaim = document.createElement('a');
-            reclaim.innerText = `${fluent.getMessage('click-here')}.`;
-            reclaim.href = '#';
-            reclaim.onclick = () => {
+            errorMessage.classList.add('hidden');
+            reclaimMessage.classList.remove('hidden');
+            reclaimMessage.querySelector('a').onclick = () => {
               document.getElementById('opt-in-group').style.display = 'none';
               reclamationToken.style.display = 'inline-block';
               reclamationToken.focus();
+
+              reclaimMessage.classList.add('hidden');
               errorMessage.textContent =
                 fluent.getMessage('check-email-for-token');
+              errorMessage.classList.remove('hidden');
 
               API.reclaimDomain(subdomain.value).catch(() => {
                 displayMessage(fluent.getMessage('reclaim-failed'), 'error');
               });
             };
-
-            errorMessage.innerHTML = '';
-            errorMessage.appendChild(text1);
-            errorMessage.appendChild(reclaim);
-
-            errorMessage.classList.remove('hidden');
-            errorMessage.classList.remove('message');
-            errorMessage.classList.add('error');
           } else {
             displayMessage(fluent.getMessage('subdomain-already-used'),
                            'error');

@@ -247,8 +247,7 @@ logs-server-remove-error = Server error: unable to remove log
 add-thing-scanning-icon =
   .alt = Scanning
 add-thing-scanning = Scanning for new devices…
-add-thing-add-adapters-hint = No new things found. Try
-add-thing-add-adapters-hint-anchor = adding some add-ons.
+add-thing-add-adapters-hint = No new things found. Try <a data-l10n-name="add-thing-add-adapters-hint-anchor">adding some add-ons</a>.
 add-thing-add-by-url = Add by URL…
 add-thing-done = Done
 add-thing-cancel = Cancel
@@ -315,8 +314,7 @@ inactive = Inactive
 
 ## Domain Setup
 
-reclaim-prompt = It looks like you’ve already registered that subdomain. To reclaim it
-click-here = click here
+tunnel-setup-reclaim-domain = It looks like you’ve already registered that subdomain. To reclaim it <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">click here</a>.
 check-email-for-token = Please check your email for a reclamation token and paste it above.
 reclaim-failed = Could not reclaim domain.
 subdomain-already-used = This subdomain is already being used. Please choose a different one.
@@ -541,10 +539,8 @@ authorize-deny = Deny
 
 local-token-title = Local Token Service — WebThings Gateway
 local-token-header = Local Token Service
-local-token-your-token = Your local token is this
-local-token-jwt = JSON Web Token
-local-token-use-it = Use it to talk to the gateway securely, with
-local-token-bearer-type = Bearer-type Authorization
+local-token-your-token = Your local token is this <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Use it to talk to the gateway securely, with <a data-l10n-name="local-token-bearer-type">Bearer-type Authorization</a>.
 
 ## Router Setup Page
 

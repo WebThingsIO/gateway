@@ -233,8 +233,7 @@ logs-server-remove-error = Errore del server: impossibile rimuovere il registro
 add-thing-scanning-icon =
   .alt = Ricerca
 add-thing-scanning = Ricerca di nuovi dispositivi…
-add-thing-add-adapters-hint = Non sono stati trovati nuovi oggetti. Provare
-add-thing-add-adapters-hint-anchor = ad aggiungere alcuni componenti aggiuntivi.
+add-thing-add-adapters-hint = Non sono stati trovati nuovi oggetti. Provare <a data-l10n-name="add-thing-add-adapters-hint-anchor">ad aggiungere alcuni componenti aggiuntivi</a>.
 add-thing-add-by-url = Aggiungi per URL…
 add-thing-done = Fatto
 add-thing-cancel = Annulla
@@ -298,8 +297,7 @@ unknown = Sconosciuto
 
 ## Domain Setup
 
-reclaim-prompt = Sembra che questo sottodominio sia già stato registrato. Per recuperarlo
-click-here = fai clic qui
+tunnel-setup-reclaim-domain = Sembra che questo sottodominio sia già stato registrato. Per recuperarlo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">fai clic qui</a>.
 check-email-for-token = Controlla l’e-mail per un token di recupero e incollalo sopra.
 reclaim-failed = Impossibile recuperare il dominio.
 subdomain-already-used = Questo sottodominio è già in uso. Scegli un altro dominio.
@@ -522,10 +520,8 @@ authorize-deny = Nega
 
 local-token-title = Servizio token locale — WebThings Gateway
 local-token-header = Servizio token locale
-local-token-your-token = Il token locale è:
-local-token-jwt = JSON Web Token
-local-token-use-it = Usalo per comunicare in modo sicuro con il gateway, con
-local-token-bearer-type = autorizzazione Bearer-type
+local-token-your-token = Il token locale è: <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-use-it = Usalo per comunicare in modo sicuro con il gateway, con <a data-l10n-name="local-token-bearer-type">autorizzazione Bearer-type</a>.
 
 ## Router Setup Page
 
