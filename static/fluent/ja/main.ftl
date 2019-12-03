@@ -222,11 +222,6 @@ notification-low = 低
 notification-normal = 通常
 notification-high = 高
 rule-name = ルール名
-rule-and = And
-rule-or = Or
-rule-time-of-day-is = 日時:
-rule-event-lower = イベント
-rule-event-occurs = 繰り返し
 
 ## Logs
 

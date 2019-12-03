@@ -197,11 +197,6 @@ notification-low = Leech
 notification-normal = Gemiddeld
 notification-high = Heech
 rule-name = Rigelnamme
-rule-and = en
-rule-or = of
-rule-time-of-day-is = it is
-rule-event-lower = barren
-rule-event-occurs = foarkomt
 
 ## Logs
 

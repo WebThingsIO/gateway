@@ -209,11 +209,6 @@ notification-low = Low
 notification-normal = Normal
 notification-high = High
 rule-name = Rule Name
-rule-and = and
-rule-or = or
-rule-time-of-day-is = the time of day is
-rule-event-lower = event
-rule-event-occurs = occurs
 
 ## Logs
 
