@@ -1,5 +1,5 @@
 const fluent = require('./fluent');
-const hljs = require('highlightjs/highlight.pack.min');
+const hljs = require('highlight.js');
 
 window.addEventListener('load', function app_onLoad() {
   window.removeEventListener('load', app_onLoad);
@@ -14,6 +14,6 @@ window.addEventListener('load', function app_onLoad() {
       document.body.classList.add('insecure');
     }
 
-    hljs.initHighlightingOnLoad();
+    hljs.initHighlighting();
   });
 });

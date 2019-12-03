@@ -10,18 +10,24 @@ assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Règles
 logs-menu-item = Journaux
-floorplan-menu-item = Plan d'étage
+floorplan-menu-item = Plan d’étage
 settings-menu-item = Paramètres
 log-out-button = Déconnexion
 
+## Things
+thing-details = 
+  .aria-label = Afficher les propriétés
+add-things =
+  .aria-label = Ajouter un Thing
+
 ## Assistant
 assistant-avatar-image =
-  .alt = Avatar d'assistant
+  .alt = Avatar d’assistant
 assistant-controls-text-input =
   .placeholder = Comment puis-je vous aider ?
 
 ## Floorplan
-upload-floorplan = Téléverser un plan d'étage…
+upload-floorplan = Envoyer un plan d’étage…
 upload-floorplan-hint = (.svg recommandé)
 
 ## Top-Level Settings
@@ -30,7 +36,7 @@ settings-network = Réseau
 settings-users = Utilisateurs
 settings-add-ons = Composants additionnels
 settings-adapters = Adaptateurs
-settings-localization = Localisation
+settings-localization = Géolocalisation
 settings-updates = Mises à jour
 settings-authorizations = Autorisations
 settings-experiments = Expériences
@@ -38,10 +44,10 @@ settings-developer = Développeur
 
 ## Domain Settings
 domain-settings-local-label = Accès local
-domain-settings-local-update = Modifiez nom d'hôte
+domain-settings-local-update = Modifiez nom d’hôte
 domain-settings-remote-access = Accès à distance
 domain-settings-local-name =
-  .placeholder = gateway
+  .placeholder = Gateway
 
 ## Network Settings
 network-settings-unsupported = Les paramètres de réseau ne sont pas pris en charge sur cette plateforme.
@@ -57,6 +63,7 @@ network-settings-internet-image =
   .alt = Internet
 network-settings-configure = Configurer
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Mode
 network-settings-home-network-lan = Réseau domestique (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
@@ -65,13 +72,13 @@ network-settings-static = Manuel (IP statique)
 network-settings-pppoe = Pont (PPPoE)
 network-settings-static-ip-address = Adresse IP statique
 network-settings-network-mask = Masque de réseau
-network-settings-gateway = Gateway
+network-settings-gateway = Passerelle
 network-settings-done = Fini
 network-settings-wifi-password =
   .placeholder = Mot de passe
 network-settings-show-password = Montrer mot de passe
 network-settings-connect = Se connecter
-network-settings-username = Nom d'utilisateur
+network-settings-username = Nom d’utilisateur
 network-settings-password = Mot de passe
 network-settings-router-ip = Adresse IP du routeur
 network-settings-dhcp-server = Serveur DHCP
@@ -81,14 +88,16 @@ wireless-connected = Connecté
 wireless-icon =
   .alt = Réseau Wi-Fi
 network-settings-changing = Modification des paramètres réseau en cours. Veuillez patienter.
-failed-ethernet-configure = Échec de configurer l'Ethernet.
-failed-wifi-configure = Échec de configurer le Wi-Fi.
-failed-wan-configure = Échec de configurer le WAN.
-failed-lan-configure = Échec de configurer le LAN.
-failed-wlan-configure = Échec de configurer le WLAN.
+failed-ethernet-configure = Échec de configuration du réseau Ethernet.
+failed-wifi-configure = Échec de configuration du réseau Wi-Fi.
+failed-wan-configure = Échec de configuration du réseau Internet.
+failed-lan-configure = Échec de configuration du réseau domestique.
+failed-wlan-configure = Échec de configuration du WLAN.
 
 ## User Settings
-user-settings-input-name =
+create-user =
+  .aria-label = Ajouter un utilisateur
+user-settings-input-name = 
   .placeholder = Nom
 user-settings-input-email =
   .placeholder = Courriel
@@ -137,9 +146,11 @@ restarting = Redémarrage en cours
 ## Developer Settings
 developer-settings-enable-ssh = Activer SSH
 developer-settings-view-internal-logs = Afficher les journaux internes
-developer-settings-create-local-authorization = Créer autorisation locale
+developer-settings-create-local-authorization = Créer une autorisation locale
 
 ## Rules
+add-rule =
+  .aria-label = Créer un règle
 rules = Règles
 rules-create-rule-hint = Aucune règle créée. Cliquer sur + pour la créer.
 rules-rule-name = Nom du règle
@@ -151,7 +162,7 @@ rules-preview-button =
 rules-delete-icon =
   .alt = Supprimer
 rules-drag-hint = Faire glisser les périphériques ici pour créer une règle
-rules-drag-input-hint = Ajouter un périphérique d'entrée
+rules-drag-input-hint = Ajouter un périphérique d’entrée
 rules-drag-output-hint = Ajouter un périphérique de sortie
 rules-scroll-left =
   .alt = Défiler vers la gauche
@@ -185,11 +196,13 @@ notification-high = Élevé
 rule-name = Nom de la règle
 rule-and = et
 rule-or = ou
-rule-time-of-day-is = l'heure est
+rule-time-of-day-is = l’heure est
 rule-event-lower = événement
 rule-event-occurs = à lieu
 
 ## Logs
+add-log =
+  .aria-label = Créer un journal
 logs = Journaux
 logs-create-log-hint = Aucun journal créé. Cliquer sur + pour le créer.
 logs-device = Périphérique
@@ -218,13 +231,13 @@ add-thing-scanning-icon =
   .alt = Recherche
 add-thing-scanning = Recherche de nouveaux périphériques…
 add-thing-add-adapters-hint = Rien de nouveau trouvé. Essayez
-add-thing-add-adapters-hint-anchor = d'installer des composants additionnels
+add-thing-add-adapters-hint-anchor = d’installer des composants additionnels
 add-thing-add-by-url = Ajouter par URL…
 add-thing-done = Terminé
 add-thing-cancel = Annuler
 
 ## Context Menu
-context-menu-choose-icon = Sélectionner l'icône…
+context-menu-choose-icon = Sélectionner l’icône…
 context-menu-save = Enregistrer
 context-menu-remove = Supprimer
 
@@ -233,7 +246,7 @@ OnOffSwitch = Interrupteur marche/arrêt
 MultiLevelSwitch = Interrupteur multi-niveaux
 ColorControl = Contrôle de couleur
 ColorSensor = Capteur de couleur
-EnergyMonitor = Dispositif de surveillance d'énergie
+EnergyMonitor = Dispositif de surveillance d’énergie
 BinarySensor = Capteur binaire
 MultiLevelSensor = Capteur multi-niveaux
 SmartPlug = Prise intelligente
@@ -249,16 +262,17 @@ Alarm = Alarme
 Thermostat = Thermostat
 Lock = Verrou
 Custom = Thing personnalisé
+Thing = Thing
 
 ## Properties
 alarm = Alarme
-pushed = Poussé
-not-pushed = Pas poussé
+pushed = Enclenché
+not-pushed = Non enclenché
 on-off = Marche/Arrêt
 on = Marche
 off = Arrêt
 power = Puissance
-voltage = Tension électrique
+voltage = Tension
 temperature = Température
 current = Courant
 frequency = Fréquence
@@ -269,22 +283,24 @@ dry = Sec
 color-temperature = Température de la couleur
 video-unsupported = Désolé, votre navigateur ne prend pas en charge la vidéo.
 motion = Mouvement
-no-motion = Aucun Mouvement
+no-motion = Aucun mouvement
 open = Ouvert
 closed = Fermé
 locked = Barré
 unlocked = Débarré
-jammed = Bourragé
+jammed = Bourré
 unknown = Inconnu
+active = Actif
+inactive = Inactif
 
 ## Domain Setup
-reclaim-prompt = Il semble que vous avez déjà enregistré cette sous-domaine. Pour la réclamer,
-click-here = cliquer ici
-check-email-for-token = Veuillez consulter votre courriel pour un jeton de réclamation et coller au-dessus.
-reclaim-failed = Impossible de réclaimer le domaine.
-subdomain-already-used = Cette sous-domaine est déjà utiliser. Veuillez choisir une autre.
+reclaim-prompt = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer,
+click-here = cliquez ici
+check-email-for-token = Consultez votre courriel pour le jeton de réclamation et le coller au-dessus.
+reclaim-failed = Impossible de réclamer le domaine.
+subdomain-already-used = Ce sous-domaine est déjà utilisé. Choisissez un autre.
 invalid-reclamation-token = Jeton de réclamation non valide.
-domain-success = Succès! Attendez pour la redirection…
+domain-success = Succès ! Patientez pendant la redirection…
 issuing-error = Impossible de délivrer un certificat. Veuillez réessayer.
 redirecting = Redirection en cours…
 
@@ -355,7 +371,7 @@ abbrev-foot = pi
 
 ## New Thing View
 unknown-device-type = Type de périphérique inconnu
-new-thing-choose-icon = Sélectionner  l'icône…
+new-thing-choose-icon = Sélectionner  l’icône…
 new-thing-save = Enregistrer
 new-thing-pin =
   .placeholder = Entrer le NIP
@@ -364,16 +380,16 @@ new-thing-pin-invalid = NIP non valide
 new-thing-cancel = Annuler
 new-thing-submit = Soumettre
 new-thing-username =
-  .placeholder = Entrer le nom d'utilisateur
+  .placeholder = Entrer le nom d’utilisateur
 new-thing-password =
   .placeholder = Entrer le mot de passe
-new-thing-credentials-error = Informations d'identification non valides
+new-thing-credentials-error = Informations d’identification non valides
 new-thing-saved = Enregistré
 new-thing-done = Terminé
 
 ## New Web Thing View
 new-web-thing-url =
-  .placeholder = Entrer l'URL de la WebThing
+  .placeholder = Entrer l’URL de la WebThing
 new-web-thing-label = WebThing
 loading = Chargement…
 new-web-thing-multiple = Plusieurs WebThings trouvées
@@ -383,9 +399,11 @@ new-web-thing-from = de
 no-things = Aucun périphérique. Cliquer sur + analyser les périphériques disponibles.
 thing-not-found = Thing non trouvé.
 action-not-found = Action non trouvée.
-events-not-found = Cette thing n'a aucun événement.
+events-not-found = Cette thing n’a aucun événement.
 
 ## Add-on Settings
+add-addons = 
+  .aria-label = Découvrir de nouveaux composants additionnels
 author-unknown = Inconnu
 disable = Désactiver
 enable = Activer
@@ -407,14 +425,14 @@ addon-discovery-failed = Échec
 settings = Paramètres
 domain = Domaine
 users = Utilisateurs
-edit-user = Modifier l'utilisateur
+edit-user = Modifier l’utilisateur
 add-user = Ajouter un utilisateur
 adapters = Adaptateurs
 addons = Composants additionnels
 addon-config = Configurer le composant additionnel
-addon-discovery = Découvrir des composants additionnels nouveaux
+addon-discovery = Découvrir de nouveaux composants additionnels
 experiments = Expériences
-localization = Localisation
+localization = Géolocalisation
 updates = Mises à jour
 authorizations = Autorisations
 developer = Développeurs
@@ -432,10 +450,10 @@ unknown-state = État inconnu.
 error = Erreur
 errors = Erreurs
 gateway-unreachable = Gateway inaccessible
-more-information = Plus d'informations
+more-information = Plus d’informations
 invalid-file = Fichier non valide.
-failed-read-file = Échec de lire le fichier.
-failed-save = Échec d'enregistrer.
+failed-read-file = Échec de lecture du fichier.
+failed-save = Échec d’enregistrement.
 
 ## Schema Form
 unsupported-field = Schéma non pris en charge
@@ -457,36 +475,37 @@ signup-next = Suivant
 ## Tunnel Setup Page
 tunnel-setup-title = Sélectionner une adresse web — WebThings Gateway
 tunnel-setup-welcome = Bienvenue
-tunnel-setup-choose-address = Sélectionner une adresse web sécurisé pour votre gateway :
+tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre Gateway :
 tunnel-setup-input-subdomain =
   .placeholder = sous-domaine
-tunnel-setup-opt-in = Veuillez m'informer de la fonctionnalité nouvelle ou des opportunités de contribuer.
-tunnel-setup-privacy-policy = Politique de Confidentialité
+tunnel-setup-opt-in = M’informe des nouvelles fonctionnalités ou des opportunités de contributions.
+tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
-  .placeholder = Jeton de la récupération
+  .placeholder = Jeton de récupération
 tunnel-setup-error = Une erreur est survenue en créant la sous-domaine.
 tunnel-setup-create = Créer
 tunnel-setup-skip = Ignorer
+tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge système depuis Internet. L’enregistrement du domaine risque de ne pas fonctionner tant que l’horloge n’est pas à jour.
 
 ## Authorize Page
-authorize-title = Demande d'autorisation — WebThings Gateway
-authorize-authorization-request = Demande d'autorisation
-authorize-would-like = veut accéder votre gateway pour
+authorize-title = Demande d’autorisation — WebThings Gateway
+authorize-authorization-request = Demande d’autorisation
+authorize-would-like = veut accéder à votre Gateway pour
 authorize-devices = périphériques.
 authorize-from = de
 authorize-monitor-and-control = surveiller et contrôler
 authorize-monitor = surveiller
-authorize-allow-all = Autoriser pour tout thing
+authorize-allow-all = Autoriser pour tout objet
 authorize-allow =
   .value = Autoriser
 authorize-deny = Refuser
 
 ## Local Token Page
 local-token-title = Service de jeton locale — WebThings Gateway
-local-token-header = Service de jeton locale
+local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
-local-token-jwt =  jeton Web de JSON
-local-token-use-it = L'utiliser pour communiquer avec votre gateway en toute sécurité avec
+local-token-jwt =  jeton Web JSON
+local-token-use-it = L’utiliser pour communiquer avec votre Gateway en toute sécurité avec
 local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
@@ -503,8 +522,8 @@ router-setup-create =
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
-wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
-wifi-setup-header = Connecter à une réseau Wi-Fi ?
+wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
+wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
   .placeholder = Mot de passe
 wifi-setup-show-password = Afficher le mot de passe
@@ -517,15 +536,15 @@ wifi-setup-skip = Ignorer
 ## Connecting to Wi-Fi Page
 connecting-title = Connexion en cours — WebThings Gateway
 connecting-header = Connexion en cours…
-connecting-connect = Assurer que vous êtes connecté au même réseau puis naviguer vers { $gateway-link } pour continuer la configuration.
-connecting-warning = Si vous ne pouvez charger { $domain }, trouver l'adresse IP dans votre routeur.
+connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
+connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
 connecting-header-skipped = Configuration Wi-Fi ignoré.
-connecting-skipped = La gateway démarre. Reste connecté au même réseau, puis naviguer vers { $gateway-link } pour continuer la configuration.
+connecting-skipped = La Gateway démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
 creating-title = Création du réseau Wi-Fi en cours — WebThings Gateway
 creating-header = Création du réseau Wi-Fi en cours…
-creating-content = Connecter à { $ssid } avec le mot de passe que vous avez créé, puis naviguer à { $gateway-link } ou { $ip-link } dans votre navigateur.
+creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
 
 ## General Terms
 ok = OK
@@ -536,3 +555,19 @@ remove = Supprimer
 disconnected = Déconnecté
 processing = Traitement en cours…
 submit = Envoyer
+
+## Top-Level Buttons
+menu-button =
+  .aria-label = Menu
+back-button =
+  .aria-label = Retour
+overflow-button =
+  .aria-label = Actions supplémentaires
+speech-button =
+  .aria-label = Écoutez la voix
+submit-button =
+  .aria-label = Envoyer
+edit-button =
+  .aria-label = Edit
+save-button =
+  .aria-label = Enregistrer
