@@ -82,7 +82,7 @@ const Utils = {
       );
     } else if (delta < day) {
       fuzzy = fluent.getMessage(
-        'utils-hours ago',
+        'utils-hours-ago',
         {value: Math.floor(delta / hour)}
       );
     } else if (delta < week) {
