@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistint
 things-menu-item = Things
 rules-menu-item = Rigels
@@ -15,16 +16,19 @@ settings-menu-item = Ynstellingen
 log-out-button = Ofmelde
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Assistint Avatar
 assistant-controls-text-input =
   .placeholder = Hoe kin ik helpe?
 
 ## Floorplan
+
 upload-floorplan = Plattegrûn oplade…
 upload-floorplan-hint = (.svg oanrekommandearre)
 
 ## Top-Level Settings
+
 settings-domain = Domein
 settings-network = Netwurk
 settings-users = Brûkers
@@ -37,6 +41,7 @@ settings-experiments = Eksperiminten
 settings-developer = Untwikkeler
 
 ## Domain Settings
+
 domain-settings-local-label = Lokale tagong
 domain-settings-local-update = Hostnamme bywurkje
 domain-settings-remote-access = Eksterne tagong
@@ -44,6 +49,7 @@ domain-settings-local-name =
   .placeholder = gateway
 
 ## Network Settings
+
 network-settings-unsupported = Netwurkynstelligen wurde op dit platfoarm net stipe.
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -88,6 +94,7 @@ failed-lan-configure = LAN ynstelle mislearre.
 failed-wlan-configure = WLAN ynstelle mislearre.
 
 ## User Settings
+
 user-settings-input-name =
   .placeholder = Namme
 user-settings-input-email =
@@ -104,16 +111,20 @@ user-settings-password-mismatch = Wachtwurden binne net lyk
 user-settings-save = Bewarje
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = Gjin adapters fûn.
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = Gjin autorisaasje.
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Lochboeken
 
 ## Localization Settings
+
 localization-settings-language-region = Taal & regio
 localization-settings-country = Lân
 localization-settings-timezone = Tiidsône
@@ -124,6 +135,7 @@ localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
+
 update-settings-update-now = No bywurkje
 update-available = Nije ferzje beskikber
 update-up-to-date = Gjin fernijingen beskikber
@@ -135,11 +147,13 @@ in-progress = Dwaande
 restarting = Opnij starte
 
 ## Developer Settings
+
 developer-settings-enable-ssh = SSH ynskeakelje
 developer-settings-view-internal-logs = Ynterne lochboeken toane
 developer-settings-create-local-authorization = Meitsje lokale autorisaasje
 
 ## Rules
+
 rules = Rigels
 rules-create-rule-hint = Gjin rigels. Klik op + om in rigel te meitsjen.
 rules-rule-name = Rigelnamme
@@ -190,6 +204,7 @@ rule-event-lower = barren
 rule-event-occurs = foarkomt
 
 ## Logs
+
 logs = Lochboeken
 logs-create-log-hint = Gjin lochboeken. Klik op + om in lochboek oan te meitsjen.
 logs-device = Apparaat
@@ -215,6 +230,7 @@ logs-unable-to-create = Kin lochboek net oanmeitsje
 logs-server-remove-error = Serverflater: kin lochboek net fuortsmite
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Sykje
 add-thing-scanning = Nije apparaten sykje…
@@ -225,11 +241,13 @@ add-thing-done = Dien
 add-thing-cancel = Annulearje
 
 ## Context Menu
+
 context-menu-choose-icon = Kies piktogram…
 context-menu-save = Bewarje
 context-menu-remove = Fuortsmite
 
 ## Capabilities
+
 OnOffSwitch = Oan-/Ut-skeakeler
 MultiLevelSwitch = Skeakeler mei nivo's
 ColorControl = Kleurynstelling
@@ -252,6 +270,7 @@ Lock = Slot
 Custom = Oanpast Thing
 
 ## Properties
+
 alarm = Alarm
 pushed = Yndrukt
 not-pushed = Net yndrukt
@@ -279,6 +298,7 @@ jammed = Klemd
 unknown = Unbekend
 
 ## Domain Setup
+
 reclaim-prompt = It liket derop dat jo dat subdomein al registrearre hawwe. Om it op te easkjen
 click-here = klik hjir
 check-email-for-token = Yn jo e-mailberjocht ûntfange jo in token foar it opeaskjen. Plak dit hjirboppe.
@@ -290,10 +310,12 @@ issuing-error = Flater mei it sertifikaat opheljen. Probearje it opnij.
 redirecting = Trochstjoere…
 
 ## Booleans
+
 true = Ja
 false = Nee
 
 ## Time
+
 utils-now = no
 utils-seconds-ago =
   { $value ->
@@ -336,6 +358,7 @@ day = Dei
 week = Wike
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -355,6 +378,7 @@ abbrev-millisecond = ms
 abbrev-foot = ft
 
 ## New Thing View
+
 unknown-device-type = Unbekend apparaattype
 new-thing-choose-icon = Kies piktogram…
 new-thing-save = Bewarje
@@ -373,6 +397,7 @@ new-thing-saved = Bewarre
 new-thing-done = Dien
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Web Thing-URL
 new-web-thing-label = Web Thing
@@ -381,12 +406,14 @@ new-web-thing-multiple = Mear Web Things fûn
 new-web-thing-from = fan
 
 ## Empty div Messages
+
 no-things = Gjin apparaten. Klik + om apparaten te sykjen.
 thing-not-found = Thing net fûn.
 action-not-found = Aksje net fûn.
 events-not-found = Dit Thing hat gjin barrens.
 
 ## Add-on Settings
+
 author-unknown = Unbekend
 disable = Utskeakele
 enable = Ynskeakele
@@ -405,6 +432,7 @@ addon-discovery-installing = Ynstallearje…
 addon-discovery-failed = Mislearre
 
 ## Page Titles
+
 settings = Ynstellingen
 domain = Domein
 users = Brûkers
@@ -425,10 +453,12 @@ wifi = Wi-Fi
 icon = Piktogram
 
 ## Speech
+
 speech-unsupported = De browser stipet gjin spraak
 speech-didnt-get = Sorry, ik haw jo net begrepen.
 
 ## Errors
+
 unknown-state = Unbekende steat.
 error = Flater
 errors = Flaters
@@ -439,16 +469,20 @@ failed-read-file = Bestân lêzen mislearre.
 failed-save = Bestân bewarjen mislearre.
 
 ## Schema Form
+
 unsupported-field = Fjildskema net stipe
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Oanmelde — WebThings Gateway
 login-log-in = Oanmelde
 
 ## Create First User Page
+
 signup-title = Brûker tafoegje — WebThings Gateway
 signup-welcome = Wolkom
 signup-create-account = Meitsje jo earste brûker oan:
@@ -456,6 +490,7 @@ signup-password-mismatch = Wachtwurden binne net lyk
 signup-next = Folgjende
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Kies webadres — WebThings Gateway
 tunnel-setup-welcome = Wolkom
 tunnel-setup-choose-address = Kies in befeilige webadres foar jo gateway:
@@ -471,6 +506,7 @@ tunnel-setup-skip = Oerslaan
 tunnel-setup-time-sync = Wacht op it ynstellen fan de klok fia ynternet. Domeinregistraasje sil oars wierskynlik mislearre.
 
 ## Authorize Page
+
 authorize-title = Autorisaasje-oanfraach — WebThings Gateway
 authorize-authorization-request = Autorisaasje-oanfraach
 authorize-would-like = wol graach tagong ta jo gateway
@@ -484,6 +520,7 @@ authorize-allow =
 authorize-deny = Wegerje
 
 ## Local Token Page
+
 local-token-title = Lokale tokentsjinst — WebThings Gateway
 local-token-header = Lokale tokentsjinst
 local-token-your-token = Jo lokale token is
@@ -492,6 +529,7 @@ local-token-use-it = Brûk dizze om befeilige mei de gateway te praten, mei
 local-token-bearer-type = Bearer-type-autorisaasje
 
 ## Router Setup Page
+
 router-setup-title = Routerynstellingen — WebThings Gateway
 router-setup-header = Meitsje in Wi-Fi-ferbining
 router-setup-input-ssid =
@@ -505,6 +543,7 @@ router-setup-create =
 router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Wi-Fi-ynstellingen — WebThings Gateway
 wifi-setup-header = Ferbine mei Wi-Fi-netwurk?
 wifi-setup-input-password =
@@ -517,6 +556,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Oerslaan
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Ferbine mei Wi-Fi — WebThings Gateway
 connecting-header = Ferbine mei Wi-Fi…
 connecting-connect = Kontrolearje oft jo ferbûn binne mei itselde netwurk en
@@ -529,12 +569,14 @@ connecting-skipped = De gateway wurdt opstart. Navigearje nei
  om de ynstallaasje te foltôgjen.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Wi-Fi-netwurk meitsje — WebThings Gateway
 creating-header = Wi-Fi-netwurk meitsje…
 creating-content = Ferbyn mei { $ssid } en it ynstelde wachtwurd,
  navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
 
 ## General Terms
+
 ok = Ok
 ellipsis = …
 event-log = Barrenslochboek

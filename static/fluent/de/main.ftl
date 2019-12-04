@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistent
 things-menu-item = Dinge
 rules-menu-item = Regeln
@@ -15,16 +16,19 @@ settings-menu-item = Einstellungen
 log-out-button = Ausloggen
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Assistent-Avatar
 assistant-controls-text-input =
   .placeholder = Wie kann ich helfen?
 
 ## Floorplan
+
 upload-floorplan = Raumplan aktualisieren…
 upload-floorplan-hint = (.svg empfohlen)
 
 ## Top-Level Settings
+
 settings-domain = Domäne
 settings-network = Netzwerk
 settings-users = Benutzer
@@ -37,6 +41,7 @@ settings-experiments = Experimente
 settings-developer = Entwickler
 
 ## Domain Settings
+
 domain-settings-local-label = Lokaler Zugriff
 domain-settings-local-update = Hostnamen aktualisieren
 domain-settings-remote-access = Fernzugriff
@@ -44,6 +49,7 @@ domain-settings-local-name =
   .placeholder = Gateway
 
 ## Network Settings
+
 network-settings-unsupported = Netzwerkeinstellungen werden auf dieser Plattform nicht unterstützt.
 network-settings-ethernet-image =
   .alt = Kabelverbindung
@@ -88,6 +94,7 @@ failed-lan-configure = Konfiguration der LAN-Verbindung fehlgeschlagen.
 failed-wlan-configure = Konfiguration der WLAN-Verbindung fehlgeschlagen.
 
 ## User Settings
+
 user-settings-input-name =
   .placeholder = Name
 user-settings-input-email =
@@ -104,16 +111,20 @@ user-settings-password-mismatch = Passwörter stimmen nicht überein
 user-settings-save = Speichern
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = Keine Adapter vorhanden.
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = Keine Authorisierungen.
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Smarter Assistent
 experiment-settings-logs = Protokolle
 
 ## Location Settings
+
 localization-settings-language-region = Sprache & Region
 localization-settings-country = Land
 localization-settings-timezone = Zeitzone
@@ -124,6 +135,7 @@ localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
+
 update-settings-update-now = Jetzt aktualisieren
 update-available = Neue Version verfügbar
 update-up-to-date = Das System ist aktuell
@@ -135,11 +147,13 @@ in-progress = Laufend
 restarting = Neustarten
 
 ## Developer Settings
+
 developer-settings-enable-ssh = SSH aktivieren
 developer-settings-view-internal-logs = Interne Protokolle ansehen
 developer-settings-create-local-authorization = Lokalen Zugang erstellen
 
 ## Rules
+
 rules = Regeln
 rules-create-rule-hint = Keine Regeln vorhanden. Für eine neue Regel + drücken.
 rules-rule-name = Regelname
@@ -190,6 +204,7 @@ rule-event-lower = Ereignis
 rule-event-occurs = Vorkommen
 
 ## Logs
+
 logs = Protokolle
 logs-create-log-hint = Keine Protokolle vorhanden. Für ein neues Protokoll + drücken.
 logs-device = Gerät
@@ -215,6 +230,7 @@ logs-unable-to-create = Das Protokoll konnte nicht angelegt werden
 logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt werden
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Suche
 add-thing-scanning = Es wird nach neuen Geräten gesucht…
@@ -225,11 +241,13 @@ add-thing-done = Erledigt
 add-thing-cancel = Abbrechen
 
 ## Context Menu
+
 context-menu-choose-icon = Bild wählen…
 context-menu-save = Speichern
 context-menu-remove = Löschen
 
 ## Capabilities
+
 OnOffSwitch = Ein/Aus-Schalter
 MultiLevelSwitch = Mehrfachschalter
 ColorControl = Farbsteuerung
@@ -252,6 +270,7 @@ Lock = Schloss
 Custom = Benutzerdefiniertes Gerät
 
 ## Properties
+
 alarm = Alarm
 pushed = Gedrückt
 not-pushed = Nicht gedrückt
@@ -279,6 +298,7 @@ jammed = Verklemmt
 unknown = Unbekannt
 
 ## Domain Setup
+
 reclaim-prompt = Die Subdomain scheint bereits registriert zu sein. Zum Wiederherstellen
 click-here = hier klicken
 check-email-for-token = Bitte das Reclaim-Token aus der verschickten E-Mail oben einfügen.
@@ -290,10 +310,12 @@ issuing-error = Zertifikat konnte nicht erstellt werden. Bitte erneut versuchen.
 redirecting = Weiterleiten…
 
 ## Booleans
+
 true = Wahr
 false = Falsch
 
 ## Time
+
 utils-now = jetzt
 utils-seconds-ago =
   { $value ->
@@ -336,6 +358,7 @@ day = Tag
 week = Woche
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -355,6 +378,7 @@ abbrev-millisecond = ms
 abbrev-foot = Fuß
 
 ## New Thing View
+
 unknown-device-type = Unbekannter Gerätetyp
 new-thing-choose-icon = Bild wählen…
 new-thing-save = Speichern
@@ -373,6 +397,7 @@ new-thing-saved = Gespeichert
 new-thing-done = Erledigt
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = URL des Web Things eingeben
 new-web-thing-label = Web Thing
@@ -381,12 +406,14 @@ new-web-thing-multiple = Mehrere Web Things gefunden
 new-web-thing-from = von
 
 ## Empty div Messages
+
 no-things = Keine Geräte vorhanden. Zum Anlegen eines neuen Geräts + klicken.
 thing-not-found = Gerät nicht gefunden.
 action-not-found = Aktion nicht gefunden.
 events-not-found = Dieses Gerät unterstützt keine Ereignisse.
 
 ## Add-on Settings
+
 author-unknown = Unbekannt
 disable = Deaktivieren
 enable = Aktivieren
@@ -405,6 +432,7 @@ addon-discovery-installing = Installieren…
 addon-discovery-failed = Fehlgeschlagen
 
 ## Page Titles
+
 settings = Einstellungen
 domain = Domäne
 users = Benutzer
@@ -425,10 +453,12 @@ wifi = Wi-Fi
 icon = Bild
 
 ## Speech
+
 speech-unsupported = Der Browser unterstützt keine Sprachausgabe
 speech-didnt-get = Entschuldigung, das habe ich nicht verstanden.
 
 ## Errors
+
 unknown-state = Unbekannter Zustand.
 error = Fehler
 errors = Fehler
@@ -439,16 +469,20 @@ failed-read-file = Datei nicht lesbar.
 failed-save = Fehler beim Speichern.
 
 ## Schema Form
+
 unsupported-field = Feldschema nicht untertützt
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Login - WebThings Gateway
 login-log-in = Anmelden
 
 ## Create First User Page
+
 signup-title = Benutzer anlegen - WebThings Gateway
 signup-welcome = Willkommen
 signup-create-account = Ersten Benutzer anlegen:
@@ -456,6 +490,7 @@ signup-password-mismatch = Passwörter sind nicht gleich
 signup-next = Weiter
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Subdomain wählen - WebThings Gateway
 tunnel-setup-welcome = Willkommen
 tunnel-setup-choose-address = Sichere URL für das Gateway:
@@ -471,6 +506,7 @@ tunnel-setup-skip = Überspringen
 tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das Internet. Das Registrieren der Subdomain schlägt wahrscheinlich fehl, bis dies abgeschlossen ist.
 
 ## Authorize Page
+
 authorize-title = Authorisierungsanfrage - WebThings Gateway
 authorize-authorization-request = Authorisierungsanfrage
 authorize-would-like = möchte auf das Gateway zugreifen zum
@@ -484,6 +520,7 @@ authorize-allow =
 authorize-deny = Ablehnen
 
 ## Local Token Page
+
 local-token-title = Dienst für lokale Token - WebThings Gateway
 local-token-header = Dienst für lokale Token
 local-token-your-token = Das lokale Zugriffstoken ist
@@ -492,6 +529,7 @@ local-token-use-it = Zugriff auf das Gateway über
 local-token-bearer-type = Bearer-type Authorisierung
 
 ## Router Setup Page
+
 router-setup-title = Router-Setup - WebThings Gateway
 router-setup-header = Neues Wi-Fi-Netzwerk erzeugen
 router-setup-input-ssid =
@@ -505,6 +543,7 @@ router-setup-create =
 router-setup-password-mismatch = Passwörter sind nicht gleich
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Wi-Fi-Setup - WebThings Gateway
 wifi-setup-header = Mit Wi-Fi-Netzwerk verbinden?
 wifi-setup-input-password =
@@ -517,6 +556,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Wi-Fi-Verbindung herstellen - WebThings Gateway
 connecting-header = Verbindung wird hergestellt…
 connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und
@@ -528,12 +568,14 @@ connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
  { $gateway-link } getätigt werden.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Neues Wi-Fi-Netzwerk anlegen - WebThings Gateway
 creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
 creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
  aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 
 ## General Terms
+
 ok = OK
 ellipsis = …
 event-log = Ereignisprotokoll

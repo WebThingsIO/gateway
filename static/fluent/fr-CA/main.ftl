@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistant
 things-menu-item = Things
 rules-menu-item = Règles
@@ -15,22 +16,26 @@ settings-menu-item = Paramètres
 log-out-button = Déconnexion
 
 ## Things
+
 thing-details = 
   .aria-label = Afficher les propriétés
 add-things =
   .aria-label = Ajouter un Thing
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Avatar d’assistant
 assistant-controls-text-input =
   .placeholder = Comment puis-je vous aider ?
 
 ## Floorplan
+
 upload-floorplan = Envoyer un plan d’étage…
 upload-floorplan-hint = (.svg recommandé)
 
 ## Top-Level Settings
+
 settings-domain = Domaine
 settings-network = Réseau
 settings-users = Utilisateurs
@@ -43,6 +48,7 @@ settings-experiments = Expériences
 settings-developer = Développeur
 
 ## Domain Settings
+
 domain-settings-local-label = Accès local
 domain-settings-local-update = Modifiez nom d’hôte
 domain-settings-remote-access = Accès à distance
@@ -50,6 +56,7 @@ domain-settings-local-name =
   .placeholder = Gateway
 
 ## Network Settings
+
 network-settings-unsupported = Les paramètres de réseau ne sont pas pris en charge sur cette plateforme.
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -95,6 +102,7 @@ failed-lan-configure = Échec de configuration du réseau domestique.
 failed-wlan-configure = Échec de configuration du WLAN.
 
 ## User Settings
+
 create-user =
   .aria-label = Ajouter un utilisateur
 user-settings-input-name = 
@@ -113,16 +121,20 @@ user-settings-password-mismatch = Les mots de passe ne correspondent pas
 user-settings-save = Enregistrer
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = Aucun adaptateur disponible.
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = Aucune autorisation.
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Assistant intelligent
 experiment-settings-logs = Journaux
 
 ## Localization Settings
+
 localization-settings-language-region = Langue et région
 localization-settings-country = Pays
 localization-settings-timezone = Fuseau horaire
@@ -133,6 +145,7 @@ localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
+
 update-settings-update-now = Mettre à jour maintenant
 update-available = Mise à jour disponible
 update-up-to-date = Le système est à jour
@@ -144,11 +157,13 @@ in-progress = En cours
 restarting = Redémarrage en cours
 
 ## Developer Settings
+
 developer-settings-enable-ssh = Activer SSH
 developer-settings-view-internal-logs = Afficher les journaux internes
 developer-settings-create-local-authorization = Créer une autorisation locale
 
 ## Rules
+
 add-rule =
   .aria-label = Créer un règle
 rules = Règles
@@ -201,6 +216,7 @@ rule-event-lower = événement
 rule-event-occurs = à lieu
 
 ## Logs
+
 add-log =
   .aria-label = Créer un journal
 logs = Journaux
@@ -227,6 +243,7 @@ logs-unable-to-create = Impossible de créer le journal
 logs-server-remove-error = Erreur du serveur : Impossible de supprimer le journal
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Recherche
 add-thing-scanning = Recherche de nouveaux périphériques…
@@ -237,11 +254,13 @@ add-thing-done = Terminé
 add-thing-cancel = Annuler
 
 ## Context Menu
+
 context-menu-choose-icon = Sélectionner l’icône…
 context-menu-save = Enregistrer
 context-menu-remove = Supprimer
 
 ## Capabilities
+
 OnOffSwitch = Interrupteur marche/arrêt
 MultiLevelSwitch = Interrupteur multi-niveaux
 ColorControl = Contrôle de couleur
@@ -265,6 +284,7 @@ Custom = Thing personnalisé
 Thing = Thing
 
 ## Properties
+
 alarm = Alarme
 pushed = Enclenché
 not-pushed = Non enclenché
@@ -294,6 +314,7 @@ active = Actif
 inactive = Inactif
 
 ## Domain Setup
+
 reclaim-prompt = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer,
 click-here = cliquez ici
 check-email-for-token = Consultez votre courriel pour le jeton de réclamation et le coller au-dessus.
@@ -305,10 +326,12 @@ issuing-error = Impossible de délivrer un certificat. Veuillez réessayer.
 redirecting = Redirection en cours…
 
 ## Booleans
+
 true = Vrai
 false = Faux
 
 ## Time
+
 utils-now = Maintenant
 utils-seconds-ago =
   { $value ->
@@ -351,6 +374,7 @@ day = Jour
 week = Semaine
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -370,6 +394,7 @@ abbrev-millisecond = ms
 abbrev-foot = pi
 
 ## New Thing View
+
 unknown-device-type = Type de périphérique inconnu
 new-thing-choose-icon = Sélectionner  l’icône…
 new-thing-save = Enregistrer
@@ -388,6 +413,7 @@ new-thing-saved = Enregistré
 new-thing-done = Terminé
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Entrer l’URL de la WebThing
 new-web-thing-label = WebThing
@@ -396,12 +422,14 @@ new-web-thing-multiple = Plusieurs WebThings trouvées
 new-web-thing-from = de
 
 ## Empty div Messages
+
 no-things = Aucun périphérique. Cliquer sur + analyser les périphériques disponibles.
 thing-not-found = Thing non trouvé.
 action-not-found = Action non trouvée.
 events-not-found = Cette thing n’a aucun événement.
 
 ## Add-on Settings
+
 add-addons = 
   .aria-label = Découvrir de nouveaux composants additionnels
 author-unknown = Inconnu
@@ -422,6 +450,7 @@ addon-discovery-installing = Installation en cours…
 addon-discovery-failed = Échec
 
 ## Page Titles
+
 settings = Paramètres
 domain = Domaine
 users = Utilisateurs
@@ -442,10 +471,12 @@ wifi = Wi-Fi
 icon = Icône
 
 ## Speech
+
 speech-unsupported = Votre navigateur ne prend pas en charge la parole
 speech-didnt-get = Désolé, je ne vous ai pas compris.
 
 ## Errors
+
 unknown-state = État inconnu.
 error = Erreur
 errors = Erreurs
@@ -456,16 +487,20 @@ failed-read-file = Échec de lecture du fichier.
 failed-save = Échec d’enregistrement.
 
 ## Schema Form
+
 unsupported-field = Schéma non pris en charge
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Connexion — WebThings Gateway
 login-log-in = Connexion
 
 ## Create First User Page
+
 signup-title = Créer un utilisateur — WebThings Gateway
 signup-welcome = Bienvenue
 signup-create-account = Créer votre premier utilisateur :
@@ -473,6 +508,7 @@ signup-password-mismatch = Les mots de passe ne correspondent pas
 signup-next = Suivant
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Sélectionner une adresse web — WebThings Gateway
 tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre Gateway :
@@ -488,6 +524,7 @@ tunnel-setup-skip = Ignorer
 tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge système depuis Internet. L’enregistrement du domaine risque de ne pas fonctionner tant que l’horloge n’est pas à jour.
 
 ## Authorize Page
+
 authorize-title = Demande d’autorisation — WebThings Gateway
 authorize-authorization-request = Demande d’autorisation
 authorize-would-like = veut accéder à votre Gateway pour
@@ -501,6 +538,7 @@ authorize-allow =
 authorize-deny = Refuser
 
 ## Local Token Page
+
 local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
@@ -509,6 +547,7 @@ local-token-use-it = L’utiliser pour communiquer avec votre Gateway en toute s
 local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
+
 router-setup-title = Configuration du routeur — WebThings Gateway
 router-setup-header = Créer un réseau Wi-Fi
 router-setup-input-ssid =
@@ -522,6 +561,7 @@ router-setup-create =
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
 wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
@@ -534,6 +574,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Ignorer
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Connexion en cours — WebThings Gateway
 connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
@@ -542,11 +583,13 @@ connecting-header-skipped = Configuration Wi-Fi ignoré.
 connecting-skipped = La Gateway démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Création du réseau Wi-Fi en cours — WebThings Gateway
 creating-header = Création du réseau Wi-Fi en cours…
 creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
 
 ## General Terms
+
 ok = OK
 ellipsis = …
 event-log = Journal des événements
@@ -557,6 +600,7 @@ processing = Traitement en cours…
 submit = Envoyer
 
 ## Top-Level Buttons
+
 menu-button =
   .aria-label = Menu
 back-button =

@@ -6,6 +6,7 @@ wordmark =
   .alt = Mozilla IoT
 
 ## Menu Items
+
 assistant-menu-item = Assistent
 things-menu-item = Things
 rules-menu-item = Regels
@@ -15,16 +16,19 @@ settings-menu-item = Instellingen
 log-out-button = Afmelden
 
 ## Assistant
+
 assistant-avatar-image =
   .alt = Assistent Avatar
 assistant-controls-text-input =
   .placeholder = Hoe kan ik helpen?
 
 ## Floorplan
+
 upload-floorplan = Upload plattegrond…
 upload-floorplan-hint = (.svg aanbevolen)
 
 ## Top-Level Settings
+
 settings-domain = Domein
 settings-network = Netwerk
 settings-users = Gebruikers
@@ -37,6 +41,7 @@ settings-experiments = Experimenten
 settings-developer = Ontwikkelaar
 
 ## Domain Settings
+
 domain-settings-local-label = Lokale toegang
 domain-settings-local-update = Hostname bijwerken
 domain-settings-remote-access = Externe toegang
@@ -44,6 +49,7 @@ domain-settings-local-name =
   .placeholder = gateway
 
 ## Network Settings
+
 network-settings-unsupported = Netwerkinstelligen worden op dit platform niet ondersteund.
 network-settings-ethernet-image =
   .alt = Ethernet
@@ -88,6 +94,7 @@ failed-lan-configure = LAN instellen mislukt.
 failed-wlan-configure = WLAN instellen mislukt.
 
 ## User Settings
+
 user-settings-input-name =
   .placeholder = Naam
 user-settings-input-email =
@@ -104,16 +111,20 @@ user-settings-password-mismatch = Wachtwoorden zijn niet gelijk
 user-settings-save = Opslaan
 
 ## Adapter Settings
+
 adapter-settings-no-adapters = Geen adapters gevonden.
 
 ## Authorization Settings
+
 authorization-settings-no-authorizations = Geen autorisatie.
 
 ## Experiment Settings
+
 experiment-settings-smart-assistant = Smart Assistant
 experiment-settings-logs = Logboeken
 
 ## Localization Settings
+
 localization-settings-language-region = Taal & Regio
 localization-settings-country = Land
 localization-settings-timezone = Tijdzone
@@ -124,6 +135,7 @@ localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
+
 update-settings-update-now = Nu bijwerken
 update-available = Nieuwe versie beschikbaar
 update-up-to-date = Geen updates beschikbaar
@@ -135,11 +147,13 @@ in-progress = Loopt
 restarting = Herstarten
 
 ## Developer Settings
+
 developer-settings-enable-ssh = SSH inschakelen
 developer-settings-view-internal-logs = Interne logboeken tonen
 developer-settings-create-local-authorization = Maak lokale autorisatie
 
 ## Rules
+
 rules = Regels
 rules-create-rule-hint = Geen regels. Klik op + om een regel te maken.
 rules-rule-name = Regelnaam
@@ -190,6 +204,7 @@ rule-event-lower = gebeurtenis
 rule-event-occurs = voorkomt
 
 ## Logs
+
 logs = Logboeken
 logs-create-log-hint = Geen logboeken. Klik op + om een logboek aan te maken.
 logs-device = Apparaat
@@ -215,6 +230,7 @@ logs-unable-to-create = Kan logboek niet aanmaken
 logs-server-remove-error = Serverfout: kan logboek niet verwijderen
 
 ## Add New Things
+
 add-thing-scanning-icon =
   .alt = Zoeken
 add-thing-scanning = Nieuwe apparaten zoeken…
@@ -225,11 +241,13 @@ add-thing-done = Gereed
 add-thing-cancel = Annuleren
 
 ## Context Menu
+
 context-menu-choose-icon = Kies icoon…
 context-menu-save = Opslaan
 context-menu-remove = Verwijderen
 
 ## Capabilities
+
 OnOffSwitch = Aan-/Uit-schakelaar
 MultiLevelSwitch = Schakelaar met niveaus
 ColorControl = Kleurinstelling
@@ -252,6 +270,7 @@ Lock = Vergrendeld
 Custom = Aangepast Thing
 
 ## Properties
+
 alarm = Alarm
 pushed = Ingedrukt
 not-pushed = Niet ingedrukt
@@ -279,6 +298,7 @@ jammed = Geklemd
 unknown = Onbekend
 
 ## Domain Setup
+
 reclaim-prompt = Het lijkt erop dat u dat subdomein al hebt geregistreerd. Om het te op te eisen
 click-here = klik hier
 check-email-for-token = In uw e-mailbericht ontvangt u een token voor het opeisen. Plak dit hierboven.
@@ -290,10 +310,12 @@ issuing-error = Fout met het certificaat ophalen. Probeer het opnieuw.
 redirecting = Doorsturen…
 
 ## Booleans
+
 true = Ja
 false = Nee
 
 ## Time
+
 utils-now = nu
 utils-seconds-ago =
   { $value ->
@@ -336,6 +358,7 @@ day = Dag
 week = Week
 
 ## Unit Abbreviations
+
 abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
@@ -355,6 +378,7 @@ abbrev-millisecond = ms
 abbrev-foot = ft
 
 ## New Thing View
+
 unknown-device-type = Onbekend apparaattype
 new-thing-choose-icon = Kies icoon…
 new-thing-save = Opslaan
@@ -373,6 +397,7 @@ new-thing-saved = Opgeslagen
 new-thing-done = Klaar
 
 ## New Web Thing View
+
 new-web-thing-url =
   .placeholder = Web thing-URL
 new-web-thing-label = Web Thing
@@ -381,12 +406,14 @@ new-web-thing-multiple = Meerdere Web Things gevonden
 new-web-thing-from = van
 
 ## Empty div Messages
+
 no-things = Geen apparaten. Klik + om apparaten te zoeken.
 thing-not-found = Thing niet gevonden.
 action-not-found = Actie niet gevonden.
 events-not-found = Dit Thing heeft geen gebeurtenissen.
 
 ## Add-on Settings
+
 author-unknown = Onbekend
 disable = Uitgeschakeld
 enable = Ingeschakeld
@@ -405,6 +432,7 @@ addon-discovery-installing = Installeren…
 addon-discovery-failed = Mislukt
 
 ## Page Titles
+
 settings = Instellingen
 domain = Domein
 users = Gebruikers
@@ -425,10 +453,12 @@ wifi = Wi-Fi
 icon = Pictogram
 
 ## Speech
+
 speech-unsupported = De browser ondersteunt geen spraak
 speech-didnt-get = Sorry, ik heb u niet verstaan.
 
 ## Errors
+
 unknown-state = Onbekende staat.
 error = Fout
 errors = Fouten
@@ -439,16 +469,20 @@ failed-read-file = Bestand lezen mislukt.
 failed-save = Bestand opslaan mislukt.
 
 ## Schema Form
+
 unsupported-field = Veldschema niet ondersteund
 
 ## Icon Sources
+
 thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
+
 login-title = Aanmelden — WebThings Gateway
 login-log-in = Aanmelden
 
 ## Create First User Page
+
 signup-title = Gebruiker toevoegen — WebThings Gateway
 signup-welcome = Welkom
 signup-create-account = Maak uw eerste gebruiker aan:
@@ -456,6 +490,7 @@ signup-password-mismatch = Wachtwoorden zijn niet gelijk
 signup-next = Volgende
 
 ## Tunnel Setup Page
+
 tunnel-setup-title = Kies webadres — WebThings Gateway
 tunnel-setup-welcome = Welkom
 tunnel-setup-choose-address = Kies een beveiligd webadres voor uw gateway:
@@ -471,6 +506,7 @@ tunnel-setup-skip = Overslaan
 tunnel-setup-time-sync = Wacht op het instellen van de klok via internet. Domeinregistratie zal anders waarschijnlijk mislukken.
 
 ## Authorize Page
+
 authorize-title = Autorisatieaanvraag- WebThings Gateway
 authorize-authorization-request = Autorisatieaanvraag
 authorize-would-like = wil graag toegang tot uw gateway
@@ -484,6 +520,7 @@ authorize-allow =
 authorize-deny = Weigeren
 
 ## Local Token Page
+
 local-token-title = Lokale tokendienst — WebThings Gateway
 local-token-header = Lokale tokendienst
 local-token-your-token = Je lokale token is
@@ -492,6 +529,7 @@ local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met
 local-token-bearer-type = Bearer-type-autorisatie
 
 ## Router Setup Page
+
 router-setup-title = Routerinstellingen — WebThings Gateway
 router-setup-header = Maak een Wi-Fi-verbinding
 router-setup-input-ssid =
@@ -505,6 +543,7 @@ router-setup-create =
 router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
 ## Wi-Fi Setup Page
+
 wifi-setup-title = Wi-Fi-instellingen — WebThings Gateway
 wifi-setup-header = Verbinden met Wi-Fi-netwerk?
 wifi-setup-input-password =
@@ -517,6 +556,7 @@ wifi-setup-network-icon =
 wifi-setup-skip = Overslaan
 
 ## Connecting to Wi-Fi Page
+
 connecting-title = Verbinden met Wi-Fi — WebThings Gateway
 connecting-header = Verbinden met Wi-Fi…
 connecting-connect = Controleer of u verbonden bent met hetzelfde netwerk en
@@ -529,12 +569,14 @@ connecting-skipped = De gateway wordt opgestart. Navigeer naar
  om de installatie te voltooien.
 
 ## Creating Wi-Fi Network Page
+
 creating-title = Wi-Fi-netwerk maken — WebThings Gateway
 creating-header = Wi-Fi-netwerk maken…
 creating-content = Verbind met { $ssid } en het ingestelde wachtwoord,
  navigeer daarna naar { $gateway-link } of { $ip-link } in uw webbrowser.
 
 ## General Terms
+
 ok = Ok
 ellipsis = …
 event-log = Gebeurtenissenlogboek
