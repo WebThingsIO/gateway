@@ -14,7 +14,7 @@ Web of Things gateway.
 * If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://iot.mozilla.org/gateway/) a pre-built software image from Mozilla to an SD card.
 * If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/mozillaiot/gateway), for both ARM and amd64 and arm.
 * On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/).
-* Otherwise you can build it from source yourself (see below).
+* Otherwise, you can build it from source yourself (see below).
 
 ## Prerequisites for Building
 
