@@ -249,12 +249,12 @@ context-menu-remove = Fuortsmite
 ## Capabilities
 
 OnOffSwitch = Oan-/Ut-skeakeler
-MultiLevelSwitch = Skeakeler mei nivo's
+MultiLevelSwitch = Skeakeler mei nivo’s
 ColorControl = Kleurynstelling
 ColorSensor = Kleursensor
 EnergyMonitor = Enerzjymonitor
 BinarySensor = Binêre sensor
-MultiLevelSensor = Sensor mei nivo's
+MultiLevelSensor = Sensor mei nivo’s
 SmartPlug = Tûke ynstekker
 Light = Ljocht
 DoorSensor = Doarsensor
