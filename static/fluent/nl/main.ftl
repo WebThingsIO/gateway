@@ -229,8 +229,7 @@ logs-server-remove-error = Serverfout: kan logboek niet verwijderen
 add-thing-scanning-icon =
   .alt = Zoeken
 add-thing-scanning = Nieuwe apparaten zoeken…
-add-thing-add-adapters-hint = Geen apparaten gevonden. Probeer
-add-thing-add-adapters-hint-anchor = add-ons toe te voegen
+add-thing-add-adapters-hint = Geen apparaten gevonden. Probeer <a data-l10n-name="add-thing-add-adapters-hint-anchor">add-ons toe te voegen</a>.
 add-thing-add-by-url = Toevoegen met URL…
 add-thing-done = Gereed
 add-thing-cancel = Annuleren
@@ -294,8 +293,7 @@ unknown = Onbekend
 
 ## Domain Setup
 
-reclaim-prompt = Het lijkt erop dat u dat subdomein al hebt geregistreerd. Om het te op te eisen
-click-here = klik hier
+tunnel-setup-reclaim-domain = Het lijkt erop dat u dat subdomein al hebt geregistreerd. Om het te op te eisen <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">klik hier</a>.
 check-email-for-token = In uw e-mailbericht ontvangt u een token voor het opeisen. Plak dit hierboven.
 reclaim-failed = Kan domein niet opeisen.
 subdomain-already-used = Dit subodmein is al in gebruik. Kies een andere.
@@ -518,10 +516,8 @@ authorize-deny = Weigeren
 
 local-token-title = Lokale tokendienst — WebThings Gateway
 local-token-header = Lokale tokendienst
-local-token-your-token = Je lokale token is
-local-token-jwt = JSON Web-token
-local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met
-local-token-bearer-type = Bearer-type-autorisatie
+local-token-your-token = Je lokale token is <a data-l10n-name="local-token-jwt">JSON Web-token</a>.
+local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
 
 ## Router Setup Page
 

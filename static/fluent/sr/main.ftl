@@ -242,8 +242,7 @@ logs-server-remove-error = Грешка на серверу: не могу да 
 add-thing-scanning-icon =
   .alt = Претражујем
 add-thing-scanning = Тражим нове уређаје…
-add-thing-add-adapters-hint = Нема нових справица. Покушајте да
-add-thing-add-adapters-hint-anchor = додате неке додатке.
+add-thing-add-adapters-hint = Нема нових справица. Покушајте да <a data-l10n-name="add-thing-add-adapters-hint-anchor">додате неке додатке</a>.
 add-thing-add-by-url = Додај преко URL-а…
 add-thing-done = Готово
 add-thing-cancel = Откажи
@@ -310,8 +309,7 @@ inactive = У мировању
 
 ## Domain Setup
 
-reclaim-prompt = Изгледа да сте већ регистровали овај поддомен. Да бисте га повратили
-click-here = кликните овде
+tunnel-setup-reclaim-domain = Изгледа да сте већ регистровали овај поддомен. Да бисте га повратили <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">кликните овде</a>.
 check-email-for-token = Проверите вашу е-пошту, потражите жетон за повраћај и унесите га изнад.
 reclaim-failed = Нисам могао да повратим домен.
 subdomain-already-used = Овај поддомен се већ користи. Изаберите други.
@@ -543,10 +541,8 @@ authorize-deny = Одбиј
 
 local-token-title = Услуга локалног жетона — WebThings мрежни пролаз
 local-token-header = Услуга локалног жетона
-local-token-your-token = Ово је ваш локални жетон
-local-token-jwt = JSON веб жетон
-local-token-use-it = Користите га за безбедну комуникацију са овим мрежним пролазом, уз
-local-token-bearer-type = Bearer-type пуномоћје
+local-token-your-token = Ово је ваш локални жетон <a data-l10n-name="local-token-jwt">JSON веб жетон</a>.
+local-token-use-it = Користите га за безбедну комуникацију са овим мрежним пролазом, уз <a data-l10n-name="local-token-bearer-type">Bearer-type пуномоћје</a>.
 
 ## Router Setup Page
 

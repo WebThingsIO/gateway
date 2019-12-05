@@ -229,8 +229,7 @@ logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt wer
 add-thing-scanning-icon =
   .alt = Suche
 add-thing-scanning = Es wird nach neuen Geräten gesucht…
-add-thing-add-adapters-hint = Keine neuen Geräte gefunden.
-add-thing-add-adapters-hint-anchor = Neue Erweiterungen hinzufügen.
+add-thing-add-adapters-hint = Keine neuen Geräte gefunden. <a data-l10n-name="add-thing-add-adapters-hint-anchor">Neue Erweiterungen hinzufügen.</a>
 add-thing-add-by-url = Via URL hinzufügen…
 add-thing-done = Erledigt
 add-thing-cancel = Abbrechen
@@ -294,8 +293,7 @@ unknown = Unbekannt
 
 ## Domain Setup
 
-reclaim-prompt = Die Subdomain scheint bereits registriert zu sein. Zum Wiederherstellen
-click-here = hier klicken
+tunnel-setup-reclaim-domain = Die Subdomain scheint bereits registriert zu sein. Zum Wiederherstellen <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">hier klicken</a>.
 check-email-for-token = Bitte das Reclaim-Token aus der verschickten E-Mail oben einfügen.
 reclaim-failed = Subdomain konnte nicht wiederhergestellt werden.
 subdomain-already-used = Diese Subdomain ist bereits in Gebrauch. Bitte einen anderen Namen wählen.
@@ -518,10 +516,8 @@ authorize-deny = Ablehnen
 
 local-token-title = Dienst für lokale Token - WebThings Gateway
 local-token-header = Dienst für lokale Token
-local-token-your-token = Das lokale Zugriffstoken ist
-local-token-jwt = JSON Web Token
-local-token-use-it = Zugriff auf das Gateway über
-local-token-bearer-type = Bearer-type Authorisierung
+local-token-your-token = Das lokale Zugriffstoken ist <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-use-it = Zugriff auf das Gateway über <a data-l10n-name="local-token-bearer-type">Bearer-type Authorisierung</a>
 
 ## Router Setup Page
 

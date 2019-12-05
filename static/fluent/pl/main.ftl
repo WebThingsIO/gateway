@@ -242,8 +242,7 @@ logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
 add-thing-scanning-icon =
   .alt = Skanowanie
 add-thing-scanning = Skanowanie w poszukiwaniu nowych urządzeń…
-add-thing-add-adapters-hint = Nie znaleziono żadnych nowych rzeczy. Spróbuj
-add-thing-add-adapters-hint-anchor = dodać rozszerzenia.
+add-thing-add-adapters-hint = Nie znaleziono żadnych nowych rzeczy. Spróbuj <a data-l10n-name="add-thing-add-adapters-hint-anchor">dodać rozszerzenia</a>.
 add-thing-add-by-url = Dodaj przez URL…
 add-thing-done = Gotowe
 add-thing-cancel = Anuluj
@@ -310,8 +309,7 @@ inactive = Nieaktywny
 
 ## Domain Setup
 
-reclaim-prompt = Wygląda na to, że już zarejestrowałeś tę subdomenę. Aby ją odzyskać
-click-here = naciśnij tutaj
+tunnel-setup-reclaim-domain = Wygląda na to, że już zarejestrowałeś tę subdomenę. Aby ją odzyskać <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">naciśnij tutaj</a>.
 check-email-for-token = Sprawdź swój e-mail w poszukiwaniu tokenu odzyskiwania i wklej go powyżej.
 reclaim-failed = Nie można odzyskać subdomeny.
 subdomain-already-used = Ta subdomena jest już zajęta. Proszę wybierz inną.
@@ -547,10 +545,8 @@ authorize-deny = Zabroń
 
 local-token-title = Usługa Tokenów Lokalnych — WebThings Gateway
 local-token-header = Usługa Tokenów Lokalnych
-local-token-your-token = Twój lokalny token jest następujący
-local-token-jwt = JSON Web Token
-local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą
-local-token-bearer-type = Autoryzacji na okaziciela
+local-token-your-token = Twój lokalny token jest następujący <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą <a data-l10n-name="local-token-bearer-type">Autoryzacji na okaziciela</a>.
 
 ## Router Setup Page
 
