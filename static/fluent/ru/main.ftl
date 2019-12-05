@@ -1,9 +1,21 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = WebThings Gateway
+
 # Main Title
-webthings-gateway = Шлюз WebThings
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -187,7 +199,7 @@ rule-select-property = Выберите свойство
 rule-not = Не
 rule-event = Событие
 rule-action = Действие
-rule-configure = Настройка...
+rule-configure = Настройка…
 rule-time-title = Время суток
 rule-notification = Уведомление
 notification-title = Заголовок
@@ -228,15 +240,15 @@ logs-server-remove-error = Ошибка сервера: невозможно у�
 
 add-thing-scanning-icon =
   .alt = Сканирование
-add-thing-scanning = Поиск новых устройств...
+add-thing-scanning = Поиск новых устройств…
 add-thing-add-adapters-hint = Ничего не найдено. Попробуйте <a data-l10n-name="add-thing-add-adapters-hint-anchor">добавить дополнения</a>.
-add-thing-add-by-url = Добавить по URL...
+add-thing-add-by-url = Добавить по URL…
 add-thing-done = Готово
 add-thing-cancel = Отмена
 
 ## Context Menu
 
-context-menu-choose-icon = Выберите значок...
+context-menu-choose-icon = Выберите значок…
 context-menu-save = Сохранить
 context-menu-remove = Удалить
 
@@ -301,9 +313,9 @@ check-email-for-token = Вставьте токен, который мы отп�
 reclaim-failed = Не удалось вернуть домен.
 subdomain-already-used = Этот субдомен уже используется. Выберите другой.
 invalid-reclamation-token = Неверный токен возврата.
-domain-success = Получилось! Подождите, пока мы вас перенаправим...
+domain-success = Получилось! Подождите, пока мы вас перенаправим…
 issuing-error = Ошибка при выдаче сертификата. Попробуйте ещё раз.
-redirecting = Перенаправление...
+redirecting = Перенаправление…
 
 ## Booleans
 
@@ -376,7 +388,7 @@ abbrev-foot = фут
 ## New Thing View
 
 unknown-device-type = Неизвестный тип устройства
-new-thing-choose-icon = Выберите значок...
+new-thing-choose-icon = Выберите значок…
 new-thing-save = Сохранить
 new-thing-pin =
   .placeholder = Введите PIN-код
@@ -397,7 +409,7 @@ new-thing-done = Готово
 new-web-thing-url =
   .placeholder = Введите URL устройства
 new-web-thing-label = Веб-вещь
-loading = Загрузка...
+loading = Загрузка…
 new-web-thing-multiple = Найдено несколько веб-вещей
 new-web-thing-from = от
 
@@ -417,14 +429,14 @@ by = от
 addon-configure = Настройка
 addon-update = Обновить
 addon-remove = Удалить
-addon-updating = Обновление ...
+addon-updating = Обновление…
 addon-updated = Обновлено
 addon-update-failed = Не удалось
-addon-config-applying = Применение...
+addon-config-applying = Применение…
 addon-config-apply = Применить
 addon-discovery-added = Добавлено
 addon-discovery-add = Добавить
-addon-discovery-installing = Установка...
+addon-discovery-installing = Установка…
 addon-discovery-failed = Не удалось
 
 ## Page Titles
@@ -474,12 +486,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Войти — Шлюз WebThings
+login-title = Войти — { -webthings-gateway-brand }
 login-log-in = Авторизоваться
 
 ## Create First User Page
 
-signup-title = Создать пользователя — Шлюз WebThings
+signup-title = Создать пользователя — { -webthings-gateway-brand }
 signup-welcome = Добро пожаловать
 signup-create-account = Создайте свою первую учетную запись:
 signup-password-mismatch = Пароли не совпадают
@@ -487,7 +499,7 @@ signup-next = Далее
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Выберите веб-адрес — шлюз WebThings
+tunnel-setup-title = Выберите веб-адрес — { -webthings-gateway-brand }
 tunnel-setup-welcome = Добро пожаловать
 tunnel-setup-choose-address = Выберите безопасный адрес для вашего шлюза:
 tunnel-setup-input-subdomain =
@@ -503,7 +515,7 @@ tunnel-setup-time-sync = Ожидание установки системных 
 
 ## Authorize Page
 
-authorize-title = Запрос на авторизацию — Шлюз WebThings
+authorize-title = Запрос на авторизацию — { -webthings-gateway-brand }
 authorize-authorization-request = Запрос на авторизацию
 authorize-monitor-and-control = мониторинг и управление
 authorize-monitor = мониторинг
@@ -514,14 +526,14 @@ authorize-deny = Запретить
 
 ## Local Token Page
 
-local-token-title = Локальная служба токенов — Шлюз WebThings
+local-token-title = Локальная служба токенов — { -webthings-gateway-brand }
 local-token-header = Локальная служба токенов
 local-token-your-token = Ваш локальный токен <a data-l10n-name="local-token-jwt">Веб-токен JSON</a>.
 local-token-use-it = Используйте его для общения со шлюзом, с <a data-l10n-name="local-token-bearer-type">Авторизация типа носителя</a>.
 
 ## Router Setup Page
 
-router-setup-title = Настройка маршрутизатора — Шлюз WebThings
+router-setup-title = Настройка маршрутизатора — { -webthings-gateway-brand }
 router-setup-header = Создать новую сеть Wi-Fi
 router-setup-input-ssid =
   .placeholder = Имя сети
@@ -535,7 +547,7 @@ router-setup-password-mismatch = Пароли должны совпадать
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Настройка Wi-Fi — шлюз WebThings
+wifi-setup-title = Настройка Wi-Fi — { -webthings-gateway-brand }
 wifi-setup-header = Подключиться к сети Wi-Fi?
 wifi-setup-input-password =
   .placeholder = Пароль
@@ -548,8 +560,8 @@ wifi-setup-skip = Пропустить
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Подключение к Wi-Fi — Шлюз WebThings
-connecting-header = Подключение к Wi-Fi...
+connecting-title = Подключение к Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Подключение к Wi-Fi…
 connecting-connect = Пожалуйста, убедитесь, что вы подключены к той же сети, и
  перейдите по ссылке { $gateway-link } в браузере, чтобы продолжить установку.
 connecting-warning = Примечание. Если вы не можете загрузить {$ domain}, поищите
@@ -561,8 +573,8 @@ connecting-skipped = Шлюз сейчас запускается. Перейд�
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Создание сети Wi-Fi — Шлюз WebThings
-creating-header = Создание сети Wi-Fi...
+creating-title = Создание сети Wi-Fi — { -webthings-gateway-brand }
+creating-header = Создание сети Wi-Fi…
 creating-content = Подключитесь к {$ ssid} с паролем, который вы только что
  создали, по ссылке { $gateway-link } или по адресу { $ip-link } в
  браузере.
@@ -570,10 +582,10 @@ creating-content = Подключитесь к {$ ssid} с паролем, ко�
 ## General Terms
 
 ok = ОК
-ellipsis = ...
+ellipsis = …
 event-log = Журнал событий
 edit = Редактировать
 remove = Удалить
 disconnected = Отключено
-processing = Обработка...
+processing = Обработка…
 submit = Отправить

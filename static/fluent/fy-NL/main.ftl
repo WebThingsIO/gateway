@@ -1,9 +1,21 @@
+## The following terms must be treated as brand, and kept in English.
+##
+## They cannot be:
+## - Transliterated.
+## - Translated.
+##
+## Declension should be avoided where possible.
+##
+## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
+
+-webthings-gateway-brand = WebThings Gateway
+
 # Main Title
-webthings-gateway = WebThings Gateway
+webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = Mozilla IoT
+  .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -471,12 +483,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Oanmelde — WebThings Gateway
+login-title = Oanmelde — { -webthings-gateway-brand }
 login-log-in = Oanmelde
 
 ## Create First User Page
 
-signup-title = Brûker tafoegje — WebThings Gateway
+signup-title = Brûker tafoegje — { -webthings-gateway-brand }
 signup-welcome = Wolkom
 signup-create-account = Meitsje jo earste brûker oan:
 signup-password-mismatch = Wachtwurden binne net lyk
@@ -484,7 +496,7 @@ signup-next = Folgjende
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Kies webadres — WebThings Gateway
+tunnel-setup-title = Kies webadres — { -webthings-gateway-brand }
 tunnel-setup-welcome = Wolkom
 tunnel-setup-choose-address = Kies in befeilige webadres foar jo gateway:
 tunnel-setup-input-subdomain =
@@ -500,7 +512,7 @@ tunnel-setup-time-sync = Wacht op it ynstellen fan de klok fia ynternet. Domeinr
 
 ## Authorize Page
 
-authorize-title = Autorisaasje-oanfraach — WebThings Gateway
+authorize-title = Autorisaasje-oanfraach — { -webthings-gateway-brand }
 authorize-authorization-request = Autorisaasje-oanfraach
 authorize-monitor-and-control = besjen en ynstelle
 authorize-monitor = besjen
@@ -511,14 +523,14 @@ authorize-deny = Wegerje
 
 ## Local Token Page
 
-local-token-title = Lokale tokentsjinst — WebThings Gateway
+local-token-title = Lokale tokentsjinst — { -webthings-gateway-brand }
 local-token-header = Lokale tokentsjinst
 local-token-your-token = Jo lokale token is <a data-l10n-name="local-token-jwt">JSON Web-token</a>.
 local-token-use-it = Brûk dizze om befeilige mei de gateway te praten, mei <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisaasje</a>.
 
 ## Router Setup Page
 
-router-setup-title = Routerynstellingen — WebThings Gateway
+router-setup-title = Routerynstellingen — { -webthings-gateway-brand }
 router-setup-header = Meitsje in Wi-Fi-ferbining
 router-setup-input-ssid =
   .placeholder = Netwurknamme
@@ -532,7 +544,7 @@ router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi-ynstellingen — WebThings Gateway
+wifi-setup-title = Wi-Fi-ynstellingen — { -webthings-gateway-brand }
 wifi-setup-header = Ferbine mei Wi-Fi-netwurk?
 wifi-setup-input-password =
   .placeholder = Wachtwurd
@@ -545,7 +557,7 @@ wifi-setup-skip = Oerslaan
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Ferbine mei Wi-Fi — WebThings Gateway
+connecting-title = Ferbine mei Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ferbine mei Wi-Fi…
 connecting-connect = Kontrolearje oft jo ferbûn binne mei itselde netwurk en
  navigearje dan nei { $gateway-link } yn jo webbrowser om de ynstallaasje te foltôgjen.
@@ -558,7 +570,7 @@ connecting-skipped = De gateway wurdt opstart. Navigearje nei
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi-netwurk meitsje — WebThings Gateway
+creating-title = Wi-Fi-netwurk meitsje — { -webthings-gateway-brand }
 creating-header = Wi-Fi-netwurk meitsje…
 creating-content = Ferbyn mei { $ssid } en it ynstelde wachtwurd,
  navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
