@@ -8,7 +8,7 @@
 ##
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
--webthings-gateway-brand = { -webthings-gateway-brand }
+-webthings-gateway-brand = WebThings Gateway
 
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
