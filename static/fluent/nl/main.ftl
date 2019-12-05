@@ -197,11 +197,6 @@ notification-low = Laag
 notification-normal = Gemiddeld
 notification-high = Hoog
 rule-name = Regelnaam
-rule-and = en
-rule-or = of
-rule-time-of-day-is = het is
-rule-event-lower = gebeurtenis
-rule-event-occurs = voorkomt
 
 ## Logs
 

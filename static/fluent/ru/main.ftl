@@ -197,11 +197,6 @@ notification-low = Низкий
 notification-normal = Средний
 notification-high = Высокий
 rule-name = Название правила
-rule-and = и
-rule-or = или
-rule-time-of-day-is = время суток - 
-rule-event-lower = событие
-rule-event-occurs = происходит
 
 ## Logs
 

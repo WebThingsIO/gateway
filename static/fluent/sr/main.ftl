@@ -209,11 +209,6 @@ notification-low = Низак
 notification-normal = Обичан
 notification-high = Висок
 rule-name = Назив правила
-rule-and = и
-rule-or = или
-rule-time-of-day-is = време у току дана је
-rule-event-lower = догађај
-rule-event-occurs = се догоди
 
 ## Logs
 
