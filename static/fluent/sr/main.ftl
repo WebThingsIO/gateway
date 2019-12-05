@@ -9,14 +9,13 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = { -webthings-gateway-brand }
--mozilla-iot-brand = { -mozilla-iot-brand }
 
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
 
 # Wordmark
 wordmark =
-  .alt = { -mozilla-iot-brand }
+  .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
