@@ -280,8 +280,8 @@ TemperatureSensor = Capteur de température
 Alarm = Alarme
 Thermostat = Thermostat
 Lock = Verrou
-Custom = Thing personnalisé
-Thing = Thing
+Custom = Élément personnalisé
+Thing = Élément
 
 ## Properties
 
@@ -306,8 +306,8 @@ motion = Mouvement
 no-motion = Aucun mouvement
 open = Ouvert
 closed = Fermé
-locked = Barré
-unlocked = Débarré
+locked = Verrouillé
+unlocked = Déverrouillé
 jammed = Bourré
 unknown = Inconnu
 active = Actif
@@ -317,11 +317,11 @@ inactive = Inactif
 
 reclaim-prompt = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer,
 click-here = cliquez ici
-check-email-for-token = Consultez votre courriel pour le jeton de réclamation et le coller au-dessus.
+check-email-for-token = Veuillez consulter votre courriel pour le jeton de réclamation et le coller au-dessus.
 reclaim-failed = Impossible de réclamer le domaine.
-subdomain-already-used = Ce sous-domaine est déjà utilisé. Choisissez un autre.
+subdomain-already-used = Ce sous-domaine est déjà utilisé. Veuillez en choisir un autre.
 invalid-reclamation-token = Jeton de réclamation non valide.
-domain-success = Succès ! Patientez pendant la redirection…
+domain-success = Succès ! Patientez pendant la redirection…
 issuing-error = Impossible de délivrer un certificat. Veuillez réessayer.
 redirecting = Redirection en cours…
 
@@ -480,7 +480,7 @@ speech-didnt-get = Désolé, je ne vous ai pas compris.
 unknown-state = État inconnu.
 error = Erreur
 errors = Erreurs
-gateway-unreachable = Gateway inaccessible
+gateway-unreachable = Passerelle inaccessible
 more-information = Plus d’informations
 invalid-file = Fichier non valide.
 failed-read-file = Échec de lecture du fichier.
@@ -511,10 +511,10 @@ signup-next = Suivant
 
 tunnel-setup-title = Sélectionner une adresse web — WebThings Gateway
 tunnel-setup-welcome = Bienvenue
-tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre Gateway :
+tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
   .placeholder = sous-domaine
-tunnel-setup-opt-in = M’informe des nouvelles fonctionnalités ou des opportunités de contributions.
+tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de contributions.
 tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
   .placeholder = Jeton de récupération
@@ -527,7 +527,7 @@ tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge
 
 authorize-title = Demande d’autorisation — WebThings Gateway
 authorize-authorization-request = Demande d’autorisation
-authorize-would-like = veut accéder à votre Gateway pour
+authorize-would-like = veut accéder à votre passerelle pour
 authorize-devices = périphériques.
 authorize-from = de
 authorize-monitor-and-control = surveiller et contrôler
@@ -543,7 +543,7 @@ local-token-title = Service de jeton locale — WebThings Gateway
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est
 local-token-jwt = jeton Web JSON
-local-token-use-it = L’utiliser pour communiquer avec votre Gateway en toute sécurité avec
+local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec
 local-token-bearer-type = « Bearer-type Authorization »
 
 ## Router Setup Page
@@ -562,7 +562,7 @@ router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
+wifi-setup-title = Configuration Wi-Fi — WebThings Gateway
 wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
   .placeholder = Mot de passe
@@ -580,7 +580,7 @@ connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
 connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
 connecting-header-skipped = Configuration Wi-Fi ignoré.
-connecting-skipped = La Gateway démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
+connecting-skipped = La passerelle démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
 
