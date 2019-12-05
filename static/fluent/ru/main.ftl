@@ -505,9 +505,6 @@ tunnel-setup-time-sync = Ожидание установки системных 
 
 authorize-title = Запрос на авторизацию — Шлюз WebThings
 authorize-authorization-request = Запрос на авторизацию
-authorize-would-like = хочет разрешить доступ шлюзу к
-authorize-devices = устройствам.
-authorize-from = от
 authorize-monitor-and-control = мониторинг и управление
 authorize-monitor = мониторинг
 authorize-allow-all = Разрешить для всех вещей

@@ -527,9 +527,6 @@ tunnel-setup-time-sync = Чекам да се системско време по
 
 authorize-title = Захтев за пуномоћје — WebThings мрежни пролаз
 authorize-authorization-request = Захтев за пуномоћје
-authorize-would-like = жели да приступи вашем мрежном пролазу да би
-authorize-devices = уређајима.
-authorize-from = из
 authorize-monitor-and-control = надгледао и управљао
 authorize-monitor = управљао
 authorize-allow-all = Дозволи за све справице

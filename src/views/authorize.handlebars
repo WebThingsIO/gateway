@@ -25,15 +25,20 @@
       </div>
 
       <form id="authorize-form" method="get" action="allow">
-        <p><b>{{name}}</b> <span data-l10n-id="authorize-would-like"></span>
-          <span class="authorize-select-container">
+        <p id="authorize-info">
+          <b id="authorize-name">{{name}}</b>
+          <span id="authorize-function" class="authorize-select-container">
             <select class="authorize-select">
               <option id="authorize-readwrite" data-l10n-id="authorize-monitor-and-control"></option>
               <option id="authorize-read" data-l10n-id="authorize-monitor"></option>
             </select>
           </span>
-          <span data-l10n-id="authorize-devices"></span></p>
-        <p><small><span data-l10n-id="authorize-from"></span> {{domain}}</small></p>
+        </p>
+        <p>
+          <small id="authorize-sub-info">
+            <span id="authorize-domain">{{domain}}</span>
+          </small>
+        </p>
         <ul id="authorize-things">
           <li class="authorize-all-things">
             <input id="authorize-all-things" type="checkbox" class="generic-checkbox">

@@ -502,9 +502,6 @@ tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das 
 
 authorize-title = Authorisierungsanfrage - WebThings Gateway
 authorize-authorization-request = Authorisierungsanfrage
-authorize-would-like = möchte auf das Gateway zugreifen zum
-authorize-devices = Geräte.
-authorize-from = von
 authorize-monitor-and-control = Überwachen und kontrollieren
 authorize-monitor = Überwachen
 authorize-allow-all = Für alle Geräte erlauben
