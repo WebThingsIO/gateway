@@ -543,6 +543,10 @@ tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internet
 
 authorize-title = Wniosek o Autoryzację — { -webthings-gateway-brand }
 authorize-authorization-request = Wniosek o autoryzację
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> chce uzyskać dostęp do twojej bramy w celu <<function>> urządzeń.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = z <<domain>>
 authorize-monitor-and-control = monitorowania i kontroli
 authorize-monitor = monitorowania
 authorize-allow-all = Pozwól dla wszystkich Rzeczy
