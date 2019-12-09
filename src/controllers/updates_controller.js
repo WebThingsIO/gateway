@@ -159,6 +159,12 @@ UpdatesController.get('/status', async (request, response) => {
   }
 });
 
+UpdatesController.get('/support', async (request, response) => {
+  response.send({
+    support: config.get('updateSupport'),
+  });
+});
+
 UpdatesController.post('/update', async (request, response) => {
   childProcess.exec('sudo systemctl start ' +
     'mozilla-iot-gateway.check-for-update.service');

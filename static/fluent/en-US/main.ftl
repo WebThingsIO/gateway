@@ -161,6 +161,7 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Update Now
 update-available = New version available
 update-up-to-date = Your system is up to date
+updates-not-supported = Updates are not supported on this platform.
 last-update = Last update
 current-version = Current version
 failed = Failed
