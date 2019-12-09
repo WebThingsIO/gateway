@@ -271,6 +271,10 @@ const API = {
     return this.getJson('/updates/latest');
   },
 
+  getUpdateSupport() {
+    return this.getJson('/updates/support');
+  },
+
   startUpdate() {
     return this.postJson('/updates/update', {});
   },

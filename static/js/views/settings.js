@@ -1710,15 +1710,18 @@ const SettingsScreen = {
     const versionElt = document.getElementById('update-settings-version');
     const statusElt = document.getElementById('update-settings-status');
 
-    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest()]);
+    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest(), API.getUpdateSupport()]);
     fetches.then((results) => {
       const status = results[0];
       const latest = results[1];
+      const support = results[2];
       let cmp = 0;
       if (latest.version) {
         cmp = this.compareSemver(status.version, latest.version);
       }
-      if (cmp < 0) {
+      if (!support.support) {
+        upToDateElt.textContent = fluent.getMessage('updates-not-supported')
+      } else if (cmp < 0) {
         // Update available
         upToDateElt.textContent = fluent.getMessage('update-available');
         updateNow.classList.remove('hidden');
@@ -1742,7 +1745,11 @@ const SettingsScreen = {
         statusText += fluent.getMessage('never');
       }
 
+      if (support.support) {
       statusElt.textContent = statusText;
+      } else {
+        statusElt.classList.add('hidden');
+      }
     });
   },
 
