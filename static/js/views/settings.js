@@ -1710,7 +1710,8 @@ const SettingsScreen = {
     const versionElt = document.getElementById('update-settings-version');
     const statusElt = document.getElementById('update-settings-status');
 
-    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest(), API.getUpdateSupport()]);
+    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest(),
+                                 API.getUpdateSupport()]);
     fetches.then((results) => {
       const status = results[0];
       const latest = results[1];
@@ -1720,7 +1721,7 @@ const SettingsScreen = {
         cmp = this.compareSemver(status.version, latest.version);
       }
       if (!support.support) {
-        upToDateElt.textContent = fluent.getMessage('updates-not-supported')
+        upToDateElt.textContent = fluent.getMessage('updates-not-supported');
       } else if (cmp < 0) {
         // Update available
         upToDateElt.textContent = fluent.getMessage('update-available');
@@ -1746,7 +1747,7 @@ const SettingsScreen = {
       }
 
       if (support.support) {
-      statusElt.textContent = statusText;
+        statusElt.textContent = statusText;
       } else {
         statusElt.classList.add('hidden');
       }
