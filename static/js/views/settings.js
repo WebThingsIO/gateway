@@ -742,16 +742,24 @@ const SettingsScreen = {
   },
   /* eslint-enable max-len */
 
+  /* eslint-disable max-len */
   setupUpdateElements: function() {
     this.elements.update = {
       updateNow: document.getElementById('update-now'),
+      enableSelfUpdatesCheckbox: document.getElementById('enable-self-updates-checkbox'),
     };
 
     this.elements.update.updateNow.addEventListener(
       'click',
       this.onUpdateClick
     );
+
+    this.elements.update.enableSelfUpdatesCheckbox.addEventListener(
+      'change',
+      this.onEnableSelfUpdatesCheckboxChange
+    );
   },
+  /* eslint-enable max-len */
 
   setupExperimentElements: function() {
     this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
@@ -1704,23 +1712,36 @@ const SettingsScreen = {
     this.fetchUpdateInfo();
   },
 
+  onEnableSelfUpdatesCheckboxChange: (e) => {
+    const enabled = e.target.checked ? true : false;
+
+    API.setSelfUpdateStatus(enabled).catch((e) => {
+      console.error(`Failed to toggle auto-updates: ${e}`);
+    });
+  },
+
   fetchUpdateInfo: function() {
     const upToDateElt = document.getElementById('update-settings-up-to-date');
     const updateNow = document.getElementById('update-now');
     const versionElt = document.getElementById('update-settings-version');
     const statusElt = document.getElementById('update-settings-status');
 
-    const fetches = Promise.all([API.getUpdateStatus(), API.getUpdateLatest(),
-                                 API.getUpdateSupport()]);
+    const fetches = Promise.all([
+      API.getUpdateStatus(),
+      API.getUpdateLatest(),
+      API.getSelfUpdateStatus(),
+    ]);
     fetches.then((results) => {
       const status = results[0];
       const latest = results[1];
       const support = results[2];
       let cmp = 0;
+
       if (latest.version) {
         cmp = this.compareSemver(status.version, latest.version);
       }
-      if (!support.support) {
+
+      if (!support.available) {
         upToDateElt.textContent = fluent.getMessage('updates-not-supported');
       } else if (cmp < 0) {
         // Update available
@@ -1732,6 +1753,7 @@ const SettingsScreen = {
         upToDateElt.textContent = fluent.getMessage('update-up-to-date');
         updateNow.classList.add('hidden');
       }
+
       versionElt.textContent =
         `${fluent.getMessage('current-version')}: ${Utils.escapeHtml(status.version)}`;
       let statusText = `${fluent.getMessage('last-update')}: `;
@@ -1746,7 +1768,11 @@ const SettingsScreen = {
         statusText += fluent.getMessage('never');
       }
 
-      if (support.support) {
+      this.elements.update.enableSelfUpdatesCheckbox.checked = support.enabled;
+      this.elements.update.enableSelfUpdatesCheckbox.disabled =
+        !support.available;
+
+      if (support.available) {
         statusElt.textContent = statusText;
       } else {
         statusElt.classList.add('hidden');

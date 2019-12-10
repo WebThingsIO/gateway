@@ -434,7 +434,6 @@
       </section>
       <section id="update-settings" class="hidden settings-section">
         <ul>
-          <!-- TODO(hobinjk): allow disabling automatic updates -->
           <li class="update-item" id="up-to-date-container">
             <p id="update-settings-up-to-date"></p>
             <button id="update-now" class="text-button hidden" data-l10n-id="update-settings-update-now"></button>
@@ -442,6 +441,10 @@
           <li class="update-item">
             <p id="update-settings-version"></p>
             <p id="update-settings-status"></p>
+            <div id="update-settings-self-update">
+              <input id="enable-self-updates-checkbox" class="update-checkbox" type="checkbox">
+              <label for="enable-self-updates-checkbox" data-l10n-id="update-settings-enable-self-updates"></label>
+            </div>
           </li>
         </ul>
       </section>

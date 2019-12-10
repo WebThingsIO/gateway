@@ -54,9 +54,6 @@ module.exports = {
           },
         },
       },
-      updates: {
-        supported: false
-      }
     },
   },
   authentication: {

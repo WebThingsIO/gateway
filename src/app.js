@@ -61,27 +61,6 @@ const httpApp = createGatewayApp(servers.http);
 servers.https = createHttpsServer();
 let httpsApp = null;
 
-let updaterInterval = null;
-if (process.env.NODE_ENV !== 'test' && platform.implemented('update')) {
-  // Start the updater
-  updaterInterval = setInterval(
-    () => {
-      platform.update().then((res) => {
-        if (res.rebootRequired) {
-          // TODO: schedule reboot: platform.restartSystem()
-        }
-
-        if (res.gatewayRestartRequired) {
-          platform.restartGateway();
-        }
-      }).catch((e) => {
-        console.error('Failed to update:', e);
-      });
-    },
-    24 * 60 * 60 * 1000
-  );
-}
-
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
  * private keys stored for the tunnel service, null is returned.
@@ -406,11 +385,6 @@ function gracefulExit() {
   addonManager.unloadAddons();
   mDNSserver.server.cleanup();
   TunnelService.stop();
-
-  if (updaterInterval !== null) {
-    clearInterval(updaterInterval);
-    updaterInterval = null;
-  }
 }
 
 if (config.get('cli')) {
