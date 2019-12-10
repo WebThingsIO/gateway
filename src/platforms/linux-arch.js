@@ -36,16 +36,15 @@ function getMacAddress(device) {
 }
 
 /**
- * Update the gateway and the system.
+ * Determine whether or not the gateway can auto-update itself.
  *
- * @returns {Promise} Promise which resolves when the update is complete.
+ * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function update() {
-  // TODO: replace external update mechanism with this function, if possible
-  return Promise.resolve({
-    rebootRequired: false,
-    gatewayRestartRequired: false,
-  });
+function getSelfUpdateStatus() {
+  return {
+    available: false,
+    enabled: false,
+  };
 }
 
 /**
@@ -156,7 +155,7 @@ function getNtpStatus() {
 module.exports = {
   getHostname,
   getMacAddress,
-  update,
+  getSelfUpdateStatus,
   getValidTimezones,
   getTimezone,
   getValidWirelessCountries,
