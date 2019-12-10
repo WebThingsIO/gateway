@@ -54,6 +54,9 @@ module.exports = {
           },
         },
       },
+      updates: {
+        supported: false
+      }
     },
   },
   authentication: {
@@ -69,7 +72,6 @@ module.exports = {
   },
   bcryptRounds: 2,
   updateUrl: 'https://api.mozilla-iot.org:8443/releases',
-  updateSupport: true,
   wifi: {
     ap: {
       ipaddr: '192.168.2.1',
