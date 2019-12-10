@@ -1242,69 +1242,15 @@ function getNetworkAddresses() {
 }
 
 /**
- * Update the gateway and the system.
+ * Determine whether or not the gateway can auto-update itself.
  *
- * @returns {Promise} Promise which resolves when the update is complete.
+ * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function update() {
-  const label = 'update';
-  return new Promise((resolve, reject) => {
-    let proc = spawnSync(label, 'opkg', ['update']);
-
-    if (proc.status !== 0) {
-      reject('opkg update failed');
-      return;
-    }
-
-    proc = spawnSync(
-      label,
-      'opkg',
-      ['list-upgradable']
-    );
-
-    if (proc.status !== 0) {
-      reject('opkg list-upgradable failed');
-      return;
-    }
-
-    const packages = proc.stdout
-      .split('\n')
-      .map((l) => l.split(' ')[0]);
-
-    if (packages.length === 0) {
-      // nothing to update
-      resolve({
-        rebootRequired: false,
-        gatewayRestartRequired: false,
-      });
-      return;
-    }
-
-    packages.unshift('upgrade');
-
-    proc = spawnSync(label, 'opkg', packages);
-
-    if (proc.status !== 0) {
-      reject('opkg upgrade failed');
-      return;
-    }
-
-    const rebootRequired = packages.filter((p) => {
-      return p === 'kernel' || p.startsWith('kmod-');
-    }).length > 0;
-
-    const gatewayRestartRequired = packages.filter((p) => {
-      return [
-        'node-mozilla-iot-gateway',
-        'node',
-      ].includes(p);
-    }).length > 0;
-
-    resolve({
-      rebootRequired,
-      gatewayRestartRequired,
-    });
-  });
+function getSelfUpdateStatus() {
+  return {
+    available: false,
+    enabled: false,
+  };
 }
 
 /**
@@ -1515,7 +1461,7 @@ module.exports = {
   restartGateway,
   restartSystem,
   scanWirelessNetworks,
-  update,
+  getSelfUpdateStatus,
   getValidTimezones,
   getTimezone,
   setTimezone,

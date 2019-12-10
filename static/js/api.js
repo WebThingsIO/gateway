@@ -271,8 +271,12 @@ const API = {
     return this.getJson('/updates/latest');
   },
 
-  getUpdateSupport() {
-    return this.getJson('/updates/support');
+  getSelfUpdateStatus() {
+    return this.getJson('/updates/self-update');
+  },
+
+  setSelfUpdateStatus(enabled) {
+    return this.putJson('/updates/self-update', {enabled});
   },
 
   startUpdate() {

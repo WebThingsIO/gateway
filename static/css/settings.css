@@ -624,6 +624,7 @@
   padding: 2rem;
 }
 
+:root .update-checkbox,
 :root .network-checkbox,
 :root .developer-checkbox,
 :root .experiment-checkbox {
@@ -659,6 +660,7 @@
   background-size: 3rem auto;
 }
 
+:root .update-checkbox + label:before,
 :root .developer-checkbox + label:before,
 :root .experiment-checkbox + label:before {
   content: "";
@@ -671,24 +673,28 @@
   background-size: 3rem auto;
 }
 
+:root .update-checkbox:checked + label:before,
 :root .network-checkbox:checked + label:before,
 :root .developer-checkbox:checked + label:before,
 :root .experiment-checkbox:checked + label:before {
   background-position: 0 -3rem;
 }
 
+:root .update-checkbox:disabled + label:before,
 :root .network-checkbox:disabled + label:before,
 :root .developer-checkbox:disabled + label:before,
 :root .experiment-checkbox:disabled + label:before {
   background-position: 0 -6rem;
 }
 
+:root .update-checkbox:checked:disabled + label:before,
 :root .network-checkbox:checked:disabled + label:before,
 :root .developer-checkbox:checked:disabled + label:before,
 :root .experiment-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
 }
 
+#enable-self-updates-checkbox + label:before,
 #domain-settings-local-checkbox + label:before {
   float: none;
   vertical-align: middle;

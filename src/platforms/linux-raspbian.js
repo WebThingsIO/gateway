@@ -12,9 +12,6 @@ const child_process = require('child_process');
 const fs = require('fs');
 const ipRegex = require('ip-regex');
 const os = require('os');
-const Settings = require('../models/settings');
-
-Settings.set('updates.supported', true);
 
 /**
  * Get DHCP server status.
@@ -802,16 +799,46 @@ function getNetworkAddresses() {
 }
 
 /**
- * Update the gateway and the system.
+ * Determine whether or not the gateway can auto-update itself.
  *
- * @returns {Promise} Promise which resolves when the update is complete.
+ * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function update() {
-  // TODO: replace external update mechanism with this function, if possible
-  return Promise.resolve({
-    rebootRequired: false,
-    gatewayRestartRequired: false,
-  });
+function getSelfUpdateStatus() {
+  const timer = 'mozilla-iot-gateway.check-for-update.timer';
+
+  const proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', 'is-active', timer]
+  );
+
+  return {
+    available: true,
+    enabled: proc.status === 0,
+  };
+}
+
+/**
+ * Enable/disable auto-updates.
+ *
+ * @param {boolean} enabled - Whether or not to enable auto-updates.
+ * @returns {boolean} Boolean indicating success of the command.
+ */
+function setSelfUpdateStatus(enabled) {
+  const timer = 'mozilla-iot-gateway.check-for-update.timer';
+
+  let proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', enabled ? 'start' : 'stop', timer]
+  );
+  if (proc.status !== 0) {
+    return false;
+  }
+
+  proc = child_process.spawnSync(
+    'sudo',
+    ['systemctl', enabled ? 'enable' : 'disable', timer]
+  );
+  return proc.status === 0;
 }
 
 /**
@@ -1036,7 +1063,8 @@ module.exports = {
   restartGateway,
   restartSystem,
   scanWirelessNetworks,
-  update,
+  getSelfUpdateStatus,
+  setSelfUpdateStatus,
   getValidTimezones,
   getTimezone,
   setTimezone,

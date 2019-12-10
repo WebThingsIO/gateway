@@ -5,9 +5,9 @@ const config = require('config');
 const fs = require('fs');
 const fetch = require('node-fetch');
 const semver = require('semver');
+const Platform = require('../platform');
 const PromiseRouter = require('express-promise-router');
 const Utils = require('../utils');
-const Settings = require('../models/settings');
 
 const pkg = require('../../package.json');
 
@@ -160,18 +160,40 @@ UpdatesController.get('/status', async (request, response) => {
   }
 });
 
-UpdatesController.get('/support', async (request, response) => {
-  const supported = await Settings.get('updates.supported');
-  response.send({
-    support: Boolean(supported),
-  });
-});
-
 UpdatesController.post('/update', async (request, response) => {
   childProcess.exec('sudo systemctl start ' +
     'mozilla-iot-gateway.check-for-update.service');
 
   response.json({});
+});
+
+UpdatesController.get('/self-update', async (request, response) => {
+  if (!Platform.implemented('getSelfUpdateStatus')) {
+    response.json({
+      available: false,
+      enabled: false,
+    });
+  } else {
+    response.json(Platform.getSelfUpdateStatus());
+  }
+});
+
+UpdatesController.put('/self-update', async (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Enabled property not defined');
+    return;
+  }
+
+  if (!Platform.implemented('setSelfUpdateStatus')) {
+    response.status(500).send('Cannot toggle auto updates');
+    return;
+  }
+
+  if (Platform.setSelfUpdateStatus(request.body.enabled)) {
+    response.status(200).json({enabled: request.body.enabled});
+  } else {
+    response.status(500).send('Failed to toggle auto updates');
+  }
 });
 
 module.exports = UpdatesController;

@@ -10,6 +10,18 @@
 
 const Raspbian = require('./linux-raspbian');
 
+/**
+ * Determine whether or not the gateway can auto-update itself.
+ *
+ * @returns {Object} {available: <bool>, enabled: <bool>}
+ */
+function getSelfUpdateStatus() {
+  return {
+    available: false,
+    enabled: false,
+  };
+}
+
 module.exports = {
   getDhcpServerStatus: Raspbian.getDhcpServerStatus,
   setDhcpServerStatus: Raspbian.setDhcpServerStatus,
@@ -28,7 +40,7 @@ module.exports = {
   restartGateway: Raspbian.restartGateway,
   restartSystem: Raspbian.restartSystem,
   scanWirelessNetworks: Raspbian.scanWirelessNetworks,
-  update: Raspbian.update,
+  getSelfUpdateStatus,
   getValidTimezones: Raspbian.getValidTimezones,
   getTimezone: Raspbian.getTimezone,
   // setTimezone,
