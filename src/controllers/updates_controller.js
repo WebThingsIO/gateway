@@ -7,6 +7,7 @@ const fetch = require('node-fetch');
 const semver = require('semver');
 const PromiseRouter = require('express-promise-router');
 const Utils = require('../utils');
+const Settings = require('../models/settings');
 
 const pkg = require('../../package.json');
 
@@ -160,8 +161,9 @@ UpdatesController.get('/status', async (request, response) => {
 });
 
 UpdatesController.get('/support', async (request, response) => {
+  const supported = await Settings.get('updates.supported');
   response.send({
-    support: config.get('updateSupport'),
+    support: Boolean(supported),
   });
 });
 

@@ -12,6 +12,9 @@ const child_process = require('child_process');
 const fs = require('fs');
 const ipRegex = require('ip-regex');
 const os = require('os');
+const Settings = require('../models/settings');
+
+Settings.set('updates.supported', true);
 
 /**
  * Get DHCP server status.
