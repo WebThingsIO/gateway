@@ -38,6 +38,7 @@ class NotImplementedError extends Error {
  *                        * linux-debian
  *                        * linux-openwrt
  *                        * linux-raspbian
+ *                        * linux-ubuntu
  *                        * linux-unknown
  */
 function getOS() {
@@ -56,6 +57,8 @@ function getOS() {
         return 'linux-debian';
       case 'Raspbian':
         return 'linux-raspbian';
+      case 'Ubuntu':
+        return 'linux-ubuntu';
       default:
         break;
     }
