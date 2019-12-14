@@ -67,8 +67,7 @@ sudo apt install -y \
 _url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.1#egg=gateway_addon"
 sudo pip3 install "$_url"
 
-_url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
-sudo pip3 install "$_url"
+sudo pip3 install adapt-parser==0.3.4
 
 # Allow node and python3 to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
