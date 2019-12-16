@@ -20,8 +20,8 @@ const os = require('os');
  */
 function getDhcpServerStatus() {
   const proc = child_process.spawnSync(
-    'sudo',
-    ['systemctl', 'is-active', 'dnsmasq.service']
+    'systemctl',
+    ['is-active', 'dnsmasq.service']
   );
   return proc.status === 0;
 }
@@ -151,8 +151,8 @@ function getWirelessMode() {
   const options = {};
 
   let proc = child_process.spawnSync(
-    'sudo',
-    ['systemctl', 'is-active', 'hostapd.service']
+    'systemctl',
+    ['is-active', 'hostapd.service']
   );
   if (proc.status === 0) {
     mode = 'ap';
@@ -482,8 +482,8 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
  */
 function getSshServerStatus() {
   const proc = child_process.spawnSync(
-    'sudo',
-    ['raspi-config', 'nonint', 'get_ssh'],
+    'raspi-config',
+    ['nonint', 'get_ssh'],
     {encoding: 'utf8'}
   );
 
@@ -516,8 +516,8 @@ function setSshServerStatus(enabled) {
  */
 function getMdnsServerStatus() {
   const proc = child_process.spawnSync(
-    'sudo',
-    ['systemctl', 'is-active', 'avahi-daemon.service']
+    'systemctl',
+    ['is-active', 'avahi-daemon.service']
   );
   return proc.status === 0;
 }
@@ -807,8 +807,8 @@ function getSelfUpdateStatus() {
   const timer = 'mozilla-iot-gateway.check-for-update.timer';
 
   const proc = child_process.spawnSync(
-    'sudo',
-    ['systemctl', 'is-active', timer]
+    'systemctl',
+    ['is-active', timer]
   );
 
   return {
@@ -935,8 +935,8 @@ function getValidWirelessCountries() {
  */
 function getWirelessCountry() {
   const proc = child_process.spawnSync(
-    'sudo',
-    ['raspi-config', 'nonint', 'get_wifi_country'],
+    'raspi-config',
+    ['nonint', 'get_wifi_country'],
     {encoding: 'utf8'}
   );
 
