@@ -27,8 +27,7 @@ sudo pip3 install -U "$_url"
 sudo pip2 uninstall -y gateway_addon || true
 
 # Upgrade adapt-parser Python package
-_url="git+https://github.com/mycroftai/adapt#egg=adapt-parser"
-sudo pip3 install -U "$_url"
+sudo pip3 install -U adapt-parser==0.3.4
 
 sudo systemctl enable mozilla-iot-gateway.service
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
