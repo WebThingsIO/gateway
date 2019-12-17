@@ -295,6 +295,11 @@ class ThingModel extends Model {
    */
   onConnected(connected) {
     this.connected = connected;
+
+    if (connected) {
+      this.updateProperties();
+    }
+
     return this.handleEvent(Constants.CONNECTED, connected);
   }
 }
