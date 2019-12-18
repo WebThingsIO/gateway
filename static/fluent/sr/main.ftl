@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -30,16 +28,16 @@ log-out-button = Одјава
 ## Things
 
 thing-details =
-  .aria-label = Погледај својства
+    .aria-label = Погледај својства
 add-things =
-  .aria-label = Додај нове справице
+    .aria-label = Додај нове справице
 
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Аватар помоћника
+    .alt = Аватар помоћника
 assistant-controls-text-input =
-  .placeholder = Како Вам могу помоћи?
+    .placeholder = Како Вам могу помоћи?
 
 ## Floorplan
 
@@ -65,21 +63,21 @@ domain-settings-local-label = Локални приступ
 domain-settings-local-update = Ажурирај назив машине
 domain-settings-remote-access = Удаљени приступ
 domain-settings-local-name =
-  .placeholder = prolaz
+    .placeholder = prolaz
 
 ## Network Settings
 
 network-settings-unsupported = Подешавања мреже нису подржана на овој платформи.
 network-settings-ethernet-image =
-  .alt = Жичана
+    .alt = Жичана
 network-settings-ethernet = Жичана (етернет)
 network-settings-wifi-image =
-  .alt = Бежична
+    .alt = Бежична
 network-settings-wifi = Бежична (вај-фај)
 network-settings-home-network-image =
-  .alt = Кућна мрежа
+    .alt = Кућна мрежа
 network-settings-internet-image =
-  .alt = Интернет
+    .alt = Интернет
 network-settings-configure = Подеси
 network-settings-internet-wan = Интернет (WAN)
 network-settings-wan-mode = Режим
@@ -94,7 +92,7 @@ network-settings-network-mask = Мрежна маска
 network-settings-gateway = Мрежни пролаз
 network-settings-done = Готово
 network-settings-wifi-password =
-  .placeholder = Лозинка
+    .placeholder = Лозинка
 network-settings-show-password = Прикажи лозинку
 network-settings-connect = Повежи се
 network-settings-username = Корисничко
@@ -105,7 +103,7 @@ network-settings-enable-wifi = Омогући бежичну
 network-settings-network-name = Назив мреже (SSID)
 wireless-connected = Повезан
 wireless-icon =
-  .alt = Бежична мрежа
+    .alt = Бежична мрежа
 network-settings-changing = Мењам подешавања мреже. Ово може потрајати који минут.
 failed-ethernet-configure = Нисам успео да подесим жичану везу.
 failed-wifi-configure = Нисам успео да подесим бежичну везу.
@@ -116,19 +114,19 @@ failed-wlan-configure = Нисам успео да подесим WLAN.
 ## User Settings
 
 create-user =
-  .aria-label = Додај новог корисника
+    .aria-label = Додај новог корисника
 user-settings-input-name =
-  .placeholder = Име
+    .placeholder = Име
 user-settings-input-email =
-  .placeholder = Е-адреса
+    .placeholder = Е-адреса
 user-settings-input-password =
-  .placeholder = Лозинка
+    .placeholder = Лозинка
 user-settings-input-new-password =
-  .placeholder = Нова лозинка (изборно)
+    .placeholder = Нова лозинка (изборно)
 user-settings-input-confirm-new-password =
-  .placeholder = Потврди нову лозинку
+    .placeholder = Потврди нову лозинку
 user-settings-input-confirm-password =
-  .placeholder = Потврди лозинку
+    .placeholder = Потврди лозинку
 user-settings-password-mismatch = Лозинке се не подударају
 user-settings-save = Сачувај
 
@@ -161,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Фаренхајт (°F)
 update-settings-update-now = Ажурирај сада
 update-available = Ново издање је доступно
 update-up-to-date = Ваш систем је ажуран
+updates-not-supported = Ажурирања нису подржана на овој платформи.
+update-settings-enable-self-updates = Омогући самостална ажурирања
 last-update = Последње ажурирање
 current-version = Тренутно издање
 failed = Неуспешно
@@ -177,36 +177,36 @@ developer-settings-create-local-authorization = Направи локално п
 ## Rules
 
 add-rule =
-  .aria-label = Направи ново правило
+    .aria-label = Направи ново правило
 rules = Правила
 rules-create-rule-hint = Нема направљених правила. Кликните на + за стварање новог.
 rules-rule-name = Назив правила
 rules-customize-rule-name-icon =
-  .alt = Прилагоди назив правила
+    .alt = Прилагоди назив правила
 rules-rule-description = Опис правила
 rules-preview-button =
-  .alt = Претпреглед
+    .alt = Претпреглед
 rules-delete-icon =
-  .alt = Обриши
+    .alt = Обриши
 rules-drag-hint = Превуците ваше уређаје овде да бисте започели стварање правила
 rules-drag-input-hint = Додај уређај као улаз
 rules-drag-output-hint = Додај уређај као излаз
 rules-scroll-left =
-  .alt = Превуци лево
+    .alt = Превуци лево
 rules-scroll-right =
-  .alt = Превуци десно
+    .alt = Превуци десно
 rules-delete-prompt = Пустите уређаје овде да бисте их откачили
 rules-delete-dialog = Да ли сте сигурни да желите трајно уклонити ово правило?
 rules-delete-cancel =
-  .value = Откажи
+    .value = Откажи
 rules-delete-confirm =
-  .value = Уклони правило
+    .value = Уклони правило
 rule-invalid = Неисправно
 rule-delete-prompt = Да ли сте сигурни да желите трајно уклонити ово правило?
 rule-delete-cancel-button =
-  .value = Откажи
+    .value = Откажи
 rule-delete-confirm-button =
-  .value = Уклони правило
+    .value = Уклони правило
 rule-select-property = Изабери својство
 rule-not = Негација
 rule-event = Догађај
@@ -225,20 +225,20 @@ rule-name = Назив правила
 ## Logs
 
 add-log =
-  .aria-label = Направи нови записник
+    .aria-label = Направи нови записник
 logs = Записници
 logs-create-log-hint = Нема направљених записника. Кликните на + да бисте направили записник.
 logs-device = Уређај
 logs-device-select =
-  .aria-label = Записник уређаја
+    .aria-label = Записник уређаја
 logs-property = Својство
 logs-property-select =
-  .aria-label = Својство записника
+    .aria-label = Својство записника
 logs-retention = Чување
 logs-retention-length =
-  .aria-label = Дужина чувања записника
+    .aria-label = Дужина чувања записника
 logs-retention-unit =
-  .aria-label = Јединица чувања записника
+    .aria-label = Јединица чувања записника
 logs-hours = Сати
 logs-days = Дани
 logs-weeks = Недеље
@@ -252,7 +252,7 @@ logs-server-remove-error = Грешка на серверу: не могу да 
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Претражујем
+    .alt = Претражујем
 add-thing-scanning = Тражим нове уређаје…
 add-thing-add-adapters-hint = Нема нових справица. Покушајте да <a data-l10n-name="add-thing-add-adapters-hint-anchor">додате неке додатке</a>.
 add-thing-add-by-url = Додај преко URL-а…
@@ -339,47 +339,47 @@ false = Нетачно
 
 utils-now = сада
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } секунд
-      [few] { $value } секунде
-     *[other] пре { $value } секунди
-  }
+    { $value ->
+        [one] { $value } секунд
+        [few] { $value } секунде
+       *[other] пре { $value } секунди
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] пре { $value } минут
-      [few] пре { $value } минута
-     *[other] пре { $value } минута
-  }
+    { $value ->
+        [one] пре { $value } минут
+        [few] пре { $value } минута
+       *[other] пре { $value } минута
+    }
 utils-hours-ago =
-  { $value ->
-      [one] пре { $value } сата
-      [few] пре { $value } сата
-     *[other] пре { $value } сати
-  }
+    { $value ->
+        [one] пре { $value } сата
+        [few] пре { $value } сата
+       *[other] пре { $value } сати
+    }
 utils-days-ago =
-  { $value ->
-      [one] пре { $value } дан
-      [few] пре { $value } дана
-     *[other] пре { $value } дана
-  }
+    { $value ->
+        [one] пре { $value } дан
+        [few] пре { $value } дана
+       *[other] пре { $value } дана
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] пре { $value } недеље
-      [few] пре { $value } недеље
-     *[other] пре { $value } недеља
-  }
+    { $value ->
+        [one] пре { $value } недеље
+        [few] пре { $value } недеље
+       *[other] пре { $value } недеља
+    }
 utils-months-ago =
-  { $value ->
-      [one] пре { $value } месеца
-      [few] пре { $value } месеца
-     *[other] пре { $value } месеци
-  }
+    { $value ->
+        [one] пре { $value } месеца
+        [few] пре { $value } месеца
+       *[other] пре { $value } месеци
+    }
 utils-years-ago =
-  { $value ->
-      [one] пре { $value } године
-      [few] пре { $value } године
-     *[other] пре { $value } година
-  }
+    { $value ->
+        [one] пре { $value } године
+        [few] пре { $value } године
+       *[other] пре { $value } година
+    }
 minute = минут
 hour = сат
 day = дан
@@ -411,15 +411,15 @@ unknown-device-type = Непозната врста уређаја
 new-thing-choose-icon = Изабери иконицу…
 new-thing-save = Сачувај
 new-thing-pin =
-  .placeholder = Унеси ПИН
+    .placeholder = Унеси ПИН
 new-thing-pin-error = Нетачан ПИН
 new-thing-pin-invalid = Неисправан ПИН
 new-thing-cancel = Откажи
 new-thing-submit = Пошаљи
 new-thing-username =
-  .placeholder = Унеси корисничко
+    .placeholder = Унеси корисничко
 new-thing-password =
-  .placeholder = Унеси лозинку
+    .placeholder = Унеси лозинку
 new-thing-credentials-error = Неисправни акредитиви
 new-thing-saved = Сачувано
 new-thing-done = Готово
@@ -427,7 +427,7 @@ new-thing-done = Готово
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Унесите адресу веб справице
+    .placeholder = Унесите адресу веб справице
 new-web-thing-label = Веб справица
 loading = Учитавам…
 new-web-thing-multiple = Нађено је више веб справица
@@ -443,7 +443,7 @@ events-not-found = Ова справица нема догађаја.
 ## Add-on Settings
 
 add-addons =
-  .aria-label = Пронађи нове додатке
+    .aria-label = Пронађи нове додатке
 author-unknown = Непознато
 disable = Онемогући
 enable = Омогући
@@ -525,11 +525,11 @@ tunnel-setup-title = Изаберите веб адресу — { -webthings-gat
 tunnel-setup-welcome = Добро дошли
 tunnel-setup-choose-address = Изаберите безбедну веб адресу за ваш мрежни пролаз:
 tunnel-setup-input-subdomain =
-  .placeholder = poddomen
+    .placeholder = poddomen
 tunnel-setup-opt-in = Шаљите ми новости о новим стварима и о могућностима доприношења.
 tunnel-setup-privacy-policy = Политика приватности
 tunnel-setup-input-reclamation-token =
-  .placeholder = Жетон за повраћај
+    .placeholder = Жетон за повраћај
 tunnel-setup-error = Догодила се грешка приликом подешавања поддомена.
 tunnel-setup-create = Направи
 tunnel-setup-skip = Прескочи
@@ -539,11 +539,15 @@ tunnel-setup-time-sync = Чекам да се системско време по
 
 authorize-title = Захтев за пуномоћје — { -webthings-gateway-brand }
 authorize-authorization-request = Захтев за пуномоћје
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> жели да приступи вашем пролазу да би обављао радњу <<function>> над вашим уређајима.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = са домена <<domain>>
 authorize-monitor-and-control = надгледао и управљао
 authorize-monitor = управљао
 authorize-allow-all = Дозволи за све справице
 authorize-allow =
-  .value = Дозволи
+    .value = Дозволи
 authorize-deny = Одбиј
 
 ## Local Token Page
@@ -558,13 +562,13 @@ local-token-use-it = Користите га за безбедну комуни�
 router-setup-title = Подешавање рутера — { -webthings-gateway-brand }
 router-setup-header = Направите нову бежичну мрежу
 router-setup-input-ssid =
-  .placeholder = Назив мреже
+    .placeholder = Назив мреже
 router-setup-input-password =
-  .placeholder = Лозинка
+    .placeholder = Лозинка
 router-setup-input-confirm-password =
-  .placeholder = Потврди лозинку
+    .placeholder = Потврди лозинку
 router-setup-create =
-  .value = Направи
+    .value = Направи
 router-setup-password-mismatch = Лозинке се морају подударати
 
 ## Wi-Fi Setup Page
@@ -572,12 +576,12 @@ router-setup-password-mismatch = Лозинке се морају подудар
 wifi-setup-title = Подешавање бежичне — { -webthings-gateway-brand }
 wifi-setup-header = Повезати се на бежичну (вај-фај) мрежу?
 wifi-setup-input-password =
-  .placeholder = Лозинка
+    .placeholder = Лозинка
 wifi-setup-show-password = Прикажи лозинку
 wifi-setup-connect =
-  .value = Повежи се
+    .value = Повежи се
 wifi-setup-network-icon =
-  .alt = Бежична мрежа
+    .alt = Бежична мрежа
 wifi-setup-skip = Прескочи
 
 ## Connecting to Wi-Fi Page
@@ -609,16 +613,16 @@ submit = Пошаљи
 ## Top-Level Buttons
 
 menu-button =
-  .aria-label = Мени
+    .aria-label = Мени
 back-button =
-  .aria-label = Назад
+    .aria-label = Назад
 overflow-button =
-  .aria-label = Додатне радње
+    .aria-label = Додатне радње
 speech-button =
-  .aria-label = Слушам глас
+    .aria-label = Слушам глас
 submit-button =
-  .aria-label = Пошаљи
+    .aria-label = Пошаљи
 edit-button =
-  .aria-label = Уреди
+    .aria-label = Уреди
 save-button =
-  .aria-label = Сачувај
+    .aria-label = Сачувај
