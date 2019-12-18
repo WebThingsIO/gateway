@@ -328,8 +328,6 @@ events-not-found = Ta rzecz nie ma zdarzeń.
 
 ## Add-on Settings
 
-add-addons =
-    .aria-label = Znajdź Nowe Dodatki
 author-unknown = Nieznany
 disable = Wyłącz
 enable = Włącz
@@ -352,16 +350,10 @@ addon-discovery-failed = Niepowodzenie
 settings = Ustawienia
 domain = Domena
 users = Użytkownicy
-edit-user = Edytuj Użytkownika
-add-user = Dodaj Użytkownika
 adapters = Adaptery
-addons = Rozszerzenia
-addon-config = Konfiguruj Rozszerzenie
-addon-discovery = Odkryj Nowe Rozszerzenia
 experiments = Eksperymenty
 localization = Lokalizacja
 updates = Aktualizacje
-authorizations = Autoryzacje
 developer = Programista
 network = Sieć
 ethernet = Ethernet
@@ -371,15 +363,12 @@ icon = Ikona
 ## Speech
 
 speech-unsupported = Aktualna przeglądarka nie obsługuje mowy
-speech-didnt-get = Przepraszam, nie zrozumiałem.
 
 ## Errors
 
 unknown-state = Nieznany stan.
 error = Błąd
 errors = Błędy
-gateway-unreachable = Brama Niedostępna
-more-information = Więcej Informacji
 invalid-file = Niepoprawny plik.
 failed-read-file = Nie można odczytać pliku.
 failed-save = Nie udało się zapisać pliku.
@@ -399,7 +388,6 @@ login-log-in = Zaloguj się
 
 ## Create First User Page
 
-signup-title = Stwórz użytkownika — { -webthings-gateway-brand }
 signup-welcome = Witamy
 signup-create-account = Utwórz swoje pierwsze konto użytkownika:
 signup-password-mismatch = Hasła są niezgodne
@@ -407,46 +395,31 @@ signup-next = Następny
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Wybierz Adres Internetowy — { -webthings-gateway-brand }
 tunnel-setup-welcome = Witamy
 tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
-tunnel-setup-input-subdomain =
-    .placeholder = subdomena
 tunnel-setup-opt-in = Chcę otrzymywać najnowsze informacje o nowych funkcjach i możliwościach zaangażowania.
-tunnel-setup-privacy-policy = Polityka Prywatności
-tunnel-setup-input-reclamation-token =
-    .placeholder = Token Odzyskiwania
-tunnel-setup-error = Wystąpił błąd podczas konfigurowania subdomeny.
 tunnel-setup-create = Utwórz
 tunnel-setup-skip = Pomiń
 tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie, dopóki synchronizacja czasu nie nastąpi.
 
 ## Authorize Page
 
-authorize-title = Wniosek o Autoryzację — { -webthings-gateway-brand }
-authorize-authorization-request = Wniosek o autoryzację
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> chce uzyskać dostęp do twojej bramy w celu <<function>> urządzeń.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = z <<domain>>
 authorize-monitor-and-control = monitorowania i kontroli
 authorize-monitor = monitorowania
-authorize-allow-all = Pozwól dla wszystkich Rzeczy
 authorize-allow =
     .value = Pozwól
 authorize-deny = Zabroń
 
 ## Local Token Page
 
-local-token-title = Usługa Tokenów Lokalnych — { -webthings-gateway-brand }
-local-token-header = Usługa Tokenów Lokalnych
 local-token-your-token = Twój lokalny token jest następujący <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
-local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą <a data-l10n-name="local-token-bearer-type">Autoryzacji na okaziciela</a>.
 
 ## Router Setup Page
 
-router-setup-title = Konfiguracja Routera — { -webthings-gateway-brand }
-router-setup-header = Stwórz nową sieć Wi-Fi
 router-setup-input-ssid =
     .placeholder = Nazwa sieci
 router-setup-input-password =
@@ -474,22 +447,15 @@ wifi-setup-skip = Pomiń
 
 connecting-title = Łączenie z Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Łączenie z Wi-Fi…
-connecting-connect = Upewnij się, że jesteś połączony do tej samej sieci co brama i przejdź do { $gateway-link } w przeglądarce internetowej, aby kontynuować konfigurację.
 connecting-warning = Uwaga: jeśli nie można załadować { $domain }, sprawdź adres IP bramy rzeczy na routerze.
 connecting-header-skipped = Konfiguracja Wi-Fi została pominięta
-connecting-skipped = Brama jest teraz uruchamiana. Po podłączeniu do tej samej sieci co brama przejdź pod adres { $gateway-link } w swojej przeglądarce internetowej aby kontynuować konfigurację.
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Tworzenie Sieci Wi-Fi — { -webthings-gateway-brand }
-creating-header = Tworzenie Sieci Wi-Fi…
-creating-content = Połącz się z { $ssid } wprowadzając hasło które właśnie utworzyłeś, a następnie przejdź do { $gateway-link } lub { $ip-link } w swojej przeglądarce internetowej.
 
 ## General Terms
 
-ok = Ok
 ellipsis = …
-event-log = Dziennik Zdarzeń
 edit = Edytuj
 remove = Usuń
 disconnected = Rozłączony
@@ -502,10 +468,6 @@ menu-button =
     .aria-label = Menu
 back-button =
     .aria-label = Wstecz
-overflow-button =
-    .aria-label = Dodatkowe Działania
-speech-button =
-    .aria-label = Słuchaj Mowy
 submit-button =
     .aria-label = Zatwierdź
 edit-button =
