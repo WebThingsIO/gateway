@@ -519,11 +519,11 @@ tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
     .placeholder = sous-domaine
-tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de contributions.
+tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de participation.
 tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de récupération
-tunnel-setup-error = Une erreur est survenue en créant la sous-domaine.
+tunnel-setup-error = Une erreur est survenue en créant le sous-domaine.
 tunnel-setup-create = Créer
 tunnel-setup-skip = Ignorer
 tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge système depuis Internet. L’enregistrement du domaine risque de ne pas fonctionner tant que l’horloge n’est pas à jour.
@@ -532,6 +532,10 @@ tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge
 
 authorize-title = Demande d’autorisation — { -webthings-gateway-brand }
 authorize-authorization-request = Demande d’autorisation
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> souhaite accéder à votre passerelle pour <<function>> les périphériques.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = de <<domain>>
 authorize-monitor-and-control = surveiller et contrôler
 authorize-monitor = surveiller
 authorize-allow-all = Autoriser pour tout objet
@@ -541,9 +545,9 @@ authorize-deny = Refuser
 
 ## Local Token Page
 
-local-token-title = Service de jeton locale — { -webthings-gateway-brand }
+local-token-title = Service de jeton local — { -webthings-gateway-brand }
 local-token-header = Service de jeton local
-local-token-your-token = Votre jeton local est <a data-l10n-name="local-token-jwt">jeton Web JSON</a>.
+local-token-your-token = Votre jeton local est le <a data-l10n-name="local-token-jwt">jeton Web JSON</a> suivant :
 local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
 
 ## Router Setup Page
@@ -563,12 +567,12 @@ router-setup-password-mismatch = Les mots de passe doivent être identiques
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }
-wifi-setup-header = Connecter à un réseau Wi-Fi ?
+wifi-setup-header = Se connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
     .placeholder = Mot de passe
 wifi-setup-show-password = Afficher le mot de passe
 wifi-setup-connect =
-    .value = Connecter
+    .value = Se connecter
 wifi-setup-network-icon =
     .alt = Réseau Wi-Fi
 wifi-setup-skip = Ignorer
@@ -577,10 +581,10 @@ wifi-setup-skip = Ignorer
 
 connecting-title = Connexion en cours — { -webthings-gateway-brand }
 connecting-header = Connexion en cours…
-connecting-connect = Assurez-vous que vous êtes connecté au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
-connecting-warning = Si vous ne pouvez charger { $domain }, trouver l’adresse IP dans votre routeur.
-connecting-header-skipped = Configuration Wi-Fi ignoré.
-connecting-skipped = La passerelle démarre. Restez connecté au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
+connecting-connect = Assurez-vous que vous êtes connecté·e au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
+connecting-warning = Si vous ne pouvez pas charger { $domain }, recherchez l’adresse IP de la passerelle dans votre routeur.
+connecting-header-skipped = Configuration Wi-Fi ignorée
+connecting-skipped = La passerelle démarre. Restez connecté·e au même réseau, puis naviguez vers { $gateway-link } pour continuer la configuration.
 
 ## Creating Wi-Fi Network Page
 
@@ -592,7 +596,7 @@ creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que 
 
 ok = OK
 ellipsis = …
-event-log = Journal des événements
+event-log = Journal des évènements
 edit = Modifier
 remove = Supprimer
 disconnected = Déconnecté
@@ -612,6 +616,6 @@ speech-button =
 submit-button =
     .aria-label = Envoyer
 edit-button =
-    .aria-label = Edit
+    .aria-label = Modifier
 save-button =
     .aria-label = Enregistrer
