@@ -28,7 +28,7 @@ log-out-button = Afmelden
 ## Things
 
 thing-details =
-    .aria-label = Toon eigenschappen
+    .aria-label = Eigenschappen tonen
 add-things =
     .aria-label = Nieuwe Things toevoegen
 
@@ -41,7 +41,7 @@ assistant-controls-text-input =
 
 ## Floorplan
 
-upload-floorplan = Upload plattegrond…
+upload-floorplan = Plattegrond uploaden…
 upload-floorplan-hint = (.svg aanbevolen)
 
 ## Top-Level Settings
@@ -127,7 +127,7 @@ user-settings-input-confirm-new-password =
     .placeholder = Bevestig nieuw wachtwoord
 user-settings-input-confirm-password =
     .placeholder = Bevestig wachtwoord
-user-settings-password-mismatch = Wachtwoorden zijn niet gelijk
+user-settings-password-mismatch = Wachtwoorden komen niet overeen
 user-settings-save = Opslaan
 
 ## Adapter Settings
@@ -172,7 +172,7 @@ restarting = Herstarten
 
 developer-settings-enable-ssh = SSH inschakelen
 developer-settings-view-internal-logs = Interne logboeken tonen
-developer-settings-create-local-authorization = Maak lokale autorisatie
+developer-settings-create-local-authorization = Lokale autorisatie maken
 
 ## Rules
 
@@ -187,8 +187,8 @@ rules-rule-description = Regelbeschrijving
 rules-preview-button =
     .alt = Voorbeeld
 rules-delete-icon =
-    .alt = Verwijder
-rules-drag-hint = Sleep hier een apparaat heen om een regel te maken
+    .alt = Verwijderen
+rules-drag-hint = Sleep een apparaat hierheen om een regel te maken
 rules-drag-input-hint = Apparaat toevoegen als input
 rules-drag-output-hint = Apparaat toevoegen als output
 rules-scroll-left =
@@ -196,18 +196,18 @@ rules-scroll-left =
 rules-scroll-right =
     .alt = Naar rechts scrollen
 rules-delete-prompt = Sleep apparaten hierheen om te ontkoppelen
-rules-delete-dialog = Weet u deze zeker dat u deze regel wilt verwijderen?
+rules-delete-dialog = Weet u zeker dat u deze regel permanent wilt verwijderen?
 rules-delete-cancel =
     .value = Annuleren
 rules-delete-confirm =
-    .value = Verwijder regel
+    .value = Regel verwijderen
 rule-invalid = Ongeldig
-rule-delete-prompt = Weet u zeker dat u deze regel wilt verwijderen?
+rule-delete-prompt = Weet u zeker dat u deze regel permanent wilt verwijderen?
 rule-delete-cancel-button =
     .value = Annuleren
 rule-delete-confirm-button =
-    .value = Verwijder regel
-rule-select-property = Selecteer eigenschap
+    .value = Regel verwijderen
+rule-select-property = Eigenschap selecteren
 rule-not = Niet
 rule-event = Gebeurtenis
 rule-action = Actie
@@ -218,7 +218,7 @@ notification-title = Titel
 notification-message = Bericht
 notification-level = Niveau
 notification-low = Laag
-notification-normal = Gemiddeld
+notification-normal = Normaal
 notification-high = Hoog
 rule-name = Regelnaam
 
@@ -238,15 +238,13 @@ logs-retention = Bewaartermijn
 logs-retention-length =
     .aria-label = Bewaartermijn logboek
 logs-retention-unit =
-    .aria-label = Log Bewaartermijn Eenheid
+    .aria-label = Eenheid bewaartermijn logboek
 logs-hours = Uren
 logs-days = Dagen
 logs-weeks = Weken
 logs-save = Opslaan
 logs-remove-dialog-title = Verwijderen
-logs-remove-dialog-warning =
-    Als het logboek wordt verwijderd, worden ook de bijbehorende gegevens gewist.
-    Wilt u deze echt verwijderen?
+logs-remove-dialog-warning = Als het logboek wordt verwijderd, worden ook de bijbehorende gegevens gewist. Weet u zeker dat u het wilt verwijderen?
 logs-remove = Verwijderen
 logs-unable-to-create = Kan logboek niet aanmaken
 logs-server-remove-error = Serverfout: kan logboek niet verwijderen
@@ -256,27 +254,27 @@ logs-server-remove-error = Serverfout: kan logboek niet verwijderen
 add-thing-scanning-icon =
     .alt = Zoeken
 add-thing-scanning = Nieuwe apparaten zoeken…
-add-thing-add-adapters-hint = Geen apparaten gevonden. Probeer <a data-l10n-name="add-thing-add-adapters-hint-anchor">add-ons toe te voegen</a>.
+add-thing-add-adapters-hint = Geen nieuwe apparaten gevonden. Probeer <a data-l10n-name="add-thing-add-adapters-hint-anchor">wat add-ons toe te voegen</a>.
 add-thing-add-by-url = Toevoegen met URL…
 add-thing-done = Gereed
 add-thing-cancel = Annuleren
 
 ## Context Menu
 
-context-menu-choose-icon = Kies icoon…
+context-menu-choose-icon = Pictogram kiezen…
 context-menu-save = Opslaan
 context-menu-remove = Verwijderen
 
 ## Capabilities
 
-OnOffSwitch = Aan-/Uit-schakelaar
+OnOffSwitch = Aan/Uit-schakelaar
 MultiLevelSwitch = Schakelaar met niveaus
 ColorControl = Kleurinstelling
-ColorSensor = Kleur sensor
+ColorSensor = Kleursensor
 EnergyMonitor = Energiemonitor
 BinarySensor = Binaire sensor
 MultiLevelSensor = Sensor met niveaus
-SmartPlug = Smart Plug
+SmartPlug = Slimme stekker
 Light = Licht
 DoorSensor = Deursensor
 MotionSensor = Bewegingsmelder
@@ -287,7 +285,7 @@ Camera = Camera
 TemperatureSensor = Temperatuursensor
 Alarm = Alarm
 Thermostat = Thermostaat
-Lock = Vergrendeld
+Lock = Slot
 Custom = Aangepast Thing
 Thing = Thing
 
@@ -323,8 +321,8 @@ inactive = Inactief
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Het lijkt erop dat u dat subdomein al hebt geregistreerd. Om het te op te eisen <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">klik hier</a>.
-check-email-for-token = In uw e-mailbericht ontvangt u een token voor het opeisen. Plak dit hierboven.
+tunnel-setup-reclaim-domain = Het lijkt erop dat u dat subdomein al hebt geregistreerd. <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">Klik hier</a> om het op te eisen.
+check-email-for-token = Controleer uw e-mail op een reclamatietoken en plak dit hierboven.
 reclaim-failed = Kan domein niet opeisen.
 subdomain-already-used = Dit subodmein is al in gebruik. Kies een andere.
 invalid-reclamation-token = Ongeldig opeis-token.
