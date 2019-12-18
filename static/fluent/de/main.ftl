@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -27,12 +25,19 @@ floorplan-menu-item = Raumplan
 settings-menu-item = Einstellungen
 log-out-button = Ausloggen
 
+## Things
+
+thing-details =
+    .aria-label = Eigenschaften anzeigen
+add-things =
+    .aria-label = Neue Dinge hinzufügen
+
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Assistent-Avatar
+    .alt = Assistent-Avatar
 assistant-controls-text-input =
-  .placeholder = Wie kann ich helfen?
+    .placeholder = Wie kann ich helfen?
 
 ## Floorplan
 
@@ -58,23 +63,24 @@ domain-settings-local-label = Lokaler Zugriff
 domain-settings-local-update = Hostnamen aktualisieren
 domain-settings-remote-access = Fernzugriff
 domain-settings-local-name =
-  .placeholder = Gateway
+    .placeholder = Gateway
 
 ## Network Settings
 
 network-settings-unsupported = Netzwerkeinstellungen werden auf dieser Plattform nicht unterstützt.
 network-settings-ethernet-image =
-  .alt = Kabelverbindung
+    .alt = Kabelverbindung
 network-settings-ethernet = Kabelverbindung
 network-settings-wifi-image =
-  .alt = Kabellose Verbindung
+    .alt = Kabellose Verbindung
 network-settings-wifi = Drahtlosverbindung
 network-settings-home-network-image =
-  .alt = Heimnetzwerk
+    .alt = Heimnetzwerk
 network-settings-internet-image =
-  .alt = Internet
+    .alt = Internet
 network-settings-configure = Konfigurieren
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Modus
 network-settings-home-network-lan = Heimnetzwerk (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-Adresse
@@ -86,7 +92,7 @@ network-settings-network-mask = Netzwerkmaske
 network-settings-gateway = Gateway
 network-settings-done = Erledigt
 network-settings-wifi-password =
-  .placeholder = Passwort
+    .placeholder = Passwort
 network-settings-show-password = Passwort anzeigen
 network-settings-connect = Verbinden
 network-settings-username = Benutzername
@@ -97,7 +103,7 @@ network-settings-enable-wifi = Wi-Fi aktivieren
 network-settings-network-name = Netwerkname
 wireless-connected = Verbunden
 wireless-icon =
-  .alt = Wi-Fi-Netzwerk
+    .alt = Wi-Fi-Netzwerk
 network-settings-changing = Netzwerkeinstellungen werden aktualisiert. Dies kann eine Minute dauern.
 failed-ethernet-configure = Konfiguration der Ethernet-Verbindung fehlgeschlagen.
 failed-wifi-configure = Konfiguration der Wi-Fi-Verbindung fehlgeschlagen.
@@ -107,18 +113,20 @@ failed-wlan-configure = Konfiguration der WLAN-Verbindung fehlgeschlagen.
 
 ## User Settings
 
+create-user =
+    .aria-label = Neuen Benutzer hinzufügen
 user-settings-input-name =
-  .placeholder = Name
+    .placeholder = Name
 user-settings-input-email =
-  .placeholder = Email
+    .placeholder = Email
 user-settings-input-password =
-  .placeholder = Passwort
+    .placeholder = Passwort
 user-settings-input-new-password =
-  .placeholder = Neues Passwort (Optional)
+    .placeholder = Neues Passwort (Optional)
 user-settings-input-confirm-new-password =
-  .placeholder = Neues Passwort bestätigen
+    .placeholder = Neues Passwort bestätigen
 user-settings-input-confirm-password =
-  .placeholder = Passwort bestätigen
+    .placeholder = Passwort bestätigen
 user-settings-password-mismatch = Passwörter stimmen nicht überein
 user-settings-save = Speichern
 
@@ -135,7 +143,7 @@ authorization-settings-no-authorizations = Keine Authorisierungen.
 experiment-settings-smart-assistant = Smarter Assistent
 experiment-settings-logs = Protokolle
 
-## Location Settings
+## Localization Settings
 
 localization-settings-language-region = Sprache & Region
 localization-settings-country = Land
@@ -151,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Jetzt aktualisieren
 update-available = Neue Version verfügbar
 update-up-to-date = Das System ist aktuell
+updates-not-supported = Updates werden auf dieser Plattform nicht unterstützt.
+update-settings-enable-self-updates = Automatische Updates aktivieren
 last-update = Letzte Aktualisierung
 current-version = Aktuelle Version
 failed = Fehlgeschlagen
@@ -166,35 +176,37 @@ developer-settings-create-local-authorization = Lokalen Zugang erstellen
 
 ## Rules
 
+add-rule =
+    .aria-label = Neue Regel erstellen
 rules = Regeln
 rules-create-rule-hint = Keine Regeln vorhanden. Für eine neue Regel + drücken.
 rules-rule-name = Regelname
 rules-customize-rule-name-icon =
-  .alt = Regelnamen anpassen
+    .alt = Regelnamen anpassen
 rules-rule-description = Regelbeschreibung
 rules-preview-button =
-  .alt = Vorschau
+    .alt = Vorschau
 rules-delete-icon =
-  .alt = Löschen
+    .alt = Löschen
 rules-drag-hint = Gerät hierher ziehen, um eine Regel zu erzeugen
 rules-drag-input-hint = Gerät als Eingang hinzufügen
 rules-drag-output-hint = Gerät als Ausgang hinzufügen
 rules-scroll-left =
-  .alt = Links scrollen
+    .alt = Links scrollen
 rules-scroll-right =
-  .alt = Rechts scrollen
+    .alt = Rechts scrollen
 rules-delete-prompt = Gerät hier fallen lassen um es zu löschen
 rules-delete-dialog = Soll das Gerät dauerhalt aus der Regel entfernt werden?
 rules-delete-cancel =
-  .value = Abbrechen
+    .value = Abbrechen
 rules-delete-confirm =
-  .value = Regel löschen
+    .value = Regel löschen
 rule-invalid = Ungültig
 rule-delete-prompt = Soll die Regel dauerhaft gelöscht werden?
 rule-delete-cancel-button =
-  .value = Abbrechen
+    .value = Abbrechen
 rule-delete-confirm-button =
-  .value = Regel löschen
+    .value = Regel löschen
 rule-select-property = Merkmal wählen
 rule-not = Nicht
 rule-event = Ereignis
@@ -212,26 +224,29 @@ rule-name = Regelname
 
 ## Logs
 
+add-log =
+    .aria-label = Neues Protokoll erstellen
 logs = Protokolle
 logs-create-log-hint = Keine Protokolle vorhanden. Für ein neues Protokoll + drücken.
 logs-device = Gerät
 logs-device-select =
-  .aria-label = Gerät protokollieren
+    .aria-label = Gerät protokollieren
 logs-property = Merkmal
 logs-property-select =
-  .aria-label = Merkmal protokollieren
+    .aria-label = Merkmal protokollieren
 logs-retention = Speicherung
 logs-retention-length =
-  .aria-label = Speicherdauer
+    .aria-label = Speicherdauer
 logs-retention-unit =
-  .aria-label = Einheit der Speicherdauer
+    .aria-label = Einheit der Speicherdauer
 logs-hours = Stunden
 logs-days = Tage
 logs-weeks = Wochen
 logs-save = Speichern
 logs-remove-dialog-title = Löschen
-logs-remove-dialog-warning = Beim Löschen eines Protokolls gehen alle bislang gesammelten Daten verloren.
-  Soll das Protokoll wirklich gelöscht werden?
+logs-remove-dialog-warning =
+    Beim Löschen eines Protokolls gehen alle bislang gesammelten Daten verloren.
+    Soll das Protokoll wirklich gelöscht werden?
 logs-remove = Löschen
 logs-unable-to-create = Das Protokoll konnte nicht angelegt werden
 logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt werden
@@ -239,7 +254,7 @@ logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt wer
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Suche
+    .alt = Suche
 add-thing-scanning = Es wird nach neuen Geräten gesucht…
 add-thing-add-adapters-hint = Keine neuen Geräte gefunden. <a data-l10n-name="add-thing-add-adapters-hint-anchor">Neue Erweiterungen hinzufügen.</a>
 add-thing-add-by-url = Via URL hinzufügen…
@@ -274,6 +289,7 @@ Alarm = Alarmanlage
 Thermostat = Thermostat
 Lock = Schloss
 Custom = Benutzerdefiniertes Gerät
+Thing = Ding
 
 ## Properties
 
@@ -302,6 +318,8 @@ locked = Abgeschlossen
 unlocked = Nicht abgeschlossen
 jammed = Verklemmt
 unknown = Unbekannt
+active = Aktiv
+inactive = Inaktiv
 
 ## Domain Setup
 
@@ -323,40 +341,40 @@ false = Falsch
 
 utils-now = jetzt
 utils-seconds-ago =
-  { $value ->
-      [one] vor einer Sekunde
-     *[other] vor { $value } Sekunden
-  }
+    { $value ->
+        [one] vor einer Sekunde
+       *[other] vor { $value } Sekunden
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] vor einer Minute
-     *[other] vor { $value } Minuten
-  }
+    { $value ->
+        [one] vor einer Minute
+       *[other] vor { $value } Minuten
+    }
 utils-hours-ago =
-  { $value ->
-      [one] vor einer Stunde
-     *[other] vor { $value } Stunden
-  }
+    { $value ->
+        [one] vor einer Stunde
+       *[other] vor { $value } Stunden
+    }
 utils-days-ago =
-  { $value ->
-      [one] vor einem Tag
-     *[other] vor { $value } Tagen
-  }
+    { $value ->
+        [one] vor einem Tag
+       *[other] vor { $value } Tagen
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] vor einer Woche
-     *[other] vor { $value } Wochen
-  }
+    { $value ->
+        [one] vor einer Woche
+       *[other] vor { $value } Wochen
+    }
 utils-months-ago =
-  { $value ->
-      [one] vor einem Monat
-     *[other] vor { $value } Monaten
-  }
+    { $value ->
+        [one] vor einem Monat
+       *[other] vor { $value } Monaten
+    }
 utils-years-ago =
-  { $value ->
-      [one] vor einem Jahr
-     *[other] vor { $value } Jahr
-  }
+    { $value ->
+        [one] vor einem Jahr
+       *[other] vor { $value } Jahr
+    }
 minute = Minute
 hour = Stunde
 day = Tag
@@ -388,15 +406,15 @@ unknown-device-type = Unbekannter Gerätetyp
 new-thing-choose-icon = Bild wählen…
 new-thing-save = Speichern
 new-thing-pin =
-  .placeholder = PIN eingeben
+    .placeholder = PIN eingeben
 new-thing-pin-error = Falsche PIN
 new-thing-pin-invalid = Falsche PIN
 new-thing-cancel = Abbrechen
 new-thing-submit = Absenden
 new-thing-username =
-  .placeholder = Benutzername eingeben
+    .placeholder = Benutzername eingeben
 new-thing-password =
-  .placeholder = Passwort eingeben
+    .placeholder = Passwort eingeben
 new-thing-credentials-error = Eingaben sind fehlerhaft
 new-thing-saved = Gespeichert
 new-thing-done = Erledigt
@@ -404,7 +422,7 @@ new-thing-done = Erledigt
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = URL des Web Things eingeben
+    .placeholder = URL des Web Things eingeben
 new-web-thing-label = Web Thing
 loading = Laden…
 new-web-thing-multiple = Mehrere Web Things gefunden
@@ -419,6 +437,8 @@ events-not-found = Dieses Gerät unterstützt keine Ereignisse.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Neue Add-ons finden
 author-unknown = Unbekannt
 disable = Deaktivieren
 enable = Aktivieren
@@ -500,11 +520,11 @@ tunnel-setup-title = Subdomain wählen — { -webthings-gateway-brand }
 tunnel-setup-welcome = Willkommen
 tunnel-setup-choose-address = Sichere URL für das Gateway:
 tunnel-setup-input-subdomain =
-  .placeholder = Subdomain
+    .placeholder = Subdomain
 tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkeiten zunm Mitmachen erhalten.
 tunnel-setup-privacy-policy = Datenschutz
 tunnel-setup-input-reclamation-token =
-  .placeholder = Reclaim-Token
+    .placeholder = Reclaim-Token
 tunnel-setup-error = Ein Fehler ist beim Erstellen der Subdomain aufgetreten.
 tunnel-setup-create = Erzeugen
 tunnel-setup-skip = Überspringen
@@ -518,7 +538,7 @@ authorize-monitor-and-control = Überwachen und kontrollieren
 authorize-monitor = Überwachen
 authorize-allow-all = Für alle Geräte erlauben
 authorize-allow =
-  .value = Erlauben
+    .value = Erlauben
 authorize-deny = Ablehnen
 
 ## Local Token Page
@@ -533,13 +553,13 @@ local-token-use-it = Zugriff auf das Gateway über <a data-l10n-name="local-toke
 router-setup-title = Router-Setup — { -webthings-gateway-brand }
 router-setup-header = Neues Wi-Fi-Netzwerk erzeugen
 router-setup-input-ssid =
-  .placeholder = Netzwerkname
+    .placeholder = Netzwerkname
 router-setup-input-password =
-  .placeholder = Passwort
+    .placeholder = Passwort
 router-setup-input-confirm-password =
-  .placeholder = Passwort bestätigen
+    .placeholder = Passwort bestätigen
 router-setup-create =
-  .value = Anlegen
+    .value = Anlegen
 router-setup-password-mismatch = Passwörter sind nicht gleich
 
 ## Wi-Fi Setup Page
@@ -547,32 +567,36 @@ router-setup-password-mismatch = Passwörter sind nicht gleich
 wifi-setup-title = Wi-Fi-Setup — { -webthings-gateway-brand }
 wifi-setup-header = Mit Wi-Fi-Netzwerk verbinden?
 wifi-setup-input-password =
-  .placeholder = Passwort
+    .placeholder = Passwort
 wifi-setup-show-password = Passwort anzeigen
 wifi-setup-connect =
-  .value = Verbinden
+    .value = Verbinden
 wifi-setup-network-icon =
-  .alt = Wi-Fi-Netzwerk
+    .alt = Wi-Fi-Netzwerk
 wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
 
 connecting-title = Wi-Fi-Verbindung herstellen — { -webthings-gateway-brand }
 connecting-header = Verbindung wird hergestellt…
-connecting-connect = Bitte mit demselben Netzwerk wie das Gateway verbinden und
- das Setup unter { $gateway-link } im Webbrowser fortsetzen.
-connecting-warning = Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP-Adresse
- des Gateways in den Routereinstellungen nachgeschlagen werden.
+connecting-connect =
+    Bitte mit demselben Netzwerk wie das Gateway verbinden und
+    das Setup unter { $gateway-link } im Webbrowser fortsetzen.
+connecting-warning =
+    Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP-Adresse
+    des Gateways in den Routereinstellungen nachgeschlagen werden.
 connecting-header-skipped = Wi-Fi-Setup abgebrochen
-connecting-skipped = Das Gateway ist einsatzbereit. Einstellungen können unter
- { $gateway-link } getätigt werden.
+connecting-skipped =
+    Das Gateway ist einsatzbereit. Einstellungen können unter
+    { $gateway-link } getätigt werden.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Neues Wi-Fi-Netzwerk anlegen — { -webthings-gateway-brand }
 creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
-creating-content = Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
- aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
+creating-content =
+    Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
+    aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 
 ## General Terms
 
@@ -584,3 +608,6 @@ remove = Löschen
 disconnected = Nicht verbunden
 processing = Bitte warten…
 submit = Absenden
+
+## Top-Level Buttons
+
