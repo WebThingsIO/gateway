@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -27,12 +25,19 @@ floorplan-menu-item = Plattegrond
 settings-menu-item = Instellingen
 log-out-button = Afmelden
 
+## Things
+
+thing-details =
+    .aria-label = Toon eigenschappen
+add-things =
+    .aria-label = Nieuwe Things toevoegen
+
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Assistent Avatar
+    .alt = Assistent Avatar
 assistant-controls-text-input =
-  .placeholder = Hoe kan ik helpen?
+    .placeholder = Hoe kan ik helpen?
 
 ## Floorplan
 
@@ -58,25 +63,26 @@ domain-settings-local-label = Lokale toegang
 domain-settings-local-update = Hostname bijwerken
 domain-settings-remote-access = Externe toegang
 domain-settings-local-name =
-  .placeholder = gateway
+    .placeholder = gateway
 
 ## Network Settings
 
 network-settings-unsupported = Netwerkinstelligen worden op dit platform niet ondersteund.
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
-network-settings-wifi = Wi-Fi
+    .alt = Wifi
+network-settings-wifi = Wifi
 network-settings-home-network-image =
-  .alt = Thuisnetwerk
+    .alt = Thuisnetwerk
 network-settings-internet-image =
-  .alt = Internet
+    .alt = Internet
 network-settings-configure = Configureren
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Modus
 network-settings-home-network-lan = Thuisnetwerk (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-wifi-wlan = Wifi (WLAN)
 network-settings-ip-address = IP-adres
 network-settings-dhcp = Automatisch (DHCP)
 network-settings-static = Handmatig (Statisch IP-adres)
@@ -86,39 +92,41 @@ network-settings-network-mask = Netwerkmask
 network-settings-gateway = Gateway
 network-settings-done = Gereed
 network-settings-wifi-password =
-  .placeholder = Wachtwoord
+    .placeholder = Wachtwoord
 network-settings-show-password = Wachtwoord tonen
 network-settings-connect = Verbinden
 network-settings-username = Gebruikersnaam
 network-settings-password = Wachtwoord
 network-settings-router-ip = IP-adres router
 network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Wi-Fi inschakelen
+network-settings-enable-wifi = Wifi inschakelen
 network-settings-network-name = Netwerknaam (SSID)
 wireless-connected = Verbonden
 wireless-icon =
-  .alt = Wi-Fi-netwerk
+    .alt = Wifi-netwerk
 network-settings-changing = Netwerkinstellingen wijzigen. Dit kan even duren.
 failed-ethernet-configure = Ethernet instellen mislukt.
-failed-wifi-configure = Wi-Fi instellen mislukt.
+failed-wifi-configure = Wifi instellen mislukt.
 failed-wan-configure = WAN instellen mislukt.
 failed-lan-configure = LAN instellen mislukt.
 failed-wlan-configure = WLAN instellen mislukt.
 
 ## User Settings
 
+create-user =
+    .aria-label = Nieuwe gebruiker toevoegen
 user-settings-input-name =
-  .placeholder = Naam
+    .placeholder = Naam
 user-settings-input-email =
-  .placeholder = E-mailadres
+    .placeholder = E-mailadres
 user-settings-input-password =
-  .placeholder = Wachtwoord
+    .placeholder = Wachtwoord
 user-settings-input-new-password =
-  .placeholder = Nieuw wachtwoord (Optioneel)
+    .placeholder = Nieuw wachtwoord (Optioneel)
 user-settings-input-confirm-new-password =
-  .placeholder = Bevestig nieuw wachtwoord
+    .placeholder = Bevestig nieuw wachtwoord
 user-settings-input-confirm-password =
-  .placeholder = Bevestig wachtwoord
+    .placeholder = Bevestig wachtwoord
 user-settings-password-mismatch = Wachtwoorden zijn niet gelijk
 user-settings-save = Opslaan
 
@@ -151,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Nu bijwerken
 update-available = Nieuwe versie beschikbaar
 update-up-to-date = Geen updates beschikbaar
+updates-not-supported = Updates worden op dit platform niet ondersteund.
+update-settings-enable-self-updates = Automatische updates inschakelen
 last-update = Laatste update
 current-version = Huidige versie
 failed = Mislukt
@@ -166,35 +176,37 @@ developer-settings-create-local-authorization = Maak lokale autorisatie
 
 ## Rules
 
+add-rule =
+    .aria-label = Nieuwe regel maken
 rules = Regels
 rules-create-rule-hint = Geen regels. Klik op + om een regel te maken.
 rules-rule-name = Regelnaam
 rules-customize-rule-name-icon =
-  .alt = Regelnaam aanpassen
+    .alt = Regelnaam aanpassen
 rules-rule-description = Regelbeschrijving
 rules-preview-button =
-  .alt = Voorbeeld
+    .alt = Voorbeeld
 rules-delete-icon =
-  .alt = Verwijder
+    .alt = Verwijder
 rules-drag-hint = Sleep hier een apparaat heen om een regel te maken
 rules-drag-input-hint = Apparaat toevoegen als input
 rules-drag-output-hint = Apparaat toevoegen als output
 rules-scroll-left =
-  .alt = Naar links scrollen
+    .alt = Naar links scrollen
 rules-scroll-right =
-  .alt = Naar rechts scrollen
+    .alt = Naar rechts scrollen
 rules-delete-prompt = Sleep apparaten hierheen om te ontkoppelen
 rules-delete-dialog = Weet u deze zeker dat u deze regel wilt verwijderen?
 rules-delete-cancel =
-  .value = Annuleren
+    .value = Annuleren
 rules-delete-confirm =
-  .value = Verwijder regel
+    .value = Verwijder regel
 rule-invalid = Ongeldig
 rule-delete-prompt = Weet u zeker dat u deze regel wilt verwijderen?
 rule-delete-cancel-button =
-  .value = Annuleren
+    .value = Annuleren
 rule-delete-confirm-button =
-  .value = Verwijder regel
+    .value = Verwijder regel
 rule-select-property = Selecteer eigenschap
 rule-not = Niet
 rule-event = Gebeurtenis
@@ -212,26 +224,29 @@ rule-name = Regelnaam
 
 ## Logs
 
+add-log =
+    .aria-label = Nieuw logboek maken
 logs = Logboeken
 logs-create-log-hint = Geen logboeken. Klik op + om een logboek aan te maken.
 logs-device = Apparaat
 logs-device-select =
-  .aria-label = Apparaatlogboek
+    .aria-label = Apparaatlogboek
 logs-property = Eigenschap
 logs-property-select =
-  .aria-label = Eigenschaplogboek
+    .aria-label = Eigenschaplogboek
 logs-retention = Bewaartermijn
 logs-retention-length =
-  .aria-label = Bewaartermijn logboek
+    .aria-label = Bewaartermijn logboek
 logs-retention-unit =
-  .aria-label = Log Bewaartermijn Eenheid
+    .aria-label = Log Bewaartermijn Eenheid
 logs-hours = Uren
 logs-days = Dagen
 logs-weeks = Weken
 logs-save = Opslaan
 logs-remove-dialog-title = Verwijderen
-logs-remove-dialog-warning = Als het logboek wordt verwijderd, worden ook de bijbehorende gegevens gewist.
-  Wilt u deze echt verwijderen?
+logs-remove-dialog-warning =
+    Als het logboek wordt verwijderd, worden ook de bijbehorende gegevens gewist.
+    Wilt u deze echt verwijderen?
 logs-remove = Verwijderen
 logs-unable-to-create = Kan logboek niet aanmaken
 logs-server-remove-error = Serverfout: kan logboek niet verwijderen
@@ -239,7 +254,7 @@ logs-server-remove-error = Serverfout: kan logboek niet verwijderen
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Zoeken
+    .alt = Zoeken
 add-thing-scanning = Nieuwe apparaten zoeken…
 add-thing-add-adapters-hint = Geen apparaten gevonden. Probeer <a data-l10n-name="add-thing-add-adapters-hint-anchor">add-ons toe te voegen</a>.
 add-thing-add-by-url = Toevoegen met URL…
@@ -274,6 +289,7 @@ Alarm = Alarm
 Thermostat = Thermostaat
 Lock = Vergrendeld
 Custom = Aangepast Thing
+Thing = Thing
 
 ## Properties
 
@@ -302,6 +318,8 @@ locked = Vergrendeld
 unlocked = Ontgrendeld
 jammed = Geklemd
 unknown = Onbekend
+active = Actief
+inactive = Inactief
 
 ## Domain Setup
 
@@ -323,40 +341,40 @@ false = Nee
 
 utils-now = nu
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } seconde geleden
-     *[other] { $value } seconden geleden
-  }
+    { $value ->
+        [one] { $value } seconde geleden
+       *[other] { $value } seconden geleden
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] { $value } minuut geleden
-     *[other] { $value } minuten geleden
-  }
+    { $value ->
+        [one] { $value } minuut geleden
+       *[other] { $value } minuten geleden
+    }
 utils-hours-ago =
-  { $value ->
-      [one] { $value } uur geleden
-     *[other] { $value } uur geleden
-  }
+    { $value ->
+        [one] { $value } uur geleden
+       *[other] { $value } uur geleden
+    }
 utils-days-ago =
-  { $value ->
-      [one] { $value } dag geleden
-     *[other] { $value } dagen geleden
-  }
+    { $value ->
+        [one] { $value } dag geleden
+       *[other] { $value } dagen geleden
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] { $value } week geleden
-     *[other] { $value } weken geleden
-  }
+    { $value ->
+        [one] { $value } week geleden
+       *[other] { $value } weken geleden
+    }
 utils-months-ago =
-  { $value ->
-      [one] { $value } maand geleden
-     *[other] { $value } maanden geleden
-  }
+    { $value ->
+        [one] { $value } maand geleden
+       *[other] { $value } maanden geleden
+    }
 utils-years-ago =
-  { $value ->
-      [one] { $value } jaar geleden
-     *[other] { $value } jaar geleden
-  }
+    { $value ->
+        [one] { $value } jaar geleden
+       *[other] { $value } jaar geleden
+    }
 minute = Minuut
 hour = Uur
 day = Dag
@@ -388,15 +406,15 @@ unknown-device-type = Onbekend apparaattype
 new-thing-choose-icon = Kies icoon…
 new-thing-save = Opslaan
 new-thing-pin =
-  .placeholder = Voer pincode in
+    .placeholder = Voer pincode in
 new-thing-pin-error = Foute pincode
 new-thing-pin-invalid = Ongeldige pincode
 new-thing-cancel = Annuleren
 new-thing-submit = Verstuur
 new-thing-username =
-  .placeholder = Gebruikersnaam
+    .placeholder = Gebruikersnaam
 new-thing-password =
-  .placeholder = Wachtwoord
+    .placeholder = Wachtwoord
 new-thing-credentials-error = Ongeldige combinatie gebruikersnaam/wachtwoord
 new-thing-saved = Opgeslagen
 new-thing-done = Klaar
@@ -404,7 +422,7 @@ new-thing-done = Klaar
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Web thing-URL
+    .placeholder = Web thing-URL
 new-web-thing-label = Web Thing
 loading = Laden…
 new-web-thing-multiple = Meerdere Web Things gevonden
@@ -419,6 +437,8 @@ events-not-found = Dit Thing heeft geen gebeurtenissen.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Nieuwe add-ons zoeken
 author-unknown = Onbekend
 disable = Uitgeschakeld
 enable = Ingeschakeld
@@ -454,7 +474,7 @@ authorizations = Autorisaties
 developer = Ontwikkelaar
 network = Netwerk
 ethernet = Ethernet
-wifi = Wi-Fi
+wifi = Wifi
 icon = Pictogram
 
 ## Speech
@@ -500,11 +520,11 @@ tunnel-setup-title = Kies webadres — { -webthings-gateway-brand }
 tunnel-setup-welcome = Welkom
 tunnel-setup-choose-address = Kies een beveiligd webadres voor uw gateway:
 tunnel-setup-input-subdomain =
-  .placeholder = subdomein
+    .placeholder = subdomein
 tunnel-setup-opt-in = Houd mij op de hoogte over nieuwe mogelijkheden en bijdragen.
 tunnel-setup-privacy-policy = Privacybeleid
 tunnel-setup-input-reclamation-token =
-  .placeholder = Opeistoken
+    .placeholder = Opeistoken
 tunnel-setup-error = Er is een fout opgetreden bij het instellen van het subdomein.
 tunnel-setup-create = Aanmaken
 tunnel-setup-skip = Overslaan
@@ -514,11 +534,15 @@ tunnel-setup-time-sync = Wacht op het instellen van de klok via internet. Domein
 
 authorize-title = Autorisatieaanvraag- { -webthings-gateway-brand }
 authorize-authorization-request = Autorisatieaanvraag
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> wil toegang krijgen tot uw gateway voor <<function>>-apparaten.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = van <<domein>>
 authorize-monitor-and-control = bekijken en instellen
 authorize-monitor = bekijken
 authorize-allow-all = Toestaan voor alle Things
 authorize-allow =
-  .value = Toestaan
+    .value = Toestaan
 authorize-deny = Weigeren
 
 ## Local Token Page
@@ -531,49 +555,53 @@ local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met <a 
 ## Router Setup Page
 
 router-setup-title = Routerinstellingen — { -webthings-gateway-brand }
-router-setup-header = Maak een Wi-Fi-verbinding
+router-setup-header = Maak een wifi-verbinding
 router-setup-input-ssid =
-  .placeholder = Netwerknaam
+    .placeholder = Netwerknaam
 router-setup-input-password =
-  .placeholder = Wachtwoord
+    .placeholder = Wachtwoord
 router-setup-input-confirm-password =
-  .placeholder = Bevestig wachtwoord
+    .placeholder = Bevestig wachtwoord
 router-setup-create =
-  .value = Maak
+    .value = Maak
 router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi-instellingen — { -webthings-gateway-brand }
-wifi-setup-header = Verbinden met Wi-Fi-netwerk?
+wifi-setup-title = Wifi-instellingen — { -webthings-gateway-brand }
+wifi-setup-header = Verbinden met wifi-netwerk?
 wifi-setup-input-password =
-  .placeholder = Wachtwoord
+    .placeholder = Wachtwoord
 wifi-setup-show-password = Wachtwoord tonen
 wifi-setup-connect =
-  .value = Verbinden
+    .value = Verbinden
 wifi-setup-network-icon =
-  .alt = Wi-Fi-Netwerk
+    .alt = Wifi-netwerk
 wifi-setup-skip = Overslaan
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Verbinden met Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Verbinden met Wi-Fi…
-connecting-connect = Controleer of u verbonden bent met hetzelfde netwerk en
- navigeer dan naar { $gateway-link } in uw webbrowser om de installatie te voltooien.
-connecting-warning = Let op: Als u { $domain } niet kunt laden, controleer
- het IP-adres van de gateway in uw router.
-connecting-header-skipped = Installatie Wi-Fi overgeslagen
-connecting-skipped = De gateway wordt opgestart. Navigeer naar
- { $gateway-link } in uw webbrowser, terwijl u verbonden bent met hetzelfde netwerk,
- om de installatie te voltooien.
+connecting-title = Verbinden met wifi — { -webthings-gateway-brand }
+connecting-header = Verbinden met wifi…
+connecting-connect =
+    Controleer of u verbonden bent met hetzelfde netwerk en
+    navigeer dan naar { $gateway-link } in uw webbrowser om de installatie te voltooien.
+connecting-warning =
+    Let op: Als u { $domain } niet kunt laden, controleer
+    het IP-adres van de gateway in uw router.
+connecting-header-skipped = Installatie wifi overgeslagen
+connecting-skipped =
+    De gateway wordt opgestart. Navigeer naar
+    { $gateway-link } in uw webbrowser, terwijl u verbonden bent met hetzelfde netwerk,
+    om de installatie te voltooien.
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi-netwerk maken — { -webthings-gateway-brand }
-creating-header = Wi-Fi-netwerk maken…
-creating-content = Verbind met { $ssid } en het ingestelde wachtwoord,
- navigeer daarna naar { $gateway-link } of { $ip-link } in uw webbrowser.
+creating-title = Wifi-netwerk maken — { -webthings-gateway-brand }
+creating-header = Wifi-netwerk maken…
+creating-content =
+    Verbind met { $ssid } en het ingestelde wachtwoord,
+    navigeer daarna naar { $gateway-link } of { $ip-link } in uw webbrowser.
 
 ## General Terms
 
@@ -585,3 +613,20 @@ remove = Verwijderen
 disconnected = Ontkoppelen
 processing = Verwerken…
 submit = Verstuur
+
+## Top-Level Buttons
+
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Terug
+overflow-button =
+    .aria-label = Aanvullende acties
+speech-button =
+    .aria-label = Luister naar spraak
+submit-button =
+    .aria-label = Indienen
+edit-button =
+    .aria-label = Bewerken
+save-button =
+    .aria-label = Opslaan
