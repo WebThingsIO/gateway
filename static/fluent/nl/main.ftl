@@ -324,16 +324,16 @@ inactive = Inactief
 tunnel-setup-reclaim-domain = Het lijkt erop dat u dat subdomein al hebt geregistreerd. <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">Klik hier</a> om het op te eisen.
 check-email-for-token = Controleer uw e-mail op een reclamatietoken en plak dit hierboven.
 reclaim-failed = Kan domein niet opeisen.
-subdomain-already-used = Dit subodmein is al in gebruik. Kies een andere.
-invalid-reclamation-token = Ongeldig opeis-token.
-domain-success = Gelukt! We verwijzen uw browser door…
-issuing-error = Fout met het certificaat ophalen. Probeer het opnieuw.
+subdomain-already-used = Dit subdomein is al in gebruik. Kies een ander.
+invalid-reclamation-token = Ongeldig reclamatietoken.
+domain-success = Gelukt! We verwijzen u door…
+issuing-error = Fout bij het uitgeven van het certificaat. Probeer het opnieuw.
 redirecting = Doorsturen…
 
 ## Booleans
 
-true = Ja
-false = Nee
+true = Juist
+false = Onjuist
 
 ## Time
 
@@ -384,7 +384,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
-abbrev-kilowatt-hour = kW⋅h
+abbrev-kilowatt-hour = kWh
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -401,26 +401,26 @@ abbrev-foot = ft
 ## New Thing View
 
 unknown-device-type = Onbekend apparaattype
-new-thing-choose-icon = Kies icoon…
+new-thing-choose-icon = Pictogram kiezen…
 new-thing-save = Opslaan
 new-thing-pin =
     .placeholder = Voer pincode in
-new-thing-pin-error = Foute pincode
+new-thing-pin-error = Onjuiste pincode
 new-thing-pin-invalid = Ongeldige pincode
 new-thing-cancel = Annuleren
-new-thing-submit = Verstuur
+new-thing-submit = Indienen
 new-thing-username =
-    .placeholder = Gebruikersnaam
+    .placeholder = Voer gebruikersnaam in
 new-thing-password =
-    .placeholder = Wachtwoord
-new-thing-credentials-error = Ongeldige combinatie gebruikersnaam/wachtwoord
+    .placeholder = Voer wachtwoord in
+new-thing-credentials-error = Ongeldige aanmeldgegevens
 new-thing-saved = Opgeslagen
 new-thing-done = Klaar
 
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Web thing-URL
+    .placeholder = Voer URL Web Thing in
 new-web-thing-label = Web Thing
 loading = Laden…
 new-web-thing-multiple = Meerdere Web Things gevonden
@@ -438,14 +438,14 @@ events-not-found = Dit Thing heeft geen gebeurtenissen.
 add-addons =
     .aria-label = Nieuwe add-ons zoeken
 author-unknown = Onbekend
-disable = Uitgeschakeld
-enable = Ingeschakeld
+disable = Uitschakelen
+enable = Inschakelen
 by = door
 addon-configure = Instellen
-addon-update = Update
+addon-update = Bijwerken
 addon-remove = Verwijderen
-addon-updating = Updaten…
-addon-updated = Geupdatet
+addon-updating = Bijwerken…
+addon-updated = Bijgewerkt
 addon-update-failed = Mislukt
 addon-config-applying = Toepassen…
 addon-config-apply = Toepassen
@@ -459,12 +459,12 @@ addon-discovery-failed = Mislukt
 settings = Instellingen
 domain = Domein
 users = Gebruikers
-edit-user = Gebruiker beheren
+edit-user = Gebruiker bewerken
 add-user = Gebruiker toevoegen
 adapters = Adapters
 addons = Add-ons
 addon-config = Add-on instellen
-addon-discovery = Nieuwe Add-ons zoeken
+addon-discovery = Nieuwe add-ons ontdekken
 experiments = Experimenten
 localization = Lokalisatie
 updates = Updates
@@ -477,7 +477,7 @@ icon = Pictogram
 
 ## Speech
 
-speech-unsupported = De browser ondersteunt geen spraak
+speech-unsupported = De huidige browser ondersteunt geen spraak
 speech-didnt-get = Sorry, ik heb u niet verstaan.
 
 ## Errors
@@ -501,36 +501,36 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Aanmelden — { -webthings-gateway-brand }
+login-title = Aanmelden – { -webthings-gateway-brand }
 login-log-in = Aanmelden
 
 ## Create First User Page
 
-signup-title = Gebruiker toevoegen — { -webthings-gateway-brand }
+signup-title = Gebruiker aanmaken – { -webthings-gateway-brand }
 signup-welcome = Welkom
-signup-create-account = Maak uw eerste gebruiker aan:
-signup-password-mismatch = Wachtwoorden zijn niet gelijk
+signup-create-account = Maak uw eerste gebruikersaccount aan:
+signup-password-mismatch = Wachtwoorden komen niet overeen
 signup-next = Volgende
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Kies webadres — { -webthings-gateway-brand }
+tunnel-setup-title = Webadres kiezen – { -webthings-gateway-brand }
 tunnel-setup-welcome = Welkom
-tunnel-setup-choose-address = Kies een beveiligd webadres voor uw gateway:
+tunnel-setup-choose-address = Kies een veilig webadres voor uw gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomein
-tunnel-setup-opt-in = Houd mij op de hoogte over nieuwe mogelijkheden en bijdragen.
+tunnel-setup-opt-in = Houd mij op de hoogte van nieuwe functies en mogelijkheden om bij te dragen.
 tunnel-setup-privacy-policy = Privacybeleid
 tunnel-setup-input-reclamation-token =
-    .placeholder = Opeistoken
+    .placeholder = Reclamatietoken
 tunnel-setup-error = Er is een fout opgetreden bij het instellen van het subdomein.
 tunnel-setup-create = Aanmaken
 tunnel-setup-skip = Overslaan
-tunnel-setup-time-sync = Wacht op het instellen van de klok via internet. Domeinregistratie zal anders waarschijnlijk mislukken.
+tunnel-setup-time-sync = Wachten op het instellen van de systeemklok via internet. Domeinregistratie zal anders waarschijnlijk mislukken.
 
 ## Authorize Page
 
-authorize-title = Autorisatieaanvraag- { -webthings-gateway-brand }
+authorize-title = Autorisatieaanvraag – { -webthings-gateway-brand }
 authorize-authorization-request = Autorisatieaanvraag
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> wil toegang krijgen tot uw gateway voor <<function>>-apparaten.
@@ -545,15 +545,15 @@ authorize-deny = Weigeren
 
 ## Local Token Page
 
-local-token-title = Lokale tokendienst — { -webthings-gateway-brand }
+local-token-title = Lokale tokendienst – { -webthings-gateway-brand }
 local-token-header = Lokale tokendienst
-local-token-your-token = Je lokale token is <a data-l10n-name="local-token-jwt">JSON Web-token</a>.
-local-token-use-it = Gebruik deze om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
+local-token-your-token = Uw lokale token is dit <a data-l10n-name="local-token-jwt">JSON Web-token</a>:
+local-token-use-it = Gebruik dit om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
 
 ## Router Setup Page
 
-router-setup-title = Routerinstellingen — { -webthings-gateway-brand }
-router-setup-header = Maak een wifi-verbinding
+router-setup-title = Routerinstellingen – { -webthings-gateway-brand }
+router-setup-header = Nieuw wifi-netwerk instellen
 router-setup-input-ssid =
     .placeholder = Netwerknaam
 router-setup-input-password =
@@ -561,12 +561,12 @@ router-setup-input-password =
 router-setup-input-confirm-password =
     .placeholder = Bevestig wachtwoord
 router-setup-create =
-    .value = Maak
+    .value = Aanmaken
 router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wifi-instellingen — { -webthings-gateway-brand }
+wifi-setup-title = Wifi-instellingen – { -webthings-gateway-brand }
 wifi-setup-header = Verbinden met wifi-netwerk?
 wifi-setup-input-password =
     .placeholder = Wachtwoord
@@ -579,38 +579,29 @@ wifi-setup-skip = Overslaan
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Verbinden met wifi — { -webthings-gateway-brand }
+connecting-title = Verbinden met wifi – { -webthings-gateway-brand }
 connecting-header = Verbinden met wifi…
-connecting-connect =
-    Controleer of u verbonden bent met hetzelfde netwerk en
-    navigeer dan naar { $gateway-link } in uw webbrowser om de installatie te voltooien.
-connecting-warning =
-    Let op: Als u { $domain } niet kunt laden, controleer
-    het IP-adres van de gateway in uw router.
-connecting-header-skipped = Installatie wifi overgeslagen
-connecting-skipped =
-    De gateway wordt opgestart. Navigeer naar
-    { $gateway-link } in uw webbrowser, terwijl u verbonden bent met hetzelfde netwerk,
-    om de installatie te voltooien.
+connecting-connect = Controleer of u verbonden bent met hetzelfde netwerk en navigeer dan in uw webbrowser naar { $gateway-link } om verder te gaan met instellen.
+connecting-warning = Opmerking: Als u { $domain } niet kunt laden, zoek dan het IP-adres van de gateway in uw router.
+connecting-header-skipped = Instellen wifi overgeslagen
+connecting-skipped = De gateway wordt opgestart. Navigeer in uw webbrowser naar { $gateway-link }, terwijl u verbonden bent met hetzelfde netwerk als de gateway, om verder te gaan met instellen.
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wifi-netwerk maken — { -webthings-gateway-brand }
+creating-title = Wifi-netwerk maken – { -webthings-gateway-brand }
 creating-header = Wifi-netwerk maken…
-creating-content =
-    Verbind met { $ssid } en het ingestelde wachtwoord,
-    navigeer daarna naar { $gateway-link } of { $ip-link } in uw webbrowser.
+creating-content = Verbind met { $ssid } met het zojuist ingestelde wachtwoord, navigeer daarna in uw webbrowser naar { $gateway-link } of { $ip-link }.
 
 ## General Terms
 
-ok = Ok
+ok = OK
 ellipsis = …
 event-log = Gebeurtenissenlogboek
 edit = Bewerken
 remove = Verwijderen
-disconnected = Ontkoppelen
+disconnected = Niet verbonden
 processing = Verwerken…
-submit = Verstuur
+submit = Indienen
 
 ## Top-Level Buttons
 
@@ -621,7 +612,7 @@ back-button =
 overflow-button =
     .aria-label = Aanvullende acties
 speech-button =
-    .aria-label = Luister naar spraak
+    .aria-label = Luisteren naar spraak
 submit-button =
     .aria-label = Indienen
 edit-button =
