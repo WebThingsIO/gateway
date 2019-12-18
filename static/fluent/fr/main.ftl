@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -29,17 +27,17 @@ log-out-button = Déconnexion
 
 ## Things
 
-thing-details = 
-  .aria-label = Afficher les propriétés
+thing-details =
+    .aria-label = Afficher les propriétés
 add-things =
-  .aria-label = Ajouter un Thing
+    .aria-label = Ajouter un Thing
 
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Avatar d’assistant
+    .alt = Avatar d’assistant
 assistant-controls-text-input =
-  .placeholder = Comment puis-je vous aider ?
+    .placeholder = Comment puis-je vous aider ?
 
 ## Floorplan
 
@@ -65,21 +63,21 @@ domain-settings-local-label = Accès local
 domain-settings-local-update = Modifiez nom d’hôte
 domain-settings-remote-access = Accès à distance
 domain-settings-local-name =
-  .placeholder = Gateway
+    .placeholder = Gateway
 
 ## Network Settings
 
 network-settings-unsupported = Les paramètres de réseau ne sont pas pris en charge sur cette plateforme.
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
+    .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
-  .alt = Réseau domestique
+    .alt = Réseau domestique
 network-settings-internet-image =
-  .alt = Internet
+    .alt = Internet
 network-settings-configure = Configurer
 network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Mode
@@ -94,7 +92,7 @@ network-settings-network-mask = Masque de réseau
 network-settings-gateway = Passerelle
 network-settings-done = Fini
 network-settings-wifi-password =
-  .placeholder = Mot de passe
+    .placeholder = Mot de passe
 network-settings-show-password = Montrer mot de passe
 network-settings-connect = Se connecter
 network-settings-username = Nom d’utilisateur
@@ -105,7 +103,7 @@ network-settings-enable-wifi = Activer le Wi-Fi
 network-settings-network-name = Nom réseau (SSID)
 wireless-connected = Connecté
 wireless-icon =
-  .alt = Réseau Wi-Fi
+    .alt = Réseau Wi-Fi
 network-settings-changing = Modification des paramètres réseau en cours. Veuillez patienter.
 failed-ethernet-configure = Échec de configuration du réseau Ethernet.
 failed-wifi-configure = Échec de configuration du réseau Wi-Fi.
@@ -116,19 +114,19 @@ failed-wlan-configure = Échec de configuration du WLAN.
 ## User Settings
 
 create-user =
-  .aria-label = Ajouter un utilisateur
-user-settings-input-name = 
-  .placeholder = Nom
+    .aria-label = Ajouter un utilisateur
+user-settings-input-name =
+    .placeholder = Nom
 user-settings-input-email =
-  .placeholder = Courriel
+    .placeholder = Courriel
 user-settings-input-password =
-  .placeholder = Mot de passe
+    .placeholder = Mot de passe
 user-settings-input-new-password =
-  .placeholder = Nouveau mot de passe (facultatif)
+    .placeholder = Nouveau mot de passe (facultatif)
 user-settings-input-confirm-new-password =
-  .placeholder = Confirmer le nouveau mot de passe
+    .placeholder = Confirmer le nouveau mot de passe
 user-settings-input-confirm-password =
-  .placeholder = Confirmer le mot de passe
+    .placeholder = Confirmer le mot de passe
 user-settings-password-mismatch = Les mots de passe ne correspondent pas
 user-settings-save = Enregistrer
 
@@ -161,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Mettre à jour maintenant
 update-available = Mise à jour disponible
 update-up-to-date = Le système est à jour
+updates-not-supported = Les mises à jour ne sont pas prises en charge sur cette plateforme.
+update-settings-enable-self-updates = Activer les mises à jour automatiques
 last-update = Dernière mise à jour
 current-version = Version actuelle
 failed = Échoué
@@ -177,39 +177,39 @@ developer-settings-create-local-authorization = Créer une autorisation locale
 ## Rules
 
 add-rule =
-  .aria-label = Créer un règle
+    .aria-label = Créer une règle
 rules = Règles
 rules-create-rule-hint = Aucune règle créée. Cliquer sur + pour la créer.
-rules-rule-name = Nom du règle
+rules-rule-name = Nom de la règle
 rules-customize-rule-name-icon =
-  .alt = Personnaliser le nom du règle
-rules-rule-description = Description du règle
+    .alt = Personnaliser le nom de la règle
+rules-rule-description = Description de la règle
 rules-preview-button =
-  .alt = Aperçu
+    .alt = Aperçu
 rules-delete-icon =
-  .alt = Supprimer
+    .alt = Supprimer
 rules-drag-hint = Faire glisser les périphériques ici pour créer une règle
 rules-drag-input-hint = Ajouter un périphérique d’entrée
 rules-drag-output-hint = Ajouter un périphérique de sortie
 rules-scroll-left =
-  .alt = Défiler vers la gauche
+    .alt = Défiler vers la gauche
 rules-scroll-right =
-  .alt = Défiler vers la droite
+    .alt = Défiler vers la droite
 rules-delete-prompt = Déplacer les périphériques ici pour déconnecter
-rules-delete-dialog = Êtes-vous certain que vous voulez supprimer la règle ?
+rules-delete-dialog = Voulez-vous vraiment supprimer la règle ?
 rules-delete-cancel =
-  .value = Annuler
+    .value = Annuler
 rules-delete-confirm =
-  .value = Supprimer la règle
+    .value = Supprimer la règle
 rule-invalid = Non valide
 rule-delete-prompt = Êtes-vous certain que vous voulez supprimer la règle ?
 rule-delete-cancel-button =
-  .value = Annuler
+    .value = Annuler
 rule-delete-confirm-button =
-  .value = Supprimer la règle
+    .value = Supprimer la règle
 rule-select-property = Sélectionner la propriété
 rule-not = Non
-rule-event = Événement
+rule-event = Évènement
 rule-action = Action
 rule-configure = Configurer…
 rule-time-title = Heure
@@ -225,34 +225,34 @@ rule-name = Nom de la règle
 ## Logs
 
 add-log =
-  .aria-label = Créer un journal
+    .aria-label = Créer un journal
 logs = Journaux
 logs-create-log-hint = Aucun journal créé. Cliquer sur + pour le créer.
 logs-device = Périphérique
 logs-device-select =
-  .aria-label = Périphérique des journaux
+    .aria-label = Périphérique des journaux
 logs-property = Propriété
 logs-property-select =
-  .aria-label = Propriété du journal
+    .aria-label = Propriété du journal
 logs-retention = Rétention
 logs-retention-length =
-  .aria-label = Durée de la rétention des journaux
+    .aria-label = Durée de la rétention des journaux
 logs-retention-unit =
-  .aria-label = Unité de la rétention des journaux
+    .aria-label = Unité de la rétention des journaux
 logs-hours = Heures
 logs-days = Jours
 logs-weeks = Semaines
 logs-save = Enregistrer
 logs-remove-dialog-title = Suppression en cours
-logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Êtes-vous certain que vous voulez la supprimer ?
+logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Voulez-vous vraiment la supprimer ?
 logs-remove = Supprimer
 logs-unable-to-create = Impossible de créer le journal
-logs-server-remove-error = Erreur du serveur : Impossible de supprimer le journal
+logs-server-remove-error = Erreur du serveur : impossible de supprimer le journal
 
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Recherche
+    .alt = Recherche
 add-thing-scanning = Recherche de nouveaux périphériques…
 add-thing-add-adapters-hint = Rien de nouveau trouvé. Essayez <a data-l10n-name="add-thing-add-adapters-hint-anchor">d’installer des composants additionnels</a>.
 add-thing-add-by-url = Ajouter par URL…
@@ -277,8 +277,8 @@ MultiLevelSensor = Capteur multi-niveaux
 SmartPlug = Prise intelligente
 Light = Lampe
 DoorSensor = Capteur de la porte
-MotionSensor = Capteur de motion
-LeakSensor = Capteur des fuites
+MotionSensor = Capteur de mouvement
+LeakSensor = Capteur de fuite
 PushButton = Bouton poussoir
 VideoCamera = Caméra vidéo
 Camera = Caméra
@@ -326,7 +326,7 @@ check-email-for-token = Veuillez consulter votre courriel pour le jeton de récl
 reclaim-failed = Impossible de réclamer le domaine.
 subdomain-already-used = Ce sous-domaine est déjà utilisé. Veuillez en choisir un autre.
 invalid-reclamation-token = Jeton de réclamation non valide.
-domain-success = Succès ! Patientez pendant la redirection…
+domain-success = Opération réussie. Veuillez patienter pendant la redirection…
 issuing-error = Impossible de délivrer un certificat. Veuillez réessayer.
 redirecting = Redirection en cours…
 
@@ -339,40 +339,40 @@ false = Faux
 
 utils-now = Maintenant
 utils-seconds-ago =
-  { $value ->
-      [one] Il y a { $value } second
-     *[other] Il y a { $value } secondes
-  }
+    { $value ->
+        [one] Il y a { $value } seconde
+       *[other] Il y a { $value } secondes
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] Il y a { $value } minute
-     *[other] Il y a { $value } minutes
-  }
+    { $value ->
+        [one] Il y a { $value } minute
+       *[other] Il y a { $value } minutes
+    }
 utils-hours-ago =
-  { $value ->
-      [one] Il y a { $value } heure
-     *[other] Il y a { $value } heures
-  }
+    { $value ->
+        [one] Il y a { $value } heure
+       *[other] Il y a { $value } heures
+    }
 utils-days-ago =
-  { $value ->
-      [one] Il y a { $value } jour
-     *[other] Il y a { $value } jours
-  }
+    { $value ->
+        [one] Il y a { $value } jour
+       *[other] Il y a { $value } jours
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] Il y a { $value } semaine
-     *[other] Il y a { $value } semaines
-  }
+    { $value ->
+        [one] Il y a { $value } semaine
+       *[other] Il y a { $value } semaines
+    }
 utils-months-ago =
-  { $value ->
-      [one] Il y a { $value } mois
-     *[other] Il y a { $value } mois
-  }
+    { $value ->
+        [one] Il y a { $value } mois
+       *[other] Il y a { $value } mois
+    }
 utils-years-ago =
-  { $value ->
-      [one] Il y a { $value } année
-     *[other] Il y a { $value } années
-  }
+    { $value ->
+        [one] Il y a { $value } année
+       *[other] Il y a { $value } années
+    }
 minute = Minute
 hour = Heure
 day = Jour
@@ -385,7 +385,7 @@ abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
 abbrev-kilowatt-hour = kW⋅h
-abbrev-percent = %
+abbrev-percent =  %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
 abbrev-kelvin = K
@@ -404,15 +404,15 @@ unknown-device-type = Type de périphérique inconnu
 new-thing-choose-icon = Sélectionner l’icône…
 new-thing-save = Enregistrer
 new-thing-pin =
-  .placeholder = Entrer le NIP
-new-thing-pin-error = NIP incorrecte
-new-thing-pin-invalid = NIP non valide
+    .placeholder = Entrer le code PIN
+new-thing-pin-error = Code PIN incorrect
+new-thing-pin-invalid = Code PIN non valide
 new-thing-cancel = Annuler
-new-thing-submit = Soumettre
+new-thing-submit = Envoyer
 new-thing-username =
-  .placeholder = Entrer le nom d’utilisateur
+    .placeholder = Entrer le nom d’utilisateur
 new-thing-password =
-  .placeholder = Entrer le mot de passe
+    .placeholder = Entrer le mot de passe
 new-thing-credentials-error = Informations d’identification non valides
 new-thing-saved = Enregistré
 new-thing-done = Terminé
@@ -420,7 +420,7 @@ new-thing-done = Terminé
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Entrer l’URL de la WebThing
+    .placeholder = Entrer l’URL de la WebThing
 new-web-thing-label = WebThing
 loading = Chargement…
 new-web-thing-multiple = Plusieurs WebThings trouvées
@@ -435,8 +435,8 @@ events-not-found = Cette thing n’a aucun événement.
 
 ## Add-on Settings
 
-add-addons = 
-  .aria-label = Découvrir de nouveaux composants additionnels
+add-addons =
+    .aria-label = Découvrir de nouveaux composants additionnels
 author-unknown = Inconnu
 disable = Désactiver
 enable = Activer
@@ -445,7 +445,7 @@ addon-configure = Configurer
 addon-update = Mettre à jour
 addon-remove = Supprimer
 addon-updating = Mise à jour en cours…
-addon-updated = Mise à jour
+addon-updated = Mis à jour
 addon-update-failed = Échec
 addon-config-applying = Application en cours…
 addon-config-apply = Appliquer
@@ -518,11 +518,11 @@ tunnel-setup-title = Sélectionner une adresse web — { -webthings-gateway-
 tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
-  .placeholder = sous-domaine
+    .placeholder = sous-domaine
 tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de contributions.
 tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
-  .placeholder = Jeton de récupération
+    .placeholder = Jeton de récupération
 tunnel-setup-error = Une erreur est survenue en créant la sous-domaine.
 tunnel-setup-create = Créer
 tunnel-setup-skip = Ignorer
@@ -536,7 +536,7 @@ authorize-monitor-and-control = surveiller et contrôler
 authorize-monitor = surveiller
 authorize-allow-all = Autoriser pour tout objet
 authorize-allow =
-  .value = Autoriser
+    .value = Autoriser
 authorize-deny = Refuser
 
 ## Local Token Page
@@ -551,13 +551,13 @@ local-token-use-it = L’utiliser pour communiquer avec votre passerelle en tout
 router-setup-title = Configuration du routeur — { -webthings-gateway-brand }
 router-setup-header = Créer un réseau Wi-Fi
 router-setup-input-ssid =
-  .placeholder = Nom du réseau
+    .placeholder = Nom du réseau
 router-setup-input-password =
-  .placeholder = Mot de passe
+    .placeholder = Mot de passe
 router-setup-input-confirm-password =
-  .placeholder = Confirmer le mot de passe
+    .placeholder = Confirmer le mot de passe
 router-setup-create =
-  .value = Créer
+    .value = Créer
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
@@ -565,12 +565,12 @@ router-setup-password-mismatch = Les mots de passe doivent être identiques
 wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }
 wifi-setup-header = Connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
-  .placeholder = Mot de passe
+    .placeholder = Mot de passe
 wifi-setup-show-password = Afficher le mot de passe
 wifi-setup-connect =
-  .value = Connecter
+    .value = Connecter
 wifi-setup-network-icon =
-  .alt = Réseau Wi-Fi
+    .alt = Réseau Wi-Fi
 wifi-setup-skip = Ignorer
 
 ## Connecting to Wi-Fi Page
@@ -602,16 +602,16 @@ submit = Envoyer
 ## Top-Level Buttons
 
 menu-button =
-  .aria-label = Menu
+    .aria-label = Menu
 back-button =
-  .aria-label = Retour
+    .aria-label = Retour
 overflow-button =
-  .aria-label = Actions supplémentaires
+    .aria-label = Actions supplémentaires
 speech-button =
-  .aria-label = Écoutez la voix
+    .aria-label = Écoutez la voix
 submit-button =
-  .aria-label = Envoyer
+    .aria-label = Envoyer
 edit-button =
-  .aria-label = Edit
+    .aria-label = Edit
 save-button =
-  .aria-label = Enregistrer
+    .aria-label = Enregistrer
