@@ -534,6 +534,10 @@ tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das 
 
 authorize-title = Authorisierungsanfrage — { -webthings-gateway-brand }
 authorize-authorization-request = Authorisierungsanfrage
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<<name>>> möchte auf Ihr Gateway für <<function>>-Geräte zugreifen.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = von <<domain>>
 authorize-monitor-and-control = Überwachen und kontrollieren
 authorize-monitor = Überwachen
 authorize-allow-all = Für alle Geräte erlauben
@@ -611,3 +615,17 @@ submit = Absenden
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menü
+back-button =
+    .aria-label = Zurück
+overflow-button =
+    .aria-label = Weitere Aktionen
+speech-button =
+    .aria-label = Sprache anhören
+submit-button =
+    .aria-label = Absenden
+edit-button =
+    .aria-label = Bearbeiten
+save-button =
+    .aria-label = Speichern
