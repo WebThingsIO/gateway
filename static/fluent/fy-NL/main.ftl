@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -27,12 +25,19 @@ floorplan-menu-item = Plattegrûn
 settings-menu-item = Ynstellingen
 log-out-button = Ofmelde
 
+## Things
+
+thing-details =
+    .aria-label = Toan eigenskippen
+add-things =
+    .aria-label = Nije Things tafoegje
+
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Assistint Avatar
+    .alt = Assistint Avatar
 assistant-controls-text-input =
-  .placeholder = Hoe kin ik helpe?
+    .placeholder = Hoe kin ik helpe?
 
 ## Floorplan
 
@@ -58,25 +63,26 @@ domain-settings-local-label = Lokale tagong
 domain-settings-local-update = Hostnamme bywurkje
 domain-settings-remote-access = Eksterne tagong
 domain-settings-local-name =
-  .placeholder = gateway
+    .placeholder = gateway
 
 ## Network Settings
 
 network-settings-unsupported = Netwurkynstelligen wurde op dit platfoarm net stipe.
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
-network-settings-wifi = Wi-Fi
+    .alt = Wifi
+network-settings-wifi = Wifi
 network-settings-home-network-image =
-  .alt = Thúsnetwurk
+    .alt = Thúsnetwurk
 network-settings-internet-image =
-  .alt = Ynternet
+    .alt = Ynternet
 network-settings-configure = Konfigurearje
 network-settings-internet-wan = Ynternet (WAN)
+network-settings-wan-mode = Modus
 network-settings-home-network-lan = Thúsnetwurk (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-wifi-wlan = Wifi (WLAN)
 network-settings-ip-address = IP-adres
 network-settings-dhcp = Automatysk (DHCP)
 network-settings-static = Hânmjittich (Statysk IP-adres)
@@ -86,18 +92,18 @@ network-settings-network-mask = Netwurkmask
 network-settings-gateway = Gateway
 network-settings-done = Dien
 network-settings-wifi-password =
-  .placeholder = Wachtwurd
+    .placeholder = Wachtwurd
 network-settings-show-password = Wachtwurd toane
 network-settings-connect = Ferbine
 network-settings-username = Brûkersnamme
 network-settings-password = Wachtwurd
 network-settings-router-ip = IP-adres router
 network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Wi-Fi ynskeakelje
+network-settings-enable-wifi = Wifi ynskeakelje
 network-settings-network-name = Netwurknamme (SSID)
 wireless-connected = Ferbûn
 wireless-icon =
-  .alt = Wi-Fi-netwurk
+    .alt = Wifi-netwurk
 network-settings-changing = Netwurkynstellingen wizigje. Dit kan efkes duorje.
 failed-ethernet-configure = Ethernet ynstelle mislearre.
 failed-wifi-configure = Wi-Fi ynstelle mislearre.
@@ -107,18 +113,20 @@ failed-wlan-configure = WLAN ynstelle mislearre.
 
 ## User Settings
 
+create-user =
+    .aria-label = Nije brûker tafoegje
 user-settings-input-name =
-  .placeholder = Namme
+    .placeholder = Namme
 user-settings-input-email =
-  .placeholder = E-mailadres
+    .placeholder = E-mailadres
 user-settings-input-password =
-  .placeholder = Wachtwurd
+    .placeholder = Wachtwurd
 user-settings-input-new-password =
-  .placeholder = Nij wachtwurd (opsjoneel)
+    .placeholder = Nij wachtwurd (opsjoneel)
 user-settings-input-confirm-new-password =
-  .placeholder = Befêstigje nij wachtwurd
+    .placeholder = Befêstigje nij wachtwurd
 user-settings-input-confirm-password =
-  .placeholder = Befêstigje wachtwurd
+    .placeholder = Befêstigje wachtwurd
 user-settings-password-mismatch = Wachtwurden binne net lyk
 user-settings-save = Bewarje
 
@@ -151,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = No bywurkje
 update-available = Nije ferzje beskikber
 update-up-to-date = Gjin fernijingen beskikber
+updates-not-supported = Fernijingen wurde op dit platfoarm net stipe.
+update-settings-enable-self-updates = Automatyske fernijingen ynskeakelje
 last-update = Lêste fernijing
 current-version = Aktuele ferzje
 failed = Mislearre
@@ -166,35 +176,37 @@ developer-settings-create-local-authorization = Meitsje lokale autorisaasje
 
 ## Rules
 
+add-rule =
+    .aria-label = Nije rigel meitsje
 rules = Rigels
 rules-create-rule-hint = Gjin rigels. Klik op + om in rigel te meitsjen.
 rules-rule-name = Rigelnamme
 rules-customize-rule-name-icon =
-  .alt = Rigelnamme oanpasse
+    .alt = Rigelnamme oanpasse
 rules-rule-description = Rigelbeskriuwing
 rules-preview-button =
-  .alt = Foarbyld
+    .alt = Foarbyld
 rules-delete-icon =
-  .alt = Fuortsmite
+    .alt = Fuortsmite
 rules-drag-hint = Sleep hjir in apparaat hinne om in rigel te meitsjen
 rules-drag-input-hint = Apparaat tafoegje as input
 rules-drag-output-hint = Apparaat tafoegje as output
 rules-scroll-left =
-  .alt = Nei links skowe
+    .alt = Nei links skowe
 rules-scroll-right =
-  .alt = Nei rjochts skowe
+    .alt = Nei rjochts skowe
 rules-delete-prompt = Sleep apparaten hjirhinne om te ûntkeppeljen
 rules-delete-dialog = Binne jo wis dat jo dizze rigel fuortsmite wolle?
 rules-delete-cancel =
-  .value = Annulearje
+    .value = Annulearje
 rules-delete-confirm =
-  .value = Smyt rigel fuort
+    .value = Smyt rigel fuort
 rule-invalid = Unjildich
 rule-delete-prompt = Binne jo wis dat jo dizze rigel fuortsmite wolle?
 rule-delete-cancel-button =
-  .value = Annulearje
+    .value = Annulearje
 rule-delete-confirm-button =
-  .value = Smyt rigel fuort
+    .value = Smyt rigel fuort
 rule-select-property = Selektearje eigenskip
 rule-not = Net
 rule-event = Barren
@@ -212,26 +224,29 @@ rule-name = Rigelnamme
 
 ## Logs
 
+add-log =
+    .aria-label = Nij lochboek meitsje
 logs = Lochboeken
 logs-create-log-hint = Gjin lochboeken. Klik op + om in lochboek oan te meitsjen.
 logs-device = Apparaat
 logs-device-select =
-  .aria-label = Apparaatlochboek
+    .aria-label = Apparaatlochboek
 logs-property = Eigenskip
 logs-property-select =
-  .aria-label = Eigenskiplochboek
+    .aria-label = Eigenskiplochboek
 logs-retention = Bewartermyn
 logs-retention-length =
-  .aria-label = Bewartermyn lochboek
+    .aria-label = Bewartermyn lochboek
 logs-retention-unit =
-  .aria-label = Ienheid bewartermyn lochboek
+    .aria-label = Ienheid bewartermyn lochboek
 logs-hours = Oeren
 logs-days = Dagen
 logs-weeks = Wiken
 logs-save = Bewarje
 logs-remove-dialog-title = Fuortsmite
-logs-remove-dialog-warning = As it lochboek fuortsmiten wurdt, wurde ek de byhearrende gegevens wiske.
-  Wolle jo dizze echt fuortsmite?
+logs-remove-dialog-warning =
+    As it lochboek fuortsmiten wurdt, wurde ek de byhearrende gegevens wiske.
+    Wolle jo dizze echt fuortsmite?
 logs-remove = Fuortsmite
 logs-unable-to-create = Kin lochboek net oanmeitsje
 logs-server-remove-error = Serverflater: kin lochboek net fuortsmite
@@ -239,7 +254,7 @@ logs-server-remove-error = Serverflater: kin lochboek net fuortsmite
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Sykje
+    .alt = Sykje
 add-thing-scanning = Nije apparaten sykje…
 add-thing-add-adapters-hint = Gjin apparaten fûn. Probearje <a data-l10n-name="add-thing-add-adapters-hint-anchor">add-ons ta te foegjen</a>.
 add-thing-add-by-url = Tafoegje mei URL…
@@ -274,6 +289,7 @@ Alarm = Alarm
 Thermostat = Termostaat
 Lock = Slot
 Custom = Oanpast Thing
+Thing = Thing
 
 ## Properties
 
@@ -302,6 +318,8 @@ locked = Beskoattele
 unlocked = Untskoattele
 jammed = Klemd
 unknown = Unbekend
+active = Aktyf
+inactive = Ynaktyf
 
 ## Domain Setup
 
@@ -323,40 +341,40 @@ false = Nee
 
 utils-now = no
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } sekonde lyn
-     *[other] { $value } sekonden lyn
-  }
+    { $value ->
+        [one] { $value } sekonde lyn
+       *[other] { $value } sekonden lyn
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] { $value } minút lyn
-     *[other] { $value } minuten lyn
-  }
+    { $value ->
+        [one] { $value } minút lyn
+       *[other] { $value } minuten lyn
+    }
 utils-hours-ago =
-  { $value ->
-      [one] { $value } oer lyn
-     *[other] { $value } oer lyn
-  }
+    { $value ->
+        [one] { $value } oer lyn
+       *[other] { $value } oer lyn
+    }
 utils-days-ago =
-  { $value ->
-      [one] { $value } dei lyn
-     *[other] { $value } dagen lyn
-  }
+    { $value ->
+        [one] { $value } dei lyn
+       *[other] { $value } dagen lyn
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] { $value } wike lyn
-     *[other] { $value } wiken lyn
-  }
+    { $value ->
+        [one] { $value } wike lyn
+       *[other] { $value } wiken lyn
+    }
 utils-months-ago =
-  { $value ->
-      [one] { $value } moanne lyn
-     *[other] { $value } moannen lyn
-  }
+    { $value ->
+        [one] { $value } moanne lyn
+       *[other] { $value } moannen lyn
+    }
 utils-years-ago =
-  { $value ->
-      [one] { $value } jier lyn
-     *[other] { $value } jier lyn
-  }
+    { $value ->
+        [one] { $value } jier lyn
+       *[other] { $value } jier lyn
+    }
 minute = Minút
 hour = Oer
 day = Dei
@@ -388,15 +406,15 @@ unknown-device-type = Unbekend apparaattype
 new-thing-choose-icon = Kies piktogram…
 new-thing-save = Bewarje
 new-thing-pin =
-  .placeholder = Fier pinkoade yn
+    .placeholder = Fier pinkoade yn
 new-thing-pin-error = Foute pinkoade
 new-thing-pin-invalid = Unjildige pinkoade
 new-thing-cancel = Annulearje
 new-thing-submit = Ferstjoer
 new-thing-username =
-  .placeholder = Brûkersnamme
+    .placeholder = Brûkersnamme
 new-thing-password =
-  .placeholder = Wachtwurd
+    .placeholder = Wachtwurd
 new-thing-credentials-error = Unjildige kombinaasje brûkersnamme/wachtwurd
 new-thing-saved = Bewarre
 new-thing-done = Dien
@@ -404,7 +422,7 @@ new-thing-done = Dien
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Web Thing-URL
+    .placeholder = Web Thing-URL
 new-web-thing-label = Web Thing
 loading = Lade…
 new-web-thing-multiple = Mear Web Things fûn
@@ -419,6 +437,8 @@ events-not-found = Dit Thing hat gjin barrens.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Nije add-ons sykje
 author-unknown = Unbekend
 disable = Utskeakele
 enable = Ynskeakele
@@ -500,11 +520,11 @@ tunnel-setup-title = Kies webadres — { -webthings-gateway-brand }
 tunnel-setup-welcome = Wolkom
 tunnel-setup-choose-address = Kies in befeilige webadres foar jo gateway:
 tunnel-setup-input-subdomain =
-  .placeholder = subdomein
+    .placeholder = subdomein
 tunnel-setup-opt-in = Hâld my op de hichte oer nije mooglikheden en bydragen.
 tunnel-setup-privacy-policy = Privacybelied
 tunnel-setup-input-reclamation-token =
-  .placeholder = Opeasktoken
+    .placeholder = Opeasktoken
 tunnel-setup-error = Der is in flater bard by it ynstellen fan it subdomein.
 tunnel-setup-create = Oanmeitsje
 tunnel-setup-skip = Oerslaan
@@ -514,11 +534,15 @@ tunnel-setup-time-sync = Wacht op it ynstellen fan de klok fia ynternet. Domeinr
 
 authorize-title = Autorisaasje-oanfraach — { -webthings-gateway-brand }
 authorize-authorization-request = Autorisaasje-oanfraach
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> wol tagong krije ta jo gateway foar <<function>>-apparaten.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = fan <<domein>>
 authorize-monitor-and-control = besjen en ynstelle
 authorize-monitor = besjen
 authorize-allow-all = Tastean foar alle Things
 authorize-allow =
-  .value = Tastean
+    .value = Tastean
 authorize-deny = Wegerje
 
 ## Local Token Page
@@ -533,13 +557,13 @@ local-token-use-it = Brûk dizze om befeilige mei de gateway te praten, mei <a d
 router-setup-title = Routerynstellingen — { -webthings-gateway-brand }
 router-setup-header = Meitsje in Wi-Fi-ferbining
 router-setup-input-ssid =
-  .placeholder = Netwurknamme
+    .placeholder = Netwurknamme
 router-setup-input-password =
-  .placeholder = Wachtwurd
+    .placeholder = Wachtwurd
 router-setup-input-confirm-password =
-  .placeholder = Befêstigje wachtwurd
+    .placeholder = Befêstigje wachtwurd
 router-setup-create =
-  .value = Oanmeitsje
+    .value = Oanmeitsje
 router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
 ## Wi-Fi Setup Page
@@ -547,33 +571,37 @@ router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 wifi-setup-title = Wi-Fi-ynstellingen — { -webthings-gateway-brand }
 wifi-setup-header = Ferbine mei Wi-Fi-netwurk?
 wifi-setup-input-password =
-  .placeholder = Wachtwurd
+    .placeholder = Wachtwurd
 wifi-setup-show-password = Wachtwurd toane
 wifi-setup-connect =
-  .value = Ferbine
+    .value = Ferbine
 wifi-setup-network-icon =
-  .alt = Wi-Fi-netwurk
+    .alt = Wi-Fi-netwurk
 wifi-setup-skip = Oerslaan
 
 ## Connecting to Wi-Fi Page
 
 connecting-title = Ferbine mei Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ferbine mei Wi-Fi…
-connecting-connect = Kontrolearje oft jo ferbûn binne mei itselde netwurk en
- navigearje dan nei { $gateway-link } yn jo webbrowser om de ynstallaasje te foltôgjen.
-connecting-warning = Let op: As jo { $domain } net lade kinne, kontrolearje
- it IP-adres fan de gateway yn jo router.
+connecting-connect =
+    Kontrolearje oft jo ferbûn binne mei itselde netwurk en
+    navigearje dan nei { $gateway-link } yn jo webbrowser om de ynstallaasje te foltôgjen.
+connecting-warning =
+    Let op: As jo { $domain } net lade kinne, kontrolearje
+    it IP-adres fan de gateway yn jo router.
 connecting-header-skipped = Ynstallaasje Wi-Fi oersloegen
-connecting-skipped = De gateway wurdt opstart. Navigearje nei
- { $gateway-link } yn jo webbrowser, wylst jo ferbûn binne mei itselde netwurk,
- om de ynstallaasje te foltôgjen.
+connecting-skipped =
+    De gateway wurdt opstart. Navigearje nei
+    { $gateway-link } yn jo webbrowser, wylst jo ferbûn binne mei itselde netwurk,
+    om de ynstallaasje te foltôgjen.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Wi-Fi-netwurk meitsje — { -webthings-gateway-brand }
 creating-header = Wi-Fi-netwurk meitsje…
-creating-content = Ferbyn mei { $ssid } en it ynstelde wachtwurd,
- navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
+creating-content =
+    Ferbyn mei { $ssid } en it ynstelde wachtwurd,
+    navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
 
 ## General Terms
 
@@ -585,3 +613,20 @@ remove = Fuortsmite
 disconnected = Untkeppelje
 processing = Ferwurkje…
 submit = Ferstjoer
+
+## Top-Level Buttons
+
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Tebek
+overflow-button =
+    .aria-label = Oanfoljende aksjes
+speech-button =
+    .aria-label = Harkje nei spraak
+submit-button =
+    .aria-label = Yntsjinje
+edit-button =
+    .aria-label = Bewurkje
+save-button =
+    .aria-label = Bewarje
