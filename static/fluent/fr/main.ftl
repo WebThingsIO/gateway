@@ -37,7 +37,7 @@ add-things =
 assistant-avatar-image =
     .alt = Avatar d’assistant
 assistant-controls-text-input =
-    .placeholder = Comment puis-je vous aider ?
+    .placeholder = Comment puis-je vous aider ?
 
 ## Floorplan
 
@@ -196,13 +196,13 @@ rules-scroll-left =
 rules-scroll-right =
     .alt = Défiler vers la droite
 rules-delete-prompt = Déplacer les périphériques ici pour déconnecter
-rules-delete-dialog = Voulez-vous vraiment supprimer la règle ?
+rules-delete-dialog = Voulez-vous vraiment supprimer la règle ?
 rules-delete-cancel =
     .value = Annuler
 rules-delete-confirm =
     .value = Supprimer la règle
 rule-invalid = Non valide
-rule-delete-prompt = Êtes-vous certain que vous voulez supprimer la règle ?
+rule-delete-prompt = Êtes-vous certain que vous voulez supprimer la règle ?
 rule-delete-cancel-button =
     .value = Annuler
 rule-delete-confirm-button =
@@ -244,10 +244,10 @@ logs-days = Jours
 logs-weeks = Semaines
 logs-save = Enregistrer
 logs-remove-dialog-title = Suppression en cours
-logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Voulez-vous vraiment la supprimer ?
+logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Voulez-vous vraiment la supprimer ?
 logs-remove = Supprimer
 logs-unable-to-create = Impossible de créer le journal
-logs-server-remove-error = Erreur du serveur : impossible de supprimer le journal
+logs-server-remove-error = Erreur du serveur : impossible de supprimer le journal
 
 ## Add New Things
 
@@ -501,22 +501,22 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Connexion — { -webthings-gateway-brand }
+login-title = Connexion — { -webthings-gateway-brand }
 login-log-in = Connexion
 
 ## Create First User Page
 
-signup-title = Créer un utilisateur — { -webthings-gateway-brand }
+signup-title = Créer un utilisateur — { -webthings-gateway-brand }
 signup-welcome = Bienvenue
-signup-create-account = Créer votre premier utilisateur :
+signup-create-account = Créer votre premier utilisateur :
 signup-password-mismatch = Les mots de passe ne correspondent pas
 signup-next = Suivant
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Sélectionner une adresse web — { -webthings-gateway-brand }
+tunnel-setup-title = Sélectionner une adresse web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Bienvenue
-tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
+tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
     .placeholder = sous-domaine
 tunnel-setup-opt-in = Veuillez m’informer des nouvelles fonctionnalités ou des opportunités de participation.
@@ -530,7 +530,7 @@ tunnel-setup-time-sync = En attente de connexion pour mettre à jour l’horloge
 
 ## Authorize Page
 
-authorize-title = Demande d’autorisation — { -webthings-gateway-brand }
+authorize-title = Demande d’autorisation — { -webthings-gateway-brand }
 authorize-authorization-request = Demande d’autorisation
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> souhaite accéder à votre passerelle pour <<function>> les périphériques.
@@ -545,14 +545,14 @@ authorize-deny = Refuser
 
 ## Local Token Page
 
-local-token-title = Service de jeton local — { -webthings-gateway-brand }
+local-token-title = Service de jeton local — { -webthings-gateway-brand }
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est le <a data-l10n-name="local-token-jwt">jeton Web JSON</a> suivant :
-local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
+local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
 
 ## Router Setup Page
 
-router-setup-title = Configuration du routeur — { -webthings-gateway-brand }
+router-setup-title = Configuration du routeur — { -webthings-gateway-brand }
 router-setup-header = Créer un réseau Wi-Fi
 router-setup-input-ssid =
     .placeholder = Nom du réseau
@@ -566,8 +566,8 @@ router-setup-password-mismatch = Les mots de passe doivent être identiques
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }
-wifi-setup-header = Se connecter à un réseau Wi-Fi ?
+wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Se connecter à un réseau Wi-Fi ?
 wifi-setup-input-password =
     .placeholder = Mot de passe
 wifi-setup-show-password = Afficher le mot de passe
@@ -579,7 +579,7 @@ wifi-setup-skip = Ignorer
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Connexion en cours — { -webthings-gateway-brand }
+connecting-title = Connexion en cours — { -webthings-gateway-brand }
 connecting-header = Connexion en cours…
 connecting-connect = Assurez-vous que vous êtes connecté·e au même réseau puis naviguez vers { $gateway-link } pour continuer la configuration.
 connecting-warning = Si vous ne pouvez pas charger { $domain }, recherchez l’adresse IP de la passerelle dans votre routeur.
@@ -588,7 +588,7 @@ connecting-skipped = La passerelle démarre. Restez connecté·e au même résea
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Création du réseau Wi-Fi en cours — { -webthings-gateway-brand }
+creating-title = Création du réseau Wi-Fi en cours — { -webthings-gateway-brand }
 creating-header = Création du réseau Wi-Fi en cours…
 creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
 
