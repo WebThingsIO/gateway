@@ -67,7 +67,7 @@ domain-settings-local-name =
 
 ## Network Settings
 
-network-settings-unsupported = Netwerkinstelligen worden op dit platform niet ondersteund.
+network-settings-unsupported = Netwerkinstellingen worden op dit platform niet ondersteund.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
