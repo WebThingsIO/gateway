@@ -106,7 +106,7 @@ wireless-icon =
     .alt = Wifi-netwurk
 network-settings-changing = Netwurkynstellingen wizigje. Dit kan efkes duorje.
 failed-ethernet-configure = Ethernet ynstelle mislearre.
-failed-wifi-configure = Wi-Fi ynstelle mislearre.
+failed-wifi-configure = Wifi ynstelle mislearre.
 failed-wan-configure = WAN ynstelle mislearre.
 failed-lan-configure = LAN ynstelle mislearre.
 failed-wlan-configure = WLAN ynstelle mislearre.
@@ -474,7 +474,7 @@ authorizations = Autorisaasjes
 developer = Untwikkeler
 network = Netwurk
 ethernet = Ethernet
-wifi = Wi-Fi
+wifi = Wifi
 icon = Piktogram
 
 ## Speech
@@ -555,7 +555,7 @@ local-token-use-it = Brûk dizze om befeilige mei de gateway te praten, mei <a d
 ## Router Setup Page
 
 router-setup-title = Routerynstellingen — { -webthings-gateway-brand }
-router-setup-header = Meitsje in Wi-Fi-ferbining
+router-setup-header = Meitsje in wifi-ferbining
 router-setup-input-ssid =
     .placeholder = Netwurknamme
 router-setup-input-password =
@@ -568,28 +568,28 @@ router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi-ynstellingen — { -webthings-gateway-brand }
-wifi-setup-header = Ferbine mei Wi-Fi-netwurk?
+wifi-setup-title = Wifi-ynstellingen — { -webthings-gateway-brand }
+wifi-setup-header = Ferbine mei wifi-netwurk?
 wifi-setup-input-password =
     .placeholder = Wachtwurd
 wifi-setup-show-password = Wachtwurd toane
 wifi-setup-connect =
     .value = Ferbine
 wifi-setup-network-icon =
-    .alt = Wi-Fi-netwurk
+    .alt = Wifi-netwurk
 wifi-setup-skip = Oerslaan
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Ferbine mei Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Ferbine mei Wi-Fi…
+connecting-title = Ferbine mei wifi — { -webthings-gateway-brand }
+connecting-header = Ferbine mei wifi…
 connecting-connect =
     Kontrolearje oft jo ferbûn binne mei itselde netwurk en
     navigearje dan nei { $gateway-link } yn jo webbrowser om de ynstallaasje te foltôgjen.
 connecting-warning =
     Let op: As jo { $domain } net lade kinne, kontrolearje
     it IP-adres fan de gateway yn jo router.
-connecting-header-skipped = Ynstallaasje Wi-Fi oersloegen
+connecting-header-skipped = Ynstallaasje wifi oersloegen
 connecting-skipped =
     De gateway wurdt opstart. Navigearje nei
     { $gateway-link } yn jo webbrowser, wylst jo ferbûn binne mei itselde netwurk,
@@ -597,8 +597,8 @@ connecting-skipped =
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi-netwurk meitsje — { -webthings-gateway-brand }
-creating-header = Wi-Fi-netwurk meitsje…
+creating-title = Wifi-netwurk meitsje — { -webthings-gateway-brand }
+creating-header = Wifi-netwurk meitsje…
 creating-content =
     Ferbyn mei { $ssid } en it ynstelde wachtwurd,
     navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
