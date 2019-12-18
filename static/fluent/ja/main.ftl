@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -30,16 +28,16 @@ log-out-button = ログアウト
 ## Things
 
 thing-details =
-  .aria-label = プロパティを表示
+    .aria-label = プロパティを表示
 add-things =
-  .aria-label = 新しい Thing を追加
+    .aria-label = 新しい Thing を追加
 
 ## Assistant
 
 assistant-avatar-image =
-  .alt = アシスタントアバター
+    .alt = アシスタントアバター
 assistant-controls-text-input =
-  .placeholder = How can I help?
+    .placeholder = How can I help?
 
 ## Floorplan
 
@@ -65,21 +63,21 @@ domain-settings-local-label = ローカルアクセス
 domain-settings-local-update = ホスト名を更新
 domain-settings-remote-access = リモートアクセス
 domain-settings-local-name =
-  .placeholder = ゲートウェイ
+    .placeholder = ゲートウェイ
 
 ## Network Settings
 
 network-settings-unsupported = このプラットフォームはネットワーク設定をサポートしていません。
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
+    .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
-  .alt = ホームネットワーク
+    .alt = ホームネットワーク
 network-settings-internet-image =
-  .alt = インターネット
+    .alt = インターネット
 network-settings-configure = 設定変更
 network-settings-internet-wan = インターネット (WAN)
 network-settings-wan-mode = モード
@@ -94,7 +92,7 @@ network-settings-network-mask = ネットワークマスク
 network-settings-gateway = ゲートウェイ
 network-settings-done = 完了
 network-settings-wifi-password =
-  .placeholder = パスワード
+    .placeholder = パスワード
 network-settings-show-password = パスワードを開示
 network-settings-connect = 接続
 network-settings-username = ユーザー名
@@ -105,7 +103,7 @@ network-settings-enable-wifi = Wi-Fi を有効化
 network-settings-network-name = ネットワーク名 (SSID)
 wireless-connected = 接続しました
 wireless-icon =
-  .alt = Wi-Fi ネットワーク
+    .alt = Wi-Fi ネットワーク
 network-settings-changing = ネットワーク設定を変更しています。しばらくお待ちください。
 failed-ethernet-configure = Ethernet の設定変更に失敗しました。
 failed-wifi-configure = Wi-Fi の設定変更に失敗しました。
@@ -116,19 +114,19 @@ failed-wlan-configure = WLAN の設定変更に失敗しました。
 ## User Settings
 
 create-user =
-  .aria-label = 新しいユーザーを追加
+    .aria-label = 新しいユーザーを追加
 user-settings-input-name =
-  .placeholder = お名前
+    .placeholder = お名前
 user-settings-input-email =
-  .placeholder = メールアドレス
+    .placeholder = メールアドレス
 user-settings-input-password =
-  .placeholder = パスワード
+    .placeholder = パスワード
 user-settings-input-new-password =
-  .placeholder = 新しいパスワード (任意)
+    .placeholder = 新しいパスワード (任意)
 user-settings-input-confirm-new-password =
-  .placeholder = 新しいパスワードの確認
+    .placeholder = 新しいパスワードの確認
 user-settings-input-confirm-password =
-  .placeholder = パスワードの確認
+    .placeholder = パスワードの確認
 user-settings-password-mismatch = パスワードが一致しません
 user-settings-save = 保存
 
@@ -161,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = 華氏 (℉)
 update-settings-update-now = 今すぐ更新
 update-available = 新しいバージョンに更新できます
 update-up-to-date = ご使用のシステムは最新です
+updates-not-supported = このプラットフォームでの更新はサポートされていません。
+update-settings-enable-self-updates = 自動更新を有効化
 last-update = 最終更新日
 current-version = 現在のバージョン
 failed = 失敗
@@ -177,36 +177,36 @@ developer-settings-create-local-authorization = ローカルの認証情報を�
 ## Rules
 
 add-rule =
-  .aria-label = 新しいルールを作成
+    .aria-label = 新しいルールを作成
 rules = Rules
 rules-create-rule-hint = ルールがありません。+ 記号をクリックしてルールを作成してください。
 rules-rule-name = ルール名
 rules-customize-rule-name-icon =
-  .alt = ルール名を変更
+    .alt = ルール名を変更
 rules-rule-description = ルールの説明
 rules-preview-button =
-  .alt = プレビュー
+    .alt = プレビュー
 rules-delete-icon =
-  .alt = 削除
+    .alt = 削除
 rules-drag-hint = デバイスをここにドラッグしてルールを作成してください
 rules-drag-input-hint = 入力デバイスを追加
 rules-drag-output-hint = 出力デバイスを追加
 rules-scroll-left =
-  .alt = 左へスクロール
+    .alt = 左へスクロール
 rules-scroll-right =
-  .alt = 右へスクロール
+    .alt = 右へスクロール
 rules-delete-prompt = デバイスをここにドロップして切断
 rules-delete-dialog = このルールを完全に削除してもよろしいですか？
 rules-delete-cancel =
-  .value = キャンセル
+    .value = キャンセル
 rules-delete-confirm =
-  .value = ルールを削除
+    .value = ルールを削除
 rule-invalid = 無効
 rule-delete-prompt = このルールを完全に削除してもよろしいですか？
 rule-delete-cancel-button =
-  .value = キャンセル
+    .value = キャンセル
 rule-delete-confirm-button =
-  .value = ルールを削除
+    .value = ルールを削除
 rule-select-property = プロパティを選択してください
 rule-not = Not
 rule-event = イベント
@@ -225,20 +225,20 @@ rule-name = ルール名
 ## Logs
 
 add-log =
-  .aria-label = 新しいログを作成
+    .aria-label = 新しいログを作成
 logs = ログ
 logs-create-log-hint = ログがありません。+ 記号をクリックしてログを作成してください。
 logs-device = デバイス
 logs-device-select =
-  .aria-label = ログ記録するデバイス
+    .aria-label = ログ記録するデバイス
 logs-property = プロパティ
 logs-property-select =
-  .aria-label = ログのプロパティ
+    .aria-label = ログのプロパティ
 logs-retention = ログの保持
 logs-retention-length =
-  .aria-label = ログを保持する期間
+    .aria-label = ログを保持する期間
 logs-retention-unit =
-  .aria-label = ログの保持単位
+    .aria-label = ログの保持単位
 logs-hours = 時間
 logs-days = 日
 logs-weeks = 週間
@@ -252,7 +252,7 @@ logs-server-remove-error = サーバーエラー: ログを削除できません
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = スキャン中
+    .alt = スキャン中
 add-thing-scanning = 新しいデバイスをスキャン中…
 add-thing-add-adapters-hint = 新しい Thing は見つかりませんでした。<a data-l10n-name="add-thing-add-adapters-hint-anchor">アドオンを追加してみてください</a>。
 add-thing-add-by-url = URL を指定して追加…
@@ -339,40 +339,40 @@ false = 偽
 
 utils-now = 直前
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } 秒前
-     *[other] { $value } 秒前
-  }
+    { $value ->
+        [one] { $value } 秒前
+       *[other] { $value } 秒前
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] { $value } 分前
-     *[other] { $value } 分前
-  }
+    { $value ->
+        [one] { $value } 分前
+       *[other] { $value } 分前
+    }
 utils-hours-ago =
-  { $value ->
-      [one] { $value } 時間前
-     *[other] { $value } 時間前
-  }
+    { $value ->
+        [one] { $value } 時間前
+       *[other] { $value } 時間前
+    }
 utils-days-ago =
-  { $value ->
-      [one] { $value } 日前
-     *[other] { $value } 日前
-  }
+    { $value ->
+        [one] { $value } 日前
+       *[other] { $value } 日前
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] { $value } 週間前
-     *[other] { $value } 週間前
-  }
+    { $value ->
+        [one] { $value } 週間前
+       *[other] { $value } 週間前
+    }
 utils-months-ago =
-  { $value ->
-      [one] { $value } か月前
-     *[other] { $value } か月前
-  }
+    { $value ->
+        [one] { $value } か月前
+       *[other] { $value } か月前
+    }
 utils-years-ago =
-  { $value ->
-      [one] { $value } 年前
-     *[other] { $value } 年前
-  }
+    { $value ->
+        [one] { $value } 年前
+       *[other] { $value } 年前
+    }
 minute = 分
 hour = 時間
 day = 日
@@ -404,15 +404,15 @@ unknown-device-type = デバイスの種類が不明です
 new-thing-choose-icon = アイコンを選択…
 new-thing-save = 保存
 new-thing-pin =
-  .placeholder = PIN を入力
+    .placeholder = PIN を入力
 new-thing-pin-error = PIN が正しくありません
 new-thing-pin-invalid = PIN が無効です
 new-thing-cancel = キャンセル
 new-thing-submit = 送信
 new-thing-username =
-  .placeholder = ユーザー名を入力
+    .placeholder = ユーザー名を入力
 new-thing-password =
-  .placeholder = パスワードを入力
+    .placeholder = パスワードを入力
 new-thing-credentials-error = 認証情報が正しくありません
 new-thing-saved = 保存しました
 new-thing-done = 完了
@@ -420,7 +420,7 @@ new-thing-done = 完了
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Web Thing の URL を入力
+    .placeholder = Web Thing の URL を入力
 new-web-thing-label = Web Thing
 loading = 読み込み中…
 new-web-thing-multiple = 複数の Web Thing が見つかりました
@@ -436,7 +436,7 @@ events-not-found = この Thing にはイベントがありません。
 ## Add-on Settings
 
 add-addons =
-  .aria-label = 新しいアドオンを検索
+    .aria-label = 新しいアドオンを検索
 author-unknown = 不明
 disable = 無効化
 enable = 有効化
@@ -518,11 +518,11 @@ tunnel-setup-title = ウェブアドレスの指定 — { -webthings-gateway-bra
 tunnel-setup-welcome = ようこそ
 tunnel-setup-choose-address = ゲートウェイの安全なウェブアドレスを指定してください:
 tunnel-setup-input-subdomain =
-  .placeholder = サブドメイン
+    .placeholder = サブドメイン
 tunnel-setup-opt-in = 新機能や貢献の機会についての情報を受け取る。
 tunnel-setup-privacy-policy = 個人情報保護方針
 tunnel-setup-input-reclamation-token =
-  .placeholder = 再利用トークン
+    .placeholder = 再利用トークン
 tunnel-setup-error = サブドメインのセットアップ中にエラーが発生しました。
 tunnel-setup-create = 作成
 tunnel-setup-skip = スキップ
@@ -536,7 +536,7 @@ authorize-monitor-and-control = モニターやコントロール
 authorize-monitor = モニター
 authorize-allow-all = すべての Thing を許可
 authorize-allow =
-  .value = 許可
+    .value = 許可
 authorize-deny = 拒否
 
 ## Local Token Page
@@ -551,13 +551,13 @@ local-token-use-it = このトークンを使用して <a data-l10n-name="local-
 router-setup-title = ルーターのセットアップ — { -webthings-gateway-brand }
 router-setup-header = 新しい Wi-Fi ネットワークの作成
 router-setup-input-ssid =
-  .placeholder = ネットワーク名
+    .placeholder = ネットワーク名
 router-setup-input-password =
-  .placeholder = パスワード
+    .placeholder = パスワード
 router-setup-input-confirm-password =
-  .placeholder = パスワード確認
+    .placeholder = パスワード確認
 router-setup-create =
-  .value = 作成
+    .value = 作成
 router-setup-password-mismatch = パスワードが一致しません
 
 ## Wi-Fi Setup Page
@@ -565,12 +565,12 @@ router-setup-password-mismatch = パスワードが一致しません
 wifi-setup-title = Wi-Fi セットアップ — { -webthings-gateway-brand }
 wifi-setup-header = Wi-Fi ネットワークに接続しますか？
 wifi-setup-input-password =
-  .placeholder = パスワード
+    .placeholder = パスワード
 wifi-setup-show-password = パスワードを開示
 wifi-setup-connect =
-  .value = 接続
+    .value = 接続
 wifi-setup-network-icon =
-  .alt = Wi-Fi ネットワーク
+    .alt = Wi-Fi ネットワーク
 wifi-setup-skip = スキップ
 
 ## Connecting to Wi-Fi Page
@@ -602,16 +602,16 @@ submit = 送信
 ## Top-Level Buttons
 
 menu-button =
-  .aria-label = メニュー
+    .aria-label = メニュー
 back-button =
-  .aria-label = 戻る
+    .aria-label = 戻る
 overflow-button =
-  .aria-label = 追加の操作
+    .aria-label = 追加の操作
 speech-button =
-  .aria-label = 話しかけてください
+    .aria-label = 話しかけてください
 submit-button =
-  .aria-label = 送信
+    .aria-label = 送信
 edit-button =
-  .aria-label = 編集
+    .aria-label = 編集
 save-button =
-  .aria-label = 保存
+    .aria-label = 保存
