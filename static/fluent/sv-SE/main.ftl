@@ -159,6 +159,11 @@ context-menu-remove = Ta bort
 
 ## Capabilities
 
+ColorControl = Färgkontroll
+ColorSensor = Färgsensor
+EnergyMonitor = Energimätare
+DoorSensor = Dörrsensor
+MotionSensor = Rörelsesensor
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
@@ -206,6 +211,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -300,6 +306,8 @@ signup-next = Nästa
 ## Tunnel Setup Page
 
 tunnel-setup-welcome = Välkommen
+tunnel-setup-input-subdomain =
+    .placeholder = underdomän
 tunnel-setup-create = Skapa
 tunnel-setup-skip = Hoppa över
 
@@ -347,11 +355,14 @@ creating-header = Skapar Wi-Fi nätverk…
 
 ok = Ok
 ellipsis = …
+edit = Redigera
 remove = Ta bort
 
 ## Top-Level Buttons
 
 menu-button =
     .aria-label = Meny
+edit-button =
+    .aria-label = Redigera
 save-button =
     .aria-label = Spara
