@@ -162,6 +162,7 @@ context-menu-remove = Ta bort
 ColorControl = Färgkontroll
 ColorSensor = Färgsensor
 EnergyMonitor = Energimätare
+Light = Lampor
 DoorSensor = Dörrsensor
 MotionSensor = Rörelsesensor
 VideoCamera = Videokamera
