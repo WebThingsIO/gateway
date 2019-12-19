@@ -53,14 +53,18 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Hemnätverk
 network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurera
 network-settings-internet-wan = Internet (WAN)
+network-settings-home-network-lan = Hemnätverk (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adress
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-pppoe = Brygga (PPPoE)
+network-settings-network-mask = Nätverksmask
 network-settings-gateway = Gateway
 network-settings-wifi-password =
     .placeholder = Lösenord
@@ -69,6 +73,7 @@ network-settings-username = Användarnamn
 network-settings-password = Lösenord
 network-settings-dhcp-server = DHCP server
 network-settings-network-name = Nätverksnamn (SSID)
+wireless-connected = Ansluten
 wireless-icon =
     .alt = Wi-Fi nätverk
 failed-ethernet-configure = Misslyckades med att konfigurera ethernet.
@@ -85,6 +90,7 @@ user-settings-input-name =
     .placeholder = Namn
 user-settings-input-password =
     .placeholder = Lösenord
+user-settings-save = Spara
 
 ## Adapter Settings
 
@@ -110,6 +116,7 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Uppdatera nu
 failed = Misslyckades
 never = Aldrig
+restarting = Startar om
 
 ## Developer Settings
 
