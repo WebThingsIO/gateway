@@ -23,7 +23,7 @@ rules-menu-item = Regeln
 logs-menu-item = Protokolle
 floorplan-menu-item = Raumplan
 settings-menu-item = Einstellungen
-log-out-button = Ausloggen
+log-out-button = Abmelden
 
 ## Things
 
@@ -41,7 +41,7 @@ assistant-controls-text-input =
 
 ## Floorplan
 
-upload-floorplan = Raumplan aktualisieren…
+upload-floorplan = Raumplan hochladen…
 upload-floorplan-hint = (.svg empfohlen)
 
 ## Top-Level Settings
@@ -53,7 +53,7 @@ settings-add-ons = Erweiterungen
 settings-adapters = Adapter
 settings-localization = Lokalisierung
 settings-updates = Aktualisierungen
-settings-authorizations = Zugänge
+settings-authorizations = Authorisierungen
 settings-experiments = Experimente
 settings-developer = Entwickler
 
@@ -100,11 +100,11 @@ network-settings-password = Passwort
 network-settings-router-ip = Router-IP-Adresse
 network-settings-dhcp-server = DHCP-Server
 network-settings-enable-wifi = Wi-Fi aktivieren
-network-settings-network-name = Netwerkname
+network-settings-network-name = Netzwerkname (SSID)
 wireless-connected = Verbunden
 wireless-icon =
     .alt = Wi-Fi-Netzwerk
-network-settings-changing = Netzwerkeinstellungen werden aktualisiert. Dies kann eine Minute dauern.
+network-settings-changing = Netzwerkeinstellungen werden geändert. Dies kann eine Minute dauern.
 failed-ethernet-configure = Konfiguration der Ethernet-Verbindung fehlgeschlagen.
 failed-wifi-configure = Konfiguration der Wi-Fi-Verbindung fehlgeschlagen.
 failed-wan-configure = Konfiguration der WAN-Verbindung fehlgeschlagen.
@@ -122,7 +122,7 @@ user-settings-input-email =
 user-settings-input-password =
     .placeholder = Passwort
 user-settings-input-new-password =
-    .placeholder = Neues Passwort (Optional)
+    .placeholder = Neues Passwort (optional)
 user-settings-input-confirm-new-password =
     .placeholder = Neues Passwort bestätigen
 user-settings-input-confirm-password =
@@ -166,7 +166,7 @@ current-version = Aktuelle Version
 failed = Fehlgeschlagen
 never = Niemals
 in-progress = Laufend
-restarting = Neustarten
+restarting = Wird neu gestartet
 
 ## Developer Settings
 
@@ -195,8 +195,8 @@ rules-scroll-left =
     .alt = Links scrollen
 rules-scroll-right =
     .alt = Rechts scrollen
-rules-delete-prompt = Gerät hier fallen lassen um es zu löschen
-rules-delete-dialog = Soll das Gerät dauerhalt aus der Regel entfernt werden?
+rules-delete-prompt = Gerät hier ablegen, um es zu löschen
+rules-delete-dialog = Soll die Regel dauerhaft gelöscht werden?
 rules-delete-cancel =
     .value = Abbrechen
 rules-delete-confirm =
@@ -207,7 +207,7 @@ rule-delete-cancel-button =
     .value = Abbrechen
 rule-delete-confirm-button =
     .value = Regel löschen
-rule-select-property = Merkmal wählen
+rule-select-property = Eigenschaft auswählen
 rule-not = Nicht
 rule-event = Ereignis
 rule-action = Aktion
@@ -231,22 +231,20 @@ logs-create-log-hint = Keine Protokolle vorhanden. Für ein neues Protokoll + dr
 logs-device = Gerät
 logs-device-select =
     .aria-label = Gerät protokollieren
-logs-property = Merkmal
+logs-property = Eigenschaft
 logs-property-select =
-    .aria-label = Merkmal protokollieren
-logs-retention = Speicherung
+    .aria-label = Eigenschaften protokollieren
+logs-retention = Aufbewahrung
 logs-retention-length =
-    .aria-label = Speicherdauer
+    .aria-label = Protokollgröße
 logs-retention-unit =
-    .aria-label = Einheit der Speicherdauer
+    .aria-label = Einheit der Protokollaufbewahrung
 logs-hours = Stunden
 logs-days = Tage
 logs-weeks = Wochen
 logs-save = Speichern
-logs-remove-dialog-title = Löschen
-logs-remove-dialog-warning =
-    Beim Löschen eines Protokolls gehen alle bislang gesammelten Daten verloren.
-    Soll das Protokoll wirklich gelöscht werden?
+logs-remove-dialog-title = Wird gelöscht
+logs-remove-dialog-warning = Beim Löschen eines Protokolls gehen alle bislang gesammelten Daten verloren. Soll das Protokoll wirklich gelöscht werden?
 logs-remove = Löschen
 logs-unable-to-create = Das Protokoll konnte nicht angelegt werden
 logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt werden
