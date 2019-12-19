@@ -246,14 +246,14 @@ logs-save = Speichern
 logs-remove-dialog-title = Wird gelöscht
 logs-remove-dialog-warning = Beim Löschen eines Protokolls gehen alle bislang gesammelten Daten verloren. Soll das Protokoll wirklich gelöscht werden?
 logs-remove = Löschen
-logs-unable-to-create = Das Protokoll konnte nicht angelegt werden
+logs-unable-to-create = Das Protokoll konnte nicht erstellt werden
 logs-server-remove-error = Serverfehler: Das Protokoll konnte nicht entfernt werden
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Suche
-add-thing-scanning = Es wird nach neuen Geräten gesucht…
+add-thing-scanning = Suche nach neuen Geräten…
 add-thing-add-adapters-hint = Keine neuen Geräte gefunden. <a data-l10n-name="add-thing-add-adapters-hint-anchor">Neue Erweiterungen hinzufügen.</a>
 add-thing-add-by-url = Via URL hinzufügen…
 add-thing-done = Erledigt
@@ -261,7 +261,7 @@ add-thing-cancel = Abbrechen
 
 ## Context Menu
 
-context-menu-choose-icon = Bild wählen…
+context-menu-choose-icon = Symbol auswählen…
 context-menu-save = Speichern
 context-menu-remove = Löschen
 
@@ -279,7 +279,7 @@ Light = Licht
 DoorSensor = Türsensor
 MotionSensor = Bewegungssensor
 LeakSensor = Wassersensor
-PushButton = Schalter
+PushButton = Taster
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
@@ -307,7 +307,7 @@ brightness = Helligkeit
 leak = Leck
 dry = Trocken
 color-temperature = Farbtemperatur
-video-unsupported = Videowiedergabe wird vom aktuellen Browser nicht unterstützt.
+video-unsupported = Videowiedergabe wird von Ihrem Browser nicht unterstützt.
 motion = Bewegung
 no-motion = Keine Bewegung
 open = Offen
@@ -321,14 +321,14 @@ inactive = Inaktiv
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Die Subdomain scheint bereits registriert zu sein. Zum Wiederherstellen <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">hier klicken</a>.
-check-email-for-token = Bitte das Reclaim-Token aus der verschickten E-Mail oben einfügen.
+tunnel-setup-reclaim-domain = Es scheint, dass du die Subdomain bereits registriert hast. <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">Klicke hier</a>. zum Wiederherstellen.
+check-email-for-token = Bitte das Wiederherstellungs-Token aus der verschickten E-Mail oben einfügen.
 reclaim-failed = Subdomain konnte nicht wiederhergestellt werden.
 subdomain-already-used = Diese Subdomain ist bereits in Gebrauch. Bitte einen anderen Namen wählen.
 invalid-reclamation-token = Ungültiges Reclaim-Token.
-domain-success = Erfolgreich! Es wird weitergeleitet…
-issuing-error = Zertifikat konnte nicht erstellt werden. Bitte erneut versuchen.
-redirecting = Weiterleiten…
+domain-success = Erfolgreich! Sie werden weitergeleitet…
+issuing-error = Fehler beim Ausstellen des Zertifikates. Bitte erneut versuchen.
+redirecting = Leite weiter…
 
 ## Booleans
 
@@ -401,12 +401,12 @@ abbrev-foot = Fuß
 ## New Thing View
 
 unknown-device-type = Unbekannter Gerätetyp
-new-thing-choose-icon = Bild wählen…
+new-thing-choose-icon = Symbol auswählen…
 new-thing-save = Speichern
 new-thing-pin =
     .placeholder = PIN eingeben
 new-thing-pin-error = Falsche PIN
-new-thing-pin-invalid = Falsche PIN
+new-thing-pin-invalid = Ungültige PIN
 new-thing-cancel = Abbrechen
 new-thing-submit = Absenden
 new-thing-username =
@@ -422,16 +422,16 @@ new-thing-done = Erledigt
 new-web-thing-url =
     .placeholder = URL des Web Things eingeben
 new-web-thing-label = Web Thing
-loading = Laden…
+loading = Wird geladen…
 new-web-thing-multiple = Mehrere Web Things gefunden
 new-web-thing-from = von
 
 ## Empty div Messages
 
-no-things = Keine Geräte vorhanden. Zum Anlegen eines neuen Geräts + klicken.
+no-things = Keine Geräte vorhanden. Zum Suchen nach verfügbaren Geräten „+“ klicken.
 thing-not-found = Gerät nicht gefunden.
 action-not-found = Aktion nicht gefunden.
-events-not-found = Dieses Gerät unterstützt keine Ereignisse.
+events-not-found = Dieses Gerät hat keine Ereignisse.
 
 ## Add-on Settings
 
@@ -443,8 +443,8 @@ enable = Aktivieren
 by = von
 addon-configure = Konfigurieren
 addon-update = Aktualisieren
-addon-remove = Löschen
-addon-updating = Aktualisierung läuft…
+addon-remove = Entfernen
+addon-updating = Wird aktualisiert…
 addon-updated = Aktualisiert
 addon-update-failed = Fehlgeschlagen
 addon-config-applying = Anwenden…
@@ -463,8 +463,8 @@ edit-user = Benutzer bearbeiten
 add-user = Benutzer hinzufügen
 adapters = Adapter
 addons = Erweiterungen
-addon-config = Erweiterung anpassen
-addon-discovery = Neue Erweiterungen suchen
+addon-config = Add-on konfigurieren
+addon-discovery = Neue Add-ons suchen
 experiments = Experimente
 localization = Lokalisierung
 updates = Aktualisierungen
@@ -473,7 +473,7 @@ developer = Entwickler
 network = Netzwerk
 ethernet = Ethernet
 wifi = Wi-Fi
-icon = Bild
+icon = Symbol
 
 ## Speech
 
@@ -506,54 +506,54 @@ login-log-in = Anmelden
 
 ## Create First User Page
 
-signup-title = Benutzer anlegen — { -webthings-gateway-brand }
+signup-title = Benutzer anlegen – { -webthings-gateway-brand }
 signup-welcome = Willkommen
 signup-create-account = Ersten Benutzer anlegen:
-signup-password-mismatch = Passwörter sind nicht gleich
+signup-password-mismatch = Die Passwörter stimmen nicht überein
 signup-next = Weiter
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Subdomain wählen — { -webthings-gateway-brand }
+tunnel-setup-title = Webadresse wählen – { -webthings-gateway-brand }
 tunnel-setup-welcome = Willkommen
-tunnel-setup-choose-address = Sichere URL für das Gateway:
+tunnel-setup-choose-address = Wählen Sie eine sichere Webadresse für Ihr Gateway:
 tunnel-setup-input-subdomain =
     .placeholder = Subdomain
-tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkeiten zunm Mitmachen erhalten.
+tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkeiten zum Mitmachen erhalten.
 tunnel-setup-privacy-policy = Datenschutz
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-Token
 tunnel-setup-error = Ein Fehler ist beim Erstellen der Subdomain aufgetreten.
-tunnel-setup-create = Erzeugen
+tunnel-setup-create = Erstellen
 tunnel-setup-skip = Überspringen
-tunnel-setup-time-sync = Warten auf die Synchonisierung der Systemuhr über das Internet. Das Registrieren der Subdomain schlägt wahrscheinlich fehl, bis dies abgeschlossen ist.
+tunnel-setup-time-sync = Warte auf die Synchonisierung der Systemuhr mit dem Internet. Das Registrieren der Domain schlägt wahrscheinlich fehl, bis dies abgeschlossen ist.
 
 ## Authorize Page
 
 authorize-title = Authorisierungsanfrage — { -webthings-gateway-brand }
 authorize-authorization-request = Authorisierungsanfrage
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
-authorize-prompt = <<<name>>> möchte auf Ihr Gateway für <<function>>-Geräte zugreifen.
+authorize-prompt = <<<name>>> möchte auf Ihr Gateway zum <<function>> von Geräten zugreifen.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = von <<domain>>
-authorize-monitor-and-control = Überwachen und kontrollieren
+authorize-monitor-and-control = Überwachen und steuern
 authorize-monitor = Überwachen
 authorize-allow-all = Für alle Geräte erlauben
 authorize-allow =
     .value = Erlauben
-authorize-deny = Ablehnen
+authorize-deny = Verweigern
 
 ## Local Token Page
 
 local-token-title = Dienst für lokale Token — { -webthings-gateway-brand }
 local-token-header = Dienst für lokale Token
-local-token-your-token = Das lokale Zugriffstoken ist <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
-local-token-use-it = Zugriff auf das Gateway über <a data-l10n-name="local-token-bearer-type">Bearer-type Authorisierung</a>
+local-token-your-token = Ihr lokales Zugriffstoken ist <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-use-it = Nutzen Sie es zur sicheren Kommunikation mit dem Gateway, mittles <a data-l10n-name="local-token-bearer-type">Bearer-type-Authorisierung</a>
 
 ## Router Setup Page
 
 router-setup-title = Router-Setup — { -webthings-gateway-brand }
-router-setup-header = Neues Wi-Fi-Netzwerk erzeugen
+router-setup-header = Neues Wi-Fi-Netzwerk einrichten
 router-setup-input-ssid =
     .placeholder = Netzwerkname
 router-setup-input-password =
@@ -561,13 +561,13 @@ router-setup-input-password =
 router-setup-input-confirm-password =
     .placeholder = Passwort bestätigen
 router-setup-create =
-    .value = Anlegen
-router-setup-password-mismatch = Passwörter sind nicht gleich
+    .value = Erstellen
+router-setup-password-mismatch = Die Passwörter müssen übereinstimmen
 
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi-Setup — { -webthings-gateway-brand }
-wifi-setup-header = Mit Wi-Fi-Netzwerk verbinden?
+wifi-setup-header = Mit einem Wi-Fi-Netzwerk verbinden?
 wifi-setup-input-password =
     .placeholder = Passwort
 wifi-setup-show-password = Passwort anzeigen
@@ -579,18 +579,14 @@ wifi-setup-skip = Überspringen
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Wi-Fi-Verbindung herstellen — { -webthings-gateway-brand }
-connecting-header = Verbindung wird hergestellt…
-connecting-connect =
-    Bitte mit demselben Netzwerk wie das Gateway verbinden und
-    das Setup unter { $gateway-link } im Webbrowser fortsetzen.
+connecting-title = WLAN-Verbindung herstellen – { -webthings-gateway-brand }
+connecting-header = Verbindung zum WLAN wird hergestellt…
+connecting-connect = Bitte stellen Sie sicher, dass Sie mit demselben Netzwerk verbunden sind und navigieren Sie im Webbrowser zu { $gateway-link }, um die Einrichtung fortzusetzen.
 connecting-warning =
     Hinweis: Wenn { $domain } nicht erreichbar ist, kann die IP-Adresse
     des Gateways in den Routereinstellungen nachgeschlagen werden.
-connecting-header-skipped = Wi-Fi-Setup abgebrochen
-connecting-skipped =
-    Das Gateway ist einsatzbereit. Einstellungen können unter
-    { $gateway-link } getätigt werden.
+connecting-header-skipped = WLAN-Einrichtung übersprungen
+connecting-skipped = Das Gateway wird jetzt neu gestartet. Navigieren Sie zu { $gateway-link } in Ihren Webbrowser, während Sie mit dem selben Netzwerk verbunden sind, um die Einrichtung fortzusetzen.
 
 ## Creating Wi-Fi Network Page
 
@@ -605,7 +601,7 @@ creating-content =
 ok = OK
 ellipsis = …
 event-log = Ereignisprotokoll
-edit = Editieren
+edit = Bearbeiten
 remove = Löschen
 disconnected = Nicht verbunden
 processing = Bitte warten…
@@ -620,7 +616,7 @@ back-button =
 overflow-button =
     .aria-label = Weitere Aktionen
 speech-button =
-    .aria-label = Sprache anhören
+    .aria-label = Zuhören
 submit-button =
     .aria-label = Absenden
 edit-button =
