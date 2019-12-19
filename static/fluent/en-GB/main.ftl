@@ -478,45 +478,144 @@ icon = Icon
 ## Speech
 
 speech-unsupported = Current browser does not support speech
+speech-didnt-get = Sorry, I didn’t get that.
 
 ## Errors
 
+unknown-state = Unknown state.
+error = Error
+errors = Errors
+gateway-unreachable = Gateway Unreachable
+more-information = More Information
+invalid-file = Invalid file.
+failed-read-file = Failed to read file.
+failed-save = Failed to save.
 
 ## Schema Form
 
+unsupported-field = Unsupported field schema
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Login — { -webthings-gateway-brand }
+login-log-in = Log in
 
 ## Create First User Page
 
+signup-title = Create User — { -webthings-gateway-brand }
+signup-welcome = Welcome
+signup-create-account = Create your first user account:
+signup-password-mismatch = Passwords do not match
+signup-next = Next
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Choose Web Address — { -webthings-gateway-brand }
+tunnel-setup-welcome = Welcome
+tunnel-setup-choose-address = Choose a secure web address for your gateway:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomain
+tunnel-setup-opt-in = Please keep me updated about new features and contribution opportunities.
+tunnel-setup-privacy-policy = Privacy Policy
+tunnel-setup-input-reclamation-token =
+    .placeholder = Reclamation Token
+tunnel-setup-error = An error occurred while setting up the subdomain.
+tunnel-setup-create = Create
+tunnel-setup-skip = Skip
+tunnel-setup-time-sync = Waiting for system clock to be set from the Internet. Domain registration is likely to fail until this completes.
 
 ## Authorize Page
 
+authorize-title = Authorisation Request — { -webthings-gateway-brand }
+authorize-authorization-request = Authorisation Request
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> would like to access your gateway to <<function>> devices.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = from <<domain>>
+authorize-monitor-and-control = monitor and control
+authorize-monitor = monitor
+authorize-allow-all = Allow for all Things
+authorize-allow =
+    .value = Allow
+authorize-deny = Deny
 
 ## Local Token Page
 
+local-token-title = Local Token Service — { -webthings-gateway-brand }
+local-token-header = Local Token Service
+local-token-your-token = Your local token is this <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Use it to talk to the gateway securely, with <a data-l10n-name="local-token-bearer-type">Bearer-type Authorisation</a>.
 
 ## Router Setup Page
 
+router-setup-title = Router Setup — { -webthings-gateway-brand }
+router-setup-header = Create a new Wi-Fi network
+router-setup-input-ssid =
+    .placeholder = Network name
+router-setup-input-password =
+    .placeholder = Password
+router-setup-input-confirm-password =
+    .placeholder = Confirm password
+router-setup-create =
+    .value = Create
+router-setup-password-mismatch = Passwords must match
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi Setup — { -webthings-gateway-brand }
+wifi-setup-header = Connect to a Wi-Fi network?
+wifi-setup-input-password =
+    .placeholder = Password
+wifi-setup-show-password = Show password
+wifi-setup-connect =
+    .value = Connect
+wifi-setup-network-icon =
+    .alt = Wi-Fi Network
+wifi-setup-skip = Skip
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Connecting to Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Connecting to Wi-Fi…
+connecting-connect = Please ensure you are connected to the same network and then navigate to { $gateway-link } in your web browser to continue setup.
+connecting-warning = Note: If you are unable to load { $domain }, look up the gateway’s IP address on your router.
+connecting-header-skipped = Wi-Fi setup skipped
+connecting-skipped = The gateway is now being started. Navigate to { $gateway-link } in your web browser while connected to the same network as the gateway to continue setup.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Creating Wi-Fi Network — { -webthings-gateway-brand }
+creating-header = Creating Wi-Fi network…
+creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Event Log
+edit = Edit
+remove = Remove
+disconnected = Disconnected
+processing = Processing…
+submit = Submit
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Back
+overflow-button =
+    .aria-label = Additional Actions
+speech-button =
+    .aria-label = Listen for Speech
+submit-button =
+    .aria-label = Submit
+edit-button =
+    .aria-label = Edit
+save-button =
+    .aria-label = Save
