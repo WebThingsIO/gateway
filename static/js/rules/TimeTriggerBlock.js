@@ -74,6 +74,7 @@ class TimeTriggerBlock extends RulePartBlock {
       this.rulePart = {trigger: {
         type: 'TimeTrigger',
         time: this.timeInput.value,
+        localized: true,
       }};
       this.onRuleChange();
     }
