@@ -408,12 +408,19 @@ const FloorplanScreen = {
     const x = parseFloat(thing.dataset.x);
     const y = parseFloat(thing.dataset.y);
     const thingUrl = decodeURI(thing.dataset.href);
+    const thingId = thingUrl.split('/').pop().replace(/%2F/g, '/');
     thing.style.cursor = '';
 
-    API.setThingFloorplanPosition(thingUrl.split('/').slice(-1)[0], x, y)
-      .catch((e) => {
-        console.error(`Error trying to move thing ${thingUrl} ${e}`);
-      });
+    API.setThingFloorplanPosition(thingId, x, y).then(() => {
+      return App.gatewayModel.getThing(thingId);
+    }).then((t) => {
+      if (t) {
+        t.floorplanX = x;
+        t.floorplanY = y;
+      }
+    }).catch((e) => {
+      console.error(`Error trying to move thing ${thingUrl} ${e}`);
+    });
 
     // Reset co-ordinates
     this.selectedThing = null;
