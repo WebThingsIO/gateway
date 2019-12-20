@@ -243,11 +243,15 @@ logs-weeks = 週
 logs-save = 儲存
 logs-remove-dialog-title = 移除中
 logs-remove = 移除
+logs-unable-to-create = 無法建立紀錄檔
+logs-server-remove-error = 伺服器錯誤: 無法刪除紀錄
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = 掃描中
+add-thing-scanning = 正在掃描新裝置…
+add-thing-add-adapters-hint = 沒有找到新 things。請試試 <a data-l10n-name="add-thing-add-adapters-hint-anchor">安裝附加元件</a>。
 add-thing-add-by-url = 透過網址新增…
 add-thing-done = 完成
 add-thing-cancel = 取消
@@ -314,6 +318,10 @@ inactive = 未啟用
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = 看來您已經註冊過該網域了。若要取回繼續使用，請<a data-l10n-name="tunnel-setup-reclaim-domain-click-here">點擊此處</a>。
+check-email-for-token = 請到信箱尋找先前收到的網域取回代碼，並複製貼到上面的欄位。
+reclaim-failed = 無法取回網域。
+invalid-reclamation-token = 網域取回代碼無效。
 
 ## Booleans
 
@@ -404,6 +412,7 @@ loading = 載入中…
 
 ## Empty div Messages
 
+thing-not-found = 找不到 Thing。
 events-not-found = 這個 thing 沒有事件。
 
 ## Add-on Settings
@@ -492,6 +501,8 @@ tunnel-setup-choose-address = 為您的閘道器挑選一組安全網址:
 tunnel-setup-input-subdomain =
     .placeholder = 子網域
 tunnel-setup-privacy-policy = 隱私權保護政策
+tunnel-setup-input-reclamation-token =
+    .placeholder = 網域取回代碼
 tunnel-setup-error = 設定子網域時發生錯誤。
 tunnel-setup-create = 建立
 tunnel-setup-skip = 略過
@@ -503,22 +514,58 @@ authorize-title = 授權要求 — { -webthings-gateway-brand }
 authorize-authorization-request = 授權要求
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> 想要存取您閘道器當中的 <<function>> 裝置。
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = 來自 <<domain>>
+authorize-monitor-and-control = 監控並控制
+authorize-monitor = 監控
+authorize-allow-all = 允許使用所有 Things
+authorize-allow =
+    .value = 允許
+authorize-deny = 拒絕
 
 ## Local Token Page
 
 
 ## Router Setup Page
 
+router-setup-title = 路由器設定 — { -webthings-gateway-brand }
 router-setup-header = 建立新 Wi-Fi 網路
+router-setup-input-ssid =
+    .placeholder = 網路名稱
+router-setup-input-password =
+    .placeholder = 密碼
+router-setup-input-confirm-password =
+    .placeholder = 確認密碼
+router-setup-create =
+    .value = 建立
+router-setup-password-mismatch = 密碼必須符合
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi 設定 — { -webthings-gateway-brand }
+wifi-setup-header = 要連線到 Wi-Fi 網路嗎？
+wifi-setup-input-password =
+    .placeholder = 密碼
+wifi-setup-show-password = 顯示密碼
+wifi-setup-connect =
+    .value = 連線
+wifi-setup-network-icon =
+    .alt = Wi-Fi 網路
+wifi-setup-skip = 略過
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = 連線到 Wi-Fi 網路 — { -webthings-gateway-brand }
+connecting-header = 連線到 Wi-Fi 網路…
+connecting-connect = 請確認您連線到與閘道器相同的網路，並使用瀏覽器開啟 { $gateway-link } 繼續設定。
+connecting-warning = 若您無法載入 { $domain }，請確認路由器當中的閘道器 IP 地址。
+connecting-header-skipped = 略過 Wi-Fi 設定
+connecting-skipped = 正在啟動閘道器。請確認您連線到與閘道器相同的網路，並使用瀏覽器開啟 { $gateway-link } 繼續設定。
 
 ## Creating Wi-Fi Network Page
 
+creating-title = 建立 Wi-Fi 網路 — { -webthings-gateway-brand }
+creating-header = 建立 Wi-Fi 網路…
 
 ## General Terms
 
