@@ -55,7 +55,6 @@
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.0",
     "ip-regex": "^4.1.0",
-    "iso-639-1": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
