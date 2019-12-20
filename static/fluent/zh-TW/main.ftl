@@ -188,33 +188,180 @@ rules-preview-button =
     .alt = 預覽
 rules-delete-icon =
     .alt = 刪除
+rules-drag-hint = 將裝置放於此處即可建立規則
+rules-drag-input-hint = 新增裝置作為輸入端
+rules-drag-output-hint = 新增裝置作為輸出端
+rules-scroll-left =
+    .alt = 向左捲動
+rules-scroll-right =
+    .alt = 向右捲動
+rules-delete-prompt = 將裝置放於此處即可斷線
+rules-delete-dialog = 您確定要永久刪除此規則嗎？
+rules-delete-cancel =
+    .value = 取消
+rules-delete-confirm =
+    .value = 刪除規則
+rule-invalid = 無效
+rule-delete-cancel-button =
+    .value = 取消
+rule-delete-confirm-button =
+    .value = 刪除規則
+rule-select-property = 選擇屬性
+rule-not = 非
+rule-event = 事件
+rule-action = 動作
+rule-configure = 設定…
+rule-notification = 通知
+notification-title = 標題
+notification-message = 訊息
+notification-level = 等級
+notification-low = 低
+notification-normal = 標準
+notification-high = 高
+rule-name = 規則名稱
 
 ## Logs
 
+add-log =
+    .aria-label = 建立新紀錄
+logs = 紀錄
+logs-create-log-hint = 未建立紀錄，點擊 + 號建立新紀錄規則。
+logs-device = 裝置
+logs-device-select =
+    .aria-label = 紀錄裝置
+logs-property = 屬性
+logs-property-select =
+    .aria-label = 紀錄屬性
+logs-retention = 保留
+logs-retention-length =
+    .aria-label = 紀錄保留長度
+logs-retention-unit =
+    .aria-label = 紀錄保留單位
+logs-hours = 小時
+logs-days = 天
+logs-weeks = 週
+logs-save = 儲存
+logs-remove-dialog-title = 移除中
+logs-remove = 移除
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = 掃描中
+add-thing-add-by-url = 透過網址新增…
+add-thing-done = 完成
+add-thing-cancel = 取消
 
 ## Context Menu
 
+context-menu-choose-icon = 選擇圖示…
+context-menu-save = 儲存
+context-menu-remove = 移除
 
 ## Capabilities
 
+OnOffSwitch = 二元開關
+MultiLevelSwitch = 多階開關
+ColorControl = 色彩控制
+ColorSensor = 色彩感應器
+EnergyMonitor = 能源監控器
+BinarySensor = 二元感應器
+MultiLevelSensor = 多階感應器
+SmartPlug = 智慧插座
+Light = 燈光
+DoorSensor = 門窗感應器
+MotionSensor = 動態感應器
+LeakSensor = 滲漏感應器
+PushButton = 按鈕
+VideoCamera = 視訊攝影機
+Camera = 攝影機
+TemperatureSensor = 溫度感應器
+Alarm = 警報器
+Thermostat = 溫度控制器
+Lock = 鎖
+Custom = 自訂 Thing
+Thing = Thing
 
 ## Properties
 
+alarm = 警報
+pushed = 按下
+not-pushed = 未按下
+on-off = 開/關
+on = 開
+off = 關
+power = 電源
+voltage = 電壓
+temperature = 溫度
+current = 電流
+frequency = 頻率
+color = 色彩
+brightness = 亮度
+leak = 洩漏
+dry = 乾燥
+color-temperature = 色溫
+video-unsupported = 很抱歉，您的瀏覽器不支援影片。
+motion = 移動
+no-motion = 未移動
+open = 開啟
+closed = 關閉
+locked = 鎖定
+unlocked = 未鎖定
+jammed = 卡住
+unknown = 未知
+active = 啟用
+inactive = 未啟用
 
 ## Domain Setup
 
 
 ## Booleans
 
+true = True
+false = False
 
 ## Time
 
+utils-now = 現在
+utils-seconds-ago =
+    { $value ->
+       *[other] { $value } 秒前
+    }
+utils-minutes-ago =
+    { $value ->
+       *[other] { $value } 分鐘前
+    }
+utils-hours-ago =
+    { $value ->
+       *[other] { $value } 小時前
+    }
+utils-days-ago =
+    { $value ->
+       *[other] { $value } 天前
+    }
+utils-weeks-ago =
+    { $value ->
+       *[other] { $value } 週前
+    }
+utils-months-ago =
+    { $value ->
+       *[other] { $value } 個月前
+    }
+utils-years-ago =
+    { $value ->
+       *[other] { $value } 年前
+    }
+minute = 分鐘
+hour = 小時
+day = 天
+week = 週
 
 ## Unit Abbreviations
 
+abbrev-volt = 伏特
+abbrev-hertz = 赫茲
+abbrev-amp = 安培
+abbrev-watt = 瓦特
 
 ## New Thing View
 
@@ -260,6 +407,7 @@ rules-delete-icon =
 
 ## Router Setup Page
 
+router-setup-header = 建立新 Wi-Fi 網路
 
 ## Wi-Fi Setup Page
 
