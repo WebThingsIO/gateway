@@ -279,7 +279,6 @@ icon = Ikon
 
 error = Fel
 more-information = Mer information
-invalid-file = Ogiltigt fil.
 failed-read-file = Misslyckades med att läsa fil.
 failed-save = Misslyckades med att spara.
 
@@ -292,12 +291,10 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
-login-title = Logga in —{ -webthings-gateway-brand }
 login-log-in = Logga in
 
 ## Create First User Page
 
-signup-title = Skapa användare —{ -webthings-gateway-brand }
 signup-welcome = Välkommen
 signup-create-account = Skapa ditt första användarkonto:
 signup-next = Nästa
@@ -342,12 +339,10 @@ wifi-setup-skip = Hoppa över
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Ansluter till Wi-Fi —{ -webthings-gateway-brand }
 connecting-header = Ansluter till Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Skapar Wi-Fi nätverk —{ -webthings-gateway-brand }
 creating-header = Skapar Wi-Fi nätverk…
 
 ## General Terms
