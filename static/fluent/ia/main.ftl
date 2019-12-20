@@ -27,21 +27,60 @@ log-out-button = Disconnecter se
 
 ## Things
 
+thing-details =
+    .aria-label = Vider proprietates
+add-things =
+    .aria-label = Adder nove things
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Avatar assistente
+assistant-controls-text-input =
+    .placeholder = Como pote io adjutar?
 
 ## Floorplan
 
+upload-floorplan-hint = (.svg recommendate)
 
 ## Top-Level Settings
 
+settings-domain = Dominio
+settings-network = Rete
+settings-users = Usatores
+settings-add-ons = Additivos
+settings-adapters = Adaptatores
+settings-localization = Localisation
+settings-updates = Actualisationes
+settings-experiments = Experimentos
+settings-developer = Disveloppator
 
 ## Domain Settings
 
+domain-settings-local-label = Accesso local
+domain-settings-remote-access = Accesso remote
+domain-settings-local-name =
+    .placeholder = gateway
 
 ## Network Settings
 
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Rete de casa
+network-settings-internet-image =
+    .alt = Internet
+network-settings-configure = Configurar
+network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Modo
+network-settings-home-network-lan = Rete de casa (LAN)
+network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-ip-address = Adresse IP
+network-settings-gateway = Gateway
 network-settings-done = Facite
 
 ## User Settings
