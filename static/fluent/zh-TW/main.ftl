@@ -30,7 +30,7 @@ log-out-button = 登出
 thing-details =
     .aria-label = 檢視屬性
 add-things =
-    .aria-label = 新增 Thing
+    .aria-label = 新增 Things
 
 ## Assistant
 
@@ -202,6 +202,7 @@ rules-delete-cancel =
 rules-delete-confirm =
     .value = 刪除規則
 rule-invalid = 無效
+rule-delete-prompt = 您確定要永久刪除此規則嗎？
 rule-delete-cancel-button =
     .value = 取消
 rule-delete-confirm-button =
@@ -211,6 +212,7 @@ rule-not = 非
 rule-event = 事件
 rule-action = 動作
 rule-configure = 設定…
+rule-time-title = 一天中的時間
 rule-notification = 通知
 notification-title = 標題
 notification-message = 訊息
@@ -241,8 +243,9 @@ logs-hours = 小時
 logs-days = 天
 logs-weeks = 週
 logs-save = 儲存
-logs-remove-dialog-title = 移除中
-logs-remove = 移除
+logs-remove-dialog-title = 刪除中
+logs-remove-dialog-warning = 刪除紀錄的同時也會清除所有紀錄資料，確定嗎？
+logs-remove = 刪除
 logs-unable-to-create = 無法建立紀錄檔
 logs-server-remove-error = 伺服器錯誤: 無法刪除紀錄
 
@@ -260,7 +263,7 @@ add-thing-cancel = 取消
 
 context-menu-choose-icon = 選擇圖示…
 context-menu-save = 儲存
-context-menu-remove = 移除
+context-menu-remove = 刪除
 
 ## Capabilities
 
@@ -321,7 +324,11 @@ inactive = 未啟用
 tunnel-setup-reclaim-domain = 看來您已經註冊過該網域了。若要取回繼續使用，請<a data-l10n-name="tunnel-setup-reclaim-domain-click-here">點擊此處</a>。
 check-email-for-token = 請到信箱尋找先前收到的網域取回代碼，並複製貼到上面的欄位。
 reclaim-failed = 無法取回網域。
+subdomain-already-used = 這個子網域已經有人使用，請改用其他名稱。
 invalid-reclamation-token = 網域取回代碼無效。
+domain-success = 成功！請稍候跳轉到新網頁…
+issuing-error = 簽發憑證時發生錯誤，請再試一次。
+redirecting = 重導中…
 
 ## Booleans
 
@@ -409,10 +416,14 @@ new-web-thing-url =
     .placeholder = 輸入 web thing 網址
 new-web-thing-label = Web Thing
 loading = 載入中…
+new-web-thing-multiple = 找到多組 web things
+new-web-thing-from = 來自
 
 ## Empty div Messages
 
+no-things = 還沒有裝置，點擊 + 號掃描可用裝置。
 thing-not-found = 找不到 Thing。
+action-not-found = 找不到可用的動作。
 events-not-found = 這個 thing 沒有事件。
 
 ## Add-on Settings
@@ -422,9 +433,10 @@ add-addons =
 author-unknown = 未知
 disable = 停用
 enable = 啟用
+by = 作者:
 addon-configure = 設定
 addon-update = 更新
-addon-remove = 移除
+addon-remove = 刪除
 addon-updating = 更新中…
 addon-updated = 已更新
 addon-update-failed = 失敗
@@ -500,6 +512,7 @@ tunnel-setup-welcome = 歡迎
 tunnel-setup-choose-address = 為您的閘道器挑選一組安全網址:
 tunnel-setup-input-subdomain =
     .placeholder = 子網域
+tunnel-setup-opt-in = 有新功能推出或貢獻機會時通知我。
 tunnel-setup-privacy-policy = 隱私權保護政策
 tunnel-setup-input-reclamation-token =
     .placeholder = 網域取回代碼
@@ -525,6 +538,10 @@ authorize-deny = 拒絕
 
 ## Local Token Page
 
+local-token-title = 本機授權服務 — { -webthings-gateway-brand }
+local-token-header = 本機授權服務
+local-token-your-token = 下列 <a data-l10n-name="local-token-jwt">JSON Web Token</a> 是您的本機授權碼:
+local-token-use-it = 請使用此授權碼，透過 <a data-l10n-name="local-token-bearer-type">Bearer-type 驗證方式</a> 來安全地與閘道器溝通。
 
 ## Router Setup Page
 
@@ -566,6 +583,7 @@ connecting-skipped = 正在啟動閘道器。請確認您連線到與閘道器�
 
 creating-title = 建立 Wi-Fi 網路 — { -webthings-gateway-brand }
 creating-header = 建立 Wi-Fi 網路…
+creating-content = 請使用您剛剛建立的密碼連線到 { $ssid } 網路，然後使用瀏覽器開啟 { $gateway-link } 或 { $ip-link }。
 
 ## General Terms
 
@@ -573,7 +591,7 @@ ok = 確定
 ellipsis = …
 event-log = 事件記錄
 edit = 編輯
-remove = 移除
+remove = 刪除
 disconnected = 已中斷連線
 processing = 處理中…
 submit = 送出
@@ -584,6 +602,10 @@ menu-button =
     .aria-label = 選單
 back-button =
     .aria-label = 上一頁
+overflow-button =
+    .aria-label = 其他動作
+speech-button =
+    .aria-label = 聆聽中，請說話
 submit-button =
     .aria-label = 送出
 edit-button =
