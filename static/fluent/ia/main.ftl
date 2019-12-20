@@ -52,6 +52,7 @@ settings-add-ons = Additivos
 settings-adapters = Adaptatores
 settings-localization = Localisation
 settings-updates = Actualisationes
+settings-authorizations = Autorisationes
 settings-experiments = Experimentos
 settings-developer = Disveloppator
 
