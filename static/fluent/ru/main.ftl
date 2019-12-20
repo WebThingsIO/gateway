@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -27,12 +25,15 @@ floorplan-menu-item = План помещения
 settings-menu-item = Настройки
 log-out-button = Выйти
 
+## Things
+
+
 ## Assistant
 
 assistant-avatar-image =
-  .alt = Аватарка ассистента
+    .alt = Аватарка ассистента
 assistant-controls-text-input =
-  .placeholder = Чем я могу помочь?
+    .placeholder = Чем я могу помочь?
 
 ## Floorplan
 
@@ -58,23 +59,24 @@ domain-settings-local-label = Локальный доступ
 domain-settings-local-update = Обновить имя хоста
 domain-settings-remote-access = Удаленный доступ
 domain-settings-local-name =
-  .placeholder = шлюз
+    .placeholder = шлюз
 
 ## Network Settings
 
 network-settings-unsupported = Сетевые настройки не поддерживаются для этой платформы.
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
+    .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
-  .alt = Домашняя сеть
+    .alt = Домашняя сеть
 network-settings-internet-image =
-  .alt = Интернет
+    .alt = Интернет
 network-settings-configure = Настройка
 network-settings-internet-wan = Интернет (WAN)
+network-settings-wan-mode = Режим
 network-settings-home-network-lan = Домашняя сеть (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-адрес
@@ -86,7 +88,7 @@ network-settings-network-mask = Маска сети
 network-settings-gateway = Шлюз
 network-settings-done = Готово
 network-settings-wifi-password =
-  .placeholder = Пароль
+    .placeholder = Пароль
 network-settings-show-password = Показать пароль
 network-settings-connect = Подключить
 network-settings-username = Имя пользователя
@@ -97,7 +99,7 @@ network-settings-enable-wifi = Включить Wi-Fi
 network-settings-network-name = Имя сети (SSID)
 wireless-connected = Подключено
 wireless-icon =
-  .alt = Сеть Wi-Fi
+    .alt = Сеть Wi-Fi
 network-settings-changing = Изменение настроек сети. Это может занять некоторое время.
 failed-ethernet-configure = Не удалось настроить Ethernet.
 failed-wifi-configure = Не удалось настроить Wi-Fi.
@@ -107,18 +109,20 @@ failed-wlan-configure = Не удалось настроить WLAN.
 
 ## User Settings
 
+create-user =
+    .aria-label = Добавить пользователя
 user-settings-input-name =
-  .placeholder = Имя
+    .placeholder = Имя
 user-settings-input-email =
-  .placeholder = Электронная почта
+    .placeholder = Электронная почта
 user-settings-input-password =
-  .placeholder = Пароль
+    .placeholder = Пароль
 user-settings-input-new-password =
-  .placeholder = Новый пароль (необязательно)
+    .placeholder = Новый пароль (необязательно)
 user-settings-input-confirm-new-password =
-  .placeholder = Подтвердите новый пароль
+    .placeholder = Подтвердите новый пароль
 user-settings-input-confirm-password =
-  .placeholder = Подтвердите пароль
+    .placeholder = Подтвердите пароль
 user-settings-password-mismatch = Пароли не совпадают
 user-settings-save = Сохранить
 
@@ -170,31 +174,31 @@ rules = Правила
 rules-create-rule-hint = Нет созданных правил. Нажмите +, чтобы создать правило.
 rules-rule-name = Название правила
 rules-customize-rule-name-icon =
-  .alt = Настройте имя правила
+    .alt = Настройте имя правила
 rules-rule-description = Описание правила
 rules-preview-button =
-  .alt = Предпросмотр
+    .alt = Предпросмотр
 rules-delete-icon =
-  .alt = Удалить
+    .alt = Удалить
 rules-drag-hint = Перетащите свои устройства сюда, чтобы создать правило
 rules-drag-input-hint = Добавить устройство в качестве ввода
 rules-drag-output-hint = Добавить устройство в качестве вывода
 rules-scroll-left =
-  .alt = Прокрутить влево
+    .alt = Прокрутить влево
 rules-scroll-right =
-  .alt = Прокрутить вправо
+    .alt = Прокрутить вправо
 rules-delete-prompt = Перетащите устройство сюда, чтобы отключить его
 rules-delete-dialog = Удалить это правило навсегда?
 rules-delete-cancel =
-  .value = Отмена
+    .value = Отмена
 rules-delete-confirm =
-  .value = Удалить правило
+    .value = Удалить правило
 rule-invalid = Недействителен
 rule-delete-prompt = Удалить это правило навсегда?
 rule-delete-cancel-button =
-  .value = Отмена
+    .value = Отмена
 rule-delete-confirm-button =
-  .value = Удалить правило
+    .value = Удалить правило
 rule-select-property = Выберите свойство
 rule-not = Не
 rule-event = Событие
@@ -216,30 +220,31 @@ logs = Журналы
 logs-create-log-hint = Журналы не созданы. Нажмите +, чтобы создать журнал.
 logs-device = Устройство
 logs-device-select =
-  .aria-label = Журналировать устройство
+    .aria-label = Журналировать устройство
 logs-property = Свойство
 logs-property-select =
-  .aria-label = Журналировать свойство
+    .aria-label = Журналировать свойство
 logs-retention = Удержание
 logs-retention-length =
-  .aria-label = Журналировать продолжительность удержания
+    .aria-label = Журналировать продолжительность удержания
 logs-retention-unit =
-  .aria-label = Журналировать единицы удержания
+    .aria-label = Журналировать единицы удержания
 logs-hours = Часы
 logs-days = Дни
 logs-weeks = Недели
 logs-save = Сохранить
 logs-remove-dialog-title = Удаление
-logs-remove-dialog-warning = Удаление журнала также удалит его содержимое.
-  Are you sure you want to remove it?
+logs-remove-dialog-warning =
+    Удаление журнала также удалит его содержимое.
+    Are you sure you want to remove it?
 logs-remove = Удалить
-logs-unable-to-create = Невозможно создать журнал
-logs-server-remove-error = Ошибка сервера: невозможно удалить журнал
+logs-unable-to-create = Не удалось создать журнал
+logs-server-remove-error = Ошибка сервера: не удалось удалить журнал
 
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Сканирование
+    .alt = Сканирование
 add-thing-scanning = Поиск новых устройств…
 add-thing-add-adapters-hint = Ничего не найдено. Попробуйте <a data-l10n-name="add-thing-add-adapters-hint-anchor">добавить дополнения</a>.
 add-thing-add-by-url = Добавить по URL…
@@ -285,7 +290,7 @@ on-off = Вкл/выкл
 on = Вкл
 off = Выкл
 power = Питание
-voltage = Вольтаж
+voltage = Напряжение
 temperature = Температура
 current = Ток
 frequency = Частота
@@ -294,7 +299,7 @@ brightness = Яркость
 leak = Утечка
 dry = Сухой
 color-temperature = Цветовая температура
-video-unsupported = Ваш браузер не поддерживает видео.
+video-unsupported = Извините, ваш браузер не поддерживает видео.
 motion = Движение
 no-motion = Нет движения
 open = Открыто
@@ -326,40 +331,47 @@ false = Ложь
 
 utils-now = сейчас
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } секунду назад
-     *[other] { $value } секунд назад
-  }
+    { $value ->
+        [one] { $value } секунду назад
+        [few] { $value } секунды назад
+       *[many] { $value } секунд назад
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] { $value } минуту назад
-     *[other] { $value } минут назад
-  }
+    { $value ->
+        [one] { $value } минуту назад
+        [few] { $value } минуты назад
+       *[many] { $value } минут назад
+    }
 utils-hours-ago =
-  { $value ->
-      [one] { $value } час назад
-     *[other] { $value } часов назад
-  }
+    { $value ->
+        [one] { $value } час назад
+        [few] { $value } часа назад
+       *[many] { $value } часов назад
+    }
 utils-days-ago =
-  { $value ->
-      [one] { $value } день назад
-     *[other] { $value } дней назад
-  }
+    { $value ->
+        [one] { $value } день назад
+        [few] { $value } дня назад
+       *[many] { $value } дней назад
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] { $value } неделю назад
-     *[other] { $value } недель назад
-  }
+    { $value ->
+        [one] { $value } неделю назад
+        [few] { $value } недели назад
+       *[many] { $value } недель назад
+    }
 utils-months-ago =
-  { $value ->
-      [one] { $value } месяц назад
-     *[other] { $value } месяцев назад
-  }
+    { $value ->
+        [one] { $value } месяц назад
+        [few] { $value } месяца назад
+       *[many] { $value } месяцев назад
+    }
 utils-years-ago =
-  { $value ->
-      [one] { $value } год назад
-     *[other] { $value } лет назад
-  }
+    { $value ->
+        [one] { $value } год назад
+        [few] { $value } года назад
+       *[many] { $value } лет назад
+    }
 minute = минут
 hour = часов
 day = дней
@@ -391,23 +403,23 @@ unknown-device-type = Неизвестный тип устройства
 new-thing-choose-icon = Выберите значок…
 new-thing-save = Сохранить
 new-thing-pin =
-  .placeholder = Введите PIN-код
+    .placeholder = Введите PIN-код
 new-thing-pin-error = Неверный PIN-код
 new-thing-pin-invalid = Некорректный PIN-код
 new-thing-cancel = Отмена
 new-thing-submit = Отправить
 new-thing-username =
-  .placeholder = Введите имя пользователя
+    .placeholder = Введите имя пользователя
 new-thing-password =
-  .placeholder = Введите пароль
-new-thing-credentials-error = Неверные учетные данные
+    .placeholder = Введите пароль
+new-thing-credentials-error = Неверные учётные данные
 new-thing-saved = Сохранено
 new-thing-done = Готово
 
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Введите URL устройства
+    .placeholder = Введите URL устройства
 new-web-thing-label = Веб-вещь
 loading = Загрузка…
 new-web-thing-multiple = Найдено несколько веб-вещей
@@ -463,7 +475,7 @@ icon = Значок
 ## Speech
 
 speech-unsupported = Ваш браузер не поддерживает речь
-speech-didnt-get = Простите, я не расслышал.
+speech-didnt-get = Извините, я не слышу.
 
 ## Errors
 
@@ -493,7 +505,7 @@ login-log-in = Авторизоваться
 
 signup-title = Создать пользователя — { -webthings-gateway-brand }
 signup-welcome = Добро пожаловать
-signup-create-account = Создайте свою первую учетную запись:
+signup-create-account = Создайте свой первый аккаунт:
 signup-password-mismatch = Пароли не совпадают
 signup-next = Далее
 
@@ -503,11 +515,11 @@ tunnel-setup-title = Выберите веб-адрес — { -webthings-gateway
 tunnel-setup-welcome = Добро пожаловать
 tunnel-setup-choose-address = Выберите безопасный адрес для вашего шлюза:
 tunnel-setup-input-subdomain =
-  .placeholder = субдомен
+    .placeholder = субдомен
 tunnel-setup-opt-in = Держать меня в курсе новых функций и возможностей.
 tunnel-setup-privacy-policy = Политика конфиденциальности
 tunnel-setup-input-reclamation-token =
-  .placeholder = Токен возврата
+    .placeholder = Токен возврата
 tunnel-setup-error = Произошла ошибка при настройке субдомена.
 tunnel-setup-create = Создать
 tunnel-setup-skip = Пропустить
@@ -521,7 +533,7 @@ authorize-monitor-and-control = мониторинг и управление
 authorize-monitor = мониторинг
 authorize-allow-all = Разрешить для всех вещей
 authorize-allow =
-  .value = Разрешить
+    .value = Разрешить
 authorize-deny = Запретить
 
 ## Local Token Page
@@ -536,13 +548,13 @@ local-token-use-it = Используйте его для общения со ш
 router-setup-title = Настройка маршрутизатора — { -webthings-gateway-brand }
 router-setup-header = Создать новую сеть Wi-Fi
 router-setup-input-ssid =
-  .placeholder = Имя сети
+    .placeholder = Имя сети
 router-setup-input-password =
-  .placeholder = Пароль
+    .placeholder = Пароль
 router-setup-input-confirm-password =
-  .placeholder = Подтвердите пароль
+    .placeholder = Подтвердите пароль
 router-setup-create =
-  .value = Создать
+    .value = Создать
 router-setup-password-mismatch = Пароли должны совпадать
 
 ## Wi-Fi Setup Page
@@ -550,34 +562,31 @@ router-setup-password-mismatch = Пароли должны совпадать
 wifi-setup-title = Настройка Wi-Fi — { -webthings-gateway-brand }
 wifi-setup-header = Подключиться к сети Wi-Fi?
 wifi-setup-input-password =
-  .placeholder = Пароль
+    .placeholder = Пароль
 wifi-setup-show-password = Показать пароль
 wifi-setup-connect =
-  .value = Подключить
+    .value = Подключить
 wifi-setup-network-icon =
-  .alt = Сеть Wi-Fi
+    .alt = Сеть Wi-Fi
 wifi-setup-skip = Пропустить
 
 ## Connecting to Wi-Fi Page
 
 connecting-title = Подключение к Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Подключение к Wi-Fi…
-connecting-connect = Пожалуйста, убедитесь, что вы подключены к той же сети, и
- перейдите по ссылке { $gateway-link } в браузере, чтобы продолжить установку.
-connecting-warning = Примечание. Если вы не можете загрузить {$ domain}, поищите
- IP-адрес вашего маршрутизатора.
+connecting-connect =
+    Пожалуйста, убедитесь, что вы подключены к той же сети, и
+    перейдите по ссылке { $gateway-link } в браузере, чтобы продолжить установку.
 connecting-header-skipped = Настройка Wi-Fi пропущена
-connecting-skipped = Шлюз сейчас запускается. Перейдите по ссылке
- { $gateway-link } в браузере, убедившись что вы подключены к той же сети,
- чтобы продолжить установку.
+connecting-skipped =
+    Шлюз сейчас запускается. Перейдите по ссылке
+    { $gateway-link } в браузере, убедившись что вы подключены к той же сети,
+    чтобы продолжить установку.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Создание сети Wi-Fi — { -webthings-gateway-brand }
 creating-header = Создание сети Wi-Fi…
-creating-content = Подключитесь к {$ ssid} с паролем, который вы только что
- создали, по ссылке { $gateway-link } или по адресу { $ip-link } в
- браузере.
 
 ## General Terms
 
@@ -589,3 +598,20 @@ remove = Удалить
 disconnected = Отключено
 processing = Обработка…
 submit = Отправить
+
+## Top-Level Buttons
+
+menu-button =
+    .aria-label = Меню
+back-button =
+    .aria-label = Назад
+overflow-button =
+    .aria-label = Дополнительные действия
+speech-button =
+    .aria-label = Слушать речь
+submit-button =
+    .aria-label = Отправить
+edit-button =
+    .aria-label = Редактировать
+save-button =
+    .aria-label = Сохранить
