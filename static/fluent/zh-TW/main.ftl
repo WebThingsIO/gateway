@@ -358,49 +358,151 @@ week = 週
 
 ## Unit Abbreviations
 
-abbrev-volt = 伏特
-abbrev-hertz = 赫茲
-abbrev-amp = 安培
-abbrev-watt = 瓦特
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = ℉
+abbrev-celsius = ℃
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = 未知裝置類型
+new-thing-choose-icon = 選擇圖示…
+new-thing-save = 儲存
+new-thing-pin =
+    .placeholder = 輸入 PIN
+new-thing-pin-error = PIN 錯誤
+new-thing-pin-invalid = PIN 無效
+new-thing-cancel = 取消
+new-thing-submit = 送出
+new-thing-username =
+    .placeholder = 輸入使用者名稱
+new-thing-password =
+    .placeholder = 輸入密碼
+new-thing-credentials-error = 帳號密碼不正確
+new-thing-saved = 已儲存
+new-thing-done = 完成
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = 輸入 web thing 網址
+new-web-thing-label = Web Thing
+loading = 載入中…
 
 ## Empty div Messages
 
+events-not-found = 這個 thing 沒有事件。
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = 尋找新的附加元件
+author-unknown = 未知
+disable = 停用
+enable = 啟用
+addon-configure = 設定
+addon-update = 更新
+addon-remove = 移除
+addon-updating = 更新中…
+addon-updated = 已更新
+addon-update-failed = 失敗
+addon-config-applying = 套用中…
+addon-config-apply = 套用
+addon-discovery-added = 已新增
+addon-discovery-add = 新增
+addon-discovery-installing = 安裝中…
+addon-discovery-failed = 失敗
 
 ## Page Titles
 
+settings = 設定
+domain = 網域
+users = 使用者
+edit-user = 編輯使用者
+add-user = 新增使用者
+adapters = 轉接器
+addons = 附加元件
+addon-config = 設定附加元件
+addon-discovery = 探索新附加元件
+experiments = 實驗
+localization = 在地化
+updates = 更新
+authorizations = 授權
+developer = 開發者
+network = 網路
+ethernet = 乙太網路
+wifi = Wi-Fi
+icon = 圖示
 
 ## Speech
 
+speech-unsupported = 目前的瀏覽器不支援語音
+speech-didnt-get = 抱歉，我聽不懂。
 
 ## Errors
 
+unknown-state = 未知狀態。
+error = 錯誤
+errors = 錯誤
+gateway-unreachable = 無法連線至閘道器
+more-information = 更多資訊
+invalid-file = 檔案無效。
+failed-read-file = 檔案讀取失敗。
+failed-save = 儲存失敗。
 
 ## Schema Form
 
+unsupported-field = 不支援的欄位格式
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = 登入 — { -webthings-gateway-brand }
+login-log-in = 登入
 
 ## Create First User Page
 
+signup-title = 建立使用者 — { -webthings-gateway-brand }
+signup-welcome = 歡迎
+signup-create-account = 建立第一組使用者帳號:
+signup-password-mismatch = 密碼不符合
+signup-next = 下一步
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = 選擇網址 — { -webthings-gateway-brand }
+tunnel-setup-welcome = 歡迎
+tunnel-setup-choose-address = 為您的閘道器挑選一組安全網址:
+tunnel-setup-input-subdomain =
+    .placeholder = 子網域
+tunnel-setup-privacy-policy = 隱私權保護政策
+tunnel-setup-error = 設定子網域時發生錯誤。
+tunnel-setup-create = 建立
+tunnel-setup-skip = 略過
+tunnel-setup-time-sync = 正在進行網路對時。若未完成此步驟，網域名稱可能會註冊失敗。
 
 ## Authorize Page
 
+authorize-title = 授權要求 — { -webthings-gateway-brand }
+authorize-authorization-request = 授權要求
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> 想要存取您閘道器當中的 <<function>> 裝置。
 
 ## Local Token Page
 
@@ -420,6 +522,24 @@ router-setup-header = 建立新 Wi-Fi 網路
 
 ## General Terms
 
+ok = 確定
+ellipsis = …
+event-log = 事件記錄
+edit = 編輯
+remove = 移除
+disconnected = 已中斷連線
+processing = 處理中…
+submit = 送出
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = 選單
+back-button =
+    .aria-label = 上一頁
+submit-button =
+    .aria-label = 送出
+edit-button =
+    .aria-label = 編輯
+save-button =
+    .aria-label = 儲存
