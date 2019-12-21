@@ -51,6 +51,7 @@ settings-developer = Utvecklare
 ## Domain Settings
 
 domain-settings-local-label = Lokal åtkomst
+domain-settings-remote-access = Fjärråtkomst
 domain-settings-local-name =
     .placeholder = gateway
 
@@ -119,6 +120,7 @@ user-settings-save = Spara
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Inga auktoriseringar.
 
 ## Experiment Settings
 
@@ -193,6 +195,7 @@ logs-remove = Ta bort
 
 ## Add New Things
 
+add-thing-add-by-url = Lägg till via URL…
 add-thing-cancel = Avbryt
 
 ## Context Menu
@@ -414,6 +417,8 @@ tunnel-setup-skip = Hoppa över
 
 ## Authorize Page
 
+authorize-title = Auktorisationsbegäran — { -webthings-gateway-brand }
+authorize-authorization-request = Auktorisationsbegäran
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = från <<domain>>
 authorize-monitor-and-control = övervaka och kontrollera
@@ -472,6 +477,8 @@ processing = Bearbetar…
 
 menu-button =
     .aria-label = Meny
+overflow-button =
+    .aria-label = Ytterligare åtgärder
 edit-button =
     .aria-label = Redigera
 save-button =
