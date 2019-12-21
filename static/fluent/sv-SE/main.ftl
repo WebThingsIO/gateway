@@ -30,6 +30,8 @@ thing-details =
 
 ## Assistant
 
+assistant-controls-text-input =
+    .placeholder = Hur kan jag hjälpa?
 
 ## Floorplan
 
@@ -104,6 +106,8 @@ create-user =
     .aria-label = Lägg till ny användare
 user-settings-input-name =
     .placeholder = Namn
+user-settings-input-email =
+    .placeholder = E-post
 user-settings-input-password =
     .placeholder = Lösenord
 user-settings-input-new-password =
@@ -140,9 +144,14 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 ## Update Settings
 
 update-settings-update-now = Uppdatera nu
+update-available = Ny version tillgänglig
+update-up-to-date = Ditt system är uppdaterat
 update-settings-enable-self-updates = Aktivera automatiska uppdateringar
+last-update = Senast uppdaterad
+current-version = Nuvarande version
 failed = Misslyckades
 never = Aldrig
+in-progress = Pågående
 restarting = Startar om
 
 ## Developer Settings
@@ -219,11 +228,13 @@ PushButton = Tryckknapp
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
+Alarm = Larm
 Thermostat = Termostat
 Lock = Lås
 
 ## Properties
 
+alarm = Larm
 on-off = På/Av
 on = På
 off = Av
