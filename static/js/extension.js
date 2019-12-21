@@ -13,6 +13,11 @@ const Menu = require('./views/menu');
 class Extension {
   constructor(id) {
     this.id = id;
+    this.preferences = {
+      language: App.LANGUAGE,
+      timezone: App.TIMEZONE,
+      units: App.UNITS,
+    };
     this.view = App.registerExtension(this);
   }
 
