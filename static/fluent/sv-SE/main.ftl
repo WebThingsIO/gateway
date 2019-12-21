@@ -323,6 +323,7 @@ check-email-for-token = Kontrollera din e-post efter en återvånnings token och
 reclaim-failed = Det gick inte att ta tillbaka domänen.
 subdomain-already-used = Denna underdomän används redan. Välj en annan.
 invalid-reclamation-token = Ogiltig återvinningstoken.
+domain-success = Lyckades! Vänta medan vi omdirigerar dig…
 issuing-error = Fel vid utfärdande av certifikat. Var god försök igen.
 redirecting = Omdirigerar…
 
@@ -404,10 +405,12 @@ new-thing-pin =
 new-thing-pin-error = Felaktig PIN
 new-thing-pin-invalid = Ogiltig PIN
 new-thing-cancel = Avbryt
+new-thing-submit = Spara och Lägg till
 new-thing-username =
     .placeholder = Skriv in ditt användarnamn
 new-thing-password =
     .placeholder = Skriv in ditt lösenord
+new-thing-credentials-error = Felaktiga inloggningsuppgifter
 new-thing-saved = Sparat
 new-thing-done = Klart
 
@@ -479,6 +482,7 @@ speech-didnt-get = Tyvärr förstod jag inte det.
 unknown-state = Okänt tillstånd.
 error = Fel
 errors = Fel
+gateway-unreachable = Gateway otillgänglig
 more-information = Mer information
 invalid-file = Ogiltigt fil.
 failed-read-file = Misslyckades med att läsa fil.
@@ -576,6 +580,7 @@ connecting-header = Ansluter till Wi-Fi…
 connecting-connect = Se till att du är ansluten till samma nätverk och navigera sedan till { $gateway-link } i din webbläsare för att fortsätta installationen.
 connecting-warning = Obs! Om du inte kan ladda { $domain }, kolla upp så att gatewayens IP-adress är korrekt på din router.
 connecting-header-skipped = Wi-Fi inställningar hoppades över
+connecting-skipped = Gateway startas nu. Navigera till { $gateway-link } i din webbläsare när du är ansluten till samma nätverk som gatewayen för att fortsätta installationen.
 
 ## Creating Wi-Fi Network Page
 
@@ -592,6 +597,7 @@ edit = Redigera
 remove = Ta bort
 disconnected = Ej ansluten
 processing = Bearbetar…
+submit = Spara
 
 ## Top-Level Buttons
 
@@ -603,6 +609,8 @@ overflow-button =
     .aria-label = Ytterligare åtgärder
 speech-button =
     .aria-label = Lyssna efter tal
+submit-button =
+    .aria-label = Spara
 edit-button =
     .aria-label = Redigera
 save-button =
