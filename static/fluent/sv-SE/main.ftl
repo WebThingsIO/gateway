@@ -265,6 +265,7 @@ context-menu-remove = Ta bort
 ## Capabilities
 
 OnOffSwitch = På/Av knapp
+MultiLevelSwitch = Multi Nivå knapp
 ColorControl = Färgkontroll
 ColorSensor = Färgsensor
 EnergyMonitor = Energimätare
@@ -317,6 +318,10 @@ inactive = Inaktiv
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Det ser ut som att du redan har registrerat den här underdomänen. För att ta tillbaka den <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klicka här</a>.
+reclaim-failed = Det gick inte att ta tillbaka domänen.
+subdomain-already-used = Denna underdomän används redan. Välj en annan.
+invalid-reclamation-token = Ogiltig återvinningstoken.
 issuing-error = Fel vid utfärdande av certifikat. Var god försök igen.
 redirecting = Omdirigerar…
 
@@ -357,6 +362,11 @@ utils-months-ago =
     { $value ->
         [one] { $value } månad sen
        *[other] { $value } månader sen
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } år sedan
+       *[other] { $value } flera år sedan
     }
 minute = Minut
 hour = Timme
@@ -502,6 +512,9 @@ tunnel-setup-input-subdomain =
     .placeholder = underdomän
 tunnel-setup-opt-in = Håll mig uppdaterad om nya funktioner och bidragsmöjligheter.
 tunnel-setup-privacy-policy = Sekretesspolicy
+tunnel-setup-input-reclamation-token =
+    .placeholder = Återvinningstoken
+tunnel-setup-error = Ett fel inträffade under inställningen av underdomänen.
 tunnel-setup-create = Skapa
 tunnel-setup-skip = Hoppa över
 
@@ -522,8 +535,8 @@ authorize-deny = Neka
 
 ## Local Token Page
 
-local-token-title = Lokal token tjänst — { -webthings-gateway-brand }
-local-token-header = Lokal token tjänst
+local-token-title = Lokal tokentjänst — { -webthings-gateway-brand }
+local-token-header = Lokal tokentjänst
 local-token-your-token = Dina lokala token är detta: <a data-l10n-name="local-token-jwt">JSON webbtoken</a>:
 
 ## Router Setup Page
