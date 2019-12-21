@@ -127,9 +127,12 @@ user-settings-input-confirm-new-password =
     .placeholder = Confirmar nove contrasigno
 user-settings-input-confirm-password =
     .placeholder = Confirmar contrasigno
+user-settings-password-mismatch = Le contrasignos non concorda
+user-settings-save = Salvar
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Nulle adaptatores presente.
 
 ## Authorization Settings
 
