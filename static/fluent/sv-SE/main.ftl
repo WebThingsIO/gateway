@@ -472,6 +472,7 @@ icon = Ikon
 ## Speech
 
 speech-unsupported = Nuvarande webbläsare stöder inte tal
+speech-didnt-get = Tyvärr förstod jag inte det.
 
 ## Errors
 
