@@ -41,11 +41,16 @@ settings-domain = Domän
 settings-network = Nätverk
 settings-users = Användare
 settings-add-ons = Tillägg
+settings-adapters = Adaptrar
+settings-localization = Översättning
 settings-updates = Uppdateringar
+settings-authorizations = Auktoriseringar
+settings-experiments = Experiment
 settings-developer = Utvecklare
 
 ## Domain Settings
 
+domain-settings-local-label = Lokal åtkomst
 domain-settings-local-name =
     .placeholder = gateway
 
@@ -63,10 +68,12 @@ network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurera
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Läge
 network-settings-home-network-lan = Hemnätverk (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adress
 network-settings-dhcp = Automatisk (DHCP)
+network-settings-static = Manuell (statisk IP)
 network-settings-pppoe = Brygga (PPPoE)
 network-settings-static-ip-address = Statisk IP adress
 network-settings-network-mask = Nätverksmask
@@ -143,6 +150,8 @@ developer-settings-view-internal-logs = Visa interna loggar
 
 ## Rules
 
+add-rule =
+    .aria-label = Skapa ny regel
 rules = Regler
 rules-rule-name = Regelnamn
 rules-customize-rule-name-icon =
@@ -152,9 +161,13 @@ rules-delete-icon =
     .alt = Ta bort
 rules-delete-cancel =
     .value = Avbryt
+rules-delete-confirm =
+    .value = Ta bort regel
 rule-invalid = Ogiltig
 rule-delete-cancel-button =
     .value = Avbryt
+rule-delete-confirm-button =
+    .value = Ta bort regel
 rule-configure = Konfigurera…
 notification-title = Titel
 notification-message = Meddelande
@@ -217,6 +230,7 @@ frequency = Frekvens
 color = Färg
 brightness = Ljusstyrka
 color-temperature = Färgtemperatur
+motion = Rörelse
 open = Öppen
 closed = Stängd
 locked = Låst
@@ -342,12 +356,14 @@ domain = Domän
 users = Användare
 edit-user = Redigera användare
 add-user = Lägg till användare
+adapters = Adaptrar
 addons = Tillägg
 addon-config = Konfigurera tillägg
 addon-discovery = Upptäck nya tillägg
 experiments = Experiment
 localization = Översättning
 updates = Uppdateringar
+authorizations = Auktoriseringar
 developer = Utvecklare
 network = Nätverk
 ethernet = Ethernet
@@ -361,6 +377,7 @@ icon = Ikon
 
 unknown-state = Okänt tillstånd.
 error = Fel
+errors = Fel
 more-information = Mer information
 invalid-file = Ogiltigt fil.
 failed-read-file = Misslyckades med att läsa fil.
