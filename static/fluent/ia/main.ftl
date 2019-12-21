@@ -136,15 +136,37 @@ adapter-settings-no-adapters = Nulle adaptatores presente.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Nulle autorisationes.
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Assistente intelligente
+experiment-settings-logs = Registros
 
 ## Localization Settings
 
+localization-settings-language-region = Lingua e region
+localization-settings-country = Pais
+localization-settings-timezone = Fuso horari
+localization-settings-language = Lingua
+localization-settings-units = Unitates
+localization-settings-units-temperature = Temperatura
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Actualisar ora
+update-available = Nove version disponibile
+update-up-to-date = Tu systema es actualisate.
+updates-not-supported = Actualisationes non es supportate sur iste platteforma.
+update-settings-enable-self-updates = Activar actualisationes automatic
+last-update = Ultime actualisation
+current-version = Version actual
+failed = Fallite
+never = Nunquam
+in-progress = In curso
+restarting = Reinitiante
 
 ## Developer Settings
 
