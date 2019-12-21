@@ -64,14 +64,18 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adress
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-pppoe = Brygga (PPPoE)
+network-settings-static-ip-address = Statisk IP adress
 network-settings-network-mask = Nätverksmask
 network-settings-gateway = Gateway
 network-settings-wifi-password =
     .placeholder = Lösenord
 network-settings-show-password = Visa lösenord
+network-settings-connect = Anslut
 network-settings-username = Användarnamn
 network-settings-password = Lösenord
+network-settings-router-ip = Router IP adress
 network-settings-dhcp-server = DHCP server
+network-settings-enable-wifi = Aktivera Wi-Fi
 network-settings-network-name = Nätverksnamn (SSID)
 wireless-connected = Ansluten
 wireless-icon =
@@ -90,6 +94,13 @@ user-settings-input-name =
     .placeholder = Namn
 user-settings-input-password =
     .placeholder = Lösenord
+user-settings-input-new-password =
+    .placeholder = Nytt lösenord (valfritt)
+user-settings-input-confirm-new-password =
+    .placeholder = Bekräfta nytt lösenord
+user-settings-input-confirm-password =
+    .placeholder = Bekräfta lösenord
+user-settings-password-mismatch = Lösenorden överensstämmer inte
 user-settings-save = Spara
 
 ## Adapter Settings
@@ -163,9 +174,12 @@ context-menu-remove = Ta bort
 ColorControl = Färgkontroll
 ColorSensor = Färgsensor
 EnergyMonitor = Energimätare
+BinarySensor = Binär sensor
+SmartPlug = Trådlöst uttag
 Light = Lampor
 DoorSensor = Dörrsensor
 MotionSensor = Rörelsesensor
+PushButton = Tryckknapp
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
@@ -193,6 +207,7 @@ inactive = Inaktiv
 
 ## Domain Setup
 
+redirecting = Omdirigerar…
 
 ## Booleans
 
@@ -202,6 +217,36 @@ false = Falskt
 ## Time
 
 utils-now = nu
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } sekund sen
+       *[other] { $value } sekunder sen
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minut sen
+       *[other] { $value } minuter sen
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } timme sen
+       *[other] { $value } timmar sen
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } dag sen
+       *[other] { $value } dagar sen
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } vecka sen
+       *[other] { $value } veckor sen
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } månad sen
+       *[other] { $value } månader sen
+    }
 minute = Minut
 hour = Timme
 day = Dag
@@ -232,7 +277,16 @@ abbrev-foot = ft
 unknown-device-type = Okänd enhetstyp
 new-thing-choose-icon = Välj ikon…
 new-thing-save = Spara
+new-thing-pin =
+    .placeholder = Ange PIN
+new-thing-pin-error = Felaktig PIN
+new-thing-pin-invalid = Ogiltig PIN
 new-thing-cancel = Avbryt
+new-thing-username =
+    .placeholder = Skriv in ditt användarnamn
+new-thing-password =
+    .placeholder = Skriv in ditt lösenord
+new-thing-saved = Sparat
 
 ## New Web Thing View
 
@@ -249,12 +303,15 @@ add-addons =
 author-unknown = Okänd
 disable = Inaktivera
 enable = Aktivera
+by = av
 addon-configure = Konfigurera
 addon-update = Uppdatera
 addon-remove = Ta bort
 addon-updating = Uppdaterar…
 addon-updated = Uppdaterad
 addon-update-failed = Misslyckades
+addon-discovery-added = Tillagd
+addon-discovery-add = Lägg till
 addon-discovery-installing = Installerar…
 addon-discovery-failed = Misslyckades
 
@@ -318,6 +375,7 @@ tunnel-setup-skip = Hoppa över
 authorize-source = från <<domain>>
 authorize-allow =
     .value = Tillåt
+authorize-deny = Neka
 
 ## Local Token Page
 
@@ -329,6 +387,8 @@ router-setup-input-ssid =
     .placeholder = Nätverksnamn
 router-setup-input-password =
     .placeholder = Lösenord
+router-setup-input-confirm-password =
+    .placeholder = Bekräfta lösenord
 router-setup-create =
     .value = Skapa
 
@@ -338,6 +398,8 @@ wifi-setup-header = Anslut till ett Wi-Fi-nätverk?
 wifi-setup-input-password =
     .placeholder = Lösenord
 wifi-setup-show-password = Visa lösenord
+wifi-setup-connect =
+    .value = Anslut
 wifi-setup-network-icon =
     .alt = Wi-Fi nätverk
 wifi-setup-skip = Hoppa över
@@ -348,6 +410,7 @@ connecting-header = Ansluter till Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Skapar Wi-Fi nätverk — { -webthings-gateway-brand }
 creating-header = Skapar Wi-Fi nätverk…
 
 ## General Terms
@@ -356,6 +419,7 @@ ok = Ok
 ellipsis = …
 edit = Redigera
 remove = Ta bort
+disconnected = Ej ansluten
 
 ## Top-Level Buttons
 
