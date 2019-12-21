@@ -319,6 +319,7 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Det ser ut som att du redan har registrerat den här underdomänen. För att ta tillbaka den <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klicka här</a>.
+check-email-for-token = Kontrollera din e-post efter en återvånnings token och klistra in den ovan.
 reclaim-failed = Det gick inte att ta tillbaka domänen.
 subdomain-already-used = Denna underdomän används redan. Välj en annan.
 invalid-reclamation-token = Ogiltig återvinningstoken.
@@ -517,6 +518,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Ett fel inträffade under inställningen av underdomänen.
 tunnel-setup-create = Skapa
 tunnel-setup-skip = Hoppa över
+tunnel-setup-time-sync = Väntar på att systemklockan ska ställas in från Internet. Domänregistrering kommer sannolikt att misslyckas förrän detta är slutfört.
 
 ## Authorize Page
 
