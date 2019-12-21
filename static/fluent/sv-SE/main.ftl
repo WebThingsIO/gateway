@@ -17,6 +17,7 @@ wordmark =
 
 ## Menu Items
 
+assistant-menu-item = Assistent
 rules-menu-item = Regler
 logs-menu-item = Loggar
 settings-menu-item = Inställningar
@@ -24,12 +25,15 @@ log-out-button = Logga ut
 
 ## Things
 
+thing-details =
+    .aria-label = Visa egenskaper
 
 ## Assistant
 
 
 ## Floorplan
 
+upload-floorplan-hint = (.svg rekommenderas)
 
 ## Top-Level Settings
 
@@ -111,10 +115,12 @@ user-settings-save = Spara
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Smart assistent
 experiment-settings-logs = Loggar
 
 ## Localization Settings
 
+localization-settings-language-region = Språk & region
 localization-settings-country = Land
 localization-settings-timezone = Tidszon
 localization-settings-language = Språk
@@ -125,6 +131,7 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 ## Update Settings
 
 update-settings-update-now = Uppdatera nu
+update-settings-enable-self-updates = Aktivera automatiska uppdateringar
 failed = Misslyckades
 never = Aldrig
 restarting = Startar om
@@ -137,6 +144,10 @@ developer-settings-view-internal-logs = Visa interna loggar
 ## Rules
 
 rules = Regler
+rules-rule-name = Regelnamn
+rules-customize-rule-name-icon =
+    .alt = Anpassa regelnamn
+rules-rule-description = Regelbeskrivning
 rules-delete-icon =
     .alt = Ta bort
 rules-delete-cancel =
@@ -147,11 +158,19 @@ rule-delete-cancel-button =
 rule-configure = Konfigurera…
 notification-title = Titel
 notification-message = Meddelande
+notification-level = Nivå
+notification-low = Låg
+notification-normal = Normal
+notification-high = Hög
+rule-name = Regelnamn
 
 ## Logs
 
+add-log =
+    .aria-label = Skapa ny logg
 logs = Loggar
 logs-device = Enhet
+logs-property = Egenskap
 logs-hours = Timmar
 logs-days = Dagar
 logs-weeks = Veckor
@@ -171,6 +190,7 @@ context-menu-remove = Ta bort
 
 ## Capabilities
 
+OnOffSwitch = På/Av knapp
 ColorControl = Färgkontroll
 ColorSensor = Färgsensor
 EnergyMonitor = Energimätare
@@ -325,6 +345,8 @@ add-user = Lägg till användare
 addons = Tillägg
 addon-config = Konfigurera tillägg
 addon-discovery = Upptäck nya tillägg
+experiments = Experiment
+localization = Översättning
 updates = Uppdateringar
 developer = Utvecklare
 network = Nätverk
@@ -337,8 +359,10 @@ icon = Ikon
 
 ## Errors
 
+unknown-state = Okänt tillstånd.
 error = Fel
 more-information = Mer information
+invalid-file = Ogiltigt fil.
 failed-read-file = Misslyckades med att läsa fil.
 failed-save = Misslyckades med att spara.
 
@@ -363,7 +387,9 @@ signup-next = Nästa
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Välj webbadress — { -webthings-gateway-brand }
 tunnel-setup-welcome = Välkommen
+tunnel-setup-choose-address = Välj en säker webbadress för din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = underdomän
 tunnel-setup-create = Skapa
@@ -373,6 +399,8 @@ tunnel-setup-skip = Hoppa över
 
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = från <<domain>>
+authorize-monitor-and-control = övervaka och kontrollera
+authorize-monitor = övervaka
 authorize-allow =
     .value = Tillåt
 authorize-deny = Neka
@@ -406,6 +434,7 @@ wifi-setup-skip = Hoppa över
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Ansluter till Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ansluter till Wi-Fi…
 
 ## Creating Wi-Fi Network Page
@@ -420,6 +449,7 @@ ellipsis = …
 edit = Redigera
 remove = Ta bort
 disconnected = Ej ansluten
+processing = Bearbetar…
 
 ## Top-Level Buttons
 
