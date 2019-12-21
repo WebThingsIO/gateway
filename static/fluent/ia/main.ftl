@@ -91,9 +91,42 @@ network-settings-static-ip-address = Adresse IP static
 network-settings-network-mask = Masca de rete
 network-settings-gateway = Gateway
 network-settings-done = Facite
+network-settings-wifi-password =
+    .placeholder = Contrasigno
+network-settings-show-password = Monstrar contrasigno
+network-settings-connect = Connecter
+network-settings-username = Nomine de usator
+network-settings-password = Contrasigno
+network-settings-router-ip = Adresse IP del router
+network-settings-dhcp-server = Servitor DHCP
+network-settings-enable-wifi = Activar Wi-Fi
+network-settings-network-name = Nomine de rete (SSID)
+wireless-connected = Connexe
+wireless-icon =
+    .alt = Rete Wi-Fi
+network-settings-changing = Cambio parametros de rete. Isto pote prender un minuta.
+failed-ethernet-configure = Falta a configurar ethernet.
+failed-wifi-configure = Falta a configurar Wi-Fi.
+failed-wan-configure = Falta a configurar WAN.
+failed-lan-configure = Falta a configurar LAN.
+failed-wlan-configure = Falta a configurar WLAN.
 
 ## User Settings
 
+create-user =
+    .aria-label = Adder un nove usator
+user-settings-input-name =
+    .placeholder = Nomine
+user-settings-input-email =
+    .placeholder = Email
+user-settings-input-password =
+    .placeholder = Contrasigno
+user-settings-input-new-password =
+    .placeholder = Nove contrasigno (optional)
+user-settings-input-confirm-new-password =
+    .placeholder = Confirmar nove contrasigno
+user-settings-input-confirm-password =
+    .placeholder = Confirmar contrasigno
 
 ## Adapter Settings
 
