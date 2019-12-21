@@ -87,6 +87,8 @@ network-settings-ip-address = Adresse IP
 network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (IP static)
 network-settings-pppoe = Ponte (PPPoE)
+network-settings-static-ip-address = Adresse IP static
+network-settings-network-mask = Masca de rete
 network-settings-gateway = Gateway
 network-settings-done = Facite
 
