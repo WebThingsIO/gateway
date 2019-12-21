@@ -41,6 +41,7 @@ assistant-controls-text-input =
 
 ## Floorplan
 
+upload-floorplan = Cargamento del plano terren…
 upload-floorplan-hint = (.svg recommendate)
 
 ## Top-Level Settings
@@ -59,12 +60,14 @@ settings-developer = Disveloppator
 ## Domain Settings
 
 domain-settings-local-label = Accesso local
+domain-settings-local-update = Actualisar nomine de servitor hospite
 domain-settings-remote-access = Accesso remote
 domain-settings-local-name =
     .placeholder = gateway
 
 ## Network Settings
 
+network-settings-unsupported = Parametros de rete non es supportate pro iste platteforma.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -81,6 +84,8 @@ network-settings-wan-mode = Modo
 network-settings-home-network-lan = Rete de casa (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
+network-settings-dhcp = Automatic (DHCP)
+network-settings-static = Manual (IP static)
 network-settings-gateway = Gateway
 network-settings-done = Facite
 
