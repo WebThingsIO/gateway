@@ -18,6 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = Assistent
+things-menu-item = Enheter
 rules-menu-item = Regler
 logs-menu-item = Loggar
 floorplan-menu-item = Planlösning
@@ -28,6 +29,8 @@ log-out-button = Logga ut
 
 thing-details =
     .aria-label = Visa egenskaper
+add-things =
+    .aria-label = Lägg till nya enheter
 
 ## Assistant
 
@@ -64,6 +67,7 @@ domain-settings-local-name =
 
 ## Network Settings
 
+network-settings-unsupported = Nätverksinställningar stöds inte för den här plattformen.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -86,6 +90,7 @@ network-settings-pppoe = Brygga (PPPoE)
 network-settings-static-ip-address = Statisk IP adress
 network-settings-network-mask = Nätverksmask
 network-settings-gateway = Gateway
+network-settings-done = Klart
 network-settings-wifi-password =
     .placeholder = Lösenord
 network-settings-show-password = Visa lösenord
@@ -99,6 +104,7 @@ network-settings-network-name = Nätverksnamn (SSID)
 wireless-connected = Ansluten
 wireless-icon =
     .alt = Wi-Fi nätverk
+network-settings-changing = Ändrar nätverksinställningar. Detta kan ta någon minut.
 failed-ethernet-configure = Misslyckades med att konfigurera ethernet.
 failed-wifi-configure = Misslyckades med att konfigurera Wi-Fi.
 failed-wan-configure = Misslyckades med att konfigurera WAN.
@@ -153,6 +159,7 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Uppdatera nu
 update-available = Ny version tillgänglig
 update-up-to-date = Ditt system är uppdaterat
+updates-not-supported = Uppdateringar stöds inte på denna plattform.
 update-settings-enable-self-updates = Aktivera automatiska uppdateringar
 last-update = Senast uppdaterad
 current-version = Nuvarande version
@@ -165,12 +172,14 @@ restarting = Startar om
 
 developer-settings-enable-ssh = Aktivera SSH
 developer-settings-view-internal-logs = Visa interna loggar
+developer-settings-create-local-authorization = Skapa lokal auktorisering
 
 ## Rules
 
 add-rule =
     .aria-label = Skapa ny regel
 rules = Regler
+rules-create-rule-hint = Inga regler skapade. Klicka på + för att skapa en regel.
 rules-rule-name = Regelnamn
 rules-customize-rule-name-icon =
     .alt = Anpassa regelnamn
@@ -179,20 +188,28 @@ rules-preview-button =
     .alt = Förhandsgranska
 rules-delete-icon =
     .alt = Ta bort
+rules-scroll-left =
+    .alt = Bläddra till vänster
+rules-scroll-right =
+    .alt = Bläddra till höger
+rules-delete-dialog = Är du säker på att du vill ta bort denna regel permanent?
 rules-delete-cancel =
     .value = Avbryt
 rules-delete-confirm =
     .value = Ta bort regel
 rule-invalid = Ogiltig
+rule-delete-prompt = Är du säker på att du vill ta bort denna regel permanent?
 rule-delete-cancel-button =
     .value = Avbryt
 rule-delete-confirm-button =
     .value = Ta bort regel
+rule-select-property = Välj egenskap
 rule-not = Inte
 rule-event = Händelse
 rule-action = Åtgärd
 rule-configure = Konfigurera…
 rule-time-title = Tid på dagen
+rule-notification = Notifiering
 notification-title = Titel
 notification-message = Meddelande
 notification-level = Nivå
@@ -206,8 +223,13 @@ rule-name = Regelnamn
 add-log =
     .aria-label = Skapa ny logg
 logs = Loggar
+logs-create-log-hint = Inga loggar har skapats. Klicka på + för att skapa en logg.
 logs-device = Enhet
+logs-device-select =
+    .aria-label = Logg enhet
 logs-property = Egenskap
+logs-property-select =
+    .aria-label = Logg egenskap
 logs-hours = Timmar
 logs-days = Dagar
 logs-weeks = Veckor
@@ -217,7 +239,11 @@ logs-remove = Ta bort
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Söker
+add-thing-scanning = Söker efter nya enheter…
 add-thing-add-by-url = Lägg till via URL…
+add-thing-done = Klart
 add-thing-cancel = Avbryt
 
 ## Context Menu
@@ -246,14 +272,18 @@ TemperatureSensor = Temperatursensor
 Alarm = Larm
 Thermostat = Termostat
 Lock = Lås
+Custom = Anpassad enhet
+Thing = Enhet
 
 ## Properties
 
 alarm = Larm
+pushed = Tryckte
 on-off = På/Av
 on = På
 off = Av
 power = Ström
+voltage = Spänning
 temperature = Temperatur
 current = Aktuell
 frequency = Frekvens
@@ -276,6 +306,7 @@ inactive = Inaktiv
 
 ## Domain Setup
 
+issuing-error = Fel vid utfärdande av certifikat. Var god försök igen.
 redirecting = Omdirigerar…
 
 ## Booleans
@@ -356,14 +387,18 @@ new-thing-username =
 new-thing-password =
     .placeholder = Skriv in ditt lösenord
 new-thing-saved = Sparat
+new-thing-done = Klart
 
 ## New Web Thing View
 
+new-web-thing-label = Webb enhet
 loading = Laddar…
+new-web-thing-multiple = Flera webb enheter hittades
 new-web-thing-from = från
 
 ## Empty div Messages
 
+no-things = Inga enheter ännu. Klicka på + för att söka efter tillgängliga enheter.
 action-not-found = Åtgärd hittades inte.
 
 ## Add-on Settings
@@ -410,6 +445,7 @@ icon = Ikon
 
 ## Speech
 
+speech-unsupported = Nuvarande webbläsare stöder inte tal
 
 ## Errors
 
@@ -459,6 +495,7 @@ authorize-authorization-request = Auktorisationsbegäran
 authorize-source = från <<domain>>
 authorize-monitor-and-control = övervaka och kontrollera
 authorize-monitor = övervaka
+authorize-allow-all = Tillåt för alla enheter
 authorize-allow =
     .value = Tillåt
 authorize-deny = Neka
@@ -520,7 +557,7 @@ menu-button =
 overflow-button =
     .aria-label = Ytterligare åtgärder
 speech-button =
-    .aria-label = Lyssna efter prat
+    .aria-label = Lyssna efter tal
 edit-button =
     .aria-label = Redigera
 save-button =
