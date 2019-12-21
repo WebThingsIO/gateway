@@ -120,6 +120,7 @@ restarting = Startar om
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Aktivera SSH
 developer-settings-view-internal-logs = Visa interna loggar
 
 ## Rules
@@ -129,6 +130,7 @@ rules-delete-icon =
     .alt = Ta bort
 rules-delete-cancel =
     .value = Avbryt
+rule-invalid = Ogiltig
 rule-delete-cancel-button =
     .value = Avbryt
 rule-configure = Konfigurera…
@@ -209,6 +211,7 @@ week = Vecka
 
 abbrev-volt = V
 abbrev-hertz = Hz
+abbrev-amp = A
 abbrev-watt = W
 abbrev-kilowatt-hour = kWh
 abbrev-percent = %
@@ -291,10 +294,12 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Logga in — { -webthings-gateway-brand }
 login-log-in = Logga in
 
 ## Create First User Page
 
+signup-title = Skapa användare — { -webthings-gateway-brand }
 signup-welcome = Välkommen
 signup-create-account = Skapa ditt första användarkonto:
 signup-next = Nästa
