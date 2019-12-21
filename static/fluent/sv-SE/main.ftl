@@ -573,6 +573,7 @@ wifi-setup-skip = Hoppa över
 connecting-title = Ansluter till Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ansluter till Wi-Fi…
 connecting-connect = Se till att du är ansluten till samma nätverk och navigera sedan till { $gateway-link } i din webbläsare för att fortsätta installationen.
+connecting-warning = Obs! Om du inte kan ladda { $domain }, kolla upp så att gatewayens IP-adress är korrekt på din router.
 connecting-header-skipped = Wi-Fi inställningar hoppades över
 
 ## Creating Wi-Fi Network Page
