@@ -86,6 +86,7 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
 network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (IP static)
+network-settings-pppoe = Ponte (PPPoE)
 network-settings-gateway = Gateway
 network-settings-done = Facite
 
