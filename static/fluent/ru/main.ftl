@@ -27,6 +27,10 @@ log-out-button = Выйти
 
 ## Things
 
+thing-details =
+    .aria-label = Смотреть свойства
+add-things =
+    .aria-label = Добавить новые вещи
 
 ## Assistant
 
@@ -38,7 +42,7 @@ assistant-controls-text-input =
 ## Floorplan
 
 upload-floorplan = Загрузить план помещения
-upload-floorplan-hint = (рекомендуем использовать формат.svg)
+upload-floorplan-hint = (рекомендуем использовать формат .svg)
 
 ## Top-Level Settings
 
@@ -155,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = По Фаренгейту (
 update-settings-update-now = Обновить сейчас
 update-available = Доступна новая версия
 update-up-to-date = Установлено последнее обновление
+updates-not-supported = Эта платформа не поддерживает обновления.
+update-settings-enable-self-updates = Включить автоматические обновления
 last-update = Последнее обновление
 current-version = Текущая версия
 failed = Не удалось
@@ -170,6 +176,8 @@ developer-settings-create-local-authorization = Создать локальну�
 
 ## Rules
 
+add-rule =
+    .aria-label = Создать правило
 rules = Правила
 rules-create-rule-hint = Нет созданных правил. Нажмите +, чтобы создать правило.
 rules-rule-name = Название правила
@@ -216,6 +224,8 @@ rule-name = Название правила
 
 ## Logs
 
+add-log =
+    .aria-label = Создать журнал
 logs = Журналы
 logs-create-log-hint = Журналы не созданы. Нажмите +, чтобы создать журнал.
 logs-device = Устройство
@@ -234,9 +244,7 @@ logs-days = Дни
 logs-weeks = Недели
 logs-save = Сохранить
 logs-remove-dialog-title = Удаление
-logs-remove-dialog-warning =
-    Удаление журнала также удалит его содержимое.
-    Are you sure you want to remove it?
+logs-remove-dialog-warning = Удаление журнала также очистит его содержимое. Вы действительно хотите удалить его?
 logs-remove = Удалить
 logs-unable-to-create = Не удалось создать журнал
 logs-server-remove-error = Ошибка сервера: не удалось удалить журнал
@@ -434,6 +442,8 @@ events-not-found = У этой вещи нет событий.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Найти новые дополнения
 author-unknown = Неизвестно
 disable = Отключить
 enable = Включить
@@ -529,6 +539,10 @@ tunnel-setup-time-sync = Ожидание установки системных 
 
 authorize-title = Запрос на авторизацию — { -webthings-gateway-brand }
 authorize-authorization-request = Запрос на авторизацию
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> хочет получить доступ к вашему шлюзу на устройства <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = из <<domain>>
 authorize-monitor-and-control = мониторинг и управление
 authorize-monitor = мониторинг
 authorize-allow-all = Разрешить для всех вещей
@@ -577,6 +591,7 @@ connecting-header = Подключение к Wi-Fi…
 connecting-connect =
     Пожалуйста, убедитесь, что вы подключены к той же сети, и
     перейдите по ссылке { $gateway-link } в браузере, чтобы продолжить установку.
+connecting-warning = Примечание: если не удаётся загрузить { $domain }, попробуйте узнать IP-адрес шлюза на вашем роутере.
 connecting-header-skipped = Настройка Wi-Fi пропущена
 connecting-skipped =
     Шлюз сейчас запускается. Перейдите по ссылке
@@ -587,6 +602,7 @@ connecting-skipped =
 
 creating-title = Создание сети Wi-Fi — { -webthings-gateway-brand }
 creating-header = Создание сети Wi-Fi…
+creating-content = Подключитесь к { $ssid } с паролем, который вы только что создали, и перейдите по ссылке { $gateway-link } или { $ip-link } в браузере.
 
 ## General Terms
 
