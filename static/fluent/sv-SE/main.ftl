@@ -20,6 +20,7 @@ wordmark =
 assistant-menu-item = Assistent
 rules-menu-item = Regler
 logs-menu-item = Loggar
+floorplan-menu-item = Planlösning
 settings-menu-item = Inställningar
 log-out-button = Logga ut
 
@@ -30,11 +31,14 @@ thing-details =
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Assistent Avatar
 assistant-controls-text-input =
     .placeholder = Hur kan jag hjälpa?
 
 ## Floorplan
 
+upload-floorplan = Ladda upp planlösning…
 upload-floorplan-hint = (.svg rekommenderas)
 
 ## Top-Level Settings
@@ -53,6 +57,7 @@ settings-developer = Utvecklare
 ## Domain Settings
 
 domain-settings-local-label = Lokal åtkomst
+domain-settings-local-update = Uppdatera värdnamn
 domain-settings-remote-access = Fjärråtkomst
 domain-settings-local-name =
     .placeholder = gateway
@@ -121,6 +126,7 @@ user-settings-save = Spara
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Inga adaptrar hittades.
 
 ## Authorization Settings
 
@@ -168,6 +174,8 @@ rules-rule-name = Regelnamn
 rules-customize-rule-name-icon =
     .alt = Anpassa regelnamn
 rules-rule-description = Regelbeskrivning
+rules-preview-button =
+    .alt = Förhandsgranska
 rules-delete-icon =
     .alt = Ta bort
 rules-delete-cancel =
@@ -179,6 +187,9 @@ rule-delete-cancel-button =
     .value = Avbryt
 rule-delete-confirm-button =
     .value = Ta bort regel
+rule-not = Inte
+rule-event = Händelse
+rule-action = Åtgärd
 rule-configure = Konfigurera…
 notification-title = Titel
 notification-message = Meddelande
@@ -224,6 +235,7 @@ SmartPlug = Trådlöst uttag
 Light = Lampor
 DoorSensor = Dörrsensor
 MotionSensor = Rörelsesensor
+LeakSensor = Läckagesensor
 PushButton = Tryckknapp
 VideoCamera = Videokamera
 Camera = Kamera
@@ -240,15 +252,20 @@ on = På
 off = Av
 power = Ström
 temperature = Temperatur
+current = Aktuell
 frequency = Frekvens
 color = Färg
 brightness = Ljusstyrka
+leak = Läcka
+dry = Torr
 color-temperature = Färgtemperatur
 motion = Rörelse
+no-motion = Ingen rörelse
 open = Öppen
 closed = Stängd
 locked = Låst
 unlocked = Upplåst
+jammed = Fastnat
 unknown = Okänd
 active = Aktiv
 inactive = Inaktiv
@@ -343,6 +360,7 @@ new-web-thing-from = från
 
 ## Empty div Messages
 
+action-not-found = Åtgärd hittades inte.
 
 ## Add-on Settings
 
@@ -423,6 +441,7 @@ tunnel-setup-welcome = Välkommen
 tunnel-setup-choose-address = Välj en säker webbadress för din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = underdomän
+tunnel-setup-privacy-policy = Sekretesspolicy
 tunnel-setup-create = Skapa
 tunnel-setup-skip = Hoppa över
 
@@ -443,6 +462,7 @@ authorize-deny = Neka
 
 ## Router Setup Page
 
+router-setup-title = Router inställningar — { -webthings-gateway-brand }
 router-setup-header = Skapa ett nytt Wi-Fi-nätverk
 router-setup-input-ssid =
     .placeholder = Nätverksnamn
@@ -455,6 +475,7 @@ router-setup-create =
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi inställningar — { -webthings-gateway-brand }
 wifi-setup-header = Anslut till ett Wi-Fi-nätverk?
 wifi-setup-input-password =
     .placeholder = Lösenord
@@ -469,6 +490,7 @@ wifi-setup-skip = Hoppa över
 
 connecting-title = Ansluter till Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ansluter till Wi-Fi…
+connecting-header-skipped = Wi-Fi inställningar hoppades över
 
 ## Creating Wi-Fi Network Page
 
@@ -479,6 +501,7 @@ creating-header = Skapar Wi-Fi nätverk…
 
 ok = Ok
 ellipsis = …
+event-log = Händelselogg
 edit = Redigera
 remove = Ta bort
 disconnected = Ej ansluten
@@ -490,6 +513,8 @@ menu-button =
     .aria-label = Meny
 overflow-button =
     .aria-label = Ytterligare åtgärder
+speech-button =
+    .aria-label = Lyssna efter prat
 edit-button =
     .aria-label = Redigera
 save-button =
