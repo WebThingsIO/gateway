@@ -188,10 +188,12 @@ rules-preview-button =
     .alt = Förhandsgranska
 rules-delete-icon =
     .alt = Ta bort
+rules-drag-hint = Dra dina enheter hit för att börja skapa en regel
 rules-scroll-left =
     .alt = Bläddra till vänster
 rules-scroll-right =
     .alt = Bläddra till höger
+rules-delete-prompt = Släpp enheter här för att koppla ner
 rules-delete-dialog = Är du säker på att du vill ta bort denna regel permanent?
 rules-delete-cancel =
     .value = Avbryt
@@ -230,18 +232,26 @@ logs-device-select =
 logs-property = Egenskap
 logs-property-select =
     .aria-label = Logg egenskap
+logs-retention = Kvarhållning
+logs-retention-length =
+    .aria-label = Logghållningslängd
+logs-retention-unit =
+    .aria-label = Log bevaringsenhet
 logs-hours = Timmar
 logs-days = Dagar
 logs-weeks = Veckor
 logs-save = Spara
 logs-remove-dialog-title = Tar bort
 logs-remove = Ta bort
+logs-unable-to-create = Det går inte att skapa logg
+logs-server-remove-error = Serverfel: kan inte ta bort loggen
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Söker
 add-thing-scanning = Söker efter nya enheter…
+add-thing-add-adapters-hint = Inga nya enheter hittades. Försök med att <a data-l10n-name="add-thing-add-adapters-hint-anchor"> lägga till några tillägg</a>.
 add-thing-add-by-url = Lägg till via URL…
 add-thing-done = Klart
 add-thing-cancel = Avbryt
@@ -279,6 +289,7 @@ Thing = Enhet
 
 alarm = Larm
 pushed = Tryckte
+not-pushed = Inte tryckt
 on-off = På/Av
 on = På
 off = Av
@@ -391,6 +402,8 @@ new-thing-done = Klart
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Ange webb-enhets URL
 new-web-thing-label = Webb enhet
 loading = Laddar…
 new-web-thing-multiple = Flera webb enheter hittades
@@ -399,7 +412,9 @@ new-web-thing-from = från
 ## Empty div Messages
 
 no-things = Inga enheter ännu. Klicka på + för att söka efter tillgängliga enheter.
+thing-not-found = Enhet hittades inte.
 action-not-found = Åtgärd hittades inte.
+events-not-found = Denna enhet har inga händelser.
 
 ## Add-on Settings
 
@@ -459,6 +474,7 @@ failed-save = Misslyckades med att spara.
 
 ## Schema Form
 
+unsupported-field = Fältschema som inte stöds
 
 ## Icon Sources
 
@@ -474,6 +490,7 @@ login-log-in = Logga in
 signup-title = Skapa användare — { -webthings-gateway-brand }
 signup-welcome = Välkommen
 signup-create-account = Skapa ditt första användarkonto:
+signup-password-mismatch = Lösenorden matchar inte
 signup-next = Nästa
 
 ## Tunnel Setup Page
@@ -483,6 +500,7 @@ tunnel-setup-welcome = Välkommen
 tunnel-setup-choose-address = Välj en säker webbadress för din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = underdomän
+tunnel-setup-opt-in = Håll mig uppdaterad om nya funktioner och bidragsmöjligheter.
 tunnel-setup-privacy-policy = Sekretesspolicy
 tunnel-setup-create = Skapa
 tunnel-setup-skip = Hoppa över
@@ -491,6 +509,8 @@ tunnel-setup-skip = Hoppa över
 
 authorize-title = Auktorisationsbegäran — { -webthings-gateway-brand }
 authorize-authorization-request = Auktorisationsbegäran
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> vill komma åt din gateway för <<function>> enheter.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = från <<domain>>
 authorize-monitor-and-control = övervaka och kontrollera
@@ -502,6 +522,9 @@ authorize-deny = Neka
 
 ## Local Token Page
 
+local-token-title = Lokal token tjänst — { -webthings-gateway-brand }
+local-token-header = Lokal token tjänst
+local-token-your-token = Dina lokala token är detta: <a data-l10n-name="local-token-jwt">JSON webbtoken</a>:
 
 ## Router Setup Page
 
@@ -515,6 +538,7 @@ router-setup-input-confirm-password =
     .placeholder = Bekräfta lösenord
 router-setup-create =
     .value = Skapa
+router-setup-password-mismatch = Lösenorden måste matcha.
 
 ## Wi-Fi Setup Page
 
@@ -533,12 +557,14 @@ wifi-setup-skip = Hoppa över
 
 connecting-title = Ansluter till Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Ansluter till Wi-Fi…
+connecting-connect = Se till att du är ansluten till samma nätverk och navigera sedan till { $gateway-link } i din webbläsare för att fortsätta installationen.
 connecting-header-skipped = Wi-Fi inställningar hoppades över
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Skapar Wi-Fi nätverk — { -webthings-gateway-brand }
 creating-header = Skapar Wi-Fi nätverk…
+creating-content = Anslut till { $ssid } med det lösenord som du just skapade och navigera sedan till { $gateway-link } eller { $ip-link } i din webbläsare.
 
 ## General Terms
 
@@ -554,6 +580,8 @@ processing = Bearbetar…
 
 menu-button =
     .aria-label = Meny
+back-button =
+    .aria-label = Bakåt
 overflow-button =
     .aria-label = Ytterligare åtgärder
 speech-button =
