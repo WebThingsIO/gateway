@@ -251,9 +251,18 @@ logs-weeks = Septimanas
 
 ## Capabilities
 
+Thing = Objecto
 
 ## Properties
 
+on = Active
+off = Inactive
+voltage = Tension
+temperature = Temperatura
+current = Currente
+frequency = Frequentia
+color = Color
+dry = Sic
 
 ## Domain Setup
 
