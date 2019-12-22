@@ -272,6 +272,7 @@ TemperatureSensor = 温度传感器
 Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
+Custom = 自定义物品
 
 ## Properties
 
@@ -284,6 +285,7 @@ off = 关
 power = 功率
 voltage = 电压
 temperature = 温度
+current = 当前
 frequency = 频率
 color = 颜色
 brightness = 亮度
@@ -293,6 +295,13 @@ color-temperature = 色温
 video-unsupported = 很抱歉，您的浏览器不支持视频。
 motion = 有运动
 no-motion = 无运动
+open = 打开
+closed = 关闭
+locked = 已锁
+unlocked = 未锁
+unknown = 未知
+active = 活动
+inactive = 不活动
 
 ## Domain Setup
 
@@ -302,6 +311,41 @@ no-motion = 无运动
 
 ## Time
 
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } 秒前
+       *[other] { $value } 秒前
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } 分钟前
+       *[other] { $value } 分钟前
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } 小时前
+       *[other] { $value } 小时前
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } 天前
+       *[other] { $value } 天前
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } 周前
+       *[other] { $value } 周前
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } 个月前
+       *[other] { $value } 个月前
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } 年前
+       *[other] { $value } 年前
+    }
 minute = 分钟
 hour = 小时
 day = 天
@@ -356,54 +400,146 @@ no-things = 尚无设备。点击 + 扫描可用的设备。
 
 ## Add-on Settings
 
+author-unknown = 未知
+disable = 禁用
+enable = 启用
+by = 作者：
+addon-configure = 配置
+addon-update = 更新
+addon-remove = 移除
+addon-updating = 正在更新…
+addon-update-failed = 失败
+addon-config-applying = 正在应用…
+addon-config-apply = 应用
+addon-discovery-add = 添加
+addon-discovery-installing = 正在安装…
+addon-discovery-failed = 失败
 
 ## Page Titles
 
+settings = 设置
+domain = 域
+users = 用户
+edit-user = 编辑用户
 authorizations = 身份授权
+network = 网络
+ethernet = 以太网
+wifi = Wi-Fi
+icon = 图标
 
 ## Speech
 
+speech-unsupported = 当前浏览器不支持语音
 
 ## Errors
 
+unknown-state = 未知状态。
+error = 错误
+errors = 错误
+gateway-unreachable = 网关不可达
+more-information = 更多信息
+invalid-file = 无效文件。
+failed-read-file = 读取文件失败。
+failed-save = 保存失败。
 
 ## Schema Form
 
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = 登录 — { -webthings-gateway-brand }
+login-log-in = 登录
 
 ## Create First User Page
 
+signup-title = 创建用户 — { -webthings-gateway-brand }
+signup-welcome = 欢迎使用
+signup-create-account = 创建你的第一个账户：
+signup-password-mismatch = 密码不匹配
+signup-next = 下一步
 
 ## Tunnel Setup Page
 
+tunnel-setup-welcome = 欢迎使用
+tunnel-setup-input-subdomain =
+    .placeholder = 子域
+tunnel-setup-privacy-policy = 隐私政策
+tunnel-setup-error = 设置子域时出错。
+tunnel-setup-create = 创建
+tunnel-setup-skip = 跳过
+tunnel-setup-time-sync = 等待根据互联网设定系统时间。此步骤完成之前，域注册的尝试可能会失败。
 
 ## Authorize Page
 
 authorize-title = 授权请求 — { -webthings-gateway-brand }
 authorize-authorization-request = 授权请求
+authorize-monitor-and-control = 监控
+authorize-allow =
+    .value = 允许
+authorize-deny = 拒绝
 
 ## Local Token Page
 
+local-token-title = 本地令牌服务 — { -webthings-gateway-brand }
+local-token-header = 本地令牌服务
 
 ## Router Setup Page
 
+router-setup-create =
+    .value = 创建
+router-setup-password-mismatch = 密码必须相符。
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi 设置 — { -webthings-gateway-brand }
+wifi-setup-header = 连接一个 Wi-Fi 网络？
+wifi-setup-input-password =
+    .placeholder = 密码
+wifi-setup-show-password = 显示密码
+wifi-setup-connect =
+    .value = 连接
+wifi-setup-network-icon =
+    .alt = Wi-Fi 网络
+wifi-setup-skip = 跳过
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = 正在连接 Wi-Fi — { -webthings-gateway-brand }
+connecting-connect = 请确保您已连接到同一个网络，然后在您的网页浏览器中访问 { $gateway-link } 以继续设置。
+connecting-warning = 注意：如果您无法加载 { $domain }，在您的路由器上寻找网关的 IP 地址。
+connecting-header-skipped = 已跳过 Wi-Fi 设置
 
 ## Creating Wi-Fi Network Page
 
+creating-title = 正在建立 Wi-Fi 网络 — { -webthings-gateway-brand }
+creating-header = 正在建立 Wi-Fi 网络…
 
 ## General Terms
 
+event-log = 事件日志
+edit = 编辑
+remove = 移除
+disconnected = 已断开连接
+processing = 正在处理...
+submit = 提交
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = 菜单
+back-button =
+    .aria-label = 返回
+overflow-button =
+    .aria-label = 其他动作
+speech-button =
+    .aria-label = 聆听语音
+submit-button =
+    .aria-label = 提交
+edit-button =
+    .aria-label = 编辑
+save-button =
+    .aria-label = 保存
