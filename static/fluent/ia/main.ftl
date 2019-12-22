@@ -254,6 +254,8 @@ logs-server-remove-error = Error de servitor: impossibile remover registro
 add-thing-scanning-icon =
     .alt = Scansion
 add-thing-scanning = Scansion pro nove objectos…
+add-thing-add-adapters-hint = Nulle nove objectos trovate. Provar <a data-l10n-name="add-thing-add-adapters-hint-anchor">adder alcun additivos</a>.
+add-thing-add-by-url = Adder per URL…
 add-thing-done = Facite
 add-thing-cancel = Cancellar
 
@@ -265,6 +267,8 @@ context-menu-remove = Remover
 
 ## Capabilities
 
+OnOffSwitch = Commutator active/inactive
+MultiLevelSwitch = Commutator plure-nivello
 ColorControl = Controlo de color
 ColorSensor = Sensor de color
 MotionSensor = Sensor de motion
