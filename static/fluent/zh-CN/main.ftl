@@ -30,7 +30,7 @@ log-out-button = 退出登录
 thing-details =
     .aria-label = 查看属性
 add-things =
-    .aria-label = 添加新设备
+    .aria-label = 添加新硬件
 
 ## Assistant
 
@@ -287,7 +287,7 @@ Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
 Custom = 自定义硬件
-Thing = 设备
+Thing = 硬件
 
 ## Properties
 
