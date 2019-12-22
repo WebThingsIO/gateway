@@ -29,6 +29,8 @@ log-out-button = Disconnettersi
 
 thing-details =
     .aria-label = Visualizza proprietà
+add-things =
+    .aria-label = Aggiungi nuovi oggetti
 
 ## Assistant
 
@@ -157,6 +159,8 @@ localization-settings-units-temperature-fahrenheit = Temperatura Fahrenheit
 update-settings-update-now = Aggiorna ora
 update-available = Aggiornamento disponibile
 update-up-to-date = Il sistema è aggiornato
+updates-not-supported = Aggiornamenti non disponibili per la piattaforma in uso.
+update-settings-enable-self-updates = Attiva aggiornamenti automatici
 last-update = Ultimo aggiornamento
 current-version = Versione corrente
 failed = Non riuscito
