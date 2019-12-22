@@ -227,9 +227,36 @@ rule-name = Szabály neve
 add-log =
     .aria-label = Új napló létrehozása
 logs = Naplók
+logs-create-log-hint = Nincsenek naplók létrehozva. Kattintson a + gombra egy napló létrehozásához.
+logs-device = Eszköz
+logs-device-select =
+    .aria-label = Naplóeszköz
+logs-property = Tulajdonság
+logs-property-select =
+    .aria-label = Naplótulajdonság
+logs-retention = Megőrzés
+logs-retention-length =
+    .aria-label = Naplómegőrzés hossza
+logs-retention-unit =
+    .aria-label = Naplómegőrzős egysége
+logs-hours = óra
+logs-days = nap
+logs-weeks = hét
+logs-save = Mentés
+logs-remove-dialog-title = Eltávolítás
+logs-remove-dialog-warning = A napló eltávolítása az összes adatot is törli. Biztos, hogy el akarja távolítani?
+logs-remove = Eltávolítás
+logs-unable-to-create = A napló nem hozható létre
+logs-server-remove-error = Kiszolgálóhiba: a napló nem távolítható el
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Keresés
+add-thing-scanning = Új eszközök keresése…
+add-thing-add-adapters-hint = Nem találhatók új dolgok. Próbáljon <a data-l10n-name="add-thing-add-adapters-hint-anchor">hozzáadni néhány kiegészítőt</a>.
+add-thing-add-by-url = Hozzáadás URL alapján…
+add-thing-done = Kész
 
 ## Context Menu
 
