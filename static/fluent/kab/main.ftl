@@ -114,6 +114,11 @@ developer-settings-enable-ssh = Rmed SSH
 ## Rules
 
 rules = Ilugan
+rules-rule-name = Isem n ulugan
+rules-preview-button =
+    .alt = Taskant
+rules-delete-icon =
+    .alt = Kkes
 
 ## Logs
 
