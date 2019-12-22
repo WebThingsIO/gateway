@@ -242,19 +242,35 @@ logs-retention-unit =
 logs-hours = Horas
 logs-days = Dies
 logs-weeks = Septimanas
+logs-save = Salvar
+logs-remove-dialog-title = Remotion
+logs-remove = Remover
 
 ## Add New Things
 
+add-thing-done = Facite
+add-thing-cancel = Cancellar
 
 ## Context Menu
 
+context-menu-choose-icon = Eliger icone…
+context-menu-save = Salvar
+context-menu-remove = Remover
 
 ## Capabilities
 
+ColorControl = Controlo de color
+ColorSensor = Sensor de color
+MotionSensor = Sensor de motion
+VideoCamera = Video Camera
+Camera = Camera
+Alarm = Alarma
+Thermostat = Thermostato
 Thing = Objecto
 
 ## Properties
 
+alarm = Alarma
 on = Active
 off = Inactive
 voltage = Tension
@@ -263,6 +279,9 @@ current = Currente
 frequency = Frequentia
 color = Color
 dry = Sic
+motion = Motion
+active = Active
+inactive = Inactive
 
 ## Domain Setup
 
@@ -272,12 +291,16 @@ dry = Sic
 
 ## Time
 
+hour = Hora
+day = Die
+week = Septimana
 
 ## Unit Abbreviations
 
 
 ## New Thing View
 
+new-thing-save = Salvar
 
 ## New Web Thing View
 
