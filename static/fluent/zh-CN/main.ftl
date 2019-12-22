@@ -18,6 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = 助手
+things-menu-item = 硬件
 rules-menu-item = 规则
 logs-menu-item = 日志
 floorplan-menu-item = 平面图
@@ -28,6 +29,8 @@ log-out-button = 退出登录
 
 thing-details =
     .aria-label = 查看属性
+add-things =
+    .aria-label = 添加新硬件
 
 ## Assistant
 
@@ -241,6 +244,7 @@ logs-days = 天
 logs-weeks = 周
 logs-save = 保存
 logs-remove-dialog-title = 移除
+logs-remove-dialog-warning = 移除日志的同时也会移除其所有数据，确定吗？
 logs-remove = 移除
 logs-unable-to-create = 无法创建日志
 logs-server-remove-error = 服务器错误：无法移除日志
@@ -250,6 +254,8 @@ logs-server-remove-error = 服务器错误：无法移除日志
 add-thing-scanning-icon =
     .alt = 正在扫描
 add-thing-scanning = 正在扫描新设备…
+add-thing-add-adapters-hint = 未找到新硬件。请尝试<a data-l10n-name="add-thing-add-adapters-hint-anchor">安装附加组件</a>。
+add-thing-add-by-url = 通过 URL 添加...
 add-thing-done = 完成
 add-thing-cancel = 取消
 
@@ -280,7 +286,8 @@ TemperatureSensor = 温度传感器
 Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
-Custom = 自定义物品
+Custom = 自定义硬件
+Thing = 硬件
 
 ## Properties
 
@@ -307,12 +314,20 @@ open = 打开
 closed = 关闭
 locked = 已锁
 unlocked = 未锁
+jammed = 卡住
 unknown = 未知
 active = 活动
 inactive = 不活动
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = 看来您已经注册了该子域。若要回收继续使用，请<a data-l10n-name="tunnel-setup-reclaim-domain-click-here">点击此处</a>。
+check-email-for-token = 请检查您的电子邮件，将收到的域回收令牌（Token）粘贴在上方。
+reclaim-failed = 无法回收域。
+subdomain-already-used = 该子域已被使用，请另选一个。
+invalid-reclamation-token = 无效的回收令牌（Token）。
+domain-success = 成功！等待跳转中...
+issuing-error = 签发证书出错，请重试。
 redirecting = 正在重定向…
 
 ## Booleans
@@ -322,6 +337,7 @@ false = False
 
 ## Time
 
+utils-now = 现在
 utils-seconds-ago =
     { $value ->
         [one] { $value } 秒前
@@ -403,15 +419,24 @@ new-thing-done = 完成
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = 输入智能硬件 URL
+new-web-thing-label = 智能硬件
 loading = 正在载入...
+new-web-thing-multiple = 发现多个智能硬件
+new-web-thing-from = 来自
 
 ## Empty div Messages
 
 no-things = 尚无设备。点击 + 扫描可用的设备。
+thing-not-found = 找不到硬件。
 action-not-found = 找不到可用的动作。
+events-not-found = 此硬件没有事件。
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = 寻找新的附加组件
 author-unknown = 未知
 disable = 禁用
 enable = 启用
@@ -420,9 +445,11 @@ addon-configure = 配置
 addon-update = 更新
 addon-remove = 移除
 addon-updating = 正在更新…
+addon-updated = 已更新
 addon-update-failed = 失败
 addon-config-applying = 正在应用…
 addon-config-apply = 应用
+addon-discovery-added = 已添加
 addon-discovery-add = 添加
 addon-discovery-installing = 正在安装…
 addon-discovery-failed = 失败
@@ -451,6 +478,7 @@ icon = 图标
 ## Speech
 
 speech-unsupported = 当前浏览器不支持语音
+speech-didnt-get = 抱歉，我没听清。
 
 ## Errors
 
@@ -491,7 +519,10 @@ tunnel-setup-welcome = 欢迎使用
 tunnel-setup-choose-address = 为您的网关选择一个安全网址：
 tunnel-setup-input-subdomain =
     .placeholder = 子域
+tunnel-setup-opt-in = 有新功能推出或贡献机会时通知我。
 tunnel-setup-privacy-policy = 隐私政策
+tunnel-setup-input-reclamation-token =
+    .placeholder = 域回收令牌（Token）
 tunnel-setup-error = 设置子域时出错。
 tunnel-setup-create = 创建
 tunnel-setup-skip = 跳过
@@ -501,7 +532,13 @@ tunnel-setup-time-sync = 等待根据互联网设定系统时间。此步骤完�
 
 authorize-title = 授权请求 — { -webthings-gateway-brand }
 authorize-authorization-request = 授权请求
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> 想要访问您网关中的 <<function>> 设备。
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = 来自 <<domain>>
 authorize-monitor-and-control = 监测和控制
+authorize-monitor = 监测
+authorize-allow-all = 允许使用所有硬件
 authorize-allow =
     .value = 允许
 authorize-deny = 拒绝
@@ -510,6 +547,8 @@ authorize-deny = 拒绝
 
 local-token-title = 本地令牌服务 — { -webthings-gateway-brand }
 local-token-header = 本地令牌服务
+local-token-your-token = 如下 <a data-l10n-name="local-token-jwt">JSON Web 令牌（JWT）</a>是您的本地令牌（Token）：
+local-token-use-it = 请使用此令牌（Token），通过 <a data-l10n-name="local-token-bearer-type">Bearer-type 验证方式</a> 与网关安全通信。
 
 ## Router Setup Page
 
@@ -555,6 +594,7 @@ creating-content = 请使用您方才创建的密码连接 { $ssid } 网络，�
 
 ## General Terms
 
+ok = 确定
 ellipsis = …
 event-log = 事件日志
 edit = 编辑
