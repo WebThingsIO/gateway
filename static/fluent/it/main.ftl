@@ -27,6 +27,8 @@ log-out-button = Disconnettersi
 
 ## Things
 
+thing-details =
+    .aria-label = Visualizza proprietà
 
 ## Assistant
 
@@ -76,6 +78,7 @@ network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configurazione
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Modalità
 network-settings-home-network-lan = Rete di casa (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Indirizzo IP
@@ -108,6 +111,8 @@ failed-wlan-configure = Impossibile configurare WLAN.
 
 ## User Settings
 
+create-user =
+    .aria-label = Aggiungi nuovo utente
 user-settings-input-name =
     .placeholder = Nome
 user-settings-input-email =
@@ -167,6 +172,8 @@ developer-settings-create-local-authorization = Crea autorizzazione locale
 
 ## Rules
 
+add-rule =
+    .aria-label = Crea nuova regola
 rules = Regole
 rules-create-rule-hint = Nessuna regola creata. Fai clic su + per creare una regola.
 rules-rule-name = Nome regola
