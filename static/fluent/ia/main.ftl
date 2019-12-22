@@ -195,11 +195,20 @@ rules-scroll-left =
     .alt = Rola a sinistra
 rules-scroll-right =
     .alt = Rolar a dextra
+rules-delete-prompt = Deponer hic le dispositivos a disconnecter
+rules-delete-dialog = Desira tu vermente remover tal regula permanentemente?
 rules-delete-cancel =
     .value = Cancellar
+rules-delete-confirm =
+    .value = Remover regula
 rule-invalid = Non valide
+rule-delete-prompt = Desira tu vermente remover tal regula permanentemente?
 rule-delete-cancel-button =
     .value = Cancellar
+rule-delete-confirm-button =
+    .value = Remover regula
+rule-select-property = Eliger Proprietate
+rule-not = Non
 rule-event = Evento
 rule-action = Action
 rule-configure = Configuration…
@@ -214,7 +223,10 @@ rule-name = Nomine de regula
 
 ## Logs
 
+add-log =
+    .aria-label = Crear nove registro
 logs = Registros
+logs-create-log-hint = Nulle registros create. Clicca + pro crear un registro.
 logs-device = Dispositivo
 logs-property = Proprietate
 logs-retention = Retention
