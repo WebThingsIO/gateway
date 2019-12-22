@@ -8,6 +8,7 @@
 ##
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
+-webthings-gateway-brand = WebThings Gateway
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
 # Wordmark
@@ -24,6 +25,8 @@ log-out-button = Ffeɣ
 
 ## Things
 
+thing-details =
+    .aria-label = Timezliyin n tsekant
 add-things =
     .aria-label = Rnu taɣawsa tamaynut
 
@@ -45,6 +48,7 @@ settings-developer = Aneflay
 
 ## Domain Settings
 
+domain-settings-local-label = Anekcum adigan
 
 ## Network Settings
 
