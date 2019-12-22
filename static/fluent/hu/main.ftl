@@ -548,6 +548,7 @@ authorize-deny = Tiltás
 local-token-title = Helyi tokenszolgáltatás – { -webthings-gateway-brand }
 local-token-header = Helyi tokenszolgáltatás
 local-token-your-token = A helyi tokenje ez a <a data-l10n-name="local-token-jwt">JSON webtoken</a>:
+local-token-use-it = Használja ezt az átjáróval való biztonságos beszélgetéshez, <a data-l10n-name="local-token-bearer-type">birtokos típusú felhatalmazással</a>.
 
 ## Router Setup Page
 
@@ -580,12 +581,41 @@ wifi-setup-skip = Kihagyás
 
 connecting-title = Kapcsolódás a Wi-Fi-hez – { -webthings-gateway-brand }
 connecting-header = Kapcsolódás a Wi-Fi-hez…
+connecting-connect = Győződjön meg róla, hogy ugyanahhoz a hálózathoz kapcsolódik, majd a beállítás folytatásához navigáljon ide a böngészőjében: { $gateway-link }.
+connecting-warning = Megjegyzés: Ha nem tudja betölteni ezt: { $domain }, akkor keresse ki az átjáró IP-címét a routerén.
+connecting-header-skipped = Wi-Fi beállítás kihagyva
+connecting-skipped = Az átjáró most elindul. A beállítás folytatásához navigáljon ide a böngészőjében: { $gateway-link }, miközben az átjáróval azonos hálózathoz csatlakozik.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Wi-Fi hálózat létrehozása – { -webthings-gateway-brand }
+creating-header = Wi-Fi hálózat létrehozása…
+creating-content = Kapcsolódjon a(z) { $ssid } hálózathoz a most létrehozott jelszóval, majd navigáljon a webböngészőjében ezek egyikére: { $gateway-link } vagy { $ip-link }.
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Eseménynapló
+edit = Szerkesztés
+remove = Eltávolítás
+disconnected = Kapcsolat bontva
+processing = Feldolgozás…
+submit = Elküldés
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menü
+back-button =
+    .aria-label = Vissza
+overflow-button =
+    .aria-label = További műveletek
+speech-button =
+    .aria-label = Hallgassa meg a beszédet
+submit-button =
+    .aria-label = Elküldés
+edit-button =
+    .aria-label = Szerkesztés
+save-button =
+    .aria-label = Mentés
