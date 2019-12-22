@@ -57,9 +57,29 @@ network-settings-wifi-image =
 network-settings-wifi = Wi-Fi
 network-settings-configure = Swel
 network-settings-ip-address = Tansa IP
+network-settings-done = Immed
+network-settings-wifi-password =
+    .placeholder = Awal uffir
+network-settings-show-password = Sken awal uffir
+network-settings-connect = Qqen
+network-settings-username = Isem n useqdac
+network-settings-password = Awal uffir
+wireless-connected = Iqqen
 
 ## User Settings
 
+user-settings-input-name =
+    .placeholder = Isem
+user-settings-input-email =
+    .placeholder = Imayl
+user-settings-input-password =
+    .placeholder = Awal uffir
+user-settings-input-confirm-new-password =
+    .placeholder = Sentem awal uffir amaynut
+user-settings-input-confirm-password =
+    .placeholder = Sentem awal uffir
+user-settings-password-mismatch = Awalen uffiren ur mṣadan ara
+user-settings-save = Sekles
 
 ## Adapter Settings
 
@@ -69,18 +89,31 @@ network-settings-ip-address = Tansa IP
 
 ## Experiment Settings
 
+experiment-settings-logs = Aɣmis
 
 ## Localization Settings
 
+localization-settings-country = Tamurt
+localization-settings-timezone = Izḍi usrig
+localization-settings-language = Tutlayt
 
 ## Update Settings
 
+update-settings-update-now = Leqqem tura
+update-available = Lqem amaynut yella
+last-update = Aleqqem aneggaru
+failed = Ur yeddi ara
+never = Weṛǧin
+in-progress = Iteddu
+restarting = Allus n usenker
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Rmed SSH
 
 ## Rules
 
+rules = Ilugan
 
 ## Logs
 
