@@ -244,6 +244,7 @@ logs-days = Dagar
 logs-weeks = Veckor
 logs-save = Spara
 logs-remove-dialog-title = Tar bort
+logs-remove-dialog-warning = När en logg tas bort förloras all data som tidigare samlats in. Är du säker på att du vill ta bort loggen?
 logs-remove = Ta bort
 logs-unable-to-create = Det går inte att skapa logg
 logs-server-remove-error = Serverfel: kan inte ta bort loggen
