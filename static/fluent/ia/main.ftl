@@ -170,6 +170,9 @@ restarting = Reinitiante
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Activar SSH
+developer-settings-view-internal-logs = Vider registros interne
+developer-settings-create-local-authorization = Crear autorisation local
 
 ## Rules
 
