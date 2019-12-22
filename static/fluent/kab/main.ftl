@@ -52,6 +52,11 @@ domain-settings-local-label = Anekcum adigan
 
 ## Network Settings
 
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
+network-settings-configure = Swel
+network-settings-ip-address = Tansa IP
 
 ## User Settings
 
