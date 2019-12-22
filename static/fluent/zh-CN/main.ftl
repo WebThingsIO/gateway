@@ -265,7 +265,7 @@ OnOffSwitch = 一个开关
 MultiLevelSwitch = 多级开关
 ColorControl = 色彩控制器
 ColorSensor = 色彩传感器
-EnergyMonitor = 能源监控器
+EnergyMonitor = 能源监测器
 BinarySensor = 二进制传感器
 MultiLevelSensor = 多级别传感器
 SmartPlug = 智能插座
@@ -408,6 +408,7 @@ loading = 正在载入...
 ## Empty div Messages
 
 no-things = 尚无设备。点击 + 扫描可用的设备。
+action-not-found = 找不到可用的动作。
 
 ## Add-on Settings
 
@@ -500,7 +501,7 @@ tunnel-setup-time-sync = 等待根据互联网设定系统时间。此步骤完�
 
 authorize-title = 授权请求 — { -webthings-gateway-brand }
 authorize-authorization-request = 授权请求
-authorize-monitor-and-control = 监控
+authorize-monitor-and-control = 监测和控制
 authorize-allow =
     .value = 允许
 authorize-deny = 拒绝
