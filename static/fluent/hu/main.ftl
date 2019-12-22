@@ -189,9 +189,44 @@ rules-preview-button =
 rules-delete-icon =
     .alt = Törlés
 rules-drag-hint = Húzza ide az eszközeit, hogy új szabályt hozzon létre
+rules-drag-input-hint = Eszköz hozzáadása bemenetként
+rules-drag-output-hint = Eszköz hozzáadása kimenetként
+rules-scroll-left =
+    .alt = Görgetés balra
+rules-scroll-right =
+    .alt = Görgetés jobbra
+rules-delete-prompt = Ejtsen ide eszközöket a kapcsolat bontásához
+rules-delete-dialog = Biztos, hogy véglegesen törli ezt a szabályt?
+rules-delete-cancel =
+    .value = Mégse
+rules-delete-confirm =
+    .value = Szabály eltávolítása
+rule-invalid = Érvénytelen
+rule-delete-prompt = Biztos, hogy véglegesen törli ezt a szabályt?
+rule-delete-cancel-button =
+    .value = Mégse
+rule-delete-confirm-button =
+    .value = Szabály eltávolítása
+rule-select-property = Válasszon tulajdonságot
+rule-not = Nem
+rule-event = Esemény
+rule-action = Művelet
+rule-configure = Beállítás…
+rule-time-title = Napszak
+rule-notification = Értesítés
+notification-title = Cím
+notification-message = Üzenet
+notification-level = Szint
+notification-low = Alacsony
+notification-normal = Normál
+notification-high = Magas
+rule-name = Szabály neve
 
 ## Logs
 
+add-log =
+    .aria-label = Új napló létrehozása
+logs = Naplók
 
 ## Add New Things
 
