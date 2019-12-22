@@ -18,7 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = 助手
-things-menu-item = 硬件
+things-menu-item = 设备
 rules-menu-item = 规则
 logs-menu-item = 日志
 floorplan-menu-item = 平面图
@@ -30,7 +30,7 @@ log-out-button = 退出登录
 thing-details =
     .aria-label = 查看属性
 add-things =
-    .aria-label = 添加新硬件
+    .aria-label = 添加新设备
 
 ## Assistant
 
@@ -287,7 +287,7 @@ Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
 Custom = 自定义硬件
-Thing = 硬件
+Thing = 设备
 
 ## Properties
 
