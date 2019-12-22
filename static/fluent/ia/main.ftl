@@ -212,6 +212,7 @@ rule-not = Non
 rule-event = Evento
 rule-action = Action
 rule-configure = Configuration…
+rule-time-title = Hora del die
 rule-notification = Notification
 notification-title = Titulo
 notification-message = Message
@@ -228,8 +229,19 @@ add-log =
 logs = Registros
 logs-create-log-hint = Nulle registros create. Clicca + pro crear un registro.
 logs-device = Dispositivo
+logs-device-select =
+    .aria-label = Registro dispositivo
 logs-property = Proprietate
+logs-property-select =
+    .aria-label = Registro Proprietate
 logs-retention = Retention
+logs-retention-length =
+    .aria-label = Longor de retention del registro
+logs-retention-unit =
+    .aria-label = Unitate de retention del registro
+logs-hours = Horas
+logs-days = Dies
+logs-weeks = Septimanas
 
 ## Add New Things
 
