@@ -176,6 +176,19 @@ developer-settings-create-local-authorization = Crear autorisation local
 
 ## Rules
 
+add-rule =
+    .aria-label = Crear nove regula
+rules = Regulas
+rules-create-rule-hint = Nulle regulas create. Cliccar + pro crear un regula.
+rules-rule-name = Nomine de regula
+rules-customize-rule-name-icon =
+    .alt = Personalisar nomine de regula
+rules-rule-description = Description del regula
+rules-preview-button =
+    .alt = Vista preliminar
+rules-delete-icon =
+    .alt = Deler
+rules-drag-hint = Trahe tu apparatos hic pro initiar creation de un regul
 
 ## Logs
 
