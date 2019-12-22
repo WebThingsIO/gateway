@@ -244,10 +244,16 @@ logs-days = Dies
 logs-weeks = Septimanas
 logs-save = Salvar
 logs-remove-dialog-title = Remotion
+logs-remove-dialog-warning = Le remotion del registro removera alsi tote su datos. Desira tu vermente remover lo?
 logs-remove = Remover
+logs-unable-to-create = Impossibile crear le registro
+logs-server-remove-error = Error de servitor: impossibile remover registro
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Scansion
+add-thing-scanning = Scansion pro nove objectos…
 add-thing-done = Facite
 add-thing-cancel = Cancellar
 
