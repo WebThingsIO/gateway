@@ -578,6 +578,8 @@ wifi-setup-skip = Kihagyás
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Kapcsolódás a Wi-Fi-hez – { -webthings-gateway-brand }
+connecting-header = Kapcsolódás a Wi-Fi-hez…
 
 ## Creating Wi-Fi Network Page
 
