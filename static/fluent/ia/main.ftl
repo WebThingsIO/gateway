@@ -189,9 +189,35 @@ rules-preview-button =
 rules-delete-icon =
     .alt = Deler
 rules-drag-hint = Trahe tu apparatos hic pro initiar creation de un regul
+rules-drag-input-hint = Adder dispositivo de entrata
+rules-drag-output-hint = Adder dispositivo de exito
+rules-scroll-left =
+    .alt = Rola a sinistra
+rules-scroll-right =
+    .alt = Rolar a dextra
+rules-delete-cancel =
+    .value = Cancellar
+rule-invalid = Non valide
+rule-delete-cancel-button =
+    .value = Cancellar
+rule-event = Evento
+rule-action = Action
+rule-configure = Configuration…
+rule-notification = Notification
+notification-title = Titulo
+notification-message = Message
+notification-level = Nivello
+notification-low = Basse
+notification-normal = Normal
+notification-high = Alte
+rule-name = Nomine de regula
 
 ## Logs
 
+logs = Registros
+logs-device = Dispositivo
+logs-property = Proprietate
+logs-retention = Retention
 
 ## Add New Things
 
