@@ -257,33 +257,170 @@ add-thing-scanning = Új eszközök keresése…
 add-thing-add-adapters-hint = Nem találhatók új dolgok. Próbáljon <a data-l10n-name="add-thing-add-adapters-hint-anchor">hozzáadni néhány kiegészítőt</a>.
 add-thing-add-by-url = Hozzáadás URL alapján…
 add-thing-done = Kész
+add-thing-cancel = Mégse
 
 ## Context Menu
 
+context-menu-choose-icon = Válasszon ikont…
+context-menu-save = Mentés
+context-menu-remove = Eltávolítás
 
 ## Capabilities
 
+OnOffSwitch = Be/ki kapcsoló
+MultiLevelSwitch = Többszintű kapcsoló
+ColorControl = Színvezérlés
+ColorSensor = Színérzékelő
+EnergyMonitor = Energiafigyelő
+BinarySensor = Bináris érzékelő
+MultiLevelSensor = Többszintű érzékelő
+SmartPlug = Okos csatlakozó
+Light = Fény
+DoorSensor = Ajtóérzékelő
+MotionSensor = Mozgásérzékelő
+LeakSensor = Szivárgásérzékelő
+PushButton = Nyomógomb
+VideoCamera = Videokamera
+Camera = Kamera
+TemperatureSensor = Hőmérséklet-érzékelő
+Alarm = Riasztó
+Thermostat = Hőszabályozó
+Lock = Zár
+Custom = Egyéni dolog
+Thing = Dolog
 
 ## Properties
 
+alarm = Riasztó
+pushed = Megnyomott
+not-pushed = Nincs megnyomva
+on-off = Be/ki
+on = Be
+off = Ki
+power = Teljesítmény
+voltage = Feszültség
+temperature = Hőmérséklet
+current = Jelenlegi
+frequency = Frekvencia
+color = Szín
+brightness = Fényerő
+leak = Szivárgás
+dry = Száraz
+color-temperature = Színhőmérséklet
+video-unsupported = Sajnáljuk, a böngésző nem támogatja a videót.
+motion = Mozgás
+no-motion = Nincs mozgás
+open = Nyitott
+closed = Zárt
+locked = Zárt
+unlocked = Nyitott
+jammed = Elakadt
+unknown = Ismeretlen
+active = Aktív
+inactive = Inaktív
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Úgy látszik, hogy már regisztrálta ezt az altartományt. A visszavételhez <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">kattintson ide</a>.
+check-email-for-token = Ellenőrizze a leveleit, hogy megérkezett a visszaszerzési token, és illessze be fent.
+reclaim-failed = A tartomány nem szerezhető vissza.
+subdomain-already-used = Ez az altartomány már használatban van. Válasszon egy másikat.
+invalid-reclamation-token = Érvénytelen visszaszerzési token.
+domain-success = Sikeres! Várjon amíg átirányítjuk…
+issuing-error = Hiba a tanúsítvány kiállításakor. Próbálja újra.
+redirecting = Átirányítás…
 
 ## Booleans
 
+true = Igaz
+false = Hamis
 
 ## Time
 
+utils-now = most
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } másodperce
+       *[other] { $value } másodperce
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } perce
+       *[other] { $value } perce
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } órája
+       *[other] { $value } órája
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } napja
+       *[other] { $value } napja
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } hete
+       *[other] { $value } hete
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } hónapja
+       *[other] { $value } hónapja
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } éve
+       *[other] { $value } éve
+    }
+minute = Perc
+hour = Óra
+day = Nap
+week = Hét
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = n
+abbrev-hour = ó
+abbrev-minute = p
+abbrev-second = mp
+abbrev-millisecond = ms
+abbrev-foot = láb
 
 ## New Thing View
 
+unknown-device-type = Ismeretlen eszköztípus
+new-thing-choose-icon = Válasszon ikont…
+new-thing-save = Mentés
+new-thing-pin =
+    .placeholder = Adja meg PIN-kódját
+new-thing-pin-error = Helytelen PIN-kód
+new-thing-pin-invalid = Érvénytelen PIN-kód
+new-thing-cancel = Mégse
+new-thing-submit = Beküldés
+new-thing-username =
+    .placeholder = Adja meg a felhasználónevet
+new-thing-password =
+    .placeholder = Adja meg a jelszót
+new-thing-credentials-error = Helytelen hitelesítő adatok
+new-thing-saved = Mentve
+new-thing-done = Kész
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Adja meg a webes dolog URL-jét
 
 ## Empty div Messages
 
