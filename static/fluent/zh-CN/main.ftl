@@ -31,6 +31,8 @@ thing-details =
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = 助手头像
 assistant-controls-text-input =
     .placeholder = 我能帮你什么？
 
@@ -135,6 +137,7 @@ authorization-settings-no-authorizations = 尚无授权。
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = 智能助手
 experiment-settings-logs = 日志
 
 ## Localization Settings
@@ -206,6 +209,7 @@ rule-not = 非
 rule-event = 事件
 rule-action = 动作
 rule-configure = 配置…
+rule-time-title = 时间
 rule-notification = 通知
 notification-title = 标题
 notification-message = 消息
@@ -243,11 +247,15 @@ logs-server-remove-error = 服务器错误：无法移除日志
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = 正在扫描
+add-thing-scanning = 正在扫描新设备…
 add-thing-done = 完成
 add-thing-cancel = 取消
 
 ## Context Menu
 
+context-menu-choose-icon = 选择图标...
 context-menu-save = 保存
 context-menu-remove = 移除
 
@@ -305,9 +313,12 @@ inactive = 不活动
 
 ## Domain Setup
 
+redirecting = 正在重定向…
 
 ## Booleans
 
+true = True
+false = False
 
 ## Time
 
@@ -421,7 +432,16 @@ settings = 设置
 domain = 域
 users = 用户
 edit-user = 编辑用户
+add-user = 添加用户
+adapters = 适配器
+addons = 附加组件
+addon-config = 配置附加组件
+addon-discovery = 探寻附加组件
+experiments = 实验
+localization = 本地化
+updates = 更新
 authorizations = 身份授权
+developer = 开发者
 network = 网络
 ethernet = 以太网
 wifi = Wi-Fi
@@ -444,6 +464,7 @@ failed-save = 保存失败。
 
 ## Schema Form
 
+unsupported-field = 不支持的字段规范。
 
 ## Icon Sources
 
@@ -464,7 +485,9 @@ signup-next = 下一步
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = 选择网址 — { -webthings-gateway-brand }
 tunnel-setup-welcome = 欢迎使用
+tunnel-setup-choose-address = 为您的网关选择一个安全网址：
 tunnel-setup-input-subdomain =
     .placeholder = 子域
 tunnel-setup-privacy-policy = 隐私政策
@@ -489,6 +512,14 @@ local-token-header = 本地令牌服务
 
 ## Router Setup Page
 
+router-setup-title = 路由器设置 — { -webthings-gateway-brand }
+router-setup-header = 新建 Wi-Fi 网络
+router-setup-input-ssid =
+    .placeholder = 网络名称
+router-setup-input-password =
+    .placeholder = 密码
+router-setup-input-confirm-password =
+    .placeholder = 确认密码
 router-setup-create =
     .value = 创建
 router-setup-password-mismatch = 密码必须相符。
@@ -509,17 +540,21 @@ wifi-setup-skip = 跳过
 ## Connecting to Wi-Fi Page
 
 connecting-title = 正在连接 Wi-Fi — { -webthings-gateway-brand }
+connecting-header = 正在连接 Wi-Fi…
 connecting-connect = 请确保您已连接到同一个网络，然后在您的网页浏览器中访问 { $gateway-link } 以继续设置。
 connecting-warning = 注意：如果您无法加载 { $domain }，在您的路由器上寻找网关的 IP 地址。
 connecting-header-skipped = 已跳过 Wi-Fi 设置
+connecting-skipped = 此刻正在启动网关。请保持与网关使用同一网络，在网页浏览器中打开 { $gateway-link } 页面继续进行设置。
 
 ## Creating Wi-Fi Network Page
 
 creating-title = 正在建立 Wi-Fi 网络 — { -webthings-gateway-brand }
 creating-header = 正在建立 Wi-Fi 网络…
+creating-content = 请使用您方才创建的密码连接 { $ssid } 网络，并在网页浏览器中打开 { $gateway-link } 或 { $ip-link } 页面。
 
 ## General Terms
 
+ellipsis = …
 event-log = 事件日志
 edit = 编辑
 remove = 移除
