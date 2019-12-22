@@ -46,7 +46,7 @@ upload-floorplan-hint = (.svg ajánlott)
 
 ## Top-Level Settings
 
-settings-domain = Tartomány
+settings-domain = Domain
 settings-network = Hálózat
 settings-users = Felhasználók
 settings-add-ons = Kiegészítők
@@ -321,10 +321,10 @@ inactive = Inaktív
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Úgy látszik, hogy már regisztrálta ezt az altartományt. A visszavételhez <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">kattintson ide</a>.
+tunnel-setup-reclaim-domain = Úgy látszik, hogy már regisztrálta ezt az aldomaint. A visszavételhez <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">kattintson ide</a>.
 check-email-for-token = Ellenőrizze a leveleit, hogy megérkezett a visszaszerzési token, és illessze be fent.
-reclaim-failed = A tartomány nem szerezhető vissza.
-subdomain-already-used = Ez az altartomány már használatban van. Válasszon egy másikat.
+reclaim-failed = A domain nem szerezhető vissza.
+subdomain-already-used = Ez az aldomain már használatban van. Válasszon egy másikat.
 invalid-reclamation-token = Érvénytelen visszaszerzési token.
 domain-success = Sikeres! Várjon amíg átirányítjuk…
 issuing-error = Hiba a tanúsítvány kiállításakor. Próbálja újra.
@@ -421,48 +421,160 @@ new-thing-done = Kész
 
 new-web-thing-url =
     .placeholder = Adja meg a webes dolog URL-jét
+new-web-thing-label = Webes dolog
+loading = Betöltés…
+new-web-thing-multiple = Több webes dolog található
+new-web-thing-from = ettől:
 
 ## Empty div Messages
 
+no-things = Még nincsenek eszközök. Kattintson a + gombra az elérhető eszközök kereséséhez.
+thing-not-found = A dolog nem található.
+action-not-found = A művelet nem található.
+events-not-found = Ennek a dolognak nincsenek eseményei.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Új kiegészítők keresése
+author-unknown = Ismeretlen
+disable = Letiltás
+enable = Engedélyezés
+by = szerző:
+addon-configure = Beállítás
+addon-update = Frissítés
+addon-remove = Eltávolítás
+addon-updating = Frissítés…
+addon-updated = Frissítve
+addon-update-failed = Sikertelen
+addon-config-applying = Alkalmazás…
+addon-config-apply = Alkalmaz
+addon-discovery-added = Hozzáadva
+addon-discovery-add = Hozzáadás
+addon-discovery-installing = Telepítés…
+addon-discovery-failed = Sikertelen
 
 ## Page Titles
 
+settings = Beállítások
+domain = Domain
+users = Felhasználók
+edit-user = Felhasználó szerkesztése
+add-user = Felhasználó hozzáadása
+adapters = Átalakítók
+addons = Kiegészítők
+addon-config = Kiegészítő beállítása
+addon-discovery = Új kiegészítők felfedezése
+experiments = Kísérletek
+localization = Honosítás
+updates = Frissítések
+authorizations = Engedélyek
+developer = Fejlesztő
+network = Hálózat
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ikon
 
 ## Speech
 
+speech-unsupported = A jelenlegi böngésző nem támogatja a beszédet
+speech-didnt-get = Sajnálom, de nem értem.
 
 ## Errors
 
+unknown-state = Ismeretlen állapot.
+error = Hiba
+errors = Hibák
+gateway-unreachable = Az átjáró nem érhető el
+more-information = További információ
+invalid-file = Érvénytelen fájl.
+failed-read-file = A fájl beolvasása sikertelen.
+failed-save = A mentés sikertelen.
 
 ## Schema Form
 
+unsupported-field = Nem támogatott mezőséma
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Bejelentkezés – { -webthings-gateway-brand }
+login-log-in = Bejelentkezés
 
 ## Create First User Page
 
+signup-title = Felhasználó létrehozása – { -webthings-gateway-brand }
+signup-welcome = Üdvözöljük
+signup-create-account = Hozza létre első felhasználói fiókját:
+signup-password-mismatch = A jelszavak nem egyeznek
+signup-next = Tovább
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Válasszon webcímet – { -webthings-gateway-brand }
+tunnel-setup-welcome = Üdvözöljük
+tunnel-setup-choose-address = Válasszon egy biztonságos webcímet az átjáróhoz:
+tunnel-setup-input-subdomain =
+    .placeholder = aldomain
+tunnel-setup-opt-in = Tájékoztassanak az új funkciókról és a közreműködési lehetőségekről.
+tunnel-setup-privacy-policy = Adatvédelmi irányelvek
+tunnel-setup-input-reclamation-token =
+    .placeholder = Visszaszerzési token
+tunnel-setup-error = Hiba történt az aldomain beállításakor.
+tunnel-setup-create = Létrehozás
+tunnel-setup-skip = Kihagyás
+tunnel-setup-time-sync = Várakozás a rendszeróra internetről történő beállítására. A domain regisztráció valószínűleg sikertelen lesz addig, amíg ez nem fejeződik be.
 
 ## Authorize Page
 
+authorize-title = Engedélyezési kérés – { -webthings-gateway-brand }
+authorize-authorization-request = Engedélyezési kérés
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> hozzá akar férni az Ön átjárójához, hogy elérje a <<function>> eszközeit.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = innen: <<domain>>
+authorize-monitor-and-control = monitorozó és vezérlő
+authorize-monitor = monitorozó
+authorize-allow-all = Engedélyezés az összes dolognál
+authorize-allow =
+    .value = Engedélyezés
+authorize-deny = Tiltás
 
 ## Local Token Page
 
+local-token-title = Helyi tokenszolgáltatás – { -webthings-gateway-brand }
+local-token-header = Helyi tokenszolgáltatás
+local-token-your-token = A helyi tokenje ez a <a data-l10n-name="local-token-jwt">JSON webtoken</a>:
 
 ## Router Setup Page
 
+router-setup-title = Router beállítás – { -webthings-gateway-brand }
+router-setup-header = Új Wi-Fi hálózat létrehozása
+router-setup-input-ssid =
+    .placeholder = Hálózatnév
+router-setup-input-password =
+    .placeholder = Jelszó
+router-setup-input-confirm-password =
+    .placeholder = Jelszó megerősítése
+router-setup-create =
+    .value = Létrehozás
+router-setup-password-mismatch = A jelszavaknak egyezniük kell
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi beállítás – { -webthings-gateway-brand }
+wifi-setup-header = Kapcsolódik egy Wi-Fi hálózathoz?
+wifi-setup-input-password =
+    .placeholder = Jelszó
+wifi-setup-show-password = Jelszó megjelenítése
+wifi-setup-connect =
+    .value = Kapcsolódás
+wifi-setup-network-icon =
+    .alt = Wi-Fi hálózat
+wifi-setup-skip = Kihagyás
 
 ## Connecting to Wi-Fi Page
 
