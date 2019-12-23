@@ -295,7 +295,16 @@ color = Color
 brightness = Brillantia
 leak = Perdita
 dry = Sic
-motion = Motion
+color-temperature = Temperatura de color
+video-unsupported = Pardono, video non es supportate in tu navigator.
+motion = Movimento
+no-motion = Nulle movimento
+open = Aperite
+closed = Claudite
+locked = Blocate
+unlocked = Disblocate
+jammed = Obstruite
+unknown = Incognite
 active = Active
 inactive = Inactive
 
