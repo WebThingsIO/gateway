@@ -415,7 +415,7 @@ new-thing-done = Fatto
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Inserisci l’URL del l’oggetto web
+    .placeholder = Inserisci l’URL dell’oggetto web
 new-web-thing-label = Oggetto web
 loading = Caricamento in corso…
 new-web-thing-multiple = Diversi oggetti web rilevati
