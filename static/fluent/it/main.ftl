@@ -18,7 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = Assistente
-things-menu-item = Things
+things-menu-item = Oggetti
 rules-menu-item = Regole
 logs-menu-item = Registri
 floorplan-menu-item = Piano terra
@@ -151,8 +151,8 @@ localization-settings-timezone = Fuso orario
 localization-settings-language = Lingua
 localization-settings-units = Unità
 localization-settings-units-temperature = Temperatura
-localization-settings-units-temperature-celsius = Temperatura Celsius
-localization-settings-units-temperature-fahrenheit = Temperatura Fahrenheit
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
@@ -212,7 +212,7 @@ rule-not = Non
 rule-event = Evento
 rule-action = Azione
 rule-configure = Configurazione
-rule-time-title = Titolo
+rule-time-title = Ora del giorno
 rule-notification = Notifica
 notification-title = Titolo
 notification-message = Messagio
