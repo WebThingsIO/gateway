@@ -281,13 +281,19 @@ Thing = Objecto
 ## Properties
 
 alarm = Alarma
+pushed = Pulsate
+not-pushed = Non pulsate
+on-off = Active/inactive
 on = Active
 off = Inactive
+power = Energia
 voltage = Tension
 temperature = Temperatura
 current = Currente
 frequency = Frequentia
 color = Color
+brightness = Brillantia
+leak = Perdita
 dry = Sic
 motion = Motion
 active = Active
