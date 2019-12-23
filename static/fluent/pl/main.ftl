@@ -322,10 +322,12 @@ inactive = Nieaktywny
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Już zarejestrowano tę poddomenę. Aby ją odzyskać, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">kliknij tutaj</a>.
-check-email-for-token = Sprawdź swój e-mail w poszukiwaniu tokenu odzyskiwania i wklej go powyżej.
-invalid-reclamation-token = Nieprawidłowy token.
+check-email-for-token = Sprawdź, czy w skrzynce e-mail jest token odzyskiwania i wklej go powyżej.
+reclaim-failed = Nie można odzyskać poddomeny.
+subdomain-already-used = Ta poddomena jest już używana. Proszę wybrać inną.
+invalid-reclamation-token = Nieprawidłowy token odzyskiwania.
 domain-success = Udało się! Poczekaj na przekierowanie…
-issuing-error = Błąd podczas wydawania certyfikatu. Proszę spróbuj ponownie.
+issuing-error = Błąd podczas wydawania certyfikatu. Proszę spróbować ponownie.
 redirecting = Przekierowywanie…
 
 ## Booleans
@@ -336,6 +338,48 @@ false = Fałsz
 ## Time
 
 utils-now = teraz
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } sekunda temu
+        [few] { $value } sekundy temu
+       *[many] { $value } sekund temu
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minuta temu
+        [few] { $value } minuty temu
+       *[many] { $value } minut temu
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } godzina temu
+        [few] { $value } godziny temu
+       *[many] { $value } godzin temu
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } dzień temu
+        [few] { $value } dni temu
+       *[many] { $value } dni temu
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } tydzień temu
+        [few] { $value } tygodnie temu
+       *[many] { $value } tygodni temu
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } miesiąc temu
+        [few] { $value } miesiące temu
+       *[many] { $value } miesięcy temu
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } rok temu
+        [few] { $value } lata temu
+       *[many] { $value } lat temu
+    }
 minute = Minuta
 hour = Godzina
 day = Dzień
@@ -347,7 +391,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
-abbrev-kilowatt-hour = kW⋅h
+abbrev-kilowatt-hour = kWh
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -371,7 +415,7 @@ new-thing-pin =
 new-thing-pin-error = Niepoprawny PIN
 new-thing-pin-invalid = Nieprawidłowy PIN
 new-thing-cancel = Anuluj
-new-thing-submit = Zatwierdź
+new-thing-submit = Wyślij
 new-thing-username =
     .placeholder = Wpisz nazwę użytkownika
 new-thing-password =
@@ -383,21 +427,23 @@ new-thing-done = Gotowe
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Wprowadź adres URL rzeczy
+    .placeholder = Wpisz adres URL rzeczy
 new-web-thing-label = Web Thing
-loading = Ładowanie…
+loading = Wczytywanie…
 new-web-thing-multiple = Znaleziono wiele rzeczy
 new-web-thing-from = z
 
 ## Empty div Messages
 
-no-things = Brak urządzeń. Kliknij +, aby wyszukać dostępne urządzenia.
-thing-not-found = Rzecz nie znaleziona.
-action-not-found = Akcja nie znaleziona.
+no-things = Nie ma jeszcze urządzeń. Kliknij +, aby wyszukać dostępne urządzenia.
+thing-not-found = Nie odnaleziono rzeczy.
+action-not-found = Nie odnaleziono działania.
 events-not-found = Ta rzecz nie ma zdarzeń.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Znajdź nowe dodatki
 author-unknown = Nieznany
 disable = Wyłącz
 enable = Włącz
@@ -420,10 +466,16 @@ addon-discovery-failed = Niepowodzenie
 settings = Ustawienia
 domain = Domena
 users = Użytkownicy
+edit-user = Edytuj użytkownika
+add-user = Dodaj użytkownika
 adapters = Adaptery
+addons = Dodatki
+addon-config = Konfiguruj dodatek
+addon-discovery = Odkrywaj nowe dodatki
 experiments = Eksperymenty
 localization = Lokalizacja
 updates = Aktualizacje
+authorizations = Upoważnienia
 developer = Programista
 network = Sieć
 ethernet = Ethernet
@@ -432,20 +484,23 @@ icon = Ikona
 
 ## Speech
 
-speech-unsupported = Aktualna przeglądarka nie obsługuje mowy
+speech-unsupported = Obecna przeglądarka nie obsługuje mowy
+speech-didnt-get = Przepraszam, nie rozumiem.
 
 ## Errors
 
 unknown-state = Nieznany stan.
 error = Błąd
 errors = Błędy
-invalid-file = Niepoprawny plik.
-failed-read-file = Nie można odczytać pliku.
-failed-save = Nie udało się zapisać pliku.
+gateway-unreachable = Brama jest niedostępna
+more-information = Więcej informacji
+invalid-file = Nieprawidłowy plik.
+failed-read-file = Odczytanie pliku się nie powiodło.
+failed-save = Zapisanie pliku się nie powiodło.
 
 ## Schema Form
 
-unsupported-field = Nieobsługiwane pole schematu
+unsupported-field = Nieobsługiwany schemat pola
 
 ## Icon Sources
 
@@ -458,15 +513,19 @@ login-log-in = Zaloguj się
 
 ## Create First User Page
 
+signup-title = Tworzenie użytkownika — { -webthings-gateway-brand }
 signup-welcome = Witamy
 signup-create-account = Utwórz swoje pierwsze konto użytkownika:
 signup-password-mismatch = Hasła są niezgodne
-signup-next = Następny
+signup-next = Dalej
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Wybór adresu internetowego — { -webthings-gateway-brand }
 tunnel-setup-welcome = Witamy
 tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
+tunnel-setup-input-subdomain =
+    .placeholder = poddomena
 tunnel-setup-opt-in = Chcę otrzymywać najnowsze informacje o nowych funkcjach i możliwościach zaangażowania.
 tunnel-setup-create = Utwórz
 tunnel-setup-skip = Pomiń
