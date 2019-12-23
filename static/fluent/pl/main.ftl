@@ -21,21 +21,28 @@ assistant-menu-item = Asystent
 things-menu-item = Rzeczy
 rules-menu-item = Reguły
 logs-menu-item = Wykresy
+floorplan-menu-item = Plan pomieszczeń
 settings-menu-item = Ustawienia
-log-out-button = Wyloguj
+log-out-button = Wyloguj się
 
 ## Things
 
+thing-details =
+    .aria-label = Wyświetl właściwości
+add-things =
+    .aria-label = Dodaj nowe rzeczy
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Awatar asystenta
 assistant-controls-text-input =
     .placeholder = Jak mogę pomóc?
 
 ## Floorplan
 
 upload-floorplan = Prześlij plan pomieszczeń…
-upload-floorplan-hint = (.svg zalecane)
+upload-floorplan-hint = (.svg jest zalecane)
 
 ## Top-Level Settings
 
@@ -46,14 +53,17 @@ settings-add-ons = Dodatki
 settings-adapters = Adaptery
 settings-localization = Lokalizacja
 settings-updates = Aktualizacje
+settings-authorizations = Upoważnienia
 settings-experiments = Eksperymenty
 settings-developer = Programista
 
 ## Domain Settings
 
+domain-settings-local-label = Dostęp lokalny
 domain-settings-local-update = Zaktualizuj nazwę hosta
+domain-settings-remote-access = Zdalny dostęp
 domain-settings-local-name =
-    .placeholder = gateway
+    .placeholder = brama
 
 ## Network Settings
 
@@ -64,15 +74,18 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Sieć domowa
 network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfiguruj
 network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Tryb
+network-settings-home-network-lan = Sieć domowa (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adres IP
 network-settings-dhcp = Automatyczny (DHCP)
-network-settings-static = Ręczny (Stałe IP)
+network-settings-static = Ręczny (stałe IP)
 network-settings-pppoe = Most (PPPoE)
 network-settings-static-ip-address = Statyczny adres IP
 network-settings-network-mask = Maska sieciowa
@@ -91,19 +104,29 @@ network-settings-network-name = Nazwa sieci (SSID)
 wireless-connected = Połączono
 wireless-icon =
     .alt = Sieć Wi-Fi
-network-settings-changing = Zmiana ustawień sieciowych. To może chwilę potrwać.
-failed-ethernet-configure = Konfiguracja Ethernetu nie powiodła się.
-failed-wifi-configure = Konfiguracja Wi-Fi nie powiodła się.
-failed-wan-configure = Konfiguracja WAN nie powiodła się.
-failed-lan-configure = Konfiguracja LAN nie powiodła się.
-failed-wlan-configure = Konfiguracja WLAN nie powiodła się.
+network-settings-changing = Zmienianie ustawień sieci. Może to chwilę potrwać.
+failed-ethernet-configure = Konfiguracja Ethernetu się nie powiodła.
+failed-wifi-configure = Konfiguracja Wi-Fi się nie powiodła.
+failed-wan-configure = Konfiguracja WAN się nie powiodła.
+failed-lan-configure = Konfiguracja LAN się nie powiodła.
+failed-wlan-configure = Konfiguracja WLAN się nie powiodła.
 
 ## User Settings
 
+create-user =
+    .aria-label = Dodaj nowego użytkownika
 user-settings-input-name =
-    .placeholder = Imię
+    .placeholder = Imię i nazwisko
+user-settings-input-email =
+    .placeholder = Adres e-mail
 user-settings-input-password =
     .placeholder = Hasło
+user-settings-input-new-password =
+    .placeholder = Nowe hasło (opcjonalne)
+user-settings-input-confirm-new-password =
+    .placeholder = Potwierdź nowe hasło
+user-settings-input-confirm-password =
+    .placeholder = Potwierdź hasło
 user-settings-password-mismatch = Hasła są niezgodne
 user-settings-save = Zapisz
 
@@ -113,13 +136,16 @@ adapter-settings-no-adapters = Brak dostępnych adapterów.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Brak upoważnień.
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Inteligentny asystent
 experiment-settings-logs = Wykresy
 
 ## Localization Settings
 
+localization-settings-language-region = Język i region
 localization-settings-country = Kraj
 localization-settings-timezone = Strefa czasowa
 localization-settings-language = Język
@@ -131,25 +157,33 @@ localization-settings-units-temperature-fahrenheit = Stopnie Fahrenheita (°F)
 ## Update Settings
 
 update-settings-update-now = Aktualizuj teraz
-update-available = Dostępna nowa wersja
-update-up-to-date = Twój system jest aktualny
+update-available = Dostępna jest nowa wersja
+update-up-to-date = System jest aktualny
 updates-not-supported = Aktualizacje nie są obsługiwane na tej platformie.
 update-settings-enable-self-updates = Włącz automatyczne aktualizacje
 last-update = Ostatnia aktualizacja
 current-version = Obecna wersja
 failed = Niepowodzenie
 never = Nigdy
-in-progress = W trakcie
-restarting = Restartowanie
+in-progress = W trakcie
+restarting = Ponowne uruchamianie
 
 ## Developer Settings
 
 developer-settings-enable-ssh = Włącz SSH
+developer-settings-view-internal-logs = Wyświetl dzienniki wewnętrzne
+developer-settings-create-local-authorization = Utwórz lokalne upoważnienie
 
 ## Rules
 
+add-rule =
+    .aria-label = Utwórz nową regułę
 rules = Reguły
 rules-create-rule-hint = Nie utworzono reguł. Kliknij +, aby utworzyć regułę.
+rules-rule-name = Nazwa reguły
+rules-customize-rule-name-icon =
+    .alt = Dostosuj nazwę reguły
+rules-rule-description = Opis reguły
 rules-preview-button =
     .alt = Podgląd
 rules-delete-icon =
@@ -158,20 +192,25 @@ rules-drag-hint = Przeciągnij tutaj urządzenia, aby rozpocząć tworzenie regu
 rules-drag-input-hint = Dodaj urządzenie jako wejściowe
 rules-drag-output-hint = Dodaj urządzenie jako wyjściowe
 rules-scroll-left =
-    .alt = Przewiń w lewo
+    .alt = Przewiń w lewo
 rules-scroll-right =
-    .alt = Przewiń w prawo
-rules-delete-prompt = Upuść urządzenie tutaj, aby rozłączyć
-rules-delete-dialog = Czy na pewno chcesz trwale usunąć tę regułę?
+    .alt = Przewiń w prawo
+rules-delete-prompt = Przeciągnij urządzenie tutaj, aby rozłączyć
+rules-delete-dialog = Czy na pewno trwale usunąć tę regułę?
 rules-delete-cancel =
     .value = Anuluj
-rule-invalid = Niepoprawna
-rule-delete-prompt = Czy na pewno chcesz trwale usunąć tę regułę?
+rules-delete-confirm =
+    .value = Usuń regułę
+rule-invalid = Nieprawidłowa
+rule-delete-prompt = Czy na pewno trwale usunąć tę regułę?
 rule-delete-cancel-button =
     .value = Anuluj
+rule-delete-confirm-button =
+    .value = Usuń regułę
+rule-select-property = Wybierz właściwość
 rule-not = Nie
 rule-event = Zdarzenie
-rule-action = Akcja
+rule-action = Działanie
 rule-configure = Konfiguruj…
 rule-time-title = Czas
 rule-notification = Powiadomienie
@@ -179,21 +218,33 @@ notification-title = Tytuł
 notification-message = Wiadomość
 notification-level = Poziom
 notification-low = Niski
+notification-normal = Zwykły
 notification-high = Wysoki
+rule-name = Nazwa reguły
 
 ## Logs
 
+add-log =
+    .aria-label = Utwórz nowy wykres
 logs = Wykresy
 logs-create-log-hint = Nie utworzono wykresów. Kliknij +, aby utworzyć wykres.
 logs-device = Urządzenie
+logs-device-select =
+    .aria-label = Rejestrowane urządzenie
 logs-property = Właściwość
-logs-retention = Retencja
+logs-property-select =
+    .aria-label = Rejestrowana właściwość
+logs-retention = Przechowywanie
+logs-retention-length =
+    .aria-label = Czas przechowywania wykresu
+logs-retention-unit =
+    .aria-label = Jednostka przechowywania wykresu
 logs-hours = Godziny
 logs-days = Dni
 logs-weeks = Tygodnie
 logs-save = Zapisz
 logs-remove-dialog-title = Usuwanie
-logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych. Czy na pewno chcesz go usunąć?
+logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych. Czy na pewno go usunąć?
 logs-remove = Usuń
 logs-unable-to-create = Nie można utworzyć wykresu
 logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
@@ -201,10 +252,10 @@ logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
 ## Add New Things
 
 add-thing-scanning-icon =
-    .alt = Skanowanie
-add-thing-scanning = Skanowanie w poszukiwaniu nowych urządzeń…
-add-thing-add-adapters-hint = Nie znaleziono żadnych nowych rzeczy. Spróbuj <a data-l10n-name="add-thing-add-adapters-hint-anchor">dodać rozszerzenia</a>.
-add-thing-add-by-url = Dodaj przez URL…
+    .alt = Wyszukiwanie
+add-thing-scanning = Wyszukiwanie nowych urządzeń…
+add-thing-add-adapters-hint = Nie odnaleziono żadnych nowych rzeczy. Spróbuj <a data-l10n-name="add-thing-add-adapters-hint-anchor">dodać rozszerzenia</a>.
+add-thing-add-by-url = Dodaj za pomocą adresu URL…
 add-thing-done = Gotowe
 add-thing-cancel = Anuluj
 
@@ -216,19 +267,34 @@ context-menu-remove = Usuń
 
 ## Capabilities
 
+OnOffSwitch = Przełącznik włączania/wyłączania
+MultiLevelSwitch = Przełącznik wielopoziomowy
+ColorControl = Sterowanie kolorem
+ColorSensor = Czujnik koloru
+EnergyMonitor = Monitor energii
+BinarySensor = Czujnik binarny
+MultiLevelSensor = Czujnik wielopoziomowy
+SmartPlug = Inteligentna wtyczka
 Light = Światło
+DoorSensor = Czujnik otwarcia drzwi
+MotionSensor = Czujnik ruchu
+LeakSensor = Czujnik przecieku
 PushButton = Przycisk
+VideoCamera = Kamera wideo
 Camera = Aparat
+TemperatureSensor = Czujnik temperatury
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Zamek
+Custom = Inna rzecz
 Thing = Rzecz
 
 ## Properties
 
 alarm = Alarm
 pushed = Wciśnięty
-on-off = Wł./Wył.
+not-pushed = Niewciśnięty
+on-off = Włączony/wyłączony
 on = Włączony
 off = Wyłączony
 power = Moc
@@ -240,7 +306,8 @@ color = Kolor
 brightness = Jasność
 leak = Przeciek
 dry = Sucho
-video-unsupported = Przepraszamy, wideo nie jest obsługiwane w Twojej przeglądarce.
+color-temperature = Temperatura kolorów
+video-unsupported = Używana przeglądarka nie obsługuje wideo.
 motion = Ruch
 no-motion = Brak ruchu
 open = Otwarty
@@ -254,6 +321,7 @@ inactive = Nieaktywny
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Już zarejestrowano tę poddomenę. Aby ją odzyskać, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">kliknij tutaj</a>.
 check-email-for-token = Sprawdź swój e-mail w poszukiwaniu tokenu odzyskiwania i wklej go powyżej.
 invalid-reclamation-token = Nieprawidłowy token.
 domain-success = Udało się! Poczekaj na przekierowanie…
