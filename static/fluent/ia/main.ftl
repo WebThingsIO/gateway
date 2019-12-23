@@ -18,7 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = Assistente
-things-menu-item = Things
+things-menu-item = Objectos
 rules-menu-item = Regulas
 logs-menu-item = Registros
 floorplan-menu-item = Plano terren
