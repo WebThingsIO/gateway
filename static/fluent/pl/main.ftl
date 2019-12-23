@@ -20,7 +20,7 @@ wordmark =
 assistant-menu-item = Asystent
 things-menu-item = Rzeczy
 rules-menu-item = Reguły
-logs-menu-item = Wykresy
+logs-menu-item = Dzienniki
 floorplan-menu-item = Plan pomieszczeń
 settings-menu-item = Ustawienia
 log-out-button = Wyloguj się
@@ -141,7 +141,7 @@ authorization-settings-no-authorizations = Brak upoważnień.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Inteligentny asystent
-experiment-settings-logs = Wykresy
+experiment-settings-logs = Dzienniki
 
 ## Localization Settings
 
@@ -225,9 +225,9 @@ rule-name = Nazwa reguły
 ## Logs
 
 add-log =
-    .aria-label = Utwórz nowy wykres
-logs = Wykresy
-logs-create-log-hint = Nie utworzono wykresów. Kliknij +, aby utworzyć wykres.
+    .aria-label = Utwórz nowy dziennik
+logs = Dzienniki
+logs-create-log-hint = Nie utworzono dzienników. Kliknij +, aby utworzyć dziennik.
 logs-device = Urządzenie
 logs-device-select =
     .aria-label = Rejestrowane urządzenie
@@ -236,18 +236,18 @@ logs-property-select =
     .aria-label = Rejestrowana właściwość
 logs-retention = Przechowywanie
 logs-retention-length =
-    .aria-label = Czas przechowywania wykresu
+    .aria-label = Czas przechowywania dziennika
 logs-retention-unit =
-    .aria-label = Jednostka przechowywania wykresu
+    .aria-label = Jednostka przechowywania dziennika
 logs-hours = Godziny
 logs-days = Dni
 logs-weeks = Tygodnie
 logs-save = Zapisz
 logs-remove-dialog-title = Usuwanie
-logs-remove-dialog-warning = Usunięcie wykresu spowoduje również usunięcie wszystkich jego danych. Czy na pewno go usunąć?
+logs-remove-dialog-warning = Usunięcie dziennika spowoduje również usunięcie wszystkich jego danych. Czy na pewno go usunąć?
 logs-remove = Usuń
-logs-unable-to-create = Nie można utworzyć wykresu
-logs-server-remove-error = Błąd serwera: nie można usunąć wykresu
+logs-unable-to-create = Nie można utworzyć dziennika
+logs-server-remove-error = Błąd serwera: nie można usunąć dziennika
 
 ## Add New Things
 
@@ -533,7 +533,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Wystąpił błąd podczas konfigurowania poddomeny.
 tunnel-setup-create = Utwórz
 tunnel-setup-skip = Pomiń
-tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie do ukończenia tego procesu.
+tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie do czasu ukończenia tego procesu.
 
 ## Authorize Page
 
@@ -560,6 +560,7 @@ local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za po
 ## Router Setup Page
 
 router-setup-title = Konfiguracja routera — { -webthings-gateway-brand }
+router-setup-header = Utwórz nową sieć Wi-Fi
 router-setup-input-ssid =
     .placeholder = Nazwa sieci
 router-setup-input-password =
@@ -573,7 +574,7 @@ router-setup-password-mismatch = Hasła są niezgodne
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Konfiguracja Wi-Fi — { -webthings-gateway-brand }
-wifi-setup-header = Połączyć się z siecią Wi-Fi?
+wifi-setup-header = Połączyć się z siecią Wi-Fi?
 wifi-setup-input-password =
     .placeholder = Hasło
 wifi-setup-show-password = Pokaż hasło
@@ -585,22 +586,29 @@ wifi-setup-skip = Pomiń
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Łączenie z Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Łączenie z Wi-Fi…
-connecting-warning = Uwaga: jeśli nie można załadować { $domain }, sprawdź adres IP bramy rzeczy na routerze.
-connecting-header-skipped = Konfiguracja Wi-Fi została pominięta
+connecting-title = Łączenie z Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Łączenie z Wi-Fi…
+connecting-connect = Upewnij się, że połączono z tą samą siecią, a następnie przejdź do { $gateway-link } w przeglądarce, aby kontynuować konfigurację.
+connecting-warning = Uwaga: jeśli nie można wczytać { $domain }, sprawdź adres IP bramy na routerze.
+connecting-header-skipped = Pominięto konfigurację Wi-Fi
+connecting-skipped = Brama jest teraz uruchamiana. Po podłączeniu do tej samej sieci co brama przejdź do { $gateway-link } w przeglądarce, aby kontynuować konfigurację.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Tworzenie sieci Wi-Fi — { -webthings-gateway-brand }
+creating-header = Tworzenie sieci Wi-Fi…
+creating-content = Połącz się z { $ssid } za pomocą właśnie utworzonego hasła, a następnie przejdź do { $gateway-link } lub { $ip-link } w przeglądarce.
 
 ## General Terms
 
+ok = OK
 ellipsis = …
+event-log = Dziennik zdarzeń
 edit = Edytuj
 remove = Usuń
-disconnected = Rozłączony
+disconnected = Rozłączono
 processing = Przetwarzanie…
-submit = Zatwierdź
+submit = Wyślij
 
 ## Top-Level Buttons
 
@@ -608,8 +616,12 @@ menu-button =
     .aria-label = Menu
 back-button =
     .aria-label = Wstecz
+overflow-button =
+    .aria-label = Dodatkowe działania
+speech-button =
+    .aria-label = Słuchaj mowy
 submit-button =
-    .aria-label = Zatwierdź
+    .aria-label = Wyślij
 edit-button =
     .aria-label = Edytuj
 save-button =
