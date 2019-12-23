@@ -533,26 +533,33 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Wystąpił błąd podczas konfigurowania poddomeny.
 tunnel-setup-create = Utwórz
 tunnel-setup-skip = Pomiń
-tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie, dopóki synchronizacja czasu nie nastąpi.
+tunnel-setup-time-sync = Oczekiwanie na ustawienie zegara systemowego z Internetu. Rejestracja domeny prawdopodobnie się nie powiedzie do ukończenia tego procesu.
 
 ## Authorize Page
 
+authorize-title = Prośba o upoważnienie — { -webthings-gateway-brand }
+authorize-authorization-request = Prośba o upoważnienie
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
-authorize-prompt = <<name>> chce uzyskać dostęp do twojej bramy w celu <<function>> urządzeń.
+authorize-prompt = <<name>> chce uzyskać dostęp do bramy w celu <<function>> urządzeń.
 # Use <<domain>> to indicate where the domain should be placed
-authorize-source = z <<domain>>
-authorize-monitor-and-control = monitorowania i kontroli
+authorize-source = z <<domain>>
+authorize-monitor-and-control = monitorowania i kontroli
 authorize-monitor = monitorowania
+authorize-allow-all = Zezwól dla wszystkich rzeczy
 authorize-allow =
-    .value = Pozwól
-authorize-deny = Zabroń
+    .value = Zezwól
+authorize-deny = Odmów
 
 ## Local Token Page
 
-local-token-your-token = Twój lokalny token jest następujący <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-title = Usługa lokalnych tokenów — { -webthings-gateway-brand }
+local-token-header = Usługa lokalnych tokenów
+local-token-your-token = Lokalny token to ten <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą <a data-l10n-name="local-token-bearer-type">upoważnienia na okaziciela</a>.
 
 ## Router Setup Page
 
+router-setup-title = Konfiguracja routera — { -webthings-gateway-brand }
 router-setup-input-ssid =
     .placeholder = Nazwa sieci
 router-setup-input-password =
