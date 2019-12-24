@@ -321,6 +321,9 @@ inactive = Inactive
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Il pare que tu ha jam registrate iste sub-dominio. Pro recuperar lo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">clicca ci</a>.
+check-email-for-token = Cerca tu emails pro un jeton de recuperation e colla lo supra.
+reclaim-failed = Impossibile recuperar dominio.
 
 ## Booleans
 
