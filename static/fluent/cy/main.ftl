@@ -242,33 +242,201 @@ logs-retention-unit =
 logs-hours = Awr
 logs-days = Diwrnod
 logs-weeks = Wythnos
+logs-save = Cadw
+logs-remove-dialog-title = Tynnu
+logs-remove-dialog-warning = Bydd cael gwared ar y cofnod hefyd yn dileu ei holl ddata. Ydych chi'n siŵr eich bod chi am gael gwared arno?
+logs-remove = Tynnu
+logs-unable-to-create = Methu creu cofnod
+logs-server-remove-error = Gwall gweinydd: methu tynnu cofnod
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Sganio
+add-thing-scanning = Sganio am ddyfeisiau newydd…
+add-thing-add-adapters-hint = Heb ddarganfod unrhyw bethau newydd. Rhowch gynnig ar <a data-l10n-name="add-thing-add-adapters-hint-anchor">ychwanegu rhai ychwanegion</a>.
+add-thing-add-by-url = Ychwanegu drwy URL...
+add-thing-done = Gorffen
+add-thing-cancel = Diddymu
 
 ## Context Menu
 
+context-menu-choose-icon = Dewis eicon...
+context-menu-save = Cadw
+context-menu-remove = Tynnu
 
 ## Capabilities
 
+OnOffSwitch = Switsh Ymlaen/Diffodd
+MultiLevelSwitch = Switsh Aml-Lefel
+ColorControl = Rheoli Lliw
+ColorSensor = Synhwyrydd Lliw
+EnergyMonitor = Monitor Ynni
+BinarySensor = Synhwyrydd Deuaidd
+MultiLevelSensor = Synhwyrydd Aml-Lefel
+SmartPlug = Plwg Clyfar
+Light = Golau
+DoorSensor = Synhwyrydd Drws
+MotionSensor = Synhwyrydd Symud
+LeakSensor = Synhwyrydd Gollwng
+PushButton = Botwm Pwyso
+VideoCamera = Camera Fideo
+Camera = Camera
+TemperatureSensor = Synhwyrydd Tymheredd
+Alarm = Larwm
+Thermostat = Thermostat
+Lock = Clo
+Custom = Peth Cyfaddas
+Thing = Peth
 
 ## Properties
 
+alarm = Larwm
+pushed = Pwyswyd
+not-pushed = Heb Bwyso
+on-off = Ymlaen/Diffodd
+on = Ymlaen
+off = Diffodd
+power = Pŵer
+voltage = Foltedd
+temperature = Tymheredd
+current = Cerrynt
+frequency = Amledd
+color = Lliw
+brightness = Disgleirdeb
+leak = Gollwng
+dry = Sych
+color-temperature = Tymheredd Lliw
+video-unsupported = Ymddiheuriadau, nid yw fideo yn cael ei gynnal yn eich porwr.
+motion = Symud
+no-motion = Dim Symud
+open = Agored
+closed = Ar Gau
+locked = Wedi'i gloi
+unlocked = Wedi'i ddatgloi
+jammed = Yn sownd
+unknown = Anhysbys
+active = Gweithredol
+inactive = Anweithredol
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Mae'n edrych fel eich bod chi eisoes wedi cofrestru'r is-barth hwnnw. I'w hawlio yn ôl <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> cliciwch yma </a>.
+check-email-for-token = Gwiriwch eich e-bost am docyn adfer a'i gludo uchod.
+reclaim-failed = Methu adennill parth.
+subdomain-already-used = Mae'r is-barth hwn eisoes yn cael ei ddefnyddio. Dewiswch un gwahanol.
+invalid-reclamation-token = Tocyn adfer annilys.
+domain-success = Llwyddiant! Arhoswch wrth i ni eich ailgyfeirio...
+issuing-error = Gwall wrth gyhoeddi tystysgrif. Ceisiwch eto, os gwelwch yn dda.
+redirecting = Ailgyfeirio…
 
 ## Booleans
 
+true = Gwir
+false = Gau
 
 ## Time
 
+utils-now = Nawr
+utils-seconds-ago =
+    { $value ->
+        [zero] { $value } eiliad yn ôl
+        [one] { $value } eiliad yn ôl
+        [two] { $value } eiliad yn ôl
+        [few] { $value } eiliad yn ôl
+        [many] { $value } eiliad yn ôl
+       *[other] { $value } eiliad yn ôl
+    }
+utils-minutes-ago =
+    { $value ->
+        [zero] { $value } munud yn ôl
+        [one] { $value } munud yn ôl
+        [two] { $value } munud yn ôl
+        [few] { $value } munud yn ôl
+        [many] { $value } munud yn ôl
+       *[other] { $value } munud yn ôl
+    }
+utils-hours-ago =
+    { $value ->
+        [zero] { $value } awr yn ôl
+        [one] { $value } awr yn ôl
+        [two] { $value } awr yn ôl
+        [few] { $value } awr yn ôl
+        [many] { $value } awr yn ôl
+       *[other] { $value } awr yn ôl
+    }
+utils-days-ago =
+    { $value ->
+        [zero] { $value } diwrnod yn ôl
+        [one] { $value } diwrnod yn ôl
+        [two] { $value } diwrnod yn ôl
+        [few] { $value } diwrnod yn ôl
+        [many] { $value } diwrnod yn ôl
+       *[other] { $value } diwrnod yn ôl
+    }
+utils-weeks-ago =
+    { $value ->
+        [zero] { $value } wythnos yn ôl
+        [one] { $value } wythnos yn ôl
+        [two] { $value } wythnos yn ôl
+        [few] { $value } wythnos yn ôl
+        [many] { $value } wythnos yn ôl
+       *[other] { $value } wythnos yn ôl
+    }
+utils-months-ago =
+    { $value ->
+        [zero] { $value } mis yn ôl
+        [one] { $value } mis yn ôl
+        [two] { $value } mis yn ôl
+        [few] { $value } mis yn ôl
+        [many] { $value } mis yn ôl
+       *[other] { $value } mis yn ôl
+    }
+utils-years-ago =
+    { $value ->
+        [zero] { $value } blwyddyn yn ôl
+        [one] { $value } blwyddyn yn ôl
+        [two] { $value } blwyddyn yn ôl
+        [few] { $value } blwyddyn yn ôl
+        [many] { $value } blwyddyn yn ôl
+       *[other] { $value } blwyddyn yn ôl
+    }
+minute = Munud
+hour = Awr
+day = Diwrnod
+week = Wythnos
 
 ## Unit Abbreviations
 
+abbrev-volt = F
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = a
+abbrev-minute = m
+abbrev-second = e
+abbrev-millisecond = me
+abbrev-foot = tr
 
 ## New Thing View
 
+unknown-device-type = Math o ddyfais anhysbys
+new-thing-choose-icon = Dewis eicon...
+new-thing-save = Cadw
+new-thing-pin =
+    .placeholder = Rhowch PIN
+new-thing-pin-error = PIN anghywir
+new-thing-pin-invalid = PIN annilys
+new-thing-cancel = Diddymu
+new-thing-submit = Cyflwyno
 
 ## New Web Thing View
 
