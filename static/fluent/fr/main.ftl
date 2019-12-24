@@ -322,7 +322,7 @@ inactive = Inactif
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Il semble que vous avez déjà enregistré ce sous-domaine. Pour le réclamer, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">cliquez ici</a>.
-check-email-for-token = Veuillez consulter votre courriel pour le jeton de réclamation et le coller au-dessus.
+check-email-for-token = Veuillez consulter votre messagerie électronique pour obtenir le jeton de réclamation et le coller ci-dessus.
 reclaim-failed = Impossible de réclamer le domaine.
 subdomain-already-used = Ce sous-domaine est déjà utilisé. Veuillez en choisir un autre.
 invalid-reclamation-token = Jeton de réclamation non valide.
