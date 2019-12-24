@@ -55,7 +55,10 @@ domain-settings-local-label = Anekcum adigan
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-internet-image =
+    .alt = Internet
 network-settings-configure = Swel
+network-settings-wan-mode = Askar
 network-settings-ip-address = Tansa IP
 network-settings-done = Immed
 network-settings-wifi-password =
@@ -68,6 +71,8 @@ wireless-connected = Iqqen
 
 ## User Settings
 
+create-user =
+    .aria-label = Rnu aseqdac amaynut
 user-settings-input-name =
     .placeholder = Isem
 user-settings-input-email =
@@ -119,9 +124,35 @@ rules-preview-button =
     .alt = Taskant
 rules-delete-icon =
     .alt = Kkes
+rules-delete-cancel =
+    .value = Sefsex
+rule-invalid = Arameɣtu
+rule-delete-cancel-button =
+    .value = Sefsex
+rule-event = Tadyant
+rule-action = Tigawt
+rule-configure = Swel…
+rule-notification = Alɣu
+notification-title = Azwel
+notification-message = Izen
+notification-level = Aswir
+notification-low = Meẓẓi
+notification-normal = Amagnu
+notification-high = Meqqeṛ
+rule-name = Isem n ulugan
 
 ## Logs
 
+logs = Aɣmis
+logs-device = Ibenk
+logs-property = Taɣaṛa
+logs-retention = Tuṭṭfa
+logs-hours = Isragen
+logs-days = Ussan
+logs-weeks = Dduṛtat
+logs-save = Sekles
+logs-remove-dialog-title = Tuksa
+logs-remove = Kkes
 
 ## Add New Things
 
