@@ -554,7 +554,7 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Digwyddodd gwall wrth osod yr is-barth.
 tunnel-setup-create = Creu
 tunnel-setup-skip = Hepgor
-tunnel-setup-time-sync = Aros am osod cloc y system o'r Rhyngrwyd. Mae cofrestru'r parth yn debygol o fethu nes bydd hyn wedi'i gwblhau.
+tunnel-setup-time-sync = Aros i gloc y system o'r Rhyngrwyd gael ei osod. Mae cofrestru'r parth yn debygol o fethu nes bydd hyn wedi'i gwblhau.
 
 ## Authorize Page
 
@@ -566,7 +566,7 @@ authorize-prompt = Hoffai <<name>> gael mynediad i'ch porth i ddyfeisiau <<funct
 authorize-source = o <<domain>>
 authorize-monitor-and-control = monitro a rheoli
 authorize-monitor = monitor
-authorize-allow-all = Caniatáu ar Pob Peth
+authorize-allow-all = Caniatáu am Bob Peth
 authorize-allow =
     .value = Caniatáu
 authorize-deny = Gwrthod
@@ -587,10 +587,10 @@ router-setup-input-ssid =
 router-setup-input-password =
     .placeholder = Cyfrinair
 router-setup-input-confirm-password =
-    .placeholder = Cadarnhau cyfrinair
+    .placeholder = Cadarnhau'r cyfrinair
 router-setup-create =
     .value = Creu
-router-setup-password-mismatch = Rhaid i'r cyfringodau gydweddu.
+router-setup-password-mismatch = Rhaid i'r cyfrineiriau gydweddu.
 
 ## Wi-Fi Setup Page
 
@@ -607,7 +607,7 @@ wifi-setup-skip = Hepgor
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Yn cysylltu â diwifr - { -webthings-gateway-brand }
+connecting-title = Yn cysylltu â'r diwifr - { -webthings-gateway-brand }
 connecting-header = Cysylltu â'r diwifr…
 connecting-connect = Sicrhewch eich bod wedi'ch cysylltu â'r un rhwydwaith ac yna llywio i { $gateway-link } yn eich porwr gwe i barhau'r gosod.
 connecting-warning = Sylw: Os nad ydych yn gallu llwytho { $domain }, chwiliwch am gyfeiriad IP y porth ar eich llwybrydd.
