@@ -325,6 +325,8 @@ tunnel-setup-reclaim-domain = Il pare que tu ha jam registrate iste sub-dominio.
 check-email-for-token = Cerca tu emails pro un jeton de recuperation e colla lo supra.
 reclaim-failed = Impossibile recuperar dominio.
 subdomain-already-used = Tal sub-dominio es jam usate. Per favor elige un altere.
+invalid-reclamation-token = Jeton de recuperation non valide.
+domain-success = Successo! Attende durante que nos re-adresse te…
 
 ## Booleans
 
