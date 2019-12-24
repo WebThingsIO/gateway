@@ -610,12 +610,32 @@ wifi-setup-skip = Hepgor
 connecting-title = Yn cysylltu â diwifr - { -webthings-gateway-brand }
 connecting-header = Cysylltu â'r diwifr…
 connecting-connect = Sicrhewch eich bod wedi'ch cysylltu â'r un rhwydwaith ac yna llywio i { $gateway-link } yn eich porwr gwe i barhau'r gosod.
+connecting-warning = Sylw: Os nad ydych yn gallu llwytho { $domain }, chwiliwch am gyfeiriad IP y porth ar eich llwybrydd.
+connecting-header-skipped = Hepgor cam gosod y diwifr
+connecting-skipped = Mae'r porth nawr yn cael ei gychwyn. Yn eich porwr gwe, ewch i { $gateway-link } tra ar yr un  rhwydwaith â'r porth i barhau'r gosod.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Yn Creu Rhwydwaith Diwifr - { -webthings-gateway-brand }
+creating-header = Yn creu rhwydwaith diwifr…
+creating-content = Cysylltwch â { $ssid } gyda'r cyfrinair rydych newydd ei greu, yna ewch i { $gateway-link } neu { $ip-link } yn eich porwr gwe.
 
 ## General Terms
 
+ok = Iawn
+ellipsis = …
+event-log = Cofnod Digwyddiad
+edit = Golygu
+remove = Tynnu
+disconnected = Datgysylltwyd
+processing = Prosesu…
+submit = Cyflwyno
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Dewislen
+back-button =
+    .aria-label = Nôl
+overflow-button =
+    .aria-label = Gweithrediadau Ychwanegol
