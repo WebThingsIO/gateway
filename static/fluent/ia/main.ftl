@@ -236,9 +236,9 @@ logs-property-select =
     .aria-label = Registro del proprietate
 logs-retention = Retention
 logs-retention-length =
-    .aria-label = Longor de retention del registro
+    .aria-label = Durata retention registro
 logs-retention-unit =
-    .aria-label = Unitate de retention del registro
+    .aria-label = Unitate mensura retention registro
 logs-hours = Horas
 logs-days = Dies
 logs-weeks = Septimanas
@@ -246,14 +246,14 @@ logs-save = Salvar
 logs-remove-dialog-title = Remotion
 logs-remove-dialog-warning = Le remotion del registro removera alsi tote su datos. Desira tu vermente remover lo?
 logs-remove = Remover
-logs-unable-to-create = Impossibile crear le registro
+logs-unable-to-create = Impossibile crear registro
 logs-server-remove-error = Error de servitor: impossibile remover registro
 
 ## Add New Things
 
 add-thing-scanning-icon =
-    .alt = Scansion
-add-thing-scanning = Scansion pro nove objectos…
+    .alt = Recerca
+add-thing-scanning = Recerca nove objectos…
 add-thing-add-adapters-hint = Nulle nove objectos trovate. Provar <a data-l10n-name="add-thing-add-adapters-hint-anchor">adder alcun additivos</a>.
 add-thing-add-by-url = Adder per URL…
 add-thing-done = Facite
@@ -261,17 +261,20 @@ add-thing-cancel = Cancellar
 
 ## Context Menu
 
-context-menu-choose-icon = Eliger icone…
+context-menu-choose-icon = Elige icone…
 context-menu-save = Salvar
 context-menu-remove = Remover
 
 ## Capabilities
 
 OnOffSwitch = Commutator active/inactive
-MultiLevelSwitch = Commutator plure-nivello
+MultiLevelSwitch = Commutator multi-nivello
 ColorControl = Controlo de color
 ColorSensor = Sensor de color
 EnergyMonitor = Sensor de energia
+BinarySensor = Sensor binari
+MultiLevelSensor = Sensor multi-nivello
+SmartPlug = Prisa electric intelligente
 MotionSensor = Sensor de motion
 VideoCamera = Video Camera
 Camera = Camera
