@@ -271,6 +271,7 @@ OnOffSwitch = Commutator active/inactive
 MultiLevelSwitch = Commutator plure-nivello
 ColorControl = Controlo de color
 ColorSensor = Sensor de color
+EnergyMonitor = Sensor de energia
 MotionSensor = Sensor de motion
 VideoCamera = Video Camera
 Camera = Camera
