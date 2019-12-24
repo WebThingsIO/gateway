@@ -281,10 +281,12 @@ MotionSensor = Sensor movimento
 LeakSensor = Sensor perditas
 PushButton = Pulsante
 VideoCamera = Videocamera
-Camera = Camera
-TemperatureSensor = Sensor temperatura
+Camera = Photo-camera
+TemperatureSensor = Sensor de temperatura
 Alarm = Alarma
 Thermostat = Thermostato
+Lock = Serratura
+Custom = Objecto personalisate
 Thing = Objecto
 
 ## Properties
@@ -305,7 +307,7 @@ brightness = Brillantia
 leak = Perdita
 dry = Sic
 color-temperature = Temperatura de color
-video-unsupported = Pardono, video non es supportate in tu navigator.
+video-unsupported = Video non supportate in tu navigator.
 motion = Movimento
 no-motion = Nulle movimento
 open = Aperite
