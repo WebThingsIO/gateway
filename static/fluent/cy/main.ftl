@@ -437,54 +437,179 @@ new-thing-pin-error = PIN anghywir
 new-thing-pin-invalid = PIN annilys
 new-thing-cancel = Diddymu
 new-thing-submit = Cyflwyno
+new-thing-username =
+    .placeholder = Rhowch enw defnyddiwr
+new-thing-password =
+    .placeholder = Rhowch gyfrinair
+new-thing-credentials-error = Manylion anghywir
+new-thing-saved = Wedi'u Cadw
+new-thing-done = Gorffen
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Rhowch URL peth gwe
+new-web-thing-label = Peth Gwe
+loading = Llwytho…
+new-web-thing-multiple = Wedi darganfod amryw o bethau gwe
+new-web-thing-from = o
 
 ## Empty div Messages
 
+no-things = Dim dyfeisiau eto. Cliciwch + i sganio am y dyfeisiau sydd ar gael.
+thing-not-found = Heb ganfod y peth
+action-not-found = Heb ganfod y weithred.
+events-not-found = Nid oes gan y peth hwn unrhyw ddigwyddiad.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Canfod Ychwanegion Newydd
+author-unknown = Anhysbys
+disable = Analluogi
+enable = Galluogi
+by = gan
+addon-configure = Ffurfweddu
+addon-update = Diweddaru
+addon-remove = Tynnu
+addon-updating = Diweddaru…
+addon-updated = Diweddarwyd
+addon-update-failed = Methwyd
+addon-config-applying = Gosod…
+addon-config-apply = Gosod
+addon-discovery-added = Ychwanegwyd
+addon-discovery-add = Ychwanegu
+addon-discovery-installing = …Gosod…
+addon-discovery-failed = Methiant
 
 ## Page Titles
 
+settings = Gosodiadau
+domain = Parth
+users = Defnyddwyr
+edit-user = Golygu Defnyddiwr
+add-user = Ychwanegu Defnyddiwr
+adapters = Addasyddion
+addons = Ychwanegion
+addon-config = Ffurfweddu Ychwanegyn
+addon-discovery = Canfod Ychwanegion Newydd
+experiments = Arbrofion
+localization = Lleoleiddio
+updates = Diweddariadau
+authorizations = Awdurdodi
+developer = Datblygwr
+network = Rhwydwaith
+ethernet = Ethernet
+wifi = Diwifr
+icon = Eicon
 
 ## Speech
 
+speech-unsupported = Nid yw eich porwr yn cynnal llefaru.
+speech-didnt-get = Ymddiheuriadau, dwi ddim yn deall.
 
 ## Errors
 
+unknown-state = Cyflwr anhysbys.
+error = Gwall
+errors = Gwallau
+gateway-unreachable = Methu cyrraedd y porth
+more-information = Rhagor o Wybodaeth
+invalid-file = Ffeil annilys.
+failed-read-file = Wedi methu darllen ffeil.
+failed-save = Wedi methu cadw
 
 ## Schema Form
 
+unsupported-field = Sgema maes heb ei gynnal
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Mewngofnod - { -webthings-gateway-brand }
+login-log-in = Mewngofnodi
 
 ## Create First User Page
 
+signup-title = Creu Defnyddiwr - { -webthings-gateway-brand }
+signup-welcome = Croeso
+signup-create-account = Creu eich cyfrif defnyddiwr cyntaf:
+signup-password-mismatch = Nid yw cyfrineiriau'n cyfateb
+signup-next = Nesaf
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Dewiswch Gyfeiriad Gwe - { -webthings-gateway-brand }
+tunnel-setup-welcome = Croeso
+tunnel-setup-choose-address = Dewiswch gyfeiriad gwe diogel ar gyfer eich porth:
+tunnel-setup-input-subdomain =
+    .placeholder = isbarth
+tunnel-setup-opt-in = Rhannwch y wybodaeth ddiweddaraf i mi am nodweddion newydd a chyfleoedd i gyfrannu.
+tunnel-setup-privacy-policy = Polisi Preifatrwydd
+tunnel-setup-input-reclamation-token =
+    .placeholder = Tocyn Adfer
+tunnel-setup-error = Digwyddodd gwall wrth osod yr isbarth.
+tunnel-setup-create = Creu
+tunnel-setup-skip = Hepgor
+tunnel-setup-time-sync = Aros am osod cloc y system o'r Rhyngrwyd. Mae cofrestru'r parth yn debygol o fethu nes bydd hyn wedi'i gwblhau.
 
 ## Authorize Page
 
+authorize-title = Cais am Awdurdodi - { -webthings-gateway-brand }
+authorize-authorization-request = Cais am Awdurdodi
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = Hoffai <<name>> gael mynediad i'ch porth i ddyfeisiau <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = o <<domain>>
+authorize-monitor-and-control = monitro a rheoli
+authorize-monitor = monitor
+authorize-allow-all = Caniatáu ar Pob Peth
+authorize-allow =
+    .value = Caniatáu
+authorize-deny = Gwrthod
 
 ## Local Token Page
 
+local-token-title = Gwasanaeth Tocyn Lleol - { -webthings-gateway-brand }
+local-token-header = Gwasanaeth Tocyn Lleol
+local-token-your-token = Eich tocyn lleol yw'r <a data-l10n-name="local-token-jwt">Tocyn Gwe JSON</a>:
+local-token-use-it = Defnyddiwch ef i gyfathrebu â'r porth yn ddiogel, gyda <a data-l10n-name="local-token-bearer-type">Awdurdodi Math Cludwr</a>.
 
 ## Router Setup Page
 
+router-setup-title = Gosodiad y Llwybrydd - { -webthings-gateway-brand }
+router-setup-header = Creu rhwydwaith diwifr newydd
+router-setup-input-ssid =
+    .placeholder = Enw'r rhwydwaith
+router-setup-input-password =
+    .placeholder = Cyfrinair
+router-setup-input-confirm-password =
+    .placeholder = Cadarnhau cyfrinair
+router-setup-create =
+    .value = Creu
+router-setup-password-mismatch = Rhaid i'r cyfringodau gydweddu.
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Gosodiad Diwifr- { -webthings-gateway-brand }
+wifi-setup-header = Cysylltu â rhwydwaith diwifr?
+wifi-setup-input-password =
+    .placeholder = Cyfrinair
+wifi-setup-show-password = Dangos cyfrinair
+wifi-setup-connect =
+    .value = Cysylltu
+wifi-setup-network-icon =
+    .alt = Rhwydwaith Diwifr
+wifi-setup-skip = Hepgor
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Yn cysylltu â diwifr - { -webthings-gateway-brand }
+connecting-header = Cysylltu â'r diwifr…
+connecting-connect = Sicrhewch eich bod wedi'ch cysylltu â'r un rhwydwaith ac yna llywio i { $gateway-link } yn eich porwr gwe i barhau'r gosod.
 
 ## Creating Wi-Fi Network Page
 
