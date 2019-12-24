@@ -18,7 +18,7 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = Assistant
-things-menu-item = Things
+things-menu-item = Objets
 rules-menu-item = Règles
 logs-menu-item = Journaux
 floorplan-menu-item = Plan d’étage
@@ -30,7 +30,7 @@ log-out-button = Déconnexion
 thing-details =
     .aria-label = Afficher les propriétés
 add-things =
-    .aria-label = Ajouter un Thing
+    .aria-label = Ajouter un objet
 
 ## Assistant
 
@@ -118,7 +118,7 @@ create-user =
 user-settings-input-name =
     .placeholder = Nom
 user-settings-input-email =
-    .placeholder = Courriel
+    .placeholder = Adresse électronique
 user-settings-input-password =
     .placeholder = Mot de passe
 user-settings-input-new-password =
@@ -163,7 +163,7 @@ updates-not-supported = Les mises à jour ne sont pas prises en charge sur cette
 update-settings-enable-self-updates = Activer les mises à jour automatiques
 last-update = Dernière mise à jour
 current-version = Version actuelle
-failed = Échoué
+failed = Échec
 never = Jamais
 in-progress = En cours
 restarting = Redémarrage en cours
@@ -286,8 +286,8 @@ TemperatureSensor = Capteur de température
 Alarm = Alarme
 Thermostat = Thermostat
 Lock = Verrou
-Custom = Élément personnalisé
-Thing = Élément
+Custom = Objet personnalisé
+Thing = Objet
 
 ## Properties
 
@@ -420,18 +420,18 @@ new-thing-done = Terminé
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Entrer l’URL de la WebThing
-new-web-thing-label = WebThing
+    .placeholder = Saisir l’URL de l’objet web
+new-web-thing-label = Objet web
 loading = Chargement…
-new-web-thing-multiple = Plusieurs WebThings trouvées
+new-web-thing-multiple = Plusieurs objets web trouvés
 new-web-thing-from = de
 
 ## Empty div Messages
 
 no-things = Aucun périphérique. Cliquer sur + analyser les périphériques disponibles.
-thing-not-found = Thing non trouvé.
+thing-not-found = Objet non trouvé.
 action-not-found = Action non trouvée.
-events-not-found = Cette thing n’a aucun événement.
+events-not-found = Cet objet n’a aucun évènement.
 
 ## Add-on Settings
 
