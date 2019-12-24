@@ -35,13 +35,13 @@ add-things =
 ## Assistant
 
 assistant-avatar-image =
-    .alt = Afatar Cynorthwyydd
+    .alt = Afatar y Cynorthwyydd
 assistant-controls-text-input =
     .placeholder = Sut fedra i helpu?
 
 ## Floorplan
 
-upload-floorplan = Llwythwch y cynllun llawr...
+upload-floorplan = Llwytho'r cynllun llawr...
 upload-floorplan-hint = (argymell .svg)
 
 ## Top-Level Settings
@@ -67,10 +67,10 @@ domain-settings-local-name =
 
 ## Network Settings
 
-network-settings-unsupported = Ni yw gosodiadau rhwydwaith yn cael eu cefnogi ar gyfer y platfform hwn.
+network-settings-unsupported = Nid yw gosodiadau rhwydwaith yn cael eu cynnal ar gyfer y platfform hwn.
 network-settings-ethernet-image =
-    .alt = Ethernet
-network-settings-ethernet = Ethernet
+    .alt = Ether-rwyd
+network-settings-ethernet = Ether-rwyd
 network-settings-wifi-image =
     .alt = Diwifr
 network-settings-wifi = Diwifr
@@ -99,12 +99,12 @@ network-settings-username = Enw Defnyddiwr
 network-settings-password = Cyfrinair
 network-settings-router-ip = Cyfeiriad IP llwybrydd
 network-settings-dhcp-server = Gweinydd DHCP
-network-settings-enable-wifi = Galluogi Diwifr
+network-settings-enable-wifi = Galluogi'r Diwifr
 network-settings-network-name = Enw'r rhwydwaith (SSID)
 wireless-connected = Wedi cysylltu
 wireless-icon =
-    .alt = Rhwydwaith Diwfr
-network-settings-changing = Newid gosodiadau rhwydwaith. Gall hyn gymryd munud.
+    .alt = Rhwydwaith Diwifr
+network-settings-changing = Newid gosodiadau'r rhwydwaith. Gall hyn gymryd peth amser.
 failed-ethernet-configure = Wedi methu ffurfweddu'r ether-rwyd.
 failed-wifi-configure = Wedi methu ffurfweddu'r diwifr.
 failed-wan-configure = Wedi methu ffurfweddu'r WAN.
@@ -132,7 +132,7 @@ user-settings-save = Cadw
 
 ## Adapter Settings
 
-adapter-settings-no-adapters = Dim addaswyr yn bresennol.
+adapter-settings-no-adapters = Dim addaswyr ar gael.
 
 ## Authorization Settings
 
@@ -145,7 +145,7 @@ experiment-settings-logs = Cofnodion
 
 ## Localization Settings
 
-localization-settings-language-region = Iaith a Rhanbarth
+localization-settings-language-region = Iaith ac Ardal
 localization-settings-country = Gwlad
 localization-settings-timezone = Cylchfa Amser
 localization-settings-language = Iaith
@@ -196,13 +196,13 @@ rules-scroll-left =
 rules-scroll-right =
     .alt = Sgrolio i'r Dde
 rules-delete-prompt = Gollwng dyfeisiau yma i ddatgysylltu
-rules-delete-dialog = Ydych chi'n siŵr eich bod eisiau dileu'r rheol yn barhaol?
+rules-delete-dialog = Ydych chi'n siŵr eich bod eisiau dileu'r rheol yn llwyr?
 rules-delete-cancel =
     .value = Diddymu
 rules-delete-confirm =
     .value = Tynnu Rheol
 rule-invalid = Annilys
-rule-delete-prompt = Ydych chi'n siŵr eich bod eisiau dileu'r rheol yn barhaol?
+rule-delete-prompt = Ydych chi'n siŵr eich bod eisiau dileu'r rheol yn llwyr?
 rule-delete-cancel-button =
     .value = Diddymu
 rule-delete-confirm-button =
@@ -321,8 +321,8 @@ inactive = Anweithredol
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Mae'n edrych fel eich bod chi eisoes wedi cofrestru'r is-barth hwnnw. I'w hawlio yn ôl <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> cliciwch yma </a>.
-check-email-for-token = Gwiriwch eich e-bost am docyn adfer a'i gludo uchod.
+tunnel-setup-reclaim-domain = Mae'n edrych fel eich bod eisoes wedi cofrestru'r is-barth hwnnw. I'w hawlio yn ôl <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">cliciwch yma</a>.
+check-email-for-token = Gwiriwch eich e-bost am docyn adfer a'i ludo yn y blwch uchod.
 reclaim-failed = Methu adennill parth.
 subdomain-already-used = Mae'r is-barth hwn eisoes yn cael ei ddefnyddio. Dewiswch un gwahanol.
 invalid-reclamation-token = Tocyn adfer annilys.
@@ -479,7 +479,7 @@ addon-config-applying = Gosod…
 addon-config-apply = Gosod
 addon-discovery-added = Ychwanegwyd
 addon-discovery-add = Ychwanegu
-addon-discovery-installing = …Gosod…
+addon-discovery-installing = Gosod…
 addon-discovery-failed = Methiant
 
 ## Page Titles
@@ -499,13 +499,13 @@ updates = Diweddariadau
 authorizations = Awdurdodi
 developer = Datblygwr
 network = Rhwydwaith
-ethernet = Ethernet
+ethernet = Ether-rwyd
 wifi = Diwifr
 icon = Eicon
 
 ## Speech
 
-speech-unsupported = Nid yw eich porwr yn cynnal llefaru.
+speech-unsupported = Nid yw eich porwr yn cynnal llais.
 speech-didnt-get = Ymddiheuriadau, dwi ddim yn deall.
 
 ## Errors
@@ -542,16 +542,16 @@ signup-next = Nesaf
 
 ## Tunnel Setup Page
 
-tunnel-setup-title = Dewiswch Gyfeiriad Gwe - { -webthings-gateway-brand }
+tunnel-setup-title = Dewis Cyfeiriad Gwe - { -webthings-gateway-brand }
 tunnel-setup-welcome = Croeso
-tunnel-setup-choose-address = Dewiswch gyfeiriad gwe diogel ar gyfer eich porth:
+tunnel-setup-choose-address = Dewis cyfeiriad gwe diogel ar gyfer eich porth:
 tunnel-setup-input-subdomain =
-    .placeholder = isbarth
+    .placeholder = is-barth
 tunnel-setup-opt-in = Rhannwch y wybodaeth ddiweddaraf i mi am nodweddion newydd a chyfleoedd i gyfrannu.
 tunnel-setup-privacy-policy = Polisi Preifatrwydd
 tunnel-setup-input-reclamation-token =
     .placeholder = Tocyn Adfer
-tunnel-setup-error = Digwyddodd gwall wrth osod yr isbarth.
+tunnel-setup-error = Digwyddodd gwall wrth osod yr is-barth.
 tunnel-setup-create = Creu
 tunnel-setup-skip = Hepgor
 tunnel-setup-time-sync = Aros am osod cloc y system o'r Rhyngrwyd. Mae cofrestru'r parth yn debygol o fethu nes bydd hyn wedi'i gwblhau.
@@ -639,3 +639,11 @@ back-button =
     .aria-label = Nôl
 overflow-button =
     .aria-label = Gweithrediadau Ychwanegol
+speech-button =
+    .aria-label = Gwrando am Lais
+submit-button =
+    .aria-label = Cyflwyno
+edit-button =
+    .aria-label = Golygu
+save-button =
+    .aria-label = Cadw
