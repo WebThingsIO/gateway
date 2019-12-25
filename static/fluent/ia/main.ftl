@@ -327,12 +327,22 @@ reclaim-failed = Impossibile recuperar dominio.
 subdomain-already-used = Tal sub-dominio es jam usate. Per favor elige un altere.
 invalid-reclamation-token = Jeton de recuperation non valide.
 domain-success = Successo! Attende durante que nos re-adresse te…
+issuing-error = Error al emission del certificato. Reproba
+redirecting = Redirection…
 
 ## Booleans
 
+true = Ver
+false = False
 
 ## Time
 
+utils-now = ora
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } secunda retro
+       *[other] { $value } secundas retro
+    }
 hour = Hora
 day = Die
 week = Septimana
