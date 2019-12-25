@@ -343,16 +343,70 @@ utils-seconds-ago =
         [one] { $value } secunda retro
        *[other] { $value } secundas retro
     }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minuta retro
+       *[other] { $value } minutas retro
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } hora retro
+       *[other] { $value } horas retro
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } die retro
+       *[other] { $value } dies retro
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $valor } septimana retro
+       *[other] { $valor } septimanas retro
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $valor } mense retro
+       *[other] { $valor } menses retro
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } anno retro
+       *[other] { $value } annos retro
+    }
+minute = Minuta
 hour = Hora
 day = Die
 week = Septimana
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Unknown device type
+new-thing-choose-icon = Elige icone…
 new-thing-save = Salvar
+new-thing-pin =
+    .placeholder = Insere PIN
+new-thing-pin-error = PIN incorrecte
+new-thing-pin-invalid = PIN invalide
 
 ## New Web Thing View
 
@@ -362,6 +416,12 @@ new-thing-save = Salvar
 
 ## Add-on Settings
 
+by = per
+addon-configure = Configurar
+addon-update = Actualisar
+addon-remove = Remover
+addon-updating = Actualisation...
+addon-updated = Actualisate
 
 ## Page Titles
 
@@ -386,6 +446,7 @@ new-thing-save = Salvar
 
 ## Tunnel Setup Page
 
+tunnel-setup-welcome = Benvenite
 
 ## Authorize Page
 
@@ -410,3 +471,5 @@ new-thing-save = Salvar
 
 ## Top-Level Buttons
 
+save-button =
+    .aria-label = Salvar
