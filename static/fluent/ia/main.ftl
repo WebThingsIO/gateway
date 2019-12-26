@@ -584,10 +584,13 @@ connecting-header = Connexion a wifi…
 connecting-connect = Presta attention a esser connectite al mesme rete e pois naviga a { $gateway-link } in tu navigator del Web pro continuar le installation.
 connecting-warning = Nota: si tu non pote cargar { $domain }, recerca le adresse IP del passarella sur tu router.
 connecting-header-skipped = Installation de rete wifi saltate
-connecting-skipped = Installation de rete wifi saltate
+connecting-skipped = Le passarella es ora in comenciamento. Naviga a { $gateway-link } in tu navigator del Web per le connexion al mesme rete si que le passarella continua le installation.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Creation del rete wifi — { -webthings-gateway-brand }
+creating-header = Creation del rete wifi…
+creating-content = Connecte te a { $ssid } con le contrasigno que tu justo ha create, pois naviga a { $gateway-link } o { $ip-link } in tu navigator del Web.
 
 ## General Terms
 
