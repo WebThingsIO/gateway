@@ -429,52 +429,130 @@ new-web-thing-from = de
 ## Empty div Messages
 
 no-things = Nulle objectos ancora. Clicca + pro scander objectos disponibile.
+thing-not-found = Objecto non trovate.
+action-not-found = Action non trovate.
+events-not-found = Tal objecto ha nulle eventos.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Cercar nove additivos
+author-unknown = Incognite
+disable = Disactivar
+enable = Activar
 by = per
 addon-configure = Configurar
 addon-update = Actualisar
 addon-remove = Remover
 addon-updating = Actualisation...
 addon-updated = Actualisate
+addon-update-failed = Fallite
+addon-config-applying = Applicante…
+addon-config-apply = Applicar
+addon-discovery-added = Addite
+addon-discovery-add = Adder
+addon-discovery-installing = Installation…
+addon-discovery-failed = Fallite
 
 ## Page Titles
 
+settings = Parametros
+domain = Dominio
+users = Usatores
+edit-user = Rediger usator
+add-user = Adder usator
+adapters = Adaptatores
+addons = Additivos
+addon-config = Configurar additivo
+addon-discovery = Cercar nove additivos
+experiments = Experimentos
+localization = Localisation
+updates = Actualisationes
+authorizations = Autorisationes
+developer = Disveloppator
+network = Rete
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Icone
 
 ## Speech
 
+speech-unsupported = Le navigator actual non supporta le voce
+speech-didnt-get = Pardono, io non comprendeva.
 
 ## Errors
 
+unknown-state = Stato incognite.
+error = Error
+errors = Errores
+gateway-unreachable = Gateway inattingibile
+more-information = Plus de informationes
+invalid-file = File non valide
+failed-read-file = Falta a leger le file.
+failed-save = Falta a salvar.
 
 ## Schema Form
 
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-log-in = Authenticar se
 
 ## Create First User Page
 
+signup-title = Crear le usator — { -webthings-gateway-brand }
+signup-welcome = Benvenite
+signup-create-account = Crea tu prime conto de usator:
+signup-password-mismatch = Le contrasignos non concorda
+signup-next = Sequente
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Elige adresse web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Benvenite
+tunnel-setup-input-subdomain =
+    .placeholder = subdominio
+tunnel-setup-privacy-policy = Politica de confidentialitate
+tunnel-setup-error = Un error occurreva durante que on configurava le subdominio.
+tunnel-setup-create = Crear
+tunnel-setup-skip = Saltar
 
 ## Authorize Page
 
+authorize-authorization-request = Requesta de autorisation
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = de <<domain>>
+authorize-allow =
+    .value = Permitter
+authorize-deny = Denegar
 
 ## Local Token Page
 
 
 ## Router Setup Page
 
+router-setup-input-password =
+    .placeholder = Contrasigno
+router-setup-input-confirm-password =
+    .placeholder = Confirmar le contrasigno
+router-setup-create =
+    .value = Crear
+router-setup-password-mismatch = Le contrasignos debe concordar
 
 ## Wi-Fi Setup Page
 
+wifi-setup-input-password =
+    .placeholder = Contrasigno
+wifi-setup-show-password = Monstrar contrasigno
+wifi-setup-connect =
+    .value = Connecter
+wifi-setup-network-icon =
+    .alt = Rete Wi-Fi
+wifi-setup-skip = Saltar
 
 ## Connecting to Wi-Fi Page
 
@@ -484,8 +562,26 @@ tunnel-setup-welcome = Benvenite
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Registro eventos
+edit = Rediger
+remove = Remover
+disconnected = Disconnexe
+processing = Processante…
+submit = Inviar
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Retro
+overflow-button =
+    .aria-label = Actiones additional
+submit-button =
+    .aria-label = Inviar
+edit-button =
+    .aria-label = Rediger
 save-button =
     .aria-label = Salvar
