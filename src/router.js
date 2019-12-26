@@ -86,11 +86,12 @@ const Router = {
         next();
 
       // If request won't accept HTML but will accept JSON,
-      // or is a WebSocket request, or is multipart/form-data
+      // or is a WebSocket request, or is multipart/form-data or JSON,
       // treat it as an API request
       } else if (!request.accepts('html') && request.accepts('json') ||
                  request.headers['content-type'] === 'application/json' ||
                  request.get('Upgrade') === 'websocket' ||
+                 request.is('json') ||
                  request.is('multipart/form-data') ||
                  request.path.startsWith(Constants.ADDONS_PATH) ||
                  request.path.startsWith(Constants.INTERNAL_LOGS_PATH)) {
