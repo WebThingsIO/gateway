@@ -292,15 +292,15 @@ Thing = Enhet
 ## Properties
 
 alarm = Larm
-pushed = Tryckte
+pushed = Tryckt
 not-pushed = Inte tryckt
 on-off = På/Av
 on = På
 off = Av
-power = Ström
+power = Effekt
 voltage = Spänning
 temperature = Temperatur
-current = Aktuell
+current = Ström
 frequency = Frekvens
 color = Färg
 brightness = Ljusstyrka
@@ -408,22 +408,22 @@ new-thing-pin =
 new-thing-pin-error = Felaktig PIN
 new-thing-pin-invalid = Ogiltig PIN
 new-thing-cancel = Avbryt
-new-thing-submit = Spara och Lägg till
+new-thing-submit = Skicka in
 new-thing-username =
     .placeholder = Skriv in ditt användarnamn
 new-thing-password =
     .placeholder = Skriv in ditt lösenord
 new-thing-credentials-error = Felaktiga inloggningsuppgifter
-new-thing-saved = Sparat
-new-thing-done = Klart
+new-thing-saved = Sparad
+new-thing-done = Klar
 
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Ange webb-enhets URL
-new-web-thing-label = Webb enhet
+    .placeholder = Ange URL till Web Thing
+new-web-thing-label = Web Thing
 loading = Laddar…
-new-web-thing-multiple = Flera webb enheter hittades
+new-web-thing-multiple = Flera Web Things hittades
 new-web-thing-from = från
 
 ## Empty div Messages
@@ -552,7 +552,7 @@ local-token-use-it = Använd den för att säkert kommunicera med gatewayen geno
 
 ## Router Setup Page
 
-router-setup-title = Router inställningar — { -webthings-gateway-brand }
+router-setup-title = Routerkonfiguration — { -webthings-gateway-brand }
 router-setup-header = Skapa ett nytt Wi-Fi-nätverk
 router-setup-input-ssid =
     .placeholder = Nätverksnamn
@@ -566,7 +566,7 @@ router-setup-password-mismatch = Lösenorden måste matcha.
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Wi-Fi inställningar — { -webthings-gateway-brand }
+wifi-setup-title = Wi-Fi konfiguration — { -webthings-gateway-brand }
 wifi-setup-header = Anslut till ett Wi-Fi-nätverk?
 wifi-setup-input-password =
     .placeholder = Lösenord
