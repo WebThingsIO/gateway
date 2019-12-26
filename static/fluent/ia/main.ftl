@@ -582,6 +582,9 @@ wifi-setup-skip = Saltar
 connecting-title = Connexion a wifi — { -webthings-gateway-brand }
 connecting-header = Connexion a wifi…
 connecting-connect = Presta attention a esser connectite al mesme rete e pois naviga a { $gateway-link } in tu navigator del Web pro continuar le installation.
+connecting-warning = Nota: si tu non pote cargar { $domain }, recerca le adresse IP del passarella sur tu router.
+connecting-header-skipped = Installation de rete wifi saltate
+connecting-skipped = Installation de rete wifi saltate
 
 ## Creating Wi-Fi Network Page
 
