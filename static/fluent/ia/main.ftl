@@ -63,7 +63,7 @@ domain-settings-local-label = Accesso local
 domain-settings-local-update = Actualisar nomine de servitor hospite
 domain-settings-remote-access = Accesso remote
 domain-settings-local-name =
-    .placeholder = gateway
+    .placeholder = passarella
 
 ## Network Settings
 
@@ -89,7 +89,7 @@ network-settings-static = Manual (IP static)
 network-settings-pppoe = Ponte (PPPoE)
 network-settings-static-ip-address = Adresse IP static
 network-settings-network-mask = Masca de rete
-network-settings-gateway = Gateway
+network-settings-gateway = Passarella
 network-settings-done = Facite
 network-settings-wifi-password =
     .placeholder = Contrasigno
@@ -485,7 +485,7 @@ speech-didnt-get = Pardono, io non comprendeva.
 unknown-state = Stato incognite.
 error = Error
 errors = Errores
-gateway-unreachable = Gateway inattingibile
+gateway-unreachable = Passarella inattingibile
 more-information = Plus de informationes
 invalid-file = File non valide
 failed-read-file = Falta a leger le file.
@@ -516,7 +516,7 @@ signup-next = Sequente
 
 tunnel-setup-title = Elige adresse web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Benvenite
-tunnel-setup-choose-address = Elige un secur adresse web pro tu gateway:
+tunnel-setup-choose-address = Elige un secur adresse web pro tu passarella:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
 tunnel-setup-opt-in = Actualisa me re nove functionalitates e opportunitates de contribution.
@@ -532,14 +532,20 @@ tunnel-setup-time-sync = Attende pro horologio de systema esser configurate de i
 
 authorize-title = Requesta de autorisation — { -webthings-gateway-brand }
 authorize-authorization-request = Requesta de autorisation
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> desirarea acceder a tu passarella pro <<function>> apparatos.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = de <<domain>>
+authorize-monitor-and-control = surveliar e controlar
+authorize-monitor = surveliar
 authorize-allow =
     .value = Permitter
 authorize-deny = Denegar
 
 ## Local Token Page
 
+local-token-title = Servicio de jeton local — { -webthings-gateway-brand }
+local-token-use-it = Usa lo pro communicar con le passarella con securitate, con le <a data-l10n-name="local-token-bearer-type">autorisation typo Bearer</a>.
 
 ## Router Setup Page
 
