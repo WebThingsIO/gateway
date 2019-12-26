@@ -35,9 +35,9 @@ add-things =
 ## Assistant
 
 assistant-avatar-image =
-    .alt = Assistent Avatar
+    .alt = Assistent-Avatar
 assistant-controls-text-input =
-    .placeholder = Hur kan jag hjälpa?
+    .placeholder = Hur kan jag hjälpa dig?
 
 ## Floorplan
 
@@ -87,18 +87,18 @@ network-settings-ip-address = IP-adress
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuell (statisk IP)
 network-settings-pppoe = Brygga (PPPoE)
-network-settings-static-ip-address = Statisk IP adress
+network-settings-static-ip-address = Statisk IP-adress
 network-settings-network-mask = Nätverksmask
 network-settings-gateway = Gateway
-network-settings-done = Klart
+network-settings-done = Klar
 network-settings-wifi-password =
     .placeholder = Lösenord
 network-settings-show-password = Visa lösenord
 network-settings-connect = Anslut
 network-settings-username = Användarnamn
 network-settings-password = Lösenord
-network-settings-router-ip = Router IP adress
-network-settings-dhcp-server = DHCP server
+network-settings-router-ip = Router IP-adress
+network-settings-dhcp-server = DHCP-server
 network-settings-enable-wifi = Aktivera Wi-Fi
 network-settings-network-name = Nätverksnamn (SSID)
 wireless-connected = Ansluten
@@ -230,15 +230,15 @@ logs = Loggar
 logs-create-log-hint = Inga loggar har skapats. Klicka på + för att skapa en logg.
 logs-device = Enhet
 logs-device-select =
-    .aria-label = Logg enhet
+    .aria-label = Logga enhet
 logs-property = Egenskap
 logs-property-select =
-    .aria-label = Logg egenskap
+    .aria-label = Logga egenskap
 logs-retention = Kvarhållning
 logs-retention-length =
-    .aria-label = Logghållningslängd
+    .aria-label = Kvarhållningslängd för logg
 logs-retention-unit =
-    .aria-label = Log bevaringsenhet
+    .aria-label = Kvarhållningsenhet för logg
 logs-hours = Timmar
 logs-days = Dagar
 logs-weeks = Veckor
@@ -256,7 +256,7 @@ add-thing-scanning-icon =
 add-thing-scanning = Söker efter nya enheter…
 add-thing-add-adapters-hint = Inga nya enheter hittades. Försök med att <a data-l10n-name="add-thing-add-adapters-hint-anchor"> lägga till några tillägg</a>.
 add-thing-add-by-url = Lägg till via URL…
-add-thing-done = Klart
+add-thing-done = Klar
 add-thing-cancel = Avbryt
 
 ## Context Menu
@@ -268,7 +268,7 @@ context-menu-remove = Ta bort
 ## Capabilities
 
 OnOffSwitch = På/Av knapp
-MultiLevelSwitch = Multi Nivå knapp
+MultiLevelSwitch = Flernivåomkopplare
 ColorControl = Färgkontroll
 ColorSensor = Färgsensor
 EnergyMonitor = Energimätare
