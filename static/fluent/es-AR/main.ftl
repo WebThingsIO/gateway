@@ -21,17 +21,28 @@ assistant-menu-item = Asistente
 things-menu-item = Dispositivos
 rules-menu-item = Reglas
 logs-menu-item = Registros
-floorplan-menu-item = Plano de los pisos
+floorplan-menu-item = Plano
 settings-menu-item = Ajustes
+log-out-button = Cerrar sesión
 
 ## Things
 
+thing-details =
+    .aria-label = Ver propiedades
+add-things =
+    .aria-label = Agregar  nuevos dispositivos
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Avatar asistente
+assistant-controls-text-input =
+    .placeholder = ¿Cómo puedo ayudar?
 
 ## Floorplan
 
+upload-floorplan = Subir plano...
+upload-floorplan-hint = (.svg recomendado)
 
 ## Top-Level Settings
 
