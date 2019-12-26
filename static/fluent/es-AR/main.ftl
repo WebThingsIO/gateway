@@ -72,8 +72,8 @@ network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-    .alt = Wifi
-network-settings-wifi = Wifi
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
     .alt = Red domestica
 network-settings-internet-image =
@@ -87,24 +87,78 @@ network-settings-ip-address = Dirección IP
 network-settings-dhcp = (DHCP) Automático
 network-settings-static = Manual (IP estática)
 network-settings-pppoe = Puente (PPPoE)
+network-settings-static-ip-address = Dirección IP estática
+network-settings-network-mask = Máscara de red
+network-settings-gateway = Gateway
+network-settings-done = Listo
+network-settings-wifi-password =
+    .placeholder = Contraseña
+network-settings-show-password = Mostrar contraseña
+network-settings-connect = Conectar
+network-settings-username = Nombre de usuario
+network-settings-password = Contraseña
+network-settings-router-ip = Dirección IP del enrutador
+network-settings-dhcp-server = Servidor DHCP
+network-settings-enable-wifi = Habilitar Wi-Fi
+network-settings-network-name = Nombre de la red (SSID)
+wireless-connected = Conectado
+wireless-icon =
+    .alt = Red Wi-Fi
+network-settings-changing = Cambiar la configuración la de red. Esto puede tardar un minuto.
+failed-ethernet-configure = Falló la configuración de ethernet.
+failed-wifi-configure = Falló la configuración de Wi-Fi
+failed-wan-configure = Falló la configuración de WAN
+failed-lan-configure = Falló la configuración de LAN
+failed-wlan-configure = Falló la configuración de WLAN
 
 ## User Settings
 
+create-user =
+    .aria-label = Agregar nuevo usuario
+user-settings-input-name =
+    .placeholder = Nombre
+user-settings-input-email =
+    .placeholder = Correo electrónico
+user-settings-input-password =
+    .placeholder = Contraseña
+user-settings-input-new-password =
+    .placeholder = Nueva contraseña (opcional)
+user-settings-input-confirm-new-password =
+    .placeholder = Confirmar nueva contraseña
+user-settings-input-confirm-password =
+    .placeholder = Confirmar contraseña
+user-settings-password-mismatch = Las contraseñas no coinciden
+user-settings-save = Guardar
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Sin adaptadores presentes.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Sin autorizaciones
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Asistente inteligente
+experiment-settings-logs = Registros
 
 ## Localization Settings
 
+localization-settings-language-region = Idioma y región
+localization-settings-country = País
+localization-settings-timezone = Huso horario
+localization-settings-language = Idioma
+localization-settings-units = Unidades
+localization-settings-units-temperature = Temperatura
+localization-settings-units-temperature-celsius = Celsius (° C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (° F)
 
 ## Update Settings
 
+update-settings-update-now = Actualizar ahora
+update-available = Nueva versión disponible
+update-up-to-date = Tu sistema esta actualizado
 
 ## Developer Settings
 
