@@ -18,6 +18,11 @@ wordmark =
 ## Menu Items
 
 assistant-menu-item = Asistente
+things-menu-item = Dispositivos
+rules-menu-item = Reglas
+logs-menu-item = Registros
+floorplan-menu-item = Plano de los pisos
+settings-menu-item = Ajustes
 
 ## Things
 
