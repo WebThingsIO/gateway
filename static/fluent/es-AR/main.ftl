@@ -46,6 +46,7 @@ upload-floorplan-hint = (.svg recomendado)
 
 ## Top-Level Settings
 
+settings-domain = Dominio
 
 ## Domain Settings
 
