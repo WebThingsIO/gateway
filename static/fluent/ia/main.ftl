@@ -407,9 +407,22 @@ new-thing-pin =
     .placeholder = Insere PIN
 new-thing-pin-error = PIN incorrecte
 new-thing-pin-invalid = PIN invalide
+new-thing-cancel = Cancellar
+new-thing-submit = Inviar
+new-thing-username =
+    .placeholder = Insere le nomine de usator
+new-thing-password =
+    .placeholder = Insere le contrasigno
+new-thing-credentials-error = Credentiales incorrecte
+new-thing-saved = Salvate
+new-thing-done = Facite
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Insere le URL de objecto del web
+new-web-thing-label = Objecto del web
+loading = Cargamento…
 
 ## Empty div Messages
 
