@@ -47,12 +47,46 @@ upload-floorplan-hint = (.svg recomendado)
 ## Top-Level Settings
 
 settings-domain = Dominio
+settings-network = Red
+settings-users = Usuarios
+settings-add-ons = Complementos
+settings-adapters = Adaptadores
+settings-localization = Ubicación
+settings-updates = Actualizaciones
+settings-authorizations = Autorizaciones
+settings-experiments = Experimentos
+settings-developer = Desarrollador
 
 ## Domain Settings
 
+domain-settings-local-label = Acceso local
+domain-settings-local-update = Actualizar nombre de host
+domain-settings-remote-access = Acceso remoto
+domain-settings-local-name =
+    .placeholder = gateway
 
 ## Network Settings
 
+network-settings-unsupported = La configuración de la red no es compatible con esta plataforma.
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
+network-settings-wifi-image =
+    .alt = Wifi
+network-settings-wifi = Wifi
+network-settings-home-network-image =
+    .alt = Red domestica
+network-settings-internet-image =
+    .alt = Internet
+network-settings-configure = Configurar
+network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Modo
+network-settings-home-network-lan = Red doméstica (LAN)
+network-settings-wifi-wlan = Wi-Fi（WLAN）
+network-settings-ip-address = Dirección IP
+network-settings-dhcp = (DHCP) Automático
+network-settings-static = Manual (IP estática)
+network-settings-pppoe = Puente (PPPoE)
 
 ## User Settings
 
