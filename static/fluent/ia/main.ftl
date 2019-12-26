@@ -493,6 +493,7 @@ failed-save = Falta a salvar.
 
 ## Schema Form
 
+unsupported-field = Schema de campo non supportate
 
 ## Icon Sources
 
@@ -500,6 +501,7 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Accesso — { -webthings-gateway-brand }
 login-log-in = Authenticar se
 
 ## Create First User Page
@@ -514,6 +516,7 @@ signup-next = Sequente
 
 tunnel-setup-title = Elige adresse web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Benvenite
+tunnel-setup-choose-address = Elige un secur adresse web pro tu gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
 tunnel-setup-privacy-policy = Politica de confidentialitate
