@@ -423,9 +423,12 @@ new-web-thing-url =
     .placeholder = Insere le URL de objecto del web
 new-web-thing-label = Objecto del web
 loading = Cargamento…
+new-web-thing-multiple = Plure objectos web trovate
+new-web-thing-from = de
 
 ## Empty div Messages
 
+no-things = Nulle objectos ancora. Clicca + pro scander objectos disponibile.
 
 ## Add-on Settings
 
