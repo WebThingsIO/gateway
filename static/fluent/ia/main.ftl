@@ -519,13 +519,18 @@ tunnel-setup-welcome = Benvenite
 tunnel-setup-choose-address = Elige un secur adresse web pro tu gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
+tunnel-setup-opt-in = Actualisa me re nove functionalitates e opportunitates de contribution.
 tunnel-setup-privacy-policy = Politica de confidentialitate
-tunnel-setup-error = Un error occurreva durante que on configurava le subdominio.
+tunnel-setup-input-reclamation-token =
+    .placeholder = Jeton de recuperation
+tunnel-setup-error = Un error occurreva durante le configuration del sub-dominio.
 tunnel-setup-create = Crear
 tunnel-setup-skip = Saltar
+tunnel-setup-time-sync = Attende pro horologio de systema esser configurate de internet. Le registration de dominio es probabile faller usque isto se completa.
 
 ## Authorize Page
 
+authorize-title = Requesta de autorisation — { -webthings-gateway-brand }
 authorize-authorization-request = Requesta de autorisation
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = de <<domain>>
