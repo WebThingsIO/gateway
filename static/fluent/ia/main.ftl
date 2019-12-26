@@ -590,7 +590,7 @@ connecting-skipped = Le passarella es ora in comenciamento. Naviga a { $gateway-
 
 creating-title = Creation del rete wifi — { -webthings-gateway-brand }
 creating-header = Creation del rete wifi…
-creating-content = Connecte te a { $ssid } con le contrasigno que tu justo ha create, pois naviga a { $gateway-link } o { $ip-link } in tu navigator del Web.
+creating-content = Connecte te a { $ssid } con le contrasigno que tu ha justo create, naviga pois a { $gateway-link } o { $ip-link } per tu navigator del Web.
 
 ## General Terms
 
@@ -611,6 +611,8 @@ back-button =
     .aria-label = Retro
 overflow-button =
     .aria-label = Actiones additional
+speech-button =
+    .aria-label = Ascolta le voce
 submit-button =
     .aria-label = Inviar
 edit-button =
