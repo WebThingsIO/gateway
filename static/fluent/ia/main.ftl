@@ -538,6 +538,7 @@ authorize-prompt = <<name>> desirarea acceder a tu passarella pro <<function>> a
 authorize-source = de <<domain>>
 authorize-monitor-and-control = surveliar e controlar
 authorize-monitor = surveliar
+authorize-allow-all = Permitter a tote le objectos
 authorize-allow =
     .value = Permitter
 authorize-deny = Denegar
@@ -545,10 +546,16 @@ authorize-deny = Denegar
 ## Local Token Page
 
 local-token-title = Servicio de jeton local — { -webthings-gateway-brand }
+local-token-header = Servicio de jeton local
+local-token-your-token = Tu jeton local es isto <a data-l10n-name="local-token-jwt">jeton web JSON</a>:
 local-token-use-it = Usa lo pro communicar con le passarella con securitate, con le <a data-l10n-name="local-token-bearer-type">autorisation typo Bearer</a>.
 
 ## Router Setup Page
 
+router-setup-title = Configuration del router — { -webthings-gateway-brand }
+router-setup-header = Crea un nove rete wifi
+router-setup-input-ssid =
+    .placeholder = Nomine del rete
 router-setup-input-password =
     .placeholder = Contrasigno
 router-setup-input-confirm-password =
@@ -559,6 +566,8 @@ router-setup-password-mismatch = Le contrasignos debe concordar
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuration del rete — { -webthings-gateway-brand }
+wifi-setup-header = Connecter a un rete wifi?
 wifi-setup-input-password =
     .placeholder = Contrasigno
 wifi-setup-show-password = Monstrar contrasigno
@@ -570,6 +579,9 @@ wifi-setup-skip = Saltar
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Connexion a wifi — { -webthings-gateway-brand }
+connecting-header = Connexion a wifi…
+connecting-connect = Presta attention a esser connectite al mesme rete e pois naviga a { $gateway-link } in tu navigator del Web pro continuar le installation.
 
 ## Creating Wi-Fi Network Page
 
