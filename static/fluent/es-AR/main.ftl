@@ -234,18 +234,64 @@ logs-device-select =
 logs-property = Propiedad
 logs-property-select =
     .aria-label = Propiedad del registro
+logs-retention = Retención
+logs-retention-length =
+    .aria-label = Longitud de retención del registro
+logs-retention-unit =
+    .aria-label = Unidad de retención del registro
+logs-hours = Horas
+logs-days = Días
+logs-weeks = Semanas
+logs-save = Guardar
+logs-remove-dialog-title = Eliminar
+logs-remove-dialog-warning = Al eliminar el registro también se van a eliminar todos sus datos. ¿Seguro de que querés eliminarlo?
+logs-remove = Eliminar
+logs-unable-to-create = No se pudo crear el registro
+logs-server-remove-error = Error del servidor: no se puede eliminar el registro
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Exploración
+add-thing-scanning = Buscando nuevos dispositivos...
+add-thing-add-adapters-hint = No se encontraron dispositivos nuevos. Probá <a data-l10n-name="add-thing-add-adapters-hint-anchor">agregando algunos complementos</a>.
+add-thing-add-by-url = Añadir por URL...
+add-thing-done = Listo
+add-thing-cancel = Cancelar
 
 ## Context Menu
 
+context-menu-choose-icon = Elegir icono...
+context-menu-save = Guardar
+context-menu-remove = Eliminar
 
 ## Capabilities
 
+OnOffSwitch = Interruptor encendido/apagado
+MultiLevelSwitch = Interruptor multinivel
+ColorControl = Control del color
+ColorSensor = Sensor del color
+EnergyMonitor = Monitor de energía
+BinarySensor = Sensor binario
+MultiLevelSensor = Sensor multinivel
+SmartPlug = Enchufe inteligente
+Light = Claro
+DoorSensor = Sensor de puerta
+MotionSensor = Sensor de movimiento
+LeakSensor = Sensor de fugas
+PushButton = Presionar botón
+VideoCamera = Cámara de video
+Camera = Cámara
+TemperatureSensor = Sensor de temperatura
+Alarm = Alarma
+Thermostat = Termostato
+Lock = Cerrar
+Custom = Dispositivo personalizado
+Thing = Dispositivo
 
 ## Properties
 
+alarm = Alarma
 
 ## Domain Setup
 
