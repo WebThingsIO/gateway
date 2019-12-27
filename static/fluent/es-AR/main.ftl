@@ -196,9 +196,44 @@ rules-scroll-left =
 rules-scroll-right =
     .alt = Desplazarse a la derecha
 rules-delete-prompt = Dejá los dispositivos aquí para desconectarte
+rules-delete-dialog = ¿Estás seguro de querés eliminar esta regla de manera permanente?
+rules-delete-cancel =
+    .value = Cancelar
+rules-delete-confirm =
+    .value = Eliminar regla
+rule-invalid = Inválido
+rule-delete-prompt = ¿Estás seguro de querés eliminar esta regla de manera permanente?
+rule-delete-cancel-button =
+    .value = Cancelar
+rule-delete-confirm-button =
+    .value = Eliminar regla
+rule-select-property = Seleccionar propiedad
+rule-not = No
+rule-event = Evento
+rule-action = Acción
+rule-configure = Configurar…
+rule-time-title = Hora del día
+rule-notification = Notificación
+notification-title = Título
+notification-message = Mensaje
+notification-level = Nivel
+notification-low = Bajo
+notification-normal = Normal
+notification-high = Alto
+rule-name = Nombre de la regla
 
 ## Logs
 
+add-log =
+    .aria-label = Crear nuevo registro
+logs = Registros
+logs-create-log-hint = No se crearon registros. Hacé clic en + para crear un registro.
+logs-device = Dispositivo
+logs-device-select =
+    .aria-label = Registro del dispositivo
+logs-property = Propiedad
+logs-property-select =
+    .aria-label = Propiedad del registro
 
 ## Add New Things
 
