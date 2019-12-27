@@ -14,7 +14,6 @@ const sleep = require('../../sleep');
 const thingLight1 = {
   id: 'light1',
   title: 'light1',
-  type: 'onOffSwitch',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
   properties: {

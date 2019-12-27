@@ -275,7 +275,7 @@ class Log {
       if (thing.selectedCapability) {
         iconUrl = Icons.capabilityToIcon(thing.selectedCapability);
       } else {
-        iconUrl = Icons.typeToIcon(thing.type);
+        iconUrl = Icons.defaultIcon();
       }
       this.icon.style.backgroundImage = `url(${iconUrl})`;
     }

@@ -19,7 +19,6 @@ const JSONWebToken = require('../../models/jsonwebtoken');
 
 const TEST_THING = {
   id: 'test-1',
-  type: 'dimmableColorLight',
   title: 'kitchen',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch', 'Light', 'ColorControl'],

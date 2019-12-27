@@ -182,29 +182,6 @@ const Utils = {
 
     return `#${r}${g}${b}`;
   },
-  legacyTypeToCapabilities: (type) => {
-    switch (type) {
-      case 'binarySensor':
-        return ['BinarySensor'];
-      case 'multiLevelSensor':
-        // legacy multiLevelSensor includes an 'on' member
-        return ['BinarySensor', 'MultiLevelSensor'];
-      case 'onOffLight':
-      case 'dimmableLight':
-        return ['OnOffSwitch', 'Light'];
-      case 'onOffColorLight':
-      case 'dimmableColorLight':
-        return ['OnOffSwitch', 'Light', 'ColorControl'];
-      case 'multiLevelSwitch':
-        return ['OnOffSwitch', 'MultiLevelSwitch'];
-      case 'onOffSwitch':
-        return ['OnOffSwitch'];
-      case 'smartPlug':
-        return ['OnOffSwitch', 'SmartPlug', 'EnergyMonitor'];
-      default:
-        return [];
-    }
-  },
   sortCapabilities: (capabilities) => {
     // copy the array, as we're going to sort in place.
     const list = capabilities.slice();

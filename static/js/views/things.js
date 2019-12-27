@@ -127,32 +127,7 @@ const ThingsScreen = {
           break;
       }
     } else {
-      switch (description.type) {
-        case 'onOffSwitch':
-          thing = new OnOffSwitch(thingModel, description, format);
-          break;
-        case 'binarySensor':
-          thing = new BinarySensor(thingModel, description, format);
-          break;
-        case 'multiLevelSensor':
-          thing = new MultiLevelSensor(thingModel, description, format);
-          break;
-        case 'onOffLight':
-        case 'onOffColorLight':
-        case 'dimmableLight':
-        case 'dimmableColorLight':
-          thing = new Light(thingModel, description, format);
-          break;
-        case 'multiLevelSwitch':
-          thing = new MultiLevelSwitch(thingModel, description, format);
-          break;
-        case 'smartPlug':
-          thing = new SmartPlug(thingModel, description, format);
-          break;
-        default:
-          thing = new Thing(thingModel, description, format);
-          break;
-      }
+      thing = new Thing(thingModel, description, format);
     }
     this.things.push(thing);
     return thing;
@@ -319,13 +294,7 @@ const ThingsScreen = {
         }
       }
 
-      let icon;
-      if (description.selectedCapability) {
-        icon = Icons.capabilityToIcon(description.selectedCapability);
-      } else {
-        icon = Icons.typeToIcon(description.type);
-      }
-
+      const icon = Icons.capabilityToIcon(description.selectedCapability);
       const iconEl = document.getElementById('thing-title-icon');
       const customIconEl = document.getElementById('thing-title-custom-icon');
       if (description.iconHref &&
@@ -372,13 +341,7 @@ const ThingsScreen = {
 
       const thingModel = await App.gatewayModel.getThingModel(thingId);
 
-      let icon;
-      if (description.selectedCapability) {
-        icon = Icons.capabilityToIcon(description.selectedCapability);
-      } else {
-        icon = Icons.typeToIcon(description.type);
-      }
-
+      const icon = Icons.capabilityToIcon(description.selectedCapability);
       const iconEl = document.getElementById('thing-title-icon');
       const customIconEl = document.getElementById('thing-title-custom-icon');
       if (description.iconHref && description.selectedCapability === 'Custom') {

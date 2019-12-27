@@ -24,7 +24,6 @@ const Events = require('../../models/events');
 
 const TEST_THING = {
   id: 'test-1',
-  type: 'onOffSwitch',
   title: 'test-1',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
@@ -79,7 +78,6 @@ const VALIDATION_THING = {
 
 const piDescr = {
   id: 'pi-1',
-  type: 'thing',
   title: 'pi-1',
   '@context': 'https://iot.mozilla.org/schemas',
   '@type': ['OnOffSwitch'],
@@ -1233,8 +1231,6 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('title');
     expect(res.body.title).toEqual(piDescr.title);
-    expect(res.body).toHaveProperty('type');
-    expect(res.body.type).toEqual(piDescr.type);
   });
 
   it('fail to set credentials for device', async () => {
@@ -1263,8 +1259,6 @@ describe('things/', function() {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('title');
     expect(res.body.title).toEqual(piDescr.title);
-    expect(res.body).toHaveProperty('type');
-    expect(res.body.type).toEqual(piDescr.type);
   });
 
   it('fail to set read-only property', async () => {

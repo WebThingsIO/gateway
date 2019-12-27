@@ -180,35 +180,7 @@ const FloorplanScreen = {
               break;
           }
         } else {
-          switch (description.type) {
-            case 'onOffSwitch':
-              thing = new OnOffSwitch(thingModel, description, format);
-              break;
-            case 'onOffLight':
-            case 'onOffColorLight':
-            case 'dimmableLight':
-            case 'dimmableColorLight':
-              thing = new Light(thingModel, description, format);
-              break;
-            case 'binarySensor':
-              thing =
-                new BinarySensor(thingModel, description, format);
-              break;
-            case 'multiLevelSensor':
-              thing =
-                new MultiLevelSensor(thingModel, description, format);
-              break;
-            case 'multiLevelSwitch':
-              thing =
-                new MultiLevelSwitch(thingModel, description, format);
-              break;
-            case 'smartPlug':
-              thing = new SmartPlug(thingModel, description, format);
-              break;
-            default:
-              thing = new Thing(thingModel, description, format);
-              break;
-          }
+          thing = new Thing(thingModel, description, format);
         }
         thing.element.dataset.index = this.things.length;
         this.addInteract(thing);

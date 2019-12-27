@@ -16,7 +16,6 @@ class ThingModel extends Model {
   constructor(description, ws) {
     super();
     this.title = description.title;
-    this.type = description.type;
     this.properties = {};
     this.events = [];
     this.connected = false;

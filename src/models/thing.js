@@ -36,7 +36,6 @@ class Thing {
     // Parse the Thing Description
     this.id = id;
     this.title = description.title || description.name || '';
-    this.type = description.type || '';
     this['@context'] =
       description['@context'] || 'https://iot.mozilla.org/schemas';
     this['@type'] = description['@type'] || [];
@@ -387,7 +386,6 @@ class Thing {
   getDescription(reqHost, reqSecure) {
     const desc = {
       title: this.title,
-      type: this.type,
       '@context': this['@context'],
       '@type': this['@type'],
       description: this.description,
@@ -479,9 +477,6 @@ class Thing {
    * @return {Promise} A promise which resolves with the description set.
    */
   updateFromDescription(description) {
-    // Update type
-    this.type = description.type || '';
-
     // Update @context
     this['@context'] =
       description['@context'] || 'https://iot.mozilla.org/schemas';

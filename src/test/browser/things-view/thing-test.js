@@ -18,7 +18,6 @@ describe('Thing', () => {
        const desc = {
          id: 'UnknownThing',
          title: 'foofoo',
-         type: 'thing',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': [],
          properties: {
@@ -122,7 +121,6 @@ describe('Thing', () => {
     const desc = {
       id: 'spacedPropertyThings',
       title: 'battery sensor',
-      type: 'thing',
       '@context': 'https://iot.mozilla.org/schemas',
       '@type': [],
       properties: {
@@ -192,7 +190,6 @@ describe('Thing', () => {
     const desc = {
       id: 'UnknownThing',
       title: 'foofoo',
-      type: 'thing',
       '@context': 'https://iot.mozilla.org/schemas',
       '@type': [],
       properties: {
@@ -279,9 +276,8 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffLight',
          title: 'foofoo',
-         type: 'onOffLight',
          '@context': 'https://iot.mozilla.org/schemas',
-         '@type': ['OnOffSwitch', 'Light'],
+         '@type': ['Light', 'OnOffSwitch'],
          properties: {
            power: {
              '@type': 'OnOffProperty',
@@ -325,7 +321,6 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffSwitch',
          title: 'foofoo',
-         type: 'onOffSwitch',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['OnOffSwitch'],
          properties: {
@@ -372,9 +367,8 @@ describe('Thing', () => {
        const desc = {
          id: 'dimmableLight',
          title: 'foofoo',
-         type: 'dimmableLight',
          '@context': 'https://iot.mozilla.org/schemas',
-         '@type': ['OnOffSwitch', 'Light'],
+         '@type': ['Light', 'OnOffSwitch'],
          properties: {
            power: {
              '@type': 'OnOffProperty',
@@ -473,9 +467,8 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffColorLight',
          title: 'foofoo',
-         type: 'onOffColorLight',
          '@context': 'https://iot.mozilla.org/schemas',
-         '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
+         '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
          properties: {
            power: {
              '@type': 'OnOffProperty',
@@ -555,9 +548,8 @@ describe('Thing', () => {
        const desc = {
          id: 'dimmableColorLight',
          title: 'foofoo',
-         type: 'dimmableColorLight',
          '@context': 'https://iot.mozilla.org/schemas',
-         '@type': ['OnOffSwitch', 'Light', 'ColorControl'],
+         '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
          properties: {
            power: {
              '@type': 'OnOffProperty',
@@ -670,9 +662,8 @@ describe('Thing', () => {
        const desc = {
          id: 'multiLevelSwitch',
          title: 'foofoo',
-         type: 'multiLevelSwitch',
          '@context': 'https://iot.mozilla.org/schemas',
-         '@type': ['OnOffSwitch', 'MultiLevelSwitch'],
+         '@type': ['MultiLevelSwitch', 'OnOffSwitch'],
          properties: {
            power: {
              '@type': 'OnOffProperty',
@@ -772,13 +763,12 @@ describe('Thing', () => {
        const desc = {
          id: 'smartPlug',
          title: 'foofoo',
-         type: 'smartPlug',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': [
-           'OnOffSwitch',
-           'MultiLevelSwitch',
            'SmartPlug',
            'EnergyMonitor',
+           'MultiLevelSwitch',
+           'OnOffSwitch',
          ],
          properties: {
            power: {
@@ -950,7 +940,6 @@ describe('Thing', () => {
        const desc = {
          id: 'binarySensor',
          title: 'foofoo',
-         type: 'binarySensor',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['BinarySensor'],
          properties: {
@@ -993,7 +982,6 @@ describe('Thing', () => {
        const desc = {
          id: 'multiLevelSensor',
          title: 'foofoo',
-         type: 'multiLevelSensor',
          '@context': 'https://iot.mozilla.org/schemas',
          '@type': ['MultiLevelSensor'],
          properties: {
