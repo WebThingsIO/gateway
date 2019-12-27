@@ -159,12 +159,43 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (° F)
 update-settings-update-now = Actualizar ahora
 update-available = Nueva versión disponible
 update-up-to-date = Tu sistema esta actualizado
+updates-not-supported = Las actualizaciones no son compatibles con esta plataforma.
+update-settings-enable-self-updates = Permitir actualizaciones automáticas
+last-update = Última actualización
+current-version = Versión actual
+failed = Falló
+never = Nunca
+in-progress = En progreso
+restarting = Reiniciando
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Habilitar SSH
+developer-settings-view-internal-logs = Ver registros internos
+developer-settings-create-local-authorization = Crear autorización local
 
 ## Rules
 
+add-rule =
+    .aria-label = Crear nueva regla
+rules = Reglas
+rules-create-rule-hint = No hay reglas creadas. Hacé clic en + para crear una regla.
+rules-rule-name = Nombre de la regla
+rules-customize-rule-name-icon =
+    .alt = Personalizar nombre de la regla
+rules-rule-description = Descripción de la regla
+rules-preview-button =
+    .alt = Vista previa
+rules-delete-icon =
+    .alt = Eliminar
+rules-drag-hint = Arrastrá tus dispositivos aquí para comenzar a crear una regla
+rules-drag-input-hint = Agregar un dispositivo como entrada
+rules-drag-output-hint = Agregar un dispositivo como salida
+rules-scroll-left =
+    .alt = Desplazarse a la izquierda
+rules-scroll-right =
+    .alt = Desplazarse a la derecha
+rules-delete-prompt = Dejá los dispositivos aquí para desconectarte
 
 ## Logs
 
