@@ -392,7 +392,6 @@ new-web-thing-from = da
 
 ## Empty div Messages
 
-no-things = Nessun dispositivo. Fai clic su + per cercare i dispositivi disponibili.
 thing-not-found = Oggetto web non trovato.
 action-not-found = Azione non trovata.
 events-not-found = Questo oggetto non ha eventi.
@@ -401,7 +400,6 @@ events-not-found = Questo oggetto non ha eventi.
 
 author-unknown = Sconosciuto
 disable = Disattiva
-enable = Abilita
 by = di
 addon-configure = Configura
 addon-update = Aggiorna
@@ -414,7 +412,6 @@ addon-config-apply = Applica
 addon-discovery-added = Aggiunto
 addon-discovery-add = Inserisci
 addon-discovery-installing = Installazione in corso…
-addon-discovery-failed = Non riuscito
 
 ## Page Titles
 
@@ -423,10 +420,8 @@ domain = Dominio
 users = Utenti
 edit-user = Modifica utente
 add-user = Aggiungi utente
-adapters = Adattori
 addons = Componenti aggiuntivi
 addon-config = Configura componente aggiuntivo
-addon-discovery = Scopri componenti aggiuntivi
 experiments = Esperimenti
 localization = Localizzazione
 updates = Aggiornamenti
@@ -439,7 +434,6 @@ icon = Icona
 
 ## Speech
 
-speech-unsupported = Il browser corrente non supporta i comandi vocali.
 speech-didnt-get = Mi dispiace, non ho capito.
 
 ## Errors
@@ -478,17 +472,14 @@ signup-next = Successivo
 
 tunnel-setup-title = Scegli indirizzo web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Benvenuto
-tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il suo gateway:
 tunnel-setup-input-subdomain =
     .placeholder = sottodominio
-tunnel-setup-opt-in = Tienimi aggiornato sulle nuove funzionalità e sulle opportunità di collaborazione.
 tunnel-setup-privacy-policy = Informativa sulla privacy
 tunnel-setup-input-reclamation-token =
     .placeholder = Token di recupero
 tunnel-setup-error = Si è verificato un errore durante l’impostazione del sottodominio.
 tunnel-setup-create = Crea
 tunnel-setup-skip = Ignora
-tunnel-setup-time-sync = In attesa che l’orologio di sistema venga impostato da Internet. È possibile che la registrazione del dominio non riesca fino al completamento dell’operazione.
 
 ## Authorize Page
 
@@ -497,15 +488,12 @@ authorize-authorization-request = Richiesta di autorizzazione
 authorize-monitor-and-control = Monitorare e controllare
 authorize-monitor = monitorare
 authorize-allow-all = Consenti tutti gli oggetti
-authorize-allow =
-    .value = Permetti
 authorize-deny = Nega
 
 ## Local Token Page
 
 local-token-title = Servizio token locale — { -webthings-gateway-brand }
 local-token-header = Servizio token locale
-local-token-your-token = Il token locale è: <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
 local-token-use-it = Usalo per comunicare in modo sicuro con il gateway, con <a data-l10n-name="local-token-bearer-type">autorizzazione Bearer-type</a>.
 
 ## Router Setup Page
