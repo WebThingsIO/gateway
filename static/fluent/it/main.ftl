@@ -52,7 +52,6 @@ settings-localization = Localizzazione
 settings-updates = Aggiornamenti
 settings-authorizations = Autorizzazioni
 settings-experiments = Esperimenti
-settings-developer = Sviluppatore
 
 ## Domain Settings
 
@@ -485,6 +484,8 @@ tunnel-setup-skip = Ignora
 
 authorize-title = Richiesta di autorizzazione — { -webthings-gateway-brand }
 authorize-authorization-request = Richiesta di autorizzazione
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = da <<dominio>>
 authorize-monitor-and-control = Monitorare e controllare
 authorize-monitor = monitorare
 authorize-allow-all = Consenti tutti gli oggetti
@@ -494,7 +495,6 @@ authorize-deny = Nega
 
 local-token-title = Servizio token locale — { -webthings-gateway-brand }
 local-token-header = Servizio token locale
-local-token-use-it = Usalo per comunicare in modo sicuro con il gateway, con <a data-l10n-name="local-token-bearer-type">autorizzazione Bearer-type</a>.
 
 ## Router Setup Page
 
@@ -526,9 +526,7 @@ wifi-setup-skip = Ignora
 ## Connecting to Wi-Fi Page
 
 connecting-title = Connessione al Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Connessione al Wi-Fi…
-connecting-connect = Assicursi di essere connessi alla stessa rete e aprire { $gateway-link } nel browser per proseguire l’installazione.
-connecting-warning = Se non è possibile aprire { $domain }, inserire l’indirizzo IP del gateway.
+connecting-connect = Assicurarsi di essere connessi alla stessa rete e aprire { $gateway-link } nel browser per proseguire l’installazione.
 connecting-header-skipped = Configurazione Wi-Fi ignorata
 connecting-skipped = Il gateway è in fase di avvio. Connettersi alla stessa rete del gateway e aprire { $gateway-link } nel browser per proseguire l’installazione.
 
@@ -553,3 +551,13 @@ submit = Invia
 
 menu-button =
     .aria-label = Menu
+back-button =
+    .aria-label = Indietro
+speech-button =
+    .aria-label = Ascolta la voce
+submit-button =
+    .aria-label = Invia
+edit-button =
+    .aria-label = Modifica
+save-button =
+    .aria-label = Salva
