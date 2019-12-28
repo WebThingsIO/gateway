@@ -310,51 +310,198 @@ reclaim-failed = Não foi possível recuperar o domínio.
 subdomain-already-used = Este subdomínio já está sendo usado. Escolha um diferente.
 invalid-reclamation-token = Token de recuperação inválido.
 domain-success = Sucesso! Aguarde enquanto redirecionamos você…
+issuing-error = Erro ao emitir certificado. Tente novamente.
+redirecting = Redirecionando…
 
 ## Booleans
 
+true = Verdadeiro
+false = Falso
 
 ## Time
 
+utils-now = agora
+utils-seconds-ago =
+    { $value ->
+        [one] Há { $value } segundo
+       *[other] Há { $value } segundos
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] Há { $value } minuto
+       *[other] Há { $value } minutos
+    }
+utils-hours-ago =
+    { $value ->
+        [one] Há { $value } hora
+       *[other] Há { $value } horas
+    }
+utils-days-ago =
+    { $value ->
+        [one] Há { $value } dia
+       *[other] Há { $value } dias
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] Há { $value } semana
+       *[other] Há { $value } semanas
+    }
+utils-months-ago =
+    { $value ->
+        [one] Há { $value } mês
+       *[other] Há { $value } meses
+    }
+utils-years-ago =
+    { $value ->
+        [one] Há { $value } ano
+       *[other] Há { $value } anos
+    }
+minute = Minuto
+hour = Hora
+day = Dia
+week = Semana
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = min
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = pés
 
 ## New Thing View
 
+unknown-device-type = Tipo de dispositivo desconhecido
+new-thing-choose-icon = Escolher ícone…
+new-thing-save = Salvar
+new-thing-pin =
+    .placeholder = Inserir PIN
+new-thing-pin-error = PIN incorreto
+new-thing-pin-invalid = PIN inválido
+new-thing-cancel = Cancelar
+new-thing-submit = Enviar
+new-thing-username =
+    .placeholder = Digitar nome de usuário
+new-thing-password =
+    .placeholder = Digitar senha
+new-thing-credentials-error = Credenciais incorretas
+new-thing-saved = Salvo
+new-thing-done = Pronto
 
 ## New Web Thing View
 
+loading = Carregando…
+new-web-thing-from = de
 
 ## Empty div Messages
 
+no-things = Nenhum dispositivo ainda. Clique em + para procurar dispositivos disponíveis.
+thing-not-found = Coisa não encontrada.
+action-not-found = Ação não encontrada.
+events-not-found = Esta coisa não tem eventos.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Encontrar mais extensões
+author-unknown = Desconhecido
+disable = Desativar
+enable = Ativar
+by = por
+addon-configure = Configurar
+addon-update = Atualizar
+addon-remove = Remover
+addon-updating = Atualizando…
+addon-updated = Atualizada
+addon-update-failed = Falha
+addon-config-applying = Aplicando…
+addon-config-apply = Aplicar
+addon-discovery-added = Adicionada
+addon-discovery-add = Adicionar
+addon-discovery-installing = Instalando…
+addon-discovery-failed = Falha
 
 ## Page Titles
 
+settings = Configurações
+domain = Domínio
+users = Usuários
+edit-user = Editar usuário
+add-user = Adicionar usuário
+adapters = Adaptadores
+addons = Extensões
+addon-config = Configurar extensão
+addon-discovery = Descobrir mais extensões
+experiments = Experimentos
+localization = Localização
+updates = Atualizações
+authorizations = Autorizações
+developer = Desenvolvedor
+network = Rede
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ícone
 
 ## Speech
 
+speech-unsupported = O navegador atual não suporta fala
+speech-didnt-get = Desculpe, não entendi.
 
 ## Errors
 
+unknown-state = Estado desconhecido.
+error = Erro
+errors = Erros
+gateway-unreachable = Gateway inacessível
+more-information = Mais informações
+invalid-file = Arquivo inválido.
+failed-read-file = Falha ao ler arquivo.
+failed-save = Falha ao salvar.
 
 ## Schema Form
 
+unsupported-field = Esquema de campo não suportado
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Accesso — { -webthings-gateway-brand }
+login-log-in = Entrar
 
 ## Create First User Page
 
+signup-title = Criar usuário — { -webthings-gateway-brand }
+signup-welcome = Boas-vindas
+signup-create-account = Crie sua primeira conta de usuário:
+signup-password-mismatch = As senhas não coincidem
+signup-next = Avançar
 
 ## Tunnel Setup Page
 
+tunnel-setup-welcome = Boas-vindas
+tunnel-setup-choose-address = Escolha um endereço web seguro para seu gateway:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomínio
+tunnel-setup-opt-in = Mantenha-me atualizado sobre novos recursos e oportunidades de contribuição.
+tunnel-setup-privacy-policy = Política de privacidade
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token de recuperação
+tunnel-setup-error = Ocorreu um erro ao configurar o subdomínio.
 
 ## Authorize Page
 
