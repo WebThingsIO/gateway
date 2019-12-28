@@ -500,6 +500,7 @@ signup-next = Avançar
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Escolha de endereço web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Boas-vindas
 tunnel-setup-choose-address = Escolha um endereço web seguro para seu gateway:
 tunnel-setup-input-subdomain =
@@ -565,11 +566,16 @@ wifi-setup-skip = Pular
 
 connecting-title = Conectando ao Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Conectando ao Wi-Fi…
+connecting-connect = Verifique se está conectado à mesma rede e acesse { $gateway-link } no seu navegador web para continuar a configuração.
+connecting-warning = Nota: Se você não conseguir carregar { $domain }, procure o endereço IP do gateway no seu roteador.
 connecting-header-skipped = Wi-Fi não foi configurado
 connecting-skipped = O gateway está sendo iniciado agora. Acesse { $gateway-link } no seu navegador web, conectado na mesma rede do gateway, para continuar a configuração.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Criação de rede Wi-Fi — { -webthings-gateway-brand }
+creating-header = Criando rede Wi-Fi…
+creating-content = Conecte-se a { $ssid } com a senha que você acabou de criar, depois acesse { $gateway-link } ou { $ip-link } no seu navegador.
 
 ## General Terms
 
@@ -590,6 +596,8 @@ back-button =
     .aria-label = Voltar
 overflow-button =
     .aria-label = Ações adicionais
+speech-button =
+    .aria-label = Escutar voz
 submit-button =
     .aria-label = Enviar
 edit-button =
