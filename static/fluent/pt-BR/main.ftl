@@ -20,7 +20,7 @@ wordmark =
 assistant-menu-item = Assistente
 things-menu-item = Coisas
 rules-menu-item = Regras
-logs-menu-item = Registros
+logs-menu-item = Logs
 floorplan-menu-item = Planta baixa
 settings-menu-item = Configurações
 log-out-button = Sair
@@ -141,7 +141,7 @@ authorization-settings-no-authorizations = Nenhuma autorização.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Assistente inteligente
-experiment-settings-logs = Registros
+experiment-settings-logs = Logs
 
 ## Localization Settings
 
@@ -171,7 +171,7 @@ restarting = Reiniciando
 ## Developer Settings
 
 developer-settings-enable-ssh = Ativar SSH
-developer-settings-view-internal-logs = Exibir registros internos
+developer-settings-view-internal-logs = Exibir logs internos
 developer-settings-create-local-authorization = Criar autorização local
 
 ## Rules
@@ -224,6 +224,10 @@ rule-name = Nome da regra
 
 ## Logs
 
+add-log =
+    .aria-label = Criar novo log
+logs = Logs
+logs-create-log-hint = Nenhum log criado. Clique em + para criar um log.
 logs-device = Dispositivo
 logs-property = Propriedade
 logs-retention = Retenção
@@ -232,7 +236,10 @@ logs-days = Dias
 logs-weeks = Semanas
 logs-save = Salvar
 logs-remove-dialog-title = Removendo
+logs-remove-dialog-warning = Remover o log remove também todos os seus dados. Tem certeza que deseja remover?
 logs-remove = Remover
+logs-unable-to-create = Não foi possível criar log
+logs-server-remove-error = Erro no servidor: não foi possível remover log
 
 ## Add New Things
 
@@ -568,6 +575,7 @@ connecting-skipped = O gateway está sendo iniciado agora. Acesse { $gateway-lin
 
 ok = Ok
 ellipsis = …
+event-log = Log de eventos
 edit = Editar
 remove = Remover
 disconnected = Desconectado
