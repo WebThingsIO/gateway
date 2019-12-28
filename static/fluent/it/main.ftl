@@ -71,19 +71,16 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
-    .alt = Rete di casa
 network-settings-internet-image =
     .alt = Internet
-network-settings-configure = Configurazione
+network-settings-configure = Configura
 network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Modalità
-network-settings-home-network-lan = Rete di casa (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Indirizzo IP
 network-settings-dhcp = Automatico (DHCP)
 network-settings-static = Manuale (IP statico)
-network-settings-pppoe = Bridge (PPPoE)
+network-settings-pppoe = Ponte (PPPoE)
 network-settings-static-ip-address = Indirizzo IP statico
 network-settings-network-mask = Maschera di rete
 network-settings-gateway = Gateway
@@ -91,8 +88,8 @@ network-settings-done = Fatto
 network-settings-wifi-password =
     .placeholder = Password
 network-settings-show-password = Mostra password
-network-settings-connect = Collegare
-network-settings-username = Username
+network-settings-connect = Connetti
+network-settings-username = Nome utente
 network-settings-password = Password
 network-settings-router-ip = Indirizzo IP del router
 network-settings-dhcp-server = Server DHCP
@@ -101,7 +98,6 @@ network-settings-network-name = Nome di rete (SSID)
 wireless-connected = Connesso
 wireless-icon =
     .alt = Rete Wi-Fi
-network-settings-changing = Modifica delle impostazioni di rete. Questa operazione potrebbe richiedere un minuto.
 failed-ethernet-configure = Impossibile configurare ethernet.
 failed-wifi-configure = Impossibile configurare Wi-Fi.
 failed-wan-configure = Impossibile configurare WAN.
@@ -137,7 +133,7 @@ authorization-settings-no-authorizations = Nessuna autorizzazione
 
 ## Experiment Settings
 
-experiment-settings-smart-assistant = Assistente smart
+experiment-settings-smart-assistant = Assistente intelligente
 experiment-settings-logs = Registri
 
 ## Localization Settings
@@ -159,11 +155,9 @@ update-up-to-date = Il sistema è aggiornato
 updates-not-supported = Aggiornamenti non disponibili per la piattaforma in uso.
 update-settings-enable-self-updates = Attiva aggiornamenti automatici
 last-update = Ultimo aggiornamento
-current-version = Versione corrente
 failed = Non riuscito
 never = Mai
 in-progress = In corso
-restarting = Riprendi
 
 ## Developer Settings
 
@@ -176,7 +170,6 @@ developer-settings-create-local-authorization = Crea autorizzazione locale
 add-rule =
     .aria-label = Crea nuova regola
 rules = Regole
-rules-create-rule-hint = Nessuna regola creata. Fai clic su + per creare una regola.
 rules-rule-name = Nome regola
 rules-customize-rule-name-icon =
     .alt = Personalizza il nome della regola
@@ -185,9 +178,8 @@ rules-preview-button =
     .alt = Anteprima
 rules-delete-icon =
     .alt = Elimina
-rules-drag-hint = Trascina qui i tuoi dispositivi per iniziare a creare una regola
-rules-drag-input-hint = Aggiungi dispositivo come ingresso (input)
-rules-drag-output-hint = Aggiungi dispositivo come uscita (output)
+rules-drag-input-hint = Aggiungi dispositivo di ingresso (input)
+rules-drag-output-hint = Aggiungi dispositivo di uscita (output)
 rules-scroll-left =
     .alt = Scorri verso sinistra
 rules-scroll-right =
@@ -204,15 +196,13 @@ rule-delete-cancel-button =
     .value = Annulla
 rule-delete-confirm-button =
     .value = Rimuovi regola
-rule-select-property = Seleziona
+rule-select-property = Seleziona proprietà
 rule-not = Non
 rule-event = Evento
 rule-action = Azione
-rule-configure = Configurazione
 rule-time-title = Ora del giorno
 rule-notification = Notifica
 notification-title = Titolo
-notification-message = Messagio
 notification-level = Livello
 notification-low = Basso
 notification-normal = Normale
@@ -222,34 +212,27 @@ rule-name = Nome
 ## Logs
 
 logs = Registri
-logs-create-log-hint = Nessun registro creato. Fai clic su + per creare un registro.
 logs-device = Dispositivo
 logs-device-select =
-    .aria-label = Registro dispositivo
+    .aria-label = Registro del dispositivo
 logs-property = Proprietà
 logs-property-select =
     .aria-label = Proprietà registro
 logs-retention = Conservazione
 logs-retention-length =
-    .aria-label = Durata del periodo di conservazione
+    .aria-label = Durata periodo conservazione
 logs-retention-unit =
-    .aria-label = Unità di misura del periodo di conservazione
+    .aria-label = Unità di misura periodo di conservazione
 logs-hours = Ore
 logs-days = Giorni
 logs-weeks = Settimane
 logs-save = Salva
-logs-remove-dialog-title = Rimozione
-logs-remove-dialog-warning = La rimozione del registro cancellerà anche tutti i dati inclusi. Procedere con la rimozione?
 logs-remove = Rimuovi
-logs-unable-to-create = Impossibile creare il registro
-logs-server-remove-error = Errore del server: impossibile rimuovere il registro
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Ricerca
-add-thing-scanning = Ricerca di nuovi dispositivi…
-add-thing-add-adapters-hint = Non sono stati trovati nuovi oggetti. Provare <a data-l10n-name="add-thing-add-adapters-hint-anchor">ad aggiungere alcuni componenti aggiuntivi</a>.
 add-thing-add-by-url = Aggiungi per URL…
 add-thing-done = Fatto
 add-thing-cancel = Annulla
