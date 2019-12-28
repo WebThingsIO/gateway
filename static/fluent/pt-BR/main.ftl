@@ -104,36 +104,142 @@ network-settings-network-name = Nome da rede (SSID)
 wireless-connected = Conectado
 wireless-icon =
     .alt = Rede Wi-Fi
+network-settings-changing = Alterando as configurações de rede. Isso pode demorar um pouco.
+failed-ethernet-configure = Falha ao configurar ethernet.
+failed-wifi-configure = Falha ao configurar Wi-Fi.
+failed-wan-configure = Falha ao configurar WAN.
+failed-lan-configure = Falha ao configurar LAN.
+failed-wlan-configure = Falha ao configurar WLAN.
 
 ## User Settings
 
+create-user =
+    .aria-label = Adicionar novo usuário
+user-settings-input-name =
+    .placeholder = Nome
+user-settings-input-email =
+    .placeholder = E-mail
+user-settings-input-password =
+    .placeholder = Senha
+user-settings-input-new-password =
+    .placeholder = Nova senha (opcional)
+user-settings-input-confirm-new-password =
+    .placeholder = Confirmar nova senha
+user-settings-input-confirm-password =
+    .placeholder = Confirmar senha
+user-settings-password-mismatch = As senhas não coincidem
+user-settings-save = Salvar
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Nenhum adaptador presente.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Nenhuma autorização.
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Assistente inteligente
+experiment-settings-logs = Registros
 
 ## Localization Settings
 
+localization-settings-language-region = Idioma e região
+localization-settings-country = País
+localization-settings-timezone = Fuso horário
+localization-settings-language = Idioma
+localization-settings-units = Unidades
+localization-settings-units-temperature = Temperatura
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Atualizar agora
+update-available = Nova versão disponível
+update-up-to-date = O seu sistema está atualizado
+updates-not-supported = As atualizações não são suportadas nesta plataforma.
+update-settings-enable-self-updates = Ativar atualizações automáticas
+last-update = Última atualização
+current-version = Versão atual
+failed = Falha
+never = Nunca
+in-progress = Em andamento
+restarting = Reiniciando
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Ativar SSH
+developer-settings-view-internal-logs = Exibir registros internos
+developer-settings-create-local-authorization = Criar autorização local
 
 ## Rules
 
+add-rule =
+    .aria-label = Criar nova regra
+rules = Regras
+rules-create-rule-hint = Nenhuma regra criada. Clique em + para criar uma regra.
+rules-rule-name = Nome da regra
+rules-customize-rule-name-icon =
+    .alt = Personalizar nome da regra
+rules-rule-description = Descrição da regra
+rules-preview-button =
+    .alt = Ver prévia
+rules-delete-icon =
+    .alt = Excluir
+rules-drag-hint = Arraste seus dispositivos aqui para começar a criar uma regra
+rules-drag-input-hint = Adicionar dispositivo como entrada
+rules-drag-output-hint = Adicionar dispositivo como saída
+rules-scroll-left =
+    .alt = Deslizar para a esquerda
+rules-scroll-right =
+    .alt = Deslizar para a direita
+rules-delete-prompt = Solte dispositivos aqui para desconectar
+rules-delete-dialog = Tem certeza que deseja remover esta regra permanentemente?
+rules-delete-cancel =
+    .value = Cancelar
+rules-delete-confirm =
+    .value = Remover regra
+rule-invalid = Inválida
+rule-delete-prompt = Tem certeza que deseja remover esta regra permanentemente?
+rule-delete-cancel-button =
+    .value = Cancelar
+rule-delete-confirm-button =
+    .value = Remover regra
+rule-select-property = Selecionar propriedade
+rule-not = Não
+rule-event = Evento
+rule-action = Ação
+rule-configure = Configurar…
+rule-time-title = Hora do dia
+rule-notification = Notificação
+notification-title = Título
+notification-message = Mensagem
+notification-level = Nível
+notification-low = Baixo
+notification-normal = Normal
+notification-high = Alto
+rule-name = Nome da regra
 
 ## Logs
 
+logs-device = Dispositivo
+logs-property = Propriedade
+logs-retention = Retenção
+logs-hours = Horas
+logs-days = Dias
+logs-weeks = Semanas
+logs-save = Salvar
+logs-remove-dialog-title = Removendo
+logs-remove = Remover
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Procurando
+add-thing-scanning = Procurando novos dispositivos…
+add-thing-add-adapters-hint = Nenhuma coisa nova foi encontrada. Experimente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar algumas extensões</a>.
 
 ## Context Menu
 
