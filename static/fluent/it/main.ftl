@@ -246,45 +246,36 @@ context-menu-remove = Rimuovi
 ## Capabilities
 
 OnOffSwitch = Interruttore acceso/spento
-MultiLevelSwitch = Interruttore multi livello
 ColorControl = Controllo del colore
 ColorSensor = Sensore di colore
 EnergyMonitor = Sensore energia
 BinarySensor = Sensore binario
 MultiLevelSensor = Sensore multilivello
-SmartPlug = Presa elettrica smart
 Light = Luce
 DoorSensor = Sensore porta
-MotionSensor = Sensore di movimento
-LeakSensor = Sensore di perdite
 PushButton = Pulsante
 VideoCamera = Videocamera
 Camera = Fotocamera
-TemperatureSensor = Sensore temperatura
+TemperatureSensor = Sensore di temperatura
 Alarm = Allarme
 Thermostat = Termostato
 Lock = Serratura
-Custom = Personalizzato
+Custom = Oggetto personalizzato
+Thing = Oggetto
 
 ## Properties
 
 alarm = Allarme
-pushed = Spinto
-not-pushed = Non spinto
 on-off = Acceso/spento
 on = Acceso
 off = Spento
-power = Energia
-voltage = Voltaggio
 temperature = Temperatura
 current = Corrente
 frequency = Frequenza
 color = Colore
-brightness = Luminosità
 leak = Perdita
-dry = Asciutto
 color-temperature = Temperatura di colore
-video-unsupported = Il video non è supportato nel browser.
+video-unsupported = Video non supportato nel browser.
 motion = Movimento
 no-motion = Nessun movimento
 open = Aperto
@@ -293,16 +284,15 @@ locked = Bloccato
 unlocked = Sbloccato
 jammed = Inceppato
 unknown = Sconosciuto
+active = Attivo
+inactive = Inattivo
 
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Sembra che questo sottodominio sia già stato registrato. Per recuperarlo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">fai clic qui</a>.
-check-email-for-token = Controlla l’e-mail per un token di recupero e incollalo sopra.
 reclaim-failed = Impossibile recuperare il dominio.
-subdomain-already-used = Questo sottodominio è già in uso. Scegli un altro dominio.
+subdomain-already-used = Questo sottodominio è già in uso. Scegline un altro.
 invalid-reclamation-token = Token di recupero non valido.
-domain-success = Operazione conclusa. Reindirizzamento in corso…
-issuing-error = Errore durante l’emissione del certificato. Riprova.
 redirecting = Reindirizzamento…
 
 ## Booleans
@@ -380,7 +370,6 @@ new-thing-choose-icon = Scegli icona…
 new-thing-save = Salva
 new-thing-pin =
     .placeholder = Inserisci PIN
-new-thing-pin-error = PIN non corretto
 new-thing-pin-invalid = PIN non valido
 new-thing-cancel = Annulla
 new-thing-submit = Invia
