@@ -240,18 +240,76 @@ add-thing-scanning-icon =
     .alt = Procurando
 add-thing-scanning = Procurando novos dispositivos…
 add-thing-add-adapters-hint = Nenhuma coisa nova foi encontrada. Experimente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar algumas extensões</a>.
+add-thing-add-by-url = Adicionar por URL…
+add-thing-done = Pronto
+add-thing-cancel = Cancelar
 
 ## Context Menu
 
+context-menu-choose-icon = Escolher ícone…
+context-menu-save = Salvar
+context-menu-remove = Remover
 
 ## Capabilities
 
+OnOffSwitch = Interruptor Ligado/Desligado
+MultiLevelSwitch = Interruptor de vários níveis
+ColorControl = Controle de cores
+ColorSensor = Sensor de cores
+EnergyMonitor = Monitor de energia
+BinarySensor = Sensor binário
+MultiLevelSensor = Sensor de vários níveis
+Light = Luz
+DoorSensor = Sensor da porta
+MotionSensor = Sensor de movimento
+LeakSensor = Sensor de perda
+PushButton = Botão de apertar
+VideoCamera = Câmera de vídeo
+Camera = Câmera
+TemperatureSensor = Sensor de temperatura
+Alarm = Alarme
+Thermostat = Termostato
+Lock = Fechadura
+Custom = Coisa personalizada
+Thing = Coisa
 
 ## Properties
 
+alarm = Alarme
+pushed = Pressionado
+not-pushed = Não pressionado
+on-off = Ligado/Desligado
+on = Ligado
+off = Desligado
+power = Energia
+voltage = Voltagem
+temperature = Temperatura
+current = Corrente
+frequency = Frequência
+color = Cor
+brightness = Brilho
+leak = Perda
+dry = Seco
+color-temperature = Temperatura de cor
+video-unsupported = Desculpe, vídeo não é suportado no seu navegador.
+motion = Movimento
+no-motion = Nenhum movimento
+open = Aberto
+closed = Fechado
+locked = Trancado
+unlocked = Destrancado
+jammed = Obstruído
+unknown = Desconhecido
+active = Ativado
+inactive = Desativado
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Parece que você já cadastrou este subdomínio. Para recuperar, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">clique aqui</a>.
+reclaim-failed = Não foi possível recuperar o domínio.
+subdomain-already-used = Este subdomínio já está sendo usado. Escolha um diferente.
+invalid-reclamation-token = Token de recuperação inválido.
+domain-success = Sucesso! Aguarde enquanto redirecionamos você…
 
 ## Booleans
 
