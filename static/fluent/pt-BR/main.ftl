@@ -559,6 +559,7 @@ wifi-setup-skip = Pular
 connecting-title = Conectando ao Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Conectando ao Wi-Fi…
 connecting-header-skipped = Wi-Fi não foi configurado
+connecting-skipped = O gateway está sendo iniciado agora. Acesse { $gateway-link } no seu navegador web, conectado na mesma rede do gateway, para continuar a configuração.
 
 ## Creating Wi-Fi Network Page
 
