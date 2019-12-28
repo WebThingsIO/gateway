@@ -21,7 +21,7 @@ assistant-menu-item = Assistente
 things-menu-item = Oggetti
 rules-menu-item = Regole
 logs-menu-item = Registri
-floorplan-menu-item = Piano terra
+floorplan-menu-item = Planimetria
 settings-menu-item = Impostazioni
 log-out-button = Disconnettersi
 
@@ -36,13 +36,10 @@ add-things =
 
 assistant-avatar-image =
     .alt = Avatar assistente
-assistant-controls-text-input =
-    .placeholder = Come posso aiutare?
 
 ## Floorplan
 
 upload-floorplan = Carica planimetria…
-upload-floorplan-hint = (.svg raccomandato)
 
 ## Top-Level Settings
 
@@ -55,7 +52,7 @@ settings-localization = Localizzazione
 settings-updates = Aggiornamenti
 settings-authorizations = Autorizzazioni
 settings-experiments = Esperimenti
-settings-developer = Sviluppo
+settings-developer = Sviluppatore
 
 ## Domain Settings
 
