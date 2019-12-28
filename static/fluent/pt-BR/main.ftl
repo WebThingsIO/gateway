@@ -502,27 +502,88 @@ tunnel-setup-privacy-policy = Política de privacidade
 tunnel-setup-input-reclamation-token =
     .placeholder = Token de recuperação
 tunnel-setup-error = Ocorreu um erro ao configurar o subdomínio.
+tunnel-setup-create = Criar
+tunnel-setup-skip = Pular
+tunnel-setup-time-sync = Aguardando o relógio do sistema ser configurado a partir da internet. É provável que o registro do domínio falhe até que isso seja concluído.
 
 ## Authorize Page
 
+authorize-title = Solicitação de autorização — { -webthings-gateway-brand }
+authorize-authorization-request = Solicitação de autorização
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> gostaria de acessar seu gateway para dispositivos de <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = do <<domain>>
+authorize-monitor-and-control = monitorar e controlar
+authorize-monitor = monitorar
+authorize-allow-all = Permitir para todas as coisas
+authorize-allow =
+    .value = Permitir
+authorize-deny = Negar
 
 ## Local Token Page
 
+local-token-title = Serviço de token local — { -webthings-gateway-brand }
+local-token-header = Serviço de token local
+local-token-your-token = Seu token local é este <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 
 ## Router Setup Page
 
+router-setup-title = Configuração do roteador — { -webthings-gateway-brand }
+router-setup-header = Criar uma nova rede Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Nome da rede
+router-setup-input-password =
+    .placeholder = Senha
+router-setup-input-confirm-password =
+    .placeholder = Confirmar senha
+router-setup-create =
+    .value = Criar
+router-setup-password-mismatch = As senhas devem coincidir
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuração de Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Conectar a uma rede Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Senha
+wifi-setup-show-password = Mostrar senha
+wifi-setup-connect =
+    .value = Conectar
+wifi-setup-network-icon =
+    .alt = Rede Wi-Fi
+wifi-setup-skip = Pular
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Conectando ao Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Conectando ao Wi-Fi…
+connecting-header-skipped = Wi-Fi não foi configurado
 
 ## Creating Wi-Fi Network Page
 
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+edit = Editar
+remove = Remover
+disconnected = Desconectado
+processing = Processando…
+submit = Enviar
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Voltar
+overflow-button =
+    .aria-label = Ações adicionais
+submit-button =
+    .aria-label = Enviar
+edit-button =
+    .aria-label = Editar
+save-button =
+    .aria-label = Salvar
