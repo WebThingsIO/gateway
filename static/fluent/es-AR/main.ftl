@@ -41,7 +41,7 @@ assistant-controls-text-input =
 
 ## Floorplan
 
-upload-floorplan = Subir plano...
+upload-floorplan = Subir plano…
 upload-floorplan-hint = (.svg recomendado)
 
 ## Top-Level Settings
@@ -255,13 +255,13 @@ add-thing-scanning-icon =
     .alt = Exploración
 add-thing-scanning = Buscando nuevos dispositivos...
 add-thing-add-adapters-hint = No se encontraron dispositivos nuevos. Probá <a data-l10n-name="add-thing-add-adapters-hint-anchor">agregando algunos complementos</a>.
-add-thing-add-by-url = Añadir por URL...
+add-thing-add-by-url = Añadir por URL…
 add-thing-done = Listo
 add-thing-cancel = Cancelar
 
 ## Context Menu
 
-context-menu-choose-icon = Elegir icono...
+context-menu-choose-icon = Elegir icono…
 context-menu-save = Guardar
 context-menu-remove = Eliminar
 
