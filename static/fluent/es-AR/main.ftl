@@ -296,39 +296,170 @@ voltage = voltaje
 temperature = Temperatura
 current = Actual
 frequency = Frecuencia
+color = Color
+brightness = Brillo
+color-temperature = Temperatura del color
+video-unsupported = Lo sentimos, el video no es soportado por el navegador.
+motion = Movimiento
+no-motion = Sin movimiento
+unknown = Desconocido
+active = Activo
+inactive = Inactivo
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Parece que ya has registrado ese subdominio. Para recuperarlo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">hacé clic aquí </a>.
+check-email-for-token = Revisá tu correo electrónico para encontrar el token de recuperación y pegalo acá arriba.
+reclaim-failed = No se pudo recuperar el dominio.
+subdomain-already-used = Este subdominio ya se está utilizando. Elegí uno diferente.
+invalid-reclamation-token = Token de recuperación inválido.
+domain-success = ¡Éxito! Esperá mientras te redirigimos…
+issuing-error = Error al emitir el certificado. Intentá de nuevo.
+redirecting = Redirigiendo…
 
 ## Booleans
 
+true = Verdadero
+false = Falso
 
 ## Time
 
+utils-now = ahora
+utils-seconds-ago =
+    { $value ->
+        [one] hace { $value } segundo
+       *[other] hace { $value } segundos
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] hace { $value } minuto
+       *[other] hace { $value } minutos
+    }
+utils-hours-ago =
+    { $value ->
+        [one] hace { $value } hora
+       *[other] hace { $value } horas
+    }
+utils-days-ago =
+    { $value ->
+        [one] hace { $value } día
+       *[other] hace { $value } días
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] hace { $value } semana
+       *[other] hace { $value } semanas
+    }
+utils-months-ago =
+    { $value ->
+        [one] hace { $value } mes
+       *[other] hace { $value } meses
+    }
+utils-years-ago =
+    { $value ->
+        [one] hace { $value } año
+       *[other] hace { $value } años
+    }
+minute = Minuto
+hour = Hora
+day = Día
+week = Semana
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
 
 ## New Thing View
 
+unknown-device-type = Tipo de dispositivo desconocido
+new-thing-choose-icon = Seleccionar ícono…
+new-thing-save = Guardar
+new-thing-pin =
+    .placeholder = Ingresar PIN
+new-thing-pin-error = PIN incorrecto
+new-thing-pin-invalid = PIN inválido
+new-thing-cancel = Cancelar
+new-thing-submit = Enviar
+new-thing-username =
+    .placeholder = Ingresar nombre de usuario
+new-thing-password =
+    .placeholder = Ingresar contraseña
+new-thing-credentials-error = Credenciales incorrectas
+new-thing-saved = Guardado
 
 ## New Web Thing View
 
+loading = Cargando…
 
 ## Empty div Messages
 
+action-not-found = Acción no encontrada.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Buscar nuevos complementos
+author-unknown = Desconocido
+disable = Deshabilitar
+enable = Habilitar
+by = por
+addon-configure = Configurar
+addon-update = Actualizar
+addon-remove = Eliminar
+addon-updating = Actualizando…
+addon-updated = Actualizado
+addon-update-failed = Falló
+addon-config-applying = Aplicando…
+addon-config-apply = Aplicar
+addon-discovery-added = Agregado
+addon-discovery-add = Agregar
+addon-discovery-installing = Instalando…
+addon-discovery-failed = Falló
 
 ## Page Titles
 
+settings = Ajustes
+domain = Dominio
+users = Usuarios
+edit-user = Editar usuario
+add-user = Agregar usuario
+adapters = Adaptadores
+addons = Complementos
+addon-config = Configurar complemento
+addon-discovery = Descubrir nuevos complementos
+experiments = Experimentos
+updates = Actualizaciones
+authorizations = Autorizaciones
+developer = Desarrollador
+network = Red
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ícono
 
 ## Speech
 
 
 ## Errors
 
+unknown-state = Estado desconocido.
+error = Error
+errors = Errores
+more-information = Más información
+invalid-file = Archivo inválido.
 
 ## Schema Form
 
