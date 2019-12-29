@@ -91,6 +91,12 @@ network-settings-static-ip-address = Alamat IP Statik
 network-settings-network-mask = Mask jaringan
 network-settings-gateway = Gateway
 network-settings-done = Selesai
+network-settings-wifi-password =
+    .placeholder = Kata sandi
+network-settings-show-password = Tampilkan kata sandi
+network-settings-connect = Sambungkan
+network-settings-username = Nama pengguna
+network-settings-password = Kata sandi
 
 ## User Settings
 
