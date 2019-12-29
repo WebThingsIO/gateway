@@ -302,6 +302,10 @@ color-temperature = Temperatura del color
 video-unsupported = Lo sentimos, el video no es soportado por el navegador.
 motion = Movimiento
 no-motion = Sin movimiento
+open = Abierto
+closed = Cerrado
+locked = Bloqueado
+unlocked = Desbloqueado
 unknown = Desconocido
 active = Activo
 inactive = Inactivo
@@ -460,6 +464,8 @@ error = Error
 errors = Errores
 more-information = Más información
 invalid-file = Archivo inválido.
+failed-read-file = Error al leer el archivo.
+failed-save = Error al guardar.
 
 ## Schema Form
 
@@ -472,30 +478,95 @@ invalid-file = Archivo inválido.
 
 ## Create First User Page
 
+signup-title = Crear usuario — { -webthings-gateway-brand }
+signup-welcome = Bienvenido
+signup-create-account = Crear tu primera cuenta de usuario:
+signup-password-mismatch = Las contraseñas no coinciden
+signup-next = Siguiente
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Elegir dirección web — { -webthings-gateway-brand }
+tunnel-setup-welcome = Bienvenido
+tunnel-setup-input-subdomain =
+    .placeholder = subdominio
+tunnel-setup-privacy-policy = Política de privacidad
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token de recuperación
+tunnel-setup-error = Ocurrió un error al configurar el subdominio.
+tunnel-setup-create = Crear
+tunnel-setup-skip = Omitir
 
 ## Authorize Page
 
+authorize-title = Pedido de autorización — { -webthings-gateway-brand }
+authorize-authorization-request = Pedido de autorización
+authorize-allow =
+    .value = Permitir
+authorize-deny = Denegar
 
 ## Local Token Page
 
 
 ## Router Setup Page
 
+router-setup-header = Crear una nueva red Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Nombre de red
+router-setup-input-password =
+    .placeholder = Contraseña
+router-setup-input-confirm-password =
+    .placeholder = Confirmar contraseña
+router-setup-create =
+    .value = Crear
+router-setup-password-mismatch = Las contraseñas deben coincidir
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuración de Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = ¿Conectarse a una red Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Contraseña
+wifi-setup-show-password = Mostrar contraseña
+wifi-setup-connect =
+    .value = Conectar
+wifi-setup-network-icon =
+    .alt = Red Wi-Fi
+wifi-setup-skip = Omitir
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Conectando a Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Conectando a Wi-Fi…
+connecting-header-skipped = Configuración de Wi-Fi omitida
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Creando red Wi-Fi — { -webthings-gateway-brand }
+creating-header = Creando red Wi-Fi…
 
 ## General Terms
 
+ok = Aceptar
+ellipsis = …
+event-log = Registro de eventos
+edit = Editar
+remove = Eliminar
+disconnected = Desconectado
+processing = Procesando…
+submit = Enviar
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menú
+back-button =
+    .aria-label = Atrás
+overflow-button =
+    .aria-label = Acciones adicionales
+submit-button =
+    .aria-label = Enviar
+edit-button =
+    .aria-label = Editar
+save-button =
+    .aria-label = Guardar
