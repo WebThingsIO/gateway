@@ -292,6 +292,10 @@ Thing = Dispositivo
 ## Properties
 
 alarm = Alarma
+voltage = voltaje
+temperature = Temperatura
+current = Actual
+frequency = Frecuencia
 
 ## Domain Setup
 
