@@ -97,6 +97,13 @@ network-settings-show-password = Tampilkan kata sandi
 network-settings-connect = Sambungkan
 network-settings-username = Nama pengguna
 network-settings-password = Kata sandi
+network-settings-router-ip = Alamat IP perute
+network-settings-dhcp-server = Server DHCP
+network-settings-enable-wifi = Aktifkan Wi-Fi
+network-settings-network-name = Nama jaringan (SSID)
+wireless-connected = Tersambung
+wireless-icon =
+    .alt = Jaringan Wi-Fi
 
 ## User Settings
 
