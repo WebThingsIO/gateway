@@ -30,7 +30,7 @@ log-out-button = Cerrar sesión
 thing-details =
     .aria-label = Ver propiedades
 add-things =
-    .aria-label = Agregar  nuevos dispositivos
+    .aria-label = Agregar nuevos dispositivos
 
 ## Assistant
 
