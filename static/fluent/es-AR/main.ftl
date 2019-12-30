@@ -292,6 +292,9 @@ Thing = Dispositivo
 ## Properties
 
 alarm = Alarma
+on-off = Habilitado/Desactivado
+on = Activado
+off = Desactivado
 voltage = voltaje
 temperature = Temperatura
 current = Actual
