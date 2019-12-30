@@ -416,11 +416,19 @@ new-thing-done = Listo
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Ingresar la URL del dispositivo web
+new-web-thing-label = Dispositivo web
 loading = Cargando…
+new-web-thing-multiple = Se encontraron múltiples dispositivos web
+new-web-thing-from = desde
 
 ## Empty div Messages
 
+no-things = Todavía no hay dispositivos. Hacé clic en + para buscar dispositivos disponibles.
+thing-not-found = No se encontró ningún dispositivo.
 action-not-found = Acción no encontrada.
+events-not-found = Este dispositivo no tiene eventos.
 
 ## Add-on Settings
 
@@ -455,6 +463,7 @@ addons = Complementos
 addon-config = Configurar complemento
 addon-discovery = Descubrir nuevos complementos
 experiments = Experimentos
+localization = Ubicación
 updates = Actualizaciones
 authorizations = Autorizaciones
 developer = Desarrollador
@@ -465,12 +474,15 @@ icon = Ícono
 
 ## Speech
 
+speech-unsupported = El navegador actual no admite voz
+speech-didnt-get = Disculpá, no entendí eso.
 
 ## Errors
 
 unknown-state = Estado desconocido.
 error = Error
 errors = Errores
+gateway-unreachable = Gateway inalcanzable
 more-information = Más información
 invalid-file = Archivo inválido.
 failed-read-file = Error al leer el archivo.
@@ -478,12 +490,16 @@ failed-save = Error al guardar.
 
 ## Schema Form
 
+unsupported-field = El esquema de campo no es compatible
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Iniciar sesión — { -webthings-gateway-brand }
+login-log-in = Iniciar sesión
 
 ## Create First User Page
 
@@ -497,19 +513,24 @@ signup-next = Siguiente
 
 tunnel-setup-title = Elegir dirección web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Bienvenido
+tunnel-setup-choose-address = Elijir una dirección web segura para tu puerta de enlace:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
+tunnel-setup-opt-in = Manténganme informado sobre las nuevas funciones y oportunidades de colaboración.
 tunnel-setup-privacy-policy = Política de privacidad
 tunnel-setup-input-reclamation-token =
     .placeholder = Token de recuperación
 tunnel-setup-error = Ocurrió un error al configurar el subdominio.
 tunnel-setup-create = Crear
 tunnel-setup-skip = Omitir
+tunnel-setup-time-sync = Esperando a que el reloj del sistema se configure desde Internet. Es probable que el registro de dominio falle hasta que esto se complete.
 
 ## Authorize Page
 
 authorize-title = Pedido de autorización — { -webthings-gateway-brand }
 authorize-authorization-request = Pedido de autorización
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> desea acceder a tu puerta de enlace a <<function>> dispositivos.
 authorize-allow =
     .value = Permitir
 authorize-deny = Denegar
