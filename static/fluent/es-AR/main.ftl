@@ -531,6 +531,8 @@ authorize-title = Pedido de autorización — { -webthings-gateway-brand }
 authorize-authorization-request = Pedido de autorización
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> desea acceder a tu puerta de enlace a <<function>> dispositivos.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = desde <<domain>>
 authorize-allow =
     .value = Permitir
 authorize-deny = Denegar
