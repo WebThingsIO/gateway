@@ -301,6 +301,8 @@ current = Actual
 frequency = Frecuencia
 color = Color
 brightness = Brillo
+leak = Fuga
+dry = Seco
 color-temperature = Temperatura del color
 video-unsupported = Lo sentimos, el video no es soportado por el navegador.
 motion = Movimiento
@@ -309,6 +311,7 @@ open = Abierto
 closed = Cerrado
 locked = Bloqueado
 unlocked = Desbloqueado
+jammed = Aglomerado
 unknown = Desconocido
 active = Activo
 inactive = Inactivo
@@ -378,6 +381,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -389,6 +393,7 @@ abbrev-hour = h
 abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
+abbrev-foot = pies
 
 ## New Thing View
 
@@ -407,6 +412,7 @@ new-thing-password =
     .placeholder = Ingresar contraseña
 new-thing-credentials-error = Credenciales incorrectas
 new-thing-saved = Guardado
+new-thing-done = Listo
 
 ## New Web Thing View
 
