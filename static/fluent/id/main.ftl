@@ -135,15 +135,40 @@ user-settings-save = Simpan
 
 ## Localization Settings
 
+localization-settings-language-region = Bahasa & Wilayah
+localization-settings-country = Negara
+localization-settings-timezone = Zona waktu
+localization-settings-language = Bahasa
+localization-settings-units = Satuan
+localization-settings-units-temperature = Suhu
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Perbarui Sekarang
+update-available = Versi baru tersedia
+update-up-to-date = Sistem Anda mutakhir!
+updates-not-supported = Pembaruan tidak didukung pada platform ini.
+update-settings-enable-self-updates = Aktifkan pembaruan otomatis
+last-update = Pembaruan terakhir
+current-version = Versi terkini
+failed = Gagal
+never = Jangan pernah
+in-progress = Sedang Diproses
+restarting = Memulai ulang
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Aktifkan SSH
+developer-settings-view-internal-logs = Lihat Log Internal
+developer-settings-create-local-authorization = Buat otorisasi lokal
 
 ## Rules
 
+add-rule =
+    .aria-label = Buat Aturan Baru
+rules = Aturan
 
 ## Logs
 
