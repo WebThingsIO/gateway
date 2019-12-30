@@ -12,9 +12,17 @@
 ## Menu Items
 
 assistant-menu-item = உதவியாளர்
+things-menu-item = பொருட்கள்
+rules-menu-item = விதிமுறைகள்
+logs-menu-item = பதிவுகள்
+floorplan-menu-item = நிலத்தள திட்டம்
+settings-menu-item = அமைப்புகள்
+log-out-button = வெளியேறு
 
 ## Things
 
+add-things =
+    .aria-label = புதிய பொருட்களைச் சேர்க்கவும்
 
 ## Assistant
 
