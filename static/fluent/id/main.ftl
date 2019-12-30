@@ -107,6 +107,22 @@ wireless-icon =
 
 ## User Settings
 
+create-user =
+    .aria-label = Tambahkan Pengguna Baru
+user-settings-input-name =
+    .placeholder = Nama
+user-settings-input-email =
+    .placeholder = Surel
+user-settings-input-password =
+    .placeholder = Kata sandi
+user-settings-input-new-password =
+    .placeholder = Kata sandi baru (Opsional)
+user-settings-input-confirm-new-password =
+    .placeholder = Konfirmasi Sandi Baru
+user-settings-input-confirm-password =
+    .placeholder = Konfirmasi Sandi
+user-settings-password-mismatch = Sandi tidak sama
+user-settings-save = Simpan
 
 ## Adapter Settings
 
