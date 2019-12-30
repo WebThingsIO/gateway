@@ -533,12 +533,16 @@ authorize-authorization-request = Pedido de autorización
 authorize-prompt = <<name>> desea acceder a tu puerta de enlace a <<function>> dispositivos.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = desde <<domain>>
+authorize-monitor-and-control = monitorear y controlar
+authorize-monitor = monitorear
+authorize-allow-all = Permitir todos los dispositivos
 authorize-allow =
     .value = Permitir
 authorize-deny = Denegar
 
 ## Local Token Page
 
+local-token-title = Servicio de token local: { -webthings-gateway-brand }
 
 ## Router Setup Page
 
