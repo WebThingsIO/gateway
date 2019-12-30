@@ -169,6 +169,12 @@ developer-settings-create-local-authorization = Buat otorisasi lokal
 add-rule =
     .aria-label = Buat Aturan Baru
 rules = Aturan
+rules-customize-rule-name-icon =
+    .alt = Sesuaikan Nama Aturan
+rules-preview-button =
+    .alt = Pratinjau
+rules-delete-icon =
+    .alt = Hapus
 
 ## Logs
 
