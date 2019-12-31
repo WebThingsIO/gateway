@@ -36,10 +36,13 @@ add-things =
 
 assistant-avatar-image =
     .alt = Avatar assistente
+assistant-controls-text-input =
+    .placeholder = Come posso aiutarti?
 
 ## Floorplan
 
 upload-floorplan = Carica planimetria…
+upload-floorplan-hint = (raccomandato .svg)
 
 ## Top-Level Settings
 
@@ -52,6 +55,7 @@ settings-localization = Localizzazione
 settings-updates = Aggiornamenti
 settings-authorizations = Autorizzazioni
 settings-experiments = Esperimenti
+settings-developer = Sviluppo
 
 ## Domain Settings
 
@@ -70,11 +74,14 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Rete domestica
 network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configura
 network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Modalità
+network-settings-home-network-lan = Rete domestica (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Indirizzo IP
 network-settings-dhcp = Automatico (DHCP)
@@ -97,6 +104,7 @@ network-settings-network-name = Nome di rete (SSID)
 wireless-connected = Connesso
 wireless-icon =
     .alt = Rete Wi-Fi
+network-settings-changing = Modifica delle impostazioni di rete in corso. L’operazione può richiedere fino a un minuto.
 failed-ethernet-configure = Impossibile configurare ethernet.
 failed-wifi-configure = Impossibile configurare Wi-Fi.
 failed-wan-configure = Impossibile configurare WAN.
@@ -157,6 +165,7 @@ last-update = Ultimo aggiornamento
 failed = Non riuscito
 never = Mai
 in-progress = In corso
+restarting = Riavvio in corso…
 
 ## Developer Settings
 
@@ -169,6 +178,7 @@ developer-settings-create-local-authorization = Crea autorizzazione locale
 add-rule =
     .aria-label = Crea nuova regola
 rules = Regole
+rules-create-rule-hint = Non sono ancora presenti regole. Fai clic sul + per creare una regola.
 rules-rule-name = Nome regola
 rules-customize-rule-name-icon =
     .alt = Personalizza il nome della regola
@@ -177,6 +187,7 @@ rules-preview-button =
     .alt = Anteprima
 rules-delete-icon =
     .alt = Elimina
+rules-drag-hint = Trascina qui i dispositivi per iniziare la creazione di una regola
 rules-drag-input-hint = Aggiungi dispositivo di ingresso (input)
 rules-drag-output-hint = Aggiungi dispositivo di uscita (output)
 rules-scroll-left =
@@ -199,18 +210,23 @@ rule-select-property = Seleziona proprietà
 rule-not = Non
 rule-event = Evento
 rule-action = Azione
+rule-configure = Configurazione in corso…
 rule-time-title = Ora del giorno
 rule-notification = Notifica
 notification-title = Titolo
+notification-message = Messaggio
 notification-level = Livello
 notification-low = Basso
 notification-normal = Normale
 notification-high = Alto
-rule-name = Nome
+rule-name = Nome regola
 
 ## Logs
 
+add-log =
+    .aria-label = Crea nuovo registro
 logs = Registri
+logs-create-log-hint = Non sono ancora presenti registri. Fai clic sul + per creare un registro.
 logs-device = Dispositivo
 logs-device-select =
     .aria-label = Registro del dispositivo
@@ -226,12 +242,18 @@ logs-hours = Ore
 logs-days = Giorni
 logs-weeks = Settimane
 logs-save = Salva
+logs-remove-dialog-title = Rimozione in corso…
+logs-remove-dialog-warning = La rimozione del registro cancellerà anche tutti i dati inclusi. Procedere con la rimozione?
 logs-remove = Rimuovi
+logs-unable-to-create = Impossibile creare il registro
+logs-server-remove-error = Errore del server: impossibile rimuovere il registro
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Ricerca
+add-thing-scanning = Ricerca di nuovi dispositivi…
+add-thing-add-adapters-hint = Non sono stati trovati nuovi oggetti. Provare <a data-l10n-name="add-thing-add-adapters-hint-anchor">ad aggiungere componenti aggiuntivi</a>.
 add-thing-add-by-url = Aggiungi per URL…
 add-thing-done = Fatto
 add-thing-cancel = Annulla
@@ -245,13 +267,17 @@ context-menu-remove = Rimuovi
 ## Capabilities
 
 OnOffSwitch = Interruttore acceso/spento
+MultiLevelSwitch = Interruttore multilivello
 ColorControl = Controllo del colore
 ColorSensor = Sensore di colore
 EnergyMonitor = Sensore energia
 BinarySensor = Sensore binario
 MultiLevelSensor = Sensore multilivello
+SmartPlug = Presa intelligente
 Light = Luce
 DoorSensor = Sensore porta
+MotionSensor = Sensore di movimento
+LeakSensor = Sensore di perdite
 PushButton = Pulsante
 VideoCamera = Videocamera
 Camera = Fotocamera
@@ -265,14 +291,20 @@ Thing = Oggetto
 ## Properties
 
 alarm = Allarme
+pushed = Premuto
+not-pushed = Non premuto
 on-off = Acceso/spento
 on = Acceso
 off = Spento
+power = Alimentazione
+voltage = Voltaggio
 temperature = Temperatura
 current = Corrente
 frequency = Frequenza
 color = Colore
+brightness = Luminosità
 leak = Perdita
+dry = Umidità
 color-temperature = Temperatura di colore
 video-unsupported = Video non supportato nel browser.
 motion = Movimento
@@ -289,9 +321,12 @@ inactive = Inattivo
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Sembra che questo sottodominio sia già stato registrato. Per recuperarlo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">fai clic qui</a>.
+check-email-for-token = Copia e incolla qui sopra il token di recupero che hai ricevuto via email.
 reclaim-failed = Impossibile recuperare il dominio.
 subdomain-already-used = Questo sottodominio è già in uso. Scegline un altro.
 invalid-reclamation-token = Token di recupero non valido.
+domain-success = Operazione completata. Reindirizzamento in corso…
+issuing-error = Si è verificato un errore durante l’emissione del certificato. Riprova.
 redirecting = Reindirizzamento…
 
 ## Booleans
@@ -369,6 +404,7 @@ new-thing-choose-icon = Scegli icona…
 new-thing-save = Salva
 new-thing-pin =
     .placeholder = Inserisci PIN
+new-thing-pin-error = PIN errato
 new-thing-pin-invalid = PIN non valido
 new-thing-cancel = Annulla
 new-thing-submit = Invia
@@ -391,14 +427,18 @@ new-web-thing-from = da
 
 ## Empty div Messages
 
+no-things = Nessun dispositivo presente. Fai clic sul + per rilevare i dispositivi disponibili.
 thing-not-found = Oggetto web non trovato.
 action-not-found = Azione non trovata.
 events-not-found = Questo oggetto non ha eventi.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Trova nuovi componenti aggiuntivi
 author-unknown = Sconosciuto
 disable = Disattiva
+enable = Attiva
 by = di
 addon-configure = Configura
 addon-update = Aggiorna
@@ -411,6 +451,7 @@ addon-config-apply = Applica
 addon-discovery-added = Aggiunto
 addon-discovery-add = Inserisci
 addon-discovery-installing = Installazione in corso…
+addon-discovery-failed = Operazione non riuscita
 
 ## Page Titles
 
@@ -419,8 +460,10 @@ domain = Dominio
 users = Utenti
 edit-user = Modifica utente
 add-user = Aggiungi utente
+adapters = Adattatori
 addons = Componenti aggiuntivi
 addon-config = Configura componente aggiuntivo
+addon-discovery = Scopri nuovi componenti aggiuntivi
 experiments = Esperimenti
 localization = Localizzazione
 updates = Aggiornamenti
@@ -433,6 +476,7 @@ icon = Icona
 
 ## Speech
 
+speech-unsupported = Il browser in uso non supporta i comandi vocali.
 speech-didnt-get = Mi dispiace, non ho capito.
 
 ## Errors
@@ -465,20 +509,23 @@ signup-title = Crea utente — { -webthings-gateway-brand }
 signup-welcome = Benvenuto
 signup-create-account = Crea il tuo primo account utente:
 signup-password-mismatch = Le password non corrispondono
-signup-next = Successivo
+signup-next = Avanti
 
 ## Tunnel Setup Page
 
 tunnel-setup-title = Scegli indirizzo web — { -webthings-gateway-brand }
 tunnel-setup-welcome = Benvenuto
+tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il tuo gateway:
 tunnel-setup-input-subdomain =
     .placeholder = sottodominio
+tunnel-setup-opt-in = Desidero ricevere aggiornamenti sulle nuove funzionalità e sulle opportunità di collaborazione.
 tunnel-setup-privacy-policy = Informativa sulla privacy
 tunnel-setup-input-reclamation-token =
     .placeholder = Token di recupero
 tunnel-setup-error = Si è verificato un errore durante l’impostazione del sottodominio.
 tunnel-setup-create = Crea
 tunnel-setup-skip = Ignora
+tunnel-setup-time-sync = In attesa che l’orologio di sistema venga impostato da Internet. Finché questa operazione non verrà completata, è possibile che la registrazione del dominio non vada a buon fine.
 
 ## Authorize Page
 
@@ -489,12 +536,16 @@ authorize-source = da <<dominio>>
 authorize-monitor-and-control = Monitorare e controllare
 authorize-monitor = monitorare
 authorize-allow-all = Consenti tutti gli oggetti
+authorize-allow =
+    .value = Consenti
 authorize-deny = Nega
 
 ## Local Token Page
 
 local-token-title = Servizio token locale — { -webthings-gateway-brand }
 local-token-header = Servizio token locale
+local-token-your-token = Il token locale è: <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
+local-token-use-it = Permette una comunicazione sicura con il gateway, con <a data-l10n-name="local-token-bearer-type">autorizzazione tipo Bearer</a>.
 
 ## Router Setup Page
 
@@ -526,7 +577,9 @@ wifi-setup-skip = Ignora
 ## Connecting to Wi-Fi Page
 
 connecting-title = Connessione al Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Connessione al Wi-Fi in corso…
 connecting-connect = Assicurarsi di essere connessi alla stessa rete e aprire { $gateway-link } nel browser per proseguire l’installazione.
+connecting-warning = Se non è possibile aprire { $domain }, cercare l’indirizzo IP del gateway sul router.
 connecting-header-skipped = Configurazione Wi-Fi ignorata
 connecting-skipped = Il gateway è in fase di avvio. Connettersi alla stessa rete del gateway e aprire { $gateway-link } nel browser per proseguire l’installazione.
 
@@ -553,6 +606,8 @@ menu-button =
     .aria-label = Menu
 back-button =
     .aria-label = Indietro
+overflow-button =
+    .aria-label = Altre azioni
 speech-button =
     .aria-label = Ascolta la voce
 submit-button =
