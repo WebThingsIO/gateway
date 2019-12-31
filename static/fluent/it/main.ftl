@@ -445,7 +445,7 @@ addon-update = Aggiorna
 addon-remove = Rimuovi
 addon-updating = Aggiornamento in corso…
 addon-updated = Aggiornato
-addon-update-failed = Non riuscito
+addon-update-failed = Operazione non riuscita
 addon-config-applying = Applicazione in corso…
 addon-config-apply = Applica
 addon-discovery-added = Aggiunto
@@ -488,7 +488,7 @@ gateway-unreachable = Gateway non raggiungibile
 more-information = Ulteriori informazioni
 invalid-file = File non valido
 failed-read-file = Impossibile leggere il file.
-failed-save = Impossibile salvare il file.
+failed-save = Impossibile salvare.
 
 ## Schema Form
 
@@ -501,7 +501,7 @@ thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 ## Login Page
 
 login-title = Accesso — { -webthings-gateway-brand }
-login-log-in = Accesso
+login-log-in = Accedi
 
 ## Create First User Page
 
