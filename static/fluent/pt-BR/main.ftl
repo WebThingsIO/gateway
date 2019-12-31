@@ -229,8 +229,16 @@ add-log =
 logs = Logs
 logs-create-log-hint = Nenhum log criado. Clique em + para criar um log.
 logs-device = Dispositivo
+logs-device-select =
+    .aria-label = Dispositivo do log
 logs-property = Propriedade
+logs-property-select =
+    .aria-label = Propriedade do log
 logs-retention = Retenção
+logs-retention-length =
+    .aria-label = Tamanho de retenção do log
+logs-retention-unit =
+    .aria-label = Unidade de retenção do log
 logs-hours = Horas
 logs-days = Dias
 logs-weeks = Semanas
@@ -266,6 +274,7 @@ ColorSensor = Sensor de cores
 EnergyMonitor = Monitor de energia
 BinarySensor = Sensor binário
 MultiLevelSensor = Sensor de vários níveis
+SmartPlug = Adaptador inteligente
 Light = Luz
 DoorSensor = Sensor da porta
 MotionSensor = Sensor de movimento
@@ -313,6 +322,7 @@ inactive = Desativado
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Parece que você já cadastrou este subdomínio. Para recuperar, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">clique aqui</a>.
+check-email-for-token = Verifique se recebeu o token de recuperação por e-mail e cole-o acima.
 reclaim-failed = Não foi possível recuperar o domínio.
 subdomain-already-used = Este subdomínio já está sendo usado. Escolha um diferente.
 invalid-reclamation-token = Token de recuperação inválido.
@@ -409,7 +419,11 @@ new-thing-done = Pronto
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Digite a URL da web thing
+new-web-thing-label = Web Thing
 loading = Carregando…
+new-web-thing-multiple = Vários web things encontrados
 new-web-thing-from = de
 
 ## Empty div Messages
@@ -534,6 +548,7 @@ authorize-deny = Negar
 local-token-title = Serviço de token local — { -webthings-gateway-brand }
 local-token-header = Serviço de token local
 local-token-your-token = Seu token local é este <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Use para se comunicar com o gateway de forma segura, com <a data-l10n-name="local-token-bearer-type">autorização de tipo portador (Bearer)</a>.
 
 ## Router Setup Page
 
