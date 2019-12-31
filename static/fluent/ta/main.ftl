@@ -29,6 +29,7 @@ add-things =
 
 ## Floorplan
 
+upload-floorplan = நிலத்தளத்தை பதிவேற்றுக…
 
 ## Top-Level Settings
 
