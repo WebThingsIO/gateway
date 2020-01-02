@@ -12,6 +12,7 @@
 
 ## Menu Items
 
+assistant-menu-item = Asistent
 rules-menu-item = Pravidla
 floorplan-menu-item = Půdorys
 settings-menu-item = Nastavení
@@ -24,6 +25,8 @@ thing-details =
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Obrázek asistenta
 assistant-controls-text-input =
     .placeholder = Jak vám mohu pomoci?
 
@@ -114,6 +117,7 @@ user-settings-save = Uložit
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Chytrý asistent
 
 ## Localization Settings
 
