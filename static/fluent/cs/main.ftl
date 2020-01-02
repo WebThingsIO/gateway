@@ -13,6 +13,7 @@
 ## Menu Items
 
 assistant-menu-item = Asistent
+things-menu-item = Věci
 rules-menu-item = Pravidla
 floorplan-menu-item = Půdorys
 settings-menu-item = Nastavení
@@ -22,6 +23,8 @@ log-out-button = Odhlásit se
 
 thing-details =
     .aria-label = Zobrazit vlastnosti
+add-things =
+    .aria-label = Přidat nové věci
 
 ## Assistant
 
@@ -89,6 +92,10 @@ network-settings-dhcp-server = DHCP server
 network-settings-enable-wifi = Povolit Wi-Fi
 network-settings-network-name = Název sítě (SSID)
 wireless-connected = Připojeno
+failed-wifi-configure = Konfigurace Wi-Fi se nezdařila.
+failed-wan-configure = Konfigurace WAN se nezdařila.
+failed-lan-configure = Konfigurace LAN se nezdařila.
+failed-wlan-configure = Konfigurace WLAN se nezdařila.
 
 ## User Settings
 
@@ -111,9 +118,11 @@ user-settings-save = Uložit
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Nejsou k dispozici žádné adaptéry.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Žádná oprávnění.
 
 ## Experiment Settings
 
@@ -130,6 +139,7 @@ localization-settings-units-temperature = Teplota
 
 ## Update Settings
 
+update-settings-update-now = Aktualizovat nyní
 update-available = Je dostupná nová verze
 update-up-to-date = Váš systém je aktuální
 update-settings-enable-self-updates = Povolit automatické aktualizace
@@ -150,12 +160,56 @@ rules-rule-name = Název pravidla
 rules-rule-description = Popis pravidla
 rules-preview-button =
     .alt = Náhled
+rules-drag-hint = Přetažením zařízení sem začněte vytvářet pravidlo
+rules-drag-input-hint = Přidat zařízení jako vstup
+rules-delete-prompt = Přetažením zařízení sem jej odpojíte
+rules-delete-cancel =
+    .value = Zrušit
+rules-delete-confirm =
+    .value = Odstranit pravidlo
+rule-invalid = Neplatné
+rule-delete-cancel-button =
+    .value = Zrušit
+rule-delete-confirm-button =
+    .value = Odstranit pravidlo
+rule-select-property = Vyberte vlastnost
+rule-event = Událost
+rule-action = Akce
+rule-configure = Nastavení…
+rule-notification = Oznámení
+notification-title = Název
+notification-message = Zpráva
+notification-level = Úroveň
+notification-low = Nízká
+notification-normal = Normální
+notification-high = Vysoká
+rule-name = Název pravidla
 
 ## Logs
 
+add-log =
+    .aria-label = Vytvořit nový protokol
+logs = Protokoly
+logs-device = Zařízení
+logs-device-select =
+    .aria-label = Protokol zařízení
+logs-property-select =
+    .aria-label = Vlastnosti protokolu
+logs-retention = Uchovávání informací
+logs-retention-unit =
+    .aria-label = Jednotka uchovávání protokolu
+logs-hours = Hodiny
+logs-days = Dny
+logs-weeks = Týdny
+logs-save = Uložit
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Prohledávání
+add-thing-scanning = Hledání nových zařízení…
+add-thing-done = Hotovo
+add-thing-cancel = Zrušit
 
 ## Context Menu
 
