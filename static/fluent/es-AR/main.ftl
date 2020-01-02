@@ -543,9 +543,12 @@ authorize-deny = Denegar
 ## Local Token Page
 
 local-token-title = Servicio de token local: { -webthings-gateway-brand }
+local-token-header = Servicio de token local
+local-token-use-it = Usalo para hablar con la puerta de enlace de forma segura, con <a data-l10n-name="local-token-bearer-type">Autorización de tipo portador</a>.
 
 ## Router Setup Page
 
+router-setup-title = Configuración del enrutador  { -webthings-gateway-brand }
 router-setup-header = Crear una nueva red Wi-Fi
 router-setup-input-ssid =
     .placeholder = Nombre de red
@@ -574,6 +577,7 @@ wifi-setup-skip = Omitir
 
 connecting-title = Conectando a Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Conectando a Wi-Fi…
+connecting-connect = Asegurate de estar conectado a la misma red y luego andá a { $gateway-link }  en tu navegador web para continuar con la configuración.
 connecting-header-skipped = Configuración de Wi-Fi omitida
 
 ## Creating Wi-Fi Network Page
