@@ -578,6 +578,7 @@ wifi-setup-skip = Omitir
 connecting-title = Conectando a Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Conectando a Wi-Fi…
 connecting-connect = Asegurate de estar conectado a la misma red y luego andá a { $gateway-link }  en tu navegador web para continuar con la configuración.
+connecting-warning = Nota: Si no podés cargar { $domain }, buscá la dirección IP de la puerta de enlace en tu enrutador.
 connecting-header-skipped = Configuración de Wi-Fi omitida
 
 ## Creating Wi-Fi Network Page
