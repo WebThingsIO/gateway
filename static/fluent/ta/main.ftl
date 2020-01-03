@@ -78,9 +78,33 @@ network-settings-done = முடிந்தது
 network-settings-wifi-password =
     .placeholder = கடவுச்சொல்
 network-settings-show-password = கடவுச்சொல்லை காட்டு
+network-settings-connect = இணை
+network-settings-username = பயனர் பெயர்
+network-settings-password = கடவுச்சொல்
+network-settings-enable-wifi = Wi-Fi யை செயல்படுத்து
+network-settings-network-name = பிணைய பெயர் (SSID)
+wireless-connected = இணைக்கப்பட்டது
+wireless-icon =
+    .alt = Wi-Fi பிணையம்
+network-settings-changing = பிணைய அமைப்புகள் மாற்றப்படுகிறது . இதற்கு ஒரு நிமிடம் ஆகலாம்.
 
 ## User Settings
 
+create-user =
+    .aria-label = புதிய பயனரைச் சேர்க்கவும்
+user-settings-input-name =
+    .placeholder = பெயர்
+user-settings-input-email =
+    .placeholder = மின்னஞ்சல் முகவரி
+user-settings-input-password =
+    .placeholder = கடவுச்சொல்
+user-settings-input-new-password =
+    .placeholder = புதிய கடவுச்சொல் (விரும்பினால்)
+user-settings-input-confirm-new-password =
+    .placeholder = புதிய கடவுச்சொல்லை உறுதிசெய்யவும்
+user-settings-input-confirm-password =
+    .placeholder = கடவுச்சொல்லை உறுதிசெய்யவும்
+user-settings-password-mismatch = கடவுச்சொற்கள் பொருந்தவில்லை
 
 ## Adapter Settings
 
