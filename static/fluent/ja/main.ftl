@@ -532,7 +532,11 @@ tunnel-setup-time-sync = システムの時計をインターネット時刻か�
 
 authorize-title = 認証要求 — { -webthings-gateway-brand }
 authorize-authorization-request = 認証要求
-authorize-monitor-and-control = モニターやコントロール
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> が <<function>> デバイスへのゲートウェイにアクセスしようとしています。
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = <<domain>> から
+authorize-monitor-and-control = モニターおよびコントロール
 authorize-monitor = モニター
 authorize-allow-all = すべての Thing を許可
 authorize-allow =
