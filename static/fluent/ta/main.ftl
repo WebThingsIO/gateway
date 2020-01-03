@@ -105,18 +105,30 @@ user-settings-input-confirm-new-password =
 user-settings-input-confirm-password =
     .placeholder = கடவுச்சொல்லை உறுதிசெய்யவும்
 user-settings-password-mismatch = கடவுச்சொற்கள் பொருந்தவில்லை
+user-settings-save = சேமி
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = இணைப்புச்சாதனங்கள் எதுவும் இல்லை.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = அங்கீகாரங்கள் எதுவும்  இல்லை.
 
 ## Experiment Settings
 
+experiment-settings-logs = பதிவுகள்
 
 ## Localization Settings
 
+localization-settings-language-region = மொழி & இடம்
+localization-settings-country = நாடு
+localization-settings-timezone = நேரமண்டலம்
+localization-settings-language = மொழி
+localization-settings-units = அலகுகள்
+localization-settings-units-temperature = வெப்பநிலை
+localization-settings-units-temperature-celsius = செல்சியஸ் (° C)
+localization-settings-units-temperature-fahrenheit = பாரன்ஹீட் (° F)
 
 ## Update Settings
 
