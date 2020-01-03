@@ -162,6 +162,11 @@ rules-delete-icon =
 rules-drag-hint = விதியை உருவாக்கத் தொடங்க உங்கள் சாதனங்களை இங்கே இழுக்கவும்
 rules-drag-input-hint = சாதனத்தை உள்ளீடாகச் சேர்க்கவும்
 rules-drag-output-hint = சாதனத்தை வெளியீடாகச் சேர்க்கவும்
+rules-delete-prompt = சாதனங்களை துண்டிக்க இங்கே விடவும்
+rules-delete-cancel =
+    .value = ரத்து செய்
+rules-delete-confirm =
+    .value = விதியை நீக்கு
 
 ## Logs
 
