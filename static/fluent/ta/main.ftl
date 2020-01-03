@@ -21,15 +21,20 @@ log-out-button = வெளியேறு
 
 ## Things
 
+thing-details =
+    .aria-label = தன்மைகளை பார்க்கவும்
 add-things =
     .aria-label = புதிய பொருட்களைச் சேர்க்கவும்
 
 ## Assistant
 
+assistant-controls-text-input =
+    .placeholder = நான் எவ்வாறு உதவ வேண்டும் ?
 
 ## Floorplan
 
 upload-floorplan = நிலத்தளத்தை பதிவேற்றுக…
+upload-floorplan-hint = (.svg பரிந்துரைக்கப்படுகிறது)
 
 ## Top-Level Settings
 
