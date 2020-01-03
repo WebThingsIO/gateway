@@ -145,9 +145,23 @@ in-progress = செயல்பாட்டில் உள்ளது
 ## Developer Settings
 
 developer-settings-enable-ssh = SSH ஐ செயல்படுத்து
+developer-settings-view-internal-logs = உள் பதிவுகளை பார்க்கவும்
 
 ## Rules
 
+add-rule =
+    .aria-label = புதிய விதிமுறைகளை உருவாக்கவும்
+rules = விதிமுறைகள்
+rules-create-rule-hint = எந்த விதிகளும் உருவாக்கப்படவில்லை. விதியை உருவாக்க + ஐ கிளிக் செய்யவும்.
+rules-rule-name = விதியின் பெயர்
+rules-customize-rule-name-icon =
+    .alt = விதியின் பெயரை தனிப்பயனாக்குங்கள்
+rules-rule-description = விதியின் விளக்கம்
+rules-delete-icon =
+    .alt = அழி
+rules-drag-hint = விதியை உருவாக்கத் தொடங்க உங்கள் சாதனங்களை இங்கே இழுக்கவும்
+rules-drag-input-hint = சாதனத்தை உள்ளீடாகச் சேர்க்கவும்
+rules-drag-output-hint = சாதனத்தை வெளியீடாகச் சேர்க்கவும்
 
 ## Logs
 
