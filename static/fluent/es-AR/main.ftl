@@ -544,6 +544,7 @@ authorize-deny = Denegar
 
 local-token-title = Servicio de token local: { -webthings-gateway-brand }
 local-token-header = Servicio de token local
+local-token-your-token = Tu token local es este <a data-l10n-name="local-token-jwt"> JSON Web Token </a>:
 local-token-use-it = Usalo para hablar con la puerta de enlace de forma segura, con <a data-l10n-name="local-token-bearer-type">Autorización de tipo portador</a>.
 
 ## Router Setup Page
@@ -580,6 +581,7 @@ connecting-header = Conectando a Wi-Fi…
 connecting-connect = Asegurate de estar conectado a la misma red y luego andá a { $gateway-link }  en tu navegador web para continuar con la configuración.
 connecting-warning = Nota: Si no podés cargar { $domain }, buscá la dirección IP de la puerta de enlace en tu enrutador.
 connecting-header-skipped = Configuración de Wi-Fi omitida
+connecting-skipped = La puerta de enlace se está iniciando ahora. Andá a { $gateway-link } en tu navegador web mientras estás conectado a la misma red que la puerta de enlace para continuar con la configuración.
 
 ## Creating Wi-Fi Network Page
 
@@ -605,6 +607,8 @@ back-button =
     .aria-label = Atrás
 overflow-button =
     .aria-label = Acciones adicionales
+speech-button =
+    .aria-label = Escuchá el discurso
 submit-button =
     .aria-label = Enviar
 edit-button =
