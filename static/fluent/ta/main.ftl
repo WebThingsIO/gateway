@@ -48,9 +48,36 @@ settings-developer = உருவாக்குபவர்
 
 ## Domain Settings
 
+domain-settings-local-update = சேவையக பெயரை புதுப்பி
+domain-settings-remote-access = தொலைநிலை அணுகல்
+domain-settings-local-name =
+    .placeholder = நுழைவாயில்
 
 ## Network Settings
 
+network-settings-unsupported = இந்த தளத்திற்கு பிணைய அமைப்புகள் ஆதரிக்கப்படவில்லை.
+network-settings-ethernet-image =
+    .alt = ஈத்தர்நெட்
+network-settings-ethernet = ஈத்தர்நெட்
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
+network-settings-internet-image =
+    .alt = இணையதளம்
+network-settings-internet-wan = இணையதளம் (WAN)
+network-settings-wan-mode = முறை
+network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-ip-address = IP முகவரி
+network-settings-dhcp = தானியங்கி (DHCP)
+network-settings-static = கைமுறை (நிலையான IP)
+network-settings-pppoe = பிணைய பாலம் (PPPoE)
+network-settings-static-ip-address = நிலையான IP முகவரி
+network-settings-network-mask = பிணைய முகமூடி
+network-settings-gateway = நுழைவாயில்
+network-settings-done = முடிந்தது
+network-settings-wifi-password =
+    .placeholder = கடவுச்சொல்
+network-settings-show-password = கடவுச்சொல்லை காட்டு
 
 ## User Settings
 
