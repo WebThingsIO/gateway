@@ -132,9 +132,19 @@ localization-settings-units-temperature-fahrenheit = பாரன்ஹீட்
 
 ## Update Settings
 
+update-available = புதிய பதிப்பு உள்ளது
+update-up-to-date = உங்கள் மென்பொருள் புதுப்பித்த நிலையில் உள்ளது
+updates-not-supported = இந்த தளத்தில் புதுப்பிப்புகள் ஆதரிக்கப்படவில்லை.
+update-settings-enable-self-updates = தானியங்கி புதுப்பித்தல்களை செயல்படுத்து
+last-update = கடைசியாக புதுப்பிக்கப்பட்டது
+current-version = தற்போதைய பதிப்பு
+failed = தோல்வியுற்றது
+never = ஒருபோதும் இல்லை
+in-progress = செயல்பாட்டில் உள்ளது
 
 ## Developer Settings
 
+developer-settings-enable-ssh = SSH ஐ செயல்படுத்து
 
 ## Rules
 
