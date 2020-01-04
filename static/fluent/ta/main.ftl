@@ -28,6 +28,8 @@ add-things =
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = உதவி அவதார்
 assistant-controls-text-input =
     .placeholder = நான் எவ்வாறு உதவ வேண்டும் ?
 
@@ -167,6 +169,8 @@ rules-delete-cancel =
     .value = ரத்து செய்
 rules-delete-confirm =
     .value = விதியை நீக்கு
+rule-delete-cancel-button =
+    .value = ரத்து செய்
 
 ## Logs
 
