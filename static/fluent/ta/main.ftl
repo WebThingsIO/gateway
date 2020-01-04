@@ -169,8 +169,12 @@ rules-delete-cancel =
     .value = ரத்து செய்
 rules-delete-confirm =
     .value = விதியை நீக்கு
+rule-invalid = மதிப்பில்லாத
+rule-delete-prompt = இந்த விதிமுறைகளை நிரந்தரமாக அகற்ற விரும்புகிறீர்களா?
 rule-delete-cancel-button =
     .value = ரத்து செய்
+rule-delete-confirm-button =
+    .value = விதியை நீக்கு
 
 ## Logs
 
