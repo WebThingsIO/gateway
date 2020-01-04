@@ -218,33 +218,158 @@ add-thing-cancel = Zrušit
 
 ## Context Menu
 
+context-menu-save = Uložit
+context-menu-remove = Odstranit
 
 ## Capabilities
 
+OnOffSwitch = Vypínač
+MultiLevelSwitch = Víceúrovňový přepínač
+ColorSensor = Senzor barev
+EnergyMonitor = Monitor energie
+BinarySensor = Binární senzor
+MultiLevelSensor = Víceúrovňový senzor
+SmartPlug = Chytrá zástrčka
+Light = Světlo
+DoorSensor = Senzor dveří
+MotionSensor = Pohybový senzor
+LeakSensor = Senzor úniku
+VideoCamera = Videokamera
+Camera = Fotoaparát
+TemperatureSensor = Teploměr
+Alarm = Budík
+Thermostat = Termostat
+Custom = Vlastní věc
+Thing = Věc
 
 ## Properties
 
+alarm = Budík
+pushed = Zmáčknuto
+not-pushed = Není zmáčknuto
+on-off = Zapnuto/Vypnuto
+on = Zapnuto
+off = Vypnuto
+power = Napájení
+voltage = Napětí
+temperature = Teplota
+frequency = Frekvence
+color = Barva
+brightness = Jas
+leak = Únik
+dry = Suché
+color-temperature = Teplota barvy
+video-unsupported = Litujeme, video ve vašem prohlížeči není podporováno.
+motion = Pohyb
+no-motion = Žádný pohyb
+closed = Zavřené
+locked = Zamčené
+unlocked = Odemčené
+jammed = Zaseknuté
+unknown = Neznámý
+active = Aktivní
+inactive = Neaktivní
 
 ## Domain Setup
 
+subdomain-already-used = Tato subdoména je již používána. Zvolte prosím jinou.
 
 ## Booleans
 
 
 ## Time
 
+utils-seconds-ago =
+    { $value ->
+        [one] před { $value } sekundou
+        [few] před { $value } sekundami
+       *[other] před { $value } sekundami
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] před { $value } minutou
+        [few] před { $value } minutami
+       *[other] před { $value } minutami
+    }
+utils-hours-ago =
+    { $value ->
+        [one] před { $value } hodinou
+        [few] před { $value } hodinami
+       *[other] před { $value } hodinami
+    }
+utils-days-ago =
+    { $value ->
+        [one] před { $value } dnem
+        [few] před { $value } dny
+       *[other] před { $value } dny
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] před { $value } týdnem
+        [few] před { $value } týdny
+       *[other] před { $value } týdny
+    }
+utils-months-ago =
+    { $value ->
+        [one] před { $value } měsícem
+        [few] před { $value } měsíci
+       *[other] před { $value } měsíci
+    }
+utils-years-ago =
+    { $value ->
+        [one] před { $value } rokem
+        [few] před { $value } roky
+       *[other] před { $value } roky
+    }
+minute = Minuta
+hour = Hodina
+day = Den
+week = Týden
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-percent = %
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
 
 ## New Thing View
 
+unknown-device-type = Neznámý typ zařízení
+new-thing-save = Uložit
+new-thing-pin =
+    .placeholder = Zadejte PIN
+new-thing-pin-error = Nesprávný PIN
+new-thing-pin-invalid = Neplatný PIN
+new-thing-cancel = Zrušit
+new-thing-submit = Odeslat
+new-thing-username =
+    .placeholder = Zadejte uživatelské jméno
+new-thing-password =
+    .placeholder = Zadejte heslo
+new-thing-credentials-error = Nesprávné přihlašovací údaje
+new-thing-saved = Uloženo
+new-thing-done = Hotovo
 
 ## New Web Thing View
 
+new-web-thing-label = Webová věc
+loading = Načítání…
+new-web-thing-multiple = Bylo nalezeno více webových věcí
+new-web-thing-from = od
 
 ## Empty div Messages
 
+thing-not-found = Věc nebyla nalezena.
 
 ## Add-on Settings
 
