@@ -9,12 +9,18 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
+# Main Title
+webthings-gateway = { -webthings-gateway-brand }
+# Wordmark
+wordmark =
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
 assistant-menu-item = Asistent
 things-menu-item = Věci
 rules-menu-item = Pravidla
+logs-menu-item = Protokoly
 floorplan-menu-item = Půdorys
 settings-menu-item = Nastavení
 log-out-button = Odhlásit se
@@ -54,12 +60,14 @@ settings-developer = Vývojář
 ## Domain Settings
 
 domain-settings-local-label = Místní přístup
+domain-settings-local-update = Změnit název hostitele
 domain-settings-remote-access = Vzdálený přístup
 domain-settings-local-name =
     .placeholder = brána
 
 ## Network Settings
 
+network-settings-unsupported = Nastavení sítě není na této platformě podporováno.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -77,6 +85,7 @@ network-settings-home-network-lan = Domácí síť (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP adresa
 network-settings-dhcp = Automaticky (DHCP)
+network-settings-static = Ručně (statická IP)
 network-settings-pppoe = Most (PPPoE)
 network-settings-static-ip-address = Statická IP adresa
 network-settings-network-mask = Maska sítě
@@ -95,6 +104,8 @@ network-settings-network-name = Název sítě (SSID)
 wireless-connected = Připojeno
 wireless-icon =
     .alt = Síť Wi-Fi
+network-settings-changing = Probíhá změna nastavení sítě. Může to chvíli trvat.
+failed-ethernet-configure = Konfigurace ethernetu se nezdařila.
 failed-wifi-configure = Konfigurace Wi-Fi se nezdařila.
 failed-wan-configure = Konfigurace WAN se nezdařila.
 failed-lan-configure = Konfigurace LAN se nezdařila.
@@ -130,6 +141,7 @@ authorization-settings-no-authorizations = Žádná oprávnění.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Chytrý asistent
+experiment-settings-logs = Protokoly
 
 ## Localization Settings
 
@@ -139,38 +151,58 @@ localization-settings-timezone = Časové pásmo
 localization-settings-language = Jazyk
 localization-settings-units = Jednotky
 localization-settings-units-temperature = Teplota
+localization-settings-units-temperature-celsius = stupně Celsia (°C)
+localization-settings-units-temperature-fahrenheit = stupně Fahrenheita (°F)
 
 ## Update Settings
 
 update-settings-update-now = Aktualizovat nyní
 update-available = Je dostupná nová verze
 update-up-to-date = Váš systém je aktuální
+updates-not-supported = Instalace aktualizací není na této platformě podporována.
 update-settings-enable-self-updates = Povolit automatické aktualizace
 last-update = Poslední aktualizace
+current-version = Současná verze
+failed = Nezdařilo se
 never = Nikdy
+in-progress = Probíhá
 restarting = Restartuje se
 
 ## Developer Settings
 
 developer-settings-enable-ssh = Povolit SSH
+developer-settings-view-internal-logs = Zobrazit interní protokoly
+developer-settings-create-local-authorization = Vytvořit místní oprávnění
 
 ## Rules
 
 add-rule =
     .aria-label = Vytvořit nové pravidlo
 rules = Pravidla
+rules-create-rule-hint = Nebyla vytvořena žádná pravidla. Klepnutím na + můžete nějaké vytvořit.
 rules-rule-name = Název pravidla
+rules-customize-rule-name-icon =
+    .alt = Přejmenovat pravidlo
 rules-rule-description = Popis pravidla
 rules-preview-button =
     .alt = Náhled
+rules-delete-icon =
+    .alt = Odstranit
 rules-drag-hint = Přetažením zařízení sem začněte vytvářet pravidlo
 rules-drag-input-hint = Přidat zařízení jako vstup
+rules-drag-output-hint = Přidat zařízení jako výstup
+rules-scroll-left =
+    .alt = Posunout doleva
+rules-scroll-right =
+    .alt = Posunout doprava
 rules-delete-prompt = Přetažením zařízení sem jej odpojíte
+rules-delete-dialog = Opravdu chcete toto pravidlo navždy odstranit?
 rules-delete-cancel =
     .value = Zrušit
 rules-delete-confirm =
     .value = Odstranit pravidlo
 rule-invalid = Neplatné
+rule-delete-prompt = Opravdu chcete toto pravidlo navždy odstranit?
 rule-delete-cancel-button =
     .value = Zrušit
 rule-delete-confirm-button =
@@ -195,29 +227,41 @@ rule-name = Název pravidla
 add-log =
     .aria-label = Vytvořit nový protokol
 logs = Protokoly
+logs-create-log-hint = Nebyly vytvořeny žádné záznamy. Klepnutím na + můžete nějaké vytvořit.
 logs-device = Zařízení
 logs-device-select =
     .aria-label = Protokol zařízení
+logs-property = Vlastnost
 logs-property-select =
     .aria-label = Vlastnosti protokolu
 logs-retention = Uchovávání informací
+logs-retention-length =
+    .aria-label = Doba uchovávání protokolu
 logs-retention-unit =
     .aria-label = Jednotka uchovávání protokolu
 logs-hours = Hodiny
 logs-days = Dny
 logs-weeks = Týdny
 logs-save = Uložit
+logs-remove-dialog-title = Mazání
+logs-remove-dialog-warning = Smazáním protokolu se odstraní také všechna jeho data. Opravdu ho chcete smazat?
+logs-remove = Smazat
+logs-unable-to-create = Protokol nelze vytvořit
+logs-server-remove-error = Chyba serveru: protokol nelze smazat
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Prohledávání
 add-thing-scanning = Hledání nových zařízení…
+add-thing-add-adapters-hint = Nebyly nalezeny žádné nové věci. Zkuste <a data-l10n-name="add-thing-add-adapters-hint-anchor">přidat nějaké doplňky</a>.
+add-thing-add-by-url = Přidat zadáním URL…
 add-thing-done = Hotovo
 add-thing-cancel = Zrušit
 
 ## Context Menu
 
+context-menu-choose-icon = Vyberte ikonu…
 context-menu-save = Uložit
 context-menu-remove = Odstranit
 
@@ -234,11 +278,13 @@ Light = Světlo
 DoorSensor = Senzor dveří
 MotionSensor = Pohybový senzor
 LeakSensor = Senzor úniku
+PushButton = Tlačítko
 VideoCamera = Videokamera
 Camera = Fotoaparát
 TemperatureSensor = Teploměr
 Alarm = Budík
 Thermostat = Termostat
+Lock = Zámek
 Custom = Vlastní věc
 Thing = Věc
 
@@ -253,6 +299,7 @@ off = Vypnuto
 power = Napájení
 voltage = Napětí
 temperature = Teplota
+current = Proud
 frequency = Frekvence
 color = Barva
 brightness = Jas
@@ -262,6 +309,7 @@ color-temperature = Teplota barvy
 video-unsupported = Litujeme, video ve vašem prohlížeči není podporováno.
 motion = Pohyb
 no-motion = Žádný pohyb
+open = Otevřené
 closed = Zavřené
 locked = Zamčené
 unlocked = Odemčené
@@ -272,54 +320,64 @@ inactive = Neaktivní
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Vypadá to, že jste tuto subdoménu již zaregistrovali. Chcete-li ji získat zpět, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klepněte sem</a>.
+check-email-for-token = Podívejte se do své schránky po zaslaném tokenu pro získání přístupu a vložte jej výše.
+reclaim-failed = Doménu nelze získat zpět.
 subdomain-already-used = Tato subdoména je již používána. Zvolte prosím jinou.
+invalid-reclamation-token = Neplatný token pro získání přístupu.
+domain-success = Podařilo se! Počkejte prosím, až vás přesměrujeme…
+issuing-error = Chyba při vydávání certifikátu. Zkuste to znovu.
+redirecting = Probíhá přesměrování…
 
 ## Booleans
 
+true = Pravda
+false = Nepravda
 
 ## Time
 
+utils-now = teď
 utils-seconds-ago =
     { $value ->
-        [one] před { $value } sekundou
+        [one] před jednou sekundou
         [few] před { $value } sekundami
        *[other] před { $value } sekundami
     }
 utils-minutes-ago =
     { $value ->
-        [one] před { $value } minutou
+        [one] před minutou
         [few] před { $value } minutami
        *[other] před { $value } minutami
     }
 utils-hours-ago =
     { $value ->
-        [one] před { $value } hodinou
+        [one] před hodinou
         [few] před { $value } hodinami
        *[other] před { $value } hodinami
     }
 utils-days-ago =
     { $value ->
-        [one] před { $value } dnem
+        [one] před jedním dnem
         [few] před { $value } dny
        *[other] před { $value } dny
     }
 utils-weeks-ago =
     { $value ->
-        [one] před { $value } týdnem
+        [one] před týdnem
         [few] před { $value } týdny
        *[other] před { $value } týdny
     }
 utils-months-ago =
     { $value ->
-        [one] před { $value } měsícem
+        [one] před měsícem
         [few] před { $value } měsíci
        *[other] před { $value } měsíci
     }
 utils-years-ago =
     { $value ->
-        [one] před { $value } rokem
-        [few] před { $value } roky
-       *[other] před { $value } roky
+        [one] před rokem
+        [few] před { $value } lety
+       *[other] před { $value } lety
     }
 minute = Minuta
 hour = Hodina
@@ -332,7 +390,10 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
+abbrev-kilowatt-hour = kWh
 abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
 abbrev-kelvin = K
 abbrev-meter = m
 abbrev-kilometer = km
@@ -341,10 +402,12 @@ abbrev-hour = h
 abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
 unknown-device-type = Neznámý typ zařízení
+new-thing-choose-icon = Vyberte ikonu…
 new-thing-save = Uložit
 new-thing-pin =
     .placeholder = Zadejte PIN
@@ -362,6 +425,8 @@ new-thing-done = Hotovo
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Zadejte URL věci
 new-web-thing-label = Webová věc
 loading = Načítání…
 new-web-thing-multiple = Bylo nalezeno více webových věcí
@@ -369,6 +434,7 @@ new-web-thing-from = od
 
 ## Empty div Messages
 
+no-things = Zatím žádná zařízení. Kepnutím na + vyhledáte dostupná zařízení.
 thing-not-found = Věc nebyla nalezena.
 
 ## Add-on Settings
