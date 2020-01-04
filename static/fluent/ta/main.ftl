@@ -291,12 +291,22 @@ inactive = செயலில் இல்லை
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = நீங்கள் ஏற்கனவே அந்த துணை டொமைனை பதிவு செய்துள்ளதாக தெரிகிறது. அதை மீண்டும் பெற <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> இங்கே கிளிக் செய்க </a>.
+check-email-for-token = மீட்டெடுப்பு அடையாளத்காக (டோக்கனுக்காக) உங்கள் மின்னஞ்சலை சரிபார்த்து மேலே ஒட்டவும்.
+reclaim-failed = களத்தை மீட்டெடுக்க முடியவில்லை.
+subdomain-already-used = இந்த துணை  களம் ஏற்கனவே பயன்படுத்தப்படுகிறது. தயவுசெய்து வேறு ஒன்றைத் தேர்ந்தெடுக்கவும்.
+invalid-reclamation-token = தவறான மறுசீரமைப்பு அடையாளம்(டோக்கன்).
+domain-success = வெற்றி! நாங்கள் உங்களை திருப்பி விடும்போது காத்திருங்கள்…
+issuing-error = சான்றிதழ் வழங்குவதில் பிழை. தயவு செய்து மீண்டும் முயற்சிக்கவும்.
+redirecting = திசைதிருப்புகிறது ...
 
 ## Booleans
 
+true = உண்மை
+false = தவறு
 
 ## Time
 
+utils-now = இப்பொழுது
 
 ## Unit Abbreviations
 
