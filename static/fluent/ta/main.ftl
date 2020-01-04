@@ -236,6 +236,11 @@ context-menu-remove = நீக்கு
 
 ## Capabilities
 
+OnOffSwitch = இணை/அணை மின்விசை மாற்றுக்குமிழ்
+MultiLevelSwitch = பலநிலை மின்விசை மாற்றுக்குமிழ்
+ColorControl = வண்ண கட்டுப்பாடு
+ColorSensor = வண்ண  உணர்வி
+EnergyMonitor = ஆற்றல் கண்காணிப்பு
 
 ## Properties
 
