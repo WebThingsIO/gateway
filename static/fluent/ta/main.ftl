@@ -181,9 +181,21 @@ rule-not = இல்லை
 rule-event = நிகழ்வு
 rule-action = செயல்
 rule-configure = கட்டமைக்க
+rule-notification = அறிவிப்பு
+notification-title = தலைப்பு
+notification-message = செய்தி
+notification-level = நிலை
+notification-low = குறைவு
+notification-normal = சராசரி
+notification-high = அதிகம்
+rule-name = விதியின் பெயர்
 
 ## Logs
 
+add-log =
+    .aria-label = புதிய பதிவை உருவாக்கவும்
+logs = பதிவுகள்
+logs-create-log-hint = பதிவுகள் எதுவும் உருவாக்கப்படவில்லை. ஒரு பதிவை உருவாக்க + கிளிக் செய்க.
 
 ## Add New Things
 
