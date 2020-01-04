@@ -261,11 +261,36 @@ Thing = பொருள்
 ## Properties
 
 alarm = அலறி
+pushed = தள்ளுதல்
 not-pushed = தள்ளப்படவில்லை
-on-off = தள்ளுதல்
+on-off = இணை/அணை
+on = இணை
+off = அணை
+power = மின்சக்தி
+voltage = மின்னழுத்தம்
+temperature = வெப்பநிலை
+current = மின்னோட்டம்
+frequency = அலைவெண்
+color = வண்ணம்
+brightness = பிரகாசம்
+leak = கசிவு
+dry = உலர்
+color-temperature = வண்ண/நிற வெப்பநிலை
+video-unsupported = மன்னிக்கவும், உங்கள் உலாவியில் வீடியோ ஆதரிக்கப்படவில்லை.
+motion = அசைவு
+no-motion = அசைவு இல்லை
+open = திறக்கவும்
+closed = மூடயது
+locked = பூட்டியது
+unlocked = திறக்கப்பட்டது
+jammed = நெரிசலா
+unknown = அறியதவை
+active = செயலிலுள்ளது
+inactive = செயலில் இல்லை
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = நீங்கள் ஏற்கனவே அந்த துணை டொமைனை பதிவு செய்துள்ளதாக தெரிகிறது. அதை மீண்டும் பெற <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> இங்கே கிளிக் செய்க </a>.
 
 ## Booleans
 
