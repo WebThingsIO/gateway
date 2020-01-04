@@ -181,6 +181,7 @@ rule-not = இல்லை
 rule-event = நிகழ்வு
 rule-action = செயல்
 rule-configure = கட்டமைக்க
+rule-time-title = நாளின் நேரம்
 rule-notification = அறிவிப்பு
 notification-title = தலைப்பு
 notification-message = செய்தி
@@ -196,6 +197,26 @@ add-log =
     .aria-label = புதிய பதிவை உருவாக்கவும்
 logs = பதிவுகள்
 logs-create-log-hint = பதிவுகள் எதுவும் உருவாக்கப்படவில்லை. ஒரு பதிவை உருவாக்க + கிளிக் செய்க.
+logs-device = சாதனம்
+logs-device-select =
+    .aria-label = சாதனம் பதிவு
+logs-property = தன்மைகள்
+logs-property-select =
+    .aria-label = பதிவு தன்மைகள்
+logs-retention = தக்கவைத்தல்
+logs-retention-length =
+    .aria-label = பதிவு வைத்திருத்தல் நீளம்
+logs-retention-unit =
+    .aria-label = பதிவு வைத்திருத்தல் பிரிவு
+logs-hours = மணிநேரங்கள்
+logs-days = நாட்கள்
+logs-weeks = வாரங்கள்
+logs-save = சேமித்தல்
+logs-remove-dialog-title = அகற்றுதல்
+logs-remove-dialog-warning = பதிவை நீக்குவது அதன் எல்லா தரவையும் அகற்றும். நீங்கள் நிச்சயமாக அதை அகற்ற விரும்புகிறீர்களா?
+logs-remove = அகற்று
+logs-unable-to-create = பதிவை உருவாக்க முடியவில்லை
+logs-server-remove-error = சேவையக பிழை: பதிவை அகற்ற முடியவில்லை
 
 ## Add New Things
 
