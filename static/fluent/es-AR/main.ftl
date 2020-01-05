@@ -587,6 +587,7 @@ connecting-skipped = La puerta de enlace se está iniciando ahora. Andá a { $ga
 
 creating-title = Creando red Wi-Fi — { -webthings-gateway-brand }
 creating-header = Creando red Wi-Fi…
+creating-content = Conectá a { $ssid } con la contraseña que recién creaste y navegá a { $gateway-link } o { $ip-link } en tu navegador web.
 
 ## General Terms
 
