@@ -310,51 +310,204 @@ color-temperature = Temperatura del color
 video-unsupported = Lo sentimos, el vídeo no es compatible con tu navegador.
 motion = Movimiento
 no-motion = Sin movimiento
+open = Abierto
+closed = Cerrado
+locked = Bloqueado
+unlocked = Desbloqueado
+jammed = Atascado
+unknown = Desconocido
+active = Activo
+inactive = Inactivo
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Parece que ya has registrado ese subdominio. Para recuperarlo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">haz clic aquí</a>.
+check-email-for-token = Revisa el correo electrónico para obtener un token de recuperación y pégalo arriba.
+reclaim-failed = No se pudo recuperar el dominio.
+subdomain-already-used = Este subdominio ya se está utilizando. Por favor, elije uno diferente.
+invalid-reclamation-token = Token de recuperación inválido.
+domain-success = ¡Correcto! Por favor espera mientras te redirigimos…
+issuing-error = Error al emitir el certificado. Inténtalo de nuevo.
+redirecting = Redirigiendo…
 
 ## Booleans
 
+true = Verdadero
+false = Falso
 
 ## Time
 
+utils-now = ahora
+utils-seconds-ago =
+    { $value ->
+        [one] Hace { $value } segundo
+       *[other] Hace { $value } segundos
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] Hace { $value } minuto
+       *[other] Hace { $value } minutos
+    }
+utils-hours-ago =
+    { $value ->
+        [one] Hace { $value } hora
+       *[other] Hace { $value } horas
+    }
+utils-days-ago =
+    { $value ->
+        [one] Hace { $value } día
+       *[other] Hace { $value } días
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] Hace { $value } semana
+       *[other] Hace { $value } semanas
+    }
+utils-months-ago =
+    { $value ->
+        [one] Hace { $value } mes
+       *[other] Hace { $value } meses
+    }
+utils-years-ago =
+    { $value ->
+        [one] Hace { $value } año
+       *[other] Hace { $value } años
+    }
+minute = Minuto
+hour = Hora
+day = Día
+week = Semana
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Tipo de dispositivo desconocido
+new-thing-choose-icon = Elegir icono…
+new-thing-save = Guardar
+new-thing-pin =
+    .placeholder = Introducir PIN
+new-thing-pin-error = PIN incorrecto
+new-thing-pin-invalid = PIN inválido
+new-thing-cancel = Cancelar
+new-thing-submit = Enviar
+new-thing-username =
+    .placeholder = Introducir nombre de usuario
+new-thing-password =
+    .placeholder = Introducir contraseña
+new-thing-credentials-error = Credenciales incorrectas
+new-thing-saved = Guardado
+new-thing-done = Hecho
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Introduce la URL del dispositivo web
+new-web-thing-label = Dispositivo web
+loading = Cargando…
+new-web-thing-multiple = Encontrados múltiples dispositivos web
+new-web-thing-from = desde
 
 ## Empty div Messages
 
+no-things = Aún no hay dispositivos. Haz clic en + para buscar dispositivos disponibles.
+thing-not-found = No se encontró dispositivo.
+action-not-found = No se encontró acción.
+events-not-found = Este dispositivo no tiene eventos.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Buscar nuevos complementos
+author-unknown = Desconocido
+disable = Desactivar
+enable = Activar
+by = por
+addon-configure = Configurar
+addon-update = Actualizar
+addon-remove = Eliminar
+addon-updating = Actualizando…
+addon-updated = Actualizado
+addon-update-failed = Fallido
+addon-config-applying = Aplicando…
+addon-config-apply = Aplicar
+addon-discovery-added = Añadido
+addon-discovery-add = Añadir
+addon-discovery-installing = Instalando…
+addon-discovery-failed = Fallido
 
 ## Page Titles
 
+settings = Ajustes
+domain = Dominio
+users = Usuarios
+edit-user = Editar usuario
+add-user = Añadir usuario
+adapters = Adaptadores
+addons = Complementos
+addon-config = Configurar complemento
+addon-discovery = Descubrir nuevos complementos
+experiments = Experimentos
+localization = Localización
+updates = Actualizaciones
+authorizations = Autorizaciones
+developer = Desarrollador
+network = Red
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Icono
 
 ## Speech
 
+speech-unsupported = El navegador actual no admite voz
+speech-didnt-get = Lo siento, no entendí eso.
 
 ## Errors
 
+unknown-state = Estado desconocido.
+error = Error
+errors = Errores
+gateway-unreachable = Pasarela inalcanzable
+more-information = Más información
+invalid-file = Archivo inválido.
+failed-read-file = Error al leer el archivo.
+failed-save = Error al guardar.
 
 ## Schema Form
 
+unsupported-field = Esquema de campo no compatible
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Iniciar sesión — { -webthings-gateway-brand }
+login-log-in = Iniciar sesión
 
 ## Create First User Page
 
+signup-title = Crear usuario — { -webthings-gateway-brand }
+signup-welcome = Bienvenido
 
 ## Tunnel Setup Page
 
