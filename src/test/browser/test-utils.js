@@ -42,6 +42,11 @@ module.exports.getAddons = async () => {
 
 module.exports.addThing = async (desc) => {
   const {id} = desc;
+
+  if (desc.hasOwnProperty('@type') && desc['@type'].length > 0 &&
+      !desc.hasOwnProperty('selectedCapability')) {
+    desc.selectedCapability = desc['@type'][0];
+  }
   await chai.request(server).keepOpen()
     .post(Constants.THINGS_PATH)
     .set('Accept', 'application/json')

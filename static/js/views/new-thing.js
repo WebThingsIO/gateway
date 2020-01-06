@@ -58,8 +58,6 @@ class NewThing {
     if (Array.isArray(this.description['@type']) &&
         this.description['@type'].length > 0) {
       capabilities = this.description['@type'];
-    } else if (this.description.type) {
-      capabilities = Utils.legacyTypeToCapabilities(this.description.type);
     }
 
     capabilities = Utils.sortCapabilities(capabilities);
@@ -128,8 +126,6 @@ class NewThing {
           cls = cls || 'lock';
           break;
         case 'Custom':
-          cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
-          break;
         default:
           cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
           break;

@@ -294,8 +294,6 @@ class NewWebThing {
       if (Array.isArray(description['@type']) &&
           description['@type'].length > 0) {
         capabilities = description['@type'];
-      } else if (description.type) {
-        capabilities = Utils.legacyTypeToCapabilities(description.type);
       }
 
       capabilities = Utils.sortCapabilities(capabilities);

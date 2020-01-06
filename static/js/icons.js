@@ -65,35 +65,8 @@ function capabilityToIcon(capability) {
   }
 }
 
-function typeHasIcon(type) {
-  return typeToIcon(type) !== defaultIcon();
-}
-
-function typeToIcon(type) {
-  switch (type) {
-    case 'onOffSwitch':
-      return '/optimized-images/thing-icons/on_off_switch.svg';
-    case 'binarySensor':
-      return '/optimized-images/thing-icons/binary_sensor.svg';
-    case 'multiLevelSensor':
-      return '/optimized-images/thing-icons/multi_level_sensor.svg';
-    case 'onOffLight':
-    case 'onOffColorLight':
-    case 'dimmableLight':
-    case 'dimmableColorLight':
-      return '/optimized-images/thing-icons/light.svg';
-    case 'multiLevelSwitch':
-      return '/optimized-images/thing-icons/multi_level_switch.svg';
-    case 'smartPlug':
-      return '/optimized-images/thing-icons/smart_plug.svg';
-    default:
-      return defaultIcon();
-  }
-}
-
 module.exports = {
   capabilityHasIcon,
   capabilityToIcon,
-  typeHasIcon,
-  typeToIcon,
+  defaultIcon,
 };

@@ -46,7 +46,6 @@ class MockDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
     this.title = deviceDescription.title;
-    this.type = deviceDescription.type;
     this['@context'] = deviceDescription['@context'];
     this['@type'] = deviceDescription['@type'];
     this.description = deviceDescription.description;

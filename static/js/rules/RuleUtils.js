@@ -19,8 +19,8 @@ const RuleUtils = {
       } else {
         return description.iconHref;
       }
-    } else if (Icons.typeHasIcon(description.type) || !description.iconHref) {
-      return Icons.typeToIcon(description.type);
+    } else if (!description.iconHref) {
+      return Icons.defaultIcon();
     } else {
       return description.iconHref;
     }
