@@ -508,21 +508,71 @@ login-log-in = Iniciar sesión
 
 signup-title = Crear usuario — { -webthings-gateway-brand }
 signup-welcome = Bienvenido
+signup-create-account = Crea tu primera cuenta de usuario:
+signup-password-mismatch = Las contraseñas no coinciden
+signup-next = Siguiente
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Elije la dirección web — { -webthings-gateway-brand }
+tunnel-setup-welcome = Bienvenido
+tunnel-setup-choose-address = Elije una dirección web segura para tu puerta de enlace:
+tunnel-setup-input-subdomain =
+    .placeholder = subdominio
+tunnel-setup-opt-in = Mantenedme informado sobre las nuevas funciones y oportunidades de colaboración.
+tunnel-setup-privacy-policy = Política de privacidad
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token de recuperación
+tunnel-setup-error = Se produjo un error al configurar el subdominio.
+tunnel-setup-create = Crear
+tunnel-setup-skip = Omitir
+tunnel-setup-time-sync = Esperando a que el reloj del sistema se configure desde Internet. Es probable que el registro de dominio falle hasta que esto se complete.
 
 ## Authorize Page
 
+authorize-title = Solicitud de autorización — { -webthings-gateway-brand }
+authorize-authorization-request = Solicitud de autorización
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> deseas acceder a tu puerta de enlace a dispositivos de <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = desde <<domain>>
+authorize-monitor-and-control = monitor y control
+authorize-monitor = monitor
+authorize-allow-all = Permitir para todos los dispositivos
+authorize-allow =
+    .value = Permitir
+authorize-deny = Denegar
 
 ## Local Token Page
 
+local-token-title = Servicio de token local — { -webthings-gateway-brand }
+local-token-header = Servicio de token local
+local-token-your-token = Tu token local es este <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Úsalo para comunicar con la puerta de enlace de manera segura, con <a data-l10n-name="local-token-bearer-type">autorización de tipo Bearer</a>.
 
 ## Router Setup Page
 
+router-setup-title = Configuración del enrutador — { -webthings-gateway-brand }
+router-setup-header = Crear una nueva red Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Nombre de red
+router-setup-input-password =
+    .placeholder = Contraseña
+router-setup-input-confirm-password =
+    .placeholder = Confirmar contraseña
+router-setup-create =
+    .value = Crear
+router-setup-password-mismatch = Las contraseñas deben coincidir
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuración de Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = ¿Conectarse a una red Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Contraseña
+wifi-setup-show-password = Mostrar contraseña
+wifi-setup-connect =
+    .value = Conectar
 
 ## Connecting to Wi-Fi Page
 
