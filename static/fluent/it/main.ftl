@@ -162,6 +162,7 @@ update-up-to-date = Il sistema è aggiornato
 updates-not-supported = Aggiornamenti non disponibili per la piattaforma in uso.
 update-settings-enable-self-updates = Attiva aggiornamenti automatici
 last-update = Ultimo aggiornamento
+current-version = Versione corrente
 failed = Non riuscito
 never = Mai
 in-progress = In corso
@@ -531,6 +532,8 @@ tunnel-setup-time-sync = In attesa che l’orologio di sistema venga impostato d
 
 authorize-title = Richiesta di autorizzazione — { -webthings-gateway-brand }
 authorize-authorization-request = Richiesta di autorizzazione
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> vuole accedere al gateway per gli oggetti <<function>>.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = da <<dominio>>
 authorize-monitor-and-control = Monitorare e controllare
