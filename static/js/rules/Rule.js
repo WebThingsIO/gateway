@@ -5,6 +5,7 @@
  */
 
 const API = require('../api');
+const App = require('../app');
 const RuleUtils = require('./RuleUtils');
 const Units = require('../units');
 
@@ -137,7 +138,18 @@ class Rule {
     }
 
     if (trigger.type === 'TimeTrigger') {
-      return `the time of day is ${trigger.time}`;
+      const d = new Date();
+      const parts = trigger.time.split(':');
+      d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+      const formatted = d.toLocaleTimeString(
+        // eslint-disable-next-line no-undefined
+        App.LANGUAGE,
+        {
+          hour: '2-digit',    // only show hour and minute
+          minute: '2-digit',  // am/pm is added automatically
+        }
+      );
+      return `the time of day is ${formatted}`;
     }
 
     if (trigger.type === 'EventTrigger') {
