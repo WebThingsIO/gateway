@@ -325,6 +325,8 @@ tunnel-setup-reclaim-domain = Parece que ya has registrado ese subdominio. Para 
 check-email-for-token = Revisa el correo electrónico para obtener un token de recuperación y pégalo arriba.
 reclaim-failed = No se pudo recuperar el dominio.
 subdomain-already-used = Este subdominio ya se está utilizando. Por favor, elije uno diferente.
+invalid-subdomain = Subdominio no válido.
+invalid-email = Correo electrónico no válido
 invalid-reclamation-token = Token de recuperación inválido.
 domain-success = ¡Correcto! Por favor espera mientras te redirigimos…
 issuing-error = Error al emitir el certificado. Inténtalo de nuevo.
@@ -573,15 +575,49 @@ wifi-setup-input-password =
 wifi-setup-show-password = Mostrar contraseña
 wifi-setup-connect =
     .value = Conectar
+wifi-setup-network-icon =
+    .alt = Red Wi-Fi
+wifi-setup-skip = Omitir
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Conectándose a Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Conectándose a Wi-Fi…
+connecting-connect = Asegúrate de estar conectado a la misma red y luego navega a { $gateway-link } en tu navegador web para continuar con la configuración.
+connecting-warning = Nota: Si no puedes cargar { $domain }, busca la dirección IP de la puerta de enlace en tu enrutador.
+connecting-header-skipped = Configuración de Wi-Fi omitida
+connecting-skipped = La puerta de enlace se está iniciando ahora. Navega a { $gateway-link } en tu navegador web mientras estás conectado a la misma red que la puerta de enlace para continuar con la configuración.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Creando una red Wi-Fi — { -webthings-gateway-brand }
+creating-header = Creando una red Wi-Fi…
+creating-content = Conéctate a { $ssid } con la contraseña que acabas de crear, luego navega a { $gateway-link } o { $ip-link } en tu navegador web.
 
 ## General Terms
 
+ok = Aceptar
+ellipsis = …
+event-log = Registro de eventos
+edit = Editar
+remove = Eliminar
+disconnected = Desconectado
+processing = Procesando…
+submit = Enviar
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menú
+back-button =
+    .aria-label = Atrás
+overflow-button =
+    .aria-label = Acciones adicionales
+speech-button =
+    .aria-label = Escuchar la voz
+submit-button =
+    .aria-label = Enviar
+edit-button =
+    .aria-label = Editar
+save-button =
+    .aria-label = Guardar
