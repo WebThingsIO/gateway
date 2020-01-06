@@ -22,6 +22,7 @@ function setupForm() {
   const skipAnchor = document.getElementById('skip-subdomain-anchor');
   const errorMessage = document.getElementById('error-setup');
   const reclaimMessage = document.getElementById('error-reclaim');
+  const validationMessage = document.getElementById('error-validation');
   const ntpMessage = document.getElementById('ntp-warning');
 
   function displayMessage(errorMsg, type) {
@@ -115,10 +116,22 @@ function setupForm() {
    * Ensure that all inputs are valid.
    */
   function validateInput() {
-    if (validateDomain() && validateEmail() && validateToken()) {
-      createDomainButton.disabled = false;
-    } else {
+    if (!validateDomain()) {
       createDomainButton.disabled = true;
+      validationMessage.innerText = fluent.getMessage('invalid-subdomain');
+      validationMessage.classList.remove('hidden');
+    } else if (!validateEmail()) {
+      createDomainButton.disabled = true;
+      validationMessage.innerText = fluent.getMessage('invalid-email');
+      validationMessage.classList.remove('hidden');
+    } else if (!validateToken()) {
+      createDomainButton.disabled = true;
+      validationMessage.innerText =
+        fluent.getMessage('invalid-reclamation-token');
+      validationMessage.classList.remove('hidden');
+    } else {
+      createDomainButton.disabled = false;
+      validationMessage.classList.add('hidden');
     }
   }
 
