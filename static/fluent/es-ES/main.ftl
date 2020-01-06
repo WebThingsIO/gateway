@@ -29,9 +29,13 @@ log-out-button = Cerrar sesión
 
 thing-details =
     .aria-label = Ver propiedades
+add-things =
+    .aria-label = Añadir nuevo dispositivo
 
 ## Assistant
 
+assistant-avatar-image =
+    .alt = Avatar asistente
 assistant-controls-text-input =
     .placeholder = ¿Cómo puedo ayudar?
 
@@ -184,21 +188,128 @@ rules-preview-button =
     .alt = Vista previa
 rules-delete-icon =
     .alt = Eliminar
+rules-drag-hint = Arrastra tus dispositivos aquí para comenzar a crear una regla
+rules-drag-input-hint = Añadir dispositivo como entrada
+rules-drag-output-hint = Añadir dispositivo como salida
+rules-scroll-left =
+    .alt = Desplazarse a la izquierda
+rules-scroll-right =
+    .alt = Desplazarse a la derecha
+rules-delete-prompt = Coloca aquí los dispositivos para desconectar
+rules-delete-dialog = ¿Seguro que quieres eliminar esta regla de forma permanente?
+rules-delete-cancel =
+    .value = Cancelar
+rules-delete-confirm =
+    .value = Eliminar regla
+rule-invalid = Inválido
+rule-delete-prompt = ¿Seguro que quieres eliminar esta regla de forma permanente?
+rule-delete-cancel-button =
+    .value = Cancelar
+rule-delete-confirm-button =
+    .value = Eliminar regla
+rule-select-property = Seleccionar propiedad
+rule-not = No
+rule-event = Evento
+rule-action = Acción
+rule-configure = Configurar…
+rule-time-title = Hora del día
+rule-notification = Notificación
+notification-title = Título
+notification-message = Mensaje
+notification-level = Nivel
+notification-low = Bajo
+notification-normal = Normal
+notification-high = Alto
+rule-name = Nombre de la regla
 
 ## Logs
 
+add-log =
+    .aria-label = Crear nuevo registro
+logs = Registros
+logs-create-log-hint = No se crearon registros. Haz clic en + para crear un registro.
+logs-device = Dispositivo
+logs-device-select =
+    .aria-label = Registro del dispositivo
+logs-property = Propiedad
+logs-property-select =
+    .aria-label = Propiedad del registro
+logs-retention = Retención
+logs-retention-length =
+    .aria-label = Tamaño de la retención del registro
+logs-retention-unit =
+    .aria-label = Unidad de retención de registro
+logs-hours = Horas
+logs-days = Días
+logs-weeks = Semanas
+logs-save = Guardar
+logs-remove-dialog-title = Eliminando
+logs-remove-dialog-warning = Eliminar el registro también eliminará todos sus datos. ¿Seguro que quieres eliminarlo?
+logs-remove = Eliminar
+logs-unable-to-create = No se puede crear el registro
+logs-server-remove-error = Error del servidor: no se puede eliminar el registro
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Explorando
+add-thing-scanning = Buscando nuevos dispositivos…
+add-thing-add-adapters-hint = No se encontraron dispositivos nuevos. Prueba a <a data-l10n-name="add-thing-add-adapters-hint-anchor">añadir algunos complementos</a>.
+add-thing-add-by-url = Añadir por URL…
+add-thing-done = Hecho
+add-thing-cancel = Cancelar
 
 ## Context Menu
 
+context-menu-choose-icon = Elegir icono…
+context-menu-save = Guardar
+context-menu-remove = Eliminar
 
 ## Capabilities
 
+OnOffSwitch = Interruptor encendido/apagado
+MultiLevelSwitch = Interruptor multinivel
+ColorControl = Control de color
+ColorSensor = Sensor de color
+EnergyMonitor = Monitor de energía
+BinarySensor = Sensor binario
+MultiLevelSensor = Sensor multinivel
+SmartPlug = Enchufe inteligente
+Light = Luz
+DoorSensor = Sensor de puerta
+MotionSensor = Sensor de movimiento
+LeakSensor = Sensor de fugas
+PushButton = Pulsador
+VideoCamera = Cámara de vídeo
+Camera = Cámara
+TemperatureSensor = Sensor de temperatura
+Alarm = Alarma
+Thermostat = Termostato
+Lock = Cerrojo
+Custom = Dispositivo personalizado
+Thing = Dispositivo
 
 ## Properties
 
+alarm = Alarma
+pushed = Pulsado
+not-pushed = Sin pulsar
+on-off = Encendido/Apagado
+on = Encendido
+off = Apagado
+power = Energía
+voltage = Voltaje
+temperature = Temperatura
+current = Actual
+frequency = Frecuencia
+color = Color
+brightness = Brillo
+leak = Fuga
+dry = Seco
+color-temperature = Temperatura del color
+video-unsupported = Lo sentimos, el vídeo no es compatible con tu navegador.
+motion = Movimiento
+no-motion = Sin movimiento
 
 ## Domain Setup
 
