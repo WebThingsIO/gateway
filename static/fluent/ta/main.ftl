@@ -237,12 +237,12 @@ context-menu-remove = நீக்கு
 
 ## Capabilities
 
-OnOffSwitch = இணை/அணை மின்விசை மாற்றுக்குமிழ்
-MultiLevelSwitch = பலநிலை மின்விசை மாற்றுக்குமிழ்
+OnOffSwitch = இருநிலை ஸ்விட்ச்
+MultiLevelSwitch = பலநிலை ஸ்விட்ச்
 ColorControl = வண்ண கட்டுப்பாடு
 ColorSensor = வண்ண  உணர்வி
-EnergyMonitor = ஆற்றல் கண்காணிப்பு
-BinarySensor = இருமம்  உணர்வி
+EnergyMonitor = மின் ஆற்றல் கண்காணிப்பு
+BinarySensor = இரும உணர்வி
 MultiLevelSensor = பலநிலை  உணர்வி
 SmartPlug = சூட்டிகை செருகி
 Light = ஒளி
