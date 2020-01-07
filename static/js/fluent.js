@@ -3,17 +3,32 @@ const FluentDOM = require('@fluent/dom/compat');
 const Fluent = require('@fluent/bundle/compat');
 
 const availableLanguages = {
+  cs: ['/fluent/cs/main.ftl'],
+  cy: ['/fluent/cy/main.ftl'],
   de: ['/fluent/de/main.ftl'],
+  'en-CA': ['/fluent/en-CA/main.ftl'],
+  'en-GB': ['/fluent/en-GB/main.ftl'],
   'en-US': ['/fluent/en-US/main.ftl'],
   en: ['/fluent/en-US/main.ftl'],
+  'es-AR': ['/fluent/es-AR/main.ftl'],
+  'es-ES': ['/fluent/es-ES/main.ftl'],
   fr: ['/fluent/fr/main.ftl'],
   'fy-NL': ['/fluent/fy-NL/main.ftl'],
+  hu: ['/fluent/hu/main.ftl'],
+  ia: ['/fluent/ia/main.ftl'],
+  id: ['/fluent/id/main.ftl'],
   it: ['/fluent/it/main.ftl'],
   ja: ['/fluent/ja/main.ftl'],
+  kab: ['/fluent/kab/main.ftl'],
   nl: ['/fluent/nl/main.ftl'],
   pl: ['/fluent/pl/main.ftl'],
+  'pt-BR': ['/fluent/pt-BR/main.ftl'],
   ru: ['/fluent/ru/main.ftl'],
   sr: ['/fluent/sr/main.ftl'],
+  'sv-SE': ['/fluent/sv-SE/main.ftl'],
+  ta: ['/fluent/ta/main.ftl'],
+  'zh-CN': ['/fluent/zh-CN/main.ftl'],
+  'zh-TW': ['/fluent/zh-TW/main.ftl'],
 };
 
 let language;

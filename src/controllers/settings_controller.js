@@ -17,7 +17,7 @@ const config = require('config');
 const Constants = require('../constants');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const ISO6391 = require('iso-639-1');
+const isoLookup = require('../iso-639/index');
 const jwtMiddleware = require('../jwt-middleware');
 const mDNSserver = require('../mdns-server');
 const path = require('path');
@@ -551,16 +551,22 @@ SettingsController.get(
     const valid = [];
     try {
       for (const dirname of fs.readdirSync(fluentDir)) {
-        const [language, country] = dirname.split('-');
+        const name = isoLookup(dirname);
+
+        if (!name) {
+          console.error('Unknown language code:', dirname);
+          continue;
+        }
 
         valid.push({
           code: dirname,
-          name: `${ISO6391.getName(language)}${country ? ` (${country})` : ''}`,
+          name,
         });
       }
 
       valid.sort((a, b) => a.name.localeCompare(b.name));
-    } catch (_) {
+    } catch (e) {
+      console.log(e);
       response.status(500).send('Failed to retrieve list of languages');
       return;
     }
