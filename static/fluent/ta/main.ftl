@@ -187,7 +187,6 @@ notification-title = தலைப்பு
 notification-message = செய்தி
 notification-level = நிலை
 notification-low = குறைவு
-notification-normal = சராசரி
 notification-high = அதிகம்
 rule-name = விதியின் பெயர்
 
