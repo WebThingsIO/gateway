@@ -12,7 +12,7 @@
 ## Menu Items
 
 assistant-menu-item = உதவியாளர்
-things-menu-item = பொருட்கள்
+things-menu-item = சாதனங்கள்
 rules-menu-item = விதிமுறைகள்
 logs-menu-item = பதிவுகள்
 floorplan-menu-item = நிலத்தள திட்டம்
@@ -24,7 +24,7 @@ log-out-button = வெளியேறு
 thing-details =
     .aria-label = தன்மைகளை பார்க்கவும்
 add-things =
-    .aria-label = புதிய பொருட்களைச் சேர்க்கவும்
+    .aria-label = புதிய சாதனங்களைச் சேர்க்கவும்
 
 ## Assistant
 
@@ -213,20 +213,20 @@ logs-hours = மணிநேரங்கள்
 logs-days = நாட்கள்
 logs-weeks = வாரங்கள்
 logs-save = சேமி
-logs-remove-dialog-title = அகற்றுதல்
-logs-remove-dialog-warning = பதிவை நீக்குவது அதன் எல்லா தரவையும் அகற்றும். நீங்கள் நிச்சயமாக அதை அகற்ற விரும்புகிறீர்களா?
-logs-remove = அகற்று
+logs-remove-dialog-title = நீக்குதல்
+logs-remove-dialog-warning = பதிவை நீக்குவது அதன் எல்லா தரவையும் நீக்கிவிடும் . நீங்கள் நிச்சயமாக அதை நீக்க விரும்புகிறீர்களா?
+logs-remove = நீக்கு
 logs-unable-to-create = பதிவை உருவாக்க முடியவில்லை
 logs-server-remove-error = சேவையக பிழை: பதிவை அகற்ற முடியவில்லை
 
 ## Add New Things
 
 add-thing-scanning-icon =
-    .alt = வருடுதல்
-add-thing-scanning = புதிய சாதனங்களுக்கு வருடுதல் செய்கிறது...
-add-thing-add-adapters-hint = புதிய விஷயங்கள் எதுவும் கிடைக்கவில்லை. <a data-l10n-name="add-thing-add-adapters-hint-anchor"> சில துணை நிரல்களைச் சேர்க்க </a> முயற்சிக்கவும்.
-add-thing-add-by-url = உரலி(URL) மூலம் சேர்…
-add-thing-done = நிறைவடைந்தது
+    .alt = ஸ்கேன் செய்கிறது
+add-thing-scanning = புதிய சாதனங்களுக்கு ஸ்கேன் செய்கிறது…
+add-thing-add-adapters-hint = புதிய சாதனங்கள் எதுவும் கிடைக்கவில்லை. <a data-l10n-name="add-thing-add-adapters-hint-anchor"> சில கூடுதல் இணைப்புகளைச் சேர்க்க </a> முயற்சிக்கவும்.
+add-thing-add-by-url = URL மூலம் சேர்…
+add-thing-done = முடிந்தது
 add-thing-cancel = ரத்து செய்
 
 ## Context Menu
@@ -317,6 +317,7 @@ utils-now = இப்பொழுது
 
 ## New Web Thing View
 
+new-web-thing-multiple = பல வலை சாதனங்கள் கண்டுபிடிக்கப்பட்டுள்ளது
 
 ## Empty div Messages
 
