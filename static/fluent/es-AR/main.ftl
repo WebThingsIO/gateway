@@ -292,9 +292,12 @@ Thing = Dispositivo
 ## Properties
 
 alarm = Alarma
+pushed = Pulsado
+not-pushed = Sin pulsar
 on-off = Habilitado/Desactivado
 on = Activado
 off = Desactivado
+power = Energía
 voltage = voltaje
 temperature = Temperatura
 current = Actual
@@ -322,6 +325,8 @@ tunnel-setup-reclaim-domain = Parece que ya has registrado ese subdominio. Para 
 check-email-for-token = Revisá tu correo electrónico para encontrar el token de recuperación y pegalo acá arriba.
 reclaim-failed = No se pudo recuperar el dominio.
 subdomain-already-used = Este subdominio ya se está utilizando. Elegí uno diferente.
+invalid-subdomain = Subdominio inválido.
+invalid-email = Dirección de correo electrónico inválida
 invalid-reclamation-token = Token de recuperación inválido.
 domain-success = ¡Éxito! Esperá mientras te redirigimos…
 issuing-error = Error al emitir el certificado. Intentá de nuevo.
