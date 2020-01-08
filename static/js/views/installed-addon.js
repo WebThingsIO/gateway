@@ -31,7 +31,7 @@ class InstalledAddon {
     this.author = metadata.author;
     this.homepageUrl = metadata.homepage_url;
     this.licenseUrl =
-      `/addons/${encodeURIComponent(this.name)}/license?jwt=${API.jwt}`;
+      `/addons/${encodeURIComponent(this.id)}/license?jwt=${API.jwt}`;
     this.version = metadata.version;
     this.primaryType = metadata.primary_type;
     this.enabled = metadata.enabled;
