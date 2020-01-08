@@ -255,22 +255,22 @@ TemperatureSensor = வெப்பநிலை  உணர்வி
 Alarm = அலறி
 Thermostat = வெப்பநிலைக்காப்பி
 Lock = பூட்டு
-Custom = தனிப்பயன் பொருள்
-Thing = பொருள்
+Custom = தனிப்பயன் சாதனம்
+Thing = சாதனம்
 
 ## Properties
 
 alarm = அலறி
-pushed = தள்ளுதல்
-not-pushed = தள்ளப்படவில்லை
-on-off = இணை/அணை
-on = இணை
-off = அணை
+pushed = அமுக்கப்பட்டுள்ளது
+not-pushed = அமுக்கப்படவில்லை
+on-off = ஆன் / ஆஃப்
+on = ஆன்
+off = ஆஃப்
 power = மின்சக்தி
 voltage = மின்னழுத்தம்
 temperature = வெப்பநிலை
 current = மின்னோட்டம்
-frequency = அலைவெண்
+frequency = அதிர்வெண்
 color = வண்ணம்
 brightness = பிரகாசம்
 leak = கசிவு
