@@ -433,27 +433,60 @@ addons = கூடுதல் இணைப்புகள்
 addon-discovery = கூடுதல் இணைப்புகளை கண்டறியவும்
 experiments = சோதனைகள்
 updates = புதுப்பிப்புகள்
+network = பிணையம்
+ethernet = ஈத்தர்நெட்
+wifi = Wi-Fi
+icon = உருவம்
 
 ## Speech
 
+speech-unsupported = தற்போதைய உலாவி பேச்சை ஆதரிக்கவில்லை
+speech-didnt-get = மன்னிக்கவும், எனக்கு அது புரியவில்லை .
 
 ## Errors
 
+unknown-state = அறியாத நிலை
+error = பிழை
+errors = பிழைகள்
+gateway-unreachable = நுழைவாயிலை அணுக முடியவில்லை
+more-information = கூடுதல் தகவல்
+failed-save = சேமிப்பதில் தோல்வி.
 
 ## Schema Form
 
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = உள் நுழை — { -webthings-gateway-brand }
+login-log-in = உள் நுழை
 
 ## Create First User Page
 
+signup-title = பயனரை உருவாக்கு — { -webthings-gateway-brand }
+signup-welcome = நல்வரவு!
+signup-create-account = உங்கள் முதல் பயனர் கணக்கை உருவாக்கவும்:
+signup-password-mismatch = கடவுச்சொற்கள் பொருந்தவில்லை
+signup-next = அடுத்து
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = வலை முகவரியைத் தேர்வுசெய்க — { -webthings-gateway-brand }
+tunnel-setup-welcome = நல்வரவு!
+tunnel-setup-choose-address = உங்கள் நுழைவாயிலுக்கு பாதுகாப்பான வலை முகவரியைத் தேர்வுசெய்க:
+tunnel-setup-input-subdomain =
+    .placeholder = துணை டொமைன்
+tunnel-setup-opt-in = புதிய அம்சங்கள் மற்றும் பங்களிப்பு வாய்ப்புகள் குறித்து என்னைப் புதுப்பிக்கவும்.
+tunnel-setup-privacy-policy = தனியுரிமை கொள்கை
+tunnel-setup-input-reclamation-token =
+    .placeholder = மீட்பு டோக்கன்
+tunnel-setup-error = துணை டொமைனை அமைக்கும் போது பிழை ஏற்பட்டுள்ளது .
+tunnel-setup-create = உருவாக்கு
+tunnel-setup-skip = தவிர்
+tunnel-setup-time-sync = கணினி கடிகாரத்தை இணையத்திலிருந்து அமைக்கக் காத்திருக்கிறது. இது முடியும் வரை டொமைன் பதிவு தோல்வியடைய வாய்ப்புள்ளது .
 
 ## Authorize Page
 
@@ -476,6 +509,28 @@ authorize-allow-all = எல்லா சாதனங்களுக்கும
 
 ## General Terms
 
+ok = சரி
+ellipsis = ...
+event-log = நிகழ்வு பதிவு
+edit = திருத்து
+remove = நீக்கு
+disconnected = துண்டிக்கப்பட்டது
+processing = செயலாக்குகிறது…
+submit = சமர்ப்பி
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = பட்டி
+back-button =
+    .aria-label = பின்செல்
+overflow-button =
+    .aria-label = கூடுதல் செயல்கள்
+speech-button =
+    .aria-label = பேச்சைக் கேளுங்கள்
+submit-button =
+    .aria-label = சமர்ப்பி
+edit-button =
+    .aria-label = திருத்து
+save-button =
+    .aria-label = சேமி
