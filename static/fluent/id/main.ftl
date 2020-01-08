@@ -97,13 +97,19 @@ network-settings-show-password = Tampilkan kata sandi
 network-settings-connect = Sambungkan
 network-settings-username = Nama pengguna
 network-settings-password = Kata sandi
-network-settings-router-ip = Alamat IP perute
+network-settings-router-ip = Alamat IP router
 network-settings-dhcp-server = Server DHCP
 network-settings-enable-wifi = Aktifkan Wi-Fi
 network-settings-network-name = Nama jaringan (SSID)
 wireless-connected = Tersambung
 wireless-icon =
     .alt = Jaringan Wi-Fi
+network-settings-changing = Mengubah pengaturan jaringan. Proses ini membutuhkan waktu beberapa saat.
+failed-ethernet-configure = Gagal mengonfigurasi ethernet.
+failed-wifi-configure = Gagal mengonfigurasi Wi.Fi.
+failed-wan-configure = Gagal mengonfigurasi WAN.
+failed-lan-configure = Gagal mengonfigurasi LAN.
+failed-wlan-configure = Gagal mengonfigurasi WLAN.
 
 ## User Settings
 
@@ -116,7 +122,7 @@ user-settings-input-email =
 user-settings-input-password =
     .placeholder = Kata sandi
 user-settings-input-new-password =
-    .placeholder = Kata sandi baru (Opsional)
+    .placeholder = Kata Sandi Baru (Opsional)
 user-settings-input-confirm-new-password =
     .placeholder = Konfirmasi Sandi Baru
 user-settings-input-confirm-password =
@@ -126,12 +132,16 @@ user-settings-save = Simpan
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Tidak ada adapter tersedia.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Tidak ada otorisasi.
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = Asisten Cerdas
+experiment-settings-logs = Log
 
 ## Localization Settings
 
@@ -169,12 +179,39 @@ developer-settings-create-local-authorization = Buat otorisasi lokal
 add-rule =
     .aria-label = Buat Aturan Baru
 rules = Aturan
+rules-create-rule-hint = Tidak ada aturan dibuat. Klik + untuk membuat aturan.
+rules-rule-name = Nama Aturan
 rules-customize-rule-name-icon =
     .alt = Sesuaikan Nama Aturan
+rules-rule-description = Deskripsi Aturan
 rules-preview-button =
     .alt = Pratinjau
 rules-delete-icon =
     .alt = Hapus
+rules-drag-hint = Seret perangkat Anda ke sini untuk memulai membuat aturan
+rules-drag-input-hint = Tambahkan perangkat sebagai input
+rules-drag-output-hint = Tambahkan perangkat sebagai output
+rules-scroll-left =
+    .alt = Gulir ke Kiri
+rules-scroll-right =
+    .alt = Gulir ke Kanan
+rules-delete-prompt = Jatuhkan perangkat di sini untuk memutuskan sambungan
+rules-delete-dialog = Yakin ingin menghapus permanen aturan ini?
+rules-delete-cancel =
+    .value = Batalkan
+rules-delete-confirm =
+    .value = Hapus Aturan
+rule-invalid = Tidak Valid
+rule-delete-prompt = Yakin ingin menghapus permanen aturan ini?
+rule-delete-cancel-button =
+    .value = Batalkan
+rule-delete-confirm-button =
+    .value = Hapus Aturan
+rule-select-property = Pilih Properti
+rule-not = Bukan
+rule-event = Peristiwa
+rule-action = Tindakan
+rule-configure = Konfigurasikan…
 
 ## Logs
 
