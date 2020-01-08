@@ -351,6 +351,23 @@ week = வாரம்
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
@@ -363,17 +380,38 @@ new-thing-pin-error = தவறான PIN
 new-thing-pin-invalid = மதிப்பில்லாத PIN
 new-thing-cancel = ரத்து செய்
 new-thing-submit = சமர்ப்பி
+new-thing-username =
+    .placeholder = பயனர்பெயரை உள்ளிடவும்
+new-thing-password =
+    .placeholder = கடவுச்சொல்லை உள்ளிடவும்
+new-thing-credentials-error = தவறான அறிமுகசான்றுகள்
+new-thing-saved = சேமிக்கப்பட்டது
+new-thing-done = முடிந்தது
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = வலை சாதனத்தின் URL ஐ உள்ளிடவும்
+new-web-thing-label = வலை சாதனம்
+loading = ஏற்றுகிறது…
 new-web-thing-multiple = பல வலை சாதனங்கள் கண்டுபிடிக்கப்பட்டுள்ளது
 
 ## Empty div Messages
 
 no-things = இதுவரை சாதனங்கள் எதுவும் இல்லை. கிடைக்கக்கூடிய சாதனங்களை ஸ்கேன் செய்ய + கிளிக் செய்க.
+thing-not-found = சாதனம் கிடைக்கவில்லை.
+action-not-found = செயல் கிடைக்கவில்லை.
+events-not-found = இந்த சாதனத்தில் எந்த நிகழ்வுகளும் இல்லை.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = கூடுதல் இணைப்புகளை கண்டறியவும்
+author-unknown = தெரியாதது
+disable = செயல்நீக்கு
+enable = செயல்படுத்து
+addon-remove = நீக்கு
+addon-updating = புதுப்பிக்கிறது ...
 
 ## Page Titles
 
