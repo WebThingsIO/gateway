@@ -212,42 +212,209 @@ rule-not = Bukan
 rule-event = Peristiwa
 rule-action = Tindakan
 rule-configure = Konfigurasikan…
+rule-time-title = Waktu hari
+rule-notification = Pemberitahuan
+notification-title = Judul
+notification-message = Pesan
+notification-level = Tingkat
+notification-low = Rendah
+notification-normal = Normal
+notification-high = Tinggi
+rule-name = Nama Aturan
 
 ## Logs
 
+add-log =
+    .aria-label = Buat Log Baru
+logs = Log
+logs-create-log-hint = Tidak ada log dibuat. Klik + untuk membuat log.
+logs-device = Perangkat
+logs-device-select =
+    .aria-label = Log Perangkat
+logs-property = Properti
+logs-property-select =
+    .aria-label = Properti Log
+logs-retention = Penyimpanan
+logs-retention-length =
+    .aria-label = Lama Penyimpanan Log
+logs-retention-unit =
+    .aria-label = Unit Penyimpanan Log
+logs-hours = Jam
+logs-days = Hari
+logs-weeks = Minggu
+logs-save = Simpan
+logs-remove-dialog-title = Menghapus
+logs-remove-dialog-warning = Menghapus log juga akan menghapus semua datanya. Yakin ingin menghapusnya?
+logs-remove = Hapus
+logs-unable-to-create = Tidak dapat membuat log
+logs-server-remove-error = Kesalahan server: tidak dapat menghapus log
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Memindai
+add-thing-scanning = Memindai perangkat baru…
+add-thing-add-adapters-hint = Tidak ada thing yang ditemukan. Coba <a data-l10n-name="add-thing-add-adapters-hint-anchor">tambahkan pengaya</a>.
+add-thing-add-by-url = Tambahkan berdasarkan URL…
+add-thing-done = Selesai
+add-thing-cancel = Batalkan
 
 ## Context Menu
 
+context-menu-choose-icon = Pilih ikon…
+context-menu-save = Simpan
+context-menu-remove = Hapus
 
 ## Capabilities
 
+OnOffSwitch = Sakelar Nyala/Mati
+MultiLevelSwitch = Sakelar Multi Level
+ColorControl = Kendali Warna
+ColorSensor = Sensor Warna
+EnergyMonitor = Monitor Energi
+BinarySensor = Sensor Biner
+MultiLevelSensor = Sensor Multi Level
+SmartPlug = Colokan Cerdas
+Light = Lampu
+DoorSensor = Sensor Pintu
+MotionSensor = Sensor Gerak
+LeakSensor = Sensor Kebocoran
+PushButton = Tombol Tekan
+VideoCamera = Kamera Video
+Camera = Kamera
+TemperatureSensor = Sensor Temperatur
+Alarm = Alarm
+Thermostat = Termostat
+Lock = Kunci
+Custom = Thing Khusus
+Thing = Thing
 
 ## Properties
 
+alarm = Alarm
+pushed = Ditekan
+not-pushed = Tidak Ditekan
+on-off = Nyala/Mati
+on = Nyala
+off = Mati
+power = Daya
+voltage = Tegangan
+temperature = Temperatur
+current = Arus
+frequency = Frekuensi
+color = Warna
+brightness = Kecerahan
+leak = Kebocoran
+dry = Kering
+color-temperature = Temperatur Warna
+video-unsupported = Maaf, video tidak didukung di browser Anda.
+motion = Gerakan
+no-motion = Tidak Ada Gerakan
+open = Buka
+closed = Tutup
+locked = Dikunci
+unlocked = Tidak Terkunci
+jammed = Macet
+unknown = Tidak Diketahui
+active = Aktif
+inactive = Tidak Aktif
 
 ## Domain Setup
 
 
 ## Booleans
 
+true = Benar
+false = Salah
 
 ## Time
 
+utils-now = sekarang
+utils-seconds-ago =
+    { $value ->
+       *[other] { $value } detik yang lalu
+    }
+utils-minutes-ago =
+    { $value ->
+       *[other] { $value } menit yang lalu
+    }
+utils-hours-ago =
+    { $value ->
+       *[other] { $value } jam yang lalu
+    }
+utils-days-ago =
+    { $value ->
+       *[other] { $value } hari yang lalu
+    }
+utils-weeks-ago =
+    { $value ->
+       *[other] { $value } pekan yang lalu
+    }
+utils-months-ago =
+    { $value ->
+       *[other] { $value } bulan yang lalu
+    }
+utils-years-ago =
+    { $value ->
+       *[other] { $value } tahun yang lalu
+    }
+minute = Menit
+hour = Jam
+day = Hari
+week = Pekan
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅jam
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = h
+abbrev-hour = j
+abbrev-minute = m
+abbrev-second = d
+abbrev-millisecond = md
+abbrev-foot = kaki
 
 ## New Thing View
 
+unknown-device-type = Jenis perangkat tidak dikenal
+new-thing-choose-icon = Pilih ikon…
+new-thing-save = Simpan
+new-thing-pin =
+    .placeholder = Masukkan PIN
+new-thing-pin-error = PIN Salah
+new-thing-pin-invalid = PIN Tidak Valid
+new-thing-cancel = Batalkan
+new-thing-submit = Kirim
+new-thing-username =
+    .placeholder = Masukkan nama pengguna
+new-thing-password =
+    .placeholder = Masukkan sandi
+new-thing-credentials-error = Kredensial salah
+new-thing-saved = Disimpan
+new-thing-done = Selesai
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Masukkan URL thing web
+new-web-thing-label = Web Thing
+loading = Memuat…
+new-web-thing-multiple = Banyak web thing ditemukan
+new-web-thing-from = dari
 
 ## Empty div Messages
 
+no-things = Belum ada perangkat. Klik + untuk memindai perangkat yang tersedia.
+thing-not-found = Thing tidak ditemukan.
 
 ## Add-on Settings
 
