@@ -20,6 +20,7 @@ const {IpcSocket} = require('gateway-addon');
 const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
 const pkg = require('../../package.json');
+const Settings = require('../models/settings');
 const UserProfile = require('../user-profile');
 
 class PluginServer extends EventEmitter {
@@ -81,21 +82,46 @@ class PluginServer extends EventEmitter {
     switch (msg.messageType) {
       case MessageType.PLUGIN_REGISTER_REQUEST: {
         const plugin = this.registerPlugin(msg.data.pluginId);
-        this.ipcSocket.sendJson({
-          messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
-          data: {
-            pluginId: msg.data.pluginId,
-            ipcBaseAddr: plugin.ipcBaseAddr,
-            gatewayVersion: pkg.version,
-            userProfile: {
-              baseDir: UserProfile.baseDir,
-              configDir: UserProfile.configDir,
-              dataDir: UserProfile.dataDir,
-              mediaDir: UserProfile.mediaDir,
-              logDir: UserProfile.logDir,
-              gatewayDir: UserProfile.gatewayDir,
+        let language = 'en-US';
+        const units = {
+          temperature: 'degree celsius',
+        };
+        Settings.get('localization.language').then((lang) => {
+          if (lang) {
+            language = lang;
+          }
+
+          return Settings.get('localization.units.temperature');
+        }).then((temp) => {
+          if (temp) {
+            units.temperature = temp;
+          }
+
+          return Promise.resolve();
+        }).catch(() => {
+          return Promise.resolve();
+        }).then(() => {
+          this.ipcSocket.sendJson({
+            messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
+            data: {
+              pluginId: msg.data.pluginId,
+              ipcBaseAddr: plugin.ipcBaseAddr,
+              gatewayVersion: pkg.version,
+              userProfile: {
+                addonsDir: UserProfile.addonsDir,
+                baseDir: UserProfile.baseDir,
+                configDir: UserProfile.configDir,
+                dataDir: UserProfile.dataDir,
+                mediaDir: UserProfile.mediaDir,
+                logDir: UserProfile.logDir,
+                gatewayDir: UserProfile.gatewayDir,
+              },
+              preferences: {
+                language,
+                units,
+              },
             },
-          },
+          });
         });
         break;
       }
