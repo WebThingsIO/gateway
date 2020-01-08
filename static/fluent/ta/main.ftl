@@ -412,9 +412,27 @@ disable = செயல்நீக்கு
 enable = செயல்படுத்து
 addon-remove = நீக்கு
 addon-updating = புதுப்பிக்கிறது ...
+addon-updated = புதுப்பிக்கப்பட்டது
+addon-update-failed = தோல்வியடைந்தது
+addon-config-applying = பயன்படுத்துகிறது ...
+addon-config-apply = பயன்படுத்து
+addon-discovery-added = சேர்க்கப்பட்டது
+addon-discovery-add = சேர்
+addon-discovery-installing = நிறுவுகிறது ...
+addon-discovery-failed = தோல்வியடைந்தது
 
 ## Page Titles
 
+settings = அமைப்புகள்
+domain = டொமைன்
+users = பயன்படுத்துபவர்கள்
+edit-user = பயனரைத் திருத்து
+add-user = பயனரைச் சேர்க்கவும்
+adapters = இணைப்புச்சாதனங்கள்
+addons = கூடுதல் இணைப்புகள்
+addon-discovery = கூடுதல் இணைப்புகளை கண்டறியவும்
+experiments = சோதனைகள்
+updates = புதுப்பிப்புகள்
 
 ## Speech
 
