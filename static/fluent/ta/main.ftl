@@ -68,10 +68,14 @@ network-settings-ethernet = ஈத்தர்நெட்
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = முகப்பு பிணையம்
 network-settings-internet-image =
     .alt = இணையதளம்
+network-settings-configure = கட்டமை
 network-settings-internet-wan = இணையதளம் (WAN)
 network-settings-wan-mode = முறை
+network-settings-home-network-lan = முகப்பு பிணையம் (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP முகவரி
 network-settings-dhcp = தானியங்கி (DHCP)
@@ -87,12 +91,18 @@ network-settings-show-password = கடவுச்சொல்லை காட�
 network-settings-connect = இணை
 network-settings-username = பயனர் பெயர்
 network-settings-password = கடவுச்சொல்
+network-settings-dhcp-server = DHCP சேவையகம்
 network-settings-enable-wifi = Wi-Fi யை செயல்படுத்து
 network-settings-network-name = பிணைய பெயர் (SSID)
 wireless-connected = இணைக்கப்பட்டது
 wireless-icon =
     .alt = Wi-Fi பிணையம்
 network-settings-changing = பிணைய அமைப்புகள் மாற்றப்படுகிறது . இதற்கு ஒரு நிமிடம் ஆகலாம்.
+failed-ethernet-configure = ஈத்தர்நெட்டை உள்ளமைப்பதில் தோல்வி.
+failed-wifi-configure = Wi-Fi ஐ உள்ளமைப்பதில் தோல்வி.
+failed-wan-configure = WAN ஐ உள்ளமைப்பதில் தோல்வி.
+failed-lan-configure = LAN ஐ உள்ளமைப்பதில் தோல்வி.
+failed-wlan-configure = WLAN ஐ உள்ளமைப்பதில் தோல்வி.
 
 ## User Settings
 
@@ -139,6 +149,7 @@ localization-settings-units-temperature-fahrenheit = பாரன்ஹீட்
 
 ## Update Settings
 
+update-settings-update-now = இப்போது புதுப்பி
 update-available = புதிய பதிப்பு உள்ளது
 update-up-to-date = உங்கள் மென்பொருள் புதுப்பித்த நிலையில் உள்ளது
 updates-not-supported = இந்த தளத்தில் புதுப்பிப்புகள் ஆதரிக்கப்படவில்லை.
@@ -148,6 +159,7 @@ current-version = தற்போதைய பதிப்பு
 failed = தோல்வியுற்றது
 never = ஒருபோதும் இல்லை
 in-progress = செயல்பாட்டில் உள்ளது
+restarting = மறுதுவக்கம்…
 
 ## Developer Settings
 
