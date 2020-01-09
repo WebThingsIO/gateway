@@ -120,6 +120,7 @@ authorization-settings-no-authorizations = அங்கீகாரங்கள�
 
 ## Experiment Settings
 
+experiment-settings-smart-assistant = ஸ்மார்ட் உதவியாளர்
 experiment-settings-logs = பதிவுகள்
 
 ## Localization Settings
@@ -244,7 +245,8 @@ ColorSensor = வண்ண  உணர்வி
 EnergyMonitor = மின் ஆற்றல் கண்காணிப்பு
 BinarySensor = இரும உணர்வி
 MultiLevelSensor = பலநிலை  உணர்வி
-Light = ஒளி
+SmartPlug = ஸ்மார்ட் பிளக்
+Light = ஒளி விளக்கு
 DoorSensor = கதவு  உணர்வி
 MotionSensor = அசைவு  உணர்வி
 LeakSensor = கசிவு  உணர்வி
