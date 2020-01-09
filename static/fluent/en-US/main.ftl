@@ -598,6 +598,11 @@ creating-title = Creating Wi-Fi Network — { -webthings-gateway-brand }
 creating-header = Creating Wi-Fi network…
 creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
+## UI Updates
+ui-update-available = An updated user interface is available.
+ui-update-reload = Reload
+ui-update-close = Close
+
 ## General Terms
 
 ok = Ok
