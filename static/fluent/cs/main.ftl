@@ -324,6 +324,7 @@ tunnel-setup-reclaim-domain = Vypadá to, že jste tuto subdoménu již zaregist
 check-email-for-token = Podívejte se do své schránky po zaslaném tokenu pro získání přístupu a vložte jej výše.
 reclaim-failed = Doménu nelze získat zpět.
 subdomain-already-used = Tato subdoména je již používána. Zvolte prosím jinou.
+invalid-subdomain = Neplatná subdoména.
 invalid-reclamation-token = Neplatný token pro získání přístupu.
 domain-success = Podařilo se! Počkejte prosím, až vás přesměrujeme…
 issuing-error = Chyba při vydávání certifikátu. Zkuste to znovu.
@@ -436,54 +437,163 @@ new-web-thing-from = od
 
 no-things = Zatím žádná zařízení. Kepnutím na + vyhledáte dostupná zařízení.
 thing-not-found = Věc nebyla nalezena.
+action-not-found = Akce nebyla nalezena.
+events-not-found = Tato věc nemá žádné události.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Najít nové doplňky
+disable = Zakázat
+enable = Povolit
+by = od
+addon-update = Aktualizovat
+addon-remove = Odebrat
+addon-updating = Probíhá aktualizace…
+addon-updated = Aktualizováno
+addon-update-failed = Selhalo
+addon-config-apply = Použít
+addon-discovery-added = Přidáno
+addon-discovery-add = Přidat
+addon-discovery-failed = Selhalo
 
 ## Page Titles
 
+settings = Nastavení
+domain = Doména
+users = Uživatelé
+edit-user = Upravit uživatele
+add-user = Přidat uživatele
+adapters = Adaptéry
+addons = Doplňky
+addon-config = Konfigurovat doplněk
+addon-discovery = Objevte nové doplňky
+experiments = Experimenty
+localization = Lokalizace
+updates = Aktualizace
+authorizations = Oprávnění
+developer = Vývojář
+network = Síť
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ikona
 
 ## Speech
 
+speech-didnt-get = Promiňte, nerozumím.
 
 ## Errors
 
+unknown-state = Neznámý stav.
+error = Chyba
+errors = Chyby
+more-information = Více informací
+invalid-file = Neplatný soubor.
+failed-read-file = Při čtení souboru nastala chyba.
+failed-save = Při ukládání souboru nastala chyba.
 
 ## Schema Form
 
+unsupported-field = Nepodporované schéma pole
 
 ## Icon Sources
 
+thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Přihlášení - { -webthings-gateway-brand }
+login-log-in = Přihlášení
 
 ## Create First User Page
 
+signup-welcome = Vítejte
+signup-create-account = Vytvořte svůj první uživatelský účet:
+signup-password-mismatch = Hesla se neshodují
+signup-next = Další
 
 ## Tunnel Setup Page
 
+tunnel-setup-welcome = Vítejte
+tunnel-setup-choose-address = Vyberte zabezpečenou webovou adresu vaší gateway:
+tunnel-setup-input-subdomain =
+    .placeholder = subdoména
+tunnel-setup-error = Při nastavování subdomény došlo k chybě.
+tunnel-setup-create = Vytvořit
+tunnel-setup-skip = Přeskočit
+tunnel-setup-time-sync = Čekání na nastavení systémových hodin z internetu. Registrace domény pravděpodobně selže, dokud se toto nedokončí.
 
 ## Authorize Page
 
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = z <<domain>>
+authorize-monitor-and-control = monitor a ovládání
+authorize-monitor = monitor
+authorize-allow-all = Povolit pro všechny věci
+authorize-allow =
+    .value = Povolit
 
 ## Local Token Page
 
+local-token-title = Local Token Service - { -webthings-gateway-brand }
 
 ## Router Setup Page
 
+router-setup-title = Nastavení routeru - { -webthings-gateway-brand }
+router-setup-input-ssid =
+    .placeholder = Název sítě
+router-setup-input-password =
+    .placeholder = Heslo
+router-setup-create =
+    .value = Vytvořit
+router-setup-password-mismatch = Heslo se musí shodovat
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Nastavení Wi-Fi - { -webthings-gateway-brand }
+wifi-setup-header = Chcete se připojit k síti Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Heslo
+wifi-setup-show-password = Ukázat heslo
+wifi-setup-connect =
+    .value = Připojit
+wifi-setup-network-icon =
+    .alt = Síť Wi-Fi
+wifi-setup-skip = Přeskočit
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Připojení k Wi-Fi - { -webthings-gateway-brand }
+connecting-connect = Ujistěte se, že jste připojeni ke stejné síti, a poté ve webovém prohlížeči přejděte na adresu { $gateway-link } a pokračujte v nastavování.
+connecting-warning = Poznámka: Pokud se vám nedaří načíst doménu { $domain }, vyhledejte na routeru IP adresu gateway.
+connecting-header-skipped = Nastavení Wi-Fi přeskočeno
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Vytváření sítě Wi-Fi - { -webthings-gateway-brand }
+creating-header = Vytváření sítě Wi-Fi…
+creating-content = Připojte se k { $ssid } pomocí hesla, které jste právě vytvořili, a potom ve webovém prohlížeči přejděte na { $gateway-link } nebo { $ip-link }.
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+edit = Upravit
+remove = Odebrat
+disconnected = Odpojeno
+submit = Odeslat
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Nabídka
+back-button =
+    .aria-label = Zpět
+overflow-button =
+    .aria-label = Další akce
+speech-button =
+    .aria-label = Poslouchat řeč
+submit-button =
+    .aria-label = Odeslat
+save-button =
+    .aria-label = Uložit
