@@ -8,6 +8,12 @@
 ##
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
+-webthings-gateway-brand = WebThings Gateway
+# Main Title
+webthings-gateway = { -webthings-gateway-brand }
+# Wordmark
+wordmark =
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -91,6 +97,7 @@ network-settings-show-password = கடவுச்சொல்லை காட�
 network-settings-connect = இணை
 network-settings-username = பயனர் பெயர்
 network-settings-password = கடவுச்சொல்
+network-settings-router-ip = திசைவி IP முகவரி
 network-settings-dhcp-server = DHCP சேவையகம்
 network-settings-enable-wifi = Wi-Fi யை செயல்படுத்து
 network-settings-network-name = பிணைய பெயர் (SSID)
@@ -165,6 +172,7 @@ restarting = மறுதுவக்கம்…
 
 developer-settings-enable-ssh = SSH ஐ செயல்படுத்து
 developer-settings-view-internal-logs = உள் பதிவுகளை பார்க்கவும்
+developer-settings-create-local-authorization = உள் அங்கீகாரத்தை உருவாக்கவும்
 
 ## Rules
 
@@ -183,7 +191,12 @@ rules-delete-icon =
 rules-drag-hint = விதியை உருவாக்கத் தொடங்க உங்கள் சாதனங்களை இங்கே இழுக்கவும்
 rules-drag-input-hint = சாதனத்தை உள்ளீடாகச் சேர்க்கவும்
 rules-drag-output-hint = சாதனத்தை வெளியீடாகச் சேர்க்கவும்
+rules-scroll-left =
+    .alt = இடதுபுறம் உருட்டவும்
+rules-scroll-right =
+    .alt = வலதுபுறம் உருட்டவும்
 rules-delete-prompt = சாதனங்களை துண்டிக்க இங்கே விடவும்
+rules-delete-dialog = இந்த விதிமுறையை நிரந்தரமாக அகற்ற விரும்புகிறீர்களா?
 rules-delete-cancel =
     .value = ரத்து செய்
 rules-delete-confirm =
@@ -205,6 +218,7 @@ notification-title = தலைப்பு
 notification-message = செய்தி
 notification-level = நிலை
 notification-low = குறைவு
+notification-normal = சாதாரணம்
 notification-high = அதிகம்
 rule-name = விதியின் பெயர்
 
@@ -412,6 +426,7 @@ new-web-thing-url =
 new-web-thing-label = வலை சாதனம்
 loading = ஏற்றுகிறது…
 new-web-thing-multiple = பல வலை சாதனங்கள் கண்டுபிடிக்கப்பட்டுள்ளது
+new-web-thing-from = இருந்து
 
 ## Empty div Messages
 
@@ -427,6 +442,8 @@ add-addons =
 author-unknown = தெரியாதது
 disable = செயல்நீக்கு
 enable = செயல்படுத்து
+addon-configure = கட்டமை
+addon-update = புதுப்பி
 addon-remove = நீக்கு
 addon-updating = புதுப்பிக்கிறது ...
 addon-updated = புதுப்பிக்கப்பட்டது
@@ -449,7 +466,10 @@ adapters = இணைப்புச்சாதனங்கள்
 addons = கூடுதல் இணைப்புகள்
 addon-discovery = கூடுதல் இணைப்புகளை கண்டறியவும்
 experiments = சோதனைகள்
+localization = இடத்துக்கேற்றதாக்குதல்
 updates = புதுப்பிப்புகள்
+authorizations = அங்கீகாரங்கள்
+developer = உருவாக்குபவர்
 network = பிணையம்
 ethernet = ஈத்தர்நெட்
 wifi = Wi-Fi
