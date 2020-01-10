@@ -269,6 +269,7 @@ context-menu-remove = Odstranit
 
 OnOffSwitch = Vypínač
 MultiLevelSwitch = Víceúrovňový přepínač
+ColorControl = Ovládání barvy
 ColorSensor = Senzor barev
 EnergyMonitor = Monitor energie
 BinarySensor = Binární senzor
@@ -320,11 +321,12 @@ inactive = Neaktivní
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Vypadá to, že jste tuto subdoménu již zaregistrovali. Chcete-li ji získat zpět, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klepněte sem</a>.
+tunnel-setup-reclaim-domain = Vypadá to, že jste tuto subdoménu již zaregistrovali. Chcete-li ji získat zpět, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">klepněte sem</a>.
 check-email-for-token = Podívejte se do své schránky po zaslaném tokenu pro získání přístupu a vložte jej výše.
 reclaim-failed = Doménu nelze získat zpět.
 subdomain-already-used = Tato subdoména je již používána. Zvolte prosím jinou.
 invalid-subdomain = Neplatná subdoména.
+invalid-email = Neplatná e-mailová adresa.
 invalid-reclamation-token = Neplatný token pro získání přístupu.
 domain-success = Podařilo se! Počkejte prosím, až vás přesměrujeme…
 issuing-error = Chyba při vydávání certifikátu. Zkuste to znovu.
@@ -444,17 +446,21 @@ events-not-found = Tato věc nemá žádné události.
 
 add-addons =
     .aria-label = Najít nové doplňky
+author-unknown = Neznámý
 disable = Zakázat
 enable = Povolit
 by = od
+addon-configure = Nastavení
 addon-update = Aktualizovat
 addon-remove = Odebrat
 addon-updating = Probíhá aktualizace…
 addon-updated = Aktualizováno
 addon-update-failed = Selhalo
+addon-config-applying = Nastavování…
 addon-config-apply = Použít
 addon-discovery-added = Přidáno
 addon-discovery-add = Přidat
+addon-discovery-installing = Probíhá instalace…
 addon-discovery-failed = Selhalo
 
 ## Page Titles
@@ -480,6 +486,7 @@ icon = Ikona
 
 ## Speech
 
+speech-unsupported = Váš prohlížeč nepodporuje řeč
 speech-didnt-get = Promiňte, nerozumím.
 
 ## Errors
@@ -487,6 +494,7 @@ speech-didnt-get = Promiňte, nerozumím.
 unknown-state = Neznámý stav.
 error = Chyba
 errors = Chyby
+gateway-unreachable = Gateway není dostupná
 more-information = Více informací
 invalid-file = Neplatný soubor.
 failed-read-file = Při čtení souboru nastala chyba.
@@ -507,6 +515,7 @@ login-log-in = Přihlášení
 
 ## Create First User Page
 
+signup-title = Vytvoření uživatele - { -webthings-gateway-brand }
 signup-welcome = Vítejte
 signup-create-account = Vytvořte svůj první uživatelský účet:
 signup-password-mismatch = Hesla se neshodují
@@ -514,10 +523,15 @@ signup-next = Další
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Nastavení webové adresy - { -webthings-gateway-brand }
 tunnel-setup-welcome = Vítejte
 tunnel-setup-choose-address = Vyberte zabezpečenou webovou adresu vaší gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdoména
+tunnel-setup-opt-in = Informujte mě prosím o nových funkcích a možnostech přispívání.
+tunnel-setup-privacy-policy = Zásady ochrany osobních údajů
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token pro opětovné získání
 tunnel-setup-error = Při nastavování subdomény došlo k chybě.
 tunnel-setup-create = Vytvořit
 tunnel-setup-skip = Přeskočit
@@ -525,6 +539,10 @@ tunnel-setup-time-sync = Čekání na nastavení systémových hodin z internetu
 
 ## Authorize Page
 
+authorize-title = Žádost o oprávnění - { -webthings-gateway-brand }
+authorize-authorization-request = Žádost o oprávnění
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = Uživatel <<name>> žádá o přístup k vaší gateway a zařízením <<function>>.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = z <<domain>>
 authorize-monitor-and-control = monitor a ovládání
@@ -532,18 +550,25 @@ authorize-monitor = monitor
 authorize-allow-all = Povolit pro všechny věci
 authorize-allow =
     .value = Povolit
+authorize-deny = Odmítnout
 
 ## Local Token Page
 
 local-token-title = Local Token Service - { -webthings-gateway-brand }
+local-token-header = Local Token Service
+local-token-your-token = Váš místní token je tento <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Můžete ho použít k bezpečné komunikaci s gateway pomocí ověření typu <a data-l10n-name="local-token-bearer-type">Bearer</a>.
 
 ## Router Setup Page
 
 router-setup-title = Nastavení routeru - { -webthings-gateway-brand }
+router-setup-header = Vytvoření nové Wi-Fi sítě
 router-setup-input-ssid =
     .placeholder = Název sítě
 router-setup-input-password =
     .placeholder = Heslo
+router-setup-input-confirm-password =
+    .placeholder = Heslo znova
 router-setup-create =
     .value = Vytvořit
 router-setup-password-mismatch = Heslo se musí shodovat
@@ -564,9 +589,11 @@ wifi-setup-skip = Přeskočit
 ## Connecting to Wi-Fi Page
 
 connecting-title = Připojení k Wi-Fi - { -webthings-gateway-brand }
+connecting-header = Připojování k Wi-Fi…
 connecting-connect = Ujistěte se, že jste připojeni ke stejné síti, a poté ve webovém prohlížeči přejděte na adresu { $gateway-link } a pokračujte v nastavování.
 connecting-warning = Poznámka: Pokud se vám nedaří načíst doménu { $domain }, vyhledejte na routeru IP adresu gateway.
 connecting-header-skipped = Nastavení Wi-Fi přeskočeno
+connecting-skipped = Gateway je nyní spuštěna. Připojte se ke stejné síti a ve webovém prohlížeči přejděte na { $gateway-link } a pokračujte v nastavování.
 
 ## Creating Wi-Fi Network Page
 
@@ -578,9 +605,11 @@ creating-content = Připojte se k { $ssid } pomocí hesla, které jste právě v
 
 ok = Ok
 ellipsis = …
+event-log = Protokol událostí
 edit = Upravit
 remove = Odebrat
 disconnected = Odpojeno
+processing = Probíhá zpracování…
 submit = Odeslat
 
 ## Top-Level Buttons
@@ -595,5 +624,7 @@ speech-button =
     .aria-label = Poslouchat řeč
 submit-button =
     .aria-label = Odeslat
+edit-button =
+    .aria-label = Upravit
 save-button =
     .aria-label = Uložit
