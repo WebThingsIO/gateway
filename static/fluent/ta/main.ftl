@@ -535,11 +535,11 @@ tunnel-setup-time-sync = கணினி நேரத்தை இணையத�
 authorize-title = அங்கீகார கோரிக்கை — { -webthings-gateway-brand }
 authorize-authorization-request = அங்கீகார கோரிக்கை
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
-authorize-prompt = <name> உங்கள் நுழைவாயிலை <function> சாதனங்கள் அணுக விரும்புகிறது.
+authorize-prompt = <<name>> சாதனங்களை <<function>> உங்கள் நுழைவாயிலை அணுக விரும்புகிறது.
 # Use <<domain>> to indicate where the domain should be placed
-authorize-source = <domain> இலிருந்து
+authorize-source = <<domain>> இலிருந்து
 authorize-monitor-and-control = கண்காணிக்கவும் மற்றும் கட்டுப்படுத்தவும்
-authorize-monitor = கண்காணிப்பு
+authorize-monitor = கண்காணிக்க
 authorize-allow-all = எல்லா சாதனங்களுக்கும் அனுமதி
 authorize-allow =
     .value = அனுமதி
