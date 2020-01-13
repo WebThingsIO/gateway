@@ -33,6 +33,7 @@ class LogsScreen {
     this.hideRemoveDialog = this.hideRemoveDialog.bind(this);
     this.onRemoveConfirm = this.onRemoveConfirm.bind(this);
     window.addEventListener('resize', this.onWindowResize);
+    this.closing = false;
   }
 
   init() {
@@ -155,9 +156,10 @@ class LogsScreen {
   }
 
   streamAll() {
-    if (this.messageSocket) {
+    if (this.closing || this.messageSocket) {
       return;
     }
+
     const timeBounds = `start=${this.start.getTime()}&end=${this.end.getTime()}`;
     const query = `jwt=${API.jwt}&${timeBounds}`;
     let subPath = '';
@@ -167,6 +169,20 @@ class LogsScreen {
 
     const path = `${App.ORIGIN.replace(/^http/, 'ws')}/logs/${subPath}?${query}`;
     this.messageSocket = new WebSocket(path);
+
+    const close = () => {
+      this.closing = true;
+
+      if (!this.messageSocket) {
+        return;
+      }
+
+      if (this.messageSocket.readyState === WebSocket.OPEN ||
+          this.messageSocket.readyState === WebSocket.CONNECTING) {
+        this.messageSocket.close();
+      }
+    };
+    window.addEventListener('beforeunload', close);
 
     const onMessage = (msg) => {
       const messages = JSON.parse(msg.data);
@@ -183,6 +199,7 @@ class LogsScreen {
       this.messageSocket.removeEventListener('error', cleanup);
       this.messageSocket.close();
       this.messageSocket = null;
+      window.removeEventListener('beforeunload', close);
 
       for (const id in this.logs) {
         this.logs[id].loading = false;

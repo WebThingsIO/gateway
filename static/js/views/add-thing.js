@@ -44,12 +44,17 @@ const AddThingScreen = {
     this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
     this.addByUrlAnchor.addEventListener('click',
                                          this.showNewWebThing.bind(this));
+    this.closing = false;
   },
 
   /**
    * Create a new "pair" action on the gateway.
    */
   requestPairing: function() {
+    if (this.closing) {
+      return;
+    }
+
     this.scanStatus.classList.remove('hidden');
     this.addonsHint.classList.add('hidden');
 
@@ -61,6 +66,21 @@ const AddThingScreen = {
 
     // Create a websocket to start listening for new things
     this.socket = new WebSocket(path);
+
+    const close = () => {
+      this.closing = true;
+
+      if (!this.socket) {
+        return;
+      }
+
+      if (this.socket.readyState === WebSocket.OPEN ||
+          this.socket.readyState === WebSocket.CONNECTING) {
+        this.socket.close();
+      }
+    };
+    window.addEventListener('beforeunload', close);
+
     this.socket.onmessage = (event) => {
       this.showNewThing(JSON.parse(event.data));
     };
