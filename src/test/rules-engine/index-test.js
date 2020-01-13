@@ -496,17 +496,17 @@ describe('rules engine', () => {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt))
         .send({hue: 150}),
-      webSocketRead(ws, 2),
+      webSocketRead(ws, 7),
     ]);
     expect(resPut.status).toEqual(200);
 
     expect(Array.isArray(messages)).toBeTruthy();
-    expect(messages.length).toEqual(2);
-    expect(messages[0]).toMatchObject({
+    expect(messages.length).toEqual(7);
+    expect(messages[5]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
       data: {bri: 30},
     });
-    expect(messages[1]).toMatchObject({
+    expect(messages[6]).toMatchObject({
       messageType: Constants.PROPERTY_STATUS,
       data: {on: true},
     });
