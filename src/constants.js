@@ -51,6 +51,7 @@ exports.API_HANDLER_ADDED = 'apiHandlerAdded';
 exports.CONNECTED = 'connected';
 exports.ERROR = 'error';
 exports.EVENT = 'event';
+exports.MODIFIED = 'modified';
 exports.NOTIFIER_ADDED = 'notifierAdded';
 exports.OUTLET_ADDED = 'outletAdded';
 exports.OUTLET_REMOVED = 'outletRemoved';
@@ -61,6 +62,7 @@ exports.REMOVED = 'removed';
 exports.REQUEST_ACTION = 'requestAction';
 exports.SET_PROPERTY = 'setProperty';
 exports.THING_ADDED = 'thingAdded';
+exports.THING_MODIFIED = 'thingModified';
 exports.THING_REMOVED = 'thingRemoved';
 
 // OAuth things

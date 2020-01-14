@@ -195,8 +195,10 @@ ThingsController.get('/:thingId', (request, response) => {
       response.status(200).json(thing);
     })
     .catch((error) => {
-      console.error(`Error getting thing description for thing with id ${id}`);
-      console.error(`Error: ${error}`);
+      console.error(
+        `Error getting thing description for thing with id ${id}:`,
+        error
+      );
       response.status(404).send(error);
     });
 });
@@ -416,6 +418,7 @@ function websocketHandler(websocket, request) {
     if (typeof thingId !== 'undefined' && property.device.id !== thingId) {
       return;
     }
+
     sendMessage({
       id: property.device.id,
       messageType: Constants.PROPERTY_STATUS,
@@ -438,9 +441,11 @@ function websocketHandler(websocket, request) {
         [action.name]: action.getDescription(),
       },
     };
+
     if (action.hasOwnProperty('thingId')) {
       message.id = action.thingId;
     }
+
     sendMessage(message);
   }
 
@@ -448,9 +453,11 @@ function websocketHandler(websocket, request) {
     if (typeof thingId !== 'undefined' && event.thingId !== thingId) {
       return;
     }
+
     if (!subscribedEventNames[event.name]) {
       return;
     }
+
     sendMessage({
       id: event.thingId,
       messageType: Constants.EVENT,
@@ -460,41 +467,64 @@ function websocketHandler(websocket, request) {
     });
   }
 
-  function onConnected(id, connected) {
-    sendMessage({
-      id,
-      messageType: Constants.CONNECTED,
-      data: connected,
-    });
-  }
-
   let thingCleanups = {};
   function addThing(thing) {
     thing.addEventSubscription(onEvent);
-    const onConn = onConnected.bind(null, thing.id);
-    thing.addConnectedSubscription(onConn);
-    const onRem = () => {
+
+    function onConnected(connected) {
+      sendMessage({
+        id: thing.id,
+        messageType: Constants.CONNECTED,
+        data: connected,
+      });
+    }
+    thing.addConnectedSubscription(onConnected);
+
+    const onRemoved = () => {
       if (thingCleanups[thing.id]) {
         thingCleanups[thing.id]();
         delete thingCleanups[thing.id];
       }
+
       if (typeof thingId !== 'undefined' &&
           (websocket.readyState === WebSocket.OPEN ||
            websocket.readyState === WebSocket.CONNECTING)) {
         websocket.close();
+      } else {
+        sendMessage({
+          id: thing.id,
+          messageType: Constants.THING_REMOVED,
+          data: {},
+        });
       }
     };
-    thing.addRemovedSubscription(onRem);
+    thing.addRemovedSubscription(onRemoved);
+
+    const onModified = () => {
+      sendMessage({
+        id: thing.id,
+        messageType: Constants.THING_MODIFIED,
+        data: {},
+      });
+    };
+    thing.addModifiedSubscription(onModified);
 
     const thingCleanup = () => {
       thing.removeEventSubscription(onEvent);
-      thing.removeConnectedSubscription(onConn);
-      thing.removeRemovedSubscription(onRem);
+      thing.removeConnectedSubscription(onConnected);
+      thing.removeRemovedSubscription(onRemoved);
+      thing.removeModifiedSubscription(onModified);
     };
     thingCleanups[thing.id] = thingCleanup;
   }
 
   function onThingAdded(thing) {
+    sendMessage({
+      id: thing.id,
+      messageType: Constants.THING_ADDED,
+      data: {},
+    });
+
     addThing(thing);
   }
 

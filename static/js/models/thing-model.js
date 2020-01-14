@@ -132,6 +132,10 @@ class ThingModel extends Model {
             this.cleanup();
           }
           break;
+        case 'thingRemoved':
+          this.handleEvent(Constants.DELETE_THING, this.id);
+          this.cleanup();
+          break;
       }
     };
 
