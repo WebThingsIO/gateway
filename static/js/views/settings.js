@@ -1726,32 +1726,16 @@ const SettingsScreen = {
     const versionElt = document.getElementById('update-settings-version');
     const statusElt = document.getElementById('update-settings-status');
 
-    const fetches = Promise.all([
+    let status, support;
+    Promise.all([
       API.getUpdateStatus(),
-      API.getUpdateLatest(),
       API.getSelfUpdateStatus(),
-    ]);
-    fetches.then((results) => {
-      const status = results[0];
-      const latest = results[1];
-      const support = results[2];
-      let cmp = 0;
-
-      if (latest.version) {
-        cmp = this.compareSemver(status.version, latest.version);
-      }
+    ]).then((results) => {
+      status = results[0];
+      support = results[1];
 
       if (!support.available) {
         upToDateElt.textContent = fluent.getMessage('updates-not-supported');
-      } else if (cmp < 0) {
-        // Update available
-        upToDateElt.textContent = fluent.getMessage('update-available');
-        updateNow.classList.remove('hidden');
-        updateNow.classList.remove('disabled');
-      } else {
-        // All up to date!
-        upToDateElt.textContent = fluent.getMessage('update-up-to-date');
-        updateNow.classList.add('hidden');
       }
 
       versionElt.textContent =
@@ -1776,6 +1760,30 @@ const SettingsScreen = {
         statusElt.textContent = statusText;
       } else {
         statusElt.classList.add('hidden');
+      }
+
+      if (support.available) {
+        upToDateElt.textContent = fluent.getMessage('checking-for-updates');
+        updateNow.classList.add('hidden');
+
+        API.getUpdateLatest().then((latest) => {
+          if (latest.version) {
+            const cmp = this.compareSemver(status.version, latest.version);
+            if (cmp < 0) {
+              // Update available
+              upToDateElt.textContent = fluent.getMessage('update-available');
+              updateNow.classList.remove('hidden');
+              updateNow.classList.remove('disabled');
+            } else {
+              // All up to date!
+              upToDateElt.textContent = fluent.getMessage('update-up-to-date');
+              updateNow.classList.add('hidden');
+            }
+          }
+        }).catch(() => {
+          upToDateElt.textContent =
+            fluent.getMessage('failed-to-check-for-updates');
+        });
       }
     });
   },
