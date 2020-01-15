@@ -167,6 +167,8 @@ failed = Misslyckades
 never = Aldrig
 in-progress = Pågående
 restarting = Startar om
+checking-for-updates = Söker efter uppdateringar…
+failed-to-check-for-updates = Kunde inte söka efter uppdateringar för tillfället.
 
 ## Developer Settings
 
