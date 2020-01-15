@@ -167,6 +167,7 @@ failed = Mislukt
 never = Nooit
 in-progress = Loopt
 restarting = Herstarten
+checking-for-updates = Controleren op updates…
 
 ## Developer Settings
 
