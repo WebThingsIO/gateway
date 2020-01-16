@@ -167,6 +167,8 @@ failed = Sikertelen
 never = Soha
 in-progress = Folyamatban
 restarting = Újraindítás
+checking-for-updates = Frissítések keresése…
+failed-to-check-for-updates = Jelenleg nem lehet ellenőrizni a frissítéseket.
 
 ## Developer Settings
 
