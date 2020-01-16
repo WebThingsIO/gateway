@@ -167,6 +167,8 @@ failed = 失敗
 never = 永不
 in-progress = 進行中
 restarting = 正在重新啟動
+checking-for-updates = 正在檢查更新…
+failed-to-check-for-updates = 目前無法檢查更新。
 
 ## Developer Settings
 
