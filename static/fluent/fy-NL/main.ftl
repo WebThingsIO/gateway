@@ -167,6 +167,8 @@ failed = Mislearre
 never = Nea
 in-progress = Dwaande
 restarting = Opnij starte
+checking-for-updates = Kontrolearje op fernijingen…
+failed-to-check-for-updates = Kin op dit stuit net kontrolearje op fernijingen.
 
 ## Developer Settings
 
