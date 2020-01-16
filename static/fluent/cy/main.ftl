@@ -167,6 +167,8 @@ failed = Methiant
 never = Byth
 in-progress = Ar Waith
 restarting = Ailgychwyn
+checking-for-updates = Gwirio am ddiweddariadau…
+failed-to-check-for-updates = Methu gwirio am ddiweddariadau ar hyn o bryd.
 
 ## Developer Settings
 
