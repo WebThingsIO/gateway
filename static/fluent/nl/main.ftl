@@ -168,6 +168,7 @@ never = Nooit
 in-progress = Loopt
 restarting = Herstarten
 checking-for-updates = Controleren op updates…
+failed-to-check-for-updates = Kan momenteel niet controleren op updates.
 
 ## Developer Settings
 
