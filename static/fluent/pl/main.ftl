@@ -157,16 +157,18 @@ localization-settings-units-temperature-fahrenheit = Stopnie Fahrenheita (°F)
 ## Update Settings
 
 update-settings-update-now = Aktualizuj teraz
-update-available = Dostępna jest nowa wersja
-update-up-to-date = System jest aktualny
+update-available = Dostępna jest nowa wersja.
+update-up-to-date = System jest aktualny.
 updates-not-supported = Aktualizacje nie są obsługiwane na tej platformie.
 update-settings-enable-self-updates = Włącz automatyczne aktualizacje
 last-update = Ostatnia aktualizacja
 current-version = Obecna wersja
 failed = Niepowodzenie
 never = Nigdy
-in-progress = W trakcie
-restarting = Ponowne uruchamianie
+in-progress = W trakcie…
+restarting = Ponowne uruchamianie…
+checking-for-updates = Wyszukiwanie aktualizacji…
+failed-to-check-for-updates = W tej chwili nie można wyszukać aktualizacji.
 
 ## Developer Settings
 
