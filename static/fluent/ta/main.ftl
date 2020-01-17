@@ -167,6 +167,7 @@ failed = தோல்வியுற்றது
 never = ஒருபோதும் இல்லை
 in-progress = செயல்பாட்டில் உள்ளது
 restarting = மறுதுவக்கம்…
+checking-for-updates = புதிய பதிப்புகளுக்காக பார்க்கிறது…
 
 ## Developer Settings
 
