@@ -168,6 +168,7 @@ never = ஒருபோதும் இல்லை
 in-progress = செயல்பாட்டில் உள்ளது
 restarting = மறுதுவக்கம்…
 checking-for-updates = புதிய பதிப்புகளுக்காக பார்க்கிறது…
+failed-to-check-for-updates = தற்போது புதுப்பிப்புகளைச் பார்க்க முடியவில்லை.
 
 ## Developer Settings
 
