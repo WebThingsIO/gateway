@@ -167,6 +167,8 @@ failed = Не удалось
 never = Никогда
 in-progress = Выполняется
 restarting = Перезапуск
+checking-for-updates = Проверка наличия обновлений…
+failed-to-check-for-updates = В данный момент невозможно проверить наличие обновлений.
 
 ## Developer Settings
 
