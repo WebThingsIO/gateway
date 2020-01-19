@@ -167,6 +167,8 @@ failed = Ha fallado
 never = Nunca
 in-progress = En curso
 restarting = Reiniciando
+checking-for-updates = Comprobando actualizaciones…
+failed-to-check-for-updates = No se pueden buscar actualizaciones en este momento.
 
 ## Developer Settings
 
