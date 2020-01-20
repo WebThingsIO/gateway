@@ -167,6 +167,8 @@ failed = Nezdařilo se
 never = Nikdy
 in-progress = Probíhá
 restarting = Restartuje se
+checking-for-updates = Kontrola aktualizací…
+failed-to-check-for-updates = Nyní nelze dostupnost aktualizace zkontrolovat.
 
 ## Developer Settings
 
