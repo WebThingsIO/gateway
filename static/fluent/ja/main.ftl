@@ -167,6 +167,8 @@ failed = 失敗
 never = 更新しない
 in-progress = 更新中
 restarting = 再起動中
+checking-for-updates = 更新を確認しています…
+failed-to-check-for-updates = 現在、更新を確認できません。
 
 ## Developer Settings
 
@@ -325,6 +327,8 @@ tunnel-setup-reclaim-domain = サブドメインをすでに登録済みのよ�
 check-email-for-token = メールアドレスに送信された再利用トークンを確認し、上記に貼り付けてください。
 reclaim-failed = ドメインを再利用できませんでした。
 subdomain-already-used = このサブドメインはすでに使用されています。別のサブドメインを指定してください。
+invalid-subdomain = 無効なサブドメインです。
+invalid-email = 無効なメールアドレスです。
 invalid-reclamation-token = 無効な再利用トークンです。
 domain-success = 完了しました。リダイレクトする間しばらくお待ちください…
 issuing-error = 証明書の発行でエラーが発生しました。もう一度試してください。
