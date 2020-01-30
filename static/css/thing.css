@@ -168,20 +168,16 @@
 }
 
 #thing-title-back-flex,
-#thing-title-speech-flex {
+#thing-title-right-flex {
   flex: 1;
   min-width: 9.6rem;
   flex-shrink: 0;
   height: 9.6rem;
 }
 
-#thing-title-speech-flex {
+#thing-title-right-flex {
   flex: 1;
   min-width: 0;
-}
-
-.speech-enabled > #thing-title-speech-flex {
-  min-width: 9.6rem;
 }
 
 .generic-checkbox {

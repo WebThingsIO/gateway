@@ -12,8 +12,6 @@
 // eslint-disable-next-line prefer-const
 let API;
 // eslint-disable-next-line prefer-const
-let AssistantScreen;
-// eslint-disable-next-line prefer-const
 let GatewayModel;
 // eslint-disable-next-line prefer-const
 let ThingsScreen;
@@ -35,8 +33,6 @@ let RulesScreen;
 let RuleScreen;
 // eslint-disable-next-line prefer-const
 let LogsScreen;
-// eslint-disable-next-line prefer-const
-let Speech;
 // eslint-disable-next-line prefer-const
 let ReopeningWebSocket;
 
@@ -103,14 +99,9 @@ const App = {
 
     AddThingScreen.init();
     ContextMenu.init();
-    AssistantScreen.init();
     ThingsScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
-
-    if (navigator.mediaDevices && window.MediaRecorder) {
-      Speech.init();
-    }
 
     RulesScreen.init();
     RuleScreen.init();
@@ -123,7 +114,6 @@ const App = {
     this.views.settings = document.getElementById('settings-view');
     this.views.rules = document.getElementById('rules-view');
     this.views.rule = document.getElementById('rule-view');
-    this.views.assistant = document.getElementById('assistant-view');
     this.views.logs = document.getElementById('logs-view');
     this.currentView = this.views.things;
     this.displayedExtension = null;
@@ -223,12 +213,6 @@ const App = {
       this.pingerInterval =
         setInterval(this.startPinger.bind(this), this.PING_INTERVAL);
     }
-  },
-
-  showAssistant: function() {
-    this.hideExtensionBackButton();
-    AssistantScreen.show();
-    this.selectView('assistant');
   },
 
   showThings: function(context) {
@@ -459,7 +443,6 @@ module.exports = App;
 
 // avoid circular dependency
 API = require('./api');
-AssistantScreen = require('./views/assistant');
 GatewayModel = require('./models/gateway-model');
 ThingsScreen = require('./views/things');
 AddThingScreen = require('./views/add-thing');
@@ -471,7 +454,6 @@ Router = require('./router');
 RulesScreen = require('./views/rules-screen');
 RuleScreen = require('./views/rule-screen');
 LogsScreen = require('./views/logs-screen');
-Speech = require('./speech');
 ReopeningWebSocket = require('./models/reopening-web-socket');
 
 // load web components

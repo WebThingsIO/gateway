@@ -48,14 +48,14 @@
 }
 
 .section-title-back-flex,
-.section-title-speech-flex {
+.section-title-right-flex {
   flex: 1;
   min-width: 9.6rem;
   flex-shrink: 0;
   height: 9.6rem;
 }
 
-.section-title-speech-flex {
+.section-title-right-flex {
   flex: 1;
   min-width: 0;
 }
@@ -703,18 +703,6 @@
 
 #enable-ssh-item {
   background-image: url('/images/ssh-icon.svg');
-}
-
-#assistant-experiment-item {
-  background-image: url('/images/assistant-icon.svg');
-}
-
-#logs-experiment-item {
-  background-image: url('/images/logs-icon.svg');
-}
-
-#speech-experiment-item {
-  background-image: url('/images/speech-icon.png');
 }
 
 #view-internal-logs {

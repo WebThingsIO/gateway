@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Assistint
 things-menu-item = Things
 rules-menu-item = Rigels
 logs-menu-item = Lochboeken
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Toan eigenskippen
 add-things =
     .aria-label = Nije Things tafoegje
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Assistint Avatar
-assistant-controls-text-input =
-    .placeholder = Hoe kin ik helpe?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Gjin adapters fûn.
 authorization-settings-no-authorizations = Gjin autorisaasje.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Smart Assistant
 
 ## Localization Settings
 
@@ -480,11 +470,6 @@ ethernet = Ethernet
 wifi = Wifi
 icon = Piktogram
 
-## Speech
-
-speech-unsupported = De browser stipet gjin spraak
-speech-didnt-get = Sorry, ik haw jo net begrepen.
-
 ## Errors
 
 unknown-state = Unbekende steat.
@@ -625,8 +610,6 @@ back-button =
     .aria-label = Tebek
 overflow-button =
     .aria-label = Oanfoljende aksjes
-speech-button =
-    .aria-label = Harkje nei spraak
 submit-button =
     .aria-label = Yntsjinje
 edit-button =

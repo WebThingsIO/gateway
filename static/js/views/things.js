@@ -141,8 +141,6 @@ const ThingsScreen = {
    * @param {Boolean} events Whether or not to display the events screen.
    */
   show: function(thingId, actionName, events, queryString) {
-    document.getElementById('speech-wrapper').classList.remove('assistant');
-
     const params = new URLSearchParams(`?${queryString || ''}`);
     if (params.has('referrer')) {
       this.backRef = params.get('referrer');
@@ -251,13 +249,6 @@ const ThingsScreen = {
         }
 
         document.getElementById('thing-title-title').innerText = thing.title;
-
-        const speechWrapper = document.getElementById('speech-wrapper');
-        if (speechWrapper.classList.contains('hidden')) {
-          this.thingTitleElement.classList.remove('speech-enabled');
-        } else {
-          this.thingTitleElement.classList.add('speech-enabled');
-        }
 
         this.thingTitleElement.classList.remove('hidden');
       }).catch((e) => {

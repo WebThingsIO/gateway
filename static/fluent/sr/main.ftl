@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Помоћник
 things-menu-item = Справице
 rules-menu-item = Правила
 logs-menu-item = Записници
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Погледај својства
 add-things =
     .aria-label = Додај нове справице
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Аватар помоћника
-assistant-controls-text-input =
-    .placeholder = Како Вам могу помоћи?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Нема доступних адаптера.
 authorization-settings-no-authorizations = Нема пуномоћја.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Паметни помоћник
 
 ## Localization Settings
 
@@ -481,11 +471,6 @@ ethernet = Жичана
 wifi = Бежична
 icon = Иконица
 
-## Speech
-
-speech-unsupported = Тренутни прегледач не подржава говор
-speech-didnt-get = Нажалост, нисам то разумео.
-
 ## Errors
 
 unknown-state = Непознато стање.
@@ -617,8 +602,6 @@ back-button =
     .aria-label = Назад
 overflow-button =
     .aria-label = Додатне радње
-speech-button =
-    .aria-label = Слушам глас
 submit-button =
     .aria-label = Пошаљи
 edit-button =

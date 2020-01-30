@@ -517,8 +517,6 @@ const RuleScreen = {
   },
 
   show: async function(ruleId) {
-    document.getElementById('speech-wrapper').classList.remove('assistant');
-
     this.rule = null;
     this.ruleEffectType = 'SetEffect';
 

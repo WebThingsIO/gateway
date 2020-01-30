@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = アシスタント
 things-menu-item = Thing
 rules-menu-item = ルール
 logs-menu-item = ログ
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = プロパティを表示
 add-things =
     .aria-label = 新しい Thing を追加
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = アシスタントアバター
-assistant-controls-text-input =
-    .placeholder = How can I help?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = アダプターがありません。
 authorization-settings-no-authorizations = 認証情報がありません。
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = スマートアシスタント
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = アイコン
 
-## Speech
-
-speech-unsupported = 現在のブラウザーはスピーチをサポートしていません
-speech-didnt-get = スピーチの内容を認識できませんでした。
-
 ## Errors
 
 unknown-state = 状態不明
@@ -614,8 +599,6 @@ back-button =
     .aria-label = 戻る
 overflow-button =
     .aria-label = 追加の操作
-speech-button =
-    .aria-label = 話しかけてください
 submit-button =
     .aria-label = 送信
 edit-button =

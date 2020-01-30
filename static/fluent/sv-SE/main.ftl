@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Assistent
 things-menu-item = Enheter
 rules-menu-item = Regler
 logs-menu-item = Loggar
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Visa egenskaper
 add-things =
     .aria-label = Lägg till nya enheter
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Assistent-Avatar
-assistant-controls-text-input =
-    .placeholder = Hur kan jag hjälpa dig?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Inga adaptrar hittades.
 authorization-settings-no-authorizations = Inga auktoriseringar.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Smart assistent
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = Ikon
 
-## Speech
-
-speech-unsupported = Nuvarande webbläsare stöder inte tal
-speech-didnt-get = Tyvärr förstod jag inte det.
-
 ## Errors
 
 unknown-state = Okänt tillstånd.
@@ -614,8 +599,6 @@ back-button =
     .aria-label = Bakåt
 overflow-button =
     .aria-label = Ytterligare åtgärder
-speech-button =
-    .aria-label = Lyssna efter tal
 submit-button =
     .aria-label = Spara
 edit-button =

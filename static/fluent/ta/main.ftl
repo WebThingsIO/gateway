@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = உதவியாளர்
 things-menu-item = சாதனங்கள்
 rules-menu-item = விதிமுறைகள்
 logs-menu-item = பதிவுகள்
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = தன்மைகளை பார்க்கவும்
 add-things =
     .aria-label = புதிய சாதனங்களைச் சேர்க்கவும்
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = உதவி அவதார்
-assistant-controls-text-input =
-    .placeholder = நான் எவ்வாறு உதவ வேண்டும் ?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = இணைப்புச்சாதனங்க�
 authorization-settings-no-authorizations = அங்கீகாரங்கள் எதுவும்  இல்லை.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = ஸ்மார்ட் உதவியாளர்
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = ஈத்தர்நெட்
 wifi = Wi-Fi
 icon = உருவம்
 
-## Speech
-
-speech-unsupported = தற்போதைய உலாவி பேச்சை ஆதரிக்கவில்லை
-speech-didnt-get = மன்னிக்கவும், எனக்கு அது புரியவில்லை .
-
 ## Errors
 
 unknown-state = அறியாத நிலை
@@ -614,8 +599,6 @@ back-button =
     .aria-label = பின் செல்
 overflow-button =
     .aria-label = கூடுதல் செயல்கள்
-speech-button =
-    .aria-label = பேச்சைக் கேளுங்கள்
 submit-button =
     .aria-label = சமர்ப்பி
 edit-button =

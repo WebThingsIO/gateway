@@ -64,8 +64,6 @@ const RulesScreen = {
   },
 
   show: function() {
-    document.getElementById('speech-wrapper').classList.remove('assistant');
-
     Promise.all([
       this.gateway.readThings(),
       this.gateway.readNotifiers(),

@@ -762,7 +762,6 @@ const SettingsScreen = {
   /* eslint-enable max-len */
 
   setupExperimentElements: function() {
-    this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
   },
 
   setupDeveloperElements: function() {
@@ -848,15 +847,13 @@ const SettingsScreen = {
         <img class="section-title-icon" alt="${name} ${fluent.getMessage('icon')}" src="${icon}" />
         <span class="section-title-name">${name}</span>
       </div>
-      <div class="section-title-speech-flex"></div>
+      <div class="section-title-right-flex"></div>
     `;
     section.insertBefore(elt, section.firstChild);
     return elt;
   },
 
   show: function(section, subsection, id) {
-    document.getElementById('speech-wrapper').classList.remove('assistant');
-
     this.backButton.href = '/settings';
     this.view.classList.remove('dark');
     this.discoverAddonsButton.classList.add('hidden');

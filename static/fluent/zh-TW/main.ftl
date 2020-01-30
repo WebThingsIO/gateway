@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = 助理
 things-menu-item = Things
 rules-menu-item = 規則
 logs-menu-item = 紀錄
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = 檢視屬性
 add-things =
     .aria-label = 新增 Things
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = 助理頭像
-assistant-controls-text-input =
-    .placeholder = 有什麼可以幫忙的？
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = 沒有存在的轉接器。
 authorization-settings-no-authorizations = 未授權。
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = 智慧助理
 
 ## Localization Settings
 
@@ -471,11 +461,6 @@ ethernet = 乙太網路
 wifi = Wi-Fi
 icon = 圖示
 
-## Speech
-
-speech-unsupported = 目前的瀏覽器不支援語音
-speech-didnt-get = 抱歉，我聽不懂。
-
 ## Errors
 
 unknown-state = 未知狀態。
@@ -607,8 +592,6 @@ back-button =
     .aria-label = 上一頁
 overflow-button =
     .aria-label = 其他動作
-speech-button =
-    .aria-label = 聆聽中，請說話
 submit-button =
     .aria-label = 送出
 edit-button =
