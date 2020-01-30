@@ -69,13 +69,9 @@ sudo apt install -y \
 _url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.1#egg=gateway_addon"
 sudo pip3 install "$_url"
 
-sudo pip3 install adapt-parser==0.3.4
-
 # Allow node and python3 to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
-
-git clone https://github.com/mozilla-iot/intent-parser "$HOME/mozilla-iot/intent-parser"
 
 # Create the service files needed by systemd
 sudo chown -R root:root ./etc
@@ -91,9 +87,6 @@ sudo systemctl enable mozilla-iot-gateway.service
 
 # Check for an update every day.
 sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
-
-# Enable the intent parser at boot
-sudo systemctl enable mozilla-iot-gateway.intent-parser.service
 
 # Activate the iptables script so that it runs on each boot.
 #
