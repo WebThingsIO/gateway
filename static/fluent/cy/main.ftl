@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Dim awdurdodi.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Cynorthwyydd Clyfar
-experiment-settings-logs = Cofnodion
 
 ## Localization Settings
 

@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Авторизаций нет.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Умный помощник
-experiment-settings-logs = Журналы
 
 ## Localization Settings
 

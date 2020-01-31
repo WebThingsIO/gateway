@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = 認証情報がありません。
 ## Experiment Settings
 
 experiment-settings-smart-assistant = スマートアシスタント
-experiment-settings-logs = ログ
 
 ## Localization Settings
 

@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Žádná oprávnění.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Chytrý asistent
-experiment-settings-logs = Protokoly
 
 ## Localization Settings
 

@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = அங்கீகாரங்கள�
 ## Experiment Settings
 
 experiment-settings-smart-assistant = ஸ்மார்ட் உதவியாளர்
-experiment-settings-logs = பதிவுகள்
 
 ## Localization Settings
 
