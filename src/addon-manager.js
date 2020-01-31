@@ -12,7 +12,6 @@
 'use strict';
 
 const AddonUtils = require('./addon-utils');
-const appInstance = require('./app-instance');
 const config = require('config');
 const Constants = require('./constants');
 const Deferred = require('./deferred');
@@ -711,7 +710,6 @@ class AddonManager extends EventEmitter {
       const pluginClient = new PluginClient(
         manifest.id,
         'inproc',
-        appInstance.get(),
         {verbose: false}
       );
       try {

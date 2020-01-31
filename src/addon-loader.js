@@ -56,7 +56,6 @@ async function loadAddon(addonPath, verbose) {
   const pluginClient = new PluginClient(
     packageName,
     config.get('ipc.protocol'),
-    null,
     {verbose}
   );
 
