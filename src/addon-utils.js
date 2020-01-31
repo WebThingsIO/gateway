@@ -6,7 +6,6 @@
 
 'use strict';
 
-const config = require('config');
 const find = require('find');
 const fs = require('fs');
 const pkg = require('../package.json');
@@ -95,12 +94,6 @@ function validatePackageJson(manifest) {
     },
   };
 
-  if (config.get('ipc.protocol') !== 'inproc') {
-    // If we're not using in-process plugins, then we also need the exec
-    // keyword to exist.
-    manifestTemplate.moziot.exec = '';
-  }
-
   return validateObject('', manifest, manifestTemplate);
 }
 
@@ -129,9 +122,18 @@ function validateManifestJson(manifest) {
     version: '',
   };
 
-  if (config.get('ipc.protocol') !== 'inproc' &&
-      // eslint-disable-next-line max-len
-      manifest.gateway_specific_settings.webthings.primary_type !== 'extension') {
+  // Since we're trying to use a field before full validation, make sure it
+  // exists first.
+  if (!manifest.gateway_specific_settings ||
+      !manifest.gateway_specific_settings.webthings ||
+      !manifest.gateway_specific_settings.webthings.primary_type) {
+    return '' +
+      'Expecting manifest.gateway_specific_settings.webthings.primary_type ' +
+      'to have type: string, found: undefined';
+  }
+
+  // eslint-disable-next-line max-len
+  if (manifest.gateway_specific_settings.webthings.primary_type !== 'extension') {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
     manifestTemplate.gateway_specific_settings.webthings.exec = '';

@@ -43,6 +43,7 @@ const testPackageJson = {
       max: 2,
     },
     enabled: true,
+    exec: '{nodeLoader} {path}',
   },
 };
 
@@ -51,6 +52,7 @@ const testManifestJson = {
   description: 'An adapter for integration tests',
   gateway_specific_settings: {
     webthings: {
+      exec: '{nodeLoader} {path}',
       primary_type: 'adapter',
       strict_min_version: pkg.version,
       strict_max_version: pkg.version,
