@@ -409,7 +409,6 @@ $ npm test
   * **`addon-loader.js`** - Script used for starting up Node-based add-ons
   * **`addon-manager.js`** - Manages add-ons (e.g. Zigbee, Z-Wave)
   * **`app.js`** - The main back end
-  * **`app-instance.js`** - Application wrapper for integration tests
   * **`certificate-manager.js`** - Certificate registration and renewal, via Let's Encrypt
   * **`command-utils.js`** - Utilities used by commands parser
   * **`constants.js`** - System-wide constants

@@ -13,7 +13,6 @@
 
 const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
-const appInstance = require('../app-instance');
 const config = require('config');
 const Constants = require('../constants');
 const db = require('../db');
@@ -54,8 +53,7 @@ class Plugin {
     this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
                                    config.get('ipc.protocol'),
                                    this.ipcBaseAddr,
-                                   this.onMsg.bind(this),
-                                   appInstance.get());
+                                   this.onMsg.bind(this));
     this.ipcSocket.bind();
     this.exec = '';
     this.execPath = '.';

@@ -46,10 +46,6 @@ const TunnelService = require('./ssltunnel');
 const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 
-// The following causes an instance of AppInstance to be created.
-// This is then used in other places (like src/addons/plugin/ipc.js)
-require('./app-instance');
-
 // Open the databases
 db.open();
 Logs.open();
