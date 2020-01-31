@@ -8,8 +8,8 @@
 
 'use strict';
 
-const User = require('./user.js');
-const Database = require('../db.js');
+const User = require('./user');
+const Database = require('../db');
 
 const Users = {
   /**

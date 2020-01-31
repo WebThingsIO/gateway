@@ -43,7 +43,7 @@ class Plugin {
   constructor(pluginId, pluginServer, forceEnable = false) {
     this.pluginId = pluginId;
     this.pluginServer = pluginServer;
-    this.logPrefix = pluginId.replace('-adapter', '');
+    this.logPrefix = pluginId;
 
     this.adapters = new Map();
     this.notifiers = new Map();

@@ -6,7 +6,7 @@
 
 'use strict';
 
-const db = require('../db.js');
+const db = require('../db');
 const DatabaseMigrate = require('./DatabaseMigrate');
 
 class Database {

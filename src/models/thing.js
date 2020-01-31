@@ -11,7 +11,7 @@
 'use strict';
 
 const Constants = require('../constants');
-const Database = require('../db.js');
+const Database = require('../db');
 const EventEmitter = require('events');
 const Router = require('../router');
 const UserProfile = require('../user-profile');

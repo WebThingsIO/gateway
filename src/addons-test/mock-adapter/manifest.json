@@ -3,6 +3,7 @@
   "description": "Mock adapter plugin for Mozilla WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
+      "exec": "{nodeLoader} {path}",
       "primary_type": "adapter",
       "strict_max_version": "*",
       "strict_min_version": "0.10.0",
