@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-[ "$NVM_VERSION" != "" ] || NVM_VERSION="v0.33.8"
+[ "$NVM_VERSION" != "" ] || NVM_VERSION="v0.35.2"
 [ "$NODE_VERSION" != "" ] || NODE_VERSION="--lts=carbon"
 [ "$USER" != "" ] || USER="pi"
 [ "$HOME" != "" ] || HOME="/home/${USER}"
@@ -23,7 +23,7 @@ cd mozilla-iot
 
 # Install and configure nvm
 [ -e "${HOME}/.bashrc" ] || touch "${HOME}/.bashrc"
-curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the target, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.

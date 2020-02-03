@@ -3,7 +3,7 @@
 # Script which will resize a filesystem and also copy the new smaller
 # filesystem onto your local machine.
 #
-# Example: shrink.fs /dev/sdd gateway-0.5.0.img 3000
+# Example: shrink.sh /dev/sdd gateway-0.5.0.img 3000
 #
 # The last argument is optional and specifies the desired size of the
 # resized filesystem in megabytes. If not provided, it will default to 3000.

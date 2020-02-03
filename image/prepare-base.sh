@@ -22,15 +22,16 @@
 # https://github.com/mozilla-iot/wiki/wiki/Creating-the-base-image-file-for-the-Raspberry-Pi
 # for complete instructions on creating a base image.
 
-NVM_VERSION="v0.33.8"
+NVM_VERSION="v0.35.2"
 NODE_VERSION="--lts=carbon"
 
 sudo apt update -y
-sudo apt upgrade -y
+sudo apt full-upgrade -y
+sudo apt autoremove --purge -y
 sudo apt update -y
 
 # Install and configure nvm
-curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash
 # The following 2 lines are installed into ~/.bashrc by the above,
 # but on the RPi, sourcing ~/.bashrc winds up being a no-op (when sourced
 # from a script), so we just run it here.
