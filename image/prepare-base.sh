@@ -61,7 +61,8 @@ sudo apt install -y \
   policykit-1 \
   python-pip \
   python3-pip \
-  sqlite3
+  sqlite3 \
+  wiringpi
 
 # Install Python add-on bindings
 _url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.1#egg=gateway_addon"

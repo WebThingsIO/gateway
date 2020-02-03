@@ -4,19 +4,16 @@
 
 sudo apt update -y
 
-# Install ffmpeg, if necessary
-if ! dpkg -s ffmpeg 2>/dev/null | grep -q '^Status.*installed'; then
-  sudo apt install -y ffmpeg
-fi
+_all_deps="ffmpeg mosquitto arping wiringpi"
+_missing_deps=""
+for dep in $_all_deps; do
+  if ! dpkg -s "$dep" 2>/dev/null | grep -q '^Status.*installed'; then
+    _missing_deps="$_missing_deps $dep"
+  fi
+done
 
-# Install mosquitto, if necessary
-if ! dpkg -s mosquitto 2>/dev/null | grep -q '^Status.*installed'; then
-  sudo apt install -y mosquitto
-fi
-
-# Install arping, if necessary
-if ! dpkg -s arping 2>/dev/null | grep -q '^Status.*installed'; then
-  sudo apt install -y arping
+if [ -n "$_missing_deps" ]; then
+  sudo apt install -y $_missing_deps
 fi
 
 # Upgrade gateway-addon Python package
