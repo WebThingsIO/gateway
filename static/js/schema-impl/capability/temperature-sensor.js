@@ -27,7 +27,7 @@ class TemperatureSensor extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/temperature_sensor.svg',
+        baseIcon: '/images/thing-icons/temperature_sensor.svg',
       }
     );
   }

@@ -80,7 +80,7 @@
   list-style-type: none;
   background-color: #5288af;
   border-radius: 0.5rem;
-  background-image: url('../optimized-images/right-arrow.png');
+  background-image: url('/images/right-arrow.png');
   background-size: auto 2rem;
   background-repeat: no-repeat;
   background-position: right 2.8rem center;
@@ -101,51 +101,51 @@
 }
 
 #domain-settings-link {
-  background-image: url('../optimized-images/domain-icon.png');
+  background-image: url('/images/domain-icon.png');
 }
 
 #domain-settings-local-link {
-  background-image: url('../optimized-images/domain-icon.png');
+  background-image: url('/images/domain-icon.png');
 }
 
 #domain-settings-mozilla-link {
-  background-image: url('../optimized-images/domain-icon.png');
+  background-image: url('/images/domain-icon.png');
 }
 
 #network-settings-link {
-  background-image: url('../optimized-images/network.svg');
+  background-image: url('/images/network.svg');
 }
 
 #user-settings-link {
-  background-image: url('../optimized-images/users-icon.png');
+  background-image: url('/images/users-icon.png');
 }
 
 #adapter-settings-link {
-  background-image: url('../optimized-images/adapters-icon.png');
+  background-image: url('/images/adapters-icon.png');
 }
 
 #addon-settings-link {
-  background-image: url('../optimized-images/add-on.svg');
+  background-image: url('/images/add-on.svg');
 }
 
 #experiment-settings-link {
-  background-image: url('../optimized-images/experiments-icon.png');
+  background-image: url('/images/experiments-icon.png');
 }
 
 #localization-settings-link {
-  background-image: url('../optimized-images/localization-icon.svg');
+  background-image: url('/images/localization-icon.svg');
 }
 
 #update-settings-link {
-  background-image: url('../optimized-images/update-icon.svg');
+  background-image: url('/images/update-icon.svg');
 }
 
 #authorization-settings-link {
-  background-image: url('../optimized-images/authorization.svg');
+  background-image: url('/images/authorization.svg');
 }
 
 #developer-settings-link {
-  background-image: url('../optimized-images/developer-icon.svg');
+  background-image: url('/images/developer-icon.svg');
 }
 
 .settings-section {
@@ -346,7 +346,7 @@
 }
 
 .network-settings-list-item-button {
-  background-image: url('../optimized-images/settings-icon.png');
+  background-image: url('/images/settings-icon.png');
   height: 4.2rem;
   margin: 2.9rem 2rem;
 }
@@ -370,24 +370,24 @@
 }
 
 .user-settings-header {
-  background-image: url('../optimized-images/user.svg');
+  background-image: url('/images/user.svg');
 }
 
 .adapter-settings-header {
-  background-image: url('../optimized-images/adapters-icon.png');
+  background-image: url('/images/adapters-icon.png');
 }
 
 .addon-settings-header,
 .addon-settings-header.extension {
-  background-image: url('../optimized-images/add-on.svg');
+  background-image: url('/images/add-on.svg');
 }
 
 .addon-settings-header.adapter {
-  background-image: url('../optimized-images/adapters-icon.png');
+  background-image: url('/images/adapters-icon.png');
 }
 
 .addon-settings-header.notifier {
-  background-image: url('../optimized-images/thing-icons/notification.svg');
+  background-image: url('/images/thing-icons/notification.svg');
 }
 
 .addon-settings-header.service {
@@ -520,7 +520,7 @@
   background-position: 0.5em;
   padding-left: 4rem;
   margin-right: .8rem;
-  background-image: url('../optimized-images/settings-icon.png');
+  background-image: url('/images/settings-icon.png');
 }
 
 .addon-settings-config.hidden {
@@ -533,7 +533,7 @@
   background-position: 0.5em;
   padding-left: 4rem;
   margin-right: .8rem;
-  background-image: url('../optimized-images/update-icon.svg');
+  background-image: url('/images/update-icon.svg');
 }
 
 .addon-settings-update.hidden {
@@ -542,22 +542,22 @@
 
 .adapter-settings-disable,
 .addon-settings-disable {
-  background-image: url('../optimized-images/disable.svg');
+  background-image: url('/images/disable.svg');
 }
 
 .adapter-settings-enable,
 .addon-settings-enable {
-  background-image: url('../optimized-images/enable.svg');
+  background-image: url('/images/enable.svg');
 }
 
 .user-settings-edit {
-  background-image: url('../optimized-images/edit-plain.svg');
+  background-image: url('/images/edit-plain.svg');
 }
 
 .addon-settings-remove,
 .user-settings-remove {
   margin-right: .8rem;
-  background-image: url('../optimized-images/remove.svg');
+  background-image: url('/images/remove.svg');
 }
 
 @media only screen and (max-width: 560px) {
@@ -577,7 +577,7 @@
 }
 
 .addon-discovery-settings-add {
-  background-image: url('../optimized-images/new.svg');
+  background-image: url('/images/new.svg');
 }
 
 #add-user-button,
@@ -585,7 +585,7 @@
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../optimized-images/add.svg');
+  background-image: url('/images/add.svg');
 }
 
 #user-settings-edit,
@@ -656,7 +656,7 @@
   height : 3rem;
   float: left;
   margin: 1rem;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -669,7 +669,7 @@
   height : 3rem;
   float: right;
   margin-top: -0.25rem;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -702,27 +702,27 @@
 }
 
 #enable-ssh-item {
-  background-image: url('../optimized-images/ssh-icon.svg');
+  background-image: url('/images/ssh-icon.svg');
 }
 
 #assistant-experiment-item {
-  background-image: url('../optimized-images/assistant-icon.svg');
+  background-image: url('/images/assistant-icon.svg');
 }
 
 #logs-experiment-item {
-  background-image: url('../optimized-images/logs-icon.svg');
+  background-image: url('/images/logs-icon.svg');
 }
 
 #speech-experiment-item {
-  background-image: url('../optimized-images/speech-icon.png');
+  background-image: url('/images/speech-icon.png');
 }
 
 #view-internal-logs {
-  background-image: url('../optimized-images/rules-icon.png');
+  background-image: url('/images/rules-icon.png');
 }
 
 #new-local-authorization {
-  background-image: url('../optimized-images/authorization.svg');
+  background-image: url('/images/authorization.svg');
 }
 
 #update-now.hidden {
@@ -752,7 +752,7 @@
 .authorization-item {
   position: relative;
   padding-left: 12rem;
-  background-image: url('../optimized-images/authorization.svg');
+  background-image: url('/images/authorization.svg');
   background-size: 8rem auto;
   background-repeat: no-repeat;
   background-position: left 2rem center;
@@ -772,7 +772,7 @@
   transform: translateY(-50%);
   background-color: #48779a;
 
-  background-image: url('../optimized-images/stop-16.svg');
+  background-image: url('/images/stop-16.svg');
   background-position: 1rem;
   background-size: 1.2rem;
   background-repeat: no-repeat;
@@ -960,7 +960,7 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background-image: url('/optimized-images/select-arrow.svg');
+  background-image: url('/images/select-arrow.svg');
   background-repeat: no-repeat;
   background-size: 1.25rem;
   background-position: calc(100% - 1rem);

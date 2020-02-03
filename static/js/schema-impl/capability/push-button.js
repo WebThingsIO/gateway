@@ -25,7 +25,7 @@ class PushButton extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/push_button.svg',
+        baseIcon: '/images/thing-icons/push_button.svg',
       }
     );
 

@@ -25,7 +25,7 @@ class VideoCamera extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/video_camera.svg',
+        baseIcon: '/images/thing-icons/video_camera.svg',
       }
     );
   }

@@ -25,7 +25,7 @@ class MotionSensor extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/motion_sensor.svg',
+        baseIcon: '/images/thing-icons/motion_sensor.svg',
       }
     );
   }

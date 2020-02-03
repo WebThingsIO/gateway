@@ -168,12 +168,12 @@ h1, h2, h3, h4, h5, h6 {
 
 #speech-button {
   right: 2rem;
-  background: no-repeat center/100% url('../optimized-images/microphone.svg');
+  background: no-repeat center/100% url('/images/microphone.svg');
   top: 2rem;
 }
 
 #speech-button.active {
-  background: no-repeat center/100% url('../optimized-images/microphone-active.svg');
+  background: no-repeat center/100% url('/images/microphone-active.svg');
 }
 
 #speech-wrapper {
@@ -254,17 +254,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #menu-button {
-  background: no-repeat center/100% url('../optimized-images/menu.svg');
+  background: no-repeat center/100% url('/images/menu.svg');
 }
 
 #back-button {
-  background: no-repeat center/100% url('../optimized-images/back.png');
+  background: no-repeat center/100% url('/images/back.png');
 }
 
 #overflow-button {
   bottom: 2rem;
   right: 2rem;
-  background: no-repeat center/100% url('../optimized-images/overflow.svg');
+  background: no-repeat center/100% url('/images/overflow.svg');
 }
 
 #overflow-menu {
@@ -341,7 +341,7 @@ h1, h2, h3, h4, h5, h6 {
 .back-button {
   top: 2rem;
   left: 2rem;
-  background: no-repeat center/100% url('../optimized-images/back.png');
+  background: no-repeat center/100% url('/images/back.png');
 }
 
 #extension-back-button {
@@ -431,7 +431,7 @@ body.hidden {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background-image: url('/optimized-images/select-arrow.svg');
+  background-image: url('/images/select-arrow.svg');
   background-repeat: no-repeat;
   background-size: 1.25rem;
   background-position: calc(100% - 1rem);

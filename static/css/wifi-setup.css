@@ -83,7 +83,7 @@ body {
   position: relative;
   width: 6.4rem;
   height: 6.4rem;
-  background-image: url('/optimized-images/back.png');
+  background-image: url('/images/back.png');
   background-repeat: no-repeat;
   background-color: #305067;
   background-size: 6.4rem 6.4rem;
@@ -203,7 +203,7 @@ body {
   height : 3rem;
   float: left;
   margin : 0.1rem 0;
-  background: url("/optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 

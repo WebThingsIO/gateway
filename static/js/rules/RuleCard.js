@@ -38,7 +38,7 @@ class RuleCard {
       if (thingTrigger) {
         iconTrigger = RuleUtils.icon(thingTrigger);
       } else if (trigger.type === 'TimeTrigger') {
-        iconTrigger = '/optimized-images/thing-icons/clock.svg';
+        iconTrigger = '/images/thing-icons/clock.svg';
       }
     }
 

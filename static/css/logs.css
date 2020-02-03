@@ -34,7 +34,7 @@
   background-size: 3.2rem;
   background-repeat: no-repeat;
   background-position: 2rem;
-  background-image: url('../optimized-images/logs-icon.svg');
+  background-image: url('/images/logs-icon.svg');
 }
 
 .logs-log-container {
@@ -102,7 +102,7 @@
 .create-log-button {
   bottom: 2rem;
   right: 2rem;
-  background-image: url('../optimized-images/add.svg');
+  background-image: url('/images/add.svg');
 }
 
 .create-log-button.hidden {

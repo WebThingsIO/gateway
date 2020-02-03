@@ -7,7 +7,7 @@ class NotifierOutletBlock extends RulePartBlock {
               values) {
     super(ruleArea, onPresentationChange, onRuleUpdate,
           `${outlet.name} ${fluent.getMessage('rule-notification')}`,
-          '/optimized-images/thing-icons/notification.svg');
+          '/images/thing-icons/notification.svg');
 
     this.notifier = notifier;
     this.outlet = outlet;

@@ -26,7 +26,7 @@
   background-size: 5rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../optimized-images/link-icon.svg');
+  background-image: url('/images/link-icon.svg');
   border: 1px solid white;
   border-radius: 2rem;
   width: 4rem;
@@ -44,7 +44,7 @@
   background-size: 2.4rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../optimized-images/thing-details-link.svg');
+  background-image: url('/images/thing-details-link.svg');
   border: 1px solid white;
   border-radius: 2rem;
   width: 4rem;
@@ -196,7 +196,7 @@
   height : 3rem;
   float: right;
   margin : 0.1rem 0;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -308,7 +308,7 @@
   width  : 3rem;
   height : 3rem;
   margin : 0.1rem 0;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -413,7 +413,7 @@
   background-size: 1.6rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../optimized-images/close.svg');
+  background-image: url('/images/close.svg');
   border-radius: 1.6rem;
   width: 3.2rem;
   height: 3.2rem;
@@ -429,7 +429,7 @@
   background-size: 1.6rem;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('../optimized-images/refresh.svg');
+  background-image: url('/images/refresh.svg');
   border-radius: 1.6rem;
   width: 3.2rem;
   height: 3.2rem;

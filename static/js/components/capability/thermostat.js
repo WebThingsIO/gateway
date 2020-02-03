@@ -51,11 +51,11 @@ template.innerHTML = `
     }
 
     .webthing-thermostat-capability-state-icon.heating {
-      background-image: url('/optimized-images/component-icons/thermostat-heating.svg');
+      background-image: url('/images/component-icons/thermostat-heating.svg');
     }
 
     .webthing-thermostat-capability-state-icon.cooling {
-      background-image: url('/optimized-images/component-icons/thermostat-cooling.svg');
+      background-image: url('/images/component-icons/thermostat-cooling.svg');
     }
 
     .webthing-thermostat-capability-contents {

@@ -34,7 +34,7 @@ class VideoProperty extends BaseComponent {
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/video.svg');
+      background-image: url('/images/component-icons/video.svg');
       background-position: center;
       position: relative;
       cursor: pointer;

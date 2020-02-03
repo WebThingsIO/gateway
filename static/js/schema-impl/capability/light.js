@@ -25,7 +25,7 @@ class Light extends OnOffSwitch {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/light.svg',
+        baseIcon: '/images/thing-icons/light.svg',
       }
     );
   }

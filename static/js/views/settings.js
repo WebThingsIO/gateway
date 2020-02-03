@@ -65,45 +65,45 @@ const SettingsScreen = {
     this.availableAddonsLastFetched = null;
 
     this.insertTitleElement(this.menu, fluent.getMessage('settings'),
-                            '/optimized-images/settings-icon.png');
+                            '/images/settings-icon.png');
     this.insertTitleElement(this.domainSettings, fluent.getMessage('domain'),
-                            '/optimized-images/domain-icon.png');
+                            '/images/domain-icon.png');
     this.insertTitleElement(this.userSettingsMain, fluent.getMessage('users'),
-                            '/optimized-images/users-icon.png');
+                            '/images/users-icon.png');
     this.insertTitleElement(this.userSettingsEdit,
                             fluent.getMessage('edit-user'),
-                            '/optimized-images/user.svg');
+                            '/images/user.svg');
     this.insertTitleElement(this.userSettingsAdd, fluent.getMessage('add-user'),
-                            '/optimized-images/user.svg');
+                            '/images/user.svg');
     this.insertTitleElement(this.adapterSettings, fluent.getMessage('adapters'),
-                            '/optimized-images/adapters-icon.png');
+                            '/images/adapters-icon.png');
     this.insertTitleElement(this.addonMainSettings, fluent.getMessage('addons'),
-                            '/optimized-images/add-on.svg');
+                            '/images/add-on.svg');
     const addonConfigTitle =
       this.insertTitleElement(this.addonConfigSettings,
                               fluent.getMessage('addon-config'),
-                              '/optimized-images/add-on.svg');
+                              '/images/add-on.svg');
     this.addonConfigTitleName =
       addonConfigTitle.querySelector('.section-title-name');
 
     this.insertTitleElement(this.addonDiscoverySettings,
                             fluent.getMessage('addon-discovery'),
-                            '/optimized-images/add-on.svg');
+                            '/images/add-on.svg');
     this.insertTitleElement(this.experimentSettings,
                             fluent.getMessage('experiments'),
-                            '/optimized-images/experiments-icon.png');
+                            '/images/experiments-icon.png');
     this.insertTitleElement(this.localizationSettings,
                             fluent.getMessage('localization'),
-                            '/optimized-images/localization-icon.svg');
+                            '/images/localization-icon.svg');
     this.insertTitleElement(this.updateSettings,
                             fluent.getMessage('updates'),
-                            '/optimized-images/update-icon.svg');
+                            '/images/update-icon.svg');
     this.insertTitleElement(this.authorizationSettings,
                             fluent.getMessage('authorizations'),
-                            '/optimized-images/authorization.svg');
+                            '/images/authorization.svg');
     this.insertTitleElement(this.developerSettings,
                             fluent.getMessage('developer'),
-                            '/optimized-images/developer-icon.svg');
+                            '/images/developer-icon.svg');
 
     this.discoverAddonsButton.addEventListener('click', () => {
       page('/settings/addons/discovered');
@@ -221,42 +221,42 @@ const SettingsScreen = {
     this.insertTitleElement(
       this.elements.network.unsupported.main,
       fluent.getMessage('network'),
-      '/optimized-images/network.svg'
+      '/images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.client.main,
       fluent.getMessage('network'),
-      '/optimized-images/network.svg'
+      '/images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.client.ethernet.main,
       fluent.getMessage('network-settings-ethernet'),
-      '/optimized-images/ethernet.svg'
+      '/images/ethernet.svg'
     );
     this.elements.network.client.wifi.title = this.insertTitleElement(
       this.elements.network.client.wifi.main,
       fluent.getMessage('network-settings-wifi'),
-      '/optimized-images/wifi.svg'
+      '/images/wifi.svg'
     ).querySelector('.section-title-name');
     this.insertTitleElement(
       this.elements.network.router.main,
       fluent.getMessage('network'),
-      '/optimized-images/network.svg'
+      '/images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.wan.main,
       fluent.getMessage('network-settings-internet-wan'),
-      '/optimized-images/internet.svg'
+      '/images/internet.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.lan.main,
       fluent.getMessage('network-settings-home-network-lan'),
-      '/optimized-images/network.svg'
+      '/images/network.svg'
     );
     this.insertTitleElement(
       this.elements.network.router.wlan.main,
       fluent.getMessage('network-settings-wifi-wlan'),
-      '/optimized-images/wifi.svg'
+      '/images/wifi.svg'
     );
 
     // Set up "Configure" button handlers

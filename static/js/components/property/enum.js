@@ -54,7 +54,7 @@ class EnumProperty extends BaseComponent {
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
-      background-image: url('/optimized-images/select-arrow-dark.svg');
+      background-image: url('/images/select-arrow-dark.svg');
       background-repeat: no-repeat;
       background-size: 1.25rem;
       background-position: calc(100% - 0.5rem);

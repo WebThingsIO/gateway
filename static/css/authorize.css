@@ -31,7 +31,7 @@ body.hidden {
   background-size: 3.2rem;
   background-repeat: no-repeat;
   background-position: 2rem;
-  background-image: url('../optimized-images/authorization.svg');
+  background-image: url('/images/authorization.svg');
 }
 
 #authorize-form {
@@ -58,11 +58,11 @@ body.hidden {
 }
 
 #cancel-button {
-  background-image: url('../optimized-images/close-16.svg');
+  background-image: url('/images/close-16.svg');
 }
 
 #authorize-button {
-  background-image: url('../optimized-images/check-16.svg');
+  background-image: url('/images/check-16.svg');
 }
 
 .generic-checkbox + label::before {

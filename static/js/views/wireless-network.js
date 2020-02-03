@@ -48,7 +48,7 @@ class WirelessNetwork {
     }
 
     const img =
-      `/optimized-images/${this.encryption ? 'wifi-secure' : 'wifi'}.svg`;
+      `/images/${this.encryption ? 'wifi-secure' : 'wifi'}.svg`;
 
     return `<li class="wireless-network-item">
         <div class="wireless-network-info ${infoClass}">

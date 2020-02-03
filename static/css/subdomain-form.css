@@ -128,7 +128,7 @@ button::-moz-focus-inner {
   width: 3rem;
   height: 3rem;
   margin: 0.1rem 0;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 

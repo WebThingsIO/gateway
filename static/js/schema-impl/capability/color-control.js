@@ -26,7 +26,7 @@ class ColorControl extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/color_control.svg',
+        baseIcon: '/images/thing-icons/color_control.svg',
       }
     );
   }

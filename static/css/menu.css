@@ -50,31 +50,31 @@
 }
 
 #main-menu #assistant-menu-item {
-  background-image: url('../optimized-images/assistant-icon.svg');
+  background-image: url('/images/assistant-icon.svg');
 }
 
 #main-menu #things-menu-item {
-  background-image: url('../optimized-images/things-icon.png');
+  background-image: url('/images/things-icon.png');
 }
 
 #main-menu #settings-menu-item {
-  background-image: url('../optimized-images/settings-icon.png');
+  background-image: url('/images/settings-icon.png');
 }
 
 #main-menu #floorplan-menu-item {
-  background-image: url('../optimized-images/floorplan-icon.png');
+  background-image: url('/images/floorplan-icon.png');
 }
 
 #main-menu #microphone-menu-item {
-  background-image: url('../optimized-images/microphone.svg');
+  background-image: url('/images/microphone.svg');
 }
 
 #main-menu #rules-menu-item {
-  background-image: url('../optimized-images/rules-icon.png');
+  background-image: url('/images/rules-icon.png');
 }
 
 #main-menu #logs-menu-item {
-  background-image: url('../optimized-images/logs-icon.svg');
+  background-image: url('/images/logs-icon.svg');
 }
 
 @keyframes show-scrim {
@@ -119,5 +119,5 @@
   text-align: left;
   cursor: pointer;
   width: 100%;
-  background-image: url('../optimized-images/log-out-icon.png');
+  background-image: url('/images/log-out-icon.png');
 }

@@ -25,7 +25,7 @@ class Camera extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/camera.svg',
+        baseIcon: '/images/thing-icons/camera.svg',
       }
     );
   }

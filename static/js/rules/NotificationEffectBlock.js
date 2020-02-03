@@ -13,7 +13,7 @@ class NotificationEffectBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate) {
     super(ruleArea, onPresentationChange, onRuleUpdate,
           fluent.getMessage('rule-notification'),
-          '/optimized-images/thing-icons/notification.svg');
+          '/images/thing-icons/notification.svg');
 
     const rulePartInfo = this.elt.querySelector('.rule-part-info');
 

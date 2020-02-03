@@ -25,7 +25,7 @@ class DoorSensor extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/door_sensor.svg',
+        baseIcon: '/images/thing-icons/door_sensor.svg',
       }
     );
   }

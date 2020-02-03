@@ -25,7 +25,7 @@ class Lock extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/lock.svg',
+        baseIcon: '/images/thing-icons/lock.svg',
       }
     );
   }

@@ -48,7 +48,7 @@ class BooleanProperty extends BaseComponent {
       display: block;
       width: 3rem;
       height: 3rem;
-      background: url("/optimized-images/checkbox-sprite.png") no-repeat 0 0;
+      background: url("/images/checkbox-sprite.png") no-repeat 0 0;
       background-size: 3rem auto;
     }
 

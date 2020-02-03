@@ -33,7 +33,7 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/temperature-sensor.svg');
+      background-image: url('/images/component-icons/temperature-sensor.svg');
       background-position: center 2rem;
     }
 

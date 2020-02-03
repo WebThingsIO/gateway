@@ -34,7 +34,7 @@ class ImageProperty extends BaseComponent {
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/image.svg');
+      background-image: url('/images/component-icons/image.svg');
       background-position: center;
       position: relative;
       cursor: pointer;

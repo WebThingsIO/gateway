@@ -27,7 +27,7 @@ class Thermostat extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/thermostat.svg',
+        baseIcon: '/images/thing-icons/thermostat.svg',
       }
     );
   }

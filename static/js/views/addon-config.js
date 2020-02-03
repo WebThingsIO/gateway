@@ -62,14 +62,14 @@ class AddonConfig {
     const icon = this.container.querySelector('.section-title-icon');
     switch (this.primaryType) {
       case 'adapter':
-        icon.src = '/optimized-images/adapters-icon.png';
+        icon.src = '/images/adapters-icon.png';
         break;
       case 'notifier':
-        icon.src = '/optimized-images/thing-icons/notification.svg';
+        icon.src = '/images/thing-icons/notification.svg';
         break;
       case 'extension':
       default:
-        icon.src = '/optimized-images/add-on.svg';
+        icon.src = '/images/add-on.svg';
         break;
     }
 

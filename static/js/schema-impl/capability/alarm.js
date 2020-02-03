@@ -25,7 +25,7 @@ class Alarm extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/alarm.svg',
+        baseIcon: '/images/thing-icons/alarm.svg',
       }
     );
   }

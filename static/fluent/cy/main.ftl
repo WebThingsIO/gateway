@@ -529,7 +529,7 @@ unsupported-field = Sgema maes heb ei gynnal
 
 ## Icon Sources
 
-thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
