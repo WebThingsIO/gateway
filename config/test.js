@@ -25,8 +25,5 @@ module.exports = {
   database: {
     removeBeforeOpen: true,
   },
-  ipc: {
-    protocol: 'inproc',
-  },
   oauthTestClients: true,
 };

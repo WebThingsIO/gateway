@@ -21,6 +21,7 @@ module.exports = {
   ports: {
     https: 4443,
     http: 8080,
+    ipc: 9500,
   },
   // Whether the gateway is behind port forwarding and should use simplified
   // port-free urls
@@ -33,9 +34,6 @@ module.exports = {
   },
   database: {
     removeBeforeOpen: false,
-  },
-  ipc: {
-    protocol: 'ipc',
   },
   settings: {
     defaults: {

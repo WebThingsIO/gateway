@@ -53,8 +53,6 @@ sudo apt install -y \
   libbluetooth-dev \
   libffi-dev \
   libglib2.0-dev \
-  libnanomsg-dev \
-  libnanomsg5 \
   libtool \
   libudev-dev \
   libusb-1.0-0-dev \

@@ -30,11 +30,12 @@ class PluginServer extends EventEmitter {
     this.verbose = verbose;
     this.plugins = new Map();
 
-    this.ipcSocket = new IpcSocket('PluginServer', 'rep',
-                                   config.get('ipc.protocol'),
-                                   'gateway.addonManager',
-                                   this.onMsg.bind(this));
-    this.ipcSocket.bind();
+    this.ipcSocket = new IpcSocket(
+      true,
+      config.get('ports.ipc'),
+      this.onMsg.bind(this),
+      'IpcSocket(plugin-server)'
+    );
     this.verbose &&
       console.log('Server bound to', this.ipcSocket.ipcAddr);
   }
@@ -73,55 +74,57 @@ class PluginServer extends EventEmitter {
    * from a plugin. This particular IPC channel is only used to register
    * plugins. Each plugin will get its own IPC channel once its registered.
    */
-  onMsg(msg) {
+  onMsg(msg, ws) {
     this.verbose &&
       console.log('PluginServer: Rcvd:', msg);
 
-    switch (msg.messageType) {
-      case MessageType.PLUGIN_REGISTER_REQUEST: {
-        const plugin = this.registerPlugin(msg.data.pluginId);
-        let language = 'en-US';
-        const units = {
-          temperature: 'degree celsius',
-        };
-        Settings.get('localization.language').then((lang) => {
-          if (lang) {
-            language = lang;
-          }
+    if (msg.messageType === MessageType.PLUGIN_REGISTER_REQUEST) {
+      const plugin = this.registerPlugin(msg.data.pluginId);
+      plugin.ws = ws;
+      let language = 'en-US';
+      const units = {
+        temperature: 'degree celsius',
+      };
+      Settings.get('localization.language').then((lang) => {
+        if (lang) {
+          language = lang;
+        }
 
-          return Settings.get('localization.units.temperature');
-        }).then((temp) => {
-          if (temp) {
-            units.temperature = temp;
-          }
+        return Settings.get('localization.units.temperature');
+      }).then((temp) => {
+        if (temp) {
+          units.temperature = temp;
+        }
 
-          return Promise.resolve();
-        }).catch(() => {
-          return Promise.resolve();
-        }).then(() => {
-          this.ipcSocket.sendJson({
-            messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
-            data: {
-              pluginId: msg.data.pluginId,
-              ipcBaseAddr: plugin.ipcBaseAddr,
-              gatewayVersion: pkg.version,
-              userProfile: {
-                addonsDir: UserProfile.addonsDir,
-                baseDir: UserProfile.baseDir,
-                configDir: UserProfile.configDir,
-                dataDir: UserProfile.dataDir,
-                mediaDir: UserProfile.mediaDir,
-                logDir: UserProfile.logDir,
-                gatewayDir: UserProfile.gatewayDir,
-              },
-              preferences: {
-                language,
-                units,
-              },
+        return Promise.resolve();
+      }).catch(() => {
+        return Promise.resolve();
+      }).then(() => {
+        ws.send(JSON.stringify({
+          messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
+          data: {
+            pluginId: msg.data.pluginId,
+            gatewayVersion: pkg.version,
+            userProfile: {
+              addonsDir: UserProfile.addonsDir,
+              baseDir: UserProfile.baseDir,
+              configDir: UserProfile.configDir,
+              dataDir: UserProfile.dataDir,
+              mediaDir: UserProfile.mediaDir,
+              logDir: UserProfile.logDir,
+              gatewayDir: UserProfile.gatewayDir,
             },
-          });
-        });
-        break;
+            preferences: {
+              language,
+              units,
+            },
+          },
+        }));
+      });
+    } else if (msg.data.pluginId) {
+      const plugin = this.getPlugin(msg.data.pluginId);
+      if (plugin) {
+        plugin.onMsg(msg);
       }
     }
   }
