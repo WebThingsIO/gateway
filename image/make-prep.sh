@@ -35,15 +35,15 @@ ${SCRIPT_NAME} [OPTION] raspbian-img-file prep-file
 
 where OPTION can be one of:
 
-  --noconsole       Don't enable the serial console
-  --ssh             Enable ssh
-  --ssid SSID       Specify the SSID for Wifi access
-  --password PWD    Specify the password for wifi access
-  --wifi-country CC Specify the WiFi country code to use (default: GB)
-  --no-i2c          Disable I2C bus
-  --hostname NAME   Specify the hostname
   --dd DEV          Issue a dd command to copy the image to an sdcard
+  --hostname NAME   Specify the hostname (default: gateway)
+  --no-console      Disable serial console
+  --no-i2c          Disable I2C bus
+  --password PWD    Specify the password for Wi-Fi access
+  --ssh             Enable SSH
+  --ssid SSID       Specify the SSID for Wi-Fi access
   --summary         Print summary of changed files
+  --wifi-country CC Specify the Wi-Fi country code (default: GB)
   -h, --help        Print this help
   -v, --verbose     Turn on some verbose reporting
   -x                Does a 'set -x'
@@ -245,7 +245,7 @@ main() {
           no-i2c)
             ENABLE_I2C=0
             ;;
-          noconsole)
+          no-console)
             ENABLE_CONSOLE=0
             ;;
           password)
