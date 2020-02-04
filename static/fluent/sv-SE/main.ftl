@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Inga auktoriseringar.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Inga experiment tillgängliga för närvarande.
+
 ## Localization Settings
 
 localization-settings-language-region = Språk & region
@@ -579,6 +581,12 @@ connecting-skipped = Gateway startas nu. Navigera till { $gateway-link } i din w
 creating-title = Skapar Wi-Fi nätverk — { -webthings-gateway-brand }
 creating-header = Skapar Wi-Fi nätverk…
 creating-content = Anslut till { $ssid } med det lösenord som du just skapade och navigera sedan till { $gateway-link } eller { $ip-link } i din webbläsare.
+
+## UI Updates
+
+ui-update-available = Ett uppdaterat användargränssnitt är tillgängligt.
+ui-update-reload = Ladda om
+ui-update-close = Stäng
 
 ## General Terms
 
