@@ -683,7 +683,7 @@ describe('things/', function() {
                                    jwt);
 
     const [messages, res] = await Promise.all([
-      webSocketRead(ws, 1),
+      webSocketRead(ws, 3),
       chai.request(server)
         .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
         .set('Accept', 'application/json')
@@ -691,8 +691,8 @@ describe('things/', function() {
         .send({power: true}),
     ]);
     expect(res.status).toEqual(200);
-    expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
-    expect(messages[0].data.power).toEqual(true);
+    expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
+    expect(messages[2].data.power).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -735,12 +735,12 @@ describe('things/', function() {
        };
        const [sendError, messages] = await Promise.all([
          webSocketSend(ws, request),
-         webSocketRead(ws, 1),
+         webSocketRead(ws, 3),
        ]);
 
        expect(sendError).toBeFalsy();
 
-       const error = messages[0];
+       const error = messages[2];
        expect(error.messageType).toBe(Constants.ERROR);
        expect(error.data.request).toMatchObject(request);
 
@@ -757,12 +757,12 @@ describe('things/', function() {
 
        const [sendError, messages] = await Promise.all([
          webSocketSend(ws, request),
-         webSocketRead(ws, 1),
+         webSocketRead(ws, 3),
        ]);
 
        expect(sendError).toBeFalsy();
 
-       const error = messages[0];
+       const error = messages[2];
        expect(error.messageType).toBe(Constants.ERROR);
 
        await webSocketClose(ws);
@@ -820,16 +820,16 @@ describe('things/', function() {
                .set(...headerAuth(jwt))
                .send({power: false});
            }),
-         webSocketRead(ws, 2),
+         webSocketRead(ws, 4),
        ]);
 
        expect(res.status).toEqual(200);
 
-       expect(messages[0].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[0].data.power).toEqual(true);
+       expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
+       expect(messages[2].data.power).toEqual(true);
 
-       expect(messages[1].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[1].data.power).toEqual(false);
+       expect(messages[3].messageType).toEqual(Constants.PROPERTY_STATUS);
+       expect(messages[3].data.power).toEqual(false);
 
        await webSocketClose(ws);
      });
@@ -864,22 +864,22 @@ describe('things/', function() {
            Events.add(eventASecond);
            return true;
          })(),
-         webSocketRead(ws, 2),
+         webSocketRead(ws, 4),
        ]);
 
        expect(res).toBeTruthy();
 
-       expect(messages[0].messageType).toEqual(Constants.EVENT);
-       expect(messages[0].data).toHaveProperty(eventAFirst.name);
-       expect(messages[0].data[eventAFirst.name]).toHaveProperty('data');
-       expect(messages[0].data[eventAFirst.name].data).toEqual(
+       expect(messages[2].messageType).toEqual(Constants.EVENT);
+       expect(messages[2].data).toHaveProperty(eventAFirst.name);
+       expect(messages[2].data[eventAFirst.name]).toHaveProperty('data');
+       expect(messages[2].data[eventAFirst.name].data).toEqual(
          eventAFirst.data);
 
-       expect(messages[1].messageType).toEqual(Constants.EVENT);
-       expect(messages[1].data).toHaveProperty(eventASecond.name);
-       expect(messages[1].data[eventASecond.name]).toHaveProperty('data');
+       expect(messages[3].messageType).toEqual(Constants.EVENT);
+       expect(messages[3].data).toHaveProperty(eventASecond.name);
+       expect(messages[3].data[eventASecond.name]).toHaveProperty('data');
        expect(
-         messages[1].data[eventASecond.name].data).toEqual(eventASecond.data);
+         messages[3].data[eventASecond.name].data).toEqual(eventASecond.data);
 
        await webSocketClose(ws);
      }
@@ -1001,20 +1001,20 @@ describe('things/', function() {
 
            return actionHref;
          })(),
-         webSocketRead(ws, 3),
+         webSocketRead(ws, 5),
        ]);
 
-       expect(messages[0].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[0].data.pair.status).toEqual('created');
-       expect(messages[0].data.pair.href).toEqual(actionHref);
-
-       expect(messages[1].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[1].data.pair.status).toEqual('pending');
-       expect(messages[1].data.pair.href).toEqual(actionHref);
-
        expect(messages[2].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[2].data.pair.status).toEqual('deleted');
+       expect(messages[2].data.pair.status).toEqual('created');
        expect(messages[2].data.pair.href).toEqual(actionHref);
+
+       expect(messages[3].messageType).toEqual(Constants.ACTION_STATUS);
+       expect(messages[3].data.pair.status).toEqual('pending');
+       expect(messages[3].data.pair.href).toEqual(actionHref);
+
+       expect(messages[4].messageType).toEqual(Constants.ACTION_STATUS);
+       expect(messages[4].data.pair.status).toEqual('deleted');
+       expect(messages[4].data.pair.href).toEqual(actionHref);
 
        await webSocketClose(ws);
      });
@@ -1138,10 +1138,10 @@ describe('things/', function() {
           },
         },
       }),
-      webSocketRead(ws, 1),
+      webSocketRead(ws, 2),
     ]);
 
-    const actionStatus = messages[0];
+    const actionStatus = messages[1];
     expect(actionStatus.messageType).toEqual(Constants.ACTION_STATUS);
     expect(actionStatus.data).toHaveProperty('reboot');
 
@@ -1175,14 +1175,14 @@ describe('things/', function() {
           },
         },
       }),
-      webSocketRead(ws, 2),
+      webSocketRead(ws, 3),
     ]);
 
-    const created = messages[0];
+    const created = messages[1];
     expect(created.messageType).toEqual(Constants.ACTION_STATUS);
     expect(created.data.pair.status).toEqual('created');
 
-    const err = messages[1];
+    const err = messages[2];
     expect(err.messageType).toEqual(Constants.ERROR);
 
     await webSocketClose(ws);
@@ -1198,10 +1198,10 @@ describe('things/', function() {
         messageType: 'tomato',
         data: {},
       }),
-      webSocketRead(ws, 1),
+      webSocketRead(ws, 2),
     ]);
 
-    const actionStatus = messages[0];
+    const actionStatus = messages[1];
     expect(actionStatus.messageType).toEqual(Constants.ERROR);
 
     await webSocketClose(ws);

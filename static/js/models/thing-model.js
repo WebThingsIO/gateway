@@ -61,7 +61,6 @@ class ThingModel extends Model {
     this.initWebSocket(ws);
 
     this.updateEvents();
-    this.updateProperties();
 
     return this;
   }

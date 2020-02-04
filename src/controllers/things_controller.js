@@ -401,6 +401,7 @@ function websocketHandler(websocket, request) {
   if (websocket.readyState !== WebSocket.OPEN) {
     return;
   }
+
   const thingId = request.params.thingId;
   const subscribedEventNames = {};
 
@@ -492,6 +493,21 @@ function websocketHandler(websocket, request) {
       thing.removeRemovedSubscription(onRem);
     };
     thingCleanups[thing.id] = thingCleanup;
+
+    // send initial property values
+    for (const name in thing.properties) {
+      AddonManager.getProperty(thing.id, name).then((value) => {
+        sendMessage({
+          id: thing.id,
+          messageType: Constants.PROPERTY_STATUS,
+          data: {
+            [name]: value,
+          },
+        });
+      }).catch((e) => {
+        console.error(`Failed to get property ${name}:`, e);
+      });
+    }
   }
 
   function onThingAdded(thing) {
