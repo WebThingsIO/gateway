@@ -22,10 +22,6 @@ const Menu = {
     this.element.addEventListener('click', this.handleClick.bind(this));
     this.scrim.addEventListener('click', this.handleScrimClick.bind(this));
     this.items = {};
-    this.items.assistant = [
-      document.getElementById('assistant-menu-item'),
-      document.getElementById('speech-wrapper'),
-    ];
     this.items.things = [document.getElementById('things-menu-item')];
     this.items.settings = [document.getElementById('settings-menu-item')];
     this.items.floorplan = [document.getElementById('floorplan-menu-item')];
@@ -34,8 +30,6 @@ const Menu = {
     this.items.logs = [document.getElementById('logs-menu-item')];
     this.currentItem = 'things';
     this.menuButton = document.getElementById('menu-button');
-
-    this.getExperimentSetting('assistant');
   },
 
   /**

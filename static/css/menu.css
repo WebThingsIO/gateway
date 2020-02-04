@@ -49,10 +49,6 @@
   display: none;
 }
 
-#main-menu #assistant-menu-item {
-  background-image: url('/images/assistant-icon.svg');
-}
-
 #main-menu #things-menu-item {
   background-image: url('/images/things-icon.png');
 }
@@ -63,10 +59,6 @@
 
 #main-menu #floorplan-menu-item {
   background-image: url('/images/floorplan-icon.png');
-}
-
-#main-menu #microphone-menu-item {
-  background-image: url('/images/microphone.svg');
 }
 
 #main-menu #rules-menu-item {

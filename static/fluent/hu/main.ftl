@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Segéd
 things-menu-item = Dolgok
 rules-menu-item = Szabályok
 logs-menu-item = Naplók
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Tulajdonságok megtekintése
 add-things =
     .aria-label = Új dolgok hozzáadása
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Segéd avatárja
-assistant-controls-text-input =
-    .placeholder = Hogyan segíthetek?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Nincsenek átalakítók.
 authorization-settings-no-authorizations = Nincsenek engedélyek.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Okos segéd
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = Ikon
 
-## Speech
-
-speech-unsupported = A jelenlegi böngésző nem támogatja a beszédet
-speech-didnt-get = Sajnálom, de nem értem.
-
 ## Errors
 
 unknown-state = Ismeretlen állapot.
@@ -614,8 +599,6 @@ back-button =
     .aria-label = Vissza
 overflow-button =
     .aria-label = További műveletek
-speech-button =
-    .aria-label = Hallgassa meg a beszédet
 submit-button =
     .aria-label = Elküldés
 edit-button =

@@ -166,39 +166,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 3.6rem;
 }
 
-#speech-button {
-  right: 2rem;
-  background: no-repeat center/100% url('/images/microphone.svg');
-  top: 2rem;
-}
-
-#speech-button.active {
-  background: no-repeat center/100% url('/images/microphone-active.svg');
-}
-
-#speech-wrapper {
-  box-sizing: border-box;
-  z-index: 0;
-  position: fixed;
-  right: 0rem;
-  top: 0rem;
-}
-
-#speech-wrapper.assistant,
-#speech-wrapper.hidden {
-  display: none;
-}
-
-#stm-levels {
-  display: block;
-  height: 20rem;
-  width: 20rem;
-}
-
-#stm-levels.hidden {
-  display: none;
-}
-
 #update-message-area {
   position: fixed;
   top: 3rem;

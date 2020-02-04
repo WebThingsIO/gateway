@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Asisten
 things-menu-item = Semua Thing
 rules-menu-item = Aturan
 logs-menu-item = Log
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Lihat Properti
 add-things =
     .aria-label = Tambahkan Thing Baru
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Avatar Asisten
-assistant-controls-text-input =
-    .placeholder = Bagaimana saya bisa membantu?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Tidak ada adapter tersedia.
 authorization-settings-no-authorizations = Tidak ada otorisasi.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Asisten Cerdas
 
 ## Localization Settings
 
@@ -419,9 +409,6 @@ thing-not-found = Thing tidak ditemukan.
 
 
 ## Page Titles
-
-
-## Speech
 
 
 ## Errors

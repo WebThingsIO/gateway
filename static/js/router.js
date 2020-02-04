@@ -14,7 +14,6 @@ const page = require('page');
 const Router = {
   init: () => {
     page('/', '/things');
-    page('/assistant', App.showAssistant.bind(App));
     page('/things', App.showThings.bind(App));
     page('/things/:thingId', App.showThings.bind(App));
     page('/things/:thingId/actions/:actionName', App.showThings.bind(App));

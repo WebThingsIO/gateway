@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Assistente
 things-menu-item = Coisas
 rules-menu-item = Regras
 logs-menu-item = Logs
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Ver propriedades
 add-things =
     .aria-label = Adicionar coisas novas
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Avatar do assistente
-assistant-controls-text-input =
-    .placeholder = Como posso ajudar?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Nenhum adaptador presente.
 authorization-settings-no-authorizations = Nenhuma autorização.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Assistente inteligente
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = Ícone
 
-## Speech
-
-speech-unsupported = O navegador atual não suporta fala
-speech-didnt-get = Desculpe, não entendi.
-
 ## Errors
 
 unknown-state = Estado desconhecido.
@@ -614,8 +599,6 @@ back-button =
     .aria-label = Voltar
 overflow-button =
     .aria-label = Ações adicionais
-speech-button =
-    .aria-label = Escutar voz
 submit-button =
     .aria-label = Enviar
 edit-button =

@@ -30,9 +30,6 @@ thing-details =
 add-things =
     .aria-label = Rnu taɣawsa tamaynut
 
-## Assistant
-
-
 ## Floorplan
 
 
@@ -190,9 +187,6 @@ logs-remove = Kkes
 
 
 ## Page Titles
-
-
-## Speech
 
 
 ## Errors

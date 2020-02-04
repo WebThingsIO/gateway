@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Ассистент
 things-menu-item = Вещи
 rules-menu-item = Правила
 logs-menu-item = Журналы
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Смотреть свойства
 add-things =
     .aria-label = Добавить новые вещи
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Аватарка ассистента
-assistant-controls-text-input =
-    .placeholder = Чем я могу помочь?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Адаптеров нет.
 authorization-settings-no-authorizations = Авторизаций нет.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Умный помощник
 
 ## Localization Settings
 
@@ -485,11 +475,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = Значок
 
-## Speech
-
-speech-unsupported = Ваш браузер не поддерживает речь
-speech-didnt-get = Извините, я не слышу.
-
 ## Errors
 
 unknown-state = Неизвестное состояние.
@@ -626,8 +611,6 @@ back-button =
     .aria-label = Назад
 overflow-button =
     .aria-label = Дополнительные действия
-speech-button =
-    .aria-label = Слушать речь
 submit-button =
     .aria-label = Отправить
 edit-button =

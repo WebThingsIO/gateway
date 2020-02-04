@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = 助手
 things-menu-item = 设备
 rules-menu-item = 规则
 logs-menu-item = 日志
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = 查看属性
 add-things =
     .aria-label = 添加新硬件
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = 助手头像
-assistant-controls-text-input =
-    .placeholder = 我能帮你什么？
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = 没有发现适配器。
 authorization-settings-no-authorizations = 尚无授权。
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = 智能助手
 
 ## Localization Settings
 
@@ -478,11 +468,6 @@ ethernet = 以太网
 wifi = Wi-Fi
 icon = 图标
 
-## Speech
-
-speech-unsupported = 当前浏览器不支持语音
-speech-didnt-get = 抱歉，我没听清。
-
 ## Errors
 
 unknown-state = 未知状态。
@@ -620,8 +605,6 @@ back-button =
     .aria-label = 返回
 overflow-button =
     .aria-label = 其他动作
-speech-button =
-    .aria-label = 聆听语音
 submit-button =
     .aria-label = 提交
 edit-button =

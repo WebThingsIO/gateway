@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Asistent
 things-menu-item = Věci
 rules-menu-item = Pravidla
 logs-menu-item = Protokoly
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Zobrazit vlastnosti
 add-things =
     .aria-label = Přidat nové věci
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Obrázek asistenta
-assistant-controls-text-input =
-    .placeholder = Jak vám mohu pomoci?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Nejsou k dispozici žádné adaptéry.
 authorization-settings-no-authorizations = Žádná oprávnění.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Chytrý asistent
 
 ## Localization Settings
 
@@ -485,11 +475,6 @@ ethernet = Ethernet
 wifi = Wi-Fi
 icon = Ikona
 
-## Speech
-
-speech-unsupported = Váš prohlížeč nepodporuje řeč
-speech-didnt-get = Promiňte, nerozumím.
-
 ## Errors
 
 unknown-state = Neznámý stav.
@@ -621,8 +606,6 @@ back-button =
     .aria-label = Zpět
 overflow-button =
     .aria-label = Další akce
-speech-button =
-    .aria-label = Poslouchat řeč
 submit-button =
     .aria-label = Odeslat
 edit-button =

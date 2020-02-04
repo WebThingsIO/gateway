@@ -355,22 +355,6 @@ const API = {
     return this.getJson('/notifiers');
   },
 
-  submitAssistantCommand(text) {
-    const opts = {
-      method: 'POST',
-      headers: this.headers('application/json'),
-      body: JSON.stringify({text}),
-    };
-
-    let ok;
-    return fetch('/commands', opts).then((res) => {
-      ok = res.ok;
-      return res.json();
-    }).then((body) => {
-      return [ok, body];
-    });
-  },
-
   startPairing(timeout) {
     return this.postJson('/actions', {
       pair: {

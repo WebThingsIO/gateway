@@ -17,7 +17,6 @@ wordmark =
 
 ## Menu Items
 
-assistant-menu-item = Cynorthwyydd
 things-menu-item = Pethau
 rules-menu-item = Rheolau
 logs-menu-item = Cofnodion
@@ -31,13 +30,6 @@ thing-details =
     .aria-label = Gweld Priodweddau
 add-things =
     .aria-label = Ychwanegu Pethau Newydd
-
-## Assistant
-
-assistant-avatar-image =
-    .alt = Afatar y Cynorthwyydd
-assistant-controls-text-input =
-    .placeholder = Sut fedra i helpu?
 
 ## Floorplan
 
@@ -139,8 +131,6 @@ adapter-settings-no-adapters = Dim addaswyr ar gael.
 authorization-settings-no-authorizations = Dim awdurdodi.
 
 ## Experiment Settings
-
-experiment-settings-smart-assistant = Cynorthwyydd Clyfar
 
 ## Localization Settings
 
@@ -506,11 +496,6 @@ ethernet = Ether-rwyd
 wifi = Diwifr
 icon = Eicon
 
-## Speech
-
-speech-unsupported = Nid yw eich porwr yn cynnal llais.
-speech-didnt-get = Ymddiheuriadau, dwi ddim yn deall.
-
 ## Errors
 
 unknown-state = Cyflwr anhysbys.
@@ -642,8 +627,6 @@ back-button =
     .aria-label = Nôl
 overflow-button =
     .aria-label = Gweithrediadau Ychwanegol
-speech-button =
-    .aria-label = Gwrando am Lais
 submit-button =
     .aria-label = Cyflwyno
 edit-button =
