@@ -87,7 +87,7 @@
   width: 3rem;
   height: 3rem;
   margin-top: -0.25rem;
-  background: url("../optimized-images/checkbox-sprite.png") no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
 
@@ -139,11 +139,11 @@
 }
 
 #addon-config-settings .json-schema-form .btn-add {
-  background-image: url('../optimized-images/add_arrayfield.svg');
+  background-image: url('/images/add_arrayfield.svg');
 }
 
 #addon-config-settings .json-schema-form .btn-remove {
-  background-image: url('../optimized-images/clear_arrayfield.svg');
+  background-image: url('/images/clear_arrayfield.svg');
   position: absolute;
   bottom: 1.5rem;
   right: 1rem;
@@ -200,7 +200,7 @@
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: 0.5em;
-  background-image: url('../optimized-images/check-16.svg');
+  background-image: url('/images/check-16.svg');
   margin: 1rem auto;
   font-size: 1.6rem;
   background-color: #597285;

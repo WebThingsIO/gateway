@@ -503,7 +503,7 @@ unsupported-field = Unsupported field schema
 
 ## Icon Sources
 
-thing-icons-thing-src = /optimized-images/thing-icons/thing.svg
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 

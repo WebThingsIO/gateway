@@ -24,7 +24,7 @@ class OnOffSwitch extends Thing {
   constructor(model, description, format, options) {
     options = options ||
       {
-        baseIcon: '/optimized-images/thing-icons/on_off_switch.svg',
+        baseIcon: '/images/thing-icons/on_off_switch.svg',
       };
 
     super(model, description, format, options);

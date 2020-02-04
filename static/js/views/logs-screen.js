@@ -97,12 +97,12 @@ class LogsScreen {
         // {
         //   listener: this.handleEdit.bind(this),
         //   name: 'Edit',
-        //   icon: '/optimized-images/edit-plain.svg',
+        //   icon: '/images/edit-plain.svg',
         // },
         {
           listener: this.handleRemove.bind(this),
           name: fluent.getMessage('remove'),
-          icon: '/optimized-images/remove.svg',
+          icon: '/images/remove.svg',
         },
       ];
       App.buildOverflowMenu(menu);

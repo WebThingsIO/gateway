@@ -33,13 +33,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/push-button-not-pushed.svg');
+      background-image: url('/images/component-icons/push-button-not-pushed.svg');
       background-position: center 2rem;
     }
 
     .webthing-push-button-capability-icon.pushed {
       background-color: white;
-      background-image: url('/optimized-images/component-icons/push-button-pushed.svg');
+      background-image: url('/images/component-icons/push-button-pushed.svg');
     }
 
     .webthing-push-button-capability-label {

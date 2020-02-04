@@ -33,13 +33,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/door-sensor-closed.svg');
+      background-image: url('/images/component-icons/door-sensor-closed.svg');
       background-position: center 2rem;
     }
 
     .webthing-door-sensor-capability-icon.open {
       background-color: white;
-      background-image: url('/optimized-images/component-icons/door-sensor-open.svg');
+      background-image: url('/images/component-icons/door-sensor-open.svg');
     }
 
     .webthing-door-sensor-capability-label {

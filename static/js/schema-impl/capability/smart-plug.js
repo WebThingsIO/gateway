@@ -28,7 +28,7 @@ class SmartPlug extends OnOffSwitch {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/smart_plug.svg',
+        baseIcon: '/images/thing-icons/smart_plug.svg',
       }
     );
   }

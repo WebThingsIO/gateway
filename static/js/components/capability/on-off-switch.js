@@ -33,13 +33,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/on-off-switch-off.svg');
+      background-image: url('/images/component-icons/on-off-switch-off.svg');
       background-position: center 2rem;
     }
 
     .webthing-on-off-switch-capability-icon.on {
       background-color: white;
-      background-image: url('/optimized-images/component-icons/on-off-switch-on.svg');
+      background-image: url('/images/component-icons/on-off-switch-on.svg');
     }
 
     .webthing-on-off-switch-capability-label {

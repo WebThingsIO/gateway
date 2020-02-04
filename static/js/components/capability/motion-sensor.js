@@ -33,13 +33,13 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/optimized-images/component-icons/motion-sensor-no-motion.svg');
+      background-image: url('/images/component-icons/motion-sensor-no-motion.svg');
       background-position: center 2rem;
     }
 
     .webthing-motion-sensor-capability-icon.motion {
       background-color: white;
-      background-image: url('/optimized-images/component-icons/motion-sensor-motion.svg');
+      background-image: url('/images/component-icons/motion-sensor-motion.svg');
     }
 
     .webthing-motion-sensor-capability-label {

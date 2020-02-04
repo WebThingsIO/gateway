@@ -96,7 +96,7 @@
 }
 
 #assistant-speech-button {
-  background-image: url('/optimized-images/microphone-icon.svg');
+  background-image: url('/images/microphone-icon.svg');
   width: 5.6rem;
   height: 5.6rem;
   background-color: #92bcda;
@@ -113,7 +113,7 @@
 }
 
 #assistant-speech-button.active {
-  background-image: url('/optimized-images/microphone-icon-active.svg');
+  background-image: url('/images/microphone-icon-active.svg');
 }
 
 #assistant-text-input {
@@ -134,7 +134,7 @@
 #assistant-text-submit {
   width: 3.2rem;
   height: 3.2rem;
-  background-image: url('/optimized-images/input-arrow.svg');
+  background-image: url('/images/input-arrow.svg');
   background-size: 1.6rem;
   background-position: center;
   background-repeat: no-repeat;

@@ -27,7 +27,7 @@ class EnergyMonitor extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/energy_monitor.svg',
+        baseIcon: '/images/thing-icons/energy_monitor.svg',
       }
     );
   }

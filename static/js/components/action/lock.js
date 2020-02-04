@@ -13,7 +13,7 @@ const Action = require('./action');
 
 class LockAction extends Action {
   constructor() {
-    super({icon: '/optimized-images/component-icons/lock-lock.svg'});
+    super({icon: '/images/component-icons/lock-lock.svg'});
   }
 }
 

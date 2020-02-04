@@ -638,7 +638,7 @@ const RuleScreen = {
     };
 
     const ttBlock = this.makeBlock('time-trigger-block',
-                                   '/optimized-images/thing-icons/clock.svg',
+                                   '/images/thing-icons/clock.svg',
                                    'Clock');
     const onTimeTriggerBlockDown =
       this.onBlockDown.bind(this, createTimeTriggerBlock);
@@ -648,7 +648,7 @@ const RuleScreen = {
 
     const neBlock = this.makeBlock(
       'notification-effect-block',
-      '/optimized-images/thing-icons/notification.svg',
+      '/images/thing-icons/notification.svg',
       'Browser Notification');
     const onNotificationEffectBlockDown =
       this.onBlockDown.bind(this, createNotificationEffectBlock);
@@ -671,7 +671,7 @@ const RuleScreen = {
       for (const outlet of notifier.outlets) {
         const noBlock = this.makeBlock(
           'notifier-outlet-block',
-          '/optimized-images/thing-icons/notification.svg',
+          '/images/thing-icons/notification.svg',
           `${outlet.name} Notification`);
         const onNotifierOutletBlockDown =
           this.onBlockDown.bind(

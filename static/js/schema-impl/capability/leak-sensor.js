@@ -25,7 +25,7 @@ class LeakSensor extends Thing {
       description,
       format,
       {
-        baseIcon: '/optimized-images/thing-icons/leak_sensor.svg',
+        baseIcon: '/images/thing-icons/leak_sensor.svg',
       }
     );
   }

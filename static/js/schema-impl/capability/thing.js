@@ -321,7 +321,7 @@ class Thing {
         menu.push({
           href: this.eventsHref,
           name: fluent.getMessage('event-log'),
-          icon: '/optimized-images/rules-icon.png',
+          icon: '/images/rules-icon.png',
         });
       } else {
         this.displayEvents = false;
@@ -330,11 +330,11 @@ class Thing {
       menu.push({
         listener: this.handleEdit.bind(this),
         name: fluent.getMessage('edit'),
-        icon: '/optimized-images/edit-plain.svg',
+        icon: '/images/edit-plain.svg',
       }, {
         listener: this.handleRemove.bind(this),
         name: fluent.getMessage('remove'),
-        icon: '/optimized-images/remove.svg',
+        icon: '/images/remove.svg',
       });
 
       App.buildOverflowMenu(menu);

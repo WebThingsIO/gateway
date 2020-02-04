@@ -7,8 +7,10 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
+const imageminMozjpeg = require('imagemin-mozjpeg');
 const path = require('path');
 const uuid = require('uuid/v1');
 const webpack = require('webpack');
@@ -90,6 +92,16 @@ const pluginsWeb = [
       to: path.join(__dirname, 'build/views/'),
     },
   ]),
+  new ImageminPlugin({
+    test: /\.(jpe?g|png|gif|svg)$/i,
+    pngquant: {quality: '65-90'},
+    plugins: [
+      imageminMozjpeg({
+        quality: 80,
+        progressive: true,
+      }),
+    ],
+  }),
   new webpack.SourceMapDevToolPlugin({
     test: /\.css$/,
     filename: '[file].map',

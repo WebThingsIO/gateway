@@ -47,12 +47,12 @@
 .rule-preview-button {
   top: 2rem;
   right: 2rem;
-  background-image: url('../optimized-images/play.svg');
+  background-image: url('/images/play.svg');
   display: none;
 }
 
 .rule-preview-button.stop {
-  background-image: url('../optimized-images/stop.svg');
+  background-image: url('/images/stop.svg');
 }
 
 #rule-view .rule-info {
@@ -85,7 +85,7 @@
 
 #rule-area {
   position: relative;
-  background: url('../optimized-images/background.png');
+  background: url('/images/background.png');
   flex: 1;
 }
 

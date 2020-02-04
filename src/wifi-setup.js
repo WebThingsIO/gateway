@@ -135,7 +135,7 @@ function handleWiFiSetup(request, response) {
       networks = results.map((result) => {
         const icon = result.encryption ? 'wifi-secure.svg' : 'wifi.svg';
         return {
-          icon: `/optimized-images/${icon}`,
+          icon: `/images/${icon}`,
           pwdRequired: result.encryption,
           ssid: result.ssid,
         };
