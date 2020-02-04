@@ -762,6 +762,8 @@ const SettingsScreen = {
   /* eslint-enable max-len */
 
   setupExperimentElements: function() {
+    // Uncomment this and change "example" to add a new experiment
+    // this.showExperimentCheckbox('example', 'example-experiment-checkbox');
   },
 
   setupDeveloperElements: function() {

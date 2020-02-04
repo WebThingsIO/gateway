@@ -247,6 +247,7 @@
 }
 
 #network-settings-unsupported-text,
+#no-experiments,
 #no-adapters {
   text-align: center;
   position: relative;
@@ -259,6 +260,7 @@
   font-size: 2rem;
 }
 
+#no-experiments,
 #no-adapters {
   transform: translateY(calc(-50% - 4.8rem));
 }
@@ -267,6 +269,7 @@
   transform: translateY(calc(-50% - 9.6rem));
 }
 
+#no-experiments.hidden,
 #no-adapters.hidden,
 #no-authorizations.hidden {
   display: none;
@@ -704,6 +707,13 @@
 #enable-ssh-item {
   background-image: url('/images/ssh-icon.svg');
 }
+
+/* Uncomment this and change "example" to add a new experiment */
+/*
+#example-experiment-item {
+  background-image: url('/images/example-icon.svg');
+}
+*/
 
 #view-internal-logs {
   background-image: url('/images/rules-icon.png');

@@ -30,6 +30,9 @@ const Menu = {
     this.items.logs = [document.getElementById('logs-menu-item')];
     this.currentItem = 'things';
     this.menuButton = document.getElementById('menu-button');
+
+    // Uncomment this and change "example" to add a new experiment
+    // this.getExperimentSetting('example');
   },
 
   /**
