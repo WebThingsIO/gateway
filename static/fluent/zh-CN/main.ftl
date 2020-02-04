@@ -595,6 +595,12 @@ creating-title = 正在建立 Wi-Fi 网络 — { -webthings-gateway-brand }
 creating-header = 正在建立 Wi-Fi 网络…
 creating-content = 请使用您方才创建的密码连接 { $ssid } 网络，并在网页浏览器中打开 { $gateway-link } 或 { $ip-link } 页面。
 
+## UI Updates
+
+ui-update-available = 用户界面已做更新。
+ui-update-reload = 重新载入
+ui-update-close = 关闭
+
 ## General Terms
 
 ok = 确定
