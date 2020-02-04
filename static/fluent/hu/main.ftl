@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Nincsenek engedélyek.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Okos segéd
-experiment-settings-logs = Naplók
 
 ## Localization Settings
 

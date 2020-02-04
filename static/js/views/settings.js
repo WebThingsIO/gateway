@@ -763,7 +763,6 @@ const SettingsScreen = {
 
   setupExperimentElements: function() {
     this.showExperimentCheckbox('assistant', 'assistant-experiment-checkbox');
-    this.showExperimentCheckbox('logs', 'logs-experiment-checkbox');
   },
 
   setupDeveloperElements: function() {

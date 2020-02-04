@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = No authorisations.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Smart Assistant
-experiment-settings-logs = Logs
 
 ## Localization Settings
 

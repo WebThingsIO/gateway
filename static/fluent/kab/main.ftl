@@ -94,7 +94,6 @@ user-settings-save = Sekles
 
 ## Experiment Settings
 
-experiment-settings-logs = Aɣmis
 
 ## Localization Settings
 

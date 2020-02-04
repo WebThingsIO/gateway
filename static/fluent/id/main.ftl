@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Tidak ada otorisasi.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Asisten Cerdas
-experiment-settings-logs = Log
 
 ## Localization Settings
 

@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Inga auktoriseringar.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Smart assistent
-experiment-settings-logs = Loggar
 
 ## Localization Settings
 

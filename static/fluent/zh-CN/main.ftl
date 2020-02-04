@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = 尚无授权。
 ## Experiment Settings
 
 experiment-settings-smart-assistant = 智能助手
-experiment-settings-logs = 日志
 
 ## Localization Settings
 

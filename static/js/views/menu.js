@@ -36,7 +36,6 @@ const Menu = {
     this.menuButton = document.getElementById('menu-button');
 
     this.getExperimentSetting('assistant');
-    this.getExperimentSetting('logs');
   },
 
   /**

@@ -141,7 +141,6 @@ authorization-settings-no-authorizations = Нема пуномоћја.
 ## Experiment Settings
 
 experiment-settings-smart-assistant = Паметни помоћник
-experiment-settings-logs = Записници
 
 ## Localization Settings
 
