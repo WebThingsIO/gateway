@@ -35,7 +35,7 @@ ${SCRIPT_NAME} [OPTION] raspbian-img-file prep-file
 
 where OPTION can be one of:
 
-  --dd DEV          Issue a dd command to copy the image to an sdcard
+  --dd DEV          Issue a dd command to copy the image to an SD card
   --hostname NAME   Specify the hostname (default: gateway)
   --no-console      Disable serial console
   --no-i2c          Disable I2C bus
@@ -207,7 +207,7 @@ update_hostname() {
 
 ###########################################################################
 #
-# Writes the image file to the sdcard
+# Writes the image file to the SD card
 #
 write_image() {
   # Unmount anything on the destination device

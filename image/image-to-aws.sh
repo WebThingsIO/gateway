@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script copies an image from an sdcard, zips it up, creates the
+# This script copies an image from an SD card, zips it up, creates the
 # sha256sum file and copies the 2 files to AWS.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -22,7 +22,7 @@ ${SCRIPT_NAME} [OPTION] base-img-file
 
 where OPTION can be one of:
 
-  --dd DEV        Issue a dd command to copy the image from an sdcard
+  --dd DEV        Issue a dd command to copy the image from an SD card
   --nozip         Skip creating the zip file
   -h, --help      Print this help
   -v, --verbose   Turn on some verbose reporting
@@ -58,7 +58,7 @@ image_to_aws() {
 
 ###########################################################################
 #
-# Writes the image file to the sdcard
+# Writes the image file to the SD card
 #
 read_image() {
   # Unmount anything on the source device
