@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Keine Authorisierungen.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Im Moment sind keine Experimente verfügbar.
+
 ## Localization Settings
 
 localization-settings-language-region = Sprache & Region
@@ -583,6 +585,12 @@ creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
 creating-content =
     Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
     aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
+
+## UI Updates
+
+ui-update-available = Für die Benutzeroberfläche ist ein Update verfügbar.
+ui-update-reload = Neu laden
+ui-update-close = Schließen
 
 ## General Terms
 
