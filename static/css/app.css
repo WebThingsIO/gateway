@@ -199,6 +199,44 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
+#update-message-area {
+  position: fixed;
+  top: 3rem;
+  width: 33%;
+  left: calc(33% - 1rem);
+  background-color: rgba(76, 124, 160, 0.6);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+  z-index: 100;
+}
+
+#update-message-area-text {
+  padding-bottom: 2rem;
+}
+
+#update-message-area > button {
+  background-color: #48779a;
+  font-size: 1.8rem;
+}
+
+#update-message-area > button:hover,
+#update-message-area > button:active {
+  background-color: #658196;
+}
+
+#update-message-area-reload {
+  margin-right: 1rem;
+}
+
+#update-message-area.hidden {
+  transform: translateY(-100%) translateY(-4rem);
+}
+
 #message-area {
   position: fixed;
   bottom: 3rem;
@@ -226,6 +264,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (max-width: 730px) {
+  #update-message-area,
   #message-area {
     width: calc(100% - 10rem);
     left: 3rem;

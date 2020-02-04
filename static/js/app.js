@@ -555,8 +555,58 @@ require('./components/property/voltage');
 require('./extension');
 
 if (navigator.serviceWorker) {
+  // eslint-disable-next-line no-inner-declarations
+  function notifyUpdateReady() {
+    const updateMessageArea = document.getElementById('update-message-area');
+
+    const updateMessageAreaReload =
+      document.getElementById('update-message-area-reload');
+    updateMessageAreaReload.addEventListener('click', () => {
+      window.location.reload(true);
+    });
+
+    const updateMessageAreaClose =
+      document.getElementById('update-message-area-close');
+    updateMessageAreaClose.addEventListener('click', () => {
+      updateMessageArea.classList.add('hidden');
+    });
+
+    updateMessageArea.classList.remove('hidden');
+  }
+
   navigator.serviceWorker.register('/service-worker.js', {
     scope: '/',
+  }).then((reg) => {
+    if (reg.active === null) {
+      return;
+    }
+
+    // If there is already an active service worker, plus another waiting, that
+    // means an updated one has been loaded in the background but is not yet
+    // active.
+    if (reg.waiting !== null) {
+      notifyUpdateReady();
+      return;
+    }
+
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state !== 'installed') {
+          return;
+        }
+
+        notifyUpdateReady();
+      });
+    });
+
+    // Check for an updated service worker every hour. This is useful when
+    // running as a PWA. When an update is found, the updatefound handler
+    // above will be called to allow the user to refresh properly.
+    setInterval(() => {
+      reg.update();
+    }, 60 * 60 * 1000);
   });
   navigator.serviceWorker.ready.then(Notifications.onReady);
 }
