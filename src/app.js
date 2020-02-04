@@ -52,7 +52,7 @@ Logs.open();
 
 const servers = {};
 servers.http = http.createServer();
-const httpApp = createGatewayApp(servers.http);
+const httpApp = createGatewayApp(servers.http, false);
 
 servers.https = createHttpsServer();
 let httpsApp = null;
@@ -98,7 +98,7 @@ function startHttpsGateway() {
     }
   }
 
-  httpsApp = createGatewayApp(servers.https);
+  httpsApp = createGatewayApp(servers.https, true);
   servers.https.on('request', httpsApp);
 
   const promises = [];
@@ -120,7 +120,7 @@ function startHttpsGateway() {
   }));
 
   // Redirect HTTP to HTTPS
-  servers.http.on('request', createRedirectApp(servers.https.address().port));
+  servers.http.on('request', httpsApp);
   const httpPort = config.get('ports.http');
 
   promises.push(new Promise((resolve) => {
@@ -231,7 +231,8 @@ function rulesEngineConfigure() {
   rulesEngine.configure();
 }
 
-function createApp() {
+function createApp(isSecure) {
+  const port = isSecure ? config.get('ports.https') : config.get('ports.http');
   const app = express();
   app.engine(
     'handlebars',
@@ -242,6 +243,45 @@ function createApp() {
   );
   app.set('view engine', 'handlebars');
   app.set('views', Constants.VIEWS_PATH);
+
+  // Redirect based on https://https.cio.gov/apis/
+  app.use((request, response, next) => {
+    // If the server is in non-HTTPS mode, or the request is already HTTPS,
+    // just carry on.
+    if (!isSecure || request.secure) {
+      next();
+      return;
+    }
+
+    // If the request is for a bare hostname, a .local address, or an IP
+    // address, allow it.
+    if (request.hostname.indexOf('.') < 0 ||
+        request.hostname.endsWith('.local') ||
+        ipRegex({exact: true}).test(request.hostname)) {
+      next();
+      return;
+    }
+
+    if (request.method !== 'GET') {
+      response.sendStatus(403);
+      return;
+    }
+
+    if (request.headers.authorization) {
+      response.sendStatus(403);
+      return;
+    }
+
+    let httpsUrl = `https://${request.hostname}`;
+
+    // If we're behind forwarding we can redirect to the port-free https url
+    if (port !== 443 && !config.get('behindForwarding')) {
+      httpsUrl += `:${port}`;
+    }
+
+    httpsUrl += request.url;
+    response.redirect(301, httpsUrl);
+  });
 
   // Use bodyParser to access the body of requests
   app.use(bodyParser.urlencoded({
@@ -259,8 +299,8 @@ function createApp() {
  * @param {http.Server|https.Server} server
  * @return {express.Router}
  */
-function createGatewayApp(server) {
-  const app = createApp();
+function createGatewayApp(server, isSecure) {
+  const app = createApp(isSecure);
   const opt = getOptions();
 
   // Inject WebSocket support
@@ -268,44 +308,6 @@ function createGatewayApp(server) {
 
   // Configure router with configured app and command line options.
   Router.configure(app, opt);
-  return app;
-}
-
-function createRedirectApp(port) {
-  const app = createApp();
-
-  // Redirect based on https://https.cio.gov/apis/
-  app.use((request, response) => {
-    if (request.method !== 'GET') {
-      response.sendStatus(403);
-      return;
-    }
-    if (request.headers.authorization) {
-      response.sendStatus(403);
-      return;
-    }
-    let httpsUrl = `https://${request.hostname}`;
-    // If we're behind forwarding we can redirect to the port-free https url
-    if (port !== 443 && !config.get('behindForwarding')) {
-      httpsUrl += `:${port}`;
-    }
-    httpsUrl += request.url;
-
-    // If the request is for a bare hostname, a .local address, or an IP
-    // address, use a 307 redirect to prevent caching. For instance, if the
-    // browser caches a redirect for gateway.local to the HTTPS version, things
-    // will break after resetting/reflashing the gateway.
-    //
-    // Otherwise, use a 301 to help mitigate DNS hijacking.
-    if (request.hostname.indexOf('.') < 0 ||
-        request.hostname.endsWith('.local') ||
-        ipRegex({exact: true}).test(request.hostname)) {
-      response.redirect(307, httpsUrl);
-    } else {
-      response.redirect(301, httpsUrl);
-    }
-  });
-
   return app;
 }
 
