@@ -20,32 +20,11 @@ const semver = require('semver');
 const UserProfile = require('../../user-profile');
 const {URLSearchParams} = require('url');
 
-const testPackageJsonFilename =
-  path.join(UserProfile.addonsDir, 'test-adapter', 'package.json');
 const testManifestJsonFilename =
   path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
 const sourceLicense = path.join(__dirname, '..', '..', '..', 'LICENSE');
 const destLicense =
   path.join(UserProfile.addonsDir, 'settings-adapter', 'LICENSE');
-
-const testPackageJson = {
-  name: 'test-adapter',
-  display_name: 'Test',
-  description: 'An adapter for integration tests',
-  version: '0',
-  files: [
-    'index.js',
-    'test-adapter.js',
-  ],
-  moziot: {
-    api: {
-      min: 2,
-      max: 2,
-    },
-    enabled: true,
-    exec: '{nodeLoader} {path}',
-  },
-};
 
 const testManifestJson = {
   author: 'Mozilla IoT',
@@ -82,34 +61,10 @@ function copyManifest(manifest) {
   return JSON.parse(JSON.stringify(manifest));
 }
 
-async function loadSettingsAdapterWithPackageJson(manifest) {
-  // If the adapter is already loaded, then unload it.
-  if (AddonManager.getAdapter('test-adapter')) {
-    await AddonManager.unloadAdapter('test-adapter');
-  }
-
-  if (fs.existsSync(testManifestJsonFilename)) {
-    fs.unlinkSync(testManifestJsonFilename);
-  }
-
-  // Create the package.json file for the test-adapter
-  jsonfile.writeFileSync(testPackageJsonFilename, manifest, {spaces: 2});
-
-  try {
-    await AddonManager.loadAddon('test-adapter');
-  } catch (err) {
-    return err;
-  }
-}
-
 async function loadSettingsAdapterWithManifestJson(manifest) {
   // If the adapter is already loaded, then unload it.
   if (AddonManager.getAdapter('test-adapter')) {
     await AddonManager.unloadAdapter('test-adapter');
-  }
-
-  if (fs.existsSync(testPackageJsonFilename)) {
-    fs.unlinkSync(testPackageJsonFilename);
   }
 
   // Create the manifest.json file for the test-adapter
@@ -393,71 +348,6 @@ describe('addons', () => {
     expect(
       res3.body.filter((a) => a.id === 'example-adapter').length
     ).toEqual(0);
-  });
-
-  it('Validate valid package.json loads fine', async () => {
-    const err = await loadSettingsAdapterWithPackageJson(testPackageJson);
-    expect(err).toBeUndefined();
-  });
-
-  it('Fail package.json with missing moziot key', async () => {
-    const manifest = copyManifest(testPackageJson);
-    delete manifest.moziot;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with non-object moziot', async () => {
-    const manifest = copyManifest(testPackageJson);
-    manifest.moziot = 123;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with missing moziot.api key', async () => {
-    const manifest = copyManifest(testPackageJson);
-    delete manifest.moziot.api;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with non-object moziot.api key', async () => {
-    const manifest = copyManifest(testPackageJson);
-    manifest.moziot.api = 456;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with missing moziot.api.min key', async () => {
-    const manifest = copyManifest(testPackageJson);
-    delete manifest.moziot.api.min;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with non-numeric moziot.api.min', async () => {
-    const manifest = copyManifest(testPackageJson);
-    manifest.moziot.api.min = 'abc';
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with missing version', async () => {
-    const manifest = copyManifest(testPackageJson);
-    delete manifest.version;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with non-string version', async () => {
-    const manifest = copyManifest(testPackageJson);
-    manifest.version = 1;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with missing files array', async () => {
-    const manifest = copyManifest(testPackageJson);
-    delete manifest.files;
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
-  });
-
-  it('Fail package.json with empty files array', async () => {
-    const manifest = copyManifest(testPackageJson);
-    manifest.files = [];
-    expect(await loadSettingsAdapterWithPackageJson(manifest)).toBeTruthy();
   });
 
   it('Validate valid manifest.json loads fine', async () => {
