@@ -225,6 +225,11 @@ const ThingsScreen = {
 
     this.refreshThing = () => {
       return App.gatewayModel.getThing(thingId).then(async (description) => {
+        if (!description) {
+          this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+          return;
+        }
+
         this.thingsElement.innerHTML = '';
 
         const thingModel = await App.gatewayModel.getThingModel(thingId);

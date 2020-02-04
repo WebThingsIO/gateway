@@ -22,7 +22,6 @@ class GatewayModel extends Model {
     this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
     this.connectWebSocket();
-    this.refreshThings();
     return this;
   }
 
@@ -123,7 +122,7 @@ class GatewayModel extends Model {
     });
   }
 
-  handleRemove(thingId) {
+  handleRemove(thingId, skipEvent = false) {
     if (this.thingModels.has(thingId)) {
       this.thingModels.get(thingId).cleanup();
       this.thingModels.delete(thingId);
@@ -131,32 +130,54 @@ class GatewayModel extends Model {
     if (this.things.has(thingId)) {
       this.things.delete(thingId);
     }
-    return this.handleEvent(Constants.DELETE_THINGS, this.things);
+
+    if (!skipEvent) {
+      return this.handleEvent(Constants.DELETE_THINGS, this.things);
+    }
   }
 
   connectWebSocket() {
     const thingsHref = `${window.location.origin}/things?jwt=${API.jwt}`;
     const wsHref = thingsHref.replace(/^http/, 'ws');
     this.ws = new ReopeningWebSocket(wsHref);
+    this.ws.addEventListener('open', this.refreshThings.bind(this));
     this.ws.addEventListener('message', this.onMessage);
   }
 
   onMessage(event) {
     const message = JSON.parse(event.data);
 
-    if (message.messageType !== 'connected') {
-      return;
+    switch (message.messageType) {
+      case 'connected':
+        this.connectedThings.set(message.id, message.data);
+        break;
+      case 'thingAdded':
+        this.refreshThings();
+        break;
+      case 'thingModified':
+        this.refreshThing(message.id);
+        break;
+      default:
+        break;
     }
-    this.connectedThings.set(message.id, message.data);
   }
 
   refreshThings() {
     return this.addQueue(() => {
       return API.getThings().then((things) => {
+        const fetchedIds = new Set();
         things.forEach((description) => {
           const thingId = decodeURIComponent(description.href.split('/').pop());
+          fetchedIds.add(thingId);
           this.setThing(thingId, description);
         });
+
+        const removedIds = Array.from(this.thingModels.keys()).filter((id) => {
+          return !fetchedIds.has(id);
+        });
+
+        removedIds.forEach((thingId) => this.handleRemove(thingId, true));
+
         return this.handleEvent(Constants.REFRESH_THINGS, this.things);
       }).catch((e) => {
         console.error(`Get things failed ${e}`);

@@ -86,6 +86,10 @@ const FloorplanScreen = {
   },
 
   refreshThings: function(things) {
+    if (this.view.classList.contains('edit')) {
+      return;
+    }
+
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       this.removeInteract(thing);

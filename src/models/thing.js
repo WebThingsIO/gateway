@@ -210,7 +210,11 @@ class Thing {
   setCoordinates(x, y) {
     this.floorplanX = x;
     this.floorplanY = y;
-    return Database.updateThing(this.id, this.getDescription());
+    return Database.updateThing(this.id, this.getDescription())
+      .then((descr) => {
+        this.emitter.emit(Constants.MODIFIED);
+        return descr;
+      });
   }
 
   /**
@@ -221,7 +225,11 @@ class Thing {
    */
   setLayoutIndex(index) {
     this.layoutIndex = index;
-    return Database.updateThing(this.id, this.getDescription());
+    return Database.updateThing(this.id, this.getDescription())
+      .then((descr) => {
+        this.emitter.emit(Constants.MODIFIED);
+        return descr;
+      });
   }
 
   /**
@@ -232,7 +240,11 @@ class Thing {
    */
   setTitle(title) {
     this.title = title;
-    return Database.updateThing(this.id, this.getDescription());
+    return Database.updateThing(this.id, this.getDescription())
+      .then((descr) => {
+        this.emitter.emit(Constants.MODIFIED);
+        return descr;
+      });
   }
 
   /**
@@ -300,7 +312,11 @@ class Thing {
     this.iconHref = path.join('/uploads', path.basename(tempfile.name));
 
     if (updateDatabase) {
-      return Database.updateThing(this.id, this.getDescription());
+      return Database.updateThing(this.id, this.getDescription())
+        .then((descr) => {
+          this.emitter.emit(Constants.MODIFIED);
+          return descr;
+        });
     }
   }
 
@@ -312,7 +328,11 @@ class Thing {
    */
   setSelectedCapability(capability) {
     this.selectedCapability = capability;
-    return Database.updateThing(this.id, this.getDescription());
+    return Database.updateThing(this.id, this.getDescription())
+      .then((descr) => {
+        this.emitter.emit(Constants.MODIFIED);
+        return descr;
+      });
   }
 
   /**
@@ -358,6 +378,22 @@ class Thing {
    */
   removeConnectedSubscription(callback) {
     this.emitter.removeListener(Constants.CONNECTED, callback);
+  }
+
+  /**
+   * Add a subscription to the Thing's modified state
+   * @param {Function} callback
+   */
+  addModifiedSubscription(callback) {
+    this.emitter.on(Constants.MODIFIED, callback);
+  }
+
+  /**
+   * Remove a subscription to the Thing's modified state
+   * @param {Function} callback
+   */
+  removeModifiedSubscription(callback) {
+    this.emitter.removeListener(Constants.MODIFIED, callback);
   }
 
   /**
@@ -477,6 +513,8 @@ class Thing {
    * @return {Promise} A promise which resolves with the description set.
    */
   updateFromDescription(description) {
+    const oldDescription = JSON.stringify(this.getDescription());
+
     // Update @context
     this['@context'] =
       description['@context'] || 'https://iot.mozilla.org/schemas';
@@ -630,7 +668,15 @@ class Thing {
       this.selectedCapability = '';
     }
 
-    return Database.updateThing(this.id, this.getDescription());
+    return Database.updateThing(this.id, this.getDescription())
+      .then((descr) => {
+        const newDescription = JSON.stringify(this.getDescription());
+        if (newDescription !== oldDescription) {
+          this.emitter.emit(Constants.MODIFIED);
+        }
+
+        return descr;
+      });
   }
 
   /**
