@@ -37,6 +37,8 @@ let RuleScreen;
 let LogsScreen;
 // eslint-disable-next-line prefer-const
 let Speech;
+// eslint-disable-next-line prefer-const
+let ReopeningWebSocket;
 
 const page = require('page');
 const shaka = require('shaka-player/dist/shaka-player.compiled');
@@ -144,7 +146,6 @@ const App = {
 
     this.gatewayModel = new GatewayModel();
 
-    this.wsBackoff = 1000;
     this.initWebSocket();
 
     this.extensions = {};
@@ -181,39 +182,16 @@ const App = {
 
   initWebSocket() {
     const path = `${this.ORIGIN.replace(/^http/, 'ws')}/internal-logs?jwt=${API.jwt}`;
-    this.messageSocket = new WebSocket(path);
-
-    this.messageSocket.addEventListener('open', () => {
-      // Reset the backoff period
-      this.wsBackoff = 1000;
-    }, {once: true});
-
-    const onMessage = (msg) => {
-      const message = JSON.parse(msg.data);
-      if (message && message.message) {
-        this.showMessage(message.message, 5000, message.url);
-      }
-    };
-
-    const cleanup = () => {
-      this.messageSocket.removeEventListener('message', onMessage);
-      this.messageSocket.removeEventListener('close', cleanup);
-      this.messageSocket.removeEventListener('error', cleanup);
-      this.messageSocket.close();
-      this.messageSocket = null;
-
-      setTimeout(() => {
-        this.wsBackoff *= 2;
-        if (this.wsBackoff > 30000) {
-          this.wsBackoff = 30000;
+    this.ws = new ReopeningWebSocket(path);
+    this.ws.addEventListener(
+      'message',
+      (msg) => {
+        const message = JSON.parse(msg.data);
+        if (message && message.message) {
+          this.showMessage(message.message, 5000, message.url);
         }
-        this.initWebSocket();
-      }, this.wsBackoff);
-    };
-
-    this.messageSocket.addEventListener('message', onMessage);
-    this.messageSocket.addEventListener('close', cleanup);
-    this.messageSocket.addEventListener('error', cleanup);
+      }
+    );
   },
 
   startPinger() {
@@ -494,6 +472,7 @@ RulesScreen = require('./views/rules-screen');
 RuleScreen = require('./views/rule-screen');
 LogsScreen = require('./views/logs-screen');
 Speech = require('./speech');
+ReopeningWebSocket = require('./models/reopening-web-socket');
 
 // load web components
 require('@webcomponents/webcomponentsjs/webcomponents-bundle');

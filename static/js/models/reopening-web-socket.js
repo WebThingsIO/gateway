@@ -18,6 +18,7 @@ class ReopeningWebSocket {
     this.onOpen = this.onOpen.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.reopen = this.reopen.bind(this);
+    this.closePermanently = this.closePermanently.bind(this);
 
     this.listeners = {
       open: [],
@@ -31,12 +32,14 @@ class ReopeningWebSocket {
     if (this.closing) {
       return;
     }
+
     this.opening = true;
     this.ws = new WebSocket(this.href);
+    window.addEventListener('beforeunload', this.closePermanently);
     this.ws.addEventListener('open', this.onOpen);
     this.ws.addEventListener('message', this.onMessage);
     this.ws.addEventListener('close', this.reopen);
-    this.ws.addEventListener('error', this.reopn);
+    this.ws.addEventListener('error', this.reopen);
   }
 
   /**
@@ -77,6 +80,7 @@ class ReopeningWebSocket {
     this.ws.removeEventListener('error', this.reopen);
     this.ws.close();
     this.ws = null;
+    window.removeEventListener('beforeunload', this.closePermanently);
 
     setTimeout(() => {
       this.backoff *= 2;
