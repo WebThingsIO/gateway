@@ -66,7 +66,7 @@ sudo apt install -y \
   wiringpi
 
 # Install Python add-on bindings
-_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.10.1#egg=gateway_addon"
+_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.11.0#egg=gateway_addon"
 sudo pip3 install "$_url"
 
 sudo pip3 install adapt-parser==0.3.4
