@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Brak upoważnień.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = W tej chwili nie ma żadnych dostępnych eksperymentów.
+
 ## Localization Settings
 
 localization-settings-language-region = Język i region
@@ -586,6 +588,12 @@ connecting-skipped = Brama jest teraz uruchamiana. Po podłączeniu do tej samej
 creating-title = Tworzenie sieci Wi-Fi — { -webthings-gateway-brand }
 creating-header = Tworzenie sieci Wi-Fi…
 creating-content = Połącz się z { $ssid } za pomocą właśnie utworzonego hasła, a następnie przejdź do { $gateway-link } lub { $ip-link } w przeglądarce.
+
+## UI Updates
+
+ui-update-available = Dostępny jest zaktualizowany interfejs użytkownika.
+ui-update-reload = Odśwież
+ui-update-close = Zamknij
 
 ## General Terms
 
