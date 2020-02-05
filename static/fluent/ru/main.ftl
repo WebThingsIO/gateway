@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Авторизаций нет.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = В настоящее время нет доступных экспериментов.
+
 ## Localization Settings
 
 localization-settings-language-region = Язык и регион
@@ -591,6 +593,12 @@ connecting-skipped =
 creating-title = Создание сети Wi-Fi — { -webthings-gateway-brand }
 creating-header = Создание сети Wi-Fi…
 creating-content = Подключитесь к { $ssid } с паролем, который вы только что создали, и перейдите по ссылке { $gateway-link } или { $ip-link } в браузере.
+
+## UI Updates
+
+ui-update-available = Доступен обновлённый пользовательский интерфейс.
+ui-update-reload = Обновить
+ui-update-close = Закрыть
 
 ## General Terms
 
