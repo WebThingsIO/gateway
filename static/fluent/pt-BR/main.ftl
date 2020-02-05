@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Nenhuma autorização.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Nenhum experimento disponível no momento.
+
 ## Localization Settings
 
 localization-settings-language-region = Idioma e região
@@ -579,6 +581,12 @@ connecting-skipped = O gateway está sendo iniciado agora. Acesse { $gateway-lin
 creating-title = Criação de rede Wi-Fi — { -webthings-gateway-brand }
 creating-header = Criando rede Wi-Fi…
 creating-content = Conecte-se a { $ssid } com a senha que você acabou de criar, depois acesse { $gateway-link } ou { $ip-link } no seu navegador.
+
+## UI Updates
+
+ui-update-available = Está disponível uma interface do usuário atualizada.
+ui-update-reload = Recarregar
+ui-update-close = Fechar
 
 ## General Terms
 
