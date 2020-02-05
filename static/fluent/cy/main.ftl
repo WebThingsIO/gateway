@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Dim awdurdodi.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Nid oes unrhyw arbrofion ar gael ar hyn o bryd.
+
 ## Localization Settings
 
 localization-settings-language-region = Iaith ac Ardal
@@ -607,6 +609,12 @@ connecting-skipped = Mae'r porth nawr yn cael ei gychwyn. Yn eich porwr gwe, ewc
 creating-title = Yn Creu Rhwydwaith Diwifr - { -webthings-gateway-brand }
 creating-header = Yn creu rhwydwaith diwifr…
 creating-content = Cysylltwch â { $ssid } gyda'r cyfrinair rydych newydd ei greu, yna ewch i { $gateway-link } neu { $ip-link } yn eich porwr gwe.
+
+## UI Updates
+
+ui-update-available = Mae rhyngwyneb defnyddiwr wedi'i ddiweddaru ar gael.
+ui-update-reload = Llwytho eto
+ui-update-close = Cau
 
 ## General Terms
 
