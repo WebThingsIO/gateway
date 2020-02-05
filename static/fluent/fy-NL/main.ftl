@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Gjin autorisaasje.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Der binne op dit stuit gjin eksperiminten beskikber.
+
 ## Localization Settings
 
 localization-settings-language-region = Taal & regio
@@ -590,6 +592,9 @@ creating-header = Wifi-netwurk meitsje…
 creating-content =
     Ferbyn mei { $ssid } en it ynstelde wachtwurd,
     navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
+
+## UI Updates
+
 
 ## General Terms
 
