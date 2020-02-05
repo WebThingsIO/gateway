@@ -132,6 +132,7 @@ authorization-settings-no-authorizations = Geen autorisatie.
 
 ## Experiment Settings
 
+
 ## Localization Settings
 
 localization-settings-language-region = Taal & Regio
@@ -579,6 +580,10 @@ connecting-skipped = De gateway wordt opgestart. Navigeer in uw webbrowser naar 
 creating-title = Wifi-netwerk maken – { -webthings-gateway-brand }
 creating-header = Wifi-netwerk maken…
 creating-content = Verbind met { $ssid } met het zojuist ingestelde wachtwoord, navigeer daarna in uw webbrowser naar { $gateway-link } of { $ip-link }.
+
+## UI Updates
+
+ui-update-close = Sluiten
 
 ## General Terms
 
