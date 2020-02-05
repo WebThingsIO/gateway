@@ -120,23 +120,6 @@ Under Fedora Linux:
 $ sudo dnf install libudev-devel libusb1-devel
 ```
 
-### Install graphics libraries
-
-Under Ubuntu/Debian Linux:
-```
-$ sudo apt install libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libpixman-1-dev
-```
-
-Under Fedora Linux:
-```
-$ sudo dnf install cairo-devel pango-devel libjpeg-turbo-devel giflib-devel pixman-devel
-```
-
-Under macOS:
-```
-$ brew install cairo pango libpng jpeg giflib librsvg pixman
-```
-
 ### Install autoconf
 
 Under Ubuntu/Debian Linux:
