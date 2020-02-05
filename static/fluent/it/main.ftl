@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Nessuna autorizzazione
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Non ci sono esperimenti disponibili al momento.
+
 ## Localization Settings
 
 localization-settings-language-region = Lingua e regione
@@ -579,6 +581,12 @@ connecting-skipped = Il gateway è in fase di avvio. Connettersi alla stessa ret
 creating-title = Creazione della rete Wi-Fi — { -webthings-gateway-brand }
 creating-header = Creazione della rete Wi-Fi…
 creating-content = Connettersi a { $ssid } con la password appena creata, quindi aprire { $gateway-link } o { $ip-link } nel browser.
+
+## UI Updates
+
+ui-update-available = È disponibile un aggiornamento dell’interfaccia utente.
+ui-update-reload = Ricarica
+ui-update-close = Chiudi
 
 ## General Terms
 
