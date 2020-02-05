@@ -132,6 +132,7 @@ authorization-settings-no-authorizations = Sin autorizaciones
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = En este momento no hay experimentos disponibles.
 
 ## Localization Settings
 
