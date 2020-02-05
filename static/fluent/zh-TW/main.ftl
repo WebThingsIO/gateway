@@ -132,6 +132,7 @@ authorization-settings-no-authorizations = 未授權。
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = 目前沒有可進行的實驗。
 
 ## Localization Settings
 
@@ -576,6 +577,7 @@ creating-content = 請使用您剛剛建立的密碼連線到 { $ssid } 網路�
 
 ## UI Updates
 
+ui-update-available = 已提供使用者介面更新。
 ui-update-reload = 重新載入
 ui-update-close = 關閉
 
