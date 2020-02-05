@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Aucune autorisation.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Aucune expérience n’est disponible pour le moment.
+
 ## Localization Settings
 
 localization-settings-language-region = Langue et région
@@ -579,6 +581,12 @@ connecting-skipped = La passerelle démarre. Restez connecté·e au même résea
 creating-title = Création du réseau Wi-Fi en cours — { -webthings-gateway-brand }
 creating-header = Création du réseau Wi-Fi en cours…
 creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
+
+## UI Updates
+
+ui-update-available = Une interface utilisateur mise à jour est disponible.
+ui-update-reload = Actualiser
+ui-update-close = Fermer
 
 ## General Terms
 
