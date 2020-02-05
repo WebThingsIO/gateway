@@ -252,7 +252,7 @@
   text-align: center;
   position: relative;
   top: 50%;
-  width: 100%;
+  width: calc(100% - 4rem);
   max-width: 60rem;
   margin: 0 auto;
   padding: 2rem;
