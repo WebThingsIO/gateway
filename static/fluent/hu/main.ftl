@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Nincsenek engedélyek.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Jelenleg nem érhető el kísérlet.
+
 ## Localization Settings
 
 localization-settings-language-region = Nyelv és régió
@@ -579,6 +581,12 @@ connecting-skipped = Az átjáró most elindul. A beállítás folytatásához n
 creating-title = Wi-Fi hálózat létrehozása – { -webthings-gateway-brand }
 creating-header = Wi-Fi hálózat létrehozása…
 creating-content = Kapcsolódjon a(z) { $ssid } hálózathoz a most létrehozott jelszóval, majd navigáljon a webböngészőjében ezek egyikére: { $gateway-link } vagy { $ip-link }.
+
+## UI Updates
+
+ui-update-available = Egy frissített felhasználói felület érhető el.
+ui-update-reload = Újratöltés
+ui-update-close = Bezárás
 
 ## General Terms
 
