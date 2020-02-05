@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = 尚无授权。
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = 现时无可进行的实验。
+
 ## Localization Settings
 
 localization-settings-language-region = 语言和区域
