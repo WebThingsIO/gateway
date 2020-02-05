@@ -132,6 +132,7 @@ authorization-settings-no-authorizations = Geen autorisatie.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Er zijn momenteel geen experimenten beschikbaar.
 
 ## Localization Settings
 
@@ -583,6 +584,8 @@ creating-content = Verbind met { $ssid } met het zojuist ingestelde wachtwoord, 
 
 ## UI Updates
 
+ui-update-available = Er is een bijgewerkte gebruikersinterface beschikbaar.
+ui-update-reload = Vernieuwen
 ui-update-close = Sluiten
 
 ## General Terms
