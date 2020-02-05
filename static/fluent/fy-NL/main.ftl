@@ -595,6 +595,9 @@ creating-content =
 
 ## UI Updates
 
+ui-update-available = Der is in bywurke brûkersynterface beskikber.
+ui-update-reload = Fernije
+ui-update-close = Slute
 
 ## General Terms
 
