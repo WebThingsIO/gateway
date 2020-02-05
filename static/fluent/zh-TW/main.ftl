@@ -132,6 +132,7 @@ authorization-settings-no-authorizations = 未授權。
 
 ## Experiment Settings
 
+
 ## Localization Settings
 
 localization-settings-language-region = 語言與地區
@@ -572,6 +573,11 @@ connecting-skipped = 正在啟動閘道器。請確認您連線到與閘道器�
 creating-title = 建立 Wi-Fi 網路 — { -webthings-gateway-brand }
 creating-header = 建立 Wi-Fi 網路…
 creating-content = 請使用您剛剛建立的密碼連線到 { $ssid } 網路，然後使用瀏覽器開啟 { $gateway-link } 或 { $ip-link }。
+
+## UI Updates
+
+ui-update-reload = 重新載入
+ui-update-close = 關閉
 
 ## General Terms
 
