@@ -17,6 +17,7 @@ const App = require('../../app');
 const BooleanDetail = require('../property/boolean');
 const BrightnessDetail = require('../property/brightness');
 const ColorDetail = require('../property/color');
+const ColorModeDetail = require('../property/color-mode');
 const ColorTemperatureDetail = require('../property/color-temperature');
 const Constants = require('../../constants');
 const CurrentDetail = require('../property/current');
@@ -189,6 +190,9 @@ class Thing {
             break;
           case 'ColorProperty':
             detail = new ColorDetail(this, name, convertedProperty);
+            break;
+          case 'ColorModeProperty':
+            detail = new ColorModeDetail(this, name, convertedProperty);
             break;
           case 'ColorTemperatureProperty':
             detail = new ColorTemperatureDetail(this, name, convertedProperty);
