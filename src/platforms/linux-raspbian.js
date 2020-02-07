@@ -340,6 +340,12 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
     return proc.status === 0;
   }
 
+  // Make sure Wi-Fi isn't blocked by rfkill
+  child_process.spawnSync(
+    'sudo',
+    ['rfkill', 'unblock', 'wifi']
+  );
+
   // Now, set the IP address back to a sane state
   proc = child_process.spawnSync(
     'sudo',
