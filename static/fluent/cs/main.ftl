@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Žádná oprávnění.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Momentálně nejsou dostupné žádné experimenty.
+
 ## Localization Settings
 
 localization-settings-language-region = Jazyk a region
@@ -586,6 +588,12 @@ connecting-skipped = Gateway je nyní spuštěna. Připojte se ke stejné síti 
 creating-title = Vytváření sítě Wi-Fi - { -webthings-gateway-brand }
 creating-header = Vytváření sítě Wi-Fi…
 creating-content = Připojte se k { $ssid } pomocí hesla, které jste právě vytvořili, a potom ve webovém prohlížeči přejděte na { $gateway-link } nebo { $ip-link }.
+
+## UI Updates
+
+ui-update-available = Je k dispozici aktualizace uživatelského rozhraní.
+ui-update-reload = Znovu načíst
+ui-update-close = Zavřít
 
 ## General Terms
 
