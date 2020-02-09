@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = 認証情報がありません。
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = 現在利用できる実験はありません。
+
 ## Localization Settings
 
 localization-settings-language-region = 言語と地域
@@ -579,6 +581,12 @@ connecting-skipped = ゲートウェイの動作を開始しました。同じ�
 creating-title = Wi-Fi ネットワークの作成 — { -webthings-gateway-brand }
 creating-header = Wi-Fi ネットワークを作成中…
 creating-content = 作成したパスワードを入力して { $ssid } に接続し、ウェブブラウザーで { $gateway-link } または { $ip-link } を開いてください。
+
+## UI Updates
+
+ui-update-available = 更新されたユーザーインターフェイスが利用できます。
+ui-update-reload = 再読み込み
+ui-update-close = 閉じる
 
 ## General Terms
 
