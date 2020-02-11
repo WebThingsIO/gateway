@@ -51,8 +51,7 @@ class AddonManager extends EventEmitter {
     this.devices = {};
     this.outlets = {};
     this.extensions = {};
-    this.deferredAdd = null;
-    this.deferredRemove = null;
+    this.pairing = false;
     this.addonsLoaded = false;
     this.installedAddons = new Map();
     this.deferredWaitForAdapter = new Map();
@@ -122,31 +121,26 @@ class AddonManager extends EventEmitter {
 
   /**
    * @method addNewThing
+   *
    * Initiates pairing on all of the adapters that support it.
-   * The user then presses the "button" on the device to be added.
-   * @returns A promise that resolves to the newly added device.
+   *
+   * @returns A promise that resolves when the pairing process is complete.
    */
   addNewThing(pairingTimeout) {
-    const deferredAdd = new Deferred();
-
-    if (this.deferredAdd) {
-      deferredAdd.reject('Add already in progress');
-    } else if (this.deferredRemove) {
-      deferredAdd.reject('Remove already in progress');
-    } else {
-      this.deferredAdd = deferredAdd;
-      this.adapters.forEach((adapter) => {
-        console.log('About to call startPairing on', adapter.name);
-        adapter.startPairing(pairingTimeout);
-      });
-      this.pairingTimeout = setTimeout(() => {
-        console.log('Pairing timeout');
-        this.emit(Constants.PAIRING_TIMEOUT);
-        this.cancelAddNewThing();
-      }, pairingTimeout * 1000);
+    if (this.pairing) {
+      return;
     }
 
-    return deferredAdd.promise;
+    this.pairing = true;
+    this.adapters.forEach((adapter) => {
+      console.log('About to call startPairing on', adapter.name);
+      adapter.startPairing(pairingTimeout);
+    });
+    this.pairingTimeout = setTimeout(() => {
+      console.log('Pairing timeout');
+      this.emit(Constants.PAIRING_TIMEOUT);
+      this.cancelAddNewThing();
+    }, pairingTimeout * 1000);
   }
 
   /**
@@ -155,19 +149,17 @@ class AddonManager extends EventEmitter {
    * Cancels a previous addNewThing request.
    */
   cancelAddNewThing() {
-    const deferredAdd = this.deferredAdd;
-
     if (this.pairingTimeout) {
       clearTimeout(this.pairingTimeout);
       this.pairingTimeout = null;
     }
 
-    if (deferredAdd) {
+    if (this.pairing) {
       this.adapters.forEach((adapter) => {
         adapter.cancelPairing();
       });
-      this.deferredAdd = null;
-      deferredAdd.reject('addNewThing cancelled');
+
+      this.pairing = false;
     }
   }
 
@@ -177,17 +169,12 @@ class AddonManager extends EventEmitter {
    * Cancels a previous removeThing request.
    */
   cancelRemoveThing(thingId) {
-    const deferredRemove = this.deferredRemove;
-    if (deferredRemove) {
-      const device = this.getDevice(thingId);
-      if (device) {
-        const adapter = device.adapter;
-        if (adapter) {
-          adapter.cancelRemoveThing(device);
-        }
+    const device = this.getDevice(thingId);
+    if (device) {
+      const adapter = device.adapter;
+      if (adapter) {
+        adapter.cancelRemoveThing(device);
       }
-      this.deferredRemove = null;
-      deferredRemove.reject('removeThing cancelled');
     }
   }
 
@@ -485,24 +472,6 @@ class AddonManager extends EventEmitter {
      * @type  {Thing}
      */
     this.emit(Constants.THING_ADDED, thing);
-
-    // If this device was added in response to addNewThing, then
-    // We need to cancel pairing mode on all of the "other" adapters.
-
-    const deferredAdd = this.deferredAdd;
-    if (deferredAdd) {
-      this.deferredAdd = null;
-      this.adapters.forEach((adapter) => {
-        if (adapter !== device.adapter) {
-          adapter.cancelPairing();
-        }
-      });
-      if (this.pairingTimeout) {
-        clearTimeout(this.pairingTimeout);
-        this.pairingTimeout = null;
-      }
-      deferredAdd.resolve(thing);
-    }
   }
 
   /**
@@ -522,12 +491,6 @@ class AddonManager extends EventEmitter {
      * @type  {Thing}
      */
     this.emit(Constants.THING_REMOVED, thing);
-
-    const deferredRemove = this.deferredRemove;
-    if (deferredRemove && deferredRemove.adapter == device.adapter) {
-      this.deferredRemove = null;
-      deferredRemove.resolve(device.id);
-    }
   }
 
   /**
@@ -812,31 +775,12 @@ class AddonManager extends EventEmitter {
    * @method removeThing
    *
    * Initiates removing a particular device.
-   * @returns A promise that resolves to the device which was actually removed.
-   * Note that it's possible that the device actually removed might
-   * not be the same as the one requested. This can occur with zwave for
-   * example if the user presses the button on a device which is different
-   * from the one that they requested removal of.
    */
   removeThing(thingId) {
-    const deferredRemove = new Deferred();
-
-    if (this.deferredAdd) {
-      deferredRemove.reject('Add already in progress');
-    } else if (this.deferredRemove) {
-      deferredRemove.reject('Remove already in progress');
-    } else {
-      const device = this.getDevice(thingId);
-      if (device) {
-        deferredRemove.adapter = device.adapter;
-        this.deferredRemove = deferredRemove;
-        device.adapter.removeThing(device);
-      } else {
-        deferredRemove.resolve(thingId);
-      }
+    const device = this.getDevice(thingId);
+    if (device) {
+      device.adapter.removeThing(device);
     }
-
-    return deferredRemove.promise;
   }
 
   /**

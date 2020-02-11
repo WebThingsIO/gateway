@@ -57,11 +57,7 @@ debugController.get('/adapters', (request, response) => {
  * Add a new device
  */
 debugController.get('/addNewThing', (request, response) => {
-  addonManager.addNewThing(60).then((thing) => {
-    console.log('debugController: addNewThing added thing', thing);
-  }, () => {
-    console.log('debugController: addNewThing cancelled');
-  });
+  addonManager.addNewThing(60);
   response.sendStatus(204);
 });
 
@@ -270,17 +266,8 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
  */
 debugController.get('/removeThing/:thingId', (request, response) => {
   const thingId = request.params.thingId;
-  addonManager.removeThing(thingId).then((thingIdRemoved) => {
-    console.log('debugController: removed', thingIdRemoved);
-    if (thingId != thingIdRemoved) {
-      console.log('debugController: Actually removed', thingIdRemoved,
-                  'even though request was for:', thingId);
-    }
-    response.status(200).json({removed: thingIdRemoved});
-  }, (str) => {
-    console.log('debugController: remove failed:', str);
-    response.status(500).send(`remove of ${thingId} failed: ${str}`);
-  });
+  addonManager.removeThing(thingId);
+  response.status(200).json({removed: thingId});
 });
 
 /**

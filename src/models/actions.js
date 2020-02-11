@@ -139,29 +139,27 @@ class Actions extends EventEmitter {
 
     switch (action.name) {
       case 'pair':
-        AddonManager.addNewThing(action.input.timeout).then(() => {
+        if (typeof action.input.timeout === 'number') {
+          AddonManager.addNewThing(action.input.timeout);
           action.updateStatus('completed');
-        }).catch((error) => {
-          action.error = error;
+        } else {
+          const msg = 'pair missing "timeout" parameter.';
+          action.error = msg;
           action.updateStatus('error');
-          console.error('Thing was not added');
-          console.error(error);
-        });
+          console.error(msg);
+        }
         break;
       case 'unpair':
         if (action.input.id) {
-          AddonManager.removeThing(action.input.id)
-            .then((thingIdUnpaired) => {
-              console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
-              Things.removeThing(thingIdUnpaired);
-              action.updateStatus('completed');
-            }).catch((error) => {
-              action.error = error;
-              action.updateStatus('error');
-              console.error('unpair of thing:',
-                            action.input.id, 'failed.');
-              console.error(error);
-            });
+          AddonManager.removeThing(action.input.id);
+          Things.removeThing(action.input.id).then(() => {
+            action.updateStatus('completed');
+          }).catch((error) => {
+            action.error = error;
+            action.updateStatus('error');
+            console.error('Thing was not removed');
+            console.error(error);
+          });
         } else {
           const msg = 'unpair missing "id" parameter.';
           action.error = msg;
@@ -198,8 +196,8 @@ class Actions extends EventEmitter {
       throw `Invalid action id: ${id}`;
     }
 
-    if (action.status === 'pending') {
-      if (action.thingId) {
+    if (action.thingId) {
+      if (action.status === 'pending') {
         Things.getThing(action.thingId).then((thing) => {
           if (!thing.removeAction(action)) {
             throw `Invalid thing action name: "${action.name}"`;
@@ -207,17 +205,17 @@ class Actions extends EventEmitter {
         }).catch((err) => {
           console.error('Error removing thing action:', err);
         });
-      } else {
-        switch (action.name) {
-          case 'pair':
-            AddonManager.cancelAddNewThing();
-            break;
-          case 'unpair':
-            AddonManager.cancelRemoveThing(action.input.id);
-            break;
-          default:
-            throw `Invalid action name: "${action.name}"`;
-        }
+      }
+    } else {
+      switch (action.name) {
+        case 'pair':
+          AddonManager.cancelAddNewThing();
+          break;
+        case 'unpair':
+          AddonManager.cancelRemoveThing(action.input.id);
+          break;
+        default:
+          throw `Invalid action name: "${action.name}"`;
       }
     }
 
