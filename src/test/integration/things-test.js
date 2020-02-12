@@ -745,7 +745,8 @@ describe('things/', function() {
        expect(error.data.request).toMatchObject(request);
 
        await webSocketClose(ws);
-     });
+     }
+  );
 
   it('should receive an error from sending a malformed message',
      async () => {
@@ -766,7 +767,8 @@ describe('things/', function() {
        expect(error.messageType).toBe(Constants.ERROR);
 
        await webSocketClose(ws);
-     });
+     }
+  );
 
   it('should fail to connect to a nonexistent thing over websocket',
      async () => {
@@ -782,7 +784,8 @@ describe('things/', function() {
        if (ws.readyState !== WebSocket.CLOSED) {
          await e2p(ws, 'close');
        }
-     });
+     }
+  );
 
   it('should only receive propertyStatus messages from the connected thing',
      async () => {
@@ -832,7 +835,8 @@ describe('things/', function() {
        expect(messages[3].data.power).toEqual(false);
 
        await webSocketClose(ws);
-     });
+     }
+  );
 
   it('should receive event notifications over websocket',
      async () => {
@@ -1017,7 +1021,8 @@ describe('things/', function() {
        expect(messages[4].data.pair.href).toEqual(actionHref);
 
        await webSocketClose(ws);
-     });
+     }
+  );
 
   it('should close websocket connections on thing deletion', async () => {
     await addDevice();
