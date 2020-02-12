@@ -82,3 +82,4 @@ exports.LogSeverity = {
 };
 
 exports.UNLOAD_PLUGIN_KILL_DELAY = 3000;
+exports.DEVICE_REMOVAL_TIMEOUT = 30000;

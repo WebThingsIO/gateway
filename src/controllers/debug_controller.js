@@ -57,8 +57,8 @@ debugController.get('/adapters', (request, response) => {
  * Add a new device
  */
 debugController.get('/addNewThing', (request, response) => {
-  addonManager.addNewThing(60).then((thing) => {
-    console.log('debugController: addNewThing added thing', thing);
+  addonManager.addNewThing(60).then(() => {
+    console.log('debugController: addNewThing added thing');
   }, () => {
     console.log('debugController: addNewThing cancelled');
   });

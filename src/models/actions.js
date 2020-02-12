@@ -150,10 +150,9 @@ class Actions extends EventEmitter {
         break;
       case 'unpair':
         if (action.input.id) {
-          AddonManager.removeThing(action.input.id)
-            .then((thingIdUnpaired) => {
-              console.log('unpair: thing:', thingIdUnpaired, 'was unpaired');
-              Things.removeThing(thingIdUnpaired);
+          const _finally = () => {
+            console.log('unpair: thing:', action.input.id, 'was unpaired');
+            Things.removeThing(action.input.id).then(() => {
               action.updateStatus('completed');
             }).catch((error) => {
               action.error = error;
@@ -162,6 +161,9 @@ class Actions extends EventEmitter {
                             action.input.id, 'failed.');
               console.error(error);
             });
+          };
+
+          AddonManager.removeThing(action.input.id).then(_finally, _finally);
         } else {
           const msg = 'unpair missing "id" parameter.';
           action.error = msg;
