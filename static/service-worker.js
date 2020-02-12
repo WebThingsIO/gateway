@@ -34,7 +34,8 @@ self.addEventListener('fetch', (event) => {
       url.pathname.endsWith('.map') ||
       url.pathname.endsWith('floorplan.svg') ||
       url.pathname.startsWith('/internal-logs') ||
-      url.pathname.startsWith('/extensions')) {
+      url.pathname.startsWith('/extensions') ||
+      url.pathname.startsWith('/oauth/allow')) {
     return;
   }
 
