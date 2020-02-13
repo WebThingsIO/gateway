@@ -370,7 +370,12 @@ class Thing {
    * HTML view for Thing.
    */
   attachExpandedView() {
-    for (const prop of Object.values(this.displayedProperties)) {
+    // Note: the UI will not show them in actual sorted order around the hub.
+    // However, sorting here will at least make it draw them in a consistent
+    // position each time.
+    const props = Array.from(Object.values(this.displayedProperties))
+      .sort((a, b) => a.detail.label.localeCompare(b.detail.label));
+    for (const prop of props) {
       // only attach the first time.
       if ((!prop.hasOwnProperty('attached') || !prop.attached) &&
             prop.hasOwnProperty('detail')) {
@@ -379,7 +384,9 @@ class Thing {
       }
     }
 
-    for (const action of Object.values(this.displayedActions)) {
+    const actions = Array.from(Object.values(this.displayedActions))
+      .sort((a, b) => a.detail.label.localeCompare(b.detail.label));
+    for (const action of actions) {
       // only attach the first time.
       if ((!action.hasOwnProperty('attached') || !action.attached) &&
             action.hasOwnProperty('detail')) {
