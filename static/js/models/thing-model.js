@@ -15,10 +15,21 @@ const Constants = require('../constants');
 class ThingModel extends Model {
   constructor(description, ws) {
     super();
-    this.title = description.title;
     this.properties = {};
     this.events = [];
     this.connected = false;
+
+    this.updateFromDescription(description);
+
+    this.initWebSocket(ws);
+
+    this.updateEvents();
+
+    return this;
+  }
+
+  updateFromDescription(description) {
+    this.title = description.title;
 
     // Parse base URL of Thing
     if (description.href) {
@@ -57,12 +68,6 @@ class ThingModel extends Model {
         this.eventDescriptions[eventName] = event;
       }
     }
-
-    this.initWebSocket(ws);
-
-    this.updateEvents();
-
-    return this;
   }
 
   /**

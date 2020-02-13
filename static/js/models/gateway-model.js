@@ -50,7 +50,10 @@ class GatewayModel extends Model {
   }
 
   setThing(thingId, description) {
-    if (!this.thingModels.has(thingId)) {
+    if (this.thingModels.has(thingId)) {
+      const thingModel = this.thingModels.get(thingId);
+      thingModel.updateFromDescription(description);
+    } else {
       const thingModel = new ThingModel(description, this.ws);
       thingModel.subscribe(
         Constants.DELETE_THING,
