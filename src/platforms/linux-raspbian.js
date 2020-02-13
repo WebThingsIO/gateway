@@ -1029,7 +1029,7 @@ function getNtpStatus() {
   }
 
   const lines = proc.stdout.split('\n').map((l) => l.trim());
-  const status = lines.find((l) => l.startsWith('System clock synchronized:'));
+  const status = lines.find((l) => l.indexOf('synchronized:') >= 0);
 
   if (!status) {
     return false;
