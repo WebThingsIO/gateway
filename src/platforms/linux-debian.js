@@ -22,6 +22,24 @@ function getSelfUpdateStatus() {
   };
 }
 
+/**
+ * Get the NTP synchronization status.
+ *
+ * @returns {boolean} Boolean indicating whether or not the time has been
+ *                    synchronized.
+ */
+function getNtpStatus() {
+  const platform = require('../platform');
+
+  // Inside Docker containers, we just assume the time is synchronized by the
+  // host.
+  if (platform.isDocker()) {
+    return true;
+  }
+
+  return Raspbian.getNtpStatus();
+}
+
 module.exports = {
   getDhcpServerStatus: Raspbian.getDhcpServerStatus,
   // setDhcpServerStatus: Raspbian.setDhcpServerStatus,
@@ -47,6 +65,6 @@ module.exports = {
   getValidWirelessCountries: Raspbian.getValidWirelessCountries,
   // getWirelessCountry,
   // setWirelessCountry,
-  getNtpStatus: Raspbian.getNtpStatus,
+  getNtpStatus,
   // restartNtpSync: Raspbian.restartNtpSync,
 };
