@@ -76,6 +76,8 @@ class Thing {
     if (Array.isArray(description['@type']) &&
         description['@type'].length > 0) {
       this['@type'] = description['@type'];
+    } else {
+      this['@type'] = [];
     }
 
     this.selectedCapability = description.selectedCapability;
