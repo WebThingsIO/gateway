@@ -52,7 +52,8 @@ class AddonManager extends EventEmitter {
     this.outlets = {};
     this.extensions = {};
     this.deferredAdd = null;
-    this.deferredRemove = null;
+    this.deferredRemovals = new Map();
+    this.removalTimeouts = new Map();
     this.addonsLoaded = false;
     this.installedAddons = new Map();
     this.deferredWaitForAdapter = new Map();
@@ -122,17 +123,16 @@ class AddonManager extends EventEmitter {
 
   /**
    * @method addNewThing
+   *
    * Initiates pairing on all of the adapters that support it.
-   * The user then presses the "button" on the device to be added.
-   * @returns A promise that resolves to the newly added device.
+   *
+   * @returns A promise when the pairing process is complete.
    */
   addNewThing(pairingTimeout) {
     const deferredAdd = new Deferred();
 
     if (this.deferredAdd) {
       deferredAdd.reject('Add already in progress');
-    } else if (this.deferredRemove) {
-      deferredAdd.reject('Remove already in progress');
     } else {
       this.deferredAdd = deferredAdd;
       this.adapters.forEach((adapter) => {
@@ -167,7 +167,7 @@ class AddonManager extends EventEmitter {
         adapter.cancelPairing();
       });
       this.deferredAdd = null;
-      deferredAdd.reject('addNewThing cancelled');
+      deferredAdd.resolve();
     }
   }
 
@@ -177,7 +177,13 @@ class AddonManager extends EventEmitter {
    * Cancels a previous removeThing request.
    */
   cancelRemoveThing(thingId) {
-    const deferredRemove = this.deferredRemove;
+    const timeout = this.removalTimeouts.get(thingId);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.removalTimeouts.delete(thingId);
+    }
+
+    const deferredRemove = this.deferredRemovals.get(thingId);
     if (deferredRemove) {
       const device = this.getDevice(thingId);
       if (device) {
@@ -186,7 +192,7 @@ class AddonManager extends EventEmitter {
           adapter.cancelRemoveThing(device);
         }
       }
-      this.deferredRemove = null;
+      this.deferredRemovals.delete(thingId);
       deferredRemove.reject('removeThing cancelled');
     }
   }
@@ -485,24 +491,6 @@ class AddonManager extends EventEmitter {
      * @type  {Thing}
      */
     this.emit(Constants.THING_ADDED, thing);
-
-    // If this device was added in response to addNewThing, then
-    // We need to cancel pairing mode on all of the "other" adapters.
-
-    const deferredAdd = this.deferredAdd;
-    if (deferredAdd) {
-      this.deferredAdd = null;
-      this.adapters.forEach((adapter) => {
-        if (adapter !== device.adapter) {
-          adapter.cancelPairing();
-        }
-      });
-      if (this.pairingTimeout) {
-        clearTimeout(this.pairingTimeout);
-        this.pairingTimeout = null;
-      }
-      deferredAdd.resolve(thing);
-    }
   }
 
   /**
@@ -523,9 +511,15 @@ class AddonManager extends EventEmitter {
      */
     this.emit(Constants.THING_REMOVED, thing);
 
-    const deferredRemove = this.deferredRemove;
+    const timeout = this.removalTimeouts.get(device.id);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.removalTimeouts.delete(device.id);
+    }
+
+    const deferredRemove = this.deferredRemovals.get(device.id);
     if (deferredRemove && deferredRemove.adapter == device.adapter) {
-      this.deferredRemove = null;
+      this.deferredRemovals.delete(device.id);
       deferredRemove.resolve(device.id);
     }
   }
@@ -812,24 +806,22 @@ class AddonManager extends EventEmitter {
    * @method removeThing
    *
    * Initiates removing a particular device.
+   *
    * @returns A promise that resolves to the device which was actually removed.
-   * Note that it's possible that the device actually removed might
-   * not be the same as the one requested. This can occur with zwave for
-   * example if the user presses the button on a device which is different
-   * from the one that they requested removal of.
    */
   removeThing(thingId) {
     const deferredRemove = new Deferred();
 
-    if (this.deferredAdd) {
-      deferredRemove.reject('Add already in progress');
-    } else if (this.deferredRemove) {
+    if (this.deferredRemovals.has(thingId)) {
       deferredRemove.reject('Remove already in progress');
     } else {
       const device = this.getDevice(thingId);
       if (device) {
         deferredRemove.adapter = device.adapter;
-        this.deferredRemove = deferredRemove;
+        this.deferredRemovals.set(thingId, deferredRemove);
+        this.removalTimeouts.set(thingId, setTimeout(() => {
+          this.cancelRemoveThing(thingId);
+        }, Constants.DEVICE_REMOVAL_TIMEOUT));
         device.adapter.removeThing(device);
       } else {
         deferredRemove.resolve(thingId);
