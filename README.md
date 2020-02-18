@@ -198,31 +198,6 @@ Under Fedora Linux:
 $ sudo dnf group install "C Development Tools and Libraries"
 ```
 
-### Install nanomsg
-
-#### Linux
-
-Under Ubuntu/Debian Linux:
-```
-$ sudo apt install libnanomsg4 libnanomsg-dev
-```
-Note: you may need to use libnanomsg5 instead of libnanomsg4 (under Debian buster, for example)
-
-#### Windows
-
-* Follow the directions from [nanomsg](https://github.com/nanomsg/nanomsg) to install in the same bitness as your Python 3.X.
-* If you want to build for 64-bit, you need to execute cmake with `-DCMAKE_GENERATOR_PLATFORM=x64`.
-* Add `C:\path\to\nanomsg\bin` to `PATH`.
-
-#### MacOS
-
-Under macOS:
-```
-$ brew install nanomsg
-```
-
-
-
 ### Install OpenSSL (Windows only)
 
 The Gateway depends on [`ursa`](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
@@ -248,18 +223,6 @@ This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https:/
   * Enable `python3` command using the following.
 ```
 mklink "C:\path\to\python3\python3.exe" "C:\path\to\python3\python.exe"
-```
-* Install nnpy
-```
-git clone https://github.com/nanomsg/nnpy.git
-cd nnpy
-```
-Add a file: site.cfg
-```
-[DEFAULT]
-include_dirs = C:\path\to\nanomsg\include\nanomsg
-library_dirs = C:\path\to\nanomsg\lib
-host_library = C:\path\to\nanomsg\bin\nanomsg.dll
 ```
 
 ### Install Python Add-on Bindings (Optional)

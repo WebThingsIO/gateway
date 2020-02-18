@@ -13,13 +13,11 @@
 
 const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
-const config = require('config');
 const Constants = require('../constants');
 const db = require('../db');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
-const {IpcSocket} = require('gateway-addon');
 const {LogSeverity} = require('../constants');
 const NotifierProxy = require('./notifier-proxy');
 const OutletProxy = require('./outlet-proxy');
@@ -48,13 +46,7 @@ class Plugin {
     this.adapters = new Map();
     this.notifiers = new Map();
     this.apiHandlers = new Map();
-    this.ipcBaseAddr = `gateway.plugin.${this.pluginId}`;
 
-    this.ipcSocket = new IpcSocket('AdapterProxy', 'pair',
-                                   config.get('ipc.protocol'),
-                                   this.ipcBaseAddr,
-                                   this.onMsg.bind(this));
-    this.ipcSocket.bind();
     this.exec = '';
     this.execPath = '.';
     this.forceEnable = forceEnable;
@@ -88,7 +80,6 @@ class Plugin {
     }
     return {
       pluginId: this.pluginId,
-      ipcBaseAddr: this.ipcBaseAddr,
       adapters: Array.from(this.adapters.values()).map((adapter) => {
         return adapter.asDict();
       }),
@@ -313,25 +304,10 @@ class Plugin {
         this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
         if (this.unloadedRcvdPromise) {
-          const socketsClosedPromise = new Deferred();
-          if (config.get('ipc.protocol') === 'inproc') {
-            // In test mode we want to wait until the sockets are actually
-            // closed before we resolve the unloadCompletedPromise.
-            this.unloadedRcvdPromise.resolve(socketsClosedPromise);
-            this.unloadedRcvdPromise = null;
-          } else {
-            // For non-test mode, the plugin is out-of-process so there is no
-            // way for us to know when then sockets are closed. We won't try
-            // try to restart the plugin until it exits, so there isn't any
-            // problem with resolving the unloadCompletedPromise right away.
-            socketsClosedPromise.resolve();
+          if (this.unloadCompletedPromise) {
+            this.unloadCompletedPromise.resolve();
+            this.unloadCompletedPromise = null;
           }
-          socketsClosedPromise.promise.then(() => {
-            if (this.unloadCompletedPromise) {
-              this.unloadCompletedPromise.resolve();
-              this.unloadCompletedPromise = null;
-            }
-          });
         }
         return;
 
@@ -601,7 +577,7 @@ class Plugin {
     };
     DEBUG && console.log('Plugin: sendMsg:', msg);
 
-    return this.ipcSocket.sendJson(msg);
+    return this.ws.send(JSON.stringify(msg));
   }
 
   /**
@@ -636,7 +612,6 @@ class Plugin {
       promise.reject();
       this.apiRequestPromises.delete(key);
     });
-    this.ipcSocket.close();
   }
 
   start() {

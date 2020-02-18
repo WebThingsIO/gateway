@@ -13,6 +13,7 @@
 const UserProfile = require('./user-profile');
 UserProfile.init();
 
+const AddonUtils = require('./addon-utils');
 const config = require('config');
 const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
@@ -24,7 +25,13 @@ const path = require('path');
 const {DONT_RESTART_EXIT_CODE} = require('gateway-addon').Constants;
 
 // Open the database.
-db.open();
+if (process.env.NODE_ENV !== 'test') {
+  // In test mode, we have a flag set to remove the database when it's opened.
+  // Therefore, we need to manually load settings and such, rather than using
+  // the normal db functions, in order to prevent removing the already open
+  // database.
+  db.open();
+}
 
 async function loadAddon(addonPath, verbose) {
   const packageName = path.basename(addonPath);
@@ -32,7 +39,13 @@ async function loadAddon(addonPath, verbose) {
   // Get any saved settings for this add-on.
   const key = `addons.${packageName}`;
   const configKey = `addons.config.${packageName}`;
-  const obj = await Settings.get(key);
+
+  let obj, savedConfig;
+  if (process.env.NODE_ENV === 'test') {
+    [obj, savedConfig] = AddonUtils.loadManifest(addonPath.split('/').pop());
+  } else {
+    obj = await Settings.get(key);
+  }
 
   const newSettings = {
     name: obj.id,
@@ -46,7 +59,10 @@ async function loadAddon(addonPath, verbose) {
     newSettings.moziot.schema = obj.schema;
   }
 
-  const savedConfig = await Settings.get(configKey);
+  if (process.env.NODE_ENV !== 'test') {
+    savedConfig = await Settings.get(configKey);
+  }
+
   if (savedConfig) {
     newSettings.moziot.config = savedConfig;
   } else {
@@ -55,11 +71,10 @@ async function loadAddon(addonPath, verbose) {
 
   const pluginClient = new PluginClient(
     packageName,
-    config.get('ipc.protocol'),
     {verbose}
   );
 
-  return pluginClient.register()
+  return pluginClient.register(config.get('ports.ipc'))
     .catch((e) => {
       throw new Error(
         `Failed to register add-on ${packageName} with gateway: ${e}`
@@ -77,11 +92,9 @@ async function loadAddon(addonPath, verbose) {
           );
         });
 
-        if (config.get('ipc.protocol') !== 'inproc') {
-          pluginClient.on('unloaded', () => {
-            sleep(500).then(() => process.exit(0));
-          });
-        }
+        pluginClient.on('unloaded', () => {
+          sleep(500).then(() => process.exit(0));
+        });
       } catch (e) {
         console.error(e);
         const message = `Failed to start add-on ${obj.name}: ${

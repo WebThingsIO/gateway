@@ -15,7 +15,6 @@ const AddonUtils = require('./addon-utils');
 const config = require('config');
 const Constants = require('./constants');
 const Deferred = require('./deferred');
-const dynamicRequire = require('./dynamic-require');
 const EventEmitter = require('events').EventEmitter;
 const Platform = require('./platform');
 const Settings = require('./models/settings');
@@ -34,7 +33,7 @@ const {ncp} = require('ncp');
 
 const pkg = require('../package.json');
 
-let PluginClient, PluginServer;
+let PluginServer;
 
 /**
  * @class AddonManager
@@ -659,7 +658,7 @@ class AddonManager extends EventEmitter {
       };
     }
 
-    if (!manifest.exec && config.get('ipc.protocol') !== 'inproc') {
+    if (!manifest.exec) {
       return;
     }
 
@@ -672,10 +671,6 @@ class AddonManager extends EventEmitter {
     } catch (e) {
       console.error(`Failed to create add-on data directory ${dataPath}:`, e);
     }
-
-    const errorCallback = (packageId, err) => {
-      console.error(`Failed to load add-on ${packageId}:`, err);
-    };
 
     // Now, we need to build an object so that add-ons which rely on things
     // being passed in can function properly.
@@ -697,51 +692,7 @@ class AddonManager extends EventEmitter {
 
     // Load the add-on
     console.log(`Loading add-on: ${manifest.id}`);
-    if (config.get('ipc.protocol') === 'inproc') {
-      // This is a special case where we load the adapter directly
-      // into the gateway, but we use IPC comms to talk to the
-      // add-on (i.e. for testing)
-      const pluginClient = new PluginClient(
-        manifest.id,
-        'inproc',
-        {verbose: false}
-      );
-      try {
-        const addonManagerProxy = await pluginClient.register();
-
-        // Set up an unload handler.
-        //
-        // When we're testing, we run in the same process and we need to close
-        // the sockets before the adapter.unload promise is resolved. So we
-        // hook into the plugin unloadedRcvdPromise.
-        addonManagerProxy.onUnload = () => {
-          const plugin = this.getPlugin(manifest.id);
-          if (plugin && plugin.unloadedRcvdPromise) {
-            plugin.unloadedRcvdPromise.promise.then((socketsClosedPromise) => {
-              pluginClient.unload();
-              socketsClosedPromise.resolve();
-            });
-          } else {
-            // Wait a small amount of time to allow the pluginUnloaded message
-            // to be processed by the server before closing.
-            setTimeout(() => {
-              pluginClient.unload();
-            }, 500);
-          }
-        };
-
-        const addonLoader = dynamicRequire(addonPath);
-        addonLoader(addonManagerProxy, newSettings, errorCallback);
-      } catch (e) {
-        throw new Error(
-          `Failed to register add-on ${manifest.id} with gateway: ${e}`
-        );
-      }
-    } else {
-      // This is the normal plugin adapter case, tell the PluginServer
-      // to load the plugin.
-      this.pluginServer.loadPlugin(addonPath, newSettings);
-    }
+    this.pluginServer.loadPlugin(addonPath, newSettings);
   }
 
   /**
@@ -757,7 +708,6 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    PluginClient = require('gateway-addon').PluginClient;
     PluginServer = require('./plugin/plugin-server');
 
     this.pluginServer = new PluginServer(this, {verbose: false});

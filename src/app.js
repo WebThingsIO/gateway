@@ -31,6 +31,7 @@ const config = require('config');
 const path = require('path');
 const expressHandlebars = require('express-handlebars');
 const ipRegex = require('ip-regex');
+const SegfaultHandler = require('segfault-handler');
 
 // Internal Dependencies
 const addonManager = require('./addon-manager');
@@ -45,6 +46,8 @@ const Things = require('./models/things');
 const TunnelService = require('./ssltunnel');
 const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
+
+SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
 // Open the databases
 db.open();

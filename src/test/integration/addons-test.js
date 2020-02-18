@@ -17,6 +17,7 @@ const path = require('path');
 const Platform = require('../../platform');
 const pkg = require('../../../package.json');
 const semver = require('semver');
+const sleep = require('../../sleep');
 const UserProfile = require('../../user-profile');
 const {URLSearchParams} = require('url');
 
@@ -151,6 +152,9 @@ describe('addons', () => {
 
     expect(addonConfig1).toHaveProperty('enabled');
     expect(addonConfig1.enabled).toBe(true);
+
+    // wait a few seconds for the add-on to fully load before toggling again
+    await sleep(3000);
 
     // Toggle off
     const res3 = await chai.request(server)
