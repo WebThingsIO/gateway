@@ -23,11 +23,6 @@ jobs:
         run: |
           sudo apt -qq update
           sudo apt install -y firefox python python-setuptools python3 python3-setuptools
-      - name: Start intent parser
-        run: |
-          git clone https://github.com/mozilla-iot/intent-parser
-          python3 -m pip install --user -e git+https://github.com/mycroftai/adapt#egg=adapter-parser
-          (python3 intent-parser/intent-parser-server.py &) &
       - name: Install node dependencies
         run: |
           npm install

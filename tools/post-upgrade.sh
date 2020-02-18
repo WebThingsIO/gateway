@@ -23,8 +23,8 @@ sudo pip3 install -U "$_url"
 # Uninstall py2 version of gateway-addon, if present
 sudo pip2 uninstall -y gateway_addon || true
 
-# Upgrade adapt-parser Python package
-sudo pip3 install -U adapt-parser==0.3.4
+# Uninstall adapt-parser, if present
+sudo pip3 uninstall adapt-parser || true
 
 sudo systemctl enable mozilla-iot-gateway.service
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
@@ -34,7 +34,7 @@ if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   touch "$HOME/.mozilla-iot/config/wifiskip"
 fi
 
-(cd "$HOME/mozilla-iot/intent-parser"; git pull)
-sudo systemctl restart mozilla-iot-gateway.intent-parser.service
+rm -rf "$HOME/mozilla-iot/intent-parser"
+sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
 touch .post_upgrade_complete

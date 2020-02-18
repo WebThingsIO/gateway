@@ -149,8 +149,6 @@ const Router = {
             require('./controllers/log_out_controller'));
     app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache, auth,
             require('./controllers/uploads_controller'));
-    app.use(API_PREFIX + Constants.COMMANDS_PATH, nocache, auth,
-            require('./controllers/commands_controller'));
     app.use(API_PREFIX + Constants.UPDATES_PATH, nocache, auth,
             require('./controllers/updates_controller'));
     app.use(API_PREFIX + Constants.ADDONS_PATH, nocache, auth,

@@ -79,13 +79,11 @@ function scopeAllowsRequest(scope, request) {
     const allowedDirect = requestPath.startsWith(path);
     const allowedThings = requestPath === Constants.THINGS_PATH &&
       path.startsWith(Constants.THINGS_PATH);
-    const allowedCommands = requestPath === Constants.COMMANDS_PATH &&
-      path.startsWith(Constants.THINGS_PATH);
     // Allow access to media only if scope covers all things
     const allowedMedia = requestPath.startsWith(Constants.MEDIA_PATH) &&
       path === Constants.THINGS_PATH;
 
-    if (allowedDirect || allowedThings || allowedCommands || allowedMedia) {
+    if (allowedDirect || allowedThings || allowedMedia) {
       if (!readwrite && request.method !== 'GET' &&
           request.method !== 'OPTIONS') {
         return false;
