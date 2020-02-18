@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Нема пуномоћја.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Нема доступних експеримената, у овом тренутку.
+
 ## Localization Settings
 
 localization-settings-language-region = Језик и област
@@ -156,6 +158,8 @@ failed = Неуспешно
 never = Никада
 in-progress = У току
 restarting = Поново покрећем
+checking-for-updates = Провера надоградњи……
+failed-to-check-for-updates = Тренутно није могуће проверити постојање надоградњи.
 
 ## Developer Settings
 
@@ -314,6 +318,8 @@ tunnel-setup-reclaim-domain = Изгледа да сте већ регистро
 check-email-for-token = Проверите вашу е-пошту, потражите жетон за повраћај и унесите га изнад.
 reclaim-failed = Нисам могао да повратим домен.
 subdomain-already-used = Овај поддомен се већ користи. Изаберите други.
+invalid-subdomain = Неисправан поддомен.
+invalid-email = Неисправна адреса е-поште.
 invalid-reclamation-token = Неисправан жетон за повраћај.
 domain-success = Успех! Сачекајте док вас преусмеримо…
 issuing-error = Грешка при издавањеу сертификата. Покушајте поново.
@@ -582,6 +588,12 @@ connecting-skipped = Мрежни пролаз се управо покреће.
 creating-title = Стварање бежичне мреже — { -webthings-gateway-brand }
 creating-header = Правим бежичну мрежу…
 creating-content = Повежите се на мрежу { $ssid } са лозинком коју сте управо направили, па онда отворите страницу { $gateway-link } или ИП адресу { $ip-link } у вашем веб прегледачу.
+
+## UI Updates
+
+ui-update-available = Новији кориснички интерфејс је доступан.
+ui-update-reload = Поново учитај
+ui-update-close = Затвори
 
 ## General Terms
 
