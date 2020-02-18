@@ -487,6 +487,7 @@ require('./components/property/alarm');
 require('./components/property/boolean');
 require('./components/property/brightness');
 require('./components/property/color');
+require('./components/property/color-mode');
 require('./components/property/color-temperature');
 require('./components/property/current');
 require('./components/property/enum');

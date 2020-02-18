@@ -39,6 +39,7 @@ class Light extends OnOffSwitch {
     this.brightnessProperty = null;
     this.colorProperty = null;
     this.colorTemperatureProperty = null;
+    this.colorModeProperty = null;
 
     // Look for properties by type first.
     for (const name in this.displayedProperties) {
@@ -51,6 +52,9 @@ class Light extends OnOffSwitch {
       } else if (this.colorTemperatureProperty === null &&
                  type === 'ColorTemperatureProperty') {
         this.colorTemperatureProperty = name;
+      } else if (this.colorModeProperty === null &&
+                 type === 'ColorModeProperty') {
+        this.colorModeProperty = name;
       }
     }
 
@@ -68,6 +72,11 @@ class Light extends OnOffSwitch {
     if (this.colorTemperatureProperty === null &&
         this.displayedProperties.hasOwnProperty('colorTemperature')) {
       this.colorTemperatureProperty = 'colorTemperature';
+    }
+
+    if (this.colorModeProperty === null &&
+        this.displayedProperties.hasOwnProperty('colorMode')) {
+      this.colorModeProperty = 'colorMode';
     }
   }
 
@@ -95,15 +104,23 @@ class Light extends OnOffSwitch {
     } else if (name === this.colorTemperatureProperty) {
       value = parseInt(value, 10);
       this.icon.colorTemperature = value;
+    } else if (name === this.colorModeProperty) {
+      this.icon.colorMode = value;
     }
   }
 
   iconView() {
     let color = '';
     if (this.colorProperty !== null) {
-      color = 'data-have-color="true"';
-    } else if (this.colorTemperatureProperty !== null) {
-      color = 'data-have-color-temperature="true"';
+      color += ' data-have-color="true"';
+    }
+
+    if (this.colorTemperatureProperty !== null) {
+      color += ' data-have-color-temperature="true"';
+    }
+
+    if (this.colorModeProperty !== null) {
+      color += ' data-have-color-mode="true"';
     }
 
     let brightness = '';
