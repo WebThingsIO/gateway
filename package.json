@@ -90,7 +90,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "clean-webpack-plugin": "^3.0.0",
-    "codecov": "^3.6.4",
+    "codecov": "^3.6.5",
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.6.4",
     "css-loader": "^3.4.2",
