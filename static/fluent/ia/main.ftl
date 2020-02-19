@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Nulle autorisationes.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Nulle experimentos actualmente disponibile.
+
 ## Localization Settings
 
 localization-settings-language-region = Lingua e region
@@ -579,6 +581,12 @@ connecting-skipped = Le passarella es ora in comenciamento. Aperi { $gateway-lin
 creating-title = Creation del rete wifi — { -webthings-gateway-brand }
 creating-header = Creation del rete wifi…
 creating-content = Connecte te a { $ssid } con le contrasigno que tu ha justo create, pois aperi { $gateway-link } o { $ip-link } per tu navigator del Web.
+
+## UI Updates
+
+ui-update-available = Un interfacie usator actualisate es disponibile.
+ui-update-reload = Recargar
+ui-update-close = Clauder
 
 ## General Terms
 
