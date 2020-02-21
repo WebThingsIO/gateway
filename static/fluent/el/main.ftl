@@ -19,6 +19,7 @@ wordmark =
 
 rules-menu-item = Κανόνες
 logs-menu-item = Αρχεία καταγραφής
+floorplan-menu-item = Κάτοψη
 settings-menu-item = Ρυθμίσεις
 log-out-button = Αποσύνδεση
 
@@ -29,6 +30,7 @@ thing-details =
 
 ## Floorplan
 
+upload-floorplan = Μεταφόρτωση κάτοψης…
 upload-floorplan-hint = (προτείνεται .svg)
 
 ## Top-Level Settings
@@ -139,22 +141,35 @@ checking-for-updates = Έλεγχος για ενημερώσεις…
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Ενεργοποίηση SSH
 
 ## Rules
 
+add-rule =
+    .aria-label = Δημιουργία νέου κανόνα
 rules = Κανόνες
+rules-rule-name = Όνομα κανόνα
+rules-rule-description = Περιγραφή κανόνα
 rules-preview-button =
     .alt = Προεπισκόπηση
 rules-delete-icon =
     .alt = Διαγραφή
+rules-delete-dialog = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
 rules-delete-cancel =
     .value = Ακύρωση
 rules-delete-confirm =
     .value = Αφαίρεση κανόνα
+rule-invalid = Μη έγκυρο
+rule-delete-prompt = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
 rule-delete-cancel-button =
     .value = Ακύρωση
 rule-delete-confirm-button =
     .value = Αφαίρεση κανόνα
+rule-select-property = Επιλογή ιδιότητας
+rule-event = Συμβάν
+rule-action = Ενέργεια
+rule-configure = Διαμόρφωση…
+rule-time-title = Ώρα ημέρας
 rule-notification = Ειδοποίηση
 notification-title = Τίτλος
 notification-message = Μήνυμα
@@ -163,8 +178,10 @@ rule-name = Όνομα κανόνα
 
 ## Logs
 
+logs = Αρχεία καταγραφής
 logs-device = Συσκευή
 logs-property = Ιδιότητα
+logs-retention = Διατήρηση
 logs-hours = Ώρες
 logs-days = Ημέρες
 logs-weeks = Εβδομάδες
@@ -176,6 +193,8 @@ logs-remove = Αφαίρεση
 
 add-thing-scanning-icon =
     .alt = Σάρωση
+add-thing-scanning = Σάρωση για νέες συσκευές…
+add-thing-add-by-url = Προσθήκη με URL…
 add-thing-done = Τέλος
 add-thing-cancel = Ακύρωση
 
@@ -187,17 +206,27 @@ context-menu-remove = Αφαίρεση
 
 ## Capabilities
 
+ColorControl = Έλεγχος χρώματος
+ColorSensor = Αισθητήρας χρώματος
+BinarySensor = Δυαδικός αισθητήρας
+MultiLevelSensor = Αισθητήρας πολλαπλών επιπέδων
+Light = Φως
 DoorSensor = Αισθητήρας πόρτας
 MotionSensor = Αισθητήρας κίνησης
 LeakSensor = Αισθητήρας διαρροής
 Camera = Κάμερα
 TemperatureSensor = Αισθητήρας θερμοκρασίας
+Alarm = Συναγερμός
 Thermostat = Θερμοστάτης
+Thing = Συσκευή
 
 ## Properties
 
+alarm = Συναγερμός
+on-off = Ενεργό/Ανενεργό
 on = Ενεργό
 off = Ανενεργό
+power = Ισχύς
 voltage = Τάση
 temperature = Θερμοκρασία
 current = Ρεύμα
@@ -207,7 +236,12 @@ brightness = Φωτεινότητα
 leak = Διαρροή
 color-temperature = Θερμοκρασία χρώματος
 motion = Κίνηση
-open = Άνοιγμα
+no-motion = Χωρίς κίνηση
+open = Ανοικτό
+closed = Κλειστό
+locked = Κλειδωμένο
+unlocked = Ξεκλειδωμένο
+jammed = Μπλοκαρισμένο
 unknown = Άγνωστο
 active = Ενεργό
 inactive = Ανενεργό
@@ -290,8 +324,10 @@ new-thing-save = Αποθήκευση
 new-thing-pin =
     .placeholder = Εισαγωγή PIN
 new-thing-pin-error = Λάθος PIN
+new-thing-pin-invalid = Μη έγκυρο PIN
 new-thing-cancel = Ακύρωση
 new-thing-submit = Υποβολή
+new-thing-saved = Αποθηκεύτηκε
 new-thing-done = Τέλος
 
 ## New Web Thing View
@@ -301,18 +337,25 @@ new-web-thing-from = από
 
 ## Empty div Messages
 
+thing-not-found = Δεν βρέθηκε συσκευή.
+action-not-found = Δεν βρέθηκε ενέργεια.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Εύρεση νέων προσθέτων
 author-unknown = Άγνωστο
 disable = Απενεργοποίηση
 enable = Ενεργοποίηση
 by = από
+addon-configure = Διαμόρφωση
 addon-update = Ενημέρωση
 addon-remove = Αφαίρεση
 addon-updating = Ενημέρωση…
+addon-updated = Ενημερώθηκε
 addon-config-applying = Εφαρμογή...
 addon-config-apply = Εφαρμογή
+addon-discovery-added = Προστέθηκε
 addon-discovery-add = Προσθήκη
 addon-discovery-installing = Εγκατάσταση…
 
@@ -358,11 +401,15 @@ login-log-in = Σύνδεση
 
 signup-title = Δημιουργία χρήστη — { -webthings-gateway-brand }
 signup-welcome = Καλώς ορίσατε!
+signup-create-account = Δημιουργήστε τον πρώτο σας λογαριασμό χρήστη:
+signup-password-mismatch = Οι κωδικοί πρόσβασης δεν ταιριάζουν
 signup-next = Επόμενο
 
 ## Tunnel Setup Page
 
 tunnel-setup-welcome = Καλώς ορίσατε
+tunnel-setup-input-subdomain =
+    .placeholder = υποτομέας
 tunnel-setup-privacy-policy = Πολιτική απορρήτου
 tunnel-setup-create = Δημιουργία
 tunnel-setup-skip = Παράλειψη
@@ -371,6 +418,7 @@ tunnel-setup-skip = Παράλειψη
 
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = από <<domain>>
+authorize-allow-all = Αποδοχή για όλες τις συσκευές
 authorize-allow =
     .value = Αποδοχή
 authorize-deny = Άρνηση
