@@ -132,6 +132,8 @@ authorization-settings-no-authorizations = Tidak ada otorisasi.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Tidak ada eksperimen tersedia saat ini.
+
 ## Localization Settings
 
 localization-settings-language-region = Bahasa & Wilayah
@@ -156,6 +158,8 @@ failed = Gagal
 never = Jangan pernah
 in-progress = Sedang Diproses
 restarting = Memulai ulang
+checking-for-updates = Memeriksa versi baru…
+failed-to-check-for-updates = Tidak dapat memeriksa pembaruan saat ini.
 
 ## Developer Settings
 
@@ -310,6 +314,16 @@ inactive = Tidak Aktif
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Sepertinya Anda telah mendaftarkan subdomain tersebut. Untuk mengambil alih silakan <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">klik di sini</a>.
+check-email-for-token = Silakan periksa surel Anda untuk mendapatkan token pengambilalihan dan tempel di atas.
+reclaim-failed = Tidak dapat mengambil alih domain.
+subdomain-already-used = Subdomain ini telah digunakan sebelumnya. Silakan gunakan subdomain berbeda.
+invalid-subdomain = Subdomain tidak valid.
+invalid-email = Alamat surel tidak valid.
+invalid-reclamation-token = Token pengambilalihan tidak valid.
+domain-success = Berhasil! Mohon tunggu, kami sedang mengalihkan…
+issuing-error = Gagal menerbitkan sertifikat. Silakan coba kembali.
+redirecting = Mengalihkan…
 
 ## Booleans
 
@@ -404,9 +418,19 @@ new-web-thing-from = dari
 
 no-things = Belum ada perangkat. Klik + untuk memindai perangkat yang tersedia.
 thing-not-found = Thing tidak ditemukan.
+action-not-found = Aksi tidak ditemukan.
+events-not-found = Benda ini tidak memiliki kegiatan.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Cari Pengaya Baru
+author-unknown = Tidak dikenal
+disable = Nonaktifkan
+enable = Aktifkan
+by = oleh
+addon-configure = Konfigurasikan
+addon-update = Perbarui
 
 ## Page Titles
 
@@ -445,6 +469,9 @@ thing-not-found = Thing tidak ditemukan.
 
 
 ## Creating Wi-Fi Network Page
+
+
+## UI Updates
 
 
 ## General Terms
