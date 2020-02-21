@@ -1,0 +1,4 @@
+*.sha256sum
+*.tar.gz
+*.zip
+pi-gen/
