@@ -171,6 +171,10 @@ rules-preview-button =
     .alt = Προεπισκόπηση
 rules-delete-icon =
     .alt = Διαγραφή
+rules-scroll-left =
+    .alt = Κύλιση προς τα αριστερά
+rules-scroll-right =
+    .alt = Κύλιση προς τα δεξιά
 rules-delete-prompt = Εναποθέστε εδώ συσκευές για αποσύνδεση
 rules-delete-dialog = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
 rules-delete-cancel =
@@ -215,6 +219,7 @@ logs-remove = Αφαίρεση
 add-thing-scanning-icon =
     .alt = Σάρωση
 add-thing-scanning = Σάρωση για νέες συσκευές…
+add-thing-add-adapters-hint = Δεν βρέθηκαν νέες συσκευές. Δοκιμάστε <a data-l10n-name="add-thing-add-adapters-hint-anchor">να προσθέσετε μερικά πρόσθετα</a>.
 add-thing-add-by-url = Προσθήκη με URL…
 add-thing-done = Τέλος
 add-thing-cancel = Ακύρωση
@@ -237,6 +242,7 @@ Light = Φως
 DoorSensor = Αισθητήρας πόρτας
 MotionSensor = Αισθητήρας κίνησης
 LeakSensor = Αισθητήρας διαρροής
+PushButton = Κουμπί
 VideoCamera = Βιντεοκάμερα
 Camera = Κάμερα
 TemperatureSensor = Αισθητήρας θερμοκρασίας
@@ -248,6 +254,8 @@ Thing = Συσκευή
 ## Properties
 
 alarm = Συναγερμός
+pushed = Πατημένο
+not-pushed = Μη πατημένο
 on-off = Ενεργό/Ανενεργό
 on = Ενεργό
 off = Ανενεργό
@@ -260,6 +268,7 @@ color = Χρώμα
 brightness = Φωτεινότητα
 leak = Διαρροή
 color-temperature = Θερμοκρασία χρώματος
+video-unsupported = Λυπούμαστε, το βίντεο δεν υποστηρίζεται στο πρόγραμμα περιήγησής σας.
 motion = Κίνηση
 no-motion = Χωρίς κίνηση
 open = Ανοικτό
@@ -273,6 +282,7 @@ inactive = Ανενεργό
 
 ## Domain Setup
 
+invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
 redirecting = Ανακατεύθυνση…
 
@@ -363,8 +373,10 @@ new-web-thing-from = από
 
 ## Empty div Messages
 
+no-things = Καμία συσκευή ακόμα. Κάντε κλικ στο + για εύρεση διαθέσιμων συσκευών.
 thing-not-found = Δεν βρέθηκε συσκευή.
 action-not-found = Δεν βρέθηκε ενέργεια.
+events-not-found = Αυτή η συσκευή δεν έχει συμβάντα.
 
 ## Add-on Settings
 
@@ -421,6 +433,7 @@ failed-save = Αποτυχία αποθήκευσης.
 
 ## Schema Form
 
+unsupported-field = Μη υποστηριζόμενο σχήμα πεδίου
 
 ## Icon Sources
 
