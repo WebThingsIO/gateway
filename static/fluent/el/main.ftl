@@ -17,6 +17,7 @@ wordmark =
 
 ## Menu Items
 
+things-menu-item = Συσκευές
 rules-menu-item = Κανόνες
 logs-menu-item = Αρχεία καταγραφής
 floorplan-menu-item = Κάτοψη
@@ -27,6 +28,8 @@ log-out-button = Αποσύνδεση
 
 thing-details =
     .aria-label = Προβολή ιδιοτήτων
+add-things =
+    .aria-label = Προσθήκη νέων συσκευών
 
 ## Floorplan
 
@@ -42,17 +45,21 @@ settings-add-ons = Πρόσθετα
 settings-adapters = Προσαρμογείς
 settings-localization = Μετάφραση
 settings-updates = Ενημερώσεις
+settings-authorizations = Εξουσιοδοτήσεις
 settings-experiments = Πειράματα
+settings-developer = Προγραμματιστής
 
 ## Domain Settings
 
 domain-settings-local-label = Τοπική πρόσβαση
+domain-settings-local-update = Ενημέρωση ονόματος υπολογιστή
 domain-settings-remote-access = Απομακρυσμένη πρόσβαση
 domain-settings-local-name =
     .placeholder = πύλη
 
 ## Network Settings
 
+network-settings-unsupported = Οι ρυθμίσεις δικτύου δεν υποστηρίζονται σε αυτή την πλατφόρμα.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -69,6 +76,8 @@ network-settings-wan-mode = Λειτουργία
 network-settings-home-network-lan = Οικιακό δίκτυο (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Διεύθυνση IP
+network-settings-dhcp = Αυτόματη (DHCP)
+network-settings-static = Μη αυτόματη (Στατική IP)
 network-settings-static-ip-address = Στατική διεύθυνση IP
 network-settings-gateway = Πύλη
 network-settings-done = Τέλος
@@ -84,6 +93,11 @@ network-settings-network-name = Όνομα δικτύου (SSID)
 wireless-connected = Συνδέθηκε
 wireless-icon =
     .alt = Δίκτυο Wi-Fi
+failed-ethernet-configure = Αποτυχία διαμόρφωσης Ethernet.
+failed-wifi-configure = Αποτυχία διαμόρφωσης Wi-Fi.
+failed-wan-configure = Αποτυχία διαμόρφωσης WAN.
+failed-lan-configure = Αποτυχία διαμόρφωσης LAN.
+failed-wlan-configure = Αποτυχία διαμόρφωσης WLAN.
 
 ## User Settings
 
@@ -110,6 +124,7 @@ adapter-settings-no-adapters = Δεν υπάρχουν προσαρμογείς.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Καμία εξουσιοδότηση.
 
 ## Experiment Settings
 
@@ -149,11 +164,14 @@ add-rule =
     .aria-label = Δημιουργία νέου κανόνα
 rules = Κανόνες
 rules-rule-name = Όνομα κανόνα
+rules-customize-rule-name-icon =
+    .alt = Προσαρμογή ονόματος κανόνα
 rules-rule-description = Περιγραφή κανόνα
 rules-preview-button =
     .alt = Προεπισκόπηση
 rules-delete-icon =
     .alt = Διαγραφή
+rules-delete-prompt = Εναποθέστε εδώ συσκευές για αποσύνδεση
 rules-delete-dialog = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
 rules-delete-cancel =
     .value = Ακύρωση
@@ -174,6 +192,9 @@ rule-notification = Ειδοποίηση
 notification-title = Τίτλος
 notification-message = Μήνυμα
 notification-level = Επίπεδο
+notification-low = Χαμηλό
+notification-normal = Κανονικό
+notification-high = Υψηλό
 rule-name = Όνομα κανόνα
 
 ## Logs
@@ -206,6 +227,8 @@ context-menu-remove = Αφαίρεση
 
 ## Capabilities
 
+OnOffSwitch = Διακόπτης λειτουργίας
+MultiLevelSwitch = Διακόπτης πολλαπλών επιπέδων
 ColorControl = Έλεγχος χρώματος
 ColorSensor = Αισθητήρας χρώματος
 BinarySensor = Δυαδικός αισθητήρας
@@ -214,10 +237,12 @@ Light = Φως
 DoorSensor = Αισθητήρας πόρτας
 MotionSensor = Αισθητήρας κίνησης
 LeakSensor = Αισθητήρας διαρροής
+VideoCamera = Βιντεοκάμερα
 Camera = Κάμερα
 TemperatureSensor = Αισθητήρας θερμοκρασίας
 Alarm = Συναγερμός
 Thermostat = Θερμοστάτης
+Custom = Προσαρμοσμένη συσκευή
 Thing = Συσκευή
 
 ## Properties
@@ -248,6 +273,7 @@ inactive = Ανενεργό
 
 ## Domain Setup
 
+invalid-email = Μη έγκυρη διεύθυνση email.
 redirecting = Ανακατεύθυνση…
 
 ## Booleans
@@ -353,11 +379,13 @@ addon-update = Ενημέρωση
 addon-remove = Αφαίρεση
 addon-updating = Ενημέρωση…
 addon-updated = Ενημερώθηκε
+addon-update-failed = Αποτυχία
 addon-config-applying = Εφαρμογή...
 addon-config-apply = Εφαρμογή
 addon-discovery-added = Προστέθηκε
 addon-discovery-add = Προσθήκη
 addon-discovery-installing = Εγκατάσταση…
+addon-discovery-failed = Αποτυχία
 
 ## Page Titles
 
@@ -366,10 +394,15 @@ domain = Τομέας
 users = Χρήστες
 edit-user = Επεξεργασία χρήστη
 add-user = Προσθήκη χρήστη
+adapters = Προσαρμογείς
 addons = Πρόσθετα
+addon-config = Διαμόρφωση προσθέτου
+addon-discovery = Ανακάλυψη νέων πρόσθετων
 experiments = Πειράματα
 localization = Μετάφραση
 updates = Ενημερώσεις
+authorizations = Εξουσιοδοτήσεις
+developer = Προγραμματιστής
 network = Δίκτυο
 ethernet = Ethernet
 wifi = Wi-Fi
@@ -380,6 +413,7 @@ icon = Εικονίδιο
 unknown-state = Άγνωστη κατάσταση.
 error = Σφάλμα
 errors = Σφάλματα
+gateway-unreachable = Απρόσιτη πύλη
 more-information = Περισσότερες πληροφορίες
 invalid-file = Μη έγκυρο αρχείο.
 failed-read-file = Αποτυχία ανάγνωσης αρχείου.
@@ -407,15 +441,19 @@ signup-next = Επόμενο
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Επιλογή διεύθυνσης ιστού — { -webthings-gateway-brand }
 tunnel-setup-welcome = Καλώς ορίσατε
 tunnel-setup-input-subdomain =
     .placeholder = υποτομέας
 tunnel-setup-privacy-policy = Πολιτική απορρήτου
+tunnel-setup-error = Προέκυψε σφάλμα κατά τη ρύθμιση του υποτομέα.
 tunnel-setup-create = Δημιουργία
 tunnel-setup-skip = Παράλειψη
 
 ## Authorize Page
 
+authorize-title = Αίτημα εξουσιοδότησης — { -webthings-gateway-brand }
+authorize-authorization-request = Αίτημα εξουσιοδότησης
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = από <<domain>>
 authorize-allow-all = Αποδοχή για όλες τις συσκευές
@@ -428,6 +466,7 @@ authorize-deny = Άρνηση
 
 ## Router Setup Page
 
+router-setup-header = Δημιουργία νέου δικτύου Wi-Fi
 router-setup-input-ssid =
     .placeholder = Όνομα δικτύου
 router-setup-input-password =
@@ -436,6 +475,7 @@ router-setup-input-confirm-password =
     .placeholder = Επιβεβαίωση κωδικού πρόσβασης
 router-setup-create =
     .value = Δημιουργία
+router-setup-password-mismatch = Οι κωδικοί πρόσβασης πρέπει να ταιριάζουν.
 
 ## Wi-Fi Setup Page
 
