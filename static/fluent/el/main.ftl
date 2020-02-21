@@ -18,11 +18,14 @@ wordmark =
 ## Menu Items
 
 rules-menu-item = Κανόνες
+logs-menu-item = Αρχεία καταγραφής
 settings-menu-item = Ρυθμίσεις
 log-out-button = Αποσύνδεση
 
 ## Things
 
+thing-details =
+    .aria-label = Προβολή ιδιοτήτων
 
 ## Floorplan
 
@@ -34,12 +37,17 @@ settings-domain = Τομέας
 settings-network = Δίκτυο
 settings-users = Χρήστες
 settings-add-ons = Πρόσθετα
+settings-adapters = Προσαρμογείς
 settings-localization = Μετάφραση
 settings-updates = Ενημερώσεις
 settings-experiments = Πειράματα
 
 ## Domain Settings
 
+domain-settings-local-label = Τοπική πρόσβαση
+domain-settings-remote-access = Απομακρυσμένη πρόσβαση
+domain-settings-local-name =
+    .placeholder = πύλη
 
 ## Network Settings
 
@@ -53,35 +61,57 @@ network-settings-home-network-image =
     .alt = Οικιακό δίκτυο
 network-settings-internet-image =
     .alt = Διαδίκτυο
+network-settings-configure = Διαμόρφωση
+network-settings-internet-wan = Διαδίκτυο (WAN)
 network-settings-wan-mode = Λειτουργία
+network-settings-home-network-lan = Οικιακό δίκτυο (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Διεύθυνση IP
+network-settings-static-ip-address = Στατική διεύθυνση IP
+network-settings-gateway = Πύλη
 network-settings-done = Τέλος
 network-settings-wifi-password =
     .placeholder = Κωδικός πρόσβασης
+network-settings-show-password = Εμφάνιση κωδικού πρόσβασης
 network-settings-connect = Σύνδεση
 network-settings-username = Όνομα χρήστη
 network-settings-password = Κωδικός πρόσβασης
 network-settings-dhcp-server = Διακομιστής DHCP
+network-settings-enable-wifi = Ενεργοποίηση Wi-Fi
+network-settings-network-name = Όνομα δικτύου (SSID)
+wireless-connected = Συνδέθηκε
+wireless-icon =
+    .alt = Δίκτυο Wi-Fi
 
 ## User Settings
 
+create-user =
+    .aria-label = Προσθήκη νέου χρήστη
 user-settings-input-name =
     .placeholder = Όνομα
 user-settings-input-email =
     .placeholder = Email
 user-settings-input-password =
     .placeholder = Κωδικός πρόσβασης
+user-settings-input-new-password =
+    .placeholder = Νέος κωδικός πρόσβασης (προαιρετικό)
+user-settings-input-confirm-new-password =
+    .placeholder = Επιβεβαίωση νέου κωδικού πρόσβασης
+user-settings-input-confirm-password =
+    .placeholder = Επιβεβαίωση κωδικού πρόσβασης
+user-settings-password-mismatch = Οι κωδικοί πρόσβασης δεν ταιριάζουν
 user-settings-save = Αποθήκευση
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Δεν υπάρχουν προσαρμογείς.
 
 ## Authorization Settings
 
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Κανένα διαθέσιμο πείραμα αυτή τη στιγμή.
 
 ## Localization Settings
 
@@ -99,6 +129,7 @@ localization-settings-units-temperature-fahrenheit = Φαρενάιτ (°F)
 update-settings-update-now = Ενημέρωση τώρα
 update-available = Νέα έκδοση διαθέσιμη.
 update-up-to-date = Το σύστημά σας είναι ενημερωμένο.
+update-settings-enable-self-updates = Ενεργοποίηση αυτόματων ενημερώσεων
 last-update = Τελευταία ενημέρωση
 current-version = Τρέχουσα έκδοση
 never = Ποτέ
@@ -340,6 +371,9 @@ tunnel-setup-skip = Παράλειψη
 
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = από <<domain>>
+authorize-allow =
+    .value = Αποδοχή
+authorize-deny = Άρνηση
 
 ## Local Token Page
 
@@ -375,12 +409,36 @@ connecting-header = Σύνδεση στο Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Δημιουργία δικτύου Wi-Fi — { -webthings-gateway-brand }
+creating-header = Δημιουργία δικτύου Wi-Fi…
 
 ## UI Updates
 
+ui-update-reload = Ανανέωση
+ui-update-close = Κλείσιμο
 
 ## General Terms
 
+ok = OK
+ellipsis = …
+event-log = Αρχείο καταγραφής συμβάντων
+edit = Επεξεργασία
+remove = Αφαίρεση
+disconnected = Αποσυνδέθηκε
+processing = Επεξεργασία…
+submit = Υποβολή
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Μενού
+back-button =
+    .aria-label = Πίσω
+overflow-button =
+    .aria-label = Πρόσθετες ενέργειες
+submit-button =
+    .aria-label = Υποβολή
+edit-button =
+    .aria-label = Επεξεργασία
+save-button =
+    .aria-label = Αποθήκευση
