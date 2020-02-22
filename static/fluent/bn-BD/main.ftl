@@ -108,7 +108,7 @@ create-user =
 user-settings-input-name =
     .placeholder = নাম
 user-settings-input-email =
-    .placeholder = ই-মেইল
+    .placeholder = ইমেইল
 user-settings-input-password =
     .placeholder = পাসওয়ার্ড
 user-settings-input-new-password =
@@ -160,6 +160,7 @@ failed-to-check-for-updates = এই মুহুর্তে আপডেটগ
 
 ## Developer Settings
 
+developer-settings-enable-ssh = SSH সক্রিয় করুন
 developer-settings-view-internal-logs = অভ্যন্তরীণ লগগুলি দেখুন
 developer-settings-create-local-authorization = স্থানীয় অনুমোদন তৈরি করুন
 
@@ -174,7 +175,7 @@ rules-customize-rule-name-icon =
     .alt = নিয়মের নাম কাস্টমাইজ করুন
 rules-rule-description = নিয়মের বিবরণ
 rules-preview-button =
-    .alt = প্রিভিউ
+    .alt = প্রাকদর্শন
 rules-delete-icon =
     .alt = মুছে ফেলুন
 rules-drag-input-hint = ইনপুট হিসাবে ডিভাইস যুক্ত করুন
@@ -193,12 +194,18 @@ rule-delete-prompt = আপনি কি এই নিয়ম স্থায�
 rule-delete-cancel-button =
     .value = বাতিল করুন
 rule-not = না
-rule-event = অনুষ্ঠান
+rule-event = ইভেন্ট
 notification-title = শিরোনাম
 notification-message = বার্তা
+notification-low = কম
+notification-normal = স্বাভাবিক
+notification-high = বেশি
+rule-name = নিয়মের নাম
 
 ## Logs
 
+logs = লগ
+logs-device = ডিভাইস
 logs-save = সংরক্ষণ করুন
 logs-remove = মুছে ফেলুন
 
