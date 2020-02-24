@@ -23,20 +23,14 @@ is_container() {
 }
 
 run_app() {
+  # load nvm
   export NVM_DIR="${HOME}/.nvm"
-  [ ! -s "${NVM_DIR}/nvm.sh" ] || \. "${NVM_DIR}/nvm.sh"  # This loads nvm
+  [ ! -s "${NVM_DIR}/nvm.sh" ] || \. "${NVM_DIR}/nvm.sh"
 
   if [ ! is_container ]; then
     sudo /sbin/ldconfig
 
     (sudo timedatectl set-local-rtc 0 && sudo timedatectl set-ntp 1) || true
-  fi
-
-  if [ -n "$(which nvm)" ]; then
-    echo "nvm version"
-    nvm --version
-  else
-    echo "Using system's node instead of nvm"
   fi
 
   echo "node version"
