@@ -1,9 +1,11 @@
 basepath = "."
 
 locales = [
+  "bn-BD",
   "cs",
   "cy",
   "de",
+  "el",
   "en-CA",
   "en-GB",
   "es-AR",
