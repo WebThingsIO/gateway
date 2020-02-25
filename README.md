@@ -71,7 +71,7 @@ $ sudo dnf install curl
 nvm allows you to easily install different versions of node. To install nvm:
 
 ```
-$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
 ```
 
 Reinitialize your terminal session.
@@ -263,9 +263,9 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#e
 
     ```
     $ node --version
-    v8.15.1
+    v10.19.0
     $ npm --version
-    6.4.1
+    6.14.0
     ```
 
     Note: these versions might differ from the LTS version installed locally.
