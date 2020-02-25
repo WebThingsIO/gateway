@@ -1322,16 +1322,27 @@ class AddonManager extends EventEmitter {
 
         // Try to load package.json.
         const packageJson = path.join(addonPath, addonId, 'package.json');
-        if (!fs.existsSync(packageJson)) {
-          continue;
-        }
-
+        const manifestJson = path.join(addonPath, addonId, 'manifest.json');
         let manifest;
-        try {
-          const data = fs.readFileSync(packageJson);
-          manifest = JSON.parse(data);
-        } catch (e) {
-          console.error(`Failed to read package.json: ${packageJson}\n${e}`);
+        if (fs.existsSync(packageJson)) {
+          try {
+            const data = fs.readFileSync(packageJson);
+            manifest = JSON.parse(data);
+          } catch (e) {
+            console.error(`Failed to read package.json: ${packageJson}\n${e}`);
+            continue;
+          }
+        } else if (fs.existsSync(manifestJson)) {
+          try {
+            const data = fs.readFileSync(manifestJson);
+            manifest = JSON.parse(data);
+          } catch (e) {
+            console.error(
+              `Failed to read manifest.json: ${manifestJson}\n${e}`
+            );
+            continue;
+          }
+        } else {
           continue;
         }
 
