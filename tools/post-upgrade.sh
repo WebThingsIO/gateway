@@ -37,4 +37,6 @@ fi
 rm -rf "$HOME/mozilla-iot/intent-parser"
 sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
+"$(readlink -f "$(dirname "$0")")/update-addons.sh"
+
 touch .post_upgrade_complete

@@ -28,6 +28,7 @@ const tar = require('tar');
 const os = require('os');
 const promisePipe = require('promisepipe');
 const fetch = require('node-fetch');
+const find = require('find');
 const {URLSearchParams} = require('url');
 const {ncp} = require('ncp');
 
@@ -1240,9 +1241,11 @@ class AddonManager extends EventEmitter {
    *
    * Attempt to update all installed add-ons.
    *
+   * @param {boolean} forceUpdateBinary Whether or not to force an update of
+   *                                    add-ons with binary node extensions
    * @returns A promise which is resolved when updating is complete.
    */
-  async updateAddons() {
+  async updateAddons(forceUpdateBinary = false) {
     const urls = config.get('addonManager.listUrls');
     const architecture = Platform.getArchitecture();
     const version = pkg.version;
@@ -1318,6 +1321,24 @@ class AddonManager extends EventEmitter {
           console.log(
             `Not updating ${addonId} since a .git directory was detected`);
           continue;
+        }
+
+        if (forceUpdateBinary) {
+          // If the add-on has binary node extensions, it needs to be updated.
+          const addonIdPath = path.join(addonPath, addonId);
+          const binFiles = find.fileSync(/\.node$/, addonIdPath);
+          if (binFiles.length > 0 && available.hasOwnProperty(addonId)) {
+            try {
+              await this.installAddonFromUrl(addonId,
+                                             available[addonId].url,
+                                             available[addonId].checksum,
+                                             false);
+            } catch (e) {
+              console.error(`Failed to update ${addonId}: ${e}`);
+            }
+
+            continue;
+          }
         }
 
         // Try to load package.json.

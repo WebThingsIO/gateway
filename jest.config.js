@@ -1,13 +1,6 @@
-const semver = require('semver');
-
 const testPathIgnorePatterns = [
   '/node_modules/',
 ];
-if (semver.major(process.versions.node) <= 9) {
-  // fluent uses node 10 features
-  testPathIgnorePatterns.push('<rootDir>/src/test/schema-form');
-  testPathIgnorePatterns.push('<rootDir>/src/test/browser');
-}
 
 module.exports = {
   coverageDirectory: './coverage/',

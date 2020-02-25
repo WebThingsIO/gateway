@@ -12,7 +12,7 @@ su - ${FIRST_USER_NAME} << 'EOF'
 set -e -x
 
 NVM_VERSION="v0.35.2"
-NODE_VERSION="--lts=carbon"
+NODE_VERSION="--lts=dubnium"
 
 # Install and configure nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash
