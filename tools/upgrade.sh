@@ -54,10 +54,16 @@ popd
 # bring down the gateway very late in the process since it'll probably be fine
 sudo systemctl stop mozilla-iot-gateway.service
 
-rm -fr gateway_old
+rm -rf gateway_old
 mv gateway gateway_old
 touch gateway_old/package.json
 mv /tmp/gateway gateway
+
+# back up the user profile
+if [ -d "$HOME/.mozilla-iot" ]; then
+  rm -rf "$HOME/.mozilla-iot.old"
+  cp -a "$HOME/.mozilla-iot" "$HOME/.mozilla-iot.old"
+fi
 
 pushd gateway
 ./tools/post-upgrade.sh

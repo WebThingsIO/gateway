@@ -52,9 +52,16 @@ function checkCounter() {
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
   systemctl stop mozilla-iot-gateway
-  rm -fr gateway_failed
+  rm -rf gateway_failed
   mv gateway gateway_failed
   mv gateway_old gateway
+
+  # restore the user profile
+  if [ -d "$HOME/.mozilla-iot.old" ]; then
+    rm -rf "$HOME/.mozilla-iot.failed"
+    mv "$HOME/.mozilla-iot" "$HOME/.mozilla-iot.failed"
+    mv "$HOME/.mozilla-iot.old" "$HOME/.mozilla-iot"
+  fi
 
   # Install and use the version of node specified in .nvmrc
   pushd ./gateway
