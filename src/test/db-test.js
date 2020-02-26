@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const {v4: uuidv4} = require('uuid');
 
 const Database = require('../db');
 const User = require('../models/user');
@@ -10,7 +10,7 @@ describe('db', () => {
     const password = 'password';
 
     beforeEach(async () => {
-      const email = `test-${uuid.v4()}@example.com`;
+      const email = `test-${uuidv4()}@example.com`;
       user = await User.generate(email, password, 'test');
       // eslint-disable-next-line require-atomic-updates
       user.id = await Database.createUser(user);

@@ -1,5 +1,5 @@
 const JSONWebToken = require('../../models/jsonwebtoken');
-const uuid = require('uuid');
+const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 const ec = require('../../ec-crypto');
 
@@ -36,7 +36,7 @@ describe('JSONWebToken', () => {
     const pair = ec.generateKeyPair();
     const sig = jwt.sign({}, pair.private, {
       algorithm: 'none',
-      keyid: uuid.v4(),
+      keyid: uuidv4(),
     });
     expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
   });

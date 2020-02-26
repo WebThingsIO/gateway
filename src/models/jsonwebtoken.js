@@ -13,7 +13,7 @@
 
 'use strict';
 
-const uuid = require('uuid');
+const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 const assert = require('assert');
 
@@ -103,7 +103,7 @@ class JSONWebToken {
   static async create(user, payload = {role: ROLE_USER_TOKEN}) {
     const pair = ec.generateKeyPair();
 
-    const keyId = uuid.v4();
+    const keyId = uuidv4();
     const tunnelInfo = await Settings.getTunnelInfo();
     const issuer = tunnelInfo.tunnelDomain;
     const options = {

@@ -219,8 +219,8 @@ describe('NumberField', () => {
   describe('range input', () => {
     const schema = {
       type: 'number',
-      multipleOf: 1,
-      minimum: 10,
+      multipleOf: 0.01,
+      minimum: 0,
       maximum: 100,
     };
 
@@ -260,7 +260,7 @@ describe('NumberField', () => {
       });
 
       it('should support the minimum constraint', () => {
-        expect(input.getAttribute('min')).toEqual('10');
+        expect(input.getAttribute('min')).toEqual('0');
       });
 
       it('should support maximum constraint', () => {
@@ -282,7 +282,7 @@ describe('NumberField', () => {
       });
 
       it('should support the multipleOf constraint', () => {
-        expect(input.getAttribute('step')).toEqual('1');
+        expect(input.getAttribute('step')).toEqual('0.01');
       });
     });
   });
