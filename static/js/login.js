@@ -25,15 +25,7 @@ function setupForm() {
 
     API.login(emailValue, passwordValue).
       then(() => {
-        const search = window.location.search;
-        const match = search.match(/url=([^=&]+)/);
-
-        let url = '/';
-        if (match) {
-          url = decodeURIComponent(match[1]);
-        }
-
-        window.location.href = url;
+        window.location.href = '/';
       }).
       catch((err) => {
         errorSubmission.classList.remove('hidden');
