@@ -37,6 +37,10 @@ fi
 rm -rf "$HOME/mozilla-iot/intent-parser"
 sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
-"$(readlink -f "$(dirname "$0")")/update-addons.sh"
+# if the node version changed, we need to update add-ons
+if [[ ! -f "$HOME/mozilla-iot/gateway_old/.nvmrc" ||
+      $(sha256sum "$HOME/mozilla-iot/gateway_old/.nvmrc") != $(sha256sum "$HOME/mozilla-iot/gateway/.nvmrc") ]]; then
+  "$(readlink -f "$(dirname "$0")")/update-addons.sh"
+fi
 
 touch .post_upgrade_complete
