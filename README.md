@@ -273,7 +273,7 @@ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#e
 * Install dependencies:
 
     ```
-    $ npm install
+    $ npm ci
     ```
 
 * Add Firewall exceptions (Fedora Linux Only)
