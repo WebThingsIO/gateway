@@ -1025,9 +1025,10 @@ class AddonManager extends EventEmitter {
    * @param {String} url The package URL
    * @param {String} checksum SHA-256 checksum of the package
    * @param {Boolean} enable Whether or not to enable the add-on after install
+   * @param {object} options Set of options, primarily used by external scripts
    * @returns A Promise that resolves when the add-on is installed.
    */
-  async installAddonFromUrl(id, url, checksum, enable) {
+  async installAddonFromUrl(id, url, checksum, enable, options = {}) {
     const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
     const destPath = path.join(tempPath, `${id}.tar.gz`);
 
@@ -1061,7 +1062,7 @@ class AddonManager extends EventEmitter {
 
     let success = false, err;
     try {
-      await this.installAddon(id, destPath, enable);
+      await this.installAddon(id, destPath, enable, options);
       success = true;
     } catch (e) {
       err = e;
@@ -1084,10 +1085,11 @@ class AddonManager extends EventEmitter {
    * @param {String} packageId The package ID to install
    * @param {String} packagePath Path to the package tarball
    * @param {Boolean} enable Whether or not to enable the add-on after install
+   * @param {object} options Set of options, primarily used by external scripts
    * @returns A promise that resolves when the package is installed.
    */
-  async installAddon(packageId, packagePath, enable) {
-    if (!this.addonsLoaded) {
+  async installAddon(packageId, packagePath, enable, options = {}) {
+    if (!this.addonsLoaded && !options.skipLoad) {
       throw new Error(
         'Cannot install add-on before other add-ons have been loaded.'
       );
@@ -1148,7 +1150,7 @@ class AddonManager extends EventEmitter {
     await Settings.set(key, obj);
 
     // If the add-on was previously enabled, load the add-on
-    if (obj.enabled) {
+    if (obj.enabled && !options.skipLoad) {
       // Now, load the add-on
       try {
         await this.loadAddon(packageId);
@@ -1241,11 +1243,10 @@ class AddonManager extends EventEmitter {
    *
    * Attempt to update all installed add-ons.
    *
-   * @param {boolean} forceUpdateBinary Whether or not to force an update of
-   *                                    add-ons with binary node extensions
+   * @param {object} options Set of options, primarily used by external scripts
    * @returns A promise which is resolved when updating is complete.
    */
-  async updateAddons(forceUpdateBinary = false) {
+  async updateAddons(options = {}) {
     const urls = config.get('addonManager.listUrls');
     const architecture = Platform.getArchitecture();
     const version = pkg.version;
@@ -1323,16 +1324,19 @@ class AddonManager extends EventEmitter {
           continue;
         }
 
-        if (forceUpdateBinary) {
+        if (options.forceUpdateBinary) {
           // If the add-on has binary node extensions, it needs to be updated.
           const addonIdPath = path.join(addonPath, addonId);
           const binFiles = find.fileSync(/\.node$/, addonIdPath);
           if (binFiles.length > 0 && available.hasOwnProperty(addonId)) {
             try {
-              await this.installAddonFromUrl(addonId,
-                                             available[addonId].url,
-                                             available[addonId].checksum,
-                                             false);
+              await this.installAddonFromUrl(
+                addonId,
+                available[addonId].url,
+                available[addonId].checksum,
+                false,
+                options
+              );
             } catch (e) {
               console.error(`Failed to update ${addonId}: ${e}`);
             }
@@ -1371,10 +1375,13 @@ class AddonManager extends EventEmitter {
         if (available.hasOwnProperty(addonId) &&
             semver.lt(manifest.version, available[addonId].version)) {
           try {
-            await this.installAddonFromUrl(addonId,
-                                           available[addonId].url,
-                                           available[addonId].checksum,
-                                           false);
+            await this.installAddonFromUrl(
+              addonId,
+              available[addonId].url,
+              available[addonId].checksum,
+              false,
+              options
+            );
           } catch (e) {
             console.error(`Failed to update ${addonId}: ${e}`);
           }
