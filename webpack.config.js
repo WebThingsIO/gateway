@@ -12,7 +12,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const path = require('path');
-const uuid = require('uuid/v1');
+const {v1: uuidv1} = require('uuid');
 const webpack = require('webpack');
 
 const externals = {};
@@ -300,6 +300,7 @@ const webpackWeb = {
               fallback: 'file-loader',
               publicPath: '/images',
               outputPath: 'images',
+              esModule: false,
             },
           },
         ],
@@ -317,7 +318,7 @@ const webpackWeb = {
 
 const pluginsSW = [
   new webpack.BannerPlugin({
-    banner: `const VERSION = '${uuid()}';`,
+    banner: `const VERSION = '${uuidv1()}';`,
     raw: true,
   }),
   new ExtractTextPlugin(
@@ -342,7 +343,12 @@ const webpackSW = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'static'),
         use: ExtractTextPlugin.extract({
-          use: 'raw-loader',
+          use: {
+            loader: 'raw-loader',
+            options: {
+              esModule: false,
+            },
+          },
         }),
       },
     ],
