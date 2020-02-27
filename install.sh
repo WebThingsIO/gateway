@@ -40,7 +40,7 @@ if [ ! -d "gateway" ]; then
     git clone https://github.com/mozilla-iot/gateway.git
 fi
 cd gateway
-npm install .
+npm ci
 ./node_modules/.bin/webpack
 
 # Create a self-signed cert. This is temporary (for development).

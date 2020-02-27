@@ -7,14 +7,14 @@ GATEWAYDIR=${SCRIPTDIR}/../../
 TMPDIR=/tmp/gateway-test
 GATEWAYSRC=${GATEWAYDIR}/build/gateway.js
 
-# Setup tempolary directory
+# Setup temporary directory
 rm -rf ${TMPDIR}
 mkdir -p ${TMPDIR}
-cp ${GATEWAYDIR}/package.json ${TMPDIR}/
+cp ${GATEWAYDIR}/package.json ${GATEWAYDIR}/package-lock.json ${TMPDIR}/
 cd ${TMPDIR}
 
 # install only production dependencies
-npm install --production
+npm ci --production
 
 # Correct modules used by Gateway.
 REQUIRE_MODULES=$(cat ${GATEWAYSRC} | sed -n -e 's/^.*\(require([^)]*)\).*$/\1/gp')
