@@ -13,7 +13,7 @@ export npm_config_target_arch=arm
 
 # build the gateway
 cd ~/mozilla-iot/gateway
-npm install
+npm ci
 ./node_modules/.bin/webpack
 npm prune --production
 
