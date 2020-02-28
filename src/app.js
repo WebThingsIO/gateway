@@ -256,6 +256,12 @@ function createApp(isSecure) {
       return;
     }
 
+    // If the Host header was not set, disallow this request.
+    if (!request.hostname) {
+      response.sendStatus(403);
+      return;
+    }
+
     // If the request is for a bare hostname, a .local address, or an IP
     // address, allow it.
     if (request.hostname.indexOf('.') < 0 ||
