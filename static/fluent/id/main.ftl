@@ -450,9 +450,26 @@ users = Pengguna
 edit-user = Ubah Pengguna
 add-user = Tambah Pengguna
 adapters = Adapter
+addons = Pengaya
+addon-config = Konfigurasikan Pengaya
+addon-discovery = Temukan Pengaya Baru
+experiments = Eksperimen
+localization = Pelokalan
+updates = Pemutakhiran
+authorizations = Otorisasi
+developer = Pengembang
+network = Jaringan
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ikon
 
 ## Errors
 
+unknown-state = Status tak diketahui.
+error = Galat
+errors = Galat
+gateway-unreachable = Gateway Tidak Dapat Dijangkau
+more-information = Informasi Lebih Lanjut
 
 ## Schema Form
 
