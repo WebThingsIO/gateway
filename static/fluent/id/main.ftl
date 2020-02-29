@@ -431,9 +431,25 @@ enable = Aktifkan
 by = oleh
 addon-configure = Konfigurasikan
 addon-update = Perbarui
+addon-remove = Hapus
+addon-updating = Memutakhirkan…
+addon-updated = Diperbarui
+addon-update-failed = Gagal
+addon-config-applying = Menerapkan...
+addon-config-apply = Terapkan
+addon-discovery-added = Ditambahkan
+addon-discovery-add = Tambah
+addon-discovery-installing = Memasang…
+addon-discovery-failed = Gagal
 
 ## Page Titles
 
+settings = Pengaturan
+domain = Domain
+users = Pengguna
+edit-user = Ubah Pengguna
+add-user = Tambah Pengguna
+adapters = Adapter
 
 ## Errors
 
