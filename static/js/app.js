@@ -117,6 +117,7 @@ const App = {
     this.views.logs = document.getElementById('logs-view');
     this.currentView = this.views.things;
     this.displayedExtension = null;
+    this.addThingScreen = document.getElementById('add-thing-screen');
     this.menuButton = document.getElementById('menu-button');
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
     this.extensionBackButton = document.getElementById('extension-back-button');
@@ -226,6 +227,7 @@ const App = {
   },
 
   showSettings: function(context) {
+    this.addThingScreen.classList.add('hidden');
     this.hideExtensionBackButton();
     SettingsScreen.show(context.params.section || null,
                         context.params.subsection || null,
