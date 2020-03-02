@@ -233,36 +233,196 @@ logs-retention-length =
 logs-retention-unit =
     .aria-label = Unitate de păstrare a jurnalului
 logs-hours = Ore
+logs-days = Zile
+logs-weeks = Săptămâni
+logs-save = Salvează
+logs-remove-dialog-title = Se elimină
+logs-remove-dialog-warning = Eliminarea jurnalului va elimina și toate datele incluse. Sigur vrei să îl elimini?
+logs-remove = Elimină
+logs-unable-to-create = Jurnalul nu a putut fi creat
+logs-server-remove-error = Eroare de server: imposibil de eliminat jurnalul
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Se scanează...
+add-thing-scanning = Se scanează pentru dispozitive noi…
+add-thing-add-adapters-hint = Nu s-au găsit lucruri noi. Încearcă <a data-l10n-name="add-thing-add-adapters-hint-anchor">adăugând unele suplimente</a>.
+add-thing-add-by-url = Adăugare după URL ...
+add-thing-done = Terminat
+add-thing-cancel = Renunță
 
 ## Context Menu
 
+context-menu-choose-icon = Alege pictograma…
+context-menu-save = Salvează
+context-menu-remove = Elimină
 
 ## Capabilities
 
+OnOffSwitch = Comutator pornit/oprit
+MultiLevelSwitch = Comutator multinivel
+ColorControl = Control culori
+ColorSensor = Senzor de culoare
+EnergyMonitor = Monitor de energie
+BinarySensor = Senzor binar
+MultiLevelSensor = Senzor multinivel
+SmartPlug = Priză inteligentă
+Light = Lumină
+DoorSensor = Senzor de ușă
+MotionSensor = Senzor de mișcare
+LeakSensor = Senzor de scurgere
+PushButton = Buton de apăsat
+VideoCamera = Cameră video
+Camera = Cameră
+TemperatureSensor = Senzor de temperatură
+Alarm = Alarmă
+Thermostat = Termostat
+Lock = Yală
+Custom = Lucru personalizat
+Thing = Lucru
 
 ## Properties
 
+alarm = Alarmă
+pushed = Apăsat
+not-pushed = Neapăsat
+on-off = Pornit/oprit
+on = Pornit
+off = Oprit
+power = Putere
+voltage = Voltaj
+temperature = Temperatură
+current = Curent
+frequency = Frecvență
+color = Culoare
+brightness = Luminozitate
+leak = Scurgere
+dry = Uscat
+color-temperature = Temperatură culoare
+video-unsupported = Ne pare rău, videoclipul nu are suport în browserul tău.
+motion = Mișcare
+no-motion = Fără mișcare
+open = Deschis
+closed = Închis
+locked = Blocat
+unlocked = Deblocat
+jammed = Obstrucționat
+unknown = Necunoscut
+active = Activ
+inactive = Inactiv
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Se pare că ai înregistrat deja subdomeniul respectiv. Pentru a-l revendica<a data-l10n-name="tunnel-setup-reclaim-domain-click-here">dă clic aici</a>.
+check-email-for-token = Te rugăm să îți verifici adresa de e-mail tău pentru un jeton de revendicare și lipește-l mai sus.
+reclaim-failed = Domeniul nu a putut fi revendicat.
+subdomain-already-used = Acest subdomeniu este deja folosit. Te rugăm să alegi altul.
+invalid-subdomain = Subdomeniu nevalid.
+invalid-email = Adresă de e-mail nevalidă.
+invalid-reclamation-token = Jeton de revendicare nevalid.
+domain-success = Succes! Te rugăm să aștepți în timp ce te redirecționăm ...
+issuing-error = Eroare la eliberarea certificatului. Te rugăm să încerci din nou.
+redirecting = Se redirecționează…
 
 ## Booleans
 
+true = Adevărat
+false = Fals
 
 ## Time
 
+utils-now = acum
+utils-seconds-ago =
+    { $value ->
+        [one] acum { $value } secundă
+        [few] acum { $value } secunde
+       *[other] acum { $value } de secunde
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] acum { $value } minut
+        [few] acum { $minutes } minute
+       *[other] acum { $minutes } de minute
+    }
+utils-hours-ago =
+    { $value ->
+        [one] acum { $value } oră
+        [few] acum { $value } ore
+       *[other] acum { $value } de ore
+    }
+utils-days-ago =
+    { $value ->
+        [one] acum { $value } zi
+        [few] acum { $value } zile
+       *[other] acum { $value } de zile
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] acum { $value } săptămână
+        [few] acum { $value } săptămâni
+       *[other] acum { $value } de săptămâni
+    }
+utils-months-ago =
+    { $value ->
+        [one] acum { $value } lună
+        [few] acum { $value } luni
+       *[other] acum { $value } de luni
+    }
+utils-years-ago =
+    { $value ->
+        [one] acum { $value } an
+        [few] acum { $value } ani
+       *[other] acum { $value } de ani
+    }
+minute = Minut
+hour = Oră
+day = Zi
+week = Săptămână
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = z
+abbrev-hour = o
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Tip de dispozitiv necunoscut
+new-thing-choose-icon = Alege pictograma…
+new-thing-save = Salvează
+new-thing-pin =
+    .placeholder = Introdu PIN-ul
+new-thing-pin-error = PIN incorect
+new-thing-pin-invalid = PIN nevalid
+new-thing-cancel = Renunță
+new-thing-submit = Trimite
+new-thing-username =
+    .placeholder = Introdu numele de utilizator
+new-thing-password =
+    .placeholder = Introdu parola
+new-thing-credentials-error = Credențiale incorecte
+new-thing-saved = Salvat
+new-thing-done = Terminat
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Introdu adresa URL a obiectului web
 
 ## Empty div Messages
 
