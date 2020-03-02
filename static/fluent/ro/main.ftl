@@ -423,44 +423,117 @@ new-thing-done = Terminat
 
 new-web-thing-url =
     .placeholder = Introdu adresa URL a obiectului web
+new-web-thing-label = Lucru web
+loading = Se încarcă…
+new-web-thing-multiple = Mai multe lucruri web găsite
+new-web-thing-from = de la
 
 ## Empty div Messages
 
+no-things = Nu există dispozitive încă. Dă clic pe + pentru a scana pentru dispozitive disponibile.
+thing-not-found = Lucru negăsit.
+action-not-found = Acțiune negăsită.
+events-not-found = Acest lucru nu are evenimente.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Găsește suplimente noi
+author-unknown = Necunoscut
+disable = Dezactivează
+enable = Activează
+by = de
+addon-configure = Configurează
+addon-update = Actualizează
+addon-remove = Elimină
+addon-updating = Se actualizează…
+addon-updated = Actualizat
+addon-update-failed = Eșuat
+addon-config-applying = Aplicare…
+addon-config-apply = Aplică
+addon-discovery-added = Adăugat
+addon-discovery-add = Adaugă
+addon-discovery-installing = Se instalează…
+addon-discovery-failed = Eșuat
 
 ## Page Titles
 
+settings = Setări
+domain = Domeniu
+users = Utilizatori
+edit-user = Editează utilizatorul
+add-user = Adaugă utilizatorul
+adapters = Adaptoare
+addons = Suplimente
+addon-config = Configurează suplimentul
+addon-discovery = Descoperă suplimente noi
+experiments = Experimente
+localization = Localizare
+updates = Actualizări
+authorizations = Autorizații
+developer = Dezvoltator
+network = Rețea
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Pictogramă
 
 ## Errors
 
+unknown-state = Stare necunoscută.
+error = Eroare
+errors = Erori
 gateway-unreachable = Poartă de acces inaccesibilă
+more-information = Mai multe informații
+invalid-file = .Fișier nevalid
+failed-read-file = Eșec la citirea fișierului.
+failed-save = Eșec la salvare.
 
 ## Schema Form
 
+unsupported-field = Schema de câmp nu are suport
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
 login-title = Autentificare — { -webthings-gateway-brand }
+login-log-in = Autentificare
 
 ## Create First User Page
 
 signup-title = Creează utilizator — { -webthings-gateway-brand }
+signup-welcome = Bine ai venit
+signup-create-account = Creează primul cont de utilizator:
+signup-password-mismatch = Parolele nu se potrivesc
+signup-next = Înainte
 
 ## Tunnel Setup Page
 
 tunnel-setup-title = Alege adresa web — { -webthings-gateway-brand }
+tunnel-setup-welcome = Bine ai venit
 tunnel-setup-choose-address = Alege o adresă web securizată pentru poarta de acces:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomeniu
+tunnel-setup-opt-in = Ține-mă la curent cu funcționalități noi și oportunități de a aduce contribuții.
+tunnel-setup-privacy-policy = Politică de confidențialitate
+tunnel-setup-input-reclamation-token =
+    .placeholder = Jeton de revendicare
+tunnel-setup-error = A apărut o eroare la setarea subdomeniului.
+tunnel-setup-create = Creează
+tunnel-setup-skip = Sari peste
+tunnel-setup-time-sync = Se așteaptă fixarea ceasului sistemului prin Internet. Înregistrarea domeniului poate eșua până la finalizarea fixării ceasului.
 
 ## Authorize Page
 
 authorize-title = Cerere de autorizare — { -webthings-gateway-brand }
+authorize-authorization-request = Cerere de autorizare
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> vrea să acceseze poarta de acces la <<function>> dispozitive.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = de la <<domain>>
+authorize-monitor-and-control = monitorizare și control
 
 ## Local Token Page
 
