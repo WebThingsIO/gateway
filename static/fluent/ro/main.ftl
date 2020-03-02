@@ -97,33 +97,142 @@ wireless-connected = Conectat
 wireless-icon =
     .alt = Rețea Wi-Fi
 network-settings-changing = Se modifică setările rețelei. Poate dura un minut.
+failed-ethernet-configure = Eroare la configurarea Ethernet-ului.
+failed-wifi-configure = Configurarea Wi-Fi a eșuat.
+failed-wan-configure = Configurarea WAN a eșuat.
+failed-lan-configure = Configurarea LAN a eșuat.
+failed-wlan-configure = Configurarea WLAN a eșuat.
 
 ## User Settings
 
+create-user =
+    .aria-label = Adaugă un utilizator nou
+user-settings-input-name =
+    .placeholder = Nume
+user-settings-input-email =
+    .placeholder = E-mail
+user-settings-input-password =
+    .placeholder = Parolă
+user-settings-input-new-password =
+    .placeholder = Parola nouă (opțional)
+user-settings-input-confirm-new-password =
+    .placeholder = Confirmă parola nouă
+user-settings-input-confirm-password =
+    .placeholder = Confirmă parola
+user-settings-password-mismatch = Parolele nu se potrivesc
+user-settings-save = Salvează
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Nu există adaptoare.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Nu există autorizații.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Niciun experiment disponibil momentan.
 
 ## Localization Settings
 
+localization-settings-language-region = Limbă și regiune
+localization-settings-country = Țară
+localization-settings-timezone = Fus orar
+localization-settings-language = Limbă
+localization-settings-units = Unități
+localization-settings-units-temperature = Temperatură
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Actualizează acum
+update-available = Versiune nouă disponibilă.
+update-up-to-date = Sistemul tău este la zi.
+updates-not-supported = Actualizările nu au suport pe această platformă.
+update-settings-enable-self-updates = Activează actualizările automate
+last-update = Ultima actualizare
+current-version = Versiune curentă
+failed = Eșuat
+never = Niciodată
+in-progress = În curs…
+restarting = Repornire în curs…
+checking-for-updates = Se caută actualizări…
+failed-to-check-for-updates = Momentan nu se pot căuta actualizări.
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Activează SSH
+developer-settings-view-internal-logs = Vizualizează jurnalele interne
+developer-settings-create-local-authorization = Creează o autorizație locală
 
 ## Rules
 
+add-rule =
+    .aria-label = Creează o nouă regulă
+rules = Reguli
+rules-create-rule-hint = Nu au fost create reguli. Dă clic pe + pentru a crea o regulă.
+rules-rule-name = Denumire regulă
+rules-customize-rule-name-icon =
+    .alt = Personalizează denumirea regulii
+rules-rule-description = Descriere regulă
+rules-preview-button =
+    .alt = Previzualizare
+rules-delete-icon =
+    .alt = Șterge
+rules-drag-hint = Trage dispozitivele aici pentru a începe crearea unei reguli
+rules-drag-input-hint = Adaugă un dispozitiv ca intrare
+rules-drag-output-hint = Adaugă un dispozitiv ca ieșire
+rules-scroll-left =
+    .alt = Derulează la stânga
+rules-scroll-right =
+    .alt = Derulează la dreapta
+rules-delete-prompt = Trage și lasă dispozitivele aici pentru deconectare
+rules-delete-dialog = Sigur vrei să elimini definitiv această regulă?
+rules-delete-cancel =
+    .value = Renunță
+rules-delete-confirm =
+    .value = Elimină regula
+rule-invalid = Invalidă
+rule-delete-prompt = Sigur vrei să elimini definitiv această regulă?
+rule-delete-cancel-button =
+    .value = Renunță
+rule-delete-confirm-button =
+    .value = Elimină regula
+rule-select-property = Selectează proprietatea
+rule-not = Nu
+rule-event = Eveniment
+rule-action = Acțiune
+rule-configure = Se configurează…
+rule-time-title = Oră
+rule-notification = Notificare
+notification-title = Titlu
+notification-message = Mesaj
+notification-level = Nivel
+notification-low = Scăzut
+notification-normal = Normal
+notification-high = Ridicat
+rule-name = Denumire regulă
 
 ## Logs
 
+add-log =
+    .aria-label = Creează un jurnal nou
+logs = Jurnale
+logs-create-log-hint = Nu au fost create jurnale. Dă clic pe + pentru a crea un jurnal.
+logs-device = Dispozitiv
+logs-device-select =
+    .aria-label = Dispozitiv de jurnale
+logs-property = Proprietate
+logs-property-select =
+    .aria-label = Proprietate jurnal
+logs-retention = Păstrare
+logs-retention-length =
+    .aria-label = Durată de păstrare a jurnalului
+logs-retention-unit =
+    .aria-label = Unitate de păstrare a jurnalului
+logs-hours = Ore
 
 ## Add New Things
 
