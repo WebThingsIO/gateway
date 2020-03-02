@@ -581,6 +581,7 @@ connecting-header = Conectare Wi-Fi în curs…
 connecting-connect = Asigură-te că ești conectat la aceeași rețea și apoi navighează la { $gateway-link } în browserul web pentru a continua configurarea.
 connecting-warning = Notă: Dacă nu poți încărca { $domain }, caută adresa IP a porții de acces pe router.
 connecting-header-skipped = S-a sărit peste configurarea Wi-Fi
+connecting-skipped = Poarta de acces este acum inițializată. Navighează pe { $gateway-link } în browserul web, rămâi conectat(ă) la aceeași rețea cât timp se continuă configurarea porții de acces.
 
 ## Creating Wi-Fi Network Page
 
