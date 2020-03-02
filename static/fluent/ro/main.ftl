@@ -82,6 +82,21 @@ network-settings-pppoe = Punte (PPPoE)
 network-settings-static-ip-address = Adresă IP statică
 network-settings-network-mask = Mască de rețea
 network-settings-gateway = Poartă de acces
+network-settings-done = Terminat
+network-settings-wifi-password =
+    .placeholder = Parolă
+network-settings-show-password = Afișează parola
+network-settings-connect = Conectare
+network-settings-username = Nume de utilizator
+network-settings-password = Parolă
+network-settings-router-ip = Adresa IP a routerului
+network-settings-dhcp-server = Server DHCP
+network-settings-enable-wifi = Activează Wi-Fi
+network-settings-network-name = Denumire rețea (SSID)
+wireless-connected = Conectat
+wireless-icon =
+    .alt = Rețea Wi-Fi
+network-settings-changing = Se modifică setările rețelei. Poate dura un minut.
 
 ## User Settings
 
