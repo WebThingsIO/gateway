@@ -534,35 +534,88 @@ authorize-prompt = <<name>> vrea să acceseze poarta de acces la <<function>> di
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = de la <<domain>>
 authorize-monitor-and-control = monitorizare și control
+authorize-monitor = monitorizare
+authorize-allow-all = Permite pentru toate lucrurile
+authorize-allow =
+    .value = Permite
+authorize-deny = Refuză
 
 ## Local Token Page
 
 local-token-title = Serviciu local de jetoane — { -webthings-gateway-brand }
+local-token-header = Serviciu local de jetoane
+local-token-your-token = Jetonul tău local este acest <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = De folosit pentru comunicații securizate cu poarta de acces, cu <a data-l10n-name="local-token-bearer-type">Autorizație tip la purtător</a>.
 
 ## Router Setup Page
 
 router-setup-title = Configurare router — { -webthings-gateway-brand }
+router-setup-header = Creează o rețea Wi-Fi nouă
+router-setup-input-ssid =
+    .placeholder = Denumire rețea
+router-setup-input-password =
+    .placeholder = Parolă
+router-setup-input-confirm-password =
+    .placeholder = Confirmă parola
+router-setup-create =
+    .value = Creează
+router-setup-password-mismatch = Parolele trebuie să se potrivească
 
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configurare Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Conectare la o rețea Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Parolă
+wifi-setup-show-password = Afișează parola
+wifi-setup-connect =
+    .value = Conectare
+wifi-setup-network-icon =
+    .alt = Rețea Wi-Fi
+wifi-setup-skip = Sari peste
 
 ## Connecting to Wi-Fi Page
 
 connecting-title = Conectare la Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Conectare Wi-Fi în curs…
 connecting-connect = Asigură-te că ești conectat la aceeași rețea și apoi navighează la { $gateway-link } în browserul web pentru a continua configurarea.
+connecting-warning = Notă: Dacă nu poți încărca { $domain }, caută adresa IP a porții de acces pe router.
+connecting-header-skipped = S-a sărit peste configurarea Wi-Fi
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Crearea unei rețele Wi-Fi — { -webthings-gateway-brand }
+creating-header = Se creează rețeaua Wi-Fi…
 creating-content = Conectează-te la { $ssid } cu parola pe care tocmai ai creat-o și apoi navighează la { $gateway-link } sau { $ip-link } în browserul web.
 
 ## UI Updates
 
+ui-update-available = Este disponibilă o interfață pentru utilizatori actualizată.
+ui-update-reload = Reîncarcă
+ui-update-close = Închide
 
 ## General Terms
 
+ok = OK
+ellipsis = …
+event-log = Jurnal de evenimente
+edit = Editează
+remove = Elimină
+disconnected = Deconectat
+processing = Se procesează…
+submit = Trimite
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Meniu
+back-button =
+    .aria-label = Înapoi
+overflow-button =
+    .aria-label = Acțiuni suplimentare
+submit-button =
+    .aria-label = Trimite
+edit-button =
+    .aria-label = Editează
+save-button =
+    .aria-label = Salvează
