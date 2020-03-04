@@ -470,6 +470,9 @@ error = Galat
 errors = Galat
 gateway-unreachable = Gateway Tidak Dapat Dijangkau
 more-information = Informasi Lebih Lanjut
+invalid-file = Berkas tidak valid.
+failed-read-file = Gagal membaca berkas.
+failed-save = Gagal menyimpan.
 
 ## Schema Form
 
