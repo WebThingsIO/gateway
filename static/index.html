@@ -330,6 +330,33 @@
             <div id="user-settings-edit-error" class="error hidden"></div>
             <button id="user-settings-edit-save" class="user-settings-save"
               data-l10n-id="user-settings-save" type="submit"></button>
+            <div id="user-settings-mfa">
+              <input type="checkbox" id="user-settings-edit-mfa-enabled" name="mfa"
+                class="user-checkbox">
+              <label for="user-settings-edit-mfa-enabled" class="checkbox"></label>
+              <span data-l10n-id="user-settings-mfa-enable"></span>
+              <button id="user-settings-mfa-regenerate-codes"
+                data-l10n-id="user-settings-mfa-regenerate-codes"
+                type="button" class="hidden"></button>
+              <div id="user-settings-edit-mfa-form" class="hidden">
+                <div data-l10n-id="user-settings-mfa-scan-code"></div>
+                <div id="user-settings-mfa-qr-code"></div>
+                <div data-l10n-id="user-settings-mfa-secret"></div>
+                <div id="user-settings-mfa-secret"></div>
+                <div data-l10n-id="user-settings-mfa-enter-code"></div>
+                <input type="text" id="user-settings-mfa-totp"
+                  data-l10n-id="user-settings-input-totp" minlength="6"
+                  maxlength="6" pattern="[0-9]{6}">
+                <div id="user-settings-mfa-error"
+                  data-l10n-id="user-settings-mfa-error" class="error hidden"></div>
+                <button id="user-settings-mfa-verify"
+                  data-l10n-id="user-settings-mfa-verify" type="button"></button>
+              </div>
+              <div id="user-settings-mfa-backup-codes-message"
+                data-l10n-id="user-settings-mfa-backup-codes" class="hidden"></div>
+              <div id="user-settings-mfa-backup-codes" class="hidden">
+              </div>
+            </div>
           </form>
         </section>
         <section id="user-settings-add" class="hidden settings-subsection">

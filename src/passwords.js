@@ -10,6 +10,7 @@
 
 const bcrypt = require('bcryptjs');
 const config = require('config');
+const speakeasy = require('speakeasy');
 
 let rounds;
 if (config.has('bcryptRounds')) {
@@ -50,4 +51,24 @@ module.exports = {
    */
   // eslint-disable-next-line max-len
   compareSync: (passwordText, passwordHash) => bcrypt.compareSync(passwordText, passwordHash),
+
+  /**
+   * Verify a TOTP token
+   * @param {string} sharedSecret - the MFA shared secret
+   * @param {object} token - an MFA token, must contain a totp member
+   * @return {boolean} If the token has been verified
+   */
+  verifyMfaToken: (sharedSecret, token) => {
+    // only supporting TOTP for now
+    if (token.totp) {
+      return speakeasy.totp.verify({
+        secret: sharedSecret,
+        encoding: 'base32',
+        window: 1,
+        token: token.totp,
+      });
+    }
+
+    return false;
+  },
 };

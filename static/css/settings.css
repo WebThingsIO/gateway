@@ -629,6 +629,7 @@
 
 :root .update-checkbox,
 :root .network-checkbox,
+:root .user-checkbox,
 :root .developer-checkbox,
 :root .experiment-checkbox {
   /* original check box is pushed outside the viewport */
@@ -652,13 +653,31 @@
   margin-left: -2rem;
 }
 
+#edit-user-form span {
+  max-width: calc(100% - 4rem);
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  top: -1.6rem;
+}
+
 :root .network-checkbox + label:before {
   content: "";
   display: inline-block;
-  width  : 3rem;
-  height : 3rem;
+  width: 3rem;
+  height: 3rem;
   float: left;
   margin: 1rem;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
+  background-size: 3rem auto;
+}
+
+:root .user-checkbox + label:before {
+  content: "";
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  margin: 1rem 1rem 1rem -1rem;
   background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
@@ -668,8 +687,8 @@
 :root .experiment-checkbox + label:before {
   content: "";
   display: inline-block;
-  width  : 3rem;
-  height : 3rem;
+  width: 3rem;
+  height: 3rem;
   float: right;
   margin-top: -0.25rem;
   background: url("/images/checkbox-sprite.png") no-repeat 0 0;
@@ -678,6 +697,7 @@
 
 :root .update-checkbox:checked + label:before,
 :root .network-checkbox:checked + label:before,
+:root .user-checkbox:checked + label:before,
 :root .developer-checkbox:checked + label:before,
 :root .experiment-checkbox:checked + label:before {
   background-position: 0 -3rem;
@@ -685,6 +705,7 @@
 
 :root .update-checkbox:disabled + label:before,
 :root .network-checkbox:disabled + label:before,
+:root .user-checkbox:disabled + label:before,
 :root .developer-checkbox:disabled + label:before,
 :root .experiment-checkbox:disabled + label:before {
   background-position: 0 -6rem;
@@ -692,6 +713,7 @@
 
 :root .update-checkbox:checked:disabled + label:before,
 :root .network-checkbox:checked:disabled + label:before,
+:root .user-checkbox:checked:disabled + label:before,
 :root .developer-checkbox:checked:disabled + label:before,
 :root .experiment-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
@@ -782,7 +804,7 @@
 
 .user-form {
   top: 50%;
-  transform: translateY(calc(-50% - 6rem));
+  transform: translateY(-50%);
   position: relative;
   text-align: center;
   font-size: 1.6rem;
@@ -790,6 +812,7 @@
   min-width: 28rem;
   max-width: 38rem;
   margin: 0 auto;
+  max-height: 100%;
 }
 
 .network-settings-wrap {
@@ -972,4 +995,44 @@
 
 #network-settings-wlan-show-password-wrap {
   grid-column: 2 / 3;
+}
+
+#edit-user-form {
+  color: #fff;
+}
+
+#user-settings-mfa {
+  padding-top: 4rem;
+}
+
+#user-settings-mfa-secret {
+  word-break: break-all;
+}
+
+#user-settings-mfa-qr-code {
+  padding: 2rem 0 2rem 0;
+}
+
+#user-settings-mfa-secret {
+  padding-bottom: 4rem;
+}
+
+#user-settings-mfa-error {
+  padding-bottom: 1rem;
+}
+
+#user-settings-mfa-verify {
+  margin-bottom: 2rem;
+}
+
+#user-settings-mfa-backup-codes-message {
+  padding: 1rem 0;
+}
+
+#user-settings-mfa-backup-codes {
+  padding-bottom: 2rem;
+}
+
+#user-settings-mfa-backup-codes > p {
+  margin: 0.1rem 0;
 }

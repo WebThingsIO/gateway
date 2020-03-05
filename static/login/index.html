@@ -18,6 +18,9 @@
     <form id="login-form" class="user-form" method="post">
       <input type="email" id="email" name="email" data-l10n-id="user-settings-input-email" autofocus>
       <input type="password" id="password" name="password" data-l10n-id="user-settings-input-password">
+      <div id="totp-prompt" data-l10n-id="login-enter-totp" class="hidden"></div>
+      <input type="hidden" id="totp" name="totp" data-l10n-id="user-settings-input-totp"
+        minlength="6" maxlength="12" pattern="([0-9]{6}|[0-9a-f]{12})">
       <div id="error-submission" class="error hidden"></div>
       <button id="login-button" data-l10n-id="login-log-in" type="submit"></button>
     </form>

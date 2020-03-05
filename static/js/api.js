@@ -61,7 +61,9 @@ const API = {
         throw new Error(res.status);
       }
 
-      return res.json();
+      if (res.status !== 204) {
+        return res.json();
+      }
     });
   },
 
@@ -170,6 +172,32 @@ const API = {
     );
   },
 
+  userEnableMfa(id, totp = null) {
+    const body = {
+      enable: true,
+    };
+
+    if (totp) {
+      body.mfa = {totp};
+    }
+
+    return this.postJson(`/users/${encodeURIComponent(id)}/mfa`, body);
+  },
+
+  userDisableMfa(id) {
+    return this.postJson(
+      `/users/${encodeURIComponent(id)}/mfa`,
+      {enable: false}
+    );
+  },
+
+  userRegenerateMfaBackupCodes(id) {
+    return this.putJson(
+      `/users/${encodeURIComponent(id)}/mfa/codes`,
+      {generate: true}
+    );
+  },
+
   deleteUser(id) {
     return this.delete(`/users/${encodeURIComponent(id)}`);
   },
@@ -178,13 +206,38 @@ const API = {
     return this.getJson('/users/info');
   },
 
-  login(email, password) {
-    return this.postJson('/login', {email, password}).then((body) => {
-      const jwt = body.jwt;
-      localStorage.setItem('jwt', jwt);
-      API.jwt = jwt;
-    }).catch(() => {
-      throw new Error('Incorrect username or password');
+  login(email, password, totp) {
+    const body = {
+      email,
+      password,
+    };
+
+    if (totp) {
+      body.mfa = {totp};
+    }
+
+    const opts = {
+      method: 'POST',
+      headers: this.headers('application/json'),
+      body: JSON.stringify(body),
+    };
+
+    return fetch('/login', opts).then((res) => {
+      if (!res.ok) {
+        if (res.status === 401) {
+          return res.text().then((body) => {
+            throw new Error(body);
+          });
+        } else {
+          throw new Error(res.status);
+        }
+      }
+
+      return res.json().then((body) => {
+        const jwt = body.jwt;
+        localStorage.setItem('jwt', jwt);
+        this.jwt = jwt;
+      });
     });
   },
 

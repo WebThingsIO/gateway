@@ -9,6 +9,8 @@ const {
   createUser,
   addUser,
   editUser,
+  enableMfa,
+  disableMfa,
   deleteUser,
   loginUser,
   userInfo,
@@ -16,6 +18,7 @@ const {
   userCount,
   logoutUser,
 } = require('../user');
+const speakeasy = require('speakeasy');
 
 it('creates a user and get email', async () => {
   const jwt = await createUser(server, TEST_USER);
@@ -204,5 +207,175 @@ it('fails to log in with incorrect password', async () => {
     await loginUser(server, Object.assign({}, TEST_USER, {password: 'wrong'}));
   } catch (err) {
     expect(err.status).toBe(401);
+  }
+});
+
+it('fails to enable MFA with wrong token', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  try {
+    await enableMfa(
+      server,
+      jwt,
+      Object.assign({}, TEST_USER, {id: info.id}),
+      '000000'
+    );
+  } catch (err) {
+    expect(err.status).toBe(401);
+  }
+});
+
+it('fails to log in with missing MFA token', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  try {
+    await loginUser(server, TEST_USER);
+  } catch (err) {
+    expect(err.status).toBe(401);
+    expect(err.body.mfaRequired).toBe(true);
+  }
+});
+
+it('fails to log in with incorrect MFA token', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  try {
+    await loginUser(
+      server,
+      Object.assign({}, TEST_USER, {mfa: {totp: '000000'}})
+    );
+  } catch (err) {
+    expect(err.status).toBe(401);
+    expect(err.body.mfaRequired).toBe(true);
+  }
+});
+
+it('logs in successfully with MFA token', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  const params =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  const totp = speakeasy.totp({
+    secret: params.secret,
+    encoding: 'base32',
+  });
+  await loginUser(server, Object.assign({}, TEST_USER, {mfa: {totp}}));
+});
+
+it('fails to log in with incorrect MFA backup code', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  try {
+    const totp = '0123456789';
+    await loginUser(server, Object.assign({}, TEST_USER, {mfa: {totp}}));
+  } catch (err) {
+    expect(err.status).toBe(401);
+    expect(err.body.mfaRequired).toBe(true);
+  }
+});
+
+it('logs in successfully with MFA backup code', async () => {
+  await createUser(server, TEST_USER);
+  const jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  const params =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  await loginUser(
+    server,
+    Object.assign({}, TEST_USER, {mfa: {totp: params.backupCodes[0]}})
+  );
+});
+
+it('fails to log in twice with same MFA backup code', async () => {
+  await createUser(server, TEST_USER);
+  let jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  const params =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  jwt = await loginUser(
+    server,
+    Object.assign({}, TEST_USER, {mfa: {totp: params.backupCodes[0]}})
+  );
+  await logoutUser(server, jwt);
+  try {
+    await loginUser(
+      server,
+      Object.assign({}, TEST_USER, {mfa: {totp: params.backupCodes[0]}})
+    );
+  } catch (err) {
+    expect(err.status).toBe(401);
+    expect(err.body.mfaRequired).toBe(true);
+  }
+});
+
+it('enables and disables MFA, then logs in', async () => {
+  await createUser(server, TEST_USER);
+  let jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  const params =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  const totp = speakeasy.totp({
+    secret: params.secret,
+    encoding: 'base32',
+  });
+  jwt = await loginUser(server, Object.assign({}, TEST_USER, {mfa: {totp}}));
+  await disableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  await loginUser(server, TEST_USER);
+});
+
+it('resets rate limit after successful login', async () => {
+  let jwt = await createUser(server, TEST_USER);
+  jwt = await loginUser(server, TEST_USER);
+  await logoutUser(server, jwt);
+
+  for (let i = 0; i < 9; ++i) {
+    try {
+      await loginUser(
+        server,
+        Object.assign({}, TEST_USER, {password: 'wrong'})
+      );
+    } catch (err) {
+      expect(err.status).toBe(401);
+    }
+  }
+
+  jwt = await loginUser(server, TEST_USER);
+  await logoutUser(server, jwt);
+
+  for (let i = 0; i < 10; ++i) {
+    try {
+      await loginUser(
+        server,
+        Object.assign({}, TEST_USER, {password: 'wrong'})
+      );
+    } catch (err) {
+      expect(err.status).toBe(401);
+    }
+  }
+
+  try {
+    await loginUser(
+      server,
+      Object.assign({}, TEST_USER, {password: 'wrong'})
+    );
+  } catch (err) {
+    // rate limit hit
+    expect(err.status).toBe(429);
   }
 });
