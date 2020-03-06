@@ -113,6 +113,7 @@ user-settings-input-email =
     .placeholder = E-post
 user-settings-input-password =
     .placeholder = Lösenord
+user-settings-mfa-verify = Verifiera
 user-settings-input-new-password =
     .placeholder = Nytt lösenord (valfritt)
 user-settings-input-confirm-new-password =
@@ -493,6 +494,7 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Logga in — { -webthings-gateway-brand }
 login-log-in = Logga in
+login-wrong-credentials = Användarnamn eller lösenord är felaktigt.
 
 ## Create First User Page
 
