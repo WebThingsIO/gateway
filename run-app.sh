@@ -48,4 +48,9 @@ if ! is_container; then
 fi
 
 mkdir -p "${MOZIOT_HOME}/log"
+
+if [ -f "${MOZIOT_HOME}/log/run-app.log" ]; then
+  rm -f "${MOZIOT_HOME}/log/run-app.log"
+fi
+
 run_app
