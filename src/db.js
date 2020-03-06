@@ -84,7 +84,10 @@ const Database = {
       'id INTEGER PRIMARY KEY ASC,' +
       'email TEXT UNIQUE,' +
       'password TEXT,' +
-      'name TEXT' +
+      'name TEXT,' +
+      'mfaSharedSecret TEXT,' +
+      'mfaEnrolled BOOLEAN DEFAULT 0,' +
+      'mfaBackupCodes TEXT' +
     ');');
 
     /**
@@ -121,6 +124,12 @@ const Database = {
    */
   migrate: function() {
     this.db.run('DROP TABLE IF EXISTS jsonwebtoken_to_user');
+    this.db.run('ALTER TABLE users ADD COLUMN mfaSharedSecret TEXT', () => {});
+    this.db.run(
+      'ALTER TABLE users ADD COLUMN mfaEnrolled BOOLEAN DEFAULT 0',
+      () => {}
+    );
+    this.db.run('ALTER TABLE users ADD COLUMN mfaBackupCodes TEXT', () => {});
   },
 
   /**
@@ -365,8 +374,17 @@ const Database = {
    */
   createUser: async function(user) {
     const result = await this.run(
-      'INSERT INTO users (email, password, name) VALUES (?, ?, ?)',
-      [user.email, user.password, user.name]
+      'INSERT INTO users ' +
+      '(email, password, name, mfaSharedSecret, mfaEnrolled, mfaBackupCodes) ' +
+      'VALUES (?, ?, ?, ?, ?, ?)',
+      [
+        user.email,
+        user.password,
+        user.name,
+        user.mfaSharedSecret,
+        user.mfaEnrolled,
+        JSON.stringify(user.mfaBackupCodes || '[]'),
+      ]
     );
     assert(typeof result.lastID === 'number');
     return result.lastID;
@@ -380,8 +398,18 @@ const Database = {
   editUser: async function(user) {
     assert(typeof user.id === 'number');
     return this.run(
-      'UPDATE users SET email=?, password=?, name=? WHERE id=?',
-      [user.email, user.password, user.name, user.id]
+      'UPDATE users SET ' +
+      'email=?, password=?, name=?, mfaSharedSecret=?, mfaEnrolled=?, ' +
+      'mfaBackupCodes=? WHERE id=?',
+      [
+        user.email,
+        user.password,
+        user.name,
+        user.mfaSharedSecret,
+        user.mfaEnrolled,
+        JSON.stringify(user.mfaBackupCodes || '[]'),
+        user.id,
+      ]
     );
   },
 

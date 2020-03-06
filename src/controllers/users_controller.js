@@ -93,6 +93,56 @@ UsersController.post('/', async (request, response) => {
   });
 });
 
+UsersController.post('/:userId/mfa', auth, async (request, response) => {
+  const user = await Users.getUserById(request.params.userId);
+
+  if (!user) {
+    response.sendStatus(404);
+    return;
+  }
+
+  const body = request.body;
+  if (body.enable) {
+    if (!body.mfa) {
+      // Initial MFA enablement, generate params
+      const params = await user.getMfaParams();
+      response.status(200).json(params);
+    } else if (Passwords.verifyMfaToken(user.mfaSharedSecret, body.mfa)) {
+      // Stage 2, verify MFA token
+      user.mfaEnrolled = true;
+      const backupCodes = await user.generateMfaBackupCodes();
+      await Users.editUser(user);
+      response.status(200).json({backupCodes});
+    } else {
+      response.sendStatus(401);
+    }
+  } else {
+    // Disable MFA
+    user.mfaEnrolled = false;
+    await Users.editUser(user);
+    response.sendStatus(204);
+  }
+});
+
+UsersController.put('/:userId/mfa/codes', auth, async (request, response) => {
+  const user = await Users.getUserById(request.params.userId);
+
+  if (!user) {
+    response.sendStatus(404);
+    return;
+  }
+
+  const body = request.body;
+  if (body.generate) {
+    const backupCodes = await user.generateMfaBackupCodes();
+    await Users.editUser(user);
+    response.status(200).json({backupCodes});
+    return;
+  }
+
+  response.status(400).send('Request missing generate parameter');
+});
+
 /**
  * Edit a user
  */

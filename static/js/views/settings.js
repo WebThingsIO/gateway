@@ -20,6 +20,7 @@ const InstalledAddon = require('./installed-addon');
 const ipRegex = require('ip-regex')({exact: true});
 const Menu = require('./menu');
 const page = require('page');
+const QRCode = require('qrcode-svg');
 const User = require('./user');
 const Utils = require('../utils');
 const WirelessNetwork = require('./wireless-network');
@@ -612,6 +613,16 @@ const SettingsScreen = {
         newPassword: document.getElementById('user-settings-edit-new-password'),
         confirmPassword: document.getElementById('user-settings-edit-confirm-password'),
         passwordMismatch: document.getElementById('user-settings-edit-password-mismatch'),
+        mfaEnabled: document.getElementById('user-settings-edit-mfa-enabled'),
+        mfaForm: document.getElementById('user-settings-edit-mfa-form'),
+        mfaQrCode: document.getElementById('user-settings-mfa-qr-code'),
+        mfaSecret: document.getElementById('user-settings-mfa-secret'),
+        mfaTotp: document.getElementById('user-settings-mfa-totp'),
+        mfaVerify: document.getElementById('user-settings-mfa-verify'),
+        mfaError: document.getElementById('user-settings-mfa-error'),
+        mfaRegenerateCodes: document.getElementById('user-settings-mfa-regenerate-codes'),
+        mfaBackupCodesMessage: document.getElementById('user-settings-mfa-backup-codes-message'),
+        mfaBackupCodes: document.getElementById('user-settings-mfa-backup-codes'),
         error: document.getElementById('user-settings-edit-error'),
       },
       add: {
@@ -625,6 +636,79 @@ const SettingsScreen = {
         error: document.getElementById('user-settings-add-error'),
       },
     };
+
+    this.elements.user.edit.mfaEnabled.addEventListener('change', (e) => {
+      const id = parseInt(this.elements.user.edit.id.value, 10);
+
+      if (e.target.checked) {
+        API.userEnableMfa(id).then((body) => {
+          this.elements.user.edit.mfaForm.classList.remove('hidden');
+          const qrcode = new QRCode({
+            content: body.url,
+            container: 'svg-viewbox',
+            join: true,
+          });
+          this.elements.user.edit.mfaQrCode.innerHTML = qrcode.svg();
+          this.elements.user.edit.mfaSecret.innerText = body.secret;
+          this.elements.user.edit.mfaVerify.disabled = true;
+        }).catch(console.error);
+      } else {
+        API.userDisableMfa(id).then(() => {
+          this.elements.user.edit.mfaError.classList.add('hidden');
+          this.elements.user.edit.mfaForm.classList.add('hidden');
+          this.elements.user.edit.mfaRegenerateCodes.classList.add('hidden');
+        }).catch(console.error);
+      }
+    });
+
+    this.elements.user.edit.mfaTotp.addEventListener('input', (e) => {
+      this.elements.user.edit.mfaVerify.disabled = e.target.value.length !== 6;
+    });
+
+    this.elements.user.edit.mfaVerify.addEventListener('click', (e) => {
+      e.target.disabled = true;
+      const id = parseInt(this.elements.user.edit.id.value, 10);
+
+      API.userEnableMfa(id, this.elements.user.edit.mfaTotp.value)
+        .then((body) => {
+          e.target.disabled = false;
+          this.elements.user.edit.mfaError.classList.add('hidden');
+          this.elements.user.edit.mfaForm.classList.add('hidden');
+          this.elements.user.edit.mfaBackupCodesMessage.classList.remove('hidden');
+          this.elements.user.edit.mfaBackupCodes.classList.remove('hidden');
+          body.backupCodes.forEach((c) => {
+            const p = document.createElement('p');
+            p.innerText = c;
+            this.elements.user.edit.mfaBackupCodes.appendChild(p);
+          });
+        }).catch(() => {
+          e.target.disabled = false;
+          this.elements.user.edit.mfaError.classList.remove('hidden');
+        });
+    });
+
+    this.elements.user.edit.mfaRegenerateCodes.addEventListener(
+      'click',
+      (e) => {
+        e.target.disabled = true;
+        const id = parseInt(this.elements.user.edit.id.value, 10);
+
+        API.userRegenerateMfaBackupCodes(id).then((body) => {
+          e.target.disabled = false;
+          this.elements.user.edit.mfaBackupCodesMessage.classList.remove('hidden');
+          this.elements.user.edit.mfaBackupCodes.classList.remove('hidden');
+          this.elements.user.edit.mfaBackupCodes.innerHTML = '';
+          body.backupCodes.forEach((c) => {
+            const p = document.createElement('p');
+            p.innerText = c;
+            this.elements.user.edit.mfaBackupCodes.appendChild(p);
+          });
+        }).catch((err) => {
+          e.target.disabled = false;
+          console.error(err);
+        });
+      }
+    );
 
     this.elements.user.edit.form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -1299,6 +1383,12 @@ const SettingsScreen = {
     this.userSettingsMain.classList.add('hidden');
     this.userSettingsAdd.classList.add('hidden');
     this.userSettingsEdit.classList.remove('hidden');
+    this.elements.user.edit.mfaForm.classList.add('hidden');
+    this.elements.user.edit.mfaError.classList.add('hidden');
+    this.elements.user.edit.mfaBackupCodes.innerHTML = '';
+    this.elements.user.edit.mfaBackupCodes.classList.add('hidden');
+    this.elements.user.edit.mfaBackupCodesMessage.classList.add('hidden');
+    this.elements.user.edit.mfaRegenerateCodes.classList.add('hidden');
     this.view.classList.add('dark');
 
     this.elements.user.edit.id.value = id;
@@ -1308,6 +1398,12 @@ const SettingsScreen = {
       this.elements.user.edit.password.value = '';
       this.elements.user.edit.newPassword.value = '';
       this.elements.user.edit.confirmPassword.value = '';
+      this.elements.user.edit.mfaEnabled.checked = user.mfaEnrolled;
+
+      if (user.mfaEnrolled) {
+        this.elements.user.edit.mfaRegenerateCodes.classList.remove('hidden');
+      }
+
       this.elements.user.edit.name.focus();
     });
   },

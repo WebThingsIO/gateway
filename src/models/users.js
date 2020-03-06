@@ -23,7 +23,15 @@ const Users = {
     if (!result) {
       return false;
     }
-    return new User(result.id, result.email, result.password, result.name);
+    return new User(
+      result.id,
+      result.email,
+      result.password,
+      result.name,
+      result.mfaSharedSecret,
+      result.mfaEnrolled,
+      result.mfaBackupCodes
+    );
   }),
 
   getCount: () => Database.getUserCount(),
@@ -47,7 +55,15 @@ const Users = {
     if (!row) {
       return row;
     }
-    return new User(row.id, row.email, row.password, row.name);
+    return new User(
+      row.id,
+      row.email,
+      row.password,
+      row.name,
+      row.mfaSharedSecret,
+      row.mfaEnrolled,
+      row.mfaBackupCodes
+    );
   },
 
   /**
@@ -56,7 +72,15 @@ const Users = {
    */
   getUsers: () => Database.getUsers().then((userRows) => {
     return userRows.map((row) => {
-      return new User(row.id, row.email, row.password, row.name);
+      return new User(
+        row.id,
+        row.email,
+        row.password,
+        row.name,
+        row.mfaSharedSecret,
+        row.mfaEnrolled,
+        row.mfaBackupCodes
+      );
     });
   }),
 
@@ -68,7 +92,8 @@ const Users = {
    * @return {User} user object.
    */
   createUser: async (email, password, name) => {
-    const user = new User(null, email.toLowerCase(), password, name);
+    const user =
+      new User(null, email.toLowerCase(), password, name, '', false, '');
     user.id = await Database.createUser(user);
     return user;
   },
