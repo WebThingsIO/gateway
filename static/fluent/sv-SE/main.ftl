@@ -113,6 +113,12 @@ user-settings-input-email =
     .placeholder = E-post
 user-settings-input-password =
     .placeholder = Lösenord
+user-settings-input-totp =
+    .placeholder = 2FA kod
+user-settings-mfa-enable = Aktivera tvåfaktorautentisering
+user-settings-mfa-scan-code = Skanna följande kod med valfri tvåfaktors autentiseringsapp.
+user-settings-mfa-error = Autentiseringskoden var felaktig.
+user-settings-mfa-enter-code = Ange koden från din autentiseringsapp nedan.
 user-settings-mfa-verify = Verifiera
 user-settings-input-new-password =
     .placeholder = Nytt lösenord (valfritt)
@@ -495,6 +501,8 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 login-title = Logga in — { -webthings-gateway-brand }
 login-log-in = Logga in
 login-wrong-credentials = Användarnamn eller lösenord är felaktigt.
+login-wrong-totp = Autentiseringskoden var felaktig.
+login-enter-totp = Ange kod från din autentiseringsapp.
 
 ## Create First User Page
 
