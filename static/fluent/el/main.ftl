@@ -111,6 +111,7 @@ user-settings-input-password =
     .placeholder = Κωδικός πρόσβασης
 user-settings-input-totp =
     .placeholder = Κωδικός 2FA
+user-settings-mfa-verify = Επαλήθευση
 user-settings-input-new-password =
     .placeholder = Νέος κωδικός πρόσβασης (προαιρετικό)
 user-settings-input-confirm-new-password =
@@ -151,6 +152,7 @@ update-up-to-date = Το σύστημά σας είναι ενημερωμένο
 update-settings-enable-self-updates = Ενεργοποίηση αυτόματων ενημερώσεων
 last-update = Τελευταία ενημέρωση
 current-version = Τρέχουσα έκδοση
+failed = Αποτυχία
 never = Ποτέ
 in-progress = Σε εξέλιξη…
 restarting = Επανεκκίνηση…
@@ -173,6 +175,8 @@ rules-preview-button =
     .alt = Προεπισκόπηση
 rules-delete-icon =
     .alt = Διαγραφή
+rules-drag-input-hint = Προσθήκη συσκευής ως εισόδου
+rules-drag-output-hint = Προσθήκη συσκευής ως εξόδου
 rules-scroll-left =
     .alt = Κύλιση προς τα αριστερά
 rules-scroll-right =
@@ -365,6 +369,7 @@ new-thing-pin-error = Λάθος PIN
 new-thing-pin-invalid = Μη έγκυρο PIN
 new-thing-cancel = Ακύρωση
 new-thing-submit = Υποβολή
+new-thing-credentials-error = Λανθασμένα διαπιστευτήρια
 new-thing-saved = Αποθηκεύτηκε
 new-thing-done = Τέλος
 
@@ -469,8 +474,12 @@ tunnel-setup-skip = Παράλειψη
 
 authorize-title = Αίτημα εξουσιοδότησης — { -webthings-gateway-brand }
 authorize-authorization-request = Αίτημα εξουσιοδότησης
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = Το <<name>> επιθυμεί πρόσβαση στην πύλη σας για <<function>> συσκευών.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = από <<domain>>
+authorize-monitor-and-control = εποπτεία και έλεγχο
+authorize-monitor = εποπτεία
 authorize-allow-all = Αποδοχή για όλες τις συσκευές
 authorize-allow =
     .value = Αποδοχή
@@ -509,14 +518,17 @@ wifi-setup-skip = Παράλειψη
 
 connecting-title = Σύνδεση στο Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Σύνδεση στο Wi-Fi…
+connecting-skipped = Η πύλη εκκινείται τώρα. Μεταβείτε στο { $gateway-link } από το πρόγραμμα περιήγησής σας, ενώ έχετε συνδεθεί στο ίδιο δίκτυο με την πύλη για να συνεχίσετε τη ρύθμιση.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Δημιουργία δικτύου Wi-Fi — { -webthings-gateway-brand }
 creating-header = Δημιουργία δικτύου Wi-Fi…
+creating-content = Παρακαλούμε συνδεθείτε στο { $ssid } με τον κωδικό πρόσβασης που μόλις δημιουργήσατε και έπειτα, μεταβείτε στο { $gateway-link } ή στο { $ip-link } από το πρόγραμμα περιήγησής σας.
 
 ## UI Updates
 
+ui-update-available = Ένα ενημερωμένο περιβάλλον χρήσης είναι διαθέσιμο.
 ui-update-reload = Ανανέωση
 ui-update-close = Κλείσιμο
 
