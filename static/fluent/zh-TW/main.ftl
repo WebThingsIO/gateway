@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = Email
 user-settings-input-password =
     .placeholder = 密碼
+user-settings-input-totp =
+    .placeholder = 2FA 代碼
+user-settings-mfa-enable = 開啟兩階段驗證
+user-settings-mfa-scan-code = 請使用任何兩階段驗證程式掃描下列條碼。
+user-settings-mfa-secret = 若上面的 QR Code 無法使用，可您的新 TOTP 密鑰:
+user-settings-mfa-error = 驗證碼不正確。
+user-settings-mfa-enter-code = 請在下面輸入來自驗證程式的驗證碼。
+user-settings-mfa-verify = 驗證
+user-settings-mfa-regenerate-codes = 重新產生備用代碼
+user-settings-mfa-backup-codes = 以下是您的備用代碼。每一組只能使用一次，請將它們保存在安全之處。
 user-settings-input-new-password =
     .placeholder = 新密碼（選填）
 user-settings-input-confirm-new-password =
@@ -486,6 +496,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = 登入 — { -webthings-gateway-brand }
 login-log-in = 登入
+login-wrong-credentials = 使用者名稱或密碼不正確。
+login-wrong-totp = 驗證碼不正確。
+login-enter-totp = 輸入來自驗證程式的驗證碼。
 
 ## Create First User Page
 
