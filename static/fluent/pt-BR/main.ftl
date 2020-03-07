@@ -118,9 +118,11 @@ user-settings-input-totp =
 user-settings-mfa-enable = Ativar autenticação em duas etapas
 user-settings-mfa-scan-code = Capture o código a seguir com qualquer aplicativo de autenticação em duas etapas.
 user-settings-mfa-secret = Esta é sua nova senha TOTP, caso o código QR acima não funcione:
-user-settings-mfa-error = O código de autenticação estava incorreto.
+user-settings-mfa-error = Código de autenticação incorreto.
+user-settings-mfa-enter-code = Digite abaixo o código do seu aplicativo autenticador.
 user-settings-mfa-verify = Verificar
 user-settings-mfa-regenerate-codes = Regerar códigos de backup
+user-settings-mfa-backup-codes = Estes são seus códigos de backup. Cada um pode ser usado apenas uma vez. Mantenha-os em um lugar seguro.
 user-settings-input-new-password =
     .placeholder = Nova senha (opcional)
 user-settings-input-confirm-new-password =
@@ -501,6 +503,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Accesso — { -webthings-gateway-brand }
 login-log-in = Entrar
+login-wrong-credentials = Nome de usuário ou senha incorreto.
+login-wrong-totp = Código de autenticação incorreto.
+login-enter-totp = Digite o código do seu aplicativo autenticador.
 
 ## Create First User Page
 
