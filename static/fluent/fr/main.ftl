@@ -116,6 +116,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = Code 2FA
 user-settings-mfa-enable = Activer l’authentification à deux facteurs
+user-settings-mfa-scan-code = Scannez le code suivant avec n’importe quelle application d’authentification à deux facteurs.
 user-settings-mfa-secret = Ceci est votre nouveau jeton TOTP secret, au cas où le QR code ci-dessus ne fonctionne pas :
 user-settings-mfa-error = Le code d’authentification est incorrect.
 user-settings-mfa-enter-code = Saisissez le code de votre application d’authentification ci-dessous.
@@ -504,6 +505,7 @@ login-title = Connexion — { -webthings-gateway-brand }
 login-log-in = Connexion
 login-wrong-credentials = L’identifiant ou le mot de passe est invalide.
 login-wrong-totp = Le code d’authentification est incorrect.
+login-enter-totp = Saisissez le code de votre application d’authentification.
 
 ## Create First User Page
 
