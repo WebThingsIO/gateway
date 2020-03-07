@@ -339,6 +339,32 @@ it('enables and disables MFA, then logs in', async () => {
   await loginUser(server, TEST_USER);
 });
 
+it('enables, disables, and re-enables MFA, but gets new secret', async () => {
+  await createUser(server, TEST_USER);
+  let jwt = await loginUser(server, TEST_USER);
+  const info = await userInfo(server, jwt);
+  const params1 =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  let totp = speakeasy.totp({
+    secret: params1.secret,
+    encoding: 'base32',
+  });
+  jwt = await loginUser(server, Object.assign({}, TEST_USER, {mfa: {totp}}));
+  await disableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  await logoutUser(server, jwt);
+  jwt = await loginUser(server, TEST_USER);
+  const params2 =
+    await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
+  expect(params2.secret).not.toBe(params1.secret);
+  await logoutUser(server, jwt);
+  totp = speakeasy.totp({
+    secret: params2.secret,
+    encoding: 'base32',
+  });
+  await loginUser(server, Object.assign({}, TEST_USER, {mfa: {totp}}));
+});
+
 it('resets rate limit after successful login', async () => {
   let jwt = await createUser(server, TEST_USER);
   jwt = await loginUser(server, TEST_USER);

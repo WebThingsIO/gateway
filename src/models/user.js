@@ -47,21 +47,7 @@ class User {
     };
   }
 
-  async getMfaParams() {
-    if (this.mfaSharedSecret) {
-      const url = speakeasy.otpauthURL({
-        secret: this.mfaSharedSecret,
-        encoding: 'base32',
-        issuer: 'WebThings Gateway',
-        label: `WebThings:${this.email}`,
-      });
-
-      return {
-        secret: this.mfaSharedSecret,
-        url,
-      };
-    }
-
+  async generateMfaParams() {
     const secret = speakeasy.generateSecret({
       issuer: 'WebThings Gateway',
       name: `WebThings:${this.email}`,
