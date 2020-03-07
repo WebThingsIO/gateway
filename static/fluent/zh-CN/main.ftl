@@ -113,6 +113,8 @@ user-settings-input-email =
     .placeholder = 电子邮件地址
 user-settings-input-password =
     .placeholder = 密码
+user-settings-mfa-error = 验证码不正确。
+user-settings-mfa-verify = 验证
 user-settings-input-new-password =
     .placeholder = 新密码（可选）
 user-settings-input-confirm-new-password =
@@ -493,6 +495,8 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = 登录 — { -webthings-gateway-brand }
 login-log-in = 登录
+login-wrong-credentials = 用户名或密码不正确。
+login-wrong-totp = 验证码不正确。
 
 ## Create First User Page
 
