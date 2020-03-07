@@ -242,7 +242,7 @@ logs-days = Jours
 logs-weeks = Semaines
 logs-save = Enregistrer
 logs-remove-dialog-title = Suppression en cours
-logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Voulez-vous vraiment la supprimer ?
+logs-remove-dialog-warning = La suppression du journal supprimera toutes ses données. Voulez-vous vraiment le supprimer ?
 logs-remove = Supprimer
 logs-unable-to-create = Impossible de créer le journal
 logs-server-remove-error = Erreur du serveur : impossible de supprimer le journal
@@ -370,8 +370,8 @@ utils-months-ago =
     }
 utils-years-ago =
     { $value ->
-        [one] Il y a { $value } année
-       *[other] Il y a { $value } années
+        [one] Il y a { $value } an
+       *[other] Il y a { $value } ans
     }
 minute = Minute
 hour = Heure
