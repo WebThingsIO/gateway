@@ -502,6 +502,8 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Connexion — { -webthings-gateway-brand }
 login-log-in = Connexion
+login-wrong-credentials = L’identifiant ou le mot de passe est invalide.
+login-wrong-totp = Le code d’authentification est incorrect.
 
 ## Create First User Page
 
