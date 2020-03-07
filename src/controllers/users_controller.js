@@ -105,7 +105,7 @@ UsersController.post('/:userId/mfa', auth, async (request, response) => {
   if (body.enable) {
     if (!body.mfa) {
       // Initial MFA enablement, generate params
-      const params = await user.getMfaParams();
+      const params = await user.generateMfaParams();
       response.status(200).json(params);
     } else if (Passwords.verifyMfaToken(user.mfaSharedSecret, body.mfa)) {
       // Stage 2, verify MFA token
