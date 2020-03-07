@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = Email
 user-settings-input-password =
     .placeholder = Passwort
+user-settings-input-totp =
+    .placeholder = 2FA-Code
+user-settings-mfa-enable = 2-Faktor-Authentifizierung aktivieren
+user-settings-mfa-scan-code = Scannen Sie den folgenden Code mit einer beliebigen Zwei-Faktor-Authentifizierungs-App.
+user-settings-mfa-secret = Dies ist das neue Geheimwort für TOTP, falls obiger Code nicht funktioniert:
+user-settings-mfa-error = Der Authentifizierungscode war falsch.
+user-settings-mfa-enter-code = Geben Sie hier unten den Code aus Ihrer Authentifizierungs-App ein.
+user-settings-mfa-verify = Verifizieren
+user-settings-mfa-regenerate-codes = Wiederherstellungscodes neu generieren
+user-settings-mfa-backup-codes = Dies sind Ihre Wiederherstellungscodes. Jeder kann nur einmal verwendet werden. Bewahren Sie sie an einem sicheren Ort auf.
 user-settings-input-new-password =
     .placeholder = Neues Passwort (optional)
 user-settings-input-confirm-new-password =
@@ -493,6 +503,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Login — { -webthings-gateway-brand }
 login-log-in = Anmelden
+login-wrong-credentials = Der Benutzername oder das Passwort war falsch.
+login-wrong-totp = Der Authentifizierungscode war falsch.
+login-enter-totp = Geben Sie den Code aus Ihrer Authentifizierungs-App ein.
 
 ## Create First User Page
 
