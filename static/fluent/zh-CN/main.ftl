@@ -114,12 +114,15 @@ user-settings-input-email =
 user-settings-input-password =
     .placeholder = 密码
 user-settings-input-totp =
-    .placeholder = 双因子验证(2FA)码
+    .placeholder = 2FA 码
 user-settings-mfa-enable = 启用双因子验证
 user-settings-mfa-scan-code = 请使用双因子验证器 App 在下方扫码。
+user-settings-mfa-secret = 若上面的二维码不可用，这是您的新 TOTP 密钥：
 user-settings-mfa-error = 验证码不正确。
+user-settings-mfa-enter-code = 请在下面输入来自验证器 App 的验证码。
 user-settings-mfa-verify = 验证
 user-settings-mfa-regenerate-codes = 重新生成备用码
+user-settings-mfa-backup-codes = 以下是您的备用码。每一组只能使用一次，请将它们保存在安全之处。
 user-settings-input-new-password =
     .placeholder = 新密码（可选）
 user-settings-input-confirm-new-password =
@@ -502,6 +505,7 @@ login-title = 登录 — { -webthings-gateway-brand }
 login-log-in = 登录
 login-wrong-credentials = 用户名或密码不正确。
 login-wrong-totp = 验证码不正确。
+login-enter-totp = 输入来自验证器 App 的验证码。
 
 ## Create First User Page
 
