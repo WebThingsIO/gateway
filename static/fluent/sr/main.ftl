@@ -122,6 +122,7 @@ user-settings-mfa-error = Код за проверу идентитета ниј
 user-settings-mfa-enter-code = Унесите код апликације за аутентификацију доле.
 user-settings-mfa-verify = Потврди
 user-settings-mfa-regenerate-codes = Обновите резервне кодове
+user-settings-mfa-backup-codes = Ово су ваши резервни кодови. Сваки код може се користити само једном. Држите их на сигурном месту.
 user-settings-input-new-password =
     .placeholder = Нова лозинка (изборно)
 user-settings-input-confirm-new-password =
@@ -509,6 +510,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Пријава — { -webthings-gateway-brand }
 login-log-in = Пријави ме
+login-wrong-credentials = Корисничко име или лозинка нису исправни.
+login-wrong-totp = Верификациони код није исправан.
+login-enter-totp = Унесите код из апликације за аутентификацију.
 
 ## Create First User Page
 
