@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mailadres
 user-settings-input-password =
     .placeholder = Wachtwoord
+user-settings-input-totp =
+    .placeholder = 2FA-code
+user-settings-mfa-enable = Tweefactorauthenticatie inschakelen
+user-settings-mfa-scan-code = Scan de volgende code met een tweefactorauthenticatie-app.
+user-settings-mfa-secret = Dit is uw nieuwe TOTP-geheim, voor het geval de bovenstaande QR-code niet werkt:
+user-settings-mfa-error = Authenticatiecode onjuist.
+user-settings-mfa-enter-code = Voer hieronder de code van uw authenticator-app in.
+user-settings-mfa-verify = Verifiëren
+user-settings-mfa-regenerate-codes = Back-upcodes opnieuw aanmaken
+user-settings-mfa-backup-codes = Dit zijn uw back-upcodes. Elke code kan slechts eenmaal worden gebruikt. Bewaar ze op een veilige plaats.
 user-settings-input-new-password =
     .placeholder = Nieuw wachtwoord (Optioneel)
 user-settings-input-confirm-new-password =
@@ -493,6 +503,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Aanmelden – { -webthings-gateway-brand }
 login-log-in = Aanmelden
+login-wrong-credentials = Gebruikersnaam of wachtwoord onjuist.
+login-wrong-totp = Authenticatiecode onjuist.
+login-enter-totp = Voer de code van uw authenticator-app in.
 
 ## Create First User Page
 
