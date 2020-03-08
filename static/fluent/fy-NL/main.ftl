@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mailadres
 user-settings-input-password =
     .placeholder = Wachtwurd
+user-settings-input-totp =
+    .placeholder = 2FA-koade
+user-settings-mfa-enable = Twafaktorautentikaasje ynskeakelje
+user-settings-mfa-scan-code = Scan de folgjende koade mei in twafaktorautentikaasje-app.
+user-settings-mfa-secret = Dit is jo nije TOTP-geheim, yn it gefal de boppesteande QR-koade net wurket:
+user-settings-mfa-error = Autentikaasjekoade net krekt.
+user-settings-mfa-enter-code = Fier hjirûnder de koade fan jo autentikator-app yn.
+user-settings-mfa-verify = Ferifiearje
+user-settings-mfa-regenerate-codes = Reservekopyen opnij oanmeitjse
+user-settings-mfa-backup-codes = Dit binne jo reservekopykoaden. Elke koade kin mar ien kear brûkt wurde. Bewarje se op in feilich plak.
 user-settings-input-new-password =
     .placeholder = Nij wachtwurd (opsjoneel)
 user-settings-input-confirm-new-password =
@@ -495,6 +505,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Oanmelde — { -webthings-gateway-brand }
 login-log-in = Oanmelde
+login-wrong-credentials = Brûkersnamme of wachtwurd is net krekt.
+login-wrong-totp = Autentikaasjekoade net krekt.
+login-enter-totp = Fier de koade fan jo autentikator-app yn.
 
 ## Create First User Page
 
