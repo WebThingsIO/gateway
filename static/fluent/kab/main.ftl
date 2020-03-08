@@ -224,12 +224,44 @@ loading = Asali…
 
 ## Add-on Settings
 
+author-unknown = Arussin
+disable = Ssens
+enable = Rmed
+by = sγur
+addon-configure = Swel
+addon-update = Leqqem
+addon-remove = Kkes
+addon-updating = Aleqqem...
+addon-updated = yettwalqem
+addon-update-failed = Ur yeddi ara
+addon-config-applying = Asnas…
+addon-config-apply = Snes
+addon-discovery-added = Yettwarna
+addon-discovery-add = Rnu
+addon-discovery-installing = Asebded…
+addon-discovery-failed = Ur yeddi ara
 
 ## Page Titles
 
+settings = Iɣewwaṛen
+domain = Taɣult
+users = Iseqdacen
+addons = Izegrar
+addon-discovery = Issin izegrar imaynuten
+experiments = Tisermiyin
+localization = Asideg
+updates = Leqqem
+developer = Aneflay
+network = Aẓeṭṭa
+wifi = Wi-Fi
+icon = Tignit
 
 ## Errors
 
+error = Tuccḍa
+errors = Tuccḍiwin
+more-information = Ugar n telɣut
+failed-read-file = Ur yezmir ara ad iɣeṛ afaylu.
 
 ## Schema Form
 
