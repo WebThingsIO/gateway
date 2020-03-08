@@ -107,6 +107,7 @@ localization-settings-language = Tutlayt
 
 update-settings-update-now = Leqqem tura
 update-available = Lqem amaynut yella
+update-up-to-date = Anagraw-ik yettwalqem.
 last-update = Aleqqem aneggaru
 failed = Ur yeddi ara
 never = Weṛǧin
@@ -169,9 +170,16 @@ context-menu-remove = Kkes
 ## Capabilities
 
 Camera = Takamiṛat
+Thing = Taɣawsa
 
 ## Properties
 
+on = Yermed
+off = Yensa
+closed = Yemdel
+locked = Isekkweṛ
+active = Urmid
+inactive = Insa
 
 ## Domain Setup
 
@@ -181,15 +189,35 @@ Camera = Takamiṛat
 
 ## Time
 
+utils-now = tura
+minute = Tasdat
+hour = Asrag
+day = Ass
+week = Dduṛt
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-percent = %
 
 ## New Thing View
 
+new-thing-save = Sekles
+new-thing-cancel = Sefsex
+new-thing-submit = Azen
+new-thing-username =
+    .placeholder = Sekcem isem n useqdac
+new-thing-password =
+    .placeholder = Sekcem awal uffir
+new-thing-saved = Yettwasekles
+new-thing-done = Immed
 
 ## New Web Thing View
 
+loading = Asali…
 
 ## Empty div Messages
 
