@@ -262,45 +262,100 @@ error = Tuccḍa
 errors = Tuccḍiwin
 more-information = Ugar n telɣut
 failed-read-file = Ur yezmir ara ad iɣeṛ afaylu.
+failed-save = Asekles ur yeddi ara.
 
 ## Schema Form
 
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
 
 ## Create First User Page
 
+signup-welcome = Ansuf
+signup-password-mismatch = Awalen uffiren ur mṣadan ara
+signup-next = Ɣer zdat
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Fren tansa web —{ -webthings-gateway-brand }
+tunnel-setup-welcome = Ansuf
+tunnel-setup-privacy-policy = Tasertit n tbaḍnit
+tunnel-setup-create = Rnu
+tunnel-setup-skip = Suref
 
 ## Authorize Page
 
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = Seg <<domain>>
+authorize-allow =
+    .value = Sireg
+authorize-deny = Gdel
 
 ## Local Token Page
 
 
 ## Router Setup Page
 
+router-setup-input-ssid =
+    .placeholder = Isem n uẓeṭṭa
+router-setup-input-password =
+    .placeholder = Awal uffir
+router-setup-input-confirm-password =
+    .placeholder = Sentem awal uffir
+router-setup-create =
+    .value = Rnu
+router-setup-password-mismatch = Awalen uffiren yessefk ad mṣadan
 
 ## Wi-Fi Setup Page
 
+wifi-setup-input-password =
+    .placeholder = Awal uffir
+wifi-setup-show-password = Sken awal uffir
+wifi-setup-connect =
+    .value = Qqen
+wifi-setup-network-icon =
+    .alt = Aẓeṭṭa Wi-Fi
+wifi-setup-skip = Suref
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Tuqqna ɣer Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Tuqqna ɣer Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
 
 ## UI Updates
 
+ui-update-reload = Smiren
+ui-update-close = Mdel
 
 ## General Terms
 
+ok = IH
+ellipsis = …
+edit = Ẓreg
+remove = Kkes
+disconnected = Yeffeɣ
+processing = Asesfer…
+submit = Azen
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Umuɣ
+back-button =
+    .aria-label = Ɣer deffir
+overflow-button =
+    .aria-label = Tiggawin nniḍen
+submit-button =
+    .aria-label = Azen
+edit-button =
+    .aria-label = Ẓreg
+save-button =
+    .aria-label = Sekles
