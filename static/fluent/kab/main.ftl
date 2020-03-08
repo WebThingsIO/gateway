@@ -39,6 +39,7 @@ settings-domain = Taɣult
 settings-network = Aẓeṭṭa
 settings-users = Iseqdacen
 settings-add-ons = Izegrar
+settings-localization = Asideg
 settings-updates = Leqqem
 settings-experiments = Tisermiyin
 settings-developer = Aneflay
@@ -56,7 +57,9 @@ network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Swel
 network-settings-wan-mode = Askar
+network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Tansa IP
+network-settings-dhcp = (DHCP) Awurman
 network-settings-done = Immed
 network-settings-wifi-password =
     .placeholder = Awal uffir
@@ -76,6 +79,7 @@ user-settings-input-email =
     .placeholder = Imayl
 user-settings-input-password =
     .placeholder = Awal uffir
+user-settings-mfa-verify = Senqed
 user-settings-input-confirm-new-password =
     .placeholder = Sentem awal uffir amaynut
 user-settings-input-confirm-password =
@@ -94,6 +98,7 @@ user-settings-save = Sekles
 
 ## Localization Settings
 
+localization-settings-language-region = Tutlayt & Temnaḍt
 localization-settings-country = Tamurt
 localization-settings-timezone = Izḍi usrig
 localization-settings-language = Tutlayt
@@ -107,6 +112,7 @@ failed = Ur yeddi ara
 never = Weṛǧin
 in-progress = Iteddu
 restarting = Allus n usenker
+checking-for-updates = Asenqed n ileqman…
 
 ## Developer Settings
 
@@ -152,12 +158,17 @@ logs-remove = Kkes
 
 ## Add New Things
 
+add-thing-done = Immed
+add-thing-cancel = Sefsex
 
 ## Context Menu
 
+context-menu-save = Sekles
+context-menu-remove = Kkes
 
 ## Capabilities
 
+Camera = Takamiṛat
 
 ## Properties
 
@@ -223,6 +234,9 @@ logs-remove = Kkes
 
 
 ## Creating Wi-Fi Network Page
+
+
+## UI Updates
 
 
 ## General Terms
