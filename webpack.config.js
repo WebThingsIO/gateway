@@ -31,7 +31,7 @@ const pluginsNode = [
 
 const webpackNode = {
   entry: './src/app.js',
-  mode: 'development',
+  mode: 'production',
   target: 'node',
   node: {
     __dirname: true,
@@ -196,7 +196,7 @@ const webpackWeb = {
       './node_modules/mobile-drag-drop/default.css',
     ],
   },
-  mode: 'development',
+  mode: 'production',
   target: 'web',
   optimization: {
     splitChunks: {
@@ -332,7 +332,7 @@ const webpackSW = {
   entry: {
     'service-worker.js': './static/service-worker.js',
   },
-  mode: 'development',
+  mode: 'production',
   target: 'webworker',
   output: {
     path: path.join(__dirname, 'build/static'),
