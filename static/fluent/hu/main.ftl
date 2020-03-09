@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mail
 user-settings-input-password =
     .placeholder = Jelszó
+user-settings-input-totp =
+    .placeholder = 2FA kód
+user-settings-mfa-enable = Kétfaktoros hitelesítés engedélyezése
+user-settings-mfa-scan-code = Olvassa le a következő kódot egy tetszőleges kétfaktoros hitelesítő alkalmazással
+user-settings-mfa-secret = Ez az új TOTP titka, arra az esetre, ha a fenti QR-kód nem működne:
+user-settings-mfa-error = A hitelesítési kód helytelen.
+user-settings-mfa-enter-code = Írja be alább a hitelesítő alkalmazásból származó kódját.
+user-settings-mfa-verify = Ellenőrzés
+user-settings-mfa-regenerate-codes = Biztonsági kódok újra előállítása
+user-settings-mfa-backup-codes = Ezek a biztonsági kódok. Mindegyiket csak egyszer lehet használni. Tartsa biztonságos helyen.
 user-settings-input-new-password =
     .placeholder = Új jelszó (nem kötelező)
 user-settings-input-confirm-new-password =
@@ -493,6 +503,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Bejelentkezés – { -webthings-gateway-brand }
 login-log-in = Bejelentkezés
+login-wrong-credentials = A felhasználónév vagy jelszó helytelen.
+login-wrong-totp = A hitelesítési kód helytelen.
+login-enter-totp = Írja be a hitelesítő alkalmazásból származó kódját.
 
 ## Create First User Page
 
