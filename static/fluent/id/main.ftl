@@ -552,12 +552,34 @@ router-setup-title = Pengaturan Router — { -webthings-gateway-brand }
 router-setup-header = Buat jaringan Wi-Fi baru
 router-setup-input-ssid =
     .placeholder = Nama jaringan
+router-setup-input-password =
+    .placeholder = Sandi
+router-setup-input-confirm-password =
+    .placeholder = Konfirmasi sandi
+router-setup-create =
+    .value = Buat
+router-setup-password-mismatch = Sandi harus sama
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Pengaturan Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Terhubung ke jaringan Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Sandi
+wifi-setup-show-password = Tampilkan sandi
+wifi-setup-connect =
+    .value = Sambungkan
+wifi-setup-network-icon =
+    .alt = Jaringan Wi-Fi
+wifi-setup-skip = Lewati
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Menhubungkan ke Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Menghubungkan ke Wi-Fi...
+connecting-connect = Harap pastikan Anda terhubung ke jaringan yang sama dan kemudian navigasikan ke { $gateway-link } di peramban web Anda untuk melanjutkan pengaturan.
+connecting-warning = Catatan: Jika Anda tidak dapat memuat { $domain }, cari alamat IP gerbang pada router Anda.
+connecting-header-skipped = Pengaturan Wi-Fi dilewati
 
 ## Creating Wi-Fi Network Page
 
