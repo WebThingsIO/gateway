@@ -580,15 +580,42 @@ connecting-header = Menghubungkan ke Wi-Fi...
 connecting-connect = Harap pastikan Anda terhubung ke jaringan yang sama dan kemudian navigasikan ke { $gateway-link } di peramban web Anda untuk melanjutkan pengaturan.
 connecting-warning = Catatan: Jika Anda tidak dapat memuat { $domain }, cari alamat IP gerbang pada router Anda.
 connecting-header-skipped = Pengaturan Wi-Fi dilewati
+connecting-skipped = Gerbang sekarang sedang dimulai. Arahkan ke { $gateway-link } di peramban web Anda saat terhubung ke jaringan yang sama dengan gerbang untuk melanjutkan pengaturan.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Membuat jaringan Wi-Fi — { -webthings-gateway-brand }
+creating-header = Membuat jaringan Wi-Fi...
+creating-content = Harap sambungkan ke { $ssid } denga sandi yang Anda telah buat, lalu navigasikan ke { $gateway-link } atau { $ip-link } di peramban Web anda.
 
 ## UI Updates
 
+ui-update-available = Antarmuka pengguna yang diperbarui tersedia.
+ui-update-reload = Muat Ulang
+ui-update-close = Tutup
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Log Event
+edit = Ubah
+remove = Hapus
+disconnected = Terputus
+processing = Memroses…
+submit = Kirim
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Kembali
+overflow-button =
+    .aria-label = Aksi Lainnya
+submit-button =
+    .aria-label = Kirim
+edit-button =
+    .aria-label = Ubah
+save-button =
+    .aria-label = Simpan
