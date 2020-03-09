@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = Surel
 user-settings-input-password =
     .placeholder = Kata sandi
+user-settings-input-totp =
+    .placeholder = Kode 2FA
+user-settings-mfa-enable = Aktifkan otentikasi 2-faktor
+user-settings-mfa-scan-code = Pindai kode berikut dengan aplikasi otentikator 2-faktor.
+user-settings-mfa-secret = Ini adalah TOTP rahasia baru Anda, jika kode QR di atas tidak berfungsi:
+user-settings-mfa-error = Kode otentikasi salah.
+user-settings-mfa-enter-code = Masukkan kode dari aplikasi otentikator Anda di bawah ini.
+user-settings-mfa-verify = Verifikasi
+user-settings-mfa-regenerate-codes = Regenerasi kode cadangan
+user-settings-mfa-backup-codes = Ini adalah kode cadangan Anda. Masing-masing hanya dapat digunakan satu kali. Simpan mereka di tempat yang aman.
 user-settings-input-new-password =
     .placeholder = Kata Sandi Baru (Opsional)
 user-settings-input-confirm-new-password =
@@ -476,18 +486,41 @@ failed-save = Gagal menyimpan.
 
 ## Schema Form
 
+unsupported-field = Skema isian tidak didukung
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Masuk — { -webthings-gateway-brand }
+login-log-in = Masuk
+login-wrong-credentials = Nama pengguna atau sandi salah
+login-wrong-totp = Kode otentikasi salah.
+login-enter-totp = Masukkan kode dari aplikasi otentikator Anda.
 
 ## Create First User Page
 
+signup-title = Buat Pengguna — { -webthings-gateway-brand }
+signup-welcome = Selamat Datang
+signup-create-account = Buat akun pengguna pertama Anda:
+signup-password-mismatch = Sandi tidak sama
+signup-next = Lanjut
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Pilih Alamat Web — { -webthings-gateway-brand }
+tunnel-setup-welcome = Selamat Datang
+tunnel-setup-choose-address = Pilih alamat web aman untuk gerbang Anda:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomain
+tunnel-setup-opt-in = Tolong kabari saya informasi terbaru tentang fitur baru dan peluang kontribusi.
+tunnel-setup-privacy-policy = Kebijakan Privasi
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token Reklamasi
+tunnel-setup-error = Galat terjadi ketika mengatur subdomain.
+tunnel-setup-create = Buat
 
 ## Authorize Page
 
