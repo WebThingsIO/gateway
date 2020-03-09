@@ -534,9 +534,16 @@ authorize-prompt = <<name>> ingin mengakses gerbang Anda ke perangkat <<function
 authorize-source = dari <<domain>>
 authorize-monitor-and-control = pantau dan kendali
 authorize-monitor = pantau
+authorize-allow-all = Izinkan untuk semua Things
+authorize-allow =
+    .value = Izinkan
+authorize-deny = Tolak
 
 ## Local Token Page
 
+local-token-title = Layanan Token Lokal — { -webthings-gateway-brand }
+local-token-header = Layanan Token Lokal
+local-token-your-token = Token lokal Anda adalah <a data-l10n-name="local-token-jwt">JSON Web Token</a> ini:
 
 ## Router Setup Page
 
