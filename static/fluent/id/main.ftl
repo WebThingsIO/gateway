@@ -527,6 +527,7 @@ tunnel-setup-time-sync = Menunggu jam sistem diatur dari Internet. Registrasi do
 ## Authorize Page
 
 authorize-title = Permintaan Otorisasi — { -webthings-gateway-brand }
+authorize-authorization-request = Permintaan Otorisasi
 
 ## Local Token Page
 
