@@ -122,6 +122,7 @@ user-settings-mfa-error = Roedd y cod dilysu yn anghywir.
 user-settings-mfa-enter-code = Rhowch y cod o'ch ap dilysu isod.
 user-settings-mfa-verify = Dilysu
 user-settings-mfa-regenerate-codes = Ail gynhyrchu codau wrth gefn
+user-settings-mfa-backup-codes = Dyma'ch codau wrth gefn. Dim ond unwaith y mae modd defnyddio pob un. Cadwch nhw mewn lle diogel.
 user-settings-input-new-password =
     .placeholder = Cyfrinair Newydd (Dewisol)
 user-settings-input-confirm-new-password =
@@ -530,6 +531,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Mewngofnod - { -webthings-gateway-brand }
 login-log-in = Mewngofnodi
+login-wrong-credentials = Roedd yr enw defnyddiwr neu'r cyfrinair yn anghywir.
+login-wrong-totp = Roedd y cod dilysu yn anghywir.
+login-enter-totp = Rhowch y cod o'ch ap dilysu.
 
 ## Create First User Page
 
