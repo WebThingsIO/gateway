@@ -544,9 +544,14 @@ authorize-deny = Tolak
 local-token-title = Layanan Token Lokal — { -webthings-gateway-brand }
 local-token-header = Layanan Token Lokal
 local-token-your-token = Token lokal Anda adalah <a data-l10n-name="local-token-jwt">JSON Web Token</a> ini:
+local-token-use-it = Gunakan ini untuk berkomunikasi dengan gerbang secara aman, dengan<a data-l10n-name="local-token-bearer-type">Otorisasi Tipe Bearer</a>.
 
 ## Router Setup Page
 
+router-setup-title = Pengaturan Router — { -webthings-gateway-brand }
+router-setup-header = Buat jaringan Wi-Fi baru
+router-setup-input-ssid =
+    .placeholder = Nama jaringan
 
 ## Wi-Fi Setup Page
 
