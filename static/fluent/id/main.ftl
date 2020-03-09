@@ -528,6 +528,12 @@ tunnel-setup-time-sync = Menunggu jam sistem diatur dari Internet. Registrasi do
 
 authorize-title = Permintaan Otorisasi — { -webthings-gateway-brand }
 authorize-authorization-request = Permintaan Otorisasi
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> ingin mengakses gerbang Anda ke perangkat <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = dari <<domain>>
+authorize-monitor-and-control = pantau dan kendali
+authorize-monitor = pantau
 
 ## Local Token Page
 
