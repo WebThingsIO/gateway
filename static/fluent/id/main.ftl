@@ -521,9 +521,12 @@ tunnel-setup-input-reclamation-token =
     .placeholder = Token Reklamasi
 tunnel-setup-error = Galat terjadi ketika mengatur subdomain.
 tunnel-setup-create = Buat
+tunnel-setup-skip = Lewati
+tunnel-setup-time-sync = Menunggu jam sistem diatur dari Internet. Registrasi domain kemungkinan akan gagal sampai ini selesai.
 
 ## Authorize Page
 
+authorize-title = Permintaan Otorisasi — { -webthings-gateway-brand }
 
 ## Local Token Page
 
