@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mail
 user-settings-input-password =
     .placeholder = Parolă
+user-settings-input-totp =
+    .placeholder = Cod 2FA
+user-settings-mfa-enable = Activează autentificarea cu 2 factori
+user-settings-mfa-scan-code = Scanează următorul cod cu orice aplicație de autentificare cu doi factori.
+user-settings-mfa-secret = Acesta este noul tău secret TOTP, în cazul în care codul QR de mai sus nu funcționează:
+user-settings-mfa-error = Codul de autentificare a fost incorect.
+user-settings-mfa-enter-code = Introdu codul din aplicația de autentificare de mai jos.
+user-settings-mfa-verify = Verifică
+user-settings-mfa-regenerate-codes = Regenerează codurile de rezervă
+user-settings-mfa-backup-codes = Acestea sunt codurile tale de rezervă. Fiecare poate fi folosit o singură dată. Păstrează-le într-un loc sigur.
 user-settings-input-new-password =
     .placeholder = Parola nouă (opțional)
 user-settings-input-confirm-new-password =
@@ -500,6 +510,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Autentificare — { -webthings-gateway-brand }
 login-log-in = Autentificare
+login-wrong-credentials = Parola sau utilizatorul nu a fost corect(ă).
+login-wrong-totp = Codul de autentificare a fost incorect.
+login-enter-totp = Introdu codul din aplicația de autentificare.
 
 ## Create First User Page
 
