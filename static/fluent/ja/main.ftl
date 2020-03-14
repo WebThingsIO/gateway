@@ -117,6 +117,7 @@ user-settings-input-totp =
     .placeholder = 二要素認証コード
 user-settings-mfa-enable = 二要素認証を有効化
 user-settings-mfa-scan-code = 任意の二要素認証アプリで次のコードをスキャンしてください。
+user-settings-mfa-secret = これが新しい TOTP 秘密鍵です。上記の QR コードが機能しない場合に使用します:
 user-settings-mfa-error = 認証コードが正しくありません。
 user-settings-mfa-enter-code = 認証アプリに表示されたコードを入力してください。
 user-settings-mfa-verify = 確認
