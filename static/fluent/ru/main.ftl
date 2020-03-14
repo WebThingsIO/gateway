@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = Электронная почта
 user-settings-input-password =
     .placeholder = Пароль
+user-settings-input-totp =
+    .placeholder = Код 2FA
+user-settings-mfa-enable = Включить двухфакторную аутентификацию
+user-settings-mfa-scan-code = Отсканируйте следующий код с помощью любого приложения двухфакторной аутентификации.
+user-settings-mfa-secret = Это ваш новый секрет TOTP, в случае если вышеуказанный QR-код не сработает:
+user-settings-mfa-error = Код аутентификации был неверным.
+user-settings-mfa-enter-code = Введите ниже код из вашего приложения для аутентификации.
+user-settings-mfa-verify = Подтвердить
+user-settings-mfa-regenerate-codes = Перегенерировать резервные коды
+user-settings-mfa-backup-codes = Это ваши резервные коды. Каждый из них может быть использован только один раз. Храните их в безопасном месте.
 user-settings-input-new-password =
     .placeholder = Новый пароль (необязательно)
 user-settings-input-confirm-new-password =
@@ -500,6 +510,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Войти — { -webthings-gateway-brand }
 login-log-in = Авторизоваться
+login-wrong-credentials = Неверное имя пользователя или пароль.
+login-wrong-totp = Код аутентификации был неверным.
+login-enter-totp = Введите код из вашего приложения для аутентификации.
 
 ## Create First User Page
 
