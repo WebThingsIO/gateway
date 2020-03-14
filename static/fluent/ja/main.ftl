@@ -119,6 +119,9 @@ user-settings-mfa-enable = 二要素認証を有効化
 user-settings-mfa-scan-code = 任意の二要素認証アプリで次のコードをスキャンしてください。
 user-settings-mfa-error = 認証コードが正しくありません。
 user-settings-mfa-enter-code = 認証アプリに表示されたコードを入力してください。
+user-settings-mfa-verify = 確認
+user-settings-mfa-regenerate-codes = バックアップコードを再生成
+user-settings-mfa-backup-codes = これらはバックアップコードです。それぞれ 1 回だけしか使用できません。安全な場所に保管してください。
 user-settings-input-new-password =
     .placeholder = 新しいパスワード (任意)
 user-settings-input-confirm-new-password =
@@ -499,6 +502,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = ログイン — { -webthings-gateway-brand }
 login-log-in = ログイン
+login-wrong-credentials = ユーザー名またはパスワードが正しくありません。
+login-wrong-totp = 認証コードが正しくありません。
+login-enter-totp = 認証アプリに表示されたコードを入力してください。
 
 ## Create First User Page
 
