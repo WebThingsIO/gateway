@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mail
 user-settings-input-password =
     .placeholder = Heslo
+user-settings-input-totp =
+    .placeholder = Kód na dvojstupňové overenie
+user-settings-mfa-enable = Aktivovať dvojstupňové overenie
+user-settings-mfa-scan-code = Oskenujte nasledujúci kód pomocou akejkoľvek aplikácie na dvojstupňové overenie.
+user-settings-mfa-secret = Ak QR kód vyššie nefunguje, použite TOTP:
+user-settings-mfa-error = Overovací kód bol nesprávny.
+user-settings-mfa-enter-code = Zadajte kód zo svojej aplikácie na overenie nižšie.
+user-settings-mfa-verify = Overiť
+user-settings-mfa-regenerate-codes = Opätovne vygenerovať zálohové kódy
+user-settings-mfa-backup-codes = Toto sú vaše zálohové kódy. Každý z nich môžete použiť iba raz. Uložte si ich na bezpečné miesto.
 user-settings-input-new-password =
     .placeholder = Nové heslo (voliteľné)
 user-settings-input-confirm-new-password =
@@ -500,6 +510,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Prihlásenie - { -webthings-gateway-brand }
 login-log-in = Prihlásenie
+login-wrong-credentials = Nesprávne používateľské meno alebo heslo.
+login-wrong-totp = Overovací kód bol nesprávny.
+login-enter-totp = Zadajte kód zo svojej aplikácie na overenie.
 
 ## Create First User Page
 
