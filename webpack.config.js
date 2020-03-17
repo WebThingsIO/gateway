@@ -31,7 +31,7 @@ const pluginsNode = [
 
 const webpackNode = {
   entry: './src/app.js',
-  mode: 'production',
+  mode: 'development',
   target: 'node',
   node: {
     __dirname: true,
