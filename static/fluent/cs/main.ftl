@@ -113,6 +113,16 @@ user-settings-input-email =
     .placeholder = E-mail
 user-settings-input-password =
     .placeholder = Heslo
+user-settings-input-totp =
+    .placeholder = Kód pro dvoufaktorové ověření
+user-settings-mfa-enable = Povolit dvoufaktorové ověření
+user-settings-mfa-scan-code = Naskenujte tento kód pomocí jakékoliv aplikace pro dvoufaktorové ověření.
+user-settings-mfa-secret = Toto je váš nový TOTP secret pro případ, že by QR kód výše nefungoval:
+user-settings-mfa-error = Nesprávný ověřovací kód.
+user-settings-mfa-enter-code = Níže zadejte kód z vaší ověřovací aplikace.
+user-settings-mfa-verify = Ověřit
+user-settings-mfa-regenerate-codes = Znovu vygenerovat záložní kódy.
+user-settings-mfa-backup-codes = Toto jsou vaše záložní kódy. Každý z nich můžete použít jenom jednou. Uložte si je na bezpečném místě.
 user-settings-input-new-password =
     .placeholder = Nové heslo (volitelné)
 user-settings-input-confirm-new-password =
@@ -500,6 +510,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Přihlášení - { -webthings-gateway-brand }
 login-log-in = Přihlášení
+login-wrong-credentials = Uživatelské jméno či heslo není správné.
+login-wrong-totp = Nesprávný ověřovací kód.
+login-enter-totp = Zadejte kód z vaší ověřovací aplikace.
 
 ## Create First User Page
 
