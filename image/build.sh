@@ -26,7 +26,11 @@ rm -rf pi-gen/stage3/03-add-gateway/files/gateway/{.git,image,node_modules}
 cd pi-gen
 
 # fix 32-/64-bit issue: https://github.com/RPi-Distro/pi-gen/issues/271
-sed -i '' 's_FROM debian:buster_FROM i386/debian:buster_' Dockerfile
+if sed --version 2>&1 | grep -q GNU; then
+  sed -i 's_FROM debian:buster_FROM i386/debian:buster_' Dockerfile
+else
+  sed -i '' 's_FROM debian:buster_FROM i386/debian:buster_' Dockerfile
+fi
 
 # skip stage4 and stage5
 touch ./stage4/SKIP ./stage5/SKIP
