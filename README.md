@@ -198,38 +198,11 @@ Under Fedora Linux:
 $ sudo dnf group install "C Development Tools and Libraries"
 ```
 
-### Install OpenSSL (Windows only)
-
-The Gateway depends on [`ursa`](https://github.com/JoshKaufman/ursa), which requires OpenSSL.
-
-Install [OpenSSL](http://slproweb.com/products/Win32OpenSSL.html) =< 1.0.2 (normal, not light) in the same bitness as your Node.js.
-
-[See here](https://github.com/JoshKaufman/ursa#windows-install).
-
-### Install Python 2.7 (Windows only)
-
-PageKite works with Python 2.7.
-
-Install Python 2.7 from [here](https://www.python.org/downloads/windows/).
-
-Enable "register extensions" on installing package, or associate file extension `.py` with python.
-
-### Install Python 3.X (Optional, Windows only)
-
-This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
-
-* Install Python 3.4+ from [here](https://www.python.org/downloads/windows/).
-  * Enable "Install launcher for all users" and "Add Python 3.X to PATH" on installing.
-  * Enable `python3` command using the following.
-```
-mklink "C:\path\to\python3\python3.exe" "C:\path\to\python3\python.exe"
-```
-
 ### Install Python Add-on Bindings (Optional)
 
 This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
 
-Execute the following command. On Linux, use sudo. On Windows, run as administrator.
+Execute the following command. On Linux, use sudo.
 
 ```
 python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
