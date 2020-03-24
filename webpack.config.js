@@ -67,28 +67,28 @@ const pluginsWeb = [
   new CopyWebpackPlugin([
     {
       from: 'static/**/*',
-      to: path.join(__dirname, 'build/'),
+      to: path.join(__dirname, 'build'),
       ignore: ['*.js', '*/index.html'],
     },
     {
       from: 'src/views/connecting.handlebars',
-      to: path.join(__dirname, 'build/views/'),
+      to: path.join(__dirname, 'build', 'views'),
     },
     {
       from: 'src/views/creating.handlebars',
-      to: path.join(__dirname, 'build/views/'),
+      to: path.join(__dirname, 'build', 'views'),
     },
     {
       from: 'src/views/hotspot.handlebars',
-      to: path.join(__dirname, 'build/views/'),
+      to: path.join(__dirname, 'build', 'views'),
     },
     {
       from: 'src/views/router-setup.handlebars',
-      to: path.join(__dirname, 'build/views/'),
+      to: path.join(__dirname, 'build', 'views'),
     },
     {
       from: 'src/views/wifi-setup.handlebars',
-      to: path.join(__dirname, 'build/views/'),
+      to: path.join(__dirname, 'build', 'views'),
     },
   ]),
   new ImageminPlugin({
@@ -211,7 +211,7 @@ const webpackWeb = {
     },
   },
   output: {
-    path: path.join(__dirname, 'build/static'),
+    path: path.join(__dirname, 'build', 'static'),
     filename: 'bundle/[hash]-[name]',
     publicPath: '/',
   },
@@ -335,7 +335,7 @@ const webpackSW = {
   mode: 'production',
   target: 'webworker',
   output: {
-    path: path.join(__dirname, 'build/static'),
+    path: path.join(__dirname, 'build', 'static'),
     filename: '[name]_',
   },
   module: {
