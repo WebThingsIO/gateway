@@ -52,9 +52,30 @@ settings-developer = Utviklarar
 
 domain-settings-local-label = Lokal tilgang
 domain-settings-local-update = Oppdater vertsnamn
+domain-settings-local-name =
+    .placeholder = gateway
 
 ## Network Settings
 
+network-settings-unsupported = Nettverks-innstillingar er ikkje støtta på denne plattforma.
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Heimenettverk
+network-settings-internet-image =
+    .alt = Internett
+network-settings-configure = Konfigurer
+network-settings-internet-wan = Internett (WAN)
+network-settings-wan-mode = Modus
+network-settings-home-network-lan = Heimenettverk (LAN)
+network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-ip-address = IP-adresse
+network-settings-dhcp = Automatisk (DHCP)
+network-settings-static = Manuell (statisk IP)
 
 ## User Settings
 
