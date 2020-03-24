@@ -33,12 +33,25 @@ add-things =
 ## Floorplan
 
 upload-floorplan = …Last opp planløysing
+upload-floorplan-hint = (.svg tilrådd)
 
 ## Top-Level Settings
 
+settings-domain = Domene
+settings-network = Nettverk
+settings-users = Brukarar
+settings-add-ons = Tillegg
+settings-adapters = Adapterar
+settings-localization = Omsetting
+settings-updates = Oppdateringar
+settings-authorizations = Autoriseringar
+settings-experiments = Eksperiment
+settings-developer = Utviklarar
 
 ## Domain Settings
 
+domain-settings-local-label = Lokal tilgang
+domain-settings-local-update = Oppdater vertsnamn
 
 ## Network Settings
 
