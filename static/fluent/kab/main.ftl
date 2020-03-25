@@ -296,6 +296,7 @@ not-pushed = UR yettwasenned ara
 on-off = Irmed/Insa
 on = Yermed
 off = Yensa
+color-temperature = Lḥamu n yini
 video-unsupported = Suref-aɣ, tavidyut ur tettwasefrak ara deg yiminig-ik.
 motion = Aḥerrek
 no-motion = Ulac aḥerrek
@@ -313,6 +314,13 @@ inactive = Insa
 tunnel-setup-reclaim-domain = Yettban d akken teskelseḍ yakan taɣult-a tasnawant. Akken ad tsetred-t <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">tekki dagi</a>.
 check-email-for-token = Ma ulac aɣilif wali tabwaḍt-ik n yiznan akken ad tawiḍ ajiṭun n usuter daɣen ad tsenteḍeḍ-t dagi.
 reclaim-failed = Ur izmir ara ad isuter taɣult.
+subdomain-already-used = Taɣult-a tasnawant tettwaseqdec yakan. Ma ulac aɣilif, fren tayeḍ.
+invalid-subdomain = Yir taɣult tasnawant.
+invalid-email = Yir tansa n yimayl.
+invalid-reclamation-token = Yir ajiṭun n nusuter.
+domain-success = Yedda! Ma ulac aɣilif, rǧu awelleh…
+issuing-error = Ur izmir ara ad d-imudd aselkin. Ɛreḍ tikkelt-nniden.
+redirecting = Awellhe iteddu…
 
 ## Booleans
 
@@ -407,6 +415,8 @@ new-web-thing-url =
     .placeholder = Sekcem tansa URL n tɣawsa Web
 new-web-thing-label = Taɣawsa Web
 loading = Asali…
+new-web-thing-multiple = Ddeqs n tɣawsiwin web i yettfwafen.
+new-web-thing-from = seg
 
 ## Empty div Messages
 
