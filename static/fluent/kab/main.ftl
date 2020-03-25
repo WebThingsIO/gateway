@@ -91,8 +91,17 @@ network-settings-username = Isem n useqdac
 network-settings-password = Awal uffir
 network-settings-router-ip = Tansi IP n tmeglayt
 network-settings-dhcp-server = Aqeddac DHCP
-network-settings-enable-wifi = Rmid Wi-Fi
+network-settings-enable-wifi = Rmed Wi-Fi
+network-settings-network-name = Isem n uzeṭṭa (SSID)
 wireless-connected = Iqqen
+wireless-icon =
+    .alt = Azeṭṭa Wi-Fi
+network-settings-changing = Abeddel n yiɣewwaṛen n uzeṭṭa iteddu. Rǧu ma ulac aɣilif.
+failed-ethernet-configure = Tawila n uzeṭṭa Ethernet tecceḍ.
+failed-wifi-configure = Tawila n uzeṭṭa Wi-Fi tecceḍ.
+failed-wan-configure = Tawila n uzeṭṭa WAN tecceḍ.
+failed-lan-configure = Tawila n uzeṭṭa LAN tecceḍ.
+failed-wlan-configure = Tawila n uzeṭṭa WLAN tecceḍ.
 
 ## User Settings
 
@@ -104,7 +113,15 @@ user-settings-input-email =
     .placeholder = Imayl
 user-settings-input-password =
     .placeholder = Awal uffir
+user-settings-input-totp =
+    .placeholder = Tangalt 2FA
+user-settings-mfa-enable = Rmed asesteb s snat n tarrayin
+user-settings-mfa-scan-code = Dumm-d tangalt-a s yal asnas n usesteb s snat n tarrayin.
+user-settings-mfa-secret = Wagi d ajiṭun-ik uffir amaynut, ma yella tangalit-ik QR ddaw-a ur teddi ara:
+user-settings-mfa-error = Tangalt n usesteb mačči d tameɣtut.
+user-settings-mfa-enter-code = Sekcem tangalt n usnas-ik n usesteb ddaw-a.
 user-settings-mfa-verify = Senqed
+user-settings-mfa-regenerate-codes = Ales asirew n tengalin n uḥraz
 user-settings-input-confirm-new-password =
     .placeholder = Sentem awal uffir amaynut
 user-settings-input-confirm-password =
