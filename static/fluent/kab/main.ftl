@@ -277,13 +277,26 @@ ColorSensor = Amaṭṭaf n yiniten
 EnergyMonitor = Aqareɛ n ṣṣehd
 BinarySensor = Amaṭṭaf imsin
 MultiLevelSensor = Amaṭṭaf s ddeqs n yiswiren
+Light = Taftilt
+DoorSensor = Amaṭṭaf n tewwurt
+MotionSensor = Amaṭṭaf n uḥerrek
+LeakSensor = Amaṭṭaf n trewla
+PushButton = Taqeffalt n utteli awuran
+VideoCamera = Takamirat n uvidyu
 Camera = Takamiṛat
+TemperatureSensor = Amaṭṭaf n lḥamu
+Lock = Leqfel
+Custom = Taɣawsa tudmawant
 Thing = Taɣawsa
 
 ## Properties
 
+pushed = Yettwasenned
+not-pushed = UR yettwasenned ara
+on-off = Irmed/Insa
 on = Yermed
 off = Yensa
+video-unsupported = Suref-aɣ, tavidyut ur tettwasefrak ara deg yiminig-ik.
 motion = Aḥerrek
 no-motion = Ulac aḥerrek
 open = Yeldi
@@ -291,11 +304,15 @@ closed = Yemdel
 locked = Isekkweṛ
 unlocked = Iserreḥ
 jammed = Yeččuṛ
+unknown = Arussin
 active = Urmid
 inactive = Insa
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Yettban d akken teskelseḍ yakan taɣult-a tasnawant. Akken ad tsetred-t <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">tekki dagi</a>.
+check-email-for-token = Ma ulac aɣilif wali tabwaḍt-ik n yiznan akken ad tawiḍ ajiṭun n usuter daɣen ad tsenteḍeḍ-t dagi.
+reclaim-failed = Ur izmir ara ad isuter taɣult.
 
 ## Booleans
 
@@ -473,6 +490,7 @@ authorize-deny = Gdel
 
 ## Router Setup Page
 
+router-setup-header = rnu azeṭṭa Wi-Fi amaynut
 router-setup-input-ssid =
     .placeholder = Isem n uẓeṭṭa
 router-setup-input-password =
@@ -485,6 +503,8 @@ router-setup-password-mismatch = Awalen uffiren yessefk ad mṣadan
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Tawila n Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Qqen ɣer uzeṭṭa Wi-Fi?
 wifi-setup-input-password =
     .placeholder = Awal uffir
 wifi-setup-show-password = Sken awal uffir
