@@ -420,9 +420,15 @@ new-web-thing-from = seg
 
 ## Empty div Messages
 
+no-things = Ulac ibenkan yakan. Tekki ɣef + akken ad tnadiḍ ibenkan yellan.
+thing-not-found = Taɣawsa ur tettwaf ara.
+action-not-found = Tigawt ur tettwaf ara.
+events-not-found = Taɣawsa-a ur ɣur-s ara ineḍruyen.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Af-s izegrar imaynuten
 author-unknown = Arussin
 disable = Ssens
 enable = Rmed
@@ -445,26 +451,36 @@ addon-discovery-failed = Ur yeddi ara
 settings = Iɣewwaṛen
 domain = Taɣult
 users = Iseqdacen
+edit-user = Ẓreg aseqdac
+add-user = Rnu aseqdac
+adapters = Imserwasen
 addons = Izegrar
+addon-config = Swel azegrir
 addon-discovery = Issin izegrar imaynuten
 experiments = Tisermiyin
 localization = Asideg
 updates = Leqqem
+authorizations = Tisirag
 developer = Aneflay
 network = Aẓeṭṭa
+ethernet = Ethernet
 wifi = Wi-Fi
 icon = Tignit
 
 ## Errors
 
+unknown-state = Addad arussin.
 error = Tuccḍa
 errors = Tuccḍiwin
+gateway-unreachable = Tiqenṭert ur tettwakcam ara
 more-information = Ugar n telɣut
+invalid-file = Yir afaylu.
 failed-read-file = Ur yezmir ara ad iɣeṛ afaylu.
 failed-save = Asekles ur yeddi ara.
 
 ## Schema Form
 
+unsupported-field = Azenziɣ ur yettwasefrak ara
 
 ## Icon Sources
 
@@ -472,10 +488,16 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Tuqqna — { -webthings-gateway-brand }
+login-wrong-credentials = Yir isem n useqdac neɣ wawal uffir.
+login-wrong-totp = Tangalt n usesteb mačči d tameɣtut.
+login-enter-totp = Sekcem tangalt seg usnas-ik n usesteb.
 
 ## Create First User Page
 
+signup-title = Rnu aseqdac — { -webthings-gateway-brand }
 signup-welcome = Ansuf
+signup-create-account = Rnu amiḍan-ik amaynut:
 signup-password-mismatch = Awalen uffiren ur mṣadan ara
 signup-next = Ɣer zdat
 
@@ -483,7 +505,13 @@ signup-next = Ɣer zdat
 
 tunnel-setup-title = Fren tansa web —{ -webthings-gateway-brand }
 tunnel-setup-welcome = Ansuf
+tunnel-setup-choose-address = Fren tansa web taɣelsant i tqenṭert-ik:
+tunnel-setup-input-subdomain =
+    .placeholder = taɣult tasnawant
+tunnel-setup-opt-in = Ma ulac aɣilif, lɣu-yi-d ɣef tmahinlin timaynutin neɣ tignatin n uttekki.
 tunnel-setup-privacy-policy = Tasertit n tbaḍnit
+tunnel-setup-input-reclamation-token =
+    .placeholder = Ajiṭun n usuter
 tunnel-setup-create = Rnu
 tunnel-setup-skip = Suref
 
