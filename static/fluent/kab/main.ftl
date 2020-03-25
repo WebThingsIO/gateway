@@ -79,6 +79,9 @@ network-settings-ip-address = Tansa IP
 network-settings-dhcp = (DHCP) Awurman
 network-settings-static = S ufus (IP usbiḍ)
 network-settings-pppoe = Tiqenṭert (PPPoE)
+network-settings-static-ip-address = Tansa IP tubiḍt
+network-settings-network-mask = Tagelmust n uzeṭṭa
+network-settings-gateway = Tiqenṭert
 network-settings-done = Immed
 network-settings-wifi-password =
     .placeholder = Awal uffir
@@ -86,6 +89,9 @@ network-settings-show-password = Sken awal uffir
 network-settings-connect = Qqen
 network-settings-username = Isem n useqdac
 network-settings-password = Awal uffir
+network-settings-router-ip = Tansi IP n tmeglayt
+network-settings-dhcp-server = Aqeddac DHCP
+network-settings-enable-wifi = Rmid Wi-Fi
 wireless-connected = Iqqen
 
 ## User Settings
