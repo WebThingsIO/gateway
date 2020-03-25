@@ -23,6 +23,8 @@ const Settings = require('./models/settings');
 const sleep = require('./sleep');
 const path = require('path');
 const {DONT_RESTART_EXIT_CODE} = require('gateway-addon').Constants;
+const {spawnSync} = require('child_process');
+const fs = require('fs');
 
 // Open the database.
 if (process.env.NODE_ENV !== 'test') {
@@ -83,6 +85,23 @@ async function loadAddon(addonPath, verbose) {
     .then((addonManagerProxy) => {
       console.log(`Loading add-on ${packageName} from ${addonPath}`);
       try {
+        // we try to link to a global gateway-addon module, because in some
+        // cases, NODE_PATH seems to not work
+        const modulePath = path.join(
+          addonPath,
+          'node_modules',
+          'gateway-addon'
+        );
+        if (!fs.existsSync(modulePath)) {
+          spawnSync(
+            'npm',
+            ['link', 'gateway-addon'],
+            {
+              cwd: addonPath,
+            }
+          );
+        }
+
         const addonLoader = dynamicRequire(addonPath);
         addonLoader(addonManagerProxy, newSettings, (packageName, err) => {
           console.error(`Failed to start add-on ${packageName}:`, err);
