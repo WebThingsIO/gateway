@@ -122,6 +122,9 @@ user-settings-mfa-error = Tangalt n usesteb mačči d tameɣtut.
 user-settings-mfa-enter-code = Sekcem tangalt n usnas-ik n usesteb ddaw-a.
 user-settings-mfa-verify = Senqed
 user-settings-mfa-regenerate-codes = Ales asirew n tengalin n uḥraz
+user-settings-mfa-backup-codes = Tigi d tingalin n uḥraz. Yal yiwet ad tettwaseqdac yiwet n tikkelt kan. Ḥrez-iten deg umḍiq yettwaḍemnen.
+user-settings-input-new-password =
+    .placeholder = Awal uffir amaynut (asefran)
 user-settings-input-confirm-new-password =
     .placeholder = Sentem awal uffir amaynut
 user-settings-input-confirm-password =
@@ -131,12 +134,15 @@ user-settings-save = Sekles
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Ulac imserwasen yellan.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Ulac tisirag.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Ulac tirmitin akka tura.
 
 ## Localization Settings
 
@@ -144,31 +150,49 @@ localization-settings-language-region = Tutlayt & Temnaḍt
 localization-settings-country = Tamurt
 localization-settings-timezone = Izḍi usrig
 localization-settings-language = Tutlayt
+localization-settings-units = Tayunin
+localization-settings-units-temperature = Azɣal
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
 update-settings-update-now = Leqqem tura
 update-available = Lqem amaynut yella
 update-up-to-date = Anagraw-ik yettwalqem.
+updates-not-supported = Ileqman ur ttwasefraken ara deg unagraw-a.
+update-settings-enable-self-updates = Rmed ileqman iwurmanen
 last-update = Aleqqem aneggaru
+current-version = Lqem amiran
 failed = Ur yeddi ara
 never = Weṛǧin
 in-progress = Iteddu
 restarting = Allus n usenker
 checking-for-updates = Asenqed n ileqman…
+failed-to-check-for-updates = Ur izmir ara ad inadi ileqman akka tura
 
 ## Developer Settings
 
 developer-settings-enable-ssh = Rmed SSH
+developer-settings-view-internal-logs = Wali iɣmisen idiganen
+developer-settings-create-local-authorization = Rnu asesteb adigan
 
 ## Rules
 
+add-rule =
+    .aria-label = Rnu alugen amaynut
 rules = Ilugan
+rules-create-rule-hint = Ulac ilugan yettwarnan. Tekki ɣef + akken ad ternuḍ alugen.
 rules-rule-name = Isem n ulugan
+rules-customize-rule-name-icon =
+    .alt = Mudd isem udmawan i ulugen
+rules-rule-description = Aglam n ulugen
 rules-preview-button =
     .alt = Taskant
 rules-delete-icon =
     .alt = Kkes
+rules-drag-hint = Zuɣer ibenkan ɣer dagi akken ad ternuḍ alugen
+rules-drag-input-hint = Rnu ibenk n unekcum
 rules-delete-cancel =
     .value = Sefsex
 rule-invalid = Arameɣtu
