@@ -537,9 +537,11 @@ authorize-deny = Gdel
 local-token-title = Ameẓlu n ujiṭun adigan — { -webthings-gateway-brand }
 local-token-header = Ameẓlu n ujitun adigan
 local-token-your-token = Ajitun-ik adigan d wa <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Seqdec-it i teywalt akked tqenṭert-ik s wudem aɣelsan s <a data-l10n-name="local-token-bearer-type">Bearer-type Authorization</a>.
 
 ## Router Setup Page
 
+router-setup-title = Tawila n tmeglayt — { -webthings-gateway-brand }
 router-setup-header = rnu azeṭṭa Wi-Fi amaynut
 router-setup-input-ssid =
     .placeholder = Isem n uẓeṭṭa
@@ -568,6 +570,9 @@ wifi-setup-skip = Suref
 
 connecting-title = Tuqqna ɣer Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Tuqqna ɣer Wi-Fi…
+connecting-connect = Ma ulac aɣilif ḍmen ma yella teqqneḍ ɣer yiwen-nni n uzeṭṭa, sakin inig ɣer { $gateway-link } s yiminig-ik web  akken ad tkemmleḍ tawila.
+connecting-warning = Tamawt: Ma yella tremdeḍ asali n { $domain }, nadi tansa IP n tqeṭert n tmeglayt-ik.
+connecting-header-skipped = Tawila n Wi-Fi tezgel
 
 ## Creating Wi-Fi Network Page
 
