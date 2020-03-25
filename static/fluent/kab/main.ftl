@@ -238,25 +238,45 @@ logs-property = Taɣaṛa
 logs-property-select =
     .aria-label = Timeẓlit n uɣmis
 logs-retention = Tuṭṭfa
+logs-retention-length =
+    .aria-label = Tanzagt n tuṭṭfa n yiɣmisen
+logs-retention-unit =
+    .aria-label = Tayunt n tuṭṭfa n yiɣmisen
 logs-hours = Isragen
 logs-days = Ussan
 logs-weeks = Dduṛtat
 logs-save = Sekles
 logs-remove-dialog-title = Tuksa
+logs-remove-dialog-warning = Tukksa n uɣmis ad yekkes meṛṛa isefka-is. Tebɣiḍ s tidet ad tekkseḍ-t?
 logs-remove = Kkes
+logs-unable-to-create = UR izmir ara ad yernu aɣmis
+logs-server-remove-error = Tuccḍa n uqeddac: ur izmir ara ad ikkes aɣmis
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Anadi
+add-thing-scanning = Anadi n yibenkan imaynuten…
+add-thing-add-adapters-hint = Ulac amaynut. Ɛreḍ<a data-l10n-name="add-thing-add-adapters-hint-anchor">timerna n kra n yizegrar</a>.
+add-thing-add-by-url = Rnu s tensa URL…
 add-thing-done = Immed
 add-thing-cancel = Sefsex
 
 ## Context Menu
 
+context-menu-choose-icon = Fren tignit…
 context-menu-save = Sekles
 context-menu-remove = Kkes
 
 ## Capabilities
 
+OnOffSwitch = Taqeffalt seddu/seḥbes
+MultiLevelSwitch = Taqeffalt s ddeqs n yiswiren
+ColorControl = Asefrek n yiniten
+ColorSensor = Amaṭṭaf n yiniten
+EnergyMonitor = Aqareɛ n ṣṣehd
+BinarySensor = Amaṭṭaf imsin
+MultiLevelSensor = Amaṭṭaf s ddeqs n yiswiren
 Camera = Takamiṛat
 Thing = Taɣawsa
 
@@ -264,8 +284,13 @@ Thing = Taɣawsa
 
 on = Yermed
 off = Yensa
+motion = Aḥerrek
+no-motion = Ulac aḥerrek
+open = Yeldi
 closed = Yemdel
 locked = Isekkweṛ
+unlocked = Iserreḥ
+jammed = Yeččuṛ
 active = Urmid
 inactive = Insa
 
@@ -274,10 +299,47 @@ inactive = Insa
 
 ## Booleans
 
+true = Uzɣrin
+false = Aruzɣin
 
 ## Time
 
 utils-now = tura
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } n tasint aya
+       *[other] { $value } n tasinin aya
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } n tesdat aya
+       *[other] { $value } n tesdatin aya
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } n usrag aya
+       *[other] { $value } n isragen aya
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } n wass aya
+       *[other] { $value } n wussan aya
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } n yimalas aya
+       *[other] { $value } n yimalasen aya
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } n waggur aaya
+       *[other] { $value } n wagguren aaya
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } n useggas aya
+       *[other] { $value } n yiseggasen aya
+    }
 minute = Tasdat
 hour = Asrag
 day = Ass
@@ -289,22 +351,44 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = s
+abbrev-hour = r
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Anaw n yibenk d arussin
+new-thing-choose-icon = Fren tignit…
 new-thing-save = Sekles
+new-thing-pin =
+    .placeholder = Sekcem PIN
+new-thing-pin-error = PIn arameɣtu
+new-thing-pin-invalid = Yir PIN
 new-thing-cancel = Sefsex
 new-thing-submit = Azen
 new-thing-username =
     .placeholder = Sekcem isem n useqdac
 new-thing-password =
     .placeholder = Sekcem awal uffir
+new-thing-credentials-error = Yir Inekcam
 new-thing-saved = Yettwasekles
 new-thing-done = Immed
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Sekcem tansa URL n tɣawsa Web
+new-web-thing-label = Taɣawsa Web
 loading = Asali…
 
 ## Empty div Messages
