@@ -20,6 +20,7 @@ wordmark =
 things-menu-item = Tiɣawsiwin
 rules-menu-item = Ilugan
 logs-menu-item = Aɣmis
+floorplan-menu-item = Aɣawas n uswir
 settings-menu-item = Iɣewwaṛen
 log-out-button = Ffeɣ
 
@@ -32,6 +33,8 @@ add-things =
 
 ## Floorplan
 
+upload-floorplan = Azen aɣawa n uswir…
+upload-floorplan-hint = (.svg d awelleh)
 
 ## Top-Level Settings
 
@@ -39,27 +42,43 @@ settings-domain = Taɣult
 settings-network = Aẓeṭṭa
 settings-users = Iseqdacen
 settings-add-ons = Izegrar
+settings-adapters = Imserwasen
 settings-localization = Asideg
 settings-updates = Leqqem
+settings-authorizations = Tisirag
 settings-experiments = Tisermiyin
 settings-developer = Aneflay
 
 ## Domain Settings
 
 domain-settings-local-label = Anekcum adigan
+domain-settings-local-update = Beddel isem n usenneftaɣ
+domain-settings-remote-access = Anekcum anmeggag
+domain-settings-local-name =
+    .placeholder = Tiqenṭert
 
 ## Network Settings
 
+network-settings-unsupported = Iɣewwaṛen n uzeṭṭa ur ttwasefraken ara deg unagraw-a.
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Azeṭṭa n uxxam
 network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Swel
+network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Askar
+network-settings-home-network-lan = Azeṭṭa n uxxam (LAN)
 network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Tansa IP
 network-settings-dhcp = (DHCP) Awurman
+network-settings-static = S ufus (IP usbiḍ)
+network-settings-pppoe = Tiqenṭert (PPPoE)
 network-settings-done = Immed
 network-settings-wifi-password =
     .placeholder = Awal uffir
