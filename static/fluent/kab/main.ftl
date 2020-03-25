@@ -512,6 +512,7 @@ tunnel-setup-opt-in = Ma ulac aɣilif, lɣu-yi-d ɣef tmahinlin timaynutin neɣ 
 tunnel-setup-privacy-policy = Tasertit n tbaḍnit
 tunnel-setup-input-reclamation-token =
     .placeholder = Ajiṭun n usuter
+tunnel-setup-error = Teḍra-d tuccḍa deg tmerna n taɣult tasnawant.
 tunnel-setup-create = Rnu
 tunnel-setup-skip = Suref
 
