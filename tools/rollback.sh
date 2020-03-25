@@ -70,5 +70,9 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   nvm alias default node
   popd
 
+  cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
+  npm link
+  cd -
+
   systemctl start mozilla-iot-gateway
 fi

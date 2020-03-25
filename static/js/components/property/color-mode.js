@@ -1,7 +1,7 @@
 /**
  * ColorModeProperty
  *
- * A bubble showing a color mode label.
+ * A bubble showing a color mode selector.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,12 +9,12 @@
  */
 'use strict';
 
-const StringLabelProperty = require('./string-label');
+const EnumProperty = require('./enum');
 
-class ColorModeProperty extends StringLabelProperty {
-  connectedCallback() {
-    this.uppercase = true;
-    super.connectedCallback();
+class ColorModeProperty extends EnumProperty {
+  constructor() {
+    super();
+    this._upperCaseOptions = true;
   }
 }
 

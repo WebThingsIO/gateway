@@ -1781,6 +1781,10 @@ const SettingsScreen = {
     languageSelect.innerHTML = '';
 
     API.getLanguage().then((response) => {
+      if (response.current === 'en') {
+        response.current = 'en-US';
+      }
+
       for (const lang of response.valid) {
         const option = document.createElement('option');
         option.value = lang.code;

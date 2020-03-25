@@ -43,4 +43,8 @@ if [[ ! -f "$HOME/mozilla-iot/gateway_old/.nvmrc" ||
   "$(readlink -f "$(dirname "$0")")/update-addons.sh"
 fi
 
+cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
+npm link
+cd -
+
 touch .post_upgrade_complete

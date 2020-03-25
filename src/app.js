@@ -173,6 +173,7 @@ function startWiFiSetup() {
 function stopWiFiSetup() {
   console.log('Stopping WiFi Setup');
   servers.http.removeListener('request', WiFiSetupApp.onRequest);
+  servers.http.close();
 }
 
 function startRouterSetup() {
@@ -187,6 +188,7 @@ function startRouterSetup() {
 function stopRouterSetup() {
   console.log('Stopping Router Setup');
   servers.http.removeListener('request', RouterSetupApp.onRequest);
+  servers.http.close();
 }
 
 function getOptions() {

@@ -10,31 +10,49 @@
 
 'use strict';
 
-const StringLabelDetail = require('./string-label');
+const EnumDetail = require('./enum');
 const Utils = require('../../utils');
-const fluent = require('../../fluent');
 
-class ColorModeDetail extends StringLabelDetail {
+class ColorModeDetail extends EnumDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('off'));
+    super(thing, name, property);
     this.id = `color-mode-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
+  attach() {
+    if (this.readOnly) {
+      this.labelElement = this.thing.element.querySelector(`#${this.id}`);
+    } else {
+      super.attach();
+    }
+  }
+
   view() {
-    return `
-      <webthing-color-mode-property
-        data-read-only="true" data-name="${Utils.escapeHtml(this.label)}"
-        id="${this.id}">
-      </webthing-color-mode-property>`;
+    if (this.readOnly) {
+      return `
+        <webthing-string-label-property
+          data-read-only="true" data-name="${Utils.escapeHtml(this.label)}"
+          id="${this.id}">
+        </webthing-string-label-property>`;
+    } else {
+      return `
+        <webthing-color-mode-property
+          data-choices="${btoa(JSON.stringify(this.choices))}"
+          data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+        </webthing-color-mode-property>`;
+    }
   }
 
   update(value) {
-    if (!this.label) {
-      return;
-    }
+    if (this.readOnly) {
+      if (!this.labelElement) {
+        return;
+      }
 
-    this.labelElement.value = `${value}`.toUpperCase();
+      this.labelElement.value = `${value}`.toUpperCase();
+    } else {
+      super.update(value);
+    }
   }
 }
 

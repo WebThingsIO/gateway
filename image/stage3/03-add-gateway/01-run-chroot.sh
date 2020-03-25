@@ -17,6 +17,11 @@ npm ci
 ./node_modules/.bin/webpack
 npm prune --production
 
+# link the gateway-addon library to make it global
+cd ./node_modules/gateway-addon
+npm link
+cd ../..
+
 # Create the .post_upgrade_complete file so that it doesn't try to upgrade on
 # the first boot.
 touch .post_upgrade_complete
