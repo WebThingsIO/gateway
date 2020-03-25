@@ -76,9 +76,34 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adresse
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuell (statisk IP)
+network-settings-network-mask = Nettverksmaske
+network-settings-gateway = Gateway
+network-settings-done = Ferdig
+network-settings-wifi-password =
+    .placeholder = Passord
+network-settings-show-password = Vis passord
+network-settings-username = Brukarnamn
+network-settings-password = Passord
+network-settings-router-ip = Router IP-adresse
+network-settings-dhcp-server = DHCP-server
+network-settings-enable-wifi = Aktiver Wi-Fi
+network-settings-network-name = Nettverksnamn (SSID)
+wireless-icon =
+    .alt = Wi-Fi nettverk
 
 ## User Settings
 
+create-user =
+    .aria-label = Legg til ny brukar
+user-settings-input-name =
+    .placeholder = Namn
+user-settings-input-email =
+    .placeholder = E-post
+user-settings-input-password =
+    .placeholder = Passord
+user-settings-input-totp =
+    .placeholder = 2FA-kode
+user-settings-mfa-enable = Aktiver tofaktorautentisering
 
 ## Adapter Settings
 
