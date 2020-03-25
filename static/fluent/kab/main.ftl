@@ -515,17 +515,28 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Teḍra-d tuccḍa deg tmerna n taɣult tasnawant.
 tunnel-setup-create = Rnu
 tunnel-setup-skip = Suref
+tunnel-setup-time-sync = Araǧu n tuqqna i ubeddel n wakud n unagraw seg Internet. Asekles n taɣult izmer ur iteddu ara skud akud ur yettwalqem ara.
 
 ## Authorize Page
 
+authorize-title = Asuter n tsiregt — { -webthings-gateway-brand }
+authorize-authorization-request = Asuter n tsiregt
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> i bɣa ad yekcem ɣer tqenṭert-ik i <<function>> yibenkan.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = Seg <<domain>>
+authorize-monitor-and-control = Qreɛ daɣen sefqed
+authorize-monitor = qareɛ
+authorize-allow-all = Sireg i yal taɣawsa
 authorize-allow =
     .value = Sireg
 authorize-deny = Gdel
 
 ## Local Token Page
 
+local-token-title = Ameẓlu n ujiṭun adigan — { -webthings-gateway-brand }
+local-token-header = Ameẓlu n ujitun adigan
+local-token-your-token = Ajitun-ik adigan d wa <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 
 ## Router Setup Page
 
