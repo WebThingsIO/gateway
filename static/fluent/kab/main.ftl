@@ -55,7 +55,7 @@ domain-settings-local-label = Anekcum adigan
 domain-settings-local-update = Beddel isem n usenneftaɣ
 domain-settings-remote-access = Anekcum anmeggag
 domain-settings-local-name =
-    .placeholder = Tiqenṭert
+    .placeholder = gateway
 
 ## Network Settings
 
