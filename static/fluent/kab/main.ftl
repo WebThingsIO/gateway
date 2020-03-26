@@ -573,9 +573,13 @@ connecting-header = Tuqqna ɣer Wi-Fi…
 connecting-connect = Ma ulac aɣilif ḍmen ma yella teqqneḍ ɣer yiwen-nni n uzeṭṭa, sakin inig ɣer { $gateway-link } s yiminig-ik web  akken ad tkemmleḍ tawila.
 connecting-warning = Tamawt: Ma yella tremdeḍ asali n { $domain }, nadi tansa IP n tqeṭert n tmeglayt-ik.
 connecting-header-skipped = Tawila n Wi-Fi tezgel
+connecting-skipped = Tiqenṭert-a tekker akka tura. Qqim teqqneḍ ɣer yiwen-nni n uẓeṭṭa, sakin inig ɣer { $gateway-link } s yiminig-ik web akken ad tkemmleḍ tawila.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Timerna n uzeṭṭa Wi-fi tetteddu — { -webthings-gateway-brand }
+creating-header = Timerna n uzeṭṭa Wi-Fi tetteddu…
+creating-content = Ma ulac aɣilif qqen ɣer uzeṭṭa { $ssid } s wawal uffir i terniḍ, sakin inig ɣer { $gateway-link } neɣ { $ip-link } deg yiminig-ik.
 
 ## UI Updates
 
