@@ -46,12 +46,13 @@ if ! is_container; then
     ./tools/post-upgrade.sh
   fi
 else
-  if [[ ! -f "${MOZIOT_HOME}/.nvmrc" ||
-        $(sha256sum "${MOZIOT_HOME}/.nvmrc") != $(sha256sum "${HOME}/mozilla-iot/gateway/.nvmrc") ]]; then
-    cd "$HOME/mozilla-iot/gateway"
+  _node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
+  if [[ ! -f "${MOZIOT_HOME}/.node_version" ||
+        "$(< "${MOZIOT_HOME}/.node_version")" != "${_node_version}" ]]; then
+    cd "${HOME}/mozilla-iot/gateway"
     ./tools/update-addons.sh
     cd -
-    cp "${HOME}/mozilla-iot/gateway/.nvmrc" "${MOZIOT_HOME}/.nvmrc"
+    echo "${_node_version}" > "${MOZIOT_HOME}/.node_version"
   fi
 fi
 
