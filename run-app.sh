@@ -45,6 +45,14 @@ if ! is_container; then
   if [ ! -f .post_upgrade_complete ]; then
     ./tools/post-upgrade.sh
   fi
+else
+  if [[ ! -f "${MOZIOT_HOME}/.nvmrc" ||
+        $(sha256sum "${MOZIOT_HOME}/.nvmrc") != $(sha256sum "${HOME}/mozilla-iot/gateway/.nvmrc") ]]; then
+    cd "$HOME/mozilla-iot/gateway"
+    ./tools/update-addons.sh
+    cd -
+    cp "${HOME}/mozilla-iot/gateway/.nvmrc" "${MOZIOT_HOME}/.nvmrc"
+  fi
 fi
 
 mkdir -p "${MOZIOT_HOME}/log"

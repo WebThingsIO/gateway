@@ -24,7 +24,7 @@ sudo pip3 install -U "$_url"
 sudo pip2 uninstall -y gateway_addon || true
 
 # Uninstall adapt-parser, if present
-sudo pip3 uninstall adapt-parser || true
+sudo pip3 uninstall -y adapt-parser || true
 
 sudo systemctl enable mozilla-iot-gateway.service
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
@@ -40,7 +40,9 @@ sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 # if the node version changed, we need to update add-ons
 if [[ ! -f "$HOME/mozilla-iot/gateway_old/.nvmrc" ||
       $(sha256sum "$HOME/mozilla-iot/gateway_old/.nvmrc") != $(sha256sum "$HOME/mozilla-iot/gateway/.nvmrc") ]]; then
-  "$(readlink -f "$(dirname "$0")")/update-addons.sh"
+  cd "$HOME/mozilla-iot/gateway"
+  ./tools/update-addons.sh
+  cd -
 fi
 
 cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
