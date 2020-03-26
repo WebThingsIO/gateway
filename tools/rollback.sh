@@ -71,7 +71,7 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   popd
 
   cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
-  npm link
+  npm link || true
   cd -
 
   systemctl start mozilla-iot-gateway

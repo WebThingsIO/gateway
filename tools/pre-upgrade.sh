@@ -17,6 +17,6 @@ nvm cache clear
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
-sudo chown -R root:root "image/etc"
-sudo cp -r "image/etc" /
-sudo chown -R $(id -u):$(id -g) "image/etc"
+sudo chown -R root:root stage3/02-systemd-units/files/etc
+sudo cp -r stage3/02-systemd-units/files/etc /
+sudo chown -R $(id -u):$(id -g) stage3/02-systemd-units/files/etc

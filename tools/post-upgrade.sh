@@ -2,6 +2,11 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
+export NVM_DIR=${HOME}/.nvm
+\. "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm use
+nvm alias default node
+
 sudo apt update -y
 
 _all_deps="ffmpeg mosquitto arping wiringpi"
