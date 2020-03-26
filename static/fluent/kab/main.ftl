@@ -277,6 +277,7 @@ ColorSensor = Amaṭṭaf n yiniten
 EnergyMonitor = Aqareɛ n ṣṣehd
 BinarySensor = Amaṭṭaf imsin
 MultiLevelSensor = Amaṭṭaf s ddeqs n yiswiren
+SmartPlug = Taprizt
 Light = Taftilt
 DoorSensor = Amaṭṭaf n tewwurt
 MotionSensor = Amaṭṭaf n uḥerrek
@@ -285,17 +286,27 @@ PushButton = Taqeffalt n utteli awuran
 VideoCamera = Takamirat n uvidyu
 Camera = Takamiṛat
 TemperatureSensor = Amaṭṭaf n lḥamu
+Alarm = Tangedwilt
+Thermostat = Atirmusṭa
 Lock = Leqfel
 Custom = Taɣawsa tudmawant
 Thing = Taɣawsa
 
 ## Properties
 
+alarm = Tangedwilt
 pushed = Yettwasenned
 not-pushed = UR yettwasenned ara
 on-off = Irmed/Insa
 on = Yermed
 off = Yensa
+power = Tazizmert
+voltage = Tassist
+temperature = Lḥamu
+current = Aḍru
+color = Ini
+leak = Tarewla
+dry = Yekkaw
 color-temperature = Lḥamu n yini
 video-unsupported = Suref-aɣ, tavidyut ur tettwasefrak ara deg yiminig-ik.
 motion = Aḥerrek
@@ -489,6 +500,7 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 ## Login Page
 
 login-title = Tuqqna — { -webthings-gateway-brand }
+login-log-in = Qqen
 login-wrong-credentials = Yir isem n useqdac neɣ wawal uffir.
 login-wrong-totp = Tangalt n usesteb mačči d tameɣtut.
 login-enter-totp = Sekcem tangalt seg usnas-ik n usesteb.
@@ -583,6 +595,7 @@ creating-content = Ma ulac aɣilif qqen ɣer uzeṭṭa { $ssid } s wawal uffir 
 
 ## UI Updates
 
+ui-update-available = Agrudem n useqdac yettwaleqmen yella akka tura.
 ui-update-reload = Smiren
 ui-update-close = Mdel
 
@@ -590,6 +603,7 @@ ui-update-close = Mdel
 
 ok = IH
 ellipsis = …
+event-log = Aɣmis n yineḍruyen
 edit = Ẓreg
 remove = Kkes
 disconnected = Yeffeɣ
