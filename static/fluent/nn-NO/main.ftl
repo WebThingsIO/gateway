@@ -76,6 +76,7 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adresse
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuell (statisk IP)
+network-settings-static-ip-address = Statisk IP-adresse
 network-settings-network-mask = Nettverksmaske
 network-settings-gateway = Gateway
 network-settings-done = Ferdig
