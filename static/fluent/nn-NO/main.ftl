@@ -83,12 +83,14 @@ network-settings-done = Ferdig
 network-settings-wifi-password =
     .placeholder = Passord
 network-settings-show-password = Vis passord
+network-settings-connect = Kople til
 network-settings-username = Brukarnamn
 network-settings-password = Passord
 network-settings-router-ip = Router IP-adresse
 network-settings-dhcp-server = DHCP-server
 network-settings-enable-wifi = Aktiver Wi-Fi
 network-settings-network-name = Nettverksnamn (SSID)
+wireless-connected = Tilkopla
 wireless-icon =
     .alt = Wi-Fi nettverk
 
