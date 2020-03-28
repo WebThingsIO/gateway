@@ -107,6 +107,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
+user-settings-save = Lagre
 
 ## Adapter Settings
 
@@ -119,12 +120,31 @@ user-settings-mfa-enable = Aktiver tofaktorautentisering
 
 ## Localization Settings
 
+localization-settings-country = Land
+localization-settings-timezone = Tidssone
+localization-settings-language = Språk
+localization-settings-units-temperature = Temperatur
+localization-settings-units-temperature-celsius = Celsius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Oppdater no
+update-available = Ny versjon tilgjengeleg
+update-up-to-date = Systemet ditt er oppdatert.
+last-update = Siste oppdatering
+current-version = Gjeldande versjon
+failed = Mislykka
+never = Aldri
+in-progress = I framdrift…
+restarting = Startar om…
+checking-for-updates = Ser etter oppdateringar…
+failed-to-check-for-updates = Klarte ikkje å sjå etter oppdateringar akkurat no.
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Aktiver SSH
+developer-settings-view-internal-logs = Vis interne loggar
 
 ## Rules
 
