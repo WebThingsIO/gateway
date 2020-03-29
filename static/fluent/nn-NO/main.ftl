@@ -145,6 +145,7 @@ update-settings-update-now = Oppdater no
 update-available = Ny versjon tilgjengeleg
 update-up-to-date = Systemet ditt er oppdatert.
 updates-not-supported = Oppdateringar er ikkje støtta på denne plattforma.
+update-settings-enable-self-updates = Slå på automatiske oppdateringar
 last-update = Siste oppdatering
 current-version = Gjeldande versjon
 failed = Mislykka
@@ -158,9 +159,37 @@ failed-to-check-for-updates = Klarte ikkje å sjå etter oppdateringar akkurat n
 
 developer-settings-enable-ssh = Aktiver SSH
 developer-settings-view-internal-logs = Vis interne loggar
+developer-settings-create-local-authorization = Lag lokal autorisering
 
 ## Rules
 
+add-rule =
+    .aria-label = Lag ny regel
+rules = reglar
+rules-create-rule-hint = Ingen reglar laga. Klikk på + for å lage ein regel.
+rules-rule-name = Regelnamn
+rules-customize-rule-name-icon =
+    .alt = Tilpass regelnamn
+rules-rule-description = Regelbeskriving
+rules-preview-button =
+    .alt = Førehandsvising
+rules-delete-icon =
+    .alt = Slett
+rules-delete-cancel =
+    .value = Avbryt
+rules-delete-confirm =
+    .value = Fjern regel
+rule-invalid = Ugyldig
+rule-delete-cancel-button =
+    .value = Avbryt
+rule-delete-confirm-button =
+    .value = Fjern regel
+rule-select-property = Vel eigenskap
+rule-not = Ikkje
+rule-event = Hending
+rule-action = Handling
+rule-configure = Konfigurer…
+rule-time-title = Tid på dagen
 
 ## Logs
 
