@@ -222,7 +222,7 @@ notification-message = Izen
 notification-level = Aswir
 notification-low = Meẓẓi
 notification-normal = Amagnu
-notification-high = Meqqeṛ
+notification-high = Meqqer
 rule-name = Isem n ulugan
 
 ## Logs
