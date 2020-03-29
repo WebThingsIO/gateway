@@ -120,6 +120,9 @@ user-settings-mfa-scan-code = Scande le codice sequente con un application de au
 user-settings-mfa-secret = In caso le codice QR supra non functiona, isto es tu nove jeton TOTP secrete.
 user-settings-mfa-error = Le codice de authentification non es correcte.
 user-settings-mfa-enter-code = Insere le codice generate per tu app de authentification ci infra.
+user-settings-mfa-verify = Verificar
+user-settings-mfa-regenerate-codes = Regenerar le codices de salveguarda
+user-settings-mfa-backup-codes = Ecce tu codices de salveguarda. Cata codice pote esser utilisate solo un vice. Salveguarda los in loco secur.
 user-settings-input-new-password =
     .placeholder = Nove contrasigno (optional)
 user-settings-input-confirm-new-password =
@@ -500,6 +503,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Accesso — { -webthings-gateway-brand }
 login-log-in = Authenticar se
+login-wrong-credentials = Nomine de usator o contrasigno incorrecte.
+login-wrong-totp = Le codice de authentification non es correcte.
+login-enter-totp = Insere le codice generate per tu app de authentification.
 
 ## Create First User Page
 
