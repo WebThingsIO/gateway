@@ -190,9 +190,19 @@ rule-event = Hending
 rule-action = Handling
 rule-configure = Konfigurer…
 rule-time-title = Tid på dagen
+notification-title = Tittel
+notification-message = Melding
+notification-level = Nivå
+notification-low = Låg
+notification-normal = Normal
+notification-high = Høg
+rule-name = Regelnamn
 
 ## Logs
 
+add-log =
+    .aria-label = Lag ny logg
+logs = Loggar
 
 ## Add New Things
 
