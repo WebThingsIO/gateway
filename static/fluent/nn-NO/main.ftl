@@ -107,22 +107,34 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
+user-settings-input-new-password =
+    .placeholder = Nytt passord (valfritt)
+user-settings-input-confirm-new-password =
+    .placeholder = Stadfest nytt passord
+user-settings-input-confirm-password =
+    .placeholder = Stadfest passord
+user-settings-password-mismatch = Passorda samsvarar ikkje
 user-settings-save = Lagre
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Fann ingen adapterar.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Ingen autoriseringar.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Ingen eksperiment tilgjengelege akkurat no.
 
 ## Localization Settings
 
+localization-settings-language-region = Språk og region
 localization-settings-country = Land
 localization-settings-timezone = Tidssone
 localization-settings-language = Språk
+localization-settings-units = Einingar
 localization-settings-units-temperature = Temperatur
 localization-settings-units-temperature-celsius = Celsius (°C)
 localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
@@ -132,6 +144,7 @@ localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 update-settings-update-now = Oppdater no
 update-available = Ny versjon tilgjengeleg
 update-up-to-date = Systemet ditt er oppdatert.
+updates-not-supported = Oppdateringar er ikkje støtta på denne plattforma.
 last-update = Siste oppdatering
 current-version = Gjeldande versjon
 failed = Mislykka
