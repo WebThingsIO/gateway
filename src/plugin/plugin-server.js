@@ -34,7 +34,8 @@ class PluginServer extends EventEmitter {
       true,
       config.get('ports.ipc'),
       this.onMsg.bind(this),
-      'IpcSocket(plugin-server)'
+      'IpcSocket(plugin-server)',
+      {verbose: this.verbose}
     );
     this.verbose &&
       console.log('Server bound to', this.ipcSocket.ipcAddr);
