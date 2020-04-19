@@ -205,6 +205,17 @@ rules-delete-cancel =
 rules-delete-confirm =
     .value = Remover regra
 rule-invalid = Inválida
+rule-delete-prompt = Tem a certeza que deseja remover permanentemente esta regra?
+rule-delete-cancel-button =
+    .value = Cancelar
+rule-delete-confirm-button =
+    .value = Remover regra
+rule-select-property = Selecionar propriedade
+rule-not = Não
+rule-event = Evento
+rule-action = Ação
+rule-configure = Configurar…
+rule-time-title = Hora do dia
 
 ## Logs
 
