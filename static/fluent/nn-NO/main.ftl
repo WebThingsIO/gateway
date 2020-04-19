@@ -220,18 +220,62 @@ logs-remove = Fjern
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Skannar
+add-thing-done = Ferdig
+add-thing-cancel = Avbryt
 
 ## Context Menu
 
+context-menu-choose-icon = Vel ikon…
+context-menu-save = Lagre
+context-menu-remove = Fjern
 
 ## Capabilities
 
+OnOffSwitch = På/Av-knapp
+MultiLevelSwitch = Fleirnivåbrytar
+ColorControl = Fargekontroll
+ColorSensor = Fargesensor
+Light = Lys
+DoorSensor = Dørsensor
+MotionSensor = Rørslesensor
+PushButton = Trykk-knapp
+VideoCamera = Videokamera
+Camera = Kamera
+TemperatureSensor = Temperatursensor
+Alarm = Alarm
+Thermostat = Termostat
+Lock = Lås
 
 ## Properties
 
+alarm = Alarm
+on-off = På/Av
+on = På
+off = Av
+power = Effekt
+voltage = Spenning
+temperature = Temperatur
+current = Straum
+frequency = Frekvens
+color = Farge
+brightness = Lysstyrke
+dry = Tørr
+color-temperature = Fargetemperatur
+motion = Rørsle
+no-motion = Inga rørsle
+open = Opne
+closed = Stengd
+locked = Låst
+unlocked = Opplåst
+unknown = Ukjend
+active = Aktiv
+inactive = Inaktiv
 
 ## Domain Setup
 
+invalid-subdomain = Ugyldig underdomene
 
 ## Booleans
 
