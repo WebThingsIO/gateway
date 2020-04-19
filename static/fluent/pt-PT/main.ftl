@@ -517,24 +517,80 @@ signup-next = Seguinte
 
 tunnel-setup-title = Escolher endereço da Internet — { -webthings-gateway-brand }
 tunnel-setup-welcome = Bem-vindo
+tunnel-setup-choose-address = Escolha um endereço da Internet seguro para o seu gateway:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomínio
+tunnel-setup-opt-in = Por favor, mantenham-me atualizado sobre as novas funcionalidades e oportunidades de contribuição.
+tunnel-setup-privacy-policy = Política de privacidade
+tunnel-setup-input-reclamation-token =
+    .placeholder = Código de recuperação
+tunnel-setup-error = Ocorreu um erro enquanto configurava o subdomínio.
+tunnel-setup-create = Criar
+tunnel-setup-skip = Ignorar
+tunnel-setup-time-sync = A aguardar que o relógio do sistema seja definido a partir da Internet. É provável que o registo do domínio falhe até que isto seja feito.
 
 ## Authorize Page
 
+authorize-title = Pedido de autorização — { -webthings-gateway-brand }
+authorize-authorization-request = Pedido de autorização
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> gostaria de aceder ao seu gateway para <<function>> os dispositivos.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = de <<domain>>
+authorize-monitor-and-control = monitorizar e controlar
+authorize-monitor = monitorizar
+authorize-allow-all = Permitir para todas as Coisas
+authorize-allow =
+    .value = Permitir
+authorize-deny = Negar
 
 ## Local Token Page
 
+local-token-title = Serviço de código local — { -webthings-gateway-brand }
+local-token-header = Serviço de código local
+local-token-your-token = O seu código local é este <a data-l10n-name="local-token-jwt">código de Internet JSON</a>:
+local-token-use-it = Utilize-o para conversar com o gateway em segurança, com <a data-l10n-name="local-token-bearer-type">autorização do tipo Bearer</a>.
 
 ## Router Setup Page
 
+router-setup-title = Configurar roteador — { -webthings-gateway-brand }
+router-setup-header = Criar uma nova rede Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Nome da rede
+router-setup-input-password =
+    .placeholder = Palavra-passe
+router-setup-input-confirm-password =
+    .placeholder = Confirmar palavra-passe
+router-setup-create =
+    .value = Criar
+router-setup-password-mismatch = As palavras-passe devem coincidem
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuração do Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Ligar a uma rede Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Palavra-passe
+wifi-setup-show-password = Mostrar palavra-passe
+wifi-setup-connect =
+    .value = Ligar
+wifi-setup-network-icon =
+    .alt = Rede Wi-Fi
+wifi-setup-skip = Ignorar
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Ligação ao Wi-Fi — { -webthings-gateway-brand }
+connecting-header = A ligar ao Wi-Fi…
+connecting-connect = Por favor, verifique se está ligado à mesma rede e navegue até { $gateway-link } no seu navegador de Internet para continuar a configuração.
+connecting-warning = Nota: se não conseguir carregar { $domain }, procure o endereço de IP do gateway no seu roteador.
+connecting-header-skipped = Configuração do Wi-Fi ignorada
+connecting-skipped = O gateway está a ser iniciado agora. Navegue até { $gateway-link } no seu navegador de Internet enquanto estiver ligado à mesma rede do gateway para continuar a instalação.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Criação da rede Wi-Fi — { -webthings-gateway-brand }
+creating-header = A criar a rede Wi-Fi…
 
 ## UI Updates
 
