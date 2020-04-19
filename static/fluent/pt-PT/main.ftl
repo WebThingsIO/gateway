@@ -181,6 +181,30 @@ developer-settings-create-local-authorization = Criar autorização local
 
 add-rule =
     .aria-label = Criar nova regra
+rules = Regras
+rules-create-rule-hint = Nenhuma regra criada. Clique em + para criar uma regra.
+rules-rule-name = Nome da regra
+rules-customize-rule-name-icon =
+    .alt = Personalizar nome da regra
+rules-rule-description = Descrição da regra
+rules-preview-button =
+    .alt = Pré-visualizar
+rules-delete-icon =
+    .alt = Eliminar
+rules-drag-hint = Arraste os seus dispositivos para aqui para começar a criar uma regra
+rules-drag-input-hint = Adicionar dispositivo como entrada
+rules-drag-output-hint = Adicionar dispositivo como saída
+rules-scroll-left =
+    .alt = Deslocar para a esquerda
+rules-scroll-right =
+    .alt = Deslocar para a direita
+rules-delete-prompt = Largue aqui os dispositivos a desligar
+rules-delete-dialog = Tem a certeza que deseja remover permanentemente esta regra?
+rules-delete-cancel =
+    .value = Cancelar
+rules-delete-confirm =
+    .value = Remover regra
+rule-invalid = Inválida
 
 ## Logs
 
