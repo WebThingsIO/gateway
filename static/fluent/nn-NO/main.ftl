@@ -276,18 +276,95 @@ inactive = Inaktiv
 ## Domain Setup
 
 invalid-subdomain = Ugyldig underdomene
+invalid-email = Ugyldig e-postadresse.
+redirecting = Omdirigerer…
 
 ## Booleans
 
+true = Sann
+false = Falsk
 
 ## Time
 
+utils-now = no
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } sekund sidan
+       *[other] { $value } sekund sidan
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minutt sidan
+       *[other] { $value } minutt sidan
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } time sidan
+       *[other] { $value } timar sidan
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } dag sidan
+       *[other] { $value } dagar sidan
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } veke sidan
+       *[other] { $value } veker sidan
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } månad sidan
+       *[other] { $value } månadar sidan
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } år sidan
+       *[other] { $value } fleire år sidan
+    }
+minute = Minutt
+hour = Time
+day = Dag
+week = Veke
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kWh
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Ukjend einingstype
+new-thing-choose-icon = Vel ikon…
+new-thing-save = Lagre
+new-thing-pin =
+    .placeholder = Skriv inn PIN
+new-thing-pin-error = Feil PIN
+new-thing-pin-invalid = Ugyldig PIN
+new-thing-cancel = Avbryt
+new-thing-submit = Send inn
+new-thing-username =
+    .placeholder = Skriv inn brukarnamn
+new-thing-password =
+    .placeholder = Skriv inn passord
+new-thing-credentials-error = Feil innloggingsopplysningar
+new-thing-saved = Lagra
+new-thing-done = Ferdig
 
 ## New Web Thing View
 
