@@ -282,6 +282,7 @@ Light = Luz
 DoorSensor = Sensor de porta
 MotionSensor = Sensor de movimento
 LeakSensor = Sensor de fugas
+PushButton = Botão
 VideoCamera = Câmara de vídeo
 Camera = Câmara
 TemperatureSensor = Sensor de temperatura
@@ -487,6 +488,7 @@ errors = Erros
 gateway-unreachable = Gateway inacessível
 more-information = Mais informação
 invalid-file = Ficheiro inválido.
+failed-read-file = Não foi possível ler o ficheiro.
 failed-save = Não foi possível guardar.
 
 ## Schema Form
@@ -591,12 +593,36 @@ connecting-skipped = O gateway está a ser iniciado agora. Navegue até { $gatew
 
 creating-title = Criação da rede Wi-Fi — { -webthings-gateway-brand }
 creating-header = A criar a rede Wi-Fi…
+creating-content = Por favor, ligue-se a { $ssid } com a palavra-passe que acabou de criar, depois navegue até { $gateway-link } ou { $ip-link } no seu navegador de Internet.
 
 ## UI Updates
 
+ui-update-available = Está disponível uma interface de utilizador atualizada.
+ui-update-reload = Recarregar
+ui-update-close = Fechar
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Registo de eventos
+edit = Editar
+remove = Remover
+disconnected = Desligado
+processing = A processar…
+submit = Submeter
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Anterior
+overflow-button =
+    .aria-label = Ações adicionais
+submit-button =
+    .aria-label = Submeter
+edit-button =
+    .aria-label = Editar
+save-button =
+    .aria-label = Guardar
