@@ -296,51 +296,227 @@ Thing = Coisa
 alarm = Alarme
 pushed = Pressionado
 not-pushed = Não pressionado
+on-off = Ligado/desligado
+on = Ligado
+off = Desligado
+power = Potência
+voltage = Voltagem
+temperature = Temperatura
+current = Corrente
+frequency = Frequência
+color = Cor
+brightness = Brilho
+leak = Fuga
+dry = Seco
+color-temperature = Temperatura de cor
+video-unsupported = Desculpe, o vídeo não é suportado no seu navegador.
+motion = Movimento
+no-motion = Sem movimento
+open = Aberta
+closed = Fechada
+locked = Trancada
+unlocked = Destrancada
+jammed = Encravada
+unknown = Desconhecido
+active = Ativo
+inactive = Inativo
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Parece que já registou esse subdomínio. Para recuperá-lo <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">clique aqui</a>.
+check-email-for-token = Por favor, verifique o seu e-mail para um código de recuperação e cole-o em cima.
+reclaim-failed = Não foi possível recuperar o domínio.
+subdomain-already-used = Este subdomínio já está a ser utilizado. Por favor, escolha um diferente.
+invalid-subdomain = Subdomínio inválido.
+invalid-email = Endereço de e-mail inválido.
+invalid-reclamation-token = Código de recuperação inválido.
+domain-success = Sucesso! Por favor, aguarde enquanto nós o redirecionamos...
+issuing-error = Erro ao emitir o certificado. Por favor, tente novamente.
+redirecting = A redirecionar...
 
 ## Booleans
 
+true = Verdadeiro
+false = Falso
 
 ## Time
 
+utils-now = agora
+utils-seconds-ago =
+    { $value ->
+        [one] Há { $value } segundo
+       *[other] Há { $value } segundos
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] Há { $value } minuto
+       *[other] Há { $value } minutos
+    }
+utils-hours-ago =
+    { $value ->
+        [one] Há { $value } hora
+       *[other] Há { $value } horas
+    }
+utils-days-ago =
+    { $value ->
+        [one] Há { $value } dia
+       *[other] Há { $value } dias
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] Há { $value } semana
+       *[other] Há { $value } semanas
+    }
+utils-months-ago =
+    { $value ->
+        [one] Há { $value } mês
+       *[other] Há { $value } meses
+    }
+utils-years-ago =
+    { $value ->
+        [one] Há { $value } ano
+       *[other] Há { $value } anos
+    }
+minute = Minuto
+hour = Hora
+day = Dia
+week = Semana
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kW/h
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Tipo de dispositivo desconhecido
+new-thing-choose-icon = Escolher o ícone…
+new-thing-save = Guardar
+new-thing-pin =
+    .placeholder = Inserir código
+new-thing-pin-error = Código incorreto
+new-thing-pin-invalid = Código inválido
+new-thing-cancel = Cancelar
+new-thing-submit = Submeter
+new-thing-username =
+    .placeholder = Inserir nome de utilizador
+new-thing-password =
+    .placeholder = Inserir palavra-passe
+new-thing-credentials-error = Credenciais incorretas
+new-thing-saved = Guardada
+new-thing-done = Concluído
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Inserir endereço da coisa na Internet
+new-web-thing-label = Coisa da Internet
+loading = A carregar…
+new-web-thing-multiple = Foram encontradas várias coisas da Internet
+new-web-thing-from = de
 
 ## Empty div Messages
 
+no-things = Ainda sem dispositivos. Clique em + para procurar por dispositivos disponíveis.
+thing-not-found = Coisa não encontrada.
+action-not-found = Ação não encontrada.
+events-not-found = Esta coisa não tem eventos.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Encontrar novos complementos
+author-unknown = Desconhecido
+disable = Desativar
+enable = Ativar
+by = por
+addon-configure = Configurar
+addon-update = Atualizar
+addon-remove = Remover
+addon-updating = A atualizar…
+addon-updated = Atualizado
+addon-update-failed = Falhou
+addon-config-applying = A aplicar…
+addon-config-apply = Aplicar
+addon-discovery-added = Adicionado
+addon-discovery-add = Adicionar
+addon-discovery-installing = A instalar...
+addon-discovery-failed = Falhou
 
 ## Page Titles
 
+settings = Definições
+domain = Domínio
+users = Utilizadores
+edit-user = Editar utilizador
+add-user = Adicionar utilizador
+adapters = Adaptadores
+addons = Complementos
+addon-config = Configurar complemento
+addon-discovery = Descobrir novos complementos
+experiments = Experiências
+localization = Localização
+updates = Atualizações
+authorizations = Autorizações
+developer = Programador
+network = Rede
+ethernet = Ethernet
+wifi = Wi-fi
+icon = Ícone
 
 ## Errors
 
+unknown-state = Estado desconhecido.
+error = Erro
+errors = Erros
+gateway-unreachable = Gateway inacessível
+more-information = Mais informação
+invalid-file = Ficheiro inválido.
+failed-save = Não foi possível guardar.
 
 ## Schema Form
 
+unsupported-field = Esquema de campo não suportado
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Iniciar sessão — { -webthings-gateway-brand }
+login-log-in = Iniciar sessão
+login-wrong-credentials = Nome de utilizador ou palavra-passe incorreto.
+login-wrong-totp = O código de autenticação estava incorreto.
+login-enter-totp = Insira o código da sua aplicação de autenticação.
 
 ## Create First User Page
 
+signup-title = Criar utilizador — { -webthings-gateway-brand }
+signup-welcome = Bem-vindo
+signup-create-account = Crie a sua primeira conta de utilizador:
+signup-password-mismatch = As palavras-passe não coincidem
+signup-next = Seguinte
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Escolher endereço da Internet — { -webthings-gateway-brand }
+tunnel-setup-welcome = Bem-vindo
 
 ## Authorize Page
 
