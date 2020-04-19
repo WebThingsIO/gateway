@@ -52,6 +52,7 @@ settings-developer = Utviklarar
 
 domain-settings-local-label = Lokal tilgang
 domain-settings-local-update = Oppdater vertsnamn
+domain-settings-remote-access = Fjerntilgang
 domain-settings-local-name =
     .placeholder = gateway
 
@@ -107,6 +108,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
+user-settings-mfa-verify = Stadfest
 user-settings-input-new-password =
     .placeholder = Nytt passord (valfritt)
 user-settings-input-confirm-new-password =
@@ -175,6 +177,10 @@ rules-preview-button =
     .alt = Førehandsvising
 rules-delete-icon =
     .alt = Slett
+rules-scroll-left =
+    .alt = Rull til venstre
+rules-scroll-right =
+    .alt = Rull til høgre
 rules-delete-cancel =
     .value = Avbryt
 rules-delete-confirm =
@@ -203,6 +209,14 @@ rule-name = Regelnamn
 add-log =
     .aria-label = Lag ny logg
 logs = Loggar
+logs-device = Eining
+logs-property = Eigenskap
+logs-hours = Timar
+logs-days = Dagar
+logs-weeks = Veker
+logs-save = Lagre
+logs-remove-dialog-title = Fjernar
+logs-remove = Fjern
 
 ## Add New Things
 
