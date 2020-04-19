@@ -216,21 +216,86 @@ rule-event = Evento
 rule-action = Ação
 rule-configure = Configurar…
 rule-time-title = Hora do dia
+rule-notification = Notificação
+notification-title = Título
+notification-message = Mensagem
+notification-level = Nível
+notification-low = Baixa
+notification-normal = Normal
+notification-high = Alta
+rule-name = Nome da regra
 
 ## Logs
 
+add-log =
+    .aria-label = Criar novo registo
+logs = Registos
+logs-create-log-hint = Nenhum registo criado. Clique em + para criar um registo.
+logs-device = Dispositivo
+logs-device-select =
+    .aria-label = Dispositivo do registo
+logs-property = Propriedade
+logs-property-select =
+    .aria-label = Propriedade do registo
+logs-retention = Retenção
+logs-retention-length =
+    .aria-label = Comprimento da retenção do registo
+logs-retention-unit =
+    .aria-label = Unidade da retenção do registo
+logs-hours = Horas
+logs-days = Dias
+logs-weeks = Semanas
+logs-save = Guardar
+logs-remove-dialog-title = Remoção
+logs-remove-dialog-warning = Se remover o registo também irá remover todos os seus dados. Tem a certeza que o deseja remover?
+logs-remove = Remover
+logs-unable-to-create = Não é possível criar o registo
+logs-server-remove-error = Erro do servidor: não é possível remover o registo
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Procurar
+add-thing-scanning = A procurar por novos dispositivos…
+add-thing-add-adapters-hint = Não foram encontradas coisas novas. Tente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar alguns complementos</a>.
+add-thing-add-by-url = Adicionar por endereço…
+add-thing-done = Concluído
+add-thing-cancel = Cancelar
 
 ## Context Menu
 
+context-menu-choose-icon = Escolher ícone…
+context-menu-save = Guardar
+context-menu-remove = Remover
 
 ## Capabilities
 
+OnOffSwitch = Interruptor ligar/desligar
+MultiLevelSwitch = Interruptor de vários níveis
+ColorControl = Controlo de cor
+ColorSensor = Sensor de cor
+EnergyMonitor = Monitor de energia
+BinarySensor = Sensor binário
+MultiLevelSensor = Sensor de vários níveis
+SmartPlug = Tomada inteligente
+Light = Luz
+DoorSensor = Sensor de porta
+MotionSensor = Sensor de movimento
+LeakSensor = Sensor de fugas
+VideoCamera = Câmara de vídeo
+Camera = Câmara
+TemperatureSensor = Sensor de temperatura
+Alarm = Alarme
+Thermostat = Termóstato
+Lock = Fechadura
+Custom = Coisa personalizada
+Thing = Coisa
 
 ## Properties
 
+alarm = Alarme
+pushed = Pressionado
+not-pushed = Não pressionado
 
 ## Domain Setup
 
