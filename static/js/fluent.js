@@ -26,6 +26,7 @@ const availableLanguages = {
   'nn-NO': ['/fluent/nn-NO/main.ftl'],
   pl: ['/fluent/pl/main.ftl'],
   'pt-BR': ['/fluent/pt-BR/main.ftl'],
+  'pt-PT': ['/fluent/pt-PT/main.ftl'],
   ro: ['/fluent/ro/main.ftl'],
   ru: ['/fluent/ru/main.ftl'],
   sk: ['/fluent/sk/main.ftl'],
