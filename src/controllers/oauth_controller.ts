@@ -37,7 +37,7 @@ type OAuthRequest = {
 
 // https://tools.ietf.org/html/rfc6749#section-4.1.1
 type AuthorizationRequest = {
-  response_type: 'code', // no suppport or desire for implicit auth
+  response_type: string,
   client_id: ClientId,
   redirect_uri: URL|undefined,
   scope: ScopeRaw,
@@ -231,13 +231,18 @@ function verifyAuthorizationRequest(authRequest: AuthorizationRequest,
 }
 
 OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
+  let redirect_uri;
+  if (request.query.redirect_uri) {
+    redirect_uri = new URL(`${request.query.redirect_uri}`);
+  }
+
   // From query component construct
   let authRequest: AuthorizationRequest = {
-    response_type: request.query.response_type,
-    client_id: request.query.client_id,
-    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
-    scope: request.query.scope,
-    state: request.query.state
+    response_type: `${request.query.response_type}`,
+    client_id: `${request.query.client_id}`,
+    redirect_uri: redirect_uri,
+    scope: `${request.query.scope}`,
+    state: `${request.query.state}`
   };
 
   let client = verifyAuthorizationRequest(authRequest, response);
@@ -256,7 +261,7 @@ OAuthController.get('/local-token-service', async (request: express.Request, res
   let localClient: ClientRegistry = OAuthClients.get('local-token', undefined)!;
   let tokenRequest: AccessTokenRequest = {
     grant_type: 'authorization_code',
-    code: request.query.code,
+    code: `${request.query.code}`,
     redirect_uri: localClient.redirect_uri,
     client_id: localClient.id
   };
@@ -273,12 +278,17 @@ OAuthController.get('/local-token-service', async (request: express.Request, res
 });
 
 OAuthController.get('/allow', auth, async (request: express.Request, response: express.Response) => {
+  let redirect_uri;
+  if (request.query.redirect_uri) {
+    redirect_uri = new URL(`${request.query.redirect_uri}`);
+  }
+
   let authRequest: AuthorizationRequest = {
-    response_type: request.query.response_type,
-    client_id: request.query.client_id,
-    redirect_uri: request.query.redirect_uri && new URL(request.query.redirect_uri),
-    scope: request.query.scope,
-    state: request.query.state
+    response_type: `${request.query.response_type}`,
+    client_id: `${request.query.client_id}`,
+    redirect_uri: redirect_uri,
+    scope: `${request.query.scope}`,
+    state: `${request.query.state}`
   };
 
   let client = verifyAuthorizationRequest(authRequest, response);
