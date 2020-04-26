@@ -93,13 +93,17 @@ async function loadAddon(addonPath, verbose) {
           'gateway-addon'
         );
         if (!fs.existsSync(modulePath)) {
-          spawnSync(
+          const link = spawnSync(
             'npm',
             ['link', 'gateway-addon'],
             {
               cwd: addonPath,
             }
           );
+
+          if (link.error) {
+            console.log(`Failed to npm-link the gateway-addon package: ${link.error}`);
+          }
         }
 
         const addonLoader = dynamicRequire(addonPath);
