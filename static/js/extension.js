@@ -33,6 +33,18 @@ class Extension {
   }
 
   /**
+   * Load your html page here
+   *
+   * @returns {Promise} Promise which should resolve as soon as the extension
+   *                    is ready to be shown
+   */
+  load() {
+    return new Promise((resolve) => {
+      resolve();
+    });
+  }
+
+  /**
    * Show the extension content.
    *
    * @param {Context} context - Context object from page.js. You'll want to use
