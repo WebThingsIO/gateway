@@ -304,7 +304,6 @@ const App = {
       extension.load()
         .then(() => {
           extension.show(context);
-          this.extensions[extensionId].show(context);
           this.selectView(
             `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
           );
