@@ -39,9 +39,7 @@ class Extension {
    *                    is ready to be shown
    */
   load() {
-    return new Promise((resolve) => {
-      resolve();
-    });
+    return Promise.resolve();
   }
 
   /**
