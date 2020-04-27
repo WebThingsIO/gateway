@@ -311,15 +311,20 @@ const App = {
         });
     } else {
       // Check if it's a valid extension id
-      API.getExtensions().then((extensions) => {
-        if (Object.keys(extensions).indexOf(extensionId) > -1) {
-          // Save the context until the extension is loaded
-          this.requestedContext = context;
-        } else {
-          console.warn('Unknown extension:', extensionId);
+      API.getExtensions()
+        .then((extensions) => {
+          if (Object.keys(extensions).indexOf(extensionId) > -1) {
+            // Save the context until the extension is loaded
+            this.requestedContext = context;
+          } else {
+            console.warn('Unknown extension:', extensionId);
+            page('/things');
+          }
+        })
+        .catch((err) => {
+          console.warn('Could not load extensions: ', err);
           page('/things');
-        }
-      });
+        });
     }
   },
 
