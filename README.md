@@ -214,26 +214,16 @@ $ sudo dnf group install "C Development Tools and Libraries"
 Under Ubuntu/Debian Linux:
 ```
 $ sudo apt install python-pip python3-pip
-$ sudo python -m pip install six
+$ sudo python2 -m pip install six
+$ sudo python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
 ```
 
 Under Fedora Linux:
 ```
 $ sudo dnf install python2-pip python3-pip
-$ sudo python -m pip install six
+$ sudo python2 -m pip install six
+$ sudo python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
 ```
-
-### Install Python Add-on Bindings (Optional)
-
-This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).
-
-Execute the following command. On Linux, use sudo.
-
-```
-$ python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
-```
-
-**Note:** 2018-04-12: `pip3` has an [issue](https://github.com/pypa/pip/issues/4251) with some languages.
 
 ## Download and Build Gateway
 
@@ -330,10 +320,9 @@ If you are not using VS Code, run `npm run debug` and it will build the gateway 
 
 ## Install additional dependencies for Test (Debian)
 
-These steps are required on Debian (where python points to python 2.7)
+These steps are required on Debian
 ```
-$ sudo apt install python-pip python3-pip firefox openjdk-8-jre
-$ sudo python3 -m pip install git+https://github.com/mycroftai/adapt#egg=adapt-parser
+$ sudo apt install firefox openjdk-8-jre
 ```
 
 ## Running Tests
