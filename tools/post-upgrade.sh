@@ -9,7 +9,7 @@ nvm alias default node
 
 sudo apt update -y
 
-_all_deps="ffmpeg mosquitto arping wiringpi"
+_all_deps="ffmpeg mosquitto arping wiringpi python-six"
 _missing_deps=""
 for dep in $_all_deps; do
   if ! dpkg -s "$dep" 2>/dev/null | grep -q '^Status.*installed'; then
