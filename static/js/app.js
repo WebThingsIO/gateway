@@ -280,6 +280,17 @@ const App = {
     newSection.classList.add('hidden');
     document.body.appendChild(newSection);
 
+    const context = this.requestedContext;
+
+    if (context) {
+      const extensionId = context.params.extensionId;
+
+      if (extensionId == extension.id) {
+        this.requestedContext = null;
+        this.showExtension(context);
+      }
+    }
+
     return newSection;
   },
 
@@ -288,14 +299,32 @@ const App = {
     const extensionId = context.params.extensionId;
 
     if (this.extensions.hasOwnProperty(extensionId)) {
-      this.extensions[extensionId].show(context);
-      this.selectView(
-        `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
-      );
-      this.displayedExtension = extensionId;
+      const extension = this.extensions[extensionId];
+      // wait until the extensions is loaded before showing it
+      extension.load()
+        .then(() => {
+          extension.show(context);
+          this.selectView(
+            `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
+          );
+          this.displayedExtension = extensionId;
+        });
     } else {
-      console.warn('Unknown extension:', extensionId);
-      page('/things');
+      // Check if it's a valid extension id
+      API.getExtensions()
+        .then((extensions) => {
+          if (Object.keys(extensions).indexOf(extensionId) > -1) {
+            // Save the context until the extension is loaded
+            this.requestedContext = context;
+          } else {
+            console.warn('Unknown extension:', extensionId);
+            page('/things');
+          }
+        })
+        .catch((err) => {
+          console.warn('Could not load extensions: ', err);
+          page('/things');
+        });
     }
   },
 
