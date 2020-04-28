@@ -209,6 +209,14 @@ Under Fedora Linux:
 $ sudo dnf group install "C Development Tools and Libraries"
 ```
 
+### Install six
+
+This is required for PageKite to work properly.
+
+```
+python -m pip install six
+```
+
 ### Install Python Add-on Bindings (Optional)
 
 This is required in order to use Python 3 add-ons, e.g. [tplink-adapter](https://github.com/mozilla-iot/tplink-adapter/).

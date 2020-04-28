@@ -15,6 +15,7 @@ libusb-1.0-0-dev
 mosquitto
 policykit-1
 python-pip
+python-six
 python3-pip
 sqlite3
 wiringpi
