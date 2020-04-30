@@ -448,7 +448,7 @@ events-not-found = Acest lucru nu are evenimente.
 ## Add-on Settings
 
 add-addons =
-    .aria-label = Găsește suplimente noi
+    .aria-label = Caută suplimente noi
 author-unknown = Necunoscut
 disable = Dezactivează
 enable = Activează
