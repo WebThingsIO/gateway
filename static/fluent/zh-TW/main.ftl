@@ -544,7 +544,7 @@ authorize-deny = 拒絕
 local-token-title = 本機授權服務 — { -webthings-gateway-brand }
 local-token-header = 本機授權服務
 local-token-your-token = 下列 <a data-l10n-name="local-token-jwt">JSON Web Token</a> 是您的本機授權碼:
-local-token-use-it = 請使用此授權碼，透過 <a data-l10n-name="local-token-bearer-type">Bearer-type 驗證方式</a> 來安全地與閘道器溝通。
+local-token-use-it = 請使用此授權碼，透過 <a data-l10n-name="local-token-bearer-type">Bearer-type 驗證方式</a>來安全地與閘道器溝通。
 
 ## Router Setup Page
 
