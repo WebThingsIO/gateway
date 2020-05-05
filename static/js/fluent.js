@@ -1,3 +1,6 @@
+// Polyfill for Intl.PluralRules
+require('intl-pluralrules');
+
 const API = require('./api');
 const FluentDOM = require('@fluent/dom/compat');
 const Fluent = require('@fluent/bundle/compat');
