@@ -374,9 +374,36 @@ new-thing-done = Ferdig
 
 ## Add-on Settings
 
+author-unknown = Ukend
+disable = Slå av
+enable = Slå på
+by = av
+addon-configure = Konfigurer
+addon-update = Oppdater
+addon-remove = Fjern
+addon-updating = Oppdaterer…
+addon-updated = Oppdatert
+addon-update-failed = Mislykka
+addon-discovery-added = Lagt til
+addon-discovery-add = Legg til
+addon-discovery-installing = Installerer…
+addon-discovery-failed = Feila
 
 ## Page Titles
 
+settings = Innstillingar
+domain = Domene
+users = Brukarar
+edit-user = Rediger brukar
+add-user = Legg til brukar
+adapters = Adapterar
+addons = Tillegg
+addon-config = Konfigurer tillegg
+addon-discovery = Oppdag nye tillegg
+experiments = Eksperiment
+localization = Omsetting
+updates = Oppdateringar
+developer = Utviklar
 
 ## Errors
 
