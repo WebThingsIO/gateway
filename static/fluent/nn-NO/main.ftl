@@ -368,6 +368,7 @@ new-thing-done = Ferdig
 
 ## New Web Thing View
 
+new-web-thing-from = frå
 
 ## Empty div Messages
 
@@ -404,9 +405,21 @@ experiments = Eksperiment
 localization = Omsetting
 updates = Oppdateringar
 developer = Utviklar
+network = Nettverk
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ikon
 
 ## Errors
 
+unknown-state = Ukjend tilstand.
+error = Feil
+errors = Feil
+gateway-unreachable = Gateway utilgjengeleg
+more-information = Meir informasjon
+invalid-file = Ugyldig fil.
+failed-read-file = Klarte ikkje å lese fila.
+failed-save = Klarte ikkje å lagre.
 
 ## Schema Form
 
@@ -416,6 +429,8 @@ developer = Utviklar
 
 ## Login Page
 
+login-log-in = Logg inn
+login-wrong-credentials = Brukarnamn eller passord er feil.
 
 ## Create First User Page
 
