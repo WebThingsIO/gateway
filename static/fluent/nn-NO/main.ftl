@@ -434,12 +434,18 @@ login-wrong-credentials = Brukarnamn eller passord er feil.
 
 ## Create First User Page
 
+signup-welcome = Velkomen
+signup-password-mismatch = Passorda samsvarar ikkje
+signup-next = Neste
 
 ## Tunnel Setup Page
 
+tunnel-setup-skip = Hopp over
 
 ## Authorize Page
 
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = frå <<domain>>
 
 ## Local Token Page
 
