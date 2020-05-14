@@ -392,7 +392,6 @@ function startGateway() {
 
 function gracefulExit() {
   addonManager.unloadAddons();
-  mDNSserver.server.cleanup();
   TunnelService.stop();
 }
 
@@ -424,16 +423,8 @@ TunnelService.switchToHttps = () => {
 // We check to see if mDNS should be setup in default mode, or has a previous
 // user setup a unique domain. Then we start it.
 mDNSserver.getmDNSstate().then((state) => {
-  try {
-    mDNSserver.getmDNSconfig().then((mDNSconfig) => {
-      console.log(`DNS config is: ${mDNSconfig.host}`);
-      mDNSserver.server.changeProfile(mDNSconfig);
-      mDNSserver.server.setState(state);
-    });
-  } catch (err) {
-    // if we failed to startup mDNS it's not the end of the world log it
-    // and carry on
-    console.error(`Service Discover failed to start with error: ${err}`);
+  if (platform.implemented('setMdnsServerStatus')) {
+    platform.setMdnsServerStatus(state);
   }
 });
 

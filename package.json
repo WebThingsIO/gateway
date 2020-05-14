@@ -44,7 +44,6 @@
     "config": "^3.3.1",
     "country-list": "^2.2.0",
     "csv-parse": "^4.8.9",
-    "dnssd": "^0.4.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "express-handlebars": "^4.0.3",

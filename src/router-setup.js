@@ -122,8 +122,7 @@ function handleRouterSetup(request, response) {
  */
 function handleCreating(request, response) {
   DEBUG && console.log('router-setup: handleCreating:', request.path);
-  mDNSserver.getmDNSconfig().then((mDNSconfig) => {
-    const domain = mDNSconfig.host;
+  mDNSserver.getmDNSdomain().then((domain) => {
     const ssid = request.body.ssid.trim();
     const password = request.body.password.trim();
 
