@@ -54,9 +54,6 @@ module.exports = {
       },
     },
   },
-  authentication: {
-    defaultUser: null,
-  },
   ssltunnel: {
     enabled: true,
     registration_endpoint: 'https://api.mozilla-iot.org:8443',
