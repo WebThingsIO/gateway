@@ -17,15 +17,33 @@ wordmark =
 ## Menu Items
 
 things-menu-item = Речі
+rules-menu-item = Правила
+logs-menu-item = Журнали
+floorplan-menu-item = План приміщення
+settings-menu-item = Налаштування
+log-out-button = Вийти
 
 ## Things
 
+thing-details =
+    .aria-label = Переглянути властивості
+add-things =
+    .aria-label = Додати нові речі
 
 ## Floorplan
 
+upload-floorplan = Завантажити план приміщення…
 
 ## Top-Level Settings
 
+settings-domain = Домен
+settings-network = Мережа
+settings-users = Користувачі
+settings-add-ons = Додатки
+settings-localization = Локалізація
+settings-updates = Оновлення
+settings-experiments = Експерименти
+settings-developer = Розробник
 
 ## Domain Settings
 
