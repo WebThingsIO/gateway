@@ -49,6 +49,9 @@ settings-developer = Розробник
 ## Domain Settings
 
 domain-settings-local-label = Локальний доступ
+domain-settings-remote-access = Віддалений доступ
+domain-settings-local-name =
+    .placeholder = шлюз
 
 ## Network Settings
 
