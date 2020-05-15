@@ -211,9 +211,32 @@ rule-delete-cancel-button =
 rule-delete-confirm-button =
     .value = Вилучити правило
 rule-select-property = Виберіть властивість
+rule-not = Немає
+rule-event = Подія
+rule-action = Дія
+rule-configure = Налаштувати…
+rule-time-title = Час доби
+rule-notification = Сповіщення
+notification-title = Заголовок
+notification-message = Повідомлення
+notification-level = Рівень
+notification-low = Низький
+notification-normal = Звичайний
+notification-high = Високий
+rule-name = Назва правила
 
 ## Logs
 
+add-log =
+    .aria-label = Створити новий журнал
+logs = Журнали
+logs-create-log-hint = Журнали не створено. Натисніть +, щоби створити журнал.
+logs-device = Пристрій
+logs-device-select =
+    .aria-label = Пристрій журналу
+logs-property = Властивість
+logs-property-select =
+    .aria-label = Властивість журналу
 
 ## Add New Things
 
