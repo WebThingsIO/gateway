@@ -247,9 +247,16 @@ logs-days = Днів
 logs-weeks = Тижнів
 logs-save = Зберегти
 logs-remove-dialog-title = Вилучення
+logs-remove-dialog-warning = Вилучення журналу також очистить усі його дані. Ви впевнені, що хочете вилучити його?
+logs-remove = Вилучити
+logs-unable-to-create = Не вдається створити журнал
+logs-server-remove-error = Помилка сервера: не вдається вилучити журнал
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Пошук
+add-thing-scanning = Пошук нових пристроїв…
 
 ## Context Menu
 
