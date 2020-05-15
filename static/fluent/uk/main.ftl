@@ -118,6 +118,19 @@ user-settings-input-totp =
 user-settings-mfa-enable = Увімкнути дворівневу автентифікацію
 user-settings-mfa-scan-code = Зчитайте цей код будь-якою програмою дворівневої автентифікації.
 user-settings-mfa-secret = Це ваш новий таємний ключ TOTP, на випадок, якщо QR-код не працює:
+user-settings-mfa-error = Код автентифікації був неправильним.
+user-settings-mfa-enter-code = Введіть код із програми автентифікації далі.
+user-settings-mfa-verify = Перевірити
+user-settings-mfa-regenerate-codes = Створити нові коди відновлення
+user-settings-mfa-backup-codes = Це ваші коди відновлення. Кожним з них, можна скористатися лише один раз. Зберігайте їх у безпечному місці.
+user-settings-input-new-password =
+    .placeholder = Новий пароль (необов’язково)
+user-settings-input-confirm-new-password =
+    .placeholder = Підтвердити новий пароль
+user-settings-input-confirm-password =
+    .placeholder = Підтвердити пароль
+user-settings-password-mismatch = Паролі не збігаються
+user-settings-save = Зберегти
 
 ## Adapter Settings
 
