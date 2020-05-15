@@ -257,12 +257,21 @@ logs-server-remove-error = Помилка сервера: не вдається 
 add-thing-scanning-icon =
     .alt = Пошук
 add-thing-scanning = Пошук нових пристроїв…
+add-thing-add-adapters-hint = Нових пристроїв не знайдено. Спробуйте <a data-l10n-name="add-thing-add-adapters-hint-anchor">додати кілька додатків</a>.
+add-thing-add-by-url = Додати за допомогою URL-адреси…
+add-thing-done = Готово
+add-thing-cancel = Скасувати
 
 ## Context Menu
 
+context-menu-choose-icon = Вибрати піктограму…
+context-menu-save = Зберегти
+context-menu-remove = Вилучити
 
 ## Capabilities
 
+OnOffSwitch = Вимикач
+MultiLevelSwitch = Багаторівневий перемикач
 
 ## Properties
 
