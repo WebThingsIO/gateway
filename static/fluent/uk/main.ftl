@@ -8,6 +8,7 @@
 ##
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
+-webthings-gateway-brand = WebThings Gateway
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
 # Wordmark
@@ -41,14 +42,17 @@ settings-domain = Домен
 settings-network = Мережа
 settings-users = Користувачі
 settings-add-ons = Додатки
+settings-adapters = Перехідники
 settings-localization = Локалізація
 settings-updates = Оновлення
+settings-authorizations = Дозволені зʼєднання
 settings-experiments = Експерименти
 settings-developer = Розробник
 
 ## Domain Settings
 
 domain-settings-local-label = Локальний доступ
+domain-settings-local-update = Оновіть назву хоста
 domain-settings-remote-access = Віддалений доступ
 domain-settings-local-name =
     .placeholder = шлюз
@@ -112,6 +116,8 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = Код дворівневої автентифікації
 user-settings-mfa-enable = Увімкнути дворівневу автентифікацію
+user-settings-mfa-scan-code = Зчитайте цей код будь-якою програмою дворівневої автентифікації.
+user-settings-mfa-secret = Це ваш новий таємний ключ TOTP, на випадок, якщо QR-код не працює:
 
 ## Adapter Settings
 
