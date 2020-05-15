@@ -33,6 +33,7 @@ add-things =
 ## Floorplan
 
 upload-floorplan = Завантажити план приміщення…
+upload-floorplan-hint = (рекомендовано, у форматі .svg)
 
 ## Top-Level Settings
 
