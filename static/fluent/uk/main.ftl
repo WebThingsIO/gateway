@@ -237,6 +237,16 @@ logs-device-select =
 logs-property = Властивість
 logs-property-select =
     .aria-label = Властивість журналу
+logs-retention = Зберігання
+logs-retention-length =
+    .aria-label = Тривалість зберігання журналу
+logs-retention-unit =
+    .aria-label = Одиниці тривалості зберігання журналу
+logs-hours = Годин
+logs-days = Днів
+logs-weeks = Тижнів
+logs-save = Зберегти
+logs-remove-dialog-title = Вилучення
 
 ## Add New Things
 
