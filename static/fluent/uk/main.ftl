@@ -160,9 +160,21 @@ localization-settings-units-temperature-fahrenheit = Градуси Фаренг
 update-settings-update-now = Оновити зараз
 update-available = Доступна нова версія.
 update-up-to-date = Ваша система оновлена.
+updates-not-supported = Оновлення не підтримуються на цій платформі.
+update-settings-enable-self-updates = Увімкнути автоматичне оновлення
+last-update = Останнє оновлення
+current-version = Поточна версія
+failed = Стався збій
+never = Ніколи
+in-progress = Поступ…
+restarting = Перезапуск…
+checking-for-updates = Перевірка оновлень…
+failed-to-check-for-updates = Наразі неможливо перевірити наявність оновлень.
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Увімкнути SSH
+developer-settings-view-internal-logs = Переглянути внутрішні журнали
 
 ## Rules
 
