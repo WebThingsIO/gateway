@@ -48,6 +48,7 @@ settings-developer = Розробник
 
 ## Domain Settings
 
+domain-settings-local-label = Локальний доступ
 
 ## Network Settings
 
