@@ -85,9 +85,30 @@ network-settings-show-password = Показати пароль
 network-settings-connect = З'єднатися
 network-settings-username = Ім'я користувача
 network-settings-password = Пароль
+network-settings-router-ip = IP-адреса маршрутизатора
+network-settings-dhcp-server = DHCP-сервер
+network-settings-enable-wifi = Увімкнути Wi-Fi
+network-settings-network-name = Назва мережі (SSID)
+wireless-connected = З'єднано
+wireless-icon =
+    .alt = Мережа Wi-Fi
+network-settings-changing = Зміна налаштувань мережі. Це може тривати хвильку.
+failed-ethernet-configure = Не вдалося налаштувати Ethernet.
+failed-wifi-configure = Не вдалося налаштувати Wi-Fi.
+failed-wan-configure = Не вдалося налаштувати WAN.
+failed-lan-configure = Не вдалося налаштувати локальну мережу (LAN).
+failed-wlan-configure = Не вдалося налаштувати WLAN.
 
 ## User Settings
 
+create-user =
+    .aria-label = Додати нового користувача
+user-settings-input-name =
+    .placeholder = Ім'я
+user-settings-input-email =
+    .placeholder = Електронна пошта
+user-settings-input-password =
+    .placeholder = Пароль
 
 ## Adapter Settings
 
