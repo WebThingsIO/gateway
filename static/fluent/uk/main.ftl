@@ -109,6 +109,9 @@ user-settings-input-email =
     .placeholder = Електронна пошта
 user-settings-input-password =
     .placeholder = Пароль
+user-settings-input-totp =
+    .placeholder = Код дворівневої автентифікації
+user-settings-mfa-enable = Увімкнути дворівневу автентифікацію
 
 ## Adapter Settings
 
