@@ -277,6 +277,18 @@ ColorSensor = Датчик кольору
 EnergyMonitor = Монітор енергоспоживання
 BinarySensor = Двійковий датчик
 MultiLevelSensor = Багаторівневий датчик
+SmartPlug = Інтелектуальний роз'єм
+Light = Світло
+DoorSensor = Датчик дверей
+MotionSensor = Датчик руху
+LeakSensor = Датчик витоку
+PushButton = Кнопка
+VideoCamera = Відеокамера
+Camera = Камера
+TemperatureSensor = Датчик температури
+Alarm = Сигналізація
+Thermostat = Термостат
+Lock = Замок
 
 ## Properties
 
