@@ -175,9 +175,24 @@ failed-to-check-for-updates = Наразі неможливо перевірит
 
 developer-settings-enable-ssh = Увімкнути SSH
 developer-settings-view-internal-logs = Переглянути внутрішні журнали
+developer-settings-create-local-authorization = Створити локальну авторизацію
 
 ## Rules
 
+add-rule =
+    .aria-label = Створити нове правило
+rules = Правила
+rules-create-rule-hint = Правил не створено. Натисніть +, щоби створити правило.
+rules-rule-name = Назва правила
+rules-customize-rule-name-icon =
+    .alt = Налаштувати назву правила
+rules-rule-description = Опис правила
+rules-preview-button =
+    .alt = Попередній перегляд
+rules-delete-icon =
+    .alt = Видалити
+rules-drag-hint = Перетягніть сюди свої пристрої, щоби почати створювати правило
+rules-drag-input-hint = Додати пристрій як вхідний
 
 ## Logs
 
