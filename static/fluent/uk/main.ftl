@@ -134,18 +134,32 @@ user-settings-save = Зберегти
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Перехідників немає.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Немає дозволених зʼєднань.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Наразі, немає доступних експериментів.
 
 ## Localization Settings
 
+localization-settings-language-region = Мова та регіон
+localization-settings-country = Країна
+localization-settings-timezone = Часовий пояс
+localization-settings-language = Мова
+localization-settings-units = Одиниці виміру
+localization-settings-units-temperature = Температура
+localization-settings-units-temperature-celsius = Градуси Цельсія (°C)
+localization-settings-units-temperature-fahrenheit = Градуси Фаренгейта (°F)
 
 ## Update Settings
 
+update-settings-update-now = Оновити зараз
+update-available = Доступна нова версія.
+update-up-to-date = Ваша система оновлена.
 
 ## Developer Settings
 
