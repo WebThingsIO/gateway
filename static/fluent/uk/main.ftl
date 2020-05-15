@@ -55,6 +55,36 @@ domain-settings-local-name =
 
 ## Network Settings
 
+network-settings-unsupported = Налаштування мережі не підтримують цю платформу.
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Домашня мережа
+network-settings-internet-image =
+    .alt = Інтернет
+network-settings-configure = Налаштувати
+network-settings-internet-wan = Інтернет (WAN)
+network-settings-wan-mode = Режим
+network-settings-home-network-lan = Домашня мережа (LAN)
+network-settings-wifi-wlan = Wi-Fi (WLAN)
+network-settings-ip-address = IP-адреса
+network-settings-dhcp = Автоматичний (DHCP)
+network-settings-static = Ручний (статичний IP)
+network-settings-pppoe = Міст (PPPoE)
+network-settings-static-ip-address = Статична IP-адреса
+network-settings-network-mask = Маска мережі
+network-settings-gateway = Шлюз
+network-settings-done = Готово
+network-settings-wifi-password =
+    .placeholder = Пароль
+network-settings-show-password = Показати пароль
+network-settings-connect = З'єднатися
+network-settings-username = Ім'я користувача
+network-settings-password = Пароль
 
 ## User Settings
 
