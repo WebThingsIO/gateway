@@ -272,6 +272,11 @@ context-menu-remove = Вилучити
 
 OnOffSwitch = Вимикач
 MultiLevelSwitch = Багаторівневий перемикач
+ColorControl = Керування кольором
+ColorSensor = Датчик кольору
+EnergyMonitor = Монітор енергоспоживання
+BinarySensor = Двійковий датчик
+MultiLevelSensor = Багаторівневий датчик
 
 ## Properties
 
