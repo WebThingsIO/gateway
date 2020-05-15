@@ -37,20 +37,9 @@ module.exports = {
   },
   settings: {
     defaults: {
-      domain: {
-        localAccess: true,
-        mozillaTunnelService: true,
-        localControl: {
-          mdnsServiceType: 'http',
-          mdnsServiceName: 'Mozilla WebThings Gateway',
-          mdnsServiceDomain: os.hostname().split('.')[0],
-
-          mdnsTxt: {
-            desc: 'Web of Things Gateway',
-            protocol: 'http, https, Web Sockets',
-            power: '6 watts',
-          },
-        },
+      mdns: {
+        enabled: true,
+        domain: os.hostname().split('.')[0],
       },
     },
   },

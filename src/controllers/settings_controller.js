@@ -198,13 +198,17 @@ SettingsController.put('/domain', auth, async (request, response) => {
 
   try {
     if (request.body.local.hasOwnProperty('localDNSname')) {
-      const requestDomainName = request.body.local.localDNSname;
-      await Settings.set('localDNSname', requestDomainName);
-      mDNSserver.server.setLocalDomain(requestDomainName);
+      if (!Platform.implemented('setHostname') ||
+          !Platform.setHostname(request.body.local.localDNSname)) {
+        response.sendStatus(500);
+        return;
+      }
     } else if (request.body.local.hasOwnProperty('multicastDNSstate')) {
-      const requestState = request.body.local.multicastDNSstate;
-      await Settings.set('multicastDNSstate', requestState);
-      mDNSserver.server.setState(requestState);
+      if (!Platform.implemented('setMdnsServerStatus') ||
+          !Platform.setMdnsServerStatus(request.body.local.multicastDNSstate)) {
+        response.sendStatus(500);
+        return;
+      }
     } else {
       response.statusMessage = 'Invalid request.';
       response.status(400).end();
@@ -220,17 +224,25 @@ SettingsController.put('/domain', auth, async (request, response) => {
       port = config.get('ports.http');
     }
 
-    const url = `${protocol}://${mDNSserver.server.localDomain}.local:${port}`;
-    const localDomainSettings = {localDomain: url,
-                                 update: true,
-                                 mDNSstate: mDNSserver.server.serviceState};
+    const domain = await mDNSserver.getmDNSdomain();
+    const state = await mDNSserver.getmDNSstate();
+    const url = `${protocol}://${domain}.local:${port}`;
+    const localDomainSettings = {
+      localDomain: url,
+      update: true,
+      mDNSstate: state,
+    };
     response.status(200).json(localDomainSettings);
   } catch (err) {
     console.error(`Failed setting domain with: ${err} `);
-    const localDomainSettings = {localDomain: mDNSserver.server.localDomain,
-                                 update: false,
-                                 mDNSstate: mDNSserver.server.serviceState,
-                                 error: err.message};
+    const domain = await mDNSserver.getmDNSdomain();
+    const state = await mDNSserver.getmDNSstate();
+    const localDomainSettings = {
+      localDomain: domain,
+      update: false,
+      mDNSstate: state,
+      error: err.message,
+    };
     response.status(400).json(localDomainSettings);
   }
 });

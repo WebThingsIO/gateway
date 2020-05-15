@@ -150,8 +150,7 @@ function handleWiFiSetup(request, response) {
  * Handle requests to /connecting.
  */
 function handleConnecting(request, response) {
-  mDNSserver.getmDNSconfig().then((mDNSconfig) => {
-    const domain = mDNSconfig.host;
+  mDNSserver.getmDNSdomain().then((domain) => {
     const skip = request.body.skip === '1';
 
     if (skip) {

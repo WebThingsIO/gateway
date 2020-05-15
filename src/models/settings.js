@@ -83,19 +83,16 @@ const Settings = {
       localDomain = await Settings.get('localDNSname');
       // If our DB is empty use defaults
       if (typeof mDNSstate === 'undefined') {
-        mDNSstate = config.get(
-          'settings.defaults.domain.localAccess');
+        mDNSstate = config.get('settings.defaults.mdns.enabled');
       }
       if (typeof localDomain === 'undefined') {
-        localDomain = config.get(
-          'settings.defaults.domain.localControl.mdnsServiceDomain');
+        localDomain = config.get('settings.defaults.mdns.domain');
       }
     } catch (err) {
       // Catch this DB error. Since we don't know what state the mDNS process
       // should be in make sure it's off
       console.error(`Error getting DB entry for multicast from the DB: ${err}`);
-      localDomain = config.get(
-        'settings.defaults.domain.localControl.mdnsServiceDomain');
+      localDomain = config.get('settings.defaults.mdns.domain');
     }
 
     console.log(`Tunnel name is set to: ${tunnelEndpoint}`);

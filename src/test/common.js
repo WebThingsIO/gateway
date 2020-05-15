@@ -12,7 +12,6 @@ const Database = require('../db');
 const Actions = require('../models/actions');
 const Events = require('../models/events');
 const Logs = require('../models/logs');
-const mDNSserver = require('../mdns-server');
 const Things = require('../models/things');
 const UserProfile = require('../user-profile');
 const e2p = require('event-to-promise');
@@ -129,7 +128,6 @@ afterAll(async () => {
   await addonManager.unloadAddons();
   servers.https.close();
   servers.http.close();
-  mDNSserver.server.setState(false);
   await Promise.all([
     e2p(servers.https, 'close'),
     e2p(servers.http, 'close'),
