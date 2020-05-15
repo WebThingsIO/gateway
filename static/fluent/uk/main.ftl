@@ -192,7 +192,25 @@ rules-preview-button =
 rules-delete-icon =
     .alt = Видалити
 rules-drag-hint = Перетягніть сюди свої пристрої, щоби почати створювати правило
-rules-drag-input-hint = Додати пристрій як вхідний
+rules-drag-input-hint = Додати пристрій як входовий
+rules-drag-output-hint = Додати пристрій як виходовий
+rules-scroll-left =
+    .alt = Прокрутити ліворуч
+rules-scroll-right =
+    .alt = Прокрутити праворуч
+rules-delete-prompt = Перетягніть пристрій сюди, щоби відʼєднати
+rules-delete-dialog = Ви дійсно хочете вилучити це правило назавжди?
+rules-delete-cancel =
+    .value = Скасувати
+rules-delete-confirm =
+    .value = Вилучити правило
+rule-invalid = Недійсне
+rule-delete-prompt = Ви дійсно хочете вилучити це правило назавжди?
+rule-delete-cancel-button =
+    .value = Скасувати
+rule-delete-confirm-button =
+    .value = Вилучити правило
+rule-select-property = Виберіть властивість
 
 ## Logs
 
