@@ -396,14 +396,45 @@ abbrev-volt = В
 abbrev-hertz = Гц
 abbrev-amp = А
 abbrev-watt = Вт
-abbrev-kilowatt-hour = кВт⋅год.
+abbrev-kilowatt-hour = кВт⋅год
 abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = К
+abbrev-meter = м
+abbrev-kilometer = км
+abbrev-day = д
+abbrev-hour = год.
+abbrev-minute = хв.
+abbrev-second = с
+abbrev-millisecond = мс
+abbrev-foot = фут
 
 ## New Thing View
 
+unknown-device-type = Невідомий тип пристрою
+new-thing-choose-icon = Вибрати піктограму…
+new-thing-save = Зберегти
+new-thing-pin =
+    .placeholder = Введіть PIN
+new-thing-pin-error = Неправильний PIN-код
+new-thing-pin-invalid = Недійсний PIN-код
+new-thing-cancel = Скасувати
+new-thing-submit = Надіслати
+new-thing-username =
+    .placeholder = Введіть ім’я користувача
+new-thing-password =
+    .placeholder = Введіть пароль
+new-thing-credentials-error = Неправильні дані
+new-thing-saved = Збережено
+new-thing-done = Готово
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Введіть URL-адресу інтернет-речі
+new-web-thing-label = Інтернет-річ
+loading = Завантаження…
 
 ## Empty div Messages
 
