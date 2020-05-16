@@ -546,9 +546,17 @@ authorize-authorization-request = Запит дозволу на зʼєднан�
 authorize-prompt = <<name>> хоче отримати доступ до вашого шлюзу на <<function>> пристроях.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = з <<domain>>
+authorize-monitor-and-control = спостерігати та керувати
+authorize-monitor = спостерігати
+authorize-allow-all = Дозволити для всіх речей
+authorize-allow =
+    .value = Дозволити
+authorize-deny = Заборонити
 
 ## Local Token Page
 
+local-token-title = Локальна служба токенів — { -webthings-gateway-brand }
+local-token-header = Локальна служба токенів
 
 ## Router Setup Page
 
