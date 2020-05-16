@@ -326,12 +326,23 @@ inactive = Неактивний
 
 tunnel-setup-reclaim-domain = Схоже, ви вже зареєстрували цей піддомен. Щоби відновити доступ до нього, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">натисніть сюди</a>.
 check-email-for-token = Будь ласка, перевірте вашу електронну пошту на наявність токена відновлення та вставте його вище.
+reclaim-failed = Не вдалося відновити доступ до домену.
+subdomain-already-used = Цей піддомен вже використовується. Будь ласка, виберіть інший.
+invalid-subdomain = Недійсний піддомен.
+invalid-email = Неправильна адреса електронної пошти.
+invalid-reclamation-token = Недійсний токен відновлення.
+domain-success = Вдалося! Зачекайте, поки ми перенаправимо вас…
+issuing-error = Помилка видачі сертифіката. Будь ласка, спробуйте ще раз.
+redirecting = Перенаправлення…
 
 ## Booleans
 
+true = Істинно
+false = Не істинно
 
 ## Time
 
+utils-now = зараз
 
 ## Unit Abbreviations
 
