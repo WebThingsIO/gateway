@@ -591,15 +591,41 @@ wifi-setup-skip = Пропустити
 
 connecting-title = Зʼєднання з Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Зʼєднання з Wi-Fi…
+connecting-header-skipped = Налаштування Wi-Fi пропущено
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Створення Wi-Fi мережі — { -webthings-gateway-brand }
+creating-header = Створення Wi-Fi мережі…
 
 ## UI Updates
 
+ui-update-available = Доступний оновлений інтерфейс користувача.
+ui-update-reload = Перезавантажити
+ui-update-close = Закрити
 
 ## General Terms
 
+ok = Гаразд
+ellipsis = …
+event-log = Журнал подій
+edit = Змінити
+remove = Вилучити
+disconnected = Від'єднано
+processing = Обробка…
+submit = Надіслати
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Меню
+back-button =
+    .aria-label = Назад
+overflow-button =
+    .aria-label = Додаткові дії
+submit-button =
+    .aria-label = Надіслати
+edit-button =
+    .aria-label = Змінити
+save-button =
+    .aria-label = Зберегти
