@@ -483,24 +483,52 @@ updates = Оновлення
 authorizations = Дозволені зʼєднання
 developer = Розробник
 network = Мережа
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Піктограма
 
 ## Errors
 
+unknown-state = Невідомий стан.
+error = Помилка
+errors = Помилки
+gateway-unreachable = Шлюз недоступний
+more-information = Докладніше
+invalid-file = Недійсний файл.
+failed-read-file = Не вдалося прочитати файл.
+failed-save = Не вдалося зберегти.
 
 ## Schema Form
 
+unsupported-field = Непідтримувана схема поля
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Вхід — { -webthings-gateway-brand }
+login-log-in = Увійти
+login-wrong-credentials = Ім'я користувача або пароль були неправильними.
+login-wrong-totp = Код автентифікації був неправильним.
+login-enter-totp = Введіть код із програми автентифікації.
 
 ## Create First User Page
 
+signup-title = Створити користувача — { -webthings-gateway-brand }
+signup-welcome = Вітаємо
+signup-create-account = Створіть свій перший обліковий запис користувача:
+signup-password-mismatch = Паролі не збігаються
+signup-next = Далі
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Виберіть адресу в мережі — { -webthings-gateway-brand }
+tunnel-setup-welcome = Вітаємо
+tunnel-setup-choose-address = Виберіть безпечну мережну адресу для вашого шлюзу:
+tunnel-setup-input-subdomain =
+    .placeholder = піддомен
 
 ## Authorize Page
 
