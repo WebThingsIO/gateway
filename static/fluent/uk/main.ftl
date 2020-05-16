@@ -324,6 +324,7 @@ inactive = Неактивний
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Схоже, ви вже зареєстрували цей піддомен. Щоби відновити доступ до нього, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">натисніть сюди</a>.
 
 ## Booleans
 
