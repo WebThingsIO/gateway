@@ -591,12 +591,16 @@ wifi-setup-skip = Пропустити
 
 connecting-title = Зʼєднання з Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Зʼєднання з Wi-Fi…
+connecting-connect = Переконайтеся, що ви зʼєднані з однаковою мережею та перейдіть до { $gateway-link } у своєму браузері, щоби продовжити налаштування.
+connecting-warning = Примітка. Якщо ви не можете завантажити { $domain }, знайдіть IP-адресу шлюзу на вашому маршрутизаторі.
 connecting-header-skipped = Налаштування Wi-Fi пропущено
+connecting-skipped = Зараз шлюз запускається. Перейдіть до { $gateway-link } у вашому браузері, зʼєднавшись з тією ж мережею, що і шлюз, щоби продовжити налаштування.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Створення Wi-Fi мережі — { -webthings-gateway-brand }
 creating-header = Створення Wi-Fi мережі…
+creating-content = З'єднайтеся з { $ssid } за допомогою паролю, який ви щойно створили, а потім перейдіть до { $gateway-link } або { $ip-link } у вашому браузері.
 
 ## UI Updates
 
