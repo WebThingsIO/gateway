@@ -316,6 +316,11 @@ no-motion = Немає руху
 open = Відкрито
 closed = Закрито
 locked = Замкнено
+unlocked = Відімкнуто
+jammed = Заклинило
+unknown = Невідомо
+active = Активний
+inactive = Неактивний
 
 ## Domain Setup
 
