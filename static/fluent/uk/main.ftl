@@ -557,15 +557,40 @@ authorize-deny = Заборонити
 
 local-token-title = Локальна служба токенів — { -webthings-gateway-brand }
 local-token-header = Локальна служба токенів
+local-token-your-token = Вашим локальним токеном є цей <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Застосовуйте його для безпечного звʼязку зі шлюзом, <a data-l10n-name="local-token-bearer-type">надавши дозвіл на зʼєднання цьому типу носія</a>.
 
 ## Router Setup Page
 
+router-setup-title = Налаштування маршрутизатора — { -webthings-gateway-brand }
+router-setup-header = Створити нову мережу Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Назва мережі
+router-setup-input-password =
+    .placeholder = Пароль
+router-setup-input-confirm-password =
+    .placeholder = Підтвердити пароль
+router-setup-create =
+    .value = Створити
+router-setup-password-mismatch = Паролі повинні збігатися
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Налаштування Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Зʼєднатися з мережею Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Пароль
+wifi-setup-show-password = Показати пароль
+wifi-setup-connect =
+    .value = З'єднатися
+wifi-setup-network-icon =
+    .alt = Мережа Wi-Fi
+wifi-setup-skip = Пропустити
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Зʼєднання з Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Зʼєднання з Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
