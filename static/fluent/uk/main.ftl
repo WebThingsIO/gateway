@@ -343,9 +343,61 @@ false = Не істинно
 ## Time
 
 utils-now = зараз
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } секунду тому
+        [few] { $value } секунди тому
+       *[many] { $value } секунд тому
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } хвилину тому
+        [few] { $value } хвилини тому
+       *[many] { $value } хвилин тому
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } годину тому
+        [few] { $value } години тому
+       *[many] { $value } годин тому
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } день тому
+        [few] { $value } дні тому
+       *[many] { $value } днів тому
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } тиждень тому
+        [few] { $value } тижні тому
+       *[many] { $value } тижнів тому
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } місяць тому
+        [few] { $value } місяці тому
+       *[many] { $value } місяців тому
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } рік тому
+        [few] { $value } роки тому
+       *[many] { $value } років тому
+    }
+minute = хвилина
+hour = година
+day = день
+week = тиждень
 
 ## Unit Abbreviations
 
+abbrev-volt = В
+abbrev-hertz = Гц
+abbrev-amp = А
+abbrev-watt = Вт
+abbrev-kilowatt-hour = кВт⋅год.
+abbrev-percent = %
 
 ## New Thing View
 
