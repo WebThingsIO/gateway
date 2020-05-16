@@ -435,15 +435,54 @@ new-web-thing-url =
     .placeholder = Введіть URL-адресу інтернет-речі
 new-web-thing-label = Інтернет-річ
 loading = Завантаження…
+new-web-thing-multiple = Знайдено кілька інтернет-речей
+new-web-thing-from = з
 
 ## Empty div Messages
 
+no-things = Ще немає пристроїв. Натисніть +, щоби знайти наявні пристрої.
+thing-not-found = Річ не знайдено.
+action-not-found = Дію не знайдено.
+events-not-found = Ця річ не має подій.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Знайти нові додатки
+author-unknown = Невідомо
+disable = Вимкнути
+enable = Увімкнути
+by = від
+addon-configure = Налаштувати
+addon-update = Оновити
+addon-remove = Вилучити
+addon-updating = Оновлення…
+addon-updated = Оновлено
+addon-update-failed = Стався збій
+addon-config-applying = Застосовується…
+addon-config-apply = Застосувати
+addon-discovery-added = Додано
+addon-discovery-add = Додати
+addon-discovery-installing = Встановлення…
+addon-discovery-failed = Стався збій
 
 ## Page Titles
 
+settings = Параметри
+domain = Домен
+users = Користувачі
+edit-user = Керувати користувачем
+add-user = Додати користувача
+adapters = Перехідники
+addons = Додатки
+addon-config = Налаштувати додаток
+addon-discovery = Відкрийте для себе нові додатки
+experiments = Експерименти
+localization = Локалізація
+updates = Оновлення
+authorizations = Дозволені зʼєднання
+developer = Розробник
+network = Мережа
 
 ## Errors
 
