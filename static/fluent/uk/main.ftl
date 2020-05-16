@@ -310,6 +310,12 @@ brightness = Яскравість
 leak = Витік
 dry = Сухий
 color-temperature = Температура кольору
+video-unsupported = На жаль, відео не підтримується вашим браузером.
+motion = Рух
+no-motion = Немає руху
+open = Відкрито
+closed = Закрито
+locked = Замкнено
 
 ## Domain Setup
 
