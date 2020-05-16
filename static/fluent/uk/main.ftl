@@ -295,6 +295,21 @@ Thing = Річ
 ## Properties
 
 alarm = Сигналізація
+pushed = Натиснуто
+not-pushed = Не натиснуто
+on-off = Увімк./вимк.
+on = Увімкнено
+off = Вимкнено
+power = Потужність
+voltage = Напруга
+temperature = Температура
+current = Струм
+frequency = Частота
+color = Колір
+brightness = Яскравість
+leak = Витік
+dry = Сухий
+color-temperature = Температура кольору
 
 ## Domain Setup
 
