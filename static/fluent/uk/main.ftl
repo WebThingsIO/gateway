@@ -529,9 +529,23 @@ tunnel-setup-welcome = Вітаємо
 tunnel-setup-choose-address = Виберіть безпечну мережну адресу для вашого шлюзу:
 tunnel-setup-input-subdomain =
     .placeholder = піддомен
+tunnel-setup-opt-in = Повідомляйте мене про нові функції та можливості допомоги проєкту.
+tunnel-setup-privacy-policy = Політика приватності
+tunnel-setup-input-reclamation-token =
+    .placeholder = Токен відновлення
+tunnel-setup-error = Під час налаштування піддомену сталася помилка.
+tunnel-setup-create = Створити
+tunnel-setup-skip = Пропустити
+tunnel-setup-time-sync = Чекаємо встановлення системного годинника з Інтернету. Реєстрація домену, ймовірно, не вдасться, до завершення цієї дії.
 
 ## Authorize Page
 
+authorize-title = Запит дозволу на зʼєднання — { -webthings-gateway-brand }
+authorize-authorization-request = Запит дозволу на зʼєднання
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> хоче отримати доступ до вашого шлюзу на <<function>> пристроях.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = з <<domain>>
 
 ## Local Token Page
 
