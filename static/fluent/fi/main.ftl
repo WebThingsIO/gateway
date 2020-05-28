@@ -8,6 +8,12 @@
 ##
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
+-webthings-gateway-brand = WebThings Gateway
+# Main Title
+webthings-gateway = { -webthings-gateway-brand }
+# Wordmark
+wordmark =
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -32,6 +38,7 @@ settings-users = Käyttäjät
 settings-add-ons = Lisäosat
 settings-localization = Lokalisointi
 settings-updates = Päivitykset
+settings-authorizations = Valtuudet
 settings-experiments = Kokeilut
 settings-developer = Kehittäjä
 
@@ -146,6 +153,8 @@ add-rule =
     .aria-label = Luo uusi sääntö
 rules = Säännöt
 rules-rule-name = Säännön nimi
+rules-customize-rule-name-icon =
+    .alt = Muokkaa säännön nimeä
 rules-rule-description = Säännön kuvaus
 rules-delete-icon =
     .alt = Poista
@@ -160,14 +169,25 @@ rule-delete-cancel-button =
     .value = Peruuta
 rule-delete-confirm-button =
     .value = Poista sääntö
+rule-notification = Ilmoitus
+notification-message = Viesti
+notification-level = Taso
+notification-low = Matala
+notification-normal = Normaali
+notification-high = Korkea
 rule-name = Säännön nimi
 
 ## Logs
 
+add-log =
+    .aria-label = Luo uusi loki
 logs = Lokit
+logs-create-log-hint = Lokeja ei ole luotu. Napsauta + luodaksesi lokin.
 logs-device = Laite
+logs-retention = Pysyvyys
 logs-save = Tallenna
 logs-remove = Poista
+logs-unable-to-create = Lokia ei voi luoda
 
 ## Add New Things
 
@@ -289,6 +309,10 @@ icon = Kuvake
 unknown-state = Tuntematon tila.
 error = Virhe
 errors = Virheet
+more-information = Lisätietoja
+invalid-file = Virheellinen tiedosto.
+failed-read-file = Tiedoston lukeminen epäonnistui.
+failed-save = Tiedoston tallentaminen epäonnistui.
 
 ## Schema Form
 
@@ -298,15 +322,24 @@ errors = Virheet
 
 ## Login Page
 
+login-log-in = Kirjaudu sisään
+login-wrong-credentials = Virheellinen käyttäjätunnus tai salasana.
 
 ## Create First User Page
 
 signup-title = Luo käyttäjä — { -webthings-gateway-brand }
 signup-welcome = Tervetuloa
 signup-create-account = Luo ensimmäinen käyttäjätilisi:
+signup-password-mismatch = Salasanat eivät täsmää
+signup-next = Seuraava
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Valitse verkko-osoite — { -webthings-gateway-brand }
+tunnel-setup-welcome = Tervetuloa
+tunnel-setup-privacy-policy = Tietosuojakäytäntö
+tunnel-setup-create = Luo
+tunnel-setup-skip = Ohita
 
 ## Authorize Page
 
@@ -316,21 +349,63 @@ signup-create-account = Luo ensimmäinen käyttäjätilisi:
 
 ## Router Setup Page
 
+router-setup-title = Reitittimen asetukset — { -webthings-gateway-brand }
+router-setup-header = Luo uusi Wi-Fi-verkko
+router-setup-input-ssid =
+    .placeholder = Verkon nimi
+router-setup-input-password =
+    .placeholder = Salasana
+router-setup-input-confirm-password =
+    .placeholder = Vahvista salasana
+router-setup-create =
+    .value = Luo
+router-setup-password-mismatch = Salasanojen täytyy täsmätä
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fin asetukset — { -webthings-gateway-brand }
+wifi-setup-header = Yhdistetäänkö Wi-Fi-verkkoon?
+wifi-setup-input-password =
+    .placeholder = Salasana
+wifi-setup-show-password = Näytä salasana
+wifi-setup-connect =
+    .value = Yhdistä
+wifi-setup-network-icon =
+    .alt = Wi-Fi-verkko
+wifi-setup-skip = Ohita
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Yhdistetään Wi-Fiin — { -webthings-gateway-brand }
+connecting-header = Yhdistetään Wi-Fiin…
 
 ## Creating Wi-Fi Network Page
 
 
 ## UI Updates
 
+ui-update-close = Sulje
 
 ## General Terms
 
+ok = OK
+ellipsis = …
+event-log = Tapahtumaloki
+edit = Muokkaa
+remove = Poista
+disconnected = Yhteys katkaistu
+processing = Käsitellään…
+submit = Lähetä
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Valikko
+back-button =
+    .aria-label = Takaisin
+submit-button =
+    .aria-label = Lähetä
+edit-button =
+    .aria-label = Muokkaa
+save-button =
+    .aria-label = Tallenna
