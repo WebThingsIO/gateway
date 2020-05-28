@@ -83,6 +83,12 @@ network-settings-network-name = Verkon nimi (SSID)
 wireless-connected = Yhdistetty
 wireless-icon =
     .alt = Wi-Fi-verkko
+network-settings-changing = Muutetaan verkkoasetuksia. Tässä saattaa kestää hetki.
+failed-ethernet-configure = Ethernetin määrittäminen epäonnistui.
+failed-wifi-configure = Wi-Fin määrittäminen epäonnistui.
+failed-wan-configure = WAN:in määrittäminen epäonnistui.
+failed-lan-configure = LAN:in määrittäminen epäonnistui.
+failed-wlan-configure = WLAN:in määrittäminen epäonnistui.
 
 ## User Settings
 
@@ -203,9 +209,14 @@ context-menu-remove = Poista
 
 ## Capabilities
 
+ColorSensor = Värianturi
+DoorSensor = Ovianturi
+MotionSensor = Liiketunnistin
+LeakSensor = Vuotoanturi
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Lämpötilasensori
+Thermostat = Termostaatti
 
 ## Properties
 
@@ -221,6 +232,7 @@ unknown = Tuntematon
 
 ## Domain Setup
 
+invalid-email = Virheellinen sähköpostiosoite.
 
 ## Booleans
 
@@ -308,8 +320,11 @@ disable = Poista käytöstä
 enable = Ota käyttöön
 addon-update = Päivitä
 addon-remove = Poista
+addon-updating = Päivitetään…
 addon-updated = Päivitetty
 addon-update-failed = Epäonnistui
+addon-config-applying = Toteutetaan…
+addon-config-apply = Toteuta
 addon-discovery-added = Lisätty
 addon-discovery-add = Lisää
 addon-discovery-installing = Asennetaan…
@@ -322,9 +337,12 @@ users = Käyttäjät
 edit-user = Muokkaa käyttäjää
 add-user = Lisää käyttäjä
 addons = Lisäosat
+addon-config = Määritä lisäosa
+addon-discovery = Löydä uusia lisäosia
 experiments = Kokeilut
 localization = Lokalisointi
 updates = Päivitykset
+developer = Kehittäjä
 network = Verkko
 ethernet = Ethernet
 wifi = Wi-Fi
@@ -370,6 +388,8 @@ tunnel-setup-skip = Ohita
 
 ## Authorize Page
 
+authorize-title = Valtuuspyyntö — { -webthings-gateway-brand }
+authorize-authorization-request = Valtuuspyyntö
 authorize-allow =
     .value = Salli
 authorize-deny = Estä
