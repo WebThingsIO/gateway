@@ -188,6 +188,7 @@ logs-retention = Pysyvyys
 logs-save = Tallenna
 logs-remove = Poista
 logs-unable-to-create = Lokia ei voi luoda
+logs-server-remove-error = Palvelinvirhe: lokia ei voi poistaa
 
 ## Add New Things
 
@@ -202,6 +203,9 @@ context-menu-remove = Poista
 
 ## Capabilities
 
+VideoCamera = Videokamera
+Camera = Kamera
+TemperatureSensor = Lämpötilasensori
 
 ## Properties
 
@@ -211,6 +215,8 @@ temperature = Lämpötila
 color = Väri
 brightness = Kirkkaus
 color-temperature = Värilämpötila
+closed = Suljettu
+locked = Lukittu
 unknown = Tuntematon
 
 ## Domain Setup
@@ -221,6 +227,7 @@ unknown = Tuntematon
 
 ## Time
 
+utils-now = nyt
 utils-seconds-ago =
     { $value ->
         [one] { $value } sekunti sitten
@@ -246,6 +253,16 @@ utils-weeks-ago =
         [one] { $value } viikko sitten
        *[other] { $value } viikkoa sitten
     }
+utils-months-ago =
+    { $value ->
+        [one] { $value } kuukausi sitten
+       *[other] { $value } kuukautta sitten
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } vuosi sitten
+       *[other] { $value } vuotta sitten
+    }
 
 ## Unit Abbreviations
 
@@ -269,11 +286,17 @@ new-thing-pin =
     .placeholder = Anna PIN-koodi
 new-thing-pin-error = Väärä PIN-koodi
 new-thing-pin-invalid = Väärä PIN-koodi
+new-thing-cancel = Peruuta
+new-thing-submit = Lähetä
+new-thing-password =
+    .placeholder = Syötä salasana
+new-thing-credentials-error = Virheelliset kirjautumistiedot
 new-thing-saved = Tallennettu
 new-thing-done = Valmis
 
 ## New Web Thing View
 
+loading = Ladataan…
 
 ## Empty div Messages
 
@@ -299,6 +322,9 @@ users = Käyttäjät
 edit-user = Muokkaa käyttäjää
 add-user = Lisää käyttäjä
 addons = Lisäosat
+experiments = Kokeilut
+localization = Lokalisointi
+updates = Päivitykset
 network = Verkko
 ethernet = Ethernet
 wifi = Wi-Fi
@@ -322,6 +348,7 @@ failed-save = Tiedoston tallentaminen epäonnistui.
 
 ## Login Page
 
+login-title = Kirjaudu sisään — { -webthings-gateway-brand }
 login-log-in = Kirjaudu sisään
 login-wrong-credentials = Virheellinen käyttäjätunnus tai salasana.
 
@@ -343,9 +370,14 @@ tunnel-setup-skip = Ohita
 
 ## Authorize Page
 
+authorize-allow =
+    .value = Salli
+authorize-deny = Estä
 
 ## Local Token Page
 
+local-token-title = Paikallinen polettipalvelu — { -webthings-gateway-brand }
+local-token-header = Paikallinen polettipalvelu
 
 ## Router Setup Page
 
@@ -381,9 +413,12 @@ connecting-header = Yhdistetään Wi-Fiin…
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Luodaan Wi-Fi-verkko — { -webthings-gateway-brand }
+creating-header = Luodaan Wi-Fi-verkkoa…
 
 ## UI Updates
 
+ui-update-available = Päivitetty käyttöliittymä on saatavana.
 ui-update-close = Sulje
 
 ## General Terms
