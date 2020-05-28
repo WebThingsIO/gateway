@@ -149,21 +149,49 @@ rules-rule-name = Säännön nimi
 rules-rule-description = Säännön kuvaus
 rules-delete-icon =
     .alt = Poista
+rules-delete-dialog = Haluatko varmasti poistaa tämän säännön pysyvästi?
+rules-delete-cancel =
+    .value = Peruuta
+rules-delete-confirm =
+    .value = Poista sääntö
+rule-invalid = Virheellinen
+rule-delete-prompt = Haluatko varmasti poistaa tämän säännön pysyvästi?
+rule-delete-cancel-button =
+    .value = Peruuta
+rule-delete-confirm-button =
+    .value = Poista sääntö
+rule-name = Säännön nimi
 
 ## Logs
 
+logs = Lokit
+logs-device = Laite
+logs-save = Tallenna
+logs-remove = Poista
 
 ## Add New Things
 
+add-thing-done = Valmis
+add-thing-cancel = Peruuta
 
 ## Context Menu
 
+context-menu-choose-icon = Valitse kuvake…
+context-menu-save = Tallenna
+context-menu-remove = Poista
 
 ## Capabilities
 
 
 ## Properties
 
+on = Päällä
+off = Pois päältä
+temperature = Lämpötila
+color = Väri
+brightness = Kirkkaus
+color-temperature = Värilämpötila
+unknown = Tuntematon
 
 ## Domain Setup
 
@@ -173,12 +201,56 @@ rules-delete-icon =
 
 ## Time
 
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } sekunti sitten
+       *[other] { $value } sekuntia sitten
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minuutti sitten
+       *[other] { $value } minuuttia sitten
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } tunti sitten
+       *[other] { $value } tuntia sitten
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } päivä sitten
+       *[other] { $value } päivää sitten
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } viikko sitten
+       *[other] { $value } viikkoa sitten
+    }
 
 ## Unit Abbreviations
 
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kWh
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
 
 ## New Thing View
 
+unknown-device-type = Tuntematon laitetyyppi
+new-thing-choose-icon = Valitse kuvake…
+new-thing-save = Tallenna
+new-thing-pin =
+    .placeholder = Anna PIN-koodi
+new-thing-pin-error = Väärä PIN-koodi
+new-thing-pin-invalid = Väärä PIN-koodi
+new-thing-saved = Tallennettu
+new-thing-done = Valmis
 
 ## New Web Thing View
 
@@ -188,12 +260,35 @@ rules-delete-icon =
 
 ## Add-on Settings
 
+author-unknown = Tuntematon
+disable = Poista käytöstä
+enable = Ota käyttöön
+addon-update = Päivitä
+addon-remove = Poista
+addon-updated = Päivitetty
+addon-update-failed = Epäonnistui
+addon-discovery-added = Lisätty
+addon-discovery-add = Lisää
+addon-discovery-installing = Asennetaan…
+addon-discovery-failed = Epäonnistui
 
 ## Page Titles
 
+settings = Asetukset
+users = Käyttäjät
+edit-user = Muokkaa käyttäjää
+add-user = Lisää käyttäjä
+addons = Lisäosat
+network = Verkko
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Kuvake
 
 ## Errors
 
+unknown-state = Tuntematon tila.
+error = Virhe
+errors = Virheet
 
 ## Schema Form
 
@@ -206,6 +301,9 @@ rules-delete-icon =
 
 ## Create First User Page
 
+signup-title = Luo käyttäjä — { -webthings-gateway-brand }
+signup-welcome = Tervetuloa
+signup-create-account = Luo ensimmäinen käyttäjätilisi:
 
 ## Tunnel Setup Page
 
