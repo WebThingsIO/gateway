@@ -103,6 +103,9 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-koodi
 user-settings-mfa-enable = Ota kaksivaiheinen vahvistus käyttöön
+user-settings-mfa-error = Todennuskoodi oli väärä.
+user-settings-mfa-enter-code = Kirjoita koodi todennussovelluksesta alle.
+user-settings-mfa-regenerate-codes = Luo koodien varmuuskopiot uudelleen
 user-settings-input-new-password =
     .placeholder = Uusi salasana (valinnainen)
 user-settings-input-confirm-new-password =
@@ -117,6 +120,7 @@ user-settings-save = Tallenna
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Ei valtuutuksia.
 
 ## Experiment Settings
 
@@ -152,6 +156,7 @@ failed-to-check-for-updates = Päivityksiä ei voi tarkistaa tällä hetkellä.
 
 developer-settings-enable-ssh = Ota SSH käyttöön
 developer-settings-view-internal-logs = Näytä sisäiset lokit
+developer-settings-create-local-authorization = Luo paikallinen valtuus
 
 ## Rules
 
@@ -233,6 +238,7 @@ unknown = Tuntematon
 ## Domain Setup
 
 invalid-email = Virheellinen sähköpostiosoite.
+redirecting = Uudelleenohjataan…
 
 ## Booleans
 
@@ -342,6 +348,7 @@ addon-discovery = Löydä uusia lisäosia
 experiments = Kokeilut
 localization = Lokalisointi
 updates = Päivitykset
+authorizations = Valtuudet
 developer = Kehittäjä
 network = Verkko
 ethernet = Ethernet
@@ -369,6 +376,7 @@ failed-save = Tiedoston tallentaminen epäonnistui.
 login-title = Kirjaudu sisään — { -webthings-gateway-brand }
 login-log-in = Kirjaudu sisään
 login-wrong-credentials = Virheellinen käyttäjätunnus tai salasana.
+login-enter-totp = Kirjoita koodi todennussovelluksesta.
 
 ## Create First User Page
 
@@ -430,6 +438,7 @@ wifi-setup-skip = Ohita
 
 connecting-title = Yhdistetään Wi-Fiin — { -webthings-gateway-brand }
 connecting-header = Yhdistetään Wi-Fiin…
+connecting-header-skipped = Wi-Fi-asetukset ohitettiin
 
 ## Creating Wi-Fi Network Page
 
