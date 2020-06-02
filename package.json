@@ -95,7 +95,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.6.5",
     "css-loader": "^3.5.3",
-    "eslint": "^6.8.0",
+    "eslint": "^7.1.0",
     "eslint-plugin-html": "^6.0.2",
     "event-to-promise": "^0.8.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

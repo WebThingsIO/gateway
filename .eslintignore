@@ -1,4 +1,5 @@
+/.eslintrc.js
 /build/
+/config/
 /coverage/
 /static/js/lib/
-/config/
