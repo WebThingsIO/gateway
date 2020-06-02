@@ -483,18 +483,46 @@ router-setup-password-mismatch = Passorda må samsvare
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi-oppsett — { -webthings-gateway-brand }
+wifi-setup-header = Kople til eit Wi-Fi-nätverk?
+wifi-setup-input-password =
+    .placeholder = Passord
+wifi-setup-show-password = Vis passord
+wifi-setup-connect =
+    .value = Kople til
+wifi-setup-network-icon =
+    .alt = Wi-Fi-nettverk
+wifi-setup-skip = Hopp over
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Koplar til Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Koplar til Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
 
 ## UI Updates
 
+ui-update-reload = Oppdater
+ui-update-close = Lat att
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Hendingslogg
+edit = Rediger
+remove = Fjern
+disconnected = Fråkopla
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Meny
+back-button =
+    .aria-label = Tilbake
+edit-button =
+    .aria-label = Rediger
+save-button =
+    .aria-label = Lagre
