@@ -94,6 +94,11 @@ network-settings-network-name = Nettverksnamn (SSID)
 wireless-connected = Tilkopla
 wireless-icon =
     .alt = Wi-Fi nettverk
+failed-ethernet-configure = Klarte ikkje å konfigurere ethernet.
+failed-wifi-configure = Klarte ikkje å konfigurere  Wi-Fi.
+failed-wan-configure = Klarte ikkje å konfigurere  WAN.
+failed-lan-configure = Klarte ikkje å konfigurere LAN.
+failed-wlan-configure = Klarte ikkje å konfigurere WLAN.
 
 ## User Settings
 
