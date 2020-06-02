@@ -17,6 +17,7 @@ const availableLanguages = {
   en: ['/fluent/en-US/main.ftl'],
   'es-AR': ['/fluent/es-AR/main.ftl'],
   'es-ES': ['/fluent/es-ES/main.ftl'],
+  fi: ['/fluent/fi/main.ftl'],
   fr: ['/fluent/fr/main.ftl'],
   'fy-NL': ['/fluent/fy-NL/main.ftl'],
   hu: ['/fluent/hu/main.ftl'],
