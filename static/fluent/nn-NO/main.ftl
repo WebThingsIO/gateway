@@ -113,6 +113,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
+user-settings-mfa-error = Autentiseringskoden er feil.
 user-settings-mfa-verify = Stadfest
 user-settings-input-new-password =
     .placeholder = Nytt passord (valfritt)
