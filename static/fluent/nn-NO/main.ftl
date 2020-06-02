@@ -114,6 +114,7 @@ user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
 user-settings-mfa-error = Autentiseringskoden er feil.
+user-settings-mfa-enter-code = Skriv inn kode frå autentiseringsappen din, nedanfor.
 user-settings-mfa-verify = Stadfest
 user-settings-input-new-password =
     .placeholder = Nytt passord (valfritt)
@@ -183,15 +184,20 @@ rules-preview-button =
     .alt = Førehandsvising
 rules-delete-icon =
     .alt = Slett
+rules-drag-input-hint = Legg til eining som inndata
+rules-drag-output-hint = Legg til eining som utdata
 rules-scroll-left =
     .alt = Rull til venstre
 rules-scroll-right =
     .alt = Rull til høgre
+rules-delete-prompt = Slepp einingar her for å kople frå
+rules-delete-dialog = Er du sikker på at du vil fjerne denne regelen permanent?
 rules-delete-cancel =
     .value = Avbryt
 rules-delete-confirm =
     .value = Fjern regel
 rule-invalid = Ugyldig
+rule-delete-prompt = Er du sikker på at du vil fjerne denne regelen permanent?
 rule-delete-cancel-button =
     .value = Avbryt
 rule-delete-confirm-button =
@@ -228,6 +234,7 @@ logs-remove = Fjern
 
 add-thing-scanning-icon =
     .alt = Skannar
+add-thing-add-by-url = Legg til via URL…
 add-thing-done = Ferdig
 add-thing-cancel = Avbryt
 
@@ -410,6 +417,7 @@ addon-discovery = Oppdag nye tillegg
 experiments = Eksperiment
 localization = Omsetting
 updates = Oppdateringar
+authorizations = Autoriseringar
 developer = Utviklar
 network = Nettverk
 ethernet = Ethernet
@@ -446,18 +454,32 @@ signup-next = Neste
 
 ## Tunnel Setup Page
 
+tunnel-setup-welcome = Velkomen
 tunnel-setup-skip = Hopp over
 
 ## Authorize Page
 
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = frå <<domain>>
+authorize-monitor = overvak
+authorize-allow =
+    .value = Tillat
+authorize-deny = Avslå
 
 ## Local Token Page
 
 
 ## Router Setup Page
 
+router-setup-input-ssid =
+    .placeholder = Nettverksnamn
+router-setup-input-password =
+    .placeholder = Passord
+router-setup-input-confirm-password =
+    .placeholder = Stadfest passord
+router-setup-create =
+    .value = Lag
+router-setup-password-mismatch = Passorda må samsvare
 
 ## Wi-Fi Setup Page
 
