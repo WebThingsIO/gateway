@@ -44,9 +44,12 @@ settings-developer = Kehittäjä
 
 ## Domain Settings
 
+domain-settings-local-label = Paikallinen pääsy
+domain-settings-remote-access = Etäyhteys
 
 ## Network Settings
 
+network-settings-unsupported = Verkkoasetuksia ei tueta tässä ympäristössä.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -105,6 +108,7 @@ user-settings-input-totp =
 user-settings-mfa-enable = Ota kaksivaiheinen vahvistus käyttöön
 user-settings-mfa-error = Todennuskoodi oli väärä.
 user-settings-mfa-enter-code = Kirjoita koodi todennussovelluksesta alle.
+user-settings-mfa-verify = Vahvista
 user-settings-mfa-regenerate-codes = Luo koodien varmuuskopiot uudelleen
 user-settings-input-new-password =
     .placeholder = Uusi salasana (valinnainen)
@@ -203,6 +207,9 @@ logs-server-remove-error = Palvelinvirhe: lokia ei voi poistaa
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Etsitään
+add-thing-scanning = Etsitään uusia laitteita…
 add-thing-done = Valmis
 add-thing-cancel = Peruuta
 
@@ -242,6 +249,8 @@ redirecting = Uudelleenohjataan…
 
 ## Booleans
 
+true = Tosi
+false = Epätosi
 
 ## Time
 
@@ -281,9 +290,14 @@ utils-years-ago =
         [one] { $value } vuosi sitten
        *[other] { $value } vuotta sitten
     }
+minute = Minuutti
+hour = Tunti
+day = Päivä
+week = Viikko
 
 ## Unit Abbreviations
 
+abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
@@ -294,6 +308,12 @@ abbrev-celsius = °C
 abbrev-kelvin = K
 abbrev-meter = m
 abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = h
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
@@ -306,6 +326,8 @@ new-thing-pin-error = Väärä PIN-koodi
 new-thing-pin-invalid = Väärä PIN-koodi
 new-thing-cancel = Peruuta
 new-thing-submit = Lähetä
+new-thing-username =
+    .placeholder = Syötä käyttäjätunnus
 new-thing-password =
     .placeholder = Syötä salasana
 new-thing-credentials-error = Virheelliset kirjautumistiedot
@@ -318,12 +340,15 @@ loading = Ladataan…
 
 ## Empty div Messages
 
+no-things = Ei vielä laitteita. Napsauta + ja etsi käytettävissä olevia laitteita.
 
 ## Add-on Settings
 
 author-unknown = Tuntematon
 disable = Poista käytöstä
 enable = Ota käyttöön
+by = tekijä
+addon-configure = Asetukset
 addon-update = Päivitä
 addon-remove = Poista
 addon-updating = Päivitetään…
