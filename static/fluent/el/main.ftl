@@ -78,7 +78,9 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Διεύθυνση IP
 network-settings-dhcp = Αυτόματη (DHCP)
 network-settings-static = Μη αυτόματη (Στατική IP)
+network-settings-pppoe = Γέφυρα (PPPoE)
 network-settings-static-ip-address = Στατική διεύθυνση IP
+network-settings-network-mask = Μάσκα δικτύου
 network-settings-gateway = Πύλη
 network-settings-done = Τέλος
 network-settings-wifi-password =
@@ -87,12 +89,14 @@ network-settings-show-password = Εμφάνιση κωδικού πρόσβασ�
 network-settings-connect = Σύνδεση
 network-settings-username = Όνομα χρήστη
 network-settings-password = Κωδικός πρόσβασης
+network-settings-router-ip = IP διεύθυνση router
 network-settings-dhcp-server = Διακομιστής DHCP
 network-settings-enable-wifi = Ενεργοποίηση Wi-Fi
 network-settings-network-name = Όνομα δικτύου (SSID)
 wireless-connected = Συνδέθηκε
 wireless-icon =
     .alt = Δίκτυο Wi-Fi
+network-settings-changing = Αλλαγή ρυθμίσεων δικτύου. Ίσως χρειαστεί λίγη ώρα.
 failed-ethernet-configure = Αποτυχία διαμόρφωσης Ethernet.
 failed-wifi-configure = Αποτυχία διαμόρφωσης Wi-Fi.
 failed-wan-configure = Αποτυχία διαμόρφωσης WAN.
@@ -167,6 +171,7 @@ developer-settings-enable-ssh = Ενεργοποίηση SSH
 add-rule =
     .aria-label = Δημιουργία νέου κανόνα
 rules = Κανόνες
+rules-create-rule-hint = Δεν έχετε δημιουργήσει κανόνες. Κάντε κλικ στο + για να δημιουργήσετε έναν κανόνα.
 rules-rule-name = Όνομα κανόνα
 rules-customize-rule-name-icon =
     .alt = Προσαρμογή ονόματος κανόνα
@@ -294,6 +299,8 @@ redirecting = Ανακατεύθυνση…
 
 ## Booleans
 
+true = Αληθές
+false = Ψευδές
 
 ## Time
 
@@ -369,6 +376,10 @@ new-thing-pin-error = Λάθος PIN
 new-thing-pin-invalid = Μη έγκυρο PIN
 new-thing-cancel = Ακύρωση
 new-thing-submit = Υποβολή
+new-thing-username =
+    .placeholder = Εισαγωγή ονόματος χρήστη
+new-thing-password =
+    .placeholder = Εισαγωγή κωδικού πρόσβασης
 new-thing-credentials-error = Λανθασμένα διαπιστευτήρια
 new-thing-saved = Αποθηκεύτηκε
 new-thing-done = Τέλος
@@ -490,6 +501,7 @@ authorize-deny = Άρνηση
 
 ## Router Setup Page
 
+router-setup-title = Ρύθμιση router — { -webthings-gateway-brand }
 router-setup-header = Δημιουργία νέου δικτύου Wi-Fi
 router-setup-input-ssid =
     .placeholder = Όνομα δικτύου
@@ -518,6 +530,7 @@ wifi-setup-skip = Παράλειψη
 
 connecting-title = Σύνδεση στο Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Σύνδεση στο Wi-Fi…
+connecting-header-skipped = Η ρύθμιση Wi-Fi παραλήφθηκε
 connecting-skipped = Η πύλη εκκινείται τώρα. Μεταβείτε στο { $gateway-link } από το πρόγραμμα περιήγησής σας, ενώ έχετε συνδεθεί στο ίδιο δίκτυο με την πύλη για να συνεχίσετε τη ρύθμιση.
 
 ## Creating Wi-Fi Network Page
