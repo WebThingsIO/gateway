@@ -899,8 +899,17 @@
 .network-select,
 .user-form input {
   display: block;
-  width: 18rem;
   margin: 1rem;
+}
+
+.network-settings-wrap input[type="password"],
+.network-settings-wrap input[type="text"],
+.network-select {
+  width: 18rem;
+}
+
+.user-form input {
+  width: 26rem;
 }
 
 .localization-select {
