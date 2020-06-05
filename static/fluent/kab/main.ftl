@@ -552,6 +552,7 @@ local-token-title = Ameẓlu n ujiṭun adigan — { -webthings-gateway-brand }
 local-token-header = Ameẓlu n ujitun adigan
 local-token-your-token = Ajitun-ik adigan d wa <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Seqdec-it i teywalt akked tqenṭert-ik s wudem aɣelsan s <a data-l10n-name="local-token-bearer-type">Bearer-type Authorization</a>.
+local-token-copy-token = Nɣel ajiṭun
 
 ## Router Setup Page
 
