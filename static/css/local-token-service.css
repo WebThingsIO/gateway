@@ -76,3 +76,12 @@ span.insecure {
 .insecure .insecure {
   display: inline;
 }
+
+#copy-token-button {
+  background-color: #78acd0;
+  font-size: 1.6rem;
+}
+
+#copy-token-button:hover, #copy-token-button:active {
+  background-color: #305067;
+}

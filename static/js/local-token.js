@@ -16,4 +16,21 @@ window.addEventListener('load', function app_onLoad() {
 
     hljs.initHighlighting();
   });
+
+  const button = document.getElementById('copy-token-button');
+  const token = document.getElementById('token');
+  button.addEventListener('click', () => {
+    const textarea = document.createElement('textarea');
+    textarea.textContent = token.innerText;
+    textarea.style.position = 'fixed';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+    } catch (_) {
+      // pass
+    }
+
+    document.body.removeChild(textarea);
+  });
 });
