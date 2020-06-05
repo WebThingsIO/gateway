@@ -559,6 +559,7 @@ local-token-title = Локальна служба токенів — { -webthing
 local-token-header = Локальна служба токенів
 local-token-your-token = Вашим локальним токеном є цей <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Застосовуйте його для безпечного звʼязку зі шлюзом, <a data-l10n-name="local-token-bearer-type">надавши дозвіл на зʼєднання цьому типу носія</a>.
+local-token-copy-token = Копіювати маркер
 
 ## Router Setup Page
 
