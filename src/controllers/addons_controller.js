@@ -160,7 +160,9 @@ AddonsController.patch('/:addonId', async (request, response) => {
 
   try {
     await AddonManager.installAddonFromUrl(id, url, checksum, false);
-    response.status(200).json({});
+    const key = `addons.${id}`;
+    const obj = await Settings.get(key);
+    response.status(200).json(obj);
   } catch (e) {
     console.error(`Failed to update add-on: ${id}\n${e}`);
     response.status(400).send(e);

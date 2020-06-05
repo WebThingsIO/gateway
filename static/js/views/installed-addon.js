@@ -36,6 +36,7 @@ class InstalledAddon {
     this.primaryType = metadata.primary_type;
     this.enabled = metadata.enabled;
     this.schema = metadata.schema;
+    this.metadata = metadata;
     this.updateUrl = null;
     this.updateVersion = null;
     this.updateChecksum = null;
@@ -165,12 +166,19 @@ class InstalledAddon {
     controlDiv.replaceChild(updating, e.target);
 
     API.updateAddon(this.id, this.updateUrl, this.updateChecksum)
-      .then(() => {
+      .then((settings) => {
         this.version = this.updateVersion;
         const addon = this.installedAddonsMap.get(this.id);
         addon.version = this.version;
         versionDiv.innerText = this.version;
         updating.innerText = fluent.getMessage('addon-updated');
+
+        // If this add-on is a UI extension, reload the page to pick up the
+        // changes
+        if (settings.content_scripts && settings.content_scripts.length > 0 &&
+            settings.enabled) {
+          window.location.reload();
+        }
       })
       .catch((err) => {
         console.error(`Failed to update add-on: ${this.id}\n${err}`);
@@ -194,6 +202,14 @@ class InstalledAddon {
         const addon = this.availableAddonsMap.get(this.id);
         if (addon) {
           addon.installed = false;
+        }
+
+        // If this add-on is a UI extension, reload the page to pick up the
+        // changes
+        if (this.metadata.content_scripts &&
+            this.metadata.content_scripts.length > 0 &&
+            this.enabled) {
+          window.location.reload();
         }
       })
       .catch((e) => {
