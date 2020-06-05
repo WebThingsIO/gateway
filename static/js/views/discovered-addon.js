@@ -110,6 +110,10 @@ class DiscoveredAddon {
           addon.installed = true;
         }
         this.installedAddonsMap.set(this.id, settings);
+
+        if (settings.content_scripts && settings.content_scripts.length > 0) {
+          window.location.reload();
+        }
       })
       .catch((err) => {
         console.error(`Failed to install add-on: ${this.id}\n${err}`);
