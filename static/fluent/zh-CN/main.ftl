@@ -552,6 +552,7 @@ local-token-title = 本地令牌服务 — { -webthings-gateway-brand }
 local-token-header = 本地令牌服务
 local-token-your-token = 如下 <a data-l10n-name="local-token-jwt">JSON Web 令牌（JWT）</a>是您的本地令牌（Token）：
 local-token-use-it = 请使用此令牌（Token），通过 <a data-l10n-name="local-token-bearer-type">Bearer 式验证方案</a> 与网关安全通信。
+local-token-copy-token = 复制令牌（Token）
 
 ## Router Setup Page
 
