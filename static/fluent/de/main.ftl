@@ -552,6 +552,7 @@ local-token-title = Dienst für lokale Token — { -webthings-gateway-brand }
 local-token-header = Dienst für lokale Token
 local-token-your-token = Ihr lokales Zugriffstoken ist <a data-l10n-name="local-token-jwt">JSON Web Token</a>.
 local-token-use-it = Nutzen Sie es zur sicheren Kommunikation mit dem Gateway, mittles <a data-l10n-name="local-token-bearer-type">Bearer-type-Authorisierung</a>
+local-token-copy-token = Token kopieren
 
 ## Router Setup Page
 
