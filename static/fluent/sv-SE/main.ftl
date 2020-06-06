@@ -552,6 +552,7 @@ local-token-title = Lokal tokentjänst — { -webthings-gateway-brand }
 local-token-header = Lokal tokentjänst
 local-token-your-token = Dina lokala token är detta: <a data-l10n-name="local-token-jwt">JSON webbtoken</a>:
 local-token-use-it = Använd den för att säkert kommunicera med gatewayen genom användning av <a data-l10n-name="local-token-bearer-type"> Tokenbaserad autentisering</a>.
+local-token-copy-token = Kopiera token
 
 ## Router Setup Page
 
