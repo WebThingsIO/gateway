@@ -559,6 +559,7 @@ local-token-title = Usługa lokalnych tokenów — { -webthings-gateway-brand }
 local-token-header = Usługa lokalnych tokenów
 local-token-your-token = Lokalny token to ten <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Użyj go, aby bezpiecznie komunikować się z bramą za pomocą <a data-l10n-name="local-token-bearer-type">upoważnienia na okaziciela</a>.
+local-token-copy-token = Kopiuj token
 
 ## Router Setup Page
 
