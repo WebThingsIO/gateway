@@ -552,6 +552,7 @@ local-token-title = Helyi tokenszolgáltatás – { -webthings-gateway-brand }
 local-token-header = Helyi tokenszolgáltatás
 local-token-your-token = A helyi tokenje ez a <a data-l10n-name="local-token-jwt">JSON webtoken</a>:
 local-token-use-it = Használja ezt az átjáróval való biztonságos beszélgetéshez, <a data-l10n-name="local-token-bearer-type">birtokos típusú felhatalmazással</a>.
+local-token-copy-token = Token másolása
 
 ## Router Setup Page
 
