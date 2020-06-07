@@ -559,6 +559,7 @@ local-token-title = Услуга локалног жетона — { -webthings-
 local-token-header = Услуга локалног жетона
 local-token-your-token = Ово је ваш локални жетон <a data-l10n-name="local-token-jwt">JSON веб жетон</a>.
 local-token-use-it = Користите га за безбедну комуникацију са овим мрежним пролазом, уз <a data-l10n-name="local-token-bearer-type">Bearer-type пуномоћје</a>.
+local-token-copy-token = Копирај токен
 
 ## Router Setup Page
 
