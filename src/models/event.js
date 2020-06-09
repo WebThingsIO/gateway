@@ -22,7 +22,7 @@ class Event {
    */
   constructor(name, data, thingId, timestamp) {
     this.name = name;
-    this.data = data || null;
+    this.data = typeof data === 'undefined' ? null : data;
     this.thingId = thingId;
     this.timestamp = timestamp || Utils.timestamp();
   }
