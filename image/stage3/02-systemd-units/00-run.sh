@@ -11,6 +11,7 @@ install -m 644 files/etc/systemd/system/mozilla-iot-gateway.check-for-update.tim
 install -m 644 files/etc/systemd/system/mozilla-iot-gateway.update-rollback.service "${ROOTFS_DIR}/etc/systemd/system/"
 install -m 644 files/etc/default/hostapd "${ROOTFS_DIR}/etc/default/"
 install -m 644 files/etc/dnsmasq.conf "${ROOTFS_DIR}/etc/"
+install -m 644 files/etc/udev/98-co2mon.rules "${ROOTFS_DIR}/etc/udev/rules.d/"
 
 on_chroot << EOF
 # Disable hostapd and dnsmasq auto start
