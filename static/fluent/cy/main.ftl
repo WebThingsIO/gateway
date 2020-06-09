@@ -580,6 +580,7 @@ local-token-title = Gwasanaeth Tocyn Lleol - { -webthings-gateway-brand }
 local-token-header = Gwasanaeth Tocyn Lleol
 local-token-your-token = Eich tocyn lleol yw'r <a data-l10n-name="local-token-jwt">Tocyn Gwe JSON</a>:
 local-token-use-it = Defnyddiwch ef i gyfathrebu â'r porth yn ddiogel, gyda <a data-l10n-name="local-token-bearer-type">Awdurdodi Math Cludwr</a>.
+local-token-copy-token = Copïwch y Tocyn
 
 ## Router Setup Page
 
