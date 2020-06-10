@@ -25,6 +25,8 @@ log-out-button = Kirjaudu ulos
 
 ## Things
 
+thing-details =
+    .aria-label = Näytä ominaisuudet
 
 ## Floorplan
 
@@ -33,9 +35,11 @@ upload-floorplan-hint = (suositeltu tiedostomuoto on .svg)
 
 ## Top-Level Settings
 
+settings-domain = Verkkotunnus
 settings-network = Verkko
 settings-users = Käyttäjät
 settings-add-ons = Lisäosat
+settings-adapters = Sovittimet
 settings-localization = Lokalisointi
 settings-updates = Päivitykset
 settings-authorizations = Valtuudet
@@ -110,6 +114,7 @@ user-settings-mfa-error = Todennuskoodi oli väärä.
 user-settings-mfa-enter-code = Kirjoita koodi todennussovelluksesta alle.
 user-settings-mfa-verify = Vahvista
 user-settings-mfa-regenerate-codes = Luo koodien varmuuskopiot uudelleen
+user-settings-mfa-backup-codes = Nämä ovat varakoodisi. Jokaista voidaan käyttää vain kerran. Pidä ne turvallisessa paikassa.
 user-settings-input-new-password =
     .placeholder = Uusi salasana (valinnainen)
 user-settings-input-confirm-new-password =
@@ -121,6 +126,7 @@ user-settings-save = Tallenna
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Sovittimia ei ole läsnä.
 
 ## Authorization Settings
 
@@ -128,6 +134,7 @@ authorization-settings-no-authorizations = Ei valtuutuksia.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Kokeiluja ei ole saatavilla tällä hetkellä.
 
 ## Localization Settings
 
@@ -167,12 +174,20 @@ developer-settings-create-local-authorization = Luo paikallinen valtuus
 add-rule =
     .aria-label = Luo uusi sääntö
 rules = Säännöt
+rules-create-rule-hint = Sääntöjä ei ole luotu. Napsauta + luodaksesi säännön.
 rules-rule-name = Säännön nimi
 rules-customize-rule-name-icon =
     .alt = Muokkaa säännön nimeä
 rules-rule-description = Säännön kuvaus
+rules-preview-button =
+    .alt = Esikatsele
 rules-delete-icon =
     .alt = Poista
+rules-drag-hint = Aloita säännön luominen vetämällä laitteita tänne
+rules-scroll-left =
+    .alt = Vieritä vasemmalle
+rules-scroll-right =
+    .alt = Vieritä oikealle
 rules-delete-dialog = Haluatko varmasti poistaa tämän säännön pysyvästi?
 rules-delete-cancel =
     .value = Peruuta
@@ -184,6 +199,9 @@ rule-delete-cancel-button =
     .value = Peruuta
 rule-delete-confirm-button =
     .value = Poista sääntö
+rule-event = Tapahtuma
+rule-action = Toiminto
+rule-configure = Määritä…
 rule-notification = Ilmoitus
 notification-message = Viesti
 notification-level = Taso
@@ -199,8 +217,10 @@ add-log =
 logs = Lokit
 logs-create-log-hint = Lokeja ei ole luotu. Napsauta + luodaksesi lokin.
 logs-device = Laite
+logs-property = Ominaisuus
 logs-retention = Pysyvyys
 logs-save = Tallenna
+logs-remove-dialog-title = Poistetaan
 logs-remove = Poista
 logs-unable-to-create = Lokia ei voi luoda
 logs-server-remove-error = Palvelinvirhe: lokia ei voi poistaa
@@ -238,6 +258,7 @@ temperature = Lämpötila
 color = Väri
 brightness = Kirkkaus
 color-temperature = Värilämpötila
+video-unsupported = Valitettavasti selaimesi ei tue videota.
 closed = Suljettu
 locked = Lukittu
 unknown = Tuntematon
@@ -245,6 +266,7 @@ unknown = Tuntematon
 ## Domain Setup
 
 invalid-email = Virheellinen sähköpostiosoite.
+domain-success = Onnistui! Odota kunnes sinut uudelleenohjataan…
 redirecting = Uudelleenohjataan…
 
 ## Booleans
@@ -341,9 +363,12 @@ loading = Ladataan…
 ## Empty div Messages
 
 no-things = Ei vielä laitteita. Napsauta + ja etsi käytettävissä olevia laitteita.
+action-not-found = Toimintoa ei löydy.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Löydä uusia lisäosia
 author-unknown = Tuntematon
 disable = Poista käytöstä
 enable = Ota käyttöön
@@ -367,6 +392,7 @@ settings = Asetukset
 users = Käyttäjät
 edit-user = Muokkaa käyttäjää
 add-user = Lisää käyttäjä
+adapters = Sovittimet
 addons = Lisäosat
 addon-config = Määritä lisäosa
 addon-discovery = Löydä uusia lisäosia
@@ -401,6 +427,7 @@ failed-save = Tiedoston tallentaminen epäonnistui.
 login-title = Kirjaudu sisään — { -webthings-gateway-brand }
 login-log-in = Kirjaudu sisään
 login-wrong-credentials = Virheellinen käyttäjätunnus tai salasana.
+login-wrong-totp = Todennuskoodi oli väärin.
 login-enter-totp = Kirjoita koodi todennussovelluksesta.
 
 ## Create First User Page
@@ -431,6 +458,8 @@ authorize-deny = Estä
 
 local-token-title = Paikallinen polettipalvelu — { -webthings-gateway-brand }
 local-token-header = Paikallinen polettipalvelu
+local-token-your-token = Paikallinen polettisi on tämä <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-copy-token = Kopioi poletti
 
 ## Router Setup Page
 
@@ -473,6 +502,7 @@ creating-header = Luodaan Wi-Fi-verkkoa…
 ## UI Updates
 
 ui-update-available = Päivitetty käyttöliittymä on saatavana.
+ui-update-reload = Lataa uudelleen
 ui-update-close = Sulje
 
 ## General Terms
@@ -492,6 +522,8 @@ menu-button =
     .aria-label = Valikko
 back-button =
     .aria-label = Takaisin
+overflow-button =
+    .aria-label = Lisätoiminnot
 submit-button =
     .aria-label = Lähetä
 edit-button =
