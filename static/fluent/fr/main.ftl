@@ -552,6 +552,7 @@ local-token-title = Service de jeton local — { -webthings-gateway-brand }
 local-token-header = Service de jeton local
 local-token-your-token = Votre jeton local est le <a data-l10n-name="local-token-jwt">jeton Web JSON</a> suivant :
 local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
+local-token-copy-token = Copier le jeton
 
 ## Router Setup Page
 
