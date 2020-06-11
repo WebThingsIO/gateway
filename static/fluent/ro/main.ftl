@@ -204,7 +204,7 @@ rules-delete-cancel =
     .value = Renunță
 rules-delete-confirm =
     .value = Elimină regula
-rule-invalid = Invalidă
+rule-invalid = Nevalidă
 rule-delete-prompt = Sigur vrei să elimini definitiv această regulă?
 rule-delete-cancel-button =
     .value = Renunță
@@ -494,7 +494,7 @@ error = Eroare
 errors = Erori
 gateway-unreachable = Poartă de acces inaccesibilă
 more-information = Mai multe informații
-invalid-file = .Fișier nevalid
+invalid-file = Fișier nevalid.
 failed-read-file = Eșec la citirea fișierului.
 failed-save = Eșec la salvare.
 
