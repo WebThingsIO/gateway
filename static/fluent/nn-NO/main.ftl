@@ -386,6 +386,7 @@ new-thing-done = Ferdig
 
 ## New Web Thing View
 
+loading = Lastar…
 new-web-thing-from = frå
 
 ## Empty div Messages
@@ -460,6 +461,7 @@ signup-next = Neste
 ## Tunnel Setup Page
 
 tunnel-setup-welcome = Velkomen
+tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
 ## Authorize Page
