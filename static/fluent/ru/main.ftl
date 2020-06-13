@@ -559,6 +559,7 @@ local-token-title = Локальная служба токенов — { -webthi
 local-token-header = Локальная служба токенов
 local-token-your-token = Ваш локальный токен <a data-l10n-name="local-token-jwt">Веб-токен JSON</a>.
 local-token-use-it = Используйте его для общения со шлюзом, с <a data-l10n-name="local-token-bearer-type">Авторизация типа носителя</a>.
+local-token-copy-token = Копировать токен
 
 ## Router Setup Page
 
