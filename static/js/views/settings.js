@@ -50,6 +50,8 @@ const SettingsScreen = {
     this.addonConfigSettings = document.getElementById('addon-config-settings');
     this.discoverAddonsButton =
       document.getElementById('discover-addons-button');
+    this.discoverAddonsSearch =
+      document.getElementById('discover-addons-search');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.localizationSettings =
       document.getElementById('localization-settings');
@@ -108,6 +110,10 @@ const SettingsScreen = {
 
     this.discoverAddonsButton.addEventListener('click', () => {
       page('/settings/addons/discovered');
+    });
+    this.discoverAddonsSearch.addEventListener('input', () => {
+      console.log(this.discoverAddonsSearch.value);
+      this.updateDiscoveredAddonsList();
     });
     this.addUserButton.addEventListener('click', () => {
       page('/settings/users/add');
@@ -1660,15 +1666,25 @@ const SettingsScreen = {
     this.fetchInstalledAddonList(false).then(() => {
       return this.fetchAvailableAddonList(false);
     }).then(() => {
-      const addonList = document.getElementById('discovered-addons-list');
-      addonList.innerHTML = '';
-
-      Array.from(this.availableAddons.entries())
-        .sort((a, b) => a[1].name.localeCompare(b[1].name))
-        .forEach((x) => new DiscoveredAddon(x[1],
-                                            this.installedAddons,
-                                            this.availableAddons));
+      this.updateDiscoveredAddonsList();
     }).catch(console.error);
+  },
+
+  updateDiscoveredAddonsList: function() {
+    const addonList = document.getElementById('discovered-addons-list');
+    addonList.innerHTML = '';
+
+    const searchText = this.discoverAddonsSearch.value.toLowerCase();
+
+    const matches = (x) => x.name.toLowerCase().indexOf(searchText) > -1 ||
+                           x.description.toLowerCase().indexOf(searchText) > -1;
+
+    Array.from(this.availableAddons.entries())
+      .filter((x) => matches(x[1]))
+      .sort((a, b) => a[1].name.localeCompare(b[1].name))
+      .forEach((x) => new DiscoveredAddon(x[1],
+                                          this.installedAddons,
+                                          this.availableAddons));
   },
 
   showExperimentCheckbox: (experiment, checkboxId) => {
