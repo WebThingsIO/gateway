@@ -552,6 +552,7 @@ local-token-title = ローカルトークンサービス — { -webthings-gatewa
 local-token-header = ローカルトークンサービス
 local-token-your-token = あなたのローカルトークンは、この <a data-l10n-name="local-token-jwt">JSON Web Token</a> です:
 local-token-use-it = このトークンを使用して <a data-l10n-name="local-token-bearer-type">持参人認証</a> (Bearer-type Authorization) でゲートウェイと安全に通信します。
+local-token-copy-token = トークンをコピー
 
 ## Router Setup Page
 
