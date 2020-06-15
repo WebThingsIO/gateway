@@ -117,6 +117,7 @@ user-settings-input-totp =
     .placeholder = Κωδικός 2FA
 user-settings-mfa-enable = Ενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων
 user-settings-mfa-verify = Επαλήθευση
+user-settings-mfa-regenerate-codes = Εκ νέου δημιουργία εφεδρικών κωδικών
 user-settings-input-new-password =
     .placeholder = Νέος κωδικός πρόσβασης (προαιρετικό)
 user-settings-input-confirm-new-password =
@@ -154,6 +155,7 @@ localization-settings-units-temperature-fahrenheit = Φαρενάιτ (°F)
 update-settings-update-now = Ενημέρωση τώρα
 update-available = Νέα έκδοση διαθέσιμη.
 update-up-to-date = Το σύστημά σας είναι ενημερωμένο.
+updates-not-supported = Δεν υποστηρίζονται ενημερώσεις σε αυτή την πλατφόρμα.
 update-settings-enable-self-updates = Ενεργοποίηση αυτόματων ενημερώσεων
 last-update = Τελευταία ενημέρωση
 current-version = Τρέχουσα έκδοση
@@ -479,6 +481,8 @@ tunnel-setup-welcome = Καλώς ορίσατε
 tunnel-setup-input-subdomain =
     .placeholder = υποτομέας
 tunnel-setup-privacy-policy = Πολιτική απορρήτου
+tunnel-setup-input-reclamation-token =
+    .placeholder = Token ανάκτησης
 tunnel-setup-error = Προέκυψε σφάλμα κατά τη ρύθμιση του υποτομέα.
 tunnel-setup-create = Δημιουργία
 tunnel-setup-skip = Παράλειψη
@@ -502,6 +506,7 @@ authorize-deny = Άρνηση
 
 local-token-title = Τοπική υπηρεσία token — { -webthings-gateway-brand }
 local-token-header = Τοπική υπηρεσία token
+local-token-your-token = Το τοπικό σας token είναι αυτό <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-copy-token = Αντιγραφή token
 
 ## Router Setup Page
@@ -535,6 +540,7 @@ wifi-setup-skip = Παράλειψη
 
 connecting-title = Σύνδεση στο Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Σύνδεση στο Wi-Fi…
+connecting-warning = Σημείωση: Αν δεν μπορείτε να φορτώσετε το { $domain }, αναζητήστε τη διεύθυνση IP της πύλης σας στο router σας.
 connecting-header-skipped = Η ρύθμιση Wi-Fi παραλήφθηκε
 connecting-skipped = Η πύλη εκκινείται τώρα. Μεταβείτε στο { $gateway-link } από το πρόγραμμα περιήγησής σας, ενώ έχετε συνδεθεί στο ίδιο δίκτυο με την πύλη για να συνεχίσετε τη ρύθμιση.
 
