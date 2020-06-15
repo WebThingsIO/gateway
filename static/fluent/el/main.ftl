@@ -115,6 +115,7 @@ user-settings-input-password =
     .placeholder = Κωδικός πρόσβασης
 user-settings-input-totp =
     .placeholder = Κωδικός 2FA
+user-settings-mfa-enable = Ενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων
 user-settings-mfa-verify = Επαλήθευση
 user-settings-input-new-password =
     .placeholder = Νέος κωδικός πρόσβασης (προαιρετικό)
@@ -293,6 +294,7 @@ inactive = Ανενεργό
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
 invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
 redirecting = Ανακατεύθυνση…
@@ -498,6 +500,9 @@ authorize-deny = Άρνηση
 
 ## Local Token Page
 
+local-token-title = Τοπική υπηρεσία token — { -webthings-gateway-brand }
+local-token-header = Τοπική υπηρεσία token
+local-token-copy-token = Αντιγραφή token
 
 ## Router Setup Page
 
