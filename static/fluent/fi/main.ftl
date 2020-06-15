@@ -17,6 +17,7 @@ wordmark =
 
 ## Menu Items
 
+things-menu-item = Esineet
 rules-menu-item = Säännöt
 logs-menu-item = Lokit
 floorplan-menu-item = Pohjapiirros
@@ -230,6 +231,7 @@ logs-server-remove-error = Palvelinvirhe: lokia ei voi poistaa
 add-thing-scanning-icon =
     .alt = Etsitään
 add-thing-scanning = Etsitään uusia laitteita…
+add-thing-add-adapters-hint = Uusia esineitä ei löytynyt. Kokeile <a data-l10n-name="add-thing-add-adapters-hint-anchor">lisätä joitain lisäosia</a>.
 add-thing-done = Valmis
 add-thing-cancel = Peruuta
 
