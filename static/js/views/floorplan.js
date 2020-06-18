@@ -74,6 +74,9 @@ const FloorplanScreen = {
     this.interactTimeout = null;
     this.onPointerDown = this.onPointerDown.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
+    this.selectThing = this.selectThing.bind(this);
+    this.moveThing = this.moveThing.bind(this);
+    this.deselectThing = this.deselectThing.bind(this);
 
     this.editButton.addEventListener('click', this.edit.bind(this));
     this.doneButton.addEventListener('click', this.done.bind(this));
@@ -231,11 +234,6 @@ const FloorplanScreen = {
     this.doneButton.classList.remove('hidden');
     this.uploadForm.classList.remove('hidden');
     this.thingsElement.classList.add('editing');
-
-    // Bind to this before adding listener to make it easier to remove.
-    this.selectThing = this.selectThing.bind(this);
-    this.moveThing = this.moveThing.bind(this);
-    this.deselectThing = this.deselectThing.bind(this);
 
     // Disable hyperlinks for things
     this.things.forEach((thing) => {
