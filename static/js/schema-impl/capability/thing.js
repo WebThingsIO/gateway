@@ -344,7 +344,11 @@ class Thing {
       });
 
       App.buildOverflowMenu(menu);
-      App.showOverflowButton();
+
+      const thingsView = document.getElementById('things-view');
+      if (!thingsView.classList.contains('hidden')) {
+        App.showOverflowButton();
+      }
     } else {
       App.hideOverflowButton();
     }
