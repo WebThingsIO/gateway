@@ -111,6 +111,9 @@ const SettingsScreen = {
     this.discoverAddonsButton.addEventListener('click', () => {
       page('/settings/addons/discovered');
     });
+    this.backButton.addEventListener('click', () => {
+      this.discoverAddonsSearch.value = '';
+    });
     this.discoverAddonsSearch.addEventListener('input', () => {
       console.log(this.discoverAddonsSearch.value);
       this.updateDiscoveredAddonsList();
