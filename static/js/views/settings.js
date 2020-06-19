@@ -1676,7 +1676,8 @@ const SettingsScreen = {
 
     const searchText = this.discoverAddonsSearch.value.toLowerCase();
 
-    const matches = (x) => x.name.toLowerCase().indexOf(searchText) > -1 ||
+    const matches = (x) => x.id.toLowerCase().indexOf(searchText) > -1 ||
+                           x.name.toLowerCase().indexOf(searchText) > -1 ||
                            x.description.toLowerCase().indexOf(searchText) > -1;
 
     Array.from(this.availableAddons.entries())
