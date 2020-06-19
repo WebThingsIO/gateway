@@ -1680,7 +1680,8 @@ const SettingsScreen = {
 
     const matches = (x) => contains(x.id, searchText) ||
                            contains(x.name, searchText) ||
-                           contains(x.description, searchText);
+                           contains(x.description, searchText) ||
+                           contains(x.primary_type, searchText);
 
     Array.from(this.availableAddons.entries())
       .filter((x) => matches(x[1]))
