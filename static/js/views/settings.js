@@ -1676,9 +1676,11 @@ const SettingsScreen = {
 
     const searchText = this.discoverAddonsSearch.value.toLowerCase();
 
-    const matches = (x) => x.id.toLowerCase().indexOf(searchText) > -1 ||
-                           x.name.toLowerCase().indexOf(searchText) > -1 ||
-                           x.description.toLowerCase().indexOf(searchText) > -1;
+    const contains = (a, b) => a.toLowerCase().indexOf(b.toLowerCase()) > -1;
+
+    const matches = (x) => contains(x.id, searchText) ||
+                           contains(x.name, searchText) ||
+                           contains(x.description, searchText);
 
     Array.from(this.availableAddons.entries())
       .filter((x) => matches(x[1]))
