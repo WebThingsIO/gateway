@@ -559,6 +559,7 @@ local-token-title = Local Token Service - { -webthings-gateway-brand }
 local-token-header = Local Token Service
 local-token-your-token = Váš miestny token je <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Môžete ho použiť k bezpečnej komunikácii s gateway pomocou overenia typu <a data-l10n-name="local-token-bearer-type">Bearer</a>.
+local-token-copy-token = Skopírovať token
 
 ## Router Setup Page
 
