@@ -545,6 +545,7 @@ local-token-title = Layanan Token Lokal — { -webthings-gateway-brand }
 local-token-header = Layanan Token Lokal
 local-token-your-token = Token lokal Anda adalah <a data-l10n-name="local-token-jwt">JSON Web Token</a> ini:
 local-token-use-it = Gunakan ini untuk berkomunikasi dengan gerbang secara aman, dengan<a data-l10n-name="local-token-bearer-type">Otorisasi Tipe Bearer</a>.
+local-token-copy-token = Salin Token
 
 ## Router Setup Page
 
