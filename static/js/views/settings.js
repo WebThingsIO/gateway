@@ -115,7 +115,6 @@ const SettingsScreen = {
       this.discoverAddonsSearch.value = '';
     });
     this.discoverAddonsSearch.addEventListener('input', () => {
-      console.log(this.discoverAddonsSearch.value);
       this.updateDiscoveredAddonsList();
     });
     this.addUserButton.addEventListener('click', () => {
