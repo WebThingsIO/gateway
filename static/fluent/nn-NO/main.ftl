@@ -234,11 +234,14 @@ logs-weeks = Veker
 logs-save = Lagre
 logs-remove-dialog-title = Fjernar
 logs-remove = Fjern
+logs-unable-to-create = Klarte ikkje å lage logg
+logs-server-remove-error = Server-feil: Klarte ikkje å fjerne loggen
 
 ## Add New Things
 
 add-thing-scanning-icon =
     .alt = Skannar
+add-thing-scanning = Søkjer etter nye einingar…
 add-thing-add-by-url = Legg til via URL…
 add-thing-done = Ferdig
 add-thing-cancel = Avbryt
