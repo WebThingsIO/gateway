@@ -207,7 +207,8 @@
 #network-settings-router ul,
 #user-settings ul,
 #adapter-settings ul,
-#addon-settings ul,
+#addon-main-settings ul,
+#addon-discovery-container,
 #domain-settings ul,
 #experiment-settings ul,
 #localization-settings ul,
@@ -223,6 +224,22 @@
   max-width: 60rem;
   padding: 9.6rem 2rem;
   max-height: 100%;
+}
+
+#discovered-addons-list {
+  padding: 0;
+}
+
+#discovered-addons-search {
+  margin: 1rem auto;
+  height: 2.3rem;
+  background-color: #d2d9de;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  width: calc(100% - 1rem);
+  display: block;
+  font-size: 1.6rem;
 }
 
 .network-settings-wrap ul {

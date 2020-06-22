@@ -50,8 +50,8 @@ const SettingsScreen = {
     this.addonConfigSettings = document.getElementById('addon-config-settings');
     this.discoverAddonsButton =
       document.getElementById('discover-addons-button');
-    this.discoverAddonsSearch =
-      document.getElementById('discover-addons-search');
+    this.discoveredAddonsSearch =
+      document.getElementById('discovered-addons-search');
     this.experimentSettings = document.getElementById('experiment-settings');
     this.localizationSettings =
       document.getElementById('localization-settings');
@@ -112,9 +112,9 @@ const SettingsScreen = {
       page('/settings/addons/discovered');
     });
     this.backButton.addEventListener('click', () => {
-      this.discoverAddonsSearch.value = '';
+      this.discoveredAddonsSearch.value = '';
     });
-    this.discoverAddonsSearch.addEventListener('input', () => {
+    this.discoveredAddonsSearch.addEventListener('input', () => {
       this.updateDiscoveredAddonsList();
     });
     this.addUserButton.addEventListener('click', () => {
@@ -1676,7 +1676,7 @@ const SettingsScreen = {
     const addonList = document.getElementById('discovered-addons-list');
     addonList.innerHTML = '';
 
-    const searchText = this.discoverAddonsSearch.value.toLowerCase();
+    const searchText = this.discoveredAddonsSearch.value.toLowerCase();
 
     const contains = (a, b) => a.toLowerCase().indexOf(b.toLowerCase()) > -1;
 
