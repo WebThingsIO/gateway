@@ -451,6 +451,8 @@ addon-discovery-added = 已新增
 addon-discovery-add = 新增
 addon-discovery-installing = 安裝中…
 addon-discovery-failed = 失敗
+addon-search =
+    .placeholder = 搜尋
 
 ## Page Titles
 
