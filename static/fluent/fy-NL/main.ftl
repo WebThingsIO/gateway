@@ -460,6 +460,8 @@ addon-discovery-added = Tafoege
 addon-discovery-add = Tafoegje
 addon-discovery-installing = Ynstallearje…
 addon-discovery-failed = Mislearre
+addon-search =
+    .placeholder = Sykje
 
 ## Page Titles
 
