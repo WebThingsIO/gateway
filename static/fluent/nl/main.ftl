@@ -458,6 +458,8 @@ addon-discovery-added = Toegevoegd
 addon-discovery-add = Toevoegen
 addon-discovery-installing = Installeren…
 addon-discovery-failed = Mislukt
+addon-search =
+    .placeholder = Zoeken
 
 ## Page Titles
 
