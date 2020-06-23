@@ -458,6 +458,8 @@ addon-discovery-added = Hozzáadva
 addon-discovery-add = Hozzáadás
 addon-discovery-installing = Telepítés…
 addon-discovery-failed = Sikertelen
+addon-search =
+    .placeholder = Keresés
 
 ## Page Titles
 
