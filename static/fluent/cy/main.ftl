@@ -486,6 +486,8 @@ addon-discovery-added = Ychwanegwyd
 addon-discovery-add = Ychwanegu
 addon-discovery-installing = Gosod…
 addon-discovery-failed = Methiant
+addon-search =
+    .placeholder = Chwilio
 
 ## Page Titles
 
