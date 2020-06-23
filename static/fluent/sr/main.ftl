@@ -465,6 +465,8 @@ addon-discovery-added = Додато
 addon-discovery-add = Додај
 addon-discovery-installing = Инсталирам…
 addon-discovery-failed = Неуспело
+addon-search =
+    .placeholder = Претражи
 
 ## Page Titles
 
