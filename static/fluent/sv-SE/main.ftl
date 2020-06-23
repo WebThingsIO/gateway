@@ -458,6 +458,8 @@ addon-discovery-added = Tillagd
 addon-discovery-add = Lägg till
 addon-discovery-installing = Installerar…
 addon-discovery-failed = Misslyckades
+addon-search =
+    .placeholder = Sök
 
 ## Page Titles
 
