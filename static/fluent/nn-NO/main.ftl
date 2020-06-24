@@ -457,6 +457,7 @@ login-title = Pålogging — { -webthings-gateway-brand }
 login-log-in = Logg inn
 login-wrong-credentials = Brukarnamn eller passord er feil.
 login-wrong-totp = Godkjenningskoden er feil.
+login-enter-totp = Skriv inn kode frå godkjenningsappen din.
 
 ## Create First User Page
 
