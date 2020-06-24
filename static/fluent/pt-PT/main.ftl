@@ -458,6 +458,8 @@ addon-discovery-added = Adicionado
 addon-discovery-add = Adicionar
 addon-discovery-installing = A instalar...
 addon-discovery-failed = Falhou
+addon-search =
+    .placeholder = Procurar
 
 ## Page Titles
 
