@@ -77,6 +77,7 @@ network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adresse
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuell (statisk IP)
+network-settings-pppoe = Bru (PPPoE)
 network-settings-static-ip-address = Statisk IP-adresse
 network-settings-network-mask = Nettverksmaske
 network-settings-gateway = Gateway
@@ -452,8 +453,10 @@ failed-save = Klarte ikkje å lagre.
 
 ## Login Page
 
+login-title = Pålogging — { -webthings-gateway-brand }
 login-log-in = Logg inn
 login-wrong-credentials = Brukarnamn eller passord er feil.
+login-wrong-totp = Godkjenningskoden er feil.
 
 ## Create First User Page
 
