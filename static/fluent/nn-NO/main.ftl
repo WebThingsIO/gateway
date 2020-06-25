@@ -297,6 +297,7 @@ current = Straum
 frequency = Frekvens
 color = Farge
 brightness = Lysstyrke
+leak = Lekkasje
 dry = Tørr
 color-temperature = Fargetemperatur
 motion = Rørsle
@@ -415,10 +416,13 @@ new-web-thing-from = frå
 
 no-things = Ingen einingar enno. Klikk på + for å søkje etter tilgjengelege einingar.
 thing-not-found = Eining ikkje funnen.
+action-not-found = Fann ikkje handling.
 events-not-found = Denne eininga har ingen hendingar.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Finn nye tillegg
 author-unknown = Ukend
 disable = Slå av
 enable = Slå på
@@ -433,6 +437,8 @@ addon-discovery-added = Lagt til
 addon-discovery-add = Legg til
 addon-discovery-installing = Installerer…
 addon-discovery-failed = Feila
+addon-search =
+    .placeholder = Søk
 
 ## Page Titles
 
@@ -468,6 +474,7 @@ failed-save = Klarte ikkje å lagre.
 
 ## Schema Form
 
+unsupported-field = Ustøtta feltskjema
 
 ## Icon Sources
 
@@ -485,6 +492,7 @@ login-enter-totp = Skriv inn kode frå godkjenningsappen din.
 
 signup-title = Lag brukar — { -webthings-gateway-brand }
 signup-welcome = Velkomen
+signup-create-account = Lag den første brukarkontoen din:
 signup-password-mismatch = Passorda samsvarar ikkje
 signup-next = Neste
 
