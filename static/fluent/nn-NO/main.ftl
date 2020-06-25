@@ -534,6 +534,7 @@ connecting-header = Koplar til Wi-Fi…
 ## Creating Wi-Fi Network Page
 
 creating-title = Lagar Wi-Fi nettverk — { -webthings-gateway-brand }
+creating-header = Lagar Wi-Fi nettverk…
 
 ## UI Updates
 
@@ -555,6 +556,8 @@ menu-button =
     .aria-label = Meny
 back-button =
     .aria-label = Tilbake
+overflow-button =
+    .aria-label = Ytterlegare handlingar
 edit-button =
     .aria-label = Rediger
 save-button =
