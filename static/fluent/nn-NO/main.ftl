@@ -96,6 +96,7 @@ network-settings-network-name = Nettverksnamn (SSID)
 wireless-connected = Tilkopla
 wireless-icon =
     .alt = Wi-Fi nettverk
+network-settings-changing = Endrar nettverksinnstillingar. Dette kan ta nokre minutt.
 failed-ethernet-configure = Klarte ikkje å konfigurere ethernet.
 failed-wifi-configure = Klarte ikkje å konfigurere  Wi-Fi.
 failed-wan-configure = Klarte ikkje å konfigurere  WAN.
@@ -115,6 +116,8 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktiver tofaktorautentisering
+user-settings-mfa-scan-code = Skann følgjande kode med valfri tofaktor-godkjenningsapp.
+user-settings-mfa-secret = Dette er din nye TOTP-hemmelegheit, om QR-koden ovanfor ikkje fungerer:
 user-settings-mfa-error = Autentiseringskoden er feil.
 user-settings-mfa-enter-code = Skriv inn kode frå autentiseringsappen din, nedanfor.
 user-settings-mfa-verify = Stadfest
@@ -500,6 +503,9 @@ signup-next = Neste
 
 tunnel-setup-title = Vel nettadresse — { -webthings-gateway-brand }
 tunnel-setup-welcome = Velkomen
+tunnel-setup-choose-address = Vel ei sikker nettadresse for gateway-en din:
+tunnel-setup-input-subdomain =
+    .placeholder = underdomene
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
