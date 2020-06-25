@@ -17,6 +17,7 @@ wordmark =
 
 ## Menu Items
 
+things-menu-item = Einingar
 rules-menu-item = Reglar
 logs-menu-item = Loggar
 floorplan-menu-item = Planløysing
@@ -243,6 +244,7 @@ logs-server-remove-error = Server-feil: Klarte ikkje å fjerne loggen
 add-thing-scanning-icon =
     .alt = Skannar
 add-thing-scanning = Søkjer etter nye einingar…
+add-thing-add-adapters-hint = Fann ingen nye einingar. Prøv å <a data-l10n-name="add-thing-add-adapters-hint-anchor"> leggje til nokre tillegg</a>.
 add-thing-add-by-url = Legg til via URL…
 add-thing-done = Ferdig
 add-thing-cancel = Avbryt
@@ -269,6 +271,8 @@ TemperatureSensor = Temperatursensor
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Lås
+Custom = Tilpassa eining
+Thing = Eining
 
 ## Properties
 
@@ -390,11 +394,18 @@ new-thing-done = Ferdig
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Skriv inn URL til Web Thing
+new-web-thing-label = Web Thing
 loading = Lastar…
+new-web-thing-multiple = Fleire Web Thing funne
 new-web-thing-from = frå
 
 ## Empty div Messages
 
+no-things = Ingen einingar enno. Klikk på + for å søkje etter tilgjengelege einingar.
+thing-not-found = Eining ikkje funnen.
+events-not-found = Denne eininga har ingen hendingar.
 
 ## Add-on Settings
 
@@ -450,6 +461,7 @@ failed-save = Klarte ikkje å lagre.
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
@@ -461,30 +473,36 @@ login-enter-totp = Skriv inn kode frå godkjenningsappen din.
 
 ## Create First User Page
 
+signup-title = Lag brukar — { -webthings-gateway-brand }
 signup-welcome = Velkomen
 signup-password-mismatch = Passorda samsvarar ikkje
 signup-next = Neste
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Vel nettadresse — { -webthings-gateway-brand }
 tunnel-setup-welcome = Velkomen
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
 ## Authorize Page
 
+authorize-title = Godkjenningsførespurnad — { -webthings-gateway-brand }
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = frå <<domain>>
 authorize-monitor = overvak
+authorize-allow-all = Tillat for alle einingar.
 authorize-allow =
     .value = Tillat
 authorize-deny = Avslå
 
 ## Local Token Page
 
+local-token-title = Lokal token-teneste — { -webthings-gateway-brand }
 
 ## Router Setup Page
 
+router-setup-title = Router-konfigurasjon — { -webthings-gateway-brand }
 router-setup-input-ssid =
     .placeholder = Nettverksnamn
 router-setup-input-password =
@@ -515,6 +533,7 @@ connecting-header = Koplar til Wi-Fi…
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Lagar Wi-Fi nettverk — { -webthings-gateway-brand }
 
 ## UI Updates
 
