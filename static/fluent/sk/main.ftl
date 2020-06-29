@@ -465,6 +465,8 @@ addon-discovery-added = Pridané
 addon-discovery-add = Pridať
 addon-discovery-installing = Inštaluje sa…
 addon-discovery-failed = Zlyhalo
+addon-search =
+    .placeholder = Hľadať
 
 ## Page Titles
 
