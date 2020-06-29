@@ -420,6 +420,8 @@ addon-discovery-added = Προστέθηκε
 addon-discovery-add = Προσθήκη
 addon-discovery-installing = Εγκατάσταση…
 addon-discovery-failed = Αποτυχία
+addon-search =
+    .placeholder = Αναζήτηση
 
 ## Page Titles
 
