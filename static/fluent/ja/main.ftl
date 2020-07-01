@@ -458,6 +458,8 @@ addon-discovery-added = 追加しました
 addon-discovery-add = 追加
 addon-discovery-installing = インストール中…
 addon-discovery-failed = 失敗しました
+addon-search =
+    .placeholder = 検索
 
 ## Page Titles
 
