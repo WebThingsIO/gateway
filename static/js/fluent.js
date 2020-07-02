@@ -2,8 +2,8 @@
 require('intl-pluralrules');
 
 const API = require('./api');
-const FluentDOM = require('@fluent/dom/compat');
-const Fluent = require('@fluent/bundle/compat');
+const FluentDOM = require('@fluent/dom');
+const Fluent = require('@fluent/bundle');
 
 const availableLanguages = {
   bn: ['/fluent/bn/main.ftl'],
