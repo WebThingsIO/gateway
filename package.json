@@ -92,7 +92,7 @@
     "chai-http": "^4.3.0",
     "clean-webpack-plugin": "^3.0.0",
     "codecov": "^3.7.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^6.0.3",
     "core-js": "^3.6.5",
     "css-loader": "^3.6.0",
     "eslint": "^7.3.1",
