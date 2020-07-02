@@ -64,33 +64,37 @@ const pluginsWeb = [
   new CleanWebpackPlugin({
     cleanOnceBeforeBuildPatterns: ['**/*', '!service-worker.js*'],
   }),
-  new CopyWebpackPlugin([
-    {
-      from: 'static/**/*',
-      to: path.join(__dirname, 'build'),
-      ignore: ['*.js', '*/index.html'],
-    },
-    {
-      from: 'src/views/connecting.handlebars',
-      to: path.join(__dirname, 'build', 'views'),
-    },
-    {
-      from: 'src/views/creating.handlebars',
-      to: path.join(__dirname, 'build', 'views'),
-    },
-    {
-      from: 'src/views/hotspot.handlebars',
-      to: path.join(__dirname, 'build', 'views'),
-    },
-    {
-      from: 'src/views/router-setup.handlebars',
-      to: path.join(__dirname, 'build', 'views'),
-    },
-    {
-      from: 'src/views/wifi-setup.handlebars',
-      to: path.join(__dirname, 'build', 'views'),
-    },
-  ]),
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: 'static/**/*',
+        to: path.join(__dirname, 'build'),
+        globOptions: {
+          ignore: ['**/*.js', '**/index.html'],
+        },
+      },
+      {
+        from: 'src/views/connecting.handlebars',
+        to: path.join(__dirname, 'build', 'views'),
+      },
+      {
+        from: 'src/views/creating.handlebars',
+        to: path.join(__dirname, 'build', 'views'),
+      },
+      {
+        from: 'src/views/hotspot.handlebars',
+        to: path.join(__dirname, 'build', 'views'),
+      },
+      {
+        from: 'src/views/router-setup.handlebars',
+        to: path.join(__dirname, 'build', 'views'),
+      },
+      {
+        from: 'src/views/wifi-setup.handlebars',
+        to: path.join(__dirname, 'build', 'views'),
+      },
+    ],
+  }),
   new ImageminPlugin({
     test: /\.(jpe?g|png|gif|svg)$/i,
     name: '[path][name].[ext]',
