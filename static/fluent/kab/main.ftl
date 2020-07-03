@@ -458,6 +458,8 @@ addon-discovery-added = Yettwarna
 addon-discovery-add = Rnu
 addon-discovery-installing = Asebded…
 addon-discovery-failed = Ur yeddi ara
+addon-search =
+    .placeholder = Nadi
 
 ## Page Titles
 
