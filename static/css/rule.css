@@ -77,9 +77,14 @@
   padding-bottom: 0;
 }
 
+#rule-view .rule-info h1 .rule-name {
+  padding: 0 1rem;
+}
+
 #rule-view .rule-info > p {
   font-size: 1.6rem;
   margin-top: 0.8rem;
+  padding-left: 1rem;
   color: #DAE3EB;
 }
 

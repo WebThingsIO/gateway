@@ -187,6 +187,7 @@ class BlockConfigureDropdown {
       node = node.parentNode;
     }
     this.elt.classList.remove('open');
+    document.activeElement.blur();
     this.onCommit();
   }
 

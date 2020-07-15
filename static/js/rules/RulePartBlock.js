@@ -55,6 +55,7 @@ class RulePartBlock {
     const openSelector = this.elt.querySelector('.open');
     if (openSelector) {
       openSelector.classList.remove('open');
+      document.activeElement.blur();
     }
 
     this.resetState = {
