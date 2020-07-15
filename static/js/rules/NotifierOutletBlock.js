@@ -21,9 +21,10 @@ class NotifierOutletBlock extends RulePartBlock {
       this.values = values;
     }
 
-    const configureContainer = this.elt.querySelector('.rule-part-info');
+    const blockContainer = this.elt.querySelector('.rule-part-block');
+    const infoContainer = this.elt.querySelector('.rule-part-info');
     this.updateValues = this.updateValues.bind(this);
-    this.dropdown = new BlockConfigureDropdown(this, configureContainer);
+    this.dropdown = new BlockConfigureDropdown(this, infoContainer);
     this.dropdown.addValue({
       id: 'title',
       title: fluent.getMessage('notification-title'),
@@ -48,7 +49,15 @@ class NotifierOutletBlock extends RulePartBlock {
       enum: this.levels,
       value: this.levels[this.values.level],
     });
+    blockContainer.addEventListener('click', this.onBlockClick.bind(this));
+    infoContainer.addEventListener('click', this.onBlockClick.bind(this));
     this.updateRulePart();
+  }
+
+  onBlockClick() {
+    if (!this.dropdown.elt.classList.contains('open')) {
+      this.dropdown.onCommit();
+    }
   }
 
   updateValues(values) {

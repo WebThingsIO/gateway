@@ -252,6 +252,9 @@ class PropertySelect {
         this.devicePropertyBlock.rulePart = ruleFragment;
         this.devicePropertyBlock.onRuleChange();
         elt.dataset.ruleFragment = JSON.stringify(ruleFragment);
+
+        // select this property, since it's been changed
+        this.select(elt);
       });
     } else if (property.type === 'string') {
       let valueInput, valueSelect;
@@ -308,6 +311,9 @@ class PropertySelect {
           this.devicePropertyBlock.rulePart = ruleFragment;
           this.devicePropertyBlock.onRuleChange();
         }
+
+        // select this property, since it's been changed
+        this.select(elt);
       });
     }
 
@@ -546,6 +552,8 @@ class PropertySelect {
   onClick(e) {
     this.elt.classList.toggle('open');
     if (!this.elt.classList.contains('open')) {
+      document.activeElement.blur();
+
       let target = e.target;
       if (!target.classList.contains('property-select-option')) {
         target = target.parentNode;
@@ -619,6 +627,7 @@ class PropertySelect {
       node = node.parentNode;
     }
     this.elt.classList.remove('open');
+    document.activeElement.blur();
   }
 
   remove() {
