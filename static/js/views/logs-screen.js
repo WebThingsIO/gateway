@@ -110,12 +110,14 @@ class LogsScreen {
       this.createLogButton.classList.add('hidden');
       this.menuButton.classList.add('hidden');
       this.logsBackButton.classList.remove('hidden');
+      this.view.classList.add('solo-view');
     } else {
       App.hideOverflowButton();
       this.createLogButton.classList.remove('hidden');
       this.menuButton.classList.remove('hidden');
       this.logsBackButton.classList.add('hidden');
       this.logsHeader.textContent = 'Logs';
+      this.view.classList.remove('solo-view');
     }
 
     API.getLogs().then((schema) => {
