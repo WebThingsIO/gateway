@@ -465,6 +465,8 @@ addon-discovery-added = Adăugat
 addon-discovery-add = Adaugă
 addon-discovery-installing = Se instalează…
 addon-discovery-failed = Eșuat
+addon-search =
+    .placeholder = Caută
 
 ## Page Titles
 
@@ -559,6 +561,7 @@ local-token-title = Serviciu local de jetoane — { -webthings-gateway-brand }
 local-token-header = Serviciu local de jetoane
 local-token-your-token = Jetonul tău local este acest <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = De folosit pentru comunicații securizate cu poarta de acces, cu <a data-l10n-name="local-token-bearer-type">Autorizație tip la purtător</a>.
+local-token-copy-token = Copiază jetonul
 
 ## Router Setup Page
 
