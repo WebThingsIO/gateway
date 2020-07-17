@@ -127,6 +127,7 @@ class LogsScreen {
         delete this.logs[id];
       }
 
+      const loadPromises = [];
       for (const logInfo of schema) {
         let included = true;
         if (soloView) {
@@ -143,13 +144,17 @@ class LogsScreen {
 
         this.logs[logInfo.id] = log;
         this.logsContainer.appendChild(log.elt);
-        log.load();
+        loadPromises.push(log.load());
       }
+
       if (!schema || schema.length === 0) {
         this.createLogHint.classList.remove('hidden');
       } else {
         this.createLogHint.classList.add('hidden');
       }
+
+      return Promise.all(loadPromises);
+    }).then(() => {
       this.streamAll();
     }).catch((e) => {
       App.showMessage('Server error: unable to retrieve logs', 5000);
