@@ -116,6 +116,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = Κωδικός 2FA
 user-settings-mfa-enable = Ενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων
+user-settings-mfa-error = Ο κωδικός ελέγχου ταυτότητας ήταν εσφαλμένος.
 user-settings-mfa-verify = Επαλήθευση
 user-settings-mfa-regenerate-codes = Εκ νέου δημιουργία εφεδρικών κωδικών
 user-settings-input-new-password =
@@ -217,6 +218,8 @@ rule-name = Όνομα κανόνα
 
 ## Logs
 
+add-log =
+    .aria-label = Δημιουργία νέου αρχείου καταγραφής
 logs = Αρχεία καταγραφής
 logs-device = Συσκευή
 logs-property = Ιδιότητα
@@ -262,6 +265,7 @@ Camera = Κάμερα
 TemperatureSensor = Αισθητήρας θερμοκρασίας
 Alarm = Συναγερμός
 Thermostat = Θερμοστάτης
+Lock = Κλειδαριά
 Custom = Προσαρμοσμένη συσκευή
 Thing = Συσκευή
 
@@ -299,6 +303,7 @@ inactive = Ανενεργό
 tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
 invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
+invalid-reclamation-token = Μη έγκυρο token ανάκτησης.
 redirecting = Ανακατεύθυνση…
 
 ## Booleans
@@ -467,6 +472,7 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Σύνδεση — { -webthings-gateway-brand }
 login-log-in = Σύνδεση
+login-wrong-totp = Ο κωδικός ελέγχου ταυτότητας ήταν εσφαλμένος.
 
 ## Create First User Page
 
