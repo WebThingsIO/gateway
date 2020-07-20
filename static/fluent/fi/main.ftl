@@ -28,6 +28,8 @@ log-out-button = Kirjaudu ulos
 
 thing-details =
     .aria-label = Näytä ominaisuudet
+add-things =
+    .aria-label = Lisää uusia esineitä
 
 ## Floorplan
 
@@ -50,7 +52,10 @@ settings-developer = Kehittäjä
 ## Domain Settings
 
 domain-settings-local-label = Paikallinen pääsy
+domain-settings-local-update = Päivitä isäntänimi
 domain-settings-remote-access = Etäyhteys
+domain-settings-local-name =
+    .placeholder = yhdyskäytävä
 
 ## Network Settings
 
@@ -111,6 +116,8 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-koodi
 user-settings-mfa-enable = Ota kaksivaiheinen vahvistus käyttöön
+user-settings-mfa-scan-code = Skannaa seuraava koodi millä tahansa kaksivaiheisella todennussovelluksella.
+user-settings-mfa-secret = Tämä on sinun uusi TOTP-salaisuutesi, mikäli yllä oleva QR-koodi ei toimi:
 user-settings-mfa-error = Todennuskoodi oli väärä.
 user-settings-mfa-enter-code = Kirjoita koodi todennussovelluksesta alle.
 user-settings-mfa-verify = Vahvista
@@ -185,10 +192,13 @@ rules-preview-button =
 rules-delete-icon =
     .alt = Poista
 rules-drag-hint = Aloita säännön luominen vetämällä laitteita tänne
+rules-drag-input-hint = Lisää laite sisääntuloksi
+rules-drag-output-hint = Lisää laite lähtönä
 rules-scroll-left =
     .alt = Vieritä vasemmalle
 rules-scroll-right =
     .alt = Vieritä oikealle
+rules-delete-prompt = Pudota laitteita tähän katkaistaksesi yhteyden
 rules-delete-dialog = Haluatko varmasti poistaa tämän säännön pysyvästi?
 rules-delete-cancel =
     .value = Peruuta
@@ -200,10 +210,14 @@ rule-delete-cancel-button =
     .value = Peruuta
 rule-delete-confirm-button =
     .value = Poista sääntö
+rule-select-property = Valitse ominaisuus
+rule-not = Ei
 rule-event = Tapahtuma
 rule-action = Toiminto
 rule-configure = Määritä…
+rule-time-title = Vuorokaudenaika
 rule-notification = Ilmoitus
+notification-title = Otsikko
 notification-message = Viesti
 notification-level = Taso
 notification-low = Matala
@@ -218,8 +232,19 @@ add-log =
 logs = Lokit
 logs-create-log-hint = Lokeja ei ole luotu. Napsauta + luodaksesi lokin.
 logs-device = Laite
+logs-device-select =
+    .aria-label = Lokilaite
 logs-property = Ominaisuus
+logs-property-select =
+    .aria-label = Lokiominaisuus
 logs-retention = Pysyvyys
+logs-retention-length =
+    .aria-label = Lokin säilytysaika
+logs-retention-unit =
+    .aria-label = Lokin säilytysyksikkö
+logs-hours = tuntia
+logs-days = päivää
+logs-weeks = viikkoa
 logs-save = Tallenna
 logs-remove-dialog-title = Poistetaan
 logs-remove = Poista
