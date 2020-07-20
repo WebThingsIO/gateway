@@ -247,6 +247,7 @@ logs-days = päivää
 logs-weeks = viikkoa
 logs-save = Tallenna
 logs-remove-dialog-title = Poistetaan
+logs-remove-dialog-warning = Lokin poistaminen poistaa myös kaiken sen datan. Oletko varma, että haluat poistaa sen?
 logs-remove = Poista
 logs-unable-to-create = Lokia ei voi luoda
 logs-server-remove-error = Palvelinvirhe: lokia ei voi poistaa
@@ -257,6 +258,7 @@ add-thing-scanning-icon =
     .alt = Etsitään
 add-thing-scanning = Etsitään uusia laitteita…
 add-thing-add-adapters-hint = Uusia esineitä ei löytynyt. Kokeile <a data-l10n-name="add-thing-add-adapters-hint-anchor">lisätä joitain lisäosia</a>.
+add-thing-add-by-url = Lisää URL-osoitteella…
 add-thing-done = Valmis
 add-thing-cancel = Peruuta
 
@@ -268,32 +270,69 @@ context-menu-remove = Poista
 
 ## Capabilities
 
+OnOffSwitch = Päällä/pois -kytkin
+MultiLevelSwitch = Moniasentokytkin
+ColorControl = Värinhallinta
 ColorSensor = Värianturi
+EnergyMonitor = Virtamittari
+BinarySensor = Binäärianturi
+MultiLevelSensor = Moniasentoanturi
+SmartPlug = Älypistorasia
+Light = Valo
 DoorSensor = Ovianturi
 MotionSensor = Liiketunnistin
 LeakSensor = Vuotoanturi
+PushButton = Painike
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Lämpötilasensori
+Alarm = Hälytin
 Thermostat = Termostaatti
+Lock = Lukko
+Custom = Mukautettu esine
+Thing = Esine
 
 ## Properties
 
+alarm = Hälytys
+pushed = Painettu
+not-pushed = Ei painettu
+on-off = Päällä/pois
 on = Päällä
 off = Pois päältä
+power = Virta kytketty
+voltage = Jännite
 temperature = Lämpötila
+current = Virta
+frequency = Taajuus
 color = Väri
 brightness = Kirkkaus
+leak = Vuoto
+dry = Kuiva
 color-temperature = Värilämpötila
 video-unsupported = Valitettavasti selaimesi ei tue videota.
+motion = Liikettä
+no-motion = Ei liikettä
+open = Auki
 closed = Suljettu
 locked = Lukittu
+unlocked = Lukitsematon
+jammed = Jumittunut
 unknown = Tuntematon
+active = Aktiivinen
+inactive = Epäaktiivinen
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Näyttää siltä, että olet jo rekisteröinyt kyseisen aliverkkotunnuksen. Palauttaaksesi sen <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">napsauta tätä</a>.
+check-email-for-token = Tarkista sähköpostistasi palautuspoletti ja liitä se ylle.
+reclaim-failed = Verkkotunnusta ei voitu palauttaa.
+subdomain-already-used = Tämä aliverkkotunnus on jo käytössä. Valitse toinen aliverkkotunnus.
+invalid-subdomain = Virheellinen aliverkkotunnus.
 invalid-email = Virheellinen sähköpostiosoite.
+invalid-reclamation-token = Virheellinen palautuspoletti.
 domain-success = Onnistui! Odota kunnes sinut uudelleenohjataan…
+issuing-error = Varmenteen myöntäminen epäonnistui. Yritä uudelleen.
 redirecting = Uudelleenohjataan…
 
 ## Booleans
@@ -385,12 +424,19 @@ new-thing-done = Valmis
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Anna web-esineen URL-osoite
+new-web-thing-label = Web-esine
 loading = Ladataan…
+new-web-thing-multiple = Useita web-esineitä löydetty
+new-web-thing-from = kohteesta
 
 ## Empty div Messages
 
 no-things = Ei vielä laitteita. Napsauta + ja etsi käytettävissä olevia laitteita.
+thing-not-found = Esinettä ei löytynyt.
 action-not-found = Toimintoa ei löydy.
+events-not-found = Tällä esineellä ei ole tapahtumia.
 
 ## Add-on Settings
 
@@ -412,10 +458,13 @@ addon-discovery-added = Lisätty
 addon-discovery-add = Lisää
 addon-discovery-installing = Asennetaan…
 addon-discovery-failed = Epäonnistui
+addon-search =
+    .placeholder = Hae
 
 ## Page Titles
 
 settings = Asetukset
+domain = Verkkotunnus
 users = Käyttäjät
 edit-user = Muokkaa käyttäjää
 add-user = Lisää käyttäjä
@@ -438,6 +487,7 @@ icon = Kuvake
 unknown-state = Tuntematon tila.
 error = Virhe
 errors = Virheet
+gateway-unreachable = Yhdyskäytävä ei ole tavoitettavissa
 more-information = Lisätietoja
 invalid-file = Virheellinen tiedosto.
 failed-read-file = Tiedoston lukeminen epäonnistui.
@@ -445,9 +495,11 @@ failed-save = Tiedoston tallentaminen epäonnistui.
 
 ## Schema Form
 
+unsupported-field = Kenttäkaavaa ei tueta
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
@@ -469,14 +521,25 @@ signup-next = Seuraava
 
 tunnel-setup-title = Valitse verkko-osoite — { -webthings-gateway-brand }
 tunnel-setup-welcome = Tervetuloa
+tunnel-setup-choose-address = Valitse turvallinen verkko-osoite yhdyskäytävällesi:
+tunnel-setup-input-subdomain =
+    .placeholder = aliverkkotunnus
+tunnel-setup-opt-in = Pidä minut ajan tasalla uusista ominaisuuksista ja vaikuttamismahdollisuuksista.
 tunnel-setup-privacy-policy = Tietosuojakäytäntö
+tunnel-setup-input-reclamation-token =
+    .placeholder = Palautuspoletti
+tunnel-setup-error = Aliverkkotunnuksen asennuksessa tapahtui virhe.
 tunnel-setup-create = Luo
 tunnel-setup-skip = Ohita
+tunnel-setup-time-sync = Kellonaikaa synkronoidaan internetistä. Verkkotunnuksen rekisteröinti epäonnistuu todennäköisesti, kunnes tämä on valmis.
 
 ## Authorize Page
 
 authorize-title = Valtuuspyyntö — { -webthings-gateway-brand }
 authorize-authorization-request = Valtuuspyyntö
+authorize-monitor-and-control = tarkasteluun ja hallintaan
+authorize-monitor = tarkasteluun
+authorize-allow-all = Salli kaikille esineille
 authorize-allow =
     .value = Salli
 authorize-deny = Estä
