@@ -537,6 +537,8 @@ tunnel-setup-time-sync = Kellonaikaa synkronoidaan internetistä. Verkkotunnukse
 
 authorize-title = Valtuuspyyntö — { -webthings-gateway-brand }
 authorize-authorization-request = Valtuuspyyntö
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> haluaa käyttää yhdyskäytävääsi laitteiden <<function>>.
 authorize-monitor-and-control = tarkasteluun ja hallintaan
 authorize-monitor = tarkasteluun
 authorize-allow-all = Salli kaikille esineille
