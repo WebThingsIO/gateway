@@ -596,6 +596,7 @@ connecting-skipped = Gatewayen startar no. Naviger til { $gateway-link } i nettl
 
 creating-title = Lagar Wi-Fi nettverk — { -webthings-gateway-brand }
 creating-header = Lagar Wi-Fi nettverk…
+creating-content = Kople til { $ssid } med passordet du nettopp laga, og naviger så til { $gateway-link } eller { $ip-link } i nettlesaren din.
 
 ## UI Updates
 
