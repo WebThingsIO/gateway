@@ -325,8 +325,10 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Det ser ut til at du allereie har registrert dette underdomenet. For å ta det tilbake <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klikk her</a>.
+subdomain-already-used = Dette underdomenet er allereie i bruk. Vel eit anna.
 invalid-subdomain = Ugyldig underdomene
 invalid-email = Ugyldig e-postadresse.
+domain-success = Vellykka! Vent medan vi omdirigerer deg…
 redirecting = Omdirigerer…
 
 ## Booleans
