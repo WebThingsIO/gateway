@@ -310,18 +310,21 @@ brightness = Lysstyrke
 leak = Lekkasje
 dry = Tørr
 color-temperature = Fargetemperatur
+video-unsupported = Video er ikkje støtt i nettlesaren din.
 motion = Rørsle
 no-motion = Inga rørsle
 open = Opne
 closed = Stengd
 locked = Låst
 unlocked = Opplåst
+jammed = Fastna
 unknown = Ukjend
 active = Aktiv
 inactive = Inaktiv
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Det ser ut til at du allereie har registrert dette underdomenet. For å ta det tilbake <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klikk her</a>.
 invalid-subdomain = Ugyldig underdomene
 invalid-email = Ugyldig e-postadresse.
 redirecting = Omdirigerer…
@@ -443,6 +446,8 @@ addon-remove = Fjern
 addon-updating = Oppdaterer…
 addon-updated = Oppdatert
 addon-update-failed = Mislykka
+addon-config-applying = Legg til…
+addon-config-apply = Legg til
 addon-discovery-added = Lagt til
 addon-discovery-add = Legg til
 addon-discovery-installing = Installerer…
@@ -513,6 +518,7 @@ tunnel-setup-welcome = Velkomen
 tunnel-setup-choose-address = Vel ei sikker nettadresse for gateway-en din:
 tunnel-setup-input-subdomain =
     .placeholder = underdomene
+tunnel-setup-privacy-policy = Personvernerklæring
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
@@ -580,6 +586,8 @@ event-log = Hendingslogg
 edit = Rediger
 remove = Fjern
 disconnected = Fråkopla
+processing = Handsamar…
+submit = Send inn
 
 ## Top-Level Buttons
 
@@ -589,6 +597,8 @@ back-button =
     .aria-label = Tilbake
 overflow-button =
     .aria-label = Ytterlegare handlingar
+submit-button =
+    .aria-label = Send inn
 edit-button =
     .aria-label = Rediger
 save-button =
