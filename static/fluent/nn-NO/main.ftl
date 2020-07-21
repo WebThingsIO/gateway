@@ -328,7 +328,9 @@ tunnel-setup-reclaim-domain = Det ser ut til at du allereie har registrert dette
 subdomain-already-used = Dette underdomenet er allereie i bruk. Vel eit anna.
 invalid-subdomain = Ugyldig underdomene
 invalid-email = Ugyldig e-postadresse.
+invalid-reclamation-token = Ugyldig reclaim-token.
 domain-success = Vellykka! Vent medan vi omdirigerer deg…
+issuing-error = Feil ved utferding av sertifikatet. Prøv igjen.
 redirecting = Omdirigerer…
 
 ## Booleans
@@ -520,7 +522,10 @@ tunnel-setup-welcome = Velkomen
 tunnel-setup-choose-address = Vel ei sikker nettadresse for gateway-en din:
 tunnel-setup-input-subdomain =
     .placeholder = underdomene
+tunnel-setup-opt-in = Hald meg oppdatert om nye funksjonar og bidragsmoglegheiter.
 tunnel-setup-privacy-policy = Personvernerklæring
+tunnel-setup-input-reclamation-token =
+    .placeholder = Reclaim-token
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
@@ -538,6 +543,7 @@ authorize-deny = Avslå
 ## Local Token Page
 
 local-token-title = Lokal token-teneste — { -webthings-gateway-brand }
+local-token-header = Lokal tokenteneste
 
 ## Router Setup Page
 
