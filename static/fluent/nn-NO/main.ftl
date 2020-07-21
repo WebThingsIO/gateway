@@ -325,6 +325,7 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Det ser ut til at du allereie har registrert dette underdomenet. For å ta det tilbake <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klikk her</a>.
+check-email-for-token = Sjekk e-posten din for eit  «reclamation token» og lim det inn ovanfor.
 reclaim-failed = Det gjekk ikkje å ta tilbake domenet.
 subdomain-already-used = Dette underdomenet er allereie i bruk. Vel eit anna.
 invalid-subdomain = Ugyldig underdomene
@@ -530,11 +531,14 @@ tunnel-setup-input-reclamation-token =
 tunnel-setup-error = Det oppstod ein feil under innstillinga av underdomenet.
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
+tunnel-setup-time-sync = Ventar på at systemkloka skal stillast inn frå Internett. Domeneregistrering kjem sannsynlegvis til å mislykkast før dette er fullført.
 
 ## Authorize Page
 
 authorize-title = Godkjenningsførespurnad — { -webthings-gateway-brand }
 authorize-authorization-request = Autorisasjonsførespurnad
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> ønskjer tilgang til gateway-en din for <<function>> einingar.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = frå <<domain>>
 authorize-monitor-and-control = overvak og kontroller
@@ -583,7 +587,10 @@ wifi-setup-skip = Hopp over
 
 connecting-title = Koplar til Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Koplar til Wi-Fi…
+connecting-connect = Pass på at du er tilkopla til same nettverk og naviger så til { $gateway-link } i nettlesaren din for å fortsetje installasjonen.
+connecting-warning = Merk! Om du ikkje kan laste { $domain }, slik at IP-adressa til gatewayen er rett på ruteren din.
 connecting-header-skipped = Wi-Fi innstillingar hoppa over
+connecting-skipped = Gatewayen startar no. Naviger til { $gateway-link } i nettlesaren din når du er kopla til same nettverk som gatewayen for å fortsetje installasjonen.
 
 ## Creating Wi-Fi Network Page
 
@@ -592,6 +599,7 @@ creating-header = Lagar Wi-Fi nettverk…
 
 ## UI Updates
 
+ui-update-available = Eit oppdatert brukargrensesnitt er tilgjengeleg.
 ui-update-reload = Oppdater
 ui-update-close = Lat att
 
