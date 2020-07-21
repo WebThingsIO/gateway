@@ -325,6 +325,7 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Det ser ut til at du allereie har registrert dette underdomenet. For å ta det tilbake <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klikk her</a>.
+reclaim-failed = Det gjekk ikkje å ta tilbake domenet.
 subdomain-already-used = Dette underdomenet er allereie i bruk. Vel eit anna.
 invalid-subdomain = Ugyldig underdomene
 invalid-email = Ugyldig e-postadresse.
@@ -526,14 +527,17 @@ tunnel-setup-opt-in = Hald meg oppdatert om nye funksjonar og bidragsmoglegheite
 tunnel-setup-privacy-policy = Personvernerklæring
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-token
+tunnel-setup-error = Det oppstod ein feil under innstillinga av underdomenet.
 tunnel-setup-create = Lag
 tunnel-setup-skip = Hopp over
 
 ## Authorize Page
 
 authorize-title = Godkjenningsførespurnad — { -webthings-gateway-brand }
+authorize-authorization-request = Autorisasjonsførespurnad
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = frå <<domain>>
+authorize-monitor-and-control = overvak og kontroller
 authorize-monitor = overvak
 authorize-allow-all = Tillat for alle einingar.
 authorize-allow =
@@ -544,10 +548,14 @@ authorize-deny = Avslå
 
 local-token-title = Lokal token-teneste — { -webthings-gateway-brand }
 local-token-header = Lokal tokenteneste
+local-token-your-token = Ditt lokale token er dette: <a data-l10n-name="local-token-jwt">JSON webbtoken</a>:
+local-token-use-it = Bruk det for å trygt kommunisere med gatewayen ved bruk av <a data-l10n-name="local-token-bearer-type"> Tokenbasert autentisering</a>.
+local-token-copy-token = Kopier token
 
 ## Router Setup Page
 
 router-setup-title = Router-konfigurasjon — { -webthings-gateway-brand }
+router-setup-header = Lag eit nytt Wi-Fi-nettverk
 router-setup-input-ssid =
     .placeholder = Nettverksnamn
 router-setup-input-password =
@@ -575,6 +583,7 @@ wifi-setup-skip = Hopp over
 
 connecting-title = Koplar til Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Koplar til Wi-Fi…
+connecting-header-skipped = Wi-Fi innstillingar hoppa over
 
 ## Creating Wi-Fi Network Page
 
