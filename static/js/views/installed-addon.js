@@ -80,7 +80,7 @@ class InstalledAddon {
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
           <span class="addon-settings-license">
-            (<a href="${this.licenseUrl}" target="_blank" rel="noopener">license</a>)
+            (<a href="${this.licenseUrl}" rel="noopener">license</a>)
           </span>
         </div>
         <div class="addon-settings-controls">
