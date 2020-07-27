@@ -67,8 +67,8 @@ class DiscoveredAddon {
           <span class="addon-settings-author">
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span class="addon-settings-license">
-            (<a href="${this.licenseUrl}" target="_blank" rel="noopener">license</a>)
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" data-license-href="${this.licenseUrl}">
+            (license)
           </span>
         </div>
         <div class="addon-settings-controls">
@@ -87,6 +87,11 @@ class DiscoveredAddon {
       const button = document.getElementById(
         `addon-install-${Utils.escapeHtmlForIdClass(this.id)}`);
       button.addEventListener('click', this.handleInstall.bind(this));
+	  
+      const licenseButton = document.getElementById(
+        `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
+      licenseButton.addEventListener('click', this.handleLicense.bind(this));
+	  
     }
   }
 
@@ -110,10 +115,6 @@ class DiscoveredAddon {
           addon.installed = true;
         }
         this.installedAddonsMap.set(this.id, settings);
-
-        if (settings.content_scripts && settings.content_scripts.length > 0) {
-          window.location.reload();
-        }
       })
       .catch((err) => {
         console.error(`Failed to install add-on: ${this.id}\n${err}`);
@@ -123,6 +124,77 @@ class DiscoveredAddon {
         controlDiv.innerHTML = el;
       });
   }
+  
+  /**
+   * Handle a click on the license button.
+   */
+  handleLicense(e) {
+		console.log(e);
+	  //const button = e.target;
+		console.log(e.target);
+		const data_href = e.target.getAttribute('data-license-href');
+	  console.log("data_href = " + data_href);
+		
+		if(e.target.getAttribute('data-license-href')) {
+			
+			const license_url = e.target.getAttribute("data-license-href");
+			console.log(license_url);
+			
+			var url = license_url.replace("blob/", "");
+			url = url.replace("https://github.com/", "https://raw.githubusercontent.com/");
+
+			
+			
+			var modal = document.getElementById('media-modal');
+			
+			if(modal == null){
+				console.log("modal was null");
+		  	var overlay_container = document.createElement('div');
+		  	overlay_container.className = "media-modal";
+				overlay_container.id = "media-modal";
+			
+		  	var overlay_frame = document.createElement('div');
+		  	overlay_frame.className = "media-modal-frame";
+
+		  	overlay_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p><span>License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text</span></p><iframe src="' + url + '"></iframe></div>';
+
+		  	overlay_container.appendChild(overlay_frame);
+		  	document.body.appendChild(overlay_container);
+				console.log("appended overlay to body");
+			
+				var modal_close_button = document.getElementById('modal-close-button');
+		    modal_close_button.addEventListener(
+		      'click',
+		      () => {
+						console.log("close button clicked");
+					  var elem = document.getElementById("media-modal");
+					  elem.parentNode.removeChild(elem);
+		      }
+		    );
+				
+				//fetch(url,{"mode": "no-cors","credentials": "omit"}).then(response => {
+				fetch(url).then(response => {
+							console.log("fetch response:");
+							console.log(response);
+				      if (!response.ok) {
+				      	throw new Error("HTTP error " + response.status); // Rejects the promise
+				      }
+				    })
+						.then(data => {
+						  console.log('Success:', data);
+							console.log(data);
+							console.log(data.body);
+						})
+						.catch((error) => {
+						  console.error('Error:', error);
+						});
+				
+				
+				
+			}	
+		}
+  }
+    
 }
 
 module.exports = DiscoveredAddon;
