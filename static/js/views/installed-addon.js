@@ -81,7 +81,7 @@ class InstalledAddon {
           </span>
           <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" 
             data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
-            (license)
+            (${fluent.getMessage('license')})
           </span>
         </div>
         <div class="addon-settings-controls">
@@ -259,50 +259,50 @@ class InstalledAddon {
    * Handle a click on the license button.
    */
   handleLicense(e) {
-		if(e.target.getAttribute('data-id')) {
-			const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.target.getAttribute('data-id');
+    if(e.dataset.id) {
+      const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.dataset.id;
 
-			var modal = document.getElementById('media-modal');
-			
-			if(modal == null){
-		  	var modal_container = document.createElement('div');
-		  	modal_container.className = "media-modal";
-				modal_container.id = "media-modal";
-			
-		  	var modal_frame = document.createElement('div');
-		  	modal_frame.className = "media-modal-frame";
-		  	modal_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text">Loading...</p></div>';
+      var modal = document.getElementById('media-modal');
 
-		  	modal_container.appendChild(modal_frame);
-		  	document.body.appendChild(modal_container);
-				
-				var modal_close_button = document.getElementById('modal-close-button');
-		    modal_close_button.addEventListener(
-		      'click',
-		      () => {
-					  modal = document.getElementById("media-modal");
-					  modal.parentNode.removeChild(modal);
-		      }
-		    );
-				
-				fetch(license_url).then(response => {
-				  if (!response.ok) {
-				    throw new Error("HTTP error " + response.status);
-						document.getElementById("media-modal-text").innerText = "Error while trying to load license";
-				  }
-				  return response.text();
-				})
-				.then(data => {
-				  document.getElementById("media-modal-text").innerText = data;
-			  })
-				.catch((error) => {
-				  document.getElementById("media-modal-text").innerText = "Connection error while trying to load license";
-				});
-						
-			}	
-		}
+      if(modal == null){
+        var modal_container = document.createElement('div');
+        modal_container.className = "media-modal";
+        modal_container.id = "media-modal";
+
+        var modal_frame = document.createElement('div');
+        modal_frame.className = "media-modal-frame";
+        modal_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text"></p></div>';
+
+        modal_container.appendChild(modal_frame);
+        document.body.appendChild(modal_container);
+
+        var modal_close_button = document.getElementById('modal-close-button');
+        modal_close_button.addEventListener(
+          'click',
+          () => {
+            modal = document.getElementById("media-modal");
+            modal.parentNode.removeChild(modal);
+          }
+        );
+
+        fetch(license_url).then(response => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+            document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById("media-modal-text").innerText = data;
+        })
+        .catch((error) => {
+          document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
+        });
+
+      }	
+    }
   }
-  
+    
 }
 
 module.exports = InstalledAddon;
