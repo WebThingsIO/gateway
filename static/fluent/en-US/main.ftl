@@ -9,13 +9,11 @@
 ## Reference: https://mozilla-l10n.github.io/styleguides/mozilla_general/index.html#brands-copyright-and-trademark
 
 -webthings-gateway-brand = WebThings Gateway
-
 # Main Title
 webthings-gateway = { -webthings-gateway-brand }
-
 # Wordmark
 wordmark =
-  .alt = { -webthings-gateway-brand }
+    .alt = { -webthings-gateway-brand }
 
 ## Menu Items
 
@@ -29,9 +27,9 @@ log-out-button = Log out
 ## Things
 
 thing-details =
-  .aria-label = View Properties
+    .aria-label = View Properties
 add-things =
-  .aria-label = Add New Things
+    .aria-label = Add New Things
 
 ## Floorplan
 
@@ -57,21 +55,21 @@ domain-settings-local-label = Local Access
 domain-settings-local-update = Update host name
 domain-settings-remote-access = Remote Access
 domain-settings-local-name =
-  .placeholder = gateway
+    .placeholder = gateway
 
 ## Network Settings
 
 network-settings-unsupported = Network settings are not supported for this platform.
 network-settings-ethernet-image =
-  .alt = Ethernet
+    .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-  .alt = Wi-Fi
+    .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
 network-settings-home-network-image =
-  .alt = Home Network
+    .alt = Home Network
 network-settings-internet-image =
-  .alt = Internet
+    .alt = Internet
 network-settings-configure = Configure
 network-settings-internet-wan = Internet (WAN)
 network-settings-wan-mode = Mode
@@ -86,7 +84,7 @@ network-settings-network-mask = Network mask
 network-settings-gateway = Gateway
 network-settings-done = Done
 network-settings-wifi-password =
-  .placeholder = Password
+    .placeholder = Password
 network-settings-show-password = Show password
 network-settings-connect = Connect
 network-settings-username = Username
@@ -97,7 +95,7 @@ network-settings-enable-wifi = Enable Wi-Fi
 network-settings-network-name = Network name (SSID)
 wireless-connected = Connected
 wireless-icon =
-  .alt = Wi-Fi Network
+    .alt = Wi-Fi Network
 network-settings-changing = Changing network settings. This may take a minute.
 failed-ethernet-configure = Failed to configure ethernet.
 failed-wifi-configure = Failed to configure Wi-Fi.
@@ -108,15 +106,15 @@ failed-wlan-configure = Failed to configure WLAN.
 ## User Settings
 
 create-user =
-  .aria-label = Add New User
+    .aria-label = Add New User
 user-settings-input-name =
-  .placeholder = Name
+    .placeholder = Name
 user-settings-input-email =
-  .placeholder = Email
+    .placeholder = Email
 user-settings-input-password =
-  .placeholder = Password
+    .placeholder = Password
 user-settings-input-totp =
-  .placeholder = 2FA Code
+    .placeholder = 2FA Code
 user-settings-mfa-enable = Enable two-factor authentication
 user-settings-mfa-scan-code = Scan the following code with any two-factor authenticator app.
 user-settings-mfa-secret = This is your new TOTP secret, in case the QR code above does not work:
@@ -126,11 +124,11 @@ user-settings-mfa-verify = Verify
 user-settings-mfa-regenerate-codes = Regenerate backup codes
 user-settings-mfa-backup-codes = These are your backup codes. Each one can only be used once. Keep them in a safe place.
 user-settings-input-new-password =
-  .placeholder = New Password (Optional)
+    .placeholder = New Password (Optional)
 user-settings-input-confirm-new-password =
-  .placeholder = Confirm New Password
+    .placeholder = Confirm New Password
 user-settings-input-confirm-password =
-  .placeholder = Confirm Password
+    .placeholder = Confirm Password
 user-settings-password-mismatch = Passwords do not match
 user-settings-save = Save
 
@@ -182,36 +180,36 @@ developer-settings-create-local-authorization = Create local authorization
 ## Rules
 
 add-rule =
-  .aria-label = Create New Rule
+    .aria-label = Create New Rule
 rules = Rules
 rules-create-rule-hint = No rules created. Click + to create a rule.
 rules-rule-name = Rule Name
 rules-customize-rule-name-icon =
-  .alt = Customize Rule Name
+    .alt = Customize Rule Name
 rules-rule-description = Rule Description
 rules-preview-button =
-  .alt = Preview
+    .alt = Preview
 rules-delete-icon =
-  .alt = Delete
+    .alt = Delete
 rules-drag-hint = Drag your devices here to start creating a rule
 rules-drag-input-hint = Add device as input
 rules-drag-output-hint = Add device as output
 rules-scroll-left =
-  .alt = Scroll Left
+    .alt = Scroll Left
 rules-scroll-right =
-  .alt = Scroll Right
+    .alt = Scroll Right
 rules-delete-prompt = Drop devices here to disconnect
 rules-delete-dialog = Are you sure you want to remove this rule permanently?
 rules-delete-cancel =
-  .value = Cancel
+    .value = Cancel
 rules-delete-confirm =
-  .value = Remove Rule
+    .value = Remove Rule
 rule-invalid = Invalid
 rule-delete-prompt = Are you sure you want to remove this rule permanently?
 rule-delete-cancel-button =
-  .value = Cancel
+    .value = Cancel
 rule-delete-confirm-button =
-  .value = Remove Rule
+    .value = Remove Rule
 rule-select-property = Select Property
 rule-not = Not
 rule-event = Event
@@ -230,20 +228,20 @@ rule-name = Rule Name
 ## Logs
 
 add-log =
-  .aria-label = Create New Log
+    .aria-label = Create New Log
 logs = Logs
 logs-create-log-hint = No logs created. Click + to create a log.
 logs-device = Device
 logs-device-select =
-  .aria-label = Log Device
+    .aria-label = Log Device
 logs-property = Property
 logs-property-select =
-  .aria-label = Log Property
+    .aria-label = Log Property
 logs-retention = Retention
 logs-retention-length =
-  .aria-label = Log Retention Length
+    .aria-label = Log Retention Length
 logs-retention-unit =
-  .aria-label = Log Retention Unit
+    .aria-label = Log Retention Unit
 logs-hours = Hours
 logs-days = Days
 logs-weeks = Weeks
@@ -257,7 +255,7 @@ logs-server-remove-error = Server error: unable to remove log
 ## Add New Things
 
 add-thing-scanning-icon =
-  .alt = Scanning
+    .alt = Scanning
 add-thing-scanning = Scanning for new devices…
 add-thing-add-adapters-hint = No new things found. Try <a data-l10n-name="add-thing-add-adapters-hint-anchor">adding some add-ons</a>.
 add-thing-add-by-url = Add by URL…
@@ -346,40 +344,40 @@ false = False
 
 utils-now = now
 utils-seconds-ago =
-  { $value ->
-      [one] { $value } second ago
-     *[other] { $value } seconds ago
-  }
+    { $value ->
+        [one] { $value } second ago
+       *[other] { $value } seconds ago
+    }
 utils-minutes-ago =
-  { $value ->
-      [one] { $value } minute ago
-     *[other] { $value } minutes ago
-  }
+    { $value ->
+        [one] { $value } minute ago
+       *[other] { $value } minutes ago
+    }
 utils-hours-ago =
-  { $value ->
-      [one] { $value } hour ago
-     *[other] { $value } hours ago
-  }
+    { $value ->
+        [one] { $value } hour ago
+       *[other] { $value } hours ago
+    }
 utils-days-ago =
-  { $value ->
-      [one] { $value } day ago
-     *[other] { $value } days ago
-  }
+    { $value ->
+        [one] { $value } day ago
+       *[other] { $value } days ago
+    }
 utils-weeks-ago =
-  { $value ->
-      [one] { $value } week ago
-     *[other] { $value } weeks ago
-  }
+    { $value ->
+        [one] { $value } week ago
+       *[other] { $value } weeks ago
+    }
 utils-months-ago =
-  { $value ->
-      [one] { $value } month ago
-     *[other] { $value } months ago
-  }
+    { $value ->
+        [one] { $value } month ago
+       *[other] { $value } months ago
+    }
 utils-years-ago =
-  { $value ->
-      [one] { $value } year ago
-     *[other] { $value } years ago
-  }
+    { $value ->
+        [one] { $value } year ago
+       *[other] { $value } years ago
+    }
 minute = Minute
 hour = Hour
 day = Day
@@ -411,15 +409,15 @@ unknown-device-type = Unknown device type
 new-thing-choose-icon = Choose icon…
 new-thing-save = Save
 new-thing-pin =
-  .placeholder = Enter PIN
+    .placeholder = Enter PIN
 new-thing-pin-error = Incorrect PIN
 new-thing-pin-invalid = Invalid PIN
 new-thing-cancel = Cancel
 new-thing-submit = Submit
 new-thing-username =
-  .placeholder = Enter username
+    .placeholder = Enter username
 new-thing-password =
-  .placeholder = Enter password
+    .placeholder = Enter password
 new-thing-credentials-error = Incorrect credentials
 new-thing-saved = Saved
 new-thing-done = Done
@@ -427,7 +425,7 @@ new-thing-done = Done
 ## New Web Thing View
 
 new-web-thing-url =
-  .placeholder = Enter web thing URL
+    .placeholder = Enter web thing URL
 new-web-thing-label = Web Thing
 loading = Loading…
 new-web-thing-multiple = Multiple web things found
@@ -443,7 +441,7 @@ events-not-found = This thing has no events.
 ## Add-on Settings
 
 add-addons =
-  .aria-label = Find New Add-ons
+    .aria-label = Find New Add-ons
 author-unknown = Unknown
 disable = Disable
 enable = Enable
@@ -461,6 +459,8 @@ addon-discovery-added = Added
 addon-discovery-add = Add
 addon-discovery-installing = Installing…
 addon-discovery-failed = Failed
+addon-search =
+    .placeholder = Search
 
 ## Page Titles
 
@@ -524,11 +524,11 @@ tunnel-setup-title = Choose Web Address — { -webthings-gateway-brand }
 tunnel-setup-welcome = Welcome
 tunnel-setup-choose-address = Choose a secure web address for your gateway:
 tunnel-setup-input-subdomain =
-  .placeholder = subdomain
+    .placeholder = subdomain
 tunnel-setup-opt-in = Please keep me updated about new features and contribution opportunities.
 tunnel-setup-privacy-policy = Privacy Policy
 tunnel-setup-input-reclamation-token =
-  .placeholder = Reclamation Token
+    .placeholder = Reclamation Token
 tunnel-setup-error = An error occurred while setting up the subdomain.
 tunnel-setup-create = Create
 tunnel-setup-skip = Skip
@@ -546,7 +546,7 @@ authorize-monitor-and-control = monitor and control
 authorize-monitor = monitor
 authorize-allow-all = Allow for all Things
 authorize-allow =
-  .value = Allow
+    .value = Allow
 authorize-deny = Deny
 
 ## Local Token Page
@@ -555,19 +555,20 @@ local-token-title = Local Token Service — { -webthings-gateway-brand }
 local-token-header = Local Token Service
 local-token-your-token = Your local token is this <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Use it to talk to the gateway securely, with <a data-l10n-name="local-token-bearer-type">Bearer-type Authorization</a>.
+local-token-copy-token = Copy Token
 
 ## Router Setup Page
 
 router-setup-title = Router Setup — { -webthings-gateway-brand }
 router-setup-header = Create a new Wi-Fi network
 router-setup-input-ssid =
-  .placeholder = Network name
+    .placeholder = Network name
 router-setup-input-password =
-  .placeholder = Password
+    .placeholder = Password
 router-setup-input-confirm-password =
-  .placeholder = Confirm password
+    .placeholder = Confirm password
 router-setup-create =
-  .value = Create
+    .value = Create
 router-setup-password-mismatch = Passwords must match
 
 ## Wi-Fi Setup Page
@@ -575,12 +576,12 @@ router-setup-password-mismatch = Passwords must match
 wifi-setup-title = Wi-Fi Setup — { -webthings-gateway-brand }
 wifi-setup-header = Connect to a Wi-Fi network?
 wifi-setup-input-password =
-  .placeholder = Password
+    .placeholder = Password
 wifi-setup-show-password = Show password
 wifi-setup-connect =
-  .value = Connect
+    .value = Connect
 wifi-setup-network-icon =
-  .alt = Wi-Fi Network
+    .alt = Wi-Fi Network
 wifi-setup-skip = Skip
 
 ## Connecting to Wi-Fi Page
@@ -599,6 +600,7 @@ creating-header = Creating Wi-Fi network…
 creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
 ## UI Updates
+
 ui-update-available = An updated user interface is available.
 ui-update-reload = Reload
 ui-update-close = Close
@@ -617,14 +619,15 @@ submit = Submit
 ## Top-Level Buttons
 
 menu-button =
-  .aria-label = Menu
+    .aria-label = Menu
 back-button =
-  .aria-label = Back
+    .aria-label = Back
 overflow-button =
-  .aria-label = Additional Actions
+    .aria-label = Additional Actions
 submit-button =
-  .aria-label = Submit
+    .aria-label = Submit
 edit-button =
-  .aria-label = Edit
+    .aria-label = Edit
 save-button =
-  .aria-label = Save
+    .aria-label = Save
+    .aria-label = Save
