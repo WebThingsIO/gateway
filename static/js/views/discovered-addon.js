@@ -117,8 +117,8 @@ class DiscoveredAddon {
         }
         this.installedAddonsMap.set(this.id, settings);
 
-        if (settings.content_scripts && settings.content_scripts.length > 0) {	
-          window.location.reload();	
+        if (settings.content_scripts && settings.content_scripts.length > 0) {
+          window.location.reload();
         }
       })
       .catch((err) => {
@@ -134,47 +134,52 @@ class DiscoveredAddon {
    * Handle a click on the license button.
    */
   handleLicense(e) {
-    if(e.dataset.id) {
-      const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.dataset.id;
+    if(e.target.getAttribute('data-id')) {
+      
+      API.getAddonsInfo().then((data) => {
+        console.log("API.getAddonsInfo() = ");
+        console.log(data);  
 
-      var modal = document.getElementById('media-modal');
+        const licenseUrl = data['urls'][0] + "/license/" + e.target.getAttribute('data-id');
 
-      if(modal == null){
-        var modal_container = document.createElement('div');
-        modal_container.className = "media-modal";
-        modal_container.id = "media-modal";
+        let modal = document.getElementById('media-modal');
 
-        var modal_frame = document.createElement('div');
-        modal_frame.className = "media-modal-frame";
-        modal_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text"></p></div>';
+        if(modal == null){
+          let modalContainer = document.createElement('div');
+          modalContainer.className = "media-modal";
+          modalContainer.id = "media-modal";
 
-        modal_container.appendChild(modal_frame);
-        document.body.appendChild(modal_container);
+          let modalFrame = document.createElement('div');
+          modalFrame.className = "media-modal-frame";
+          modalFrame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text"></p></div>';
 
-        var modal_close_button = document.getElementById('modal-close-button');
-        modal_close_button.addEventListener(
-          'click',
-          () => {
-            modal = document.getElementById("media-modal");
-            modal.parentNode.removeChild(modal);
-          }
-        );
+          modalContainer.appendChild(modalFrame);
+          document.body.appendChild(modalContainer);
 
-        fetch(license_url).then(response => {
-          if (!response.ok) {
-            throw new Error("HTTP error " + response.status);
+          let modalCloseButton = document.getElementById('modal-close-button');
+          modalCloseButton.addEventListener(
+            'click',
+            () => {
+              modal = document.getElementById("media-modal");
+              modal.parentNode.removeChild(modal);
+            }
+          );
+
+          fetch(licenseUrl).then(response => {
+            if (!response.ok) {
+              throw new Error("HTTP error " + response.status);
+              document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById("media-modal-text").innerText = data;
+          })
+          .catch((error) => {
             document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
-          }
-          return response.text();
-        })
-        .then(data => {
-          document.getElementById("media-modal-text").innerText = data;
-        })
-        .catch((error) => {
-          document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
-        });
-
-      }	
+          });
+        }
+      });	
     }
   }
     
