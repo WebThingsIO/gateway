@@ -79,7 +79,8 @@ class InstalledAddon {
           <span class="addon-settings-author">
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" 
+            data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
             (license)
           </span>
         </div>
