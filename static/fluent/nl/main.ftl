@@ -446,6 +446,7 @@ author-unknown = Onbekend
 disable = Uitschakelen
 enable = Inschakelen
 by = door
+license = licentie
 addon-configure = Instellen
 addon-update = Bijwerken
 addon-remove = Verwijderen
@@ -458,8 +459,6 @@ addon-discovery-added = Toegevoegd
 addon-discovery-add = Toevoegen
 addon-discovery-installing = Installeren…
 addon-discovery-failed = Mislukt
-addon-search =
-    .placeholder = Zoeken
 
 ## Page Titles
 
@@ -554,7 +553,6 @@ local-token-title = Lokale tokendienst – { -webthings-gateway-brand }
 local-token-header = Lokale tokendienst
 local-token-your-token = Uw lokale token is dit <a data-l10n-name="local-token-jwt">JSON Web-token</a>:
 local-token-use-it = Gebruik dit om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
-local-token-copy-token = Token kopiëren
 
 ## Router Setup Page
 
