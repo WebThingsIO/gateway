@@ -25,7 +25,8 @@ body {
   margin: 1rem;
 }
 
-#login-button, #create-user-button {
+#login-button,
+#create-user-button {
   display: block;
   margin: 1rem auto;
 }

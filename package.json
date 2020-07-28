@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "webpack && npm run lint && npm run mocha",
-    "lint": "eslint .",
+    "lint": "eslint . && stylelint static/**/*.css",
     "screenshots": "./src/test/take-prev-screenshots.sh",
     "mocha": "./src/test/run-tests.sh",
     "jest": "./src/test/run-tests.sh",
@@ -127,6 +127,8 @@
     "simple-oauth2": "^3.4.0",
     "sinon": "^9.0.2",
     "style-loader": "^1.2.1",
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6",
     "url-loader": "^4.1.0",

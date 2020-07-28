@@ -5,37 +5,42 @@
   font-family: 'Zilla Slab';
   font-weight: 400;
   font-style: normal;
-  src: url("/fonts/ZillaSlab-Regular.woff2") format("woff2"), url("/fonts/ZillaSlab-Regular.woff") format("woff");
+  src: url('/fonts/ZillaSlab-Regular.woff2') format('woff2'), url('/fonts/ZillaSlab-Regular.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 700;
   font-style: normal;
-  src: url("/fonts/ZillaSlab-Bold.woff2") format("woff2"), url("/fonts/ZillaSlab-Bold.woff") format("woff");
+  src: url('/fonts/ZillaSlab-Bold.woff2') format('woff2'), url('/fonts/ZillaSlab-Bold.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 400;
   font-style: italic;
-  src: url("/fonts/ZillaSlab-RegularItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-RegularItalic.woff") format("woff");
+  src: url('/fonts/ZillaSlab-RegularItalic.woff2') format('woff2'), url('/fonts/ZillaSlab-RegularItalic.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 700;
   font-style: italic;
-  src: url("/fonts/ZillaSlab-BoldItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-BoldItalic.woff") format("woff");
+  src: url('/fonts/ZillaSlab-BoldItalic.woff2') format('woff2'), url('/fonts/ZillaSlab-BoldItalic.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Open Sans';
   font-weight: 400;
   font-style: normal;
-  src: url("/fonts/opensans-regular.woff2") format("woff2"), url("/fonts/opensans-regular.woff") format("woff");
+  src: url('/fonts/opensans-regular.woff2') format('woff2'), url('/fonts/opensans-regular.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Open Sans';
   font-weight: 700;
   font-style: normal;
-  src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
+  src: url('/fonts/opensans-bold.woff2') format('woff2'), url('/fonts/opensans-bold.woff') format('woff');
 }
 
 html {
@@ -44,7 +49,8 @@ html {
   padding: 2rem;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -73,10 +79,10 @@ section.selected {
   display: block;
 }
 
-input[type="number"],
-input[type="text"],
-input[type="password"],
-input[type="email"] {
+input[type='number'],
+input[type='text'],
+input[type='password'],
+input[type='email'] {
   height: 1.75rem;
   background-color: #d2d9de;
   border: none;
@@ -103,16 +109,17 @@ input[type="email"] {
   color: #fff;
 }
 
-.text-button:hover, .text-button:active {
+.text-button::-moz-focus-inner {
+  border: 0;
+}
+
+.text-button:hover,
+.text-button:active {
   background-color: #658196;
 }
 
-.text-button:disabled  {
+.text-button:disabled {
   background-color: #8dbee0;
-}
-
-.text-button::-moz-focus-inner {
-  border: 0;
 }
 
 .icon-button {
@@ -133,14 +140,15 @@ input[type="email"] {
   outline: 0;
   z-index: 100;
   cursor: default;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 .icon-button::-moz-focus-inner {
   border: 0;
 }
 
-.icon-button:hover, .icon-button:active {
+.icon-button:hover,
+.icon-button:active {
   opacity: 1;
 }
 
@@ -148,7 +156,12 @@ input[type="email"] {
   display: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Zilla Slab', 'Open Sans', sans-serif;
 }
 
@@ -287,7 +300,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #overflow-menu::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -1rem;
   right: 1rem;
@@ -367,9 +380,9 @@ h1, h2, h3, h4, h5, h6 {
   transition: 0.1s;
 }
 
-.switch-slider:after {
+.switch-slider::after {
   display: block;
-  content: "";
+  content: '';
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
@@ -378,7 +391,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: 0.1s;
 }
 
-input:checked + .switch-slider:after {
+input:checked + .switch-slider::after {
   transform: translate(3.65rem, 0.35rem);
 }
 
@@ -388,21 +401,23 @@ body.hidden {
 
 @keyframes show-scrim {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 0.5;
+    opacity: 0.5;
   }
 }
 
 @keyframes hide-scrim {
   from {
-      opacity: 0.5;
-      width: 100%;
+    opacity: 0.5;
+    width: 100%;
   }
+
   to {
-      opacity: 0;
-      width: 100%;
+    opacity: 0;
+    width: 100%;
   }
 }
 
