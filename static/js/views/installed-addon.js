@@ -36,7 +36,6 @@ class InstalledAddon {
     this.primaryType = metadata.primary_type;
     this.enabled = metadata.enabled;
     this.schema = metadata.schema;
-    this.metadata = metadata;
     this.updateUrl = null;
     this.updateVersion = null;
     this.updateChecksum = null;
@@ -79,8 +78,8 @@ class InstalledAddon {
           <span class="addon-settings-author">
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span class="addon-settings-license">
-            (<a href="${this.licenseUrl}" target="_blank" rel="noopener">license</a>)
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
+            (license)
           </span>
         </div>
         <div class="addon-settings-controls">
@@ -126,6 +125,10 @@ class InstalledAddon {
     const toggleButton = document.getElementById(
       `addon-toggle-${Utils.escapeHtmlForIdClass(this.id)}`);
     toggleButton.addEventListener('click', this.handleToggle.bind(this));
+	
+    const licenseButton = document.getElementById(
+      `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
+    licenseButton.addEventListener('click', this.handleLicense.bind(this));
   }
 
   /**
@@ -166,19 +169,12 @@ class InstalledAddon {
     controlDiv.replaceChild(updating, e.target);
 
     API.updateAddon(this.id, this.updateUrl, this.updateChecksum)
-      .then((settings) => {
+      .then(() => {
         this.version = this.updateVersion;
         const addon = this.installedAddonsMap.get(this.id);
         addon.version = this.version;
         versionDiv.innerText = this.version;
         updating.innerText = fluent.getMessage('addon-updated');
-
-        // If this add-on is a UI extension, reload the page to pick up the
-        // changes
-        if (settings.content_scripts && settings.content_scripts.length > 0 &&
-            settings.enabled) {
-          window.location.reload();
-        }
       })
       .catch((err) => {
         console.error(`Failed to update add-on: ${this.id}\n${err}`);
@@ -202,14 +198,6 @@ class InstalledAddon {
         const addon = this.availableAddonsMap.get(this.id);
         if (addon) {
           addon.installed = false;
-        }
-
-        // If this add-on is a UI extension, reload the page to pick up the
-        // changes
-        if (this.metadata.content_scripts &&
-            this.metadata.content_scripts.length > 0 &&
-            this.enabled) {
-          window.location.reload();
         }
       })
       .catch((e) => {
@@ -249,6 +237,55 @@ class InstalledAddon {
         button.disabled = false;
       });
   }
+  
+  /**
+   * Handle a click on the license button.
+   */
+  handleLicense(e) {
+		if(e.target.getAttribute('data-id')) {
+			const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.target.getAttribute('data-id');
+
+			var modal = document.getElementById('media-modal');
+			
+			if(modal == null){
+		  	var modal_container = document.createElement('div');
+		  	modal_container.className = "media-modal";
+				modal_container.id = "media-modal";
+			
+		  	var modal_frame = document.createElement('div');
+		  	modal_frame.className = "media-modal-frame";
+		  	modal_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text">Loading...</p></div>';
+
+		  	modal_container.appendChild(modal_frame);
+		  	document.body.appendChild(modal_container);
+				
+				var modal_close_button = document.getElementById('modal-close-button');
+		    modal_close_button.addEventListener(
+		      'click',
+		      () => {
+					  modal = document.getElementById("media-modal");
+					  modal.parentNode.removeChild(modal);
+		      }
+		    );
+				
+				fetch(license_url).then(response => {
+				  if (!response.ok) {
+				    throw new Error("HTTP error " + response.status);
+						document.getElementById("media-modal-text").innerText = "Error while trying to load license";
+				  }
+				  return response.text();
+				})
+				.then(data => {
+				  document.getElementById("media-modal-text").innerText = data;
+			  })
+				.catch((error) => {
+				  document.getElementById("media-modal-text").innerText = "Connection error while trying to load license";
+				});
+						
+			}	
+		}
+  }
+  
 }
 
 module.exports = InstalledAddon;

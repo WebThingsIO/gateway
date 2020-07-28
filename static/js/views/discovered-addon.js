@@ -129,16 +129,9 @@ class DiscoveredAddon {
    * Handle a click on the license button.
    */
   handleLicense(e) {
-		console.log(e);
-	  //const button = e.target;
-		console.log(e.target);
-		//const data_href = e.target.getAttribute('data-license-href');
-
-		
 		if(e.target.getAttribute('data-id')) {
 			const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.target.getAttribute('data-id');
 
-			
 			var modal = document.getElementById('media-modal');
 			
 			if(modal == null){
@@ -160,26 +153,22 @@ class DiscoveredAddon {
 					  modal = document.getElementById("media-modal");
 					  modal.parentNode.removeChild(modal);
 		      }
-		    );				
-				//fetch(url,{"mode": "no-cors","credentials": "omit"}).then(response => {
+		    );
+				
 				fetch(license_url).then(response => {
-							console.log("fetch response:");
-							console.log(response);
-				      if (!response.ok) {
-				      	throw new Error("HTTP error " + response.status); // Rejects the promise
-								document.getElementById("media-modal-text").innerText = "Error while trying to load license";
-				      }
-							return response.text();
-				    })
-						.then(data => {
-							document.getElementById("media-modal-text").innerText = data;
-						})
-						.catch((error) => {
-							document.getElementById("media-modal-text").innerText = "Connection error while trying to load license";
-						});
-				
-				
-				
+				  if (!response.ok) {
+				    throw new Error("HTTP error " + response.status);
+						document.getElementById("media-modal-text").innerText = "Error while trying to load license";
+				  }
+				  return response.text();
+				})
+				.then(data => {
+				  document.getElementById("media-modal-text").innerText = data;
+			  })
+				.catch((error) => {
+				  document.getElementById("media-modal-text").innerText = "Connection error while trying to load license";
+				});
+						
 			}	
 		}
   }
