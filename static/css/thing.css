@@ -374,13 +374,11 @@
 }
 
 .media-modal {
-  /*width: calc(100% - 15.2rem);*/
-	width: calc(100% - 6.4rem);
+  width: calc(100% - 15.2rem);
   height: calc(100% - 15.2rem);
   position: absolute;
   top: 7.6rem;
-  /*left: 7.6rem;*/
-	left: 1.8rem;
+  left: 7.6rem;
   text-align: center;
 	z-index:50;
 }
@@ -411,6 +409,7 @@
   height: calc(100% - 3.2rem);
   margin: 1.6rem;
   padding: 2rem;
+	overflow:auto;
 }
 
 .media-modal-content p{
