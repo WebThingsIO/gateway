@@ -67,7 +67,7 @@ class DiscoveredAddon {
           <span class="addon-settings-author">
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" data-license-href="${this.licenseUrl}">
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
             (license)
           </span>
         </div>
@@ -132,61 +132,50 @@ class DiscoveredAddon {
 		console.log(e);
 	  //const button = e.target;
 		console.log(e.target);
-		const data_href = e.target.getAttribute('data-license-href');
-	  console.log("data_href = " + data_href);
-		
-		if(e.target.getAttribute('data-license-href')) {
-			
-			const license_url = e.target.getAttribute("data-license-href");
-			console.log(license_url);
-			
-			var url = license_url.replace("blob/", "");
-			url = url.replace("https://github.com/", "https://raw.githubusercontent.com/");
+		//const data_href = e.target.getAttribute('data-license-href');
 
-			
+		
+		if(e.target.getAttribute('data-id')) {
+			const license_url = "https://api.mozilla-iot.org:8443/addons/license/" + e.target.getAttribute('data-id');
+
 			
 			var modal = document.getElementById('media-modal');
 			
 			if(modal == null){
-				console.log("modal was null");
-		  	var overlay_container = document.createElement('div');
-		  	overlay_container.className = "media-modal";
-				overlay_container.id = "media-modal";
+		  	var modal_container = document.createElement('div');
+		  	modal_container.className = "media-modal";
+				modal_container.id = "media-modal";
 			
-		  	var overlay_frame = document.createElement('div');
-		  	overlay_frame.className = "media-modal-frame";
+		  	var modal_frame = document.createElement('div');
+		  	modal_frame.className = "media-modal-frame";
+		  	modal_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text">Loading...</p></div>';
 
-		  	overlay_frame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p><span>License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text License text license text</span></p><iframe src="' + url + '"></iframe></div>';
-
-		  	overlay_container.appendChild(overlay_frame);
-		  	document.body.appendChild(overlay_container);
-				console.log("appended overlay to body");
-			
+		  	modal_container.appendChild(modal_frame);
+		  	document.body.appendChild(modal_container);
+				
 				var modal_close_button = document.getElementById('modal-close-button');
 		    modal_close_button.addEventListener(
 		      'click',
 		      () => {
-						console.log("close button clicked");
-					  var elem = document.getElementById("media-modal");
-					  elem.parentNode.removeChild(elem);
+					  modal = document.getElementById("media-modal");
+					  modal.parentNode.removeChild(modal);
 		      }
-		    );
-				
+		    );				
 				//fetch(url,{"mode": "no-cors","credentials": "omit"}).then(response => {
-				fetch(url).then(response => {
+				fetch(license_url).then(response => {
 							console.log("fetch response:");
 							console.log(response);
 				      if (!response.ok) {
 				      	throw new Error("HTTP error " + response.status); // Rejects the promise
+								document.getElementById("media-modal-text").innerText = "Error while trying to load license";
 				      }
+							return response.text();
 				    })
 						.then(data => {
-						  console.log('Success:', data);
-							console.log(data);
-							console.log(data.body);
+							document.getElementById("media-modal-text").innerText = data;
 						})
 						.catch((error) => {
-						  console.error('Error:', error);
+							document.getElementById("media-modal-text").innerText = "Connection error while trying to load license";
 						});
 				
 				
