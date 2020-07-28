@@ -380,7 +380,7 @@
   top: 7.6rem;
   left: 7.6rem;
   text-align: center;
-	z-index:50;
+  z-index:50;
 }
 
 .media-modal-frame {
@@ -409,7 +409,7 @@
   height: calc(100% - 3.2rem);
   margin: 1.6rem;
   padding: 2rem;
-	overflow:auto;
+  overflow:auto;
 }
 
 .media-modal-content p{
