@@ -1,0 +1,12 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": [
+    "**/*.min.css"
+  ],
+  "rules": {
+    "font-family-name-quotes": "always-unless-keyword",
+    "function-url-quotes": "always",
+    "selector-attribute-quotes": "always",
+    "string-quotes": "single"
+  }
+}

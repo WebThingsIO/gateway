@@ -1,5 +1,6 @@
 @media only screen and (max-width: 730px) {
-  #rules-view, #rules {
+  #rules-view,
+  #rules {
     background: #5d9bc7;
   }
 }
@@ -8,6 +9,11 @@
   color: white;
   font-family: 'Open Sans', sans-serif;
   overflow: auto;
+}
+
+.rule-info h3 {
+  margin: 0;
+  font-size: 1.6rem;
 }
 
 #rules-view h3 {
@@ -35,7 +41,7 @@
 
 .rule {
   position: relative;
-  background: #46769C;
+  background: #46769c;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -48,11 +54,6 @@
 
 .rule.invalid {
   background: #7f3939;
-}
-
-.rule-info h3 {
-  margin: 0;
-  font-size: 1.6rem;
 }
 
 .rule-preview {
@@ -101,14 +102,13 @@
   background: #4a4a4a;
 }
 
-.rule-switch > .switch-slider:after {
+.rule-switch > .switch-slider::after {
   width: 3rem;
   height: 3rem;
   border-radius: 1.5rem;
-  background: #B1B1B3;
+  background: #b1b1b3;
   transform: translate(0, -0.4rem);
 }
-
 
 .rule-switch > input:checked + .switch-slider {
   background: #305067;
@@ -118,7 +118,7 @@
   background: #4d2121;
 }
 
-.rule-switch > input:checked + .switch-slider:after {
+.rule-switch > input:checked + .switch-slider::after {
   background: white;
   transform: translate(2.5rem, -0.4rem);
 }
@@ -145,7 +145,7 @@
   margin: 0;
   border-radius: 50%;
   border: 1px solid #979797;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   cursor: pointer;
 }
 
@@ -159,7 +159,6 @@
 .rule-edit-overlay.delete .rule-delete-button {
   display: none;
 }
-
 
 .rule-edit-overlay.delete .rule-delete-dialog {
   display: block;
@@ -187,7 +186,7 @@
 
 #create-rule-hint {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.6rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -205,8 +204,4 @@
   min-width: 40rem;
   justify-content: center;
   padding-bottom: 9.6rem;
-}
-
-#create-rule-hint {
-  font-size: 1.6rem;
 }

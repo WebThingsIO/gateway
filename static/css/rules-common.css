@@ -1,12 +1,15 @@
-#rules-view h1, #rule-view h1 {
+#rules-view h1,
+#rule-view h1 {
   font-size: 3.2rem;
 }
 
-#rules-view h3, #rule-view h3 {
+#rules-view h3,
+#rule-view h3 {
   font-size: 1.8rem;
 }
 
-#rules-view p, #rule-view p {
+#rules-view p,
+#rule-view p {
   font-size: 1.2rem;
 }
 
@@ -16,16 +19,16 @@
   padding: 0;
   width: 10rem;
   height: 10rem;
-  background: #ACCCE3;
+  background: #accce3;
   float: left;
 }
 
 .rule-part-block.trigger {
-  background: #81B8E1;
+  background: #81b8e1;
 }
 
 .rule-part-block.effect {
-  background: #FFCF8A;
+  background: #ffcf8a;
 }
 
 .rule-part-icon {
@@ -35,7 +38,9 @@
   height: 4.8rem;
 }
 
-.rule-edit-button, .rule-delete-cancel-button, .rule-delete-confirm-button {
+.rule-edit-button,
+.rule-delete-cancel-button,
+.rule-delete-confirm-button {
   background: #ededed;
   border: none;
   border-radius: 0.3rem;
@@ -51,7 +56,8 @@
   transform: translate(-50%, -50%);
 }
 
-.rule-edit-button:active, .rule-delete-cancel-button:active {
+.rule-edit-button:active,
+.rule-delete-cancel-button:active {
   background: rgba(237, 237, 237, 0.7);
 }
 

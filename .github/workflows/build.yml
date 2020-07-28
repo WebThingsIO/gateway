@@ -33,7 +33,7 @@ jobs:
       - name: Run build
         run: |
           ./node_modules/.bin/webpack
-      - name: Lint with eslint
+      - name: Lint with eslint and stylelint
         run: |
           npm run lint
       - name: Run integration tests

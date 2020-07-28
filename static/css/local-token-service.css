@@ -11,7 +11,8 @@ section {
   overflow: auto;
 }
 
-a, a:visited {
+a,
+a:visited {
   color: white;
 }
 
@@ -26,12 +27,10 @@ a, a:visited {
 .title-bar > h1 {
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
-
   padding: 0;
   margin: 0 auto;
   display: inline-block;
   line-height: 9.6rem;
-
   padding-left: 6.8rem;
   background-size: 3.2rem;
   background-repeat: no-repeat;
@@ -82,6 +81,7 @@ span.insecure {
   font-size: 1.6rem;
 }
 
-#copy-token-button:hover, #copy-token-button:active {
+#copy-token-button:hover,
+#copy-token-button:active {
   background-color: #305067;
 }

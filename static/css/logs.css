@@ -144,7 +144,8 @@
   stroke: none;
 }
 
-.logs-graph-line, .logs-graph-fill {
+.logs-graph-line,
+.logs-graph-fill {
   transition: transform 0.2s;
   transform: translate(0, 0) scale(1);
 }
@@ -186,7 +187,8 @@
   stroke: none;
 }
 
-.logs-graph-progress, .logs-graph-selection-highlight {
+.logs-graph-progress,
+.logs-graph-selection-highlight {
   fill: rgba(255, 255, 255, 0.1);
   stroke: none;
 }
@@ -199,7 +201,6 @@
   background: #597285;
   max-width: 64rem;
   border-radius: 0.5rem;
-
   display: grid;
   grid-template-columns: 1fr 1.618fr;
   grid-gap: 0.8rem 1.6rem;
@@ -214,7 +215,7 @@
   text-align: right;
 }
 
-input[type="number"].create-log-retention-duration-number {
+input[type='number'].create-log-retention-duration-number {
   width: 5rem;
   height: 3rem;
 }
@@ -231,12 +232,7 @@ input[type="number"].create-log-retention-duration-number {
   margin: 1.25rem 0;
 }
 
-#create-log-save-button:disabled,
-#create-log-save-button:disabled:hover {
-  background-color: #8dbee0;
-}
-
-#create-log-save-button:hover  {
+#create-log-save-button:hover {
   background-color: #97aebf;
 }
 
@@ -244,12 +240,18 @@ input[type="number"].create-log-retention-duration-number {
   background-color: #d2d9de;
 }
 
+#create-log-save-button:disabled,
+#create-log-save-button:disabled:hover {
+  background-color: #8dbee0;
+}
+
 .create-log-retention-duration {
   max-width: 4rem;
   text-align: center;
 }
 
-.create-log-device, .create-log-property {
+.create-log-device,
+.create-log-property {
   width: 100%;
   margin-right: 1rem;
   max-width: 24rem;

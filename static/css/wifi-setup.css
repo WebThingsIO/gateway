@@ -2,37 +2,42 @@
   font-family: 'Zilla Slab';
   font-weight: 400;
   font-style: normal;
-  src: url("/fonts/ZillaSlab-Regular.woff2") format("woff2"), url("/fonts/ZillaSlab-Regular.woff") format("woff");
+  src: url('/fonts/ZillaSlab-Regular.woff2') format('woff2'), url('/fonts/ZillaSlab-Regular.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 700;
   font-style: normal;
-  src: url("/fonts/ZillaSlab-Bold.woff2") format("woff2"), url("/fonts/ZillaSlab-Bold.woff") format("woff");
+  src: url('/fonts/ZillaSlab-Bold.woff2') format('woff2'), url('/fonts/ZillaSlab-Bold.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 400;
   font-style: italic;
-  src: url("/fonts/ZillaSlab-RegularItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-RegularItalic.woff") format("woff");
+  src: url('/fonts/ZillaSlab-RegularItalic.woff2') format('woff2'), url('/fonts/ZillaSlab-RegularItalic.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Zilla Slab';
   font-weight: 700;
   font-style: italic;
-  src: url("/fonts/ZillaSlab-BoldItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-BoldItalic.woff") format("woff");
+  src: url('/fonts/ZillaSlab-BoldItalic.woff2') format('woff2'), url('/fonts/ZillaSlab-BoldItalic.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Open Sans';
   font-weight: 400;
   font-style: normal;
-  src: url("/fonts/opensans-regular.woff2") format("woff2"), url("/fonts/opensans-regular.woff") format("woff");
+  src: url('/fonts/opensans-regular.woff2') format('woff2'), url('/fonts/opensans-regular.woff') format('woff');
 }
+
 @font-face {
   font-family: 'Open Sans';
   font-weight: 700;
   font-style: normal;
-  src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
+  src: url('/fonts/opensans-bold.woff2') format('woff2'), url('/fonts/opensans-bold.woff') format('woff');
 }
 
 h3 {
@@ -46,7 +51,8 @@ label {
   margin-left: 0.8rem;
 }
 
-html, body {
+html,
+body {
   font-size: 10px;
   font-family: 'Open Sans', sans-serif;
   background-color: #305067;
@@ -111,12 +117,6 @@ body {
   margin-bottom: 4rem;
 }
 
-.item.ssid:hover,
-.item.skip:hover,
-.item.connect:hover {
-  background-color: #658196;
-}
-
 .item.ssid {
   max-width: 40rem;
   height: 5rem;
@@ -125,6 +125,12 @@ body {
   background: #597285;
   padding: 0.8rem;
   color: #fff;
+}
+
+.item.ssid:hover,
+.item.skip:hover,
+.item.connect:hover {
+  background-color: #658196;
 }
 
 .item.password {
@@ -154,7 +160,7 @@ body {
 
 #text-ssid {
   float: left;
-  padding: .5rem 0 0 1rem;
+  padding: 0.5rem 0 0 1rem;
   font-size: large;
   width: 30rem;
   text-overflow: ellipsis;
@@ -196,25 +202,25 @@ body {
   left: -1000em;
 }
 
-:root .showpassword-checkbox + label:before {
-  content: "";
+:root .showpassword-checkbox + label::before {
+  content: '';
   display: inline-block;
-  width  : 3rem;
-  height : 3rem;
+  width: 3rem;
+  height: 3rem;
   float: left;
-  margin : 0.1rem 0;
-  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
+  margin: 0.1rem 0;
+  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
   background-size: 3rem auto;
 }
 
-:root .showpassword-checkbox:checked + label:before {
+:root .showpassword-checkbox:checked + label::before {
   background-position: 0 -3rem;
 }
 
-:root .showpassword-checkbox:disabled + label:before {
+:root .showpassword-checkbox:disabled + label::before {
   background-position: 0 -6rem;
 }
 
-:root .showpassword-checkbox:checked:disabled + label:before {
+:root .showpassword-checkbox:checked:disabled + label::before {
   background-position: 0 -9rem;
 }

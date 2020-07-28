@@ -28,7 +28,8 @@
   overflow: auto;
 }
 
-#main-menu a, .log-out-button {
+#main-menu a,
+.log-out-button {
   display: block;
   padding: 2rem;
   padding-left: 6.8rem;
@@ -41,7 +42,18 @@
   outline: 0;
 }
 
-#main-menu a:hover, #main-menu a.selected, .log-out-button:hover, .log-out-button.selected {
+.log-out-button {
+  background-color: unset;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  background-image: url('/images/log-out-icon.png');
+}
+
+#main-menu a:hover,
+#main-menu a.selected,
+.log-out-button:hover,
+.log-out-button.selected {
   background-color: rgba(0, 0, 0, 0.12);
 }
 
@@ -71,21 +83,23 @@
 
 @keyframes show-scrim {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 0.5;
+    opacity: 0.5;
   }
 }
 
 @keyframes hide-scrim {
   from {
-      opacity: 0.5;
-      width: 100%;
+    opacity: 0.5;
+    width: 100%;
   }
+
   to {
-      opacity: 0;
-      width: 100%;
+    opacity: 0;
+    width: 100%;
   }
 }
 
@@ -104,12 +118,4 @@
 #menu-scrim.hidden {
   animation: hide-scrim 0.25s ease 0s;
   width: 0%;
-}
-
-.log-out-button {
-  background-color: unset;
-  text-align: left;
-  cursor: pointer;
-  width: 100%;
-  background-image: url('/images/log-out-icon.png');
 }
