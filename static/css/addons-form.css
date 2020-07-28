@@ -218,3 +218,8 @@
 #addon-config-settings .button-submit::-moz-focus-inner {
   border: 0;
 }
+
+
+.addon-settings-license{
+  cursor: pointer;
+}
