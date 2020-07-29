@@ -353,6 +353,13 @@ abbrev-foot = ft
 unknown-device-type = Ukendt enhedstype
 new-thing-choose-icon = Vælg ikon…
 new-thing-save = Gem
+new-thing-cancel = Annuller
+new-thing-submit = Indsend
+new-thing-username =
+    .placeholder = Indtast brugernavn
+new-thing-credentials-error = Ugyldige loginoplysninger
+new-thing-saved = Gemt
+new-thing-done = Færdig
 
 ## New Web Thing View
 
