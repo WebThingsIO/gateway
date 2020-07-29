@@ -133,12 +133,9 @@ class DiscoveredAddon {
    * Handle a click on the license button.
    */
   handleLicense(e) {
-    if (e.target.getAttribute('data-id')) {
+    if (e.target.dataset.id) {
       API.getAddonsInfo().then((data) => {
-        const licenseUrl = `
-          ${data.urls[0]}/license/
-          ${e.target.getAttribute('data-id')}`;
-        console.log(licenseUrl);
+        const licenseUrl = `${data.urls[0]}/license/${e.target.dataset.id}`;
         let modal = document.getElementById('media-modal');
         if (modal == null) {
           const modalContainer = document.createElement('div');
