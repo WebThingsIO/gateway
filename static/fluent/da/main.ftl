@@ -76,6 +76,7 @@ network-settings-gateway = Gateway
 network-settings-done = Færdig
 network-settings-username = Brugernavn
 network-settings-router-ip = Routerens IP-adresse
+network-settings-dhcp-server = DHCP-server
 network-settings-enable-wifi = Aktiver Wi-Fi
 network-settings-network-name = Netværksnavn (SSID)
 network-settings-changing = Ændrer netværksinstillinger. Dette kan tage et øjeblik.
@@ -200,6 +201,8 @@ logs-property = Egenskab
 logs-property-select =
     .aria-label = Egenskab for logning
 logs-retention = Opbevaring
+logs-retention-length =
+    .aria-label = Opbevaringslængde for log
 logs-retention-unit =
     .aria-label = Logopbevaringsenhed
 logs-hours = Timer
@@ -285,12 +288,71 @@ false = Falsk
 
 ## Time
 
+utils-seconds-ago =
+    { $value ->
+        [one] { $value } sekund siden
+       *[other] { $value } sekunder siden
+    }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } minut siden
+       *[other] { $value } minutter siden
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } time siden
+       *[other] { $value } timer siden
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } dag siden
+       *[other] { $value } dage siden
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } uge siden
+       *[other] { $value } uger siden
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } måned siden
+       *[other] { $value } måneder siden
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } år siden
+       *[other] { $value } år siden
+    }
+minute = Minut
+hour = Time
+day = Dag
+week = Uge
 
 ## Unit Abbreviations
 
+abbrev-volt = V
+abbrev-hertz = Hz
+abbrev-amp = A
+abbrev-watt = W
+abbrev-kilowatt-hour = kWh
+abbrev-percent = %
+abbrev-fahrenheit = °F
+abbrev-celsius = °C
+abbrev-kelvin = K
+abbrev-meter = m
+abbrev-kilometer = km
+abbrev-day = d
+abbrev-hour = t
+abbrev-minute = m
+abbrev-second = s
+abbrev-millisecond = ms
+abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = Ukendt enhedstype
+new-thing-choose-icon = Vælg ikon…
+new-thing-save = Gem
 
 ## New Web Thing View
 
