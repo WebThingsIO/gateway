@@ -215,12 +215,22 @@ logs-server-remove-error = Serverfejl: kunne ikke fjerne logfilen
 
 add-thing-scanning-icon =
     .alt = Scanner
+add-thing-add-adapters-hint = Der blev ikke fundet nogen nye enheder. Prøv at <a data-l10n-name="add-thing-add-adapters-hint-anchor">tilføje nogle tilføjelser</a>.
+add-thing-add-by-url = Tilføj via URL…
+add-thing-done = Færdig
+add-thing-cancel = Annuller
 
 ## Context Menu
 
+context-menu-choose-icon = Vælg ikon…
+context-menu-save = Gem
+context-menu-remove = Fjern
 
 ## Capabilities
 
+OnOffSwitch = Tænd/Sluk-kontakt
+ColorControl = Farvekontrol
+ColorSensor = Farvesensor
 
 ## Properties
 
