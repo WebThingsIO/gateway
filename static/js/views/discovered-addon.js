@@ -166,10 +166,6 @@ class DiscoveredAddon {
           );
 
           fetch(licenseUrl).then(response => {
-            if (!response.ok) {
-              throw new Error("HTTP error " + response.status);
-              document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
-            }
             return response.text();
           })
           .then(data => {

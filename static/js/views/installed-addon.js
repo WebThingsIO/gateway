@@ -209,12 +209,12 @@ class InstalledAddon {
           addon.installed = false;
         }
 
-        // If this add-on is a UI extension, reload the page to pick up the	
-        // changes	
-        if (this.metadata.content_scripts &&	
-            this.metadata.content_scripts.length > 0 &&	
-            this.enabled) {	
-          window.location.reload();	
+        // If this add-on is a UI extension, reload the page to pick up the
+        // changes
+        if (this.metadata.content_scripts &&
+            this.metadata.content_scripts.length > 0 &&
+            this.enabled) {
+          window.location.reload();
         }
       })
       .catch((e) => {
@@ -291,10 +291,6 @@ class InstalledAddon {
           );
 
           fetch(licenseUrl).then(response => {
-            if (!response.ok) {
-              throw new Error("HTTP error " + response.status);
-              document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
-            }
             return response.text();
           })
           .then(data => {
