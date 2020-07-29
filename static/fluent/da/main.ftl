@@ -235,9 +235,39 @@ BinarySensor = Binær sensor
 SmartPlug = Smart stikkontakt
 Light = Lys
 DoorSensor = Dørsensor
+PushButton = Trykkontakt
+VideoCamera = Videokamera
+Camera = Kamera
+Alarm = Alarm
+Thermostat = Termostat
+Lock = Lås
 
 ## Properties
 
+alarm = Alarm
+on-off = Tændt/Slukket
+on = Tændt
+off = Slukket
+power = Effekt
+voltage = Spænding
+temperature = Temperatur
+current = Strømstyrke
+frequency = Frekvens
+color = Farve
+brightness = Lysstyrke
+leak = Lækage
+dry = Tør
+color-temperature = Farvetemperatur
+video-unsupported = Video er ikke understøttet i din browser.
+motion = Bevægelse
+no-motion = Ingen bevægelse
+open = Åben
+closed = Lukket
+locked = Låst
+unlocked = Ulåst
+unknown = Ukendt
+active = Aktiv
+inactive = Inaktiv
 
 ## Domain Setup
 
