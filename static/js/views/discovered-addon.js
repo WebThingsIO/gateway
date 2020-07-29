@@ -143,7 +143,7 @@ class DiscoveredAddon {
           modalContainer.id = 'media-modal';
           const modalFrame = document.createElement('div');
           modalFrame.className = 'media-modal-frame';
-          const content = `'<div class="media-modal-close" 
+          const content = `<div class="media-modal-close" 
             id="modal-close-button"></div>
             <div class="media-modal-content">
             <p id="media-modal-text"></p></div>`;
