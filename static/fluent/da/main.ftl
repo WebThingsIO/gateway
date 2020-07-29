@@ -183,12 +183,38 @@ rule-configure = Konfigurér…
 rule-notification = Notifikation
 notification-title = Titel
 notification-message = Besked
+notification-level = Niveau
+notification-low = Lav
+notification-normal = Normal
+notification-high = Høj
+rule-name = Regelnavn
 
 ## Logs
 
+add-log =
+    .aria-label = Opret en ny log
+logs = Logfiler
+logs-create-log-hint = Der er ikke oprette nogen logs. Klik på + for at oprette en ny log.
+logs-device = Enhed
+logs-property = Egenskab
+logs-property-select =
+    .aria-label = Egenskab for logning
+logs-retention = Opbevaring
+logs-retention-unit =
+    .aria-label = Logopbevaringsenhed
+logs-hours = Timer
+logs-days = Dage
+logs-weeks = Uger
+logs-save = Gem
+logs-remove-dialog-title = Fjerner
+logs-remove-dialog-warning = Ved at fjerne loggen fjerner du også alle dens data. Er du sikker på, at du vil fjerne den?
+logs-remove = Fjern
+logs-server-remove-error = Serverfejl: kunne ikke fjerne logfilen
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = Scanner
 
 ## Context Menu
 
