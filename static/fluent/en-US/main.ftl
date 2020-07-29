@@ -630,4 +630,3 @@ edit-button =
     .aria-label = Edit
 save-button =
     .aria-label = Save
-    .aria-label = Save
