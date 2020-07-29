@@ -25,7 +25,8 @@ body {
   margin: 1rem;
 }
 
-#login-button, #create-user-button {
+#login-button,
+#create-user-button {
   display: block;
   margin: 1rem auto;
 }
@@ -50,7 +51,9 @@ p {
   padding-bottom: 0.6rem;
 }
 
-input[type="text"], input[type="password"], input[type="email"] {
+input[type='text'],
+input[type='password'],
+input[type='email'] {
   height: 2.3rem;
   background-color: #d2d9de;
   border: none;
@@ -68,11 +71,11 @@ button {
   color: #fff;
 }
 
-button:hover, button:active {
-  background-color: #658196;
-}
-
 button::-moz-focus-inner {
   border: 0;
 }
 
+button:hover,
+button:active {
+  background-color: #658196;
+}

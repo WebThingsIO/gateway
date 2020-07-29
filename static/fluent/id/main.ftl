@@ -451,6 +451,8 @@ addon-discovery-added = Ditambahkan
 addon-discovery-add = Tambah
 addon-discovery-installing = Memasang…
 addon-discovery-failed = Gagal
+addon-search =
+    .placeholder = Cari
 
 ## Page Titles
 

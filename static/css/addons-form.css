@@ -37,6 +37,7 @@
   display: none;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 #addon-config-settings .json-schema-form .form-group {
   padding-left: 10px;
   margin-bottom: 1.5rem;
@@ -49,7 +50,7 @@
 }
 
 #addon-config-settings .json-schema-form .field-description {
-  margin-top: 0rem;
+  margin-top: 0;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
@@ -76,30 +77,30 @@
   margin-bottom: 0.5rem;
 }
 
-#addon-config-settings .json-schema-form input[type=checkbox] {
+#addon-config-settings .json-schema-form input[type='checkbox'] {
   position: absolute;
   left: -1000em;
 }
 
-#addon-config-settings .json-schema-form input[type=checkbox] + label:before {
-  content: "";
+#addon-config-settings .json-schema-form input[type='checkbox'] + label::before {
+  content: '';
   display: inline-block;
   width: 3rem;
   height: 3rem;
   margin-top: -0.25rem;
-  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
+  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
   background-size: 3rem auto;
 }
 
-#addon-config-settings .json-schema-form input[type=checkbox]:checked + label:before {
+#addon-config-settings .json-schema-form input[type='checkbox']:checked + label::before {
   background-position: 0 -3rem;
 }
 
-#addon-config-settings .json-schema-form input[type=checkbox]:disabled + label:before {
+#addon-config-settings .json-schema-form input[type='checkbox']:disabled + label::before {
   background-position: 0 -6rem;
 }
 
-#addon-config-settings .json-schema-form input[type=checkbox]:checked:disabled + label:before {
+#addon-config-settings .json-schema-form input[type='checkbox']:checked:disabled + label::before {
   background-position: 0 -9rem;
 }
 
@@ -110,15 +111,6 @@
   height: 3.6rem;
   overflow: hidden;
   margin: 0.5rem 0;
-}
-
-#addon-config-settings .json-schema-form .btn-form-tools:hover:enabled,
-#addon-config-settings .json-schema-form .btn-form-tools:active:enabled {
-  background-color: #658196;
-}
-
-#addon-config-settings .json-schema-form .btn-form-tools::-moz-focus-inner {
-  border: 0;
 }
 
 #addon-config-settings .json-schema-form .btn-form-tools {
@@ -136,6 +128,15 @@
   -ms-user-select: none;
   user-select: none;
   outline: 0;
+}
+
+#addon-config-settings .json-schema-form .btn-form-tools::-moz-focus-inner {
+  border: 0;
+}
+
+#addon-config-settings .json-schema-form .btn-form-tools:hover:enabled,
+#addon-config-settings .json-schema-form .btn-form-tools:active:enabled {
+  background-color: #658196;
 }
 
 #addon-config-settings .json-schema-form .btn-add {
@@ -187,7 +188,7 @@
   transform: translateY(0%);
   top: auto;
   margin: 0 auto;
-  padding: 0rem;
+  padding: 0;
   padding-left: 1em;
   text-indent: -1em;
   list-style-position: inside;
@@ -208,6 +209,10 @@
   border-radius: 0.5rem;
   padding: 1rem 2rem 1rem 4rem;
   color: #fff;
+}
+
+#addon-config-settings .button-submit::-moz-focus-inner {
+  border: 0;
 }
 
 #addon-config-settings .button-submit:hover,

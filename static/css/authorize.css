@@ -21,12 +21,10 @@ body.hidden {
 .title-bar > h1 {
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
-
   padding: 0;
   margin: 0 auto;
   display: inline-block;
   line-height: 9.6rem;
-
   padding-left: 6.8rem;
   background-size: 3.2rem;
   background-repeat: no-repeat;
@@ -89,7 +87,6 @@ body.hidden {
   -webkit-appearance: none;
   -ms-appearance: none;
   appearance: none;
-
   background: none;
   color: white;
   border: 0;
@@ -102,7 +99,7 @@ body.hidden {
   border-bottom: 2px solid white;
 }
 
-.authorize-select-container:after {
+.authorize-select-container::after {
   border-top: 0.6rem solid white;
   border-left: 0.6rem solid transparent;
   border-right: 0.6rem solid transparent;

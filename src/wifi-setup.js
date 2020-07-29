@@ -338,20 +338,31 @@ function defineNetwork(ssid, password) {
  *                    or not we have a connection.
  */
 function checkConnection() {
+  const ensureAPStopped = () => {
+    // If the host seems to be in AP mode (e.g. from a previous run), stop it
+    if (platform.getDhcpServerStatus() ||
+        platform.getWirelessMode().mode === 'ap') {
+      stopAP();
+    }
+  };
+
   return Settings.get('wifiskip').catch(() => false).then((skipped) => {
     if (skipped) {
+      ensureAPStopped();
       return Promise.resolve(true);
     }
 
     // If wifi wasn't skipped, but there is an ethernet connection, just move on
     const addresses = platform.getNetworkAddresses();
     if (addresses.lan) {
+      ensureAPStopped();
       return Promise.resolve(true);
     }
 
     // Wait until we have a working wifi connection. Retry every 3 seconds up
     // to 20 times. If we never get a wifi connection, go into AP mode.
     return waitForWiFi(20, 3000).then(() => {
+      ensureAPStopped();
       return true;
     }).catch((err) => {
       if (err) {

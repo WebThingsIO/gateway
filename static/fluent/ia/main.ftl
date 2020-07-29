@@ -116,7 +116,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = Codice 2FA
 user-settings-mfa-enable = Activar le authentification a duo factores
-user-settings-mfa-scan-code = Scande le codice sequente con un application de authentification a duo factores.
+user-settings-mfa-scan-code = Scanna le codice sequente con un application de authentication a duo factores.
 user-settings-mfa-secret = In caso le codice QR supra non functiona, isto es tu nove jeton TOTP secrete.
 user-settings-mfa-error = Le codice de authentification non es correcte.
 user-settings-mfa-enter-code = Insere le codice generate per tu app de authentification ci infra.
@@ -433,7 +433,7 @@ new-web-thing-from = de
 
 ## Empty div Messages
 
-no-things = Nulle objectos ancora. Clicca + pro scander objectos disponibile.
+no-things = Nulle objectos ancora. Clicca + pro scannar objectos disponibile.
 thing-not-found = Objecto non trovate.
 action-not-found = Action non trovate.
 events-not-found = Tal objecto ha nulle eventos.
