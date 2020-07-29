@@ -58,6 +58,24 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
+network-settings-home-network-image =
+    .alt = Hjemmenetværk
+network-settings-internet-image =
+    .alt = Internet
+network-settings-configure = Konfigurér
+network-settings-internet-wan = Internet (WAN)
+network-settings-home-network-lan = Hjemmenetværk (LAN)
+network-settings-wifi-wlan = Wi-FI (WLAN)
+network-settings-ip-address = IP-adresse
+network-settings-dhcp = Automatisk (DHCP)
+network-settings-static = Manuel (statisk IP)
+network-settings-pppoe = Bridge (PPPoE)
+network-settings-static-ip-address = Statisk IP-adresse
+network-settings-network-mask = Netværksmaske
+network-settings-gateway = Gateway
+network-settings-done = Færdig
+network-settings-username = Brugernavn
+network-settings-router-ip = Routerens IP-adresse
 
 ## User Settings
 
