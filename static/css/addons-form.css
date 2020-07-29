@@ -220,10 +220,10 @@
   background-color: #658196;
 }
 
-.addon-settings-license{
+.addon-settings-license {
   cursor: pointer;
 }
 
-.addon-settings-license:hover{
-  color:white;
+.addon-settings-license:hover {
+  color: white;
 }
