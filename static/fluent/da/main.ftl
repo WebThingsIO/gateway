@@ -36,9 +36,15 @@ upload-floorplan-hint = (.svg anbefales)
 settings-domain = Domæne
 settings-network = Netværk
 settings-users = Brugere
+settings-adapters = Adaptere
+settings-updates = Opdateringer
+settings-authorizations = Tilladelser
+settings-experiments = Eksperimenter
+settings-developer = Udvikler
 
 ## Domain Settings
 
+domain-settings-local-label = Lokal adgang
 
 ## Network Settings
 
