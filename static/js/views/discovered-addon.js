@@ -89,11 +89,10 @@ class DiscoveredAddon {
         `addon-install-${Utils.escapeHtmlForIdClass(this.id)}`);
       button.addEventListener('click', this.handleInstall.bind(this));
     }
-      
+
     const licenseButton = document.getElementById(
       `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
     licenseButton.addEventListener('click', this.handleLicense.bind(this));
-	  
   }
 
   /**
@@ -129,56 +128,53 @@ class DiscoveredAddon {
         controlDiv.innerHTML = el;
       });
   }
-  
+
   /**
    * Handle a click on the license button.
    */
   handleLicense(e) {
-    if(e.target.getAttribute('data-id')) {
-      
+    if (e.target.getAttribute('data-id')) {
       API.getAddonsInfo().then((data) => {
-        console.log("API.getAddonsInfo() = ");
-        console.log(data);  
-
-        const licenseUrl = data['urls'][0] + "/license/" + e.target.getAttribute('data-id');
-
+        const licenseUrl =
+          '${data.urls[0]}/license/${e.target.getAttribute("data-id")}';
         let modal = document.getElementById('media-modal');
-
-        if(modal == null){
-          let modalContainer = document.createElement('div');
-          modalContainer.className = "media-modal";
-          modalContainer.id = "media-modal";
-
-          let modalFrame = document.createElement('div');
-          modalFrame.className = "media-modal-frame";
-          modalFrame.innerHTML = '<div class="media-modal-close" id="modal-close-button"></div><div class="media-modal-content"><p id="media-modal-text"></p></div>';
-
+        if (modal == null) {
+          const modalContainer = document.createElement('div');
+          modalContainer.className = 'media-modal';
+          modalContainer.id = 'media-modal';
+          const modalFrame = document.createElement('div');
+          modalFrame.className = 'media-modal-frame';
+          const content = `'<div class="media-modal-close" 
+            id="modal-close-button"></div>
+            <div class="media-modal-content">
+            <p id="media-modal-text"></p></div>`;
+          modalFrame.innerHTML = content;
           modalContainer.appendChild(modalFrame);
           document.body.appendChild(modalContainer);
-
-          let modalCloseButton = document.getElementById('modal-close-button');
-          modalCloseButton.addEventListener(
+          const modalCloseBtn = document.getElementById('modal-close-button');
+          modalCloseBtn.addEventListener(
             'click',
             () => {
-              modal = document.getElementById("media-modal");
+              modal = document.getElementById('media-modal');
               modal.parentNode.removeChild(modal);
             }
           );
-
-          fetch(licenseUrl).then(response => {
-            return response.text();
-          })
-          .then(data => {
-            document.getElementById("media-modal-text").innerText = data;
-          })
-          .catch((error) => {
-            document.getElementById("media-modal-text").innerText = fluent.getMessage('failed-read-file');
-          });
+          fetch(licenseUrl)
+            .then((response) => {
+              return response.text();
+            })
+            .then((data) => {
+              document.getElementById('media-modal-text').innerText = data;
+            })
+            .catch(() => {
+              document.getElementById('media-modal-text').innerText =
+                fluent.getMessage('failed-read-file');
+            });
         }
-      });	
+      });
     }
   }
-    
+
 }
 
 module.exports = DiscoveredAddon;
