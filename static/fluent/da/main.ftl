@@ -271,6 +271,12 @@ inactive = Inaktiv
 
 ## Domain Setup
 
+reclaim-failed = Domænet kunne ikke gendannes.
+invalid-subdomain = Ugyldigt subdomæne.
+invalid-reclamation-token = Ugyldig gendannelses-token.
+domain-success = Succes! Du omdirigeres, vent venligst…
+issuing-error = Fejl ved udstedelse af certifikat. Prøv igen.
+redirecting = Omdirigerer…
 
 ## Booleans
 
