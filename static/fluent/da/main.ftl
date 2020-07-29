@@ -98,27 +98,91 @@ user-settings-mfa-scan-code = Scan den følgende kode med en totrins-godkendelse
 user-settings-mfa-secret = I tilfælde af at QR-koden ovenfor ikke virker, er dette din nye TOTP-hemmelighed:
 user-settings-mfa-enter-code = Indtast koden fra din godkendelses-app nedenfor.
 user-settings-mfa-verify = Bekræft
+user-settings-mfa-backup-codes = Dette er dine backup-koder. Hver af dem kan kun benyttes én gang. Gem dem et sikkert sted.
+user-settings-save = Gem
 
 ## Adapter Settings
 
+adapter-settings-no-adapters = Der blev ikke fundet nogen adaptere.
 
 ## Authorization Settings
 
+authorization-settings-no-authorizations = Ingen tilladelser.
 
 ## Experiment Settings
 
+experiment-settings-no-experiments = Der er ingen eksperimenter tilgængelige i øjeblikket.
 
 ## Localization Settings
 
+localization-settings-country = Land
+localization-settings-timezone = Tidszone
+localization-settings-language = Sprog
+localization-settings-units = Enheder
+localization-settings-units-temperature = Temperatur
+localization-settings-units-temperature-celsius = Celcius (°C)
+localization-settings-units-temperature-fahrenheit = Fahrenheit (°F)
 
 ## Update Settings
 
+update-settings-update-now = Opdater nu
+update-available = Ny version tilgængelig.
+update-up-to-date = Dit system har den seneste version.
+updates-not-supported = Opdateringer er ikke understøttet på denne platform.
+update-settings-enable-self-updates = Aktiver automatiske opdateringer
+last-update = Seneste opdatering
+current-version = Nuværende version
+failed = Mislykkedes
+never = Aldrig
+restarting = Genstarter…
+checking-for-updates = Søger efter opdateringer…
+failed-to-check-for-updates = Ikke i stand til at søge efter opdateringer i øjeblikket.
 
 ## Developer Settings
 
+developer-settings-enable-ssh = Aktiver SSH
+developer-settings-view-internal-logs = Se interne logfiler
+developer-settings-create-local-authorization = Opret lokal tilladelse
 
 ## Rules
 
+add-rule =
+    .aria-label = Opret ny regel
+rules = Regler
+rules-create-rule-hint = Der er ikke oprettet nogen regler. Tryk på + for at oprette en regel.
+rules-rule-name = Navn på regel
+rules-rule-description = Beskrivelse af regel
+rules-preview-button =
+    .alt = Forhåndsvisning
+rules-delete-icon =
+    .alt = Slet
+rules-drag-hint = Træk dine enheder hertil for at oprette en regel
+rules-drag-input-hint = Tilføj enhed som input
+rules-drag-output-hint = Tilføj enhed som output
+rules-scroll-left =
+    .alt = Scroll til venstre
+rules-scroll-right =
+    .alt = Scroll til højre
+rules-delete-prompt = Slip enheder her for at afbryde forbindelsen
+rules-delete-dialog = Er du sikker på, at du vil slette reglen permanent?
+rules-delete-cancel =
+    .value = Annuller
+rules-delete-confirm =
+    .value = Fjern regel
+rule-invalid = Ugyldig
+rule-delete-prompt = Er du sikker på, at du vil fjerne reglen permanent?
+rule-delete-cancel-button =
+    .value = Annuller
+rule-delete-confirm-button =
+    .value = Fjern regel
+rule-select-property = Vælg egenskab
+rule-not = Ikke
+rule-event = Begivenhed
+rule-action = Handling
+rule-configure = Konfigurér…
+rule-notification = Notifikation
+notification-title = Titel
+notification-message = Besked
 
 ## Logs
 
