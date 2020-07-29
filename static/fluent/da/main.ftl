@@ -45,9 +45,19 @@ settings-developer = Udvikler
 ## Domain Settings
 
 domain-settings-local-label = Lokal adgang
+domain-settings-remote-access = Fjernadgang
+domain-settings-local-name =
+    .placeholder = gateway
 
 ## Network Settings
 
+network-settings-unsupported = Denne platform understøtter ikke netværksindstillinger.
+network-settings-ethernet-image =
+    .alt = Ethernet
+network-settings-ethernet = Ethernet
+network-settings-wifi-image =
+    .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
 
 ## User Settings
 
