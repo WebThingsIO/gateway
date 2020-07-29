@@ -9,6 +9,7 @@ const availableLanguages = {
   bn: ['/fluent/bn/main.ftl'],
   cs: ['/fluent/cs/main.ftl'],
   cy: ['/fluent/cy/main.ftl'],
+  da: ['/fluent/da/main.ftl'],
   de: ['/fluent/de/main.ftl'],
   el: ['/fluent/el/main.ftl'],
   'en-CA': ['/fluent/en-CA/main.ftl'],
