@@ -271,6 +271,7 @@ inactive = Inaktiv
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = Du har allerede registreret subdomænet. <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">Klik her</a> for at gendanne det.
 reclaim-failed = Domænet kunne ikke gendannes.
 invalid-subdomain = Ugyldigt subdomæne.
 invalid-reclamation-token = Ugyldig gendannelses-token.
@@ -280,6 +281,7 @@ redirecting = Omdirigerer…
 
 ## Booleans
 
+false = Falsk
 
 ## Time
 
