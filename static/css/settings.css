@@ -60,6 +60,15 @@
   min-width: 0;
 }
 
+#settings-menu ul {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 0;
+}
+
 #settings-back-button {
   background-color: transparent;
 }
@@ -176,6 +185,7 @@
   background-color: #48779a;
   border-radius: 0.5rem;
   padding: 2rem;
+  color: #fff;
   text-align: left;
   top: 50%;
   transform: translateY(-50%);
@@ -193,28 +203,11 @@
   padding-bottom: 0;
 }
 
-.network-settings-wrap ul {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 60rem;
-  padding: 9.6rem 2rem;
-  max-height: 100%;
-}
-
-#settings-menu ul {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 0 2rem 2rem 2rem;
-}
-
 #network-settings-client ul,
 #network-settings-router ul,
 #user-settings ul,
 #adapter-settings ul,
-#addon-main-settings ul,
-#addon-discovery-container,
+#addon-settings ul,
 #domain-settings ul,
 #experiment-settings ul,
 #localization-settings ul,
@@ -232,25 +225,17 @@
   max-height: 100%;
 }
 
-#discovered-addons-list {
-  padding: 0;
+.network-settings-wrap ul {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 60rem;
+  padding: 9.6rem 2rem;
+  max-height: 100%;
 }
 
-#discovered-addons-search {
-  margin: 1rem auto;
-  height: 2.3rem;
-  background-color: #d2d9de;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  width: calc(100% - 1rem);
-  display: block;
-  font-size: 1.6rem;
-}
-
-.network-settings-wrap ul li:last-child,
 #network-settings-client ul li:last-child,
 #network-settings-router ul li:last-child,
+.network-settings-wrap ul li:last-child,
 #user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
@@ -341,7 +326,6 @@
 
 .network-settings-list-item-icon {
   height: 6rem;
-  width: 6rem;
   padding: 2rem 2rem;
 }
 
@@ -423,7 +407,7 @@
 }
 
 .addon-updating {
-  margin-right: 0.8rem;
+  margin-right: .8rem;
 }
 
 .user-settings-description,
@@ -435,7 +419,7 @@
 }
 
 .domain-settings-error {
-  color: #f95;
+  color: #ff9955;
   font-size: 1.4rem;
   padding: 0 0 1rem 0;
 }
@@ -454,7 +438,7 @@
 }
 
 #domain-settings-local-update {
-  display: block;
+  display:block;
   font-size: 1.8rem;
 }
 
@@ -466,17 +450,12 @@
 .addon-settings-author {
   font-size: 1.4rem;
   font-style: italic;
+}
+
+.addon-settings-author {
   color: #ccc;
 }
 
-.addon-settings-license {
-  padding-left: 0.5rem;
-}
-
-.addon-settings-license a:link,
-.addon-settings-license a:visited,
-.addon-settings-license a:hover,
-.addon-settings-license a:active,
 .addon-settings-author a:link,
 .addon-settings-author a:visited,
 .addon-settings-author a:hover,
@@ -484,10 +463,16 @@
   color: #fff;
 }
 
+.addon-settings-license {
+  padding-left: 0.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+
 .user-settings-controls,
 .adapter-settings-controls,
 .addon-settings-controls {
-  padding: 0 1rem 1rem 1rem;
+  padding: 0rem 1rem 1rem 1rem;
   text-align: right;
 }
 
@@ -531,7 +516,6 @@
 
 .addon-discovery-settings-add {
   background-color: #7f93a1;
-  background-image: url('/images/new.svg');
 }
 
 .addon-settings-config {
@@ -539,7 +523,7 @@
   background-repeat: no-repeat;
   background-position: 0.5em;
   padding-left: 4rem;
-  margin-right: 0.8rem;
+  margin-right: .8rem;
   background-image: url('/images/settings-icon.png');
 }
 
@@ -552,7 +536,7 @@
   background-repeat: no-repeat;
   background-position: 0.5em;
   padding-left: 4rem;
-  margin-right: 0.8rem;
+  margin-right: .8rem;
   background-image: url('/images/update-icon.svg');
 }
 
@@ -576,7 +560,7 @@
 
 .addon-settings-remove,
 .user-settings-remove {
-  margin-right: 0.8rem;
+  margin-right: .8rem;
   background-image: url('/images/remove.svg');
 }
 
@@ -588,12 +572,16 @@
 
   .addon-settings-update {
     margin-right: 0;
-    margin-left: 0.8rem;
+    margin-left: .8rem;
   }
 
   .addon-settings-config {
     margin-right: 0;
   }
+}
+
+.addon-discovery-settings-add {
+  background-image: url('/images/new.svg');
 }
 
 #add-user-button,
@@ -650,78 +638,90 @@
   left: -1000em;
 }
 
-/* stylelint-disable no-descending-specificity */
-:root .network-checkbox + label::before {
-  content: '';
+#network-settings-wifi-show-password + label:before {
+  float: none;
+  margin: -1rem 1rem -1rem -0.5rem;
+}
+
+#network-settings-wlan-show-password-wrap span,
+#network-settings-wifi .network-settings-wrap span {
+  width: 14rem;
+  display: inline-block;
+  text-align: left;
+}
+
+#network-settings-wlan-show-password-wrap span {
+  margin-left: -2rem;
+}
+
+#edit-user-form span {
+  max-width: calc(100% - 4rem);
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  top: -1.6rem;
+}
+
+:root .network-checkbox + label:before {
+  content: "";
   display: inline-block;
   width: 3rem;
   height: 3rem;
   float: left;
   margin: 1rem;
-  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-:root .user-checkbox + label::before {
-  content: '';
+:root .user-checkbox + label:before {
+  content: "";
   display: inline-block;
   width: 3rem;
   height: 3rem;
   margin: 1rem 1rem 1rem -1rem;
-  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-:root .update-checkbox + label::before,
-:root .developer-checkbox + label::before,
-:root .experiment-checkbox + label::before {
-  content: '';
+:root .update-checkbox + label:before,
+:root .developer-checkbox + label:before,
+:root .experiment-checkbox + label:before {
+  content: "";
   display: inline-block;
   width: 3rem;
   height: 3rem;
   float: right;
   margin-top: -0.25rem;
-  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
+  background: url("/images/checkbox-sprite.png") no-repeat 0 0;
   background-size: 3rem auto;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-:root .update-checkbox:checked + label::before,
-:root .network-checkbox:checked + label::before,
-:root .user-checkbox:checked + label::before,
-:root .developer-checkbox:checked + label::before,
-:root .experiment-checkbox:checked + label::before {
+:root .update-checkbox:checked + label:before,
+:root .network-checkbox:checked + label:before,
+:root .user-checkbox:checked + label:before,
+:root .developer-checkbox:checked + label:before,
+:root .experiment-checkbox:checked + label:before {
   background-position: 0 -3rem;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-:root .update-checkbox:disabled + label::before,
-:root .network-checkbox:disabled + label::before,
-:root .user-checkbox:disabled + label::before,
-:root .developer-checkbox:disabled + label::before,
-:root .experiment-checkbox:disabled + label::before {
+:root .update-checkbox:disabled + label:before,
+:root .network-checkbox:disabled + label:before,
+:root .user-checkbox:disabled + label:before,
+:root .developer-checkbox:disabled + label:before,
+:root .experiment-checkbox:disabled + label:before {
   background-position: 0 -6rem;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-:root .update-checkbox:checked:disabled + label::before,
-:root .network-checkbox:checked:disabled + label::before,
-:root .user-checkbox:checked:disabled + label::before,
-:root .developer-checkbox:checked:disabled + label::before,
-:root .experiment-checkbox:checked:disabled + label::before {
+:root .update-checkbox:checked:disabled + label:before,
+:root .network-checkbox:checked:disabled + label:before,
+:root .user-checkbox:checked:disabled + label:before,
+:root .developer-checkbox:checked:disabled + label:before,
+:root .experiment-checkbox:checked:disabled + label:before {
   background-position: 0 -9rem;
 }
-/* stylelint-enable no-descending-specificity */
 
-#enable-self-updates-checkbox + label::before,
-#domain-settings-local-checkbox + label::before {
+#enable-self-updates-checkbox + label:before,
+#domain-settings-local-checkbox + label:before {
   float: none;
   vertical-align: middle;
   margin-right: 0.5rem;
@@ -732,7 +732,6 @@
 }
 
 /* Uncomment this and change "example" to add a new experiment */
-
 /*
 #example-experiment-item {
   background-image: url('/images/example-icon.svg');
@@ -768,6 +767,9 @@
   background: #305067;
 }
 
+#update-settings-up-to-date {
+}
+
 .authorization-item {
   position: relative;
   padding-left: 12rem;
@@ -790,6 +792,7 @@
   top: 50%;
   transform: translateY(-50%);
   background-color: #48779a;
+
   background-image: url('/images/stop-16.svg');
   background-position: 1rem;
   background-size: 1.2rem;
@@ -847,22 +850,6 @@
   text-align: right;
 }
 
-#network-settings-wifi-show-password + label::before {
-  float: none;
-  margin: -1rem 1rem -1rem -0.5rem;
-}
-
-#network-settings-wlan-show-password-wrap span {
-  margin-left: -2rem;
-}
-
-#network-settings-wlan-show-password-wrap span,
-#network-settings-wifi .network-settings-wrap span {
-  width: 14rem;
-  display: inline-block;
-  text-align: left;
-}
-
 .network-button {
   display: block;
   grid-column: 2 / 3;
@@ -896,7 +883,7 @@
 }
 
 .wireless-network-info-disconnected {
-  color: #f95 !important;
+  color: #ff9955 !important;
 }
 
 .wireless-network-icon {
@@ -907,25 +894,13 @@
   float: right;
 }
 
-/* stylelint-disable no-descending-specificity */
-.network-settings-wrap input[type='password'],
-.network-settings-wrap input[type='text'],
+.network-settings-wrap input[type="password"],
+.network-settings-wrap input[type="text"],
 .network-select,
 .user-form input {
   display: block;
-  margin: 1rem;
-}
-/* stylelint-enable no-descending-specificity */
-
-.network-settings-wrap input[type='password'],
-.network-settings-wrap input[type='text'],
-.network-select {
   width: 18rem;
-}
-
-/* stylelint-disable-next-line no-descending-specificity */
-.user-form input {
-  width: 26rem;
+  margin: 1rem;
 }
 
 .localization-select {
@@ -941,14 +916,14 @@
 }
 
 .user-form .error {
-  color: #f95;
+  color: #ff9955;
 }
 
-.network-settings-wrap input[type='text'],
-.network-settings-wrap input[type='password'],
-.user-form input[type='text'],
-.user-form input[type='password'],
-.user-form input[type='email'] {
+.network-settings-wrap input[type="text"],
+.network-settings-wrap input[type="password"],
+.user-form input[type="text"],
+.user-form input[type="password"],
+.user-form input[type="email"] {
   height: 2.3rem;
   background-color: #d2d9de;
   border: none;
@@ -956,13 +931,12 @@
   padding: 0.5rem;
 }
 
-.user-form input[type='text'],
-.user-form input[type='password'],
-.user-form input[type='email'] {
+.user-form input[type="text"],
+.user-form input[type="password"],
+.user-form input[type="email"] {
   margin: 1rem auto;
 }
 
-/* stylelint-disable no-descending-specificity */
 .network-button,
 .user-form button {
   font-size: 1.6rem;
@@ -972,23 +946,18 @@
   padding: 1rem 4rem;
   color: #fff;
 }
-/* stylelint-enable no-descending-specificity */
 
-/* stylelint-disable no-descending-specificity */
-.network-button::-moz-focus-inner,
-.user-form button::-moz-focus-inner {
-  border: 0;
-}
-/* stylelint-enable no-descending-specificity */
-
-/* stylelint-disable no-descending-specificity */
 .network-button:hover,
 .network-button:active,
 .user-form button:hover,
 .user-form button:active {
   background-color: #658196;
 }
-/* stylelint-enable no-descending-specificity */
+
+.network-button::-moz-focus-inner,
+.user-form button::-moz-focus-inner {
+  border: 0;
+}
 
 .network-button:disabled {
   background-color: #597285;
@@ -1033,26 +1002,20 @@
   color: #fff;
 }
 
-/* stylelint-disable-next-line no-descending-specificity */
-#edit-user-form span {
-  max-width: calc(100% - 4rem);
-  display: inline-block;
-  text-align: left;
-  position: relative;
-  top: -1.6rem;
-}
-
 #user-settings-mfa {
   padding-top: 4rem;
 }
 
 #user-settings-mfa-secret {
   word-break: break-all;
-  padding-bottom: 4rem;
 }
 
 #user-settings-mfa-qr-code {
   padding: 2rem 0 2rem 0;
+}
+
+#user-settings-mfa-secret {
+  padding-bottom: 4rem;
 }
 
 #user-settings-mfa-error {
