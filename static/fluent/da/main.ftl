@@ -231,6 +231,10 @@ context-menu-remove = Fjern
 OnOffSwitch = Tænd/Sluk-kontakt
 ColorControl = Farvekontrol
 ColorSensor = Farvesensor
+BinarySensor = Binær sensor
+SmartPlug = Smart stikkontakt
+Light = Lys
+DoorSensor = Dørsensor
 
 ## Properties
 
