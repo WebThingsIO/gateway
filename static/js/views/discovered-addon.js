@@ -135,8 +135,11 @@ class DiscoveredAddon {
   handleLicense(e) {
     if (e.target.getAttribute('data-id')) {
       API.getAddonsInfo().then((data) => {
-        const licenseUrl =
-          '${data.urls[0]}/license/${e.target.getAttribute("data-id")}';
+        const addon_id = 'data-id';
+        const licenseUrl = `
+          ${data.urls[0]}/license/
+          ${e.target.getAttribute(addon_id)}`;
+        console.log(licenseUrl);
         let modal = document.getElementById('media-modal');
         if (modal == null) {
           const modalContainer = document.createElement('div');
