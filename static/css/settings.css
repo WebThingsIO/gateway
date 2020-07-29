@@ -483,6 +483,7 @@
   padding-left: 0.5rem;
   cursor: pointer;
   color: #fff;
+  text-decoration: underline;
 }
 
 .user-settings-controls,
