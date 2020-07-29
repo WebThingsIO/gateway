@@ -127,7 +127,7 @@ class InstalledAddon {
     const toggleButton = document.getElementById(
       `addon-toggle-${Utils.escapeHtmlForIdClass(this.id)}`);
     toggleButton.addEventListener('click', this.handleToggle.bind(this));
-	
+
     const licenseButton = document.getElementById(
       `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
     licenseButton.addEventListener('click', this.handleLicense.bind(this));
@@ -254,17 +254,16 @@ class InstalledAddon {
         button.disabled = false;
       });
   }
-  
+
   /**
    * Handle a click on the license button.
    */
   handleLicense(e) {
     if (e.target.getAttribute('data-id')) {
       API.getAddonsInfo().then((data) => {
-        const addon_id = 'data-id';
         const licenseUrl = `
           ${data.urls[0]}/license/
-          ${e.target.getAttribute(addon_id)}`;
+          ${e.target.getAttribute('data-id')}`;
         console.log(licenseUrl);
         let modal = document.getElementById('media-modal');
         if (modal == null) {
