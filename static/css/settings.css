@@ -466,21 +466,22 @@
 .addon-settings-author {
   font-size: 1.4rem;
   font-style: italic;
+}
+
+.addon-settings-author {
   color: #ccc;
 }
 
-.addon-settings-license {
-  padding-left: 0.5rem;
-}
-
-.addon-settings-license a:link,
-.addon-settings-license a:visited,
-.addon-settings-license a:hover,
-.addon-settings-license a:active,
 .addon-settings-author a:link,
 .addon-settings-author a:visited,
 .addon-settings-author a:hover,
 .addon-settings-author a:active {
+  color: #fff;
+}
+
+.addon-settings-license {
+  padding-left: 0.5rem;
+  cursor: pointer;
   color: #fff;
 }
 

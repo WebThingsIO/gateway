@@ -219,11 +219,3 @@
 #addon-config-settings .button-submit:active {
   background-color: #658196;
 }
-
-.addon-settings-license {
-  cursor: pointer;
-}
-
-.addon-settings-license:hover {
-  color: white;
-}
