@@ -446,6 +446,7 @@ author-unknown = Onbekend
 disable = Uitschakelen
 enable = Inschakelen
 by = door
+license = licentie
 addon-configure = Instellen
 addon-update = Bijwerken
 addon-remove = Verwijderen

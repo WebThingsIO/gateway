@@ -79,8 +79,9 @@ class InstalledAddon {
           <span class="addon-settings-author">
             ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span class="addon-settings-license">
-            (<a href="${this.licenseUrl}" target="_blank" rel="noopener">license</a>)
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" 
+            data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
+            (${fluent.getMessage('license')})
           </span>
         </div>
         <div class="addon-settings-controls">
@@ -126,6 +127,10 @@ class InstalledAddon {
     const toggleButton = document.getElementById(
       `addon-toggle-${Utils.escapeHtmlForIdClass(this.id)}`);
     toggleButton.addEventListener('click', this.handleToggle.bind(this));
+
+    const licenseButton = document.getElementById(
+      `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
+    licenseButton.addEventListener('click', this.handleLicense.bind(this));
   }
 
   /**
@@ -249,6 +254,52 @@ class InstalledAddon {
         button.disabled = false;
       });
   }
+
+  /**
+   * Handle a click on the license button.
+   */
+  handleLicense(e) {
+    if (e.target.dataset.id) {
+      API.getAddonsInfo().then((data) => {
+        const licenseUrl = `${data.urls[0]}/license/${e.target.dataset.id}`;
+        let modal = document.getElementById('media-modal');
+        if (modal == null) {
+          const modalContainer = document.createElement('div');
+          modalContainer.className = 'media-modal';
+          modalContainer.id = 'media-modal';
+          const modalFrame = document.createElement('div');
+          modalFrame.className = 'media-modal-frame';
+          const content = `<div class="media-modal-close" 
+            id="modal-close-button"></div>
+            <div class="media-modal-content">
+            <p id="media-modal-text"></p></div>`;
+          modalFrame.innerHTML = content;
+          modalContainer.appendChild(modalFrame);
+          document.body.appendChild(modalContainer);
+          const modalCloseBtn = document.getElementById('modal-close-button');
+          modalCloseBtn.addEventListener(
+            'click',
+            () => {
+              modal = document.getElementById('media-modal');
+              modal.parentNode.removeChild(modal);
+            }
+          );
+          fetch(licenseUrl)
+            .then((response) => {
+              return response.text();
+            })
+            .then((data) => {
+              document.getElementById('media-modal-text').innerText = data;
+            })
+            .catch(() => {
+              document.getElementById('media-modal-text').innerText =
+                fluent.getMessage('failed-read-file');
+            });
+        }
+      });
+    }
+  }
+
 }
 
 module.exports = InstalledAddon;
