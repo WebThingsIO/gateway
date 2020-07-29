@@ -76,9 +76,28 @@ network-settings-gateway = Gateway
 network-settings-done = Færdig
 network-settings-username = Brugernavn
 network-settings-router-ip = Routerens IP-adresse
+network-settings-enable-wifi = Aktiver Wi-Fi
+network-settings-network-name = Netværksnavn (SSID)
+network-settings-changing = Ændrer netværksinstillinger. Dette kan tage et øjeblik.
+failed-ethernet-configure = Konfigurering af ethernet mislykkedes.
+failed-wifi-configure = Konfigurering af Wi-Fi mislykkedes.
+failed-wan-configure = Konfigurering af WAN mislykkedes.
+failed-lan-configure = Konfigurering af LAN mislykkedes.
+failed-wlan-configure = Konfigurering af WLAN mislykkedes.
 
 ## User Settings
 
+create-user =
+    .aria-label = Tilføj en ny bruger
+user-settings-input-name =
+    .placeholder = Navn
+user-settings-input-totp =
+    .placeholder = 2FA-kode
+user-settings-mfa-enable = Aktivér totrinsgodkendelse
+user-settings-mfa-scan-code = Scan den følgende kode med en totrins-godkendelsesapp.
+user-settings-mfa-secret = I tilfælde af at QR-koden ovenfor ikke virker, er dette din nye TOTP-hemmelighed:
+user-settings-mfa-enter-code = Indtast koden fra din godkendelses-app nedenfor.
+user-settings-mfa-verify = Bekræft
 
 ## Adapter Settings
 
