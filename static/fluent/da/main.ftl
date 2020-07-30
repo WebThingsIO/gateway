@@ -39,7 +39,9 @@ upload-floorplan-hint = (.svg anbefales)
 settings-domain = Domæne
 settings-network = Netværk
 settings-users = Brugere
+settings-add-ons = Tilføjelser
 settings-adapters = Adaptere
+settings-localization = Oversættelse
 settings-updates = Opdateringer
 settings-authorizations = Tilladelser
 settings-experiments = Eksperimenter
@@ -48,6 +50,7 @@ settings-developer = Udvikler
 ## Domain Settings
 
 domain-settings-local-label = Lokal adgang
+domain-settings-local-update = Opdater værtsnavn
 domain-settings-remote-access = Fjernadgang
 domain-settings-local-name =
     .placeholder = gateway
@@ -67,6 +70,7 @@ network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurér
 network-settings-internet-wan = Internet (WAN)
+network-settings-wan-mode = Tilstand
 network-settings-home-network-lan = Hjemmenetværk (LAN)
 network-settings-wifi-wlan = Wi-FI (WLAN)
 network-settings-ip-address = IP-adresse
@@ -99,6 +103,8 @@ create-user =
     .aria-label = Tilføj en ny bruger
 user-settings-input-name =
     .placeholder = Navn
+user-settings-input-email =
+    .placeholder = Mailadresse
 user-settings-input-password =
     .placeholder = Adgangskode
 user-settings-input-totp =
@@ -514,6 +520,9 @@ router-setup-password-mismatch = Adgangskoderne skal være ens
 
 ## Wi-Fi Setup Page
 
+wifi-setup-input-password =
+    .placeholder = Adgangskode
+wifi-setup-show-password = Vis adgangskode
 wifi-setup-skip = Spring over
 
 ## Connecting to Wi-Fi Page
