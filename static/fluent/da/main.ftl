@@ -17,6 +17,7 @@ wordmark =
 
 ## Menu Items
 
+things-menu-item = Ting
 rules-menu-item = Regler
 logs-menu-item = Logfiler
 settings-menu-item = Indstillinger
@@ -26,6 +27,8 @@ log-out-button = Log ud
 
 thing-details =
     .aria-label = Vis egenskaber
+add-things =
+    .aria-label = Tilføj nye ting
 
 ## Floorplan
 
@@ -480,6 +483,10 @@ local-token-copy-token = Kopiér token
 ## Router Setup Page
 
 router-setup-title = Opsætning af router — { -webthings-gateway-brand }
+router-setup-input-ssid =
+    .placeholder = Netværksnavn
+router-setup-create =
+    .value = Opret
 
 ## Wi-Fi Setup Page
 
@@ -497,9 +504,31 @@ connecting-warning = Bemærk: Hvis du ikke er i stand til at indlæse { $domain 
 
 ## UI Updates
 
+ui-update-available = En opdateret brugergrænseflade er tilgængelig.
+ui-update-reload = Genindlæs
+ui-update-close = Luk
 
 ## General Terms
 
+ok = Ok
+ellipsis = …
+event-log = Hændelseslog
+edit = Redigér
+remove = Fjern
+processing = Behandler…
+submit = Indsend
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menu
+back-button =
+    .aria-label = Tilbage
+overflow-button =
+    .aria-label = Yderligere handlinger
+submit-button =
+    .aria-label = Indsend
+edit-button =
+    .aria-label = Redigér
+save-button =
+    .aria-label = Gem
