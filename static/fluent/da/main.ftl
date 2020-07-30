@@ -77,7 +77,11 @@ network-settings-static-ip-address = Statisk IP-adresse
 network-settings-network-mask = Netværksmaske
 network-settings-gateway = Gateway
 network-settings-done = Færdig
+network-settings-wifi-password =
+    .placeholder = Adgangskode
+network-settings-show-password = Vis adgangskode
 network-settings-username = Brugernavn
+network-settings-password = Adgangskode
 network-settings-router-ip = Routerens IP-adresse
 network-settings-dhcp-server = DHCP-server
 network-settings-enable-wifi = Aktiver Wi-Fi
@@ -95,6 +99,8 @@ create-user =
     .aria-label = Tilføj en ny bruger
 user-settings-input-name =
     .placeholder = Navn
+user-settings-input-password =
+    .placeholder = Adgangskode
 user-settings-input-totp =
     .placeholder = 2FA-kode
 user-settings-mfa-enable = Aktivér totrinsgodkendelse
@@ -103,6 +109,13 @@ user-settings-mfa-secret = I tilfælde af at QR-koden ovenfor ikke virker, er de
 user-settings-mfa-enter-code = Indtast koden fra din godkendelses-app nedenfor.
 user-settings-mfa-verify = Bekræft
 user-settings-mfa-backup-codes = Dette er dine backup-koder. Hver af dem kan kun benyttes én gang. Gem dem et sikkert sted.
+user-settings-input-new-password =
+    .placeholder = Ny adgangskode (valgfrit)
+user-settings-input-confirm-new-password =
+    .placeholder = Bekræft den nye adgangskode
+user-settings-input-confirm-password =
+    .placeholder = Bekræft adgangskode
+user-settings-password-mismatch = Adgangskoderne er ikke ens
 user-settings-save = Gem
 
 ## Adapter Settings
@@ -247,6 +260,7 @@ Camera = Kamera
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Lås
+Thing = Ting
 
 ## Properties
 
@@ -364,6 +378,8 @@ new-thing-cancel = Annuller
 new-thing-submit = Indsend
 new-thing-username =
     .placeholder = Indtast brugernavn
+new-thing-password =
+    .placeholder = Indtast adgangskode
 new-thing-credentials-error = Ugyldige loginoplysninger
 new-thing-saved = Gemt
 new-thing-done = Færdig
@@ -440,13 +456,16 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Login — { -webthings-gateway-brand }
 login-log-in = Log ind
+login-wrong-credentials = Brugernavn eller adgangskode er forkert.
 login-wrong-totp = Godkendelseskoden er forkert.
 login-enter-totp = Indtast koden fra godkendelses-app.
 
 ## Create First User Page
 
+signup-title = Opret bruger — { -webthings-gateway-brand }
 signup-welcome = Velkommen
 signup-create-account = Opret din første brugerkonto:
+signup-password-mismatch = Adgangskoderne er ikke ens
 signup-next = Næste
 
 ## Tunnel Setup Page
@@ -485,8 +504,13 @@ local-token-copy-token = Kopiér token
 router-setup-title = Opsætning af router — { -webthings-gateway-brand }
 router-setup-input-ssid =
     .placeholder = Netværksnavn
+router-setup-input-password =
+    .placeholder = Adgangskode
+router-setup-input-confirm-password =
+    .placeholder = Bekræft adgangskode
 router-setup-create =
     .value = Opret
+router-setup-password-mismatch = Adgangskoderne skal være ens
 
 ## Wi-Fi Setup Page
 
