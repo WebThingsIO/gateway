@@ -453,6 +453,7 @@ author-unknown = Невідомо
 disable = Вимкнути
 enable = Увімкнути
 by = від
+license = ліцензія
 addon-configure = Налаштувати
 addon-update = Оновити
 addon-remove = Вилучити
