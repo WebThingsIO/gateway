@@ -446,6 +446,7 @@ author-unknown = 不明
 disable = 無効化
 enable = 有効化
 by = 作者:
+license = ライセンス
 addon-configure = 設定変更
 addon-update = 更新
 addon-remove = 削除
