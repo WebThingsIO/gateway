@@ -539,6 +539,8 @@ authorize-title = Valtuuspyyntö — { -webthings-gateway-brand }
 authorize-authorization-request = Valtuuspyyntö
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> haluaa käyttää yhdyskäytävääsi laitteiden <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = lähteestä <<domain>>
 authorize-monitor-and-control = tarkasteluun ja hallintaan
 authorize-monitor = tarkasteluun
 authorize-allow-all = Salli kaikille esineille
