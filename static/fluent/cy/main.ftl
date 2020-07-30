@@ -474,6 +474,7 @@ author-unknown = Anhysbys
 disable = Analluogi
 enable = Galluogi
 by = gan
+license = trwydded
 addon-configure = Ffurfweddu
 addon-update = Diweddaru
 addon-remove = Tynnu
