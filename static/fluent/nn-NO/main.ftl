@@ -446,6 +446,7 @@ author-unknown = Ukend
 disable = Slå av
 enable = Slå på
 by = av
+license = lisens
 addon-configure = Konfigurer
 addon-update = Oppdater
 addon-remove = Fjern
