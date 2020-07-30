@@ -353,6 +353,10 @@ abbrev-foot = ft
 unknown-device-type = Ukendt enhedstype
 new-thing-choose-icon = Vælg ikon…
 new-thing-save = Gem
+new-thing-pin =
+    .placeholder = Indtast PIN
+new-thing-pin-error = Forkert PIN
+new-thing-pin-invalid = Ugyldig PIN
 new-thing-cancel = Annuller
 new-thing-submit = Indsend
 new-thing-username =
@@ -363,33 +367,92 @@ new-thing-done = Færdig
 
 ## New Web Thing View
 
+loading = Indlæser…
 
 ## Empty div Messages
 
+no-things = Ingen enheder. Klik på + for at søge efter tilgængelige enheder.
+action-not-found = Handling blev ikke fundet.
 
 ## Add-on Settings
 
+author-unknown = Ukendt
+disable = Deaktiver
+enable = Aktiver
+by = af
+addon-configure = Konfigurér
+addon-update = Opdater
+addon-remove = Fjern
+addon-updating = Opdaterer…
+addon-updated = Opdateret
+addon-update-failed = Mislykkedes
+addon-config-applying = Anvender…
+addon-config-apply = Anvend
+addon-discovery-added = Tilføjet
+addon-discovery-add = Tilføj
+addon-discovery-installing = Installerer…
+addon-discovery-failed = Mislykkedes
+addon-search =
+    .placeholder = Søg
 
 ## Page Titles
 
+settings = Indstillinger
+domain = Domæne
+users = Brugere
+edit-user = Rediger bruger
+add-user = Tilføj bruger
+addon-config = Konfigurér udvidelse
+addon-discovery = Opdag nye udvidelser
+experiments = Eksperimenter
+localization = Oversættelse
+updates = Opdateringer
+authorizations = Godkendelser
+developer = Udvikler
+network = Netværk
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Ikon
 
 ## Errors
 
+unknown-state = Ukendt tilstand.
+error = Fejl
+errors = Fejl
+gateway-unreachable = Gateway utilgængelig
+more-information = Mere information
+invalid-file = Ugyldig fil.
+failed-read-file = Filen kunne ikke læses.
+failed-save = Kunne ikke gemme.
 
 ## Schema Form
 
+unsupported-field = Filtypen er ikke understøttet
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Login — { -webthings-gateway-brand }
+login-log-in = Log ind
+login-wrong-totp = Godkendelseskoden er forkert.
+login-enter-totp = Indtast koden fra godkendelses-app.
 
 ## Create First User Page
 
+signup-welcome = Velkommen
+signup-create-account = Opret din første brugerkonto:
+signup-next = Næste
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Vælg webadresse — { -webthings-gateway-brand }
+tunnel-setup-welcome = Velkommen
+tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
+tunnel-setup-opt-in = Hold mig opdateret om nye funktioner og muligheder for at bidrage.
+tunnel-setup-privacy-policy = Privatlivspolitik
 
 ## Authorize Page
 
