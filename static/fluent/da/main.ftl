@@ -20,6 +20,7 @@ wordmark =
 things-menu-item = Ting
 rules-menu-item = Regler
 logs-menu-item = Logfiler
+floorplan-menu-item = Plantegning
 settings-menu-item = Indstillinger
 log-out-button = Log ud
 
@@ -32,6 +33,7 @@ add-things =
 
 ## Floorplan
 
+upload-floorplan = Upload plantegning…
 upload-floorplan-hint = (.svg anbefales)
 
 ## Top-Level Settings
@@ -84,12 +86,14 @@ network-settings-done = Færdig
 network-settings-wifi-password =
     .placeholder = Adgangskode
 network-settings-show-password = Vis adgangskode
+network-settings-connect = Opret forbindelse
 network-settings-username = Brugernavn
 network-settings-password = Adgangskode
 network-settings-router-ip = Routerens IP-adresse
 network-settings-dhcp-server = DHCP-server
 network-settings-enable-wifi = Aktiver Wi-Fi
 network-settings-network-name = Netværksnavn (SSID)
+wireless-connected = Tilsluttet
 network-settings-changing = Ændrer netværksinstillinger. Dette kan tage et øjeblik.
 failed-ethernet-configure = Konfigurering af ethernet mislykkedes.
 failed-wifi-configure = Konfigurering af Wi-Fi mislykkedes.
@@ -138,6 +142,7 @@ experiment-settings-no-experiments = Der er ingen eksperimenter tilgængelige i 
 
 ## Localization Settings
 
+localization-settings-language-region = Sprog og region
 localization-settings-country = Land
 localization-settings-timezone = Tidszone
 localization-settings-language = Sprog
@@ -203,6 +208,7 @@ rule-not = Ikke
 rule-event = Begivenhed
 rule-action = Handling
 rule-configure = Konfigurér…
+rule-time-title = Tidspunkt
 rule-notification = Notifikation
 notification-title = Titel
 notification-message = Besked
@@ -217,7 +223,7 @@ rule-name = Regelnavn
 add-log =
     .aria-label = Opret en ny log
 logs = Logfiler
-logs-create-log-hint = Der er ikke oprette nogen logs. Klik på + for at oprette en ny log.
+logs-create-log-hint = Der er ikke oprettet nogen logs. Klik på + for at oprette en ny log.
 logs-device = Enhed
 logs-property = Egenskab
 logs-property-select =
@@ -240,6 +246,7 @@ logs-server-remove-error = Serverfejl: kunne ikke fjerne logfilen
 
 add-thing-scanning-icon =
     .alt = Scanner
+add-thing-scanning = Leder efter nye enheder…
 add-thing-add-adapters-hint = Der blev ikke fundet nogen nye enheder. Prøv at <a data-l10n-name="add-thing-add-adapters-hint-anchor">tilføje nogle tilføjelser</a>.
 add-thing-add-by-url = Tilføj via URL…
 add-thing-done = Færdig
