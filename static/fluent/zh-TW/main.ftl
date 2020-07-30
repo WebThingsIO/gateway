@@ -439,6 +439,7 @@ author-unknown = 未知
 disable = 停用
 enable = 啟用
 by = 作者:
+license = 授權條款
 addon-configure = 設定
 addon-update = 更新
 addon-remove = 刪除
