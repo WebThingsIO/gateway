@@ -446,6 +446,7 @@ author-unknown = Desconocido
 disable = Deshabilitar
 enable = Habilitar
 by = por
+license = licencia
 addon-configure = Configurar
 addon-update = Actualizar
 addon-remove = Eliminar
