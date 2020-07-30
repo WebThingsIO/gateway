@@ -453,21 +453,44 @@ tunnel-setup-welcome = Velkommen
 tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
 tunnel-setup-opt-in = Hold mig opdateret om nye funktioner og muligheder for at bidrage.
 tunnel-setup-privacy-policy = Privatlivspolitik
+tunnel-setup-input-reclamation-token =
+    .placeholder = Gendannelsestoken
+tunnel-setup-error = Der opstod en fejl under opsætning af subdomænet.
+tunnel-setup-create = Opret
+tunnel-setup-skip = Spring over
+tunnel-setup-time-sync = Venter på, at systemuret bliver indstillet fra nettet. Registrering af domænet vil sandsynligvis mislykkedes indtil uret er sat.
 
 ## Authorize Page
 
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> ønsker adgang til din gateway for at <<function>> enheder.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = fra <<domain>>
+authorize-monitor-and-control = overvåge og styre
+authorize-monitor = overvåge
+authorize-allow =
+    .value = Tillad
+authorize-deny = Afvis
 
 ## Local Token Page
 
+local-token-your-token = Din lokale token er denne <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-copy-token = Kopiér token
 
 ## Router Setup Page
 
+router-setup-title = Opsætning af router — { -webthings-gateway-brand }
 
 ## Wi-Fi Setup Page
 
+wifi-setup-skip = Spring over
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Forbinder til Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Opretter forbindelse til Wi-Fi…
+connecting-connect = Sørg for at du er forbundet til det samme netværk og naviger til { $gateway-link } i din browser for at fortsætte opsætningen.
+connecting-warning = Bemærk: Hvis du ikke er i stand til at indlæse { $domain } skal du finde gatewayens IP adresse på din router.
 
 ## Creating Wi-Fi Network Page
 
