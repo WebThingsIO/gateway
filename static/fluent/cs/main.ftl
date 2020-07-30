@@ -453,6 +453,7 @@ author-unknown = Neznámý
 disable = Zakázat
 enable = Povolit
 by = od
+license = licence
 addon-configure = Nastavení
 addon-update = Aktualizovat
 addon-remove = Odebrat
