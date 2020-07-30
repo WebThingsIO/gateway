@@ -446,6 +446,7 @@ author-unknown = 未知
 disable = 禁用
 enable = 启用
 by = 作者：
+license = 许可协议
 addon-configure = 配置
 addon-update = 更新
 addon-remove = 移除
