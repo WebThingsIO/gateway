@@ -397,10 +397,14 @@ loading = Indlæser…
 ## Empty div Messages
 
 no-things = Ingen enheder. Klik på + for at søge efter tilgængelige enheder.
+thing-not-found = Enhed blev ikke fundet.
 action-not-found = Handling blev ikke fundet.
+events-not-found = Denne enhed har ingen handlinger.
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = Find nye tilføjelser.
 author-unknown = Ukendt
 disable = Deaktiver
 enable = Aktiver
@@ -427,6 +431,7 @@ domain = Domæne
 users = Brugere
 edit-user = Rediger bruger
 add-user = Tilføj bruger
+addons = Tilføjelser
 addon-config = Konfigurér udvidelse
 addon-discovery = Opdag nye udvidelser
 experiments = Eksperimenter
@@ -496,12 +501,15 @@ authorize-prompt = <<name>> ønsker adgang til din gateway for at <<function>> e
 authorize-source = fra <<domain>>
 authorize-monitor-and-control = overvåge og styre
 authorize-monitor = overvåge
+authorize-allow-all = Tillad for alle enheder
 authorize-allow =
     .value = Tillad
 authorize-deny = Afvis
 
 ## Local Token Page
 
+local-token-title = Lokal token-service — { -webthings-gateway-brand }
+local-token-header = Lokal token-service
 local-token-your-token = Din lokale token er denne <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-copy-token = Kopiér token
 
