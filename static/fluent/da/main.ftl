@@ -231,6 +231,8 @@ add-log =
 logs = Logfiler
 logs-create-log-hint = Der er ikke oprettet nogen logs. Klik på + for at oprette en ny log.
 logs-device = Enhed
+logs-device-select =
+    .aria-label = Logget enhed
 logs-property = Egenskab
 logs-property-select =
     .aria-label = Egenskab for logning
@@ -246,6 +248,7 @@ logs-save = Gem
 logs-remove-dialog-title = Fjerner
 logs-remove-dialog-warning = Ved at fjerne loggen fjerner du også alle dens data. Er du sikker på, at du vil fjerne den?
 logs-remove = Fjern
+logs-unable-to-create = Kunne ikke oprette logfil
 logs-server-remove-error = Serverfejl: kunne ikke fjerne logfilen
 
 ## Add New Things
@@ -267,8 +270,10 @@ context-menu-remove = Fjern
 ## Capabilities
 
 OnOffSwitch = Tænd/Sluk-kontakt
+MultiLevelSwitch = Trinafbryder
 ColorControl = Farvekontrol
 ColorSensor = Farvesensor
+EnergyMonitor = Energi-overvågning
 BinarySensor = Binær sensor
 SmartPlug = Smart stikkontakt
 Light = Lys
