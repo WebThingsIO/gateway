@@ -275,20 +275,27 @@ ColorControl = Farvekontrol
 ColorSensor = Farvesensor
 EnergyMonitor = Energi-overvågning
 BinarySensor = Binær sensor
+MultiLevelSensor = Flertrins-sensor
 SmartPlug = Smart stikkontakt
 Light = Lys
 DoorSensor = Dørsensor
+MotionSensor = Bevægelses-sensor
+LeakSensor = Lækage-sensor
 PushButton = Trykkontakt
 VideoCamera = Videokamera
 Camera = Kamera
+TemperatureSensor = Temperatur-sensor
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Lås
+Custom = Tilpasset ting
 Thing = Ting
 
 ## Properties
 
 alarm = Alarm
+pushed = Aktiveret
+not-pushed = Ikke trykket
 on-off = Tændt/Slukket
 on = Tændt
 off = Slukket
@@ -309,6 +316,7 @@ open = Åben
 closed = Lukket
 locked = Låst
 unlocked = Ulåst
+jammed = Blokeret
 unknown = Ukendt
 active = Aktiv
 inactive = Inaktiv
@@ -316,8 +324,11 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Du har allerede registreret subdomænet. <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">Klik her</a> for at gendanne det.
+check-email-for-token = Tjek din indbakke og indsæt den tilsendte gendannelses-token ovenfor.
 reclaim-failed = Domænet kunne ikke gendannes.
+subdomain-already-used = Subdomænet bruges allerede. Vælg et andet.
 invalid-subdomain = Ugyldigt subdomæne.
+invalid-email = Ugyldig mailadresse.
 invalid-reclamation-token = Ugyldig gendannelses-token.
 domain-success = Succes! Du omdirigeres, vent venligst…
 issuing-error = Fejl ved udstedelse af certifikat. Prøv igen.
