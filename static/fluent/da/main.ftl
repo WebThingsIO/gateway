@@ -336,10 +336,12 @@ redirecting = Omdirigerer…
 
 ## Booleans
 
+true = Sand
 false = Falsk
 
 ## Time
 
+utils-now = nu
 utils-seconds-ago =
     { $value ->
         [one] { $value } sekund siden
@@ -422,6 +424,7 @@ new-thing-done = Færdig
 ## New Web Thing View
 
 loading = Indlæser…
+new-web-thing-from = Fra
 
 ## Empty div Messages
 
@@ -438,6 +441,7 @@ author-unknown = Ukendt
 disable = Deaktiver
 enable = Aktiver
 by = af
+license = licens
 addon-configure = Konfigurér
 addon-update = Opdater
 addon-remove = Fjern
@@ -460,6 +464,7 @@ domain = Domæne
 users = Brugere
 edit-user = Rediger bruger
 add-user = Tilføj bruger
+adapters = Adaptere
 addons = Tilføjelser
 addon-config = Konfigurér udvidelse
 addon-discovery = Opdag nye udvidelser
@@ -513,6 +518,8 @@ signup-next = Næste
 tunnel-setup-title = Vælg webadresse — { -webthings-gateway-brand }
 tunnel-setup-welcome = Velkommen
 tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
+tunnel-setup-input-subdomain =
+    .placeholder = subdomæne
 tunnel-setup-opt-in = Hold mig opdateret om nye funktioner og muligheder for at bidrage.
 tunnel-setup-privacy-policy = Privatlivspolitik
 tunnel-setup-input-reclamation-token =
@@ -524,6 +531,8 @@ tunnel-setup-time-sync = Venter på, at systemuret bliver indstillet fra nettet.
 
 ## Authorize Page
 
+authorize-title = Anmodning om godkendelse — { -webthings-gateway-brand }
+authorize-authorization-request = Anmodning om godkendelse
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> ønsker adgang til din gateway for at <<function>> enheder.
 # Use <<domain>> to indicate where the domain should be placed
@@ -540,11 +549,13 @@ authorize-deny = Afvis
 local-token-title = Lokal token-service — { -webthings-gateway-brand }
 local-token-header = Lokal token-service
 local-token-your-token = Din lokale token er denne <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Benyt den til at kommunikere sikkert med din gateway via <a data-l10n-name="local-token-bearer-type">token-baseret godkendelse</a>.
 local-token-copy-token = Kopiér token
 
 ## Router Setup Page
 
 router-setup-title = Opsætning af router — { -webthings-gateway-brand }
+router-setup-header = Opret et nyt WiFi-netværk
 router-setup-input-ssid =
     .placeholder = Netværksnavn
 router-setup-input-password =
@@ -557,9 +568,15 @@ router-setup-password-mismatch = Adgangskoderne skal være ens
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Opsætning af Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Vil du oprette forbindelse til et WiFi-netværk?
 wifi-setup-input-password =
     .placeholder = Adgangskode
 wifi-setup-show-password = Vis adgangskode
+wifi-setup-connect =
+    .value = Opret forbindelse
+wifi-setup-network-icon =
+    .alt = WiFi-netværk
 wifi-setup-skip = Spring over
 
 ## Connecting to Wi-Fi Page
@@ -568,9 +585,14 @@ connecting-title = Forbinder til Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Opretter forbindelse til Wi-Fi…
 connecting-connect = Sørg for at du er forbundet til det samme netværk og naviger til { $gateway-link } i din browser for at fortsætte opsætningen.
 connecting-warning = Bemærk: Hvis du ikke er i stand til at indlæse { $domain } skal du finde gatewayens IP adresse på din router.
+connecting-header-skipped = Opsætning af Wi-Fi er sprunget over
+connecting-skipped = Gatewayen startes. Fortsæt opsætningen ved at gå til { $gateway-link } i din browser mens du er forbundet til det samme netværk som din gateway.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Opretter WiFi-netværk — { -webthings-gateway-brand }
+creating-header = Opretter WiFi-netværk…
+creating-content = Opret forbindelse til { $ssid } med den adgangskode, du lige har oprettet. Gå derefter til { $gateway-link } eller { $ip-link } i din browser.
 
 ## UI Updates
 
@@ -585,6 +607,7 @@ ellipsis = …
 event-log = Hændelseslog
 edit = Redigér
 remove = Fjern
+disconnected = Afbrudt
 processing = Behandler…
 submit = Indsend
 
