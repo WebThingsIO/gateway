@@ -158,9 +158,32 @@ const Menu = {
     const newItem = document.createElement('li');
     newItem.appendChild(newLink);
 
-    const logoutItem = document.getElementById('logout').parentNode;
+    // Extensions will go between "Settings" and "Log Out", and will be sorted
     const list = document.querySelector('#main-menu > ul');
-    list.insertBefore(newItem, logoutItem);
+    const nodes = Array.from(list.querySelectorAll('li'));
+    const settingsItem =
+      document.getElementById('settings-menu-item').parentNode;
+    const logoutItem = document.getElementById('logout').parentNode;
+    const extensionItems =
+      nodes.slice(nodes.indexOf(settingsItem) + 1, nodes.indexOf(logoutItem));
+
+    if (extensionItems.length === 0) {
+      list.insertBefore(newItem, logoutItem);
+    } else {
+      let next = logoutItem;
+
+      while (extensionItems.length > 0) {
+        const current = extensionItems.pop();
+
+        if (name.localeCompare(current.firstChild.innerText) > 0) {
+          break;
+        }
+
+        next = current;
+      }
+
+      list.insertBefore(newItem, next);
+    }
 
     this.items[extension.view.id] = [newLink];
   },
