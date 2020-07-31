@@ -116,6 +116,9 @@ class NewThing {
         case 'TemperatureSensor':
           cls = cls || 'temperature-sensor';
           break;
+        case 'HumiditySensor':
+          cls = 'humidity-sensor';
+          break;
         case 'Alarm':
           cls = cls || 'alarm';
           break;
@@ -419,6 +422,9 @@ class NewThing {
         break;
       case 'TemperatureSensor':
         cls = 'temperature-sensor';
+        break;
+      case 'HumiditySensor':
+        cls = 'humidity-sensor';
         break;
       case 'Alarm':
         cls = 'alarm';

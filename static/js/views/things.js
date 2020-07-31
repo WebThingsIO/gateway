@@ -38,6 +38,8 @@ const PushButton = require('../schema-impl/capability/push-button');
 const SmartPlug = require('../schema-impl/capability/smart-plug');
 const TemperatureSensor =
   require('../schema-impl/capability/temperature-sensor');
+const HumiditySensor =
+  require('../schema-impl/capability/humidity-sensor');
 const Thermostat = require('../schema-impl/capability/thermostat');
 const Thing = require('../schema-impl/capability/thing');
 const VideoCamera = require('../schema-impl/capability/video-camera');
@@ -112,6 +114,9 @@ const ThingsScreen = {
           break;
         case 'TemperatureSensor':
           thing = new TemperatureSensor(thingModel, description, format);
+          break;
+        case 'HumiditySensor':
+          thing = new HumiditySensor(thingModel, description, format);
           break;
         case 'Alarm':
           thing = new Alarm(thingModel, description, format);

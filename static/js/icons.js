@@ -53,6 +53,8 @@ function capabilityToIcon(capability) {
       return '/images/thing-icons/camera.svg';
     case 'TemperatureSensor':
       return '/images/thing-icons/temperature_sensor.svg';
+    case 'HumiditySensor':
+      return '/images/thing-icons/multi_level_sensor.svg';
     case 'Alarm':
       return '/images/thing-icons/alarm.svg';
     case 'Thermostat':

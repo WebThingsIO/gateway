@@ -203,6 +203,7 @@ const Utils = {
       'LeakSensor',
       'PushButton',
       'TemperatureSensor',
+      'HumiditySensor',
       'MultiLevelSensor',
       'Alarm',
       'BinarySensor',
