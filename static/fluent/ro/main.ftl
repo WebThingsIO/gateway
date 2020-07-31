@@ -453,6 +453,7 @@ author-unknown = Necunoscut
 disable = Dezactivează
 enable = Activează
 by = de
+license = licență
 addon-configure = Configurează
 addon-update = Actualizează
 addon-remove = Elimină
