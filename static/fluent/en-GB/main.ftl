@@ -286,6 +286,7 @@ PushButton = Push Button
 VideoCamera = Video Camera
 Camera = Camera
 TemperatureSensor = Temperature Sensor
+HumiditySensor = Humidity Sensor
 Alarm = Alarm
 Thermostat = Thermostat
 Lock = Lock
