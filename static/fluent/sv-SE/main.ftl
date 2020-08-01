@@ -286,6 +286,7 @@ PushButton = Tryckknapp
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
+HumiditySensor = Fuktighetssensor
 Alarm = Larm
 Thermostat = Termostat
 Lock = Lås
