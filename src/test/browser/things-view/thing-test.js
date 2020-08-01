@@ -1023,4 +1023,48 @@ describe('Thing', () => {
        expect(detailPage).toBeTruthy();
        await saveStepScreen();
      });
+
+
+  it('should render a humidity sensor and be able to change properties',
+     async () => {
+       const browser = getBrowser();
+       const desc = {
+         id: 'humiditySensor',
+         title: 'Humidity',
+         '@context': 'https://iot.mozilla.org/schemas',
+         '@type': ['HumiditySensor'],
+         properties: {
+           humidity: {
+             '@type': 'HumidityProperty',
+             value: 0,
+             type: 'number',
+             unit: 'percent',
+           },
+         },
+       };
+       await addThing(desc);
+
+       const thingsPage = new ThingsPage(browser);
+       await thingsPage.open();
+
+       await thingsPage.waitForThings();
+       const things = await thingsPage.things();
+       expect(things.length).toEqual(1);
+       const thingTitle = await things[0].thingTitle();
+       expect(thingTitle).toEqual(desc.title);
+       await saveStepScreen();
+
+       await setProperty(desc.id, 'humidity', 50);
+       await waitForExpect(async () => {
+         const things = await thingsPage.things();
+         const level = await things[0].thingLevelDisplayed();
+         expect(level).toEqual('50%');
+       });
+       await saveStepScreen();
+
+       const things2 = await thingsPage.things();
+       const detailPage = await things2[0].openDetailPage();
+       expect(detailPage).toBeTruthy();
+       await saveStepScreen();
+     });
 });

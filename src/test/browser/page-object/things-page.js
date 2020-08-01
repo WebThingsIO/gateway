@@ -21,6 +21,7 @@ class ThingSection extends Section {
         'webthing-light-capability',
         'webthing-multi-level-sensor-capability',
         'webthing-multi-level-switch-capability',
+        'webthing-humidity-sensor-capability',
       ].join(',')
     );
     this.defineElement('power', 'webthing-smart-plug-capability');
