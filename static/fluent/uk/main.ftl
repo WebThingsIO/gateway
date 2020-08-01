@@ -286,6 +286,7 @@ PushButton = Кнопка
 VideoCamera = Відеокамера
 Camera = Камера
 TemperatureSensor = Датчик температури
+HumiditySensor = Датчик вологості
 Alarm = Сигналізація
 Thermostat = Термостат
 Lock = Замок
