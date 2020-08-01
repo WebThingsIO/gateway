@@ -24,6 +24,8 @@ const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
 const EventList = require('./event-list');
 const fluent = require('../fluent');
+const HumiditySensor =
+  require('../schema-impl/capability/humidity-sensor');
 const Icons = require('../icons');
 const LeakSensor = require('../schema-impl/capability/leak-sensor');
 const Light = require('../schema-impl/capability/light');
@@ -38,8 +40,6 @@ const PushButton = require('../schema-impl/capability/push-button');
 const SmartPlug = require('../schema-impl/capability/smart-plug');
 const TemperatureSensor =
   require('../schema-impl/capability/temperature-sensor');
-const HumiditySensor =
-  require('../schema-impl/capability/humidity-sensor');
 const Thermostat = require('../schema-impl/capability/thermostat');
 const Thing = require('../schema-impl/capability/thing');
 const VideoCamera = require('../schema-impl/capability/video-camera');
