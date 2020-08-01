@@ -21,6 +21,8 @@ const ColorSensor = require('../schema-impl/capability/color-sensor');
 const Constants = require('../constants');
 const DoorSensor = require('../schema-impl/capability/door-sensor');
 const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
+const HumiditySensor =
+  require('../schema-impl/capability/humidity-sensor');
 const LeakSensor = require('../schema-impl/capability/leak-sensor');
 const Light = require('../schema-impl/capability/light');
 const Lock = require('../schema-impl/capability/lock');
@@ -172,6 +174,9 @@ const FloorplanScreen = {
               break;
             case 'TemperatureSensor':
               thing = new TemperatureSensor(thingModel, description, format);
+              break;
+            case 'HumiditySensor':
+              thing = new HumiditySensor(thingModel, description, format);
               break;
             case 'Alarm':
               thing = new Alarm(thingModel, description, format);
