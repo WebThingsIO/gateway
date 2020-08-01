@@ -423,7 +423,11 @@ new-thing-done = Færdig
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Indtast URL til web thing
+new-web-thing-label = Web Thing
 loading = Indlæser…
+new-web-thing-multiple = Der blev fundet flere web things
 new-web-thing-from = Fra
 
 ## Empty div Messages
