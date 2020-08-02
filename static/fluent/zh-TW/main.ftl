@@ -286,6 +286,7 @@ PushButton = 按鈕
 VideoCamera = 視訊攝影機
 Camera = 攝影機
 TemperatureSensor = 溫度感應器
+HumiditySensor = 濕度感應器
 Alarm = 警報器
 Thermostat = 溫度控制器
 Lock = 鎖
