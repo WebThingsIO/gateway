@@ -286,6 +286,7 @@ PushButton = 按钮
 VideoCamera = 摄像头
 Camera = 相机
 TemperatureSensor = 温度传感器
+HumiditySensor = 湿度传感器
 Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
