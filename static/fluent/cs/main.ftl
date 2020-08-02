@@ -286,6 +286,7 @@ PushButton = Tlačítko
 VideoCamera = Videokamera
 Camera = Fotoaparát
 TemperatureSensor = Teploměr
+HumiditySensor = Senzor vlhkosti
 Alarm = Budík
 Thermostat = Termostat
 Lock = Zámek
