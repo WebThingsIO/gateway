@@ -286,6 +286,7 @@ PushButton = プッシュボタン
 VideoCamera = ビデオカメラ
 Camera = カメラ
 TemperatureSensor = 温度センサー
+HumiditySensor = 湿度センサー
 Alarm = アラーム
 Thermostat = 温度計
 Lock = 施錠
