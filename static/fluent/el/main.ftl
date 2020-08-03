@@ -413,6 +413,7 @@ author-unknown = Άγνωστο
 disable = Απενεργοποίηση
 enable = Ενεργοποίηση
 by = από
+license = άδεια
 addon-configure = Διαμόρφωση
 addon-update = Ενημέρωση
 addon-remove = Αφαίρεση
