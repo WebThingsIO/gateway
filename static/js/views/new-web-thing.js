@@ -13,6 +13,8 @@
 const API = require('../api');
 const fluent = require('../fluent');
 const Utils = require('../utils');
+const {getClassFromCapability} =
+  require('../components/capability/capabilities');
 
 let idCounter = -1;
 const getNewWebThingId = () => {
@@ -111,74 +113,11 @@ class NewWebThing {
     this.customIconLabel.classList.add('hidden');
     this.customIcon.classList.add('hidden');
 
-    let cls = '';
-    switch (capability) {
-      case 'OnOffSwitch':
-        cls = 'on-off-switch';
-        break;
-      case 'MultiLevelSwitch':
-        cls = 'multi-level-switch';
-        break;
-      case 'ColorControl':
-        cls = 'color-control';
-        break;
-      case 'ColorSensor':
-        cls = 'color-sensor';
-        break;
-      case 'EnergyMonitor':
-        cls = 'energy-monitor';
-        break;
-      case 'BinarySensor':
-        cls = 'binary-sensor';
-        break;
-      case 'MultiLevelSensor':
-        cls = 'multi-level-sensor';
-        break;
-      case 'SmartPlug':
-        cls = 'smart-plug';
-        break;
-      case 'Light':
-        cls = 'light';
-        break;
-      case 'DoorSensor':
-        cls = 'door-sensor';
-        break;
-      case 'MotionSensor':
-        cls = 'motion-sensor';
-        break;
-      case 'LeakSensor':
-        cls = 'leak-sensor';
-        break;
-      case 'PushButton':
-        cls = 'push-button';
-        break;
-      case 'VideoCamera':
-        cls = 'video-camera';
-        break;
-      case 'Camera':
-        cls = 'camera';
-        break;
-      case 'TemperatureSensor':
-        cls = 'temperature-sensor';
-        break;
-      case 'HumiditySensor':
-        cls = 'humidity-sensor';
-        break;
-      case 'Alarm':
-        cls = 'alarm';
-        break;
-      case 'Thermostat':
-        cls = 'thermostat';
-        break;
-      case 'Lock':
-        cls = 'lock';
-        break;
-      case 'Custom':
-        this.customIconLabel.classList.remove('hidden');
-        this.customIcon.classList.remove('hidden');
-        break;
-      default:
-        break;
+    const cls = getClassFromCapability();
+
+    if (capability == 'Custom') {
+      this.customIconLabel.classList.remove('hidden');
+      this.customIcon.classList.remove('hidden');
     }
 
     this.element.classList.remove(
@@ -309,73 +248,13 @@ class NewWebThing {
         const option = document.createElement('option');
         option.value = capability;
         option.innerText = fluent.getMessageStrict(capability) || capability;
-        switch (capability) {
-          case 'OnOffSwitch':
-            cls = cls || 'on-off-switch';
-            break;
-          case 'MultiLevelSwitch':
-            cls = cls || 'multi-level-switch';
-            break;
-          case 'ColorControl':
-            cls = cls || 'color-control';
-            break;
-          case 'ColorSensor':
-            cls = cls || 'color-sensor';
-            break;
-          case 'EnergyMonitor':
-            cls = cls || 'energy-monitor';
-            break;
-          case 'BinarySensor':
-            cls = cls || 'binary-sensor';
-            break;
-          case 'MultiLevelSensor':
-            cls = cls || 'multi-level-sensor';
-            break;
-          case 'SmartPlug':
-            cls = cls || 'smart-plug';
-            break;
-          case 'Light':
-            cls = cls || 'light';
-            break;
-          case 'DoorSensor':
-            cls = cls || 'door-sensor';
-            break;
-          case 'MotionSensor':
-            cls = cls || 'motion-sensor';
-            break;
-          case 'LeakSensor':
-            cls = cls || 'leak-sensor';
-            break;
-          case 'PushButton':
-            cls = cls || 'push-button';
-            break;
-          case 'VideoCamera':
-            cls = cls || 'video-camera';
-            break;
-          case 'Camera':
-            cls = cls || 'camera';
-            break;
-          case 'TemperatureSensor':
-            cls = cls || 'temperature-sensor';
-            break;
-          case 'HumiditySensor':
-            cls = cls || 'humidity-sensor';
-            break;
-          case 'Alarm':
-            cls = cls || 'alarm';
-            break;
-          case 'Thermostat':
-            cls = cls || 'thermostat';
-            break;
-          case 'Lock':
-            cls = cls || 'lock';
-            break;
-          case 'Custom':
-            cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
-            break;
-          default:
-            cls = cls || (capabilities.length > 1 ? '' : 'custom-thing');
-            break;
+
+        if (!cls) {
+          cls = getClassFromCapability(capability);
+
+          if (!cls && capabilities.length == 1) {
+            cls = 'custom-thing';
+          }
         }
 
         if (this.thingType.options.length === 0) {
