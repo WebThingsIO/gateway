@@ -286,6 +286,7 @@ PushButton = Botwm Pwyso
 VideoCamera = Camera Fideo
 Camera = Camera
 TemperatureSensor = Synhwyrydd Tymheredd
+HumiditySensor = Synhwyrydd Lleithder
 Alarm = Larwm
 Thermostat = Thermostat
 Lock = Clo
