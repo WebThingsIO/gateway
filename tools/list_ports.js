@@ -15,11 +15,7 @@ function extraInfo(port) {
   return output;
 }
 
-SerialPort.list((error, ports) => {
-  if (error) {
-    console.log('Error:', error);
-    return;
-  }
+SerialPort.list().then((ports) => {
   for (const port of ports) {
     if (port.vendorId) {
       const vidPid = `${port.vendorId}:${port.productId}`;
