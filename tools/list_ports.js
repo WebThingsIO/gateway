@@ -22,7 +22,7 @@ SerialPort.list().then((ports) => {
       console.log('USB Serial Device', vidPid + extraInfo(port),
                   'found @', port.comName);
     } else {
-      console.log('Serial Device found @', port.comName);
+      console.log('Serial Device found @', port.path);
     }
   }
 });
