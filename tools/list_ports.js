@@ -20,7 +20,7 @@ SerialPort.list().then((ports) => {
     if (port.vendorId) {
       const vidPid = `${port.vendorId}:${port.productId}`;
       console.log('USB Serial Device', vidPid + extraInfo(port),
-                  'found @', port.comName);
+                  'found @', port.path);
     } else {
       console.log('Serial Device found @', port.path);
     }
