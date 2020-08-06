@@ -15,7 +15,7 @@ const API = require('../api');
 const App = require('../app');
 const Constants = require('../constants');
 const {createThingFromCapability} =
-  require('../schema-impl/capability/capabilities-things');
+  require('../schema-impl/capability/capabilities');
 
 // eslint-disable-next-line no-unused-vars
 const FloorplanScreen = {

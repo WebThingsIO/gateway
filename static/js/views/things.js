@@ -19,7 +19,7 @@ const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
 const {createThingFromCapability} =
-  require('../schema-impl/capability/capabilities-things');
+  require('../schema-impl/capability/capabilities');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {

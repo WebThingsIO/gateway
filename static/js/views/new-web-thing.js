@@ -14,7 +14,7 @@ const API = require('../api');
 const fluent = require('../fluent');
 const Utils = require('../utils');
 const {getClassFromCapability} =
-  require('../components/capability/capabilities');
+  require('../schema-impl/capability/capabilities');
 
 let idCounter = -1;
 const getNewWebThingId = () => {

@@ -14,7 +14,7 @@ const API = require('../api');
 const Utils = require('../utils');
 const fluent = require('../fluent');
 const {getClassFromCapability} =
-  require('../components/capability/capabilities');
+  require('../schema-impl/capability/capabilities');
 
 class NewThing {
   /**
