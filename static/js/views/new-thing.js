@@ -317,7 +317,7 @@ class NewThing {
     this.customIconLabel.classList.add('hidden');
     this.customIcon.classList.add('hidden');
 
-    const cls = getClassFromCapability();
+    const cls = getClassFromCapability(capability);
 
     if (capability == 'Custom') {
       this.customIconLabel.classList.remove('hidden');
