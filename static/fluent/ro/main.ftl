@@ -286,6 +286,7 @@ PushButton = Buton de apăsat
 VideoCamera = Cameră video
 Camera = Cameră
 TemperatureSensor = Senzor de temperatură
+HumiditySensor = Senzor de umiditate
 Alarm = Alarmă
 Thermostat = Termostat
 Lock = Yală
