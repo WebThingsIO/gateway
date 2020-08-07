@@ -13,36 +13,13 @@
 const page = require('page');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
-const Alarm = require('../schema-impl/capability/alarm');
 const App = require('../app');
-const BinarySensor = require('../schema-impl/capability/binary-sensor');
-const Camera = require('../schema-impl/capability/camera');
-const ColorControl = require('../schema-impl/capability/color-control');
-const ColorSensor = require('../schema-impl/capability/color-sensor');
 const Constants = require('../constants');
-const DoorSensor = require('../schema-impl/capability/door-sensor');
-const EnergyMonitor = require('../schema-impl/capability/energy-monitor');
 const EventList = require('./event-list');
 const fluent = require('../fluent');
-const HumiditySensor =
-  require('../schema-impl/capability/humidity-sensor');
 const Icons = require('../icons');
-const LeakSensor = require('../schema-impl/capability/leak-sensor');
-const Light = require('../schema-impl/capability/light');
-const Lock = require('../schema-impl/capability/lock');
-const MotionSensor = require('../schema-impl/capability/motion-sensor');
-const MultiLevelSensor =
-  require('../schema-impl/capability/multi-level-sensor');
-const MultiLevelSwitch =
-  require('../schema-impl/capability/multi-level-switch');
-const OnOffSwitch = require('../schema-impl/capability/on-off-switch');
-const PushButton = require('../schema-impl/capability/push-button');
-const SmartPlug = require('../schema-impl/capability/smart-plug');
-const TemperatureSensor =
-  require('../schema-impl/capability/temperature-sensor');
-const Thermostat = require('../schema-impl/capability/thermostat');
-const Thing = require('../schema-impl/capability/thing');
-const VideoCamera = require('../schema-impl/capability/video-camera');
+const {createThingFromCapability} =
+  require('../schema-impl/capability/capabilities');
 
 // eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
@@ -64,76 +41,8 @@ const ThingsScreen = {
   },
 
   renderThing: function(thingModel, description, format) {
-    let thing;
-    if (description.selectedCapability) {
-      switch (description.selectedCapability) {
-        case 'OnOffSwitch':
-          thing = new OnOffSwitch(thingModel, description, format);
-          break;
-        case 'MultiLevelSwitch':
-          thing = new MultiLevelSwitch(thingModel, description, format);
-          break;
-        case 'ColorControl':
-          thing = new ColorControl(thingModel, description, format);
-          break;
-        case 'ColorSensor':
-          thing = new ColorSensor(thingModel, description, format);
-          break;
-        case 'EnergyMonitor':
-          thing = new EnergyMonitor(thingModel, description, format);
-          break;
-        case 'BinarySensor':
-          thing = new BinarySensor(thingModel, description, format);
-          break;
-        case 'MultiLevelSensor':
-          thing = new MultiLevelSensor(thingModel, description, format);
-          break;
-        case 'SmartPlug':
-          thing = new SmartPlug(thingModel, description, format);
-          break;
-        case 'Light':
-          thing = new Light(thingModel, description, format);
-          break;
-        case 'DoorSensor':
-          thing = new DoorSensor(thingModel, description, format);
-          break;
-        case 'MotionSensor':
-          thing = new MotionSensor(thingModel, description, format);
-          break;
-        case 'LeakSensor':
-          thing = new LeakSensor(thingModel, description, format);
-          break;
-        case 'PushButton':
-          thing = new PushButton(thingModel, description, format);
-          break;
-        case 'VideoCamera':
-          thing = new VideoCamera(thingModel, description, format);
-          break;
-        case 'Camera':
-          thing = new Camera(thingModel, description, format);
-          break;
-        case 'TemperatureSensor':
-          thing = new TemperatureSensor(thingModel, description, format);
-          break;
-        case 'HumiditySensor':
-          thing = new HumiditySensor(thingModel, description, format);
-          break;
-        case 'Alarm':
-          thing = new Alarm(thingModel, description, format);
-          break;
-        case 'Thermostat':
-          thing = new Thermostat(thingModel, description, format);
-          break;
-        case 'Lock':
-          thing = new Lock(thingModel, description, format);
-          break;
-        default:
-          thing = new Thing(thingModel, description, format);
-          break;
-      }
-    } else {
-      thing = new Thing(thingModel, description, format);
-    }
+    const thing = createThingFromCapability(
+      description.selectedCapability, thingModel, description, format);
     this.things.push(thing);
     return thing;
   },
