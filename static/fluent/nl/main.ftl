@@ -286,6 +286,7 @@ PushButton = Drukknop
 VideoCamera = Videocamera
 Camera = Camera
 TemperatureSensor = Temperatuursensor
+HumiditySensor = Vochtsensor
 Alarm = Alarm
 Thermostat = Thermostaat
 Lock = Slot
