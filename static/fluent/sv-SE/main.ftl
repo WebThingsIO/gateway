@@ -326,9 +326,9 @@ inactive = Inaktiv
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Det ser ut som att du redan har registrerat den här underdomänen. För att ta tillbaka den <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> klicka här</a>.
-check-email-for-token = Kontrollera din e-post efter en återvånnings token och klistra in den ovan.
+check-email-for-token = Kontrollera din e-post efter en återvinnings-token och klistra in den ovan.
 reclaim-failed = Det gick inte att ta tillbaka domänen.
-subdomain-already-used = Denna underdomän används redan. Välj en annan.
+subdomain-already-used = Underdomänen används redan. Vänligen välj en annan.
 invalid-subdomain = Ogiltig underdomän.
 invalid-email = Ogiltig e-postadress.
 invalid-reclamation-token = Ogiltig återvinningstoken.
@@ -554,8 +554,8 @@ authorize-deny = Neka
 
 local-token-title = Lokal tokentjänst — { -webthings-gateway-brand }
 local-token-header = Lokal tokentjänst
-local-token-your-token = Dina lokala token är detta: <a data-l10n-name="local-token-jwt">JSON webbtoken</a>:
-local-token-use-it = Använd den för att säkert kommunicera med gatewayen genom användning av <a data-l10n-name="local-token-bearer-type"> Tokenbaserad autentisering</a>.
+local-token-your-token = Dina lokala token är denna <a data-l10n-name="local-token-jwt">JSON webb-token</a>:
+local-token-use-it = Använd den för att säkert kommunicera med gatewayen, med <a data-l10n-name="local-token-bearer-type"> Tokenbaserad autentisering</a>.
 local-token-copy-token = Kopiera token
 
 ## Router Setup Page
