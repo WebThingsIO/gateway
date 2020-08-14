@@ -116,7 +116,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA-kod
 user-settings-mfa-enable = Aktivera tvåfaktorautentisering
-user-settings-mfa-scan-code = Skanna följande kod med valfri tvåfaktors autentiseringsapp.
+user-settings-mfa-scan-code = Skanna följande kod med valfri tvåfaktorsautentiseringsapp.
 user-settings-mfa-secret = Det här är din nya TOTP-hemlighet, om QR-koden ovan inte fungerar:
 user-settings-mfa-error = Autentiseringskoden var felaktig.
 user-settings-mfa-enter-code = Ange koden från din autentiseringsapp nedan.
@@ -286,7 +286,7 @@ PushButton = Tryckknapp
 VideoCamera = Videokamera
 Camera = Kamera
 TemperatureSensor = Temperatursensor
-HumiditySensor = Fuktighetssensor
+HumiditySensor = Luftfuktighetssensor
 Alarm = Larm
 Thermostat = Termostat
 Lock = Lås
@@ -346,33 +346,33 @@ false = Falskt
 utils-now = nu
 utils-seconds-ago =
     { $value ->
-        [one] { $value } sekund sen
-       *[other] { $value } sekunder sen
+        [one] { $value } sekund sedan
+       *[other] { $value } sekunder sedan
     }
 utils-minutes-ago =
     { $value ->
-        [one] { $value } minut sen
-       *[other] { $value } minuter sen
+        [one] { $value } minut sedan
+       *[other] { $value } minuter sedan
     }
 utils-hours-ago =
     { $value ->
-        [one] { $value } timme sen
-       *[other] { $value } timmar sen
+        [one] { $value } timme sedan
+       *[other] { $value } timmar sedan
     }
 utils-days-ago =
     { $value ->
-        [one] { $value } dag sen
-       *[other] { $value } dagar sen
+        [one] { $value } dag sedan
+       *[other] { $value } dagar sedan
     }
 utils-weeks-ago =
     { $value ->
-        [one] { $value } vecka sen
-       *[other] { $value } veckor sen
+        [one] { $value } vecka sedan
+       *[other] { $value } veckor sedan
     }
 utils-months-ago =
     { $value ->
-        [one] { $value } månad sen
-       *[other] { $value } månader sen
+        [one] { $value } månad sedan
+       *[other] { $value } månader sedan
     }
 utils-years-ago =
     { $value ->
@@ -414,11 +414,11 @@ new-thing-pin =
 new-thing-pin-error = Felaktig PIN
 new-thing-pin-invalid = Ogiltig PIN
 new-thing-cancel = Avbryt
-new-thing-submit = Skicka in
+new-thing-submit = Skicka
 new-thing-username =
-    .placeholder = Skriv in ditt användarnamn
+    .placeholder = Ange användarnamn
 new-thing-password =
-    .placeholder = Skriv in ditt lösenord
+    .placeholder = Ange lösenord
 new-thing-credentials-error = Felaktiga inloggningsuppgifter
 new-thing-saved = Sparad
 new-thing-done = Klar
