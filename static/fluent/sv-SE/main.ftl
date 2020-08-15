@@ -540,7 +540,7 @@ tunnel-setup-time-sync = Väntar på att systemklockan ska ställas in från Int
 authorize-title = Auktorisationsbegäran — { -webthings-gateway-brand }
 authorize-authorization-request = Auktorisationsbegäran
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
-authorize-prompt = <<name>> vill komma åt din gateway för <<function>> enheter.
+authorize-prompt = <<name>> vill komma åt din gateway för att <<function>> enheter.
 # Use <<domain>> to indicate where the domain should be placed
 authorize-source = från <<domain>>
 authorize-monitor-and-control = övervaka och kontrollera
@@ -570,7 +570,7 @@ router-setup-input-confirm-password =
     .placeholder = Bekräfta lösenord
 router-setup-create =
     .value = Skapa
-router-setup-password-mismatch = Lösenorden måste matcha.
+router-setup-password-mismatch = Lösenorden måste överensstämma.
 
 ## Wi-Fi Setup Page
 
