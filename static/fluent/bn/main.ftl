@@ -433,13 +433,21 @@ new-web-thing-from = থেকে
 
 ## Empty div Messages
 
+no-things = এখনও কোনও ডিভাইস নেই। উপলব্ধ ডিভাইসগুলির জন্য স্ক্যান করতে + ক্লিক করুন।
+thing-not-found = কিছু পাওয়া যায়নি।
+action-not-found = করণীয় পাওয়া যায়নি।
+events-not-found = এই জিনিসে কোন ইভেন্ট নেই।
 
 ## Add-on Settings
 
+add-addons =
+    .aria-label = নতুন অ্যাড-অন খুঁজুন
 author-unknown = অপরিচিত
 disable = নিষ্ক্রিয় করুন
 enable = সক্রিয় করুন
 by = দ্বারা
+license = লাইসেন্স
+addon-configure = কনফিগার
 addon-update = হালনাগাদ
 addon-remove = মুছে ফেলুন
 addon-updating = হালনাগাদ হচ্ছে…
@@ -451,12 +459,23 @@ addon-discovery-added = যোগ করা হয়েছে
 addon-discovery-add = যোগ করুন
 addon-discovery-installing = ইনস্টল হচ্ছে...
 addon-discovery-failed = ব্যর্থ হয়েছে
+addon-search =
+    .placeholder = অনুসন্ধান
 
 ## Page Titles
 
 settings = সেটিংস
 domain = ডোমেইন
+users = ব্যবহারকারী
+edit-user = ব্যবহারকারী সম্পাদনা করুন
+add-user = ব্যবহারকারী যুক্ত করুন
+adapters = অ্যাডাপ্টার
+addons = অ্যাড-অন
+addon-config = অ্যাড-অন কনফিগার করুন
+addon-discovery = নতুন অ্যাড-অন খুঁজুন
+experiments = পরীক্ষানিরীক্ষা
 localization = স্থানীয়করণ
+updates = হালনাগাদ
 authorizations = অনুমোদন
 developer = ডেভেলপার
 network = নেটওয়ার্ক
