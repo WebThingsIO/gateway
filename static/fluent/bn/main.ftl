@@ -428,6 +428,7 @@ new-web-thing-url =
     .placeholder = ওয়েব থিং URL প্রবেশ করুন
 new-web-thing-label = ওয়েব থিং
 loading = লোড হচ্ছে …
+new-web-thing-multiple = একাধিক ওয়েব থিং পাওয়া গেছে
 new-web-thing-from = থেকে
 
 ## Empty div Messages
