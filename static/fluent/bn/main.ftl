@@ -114,6 +114,7 @@ user-settings-input-password =
 user-settings-input-totp =
     .placeholder = 2FA কোড
 user-settings-mfa-verify = যাচাই করুন
+user-settings-mfa-regenerate-codes = ব্যাকআপ কোডগুলি পুনরায় জেনারেট করুন
 user-settings-input-new-password =
     .placeholder = নতুন পাসওয়ার্ড (ঐচ্ছিক):
 user-settings-input-confirm-new-password =
@@ -196,6 +197,9 @@ rule-invalid = অকার্যকর
 rule-delete-prompt = আপনি কি এই নিয়ম স্থায়ীভাবে মুছে ফেলার বিষয়ে নিশ্চিত?
 rule-delete-cancel-button =
     .value = বাতিল করুন
+rule-delete-confirm-button =
+    .value = নিয়ম মুছে ফেলুন
+rule-select-property = প্রোপার্টি নির্বাচন করুন
 rule-not = না
 rule-event = ইভেন্ট
 rule-time-title = দিনের সময়
@@ -213,11 +217,22 @@ rule-name = নিয়মের নাম
 add-log =
     .aria-label = নতুন লগ তৈরি করুন
 logs = লগ
+logs-create-log-hint = কোনও লগ তৈরি হয়নি। লগ তৈরি করতে + ক্লিক করুন।
 logs-device = ডিভাইস
 logs-device-select =
     .aria-label = লগ ডিভাইস
+logs-property = প্রোপার্টি
+logs-retention = ধারণ
+logs-retention-length =
+    .aria-label = লগ ধারণের দৈর্ঘ্য
+logs-retention-unit =
+    .aria-label = লগ ধারণ ইউনিট
+logs-hours = ঘন্টা
+logs-days = দিন
+logs-weeks = সপ্তাহ
 logs-save = সংরক্ষণ করুন
 logs-remove-dialog-title = মুছে ফেলা হচ্ছে
+logs-remove-dialog-warning = লগ অপসারণ করলে এর সমস্ত ডাটাও মুছে যাবে। আপনি কি এটি মুছে ফেলতে চান?
 logs-remove = মুছে ফেলুন
 logs-unable-to-create = লগ তৈরি করা যাচ্ছে না
 
@@ -244,15 +259,19 @@ ColorSensor = রঙ সেন্সর
 EnergyMonitor = শক্তি মনিটর
 BinarySensor = বাইনারি সেন্সর
 SmartPlug = স্মার্ট প্লাগ
+Light = হালকা
+DoorSensor = ডোর সেন্সর
 VideoCamera = ভিডিও ক্যামেরা
 Camera = ক্যামেরা
 TemperatureSensor = তাপমাত্রা সেন্সর
+Thermostat = থার্মোস্টেট
+Thing = জিনিস
 
 ## Properties
 
 alarm = অ্যালার্ম
 pushed = স্থগিত
-on-off = চালু / বন্ধ
+on-off = চালু/বন্ধ
 on = চালু
 off = বন্ধ
 power = ক্ষমতা
@@ -275,7 +294,10 @@ inactive = নিষ্ক্রিয়
 
 ## Domain Setup
 
+tunnel-setup-reclaim-domain = মনে হচ্ছে আপনি ইতিমধ্যে এই সাবডোমেন নিবন্ধন করেছেন। এটি পুনরুদ্ধার করতে <a data-l10n-name="tunnel-setup-reclaim-domain-click-here"> এখানে ক্লিক করুন </a>।
+check-email-for-token = পুনরুদ্ধার টোকেনের জন্য দয়া করে আপনার ইমেল দেখুন এবং এটি উপরে পেস্ট করুন।
 reclaim-failed = ডোমেন পুনরুদ্ধার করা যায়নি।
+subdomain-already-used = এই সাবডোমেন ইতিমধ্যে ব্যবহৃত হয়েছে। দয়া করে অন্য একটি পছন্দ করুন।
 invalid-subdomain = অকার্যকর সাবডোমেন।
 invalid-email = অকার্যকর ইমেইল ঠিকানা।
 invalid-reclamation-token = অকার্যকর পুনরুদ্ধার টোকেন।
@@ -344,8 +366,12 @@ author-unknown = অপরিচিত
 disable = নিষ্ক্রিয় করুন
 enable = সক্রিয় করুন
 by = দ্বারা
+addon-update = হালনাগাদ
 addon-remove = মুছে ফেলুন
+addon-updating = হালনাগাদ হচ্ছে…
+addon-updated = হালনাগাদ হয়েছে
 addon-update-failed = ব্যর্থ হয়েছে
+addon-config-applying = প্রয়োগ করা হচ্ছে…
 addon-config-apply = প্রয়োগ করুন
 addon-discovery-added = যোগ করা হয়েছে
 addon-discovery-add = যোগ করুন
@@ -366,6 +392,7 @@ icon = আইকন
 
 ## Errors
 
+unknown-state = অজানা অবস্থা।
 more-information = আরো তথ্য
 invalid-file = অকার্যকর ফাইল।
 failed-read-file = ফাইলটি পড়তে ব্যর্থ হয়েছে।
@@ -393,6 +420,7 @@ signup-next = পরবর্তী
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = ওয়েব ঠিকানা নির্বাচন করুন — { -webthings-gateway-brand }
 tunnel-setup-welcome = স্বাগতম
 tunnel-setup-input-subdomain =
     .placeholder = সাবডোমেন
@@ -431,10 +459,12 @@ router-setup-input-confirm-password =
     .placeholder = পাসওয়ার্ড নিশ্চিত করুন
 router-setup-create =
     .value = তৈরি করুন
+router-setup-password-mismatch = পাসওয়ার্ড অবশ্যই মিলতে হবে।
 
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi সেটআপ — { -webthings-gateway-brand }
+wifi-setup-header = Wi-Fi নেটওয়ার্কে সংযোগ স্থাপন করবেন?
 wifi-setup-input-password =
     .placeholder = পাসওয়ার্ড
 wifi-setup-show-password = পাসওয়ার্ড দেখান
