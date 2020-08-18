@@ -594,10 +594,12 @@ connecting-header-skipped = Wi-Fi সেটআপ এড়িয়ে গে�
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Wi-Fi নেটওয়ার্ক তৈরি করা হচ্ছে— { -webthings-gateway-brand }
 creating-header = Wi-Fi নেটওয়ার্ক তৈরি করা হচ্ছে ...
 
 ## UI Updates
 
+ui-update-available = একটি আপডেট ইউজার ইন্টারফেস উপলব্ধ।
 ui-update-reload = রিলোড
 ui-update-close = বন্ধ
 
