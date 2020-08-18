@@ -486,6 +486,9 @@ icon = আইকন
 ## Errors
 
 unknown-state = অজানা অবস্থা।
+error = ত্রুটি
+errors = ত্রুটি
+gateway-unreachable = গেটওয়ে ব্যবহারযোগ্য নয়
 more-information = আরো তথ্য
 invalid-file = অকার্যকর ফাইল।
 failed-read-file = ফাইলটি পড়তে ব্যর্থ হয়েছে।
@@ -493,6 +496,7 @@ failed-save = সংরক্ষণ করতে ব্যর্থ হয়ে
 
 ## Schema Form
 
+unsupported-field = অসমর্থিত ফাইল স্কিমা
 
 ## Icon Sources
 
@@ -502,6 +506,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = লগইন — { -webthings-gateway-brand }
 login-log-in = লগ ইন
+login-wrong-credentials = ব্যবহারকারীর নাম বা পাসওয়ার্ড ভুল ছিল।
+login-wrong-totp = প্রমাণীকরণ কোডটি ভুল ছিল।
+login-enter-totp = প্রমাণীকরণকারী অ্যাপ থেকে কোড প্রবেশ করান।
 
 ## Create First User Page
 
@@ -515,13 +522,17 @@ signup-next = পরবর্তী
 
 tunnel-setup-title = ওয়েব ঠিকানা নির্বাচন করুন — { -webthings-gateway-brand }
 tunnel-setup-welcome = স্বাগতম
+tunnel-setup-choose-address = আপনার গেটওয়ের জন্য একটি সুরক্ষিত ওয়েব ঠিকানা নির্বাচন করুন:
 tunnel-setup-input-subdomain =
     .placeholder = সাবডোমেন
 tunnel-setup-opt-in = নতুন বৈশিষ্ট্য এবং অবদানের সুযোগ সম্পর্কে দয়া করে আমাকে আপডেট রাখুন।
 tunnel-setup-privacy-policy = গোপনীয়তা নীতি
+tunnel-setup-input-reclamation-token =
+    .placeholder = পুনরুদ্ধার টোকেন
 tunnel-setup-error = সাবডোমেন সেট আপ করার সময় একটি ত্রুটি দেখা দিয়েছে।
 tunnel-setup-create = তৈরি করুন
 tunnel-setup-skip = এড়িয়ে যান
+tunnel-setup-time-sync = ইন্টারনেট থেকে সিস্টেম ঘড়ির সেট হওয়ার জন্য অপেক্ষা করা হচ্ছে। এটি সম্পূর্ণ না হওয়া পর্যন্ত ডোমেন নিবন্ধকরণ ব্যর্থ হতে পারে।
 
 ## Authorize Page
 
