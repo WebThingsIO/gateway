@@ -211,6 +211,7 @@ rule-delete-cancel-button =
 rule-delete-confirm-button =
     .value = Αφαίρεση κανόνα
 rule-select-property = Επιλογή ιδιότητας
+rule-not = Όχι
 rule-event = Συμβάν
 rule-action = Ενέργεια
 rule-configure = Διαμόρφωση…
@@ -325,7 +326,9 @@ inactive = Ανενεργό
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
+check-email-for-token = Παρακαλούμε ελέγξτε το email σας για το token ανάκτησης και επικολλήστε το παραπάνω.
 reclaim-failed = Δεν ήταν δυνατή η ανάκτηση του τομέα.
+subdomain-already-used = Αυτό ο υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε επιλέξτε έναν διαφορετικό.
 invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
 invalid-reclamation-token = Μη έγκυρο token ανάκτησης.
@@ -422,7 +425,11 @@ new-thing-done = Τέλος
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = Εισαγάγετε το URL του αντικειμένου ιστού
+new-web-thing-label = Αντικείμενο ιστού
 loading = Φόρτωση…
+new-web-thing-multiple = Βρέθηκαν πολλαπλά αντικείμενα ιστού
 new-web-thing-from = από
 
 ## Empty div Messages
