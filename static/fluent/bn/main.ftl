@@ -348,6 +348,36 @@ utils-seconds-ago =
         [one] { $value } সেকেন্ড পূর্বে
        *[other] { $value } সেকেন্ড পূর্বে
     }
+utils-minutes-ago =
+    { $value ->
+        [one] { $value } মিনিট পূর্বে
+       *[other] { $value } মিনিট পূর্বে
+    }
+utils-hours-ago =
+    { $value ->
+        [one] { $value } ঘণ্টা পূর্বে
+       *[other] { $value } ঘণ্টা পূর্বে
+    }
+utils-days-ago =
+    { $value ->
+        [one] { $value } দিন পূর্বে
+       *[other] { $value } দিন পূর্বে
+    }
+utils-weeks-ago =
+    { $value ->
+        [one] { $value } সপ্তাহ পূর্বে
+       *[other] { $value } সপ্তাহ পূর্বে
+    }
+utils-months-ago =
+    { $value ->
+        [one] { $value } মাস পূর্বে
+       *[other] { $value } মাস পূর্বে
+    }
+utils-years-ago =
+    { $value ->
+        [one] { $value } বছর পূর্বে
+       *[other] { $value } বছর পূর্বে
+    }
 minute = মিনিট
 hour = ঘন্টা
 day = দিন
@@ -375,6 +405,7 @@ abbrev-foot = ft
 
 ## New Thing View
 
+unknown-device-type = অজানা ডিভাইসের ধরণ
 new-thing-choose-icon = আইকন পছন্দ করুন ...
 new-thing-save = সংরক্ষণ করুন
 new-thing-pin =
@@ -387,11 +418,15 @@ new-thing-username =
     .placeholder = ইউজার নাম দিন
 new-thing-password =
     .placeholder = পাসওয়ার্ড দিন
+new-thing-credentials-error = ভুল তথ্যাদি
 new-thing-saved = সংরক্ষণ করা হয়েছে
 new-thing-done = সম্পন্ন হয়েছে
 
 ## New Web Thing View
 
+new-web-thing-url =
+    .placeholder = ওয়েব থিং URL প্রবেশ করুন
+new-web-thing-label = ওয়েব থিং
 loading = লোড হচ্ছে …
 new-web-thing-from = থেকে
 
