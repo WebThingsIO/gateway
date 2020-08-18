@@ -174,6 +174,8 @@ failed-to-check-for-updates = Δεν είναι δυνατός ο έλεγχος
 ## Developer Settings
 
 developer-settings-enable-ssh = Ενεργοποίηση SSH
+developer-settings-view-internal-logs = Προβολή εσωτερικών αρχείων καταγραφής
+developer-settings-create-local-authorization = Δημιουργία τοπικής εξουσιοδότησης
 
 ## Rules
 
@@ -189,6 +191,7 @@ rules-preview-button =
     .alt = Προεπισκόπηση
 rules-delete-icon =
     .alt = Διαγραφή
+rules-drag-hint = Σύρετε τις συσκευές σας εδώ για να ξεκινήσετε τη δημιουργία ενός κανόνα
 rules-drag-input-hint = Προσθήκη συσκευής ως εισόδου
 rules-drag-output-hint = Προσθήκη συσκευής ως εξόδου
 rules-scroll-left =
@@ -226,15 +229,27 @@ rule-name = Όνομα κανόνα
 add-log =
     .aria-label = Δημιουργία νέου αρχείου καταγραφής
 logs = Αρχεία καταγραφής
+logs-create-log-hint = Δεν έχετε δημιουργήσει αρχεία καταγραφής. Κάντε κλικ στο + για να δημιουργήσετε ένα αρχείο καταγραφής.
 logs-device = Συσκευή
+logs-device-select =
+    .aria-label = Συσκευή καταγραφής
 logs-property = Ιδιότητα
+logs-property-select =
+    .aria-label = Ιδιότητα αρχείου καταγραφής
 logs-retention = Διατήρηση
+logs-retention-length =
+    .aria-label = Μέγεθος μνήμης αρχείου καταγραφής
+logs-retention-unit =
+    .aria-label = Μονάδα μνήμης αρχείου καταγραφής
 logs-hours = Ώρες
 logs-days = Ημέρες
 logs-weeks = Εβδομάδες
 logs-save = Αποθήκευση
 logs-remove-dialog-title = Αφαίρεση
+logs-remove-dialog-warning = Η αφαίρεση του αρχείο καταγραφής θα αφαιρέσει και όλα τα δεδομένα του. Θέλετε σίγουρα να το διαγράψετε;
 logs-remove = Αφαίρεση
+logs-unable-to-create = Δεν ήταν δυνατή η δημιουργία αρχείου καταγραφής
+logs-server-remove-error = Σφάλμα διακομιστή: δεν ήταν δυνατή η διαγραφή του αρχείου καταγραφής
 
 ## Add New Things
 
@@ -258,8 +273,10 @@ OnOffSwitch = Διακόπτης λειτουργίας
 MultiLevelSwitch = Διακόπτης πολλαπλών επιπέδων
 ColorControl = Έλεγχος χρώματος
 ColorSensor = Αισθητήρας χρώματος
+EnergyMonitor = Εργαλείο εποπτείας ενέργειας
 BinarySensor = Δυαδικός αισθητήρας
 MultiLevelSensor = Αισθητήρας πολλαπλών επιπέδων
+SmartPlug = Έξυπνη πρίζα
 Light = Φως
 DoorSensor = Αισθητήρας πόρτας
 MotionSensor = Αισθητήρας κίνησης
@@ -268,6 +285,7 @@ PushButton = Κουμπί
 VideoCamera = Βιντεοκάμερα
 Camera = Κάμερα
 TemperatureSensor = Αισθητήρας θερμοκρασίας
+HumiditySensor = Αισθητήρας υγρασίας
 Alarm = Συναγερμός
 Thermostat = Θερμοστάτης
 Lock = Κλειδαριά
@@ -290,6 +308,7 @@ frequency = Συχνότητα
 color = Χρώμα
 brightness = Φωτεινότητα
 leak = Διαρροή
+dry = Ξηρασία
 color-temperature = Θερμοκρασία χρώματος
 video-unsupported = Λυπούμαστε, το βίντεο δεν υποστηρίζεται στο πρόγραμμα περιήγησής σας.
 motion = Κίνηση
@@ -306,9 +325,12 @@ inactive = Ανενεργό
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
+reclaim-failed = Δεν ήταν δυνατή η ανάκτηση του τομέα.
 invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
 invalid-reclamation-token = Μη έγκυρο token ανάκτησης.
+domain-success = Επιτυχία! Παρακαλούμε περιμένετε όσο σας ανακατευθύνουμε…
+issuing-error = Σφάλμα κατά την έκδοση πιστοποιητικού. Παρακαλούμε προσπαθήστε ξανά.
 redirecting = Ανακατεύθυνση…
 
 ## Booleans
@@ -478,7 +500,9 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 login-title = Σύνδεση — { -webthings-gateway-brand }
 login-log-in = Σύνδεση
+login-wrong-credentials = Το όνομα χρήστη ή ο κωδικός πρόσβασης ήταν λάθος.
 login-wrong-totp = Ο κωδικός ελέγχου ταυτότητας ήταν εσφαλμένος.
+login-enter-totp = Εισάγετε τον κωδικό από την εφαρμογή ελέγχου ταυτότητάς σας.
 
 ## Create First User Page
 
@@ -492,14 +516,17 @@ signup-next = Επόμενο
 
 tunnel-setup-title = Επιλογή διεύθυνσης ιστού — { -webthings-gateway-brand }
 tunnel-setup-welcome = Καλώς ορίσατε
+tunnel-setup-choose-address = Επιλέξτε μια ασφαλή διεύθυνση ιστού για την πύλη σας:
 tunnel-setup-input-subdomain =
     .placeholder = υποτομέας
+tunnel-setup-opt-in = Επιθυμώ να ενημερώνομαι για νέες δυνατότητες και ευκαιρίες συνεισφοράς.
 tunnel-setup-privacy-policy = Πολιτική απορρήτου
 tunnel-setup-input-reclamation-token =
     .placeholder = Token ανάκτησης
 tunnel-setup-error = Προέκυψε σφάλμα κατά τη ρύθμιση του υποτομέα.
 tunnel-setup-create = Δημιουργία
 tunnel-setup-skip = Παράλειψη
+tunnel-setup-time-sync = Αναμονή για ρύθμιση του ρολογιού συστήματος από το Διαδίκτυο. Η εγγραφή τομέα ενδέχεται να αποτύχει έως ότου η παραπάνω ρύθμιση ολοκληρωθεί.
 
 ## Authorize Page
 
@@ -521,6 +548,7 @@ authorize-deny = Άρνηση
 local-token-title = Τοπική υπηρεσία token — { -webthings-gateway-brand }
 local-token-header = Τοπική υπηρεσία token
 local-token-your-token = Το τοπικό σας token είναι αυτό <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Χρησιμοποιήστε το για ασφαλή επικοινωνία με την πύλη, με <a data-l10n-name="local-token-bearer-type">Εξουσιοδότηση τύπου Bearer</a>.
 local-token-copy-token = Αντιγραφή token
 
 ## Router Setup Page
@@ -554,6 +582,7 @@ wifi-setup-skip = Παράλειψη
 
 connecting-title = Σύνδεση στο Wi-Fi — { -webthings-gateway-brand }
 connecting-header = Σύνδεση στο Wi-Fi…
+connecting-connect = Παρακαλούμε βεβαιωθείτε ότι έχετε συνδεθεί στο ίδιο δίκτυο και μεταβείτε στο { $gateway-link } στο πρόγραμμα περιήγησης σας για να συνεχίσετε την εγκατάσταση.
 connecting-warning = Σημείωση: Αν δεν μπορείτε να φορτώσετε το { $domain }, αναζητήστε τη διεύθυνση IP της πύλης σας στο router σας.
 connecting-header-skipped = Η ρύθμιση Wi-Fi παραλήφθηκε
 connecting-skipped = Η πύλη εκκινείται τώρα. Μεταβείτε στο { $gateway-link } από το πρόγραμμα περιήγησής σας, ενώ έχετε συνδεθεί στο ίδιο δίκτυο με την πύλη για να συνεχίσετε τη ρύθμιση.
