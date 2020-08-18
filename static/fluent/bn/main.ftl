@@ -111,6 +111,9 @@ user-settings-input-email =
     .placeholder = ইমেইল
 user-settings-input-password =
     .placeholder = পাসওয়ার্ড
+user-settings-input-totp =
+    .placeholder = 2FA কোড
+user-settings-mfa-verify = যাচাই করুন
 user-settings-input-new-password =
     .placeholder = নতুন পাসওয়ার্ড (ঐচ্ছিক):
 user-settings-input-confirm-new-password =
@@ -195,8 +198,11 @@ rule-delete-cancel-button =
     .value = বাতিল করুন
 rule-not = না
 rule-event = ইভেন্ট
+rule-time-title = দিনের সময়
+rule-notification = নোটিফিকেশন
 notification-title = শিরোনাম
 notification-message = বার্তা
+notification-level = স্তর
 notification-low = কম
 notification-normal = স্বাভাবিক
 notification-high = বেশি
@@ -204,38 +210,63 @@ rule-name = নিয়মের নাম
 
 ## Logs
 
+add-log =
+    .aria-label = নতুন লগ তৈরি করুন
 logs = লগ
 logs-device = ডিভাইস
+logs-device-select =
+    .aria-label = লগ ডিভাইস
 logs-save = সংরক্ষণ করুন
+logs-remove-dialog-title = মুছে ফেলা হচ্ছে
 logs-remove = মুছে ফেলুন
+logs-unable-to-create = লগ তৈরি করা যাচ্ছে না
 
 ## Add New Things
 
+add-thing-scanning-icon =
+    .alt = স্ক্যান হচ্ছে
+add-thing-add-by-url = URL দ্বারা যুক্ত করুন…
 add-thing-done = সম্পন্ন হয়েছে
 add-thing-cancel = বাতিল করুন
 
 ## Context Menu
 
+context-menu-choose-icon = আইকন নির্বাচন করুন…
 context-menu-save = সংরক্ষণ করুন
 context-menu-remove = মুছে ফেলুন
 
 ## Capabilities
 
+OnOffSwitch = চালু / বন্ধ সুইচ
+MultiLevelSwitch = মাল্টি লেভেল স্যুইচ
+ColorControl = রঙ নিয়ন্ত্রণ
+ColorSensor = রঙ সেন্সর
+EnergyMonitor = শক্তি মনিটর
+BinarySensor = বাইনারি সেন্সর
+SmartPlug = স্মার্ট প্লাগ
 VideoCamera = ভিডিও ক্যামেরা
 Camera = ক্যামেরা
+TemperatureSensor = তাপমাত্রা সেন্সর
 
 ## Properties
 
+alarm = অ্যালার্ম
+pushed = স্থগিত
+on-off = চালু / বন্ধ
 on = চালু
 off = বন্ধ
+power = ক্ষমতা
 voltage = ভোল্টেজ
 temperature = তাপমাত্রা
 current = বর্তমান
+frequency = ফ্রিকোয়েন্সি
 color = রঙ
 brightness = উজ্জ্বলতা
+leak = ফুটো
 dry = শুষ্ক
 video-unsupported = দুঃখিত, ভিডিওটি আপনার ব্রাউজারে সমর্থিত নয়।
 motion = গতি
+no-motion = কোনও গতি নেই
 open = খুলুন
 closed = বন্ধ
 unknown = অপরিচিত
@@ -244,7 +275,10 @@ inactive = নিষ্ক্রিয়
 
 ## Domain Setup
 
+reclaim-failed = ডোমেন পুনরুদ্ধার করা যায়নি।
 invalid-subdomain = অকার্যকর সাবডোমেন।
+invalid-email = অকার্যকর ইমেইল ঠিকানা।
+invalid-reclamation-token = অকার্যকর পুনরুদ্ধার টোকেন।
 
 ## Booleans
 
@@ -265,6 +299,7 @@ abbrev-volt = V
 abbrev-hertz = Hz
 abbrev-amp = A
 abbrev-watt = W
+abbrev-kilowatt-hour = kW⋅h
 abbrev-percent = %
 abbrev-fahrenheit = °F
 abbrev-celsius = °C
@@ -280,6 +315,7 @@ abbrev-foot = ft
 
 ## New Thing View
 
+new-thing-choose-icon = আইকন পছন্দ করুন ...
 new-thing-save = সংরক্ষণ করুন
 new-thing-pin =
     .placeholder = PIN দিন
@@ -287,11 +323,17 @@ new-thing-pin-error = ভুল PIN
 new-thing-pin-invalid = অকার্যকর PIN
 new-thing-cancel = বাতিল করুন
 new-thing-submit = জমা দিন
+new-thing-username =
+    .placeholder = ইউজার নাম দিন
+new-thing-password =
+    .placeholder = পাসওয়ার্ড দিন
 new-thing-saved = সংরক্ষণ করা হয়েছে
 new-thing-done = সম্পন্ন হয়েছে
 
 ## New Web Thing View
 
+loading = লোড হচ্ছে …
+new-web-thing-from = থেকে
 
 ## Empty div Messages
 
@@ -301,17 +343,33 @@ new-thing-done = সম্পন্ন হয়েছে
 author-unknown = অপরিচিত
 disable = নিষ্ক্রিয় করুন
 enable = সক্রিয় করুন
+by = দ্বারা
 addon-remove = মুছে ফেলুন
+addon-update-failed = ব্যর্থ হয়েছে
+addon-config-apply = প্রয়োগ করুন
+addon-discovery-added = যোগ করা হয়েছে
 addon-discovery-add = যোগ করুন
+addon-discovery-installing = ইনস্টল হচ্ছে...
+addon-discovery-failed = ব্যর্থ হয়েছে
 
 ## Page Titles
 
+settings = সেটিংস
 domain = ডোমেইন
 localization = স্থানীয়করণ
+authorizations = অনুমোদন
+developer = ডেভেলপার
+network = নেটওয়ার্ক
+ethernet = ইথারনেট
 wifi = Wi-Fi
+icon = আইকন
 
 ## Errors
 
+more-information = আরো তথ্য
+invalid-file = অকার্যকর ফাইল।
+failed-read-file = ফাইলটি পড়তে ব্যর্থ হয়েছে।
+failed-save = সংরক্ষণ করতে ব্যর্থ হয়েছে.
 
 ## Schema Form
 
@@ -322,11 +380,15 @@ thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = লগইন — { -webthings-gateway-brand }
 login-log-in = লগ ইন
 
 ## Create First User Page
 
+signup-title = ব্যবহারকারী তৈরি করুন — { -webthings-gateway-brand }
 signup-welcome = স্বাগতম
+signup-create-account = আপনার প্রথম ইউজার অ্যাকাউন্ট তৈরি করুন:
+signup-password-mismatch = পাসওয়ার্ড মিলছে না
 signup-next = পরবর্তী
 
 ## Tunnel Setup Page
@@ -334,20 +396,35 @@ signup-next = পরবর্তী
 tunnel-setup-welcome = স্বাগতম
 tunnel-setup-input-subdomain =
     .placeholder = সাবডোমেন
+tunnel-setup-opt-in = নতুন বৈশিষ্ট্য এবং অবদানের সুযোগ সম্পর্কে দয়া করে আমাকে আপডেট রাখুন।
+tunnel-setup-privacy-policy = গোপনীয়তা নীতি
+tunnel-setup-error = সাবডোমেন সেট আপ করার সময় একটি ত্রুটি দেখা দিয়েছে।
 tunnel-setup-create = তৈরি করুন
 tunnel-setup-skip = এড়িয়ে যান
 
 ## Authorize Page
 
+authorize-title = অনুমোদনের অনুরোধ — { -webthings-gateway-brand }
+authorize-authorization-request = অনুমোদনের অনুরোধ
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = <<domain>> থেকে
+authorize-monitor-and-control = নিরীক্ষণ এবং নিয়ন্ত্রণ
+authorize-monitor = নিরীক্ষণ
+authorize-allow-all = সব কিছুর জন্য অনুমতি দিন
 authorize-allow =
     .value = অনুমতি দিন
+authorize-deny = প্রত্যাখ্যান করুন
 
 ## Local Token Page
 
+local-token-title = স্থানীয় টোকেন পরিষেবা — { -webthings-gateway-brand }
 
 ## Router Setup Page
 
+router-setup-title = রাউটার সেটআপ — { -webthings-gateway-brand }
 router-setup-header = একটি নতুন Wi-Fi নেটওয়ার্ক তৈরি করুন
+router-setup-input-ssid =
+    .placeholder = নেটওয়ার্কের নাম
 router-setup-input-password =
     .placeholder = পাসওয়ার্ড
 router-setup-input-confirm-password =
@@ -357,31 +434,44 @@ router-setup-create =
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Wi-Fi সেটআপ — { -webthings-gateway-brand }
 wifi-setup-input-password =
     .placeholder = পাসওয়ার্ড
 wifi-setup-show-password = পাসওয়ার্ড দেখান
+wifi-setup-connect =
+    .value = যুক্ত
 wifi-setup-network-icon =
     .alt = Wi-Fi নেটওয়ার্ক
 wifi-setup-skip = এড়িয়ে যান
 
 ## Connecting to Wi-Fi Page
 
+connecting-header = Wi-Fi এর সাথে সংযুক্ত হচ্ছে ...
+connecting-header-skipped = Wi-Fi সেটআপ এড়িয়ে গেছে
 
 ## Creating Wi-Fi Network Page
 
+creating-header = Wi-Fi নেটওয়ার্ক তৈরি করা হচ্ছে ...
 
 ## UI Updates
 
+ui-update-close = বন্ধ
 
 ## General Terms
 
 ok = ঠিক আছে
+ellipsis = …
+event-log = ইভেন্ট লগ
+disconnected = সংযোগ বিচ্ছিন্ন হয়েছে
+processing = প্রক্রিয়াকরণ চলছে…
 submit = জমা দিন
 
 ## Top-Level Buttons
 
 back-button =
     .aria-label = ফিরে যান
+overflow-button =
+    .aria-label = অতিরিক্ত কার্যকলাপ
 submit-button =
     .aria-label = জমা দিন
 save-button =
