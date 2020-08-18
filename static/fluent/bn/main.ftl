@@ -550,6 +550,8 @@ authorize-deny = প্রত্যাখ্যান করুন
 ## Local Token Page
 
 local-token-title = স্থানীয় টোকেন পরিষেবা — { -webthings-gateway-brand }
+local-token-header = স্থানীয় টোকেন পরিষেবা
+local-token-your-token = আপনার স্থানীয় টোকেনটি হ'ল <a data-l10n-name="local-token-jwt"> JSON ওয়েব টোকন </a>:
 
 ## Router Setup Page
 
