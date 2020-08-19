@@ -555,6 +555,7 @@ authorize-deny = Estä
 local-token-title = Paikallinen polettipalvelu — { -webthings-gateway-brand }
 local-token-header = Paikallinen polettipalvelu
 local-token-your-token = Paikallinen polettisi on tämä <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-use-it = Käytä sitä keskustellaksesi yhdyskäytävän kanssa turvallisesti hyödyntämällä <a data-l10n-name="local-token-bearer-type">Bearer-tyyppistä valtuutta</a>.
 local-token-copy-token = Kopioi poletti
 
 ## Router Setup Page
