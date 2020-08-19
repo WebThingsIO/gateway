@@ -589,12 +589,16 @@ wifi-setup-skip = Ohita
 
 connecting-title = Yhdistetään Wi-Fiin — { -webthings-gateway-brand }
 connecting-header = Yhdistetään Wi-Fiin…
+connecting-connect = Varmista että olet yhteydessä samaan verkkoon ja mene sitten selaimellasi { $gateway-link } jatkaaksesi määritysten tekoa.
+connecting-warning = Huomio: Jos et voi ladata { $domain }, tarkista yhdyskäytävän IP-osoite reitittimestäsi.
 connecting-header-skipped = Wi-Fi-asetukset ohitettiin
+connecting-skipped = Yhdyskäytävää käynnistetään nyt. Siirry selaimellasi { $gateway-link } samalla kun olet yhteydessä samaan verkkoon kuin yhdyskäytävä jatkaaksesi määritysten tekoa.
 
 ## Creating Wi-Fi Network Page
 
 creating-title = Luodaan Wi-Fi-verkko — { -webthings-gateway-brand }
 creating-header = Luodaan Wi-Fi-verkkoa…
+creating-content = Yhdistä verkkoon { $ssid } juuri luomallasi salasanalla, sen jälkeen mene selaimellasi { $gateway-link } tai { $ip-link }.
 
 ## UI Updates
 
