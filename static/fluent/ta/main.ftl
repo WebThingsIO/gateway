@@ -446,6 +446,7 @@ author-unknown = தெரியாதது
 disable = செயல்நீக்கு
 enable = செயல்படுத்து
 by = மூலம்
+license = உரிமம்
 addon-configure = கட்டமை
 addon-update = புதுப்பி
 addon-remove = நீக்கு
@@ -458,6 +459,8 @@ addon-discovery-added = சேர்க்கப்பட்டது
 addon-discovery-add = சேர்
 addon-discovery-installing = நிறுவுகிறது ...
 addon-discovery-failed = தோல்வியடைந்தது
+addon-search =
+    .placeholder = தேடு:
 
 ## Page Titles
 
