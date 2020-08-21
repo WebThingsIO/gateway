@@ -286,6 +286,7 @@ PushButton = Pulsador
 VideoCamera = Cámara de vídeo
 Camera = Cámara
 TemperatureSensor = Sensor de temperatura
+HumiditySensor = Sensor de humidade
 Alarm = Alarma
 Thermostat = Termostato
 Lock = Pechar
@@ -446,6 +447,7 @@ author-unknown = Descoñecido
 disable = Desactivar
 enable = Activar
 by = por
+license = Licenza
 addon-configure = Configurar
 addon-update = Actualizar
 addon-remove = Eliminar
@@ -465,51 +467,167 @@ addon-search =
 
 settings = Configuración
 domain = Dominio
+users = Usuarios
 edit-user = Editar usuario
 add-user = Engadir usuario
 adapters = Adaptadores
+addons = Complementos
+addon-config = Configurar o complemento
+addon-discovery = Descubra novos complementos
+experiments = Experimentos
+localization = Localización
+updates = Actualizacións
+authorizations = Autorizacións
+developer = Desenvolvedor
+network = Rede
+ethernet = Ethernet
+wifi = Wi-Fi
+icon = Icona
 
 ## Errors
 
+unknown-state = Estado descoñecido.
+error = Erro
+errors = Erros
+gateway-unreachable = Entrada inalcanzable
+more-information = Máis información
+invalid-file = O ficheiro non é válido.
+failed-read-file = Produciuse un fallo ao ler o ficheiro.
+failed-save = Erro ao gardar.
 
 ## Schema Form
 
+unsupported-field = Esquema de campo non compatible
 
 ## Icon Sources
 
+thing-icons-thing-src = /images/thing-icons/thing.svg
 
 ## Login Page
 
+login-title = Iniciar sesión — { -webthings-gateway-brand }
+login-log-in = Acceder
+login-wrong-credentials = O nome de usuario ou o contrasinal foron incorrectos.
+login-wrong-totp = O código de autenticación foi incorrecto.
+login-enter-totp = Introduza o código do seu aplicativo de autentificador.
 
 ## Create First User Page
 
+signup-title = Crear usuario — { -webthings-gateway-brand }
+signup-welcome = Benvido
+signup-create-account = Cree a súa primeira conta de usuario:
+signup-password-mismatch = Os contrasinais non coinciden
+signup-next = Seguinte
 
 ## Tunnel Setup Page
 
+tunnel-setup-title = Escolla Enderezo web - { -webthings-gateway-brand }
+tunnel-setup-welcome = Benvido
+tunnel-setup-choose-address = Escolla un enderezo web seguro para a súa entrada:
+tunnel-setup-input-subdomain =
+    .placeholder = subdominio
+tunnel-setup-opt-in = Mantéñame ao día sobre novas funcións e oportunidades de contribución.
+tunnel-setup-privacy-policy = Política de privacidade
+tunnel-setup-input-reclamation-token =
+    .placeholder = Mostra de reclamación
+tunnel-setup-error = Produciuse un erro ao configurar o subdominio.
+tunnel-setup-create = Crear
+tunnel-setup-skip = Saltar
+tunnel-setup-time-sync = Agardando a que o reloxo do sistema se configure. É probable que o rexistro de dominios falle ata que se complete isto.
 
 ## Authorize Page
 
+authorize-title = Solicitude de autorización — { -webthings-gateway-brand }
+authorize-authorization-request = Solicitude de autorización
+# Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
+authorize-prompt = <<name>> quere acceder á súa entrada a dispositivos <<function>>.
+# Use <<domain>> to indicate where the domain should be placed
+authorize-source = desde <<dominio>>
+authorize-monitor-and-control = supervisar e controlar
+authorize-monitor = monitor
+authorize-allow-all = Permitir todos os obxectos
+authorize-allow =
+    .value = Permitir
+authorize-deny = Denegar
 
 ## Local Token Page
 
+local-token-title = Servizo de mostras locais — { -webthings-gateway-brand }
+local-token-header = Servizo de Mostras Local
+local-token-your-token = A mostra local é este <a data-l10n-name="local-token-jwt"> token web JSON </a>:
+local-token-use-it = Utilízao para falar coa entrada de forma segura, con <a data-l10n-name="local-token-bearer-type"> Autorización de tipo portador </a>.
+local-token-copy-token = Copiar mostra
 
 ## Router Setup Page
 
+router-setup-title = Configuración do enrutador — { -webthings-gateway-brand }
+router-setup-header = Crea unha nova rede Wi-Fi
+router-setup-input-ssid =
+    .placeholder = Nome da rede
+router-setup-input-password =
+    .placeholder = Contrasinal
+router-setup-input-confirm-password =
+    .placeholder = Confirmar o contrasinal
+router-setup-create =
+    .value = Crear
+router-setup-password-mismatch = Os contrasinais deben coincidir
 
 ## Wi-Fi Setup Page
 
+wifi-setup-title = Configuración do Wi-Fi — { -webthings-gateway-brand }
+wifi-setup-header = Conectarse a unha rede Wi-Fi?
+wifi-setup-input-password =
+    .placeholder = Contrasinal
+wifi-setup-show-password = Amosar contrasinal
+wifi-setup-connect =
+    .value = Conectar
+wifi-setup-network-icon =
+    .alt = Rede Wi-Fi
+wifi-setup-skip = Saltar
 
 ## Connecting to Wi-Fi Page
 
+connecting-title = Conexión a Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Conectándose a través de Wi-Fi ...
+connecting-connect = Asegúrese de estar conectado á mesma rede e logo navegue ata { $gateway-link } no seu navegador web para continuar coa configuración.
+connecting-warning = Nota: Se non pode cargar { $domain }, busque o enderezo IP da entrada no seu enrutador.
+connecting-header-skipped = Confirmouse a configuración do Wi-Fi
+connecting-skipped = A entrada está sendo iniciada. Desprácese ata { $gateway-link } do navegador web mentres estea conectado á mesma rede que a entrada para continuar coa configuración.
 
 ## Creating Wi-Fi Network Page
 
+creating-title = Creando rede Wi-Fi — { -webthings-gateway-brand }
+creating-header = Creando unha rede Wi-Fi…
+creating-content = Conéctese a { $ssid } co contrasinal que acaba de crear e logo navegue ata { $gateway-link } ou { $ip-link } no seu navegador web.
 
 ## UI Updates
 
+ui-update-available = Está dispoñible unha interface de usuario actualizada.
+ui-update-reload = Recargar
+ui-update-close = Pechar
 
 ## General Terms
 
+ok = Aceptar
+ellipsis = …
+event-log = Rexistro de eventos
+edit = Editar
+remove = Eliminar
+disconnected = Desconectado
+processing = Procesando…
+submit = Enviar
 
 ## Top-Level Buttons
 
+menu-button =
+    .aria-label = Menú
+back-button =
+    .aria-label = Atrás
+overflow-button =
+    .aria-label = Accións adicionais
+submit-button =
+    .aria-label = Enviar
+edit-button =
+    .aria-label = Editar
+save-button =
+    .aria-label = Gardar
