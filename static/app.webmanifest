@@ -6,6 +6,12 @@
   "description": "Web of Things Gateway",
   "icons": [
     {
+      "src": "/images/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "badge"
+    },
+    {
       "src": "/images/icon.png",
       "sizes": "256x256",
       "type": "image/png",
@@ -16,6 +22,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "badge"
+    },
+    {
+      "src": "/images/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     },
     {
       "src": "/images/icon-maskable.png",
