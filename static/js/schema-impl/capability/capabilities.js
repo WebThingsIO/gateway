@@ -7,6 +7,7 @@
 'use strict';
 
 const Alarm = require('./alarm');
+const BarometricPressureSensor = require('./barometric-pressure-sensor');
 const BinarySensor = require('./binary-sensor');
 const Camera = require('./camera');
 const ColorControl = require('./color-control');
@@ -72,6 +73,8 @@ function createThingFromCapability(
         return new Thermostat(thingModel, description, format);
       case 'Lock':
         return new Lock(thingModel, description, format);
+      case 'BarometricPressureSensor':
+        return new BarometricPressureSensor(thingModel, description, format);
     }
   }
 
@@ -120,6 +123,8 @@ function getClassFromCapability(capability) {
       return 'thermostat';
     case 'Lock':
       return 'lock';
+    case 'BarometricPressureSensor':
+      return 'barometric-pressure-sensor';
   }
 
   return '';

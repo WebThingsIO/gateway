@@ -290,6 +290,7 @@ HumiditySensor = Humidity Sensor
 Alarm = Alarm
 Thermostat = Thermostat
 Lock = Lock
+BarometricPressureSensor = Barometric Pressure Sensor
 Custom = Custom Thing
 Thing = Thing
 
