@@ -290,6 +290,7 @@ HumiditySensor = Αισθητήρας υγρασίας
 Alarm = Συναγερμός
 Thermostat = Θερμοστάτης
 Lock = Κλειδαριά
+BarometricPressureSensor = Αισθητήρας βαρομετρικής πίεσης
 Custom = Προσαρμοσμένη συσκευή
 Thing = Συσκευή
 
