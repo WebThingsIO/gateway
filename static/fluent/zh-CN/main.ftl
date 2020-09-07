@@ -290,6 +290,7 @@ HumiditySensor = 湿度传感器
 Alarm = 警报器
 Thermostat = 温控器
 Lock = 锁
+BarometricPressureSensor = 气压传感器
 Custom = 自定义硬件
 Thing = 硬件
 
