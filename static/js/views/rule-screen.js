@@ -92,6 +92,7 @@ const RuleScreen = {
 
     this.deleteConfirm.addEventListener('click', () => {
       this.rule.delete().then(() => {
+        this.deleteOverlay.classList.remove('active');
         page('/rules');
       });
     });
