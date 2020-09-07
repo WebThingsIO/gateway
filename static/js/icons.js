@@ -61,6 +61,8 @@ function capabilityToIcon(capability) {
       return '/images/thing-icons/thermostat.svg';
     case 'Lock':
       return '/images/thing-icons/lock.svg';
+    case 'BarometricPressureSensor':
+      return '/images/thing-icons/multi_level_sensor.svg';
     case 'Custom':
     default:
       return defaultIcon();

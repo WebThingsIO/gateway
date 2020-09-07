@@ -493,6 +493,7 @@ require('./components/action/action');
 require('./components/action/lock');
 require('./components/action/unlock');
 require('./components/capability/alarm');
+require('./components/capability/barometric-pressure-sensor');
 require('./components/capability/binary-sensor');
 require('./components/capability/camera');
 require('./components/capability/color-control');

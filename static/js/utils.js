@@ -207,6 +207,7 @@ const Utils = {
       'MultiLevelSensor',
       'Alarm',
       'BinarySensor',
+      'BarometricPressureSensor',
     ];
 
     list.sort((a, b) => {
