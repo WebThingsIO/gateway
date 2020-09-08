@@ -290,6 +290,7 @@ HumiditySensor = Nedvességérzékelő
 Alarm = Riasztó
 Thermostat = Hőszabályozó
 Lock = Zár
+BarometricPressureSensor = Barometrikus nyomásérzékelő
 Custom = Egyéni dolog
 Thing = Dolog
 
