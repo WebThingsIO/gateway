@@ -290,6 +290,7 @@ HumiditySensor = Synhwyrydd Lleithder
 Alarm = Larwm
 Thermostat = Thermostat
 Lock = Clo
+BarometricPressureSensor = Synhwyrydd Pwysedd Barometrig
 Custom = Peth Cyfaddas
 Thing = Peth
 
