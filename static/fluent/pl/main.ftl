@@ -290,6 +290,7 @@ HumiditySensor = Czujnik wilgotności
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Zamek
+BarometricPressureSensor = Czujnik ciśnienia atmosferycznego
 Custom = Inna rzecz
 Thing = Rzecz
 
