@@ -290,6 +290,7 @@ HumiditySensor = Датчик вологості
 Alarm = Сигналізація
 Thermostat = Термостат
 Lock = Замок
+BarometricPressureSensor = Барометричний датчик тиску
 Custom = Власна річ
 Thing = Річ
 
