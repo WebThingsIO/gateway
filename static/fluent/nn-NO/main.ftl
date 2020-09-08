@@ -290,6 +290,7 @@ HumiditySensor = Fuktsensor
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Lås
+BarometricPressureSensor = Barometrisk trykksensor
 Custom = Tilpassa eining
 Thing = Eining
 
