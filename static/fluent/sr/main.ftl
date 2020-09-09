@@ -290,6 +290,7 @@ HumiditySensor = Сензор влажности
 Alarm = Аларм
 Thermostat = Термостат
 Lock = Брава
+BarometricPressureSensor = Сензор барометарског притиска
 Custom = Прилагођена справица
 Thing = Справица
 
