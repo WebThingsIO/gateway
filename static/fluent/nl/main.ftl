@@ -290,6 +290,7 @@ HumiditySensor = Vochtsensor
 Alarm = Alarm
 Thermostat = Thermostaat
 Lock = Slot
+BarometricPressureSensor = Barometrische druksensor
 Custom = Aangepast Thing
 Thing = Thing
 
