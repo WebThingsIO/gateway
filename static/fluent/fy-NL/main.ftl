@@ -292,6 +292,7 @@ HumiditySensor = Fochtsensor
 Alarm = Alarm
 Thermostat = Termostaat
 Lock = Slot
+BarometricPressureSensor = Barometryske druksensor
 Custom = Oanpast Thing
 Thing = Thing
 
