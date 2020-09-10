@@ -50,6 +50,7 @@ else
   if [[ ! -f "${MOZIOT_HOME}/.node_version" ||
         "$(< "${MOZIOT_HOME}/.node_version")" != "${_node_version}" ]]; then
     cd "${HOME}/mozilla-iot/gateway"
+    mkdir -p "${MOZIOT_HOME}/config"
     ./tools/update-addons.sh
     cd -
     echo "${_node_version}" > "${MOZIOT_HOME}/.node_version"
