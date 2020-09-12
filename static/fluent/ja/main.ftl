@@ -290,6 +290,7 @@ HumiditySensor = 湿度センサー
 Alarm = アラーム
 Thermostat = 温度計
 Lock = 施錠
+BarometricPressureSensor = 気圧センサー
 Custom = カスタム Thing
 Thing = Thing
 
