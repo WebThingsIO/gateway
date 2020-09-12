@@ -290,6 +290,7 @@ HumiditySensor = Kosteusanturi
 Alarm = Hälytin
 Thermostat = Termostaatti
 Lock = Lukko
+BarometricPressureSensor = Ilmanpaineanturi
 Custom = Mukautettu esine
 Thing = Esine
 
