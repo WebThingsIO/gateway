@@ -290,6 +290,7 @@ HumiditySensor = Sensor de humedad
 Alarm = Alarma
 Thermostat = Termostato
 Lock = Cerrojo
+BarometricPressureSensor = Sensor de presión barométrica
 Custom = Dispositivo personalizado
 Thing = Dispositivo
 
