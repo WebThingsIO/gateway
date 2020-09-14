@@ -122,10 +122,14 @@ class ActionInputForm {
           if (input.hasOwnProperty('maximum')) {
             max = `max="${Units.convert(input.maximum, input.unit)}"`;
           }
+          let value = '';
+          if (input.hasOwnProperty('default')) {
+            value = `value="${input.default}"`;
+          }
 
           const numberClass = min && max ? '' : 'hide-number-spinner';
 
-          form += `<input type="number" name="${name}" step="${step}" ${min}
+          form += `<input type="number" name="${name}" ${value} step="${step}" ${min}
                           ${max} class="action-input-number ${numberClass}"
                           ${required}>${unit}`;
           break;
