@@ -28,7 +28,7 @@ const destLicense =
   path.join(UserProfile.addonsDir, 'settings-adapter', 'LICENSE');
 
 const testManifestJson = {
-  author: 'Mozilla IoT',
+  author: 'WebThingsIO',
   description: 'An adapter for integration tests',
   gateway_specific_settings: {
     webthings: {
@@ -39,7 +39,7 @@ const testManifestJson = {
       enabled: true,
     },
   },
-  homepage_url: 'https://github.com/mozilla-iot',
+  homepage_url: 'https://github.com/WebThingsIO',
   id: 'test-adapter',
   license: 'MPL-2.0',
   manifest_version: 1,

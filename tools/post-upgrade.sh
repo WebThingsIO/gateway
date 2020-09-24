@@ -22,7 +22,7 @@ if [ -n "$_missing_deps" ]; then
 fi
 
 # Upgrade gateway-addon Python package
-_url="git+https://github.com/mozilla-iot/gateway-addon-python@v0.12.0#egg=gateway_addon"
+_url="git+https://github.com/WebThingsIO/gateway-addon-python@v0.12.0#egg=gateway_addon"
 sudo pip3 install -U "$_url"
 
 # Uninstall py2 version of gateway-addon, if present

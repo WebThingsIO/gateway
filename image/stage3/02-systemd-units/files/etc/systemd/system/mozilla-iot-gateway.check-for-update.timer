@@ -1,5 +1,5 @@
 [Unit]
-Description=Run the Mozilla WebThings Gateway update checker daily
+Description=Run the WebThings Gateway update checker daily
 
 [Timer]
 OnCalendar=daily
