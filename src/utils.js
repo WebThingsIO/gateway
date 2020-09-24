@@ -65,7 +65,7 @@ module.exports = {
   },
 
   getGatewayUserAgent: () => {
-    const primary = `mozilla-iot-gateway/${pkg.version}`;
+    const primary = `webthings-gateway/${pkg.version}`;
     const secondary = `(${platform.getArchitecture()}; ${platform.getOS()})`;
     const tertiary = platform.isDocker() ? ' (docker)' : '';
 

@@ -1,26 +1,26 @@
-# WebThings Gateway by Mozilla
+# WebThings Gateway
 
-[![Build Status](https://github.com/mozilla-iot/gateway/workflows/Build/badge.svg)](https://github.com/mozilla-iot/gateway/actions?query=workflow%3ABuild)
-[![codecov](https://codecov.io/gh/mozilla-iot/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-iot/gateway)
-[![dependencies](https://david-dm.org/mozilla-iot/gateway.svg)](https://david-dm.org/mozilla-iot/gateway)
-[![devDependencies](https://david-dm.org/mozilla-iot/gateway/dev-status.svg)](https://david-dm.org/mozilla-iot/gateway?type=dev)
+[![Build Status](https://github.com/WebThingsIO/gateway/workflows/Build/badge.svg)](https://github.com/WebThingsIO/gateway/actions?query=workflow%3ABuild)
+[![codecov](https://codecov.io/gh/WebThingsIO/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/WebThingsIO/gateway)
+[![dependencies](https://david-dm.org/WebThingsIO/gateway.svg)](https://david-dm.org/WebThingsIO/gateway)
+[![devDependencies](https://david-dm.org/WebThingsIO/gateway/dev-status.svg)](https://david-dm.org/WebThingsIO/gateway?type=dev)
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
 Web of Things gateway.
 
 ## Installation
 
-* If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://iot.mozilla.org/gateway/) a pre-built software image from Mozilla to an SD card.
-* If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/mozillaiot/gateway), for both ARM and amd64. You can also build your own image from [this repository](https://github.com/mozilla-iot/gateway-docker).
-* On Fedora, Debian, Raspbian, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/mozilla-iot/gateway/releases). Those packages are built from the [gateway-rpm](https://github.com/mozilla-iot/gateway-rpm) and [gateway-deb](https://github.com/mozilla-iot/gateway-deb) repos.
-* On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/mozilla-iot/gateway-aur).
+* If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://iot.mozilla.org/gateway/) a pre-built software image to an SD card.
+* If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/mozillaiot/gateway), for both ARM and amd64. You can also build your own image from [this repository](https://github.com/WebThingsIO/gateway-docker).
+* On Fedora, Debian, Raspbian, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases). Those packages are built from the [gateway-rpm](https://github.com/WebThingsIO/gateway-rpm) and [gateway-deb](https://github.com/WebThingsIO/gateway-deb) repos.
+* On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/WebThingsIO/gateway-aur).
 * Otherwise, you can build it from source yourself (see below).
 
 ## Documentation
 
 * [Getting Started Guide](https://iot.mozilla.org/docs/gateway-getting-started-guide.html)
 * [User Guide](https://iot.mozilla.org/docs/gateway-user-guide.html)
-* [Wiki](https://github.com/mozilla-iot/wiki/wiki)
+* [Wiki](https://github.com/WebThingsIO/wiki/wiki)
 * [Various other docs](https://iot.mozilla.org/docs/)
 
 ## Community
@@ -34,7 +34,7 @@ Web of Things gateway.
 
 (If you're just installing on your PC, you can skip this step).
 
-If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/mozilla-iot/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
+If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/WebThingsIO/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
 
 ### Update Package Cache (Linux only)
 
@@ -215,14 +215,14 @@ Under Ubuntu/Debian Linux:
 ```
 $ sudo apt install python-pip python3-pip
 $ sudo python2 -m pip install six
-$ sudo python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
+$ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
 Under Fedora Linux:
 ```
 $ sudo dnf install python2-pip python3-pip
 $ sudo python2 -m pip install six
-$ sudo python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
+$ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
 ## Download and Build Gateway
@@ -230,7 +230,7 @@ $ sudo python3 -m pip install git+https://github.com/mozilla-iot/gateway-addon-p
 * Clone the GitHub repository (or fork it first):
 
     ```
-    $ git clone https://github.com/mozilla-iot/gateway.git
+    $ git clone https://github.com/WebThingsIO/gateway.git
     ```
 
 * Change into the gateway directory:

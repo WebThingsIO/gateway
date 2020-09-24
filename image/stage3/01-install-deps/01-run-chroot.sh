@@ -3,7 +3,7 @@
 set -x
 
 # Install Python add-on bindings
-pip3 install git+https://github.com/mozilla-iot/gateway-addon-python#egg=gateway_addon
+pip3 install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 
 # Allow python3 to use the Bluetooth adapter
 setcap cap_net_raw+eip $(eval readlink -f $(which python3))

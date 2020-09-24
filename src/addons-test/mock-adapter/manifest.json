@@ -1,6 +1,6 @@
 {
-  "author": "Mozilla IoT",
-  "description": "Mock adapter plugin for Mozilla WebThings Gateway",
+  "author": "WebThingsIO",
+  "description": "Mock adapter plugin for WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
       "exec": "{nodeLoader} {path}",
@@ -10,7 +10,7 @@
       "enabled": true
     }
   },
-  "homepage_url": "https://iot.mozilla.org/",
+  "homepage_url": "https://webthings.io/",
   "id": "mock-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,

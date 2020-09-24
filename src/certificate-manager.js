@@ -119,7 +119,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     } catch (e) {
       console.error('Failed to set email on server:', e);
 
-      // https://github.com/mozilla-iot/gateway/issues/358
+      // https://github.com/WebThingsIO/gateway/issues/358
       // we should store this error and display to the user on
       // settings page to allow him to retry
       callback(e);

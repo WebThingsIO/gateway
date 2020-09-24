@@ -173,7 +173,7 @@ SettingsController.get('/tunnelinfo', auth, async (request, response) => {
 });
 
 /* This is responsible for controlling dynamically the local domain name
- * settings (via mDNS) and changing or updating mozilla tunnel endpoints.
+ * settings (via mDNS) and changing or updating tunnel endpoints.
  * The /domain endpoint is invoked from:
  *   MainMenu -> Settings -> Doamin
  *
@@ -181,11 +181,6 @@ SettingsController.get('/tunnelinfo', auth, async (request, response) => {
  *              local: {
  *                multicastDNSstate: boolean,
  *                localDNSname: string, - e.g. MyHome
- *              },
- *              mozillaTunnel: {
- *                tunnel: boolean,
- *                tunnelName: string, - e.g. MyName
- *                tunnelEmail: string
  *              }
  *            }
  */

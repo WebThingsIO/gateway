@@ -1,5 +1,5 @@
 [Unit]
-Description=Mozilla WebThings Gateway Client Update Rollback
+Description=WebThings Gateway Client Update Rollback
 After=network.target
 
 [Service]

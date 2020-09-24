@@ -1,6 +1,6 @@
 {
-  "author": "Mozilla IoT",
-  "description": "Settings test adapter plugin for Mozilla WebThings Gateway",
+  "author": "WebThingsIO",
+  "description": "Settings test adapter plugin for WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
       "exec": "{nodeLoader} {path}",
@@ -9,7 +9,7 @@
       "strict_min_version": "0.10.0"
     }
   },
-  "homepage_url": "https://iot.mozilla.org/",
+  "homepage_url": "https://webthings.io/",
   "id": "settings-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,

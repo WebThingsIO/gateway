@@ -7,7 +7,7 @@
 #}
 # WARNING: this docker file is *ONLY* for developer convenience
 # WARNING: for production deployment please consider supported project:
-# WARNING: https://github.com/mozilla-iot/gateway-docker
+# WARNING: https://github.com/WebThingsIO/gateway-docker
 
 FROM debian:buster
 LABEL maintainer="p.coval@samsung.com"
@@ -26,7 +26,7 @@ RUN echo "#log: Configuring locales and setting up system" \
   && apt clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV project mozilla-iot
+ENV project WebThings
 
 ADD . /root/mozilla-iot/gateway
 WORKDIR /root/mozilla-iot/gateway/..

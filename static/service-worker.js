@@ -2,7 +2,7 @@
 // https://serviceworke.rs/strategy-cache-and-update_service-worker_doc.html
 
 // eslint-disable-next-line no-undef
-const CACHE = `mozilla-iot-cache-${VERSION}`;
+const CACHE = `webthings-cache-${VERSION}`;
 
 self.addEventListener('install', () => {
   self.skipWaiting();
@@ -57,7 +57,7 @@ self.addEventListener('push', (event) => {
 
   event.waitUntil(
     self.registration.showNotification(
-      'Mozilla WebThings Gateway',
+      'WebThings Gateway',
       {body: payload}
     )
   );

@@ -1,5 +1,5 @@
 [Unit]
-Description=Mozilla WebThings Gateway Client Update Checker
+Description=WebThings Gateway Client Update Checker
 After=network.target
 
 [Service]
