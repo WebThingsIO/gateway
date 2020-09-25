@@ -290,6 +290,7 @@ HumiditySensor = Senzor vlhkosti
 Alarm = Budík
 Thermostat = Termostat
 Lock = Zámek
+BarometricPressureSensor = Senzor atmosferického tlaku
 Custom = Vlastní věc
 Thing = Věc
 
