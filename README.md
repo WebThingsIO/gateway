@@ -82,7 +82,7 @@ $ sudo dnf install curl
 nvm allows you to easily install different versions of node. To install nvm:
 
 ```
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 ```
 
 Reinitialize your terminal session.
