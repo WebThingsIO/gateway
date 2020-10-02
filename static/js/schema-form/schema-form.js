@@ -120,4 +120,7 @@ class SchemaForm {
   }
 }
 
+// Elevate this to the window level.
+window.SchemaForm = SchemaForm;
+
 module.exports = SchemaForm;
