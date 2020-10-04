@@ -6,5 +6,7 @@
   "eslint.options": {
     "configFile": ".eslintrc.js"
   },
-  "eslint.autoFixOnSave": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
