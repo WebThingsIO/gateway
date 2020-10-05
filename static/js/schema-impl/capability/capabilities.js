@@ -7,6 +7,7 @@
 'use strict';
 
 const Alarm = require('./alarm');
+const AirQualitySensor = require('./air-quality-sensor');
 const BarometricPressureSensor = require('./barometric-pressure-sensor');
 const BinarySensor = require('./binary-sensor');
 const Camera = require('./camera');
@@ -75,6 +76,8 @@ function createThingFromCapability(
         return new Lock(thingModel, description, format);
       case 'BarometricPressureSensor':
         return new BarometricPressureSensor(thingModel, description, format);
+      case 'AirQualitySensor':
+        return new AirQualitySensor(thingModel, description, format);
     }
   }
 
@@ -125,6 +128,8 @@ function getClassFromCapability(capability) {
       return 'lock';
     case 'BarometricPressureSensor':
       return 'barometric-pressure-sensor';
+    case 'AirQualitySensor':
+      return 'air-quality-sensor';
   }
 
   return '';
