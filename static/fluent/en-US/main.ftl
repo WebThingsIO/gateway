@@ -323,6 +323,7 @@ jammed = Jammed
 unknown = Unknown
 active = Active
 inactive = Inactive
+humidity = Humidity
 
 ## Domain Setup
 
