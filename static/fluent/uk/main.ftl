@@ -323,6 +323,7 @@ jammed = Заклинило
 unknown = Невідомо
 active = Активний
 inactive = Неактивний
+humidity = Вологість
 
 ## Domain Setup
 
