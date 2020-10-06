@@ -323,6 +323,7 @@ jammed = Geklemd
 unknown = Onbekend
 active = Actief
 inactive = Inactief
+humidity = Vochtigheid
 
 ## Domain Setup
 
