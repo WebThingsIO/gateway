@@ -323,6 +323,7 @@ jammed = Fastnat
 unknown = Okänd
 active = Aktiv
 inactive = Inaktiv
+humidity = Luftfuktighet
 
 ## Domain Setup
 
