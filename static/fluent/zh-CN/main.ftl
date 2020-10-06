@@ -323,6 +323,7 @@ jammed = 卡住
 unknown = 未知
 active = 活动
 inactive = 不活动
+humidity = 湿度
 
 ## Domain Setup
 
