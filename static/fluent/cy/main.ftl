@@ -323,6 +323,7 @@ jammed = Yn sownd
 unknown = Anhysbys
 active = Gweithredol
 inactive = Anweithredol
+humidity = Lleithder
 
 ## Domain Setup
 
