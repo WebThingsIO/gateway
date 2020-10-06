@@ -323,6 +323,7 @@ jammed = Μπλοκαρισμένο
 unknown = Άγνωστο
 active = Ενεργό
 inactive = Ανενεργό
+humidity = Υγρασία
 
 ## Domain Setup
 
