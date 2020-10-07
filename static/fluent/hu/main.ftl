@@ -323,6 +323,7 @@ jammed = Elakadt
 unknown = Ismeretlen
 active = Aktív
 inactive = Inaktív
+humidity = Páratartalom
 
 ## Domain Setup
 
