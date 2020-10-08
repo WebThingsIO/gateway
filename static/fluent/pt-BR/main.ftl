@@ -293,6 +293,7 @@ Lock = Fechadura
 BarometricPressureSensor = Sensor de pressão barométrica
 Custom = Coisa personalizada
 Thing = Coisa
+AirQualitySensor = Sensor de qualidade do ar
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Desconhecido
 active = Ativado
 inactive = Desativado
 humidity = Umidade
+concentration = Concentração
+density = Densidade
 
 ## Domain Setup
 
