@@ -323,6 +323,7 @@ jammed = Fastna
 unknown = Ukjend
 active = Aktiv
 inactive = Inaktiv
+humidity = Luftfukt
 
 ## Domain Setup
 
