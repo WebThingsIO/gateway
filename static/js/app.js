@@ -492,6 +492,7 @@ require('@webcomponents/webcomponentsjs/webcomponents-bundle');
 require('./components/action/action');
 require('./components/action/lock');
 require('./components/action/unlock');
+require('./components/capability/air-quality-sensor');
 require('./components/capability/alarm');
 require('./components/capability/barometric-pressure-sensor');
 require('./components/capability/binary-sensor');
