@@ -293,6 +293,7 @@ Lock = 锁
 BarometricPressureSensor = 气压传感器
 Custom = 自定义硬件
 Thing = 硬件
+AirQualitySensor = 空气质量传感器
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = 未知
 active = 活动
 inactive = 不活动
 humidity = 湿度
+concentration = 浓度
+density = 密度
 
 ## Domain Setup
 
