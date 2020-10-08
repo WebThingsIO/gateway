@@ -1,7 +1,7 @@
 /**
  * AirQuality sensor.
  *
- * UI element representing a airquality sensor.
+ * UI element representing an air quality sensor.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -36,19 +36,19 @@ class AirQualitySensor extends Thing {
    * Find any properties required for this view.
    */
   findProperties() {
-    this.airqualityProperty = null;
+    this.airQualityProperty = null;
 
     // Look for properties by type first.
     for (const name in this.displayedProperties) {
       const type = this.displayedProperties[name].property['@type'];
 
       if (type === 'ConcentrationProperty') {
-        this.airqualityProperty = name;
+        this.airQualityProperty = name;
         break;
       }
 
       if (type === 'DensityProperty') {
-        this.airqualityProperty = name;
+        this.airQualityProperty = name;
         break;
       }
     }
@@ -56,9 +56,9 @@ class AirQualitySensor extends Thing {
     this.precision = 0;
     this.unit = '';
 
-    if (this.airqualityProperty) {
+    if (this.airQualityProperty) {
       const property =
-        this.displayedProperties[this.airqualityProperty].convertedProperty;
+        this.displayedProperties[this.airQualityProperty].convertedProperty;
 
       if (property.hasOwnProperty('multipleOf') &&
         `${property.multipleOf}`.includes('.')) {
@@ -87,7 +87,7 @@ class AirQualitySensor extends Thing {
       return;
     }
 
-    if (name === this.airqualityProperty) {
+    if (name === this.airQualityProperty) {
       value = parseFloat(value);
       this.icon.level = value;
     }
