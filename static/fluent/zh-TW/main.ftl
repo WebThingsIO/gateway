@@ -293,6 +293,7 @@ Lock = 鎖
 BarometricPressureSensor = 氣壓感應器
 Custom = 自訂 Thing
 Thing = Thing
+AirQualitySensor = 空氣品質感應器
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = 未知
 active = 啟用
 inactive = 未啟用
 humidity = 濕度
+concentration = 濃度
+density = 密度
 
 ## Domain Setup
 
