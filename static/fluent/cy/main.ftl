@@ -293,6 +293,7 @@ Lock = Clo
 BarometricPressureSensor = Synhwyrydd Pwysedd Barometrig
 Custom = Peth Cyfaddas
 Thing = Peth
+AirQualitySensor = Synhwyrydd ansawdd awyr
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Anhysbys
 active = Gweithredol
 inactive = Anweithredol
 humidity = Lleithder
+concentration = Crynodiad
+density = Dwysedd
 
 ## Domain Setup
 
