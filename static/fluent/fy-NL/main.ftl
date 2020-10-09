@@ -295,6 +295,7 @@ Lock = Slot
 BarometricPressureSensor = Barometryske druksensor
 Custom = Oanpast Thing
 Thing = Thing
+AirQualitySensor = Loftkwaliteitssensor
 
 ## Properties
 
@@ -326,6 +327,8 @@ unknown = Unbekend
 active = Aktyf
 inactive = Ynaktyf
 humidity = Fochtichheid
+concentration = Konsintraasje
+density = Tichtens
 
 ## Domain Setup
 
