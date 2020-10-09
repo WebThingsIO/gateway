@@ -293,6 +293,7 @@ Lock = Serratura
 BarometricPressureSensor = Sensor de pression barometric
 Custom = Objecto personalisate
 Thing = Objecto
+AirQualitySensor = Sensor de qualitate del aria
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Obstruite
 unknown = Incognite
 active = Active
 inactive = Inactive
+humidity = Humiditate
+concentration = Concentration
+density = Densitate
 
 ## Domain Setup
 
