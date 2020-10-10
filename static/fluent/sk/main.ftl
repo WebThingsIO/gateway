@@ -293,6 +293,7 @@ Lock = Zámok
 BarometricPressureSensor = Senzor atmosférického tlaku
 Custom = Vlastná vec
 Thing = Vec
+AirQualitySensor = Senzor kvality ovzdušia
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Zaseknuté
 unknown = Neznáme
 active = Aktívne
 inactive = Neaktívne
+humidity = Vlhkosť
+concentration = Koncentrácia
+density = Hustota
 
 ## Domain Setup
 
