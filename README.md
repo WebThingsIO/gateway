@@ -305,7 +305,7 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
     - Start the web server:
 
       ```
-      npm start
+      $ npm start
       ```
 
     - Load http://localhost:8080 in your web browser (or use the server's IP address if loading remotely). Then follow the instructions on the web page to set up domain and register. Once this is done you can load https://localhost:4443 in your web browser (or use the server's IP address if loading remotely).
