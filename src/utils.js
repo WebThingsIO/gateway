@@ -67,7 +67,7 @@ module.exports = {
   getGatewayUserAgent: () => {
     const primary = `webthings-gateway/${pkg.version}`;
     const secondary = `(${platform.getArchitecture()}; ${platform.getOS()})`;
-    const tertiary = platform.isDocker() ? ' (docker)' : '';
+    const tertiary = platform.isContainer() ? ' (container)' : '';
 
     return `${primary} ${secondary}${tertiary}`;
   },

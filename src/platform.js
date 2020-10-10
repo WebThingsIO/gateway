@@ -84,10 +84,11 @@ function getArchitecture() {
 }
 
 /**
- * Determine whether or not we're running inside Docker.
+ * Determine whether or not we're running inside a container (e.g. Docker).
  */
-function isDocker() {
+function isContainer() {
   return fs.existsSync('/.dockerenv') ||
+    fs.existsSync('/run/.containerenv') ||
     (fs.existsSync('/proc/1/cgroup') &&
      fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
     fs.existsSync('/pantavisor');
@@ -137,7 +138,7 @@ module.exports = {
   getNodeVersion,
   getOS,
   getPythonVersions,
-  isDocker,
+  isContainer,
   NotImplementedError,
 };
 

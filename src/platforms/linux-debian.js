@@ -31,9 +31,9 @@ function getSelfUpdateStatus() {
 function getNtpStatus() {
   const platform = require('../platform');
 
-  // Inside Docker containers, we just assume the time is synchronized by the
-  // host.
-  if (platform.isDocker()) {
+  // Inside containers (e.g. Docker), we just assume the time is synchronized
+  // by the host.
+  if (platform.isContainer()) {
     return true;
   }
 

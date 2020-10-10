@@ -11,6 +11,10 @@ is_container() {
     return 0
   fi
 
+  if [ -f /run/.containerenv ]; then
+    return 0
+  fi
+
   if grep -q ':\/docker\/' /proc/1/cgroup 2>&1; then
     return 0
   fi
