@@ -7,7 +7,11 @@ args=""
 start_task="run-only"
 
 is_container() {
-  if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
+  if [ -f /.dockerenv ]; then
+    return 0
+  fi
+
+  if [ -f /run/.containerenv ]; then
     return 0
   fi
 
