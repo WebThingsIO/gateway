@@ -293,6 +293,7 @@ Lock = Lukko
 BarometricPressureSensor = Ilmanpaineanturi
 Custom = Mukautettu esine
 Thing = Esine
+AirQualitySensor = Ilmanlaatuanturi
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Jumittunut
 unknown = Tuntematon
 active = Aktiivinen
 inactive = Epäaktiivinen
+humidity = Kosteus
+concentration = Sakeus
+density = Tiheys
 
 ## Domain Setup
 
