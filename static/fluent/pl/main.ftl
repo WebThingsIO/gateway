@@ -293,6 +293,7 @@ Lock = Zamek
 BarometricPressureSensor = Czujnik ciśnienia atmosferycznego
 Custom = Inna rzecz
 Thing = Rzecz
+AirQualitySensor = Czujnik jakości powietrza
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Nieznany
 active = Aktywny
 inactive = Nieaktywny
 humidity = Wilgotność
+concentration = Stężenie
+density = Gęstość
 
 ## Domain Setup
 
