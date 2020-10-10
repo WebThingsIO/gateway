@@ -293,6 +293,7 @@ Lock = 施錠
 BarometricPressureSensor = 気圧センサー
 Custom = カスタム Thing
 Thing = Thing
+AirQualitySensor = 大気質センサー
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = 引っかかりがあります
 unknown = 状態不明
 active = 動作しています
 inactive = 停止しています
+humidity = 湿度
+concentration = 濃度
+density = 密度
 
 ## Domain Setup
 
