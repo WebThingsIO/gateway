@@ -84,7 +84,7 @@ function getArchitecture() {
 }
 
 /**
- * Determine whether or not we're running inside a contianer (e.g. Docker).
+ * Determine whether or not we're running inside a container (e.g. Docker).
  */
 function isContainer() {
   return fs.existsSync('/.dockerenv') ||
