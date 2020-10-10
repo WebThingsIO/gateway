@@ -299,7 +299,8 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
   ```
 
 - Set up domain:
-  _ If you plan to use Mozilla's provided tunneling service to set up a `_.mozilla-iot.org` domain: \* Start the web server:
+
+  - If you plan to use Mozilla's provided tunneling service to set up a `_.mozilla-iot.org` domain: \* Start the web server:
 
               ```
               $ npm start
@@ -308,8 +309,10 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
           * Load `http://localhost:8080` in your web browser (or use the server's IP address if loading remotely). Then follow the instructions on the web page to set up domain and register. Once this is done you can load
 
   `https://localhost:4443` in your web browser (or use the server's IP address if loading remotely).
-  _ If you plan to use your own SSL certificate:
-  _ The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
+
+  - If you plan to use your own SSL certificate:
+
+    - The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
 
               ```
               $ MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
