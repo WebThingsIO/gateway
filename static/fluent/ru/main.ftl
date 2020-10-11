@@ -293,6 +293,7 @@ Lock = Замок
 BarometricPressureSensor = Датчик барометрического давления
 Custom = Кастомное устройство
 Thing = Вещь
+AirQualitySensor = Датчик качества воздуха
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Неизвестно
 active = Активно
 inactive = Неактивно
 humidity = Влажность
+concentration = Концентрация
+density = Плотность
 
 ## Domain Setup
 
