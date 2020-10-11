@@ -293,6 +293,7 @@ Lock = Cerrojo
 BarometricPressureSensor = Sensor de presión barométrica
 Custom = Dispositivo personalizado
 Thing = Dispositivo
+AirQualitySensor = Sensor de calidad del aire
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Atascado
 unknown = Desconocido
 active = Activo
 inactive = Inactivo
+humidity = Humedad
+concentration = Concentración
+density = Densidad
 
 ## Domain Setup
 
