@@ -293,6 +293,7 @@ Lock = Lås
 BarometricPressureSensor = Barometrisk trykksensor
 Custom = Tilpassa eining
 Thing = Eining
+AirQualitySensor = Luftkvalitetssensor
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Ukjend
 active = Aktiv
 inactive = Inaktiv
 humidity = Luftfukt
+concentration = Konsentrasjon
+density = Densitet
 
 ## Domain Setup
 
