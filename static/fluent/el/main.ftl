@@ -293,6 +293,7 @@ Lock = Κλειδαριά
 BarometricPressureSensor = Αισθητήρας βαρομετρικής πίεσης
 Custom = Προσαρμοσμένη συσκευή
 Thing = Συσκευή
+AirQualitySensor = Αισθητήρας ποιότητας αέρα
 
 ## Properties
 
@@ -324,6 +325,8 @@ unknown = Άγνωστο
 active = Ενεργό
 inactive = Ανενεργό
 humidity = Υγρασία
+concentration = Συγκέντρωση
+density = Πυκνότητα
 
 ## Domain Setup
 
