@@ -73,6 +73,10 @@ class ColorProperty extends BaseComponent {
         this.dataset.readOnly === 'true' :
         false;
 
+    // Work around weird Safari issue where the color input is initially
+    // rendered as a text input.
+    this._input.type = 'color';
+
     this._upgradeProperty('value');
 
     this._input.addEventListener('change', this._onChange);
