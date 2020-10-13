@@ -336,6 +336,7 @@ class NewThing {
       'door-sensor',
       'motion-sensor',
       'leak-sensor',
+      'smoke-sensor',
       'push-button',
       'video-camera',
       'camera',

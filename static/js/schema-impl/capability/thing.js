@@ -38,6 +38,7 @@ const NumberDetail = require('../property/number');
 const OnOffDetail = require('../property/on-off');
 const OpenDetail = require('../property/open');
 const PushedDetail = require('../property/pushed');
+const SmokeDetail = require('../property/smoke');
 const StringDetail = require('../property/string');
 const TargetTemperatureDetail = require('../property/target-temperature');
 const TemperatureDetail = require('../property/temperature');
@@ -226,6 +227,9 @@ class Thing {
             break;
           case 'LeakProperty':
             detail = new LeakDetail(this, name, convertedProperty);
+            break;
+          case 'SmokeProperty':
+            detail = new SmokeDetail(this, name, convertedProperty);
             break;
           case 'PushedProperty':
             detail = new PushedDetail(this, name, convertedProperty);

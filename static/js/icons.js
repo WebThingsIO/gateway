@@ -48,6 +48,8 @@ function capabilityToIcon(capability) {
       return '/images/thing-icons/motion_sensor.svg';
     case 'LeakSensor':
       return '/images/thing-icons/leak_sensor.svg';
+    case 'SmokeSensor':
+      return '/images/thing-icons/smoke_sensor.svg';
     case 'PushButton':
       return '/images/thing-icons/push_button.svg';
     case 'VideoCamera':
