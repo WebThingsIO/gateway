@@ -530,6 +530,7 @@ require('./components/property/heating-cooling');
 require('./components/property/humidity');
 require('./components/property/image');
 require('./components/property/instantaneous-power');
+require('./components/property/instantaneous-power-factor');
 require('./components/property/leak');
 require('./components/property/level');
 require('./components/property/locked');

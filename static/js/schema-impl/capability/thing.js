@@ -27,6 +27,8 @@ const fluent = require('../../fluent');
 const HeatingCoolingDetail = require('../property/heating-cooling');
 const ImageDetail = require('../property/image');
 const InstantaneousPowerDetail = require('../property/instantaneous-power');
+const InstantaneousPowerFactorDetail =
+  require('../property/instantaneous-power-factor');
 const LeakDetail = require('../property/leak');
 const LevelDetail = require('../property/level');
 const LockActionDetail = require('../action/lock');
@@ -202,6 +204,10 @@ class Thing {
           case 'InstantaneousPowerProperty':
             detail =
               new InstantaneousPowerDetail(this, name, convertedProperty);
+            break;
+          case 'InstantaneousPowerFactorProperty':
+            detail =
+              new InstantaneousPowerFactorDetail(this, name, convertedProperty);
             break;
           case 'CurrentProperty':
             detail = new CurrentDetail(this, name, convertedProperty);
