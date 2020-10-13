@@ -99,6 +99,14 @@ const Units = {
       case 'feet':
         return fluent.getMessage('abbrev-foot');
 
+      case 'micrograms per cubic metre':
+      case 'micrograms per cubic meter':
+        return fluent.getMessage('abbrev-micrograms-per-cubic-meter');
+
+      case 'hectopascal':
+      case 'hectopascals':
+        return fluent.getMessage('abbrev-hectopascal');
+
       default:
         return unit;
     }

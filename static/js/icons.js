@@ -33,6 +33,9 @@ function capabilityToIcon(capability) {
       return '/images/thing-icons/energy_monitor.svg';
     case 'BinarySensor':
       return '/images/thing-icons/binary_sensor.svg';
+    case 'AirQualitySensor':
+    case 'BarometricPressureSensor':
+    case 'HumiditySensor':
     case 'MultiLevelSensor':
       return '/images/thing-icons/multi_level_sensor.svg';
     case 'SmartPlug':
@@ -53,16 +56,12 @@ function capabilityToIcon(capability) {
       return '/images/thing-icons/camera.svg';
     case 'TemperatureSensor':
       return '/images/thing-icons/temperature_sensor.svg';
-    case 'HumiditySensor':
-      return '/images/thing-icons/multi_level_sensor.svg';
     case 'Alarm':
       return '/images/thing-icons/alarm.svg';
     case 'Thermostat':
       return '/images/thing-icons/thermostat.svg';
     case 'Lock':
       return '/images/thing-icons/lock.svg';
-    case 'BarometricPressureSensor':
-      return '/images/thing-icons/multi_level_sensor.svg';
     case 'Custom':
     default:
       return defaultIcon();
