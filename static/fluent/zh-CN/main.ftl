@@ -408,6 +408,8 @@ abbrev-minute = 分
 abbrev-second = 秒
 abbrev-millisecond = 毫秒
 abbrev-foot = 英尺
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
