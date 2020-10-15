@@ -408,6 +408,8 @@ abbrev-minute = p
 abbrev-second = mp
 abbrev-millisecond = ms
 abbrev-foot = láb
+abbrev-micrograms-per-cubic-meter = µg / m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
