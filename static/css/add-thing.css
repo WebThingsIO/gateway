@@ -191,7 +191,10 @@
   background-image: url('/images/thing-icons/binary_sensor.svg');
 }
 
-.new-thing.multi-level-sensor .new-thing-icon {
+.new-thing.multi-level-sensor .new-thing-icon,
+.new-thing.humidity-sensor .new-thing-icon,
+.new-thing.air-quality-sensor .new-thing-icon,
+.new-thing.barometric-pressure-sensor .new-thing-icon {
   background-image: url('/images/thing-icons/multi_level_sensor.svg');
 }
 

@@ -270,7 +270,7 @@ context-menu-remove = Remove
 
 ## Capabilities
 
-AirQualitySensor = Air quality sensor
+AirQualitySensor = Air Quality Sensor
 OnOffSwitch = On/Off Switch
 MultiLevelSwitch = Multi Level Switch
 ColorControl = Colour Control

@@ -94,7 +94,7 @@ class NewThing {
         `<option value="${capability}" ${selected}>${type}</option>`);
     }
 
-    cls = cls.trim();
+    cls = cls.trim() || 'custom-thing';
     if (cls) {
       this.element.classList.add(cls);
     }
@@ -342,7 +342,10 @@ class NewThing {
       'temperature-sensor',
       'alarm',
       'thermostat',
-      'lock'
+      'lock',
+      'humidity-sensor',
+      'air-quality-sensor',
+      'barometric-pressure-sensor'
     );
 
     if (cls) {

@@ -97,7 +97,7 @@ wireless-connected = Connected
 wireless-icon =
     .alt = Wi-Fi Network
 network-settings-changing = Changing network settings. This may take a minute.
-failed-ethernet-configure = Failed to configure ethernet.
+failed-ethernet-configure = Failed to configure Ethernet.
 failed-wifi-configure = Failed to configure Wi-Fi.
 failed-wan-configure = Failed to configure WAN.
 failed-lan-configure = Failed to configure LAN.
@@ -293,7 +293,7 @@ Lock = Lock
 BarometricPressureSensor = Barometric Pressure Sensor
 Custom = Custom Thing
 Thing = Thing
-AirQualitySensor = Air quality sensor
+AirQualitySensor = Air Quality Sensor
 
 ## Properties
 
@@ -408,6 +408,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
@@ -613,7 +615,7 @@ ui-update-close = Close
 
 ## General Terms
 
-ok = Ok
+ok = OK
 ellipsis = …
 event-log = Event Log
 edit = Edit

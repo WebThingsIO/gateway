@@ -139,7 +139,10 @@ class NewWebThing {
       'temperature-sensor',
       'alarm',
       'thermostat',
-      'lock'
+      'lock',
+      'humidity-sensor',
+      'air-quality-sensor',
+      'barometric-pressure-sensor'
     );
 
     if (cls) {
@@ -290,7 +293,7 @@ class NewWebThing {
       this.saveButton.classList.remove('hidden');
       this.originLabel.classList.remove('hidden');
 
-      cls = cls.trim();
+      cls = cls.trim() || 'custom-thing';
       if (cls) {
         this.element.classList.add(cls);
       }
@@ -370,7 +373,10 @@ class NewWebThing {
       'temperature-sensor',
       'alarm',
       'thermostat',
-      'lock'
+      'lock',
+      'humidity-sensor',
+      'air-quality-sensor',
+      'barometric-pressure-sensor'
     );
     this.element.classList.add('web-thing');
     this.urlInput.classList.remove('hidden');
