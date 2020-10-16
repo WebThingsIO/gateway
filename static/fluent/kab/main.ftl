@@ -286,11 +286,14 @@ PushButton = Taqeffalt n utteli awuran
 VideoCamera = Takamirat n uvidyu
 Camera = Takamiṛat
 TemperatureSensor = Amaṭṭaf n lḥamu
+HumiditySensor = Amaṭṭaf n tadawt
 Alarm = Tangedwilt
 Thermostat = Atirmusṭa
 Lock = Leqfel
+BarometricPressureSensor = Amaṭṭaf abyumitri n tussda
 Custom = Taɣawsa tudmawant
 Thing = Taɣawsa
+AirQualitySensor = Amaṭṭaf n tɣara n uzwu
 
 ## Properties
 
@@ -321,6 +324,7 @@ jammed = Yeččuṛ
 unknown = Arussin
 active = Urmid
 inactive = Insa
+humidity = Tadawt
 
 ## Domain Setup
 
@@ -402,6 +406,7 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
 abbrev-hectopascal = hPa
 
 ## New Thing View
