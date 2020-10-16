@@ -436,6 +436,8 @@ abbrev-minute = m
 abbrev-second = e
 abbrev-millisecond = me
 abbrev-foot = tr
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
