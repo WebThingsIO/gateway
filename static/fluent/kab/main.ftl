@@ -325,6 +325,8 @@ unknown = Arussin
 active = Urmid
 inactive = Insa
 humidity = Tadawt
+concentration = Tasammest
+density = Taneẓẓi
 
 ## Domain Setup
 
