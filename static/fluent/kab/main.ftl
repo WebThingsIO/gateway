@@ -402,6 +402,7 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
@@ -446,6 +447,7 @@ author-unknown = Arussin
 disable = Ssens
 enable = Rmed
 by = sγur
+license = turagt
 addon-configure = Swel
 addon-update = Leqqem
 addon-remove = Kkes
