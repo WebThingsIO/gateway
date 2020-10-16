@@ -270,7 +270,6 @@ context-menu-remove = Remove
 
 ## Capabilities
 
-AirQualitySensor = Air Quality Sensor
 OnOffSwitch = On/Off Switch
 MultiLevelSwitch = Multi Level Switch
 ColorControl = Colour Control
@@ -294,6 +293,7 @@ Lock = Lock
 BarometricPressureSensor = Barometric Pressure Sensor
 Custom = Custom Thing
 Thing = Thing
+AirQualitySensor = Air Quality Sensor
 
 ## Properties
 
@@ -408,6 +408,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
