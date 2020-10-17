@@ -415,6 +415,8 @@ abbrev-minute = min
 abbrev-second = sek.
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
