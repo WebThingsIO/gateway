@@ -415,6 +415,8 @@ abbrev-minute = м
 abbrev-second = с
 abbrev-millisecond = мс
 abbrev-foot = фут
+abbrev-micrograms-per-cubic-meter = мкг/м³
+abbrev-hectopascal = гПа
 
 ## New Thing View
 
