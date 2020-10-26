@@ -293,6 +293,7 @@ Lock = Zámek
 BarometricPressureSensor = Senzor atmosferického tlaku
 Custom = Vlastní věc
 Thing = Věc
+AirQualitySensor = Senzor kvality vzduchu
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Zaseknuté
 unknown = Neznámý
 active = Aktivní
 inactive = Neaktivní
+humidity = Vlhkost
+concentration = Koncentrace
+density = Hustota
 
 ## Domain Setup
 
@@ -411,6 +415,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
