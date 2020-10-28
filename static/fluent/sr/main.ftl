@@ -293,6 +293,7 @@ Lock = Брава
 BarometricPressureSensor = Сензор барометарског притиска
 Custom = Прилагођена справица
 Thing = Справица
+AirQualitySensor = Сензор квалитета ваздуха
 
 ## Properties
 
@@ -323,6 +324,9 @@ jammed = Заглављено
 unknown = Непознато
 active = Покренуто
 inactive = У мировању
+humidity = Влажност
+concentration = Концентрација
+density = Густина
 
 ## Domain Setup
 
@@ -411,6 +415,8 @@ abbrev-minute = м
 abbrev-second = с
 abbrev-millisecond = мс
 abbrev-foot = ст.
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
