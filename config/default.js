@@ -28,7 +28,7 @@ module.exports = {
   behindForwarding: true,
   addonManager: {
     listUrls: [
-      'https://api.mozilla-iot.org:8443/addons',
+      'https://api.webthings.io:8443/addons',
     ],
     testAddons: false,
   },
@@ -45,14 +45,14 @@ module.exports = {
   },
   ssltunnel: {
     enabled: true,
-    registration_endpoint: 'https://api.mozilla-iot.org:8443',
-    domain: 'mozilla-iot.org',
+    registration_endpoint: 'https://api.webthings.io:8443',
+    domain: 'webthings.io',
     pagekite_cmd: path.normalize(path.join(process.cwd(), 'pagekite.py')),
     port: 443,
-    certemail: 'certificate@mozilla-iot.org',
+    certemail: 'noreply@webthings.io',
   },
   bcryptRounds: 2,
-  updateUrl: 'https://api.mozilla-iot.org:8443/releases',
+  updateUrl: 'https://api.webthings.io:8443/releases',
   wifi: {
     ap: {
       ipaddr: '192.168.2.1',
