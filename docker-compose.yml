@@ -1,14 +1,28 @@
-# WARNING: this docker file is *ONLY* for developer convenience
-# WARNING: for production deployment please consider supported project:
-# WARNING: https://github.com/WebThingsIO/gateway-docker
-
-version: "2"
+version: "3"
 
 services:
-  web:
-    build: .
-    command: /root/mozilla-iot/gateway/run-app.sh
+  webthings-gateway:
+    container_name: webthings-gateway
+    image: mozillaiot/gateway:latest
+    restart: unless-stopped
+    network_mode: host
+    # "ports" are ignored because of "network_mode: host". Either use "ports"
+    # or "network_mode: host".
+    #ports:
+    #  - "8080:8080"
+    #  - "4443:4443"
+    environment:
+      - "TZ=America/Los_Angeles"
     volumes:
-      - /root/mozilla-iot/gateway
-    ports:
-      - "8080:8080"
+      - /opt/docker/webthings-gateway:/home/node/.mozilla-iot
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "10"
+    # If certain devices are needed, e.g. USB dongles, enable them here.
+    #devices:
+    #  - /dev/ttyUSB0:/dev/ttyUSB0
+    #  - /dev/ttyACM0:/dev/ttyACM0
+    # If Bluetooth, the container needs to run in privileged mode.
+    #privileged: true
