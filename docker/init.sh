@@ -12,6 +12,6 @@ ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
 /usr/sbin/avahi-daemon -s -D
 
 # Run the gateway
-export MOZIOT_HOME=/home/node/.mozilla-iot
-chown -R node:node "${MOZIOT_HOME}"
+export WEBTHINGS_HOME=/home/node/.mozilla-iot
+chown -R node:node "${WEBTHINGS_HOME}"
 su node -c "cd /home/node/mozilla-iot/gateway && ./run-app.sh"

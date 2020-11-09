@@ -647,7 +647,7 @@ class Plugin {
         {
           env: Object.assign(process.env,
                              {
-                               MOZIOT_HOME: UserProfile.baseDir,
+                               WEBTHINGS_HOME: UserProfile.baseDir,
                                NODE_PATH: path.join(UserProfile.gatewayDir,
                                                     'node_modules'),
                              }),

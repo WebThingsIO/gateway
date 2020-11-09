@@ -42,7 +42,7 @@ jobs:
           ./node_modules/.bin/jest --runInBand --coverage --detectOpenHandles
           ./node_modules/.bin/codecov
         env:
-          MOZIOT_HOME: "${HOME}/.mozilla-iot/test"
+          WEBTHINGS_HOME: "${HOME}/.mozilla-iot/test"
           NODE_TLS_REJECT_UNAUTHORIZED: 0
       - name: Check dependencies
         run: |

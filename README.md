@@ -315,8 +315,8 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
     - The HTTPS server looks for `privatekey.pem` and `certificate.pem` in the `ssl` sub-directory of the `userProfile` directory specified in your config. You can use a real certificate or generate a self-signed one by following the steps below.
 
       ```
-      $ MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
-      $ SSL_DIR="${MOZIOT_HOME}/ssl"
+      $ WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.mozilla-iot}"
+      $ SSL_DIR="${WEBTHINGS_HOME}/ssl"
       $ [ ! -d "${SSL_DIR}" ] && mkdir -p "${SSL_DIR}"
       $ openssl genrsa -out "${SSL_DIR}/privatekey.pem" 2048
       $ openssl req -new -sha256 -key "${SSL_DIR}/privatekey.pem" -out "${SSL_DIR}/csr.pem"
