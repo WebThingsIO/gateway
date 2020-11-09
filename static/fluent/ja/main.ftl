@@ -533,7 +533,6 @@ tunnel-setup-welcome = ようこそ
 tunnel-setup-choose-address = ゲートウェイの安全なウェブアドレスを指定してください:
 tunnel-setup-input-subdomain =
     .placeholder = サブドメイン
-tunnel-setup-privacy-policy = 個人情報保護方針
 tunnel-setup-input-reclamation-token =
     .placeholder = 再利用トークン
 tunnel-setup-error = サブドメインのセットアップ中にエラーが発生しました。

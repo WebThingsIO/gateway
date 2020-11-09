@@ -534,7 +534,6 @@ tunnel-setup-choose-address = Válasszon egy biztonságos webcímet az átjáró
 tunnel-setup-input-subdomain =
     .placeholder = aldomain
 tunnel-setup-email-opt-in = Tartson naprakészen a WebThingsről szóló hírekkel.
-tunnel-setup-privacy-policy = Adatvédelmi irányelvek
 tunnel-setup-input-reclamation-token =
     .placeholder = Visszaszerzési token
 tunnel-setup-error = Hiba történt az aldomain beállításakor.

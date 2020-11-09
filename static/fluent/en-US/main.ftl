@@ -534,7 +534,7 @@ tunnel-setup-choose-address = Choose a secure web address for your gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomain
 tunnel-setup-email-opt-in = Keep me updated with news about WebThings.
-tunnel-setup-privacy-policy = Privacy Policy
+tunnel-setup-agree-privacy-policy = Agree to the WebThings <a href="https://webthings.io/privacy">Privacy Policy</a> and <a href="https://webthings.io/legal">Terms of Service</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclamation Token
 tunnel-setup-error = An error occurred while setting up the subdomain.

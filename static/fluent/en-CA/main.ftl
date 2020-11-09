@@ -533,7 +533,6 @@ tunnel-setup-welcome = Welcome
 tunnel-setup-choose-address = Choose a secure web address for your gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomain
-tunnel-setup-privacy-policy = Privacy Policy
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclamation Token
 tunnel-setup-error = An error occurred while setting up the subdomain.

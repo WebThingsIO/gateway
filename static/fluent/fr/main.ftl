@@ -533,7 +533,6 @@ tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
     .placeholder = sous-domaine
-tunnel-setup-privacy-policy = Politique de confidentialité
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de récupération
 tunnel-setup-error = Une erreur est survenue en créant le sous-domaine.

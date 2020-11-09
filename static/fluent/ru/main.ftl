@@ -541,7 +541,6 @@ tunnel-setup-choose-address = Выберите безопасный адрес �
 tunnel-setup-input-subdomain =
     .placeholder = субдомен
 tunnel-setup-email-opt-in = Держать меня в курсе новостей о WebThings.
-tunnel-setup-privacy-policy = Политика конфиденциальности
 tunnel-setup-input-reclamation-token =
     .placeholder = Токен возврата
 tunnel-setup-error = Произошла ошибка при настройке субдомена.
