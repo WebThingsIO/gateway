@@ -300,7 +300,7 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
 
 - Set up domain:
 
-  - If you plan to use Mozilla's provided tunneling service to set up a `_.mozilla-iot.org` domain:
+  - If you plan to use the provided tunneling service to set up a `_.webthings.io` domain:
 
     - Start the web server:
 

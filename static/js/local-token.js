@@ -10,7 +10,7 @@ window.addEventListener('load', function app_onLoad() {
       origin.textContent = window.location.origin;
     }
 
-    if (!window.location.origin.endsWith('.mozilla-iot.org')) {
+    if (!window.location.origin.endsWith('.webthings.io')) {
       document.body.classList.add('insecure');
     }
 
