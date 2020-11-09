@@ -2,10 +2,10 @@
 
 SCRIPTDIR="$(dirname ""$0"")"
 
-MOZIOT_HOME="${MOZIOT_HOME:=${HOME}/.mozilla-iot}"
-MOZIOT_TEST_HOME="${MOZIOT_HOME}/test"
-if [ ! -f "${MOZIOT_TEST_HOME}/ssl/certificate.pem" ]; then
-  MOZIOT_HOME="${MOZIOT_TEST_HOME}" ${SCRIPTDIR}/../../tools/make-self-signed-cert.sh
+WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.mozilla-iot}"
+WEBTHINGS_TEST_HOME="${WEBTHINGS_HOME}/test"
+if [ ! -f "${WEBTHINGS_TEST_HOME}/ssl/certificate.pem" ]; then
+  WEBTHINGS_HOME="${WEBTHINGS_TEST_HOME}" ${SCRIPTDIR}/../../tools/make-self-signed-cert.sh
 fi
 
 # cleanup the previous outputs

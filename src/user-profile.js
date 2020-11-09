@@ -24,7 +24,7 @@ const rimraf = require('rimraf');
 const Profile = {
   init: function() {
     this.baseDir = path.resolve(
-      process.env.MOZIOT_HOME || config.get('profileDir')
+      process.env.WEBTHINGS_HOME || config.get('profileDir')
     );
     this.configDir = path.join(this.baseDir, 'config');
     this.dataDir = path.join(this.baseDir, 'data');
