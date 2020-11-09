@@ -533,7 +533,6 @@ tunnel-setup-welcome = Bienvenido
 tunnel-setup-choose-address = Elijir una dirección web segura para tu puerta de enlace:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
-tunnel-setup-opt-in = Manténganme informado sobre las nuevas funciones y oportunidades de colaboración.
 tunnel-setup-privacy-policy = Política de privacidad
 tunnel-setup-input-reclamation-token =
     .placeholder = Token de recuperación

@@ -526,7 +526,6 @@ tunnel-setup-welcome = Benvido
 tunnel-setup-choose-address = Escolla un enderezo web seguro para a súa entrada:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
-tunnel-setup-opt-in = Mantéñame ao día sobre novas funcións e oportunidades de contribución.
 tunnel-setup-privacy-policy = Política de privacidade
 tunnel-setup-input-reclamation-token =
     .placeholder = Mostra de reclamación

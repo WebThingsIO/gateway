@@ -540,7 +540,6 @@ tunnel-setup-welcome = Добро дошли
 tunnel-setup-choose-address = Изаберите безбедну веб адресу за ваш мрежни пролаз:
 tunnel-setup-input-subdomain =
     .placeholder = poddomen
-tunnel-setup-opt-in = Шаљите ми новости о новим стварима и о могућностима доприношења.
 tunnel-setup-privacy-policy = Политика приватности
 tunnel-setup-input-reclamation-token =
     .placeholder = Жетон за повраћај

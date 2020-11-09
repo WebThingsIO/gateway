@@ -533,7 +533,6 @@ tunnel-setup-welcome = Benvenite
 tunnel-setup-choose-address = Elige un secur adresse web pro tu passarella:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
-tunnel-setup-opt-in = Actualisa me re nove functionalitates e opportunitates de contribution.
 tunnel-setup-privacy-policy = Politica de confidentialitate
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de recuperation

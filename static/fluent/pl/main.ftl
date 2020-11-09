@@ -540,7 +540,6 @@ tunnel-setup-welcome = Witamy
 tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
 tunnel-setup-input-subdomain =
     .placeholder = poddomena
-tunnel-setup-opt-in = Chcę otrzymywać najnowsze informacje o nowych funkcjach i możliwościach zaangażowania się.
 tunnel-setup-privacy-policy = Zasady ochrony prywatności
 tunnel-setup-input-reclamation-token =
     .placeholder = Token odzyskiwania

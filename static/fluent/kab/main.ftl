@@ -533,7 +533,6 @@ tunnel-setup-welcome = Ansuf
 tunnel-setup-choose-address = Fren tansa web taɣelsant i tqenṭert-ik:
 tunnel-setup-input-subdomain =
     .placeholder = taɣult tasnawant
-tunnel-setup-opt-in = Ma ulac aɣilif, lɣu-yi-d ɣef tmahinlin timaynutin neɣ tignatin n uttekki.
 tunnel-setup-privacy-policy = Tasertit n tbaḍnit
 tunnel-setup-input-reclamation-token =
     .placeholder = Ajiṭun n usuter

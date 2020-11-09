@@ -533,7 +533,6 @@ tunnel-setup-welcome = Willkommen
 tunnel-setup-choose-address = Wählen Sie eine sichere Webadresse für Ihr Gateway:
 tunnel-setup-input-subdomain =
     .placeholder = Subdomain
-tunnel-setup-opt-in = Benachrichtigungen bei neuen Funktionen und Möglichkeiten zum Mitmachen erhalten.
 tunnel-setup-privacy-policy = Datenschutz
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-Token

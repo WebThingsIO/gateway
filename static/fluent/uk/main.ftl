@@ -540,7 +540,6 @@ tunnel-setup-welcome = Вітаємо
 tunnel-setup-choose-address = Виберіть безпечну мережну адресу для вашого шлюзу:
 tunnel-setup-input-subdomain =
     .placeholder = піддомен
-tunnel-setup-opt-in = Повідомляйте мене про нові функції та можливості допомоги проєкту.
 tunnel-setup-privacy-policy = Політика приватності
 tunnel-setup-input-reclamation-token =
     .placeholder = Токен відновлення

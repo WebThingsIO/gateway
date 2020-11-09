@@ -540,7 +540,6 @@ tunnel-setup-welcome = Vitajte
 tunnel-setup-choose-address = Vyberte zabezpečenú webovú adresu vašej gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdoména
-tunnel-setup-opt-in = Informujte ma, prosím, o nových funkciách a možnostiach prispievania.
 tunnel-setup-privacy-policy = Zásady ochrany súkromia
 tunnel-setup-input-reclamation-token =
     .placeholder = Token pre opätovné získanie
