@@ -13,7 +13,7 @@ const home = os.homedir();
 
 module.exports = {
   cli: false,
-  profileDir: `${home}/.mozilla-iot/test`,
+  profileDir: `${home}/.webthings/test`,
   ports: {
     https: 0, // 0 = find a free open port
     http: 0,

@@ -40,9 +40,9 @@ RUN set -x && \
     usermod -a -G sudo,dialout,gpio node && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-COPY --chown=node:node . /home/node/mozilla-iot/gateway/
+COPY --chown=node:node . /home/node/webthings/gateway/
 USER node
-WORKDIR /home/node/mozilla-iot/gateway
+WORKDIR /home/node/webthings/gateway
 RUN set -x && \
     CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm ci && \
     ./node_modules/.bin/webpack && \
@@ -56,8 +56,8 @@ RUN set -x && \
         config/default.js
 
 USER root
-RUN cp /home/node/mozilla-iot/gateway/tools/udevadm /bin/udevadm && \
-    cp /home/node/mozilla-iot/gateway/docker/avahi-daemon.conf /etc/avahi/ && \
-    cp /home/node/mozilla-iot/gateway/docker/init.sh /
+RUN cp /home/node/webthings/gateway/tools/udevadm /bin/udevadm && \
+    cp /home/node/webthings/gateway/docker/avahi-daemon.conf /etc/avahi/ && \
+    cp /home/node/webthings/gateway/docker/init.sh /
 
 ENTRYPOINT ["/init.sh"]

@@ -36,7 +36,11 @@ sudo systemctl disable mozilla-gateway-wifi-setup.service || true
 sudo systemctl disable mozilla-iot-gateway.renew-certificates.timer || true
 
 if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
-  touch "$HOME/.mozilla-iot/config/wifiskip"
+  if [ -d "$HOME/.webthings" ]; then
+    touch "$HOME/.webthings/config/wifiskip"
+  elif [ -d "$HOME/.mozilla-iot" ]; then
+    touch "$HOME/.mozilla-iot/config/wifiskip"
+  fi
 fi
 
 rm -rf "$HOME/mozilla-iot/intent-parser"

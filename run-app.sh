@@ -2,7 +2,7 @@
 
 set -e -x
 
-WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.mozilla-iot}"
+WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.webthings}"
 args=""
 start_task="run-only"
 
@@ -59,6 +59,12 @@ else
     cd -
     echo "${_node_version}" > "${WEBTHINGS_HOME}/.node_version"
   fi
+fi
+
+if [[ "$WEBTHINGS_HOME" == "$HOME/.webthings" &&
+      -d "$HOME/.mozilla-iot" &&
+      ! -e "$HOME/.webthings" ]]; then
+  mv "$HOME/.mozilla-iot" "$HOME/.webthings"
 fi
 
 mkdir -p "${WEBTHINGS_HOME}/log"
