@@ -540,6 +540,7 @@ tunnel-setup-welcome = Вітаємо
 tunnel-setup-choose-address = Виберіть безпечну мережну адресу для вашого шлюзу:
 tunnel-setup-input-subdomain =
     .placeholder = піддомен
+tunnel-setup-email-opt-in = Тримати мене в курсі новин про WebThings.
 tunnel-setup-privacy-policy = Політика приватності
 tunnel-setup-input-reclamation-token =
     .placeholder = Токен відновлення
