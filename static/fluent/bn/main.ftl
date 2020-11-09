@@ -526,7 +526,6 @@ tunnel-setup-welcome = স্বাগতম
 tunnel-setup-choose-address = আপনার গেটওয়ের জন্য একটি সুরক্ষিত ওয়েব ঠিকানা নির্বাচন করুন:
 tunnel-setup-input-subdomain =
     .placeholder = সাবডোমেন
-tunnel-setup-opt-in = নতুন বৈশিষ্ট্য এবং অবদানের সুযোগ সম্পর্কে দয়া করে আমাকে আপডেট রাখুন।
 tunnel-setup-privacy-policy = গোপনীয়তা নীতি
 tunnel-setup-input-reclamation-token =
     .placeholder = পুনরুদ্ধার টোকেন

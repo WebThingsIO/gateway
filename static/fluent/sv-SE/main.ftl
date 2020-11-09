@@ -533,7 +533,6 @@ tunnel-setup-welcome = Välkommen
 tunnel-setup-choose-address = Välj en säker webbadress för din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = underdomän
-tunnel-setup-opt-in = Håll mig uppdaterad om nya funktioner och bidragsmöjligheter.
 tunnel-setup-privacy-policy = Sekretesspolicy
 tunnel-setup-input-reclamation-token =
     .placeholder = Återvinningstoken

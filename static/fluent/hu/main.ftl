@@ -533,7 +533,6 @@ tunnel-setup-welcome = Üdvözöljük
 tunnel-setup-choose-address = Válasszon egy biztonságos webcímet az átjáróhoz:
 tunnel-setup-input-subdomain =
     .placeholder = aldomain
-tunnel-setup-opt-in = Tájékoztassanak az új funkciókról és a közreműködési lehetőségekről.
 tunnel-setup-privacy-policy = Adatvédelmi irányelvek
 tunnel-setup-input-reclamation-token =
     .placeholder = Visszaszerzési token

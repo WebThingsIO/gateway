@@ -540,7 +540,6 @@ tunnel-setup-welcome = Добро пожаловать
 tunnel-setup-choose-address = Выберите безопасный адрес для вашего шлюза:
 tunnel-setup-input-subdomain =
     .placeholder = субдомен
-tunnel-setup-opt-in = Держать меня в курсе новых функций и возможностей.
 tunnel-setup-privacy-policy = Политика конфиденциальности
 tunnel-setup-input-reclamation-token =
     .placeholder = Токен возврата

@@ -533,7 +533,6 @@ tunnel-setup-welcome = Bine ai venit
 tunnel-setup-choose-address = Alege o adresă web securizată pentru poarta de acces:
 tunnel-setup-input-subdomain =
     .placeholder = subdomeniu
-tunnel-setup-opt-in = Ține-mă la curent cu funcționalități noi și oportunități de a aduce contribuții.
 tunnel-setup-privacy-policy = Politică de confidențialitate
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de revendicare

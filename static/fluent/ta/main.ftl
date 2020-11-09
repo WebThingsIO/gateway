@@ -525,7 +525,6 @@ tunnel-setup-welcome = நல்வரவு!
 tunnel-setup-choose-address = உங்கள் நுழைவாயிலுக்கு பாதுகாப்பான வலை முகவரியைத் தேர்வுசெய்க:
 tunnel-setup-input-subdomain =
     .placeholder = துணை டொமைன்
-tunnel-setup-opt-in = புதிய அம்சங்கள் மற்றும் பங்களிப்பு வாய்ப்புகள் குறித்து என்னைப் புதுப்பிக்கவும்.
 tunnel-setup-privacy-policy = தனியுரிமை கொள்கை
 tunnel-setup-input-reclamation-token =
     .placeholder = மீட்பு டோக்கன்
