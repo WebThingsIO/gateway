@@ -533,6 +533,7 @@ tunnel-setup-welcome = Καλώς ορίσατε
 tunnel-setup-choose-address = Επιλέξτε μια ασφαλή διεύθυνση ιστού για την πύλη σας:
 tunnel-setup-input-subdomain =
     .placeholder = υποτομέας
+tunnel-setup-email-opt-in = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings.
 tunnel-setup-privacy-policy = Πολιτική απορρήτου
 tunnel-setup-input-reclamation-token =
     .placeholder = Token ανάκτησης
