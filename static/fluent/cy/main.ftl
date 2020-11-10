@@ -561,6 +561,7 @@ tunnel-setup-welcome = Croeso
 tunnel-setup-choose-address = Dewis cyfeiriad gwe diogel ar gyfer eich porth:
 tunnel-setup-input-subdomain =
     .placeholder = is-barth
+tunnel-setup-email-opt-in = Gadewch i mi wybod am y newyddion am WebThings.
 tunnel-setup-privacy-policy = Polisi Preifatrwydd
 tunnel-setup-input-reclamation-token =
     .placeholder = Tocyn Adfer
