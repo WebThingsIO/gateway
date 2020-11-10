@@ -1,0 +1,39 @@
+#!/bin/sh
+# postinst script for webthings-gateway
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+case "$1" in
+  configure)
+    adduser --disabled-password --quiet --system \
+      --home /var/run/webthings-gateway --no-create-home \
+      --gecos "WebThings Gateway" --group webthings
+
+    usermod -a -G gpio webthings || true
+    usermod -a -G dialout webthings || true
+
+    if [ `lsb_release -is` = "Raspbian" ]; then
+      echo "webthings ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/010_webthings-nopasswd
+      chmod 0440 /etc/sudoers.d/010_webthings-nopasswd
+    fi
+  ;;
+  abort-upgrade|abort-remove|abort-deconfigure)
+  ;;
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
+
+#DEBHELPER#

@@ -1,0 +1,6 @@
+#!/bin/sh
+# prerm script for webthings-gateway
+
+set -e
+
+#DEBHELPER#

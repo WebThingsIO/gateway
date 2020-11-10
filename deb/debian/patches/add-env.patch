@@ -1,0 +1,5 @@
+Add env variables for the gateway.
+--- /dev/null
++++ b/webthings-gateway.sh
+@@ -0,0 +1 @@
++export WEBTHINGS_HOME="/etc/webthings-gateway"
