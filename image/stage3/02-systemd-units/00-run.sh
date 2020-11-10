@@ -5,10 +5,10 @@ set -x
 install -m 644 files/etc/hostapd/hostapd.conf "${ROOTFS_DIR}/etc/hostapd/"
 install -m 755 files/etc/init.d/gateway-iptables "${ROOTFS_DIR}/etc/init.d/"
 install -m 755 files/etc/init.d/resize2fs_once "${ROOTFS_DIR}/etc/init.d/"
-install -m 644 files/etc/systemd/system/mozilla-iot-gateway.check-for-update.service "${ROOTFS_DIR}/etc/systemd/system/"
-install -m 644 files/etc/systemd/system/mozilla-iot-gateway.service "${ROOTFS_DIR}/etc/systemd/system/"
-install -m 644 files/etc/systemd/system/mozilla-iot-gateway.check-for-update.timer "${ROOTFS_DIR}/etc/systemd/system/"
-install -m 644 files/etc/systemd/system/mozilla-iot-gateway.update-rollback.service "${ROOTFS_DIR}/etc/systemd/system/"
+install -m 644 files/etc/systemd/system/webthings-gateway.check-for-update.service "${ROOTFS_DIR}/etc/systemd/system/"
+install -m 644 files/etc/systemd/system/webthings-gateway.service "${ROOTFS_DIR}/etc/systemd/system/"
+install -m 644 files/etc/systemd/system/webthings-gateway.check-for-update.timer "${ROOTFS_DIR}/etc/systemd/system/"
+install -m 644 files/etc/systemd/system/webthings-gateway.update-rollback.service "${ROOTFS_DIR}/etc/systemd/system/"
 install -m 644 files/etc/default/hostapd "${ROOTFS_DIR}/etc/default/"
 install -m 644 files/etc/dnsmasq.conf "${ROOTFS_DIR}/etc/"
 install -m 644 files/etc/udev/98-co2mon.rules "${ROOTFS_DIR}/etc/udev/rules.d/"
@@ -20,10 +20,10 @@ systemctl disable hostapd.service
 systemctl disable dnsmasq.service
 
 # Enable the gateway service so that it starts up automatically on each boot
-systemctl enable mozilla-iot-gateway.service
+systemctl enable webthings-gateway.service
 
 # Check for an update every day.
-systemctl enable mozilla-iot-gateway.check-for-update.timer
+systemctl enable webthings-gateway.check-for-update.timer
 
 # Activate the iptables script so that it runs on each boot.
 #

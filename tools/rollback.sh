@@ -50,7 +50,8 @@ function checkCounter() {
 }
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
-  systemctl stop mozilla-iot-gateway
+  systemctl stop webthings-gateway || true
+  systemctl stop mozilla-iot-gateway || true
   mv gateway_old gateway
 
   # restore the user profile
@@ -73,5 +74,11 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   npm link || true
   cd -
 
-  systemctl start mozilla-iot-gateway
+  if [ -f "$HOME/mozilla-iot/gateway/image/stage3/02-systemd-units/files/etc/systemd/system/webthings-gateway.service" ]; then
+    systemctl start webthings-gateway
+  else
+    systemctl disable webthings-gateway
+    systemctl enable mozilla-iot-gateway
+    systemctl start mozilla-iot-gateway
+  fi
 fi

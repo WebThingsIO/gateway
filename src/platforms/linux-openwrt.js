@@ -1049,7 +1049,7 @@ function restartGateway() {
   const label = 'restartGateway';
   const proc = spawnSync(
     label,
-    '/etc/init.d/mozilla-iot-gateway',
+    '/etc/init.d/webthings-gateway',
     ['restart']
   );
 
