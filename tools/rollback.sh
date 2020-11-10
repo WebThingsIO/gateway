@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # This script performs a rollback of a failed upgrade. It expects to be run in
-# the ~/mozilla-iot directory where it can see gateway, gateway_old, and
-# gateway_failed
+# the ~/mozilla-iot directory where it can see gateway and gateway_old.
 
 COUNTER_FILE=/tmp/mozilla-iot-gateway-reset-counter
 
@@ -52,14 +51,14 @@ function checkCounter() {
 
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
   systemctl stop mozilla-iot-gateway
-  rm -rf gateway_failed
-  mv gateway gateway_failed
   mv gateway_old gateway
 
   # restore the user profile
-  if [ -d "$HOME/.mozilla-iot.old" ]; then
-    rm -rf "$HOME/.mozilla-iot.failed"
-    mv "$HOME/.mozilla-iot" "$HOME/.mozilla-iot.failed"
+  if [ -d "$HOME/.webthings.old" ]; then
+    rm -rf "$HOME/.webthings"
+    mv "$HOME/.webthings.old" "$HOME/.webthings"
+  elif [ -d "$HOME/.mozilla-iot.old" ]; then
+    rm -rf "$HOME/.webthings"
     mv "$HOME/.mozilla-iot.old" "$HOME/.mozilla-iot"
   fi
 

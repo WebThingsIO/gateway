@@ -16,7 +16,7 @@ module.exports = {
   // Expose CLI
   cli: true,
 
-  profileDir: `${home}/.mozilla-iot`,
+  profileDir: `${home}/.webthings`,
 
   ports: {
     https: 4443,

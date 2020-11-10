@@ -2,7 +2,7 @@
 
 set -x
 
-WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.mozilla-iot}"
+WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.webthings}"
 SSL_DIR="${WEBTHINGS_HOME}/ssl"
 [ ! -d "${SSL_DIR}" ] && mkdir -p "${SSL_DIR}"
 openssl genrsa -out "${SSL_DIR}/privatekey.pem" 2048

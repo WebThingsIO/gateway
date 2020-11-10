@@ -60,9 +60,13 @@ touch gateway_old/package.json
 mv /tmp/gateway gateway
 
 # back up the user profile
-if [ -d "$HOME/.mozilla-iot" ]; then
-  rm -rf "$HOME/.mozilla-iot.old"
+if [ -d "$HOME/.webthings" ]; then
+  rm -rf "$HOME/.webthings.old" "$HOME/.mozilla-iot.old"
+  cp -a "$HOME/.webthings" "$HOME/.webthings.old"
+elif [ -d "$HOME/.mozilla-iot" ]; then
+  rm -rf "$HOME/.webthings.old" "$HOME/.mozilla-iot.old"
   cp -a "$HOME/.mozilla-iot" "$HOME/.mozilla-iot.old"
+  mv "$HOME/.mozilla-iot" "$HOME/.webthings"
 fi
 
 pushd gateway
