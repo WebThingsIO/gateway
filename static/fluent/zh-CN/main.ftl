@@ -533,6 +533,7 @@ tunnel-setup-welcome = 欢迎使用
 tunnel-setup-choose-address = 为您的网关选择一个安全网址：
 tunnel-setup-input-subdomain =
     .placeholder = 子域
+tunnel-setup-email-opt-in = 让我随时了解 WebThings 的相关新闻。
 tunnel-setup-privacy-policy = 隐私政策
 tunnel-setup-input-reclamation-token =
     .placeholder = 域回收令牌（Token）
