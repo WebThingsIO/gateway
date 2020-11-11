@@ -535,6 +535,7 @@ tunnel-setup-welcome = Wolkom
 tunnel-setup-choose-address = Kies in befeilige webadres foar jo gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomein
+tunnel-setup-email-opt-in = Hâld my op de hichte mei nijs oer WebThings.
 tunnel-setup-privacy-policy = Privacybelied
 tunnel-setup-input-reclamation-token =
     .placeholder = Opeasktoken
