@@ -540,6 +540,7 @@ tunnel-setup-welcome = Witamy
 tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
 tunnel-setup-input-subdomain =
     .placeholder = poddomena
+tunnel-setup-email-opt-in = Informuj mnie na bieżąco o nowościach na temat WebThings.
 tunnel-setup-privacy-policy = Zasady ochrony prywatności
 tunnel-setup-input-reclamation-token =
     .placeholder = Token odzyskiwania
