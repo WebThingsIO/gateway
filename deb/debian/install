@@ -1,0 +1,12 @@
+webthings-gateway.sh etc/profile.d
+LICENSE opt/webthings-gateway
+build opt/webthings-gateway
+config/default.js opt/webthings-gateway/config
+node_modules opt/webthings-gateway
+package-lock.json opt/webthings-gateway
+package.json opt/webthings-gateway
+python opt/webthings-gateway
+src opt/webthings-gateway
+static opt/webthings-gateway
+tools opt/webthings-gateway
+webthings-gateway usr/bin

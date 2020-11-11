@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+
+ifeq ("$(shell test -e /usr/local/lib/node_modules/npm/bin/npm-cli.js && echo true)","true")
+	NPM := NODE_PATH=/usr/local/lib/node_modules/npm/node_modules /usr/local/lib/node_modules/npm/bin/npm-cli.js
+else
+	NPM := NODE_PATH=/usr/lib/node_modules/npm/node_modules /usr/lib/node_modules/npm/bin/npm-cli.js
+endif
+
+%:
+	dh $@ --with-systemd
+
+override_dh_auto_clean:
+	$(RM) -rf build node_modules
+
+override_dh_auto_build:
+	$(eval NPM_CACHE := $(shell mktemp -dq))
+	CPPFLAGS="-DPNG_ARM_NEON_OPT=0" $(NPM) --cache "$(NPM_CACHE)" ci
+	./node_modules/.bin/webpack
+	$(RM) -rf ./node_modules/gifsicle
+	$(RM) -rf ./node_modules/mozjpeg
+	$(NPM) --cache "$(NPM_CACHE)" prune --production
+	$(RM) -rf "$(NPM_CACHE)"
+	chmod a+x webthings-gateway
+	mkdir python
+	python3 -m pip install \
+		--system \
+		--install-option="--prefix=" \
+		--no-binary=:all: \
+		-t ./python \
+		./gateway-addon-python
+
+override_dh_installinit:
+	dh_installinit --name=webthings-gateway
+
+override_dh_systemd_enable:
+	dh_systemd_enable --name=webthings-gateway
+
+override_dh_systemd_start:
+	dh_systemd_start --name=webthings-gateway

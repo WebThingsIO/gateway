@@ -1,0 +1,32 @@
+--- a/config/default.js
++++ b/config/default.js
+@@ -14,9 +14,9 @@
+
+ module.exports = {
+   // Expose CLI
+-  cli: true,
++  cli: false,
+
+-  profileDir: `${home}/.webthings`,
++  profileDir: '/etc/webthings-gateway',
+
+   ports: {
+     https: 4443,
+@@ -25,7 +25,7 @@
+   },
+   // Whether the gateway is behind port forwarding and should use simplified
+   // port-free urls
+-  behindForwarding: true,
++  behindForwarding: false,
+   addonManager: {
+     listUrls: [
+       'https://api.webthings.io:8443/addons',
+@@ -38,7 +38,7 @@
+   settings: {
+     defaults: {
+       mdns: {
+-        enabled: true,
++        enabled: false,
+         domain: os.hostname().split('.')[0],
+       },
+     },

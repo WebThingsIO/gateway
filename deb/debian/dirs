@@ -1,0 +1,4 @@
+etc/profile.d
+opt/webthings-gateway
+opt/webthings-gateway/config
+usr/bin

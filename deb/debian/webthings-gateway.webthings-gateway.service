@@ -1,0 +1,16 @@
+[Unit]
+Description=WebThings Gateway
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+WorkingDirectory=/opt/webthings-gateway
+Environment="PYTHONPATH=/opt/webthings-gateway/python"
+ExecStart=/usr/bin/webthings-gateway
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
