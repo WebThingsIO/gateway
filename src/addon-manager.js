@@ -62,6 +62,22 @@ class AddonManager extends EventEmitter {
     this.updateInterval = null;
   }
 
+  // These stubs are needed because the gateway shares classes like
+  // Addon, Device, ... with the addon.
+  // Although the values aren't used, the getters need to be present
+  // because they are called as part of the initialization process.
+  getGatewayVersion() {
+    return '';
+  }
+
+  getUserProfile() {
+    return '';
+  }
+
+  getPreferences() {
+    return '';
+  }
+
   /**
    * Adds an adapter to the collection of adapters managed by AddonManager.
    * This function is typically called when loading add-ons.
