@@ -211,6 +211,24 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     return;
   }
 
+  try {
+    await fetch(
+      `${endpoint}/newsletter/subscribe`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          subscribe: !optout,
+        }),
+      }
+    );
+  } catch (e) {
+    console.error('Failed to subscribe to newsletter:', e);
+  }
+
   console.log('Registration success!');
   callback();
 }
