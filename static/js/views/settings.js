@@ -1170,7 +1170,7 @@ const SettingsScreen = {
       });
   },
 
-  // The button controller to update the mozilla tunnel domain settings.
+  // The button controller to update the tunnel domain settings.
   // In menu -> Settings -> Domain. Removed until this feature is done
   // at a future point.
 

@@ -162,7 +162,7 @@ UpdatesController.get('/status', async (request, response) => {
 
 UpdatesController.post('/update', async (request, response) => {
   childProcess.exec('sudo systemctl start ' +
-    'mozilla-iot-gateway.check-for-update.service');
+    'webthings-gateway.check-for-update.service');
 
   response.json({});
 });

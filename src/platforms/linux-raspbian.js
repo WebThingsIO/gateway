@@ -636,7 +636,7 @@ function setHostname(hostname) {
 function restartGateway() {
   const proc = child_process.spawnSync(
     'sudo',
-    ['systemctl', 'restart', 'mozilla-iot-gateway.service']
+    ['systemctl', 'restart', 'webthings-gateway.service']
   );
 
   // This will probably not fire, but just in case.
@@ -810,7 +810,7 @@ function getNetworkAddresses() {
  * @returns {Object} {available: <bool>, enabled: <bool>}
  */
 function getSelfUpdateStatus() {
-  const timer = 'mozilla-iot-gateway.check-for-update.timer';
+  const timer = 'webthings-gateway.check-for-update.timer';
 
   const proc = child_process.spawnSync(
     'systemctl',
@@ -830,7 +830,7 @@ function getSelfUpdateStatus() {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function setSelfUpdateStatus(enabled) {
-  const timer = 'mozilla-iot-gateway.check-for-update.timer';
+  const timer = 'webthings-gateway.check-for-update.timer';
 
   let proc = child_process.spawnSync(
     'sudo',

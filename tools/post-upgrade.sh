@@ -31,7 +31,10 @@ sudo pip2 uninstall -y gateway_addon || true
 # Uninstall adapt-parser, if present
 sudo pip3 uninstall -y adapt-parser || true
 
-sudo systemctl enable mozilla-iot-gateway.service
+sudo systemctl enable webthings-gateway.service
+sudo systemctl enable webthings-gateway.check-for-update.timer
+sudo systemctl disable mozilla-iot-gateway.service || true
+sudo systemctl disable mozilla-iot-gateway.check-for-update.timer || true
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
 sudo systemctl disable mozilla-iot-gateway.renew-certificates.timer || true
 

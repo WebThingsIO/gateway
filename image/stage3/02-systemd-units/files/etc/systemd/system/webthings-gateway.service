@@ -1,7 +1,7 @@
 [Unit]
 Description=WebThings Gateway Client
 After=network.target
-OnFailure=mozilla-iot-gateway.update-rollback.service
+OnFailure=webthings-gateway.update-rollback.service
 
 [Service]
 Type=simple

@@ -12,7 +12,11 @@ if [ -z $gateway_archive_url ] || [ -z $node_modules_archive_url ]; then
 fi
 
 die() {
-  sudo systemctl start mozilla-iot-gateway.service
+  if [ -d /etc/systemd/system/webthings-gateway.service ]; then
+    sudo systemctl start webthings-gateway.service
+  else
+    sudo systemctl start mozilla-iot-gateway.service
+  fi
   rm -f gateway-*.tar.gz
   rm -f node_modules-*.tar.gz
   exit -1
@@ -52,7 +56,8 @@ pushd /tmp/gateway
 popd
 
 # bring down the gateway very late in the process since it'll probably be fine
-sudo systemctl stop mozilla-iot-gateway.service
+sudo systemctl stop webthings-gateway.service || true
+sudo systemctl stop mozilla-iot-gateway.service || true
 
 rm -rf gateway_old
 mv gateway gateway_old
@@ -73,4 +78,4 @@ pushd gateway
 ./tools/post-upgrade.sh
 popd
 
-sudo systemctl start mozilla-iot-gateway.service
+sudo systemctl start webthings-gateway.service
