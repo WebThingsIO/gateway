@@ -114,7 +114,7 @@ button:active:enabled {
 
 #agree-group,
 #opt-in-group {
-  padding-top: 2rem;
+  padding-top: 0;
   display: grid;
   grid-template-columns: 8rem auto;
   width: 100%;
@@ -167,9 +167,9 @@ button:active:enabled {
   padding-top: 2rem;
 }
 
-#agree-info > a:link,
-#agree-info > a:visited,
-#agree-info > a:hover,
-#agree-info > a:active {
+#agree-info > span > a:link,
+#agree-info > span > a:visited,
+#agree-info > span > a:hover,
+#agree-info > span > a:active {
   color: white;
 }
