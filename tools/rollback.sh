@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This script performs a rollback of a failed upgrade. It expects to be run in
-# the ~/mozilla-iot directory where it can see gateway and gateway_old.
+# the ~/webthings directory where it can see gateway and gateway_old.
 
-COUNTER_FILE=/tmp/mozilla-iot-gateway-reset-counter
+COUNTER_FILE=/tmp/webthings-gateway-reset-counter
 
 export NVM_DIR=${HOME}/.nvm
 \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -70,11 +70,11 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   nvm alias default node
   popd
 
-  cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
+  cd "$HOME/webthings/gateway/node_modules/gateway-addon"
   npm link || true
   cd -
 
-  if [ -f "$HOME/mozilla-iot/gateway/image/stage3/02-systemd-units/files/etc/systemd/system/webthings-gateway.service" ]; then
+  if [ -f "$HOME/webthings/gateway/image/stage3/02-systemd-units/files/etc/systemd/system/webthings-gateway.service" ]; then
     systemctl start webthings-gateway
   else
     systemctl disable webthings-gateway
