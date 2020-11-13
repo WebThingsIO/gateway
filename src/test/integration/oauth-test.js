@@ -23,7 +23,7 @@ const CLIENT_SERVER_PORT = 31338;
 const TEST_THING = {
   id: 'test-1',
   title: 'kitchen',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     power: {

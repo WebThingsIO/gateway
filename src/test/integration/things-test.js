@@ -25,7 +25,7 @@ const Events = require('../../models/events');
 const TEST_THING = {
   id: 'test-1',
   title: 'test-1',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     power: {
@@ -44,7 +44,7 @@ const TEST_THING = {
 const VALIDATION_THING = {
   id: 'validation-1',
   title: 'validation-1',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   properties: {
     readOnlyProp: {
       type: 'boolean',
@@ -79,7 +79,7 @@ const VALIDATION_THING = {
 const piDescr = {
   id: 'pi-1',
   title: 'pi-1',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     power: {

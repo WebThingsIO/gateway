@@ -37,7 +37,7 @@ class Thing {
     this.id = id;
     this.title = description.title || description.name || '';
     this['@context'] =
-      description['@context'] || 'https://iot.mozilla.org/schemas';
+      description['@context'] || 'https://webthings.io/schemas';
     this['@type'] = description['@type'] || [];
     this.description = description.description || '';
     this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
@@ -517,7 +517,7 @@ class Thing {
 
     // Update @context
     this['@context'] =
-      description['@context'] || 'https://iot.mozilla.org/schemas';
+      description['@context'] || 'https://webthings.io/schemas';
 
     // Update @type
     this['@type'] = description['@type'] || [];

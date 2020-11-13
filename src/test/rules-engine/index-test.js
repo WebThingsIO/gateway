@@ -22,7 +22,7 @@ const thingLight1 = {
   id: 'light1',
   title: 'light1',
   type: 'onOffSwitch',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     on: {type: 'boolean', value: false},
@@ -46,7 +46,7 @@ const thingLight2 = {
   id: 'light2',
   title: 'light2',
   type: 'onOffSwitch',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     on: {type: 'boolean', value: false},
@@ -60,7 +60,7 @@ const thingLight3 = {
   id: 'light3',
   title: 'light3',
   type: 'onOffSwitch',
-  '@context': 'https://iot.mozilla.org/schemas',
+  '@context': 'https://webthings.io/schemas',
   '@type': ['OnOffSwitch'],
   properties: {
     on: {type: 'boolean', value: false},

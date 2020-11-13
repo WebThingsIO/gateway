@@ -18,7 +18,7 @@ describe('Thing', () => {
        const desc = {
          id: 'UnknownThing',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': [],
          properties: {
            numberProp: {
@@ -121,7 +121,7 @@ describe('Thing', () => {
     const desc = {
       id: 'spacedPropertyThings',
       title: 'battery sensor',
-      '@context': 'https://iot.mozilla.org/schemas',
+      '@context': 'https://webthings.io/schemas',
       '@type': [],
       properties: {
         'spaced number': {
@@ -190,7 +190,7 @@ describe('Thing', () => {
     const desc = {
       id: 'UnknownThing',
       title: 'foofoo',
-      '@context': 'https://iot.mozilla.org/schemas',
+      '@context': 'https://webthings.io/schemas',
       '@type': [],
       properties: {
         rejectPropertyNum: {
@@ -276,7 +276,7 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffLight',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['Light', 'OnOffSwitch'],
          properties: {
            power: {
@@ -321,7 +321,7 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffSwitch',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['OnOffSwitch'],
          properties: {
            power: {
@@ -367,7 +367,7 @@ describe('Thing', () => {
        const desc = {
          id: 'dimmableLight',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['Light', 'OnOffSwitch'],
          properties: {
            power: {
@@ -467,7 +467,7 @@ describe('Thing', () => {
        const desc = {
          id: 'onOffColorLight',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
          properties: {
            power: {
@@ -548,7 +548,7 @@ describe('Thing', () => {
        const desc = {
          id: 'dimmableColorLight',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
          properties: {
            power: {
@@ -662,7 +662,7 @@ describe('Thing', () => {
        const desc = {
          id: 'multiLevelSwitch',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['MultiLevelSwitch', 'OnOffSwitch'],
          properties: {
            power: {
@@ -763,7 +763,7 @@ describe('Thing', () => {
        const desc = {
          id: 'smartPlug',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': [
            'SmartPlug',
            'EnergyMonitor',
@@ -940,7 +940,7 @@ describe('Thing', () => {
        const desc = {
          id: 'binarySensor',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['BinarySensor'],
          properties: {
            active: {
@@ -982,7 +982,7 @@ describe('Thing', () => {
        const desc = {
          id: 'multiLevelSensor',
          title: 'foofoo',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['MultiLevelSensor'],
          properties: {
            active: {
@@ -1031,7 +1031,7 @@ describe('Thing', () => {
        const desc = {
          id: 'humiditySensor',
          title: 'Humidity',
-         '@context': 'https://iot.mozilla.org/schemas',
+         '@context': 'https://webthings.io/schemas',
          '@type': ['HumiditySensor'],
          properties: {
            humidity: {

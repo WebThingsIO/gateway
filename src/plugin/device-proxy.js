@@ -24,7 +24,7 @@ class DeviceProxy extends Device {
 
     this.title = deviceDict.title;
     this['@context'] =
-      deviceDict['@context'] || 'https://iot.mozilla.org/schemas';
+      deviceDict['@context'] || 'https://webthings.io/schemas';
     this['@type'] = deviceDict['@type'] || [];
     this.description = deviceDict.description || '';
     this.links = deviceDict.links || [];

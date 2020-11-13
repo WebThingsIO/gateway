@@ -15,7 +15,7 @@ describe('actions/', () => {
   const thingLight = {
     id: 'light',
     title: 'light',
-    '@context': 'https://iot.mozilla.org/schemas',
+    '@context': 'https://webthings.io/schemas',
     '@type': ['OnOffSwitch', 'Light'],
     properties: {
       power: {
