@@ -534,6 +534,7 @@ tunnel-setup-choose-address = Välj en säker webbadress för din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = underdomän
 tunnel-setup-email-opt-in = Håll mig uppdaterad med nyheter om WebThings.
+tunnel-setup-agree-privacy-policy = Godkänn WebThings <a data-l10n-name="tunnel-setup-privacy-policy-link">sekretesspolicy</a> och <a data-l10n-name="tunnel-setup-tos-link">användarvillkor</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Återvinningstoken
 tunnel-setup-error = Ett fel inträffade under inställningen av underdomänen.
