@@ -12,7 +12,7 @@ export npm_config_arch=armv6l
 export npm_config_target_arch=arm
 
 # build the gateway
-cd ~/mozilla-iot/gateway
+cd ~/webthings/gateway
 npm ci
 ./node_modules/.bin/webpack
 npm prune --production

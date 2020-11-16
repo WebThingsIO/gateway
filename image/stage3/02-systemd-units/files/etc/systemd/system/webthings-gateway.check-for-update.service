@@ -8,6 +8,6 @@ StandardOutput=journal
 StandardError=journal
 User=pi
 # Edit this line, if needed, to specify where you installed the server
-WorkingDirectory=/home/pi/mozilla-iot/gateway
+WorkingDirectory=/home/pi/webthings/gateway
 # Edit this line, if needed, to set the correct path to the script
-ExecStart=/home/pi/mozilla-iot/gateway/tools/check-for-update.sh
+ExecStart=/home/pi/webthings/gateway/tools/check-for-update.sh

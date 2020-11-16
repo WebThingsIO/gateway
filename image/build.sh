@@ -50,7 +50,7 @@ mv pi-gen/deploy/*.zip "gateway-${_version}.img.zip"
 shasum --algorithm 256 "gateway-${_version}.img.zip" > "gateway-${_version}.img.zip.sha256sum"
 
 # copy the built gateway out of the docker image
-docker cp "pigen_work:/pi-gen/work/${_image_name}/stage3/rootfs/home/pi/mozilla-iot/gateway" .
+docker cp "pigen_work:/pi-gen/work/${_image_name}/stage3/rootfs/home/pi/webthings/gateway" .
 
 makeContentAddressedArchive() {
   base_name="$1"

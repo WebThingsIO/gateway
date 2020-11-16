@@ -53,7 +53,7 @@ else
   _node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
   if [[ ! -f "${WEBTHINGS_HOME}/.node_version" ||
         "$(< "${WEBTHINGS_HOME}/.node_version")" != "${_node_version}" ]]; then
-    cd "${HOME}/mozilla-iot/gateway"
+    cd "${HOME}/webthings/gateway"
     mkdir -p "${WEBTHINGS_HOME}/config"
     ./tools/update-addons.sh
     cd -

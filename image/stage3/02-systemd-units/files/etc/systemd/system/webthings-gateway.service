@@ -11,9 +11,9 @@ StandardError=journal
 # If you delete this line, it will run as root
 User=pi
 # Edit this line, if needed, to specify where you installed the server
-WorkingDirectory=/home/pi/mozilla-iot/gateway
+WorkingDirectory=/home/pi/webthings/gateway
 # Edit this line, if needed, to set the correct path to node
-ExecStart=/home/pi/mozilla-iot/gateway/run-app.sh
+ExecStart=/home/pi/webthings/gateway/run-app.sh
 Restart=always
 RestartSec=10s
 

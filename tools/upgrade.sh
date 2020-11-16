@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Performs an upgrade given the urls to the content-addressed archives. Expects
-# to be run in the ~/mozilla-iot directory
+# to be run in the ~/webthings directory
 
 gateway_archive_url=$1
 node_modules_archive_url=$2

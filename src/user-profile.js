@@ -16,7 +16,6 @@ process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 const config = require('config');
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 const mkdirp = require('mkdirp');
 const {ncp} = require('ncp');
 const rimraf = require('rimraf');
@@ -263,17 +262,6 @@ const Profile = {
     const localConfig = config.util.parseFile(userConfigPath);
     if (localConfig) {
       config.util.extendDeep(config, localConfig);
-    }
-
-    // Move anything that exists in ~/mozilla-iot, such as certbot configs.
-    const oldProfileDir = path.join(os.homedir(), 'mozilla-iot');
-    const oldEtcDir = path.join(oldProfileDir, 'etc');
-    if (fs.existsSync(oldEtcDir) && fs.lstatSync(oldEtcDir).isDirectory()) {
-      pending.push(this.renameDir(oldEtcDir, path.join(this.baseDir, 'etc')));
-    }
-    const oldVarDir = path.join(oldProfileDir, 'var');
-    if (fs.existsSync(oldVarDir) && fs.lstatSync(oldVarDir).isDirectory()) {
-      pending.push(this.renameDir(oldVarDir, path.join(this.baseDir, 'var')));
     }
 
     // Move add-ons.

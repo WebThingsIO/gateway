@@ -5,6 +5,10 @@
 export NVM_DIR=${HOME}/.nvm
 \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
+if [[ -d "$HOME/mozilla-iot" && ! -e "$HOME/webthings" ]]; then
+  ln -sf "$HOME/mozilla-iot" "$HOME/webthings"
+fi
+
 # Install and use the version of node specified in .nvmrc
 nvm install
 nvm use

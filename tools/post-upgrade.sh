@@ -46,18 +46,18 @@ if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   fi
 fi
 
-rm -rf "$HOME/mozilla-iot/intent-parser"
+rm -rf "$HOME/webthings/intent-parser"
 sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
 # if the node version changed, we need to update add-ons
-if [[ ! -f "$HOME/mozilla-iot/gateway_old/.nvmrc" ||
-      $(sha256sum "$HOME/mozilla-iot/gateway_old/.nvmrc") != $(sha256sum "$HOME/mozilla-iot/gateway/.nvmrc") ]]; then
-  cd "$HOME/mozilla-iot/gateway"
+if [[ ! -f "$HOME/webthings/gateway_old/.nvmrc" ||
+      $(sha256sum "$HOME/webthings/gateway_old/.nvmrc") != $(sha256sum "$HOME/webthings/gateway/.nvmrc") ]]; then
+  cd "$HOME/webthings/gateway"
   ./tools/update-addons.sh
   cd -
 fi
 
-cd "$HOME/mozilla-iot/gateway/node_modules/gateway-addon"
+cd "$HOME/webthings/gateway/node_modules/gateway-addon"
 npm link
 cd -
 
