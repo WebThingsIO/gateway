@@ -533,7 +533,6 @@ tunnel-setup-welcome = Tervetuloa
 tunnel-setup-choose-address = Valitse turvallinen verkko-osoite yhdyskäytävällesi:
 tunnel-setup-input-subdomain =
     .placeholder = aliverkkotunnus
-tunnel-setup-privacy-policy = Tietosuojakäytäntö
 tunnel-setup-input-reclamation-token =
     .placeholder = Palautuspoletti
 tunnel-setup-error = Aliverkkotunnuksen asennuksessa tapahtui virhe.

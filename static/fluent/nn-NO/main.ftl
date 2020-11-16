@@ -531,7 +531,6 @@ tunnel-setup-welcome = Velkomen
 tunnel-setup-choose-address = Vel ei sikker nettadresse for gateway-en din:
 tunnel-setup-input-subdomain =
     .placeholder = underdomene
-tunnel-setup-privacy-policy = Personvernerklæring
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-token
 tunnel-setup-error = Det oppstod ein feil under innstillinga av underdomenet.

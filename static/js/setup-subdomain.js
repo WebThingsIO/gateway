@@ -17,6 +17,7 @@ function setupForm() {
   const subdomain = document.getElementById('subdomain');
   const email = document.getElementById('email');
   const optIn = document.getElementById('opt-in');
+  const agree = document.getElementById('agree');
   const reclamationToken = document.getElementById('reclamation-token');
   const createDomainButton = document.getElementById('create-domain-button');
   const skipAnchor = document.getElementById('skip-subdomain-anchor');
@@ -130,7 +131,7 @@ function setupForm() {
         fluent.getMessage('invalid-reclamation-token');
       validationMessage.classList.remove('hidden');
     } else {
-      createDomainButton.disabled = false;
+      createDomainButton.disabled = !agree.checked;
       validationMessage.classList.add('hidden');
     }
   }
@@ -205,6 +206,7 @@ function setupForm() {
   subdomain.addEventListener('input', validateInput);
   email.addEventListener('input', validateInput);
   reclamationToken.addEventListener('input', validateInput);
+  agree.addEventListener('change', validateInput);
 
   subdomain.addEventListener('keydown', submitOnEnter);
   email.addEventListener('keydown', submitOnEnter);

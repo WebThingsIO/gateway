@@ -519,7 +519,6 @@ tunnel-setup-welcome = Selamat Datang
 tunnel-setup-choose-address = Pilih alamat web aman untuk gerbang Anda:
 tunnel-setup-input-subdomain =
     .placeholder = subdomain
-tunnel-setup-privacy-policy = Kebijakan Privasi
 tunnel-setup-input-reclamation-token =
     .placeholder = Token Reklamasi
 tunnel-setup-error = Galat terjadi ketika mengatur subdomain.

@@ -534,7 +534,6 @@ tunnel-setup-choose-address = Elijir una dirección web segura para tu puerta de
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
 tunnel-setup-email-opt-in = Manténganme al día con las noticias sobre WebThings.
-tunnel-setup-privacy-policy = Política de privacidad
 tunnel-setup-input-reclamation-token =
     .placeholder = Token de recuperación
 tunnel-setup-error = Ocurrió un error al configurar el subdominio.

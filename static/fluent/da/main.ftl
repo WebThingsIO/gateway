@@ -526,7 +526,6 @@ tunnel-setup-welcome = Velkommen
 tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomæne
-tunnel-setup-privacy-policy = Privatlivspolitik
 tunnel-setup-input-reclamation-token =
     .placeholder = Gendannelsestoken
 tunnel-setup-error = Der opstod en fejl under opsætning af subdomænet.

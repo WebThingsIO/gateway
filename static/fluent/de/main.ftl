@@ -534,7 +534,6 @@ tunnel-setup-choose-address = Wählen Sie eine sichere Webadresse für Ihr Gatew
 tunnel-setup-input-subdomain =
     .placeholder = Subdomain
 tunnel-setup-email-opt-in = Halten Sie mich mit Neuigkeiten über WebThings auf dem Laufenden.
-tunnel-setup-privacy-policy = Datenschutz
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-Token
 tunnel-setup-error = Ein Fehler ist beim Erstellen der Subdomain aufgetreten.
