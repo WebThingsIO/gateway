@@ -534,6 +534,7 @@ tunnel-setup-choose-address = Επιλέξτε μια ασφαλή διεύθυ�
 tunnel-setup-input-subdomain =
     .placeholder = υποτομέας
 tunnel-setup-email-opt-in = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings.
+tunnel-setup-agree-privacy-policy = Συμφωνώ με την <a data-l10n-name="tunnel-setup-privacy-policy-link">Πολιτική απορρήτου</a> και τους <a data-l10n-name="tunnel-setup-tos-link">Όρους υπηρεσίας</a> του WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token ανάκτησης
 tunnel-setup-error = Προέκυψε σφάλμα κατά τη ρύθμιση του υποτομέα.
