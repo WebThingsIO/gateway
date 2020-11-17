@@ -527,6 +527,7 @@ tunnel-setup-choose-address = 為您的閘道器挑選一組安全網址:
 tunnel-setup-input-subdomain =
     .placeholder = 子網域
 tunnel-setup-email-opt-in = 隨時告訴我 WebThings 的新鮮事。
+tunnel-setup-agree-privacy-policy = 同意 WebThings 的<a data-l10n-name="tunnel-setup-privacy-policy-link">隱私權保護政策</a>與<a data-l10n-name="tunnel-setup-tos-link">服務條款</a>。
 tunnel-setup-input-reclamation-token =
     .placeholder = 網域取回代碼
 tunnel-setup-error = 設定子網域時發生錯誤。
