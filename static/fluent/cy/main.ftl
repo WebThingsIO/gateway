@@ -562,6 +562,7 @@ tunnel-setup-choose-address = Dewis cyfeiriad gwe diogel ar gyfer eich porth:
 tunnel-setup-input-subdomain =
     .placeholder = is-barth
 tunnel-setup-email-opt-in = Gadewch i mi wybod am y newyddion am WebThings.
+tunnel-setup-agree-privacy-policy = Cytuno i <a data-l10n-name="tunnel-setup-privacy-policy-link">Bolisi Preifatrwydd</a> a <a data-l10n-name="tunnel-setup-tos-link">Thelerau Gwasanaeth </a> WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Tocyn Adfer
 tunnel-setup-error = Digwyddodd gwall wrth osod yr is-barth.
