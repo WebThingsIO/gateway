@@ -174,9 +174,9 @@ h6 {
 
 #menu-wordmark {
   position: fixed;
-  top: 3rem;
-  left: 10rem;
-  height: 3.6rem;
+  width: 20rem;
+  top: 4rem;
+  left: 9.5rem;
 }
 
 #update-message-area {
