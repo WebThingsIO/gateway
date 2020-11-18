@@ -540,6 +540,8 @@ tunnel-setup-welcome = Добро дошли
 tunnel-setup-choose-address = Изаберите безбедну веб адресу за ваш мрежни пролаз:
 tunnel-setup-input-subdomain =
     .placeholder = poddomen
+tunnel-setup-email-opt-in = Обавештавајте ме о WebThings новостима.
+tunnel-setup-agree-privacy-policy = Пристаните на WebThings<a data-l10n-name="tunnel-setup-privacy-policy-link">Политику приватности</a> и <a data-l10n-name="tunnel-setup-tos-link">Услове услуга</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Жетон за повраћај
 tunnel-setup-error = Догодила се грешка приликом подешавања поддомена.
