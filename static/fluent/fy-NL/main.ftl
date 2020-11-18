@@ -536,6 +536,7 @@ tunnel-setup-choose-address = Kies in befeilige webadres foar jo gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomein
 tunnel-setup-email-opt-in = Hâld my op de hichte mei nijs oer WebThings.
+tunnel-setup-agree-privacy-policy = Ynstimme mei it <a data-l10n-name="tunnel-setup-privacy-policy-link">Privacybelied</a> en de <a data-l10n-name="tunnel-setup-tos-link">Servicebetingsten</a> fan WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Opeasktoken
 tunnel-setup-error = Der is in flater bard by it ynstellen fan it subdomein.
