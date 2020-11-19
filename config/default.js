@@ -52,7 +52,10 @@ module.exports = {
     certemail: 'noreply@webthings.io',
   },
   bcryptRounds: 2,
-  updateUrl: 'https://api.webthings.io:8443/releases',
+  updates: {
+    url: 'https://api.webthings.io:8443/releases',
+    allowPrerelease: false,
+  },
   wifi: {
     ap: {
       ipaddr: '192.168.2.1',

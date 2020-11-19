@@ -35,7 +35,7 @@ const releases = [
   },
 ];
 
-const updateUrl = new URL(config.get('updateUrl'));
+const updateUrl = new URL(config.get('updates.url'));
 
 describe('updates/', () => {
   let jwt;

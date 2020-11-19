@@ -80,7 +80,7 @@ UpdatesController.get('/latest', async (request, response) => {
   }
 
   const res = await fetch(
-    config.get('updateUrl'),
+    config.get('updates.url'),
     {headers: {'User-Agent': Utils.getGatewayUserAgent()}}
   );
 
@@ -93,7 +93,15 @@ UpdatesController.get('/latest', async (request, response) => {
     return;
   }
   const latestRelease = releases.filter((release) => {
-    return !release.prerelease && !release.draft;
+    if (release.prerelease && !config.get('updates.allowPrerelease')) {
+      return false;
+    }
+
+    if (release.draft) {
+      return false;
+    }
+
+    return true;
   })[0];
   if (!latestRelease) {
     console.warn('No releases found');
