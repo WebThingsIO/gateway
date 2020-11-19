@@ -1,12 +1,26 @@
+process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 const config = require('config');
 const exec = require('child_process').exec;
 const fetch = require('node-fetch');
-const semver = require('semver');
-
+const fs = require('fs');
+const path = require('path');
 const pkg = require('../package.json');
+const semver = require('semver');
 const Utils = require('../src/utils');
 
-fetch(config.get('updateUrl'),
+// Load in the local.json file, if it exists
+const baseDir = path.resolve(
+  process.env.WEBTHINGS_HOME || config.get('profileDir')
+);
+const userConfigPath = path.join(baseDir, 'config', 'local.json');
+if (fs.existsSync(userConfigPath)) {
+  const localConfig = config.util.parseFile(userConfigPath);
+  if (localConfig) {
+    config.util.extendDeep(config, localConfig);
+  }
+}
+
+fetch(config.get('updates.url'),
       {headers: {'User-Agent': Utils.getGatewayUserAgent()}})
   .then((res) => {
     return res.json();
@@ -14,7 +28,15 @@ fetch(config.get('updateUrl'),
   .then((releases) => {
     // Assumes that releases are in chronological order, latest-first
     return releases.filter((release) => {
-      return !release.prerelease && !release.draft;
+      if (release.prerelease && !config.get('updates.allowPrerelease')) {
+        return false;
+      }
+
+      if (release.draft) {
+        return false;
+      }
+
+      return true;
     })[0];
   })
   .then((latestRelease) => {
