@@ -192,10 +192,9 @@ function stopRouterSetup() {
 }
 
 function getOptions() {
-  if (!config.get('cli')) {
+  if (process.env.NODE_ENV === 'test') {
     return {
       debug: false,
-      port: null,
     };
   }
 
@@ -203,26 +202,16 @@ function getOptions() {
   const getopt = new GetOpt([
     ['d', 'debug', 'Enable debug features'],
     ['h', 'help', 'Display help'],
-    ['v', 'verbose', 'Show verbose output'],
   ]);
 
   const opt = getopt.parseSystem();
   const options = {
-    debug: !!opt.options.debug, // cast to bool
-    verbose: opt.options.verbose,
+    debug: !!opt.options.debug,
   };
-
-  if (opt.options.verbose) {
-    console.log(opt);
-  }
 
   if (opt.options.help) {
     getopt.showHelp();
     process.exit(1);
-  }
-
-  if (opt.options.port) {
-    options.port = parseInt(opt.options.port);
   }
 
   return options;
@@ -395,21 +384,19 @@ function gracefulExit() {
   TunnelService.stop();
 }
 
-if (config.get('cli')) {
-  // Get some decent error messages for unhandled rejections. This is
-  // often just errors in the code.
-  process.on('unhandledRejection', (reason) => {
-    console.log('Unhandled Rejection');
-    console.error(reason);
-  });
+// Get some decent error messages for unhandled rejections. This is
+// often just errors in the code.
+process.on('unhandledRejection', (reason) => {
+  console.log('Unhandled Rejection');
+  console.error(reason);
+});
 
-  // Do graceful shutdown when Control-C is pressed.
-  process.on('SIGINT', () => {
-    console.log('Control-C: Exiting gracefully');
-    gracefulExit();
-    process.exit(0);
-  });
-}
+// Do graceful shutdown when Control-C is pressed.
+process.on('SIGINT', () => {
+  console.log('Control-C: Exiting gracefully');
+  gracefulExit();
+  process.exit(0);
+});
 
 // function to stop running server and start https
 TunnelService.switchToHttps = () => {

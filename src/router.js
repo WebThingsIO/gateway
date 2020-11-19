@@ -45,7 +45,7 @@ const Router = {
 
       // Disable embedding
       response.set('Content-Security-Policy',
-                   config.get('oauthPostToken') ?
+                   config.get('oauth.postToken') ?
                      'frame-ancestors filesystem:' :
                      'frame-ancestors \'none\''
       );
