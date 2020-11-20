@@ -613,6 +613,20 @@ ui-update-available = Egy frissített felhasználói felület érhető el.
 ui-update-reload = Újratöltés
 ui-update-close = Bezárás
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Figyelmeztetés
+action-required = Művelet szükséges:
+action-required-more-info = További információk
+action-required-dont-ask-again = Ne kérdezze meg újra
+action-required-choose = Válasszon
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Aldomain
+transition-dialog-newsletter-label = Tartson naprakészen a WebThingsről szóló hírekkel
+
 ## General Terms
 
 ok = Ok
