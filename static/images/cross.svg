@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg33402"
+   version="1.1"
+   viewBox="0 0 8.4666665 8.4666669"
+   height="32"
+   width="32">
+  <defs
+     id="defs33396" />
+  <metadata
+     id="metadata33399">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-288.53332)"
+     id="layer1">
+    <g
+       id="text33392"
+       style="font-style:normal;font-weight:normal;font-size:4.84326267px;line-height:0%;font-family:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#5288af;fill-opacity:1;stroke:none;stroke-width:0.40360522px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       aria-label="!">
+      <g
+         id="flowRoot15345-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:GoodDog;-inkscape-font-specification:GoodDog;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+         transform="matrix(0.27311771,0,0,0.27311771,-707.61411,-4678.304)"
+         aria-label="✔">
+        <g
+           id="flowRoot15353-7"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:GoodDog;-inkscape-font-specification:GoodDog;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff5555;fill-opacity:1;stroke:none"
+           transform="matrix(0.75348472,0,0,0.75348472,641.90815,4487.1982)"
+           aria-label="✘">
+          <path
+             id="path34062"
+             d="m 2616.2783,18185.987 q 0.5664,0 1.0938,0.586 0.3906,0.43 0.5468,1.562 0.5079,-0.02 0.7032,0.08 0.625,0.234 0.8984,0.507 0.2734,0.254 0.2734,0.664 0,0.782 -0.3125,1.094 -4.707,4.278 -9.2968,10.391 2.8906,3.984 5.7812,7.148 0.3321,0.352 0.3321,0.821 0,0.957 -0.586,1.464 -0.3906,0.332 -1.1133,0.371 -0.039,0.333 -0.3125,1.016 -0.4687,1.133 -1.0937,1.133 -0.7031,0 -1.2891,-0.469 -0.1562,0.352 -0.4297,0.567 -0.7031,0.527 -1.2304,0.527 -0.4493,0 -0.9571,-0.547 -1.7382,-1.855 -4.1015,-5.586 -4.4922,5.098 -6.211,7.734 -0.332,0.508 -0.7422,0.508 h -0.039 q -0.3516,0 -0.6836,-0.703 -0.293,-0.605 -0.332,-0.859 -0.3907,0.234 -0.7422,0.234 -0.4883,0 -1.0547,-0.586 -0.7031,-0.683 -0.7031,-1.015 0,-0.528 0.5859,-1.407 -0.1758,-0.06 -0.3516,-0.312 -0.3515,-0.469 -0.3515,-0.938 0,-0.41 0.4687,-1.015 2.5391,-3.438 6.3672,-7.578 -2.3828,-3.692 -4.3164,-8.907 -0.4297,-1.191 -0.4297,-1.738 0,-0.508 0.4492,-1.465 0.3125,-0.625 0.7422,-0.625 0.5078,0 1.4453,0.762 0.02,-0.273 0.2344,-0.762 0.4492,-0.976 0.7813,-0.976 0.8398,0 1.0937,0.507 2.0703,3.829 5,7.461 4.5117,-5.156 9.375,-9.414 0.2344,-0.234 0.5078,-0.234 z" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
