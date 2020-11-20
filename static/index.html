@@ -620,6 +620,65 @@
       <button id="action-required-close" class="close-button"></button>
     </div>
 
+    <!-- Transition dialog -->
+    <div id="transition-dialog" class="hidden">
+      <div id="transition-dialog-step-1">
+        <img id="transition-dialog-step-1-wordmark" src="/images/webthings-lockup.svg"
+             data-l10n-id="transition-dialog-wordmark" />
+        <button id="transition-dialog-close" class="close-button"></button>
+        <div id="transition-dialog-text" data-l10n-id="transition-dialog-text">
+          <a href="https://discourse.mozilla.org/t/an-important-update-on-mozilla-webthings/67764"
+             target="_blank" rel="noopener" data-l10n-name="transition-dialog-more-info"></a>
+          <a href="https://webthings.io"
+             target="_blank" rel="noopener" data-l10n-name="transition-dialog-step-1-website"></a>
+        </div>
+        <input id="transition-dialog-register-domain-checkbox" name="transition-dialog-register-domain"
+          class="transition-checkbox" type="checkbox">
+        <label id="transition-dialog-register-domain-label"
+          data-l10n-id="transition-dialog-register-domain-label"
+          for="transition-dialog-register-domain-checkbox">
+        </label>
+        <input type="text" id="transition-dialog-subdomain" data-l10n-id="transition-dialog-subdomain" />
+        <span id="label-subdomain">.webthings.io</span>
+        <input id="transition-dialog-newsletter-checkbox" name="transition-dialog-newsletter"
+          class="transition-checkbox" type="checkbox">
+        <label id="transition-dialog-newsletter-label"
+          data-l10n-id="transition-dialog-newsletter-label"
+          for="transition-dialog-newsletter-checkbox">
+        </label>
+        <input id="transition-dialog-agree-tos-checkbox" name="transition-dialog-agree-tos"
+          class="transition-checkbox" type="checkbox">
+        <label id="transition-dialog-agree-tos-label"
+          data-l10n-id="transition-dialog-agree-tos-label"
+          for="transition-dialog-agree-tos-checkbox">
+          <a data-l10n-name="transition-dialog-privacy-policy-link" href="https://webthings.io/privacy"></a>
+          <a data-l10n-name="transition-dialog-tos-link" href="https://webthings.io/legal"></a>
+        </label>
+        <input type="text" id="transition-dialog-email" data-l10n-id="transition-dialog-email" />
+        <button id="transition-dialog-register" class="text-button" data-l10n-id="transition-dialog-register"></button>
+      </div>
+      <div id="transition-dialog-step-2">
+        <img id="transition-dialog-step-2-wordmark" src="/images/webthings-lockup.svg"
+             data-l10n-id="transition-dialog-wordmark" />
+        <button id="transition-dialog-close" class="close-button"></button>
+        <button id="transition-dialog-back" class="back-button icon-button"></button>
+        <div id="transition-dialog-registering">
+          <img id="transition-dialog-register-status" src="#" data-l10n-id="transition-dialog-register-status" />
+          <span id="transition-dialog-register-label" data-l10n-id="transition-dialog-register-label"></span>
+        </div>
+        <div id="transition-dialog-subscribing">
+          <img id="transition-dialog-subscribe-status" src="#" data-l10n-id="transition-dialog-subscribe-status" />
+          <span id="transition-dialog-subscribe-label" data-l10n-id="transition-dialog-subscribe-label"></span>
+        </div>
+        <div id="transition-dialog-error-subdomain-taken" data-l10n-id="transition-dialog-error-subdomain-taken"></div>
+        <div id="transition-dialog-error-subdomain-failed" data-l10n-id="transition-dialog-error-subdomain-failed"></div>
+        <div id="transition-dialog-error-subscribe-failed" data-l10n-id="transition-dialog-error-subscribe-failed">
+          <a href="https://webthings.io"
+             target="_blank" rel="noopener" data-l10n-name="transition-dialog-step-2-website"></a>
+        </div>
+      </div>
+    </div>
+
     <!-- Add Thing Screen -->
     <div id="add-thing-screen" class="hidden dialog">
       <button id="add-thing-back-button" class="back-button icon-button" data-l10n-id="back-button"></button>
