@@ -623,11 +623,23 @@ action-required-dont-ask-again = Fråga inte igen
 action-required-choose = Välj
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-register-domain-label = Registrera dig för webthings.io fjärråtkomsttjänst
+transition-dialog-subdomain =
+    .placeholder = Underdomän
+transition-dialog-newsletter-label = Håll mig uppdaterad med nyheter om WebThings
+transition-dialog-agree-tos-label = Godkänn WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">sekretesspolicy</a> och <a data-l10n-name="transition-dialog-tos-link">användarvillkor</a>.
 transition-dialog-email =
     .placeholder = E-postadress
 transition-dialog-register = Registrera
 transition-dialog-register-status =
     .alt = Registreringsstatus
+transition-dialog-register-label = Registrerar underdomän
+transition-dialog-subscribe-status =
+    .alt = Prenumerationsstatus för nyhetsbrev
+transition-dialog-subscribe-label = Prenumerera på nyhetsbrev
+transition-dialog-error-subdomain-taken = Vald underdomän används redan. Gå tillbaka och välj en annan.
+transition-dialog-error-subdomain-failed = Det gick inte att registrera underdomän. Gå tillbaka och försök igen.
+transition-dialog-error-subscribe-failed = Det gick inte att prenumerera på nyhetsbrevet. Försök igen på<a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 
 ## General Terms
 
