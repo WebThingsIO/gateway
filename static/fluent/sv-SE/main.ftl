@@ -623,6 +623,11 @@ action-required-dont-ask-again = Fråga inte igen
 action-required-choose = Välj
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-email =
+    .placeholder = E-postadress
+transition-dialog-register = Registrera
+transition-dialog-register-status =
+    .alt = Registreringsstatus
 
 ## General Terms
 
