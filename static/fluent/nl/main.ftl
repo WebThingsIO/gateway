@@ -613,6 +613,14 @@ ui-update-available = Er is een bijgewerkte gebruikersinterface beschikbaar.
 ui-update-reload = Vernieuwen
 ui-update-close = Sluiten
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Waarschuwing
+action-required-more-info = Meer info
+action-required-dont-ask-again = Dit niet meer vragen
+action-required-choose = Kiezen
+
 ## General Terms
 
 ok = OK
