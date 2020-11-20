@@ -613,6 +613,17 @@ ui-update-available = Ett uppdaterat användargränssnitt är tillgängligt.
 ui-update-reload = Ladda om
 ui-update-close = Stäng
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Varning
+action-required = Åtgärd krävs:
+action-required-more-info = Mer info
+action-required-dont-ask-again = Fråga inte igen
+action-required-choose = Välj
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+
 ## General Terms
 
 ok = Ok
