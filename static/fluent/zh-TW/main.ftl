@@ -606,6 +606,29 @@ ui-update-available = 已提供使用者介面更新。
 ui-update-reload = 重新載入
 ui-update-close = 關閉
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = 警告
+action-required = 需要採取行動:
+action-required-more-info = 更多資訊
+action-required-dont-ask-again = 不要再問我。
+action-required-choose = 選擇
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = 子網域
+transition-dialog-newsletter-label = 隨時告訴我 WebThings 的新鮮事
+transition-dialog-email =
+    .placeholder = 電子郵件地址
+transition-dialog-register = 註冊
+transition-dialog-register-status =
+    .alt = 註冊狀態
+transition-dialog-register-label = 正在註冊子網域
+transition-dialog-subscribe-status =
+    .alt = 電子報訂閱狀態
+transition-dialog-subscribe-label = 正在訂閱電子報
+
 ## General Terms
 
 ok = 確定
