@@ -617,6 +617,7 @@ ui-update-close = Κλείσιμο
 
 action-required-image =
     .alt = Προειδοποίηση
+action-required = Απαιτείται ενέργεια:
 action-required-more-info = Περισσότερες πληροφορίες
 action-required-choose = Επιλογή
 transition-dialog-wordmark =
