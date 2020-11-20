@@ -179,9 +179,36 @@ h6 {
   left: 9.5rem;
 }
 
+#action-required-area {
+  position: fixed;
+  top: 2rem;
+  width: calc(100% - 34.2rem);
+  left: 9.6rem;
+  background-color: rgba(76, 124, 160, 0.6);
+  border-radius: 0.5rem;
+  padding: 2rem 6rem 2rem 9rem;
+  text-align: left;
+  color: white;
+  font-size: 1.8rem;
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: auto max-content;
+  grid-gap: 1rem;
+}
+
+@media only screen and (max-width: 960px) {
+  #action-required-area {
+    width: calc(100% - 24.6rem);
+    left: 4.8rem;
+    grid-template-columns: auto;
+  }
+}
+
 #update-message-area {
   position: fixed;
-  top: 3rem;
+  top: 2rem;
   width: 33%;
   left: calc(33% - 1rem);
   background-color: rgba(76, 124, 160, 0.6);
@@ -199,11 +226,18 @@ h6 {
   padding-bottom: 2rem;
 }
 
+#action-required-area-buttons {
+  margin: 0.4rem 0;
+}
+
+#action-required-area-buttons > button,
 #update-message-area > button {
   background-color: #48779a;
   font-size: 1.8rem;
 }
 
+#action-required-area-buttons > button:hover,
+#action-required-area-buttons > button:active,
 #update-message-area > button:hover,
 #update-message-area > button:active {
   background-color: #658196;
@@ -213,8 +247,42 @@ h6 {
   margin-right: 1rem;
 }
 
+#action-required-area.hidden,
 #update-message-area.hidden {
   transform: translateY(-100%) translateY(-4rem);
+}
+
+#action-required-action-required {
+  font-weight: bold;
+}
+
+#action-required-image {
+  position: fixed;
+  left: 2rem;
+  top: 2.2rem;
+  height: 5rem;
+}
+
+#action-required-close {
+  background: no-repeat center/100% url('/images/close.svg');
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  opacity: 0.9;
+  user-select: none;
+  outline: 0;
+  cursor: default;
+  position: fixed;
+  right: 2rem;
+  top: 3.6rem;
+}
+
+#action-required-area-text > a:link,
+#action-required-area-text > a:visited,
+#action-required-area-text > a:hover,
+#action-required-area-text > a:active {
+  color: white;
 }
 
 #message-area {

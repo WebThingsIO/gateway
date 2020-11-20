@@ -613,6 +613,15 @@ ui-update-available = An updated user interface is available.
 ui-update-reload = Reload
 ui-update-close = Close
 
+## Transfer to webthings.io
+action-required-image =
+    .alt = Warning
+action-required = Action Required:
+action-required-message = The Mozilla IoT remote access service and automatic software updates are being discontinued. Choose whether to transfer to the community-run webthings.io for continued service.
+action-required-more-info = More info
+action-required-dont-ask-again = Don't ask again
+action-required-choose = Choose
+
 ## General Terms
 
 ok = OK
