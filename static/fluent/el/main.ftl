@@ -618,11 +618,13 @@ ui-update-close = Κλείσιμο
 action-required-image =
     .alt = Προειδοποίηση
 action-required = Απαιτείται ενέργεια:
+action-required-message = Η υπηρεσία απομακρυσμένης πρόσβασης Mozilla IoT και οι αυτόματες ενημερώσεις λογισμικού θα διακοπούν. Επιλέξτε αν θέλετε να μεταφερθείτε στο webthings.io, που διαχειρίζεται η κοινότητα, για συνέχεια της υπηρεσίας.
 action-required-more-info = Περισσότερες πληροφορίες
 action-required-dont-ask-again = Να μη γίνει ερώτηση ξανά
 action-required-choose = Επιλογή
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-register-domain-label = Εγγραφή στην υπηρεσία απομακρυσμένης πρόσβασης webthings.io
 transition-dialog-subdomain =
     .placeholder = Υποτομέας
 transition-dialog-newsletter-label = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings
@@ -636,7 +638,9 @@ transition-dialog-register-label = Εγγραφή υποτομέα
 transition-dialog-subscribe-status =
     .alt = Κατάσταση εγγραφής ενημερωτικού δελτίου
 transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό δελτίο
+transition-dialog-error-subdomain-taken = Ο επιλεγμένος υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε πηγαίνετε πίσω και επιλέξτε άλλον.
 transition-dialog-error-subdomain-failed = Αποτυχία εγγραφής υποτομέα. Παρακαλούμε πηγαίνετε πίσω και δοκιμάστε ξανά.
+transition-dialog-error-subscribe-failed = Αποτυχία εγγραφής στο ενημερωτικό δελτίο. Παρακαλούμε δοκιμάστε ξανά στο <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 
 ## General Terms
 
