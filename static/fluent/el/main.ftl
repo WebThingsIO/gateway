@@ -613,6 +613,17 @@ ui-update-available = Ένα ενημερωμένο περιβάλλον χρή�
 ui-update-reload = Ανανέωση
 ui-update-close = Κλείσιμο
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Προειδοποίηση
+action-required-more-info = Περισσότερες πληροφορίες
+action-required-choose = Επιλογή
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Υποτομέας
+
 ## General Terms
 
 ok = OK
