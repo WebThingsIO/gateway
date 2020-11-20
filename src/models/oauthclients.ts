@@ -73,7 +73,7 @@ class OAuthClients {
 
 let oauthClients = new OAuthClients();
 
-if (config.get('oauthTestClients')) {
+if (config.get('oauth.testClients')) {
   oauthClients.register(
     new ClientRegistry(new URL('http://127.0.0.1:31338/callback'), 'test',
                        'Test OAuth Client', 'super secret', '/things:readwrite')

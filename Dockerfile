@@ -50,9 +50,7 @@ RUN set -x && \
     rm -rf ./node_modules/mozjpeg && \
     npm prune --production && \
     sed -i \
-        -e 's/ cli: true/ cli: false/' \
         -e 's/ behindForwarding: true/ behindForwarding: false/' \
-        -e 's/ localAccess: true/ localAccess: false/' \
         config/default.js
 
 USER root

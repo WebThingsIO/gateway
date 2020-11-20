@@ -9,13 +9,9 @@
 'use strict';
 
 const bcrypt = require('bcryptjs');
-const config = require('config');
 const speakeasy = require('speakeasy');
 
-let rounds;
-if (config.has('bcryptRounds')) {
-  rounds = config.get('bcryptRounds');
-}
+const rounds = 2;
 
 module.exports = {
   /**

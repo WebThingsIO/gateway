@@ -271,7 +271,7 @@ OAuthController.get('/local-token-service', async (request: express.Request, res
   let token = await handleAccessTokenRequest(request, response);
   if (token) {
     response.render('local-token-service', {
-      oauthPostToken: config.get('oauthPostToken'),
+      oauthPostToken: config.get('oauth.postToken'),
       token: token.access_token
     });
   }

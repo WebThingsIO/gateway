@@ -12,7 +12,6 @@ const os = require('os');
 const home = os.homedir();
 
 module.exports = {
-  cli: false,
   profileDir: `${home}/.webthings/test`,
   ports: {
     https: 0, // 0 = find a free open port
@@ -25,5 +24,7 @@ module.exports = {
   database: {
     removeBeforeOpen: true,
   },
-  oauthTestClients: true,
+  oauth: {
+    testClients: true,
+  },
 };

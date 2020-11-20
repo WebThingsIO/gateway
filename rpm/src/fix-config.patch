@@ -1,32 +1,29 @@
 --- a/config/default.js
 +++ b/config/default.js
-@@ -14,9 +14,9 @@
+@@ -14,7 +14,7 @@
 
  module.exports = {
-   // Expose CLI
--  cli: true,
-+  cli: false,
-
+   // Base profile directory
 -  profileDir: `${home}/.webthings`,
 +  profileDir: '/etc/webthings-gateway',
 
    ports: {
-     https: 4443,
-@@ -25,7 +25,7 @@
-   },
+     // HTTPS port
+@@ -29,7 +29,7 @@
+
    // Whether the gateway is behind port forwarding and should use simplified
    // port-free urls
 -  behindForwarding: true,
 +  behindForwarding: false,
+
    addonManager: {
-     listUrls: [
-       'https://api.webthings.io:8443/addons',
-@@ -38,7 +38,7 @@
-   settings: {
+     // URLs of add-on lists to parse, in order
+@@ -50,7 +50,7 @@
      defaults: {
        mdns: {
+         // Whether or not to enable mDNS advertisements
 -        enabled: true,
 +        enabled: false,
+
+         // Domain to advertise via mDNS
          domain: os.hostname().split('.')[0],
-       },
-     },
