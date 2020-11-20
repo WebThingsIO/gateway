@@ -619,11 +619,21 @@ action-required-image =
     .alt = Προειδοποίηση
 action-required = Απαιτείται ενέργεια:
 action-required-more-info = Περισσότερες πληροφορίες
+action-required-dont-ask-again = Να μη γίνει ερώτηση ξανά
 action-required-choose = Επιλογή
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
 transition-dialog-subdomain =
     .placeholder = Υποτομέας
+transition-dialog-email =
+    .placeholder = Διεύθυνση email
+transition-dialog-register = Εγγραφή
+transition-dialog-register-status =
+    .alt = Κατάσταση εγγραφής
+transition-dialog-register-label = Εγγραφή υποτομέα
+transition-dialog-subscribe-status =
+    .alt = Κατάσταση εγγραφής ενημερωτικού δελτίου
+transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό δελτίο
 
 ## General Terms
 
