@@ -626,6 +626,19 @@ transition-dialog-wordmark =
 transition-dialog-subdomain =
     .placeholder = Aldomain
 transition-dialog-newsletter-label = Tartson naprakészen a WebThingsről szóló hírekkel
+transition-dialog-agree-tos-label = Fogadja el a WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">adatvédelmi irányelveit</a> és <a data-l10n-name="transition-dialog-tos-link">szolgáltatási feltételeit</a>.
+transition-dialog-email =
+    .placeholder = E-mail-cím
+transition-dialog-register = Regisztráció
+transition-dialog-register-status =
+    .alt = Regisztráció állapota
+transition-dialog-register-label = Aldomain regisztrációja
+transition-dialog-subscribe-status =
+    .alt = Hírlevél-feliratkozás állapota
+transition-dialog-subscribe-label = Feliratkozás a hírlevélre
+transition-dialog-error-subdomain-taken = A kiválasztott aldomain már foglalt. Ugorjon vissza, és válasszon másikat.
+transition-dialog-error-subdomain-failed = Az aldomain regisztrációja sikertelen. Ugorjon vissza, és próbálkozzon újra.
+transition-dialog-error-subscribe-failed = A hírlevélre feliratkozás sikertelen. Próbálja újra a <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> címen.
 
 ## General Terms
 
