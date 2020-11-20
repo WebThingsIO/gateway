@@ -613,6 +613,17 @@ ui-update-available = Está disponível uma interface do usuário atualizada.
 ui-update-reload = Recarregar
 ui-update-close = Fechar
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Aviso
+action-required = Ação necessária:
+action-required-more-info = Mais informações
+action-required-dont-ask-again = Não perguntar novamente
+action-required-choose = Escolher
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+
 ## General Terms
 
 ok = Ok
