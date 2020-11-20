@@ -625,6 +625,8 @@ transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
 transition-dialog-subdomain =
     .placeholder = Υποτομέας
+transition-dialog-newsletter-label = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings
+transition-dialog-agree-tos-label = Συμφωνώ με την <a data-l10n-name="transition-dialog-privacy-policy-link">Πολιτική απορρήτου</a> και τους <a data-l10n-name="transition-dialog-tos-link">Όρους υπηρεσίας</a> του WebThings.
 transition-dialog-email =
     .placeholder = Διεύθυνση email
 transition-dialog-register = Εγγραφή
@@ -634,6 +636,7 @@ transition-dialog-register-label = Εγγραφή υποτομέα
 transition-dialog-subscribe-status =
     .alt = Κατάσταση εγγραφής ενημερωτικού δελτίου
 transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό δελτίο
+transition-dialog-error-subdomain-failed = Αποτυχία εγγραφής υποτομέα. Παρακαλούμε πηγαίνετε πίσω και δοκιμάστε ξανά.
 
 ## General Terms
 
