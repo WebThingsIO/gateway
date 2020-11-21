@@ -624,6 +624,7 @@ action-required-dont-ask-again = Fråga inte igen
 action-required-choose = Välj
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = Den 31 december 2020 avbryts Mozilla IoT fjärråtkomsttjänst och de automatiska programuppdateringarna (<a data-l10n-name="transition-dialog-more-info">mer information</a>). Mozilla överför projektet till den nya, community-run <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (inte ansluten till Mozilla).<br>< br>Om du inte vill få fler programuppdateringar från community-run uppdateringsservrar kan du inaktivera automatiska uppdateringar i inställningarna.<br><br>Om du vill överföra din underdomän från mozilla-iot.org till webthings.io eller om du vill registrera en ny underdomän kan du fylla i formuläret nedan för att registrera dig för den ersättande community-run externa åtkomsttjänst.
 transition-dialog-register-domain-label = Registrera dig för webthings.io fjärråtkomsttjänst
 transition-dialog-subdomain =
     .placeholder = Underdomän
