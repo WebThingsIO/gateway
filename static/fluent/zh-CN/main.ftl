@@ -624,9 +624,11 @@ action-required-dont-ask-again = 不再询问
 action-required-choose = 选择
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-register-domain-label = 注册 webthings.io 远程访问服务
 transition-dialog-subdomain =
     .placeholder = 子域
 transition-dialog-newsletter-label = 让我随时了解 WebThings 的相关新闻
+transition-dialog-agree-tos-label = 同意 WebThings 的<a data-l10n-name="transition-dialog-privacy-policy-link">隐私政策</a>和<a data-l10n-name="transition-dialog-tos-link">使用条款</a>。
 transition-dialog-email =
     .placeholder = 电子邮件地址
 transition-dialog-register = 注册
