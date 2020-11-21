@@ -617,6 +617,8 @@ ui-update-close = 关闭
 
 action-required-image =
     .alt = 警告
+action-required = 需要采取行动：
+action-required-message = Mozilla IoT 的远程访问服务和自动软件更新已终止。请选择是否转移到社区运营的 webthings.io 以继续获得服务。
 action-required-more-info = 更多信息
 action-required-dont-ask-again = 不再询问
 action-required-choose = 选择
