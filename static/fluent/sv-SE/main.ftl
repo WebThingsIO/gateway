@@ -618,6 +618,7 @@ ui-update-close = Stäng
 action-required-image =
     .alt = Varning
 action-required = Åtgärd krävs:
+action-required-message = Mozilla IoT fjärråtkomsttjänst och automatiska programuppdateringar kommer att avbrytas. Välj om du vill överföra webthings.io till det communitystyrda webthings.io för fortsatt service.
 action-required-more-info = Mer info
 action-required-dont-ask-again = Fråga inte igen
 action-required-choose = Välj
