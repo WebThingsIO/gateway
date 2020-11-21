@@ -618,6 +618,7 @@ ui-update-close = 关闭
 action-required-image =
     .alt = 警告
 action-required-more-info = 更多信息
+action-required-dont-ask-again = 不再询问
 action-required-choose = 选择
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
@@ -632,7 +633,8 @@ transition-dialog-register-status =
 transition-dialog-register-label = 正在注册子域
 transition-dialog-subscribe-status =
     .alt = 新闻通讯订阅状态
-transition-dialog-subscribe-label = 订阅新闻通讯
+transition-dialog-subscribe-label = 正在订阅新闻通讯
+transition-dialog-error-subdomain-failed = 无法注册子域，请返回重试。
 
 ## General Terms
 
