@@ -613,6 +613,27 @@ ui-update-available = 用户界面已做更新。
 ui-update-reload = 重新载入
 ui-update-close = 关闭
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = 警告
+action-required-more-info = 更多信息
+action-required-choose = 选择
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = 子域
+transition-dialog-newsletter-label = 让我随时了解 WebThings 的相关新闻
+transition-dialog-email =
+    .placeholder = 电子邮件地址
+transition-dialog-register = 注册
+transition-dialog-register-status =
+    .alt = 注册状态
+transition-dialog-register-label = 正在注册子域
+transition-dialog-subscribe-status =
+    .alt = 新闻通讯订阅状态
+transition-dialog-subscribe-label = 订阅新闻通讯
+
 ## General Terms
 
 ok = 确定
