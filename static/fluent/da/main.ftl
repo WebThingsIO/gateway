@@ -290,6 +290,7 @@ HumiditySensor = Fugtigheds-sensor
 Alarm = Alarm
 Thermostat = Termostat
 Lock = Lås
+BarometricPressureSensor = Barometisk tryksensor
 Custom = Tilpasset ting
 Thing = Ting
 
@@ -322,6 +323,9 @@ jammed = Blokeret
 unknown = Ukendt
 active = Aktiv
 inactive = Inaktiv
+humidity = Fugtighed
+concentration = Koncentration
+density = Massefylde
 
 ## Domain Setup
 
@@ -403,6 +407,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
@@ -603,6 +609,9 @@ creating-content = Opret forbindelse til { $ssid } med den adgangskode, du lige 
 ui-update-available = En opdateret brugergrænseflade er tilgængelig.
 ui-update-reload = Genindlæs
 ui-update-close = Luk
+
+## Transfer to webthings.io
+
 
 ## General Terms
 
