@@ -640,6 +640,15 @@ transition-dialog-agree-tos-label = Wyrażam zgodę na <a data-l10n-name="transi
 transition-dialog-email =
     .placeholder = Adres e-mail
 transition-dialog-register = Zarejestruj się
+transition-dialog-register-status =
+    .alt = Stan rejestracji
+transition-dialog-register-label = Rejestrowanie poddomeny
+transition-dialog-subscribe-status =
+    .alt = Stan subskrypcji biuletynu
+transition-dialog-subscribe-label = Subskrybowanie biuletynu
+transition-dialog-error-subdomain-taken = Wybrana poddomena jest już zajęta. Proszę wrócić i wybrać inną.
+transition-dialog-error-subdomain-failed = Zarejestrowanie poddomeny się nie powiodło. Proszę wrócić i spróbować ponownie.
+transition-dialog-error-subscribe-failed = Subskrypcja biuletynu się nie powiodła. Proszę spróbować ponownie w serwisie <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 
 ## General Terms
 
