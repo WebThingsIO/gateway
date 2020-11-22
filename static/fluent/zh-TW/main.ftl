@@ -611,14 +611,18 @@ ui-update-close = 關閉
 action-required-image =
     .alt = 警告
 action-required = 需要採取行動:
+action-required-message = 將不再提供 Mozilla IoT 遠端存取服務與軟體自動更新服務。請選擇是否要轉移到由社群維護的 webthings.io 服務。
 action-required-more-info = 更多資訊
 action-required-dont-ask-again = 不要再問我。
 action-required-choose = 選擇
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = Mozilla IoT 遠端存取服務與軟體自動更新服務將在 2020 年 12 月 31 日後結束營運（<a data-l10n-name="transition-dialog-more-info">了解更多</a>）。Mozilla 已將專案轉由社群維運的 <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> 服務繼續運作（與 Mozilla 無關）。<br><br>若您不想繼續收到由社群維護的軟體更新資訊，可以到設定中關閉軟體自動更新。<br><br>若您想將子網域從 mozilla-iot.org 轉移到 webthings.io，或註冊新的子網域，可填寫下方的表單來註冊由社群維護的遠端存取服務。
+transition-dialog-register-domain-label = 註冊 webthings.io 遠端存取服務
 transition-dialog-subdomain =
     .placeholder = 子網域
 transition-dialog-newsletter-label = 隨時告訴我 WebThings 的新鮮事
+transition-dialog-agree-tos-label = 同意 WebThings 的<a data-l10n-name="transition-dialog-privacy-policy-link">隱私權保護政策</a>與<a data-l10n-name="transition-dialog-tos-link">服務條款</a>。
 transition-dialog-email =
     .placeholder = 電子郵件地址
 transition-dialog-register = 註冊
