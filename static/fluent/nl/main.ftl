@@ -620,6 +620,14 @@ action-required-image =
 action-required-more-info = Meer info
 action-required-dont-ask-again = Dit niet meer vragen
 action-required-choose = Kiezen
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-agree-tos-label = Instemmen met het <a data-l10n-name="transition-dialog-privacy-policy-link">Privacybeleid</a> en de <a data-l10n-name="transition-dialog-tos-link">Servicevoorwaarden</a> van WebThings.
+transition-dialog-email =
+    .placeholder = E-mailadres
+transition-dialog-register = Registreren
+transition-dialog-register-status =
+    .alt = Registratiestatus
 
 ## General Terms
 
