@@ -628,6 +628,9 @@ transition-dialog-register-label = 正在註冊子網域
 transition-dialog-subscribe-status =
     .alt = 電子報訂閱狀態
 transition-dialog-subscribe-label = 正在訂閱電子報
+transition-dialog-error-subdomain-taken = 選擇的子網域已被使用，請回到上一步重新輸入。
+transition-dialog-error-subdomain-failed = 子網域註冊失敗，請回到上一步再試一次。
+transition-dialog-error-subscribe-failed = 電子報訂閱失敗。請到 <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> 再試一次。
 
 ## General Terms
 
