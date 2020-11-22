@@ -24,6 +24,7 @@ class VideoDetail {
 
     this.dashHref = null;
     this.hlsHref = null;
+    this.mjpegHref = null;
     this.player = null;
 
     for (const link of property.links) {
@@ -34,6 +35,10 @@ class VideoDetail {
         } else if (this.hlsHref === null &&
                    link.mediaType === 'application/vnd.apple.mpegurl') {
           this.hlsHref = link.href;
+        } else if (this.mjpegHref === null &&
+                   (link.mediaType === 'video/x-motion-jpeg' ||
+                    link.mediaType === 'video/x-jpeg')) {
+          this.mjpegHref = link.href;
         }
       }
     }
@@ -69,7 +74,16 @@ class VideoDetail {
     const element = document.createElement('div');
     element.classList.add('media-modal-backdrop');
 
-    if (!shaka.Player.isBrowserSupported()) {
+    if (this.mjpegHref !== null) {
+      element.innerHTML = `
+        <div class="media-modal">
+          <div class="media-modal-frame">
+            <div class="media-modal-close"></div>
+            <img class="media-modal-video"></img>
+          </div>
+        </div>
+        `;
+    } else if (!shaka.Player.isBrowserSupported()) {
       element.innerHTML = `
         <div class="media-modal">
           <div class="media-modal-frame">
@@ -93,7 +107,7 @@ class VideoDetail {
     document.body.appendChild(element);
     document.querySelector('#things').style.display = 'none';
 
-    if (!shaka.Player.isBrowserSupported()) {
+    if (this.mjpegHref || !shaka.Player.isBrowserSupported()) {
       this.positionButtons();
     }
 
@@ -113,7 +127,15 @@ class VideoDetail {
 
     window.addEventListener('resize', this.positionButtons);
 
-    if (shaka.Player.isBrowserSupported() && (this.dashHref || this.hlsHref)) {
+    if (this.mjpegHref) {
+      element.querySelector('.media-modal-video').addEventListener(
+        'load',
+        this.positionButtons
+      );
+      element.querySelector('.media-modal-video').src =
+        `${this.mjpegHref}?jwt=${API.jwt}`;
+    } else if (shaka.Player.isBrowserSupported() &&
+               (this.dashHref || this.hlsHref)) {
       element.querySelector('.media-modal-video').addEventListener(
         'loadeddata',
         this.positionButtons
