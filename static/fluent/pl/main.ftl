@@ -541,6 +541,7 @@ tunnel-setup-choose-address = Wybierz bezpieczny adres internetowy swojej bramy:
 tunnel-setup-input-subdomain =
     .placeholder = poddomena
 tunnel-setup-email-opt-in = Informuj mnie na bieżąco o nowościach na temat WebThings.
+tunnel-setup-agree-privacy-policy = Wyrażam zgodę na <a data-l10n-name="tunnel-setup-privacy-policy-link">zasady ochrony prywatności</a> i <a data-l10n-name="tunnel-setup-tos-link">warunki korzystania z usługi</a> WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token odzyskiwania
 tunnel-setup-error = Wystąpił błąd podczas konfigurowania poddomeny.
@@ -618,6 +619,19 @@ creating-content = Połącz się z { $ssid } za pomocą właśnie utworzonego h
 ui-update-available = Dostępny jest zaktualizowany interfejs użytkownika.
 ui-update-reload = Odśwież
 ui-update-close = Zamknij
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Ostrzeżenie
+action-required = Wymagane działanie:
+action-required-message = Usługa zdalnego dostępu i automatyczne aktualizacje oprogramowania Mozilla IoT są zamykane. Wybierz, czy przenieść się do projektu webthings.io prowadzonego przez społeczność, aby dalej korzystać z usługi.
+action-required-more-info = Więcej informacji
+action-required-dont-ask-again = Nie pytaj ponownie
+action-required-choose = Wybierz
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-text = Usługa zdalnego dostępu i automatyczne aktualizacje oprogramowania Mozilla IoT zostaną zamknięte 31 grudnia 2020 r. (<a data-l10n-name="transition-dialog-more-info">więcej informacji</a>). Mozilla przenosi usługę do nowego projektu <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> prowadzonego przez społeczność (niepowiązanego z Mozillą). <br><br>Jeśli nie chcesz dalej otrzymywać aktualizacji oprogramowania z serwerów aktualizacji prowadzonych przez społeczność, możesz wyłączyć automatyczne aktualizacje w ustawieniach. <br><br>Jeśli chcesz przenieść swoją poddomenę mozilla-iot.org do webthings.io lub zarejestrować nową, możesz wypełnić poniższy formularz, aby zarejestrować się w zastępczej usłudze zdalnego dostępu prowadzonej przez społeczność.
 
 ## General Terms
 
