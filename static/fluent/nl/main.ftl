@@ -617,17 +617,29 @@ ui-update-close = Sluiten
 
 action-required-image =
     .alt = Waarschuwing
+action-required = Actie vereist:
+action-required-message = De Mozilla IoT-service voor externe toegang en automatische software-updates worden stopgezet. Kies of u wilt overstappen naar het door de gemeenschap beheerde webthings.io voor verdere service.
 action-required-more-info = Meer info
 action-required-dont-ask-again = Dit niet meer vragen
 action-required-choose = Kiezen
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Subdomein
+transition-dialog-newsletter-label = Houd mij op de hoogte met nieuws over WebThings.
 transition-dialog-agree-tos-label = Instemmen met het <a data-l10n-name="transition-dialog-privacy-policy-link">Privacybeleid</a> en de <a data-l10n-name="transition-dialog-tos-link">Servicevoorwaarden</a> van WebThings.
 transition-dialog-email =
     .placeholder = E-mailadres
 transition-dialog-register = Registreren
 transition-dialog-register-status =
     .alt = Registratiestatus
+transition-dialog-register-label = Subdomein registreren
+transition-dialog-subscribe-status =
+    .alt = Status nieuwsbriefabonnement
+transition-dialog-subscribe-label = Abonneren op nieuwsbrief
+transition-dialog-error-subdomain-taken = Het gekozen subdomein is al in gebruik. Ga terug en kies een ander.
+transition-dialog-error-subdomain-failed = Kan subdomein niet registreren. Ga terug en probeer het opnieuw.
+transition-dialog-error-subscribe-failed = Abonneren op nieuwsbrief mislukt. Probeer het nogmaals op <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 
 ## General Terms
 
