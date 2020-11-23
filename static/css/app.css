@@ -290,22 +290,22 @@ h6 {
     height: auto;
   }
 
-   #action-required-area-content {
-     flex-direction: column;
-   }
+  #action-required-area-content {
+    flex-direction: column;
+  }
 
-   #action-required-area-content button {
-     margin: 0.5rem auto;
-     width: 13rem;
-   }
+  #action-required-area-content button {
+    margin: 0.5rem auto;
+    width: 13rem;
+  }
 
-   #action-required-close {
-     margin: 0.5rem 0.5rem;
-   }
+  #action-required-close {
+    margin: 0.5rem 0.5rem;
+  }
 
-   #action-required-area-text {
-     padding: 5rem 0 1rem 0;
-   }
+  #action-required-area-text {
+    padding: 5rem 0 1rem 0;
+  }
 }
 
 #message-area {
