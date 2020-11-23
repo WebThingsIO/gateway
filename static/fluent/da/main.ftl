@@ -532,6 +532,7 @@ tunnel-setup-welcome = Velkommen
 tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomæne
+tunnel-setup-agree-privacy-policy = Acceptér <a data-l10n-name="tunnel-setup-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="tunnel-setup-tos-link"> tjenestevilkår</a> for WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Gendannelsestoken
 tunnel-setup-error = Der opstod en fejl under opsætning af subdomænet.
@@ -612,6 +613,7 @@ ui-update-close = Luk
 
 ## Transfer to webthings.io
 
+transition-dialog-agree-tos-label = Acceptér <a data-l10n-name="transition-dialog-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="transition-dialog-tos-link">tjenestevilkår</a> for WebThings.
 
 ## General Terms
 
