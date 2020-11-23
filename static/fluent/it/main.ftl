@@ -613,6 +613,23 @@ ui-update-available = È disponibile un aggiornamento dell’interfaccia utente.
 ui-update-reload = Ricarica
 ui-update-close = Chiudi
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Avviso
+action-required = Azione richiesta:
+action-required-more-info = Ulteriori informazioni
+action-required-dont-ask-again = Non chiederlo di nuovo
+action-required-choose = Scegli
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Sottodominio
+transition-dialog-email =
+    .placeholder = Indirizzo email
+transition-dialog-register = Registrati
+transition-dialog-register-label = Registrazione sottodominio
+
 ## General Terms
 
 ok = OK
