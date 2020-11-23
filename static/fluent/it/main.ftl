@@ -629,6 +629,7 @@ transition-dialog-email =
     .placeholder = Indirizzo email
 transition-dialog-register = Registrati
 transition-dialog-register-label = Registrazione sottodominio
+transition-dialog-error-subdomain-failed = Impossibile registrare il sottodominio. Torna indietro e riprova.
 
 ## General Terms
 
