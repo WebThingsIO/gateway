@@ -180,30 +180,18 @@ h6 {
 }
 
 #action-required-area {
-  position: fixed;
-  top: 2rem;
-  width: calc(100% - 34.2rem);
-  left: 9.6rem;
-  background-color: rgba(76, 124, 160, 0.6);
+  height: 5.6rem;
+  width: calc(100% - 15.2rem);
+  padding: 0.6rem;
+  background-color: #5288af;
+  margin: 0 auto;
   border-radius: 0.5rem;
-  padding: 2rem 6rem 2rem 9rem;
-  text-align: left;
-  color: white;
-  font-size: 1.8rem;
-  transform: translateY(0);
+  box-sizing: border-box;
+  color: #fff;
   transition: transform 0.25s ease;
-  z-index: 100;
-  display: grid;
-  grid-template-columns: auto max-content;
-  grid-gap: 1rem;
-}
-
-@media only screen and (max-width: 960px) {
-  #action-required-area {
-    width: calc(100% - 24.6rem);
-    left: 4.8rem;
-    grid-template-columns: auto;
-  }
+  transform: translateY(0);
+  display: flex;
+  flex-direction: row;
 }
 
 #update-message-area {
@@ -226,18 +214,24 @@ h6 {
   padding-bottom: 2rem;
 }
 
-#action-required-area-buttons {
-  margin: 0.4rem 0;
+#action-required-area-content {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-#action-required-area-buttons > button,
+#action-required-area-content > button,
 #update-message-area > button {
+  height: 4rem;
   background-color: #48779a;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
+  margin: auto 0.5rem;
 }
 
-#action-required-area-buttons > button:hover,
-#action-required-area-buttons > button:active,
+#action-required-area-content > button:hover,
+#action-required-area-content > button:active,
 #update-message-area > button:hover,
 #update-message-area > button:active {
   background-color: #658196;
@@ -258,25 +252,29 @@ h6 {
 }
 
 #action-required-image {
-  position: fixed;
-  left: 2rem;
-  top: 2.2rem;
-  height: 5rem;
+  height: 3.2rem;
+  margin: 0.6rem 1.4rem;
+}
+
+#action-required-area-text {
+  flex: 1;
+  font-size: 1.2rem;
+  line-height: 1.2;
 }
 
 #action-required-close {
-  background: no-repeat center/100% url('/images/close.svg');
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
+  background: no-repeat center url('/images/close.svg');
+  background-size: 1.6rem;
+  width: 4rem;
+  height: 4rem;
   border: none;
-  opacity: 0.9;
-  user-select: none;
-  outline: 0;
-  cursor: default;
-  position: fixed;
-  right: 2rem;
-  top: 3.6rem;
+  margin: auto 0.5rem;
+  opacity: 0.8;
+}
+
+#action-required-close:hover,
+#action-required-close:active {
+  opacity: 1;
 }
 
 #action-required-area-text > a:link,
@@ -284,6 +282,30 @@ h6 {
 #action-required-area-text > a:hover,
 #action-required-area-text > a:active {
   color: white;
+}
+
+@media only screen and (max-width: 959px) {
+  #action-required-area {
+    width: calc(100% - 4rem);
+    height: auto;
+  }
+
+  #action-required-area-content {
+    flex-direction: column;
+  }
+
+  #action-required-area-content button {
+    margin: 0.5rem auto;
+    width: 13rem;
+  }
+
+  #action-required-close {
+    margin: 0.5rem 0.5rem;
+  }
+
+  #action-required-area-text {
+    padding: 5rem 0 1rem 0;
+  }
 }
 
 #message-area {
