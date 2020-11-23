@@ -218,6 +218,8 @@ h6 {
   display: flex;
   flex: 1;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 #action-required-area-content > button,
@@ -258,8 +260,6 @@ h6 {
   flex: 1;
   font-size: 1.2rem;
   line-height: 1.2;
-  /* TODO: Remove this padding and vertical align center */
-  padding: 0.6rem 0;
 }
 
 #action-required-close {
