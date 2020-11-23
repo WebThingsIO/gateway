@@ -623,6 +623,7 @@ action-required-dont-ask-again = Non chiederlo di nuovo
 action-required-choose = Scegli
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-register-domain-label = Registrati al servizio di accesso remoto webthings.io
 transition-dialog-subdomain =
     .placeholder = Sottodominio
 transition-dialog-email =
