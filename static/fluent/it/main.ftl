@@ -618,20 +618,27 @@ ui-update-close = Chiudi
 action-required-image =
     .alt = Avviso
 action-required = Azione richiesta:
+action-required-message = Il servizio di accesso remoto Mozilla IoT e gli aggiornamenti automatici del software verranno interrotti. Passa a webthings.io, gestito dalla community, per continuare a usufruire del servizio.
 action-required-more-info = Ulteriori informazioni
 action-required-dont-ask-again = Non chiederlo di nuovo
 action-required-choose = Scegli
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = Il servizio di accesso remoto IoT e gli aggiornamenti automatici del software verranno interrotti il 31 dicembre 2020 (<a data-l10n-name="transition-dialog-more-info">ulteriori informazioni</a>). Mozilla sta effettuando la transizione del progetto al nuovo <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>, gestito da una community (non affiliata a Mozilla).<br><br>Se non desideri più ricevere gli aggiornamenti del software dai server gestiti dalla community, puoi disattivare gli aggiornamenti automatici nelle Impostazioni.<br><br>Se desideri trasferire il tuo sottodominio da mozilla-iot.org a webthings.io o registrare un nuovo sottodominio, compila il modulo sottostante per registrarti al servizio di accesso remoto sostitutivo gestito dalla community.
 transition-dialog-register-domain-label = Registrati al servizio di accesso remoto webthings.io
 transition-dialog-subdomain =
     .placeholder = Sottodominio
+transition-dialog-newsletter-label = Voglio ricevere aggiornamenti sulle novità di WebThings
 transition-dialog-email =
     .placeholder = Indirizzo email
 transition-dialog-register = Registrati
 transition-dialog-register-status =
     .alt = Stato della registrazione
 transition-dialog-register-label = Registrazione sottodominio
+transition-dialog-subscribe-status =
+    .alt = Stato di iscrizione alla newsletter
+transition-dialog-subscribe-label = Iscrizione alla newsletter
+transition-dialog-error-subdomain-taken = Il sottodominio scelto è già in uso. Torna indietro e scegline un altro.
 transition-dialog-error-subdomain-failed = Impossibile registrare il sottodominio. Torna indietro e riprova.
 
 ## General Terms
