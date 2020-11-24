@@ -96,10 +96,12 @@ async function register(email, reclamationToken, subdomain, fulldomain,
       return;
     }
 
+    jsonToken.base = config.get('ssltunnel.domain');
     token = jsonToken.token;
 
     // Store the token in the db
     await Settings.set('tunneltoken', jsonToken);
+    await Settings.set('transition.complete', true);
   } catch (e) {
     console.error('Failed to subscribe:', e);
     callback(e);
@@ -306,7 +308,7 @@ async function renew(server) {
     // do nothing for now
   };
 
-  const domain = `${tunnelToken.name}.${config.get('ssltunnel.domain')}`;
+  const domain = `${tunnelToken.name}.${tunnelToken.base}`;
 
   try {
     // create an ACME client

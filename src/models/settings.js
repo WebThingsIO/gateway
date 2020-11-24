@@ -69,9 +69,9 @@ const Settings = {
 
     if (typeof result === 'object') {
       console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
-                  `tunnel domain is: ${config.get('ssltunnel.domain')}`);
+                  `tunnel domain is: ${result.base}`);
       tunnelEndpoint =
-        `https://${result.name}.${config.get('ssltunnel.domain')}`;
+        `https://${result.name}.${result.base}`;
     } else {
       tunnelEndpoint = 'Not set.';
     }

@@ -77,10 +77,17 @@ const TunnelService = {
   start: function(response, urlredirect) {
     Settings.get('tunneltoken').then((result) => {
       if (typeof result === 'object') {
+        if (!result.base) {
+          // handle legacy tunnels
+          result.base = 'mozilla-iot.org';
+          Settings.set('tunneltoken', result).catch((e) => {
+            console.error('Failed to set tunneltoken.base:', e);
+          });
+        }
+
         let responseSent = false;
         this.tunneltoken = result;
-        const endpoint = `${result.name}.${
-          config.get('ssltunnel.domain')}`;
+        const endpoint = `${result.name}.${result.base}`;
         this.pagekiteProcess =
           spawnSync(config.get('ssltunnel.pagekite_cmd'),
                     ['--clean', `--frontend=${endpoint}:${
