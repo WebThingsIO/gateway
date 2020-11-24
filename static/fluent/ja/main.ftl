@@ -533,7 +533,7 @@ tunnel-setup-welcome = ようこそ
 tunnel-setup-choose-address = ゲートウェイの安全なウェブアドレスを指定してください:
 tunnel-setup-input-subdomain =
     .placeholder = サブドメイン
-tunnel-setup-email-opt-in = WebThings についてのニュースを更新する。
+tunnel-setup-email-opt-in = WebThings についてのニュースを受け取る。
 tunnel-setup-agree-privacy-policy = WebThings の <a data-l10n-name="tunnel-setup-privacy-policy-link">プライバシーポリシー</a> および <a data-l10n-name="tunnel-setup-tos-link">サービス利用規約</a> に同意する。
 tunnel-setup-input-reclamation-token =
     .placeholder = 再利用トークン
@@ -624,6 +624,24 @@ action-required-dont-ask-again = 次回からは確認しない
 action-required-choose = 選択
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = Mozilla IoT リモートアクセスサービスとソフトウェアの自動更新は 2020 年 12 月 31 日に終了します (<a data-l10n-name="transition-dialog-more-info">詳細情報</a>)。Mozilla は、新たなコミュニティが運営する <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> にプロジェクトを移行しています (ただし、Mozilla と提携していません)。<br><br>ソフトウェアの更新をコミュニティが運営するサーバーから受け取りたくない場合は、設定で自動更新を無効にできます。<br><br>あなたの mozilla-iot.org サブドメインを webthings.io に転送するか、新しいサブドメインを登録したい場合は、以下のフォームに記入して、コミュニティが運営するリモートアクセスサービスに登録してください。
+transition-dialog-register-domain-label = webthings.io リモートアクセスサービスに登録する
+transition-dialog-subdomain =
+    .placeholder = サブドメイン
+transition-dialog-newsletter-label = WebThings についてのニュースを受け取る。
+transition-dialog-agree-tos-label = WebThings の <a data-l10n-name="transition-dialog-privacy-policy-link">プライバシーポリシー</a> および <a data-l10n-name="transition-dialog-tos-link">サービス利用規約</a> に同意する。
+transition-dialog-email =
+    .placeholder = メールアドレス
+transition-dialog-register = 登録
+transition-dialog-register-status =
+    .alt = 登録状況
+transition-dialog-register-label = サブドメインの登録
+transition-dialog-subscribe-status =
+    .alt = ニュースレターの購読状況
+transition-dialog-subscribe-label = ニュースレターを購読
+transition-dialog-error-subdomain-taken = 指定されたサブドメインはすでに使用されています。前に戻って別のサブドメインを選択してください。
+transition-dialog-error-subdomain-failed = サブドメインの登録に失敗しました。前に戻ってもう一度やり直してください。
+transition-dialog-error-subscribe-failed = ニュースレターの購読に失敗しました。<a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> でもう一度お試しください
 
 ## General Terms
 
