@@ -533,6 +533,8 @@ tunnel-setup-welcome = ようこそ
 tunnel-setup-choose-address = ゲートウェイの安全なウェブアドレスを指定してください:
 tunnel-setup-input-subdomain =
     .placeholder = サブドメイン
+tunnel-setup-email-opt-in = WebThings についてのニュースを更新する。
+tunnel-setup-agree-privacy-policy = WebThings の <a data-l10n-name="tunnel-setup-privacy-policy-link">プライバシーポリシー</a> および <a data-l10n-name="tunnel-setup-tos-link">サービス利用規約</a> に同意する。
 tunnel-setup-input-reclamation-token =
     .placeholder = 再利用トークン
 tunnel-setup-error = サブドメインのセットアップ中にエラーが発生しました。
@@ -610,6 +612,18 @@ creating-content = 作成したパスワードを入力して { $ssid } に接�
 ui-update-available = 更新されたユーザーインターフェイスが利用できます。
 ui-update-reload = 再読み込み
 ui-update-close = 閉じる
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = 警告
+action-required = 行動が必要:
+action-required-message = Mozilla IoT リモートアクセスサービスとソフトウェアの自動更新は終了しています。サービス継続のため、コミュニティが運営する webthings.io に転送するかどうかを選んでください。
+action-required-more-info = 詳細情報
+action-required-dont-ask-again = 次回からは確認しない
+action-required-choose = 選択
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
 
 ## General Terms
 
