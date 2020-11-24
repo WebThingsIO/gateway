@@ -293,6 +293,7 @@ Lock = Lås
 BarometricPressureSensor = Barometisk tryksensor
 Custom = Tilpasset ting
 Thing = Ting
+AirQualitySensor = Luftkvalitets-sensor
 
 ## Properties
 
@@ -532,6 +533,7 @@ tunnel-setup-welcome = Velkommen
 tunnel-setup-choose-address = Vælg en sikker webadresse til din gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomæne
+tunnel-setup-email-opt-in = Hold mig opdateret med nyheder om WebThings
 tunnel-setup-agree-privacy-policy = Acceptér <a data-l10n-name="tunnel-setup-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="tunnel-setup-tos-link"> tjenestevilkår</a> for WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Gendannelsestoken
