@@ -624,6 +624,7 @@ action-required-dont-ask-again = Ne kérdezze meg újra
 action-required-choose = Válasszon
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = A Mozilla IoT távoli hozzáférési szolgáltatása és az automatikus szoftverfrissítései 2020. december 31.-ével megszűnik (<a data-l10n-name="transition-dialog-more-info">további információk</a>). A Mozilla átvezeti a szolgáltatást az új, közösség által üzemeltetett <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> weboldalra (nem áll kapcsolatban a Mozillával).<br><br>Ha többé nem akar szoftverfrissítéseket kapni a közösségi frissítési kiszolgálóktól, akkor letilthatja az automatikus frissítéseket a Beállításokban.<br><br>Ha át akarja állítani a mozilla-iot.org aldomainjét webthings.io-ra, akkor vagy új aldomaint regisztrálna, akkor töltse ki a lenti űrlapot, hogy regisztráljon a közösség által üzemeltetett távoli hozzáférési szolgáltatásra.
 transition-dialog-register-domain-label = Regisztráljon a webthings.io távoli hozzáférési szolgáltatására
 transition-dialog-subdomain =
     .placeholder = Aldomain
