@@ -624,6 +624,8 @@ action-required-dont-ask-again = Dit niet meer vragen
 action-required-choose = Kiezen
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = De Mozilla-service voor externe toegang en automatische updates wordt op 31 december 2020 beëindigd (<a data-l10n-name="transition-dialog-more-info">lees hier meer</a>). Mozilla stapt over naar het nieuwe <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>, dat door de gemeenschap wordt uitgevoerd (er is geen connectie met Mozilla).<br><br>Als u geen software-updates van door de gemeenschap uitgevoerde updateservers meer wilt ontvangen, kunt u automatische updates in uw Instellingen uitschakelen.<br><br>Als u uw mozilla-iot.org-subdomein wilt overzetten naar webthings.io, of een nieuw subdomein wilt registreren, dan kunt u onderstaand formulier invullen om te registreren bij de vervangende service voor externe toegang die door de gemeenschap wordt uitgevoerd.
+transition-dialog-register-domain-label = Registreren voor de service voor externe toegang op webthings.io
 transition-dialog-subdomain =
     .placeholder = Subdomein
 transition-dialog-newsletter-label = Houd mij op de hoogte met nieuws over WebThings.
