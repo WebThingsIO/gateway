@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = Suscribirse al boletín
 transition-dialog-error-subdomain-taken = El subdominio elegido ya está en uso. Vuelva atrás y elija otro.
 transition-dialog-error-subdomain-failed = No se pudo registrar el subdominio. Regrese y vuelva a intentarlo.
 transition-dialog-error-subscribe-failed = No se pudo suscribir al boletín. Vuelva a intentarlo en <a data-l10n-name="transition-dialog-step-2-website"> webthings.io </a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navegar a <<dominio>> para continuar.
 
 ## General Terms
 
