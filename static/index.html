@@ -387,7 +387,7 @@
         </section>
         <section id="addon-discovery-settings" class="hidden settings-subsection">
           <div id="addon-discovery-container">
-            <input id="discovered-addons-search" data-l10n-id="addon-search"></input>
+            <input id="discovered-addons-search" data-l10n-id="addon-search">
             <ul id="discovered-addons-list">
             </ul>
           </div>
@@ -423,9 +423,9 @@
             <div class="localization-item-content">
               <label for="localization-settings-country" data-l10n-id="localization-settings-country"></label>
               <select id="localization-settings-country" class="localization-select"></select>
-              <label for="localization-settings-timezone" data-l10n-id="localization-settings-timezone" name="localization-settings-timezone"></label>
+              <label for="localization-settings-timezone" data-l10n-id="localization-settings-timezone"></label>
               <select id="localization-settings-timezone" class="localization-select"></select>
-              <label for="localization-settings-language" data-l10n-id="localization-settings-language" name="localization-settings-language"></label>
+              <label for="localization-settings-language" data-l10n-id="localization-settings-language"></label>
               <select id="localization-settings-language" class="localization-select"></select>
             </div>
           </li>
@@ -623,6 +623,7 @@
     </div>
 
     <!-- Transition dialog -->
+    <div id="transition-scrim" class="hidden"></div>
     <div id="transition-dialog" class="hidden">
       <div id="transition-dialog-step-1">
         <img id="transition-dialog-step-1-wordmark" src="/images/webthings-lockup.svg"
@@ -658,7 +659,7 @@
             <a data-l10n-name="transition-dialog-tos-link" href="https://webthings.io/legal" target="_blank" rel="noopener"></a>
           </label>
           <input type="text" id="transition-dialog-email" data-l10n-id="transition-dialog-email" required />
-          <input type="submit" id="transition-dialog-register" value="Register" class="text-button" data-l10n-id="transition-dialog-register"></input>
+          <input type="submit" id="transition-dialog-register" value="Register" class="text-button" data-l10n-id="transition-dialog-register">
         </form>
       </div>
       <div id="transition-dialog-step-2" class="hidden">
@@ -680,7 +681,7 @@
           <a href="https://webthings.io"
              target="_blank" rel="noopener" data-l10n-name="transition-dialog-step-2-website"></a>
         </div>
-        <div id="transition-dialog-success" class="hidden transition-success" data-l10n-id="transition-dialog-success">
+        <div id="transition-dialog-success" class="hidden transition-success" data-l10n-id="transition-dialog-success"></div>
       </div>
     </div>
 
@@ -728,6 +729,7 @@
             <option value="hours" data-l10n-id="logs-hours"></option>
             <option value="days" data-l10n-id="logs-days" selected></option>
             <option value="weeks" data-l10n-id="logs-weeks"></option>
+          </select>
         </div>
         <div class="create-log-spacer"></div>
         <button id="create-log-save-button" class="text-button" data-l10n-id="logs-save"></button>

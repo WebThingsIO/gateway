@@ -343,6 +343,7 @@ h6 {
   max-height: calc(100% - 15.2rem);
   overflow: auto;
   font-size: 1.6rem;
+  z-index: 1001;
 }
 
 #transition-dialog-step-1 {
@@ -670,6 +671,7 @@ body.hidden {
   }
 }
 
+#transition-scrim,
 #connectivity-scrim {
   background-color: rgba(0, 0, 0);
   opacity: 0.5;
@@ -682,6 +684,7 @@ body.hidden {
   z-index: 1000;
 }
 
+#transition-scrim.hidden,
 #connectivity-scrim.hidden {
   animation: hide-scrim 0.25s ease 0s;
   width: 0%;

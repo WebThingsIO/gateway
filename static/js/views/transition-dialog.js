@@ -23,6 +23,7 @@ const TransitionDialog = {
       },
       dialog: {
         main: document.getElementById('transition-dialog'),
+        scrim: document.getElementById('transition-scrim'),
         step1: {
           close: document.getElementById('transition-dialog-step-1-close'),
         },
@@ -38,9 +39,11 @@ const TransitionDialog = {
     });
     this.elements.dialog.step1.close.addEventListener('click', () => {
       this.elements.dialog.main.classList.add('hidden');
+      this.elements.dialog.scrim.classList.add('hidden');
     });
     this.elements.dialog.step2.close.addEventListener('click', () => {
       this.elements.dialog.main.classList.add('hidden');
+      this.elements.dialog.scrim.classList.add('hidden');
     });
 
     // Dismiss button
@@ -52,9 +55,11 @@ const TransitionDialog = {
       });
     });
 
+    // Choose button
     this.elements.banner.choose.addEventListener('click', () => {
       this.elements.banner.main.classList.add('hidden');
       this.elements.dialog.main.classList.remove('hidden');
+      this.elements.dialog.scrim.classList.remove('hidden');
     });
 
     this.settings = {};
