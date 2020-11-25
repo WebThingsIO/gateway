@@ -650,6 +650,8 @@ transition-dialog-subscribe-label = Підписка на розсилку
 transition-dialog-error-subdomain-taken = Вибраний піддомен уже зайнятий. Поверніться назад і виберіть інший.
 transition-dialog-error-subdomain-failed = Не вдалося зареєструвати піддомен. Поверніться і спробуйте ще раз.
 transition-dialog-error-subscribe-failed = Не вдалося підписатися на розсилку. Повторіть спробу на <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Перейдіть до <<domain>>, щоб продовжити.
 
 ## General Terms
 
