@@ -629,6 +629,7 @@ transition-dialog-register-domain-label = Registrati al servizio di accesso remo
 transition-dialog-subdomain =
     .placeholder = Sottodominio
 transition-dialog-newsletter-label = Voglio ricevere aggiornamenti sulle novità di WebThings
+transition-dialog-agree-tos-label = Accetta l’<a data-l10n-name="transition-dialog-privacy-policy-link">informativa sulla privacy</a> e i <a data-l10n-name="transition-dialog-tos-link">termini di servizio</a> di WebThings.
 transition-dialog-email =
     .placeholder = Indirizzo email
 transition-dialog-register = Registrati
@@ -640,6 +641,7 @@ transition-dialog-subscribe-status =
 transition-dialog-subscribe-label = Iscrizione alla newsletter
 transition-dialog-error-subdomain-taken = Il sottodominio scelto è già in uso. Torna indietro e scegline un altro.
 transition-dialog-error-subdomain-failed = Impossibile registrare il sottodominio. Torna indietro e riprova.
+transition-dialog-error-subscribe-failed = Iscrizione alla newsletter non riuscita. Riprova da <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 
 ## General Terms
 
