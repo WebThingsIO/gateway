@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό
 transition-dialog-error-subdomain-taken = Ο επιλεγμένος υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε πηγαίνετε πίσω και επιλέξτε άλλον.
 transition-dialog-error-subdomain-failed = Αποτυχία καταχώρησης υποτομέα. Παρακαλούμε πηγαίνετε πίσω και δοκιμάστε ξανά.
 transition-dialog-error-subscribe-failed = Αποτυχία εγγραφής στο ενημερωτικό δελτίο. Παρακαλούμε δοκιμάστε ξανά στο <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Πλοηγηθείτε στο <<domain>> για να συνεχίσετε.
 
 ## General Terms
 
