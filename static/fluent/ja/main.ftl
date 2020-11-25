@@ -632,7 +632,8 @@ transition-dialog-newsletter-label = WebThings についてのニュースを受
 transition-dialog-agree-tos-label = WebThings の <a data-l10n-name="transition-dialog-privacy-policy-link">プライバシーポリシー</a> および <a data-l10n-name="transition-dialog-tos-link">サービス利用規約</a> に同意する。
 transition-dialog-email =
     .placeholder = メールアドレス
-transition-dialog-register = 登録
+transition-dialog-register =
+    .value = 登録
 transition-dialog-register-status =
     .alt = 登録状況
 transition-dialog-register-label = サブドメインの登録

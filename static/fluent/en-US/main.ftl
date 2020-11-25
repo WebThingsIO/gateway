@@ -642,6 +642,8 @@ transition-dialog-subscribe-label = Subscribing to newsletter
 transition-dialog-error-subdomain-taken = Chosen subdomain already taken. Please go back and choose another.
 transition-dialog-error-subdomain-failed = Failed to register subdomain. Please go back and try again.
 transition-dialog-error-subscribe-failed = Failed to subscribe to newsletter. Please try again at <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navigate to <<domain>> to continue.
 
 ## General Terms
 

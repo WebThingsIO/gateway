@@ -632,7 +632,8 @@ transition-dialog-newsletter-label = Manténganme al día con las noticias sobre
 transition-dialog-agree-tos-label = Aceptar la <a data-l10n-name="transition-dialog-privacy-policy-link"> Política de privacidad </a> y las <a data-l10n-name="transition-dialog-tos-link"> Condiciones de WebThings de servicio </a>.
 transition-dialog-email =
     .placeholder = Dirección de correo electrónico
-transition-dialog-register = Registrarse
+transition-dialog-register =
+    .value = Registrarse
 transition-dialog-register-status =
     .alt = Estado del registro
 transition-dialog-register-label = Registrando subdominio
