@@ -158,7 +158,20 @@ function startHttpGateway() {
 
 function stopHttpGateway() {
   servers.http.removeListener('request', httpApp);
+
+  if (httpsApp) {
+    servers.http.removeListener('request', httpsApp);
+  }
+
   servers.http.close();
+}
+
+function stopHttpsGateway() {
+  if (servers.https && httpsApp) {
+    servers.https.removeListener('request', httpsApp);
+    servers.https.close();
+    servers.https = null;
+  }
 }
 
 function startWiFiSetup() {
@@ -401,6 +414,7 @@ process.on('SIGINT', () => {
 // function to stop running server and start https
 TunnelService.switchToHttps = () => {
   stopHttpGateway();
+  stopHttpsGateway();
   startHttpsGateway().then((server) => {
     TunnelService.setServerHandle(server);
   });

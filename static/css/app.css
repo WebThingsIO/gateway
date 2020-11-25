@@ -410,6 +410,11 @@ h6 {
   margin: 1rem auto;
 }
 
+#transition-dialog-registering.hidden,
+#transition-dialog-subscribing.hidden {
+  display: none;
+}
+
 #transition-dialog-register-status,
 #transition-dialog-subscribe-status {
   width: 3.2rem;

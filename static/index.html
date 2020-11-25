@@ -658,15 +658,15 @@
             <a data-l10n-name="transition-dialog-privacy-policy-link" href="https://webthings.io/privacy" target="_blank" rel="noopener"></a>
             <a data-l10n-name="transition-dialog-tos-link" href="https://webthings.io/legal" target="_blank" rel="noopener"></a>
           </label>
-          <input type="text" id="transition-dialog-email" data-l10n-id="transition-dialog-email" required />
-          <input type="submit" id="transition-dialog-register" value="Register" class="text-button" data-l10n-id="transition-dialog-register">
+          <input type="email" id="transition-dialog-email" data-l10n-id="transition-dialog-email" />
+          <input type="submit" id="transition-dialog-register" value="Register" class="text-button" data-l10n-id="transition-dialog-register" disabled>
         </form>
       </div>
       <div id="transition-dialog-step-2" class="hidden">
         <img id="transition-dialog-step-2-wordmark" src="/images/webthings-lockup.svg"
              data-l10n-id="transition-dialog-wordmark" />
         <button id="transition-dialog-step-2-close" class="close-button"></button>
-        <button id="transition-dialog-back" class="back-button icon-button"></button>
+        <button id="transition-dialog-back" class="back-button icon-button hidden"></button>
         <div id="transition-dialog-registering">
           <img id="transition-dialog-register-status" src="#" data-l10n-id="transition-dialog-register-status" />
           <span id="transition-dialog-register-label" data-l10n-id="transition-dialog-register-label"></span>
@@ -675,13 +675,14 @@
           <img id="transition-dialog-subscribe-status" src="#" data-l10n-id="transition-dialog-subscribe-status" />
           <span id="transition-dialog-subscribe-label" data-l10n-id="transition-dialog-subscribe-label"></span>
         </div>
+        <div id="transition-dialog-error-generic" class="hidden transition-error" data-l10n-id="transition-dialog-error-generic"></div>
         <div id="transition-dialog-error-subdomain-taken" class="hidden transition-error" data-l10n-id="transition-dialog-error-subdomain-taken"></div>
         <div id="transition-dialog-error-subdomain-failed" class="hidden transition-error" data-l10n-id="transition-dialog-error-subdomain-failed"></div>
         <div id="transition-dialog-error-subscribe-failed" class="hidden transition-error" data-l10n-id="transition-dialog-error-subscribe-failed">
           <a href="https://webthings.io"
              target="_blank" rel="noopener" data-l10n-name="transition-dialog-step-2-website"></a>
         </div>
-        <div id="transition-dialog-success" class="hidden transition-success" data-l10n-id="transition-dialog-success"></div>
+        <div id="transition-dialog-success" class="hidden transition-success"></div>
       </div>
     </div>
 

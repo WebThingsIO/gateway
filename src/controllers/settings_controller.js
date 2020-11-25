@@ -644,7 +644,6 @@ SettingsController.put(
 SettingsController.get('/transition', auth, async (request, response) => {
   const settings = {
     complete: false,
-    skipped: false,
     tunnel: {
       subdomain: null,
       base: null,
@@ -653,7 +652,6 @@ SettingsController.get('/transition', auth, async (request, response) => {
 
   try {
     settings.complete = await Settings.get('transition.complete');
-    settings.skipped = await Settings.get('transition.skipped');
 
     const token = await Settings.get('tunneltoken');
     if (typeof token === 'object') {
@@ -667,21 +665,141 @@ SettingsController.get('/transition', auth, async (request, response) => {
   response.json(settings);
 });
 
-SettingsController.put('/transition', auth, async (request, response) => {
-  if (request.body.skipped) {
+SettingsController.put('/transition', auth, async (request, response, next) => {
+  if (request.body.registerDomain) {
+    // First, save off the old domain. We'll need it later.
+    let oldDomain = null;
+    const token = await Settings.get('tunneltoken');
+    if (typeof token === 'object') {
+      oldDomain = token.name;
+    }
+
+    // increase the timeout for this request, as registration can take a while
+    request.setTimeout(5 * 60 * 1000, () => {
+      const err = new Error('Request Timeout');
+      err.status = 408;
+      next(err);
+    });
+
+    const email = request.body.email.trim().toLowerCase();
+    const subdomain = request.body.domain.trim().toLowerCase();
+    const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
+    const optout = !request.body.subscribeNewsletter;
+    let newsletterError = null;
+
+    // eslint-disable-next-line no-inner-declarations
+    function cb(err) {
+      if (err) {
+        response.status(200).json({
+          error: {
+            domain: err,
+          },
+        });
+      } else {
+        TunnelService.start();
+
+        // Send the response before we shut down and restart the server
+        if (newsletterError) {
+          response.status(200).json({
+            error: {
+              newsletter: newsletterError,
+            },
+          });
+        } else {
+          response.status(200).json({});
+        }
+
+        TunnelService.switchToHttps();
+      }
+    }
+
+    // eslint-disable-next-line no-inner-declarations
+    function newsletterCallback(err) {
+      newsletterError = err;
+    }
+
+    await CertificateManager.register(
+      email,
+      null,
+      subdomain,
+      fulldomain,
+      optout,
+      cb,
+      newsletterCallback
+    );
+
+    // Make sure we don't get stuck in a state where the tunnel doesn't start
     try {
-      await Settings.set('transition.skipped', true);
+      await Settings.delete('notunnel');
+    } catch (e) {
+      console.error('Failed to delete notunnel setting:', e);
+    }
+
+    // At this point, the response should already be sent, but we need to ping
+    // the transition endpoint.
+    if (oldDomain) {
+      try {
+        await fetch(
+          'https://api.mozilla-iot.org:8443/transition',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              domain: oldDomain,
+            }),
+          }
+        );
+      } catch (e) {
+        console.error('Failed to call transition endpoint:', e);
+      }
+    }
+  } else if (request.body.subscribeNewsletter) {
+    try {
+      const endpoint = config.get('ssltunnel.registration_endpoint');
+      await fetch(
+        `${endpoint}/newsletter/subscribe`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: request.body.email,
+            subscribe: true,
+          }),
+        }
+      );
+
       response.status(200).json({});
     } catch (e) {
-      console.error('Failed to set transition.skipped setting.');
+      console.error('Failed to subscribe to newsletter:', e);
+      response.status(200).json({
+        error: {
+          newsletter: e,
+        },
+      });
+    } finally {
+      // If we're ONLY subscribing to the newsletter, go ahead and mark the
+      // transition as complete, even if it failed.
+      try {
+        await Settings.set('transition.complete', true);
+      } catch (e) {
+        console.error('Failed to set transition.complete setting.');
+        console.error(e);
+      }
+    }
+  } else {
+    try {
+      await Settings.set('transition.complete', true);
+      response.status(200).json({});
+    } catch (e) {
+      console.error('Failed to set transition.complete setting.');
       console.error(e);
       response.status(400).send(e);
     }
-
-    return;
   }
-
-  response.status(400).send('Invalid request');
 });
 
 module.exports = SettingsController;
