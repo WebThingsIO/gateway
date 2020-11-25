@@ -132,7 +132,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
       response.status(400).end();
     } else {
       const endpoint = {
-        url: `https://${subdomain}.${config.get('ssltunnel.domain')}`,
+        url: `https://${fulldomain}`,
       };
       TunnelService.start(response, endpoint);
       TunnelService.switchToHttps();
@@ -152,6 +152,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
 SettingsController.post('/skiptunnel', async (request, response) => {
   try {
     await Settings.set('notunnel', true);
+    await Settings.set('transition.complete', true);
     response.status(200).json({});
   } catch (e) {
     console.error('Failed to set notunnel setting.');
@@ -639,5 +640,48 @@ SettingsController.put(
     response.json({});
   }
 );
+
+SettingsController.get('/transition', auth, async (request, response) => {
+  const settings = {
+    complete: false,
+    skipped: false,
+    tunnel: {
+      subdomain: null,
+      base: null,
+    },
+  };
+
+  try {
+    settings.complete = await Settings.get('transition.complete');
+    settings.skipped = await Settings.get('transition.skipped');
+
+    const token = await Settings.get('tunneltoken');
+    if (typeof token === 'object') {
+      settings.tunnel.subdomain = token.name;
+      settings.tunnel.base = token.base;
+    }
+  } catch (e) {
+    console.error('Failed to get transition settings:', e);
+  }
+
+  response.json(settings);
+});
+
+SettingsController.put('/transition', auth, async (request, response) => {
+  if (request.body.skipped) {
+    try {
+      await Settings.set('transition.skipped', true);
+      response.status(200).json({});
+    } catch (e) {
+      console.error('Failed to set transition.skipped setting.');
+      console.error(e);
+      response.status(400).send(e);
+    }
+
+    return;
+  }
+
+  response.status(400).send('Invalid request');
+});
 
 module.exports = SettingsController;
