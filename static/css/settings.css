@@ -638,11 +638,22 @@
   padding: 2rem;
 }
 
+/* stylelint-disable no-descending-specificity */
+#enable-self-updates-checkbox + label::before,
+#domain-settings-local-checkbox + label::before,
+:root .transition-checkbox + label::before {
+  float: none;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+/* stylelint-enable no-descending-specificity */
+
 :root .update-checkbox,
 :root .network-checkbox,
 :root .user-checkbox,
 :root .developer-checkbox,
-:root .experiment-checkbox {
+:root .experiment-checkbox,
+:root .transition-checkbox {
   /* original check box is pushed outside the viewport */
   position: absolute;
   left: -1000em;
@@ -662,7 +673,8 @@
 /* stylelint-enable no-descending-specificity */
 
 /* stylelint-disable no-descending-specificity */
-:root .user-checkbox + label::before {
+:root .user-checkbox + label::before,
+:root .transition-checkbox + label::before {
   content: '';
   display: inline-block;
   width: 3rem;
@@ -693,7 +705,8 @@
 :root .network-checkbox:checked + label::before,
 :root .user-checkbox:checked + label::before,
 :root .developer-checkbox:checked + label::before,
-:root .experiment-checkbox:checked + label::before {
+:root .experiment-checkbox:checked + label::before,
+:root .transition-checkbox:checked + label::before {
   background-position: 0 -3rem;
 }
 /* stylelint-enable no-descending-specificity */
@@ -703,7 +716,8 @@
 :root .network-checkbox:disabled + label::before,
 :root .user-checkbox:disabled + label::before,
 :root .developer-checkbox:disabled + label::before,
-:root .experiment-checkbox:disabled + label::before {
+:root .experiment-checkbox:disabled + label::before,
+:root .transition-checkbox:disabled + label::before {
   background-position: 0 -6rem;
 }
 /* stylelint-enable no-descending-specificity */
@@ -713,17 +727,11 @@
 :root .network-checkbox:checked:disabled + label::before,
 :root .user-checkbox:checked:disabled + label::before,
 :root .developer-checkbox:checked:disabled + label::before,
-:root .experiment-checkbox:checked:disabled + label::before {
+:root .experiment-checkbox:checked:disabled + label::before,
+:root .transition-checkbox:checked:disabled + label::before {
   background-position: 0 -9rem;
 }
 /* stylelint-enable no-descending-specificity */
-
-#enable-self-updates-checkbox + label::before,
-#domain-settings-local-checkbox + label::before {
-  float: none;
-  vertical-align: middle;
-  margin-right: 0.5rem;
-}
 
 #enable-ssh-item {
   background-image: url('/images/ssh-icon.svg');

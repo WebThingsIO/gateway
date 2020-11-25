@@ -660,7 +660,8 @@ transition-dialog-newsletter-label = Gadewch i mi wybod am y newyddion diweddara
 transition-dialog-agree-tos-label = Yn cytuno i <a data-l10n-name="tunnel-setup-privacy-policy-link">Bolisi Preifatrwydd</a> a <a data-l10n-name="tunnel-setup-tos-link">Thelerau Gwasanaeth </a> WebThings.
 transition-dialog-email =
     .placeholder = Cyfeiriad e-bost
-transition-dialog-register = Cofrestru
+transition-dialog-register =
+    .value = Cofrestru
 transition-dialog-register-status =
     .alt = Statws cofrestru
 transition-dialog-register-label = Cofrestru is-barth

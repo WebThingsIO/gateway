@@ -629,7 +629,8 @@ transition-dialog-newsletter-label = Tartson naprakészen a WebThingsről szól�
 transition-dialog-agree-tos-label = Fogadja el a WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">adatvédelmi irányelveit</a> és <a data-l10n-name="transition-dialog-tos-link">szolgáltatási feltételeit</a>.
 transition-dialog-email =
     .placeholder = E-mail-cím
-transition-dialog-register = Regisztráció
+transition-dialog-register =
+    .value = Regisztráció
 transition-dialog-register-status =
     .alt = Regisztráció állapota
 transition-dialog-register-label = Aldomain regisztrációja

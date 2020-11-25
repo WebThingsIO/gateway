@@ -630,7 +630,8 @@ transition-dialog-newsletter-label = Houd mij op de hoogte met nieuws over WebTh
 transition-dialog-agree-tos-label = Instemmen met het <a data-l10n-name="transition-dialog-privacy-policy-link">Privacybeleid</a> en de <a data-l10n-name="transition-dialog-tos-link">Servicevoorwaarden</a> van WebThings.
 transition-dialog-email =
     .placeholder = E-mailadres
-transition-dialog-register = Registreren
+transition-dialog-register =
+    .value = Registreren
 transition-dialog-register-status =
     .alt = Registratiestatus
 transition-dialog-register-label = Subdomein registreren

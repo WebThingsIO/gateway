@@ -639,7 +639,8 @@ transition-dialog-newsletter-label = Повідомляти мені новин�
 transition-dialog-agree-tos-label = Погодитеся з <a data-l10n-name="transition-dialog-privacy-policy-link">Політикою приватности</a> та <a data-l10n-name="transition-dialog-tos-link">Умовами обслуговування</a> WebThings.
 transition-dialog-email =
     .placeholder = Адреса електронної пошти
-transition-dialog-register = Зареєструватися
+transition-dialog-register =
+    .value = Зареєструватися
 transition-dialog-register-status =
     .alt = Стан реєстрації
 transition-dialog-register-label = Реєстрація піддомену

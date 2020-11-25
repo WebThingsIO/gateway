@@ -632,7 +632,8 @@ transition-dialog-newsletter-label = Να ενημερώνομαι για ειδ
 transition-dialog-agree-tos-label = Συμφωνώ με την <a data-l10n-name="transition-dialog-privacy-policy-link">Πολιτική απορρήτου</a> και τους <a data-l10n-name="transition-dialog-tos-link">Όρους υπηρεσίας</a> του WebThings.
 transition-dialog-email =
     .placeholder = Διεύθυνση email
-transition-dialog-register = Εγγραφή
+transition-dialog-register =
+    .value = Εγγραφή
 transition-dialog-register-status =
     .alt = Κατάσταση εγγραφής
 transition-dialog-register-label = Καταχώρηση υποτομέα

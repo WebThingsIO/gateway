@@ -632,7 +632,8 @@ transition-dialog-newsletter-label = Håll mig uppdaterad med nyheter om WebThin
 transition-dialog-agree-tos-label = Godkänn WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">sekretesspolicy</a> och <a data-l10n-name="transition-dialog-tos-link">användarvillkor</a>.
 transition-dialog-email =
     .placeholder = E-postadress
-transition-dialog-register = Registrera
+transition-dialog-register =
+    .value = Registrera
 transition-dialog-register-status =
     .alt = Registreringsstatus
 transition-dialog-register-label = Registrerar underdomän

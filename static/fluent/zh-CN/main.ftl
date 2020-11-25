@@ -632,7 +632,8 @@ transition-dialog-newsletter-label = 让我随时了解 WebThings 的相关新�
 transition-dialog-agree-tos-label = 同意 WebThings 的<a data-l10n-name="transition-dialog-privacy-policy-link">隐私政策</a>和<a data-l10n-name="transition-dialog-tos-link">使用条款</a>。
 transition-dialog-email =
     .placeholder = 电子邮件地址
-transition-dialog-register = 注册
+transition-dialog-register =
+    .value = 注册
 transition-dialog-register-status =
     .alt = 注册状态
 transition-dialog-register-label = 正在注册子域
