@@ -265,14 +265,16 @@ h6 {
   line-height: 1.2;
 }
 
-#transition-dialog-close {
+#transition-dialog-step-1-close,
+#transition-dialog-step-2-close {
   position: absolute;
   top: 0;
   right: 0;
 }
 
 #action-required-close,
-#transition-dialog-close {
+#transition-dialog-step-1-close,
+#transition-dialog-step-2-close {
   background: no-repeat center url('/images/close.svg');
   background-size: 1.6rem;
   width: 4rem;
@@ -284,8 +286,10 @@ h6 {
 
 #action-required-close:hover,
 #action-required-close:active,
-#transition-dialog-close:hover,
-#transition-dialog-close:active {
+#transition-dialog-step-1-close:hover,
+#transition-dialog-step-1-close:active,
+#transition-dialog-step-2-close:hover,
+#transition-dialog-step-2-close:active {
   opacity: 1;
 }
 
