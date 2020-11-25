@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = Prenumerera på nyhetsbrev
 transition-dialog-error-subdomain-taken = Vald underdomän används redan. Gå tillbaka och välj en annan.
 transition-dialog-error-subdomain-failed = Det gick inte att registrera underdomän. Gå tillbaka och försök igen.
 transition-dialog-error-subscribe-failed = Det gick inte att prenumerera på nyhetsbrevet. Försök igen på<a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navigera till <<domain>> för att fortsätta.
 
 ## General Terms
 
