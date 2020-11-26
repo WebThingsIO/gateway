@@ -671,6 +671,8 @@ transition-dialog-subscribe-label = Tanysgrifio i'r cylchlythyr
 transition-dialog-error-subdomain-taken = Mae'r is-barth a ddewiswyd wedi'i gymryd eisoes. Ewch yn ôl a dewis un arall.
 transition-dialog-error-subdomain-failed = Wedi methu cofrestru'r is-barth. Ewch yn ôl a rhoi cynnig arall arni.
 transition-dialog-error-subscribe-failed = Wedi methu tanysgrifio i'r cylchlythyr. Rhowch gynnig arall arni yn <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Llywiwch i <<domain>> i barhau.
 
 ## General Terms
 
