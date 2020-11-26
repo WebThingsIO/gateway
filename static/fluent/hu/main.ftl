@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = Feliratkozás a hírlevélre
 transition-dialog-error-subdomain-taken = A kiválasztott aldomain már foglalt. Ugorjon vissza, és válasszon másikat.
 transition-dialog-error-subdomain-failed = Az aldomain regisztrációja sikertelen. Ugorjon vissza, és próbálkozzon újra.
 transition-dialog-error-subscribe-failed = A hírlevélre feliratkozás sikertelen. Próbálja újra a <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> címen.
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navigálás ide a folytatáshoz: <<domain>>.
 
 ## General Terms
 
