@@ -617,6 +617,8 @@ ui-update-close = Luk
 
 action-required-image =
     .alt = Advarsel
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
 transition-dialog-agree-tos-label = Acceptér <a data-l10n-name="transition-dialog-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="transition-dialog-tos-link">tjenestevilkår</a> for WebThings.
 
 ## General Terms
