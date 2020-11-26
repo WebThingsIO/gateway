@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = 正在订阅新闻通讯
 transition-dialog-error-subdomain-taken = 所选子域已被占用，请返回重新选择。
 transition-dialog-error-subdomain-failed = 无法注册子域，请返回重试。
 transition-dialog-error-subscribe-failed = 无法订阅新闻通讯。请到 <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> 重试。
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = 前往 <<domain>> 以继续。
 
 ## General Terms
 
