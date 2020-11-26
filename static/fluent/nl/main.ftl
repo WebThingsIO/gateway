@@ -643,6 +643,8 @@ transition-dialog-subscribe-label = Abonneren op nieuwsbrief
 transition-dialog-error-subdomain-taken = Het gekozen subdomein is al in gebruik. Ga terug en kies een ander.
 transition-dialog-error-subdomain-failed = Kan subdomein niet registreren. Ga terug en probeer het opnieuw.
 transition-dialog-error-subscribe-failed = Abonneren op nieuwsbrief mislukt. Probeer het nogmaals op <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navigeer naar <<domain>> om verder te gaan.
 
 ## General Terms
 
