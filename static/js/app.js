@@ -574,6 +574,7 @@ if (navigator.serviceWorker) {
       updateMessageArea.classList.add('hidden');
     });
 
+    document.getElementById('action-required-area').classList.add('hidden');
     updateMessageArea.classList.remove('hidden');
   }
 

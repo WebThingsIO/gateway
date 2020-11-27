@@ -133,7 +133,10 @@ const TransitionDialog = {
       this.settings = body;
 
       if (!body.complete) {
-        this.elements.banner.main.classList.remove('hidden');
+        const updateBanner = document.getElementById('update-message-area');
+        if (updateBanner.classList.contains('hidden')) {
+          this.elements.banner.main.classList.remove('hidden');
+        }
       }
 
       if (body.tunnel.subdomain) {
