@@ -710,6 +710,31 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
         }
 
         TunnelService.switchToHttps();
+
+        // Make sure we don't get stuck in a state where the tunnel doesn't
+        // start
+        Settings.delete('notunnel').catch((e) => {
+          console.error('Failed to delete notunnel setting:', e);
+        });
+
+        // If we previously had a mozilla-iot.org subdomain, we need to ping
+        // the old transition endpoint.
+        if (oldDomain) {
+          fetch(
+            'https://api.mozilla-iot.org:8443/transition',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                domain: oldDomain,
+              }),
+            }
+          ).catch((e) => {
+            console.error('Failed to call transition endpoint:', e);
+          });
+        }
       }
     }
 
@@ -727,34 +752,6 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
       cb,
       newsletterCallback
     );
-
-    // Make sure we don't get stuck in a state where the tunnel doesn't start
-    try {
-      await Settings.delete('notunnel');
-    } catch (e) {
-      console.error('Failed to delete notunnel setting:', e);
-    }
-
-    // At this point, the response should already be sent, but we need to ping
-    // the transition endpoint.
-    if (oldDomain) {
-      try {
-        await fetch(
-          'https://api.mozilla-iot.org:8443/transition',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              domain: oldDomain,
-            }),
-          }
-        );
-      } catch (e) {
-        console.error('Failed to call transition endpoint:', e);
-      }
-    }
   } else if (request.body.subscribeNewsletter) {
     try {
       const endpoint = config.get('ssltunnel.registration_endpoint');
