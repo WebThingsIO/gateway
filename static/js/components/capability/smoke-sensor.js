@@ -34,7 +34,7 @@ template.innerHTML = `
       transform: translate(0);
       background-color: #89b6d6;
       background-image: url('/images/component-icons/smoke-sensor-ok.svg');
-      background-position: center 2rem;
+      background-position: center 2.75rem;
     }
 
     .webthing-smoke-sensor-capability-icon.smoke {
@@ -53,7 +53,7 @@ template.innerHTML = `
     .webthing-smoke-sensor-capability-icon.smoke
     .webthing-smoke-sensor-capability-label {
       color: white;
-      padding-top: 8.75rem;
+      padding-top: 9.25rem;
     }
   </style>
   <div id="icon" class="webthing-smoke-sensor-capability-icon">

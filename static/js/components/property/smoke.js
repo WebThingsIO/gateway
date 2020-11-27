@@ -53,7 +53,7 @@ class SmokeProperty extends BaseComponent {
 
     .webthing-smoke-property-container.inverted
     .webthing-smoke-property-value {
-      top: calc(50% + 1rem);
+      top: calc(50% + 1.7rem);
     }
 
     .webthing-smoke-property-image {
@@ -66,7 +66,7 @@ class SmokeProperty extends BaseComponent {
       width: 3.2rem;
       position: absolute;
       left: calc(50% - 1.6rem);
-      top: 1.6rem;
+      top: 2.6rem;
     }
 
     .webthing-smoke-property-name {
