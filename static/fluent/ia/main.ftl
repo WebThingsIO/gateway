@@ -612,6 +612,23 @@ ui-update-available = Un interfacie usator actualisate es disponibile.
 ui-update-reload = Recargar
 ui-update-close = Clauder
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Advertentia
+action-required-more-info = Plus de informationes
+action-required-dont-ask-again = Non plus demandar.
+action-required-choose = Eliger
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Subdominio
+transition-dialog-newsletter-label = Tene me actualisate del novas re WebThings
+transition-dialog-email =
+    .placeholder = Adresse de e-mail
+transition-dialog-register =
+    .value = Registra te
+
 ## General Terms
 
 ok = Ok
