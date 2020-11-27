@@ -57,9 +57,11 @@ function writeCertificates(certificate, privateKey, chain) {
  * @param {string} fulldomain - The full domain being registered
  * @param {boolean} optout - Whether or not the user opted out of emails
  * @param {function} callback - Callback function
+ * @param {function?} newsletterCallback - Callback function for newsletter
+ *                                         subscription errors
  */
 async function register(email, reclamationToken, subdomain, fulldomain,
-                        optout, callback) {
+                        optout, callback, newsletterCallback) {
   if (DEBUG) {
     console.debug('Starting registration:', email, reclamationToken, subdomain,
                   fulldomain, optout);
@@ -227,8 +229,15 @@ async function register(email, reclamationToken, subdomain, fulldomain,
         }),
       }
     );
+
+    if (newsletterCallback) {
+      newsletterCallback();
+    }
   } catch (e) {
     console.error('Failed to subscribe to newsletter:', e);
+    if (newsletterCallback) {
+      newsletterCallback(e);
+    }
   }
 
   console.log('Registration success!');
