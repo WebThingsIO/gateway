@@ -25,9 +25,8 @@ class SmokeDetail extends StringLabelDetail {
     const readOnly = this.readOnly ? 'data-read-only="true"' : '';
 
     return `
-      <webthing-smoke-property
-        data-value="${fluent.getMessage('clear')}" ${readOnly}
-        data-name="${Utils.escapeHtml(this.label)}" id="${this.id}">
+      <webthing-smoke-property data-name="${Utils.escapeHtml(this.label)}"
+        id="${this.id}" ${readOnly}>
       </webthing-smoke-property>`;
   }
 
@@ -36,10 +35,7 @@ class SmokeDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ?
-      fluent.getMessage('smoke') :
-      fluent.getMessage('clear');
-    this.labelElement.inverted = value;
+    this.labelElement.value = value;
   }
 }
 

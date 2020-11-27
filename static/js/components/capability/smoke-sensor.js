@@ -33,26 +33,27 @@ template.innerHTML = `
       background-repeat: no-repeat;
       transform: translate(0);
       background-color: #89b6d6;
-      background-image: url('/images/component-icons/smoke-sensor-clear.svg');
+      background-image: url('/images/component-icons/smoke-sensor-ok.svg');
       background-position: center 2rem;
     }
 
     .webthing-smoke-sensor-capability-icon.smoke {
-      background-color: white;
+      background-color: #ff5555;
       background-image: url('/images/component-icons/smoke-sensor-smoke.svg');
+      border: 0.2rem solid #ff5555;
     }
 
     .webthing-smoke-sensor-capability-label {
       font-weight: bold;
       text-transform: uppercase;
-      padding-top: 8.75rem;
-      font-size: 1.2rem;
+      padding-top: 7rem;
+      font-size: 1.4rem;
     }
 
     .webthing-smoke-sensor-capability-icon.smoke
     .webthing-smoke-sensor-capability-label {
-      color: #5d9bc7;
-      font-size: 1.4rem;
+      color: white;
+      padding-top: 8.75rem;
     }
   </style>
   <div id="icon" class="webthing-smoke-sensor-capability-icon">
@@ -90,7 +91,7 @@ class SmokeSensorCapability extends BaseComponent {
       this._label.innerText = fluent.getMessage('smoke');
     } else {
       this._icon.classList.remove('smoke');
-      this._label.innerText = fluent.getMessage('clear');
+      this._label.innerText = fluent.getMessage('ok');
     }
   }
 }

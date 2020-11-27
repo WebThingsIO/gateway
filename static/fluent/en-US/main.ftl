@@ -329,7 +329,6 @@ humidity = Humidity
 concentration = Concentration
 density = Density
 smoke = Smoke
-clear = Clear
 
 ## Domain Setup
 

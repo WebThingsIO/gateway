@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32.000001"
+   id="svg16389"
+   version="1.1">
+  <defs
+     id="defs16391">
+    <clipPath
+       id="clipPath27913"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         y="-16995.246"
+         x="14447.59"
+         height="28.019884"
+         width="10.050467"
+         id="rect27915"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1;stroke-miterlimit:3.73333335;stroke-dasharray:none;stroke-opacity:1" />
+    </clipPath>
+  </defs>
+  <metadata
+     id="metadata16394">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="rect25937-4-9"
+     d="M 2.9090904,4.979713 H 29.090909 C 30.702546,4.979713 32,6.2771675 32,7.888804 v 2.909091 c 0,1.611637 -1.297454,2.909091 -2.909091,2.909091 H 2.9090904 C 1.2974545,13.706986 0,12.409532 0,10.797895 V 7.888804 C 0,6.2771675 1.2974545,4.979713 2.9090904,4.979713 Z"
+     style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.29090908;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke" />
+  <path
+     id="path28052"
+     d="m 2.1331851,13.70766 2.1333019,5.817622 h 23.466321 l 2.134344,-5.817622 z m 3.7343204,1.454145 h 3.1999528 v 2.909332 H 5.8675055 Z m 4.2666035,0 h 3.199953 v 2.909332 h -3.199953 z m 4.266604,0 h 3.199953 v 2.909332 h -3.199953 z m 4.266604,0 h 3.199953 v 2.909332 h -3.199953 z m 4.266604,0 h 3.199952 v 2.909332 h -3.199952 z"
+     style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.29090908;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke" />
+  <path
+     id="rect25953-5-8"
+     d="M 7.1756947,18.070145 H 24.824178 c 1.611636,0 2.90909,0.648791 2.90909,1.454687 0,0.805897 -1.297454,1.454687 -2.90909,1.454687 H 7.1756947 c -1.6116359,0 -2.9090904,-0.64879 -2.9090904,-1.454687 0,-0.805896 1.2974545,-1.454687 2.9090904,-1.454687 z"
+     style="opacity:1;vector-effect:none;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:0.29090908;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke" />
+</svg>
