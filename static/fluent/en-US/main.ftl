@@ -294,6 +294,7 @@ BarometricPressureSensor = Barometric Pressure Sensor
 Custom = Custom Thing
 Thing = Thing
 AirQualitySensor = Air Quality Sensor
+SmokeSensor = Smoke Sensor
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inactive
 humidity = Humidity
 concentration = Concentration
 density = Density
+smoke = Smoke
 
 ## Domain Setup
 

@@ -852,6 +852,10 @@ class Log {
           return value ?
             fluent.getMessage('leak') :
             fluent.getMessage('dry');
+        case 'SmokeProperty':
+          return value ?
+            fluent.getMessage('smoke') :
+            fluent.getMessage('ok');
         case 'PushedProperty':
           return value ?
             fluent.getMessage('pushed') :

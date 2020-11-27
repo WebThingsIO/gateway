@@ -227,6 +227,10 @@
   background-image: url('/images/thing-icons/leak_sensor.svg');
 }
 
+.new-thing.smoke-sensor .new-thing-icon {
+  background-image: url('/images/thing-icons/smoke_sensor.svg');
+}
+
 .new-thing.push-button .new-thing-icon {
   background-image: url('/images/thing-icons/push_button.svg');
 }

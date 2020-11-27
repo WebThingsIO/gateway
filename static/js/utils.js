@@ -201,6 +201,7 @@ const Utils = {
       'DoorSensor',
       'MotionSensor',
       'LeakSensor',
+      'SmokeSensor',
       'PushButton',
       'TemperatureSensor',
       'HumiditySensor',
