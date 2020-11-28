@@ -13,6 +13,7 @@ fi
 nvm install
 nvm use
 nvm alias default node
+nvm install-latest-npm
 
 # Clean up the nvm cache to free some space
 nvm cache clear

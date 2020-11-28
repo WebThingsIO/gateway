@@ -11,7 +11,7 @@ setcap cap_net_raw+eip $(eval readlink -f $(which python3))
 su - ${FIRST_USER_NAME} << 'EOF'
 set -e -x
 
-NVM_VERSION="v0.36.0"
+NVM_VERSION="v0.37.2"
 NODE_VERSION="--lts=dubnium"
 
 # Install and configure nvm
@@ -31,6 +31,7 @@ nvm_get_arch() {
 # Install node
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
+nvm install-latest-npm
 
 # Allow node to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f $(which node))

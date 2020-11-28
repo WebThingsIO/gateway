@@ -68,6 +68,7 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   nvm install
   nvm use
   nvm alias default node
+  nvm install-latest-npm
   popd
 
   cd "$HOME/webthings/gateway/node_modules/gateway-addon"
