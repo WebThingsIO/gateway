@@ -294,6 +294,7 @@ BarometricPressureSensor = 气压传感器
 Custom = 自定义硬件
 Thing = 硬件
 AirQualitySensor = 空气质量传感器
+SmokeSensor = 烟雾传感器
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = 不活动
 humidity = 湿度
 concentration = 浓度
 density = 密度
+smoke = 烟雾
 
 ## Domain Setup
 
@@ -640,6 +642,7 @@ transition-dialog-register-label = 正在注册子域
 transition-dialog-subscribe-status =
     .alt = 新闻通讯订阅状态
 transition-dialog-subscribe-label = 正在订阅新闻通讯
+transition-dialog-error-generic = 发生错误，请返回重试。
 transition-dialog-error-subdomain-taken = 所选子域已被占用，请返回重新选择。
 transition-dialog-error-subdomain-failed = 无法注册子域，请返回重试。
 transition-dialog-error-subscribe-failed = 无法订阅新闻通讯。请到 <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> 重试。
