@@ -3,7 +3,7 @@
 set -e
 
 _gateway_version=$(grep '"version"' ../package.json | cut -d: -f2 | cut -d\" -f2)
-_gateway_addon_python_version="0.12.0"
+_gateway_addon_python_version="1.0.0"
 _gateway_addon_python_url="https://github.com/WebThingsIO/gateway-addon-python"
 
 # Clean up

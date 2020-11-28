@@ -3,7 +3,7 @@ FROM node:12-buster-slim
 EXPOSE 8080 4443
 
 ARG gateway_addon_version
-ENV gateway_addon_version ${gateway_addon_version:-master}
+ENV gateway_addon_version ${gateway_addon_version:-v1.0.0}
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x && \
