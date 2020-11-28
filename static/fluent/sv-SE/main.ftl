@@ -294,6 +294,7 @@ BarometricPressureSensor = Barometrisk trycksensor
 Custom = Anpassad enhet
 Thing = Enhet
 AirQualitySensor = Luftkvalitetssensor
+SmokeSensor = Röksensor
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inaktiv
 humidity = Luftfuktighet
 concentration = Koncentration
 density = Täthet
+smoke = Rök
 
 ## Domain Setup
 
@@ -640,6 +642,7 @@ transition-dialog-register-label = Registrerar underdomän
 transition-dialog-subscribe-status =
     .alt = Prenumerationsstatus för nyhetsbrev
 transition-dialog-subscribe-label = Prenumerera på nyhetsbrev
+transition-dialog-error-generic = Ett fel uppstod. Gå tillbaka och försök igen.
 transition-dialog-error-subdomain-taken = Vald underdomän används redan. Gå tillbaka och välj en annan.
 transition-dialog-error-subdomain-failed = Det gick inte att registrera underdomän. Gå tillbaka och försök igen.
 transition-dialog-error-subscribe-failed = Det gick inte att prenumerera på nyhetsbrevet. Försök igen på<a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
