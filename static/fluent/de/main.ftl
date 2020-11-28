@@ -294,6 +294,7 @@ BarometricPressureSensor = Barometer
 Custom = Benutzerdefiniertes Gerät
 Thing = Ding
 AirQualitySensor = Luftqualitätssensor
+SmokeSensor = Rauchmelder
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inaktiv
 humidity = Luftfeuchtigkeit
 concentration = Konzentration
 density = Dichte
+smoke = Rauch
 
 ## Domain Setup
 
@@ -644,6 +646,7 @@ transition-dialog-register-label = Subdomain registrieren
 transition-dialog-subscribe-status =
     .alt = Newsletter-Abonnement-Status
 transition-dialog-subscribe-label = Newsletter abonnieren
+transition-dialog-error-generic = Ein Fehler ist aufgetreten. Bitte gehen Sie zurück und versuchen Sie es erneut.
 transition-dialog-error-subdomain-taken = Ausgewählte Subdomain bereits vergeben. Bitte gehen Sie zurück und wählen Sie eine andere.
 transition-dialog-error-subdomain-failed = Subdomain konnte nicht registriert werden. Bitte gehen Sie zurück und versuchen Sie es erneut.
 transition-dialog-error-subscribe-failed = Newsletter konnte nicht abonniert werden. Bitte versuchen Sie es erneut unter <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
