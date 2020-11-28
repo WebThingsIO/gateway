@@ -294,6 +294,7 @@ BarometricPressureSensor = Czujnik ciśnienia atmosferycznego
 Custom = Inna rzecz
 Thing = Rzecz
 AirQualitySensor = Czujnik jakości powietrza
+SmokeSensor = Czujnik dymu
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Nieaktywny
 humidity = Wilgotność
 concentration = Stężenie
 density = Gęstość
+smoke = Dym
 
 ## Domain Setup
 
@@ -647,6 +649,7 @@ transition-dialog-register-label = Rejestrowanie poddomeny
 transition-dialog-subscribe-status =
     .alt = Stan subskrypcji biuletynu
 transition-dialog-subscribe-label = Subskrybowanie biuletynu
+transition-dialog-error-generic = Wystąpił błąd. Proszę wrócić i spróbować ponownie.
 transition-dialog-error-subdomain-taken = Wybrana poddomena jest już zajęta. Proszę wrócić i wybrać inną.
 transition-dialog-error-subdomain-failed = Zarejestrowanie poddomeny się nie powiodło. Proszę wrócić i spróbować ponownie.
 transition-dialog-error-subscribe-failed = Subskrypcja biuletynu się nie powiodła. Proszę spróbować ponownie w serwisie <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
