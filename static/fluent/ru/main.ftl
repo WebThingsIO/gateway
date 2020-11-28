@@ -651,6 +651,9 @@ transition-dialog-register-label = Регистрация поддомена
 transition-dialog-subscribe-status =
     .alt = Статус подписки на новостную рассылку
 transition-dialog-subscribe-label = Подписка на новостную рассылку
+transition-dialog-error-generic = Произошла ошибка. Пожалуйста вернитесь и попробуйте снова.
+transition-dialog-error-subdomain-taken = Выбранный поддомен уже занят. Пожалуйста, вернитесь и выберите другой.
+transition-dialog-error-subdomain-failed = Не удалось зарегистрировать поддомен. Пожалуйста вернитесь и попробуйте снова.
 
 ## General Terms
 
