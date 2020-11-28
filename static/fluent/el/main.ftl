@@ -294,6 +294,7 @@ BarometricPressureSensor = Αισθητήρας βαρομετρικής πίε�
 Custom = Προσαρμοσμένη συσκευή
 Thing = Συσκευή
 AirQualitySensor = Αισθητήρας ποιότητας αέρα
+SmokeSensor = Αισθητήρας καπνού
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Ανενεργό
 humidity = Υγρασία
 concentration = Συγκέντρωση
 density = Πυκνότητα
+smoke = Καπνός
 
 ## Domain Setup
 
@@ -640,6 +642,7 @@ transition-dialog-register-label = Καταχώρηση υποτομέα
 transition-dialog-subscribe-status =
     .alt = Κατάσταση εγγραφής ενημερωτικού δελτίου
 transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό δελτίο
+transition-dialog-error-generic = Προέκυψε σφάλμα. Παρακαλώ πηγαίνετε πίσω και δοκιμάστε ξανά.
 transition-dialog-error-subdomain-taken = Ο επιλεγμένος υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε πηγαίνετε πίσω και επιλέξτε άλλον.
 transition-dialog-error-subdomain-failed = Αποτυχία καταχώρησης υποτομέα. Παρακαλούμε πηγαίνετε πίσω και δοκιμάστε ξανά.
 transition-dialog-error-subscribe-failed = Αποτυχία εγγραφής στο ενημερωτικό δελτίο. Παρακαλούμε δοκιμάστε ξανά στο <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
