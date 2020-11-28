@@ -294,6 +294,7 @@ BarometricPressureSensor = Датчик барометрического дав�
 Custom = Кастомное устройство
 Thing = Вещь
 AirQualitySensor = Датчик качества воздуха
+SmokeSensor = Датчик дыма
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Неактивно
 humidity = Влажность
 concentration = Концентрация
 density = Плотность
+smoke = Дым
 
 ## Domain Setup
 
@@ -624,6 +626,31 @@ creating-content = Подключитесь к { $ssid } с паролем, ко
 ui-update-available = Доступен обновлённый пользовательский интерфейс.
 ui-update-reload = Обновить
 ui-update-close = Закрыть
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Предупреждение
+action-required = Требуются действия:
+action-required-more-info = Подробнее
+action-required-dont-ask-again = Больше не спрашивать
+action-required-choose = Выбрать
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Поддомен
+transition-dialog-newsletter-label = Держать меня в курсе новостей о WebThings
+transition-dialog-agree-tos-label = Примите <a data-l10n-name="transition-dialog-privacy-policy-link">Политику конфиденциальности</a> и <a data-l10n-name="transition-dialog-tos-link">Правила использования сервиса</a> WebThings.
+transition-dialog-email =
+    .placeholder = Адрес электронной почты
+transition-dialog-register =
+    .value = Зарегистрировать
+transition-dialog-register-status =
+    .alt = Статус регистрации
+transition-dialog-register-label = Регистрация поддомена
+transition-dialog-subscribe-status =
+    .alt = Статус подписки на новостную рассылку
+transition-dialog-subscribe-label = Подписка на новостную рассылку
 
 ## General Terms
 
