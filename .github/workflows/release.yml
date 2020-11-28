@@ -176,6 +176,12 @@ jobs:
           docker start -a build
           docker cp -L build:/build/webthings-gateway.deb ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
           docker rm build
+      - name: Download upload_url
+        uses: actions/download-artifact@v1
+        with:
+          name: upload_url
+      - name: Set upload_url
+        run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
       - name: Upload .deb package
         id: upload-release-asset-deb
         uses: actions/upload-release-asset@v1
@@ -239,6 +245,12 @@ jobs:
           docker start -a build
           docker cp -L build:/build/webthings-gateway.rpm ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
           docker rm build
+      - name: Download upload_url
+        uses: actions/download-artifact@v1
+        with:
+          name: upload_url
+      - name: Set upload_url
+        run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
       - name: Upload .rpm package
         id: upload-release-asset-rpm
         uses: actions/upload-release-asset@v1
