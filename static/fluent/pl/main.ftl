@@ -653,6 +653,8 @@ transition-dialog-error-generic = Wystąpił błąd. Proszę wrócić i spróbo
 transition-dialog-error-subdomain-taken = Wybrana poddomena jest już zajęta. Proszę wrócić i wybrać inną.
 transition-dialog-error-subdomain-failed = Zarejestrowanie poddomeny się nie powiodło. Proszę wrócić i spróbować ponownie.
 transition-dialog-error-subscribe-failed = Subskrypcja biuletynu się nie powiodła. Proszę spróbować ponownie w serwisie <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Przejdź do <<domain>>, aby kontynuować.
 
 ## General Terms
 
