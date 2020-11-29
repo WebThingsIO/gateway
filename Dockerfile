@@ -2,9 +2,6 @@ FROM node:12-buster-slim
 
 EXPOSE 8080 4443
 
-ARG gateway_addon_version
-ENV gateway_addon_version ${gateway_addon_version:-v1.0.0}
-
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x && \
     echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list && \
@@ -35,12 +32,13 @@ RUN set -x && \
         zlib1g-dev && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
-    pip3 install git+https://github.com/WebThingsIO/gateway-addon-python@${gateway_addon_version}#egg=gateway_addon && \
     groupadd -g 997 gpio && \
     usermod -a -G sudo,dialout,gpio node && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 COPY --chown=node:node . /home/node/webthings/gateway/
+RUN pip3 install -r /home/node/webthings/gateway/requirements.txt
+
 USER node
 WORKDIR /home/node/webthings/gateway
 RUN set -x && \

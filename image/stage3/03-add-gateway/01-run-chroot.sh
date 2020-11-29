@@ -2,6 +2,9 @@
 
 set -x
 
+# Install Python add-on bindings
+pip3 install -r "/home/${FIRST_USER_NAME}/webthings/gateway/requirements.txt"
+
 su - ${FIRST_USER_NAME} << 'EOF'
 set -e -x
 

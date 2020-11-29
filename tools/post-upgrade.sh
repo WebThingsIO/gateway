@@ -22,8 +22,7 @@ if [ -n "$_missing_deps" ]; then
 fi
 
 # Upgrade gateway-addon Python package
-_url="git+https://github.com/WebThingsIO/gateway-addon-python@v1.0.0#egg=gateway_addon"
-sudo pip3 install -U "$_url"
+sudo pip3 install -U -r "$HOME/webthings/gateway/requirements.txt"
 
 # Uninstall py2 version of gateway-addon, if present
 sudo pip2 uninstall -y gateway_addon || true
