@@ -655,6 +655,10 @@ transition-dialog-subscribe-status =
 transition-dialog-subscribe-label = Abonnearje op nijsbrief
 transition-dialog-error-generic = Der is in flater bard. Gean werom en probearje it nochris.
 transition-dialog-error-subdomain-taken = It keazen subdomein is al yn gebrûk. Gean werom en kies in oar.
+transition-dialog-error-subdomain-failed = Kin subdomein net registrearje. Gean werom en probearje it nochris.
+transition-dialog-error-subscribe-failed = Abonnearje op nijsbrief mislearre. Probearje it nochris op <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navigearje nei <<domain>> om fierder te gean.
 
 ## General Terms
 
