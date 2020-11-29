@@ -296,6 +296,7 @@ BarometricPressureSensor = Barometryske druksensor
 Custom = Oanpast Thing
 Thing = Thing
 AirQualitySensor = Loftkwaliteitssensor
+SmokeSensor = Reekmelder
 
 ## Properties
 
@@ -329,6 +330,7 @@ inactive = Ynaktyf
 humidity = Fochtichheid
 concentration = Konsintraasje
 density = Tichtens
+smoke = Reek
 
 ## Domain Setup
 
@@ -623,6 +625,36 @@ creating-content =
 ui-update-available = Der is in bywurke brûkersynterface beskikber.
 ui-update-reload = Fernije
 ui-update-close = Slute
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Warskôging
+action-required = Aksje fereaske:
+action-required-message = De Mozilla IoT-service foar eksterne tagong en automatyske software-updates wurde stopset. Kies oft jo oerstappe wolle nei it troch de mienskip behearde webthings.io foar fierdere service.
+action-required-more-info = Mear ynfo
+action-required-dont-ask-again = Dit net mear freegje
+action-required-choose = Kieze
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-text = De Mozilla-service foar eksterne tagong en automatyske updates wurdt op 31 desimber 2020 beëinige (<a data-l10n-name="transition-dialog-more-info">lês hjir mear</a>). Mozilla stapt oer nei it nije <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>, dat troch de mienskip útfierd wurdt (der is gjin konneksje mei Mozilla).<br><br>As jo gjin software-updates fan troch de mienskip útfierde updateservers mear ûntfange wolle, kinne jo automatyske updates yn jo Ynstellingen útskeakelje.<br><br>As jo jo mozilla-iot.org-subdomein oersette wolle nei webthings.io, of in nij subdomein registrearje wolle, dan kinne jo ûndersteand formulier ynfolje om te registrearjen by de ferfangende service foar eksterne tagong dy't toochr de mienskip útfierd wurdt.
+transition-dialog-register-domain-label = Registrearje foar de service foar eksterne tagong op webthings.io
+transition-dialog-subdomain =
+    .placeholder = Subdomein
+transition-dialog-newsletter-label = Hâld my op de hichte mei nijs oer WebThings.
+transition-dialog-agree-tos-label = Ynstimme mei it <a data-l10n-name="transition-dialog-privacy-policy-link">Privacybelied</a> en de <a data-l10n-name="transition-dialog-tos-link">Servicebetingsten</a> fan WebThings.
+transition-dialog-email =
+    .placeholder = E-mailadres
+transition-dialog-register =
+    .value = Registrearje
+transition-dialog-register-status =
+    .alt = Registraasjesteat
+transition-dialog-register-label = Subdomein registrearje
+transition-dialog-subscribe-status =
+    .alt = Steat nijsbriefabonnemint
+transition-dialog-subscribe-label = Abonnearje op nijsbrief
+transition-dialog-error-generic = Der is in flater bard. Gean werom en probearje it nochris.
+transition-dialog-error-subdomain-taken = It keazen subdomein is al yn gebrûk. Gean werom en kies in oar.
 
 ## General Terms
 
