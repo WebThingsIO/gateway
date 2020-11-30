@@ -44,11 +44,15 @@ const TransitionDialog = {
           back: document.getElementById('transition-dialog-back'),
           registering: {
             main: document.getElementById('transition-dialog-registering'),
-            image: document.getElementById('transition-dialog-register-status'),
+            workingImage: document.getElementById('transition-dialog-register-status-working'),
+            successImage: document.getElementById('transition-dialog-register-status-success'),
+            failedImage: document.getElementById('transition-dialog-register-status-failed'),
           },
           subscribing: {
             main: document.getElementById('transition-dialog-subscribing'),
-            image: document.getElementById('transition-dialog-subscribe-status'),
+            workingImage: document.getElementById('transition-dialog-subscribe-status-working'),
+            successImage: document.getElementById('transition-dialog-subscribe-status-success'),
+            failedImage: document.getElementById('transition-dialog-subscribe-status-failed'),
           },
           errors: {
             generic: document.getElementById('transition-dialog-error-generic'),
@@ -167,14 +171,30 @@ const TransitionDialog = {
       this.elements.dialog.step2.registering.main.classList.add('hidden');
     } else {
       this.elements.dialog.step2.registering.main.classList.remove('hidden');
-      this.elements.dialog.step2.registering.image.src = '/images/loading.gif';
+      this.elements.dialog.step2.registering.workingImage.classList.remove(
+        'hidden'
+      );
+      this.elements.dialog.step2.registering.successImage.classList.add(
+        'hidden'
+      );
+      this.elements.dialog.step2.registering.failedImage.classList.add(
+        'hidden'
+      );
     }
 
     if (!subscribeNewsletter) {
       this.elements.dialog.step2.subscribing.main.classList.add('hidden');
     } else {
       this.elements.dialog.step2.subscribing.main.classList.remove('hidden');
-      this.elements.dialog.step2.subscribing.image.src = '/images/loading.gif';
+      this.elements.dialog.step2.subscribing.workingImage.classList.remove(
+        'hidden'
+      );
+      this.elements.dialog.step2.subscribing.successImage.classList.add(
+        'hidden'
+      );
+      this.elements.dialog.step2.subscribing.failedImage.classList.add(
+        'hidden'
+      );
     }
 
     this.elements.dialog.step2.main.classList.remove('hidden');
@@ -191,8 +211,15 @@ const TransitionDialog = {
       if (registerDomain) {
         if (body.error && body.error.domain) {
           this.elements.dialog.step2.back.classList.remove('hidden');
-          this.elements.dialog.step2.registering.image.src =
-            '/images/cross.svg';
+          this.elements.dialog.step2.registering.workingImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.registering.successImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.registering.failedImage.classList.remove(
+            'hidden'
+          );
 
           if (body.error.domain.indexOf('UnavailableName') > -1) {
             this.elements.dialog.step2.errors.subdomainTaken.classList.remove(
@@ -212,8 +239,15 @@ const TransitionDialog = {
           );
           this.elements.dialog.step2.success.innerHTML = successMessage;
           this.elements.dialog.step2.success.classList.remove('hidden');
-          this.elements.dialog.step2.registering.image.src =
-            '/images/tick.svg';
+          this.elements.dialog.step2.registering.workingImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.registering.successImage.classList.remove(
+            'hidden'
+          );
+          this.elements.dialog.step2.registering.failedImage.classList.add(
+            'hidden'
+          );
         }
       }
 
@@ -222,11 +256,25 @@ const TransitionDialog = {
           this.elements.dialog.step2.errors.subscribeFailed.classList.remove(
             'hidden'
           );
-          this.elements.dialog.step2.subscribing.image.src =
-            '/images/cross.svg';
+          this.elements.dialog.step2.subscribing.workingImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.subscribing.successImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.subscribing.failedImage.classList.remove(
+            'hidden'
+          );
         } else {
-          this.elements.dialog.step2.subscribing.image.src =
-            '/images/tick.svg';
+          this.elements.dialog.step2.subscribing.workingImage.classList.add(
+            'hidden'
+          );
+          this.elements.dialog.step2.subscribing.successImage.classList.remove(
+            'hidden'
+          );
+          this.elements.dialog.step2.subscribing.failedImage.classList.add(
+            'hidden'
+          );
         }
       }
     }).catch((e) => {
