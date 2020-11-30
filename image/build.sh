@@ -21,7 +21,7 @@ rm -rf pi-gen/stage3
 cp -r config stage3 pi-gen
 mkdir pi-gen/stage3/03-add-gateway/files
 mv "${_temp}" pi-gen/stage3/03-add-gateway/files/gateway
-rm -rf pi-gen/stage3/03-add-gateway/files/gateway/{.git,image,node_modules}
+rm -rf pi-gen/stage3/03-add-gateway/files/gateway/{.git,node_modules}
 
 cd pi-gen
 

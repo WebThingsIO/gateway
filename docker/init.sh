@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Set up the system time zone
 if [ -z "$TZ" ]; then

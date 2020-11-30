@@ -11,6 +11,7 @@ if [ -z $gateway_archive_url ] || [ -z $node_modules_archive_url ]; then
   exit 1
 fi
 
+# Bail out
 die() {
   if [ -d /etc/systemd/system/webthings-gateway.service ]; then
     sudo systemctl start webthings-gateway.service
@@ -22,7 +23,7 @@ die() {
   exit -1
 }
 
-
+# Extract an archive
 extractCAArchive() {
   file=$1
   target=$2
@@ -45,26 +46,30 @@ extractCAArchive() {
   rm $archive_name
 }
 
+# Download the gateway and node_modules archives
 wget $gateway_archive_url
 wget $node_modules_archive_url
 
+# Extract the gateway and node_modules
 extractCAArchive gateway-*.tar.gz /tmp
 extractCAArchive node_modules-*.tar.gz /tmp/gateway
 
+# Run the pre-upgrade script
 pushd /tmp/gateway
 ./tools/pre-upgrade.sh
 popd
 
-# bring down the gateway very late in the process since it'll probably be fine
+# Bring down the gateway very late in the process since it'll probably be fine
 sudo systemctl stop webthings-gateway.service || true
 sudo systemctl stop mozilla-iot-gateway.service || true
 
+# Back up the current gateway
 rm -rf gateway_old
 mv gateway gateway_old
 touch gateway_old/package.json
 mv /tmp/gateway gateway
 
-# back up the user profile
+# Back up the user profile
 if [ -d "$HOME/.webthings" ]; then
   rm -rf "$HOME/.webthings.old" "$HOME/.mozilla-iot.old"
   cp -a "$HOME/.webthings" "$HOME/.webthings.old"
@@ -74,8 +79,10 @@ elif [ -d "$HOME/.mozilla-iot" ]; then
   mv "$HOME/.mozilla-iot" "$HOME/.webthings"
 fi
 
+# Run the post-upgrade script
 pushd gateway
 ./tools/post-upgrade.sh
 popd
 
+# Start the gateway back up
 sudo systemctl start webthings-gateway.service

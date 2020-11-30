@@ -2,13 +2,13 @@
 
 # Performs any necessary steps after the main upgrade process is complete.
 
+# Load nvm
 export NVM_DIR=${HOME}/.nvm
-\. "$NVM_DIR/nvm.sh"  # This loads nvm
+\. "$NVM_DIR/nvm.sh"
 nvm use
 nvm alias default node
 
-sudo apt update -y
-
+# Check for and install any missing system dependencies
 _all_deps="ffmpeg mosquitto arping wiringpi python-six"
 _missing_deps=""
 for dep in $_all_deps; do
@@ -18,6 +18,7 @@ for dep in $_all_deps; do
 done
 
 if [ -n "$_missing_deps" ]; then
+  sudo apt update -y
   sudo apt install -y $_missing_deps
 fi
 
@@ -30,6 +31,7 @@ sudo pip2 uninstall -y gateway_addon || true
 # Uninstall adapt-parser, if present
 sudo pip3 uninstall -y adapt-parser || true
 
+# Fix up system services
 sudo systemctl enable webthings-gateway.service
 sudo systemctl enable webthings-gateway.check-for-update.timer
 sudo systemctl disable mozilla-iot-gateway.service || true
@@ -37,6 +39,7 @@ sudo systemctl disable mozilla-iot-gateway.check-for-update.timer || true
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
 sudo systemctl disable mozilla-iot-gateway.renew-certificates.timer || true
 
+# Handle legacy wifiskip file
 if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   if [ -d "$HOME/.webthings" ]; then
     touch "$HOME/.webthings/config/wifiskip"
@@ -45,19 +48,25 @@ if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
   fi
 fi
 
+# Remove old intent parser
 rm -rf "$HOME/webthings/intent-parser"
 sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
-# if the node version changed, we need to update add-ons
-if [[ ! -f "$HOME/webthings/gateway_old/.nvmrc" ||
-      $(sha256sum "$HOME/webthings/gateway_old/.nvmrc") != $(sha256sum "$HOME/webthings/gateway/.nvmrc") ]]; then
-  cd "$HOME/webthings/gateway"
-  ./tools/update-addons.sh
-  cd -
+# If the node version changed, and we have a user profile, we need to update
+# add-ons
+if [ -d "$HOME/.webthings" ]; then
+  if [[ ! -f "$HOME/webthings/gateway_old/.nvmrc" ||
+        $(sha256sum "$HOME/webthings/gateway_old/.nvmrc") != $(sha256sum "$HOME/webthings/gateway/.nvmrc") ]]; then
+    cd "$HOME/webthings/gateway"
+    ./tools/update-addons.sh
+    cd -
+  fi
 fi
 
+# Link the gateway-addon module globally
 cd "$HOME/webthings/gateway/node_modules/gateway-addon"
 npm link
 cd -
 
+# Finished
 touch .post_upgrade_complete

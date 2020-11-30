@@ -2,9 +2,11 @@
 
 # Performs any necessary steps before the main upgrade process is complete.
 
+# Load nvm
 export NVM_DIR=${HOME}/.nvm
-\. "$NVM_DIR/nvm.sh"  # This loads nvm
+\. "$NVM_DIR/nvm.sh"
 
+# Rename the base directory
 if [[ -d "$HOME/mozilla-iot" && ! -e "$HOME/webthings" ]]; then
   ln -sf "$HOME/mozilla-iot" "$HOME/webthings"
 fi
@@ -22,6 +24,7 @@ nvm cache clear
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
-sudo chown -R root:root stage3/02-systemd-units/files/etc
-sudo cp -r stage3/02-systemd-units/files/etc /
-sudo chown -R $(id -u):$(id -g) stage3/02-systemd-units/files/etc
+# Copy any new system config files
+sudo chown -R root:root image/stage3/02-systemd-units/files/etc
+sudo cp -r image/stage3/02-systemd-units/files/etc /
+sudo chown -R $(id -u):$(id -g) image/stage3/02-systemd-units/files/etc

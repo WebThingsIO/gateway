@@ -5,10 +5,11 @@
 
 COUNTER_FILE=/tmp/webthings-gateway-reset-counter
 
+# Load nvm
 export NVM_DIR=${HOME}/.nvm
-\. "$NVM_DIR/nvm.sh"  # This loads nvm
+\. "$NVM_DIR/nvm.sh"
 
-# from https://stackoverflow.com/questions/552724/
+# From https://stackoverflow.com/questions/552724/
 function recentEnough() {
   local filename=$1
   local changed=$(stat -c %Y "$filename")
@@ -16,7 +17,7 @@ function recentEnough() {
   local elapsed
 
   let elapsed=now-changed
-  # if less than 60 * 60 * 24 * 14 seconds have passed
+  # if less than 60 * 60 * 24 * 14 seconds (14 days) have passed
   if [ $elapsed -lt 1209600 ]; then
     return 0 # successful exit
   fi
@@ -49,12 +50,17 @@ function checkCounter() {
   return 1
 }
 
+# Roll back if we need to
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
+  # Stop the gateway
   systemctl stop webthings-gateway || true
   systemctl stop mozilla-iot-gateway || true
+
+  # Roll back to the old gateway
+  rm -rf gateway
   mv gateway_old gateway
 
-  # restore the user profile
+  # Restore the user profile
   if [ -d "$HOME/.webthings.old" ]; then
     rm -rf "$HOME/.webthings"
     mv "$HOME/.webthings.old" "$HOME/.webthings"
@@ -71,10 +77,12 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
   nvm install-latest-npm
   popd
 
+  # Link the gateway-addon module globally
   cd "$HOME/webthings/gateway/node_modules/gateway-addon"
   npm link || true
   cd -
 
+  # Start the gateway back up
   if [ -f "$HOME/webthings/gateway/image/stage3/02-systemd-units/files/etc/systemd/system/webthings-gateway.service" ]; then
     systemctl start webthings-gateway
   else
