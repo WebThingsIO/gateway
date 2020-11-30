@@ -410,13 +410,13 @@ h6 {
   margin: 1rem auto;
 }
 
+.transition-dialog-status-image.hidden,
 #transition-dialog-registering.hidden,
 #transition-dialog-subscribing.hidden {
   display: none;
 }
 
-#transition-dialog-register-status,
-#transition-dialog-subscribe-status {
+.transition-dialog-status-image {
   width: 3.2rem;
   vertical-align: middle;
 }
