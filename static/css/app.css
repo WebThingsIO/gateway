@@ -330,6 +330,10 @@ h6 {
   #action-required-area-text {
     padding: 5rem 0 1rem 0;
   }
+
+  #action-required-close {
+    margin: 0.5rem auto;
+  }
 }
 
 #transition-dialog {
