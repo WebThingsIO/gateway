@@ -40,8 +40,8 @@ jobs:
           imageName: webthingsio/gateway
           platform: linux/amd64,linux/arm/v7,linux/arm64
           tag: latest,${{ env.RELEASE_VERSION }}
-          dockerHubUser: ${{ secrets.DOCKER_HUB_USER }}
-          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          dockerUser: ${{ secrets.DOCKER_HUB_USER }}
+          dockerPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
   build-raspbian-image:
     needs: create-release
