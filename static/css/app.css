@@ -118,8 +118,10 @@ input[type='email'] {
   background-color: #658196;
 }
 
-.text-button:disabled {
-  background-color: #8dbee0;
+.text-button:disabled,
+.text-button:disabled:hover {
+  background-color: #597285;
+  opacity: 0.5;
 }
 
 .icon-button {
@@ -329,6 +331,10 @@ h6 {
 
   #action-required-area-text {
     padding: 5rem 0 1rem 0;
+  }
+
+  #action-required-close {
+    margin: 0.5rem auto;
   }
 }
 
