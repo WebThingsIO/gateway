@@ -294,6 +294,7 @@ BarometricPressureSensor = Synhwyrydd Pwysedd Barometrig
 Custom = Peth Cyfaddas
 Thing = Peth
 AirQualitySensor = Synhwyrydd ansawdd awyr
+SmokeSensor = Synhwyrydd Mwg
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Anweithredol
 humidity = Lleithder
 concentration = Crynodiad
 density = Dwysedd
+smoke = Mwg
 
 ## Domain Setup
 
@@ -668,6 +670,7 @@ transition-dialog-register-label = Cofrestru is-barth
 transition-dialog-subscribe-status =
     .alt = Statws tanysgrifio i'r cylchlythyr
 transition-dialog-subscribe-label = Tanysgrifio i'r cylchlythyr
+transition-dialog-error-generic = Digwyddodd gwall. Ewch yn ôl a cheisiwch eto.
 transition-dialog-error-subdomain-taken = Mae'r is-barth a ddewiswyd wedi'i gymryd eisoes. Ewch yn ôl a dewis un arall.
 transition-dialog-error-subdomain-failed = Wedi methu cofrestru'r is-barth. Ewch yn ôl a rhoi cynnig arall arni.
 transition-dialog-error-subscribe-failed = Wedi methu tanysgrifio i'r cylchlythyr. Rhowch gynnig arall arni yn <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
