@@ -19,7 +19,7 @@ async function getmDNSdomain() {
 
   try {
     const domain = await Settings.get('localDNSname');
-    if (mDNSserviceDomain) {
+    if (domain) {
       mDNSserviceDomain = domain;
     }
   } catch (_) {
