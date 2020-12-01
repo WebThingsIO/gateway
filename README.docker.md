@@ -22,12 +22,12 @@ Currently, this flag will not work when using
     docker run \
         -d \
         -e TZ=America/Los_Angeles \
-        -v /path/to/shared/data:/home/node/.mozilla-iot \
+        -v /path/to/shared/data:/home/node/.webthings \
         --network="host" \
         --log-opt max-size=1m \
         --log-opt max-file=10 \
         --name webthings-gateway \
-        mozillaiot/gateway:latest
+        webthingsio/gateway:latest
     ```
 
 * On Windows or macOS:
@@ -38,11 +38,11 @@ Currently, this flag will not work when using
         -p 8080:8080 \
         -p 4443:4443 \
         -e TZ=America/Los_Angeles \
-        -v /path/to/shared/data:/home/node/.mozilla-iot \
+        -v /path/to/shared/data:/home/node/.webthings \
         --log-opt max-size=1m \
         --log-opt max-file=10 \
         --name webthings-gateway \
-        mozillaiot/gateway:latest
+        webthingsio/gateway:latest
     ```
 
 ### Parameters
@@ -51,7 +51,7 @@ Currently, this flag will not work when using
 * `-e TZ=America/Los_Angeles` - Set the time zone to `America/Los_Angeles`. The
   list of names can be found
   [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
-* `-v /path/to/shared/data:/home/node/.mozilla-iot` - Change
+* `-v /path/to/shared/data:/home/node/.webthings` - Change
   `/path/to/shared/data` to some local path. We are mounting a directory on the
   host to the container in order to store the persistent "user profile" data,
   e.g. add-ons, logs, configuration data, etc.
@@ -67,7 +67,7 @@ Currently, this flag will not work when using
 
 Create a file `local.json` and map it to
 `/path/to/shared/data/config/local.json` (where `/path/to/shared/data` is the
-volume mounted to `/home/node/.mozilla-iot`). Contents of the file:
+volume mounted to `/home/node/.webthings`). Contents of the file:
 
 ```json
 {
@@ -102,7 +102,7 @@ docker build -t gateway .
 docker run \
     -d \
     -e TZ=America/Los_Angeles \
-    -v /path/to/shared/data:/home/node/.mozilla-iot \
+    -v /path/to/shared/data:/home/node/.webthings \
     --network="host" \
     --log-opt max-size=1m \
     --log-opt max-file=10 \

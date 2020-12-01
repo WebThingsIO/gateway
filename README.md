@@ -10,18 +10,18 @@ Web of Things gateway.
 
 ## Installation
 
-- If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://iot.mozilla.org/gateway/) a pre-built software image to an SD card.
-- If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/mozillaiot/gateway), for both ARM and amd64. You can also build your own image from this repository.
+- If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
+- If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
 - On Fedora, Debian, Raspbian, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases). Those packages are built from the [gateway-rpm](https://github.com/WebThingsIO/gateway-rpm) and [gateway-deb](https://github.com/WebThingsIO/gateway-deb) repos.
 - On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/WebThingsIO/gateway-aur).
 - Otherwise, you can build it from source yourself (see below).
 
 ## Documentation
 
-- [Getting Started Guide](https://iot.mozilla.org/docs/gateway-getting-started-guide.html)
-- [User Guide](https://iot.mozilla.org/docs/gateway-user-guide.html)
+- [Getting Started Guide](https://webthings.io/docs/gateway-getting-started-guide.html)
+- [User Guide](https://webthings.io/docs/gateway-user-guide.html)
 - [Wiki](https://github.com/WebThingsIO/wiki/wiki)
-- [Various other docs](https://iot.mozilla.org/docs/)
+- [Various other docs](https://webthings.io/docs/)
 
 ## Community
 
