@@ -53,8 +53,8 @@ function checkCounter() {
 # Roll back if we need to
 if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); then
   # Stop the gateway
-  systemctl stop webthings-gateway || true
-  systemctl stop mozilla-iot-gateway || true
+  sudo systemctl stop webthings-gateway.service || true
+  sudo systemctl stop mozilla-iot-gateway.service || true
 
   # Roll back to the old gateway
   rm -rf gateway
@@ -84,10 +84,14 @@ if [ -d "gateway_old" ] && $(recentEnough "gateway_old") && $(checkCounter); the
 
   # Start the gateway back up
   if [ -f "$HOME/webthings/gateway/image/stage3/02-systemd-units/files/etc/systemd/system/webthings-gateway.service" ]; then
-    systemctl start webthings-gateway
+    sudo systemctl start webthings-gateway.service
   else
-    systemctl disable webthings-gateway
-    systemctl enable mozilla-iot-gateway
-    systemctl start mozilla-iot-gateway
+    sudo systemctl disable webthings-gateway || true
+    sudo systemctl disable webthings-gateway.check-for-update.timer || true
+    sudo systemctl stop webthings-gateway.check-for-update.timer || true
+    sudo systemctl enable mozilla-iot-gateway.service
+    sudo systemctl start mozilla-iot-gateway.service
+    sudo systemctl enable mozilla-iot-gateway.check-for-update.timer
+    sudo systemctl start mozilla-iot-gateway.check-for-update.timer
   fi
 fi

@@ -31,13 +31,23 @@ sudo pip2 uninstall -y gateway_addon || true
 # Uninstall adapt-parser, if present
 sudo pip3 uninstall -y adapt-parser || true
 
-# Fix up system services
-sudo systemctl enable webthings-gateway.service
-sudo systemctl enable webthings-gateway.check-for-update.timer
+# Disable old system services
 sudo systemctl disable mozilla-iot-gateway.service || true
+# mozilla-iot-gateway.service is already stopped
 sudo systemctl disable mozilla-iot-gateway.check-for-update.timer || true
+sudo systemctl stop mozilla-iot-gateway.check-for-update.timer || true
 sudo systemctl disable mozilla-gateway-wifi-setup.service || true
+sudo systemctl stop mozilla-gateway-wifi-setup.service || true
 sudo systemctl disable mozilla-iot-gateway.renew-certificates.timer || true
+sudo systemctl stop mozilla-iot-gateway.renew-certificates.timer || true
+sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
+sudo systemctl stop mozilla-iot-gateway.intent-parser.service || true
+
+# Enable new system services
+sudo systemctl enable webthings-gateway.service
+# webthings-gateway.service will be started by upgrade.sh
+sudo systemctl enable webthings-gateway.check-for-update.timer
+sudo systemctl start webthings-gateway.check-for-update.timer
 
 # Handle legacy wifiskip file
 if sudo test -e "/root/gateway-wifi-setup/wifiskip"; then
@@ -50,7 +60,6 @@ fi
 
 # Remove old intent parser
 rm -rf "$HOME/webthings/intent-parser"
-sudo systemctl disable mozilla-iot-gateway.intent-parser.service || true
 
 # If the node version changed, and we have a user profile, we need to update
 # add-ons

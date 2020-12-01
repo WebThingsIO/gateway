@@ -13,7 +13,7 @@ fi
 
 # Bail out
 die() {
-  if [ -d /etc/systemd/system/webthings-gateway.service ]; then
+  if [ -f /etc/systemd/system/webthings-gateway.service ]; then
     sudo systemctl start webthings-gateway.service
   else
     sudo systemctl start mozilla-iot-gateway.service
