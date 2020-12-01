@@ -294,6 +294,7 @@ BarometricPressureSensor = Barometrikus nyomásérzékelő
 Custom = Egyéni dolog
 Thing = Dolog
 AirQualitySensor = Levegőminőség érzékelő
+SmokeSensor = Füstérzékelő
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inaktív
 humidity = Páratartalom
 concentration = Koncentráció
 density = Sűrűség
+smoke = Füst
 
 ## Domain Setup
 
@@ -640,6 +642,7 @@ transition-dialog-register-label = Aldomain regisztrációja
 transition-dialog-subscribe-status =
     .alt = Hírlevél-feliratkozás állapota
 transition-dialog-subscribe-label = Feliratkozás a hírlevélre
+transition-dialog-error-generic = Hiba történt. Lépjen vissza, és próbálkozzon újra.
 transition-dialog-error-subdomain-taken = A kiválasztott aldomain már foglalt. Ugorjon vissza, és válasszon másikat.
 transition-dialog-error-subdomain-failed = Az aldomain regisztrációja sikertelen. Ugorjon vissza, és próbálkozzon újra.
 transition-dialog-error-subscribe-failed = A hírlevélre feliratkozás sikertelen. Próbálja újra a <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> címen.
