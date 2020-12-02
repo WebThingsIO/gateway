@@ -294,6 +294,7 @@ BarometricPressureSensor = 気圧センサー
 Custom = カスタム Thing
 Thing = Thing
 AirQualitySensor = 大気質センサー
+SmokeSensor = 煙センサー
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = 停止しています
 humidity = 湿度
 concentration = 濃度
 density = 密度
+smoke = 煙
 
 ## Domain Setup
 
@@ -640,9 +642,12 @@ transition-dialog-register-label = サブドメインの登録
 transition-dialog-subscribe-status =
     .alt = ニュースレターの購読状況
 transition-dialog-subscribe-label = ニュースレターを購読
+transition-dialog-error-generic = エラーが発生しました。前に戻ってもう一度試してください。
 transition-dialog-error-subdomain-taken = 指定されたサブドメインはすでに使用されています。前に戻って別のサブドメインを選択してください。
 transition-dialog-error-subdomain-failed = サブドメインの登録に失敗しました。前に戻ってもう一度やり直してください。
 transition-dialog-error-subscribe-failed = ニュースレターの購読に失敗しました。<a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> でもう一度お試しください
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = <<domain>> へ移動して続行します。
 
 ## General Terms
 
