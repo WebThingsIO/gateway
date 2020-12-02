@@ -177,7 +177,7 @@ function setupForm() {
             reclaimMessage.classList.remove('hidden');
             reclaimMessage.querySelector('a').onclick = () => {
               document.getElementById('opt-in-group').style.display = 'none';
-              reclamationToken.style.display = 'block';
+              reclamationToken.style.display = 'inline-block';
               reclamationToken.focus();
 
               reclaimMessage.classList.add('hidden');

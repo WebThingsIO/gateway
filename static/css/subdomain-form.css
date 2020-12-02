@@ -40,19 +40,15 @@ body {
   color: #fff;
 }
 
-#skip-subdomain-anchor:hover {
-  text-decoration: underline;
-}
-
 #create-domain-button {
   display: inline-block;
   margin: 1rem auto;
 }
 
 #create-domain-button:disabled,
-#create-domain-button:disabled:hover {
-  background-color: #597285;
-  opacity: 0.5;
+#create-domain-button:disabled:hover,
+#create-domain-button:hover:active {
+  background-color: #658196;
 }
 
 #label-subdomain {
@@ -159,7 +155,7 @@ button:active:enabled {
 
 #agree-group > label,
 #opt-in-group > label {
-  margin: 1.5rem;
+  margin: 2rem;
 }
 
 #agree-info,
@@ -168,7 +164,7 @@ button:active:enabled {
   display: table-cell;
   font-size: 1.4rem;
   vertical-align: middle;
-  padding-top: 1.5rem;
+  padding-top: 2rem;
 }
 
 #agree-info > span > a:link,
