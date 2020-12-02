@@ -115,7 +115,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     const params = new URLSearchParams();
     params.set('token', token);
     params.set('email', email);
-    params.set('optout', optout);
+    params.set('optout', optout ? '1' : '0');
 
     try {
       await fetch(`${endpoint}/setemail?${params.toString()}`);
