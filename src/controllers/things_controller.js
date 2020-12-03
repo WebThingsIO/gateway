@@ -270,7 +270,7 @@ ThingsController.put(
       };
       response.status(200).json(result);
     } catch (e) {
-      response.status(e.code).send(e.message);
+      response.status(e.code || 500).send(e.message);
     }
   });
 
