@@ -270,6 +270,7 @@ ThingsController.put(
       };
       response.status(200).json(result);
     } catch (e) {
+      console.error('Error setting property:', e);
       response.status(e.code || 500).send(e.message);
     }
   });
