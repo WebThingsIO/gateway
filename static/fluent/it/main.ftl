@@ -646,6 +646,8 @@ transition-dialog-error-generic = Si è verificato un errore. Torna indietro e r
 transition-dialog-error-subdomain-taken = Il sottodominio scelto è già in uso. Torna indietro e scegline un altro.
 transition-dialog-error-subdomain-failed = Impossibile registrare il sottodominio. Torna indietro e riprova.
 transition-dialog-error-subscribe-failed = Iscrizione alla newsletter non riuscita. Riprova da <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Apri <<domain>> per continuare.
 
 ## General Terms
 
