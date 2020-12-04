@@ -294,6 +294,7 @@ BarometricPressureSensor = Sensor de pressão barométrica
 Custom = Coisa personalizada
 Thing = Coisa
 AirQualitySensor = Sensor de qualidade do ar
+SmokeSensor = Sensor de fumo
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inativo
 humidity = Humidade
 concentration = Concentração
 density = Densidade
+smoke = Fumo
 
 ## Domain Setup
 
@@ -533,6 +535,8 @@ tunnel-setup-welcome = Bem-vindo
 tunnel-setup-choose-address = Escolha um endereço da Internet seguro para o seu gateway:
 tunnel-setup-input-subdomain =
     .placeholder = subdomínio
+tunnel-setup-email-opt-in = Mantenham-me atualizado com notícias sobre WebThings.
+tunnel-setup-agree-privacy-policy = Concordar com a <a data-l10n-name="tunnel-setup-privacy-policy-link">política de privacidade</a> e os <a data-l10n-name="tunnel-setup-tos-link">termos de serviço</a> de WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Código de recuperação
 tunnel-setup-error = Ocorreu um erro enquanto configurava o subdomínio.
@@ -610,6 +614,17 @@ creating-content = Por favor, ligue-se a { $ssid } com a palavra-passe que acabo
 ui-update-available = Está disponível uma interface de utilizador atualizada.
 ui-update-reload = Recarregar
 ui-update-close = Fechar
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Aviso
+action-required = Ação necessária:
+action-required-more-info = Mais informações
+action-required-dont-ask-again = Não perguntar novamente
+action-required-choose = Escolher
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
 
 ## General Terms
 
