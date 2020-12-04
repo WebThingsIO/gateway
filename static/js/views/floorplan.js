@@ -294,8 +294,8 @@ const FloorplanScreen = {
     const thing = this.selectedThing;
     const x = parseFloat(thing.dataset.x);
     const y = parseFloat(thing.dataset.y);
-    const thingUrl = decodeURI(thing.dataset.href);
-    const thingId = thingUrl.split('/').pop().replace(/%2F/g, '/');
+    const thingUrl = decodeURIComponent(thing.dataset.href);
+    const thingId = thingUrl.split('/').pop();
     thing.style.cursor = '';
 
     API.setThingFloorplanPosition(thingId, x, y).then(() => {
