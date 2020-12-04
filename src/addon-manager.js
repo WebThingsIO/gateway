@@ -71,11 +71,11 @@ class AddonManager extends EventEmitter {
   }
 
   getUserProfile() {
-    return '';
+    return {};
   }
 
   getPreferences() {
-    return '';
+    return {};
   }
 
   /**
