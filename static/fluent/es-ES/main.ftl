@@ -631,6 +631,23 @@ transition-dialog-register-domain-label = Regístrate para el servicio de acceso
 transition-dialog-subdomain =
     .placeholder = Subdominio
 transition-dialog-newsletter-label = Mantenerme al día con las noticias sobre WebThings
+transition-dialog-agree-tos-label = Aceptar la <a data-l10n-name="transition-dialog-privacy-policy-link">política de privacidad</a> y los <a data-l10n-name="transition-dialog-tos-link">términos del servicio</a>.
+transition-dialog-email =
+    .placeholder = Dirección de correo
+transition-dialog-register =
+    .value = Registrarse
+transition-dialog-register-status =
+    .alt = Estado del registro
+transition-dialog-register-label = Registrando subdominio
+transition-dialog-subscribe-status =
+    .alt = Estado de la suscripción al boletín
+transition-dialog-subscribe-label = Suscribiéndose al boletín
+transition-dialog-error-generic = Ha ocurrido un error. Por favor, vuelve atrás e inténtalo de nuevo.
+transition-dialog-error-subdomain-taken = El subdominio elegido ya está en uso. Por favor, vuelve atrás y elige otro.
+transition-dialog-error-subdomain-failed = No se ha podido registrar el subdominio. Por favor, vuelve atrás e inténtalo de nuevo.
+transition-dialog-error-subscribe-failed = No se ha podido suscribir al boletín. Por favor, vuelve a intentarlo en <a data-l10n-name="transfer-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Navega a <<domain>> para continuar.
 
 ## General Terms
 
