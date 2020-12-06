@@ -294,6 +294,7 @@ BarometricPressureSensor = Sensor de presión barométrica
 Custom = Dispositivo personalizado
 Thing = Dispositivo
 AirQualitySensor = Sensor de calidad del aire
+SmokeSensor = Sensor de humo
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inactivo
 humidity = Humedad
 concentration = Concentración
 density = Densidad
+smoke = Humo
 
 ## Domain Setup
 
@@ -534,6 +536,7 @@ tunnel-setup-choose-address = Elije una dirección web segura para tu puerta de 
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
 tunnel-setup-email-opt-in = Quiero recibir noticias sobre WebThings.
+tunnel-setup-agree-privacy-policy = Acepto la <a data-l10n-name="tunnel-setup-privacy-policy-link">política de privacidad</a> de WebThings y los <a data-l10n-name="tunnel-setup-tos-link">términos de servicio</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token de recuperación
 tunnel-setup-error = Se produjo un error al configurar el subdominio.
@@ -611,6 +614,23 @@ creating-content = Conéctate a { $ssid } con la contraseña que acabas de crear
 ui-update-available = Está disponible una interfaz de usuario actualizada.
 ui-update-reload = Recargar
 ui-update-close = Cerrar
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Advertencia
+action-required = Acción requerida:
+action-required-message = El servicio de acceso remoto IoT de Mozilla y las actualizaciones automáticas de software están siendo descontinuadas. Escoge si prefieres cambiar a la web administrada por la comunidad webthings.io para un continuar el servicio.
+action-required-more-info = Más información
+action-required-dont-ask-again = No preguntar de nuevo
+action-required-choose = Elegir
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-text = El servicio de acceso remoto de Mozilla IoT y las actualizaciones automáticas de software dejarán de estar disponibles el 31 de diciembre de 2020 (<a data-l10n-name="transfer-dialog-more-info">más información</a>). Mozilla está transfiriendo el proyecto a la nueva página web gestionada por la comunidad: <a data-l10n-name="transfer-dialog-step-1-website">webthings.io</a> (no afiliada a Mozilla).<br><br>Si no deseas continuar recibiendo actualizaciones de software de servidores de actualización gestionados por la comunidad, puedes desactivar las actualizaciones automáticas en Ajustes.<br><br>Si deseas transferir tu subdominio mozilla-iot.org a webthings.io o registrar un nuevo subdominio, puedes rellenar el formulario a continuación para registrarte en el servicio de acceso remoto administrador por la comunidad.
+transition-dialog-register-domain-label = Regístrate para el servicio de acceso remoto webthings.io
+transition-dialog-subdomain =
+    .placeholder = Subdominio
+transition-dialog-newsletter-label = Mantenerme al día con las noticias sobre WebThings
 
 ## General Terms
 
