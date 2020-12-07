@@ -289,7 +289,8 @@ class Thing {
     try {
       tempfile = tmp.fileSync({
         mode: parseInt('0644', 8),
-        template: path.join(UserProfile.uploadsDir, `XXXXXX${extension}`),
+        template: `XXXXXX${extension}`,
+        tmpdir: UserProfile.uploadsDir,
         detachDescriptor: true,
         keep: true,
       });
