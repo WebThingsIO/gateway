@@ -414,9 +414,7 @@ class Plugin {
           property = device.findProperty(msg.data.property.name);
           if (property) {
             property.doPropertyChanged(msg.data.property);
-            if (property.isVisible()) {
-              device.notifyPropertyChanged(property);
-            }
+            device.notifyPropertyChanged(property);
           }
         }
         break;
