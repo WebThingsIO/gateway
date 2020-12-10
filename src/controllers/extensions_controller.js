@@ -45,7 +45,8 @@ ExtensionsController.all(
       const rsp = await apiHandler.handleRequest(req);
       response.status(rsp.status);
 
-      if (rsp.contentType && rsp.content !== null) {
+      if (rsp.contentType && rsp.content !== null &&
+          typeof rsp.content !== 'undefined') {
         response.type(rsp.contentType);
         response.send(rsp.content);
       } else {
