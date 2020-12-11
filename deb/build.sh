@@ -71,6 +71,10 @@ sed -i "s/{{nodejs}}/nodejs (>= ${_node_version}.0.0), nodejs (<< $(expr ${_node
 _python3_version=$(dpkg --status python3 | awk '/Version/ {print $2}' | cut -d. -f 1-2)
 sed -i "s/{{python3}}/python3 (>= ${_python3_version}.0), python3 (<< 3.$(expr $(echo ${_python3_version} | cut -d. -f2) + 1).0~~)/" debian/control
 
+# Pin the libffi major version, since dependencies will be build against it
+_libffi_version=$(dpkg --status libffi-dev | grep ^Depends: | egrep -o 'libffi[0-9]')
+sed -i "s/{{libffi}}/${_libffi_version}/" debian/control
+
 # Build it
 debuild -us -uc
 
