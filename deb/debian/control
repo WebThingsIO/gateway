@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 9), nodejs (>= 8), {{npm}} git, python, python3, py
 
 Package: webthings-gateway
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, {{nodejs}}, python-six, lsb-release, {{python3}}, python3-pip, libffi6, adduser, sudo
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, {{nodejs}}, python-six, lsb-release, {{python3}}, python3-pip, {{libffi}}, adduser, sudo
 Recommends: alsa-utils, arping, avahi-daemon, ffmpeg, mosquitto, sqlite3
 Description: WebThings Gateway
  Web of Things gateway, which can bridge existing Internet of Things (IoT)
