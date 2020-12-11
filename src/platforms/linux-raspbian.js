@@ -811,14 +811,14 @@ function getNetworkAddresses() {
  */
 function getSelfUpdateStatus() {
   const timer = 'webthings-gateway.check-for-update.timer';
-
+  const timerExists = fs.existsSync(`/etc/systemd/system/${timer}`);
   const proc = child_process.spawnSync(
     'systemctl',
     ['is-active', timer]
   );
 
   return {
-    available: true,
+    available: timerExists,
     enabled: proc.status === 0,
   };
 }
