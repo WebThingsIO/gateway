@@ -625,6 +625,13 @@ action-required-dont-ask-again = Não perguntar novamente
 action-required-choose = Escolher
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-email =
+    .placeholder = Endereço de e-mail
+transition-dialog-register =
+    .value = Registar
+transition-dialog-register-status =
+    .alt = Estado do registo
+transition-dialog-error-generic = Ocorreu um erro. Por favor retroceda e tente novamente
 
 ## General Terms
 
