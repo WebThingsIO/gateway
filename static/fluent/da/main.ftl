@@ -625,6 +625,8 @@ action-required-choose = Vælg
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
 transition-dialog-agree-tos-label = Acceptér <a data-l10n-name="transition-dialog-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="transition-dialog-tos-link">tjenestevilkår</a> for WebThings.
+transition-dialog-register =
+    .value = Tilmeld
 transition-dialog-register-status =
     .alt = Tilmeldingsstatus
 transition-dialog-error-generic = Der opstod en fejl. Gå tilbage og prøv igen.
