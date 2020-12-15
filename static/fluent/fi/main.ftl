@@ -327,6 +327,7 @@ inactive = Epäaktiivinen
 humidity = Kosteus
 concentration = Sakeus
 density = Tiheys
+smoke = Savu
 
 ## Domain Setup
 
@@ -610,6 +611,24 @@ creating-content = Yhdistä verkkoon { $ssid } juuri luomallasi salasanalla, sen
 ui-update-available = Päivitetty käyttöliittymä on saatavana.
 ui-update-reload = Lataa uudelleen
 ui-update-close = Sulje
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Varoitus
+action-required = Vaatii toimenpiteitä:
+action-required-more-info = Lisätietoja
+action-required-dont-ask-again = Älä kysy uudestaan
+action-required-choose = Valitse
+transition-dialog-email =
+    .placeholder = Sähköpostiosoite
+transition-dialog-register =
+    .value = Rekisteröidy
+transition-dialog-register-status =
+    .alt = Rekisteröinnin tila
+transition-dialog-register-label = Rekisteröidään aliverkkotunnusta
+transition-dialog-subscribe-status =
+    .alt = Uutiskirjeen tilauksen tila
 
 ## General Terms
 
