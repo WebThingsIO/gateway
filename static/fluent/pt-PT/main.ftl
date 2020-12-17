@@ -620,6 +620,7 @@ ui-update-close = Fechar
 action-required-image =
     .alt = Aviso
 action-required = Ação necessária:
+action-required-message = O serviço de acesso remoto e as atualizações automáticas de software da Mozilla IoT esta a ser descontinuado. Escolha se pretende transferir para o webthings.io gerido pela comunidade para garantir a continuidade do serviço.
 action-required-more-info = Mais informações
 action-required-dont-ask-again = Não perguntar novamente
 action-required-choose = Escolher
