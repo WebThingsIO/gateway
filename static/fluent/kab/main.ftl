@@ -630,6 +630,15 @@ transition-dialog-register =
     .value = Jerred
 transition-dialog-register-status =
     .alt = Addad n ujerred
+transition-dialog-register-label = Asekles n taɣult tasnawant
+transition-dialog-subscribe-status =
+    .alt = Addad n ujerred ɣer yizen n telɣut
+transition-dialog-subscribe-label = Ajerred ɣer yizen n telɣut
+transition-dialog-error-generic = Tella-d tuccḍa. Ttxil uɣal ɣer deffir tɛawdeḍ tikkelt-nniḍen.
+transition-dialog-error-subdomain-taken = Taɣult tasnawant yettwaṭṭef. Ttxil uɣal ɣer deffir tferneḍ tayeḍ.
+transition-dialog-error-subdomain-failed = Ajerred ɣer taɣult tasnawant ur yeddi ara. Ttxil uɣal ɣer deffir tɛawdeḍ tikkelt-nniḍen.
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Inig ɣer <<domain>> akken ad tkemmleḍ.
 
 ## General Terms
 
