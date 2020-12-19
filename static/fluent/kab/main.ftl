@@ -611,6 +611,26 @@ ui-update-available = Agrudem n useqdac yettwaleqmen yella akka tura.
 ui-update-reload = Smiren
 ui-update-close = Mdel
 
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Alɣu
+action-required = Tigawt tettusra:
+action-required-more-info = Ugar n telɣut
+action-required-dont-ask-again = Ur d-sutur ara tikkelt-nniḍen.
+action-required-choose = Fren
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-subdomain =
+    .placeholder = Taɣult tasnawant
+transition-dialog-agree-tos-label = Qbel WebThings<a data-l10n-name="transition-dialog-privacy-policy-link"><a data-l10n-name="transition-dialog-privacy-policy-link"> tasertit n tbaḍnit </a> d <a data-l10n-name="transition-dialog-tos-link"> tewtilin n useqdec </a>.
+transition-dialog-email =
+    .placeholder = Tansa imayl
+transition-dialog-register =
+    .value = Jerred
+transition-dialog-register-status =
+    .alt = Addad n ujerred
+
 ## General Terms
 
 ok = IH
