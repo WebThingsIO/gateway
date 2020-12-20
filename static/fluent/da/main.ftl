@@ -645,6 +645,7 @@ transition-dialog-subscribe-label = Abonnerer på nyhedsbrev
 transition-dialog-error-generic = Der opstod en fejl. Gå tilbage og prøv igen.
 transition-dialog-error-subdomain-taken = Det valgte subdomæne er allerede i brug. Gå tilbage og vælg et andet.
 transition-dialog-error-subdomain-failed = Kunne ikke registrere subdomæne. Gå tilbage og prøv igen.
+transition-dialog-error-subscribe-failed = Kunne ikke abonnere på nyhedsbrevet. Prøv igen på <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
 # Use <<domain>> to indicate where the domain should be placed
 transition-dialog-success = Gå til <<domain>> for at fortsætte.
 
