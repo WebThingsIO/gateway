@@ -294,6 +294,7 @@ BarometricPressureSensor = Senzor atmosférického tlaku
 Custom = Vlastná vec
 Thing = Vec
 AirQualitySensor = Senzor kvality ovzdušia
+SmokeSensor = Dymový senzor
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Neaktívne
 humidity = Vlhkosť
 concentration = Koncentrácia
 density = Hustota
+smoke = Dym
 
 ## Domain Setup
 
