@@ -294,6 +294,7 @@ BarometricPressureSensor = Amaṭṭaf abyumitri n tussda
 Custom = Taɣawsa tudmawant
 Thing = Taɣawsa
 AirQualitySensor = Amaṭṭaf n tɣara n uzwu
+SmokeSensor = Amaṭṭaf n dexxan
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Insa
 humidity = Tadawt
 concentration = Tasammest
 density = Taneẓẓi
+smoke = Dexxan
 
 ## Domain Setup
 
@@ -533,6 +535,7 @@ tunnel-setup-welcome = Ansuf
 tunnel-setup-choose-address = Fren tansa web taɣelsant i tqenṭert-ik:
 tunnel-setup-input-subdomain =
     .placeholder = taɣult tasnawant
+tunnel-setup-email-opt-in = Eǧǧ-iyi ad ẓreɣ isallen ineggura ɣef WebThings.
 tunnel-setup-agree-privacy-policy = Qbel WebThings <a data-l10n-name="tunnel-setup-privacy-policy-link"> tasertit n tbaḍnit </a> d <a data-l10n-name="tunnel-setup-tos-link"> tewtilin n useqdec </a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Ajiṭun n usuter
@@ -625,6 +628,7 @@ transition-dialog-wordmark =
 transition-dialog-register-domain-label = Jerred ɣer umeẓlu n unekcum anmeggag n webthings.io
 transition-dialog-subdomain =
     .placeholder = Taɣult tasnawant
+transition-dialog-newsletter-label = Eǧǧ-iyi ad ẓreɣ isallen ineggura ɣef WebThings
 transition-dialog-agree-tos-label = Qbel WebThings<a data-l10n-name="transition-dialog-privacy-policy-link"><a data-l10n-name="transition-dialog-privacy-policy-link"> tasertit n tbaḍnit </a> d <a data-l10n-name="transition-dialog-tos-link"> tewtilin n useqdec </a>.
 transition-dialog-email =
     .placeholder = Tansa imayl
