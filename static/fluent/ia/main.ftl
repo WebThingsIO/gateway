@@ -616,6 +616,7 @@ ui-update-close = Clauder
 
 action-required-image =
     .alt = Advertentia
+action-required = Action obligatori:
 action-required-more-info = Plus de informationes
 action-required-dont-ask-again = Non plus demandar.
 action-required-choose = Eliger
