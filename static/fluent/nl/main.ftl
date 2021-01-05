@@ -615,40 +615,6 @@ ui-update-available = Er is een bijgewerkte gebruikersinterface beschikbaar.
 ui-update-reload = Vernieuwen
 ui-update-close = Sluiten
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Waarschuwing
-action-required = Actie vereist:
-action-required-message = De Mozilla IoT-service voor externe toegang en automatische software-updates worden stopgezet. Kies of u wilt overstappen naar het door de gemeenschap beheerde webthings.io voor verdere service.
-action-required-more-info = Meer info
-action-required-dont-ask-again = Dit niet meer vragen
-action-required-choose = Kiezen
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = De Mozilla-service voor externe toegang en automatische updates wordt op 31 december 2020 beëindigd (<a data-l10n-name="transition-dialog-more-info">lees hier meer</a>). Mozilla stapt over naar het nieuwe <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>, dat door de gemeenschap wordt uitgevoerd (er is geen connectie met Mozilla).<br><br>Als u geen software-updates van door de gemeenschap uitgevoerde updateservers meer wilt ontvangen, kunt u automatische updates in uw Instellingen uitschakelen.<br><br>Als u uw mozilla-iot.org-subdomein wilt overzetten naar webthings.io, of een nieuw subdomein wilt registreren, dan kunt u onderstaand formulier invullen om te registreren bij de vervangende service voor externe toegang die door de gemeenschap wordt uitgevoerd.
-transition-dialog-register-domain-label = Registreren voor de service voor externe toegang op webthings.io
-transition-dialog-subdomain =
-    .placeholder = Subdomein
-transition-dialog-newsletter-label = Houd mij op de hoogte met nieuws over WebThings.
-transition-dialog-agree-tos-label = Instemmen met het <a data-l10n-name="transition-dialog-privacy-policy-link">Privacybeleid</a> en de <a data-l10n-name="transition-dialog-tos-link">Servicevoorwaarden</a> van WebThings.
-transition-dialog-email =
-    .placeholder = E-mailadres
-transition-dialog-register =
-    .value = Registreren
-transition-dialog-register-status =
-    .alt = Registratiestatus
-transition-dialog-register-label = Subdomein registreren
-transition-dialog-subscribe-status =
-    .alt = Status nieuwsbriefabonnement
-transition-dialog-subscribe-label = Abonneren op nieuwsbrief
-transition-dialog-error-generic = Er is een fout opgetreden. Ga terug en probeer het opnieuw.
-transition-dialog-error-subdomain-taken = Het gekozen subdomein is al in gebruik. Ga terug en kies een ander.
-transition-dialog-error-subdomain-failed = Kan subdomein niet registreren. Ga terug en probeer het opnieuw.
-transition-dialog-error-subscribe-failed = Abonneren op nieuwsbrief mislukt. Probeer het nogmaals op <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Navigeer naar <<domain>> om verder te gaan.
-
 ## General Terms
 
 ok = OK

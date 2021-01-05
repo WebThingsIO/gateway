@@ -615,38 +615,6 @@ ui-update-available = Agrudem n useqdac yettwaleqmen yella akka tura.
 ui-update-reload = Smiren
 ui-update-close = Mdel
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Alɣu
-action-required = Tigawt tettusra:
-action-required-more-info = Ugar n telɣut
-action-required-dont-ask-again = Ur d-sutur ara tikkelt-nniḍen.
-action-required-choose = Fren
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-register-domain-label = Jerred ɣer umeẓlu n unekcum anmeggag n webthings.io
-transition-dialog-subdomain =
-    .placeholder = Taɣult tasnawant
-transition-dialog-newsletter-label = Eǧǧ-iyi ad ẓreɣ isallen ineggura ɣef WebThings
-transition-dialog-agree-tos-label = Qbel WebThings<a data-l10n-name="transition-dialog-privacy-policy-link"><a data-l10n-name="transition-dialog-privacy-policy-link"> tasertit n tbaḍnit </a> d <a data-l10n-name="transition-dialog-tos-link"> tewtilin n useqdec </a>.
-transition-dialog-email =
-    .placeholder = Tansa imayl
-transition-dialog-register =
-    .value = Jerred
-transition-dialog-register-status =
-    .alt = Addad n ujerred
-transition-dialog-register-label = Asekles n taɣult tasnawant
-transition-dialog-subscribe-status =
-    .alt = Addad n ujerred ɣer yizen n telɣut
-transition-dialog-subscribe-label = Ajerred ɣer yizen n telɣut
-transition-dialog-error-generic = Tella-d tuccḍa. Ttxil uɣal ɣer deffir tɛawdeḍ tikkelt-nniḍen.
-transition-dialog-error-subdomain-taken = Taɣult tasnawant yettwaṭṭef. Ttxil uɣal ɣer deffir tferneḍ tayeḍ.
-transition-dialog-error-subdomain-failed = Ajerred ɣer taɣult tasnawant ur yeddi ara. Ttxil uɣal ɣer deffir tɛawdeḍ tikkelt-nniḍen.
-transition-dialog-error-subscribe-failed = Ajerred ɣer yizen n telɣut ur yeddi ara. Ttxil ɛreḍ tikkelt-nniḍen deg <a data-l10n-name="transition-dialog-step-2-website"> webthings.io </a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Inig ɣer <<domain>> akken ad tkemmleḍ.
-
 ## General Terms
 
 ok = IH

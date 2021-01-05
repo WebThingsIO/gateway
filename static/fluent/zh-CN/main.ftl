@@ -615,40 +615,6 @@ ui-update-available = 用户界面已做更新。
 ui-update-reload = 重新载入
 ui-update-close = 关闭
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = 警告
-action-required = 需要采取行动：
-action-required-message = Mozilla IoT 的远程访问服务和自动软件更新已终止。请选择是否转移到社区运营的 webthings.io 以继续获得服务。
-action-required-more-info = 更多信息
-action-required-dont-ask-again = 不再询问
-action-required-choose = 选择
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = Mozilla IoT 远程访问服务和自动软件更新将于 2020 年 12 月 31 日终止（<a data-l10n-name="transition-dialog-more-info">了解更多</a>）。 Mozilla 正在将该项目迁移到新的社区运营的 <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>（与 Mozilla 无关）。<br><br>若您不希望继续从社区运营的更新服务器接收软件更新，则请在“设置”中禁用自动更新。<br><br>若要将 mozilla-iot.org 子域转移到 webthings.io，或注册新的子域，您可以填写下表来注册社区运营的远程访问服务。
-transition-dialog-register-domain-label = 注册 webthings.io 远程访问服务
-transition-dialog-subdomain =
-    .placeholder = 子域
-transition-dialog-newsletter-label = 让我随时了解 WebThings 的相关新闻
-transition-dialog-agree-tos-label = 同意 WebThings 的<a data-l10n-name="transition-dialog-privacy-policy-link">隐私政策</a>和<a data-l10n-name="transition-dialog-tos-link">使用条款</a>。
-transition-dialog-email =
-    .placeholder = 电子邮件地址
-transition-dialog-register =
-    .value = 注册
-transition-dialog-register-status =
-    .alt = 注册状态
-transition-dialog-register-label = 正在注册子域
-transition-dialog-subscribe-status =
-    .alt = 新闻通讯订阅状态
-transition-dialog-subscribe-label = 正在订阅新闻通讯
-transition-dialog-error-generic = 发生错误，请返回重试。
-transition-dialog-error-subdomain-taken = 所选子域已被占用，请返回重新选择。
-transition-dialog-error-subdomain-failed = 无法注册子域，请返回重试。
-transition-dialog-error-subscribe-failed = 无法订阅新闻通讯。请到 <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a> 重试。
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = 前往 <<domain>> 以继续。
-
 ## General Terms
 
 ok = 确定

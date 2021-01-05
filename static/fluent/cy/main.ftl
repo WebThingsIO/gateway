@@ -643,40 +643,6 @@ ui-update-available = Mae rhyngwyneb defnyddiwr wedi'i ddiweddaru ar gael.
 ui-update-reload = Llwytho eto
 ui-update-close = Cau
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Rhybudd
-action-required = Camau Angenrheidiol:
-action-required-message = Mae gwasanaeth mynediad o bell Mozilla IoT a'r diweddariadau meddalwedd awtomatig yn dod i ben. Dewiswch p'un ai i drosglwyddo i webthings.io sy'n cael ei redeg gan y gymuned i gael gwasanaeth parhaus.
-action-required-more-info = Rhagor o wybodaeth
-action-required-dont-ask-again = Peidiwch a gofyn eto.
-action-required-choose = Dewis
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = Mae gwasanaeth mynediad o bell Mozilla IoT a'r diweddariadau meddalwedd awtomatig yn dod i ben ar 31ain Rhagfyr 2020 (<a data-l10n-name="transition-dialog-more-info">Rhagor</a>). Mae Mozilla yn trosglwyddo'r project i <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (nad yw'n gysylltiedig â Mozilla). <br> <br > Os nad ydych am barhau i dderbyn diweddariadau meddalwedd gan weinyddion diweddaru sy'n cael eu rhedeg gan y gymuned, gallwch analluogi'r diweddariadau awtomatig yn y Gosodiadau. <br> <br> Os hoffech drosglwyddo'ch is-barth mozilla-iot.org i webthings.io, neu gofrestru is-barth newydd, gallwch lenwi'r ffurflen isod i gofrestru ar gyfer y gwasanaeth mynediad o bell sy'n cael ei redeg gan y gymuned.
-transition-dialog-register-domain-label = Cofrestru ar gyfer y gwasanaeth mynediad o bell webthings.io
-transition-dialog-subdomain =
-    .placeholder = Is-barth
-transition-dialog-newsletter-label = Gadewch i mi wybod am y newyddion diweddaraf am WebThings.
-transition-dialog-agree-tos-label = Yn cytuno i <a data-l10n-name="tunnel-setup-privacy-policy-link">Bolisi Preifatrwydd</a> a <a data-l10n-name="tunnel-setup-tos-link">Thelerau Gwasanaeth </a> WebThings.
-transition-dialog-email =
-    .placeholder = Cyfeiriad e-bost
-transition-dialog-register =
-    .value = Cofrestru
-transition-dialog-register-status =
-    .alt = Statws cofrestru
-transition-dialog-register-label = Cofrestru is-barth
-transition-dialog-subscribe-status =
-    .alt = Statws tanysgrifio i'r cylchlythyr
-transition-dialog-subscribe-label = Tanysgrifio i'r cylchlythyr
-transition-dialog-error-generic = Digwyddodd gwall. Ewch yn ôl a cheisiwch eto.
-transition-dialog-error-subdomain-taken = Mae'r is-barth a ddewiswyd wedi'i gymryd eisoes. Ewch yn ôl a dewis un arall.
-transition-dialog-error-subdomain-failed = Wedi methu cofrestru'r is-barth. Ewch yn ôl a rhoi cynnig arall arni.
-transition-dialog-error-subscribe-failed = Wedi methu tanysgrifio i'r cylchlythyr. Rhowch gynnig arall arni yn <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Llywiwch i <<domain>> i barhau.
-
 ## General Terms
 
 ok = Iawn
