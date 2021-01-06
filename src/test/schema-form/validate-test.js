@@ -24,7 +24,7 @@ describe('Validation', () => {
 
       expect(node.querySelectorAll('.errors-list li')).toHaveLength(1);
       expect(node.querySelector('.errors-list li').textContent.trim())
-        .toEqual('.foo is a required property');
+        .toEqual('should have required property \'foo\'');
     });
   });
 
@@ -52,7 +52,7 @@ describe('Validation', () => {
 
       expect(node.querySelectorAll('.error-item')).toHaveLength(1);
       expect(node.querySelector('.error-item').textContent.trim())
-        .toEqual('.foo should NOT be shorter than 10 characters');
+        .toEqual('/foo should NOT have fewer than 10 characters');
     });
   });
 });

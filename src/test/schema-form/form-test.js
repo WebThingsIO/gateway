@@ -401,7 +401,7 @@ describe('Form', () => {
         expect(node.querySelectorAll('.errors-list')).toHaveLength(1);
         expect(
           node.querySelector('.error-item').textContent.trim()
-        ).toContain('should NOT be shorter than 8 characters');
+        ).toContain('should NOT have fewer than 8 characters');
       });
     });
 
@@ -422,7 +422,7 @@ describe('Form', () => {
         const errors = [].map.call(liNodes, (li) => li.textContent.trim());
 
         expect(errors).toEqual([
-          'should NOT be shorter than 8 characters',
+          'should NOT have fewer than 8 characters',
           'should match pattern "d+"',
         ]);
       });
@@ -452,7 +452,7 @@ describe('Form', () => {
 
         expect(node.querySelectorAll('.errors-list')).toHaveLength(1);
         expect(node.querySelector('.error-item').textContent.trim()).toEqual(
-          '.level1.level2 should NOT be shorter than 8 characters'
+          '/level1/level2 should NOT have fewer than 8 characters'
         );
       });
     });
@@ -514,7 +514,7 @@ describe('Form', () => {
           // TODO: uncomment this when jsdom's validation is no longer broken.
           // it doesn't set input.validity.badInput when it should.
           // '.field1 should be number',
-          '.field1 is a required property'
+          'should have required property \'field1\''
         );
       });
 
@@ -540,8 +540,8 @@ describe('Form', () => {
           // it doesn't set input.validity.badInput when it should.
           // '.field1 should be number',
           // '.field2 should be number',
-          '.field1 is a required property',
-          '.field2 is a required property',
+          'should have required property \'field1\'',
+          'should have required property \'field2\'',
         ]));
       });
 
@@ -558,7 +558,7 @@ describe('Form', () => {
         const errors = [].map.call(liNodes, (li) => li.textContent.trim());
 
         expect(errors).toEqual(expect.arrayContaining([
-          '.branch should be equal to one of the allowed values',
+          '/branch should be equal to one of the allowed values',
         ]));
       });
     });
