@@ -11,48 +11,85 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import {v4 as uuidv4} from 'uuid';
+import * as jwt from 'jsonwebtoken';
 
-const {v4: uuidv4} = require('uuid');
-const jwt = require('jsonwebtoken');
-const assert = require('assert');
-
-const ec = require('../ec-crypto');
-const Database = require('../db');
-const Settings = require('./settings');
+import * as ec from '../ec-crypto';
+import Database from '../db';
+import * as Settings from './settings';
 
 const ROLE_USER_TOKEN = 'user_token';
 
-class JSONWebToken {
+interface Payload {
+  role: string;
+  scope?: string;
+  client_id?: string;
+}
+
+export interface TokenData {
+  user: number;
+  issuedAt: string|Date;
+  publicKey: string;
+  keyId: string;
+  payload: Payload;
+}
+
+export default class JSONWebToken {
+  private user: number;
+  private issuedAt: string|Date;
+  private publicKey: string;
+  private keyId: string;
+  private payload: Payload|null;
+
+  getUser(): number {
+   return this.user;
+  }
+
+  getIssuedAt(): string|Date {
+    return this.issuedAt;
+  }
+
+  getPublicKey(): string {
+    return this.publicKey;
+  }
+
+  getKeyId(): string {
+    return this.keyId;
+  }
+
+  getPayload(): Payload|null {
+    return this.payload;
+  }
 
   /**
    * Verify a JWT by it's signature.
    *
-   * @return {JSONWebToken|bool} false when invalid JSONWebToken when valid.
+   * @return {JSONWebToken|null} null when invalid JSONWebToken when valid.
    */
-  static async verifyJWT(sig) {
+  static async verifyJWT(sig: string): Promise<JSONWebToken|null> {
     const decoded = jwt.decode(sig, {
       complete: true,
+      json: true,
     });
 
     if (!decoded || !decoded.header || !decoded.header.kid) {
-      return false;
+      return null;
     }
 
     const {kid} = decoded.header;
 
-    const tokenData = await Database.getJSONWebTokenByKeyId(kid);
+    const tokenData: any = await Database.getJSONWebTokenByKeyId(kid);
     if (!tokenData) {
-      return false;
+      return null;
     }
 
-    const token = new JSONWebToken(tokenData);
+    const token = new JSONWebToken(<TokenData>tokenData);
     token.payload = token.verify(sig);
     if (token.payload) {
       return token;
     }
 
-    return false;
+    return null;
   }
 
   /**
@@ -61,7 +98,7 @@ class JSONWebToken {
    * @param {User} user to issue token for.
    * @return {string} the JWT token signature.
    */
-  static async issueToken(user) {
+  static async issueToken(user: number): Promise<string> {
     const {sig, token} = await this.create(user);
     await Database.createJSONWebToken(token);
     return sig;
@@ -73,10 +110,10 @@ class JSONWebToken {
    *
    * @param {ClientRegistry} client to issue token for.
    * @param {number} user user id associated with token
-   * @param {{role: String, scope: String}} payload of token
+   * @param {Payload} payload of token
    * @return {string} the JWT token signature.
    */
-  static async issueOAuthToken(client, user, payload) {
+  static async issueOAuthToken(client: {id: string}, user: number, payload: Payload): Promise<string> {
     const {sig, token} = await this.create(user, Object.assign({
       client_id: client.id,
     }, payload));
@@ -90,9 +127,8 @@ class JSONWebToken {
    * @param {string} keyId of the record to remove.
    * @return bool true when a record was deleted.
    */
-  static async revokeToken(keyId) {
-    assert(typeof keyId === 'string');
-    return Database.deleteJSONWebTokenByKeyId(keyId);
+  static async revokeToken(keyId: string): Promise<boolean> {
+    return await Database.deleteJSONWebTokenByKeyId(keyId);
   }
 
   /**
@@ -100,13 +136,13 @@ class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static async create(user, payload = {role: ROLE_USER_TOKEN}) {
+  static async create(user: number, payload = {role: ROLE_USER_TOKEN}): Promise<{sig: string, token: TokenData}> {
     const pair = ec.generateKeyPair();
 
     const keyId = uuidv4();
     const tunnelInfo = await Settings.getTunnelInfo();
     const issuer = tunnelInfo.tunnelDomain;
-    const options = {
+    const options: jwt.SignOptions = {
       algorithm: ec.JWT_ALGORITHM,
       keyid: keyId,
     };
@@ -127,39 +163,32 @@ class JSONWebToken {
     return {sig, token};
   }
 
-  constructor(obj) {
+  constructor(obj: TokenData) {
     const {user, issuedAt, publicKey, keyId} = obj;
-    assert(typeof user === 'number');
-    assert(issuedAt);
-    assert(typeof publicKey === 'string');
-    assert(typeof keyId === 'string');
     this.user = user;
     this.issuedAt = issuedAt;
     this.publicKey = publicKey;
     this.keyId = keyId;
-    this.payload = {};
+    this.payload = null;
   }
 
   /**
    * Verify that the given JWT matches this token.
    *
    * @param string sig jwt token.
-   * @returns {Object|false} jwt payload if signature matches.
+   * @returns {Object|null} jwt payload if signature matches.
    */
-  verify(sig) {
+  verify(sig: string): Payload|null {
     try {
-      return jwt.verify(sig, this.publicKey, {
+      return <Payload>jwt.verify(sig, this.publicKey, {
         algorithms: [ec.JWT_ALGORITHM],
       });
     } catch (err) {
       // If this error is thrown we know the token is invalid.
       if (err.name === 'JsonWebTokenError') {
-        return false;
+        return null;
       }
       throw err;
     }
   }
-
 }
-
-module.exports = JSONWebToken;

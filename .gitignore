@@ -1,5 +1,6 @@
 # Standard artifacts
 *~
+*.map
 *.swp
 .DS_Store
 .nyc_output/

@@ -14,7 +14,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const Constants = require('../constants');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 
 const UPLOADS_PATH = UserProfile.uploadsDir;
 const FLOORPLAN_PATH = path.join(UPLOADS_PATH, 'floorplan.svg');

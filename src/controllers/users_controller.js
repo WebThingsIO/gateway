@@ -13,7 +13,7 @@
 const PromiseRouter = require('express-promise-router');
 const Passwords = require('../passwords');
 const Users = require('../models/users');
-const JSONWebToken = require('../models/jsonwebtoken');
+const JSONWebToken = require('../models/jsonwebtoken').default;
 const jwtMiddleware = require('../jwt-middleware');
 const auth = jwtMiddleware.middleware();
 

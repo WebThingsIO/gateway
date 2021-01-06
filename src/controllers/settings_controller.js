@@ -48,8 +48,8 @@ SettingsController.put(
 
     try {
       const result =
-        await Settings.set(`experiments.${experimentName}.enabled`,
-                           enabled);
+        await Settings.setSetting(`experiments.${experimentName}.enabled`,
+                                  enabled);
       response.status(200).json({enabled: result});
     } catch (e) {
       console.error(`Failed to set setting experiments.${experimentName}`);
@@ -69,7 +69,7 @@ SettingsController.get(
 
     try {
       const result =
-        await Settings.get(`experiments.${experimentName}.enabled`);
+        await Settings.getSetting(`experiments.${experimentName}.enabled`);
       if (typeof result === 'undefined') {
         response.status(404).send('Setting not found');
       } else {
@@ -151,8 +151,8 @@ SettingsController.post('/subscribe', async (request, response, next) => {
 
 SettingsController.post('/skiptunnel', async (request, response) => {
   try {
-    await Settings.set('notunnel', true);
-    await Settings.set('transition.complete', true);
+    await Settings.setSetting('notunnel', true);
+    await Settings.setSetting('transition.complete', true);
     response.status(200).json({});
   } catch (e) {
     console.error('Failed to set notunnel setting.');
@@ -580,7 +580,7 @@ SettingsController.get(
     }
 
     try {
-      const current = await Settings.get('localization.language');
+      const current = await Settings.getSetting('localization.language');
       response.json({valid, current});
     } catch (_) {
       response.status(500).send('Failed to get current language');
@@ -598,7 +598,7 @@ SettingsController.put(
     }
 
     try {
-      await Settings.set('localization.language', request.body.language);
+      await Settings.setSetting('localization.language', request.body.language);
       response.json({});
     } catch (_) {
       response.status(500).send('Failed to set language');
@@ -613,7 +613,7 @@ SettingsController.get(
     let temperature;
 
     try {
-      temperature = await Settings.get('localization.units.temperature');
+      temperature = await Settings.getSetting('localization.units.temperature');
     } catch (e) {
       // pass
     }
@@ -630,7 +630,7 @@ SettingsController.put(
   async (request, response) => {
     for (const [key, value] of Object.entries(request.body)) {
       try {
-        await Settings.set(`localization.units.${key}`, value);
+        await Settings.setSetting(`localization.units.${key}`, value);
       } catch (_) {
         response.status(500).send('Failed to set unit');
         return;
@@ -651,9 +651,9 @@ SettingsController.get('/transition', auth, async (request, response) => {
   };
 
   try {
-    settings.complete = await Settings.get('transition.complete');
+    settings.complete = await Settings.getSetting('transition.complete');
 
-    const token = await Settings.get('tunneltoken');
+    const token = await Settings.getSetting('tunneltoken');
     if (typeof token === 'object') {
       settings.tunnel.subdomain = token.name;
       settings.tunnel.base = token.base;
@@ -669,7 +669,7 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
   if (request.body.registerDomain) {
     // First, save off the old domain. We'll need it later.
     let oldDomain = null;
-    const token = await Settings.get('tunneltoken');
+    const token = await Settings.getSetting('tunneltoken');
     if (typeof token === 'object') {
       oldDomain = token.name;
     }
@@ -713,7 +713,7 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
 
         // Make sure we don't get stuck in a state where the tunnel doesn't
         // start
-        Settings.delete('notunnel').catch((e) => {
+        Settings.deleteSetting('notunnel').catch((e) => {
           console.error('Failed to delete notunnel setting:', e);
         });
 
@@ -781,7 +781,7 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
       // If we're ONLY subscribing to the newsletter, go ahead and mark the
       // transition as complete, even if it failed.
       try {
-        await Settings.set('transition.complete', true);
+        await Settings.setSetting('transition.complete', true);
       } catch (e) {
         console.error('Failed to set transition.complete setting.');
         console.error(e);
@@ -789,7 +789,7 @@ SettingsController.put('/transition', auth, async (request, response, next) => {
     }
   } else {
     try {
-      await Settings.set('transition.complete', true);
+      await Settings.setSetting('transition.complete', true);
       response.status(200).json({});
     } catch (e) {
       console.error('Failed to set transition.complete setting.');

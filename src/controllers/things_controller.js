@@ -146,13 +146,13 @@ ThingsController.post('/', async (request, response) => {
 
     const key = 'addons.config.thing-url-adapter';
     try {
-      const config = await Settings.get(key);
+      const config = await Settings.getSetting(key);
       if (typeof config === 'undefined') {
         throw new Error('Setting is undefined.');
       }
 
       config.urls.push(description.webthingUrl);
-      await Settings.set(key, config);
+      await Settings.setSetting(key, config);
     } catch (e) {
       console.error('Failed to update settings for thing-url-adapter');
       console.error(e);

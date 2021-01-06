@@ -20,7 +20,7 @@ const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
 const pkg = require('../../package.json');
 const Settings = require('../models/settings');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 
 class PluginServer extends EventEmitter {
   constructor(addonManager, {verbose} = {}) {
@@ -86,12 +86,12 @@ class PluginServer extends EventEmitter {
       const units = {
         temperature: 'degree celsius',
       };
-      Settings.get('localization.language').then((lang) => {
+      Settings.getSetting('localization.language').then((lang) => {
         if (lang) {
           language = lang;
         }
 
-        return Settings.get('localization.units.temperature');
+        return Settings.getSetting('localization.units.temperature');
       }).then((temp) => {
         if (temp) {
           units.temperature = temp;

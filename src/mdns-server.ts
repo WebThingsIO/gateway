@@ -6,19 +6,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const config = require('config');
-const Settings = require('./models/settings');
+import config from 'config';
+import * as Settings from './models/settings';
 
 /**
  * Get the current domain of the mDNS service.
  */
-async function getmDNSdomain() {
+export async function getmDNSdomain(): Promise<string> {
   let mDNSserviceDomain = config.get('settings.defaults.mdns.domain');
 
   try {
-    const domain = await Settings.get('localDNSname');
+    const domain = await Settings.getSetting('localDNSname');
     if (domain) {
       mDNSserviceDomain = domain;
     }
@@ -26,16 +24,16 @@ async function getmDNSdomain() {
     // pass
   }
 
-  return mDNSserviceDomain;
+  return `${mDNSserviceDomain}`;
 }
 
 /**
  * Get the current enablement state of the mDNS service.
  */
-async function getmDNSstate() {
+export async function getmDNSstate(): Promise<boolean> {
   let mDNSstate = config.get('settings.defaults.mdns.enabled');
   try {
-    const state = await Settings.get('multicastDNSstate');
+    const state = await Settings.getSetting('multicastDNSstate');
     if (typeof state !== 'undefined') {
       mDNSstate = state;
     }
@@ -43,10 +41,5 @@ async function getmDNSstate() {
     // pass
   }
 
-  return mDNSstate;
+  return <boolean>mDNSstate;
 }
-
-module.exports = {
-  getmDNSdomain,
-  getmDNSstate,
-};

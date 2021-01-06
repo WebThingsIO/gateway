@@ -1,23 +1,19 @@
-const testPathIgnorePatterns = [
-  '/node_modules/',
-];
-
 module.exports = {
   coverageDirectory: './coverage/',
   moduleFileExtensions: [
-    'ts',
-    'tsx',
     'js',
-    'jsx',
     'json',
+    'ts',
   ],
   testMatch: [
-    '**/test/**/*-test.(ts|tsx|js)',
+    '**/test/**/*-test.(ts|js)',
   ],
-  testPathIgnorePatterns,
+  testPathIgnorePatterns: [
+    '/node_modules/',
+  ],
   transform: {
-    '\\.tsx?$': 'ts-jest',
-    '\\.js?$': 'babel-jest',
+    '\\.ts$': 'ts-jest',
+    '\\.js$': 'babel-jest',
   },
   setupFilesAfterEnv: [
     '<rootDir>/src/test/common.js',

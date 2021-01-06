@@ -2,6 +2,7 @@
 
 SCRIPTDIR="$(dirname ""$0"")"
 
+# make sure we have test certificates
 WEBTHINGS_HOME="${WEBTHINGS_HOME:=${HOME}/.webthings}"
 WEBTHINGS_TEST_HOME="${WEBTHINGS_HOME}/test"
 if [ ! -f "${WEBTHINGS_TEST_HOME}/ssl/certificate.pem" ]; then
@@ -11,6 +12,3 @@ fi
 # cleanup the previous outputs
 rm -rf "${SCRIPTDIR}/../../browser-test-output"
 rm -rf "${SCRIPTDIR}/../../browser-test-diff"
-
-# Run the tests
-NODE_TLS_REJECT_UNAUTHORIZED=0 "${SCRIPTDIR}/../../node_modules/.bin/jest" --runInBand --detectOpenHandles "$@"

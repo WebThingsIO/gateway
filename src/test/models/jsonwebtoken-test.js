@@ -1,4 +1,4 @@
-const JSONWebToken = require('../../models/jsonwebtoken');
+const JSONWebToken = require('../../models/jsonwebtoken').default;
 const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 const ec = require('../../ec-crypto');
@@ -12,7 +12,7 @@ describe('JSONWebToken', () => {
     const {sig: sig2} = await JSONWebToken.create(userId);
 
     expect(subject.verify(sig)).toBeTruthy();
-    expect(subject.verify(sig2)).toEqual(false);
+    expect(subject.verify(sig2)).toEqual(null);
   });
 
   it('should fail to verify with a missing key id', async () => {
@@ -20,7 +20,7 @@ describe('JSONWebToken', () => {
     const sig = jwt.sign({}, pair.private, {
       algorithm: ec.JWT_ALGORITHM,
     });
-    expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
+    expect(await JSONWebToken.verifyJWT(sig)).toEqual(null);
   });
 
   it('should fail to verify with an incorrect key id', async () => {
@@ -29,7 +29,7 @@ describe('JSONWebToken', () => {
       algorithm: ec.JWT_ALGORITHM,
       keyid: 'tomato',
     });
-    expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
+    expect(await JSONWebToken.verifyJWT(sig)).toEqual(null);
   });
 
   it('should fail to verify a JWT with the "none" alg', async () => {
@@ -38,6 +38,6 @@ describe('JSONWebToken', () => {
       algorithm: 'none',
       keyid: uuidv4(),
     });
-    expect(await JSONWebToken.verifyJWT(sig)).toEqual(false);
+    expect(await JSONWebToken.verifyJWT(sig)).toEqual(null);
   });
 });

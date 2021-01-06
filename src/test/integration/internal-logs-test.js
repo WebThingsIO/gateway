@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
 const Constants = require('../../constants');
-const UserProfile = require('../../user-profile');
+const UserProfile = require('../../user-profile').default;
 
 describe('internal-logs/', () => {
   let jwt;

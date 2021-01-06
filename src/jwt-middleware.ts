@@ -9,10 +9,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const Constants = require('./constants');
-const JSONWebToken = require('./models/jsonwebtoken');
+import * as express from 'express';
+import * as Constants from './constants';
+import JSONWebToken from './models/jsonwebtoken';
 
 const AUTH_TYPE = 'Bearer';
 
@@ -22,9 +21,9 @@ const AUTH_TYPE = 'Bearer';
  * @param {Request} req incoming http request.
  * @return {string|false} JWT string or false.
  */
-function extractJWTQS(req) {
+export function extractJWTQS(req: express.Request): string|boolean {
   if (typeof req.query === 'object' && req.query.jwt) {
-    return req.query.jwt;
+    return `${req.query.jwt}`;
   }
   return false;
 }
@@ -35,7 +34,7 @@ function extractJWTQS(req) {
  * @param {Request} req incoming http request.
  * @return {string|false} JWT string or false.
  */
-function extractJWTHeader(req) {
+export function extractJWTHeader(req: express.Request): string|boolean {
   const {authorization} = req.headers;
   if (!authorization) {
     return false;
@@ -53,15 +52,15 @@ function extractJWTHeader(req) {
  *
  * TODO: User error messages.
  */
-async function authenticate(req) {
+export async function authenticate(req: express.Request): Promise<JSONWebToken|null> {
   const sig = extractJWTHeader(req) || extractJWTQS(req);
   if (!sig) {
-    return false;
+    return null;
   }
-  return await JSONWebToken.verifyJWT(sig);
+  return await JSONWebToken.verifyJWT(<string>sig);
 }
 
-function scopeAllowsRequest(scope, request) {
+export function scopeAllowsRequest(scope: string|undefined, request: express.Request): boolean {
   const requestPath = request.originalUrl;
   if (!scope) {
     return true;
@@ -94,32 +93,34 @@ function scopeAllowsRequest(scope, request) {
   return false;
 }
 
-function middleware() {
+export function middleware(): express.Handler {
   return (req, res, next) => {
-    authenticate(req, res).
+    authenticate(req).
       then((jwt) => {
         if (!jwt) {
           res.status(401).end();
           return;
         }
-        let scope = jwt.payload.scope;
-        if (jwt.payload.role === Constants.AUTHORIZATION_CODE) {
+
+        const payload = (<JSONWebToken>jwt).getPayload()!;
+        let scope = payload!.scope;
+        if (payload!.role === Constants.AUTHORIZATION_CODE) {
           scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
         }
         if (!scopeAllowsRequest(scope, req)) {
           res.status(401).send(
-            `Token of role ${jwt.payload.role} used out of scope: ${scope}`);
+            `Token of role ${payload.role} used out of scope: ${scope}`);
           return;
         }
-        if (jwt.payload.role !== Constants.USER_TOKEN) {
-          if (!jwt.payload.scope) {
+        if (payload.role !== Constants.USER_TOKEN) {
+          if (!payload.scope) {
             res.status(400)
               .send('Token must contain scope');
             return;
           }
         }
 
-        req.jwt = jwt;
+        (req as any).jwt = jwt;
         next();
       }).
       catch((err) => {
@@ -128,10 +129,3 @@ function middleware() {
       });
   };
 }
-
-module.exports = {
-  middleware,
-  authenticate,
-  extractJWTQS,
-  extractJWTHeader,
-};

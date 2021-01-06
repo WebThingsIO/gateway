@@ -18,7 +18,7 @@ const path = require('path');
 const fetch = require('node-fetch');
 const spawnSync = require('child_process').spawn;
 const Settings = require('./models/settings');
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 const PushService = require('./push-service');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
@@ -45,7 +45,7 @@ const TunnelService = {
     if (!config.get('ssltunnel.enabled')) {
       return next();
     } else {
-      let notunnel = await Settings.get('notunnel');
+      let notunnel = await Settings.getSetting('notunnel');
       if (typeof notunnel !== 'boolean') {
         notunnel = false;
       }
@@ -75,12 +75,12 @@ const TunnelService = {
 
   // method that starts the client if the box has a registered tunnel
   start: function(response, urlredirect) {
-    Settings.get('tunneltoken').then((result) => {
+    Settings.getSetting('tunneltoken').then((result) => {
       if (typeof result === 'object') {
         if (!result.base) {
           // handle legacy tunnels
           result.base = 'mozilla-iot.org';
-          Settings.set('tunneltoken', result).catch((e) => {
+          Settings.setSetting('tunneltoken', result).catch((e) => {
             console.error('Failed to set tunneltoken.base:', e);
           });
         }
@@ -183,13 +183,13 @@ const TunnelService = {
 
   // method to check if the box has a registered tunnel
   hasTunnelToken: async function() {
-    const tunneltoken = await Settings.get('tunneltoken');
+    const tunneltoken = await Settings.getSetting('tunneltoken');
     return typeof tunneltoken === 'object';
   },
 
   // method to check if user skipped the ssl tunnel setup
   userSkipped: async function() {
-    const notunnel = await Settings.get('notunnel');
+    const notunnel = await Settings.getSetting('notunnel');
     if (typeof notunnel === 'boolean' && notunnel) {
       return true;
     }

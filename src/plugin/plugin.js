@@ -14,7 +14,7 @@
 const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
 const Constants = require('../constants');
-const db = require('../db');
+const db = require('../db').default;
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
@@ -26,7 +26,7 @@ const readline = require('readline');
 const Settings = require('../models/settings');
 const spawn = require('child_process').spawn;
 const Things = require('../models/things');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 const {
   DONT_RESTART_EXIT_CODE,
   MessageType,
@@ -615,7 +615,7 @@ class Plugin {
   start() {
     const key = `addons.${this.pluginId}`;
 
-    this.startPromise = Settings.get(key).then((savedSettings) => {
+    this.startPromise = Settings.getSetting(key).then((savedSettings) => {
       if (!this.forceEnable &&
           (!savedSettings || !savedSettings.enabled)) {
         console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);

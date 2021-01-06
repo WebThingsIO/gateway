@@ -8,14 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import config from 'config';
+import {verbose, Database as SQLiteDatabase} from 'sqlite3';
+import fs from 'fs';
+import path from 'path';
+import {TokenData} from './models/jsonwebtoken';
+import User from './models/user';
+import UserProfile from './user-profile';
 
-const config = require('config');
-const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
-const path = require('path');
-const assert = require('assert');
-const UserProfile = require('./user-profile');
+const sqlite3 = verbose();
 
 const TABLES = [
   'users',
@@ -27,16 +28,16 @@ const TABLES = [
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
-const Database = {
+export default class Database {
   /**
    * SQLite3 Database object.
    */
-  db: null,
+  static db: SQLiteDatabase|null = null;
 
   /**
    * Open the database.
    */
-  open: function() {
+  static open(): void {
     // If the database is already open, just return.
     if (this.db) {
       return;
@@ -70,17 +71,17 @@ const Database = {
         this.populate();
       }
     });
-  },
+  }
 
-  createTables: function() {
+  static createTables(): void {
     // Create Things table
-    this.db.run('CREATE TABLE IF NOT EXISTS things (' +
+    this.db!.run('CREATE TABLE IF NOT EXISTS things (' +
       'id TEXT PRIMARY KEY,' +
       'description TEXT' +
     ');');
 
     // Create Users table
-    this.db.run('CREATE TABLE IF NOT EXISTS users (' +
+    this.db!.run('CREATE TABLE IF NOT EXISTS users (' +
       'id INTEGER PRIMARY KEY ASC,' +
       'email TEXT UNIQUE,' +
       'password TEXT,' +
@@ -98,7 +99,7 @@ const Database = {
      *
      * Instead, the INTEGER user is either the id of the user or -1 if NULL
      */
-    this.db.run('CREATE TABLE IF NOT EXISTS jsonwebtokens (' +
+    this.db!.run('CREATE TABLE IF NOT EXISTS jsonwebtokens (' +
       'id INTEGER PRIMARY KEY ASC,' +
       'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
       'user INTEGER,' +
@@ -108,36 +109,36 @@ const Database = {
     ');');
 
     // Create Settings table
-    this.db.run('CREATE TABLE IF NOT EXISTS settings (' +
+    this.db!.run('CREATE TABLE IF NOT EXISTS settings (' +
       'key TEXT PRIMARY KEY,' +
       'value TEXT' +
     ');');
 
-    this.db.run(`CREATE TABLE IF NOT EXISTS pushSubscriptions (
+    this.db!.run(`CREATE TABLE IF NOT EXISTS pushSubscriptions (
       id INTEGER PRIMARY KEY,
       subscription TEXT UNIQUE
     );`);
-  },
+  }
 
   /**
    * Do anything necessary to migrate from old database schemas.
    */
-  migrate: function() {
-    this.db.run('DROP TABLE IF EXISTS jsonwebtoken_to_user');
-    this.db.run('ALTER TABLE users ADD COLUMN mfaSharedSecret TEXT', () => {});
-    this.db.run(
+  static migrate(): void {
+    this.db!.run('DROP TABLE IF EXISTS jsonwebtoken_to_user');
+    this.db!.run('ALTER TABLE users ADD COLUMN mfaSharedSecret TEXT', () => {});
+    this.db!.run(
       'ALTER TABLE users ADD COLUMN mfaEnrolled BOOLEAN DEFAULT 0',
       () => {}
     );
-    this.db.run('ALTER TABLE users ADD COLUMN mfaBackupCodes TEXT', () => {});
-  },
+    this.db!.run('ALTER TABLE users ADD COLUMN mfaBackupCodes TEXT', () => {});
+  }
 
   /**
    * Populate the database with default data.
    */
-  populate: function() {
+  static populate(): void {
     // Add any settings provided.
-    const generateSettings = (obj, baseKey) => {
+    const generateSettings = (obj: any, baseKey: string): any => {
       const settings = [];
 
       for (const key in obj) {
@@ -159,7 +160,7 @@ const Database = {
 
     const settings = generateSettings(config.get('settings.defaults'), '');
     for (const setting of settings) {
-      this.db.run(
+      this.db!.run(
         'INSERT INTO settings (key, value) VALUES (?, ?)',
         [setting[0], setting[1]],
         (error) => {
@@ -173,16 +174,16 @@ const Database = {
         }
       );
     }
-  },
+  }
 
   /**
    * Get all Things stored in the database.
    *
    * @return Promise which resolves with a list of Thing objects.
    */
-  getThings: function() {
-    return new Promise((function(resolve, reject) {
-      this.db.all(
+  static getThings(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.db!.all(
         'SELECT id, description FROM things',
         ((err, rows) => {
           if (err) {
@@ -197,8 +198,8 @@ const Database = {
             resolve(things);
           }
         }));
-    }).bind(this));
-  },
+    });
+  }
 
   /**
    * Add a new Thing to the Database.
@@ -206,9 +207,9 @@ const Database = {
    * @param String id The ID to give the new Thing.
    * @param String description A serialised Thing description.
    */
-  createThing: function(id, description) {
-    return new Promise((function(resolve, reject) {
-      const db = this.db;
+  static createThing<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
       db.run(
         'INSERT INTO things (id, description) VALUES (?, ?)',
         [id, JSON.stringify(description)],
@@ -219,8 +220,8 @@ const Database = {
             resolve(description);
           }
         });
-    }).bind(this));
-  },
+    });
+  }
 
   /**
    * Update a Thing in the Database.
@@ -228,9 +229,9 @@ const Database = {
    * @param String id ID of the thing to update.
    * @param String description A serialised Thing description.
    */
-  updateThing: function(id, description) {
-    return new Promise((function(resolve, reject) {
-      const db = this.db;
+  static updateThing<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
       db.run(
         'UPDATE things SET description=? WHERE id=?',
         [JSON.stringify(description), id],
@@ -241,17 +242,17 @@ const Database = {
             resolve(description);
           }
         });
-    }).bind(this));
-  },
+    });
+  }
 
   /**
    * Remove a Thing from the Database.
    *
    * @param String id The ID of the Thing to remove.
    */
-  removeThing: function(id) {
-    return new Promise((function(resolve, reject) {
-      const db = this.db;
+  static removeThing(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
       db.run('DELETE FROM things WHERE id = ?', id, (error) => {
         if (error) {
           reject(error);
@@ -259,15 +260,15 @@ const Database = {
           resolve();
         }
       });
-    }).bind(this));
-  },
+    });
+  }
 
   /**
    * Get a user by their email address.
    */
-  getUser: function(email) {
-    return new Promise((function(resolve, reject) {
-      const db = this.db;
+  static getUser(email: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
       db.get(
         'SELECT * FROM users WHERE email = ?',
         email,
@@ -278,28 +279,27 @@ const Database = {
             resolve(row);
           }
         });
-    }).bind(this));
-  },
+    });
+  }
 
   /**
    * Get a user by it's primary key (id).
    */
-  getUserById: async function(id) {
-    assert(typeof id === 'number');
+  static async getUserById(id: number): Promise<any> {
     return await this.get(
       'SELECT * FROM users WHERE id = ?',
       id
     );
-  },
+  }
 
   /**
    * Get all Users stored in the database.
    *
    * @return {Promise<Array<User>>} resolves with a list of User objects
    */
-  getUsers: function() {
+  static getUsers(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.db.all('SELECT * FROM users', (err, rows) => {
+      this.db!.all('SELECT * FROM users', (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -307,19 +307,19 @@ const Database = {
         }
       });
     });
-  },
+  }
 
-  getUserCount: async function() {
-    const {count} = await this.get('SELECT count(*) as count FROM users');
+  static async getUserCount(): Promise<number> {
+    const {count} = <{count: number}>(await this.get('SELECT count(*) as count FROM users'));
     return count;
-  },
+  }
 
   /**
    * Get a setting or return undefined
    * @param {String} key
    * @return {Promise<Object?>} value
    */
-  getSetting: async function(key) {
+  static async getSetting(key: string): Promise<any> {
     const res = await this.get('SELECT value FROM settings WHERE key=?', key);
     if (DEBUG) {
       console.log('getSetting', key, res);
@@ -329,13 +329,13 @@ const Database = {
       return;
     }
 
-    const {value} = res;
+    const {value} = <{value?: string}>res;
     if (typeof value === 'undefined') {
       return value;
     } else {
       return JSON.parse(value);
     }
-  },
+  }
 
   /**
    * Set a setting. Assumes that the only access to the database is
@@ -345,7 +345,7 @@ const Database = {
    * @param {Object} value
    * @return {Promise}
    */
-  setSetting: async function(key, value) {
+  static async setSetting(key: string, value: any): Promise<any> {
     value = JSON.stringify(value);
     const currentValue = await this.getSetting(key);
     if (typeof currentValue === 'undefined') {
@@ -354,7 +354,7 @@ const Database = {
     } else {
       return this.run('UPDATE settings SET value=? WHERE key=?', [value, key]);
     }
-  },
+  }
 
   /**
    * Remove a setting. Assumes that the only access to the database is
@@ -363,63 +363,60 @@ const Database = {
    * @param {String} key
    * @return {Promise}
    */
-  deleteSetting: async function(key) {
+  static async deleteSetting(key: string): Promise<void> {
     this.run('DELETE FROM settings WHERE key = ?', [key]);
-  },
+  }
 
   /**
    * Create a user
    * @param {User} user
    * @return {Promise<User>}
    */
-  createUser: async function(user) {
+  static async createUser(user: User): Promise<number> {
     const result = await this.run(
       'INSERT INTO users ' +
       '(email, password, name, mfaSharedSecret, mfaEnrolled, mfaBackupCodes) ' +
       'VALUES (?, ?, ?, ?, ?, ?)',
       [
-        user.email,
-        user.password,
-        user.name,
-        user.mfaSharedSecret,
-        user.mfaEnrolled,
-        JSON.stringify(user.mfaBackupCodes || '[]'),
+        user.getEmail(),
+        user.getPassword(),
+        user.getName(),
+        user.getMfaSharedSecret(),
+        user.getMfaEnrolled(),
+        JSON.stringify(user.getMfaBackupCodes() || '[]'),
       ]
     );
-    assert(typeof result.lastID === 'number');
-    return result.lastID;
-  },
+    return (result as any).lastID;
+  }
 
   /**
    * Edit a user.
    * @param {User} user
    * @return Promise that resolves when operation is complete.
    */
-  editUser: async function(user) {
-    assert(typeof user.id === 'number');
+  static async editUser(user: User): Promise<any> {
     return this.run(
       'UPDATE users SET ' +
       'email=?, password=?, name=?, mfaSharedSecret=?, mfaEnrolled=?, ' +
       'mfaBackupCodes=? WHERE id=?',
       [
-        user.email,
-        user.password,
-        user.name,
-        user.mfaSharedSecret,
-        user.mfaEnrolled,
-        JSON.stringify(user.mfaBackupCodes || '[]'),
-        user.id,
+        user.getEmail(),
+        user.getPassword(),
+        user.getName(),
+        user.getMfaSharedSecret(),
+        user.getMfaEnrolled(),
+        JSON.stringify(user.getMfaBackupCodes() || '[]'),
+        user.getId(),
       ]
     );
-  },
+  }
 
   /**
    * Delete a user.
    * @param {Number} userId
    * @return Promise that resolves when operation is complete.
    */
-  deleteUser: function(userId) {
-    assert(typeof userId === 'number');
+  static deleteUser(userId: number): Promise<any[]> {
     const deleteUser = this.run(
       'DELETE FROM users WHERE id = ?',
       [userId]
@@ -430,56 +427,58 @@ const Database = {
      * turned on with node-sqlite. As is this could leave junk around in the db.
      */
     return Promise.all([deleteTokens, deleteUser]);
-  },
+  }
 
   /**
    * Delete all jsonwebtoken's for a given user.
    */
-  deleteJSONWebTokensForUser: function(userId) {
-    assert(typeof userId === 'number');
+  static deleteJSONWebTokensForUser(userId: number): Promise<any> {
     return this.run(
       'DELETE FROM jsonwebtokens WHERE user = ?',
       [userId]
     );
-  },
+  }
 
   /**
    * Insert a JSONWebToken into the database
    * @param {JSONWebToken} token
    * @return {Promise<number>} resolved to JWT's primary key
    */
-  createJSONWebToken: async function(token) {
-    const {keyId, user, publicKey, issuedAt, payload} = token;
+  static async createJSONWebToken(token: TokenData): Promise<number> {
     const result = await this.run(
       'INSERT INTO jsonwebtokens (keyId, user, issuedAt, publicKey, payload) ' +
       'VALUES (?, ?, ?, ?, ?)',
-      [keyId, user, issuedAt, publicKey, JSON.stringify(payload)]
+      [
+        token.keyId,
+        token.user,
+        token.issuedAt,
+        token.publicKey,
+        JSON.stringify(token.payload),
+      ]
     );
-    assert(typeof result.lastID === 'number');
-    return result.lastID;
-  },
+    return (result as any).lastID;
+  }
 
   /**
    * Get a JWT by its key id.
    * @param {string} keyId
    * @return {Promise<Object>} jwt data
    */
-  getJSONWebTokenByKeyId: function(keyId) {
-    assert(typeof keyId === 'string');
+  static getJSONWebTokenByKeyId(keyId: string): Promise<any> {
     return this.get(
       'SELECT * FROM jsonwebtokens WHERE keyId = ?',
       keyId
     );
-  },
+  }
 
   /**
    * Get all known JWTs of a user
    * @param {number} userId
    * @return {Promise<Array<Object>>}
    */
-  getJSONWebTokensByUser: function(userId) {
+  static getJSONWebTokensByUser(userId: number): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.db.all(
+      this.db!.all(
         'SELECT * FROM jsonwebtokens WHERE user = ?',
         [userId],
         (err, rows) => {
@@ -490,28 +489,27 @@ const Database = {
           }
         });
     });
-  },
+  }
 
   /**
    * Delete a JWT by it's key id.
    * @param {string} keyId
    * @return {Promise<boolean>} whether deleted
    */
-  deleteJSONWebTokenByKeyId: async function(keyId) {
-    assert(typeof keyId === 'string');
+  static async deleteJSONWebTokenByKeyId(keyId: string): Promise<boolean> {
     const result = await this.run(
       'DELETE FROM jsonwebtokens WHERE keyId = ?',
-      keyId
+      [keyId]
     );
-    return result.changes !== 0;
-  },
+    return (result as any).changes !== 0;
+  }
 
   /**
    * Store a new Push subscription
    * @param {Object} subscription
    * @return {Promise<number>} resolves to sub id
    */
-  createPushSubscription: function(desc) {
+  static createPushSubscription(desc: any): Promise<number> {
     const description = JSON.stringify(desc);
 
     const insert = () => {
@@ -519,7 +517,7 @@ const Database = {
         'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
         [description]
       ).then((res) => {
-        return parseInt(res.lastID);
+        return parseInt((res as any).lastID);
       });
     };
 
@@ -531,19 +529,19 @@ const Database = {
         return insert();
       }
 
-      return res.id;
+      return (res as any).id;
     }).catch(() => {
       return insert();
     });
-  },
+  }
 
   /**
    * Get all push subscriptions
    * @return {Promise<Array<PushSubscription>>}
    */
-  getPushSubscriptions: function() {
+  static getPushSubscriptions(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.db.all(
+      this.db!.all(
         'SELECT id, subscription FROM pushSubscriptions',
         [],
         (err, rows) => {
@@ -561,42 +559,42 @@ const Database = {
         }
       );
     });
-  },
+  }
 
   /**
    * Delete a single subscription
    * @param {number} id
    */
-  deletePushSubscription: function(id) {
+  static deletePushSubscription(id: string): Promise<any> {
     return this.run('DELETE FROM pushSubscriptions WHERE id = ?', [id]);
-  },
+  }
 
   /**
    * ONLY for tests (clears all tables).
    */
-  deleteEverything: async function() {
+  static async deleteEverything(): Promise<any[]> {
     return Promise.all(TABLES.map((t) => {
-      return this.run(`DELETE FROM ${t}`);
+      return this.run(`DELETE FROM ${t}`, []);
     }));
-  },
+  }
 
-  get: function(sql, ...params) {
-    return new Promise((accept, reject) => {
-      params.push((err, row) => {
+  static get(sql: string, ...params: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      params.push((err: unknown, row: any) => {
         if (err) {
           reject(err);
           return;
         }
-        accept(row);
+        resolve(row);
       });
 
       try {
-        this.db.get(sql, ...params);
+        this.db!.get(sql, ...params);
       } catch (err) {
         reject(err);
       }
     });
-  },
+  }
 
   /**
    * Run a SQL statement
@@ -604,22 +602,20 @@ const Database = {
    * @param {Array<any>} values
    * @return {Promise<Object>} promise resolved to `this` of statement result
    */
-  run: function(sql, values) {
-    return new Promise((accept, reject) => {
+  static run(sql: string, values: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
       try {
-        this.db.run(sql, values, function(err) {
+        this.db!.run(sql, values, function(err) {
           if (err) {
             reject(err);
             return;
           }
           // node-sqlite puts results on "this" so avoid arrrow fn.
-          accept(this);
+          resolve(this);
         });
       } catch (err) {
         reject(err);
       }
     });
-  },
+  }
 };
-
-module.exports = Database;

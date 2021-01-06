@@ -158,7 +158,7 @@ function handleConnecting(request, response) {
         'wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.'
       );
 
-      Settings.set('wifiskip', true).catch((e) => {
+      Settings.setSetting('wifiskip', true).catch((e) => {
         console.error(
           'wifi-setup: handleConnecting: failed to store wifiskip:', e
         );
@@ -346,7 +346,7 @@ function checkConnection() {
     }
   };
 
-  return Settings.get('wifiskip').catch(() => false).then((skipped) => {
+  return Settings.getSetting('wifiskip').catch(() => false).then((skipped) => {
     if (skipped) {
       ensureAPStopped();
       return Promise.resolve(true);
