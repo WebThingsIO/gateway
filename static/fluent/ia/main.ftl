@@ -294,6 +294,7 @@ BarometricPressureSensor = Sensor de pression barometric
 Custom = Objecto personalisate
 Thing = Objecto
 AirQualitySensor = Sensor de qualitate del aria
+SmokeSensor = Sensor de fumo
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = Inactive
 humidity = Humiditate
 concentration = Concentration
 density = Densitate
+smoke = Fumo
 
 ## Domain Setup
 
@@ -534,6 +536,7 @@ tunnel-setup-choose-address = Elige un secur adresse web pro tu passarella:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
 tunnel-setup-email-opt-in = Tene me actualisate del novas re WebThings.
+tunnel-setup-agree-privacy-policy = Acceptar le <a data-l10n-name="tunnel-setup-privacy-policy-link">Politica de confidentialitate</a> e le <a data-l10n-name="tunnel-setup-tos-link">Terminos de Servicio</a> de WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de recuperation
 tunnel-setup-error = Un error occurreva durante le configuration del sub-dominio.
@@ -617,18 +620,34 @@ ui-update-close = Clauder
 action-required-image =
     .alt = Advertentia
 action-required = Action obligatori:
+action-required-message = Le servicio de accesso remote e actualisationes automatic del software de Mozilla IoT va esser discontinuate. Elige si passar al webthings.io gerite per le communitate pro continuar le servicio.
 action-required-more-info = Plus de informationes
 action-required-dont-ask-again = Non plus demandar.
 action-required-choose = Eliger
 transition-dialog-wordmark =
     .alt = { -webthings-gateway-brand }
+transition-dialog-text = Le servicio de accesso remote e actualisationes automatic del software de Mozilla IoT va esser discontinuate le 31 decembre 2020 (<a data-l10n-name="transition-dialog-more-info">discoperi plus</a>). Mozilla va actuar le transition del projecto al nove sito web <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (non affiliate a Mozilla) gerite per le communitate.<br><br>Si tu non vole continuar reciper actualisationes del software ab le servitores de actualisation gerite per le communitate, tu pote disactivar le actualisationes automatic in Parametros.<br><br>Si tu vole transferer tu sub-dominio mozilla-iot.org a webthings.io, o registrar un nove sub-dominio, tu pote plenar le modulo infra, pro registrar te al servicio de accesso remote de replaciamento gerite per le communitate.
+transition-dialog-register-domain-label = Registra te al servicio de accesso remote de webthings.io
 transition-dialog-subdomain =
     .placeholder = Subdominio
 transition-dialog-newsletter-label = Tene me actualisate del novas re WebThings
+transition-dialog-agree-tos-label = Acceptar le <a data-l10n-name="transition-dialog-privacy-policy-link">Politica de confidentialitate</a> e le<a data-l10n-name="transition-dialog-tos-link">Terminos de servicio</a> de WebThings.
 transition-dialog-email =
     .placeholder = Adresse de e-mail
 transition-dialog-register =
     .value = Registra te
+transition-dialog-register-status =
+    .alt = Stato del registration
+transition-dialog-register-label = Registration del subdominio
+transition-dialog-subscribe-status =
+    .alt = Stato del subscription al littera de novas
+transition-dialog-subscribe-label = Subscribente a littera de novas
+transition-dialog-error-generic = Un error occurreva. Per favor retorna e reproba.
+transition-dialog-error-subdomain-taken = Le sub-dominio eligite es jam in uso. Per favor retorna e elige un altere.
+transition-dialog-error-subdomain-failed = Impossibile registrar le sub-dominio. Per favor retorna e reproba.
+transition-dialog-error-subscribe-failed = Impossibile subscriber te al littera de novas. Reproba al sito <a data-l10n-name="transition-dialog-step-2-sito web">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Vade al sito <<domain>> pro continuar.
 
 ## General Terms
 
