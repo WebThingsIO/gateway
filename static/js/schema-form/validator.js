@@ -13,7 +13,7 @@
 
 'use strict';
 
-const Ajv = require('ajv');
+const Ajv = require('ajv').default;
 
 const Validator = {
   _ajv: new Ajv({

@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Ajv = require('ajv');
+const Ajv = require('ajv').default;
 const EventEmitter = require('events');
 
 const AddonManager = require('../addon-manager');
@@ -19,7 +19,7 @@ const Router = require('../router');
 const Thing = require('./thing');
 const Constants = require('../constants');
 
-const ajv = new Ajv();
+const ajv = new Ajv({strict: false});
 
 const Things = {
 
