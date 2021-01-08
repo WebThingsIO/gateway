@@ -627,6 +627,33 @@ ui-update-close = Затвори
 action-required-image =
     .alt = Упозорење
 action-required = Потребне мере:
+action-required-message = Услуга приступа на даљину и аутоматско ажурирање софтвера Mozilla IoT се укидају. Изаберите желите ли да пређете на webthings.io, којим управља заједница, да и даље примате услуге.
+action-required-more-info = Више информација
+action-required-dont-ask-again = Не питај поново
+action-required-choose = Изабери
+transition-dialog-wordmark =
+    .alt = { -webthings-gateway-brand }
+transition-dialog-register-domain-label = Региструјте се за webthings.io услугу приступа на даљину
+transition-dialog-subdomain =
+    .placeholder = Поддомен
+transition-dialog-newsletter-label = Обавештавај ме о WebThings новостима
+transition-dialog-agree-tos-label = Пристани на WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">политику приватности</a> и <a data-l10n-name="transition-dialog-tos-link">услове услуге</a>.
+transition-dialog-email =
+    .placeholder = Адреса е-поште
+transition-dialog-register =
+    .value = Региструј се
+transition-dialog-register-status =
+    .alt = Статус регистрације
+transition-dialog-register-label = Регистровање поддомена
+transition-dialog-subscribe-status =
+    .alt = Статус претплате на билтен
+transition-dialog-subscribe-label = Претплаћивање на билтен
+transition-dialog-error-generic = Дошло је до грешке. Вратите се и покушајте поново.
+transition-dialog-error-subdomain-taken = Изабрани поддомен је већ заузет. Вратите се и одаберите други.
+transition-dialog-error-subdomain-failed = Регистрација поддомена није успела. Вратите се и покушајте поново.
+transition-dialog-error-subscribe-failed = Претплата на билтен није успела. Покушајте поново на <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
+# Use <<domain>> to indicate where the domain should be placed
+transition-dialog-success = Идите на <<domain>> да наставите.
 
 ## General Terms
 
