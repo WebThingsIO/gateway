@@ -294,6 +294,7 @@ BarometricPressureSensor = Сензор барометарског притис�
 Custom = Прилагођена справица
 Thing = Справица
 AirQualitySensor = Сензор квалитета ваздуха
+SmokeSensor = Детектор дима
 
 ## Properties
 
@@ -327,6 +328,7 @@ inactive = У мировању
 humidity = Влажност
 concentration = Концентрација
 density = Густина
+smoke = Дим
 
 ## Domain Setup
 
@@ -619,6 +621,12 @@ creating-content = Повежите се на мрежу { $ssid } са лози
 ui-update-available = Новији кориснички интерфејс је доступан.
 ui-update-reload = Поново учитај
 ui-update-close = Затвори
+
+## Transfer to webthings.io
+
+action-required-image =
+    .alt = Упозорење
+action-required = Потребне мере:
 
 ## General Terms
 
