@@ -9,7 +9,6 @@
 'use strict';
 
 const child_process = require('child_process');
-const dynamicRequire = require('./dynamic-require');
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
@@ -159,9 +158,7 @@ function wrapPlatform(platform, fn) {
 
 let platform;
 try {
-  platform = dynamicRequire(path.resolve(path.join(__dirname,
-                                                   'platforms',
-                                                   getOS())));
+  platform = require(path.join('.', 'platforms', getOS()));
 } catch (_) {
   console.log(
     `Failed to import platform utilities for ${getOS()}.`,
