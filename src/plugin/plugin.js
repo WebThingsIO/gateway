@@ -626,7 +626,7 @@ class Plugin {
 
       const execArgs = {
         nodeLoader: `node ${path.join(UserProfile.gatewayDir,
-                                      'src',
+                                      'build',
                                       'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,

@@ -124,13 +124,12 @@ export default class Database {
    * Do anything necessary to migrate from old database schemas.
    */
   static migrate(): void {
-    this.db!.run('DROP TABLE IF EXISTS jsonwebtoken_to_user');
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    this.db!.run('DROP TABLE IF EXISTS jsonwebtoken_to_user', () => {});
     this.db!.run('ALTER TABLE users ADD COLUMN mfaSharedSecret TEXT', () => {});
-    this.db!.run(
-      'ALTER TABLE users ADD COLUMN mfaEnrolled BOOLEAN DEFAULT 0',
-      () => {}
-    );
+    this.db!.run('ALTER TABLE users ADD COLUMN mfaEnrolled BOOLEAN DEFAULT 0', () => {});
     this.db!.run('ALTER TABLE users ADD COLUMN mfaBackupCodes TEXT', () => {});
+    /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
   /**
@@ -618,4 +617,4 @@ export default class Database {
       }
     });
   }
-};
+}

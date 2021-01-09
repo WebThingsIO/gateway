@@ -42,4 +42,4 @@ export = class Deferred<T, E> {
   getPromise(): Promise<T> {
     return this.promise;
   }
-}
+};

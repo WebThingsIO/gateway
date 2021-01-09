@@ -20,4 +20,4 @@ Add a launcher for the gateway.
 +  --regid=webthings \
 +  --init-groups \
 +  --inh-caps=-all \
-+  node build/gateway.js
++  node build/app.js

@@ -17,7 +17,7 @@ export npm_config_target_arch=arm
 # build the gateway
 cd ~/webthings/gateway
 npm ci
-./node_modules/.bin/webpack
+npm run build
 npm prune --production
 
 # link the gateway-addon library to make it global
