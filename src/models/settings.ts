@@ -68,7 +68,8 @@ export async function deleteSetting(key: string): Promise<void> {
  * Get an object of all tunnel settings
  * @return {localDomain, mDNSstate, tunnelDomain}
  */
-export async function getTunnelInfo(): Promise<{localDomain: string, mDNSstate: string, tunnelDomain: string}> {
+export async function getTunnelInfo():
+Promise<{localDomain: string, mDNSstate: string, tunnelDomain: string}> {
   // Check to see if we have a tunnel endpoint first
   const result = await getSetting('tunneltoken');
   let localDomain;

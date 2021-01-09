@@ -64,7 +64,7 @@ const UserProfile = {
   logDir: path.join(baseDir, 'log'),
   gatewayDir: path.resolve(path.join(__dirname, '..')),
   addonsDir: process.env.NODE_ENV === 'test' ?
-    path.join(path.resolve(path.join(__dirname, '..')), 'src', 'addons-test') :
+    path.join(__dirname, 'addons-test') :
     path.join(baseDir, 'addons'),
 };
 

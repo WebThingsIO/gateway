@@ -9,61 +9,15 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const fs = require('fs');
 const path = require('path');
 const {v1: uuidv1} = require('uuid');
 const webpack = require('webpack');
-
-const externals = {};
-fs.readdirSync('node_modules')
-  .filter((x) => !['.bin'].includes(x))
-  .forEach((mod) => {
-    externals[mod] = `commonjs ${mod}`;
-  });
-
-const pluginsNode = [
-  new CheckerPlugin(),
-  new webpack.BannerPlugin({
-    banner: 'require("source-map-support").install();',
-    raw: true,
-  }),
-];
-
-const webpackNode = {
-  entry: './src/app.js',
-  mode: 'development',
-  target: 'node',
-  node: {
-    __dirname: true,
-    __filename: false,
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
-  },
-  output: {
-    path: path.join(__dirname, 'build'),
-    filename: 'gateway.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        include: path.resolve(__dirname, 'src'),
-        use: [
-          'awesome-typescript-loader',
-        ],
-      },
-    ],
-  },
-  devtool: 'sourcemap',
-  plugins: pluginsNode,
-  externals,
-};
 
 const pluginsWeb = [
   new CleanWebpackPlugin({
     cleanOnceBeforeBuildPatterns: ['**/*', '!service-worker.js*'],
   }),
+  new CheckerPlugin(),
   new CopyWebpackPlugin({
     patterns: [
       {
@@ -222,6 +176,13 @@ const webpackWeb = {
   module: {
     rules: [
       {
+        test: /\.ts$/,
+        include: path.resolve(__dirname, 'static'),
+        use: [
+          'awesome-typescript-loader',
+        ],
+      },
+      {
         test: /.\/static\/js\/.*\.js$/,
         include: path.resolve(__dirname, 'static'),
         use: [
@@ -322,6 +283,7 @@ const webpackWeb = {
 };
 
 const pluginsSW = [
+  new CheckerPlugin(),
   new webpack.BannerPlugin({
     banner: `const VERSION = '${uuidv1()}';`,
     raw: true,
@@ -345,6 +307,13 @@ const webpackSW = {
   module: {
     rules: [
       {
+        test: /\.ts$/,
+        include: path.resolve(__dirname, 'static'),
+        use: [
+          'awesome-typescript-loader',
+        ],
+      },
+      {
         test: /\.js$/,
         include: path.resolve(__dirname, 'static'),
         use: ExtractTextPlugin.extract({
@@ -363,7 +332,6 @@ const webpackSW = {
 };
 
 module.exports = [
-  webpackNode,
   webpackWeb,
   webpackSW,
 ];

@@ -16,7 +16,8 @@ module.exports = {
     '\\.js$': 'babel-jest',
   },
   setupFilesAfterEnv: [
-    '<rootDir>/src/test/common.js',
+    '<rootDir>/test/common.js',
   ],
   testEnvironment: 'node',
+  rootDir: 'build',
 };

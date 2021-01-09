@@ -22,24 +22,27 @@ const OAuthClientsController = PromiseRouter();
  * Get the currently authorized clients
  */
 OAuthClientsController.get('/', async (request: express.Request, response: express.Response) => {
-  let user = (request as any).jwt.user;
-  let clients = await OAuthClients.getAuthorized(user);
+  const user = (request as any).jwt.user;
+  const clients = await OAuthClients.getAuthorized(user);
 
   response.json(clients.map((client: ClientRegistry) => {
     return client.getDescription();
   }));
 });
 
-OAuthClientsController.delete('/:clientId', async (request: express.Request, response: express.Response) => {
-  let clientId = request.params.clientId;
-  if (!OAuthClients.get(clientId, undefined)) {
-    response.status(404).send('Client not found');
-    return;
-  }
-  let user = (request as any).jwt.user;
+OAuthClientsController.delete(
+  '/:clientId',
+  async (request: express.Request, response: express.Response) => {
+    const clientId = request.params.clientId;
+    if (!OAuthClients.get(clientId)) {
+      response.status(404).send('Client not found');
+      return;
+    }
+    const user = (request as any).jwt.user;
 
-  await OAuthClients.revokeClientAuthorization(user, clientId);
-  response.sendStatus(204);
-});
+    await OAuthClients.revokeClientAuthorization(user, clientId);
+    response.sendStatus(204);
+  }
+);
 
 export default OAuthClientsController;

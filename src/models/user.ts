@@ -15,11 +15,17 @@ import speakeasy from 'speakeasy';
 
 export = class User {
   private id: number|null;
+
   private email: string;
+
   private password: string;
+
   private mfaEnrolled: boolean;
+
   private mfaSharedSecret: string;
+
   private mfaBackupCodes: string[];
+
   private name: string|null;
 
   constructor(id: number|null, email: string, password: string,
@@ -121,4 +127,4 @@ export = class User {
   getMfaEnrolled(): boolean {
     return this.mfaEnrolled;
   }
-}
+};
