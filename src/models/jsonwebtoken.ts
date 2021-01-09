@@ -36,13 +36,17 @@ export interface TokenData {
 
 export default class JSONWebToken {
   private user: number;
+
   private issuedAt: string|Date;
+
   private publicKey: string;
+
   private keyId: string;
+
   private payload: Payload|null;
 
   getUser(): number {
-   return this.user;
+    return this.user;
   }
 
   getIssuedAt(): string|Date {
@@ -113,7 +117,8 @@ export default class JSONWebToken {
    * @param {Payload} payload of token
    * @return {string} the JWT token signature.
    */
-  static async issueOAuthToken(client: {id: string}, user: number, payload: Payload): Promise<string> {
+  static async issueOAuthToken(client: {id: string}, user: number, payload: Payload):
+  Promise<string> {
     const {sig, token} = await this.create(user, Object.assign({
       client_id: client.id,
     }, payload));
@@ -136,7 +141,8 @@ export default class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static async create(user: number, payload = {role: ROLE_USER_TOKEN}): Promise<{sig: string, token: TokenData}> {
+  static async create(user: number, payload = {role: ROLE_USER_TOKEN}):
+  Promise<{sig: string, token: TokenData}> {
     const pair = ec.generateKeyPair();
 
     const keyId = uuidv4();

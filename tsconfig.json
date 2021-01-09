@@ -1,21 +1,31 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "commonjs",
     "target": "es2018",
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "build",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "checkJs": true
   },
   "include": [
     "**/*.ts"

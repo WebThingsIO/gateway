@@ -43,7 +43,7 @@ USER node
 WORKDIR /home/node/webthings/gateway
 RUN set -x && \
     CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm ci && \
-    ./node_modules/.bin/webpack && \
+    npm run build && \
     rm -rf ./node_modules/gifsicle && \
     rm -rf ./node_modules/mozjpeg && \
     npm prune --production && \

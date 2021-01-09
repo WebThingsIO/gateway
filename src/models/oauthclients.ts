@@ -1,15 +1,13 @@
 'use strict';
 
-import { URL } from 'url';
-import {Scope, ClientId, ClientRegistry} from '../oauth-types';
+import {URL} from 'url';
+import {ClientRegistry} from '../oauth-types';
 import config from 'config';
 import Database from '../db';
 
 
 class OAuthClients {
   private clients: Map<string, Array<ClientRegistry>> = new Map();
-  constructor() {
-  }
 
   register(client: ClientRegistry) {
     if (this.clients.get(client.id)) {
@@ -19,15 +17,15 @@ class OAuthClients {
     }
   }
 
-  get(id: string, redirectUri: URL|undefined): ClientRegistry|undefined {
+  get(id: string, redirectUri?: URL): ClientRegistry|null {
     const clients = this.clients.get(id);
     if (!clients) {
-      return;
+      return null;
     }
     if (!redirectUri) {
       return clients[0];
     }
-    for (let client of clients) {
+    for (const client of clients) {
       if (client.redirect_uri.href === redirectUri.href) {
         return client;
       }
@@ -36,11 +34,11 @@ class OAuthClients {
   }
 
   async getAuthorized(userId: number): Promise<Array<ClientRegistry>> {
-    let jwts = await Database.getJSONWebTokensByUser(userId);
-    let authorized = new Map();
+    const jwts = await Database.getJSONWebTokensByUser(userId);
+    const authorized = new Map();
 
-    for (let jwt of jwts) {
-      let payload = JSON.parse(jwt.payload);
+    for (const jwt of jwts) {
+      const payload = JSON.parse(jwt.payload);
       if (payload.role !== 'access_token') {
         continue;
       }
@@ -60,10 +58,10 @@ class OAuthClients {
   }
 
   async revokeClientAuthorization(userId: number, clientId: string) {
-    let jwts = await Database.getJSONWebTokensByUser(userId);
+    const jwts = await Database.getJSONWebTokensByUser(userId);
 
-    for (let jwt of jwts) {
-      let payload = JSON.parse(jwt.payload);
+    for (const jwt of jwts) {
+      const payload = JSON.parse(jwt.payload);
       if (payload.client_id === clientId) {
         await Database.deleteJSONWebTokenByKeyId(jwt.keyId);
       }
@@ -71,7 +69,7 @@ class OAuthClients {
   }
 }
 
-let oauthClients = new OAuthClients();
+const oauthClients = new OAuthClients();
 
 if (config.get('oauth.testClients')) {
   oauthClients.register(

@@ -31,7 +31,7 @@ devices to the web.
 %build
 NPM_CACHE=$(mktemp -dq)
 CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm --cache "${NPM_CACHE}" ci
-./node_modules/.bin/webpack
+npm run build
 npm --cache "${NPM_CACHE}" prune --production
 rm -rf "${NPM_CACHE}"
 # clean up node modules to prevent broken and unnecessary dependencies

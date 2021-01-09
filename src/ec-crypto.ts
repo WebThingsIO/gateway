@@ -41,7 +41,7 @@ const SubjectPublicKeyInfoASN = asn1.define('SubjectPublicKeyInfo', function() {
       this.key('namedCurve').objid()
     ),
     this.key('pub').bitstr()
-  )
+  );
 });
 
 // Chosen because it is _must_ implement.
@@ -57,7 +57,7 @@ const SECP256R1_CURVE = [1, 2, 840, 10045, 3, 1, 7];
  *
  * @return {Object} .public in PEM. .prviate in PEM.
  */
-export function generateKeyPair() {
+export function generateKeyPair(): {public: string, private: string} {
   const key = crypto.createECDH(CURVE);
   key.generateKeys();
 
@@ -83,7 +83,7 @@ export function generateKeyPair() {
     label: 'PUBLIC KEY',
   });
 
-  return { public: pub, private: priv };
+  return {public: pub, private: priv};
 }
 
 export const JWT_ALGORITHM = 'ES256';

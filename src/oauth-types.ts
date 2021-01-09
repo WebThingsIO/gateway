@@ -1,6 +1,6 @@
 'use strict';
 
-import { URL } from 'url';
+import {URL} from 'url';
 import * as Constants from './constants';
 
 type Read = 'read';
@@ -12,26 +12,40 @@ export type ScopeRaw = string;
 export type ClientId = string;
 
 export class ClientRegistry {
-  constructor(public redirect_uri: URL, public id: ClientId, public name: string,
-              public secret: string, public scope: ScopeRaw) {
+  public redirect_uri: URL;
+
+  public id: ClientId;
+
+  public name: string;
+
+  public secret: string;
+
+  public scope: ScopeRaw;
+
+  constructor(redirect_uri: URL, id: ClientId, name: string, secret: string, scope: ScopeRaw) {
+    this.redirect_uri = redirect_uri;
+    this.id = id;
+    this.name = name;
+    this.secret = secret;
+    this.scope = scope;
   }
 
-  getDescription() {
+  getDescription(): {id: ClientId, name: string, redirect_uri: URL, scope: ScopeRaw} {
     return {
       id: this.id,
       name: this.name,
       redirect_uri: this.redirect_uri,
-      scope: this.scope
+      scope: this.scope,
     };
   }
 }
 
 function stringToScope(scopeRaw: ScopeRaw): Scope {
-  let scope: Scope = {};
-  let scopeParts = scopeRaw.split(' ');
-  for (let scopePart of scopeParts) {
-    let parts = scopePart.split(':');
-    let path = parts[0];
+  const scope: Scope = {};
+  const scopeParts = scopeRaw.split(' ');
+  for (const scopePart of scopeParts) {
+    const parts = scopePart.split(':');
+    const path = parts[0];
     let readwrite = parts[1];
     if (readwrite !== 'read' && readwrite !== 'readwrite') {
       readwrite = 'read';
@@ -46,19 +60,19 @@ export function scopeValidSubset(clientScopeRaw: ScopeRaw, requestScopeRaw: Scop
   if (clientScopeRaw === requestScopeRaw) {
     return true;
   }
-  let clientScope = stringToScope(clientScopeRaw);
-  let requestScope = stringToScope(requestScopeRaw);
+  const clientScope = stringToScope(clientScopeRaw);
+  const requestScope = stringToScope(requestScopeRaw);
 
   if (!clientScope || !requestScope) {
     return false;
   }
 
-  for (let requestPath in requestScope) {
+  for (const requestPath in requestScope) {
     if (!requestPath.startsWith(Constants.THINGS_PATH)) {
       console.warn('Invalid request for out-of-bounds scope', requestScopeRaw);
       return false;
     }
-    let requestAccess = requestScope[requestPath];
+    const requestAccess = requestScope[requestPath];
     let access: ScopeAccess|undefined;
     if (clientScope[requestPath]) {
       access = clientScope[requestPath];
