@@ -18,7 +18,7 @@ const Platform = require('../../platform');
 const pkg = require('../../../package.json');
 const semver = require('semver');
 const sleep = require('../../sleep');
-const UserProfile = require('../../user-profile');
+const UserProfile = require('../../user-profile').default;
 const {URLSearchParams} = require('url');
 
 const testManifestJsonFilename =

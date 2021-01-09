@@ -12,7 +12,7 @@
 
 const WebPush = require('web-push');
 const Settings = require('./models/settings');
-const Database = require('./db');
+const Database = require('./db').default;
 
 const PushService = {
 
@@ -22,10 +22,10 @@ const PushService = {
    * if necessary.
    */
   init: async (tunnelDomain) => {
-    let vapid = await Settings.get('push.vapid');
+    let vapid = await Settings.getSetting('push.vapid');
     if (!vapid) {
       vapid = WebPush.generateVAPIDKeys();
-      await Settings.set('push.vapid', vapid);
+      await Settings.setSetting('push.vapid', vapid);
     }
     const {publicKey, privateKey} = vapid;
 
@@ -36,7 +36,7 @@ const PushService = {
 
   getVAPIDKeys: async () => {
     try {
-      const vapid = await Settings.get('push.vapid');
+      const vapid = await Settings.getSetting('push.vapid');
       return vapid;
     } catch (err) {
       // do nothing

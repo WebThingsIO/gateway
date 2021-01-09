@@ -13,7 +13,7 @@
 
 const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 const format = require('util').format;
 
 class CustomFormatter {

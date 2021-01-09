@@ -16,7 +16,7 @@ const path = require('path');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 const {URLSearchParams} = require('url');
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -102,8 +102,8 @@ async function register(email, reclamationToken, subdomain, fulldomain,
     token = jsonToken.token;
 
     // Store the token in the db
-    await Settings.set('tunneltoken', jsonToken);
-    await Settings.set('transition.complete', true);
+    await Settings.setSetting('tunneltoken', jsonToken);
+    await Settings.setSetting('transition.complete', true);
   } catch (e) {
     console.error('Failed to subscribe:', e);
     callback(e);
@@ -267,7 +267,7 @@ async function renew(server) {
 
   let tunnelToken;
   try {
-    tunnelToken = await Settings.get('tunneltoken');
+    tunnelToken = await Settings.getSetting('tunneltoken');
   } catch (e) {
     console.error('Tunnel token not set!');
     return;

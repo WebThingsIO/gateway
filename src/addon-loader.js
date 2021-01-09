@@ -10,15 +10,12 @@
 
 'use strict';
 
-const UserProfile = require('./user-profile');
-UserProfile.init();
-
 const AddonUtils = require('./addon-utils');
 const config = require('config');
 const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
 const {PluginClient} = require('gateway-addon');
-const db = require('./db');
+const db = require('./db').default;
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 const path = require('path');
@@ -46,7 +43,7 @@ async function loadAddon(addonPath, verbose) {
   if (process.env.NODE_ENV === 'test') {
     [obj, savedConfig] = AddonUtils.loadManifest(addonPath.split('/').pop());
   } else {
-    obj = await Settings.get(key);
+    obj = await Settings.getSetting(key);
   }
 
   const newSettings = {
@@ -62,7 +59,7 @@ async function loadAddon(addonPath, verbose) {
   }
 
   if (process.env.NODE_ENV !== 'test') {
-    savedConfig = await Settings.get(configKey);
+    savedConfig = await Settings.getSetting(configKey);
   }
 
   if (savedConfig) {

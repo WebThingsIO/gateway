@@ -16,7 +16,7 @@ const Constants = require('./constants');
 const express = require('express');
 const jwtMiddleware = require('./jwt-middleware');
 const nocache = require('nocache')();
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 
 const auth = jwtMiddleware.middleware();
 

@@ -2,7 +2,7 @@
 
 const AddonManager = require('../addon-manager');
 const {APIRequest} = require('gateway-addon');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 const express = require('express');
 const fs = require('fs');
 const globToRegExp = require('glob-to-regexp');

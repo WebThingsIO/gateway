@@ -1,7 +1,7 @@
 'use strict';
 
 const {server, chai} = require('../common');
-const Database = require('../../db');
+const Database = require('../../db').default;
 const PushService = require('../../push-service');
 
 const {

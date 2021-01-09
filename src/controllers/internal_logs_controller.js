@@ -20,7 +20,7 @@ const WebSocket = require('ws');
 const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const jwtMiddleware = require('../jwt-middleware');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 const Utils = require('../utils');
 
 const InternalLogsController = PromiseRouter();

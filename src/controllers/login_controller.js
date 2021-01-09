@@ -14,7 +14,7 @@ const path = require('path');
 
 const Router = require('express-promise-router');
 const Users = require('../models/users');
-const JSONWebToken = require('../models/jsonwebtoken');
+const JSONWebToken = require('../models/jsonwebtoken').default;
 const Passwords = require('../passwords');
 const Constants = require('../constants');
 const rateLimit = require('express-rate-limit');

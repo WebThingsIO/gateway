@@ -11,7 +11,7 @@ const fs = require('fs');
 const pkg = require('../package.json');
 const path = require('path');
 const semver = require('semver');
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 const Utils = require('./utils');
 
 const MANIFEST_VERSION = 1;

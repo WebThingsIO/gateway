@@ -5,7 +5,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 
 const METRICS_NUMBER = 'metricsNumber';
 const METRICS_BOOLEAN = 'metricsBoolean';
