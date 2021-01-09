@@ -12,7 +12,6 @@
 
 const AddonUtils = require('./addon-utils');
 const config = require('config');
-const dynamicRequire = require('./dynamic-require');
 const GetOpt = require('node-getopt');
 const {PluginClient} = require('gateway-addon');
 const db = require('./db').default;
@@ -103,7 +102,7 @@ async function loadAddon(addonPath, verbose) {
           }
         }
 
-        const addonLoader = dynamicRequire(addonPath);
+        const addonLoader = require(addonPath);
         addonLoader(addonManagerProxy, newSettings, (packageName, err) => {
           console.error(`Failed to start add-on ${packageName}:`, err);
           fail(
