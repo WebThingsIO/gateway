@@ -273,7 +273,7 @@ function defineNetwork(ssid, password) {
     platform.setWanMode('dhcp');
   }
 
-  return Settings.set('router.configured', true).then(() => {
+  return Settings.setSetting('router.configured', true).then(() => {
     return platform.setWirelessMode(
       true,
       'ap',
@@ -296,7 +296,7 @@ function defineNetwork(ssid, password) {
  *                    or not we have a connection.
  */
 function checkConnection() {
-  return Settings.get('router.configured')
+  return Settings.getSetting('router.configured')
     .catch(() => false)
     .then((configured) => {
       if (configured) {

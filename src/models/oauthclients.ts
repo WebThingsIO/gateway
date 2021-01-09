@@ -2,8 +2,8 @@
 
 import { URL } from 'url';
 import {Scope, ClientId, ClientRegistry} from '../oauth-types';
-const config = require('config');
-const Database = require('../db');
+import config from 'config';
+import Database from '../db';
 
 
 class OAuthClients {

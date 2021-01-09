@@ -30,17 +30,17 @@ jobs:
       - name: Install node dependencies
         run: |
           npm ci
-      - name: Run build
-        run: |
-          ./node_modules/.bin/webpack
       - name: Lint with eslint and stylelint
         run: |
           npm run lint
+      - name: Run build
+        run: |
+          npm run build
       - name: Run integration tests
         run: |
           ./tools/make-self-signed-cert.sh
-          ./node_modules/.bin/jest --runInBand --coverage --detectOpenHandles
-          ./node_modules/.bin/codecov
+          npm run jest
+          npm run coverage
         env:
           WEBTHINGS_HOME: "${HOME}/.webthings/test"
           NODE_TLS_REJECT_UNAUTHORIZED: 0

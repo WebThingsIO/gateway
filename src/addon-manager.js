@@ -18,7 +18,7 @@ const Deferred = require('./deferred');
 const EventEmitter = require('events').EventEmitter;
 const Platform = require('./platform');
 const Settings = require('./models/settings');
-const UserProfile = require('./user-profile');
+const UserProfile = require('./user-profile').default;
 const Utils = require('./utils');
 const fs = require('fs');
 const path = require('path');
@@ -600,7 +600,7 @@ class AddonManager extends EventEmitter {
 
     const obj = this.installedAddons.get(packageId);
     obj.enabled = true;
-    await Settings.set(`addons.${packageId}`, obj);
+    await Settings.setSetting(`addons.${packageId}`, obj);
     await this.loadAddon(packageId);
   }
 
@@ -611,7 +611,7 @@ class AddonManager extends EventEmitter {
 
     const obj = this.installedAddons.get(packageId);
     obj.enabled = false;
-    await Settings.set(`addons.${packageId}`, obj);
+    await Settings.setSetting(`addons.${packageId}`, obj);
     await this.unloadAddon(packageId, wait);
   }
 
@@ -633,7 +633,7 @@ class AddonManager extends EventEmitter {
     const key = `addons.${packageId}`;
     const configKey = `addons.config.${packageId}`;
     try {
-      const savedSettings = await Settings.get(key);
+      const savedSettings = await Settings.getSetting(key);
 
       // If the old-style data is stored in the database, we need to transition
       // to the new format.
@@ -646,20 +646,20 @@ class AddonManager extends EventEmitter {
 
       if (savedSettings.hasOwnProperty('moziot') &&
           savedSettings.moziot.hasOwnProperty('config')) {
-        await Settings.set(configKey, savedSettings.moziot.config);
+        await Settings.setSetting(configKey, savedSettings.moziot.config);
       }
     } catch (_e) {
       // pass
     }
 
-    await Settings.set(key, manifest);
+    await Settings.setSetting(key, manifest);
     this.installedAddons.set(packageId, manifest);
 
     // Get the saved config. If there is none, populate the database with the
     // defaults.
-    let savedConfig = await Settings.get(configKey);
+    let savedConfig = await Settings.getSetting(configKey);
     if (!savedConfig) {
-      await Settings.set(configKey, cfg);
+      await Settings.setSetting(configKey, cfg);
       savedConfig = cfg;
     }
 
@@ -1150,7 +1150,7 @@ class AddonManager extends EventEmitter {
 
     // Update the saved settings (if any) and enable the add-on
     const key = `addons.${packageId}`;
-    let obj = await Settings.get(key);
+    let obj = await Settings.getSetting(key);
     if (obj) {
       // Only enable if we're supposed to. Otherwise, keep whatever the current
       // setting is.
@@ -1163,7 +1163,7 @@ class AddonManager extends EventEmitter {
         enabled: enable,
       };
     }
-    await Settings.set(key, obj);
+    await Settings.setSetting(key, obj);
 
     // If the add-on was previously enabled, load the add-on
     if (obj.enabled && !options.skipLoad) {
@@ -1218,10 +1218,10 @@ class AddonManager extends EventEmitter {
     // Update the saved settings and disable the add-on
     if (disable) {
       const key = `addons.${packageId}`;
-      const obj = await Settings.get(key);
+      const obj = await Settings.getSetting(key);
       if (obj) {
         obj.enabled = false;
-        await Settings.set(key, obj);
+        await Settings.setSetting(key, obj);
       }
     }
 

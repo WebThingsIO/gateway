@@ -1,8 +1,8 @@
 const {v4: uuidv4} = require('uuid');
 
-const Database = require('../db');
+const Database = require('../db').default;
 const User = require('../models/user');
-const JSONWebToken = require('../models/jsonwebtoken');
+const JSONWebToken = require('../models/jsonwebtoken').default;
 
 describe('db', () => {
   describe('jwt workflows', () => {

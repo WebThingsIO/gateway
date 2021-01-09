@@ -11,7 +11,7 @@
 import * as express from 'express';
 import { URL } from 'url';
 import * as assert from 'assert';
-const JSONWebToken = require('../models/jsonwebtoken');
+import JSONWebToken from '../models/jsonwebtoken';
 const config = require('config');
 import * as Database from '../db';
 import {
@@ -396,7 +396,8 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     return;
   }
 
-  let payload = tokenData.payload;
+  tokenData = <JSONWebToken>tokenData;
+  let payload = tokenData.getPayload();
   if (!payload || payload.role !== 'authorization_code' || payload.client_id !== client.id) {
     let err: AccessTokenErrorResponse = {
       error: 'invalid_grant',
@@ -407,9 +408,9 @@ async function handleAccessTokenRequest(request: express.Request, response: expr
     return;
   }
 
-  let accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.user, {
+  let accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.getUser(), {
     role: Constants.ACCESS_TOKEN,
-    scope: tokenData.payload.scope
+    scope: payload.scope
   });
 
   // let refreshToken = await JSONWebToken.issueOAuthToken(client, 'refresh_token');

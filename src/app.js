@@ -11,9 +11,8 @@
 'use strict';
 
 // Set up the user profile.
-const UserProfile = require('./user-profile');
-UserProfile.init();
-const migration = UserProfile.migrate();
+const {default: UserProfile, migrate} = require('./user-profile');
+const migration = migrate();
 
 // Causes a timestamp to be prepended to console log lines.
 require('./log-timestamps');
@@ -36,7 +35,7 @@ const SegfaultHandler = require('segfault-handler');
 // Internal Dependencies
 const addonManager = require('./addon-manager');
 const Constants = require('./constants');
-const db = require('./db');
+const db = require('./db').default;
 const mDNSserver = require('./mdns-server');
 const Logs = require('./models/logs');
 const platform = require('./platform');

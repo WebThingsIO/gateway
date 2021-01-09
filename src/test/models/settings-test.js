@@ -6,13 +6,13 @@ describe('Settings', () => {
     const value = {something: 'complicated'};
     const newValue = 'less complicated';
 
-    expect(await Settings.get(key)).toBeFalsy();
+    expect(await Settings.getSetting(key)).toBeFalsy();
 
-    await Settings.set(key, value);
-    expect(await Settings.get(key)).toMatchObject(value);
+    await Settings.setSetting(key, value);
+    expect(await Settings.getSetting(key)).toMatchObject(value);
 
-    await Settings.set(key, newValue);
-    expect(await Settings.get(key)).toEqual(newValue);
+    await Settings.setSetting(key, newValue);
+    expect(await Settings.getSetting(key)).toEqual(newValue);
   });
 });
 

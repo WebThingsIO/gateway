@@ -11,10 +11,10 @@
 'use strict';
 
 const Constants = require('../constants');
-const Database = require('../db');
+const Database = require('../db').default;
 const EventEmitter = require('events');
 const Router = require('../router');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');

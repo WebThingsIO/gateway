@@ -3,7 +3,7 @@
 const PromiseRouter = require('express-promise-router');
 const AddonManager = require('../addon-manager');
 const Settings = require('../models/settings');
-const UserProfile = require('../user-profile');
+const UserProfile = require('../user-profile').default;
 const fs = require('fs');
 const path = require('path');
 
@@ -78,7 +78,7 @@ AddonsController.get('/:addonId/config', async (request, response) => {
   const key = `addons.config.${addonId}`;
 
   try {
-    const config = await Settings.get(key);
+    const config = await Settings.getSetting(key);
     response.status(200).json(config || {});
   } catch (e) {
     console.error(`Failed to get config for add-on ${addonId}`);
@@ -99,7 +99,7 @@ AddonsController.put('/:addonId/config', async (request, response) => {
   const key = `addons.config.${addonId}`;
 
   try {
-    await Settings.set(key, config);
+    await Settings.setSetting(key, config);
   } catch (e) {
     console.error(`Failed to set config for add-on ${addonId}`);
     console.error(e);
@@ -138,7 +138,7 @@ AddonsController.post('/', async (request, response) => {
   try {
     await AddonManager.installAddonFromUrl(id, url, checksum, true);
     const key = `addons.${id}`;
-    const obj = await Settings.get(key);
+    const obj = await Settings.getSetting(key);
     response.status(200).json(obj);
   } catch (e) {
     response.status(400).send(e);
@@ -161,7 +161,7 @@ AddonsController.patch('/:addonId', async (request, response) => {
   try {
     await AddonManager.installAddonFromUrl(id, url, checksum, false);
     const key = `addons.${id}`;
-    const obj = await Settings.get(key);
+    const obj = await Settings.getSetting(key);
     response.status(200).json(obj);
   } catch (e) {
     console.error(`Failed to update add-on: ${id}\n${e}`);
