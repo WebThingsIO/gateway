@@ -66,19 +66,12 @@ network-settings-ethernet = Kabelverbindung
 network-settings-wifi-image =
     .alt = Kabellose Verbindung
 network-settings-wifi = Drahtlosverbindung
-network-settings-home-network-image =
     .alt = Heimnetzwerk
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurieren
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Modus
-network-settings-home-network-lan = Heimnetzwerk (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-Adresse
 network-settings-dhcp = Automatisch (DHCP)
 network-settings-static = Manuell (Statische IP)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Statische IP-Adresse
 network-settings-network-mask = Netzwerkmaske
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Passwort
 network-settings-show-password = Passwort anzeigen
 network-settings-connect = Verbinden
-network-settings-username = Benutzername
-network-settings-password = Passwort
-network-settings-router-ip = Router-IP-Adresse
-network-settings-dhcp-server = DHCP-Server
-network-settings-enable-wifi = Wi-Fi aktivieren
-network-settings-network-name = Netzwerkname (SSID)
 wireless-connected = Verbunden
 wireless-icon =
     .alt = Wi-Fi-Netzwerk
 network-settings-changing = Netzwerkeinstellungen werden geändert. Dies kann eine Minute dauern.
 failed-ethernet-configure = Konfiguration der Ethernet-Verbindung fehlgeschlagen.
 failed-wifi-configure = Konfiguration der Wi-Fi-Verbindung fehlgeschlagen.
-failed-wan-configure = Konfiguration der WAN-Verbindung fehlgeschlagen.
-failed-lan-configure = Konfiguration der LAN-Verbindung fehlgeschlagen.
-failed-wlan-configure = Konfiguration der WLAN-Verbindung fehlgeschlagen.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Dieses Gerät hat keine Ereignisse.
 
 add-addons =
     .aria-label = Neue Add-ons finden
-author-unknown = Unbekannt
 disable = Deaktivieren
 enable = Aktivieren
 by = von
@@ -569,15 +552,9 @@ local-token-copy-token = Token kopieren
 
 ## Router Setup Page
 
-router-setup-title = Router-Setup — { -webthings-gateway-brand }
-router-setup-header = Neues Wi-Fi-Netzwerk einrichten
-router-setup-input-ssid =
     .placeholder = Netzwerkname
-router-setup-input-password =
     .placeholder = Passwort
-router-setup-input-confirm-password =
     .placeholder = Passwort bestätigen
-router-setup-create =
     .value = Erstellen
 router-setup-password-mismatch = Die Passwörter müssen übereinstimmen
 
@@ -607,9 +584,6 @@ connecting-skipped = Das Gateway wird jetzt neu gestartet. Navigieren Sie zu { $
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Neues Wi-Fi-Netzwerk anlegen — { -webthings-gateway-brand }
-creating-header = Neues Wi-Fi-Netzwerk wird angelegt…
-creating-content =
     Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
     aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 

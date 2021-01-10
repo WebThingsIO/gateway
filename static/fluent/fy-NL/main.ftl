@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wifi
 network-settings-wifi = Wifi
-network-settings-home-network-image =
     .alt = Thúsnetwurk
-network-settings-internet-image =
     .alt = Ynternet
 network-settings-configure = Konfigurearje
-network-settings-internet-wan = Ynternet (WAN)
-network-settings-wan-mode = Modus
-network-settings-home-network-lan = Thúsnetwurk (LAN)
-network-settings-wifi-wlan = Wifi (WLAN)
 network-settings-ip-address = IP-adres
 network-settings-dhcp = Automatysk (DHCP)
 network-settings-static = Hânmjittich (Statysk IP-adres)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Statysk IP-adres
 network-settings-network-mask = Netwurkmask
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Wachtwurd
 network-settings-show-password = Wachtwurd toane
 network-settings-connect = Ferbine
-network-settings-username = Brûkersnamme
-network-settings-password = Wachtwurd
-network-settings-router-ip = IP-adres router
-network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Wifi ynskeakelje
-network-settings-network-name = Netwurknamme (SSID)
 wireless-connected = Ferbûn
 wireless-icon =
     .alt = Wifi-netwurk
 network-settings-changing = Netwurkynstellingen wizigje. Dit kan efkes duorje.
 failed-ethernet-configure = Ethernet ynstelle mislearre.
 failed-wifi-configure = Wifi ynstelle mislearre.
-failed-wan-configure = WAN ynstelle mislearre.
-failed-lan-configure = LAN ynstelle mislearre.
-failed-wlan-configure = WLAN ynstelle mislearre.
 
 ## User Settings
 
@@ -454,7 +438,6 @@ events-not-found = Dit Thing hat gjin barrens.
 
 add-addons =
     .aria-label = Nije add-ons sykje
-author-unknown = Unbekend
 disable = Utskeakele
 enable = Ynskeakele
 by = troch
@@ -571,15 +554,9 @@ local-token-copy-token = Token kopiearje
 
 ## Router Setup Page
 
-router-setup-title = Routerynstellingen — { -webthings-gateway-brand }
-router-setup-header = Meitsje in wifi-ferbining
-router-setup-input-ssid =
     .placeholder = Netwurknamme
-router-setup-input-password =
     .placeholder = Wachtwurd
-router-setup-input-confirm-password =
     .placeholder = Befêstigje wachtwurd
-router-setup-create =
     .value = Oanmeitsje
 router-setup-password-mismatch = Wachtwurden moatte oerienkomme
 
@@ -614,9 +591,6 @@ connecting-skipped =
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wifi-netwurk meitsje — { -webthings-gateway-brand }
-creating-header = Wifi-netwurk meitsje…
-creating-content =
     Ferbyn mei { $ssid } en it ynstelde wachtwurd,
     navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
 

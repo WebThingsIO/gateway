@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wifi
 network-settings-wifi = Wifi
-network-settings-home-network-image =
     .alt = Thuisnetwerk
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configureren
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Modus
-network-settings-home-network-lan = Thuisnetwerk (LAN)
-network-settings-wifi-wlan = Wifi (WLAN)
 network-settings-ip-address = IP-adres
 network-settings-dhcp = Automatisch (DHCP)
 network-settings-static = Handmatig (Statisch IP-adres)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Statisch IP-adres
 network-settings-network-mask = Netwerkmask
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Wachtwoord
 network-settings-show-password = Wachtwoord tonen
 network-settings-connect = Verbinden
-network-settings-username = Gebruikersnaam
-network-settings-password = Wachtwoord
-network-settings-router-ip = IP-adres router
-network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Wifi inschakelen
-network-settings-network-name = Netwerknaam (SSID)
 wireless-connected = Verbonden
 wireless-icon =
     .alt = Wifi-netwerk
 network-settings-changing = Netwerkinstellingen wijzigen. Dit kan even duren.
 failed-ethernet-configure = Ethernet instellen mislukt.
 failed-wifi-configure = Wifi instellen mislukt.
-failed-wan-configure = WAN instellen mislukt.
-failed-lan-configure = LAN instellen mislukt.
-failed-wlan-configure = WLAN instellen mislukt.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Dit Thing heeft geen gebeurtenissen.
 
 add-addons =
     .aria-label = Nieuwe add-ons zoeken
-author-unknown = Onbekend
 disable = Uitschakelen
 enable = Inschakelen
 by = door
@@ -569,15 +552,9 @@ local-token-copy-token = Token kopiëren
 
 ## Router Setup Page
 
-router-setup-title = Routerinstellingen – { -webthings-gateway-brand }
-router-setup-header = Nieuw wifi-netwerk instellen
-router-setup-input-ssid =
     .placeholder = Netwerknaam
-router-setup-input-password =
     .placeholder = Wachtwoord
-router-setup-input-confirm-password =
     .placeholder = Bevestig wachtwoord
-router-setup-create =
     .value = Aanmaken
 router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
 
@@ -605,9 +582,6 @@ connecting-skipped = De gateway wordt opgestart. Navigeer in uw webbrowser naar 
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wifi-netwerk maken – { -webthings-gateway-brand }
-creating-header = Wifi-netwerk maken…
-creating-content = Verbind met { $ssid } met het zojuist ingestelde wachtwoord, navigeer daarna in uw webbrowser naar { $gateway-link } of { $ip-link }.
 
 ## UI Updates
 

@@ -534,10 +534,6 @@ const API = {
     return this.getJson('/settings/network/lan');
   },
 
-  getWanSettings() {
-    return this.getJson('/settings/network/wan');
-  },
-
   getWlanSettings() {
     return this.getJson('/settings/network/wireless');
   },
@@ -556,10 +552,6 @@ const API = {
 
   setLanSettings(settings) {
     return this.putJson('/settings/network/lan', settings);
-  },
-
-  setWanSettings(settings) {
-    return this.putJson('/settings/network/wan', settings);
   },
 
   setWlanSettings(settings) {

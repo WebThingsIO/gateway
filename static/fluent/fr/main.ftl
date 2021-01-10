@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Réseau domestique
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configurer
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Mode
-network-settings-home-network-lan = Réseau domestique (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
 network-settings-dhcp = Automatique (DHCP)
 network-settings-static = Manuel (IP statique)
-network-settings-pppoe = Pont (PPPoE)
 network-settings-static-ip-address = Adresse IP statique
 network-settings-network-mask = Masque de réseau
 network-settings-gateway = Passerelle
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Mot de passe
 network-settings-show-password = Montrer mot de passe
 network-settings-connect = Se connecter
-network-settings-username = Nom d’utilisateur
-network-settings-password = Mot de passe
-network-settings-router-ip = Adresse IP du routeur
-network-settings-dhcp-server = Serveur DHCP
-network-settings-enable-wifi = Activer le Wi-Fi
-network-settings-network-name = Nom réseau (SSID)
 wireless-connected = Connecté
 wireless-icon =
     .alt = Réseau Wi-Fi
 network-settings-changing = Modification des paramètres réseau en cours. Veuillez patienter.
 failed-ethernet-configure = Échec de configuration du réseau Ethernet.
 failed-wifi-configure = Échec de configuration du réseau Wi-Fi.
-failed-wan-configure = Échec de configuration du réseau Internet.
-failed-lan-configure = Échec de configuration du réseau domestique.
-failed-wlan-configure = Échec de configuration du WLAN.
 
 ## User Settings
 
@@ -450,7 +434,6 @@ events-not-found = Cet objet n’a aucun évènement.
 
 add-addons =
     .aria-label = Découvrir de nouveaux composants additionnels
-author-unknown = Inconnu
 disable = Désactiver
 enable = Activer
 by = par
@@ -565,15 +548,9 @@ local-token-copy-token = Copier le jeton
 
 ## Router Setup Page
 
-router-setup-title = Configuration du routeur — { -webthings-gateway-brand }
-router-setup-header = Créer un réseau Wi-Fi
-router-setup-input-ssid =
     .placeholder = Nom du réseau
-router-setup-input-password =
     .placeholder = Mot de passe
-router-setup-input-confirm-password =
     .placeholder = Confirmer le mot de passe
-router-setup-create =
     .value = Créer
 router-setup-password-mismatch = Les mots de passe doivent être identiques
 
@@ -601,9 +578,6 @@ connecting-skipped = La passerelle démarre. Restez connecté·e au même résea
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Création du réseau Wi-Fi en cours — { -webthings-gateway-brand }
-creating-header = Création du réseau Wi-Fi en cours…
-creating-content = Connectez-vous au réseau { $ssid } avec le mot de passe que vous avez créé, puis naviguez vers { $gateway-link } ou { $ip-link } dans votre navigateur.
 
 ## UI Updates
 

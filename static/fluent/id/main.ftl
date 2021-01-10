@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Jaringan Rumah
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurasikan
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Mode
-network-settings-home-network-lan = Jaringan Rumah (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Alamat IP
 network-settings-dhcp = Otomatis (DHCP)
 network-settings-static = Manual (IP Statis)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Alamat IP Statik
 network-settings-network-mask = Mask jaringan
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Kata sandi
 network-settings-show-password = Tampilkan kata sandi
 network-settings-connect = Sambungkan
-network-settings-username = Nama pengguna
-network-settings-password = Kata sandi
-network-settings-router-ip = Alamat IP router
-network-settings-dhcp-server = Server DHCP
-network-settings-enable-wifi = Aktifkan Wi-Fi
-network-settings-network-name = Nama jaringan (SSID)
 wireless-connected = Tersambung
 wireless-icon =
     .alt = Jaringan Wi-Fi
 network-settings-changing = Mengubah pengaturan jaringan. Proses ini membutuhkan waktu beberapa saat.
 failed-ethernet-configure = Gagal mengonfigurasi ethernet.
 failed-wifi-configure = Gagal mengonfigurasi Wi.Fi.
-failed-wan-configure = Gagal mengonfigurasi WAN.
-failed-lan-configure = Gagal mengonfigurasi LAN.
-failed-wlan-configure = Gagal mengonfigurasi WLAN.
 
 ## User Settings
 
@@ -436,7 +420,6 @@ events-not-found = Benda ini tidak memiliki kegiatan.
 
 add-addons =
     .aria-label = Cari Pengaya Baru
-author-unknown = Tidak dikenal
 disable = Nonaktifkan
 enable = Aktifkan
 by = oleh
@@ -551,15 +534,9 @@ local-token-copy-token = Salin Token
 
 ## Router Setup Page
 
-router-setup-title = Pengaturan Router — { -webthings-gateway-brand }
-router-setup-header = Buat jaringan Wi-Fi baru
-router-setup-input-ssid =
     .placeholder = Nama jaringan
-router-setup-input-password =
     .placeholder = Sandi
-router-setup-input-confirm-password =
     .placeholder = Konfirmasi sandi
-router-setup-create =
     .value = Buat
 router-setup-password-mismatch = Sandi harus sama
 
@@ -587,9 +564,6 @@ connecting-skipped = Gerbang sekarang sedang dimulai. Arahkan ke { $gateway-link
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Membuat jaringan Wi-Fi — { -webthings-gateway-brand }
-creating-header = Membuat jaringan Wi-Fi...
-creating-content = Harap sambungkan ke { $ssid } denga sandi yang Anda telah buat, lalu navigasikan ke { $gateway-link } atau { $ip-link } di peramban Web anda.
 
 ## UI Updates
 
