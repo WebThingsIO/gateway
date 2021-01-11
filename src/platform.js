@@ -10,7 +10,6 @@
 
 const child_process = require('child_process');
 const fs = require('fs');
-const path = require('path');
 const process = require('process');
 
 /**
@@ -158,7 +157,7 @@ function wrapPlatform(platform, fn) {
 
 let platform;
 try {
-  platform = require(path.join('.', 'platforms', getOS()));
+  platform = require(`./platforms/${getOS()}`);
 } catch (_) {
   console.log(
     `Failed to import platform utilities for ${getOS()}.`,

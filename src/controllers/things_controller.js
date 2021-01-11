@@ -449,19 +449,19 @@ function websocketHandler(websocket, request) {
   }
 
   function onEvent(event) {
-    if (typeof thingId !== 'undefined' && event.thingId !== thingId) {
+    if (typeof thingId !== 'undefined' && event.getThingId() !== thingId) {
       return;
     }
 
-    if (!subscribedEventNames[event.name]) {
+    if (!subscribedEventNames[event.getName()]) {
       return;
     }
 
     sendMessage({
-      id: event.thingId,
+      id: event.getThingId(),
       messageType: Constants.EVENT,
       data: {
-        [event.name]: event.getDescription(),
+        [event.getName()]: event.getDescription(),
       },
     });
   }
