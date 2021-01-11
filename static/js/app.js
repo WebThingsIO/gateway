@@ -35,8 +35,6 @@ let RuleScreen;
 let LogsScreen;
 // eslint-disable-next-line prefer-const
 let ReopeningWebSocket;
-// eslint-disable-next-line prefer-const
-let TransitionDialog;
 
 const page = require('page');
 const shaka = require('shaka-player/dist/shaka-player.compiled');
@@ -109,8 +107,6 @@ const App = {
     RuleScreen.init();
 
     LogsScreen.init();
-
-    TransitionDialog.init();
 
     this.views = [];
     this.views.things = document.getElementById('things-view');
@@ -490,7 +486,6 @@ RulesScreen = require('./views/rules-screen');
 RuleScreen = require('./views/rule-screen');
 LogsScreen = require('./views/logs-screen');
 ReopeningWebSocket = require('./models/reopening-web-socket');
-TransitionDialog = require('./views/transition-dialog');
 
 // load web components
 require('@webcomponents/webcomponentsjs/webcomponents-bundle');
@@ -576,7 +571,6 @@ if (navigator.serviceWorker) {
       updateMessageArea.classList.add('hidden');
     });
 
-    document.getElementById('action-required-area').classList.add('hidden');
     updateMessageArea.classList.remove('hidden');
   }
 

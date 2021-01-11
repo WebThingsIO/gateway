@@ -622,27 +622,6 @@ ui-update-available = K dispozícii je aktualizované používateľské rozhrani
 ui-update-reload = Obnoviť
 ui-update-close = Zavrieť
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Upozornenie
-action-required = Vyžaduje sa akcia:
-action-required-more-info = Ďalšie informácie
-action-required-dont-ask-again = Nabudúce sa už nepýtať
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-subdomain =
-    .placeholder = Subdoména
-transition-dialog-newsletter-label = Informujte ma o novinkách o WebThings.
-transition-dialog-email =
-    .placeholder = E-mailová adresa
-transition-dialog-register-status =
-    .alt = Stav registrácie
-transition-dialog-register-label = Registrácia subdomény
-transition-dialog-subscribe-status =
-    .alt = Stav odberu noviniek
-transition-dialog-subscribe-label = Prihlasovanie na odber noviniek
-
 ## General Terms
 
 ok = Ok

@@ -627,40 +627,6 @@ ui-update-available = Доступен обновлённый пользоват
 ui-update-reload = Обновить
 ui-update-close = Закрыть
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Предупреждение
-action-required = Требуются действия:
-action-required-message = Служба удалённого доступа Mozilla IoT и автоматические обновления программного обеспечения прекратят свою работу. Выберите, хотите ли вы переходить на управляемый сообществом сервер webthings.io для продолжения работы.
-action-required-more-info = Подробнее
-action-required-dont-ask-again = Больше не спрашивать
-action-required-choose = Выбрать
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = Служба удалённого доступа Mozilla IoT и автоматические обновления программного обеспечения прекратят свою работу 31 декабря 2020 г. (<a data-l10n-name="transition-dialog-more-info">узнать больше</a>). Mozilla переводит проект на новый управляемый сообществом сервер <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (не связанный с Mozilla).<br><br>Если вы не хотите продолжать получать обновления программного обеспечения с серверов обновлений управляемых сообществом, вы можете отключить автоматические обновления в Настройках.<br><br>Если вы хотите перенести свой поддомен mozilla-iot.org на webthings.io, или зарегистрировать новый поддомен, вы можете заполнить форму ниже для регистрации замены службы удалённого доступа на службу сообщества.
-transition-dialog-register-domain-label = Зарегистрировать службу удаленного доступа webthings.io
-transition-dialog-subdomain =
-    .placeholder = Поддомен
-transition-dialog-newsletter-label = Держать меня в курсе новостей о WebThings
-transition-dialog-agree-tos-label = Примите <a data-l10n-name="transition-dialog-privacy-policy-link">Политику конфиденциальности</a> и <a data-l10n-name="transition-dialog-tos-link">Правила использования сервиса</a> WebThings.
-transition-dialog-email =
-    .placeholder = Адрес электронной почты
-transition-dialog-register =
-    .value = Зарегистрировать
-transition-dialog-register-status =
-    .alt = Статус регистрации
-transition-dialog-register-label = Регистрация поддомена
-transition-dialog-subscribe-status =
-    .alt = Статус подписки на новостную рассылку
-transition-dialog-subscribe-label = Подписка на новостную рассылку
-transition-dialog-error-generic = Произошла ошибка. Пожалуйста вернитесь и попробуйте снова.
-transition-dialog-error-subdomain-taken = Выбранный поддомен уже занят. Пожалуйста, вернитесь и выберите другой.
-transition-dialog-error-subdomain-failed = Не удалось зарегистрировать поддомен. Пожалуйста вернитесь и попробуйте снова.
-transition-dialog-error-subscribe-failed = Не удалось подписаться на новостную рассылку. Повторите попытку на <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Перейдите на <<domain>>, чтобы продолжить.
-
 ## General Terms
 
 ok = ОК

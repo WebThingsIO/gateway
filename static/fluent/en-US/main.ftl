@@ -615,39 +615,6 @@ ui-update-available = An updated user interface is available.
 ui-update-reload = Reload
 ui-update-close = Close
 
-## Transfer to webthings.io
-action-required-image =
-    .alt = Warning
-action-required = Action Required:
-action-required-message = The Mozilla IoT remote access service and automatic software updates are being discontinued. Choose whether to transfer to the community-run webthings.io for continued service.
-action-required-more-info = More info
-action-required-dont-ask-again = Don't ask again
-action-required-choose = Choose
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = The Mozilla IoT remote access service and automatic software updates are being discontinued on 31st December 2020 (<a data-l10n-name="transition-dialog-more-info">find out more</a>). Mozilla is transitioning the project to the new community-run <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (not affiliated with Mozilla).<br><br>If you do not wish to continue receiving software updates from community-run update servers, you can disable automatic updates in Settings.<br><br>If you would like to transfer your mozilla-iot.org subdomain to webthings.io, or register a new subdomain, you can fill out the form below to register for the replacement community-run remote access service.
-transition-dialog-register-domain-label = Register for the webthings.io remote access service
-transition-dialog-subdomain =
-    .placeholder = Subdomain
-transition-dialog-newsletter-label = Keep me updated with news about WebThings
-transition-dialog-agree-tos-label = Agree to the WebThings <a data-l10n-name="transition-dialog-privacy-policy-link">Privacy Policy</a> and <a data-l10n-name="transition-dialog-tos-link">Terms of Service</a>.
-transition-dialog-email =
-    .placeholder = Email address
-transition-dialog-register =
-    .value = Register
-transition-dialog-register-status =
-    .alt = Registration status
-transition-dialog-register-label = Registering subdomain
-transition-dialog-subscribe-status =
-    .alt = Newsletter subscription status
-transition-dialog-subscribe-label = Subscribing to newsletter
-transition-dialog-error-generic = An error occurred. Please go back and try again.
-transition-dialog-error-subdomain-taken = Chosen subdomain already taken. Please go back and choose another.
-transition-dialog-error-subdomain-failed = Failed to register subdomain. Please go back and try again.
-transition-dialog-error-subscribe-failed = Failed to subscribe to newsletter. Please try again at <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Navigate to <<domain>> to continue.
-
 ## General Terms
 
 ok = OK
