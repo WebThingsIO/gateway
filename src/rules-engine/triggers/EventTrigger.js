@@ -47,7 +47,7 @@ class EventTrigger extends Trigger {
   }
 
   onEvent(event) {
-    if (this.event !== event.name) {
+    if (this.event !== event.getName()) {
       return;
     }
 

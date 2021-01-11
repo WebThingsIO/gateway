@@ -12,7 +12,7 @@
 const Actions = require('../models/actions');
 const Constants = require('../constants');
 const {Device, Deferred} = require('gateway-addon');
-const Event = require('../models/event');
+const Event = require('../models/event').default;
 const Events = require('../models/events');
 const {MessageType} = require('gateway-addon').Constants;
 const PropertyProxy = require('./property-proxy');

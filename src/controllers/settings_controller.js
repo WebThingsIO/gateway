@@ -639,3 +639,5 @@ SettingsController.put(
     response.json({});
   }
 );
+
+module.exports = SettingsController;

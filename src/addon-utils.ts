@@ -4,15 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import find from 'find';
+import fs from 'fs';
+import path from 'path';
+import semver from 'semver';
+import UserProfile from './user-profile';
+import * as Utils from './utils';
 
-const find = require('find');
-const fs = require('fs');
 const pkg = require('../package.json');
-const path = require('path');
-const semver = require('semver');
-const UserProfile = require('./user-profile').default;
-const Utils = require('./utils');
 
 const MANIFEST_VERSION = 1;
 
@@ -26,15 +25,15 @@ const ENFORCE_STRICT_SHA_CHECK = false;
  * Verify one level of an object, recursing as required.
  *
  * @param {string} prefix - Prefix to use for keys, e.g. level1.level2.
- * @param {object} object - Object to validate
+ * @param {object} obj - Object to validate
  * @param {object} template - Template to validate against
  *
  * @returns {string?} Error string, or undefined if no error.
  */
-function validateObject(prefix, object, template) {
+function validateObject(prefix: string, obj: any, template: any): string|undefined {
   for (const key in template) {
-    if (key in object) {
-      const objectVal = object[key];
+    if (key in obj) {
+      const objectVal = obj[key];
       const templateVal = template[key];
 
       if (typeof objectVal !== typeof templateVal) {
@@ -68,6 +67,9 @@ function validateObject(prefix, object, template) {
       return `Manifest is missing: ${prefix}${key}`;
     }
   }
+
+  // eslint-disable-next-line no-useless-return
+  return;
 }
 
 /**
@@ -78,7 +80,7 @@ function validateObject(prefix, object, template) {
  *
  * @returns {string?} Error string, or undefined if no error.
  */
-function validateManifestJson(manifest) {
+function validateManifestJson(manifest: any): string|undefined {
   const manifestTemplate = {
     author: '',
     description: '',
@@ -109,7 +111,7 @@ function validateManifestJson(manifest) {
   if (manifest.gateway_specific_settings.webthings.primary_type !== 'extension') {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
-    manifestTemplate.gateway_specific_settings.webthings.exec = '';
+    (manifestTemplate.gateway_specific_settings.webthings as any).exec = '';
   }
 
   return validateObject('', manifest, manifestTemplate);
@@ -123,13 +125,13 @@ function validateManifestJson(manifest) {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifestJson(packageId) {
+function loadManifestJson(packageId: string): any[] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   // Read the package.json file.
   let data;
   try {
-    data = fs.readFileSync(path.join(addonPath, 'manifest.json'));
+    data = fs.readFileSync(path.join(addonPath, 'manifest.json'), 'utf8');
   } catch (e) {
     throw new Error(
       `Failed to read manifest.json for add-on ${packageId}: ${e}`
@@ -274,7 +276,7 @@ function loadManifestJson(packageId) {
     }
 
     if (manifest.options.hasOwnProperty('schema')) {
-      obj.schema = manifest.options.schema;
+      (obj as any).schema = manifest.options.schema;
     }
   }
 
@@ -296,7 +298,7 @@ function loadManifestJson(packageId) {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifest(packageId) {
+export function loadManifest(packageId: string): any[] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   if (fs.existsSync(path.join(addonPath, 'manifest.json'))) {
@@ -305,7 +307,3 @@ function loadManifest(packageId) {
 
   throw new Error(`No manifest found for add-on ${packageId}`);
 }
-
-module.exports = {
-  loadManifest,
-};
