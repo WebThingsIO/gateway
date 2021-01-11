@@ -181,21 +181,6 @@ h6 {
   left: 9.5rem;
 }
 
-#action-required-area {
-  height: 5.6rem;
-  width: calc(100% - 15.2rem);
-  padding: 0.6rem;
-  background-color: #5288af;
-  margin: 0 auto;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  color: #fff;
-  transition: transform 0.25s ease;
-  transform: translateY(0);
-  display: flex;
-  flex-direction: row;
-}
-
 #update-message-area {
   position: fixed;
   top: 2rem;
@@ -216,15 +201,6 @@ h6 {
   padding-bottom: 2rem;
 }
 
-#action-required-area-content {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-#action-required-area-content > button,
 #update-message-area > button {
   height: 4rem;
   background-color: #48779a;
@@ -232,8 +208,6 @@ h6 {
   margin: auto 0.5rem;
 }
 
-#action-required-area-content > button:hover,
-#action-required-area-content > button:active,
 #update-message-area > button:hover,
 #update-message-area > button:active {
   background-color: #658196;
@@ -243,239 +217,8 @@ h6 {
   margin-right: 1rem;
 }
 
-#transition-dialog.hidden {
-  display: none;
-}
-
-#action-required-area.hidden,
 #update-message-area.hidden {
   transform: translateY(-100%) translateY(-4rem);
-}
-
-#action-required-action-required {
-  font-weight: bold;
-}
-
-#action-required-image {
-  height: 3.2rem;
-  margin: 0.6rem 1.4rem;
-}
-
-#action-required-area-text {
-  flex: 1;
-  font-size: 1.2rem;
-  line-height: 1.2;
-}
-
-#transition-dialog-step-1-close,
-#transition-dialog-step-2-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-#action-required-close,
-#transition-dialog-step-1-close,
-#transition-dialog-step-2-close {
-  background: no-repeat center url('/images/close.svg');
-  background-size: 1.6rem;
-  width: 4rem;
-  height: 4rem;
-  border: none;
-  margin: auto 0.5rem;
-  opacity: 0.8;
-}
-
-#action-required-close:hover,
-#action-required-close:active,
-#transition-dialog-step-1-close:hover,
-#transition-dialog-step-1-close:active,
-#transition-dialog-step-2-close:hover,
-#transition-dialog-step-2-close:active {
-  opacity: 1;
-}
-
-.transition-error a {
-  color: #ff9d5b;
-}
-
-.transition-success a {
-  color: #fff;
-}
-
-#transition-dialog a {
-  color: #fff;
-}
-
-#action-required-area-text > a:link,
-#action-required-area-text > a:visited,
-#action-required-area-text > a:hover,
-#action-required-area-text > a:active {
-  color: white;
-}
-
-@media only screen and (max-width: 959px) {
-  #action-required-area {
-    width: calc(100% - 4rem);
-    height: auto;
-  }
-
-  #action-required-area-content {
-    flex-direction: column;
-  }
-
-  #action-required-area-content button {
-    margin: 0.5rem auto;
-    width: 13rem;
-  }
-
-  #action-required-area-text {
-    padding: 5rem 0 1rem 0;
-  }
-
-  #action-required-close {
-    margin: 0.5rem auto;
-  }
-}
-
-#transition-dialog {
-  position: relative;
-  background-color: #5288af;
-  border-radius: 0.5rem;
-  padding: 3rem;
-  margin: 0 auto;
-  color: #fff;
-  width: 65rem;
-  max-height: calc(100% - 15.2rem);
-  overflow: auto;
-  font-size: 1.6rem;
-  z-index: 1001;
-}
-
-#transition-dialog-step-1 {
-  padding-bottom: 2rem;
-}
-
-#transition-dialog-text {
-  font-size: 1.3rem;
-  margin: 2rem auto;
-}
-
-#transition-dialog-step-1.hidden,
-#transition-dialog-step-2.hidden {
-  display: none;
-}
-
-#transition-dialog-step-1-wordmark {
-  display: block;
-  margin: 0 auto;
-}
-
-#transition-dialog-form {
-  width: 50rem;
-  margin: 0 auto;
-  padding: 0 3rem;
-}
-
-#transition-dialog label,
-#transition-dialog-email,
-#transition-dialog-register {
-  display: block;
-}
-
-#transition-dialog-register-domain-checkbox + label::before,
-#transition-dialog-newsletter-checkbox + label::before,
-#transition-dialog-agree-tos-checkbox + label::before {
-  margin: 0.5rem 1rem;
-}
-
-#transition-dialog-subdomain {
-  margin-left: 6rem;
-}
-
-#transition-dialog-email {
-  margin: 2rem auto;
-}
-
-#transition-dialog-register {
-  margin: 0 auto;
-}
-
-#transition-dialog-step-2 {
-  padding: 8rem;
-}
-
-#transition-dialog-step-2-wordmark {
-  display: block;
-  margin: 2rem auto;
-}
-
-#transition-dialog-registering,
-#transition-dialog-subscribing {
-  width: 23rem;
-  margin: 1rem auto;
-}
-
-.transition-dialog-status-image.hidden,
-#transition-dialog-registering.hidden,
-#transition-dialog-subscribing.hidden {
-  display: none;
-}
-
-.transition-dialog-status-image {
-  width: 3.2rem;
-  vertical-align: middle;
-}
-
-#transition-dialog-back {
-  top: 2rem;
-  left: 2rem;
-  position: absolute;
-}
-
-.transition-error {
-  color: #ff9d5b;
-  text-align: center;
-  margin: 2rem auto;
-}
-
-.transition-success {
-  text-align: center;
-  margin: 2rem auto;
-}
-
-.transition-error.hidden,
-.transition-success.hidden {
-  display: none;
-}
-
-@media only screen and (max-width: 959px) {
-  #transition-dialog {
-    width: calc(100% - 4rem);
-    position: fixed;
-    right: 0;
-    margin: 2rem;
-    top: 0;
-    max-height: calc(100% - 10rem);
-    box-sizing: border-box;
-  }
-
-  #transition-dialog-form {
-    width: auto;
-    font-size: 1.4rem;
-  }
-
-  #transition-dialog input[type='text'] {
-    width: 15rem;
-  }
-
-  #transition-dialog-subdomain {
-    margin-left: 4rem;
-  }
-
-  #transition-dialog-step-2 {
-    padding: 8rem 0;
-  }
 }
 
 #message-area {
@@ -682,7 +425,6 @@ body.hidden {
   }
 }
 
-#transition-scrim,
 #connectivity-scrim {
   background-color: rgba(0, 0, 0);
   opacity: 0.5;
@@ -695,7 +437,6 @@ body.hidden {
   z-index: 1000;
 }
 
-#transition-scrim.hidden,
 #connectivity-scrim.hidden {
   animation: hide-scrim 0.25s ease 0s;
   width: 0%;

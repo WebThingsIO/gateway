@@ -615,40 +615,6 @@ ui-update-available = Ένα ενημερωμένο περιβάλλον χρή�
 ui-update-reload = Ανανέωση
 ui-update-close = Κλείσιμο
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Προειδοποίηση
-action-required = Απαιτείται ενέργεια:
-action-required-message = Η υπηρεσία απομακρυσμένης πρόσβασης Mozilla IoT και οι αυτόματες ενημερώσεις λογισμικού θα διακοπούν. Επιλέξτε αν θέλετε να μεταφερθείτε στο webthings.io, που διαχειρίζεται η κοινότητα, για συνέχεια της υπηρεσίας.
-action-required-more-info = Περισσότερες πληροφορίες
-action-required-dont-ask-again = Να μη γίνει ερώτηση ξανά
-action-required-choose = Επιλογή
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = Η υπηρεσία απομακρυσμένης πρόσβασης Mozilla IoT και οι αυτόματες ενημερώσεις λογισμικού θα διακοπούν στις 31 Δεκεμβρίου 2020 (<a data-l10n-name="transition-dialog-more-info">μάθετε περισσότερα</a>). Η Mozilla μεταφέρει το έργο στο νέο <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a>, που διαχειρίζεται η κοινότητα (δεν σχετίζεται με τη Mozilla).<br><br>Αν δεν επιθυμείτε να λαμβάνετε ενημερώσεις λογισμικού από τους διακομιστές της κοινότητας, μπορείτε να απενεργοποιήσετε τις αυτόματες ενημερώσεις στις Ρυθμίσεις.<br><br>Αν θέλετε να μεταφέρετε τον υποτομέα mozilla-iot.org σας στο webthings.io, ή να καταχωρήσετε ένα νέο υποτομέα, μπορείτε να συμπληρώσετε την παρακάτω φόρμα για να κάνετε εγγραφή στην υπηρεσία απομακρυσμένης πρόσβασης της κοινότητας.
-transition-dialog-register-domain-label = Εγγραφή στην υπηρεσία απομακρυσμένης πρόσβασης webthings.io
-transition-dialog-subdomain =
-    .placeholder = Υποτομέας
-transition-dialog-newsletter-label = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings
-transition-dialog-agree-tos-label = Συμφωνώ με την <a data-l10n-name="transition-dialog-privacy-policy-link">Πολιτική απορρήτου</a> και τους <a data-l10n-name="transition-dialog-tos-link">Όρους υπηρεσίας</a> του WebThings.
-transition-dialog-email =
-    .placeholder = Διεύθυνση email
-transition-dialog-register =
-    .value = Εγγραφή
-transition-dialog-register-status =
-    .alt = Κατάσταση εγγραφής
-transition-dialog-register-label = Καταχώρηση υποτομέα
-transition-dialog-subscribe-status =
-    .alt = Κατάσταση εγγραφής ενημερωτικού δελτίου
-transition-dialog-subscribe-label = Εγγραφή στο ενημερωτικό δελτίο
-transition-dialog-error-generic = Προέκυψε σφάλμα. Παρακαλώ πηγαίνετε πίσω και δοκιμάστε ξανά.
-transition-dialog-error-subdomain-taken = Ο επιλεγμένος υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε πηγαίνετε πίσω και επιλέξτε άλλον.
-transition-dialog-error-subdomain-failed = Αποτυχία καταχώρησης υποτομέα. Παρακαλούμε πηγαίνετε πίσω και δοκιμάστε ξανά.
-transition-dialog-error-subscribe-failed = Αποτυχία εγγραφής στο ενημερωτικό δελτίο. Παρακαλούμε δοκιμάστε ξανά στο <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Πλοηγηθείτε στο <<domain>> για να συνεχίσετε.
-
 ## General Terms
 
 ok = OK

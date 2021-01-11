@@ -615,40 +615,6 @@ ui-update-available = En opdateret brugergrænseflade er tilgængelig.
 ui-update-reload = Genindlæs
 ui-update-close = Luk
 
-## Transfer to webthings.io
-
-action-required-image =
-    .alt = Advarsel
-action-required = Handling påkrævet:
-action-required-message = Mozillas IoT-fjernadgangs-tjeneste og automatisk softwareopdatering ophører. Vælg om du ønsker at migrere til den community-vedligeholdte webthings.io for fortsat understøttelse.
-action-required-more-info = Mere information
-action-required-dont-ask-again = Spørg ikke igen
-action-required-choose = Vælg
-transition-dialog-wordmark =
-    .alt = { -webthings-gateway-brand }
-transition-dialog-text = Mozillas IoT-fjernadgangs-tjeneste og automatisk softwareopdatering ophører d. 31. december 2020 (<a data-l10n-name="transition-dialog-more-info">læs mere</a>). Mozilla migrere projektet til det nye community-vedligeholdte <a data-l10n-name="transition-dialog-step-1-website">webthings.io</a> (uden tilknytning til Mozilla). <br><br>Hvis ikke du ønsker at modtage softwareopdateringer fra de community-vedligeholdte servere, kan du deaktivere automatiske opdateringer under Indstillinger.<br><br>Hvis du ønsker at migrere dit mozilla.iot.org subdomæne til webthings.io eller registrere et nyt subdomæne, bedes du udfylde nedenstående formular for at registrere dig ved den community-vedligeholdte fjernadgangs-tjeneste.
-transition-dialog-register-domain-label = Tilmeld dig webthings.io fjernadgangs-tjeneste
-transition-dialog-subdomain =
-    .placeholder = Subdomæne
-transition-dialog-newsletter-label = Hold mig opdateret med nyheder om WebThings
-transition-dialog-agree-tos-label = Acceptér <a data-l10n-name="transition-dialog-privacy-policy-link">privatlivspolitik</a> og <a data-l10n-name="transition-dialog-tos-link">tjenestevilkår</a> for WebThings.
-transition-dialog-email =
-    .placeholder = Mailadresse
-transition-dialog-register =
-    .value = Tilmeld
-transition-dialog-register-status =
-    .alt = Tilmeldingsstatus
-transition-dialog-register-label = Registrer subdomæne
-transition-dialog-subscribe-status =
-    .alt = Abonnementsstatus på nyhedsbrev
-transition-dialog-subscribe-label = Abonnerer på nyhedsbrev
-transition-dialog-error-generic = Der opstod en fejl. Gå tilbage og prøv igen.
-transition-dialog-error-subdomain-taken = Det valgte subdomæne er allerede i brug. Gå tilbage og vælg et andet.
-transition-dialog-error-subdomain-failed = Kunne ikke registrere subdomæne. Gå tilbage og prøv igen.
-transition-dialog-error-subscribe-failed = Kunne ikke abonnere på nyhedsbrevet. Prøv igen på <a data-l10n-name="transition-dialog-step-2-website">webthings.io</a>
-# Use <<domain>> to indicate where the domain should be placed
-transition-dialog-success = Gå til <<domain>> for at fortsætte.
-
 ## General Terms
 
 ok = Ok

@@ -103,7 +103,6 @@ async function register(email, reclamationToken, subdomain, fulldomain,
 
     // Store the token in the db
     await Settings.setSetting('tunneltoken', jsonToken);
-    await Settings.setSetting('transition.complete', true);
   } catch (e) {
     console.error('Failed to subscribe:', e);
     callback(e);
