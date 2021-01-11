@@ -88,7 +88,7 @@ async function loadAddon(addonPath, verbose) {
           'node_modules',
           'gateway-addon'
         );
-        if (!fs.existsSync(modulePath)) {
+        if (!fs.existsSync(modulePath) && process.env.NODE_ENV !== 'test') {
           const link = spawnSync(
             'npm',
             ['link', 'gateway-addon'],

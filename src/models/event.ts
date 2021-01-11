@@ -8,31 +8,48 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import {Utils} from 'gateway-addon';
 
-const {Utils} = require('gateway-addon');
+export interface EventDescription {
+  data: any;
+  timestamp: string;
+}
 
-class Event {
+export default class Event {
+  private name: string;
+
+  private data: any;
+
+  private thingId: string;
+
+  private timestamp: string;
+
   /**
    * Create a new Event
    * @param {String} name
    * @param {*} data
-   * @param {String?} thingId
+   * @param {String} thingId
    * @param {String?} timestamp
    */
-  constructor(name, data, thingId, timestamp) {
+  constructor(name: string, data: any, thingId: string, timestamp?: string) {
     this.name = name;
     this.data = typeof data === 'undefined' ? null : data;
     this.thingId = thingId;
     this.timestamp = timestamp || Utils.timestamp();
   }
 
-  getDescription() {
+  getDescription(): EventDescription {
     return {
       data: this.data,
       timestamp: this.timestamp,
     };
   }
-}
 
-module.exports = Event;
+  getName(): string {
+    return this.name;
+  }
+
+  getThingId(): string {
+    return this.thingId;
+  }
+}

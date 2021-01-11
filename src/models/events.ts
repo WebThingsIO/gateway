@@ -8,11 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
+import Event, {EventDescription} from './event';
 const Things = require('../models/things');
 
 class Events {
+  private events: Event[];
 
   constructor() {
     this.events = [];
@@ -21,7 +21,7 @@ class Events {
   /**
    * Reset events state.
    */
-  clearState() {
+  clearState(): void {
     this.events = [];
   }
 
@@ -29,17 +29,17 @@ class Events {
    * Get only the events which are not associated with a specific thing and
    * therefore belong to the root Gateway.
    */
-  getGatewayEvents(eventName) {
+  getGatewayEvents(eventName: string): {[name: string]: EventDescription}[] {
     return this.events.filter((event) => {
-      return !event.thingId;
+      return !event.getThingId();
     }).filter((event) => {
       if (eventName) {
-        return eventName === event.name;
+        return eventName === event.getName();
       }
 
       return true;
     }).map((event) => {
-      return {[event.name]: event.getDescription()};
+      return {[event.getName()]: event.getDescription()};
     });
   }
 
@@ -47,17 +47,17 @@ class Events {
   /**
    * Get only the events which are associated with a specific thing.
    */
-  getByThing(thingId, eventName) {
+  getByThing(thingId: string, eventName: string): {[name: string]: EventDescription}[] {
     return this.events.filter((event) => {
-      return event.thingId === thingId;
+      return event.getThingId() === thingId;
     }).filter((event) => {
       if (eventName) {
-        return eventName === event.name;
+        return eventName === event.getName();
       }
 
       return true;
     }).map((event) => {
-      return {[event.name]: event.getDescription()};
+      return {[event.getName()]: event.getDescription()};
     });
   }
 
@@ -67,14 +67,14 @@ class Events {
    * @param {Object} event An Event object.
    * @returns {Promise} Promise which resolves when the event has been added.
    */
-  add(event) {
+  add(event: Event): Promise<void> {
     this.events.push(event);
 
-    if (event.thingId) {
-      return Things.getThing(event.thingId).then((thing) => {
+    if (event.getThingId()) {
+      return Things.getThing(event.getThingId()).then((thing: any) => {
         thing.dispatchEvent(event);
       }).catch(() => {
-        console.warn('Received event for unknown thing:', event.thingId);
+        console.warn('Received event for unknown thing:', event.getThingId());
       });
     }
 
@@ -82,4 +82,4 @@ class Events {
   }
 }
 
-module.exports = new Events();
+export = new Events();
