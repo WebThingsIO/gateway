@@ -8,30 +8,46 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import fs from 'fs';
+import config from 'config';
+import Deferred from './deferred';
+import path from 'path';
+import fetch from 'node-fetch';
+import {spawn, ChildProcess} from 'child_process';
+import {Server} from 'https';
+import express from 'express';
+import * as Settings from './models/settings';
+import UserProfile from './user-profile';
+import PushService from './push-service';
 
-const fs = require('fs');
 const CertificateManager = require('./certificate-manager');
-const config = require('config');
-const Deferred = require('./deferred');
-const path = require('path');
-const fetch = require('node-fetch');
-const spawnSync = require('child_process').spawn;
-const Settings = require('./models/settings');
-const UserProfile = require('./user-profile').default;
-const PushService = require('./push-service');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
-const TunnelService = {
+class TunnelService {
+  private pagekiteProcess: ChildProcess|null;
 
-  pagekiteProcess: null,
-  tunneltoken: null,
-  switchToHttps: null,
-  connected: new Deferred(),
-  pingInterval: null,
-  renewInterval: null,
-  server: null,
+  private tunnelToken: {base?: string, token: string}|null;
+
+  private connected: Deferred<void, void>;
+
+  private pingInterval: NodeJS.Timeout|null;
+
+  private renewInterval: NodeJS.Timeout|null;
+
+  private server: Server|null;
+
+  public switchToHttps: (() => void)|null;
+
+  constructor() {
+    this.pagekiteProcess = null;
+    this.tunnelToken = null;
+    this.connected = new Deferred();
+    this.pingInterval = null;
+    this.renewInterval = null;
+    this.server = null;
+    this.switchToHttps = null;
+  }
 
   /*
    * Router middleware to check if we have a ssl tunnel set.
@@ -40,7 +56,8 @@ const TunnelService = {
    * @param {Object} response Express response object.
    * @param {Object} next Next middleware.
    */
-  isTunnelSet: async function(request, response, next) {
+  async isTunnelSet(_request: express.Request, response: express.Response,
+                    next: express.NextFunction): Promise<void> {
     // If ssl tunnel is disabled, continue
     if (!config.get('ssltunnel.enabled')) {
       return next();
@@ -66,15 +83,15 @@ const TunnelService = {
       response.render('tunnel-setup',
                       {domain: config.get('ssltunnel.domain')});
     }
-  },
+  }
 
   // Set a handle for the running https server, used when renewing certificates
-  setServerHandle: function(server) {
+  setServerHandle(server: Server): void {
     this.server = server;
-  },
+  }
 
   // method that starts the client if the box has a registered tunnel
-  start: function(response, urlredirect) {
+  start(response?: express.Response, urlredirect?: {url: string}): void {
     Settings.getSetting('tunneltoken').then((result) => {
       if (typeof result === 'object') {
         if (!result.base) {
@@ -86,19 +103,19 @@ const TunnelService = {
         }
 
         let responseSent = false;
-        this.tunneltoken = result;
+        this.tunnelToken = result;
         const endpoint = `${result.name}.${result.base}`;
         this.pagekiteProcess =
-          spawnSync(config.get('ssltunnel.pagekite_cmd'),
-                    ['--clean', `--frontend=${endpoint}:${
-                      config.get('ssltunnel.port')}`,
-                     `--service_on=https:${endpoint
-                     }:localhost:${
-                       config.get('ports.https')}:${
-                       this.tunneltoken.token}`],
-                    {shell: true});
+          spawn(config.get('ssltunnel.pagekite_cmd'),
+                ['--clean', `--frontend=${endpoint}:${
+                  config.get('ssltunnel.port')}`,
+                 `--service_on=https:${endpoint
+                 }:localhost:${
+                   config.get('ports.https')}:${
+                   this.tunnelToken!.token}`],
+                {shell: true});
 
-        this.pagekiteProcess.stdout.on('data', (data) => {
+        this.pagekiteProcess.stdout!.on('data', (data) => {
           if (DEBUG) {
             console.log(`[pagekite] stdout: ${data}`);
           }
@@ -110,25 +127,25 @@ const TunnelService = {
             this.connected.reject();
             if (needToSend) {
               responseSent = true;
-              response.sendStatus(400);
+              response!.sendStatus(400);
             }
           } else if (data.indexOf('connect=') > -1) {
             console.log('PageKite connected!');
             this.connected.resolve();
             if (needToSend) {
               responseSent = true;
-              response.status(200).json(urlredirect);
+              response!.status(200).json(urlredirect);
             }
           }
         });
-        this.pagekiteProcess.stderr.on('data', (data) => {
+        this.pagekiteProcess.stderr!.on('data', (data) => {
           console.log(`[pagekite] stderr: ${data}`);
         });
         this.pagekiteProcess.on('close', (code) => {
           console.log(`[pagekite] process exited with code ${code}`);
         });
 
-        this.connected.promise.then(() => {
+        this.connected.getPromise().then(() => {
           // Ping the registration server every hour.
           this.pingInterval =
             setInterval(() => this.pingRegistrationServer(), 60 * 60 * 1000);
@@ -137,6 +154,7 @@ const TunnelService = {
           PushService.init(`https://${endpoint}`);
 
           const renew = () => {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             return CertificateManager.renew(this.server).catch(() => {});
           };
 
@@ -144,6 +162,7 @@ const TunnelService = {
           renew().then(() => {
             this.renewInterval = setInterval(renew, 24 * 60 * 60 * 1000);
           });
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         }).catch(() => {});
       } else {
         console.error('tunneltoken not set');
@@ -158,10 +177,10 @@ const TunnelService = {
         response.status(400).send(e);
       }
     });
-  },
+  }
 
   // method to stop pagekite process
-  stop: function() {
+  stop(): void {
     if (this.pingInterval !== null) {
       clearInterval(this.pingInterval);
     }
@@ -173,38 +192,38 @@ const TunnelService = {
     if (this.pagekiteProcess) {
       this.pagekiteProcess.kill('SIGHUP');
     }
-  },
+  }
 
   // method to check if the box has certificates
-  hasCertificates: function() {
+  hasCertificates(): boolean {
     return fs.existsSync(path.join(UserProfile.sslDir, 'certificate.pem')) &&
       fs.existsSync(path.join(UserProfile.sslDir, 'privatekey.pem'));
-  },
+  }
 
   // method to check if the box has a registered tunnel
-  hasTunnelToken: async function() {
+  async hasTunnelToken(): Promise<boolean> {
     const tunneltoken = await Settings.getSetting('tunneltoken');
     return typeof tunneltoken === 'object';
-  },
+  }
 
   // method to check if user skipped the ssl tunnel setup
-  userSkipped: async function() {
+  async userSkipped(): Promise<boolean> {
     const notunnel = await Settings.getSetting('notunnel');
     if (typeof notunnel === 'boolean' && notunnel) {
       return true;
     }
 
     return false;
-  },
+  }
 
   // method to ping the registration server to track active domains
-  pingRegistrationServer: function() {
+  pingRegistrationServer(): void {
     const url = `${config.get('ssltunnel.registration_endpoint')}` +
-      `/ping?token=${this.tunneltoken.token}`;
+      `/ping?token=${this.tunnelToken!.token}`;
     fetch(url).catch((e) => {
       console.log('Failed to ping registration server:', e);
     });
-  },
-};
+  }
+}
 
-module.exports = TunnelService;
+export = new TunnelService();

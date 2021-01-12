@@ -10,7 +10,7 @@
 
 'use strict';
 
-import * as express from 'express';
+import express from 'express';
 
 const PromiseRouter = require('express-promise-router');
 import OAuthClients from '../models/oauthclients';

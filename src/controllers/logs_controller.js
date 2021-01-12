@@ -54,7 +54,7 @@ LogsController.post('/', async (request, response) => {
 
   try {
     const id = await Logs.registerMetric(normalizedDescr, maxAge);
-    if (typeof id === 'undefined') {
+    if (id === null) {
       response.status(400).send('Log already exists');
       return;
     }

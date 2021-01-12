@@ -15,7 +15,7 @@ process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 import config from 'config';
 import fs from 'fs';
 import path from 'path';
-import * as mkdirp from 'mkdirp';
+import mkdirp from 'mkdirp';
 import {ncp} from 'ncp';
 import rimraf, {sync as rimrafSync} from 'rimraf';
 
