@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Kotiverkko
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Määritä
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Tila
-network-settings-home-network-lan = Kotiverkko (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-osoite
 network-settings-dhcp = Automaattinen (DHCP)
 network-settings-static = Manuaalinen (staattinen IP)
-network-settings-pppoe = Siltaava (PPPoE)
 network-settings-static-ip-address = Staattinen IP-osoite
 network-settings-network-mask = Verkon peite
 network-settings-gateway = Yhdyskäytävä
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Salasana
 network-settings-show-password = Näytä salasana
 network-settings-connect = Yhdistä
-network-settings-username = Käyttäjänimi
-network-settings-password = Salasana
-network-settings-router-ip = Reitittimen IP-osoite
-network-settings-dhcp-server = DHCP-palvelin
-network-settings-enable-wifi = Ota Wi-Fi käyttöön
-network-settings-network-name = Verkon nimi (SSID)
 wireless-connected = Yhdistetty
 wireless-icon =
     .alt = Wi-Fi-verkko
 network-settings-changing = Muutetaan verkkoasetuksia. Tässä saattaa kestää hetki.
 failed-ethernet-configure = Ethernetin määrittäminen epäonnistui.
 failed-wifi-configure = Wi-Fin määrittäminen epäonnistui.
-failed-wan-configure = WAN:in määrittäminen epäonnistui.
-failed-lan-configure = LAN:in määrittäminen epäonnistui.
-failed-wlan-configure = WLAN:in määrittäminen epäonnistui.
 
 ## User Settings
 
@@ -451,7 +435,6 @@ events-not-found = Tällä esineellä ei ole tapahtumia.
 
 add-addons =
     .aria-label = Löydä uusia lisäosia
-author-unknown = Tuntematon
 disable = Poista käytöstä
 enable = Ota käyttöön
 by = tekijä
@@ -566,15 +549,9 @@ local-token-copy-token = Kopioi poletti
 
 ## Router Setup Page
 
-router-setup-title = Reitittimen asetukset — { -webthings-gateway-brand }
-router-setup-header = Luo uusi Wi-Fi-verkko
-router-setup-input-ssid =
     .placeholder = Verkon nimi
-router-setup-input-password =
     .placeholder = Salasana
-router-setup-input-confirm-password =
     .placeholder = Vahvista salasana
-router-setup-create =
     .value = Luo
 router-setup-password-mismatch = Salasanojen täytyy täsmätä
 
@@ -602,9 +579,6 @@ connecting-skipped = Yhdyskäytävää käynnistetään nyt. Siirry selaimellasi
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Luodaan Wi-Fi-verkko — { -webthings-gateway-brand }
-creating-header = Luodaan Wi-Fi-verkkoa…
-creating-content = Yhdistä verkkoon { $ssid } juuri luomallasi salasanalla, sen jälkeen mene selaimellasi { $gateway-link } tai { $ip-link }.
 
 ## UI Updates
 

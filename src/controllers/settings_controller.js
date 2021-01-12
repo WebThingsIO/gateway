@@ -409,34 +409,6 @@ SettingsController.put('/network/lan', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/network/wan', auth, (request, response) => {
-  if (Platform.implemented('getWanMode')) {
-    response.json(Platform.getWanMode());
-  } else {
-    response.status(500).send('WAN mode not implemented');
-  }
-});
-
-SettingsController.put('/network/wan', auth, (request, response) => {
-  if (!request.body || !request.body.hasOwnProperty('mode')) {
-    response.status(400).send('Missing mode property');
-    return;
-  }
-
-  const mode = request.body.mode;
-  const options = request.body.options;
-
-  if (Platform.implemented('setWanMode')) {
-    if (Platform.setWanMode(mode, options)) {
-      response.status(200).json({});
-    } else {
-      response.status(500).send('Failed to update WAN configuration');
-    }
-  } else {
-    response.status(500).send('Setting WAN mode not implemented');
-  }
-});
-
 SettingsController.get('/network/wireless', auth, (request, response) => {
   if (Platform.implemented('getWirelessMode')) {
     response.json(Platform.getWirelessMode());

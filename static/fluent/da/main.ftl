@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Hjemmenetværk
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurér
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Tilstand
-network-settings-home-network-lan = Hjemmenetværk (LAN)
-network-settings-wifi-wlan = Wi-FI (WLAN)
 network-settings-ip-address = IP-adresse
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuel (statisk IP)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Statisk IP-adresse
 network-settings-network-mask = Netværksmaske
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Adgangskode
 network-settings-show-password = Vis adgangskode
 network-settings-connect = Opret forbindelse
-network-settings-username = Brugernavn
-network-settings-password = Adgangskode
-network-settings-router-ip = Routerens IP-adresse
-network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Aktiver Wi-Fi
-network-settings-network-name = Netværksnavn (SSID)
 wireless-connected = Tilsluttet
 wireless-icon =
     .alt = Wi-Fi netværk
 network-settings-changing = Ændrer netværksinstillinger. Dette kan tage et øjeblik.
 failed-ethernet-configure = Konfigurering af ethernet mislykkedes.
 failed-wifi-configure = Konfigurering af Wi-Fi mislykkedes.
-failed-wan-configure = Konfigurering af WAN mislykkedes.
-failed-lan-configure = Konfigurering af LAN mislykkedes.
-failed-wlan-configure = Konfigurering af WLAN mislykkedes.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Denne enhed har ingen handlinger.
 
 add-addons =
     .aria-label = Find nye tilføjelser.
-author-unknown = Ukendt
 disable = Deaktiver
 enable = Aktiver
 by = af
@@ -569,15 +552,9 @@ local-token-copy-token = Kopiér token
 
 ## Router Setup Page
 
-router-setup-title = Opsætning af router — { -webthings-gateway-brand }
-router-setup-header = Opret et nyt WiFi-netværk
-router-setup-input-ssid =
     .placeholder = Netværksnavn
-router-setup-input-password =
     .placeholder = Adgangskode
-router-setup-input-confirm-password =
     .placeholder = Bekræft adgangskode
-router-setup-create =
     .value = Opret
 router-setup-password-mismatch = Adgangskoderne skal være ens
 
@@ -605,9 +582,6 @@ connecting-skipped = Gatewayen startes. Fortsæt opsætningen ved at gå til { $
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Opretter WiFi-netværk — { -webthings-gateway-brand }
-creating-header = Opretter WiFi-netværk…
-creating-content = Opret forbindelse til { $ssid } med den adgangskode, du lige har oprettet. Gå derefter til { $gateway-link } eller { $ip-link } i din browser.
 
 ## UI Updates
 

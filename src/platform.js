@@ -34,7 +34,6 @@ class NotImplementedError extends Error {
  *                        * win32
  *                        * linux-arch
  *                        * linux-debian
- *                        * linux-openwrt
  *                        * linux-raspbian
  *                        * linux-ubuntu
  *                        * linux-unknown
@@ -60,10 +59,6 @@ function getOS() {
       default:
         break;
     }
-  }
-
-  if (fs.existsSync('/etc/openwrt_release')) {
-    return 'linux-openwrt';
   }
 
   return 'linux-unknown';
@@ -168,8 +163,6 @@ try {
 
 const wrappedMethods = [
   'getPlatformArchitecture',
-  'getCaptivePortalStatus',
-  'setCaptivePortalStatus',
   'getDhcpServerStatus',
   'setDhcpServerStatus',
   'getHostname',
@@ -182,11 +175,8 @@ const wrappedMethods = [
   'getNetworkAddresses',
   'getSshServerStatus',
   'setSshServerStatus',
-  'getWanMode',
-  'setWanMode',
   'getWirelessMode',
   'setWirelessMode',
-  'checkConnection',
   'restartGateway',
   'restartSystem',
   'scanWirelessNetworks',

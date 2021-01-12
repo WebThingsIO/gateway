@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Otthoni hálózat
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Beállítás
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Üzemmód
-network-settings-home-network-lan = Otthoni hálózat (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-cím
 network-settings-dhcp = Automatikus (DHCP)
 network-settings-static = Kézi (statikus IP)
-network-settings-pppoe = Híd (PPPoE)
 network-settings-static-ip-address = Statikus IP-cím
 network-settings-network-mask = Hálózati maszk
 network-settings-gateway = Átjáró
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Jelszó
 network-settings-show-password = Jelszó megjelenítése
 network-settings-connect = Kapcsolódás
-network-settings-username = Felhasználónév
-network-settings-password = Jelszó
-network-settings-router-ip = Router IP-címe
-network-settings-dhcp-server = DHCP-kiszolgáló
-network-settings-enable-wifi = Wi-Fi engedélyezése
-network-settings-network-name = Hálózat neve (SSID)
 wireless-connected = Kapcsolódva
 wireless-icon =
     .alt = Wi-Fi hálózat
 network-settings-changing = Hálózati beállítások megváltoztatása. Ez eltarthat egy percig.
 failed-ethernet-configure = Az ethernet beállítása sikertelen.
 failed-wifi-configure = A Wi-Fi beállítása sikertelen.
-failed-wan-configure = A WAN beállítása sikertelen.
-failed-lan-configure = A LAN beállítása sikertelen.
-failed-wlan-configure = A WLAN beállítása sikertelen.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Ennek a dolognak nincsenek eseményei.
 
 add-addons =
     .aria-label = Új kiegészítők keresése
-author-unknown = Ismeretlen
 disable = Letiltás
 enable = Engedélyezés
 by = szerző:
@@ -569,15 +552,9 @@ local-token-copy-token = Token másolása
 
 ## Router Setup Page
 
-router-setup-title = Router beállítás – { -webthings-gateway-brand }
-router-setup-header = Új Wi-Fi hálózat létrehozása
-router-setup-input-ssid =
     .placeholder = Hálózatnév
-router-setup-input-password =
     .placeholder = Jelszó
-router-setup-input-confirm-password =
     .placeholder = Jelszó megerősítése
-router-setup-create =
     .value = Létrehozás
 router-setup-password-mismatch = A jelszavaknak egyezniük kell
 
@@ -605,9 +582,6 @@ connecting-skipped = Az átjáró most elindul. A beállítás folytatásához n
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi hálózat létrehozása – { -webthings-gateway-brand }
-creating-header = Wi-Fi hálózat létrehozása…
-creating-content = Kapcsolódjon a(z) { $ssid } hálózathoz a most létrehozott jelszóval, majd navigáljon a webböngészőjében ezek egyikére: { $gateway-link } vagy { $ip-link }.
 
 ## UI Updates
 

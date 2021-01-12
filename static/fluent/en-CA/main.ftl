@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Home Network
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configure
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Mode
-network-settings-home-network-lan = Home Network (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP address
 network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (Static IP)
-network-settings-pppoe = Bridge (PPPoE)
 network-settings-static-ip-address = Static IP address
 network-settings-network-mask = Network mask
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Password
 network-settings-show-password = Show password
 network-settings-connect = Connect
-network-settings-username = Username
-network-settings-password = Password
-network-settings-router-ip = Router IP address
-network-settings-dhcp-server = DHCP server
-network-settings-enable-wifi = Enable Wi-Fi
-network-settings-network-name = Network name (SSID)
 wireless-connected = Connected
 wireless-icon =
     .alt = Wi-Fi Network
 network-settings-changing = Changing network settings. This may take a minute.
 failed-ethernet-configure = Failed to configure Ethernet.
 failed-wifi-configure = Failed to configure Wi-Fi.
-failed-wan-configure = Failed to configure WAN.
-failed-lan-configure = Failed to configure LAN.
-failed-wlan-configure = Failed to configure WLAN.
 
 ## User Settings
 
@@ -450,7 +434,6 @@ events-not-found = This thing has no events.
 
 add-addons =
     .aria-label = Find New Add-ons
-author-unknown = Unknown
 disable = Disable
 enable = Enable
 by = by
@@ -565,15 +548,9 @@ local-token-copy-token = Copy Token
 
 ## Router Setup Page
 
-router-setup-title = Router Setup — { -webthings-gateway-brand }
-router-setup-header = Create a new Wi-Fi network
-router-setup-input-ssid =
     .placeholder = Network name
-router-setup-input-password =
     .placeholder = Password
-router-setup-input-confirm-password =
     .placeholder = Confirm password
-router-setup-create =
     .value = Create
 router-setup-password-mismatch = Passwords must match
 
@@ -601,9 +578,6 @@ connecting-skipped = The gateway is now being started. Navigate to { $gateway-li
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Creating Wi-Fi Network — { -webthings-gateway-brand }
-creating-header = Creating Wi-Fi network…
-creating-content = Please connect to { $ssid } with the password you just created, then navigate to { $gateway-link } or { $ip-link } in your web browser.
 
 ## UI Updates
 

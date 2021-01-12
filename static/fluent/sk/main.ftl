@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Domáca sieť
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Nastaviť
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Režim
-network-settings-home-network-lan = Domáca sieť (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP adresa
 network-settings-dhcp = Automaticky (DHCP)
 network-settings-static = Manuálne (Statická IP)
-network-settings-pppoe = Most (PPPoE)
 network-settings-static-ip-address = Statická IP adresa
 network-settings-network-mask = Sieťová maska
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Heslo
 network-settings-show-password = Zobraziť heslo
 network-settings-connect = Pripojiť
-network-settings-username = Používateľské meno
-network-settings-password = Heslo
-network-settings-router-ip = IP adresa routeru
-network-settings-dhcp-server = DHCP server
-network-settings-enable-wifi = Povoliť Wi-Fi
-network-settings-network-name = Názov siete (SSID)
 wireless-connected = Pripojené
 wireless-icon =
     .alt = Sieť Wi-Fi
 network-settings-changing = Prebieha zmena sieťových nastavení. Môže to chvíľu trvať.
 failed-ethernet-configure = Konfigurácia ethernetu zlyhala.
 failed-wifi-configure = Konfigurácia Wi-Fi zlyhala.
-failed-wan-configure = Konfigurácia WAN zlyhala.
-failed-lan-configure = Konfigurácia LAN zlyhala.
-failed-wlan-configure = Konfigurácia WLAN zlyhala.
 
 ## User Settings
 
@@ -459,7 +443,6 @@ events-not-found = Táto vec nemá žiadne udalosti.
 
 add-addons =
     .aria-label = Vyhľadať nové doplnky
-author-unknown = Neznámy
 disable = Zakázať
 enable = Povoliť
 by = od
@@ -576,15 +559,9 @@ local-token-copy-token = Skopírovať token
 
 ## Router Setup Page
 
-router-setup-title = Konfigurácia routeru - { -webthings-gateway-brand }
-router-setup-header = Vytvoriť novú Wi-Fi sieť
-router-setup-input-ssid =
     .placeholder = Názov siete
-router-setup-input-password =
     .placeholder = Heslo
-router-setup-input-confirm-password =
     .placeholder = Overenie hesla
-router-setup-create =
     .value = Vytvoriť
 router-setup-password-mismatch = Heslá sa musia zhodovať
 
@@ -612,9 +589,6 @@ connecting-skipped = Gateway je teraz spustená. Pripojte sa k rovnakej sieti a 
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Prebieha vytváranie Wi-Fi siete - { -webthings-gateway-brand }
-creating-header = Prebieha vytváranie Wi-Fi siete...
-creating-content = Pripojte sa k { $ssid } s heslom, ktoré ste práve vytvorili, prejdite na { $gateway-link } alebo { $ip-link } vo vašom prehliadači.
 
 ## UI Updates
 

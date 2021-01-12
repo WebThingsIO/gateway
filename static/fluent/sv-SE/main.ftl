@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Hemnätverk
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Konfigurera
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Läge
-network-settings-home-network-lan = Hemnätverk (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-adress
 network-settings-dhcp = Automatisk (DHCP)
 network-settings-static = Manuell (statisk IP)
-network-settings-pppoe = Brygga (PPPoE)
 network-settings-static-ip-address = Statisk IP-adress
 network-settings-network-mask = Nätverksmask
 network-settings-gateway = Gateway
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Lösenord
 network-settings-show-password = Visa lösenord
 network-settings-connect = Anslut
-network-settings-username = Användarnamn
-network-settings-password = Lösenord
-network-settings-router-ip = Router IP-adress
-network-settings-dhcp-server = DHCP-server
-network-settings-enable-wifi = Aktivera Wi-Fi
-network-settings-network-name = Nätverksnamn (SSID)
 wireless-connected = Ansluten
 wireless-icon =
     .alt = Wi-Fi nätverk
 network-settings-changing = Ändrar nätverksinställningar. Detta kan ta någon minut.
 failed-ethernet-configure = Misslyckades med att konfigurera ethernet.
 failed-wifi-configure = Misslyckades med att konfigurera Wi-Fi.
-failed-wan-configure = Misslyckades med att konfigurera WAN.
-failed-lan-configure = Misslyckades med att konfigurera LAN.
-failed-wlan-configure = Misslyckades med att konfigurera WLAN.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Denna enhet har inga händelser.
 
 add-addons =
     .aria-label = Hitta nya tillägg
-author-unknown = Okänd
 disable = Inaktivera
 enable = Aktivera
 by = av
@@ -569,15 +552,9 @@ local-token-copy-token = Kopiera token
 
 ## Router Setup Page
 
-router-setup-title = Routerkonfiguration — { -webthings-gateway-brand }
-router-setup-header = Skapa ett nytt Wi-Fi-nätverk
-router-setup-input-ssid =
     .placeholder = Nätverksnamn
-router-setup-input-password =
     .placeholder = Lösenord
-router-setup-input-confirm-password =
     .placeholder = Bekräfta lösenord
-router-setup-create =
     .value = Skapa
 router-setup-password-mismatch = Lösenorden måste överensstämma.
 
@@ -605,9 +582,6 @@ connecting-skipped = Gateway startas nu. Navigera till { $gateway-link } i din w
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Skapar Wi-Fi nätverk — { -webthings-gateway-brand }
-creating-header = Skapar Wi-Fi nätverk…
-creating-content = Anslut till { $ssid } med det lösenord som du just skapade och navigera sedan till { $gateway-link } eller { $ip-link } i din webbläsare.
 
 ## UI Updates
 

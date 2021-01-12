@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Rede doméstica
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configurar
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Modo
-network-settings-home-network-lan = Rede doméstica (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Enderezo IP
 network-settings-dhcp = Automático (DHCP)
 network-settings-static = Manual (IP estática)
-network-settings-pppoe = Ponte (PPPoE)
 network-settings-static-ip-address = Enderezo IP estático
 network-settings-network-mask = Máscara de rede
 network-settings-gateway = Entrada
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Contrasinal
 network-settings-show-password = Amosar contrasinal
 network-settings-connect = Conectar
-network-settings-username = Nome de usuario
-network-settings-password = Contrasinal
-network-settings-router-ip = Enderezo IP do enrutador
-network-settings-dhcp-server = Servidor DHCP
-network-settings-enable-wifi = Activar o Wi-Fi
-network-settings-network-name = Nome da rede (SSID)
 wireless-connected = Conectado
 wireless-icon =
     .alt = Rede Wi-Fi
 network-settings-changing = Cambiando a configuración da rede. É posible que dure un minuto.
 failed-ethernet-configure = Erro ao configurar Ethernet.
 failed-wifi-configure = Erro ao configurar o Wi-Fi.
-failed-wan-configure = Erro ao configurar WAN.
-failed-lan-configure = Erro ao configurar a LAN.
-failed-wlan-configure = Erro ao configurar a rede WLAN.
 
 ## User Settings
 
@@ -443,7 +427,6 @@ events-not-found = Este obxecto non ten eventos.
 
 add-addons =
     .aria-label = Atopar complementos novos
-author-unknown = Descoñecido
 disable = Desactivar
 enable = Activar
 by = por
@@ -558,15 +541,9 @@ local-token-copy-token = Copiar mostra
 
 ## Router Setup Page
 
-router-setup-title = Configuración do enrutador — { -webthings-gateway-brand }
-router-setup-header = Crea unha nova rede Wi-Fi
-router-setup-input-ssid =
     .placeholder = Nome da rede
-router-setup-input-password =
     .placeholder = Contrasinal
-router-setup-input-confirm-password =
     .placeholder = Confirmar o contrasinal
-router-setup-create =
     .value = Crear
 router-setup-password-mismatch = Os contrasinais deben coincidir
 
@@ -594,9 +571,6 @@ connecting-skipped = A entrada está sendo iniciada. Desprácese ata { $gateway-
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Creando rede Wi-Fi — { -webthings-gateway-brand }
-creating-header = Creando unha rede Wi-Fi…
-creating-content = Conéctese a { $ssid } co contrasinal que acaba de crear e logo navegue ata { $gateway-link } ou { $ip-link } no seu navegador web.
 
 ## UI Updates
 
