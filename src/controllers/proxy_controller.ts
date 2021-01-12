@@ -11,38 +11,48 @@
 import Server from 'http-proxy';
 import express from 'express';
 
-const ProxyController = express.Router();
+export class ProxyStore {
+  private proxies = new Map<string, string>();
 
-const proxies = new Map();
-const proxy = Server.createProxyServer({
-  changeOrigin: true,
-});
-
-proxy.on('error', (e) => {
-  console.debug('Proxy error:', e);
-});
-
-(ProxyController as any).addProxyServer = (thingId: string, server: string) => {
-  proxies.set(thingId, server);
-};
-
-(ProxyController as any).removeProxyServer = (thingId: string) => {
-  proxies.delete(thingId);
-};
-
-/**
- * Proxy the request, if configured.
- */
-ProxyController.all('/:thingId/*', (request, response) => {
-  const thingId = request.params.thingId;
-
-  if (!proxies.has(thingId)) {
-    response.sendStatus(404);
-    return;
+  addProxyServer(thingId: string, server: string): void {
+    this.proxies.set(thingId, server);
   }
 
-  request.url = request.url.substring(thingId.length + 1);
-  proxy.web(request, response, {target: proxies.get(thingId)});
-});
+  removeProxyServer(thingId: string): void {
+    this.proxies.delete(thingId);
+  }
 
-export = ProxyController;
+  get(thingId: string): string | undefined {
+    return this.proxies.get(thingId);
+  }
+}
+
+export default function ProxyController(): [express.Router, ProxyStore] {
+  const router = express.Router();
+  const proxyStore = new ProxyStore();
+  const proxy = Server.createProxyServer({
+    changeOrigin: true,
+  });
+
+  proxy.on('error', (e) => {
+    console.debug('Proxy error:', e);
+  });
+
+  /**
+   * Proxy the request, if configured.
+   */
+  router.all('/:thingId/*', (request, response) => {
+    const thingId = request.params.thingId;
+    const server = proxyStore.get(thingId);
+
+    if (!server) {
+      response.sendStatus(404);
+      return;
+    }
+
+    request.url = request.url.substring(thingId.length + 1);
+    proxy.web(request, response, {target: server});
+  });
+
+  return [router, proxyStore];
+}

@@ -11,9 +11,13 @@
 
 'use strict';
 
-const {Adapter} = require('gateway-addon');
-const Deferred = require('../deferred').default;
-const DeviceProxy = require('./device-proxy');
+import {Adapter, AddonManagerProxy, Device} from 'gateway-addon';
+import {Device as DeviceSchema} from 'gateway-addon/lib/schema';
+import {AddonManager} from '../addon-manager';
+import Deferred from '../deferred';
+import Thing from '../models/thing';
+import DeviceProxy from './device-proxy';
+import Plugin from './plugin';
 const {MessageType} = require('gateway-addon').Constants;
 
 const DEBUG = false;
@@ -22,20 +26,26 @@ const DEBUG = false;
  * Class used to describe an adapter from the perspective
  * of the gateway.
  */
-class AdapterProxy extends Adapter {
+export default class AdapterProxy extends Adapter {
+  private deferredMock: Deferred<void, void> | null = null;
 
-  constructor(addonManager, adapterId, name, packageName, plugin) {
-    super(addonManager, adapterId, packageName);
-    this.name = name;
-    this.plugin = plugin;
-    this.deferredMock = null;
-    this.unloadCompletedPromise = null;
-    this.eventHandlers = {};
+  private unloadCompletedPromise: Deferred<void, void> | null = null;
+
+  private eventHandlers: Record<string, (thing: Thing) => void> = {};
+
+  constructor(private addonManager: AddonManager, adapterId: string, name: string,
+              packageName: string, private plugin: Plugin) {
+    super(<AddonManagerProxy><unknown>addonManager, adapterId, packageName);
+    (<{name: string}><unknown> this).name = name;
   }
 
-  startPairing(timeoutSeconds) {
+  public getEventHandlers(): Record<string, (thing: Thing) => void> {
+    return this.eventHandlers;
+  }
+
+  startPairing(timeoutSeconds: number): void {
     DEBUG && console.log('AdapterProxy: startPairing',
-                         this.name, 'id', this.id);
+                         this.getName(), 'id', this.getId());
     this.sendMsg(
       MessageType.ADAPTER_START_PAIRING_COMMAND,
       {
@@ -44,37 +54,38 @@ class AdapterProxy extends Adapter {
     );
   }
 
-  cancelPairing() {
+  cancelPairing(): void {
     DEBUG && console.log('AdapterProxy: cancelPairing',
-                         this.name, 'id', this.id);
+                         this.getName(), 'id', this.getId());
     this.sendMsg(MessageType.ADAPTER_CANCEL_PAIRING_COMMAND, {});
   }
 
-  removeThing(device) {
-    DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
-                         'removeThing:', device.id);
+  removeThing(device: Device): void {
+    DEBUG && console.log('AdapterProxy:', this.getName(), 'id', this.getId(),
+                         'removeThing:', device.getId());
     this.sendMsg(
       MessageType.ADAPTER_REMOVE_DEVICE_REQUEST,
       {
-        deviceId: device.id,
+        deviceId: device.getId(),
       }
     );
   }
 
-  cancelRemoveThing(device) {
-    DEBUG && console.log('AdapterProxy:', this.name, 'id', this.id,
-                         'cancelRemoveThing:', device.id);
+  cancelRemoveThing(device: Device): void {
+    DEBUG && console.log('AdapterProxy:', this.getName(), 'id', this.getId(),
+                         'cancelRemoveThing:', device.getId());
     this.sendMsg(
       MessageType.ADAPTER_CANCEL_REMOVE_DEVICE_COMMAND,
       {
-        deviceId: device.id,
+        deviceId: device.getId(),
       }
     );
   }
 
-  sendMsg(methodType, data, deferred) {
-    data.adapterId = this.id;
-    return this.plugin.sendMsg(methodType, data, deferred);
+  sendMsg<T extends unknown>(
+    methodType: number, data: Record<string, unknown>, deferred? : Deferred<T, unknown>): void {
+    data.adapterId = this.getId();
+    this.plugin.sendMsg(methodType, data, deferred);
   }
 
   /**
@@ -83,19 +94,19 @@ class AdapterProxy extends Adapter {
    * @returns a promise which resolves when the adapter has
    *          finished unloading.
    */
-  unload() {
+  async unload(): Promise<void> {
     if (this.unloadCompletedPromise) {
       console.error('AdapterProxy: unload already in progress');
       return Promise.reject();
     }
-    this.unloadCompletedPromise = new Deferred();
+    this.unloadCompletedPromise = new Deferred<void, void>();
     this.sendMsg(
       MessageType.ADAPTER_UNLOAD_REQUEST,
       {
-        adapterId: this.id,
+        adapterId: this.getId(),
       }
     );
-    return this.unloadCompletedPromise.promise;
+    return this.unloadCompletedPromise.getPromise();
   }
 
   /**
@@ -106,7 +117,7 @@ class AdapterProxy extends Adapter {
    *
    * @returns a promise which resolves when the PIN has been set.
    */
-  setPin(deviceId, pin) {
+  setPin(deviceId: string, pin: string): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log('AdapterProxy: setPin:', pin, 'for:', deviceId);
 
@@ -116,10 +127,10 @@ class AdapterProxy extends Adapter {
         return;
       }
 
-      const deferredSet = new Deferred();
+      const deferredSet = new Deferred<unknown, unknown>();
 
-      deferredSet.promise.then((device) => {
-        resolve(device);
+      deferredSet.getPromise().then((device) => {
+        resolve(<void><unknown>device);
       }).catch(() => {
         reject();
       });
@@ -144,7 +155,7 @@ class AdapterProxy extends Adapter {
    *
    * @returns a promise which resolves when the credentials have been set.
    */
-  setCredentials(deviceId, username, password) {
+  setCredentials(deviceId: string, username: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log('AdapterProxy: setCredentials:', username, password, 'for:',
                   deviceId);
@@ -155,10 +166,10 @@ class AdapterProxy extends Adapter {
         return;
       }
 
-      const deferredSet = new Deferred();
+      const deferredSet = new Deferred<unknown, unknown>();
 
-      deferredSet.promise.then((device) => {
-        resolve(device);
+      deferredSet.getPromise().then((device) => {
+        resolve(<void><unknown>device);
       }).catch(() => {
         reject();
       });
@@ -178,7 +189,7 @@ class AdapterProxy extends Adapter {
   // The following methods are added to support using the
   // MockAdapter as a plugin.
 
-  clearState() {
+  clearState(): Promise<void> {
     if (this.deferredMock) {
       const err = 'clearState: deferredMock already in progress';
       console.error(err);
@@ -188,13 +199,13 @@ class AdapterProxy extends Adapter {
     this.sendMsg(
       MessageType.MOCK_ADAPTER_CLEAR_STATE_REQUEST,
       {
-        adapterId: this.id,
+        adapterId: this.getId(),
       }
     );
-    return this.deferredMock.promise;
+    return this.deferredMock.getPromise();
   }
 
-  addDevice(deviceId, deviceDescription) {
+  addDevice(deviceId: string, deviceDescription: DeviceSchema): Promise<void> {
     if (this.deferredMock) {
       const err = 'addDevice: deferredMock already in progress';
       console.error(err);
@@ -207,7 +218,8 @@ class AdapterProxy extends Adapter {
     // create now will be replaced when the handleDeviceAdded
     // notification shows up.
 
-    this.devices[deviceId] = new DeviceProxy(this, deviceDescription);
+    (<{devices: Record<string, DeviceProxy>}><unknown> this).devices[deviceId] =
+    new DeviceProxy(this.addonManager, this, deviceDescription);
 
     this.deferredMock = new Deferred();
     this.sendMsg(
@@ -217,10 +229,10 @@ class AdapterProxy extends Adapter {
         deviceDescr: deviceDescription,
       }
     );
-    return this.deferredMock.promise;
+    return this.deferredMock.getPromise();
   }
 
-  removeDevice(deviceId) {
+  removeDevice(deviceId: string): Promise<void> {
     if (this.deferredMock) {
       const err = 'removeDevice: deferredMock already in progress';
       console.error(err);
@@ -230,17 +242,18 @@ class AdapterProxy extends Adapter {
 
     // We need the actual device object when we resolve the promise
     // so we stash it here since it gets removed under our feet.
-    this.deferredMock.device = this.getDevice(deviceId);
+    (<{device: Device}><unknown> this.deferredMock).device = this.getDevice(deviceId);
+
     this.sendMsg(
       MessageType.MOCK_ADAPTER_REMOVE_DEVICE_REQUEST,
       {
         deviceId: deviceId,
       }
     );
-    return this.deferredMock.promise;
+    return this.deferredMock.getPromise();
   }
 
-  pairDevice(deviceId, deviceDescription) {
+  pairDevice(deviceId: string, deviceDescription: DeviceSchema): void {
     this.sendMsg(
       MessageType.MOCK_ADAPTER_PAIR_DEVICE_COMMAND,
       {
@@ -250,7 +263,7 @@ class AdapterProxy extends Adapter {
     );
   }
 
-  unpairDevice(deviceId) {
+  unpairDevice(deviceId: string): void {
     this.sendMsg(
       MessageType.MOCK_ADAPTER_UNPAIR_DEVICE_COMMAND,
       {
@@ -259,5 +272,3 @@ class AdapterProxy extends Adapter {
     );
   }
 }
-
-module.exports = AdapterProxy;

@@ -11,15 +11,16 @@
 import express from 'express';
 import JSONWebToken from '../models/jsonwebtoken';
 
-const LogOutController = express.Router();
-
-/**
+export default function LogOutController(): express.Router {
+  const router = express.Router();
+  /**
  * Log out the user
  */
-LogOutController.post('/', async (request, response) => {
-  const {jwt} = request as any;
-  await JSONWebToken.revokeToken(jwt.keyId);
-  response.status(200).json({});
-});
+  router.post('/', async (request, response) => {
+    const {jwt} = request as any;
+    await JSONWebToken.revokeToken(jwt.keyId);
+    response.status(200).json({});
+  });
 
-export = LogOutController;
+  return router;
+}

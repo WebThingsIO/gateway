@@ -11,18 +11,16 @@
 import Action, {ActionDescription} from './action';
 import * as Constants from '../constants';
 import {EventEmitter} from 'events';
+import {AddonManager} from '../addon-manager';
 
-const Things = require('./things');
-const AddonManager = require('../addon-manager');
-
-class Actions extends EventEmitter {
+export default class Actions extends EventEmitter {
   private actions: Record<string, Action>;
 
   private nextId: number;
 
   private _onActionStatus: (action: Action) => void;
 
-  constructor() {
+  constructor(private addonManager: AddonManager) {
     super();
 
     /**
@@ -129,14 +127,18 @@ class Actions extends EventEmitter {
 
     action.on(Constants.ACTION_STATUS, this._onActionStatus);
 
-    if (action.getThingId()) {
-      return Things.getThing(action.getThingId()).then((thing: any) => {
-        const success = thing.addAction(action);
-        if (!success) {
-          delete this.actions[id];
-          throw new Error(`Invalid thing action name: "${action.getName()}"`);
-        }
-      });
+    const thingId = action.getThingId();
+
+    if (thingId) {
+      return this.addonManager
+        .getThingsCollection()
+        .getThing(thingId).then((thing: any) => {
+          const success = thing.addAction(action);
+          if (!success) {
+            delete this.actions[id];
+            throw new Error(`Invalid thing action name: "${action.getName()}"`);
+          }
+        });
     }
 
     // Only update the action status if it's being handled internally
@@ -144,7 +146,7 @@ class Actions extends EventEmitter {
 
     switch (action.getName()) {
       case 'pair':
-        AddonManager.addNewThing(action.getInput().timeout).then(() => {
+        this.addonManager.addNewThing(action.getInput().timeout).then(() => {
           action.updateStatus('completed');
         }).catch((error: any) => {
           action.setError(`${error}`);
@@ -157,7 +159,7 @@ class Actions extends EventEmitter {
         if (action.getInput().id) {
           const _finally = () => {
             console.log('unpair: thing:', action.getInput().id, 'was unpaired');
-            Things.removeThing(action.getInput().id).then(() => {
+            this.addonManager.getThingsCollection().removeThing(action.getInput().id).then(() => {
               action.updateStatus('completed');
             }).catch((error: any) => {
               action.setError(`${error}`);
@@ -168,7 +170,7 @@ class Actions extends EventEmitter {
             });
           };
 
-          AddonManager.removeThing(action.getInput().id).then(_finally, _finally);
+          this.addonManager.removeThing(action.getInput().id).then(_finally, _finally);
         } else {
           const msg = 'unpair missing "id" parameter.';
           action.setError(msg);
@@ -206,8 +208,10 @@ class Actions extends EventEmitter {
     }
 
     if (action.getStatus() === 'pending') {
-      if (action.getThingId()) {
-        Things.getThing(action.getThingId()).then((thing: any) => {
+      const thingId = action.getThingId();
+
+      if (thingId) {
+        this.addonManager.getThingsCollection().getThing(thingId).then((thing: any) => {
           if (!thing.removeAction(action)) {
             throw `Invalid thing action name: "${action.getName()}"`;
           }
@@ -217,10 +221,10 @@ class Actions extends EventEmitter {
       } else {
         switch (action.getName()) {
           case 'pair':
-            AddonManager.cancelAddNewThing();
+            this.addonManager.cancelAddNewThing();
             break;
           case 'unpair':
-            AddonManager.cancelRemoveThing(action.getInput().id);
+            this.addonManager.cancelRemoveThing(action.getInput().id);
             break;
           default:
             throw `Invalid action name: "${action.getName()}"`;
@@ -233,6 +237,3 @@ class Actions extends EventEmitter {
     delete this.actions[id];
   }
 }
-
-const actions = new Actions();
-export default actions;

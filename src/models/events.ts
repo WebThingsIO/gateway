@@ -8,13 +8,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import {AddonManager} from '../addon-manager';
 import Event, {EventDescription} from './event';
-const Things = require('../models/things');
 
-class Events {
+export default class Events {
   private events: Event[];
 
-  constructor() {
+  constructor(private addonManager: AddonManager) {
     this.events = [];
   }
 
@@ -71,16 +71,15 @@ class Events {
     this.events.push(event);
 
     if (event.getThingId()) {
-      return Things.getThing(event.getThingId()).then((thing: any) => {
-        thing.dispatchEvent(event);
-      }).catch(() => {
-        console.warn('Received event for unknown thing:', event.getThingId());
-      });
+      return this.addonManager
+        .getThingsCollection()
+        .getThing(event.getThingId()).then((thing: any) => {
+          thing.dispatchEvent(event);
+        }).catch(() => {
+          console.warn('Received event for unknown thing:', event.getThingId());
+        });
     }
 
     return Promise.resolve();
   }
 }
-
-const events = new Events();
-export default events;

@@ -9,33 +9,34 @@
 
 'use strict';
 
-const {MessageType} = require('gateway-addon').Constants;
-const {Outlet, Deferred} = require('gateway-addon');
+import {Outlet, Constants as AddonConstants, Notifier} from 'gateway-addon';
+import {Level, OutletDescription} from 'gateway-addon/lib/schema';
+import Deferred from '../deferred';
+import NotifierProxy from './notifier-proxy';
 
-class OutletProxy extends Outlet {
-  constructor(notifier, outletDict) {
+export default class OutletProxy extends Outlet {
+  constructor(notifier: Notifier, outletDict: OutletDescription) {
     super(notifier, outletDict.id);
-
-    this.name = outletDict.name;
+    this.setName(outletDict.name);
   }
 
-  notify(title, message, level) {
+  notify(title: string, message: string, level: Level): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log('OutletProxy: notify title:', title, 'message:', message,
-                  'level:', level, 'for:', this.id);
+                  'level:', level, 'for:', this.getId());
 
       const deferredSet = new Deferred();
 
-      deferredSet.promise.then(() => {
+      deferredSet.getPromise().then(() => {
         resolve();
       }).catch(() => {
         reject();
       });
 
-      this.notifier.sendMsg(
-        MessageType.OUTLET_NOTIFY_REQUEST,
+      (<NotifierProxy> this.getNotifier()).sendMsg(
+        AddonConstants.MessageType.OUTLET_NOTIFY_REQUEST,
         {
-          outletId: this.id,
+          outletId: this.getId(),
           title,
           message,
           level,
@@ -45,5 +46,3 @@ class OutletProxy extends Outlet {
     });
   }
 }
-
-module.exports = OutletProxy;

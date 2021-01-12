@@ -2,10 +2,7 @@ import config from 'config';
 import fs from 'fs';
 import path from 'path';
 import {verbose, Database as SQLiteDatabase} from 'sqlite3';
-import * as Constants from '../constants';
 import UserProfile from '../user-profile';
-
-const AddonManager = require('../addon-manager');
 
 const sqlite3 = verbose();
 
@@ -20,8 +17,6 @@ class Logs {
 
   private descrToId: Record<string, number>;
 
-  private _onPropertyChanged: (property: any) => void;
-
   private _clearOldMetrics: () => Promise<void>;
 
   private clearOldMetricsInterval: NodeJS.Timeout;
@@ -30,10 +25,7 @@ class Logs {
     this.db = null;
     this.idToDescr = {};
     this.descrToId = {};
-    this._onPropertyChanged = this.onPropertyChanged.bind(this);
     this._clearOldMetrics = this.clearOldMetrics.bind(this);
-
-    AddonManager.on(Constants.PROPERTY_CHANGED, this._onPropertyChanged);
 
     // Clear out old metrics every hour
     this.clearOldMetricsInterval = setInterval(this._clearOldMetrics, 60 * 60 * 1000);
@@ -58,8 +50,6 @@ class Logs {
       this.db = null;
     }
 
-    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
-                                this._onPropertyChanged);
     clearInterval(this.clearOldMetricsInterval);
   }
 

@@ -8,7 +8,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Actions from './actions';
 import * as Constants from '../constants';
 import {EventEmitter} from 'events';
 import {Utils} from 'gateway-addon';
@@ -47,10 +46,10 @@ export default class Action extends EventEmitter {
    * @param {Object} input
    * @param {Thing?} thing
    */
-  constructor(name: string, input?: any, thing?: any) {
+  constructor(id: string, name: string, input?: any, thing?: any) {
     super();
 
-    this.id = Actions.generateId();
+    this.id = id;
     this.name = name;
     this.input = input || {};
     if (thing) {

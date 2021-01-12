@@ -29,42 +29,44 @@ if (!fs.existsSync(FLOORPLAN_PATH)) {
   }
 }
 
-const UploadsController = express.Router();
+export default function UploadsController(): express.Router {
+  const router = express.Router();
 
-/**
+  /**
  * Upload a file.
  */
-UploadsController.post('/', (request, response) => {
-  if (!(request as any).files || !((request as any).files as any).file) {
-    response.status(500).send('No file provided for upload');
-    return;
-  }
-
-  try {
-    if (fs.existsSync(FLOORPLAN_PATH)) {
-      fs.unlinkSync(FLOORPLAN_PATH);
-    }
-  } catch (err) {
-    response.status(500).send(`Failed to unlink old floorplan: ${err}`);
-    return;
-  }
-
-  const file = ((request as any).files as any).file;
-  file.mv(FLOORPLAN_PATH, (error?: any) => {
-    if (error) {
-      // On error, try to copy the fallback.
-      try {
-        fs.copyFileSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
-      } catch (err) {
-        console.error(`Failed to copy floorplan: ${err}`);
-      }
-
-      response.status(500).send(`Failed to save uploaded file: ${error}`);
+  router.post('/', (request, response) => {
+    if (!(request as any).files || !((request as any).files as any).file) {
+      response.status(500).send('No file provided for upload');
       return;
     }
 
-    response.status(201).send('Successfully uploaded file');
-  });
-});
+    try {
+      if (fs.existsSync(FLOORPLAN_PATH)) {
+        fs.unlinkSync(FLOORPLAN_PATH);
+      }
+    } catch (err) {
+      response.status(500).send(`Failed to unlink old floorplan: ${err}`);
+      return;
+    }
 
-export = UploadsController;
+    const file = ((request as any).files as any).file;
+    file.mv(FLOORPLAN_PATH, (error?: any) => {
+      if (error) {
+      // On error, try to copy the fallback.
+        try {
+          fs.copyFileSync(FALLBACK_FLOORPLAN_PATH, FLOORPLAN_PATH);
+        } catch (err) {
+          console.error(`Failed to copy floorplan: ${err}`);
+        }
+
+        response.status(500).send(`Failed to save uploaded file: ${error}`);
+        return;
+      }
+
+      response.status(201).send('Successfully uploaded file');
+    });
+  });
+
+  return router;
+}

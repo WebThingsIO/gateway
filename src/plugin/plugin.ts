@@ -11,72 +11,134 @@
 
 'use strict';
 
-const AdapterProxy = require('./adapter-proxy');
-const APIHandlerProxy = require('./api-handler-proxy');
-const Constants = require('../constants');
-const Database = require('../db').default;
-const Deferred = require('../deferred').default;
-const DeviceProxy = require('./device-proxy');
-const format = require('string-format');
-const {LogSeverity} = require('../constants');
-const NotifierProxy = require('./notifier-proxy');
-const OutletProxy = require('./outlet-proxy');
-const path = require('path');
-const readline = require('readline');
-const Settings = require('../models/settings');
-const spawn = require('child_process').spawn;
-const Things = require('../models/things');
-const UserProfile = require('../user-profile').default;
-const {
-  DONT_RESTART_EXIT_CODE,
-  MessageType,
-} = require('gateway-addon').Constants;
+import AdapterProxy from './adapter-proxy';
+import APIHandlerProxy from './api-handler-proxy';
+import Database from '../db';
+import Deferred from '../deferred';
+import DeviceProxy from './device-proxy';
+import format from 'string-format';
+import {LogSeverity, THING_ADDED} from '../constants';
+import NotifierProxy from './notifier-proxy';
+import OutletProxy from './outlet-proxy';
+import path from 'path';
+import readline from 'readline';
+import {getSetting} from '../models/settings';
+import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
+import PluginServer from './plugin-server';
+import {
+  AdapterAddedNotificationMessageData,
+  APIHandlerAddedNotificationMessageData,
+  APIHandlerUnloadResponseMessageData,
+  DeviceAddedNotificationMessageData,
+  DevicePropertyChangedNotificationMessageData,
+  DeviceSetCredentialsResponseMessageData,
+  DeviceSetPINResponseMessageData,
+  Message,
+  NotifierAddedNotificationMessageData,
+  OutletAddedNotificationMessageData,
+} from 'gateway-addon/lib/schema';
+import Thing from '../models/thing';
+import UserProfile from '../user-profile';
+import {AddonManagerProxy, Constants as AddonConstants} from 'gateway-addon';
+import {AddonManager} from '../addon-manager';
+import WebSocket from 'ws';
 
 const DEBUG = false;
 
 Database.open();
 
-class Plugin {
+export default class Plugin {
+  private logPrefix: string;
 
-  constructor(pluginId, pluginServer, forceEnable = false) {
-    this.pluginId = pluginId;
-    this.pluginServer = pluginServer;
+  private adapters = new Map<string, AdapterProxy>();
+
+  private notifiers = new Map<string, NotifierProxy>();
+
+  private apiHandlers = new Map<string, APIHandlerProxy>();
+
+  private exec = '';
+
+  private execPath = '.';
+
+  private startPromise?: Promise<void>;
+
+  // Make this a nested object such that if the Plugin object is reused,
+  // i.e. the plugin is disabled and quickly re-enabled, the gateway process
+  // can maintain a proper reference to the process object.
+  private process: {p?: ChildProcessWithoutNullStreams} = {};
+
+  private restart = true;
+
+  private restartDelay = 0;
+
+  private lastRestart = 0;
+
+  private pendingRestart?: NodeJS.Timeout;
+
+  private unloadCompletedPromise: any = null;
+
+  private unloadedRcvdPromise?: Deferred<void, void>;
+
+  private nextId = 0;
+
+  private requestActionPromises = new Map();
+
+  private removeActionPromises = new Map();
+
+  private setPinPromises = new Map();
+
+  private setCredentialsPromises = new Map();
+
+  private notifyPromises = new Map();
+
+  private apiRequestPromises = new Map();
+
+  private ws?: WebSocket;
+
+  private stdoutReadline?: readline.Interface;
+
+  private stderrReadline?: readline.Interface;
+
+  constructor(
+    private addonManager: AddonManager,
+    private pluginId: string,
+    private pluginServer: PluginServer,
+    private forceEnable = false) {
     this.logPrefix = pluginId;
-
-    this.adapters = new Map();
-    this.notifiers = new Map();
-    this.apiHandlers = new Map();
-
-    this.exec = '';
-    this.execPath = '.';
-    this.forceEnable = forceEnable;
-    this.startPromise = null;
-
-    // Make this a nested object such that if the Plugin object is reused,
-    // i.e. the plugin is disabled and quickly re-enabled, the gateway process
-    // can maintain a proper reference to the process object.
-    this.process = {p: null};
-
-    this.restart = true;
-    this.restartDelay = 0;
-    this.lastRestart = 0;
-    this.pendingRestart = null;
-    this.unloadCompletedPromise = null;
-    this.unloadedRcvdPromise = null;
-
-    this.nextId = 0;
-    this.requestActionPromises = new Map();
-    this.removeActionPromises = new Map();
-    this.setPinPromises = new Map();
-    this.setCredentialsPromises = new Map();
-    this.notifyPromises = new Map();
-    this.apiRequestPromises = new Map();
   }
 
-  asDict() {
-    let pid = 'not running';
+  public getProcess(): ChildProcessWithoutNullStreams | undefined {
+    return this.process.p;
+  }
+
+  public getWebsocket(): WebSocket | undefined {
+    return this.ws;
+  }
+
+  public setWebSocket(ws: WebSocket): void {
+    this.ws = ws;
+  }
+
+  public getExec(): string | undefined {
+    return this.exec;
+  }
+
+  public setExec(exec: string): void {
+    this.exec = exec;
+  }
+
+  public getExecPath(): string | undefined {
+    return this.execPath;
+  }
+
+  public setExecPath(execPath: string): void {
+    this.execPath = execPath;
+  }
+
+  asDict(): Record<string, unknown> {
+    let pid: string | number = 'not running';
     if (this.process.p) {
-      pid = this.process.p.pid;
+      pid = this.process.p?.pid;
     }
     return {
       pluginId: this.pluginId,
@@ -91,12 +153,12 @@ class Plugin {
     };
   }
 
-  onMsg(msg) {
+  onMsg(msg: Message): void {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
 
     // The first switch manages action method resolved or rejected messages.
     switch (msg.messageType) {
-      case MessageType.DEVICE_REQUEST_ACTION_RESPONSE: {
+      case AddonConstants.MessageType.DEVICE_REQUEST_ACTION_RESPONSE: {
         const actionId = msg.data.actionId;
         const deferred = this.requestActionPromises.get(actionId);
         if (typeof actionId === 'undefined' ||
@@ -116,7 +178,7 @@ class Plugin {
         this.requestActionPromises.delete(actionId);
         return;
       }
-      case MessageType.DEVICE_REMOVE_ACTION_RESPONSE: {
+      case AddonConstants.MessageType.DEVICE_REMOVE_ACTION_RESPONSE: {
         const messageId = msg.data.messageId;
         const deferred = this.removeActionPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -136,7 +198,7 @@ class Plugin {
         this.removeActionPromises.delete(messageId);
         return;
       }
-      case MessageType.OUTLET_NOTIFY_RESPONSE: {
+      case AddonConstants.MessageType.OUTLET_NOTIFY_RESPONSE: {
         const messageId = msg.data.messageId;
         const deferred = this.notifyPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -156,8 +218,9 @@ class Plugin {
         this.notifyPromises.delete(messageId);
         return;
       }
-      case MessageType.DEVICE_SET_PIN_RESPONSE: {
-        const messageId = msg.data.messageId;
+      case AddonConstants.MessageType.DEVICE_SET_PIN_RESPONSE: {
+        const data: DeviceSetPINResponseMessageData = <DeviceSetPINResponseMessageData>msg.data;
+        const messageId = data.messageId;
         const deferred = this.setPinPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
             typeof deferred === 'undefined') {
@@ -167,13 +230,15 @@ class Plugin {
           return;
         }
 
-        if (msg.data.success) {
-          const adapter = this.adapters.get(msg.data.adapterId);
-          const deviceId = msg.data.device.id;
-          const device = new DeviceProxy(adapter, msg.data.device);
-          adapter.devices[deviceId] = device;
-          adapter.manager.devices[deviceId] = device;
-          deferred.resolve(msg.data.device);
+        if (data.success && data.device) {
+          const adapter = this.adapters.get(data.adapterId);
+          if (adapter) {
+            const deviceId = data.device.id;
+            const device = new DeviceProxy(this.addonManager, adapter, data.device);
+            adapter.getDevices()[deviceId] = device;
+            (<any>adapter.getManager()).devices[deviceId] = device;
+            deferred.resolve(data.device);
+          }
         } else {
           deferred.reject();
         }
@@ -181,7 +246,9 @@ class Plugin {
         this.setPinPromises.delete(messageId);
         return;
       }
-      case MessageType.DEVICE_SET_CREDENTIALS_RESPONSE: {
+      case AddonConstants.MessageType.DEVICE_SET_CREDENTIALS_RESPONSE: {
+        const data: DeviceSetCredentialsResponseMessageData =
+        <DeviceSetCredentialsResponseMessageData><unknown>msg.data;
         const messageId = msg.data.messageId;
         const deferred = this.setCredentialsPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -192,13 +259,17 @@ class Plugin {
           return;
         }
 
-        if (msg.data.success) {
-          const adapter = this.adapters.get(msg.data.adapterId);
-          const deviceId = msg.data.device.id;
-          const device = new DeviceProxy(adapter, msg.data.device);
-          adapter.devices[deviceId] = device;
-          adapter.manager.devices[deviceId] = device;
-          deferred.resolve(msg.data.device);
+        if (msg.data.success && data.device) {
+          const adapter = this.adapters.get(data.adapterId);
+          if (adapter) {
+            const deviceId = data.device.id;
+            const device = new DeviceProxy(this.addonManager, adapter, data.device);
+            adapter.getDevices()[deviceId] = device;
+            (<AddonManager><unknown>adapter.getManager()).getDevices()[deviceId] = device;
+            deferred.resolve(msg.data.device);
+          } else {
+            deferred.reject();
+          }
         } else {
           deferred.reject();
         }
@@ -206,7 +277,7 @@ class Plugin {
         this.setCredentialsPromises.delete(messageId);
         return;
       }
-      case MessageType.API_HANDLER_API_RESPONSE: {
+      case AddonConstants.MessageType.API_HANDLER_API_RESPONSE: {
         const messageId = msg.data.messageId;
         const deferred = this.apiRequestPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -222,61 +293,69 @@ class Plugin {
       }
     }
 
-    const adapterId = msg.data.adapterId;
-    const notifierId = msg.data.notifierId;
-    let adapter, notifier, apiHandler;
-
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
-      case MessageType.ADAPTER_ADDED_NOTIFICATION: {
-        adapter = new AdapterProxy(this.pluginServer.manager,
-                                   adapterId,
-                                   msg.data.name,
-                                   msg.data.packageName,
-                                   this);
-        this.adapters.set(adapterId, adapter);
+      case AddonConstants.MessageType.ADAPTER_ADDED_NOTIFICATION: {
+        const data: AdapterAddedNotificationMessageData =
+        <AdapterAddedNotificationMessageData>msg.data;
+        const adapter = new AdapterProxy(this.addonManager,
+                                         data.adapterId,
+                                         data.name,
+                                         data.packageName,
+                                         this);
+        this.adapters.set(data.adapterId, adapter);
         this.pluginServer.addAdapter(adapter);
 
         // Tell the adapter about all saved things
-        const send = (thing) => {
+        const send = (thing: Thing) => {
           adapter.sendMsg(
-            MessageType.DEVICE_SAVED_NOTIFICATION,
+            AddonConstants.MessageType.DEVICE_SAVED_NOTIFICATION,
             {
-              deviceId: thing.id,
-              device: thing.getDescription(),
+              deviceId: thing.getId(),
+              device: (<any>thing).getDescription(),
             }
           );
         };
 
-        adapter.eventHandlers[Constants.THING_ADDED] = send;
+        adapter.getEventHandlers()[THING_ADDED] = send;
 
-        Things.getThings().then((things) => {
+        this.addonManager.getThingsCollection().getThings().then((things) => {
           things.forEach(send);
         });
-        Things.on(Constants.THING_ADDED, send);
+        this.addonManager.getThingsCollection().on(THING_ADDED, send);
         return;
       }
-      case MessageType.NOTIFIER_ADDED_NOTIFICATION:
-        notifier = new NotifierProxy(this.pluginServer.manager,
-                                     notifierId,
-                                     msg.data.name,
-                                     msg.data.packageName,
-                                     this);
-        this.notifiers.set(notifierId, notifier);
+      case AddonConstants.MessageType.NOTIFIER_ADDED_NOTIFICATION: {
+        const data: NotifierAddedNotificationMessageData =
+        <NotifierAddedNotificationMessageData>msg.data;
+        const notifier = new NotifierProxy(
+          <AddonManagerProxy><unknown> this.pluginServer.getAddonManager(),
+          data.notifierId,
+          data.name,
+          data.packageName,
+          this);
+        this.notifiers.set(data.notifierId, notifier);
         this.pluginServer.addNotifier(notifier);
         return;
+      }
 
-      case MessageType.API_HANDLER_ADDED_NOTIFICATION:
-        apiHandler = new APIHandlerProxy(this.pluginServer.manager,
-                                         msg.data.packageName,
-                                         this);
-        this.apiHandlers.set(msg.data.packageName, apiHandler);
+      case AddonConstants.MessageType.API_HANDLER_ADDED_NOTIFICATION: {
+        const data: APIHandlerAddedNotificationMessageData =
+        <APIHandlerAddedNotificationMessageData>msg.data;
+        const apiHandler = new APIHandlerProxy(
+          <AddonManagerProxy><unknown> this.pluginServer.getAddonManager(),
+          data.packageName,
+          this);
+        this.apiHandlers.set(data.packageName, apiHandler);
         this.pluginServer.addAPIHandler(apiHandler);
         return;
+      }
 
-      case MessageType.API_HANDLER_UNLOAD_RESPONSE: {
-        const packageName = msg.data.packageName;
-        const handler = this.apiHandlers.get(packageName);
+      case AddonConstants.MessageType.API_HANDLER_UNLOAD_RESPONSE: {
+        const data: APIHandlerUnloadResponseMessageData =
+        <APIHandlerUnloadResponseMessageData>msg.data;
+        const packageName = data.packageName;
+        const handler: any = this.apiHandlers.get(packageName);
 
         if (!handler) {
           console.error('Plugin:', this.pluginId,
@@ -300,7 +379,7 @@ class Plugin {
 
         return;
       }
-      case MessageType.PLUGIN_UNLOAD_RESPONSE:
+      case AddonConstants.MessageType.PLUGIN_UNLOAD_RESPONSE:
         this.shutdown();
         this.pluginServer.unregisterPlugin(msg.data.pluginId);
         if (this.unloadedRcvdPromise) {
@@ -311,7 +390,7 @@ class Plugin {
         }
         return;
 
-      case MessageType.PLUGIN_ERROR_NOTIFICATION:
+      case AddonConstants.MessageType.PLUGIN_ERROR_NOTIFICATION:
         this.pluginServer.emit('log', {
           severity: LogSeverity.ERROR,
           message: msg.data.message,
@@ -321,7 +400,8 @@ class Plugin {
 
     // The next switch deals with adapter level messages
 
-    adapter = this.adapters.get(adapterId);
+    const adapterId = <string>msg.data.adapterId;
+    const adapter: any = this.adapters.get(<string>adapterId);
     if (adapterId && !adapter) {
       console.error('Plugin:', this.pluginId,
                     'Unrecognized adapter:', adapterId,
@@ -329,7 +409,8 @@ class Plugin {
       return;
     }
 
-    notifier = this.notifiers.get(notifierId);
+    const notifierId = <string>msg.data.notifierId;
+    const notifier: any = <NotifierProxy> this.notifiers.get(<string>notifierId);
     if (notifierId && !notifier) {
       console.error('Plugin:', this.pluginId,
                     'Unrecognized notifier:', notifierId,
@@ -344,10 +425,10 @@ class Plugin {
 
     switch (msg.messageType) {
 
-      case MessageType.ADAPTER_UNLOAD_RESPONSE: {
-        const handler = adapter.eventHandlers[Constants.THING_ADDED];
+      case AddonConstants.MessageType.ADAPTER_UNLOAD_RESPONSE: {
+        const handler = adapter.getEventHandlers()[THING_ADDED];
         if (handler) {
-          Things.removeListener(Constants.THING_ADDED, handler);
+          this.addonManager.getThingsCollection().removeListener(THING_ADDED, handler);
         }
 
         this.adapters.delete(adapterId);
@@ -369,7 +450,7 @@ class Plugin {
         }
         break;
       }
-      case MessageType.NOTIFIER_UNLOAD_RESPONSE:
+      case AddonConstants.MessageType.NOTIFIER_UNLOAD_RESPONSE:
         this.notifiers.delete(notifierId);
         if (this.adapters.size === 0 &&
             this.notifiers.size === 0 &&
@@ -384,63 +465,71 @@ class Plugin {
         }
         break;
 
-      case MessageType.DEVICE_ADDED_NOTIFICATION:
-        device = new DeviceProxy(adapter, msg.data.device);
+      case AddonConstants.MessageType.DEVICE_ADDED_NOTIFICATION: {
+        const data: DeviceAddedNotificationMessageData =
+        <DeviceAddedNotificationMessageData>msg.data;
+        device = new DeviceProxy(this.addonManager, adapter, data.device);
         adapter.handleDeviceAdded(device);
         break;
+      }
 
-      case MessageType.ADAPTER_REMOVE_DEVICE_RESPONSE:
+      case AddonConstants.MessageType.ADAPTER_REMOVE_DEVICE_RESPONSE:
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
           adapter.handleDeviceRemoved(device);
         }
         break;
 
-      case MessageType.OUTLET_ADDED_NOTIFICATION:
-        outlet = new OutletProxy(notifier, msg.data.outlet);
+      case AddonConstants.MessageType.OUTLET_ADDED_NOTIFICATION: {
+        const data: OutletAddedNotificationMessageData =
+        <OutletAddedNotificationMessageData>msg.data;
+        outlet = new OutletProxy(notifier, data.outlet);
         notifier.handleOutletAdded(outlet);
         break;
+      }
 
-      case MessageType.OUTLET_REMOVED_NOTIFICATION:
+      case AddonConstants.MessageType.OUTLET_REMOVED_NOTIFICATION:
         outlet = notifier.getOutlet(msg.data.outletId);
         if (outlet) {
           notifier.handleOutletRemoved(outlet);
         }
         break;
 
-      case MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION:
+      case AddonConstants.MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION: {
+        const data: DevicePropertyChangedNotificationMessageData =
+        <DevicePropertyChangedNotificationMessageData>msg.data;
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
-          property = device.findProperty(msg.data.property.name);
+          property = device.findProperty(data.property.name);
           if (property) {
             property.doPropertyChanged(msg.data.property);
             device.notifyPropertyChanged(property);
           }
         }
         break;
-
-      case MessageType.DEVICE_ACTION_STATUS_NOTIFICATION:
+      }
+      case AddonConstants.MessageType.DEVICE_ACTION_STATUS_NOTIFICATION:
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
           device.actionNotify(msg.data.action);
         }
         break;
 
-      case MessageType.DEVICE_EVENT_NOTIFICATION:
+      case AddonConstants.MessageType.DEVICE_EVENT_NOTIFICATION:
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
           device.eventNotify(msg.data.event);
         }
         break;
 
-      case MessageType.DEVICE_CONNECTED_STATE_NOTIFICATION:
+      case AddonConstants.MessageType.DEVICE_CONNECTED_STATE_NOTIFICATION:
         device = adapter.getDevice(msg.data.deviceId);
         if (device) {
           device.connectedNotify(msg.data.connected);
         }
         break;
 
-      case MessageType.ADAPTER_PAIRING_PROMPT_NOTIFICATION: {
+      case AddonConstants.MessageType.ADAPTER_PAIRING_PROMPT_NOTIFICATION: {
         let message = `${adapter.name}: `;
         if (msg.data.hasOwnProperty('deviceId')) {
           device = adapter.getDevice(msg.data.deviceId);
@@ -449,7 +538,7 @@ class Plugin {
 
         message += msg.data.prompt;
 
-        const data = {
+        const data: Record<string, unknown> = {
           severity: LogSeverity.PROMPT,
           message,
         };
@@ -461,7 +550,7 @@ class Plugin {
         this.pluginServer.emit('log', data);
         return;
       }
-      case MessageType.ADAPTER_UNPAIRING_PROMPT_NOTIFICATION: {
+      case AddonConstants.MessageType.ADAPTER_UNPAIRING_PROMPT_NOTIFICATION: {
         let message = `${adapter.name}`;
         if (msg.data.hasOwnProperty('deviceId')) {
           device = adapter.getDevice(msg.data.deviceId);
@@ -470,7 +559,7 @@ class Plugin {
 
         message += `: ${msg.data.prompt}`;
 
-        const data = {
+        const data: Record<string, unknown> = {
           severity: LogSeverity.PROMPT,
           message,
         };
@@ -482,7 +571,7 @@ class Plugin {
         this.pluginServer.emit('log', data);
         return;
       }
-      case MessageType.MOCK_ADAPTER_CLEAR_STATE_RESPONSE:
+      case AddonConstants.MessageType.MOCK_ADAPTER_CLEAR_STATE_RESPONSE:
         deferredMock = adapter.deferredMock;
         if (!deferredMock) {
           console.error('mockAdapterStateCleared: No deferredMock');
@@ -492,8 +581,8 @@ class Plugin {
         }
         break;
 
-      case MessageType.MOCK_ADAPTER_ADD_DEVICE_RESPONSE:
-      case MessageType.MOCK_ADAPTER_REMOVE_DEVICE_RESPONSE:
+      case AddonConstants.MessageType.MOCK_ADAPTER_ADD_DEVICE_RESPONSE:
+      case AddonConstants.MessageType.MOCK_ADAPTER_REMOVE_DEVICE_RESPONSE:
         deferredMock = adapter.deferredMock;
         if (!deferredMock) {
           console.error('mockDeviceAddedRemoved: No deferredMock');
@@ -519,47 +608,49 @@ class Plugin {
    *
    * @returns {integer} An id.
    */
-  generateMsgId() {
+  generateMsgId(): number {
     return ++this.nextId;
   }
 
-  sendMsg(methodType, data, deferred) {
+  sendMsg<T extends unknown>(
+    methodType: number, data: Record<string, unknown>,
+    deferred?: Deferred<T, unknown>): void {
     data.pluginId = this.pluginId;
 
     // Methods which could fail should await result.
     if (typeof deferred !== 'undefined') {
       switch (methodType) {
-        case MessageType.DEVICE_REQUEST_ACTION_REQUEST: {
+        case AddonConstants.MessageType.DEVICE_REQUEST_ACTION_REQUEST: {
           this.requestActionPromises.set(data.actionId, deferred);
           break;
         }
-        case MessageType.DEVICE_REMOVE_ACTION_REQUEST: {
+        case AddonConstants.MessageType.DEVICE_REMOVE_ACTION_REQUEST: {
           // removeAction needs ID which is per message, because it
           // can be called while waiting rejected or resolved.
           data.messageId = this.generateMsgId();
           this.removeActionPromises.set(data.messageId, deferred);
           break;
         }
-        case MessageType.OUTLET_NOTIFY_REQUEST: {
+        case AddonConstants.MessageType.OUTLET_NOTIFY_REQUEST: {
           data.messageId = this.generateMsgId();
           this.notifyPromises.set(data.messageId, deferred);
           break;
         }
-        case MessageType.DEVICE_SET_PIN_REQUEST: {
+        case AddonConstants.MessageType.DEVICE_SET_PIN_REQUEST: {
           // removeAction needs ID which is per message, because it
           // can be called while waiting rejected or resolved.
           data.messageId = this.generateMsgId();
           this.setPinPromises.set(data.messageId, deferred);
           break;
         }
-        case MessageType.DEVICE_SET_CREDENTIALS_REQUEST: {
+        case AddonConstants.MessageType.DEVICE_SET_CREDENTIALS_REQUEST: {
           // removeAction needs ID which is per message, because it
           // can be called while waiting rejected or resolved.
           data.messageId = this.generateMsgId();
           this.setCredentialsPromises.set(data.messageId, deferred);
           break;
         }
-        case MessageType.API_HANDLER_API_REQUEST: {
+        case AddonConstants.MessageType.API_HANDLER_API_REQUEST: {
           data.messageId = this.generateMsgId();
           this.apiRequestPromises.set(data.messageId, deferred);
           break;
@@ -575,13 +666,13 @@ class Plugin {
     };
     DEBUG && console.log('Plugin: sendMsg:', msg);
 
-    return this.ws.send(JSON.stringify(msg));
+    this?.ws?.send(JSON.stringify(msg));
   }
 
   /**
    * Does cleanup required to allow the test suite to complete cleanly.
    */
-  shutdown() {
+  shutdown(): void {
     if (this.pendingRestart) {
       clearTimeout(this.pendingRestart);
     }
@@ -612,15 +703,15 @@ class Plugin {
     });
   }
 
-  start() {
+  start(): Promise<void> {
     const key = `addons.${this.pluginId}`;
 
-    this.startPromise = Settings.getSetting(key).then((savedSettings) => {
+    this.startPromise = getSetting(key).then((savedSettings) => {
       if (!this.forceEnable &&
           (!savedSettings || !savedSettings.enabled)) {
         console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
         this.restart = false;
-        this.process.p = null;
+        delete this.process.p;
         return;
       }
 
@@ -676,13 +767,13 @@ class Plugin {
         console.error(`${this.logPrefix}: ${line}`);
       });
 
-      this.process.p.on('exit', (code) => {
+      this?.process.p?.on('exit', (code) => {
         if (this.restart) {
-          if (code == DONT_RESTART_EXIT_CODE) {
+          if (code == AddonConstants.DONT_RESTART_EXIT_CODE) {
             console.log('Plugin:', this.pluginId, 'died, code =', code,
                         'NOT restarting...');
             this.restart = false;
-            this.process.p = null;
+            delete this.process.p;
           } else {
             if (this.pendingRestart) {
               return;
@@ -698,7 +789,7 @@ class Plugin {
               // not going to work, so bail out.
               console.log(`Giving up on restarting plugin ${this.pluginId}`);
               this.restart = false;
-              this.process.p = null;
+              delete this.process.p;
               return;
             }
             console.log('Plugin:', this.pluginId, 'died, code =', code,
@@ -706,10 +797,10 @@ class Plugin {
             const doRestart = () => {
               if (this.restart) {
                 this.lastRestart = Date.now();
-                this.pendingRestart = null;
+                delete this.pendingRestart;
                 this.start();
               } else {
-                this.process.p = null;
+                delete this.process.p;
               }
             };
             if (this.restartDelay > 0) {
@@ -721,7 +812,7 @@ class Plugin {
             }
           }
         } else {
-          this.process.p = null;
+          delete this.process.p;
         }
       });
     });
@@ -729,11 +820,9 @@ class Plugin {
     return this.startPromise;
   }
 
-  unload() {
+  unload(): void {
     this.restart = false;
     this.unloadedRcvdPromise = new Deferred();
-    this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
+    this.sendMsg(AddonConstants.MessageType.PLUGIN_UNLOAD_REQUEST, {});
   }
 }
-
-module.exports = Plugin;

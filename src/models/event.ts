@@ -52,4 +52,8 @@ export default class Event {
   getThingId(): string {
     return this.thingId;
   }
+
+  setThingId(thingId: string): void {
+    this.thingId = thingId;
+  }
 }

@@ -31,6 +31,7 @@
   "dependencies": {
     "@fluent/bundle": "^0.16.0",
     "@fluent/dom": "^0.7.0",
+    "@types/express-ws": "^3.0.0",
     "acme-client": "^4.1.2",
     "ajv": "^7.0.3",
     "archiver": "^5.1.0",
@@ -102,6 +103,9 @@
     "@types/semver": "^7.3.4",
     "@types/speakeasy": "^2.0.5",
     "@types/sqlite3": "^3.1.6",
+    "@types/string-format": "^2.0.0",
+    "@types/tar": "^4.0.4",
+    "@types/tmp": "^0.2.0",
     "@types/uuid": "^8.3.0",
     "@types/web-push": "^3.3.0",
     "@types/ws": "^7.4.0",

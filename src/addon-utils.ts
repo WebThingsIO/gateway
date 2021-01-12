@@ -21,6 +21,26 @@ const MANIFEST_VERSION = 1;
 // issues, this flag can be flipped.
 const ENFORCE_STRICT_SHA_CHECK = false;
 
+export interface Manifest {
+  id: string,
+  author: string,
+  name: string,
+  description: string,
+  homepage_url: string,
+  version: string,
+  primary_type: string,
+  exec: string,
+  content_scripts: ContentScript[],
+  web_accessible_resources: string[],
+  enabled: boolean,
+  schema?: Record<string, unknown>
+}
+
+interface ContentScript {
+  js: string [],
+  css: string []
+}
+
 /**
  * Verify one level of an object, recursing as required.
  *
@@ -125,7 +145,7 @@ function validateManifestJson(manifest: any): string|undefined {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifestJson(packageId: string): any[] {
+function loadManifestJson(packageId: string): [Manifest, unknown] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   // Read the package.json file.
@@ -255,7 +275,7 @@ function loadManifestJson(packageId: string): any[] {
     }
   }
 
-  const obj = {
+  const obj: Manifest = {
     id: manifest.id,
     author: manifest.author,
     name: manifest.name,
@@ -298,7 +318,7 @@ function loadManifestJson(packageId: string): any[] {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-export function loadManifest(packageId: string): any[] {
+export function loadManifest(packageId: string): [Manifest, unknown] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   if (fs.existsSync(path.join(addonPath, 'manifest.json'))) {

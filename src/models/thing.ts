@@ -10,16 +10,106 @@
 
 'use strict';
 
-const Constants = require('../constants');
-const Database = require('../db').default;
-const EventEmitter = require('events');
+import {ACTIONS_PATH,
+  CONNECTED,
+  EVENT,
+  EVENTS_PATH,
+  MODIFIED,
+  OAUTH_PATH,
+  PROPERTIES_PATH,
+  PROXY_PATH,
+  REMOVED,
+  THINGS_PATH} from '../constants';
+import Database from '../db';
+import {EventEmitter} from 'events';
 const Router = require('../router');
-const UserProfile = require('../user-profile').default;
-const fs = require('fs');
-const path = require('path');
-const tmp = require('tmp');
+import UserProfile from '../user-profile';
+import fs, {PathLike} from 'fs';
+import path from 'path';
+import tmp from 'tmp';
+import {Action as ActionSchema,
+  Event as EventSchema,
+  Property as PropertySchema,
+  Link} from 'gateway-addon/lib/schema';
+import Action from './action';
+import Event from './event';
 
-class Thing {
+
+export interface ThingDescription {
+  id: string;
+  title: string;
+  '@context': string;
+  '@type': string[];
+  description: string;
+  base: string;
+  baseHref: string;
+  href: string;
+  properties: Record<string, PropertySchema>;
+  actions: Record<string, ActionSchema>;
+  events: Record<string, EventSchema>;
+  links: Link[];
+  floorplanX: number;
+  floorplanY: number;
+  layoutIndex: number;
+  selectedCapability: string;
+  iconHref: string | null;
+  iconData: IconData;
+  security: string;
+  securityDefinitions: SecurityDefinition;
+}
+
+interface IconData {
+  data: string;
+  mime: string;
+}
+
+interface SecurityDefinition {
+  oauth2_sc: OAuth2,
+}
+
+interface OAuth2 {
+  scheme: string;
+  flow: string;
+  authorization: string;
+  token: string;
+  scopes: string[];
+}
+
+export default class Thing {
+  private title = '';
+
+  private '@context': string;
+
+  private '@type': string[];
+
+  private description = '';
+
+  private href = '';
+
+  private properties: Record<string, PropertySchema> = {};
+
+  private actions: Record<string, ActionSchema> = {};
+
+  private events: Record<string, EventSchema> = {};
+
+  private connected = false;
+
+  private eventsDispatched: Event[] = [];
+
+  private emitter: any;
+
+  private floorplanX?: number;
+
+  private floorplanY?: number;
+
+  private layoutIndex = 0;
+
+  private selectedCapability?: string;
+
+  private links: Link[] = [];
+
+  private iconHref?: string | null;
+
   /**
    * Thing constructor.
    *
@@ -28,23 +118,21 @@ class Thing {
    * @param {String} id Unique ID.
    * @param {Object} description Thing description.
    */
-  constructor(id, description) {
+  constructor(private id: string, description: ThingDescription) {
     if (!id || !description) {
       console.error('id and description needed to create new Thing');
       return;
     }
     // Parse the Thing Description
     this.id = id;
-    this.title = description.title || description.name || '';
+    this.title = description.title || (<any>description).name || '';
     this['@context'] =
       description['@context'] || 'https://webthings.io/schemas';
     this['@type'] = description['@type'] || [];
     this.description = description.description || '';
-    this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
-    this.properties = {};
+    this.href = `${THINGS_PATH}/${encodeURIComponent(this.id)}`;
     this.actions = description.actions || {};
     this.events = description.events || {};
-    this.connected = false;
     this.eventsDispatched = [];
     this.emitter = new EventEmitter();
     if (description.properties) {
@@ -56,12 +144,12 @@ class Thing {
         }
 
         if (property.hasOwnProperty('links')) {
-          property.links = property.links.filter((link) => {
+          property.links = property.links?.filter((link) => {
             return link.rel && link.rel !== 'property';
           }).map((link) => {
             if (link.proxy) {
               delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+              link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
             }
 
             return link;
@@ -71,9 +159,9 @@ class Thing {
         }
 
         // Give the property a URL
-        property.links.push({
+        property.links?.push({
           rel: 'property',
-          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          href: `${this.href}${PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
 
         this.properties[propertyName] = property;
@@ -109,22 +197,22 @@ class Thing {
     }
 
     if (description.hasOwnProperty('links')) {
-      for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel)) {
+      for (const link of description.links || []) {
+        if (['properties', 'actions', 'events'].includes(<string>link.rel)) {
           continue;
         }
 
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
-            uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            uiLink.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           } else {
             uiLink.href = link.href;
           }
         } else {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           this.links.push(link);
@@ -142,12 +230,12 @@ class Thing {
       }
 
       if (action.hasOwnProperty('links')) {
-        action.links = action.links.filter((link) => {
+        action.links = action.links?.filter((link) => {
           return link.rel && link.rel !== 'action';
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -157,9 +245,9 @@ class Thing {
       }
 
       // Give the action a URL
-      action.links.push({
+      action.links?.push({
         rel: 'action',
-        href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
+        href: `${this.href}${ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
 
@@ -171,12 +259,12 @@ class Thing {
       }
 
       if (event.hasOwnProperty('links')) {
-        event.links = event.links.filter((link) => {
+        event.links = event.links?.filter((link) => {
           return link.rel && link.rel !== 'event';
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -186,9 +274,9 @@ class Thing {
       }
 
       // Give the event a URL
-      event.links.push({
+      event.links?.push({
         rel: 'event',
-        href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
+        href: `${this.href}${EVENTS_PATH}/${encodeURIComponent(eventName)}`,
       });
     }
 
@@ -200,6 +288,22 @@ class Thing {
     }
   }
 
+  getId(): string {
+    return this.id;
+  }
+
+  getTitle(): string {
+    return this.title;
+  }
+
+  getHref(): string {
+    return this.href;
+  }
+
+  getLayoutIndex(): number {
+    return this.layoutIndex;
+  }
+
   /**
    * Set the x and y co-ordinates for a Thing on the floorplan.
    *
@@ -207,12 +311,12 @@ class Thing {
    * @param {number} y The y co-ordinate on floorplan (0-100).
    * @return {Promise} A promise which resolves with the description set.
    */
-  setCoordinates(x, y) {
+  setCoordinates(x: number, y: number): Promise<ThingDescription | void> {
     this.floorplanX = x;
     this.floorplanY = y;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emitter.emit(MODIFIED);
         return descr;
       });
   }
@@ -223,11 +327,11 @@ class Thing {
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  setLayoutIndex(index) {
+  setLayoutIndex(index: number): Promise<ThingDescription | void> {
     this.layoutIndex = index;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emitter.emit(MODIFIED);
         return descr;
       });
   }
@@ -238,13 +342,17 @@ class Thing {
    * @param {String} title The new title
    * @return {Promise} A promise which resolves with the description set.
    */
-  setTitle(title) {
+  setTitle(title: string): Promise<ThingDescription | void> {
     this.title = title;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emitter.emit(MODIFIED);
         return descr;
       });
+  }
+
+  getProperties(): Record<string, PropertySchema> {
+    return this.properties;
   }
 
   /**
@@ -254,7 +362,7 @@ class Thing {
    * @param {Boolean} updateDatabase Whether or not to update the database after
    *                                 setting.
    */
-  setIcon(iconData, updateDatabase) {
+  async setIcon(iconData: IconData, updateDatabase: boolean): Promise<ThingDescription | void> {
     if (!iconData.data ||
         !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
       console.error('Invalid icon data:', iconData);
@@ -301,7 +409,7 @@ class Thing {
       console.error('Failed to write icon:', e);
       if (tempfile) {
         try {
-          fs.unlinkSync(tempfile.fd);
+          fs.unlinkSync(<PathLike><unknown>tempfile.fd);
         } catch (e) {
           // pass
         }
@@ -315,7 +423,7 @@ class Thing {
     if (updateDatabase) {
       return Database.updateThing(this.id, this.getDescription())
         .then((descr) => {
-          this.emitter.emit(Constants.MODIFIED);
+          this.emitter.emit(MODIFIED);
           return descr;
         });
     }
@@ -327,11 +435,11 @@ class Thing {
    * @param {String} capability The selected capability
    * @return {Promise} A promise which resolves with the description set.
    */
-  setSelectedCapability(capability) {
+  setSelectedCapability(capability: string): Promise<ThingDescription | void> {
     this.selectedCapability = capability;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emitter.emit(MODIFIED);
         return descr;
       });
   }
@@ -340,36 +448,36 @@ class Thing {
    * Dispatch an event to all listeners subscribed to the Thing
    * @param {Event} event
    */
-  dispatchEvent(event) {
-    if (!event.thingId) {
-      event.thingId = this.id;
+  dispatchEvent(event: Event): void {
+    if (!event.getThingId()) {
+      event.setThingId(this.id);
     }
     this.eventsDispatched.push(event);
-    this.emitter.emit(Constants.EVENT, event);
+    this.emitter.emit(EVENT, event);
   }
 
   /**
    * Add a subscription to the Thing's events
    * @param {Function} callback
    */
-  addEventSubscription(callback) {
-    this.emitter.on(Constants.EVENT, callback);
+  addEventSubscription(callback: (event: Event) => void): void {
+    this.emitter.on(EVENT, callback);
   }
 
   /**
    * Remove a subscription to the Thing's events
    * @param {Function} callback
    */
-  removeEventSubscription(callback) {
-    this.emitter.removeListener(Constants.EVENT, callback);
+  removeEventSubscription(callback: (event: Event) => void): void {
+    this.emitter.removeListener(EVENT, callback);
   }
 
   /**
    * Add a subscription to the Thing's connected state
    * @param {Function} callback
    */
-  addConnectedSubscription(callback) {
-    this.emitter.on(Constants.CONNECTED, callback);
+  addConnectedSubscription(callback: (connected: boolean) => void): void {
+    this.emitter.on(CONNECTED, callback);
     callback(this.connected);
   }
 
@@ -377,40 +485,40 @@ class Thing {
    * Remove a subscription to the Thing's connected state
    * @param {Function} callback
    */
-  removeConnectedSubscription(callback) {
-    this.emitter.removeListener(Constants.CONNECTED, callback);
+  removeConnectedSubscription(callback: () => void): void {
+    this.emitter.removeListener(CONNECTED, callback);
   }
 
   /**
    * Add a subscription to the Thing's modified state
    * @param {Function} callback
    */
-  addModifiedSubscription(callback) {
-    this.emitter.on(Constants.MODIFIED, callback);
+  addModifiedSubscription(callback: () => void): void {
+    this.emitter.on(MODIFIED, callback);
   }
 
   /**
    * Remove a subscription to the Thing's modified state
    * @param {Function} callback
    */
-  removeModifiedSubscription(callback) {
-    this.emitter.removeListener(Constants.MODIFIED, callback);
+  removeModifiedSubscription(callback: () => void): void {
+    this.emitter.removeListener(MODIFIED, callback);
   }
 
   /**
    * Add a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  addRemovedSubscription(callback) {
-    this.emitter.on(Constants.REMOVED, callback);
+  addRemovedSubscription(callback: () => void): void {
+    this.emitter.on(REMOVED, callback);
   }
 
   /**
    * Remove a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  removeRemovedSubscription(callback) {
-    this.emitter.removeListener(Constants.REMOVED, callback);
+  removeRemovedSubscription(callback: () => void): void {
+    this.emitter.removeListener(REMOVED, callback);
   }
 
 
@@ -420,8 +528,8 @@ class Thing {
    * @param {String} reqHost request host, if coming via HTTP
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    */
-  getDescription(reqHost, reqSecure) {
-    const desc = {
+  getDescription(reqHost?: string, reqSecure?: boolean): ThingDescription {
+    const desc: ThingDescription = <ThingDescription>{
       title: this.title,
       '@context': this['@context'],
       '@type': this['@type'],
@@ -452,13 +560,14 @@ class Thing {
         oauth2_sc: {
           scheme: 'oauth2',
           flow: 'code',
-          authorization: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
-          token: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/token`,
+          authorization:
+          `${reqSecure ? 'https' : 'http'}://${reqHost}${OAUTH_PATH}/authorize`,
+          token: `${reqSecure ? 'https' : 'http'}://${reqHost}${OAUTH_PATH}/token`,
           scopes: [
             `${this.href}:readwrite`,
             this.href,
-            `${Constants.THINGS_PATH}:readwrite`,
-            Constants.THINGS_PATH,
+            `${THINGS_PATH}:readwrite`,
+            THINGS_PATH,
           ],
         },
       };
@@ -471,7 +580,7 @@ class Thing {
   /**
    * Remove and clean up the Thing
    */
-  remove() {
+  remove(): void {
     if (this.iconHref) {
       try {
         fs.unlinkSync(path.join(UserProfile.baseDir, this.iconHref));
@@ -483,7 +592,7 @@ class Thing {
       this.iconHref = null;
     }
 
-    this.emitter.emit(Constants.REMOVED, true);
+    this.emitter.emit(REMOVED, true);
   }
 
   /**
@@ -491,8 +600,8 @@ class Thing {
    * @param {Action} action
    * @return {boolean} Whether a known action
    */
-  addAction(action) {
-    return this.actions.hasOwnProperty(action.name);
+  addAction(action: Action): boolean {
+    return this.actions.hasOwnProperty(action.getName());
   }
 
   /**
@@ -500,8 +609,8 @@ class Thing {
    * @param {Action} action
    * @return {boolean} Whether a known action
    */
-  removeAction(action) {
-    return this.actions.hasOwnProperty(action.name);
+  removeAction(action: Action): boolean {
+    return this.actions.hasOwnProperty(action.getName());
   }
 
   /**
@@ -513,7 +622,7 @@ class Thing {
    * @param {Object} description Thing description.
    * @return {Promise} A promise which resolves with the description set.
    */
-  updateFromDescription(description) {
+  updateFromDescription(description: ThingDescription): Promise<ThingDescription | void> {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
@@ -537,12 +646,12 @@ class Thing {
         }
 
         if (property.hasOwnProperty('links')) {
-          property.links = property.links.filter((link) => {
+          property.links = property.links?.filter((link) => {
             return link.rel && link.rel !== 'property';
           }).map((link) => {
             if (link.proxy) {
               delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+              link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
             }
 
             return link;
@@ -552,9 +661,9 @@ class Thing {
         }
 
         // Give the property a URL
-        property.links.push({
+        property.links?.push({
           rel: 'property',
-          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          href: `${this.href}${PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
         this.properties[propertyName] = property;
       }
@@ -570,12 +679,12 @@ class Thing {
       }
 
       if (action.hasOwnProperty('links')) {
-        action.links = action.links.filter((link) => {
+        action.links = action.links?.filter((link) => {
           return link.rel && link.rel !== 'action';
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -585,9 +694,9 @@ class Thing {
       }
 
       // Give the action a URL
-      action.links.push({
+      action.links?.push({
         rel: 'action',
-        href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
+        href: `${this.href}${ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
 
@@ -601,12 +710,12 @@ class Thing {
       }
 
       if (event.hasOwnProperty('links')) {
-        event.links = event.links.filter((link) => {
+        event.links = event.links?.filter((link) => {
           return link.rel && link.rel !== 'event';
         }).map((link) => {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           return link;
@@ -616,13 +725,13 @@ class Thing {
       }
 
       // Give the event a URL
-      event.links.push({
+      event.links?.push({
         rel: 'event',
-        href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
+        href: `${this.href}${EVENTS_PATH}/${encodeURIComponent(eventName)}`,
       });
     }
 
-    let uiLink = {
+    let uiLink: any = {
       rel: 'alternate',
       mediaType: 'text/html',
       href: this.href,
@@ -641,21 +750,21 @@ class Thing {
     // Update the UI href
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel)) {
+        if (['properties', 'actions', 'events'].includes(<string>link.rel)) {
           continue;
         }
 
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
-            uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            uiLink.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           } else {
             uiLink.href = link.href;
           }
         } else {
           if (link.proxy) {
             delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            link.href = `${PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
           }
 
           this.links.push(link);
@@ -673,7 +782,7 @@ class Thing {
       .then((descr) => {
         const newDescription = JSON.stringify(this.getDescription());
         if (newDescription !== oldDescription) {
-          this.emitter.emit(Constants.MODIFIED);
+          this.emitter.emit(MODIFIED);
         }
 
         return descr;
@@ -685,10 +794,8 @@ class Thing {
    *
    * @param {boolean} connected - Whether or not the thing is connected
    */
-  setConnected(connected) {
+  setConnected(connected: boolean): void {
     this.connected = connected;
-    this.emitter.emit(Constants.CONNECTED, connected);
+    this.emitter.emit(CONNECTED, connected);
   }
 }
-
-module.exports = Thing;

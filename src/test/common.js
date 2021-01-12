@@ -9,10 +9,7 @@
 process.env.NODE_ENV = 'test';
 
 const Database = require('../db').default;
-const Actions = require('../models/actions').default;
-const Events = require('../models/events').default;
 const Logs = require('../models/logs').default;
-const Things = require('../models/things');
 const UserProfile = require('../user-profile').default;
 const e2p = require('event-to-promise');
 const fs = require('fs');
@@ -21,7 +18,9 @@ const path = require('path');
 const chai = require('./chai');
 global.chai = chai;
 
-const debugJasmine = false;
+const debugJasmine = true;
+
+console.log(debugJasmine);
 
 if (debugJasmine) {
   // The following debug code can prove to be very useful when
@@ -76,10 +75,8 @@ expect.extend({
   },
 });
 
-const {servers, serverStartup} = require('../app');
+const {servers, serverStartup, addonManager} = require('../app');
 global.server = servers.https;
-
-const addonManager = require('../addon-manager');
 
 function mockAdapter() {
   const adapter = addonManager.getAdapter('mock-adapter');
@@ -100,6 +97,7 @@ function removeTestManifest() {
 }
 
 beforeAll(async () => {
+  console.log('beforeAll');
   removeTestManifest();
 
   // The server may not be done with reading tunneltoken and related settings
@@ -112,18 +110,20 @@ beforeAll(async () => {
 });
 
 afterEach(async () => {
+  console.log('afterEach');
   // This is all potentially brittle.
   const adapter = addonManager.getAdapter('mock-adapter');
   if (adapter) {
     await adapter.clearState();
   }
-  Actions.clearState();
-  Events.clearState();
-  Things.clearState();
+  addonManager.getActionsCollection().clearState();
+  addonManager.getEventsCollection().clearState();
+  addonManager.getThingsCollection().clearState();
   await Database.deleteEverything();
 });
 
 afterAll(async () => {
+  console.log('afterAll');
   Logs.close();
   await addonManager.unloadAddons();
   servers.https.close();
@@ -143,4 +143,5 @@ module.exports = {
   server: servers.https,
   chai,
   httpServer: servers.http,
+  addonManager,
 };

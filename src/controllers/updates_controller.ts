@@ -9,8 +9,6 @@ import * as Utils from '../utils';
 
 const pkg = require('../../package.json');
 
-const UpdatesController = express.Router();
-
 function readVersion(packagePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(packagePath, {encoding: 'utf8'}, (err, data) => {
@@ -64,142 +62,146 @@ function cacheLatestInsert(response: express.Response, value: any): void {
   cacheLatest.value = value;
 }
 
-/**
+export default function UpdatesController(): express.Router {
+  const router = express.Router();
+
+  /**
  * Send the client an object describing the latest release
  */
-UpdatesController.get('/latest', async (request, response) => {
-  const etag = request.get('If-None-Match');
-  if (etag) {
-    if (cacheLatest.tag === etag &&
+  router.get('/latest', async (request, response) => {
+    const etag = request.get('If-None-Match');
+    if (etag) {
+      if (cacheLatest.tag === etag &&
         Date.now() - cacheLatest.time < cacheDuration) {
-      response.sendStatus(304);
+        response.sendStatus(304);
+        return;
+      }
+    }
+
+    const res = await fetch(
+      config.get('updates.url'),
+      {headers: {'User-Agent': Utils.getGatewayUserAgent()}}
+    );
+
+    const releases = await res.json();
+    if (!releases || !releases.filter) {
+      console.warn('API returned invalid releases, rate limit likely exceeded');
+      const value = {version: null};
+      response.send(value);
+      cacheLatestInsert(response, value);
       return;
     }
-  }
+    const latestRelease = releases.filter((release: any) => {
+      if (release.prerelease && !config.get('updates.allowPrerelease')) {
+        return false;
+      }
 
-  const res = await fetch(
-    config.get('updates.url'),
-    {headers: {'User-Agent': Utils.getGatewayUserAgent()}}
-  );
+      if (release.draft) {
+        return false;
+      }
 
-  const releases = await res.json();
-  if (!releases || !releases.filter) {
-    console.warn('API returned invalid releases, rate limit likely exceeded');
-    const value = {version: null};
+      return true;
+    })[0];
+    if (!latestRelease) {
+      console.warn('No releases found');
+      const value = {version: null};
+      response.send(value);
+      cacheLatestInsert(response, value);
+      return;
+    }
+    const releaseVer = latestRelease.tag_name;
+    const value = {version: releaseVer};
     response.send(value);
     cacheLatestInsert(response, value);
-    return;
-  }
-  const latestRelease = releases.filter((release: any) => {
-    if (release.prerelease && !config.get('updates.allowPrerelease')) {
-      return false;
-    }
+  });
 
-    if (release.draft) {
-      return false;
-    }
-
-    return true;
-  })[0];
-  if (!latestRelease) {
-    console.warn('No releases found');
-    const value = {version: null};
-    response.send(value);
-    cacheLatestInsert(response, value);
-    return;
-  }
-  const releaseVer = latestRelease.tag_name;
-  const value = {version: releaseVer};
-  response.send(value);
-  cacheLatestInsert(response, value);
-});
-
-/**
+  /**
  * Send an object describing the update status of the gateway
  */
-UpdatesController.get('/status', async (_request, response) => {
+  router.get('/status', async (_request, response) => {
   // gateway, gateway_failed, gateway_old
   // oldVersion -> gateway_old's package.json version
   // if (gateway_failed.version > thisversion) {
   //  update failed, last attempt was ctime of gateway_failed
   // }
-  const currentVersion = pkg.version;
+    const currentVersion = pkg.version;
 
-  const oldStats = await stat('../gateway_old/package.json');
-  let oldVersion = null;
-  if (oldStats) {
-    try {
-      oldVersion = await readVersion('../gateway_old/package.json');
-    } catch (e) {
-      console.error('Failed to read ../gateway_old/package.json:', e);
-    }
-  }
-
-  const failedStats = await stat('../gateway_failed/package.json');
-  let failedVersion = null;
-  if (failedStats) {
-    try {
-      failedVersion = await readVersion('../gateway_failed/package.json');
-    } catch (e) {
-      console.error('Failed to read ../gateway_failed/package.json:', e);
-    }
-  }
-
-  if (failedVersion && semver.gt(failedVersion, currentVersion)) {
-    response.send({
-      success: false,
-      version: currentVersion,
-      failedVersion,
-      timestamp: failedStats!.ctime,
-    });
-  } else {
-    let timestamp = null;
+    const oldStats = await stat('../gateway_old/package.json');
+    let oldVersion = null;
     if (oldStats) {
-      timestamp = oldStats.ctime;
+      try {
+        oldVersion = await readVersion('../gateway_old/package.json');
+      } catch (e) {
+        console.error('Failed to read ../gateway_old/package.json:', e);
+      }
     }
-    response.send({
-      success: true,
-      version: currentVersion,
-      oldVersion,
-      timestamp,
-    });
-  }
-});
 
-UpdatesController.post('/update', async (_request, response) => {
-  child_process.exec('sudo systemctl start ' +
+    const failedStats = await stat('../gateway_failed/package.json');
+    let failedVersion = null;
+    if (failedStats) {
+      try {
+        failedVersion = await readVersion('../gateway_failed/package.json');
+      } catch (e) {
+        console.error('Failed to read ../gateway_failed/package.json:', e);
+      }
+    }
+
+    if (failedVersion && semver.gt(failedVersion, currentVersion)) {
+      response.send({
+        success: false,
+        version: currentVersion,
+        failedVersion,
+        timestamp: failedStats!.ctime,
+      });
+    } else {
+      let timestamp = null;
+      if (oldStats) {
+        timestamp = oldStats.ctime;
+      }
+      response.send({
+        success: true,
+        version: currentVersion,
+        oldVersion,
+        timestamp,
+      });
+    }
+  });
+
+  router.post('/update', async (_request, response) => {
+    child_process.exec('sudo systemctl start ' +
     'webthings-gateway.check-for-update.service');
 
-  response.json({});
-});
+    response.json({});
+  });
 
-UpdatesController.get('/self-update', async (_request, response) => {
-  if (!Platform.implemented('getSelfUpdateStatus')) {
-    response.json({
-      available: false,
-      enabled: false,
-    });
-  } else {
-    response.json(Platform.getSelfUpdateStatus());
-  }
-});
+  router.get('/self-update', async (_request, response) => {
+    if (!Platform.implemented('getSelfUpdateStatus')) {
+      response.json({
+        available: false,
+        enabled: false,
+      });
+    } else {
+      response.json(Platform.getSelfUpdateStatus());
+    }
+  });
 
-UpdatesController.put('/self-update', async (request, response) => {
-  if (!request.body || !request.body.hasOwnProperty('enabled')) {
-    response.status(400).send('Enabled property not defined');
-    return;
-  }
+  router.put('/self-update', async (request, response) => {
+    if (!request.body || !request.body.hasOwnProperty('enabled')) {
+      response.status(400).send('Enabled property not defined');
+      return;
+    }
 
-  if (!Platform.implemented('setSelfUpdateStatus')) {
-    response.status(500).send('Cannot toggle auto updates');
-    return;
-  }
+    if (!Platform.implemented('setSelfUpdateStatus')) {
+      response.status(500).send('Cannot toggle auto updates');
+      return;
+    }
 
-  if (Platform.setSelfUpdateStatus(request.body.enabled)) {
-    response.status(200).json({enabled: request.body.enabled});
-  } else {
-    response.status(500).send('Failed to toggle auto updates');
-  }
-});
+    if (Platform.setSelfUpdateStatus(request.body.enabled)) {
+      response.status(200).json({enabled: request.body.enabled});
+    } else {
+      response.status(500).send('Failed to toggle auto updates');
+    }
+  });
 
-export = UpdatesController;
+  return router;
+}

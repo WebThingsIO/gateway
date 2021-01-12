@@ -33,19 +33,22 @@ const ipRegex = require('ip-regex');
 const SegfaultHandler = require('segfault-handler');
 
 // Internal Dependencies
-const addonManager = require('./addon-manager');
+const {AddonManager} = require('./addon-manager');
 const Constants = require('./constants');
 const Database = require('./db').default;
 const mDNSserver = require('./mdns-server');
 const Logs = require('./models/logs').default;
 const platform = require('./platform');
-const Router = require('./router');
-const sleep = require('./sleep').default;
-const Things = require('./models/things');
+const sleep = require('./sleep');
 const TunnelService = require('./tunnel-service').default;
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
+const Engine = require('./rules-engine/Engine');
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
+getOptions();
+
+const addonManager = new AddonManager();
+const engine = new Engine;
 
 // Open the databases
 Database.open();
@@ -53,7 +56,7 @@ Logs.open();
 
 const servers = {};
 servers.http = http.createServer();
-const httpApp = createGatewayApp(servers.http, false);
+const httpApp = createGatewayApp(servers.http, false, engine);
 
 servers.https = createHttpsServer();
 let httpsApp = null;
@@ -99,7 +102,7 @@ function startHttpsGateway() {
     }
   }
 
-  httpsApp = createGatewayApp(servers.https, true);
+  httpsApp = createGatewayApp(servers.https, true, engine);
   servers.https.on('request', httpsApp);
 
   const promises = [];
@@ -109,11 +112,11 @@ function startHttpsGateway() {
     servers.https.listen(port, () => {
       migration.then(() => {
         // load existing things from the database
-        return Things.getThings();
+        return addonManager.getThingsCollection().getThings();
       }).then(() => {
         addonManager.loadAddons();
+        engine.getRules(addonManager);
       });
-      rulesEngineConfigure();
       console.log('HTTPS server listening on port',
                   servers.https.address().port);
       resolve();
@@ -143,11 +146,11 @@ function startHttpGateway() {
     servers.http.listen(port, () => {
       migration.then(() => {
         // load existing things from the database
-        return Things.getThings();
+        return addonManager.getThingsCollection().getThings();
       }).then(() => {
         addonManager.loadAddons();
+        engine.getRules();
       });
-      rulesEngineConfigure();
       console.log('HTTP server listening on port', servers.http.address().port);
       resolve();
     });
@@ -211,14 +214,6 @@ function getOptions() {
   }
 
   return options;
-}
-
-/**
- * Set up the rules engine.
- */
-function rulesEngineConfigure() {
-  const rulesEngine = require('./rules-engine/index').default;
-  rulesEngine.configure();
 }
 
 function createApp(isSecure) {
@@ -295,15 +290,16 @@ function createApp(isSecure) {
  * @param {http.Server|https.Server} server
  * @return {express.Router}
  */
-function createGatewayApp(server, isSecure) {
+function createGatewayApp(server, isSecure, engine) {
   const app = createApp(isSecure);
-  const opt = getOptions();
 
   // Inject WebSocket support
   expressWs(app, server);
 
+  const Router = require('./router').default;
+  const router = new Router();
   // Configure router with configured app and command line options.
-  Router.configure(app, opt);
+  router.configure(app, addonManager, engine);
   return app;
 }
 
@@ -401,4 +397,5 @@ mDNSserver.getmDNSstate().then((state) => {
 module.exports = {
   servers,
   serverStartup,
+  addonManager,
 };

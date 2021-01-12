@@ -1,6 +1,6 @@
 'use strict';
 
-const {server, chai, mockAdapter} = require('../common');
+const {server, chai, mockAdapter, addonManager} = require('../common');
 const {
   TEST_USER,
   createUser,
@@ -20,7 +20,7 @@ const WebSocket = require('ws');
 
 const Constants = require('../../constants');
 const Event = require('../../models/event').default;
-const Events = require('../../models/events').default;
+const Events = addonManager.getEventsCollection();
 
 const TEST_THING = {
   id: 'test-1',

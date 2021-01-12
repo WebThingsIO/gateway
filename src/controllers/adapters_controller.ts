@@ -9,33 +9,34 @@
  */
 
 import express from 'express';
+import {AddonManager} from '../addon-manager';
 
-const addonManager = require('../addon-manager');
+export default function AdaptersController(addonManager: AddonManager): express.Router {
+  const router = express.Router();
 
-const adaptersController = express.Router();
-
-/**
+  /**
  * Return a list of adapters
  */
-adaptersController.get('/', (_request, response) => {
-  const adapters = addonManager.getAdapters();
-  const adapterList = Array.from(adapters.values()).map((adapter: any) => {
-    return adapter.asDict();
+  router.get('/', (_request, response) => {
+    const adapters = addonManager.getAdapters();
+    const adapterList = Array.from(adapters.values()).map((adapter: any) => {
+      return adapter.asDict();
+    });
+    response.json(adapterList);
   });
-  response.json(adapterList);
-});
 
-/**
+  /**
  * Get a particular adapter.
  */
-adaptersController.get('/:adapterId/', (request, response) => {
-  const adapterId = request.params.adapterId;
-  const adapter = addonManager.getAdapter(adapterId);
-  if (adapter) {
-    response.json(adapter.asDict());
-  } else {
-    response.status(404).send(`Adapter "${adapterId}" not found.`);
-  }
-});
+  router.get('/:adapterId/', (request, response) => {
+    const adapterId = request.params.adapterId;
+    const adapter = addonManager.getAdapter(adapterId);
+    if (adapter) {
+      response.json(adapter.asDict());
+    } else {
+      response.status(404).send(`Adapter "${adapterId}" not found.`);
+    }
+  });
 
-export = adaptersController;
+  return router;
+}

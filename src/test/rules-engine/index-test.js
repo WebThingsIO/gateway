@@ -1,4 +1,4 @@
-const {server, chai, mockAdapter} = require('../common');
+const {server, chai, mockAdapter, addonManager} = require('../common');
 const {waitForExpect} = require('../expect-utils');
 const util = require('util');
 
@@ -10,7 +10,7 @@ const {
 
 const Constants = require('../../constants');
 const Event = require('../../models/event').default;
-const Events = require('../../models/events').default;
+const Events = addonManager.getEventsCollection();
 
 const {
   webSocketOpen,

@@ -6,51 +6,49 @@
 
 'use strict';
 
-const assert = require('assert');
-const PropertyEffect = require('./PropertyEffect');
+import {AddonManager} from '../../addon-manager';
+import PropertyEffect from './PropertyEffect';
+import {SetEffectDescription} from './SetEffect';
 
+type PulseEffectDescription = SetEffectDescription;
 /**
  * An Effect which temporarily sets the target property to
  * a value before restoring its original value
  */
-class PulseEffect extends PropertyEffect {
+export default class PulseEffect extends PropertyEffect {
+  private on = false;
+
+  private oldValue: any = null;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
-    super(desc);
-    this.value = desc.value;
-    if (typeof this.value === 'number') {
-      assert(this.property.type === 'number' ||
-             this.property.type === 'integer',
-             'setpoint and property must be compatible types');
-    } else {
-      assert(typeof this.value === this.property.type,
-             'setpoint and property must be same type');
-    }
-
-    this.on = false;
-    this.oldValue = null;
+  constructor(addonManager: AddonManager, private pulseEffectDescription: PulseEffectDescription) {
+    super(addonManager, pulseEffectDescription);
   }
 
   /**
-   * @return {EffectDescription}
+   * @return {PulseEffectDescription}
    */
-  toDescription() {
-    return Object.assign(
-      super.toDescription(),
-      {value: this.value}
-    );
+  toDescription(): PulseEffectDescription {
+    return {
+      ...super.toDescription(),
+      ...{value: this.pulseEffectDescription.value},
+    };
   }
 
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): Promise<any> | undefined {
+    const {
+      value,
+    } = this.pulseEffectDescription;
+
     if (state.on) {
       // If we're already active, just perform the effect again
       if (this.on) {
-        return this.property.set(this.value);
+        return this.property.set(value);
       }
       // Activate the effect and save our current state to revert to upon
       // deactivation
@@ -58,10 +56,10 @@ class PulseEffect extends PropertyEffect {
         this.oldValue = value;
         // Always set to the opposite (always toggle)
         if (typeof value === 'boolean') {
-          this.oldValue = !this.value;
+          this.oldValue = !value;
         }
         this.on = true;
-        return this.property.set(this.value);
+        return this.property.set(value);
       });
     } else if (this.on) {
       // Revert to our original value if we pulsed to a new value
@@ -70,7 +68,8 @@ class PulseEffect extends PropertyEffect {
         return this.property.set(this.oldValue);
       }
     }
+
+    // eslint-disable-next-line no-useless-return
+    return;
   }
 }
-
-module.exports = PulseEffect;

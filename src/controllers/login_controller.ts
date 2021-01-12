@@ -16,86 +16,87 @@ import * as Users from '../models/users';
 import JSONWebToken from '../models/jsonwebtoken';
 import rateLimit from 'express-rate-limit';
 
-const LoginController = express.Router();
+export default function LoginController(): express.Router {
+  const router = express.Router();
+  const loginRoot = path.join(Constants.BUILD_STATIC_PATH, 'login');
 
-const loginRoot = path.join(Constants.BUILD_STATIC_PATH, 'login');
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10,                  // 10 failed requests per windowMs
+    skipSuccessfulRequests: true,
+  });
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,                  // 10 failed requests per windowMs
-  skipSuccessfulRequests: true,
-});
-
-/**
+  /**
  * Serve the static login page
  */
-LoginController.get('/', async (_request, response) => {
-  response.sendFile('index.html', {root: loginRoot});
-});
+  router.get('/', async (_request, response) => {
+    response.sendFile('index.html', {root: loginRoot});
+  });
 
-/**
+  /**
  * Handle login request.
  */
-LoginController.post('/', limiter, async (request, response) => {
-  const {body} = request;
-  if (!body || !body.email || !body.password) {
-    response.status(400).send('User requires email and password');
-    return;
-  }
-
-  const user = await Users.getUser(body.email.toLowerCase());
-  if (!user) {
-    response.sendStatus(401);
-    return;
-  }
-
-  const passwordMatch = await Passwords.compare(
-    body.password,
-    user.getPassword()
-  );
-
-  if (!passwordMatch) {
-    response.sendStatus(401);
-    return;
-  }
-
-  if (user.getMfaEnrolled()) {
-    if (!body.mfa) {
-      response.status(401).json({mfaRequired: true});
+  router.post('/', limiter, async (request, response) => {
+    const {body} = request;
+    if (!body || !body.email || !body.password) {
+      response.status(400).send('User requires email and password');
       return;
     }
 
-    if (!Passwords.verifyMfaToken(user.getMfaSharedSecret(), body.mfa)) {
-      let backupMatch = false;
+    const user = await Users.getUser(body.email.toLowerCase());
+    if (!user) {
+      response.sendStatus(401);
+      return;
+    }
 
-      if (body.mfa.totp.length === 12) {
-        let index = 0;
-        for (const backup of user.getMfaBackupCodes()) {
-          backupMatch = await Passwords.compare(body.mfa.totp, backup);
-          if (backupMatch) {
-            break;
-          }
+    const passwordMatch = await Passwords.compare(
+      body.password,
+      user.getPassword()
+    );
 
-          ++index;
-        }
+    if (!passwordMatch) {
+      response.sendStatus(401);
+      return;
+    }
 
-        if (backupMatch) {
-          user.getMfaBackupCodes().splice(index, 1);
-          await Users.editUser(user);
-        }
-      }
-
-      if (!backupMatch) {
+    if (user.getMfaEnrolled()) {
+      if (!body.mfa) {
         response.status(401).json({mfaRequired: true});
         return;
       }
+
+      if (!Passwords.verifyMfaToken(user.getMfaSharedSecret(), body.mfa)) {
+        let backupMatch = false;
+
+        if (body.mfa.totp.length === 12) {
+          let index = 0;
+          for (const backup of user.getMfaBackupCodes()) {
+            backupMatch = await Passwords.compare(body.mfa.totp, backup);
+            if (backupMatch) {
+              break;
+            }
+
+            ++index;
+          }
+
+          if (backupMatch) {
+            user.getMfaBackupCodes().splice(index, 1);
+            await Users.editUser(user);
+          }
+        }
+
+        if (!backupMatch) {
+          response.status(401).json({mfaRequired: true});
+          return;
+        }
+      }
     }
-  }
 
-  // Issue a new JWT for this user.
-  const jwt = await JSONWebToken.issueToken(user.getId()!);
-  limiter.resetKey(request.ip);
-  response.status(200).json({jwt});
-});
+    // Issue a new JWT for this user.
+    const jwt = await JSONWebToken.issueToken(user.getId()!);
+    limiter.resetKey(request.ip);
+    response.status(200).json({jwt});
+  });
 
-export = LoginController;
+  return router;
+}
