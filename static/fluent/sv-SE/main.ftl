@@ -552,10 +552,6 @@ local-token-copy-token = Kopiera token
 
 ## Router Setup Page
 
-    .placeholder = Nätverksnamn
-    .placeholder = Lösenord
-    .placeholder = Bekräfta lösenord
-    .value = Skapa
 router-setup-password-mismatch = Lösenorden måste överensstämma.
 
 ## Wi-Fi Setup Page
