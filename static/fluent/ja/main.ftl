@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = ホームネットワーク
-network-settings-internet-image =
     .alt = インターネット
 network-settings-configure = 設定変更
-network-settings-internet-wan = インターネット (WAN)
-network-settings-wan-mode = モード
-network-settings-home-network-lan = ホームネットワーク (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP アドレス
 network-settings-dhcp = 自動 (DHCP)
 network-settings-static = 手動 (固定 IP)
-network-settings-pppoe = ブリッジ (PPPoE)
 network-settings-static-ip-address = 固定 IP アドレス
 network-settings-network-mask = ネットワークマスク
 network-settings-gateway = ゲートウェイ
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = パスワード
 network-settings-show-password = パスワードを開示
 network-settings-connect = 接続
-network-settings-username = ユーザー名
-network-settings-password = パスワード
-network-settings-router-ip = ルーターの IP アドレス
-network-settings-dhcp-server = DHCP サーバー
-network-settings-enable-wifi = Wi-Fi を有効化
-network-settings-network-name = ネットワーク名 (SSID)
 wireless-connected = 接続しました
 wireless-icon =
     .alt = Wi-Fi ネットワーク
 network-settings-changing = ネットワーク設定を変更しています。しばらくお待ちください。
 failed-ethernet-configure = Ethernet の設定変更に失敗しました。
 failed-wifi-configure = Wi-Fi の設定変更に失敗しました。
-failed-wan-configure = WAN の設定変更に失敗しました。
-failed-lan-configure = LAN の設定変更に失敗しました。
-failed-wlan-configure = WLAN の設定変更に失敗しました。
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = この Thing にはイベントがありません。
 
 add-addons =
     .aria-label = 新しいアドオンを検索
-author-unknown = 不明
 disable = 無効化
 enable = 有効化
 by = 作者:
@@ -569,15 +552,9 @@ local-token-copy-token = トークンをコピー
 
 ## Router Setup Page
 
-router-setup-title = ルーターのセットアップ — { -webthings-gateway-brand }
-router-setup-header = 新しい Wi-Fi ネットワークの作成
-router-setup-input-ssid =
     .placeholder = ネットワーク名
-router-setup-input-password =
     .placeholder = パスワード
-router-setup-input-confirm-password =
     .placeholder = パスワード確認
-router-setup-create =
     .value = 作成
 router-setup-password-mismatch = パスワードが一致しません
 
@@ -605,9 +582,6 @@ connecting-skipped = ゲートウェイの動作を開始しました。同じ�
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi ネットワークの作成 — { -webthings-gateway-brand }
-creating-header = Wi-Fi ネットワークを作成中…
-creating-content = 作成したパスワードを入力して { $ssid } に接続し、ウェブブラウザーで { $gateway-link } または { $ip-link } を開いてください。
 
 ## UI Updates
 

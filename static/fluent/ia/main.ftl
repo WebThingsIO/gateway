@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Rete de casa
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Configurar
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Modo
-network-settings-home-network-lan = Rete de casa (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Adresse IP
 network-settings-dhcp = Automatic (DHCP)
 network-settings-static = Manual (IP static)
-network-settings-pppoe = Ponte (PPPoE)
 network-settings-static-ip-address = Adresse IP static
 network-settings-network-mask = Masca de rete
 network-settings-gateway = Passarella
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Contrasigno
 network-settings-show-password = Monstrar contrasigno
 network-settings-connect = Connecter
-network-settings-username = Nomine de usator
-network-settings-password = Contrasigno
-network-settings-router-ip = Adresse IP del router
-network-settings-dhcp-server = Servitor DHCP
-network-settings-enable-wifi = Activar Wi-Fi
-network-settings-network-name = Nomine de rete (SSID)
 wireless-connected = Connexe
 wireless-icon =
     .alt = Rete Wi-Fi
 network-settings-changing = Cambio parametros de rete. Isto pote prender un minuta.
 failed-ethernet-configure = Falta a configurar ethernet.
 failed-wifi-configure = Falta a configurar Wi-Fi.
-failed-wan-configure = Falta a configurar WAN.
-failed-lan-configure = Falta a configurar LAN.
-failed-wlan-configure = Falta a configurar WLAN.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Tal objecto ha nulle eventos.
 
 add-addons =
     .aria-label = Cercar nove additivos
-author-unknown = Incognite
 disable = Disactivar
 enable = Activar
 by = per
@@ -569,15 +552,9 @@ local-token-copy-token = Copiar token
 
 ## Router Setup Page
 
-router-setup-title = Configuration del router — { -webthings-gateway-brand }
-router-setup-header = Crea un nove rete wifi
-router-setup-input-ssid =
     .placeholder = Nomine del rete
-router-setup-input-password =
     .placeholder = Contrasigno
-router-setup-input-confirm-password =
     .placeholder = Confirmar le contrasigno
-router-setup-create =
     .value = Crear
 router-setup-password-mismatch = Le contrasignos debe concordar
 
@@ -605,9 +582,6 @@ connecting-skipped = Le passarella es ora in comenciamento. Aperi { $gateway-lin
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Creation del rete wifi — { -webthings-gateway-brand }
-creating-header = Creation del rete wifi…
-creating-content = Connecte te a { $ssid } con le contrasigno que tu ha justo create, pois aperi { $gateway-link } o { $ip-link } per tu navigator del Web.
 
 ## UI Updates
 

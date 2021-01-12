@@ -43,7 +43,6 @@ const Router = require('./router');
 const sleep = require('./sleep');
 const Things = require('./models/things');
 const TunnelService = require('./ssltunnel');
-const {RouterSetupApp, isRouterConfigured} = require('./router-setup');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
@@ -188,21 +187,6 @@ function stopWiFiSetup() {
   servers.http.close();
 }
 
-function startRouterSetup() {
-  console.log('Starting Router Setup');
-  servers.http.on('request', RouterSetupApp.onRequest);
-
-  const port = config.get('ports.http');
-
-  servers.http.listen(port);
-}
-
-function stopRouterSetup() {
-  console.log('Stopping Router Setup');
-  servers.http.removeListener('request', RouterSetupApp.onRequest);
-  servers.http.close();
-}
-
 function getOptions() {
   if (process.env.NODE_ENV === 'test') {
     return {
@@ -338,21 +322,6 @@ switch (platform.getOS()) {
           startGateway();
         };
         startWiFiSetup();
-      } else {
-        startGateway();
-      }
-    });
-    break;
-  case 'linux-openwrt':
-    migration.then(() => {
-      return isRouterConfigured();
-    }).then((configured) => {
-      if (!configured) {
-        RouterSetupApp.onConnection = () => {
-          stopRouterSetup();
-          startGateway();
-        };
-        startRouterSetup();
       } else {
         startGateway();
       }

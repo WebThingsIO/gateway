@@ -206,7 +206,6 @@
 }
 
 #network-settings-client ul,
-#network-settings-router ul,
 #user-settings ul,
 #adapter-settings ul,
 #addon-main-settings ul,
@@ -246,7 +245,6 @@
 
 .network-settings-wrap ul li:last-child,
 #network-settings-client ul li:last-child,
-#network-settings-router ul li:last-child,
 #user-settings ul li:last-child,
 #adapter-settings ul li:last-child,
 #addon-settings ul li:last-child,
@@ -858,11 +856,6 @@
   margin: -1rem 1rem -1rem -0.5rem;
 }
 
-#network-settings-wlan-show-password-wrap span {
-  margin-left: -2rem;
-}
-
-#network-settings-wlan-show-password-wrap span,
 #network-settings-wifi .network-settings-wrap span {
   width: 14rem;
   display: inline-block;
@@ -1029,10 +1022,6 @@
 .localization-select:disabled,
 .network-select:disabled {
   background-color: #48779a;
-}
-
-#network-settings-wlan-show-password-wrap {
-  grid-column: 2 / 3;
 }
 
 #edit-user-form {

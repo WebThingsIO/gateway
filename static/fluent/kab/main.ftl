@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Azeṭṭa n uxxam
-network-settings-internet-image =
     .alt = Internet
 network-settings-configure = Swel
-network-settings-internet-wan = Internet (WAN)
-network-settings-wan-mode = Askar
-network-settings-home-network-lan = Azeṭṭa n uxxam (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Tansa IP
 network-settings-dhcp = (DHCP) Awurman
 network-settings-static = S ufus (IP usbiḍ)
-network-settings-pppoe = Tiqenṭert (PPPoE)
 network-settings-static-ip-address = Tansa IP tubiḍt
 network-settings-network-mask = Tagelmust n uzeṭṭa
 network-settings-gateway = Tiqenṭert
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Awal uffir
 network-settings-show-password = Sken awal uffir
 network-settings-connect = Qqen
-network-settings-username = Isem n useqdac
-network-settings-password = Awal uffir
-network-settings-router-ip = Tansi IP n tmeglayt
-network-settings-dhcp-server = Aqeddac DHCP
-network-settings-enable-wifi = Rmed Wi-Fi
-network-settings-network-name = Isem n uzeṭṭa (SSID)
 wireless-connected = Iqqen
 wireless-icon =
     .alt = Azeṭṭa Wi-Fi
 network-settings-changing = Abeddel n yiɣewwaṛen n uzeṭṭa iteddu. Rǧu ma ulac aɣilif.
 failed-ethernet-configure = Tawila n uzeṭṭa Ethernet tecceḍ.
 failed-wifi-configure = Tawila n uzeṭṭa Wi-Fi tecceḍ.
-failed-wan-configure = Tawila n uzeṭṭa WAN tecceḍ.
-failed-lan-configure = Tawila n uzeṭṭa LAN tecceḍ.
-failed-wlan-configure = Tawila n uzeṭṭa WLAN tecceḍ.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Taɣawsa-a ur ɣur-s ara ineḍruyen.
 
 add-addons =
     .aria-label = Af-s izegrar imaynuten
-author-unknown = Arussin
 disable = Ssens
 enable = Rmed
 by = sγur
@@ -569,15 +552,9 @@ local-token-copy-token = Nɣel ajiṭun
 
 ## Router Setup Page
 
-router-setup-title = Tawila n tmeglayt — { -webthings-gateway-brand }
-router-setup-header = rnu azeṭṭa Wi-Fi amaynut
-router-setup-input-ssid =
     .placeholder = Isem n uẓeṭṭa
-router-setup-input-password =
     .placeholder = Awal uffir
-router-setup-input-confirm-password =
     .placeholder = Sentem awal uffir
-router-setup-create =
     .value = Rnu
 router-setup-password-mismatch = Awalen uffiren yessefk ad mṣadan
 
@@ -605,9 +582,6 @@ connecting-skipped = Tiqenṭert-a tekker akka tura. Qqim teqqneḍ ɣer yiwen-n
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Timerna n uzeṭṭa Wi-fi tetteddu — { -webthings-gateway-brand }
-creating-header = Timerna n uzeṭṭa Wi-Fi tetteddu…
-creating-content = Ma ulac aɣilif qqen ɣer uzeṭṭa { $ssid } s wawal uffir i terniḍ, sakin inig ɣer { $gateway-link } neɣ { $ip-link } deg yiminig-ik.
 
 ## UI Updates
 

@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Домашня мережа
-network-settings-internet-image =
     .alt = Інтернет
 network-settings-configure = Налаштувати
-network-settings-internet-wan = Інтернет (WAN)
-network-settings-wan-mode = Режим
-network-settings-home-network-lan = Домашня мережа (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = IP-адреса
 network-settings-dhcp = Автоматичний (DHCP)
 network-settings-static = Ручний (статичний IP)
-network-settings-pppoe = Міст (PPPoE)
 network-settings-static-ip-address = Статична IP-адреса
 network-settings-network-mask = Маска мережі
 network-settings-gateway = Шлюз
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Пароль
 network-settings-show-password = Показати пароль
 network-settings-connect = З'єднатися
-network-settings-username = Ім'я користувача
-network-settings-password = Пароль
-network-settings-router-ip = IP-адреса маршрутизатора
-network-settings-dhcp-server = DHCP-сервер
-network-settings-enable-wifi = Увімкнути Wi-Fi
-network-settings-network-name = Назва мережі (SSID)
 wireless-connected = З'єднано
 wireless-icon =
     .alt = Мережа Wi-Fi
 network-settings-changing = Зміна налаштувань мережі. Це може тривати хвильку.
 failed-ethernet-configure = Не вдалося налаштувати Ethernet.
 failed-wifi-configure = Не вдалося налаштувати Wi-Fi.
-failed-wan-configure = Не вдалося налаштувати WAN.
-failed-lan-configure = Не вдалося налаштувати локальну мережу (LAN).
-failed-wlan-configure = Не вдалося налаштувати WLAN.
 
 ## User Settings
 
@@ -459,7 +443,6 @@ events-not-found = Ця річ не має подій.
 
 add-addons =
     .aria-label = Знайти нові додатки
-author-unknown = Невідомо
 disable = Вимкнути
 enable = Увімкнути
 by = від
@@ -576,15 +559,9 @@ local-token-copy-token = Копіювати маркер
 
 ## Router Setup Page
 
-router-setup-title = Налаштування маршрутизатора — { -webthings-gateway-brand }
-router-setup-header = Створити нову мережу Wi-Fi
-router-setup-input-ssid =
     .placeholder = Назва мережі
-router-setup-input-password =
     .placeholder = Пароль
-router-setup-input-confirm-password =
     .placeholder = Підтвердити пароль
-router-setup-create =
     .value = Створити
 router-setup-password-mismatch = Паролі повинні збігатися
 
@@ -612,9 +589,6 @@ connecting-skipped = Зараз шлюз запускається. Перейд�
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Створення Wi-Fi мережі — { -webthings-gateway-brand }
-creating-header = Створення Wi-Fi мережі…
-creating-content = З'єднайтеся з { $ssid } за допомогою паролю, який ви щойно створили, а потім перейдіть до { $gateway-link } або { $ip-link } у вашому браузері.
 
 ## UI Updates
 

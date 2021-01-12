@@ -66,19 +66,12 @@ network-settings-ethernet = ইথারনেট
 network-settings-wifi-image =
     .alt = ওয়াই-ফাই
 network-settings-wifi = ওয়াই-ফাই
-network-settings-home-network-image =
     .alt = হোম নেটওয়ার্ক
-network-settings-internet-image =
     .alt = ইন্টারনেট
 network-settings-configure = কনফিগার করুন
-network-settings-internet-wan = ইন্টারনেট (WAN)
-network-settings-wan-mode = মোড
-network-settings-home-network-lan = হোম নেটওয়ার্ক (LAN)
-network-settings-wifi-wlan = ওয়াই-ফাই (WLAN)
 network-settings-ip-address = আইপি ঠিকানা
 network-settings-dhcp = স্বয়ংক্রিয় (DHCP)
 network-settings-static = ম্যানুয়াল (স্ট্যাটিক আইপি)
-network-settings-pppoe = ব্রিজ (PPPoE)
 network-settings-static-ip-address = স্ট্যাটিক আইপি ঠিকানা
 network-settings-network-mask = নেটওয়ার্ক মাস্ক
 network-settings-gateway = গেটওয়ে
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = পাসওয়ার্ড
 network-settings-show-password = পাসওয়ার্ড দেখুন
 network-settings-connect = সংযুক্ত করুন
-network-settings-username = ব্যবহারকারীর নাম
-network-settings-password = পাসওয়ার্ড
-network-settings-router-ip = রাউটারের আইপি ঠিকানা
-network-settings-dhcp-server = DHCP সার্ভার
-network-settings-enable-wifi = ওয়াই-ফাই সক্ষম করুন
-network-settings-network-name = নেটওয়ার্কের নাম (SSID)
 wireless-connected = সংযুক্ত হয়েছে
 wireless-icon =
     .alt = ওয়াই-ফাই নেটওয়ার্ক
 network-settings-changing = নেটওয়ার্ক সেটিংস পরিবর্তন করা হচ্ছে। এটি এক মিনিট সময় নিতে পারে।
 failed-ethernet-configure = ইথারনেট কনফিগার করতে ব্যর্থ হয়েছে।
 failed-wifi-configure = ওয়াই-ফাই কনফিগার করতে ব্যর্থ হয়েছে।
-failed-wan-configure = WAN কনফিগার করতে ব্যর্থ হয়েছে।
-failed-lan-configure = LAN কনফিগার করতে ব্যর্থ হয়েছে।
-failed-wlan-configure = WLANকনফিগার করতে ব্যর্থ হয়েছে।
 
 ## User Settings
 
@@ -443,7 +427,6 @@ events-not-found = এই জিনিসে কোন ইভেন্ট নে
 
 add-addons =
     .aria-label = নতুন অ্যাড-অন খুঁজুন
-author-unknown = অপরিচিত
 disable = নিষ্ক্রিয় করুন
 enable = সক্রিয় করুন
 by = দ্বারা
@@ -558,15 +541,9 @@ local-token-copy-token = টোকেন অনুলিপি করুন
 
 ## Router Setup Page
 
-router-setup-title = রাউটার সেটআপ — { -webthings-gateway-brand }
-router-setup-header = একটি নতুন Wi-Fi নেটওয়ার্ক তৈরি করুন
-router-setup-input-ssid =
     .placeholder = নেটওয়ার্কের নাম
-router-setup-input-password =
     .placeholder = পাসওয়ার্ড
-router-setup-input-confirm-password =
     .placeholder = পাসওয়ার্ড নিশ্চিত করুন
-router-setup-create =
     .value = তৈরি করুন
 router-setup-password-mismatch = পাসওয়ার্ড অবশ্যই মিলতে হবে।
 
@@ -592,8 +569,6 @@ connecting-header-skipped = Wi-Fi সেটআপ এড়িয়ে গে�
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Wi-Fi নেটওয়ার্ক তৈরি করা হচ্ছে— { -webthings-gateway-brand }
-creating-header = Wi-Fi নেটওয়ার্ক তৈরি করা হচ্ছে ...
 
 ## UI Updates
 

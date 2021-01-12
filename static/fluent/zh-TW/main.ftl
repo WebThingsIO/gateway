@@ -66,19 +66,12 @@ network-settings-ethernet = 乙太網路
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = 家庭網路
-network-settings-internet-image =
     .alt = 網際網路
 network-settings-configure = 設定
-network-settings-internet-wan = 網際網路（WAN）
-network-settings-wan-mode = 模式
-network-settings-home-network-lan = 家庭網路（LAN）
-network-settings-wifi-wlan = Wi-Fi（WLAN）
 network-settings-ip-address = IP 地址
 network-settings-dhcp = 自動取得（DHCP）
 network-settings-static = 手動設定（靜態 IP）
-network-settings-pppoe = 橋接連線（PPPoE）
 network-settings-static-ip-address = 靜態 IP 地址
 network-settings-network-mask = 網路遮罩
 network-settings-gateway = 閘道器
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = 密碼
 network-settings-show-password = 顯示密碼
 network-settings-connect = 連線
-network-settings-username = 使用者名稱
-network-settings-password = 密碼
-network-settings-router-ip = 路由器 IP 地址
-network-settings-dhcp-server = DHCP 伺服器
-network-settings-enable-wifi = 開啟 Wi-Fi
-network-settings-network-name = 無線網路名稱（SSID）
 wireless-connected = 已連線
 wireless-icon =
     .alt = Wi-Fi 網路
 network-settings-changing = 正在更改網路設定，可能要花一分鐘時間。
 failed-ethernet-configure = 乙太網路設定失敗。
 failed-wifi-configure = Wi-Fi 設定失敗。
-failed-wan-configure = WAN 設定失敗。
-failed-lan-configure = LAN 設定失敗。
-failed-wlan-configure = WLAN 設定失敗。
 
 ## User Settings
 
@@ -445,7 +429,6 @@ events-not-found = 這個 thing 沒有事件。
 
 add-addons =
     .aria-label = 尋找新的附加元件
-author-unknown = 未知
 disable = 停用
 enable = 啟用
 by = 作者:
@@ -562,15 +545,9 @@ local-token-copy-token = 複製 Token
 
 ## Router Setup Page
 
-router-setup-title = 路由器設定 — { -webthings-gateway-brand }
-router-setup-header = 建立新 Wi-Fi 網路
-router-setup-input-ssid =
     .placeholder = 網路名稱
-router-setup-input-password =
     .placeholder = 密碼
-router-setup-input-confirm-password =
     .placeholder = 確認密碼
-router-setup-create =
     .value = 建立
 router-setup-password-mismatch = 密碼必須符合
 
@@ -598,9 +575,6 @@ connecting-skipped = 正在啟動閘道器。請確認您連線到與閘道器�
 
 ## Creating Wi-Fi Network Page
 
-creating-title = 建立 Wi-Fi 網路 — { -webthings-gateway-brand }
-creating-header = 建立 Wi-Fi 網路…
-creating-content = 請使用您剛剛建立的密碼連線到 { $ssid } 網路，然後使用瀏覽器開啟 { $gateway-link } 或 { $ip-link }。
 
 ## UI Updates
 

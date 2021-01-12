@@ -66,19 +66,12 @@ network-settings-ethernet = Ethernet
 network-settings-wifi-image =
     .alt = Wi-Fi
 network-settings-wifi = Wi-Fi
-network-settings-home-network-image =
     .alt = Οικιακό δίκτυο
-network-settings-internet-image =
     .alt = Διαδίκτυο
 network-settings-configure = Διαμόρφωση
-network-settings-internet-wan = Διαδίκτυο (WAN)
-network-settings-wan-mode = Λειτουργία
-network-settings-home-network-lan = Οικιακό δίκτυο (LAN)
-network-settings-wifi-wlan = Wi-Fi (WLAN)
 network-settings-ip-address = Διεύθυνση IP
 network-settings-dhcp = Αυτόματη (DHCP)
 network-settings-static = Μη αυτόματη (Στατική IP)
-network-settings-pppoe = Γέφυρα (PPPoE)
 network-settings-static-ip-address = Στατική διεύθυνση IP
 network-settings-network-mask = Μάσκα δικτύου
 network-settings-gateway = Πύλη
@@ -87,21 +80,12 @@ network-settings-wifi-password =
     .placeholder = Κωδικός πρόσβασης
 network-settings-show-password = Εμφάνιση κωδικού πρόσβασης
 network-settings-connect = Σύνδεση
-network-settings-username = Όνομα χρήστη
-network-settings-password = Κωδικός πρόσβασης
-network-settings-router-ip = IP διεύθυνση router
-network-settings-dhcp-server = Διακομιστής DHCP
-network-settings-enable-wifi = Ενεργοποίηση Wi-Fi
-network-settings-network-name = Όνομα δικτύου (SSID)
 wireless-connected = Συνδέθηκε
 wireless-icon =
     .alt = Δίκτυο Wi-Fi
 network-settings-changing = Αλλαγή ρυθμίσεων δικτύου. Ίσως χρειαστεί λίγη ώρα.
 failed-ethernet-configure = Αποτυχία διαμόρφωσης Ethernet.
 failed-wifi-configure = Αποτυχία διαμόρφωσης Wi-Fi.
-failed-wan-configure = Αποτυχία διαμόρφωσης WAN.
-failed-lan-configure = Αποτυχία διαμόρφωσης LAN.
-failed-wlan-configure = Αποτυχία διαμόρφωσης WLAN.
 
 ## User Settings
 
@@ -452,7 +436,6 @@ events-not-found = Αυτή η συσκευή δεν έχει συμβάντα.
 
 add-addons =
     .aria-label = Εύρεση νέων προσθέτων
-author-unknown = Άγνωστο
 disable = Απενεργοποίηση
 enable = Ενεργοποίηση
 by = από
@@ -569,15 +552,9 @@ local-token-copy-token = Αντιγραφή token
 
 ## Router Setup Page
 
-router-setup-title = Ρύθμιση router — { -webthings-gateway-brand }
-router-setup-header = Δημιουργία νέου δικτύου Wi-Fi
-router-setup-input-ssid =
     .placeholder = Όνομα δικτύου
-router-setup-input-password =
     .placeholder = Κωδικός πρόσβασης
-router-setup-input-confirm-password =
     .placeholder = Επιβεβαίωση κωδικού πρόσβασης
-router-setup-create =
     .value = Δημιουργία
 router-setup-password-mismatch = Οι κωδικοί πρόσβασης πρέπει να ταιριάζουν.
 
@@ -605,9 +582,6 @@ connecting-skipped = Η πύλη εκκινείται τώρα. Μεταβείτ
 
 ## Creating Wi-Fi Network Page
 
-creating-title = Δημιουργία δικτύου Wi-Fi — { -webthings-gateway-brand }
-creating-header = Δημιουργία δικτύου Wi-Fi…
-creating-content = Παρακαλούμε συνδεθείτε στο { $ssid } με τον κωδικό πρόσβασης που μόλις δημιουργήσατε και έπειτα, μεταβείτε στο { $gateway-link } ή στο { $ip-link } από το πρόγραμμα περιήγησής σας.
 
 ## UI Updates
 

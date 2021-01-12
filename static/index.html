@@ -145,61 +145,6 @@
             </li>
           </ul>
         </section>
-        <section id="network-settings-router" class="hidden settings-subsection">
-          <ul class="network-settings-list">
-            <li class="network-item">
-              <img src="/images/internet.svg"
-                data-l10n-id="network-settings-internet-image"
-                class="network-settings-list-item-icon" />
-              <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header"
-                     data-l10n-id="network-settings-internet-wan">
-                </div>
-                <div class="network-settings-list-item-detail"
-                  id="network-settings-list-item-wan-ip">
-                </div>
-              </div>
-              <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-wan-configure"
-                data-l10n-id="network-settings-configure">
-              </button>
-            </li>
-            <li class="network-item">
-              <img src="/images/network.svg"
-                data-l10n-id="network-settings-home-network-image"
-                class="network-settings-list-item-icon" />
-              <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header"
-                     data-l10n-id="network-settings-home-network-lan">
-                </div>
-                <div class="network-settings-list-item-detail"
-                  id="network-settings-list-item-lan-ip">
-                </div>
-              </div>
-              <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-lan-configure"
-                data-l10n-id="network-settings-configure">
-              </button>
-            </li>
-            <li class="network-item">
-              <img src="/images/wifi.svg"
-                data-l10n-id="network-settings-wifi-image"
-                class="network-settings-list-item-icon" />
-              <div class="network-settings-list-item-container-2">
-                <div class="network-settings-list-item-header"
-                     data-l10n-id="network-settings-wifi-wlan">
-                </div>
-                <div class="network-settings-list-item-detail"
-                  id="network-settings-list-item-wlan-ssid">
-                </div>
-              </div>
-              <button class="network-settings-list-item-button text-button"
-                id="network-settings-list-item-wlan-configure"
-                data-l10n-id="network-settings-configure">
-              </button>
-            </li>
-          </ul>
-        </section>
         <section id="network-settings-ethernet" class="hidden settings-subsection">
           <div class="network-settings-wrap">
             <label for="network-settings-ethernet-mode" data-l10n-id="network-settings-ip-address"></label>
@@ -236,72 +181,6 @@
                       data-l10n-id="network-settings-connect">
               </button>
             </div>
-          </div>
-        </section>
-        <section id="network-settings-wan" class="hidden settings-subsection">
-          <div class="network-settings-wrap">
-            <label for="network-settings-wan-mode" data-l10n-id="network-settings-wan-mode"></label>
-            <select id="network-settings-wan-mode" class="network-select">
-              <option value="dhcp" data-l10n-id="network-settings-dhcp"></option>
-              <option value="static" data-l10n-id="network-settings-static"></option>
-              <option value="pppoe" data-l10n-id="network-settings-pppoe"></option>
-            </select>
-            <label for="network-settings-wan-ip" id="network-settings-wan-ip-label" data-l10n-id="network-settings-ip-address"></label>
-            <input id="network-settings-wan-ip" class="network-text"
-                   type="text">
-            <label for="network-settings-wan-netmask" id="network-settings-wan-netmask-label" data-l10n-id="network-settings-network-mask"></label>
-            <input id="network-settings-wan-netmask" class="network-text"
-                   type="text">
-            <label for="network-settings-wan-gateway" id="network-settings-wan-gateway-label" data-l10n-id="network-settings-gateway"></label>
-            <input id="network-settings-wan-gateway" class="network-text"
-                   type="text">
-            <label for="network-settings-wan-username" id="network-settings-wan-username-label" data-l10n-id="network-settings-username"></label>
-            <input id="network-settings-wan-username" class="network-text"
-                   type="text">
-            <label for="network-settings-wan-password" id="network-settings-wan-password-label" data-l10n-id="network-settings-password"></label>
-            <input id="network-settings-wan-password" class="network-password"
-                   type="password">
-            <button id="network-settings-wan-done" class="network-button text-button" data-l10n-id="network-settings-done">
-            </button>
-          </div>
-        </section>
-        <section id="network-settings-lan" class="hidden settings-subsection">
-          <div class="network-settings-wrap">
-            <label for="network-settings-lan-ip" data-l10n-id="network-settings-router-ip"></label>
-            <input id="network-settings-lan-ip" class="network-text"
-                   type="text">
-            <label for="network-settings-lan-netmask" data-l10n-id="network-settings-network-mask"></label>
-            <input id="network-settings-lan-netmask" class="network-text"
-                   type="text">
-            <span data-l10n-id="network-settings-dhcp-server"></span>
-            <input id="network-settings-lan-dhcp" class="network-checkbox"
-                   type="checkbox">
-            <label for="network-settings-lan-dhcp" class="checkbox"></label>
-            <button id="network-settings-lan-done" class="network-button text-button" data-l10n-id="network-settings-done">
-            </button>
-          </div>
-        </section>
-        <section id="network-settings-wlan" class="hidden settings-subsection">
-          <div class="network-settings-wrap">
-            <span data-l10n-id="network-settings-enable-wifi"></span>
-            <input id="network-settings-wlan-enable" class="network-checkbox"
-                   type="checkbox">
-            <label for="network-settings-wlan-enable" class="checkbox"></label>
-            <label for="network-settings-wlan-ssid" data-l10n-id="network-settings-network-name"></label>
-            <input id="network-settings-wlan-ssid" class="network-text"
-                   type="text">
-            <label for="network-settings-wlan-password" data-l10n-id="network-settings-password"></label>
-            <input id="network-settings-wlan-password" class="network-password"
-                   type="password">
-            <div id="network-settings-wlan-show-password-wrap">
-              <input id="network-settings-wlan-show-password" class="network-checkbox"
-                     type="checkbox">
-              <label for="network-settings-wlan-show-password" class="checkbox"></label>
-              <span data-l10n-id="network-settings-show-password"></span>
-            </div>
-            <button id="network-settings-wlan-done" class="network-button text-button"
-                    data-l10n-id="network-settings-done">
-            </button>
           </div>
         </section>
       </section>
