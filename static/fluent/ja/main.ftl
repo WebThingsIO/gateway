@@ -550,14 +550,6 @@ local-token-your-token = あなたのローカルトークンは、この <a dat
 local-token-use-it = このトークンを使用して <a data-l10n-name="local-token-bearer-type">持参人認証</a> (Bearer-type Authorization) でゲートウェイと安全に通信します。
 local-token-copy-token = トークンをコピー
 
-## Router Setup Page
-
-    .placeholder = ネットワーク名
-    .placeholder = パスワード
-    .placeholder = パスワード確認
-    .value = 作成
-router-setup-password-mismatch = パスワードが一致しません
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi セットアップ — { -webthings-gateway-brand }

@@ -578,14 +578,6 @@ local-token-your-token = Eich tocyn lleol yw'r <a data-l10n-name="local-token-jw
 local-token-use-it = Defnyddiwch ef i gyfathrebu â'r porth yn ddiogel, gyda <a data-l10n-name="local-token-bearer-type">Awdurdodi Math Cludwr</a>.
 local-token-copy-token = Copïwch y Tocyn
 
-## Router Setup Page
-
-    .placeholder = Enw'r rhwydwaith
-    .placeholder = Cyfrinair
-    .placeholder = Cadarnhau'r cyfrinair
-    .value = Creu
-router-setup-password-mismatch = Rhaid i'r cyfrineiriau gydweddu.
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Gosodiad Diwifr- { -webthings-gateway-brand }

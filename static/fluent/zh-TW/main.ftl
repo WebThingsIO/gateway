@@ -543,14 +543,6 @@ local-token-your-token = 下列 <a data-l10n-name="local-token-jwt">JSON Web Tok
 local-token-use-it = 請使用此授權碼，透過 <a data-l10n-name="local-token-bearer-type">Bearer-type 驗證方式</a>來安全地與閘道器溝通。
 local-token-copy-token = 複製 Token
 
-## Router Setup Page
-
-    .placeholder = 網路名稱
-    .placeholder = 密碼
-    .placeholder = 確認密碼
-    .value = 建立
-router-setup-password-mismatch = 密碼必須符合
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi 設定 — { -webthings-gateway-brand }
