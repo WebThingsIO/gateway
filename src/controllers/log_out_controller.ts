@@ -8,21 +8,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import JSONWebToken from '../models/jsonwebtoken';
 
-const Router = require('express-promise-router');
-
-const JSONWebToken = require('../models/jsonwebtoken').default;
-
-const LogOutController = new Router();
+const LogOutController = express.Router();
 
 /**
  * Log out the user
  */
 LogOutController.post('/', async (request, response) => {
-  const {jwt} = request;
+  const {jwt} = request as any;
   await JSONWebToken.revokeToken(jwt.keyId);
   response.status(200).json({});
 });
 
-module.exports = LogOutController;
+export = LogOutController;

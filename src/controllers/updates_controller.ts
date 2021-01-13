@@ -1,19 +1,17 @@
-'use strict';
+import child_process from 'child_process';
+import config from 'config';
+import express from 'express';
+import fs from 'fs';
+import fetch from 'node-fetch';
+import semver from 'semver';
+import * as Utils from '../utils';
 
-const childProcess = require('child_process');
-const config = require('config');
-const fs = require('fs');
-const fetch = require('node-fetch');
-const semver = require('semver');
 const Platform = require('../platform');
-const PromiseRouter = require('express-promise-router');
-const Utils = require('../utils');
-
 const pkg = require('../../package.json');
 
-const UpdatesController = PromiseRouter();
+const UpdatesController = express.Router();
 
-function readVersion(packagePath) {
+function readVersion(packagePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(packagePath, {encoding: 'utf8'}, (err, data) => {
       if (err) {
@@ -37,7 +35,7 @@ function readVersion(packagePath) {
   });
 }
 
-function stat(path) {
+function stat(path: string): Promise<fs.Stats|null> {
   return new Promise((resolve, reject) => {
     fs.stat(path, (err, stats) => {
       if (err) {
@@ -53,14 +51,14 @@ function stat(path) {
   });
 }
 
-const cacheLatest = {
+const cacheLatest: any = {
   tag: null,
   time: 0,
   value: {version: null},
 };
 const cacheDuration = 60 * 1000;
 
-function cacheLatestInsert(response, value) {
+function cacheLatestInsert(response: express.Response, value: any): void {
   cacheLatest.tag = response.get('etag');
   cacheLatest.time = Date.now();
   cacheLatest.value = value;
@@ -92,7 +90,7 @@ UpdatesController.get('/latest', async (request, response) => {
     cacheLatestInsert(response, value);
     return;
   }
-  const latestRelease = releases.filter((release) => {
+  const latestRelease = releases.filter((release: any) => {
     if (release.prerelease && !config.get('updates.allowPrerelease')) {
       return false;
     }
@@ -119,7 +117,7 @@ UpdatesController.get('/latest', async (request, response) => {
 /**
  * Send an object describing the update status of the gateway
  */
-UpdatesController.get('/status', async (request, response) => {
+UpdatesController.get('/status', async (_request, response) => {
   // gateway, gateway_failed, gateway_old
   // oldVersion -> gateway_old's package.json version
   // if (gateway_failed.version > thisversion) {
@@ -152,7 +150,7 @@ UpdatesController.get('/status', async (request, response) => {
       success: false,
       version: currentVersion,
       failedVersion,
-      timestamp: failedStats.ctime,
+      timestamp: failedStats!.ctime,
     });
   } else {
     let timestamp = null;
@@ -168,14 +166,14 @@ UpdatesController.get('/status', async (request, response) => {
   }
 });
 
-UpdatesController.post('/update', async (request, response) => {
-  childProcess.exec('sudo systemctl start ' +
+UpdatesController.post('/update', async (_request, response) => {
+  child_process.exec('sudo systemctl start ' +
     'webthings-gateway.check-for-update.service');
 
   response.json({});
 });
 
-UpdatesController.get('/self-update', async (request, response) => {
+UpdatesController.get('/self-update', async (_request, response) => {
   if (!Platform.implemented('getSelfUpdateStatus')) {
     response.json({
       available: false,
@@ -204,4 +202,4 @@ UpdatesController.put('/self-update', async (request, response) => {
   }
 });
 
-module.exports = UpdatesController;
+export = UpdatesController;

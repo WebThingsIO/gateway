@@ -14,7 +14,7 @@ const AddonUtils = require('./addon-utils');
 const config = require('config');
 const GetOpt = require('node-getopt');
 const {PluginClient} = require('gateway-addon');
-const db = require('./db').default;
+const Database = require('./db');
 const Settings = require('./models/settings');
 const sleep = require('./sleep');
 const path = require('path');
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV !== 'test') {
   // Therefore, we need to manually load settings and such, rather than using
   // the normal db functions, in order to prevent removing the already open
   // database.
-  db.open();
+  Database.open();
 }
 
 async function loadAddon(addonPath, verbose) {

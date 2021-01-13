@@ -8,15 +8,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import Action from '../models/action';
+import Actions from '../models/actions';
 
-const PromiseRouter = require('express-promise-router');
-const Action = require('../models/action').default;
-const Actions = require('../models/actions');
 const AddonManager = require('../addon-manager');
 const Things = require('../models/things');
 
-const ActionsController = PromiseRouter({mergeParams: true});
+const ActionsController = express.Router({mergeParams: true});
 
 /**
  * Handle creating a new action.
@@ -199,6 +198,7 @@ ActionsController.delete(
     }
 
     response.sendStatus(204);
-  });
+  }
+);
 
-module.exports = ActionsController;
+export = ActionsController;

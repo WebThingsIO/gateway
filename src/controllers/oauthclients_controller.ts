@@ -11,12 +11,10 @@
 'use strict';
 
 import express from 'express';
-
-const PromiseRouter = require('express-promise-router');
 import OAuthClients from '../models/oauthclients';
 import {ClientRegistry} from '../oauth-types';
 
-const OAuthClientsController = PromiseRouter();
+const OAuthClientsController = express.Router();
 
 /**
  * Get the currently authorized clients
@@ -45,4 +43,4 @@ OAuthClientsController.delete(
   }
 );
 
-export default OAuthClientsController;
+export = OAuthClientsController;

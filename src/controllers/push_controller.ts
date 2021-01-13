@@ -8,17 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import PushService from '../push-service';
 
-const PromiseRouter = require('express-promise-router');
-const PushService = require('../push-service');
-
-const PushController = PromiseRouter();
+const PushController = express.Router();
 
 /**
  * Handle requests for the public key
  */
-PushController.get('/vapid-public-key', async (request, response) => {
+PushController.get('/vapid-public-key', async (_request, response) => {
   const vapid = await PushService.getVAPIDKeys();
   if (!vapid) {
     response.status(500).json({error: 'vapid not configured'});
@@ -39,4 +37,4 @@ PushController.post('/register', async (request, response) => {
   response.status(200).json({});
 });
 
-module.exports = PushController;
+export = PushController;

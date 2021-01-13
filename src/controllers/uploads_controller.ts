@@ -8,13 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const Constants = require('../constants');
-const UserProfile = require('../user-profile').default;
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import * as Constants from '../constants';
+import UserProfile from '../user-profile';
 
 const UPLOADS_PATH = UserProfile.uploadsDir;
 const FLOORPLAN_PATH = path.join(UPLOADS_PATH, 'floorplan.svg');
@@ -37,8 +35,9 @@ const UploadsController = express.Router();
  * Upload a file.
  */
 UploadsController.post('/', (request, response) => {
-  if (!request.files || !request.files.file) {
-    return response.status(500).send('No file provided for upload');
+  if (!(request as any).files || !((request as any).files as any).file) {
+    response.status(500).send('No file provided for upload');
+    return;
   }
 
   try {
@@ -46,11 +45,12 @@ UploadsController.post('/', (request, response) => {
       fs.unlinkSync(FLOORPLAN_PATH);
     }
   } catch (err) {
-    return response.status(500).send(`Failed to unlink old floorplan: ${err}`);
+    response.status(500).send(`Failed to unlink old floorplan: ${err}`);
+    return;
   }
 
-  const file = request.files.file;
-  file.mv(FLOORPLAN_PATH, (error) => {
+  const file = ((request as any).files as any).file;
+  file.mv(FLOORPLAN_PATH, (error?: any) => {
     if (error) {
       // On error, try to copy the fallback.
       try {
@@ -59,12 +59,12 @@ UploadsController.post('/', (request, response) => {
         console.error(`Failed to copy floorplan: ${err}`);
       }
 
-      return response.status(500).send(
-        `Failed to save uploaded file: ${error}`);
+      response.status(500).send(`Failed to save uploaded file: ${error}`);
+      return;
     }
 
     response.status(201).send('Successfully uploaded file');
   });
 });
 
-module.exports = UploadsController;
+export = UploadsController;

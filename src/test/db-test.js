@@ -1,6 +1,6 @@
 const {v4: uuidv4} = require('uuid');
 
-const Database = require('../db').default;
+const Database = require('../db');
 const User = require('../models/user');
 const JSONWebToken = require('../models/jsonwebtoken').default;
 

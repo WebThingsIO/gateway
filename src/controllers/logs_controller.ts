@@ -8,20 +8,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import WebSocket from 'ws';
+import * as Constants from '../constants';
+import Logs from '../models/logs';
 
-const PromiseRouter = require('express-promise-router');
-const WebSocket = require('ws');
-
-const Constants = require('../constants');
-const Logs = require('../models/logs');
-
-const LogsController = PromiseRouter();
+const LogsController = express.Router();
 
 /**
  * Get a list of all currently logged properties
  */
-LogsController.get('/.schema', async (request, response) => {
+LogsController.get('/.schema', async (_request, response) => {
   const schema = await Logs.getSchema();
   response.status(200).json(schema);
 });
@@ -36,7 +33,8 @@ LogsController.post('/', async (request, response) => {
     response.status(400).send('Invalid descr or maxAge property');
     return;
   }
-  let normalizedDescr = '';
+
+  let normalizedDescr;
   switch (descr.type) {
     case 'property':
       normalizedDescr = Logs.propertyDescr(descr.thing, descr.property);
@@ -58,6 +56,7 @@ LogsController.post('/', async (request, response) => {
       response.status(400).send('Log already exists');
       return;
     }
+
     response.status(200).send({
       descr: normalizedDescr,
     });
@@ -100,8 +99,10 @@ LogsController.get('/', async (request, response) => {
   //     }
   //   }
   // } else
+  const start = 'start' in request.query ? parseInt(`${request.query.start}`, 10) : null;
+  const end = 'end' in request.query ? parseInt(`${request.query.end}`, 10) : null;
   try {
-    const logs = await Logs.getAll(request.query.start, request.query.end);
+    const logs = await Logs.getAll(start, end);
     response.status(200).json(logs);
   } catch (e) {
     console.error('Failed to get logs:', e);
@@ -114,8 +115,10 @@ LogsController.get('/', async (request, response) => {
  */
 LogsController.get(`${Constants.THINGS_PATH}/:thingId`, async (request, response) => {
   const id = request.params.thingId;
+  const start = 'start' in request.query ? parseInt(`${request.query.start}`, 10) : null;
+  const end = 'end' in request.query ? parseInt(`${request.query.end}`, 10) : null;
   try {
-    const logs = await Logs.get(id, request.query.start, request.query.end);
+    const logs = await Logs.get(id, start, end);
     response.status(200).json(logs);
   } catch (error) {
     console.error(`Error getting logs for thing with id ${id}`);
@@ -137,10 +140,10 @@ LogsController.get(
   async (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName || '';
+    const start = 'start' in request.query ? parseInt(`${request.query.start}`, 10) : null;
+    const end = 'end' in request.query ? parseInt(`${request.query.end}`, 10) : null;
     try {
-      const values = await Logs.getProperty(thingId, propertyName,
-                                            request.query.start,
-                                            request.query.end);
+      const values = await Logs.getProperty(thingId, propertyName, start, end);
       response.status(200).json(values || []);
     } catch (err) {
       response.status(404).send(err);
@@ -167,7 +170,7 @@ LogsController.delete(
   }
 );
 
-LogsController.ws('/', (websocket) => {
+(LogsController as any).ws('/', (websocket: WebSocket) => {
   if (websocket.readyState !== WebSocket.OPEN) {
     return;
   }
@@ -180,12 +183,13 @@ LogsController.ws('/', (websocket) => {
     }
   }, 30 * 1000);
 
-  function streamMetric(metrics) {
+  function streamMetric(metrics: any[]) {
     if (!metrics || metrics.length === 0) {
       return;
     }
     try {
-      websocket.send(JSON.stringify(metrics), (_err) => {});
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      websocket.send(JSON.stringify(metrics), () => {});
     } catch (_e) {
       // Just don't let it crash anything
     }
@@ -195,7 +199,7 @@ LogsController.ws('/', (websocket) => {
     clearInterval(heartbeat);
   };
 
-  Logs.streamAll(streamMetric).then(() => {
+  Logs.streamAll(streamMetric, null, null).then(() => {
     cleanup();
     // Eventually send dynamic property value updates for the graphs to update
     // in real time
@@ -205,4 +209,5 @@ LogsController.ws('/', (websocket) => {
   websocket.on('error', cleanup);
   websocket.on('close', cleanup);
 });
-module.exports = LogsController;
+
+export = LogsController;

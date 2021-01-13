@@ -8,9 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
 
-const express = require('express');
 const addonManager = require('../addon-manager');
 
 const adaptersController = express.Router();
@@ -18,9 +17,9 @@ const adaptersController = express.Router();
 /**
  * Return a list of adapters
  */
-adaptersController.get('/', (request, response) => {
+adaptersController.get('/', (_request, response) => {
   const adapters = addonManager.getAdapters();
-  const adapterList = Array.from(adapters.values()).map((adapter) => {
+  const adapterList = Array.from(adapters.values()).map((adapter: any) => {
     return adapter.asDict();
   });
   response.json(adapterList);
@@ -39,4 +38,4 @@ adaptersController.get('/:adapterId/', (request, response) => {
   }
 });
 
-module.exports = adaptersController;
+export = adaptersController;

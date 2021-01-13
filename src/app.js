@@ -35,7 +35,7 @@ const SegfaultHandler = require('segfault-handler');
 // Internal Dependencies
 const addonManager = require('./addon-manager');
 const Constants = require('./constants');
-const db = require('./db').default;
+const Database = require('./db');
 const mDNSserver = require('./mdns-server');
 const Logs = require('./models/logs');
 const platform = require('./platform');
@@ -48,7 +48,7 @@ const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
 // Open the databases
-db.open();
+Database.open();
 Logs.open();
 
 const servers = {};
