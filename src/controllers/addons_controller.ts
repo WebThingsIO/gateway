@@ -1,15 +1,14 @@
-'use strict';
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import * as Settings from '../models/settings';
+import UserProfile from '../user-profile';
 
-const PromiseRouter = require('express-promise-router');
 const AddonManager = require('../addon-manager');
-const Settings = require('../models/settings');
-const UserProfile = require('../user-profile').default;
-const fs = require('fs');
-const path = require('path');
 
-const AddonsController = PromiseRouter();
+const AddonsController = express.Router();
 
-AddonsController.get('/', async (request, response) => {
+AddonsController.get('/', async (_request, response) => {
   response.status(200).json(Array.from(AddonManager.installedAddons.values()));
 });
 
@@ -181,4 +180,4 @@ AddonsController.delete('/:addonId', async (request, response) => {
   }
 });
 
-module.exports = AddonsController;
+export = AddonsController;

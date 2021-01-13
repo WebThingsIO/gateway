@@ -4,16 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const PromiseRouter = require('express-promise-router');
+import express from 'express';
 
 const APIError = require('./APIError');
 const Database = require('./Database');
 const Engine = require('./Engine');
 const Rule = require('./Rule');
 
-const index = PromiseRouter();
+const index = express.Router();
 const engine = new Engine();
 
 /**
@@ -22,7 +20,8 @@ const engine = new Engine();
  * @param {express.Response} res
  * @param {Function} next
  */
-function parseRuleFromBody(req, res, next) {
+function parseRuleFromBody(req: express.Request, res: express.Response, next: express.NextFunction):
+void {
   if (!req.body.trigger) {
     res.status(400).send(new APIError('No trigger provided').toString());
     return;
@@ -39,13 +38,13 @@ function parseRuleFromBody(req, res, next) {
     res.status(400).send(new APIError('Invalid rule', e).toString());
     return;
   }
-  req.rule = rule;
+  (req as any).rule = rule;
   next();
 }
 
-index.get('/', async (req, res) => {
+index.get('/', async (_req, res) => {
   const rules = await engine.getRules();
-  res.send(rules.map((rule) => {
+  res.send(rules.map((rule: any) => {
     return rule.toDescription();
   }));
 });
@@ -63,13 +62,13 @@ index.get('/:id', async (req, res) => {
 });
 
 index.post('/', parseRuleFromBody, async (req, res) => {
-  const ruleId = await engine.addRule(req.rule);
+  const ruleId = await engine.addRule((req as any).rule);
   res.send({id: ruleId});
 });
 
 index.put('/:id', parseRuleFromBody, async (req, res) => {
   try {
-    await engine.updateRule(parseInt(req.params.id), req.rule);
+    await engine.updateRule(parseInt(req.params.id), (req as any).rule);
     res.send({});
   } catch (e) {
     res.status(404).send(
@@ -87,9 +86,9 @@ index.delete('/:id', async (req, res) => {
   }
 });
 
-index.configure = async () => {
+(index as any).configure = async () => {
   await Database.open();
   await engine.getRules();
 };
 
-module.exports = index;
+export = index;

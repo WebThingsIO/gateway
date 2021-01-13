@@ -8,30 +8,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import * as Constants from '../constants';
 
-const Constants = require('../constants');
-const express = require('express');
 const addonManager = require('../addon-manager');
 
 const debugController = express.Router();
 
-addonManager.on(Constants.ADAPTER_ADDED, (adapter) => {
+addonManager.on(Constants.ADAPTER_ADDED, (adapter: any) => {
   console.log('debug: Got:', Constants.ADAPTER_ADDED,
               'notification for', adapter.id, adapter.name);
 });
 
-addonManager.on(Constants.THING_ADDED, (thing) => {
+addonManager.on(Constants.THING_ADDED, (thing: any) => {
   console.log('debug: Got:', Constants.THING_ADDED,
               'notification for', thing.title);
 });
 
-addonManager.on(Constants.THING_REMOVED, (thing) => {
+addonManager.on(Constants.THING_REMOVED, (thing: any) => {
   console.log('debug: Got:', Constants.THING_REMOVED,
               'notification for', thing.title);
 });
 
-addonManager.on(Constants.PROPERTY_CHANGED, (property) => {
+addonManager.on(Constants.PROPERTY_CHANGED, (property: any) => {
   console.log('debug: Got:', Constants.PROPERTY_CHANGED,
               'notification for:', property.device.title,
               'property:', property.name,
@@ -46,9 +45,9 @@ addonManager.on(Constants.PAIRING_TIMEOUT, () => {
 /**
  * List all known adapters
  */
-debugController.get('/adapters', (request, response) => {
+debugController.get('/adapters', (_request, response) => {
   const adapters = addonManager.getAdapters();
-  response.status(200).json(Array.from(adapters.values()).map((adapter) => {
+  response.status(200).json(Array.from(adapters.values()).map((adapter: any) => {
     return adapter.asDict();
   }));
 });
@@ -56,7 +55,7 @@ debugController.get('/adapters', (request, response) => {
 /**
  * Add a new device
  */
-debugController.get('/addNewThing', (request, response) => {
+debugController.get('/addNewThing', (_request, response) => {
   addonManager.addNewThing(60).then(() => {
     console.log('debugController: addNewThing added thing');
   }, () => {
@@ -68,7 +67,7 @@ debugController.get('/addNewThing', (request, response) => {
 /**
  * Cancel adding a new device
  */
-debugController.get('/cancelAddNewThing', (request, response) => {
+debugController.get('/cancelAddNewThing', (_request, response) => {
   addonManager.cancelAddNewThing();
   response.sendStatus(204);
 });
@@ -85,7 +84,7 @@ debugController.get('/cancelRemoveThing/:thingId', (request, response) => {
 /**
  * Get a list of devices ids registered with the add-on manager.
  */
-debugController.get('/deviceIds', (request, response) => {
+debugController.get('/deviceIds', (_request, response) => {
   const devices = addonManager.getDevices();
   const deviceList = [];
   for (const deviceId in devices) {
@@ -98,7 +97,7 @@ debugController.get('/deviceIds', (request, response) => {
 /**
  * Get a list of the devices registered with the add-on manager.
  */
-debugController.get('/devices', (request, response) => {
+debugController.get('/devices', (_request, response) => {
   const devices = addonManager.getDevices();
   const deviceList = [];
   for (const deviceId in devices) {
@@ -129,11 +128,11 @@ debugController.get('/device/:deviceId/:propertyName', (request, response) => {
   const propertyName = request.params.propertyName;
   const device = addonManager.getDevice(deviceId);
   if (device) {
-    device.getProperty(propertyName).then((value) => {
-      const valueDict = {};
+    device.getProperty(propertyName).then((value: any) => {
+      const valueDict: any = {};
       valueDict[propertyName] = value;
       response.status(200).json(valueDict);
-    }).catch((error) => {
+    }).catch((error: any) => {
       console.log(`Device "${deviceId}"`);
       console.log(error);
       response.status(404).send(`Device "${deviceId}${error}`);
@@ -167,11 +166,11 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
   if (device) {
     const propertyValue = request.body[propertyName];
     if (typeof propertyValue !== 'undefined') {
-      device.setProperty(propertyName, propertyValue).then((updatedValue) => {
-        const valueDict = {};
+      device.setProperty(propertyName, propertyValue).then((updatedValue: any) => {
+        const valueDict: any = {};
         valueDict[propertyName] = updatedValue;
         response.status(200).json(valueDict);
-      }).catch((error) => {
+      }).catch((error: any) => {
         console.log(`Device "${deviceId}"`);
         console.log(error);
         response.status(404).send(`Device "${deviceId}" ${error}`);
@@ -189,9 +188,9 @@ debugController.put('/device/:deviceId/:propertyName', (request, response) => {
 /**
  * Get a list of plugins
  */
-debugController.get('/plugins', (request, response) => {
+debugController.get('/plugins', (_request, response) => {
   const plugins = Array.from(addonManager.pluginServer.plugins.values());
-  response.status(200).json(plugins.map((plugin) => {
+  response.status(200).json(plugins.map((plugin: any) => {
     return plugin.asDict();
   }));
 });
@@ -199,7 +198,7 @@ debugController.get('/plugins', (request, response) => {
 /**
  * Get a list of the things registered with the add-on manager.
  */
-debugController.get('/things', (request, response) => {
+debugController.get('/things', (_request, response) => {
   response.status(200).json(addonManager.getThings());
 });
 
@@ -224,11 +223,11 @@ debugController.get('/thing/:thingId/:propertyName', (request, response) => {
   const propertyName = request.params.propertyName;
   const thing = addonManager.getThing(thingId);
   if (thing) {
-    addonManager.getProperty(thing.id, propertyName).then((value) => {
-      const valueDict = {};
+    addonManager.getProperty(thing.id, propertyName).then((value: any) => {
+      const valueDict: any = {};
       valueDict[propertyName] = value;
       response.status(200).json(valueDict);
-    }).catch((error) => {
+    }).catch((error: any) => {
       response.status(404).send(`Thing "${thingId} ${error}`);
     });
   } else {
@@ -246,11 +245,11 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
   if (thing) {
     const propertyValue = request.body[propertyName];
     if (typeof propertyValue !== 'undefined') {
-      addonManager.setProperty(propertyName, propertyValue).then((value) => {
-        const valueDict = {};
+      addonManager.setProperty(propertyName, propertyValue).then((value: any) => {
+        const valueDict: any = {};
         valueDict[propertyName] = value;
         response.status(200).json(valueDict);
-      }).catch((error) => {
+      }).catch((error: any) => {
         console.log(`Thing "${thingId}`);
         console.log(error);
         response.status(404).send(`Thing "${thingId} ${error}`);
@@ -270,14 +269,14 @@ debugController.put('/thing/:thingId/:propertyName', (request, response) => {
  */
 debugController.get('/removeThing/:thingId', (request, response) => {
   const thingId = request.params.thingId;
-  addonManager.removeThing(thingId).then((thingIdRemoved) => {
+  addonManager.removeThing(thingId).then((thingIdRemoved: string) => {
     console.log('debugController: removed', thingIdRemoved);
     if (thingId != thingIdRemoved) {
       console.log('debugController: Actually removed', thingIdRemoved,
                   'even though request was for:', thingId);
     }
     response.status(200).json({removed: thingIdRemoved});
-  }, (str) => {
+  }, (str: string) => {
     console.log('debugController: remove failed:', str);
     response.status(500).send(`remove of ${thingId} failed: ${str}`);
   });
@@ -286,10 +285,10 @@ debugController.get('/removeThing/:thingId', (request, response) => {
 /**
  * Unload add-ons
  */
-debugController.get('/unloadAddons', (request, response) => {
+debugController.get('/unloadAddons', (_request, response) => {
   console.log('debugController: Unloading Add-ons');
   addonManager.unloadAddons();
   response.status(200).send('');
 });
 
-module.exports = debugController;
+export = debugController;

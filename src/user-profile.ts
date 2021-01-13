@@ -101,13 +101,13 @@ export function migrate(): Promise<any[]> {
     renameFile(oldDbPath, dbPath);
   }
 
-  const db = require('./db').default;
+  const Database = require('./db');
   const Settings = require('./models/settings');
   const User = require('./models/user');
   const Users = require('./models/users');
 
   // Open the database.
-  db.open();
+  Database.open();
 
   // Normalize user email addresses
   pending.push(

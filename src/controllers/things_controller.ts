@@ -8,45 +8,43 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import Action from '../models/action';
+import Actions from '../models/actions';
+import ActionsController from './actions_controller';
+import * as Constants from '../constants';
+import EventsController from './events_controller';
+import express from 'express';
+import * as Settings from '../models/settings';
+import WebSocket from 'ws';
 
-const Action = require('../models/action').default;
-const Actions = require('../models/actions');
-const ActionsController = require('./actions_controller');
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
-const EventsController = require('./events_controller');
-const PromiseRouter = require('express-promise-router');
-const Settings = require('../models/settings');
 const Things = require('../models/things');
-const WebSocket = require('ws');
 
-const ThingsController = PromiseRouter();
+const ThingsController = express.Router();
 
 /**
  * Connect to receive messages from a Thing or all Things
  *
  * Note that these must precede the normal routes to allow express-ws to work
  */
-ThingsController.ws('/:thingId/', websocketHandler);
-ThingsController.ws('/', websocketHandler);
+(ThingsController as any).ws('/:thingId/', websocketHandler);
+(ThingsController as any).ws('/', websocketHandler);
 
 /**
  * Get a list of Things.
  */
 ThingsController.get('/', (request, response) => {
-  if (request.jwt.payload.role !== Constants.USER_TOKEN) {
-    if (!request.jwt.payload.scope) {
+  if ((request as any).jwt.payload.role !== Constants.USER_TOKEN) {
+    if (!(request as any).jwt.payload.scope) {
       response.status(400).send('Token must contain scope');
     } else {
-      const scope = request.jwt.payload.scope;
+      const scope = (request as any).jwt.payload.scope;
       if (!scope.includes(' ') && scope.indexOf('/') == 0 &&
         scope.split('/').length == 2 &&
         scope.split(':')[0] === Constants.THINGS_PATH) {
-        Things.getThingDescriptions(request.get('Host'), request.secure)
-          .then((things) => {
-            response.status(200).json(things);
-          });
+        Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+          response.status(200).json(things);
+        });
       } else {
         // Get hrefs of things in scope
         const paths = scope.split(' ');
@@ -55,19 +53,16 @@ ThingsController.get('/', (request, response) => {
           const parts = path.split(':');
           hrefs.push(parts[0]);
         }
-        Things.getListThingDescriptions(hrefs,
-                                        request.get('Host'),
-                                        request.secure)
-          .then((things) => {
+        Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure)
+          .then((things: any[]) => {
             response.status(200).json(things);
           });
       }
     }
   } else {
-    Things.getThingDescriptions(request.get('Host'), request.secure)
-      .then((things) => {
-        response.status(200).json(things);
-      });
+    Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+      response.status(200).json(things);
+    });
   }
 });
 
@@ -190,17 +185,12 @@ ThingsController.post('/', async (request, response) => {
  */
 ThingsController.get('/:thingId', (request, response) => {
   const id = request.params.thingId;
-  Things.getThingDescription(id, request.get('Host'), request.secure)
-    .then((thing) => {
-      response.status(200).json(thing);
-    })
-    .catch((error) => {
-      console.error(
-        `Error getting thing description for thing with id ${id}:`,
-        error
-      );
-      response.status(404).send(error);
-    });
+  Things.getThingDescription(id, request.get('Host'), request.secure).then((thing: any) => {
+    response.status(200).json(thing);
+  }).catch((error: any) => {
+    console.error(`Error getting thing description for thing with id ${id}:`, error);
+    response.status(404).send(error);
+  });
 });
 
 /**
@@ -218,7 +208,7 @@ ThingsController.get('/:thingId/properties', async (request, response) => {
     return;
   }
 
-  const result = {};
+  const result: any = {};
   for (const name in thing.properties) {
     try {
       const value = await AddonManager.getProperty(thingId, name);
@@ -241,7 +231,7 @@ ThingsController.get(
     const propertyName = request.params.propertyName;
     try {
       const value = await Things.getThingProperty(thingId, propertyName);
-      const result = {};
+      const result: any = {};
       result[propertyName] = value;
       response.status(200).json(result);
     } catch (err) {
@@ -387,7 +377,7 @@ ThingsController.delete('/:thingId', (request, response) => {
     Things.removeThing(thingId).then(() => {
       console.log(`Successfully deleted ${thingId} from database.`);
       response.sendStatus(204);
-    }).catch((e) => {
+    }).catch((e: any) => {
       response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
     });
   };
@@ -395,7 +385,7 @@ ThingsController.delete('/:thingId', (request, response) => {
   AddonManager.removeThing(thingId).then(_finally, _finally);
 });
 
-function websocketHandler(websocket, request) {
+function websocketHandler(websocket: WebSocket, request: express.Request): void {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
   if (websocket.readyState !== WebSocket.OPEN) {
@@ -403,9 +393,9 @@ function websocketHandler(websocket, request) {
   }
 
   const thingId = request.params.thingId;
-  const subscribedEventNames = {};
+  const subscribedEventNames: any = {};
 
-  async function sendMessage(message) {
+  function sendMessage(message: any): void {
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error(`WebSocket sendMessage failed: ${err}`);
@@ -413,7 +403,7 @@ function websocketHandler(websocket, request) {
     });
   }
 
-  function onPropertyChanged(property) {
+  function onPropertyChanged(property: any): void {
     if (typeof thingId !== 'undefined' && property.device.id !== thingId) {
       return;
     }
@@ -427,14 +417,14 @@ function websocketHandler(websocket, request) {
     });
   }
 
-  function onActionStatus(action) {
+  function onActionStatus(action: any): void {
     if (action.hasOwnProperty('thingId') &&
         action.thingId !== null &&
         action.thingId !== thingId) {
       return;
     }
 
-    const message = {
+    const message: any = {
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
@@ -448,7 +438,7 @@ function websocketHandler(websocket, request) {
     sendMessage(message);
   }
 
-  function onEvent(event) {
+  function onEvent(event: any): void {
     if (typeof thingId !== 'undefined' && event.getThingId() !== thingId) {
       return;
     }
@@ -466,11 +456,11 @@ function websocketHandler(websocket, request) {
     });
   }
 
-  let thingCleanups = {};
-  function addThing(thing) {
+  let thingCleanups: any = {};
+  function addThing(thing: any): void {
     thing.addEventSubscription(onEvent);
 
-    function onConnected(connected) {
+    function onConnected(connected: boolean): void {
       sendMessage({
         id: thing.id,
         messageType: Constants.CONNECTED,
@@ -518,7 +508,7 @@ function websocketHandler(websocket, request) {
 
     // send initial property values
     for (const name in thing.properties) {
-      AddonManager.getProperty(thing.id, name).then((value) => {
+      AddonManager.getProperty(thing.id, name).then((value: any) => {
         sendMessage({
           id: thing.id,
           messageType: Constants.PROPERTY_STATUS,
@@ -526,13 +516,13 @@ function websocketHandler(websocket, request) {
             [name]: value,
           },
         });
-      }).catch((e) => {
+      }).catch((e: any) => {
         console.error(`Failed to get property ${name}:`, e);
       });
     }
   }
 
-  function onThingAdded(thing) {
+  function onThingAdded(thing: any): void {
     sendMessage({
       id: thing.id,
       messageType: Constants.THING_ADDED,
@@ -543,7 +533,7 @@ function websocketHandler(websocket, request) {
   }
 
   if (typeof thingId !== 'undefined') {
-    Things.getThing(thingId).then((thing) => {
+    Things.getThing(thingId).then((thing: any) => {
       addThing(thing);
     }).catch(() => {
       console.error('WebSocket opened on nonexistent thing', thingId);
@@ -558,7 +548,7 @@ function websocketHandler(websocket, request) {
       websocket.close();
     });
   } else {
-    Things.getThings().then((things) => {
+    Things.getThings().then((things: any[]) => {
       things.forEach(addThing);
     });
     Things.on(Constants.THING_ADDED, onThingAdded);
@@ -590,8 +580,8 @@ function websocketHandler(websocket, request) {
   websocket.on('error', cleanup);
   websocket.on('close', cleanup);
 
-  websocket.on('message', (requestText) => {
-    let request = null;
+  websocket.on('message', (requestText: string) => {
+    let request: any;
     try {
       request = JSON.parse(requestText);
     } catch (e) {
@@ -665,13 +655,13 @@ function websocketHandler(websocket, request) {
       case Constants.REQUEST_ACTION: {
         for (const actionName in request.data) {
           const actionParams = request.data[actionName].input;
-          Things.getThing(id).then((thing) => {
+          Things.getThing(id).then((thing: any) => {
             const action = new Action(actionName, actionParams, thing);
             return Actions.add(action).then(() => {
               return AddonManager.requestAction(
-                id, action.id, actionName, actionParams);
+                id, action.getId(), actionName, actionParams);
             });
-          }).catch((err) => {
+          }).catch((err: any) => {
             sendMessage({
               messageType: Constants.ERROR,
               data: {
@@ -702,4 +692,4 @@ function websocketHandler(websocket, request) {
   });
 }
 
-module.exports = ThingsController;
+export = ThingsController;

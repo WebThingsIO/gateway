@@ -8,7 +8,7 @@
 
 process.env.NODE_ENV = 'test';
 
-const Database = require('../db').default;
+const Database = require('../db');
 const Actions = require('../models/actions');
 const Events = require('../models/events');
 const Logs = require('../models/logs');

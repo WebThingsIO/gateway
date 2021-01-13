@@ -8,10 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const express = require('express');
-const Events = require('../models/events');
+import express from 'express';
+import Events from '../models/events';
 
 const EventsController = express.Router({mergeParams: true});
 
@@ -40,4 +38,4 @@ EventsController.get('/:eventName', (request, response) => {
   }
 });
 
-module.exports = EventsController;
+export = EventsController;

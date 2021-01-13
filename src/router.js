@@ -110,7 +110,7 @@ const Router = {
 
     // Let OAuth handle its own rendering
     app.use(APP_PREFIX + Constants.OAUTH_PATH, nocache,
-            require('./controllers/oauth_controller').default);
+            require('./controllers/oauth_controller'));
 
     // Handle static media files before other static content. These must be
     // authenticated.
@@ -165,9 +165,9 @@ const Router = {
             require('./controllers/notifiers_controller'));
 
     app.use(API_PREFIX + Constants.OAUTH_PATH, nocache,
-            require('./controllers/oauth_controller').default);
+            require('./controllers/oauth_controller'));
     app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nocache, auth,
-            require('./controllers/oauthclients_controller').default);
+            require('./controllers/oauthclients_controller'));
   },
 
   addProxyServer(thingId, server) {

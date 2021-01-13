@@ -112,8 +112,16 @@ export = class User {
     return this.password;
   }
 
+  setPassword(password: string): void {
+    this.password = password;
+  }
+
   getName(): string|null {
     return this.name;
+  }
+
+  setName(name: string): void {
+    this.name = name;
   }
 
   getMfaSharedSecret(): string {
@@ -126,5 +134,9 @@ export = class User {
 
   getMfaEnrolled(): boolean {
     return this.mfaEnrolled;
+  }
+
+  setMfaEnrolled(mfaEnrolled: boolean): void {
+    this.mfaEnrolled = mfaEnrolled;
   }
 };

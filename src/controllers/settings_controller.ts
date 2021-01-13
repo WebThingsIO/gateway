@@ -8,80 +8,70 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import config from 'config';
+import express from 'express';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import * as Constants from '../constants';
+import lookup from '../iso-639/index';
+import * as jwtMiddleware from '../jwt-middleware';
+import * as mDNSserver from '../mdns-server';
+import * as Settings from '../models/settings';
+import TunnelService from '../tunnel-service';
 
-/* jshint unused:false */
-
-const CertificateManager = require('../certificate-manager');
-const config = require('config');
-const Constants = require('../constants');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const isoLookup = require('../iso-639/index');
-const jwtMiddleware = require('../jwt-middleware');
-const mDNSserver = require('../mdns-server');
-const path = require('path');
 const pkg = require('../../package.json');
 const Platform = require('../platform');
-const PromiseRouter = require('express-promise-router');
-const Settings = require('../models/settings');
-const TunnelService = require('../tunnel-service');
+const CertificateManager = require('../certificate-manager');
 
 const auth = jwtMiddleware.middleware();
-const SettingsController = PromiseRouter();
+const SettingsController = express.Router();
 
 /**
  * Set an experiment setting.
  */
-SettingsController.put(
-  '/experiments/:experimentName',
-  auth,
-  async (request, response) => {
-    const experimentName = request.params.experimentName;
+SettingsController.put('/experiments/:experimentName', auth, async (request, response) => {
+  const experimentName = request.params.experimentName;
 
-    if (!request.body || !request.body.hasOwnProperty('enabled')) {
-      response.status(400).send('Enabled property not defined');
-      return;
-    }
+  if (!request.body || !request.body.hasOwnProperty('enabled')) {
+    response.status(400).send('Enabled property not defined');
+    return;
+  }
 
-    const enabled = request.body.enabled;
+  const enabled = request.body.enabled;
 
-    try {
-      const result =
-        await Settings.setSetting(`experiments.${experimentName}.enabled`,
-                                  enabled);
-      response.status(200).json({enabled: result});
-    } catch (e) {
-      console.error(`Failed to set setting experiments.${experimentName}`);
-      console.error(e);
-      response.status(400).send(e);
-    }
-  });
+  try {
+    const result =
+      await Settings.setSetting(`experiments.${experimentName}.enabled`,
+                                enabled);
+    response.status(200).json({enabled: result});
+  } catch (e) {
+    console.error(`Failed to set setting experiments.${experimentName}`);
+    console.error(e);
+    response.status(400).send(e);
+  }
+});
 
 /**
  * Get an experiment setting.
  */
-SettingsController.get(
-  '/experiments/:experimentName',
-  auth,
-  async (request, response) => {
-    const experimentName = request.params.experimentName;
+SettingsController.get('/experiments/:experimentName', auth, async (request, response) => {
+  const experimentName = request.params.experimentName;
 
-    try {
-      const result =
-        await Settings.getSetting(`experiments.${experimentName}.enabled`);
-      if (typeof result === 'undefined') {
-        response.status(404).send('Setting not found');
-      } else {
-        response.status(200).json({enabled: result});
-      }
-    } catch (e) {
-      console.error(`Failed to get setting experiments.${experimentName}`);
-      console.error(e);
-      response.status(400).send(e);
+  try {
+    const result =
+      await Settings.getSetting(`experiments.${experimentName}.enabled`);
+    if (typeof result === 'undefined') {
+      response.status(404).send('Setting not found');
+    } else {
+      response.status(200).json({enabled: result});
     }
+  } catch (e) {
+    console.error(`Failed to get setting experiments.${experimentName}`);
+    console.error(e);
+    response.status(400).send(e);
   }
-);
+});
 
 SettingsController.post('/reclaim', async (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('subdomain')) {
@@ -116,7 +106,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
   // increase the timeout for this request, as registration can take a while
   request.setTimeout(5 * 60 * 1000, () => {
     const err = new Error('Request Timeout');
-    err.status = 408;
+    (err as any).status = 408;
     next(err);
   });
 
@@ -126,7 +116,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
   const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
   const optout = request.body.optout;
 
-  function cb(err) {
+  function cb(err: any) {
     if (err) {
       response.statusMessage = `Error issuing certificate - ${err}`;
       response.status(400).end();
@@ -135,7 +125,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
         url: `https://${fulldomain}`,
       };
       TunnelService.start(response, endpoint);
-      TunnelService.switchToHttps();
+      TunnelService.switchToHttps!();
     }
   }
 
@@ -149,7 +139,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
   );
 });
 
-SettingsController.post('/skiptunnel', async (request, response) => {
+SettingsController.post('/skiptunnel', async (_request, response) => {
   try {
     await Settings.setSetting('notunnel', true);
     response.status(200).json({});
@@ -160,7 +150,7 @@ SettingsController.post('/skiptunnel', async (request, response) => {
   }
 });
 
-SettingsController.get('/tunnelinfo', auth, async (request, response) => {
+SettingsController.get('/tunnelinfo', auth, async (_request, response) => {
   try {
     const localDomainSettings = await Settings.getTunnelInfo();
     response.status(200).json(localDomainSettings);
@@ -242,7 +232,7 @@ SettingsController.put('/domain', auth, async (request, response) => {
   }
 });
 
-SettingsController.get('/addonsInfo', auth, (request, response) => {
+SettingsController.get('/addonsInfo', auth, (_request, response) => {
   response.json({
     urls: config.get('addonManager.listUrls'),
     architecture: Platform.getArchitecture(),
@@ -253,14 +243,14 @@ SettingsController.get('/addonsInfo', auth, (request, response) => {
   });
 });
 
-SettingsController.get('/system/platform', auth, (request, response) => {
+SettingsController.get('/system/platform', auth, (_request, response) => {
   response.json({
     architecture: Platform.getArchitecture(),
     os: Platform.getOS(),
   });
 });
 
-SettingsController.get('/system/ssh', auth, (request, response) => {
+SettingsController.get('/system/ssh', auth, (_request, response) => {
   const toggleImplemented = Platform.implemented('setSshServerStatus');
   let enabled = false;
   if (Platform.implemented('getSshServerStatus')) {
@@ -328,7 +318,7 @@ SettingsController.post('/system/actions', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/system/ntp', (request, response) => {
+SettingsController.get('/system/ntp', (_request, response) => {
   const statusImplemented = Platform.implemented('getNtpStatus');
 
   let synchronized = false;
@@ -342,7 +332,7 @@ SettingsController.get('/system/ntp', (request, response) => {
   });
 });
 
-SettingsController.post('/system/ntp', (request, response) => {
+SettingsController.post('/system/ntp', (_request, response) => {
   if (Platform.implemented('restartNtpSync')) {
     if (Platform.restartNtpSync()) {
       response.status(200).json({});
@@ -354,7 +344,7 @@ SettingsController.post('/system/ntp', (request, response) => {
   }
 });
 
-SettingsController.get('/network/dhcp', auth, (request, response) => {
+SettingsController.get('/network/dhcp', auth, (_request, response) => {
   if (Platform.implemented('getDhcpServerStatus')) {
     response.json({enabled: Platform.getDhcpServerStatus()});
   } else {
@@ -381,7 +371,7 @@ SettingsController.put('/network/dhcp', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/network/lan', auth, (request, response) => {
+SettingsController.get('/network/lan', auth, (_request, response) => {
   if (Platform.implemented('getLanMode')) {
     response.json(Platform.getLanMode());
   } else {
@@ -409,7 +399,7 @@ SettingsController.put('/network/lan', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/network/wireless', auth, (request, response) => {
+SettingsController.get('/network/wireless', auth, (_request, response) => {
   if (Platform.implemented('getWirelessMode')) {
     response.json(Platform.getWirelessMode());
   } else {
@@ -417,17 +407,13 @@ SettingsController.get('/network/wireless', auth, (request, response) => {
   }
 });
 
-SettingsController.get(
-  '/network/wireless/networks',
-  auth,
-  (request, response) => {
-    if (Platform.implemented('scanWirelessNetworks')) {
-      response.json(Platform.scanWirelessNetworks());
-    } else {
-      response.status(500).send('Wireless scanning not implemented');
-    }
+SettingsController.get('/network/wireless/networks', auth, (_request, response) => {
+  if (Platform.implemented('scanWirelessNetworks')) {
+    response.json(Platform.scanWirelessNetworks());
+  } else {
+    response.status(500).send('Wireless scanning not implemented');
   }
-);
+});
 
 SettingsController.put('/network/wireless', auth, (request, response) => {
   if (!request.body || !request.body.hasOwnProperty('enabled')) {
@@ -450,7 +436,7 @@ SettingsController.put('/network/wireless', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/network/addresses', auth, (request, response) => {
+SettingsController.get('/network/addresses', auth, (_request, response) => {
   if (Platform.implemented('getNetworkAddresses')) {
     response.json(Platform.getNetworkAddresses());
   } else {
@@ -458,7 +444,7 @@ SettingsController.get('/network/addresses', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/localization/country', auth, (request, response) => {
+SettingsController.get('/localization/country', auth, (_request, response) => {
   let valid = [];
   if (Platform.implemented('getValidWirelessCountries')) {
     valid = Platform.getValidWirelessCountries();
@@ -490,7 +476,7 @@ SettingsController.put('/localization/country', auth, (request, response) => {
   }
 });
 
-SettingsController.get('/localization/timezone', auth, (request, response) => {
+SettingsController.get('/localization/timezone', auth, (_request, response) => {
   let valid = [];
   if (Platform.implemented('getValidTimezones')) {
     valid = Platform.getValidTimezones();
@@ -522,94 +508,78 @@ SettingsController.put('/localization/timezone', auth, (request, response) => {
   }
 });
 
-SettingsController.get(
-  '/localization/language',
-  auth,
-  async (request, response) => {
-    const fluentDir = path.join(Constants.BUILD_STATIC_PATH, 'fluent');
-    const valid = [];
-    try {
-      for (const dirname of fs.readdirSync(fluentDir)) {
-        const name = isoLookup(dirname);
+SettingsController.get('/localization/language', auth, async (_request, response) => {
+  const fluentDir = path.join(Constants.BUILD_STATIC_PATH, 'fluent');
+  const valid = [];
+  try {
+    for (const dirname of fs.readdirSync(fluentDir)) {
+      const name = lookup(dirname);
 
-        if (!name) {
-          console.error('Unknown language code:', dirname);
-          continue;
-        }
-
-        valid.push({
-          code: dirname,
-          name,
-        });
+      if (!name) {
+        console.error('Unknown language code:', dirname);
+        continue;
       }
 
-      valid.sort((a, b) => a.name.localeCompare(b.name));
-    } catch (e) {
-      console.log(e);
-      response.status(500).send('Failed to retrieve list of languages');
-      return;
+      valid.push({
+        code: dirname,
+        name,
+      });
     }
 
-    try {
-      const current = await Settings.getSetting('localization.language');
-      response.json({valid, current});
-    } catch (_) {
-      response.status(500).send('Failed to get current language');
-    }
+    valid.sort((a, b) => a.name.localeCompare(b.name));
+  } catch (e) {
+    console.log(e);
+    response.status(500).send('Failed to retrieve list of languages');
+    return;
   }
-);
 
-SettingsController.put(
-  '/localization/language',
-  auth,
-  async (request, response) => {
-    if (!request.body || !request.body.hasOwnProperty('language')) {
-      response.status(400).send('Missing language property');
-      return;
-    }
-
-    try {
-      await Settings.setSetting('localization.language', request.body.language);
-      response.json({});
-    } catch (_) {
-      response.status(500).send('Failed to set language');
-    }
+  try {
+    const current = await Settings.getSetting('localization.language');
+    response.json({valid, current});
+  } catch (_) {
+    response.status(500).send('Failed to get current language');
   }
-);
+});
 
-SettingsController.get(
-  '/localization/units',
-  auth,
-  async (request, response) => {
-    let temperature;
-
-    try {
-      temperature = await Settings.getSetting('localization.units.temperature');
-    } catch (e) {
-      // pass
-    }
-
-    response.json({
-      temperature: temperature || 'degree celsius',
-    });
+SettingsController.put('/localization/language', auth, async (request, response) => {
+  if (!request.body || !request.body.hasOwnProperty('language')) {
+    response.status(400).send('Missing language property');
+    return;
   }
-);
 
-SettingsController.put(
-  '/localization/units',
-  auth,
-  async (request, response) => {
-    for (const [key, value] of Object.entries(request.body)) {
-      try {
-        await Settings.setSetting(`localization.units.${key}`, value);
-      } catch (_) {
-        response.status(500).send('Failed to set unit');
-        return;
-      }
-    }
-
+  try {
+    await Settings.setSetting('localization.language', request.body.language);
     response.json({});
+  } catch (_) {
+    response.status(500).send('Failed to set language');
   }
-);
+});
 
-module.exports = SettingsController;
+SettingsController.get('/localization/units', auth, async (_request, response) => {
+  let temperature;
+
+  try {
+    temperature = await Settings.getSetting('localization.units.temperature');
+  } catch (e) {
+    // pass
+  }
+
+  response.json({
+    temperature: temperature || 'degree celsius',
+  });
+});
+
+SettingsController.put('/localization/units', auth, async (request, response) => {
+  for (const [key, value] of Object.entries(request.body)) {
+    try {
+      await Settings.setSetting(`localization.units.${key}`, value);
+    } catch (_) {
+      response.status(500).send('Failed to set unit');
+      return;
+    }
+  }
+
+  response.json({});
+});
+
+export = SettingsController;

@@ -29,7 +29,7 @@ class Events {
    * Get only the events which are not associated with a specific thing and
    * therefore belong to the root Gateway.
    */
-  getGatewayEvents(eventName: string): {[name: string]: EventDescription}[] {
+  getGatewayEvents(eventName?: string): {[name: string]: EventDescription}[] {
     return this.events.filter((event) => {
       return !event.getThingId();
     }).filter((event) => {
@@ -47,7 +47,7 @@ class Events {
   /**
    * Get only the events which are associated with a specific thing.
    */
-  getByThing(thingId: string, eventName: string): {[name: string]: EventDescription}[] {
+  getByThing(thingId: string, eventName?: string): {[name: string]: EventDescription}[] {
     return this.events.filter((event) => {
       return event.getThingId() === thingId;
     }).filter((event) => {

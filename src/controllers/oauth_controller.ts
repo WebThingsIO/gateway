@@ -86,7 +86,7 @@ type AccessTokenError =
 
 type AccessTokenErrorResponse = ErrorResponse<AccessTokenError>;
 
-function redirect(response: express.Response, baseURL: URL, params: {[key: string]: any}) {
+function redirect(response: express.Response, baseURL: URL, params: {[key: string]: any}): void {
   const url = new URL(baseURL.toString());
   for (const key in params) {
     if (!params.hasOwnProperty(key)) {
@@ -418,4 +418,4 @@ Promise<AccessTokenSuccessResponse|null> {
   return res;
 }
 
-export default OAuthController;
+export = OAuthController;

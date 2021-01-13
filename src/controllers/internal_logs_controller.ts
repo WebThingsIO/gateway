@@ -8,22 +8,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const archiver = require('archiver');
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const PromiseRouter = require('express-promise-router');
-const WebSocket = require('ws');
+import archiver from 'archiver';
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import WebSocket from 'ws';
+import * as Constants from '../constants';
+import * as jwtMiddleware from '../jwt-middleware';
+import UserProfile from '../user-profile';
+import * as Utils from '../utils';
 
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
-const jwtMiddleware = require('../jwt-middleware');
-const UserProfile = require('../user-profile').default;
-const Utils = require('../utils');
 
-const InternalLogsController = PromiseRouter();
+const InternalLogsController = express.Router();
 
 /**
  * Generate an index of log files.
@@ -85,7 +82,7 @@ InternalLogsController.use(
 /**
  * Handle request for logs.zip.
  */
-InternalLogsController.get('/zip', async (request, response) => {
+InternalLogsController.get('/zip', async (_request, response) => {
   const archive = archiver('zip');
 
   archive.on('error', (err) => {
@@ -107,7 +104,7 @@ InternalLogsController.get('/zip', async (request, response) => {
   archive.finalize();
 });
 
-InternalLogsController.ws('/', (websocket) => {
+(InternalLogsController as any).ws('/', (websocket: WebSocket) => {
   if (websocket.readyState !== WebSocket.OPEN) {
     return;
   }
@@ -120,7 +117,7 @@ InternalLogsController.ws('/', (websocket) => {
     }
   }, 30 * 1000);
 
-  function onLog(message) {
+  function onLog(message: any) {
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error('WebSocket sendMessage failed:', err);
@@ -139,4 +136,4 @@ InternalLogsController.ws('/', (websocket) => {
   websocket.on('close', cleanup);
 });
 
-module.exports = InternalLogsController;
+export = InternalLogsController;
