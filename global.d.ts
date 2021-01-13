@@ -1,8 +1,7 @@
 /**
  * Best effort declaration files.
  */
-declare namespace ANSN1 {
-
+declare namespace ASN1 {
   type EncoderInputTypes = string | number | boolean | number[] | string[] | Buffer;
 
   type EncoderInput = {
@@ -36,5 +35,5 @@ declare namespace ANSN1 {
 }
 
 declare module 'asn1.js' {
-  export = ANSN1;
+  export = ASN1;
 }
