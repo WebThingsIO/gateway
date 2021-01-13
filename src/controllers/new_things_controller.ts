@@ -9,22 +9,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import fetch from 'node-fetch';
+import WebSocket from 'ws';
 
-const PromiseRouter = require('express-promise-router');
-const fetch = require('node-fetch');
-const WebSocket = require('ws');
 const Things = require('../models/things');
 
-const NewThingsController = PromiseRouter();
+const NewThingsController = express.Router();
 
 /**
  * Handle GET requests to /new_things
  */
-NewThingsController.get('/', (request, response) => {
-  Things.getNewThings().then((newThings) => {
+NewThingsController.get('/', (_request, response) => {
+  Things.getNewThings().then((newThings: any) => {
     response.json(newThings);
-  }).catch((error) => {
+  }).catch((error: any) => {
     console.error(`Error getting a list of new things from adapters ${error}`);
     response.status(500).send(error);
   });
@@ -33,7 +32,7 @@ NewThingsController.get('/', (request, response) => {
 /**
  * Handle a WebSocket request on /new_things
  */
-NewThingsController.ws('/', (websocket) => {
+(NewThingsController as any).ws('/', (websocket: WebSocket) => {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
   if (websocket.readyState !== WebSocket.OPEN) {
@@ -44,11 +43,11 @@ NewThingsController.ws('/', (websocket) => {
   // to the client as they are added.
   Things.registerWebsocket(websocket);
   // Send a list of things the adapter manager already knows about
-  Things.getNewThings().then(function(newThings) {
-    newThings.forEach((newThing) => {
+  Things.getNewThings().then((newThings: any) => {
+    newThings.forEach((newThing: any) => {
       websocket.send(JSON.stringify(newThing));
-    }, this);
-  }).catch((error) => {
+    });
+  }).catch((error: any) => {
     console.error(`Error getting a list of new things from adapters ${error}`);
   });
 });
@@ -90,4 +89,4 @@ NewThingsController.post('/', async (request, response) => {
   }
 });
 
-module.exports = NewThingsController;
+export = NewThingsController;

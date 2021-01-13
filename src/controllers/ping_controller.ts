@@ -8,14 +8,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const express = require('express');
+import express from 'express';
 
 const PingController = express.Router();
 
-PingController.get('/', (request, response) => {
+PingController.get('/', (_request, response) => {
   response.sendStatus(204);
 });
 
-module.exports = PingController;
+export = PingController;

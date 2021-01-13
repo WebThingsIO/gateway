@@ -14,7 +14,7 @@
 const AdapterProxy = require('./adapter-proxy');
 const APIHandlerProxy = require('./api-handler-proxy');
 const Constants = require('../constants');
-const db = require('../db').default;
+const Database = require('../db');
 const Deferred = require('../deferred');
 const DeviceProxy = require('./device-proxy');
 const format = require('string-format');
@@ -34,7 +34,7 @@ const {
 
 const DEBUG = false;
 
-db.open();
+Database.open();
 
 class Plugin {
 

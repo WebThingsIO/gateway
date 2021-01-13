@@ -8,23 +8,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import * as Passwords from '../passwords';
+import * as Users from '../models/users';
+import JSONWebToken from '../models/jsonwebtoken';
+import * as jwtMiddleware from '../jwt-middleware';
 
-const PromiseRouter = require('express-promise-router');
-const Passwords = require('../passwords');
-const Users = require('../models/users');
-const JSONWebToken = require('../models/jsonwebtoken').default;
-const jwtMiddleware = require('../jwt-middleware');
 const auth = jwtMiddleware.middleware();
 
-const UsersController = PromiseRouter();
+const UsersController = express.Router();
 
 /**
  * Get the count of users.
  *
  * NOTE: This is temporary while we figure out mutli user UI.
  */
-UsersController.get('/count', async (request, response) => {
+UsersController.get('/count', async (_request, response) => {
   const count = await Users.getCount();
   return response.status(200).send({count});
 });
@@ -35,7 +34,7 @@ UsersController.get('/count', async (request, response) => {
 UsersController.get('/info', auth, async (request, response) => {
   const users = await Users.getUsers();
   const descriptions = users.map((user) => {
-    const loggedIn = user.id === request.jwt.user;
+    const loggedIn = user.getId() === (request as any).jwt.user;
     return Object.assign(user.getDescription(), {loggedIn});
   });
   return response.status(200).send(descriptions);
@@ -86,7 +85,7 @@ UsersController.post('/', async (request, response) => {
   // TODO: user facing errors...
   const hash = await Passwords.hash(body.password);
   const user = await Users.createUser(body.email, hash, body.name);
-  const jwt = await JSONWebToken.issueToken(user.id);
+  const jwt = await JSONWebToken.issueToken(user.getId()!);
 
   response.send({
     jwt,
@@ -107,9 +106,9 @@ UsersController.post('/:userId/mfa', auth, async (request, response) => {
       // Initial MFA enablement, generate params
       const params = await user.generateMfaParams();
       response.status(200).json(params);
-    } else if (Passwords.verifyMfaToken(user.mfaSharedSecret, body.mfa)) {
+    } else if (Passwords.verifyMfaToken(user.getMfaSharedSecret(), body.mfa)) {
       // Stage 2, verify MFA token
-      user.mfaEnrolled = true;
+      user.setMfaEnrolled(true);
       const backupCodes = await user.generateMfaBackupCodes();
       await Users.editUser(user);
       response.status(200).json({backupCodes});
@@ -118,7 +117,7 @@ UsersController.post('/:userId/mfa', auth, async (request, response) => {
     }
   } else {
     // Disable MFA
-    user.mfaEnrolled = false;
+    user.setMfaEnrolled(false);
     await Users.editUser(user);
     response.sendStatus(204);
   }
@@ -160,18 +159,18 @@ UsersController.put('/:userId', auth, async (request, response) => {
     return;
   }
 
-  const passwordMatch = await Passwords.compare(body.password, user.password);
+  const passwordMatch = await Passwords.compare(body.password, user.getPassword());
   if (!passwordMatch) {
     response.status(400).send('Passwords do not match.');
     return;
   }
 
   if (body.newPassword) {
-    user.password = await Passwords.hash(body.newPassword);
+    user.setPassword(await Passwords.hash(body.newPassword));
   }
 
-  user.email = body.email;
-  user.name = body.name;
+  user.setEmail(body.email);
+  user.setName(body.name);
 
   await Users.editUser(user);
   response.status(200).json({});
@@ -187,4 +186,4 @@ UsersController.delete('/:userId', auth, async (request, response) => {
   response.sendStatus(204);
 });
 
-module.exports = UsersController;
+export = UsersController;

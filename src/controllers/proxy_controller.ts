@@ -8,15 +8,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import Server from 'http-proxy';
+import express from 'express';
 
-const httpProxy = require('http-proxy');
-const Router = require('express-promise-router');
-
-const ProxyController = new Router();
+const ProxyController = express.Router();
 
 const proxies = new Map();
-const proxy = httpProxy.createProxyServer({
+const proxy = Server.createProxyServer({
   changeOrigin: true,
 });
 
@@ -24,11 +22,11 @@ proxy.on('error', (e) => {
   console.debug('Proxy error:', e);
 });
 
-ProxyController.addProxyServer = (thingId, server) => {
+(ProxyController as any).addProxyServer = (thingId: string, server: string) => {
   proxies.set(thingId, server);
 };
 
-ProxyController.removeProxyServer = (thingId) => {
+(ProxyController as any).removeProxyServer = (thingId: string) => {
   proxies.delete(thingId);
 };
 
@@ -47,4 +45,4 @@ ProxyController.all('/:thingId/*', (request, response) => {
   proxy.web(request, response, {target: proxies.get(thingId)});
 });
 
-module.exports = ProxyController;
+export = ProxyController;

@@ -8,18 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import express from 'express';
+import path from 'path';
+import * as Constants from '../constants';
+import * as Passwords from '../passwords';
+import * as Users from '../models/users';
+import JSONWebToken from '../models/jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 
-const path = require('path');
-
-const Router = require('express-promise-router');
-const Users = require('../models/users');
-const JSONWebToken = require('../models/jsonwebtoken').default;
-const Passwords = require('../passwords');
-const Constants = require('../constants');
-const rateLimit = require('express-rate-limit');
-
-const LoginController = Router();
+const LoginController = express.Router();
 
 const loginRoot = path.join(Constants.BUILD_STATIC_PATH, 'login');
 
@@ -32,7 +29,7 @@ const limiter = rateLimit({
 /**
  * Serve the static login page
  */
-LoginController.get('/', async (request, response) => {
+LoginController.get('/', async (_request, response) => {
   response.sendFile('index.html', {root: loginRoot});
 });
 
@@ -54,7 +51,7 @@ LoginController.post('/', limiter, async (request, response) => {
 
   const passwordMatch = await Passwords.compare(
     body.password,
-    user.password
+    user.getPassword()
   );
 
   if (!passwordMatch) {
@@ -62,18 +59,18 @@ LoginController.post('/', limiter, async (request, response) => {
     return;
   }
 
-  if (user.mfaEnrolled) {
+  if (user.getMfaEnrolled()) {
     if (!body.mfa) {
       response.status(401).json({mfaRequired: true});
       return;
     }
 
-    if (!Passwords.verifyMfaToken(user.mfaSharedSecret, body.mfa)) {
+    if (!Passwords.verifyMfaToken(user.getMfaSharedSecret(), body.mfa)) {
       let backupMatch = false;
 
       if (body.mfa.totp.length === 12) {
         let index = 0;
-        for (const backup of user.mfaBackupCodes) {
+        for (const backup of user.getMfaBackupCodes()) {
           backupMatch = await Passwords.compare(body.mfa.totp, backup);
           if (backupMatch) {
             break;
@@ -83,7 +80,7 @@ LoginController.post('/', limiter, async (request, response) => {
         }
 
         if (backupMatch) {
-          user.mfaBackupCodes.splice(index, 1);
+          user.getMfaBackupCodes().splice(index, 1);
           await Users.editUser(user);
         }
       }
@@ -96,9 +93,9 @@ LoginController.post('/', limiter, async (request, response) => {
   }
 
   // Issue a new JWT for this user.
-  const jwt = await JSONWebToken.issueToken(user.id);
+  const jwt = await JSONWebToken.issueToken(user.getId()!);
   limiter.resetKey(request.ip);
   response.status(200).json({jwt});
 });
 
-module.exports = LoginController;
+export = LoginController;

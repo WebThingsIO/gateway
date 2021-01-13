@@ -1,21 +1,22 @@
 'use strict';
 
+import express from 'express';
+import fs from 'fs';
+import GlobToRegExp from 'glob-to-regexp';
+import path from 'path';
+import {APIRequest} from 'gateway-addon';
+import UserProfile from '../user-profile';
+import * as jwtMiddleware from '../jwt-middleware';
+
 const AddonManager = require('../addon-manager');
-const {APIRequest} = require('gateway-addon');
-const UserProfile = require('../user-profile').default;
-const express = require('express');
-const fs = require('fs');
-const globToRegExp = require('glob-to-regexp');
-const jwtMiddleware = require('../jwt-middleware');
-const path = require('path');
 
 const auth = jwtMiddleware.middleware();
 const ExtensionsController = express.Router();
 
-ExtensionsController.get('/', auth, (request, response) => {
-  const map = {};
+ExtensionsController.get('/', auth, (_request, response) => {
+  const map: any = {};
   for (const [key, value] of Object.entries(AddonManager.getExtensions())) {
-    map[key] = value.extensions;
+    map[key] = (value as any).extensions;
   }
   response.status(200).json(map);
 });
@@ -79,7 +80,7 @@ ExtensionsController.get('/:extensionId/*', (request, response) => {
   let matched = false;
   const resources = extensions[extensionId].resources;
   for (let resource of resources) {
-    resource = globToRegExp(resource);
+    resource = GlobToRegExp(resource);
     if (resource.test(relPath)) {
       matched = true;
       break;
@@ -102,4 +103,4 @@ ExtensionsController.get('/:extensionId/*', (request, response) => {
   response.sendFile(fullPath);
 });
 
-module.exports = ExtensionsController;
+export = ExtensionsController;
