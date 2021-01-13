@@ -552,10 +552,6 @@ local-token-copy-token = Copy Token
 
 ## Router Setup Page
 
-    .placeholder = Network name
-    .placeholder = Password
-    .placeholder = Confirm password
-    .value = Create
 router-setup-password-mismatch = Passwords must match
 
 ## Wi-Fi Setup Page
