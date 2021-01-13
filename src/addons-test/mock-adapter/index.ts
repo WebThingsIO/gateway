@@ -1,23 +1,22 @@
 /**
- * mock-adapter.js - Mock Adapter.
+ * mock-adapter.ts - Mock Adapter.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import {Action, Adapter, AddonManagerProxy, Device, Property} from 'gateway-addon';
+import express from 'express';
+import {Server} from 'http';
 
-const {Adapter, Device, Property} = require('gateway-addon');
-const express = require('express');
-
-class MockProperty extends Property {
-  constructor(device, name, propertyDescription) {
+class MockProperty extends Property<any> {
+  constructor(device: MockDevice, name: string, propertyDescription: any) {
     super(device, name, propertyDescription);
-    this.unit = propertyDescription.unit;
-    this.description = propertyDescription.description;
+    this.setUnit(propertyDescription.unit);
+    this.setDescription(propertyDescription.description);
     this.setCachedValue(propertyDescription.value);
-    this.device.notifyPropertyChanged(this);
+    this.getDevice().notifyPropertyChanged(this);
   }
 
   /**
@@ -27,9 +26,9 @@ class MockProperty extends Property {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value) {
+  setValue(value: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (/^rejectProperty/.test(this.name)) {
+      if (/^rejectProperty/.test(this.getName())) {
         reject('Read-only property');
         return;
       }
@@ -43,18 +42,16 @@ class MockProperty extends Property {
 }
 
 class MockDevice extends Device {
-  constructor(adapter, id, deviceDescription) {
+  constructor(adapter: MockAdapter, id: string, deviceDescription: any) {
     super(adapter, id);
-    this.title = deviceDescription.title;
-    this['@context'] = deviceDescription['@context'];
-    this['@type'] = deviceDescription['@type'];
-    this.description = deviceDescription.description;
-    this.baseHref = `http://127.0.0.1:${adapter.port}`;
+    this.setTitle(deviceDescription.title);
+    (this as any)['@type'] = deviceDescription['@type'];
+    this.setDescription(deviceDescription.description);
+    (this as any).baseHref = `http://127.0.0.1:${adapter.getPort()}`;
     for (const propertyName in deviceDescription.properties) {
       const propertyDescription = deviceDescription.properties[propertyName];
-      const property =
-        new MockProperty(this, propertyName, propertyDescription);
-      this.properties.set(propertyName, property);
+      const property = new MockProperty(this, propertyName, propertyDescription);
+      this.addProperty(property);
     }
 
     for (const actionName in deviceDescription.actions) {
@@ -66,21 +63,21 @@ class MockDevice extends Device {
     }
   }
 
-  requestAction(actionId, actionName, input) {
+  requestAction(actionId: string, actionName: string, input: any): Promise<void> {
     if (actionName === 'rejectRequest') {
       return Promise.reject();
     }
     return super.requestAction(actionId, actionName, input);
   }
 
-  removeAction(actionId, actionName) {
+  removeAction(actionId: string, actionName: string): Promise<void> {
     if (actionName === 'rejectRemove') {
       return Promise.reject();
     }
     return super.removeAction(actionId, actionName);
   }
 
-  performAction(action) {
+  performAction(action: Action): Promise<void> {
     return new Promise((resolve, _reject) => {
       action.start();
       action.finish();
@@ -90,10 +87,22 @@ class MockDevice extends Device {
 }
 
 class MockAdapter extends Adapter {
-  constructor(addonManager, packageName) {
+  private port: number;
+
+  private app: express.Express;
+
+  private server: Server;
+
+  private pairDeviceId: string|null;
+
+  private pairDeviceDescription: any;
+
+  constructor(addonManager: AddonManagerProxy, packageName: string) {
     super(addonManager, packageName, packageName);
     addonManager.addAdapter(this);
 
+    this.pairDeviceId = null;
+    this.pairDeviceDescription = null;
     this.port = 12345;
     this.app = express();
     this.app.all('/*', (req, rsp) => {
@@ -106,11 +115,11 @@ class MockAdapter extends Adapter {
    * For cleanup between tests. Returns a promise which resolves
    * when all of the state has been cleared.
    */
-  clearState() {
-    this.actions = {};
+  clearState(): Promise<Device[]> {
+    (this as any).actions = {};
 
     return Promise.all(
-      Object.keys(this.devices).map((deviceId) => {
+      Object.keys(this.getDevices()).map((deviceId) => {
         return this.removeDevice(deviceId);
       })
     );
@@ -122,9 +131,9 @@ class MockAdapter extends Adapter {
    * @param {String} deviceId ID of the device to add.
    * @return {Promise} which resolves to the device added.
    */
-  addDevice(deviceId, deviceDescription) {
+  addDevice(deviceId: string, deviceDescription: any): Promise<Device> {
     return new Promise((resolve, reject) => {
-      if (deviceId in this.devices) {
+      if (deviceId in this.getDevices()) {
         reject(`Device: ${deviceId} already exists.`);
       } else {
         const device = new MockDevice(this, deviceId, deviceDescription);
@@ -140,9 +149,9 @@ class MockAdapter extends Adapter {
    * @param {String} deviceId ID of the device to remove.
    * @return {Promise} which resolves to the device removed.
    */
-  removeDevice(deviceId) {
+  removeDevice(deviceId: string): Promise<Device> {
     return new Promise((resolve, reject) => {
-      const device = this.devices[deviceId];
+      const device = this.getDevice(deviceId);
       if (device) {
         this.handleDeviceRemoved(device);
         resolve(device);
@@ -152,18 +161,17 @@ class MockAdapter extends Adapter {
     });
   }
 
-  pairDevice(deviceId, deviceDescription) {
+  pairDevice(deviceId: string, deviceDescription: any): void {
     this.pairDeviceId = deviceId;
     this.pairDeviceDescription = deviceDescription;
   }
 
-  unpairDevice(deviceId) {
-    this.unpairDeviceId = deviceId;
+  unpairDevice(_deviceId: string): void {
+    // pass
   }
 
-  // eslint-disable-next-line no-unused-vars
-  startPairing(timeoutSeconds) {
-    console.log('MockAdapter:', this.title, 'id', this.id, 'pairing started');
+  startPairing(_timeoutSeconds: number): void {
+    console.log('MockAdapter:', this.getName(), 'id', this.getId(), 'pairing started');
     if (this.pairDeviceId) {
       const deviceId = this.pairDeviceId;
       const deviceDescription = this.pairDeviceDescription;
@@ -178,29 +186,29 @@ class MockAdapter extends Adapter {
     }
   }
 
-  cancelPairing() {
-    console.log('MockAdapter:', this.title, 'id', this.id,
+  cancelPairing(): void {
+    console.log('MockAdapter:', this.getName(), 'id', this.getId(),
                 'pairing cancelled');
   }
 
-  removeThing(device) {
-    console.log('MockAdapter:', this.title, 'id', this.id,
-                'removeThing(', device.id, ') started');
+  removeThing(device: Device): void {
+    console.log('MockAdapter:', this.getName(), 'id', this.getId(),
+                'removeThing(', device.getId(), ') started');
 
-    this.removeDevice(device.id).then(() => {
-      console.log('MockAdapter: device:', device.id, 'was unpaired.');
+    this.removeDevice(device.getId()).then(() => {
+      console.log('MockAdapter: device:', device.getId(), 'was unpaired.');
     }).catch((err) => {
-      console.error('MockAdapter: unpairing', device.id, 'failed');
+      console.error('MockAdapter: unpairing', device.getId(), 'failed');
       console.error(err);
     });
   }
 
-  cancelRemoveThing(device) {
-    console.log('MockAdapter:', this.title, 'id', this.id,
-                'cancelRemoveThing(', device.id, ')');
+  cancelRemoveThing(device: Device): void {
+    console.log('MockAdapter:', this.getName(), 'id', this.getId(),
+                'cancelRemoveThing(', device.getId(), ')');
   }
 
-  setPin(deviceId, pin) {
+  setPin(_deviceId: string, pin: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (pin === '1234') {
         resolve();
@@ -210,7 +218,7 @@ class MockAdapter extends Adapter {
     });
   }
 
-  setCredentials(deviceId, username, password) {
+  setCredentials(_deviceId: string, username: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (username === 'test-user' && password === 'Password-1234!') {
         resolve();
@@ -220,14 +228,18 @@ class MockAdapter extends Adapter {
     });
   }
 
-  unload() {
+  unload(): Promise<void> {
     this.server.close();
     return super.unload();
   }
+
+  getPort(): number {
+    return this.port;
+  }
 }
 
-function loadMockAdapter(addonManager, manifest, _errorCallback) {
+function loadMockAdapter(addonManager: AddonManagerProxy, manifest: any): void {
   new MockAdapter(addonManager, manifest.name);
 }
 
-module.exports = loadMockAdapter;
+export = loadMockAdapter;

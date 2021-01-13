@@ -8,14 +8,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import Action, {ActionDescription} from './action';
+import * as Constants from '../constants';
+import {EventEmitter} from 'events';
 
-const Things = require('../models/things');
+const Things = require('./things');
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
-const EventEmitter = require('events');
 
 class Actions extends EventEmitter {
+  private actions: Record<string, Action>;
+
+  private nextId: number;
+
+  private _onActionStatus: (action: Action) => void;
 
   constructor() {
     super();
@@ -30,13 +35,13 @@ class Actions extends EventEmitter {
      */
     this.nextId = 0;
 
-    this.onActionStatus = this.onActionStatus.bind(this);
+    this._onActionStatus = this.onActionStatus.bind(this);
   }
 
   /**
    * Reset actions state.
    */
-  clearState() {
+  clearState(): void {
     this.nextId = 0;
     for (const id in this.actions) {
       this.remove(id);
@@ -46,9 +51,9 @@ class Actions extends EventEmitter {
   /**
    * Generate an ID for a new action.
    *
-   * @returns {integer} An id.
+   * @returns {String} An id.
    */
-  generateId() {
+  generateId(): string {
     return `${++this.nextId}`;
   }
 
@@ -58,7 +63,7 @@ class Actions extends EventEmitter {
    * @returns {Object} The specified action, or undefined if the action
    * doesn't exist.
    */
-  get(id) {
+  get(id: string): Action {
     return this.actions[id];
   }
 
@@ -67,7 +72,7 @@ class Actions extends EventEmitter {
    *
    * @returns {Array} A list of current actions.
    */
-  getAll() {
+  getAll(): Action[] {
     return Object.keys(this.actions).map((id) => {
       return this.actions[id];
     });
@@ -77,17 +82,17 @@ class Actions extends EventEmitter {
    * Get only the actions which are not associated with a specific thing and
    * therefore belong to the root Gateway
    */
-  getGatewayActions(actionName) {
+  getGatewayActions(actionName: string): { [name: string]: ActionDescription }[] {
     return this.getAll().filter((action) => {
-      return !action.thingId;
+      return !action.getThingId();
     }).filter((action) => {
       if (actionName) {
-        return actionName === action.name;
+        return actionName === action.getName();
       }
 
       return true;
     }).map((action) => {
-      return {[action.name]: action.getDescription()};
+      return {[action.getName()]: action.getDescription()};
     });
   }
 
@@ -95,17 +100,17 @@ class Actions extends EventEmitter {
   /**
    * Get only the actions which are associated with a specific thing
    */
-  getByThing(thingId, actionName) {
+  getByThing(thingId: string, actionName: string): { [name: string]: ActionDescription }[] {
     return this.getAll().filter((action) => {
-      return action.thingId === thingId;
+      return action.getThingId() === thingId;
     }).filter((action) => {
       if (actionName) {
-        return actionName === action.name;
+        return actionName === action.getName();
       }
 
       return true;
     }).map((action) => {
-      return {[action.name]: action.getDescription()};
+      return {[action.getName()]: action.getDescription()};
     });
   }
 
@@ -115,21 +120,21 @@ class Actions extends EventEmitter {
    * @param {Action} action An Action object.
    * @return {Promise} resolved when action added or rejected if failed
    */
-  add(action) {
-    const id = action.id;
+  add(action: Action): Promise<void> {
+    const id = action.getId();
     this.actions[id] = action;
 
     // Call this initially for the 'created' status.
     this.onActionStatus(action);
 
-    action.on(Constants.ACTION_STATUS, this.onActionStatus);
+    action.on(Constants.ACTION_STATUS, this._onActionStatus);
 
-    if (action.thingId) {
-      return Things.getThing(action.thingId).then((thing) => {
+    if (action.getThingId()) {
+      return Things.getThing(action.getThingId()).then((thing: any) => {
         const success = thing.addAction(action);
         if (!success) {
           delete this.actions[id];
-          throw new Error(`Invalid thing action name: "${action.name}"`);
+          throw new Error(`Invalid thing action name: "${action.getName()}"`);
         }
       });
     }
@@ -137,36 +142,36 @@ class Actions extends EventEmitter {
     // Only update the action status if it's being handled internally
     action.updateStatus('pending');
 
-    switch (action.name) {
+    switch (action.getName()) {
       case 'pair':
-        AddonManager.addNewThing(action.input.timeout).then(() => {
+        AddonManager.addNewThing(action.getInput().timeout).then(() => {
           action.updateStatus('completed');
-        }).catch((error) => {
-          action.error = error;
+        }).catch((error: any) => {
+          action.setError(`${error}`);
           action.updateStatus('error');
           console.error('Thing was not added');
           console.error(error);
         });
         break;
       case 'unpair':
-        if (action.input.id) {
+        if (action.getInput().id) {
           const _finally = () => {
-            console.log('unpair: thing:', action.input.id, 'was unpaired');
-            Things.removeThing(action.input.id).then(() => {
+            console.log('unpair: thing:', action.getInput().id, 'was unpaired');
+            Things.removeThing(action.getInput().id).then(() => {
               action.updateStatus('completed');
-            }).catch((error) => {
-              action.error = error;
+            }).catch((error: any) => {
+              action.setError(`${error}`);
               action.updateStatus('error');
               console.error('unpair of thing:',
-                            action.input.id, 'failed.');
+                            action.getInput().id, 'failed.');
               console.error(error);
             });
           };
 
-          AddonManager.removeThing(action.input.id).then(_finally, _finally);
+          AddonManager.removeThing(action.getInput().id).then(_finally, _finally);
         } else {
           const msg = 'unpair missing "id" parameter.';
-          action.error = msg;
+          action.setError(msg);
           action.updateStatus('error');
           console.error(msg);
         }
@@ -174,7 +179,7 @@ class Actions extends EventEmitter {
       default:
         delete this.actions[id];
         return Promise.reject(
-          new Error(`Invalid action name: "${action.name}"`)
+          new Error(`Invalid action name: "${action.getName()}"`)
         );
     }
     return Promise.resolve();
@@ -183,50 +188,50 @@ class Actions extends EventEmitter {
   /**
    * Forward the actionStatus event
    */
-  onActionStatus(action) {
+  onActionStatus(action: Action): void {
     this.emit(Constants.ACTION_STATUS, action);
   }
 
   /**
    * Remove an action from the action list.
    *
-   * @param integer id Action ID.
+   * @param {String} id Action ID.
    *
    * If the action has not yet been completed, it is cancelled.
    */
-  remove(id) {
+  remove(id: string): void {
     const action = this.actions[id];
     if (!action) {
       throw `Invalid action id: ${id}`;
     }
 
-    if (action.status === 'pending') {
-      if (action.thingId) {
-        Things.getThing(action.thingId).then((thing) => {
+    if (action.getStatus() === 'pending') {
+      if (action.getThingId()) {
+        Things.getThing(action.getThingId()).then((thing: any) => {
           if (!thing.removeAction(action)) {
-            throw `Invalid thing action name: "${action.name}"`;
+            throw `Invalid thing action name: "${action.getName()}"`;
           }
-        }).catch((err) => {
+        }).catch((err: any) => {
           console.error('Error removing thing action:', err);
         });
       } else {
-        switch (action.name) {
+        switch (action.getName()) {
           case 'pair':
             AddonManager.cancelAddNewThing();
             break;
           case 'unpair':
-            AddonManager.cancelRemoveThing(action.input.id);
+            AddonManager.cancelRemoveThing(action.getInput().id);
             break;
           default:
-            throw `Invalid action name: "${action.name}"`;
+            throw `Invalid action name: "${action.getName()}"`;
         }
       }
     }
 
     action.updateStatus('deleted');
-    action.removeListener(Constants.ACTION_STATUS, this.onActionStatus);
+    action.removeListener(Constants.ACTION_STATUS, this._onActionStatus);
     delete this.actions[id];
   }
 }
 
-module.exports = new Actions();
+export = new Actions();

@@ -42,7 +42,7 @@ const platform = require('./platform');
 const Router = require('./router');
 const sleep = require('./sleep');
 const Things = require('./models/things');
-const TunnelService = require('./ssltunnel');
+const TunnelService = require('./tunnel-service');
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));

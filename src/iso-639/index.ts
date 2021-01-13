@@ -2,12 +2,10 @@
  * Read data from the official ISO 639-3 table.
  */
 
-'use strict';
-
-const fs = require('fs');
-const {getName} = require('country-list');
-const parse = require('csv-parse/lib/sync');
-const path = require('path');
+import fs from 'fs';
+import {getName} from 'country-list';
+import parse from 'csv-parse/lib/sync';
+import path from 'path';
 
 let parsed = false;
 const by1 = new Map();
@@ -16,7 +14,7 @@ const by3 = new Map();
 /**
  * Parse the table in this directory.
  */
-function readFile() {
+function readFile(): boolean {
   let fname;
   try {
     for (const name of fs.readdirSync(__dirname)) {
@@ -70,12 +68,12 @@ function readFile() {
  * Look up the provided code.
  *
  * @param {string} code - Code to look up
- * @returns {string?} Language name or undefined if not found.
+ * @returns {string|null} Language name or null if not found.
  */
-function lookup(code) {
+function lookup(code: string): string|null {
   if (!parsed) {
     if (!readFile()) {
-      return;
+      return null;
     }
 
     parsed = true;
@@ -88,7 +86,7 @@ function lookup(code) {
   } else if (language.length === 3) {
     name = by3.get(language);
   } else {
-    return;
+    return null;
   }
 
   if (name && country) {
@@ -99,4 +97,4 @@ function lookup(code) {
   return name;
 }
 
-module.exports = lookup;
+export = lookup;

@@ -8,21 +8,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const express = require('express');
-const Constants = require('../constants');
-const TunnelService = require('../ssltunnel');
+import express from 'express';
+import * as Constants from '../constants';
+import TunnelService from '../tunnel-service';
 
 const RootController = express.Router();
 
 /**
  * Get the home page.
  */
-RootController.get('/', TunnelService.isTunnelSet, (request, response) => {
+RootController.get('/', TunnelService.isTunnelSet.bind(TunnelService), (_request, response) => {
   response.sendFile('index.html', {
     root: Constants.BUILD_STATIC_PATH,
   });
 });
 
-module.exports = RootController;
+export = RootController;

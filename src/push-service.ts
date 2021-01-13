@@ -8,20 +8,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import WebPush from 'web-push';
+import * as Settings from './models/settings';
+import Database from './db';
 
-const WebPush = require('web-push');
-const Settings = require('./models/settings');
-const Database = require('./db').default;
+class PushService {
+  private enabled: boolean;
 
-const PushService = {
+  constructor() {
+    this.enabled = false;
+  }
 
-  enabled: false,
   /**
    * Initialize the Push Service, generating and storing a VAPID keypair
    * if necessary.
    */
-  init: async (tunnelDomain) => {
+  async init(tunnelDomain: string): Promise<void> {
     let vapid = await Settings.getSetting('push.vapid');
     if (!vapid) {
       vapid = WebPush.generateVAPIDKeys();
@@ -32,23 +34,23 @@ const PushService = {
     WebPush.setVapidDetails(tunnelDomain, publicKey, privateKey);
 
     this.enabled = true;
-  },
+  }
 
-  getVAPIDKeys: async () => {
+  async getVAPIDKeys(): Promise<string|null> {
     try {
       const vapid = await Settings.getSetting('push.vapid');
       return vapid;
     } catch (err) {
-      // do nothing
       console.error('vapid still not generated');
+      return null;
     }
-  },
+  }
 
-  createPushSubscription: async (subscription) => {
+  async createPushSubscription(subscription: any): Promise<any> {
     return await Database.createPushSubscription(subscription);
-  },
+  }
 
-  broadcastNotification: async (message) => {
+  async broadcastNotification(message: string): Promise<void> {
     if (!this.enabled) {
       return;
     }
@@ -59,7 +61,7 @@ const PushService = {
         Database.deletePushSubscription(subscription.id);
       });
     }
-  },
-};
+  }
+}
 
-module.exports = PushService;
+export = new PushService();

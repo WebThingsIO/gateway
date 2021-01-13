@@ -11,7 +11,7 @@
 'use strict';
 
 const PromiseRouter = require('express-promise-router');
-const Action = require('../models/action');
+const Action = require('../models/action').default;
 const Actions = require('../models/actions');
 const AddonManager = require('../addon-manager');
 const Things = require('../models/things');
@@ -58,7 +58,7 @@ ActionsController.post('/', async (request, response) => {
   try {
     if (thingId) {
       await AddonManager.requestAction(
-        thingId, action.id, actionName, actionParams);
+        thingId, action.getId(), actionName, actionParams);
     }
     await Actions.add(action);
 
@@ -141,7 +141,7 @@ ActionsController.post('/:actionName', async (request, response) => {
   try {
     if (thingId) {
       await AddonManager.requestAction(
-        thingId, action.id, actionName, actionParams);
+        thingId, action.getId(), actionName, actionParams);
     }
     await Actions.add(action);
 
@@ -160,7 +160,7 @@ ActionsController.get('/:actionName/:actionId', (request, response) => {
   const actionId = request.params.actionId;
   const action = Actions.get(actionId);
   if (action) {
-    response.status(200).json({[action.name]: action.getDescription()});
+    response.status(200).json({[action.getName()]: action.getDescription()});
   } else {
     const error = `Action "${actionId}" not found`;
     console.error(error);

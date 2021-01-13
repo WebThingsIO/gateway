@@ -25,7 +25,7 @@ const pkg = require('../../package.json');
 const Platform = require('../platform');
 const PromiseRouter = require('express-promise-router');
 const Settings = require('../models/settings');
-const TunnelService = require('../ssltunnel');
+const TunnelService = require('../tunnel-service');
 
 const auth = jwtMiddleware.middleware();
 const SettingsController = PromiseRouter();
