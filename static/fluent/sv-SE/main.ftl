@@ -550,10 +550,6 @@ local-token-your-token = Dina lokala token är denna <a data-l10n-name="local-to
 local-token-use-it = Använd den för att säkert kommunicera med gatewayen, med <a data-l10n-name="local-token-bearer-type"> Tokenbaserad autentisering</a>.
 local-token-copy-token = Kopiera token
 
-## Router Setup Page
-
-router-setup-password-mismatch = Lösenorden måste överensstämma.
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi konfiguration — { -webthings-gateway-brand }

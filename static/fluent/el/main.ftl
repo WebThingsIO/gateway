@@ -550,14 +550,6 @@ local-token-your-token = Το τοπικό σας token είναι αυτό <a d
 local-token-use-it = Χρησιμοποιήστε το για ασφαλή επικοινωνία με την πύλη, με <a data-l10n-name="local-token-bearer-type">Εξουσιοδότηση τύπου Bearer</a>.
 local-token-copy-token = Αντιγραφή token
 
-## Router Setup Page
-
-    .placeholder = Όνομα δικτύου
-    .placeholder = Κωδικός πρόσβασης
-    .placeholder = Επιβεβαίωση κωδικού πρόσβασης
-    .value = Δημιουργία
-router-setup-password-mismatch = Οι κωδικοί πρόσβασης πρέπει να ταιριάζουν.
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Ρύθμιση Wi-Fi — { -webthings-gateway-brand }

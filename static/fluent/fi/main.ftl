@@ -547,14 +547,6 @@ local-token-your-token = Paikallinen polettisi on tämä <a data-l10n-name="loca
 local-token-use-it = Käytä sitä keskustellaksesi yhdyskäytävän kanssa turvallisesti hyödyntämällä <a data-l10n-name="local-token-bearer-type">Bearer-tyyppistä valtuutta</a>.
 local-token-copy-token = Kopioi poletti
 
-## Router Setup Page
-
-    .placeholder = Verkon nimi
-    .placeholder = Salasana
-    .placeholder = Vahvista salasana
-    .value = Luo
-router-setup-password-mismatch = Salasanojen täytyy täsmätä
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fin asetukset — { -webthings-gateway-brand }

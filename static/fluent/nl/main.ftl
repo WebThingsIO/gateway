@@ -550,14 +550,6 @@ local-token-your-token = Uw lokale token is dit <a data-l10n-name="local-token-j
 local-token-use-it = Gebruik dit om beveiligd met de gateway te praten, met <a data-l10n-name="local-token-bearer-type">Bearer-type-autorisatie</a>.
 local-token-copy-token = Token kopiëren
 
-## Router Setup Page
-
-    .placeholder = Netwerknaam
-    .placeholder = Wachtwoord
-    .placeholder = Bevestig wachtwoord
-    .value = Aanmaken
-router-setup-password-mismatch = Wachtwoorden moeten overeenkomen
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wifi-instellingen – { -webthings-gateway-brand }

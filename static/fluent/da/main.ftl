@@ -550,14 +550,6 @@ local-token-your-token = Din lokale token er denne <a data-l10n-name="local-toke
 local-token-use-it = Benyt den til at kommunikere sikkert med din gateway via <a data-l10n-name="local-token-bearer-type">token-baseret godkendelse</a>.
 local-token-copy-token = Kopiér token
 
-## Router Setup Page
-
-    .placeholder = Netværksnavn
-    .placeholder = Adgangskode
-    .placeholder = Bekræft adgangskode
-    .value = Opret
-router-setup-password-mismatch = Adgangskoderne skal være ens
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Opsætning af Wi-Fi — { -webthings-gateway-brand }

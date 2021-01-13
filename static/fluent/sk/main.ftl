@@ -557,14 +557,6 @@ local-token-your-token = Váš miestny token je <a data-l10n-name="local-token-j
 local-token-use-it = Môžete ho použiť k bezpečnej komunikácii s gateway pomocou overenia typu <a data-l10n-name="local-token-bearer-type">Bearer</a>.
 local-token-copy-token = Skopírovať token
 
-## Router Setup Page
-
-    .placeholder = Názov siete
-    .placeholder = Heslo
-    .placeholder = Overenie hesla
-    .value = Vytvoriť
-router-setup-password-mismatch = Heslá sa musia zhodovať
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Nastavenie Wi-Fi - { -webthings-gateway-brand }

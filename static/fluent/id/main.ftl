@@ -532,14 +532,6 @@ local-token-your-token = Token lokal Anda adalah <a data-l10n-name="local-token-
 local-token-use-it = Gunakan ini untuk berkomunikasi dengan gerbang secara aman, dengan<a data-l10n-name="local-token-bearer-type">Otorisasi Tipe Bearer</a>.
 local-token-copy-token = Salin Token
 
-## Router Setup Page
-
-    .placeholder = Nama jaringan
-    .placeholder = Sandi
-    .placeholder = Konfirmasi sandi
-    .value = Buat
-router-setup-password-mismatch = Sandi harus sama
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Pengaturan Wi-Fi — { -webthings-gateway-brand }

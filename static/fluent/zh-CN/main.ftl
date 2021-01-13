@@ -550,10 +550,6 @@ local-token-your-token = 如下 <a data-l10n-name="local-token-jwt">JSON Web 令
 local-token-use-it = 请使用此令牌（Token），通过 <a data-l10n-name="local-token-bearer-type">Bearer 式验证方案</a> 与网关安全通信。
 local-token-copy-token = 复制令牌（Token）
 
-## Router Setup Page
-
-router-setup-password-mismatch = 密码必须相符。
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi 设置 — { -webthings-gateway-brand }

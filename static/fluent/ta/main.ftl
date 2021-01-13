@@ -537,14 +537,6 @@ local-token-header = உள் அடையாள சேவை
 local-token-your-token = உங்கள் உள் அடையாளம் இந்த <a data-l10n-name="local-token-jwt"> JSON Web Token</a> தான் :
 local-token-use-it = நுழைவாயிலுடன் பாதுகாப்பாக பேச இந்த <a data-l10n-name="local-token-bearer-type"> Bearer-type அங்கீகாரத்தை</a> பயன்படுத்தவும்.
 
-## Router Setup Page
-
-    .placeholder = பிணைய பெயர்
-    .placeholder = கடவுச்சொல்
-    .placeholder = கடவுச்சொல்லை உறுதிசெய்
-    .value = உருவாக்கு
-router-setup-password-mismatch = கடவுச்சொற்கள் பொருந்த வேண்டும்
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi அமைப்பு — { -webthings-gateway-brand }

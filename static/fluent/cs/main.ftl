@@ -554,14 +554,6 @@ local-token-your-token = Váš místní token je tento <a data-l10n-name="local-
 local-token-use-it = Můžete ho použít k bezpečné komunikaci s gateway pomocí ověření typu <a data-l10n-name="local-token-bearer-type">Bearer</a>.
 local-token-copy-token = Zkopírovat token
 
-## Router Setup Page
-
-    .placeholder = Název sítě
-    .placeholder = Heslo
-    .placeholder = Heslo znova
-    .value = Vytvořit
-router-setup-password-mismatch = Heslo se musí shodovat
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Nastavení Wi-Fi - { -webthings-gateway-brand }
