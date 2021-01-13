@@ -18,7 +18,7 @@ class Logs {
 
   private idToDescr: {[id: number]: any};
 
-  private descrToId: {[descr: string]: number};
+  private descrToId: Record<string, number>;
 
   private _onPropertyChanged: (property: any) => void;
 
