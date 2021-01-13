@@ -552,10 +552,6 @@ local-token-copy-token = 复制令牌（Token）
 
 ## Router Setup Page
 
-    .placeholder = 网络名称
-    .placeholder = 密码
-    .placeholder = 确认密码
-    .value = 创建
 router-setup-password-mismatch = 密码必须相符。
 
 ## Wi-Fi Setup Page
