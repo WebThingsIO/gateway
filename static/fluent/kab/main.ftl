@@ -550,14 +550,6 @@ local-token-your-token = Ajitun-ik adigan d wa <a data-l10n-name="local-token-jw
 local-token-use-it = Seqdec-it i teywalt akked tqenṭert-ik s wudem aɣelsan s <a data-l10n-name="local-token-bearer-type">Bearer-type Authorization</a>.
 local-token-copy-token = Nɣel ajiṭun
 
-## Router Setup Page
-
-    .placeholder = Isem n uẓeṭṭa
-    .placeholder = Awal uffir
-    .placeholder = Sentem awal uffir
-    .value = Rnu
-router-setup-password-mismatch = Awalen uffiren yessefk ad mṣadan
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Tawila n Wi-Fi — { -webthings-gateway-brand }

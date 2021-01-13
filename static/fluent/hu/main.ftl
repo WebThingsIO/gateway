@@ -550,14 +550,6 @@ local-token-your-token = A helyi tokenje ez a <a data-l10n-name="local-token-jwt
 local-token-use-it = Használja ezt az átjáróval való biztonságos beszélgetéshez, <a data-l10n-name="local-token-bearer-type">birtokos típusú felhatalmazással</a>.
 local-token-copy-token = Token másolása
 
-## Router Setup Page
-
-    .placeholder = Hálózatnév
-    .placeholder = Jelszó
-    .placeholder = Jelszó megerősítése
-    .value = Létrehozás
-router-setup-password-mismatch = A jelszavaknak egyezniük kell
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Wi-Fi beállítás – { -webthings-gateway-brand }

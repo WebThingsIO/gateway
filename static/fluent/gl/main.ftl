@@ -539,14 +539,6 @@ local-token-your-token = A mostra local é este <a data-l10n-name="local-token-j
 local-token-use-it = Utilízao para falar coa entrada de forma segura, con <a data-l10n-name="local-token-bearer-type"> Autorización de tipo portador </a>.
 local-token-copy-token = Copiar mostra
 
-## Router Setup Page
-
-    .placeholder = Nome da rede
-    .placeholder = Contrasinal
-    .placeholder = Confirmar o contrasinal
-    .value = Crear
-router-setup-password-mismatch = Os contrasinais deben coincidir
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configuración do Wi-Fi — { -webthings-gateway-brand }

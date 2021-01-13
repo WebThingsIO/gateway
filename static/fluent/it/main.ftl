@@ -550,14 +550,6 @@ local-token-your-token = Il token locale è: <a data-l10n-name="local-token-jwt"
 local-token-use-it = Permette una comunicazione sicura con il gateway, con <a data-l10n-name="local-token-bearer-type">autorizzazione tipo Bearer</a>.
 local-token-copy-token = Copia token
 
-## Router Setup Page
-
-    .placeholder = Nome della rete
-    .placeholder = Password
-    .placeholder = Conferma password
-    .value = Crea
-router-setup-password-mismatch = Le password devono essere identiche
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configurazione Wi-Fi — { -webthings-gateway-brand }

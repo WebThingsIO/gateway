@@ -550,14 +550,6 @@ local-token-your-token = Tu jeton local es isto <a data-l10n-name="local-token-j
 local-token-use-it = Usa lo pro communicar con le passarella con securitate, con le <a data-l10n-name="local-token-bearer-type">autorisation typo Bearer</a>.
 local-token-copy-token = Copiar token
 
-## Router Setup Page
-
-    .placeholder = Nomine del rete
-    .placeholder = Contrasigno
-    .placeholder = Confirmar le contrasigno
-    .value = Crear
-router-setup-password-mismatch = Le contrasignos debe concordar
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configuration del rete — { -webthings-gateway-brand }

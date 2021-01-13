@@ -546,14 +546,6 @@ local-token-your-token = Votre jeton local est le <a data-l10n-name="local-token
 local-token-use-it = L’utiliser pour communiquer avec votre passerelle en toute sécurité avec <a data-l10n-name="local-token-bearer-type">« Bearer-type Authorization »</a>.
 local-token-copy-token = Copier le jeton
 
-## Router Setup Page
-
-    .placeholder = Nom du réseau
-    .placeholder = Mot de passe
-    .placeholder = Confirmer le mot de passe
-    .value = Créer
-router-setup-password-mismatch = Les mots de passe doivent être identiques
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Configuration Wi-Fi — { -webthings-gateway-brand }

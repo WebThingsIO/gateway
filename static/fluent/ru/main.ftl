@@ -557,14 +557,6 @@ local-token-your-token = Ваш локальный токен <a data-l10n-name=
 local-token-use-it = Используйте его для общения со шлюзом, с <a data-l10n-name="local-token-bearer-type">Авторизация типа носителя</a>.
 local-token-copy-token = Копировать токен
 
-## Router Setup Page
-
-    .placeholder = Имя сети
-    .placeholder = Пароль
-    .placeholder = Подтвердите пароль
-    .value = Создать
-router-setup-password-mismatch = Пароли должны совпадать
-
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Настройка Wi-Fi — { -webthings-gateway-brand }
