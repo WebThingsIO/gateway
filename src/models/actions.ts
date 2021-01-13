@@ -16,7 +16,7 @@ const Things = require('./things');
 const AddonManager = require('../addon-manager');
 
 class Actions extends EventEmitter {
-  private actions: {[id: string]: Action};
+  private actions: Record<string, Action>;
 
   private nextId: number;
 
