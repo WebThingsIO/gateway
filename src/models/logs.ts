@@ -16,7 +16,7 @@ const METRICS_OTHER = 'metricsOther';
 class Logs {
   private db: SQLiteDatabase|null;
 
-  private idToDescr: {[id: number]: any};
+  private idToDescr: Record<number, any>;
 
   private descrToId: Record<string, number>;
 
