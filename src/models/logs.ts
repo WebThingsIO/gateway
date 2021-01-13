@@ -1,32 +1,45 @@
-const config = require('config');
-const fs = require('fs');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+import config from 'config';
+import fs from 'fs';
+import path from 'path';
+import {verbose, Database as SQLiteDatabase} from 'sqlite3';
+import * as Constants from '../constants';
+import UserProfile from '../user-profile';
 
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
-const UserProfile = require('../user-profile').default;
+
+const sqlite3 = verbose();
 
 const METRICS_NUMBER = 'metricsNumber';
 const METRICS_BOOLEAN = 'metricsBoolean';
 const METRICS_OTHER = 'metricsOther';
 
 class Logs {
+  private db: SQLiteDatabase|null;
+
+  private idToDescr: Record<number, any>;
+
+  private descrToId: Record<string, number>;
+
+  private _onPropertyChanged: (property: any) => void;
+
+  private _clearOldMetrics: () => Promise<void>;
+
+  private clearOldMetricsInterval: NodeJS.Timeout;
+
   constructor() {
     this.db = null;
     this.idToDescr = {};
     this.descrToId = {};
-    this.onPropertyChanged = this.onPropertyChanged.bind(this);
-    this.clearOldMetrics = this.clearOldMetrics.bind(this);
+    this._onPropertyChanged = this.onPropertyChanged.bind(this);
+    this._clearOldMetrics = this.clearOldMetrics.bind(this);
 
-    AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
+    AddonManager.on(Constants.PROPERTY_CHANGED, this._onPropertyChanged);
 
     // Clear out old metrics every hour
-    this.clearOldMetricsInterval =
-      setInterval(this.clearOldMetrics, 60 * 60 * 1000);
+    this.clearOldMetricsInterval = setInterval(this._clearOldMetrics, 60 * 60 * 1000);
   }
 
-  clear() {
+  clear(): Promise<any[]> {
     this.idToDescr = {};
     this.descrToId = {};
     return Promise.all([
@@ -35,22 +48,22 @@ class Logs {
       METRICS_OTHER,
       'metricIds',
     ].map((table) => {
-      return this.run(`DELETE FROM ${table}`);
+      return this.run(`DELETE FROM ${table}`, []);
     }));
   }
 
-  close() {
+  close(): void {
     if (this.db) {
-      this.db.close();
+      this.db!.close();
       this.db = null;
     }
 
     AddonManager.removeListener(Constants.PROPERTY_CHANGED,
-                                this.onPropertyChanged);
+                                this._onPropertyChanged);
     clearInterval(this.clearOldMetricsInterval);
   }
 
-  open() {
+  open(): void {
     // Get all things, create table if not exists
     // If the database is already open, just return.
     if (this.db) {
@@ -79,7 +92,7 @@ class Logs {
     });
   }
 
-  createTables() {
+  createTables(): Promise<any[]> {
     return Promise.all([
       this.createMetricTable(METRICS_NUMBER, typeof 0),
       this.createMetricTable(METRICS_BOOLEAN, typeof false),
@@ -88,7 +101,7 @@ class Logs {
     ]);
   }
 
-  createIdTable() {
+  createIdTable(): Promise<any> {
     // We use a version of sqlite which doesn't support foreign keys so id is
     // an integer referenced by the metric tables
     return this.run(`CREATE TABLE IF NOT EXISTS metricIds (
@@ -98,11 +111,11 @@ class Logs {
     );`, []);
   }
 
-  createMetricTable(id, type) {
+  createMetricTable(id: string, dataType: string) {
     const table = id;
     let sqlType = 'TEXT';
 
-    switch (type) {
+    switch (dataType) {
       case 'number':
         sqlType = 'REAL';
         break;
@@ -118,7 +131,7 @@ class Logs {
     );`, []);
   }
 
-  async loadKnownMetrics() {
+  async loadKnownMetrics(): Promise<void> {
     const rows = await this.all('SELECT id, descr, maxAge FROM metricIds');
     for (const row of rows) {
       this.idToDescr[row.id] = JSON.parse(row.descr);
@@ -127,7 +140,7 @@ class Logs {
     }
   }
 
-  propertyDescr(thingId, propId) {
+  propertyDescr(thingId: string, propId: string): {type: string, thing: string, property: string} {
     return {
       type: 'property',
       thing: thingId,
@@ -135,7 +148,7 @@ class Logs {
     };
   }
 
-  actionDescr(thingId, actionId) {
+  actionDescr(thingId: string, actionId: string): {type: string, thing: string, action: string} {
     return {
       type: 'action',
       thing: thingId,
@@ -143,7 +156,7 @@ class Logs {
     };
   }
 
-  eventDescr(thingId, eventId) {
+  eventDescr(thingId: string, eventId: string): {type: string, thing: string, event: string} {
     return {
       type: 'event',
       thing: thingId,
@@ -155,10 +168,10 @@ class Logs {
    * @param {Object} rawDescr
    * @param {number} maxAge
    */
-  async registerMetric(rawDescr, maxAge) {
+  async registerMetric(rawDescr: any, maxAge: number): Promise<number|null> {
     const descr = JSON.stringify(rawDescr);
     if (this.descrToId.hasOwnProperty(descr)) {
-      return;
+      return null;
     }
     const result = await this.run(
       'INSERT INTO metricIds (descr, maxAge) VALUES (?, ?)',
@@ -175,7 +188,7 @@ class Logs {
    * @param {any} rawValue
    * @param {Date} date
    */
-  async insertMetric(rawDescr, rawValue, date) {
+  async insertMetric(rawDescr: any, rawValue: any, date: Date): Promise<void> {
     const descr = JSON.stringify(rawDescr);
     if (!this.descrToId.hasOwnProperty(descr)) {
       return;
@@ -207,7 +220,7 @@ class Logs {
    * Remove a metric with all its associated data
    * @param {Object} rawDescr
    */
-  async unregisterMetric(rawDescr) {
+  async unregisterMetric(rawDescr: any): Promise<void> {
     const descr = JSON.stringify(rawDescr);
     const id = this.descrToId[descr];
     await Promise.all([
@@ -223,19 +236,14 @@ class Logs {
     delete this.idToDescr[id];
   }
 
-  onPropertyChanged(property) {
+  onPropertyChanged(property: any): void {
     const thingId = property.device.id;
     const descr = this.propertyDescr(thingId, property.name);
     this.insertMetric(descr, property.value, new Date());
   }
 
-  onEvent() {
-  }
-
-  onAction() {
-  }
-
-  buildQuery(table, id, start, end, limit) {
+  buildQuery(table: string, id: number|null, start: number, end: number, limit: number|null):
+  {query: string, params: number[]} {
     const conditions = [];
     const params = [];
     if (typeof id === 'number') {
@@ -265,8 +273,9 @@ class Logs {
     };
   }
 
-  async loadMetrics(out, table, transformer, id, start, end) {
-    const {query, params} = this.buildQuery(table, id, start, end);
+  async loadMetrics(out: any, table: string, transformer: ((arg: any) => any)|null, id: number|null,
+                    start: number, end: number): Promise<void> {
+    const {query, params} = this.buildQuery(table, id, start, end, null);
     const rows = await this.all(query, params);
 
     for (const row of rows) {
@@ -289,7 +298,7 @@ class Logs {
     }
   }
 
-  async getAll(start, end) {
+  async getAll(start: number, end: number): Promise<any> {
     const out = {};
     await this.loadMetrics(out, METRICS_NUMBER, null, null, start, end);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null,
@@ -299,14 +308,15 @@ class Logs {
     return out;
   }
 
-  async get(thingId, start, end) {
+  async get(thingId: string, start: number, end: number): Promise<any> {
     const all = await this.getAll(start, end);
     return all[thingId];
   }
 
-  async getProperty(thingId, propertyName, start, end) {
-    const descr = this.propertyDescr(thingId, propertyName);
-    const out = {};
+  async getProperty(thingId: string, propertyName: string, start: number, end: number):
+  Promise<any> {
+    const descr = JSON.stringify(this.propertyDescr(thingId, propertyName));
+    const out: any = {};
     const id = this.descrToId[descr];
     // TODO determine property type to only do one of these
     await this.loadMetrics(out, METRICS_NUMBER, null, id, start, end);
@@ -317,7 +327,7 @@ class Logs {
     return out[thingId][propertyName];
   }
 
-  async getSchema() {
+  async getSchema(): Promise<any> {
     await this.loadKnownMetrics();
     const schema = [];
     for (const id in this.idToDescr) {
@@ -331,7 +341,9 @@ class Logs {
     return schema;
   }
 
-  async streamMetrics(callback, table, transformer, id, start, end) {
+  async streamMetrics(callback: (metrics: any[]) => void, table: string,
+                      transformer: ((arg: any) => any)|null, id: number|null, start: number,
+                      end: number): Promise<void> {
     const MAX_ROWS = 10000;
     start = start || 0;
     end = end || Date.now();
@@ -343,7 +355,7 @@ class Logs {
       if (rows.length < MAX_ROWS) {
         queryCompleted = true;
       }
-      callback(rows.map((row) => {
+      callback(rows.map((row: any) => {
         const value = transformer ? transformer(row.value) : row.value;
         return {
           id: row.id,
@@ -361,18 +373,18 @@ class Logs {
     }
   }
 
-  async streamAll(callback, start, end) {
+  async streamAll(callback: (metrics: any[]) => void, start: number, end: number): Promise<void> {
     // Stream all three in parallel, which should look cool
     await Promise.all([
       this.streamMetrics(callback, METRICS_NUMBER, null, null, start, end),
       this.streamMetrics(callback, METRICS_BOOLEAN,
-                         (value) => !!value, null, start, end),
+                         (value: any) => !!value, null, start, end),
       this.streamMetrics(callback, METRICS_OTHER,
-                         (value) => JSON.parse(value), null, start, end),
+                         (value: any) => JSON.parse(value), null, start, end),
     ]);
   }
 
-  async clearOldMetrics() {
+  async clearOldMetrics(): Promise<any> {
     await this.loadKnownMetrics();
     for (const id in this.idToDescr) {
       const descr = this.idToDescr[id];
@@ -391,18 +403,18 @@ class Logs {
     }
   }
 
-  all(sql, ...params) {
-    return new Promise((accept, reject) => {
-      params.push(function(err, rows) {
+  all(sql: string, ...params: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      params.push(function(err: any, rows: any[]) {
         if (err) {
           reject(err);
           return;
         }
-        accept(rows);
+        resolve(rows);
       });
 
       try {
-        this.db.all(sql, ...params);
+        this.db!.all(sql, ...params);
       } catch (err) {
         reject(err);
       }
@@ -415,16 +427,16 @@ class Logs {
    * @param {Array<any>} values
    * @return {Promise<Object>} promise resolved to `this` of statement result
    */
-  run(sql, values) {
-    return new Promise((accept, reject) => {
+  run(sql: string, values: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
       try {
-        this.db.run(sql, values, function(err) {
+        this.db!.run(sql, values, function(err) {
           if (err) {
             reject(err);
             return;
           }
           // node-sqlite puts results on "this" so avoid arrrow fn.
-          accept(this);
+          resolve(this);
         });
       } catch (err) {
         reject(err);
@@ -433,5 +445,4 @@ class Logs {
   }
 }
 
-module.exports = new Logs();
-
+export = new Logs();

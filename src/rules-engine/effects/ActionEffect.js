@@ -8,7 +8,7 @@
 
 const assert = require('assert');
 
-const Action = require('../../models/action');
+const Action = require('../../models/action').default;
 const Actions = require('../../models/actions');
 const AddonManager = require('../../addon-manager');
 const Effect = require('./Effect');
@@ -63,7 +63,7 @@ class ActionEffect extends Effect {
 
       const action = new Action(this.action, this.parameters, thing);
       await Actions.add(action);
-      await AddonManager.requestAction(this.thing, action.id, this.action,
+      await AddonManager.requestAction(this.thing, action.getId(), this.action,
                                        this.parameters);
     } catch (e) {
       console.warn('Unable to dispatch action', e);

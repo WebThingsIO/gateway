@@ -1,5 +1,5 @@
 /**
- * settings-adapter.js - Adapter for testing portions of the the
+ * settings-adapter.ts - Adapter for testing portions of the the
  *                       settings-controller.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,19 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const {Adapter} = require('gateway-addon');
+import {Adapter, AddonManagerProxy} from 'gateway-addon';
 
 class SettingsTestAdapter extends Adapter {
-  constructor(addonManager, packageName) {
+  constructor(addonManager: AddonManagerProxy, packageName: string) {
     super(addonManager, packageName, packageName);
     addonManager.addAdapter(this);
   }
 }
 
-function loadSettingsTestAdapter(addonManager, manifest, _errorCallback) {
+function loadSettingsTestAdapter(addonManager: AddonManagerProxy, manifest: any): void {
   new SettingsTestAdapter(addonManager, manifest.name);
 }
 
-module.exports = loadSettingsTestAdapter;
+export = loadSettingsTestAdapter;

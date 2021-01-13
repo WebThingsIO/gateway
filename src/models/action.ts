@@ -8,21 +8,46 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import Actions from './actions';
+import * as Constants from '../constants';
+import {EventEmitter} from 'events';
+import {Utils} from 'gateway-addon';
 
-const Actions = require('../models/actions');
-const Constants = require('../constants');
-const EventEmitter = require('events');
-const {Utils} = require('gateway-addon');
+export interface ActionDescription {
+  input: any;
+  href: string;
+  status: string;
+  timeRequested: string;
+  timeCompleted?: string;
+  error?: string;
+}
 
-class Action extends EventEmitter {
+export default class Action extends EventEmitter {
+  private id: string;
+
+  private name: string;
+
+  private input: any;
+
+  private href: string;
+
+  private thingId: string|null;
+
+  private status: string;
+
+  private timeRequested: string;
+
+  private timeCompleted: string|null;
+
+  private error: string;
+
   /**
    * Create a new Action
    * @param {String} name
    * @param {Object} input
    * @param {Thing?} thing
    */
-  constructor(name, input, thing) {
+  constructor(name: string, input?: any, thing?: any) {
     super();
 
     this.id = Actions.generateId();
@@ -33,6 +58,7 @@ class Action extends EventEmitter {
       this.thingId = thing.id;
     } else {
       this.href = `${Constants.ACTIONS_PATH}/${name}/${this.id}`;
+      this.thingId = null;
     }
     this.status = 'created';
     this.timeRequested = Utils.timestamp();
@@ -40,8 +66,8 @@ class Action extends EventEmitter {
     this.error = '';
   }
 
-  getDescription() {
-    const description = {
+  getDescription(): ActionDescription {
+    const description: ActionDescription = {
       input: this.input,
       href: this.href,
       status: this.status,
@@ -63,7 +89,7 @@ class Action extends EventEmitter {
    * Update status and notify listeners
    * @param {String} newStatus
    */
-  updateStatus(newStatus) {
+  updateStatus(newStatus: string): void {
     if (this.status === newStatus) {
       return;
     }
@@ -79,7 +105,7 @@ class Action extends EventEmitter {
   /**
    * Update from another action.
    */
-  update(action) {
+  update(action: any): void {
     this.timeRequested = action.timeRequested;
     this.timeCompleted = action.timeCompleted;
 
@@ -88,6 +114,36 @@ class Action extends EventEmitter {
       this.emit(Constants.ACTION_STATUS, this);
     }
   }
-}
 
-module.exports = Action;
+  getId(): string {
+    return this.id;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  getInput(): any {
+    return this.input;
+  }
+
+  getThingId(): string|null {
+    return this.thingId;
+  }
+
+  getStatus(): string {
+    return this.status;
+  }
+
+  getTimeRequested(): string {
+    return this.timeRequested;
+  }
+
+  getTimeCompleted(): string|null {
+    return this.timeCompleted;
+  }
+
+  setError(error: string): void {
+    this.error = error;
+  }
+}

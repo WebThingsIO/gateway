@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Action = require('../models/action');
+const Action = require('../models/action').default;
 const Actions = require('../models/actions');
 const ActionsController = require('./actions_controller');
 const AddonManager = require('../addon-manager');
@@ -429,7 +429,7 @@ function websocketHandler(websocket, request) {
 
   function onActionStatus(action) {
     if (action.hasOwnProperty('thingId') &&
-        typeof thingId !== 'undefined' &&
+        action.thingId !== null &&
         action.thingId !== thingId) {
       return;
     }
@@ -441,7 +441,7 @@ function websocketHandler(websocket, request) {
       },
     };
 
-    if (action.hasOwnProperty('thingId')) {
+    if (action.thingId !== null) {
       message.id = action.thingId;
     }
 
