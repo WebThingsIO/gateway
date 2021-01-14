@@ -14,7 +14,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const Settings = require('./models/settings');
-const sleep = require('./sleep');
+const sleep = require('./sleep').default;
 const {URLSearchParams} = require('url');
 const UserProfile = require('./user-profile').default;
 

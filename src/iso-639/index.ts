@@ -70,7 +70,7 @@ function readFile(): boolean {
  * @param {string} code - Code to look up
  * @returns {string|null} Language name or null if not found.
  */
-function lookup(code: string): string|null {
+export default function lookup(code: string): string|null {
   if (!parsed) {
     if (!readFile()) {
       return null;
@@ -96,5 +96,3 @@ function lookup(code: string): string|null {
 
   return name;
 }
-
-export = lookup;

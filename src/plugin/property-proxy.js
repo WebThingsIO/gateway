@@ -9,7 +9,7 @@
 
 'use strict';
 
-const Deferred = require('../deferred');
+const Deferred = require('../deferred').default;
 const {Property} = require('gateway-addon');
 const {MessageType} = require('gateway-addon').Constants;
 

@@ -1,4 +1,4 @@
-const sleep = require('../sleep');
+const sleep = require('../sleep').default;
 
 module.exports.waitForExpect = (expect) => new Promise((resolve, reject) => {
   let wait = 2500;

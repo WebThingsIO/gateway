@@ -91,4 +91,4 @@ index.delete('/:id', async (req, res) => {
   await engine.getRules();
 };
 
-export = index;
+export default index;

@@ -446,4 +446,5 @@ class Logs {
   }
 }
 
-export = new Logs();
+const logs = new Logs();
+export default logs;

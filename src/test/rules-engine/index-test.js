@@ -10,7 +10,7 @@ const {
 
 const Constants = require('../../constants');
 const Event = require('../../models/event').default;
-const Events = require('../../models/events');
+const Events = require('../../models/events').default;
 
 const {
   webSocketOpen,

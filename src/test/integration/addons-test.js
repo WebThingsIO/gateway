@@ -17,7 +17,7 @@ const path = require('path');
 const Platform = require('../../platform');
 const pkg = require('../../../package.json');
 const semver = require('semver');
-const sleep = require('../../sleep');
+const sleep = require('../../sleep').default;
 const UserProfile = require('../../user-profile').default;
 const {URLSearchParams} = require('url');
 
