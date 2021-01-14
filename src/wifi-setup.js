@@ -9,7 +9,7 @@ const mDNSserver = require('./mdns-server');
 const os = require('os');
 const platform = require('./platform');
 const Settings = require('./models/settings');
-const sleep = require('./sleep');
+const sleep = require('./sleep').default;
 
 const hbs = expressHandlebars.create({
   helpers: {

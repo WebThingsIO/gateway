@@ -1,5 +1,3 @@
-'use strict';
-
 import {URL} from 'url';
 import {ClientRegistry} from '../oauth-types';
 import config from 'config';

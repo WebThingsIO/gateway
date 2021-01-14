@@ -12,7 +12,7 @@
 'use strict';
 
 const {APIHandler} = require('gateway-addon');
-const Deferred = require('../deferred');
+const Deferred = require('../deferred').default;
 const {MessageType} = require('gateway-addon').Constants;
 
 /**

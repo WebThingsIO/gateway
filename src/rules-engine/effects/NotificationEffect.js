@@ -8,7 +8,7 @@
 
 const assert = require('assert');
 const Effect = require('./Effect');
-const PushService = require('../../push-service');
+const PushService = require('../../push-service').default;
 
 /**
  * An Effect which creates a notification

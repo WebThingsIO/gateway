@@ -9,7 +9,7 @@
 const assert = require('assert');
 
 const Action = require('../../models/action').default;
-const Actions = require('../../models/actions');
+const Actions = require('../../models/actions').default;
 const AddonManager = require('../../addon-manager');
 const Effect = require('./Effect');
 const Things = require('../../models/things');

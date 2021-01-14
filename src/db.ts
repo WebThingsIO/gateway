@@ -619,4 +619,5 @@ class Database {
   }
 }
 
-export = new Database();
+const db = new Database();
+export default db;

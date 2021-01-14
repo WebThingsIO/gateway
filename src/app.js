@@ -35,14 +35,14 @@ const SegfaultHandler = require('segfault-handler');
 // Internal Dependencies
 const addonManager = require('./addon-manager');
 const Constants = require('./constants');
-const Database = require('./db');
+const Database = require('./db').default;
 const mDNSserver = require('./mdns-server');
-const Logs = require('./models/logs');
+const Logs = require('./models/logs').default;
 const platform = require('./platform');
 const Router = require('./router');
-const sleep = require('./sleep');
+const sleep = require('./sleep').default;
 const Things = require('./models/things');
-const TunnelService = require('./tunnel-service');
+const TunnelService = require('./tunnel-service').default;
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
@@ -217,7 +217,7 @@ function getOptions() {
  * Set up the rules engine.
  */
 function rulesEngineConfigure() {
-  const rulesEngine = require('./rules-engine/index');
+  const rulesEngine = require('./rules-engine/index').default;
   rulesEngine.configure();
 }
 

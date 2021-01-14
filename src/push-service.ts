@@ -64,4 +64,5 @@ class PushService {
   }
 }
 
-export = new PushService();
+const service = new PushService();
+export default service;

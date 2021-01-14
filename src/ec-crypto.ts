@@ -9,10 +9,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-import * as asn1 from 'asn1.js';
-import * as crypto from 'crypto';
+import asn1 from 'asn1.js';
+import crypto from 'crypto';
 
 /**
  * This curve goes by different names in different standards.

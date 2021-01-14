@@ -9,11 +9,11 @@
 
 'use strict';
 
-const Actions = require('../models/actions');
+const Actions = require('../models/actions').default;
 const Constants = require('../constants');
 const {Device, Deferred} = require('gateway-addon');
 const Event = require('../models/event').default;
-const Events = require('../models/events');
+const Events = require('../models/events').default;
 const {MessageType} = require('gateway-addon').Constants;
 const PropertyProxy = require('./property-proxy');
 

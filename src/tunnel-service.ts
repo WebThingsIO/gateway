@@ -226,4 +226,5 @@ class TunnelService {
   }
 }
 
-export = new TunnelService();
+const service = new TunnelService();
+export default service;

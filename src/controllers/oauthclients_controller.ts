@@ -8,8 +8,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import express from 'express';
 import OAuthClients from '../models/oauthclients';
 import {ClientRegistry} from '../oauth-types';

@@ -13,7 +13,7 @@ import Database from '../db';
 import * as Passwords from '../passwords';
 import speakeasy from 'speakeasy';
 
-export = class User {
+export default class User {
   private id: number|null;
 
   private email: string;
@@ -139,4 +139,4 @@ export = class User {
   setMfaEnrolled(mfaEnrolled: boolean): void {
     this.mfaEnrolled = mfaEnrolled;
   }
-};
+}

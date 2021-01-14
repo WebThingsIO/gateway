@@ -101,9 +101,9 @@ export function migrate(): Promise<any[]> {
     renameFile(oldDbPath, dbPath);
   }
 
-  const Database = require('./db');
+  const Database = require('./db').default;
   const Settings = require('./models/settings');
-  const User = require('./models/user');
+  const User = require('./models/user').default;
   const Users = require('./models/users');
 
   // Open the database.

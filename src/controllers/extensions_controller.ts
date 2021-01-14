@@ -1,5 +1,3 @@
-'use strict';
-
 import express from 'express';
 import fs from 'fs';
 import GlobToRegExp from 'glob-to-regexp';
