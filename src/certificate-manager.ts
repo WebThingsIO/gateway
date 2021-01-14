@@ -6,17 +6,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const acme = require('acme-client');
-const config = require('config');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
-const Settings = require('./models/settings');
-const sleep = require('./sleep').default;
-const {URLSearchParams} = require('url');
-const UserProfile = require('./user-profile').default;
+import * as acme from 'acme-client';
+import config from 'config';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import * as Settings from './models/settings';
+import sleep from './sleep';
+import {URLSearchParams} from 'url';
+import UserProfile from './user-profile';
+import {Server} from 'https';
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -33,7 +32,7 @@ const DIRECTORY_URL = acme.directory.letsencrypt.production;
  * @param {string} privateKey - The generated private key
  * @param {string} chain - The generated certificate chain
  */
-function writeCertificates(certificate, privateKey, chain) {
+function writeCertificates(certificate: string, privateKey: string, chain: string): void {
   fs.writeFileSync(
     path.join(UserProfile.sslDir, 'certificate.pem'),
     certificate
@@ -57,11 +56,10 @@ function writeCertificates(certificate, privateKey, chain) {
  * @param {string} fulldomain - The full domain being registered
  * @param {boolean} optout - Whether or not the user opted out of emails
  * @param {function} callback - Callback function
- * @param {function?} newsletterCallback - Callback function for newsletter
- *                                         subscription errors
  */
-async function register(email, reclamationToken, subdomain, fulldomain,
-                        optout, callback, newsletterCallback) {
+export async function register(email: string, reclamationToken: string|null, subdomain: string,
+                               fulldomain: string, optout: boolean,
+                               callback: (err?: string) => void): Promise<void> {
   if (DEBUG) {
     console.debug('Starting registration:', email, reclamationToken, subdomain,
                   fulldomain, optout);
@@ -70,7 +68,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
   }
 
   const endpoint = config.get('ssltunnel.registration_endpoint');
-  let token;
+  let token: string;
 
   // First, try to register the subdomain with the registration server.
   try {
@@ -134,24 +132,25 @@ async function register(email, reclamationToken, subdomain, fulldomain,
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeCreateFn = async (_authz, _challenge, keyAuthorization) => {
-    const params = new URLSearchParams();
-    params.set('token', token);
-    params.set('challenge', keyAuthorization);
+  const challengeCreateFn =
+    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string) => {
+      const params = new URLSearchParams();
+      params.set('token', token);
+      params.set('challenge', keyAuthorization);
 
-    // Now that we have a challenge, we call our registration server to
-    // setup the TXT record
-    const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to set DNS token on server: ${response.status}`);
-    }
+      // Now that we have a challenge, we call our registration server to
+      // setup the TXT record
+      const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Failed to set DNS token on server: ${response.status}`);
+      }
 
-    console.log('Set DNS token on registration server');
+      console.log('Set DNS token on registration server');
 
-    // Let's wait a few seconds for changes to propagate on the registration
-    // server and its database.
-    await sleep(2500);
-  };
+      // Let's wait a few seconds for changes to propagate on the registration
+      // server and its database.
+      await sleep(2500);
+    };
 
   /**
    * Function used to remove an ACME challenge response
@@ -161,7 +160,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeRemoveFn = async (_authz, _challenge, _keyAuthorization) => {
+  const challengeRemoveFn = async () => {
     // do nothing for now
   };
 
@@ -224,15 +223,8 @@ async function register(email, reclamationToken, subdomain, fulldomain,
         }),
       }
     );
-
-    if (newsletterCallback) {
-      newsletterCallback();
-    }
   } catch (e) {
     console.error('Failed to subscribe to newsletter:', e);
-    if (newsletterCallback) {
-      newsletterCallback(e);
-    }
   }
 
   console.log('Registration success!');
@@ -244,7 +236,7 @@ async function register(email, reclamationToken, subdomain, fulldomain,
  *
  * @param {Object} server - HTTPS server handle
  */
-async function renew(server) {
+export async function renew(server: Server): Promise<void> {
   console.log('Starting certificate renewal.');
 
   // Check if we need to renew yet
@@ -253,10 +245,10 @@ async function renew(server) {
       path.join(UserProfile.sslDir, 'certificate.pem')
     );
     const info = await acme.forge.readCertificateInfo(oldCert);
-    const now = new Date();
+    const now = new Date().getTime();
 
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
-    if (info.notAfter - now >= oneWeek) {
+    if (info.notAfter.getTime() - now >= oneWeek) {
       console.log('Certificate not yet due for renewal.');
       return;
     }
@@ -264,7 +256,7 @@ async function renew(server) {
     // pass. move on to renewal.
   }
 
-  let tunnelToken;
+  let tunnelToken: {name: string, token: string, base: string};
   try {
     tunnelToken = await Settings.getSetting('tunneltoken');
   } catch (e) {
@@ -280,25 +272,26 @@ async function renew(server) {
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeCreateFn = async (_authz, challenge, keyAuthorization) => {
-    const params = new URLSearchParams();
-    params.set('token', tunnelToken.token);
-    params.set('challenge', keyAuthorization);
+  const challengeCreateFn =
+    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string) => {
+      const params = new URLSearchParams();
+      params.set('token', tunnelToken.token);
+      params.set('challenge', keyAuthorization);
 
-    // Now that we have a challenge, we call our registration server to
-    // setup the TXT record
-    const endpoint = config.get('ssltunnel.registration_endpoint');
-    const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to set DNS token on server: ${response.status}`);
-    }
+      // Now that we have a challenge, we call our registration server to
+      // setup the TXT record
+      const endpoint = config.get('ssltunnel.registration_endpoint');
+      const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Failed to set DNS token on server: ${response.status}`);
+      }
 
-    console.log('Set DNS token on registration server');
+      console.log('Set DNS token on registration server');
 
-    // Let's wait a few seconds for changes to propagate on the registration
-    // server and its database.
-    await sleep(2500);
-  };
+      // Let's wait a few seconds for changes to propagate on the registration
+      // server and its database.
+      await sleep(2500);
+    };
 
   /**
    * Function used to remove an ACME challenge response
@@ -308,7 +301,7 @@ async function renew(server) {
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeRemoveFn = async (_authz, _challenge, _keyAuthorization) => {
+  const challengeRemoveFn = async () => {
     // do nothing for now
   };
 
@@ -355,7 +348,7 @@ async function renew(server) {
     console.log('Wrote certificates to file system');
 
     if (server) {
-      const ctx = server._sharedCreds.context;
+      const ctx = ((server as any)._sharedCreds as any).context;
       ctx.setCert(chain[0]);
       ctx.setKey(key.toString());
       ctx.addCACert(chain.join('\n'));
@@ -367,8 +360,3 @@ async function renew(server) {
 
   console.log('Renewal success!');
 }
-
-module.exports = {
-  register,
-  renew,
-};
