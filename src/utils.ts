@@ -8,7 +8,8 @@
 
 import crypto from 'crypto';
 import fs from 'fs';
-const platform = require('./platform');
+import * as Platform from './platform';
+
 const pkg = require('../package.json');
 
 /**
@@ -63,8 +64,8 @@ export function escapeHtml(text: string): string {
 
 export function getGatewayUserAgent(): string {
   const primary = `webthings-gateway/${pkg.version}`;
-  const secondary = `(${platform.getArchitecture()}; ${platform.getOS()})`;
-  const tertiary = platform.isContainer() ? ' (container)' : '';
+  const secondary = `(${Platform.getArchitecture()}; ${Platform.getOS()})`;
+  const tertiary = Platform.isContainer() ? ' (container)' : '';
 
   return `${primary} ${secondary}${tertiary}`;
 }

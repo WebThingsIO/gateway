@@ -6,17 +6,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const child_process = require('child_process');
-const fs = require('fs');
+import child_process from 'child_process';
+import fs from 'fs';
+import {SelfUpdateStatus} from './types';
 
 /**
  * Get mDNS server status.
  *
  * @returns {boolean} Boolean indicating whether or not mDNS is enabled.
  */
-function getMdnsServerStatus() {
+export function getMdnsServerStatus(): boolean {
   // mDNS is always enabled
   return true;
 }
@@ -27,7 +26,7 @@ function getMdnsServerStatus() {
  * @param {boolean} enabled - Whether or not to enable the mDNS server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setMdnsServerStatus(enabled) {
+export function setMdnsServerStatus(enabled: boolean): boolean {
   if (enabled) {
     return true;
   }
@@ -41,7 +40,7 @@ function setMdnsServerStatus(enabled) {
  *
  * @returns {string} The hostname.
  */
-function getHostname() {
+export function getHostname(): string {
   const proc = child_process.spawnSync('hostname', {encoding: 'utf8'});
   if (proc.status !== 0) {
     return '';
@@ -55,7 +54,7 @@ function getHostname() {
  *
  * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function getSelfUpdateStatus() {
+export function getSelfUpdateStatus(): SelfUpdateStatus {
   return {
     available: false,
     enabled: false,
@@ -67,7 +66,7 @@ function getSelfUpdateStatus() {
  *
  * @returns {string[]} List of timezones.
  */
-function getValidTimezones() {
+export function getValidTimezones(): string[] {
   const tzdata = '/usr/share/zoneinfo/zone.tab';
   if (!fs.existsSync(tzdata)) {
     return [];
@@ -93,7 +92,7 @@ function getValidTimezones() {
  *
  * @returns {string} Name of timezone.
  */
-function getTimezone() {
+export function getTimezone(): string {
   const tzdata = '/etc/localtime';
   if (!fs.existsSync(tzdata)) {
     return '';
@@ -114,7 +113,7 @@ function getTimezone() {
  *
  * @returns {string[]} List of countries.
  */
-function getValidWirelessCountries() {
+export function getValidWirelessCountries(): string[] {
   const fname = '/usr/share/zoneinfo/iso3166.tab';
   if (!fs.existsSync(fname)) {
     return [];
@@ -134,13 +133,3 @@ function getValidWirelessCountries() {
 
   return [];
 }
-
-module.exports = {
-  getHostname,
-  getMdnsServerStatus,
-  setMdnsServerStatus,
-  getSelfUpdateStatus,
-  getValidTimezones,
-  getTimezone,
-  getValidWirelessCountries,
-};

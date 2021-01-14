@@ -4,9 +4,9 @@ import express from 'express';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import semver from 'semver';
+import * as Platform from '../platform';
 import * as Utils from '../utils';
 
-const Platform = require('../platform');
 const pkg = require('../../package.json');
 
 const UpdatesController = express.Router();
