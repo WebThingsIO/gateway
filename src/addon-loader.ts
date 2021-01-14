@@ -8,19 +8,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const AddonUtils = require('./addon-utils');
-const config = require('config');
-const GetOpt = require('node-getopt');
-const {PluginClient} = require('gateway-addon');
-const Database = require('./db').default;
-const Settings = require('./models/settings');
-const sleep = require('./sleep').default;
-const path = require('path');
-const {DONT_RESTART_EXIT_CODE} = require('gateway-addon').Constants;
-const {spawnSync} = require('child_process');
-const fs = require('fs');
+import {loadManifest} from './addon-utils';
+import config from 'config';
+import Getopt from 'node-getopt';
+import {AddonManagerProxy, Constants, PluginClient} from 'gateway-addon';
+import Database from './db';
+import * as Settings from './models/settings';
+import sleep from './sleep';
+import path from 'path';
+import {spawnSync} from 'child_process';
+import fs from 'fs';
 
 // Open the database.
 if (process.env.NODE_ENV !== 'test') {
@@ -31,21 +28,21 @@ if (process.env.NODE_ENV !== 'test') {
   Database.open();
 }
 
-async function loadAddon(addonPath, verbose) {
+async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   const packageName = path.basename(addonPath);
 
   // Get any saved settings for this add-on.
   const key = `addons.${packageName}`;
   const configKey = `addons.config.${packageName}`;
 
-  let obj, savedConfig;
+  let obj: any, savedConfig: any;
   if (process.env.NODE_ENV === 'test') {
-    [obj, savedConfig] = AddonUtils.loadManifest(addonPath.split('/').pop());
+    [obj, savedConfig] = loadManifest(addonPath.split('/').pop()!);
   } else {
     obj = await Settings.getSetting(key);
   }
 
-  const newSettings = {
+  const newSettings: any = {
     name: obj.id,
     display_name: obj.name,
     moziot: {
@@ -79,6 +76,11 @@ async function loadAddon(addonPath, verbose) {
       );
     })
     .then((addonManagerProxy) => {
+      if (!(addonManagerProxy instanceof AddonManagerProxy)) {
+        console.error(`Failed to load add-on ${packageName}`);
+        process.exit(Constants.DONT_RESTART_EXIT_CODE);
+      }
+
       console.log(`Loading add-on ${packageName} from ${addonPath}`);
       try {
         // we try to link to a global gateway-addon module, because in some
@@ -103,7 +105,7 @@ async function loadAddon(addonPath, verbose) {
         }
 
         const addonLoader = require(addonPath);
-        addonLoader(addonManagerProxy, newSettings, (packageName, err) => {
+        addonLoader(addonManagerProxy, newSettings, (packageName: string, err: any) => {
           console.error(`Failed to start add-on ${packageName}:`, err);
           fail(
             addonManagerProxy,
@@ -123,12 +125,12 @@ async function loadAddon(addonPath, verbose) {
     });
 }
 
-async function fail(addonManagerProxy, message) {
+async function fail(addonManagerProxy: AddonManagerProxy, message: string): Promise<void> {
   addonManagerProxy.sendError(message);
   await sleep(200);
   addonManagerProxy.unloadPlugin();
   await sleep(200);
-  process.exit(DONT_RESTART_EXIT_CODE);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 
 // Get some decent error messages for unhandled rejections. This is
@@ -139,7 +141,7 @@ process.on('unhandledRejection', (reason) => {
 });
 
 // Command line arguments
-const getopt = new GetOpt([
+const getopt = new Getopt([
   ['h', 'help', 'Display help' ],
   ['v', 'verbose', 'Show verbose output'],
 ]);
@@ -152,16 +154,16 @@ if (opt.options.verbose) {
 
 if (opt.options.help) {
   getopt.showHelp();
-  process.exit(DONT_RESTART_EXIT_CODE);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 
 if (opt.argv.length != 1) {
   console.error('Expecting a single package to load');
-  process.exit(DONT_RESTART_EXIT_CODE);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 }
 const addonPath = opt.argv[0];
 
-loadAddon(addonPath, opt.options.verbose).catch((err) => {
+loadAddon(addonPath, !!opt.options.verbose).catch((err) => {
   console.error(err);
-  process.exit(DONT_RESTART_EXIT_CODE);
+  process.exit(Constants.DONT_RESTART_EXIT_CODE);
 });

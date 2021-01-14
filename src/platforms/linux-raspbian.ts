@@ -6,19 +6,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const child_process = require('child_process');
-const fs = require('fs');
-const ipRegex = require('ip-regex');
-const os = require('os');
+import child_process from 'child_process';
+import fs from 'fs';
+import ipRegex from 'ip-regex';
+import os from 'os';
+import {
+  LanMode,
+  NetworkAddresses,
+  SelfUpdateStatus,
+  WirelessMode,
+  WirelessNetwork,
+} from './types';
 
 /**
  * Get DHCP server status.
  *
  * @returns {boolean} Boolean indicating whether or not DHCP is enabled.
  */
-function getDhcpServerStatus() {
+export function getDhcpServerStatus(): boolean {
   const proc = child_process.spawnSync(
     'systemctl',
     ['is-active', 'dnsmasq.service']
@@ -32,7 +37,7 @@ function getDhcpServerStatus() {
  * @param {boolean} enabled - Whether or not to enable the DHCP server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setDhcpServerStatus(enabled) {
+export function setDhcpServerStatus(enabled: boolean): boolean {
   let proc = child_process.spawnSync(
     'sudo',
     ['systemctl', enabled ? 'start' : 'stop', 'dnsmasq.service']
@@ -53,9 +58,9 @@ function setDhcpServerStatus(enabled) {
  *
  * @returns {Object} {mode: 'static|dhcp|...', options: {...}}
  */
-function getLanMode() {
+export function getLanMode(): LanMode {
   let mode = 'static';
-  const options = {};
+  const options: any = {};
 
   if (!fs.existsSync('/etc/network/interfaces.d/eth0')) {
     mode = 'dhcp';
@@ -95,7 +100,7 @@ function getLanMode() {
  * @param {Object?} options - options specific to LAN mode
  * @returns {boolean} Boolean indicating success.
  */
-function setLanMode(mode, options = {}) {
+export function setLanMode(mode: 'static' | 'dhcp', options: any = {}): boolean {
   const valid = ['static', 'dhcp'];
   if (!valid.includes(mode)) {
     return false;
@@ -105,7 +110,7 @@ function setLanMode(mode, options = {}) {
   if ((options.ipaddr && !regex.test(options.ipaddr)) ||
       (options.netmask && !regex.test(options.netmask)) ||
       (options.gateway && !regex.test(options.gateway)) ||
-      (options.dns && options.dns.filter((d) => !regex.test(d)).length > 0)) {
+      (options.dns && options.dns.filter((d: string) => !regex.test(d)).length > 0)) {
     return false;
   }
 
@@ -146,9 +151,9 @@ function setLanMode(mode, options = {}) {
  *
  * @returns {Object} {enabled: true|false, mode: 'ap|sta|...', options: {...}}
  */
-function getWirelessMode() {
+export function getWirelessMode(): WirelessMode {
   let enabled = false, mode = '', cipher = '', mgmt = '';
-  const options = {};
+  const options: any = {};
 
   let proc = child_process.spawnSync(
     'systemctl',
@@ -288,7 +293,7 @@ function getWirelessMode() {
  * @param {Object?} options - options specific to wireless mode
  * @returns {boolean} Boolean indicating success.
  */
-function setWirelessMode(enabled, mode = 'ap', options = {}) {
+export function setWirelessMode(enabled: string, mode = 'ap', options: any = {}): boolean {
   const valid = ['ap', 'sta'];
   if (enabled && !valid.includes(mode)) {
     return false;
@@ -486,7 +491,7 @@ function setWirelessMode(enabled, mode = 'ap', options = {}) {
  *
  * @returns {boolean} Boolean indicating whether or not SSH is enabled.
  */
-function getSshServerStatus() {
+export function getSshServerStatus(): boolean {
   const proc = child_process.spawnSync(
     'raspi-config',
     ['nonint', 'get_ssh'],
@@ -506,7 +511,7 @@ function getSshServerStatus() {
  * @param {boolean} enabled - Whether or not to enable the SSH server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setSshServerStatus(enabled) {
+export function setSshServerStatus(enabled: boolean): boolean {
   const arg = enabled ? '0' : '1';
   const proc = child_process.spawnSync(
     'sudo',
@@ -520,7 +525,7 @@ function setSshServerStatus(enabled) {
  *
  * @returns {boolean} Boolean indicating whether or not mDNS is enabled.
  */
-function getMdnsServerStatus() {
+export function getMdnsServerStatus(): boolean {
   const proc = child_process.spawnSync(
     'systemctl',
     ['is-active', 'avahi-daemon.service']
@@ -534,7 +539,7 @@ function getMdnsServerStatus() {
  * @param {boolean} enabled - Whether or not to enable the mDNS server
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setMdnsServerStatus(enabled) {
+export function setMdnsServerStatus(enabled: boolean): boolean {
   let proc = child_process.spawnSync(
     'sudo',
     ['systemctl', enabled ? 'start' : 'stop', 'avahi-daemon.service']
@@ -555,7 +560,7 @@ function setMdnsServerStatus(enabled) {
  *
  * @returns {string} The hostname.
  */
-function getHostname() {
+export function getHostname(): string {
   return fs.readFileSync('/etc/hostname', 'utf8').trim();
 }
 
@@ -565,7 +570,7 @@ function getHostname() {
  * @param {string} hostname - The hostname to set
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setHostname(hostname) {
+export function setHostname(hostname: string): boolean {
   hostname = hostname.toLowerCase();
   const re = new RegExp(/^([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$/);
   const valid = re.test(hostname) && hostname.length <= 63;
@@ -633,7 +638,7 @@ function setHostname(hostname) {
  *
  * @returns {boolean} Boolean indicating success of the command.
  */
-function restartGateway() {
+export function restartGateway(): boolean {
   const proc = child_process.spawnSync(
     'sudo',
     ['systemctl', 'restart', 'webthings-gateway.service']
@@ -648,7 +653,7 @@ function restartGateway() {
  *
  * @returns {boolean} Boolean indicating success of the command.
  */
-function restartSystem() {
+export function restartSystem(): boolean {
   const proc = child_process.spawnSync('sudo', ['reboot']);
 
   // This will probably not fire, but just in case.
@@ -661,7 +666,7 @@ function restartSystem() {
  * @param {string} device - The network device, e.g. wlan0
  * @returns {string|null} MAC address, or null on error
  */
-function getMacAddress(device) {
+export function getMacAddress(device: string): string|null {
   const addrFile = `/sys/class/net/${device}/address`;
   if (!fs.existsSync(addrFile)) {
     return null;
@@ -683,7 +688,7 @@ function getMacAddress(device) {
  *                       ...
  *                     ]
  */
-function scanWirelessNetworks() {
+export function scanWirelessNetworks(): WirelessNetwork[] {
   const status = getWirelessMode();
 
   const proc = child_process.spawnSync(
@@ -705,7 +710,7 @@ function scanWirelessNetworks() {
   lines.push('');
 
   const cells = new Map();
-  let cell = {};
+  let cell: any = {};
 
   for (const line of lines) {
     // New cell, start over
@@ -754,11 +759,10 @@ function scanWirelessNetworks() {
 }
 
 /**
- * Get the current addresses for wifi, LAN, and WAN.
+ * Get the current addresses for Wi-Fi and LAN.
  *
  * @returns {Object} Address object:
  *                   {
- *                     wan: '...',
  *                     lan: '...',
  *                     wlan: {
  *                       ip: '...',
@@ -766,9 +770,8 @@ function scanWirelessNetworks() {
  *                     }
  *                   }
  */
-function getNetworkAddresses() {
+export function getNetworkAddresses(): NetworkAddresses {
   const result = {
-    wan: '',
     lan: '',
     wlan: {
       ip: '',
@@ -809,7 +812,7 @@ function getNetworkAddresses() {
  *
  * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function getSelfUpdateStatus() {
+export function getSelfUpdateStatus(): SelfUpdateStatus {
   const timer = 'webthings-gateway.check-for-update.timer';
   const timerExists = fs.existsSync(`/etc/systemd/system/${timer}`);
   const proc = child_process.spawnSync(
@@ -829,7 +832,7 @@ function getSelfUpdateStatus() {
  * @param {boolean} enabled - Whether or not to enable auto-updates.
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setSelfUpdateStatus(enabled) {
+export function setSelfUpdateStatus(enabled: boolean): boolean {
   const timer = 'webthings-gateway.check-for-update.timer';
 
   let proc = child_process.spawnSync(
@@ -852,7 +855,7 @@ function setSelfUpdateStatus(enabled) {
  *
  * @returns {string[]} List of timezones.
  */
-function getValidTimezones() {
+export function getValidTimezones(): string[] {
   const tzdata = '/usr/share/zoneinfo/zone.tab';
   if (!fs.existsSync(tzdata)) {
     return [];
@@ -878,7 +881,7 @@ function getValidTimezones() {
  *
  * @returns {string} Name of timezone.
  */
-function getTimezone() {
+export function getTimezone(): string {
   const tzdata = '/etc/timezone';
   if (!fs.existsSync(tzdata)) {
     return '';
@@ -900,7 +903,7 @@ function getTimezone() {
  * @param {string} zone - The timezone to set
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setTimezone(zone) {
+export function setTimezone(zone: string): boolean {
   const proc = child_process.spawnSync(
     'sudo',
     ['raspi-config', 'nonint', 'do_change_timezone', zone]
@@ -913,7 +916,7 @@ function setTimezone(zone) {
  *
  * @returns {string[]} List of countries.
  */
-function getValidWirelessCountries() {
+export function getValidWirelessCountries(): string[] {
   const fname = '/usr/share/zoneinfo/iso3166.tab';
   if (!fs.existsSync(fname)) {
     return [];
@@ -939,7 +942,7 @@ function getValidWirelessCountries() {
  *
  * @returns {string} Country.
  */
-function getWirelessCountry() {
+export function getWirelessCountry(): string {
   const proc = child_process.spawnSync(
     'raspi-config',
     ['nonint', 'get_wifi_country'],
@@ -982,7 +985,7 @@ function getWirelessCountry() {
  * @param {string} country - The country to set
  * @returns {boolean} Boolean indicating success of the command.
  */
-function setWirelessCountry(country) {
+export function setWirelessCountry(country: string): boolean {
   const fname = '/usr/share/zoneinfo/iso3166.tab';
   if (!fs.existsSync(fname)) {
     return false;
@@ -1017,7 +1020,7 @@ function setWirelessCountry(country) {
  * @returns {boolean} Boolean indicating whether or not the time has been
  *                    synchronized.
  */
-function getNtpStatus() {
+export function getNtpStatus(): boolean {
   const proc = child_process.spawnSync(
     'timedatectl',
     ['status'],
@@ -1043,40 +1046,10 @@ function getNtpStatus() {
  *
  * @returns {boolean} Boolean indicating success of the command.
  */
-function restartNtpSync() {
+export function restartNtpSync(): boolean {
   const proc = child_process.spawnSync(
     'sudo',
     ['systemctl', 'restart', 'systemd-timesyncd.service']
   );
   return proc.status === 0;
 }
-
-module.exports = {
-  getDhcpServerStatus,
-  setDhcpServerStatus,
-  getHostname,
-  setHostname,
-  getLanMode,
-  setLanMode,
-  getMacAddress,
-  getMdnsServerStatus,
-  setMdnsServerStatus,
-  getNetworkAddresses,
-  getSshServerStatus,
-  setSshServerStatus,
-  getWirelessMode,
-  setWirelessMode,
-  restartGateway,
-  restartSystem,
-  scanWirelessNetworks,
-  getSelfUpdateStatus,
-  setSelfUpdateStatus,
-  getValidTimezones,
-  getTimezone,
-  setTimezone,
-  getValidWirelessCountries,
-  getWirelessCountry,
-  setWirelessCountry,
-  getNtpStatus,
-  restartNtpSync,
-};

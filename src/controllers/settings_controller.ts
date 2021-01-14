@@ -17,11 +17,11 @@ import * as Constants from '../constants';
 import lookup from '../iso-639/index';
 import * as jwtMiddleware from '../jwt-middleware';
 import * as mDNSserver from '../mdns-server';
+import * as Platform from '../platform';
 import * as Settings from '../models/settings';
 import TunnelService from '../tunnel-service';
 
 const pkg = require('../../package.json');
-const Platform = require('../platform');
 const CertificateManager = require('../certificate-manager');
 
 const auth = jwtMiddleware.middleware();

@@ -6,17 +6,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const child_process = require('child_process');
-const fs = require('fs');
+import child_process from 'child_process';
+import fs from 'fs';
+import {SelfUpdateStatus} from './types';
 
 /**
  * Get the system's hostname.
  *
  * @returns {string} The hostname.
  */
-function getHostname() {
+export function getHostname(): string {
   return fs.readFileSync('/etc/hostname', 'utf8').trim();
 }
 
@@ -26,7 +25,7 @@ function getHostname() {
  * @param {string} device - The network device, e.g. wlan0
  * @returns {string|null} MAC address, or null on error
  */
-function getMacAddress(device) {
+export function getMacAddress(device: string): string|null {
   const addrFile = `/sys/class/net/${device}/address`;
   if (!fs.existsSync(addrFile)) {
     return null;
@@ -40,7 +39,7 @@ function getMacAddress(device) {
  *
  * @returns {Object} {available: <bool>, enabled: <bool>}
  */
-function getSelfUpdateStatus() {
+export function getSelfUpdateStatus(): SelfUpdateStatus {
   return {
     available: false,
     enabled: false,
@@ -52,7 +51,7 @@ function getSelfUpdateStatus() {
  *
  * @returns {string[]} List of timezones.
  */
-function getValidTimezones() {
+export function getValidTimezones(): string[] {
   const tzdata = '/usr/share/zoneinfo/zone.tab';
   if (!fs.existsSync(tzdata)) {
     return [];
@@ -78,7 +77,7 @@ function getValidTimezones() {
  *
  * @returns {string} Name of timezone.
  */
-function getTimezone() {
+export function getTimezone(): string {
   const proc = child_process.spawnSync(
     'timedatectl',
     ['status'],
@@ -86,14 +85,14 @@ function getTimezone() {
   );
 
   if (proc.status !== 0) {
-    return false;
+    return '';
   }
 
   const lines = proc.stdout.split('\n').map((l) => l.trim());
   const zone = lines.find((l) => l.startsWith('Time zone:'));
 
   if (!zone) {
-    return false;
+    return '';
   }
 
   return zone.split(':')[1].split('(')[0].trim();
@@ -104,7 +103,7 @@ function getTimezone() {
  *
  * @returns {string[]} List of countries.
  */
-function getValidWirelessCountries() {
+export function getValidWirelessCountries(): string[] {
   const fname = '/usr/share/zoneinfo/iso3166.tab';
   if (!fs.existsSync(fname)) {
     return [];
@@ -131,7 +130,7 @@ function getValidWirelessCountries() {
  * @returns {boolean} Boolean indicating whether or not the time has been
  *                    synchronized.
  */
-function getNtpStatus() {
+export function getNtpStatus(): boolean {
   const proc = child_process.spawnSync(
     'timedatectl',
     ['status'],
@@ -151,13 +150,3 @@ function getNtpStatus() {
 
   return status.split(':')[1].trim() === 'yes';
 }
-
-module.exports = {
-  getHostname,
-  getMacAddress,
-  getSelfUpdateStatus,
-  getValidTimezones,
-  getTimezone,
-  getValidWirelessCountries,
-  getNtpStatus,
-};
