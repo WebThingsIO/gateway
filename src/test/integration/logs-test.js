@@ -8,8 +8,8 @@ const {
 } = require('../user');
 
 const Constants = require('../../constants');
-const Logs = require('../../models/logs');
-const sleep = require('../../sleep');
+const Logs = require('../../models/logs').default;
+const sleep = require('../../sleep').default;
 
 const thingLight1 = {
   id: 'light1',

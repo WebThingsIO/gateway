@@ -11,7 +11,7 @@
 
 'use strict';
 
-const Deferred = require('../deferred');
+const Deferred = require('../deferred').default;
 const {MessageType} = require('gateway-addon').Constants;
 const {Notifier} = require('gateway-addon');
 const OutletProxy = require('./outlet-proxy');

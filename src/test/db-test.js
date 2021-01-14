@@ -1,7 +1,7 @@
 const {v4: uuidv4} = require('uuid');
 
-const Database = require('../db');
-const User = require('../models/user');
+const Database = require('../db').default;
+const User = require('../models/user').default;
 const JSONWebToken = require('../models/jsonwebtoken').default;
 
 describe('db', () => {

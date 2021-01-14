@@ -12,7 +12,7 @@
 'use strict';
 
 const {Adapter} = require('gateway-addon');
-const Deferred = require('../deferred');
+const Deferred = require('../deferred').default;
 const DeviceProxy = require('./device-proxy');
 const {MessageType} = require('gateway-addon').Constants;
 

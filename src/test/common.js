@@ -8,10 +8,10 @@
 
 process.env.NODE_ENV = 'test';
 
-const Database = require('../db');
-const Actions = require('../models/actions');
-const Events = require('../models/events');
-const Logs = require('../models/logs');
+const Database = require('../db').default;
+const Actions = require('../models/actions').default;
+const Events = require('../models/events').default;
+const Logs = require('../models/logs').default;
 const Things = require('../models/things');
 const UserProfile = require('../user-profile').default;
 const e2p = require('event-to-promise');

@@ -1,5 +1,3 @@
-'use strict';
-
 import {URL} from 'url';
 import * as Constants from './constants';
 

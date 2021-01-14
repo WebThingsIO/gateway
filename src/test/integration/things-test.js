@@ -20,7 +20,7 @@ const WebSocket = require('ws');
 
 const Constants = require('../../constants');
 const Event = require('../../models/event').default;
-const Events = require('../../models/events');
+const Events = require('../../models/events').default;
 
 const TEST_THING = {
   id: 'test-1',

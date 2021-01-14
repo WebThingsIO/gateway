@@ -7,7 +7,7 @@
 
 let id = 0;
 
-export = class Deferred<T, E> {
+export default class Deferred<T, E> {
   private id = ++id;
 
   private promise: Promise<T>;
@@ -42,4 +42,4 @@ export = class Deferred<T, E> {
   getPromise(): Promise<T> {
     return this.promise;
   }
-};
+}

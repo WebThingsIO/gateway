@@ -234,4 +234,5 @@ class Actions extends EventEmitter {
   }
 }
 
-export = new Actions();
+const actions = new Actions();
+export default actions;
