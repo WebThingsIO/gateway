@@ -1,5 +1,3 @@
-'use strict';
-
 import express from 'express';
 import fs from 'fs';
 import GlobToRegExp from 'glob-to-regexp';
@@ -10,24 +8,22 @@ import * as jwtMiddleware from '../jwt-middleware';
 
 const AddonManager = require('../addon-manager');
 
-const auth = jwtMiddleware.middleware();
-const ExtensionsController = express.Router();
+function build(): express.Router {
+  const auth = jwtMiddleware.middleware();
+  const controller = express.Router();
 
-ExtensionsController.get('/', auth, (_request, response) => {
-  const map: any = {};
-  for (const [key, value] of Object.entries(AddonManager.getExtensions())) {
-    map[key] = (value as any).extensions;
-  }
-  response.status(200).json(map);
-});
+  controller.get('/', auth, (_request, response) => {
+    const map: Record<string, any> = {};
+    for (const [key, value] of Object.entries(AddonManager.getExtensions())) {
+      map[key] = (value as any).extensions;
+    }
+    response.status(200).json(map);
+  });
 
-/**
- * Extension API handler.
- */
-ExtensionsController.all(
-  '/:extensionId/api/*',
-  auth,
-  async (request, response) => {
+  /**
+   * Extension API handler.
+   */
+  controller.all('/:extensionId/api/*', auth, async (request, response) => {
     const extensionId = request.params.extensionId;
     const apiHandler = AddonManager.getAPIHandler(extensionId);
     if (!apiHandler) {
@@ -57,50 +53,52 @@ ExtensionsController.all(
       console.error('Error calling API handler:', e);
       response.status(500).send(e);
     }
-  }
-);
+  });
 
-/**
- * Static resource handler for extensions. This is intentionally
- * unauthenticated, since we're just loading static content.
- */
-ExtensionsController.get('/:extensionId/*', (request, response) => {
-  const extensionId = request.params.extensionId;
-  const relPath = request.path.split('/').slice(2).join('/');
+  /**
+   * Static resource handler for extensions. This is intentionally
+   * unauthenticated, since we're just loading static content.
+   */
+  controller.get('/:extensionId/*', (request, response) => {
+    const extensionId = request.params.extensionId;
+    const relPath = request.path.split('/').slice(2).join('/');
 
-  // make sure the extension is installed and enabled
-  const extensions = AddonManager.getExtensions();
-  if (!extensions.hasOwnProperty(extensionId)) {
-    response.status(404).send();
-    return;
-  }
-
-  // make sure the requested resource is listed in the extension's
-  // web_accessible_resources array
-  let matched = false;
-  const resources = extensions[extensionId].resources;
-  for (let resource of resources) {
-    resource = GlobToRegExp(resource);
-    if (resource.test(relPath)) {
-      matched = true;
-      break;
+    // make sure the extension is installed and enabled
+    const extensions = AddonManager.getExtensions();
+    if (!extensions.hasOwnProperty(extensionId)) {
+      response.status(404).send();
+      return;
     }
-  }
 
-  if (!matched) {
-    response.status(404).send();
-    return;
-  }
+    // make sure the requested resource is listed in the extension's
+    // web_accessible_resources array
+    let matched = false;
+    const resources = extensions[extensionId].resources;
+    for (let resource of resources) {
+      resource = GlobToRegExp(resource);
+      if (resource.test(relPath)) {
+        matched = true;
+        break;
+      }
+    }
 
-  // make sure the file actually exists
-  const fullPath = path.join(UserProfile.addonsDir, extensionId, relPath);
-  if (!fs.existsSync(fullPath)) {
-    response.status(404).send();
-    return;
-  }
+    if (!matched) {
+      response.status(404).send();
+      return;
+    }
 
-  // finally, send the file
-  response.sendFile(fullPath);
-});
+    // make sure the file actually exists
+    const fullPath = path.join(UserProfile.addonsDir, extensionId, relPath);
+    if (!fs.existsSync(fullPath)) {
+      response.status(404).send();
+      return;
+    }
 
-export = ExtensionsController;
+    // finally, send the file
+    response.sendFile(fullPath);
+  });
+
+  return controller;
+}
+
+export = build;

@@ -11,38 +11,42 @@
 import Server from 'http-proxy';
 import express from 'express';
 
-const ProxyController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-const proxies = new Map();
-const proxy = Server.createProxyServer({
-  changeOrigin: true,
-});
+  const proxies = new Map();
+  const proxy = Server.createProxyServer({
+    changeOrigin: true,
+  });
 
-proxy.on('error', (e) => {
-  console.debug('Proxy error:', e);
-});
+  proxy.on('error', (e) => {
+    console.debug('Proxy error:', e);
+  });
 
-(ProxyController as any).addProxyServer = (thingId: string, server: string) => {
-  proxies.set(thingId, server);
-};
+  (controller as any).addProxyServer = (thingId: string, server: string) => {
+    proxies.set(thingId, server);
+  };
 
-(ProxyController as any).removeProxyServer = (thingId: string) => {
-  proxies.delete(thingId);
-};
+  (controller as any).removeProxyServer = (thingId: string) => {
+    proxies.delete(thingId);
+  };
 
-/**
- * Proxy the request, if configured.
- */
-ProxyController.all('/:thingId/*', (request, response) => {
-  const thingId = request.params.thingId;
+  /**
+   * Proxy the request, if configured.
+   */
+  controller.all('/:thingId/*', (request, response) => {
+    const thingId = request.params.thingId;
 
-  if (!proxies.has(thingId)) {
-    response.sendStatus(404);
-    return;
-  }
+    if (!proxies.has(thingId)) {
+      response.sendStatus(404);
+      return;
+    }
 
-  request.url = request.url.substring(thingId.length + 1);
-  proxy.web(request, response, {target: proxies.get(thingId)});
-});
+    request.url = request.url.substring(thingId.length + 1);
+    proxy.web(request, response, {target: proxies.get(thingId)});
+  });
 
-export = ProxyController;
+  return controller;
+}
+
+export = build;

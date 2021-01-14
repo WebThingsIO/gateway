@@ -14,376 +14,19 @@ import ActionsController from './actions_controller';
 import * as Constants from '../constants';
 import EventsController from './events_controller';
 import express from 'express';
+import expressWs from 'express-ws';
+import {RequestWithJWT} from '../jwt-middleware';
 import * as Settings from '../models/settings';
 import WebSocket from 'ws';
 
 const AddonManager = require('../addon-manager');
 const Things = require('../models/things');
 
-const ThingsController = express.Router();
-
-/**
- * Connect to receive messages from a Thing or all Things
- *
- * Note that these must precede the normal routes to allow express-ws to work
- */
-(ThingsController as any).ws('/:thingId/', websocketHandler);
-(ThingsController as any).ws('/', websocketHandler);
-
-/**
- * Get a list of Things.
- */
-ThingsController.get('/', (request, response) => {
-  if ((request as any).jwt.payload.role !== Constants.USER_TOKEN) {
-    if (!(request as any).jwt.payload.scope) {
-      response.status(400).send('Token must contain scope');
-    } else {
-      const scope = (request as any).jwt.payload.scope;
-      if (!scope.includes(' ') && scope.indexOf('/') == 0 &&
-        scope.split('/').length == 2 &&
-        scope.split(':')[0] === Constants.THINGS_PATH) {
-        Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
-          response.status(200).json(things);
-        });
-      } else {
-        // Get hrefs of things in scope
-        const paths = scope.split(' ');
-        const hrefs = new Array(0);
-        for (const path of paths) {
-          const parts = path.split(':');
-          hrefs.push(parts[0]);
-        }
-        Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure)
-          .then((things: any[]) => {
-            response.status(200).json(things);
-          });
-      }
-    }
-  } else {
-    Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
-      response.status(200).json(things);
-    });
-  }
-});
-
-ThingsController.patch('/', async (request, response) => {
-  if (!request.body ||
-      !request.body.hasOwnProperty('thingId') ||
-      !request.body.thingId) {
-    response.status(400).send('Invalid request');
-    return;
-  }
-
-  const thingId = request.body.thingId;
-
-  if (request.body.hasOwnProperty('pin') &&
-      request.body.pin.length > 0) {
-    const pin = request.body.pin;
-
-    try {
-      const device = await AddonManager.setPin(thingId, pin);
-      response.status(200).json(device);
-    } catch (e) {
-      console.error(`Failed to set PIN for ${thingId}: ${e}`);
-      response.status(400).send(e);
-    }
-  } else if (request.body.hasOwnProperty('username') &&
-             request.body.username.length > 0 &&
-             request.body.hasOwnProperty('password') &&
-             request.body.password.length > 0) {
-    const username = request.body.username;
-    const password = request.body.password;
-
-    try {
-      const device = await AddonManager.setCredentials(
-        thingId,
-        username,
-        password
-      );
-      response.status(200).json(device);
-    } catch (e) {
-      console.error(`Failed to set credentials for ${thingId}: ${e}`);
-      response.status(400).send(e);
-    }
-  } else {
-    response.status(400).send('Invalid request');
-  }
-});
-
-/**
- * Handle creating a new thing.
- */
-ThingsController.post('/', async (request, response) => {
-  if (!request.body || !request.body.hasOwnProperty('id')) {
-    response.status(400).send('No id in thing description');
-    return;
-  }
-  const description = request.body;
-  const id = description.id;
-  delete description.id;
-
-  try {
-    // If the thing already exists, bail out.
-    await Things.getThing(id);
-    const err = 'Web thing already added';
-    console.log(err, id);
-    response.status(400).send(err);
-    return;
-  } catch (_e) {
-    // Do nothing, this is what we want.
-  }
-
-  // If we're adding a native webthing, we need to update the config for
-  // thing-url-adapter so that it knows about it.
-  let webthing = false;
-  if (description.hasOwnProperty('webthingUrl')) {
-    webthing = true;
-
-    const key = 'addons.config.thing-url-adapter';
-    try {
-      const config = await Settings.getSetting(key);
-      if (typeof config === 'undefined') {
-        throw new Error('Setting is undefined.');
-      }
-
-      config.urls.push(description.webthingUrl);
-      await Settings.setSetting(key, config);
-    } catch (e) {
-      console.error('Failed to update settings for thing-url-adapter');
-      console.error(e);
-      response.status(400).send(e);
-      return;
-    }
-
-    delete description.webthingUrl;
-  }
-
-  try {
-    const thing = await Things.createThing(id, description, webthing);
-    console.log(`Successfully created new thing ${thing.title}`);
-    response.status(201).send(thing);
-  } catch (error) {
-    console.error('Error saving new thing', id, description);
-    console.error(error);
-    response.status(500).send(error);
-  }
-
-  // If this is a web thing, we need to restart thing-url-adapter.
-  if (webthing) {
-    try {
-      await AddonManager.unloadAddon('thing-url-adapter', true);
-      await AddonManager.loadAddon('thing-url-adapter');
-    } catch (e) {
-      console.error('Failed to restart thing-url-adapter');
-      console.error(e);
-    }
-  }
-});
-
-/**
- * Get a Thing.
- */
-ThingsController.get('/:thingId', (request, response) => {
-  const id = request.params.thingId;
-  Things.getThingDescription(id, request.get('Host'), request.secure).then((thing: any) => {
-    response.status(200).json(thing);
-  }).catch((error: any) => {
-    console.error(`Error getting thing description for thing with id ${id}:`, error);
-    response.status(404).send(error);
-  });
-});
-
-/**
- * Get the properties of a Thing.
- */
-ThingsController.get('/:thingId/properties', async (request, response) => {
-  const thingId = request.params.thingId;
-
-  let thing;
-  try {
-    thing = await Things.getThing(thingId);
-  } catch (e) {
-    console.error('Failed to get thing:', e);
-    response.status(404).send(e);
-    return;
-  }
-
-  const result: any = {};
-  for (const name in thing.properties) {
-    try {
-      const value = await AddonManager.getProperty(thingId, name);
-      result[name] = value;
-    } catch (e) {
-      console.error(`Failed to get property ${name}:`, e);
-    }
-  }
-
-  response.status(200).json(result);
-});
-
-/**
- * Get a property of a Thing.
- */
-ThingsController.get(
-  '/:thingId/properties/:propertyName',
-  async (request, response) => {
-    const thingId = request.params.thingId;
-    const propertyName = request.params.propertyName;
-    try {
-      const value = await Things.getThingProperty(thingId, propertyName);
-      const result: any = {};
-      result[propertyName] = value;
-      response.status(200).json(result);
-    } catch (err) {
-      response.status(err.code).send(err.message);
-    }
-  });
-
-/**
- * Set a property of a Thing.
- */
-ThingsController.put(
-  '/:thingId/properties/:propertyName',
-  async (request, response) => {
-    const thingId = request.params.thingId;
-    const propertyName = request.params.propertyName;
-    if (!request.body || typeof request.body[propertyName] === 'undefined') {
-      response.status(400).send('Invalid property name');
-      return;
-    }
-    const value = request.body[propertyName];
-    try {
-      const updatedValue = await Things.setThingProperty(thingId, propertyName,
-                                                         value);
-      const result = {
-        [propertyName]: updatedValue,
-      };
-      response.status(200).json(result);
-    } catch (e) {
-      console.error('Error setting property:', e);
-      response.status(e.code || 500).send(e.message);
-    }
-  });
-
-/**
- * Use an ActionsController to handle each thing's actions.
- */
-ThingsController.use(`/:thingId${Constants.ACTIONS_PATH}`, ActionsController);
-
-/**
- * Use an EventsController to handle each thing's events.
- */
-ThingsController.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController);
-
-/**
- * Modify a Thing's floorplan position or layout index.
- */
-ThingsController.patch('/:thingId', async (request, response) => {
-  const thingId = request.params.thingId;
-  if (!request.body) {
-    response.status(400).send('request body missing');
-    return;
-  }
-
-  let thing;
-  try {
-    thing = await Things.getThing(thingId);
-  } catch (e) {
-    response.status(404).send('thing not found');
-    return;
-  }
-
-  let description;
-  try {
-    if (request.body.hasOwnProperty('floorplanX') &&
-        request.body.hasOwnProperty('floorplanY')) {
-      description = await thing.setCoordinates(
-        request.body.floorplanX,
-        request.body.floorplanY
-      );
-    } else if (request.body.hasOwnProperty('layoutIndex')) {
-      description = await thing.setLayoutIndex(request.body.layoutIndex);
-    } else {
-      response.status(400).send('request body missing required parameters');
-      return;
-    }
-
-    response.status(200).json(description);
-  } catch (e) {
-    response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-  }
-});
-
-/**
- * Modify a Thing.
- */
-ThingsController.put('/:thingId', async (request, response) => {
-  const thingId = request.params.thingId;
-  if (!request.body || !request.body.hasOwnProperty('title')) {
-    response.status(400).send('title parameter required');
-    return;
-  }
-
-  const title = request.body.title.trim();
-  if (title.length === 0) {
-    response.status(400).send('Invalid title');
-    return;
-  }
-
-  let thing;
-  try {
-    thing = await Things.getThing(thingId);
-  } catch (e) {
-    response.status(500).send(`Failed to retrieve thing ${thingId}: ${e}`);
-    return;
-  }
-
-  if (request.body.selectedCapability) {
-    try {
-      await thing.setSelectedCapability(request.body.selectedCapability);
-    } catch (e) {
-      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-      return;
-    }
-  }
-
-  if (request.body.iconData) {
-    try {
-      await thing.setIcon(request.body.iconData, true);
-    } catch (e) {
-      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-      return;
-    }
-  }
-
-  let description;
-  try {
-    description = await thing.setTitle(title);
-  } catch (e) {
-    response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
-    return;
-  }
-
-  response.status(200).json(description);
-});
-
-/**
- * Remove a Thing.
- */
-ThingsController.delete('/:thingId', (request, response) => {
-  const thingId = request.params.thingId;
-
-  const _finally = () => {
-    Things.removeThing(thingId).then(() => {
-      console.log(`Successfully deleted ${thingId} from database.`);
-      response.sendStatus(204);
-    }).catch((e: any) => {
-      response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
-    });
-  };
-
-  AddonManager.removeThing(thingId).then(_finally, _finally);
-});
+interface WebSocketMessage {
+  messageType: string;
+  data: any;
+  id?: string;
+}
 
 function websocketHandler(websocket: WebSocket, request: express.Request): void {
   // Since the Gateway have the asynchronous express middlewares, there is a
@@ -393,9 +36,9 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
   }
 
   const thingId = request.params.thingId;
-  const subscribedEventNames: any = {};
+  const subscribedEventNames: Record<string, boolean> = {};
 
-  function sendMessage(message: any): void {
+  function sendMessage(message: WebSocketMessage): void {
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error(`WebSocket sendMessage failed: ${err}`);
@@ -424,7 +67,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
       return;
     }
 
-    const message: any = {
+    const message: WebSocketMessage = {
       messageType: Constants.ACTION_STATUS,
       data: {
         [action.name]: action.getDescription(),
@@ -456,7 +99,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
     });
   }
 
-  let thingCleanups: any = {};
+  let thingCleanups: Record<string, () => void> = {};
   function addThing(thing: any): void {
     thing.addEventSubscription(onEvent);
 
@@ -581,7 +224,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
   websocket.on('close', cleanup);
 
   websocket.on('message', (requestText: string) => {
-    let request: any;
+    let request: WebSocketMessage;
     try {
       request = JSON.parse(requestText);
     } catch (e) {
@@ -692,4 +335,376 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
   });
 }
 
-export = ThingsController;
+function build(): express.Router {
+  const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
+
+  /**
+   * Connect to receive messages from a Thing or all Things
+   *
+   * Note that these must precede the normal routes to allow express-ws to work
+   */
+  controller.ws('/:thingId/', websocketHandler);
+  controller.ws('/', websocketHandler);
+
+  /**
+   * Get a list of Things.
+   */
+  controller.get('/', (request, response) => {
+    const payload = (<RequestWithJWT>request).jwt.getPayload();
+
+    if (!payload) {
+      response.status(401).end();
+      return;
+    }
+
+    if (payload.role !== Constants.USER_TOKEN) {
+      if (!payload.scope) {
+        response.status(400).send('Token must contain scope');
+      } else {
+        const scope = payload.scope;
+        if (!scope.includes(' ') && scope.indexOf('/') == 0 &&
+          scope.split('/').length == 2 &&
+          scope.split(':')[0] === Constants.THINGS_PATH) {
+          Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+            response.status(200).json(things);
+          });
+        } else {
+          // Get hrefs of things in scope
+          const paths = scope.split(' ');
+          const hrefs = new Array(0);
+          for (const path of paths) {
+            const parts = path.split(':');
+            hrefs.push(parts[0]);
+          }
+          Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure)
+            .then((things: any[]) => {
+              response.status(200).json(things);
+            });
+        }
+      }
+    } else {
+      Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+        response.status(200).json(things);
+      });
+    }
+  });
+
+  controller.patch('/', async (request, response) => {
+    if (!request.body ||
+        !request.body.hasOwnProperty('thingId') ||
+        !request.body.thingId) {
+      response.status(400).send('Invalid request');
+      return;
+    }
+
+    const thingId = request.body.thingId;
+
+    if (request.body.hasOwnProperty('pin') &&
+        request.body.pin.length > 0) {
+      const pin = request.body.pin;
+
+      try {
+        const device = await AddonManager.setPin(thingId, pin);
+        response.status(200).json(device);
+      } catch (e) {
+        console.error(`Failed to set PIN for ${thingId}: ${e}`);
+        response.status(400).send(e);
+      }
+    } else if (request.body.hasOwnProperty('username') &&
+               request.body.username.length > 0 &&
+               request.body.hasOwnProperty('password') &&
+               request.body.password.length > 0) {
+      const username = request.body.username;
+      const password = request.body.password;
+
+      try {
+        const device = await AddonManager.setCredentials(
+          thingId,
+          username,
+          password
+        );
+        response.status(200).json(device);
+      } catch (e) {
+        console.error(`Failed to set credentials for ${thingId}: ${e}`);
+        response.status(400).send(e);
+      }
+    } else {
+      response.status(400).send('Invalid request');
+    }
+  });
+
+  /**
+   * Handle creating a new thing.
+   */
+  controller.post('/', async (request, response) => {
+    if (!request.body || !request.body.hasOwnProperty('id')) {
+      response.status(400).send('No id in thing description');
+      return;
+    }
+    const description = request.body;
+    const id = description.id;
+    delete description.id;
+
+    try {
+      // If the thing already exists, bail out.
+      await Things.getThing(id);
+      const err = 'Web thing already added';
+      console.log(err, id);
+      response.status(400).send(err);
+      return;
+    } catch (_e) {
+      // Do nothing, this is what we want.
+    }
+
+    // If we're adding a native webthing, we need to update the config for
+    // thing-url-adapter so that it knows about it.
+    let webthing = false;
+    if (description.hasOwnProperty('webthingUrl')) {
+      webthing = true;
+
+      const key = 'addons.config.thing-url-adapter';
+      try {
+        const config = await Settings.getSetting(key);
+        if (typeof config === 'undefined') {
+          throw new Error('Setting is undefined.');
+        }
+
+        config.urls.push(description.webthingUrl);
+        await Settings.setSetting(key, config);
+      } catch (e) {
+        console.error('Failed to update settings for thing-url-adapter');
+        console.error(e);
+        response.status(400).send(e);
+        return;
+      }
+
+      delete description.webthingUrl;
+    }
+
+    try {
+      const thing = await Things.createThing(id, description, webthing);
+      console.log(`Successfully created new thing ${thing.title}`);
+      response.status(201).send(thing);
+    } catch (error) {
+      console.error('Error saving new thing', id, description);
+      console.error(error);
+      response.status(500).send(error);
+    }
+
+    // If this is a web thing, we need to restart thing-url-adapter.
+    if (webthing) {
+      try {
+        await AddonManager.unloadAddon('thing-url-adapter', true);
+        await AddonManager.loadAddon('thing-url-adapter');
+      } catch (e) {
+        console.error('Failed to restart thing-url-adapter');
+        console.error(e);
+      }
+    }
+  });
+
+  /**
+   * Get a Thing.
+   */
+  controller.get('/:thingId', (request, response) => {
+    const id = request.params.thingId;
+    Things.getThingDescription(id, request.get('Host'), request.secure).then((thing: any) => {
+      response.status(200).json(thing);
+    }).catch((error: any) => {
+      console.error(`Error getting thing description for thing with id ${id}:`, error);
+      response.status(404).send(error);
+    });
+  });
+
+  /**
+   * Get the properties of a Thing.
+   */
+  controller.get('/:thingId/properties', async (request, response) => {
+    const thingId = request.params.thingId;
+
+    let thing;
+    try {
+      thing = await Things.getThing(thingId);
+    } catch (e) {
+      console.error('Failed to get thing:', e);
+      response.status(404).send(e);
+      return;
+    }
+
+    const result: Record<string, any> = {};
+    for (const name in thing.properties) {
+      try {
+        const value = await AddonManager.getProperty(thingId, name);
+        result[name] = value;
+      } catch (e) {
+        console.error(`Failed to get property ${name}:`, e);
+      }
+    }
+
+    response.status(200).json(result);
+  });
+
+  /**
+   * Get a property of a Thing.
+   */
+  controller.get('/:thingId/properties/:propertyName', async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    try {
+      const value = await Things.getThingProperty(thingId, propertyName);
+      const result: Record<string, any> = {};
+      result[propertyName] = value;
+      response.status(200).json(result);
+    } catch (err) {
+      response.status(err.code).send(err.message);
+    }
+  });
+
+  /**
+   * Set a property of a Thing.
+   */
+  controller.put('/:thingId/properties/:propertyName', async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    if (!request.body || typeof request.body[propertyName] === 'undefined') {
+      response.status(400).send('Invalid property name');
+      return;
+    }
+    const value = request.body[propertyName];
+    try {
+      const updatedValue = await Things.setThingProperty(thingId, propertyName,
+                                                         value);
+      const result = {
+        [propertyName]: updatedValue,
+      };
+      response.status(200).json(result);
+    } catch (e) {
+      console.error('Error setting property:', e);
+      response.status(e.code || 500).send(e.message);
+    }
+  });
+
+  /**
+   * Use an ActionsController to handle each thing's actions.
+   */
+  controller.use(`/:thingId${Constants.ACTIONS_PATH}`, ActionsController());
+
+  /**
+   * Use an EventsController to handle each thing's events.
+   */
+  controller.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController());
+
+  /**
+   * Modify a Thing's floorplan position or layout index.
+   */
+  controller.patch('/:thingId', async (request, response) => {
+    const thingId = request.params.thingId;
+    if (!request.body) {
+      response.status(400).send('request body missing');
+      return;
+    }
+
+    let thing;
+    try {
+      thing = await Things.getThing(thingId);
+    } catch (e) {
+      response.status(404).send('thing not found');
+      return;
+    }
+
+    let description;
+    try {
+      if (request.body.hasOwnProperty('floorplanX') &&
+          request.body.hasOwnProperty('floorplanY')) {
+        description = await thing.setCoordinates(
+          request.body.floorplanX,
+          request.body.floorplanY
+        );
+      } else if (request.body.hasOwnProperty('layoutIndex')) {
+        description = await thing.setLayoutIndex(request.body.layoutIndex);
+      } else {
+        response.status(400).send('request body missing required parameters');
+        return;
+      }
+
+      response.status(200).json(description);
+    } catch (e) {
+      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+    }
+  });
+
+  /**
+   * Modify a Thing.
+   */
+  controller.put('/:thingId', async (request, response) => {
+    const thingId = request.params.thingId;
+    if (!request.body || !request.body.hasOwnProperty('title')) {
+      response.status(400).send('title parameter required');
+      return;
+    }
+
+    const title = request.body.title.trim();
+    if (title.length === 0) {
+      response.status(400).send('Invalid title');
+      return;
+    }
+
+    let thing;
+    try {
+      thing = await Things.getThing(thingId);
+    } catch (e) {
+      response.status(500).send(`Failed to retrieve thing ${thingId}: ${e}`);
+      return;
+    }
+
+    if (request.body.selectedCapability) {
+      try {
+        await thing.setSelectedCapability(request.body.selectedCapability);
+      } catch (e) {
+        response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+        return;
+      }
+    }
+
+    if (request.body.iconData) {
+      try {
+        await thing.setIcon(request.body.iconData, true);
+      } catch (e) {
+        response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+        return;
+      }
+    }
+
+    let description;
+    try {
+      description = await thing.setTitle(title);
+    } catch (e) {
+      response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
+      return;
+    }
+
+    response.status(200).json(description);
+  });
+
+  /**
+   * Remove a Thing.
+   */
+  controller.delete('/:thingId', (request, response) => {
+    const thingId = request.params.thingId;
+
+    const _finally = () => {
+      Things.removeThing(thingId).then(() => {
+        console.log(`Successfully deleted ${thingId} from database.`);
+        response.sendStatus(204);
+      }).catch((e: any) => {
+        response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
+      });
+    };
+
+    AddonManager.removeThing(thingId).then(_finally, _finally);
+  });
+
+  return controller;
+}
+
+export = build;

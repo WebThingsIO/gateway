@@ -15,10 +15,28 @@ const compression = require('compression');
 const Constants = require('./constants');
 const express = require('express');
 const jwtMiddleware = require('./jwt-middleware');
-const nocache = require('nocache')();
+const nocache = require('nocache');
 const UserProfile = require('./user-profile').default;
 
-const auth = jwtMiddleware.middleware();
+const AdaptersController = require('./controllers/adapters_controller');
+const AddonsController = require('./controllers/addons_controller');
+const DebugController = require('./controllers/debug_controller');
+const ExtensionsController = require('./controllers/extensions_controller');
+const InternalLogsController = require('./controllers/internal_logs_controller');
+const LogOutController = require('./controllers/log_out_controller');
+const LoginController = require('./controllers/login_controller');
+const LogsController = require('./controllers/logs_controller');
+const NotifiersController = require('./controllers/notifiers_controller');
+const OAuthController = require('./controllers/oauth_controller');
+const OAuthClientsController = require('./controllers/oauthclients_controller');
+const PingController = require('./controllers/ping_controller');
+const ProxyController = require('./controllers/proxy_controller');
+const PushController = require('./controllers/push_controller');
+const RootController = require('./controllers/root_controller');
+const SettingsController = require('./controllers/settings_controller');
+const UpdatesController = require('./controllers/updates_controller');
+const UploadsController = require('./controllers/uploads_controller');
+const UsersController = require('./controllers/users_controller');
 
 const API_PREFIX = '/api'; // A pseudo path to use for API requests
 const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
@@ -26,12 +44,15 @@ const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
 /**
  * Router.
  */
-const Router = {
+class Router {
   /**
    * Configure web app routes.
    */
-  configure: function(app, options) {
-    this.proxyController = require('./controllers/proxy_controller');
+  configure(app, options) {
+    const auth = jwtMiddleware.middleware();
+    const nc = nocache();
+
+    this.proxyController = ProxyController();
 
     // Compress all responses larger than 1kb
     app.use(compression());
@@ -56,8 +77,7 @@ const Router = {
     // First look for a static file
     const staticHandler = express.static(Constants.BUILD_STATIC_PATH);
     app.use(Constants.UPLOADS_PATH, express.static(UserProfile.uploadsDir));
-    app.use(Constants.EXTENSIONS_PATH, nocache,
-            require('./controllers/extensions_controller'));
+    app.use(Constants.EXTENSIONS_PATH, nc, ExtensionsController());
     app.use((request, response, next) => {
       if (request.path === '/' && request.accepts('html')) {
         // We need this to hit RootController.
@@ -77,8 +97,7 @@ const Router = {
       response.setHeader(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-      response.setHeader('Access-Control-Allow-Methods',
-                         'GET,HEAD,PUT,PATCH,POST,DELETE');
+      response.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
 
       // If this is a proxy request, skip everything and go straight there.
       if (request.path.startsWith(Constants.PROXY_PATH)) {
@@ -105,78 +124,59 @@ const Router = {
     });
 
     // Handle proxied resources
-    app.use(APP_PREFIX + Constants.PROXY_PATH, nocache, auth,
-            this.proxyController);
+    app.use(APP_PREFIX + Constants.PROXY_PATH, nc, auth, this.proxyController);
 
     // Let OAuth handle its own rendering
-    app.use(APP_PREFIX + Constants.OAUTH_PATH, nocache,
-            require('./controllers/oauth_controller'));
+    app.use(APP_PREFIX + Constants.OAUTH_PATH, nc, OAuthController());
 
     // Handle static media files before other static content. These must be
     // authenticated.
-    app.use(APP_PREFIX + Constants.MEDIA_PATH, nocache, auth,
-            express.static(UserProfile.mediaDir));
+    app.use(APP_PREFIX + Constants.MEDIA_PATH, nc, auth, express.static(UserProfile.mediaDir));
 
     // Web app routes - send index.html and fall back to client side URL router
-    app.use(`${APP_PREFIX}/*`, require('./controllers/root_controller'));
+    app.use(`${APP_PREFIX}/*`, RootController());
 
     // Unauthenticated API routes
-    app.use(API_PREFIX + Constants.LOGIN_PATH, nocache,
-            require('./controllers/login_controller'));
-    app.use(API_PREFIX + Constants.SETTINGS_PATH, nocache,
-            require('./controllers/settings_controller'));
-    app.use(API_PREFIX + Constants.USERS_PATH, nocache,
-            require('./controllers/users_controller'));
-    app.use(API_PREFIX + Constants.PING_PATH, nocache,
-            require('./controllers/ping_controller'));
+    app.use(API_PREFIX + Constants.LOGIN_PATH, nc, LoginController());
+    app.use(API_PREFIX + Constants.SETTINGS_PATH, nc, SettingsController());
+    app.use(API_PREFIX + Constants.USERS_PATH, nc, UsersController());
+    app.use(API_PREFIX + Constants.PING_PATH, nc, PingController());
     if (options.debug) {
-      app.use(API_PREFIX + Constants.DEBUG_PATH, nocache,
-              require('./controllers/debug_controller'));
+      app.use(API_PREFIX + Constants.DEBUG_PATH, nc, DebugController());
     }
 
     // Authenticated API routes
-    app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth,
-            require('./controllers/things_controller'));
-    app.use(API_PREFIX + Constants.NEW_THINGS_PATH, nocache, auth,
-            require('./controllers/new_things_controller'));
-    app.use(API_PREFIX + Constants.ADAPTERS_PATH, nocache, auth,
-            require('./controllers/adapters_controller'));
-    app.use(API_PREFIX + Constants.ACTIONS_PATH, nocache, auth,
-            require('./controllers/actions_controller'));
-    app.use(API_PREFIX + Constants.EVENTS_PATH, nocache, auth,
-            require('./controllers/events_controller'));
-    app.use(API_PREFIX + Constants.LOG_OUT_PATH, nocache, auth,
-            require('./controllers/log_out_controller'));
-    app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache, auth,
-            require('./controllers/uploads_controller'));
-    app.use(API_PREFIX + Constants.UPDATES_PATH, nocache, auth,
-            require('./controllers/updates_controller'));
-    app.use(API_PREFIX + Constants.ADDONS_PATH, nocache, auth,
-            require('./controllers/addons_controller'));
-    app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth,
-            require('./rules-engine/index'));
-    app.use(API_PREFIX + Constants.INTERNAL_LOGS_PATH, nocache, auth,
-            require('./controllers/internal_logs_controller'));
-    app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth,
-            require('./controllers/push_controller'));
-    app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth,
-            require('./controllers/logs_controller'));
-    app.use(API_PREFIX + Constants.NOTIFIERS_PATH, nocache, auth,
-            require('./controllers/notifiers_controller'));
+    app.use(API_PREFIX + Constants.THINGS_PATH, nc, auth,
+            require('./controllers/things_controller')());
+    app.use(API_PREFIX + Constants.NEW_THINGS_PATH, nc, auth,
+            require('./controllers/new_things_controller')());
+    app.use(API_PREFIX + Constants.ADAPTERS_PATH, nc, auth, AdaptersController());
+    app.use(API_PREFIX + Constants.ACTIONS_PATH, nc, auth,
+            require('./controllers/actions_controller')());
+    app.use(API_PREFIX + Constants.EVENTS_PATH, nc, auth,
+            require('./controllers/events_controller')());
+    app.use(API_PREFIX + Constants.LOG_OUT_PATH, nc, auth, LogOutController());
+    app.use(API_PREFIX + Constants.UPLOADS_PATH, nc, auth, UploadsController());
+    app.use(API_PREFIX + Constants.UPDATES_PATH, nc, auth, UpdatesController());
+    app.use(API_PREFIX + Constants.ADDONS_PATH, nc, auth, AddonsController());
+    app.use(API_PREFIX + Constants.RULES_PATH, nc, auth,
+            require('./controllers/rules_controller').build());
+    app.use(API_PREFIX + Constants.INTERNAL_LOGS_PATH, nc, auth, InternalLogsController());
+    app.use(API_PREFIX + Constants.PUSH_PATH, nc, auth, PushController());
+    app.use(API_PREFIX + Constants.LOGS_PATH, nc, auth, LogsController());
+    app.use(API_PREFIX + Constants.NOTIFIERS_PATH, nc, auth, NotifiersController());
 
-    app.use(API_PREFIX + Constants.OAUTH_PATH, nocache,
-            require('./controllers/oauth_controller'));
-    app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nocache, auth,
-            require('./controllers/oauthclients_controller'));
-  },
+    app.use(API_PREFIX + Constants.OAUTH_PATH, nc, OAuthController());
+    app.use(API_PREFIX + Constants.OAUTHCLIENTS_PATH, nc, auth, OAuthClientsController());
+  }
 
   addProxyServer(thingId, server) {
     this.proxyController.addProxyServer(thingId, server);
-  },
+  }
 
   removeProxyServer(thingId) {
     this.proxyController.removeProxyServer(thingId);
-  },
-};
+  }
+}
 
-module.exports = Router;
+module.exports = new Router();

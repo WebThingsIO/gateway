@@ -8,39 +8,39 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import express from 'express';
 import OAuthClients from '../models/oauthclients';
 import {ClientRegistry} from '../oauth-types';
+import {RequestWithJWT} from '../jwt-middleware';
 
-const OAuthClientsController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-/**
- * Get the currently authorized clients
- */
-OAuthClientsController.get('/', async (request: express.Request, response: express.Response) => {
-  const user = (request as any).jwt.user;
-  const clients = await OAuthClients.getAuthorized(user);
+  /**
+   * Get the currently authorized clients
+   */
+  controller.get('/', async (request, response) => {
+    const user = (<RequestWithJWT>request).jwt.getUser();
+    const clients = await OAuthClients.getAuthorized(user);
 
-  response.json(clients.map((client: ClientRegistry) => {
-    return client.getDescription();
-  }));
-});
+    response.json(clients.map((client: ClientRegistry) => {
+      return client.getDescription();
+    }));
+  });
 
-OAuthClientsController.delete(
-  '/:clientId',
-  async (request: express.Request, response: express.Response) => {
+  controller.delete('/:clientId', async (request, response) => {
     const clientId = request.params.clientId;
     if (!OAuthClients.get(clientId)) {
       response.status(404).send('Client not found');
       return;
     }
-    const user = (request as any).jwt.user;
+    const user = (<RequestWithJWT>request).jwt.getUser();
 
     await OAuthClients.revokeClientAuthorization(user, clientId);
     response.sendStatus(204);
-  }
-);
+  });
 
-export = OAuthClientsController;
+  return controller;
+}
+
+export = build;

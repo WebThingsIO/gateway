@@ -15,6 +15,8 @@ import JSONWebToken from './models/jsonwebtoken';
 
 const AUTH_TYPE = 'Bearer';
 
+export type RequestWithJWT = express.Request & {jwt: JSONWebToken};
+
 /**
  * Attempt to find the JWT in query parameters.
  *
@@ -25,6 +27,7 @@ export function extractJWTQS(req: express.Request): string|boolean {
   if (typeof req.query === 'object' && req.query.jwt) {
     return `${req.query.jwt}`;
   }
+
   return false;
 }
 
@@ -39,16 +42,18 @@ export function extractJWTHeader(req: express.Request): string|boolean {
   if (!authorization) {
     return false;
   }
+
   const [type, sig] = authorization.split(' ');
   if (type !== AUTH_TYPE) {
     console.warn('JWT header extraction failed: invalid auth type');
     return false;
   }
+
   return sig;
 }
 
 /**
- * Authenticate the incoming call by checking it's JWT.
+ * Authenticate the incoming call by checking its JWT.
  *
  * TODO: User error messages.
  */
@@ -57,6 +62,7 @@ export async function authenticate(req: express.Request): Promise<JSONWebToken|n
   if (!sig) {
     return null;
   }
+
   return await JSONWebToken.verifyJWT(<string>sig);
 }
 
@@ -65,6 +71,7 @@ export function scopeAllowsRequest(scope: string|undefined, request: express.Req
   if (!scope) {
     return true;
   }
+
   const paths = scope.split(' ');
   for (let path of paths) {
     const parts = path.split(':');
@@ -72,6 +79,7 @@ export function scopeAllowsRequest(scope: string|undefined, request: express.Req
       console.warn('Invalid scope', scope);
       return false;
     }
+
     const access = parts[1];
     const readwrite = access === Constants.READWRITE;
     path = parts[0];
@@ -83,49 +91,48 @@ export function scopeAllowsRequest(scope: string|undefined, request: express.Req
       path === Constants.THINGS_PATH;
 
     if (allowedDirect || allowedThings || allowedMedia) {
-      if (!readwrite && request.method !== 'GET' &&
-          request.method !== 'OPTIONS') {
+      if (!readwrite && request.method !== 'GET' && request.method !== 'OPTIONS') {
         return false;
       }
+
       return true;
     }
   }
+
   return false;
 }
 
 export function middleware(): express.Handler {
-  return (req, res, next) => {
-    authenticate(req).
-      then((jwt) => {
-        if (!jwt) {
-          res.status(401).end();
-          return;
-        }
+  return async (req, res, next) => {
+    try {
+      const jwt = await authenticate(req);
+      if (!jwt) {
+        res.status(401).end();
+        return;
+      }
 
-        const payload = (<JSONWebToken>jwt).getPayload()!;
-        let scope = payload!.scope;
-        if (payload!.role === Constants.AUTHORIZATION_CODE) {
-          scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
-        }
-        if (!scopeAllowsRequest(scope, req)) {
-          res.status(401).send(
-            `Token of role ${payload.role} used out of scope: ${scope}`);
-          return;
-        }
-        if (payload.role !== Constants.USER_TOKEN) {
-          if (!payload.scope) {
-            res.status(400)
-              .send('Token must contain scope');
-            return;
-          }
-        }
+      const payload = (<JSONWebToken>jwt).getPayload()!;
+      let scope = payload.scope;
 
-        (req as any).jwt = jwt;
-        next();
-      }).
-      catch((err) => {
-        console.error('error running jwt middleware', err.stack);
-        next(err);
-      });
+      if (payload.role === Constants.AUTHORIZATION_CODE) {
+        scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
+      }
+
+      if (!scopeAllowsRequest(scope, req)) {
+        res.status(401).send(`Token of role ${payload.role} used out of scope: ${scope}`);
+        return;
+      }
+
+      if (payload.role !== Constants.USER_TOKEN && !payload.scope) {
+        res.status(400).send('Token must contain scope');
+        return;
+      }
+
+      (<RequestWithJWT>req).jwt = jwt;
+      next();
+    } catch (err) {
+      console.error('error running jwt middleware', err.stack);
+      next(err);
+    }
   };
 }

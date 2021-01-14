@@ -3,60 +3,59 @@ import {Constants} from 'gateway-addon';
 
 const AddonManager = require('../addon-manager');
 
-const NotifiersController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-/**
- * Helper function to cut down on unnecessary API round trips
- * @param {Notifier} notifier
- * @return {Object}
- */
-function notifierAsDictWithOutlets(notifier: any): any {
-  const notifierDict = notifier.asDict();
-  const outlets = notifier.getOutlets();
-  notifierDict.outlets = Array.from(Object.values(outlets)).map((outlet: any) => {
-    return outlet.asDict();
-  });
-  return notifierDict;
-}
-
-NotifiersController.get('/', async (_request, response) => {
-  const notifiers = AddonManager.getNotifiers();
-  const notifierList = Array.from(notifiers.values())
-    .map(notifierAsDictWithOutlets);
-  response.status(200).json(notifierList);
-});
-
-NotifiersController.get('/:notifierId', async (request, response) => {
-  const notifierId = request.params.notifierId;
-  const notifier = AddonManager.getNotifier(notifierId);
-  if (notifier) {
-    response.status(200).send(notifierAsDictWithOutlets(notifier));
-  } else {
-    response.status(404).send(`Notifier "${notifierId}" not found.`);
+  /**
+   * Helper function to cut down on unnecessary API round trips
+   * @param {Notifier} notifier
+   * @return {Object}
+   */
+  function notifierAsDictWithOutlets(notifier: any): any {
+    const notifierDict = notifier.asDict();
+    const outlets = notifier.getOutlets();
+    notifierDict.outlets = Array.from(Object.values(outlets)).map((outlet: any) => {
+      return outlet.asDict();
+    });
+    return notifierDict;
   }
-});
 
-NotifiersController.get('/:notifierId/outlets', async (request, response) => {
-  const notifierId = request.params.notifierId;
-  const notifier = AddonManager.getNotifier(notifierId);
-  if (!notifier) {
-    response.status(404).send(`Notifier "${notifierId}" not found.`);
-    return;
-  }
-  const outlets = notifier.getOutlets();
-  const outletList = Array.from(Object.values(outlets)).map((outlet: any) => {
-    return outlet.asDict();
+  controller.get('/', async (_request, response) => {
+    const notifiers = AddonManager.getNotifiers();
+    const notifierList = Array.from(notifiers.values())
+      .map(notifierAsDictWithOutlets);
+    response.status(200).json(notifierList);
   });
-  response.status(200).json(outletList);
-});
 
-/**
- * Create a new notification with the title, message, and level contained in
- * the request body
- */
-NotifiersController.post(
-  `/:notifierId/outlets/:outletId/notification`,
-  async (request, response) => {
+  controller.get('/:notifierId', async (request, response) => {
+    const notifierId = request.params.notifierId;
+    const notifier = AddonManager.getNotifier(notifierId);
+    if (notifier) {
+      response.status(200).send(notifierAsDictWithOutlets(notifier));
+    } else {
+      response.status(404).send(`Notifier "${notifierId}" not found.`);
+    }
+  });
+
+  controller.get('/:notifierId/outlets', async (request, response) => {
+    const notifierId = request.params.notifierId;
+    const notifier = AddonManager.getNotifier(notifierId);
+    if (!notifier) {
+      response.status(404).send(`Notifier "${notifierId}" not found.`);
+      return;
+    }
+    const outlets = notifier.getOutlets();
+    const outletList = Array.from(Object.values(outlets)).map((outlet: any) => {
+      return outlet.asDict();
+    });
+    response.status(200).json(outletList);
+  });
+
+  /**
+   * Create a new notification with the title, message, and level contained in
+   * the request body
+   */
+  controller.post(`/:notifierId/outlets/:outletId/notification`, async (request, response) => {
     const notifierId = request.params.notifierId;
     const outletId = request.params.outletId;
     const notifier = AddonManager.getNotifier(notifierId);
@@ -85,7 +84,9 @@ NotifiersController.post(
     } catch (e) {
       response.status(500).send(e);
     }
-  }
-);
+  });
 
-export = NotifiersController;
+  return controller;
+}
+
+export = build;

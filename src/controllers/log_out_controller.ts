@@ -10,16 +10,21 @@
 
 import express from 'express';
 import JSONWebToken from '../models/jsonwebtoken';
+import {RequestWithJWT} from '../jwt-middleware';
 
-const LogOutController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-/**
- * Log out the user
- */
-LogOutController.post('/', async (request, response) => {
-  const {jwt} = request as any;
-  await JSONWebToken.revokeToken(jwt.keyId);
-  response.status(200).json({});
-});
+  /**
+   * Log out the user
+   */
+  controller.post('/', async (request, response) => {
+    const jwt = (<RequestWithJWT>request).jwt;
+    await JSONWebToken.revokeToken(jwt.getKeyId());
+    response.status(200).json({});
+  });
 
-export = LogOutController;
+  return controller;
+}
+
+export = build;

@@ -217,7 +217,7 @@ function getOptions() {
  * Set up the rules engine.
  */
 function rulesEngineConfigure() {
-  const rulesEngine = require('./rules-engine/index');
+  const rulesEngine = require('./controllers/rules_controller');
   rulesEngine.configure();
 }
 

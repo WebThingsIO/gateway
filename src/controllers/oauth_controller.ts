@@ -20,10 +20,6 @@ import OAuthClients from '../models/oauthclients';
 import * as jwtMiddleware from '../jwt-middleware';
 import * as Constants from '../constants';
 
-const auth = jwtMiddleware.middleware();
-
-const OAuthController = express.Router();
-
 type InvalidRequest = 'invalid_request';
 type UnauthorizedClient = 'unauthorized_client';
 
@@ -216,36 +212,39 @@ ClientRegistry|null {
   return client;
 }
 
-OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
-  let redirect_uri;
-  if (request.query.redirect_uri) {
-    redirect_uri = new URL(`${request.query.redirect_uri}`);
-  }
+function build(): express.Router {
+  const auth = jwtMiddleware.middleware();
 
-  // From query component construct
-  const authRequest: AuthorizationRequest = {
-    response_type: `${request.query.response_type}`,
-    client_id: `${request.query.client_id}`,
-    redirect_uri: redirect_uri,
-    scope: `${request.query.scope}`,
-    state: `${request.query.state}`,
-  };
+  const controller = express.Router();
 
-  const client = verifyAuthorizationRequest(authRequest, response);
-  if (!client) {
-    return;
-  }
+  controller.get('/authorize', async (request, response) => {
+    let redirect_uri;
+    if (request.query.redirect_uri) {
+      redirect_uri = new URL(`${request.query.redirect_uri}`);
+    }
 
-  response.render('authorize', {
-    name: client.name,
-    domain: client.redirect_uri.host,
-    request: authRequest,
+    // From query component construct
+    const authRequest: AuthorizationRequest = {
+      response_type: `${request.query.response_type}`,
+      client_id: `${request.query.client_id}`,
+      redirect_uri: redirect_uri,
+      scope: `${request.query.scope}`,
+      state: `${request.query.state}`,
+    };
+
+    const client = verifyAuthorizationRequest(authRequest, response);
+    if (!client) {
+      return;
+    }
+
+    response.render('authorize', {
+      name: client.name,
+      domain: client.redirect_uri.host,
+      request: authRequest,
+    });
   });
-});
 
-OAuthController.get(
-  '/local-token-service',
-  async (request: express.Request, response: express.Response) => {
+  controller.get('/local-token-service', async (request, response) => {
     const localClient: ClientRegistry = OAuthClients.get('local-token')!;
     const tokenRequest: AccessTokenRequest = {
       grant_type: 'authorization_code',
@@ -263,13 +262,9 @@ OAuthController.get(
         token: token.access_token,
       });
     }
-  }
-);
+  });
 
-OAuthController.get(
-  '/allow',
-  auth,
-  async (request: express.Request, response: express.Response) => {
+  controller.get('/allow', auth, async (request, response) => {
     let redirect_uri;
     if (request.query.redirect_uri) {
       redirect_uri = new URL(`${request.query.redirect_uri}`);
@@ -288,18 +283,18 @@ OAuthController.get(
       return;
     }
 
-    const jwt = (request as any).jwt;
+    const jwt = (<jwtMiddleware.RequestWithJWT>request).jwt;
     if (!jwt) {
       return;
     }
 
-    if (!jwt.payload || jwt.payload.role !== 'user_token') {
+    if (!jwt.getPayload() || jwt.getPayload()!.role !== 'user_token') {
       response.status(401).send('Authorization must come from user');
       return;
     }
 
     // TODO: should expire in 10 minutes
-    const code = await JSONWebToken.issueOAuthToken(client, jwt.user, {
+    const code = await JSONWebToken.issueOAuthToken(client, jwt.getUser(), {
       role: 'authorization_code',
       scope: authRequest.scope,
     });
@@ -314,108 +309,110 @@ OAuthController.get(
       client.redirect_uri,
       success
     );
-  }
-);
-
-OAuthController.post('/token', async (request: express.Request, response: express.Response) => {
-  const requestData = request.body;
-  if (requestData.grant_type === 'authorization_code') {
-    const token = await handleAccessTokenRequest(request, response);
-    if (token) {
-      response.json(token);
-    }
-    return;
-  }
-  // if (requestData.grant_type === 'refresh_token') {
-  //   handleRefreshTokenRequest(request, response);
-  // }
-  const err: AccessTokenErrorResponse = {
-    error: 'unsupported_grant_type',
-    state: requestData.state,
-  };
-  response.status(400).json(err);
-});
-
-/**
- * Handles the request for an access token using an authorization code.
- * On error sends a 400 with a JSON reason.
- */
-async function handleAccessTokenRequest(request: express.Request, response: express.Response):
-Promise<AccessTokenSuccessResponse|null> {
-  const requestData = request.body;
-  const reqClientInfo = extractClientInfo(request, response);
-  if (!reqClientInfo) {
-    const err: ErrorResponse<UnauthorizedClient> = {
-      error: 'unauthorized_client',
-      error_description: 'client info missing or malformed',
-    };
-
-    response.status(400).json(err);
-    return null;
-  }
-
-  const tokenRequest: AccessTokenRequest = {
-    grant_type: requestData.grant_type,
-    code: requestData.code,
-    redirect_uri: requestData.redirect_uri && new URL(requestData.redirect_uri),
-    client_id: reqClientInfo.clientId,
-  };
-
-  const client = verifyClient(tokenRequest, response);
-  if (!client) {
-    return null;
-  }
-
-  if (client.id !== reqClientInfo.clientId ||
-      client.secret !== reqClientInfo.clientSecret) {
-    const err: ErrorResponse<UnauthorizedClient> = {
-      error: 'unauthorized_client',
-      error_description: 'client info mismatch',
-    };
-
-    response.status(400).json(err);
-    return null;
-  }
-
-  let tokenData = await JSONWebToken.verifyJWT(tokenRequest.code);
-  if (!tokenData) {
-    const err: AccessTokenErrorResponse = {
-      error: 'invalid_grant',
-      error_description: 'included JWT is invalid',
-      state: request.body.state,
-    };
-
-    response.status(400).json(err);
-    return null;
-  }
-
-  tokenData = <JSONWebToken>tokenData;
-  const payload = tokenData.getPayload();
-  if (!payload || payload.role !== 'authorization_code' || payload.client_id !== client.id) {
-    const err: AccessTokenErrorResponse = {
-      error: 'invalid_grant',
-      state: request.body.state,
-    };
-
-    response.status(400).json(err);
-    return null;
-  }
-
-  const accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.getUser(), {
-    role: Constants.ACCESS_TOKEN,
-    scope: payload.scope,
   });
 
-  // let refreshToken = await JSONWebToken.issueOAuthToken(client, 'refresh_token');
+  controller.post('/token', async (request, response) => {
+    const requestData = request.body;
+    if (requestData.grant_type === 'authorization_code') {
+      const token = await handleAccessTokenRequest(request, response);
+      if (token) {
+        response.json(token);
+      }
+      return;
+    }
+    // if (requestData.grant_type === 'refresh_token') {
+    //   handleRefreshTokenRequest(request, response);
+    // }
+    const err: AccessTokenErrorResponse = {
+      error: 'unsupported_grant_type',
+      state: requestData.state,
+    };
+    response.status(400).json(err);
+  });
 
-  const res: AccessTokenSuccessResponse = {
-    access_token: accessToken,
-    token_type: 'bearer',
-    // refresh_token: refreshToken,
-    scope: client.scope,
-  };
+  /**
+   * Handles the request for an access token using an authorization code.
+   * On error sends a 400 with a JSON reason.
+   */
+  async function handleAccessTokenRequest(request: express.Request, response: express.Response):
+  Promise<AccessTokenSuccessResponse|null> {
+    const requestData = request.body;
+    const reqClientInfo = extractClientInfo(request, response);
+    if (!reqClientInfo) {
+      const err: ErrorResponse<UnauthorizedClient> = {
+        error: 'unauthorized_client',
+        error_description: 'client info missing or malformed',
+      };
 
-  return res;
+      response.status(400).json(err);
+      return null;
+    }
+
+    const tokenRequest: AccessTokenRequest = {
+      grant_type: requestData.grant_type,
+      code: requestData.code,
+      redirect_uri: requestData.redirect_uri && new URL(requestData.redirect_uri),
+      client_id: reqClientInfo.clientId,
+    };
+
+    const client = verifyClient(tokenRequest, response);
+    if (!client) {
+      return null;
+    }
+
+    if (client.id !== reqClientInfo.clientId ||
+        client.secret !== reqClientInfo.clientSecret) {
+      const err: ErrorResponse<UnauthorizedClient> = {
+        error: 'unauthorized_client',
+        error_description: 'client info mismatch',
+      };
+
+      response.status(400).json(err);
+      return null;
+    }
+
+    let tokenData = await JSONWebToken.verifyJWT(tokenRequest.code);
+    if (!tokenData) {
+      const err: AccessTokenErrorResponse = {
+        error: 'invalid_grant',
+        error_description: 'included JWT is invalid',
+        state: request.body.state,
+      };
+
+      response.status(400).json(err);
+      return null;
+    }
+
+    tokenData = <JSONWebToken>tokenData;
+    const payload = tokenData.getPayload();
+    if (!payload || payload.role !== 'authorization_code' || payload.client_id !== client.id) {
+      const err: AccessTokenErrorResponse = {
+        error: 'invalid_grant',
+        state: request.body.state,
+      };
+
+      response.status(400).json(err);
+      return null;
+    }
+
+    const accessToken = await JSONWebToken.issueOAuthToken(client, tokenData.getUser(), {
+      role: Constants.ACCESS_TOKEN,
+      scope: payload.scope,
+    });
+
+    // let refreshToken = await JSONWebToken.issueOAuthToken(client, 'refresh_token');
+
+    const res: AccessTokenSuccessResponse = {
+      access_token: accessToken,
+      token_type: 'bearer',
+      // refresh_token: refreshToken,
+      scope: client.scope,
+    };
+
+    return res;
+  }
+
+  return controller;
 }
 
-export = OAuthController;
+export = build;
