@@ -12,14 +12,14 @@
 
 const Constants = require('../constants');
 const Database = require('../db').default;
-const EventEmitter = require('events');
+const {EventEmitter} = require('events');
 const Router = require('../router');
 const UserProfile = require('../user-profile').default;
 const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');
 
-class Thing {
+class Thing extends EventEmitter {
   /**
    * Thing constructor.
    *
@@ -29,10 +29,13 @@ class Thing {
    * @param {Object} description Thing description.
    */
   constructor(id, description) {
+    super();
+
     if (!id || !description) {
       console.error('id and description needed to create new Thing');
       return;
     }
+
     // Parse the Thing Description
     this.id = id;
     this.title = description.title || description.name || '';
@@ -46,7 +49,7 @@ class Thing {
     this.events = description.events || {};
     this.connected = false;
     this.eventsDispatched = [];
-    this.emitter = new EventEmitter();
+
     if (description.properties) {
       for (const propertyName in description.properties) {
         const property = description.properties[propertyName];
@@ -212,7 +215,7 @@ class Thing {
     this.floorplanY = y;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emit(Constants.MODIFIED);
         return descr;
       });
   }
@@ -227,7 +230,7 @@ class Thing {
     this.layoutIndex = index;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emit(Constants.MODIFIED);
         return descr;
       });
   }
@@ -242,7 +245,7 @@ class Thing {
     this.title = title;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emit(Constants.MODIFIED);
         return descr;
       });
   }
@@ -315,7 +318,7 @@ class Thing {
     if (updateDatabase) {
       return Database.updateThing(this.id, this.getDescription())
         .then((descr) => {
-          this.emitter.emit(Constants.MODIFIED);
+          this.emit(Constants.MODIFIED);
           return descr;
         });
     }
@@ -331,7 +334,7 @@ class Thing {
     this.selectedCapability = capability;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
-        this.emitter.emit(Constants.MODIFIED);
+        this.emit(Constants.MODIFIED);
         return descr;
       });
   }
@@ -345,7 +348,7 @@ class Thing {
       event.thingId = this.id;
     }
     this.eventsDispatched.push(event);
-    this.emitter.emit(Constants.EVENT, event);
+    this.emit(Constants.EVENT, event);
   }
 
   /**
@@ -353,7 +356,7 @@ class Thing {
    * @param {Function} callback
    */
   addEventSubscription(callback) {
-    this.emitter.on(Constants.EVENT, callback);
+    this.on(Constants.EVENT, callback);
   }
 
   /**
@@ -361,7 +364,7 @@ class Thing {
    * @param {Function} callback
    */
   removeEventSubscription(callback) {
-    this.emitter.removeListener(Constants.EVENT, callback);
+    this.removeListener(Constants.EVENT, callback);
   }
 
   /**
@@ -369,7 +372,7 @@ class Thing {
    * @param {Function} callback
    */
   addConnectedSubscription(callback) {
-    this.emitter.on(Constants.CONNECTED, callback);
+    this.on(Constants.CONNECTED, callback);
     callback(this.connected);
   }
 
@@ -378,7 +381,7 @@ class Thing {
    * @param {Function} callback
    */
   removeConnectedSubscription(callback) {
-    this.emitter.removeListener(Constants.CONNECTED, callback);
+    this.removeListener(Constants.CONNECTED, callback);
   }
 
   /**
@@ -386,7 +389,7 @@ class Thing {
    * @param {Function} callback
    */
   addModifiedSubscription(callback) {
-    this.emitter.on(Constants.MODIFIED, callback);
+    this.on(Constants.MODIFIED, callback);
   }
 
   /**
@@ -394,7 +397,7 @@ class Thing {
    * @param {Function} callback
    */
   removeModifiedSubscription(callback) {
-    this.emitter.removeListener(Constants.MODIFIED, callback);
+    this.removeListener(Constants.MODIFIED, callback);
   }
 
   /**
@@ -402,7 +405,7 @@ class Thing {
    * @param {Function} callback
    */
   addRemovedSubscription(callback) {
-    this.emitter.on(Constants.REMOVED, callback);
+    this.on(Constants.REMOVED, callback);
   }
 
   /**
@@ -410,7 +413,7 @@ class Thing {
    * @param {Function} callback
    */
   removeRemovedSubscription(callback) {
-    this.emitter.removeListener(Constants.REMOVED, callback);
+    this.removeListener(Constants.REMOVED, callback);
   }
 
 
@@ -483,7 +486,7 @@ class Thing {
       this.iconHref = null;
     }
 
-    this.emitter.emit(Constants.REMOVED, true);
+    this.emit(Constants.REMOVED, true);
   }
 
   /**
@@ -673,7 +676,7 @@ class Thing {
       .then((descr) => {
         const newDescription = JSON.stringify(this.getDescription());
         if (newDescription !== oldDescription) {
-          this.emitter.emit(Constants.MODIFIED);
+          this.emit(Constants.MODIFIED);
         }
 
         return descr;
@@ -687,7 +690,7 @@ class Thing {
    */
   setConnected(connected) {
     this.connected = connected;
-    this.emitter.emit(Constants.CONNECTED, connected);
+    this.emit(Constants.CONNECTED, connected);
   }
 }
 
