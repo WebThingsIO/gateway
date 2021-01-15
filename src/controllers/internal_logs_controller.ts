@@ -10,6 +10,7 @@
 
 import archiver from 'archiver';
 import express from 'express';
+import expressWs from 'express-ws';
 import fs from 'fs';
 import path from 'path';
 import WebSocket from 'ws';
@@ -20,19 +21,19 @@ import * as Utils from '../utils';
 
 const AddonManager = require('../addon-manager');
 
-const InternalLogsController = express.Router();
-
-/**
+export default function InternalLogsController(): express.Router {
+  const router: express.Router & expressWs.WithWebsocketMethod = express.Router();
+  /**
  * Generate an index of log files.
  */
-InternalLogsController.get('/', async (request, response) => {
-  const jwt = jwtMiddleware.extractJWTHeader(request) ||
+  router.get('/', async (request, response) => {
+    const jwt = jwtMiddleware.extractJWTHeader(request) ||
     jwtMiddleware.extractJWTQS(request);
-  const files = fs.readdirSync(UserProfile.logDir)
-    .filter((f) => !f.startsWith('.') && f !== 'logs.sqlite3');
-  files.sort();
+    const files = fs.readdirSync(UserProfile.logDir)
+      .filter((f) => !f.startsWith('.') && f !== 'logs.sqlite3');
+    files.sort();
 
-  let content =
+    let content =
     '<!DOCTYPE html>' +
     '<html lang="en">' +
     '<head>' +
@@ -42,98 +43,99 @@ InternalLogsController.get('/', async (request, response) => {
     '<body>' +
     '<ul>';
 
-  for (const name of files) {
-    if (fs.lstatSync(path.join(UserProfile.logDir, name)).isFile()) {
-      content +=
+    for (const name of files) {
+      if (fs.lstatSync(path.join(UserProfile.logDir, name)).isFile()) {
+        content +=
         `${'<li>' +
         `<a href="${Constants.INTERNAL_LOGS_PATH}/files/${encodeURIComponent(name)}?jwt=${jwt}">`}${
           Utils.escapeHtml(name)
         }</a>` +
         `</li>`;
+      }
     }
-  }
 
-  content +=
+    content +=
     '</ul>' +
     '</body>' +
     '</html>';
 
-  response.send(content);
-});
+    response.send(content);
+  });
 
-/**
+  /**
  * Static handler for log files.
  */
-InternalLogsController.use(
-  '/files',
-  express.static(
-    UserProfile.logDir,
-    {
-      setHeaders: (res, filepath) => {
-        const base = path.basename(filepath);
-        if (base.startsWith('run-app.log')) {
-          res.set('Content-Type', 'text/plain');
-        }
-      },
-    }
-  )
-);
+  router.use(
+    '/files',
+    express.static(
+      UserProfile.logDir,
+      {
+        setHeaders: (res, filepath) => {
+          const base = path.basename(filepath);
+          if (base.startsWith('run-app.log')) {
+            res.set('Content-Type', 'text/plain');
+          }
+        },
+      }
+    )
+  );
 
-/**
+  /**
  * Handle request for logs.zip.
  */
-InternalLogsController.get('/zip', async (_request, response) => {
-  const archive = archiver('zip');
+  router.get('/zip', async (_request, response) => {
+    const archive = archiver('zip');
 
-  archive.on('error', (err) => {
-    response.status(500).send(err.message);
-  });
+    archive.on('error', (err) => {
+      response.status(500).send(err.message);
+    });
 
-  response.attachment('logs.zip');
+    response.attachment('logs.zip');
 
-  archive.pipe(response);
-  fs.readdirSync(
-    UserProfile.logDir
-  ).map((f) => {
-    const fullPath = path.join(UserProfile.logDir, f);
-    if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile() &&
+    archive.pipe(response);
+    fs.readdirSync(
+      UserProfile.logDir
+    ).map((f) => {
+      const fullPath = path.join(UserProfile.logDir, f);
+      if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile() &&
         f !== 'logs.sqlite3') {
-      archive.file(fullPath, {name: path.join('logs', f)});
-    }
-  });
-  archive.finalize();
-});
-
-(InternalLogsController as any).ws('/', (websocket: WebSocket) => {
-  if (websocket.readyState !== WebSocket.OPEN) {
-    return;
-  }
-
-  const heartbeat = setInterval(() => {
-    try {
-      websocket.ping();
-    } catch (e) {
-      websocket.terminate();
-    }
-  }, 30 * 1000);
-
-  function onLog(message: any) {
-    websocket.send(JSON.stringify(message), (err) => {
-      if (err) {
-        console.error('WebSocket sendMessage failed:', err);
+        archive.file(fullPath, {name: path.join('logs', f)});
       }
     });
-  }
+    archive.finalize();
+  });
 
-  AddonManager.pluginServer.on('log', onLog);
+  router.ws('/', (websocket: WebSocket) => {
+    if (websocket.readyState !== WebSocket.OPEN) {
+      return;
+    }
 
-  const cleanup = () => {
-    AddonManager.pluginServer.removeListener('log', onLog);
-    clearInterval(heartbeat);
-  };
+    const heartbeat = setInterval(() => {
+      try {
+        websocket.ping();
+      } catch (e) {
+        websocket.terminate();
+      }
+    }, 30 * 1000);
 
-  websocket.on('error', cleanup);
-  websocket.on('close', cleanup);
-});
+    function onLog(message: any) {
+      websocket.send(JSON.stringify(message), (err) => {
+        if (err) {
+          console.error('WebSocket sendMessage failed:', err);
+        }
+      });
+    }
 
-export = InternalLogsController;
+    AddonManager.pluginServer.on('log', onLog);
+
+    const cleanup = () => {
+      AddonManager.pluginServer.removeListener('log', onLog);
+      clearInterval(heartbeat);
+    };
+
+    websocket.on('error', cleanup);
+    websocket.on('close', cleanup);
+  });
+
+  return router;
+}

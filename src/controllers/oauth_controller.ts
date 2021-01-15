@@ -22,8 +22,6 @@ import * as Constants from '../constants';
 
 const auth = jwtMiddleware.middleware();
 
-const OAuthController = express.Router();
-
 type InvalidRequest = 'invalid_request';
 type UnauthorizedClient = 'unauthorized_client';
 
@@ -216,65 +214,16 @@ ClientRegistry|null {
   return client;
 }
 
-OAuthController.get('/authorize', async (request: express.Request, response: express.Response) => {
-  let redirect_uri;
-  if (request.query.redirect_uri) {
-    redirect_uri = new URL(`${request.query.redirect_uri}`);
-  }
+export default function OAuthController(): express.Router {
+  const router = express.Router();
 
-  // From query component construct
-  const authRequest: AuthorizationRequest = {
-    response_type: `${request.query.response_type}`,
-    client_id: `${request.query.client_id}`,
-    redirect_uri: redirect_uri,
-    scope: `${request.query.scope}`,
-    state: `${request.query.state}`,
-  };
-
-  const client = verifyAuthorizationRequest(authRequest, response);
-  if (!client) {
-    return;
-  }
-
-  response.render('authorize', {
-    name: client.name,
-    domain: client.redirect_uri.host,
-    request: authRequest,
-  });
-});
-
-OAuthController.get(
-  '/local-token-service',
-  async (request: express.Request, response: express.Response) => {
-    const localClient: ClientRegistry = OAuthClients.get('local-token')!;
-    const tokenRequest: AccessTokenRequest = {
-      grant_type: 'authorization_code',
-      code: `${request.query.code}`,
-      redirect_uri: localClient.redirect_uri,
-      client_id: localClient.id,
-    };
-    request.body = tokenRequest;
-    request.headers.authorization = `Basic ${
-      Buffer.from(`${localClient.id}:${localClient.secret}`).toString('base64')}`;
-    const token = await handleAccessTokenRequest(request, response);
-    if (token) {
-      response.render('local-token-service', {
-        oauthPostToken: config.get('oauth.postToken'),
-        token: token.access_token,
-      });
-    }
-  }
-);
-
-OAuthController.get(
-  '/allow',
-  auth,
-  async (request: express.Request, response: express.Response) => {
+  router.get('/authorize', async (request: express.Request, response: express.Response) => {
     let redirect_uri;
     if (request.query.redirect_uri) {
       redirect_uri = new URL(`${request.query.redirect_uri}`);
     }
 
+    // From query component construct
     const authRequest: AuthorizationRequest = {
       response_type: `${request.query.response_type}`,
       client_id: `${request.query.client_id}`,
@@ -288,53 +237,108 @@ OAuthController.get(
       return;
     }
 
-    const jwt = (request as any).jwt;
-    if (!jwt) {
-      return;
-    }
-
-    if (!jwt.payload || jwt.payload.role !== 'user_token') {
-      response.status(401).send('Authorization must come from user');
-      return;
-    }
-
-    // TODO: should expire in 10 minutes
-    const code = await JSONWebToken.issueOAuthToken(client, jwt.user, {
-      role: 'authorization_code',
-      scope: authRequest.scope,
+    response.render('authorize', {
+      name: client.name,
+      domain: client.redirect_uri.host,
+      request: authRequest,
     });
+  });
 
-    const success: AuthorizationSuccessResponse = {
-      code: code,
-      state: authRequest.state,
-    };
-
-    redirect(
-      response,
-      client.redirect_uri,
-      success
-    );
-  }
-);
-
-OAuthController.post('/token', async (request: express.Request, response: express.Response) => {
-  const requestData = request.body;
-  if (requestData.grant_type === 'authorization_code') {
-    const token = await handleAccessTokenRequest(request, response);
-    if (token) {
-      response.json(token);
+  router.get(
+    '/local-token-service',
+    async (request: express.Request, response: express.Response) => {
+      const localClient: ClientRegistry = OAuthClients.get('local-token')!;
+      const tokenRequest: AccessTokenRequest = {
+        grant_type: 'authorization_code',
+        code: `${request.query.code}`,
+        redirect_uri: localClient.redirect_uri,
+        client_id: localClient.id,
+      };
+      request.body = tokenRequest;
+      request.headers.authorization = `Basic ${
+        Buffer.from(`${localClient.id}:${localClient.secret}`).toString('base64')}`;
+      const token = await handleAccessTokenRequest(request, response);
+      if (token) {
+        response.render('local-token-service', {
+          oauthPostToken: config.get('oauth.postToken'),
+          token: token.access_token,
+        });
+      }
     }
-    return;
-  }
-  // if (requestData.grant_type === 'refresh_token') {
-  //   handleRefreshTokenRequest(request, response);
-  // }
-  const err: AccessTokenErrorResponse = {
-    error: 'unsupported_grant_type',
-    state: requestData.state,
-  };
-  response.status(400).json(err);
-});
+  );
+
+  router.get(
+    '/allow',
+    auth,
+    async (request: express.Request, response: express.Response) => {
+      let redirect_uri;
+      if (request.query.redirect_uri) {
+        redirect_uri = new URL(`${request.query.redirect_uri}`);
+      }
+
+      const authRequest: AuthorizationRequest = {
+        response_type: `${request.query.response_type}`,
+        client_id: `${request.query.client_id}`,
+        redirect_uri: redirect_uri,
+        scope: `${request.query.scope}`,
+        state: `${request.query.state}`,
+      };
+
+      const client = verifyAuthorizationRequest(authRequest, response);
+      if (!client) {
+        return;
+      }
+
+      const jwt = (request as any).jwt;
+      if (!jwt) {
+        return;
+      }
+
+      if (!jwt.payload || jwt.payload.role !== 'user_token') {
+        response.status(401).send('Authorization must come from user');
+        return;
+      }
+
+      // TODO: should expire in 10 minutes
+      const code = await JSONWebToken.issueOAuthToken(client, jwt.user, {
+        role: 'authorization_code',
+        scope: authRequest.scope,
+      });
+
+      const success: AuthorizationSuccessResponse = {
+        code: code,
+        state: authRequest.state,
+      };
+
+      redirect(
+        response,
+        client.redirect_uri,
+        success
+      );
+    }
+  );
+
+  router.post('/token', async (request: express.Request, response: express.Response) => {
+    const requestData = request.body;
+    if (requestData.grant_type === 'authorization_code') {
+      const token = await handleAccessTokenRequest(request, response);
+      if (token) {
+        response.json(token);
+      }
+      return;
+    }
+    // if (requestData.grant_type === 'refresh_token') {
+    //   handleRefreshTokenRequest(request, response);
+    // }
+    const err: AccessTokenErrorResponse = {
+      error: 'unsupported_grant_type',
+      state: requestData.state,
+    };
+    response.status(400).json(err);
+  });
+
+  return router;
+}
 
 /**
  * Handles the request for an access token using an authorization code.
@@ -417,5 +421,3 @@ Promise<AccessTokenSuccessResponse|null> {
 
   return res;
 }
-
-export = OAuthController;

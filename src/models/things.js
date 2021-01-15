@@ -15,7 +15,7 @@ const EventEmitter = require('events');
 
 const AddonManager = require('../addon-manager');
 const Database = require('../db').default;
-const Router = require('../router');
+const Router = require('../router').default;
 const Thing = require('./thing');
 const Constants = require('../constants');
 

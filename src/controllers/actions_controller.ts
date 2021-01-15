@@ -15,190 +15,191 @@ import Actions from '../models/actions';
 const AddonManager = require('../addon-manager');
 const Things = require('../models/things');
 
-const ActionsController = express.Router({mergeParams: true});
-
-/**
+export default function ActionsController(): express.Router {
+  const router = express.Router({mergeParams: true});
+  /**
  * Handle creating a new action.
  */
-ActionsController.post('/', async (request, response) => {
-  const keys = Object.keys(request.body);
-  if (keys.length != 1) {
-    const err = 'Incorrect number of parameters.';
-    console.log(err, request.body);
-    response.status(400).send(err);
-    return;
-  }
-
-  const actionName = keys[0];
-
-  if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
-                                            'input')) {
-    response.status(400).send('Missing input');
-    return;
-  }
-
-  const actionParams = request.body[actionName].input;
-  const thingId = request.params.thingId;
-  let action = null;
-
-  if (thingId) {
-    try {
-      const thing = await Things.getThing(thingId);
-      action = new Action(actionName, actionParams, thing);
-    } catch (e) {
-      console.error('Thing does not exist', thingId, e);
-      response.status(404).send(e);
+  router.post('/', async (request, response) => {
+    const keys = Object.keys(request.body);
+    if (keys.length != 1) {
+      const err = 'Incorrect number of parameters.';
+      console.log(err, request.body);
+      response.status(400).send(err);
       return;
     }
-  } else {
-    action = new Action(actionName, actionParams);
-  }
 
-  try {
-    if (thingId) {
-      await AddonManager.requestAction(
-        thingId, action.getId(), actionName, actionParams);
-    }
-    await Actions.add(action);
+    const actionName = keys[0];
 
-    response.status(201).json({[actionName]: action.getDescription()});
-  } catch (e) {
-    console.error('Creating action', actionName, 'failed');
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
-
-/**
- * Handle getting a list of actions.
- */
-ActionsController.get('/', (request, response) => {
-  if (request.params.thingId) {
-    response.status(200).json(Actions.getByThing(request.params.thingId));
-  } else {
-    response.status(200).json(Actions.getGatewayActions());
-  }
-});
-
-/**
- * Handle getting a list of actions.
- */
-ActionsController.get('/:actionName', (request, response) => {
-  const actionName = request.params.actionName;
-  if (request.params.thingId) {
-    response.status(200).json(Actions.getByThing(request.params.thingId,
-                                                 actionName));
-  } else {
-    response.status(200).json(Actions.getGatewayActions(actionName));
-  }
-});
-
-/**
- * Handle creating a new action.
- */
-ActionsController.post('/:actionName', async (request, response) => {
-  const actionName = request.params.actionName;
-
-  const keys = Object.keys(request.body);
-  if (keys.length != 1) {
-    const err = 'Incorrect number of parameters.';
-    console.log(err, request.body);
-    response.status(400).send(err);
-    return;
-  }
-
-  if (actionName !== keys[0]) {
-    const err = `Action name must be ${actionName}`;
-    console.log(err, request.body);
-    response.status(400).send(err);
-    return;
-  }
-
-  if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
-                                            'input')) {
-    response.status(400).send('Missing input');
-    return;
-  }
-
-  const actionParams = request.body[actionName].input;
-  const thingId = request.params.thingId;
-  let action = null;
-
-  if (thingId) {
-    try {
-      const thing = await Things.getThing(thingId);
-      action = new Action(actionName, actionParams, thing);
-    } catch (e) {
-      console.error('Thing does not exist', thingId, e);
-      response.status(404).send(e);
+    if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
+                                              'input')) {
+      response.status(400).send('Missing input');
       return;
     }
-  } else {
-    action = new Action(actionName, actionParams);
-  }
 
-  try {
-    if (thingId) {
-      await AddonManager.requestAction(
-        thingId, action.getId(), actionName, actionParams);
-    }
-    await Actions.add(action);
-
-    response.status(201).json({[actionName]: action.getDescription()});
-  } catch (e) {
-    console.error('Creating action', actionName, 'failed');
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
-
-/**
- * Handle getting a particular action.
- */
-ActionsController.get('/:actionName/:actionId', (request, response) => {
-  const actionId = request.params.actionId;
-  const action = Actions.get(actionId);
-  if (action) {
-    response.status(200).json({[action.getName()]: action.getDescription()});
-  } else {
-    const error = `Action "${actionId}" not found`;
-    console.error(error);
-    response.status(404).send(error);
-  }
-});
-
-/**
- * Handle cancelling an action.
- */
-ActionsController.delete(
-  '/:actionName/:actionId',
-  async (request, response) => {
-    const actionName = request.params.actionName;
-    const actionId = request.params.actionId;
+    const actionParams = request.body[actionName].input;
     const thingId = request.params.thingId;
+    let action = null;
 
     if (thingId) {
       try {
-        await AddonManager.removeAction(thingId, actionId, actionName);
+        const thing = await Things.getThing(thingId);
+        action = new Action(actionName, actionParams, thing);
       } catch (e) {
-        console.error('Removing action', actionId, 'failed');
-        console.error(e);
-        response.status(400).send(e);
+        console.error('Thing does not exist', thingId, e);
+        response.status(404).send(e);
         return;
       }
+    } else {
+      action = new Action(actionName, actionParams);
     }
 
     try {
-      Actions.remove(actionId);
+      if (thingId) {
+        await AddonManager.requestAction(
+          thingId, action.getId(), actionName, actionParams);
+      }
+      await Actions.add(action);
+
+      response.status(201).json({[actionName]: action.getDescription()});
     } catch (e) {
-      console.error('Removing action', actionId, 'failed');
+      console.error('Creating action', actionName, 'failed');
       console.error(e);
-      response.status(404).send(e);
+      response.status(400).send(e);
+    }
+  });
+
+  /**
+ * Handle getting a list of actions.
+ */
+  router.get('/', (request, response) => {
+    if (request.params.thingId) {
+      response.status(200).json(Actions.getByThing(request.params.thingId));
+    } else {
+      response.status(200).json(Actions.getGatewayActions());
+    }
+  });
+
+  /**
+ * Handle getting a list of actions.
+ */
+  router.get('/:actionName', (request, response) => {
+    const actionName = request.params.actionName;
+    if (request.params.thingId) {
+      response.status(200).json(Actions.getByThing(request.params.thingId,
+                                                   actionName));
+    } else {
+      response.status(200).json(Actions.getGatewayActions(actionName));
+    }
+  });
+
+  /**
+ * Handle creating a new action.
+ */
+  router.post('/:actionName', async (request, response) => {
+    const actionName = request.params.actionName;
+
+    const keys = Object.keys(request.body);
+    if (keys.length != 1) {
+      const err = 'Incorrect number of parameters.';
+      console.log(err, request.body);
+      response.status(400).send(err);
       return;
     }
 
-    response.sendStatus(204);
-  }
-);
+    if (actionName !== keys[0]) {
+      const err = `Action name must be ${actionName}`;
+      console.log(err, request.body);
+      response.status(400).send(err);
+      return;
+    }
 
-export = ActionsController;
+    if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
+                                              'input')) {
+      response.status(400).send('Missing input');
+      return;
+    }
+
+    const actionParams = request.body[actionName].input;
+    const thingId = request.params.thingId;
+    let action = null;
+
+    if (thingId) {
+      try {
+        const thing = await Things.getThing(thingId);
+        action = new Action(actionName, actionParams, thing);
+      } catch (e) {
+        console.error('Thing does not exist', thingId, e);
+        response.status(404).send(e);
+        return;
+      }
+    } else {
+      action = new Action(actionName, actionParams);
+    }
+
+    try {
+      if (thingId) {
+        await AddonManager.requestAction(
+          thingId, action.getId(), actionName, actionParams);
+      }
+      await Actions.add(action);
+
+      response.status(201).json({[actionName]: action.getDescription()});
+    } catch (e) {
+      console.error('Creating action', actionName, 'failed');
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
+
+  /**
+ * Handle getting a particular action.
+ */
+  router.get('/:actionName/:actionId', (request, response) => {
+    const actionId = request.params.actionId;
+    const action = Actions.get(actionId);
+    if (action) {
+      response.status(200).json({[action.getName()]: action.getDescription()});
+    } else {
+      const error = `Action "${actionId}" not found`;
+      console.error(error);
+      response.status(404).send(error);
+    }
+  });
+
+  /**
+ * Handle cancelling an action.
+ */
+  router.delete(
+    '/:actionName/:actionId',
+    async (request, response) => {
+      const actionName = request.params.actionName;
+      const actionId = request.params.actionId;
+      const thingId = request.params.thingId;
+
+      if (thingId) {
+        try {
+          await AddonManager.removeAction(thingId, actionId, actionName);
+        } catch (e) {
+          console.error('Removing action', actionId, 'failed');
+          console.error(e);
+          response.status(400).send(e);
+          return;
+        }
+      }
+
+      try {
+        Actions.remove(actionId);
+      } catch (e) {
+        console.error('Removing action', actionId, 'failed');
+        console.error(e);
+        response.status(404).send(e);
+        return;
+      }
+
+      response.sendStatus(204);
+    }
+  );
+
+  return router;
+}

@@ -10,83 +10,86 @@
  */
 
 import express from 'express';
+import expressWs from 'express-ws';
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
 
 const Things = require('../models/things');
 
-const NewThingsController = express.Router();
+export default function NewThingsController(): express.Router {
+  const router: express.Router & expressWs.WithWebsocketMethod = express.Router();
 
-/**
+  /**
  * Handle GET requests to /new_things
  */
-NewThingsController.get('/', (_request, response) => {
-  Things.getNewThings().then((newThings: any) => {
-    response.json(newThings);
-  }).catch((error: any) => {
-    console.error(`Error getting a list of new things from adapters ${error}`);
-    response.status(500).send(error);
+  router.get('/', (_request, response) => {
+    Things.getNewThings().then((newThings: any) => {
+      response.json(newThings);
+    }).catch((error: any) => {
+      console.error(`Error getting a list of new things from adapters ${error}`);
+      response.status(500).send(error);
+    });
   });
-});
 
-/**
+  /**
  * Handle a WebSocket request on /new_things
  */
-(NewThingsController as any).ws('/', (websocket: WebSocket) => {
+  router.ws('/', (websocket: WebSocket) => {
   // Since the Gateway have the asynchronous express middlewares, there is a
   // possibility that the WebSocket have been closed.
-  if (websocket.readyState !== WebSocket.OPEN) {
-    return;
-  }
-  console.log('Opened a new things socket');
-  // Register the WebSocket with the Things model so new devices can be pushed
-  // to the client as they are added.
-  Things.registerWebsocket(websocket);
-  // Send a list of things the adapter manager already knows about
-  Things.getNewThings().then((newThings: any) => {
-    newThings.forEach((newThing: any) => {
-      websocket.send(JSON.stringify(newThing));
+    if (websocket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+    console.log('Opened a new things socket');
+    // Register the WebSocket with the Things model so new devices can be pushed
+    // to the client as they are added.
+    Things.registerWebsocket(websocket);
+    // Send a list of things the adapter manager already knows about
+    Things.getNewThings().then((newThings: any) => {
+      newThings.forEach((newThing: any) => {
+        websocket.send(JSON.stringify(newThing));
+      });
+    }).catch((error: any) => {
+      console.error(`Error getting a list of new things from adapters ${error}`);
     });
-  }).catch((error: any) => {
-    console.error(`Error getting a list of new things from adapters ${error}`);
   });
-});
 
-/**
+  /**
  * Handle POST requests to /new_things
  */
-NewThingsController.post('/', async (request, response) => {
-  if (!request.body || !request.body.hasOwnProperty('url')) {
-    response.status(400).send('No URL in thing description');
-    return;
-  }
-
-  const url = request.body.url;
-  try {
-    const res = await fetch(url, {headers: {Accept: 'application/json'}});
-
-    if (!res.ok) {
-      response.status(400).send('Web thing not found');
+  router.post('/', async (request, response) => {
+    if (!request.body || !request.body.hasOwnProperty('url')) {
+      response.status(400).send('No URL in thing description');
       return;
     }
 
-    const description = await res.json();
+    const url = request.body.url;
+    try {
+      const res = await fetch(url, {headers: {Accept: 'application/json'}});
 
-    // Verify some high level thing description properties.
-    if ((description.hasOwnProperty('title') ||
+      if (!res.ok) {
+        response.status(400).send('Web thing not found');
+        return;
+      }
+
+      const description = await res.json();
+
+      // Verify some high level thing description properties.
+      if ((description.hasOwnProperty('title') ||
          description.hasOwnProperty('name')) &&  // backwards compat
         (description.hasOwnProperty('properties') ||
          description.hasOwnProperty('actions') ||
          description.hasOwnProperty('events'))) {
-      response.json(description);
-    } else if (Array.isArray(description)) {
-      response.status(400).send('Web things must be added individually');
-    } else {
-      response.status(400).send('Invalid thing description');
+        response.json(description);
+      } else if (Array.isArray(description)) {
+        response.status(400).send('Web things must be added individually');
+      } else {
+        response.status(400).send('Invalid thing description');
+      }
+    } catch (e) {
+      response.status(400).send('Web thing not found');
     }
-  } catch (e) {
-    response.status(400).send('Web thing not found');
-  }
-});
+  });
 
-export = NewThingsController;
+  return router;
+}

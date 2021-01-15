@@ -31,6 +31,7 @@
   "dependencies": {
     "@fluent/bundle": "^0.16.0",
     "@fluent/dom": "^0.7.0",
+    "@types/express-ws": "^3.0.0",
     "acme-client": "^4.1.2",
     "ajv": "^7.0.3",
     "archiver": "^5.1.0",

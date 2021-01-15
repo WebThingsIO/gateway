@@ -12,15 +12,17 @@ import express from 'express';
 import * as Constants from '../constants';
 import TunnelService from '../tunnel-service';
 
-const RootController = express.Router();
+export default function RootController(): express.Router {
+  const router = express.Router();
 
-/**
+  /**
  * Get the home page.
  */
-RootController.get('/', TunnelService.isTunnelSet.bind(TunnelService), (_request, response) => {
-  response.sendFile('index.html', {
-    root: Constants.BUILD_STATIC_PATH,
+  router.get('/', TunnelService.isTunnelSet.bind(TunnelService), (_request, response) => {
+    response.sendFile('index.html', {
+      root: Constants.BUILD_STATIC_PATH,
+    });
   });
-});
 
-export = RootController;
+  return router;
+}

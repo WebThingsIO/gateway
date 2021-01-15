@@ -10,10 +10,12 @@
 
 import express from 'express';
 
-const PingController = express.Router();
+export default function PingController(): express.Router {
+  const router = express.Router();
 
-PingController.get('/', (_request, response) => {
-  response.sendStatus(204);
-});
+  router.get('/', (_request, response) => {
+    response.sendStatus(204);
+  });
 
-export = PingController;
+  return router;
+}
