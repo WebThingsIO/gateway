@@ -24,7 +24,6 @@ export const SETTINGS_PATH = '/settings';
 export const UPDATES_PATH = '/updates';
 export const UPLOADS_PATH = '/uploads';
 export const MEDIA_PATH = '/media';
-export const DEBUG_PATH = '/debug';
 export const RULES_PATH = '/rules';
 export const OAUTH_PATH = '/oauth';
 export const OAUTHCLIENTS_PATH = '/authorizations';

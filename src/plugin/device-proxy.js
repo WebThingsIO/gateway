@@ -76,17 +76,6 @@ class DeviceProxy extends Device {
     return Object.assign({}, this.deviceDict, super.asDict());
   }
 
-  debugCmd(cmd, params) {
-    this.adapter.sendMsg(
-      MessageType.DEVICE_DEBUG_COMMAND,
-      {
-        deviceId: this.id,
-        cmd: cmd,
-        params: params,
-      }
-    );
-  }
-
   /**
    * @method requestAction
    */
