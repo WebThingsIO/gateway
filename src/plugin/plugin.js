@@ -11,16 +11,16 @@
 
 'use strict';
 
-const AdapterProxy = require('./adapter-proxy');
-const APIHandlerProxy = require('./api-handler-proxy');
+const AdapterProxy = require('./adapter-proxy').default;
+const APIHandlerProxy = require('./api-handler-proxy').default;
 const Constants = require('../constants');
 const Database = require('../db').default;
 const Deferred = require('../deferred').default;
-const DeviceProxy = require('./device-proxy');
+const DeviceProxy = require('./device-proxy').default;
 const format = require('string-format');
 const {LogSeverity} = require('../constants');
-const NotifierProxy = require('./notifier-proxy');
-const OutletProxy = require('./outlet-proxy');
+const NotifierProxy = require('./notifier-proxy').default;
+const OutletProxy = require('./outlet-proxy').default;
 const path = require('path');
 const readline = require('readline');
 const Settings = require('../models/settings');
