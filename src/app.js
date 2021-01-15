@@ -25,7 +25,6 @@ const express = require('express');
 const expressWs = require('express-ws');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
-const GetOpt = require('node-getopt');
 const config = require('config');
 const path = require('path');
 const expressHandlebars = require('express-handlebars');
@@ -187,32 +186,6 @@ function stopWiFiSetup() {
   servers.http.close();
 }
 
-function getOptions() {
-  if (process.env.NODE_ENV === 'test') {
-    return {
-      debug: false,
-    };
-  }
-
-  // Command line arguments
-  const getopt = new GetOpt([
-    ['d', 'debug', 'Enable debug features'],
-    ['h', 'help', 'Display help'],
-  ]);
-
-  const opt = getopt.parseSystem();
-  const options = {
-    debug: !!opt.options.debug,
-  };
-
-  if (opt.options.help) {
-    getopt.showHelp();
-    process.exit(1);
-  }
-
-  return options;
-}
-
 /**
  * Set up the rules engine.
  */
@@ -297,13 +270,13 @@ function createApp(isSecure) {
  */
 function createGatewayApp(server, isSecure) {
   const app = createApp(isSecure);
-  const opt = getOptions();
 
   // Inject WebSocket support
   expressWs(app, server);
 
-  // Configure router with configured app and command line options.
-  Router.configure(app, opt);
+  // Configure router with configured app.
+  Router.configure(app);
+
   return app;
 }
 

@@ -30,7 +30,7 @@ const Router = {
   /**
    * Configure web app routes.
    */
-  configure: function(app, options) {
+  configure: function(app) {
     this.proxyController = require('./controllers/proxy_controller');
 
     // Compress all responses larger than 1kb
@@ -129,10 +129,6 @@ const Router = {
             require('./controllers/users_controller'));
     app.use(API_PREFIX + Constants.PING_PATH, nocache,
             require('./controllers/ping_controller'));
-    if (options.debug) {
-      app.use(API_PREFIX + Constants.DEBUG_PATH, nocache,
-              require('./controllers/debug_controller'));
-    }
 
     // Authenticated API routes
     app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth,
