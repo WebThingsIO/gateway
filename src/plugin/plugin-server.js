@@ -14,7 +14,7 @@
 'use strict';
 
 const config = require('config');
-const EventEmitter = require('events');
+const {EventEmitter} = require('events');
 const {IpcSocket} = require('gateway-addon');
 const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
