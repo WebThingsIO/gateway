@@ -6,8 +6,7 @@ import fetch from 'node-fetch';
 import semver from 'semver';
 import * as Platform from '../platform';
 import * as Utils from '../utils';
-
-const pkg = require('../../package.json');
+import pkg from '../package.json';
 
 const UpdatesController = express.Router();
 

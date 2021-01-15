@@ -11,7 +11,7 @@
 import express from 'express';
 import {URL} from 'url';
 import JSONWebToken from '../models/jsonwebtoken';
-const config = require('config');
+import config from 'config';
 import {
   scopeValidSubset, ScopeRaw, ClientId, ClientRegistry,
 } from '../oauth-types';

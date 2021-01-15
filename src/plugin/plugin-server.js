@@ -18,7 +18,7 @@ const {EventEmitter} = require('events');
 const {IpcSocket} = require('gateway-addon');
 const {MessageType} = require('gateway-addon').Constants;
 const Plugin = require('./plugin');
-const pkg = require('../../package.json');
+const pkg = require('../package.json');
 const Settings = require('../models/settings');
 const UserProfile = require('../user-profile').default;
 

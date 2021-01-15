@@ -9,8 +9,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import * as Platform from './platform';
-
-const pkg = require('../package.json');
+import pkg from './package.json';
 
 /**
  * Compute a SHA-256 checksum of a file.

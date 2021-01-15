@@ -19,8 +19,7 @@ import express from 'express';
 import * as Settings from './models/settings';
 import UserProfile from './user-profile';
 import PushService from './push-service';
-
-const CertificateManager = require('./certificate-manager');
+import * as CertificateManager from './certificate-manager';
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -155,7 +154,7 @@ class TunnelService {
 
           const renew = () => {
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return CertificateManager.renew(this.server).catch(() => {});
+            return CertificateManager.renew(this.server!).catch(() => {});
           };
 
           // Try to renew certificates immediately, then daily.
