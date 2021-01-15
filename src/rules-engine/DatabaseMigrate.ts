@@ -1,81 +1,93 @@
-'use strict';
+import {RuleDescription} from './Rule';
+import {TriggerDescription} from './triggers/Trigger';
+import {TimeTriggerDescription} from './triggers/TimeTrigger';
 
-function extractProperty(href) {
-  return href.match(/properties\/([^/]+)/)[1];
+// TODO: remove these
+type EffectDescription = any;
+type Property = any;
+
+function extractProperty(href: string): string {
+  return href.match(/properties\/([^/]+)/)![1];
 }
 
-function extractThing(href) {
-  return href.match(/things\/([^/]+)/)[1];
+function extractThing(href: string): string {
+  return href.match(/things\/([^/]+)/)![1];
 }
 
-function migrateTimeTrigger(trigger) {
+function migrateTimeTrigger(trigger: TimeTriggerDescription): TimeTriggerDescription|null {
   if (trigger.localized) {
-    return;
+    return null;
   }
 
   // If the time trigger has not been localized, it's still in UTC time
   const parts = trigger.time.split(':');
-  let hours = parseInt(parts[0], 10);
-  let minutes = parseInt(parts[1], 10);
+  const hours = parseInt(parts[0], 10);
+  const minutes = parseInt(parts[1], 10);
 
   // Convert from UTC to local
   const oldTime = new Date();
   const offset = oldTime.getTimezoneOffset();
   oldTime.setUTCHours(hours, minutes, 0, 0);
-  const newTime = new Date(oldTime + (offset * 60 * 1000));
+  const newTime = new Date(oldTime.getTime() + (offset * 60 * 1000));
 
-  hours = newTime.getHours().toString().padStart(2, '0');
-  minutes = newTime.getMinutes().toString().padStart(2, '0');
+  const hoursStr = newTime.getHours().toString().padStart(2, '0');
+  const minutesStr = newTime.getMinutes().toString().padStart(2, '0');
 
   return {
     type: 'TimeTrigger',
-    time: `${hours}:${minutes}`,
+    time: `${hoursStr}:${minutesStr}`,
     localized: true,
   };
 }
 
-function migrateProperty(prop) {
+function migrateProperty(prop: Property): Property|null {
   if (!prop.href) {
-    return;
+    return null;
   }
+
   const base = Object.assign({}, prop);
   delete base.href;
+
   return Object.assign(base, {
     id: extractProperty(prop.href),
     thing: extractThing(prop.href),
   });
 }
 
-function migrateThing(thing) {
-  console.log('migrateThing', thing);
+function migrateThing(thing: Record<string, unknown>): string|null {
   if (typeof thing !== 'object') {
-    return;
+    return null;
   }
+
   if (!thing.href) {
-    return;
+    return null;
   }
-  return extractThing(thing.href);
+
+  return extractThing(<string>thing.href);
 }
 
-function migratePart(part) {
+function migratePart(part: TriggerDescription|EffectDescription):
+TriggerDescription|EffectDescription|null {
   let changed = false;
   const newPart = Object.assign({}, part);
   if (part.triggers) {
-    newPart.triggers = part.triggers.map((child) => {
+    newPart.triggers = part.triggers.map((child: TriggerDescription) => {
       const newChild = migratePart(child);
       if (newChild) {
         changed = true;
       }
+
       return newChild || child;
     });
   }
 
   if (part.effects) {
-    newPart.effects = part.effects.map((child) => {
+    newPart.effects = part.effects.map((child: EffectDescription) => {
       const newChild = migratePart(child);
       if (newChild) {
         changed = true;
       }
+
       return newChild || child;
     });
   }
@@ -91,23 +103,25 @@ function migratePart(part) {
     if (newProp) {
       changed = true;
     }
+
     newPart.property = newProp || part.property;
   } else if (part.thing) {
     const newThing = migrateThing(part.thing);
     if (newThing) {
       changed = true;
     }
+
     newPart.thing = newThing || part.thing;
   }
 
   if (!changed) {
-    return;
+    return null;
   }
 
   return newPart;
 }
 
-function migrate(oldRule) {
+export function migrate(oldRule: RuleDescription): RuleDescription|null {
   const newRule = Object.assign({}, oldRule);
   const newTrigger = migratePart(oldRule.trigger);
   let changed = false;
@@ -115,6 +129,7 @@ function migrate(oldRule) {
     changed = true;
     newRule.trigger = newTrigger;
   }
+
   const newEffect = migratePart(oldRule.effect);
   if (newEffect) {
     changed = true;
@@ -122,11 +137,8 @@ function migrate(oldRule) {
   }
 
   if (!changed) {
-    return;
+    return null;
   }
+
   return newRule;
 }
-
-module.exports = {
-  migrate,
-};

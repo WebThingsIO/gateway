@@ -4,20 +4,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import {EventEmitter} from 'events';
 
-const EventEmitter = require('events').EventEmitter;
+export interface TriggerDescription {
+  type: string;
+  label?: string;
+}
 
 /**
  * The trigger component of a Rule which monitors some state and passes on
  * whether to be active to the Rule's effect
  */
-class Trigger extends EventEmitter {
+export default class Trigger extends EventEmitter {
+  private type: string;
+
+  private label?: string;
+
   /**
    * Create a Trigger based on a wire-format description with a property
    * @param {TriggerDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: TriggerDescription) {
     super();
     this.type = this.constructor.name;
     this.label = desc.label;
@@ -26,12 +33,18 @@ class Trigger extends EventEmitter {
   /**
    * @return {TriggerDescription}
    */
-  toDescription() {
+  toDescription(): TriggerDescription {
     return {
       type: this.type,
       label: this.label,
     };
   }
-}
 
-module.exports = Trigger;
+  async start(): Promise<void> {
+    // to be overridden
+  }
+
+  stop(): void {
+    // to be overridden
+  }
+}

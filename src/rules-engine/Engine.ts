@@ -4,20 +4,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const Database = require('./Database');
-const Rule = require('./Rule');
+import Database from './Database';
+import Rule from './Rule';
 
 /**
  * An engine for running and managing list of rules
  */
-class Engine {
+export default class Engine {
+  private rules: Record<string, Rule>|null;
+
+  constructor() {
+    this.rules = null;
+  }
+
   /**
    * Get a list of all current rules
    * @return {Promise<Array<Rule>>} rules
    */
-  getRules() {
+  getRules(): Promise<Rule[]> {
     let rulesPromise = Promise.resolve(this.rules);
 
     if (!this.rules) {
@@ -33,8 +37,9 @@ class Engine {
     }
 
     return rulesPromise.then((rules) => {
-      return Object.keys(rules).map((ruleId) => {
-        return rules[ruleId];
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      return Object.keys(<object>rules).map((ruleId: string) => {
+        return rules![ruleId];
       });
     });
   }
@@ -44,12 +49,12 @@ class Engine {
    * @param {number} id
    * @return {Promise<Rule>}
    */
-  getRule(id) {
-    const rule = this.rules[id];
-    if (!rule) {
+  getRule(id: number): Promise<Rule> {
+    if (!(id in this.rules!)) {
       return Promise.reject(new Error(`Rule ${id} does not exist`));
     }
-    return Promise.resolve(rule);
+
+    return Promise.resolve(this.rules![id]);
   }
 
   /**
@@ -57,11 +62,11 @@ class Engine {
    * @param {Rule} rule
    * @return {Promise<number>} rule id
    */
-  async addRule(rule) {
+  async addRule(rule: Rule): Promise<number> {
     const id = await Database.createRule(rule.toDescription());
     // eslint-disable-next-line require-atomic-updates
-    rule.id = id;
-    this.rules[id] = rule;
+    rule.setId(id);
+    this.rules![id] = rule;
     await rule.start();
     return id;
   }
@@ -72,15 +77,16 @@ class Engine {
    * @param {Rule} rule
    * @return {Promise}
    */
-  async updateRule(ruleId, rule) {
-    if (!this.rules[ruleId]) {
+  async updateRule(ruleId: number, rule: Rule): Promise<void> {
+    if (!(ruleId in this.rules!)) {
       return Promise.reject(new Error(`Rule ${ruleId} does not exist`));
     }
-    rule.id = ruleId;
+
+    rule.setId(ruleId);
     await Database.updateRule(ruleId, rule.toDescription());
 
-    this.rules[ruleId].stop();
-    this.rules[ruleId] = rule;
+    this.rules![ruleId].stop();
+    this.rules![ruleId] = rule;
     await rule.start();
   }
 
@@ -89,16 +95,15 @@ class Engine {
    * @param {number} rule id
    * @return {Promise}
    */
-  deleteRule(ruleId) {
-    if (!this.rules[ruleId]) {
+  deleteRule(ruleId: number): Promise<void> {
+    if (!(ruleId in this.rules!)) {
       return Promise.reject(
         new Error(`Rule ${ruleId} does not exist`));
     }
+
     return Database.deleteRule(ruleId).then(() => {
-      this.rules[ruleId].stop();
-      delete this.rules[ruleId];
+      this.rules![ruleId].stop();
+      delete this.rules![ruleId];
     });
   }
 }
-
-module.exports = Engine;

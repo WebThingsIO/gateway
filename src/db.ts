@@ -617,6 +617,11 @@ class Database {
       }
     });
   }
+
+  all(sql: string, values: any[], callback?: (this: any, err: Error|null, rows: any[]) => void):
+  void {
+    this.db!.all(sql, values, callback);
+  }
 }
 
 const db = new Database();

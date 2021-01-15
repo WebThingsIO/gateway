@@ -4,28 +4,25 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import Database from '../db';
+import * as DatabaseMigrate from './DatabaseMigrate';
+import {RuleDescription} from './Rule';
 
-const db = require('../db').default;
-const DatabaseMigrate = require('./DatabaseMigrate');
-
-class Database {
+class RulesDatabase {
   constructor() {
-    if (!db.db) {
-      db.open();
-    }
+    Database.open();
     this.open();
   }
 
   /**
    * Open the database
    */
-  open() {
+  open(): Promise<any> {
     const rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
       id INTEGER PRIMARY KEY,
       description TEXT
     );`;
-    return db.run(rulesTableSQL, []);
+    return Database.run(rulesTableSQL, []);
   }
 
   /**
@@ -33,9 +30,9 @@ class Database {
    * @return {Promise<Map<number, RuleDescription>>} resolves to a map of rule
    * id to rule
    */
-  getRules() {
+  getRules(): Promise<Record<number, RuleDescription>> {
     return new Promise((resolve, reject) => {
-      db.db.all(
+      Database.all(
         'SELECT id, description FROM rules',
         [],
         (err, rows) => {
@@ -43,7 +40,7 @@ class Database {
             reject(err);
             return;
           }
-          const rules = {};
+          const rules: Record<number, RuleDescription> = {};
           const updatePromises = [];
           for (const row of rows) {
             let desc = JSON.parse(row.description);
@@ -52,7 +49,7 @@ class Database {
               desc = updatedDesc;
               updatePromises.push(this.updateRule(row.id, desc));
             }
-            rules[row.id] = desc;
+            rules[(row as Record<string, any>).id] = desc;
           }
           Promise.all(updatePromises).then(() => {
             resolve(rules);
@@ -67,8 +64,8 @@ class Database {
    * @param {RuleDescription} desc
    * @return {Promise<number>} resolves to rule id
    */
-  createRule(desc) {
-    return db.run(
+  createRule(desc: RuleDescription): Promise<number> {
+    return Database.run(
       'INSERT INTO rules (description) VALUES (?)',
       [JSON.stringify(desc)]
     ).then((res) => {
@@ -82,8 +79,8 @@ class Database {
    * @param {RuleDescription} desc
    * @return {Promise}
    */
-  updateRule(id, desc) {
-    return db.run(
+  updateRule(id: number, desc: RuleDescription): Promise<any> {
+    return Database.run(
       'UPDATE rules SET description = ? WHERE id = ?',
       [JSON.stringify(desc), id]
     );
@@ -94,9 +91,10 @@ class Database {
    * @param {number} id
    * @return {Promise}
    */
-  deleteRule(id) {
-    return db.run('DELETE FROM rules WHERE id = ?', [id]);
+  deleteRule(id: number): Promise<any> {
+    return Database.run('DELETE FROM rules WHERE id = ?', [id]);
   }
 }
 
-module.exports = new Database();
+const db = new RulesDatabase();
+export default db;

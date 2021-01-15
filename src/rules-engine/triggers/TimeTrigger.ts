@@ -4,38 +4,52 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import * as Events from '../Events';
+import Trigger, {TriggerDescription} from './Trigger';
 
-const Events = require('../Events');
-const Trigger = require('./Trigger');
+export interface TimeTriggerDescription extends TriggerDescription {
+  time: string;
+  localized: boolean;
+}
 
 /**
  * An abstract class for triggers whose input is a single property
  */
-class TimeTrigger extends Trigger {
-  constructor(desc) {
+export default class TimeTrigger extends Trigger {
+  private time: string;
+
+  private localized: boolean;
+
+  private timeout: NodeJS.Timeout|null;
+
+  private _sendOn: () => void;
+
+  private _sendOff: () => void;
+
+  constructor(desc: TimeTriggerDescription) {
     super(desc);
     this.time = desc.time;
     this.localized = !!desc.localized;
-    this.sendOn = this.sendOn.bind(this);
-    this.sendOff = this.sendOff.bind(this);
+    this.timeout = null;
+    this._sendOn = this.sendOn.bind(this);
+    this._sendOff = this.sendOff.bind(this);
   }
 
   /**
    * @return {TriggerDescription}
    */
-  toDescription() {
+  toDescription(): TimeTriggerDescription {
     return Object.assign(
       super.toDescription(),
       {time: this.time, localized: this.localized}
     );
   }
 
-  async start() {
+  async start(): Promise<void> {
     this.scheduleNext();
   }
 
-  scheduleNext() {
+  scheduleNext(): void {
     const parts = this.time.split(':');
     const hours = parseInt(parts[0], 10);
     const minutes = parseInt(parts[1], 10);
@@ -52,24 +66,24 @@ class TimeTrigger extends Trigger {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.timeout = setTimeout(this.sendOn, nextTime.getTime() - Date.now());
+
+    this.timeout = setTimeout(this._sendOn, nextTime.getTime() - Date.now());
   }
 
-  sendOn() {
+  sendOn(): void {
     this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
-    this.timeout = setTimeout(this.sendOff, 60 * 1000);
+    this.timeout = setTimeout(this._sendOff, 60 * 1000);
   }
 
-  sendOff() {
+  sendOff(): void {
     this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
     this.scheduleNext();
   }
 
-  stop() {
-    clearTimeout(this.timeout);
-    this.timeout = null;
+  stop(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
   }
 }
-
-module.exports = TimeTrigger;
-
