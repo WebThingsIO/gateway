@@ -32,7 +32,7 @@ const find = require('find');
 const {URLSearchParams} = require('url');
 const {ncp} = require('ncp');
 
-const pkg = require('../package.json');
+const pkg = require('./package.json');
 
 let PluginServer;
 
