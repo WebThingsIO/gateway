@@ -110,6 +110,19 @@ module.exports = {
       'error',
       100
     ],
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
+      {
+        'singleline': {
+          'delimiter': 'comma',
+          'requireLast': false
+        },
+        'multiline': {
+          'delimiter': 'semi',
+          'requireLast': true
+        }
+      }
+    ],
     'multiline-ternary': [
       'error',
       'always-multiline'

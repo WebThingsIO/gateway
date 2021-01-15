@@ -12,7 +12,7 @@ import NotifierOutletEffect from './NotifierOutletEffect';
 import SetEffect from './SetEffect';
 import PulseEffect from './PulseEffect';
 
-type EffectClass = { new(desc: any): any; };
+type EffectClass = { new(desc: any): any };
 
 export const effects: Record<string, EffectClass> = {
   Effect,

@@ -4,8 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import assert from 'assert';
 const AddonManager = require('../addon-manager');
 import * as Constants from '../constants';
@@ -16,11 +14,11 @@ import {Property as AddonProperty} from 'gateway-addon';
 import {PropertyValue} from 'gateway-addon/lib/schema';
 
 export interface PropertyDescription {
-  id: string,
-  type: string,
-  thing: string,
-  unit?: string,
-  description?: string,
+  id: string;
+  type: string;
+  thing: string;
+  unit?: string;
+  description?: string;
 }
 
 /**
