@@ -6,18 +6,24 @@
 
 'use strict';
 
-const Effect = require('./Effect');
+import {fromDescription} from './index';
+import Effect, {EffectDescription} from './Effect';
+
+interface MultiEffectDescription extends EffectDescription {
+  effects: EffectDescription[]
+}
 
 /**
  * MultiEffect - The outcome of a Rule involving multiple effects
  */
-class MultiEffect extends Effect {
+export default class MultiEffect extends Effect {
+  private effects: Effect[];
+
   /**
    * @param {MultiEffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: MultiEffectDescription) {
     super(desc);
-    const fromDescription = require('./index').fromDescription;
 
     this.effects = desc.effects.map(function(effect) {
       return fromDescription(effect);
@@ -27,7 +33,7 @@ class MultiEffect extends Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): MultiEffectDescription {
     return Object.assign(super.toDescription(), {
       effects: this.effects.map((effect) => effect.toDescription()),
     });
@@ -36,12 +42,9 @@ class MultiEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): void {
     for (const effect of this.effects) {
       effect.setState(state);
     }
   }
 }
-
-module.exports = MultiEffect;
-

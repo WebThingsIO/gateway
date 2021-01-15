@@ -6,35 +6,42 @@
 
 'use strict';
 
-const assert = require('assert');
-const PropertyEffect = require('./PropertyEffect');
+import assert from 'assert';
+import PropertyEffect, {PropertyEffectDescription} from './PropertyEffect';
+
+export interface SetEffectDescription extends PropertyEffectDescription {
+  value: any
+}
 
 /**
  * An Effect which permanently sets the target property to
  * a value when triggered
  */
-class SetEffect extends PropertyEffect {
+export default class SetEffect extends PropertyEffect {
+  private value: any;
+
+  private on = false;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: SetEffectDescription) {
     super(desc);
     this.value = desc.value;
     if (typeof this.value === 'number') {
-      assert(this.property.type === 'number' ||
-             this.property.type === 'integer',
+      assert(this.property.getType() === 'number' ||
+             this.property.getType() === 'integer',
              'setpoint and property must be compatible types');
     } else {
-      assert(typeof this.value === this.property.type,
+      assert(typeof this.value === this.property.getType(),
              'setpoint and property must be same type');
     }
-    this.on = false;
   }
 
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): SetEffectDescription {
     return Object.assign(
       super.toDescription(),
       {value: this.value}
@@ -44,7 +51,7 @@ class SetEffect extends PropertyEffect {
   /**
    * @return {State}
    */
-  setState(state) {
+  setState(state: any): Promise<any> | undefined {
     if (!this.on && state.on) {
       this.on = true;
       return this.property.set(this.value);
@@ -53,7 +60,8 @@ class SetEffect extends PropertyEffect {
       this.on = false;
       return Promise.resolve();
     }
+
+    // eslint-disable-next-line no-useless-return
+    return;
   }
 }
-
-module.exports = SetEffect;
