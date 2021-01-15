@@ -1,4 +1,4 @@
-const triggers = require('../../rules-engine/triggers');
+const Triggers = require('../../rules-engine/triggers/index');
 
 const booleanTrigger = {
   property: {
@@ -43,29 +43,29 @@ const andTrigger = {
 
 describe('triggers', () => {
   it('should parse a BooleanTrigger', () => {
-    const trigger = triggers.fromDescription(booleanTrigger);
+    const trigger = Triggers.fromDescription(booleanTrigger);
     expect(trigger).toMatchObject(booleanTrigger);
   });
 
   it('should parse a LevelTrigger', () => {
-    const trigger = triggers.fromDescription(levelTrigger);
+    const trigger = Triggers.fromDescription(levelTrigger);
     expect(trigger).toMatchObject(levelTrigger);
   });
 
   it('should parse an EqualityTrigger', () => {
-    const trigger = triggers.fromDescription(equalityTrigger);
+    const trigger = Triggers.fromDescription(equalityTrigger);
     expect(trigger).toMatchObject(equalityTrigger);
   });
 
   it('should parse a MultiTrigger', () => {
-    const trigger = triggers.fromDescription(andTrigger);
+    const trigger = Triggers.fromDescription(andTrigger);
     expect(trigger).toMatchObject(andTrigger);
   });
 
   it('should reject an unknown trigger type', () => {
     let err = null;
     try {
-      triggers.fromDescription({type: 'LimaTrigger'});
+      Triggers.fromDescription({type: 'LimaTrigger'});
     } catch (e) {
       err = e;
     }
@@ -75,7 +75,7 @@ describe('triggers', () => {
   it('should reject a number type onValue', () => {
     let err = null;
     try {
-      triggers.fromDescription(Object.assign(
+      Triggers.fromDescription(Object.assign(
         {},
         booleanTrigger,
         {onValue: 12}
@@ -89,7 +89,7 @@ describe('triggers', () => {
   it('should reject a boolean type level', () => {
     let err = null;
     try {
-      triggers.fromDescription(Object.assign(
+      Triggers.fromDescription(Object.assign(
         {},
         levelTrigger,
         {value: true}
@@ -103,7 +103,7 @@ describe('triggers', () => {
   it('should reject an unknown levelType', () => {
     let err = null;
     try {
-      triggers.fromDescription(Object.assign(
+      Triggers.fromDescription(Object.assign(
         {},
         levelTrigger,
         {levelType: 'GARBANZO'}
@@ -124,7 +124,7 @@ describe('triggers', () => {
       );
       delete brokenTrigger.property;
 
-      triggers.fromDescription(brokenTrigger);
+      Triggers.fromDescription(brokenTrigger);
     } catch (e) {
       err = e;
     }

@@ -6,11 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+// Sent by a trigger to a rule to notify effects
+export const STATE_CHANGED = 'state-changed';
 
-module.exports = {
-  // Sent by a trigger to a rule to notify effects
-  STATE_CHANGED: 'state-changed',
-  // Sent by a property to a trigger to potentially change state
-  VALUE_CHANGED: 'value-changed',
-};
+// Sent by a property to a trigger to potentially change state
+export const VALUE_CHANGED = 'value-changed';

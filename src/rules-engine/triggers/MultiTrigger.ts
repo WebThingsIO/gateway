@@ -4,11 +4,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const assert = require('assert');
-const Events = require('../Events');
-const Trigger = require('./Trigger');
+import assert from 'assert';
+import * as Events from '../Events';
+import Trigger, {TriggerDescription} from './Trigger';
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -17,18 +15,33 @@ const ops = {
   OR: 'OR',
 };
 
+export interface MultiTriggerDescription extends TriggerDescription {
+  op: string;
+  triggers: TriggerDescription[];
+}
+
 /**
  * A Trigger which activates only when a set of triggers are activated
  */
-class MultiTrigger extends Trigger {
+export default class MultiTrigger extends Trigger {
+  private op: string;
+
+  private triggers: Trigger[];
+
+  private id?: number;
+
+  private states: boolean[];
+
+  private state: boolean;
+
   /**
    * @param {TriggerDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: MultiTriggerDescription) {
     super(desc);
     assert(desc.op in ops);
     this.op = desc.op;
-    const fromDescription = require('./index').fromDescription;
+    const {fromDescription} = require('./index');
 
     if (DEBUG) {
       this.id = Math.floor(Math.random() * 1000);
@@ -47,14 +60,14 @@ class MultiTrigger extends Trigger {
   /**
    * @return {TriggerDescription}
    */
-  toDescription() {
+  toDescription(): MultiTriggerDescription {
     return Object.assign(super.toDescription(), {
       op: this.op,
       triggers: this.triggers.map((trigger) => trigger.toDescription()),
     });
   }
 
-  async start() {
+  async start(): Promise<void> {
     const starts = this.triggers.map((trigger, triggerIndex) => {
       trigger.on(Events.STATE_CHANGED,
                  this.onStateChanged.bind(this, triggerIndex));
@@ -63,15 +76,15 @@ class MultiTrigger extends Trigger {
     await Promise.all(starts);
   }
 
-  stop() {
+  stop(): void {
     this.triggers.forEach((trigger) => {
       trigger.removeAllListeners(Events.STATE_CHANGED);
       trigger.stop();
     });
   }
 
-  onStateChanged(triggerIndex, state) {
-    this.states[triggerIndex] = state.on;
+  onStateChanged(triggerIndex: number, state: Record<string, unknown>): void {
+    this.states[triggerIndex] = <boolean>state.on;
 
     let value = this.states[0];
     for (let i = 1; i < this.states.length; i++) {
@@ -91,5 +104,3 @@ class MultiTrigger extends Trigger {
     }
   }
 }
-
-module.exports = MultiTrigger;

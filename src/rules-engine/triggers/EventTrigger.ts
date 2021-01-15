@@ -4,30 +4,42 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import assert from 'assert';
+import * as Events from '../Events';
+import Trigger, {TriggerDescription} from './Trigger';
 
-const assert = require('assert');
-const Events = require('../Events');
 const Things = require('../../models/things');
-const Trigger = require('./Trigger');
+
+export interface EventTriggerDescription extends TriggerDescription {
+  thing: string;
+  event: string;
+}
 
 /**
  * A trigger activated when an event occurs
  */
-class EventTrigger extends Trigger {
-  constructor(desc) {
+export default class EventTrigger extends Trigger {
+  private thing: string;
+
+  private event: string;
+
+  private stopped: boolean;
+
+  private _onEvent: (event: any) => void;
+
+  constructor(desc: EventTriggerDescription) {
     super(desc);
     assert(desc.thing);
     this.thing = desc.thing;
     this.event = desc.event;
     this.stopped = true;
-    this.onEvent = this.onEvent.bind(this);
+    this._onEvent = this.onEvent.bind(this);
   }
 
   /**
    * @return {TriggerDescription}
    */
-  toDescription() {
+  toDescription(): EventTriggerDescription {
     return Object.assign(
       super.toDescription(),
       {
@@ -37,16 +49,16 @@ class EventTrigger extends Trigger {
     );
   }
 
-  async start() {
+  async start(): Promise<void> {
     this.stopped = false;
     const thing = await Things.getThing(this.thing);
     if (this.stopped) {
       return;
     }
-    thing.addEventSubscription(this.onEvent);
+    thing.addEventSubscription(this._onEvent);
   }
 
-  onEvent(event) {
+  onEvent(event: any): void {
     if (this.event !== event.getName()) {
       return;
     }
@@ -55,13 +67,10 @@ class EventTrigger extends Trigger {
     this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
   }
 
-  stop() {
+  stop(): void {
     this.stopped = true;
-    Things.getThing(this.thing).then((thing) => {
-      thing.removeEventSubscription(this.onEvent);
+    Things.getThing(this.thing).then((thing: any) => {
+      thing.removeEventSubscription(this._onEvent);
     });
   }
 }
-
-module.exports = EventTrigger;
-

@@ -5,11 +5,10 @@
  */
 
 import express from 'express';
-
-const APIError = require('./APIError');
-const Database = require('./Database');
-const Engine = require('./Engine');
-const Rule = require('./Rule');
+import APIError from './APIError';
+import Database from './Database';
+import Engine from './Engine';
+import Rule from './Rule';
 
 const index = express.Router();
 const engine = new Engine();
@@ -78,7 +77,7 @@ index.put('/:id', parseRuleFromBody, async (req, res) => {
 
 index.delete('/:id', async (req, res) => {
   try {
-    await engine.deleteRule(req.params.id);
+    await engine.deleteRule(parseInt(req.params.id));
     res.send({});
   } catch (e) {
     res.status(404).send(
