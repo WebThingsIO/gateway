@@ -10,7 +10,7 @@ const assert = require('assert');
 const AddonManager = require('../addon-manager');
 const Constants = require('../constants');
 const Things = require('../models/things');
-const EventEmitter = require('events').EventEmitter;
+const {EventEmitter} = require('events');
 const Events = require('./Events');
 
 /**
