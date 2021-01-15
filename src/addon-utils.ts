@@ -10,8 +10,7 @@ import path from 'path';
 import semver from 'semver';
 import UserProfile from './user-profile';
 import * as Utils from './utils';
-
-const pkg = require('../package.json');
+import pkg from './package.json';
 
 const MANIFEST_VERSION = 1;
 

@@ -20,9 +20,8 @@ import * as mDNSserver from '../mdns-server';
 import * as Platform from '../platform';
 import * as Settings from '../models/settings';
 import TunnelService from '../tunnel-service';
-
-const pkg = require('../../package.json');
-const CertificateManager = require('../certificate-manager');
+import * as CertificateManager from '../certificate-manager';
+import pkg from '../package.json';
 
 const auth = jwtMiddleware.middleware();
 const SettingsController = express.Router();

@@ -24,7 +24,8 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "checkJs": true
+    "checkJs": true,
+    "resolveJsonModule": true
   },
   "include": [
     "**/*.ts"
