@@ -4,19 +4,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import * as Events from '../Events';
+import PropertyTrigger, {PropertyTriggerDescription} from './PropertyTrigger';
 
-const Events = require('../Events');
-const PropertyTrigger = require('./PropertyTrigger');
+export interface EqualityTriggerDescription extends PropertyTriggerDescription {
+  value: number;
+}
 
 /**
  * A trigger which activates when a property is equal to a given value
  */
-class EqualityTrigger extends PropertyTrigger {
+export default class EqualityTrigger extends PropertyTrigger {
+  private value: number;
+
   /**
    * @param {TriggerDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: EqualityTriggerDescription) {
     super(desc);
 
     this.value = desc.value;
@@ -25,7 +29,7 @@ class EqualityTrigger extends PropertyTrigger {
   /**
    * @return {TriggerDescription}
    */
-  toDescription() {
+  toDescription(): EqualityTriggerDescription {
     return Object.assign(
       super.toDescription(),
       {
@@ -38,11 +42,9 @@ class EqualityTrigger extends PropertyTrigger {
    * @param {number} propValue
    * @return {State}
    */
-  onValueChanged(propValue) {
+  onValueChanged(propValue: number): void {
     const on = propValue === this.value;
 
     this.emit(Events.STATE_CHANGED, {on: on, value: propValue});
   }
 }
-
-module.exports = EqualityTrigger;
