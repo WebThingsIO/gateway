@@ -276,6 +276,7 @@ BarometricPressureSensor = Senzor atmosferického tlaku
 Custom = Vlastní věc
 Thing = Věc
 AirQualitySensor = Senzor kvality vzduchu
+SmokeSensor = Senzor kouře
 
 ## Properties
 
@@ -309,6 +310,7 @@ inactive = Neaktivní
 humidity = Vlhkost
 concentration = Koncentrace
 density = Hustota
+smoke = Kouř
 
 ## Domain Setup
 
@@ -522,6 +524,7 @@ tunnel-setup-choose-address = Vyberte zabezpečenou webovou adresu vaší gatewa
 tunnel-setup-input-subdomain =
     .placeholder = subdoména
 tunnel-setup-email-opt-in = Informujte mě o novinkách ve WebThings.
+tunnel-setup-agree-privacy-policy = Souhlasíte se zásadami projektu WebThings pro <a data-l10n-name="tunnel-setup-privacy-policy-link">ochranu osobních údajů</a> a <a data-l10n-name="tunnel-setup-tos-link">podmínkami poskytování služby</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token pro opětovné získání
 tunnel-setup-error = Při nastavování subdomény došlo k chybě.
