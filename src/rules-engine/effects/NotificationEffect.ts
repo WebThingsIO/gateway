@@ -4,14 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
 import PushService from '../../push-service';
 
 interface NotificationEffectDescription extends EffectDescription {
-  message: string
+  message: string;
 }
 
 /**

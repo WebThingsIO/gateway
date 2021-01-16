@@ -4,8 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import assert from 'assert';
 import PropertyEffect from './PropertyEffect';
 import {SetEffectDescription} from './SetEffect';

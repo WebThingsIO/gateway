@@ -4,13 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import Property, {PropertyDescription} from '../Property';
 import Effect, {EffectDescription} from './Effect';
 
 export interface PropertyEffectDescription extends EffectDescription {
-  property: PropertyDescription
+  property: PropertyDescription;
 }
 /**
  * PropertyEffect - The outcome of a Rule involving a property

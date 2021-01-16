@@ -4,11 +4,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import * as Effects from './effects/index';
 import * as Triggers from './triggers/index';
 import * as Events from './Events';
 import Trigger, {TriggerDescription} from './triggers/Trigger';
-
-const Effects = require('./effects');
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 

@@ -28,18 +28,18 @@ type InvalidRequest = 'invalid_request';
 type UnauthorizedClient = 'unauthorized_client';
 
 type OAuthRequest = {
-  client_id: ClientId,
-  redirect_uri?: URL,
-  state?: string
+  client_id: ClientId;
+  redirect_uri?: URL;
+  state?: string;
 };
 
 // https://tools.ietf.org/html/rfc6749#section-4.1.1
 type AuthorizationRequest = {
-  response_type: string,
-  client_id: ClientId,
-  redirect_uri?: URL,
-  scope: ScopeRaw,
-  state?: string
+  response_type: string;
+  client_id: ClientId;
+  redirect_uri?: URL;
+  scope: ScopeRaw;
+  state?: string;
 };
 
 type AuthorizationCode = string;
@@ -49,35 +49,35 @@ type AuthorizationError =
   'temporarily_unavailable';
 
 type AuthorizationSuccessResponse = {
-  code: AuthorizationCode,
-  state?: string
+  code: AuthorizationCode;
+  state?: string;
 };
 
 type ErrorResponse<T> = {
-  error: T,
-  error_description?: string,
-  error_uri?: URL,
-  state?: string
+  error: T;
+  error_description?: string;
+  error_uri?: URL;
+  state?: string;
 };
 
 type AuthorizationErrorResponse = ErrorResponse<AuthorizationError>;
 
 // https://tools.ietf.org/html/rfc6749#section-4.1.3
 type AccessTokenRequest = {
-  grant_type: 'authorization_code',
-  code: AuthorizationCode,
-  redirect_uri?: URL,
-  client_id: ClientId
+  grant_type: 'authorization_code';
+  code: AuthorizationCode;
+  redirect_uri?: URL;
+  client_id: ClientId;
 };
 
 type Token = string; // JWT
 
 type AccessTokenSuccessResponse = {
-  access_token: Token,
-  token_type: 'bearer',
-  expires_in?: number,
-  refresh_token?: Token,
-  scope: ScopeRaw
+  access_token: Token;
+  token_type: 'bearer';
+  expires_in?: number;
+  refresh_token?: Token;
+  scope: ScopeRaw;
 };
 
 type AccessTokenError =
