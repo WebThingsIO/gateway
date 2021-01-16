@@ -6,26 +6,34 @@
 
 'use strict';
 
-const assert = require('assert');
-const PropertyEffect = require('./PropertyEffect');
+import assert from 'assert';
+import PropertyEffect from './PropertyEffect';
+import {SetEffectDescription} from './SetEffect';
 
+type PulseEffectDescription = SetEffectDescription;
 /**
  * An Effect which temporarily sets the target property to
  * a value before restoring its original value
  */
-class PulseEffect extends PropertyEffect {
+export default class PulseEffect extends PropertyEffect {
+  private value: any;
+
+  private on: boolean;
+
+  private oldValue: any;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: PulseEffectDescription) {
     super(desc);
     this.value = desc.value;
     if (typeof this.value === 'number') {
-      assert(this.property.type === 'number' ||
-             this.property.type === 'integer',
+      assert(this.property.getType() === 'number' ||
+             this.property.getType() === 'integer',
              'setpoint and property must be compatible types');
     } else {
-      assert(typeof this.value === this.property.type,
+      assert(typeof this.value === this.property.getType(),
              'setpoint and property must be same type');
     }
 
@@ -36,7 +44,7 @@ class PulseEffect extends PropertyEffect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): PulseEffectDescription {
     return Object.assign(
       super.toDescription(),
       {value: this.value}
@@ -46,7 +54,7 @@ class PulseEffect extends PropertyEffect {
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): Promise<any> | undefined {
     if (state.on) {
       // If we're already active, just perform the effect again
       if (this.on) {
@@ -70,7 +78,8 @@ class PulseEffect extends PropertyEffect {
         return this.property.set(this.oldValue);
       }
     }
+
+    // eslint-disable-next-line no-useless-return
+    return;
   }
 }
-
-module.exports = PulseEffect;

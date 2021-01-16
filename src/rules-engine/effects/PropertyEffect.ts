@@ -6,18 +6,23 @@
 
 'use strict';
 
-const Property = require('../Property');
-const Effect = require('./Effect');
+import Property, {PropertyDescription} from '../Property';
+import Effect, {EffectDescription} from './Effect';
 
+export interface PropertyEffectDescription extends EffectDescription {
+  property: PropertyDescription
+}
 /**
  * PropertyEffect - The outcome of a Rule involving a property
  */
-class PropertyEffect extends Effect {
+export default class PropertyEffect extends Effect {
+  protected property: Property;
+
   /**
    * Create an Effect based on a wire-format description with a property
    * @param {PropertyEffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: PropertyEffectDescription) {
     super(desc);
     this.property = new Property(desc.property);
   }
@@ -25,11 +30,9 @@ class PropertyEffect extends Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): PropertyEffectDescription {
     return Object.assign(super.toDescription(), {
       property: this.property.toDescription(),
     });
   }
 }
-
-module.exports = PropertyEffect;

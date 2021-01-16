@@ -7,7 +7,7 @@
 import * as Events from '../Events';
 import Trigger, {TriggerDescription} from './Trigger';
 
-const Property = require('../Property');
+import Property from '../Property';
 
 export interface PropertyTriggerDescription extends TriggerDescription {
   property: any;
