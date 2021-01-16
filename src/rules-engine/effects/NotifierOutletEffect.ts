@@ -6,18 +6,38 @@
 
 'use strict';
 
-const assert = require('assert');
-const Effect = require('./Effect');
+import {Level} from 'gateway-addon/lib/schema';
+
+import assert from 'assert';
+import Effect, {EffectDescription} from './Effect';
 const AddonManager = require('../../addon-manager');
+
+interface NotifierOutletEffectDescription extends EffectDescription {
+  notifier: string,
+  outlet: string,
+  title: string,
+  message: string,
+  level: Level,
+}
 
 /**
  * An Effect which calls notify on a notifier's outlet
  */
-class NotifierOutletEffect extends Effect {
+export default class NotifierOutletEffect extends Effect {
+  private notifier: string;
+
+  private outlet: string;
+
+  private title: string;
+
+  private message: string;
+
+  private level: Level;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: NotifierOutletEffectDescription) {
     super(desc);
 
     assert(desc.hasOwnProperty('notifier'));
@@ -36,7 +56,7 @@ class NotifierOutletEffect extends Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): NotifierOutletEffectDescription {
     return Object.assign(
       super.toDescription(),
       {
@@ -52,7 +72,7 @@ class NotifierOutletEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): void {
     if (!state.on) {
       return;
     }
@@ -64,14 +84,13 @@ class NotifierOutletEffect extends Effect {
     }
     const outlet = notifier.getOutlet(this.outlet);
     if (!outlet) {
-      console.warn(`Outlet "${this.outlet}" of notifier "${this.notifier}" not found, unable to notify`);
+      console.warn(
+        `Outlet "${this.outlet}" of notifier "${this.notifier}" not found, unable to notify`);
       return;
     }
 
-    outlet.notify(this.title, this.message, this.level).catch((e) => {
+    outlet.notify(this.title, this.message, this.level).catch((e: any) => {
       console.warn(`Outlet "${this.outlet}" of notifier "${this.notifier}" unable to notify`, e);
     });
   }
 }
-
-module.exports = NotifierOutletEffect;

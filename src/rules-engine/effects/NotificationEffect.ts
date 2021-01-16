@@ -6,18 +6,24 @@
 
 'use strict';
 
-const assert = require('assert');
-const Effect = require('./Effect');
-const PushService = require('../../push-service').default;
+import assert from 'assert';
+import Effect, {EffectDescription} from './Effect';
+import PushService from '../../push-service';
+
+interface NotificationEffectDescription extends EffectDescription {
+  message: string
+}
 
 /**
  * An Effect which creates a notification
  */
-class NotificationEffect extends Effect {
+export default class NotificationEffect extends Effect {
+  private message: string;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: NotificationEffectDescription) {
     super(desc);
 
     assert(desc.hasOwnProperty('message'));
@@ -28,7 +34,7 @@ class NotificationEffect extends Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): NotificationEffectDescription {
     return Object.assign(
       super.toDescription(),
       {
@@ -40,7 +46,7 @@ class NotificationEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): void {
     if (!state.on) {
       return;
     }
@@ -48,6 +54,3 @@ class NotificationEffect extends Effect {
     PushService.broadcastNotification(this.message);
   }
 }
-
-module.exports = NotificationEffect;
-

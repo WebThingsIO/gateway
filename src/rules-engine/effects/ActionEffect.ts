@@ -6,22 +6,34 @@
 
 'use strict';
 
-const assert = require('assert');
+import assert from 'assert';
 
 const Action = require('../../models/action').default;
 const Actions = require('../../models/actions').default;
 const AddonManager = require('../../addon-manager');
-const Effect = require('./Effect');
+import Effect, {EffectDescription} from './Effect';
 const Things = require('../../models/things');
+
+interface ActionEffectDescription extends EffectDescription{
+  thing: string,
+  action: string
+  parameters: any
+}
 
 /**
  * An Effect which creates an action
  */
-class ActionEffect extends Effect {
+export default class ActionEffect extends Effect {
+  parameters: any;
+
+  thing: string;
+
+  action: string;
+
   /**
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: ActionEffectDescription) {
     super(desc);
 
     assert(desc.thing);
@@ -35,7 +47,7 @@ class ActionEffect extends Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): ActionEffectDescription {
     return Object.assign(
       super.toDescription(),
       {
@@ -49,7 +61,7 @@ class ActionEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state) {
+  setState(state: any): void {
     if (!state.on) {
       return;
     }
@@ -57,7 +69,7 @@ class ActionEffect extends Effect {
     this.createAction();
   }
 
-  async createAction() {
+  async createAction(): Promise<void> {
     try {
       const thing = await Things.getThing(this.thing);
 
@@ -70,6 +82,3 @@ class ActionEffect extends Effect {
     }
   }
 }
-
-module.exports = ActionEffect;
-

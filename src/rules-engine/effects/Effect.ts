@@ -6,15 +6,24 @@
 
 'use strict';
 
+export interface EffectDescription {
+  type: any,
+  label: string
+}
+
 /**
  * Effect - The outcome of a Rule once triggered
  */
-class Effect {
+export default class Effect {
+  private type: string;
+
+  private label: string;
+
   /**
    * Create an Effect based on a wire-format description with a property
    * @param {EffectDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: EffectDescription) {
     this.type = this.constructor.name;
     this.label = desc.label;
   }
@@ -22,7 +31,7 @@ class Effect {
   /**
    * @return {EffectDescription}
    */
-  toDescription() {
+  toDescription(): EffectDescription {
     return {
       type: this.type,
       label: this.label,
@@ -33,9 +42,7 @@ class Effect {
    * Set the state of Effect based on a trigger
    * @param {State} _state
    */
-  setState(_state) {
+  setState(_state: any): void {
     throw new Error('Unimplemented');
   }
 }
-
-module.exports = Effect;

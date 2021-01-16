@@ -6,22 +6,42 @@
 
 'use strict';
 
-const assert = require('assert');
+import assert from 'assert';
 const AddonManager = require('../addon-manager');
-const Constants = require('../constants');
+import * as Constants from '../constants';
 const Things = require('../models/things');
-const {EventEmitter} = require('events');
-const Events = require('./Events');
+import {EventEmitter} from 'events';
+import * as Events from './Events';
+import {Property as AddonProperty} from 'gateway-addon';
+import {PropertyValue} from 'gateway-addon/lib/schema';
+
+export interface PropertyDescription {
+  id: string,
+  type: string,
+  thing: string,
+  unit?: string,
+  description?: string,
+}
 
 /**
  * Utility to support operations on Thing's properties
  */
-class Property extends EventEmitter {
+export default class Property extends EventEmitter {
+  private type: string;
+
+  private thing: string;
+
+  private id: string;
+
+  private unit?: string;
+
+  private description?: string;
+
   /**
    * Create a Property from a descriptor returned by the WoT API
    * @param {PropertyDescription} desc
    */
-  constructor(desc) {
+  constructor(desc: PropertyDescription) {
     super();
 
     assert(desc.type);
@@ -43,11 +63,15 @@ class Property extends EventEmitter {
     this.onThingAdded = this.onThingAdded.bind(this);
   }
 
+  getType(): string {
+    return this.type;
+  }
+
   /**
    * @return {PropertyDescription}
    */
-  toDescription() {
-    const desc = {
+  toDescription(): PropertyDescription {
+    const desc: PropertyDescription = {
       type: this.type,
       thing: this.thing,
       id: this.id,
@@ -64,7 +88,7 @@ class Property extends EventEmitter {
   /**
    * @return {Promise} resolves to property's value or undefined if not found
    */
-  async get() {
+  async get(): Promise<any> {
     try {
       return await Things.getThingProperty(this.thing, this.id);
     } catch (e) {
@@ -76,16 +100,16 @@ class Property extends EventEmitter {
    * @param {any} value
    * @return {Promise} resolves when set is done
    */
-  set(value) {
-    return Things.setThingProperty(this.thing, this.id, value).catch((e) => {
+  set(value: PropertyValue): Promise<any> {
+    return Things.setThingProperty(this.thing, this.id, value).catch((e: any) => {
       console.warn('Rule set failed, retrying once', e);
       return Things.setThingProperty(this.thing, this.id, value);
-    }).catch((e) => {
+    }).catch((e: any) => {
       console.warn('Rule set failed completely', e);
     });
   }
 
-  async start() {
+  async start(): Promise<any> {
     AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
 
     try {
@@ -95,7 +119,7 @@ class Property extends EventEmitter {
     }
   }
 
-  async getInitialValue() {
+  async getInitialValue(): Promise<void> {
     const initialValue = await this.get();
     if (typeof initialValue === 'undefined') {
       throw new Error('Did not get a real value');
@@ -107,7 +131,7 @@ class Property extends EventEmitter {
    * Listener for AddonManager's THING_ADDED event
    * @param {String} thing - thing id
    */
-  onThingAdded(thing) {
+  onThingAdded(thing: any): void {
     if (thing.id !== this.thing) {
       return;
     }
@@ -116,22 +140,20 @@ class Property extends EventEmitter {
     });
   }
 
-  onPropertyChanged(property) {
-    if (property.device.id !== this.thing) {
+  onPropertyChanged(property: AddonProperty<PropertyValue>): void {
+    if (property.getDevice().getId() !== this.thing) {
       return;
     }
-    if (property.name !== this.id) {
+    if (property.getName() !== this.id) {
       return;
     }
-    this.emit(Events.VALUE_CHANGED, property.value);
+    this.emit(Events.VALUE_CHANGED, (property as any).value);
   }
 
-  stop() {
+  stop(): void {
     AddonManager.removeListener(Constants.PROPERTY_CHANGED,
                                 this.onPropertyChanged);
     AddonManager.removeListener(Constants.THING_ADDED,
                                 this.onThingAdded);
   }
 }
-
-module.exports = Property;
