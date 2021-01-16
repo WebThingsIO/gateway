@@ -4,8 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import {Level} from 'gateway-addon/lib/schema';
 
 import assert from 'assert';
@@ -13,11 +11,11 @@ import Effect, {EffectDescription} from './Effect';
 const AddonManager = require('../../addon-manager');
 
 interface NotifierOutletEffectDescription extends EffectDescription {
-  notifier: string,
-  outlet: string,
-  title: string,
-  message: string,
-  level: Level,
+  notifier: string;
+  outlet: string;
+  title: string;
+  message: string;
+  level: Level;
 }
 
 /**

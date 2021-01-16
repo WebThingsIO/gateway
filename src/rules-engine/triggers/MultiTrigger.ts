@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import {fromDescription} from './index';
 import assert from 'assert';
 import * as Events from '../Events';
 import Trigger, {TriggerDescription} from './Trigger';
@@ -41,7 +42,6 @@ export default class MultiTrigger extends Trigger {
     super(desc);
     assert(desc.op in ops);
     this.op = desc.op;
-    const {fromDescription} = require('./index');
 
     if (DEBUG) {
       this.id = Math.floor(Math.random() * 1000);

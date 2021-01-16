@@ -4,13 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import assert from 'assert';
 import PropertyEffect, {PropertyEffectDescription} from './PropertyEffect';
 
 export interface SetEffectDescription extends PropertyEffectDescription {
-  value: any
+  value: any;
 }
 
 /**

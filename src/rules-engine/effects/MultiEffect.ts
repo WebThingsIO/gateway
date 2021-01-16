@@ -4,13 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import {fromDescription} from './index';
 import Effect, {EffectDescription} from './Effect';
 
 interface MultiEffectDescription extends EffectDescription {
-  effects: EffectDescription[]
+  effects: EffectDescription[];
 }
 
 /**

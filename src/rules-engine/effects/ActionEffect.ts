@@ -4,20 +4,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import assert from 'assert';
 
-const Action = require('../../models/action').default;
-const Actions = require('../../models/actions').default;
+import Action from '../../models/action';
+import Actions from '../../models/actions';
 const AddonManager = require('../../addon-manager');
 import Effect, {EffectDescription} from './Effect';
 const Things = require('../../models/things');
 
-interface ActionEffectDescription extends EffectDescription{
-  thing: string,
-  action: string
-  parameters: any
+interface ActionEffectDescription extends EffectDescription {
+  thing: string;
+  action: string;
+  parameters: any;
 }
 
 /**

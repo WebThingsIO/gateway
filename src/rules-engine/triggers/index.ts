@@ -13,7 +13,7 @@ import PropertyTrigger from './PropertyTrigger';
 import TimeTrigger from './TimeTrigger';
 import Trigger, {TriggerDescription} from './Trigger';
 
-type TriggerClass = { new(desc: any): Trigger; };
+type TriggerClass = { new(desc: any): Trigger };
 
 export const triggers: Record<string, TriggerClass> = {
   BooleanTrigger,
