@@ -20,9 +20,9 @@ const DEBUG = false;
  * of the gateway.
  */
 export default class AdapterProxy extends Adapter {
-  private deferredMock: any = null;
+  public deferredMock: any = null;
 
-  private unloadCompletedPromise: any = null;
+  public unloadCompletedPromise: any = null;
 
   private eventHandlers: any = {};
 
