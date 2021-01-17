@@ -5,8 +5,8 @@
  */
 
 export interface EffectDescription {
-  type: any;
-  label: string;
+  type: string;
+  label?: string;
 }
 
 /**
@@ -15,7 +15,7 @@ export interface EffectDescription {
 export default class Effect {
   private type: string;
 
-  private label: string;
+  private label?: string;
 
   /**
    * Create an Effect based on a wire-format description with a property

@@ -7,7 +7,7 @@
 import {fromDescription} from './index';
 import Effect, {EffectDescription} from './Effect';
 
-interface MultiEffectDescription extends EffectDescription {
+export interface MultiEffectDescription extends EffectDescription {
   effects: EffectDescription[];
 }
 

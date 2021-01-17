@@ -5,21 +5,20 @@
  */
 
 import * as Events from '../Events';
+import Property, {PropertyDescription} from '../Property';
 import Trigger, {TriggerDescription} from './Trigger';
 
-import Property from '../Property';
-
 export interface PropertyTriggerDescription extends TriggerDescription {
-  property: any;
+  property: PropertyDescription;
 }
 
 /**
  * An abstract class for triggers whose input is a single property
  */
 export default class PropertyTrigger extends Trigger {
-  protected property: any;
+  protected property: Property;
 
-  private _onValueChanged: (value: any) => void;
+  private _onValueChanged: (value: unknown) => void;
 
   constructor(desc: PropertyTriggerDescription) {
     super(desc);
@@ -42,7 +41,7 @@ export default class PropertyTrigger extends Trigger {
     await this.property.start();
   }
 
-  onValueChanged(_value: any): void {
+  onValueChanged(_value: unknown): void {
     // to be overridden
   }
 
