@@ -10,11 +10,10 @@
 'use strict';
 
 import {Level} from 'gateway-addon/lib/schema';
-
-const {MessageType} = require('gateway-addon').Constants;
-import {Outlet} from 'gateway-addon';
+import {Constants, Outlet} from 'gateway-addon';
 import NotifierProxy from './notifier-proxy';
 import Deferred from '../deferred';
+const MessageType = Constants.MessageType;
 
 export default class OutletProxy extends Outlet {
   constructor(notifier: NotifierProxy, outletDict: any) {
