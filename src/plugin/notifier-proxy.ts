@@ -12,9 +12,9 @@
 'use strict';
 
 import Deferred from '../deferred';
-const {MessageType} = require('gateway-addon').Constants;
 import {Notifier} from 'gateway-addon';
 import OutletProxy from './outlet-proxy';
+const MessageType = Constants.MessageType;
 
 /**
  * Class used to describe a notifier from the perspective of the gateway.
