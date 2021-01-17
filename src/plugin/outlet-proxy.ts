@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import {Level} from 'gateway-addon/lib/schema';
 import {Constants, Outlet} from 'gateway-addon';
 import NotifierProxy from './notifier-proxy';

@@ -9,8 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import Deferred from '../deferred';
 import {Constants, Notifier} from 'gateway-addon';
 import OutletProxy from './outlet-proxy';
