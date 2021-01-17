@@ -725,7 +725,7 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    PluginServer = require('./plugin/plugin-server');
+    PluginServer = require('./plugin/plugin-server').default;
 
     this.pluginServer = new PluginServer(this, {verbose: false});
 

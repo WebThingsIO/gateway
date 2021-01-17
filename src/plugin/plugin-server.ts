@@ -11,19 +11,35 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+import config from 'config';
+import {EventEmitter} from 'events';
+import {IpcSocket, Constants} from 'gateway-addon';
+import * as Settings from '../models/settings';
+import UserProfile from '../user-profile';
+import {Message} from 'gateway-addon/lib/schema';
+import WebSocket from 'ws';
+import AdapterProxy from './adapter-proxy';
+import APIHandlerProxy from './api-handler-proxy';
+import NotifierProxy from './notifier-proxy';
+import pkg from '../package.json';
 
-const config = require('config');
-const {EventEmitter} = require('events');
-const {IpcSocket} = require('gateway-addon');
-const {MessageType} = require('gateway-addon').Constants;
+const MessageType = Constants.MessageType;
+
 const Plugin = require('./plugin');
-const pkg = require('../package.json');
-const Settings = require('../models/settings');
-const UserProfile = require('../user-profile').default;
 
-class PluginServer extends EventEmitter {
-  constructor(addonManager, {verbose} = {}) {
+// TODO: remove these
+type AddonManager = any;
+
+export default class PluginServer extends EventEmitter {
+  private manager: AddonManager;
+
+  private verbose?: boolean;
+
+  private plugins: Map<string, Plugin>;
+
+  private ipcSocket: IpcSocket;
+
+  constructor(addonManager: AddonManager, {verbose}: {verbose?: boolean} = {}) {
     super();
     this.manager = addonManager;
 
@@ -37,8 +53,10 @@ class PluginServer extends EventEmitter {
       'IpcSocket(plugin-server)',
       {verbose: this.verbose}
     );
-    this.verbose &&
-      console.log('Server bound to', this.ipcSocket.ipcAddr);
+  }
+
+  public getAddonManager(): AddonManager {
+    return this.manager;
   }
 
   /**
@@ -46,7 +64,7 @@ class PluginServer extends EventEmitter {
    *
    * Tells the add-on manager about new adapters added via a plugin.
    */
-  addAdapter(adapter) {
+  addAdapter(adapter: AdapterProxy): void {
     this.manager.addAdapter(adapter);
   }
 
@@ -55,7 +73,7 @@ class PluginServer extends EventEmitter {
    *
    * Tells the add-on manager about new notifiers added via a plugin.
    */
-  addNotifier(notifier) {
+  addNotifier(notifier: NotifierProxy): void {
     this.manager.addNotifier(notifier);
   }
 
@@ -64,7 +82,7 @@ class PluginServer extends EventEmitter {
    *
    * Tells the add-on manager about new API handlers added via a plugin.
    */
-  addAPIHandler(handler) {
+  addAPIHandler(handler: APIHandlerProxy): void {
     this.manager.addAPIHandler(handler);
   }
 
@@ -75,13 +93,13 @@ class PluginServer extends EventEmitter {
    * from a plugin. This particular IPC channel is only used to register
    * plugins. Each plugin will get its own IPC channel once its registered.
    */
-  onMsg(msg, ws) {
+  onMsg(msg: Message, ws: WebSocket): void {
     this.verbose &&
       console.log('PluginServer: Rcvd:', msg);
 
     if (msg.messageType === MessageType.PLUGIN_REGISTER_REQUEST) {
       const plugin = this.registerPlugin(msg.data.pluginId);
-      plugin.ws = ws;
+      (plugin as any).ws = ws;
       let language = 'en-US';
       const units = {
         temperature: 'degree celsius',
@@ -125,7 +143,7 @@ class PluginServer extends EventEmitter {
     } else if (msg.data.pluginId) {
       const plugin = this.getPlugin(msg.data.pluginId);
       if (plugin) {
-        plugin.onMsg(msg);
+        (plugin as any).onMsg(msg);
       }
     }
   }
@@ -135,7 +153,7 @@ class PluginServer extends EventEmitter {
    *
    * Returns a previously loaded plugin instance.
    */
-  getPlugin(pluginId) {
+  getPlugin(pluginId: string): Plugin | undefined {
     return this.plugins.get(pluginId);
   }
 
@@ -144,11 +162,11 @@ class PluginServer extends EventEmitter {
    *
    * Loads a plugin by launching a separate process.
    */
-  loadPlugin(pluginPath, manifest) {
+  loadPlugin(pluginPath: string, manifest: any): void {
     const plugin = this.registerPlugin(manifest.name);
-    plugin.exec = manifest.moziot.exec;
-    plugin.execPath = pluginPath;
-    plugin.start();
+    (plugin as any).exec = manifest.moziot.exec;
+    (plugin as any).execPath = pluginPath;
+    (plugin as any).start();
   }
 
   /**
@@ -157,16 +175,16 @@ class PluginServer extends EventEmitter {
    * Called when the plugin server receives a register plugin message
    * via IPC.
    */
-  registerPlugin(pluginId) {
+  registerPlugin(pluginId: string): Plugin {
     let plugin = this.plugins.get(pluginId);
     if (plugin) {
       // This is a plugin that we already know about.
     } else {
       // We haven't seen this plugin before.
       plugin = new Plugin(pluginId, this);
-      this.plugins.set(pluginId, plugin);
+      this.plugins.set(pluginId, plugin!);
     }
-    return plugin;
+    return plugin!;
   }
 
   /**
@@ -174,13 +192,11 @@ class PluginServer extends EventEmitter {
    *
    * Called when the plugin sends a plugin-unloaded message.
    */
-  unregisterPlugin(pluginId) {
+  unregisterPlugin(pluginId: string): void {
     this.plugins.delete(pluginId);
   }
 
-  shutdown() {
+  shutdown(): void {
     this.ipcSocket.close();
   }
 }
-
-module.exports = PluginServer;
