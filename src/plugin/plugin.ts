@@ -199,7 +199,7 @@ export default class Plugin {
         return;
       }
       case MessageType.DEVICE_SET_PIN_RESPONSE: {
-        const data = msg as unknown as DeviceSetPINResponseMessageData;
+        const data = msg.data as DeviceSetPINResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.setPinPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -226,7 +226,7 @@ export default class Plugin {
         return;
       }
       case MessageType.DEVICE_SET_CREDENTIALS_RESPONSE: {
-        const data = msg as unknown as DeviceSetCredentialsResponseMessageData;
+        const data = msg.data as DeviceSetCredentialsResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.setCredentialsPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -253,7 +253,7 @@ export default class Plugin {
         return;
       }
       case MessageType.API_HANDLER_API_RESPONSE: {
-        const data = msg as unknown as APIHandlerAPIResponseMessageData;
+        const data = msg.data as APIHandlerAPIResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.apiRequestPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
@@ -272,7 +272,7 @@ export default class Plugin {
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
-        const data = msg as unknown as AdapterAddedNotificationMessageData;
+        const data = msg.data as AdapterAddedNotificationMessageData;
         const adapter = new AdapterProxy(this.pluginServer.getAddonManager(),
                                          data.adapterId,
                                          data.name,
@@ -301,7 +301,7 @@ export default class Plugin {
         return;
       }
       case MessageType.NOTIFIER_ADDED_NOTIFICATION: {
-        const data = msg as unknown as NotifierAddedNotificationMessageData;
+        const data = msg.data as NotifierAddedNotificationMessageData;
         const notifier = new NotifierProxy(this.pluginServer.getAddonManager(),
                                            data.notifierId,
                                            data.name,
@@ -313,7 +313,7 @@ export default class Plugin {
       }
 
       case MessageType.API_HANDLER_ADDED_NOTIFICATION: {
-        const data = msg as unknown as APIHandlerAddedNotificationMessageData;
+        const data = msg.data as APIHandlerAddedNotificationMessageData;
         const apiHandler = new APIHandlerProxy(this.pluginServer.getAddonManager(),
                                                data.packageName,
                                                this);
@@ -323,7 +323,7 @@ export default class Plugin {
       }
 
       case MessageType.API_HANDLER_UNLOAD_RESPONSE: {
-        const data = msg as unknown as APIHandlerUnloadResponseMessageData;
+        const data = msg.data as APIHandlerUnloadResponseMessageData;
         const packageName = data.packageName;
         const handler = this.apiHandlers.get(packageName);
 
@@ -436,14 +436,14 @@ export default class Plugin {
         break;
 
       case MessageType.DEVICE_ADDED_NOTIFICATION: {
-        const data = msg as unknown as DeviceAddedNotificationMessageData;
+        const data = msg.data as DeviceAddedNotificationMessageData;
         device = new DeviceProxy(adapter, data.device);
         adapter.handleDeviceAdded(device);
         break;
       }
 
       case MessageType.ADAPTER_REMOVE_DEVICE_RESPONSE: {
-        const data = msg as unknown as AdapterRemoveDeviceResponseMessageData;
+        const data = msg.data as AdapterRemoveDeviceResponseMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
           adapter.handleDeviceRemoved(device);
@@ -457,7 +457,7 @@ export default class Plugin {
         break;
 
       case MessageType.OUTLET_REMOVED_NOTIFICATION: {
-        const data = msg as unknown as OutletRemovedNotificationMessageData;
+        const data = msg.data as OutletRemovedNotificationMessageData;
         outlet = notifier.getOutlet(data.outletId);
         if (outlet) {
           notifier.handleOutletRemoved(outlet);
@@ -466,7 +466,7 @@ export default class Plugin {
       }
 
       case MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION: {
-        const data = msg as unknown as DevicePropertyChangedNotificationMessageData;
+        const data = msg.data as DevicePropertyChangedNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device && data.property.name) {
           property = device.findProperty(data.property.name) as PropertyProxy;
@@ -479,7 +479,7 @@ export default class Plugin {
       }
 
       case MessageType.DEVICE_ACTION_STATUS_NOTIFICATION: {
-        const data = msg as unknown as DeviceActionStatusNotificationMessageData;
+        const data = msg.data as DeviceActionStatusNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
           device.actionNotify(data.action as any);
@@ -488,7 +488,7 @@ export default class Plugin {
       }
 
       case MessageType.DEVICE_EVENT_NOTIFICATION: {
-        const data = msg as unknown as DeviceEventNotificationMessageData;
+        const data = msg.data as DeviceEventNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
           device.eventNotify(data.event as any);
@@ -497,7 +497,7 @@ export default class Plugin {
       }
 
       case MessageType.DEVICE_CONNECTED_STATE_NOTIFICATION: {
-        const data = msg as unknown as DeviceConnectedStateNotificationMessageData;
+        const data = msg.data as DeviceConnectedStateNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
           device.connectedNotify(data.connected);
@@ -506,7 +506,7 @@ export default class Plugin {
       }
 
       case MessageType.ADAPTER_PAIRING_PROMPT_NOTIFICATION: {
-        const data = msg as unknown as AdapterPairingPromptNotificationMessageData;
+        const data = msg.data as AdapterPairingPromptNotificationMessageData;
         let message = `${adapter.getName()}: `;
         if (data.deviceId) {
           device = adapter.getDevice(data.deviceId);
@@ -528,7 +528,7 @@ export default class Plugin {
         return;
       }
       case MessageType.ADAPTER_UNPAIRING_PROMPT_NOTIFICATION: {
-        const data = msg as unknown as AdapterUnpairingPromptNotificationMessageData;
+        const data = msg.data as AdapterUnpairingPromptNotificationMessageData;
         let message = `${adapter.getName()}`;
         if (data.deviceId) {
           device = adapter.getDevice(data.deviceId);
