@@ -8,18 +8,96 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const Constants = require('../constants');
-const Database = require('../db').default;
-const {EventEmitter} = require('events');
+import * as Constants from '../constants';
+import Database from '../db';
+import {EventEmitter} from 'events';
 const Router = require('../router');
-const UserProfile = require('../user-profile').default;
-const fs = require('fs');
-const path = require('path');
-const tmp = require('tmp');
+import UserProfile from '../user-profile';
+import fs from 'fs';
+import path from 'path';
+import tmp from 'tmp';
+import {Action as ActionSchema,
+  Event as EventSchema,
+  Property as PropertySchema,
+  Link} from 'gateway-addon/lib/schema';
+import Action from './action';
+import Event from './event';
 
-class Thing extends EventEmitter {
+export interface ThingDescription {
+  id: string;
+  title: string;
+  '@context': string;
+  '@type': string[];
+  description: string;
+  base: string;
+  baseHref: string;
+  href: string;
+  properties: Record<string, PropertySchema>;
+  actions: Record<string, ActionSchema>;
+  events: Record<string, EventSchema>;
+  links: Link[];
+  floorplanX: number;
+  floorplanY: number;
+  layoutIndex: number;
+  selectedCapability: string;
+  iconHref: string | null;
+  iconData: IconData;
+  security: string;
+  securityDefinitions: SecurityDefinition;
+}
+
+interface IconData {
+  data: string;
+  mime: string;
+}
+
+interface SecurityDefinition {
+  oauth2_sc: OAuth2;
+}
+
+interface OAuth2 {
+  scheme: string;
+  flow: string;
+  authorization: string;
+  token: string;
+  scopes: string[];
+}
+
+export default class Thing extends EventEmitter {
+  private id: string;
+
+  private title: string;
+
+  private '@context': string;
+
+  private '@type': string[];
+
+  private description: string;
+
+  private href: string;
+
+  private properties: Record<string, PropertySchema>;
+
+  private actions: Record<string, ActionSchema>;
+
+  private events: Record<string, EventSchema>;
+
+  private connected: boolean;
+
+  private eventsDispatched: Event[];
+
+  private floorplanX: number;
+
+  private floorplanY: number;
+
+  private layoutIndex: number;
+
+  private selectedCapability: string;
+
+  private links: Link[];
+
+  private iconHref: string | null;
+
   /**
    * Thing constructor.
    *
@@ -28,7 +106,7 @@ class Thing extends EventEmitter {
    * @param {String} id Unique ID.
    * @param {Object} description Thing description.
    */
-  constructor(id, description) {
+  constructor(id: string, description: ThingDescription) {
     super();
 
     if (!id || !description) {
@@ -37,7 +115,7 @@ class Thing extends EventEmitter {
 
     // Parse the Thing Description
     this.id = id;
-    this.title = description.title || description.name || '';
+    this.title = description.title || (description as any).name || '';
     this['@context'] =
       description['@context'] || 'https://webthings.io/schemas';
     this['@type'] = description['@type'] || [];
@@ -57,7 +135,7 @@ class Thing extends EventEmitter {
           delete property.href;
         }
 
-        if (property.hasOwnProperty('links')) {
+        if (property.links) {
           property.links = property.links.filter((link) => {
             return link.rel && link.rel !== 'property';
           }).map((link) => {
@@ -112,7 +190,7 @@ class Thing extends EventEmitter {
 
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel)) {
+        if (['properties', 'actions', 'events'].includes(link.rel as string)) {
           continue;
         }
 
@@ -143,7 +221,7 @@ class Thing extends EventEmitter {
         delete action.href;
       }
 
-      if (action.hasOwnProperty('links')) {
+      if (action.links) {
         action.links = action.links.filter((link) => {
           return link.rel && link.rel !== 'action';
         }).map((link) => {
@@ -172,7 +250,7 @@ class Thing extends EventEmitter {
         delete event.href;
       }
 
-      if (event.hasOwnProperty('links')) {
+      if (event.links) {
         event.links = event.links.filter((link) => {
           return link.rel && link.rel !== 'event';
         }).map((link) => {
@@ -209,7 +287,7 @@ class Thing extends EventEmitter {
    * @param {number} y The y co-ordinate on floorplan (0-100).
    * @return {Promise} A promise which resolves with the description set.
    */
-  setCoordinates(x, y) {
+  setCoordinates(x: number, y: number): Promise<ThingDescription> {
     this.floorplanX = x;
     this.floorplanY = y;
     return Database.updateThing(this.id, this.getDescription())
@@ -225,7 +303,7 @@ class Thing extends EventEmitter {
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  setLayoutIndex(index) {
+  setLayoutIndex(index: number): Promise<ThingDescription> {
     this.layoutIndex = index;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
@@ -240,7 +318,7 @@ class Thing extends EventEmitter {
    * @param {String} title The new title
    * @return {Promise} A promise which resolves with the description set.
    */
-  setTitle(title) {
+  setTitle(title: string): Promise<ThingDescription> {
     this.title = title;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
@@ -256,7 +334,7 @@ class Thing extends EventEmitter {
    * @param {Boolean} updateDatabase Whether or not to update the database after
    *                                 setting.
    */
-  setIcon(iconData, updateDatabase) {
+  setIcon(iconData: IconData, updateDatabase: boolean): Promise<ThingDescription> | undefined {
     if (!iconData.data ||
         !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
       console.error('Invalid icon data:', iconData);
@@ -287,7 +365,7 @@ class Thing extends EventEmitter {
         break;
     }
 
-    let tempfile;
+    let tempfile: tmp.FileResult | undefined;
     try {
       tempfile = tmp.fileSync({
         mode: parseInt('0644', 8),
@@ -303,7 +381,7 @@ class Thing extends EventEmitter {
       console.error('Failed to write icon:', e);
       if (tempfile) {
         try {
-          fs.unlinkSync(tempfile.fd);
+          fs.unlinkSync(tempfile.fd as any);
         } catch (e) {
           // pass
         }
@@ -321,6 +399,9 @@ class Thing extends EventEmitter {
           return descr;
         });
     }
+
+    // eslint-disable-next-line no-useless-return
+    return;
   }
 
   /**
@@ -329,7 +410,7 @@ class Thing extends EventEmitter {
    * @param {String} capability The selected capability
    * @return {Promise} A promise which resolves with the description set.
    */
-  setSelectedCapability(capability) {
+  setSelectedCapability(capability: string): Promise<ThingDescription> {
     this.selectedCapability = capability;
     return Database.updateThing(this.id, this.getDescription())
       .then((descr) => {
@@ -342,9 +423,9 @@ class Thing extends EventEmitter {
    * Dispatch an event to all listeners subscribed to the Thing
    * @param {Event} event
    */
-  dispatchEvent(event) {
-    if (!event.thingId) {
-      event.thingId = this.id;
+  dispatchEvent(event: Event): void {
+    if (!event.getThingId()) {
+      (event as any).thingId = this.id;
     }
     this.eventsDispatched.push(event);
     this.emit(Constants.EVENT, event);
@@ -354,7 +435,7 @@ class Thing extends EventEmitter {
    * Add a subscription to the Thing's events
    * @param {Function} callback
    */
-  addEventSubscription(callback) {
+  addEventSubscription(callback: () => void): void {
     this.on(Constants.EVENT, callback);
   }
 
@@ -362,7 +443,7 @@ class Thing extends EventEmitter {
    * Remove a subscription to the Thing's events
    * @param {Function} callback
    */
-  removeEventSubscription(callback) {
+  removeEventSubscription(callback: () => void): void {
     this.removeListener(Constants.EVENT, callback);
   }
 
@@ -370,7 +451,7 @@ class Thing extends EventEmitter {
    * Add a subscription to the Thing's connected state
    * @param {Function} callback
    */
-  addConnectedSubscription(callback) {
+  addConnectedSubscription(callback: (connected: boolean) => void): void {
     this.on(Constants.CONNECTED, callback);
     callback(this.connected);
   }
@@ -379,7 +460,7 @@ class Thing extends EventEmitter {
    * Remove a subscription to the Thing's connected state
    * @param {Function} callback
    */
-  removeConnectedSubscription(callback) {
+  removeConnectedSubscription(callback: () => void): void {
     this.removeListener(Constants.CONNECTED, callback);
   }
 
@@ -387,7 +468,7 @@ class Thing extends EventEmitter {
    * Add a subscription to the Thing's modified state
    * @param {Function} callback
    */
-  addModifiedSubscription(callback) {
+  addModifiedSubscription(callback: () => void): void {
     this.on(Constants.MODIFIED, callback);
   }
 
@@ -395,7 +476,7 @@ class Thing extends EventEmitter {
    * Remove a subscription to the Thing's modified state
    * @param {Function} callback
    */
-  removeModifiedSubscription(callback) {
+  removeModifiedSubscription(callback: () => void): void {
     this.removeListener(Constants.MODIFIED, callback);
   }
 
@@ -403,7 +484,7 @@ class Thing extends EventEmitter {
    * Add a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  addRemovedSubscription(callback) {
+  addRemovedSubscription(callback: () => void): void {
     this.on(Constants.REMOVED, callback);
   }
 
@@ -411,7 +492,7 @@ class Thing extends EventEmitter {
    * Remove a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  removeRemovedSubscription(callback) {
+  removeRemovedSubscription(callback: () => void): void {
     this.removeListener(Constants.REMOVED, callback);
   }
 
@@ -422,8 +503,8 @@ class Thing extends EventEmitter {
    * @param {String} reqHost request host, if coming via HTTP
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    */
-  getDescription(reqHost, reqSecure) {
-    const desc = {
+  getDescription(reqHost?: string, reqSecure?: boolean): ThingDescription {
+    const desc: ThingDescription = {
       title: this.title,
       '@context': this['@context'],
       '@type': this['@type'],
@@ -438,7 +519,7 @@ class Thing extends EventEmitter {
       layoutIndex: this.layoutIndex,
       selectedCapability: this.selectedCapability,
       iconHref: this.iconHref,
-    };
+    } as ThingDescription;
 
     if (typeof reqHost !== 'undefined') {
       const wsLink = {
@@ -454,7 +535,8 @@ class Thing extends EventEmitter {
         oauth2_sc: {
           scheme: 'oauth2',
           flow: 'code',
-          authorization: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
+          authorization:
+          `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
           token: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/token`,
           scopes: [
             `${this.href}:readwrite`,
@@ -473,7 +555,7 @@ class Thing extends EventEmitter {
   /**
    * Remove and clean up the Thing
    */
-  remove() {
+  remove(): void {
     if (this.iconHref) {
       try {
         fs.unlinkSync(path.join(UserProfile.baseDir, this.iconHref));
@@ -493,8 +575,8 @@ class Thing extends EventEmitter {
    * @param {Action} action
    * @return {boolean} Whether a known action
    */
-  addAction(action) {
-    return this.actions.hasOwnProperty(action.name);
+  addAction(action: Action): boolean {
+    return this.actions.hasOwnProperty(action.getName());
   }
 
   /**
@@ -502,8 +584,8 @@ class Thing extends EventEmitter {
    * @param {Action} action
    * @return {boolean} Whether a known action
    */
-  removeAction(action) {
-    return this.actions.hasOwnProperty(action.name);
+  removeAction(action: Action): boolean {
+    return this.actions.hasOwnProperty(action.getName());
   }
 
   /**
@@ -515,7 +597,7 @@ class Thing extends EventEmitter {
    * @param {Object} description Thing description.
    * @return {Promise} A promise which resolves with the description set.
    */
-  updateFromDescription(description) {
+  updateFromDescription(description: ThingDescription): Promise<ThingDescription> {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
@@ -538,7 +620,7 @@ class Thing extends EventEmitter {
           delete property.href;
         }
 
-        if (property.hasOwnProperty('links')) {
+        if (property.links) {
           property.links = property.links.filter((link) => {
             return link.rel && link.rel !== 'property';
           }).map((link) => {
@@ -571,7 +653,7 @@ class Thing extends EventEmitter {
         delete action.href;
       }
 
-      if (action.hasOwnProperty('links')) {
+      if (action.links) {
         action.links = action.links.filter((link) => {
           return link.rel && link.rel !== 'action';
         }).map((link) => {
@@ -602,7 +684,7 @@ class Thing extends EventEmitter {
         delete event.href;
       }
 
-      if (event.hasOwnProperty('links')) {
+      if (event.links) {
         event.links = event.links.filter((link) => {
           return link.rel && link.rel !== 'event';
         }).map((link) => {
@@ -624,7 +706,7 @@ class Thing extends EventEmitter {
       });
     }
 
-    let uiLink = {
+    let uiLink: any = {
       rel: 'alternate',
       mediaType: 'text/html',
       href: this.href,
@@ -643,7 +725,7 @@ class Thing extends EventEmitter {
     // Update the UI href
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel)) {
+        if (['properties', 'actions', 'events'].includes(link.rel as string)) {
           continue;
         }
 
@@ -687,10 +769,8 @@ class Thing extends EventEmitter {
    *
    * @param {boolean} connected - Whether or not the thing is connected
    */
-  setConnected(connected) {
+  setConnected(connected: boolean): void {
     this.connected = connected;
     this.emit(Constants.CONNECTED, connected);
   }
 }
-
-module.exports = Thing;
