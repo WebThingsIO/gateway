@@ -65,6 +65,7 @@ network-settings-ethernet-image =
 network-settings-ethernet = 乙太網路
 network-settings-wifi-image =
     .alt = Wi-Fi
+network-settings-wifi = Wi-Fi
 network-settings-configure = 設定
 network-settings-ip-address = IP 地址
 network-settings-dhcp = 自動取得（DHCP）
