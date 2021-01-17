@@ -7,12 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import {PropertyValue, Property as PropertySchema} from 'gateway-addon/lib/schema';
-
 import Deferred from '../deferred';
-import {Property, Constants as AddonConstants, Device} from 'gateway-addon';
+import {Property, Constants, Device} from 'gateway-addon';
+const MessageType = Constants.MessageType;
 
 export default class PropertyProxy extends Property<PropertyValue> {
   private propertyChangedPromises: Deferred<PropertyValue, unknown>[];
@@ -22,9 +20,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
   constructor(device: Device, propertyName: string, propertyDict: PropertySchema) {
     super(device, propertyName, propertyDict);
 
-    if (propertyDict.value) {
-      this.setCachedValue(propertyDict.value);
-    }
+    this.setCachedValue(propertyDict.value!);
 
     this.propertyChangedPromises = [];
     this.propertyDict = Object.assign({}, propertyDict);
@@ -52,9 +48,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
    */
   doPropertyChanged(propertyDict: PropertySchema): void {
     this.propertyDict = Object.assign({}, propertyDict);
-    if (propertyDict.value) {
-      this.setCachedValue(propertyDict.value);
-    }
+    this.setCachedValue(propertyDict.value!);
     if (typeof propertyDict.title === 'string') {
       this.setTitle(propertyDict.title);
     }
@@ -76,21 +70,19 @@ export default class PropertyProxy extends Property<PropertyValue> {
     if (typeof propertyDict.maximum === 'number') {
       this.setMaximum(propertyDict.maximum);
     }
-    if (typeof propertyDict.multipleOf === 'string') {
+    if (typeof propertyDict.multipleOf === 'number') {
       this.setMultipleOf(propertyDict.multipleOf);
     }
-    if (typeof propertyDict.enum === 'string') {
-      this.setEnum(propertyDict.enum);
+    if (Array.isArray(propertyDict.enum)) {
+      (this as any).enum = propertyDict.enum;
     }
-    if (typeof propertyDict.links === 'object') {
+    if (Array.isArray(propertyDict.links)) {
       this.setLinks(propertyDict.links);
     }
 
     while (this.propertyChangedPromises.length > 0) {
       const deferredChange = this.propertyChangedPromises.pop();
-      if (propertyDict.value) {
-        deferredChange?.resolve(propertyDict.value);
-      }
+      deferredChange?.resolve(propertyDict.value!);
     }
   }
 
@@ -103,7 +95,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
   setValue(value: PropertyValue): Promise<PropertyValue> {
     return new Promise((resolve, reject) => {
       (this.getDevice().getAdapter() as any).sendMsg(
-        AddonConstants.MessageType.DEVICE_SET_PROPERTY_COMMAND,
+        MessageType.DEVICE_SET_PROPERTY_COMMAND,
         {
           deviceId: this.getDevice().getId(),
           propertyName: this.getName(),
