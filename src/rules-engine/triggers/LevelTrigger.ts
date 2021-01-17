@@ -33,11 +33,11 @@ export default class LevelTrigger extends PropertyTrigger {
    */
   constructor(desc: LevelTriggerDescription) {
     super(desc);
-    assert(this.property.type === 'number' || this.property.type === 'integer');
+    assert(this.property.getType() === 'number' || this.property.getType() === 'integer');
     assert(typeof desc.value === 'number');
     assert(LevelTrigger.types[desc.levelType]);
     if (desc.levelType === 'EQUAL') {
-      assert(this.property.type === 'integer');
+      assert(this.property.getType() === 'integer');
     }
 
     this.value = desc.value;

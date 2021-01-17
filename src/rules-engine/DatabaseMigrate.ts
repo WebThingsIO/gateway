@@ -1,10 +1,10 @@
 import {RuleDescription} from './Rule';
+import {EffectDescription} from './effects/Effect';
+import {PropertyDescription} from './Property';
+import {MultiEffectDescription} from './effects/MultiEffect';
+import {MultiTriggerDescription} from './triggers/MultiTrigger';
 import {TriggerDescription} from './triggers/Trigger';
 import {TimeTriggerDescription} from './triggers/TimeTrigger';
-
-// TODO: remove these
-type EffectDescription = any;
-type Property = any;
 
 function extractProperty(href: string): string {
   return href.match(/properties\/([^/]+)/)![1];
@@ -40,7 +40,7 @@ function migrateTimeTrigger(trigger: TimeTriggerDescription): TimeTriggerDescrip
   };
 }
 
-function migrateProperty(prop: Property): Property|null {
+function migrateProperty(prop: PropertyDescription): PropertyDescription|null {
   if (!prop.href) {
     return null;
   }
@@ -70,48 +70,50 @@ function migratePart(part: TriggerDescription|EffectDescription):
 TriggerDescription|EffectDescription|null {
   let changed = false;
   const newPart = Object.assign({}, part);
-  if (part.triggers) {
-    newPart.triggers = part.triggers.map((child: TriggerDescription) => {
-      const newChild = migratePart(child);
-      if (newChild) {
-        changed = true;
-      }
+  if (part.type === 'MultiTrigger') {
+    (<MultiTriggerDescription>newPart).triggers =
+      (<MultiTriggerDescription>part).triggers.map((child: TriggerDescription) => {
+        const newChild = migratePart(child);
+        if (newChild) {
+          changed = true;
+        }
 
-      return newChild || child;
-    });
+        return newChild || child;
+      });
   }
 
-  if (part.effects) {
-    newPart.effects = part.effects.map((child: EffectDescription) => {
-      const newChild = migratePart(child);
-      if (newChild) {
-        changed = true;
-      }
+  if (part.type === 'MultiEffect') {
+    (<MultiEffectDescription>newPart).effects =
+      (<MultiEffectDescription>part).effects.map((child: EffectDescription) => {
+        const newChild = migratePart(child);
+        if (newChild) {
+          changed = true;
+        }
 
-      return newChild || child;
-    });
+        return newChild || child;
+      });
   }
 
   if (part.type === 'TimeTrigger') {
-    const newTrigger = migrateTimeTrigger(part);
+    const newTrigger = migrateTimeTrigger(<TimeTriggerDescription>part);
     if (newTrigger) {
       changed = true;
       Object.assign(newPart, newTrigger);
     }
-  } else if (part.property) {
-    const newProp = migrateProperty(part.property);
+  } else if ((part as any).property) {
+    const newProp = migrateProperty((part as any).property);
     if (newProp) {
       changed = true;
     }
 
-    newPart.property = newProp || part.property;
-  } else if (part.thing) {
-    const newThing = migrateThing(part.thing);
+    (newPart as any).property = newProp || (part as any).property;
+  } else if ((part as any).thing) {
+    const newThing = migrateThing((part as any).thing);
     if (newThing) {
       changed = true;
     }
 
-    newPart.thing = newThing || part.thing;
+    (newPart as any).thing = newThing || (part as any).thing;
   }
 
   if (!changed) {

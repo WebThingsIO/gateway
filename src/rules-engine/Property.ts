@@ -19,6 +19,7 @@ export interface PropertyDescription {
   thing: string;
   unit?: string;
   description?: string;
+  href?: string;
 }
 
 /**

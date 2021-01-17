@@ -12,7 +12,7 @@ const AddonManager = require('../../addon-manager');
 import Effect, {EffectDescription} from './Effect';
 const Things = require('../../models/things');
 
-interface ActionEffectDescription extends EffectDescription {
+export interface ActionEffectDescription extends EffectDescription {
   thing: string;
   action: string;
   parameters: any;

@@ -10,7 +10,7 @@ import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
 const AddonManager = require('../../addon-manager');
 
-interface NotifierOutletEffectDescription extends EffectDescription {
+export interface NotifierOutletEffectDescription extends EffectDescription {
   notifier: string;
   outlet: string;
   title: string;

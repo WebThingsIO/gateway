@@ -5,15 +5,12 @@
  */
 
 import * as Effects from './effects/index';
+import Effect, {EffectDescription} from './effects/Effect';
 import * as Triggers from './triggers/index';
 import * as Events from './Events';
 import Trigger, {TriggerDescription} from './triggers/Trigger';
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
-
-// TODO: remove these
-type Effect = any;
-type EffectDescription = any;
 
 export interface RuleDescription {
   enabled: boolean;

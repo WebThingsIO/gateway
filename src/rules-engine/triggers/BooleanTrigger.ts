@@ -24,7 +24,7 @@ export default class BooleanTrigger extends PropertyTrigger {
    */
   constructor(desc: BooleanTriggerDescription) {
     super(desc);
-    assert(this.property.type === 'boolean');
+    assert(this.property.getType() === 'boolean');
     assert(typeof desc.onValue === 'boolean');
     this.onValue = desc.onValue;
   }

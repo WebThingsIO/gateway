@@ -6,9 +6,10 @@
 
 import assert from 'assert';
 import PropertyEffect, {PropertyEffectDescription} from './PropertyEffect';
+import {PropertyValue} from 'gateway-addon/lib/schema';
 
 export interface SetEffectDescription extends PropertyEffectDescription {
-  value: any;
+  value: PropertyValue;
 }
 
 /**
@@ -16,7 +17,7 @@ export interface SetEffectDescription extends PropertyEffectDescription {
  * a value when triggered
  */
 export default class SetEffect extends PropertyEffect {
-  private value: any;
+  private value: PropertyValue;
 
   private on = false;
 
