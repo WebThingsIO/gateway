@@ -9,8 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import AdapterProxy from './adapter-proxy';
 import APIHandlerProxy from './api-handler-proxy';
 import * as Constants from '../constants';
