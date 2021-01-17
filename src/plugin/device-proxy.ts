@@ -7,22 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import * as Constants from '../constants';
 import {Device, Action as AddonAction, Property, Constants as AddonConstants} from 'gateway-addon';
-import Event from '../models/event';
-const MessageType = AddonConstants.MessageType;
-import {PropertyValue,
-  Device as DeviceSchema,
-  Link,
-  Input} from 'gateway-addon/lib/schema';
+import {PropertyValue, Device as DeviceSchema, Link, Input} from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
 import Action from '../models/action';
 import Actions from '../models/actions';
+import Event from '../models/event';
 import Events from '../models/events';
-
-const PropertyProxy = require('./property-proxy');
+import PropertyProxy from './property-proxy';
+const MessageType = AddonConstants.MessageType;
 
 export default class DeviceProxy extends Device {
   private deviceDict: Record<string, unknown>;
@@ -47,12 +41,11 @@ export default class DeviceProxy extends Device {
     }
 
     (<{credentialsRequired: boolean}><unknown> this).credentialsRequired =
-    !!deviceDict.credentialsRequired;
+      !!deviceDict.credentialsRequired;
 
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
-      const propertyProxy =
-        new PropertyProxy(this, propertyName, propertyDict);
+      const propertyProxy = new PropertyProxy(this, propertyName, propertyDict);
       this.addProperty(<Property<PropertyValue>><unknown>propertyProxy);
     }
 
