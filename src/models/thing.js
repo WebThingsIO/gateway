@@ -32,8 +32,7 @@ class Thing extends EventEmitter {
     super();
 
     if (!id || !description) {
-      console.error('id and description needed to create new Thing');
-      return;
+      throw new Error('id and description needed to create new Thing');
     }
 
     // Parse the Thing Description
