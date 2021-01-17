@@ -49,6 +49,7 @@ const MessageType = AddonConstants.MessageType;
 
 const DEBUG = false;
 
+// TODO: remove these types
 type AddonManager = any;
 type Thing = any;
 type PluginServer = any;
