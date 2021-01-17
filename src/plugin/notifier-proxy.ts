@@ -12,7 +12,7 @@
 'use strict';
 
 import Deferred from '../deferred';
-import {Notifier} from 'gateway-addon';
+import {Constants, Notifier} from 'gateway-addon';
 import OutletProxy from './outlet-proxy';
 const MessageType = Constants.MessageType;
 
