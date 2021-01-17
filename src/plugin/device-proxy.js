@@ -15,7 +15,7 @@ const {Device, Deferred} = require('gateway-addon');
 const Event = require('../models/event').default;
 const Events = require('../models/events').default;
 const {MessageType} = require('gateway-addon').Constants;
-const PropertyProxy = require('./property-proxy');
+const PropertyProxy = require('./property-proxy').default;
 
 class DeviceProxy extends Device {
 
