@@ -82,7 +82,7 @@ export default class DeviceProxy extends Device {
    * @method requestAction
    */
   requestAction(actionId: string, actionName: string, input: Input): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (!(this as any).actions.has(actionName)) {
         reject(`Action "${actionName}" not found`);
         return;
@@ -150,7 +150,7 @@ export default class DeviceProxy extends Device {
   }
 
   actionNotify(action: AddonAction): void {
-    const a = <Action><unknown> Actions.get(action.asDict().id);
+    const a = <Action><unknown> Actions.get((action as any).id);
     if (a) {
       a.update(action);
     }
