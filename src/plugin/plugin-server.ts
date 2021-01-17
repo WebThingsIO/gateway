@@ -25,7 +25,7 @@ import pkg from '../package.json';
 
 const MessageType = Constants.MessageType;
 
-const Plugin = require('./plugin');
+import Plugin from './plugin';
 
 // TODO: remove these
 type AddonManager = any;

@@ -1,6 +1,6 @@
 'use strict';
 
-const Plugin = require('../../plugin/plugin');
+const Plugin = require('../../plugin/plugin').default;
 
 describe('plugins/', () => {
   it('Test the plugin start mechanism (good exec)', async () => {

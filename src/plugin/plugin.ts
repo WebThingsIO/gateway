@@ -9,74 +9,113 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
-const AdapterProxy = require('./adapter-proxy').default;
-const APIHandlerProxy = require('./api-handler-proxy').default;
-const Constants = require('../constants');
-const Database = require('../db').default;
-const Deferred = require('../deferred').default;
-const DeviceProxy = require('./device-proxy').default;
-const format = require('string-format');
-const {LogSeverity} = require('../constants');
-const NotifierProxy = require('./notifier-proxy').default;
-const OutletProxy = require('./outlet-proxy').default;
-const path = require('path');
-const readline = require('readline');
-const Settings = require('../models/settings');
-const spawn = require('child_process').spawn;
+import AdapterProxy from './adapter-proxy';
+import APIHandlerProxy from './api-handler-proxy';
+import * as Constants from '../constants';
+import Database from '../db';
+import Deferred from '../deferred';
+import DeviceProxy from './device-proxy';
+import format from 'string-format';
+import NotifierProxy from './notifier-proxy';
+import OutletProxy from './outlet-proxy';
+import path from 'path';
+import readline from 'readline';
+import * as Settings from '../models/settings';
+import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
 const Things = require('../models/things');
-const UserProfile = require('../user-profile').default;
-const {
-  DONT_RESTART_EXIT_CODE,
-  MessageType,
-} = require('gateway-addon').Constants;
+import UserProfile from '../user-profile';
+import {Constants as AddonConstants} from 'gateway-addon';
+import {AdapterAddedNotificationMessageData,
+  AdapterPairingPromptNotificationMessageData,
+  AdapterRemoveDeviceResponseMessageData,
+  AdapterUnpairingPromptNotificationMessageData,
+  APIHandlerAddedNotificationMessageData,
+  APIHandlerAPIResponseMessageData,
+  APIHandlerUnloadResponseMessageData,
+  DeviceActionStatusNotificationMessageData,
+  DeviceAddedNotificationMessageData,
+  DeviceConnectedStateNotificationMessageData,
+  DeviceEventNotificationMessageData,
+  DevicePropertyChangedNotificationMessageData,
+  DeviceSetCredentialsResponseMessageData,
+  DeviceSetPINResponseMessageData,
+  Message,
+  NotifierAddedNotificationMessageData,
+  OutletRemovedNotificationMessageData} from 'gateway-addon/lib/schema';
+
+const MessageType = AddonConstants.MessageType;
 
 const DEBUG = false;
 
+// TODO: remove these types
+type AddonManager = any;
+type Thing = any;
+type PluginServer = any;
+type PropertyProxy = any;
+
 Database.open();
 
-class Plugin {
+export default class Plugin {
+  private logPrefix: string;
 
-  constructor(pluginId, pluginServer, forceEnable = false) {
-    this.pluginId = pluginId;
-    this.pluginServer = pluginServer;
+  private adapters = new Map<string, AdapterProxy>();
+
+  private notifiers = new Map<string, NotifierProxy>();
+
+  private apiHandlers = new Map<string, APIHandlerProxy>();
+
+  private exec = '';
+
+  private execPath = '.';
+
+  private startPromise?: Promise<void>;
+
+  // Make this a nested object such that if the Plugin object is reused,
+  // i.e. the plugin is disabled and quickly re-enabled, the gateway process
+  // can maintain a proper reference to the process object.
+  private process: {p: ChildProcessWithoutNullStreams | null} = {p: null};
+
+  private restart = true;
+
+  private restartDelay = 0;
+
+  private lastRestart = 0;
+
+  private pendingRestart: NodeJS.Timeout | null = null;
+
+  private unloadCompletedPromise: any = null;
+
+  private unloadedRcvdPromise?: Deferred<void, void>;
+
+  private nextId = 0;
+
+  private requestActionPromises = new Map();
+
+  private removeActionPromises = new Map();
+
+  private setPinPromises = new Map();
+
+  private setCredentialsPromises = new Map();
+
+  private notifyPromises = new Map();
+
+  private apiRequestPromises = new Map();
+
+  private ws?: WebSocket;
+
+  private stdoutReadline?: readline.Interface;
+
+  private stderrReadline?: readline.Interface;
+
+  constructor(
+    private pluginId: string,
+    private pluginServer: PluginServer,
+    private forceEnable = false) {
     this.logPrefix = pluginId;
-
-    this.adapters = new Map();
-    this.notifiers = new Map();
-    this.apiHandlers = new Map();
-
-    this.exec = '';
-    this.execPath = '.';
-    this.forceEnable = forceEnable;
-    this.startPromise = null;
-
-    // Make this a nested object such that if the Plugin object is reused,
-    // i.e. the plugin is disabled and quickly re-enabled, the gateway process
-    // can maintain a proper reference to the process object.
-    this.process = {p: null};
-
-    this.restart = true;
-    this.restartDelay = 0;
-    this.lastRestart = 0;
-    this.pendingRestart = null;
-    this.unloadCompletedPromise = null;
-    this.unloadedRcvdPromise = null;
-
-    this.nextId = 0;
-    this.requestActionPromises = new Map();
-    this.removeActionPromises = new Map();
-    this.setPinPromises = new Map();
-    this.setCredentialsPromises = new Map();
-    this.notifyPromises = new Map();
-    this.apiRequestPromises = new Map();
-
-    this.ws = null;
   }
 
-  asDict() {
-    let pid = 'not running';
+  asDict(): Record<string, unknown> {
+    let pid: string | number = 'not running';
     if (this.process.p) {
       pid = this.process.p.pid;
     }
@@ -93,7 +132,7 @@ class Plugin {
     };
   }
 
-  onMsg(msg) {
+  onMsg(msg: Message): void {
     DEBUG && console.log('Plugin: Rcvd Msg', msg);
 
     // The first switch manages action method resolved or rejected messages.
@@ -159,7 +198,8 @@ class Plugin {
         return;
       }
       case MessageType.DEVICE_SET_PIN_RESPONSE: {
-        const messageId = msg.data.messageId;
+        const data = msg.data as DeviceSetPINResponseMessageData;
+        const messageId = data.messageId;
         const deferred = this.setPinPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
             typeof deferred === 'undefined') {
@@ -169,12 +209,13 @@ class Plugin {
           return;
         }
 
-        if (msg.data.success) {
-          const adapter = this.adapters.get(msg.data.adapterId);
-          const deviceId = msg.data.device.id;
-          const device = new DeviceProxy(adapter, msg.data.device);
-          adapter.devices[deviceId] = device;
-          adapter.manager.devices[deviceId] = device;
+        const adapter = this.adapters.get(data.adapterId);
+
+        if (adapter && data.success && data.device) {
+          const deviceId = data.device.id;
+          const device = new DeviceProxy(adapter, data.device);
+          adapter.getDevices()[deviceId] = device;
+          (adapter.getManager() as AddonManager).devices[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -184,7 +225,8 @@ class Plugin {
         return;
       }
       case MessageType.DEVICE_SET_CREDENTIALS_RESPONSE: {
-        const messageId = msg.data.messageId;
+        const data = msg.data as DeviceSetCredentialsResponseMessageData;
+        const messageId = data.messageId;
         const deferred = this.setCredentialsPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
             typeof deferred === 'undefined') {
@@ -194,12 +236,13 @@ class Plugin {
           return;
         }
 
-        if (msg.data.success) {
-          const adapter = this.adapters.get(msg.data.adapterId);
-          const deviceId = msg.data.device.id;
-          const device = new DeviceProxy(adapter, msg.data.device);
-          adapter.devices[deviceId] = device;
-          adapter.manager.devices[deviceId] = device;
+        const adapter = this.adapters.get(data.adapterId);
+
+        if (adapter && data.device && data.success) {
+          const deviceId = data.device.id;
+          const device = new DeviceProxy(adapter, data.device);
+          adapter.getDevices()[deviceId] = device;
+          (adapter.getManager() as AddonManager).devices[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -209,7 +252,8 @@ class Plugin {
         return;
       }
       case MessageType.API_HANDLER_API_RESPONSE: {
-        const messageId = msg.data.messageId;
+        const data = msg.data as APIHandlerAPIResponseMessageData;
+        const messageId = data.messageId;
         const deferred = this.apiRequestPromises.get(messageId);
         if (typeof messageId === 'undefined' ||
             typeof deferred === 'undefined') {
@@ -218,29 +262,26 @@ class Plugin {
                         'Ignoring msg:', msg);
           return;
         }
-        deferred.resolve(msg.data.response);
+        deferred.resolve(data.response);
         this.apiRequestPromises.delete(messageId);
         return;
       }
     }
 
-    const adapterId = msg.data.adapterId;
-    const notifierId = msg.data.notifierId;
-    let adapter, notifier, apiHandler;
-
     // The second switch manages plugin level messages.
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
-        adapter = new AdapterProxy(this.pluginServer.manager,
-                                   adapterId,
-                                   msg.data.name,
-                                   msg.data.packageName,
-                                   this);
-        this.adapters.set(adapterId, adapter);
+        const data = msg.data as AdapterAddedNotificationMessageData;
+        const adapter = new AdapterProxy(this.pluginServer.getAddonManager(),
+                                         data.adapterId,
+                                         data.name,
+                                         data.packageName,
+                                         this);
+        this.adapters.set(data.adapterId, adapter);
         this.pluginServer.addAdapter(adapter);
 
         // Tell the adapter about all saved things
-        const send = (thing) => {
+        const send = (thing: Thing) => {
           adapter.sendMsg(
             MessageType.DEVICE_SAVED_NOTIFICATION,
             {
@@ -250,34 +291,39 @@ class Plugin {
           );
         };
 
-        adapter.eventHandlers[Constants.THING_ADDED] = send;
+        adapter.getEventHandlers()[Constants.THING_ADDED] = send;
 
-        Things.getThings().then((things) => {
+        Things.getThings().then((things: Thing[]) => {
           things.forEach(send);
         });
         Things.on(Constants.THING_ADDED, send);
         return;
       }
-      case MessageType.NOTIFIER_ADDED_NOTIFICATION:
-        notifier = new NotifierProxy(this.pluginServer.manager,
-                                     notifierId,
-                                     msg.data.name,
-                                     msg.data.packageName,
-                                     this);
-        this.notifiers.set(notifierId, notifier);
+      case MessageType.NOTIFIER_ADDED_NOTIFICATION: {
+        const data = msg.data as NotifierAddedNotificationMessageData;
+        const notifier = new NotifierProxy(this.pluginServer.getAddonManager(),
+                                           data.notifierId,
+                                           data.name,
+                                           data.packageName,
+                                           this);
+        this.notifiers.set(data.notifierId, notifier);
         this.pluginServer.addNotifier(notifier);
         return;
+      }
 
-      case MessageType.API_HANDLER_ADDED_NOTIFICATION:
-        apiHandler = new APIHandlerProxy(this.pluginServer.manager,
-                                         msg.data.packageName,
-                                         this);
-        this.apiHandlers.set(msg.data.packageName, apiHandler);
+      case MessageType.API_HANDLER_ADDED_NOTIFICATION: {
+        const data = msg.data as APIHandlerAddedNotificationMessageData;
+        const apiHandler = new APIHandlerProxy(this.pluginServer.getAddonManager(),
+                                               data.packageName,
+                                               this);
+        this.apiHandlers.set(data.packageName, apiHandler);
         this.pluginServer.addAPIHandler(apiHandler);
         return;
+      }
 
       case MessageType.API_HANDLER_UNLOAD_RESPONSE: {
-        const packageName = msg.data.packageName;
+        const data = msg.data as APIHandlerUnloadResponseMessageData;
+        const packageName = data.packageName;
         const handler = this.apiHandlers.get(packageName);
 
         if (!handler) {
@@ -315,7 +361,7 @@ class Plugin {
 
       case MessageType.PLUGIN_ERROR_NOTIFICATION:
         this.pluginServer.emit('log', {
-          severity: LogSeverity.ERROR,
+          severity: Constants.LogSeverity.ERROR,
           message: msg.data.message,
         });
         return;
@@ -323,7 +369,8 @@ class Plugin {
 
     // The next switch deals with adapter level messages
 
-    adapter = this.adapters.get(adapterId);
+    const adapterId = msg.data.adapterId as string;
+    const adapter = this.adapters.get(adapterId) as AdapterProxy;
     if (adapterId && !adapter) {
       console.error('Plugin:', this.pluginId,
                     'Unrecognized adapter:', adapterId,
@@ -331,7 +378,8 @@ class Plugin {
       return;
     }
 
-    notifier = this.notifiers.get(notifierId);
+    const notifierId = msg.data.notifierId as string;
+    const notifier = this.notifiers.get(notifierId) as NotifierProxy;
     if (notifierId && !notifier) {
       console.error('Plugin:', this.pluginId,
                     'Unrecognized notifier:', notifierId,
@@ -347,7 +395,7 @@ class Plugin {
     switch (msg.messageType) {
 
       case MessageType.ADAPTER_UNLOAD_RESPONSE: {
-        const handler = adapter.eventHandlers[Constants.THING_ADDED];
+        const handler = adapter.getEventHandlers()[Constants.THING_ADDED];
         if (handler) {
           Things.removeListener(Constants.THING_ADDED, handler);
         }
@@ -386,102 +434,118 @@ class Plugin {
         }
         break;
 
-      case MessageType.DEVICE_ADDED_NOTIFICATION:
-        device = new DeviceProxy(adapter, msg.data.device);
+      case MessageType.DEVICE_ADDED_NOTIFICATION: {
+        const data = msg.data as DeviceAddedNotificationMessageData;
+        device = new DeviceProxy(adapter, data.device);
         adapter.handleDeviceAdded(device);
         break;
+      }
 
-      case MessageType.ADAPTER_REMOVE_DEVICE_RESPONSE:
-        device = adapter.getDevice(msg.data.deviceId);
+      case MessageType.ADAPTER_REMOVE_DEVICE_RESPONSE: {
+        const data = msg.data as AdapterRemoveDeviceResponseMessageData;
+        device = adapter.getDevice(data.deviceId);
         if (device) {
           adapter.handleDeviceRemoved(device);
         }
         break;
+      }
 
       case MessageType.OUTLET_ADDED_NOTIFICATION:
         outlet = new OutletProxy(notifier, msg.data.outlet);
         notifier.handleOutletAdded(outlet);
         break;
 
-      case MessageType.OUTLET_REMOVED_NOTIFICATION:
-        outlet = notifier.getOutlet(msg.data.outletId);
+      case MessageType.OUTLET_REMOVED_NOTIFICATION: {
+        const data = msg.data as OutletRemovedNotificationMessageData;
+        outlet = notifier.getOutlet(data.outletId);
         if (outlet) {
           notifier.handleOutletRemoved(outlet);
         }
         break;
+      }
 
-      case MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION:
-        device = adapter.getDevice(msg.data.deviceId);
-        if (device) {
-          property = device.findProperty(msg.data.property.name);
+      case MessageType.DEVICE_PROPERTY_CHANGED_NOTIFICATION: {
+        const data = msg.data as DevicePropertyChangedNotificationMessageData;
+        device = adapter.getDevice(data.deviceId);
+        if (device && data.property.name) {
+          property = device.findProperty(data.property.name) as PropertyProxy;
           if (property) {
-            property.doPropertyChanged(msg.data.property);
+            property.doPropertyChanged(data.property);
             device.notifyPropertyChanged(property);
           }
         }
         break;
+      }
 
-      case MessageType.DEVICE_ACTION_STATUS_NOTIFICATION:
-        device = adapter.getDevice(msg.data.deviceId);
+      case MessageType.DEVICE_ACTION_STATUS_NOTIFICATION: {
+        const data = msg.data as DeviceActionStatusNotificationMessageData;
+        device = adapter.getDevice(data.deviceId);
         if (device) {
-          device.actionNotify(msg.data.action);
+          device.actionNotify(data.action as any);
         }
         break;
+      }
 
-      case MessageType.DEVICE_EVENT_NOTIFICATION:
-        device = adapter.getDevice(msg.data.deviceId);
+      case MessageType.DEVICE_EVENT_NOTIFICATION: {
+        const data = msg.data as DeviceEventNotificationMessageData;
+        device = adapter.getDevice(data.deviceId);
         if (device) {
-          device.eventNotify(msg.data.event);
+          device.eventNotify(data.event as any);
         }
         break;
+      }
 
-      case MessageType.DEVICE_CONNECTED_STATE_NOTIFICATION:
-        device = adapter.getDevice(msg.data.deviceId);
+      case MessageType.DEVICE_CONNECTED_STATE_NOTIFICATION: {
+        const data = msg.data as DeviceConnectedStateNotificationMessageData;
+        device = adapter.getDevice(data.deviceId);
         if (device) {
-          device.connectedNotify(msg.data.connected);
+          device.connectedNotify(data.connected);
         }
         break;
+      }
 
       case MessageType.ADAPTER_PAIRING_PROMPT_NOTIFICATION: {
-        let message = `${adapter.name}: `;
-        if (msg.data.hasOwnProperty('deviceId')) {
-          device = adapter.getDevice(msg.data.deviceId);
-          message += `(${device.title}): `;
+        const data = msg.data as AdapterPairingPromptNotificationMessageData;
+        let message = `${adapter.getName()}: `;
+        if (data.deviceId) {
+          device = adapter.getDevice(data.deviceId);
+          message += `(${device.getTitle()}): `;
         }
 
         message += msg.data.prompt;
 
-        const data = {
-          severity: LogSeverity.PROMPT,
+        const log: any = {
+          severity: Constants.LogSeverity.PROMPT,
           message,
         };
 
         if (msg.data.hasOwnProperty('url')) {
-          data.url = msg.data.url;
+          log.url = msg.data.url;
         }
 
-        this.pluginServer.emit('log', data);
+        this.pluginServer.emit('log', log);
         return;
       }
       case MessageType.ADAPTER_UNPAIRING_PROMPT_NOTIFICATION: {
-        let message = `${adapter.name}`;
-        if (msg.data.hasOwnProperty('deviceId')) {
-          device = adapter.getDevice(msg.data.deviceId);
-          message += ` (${device.title})`;
+        const data = msg.data as AdapterUnpairingPromptNotificationMessageData;
+        let message = `${adapter.getName()}`;
+        if (data.deviceId) {
+          device = adapter.getDevice(data.deviceId);
+          message += ` (${device.getTitle()})`;
         }
 
         message += `: ${msg.data.prompt}`;
 
-        const data = {
-          severity: LogSeverity.PROMPT,
+        const log: any = {
+          severity: Constants.LogSeverity.PROMPT,
           message,
         };
 
         if (msg.data.hasOwnProperty('url')) {
-          data.url = msg.data.url;
+          log.url = msg.data.url;
         }
 
-        this.pluginServer.emit('log', data);
+        this.pluginServer.emit('log', log);
         return;
       }
       case MessageType.MOCK_ADAPTER_CLEAR_STATE_RESPONSE:
@@ -521,11 +585,11 @@ class Plugin {
    *
    * @returns {integer} An id.
    */
-  generateMsgId() {
+  generateMsgId(): number {
     return ++this.nextId;
   }
 
-  sendMsg(methodType, data, deferred) {
+  sendMsg(methodType: number, data: any, deferred?: Deferred<unknown, unknown>): void {
     data.pluginId = this.pluginId;
 
     // Methods which could fail should await result.
@@ -577,13 +641,13 @@ class Plugin {
     };
     DEBUG && console.log('Plugin: sendMsg:', msg);
 
-    return this.ws.send(JSON.stringify(msg));
+    return this.ws?.send(JSON.stringify(msg));
   }
 
   /**
    * Does cleanup required to allow the test suite to complete cleanly.
    */
-  shutdown() {
+  shutdown(): void {
     if (this.pendingRestart) {
       clearTimeout(this.pendingRestart);
     }
@@ -614,7 +678,7 @@ class Plugin {
     });
   }
 
-  start() {
+  start(): Promise<void> {
     const key = `addons.${this.pluginId}`;
 
     this.startPromise = Settings.getSetting(key).then((savedSettings) => {
@@ -680,7 +744,7 @@ class Plugin {
 
       this.process.p.on('exit', (code) => {
         if (this.restart) {
-          if (code == DONT_RESTART_EXIT_CODE) {
+          if (code == AddonConstants.DONT_RESTART_EXIT_CODE) {
             console.log('Plugin:', this.pluginId, 'died, code =', code,
                         'NOT restarting...');
             this.restart = false;
@@ -731,11 +795,9 @@ class Plugin {
     return this.startPromise;
   }
 
-  unload() {
+  unload(): void {
     this.restart = false;
     this.unloadedRcvdPromise = new Deferred();
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
   }
 }
-
-module.exports = Plugin;

@@ -18,7 +18,7 @@ const MessageType = Constants.MessageType;
  * Class used to describe a notifier from the perspective of the gateway.
  */
 export default class NotifierProxy extends Notifier {
-  private unloadCompletedPromise: any = null;
+  public unloadCompletedPromise: any = null;
 
   constructor(
     addonManager: any, notifierId: string, name: string, packageName: string, private plugin: any) {
