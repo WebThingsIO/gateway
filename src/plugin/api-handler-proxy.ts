@@ -11,30 +11,30 @@
 
 'use strict';
 
-const {APIHandler} = require('gateway-addon');
-const Deferred = require('../deferred').default;
-const {MessageType} = require('gateway-addon').Constants;
+import Deferred from '../deferred';
+
+import {APIHandler, APIRequest, APIResponse, Constants} from 'gateway-addon';
+const MessageType = Constants.MessageType;
 
 /**
  * Class used to describe an API handler from the perspective of the gateway.
  */
-class APIHandlerProxy extends APIHandler {
+export default class APIHandlerProxy extends APIHandler {
+  private unloadCompletedPromise: any = null;
 
-  constructor(addonManager, packageName, plugin) {
+  constructor(addonManager: any, packageName: string, private plugin: any) {
     super(addonManager, packageName);
-    this.plugin = plugin;
-    this.unloadCompletedPromise = null;
   }
 
-  sendMsg(methodType, data, deferred) {
-    data.packageName = this.packageName;
+  sendMsg(methodType: number, data: any, deferred?: Deferred<APIResponse, unknown>): void {
+    data.packageName = this.getPackageName();
     return this.plugin.sendMsg(methodType, data, deferred);
   }
 
-  handleRequest(request) {
+  handleRequest(request: APIRequest): Promise<APIResponse> {
     return new Promise((resolve, reject) => {
-      const deferred = new Deferred();
-      deferred.promise.then((response) => {
+      const deferred = new Deferred<APIResponse, unknown>();
+      deferred.getPromise().then((response) => {
         resolve(response);
       }).catch(() => {
         reject();
@@ -43,7 +43,7 @@ class APIHandlerProxy extends APIHandler {
       this.sendMsg(
         MessageType.API_HANDLER_API_REQUEST,
         {
-          packageName: this.packageName,
+          packageName: this.getPackageName(),
           request,
         },
         deferred
@@ -56,7 +56,7 @@ class APIHandlerProxy extends APIHandler {
    *
    * @returns a promise which resolves when the handler has finished unloading.
    */
-  unload() {
+  unload(): Promise<void> {
     if (this.unloadCompletedPromise) {
       console.error('APIHandlerProxy: unload already in progress');
       return Promise.reject();
@@ -66,5 +66,3 @@ class APIHandlerProxy extends APIHandler {
     return this.unloadCompletedPromise.promise;
   }
 }
-
-module.exports = APIHandlerProxy;

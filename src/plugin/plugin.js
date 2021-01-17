@@ -12,7 +12,7 @@
 'use strict';
 
 const AdapterProxy = require('./adapter-proxy').default;
-const APIHandlerProxy = require('./api-handler-proxy');
+const APIHandlerProxy = require('./api-handler-proxy').default;
 const Constants = require('../constants');
 const Database = require('../db').default;
 const Deferred = require('../deferred').default;
