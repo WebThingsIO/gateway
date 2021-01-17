@@ -11,25 +11,25 @@
 
 'use strict';
 
-const Deferred = require('../deferred').default;
+import Deferred from '../deferred';
 const {MessageType} = require('gateway-addon').Constants;
-const {Notifier} = require('gateway-addon');
-const OutletProxy = require('./outlet-proxy');
+import {Notifier} from 'gateway-addon';
+import OutletProxy from './outlet-proxy';
 
 /**
  * Class used to describe a notifier from the perspective of the gateway.
  */
-class NotifierProxy extends Notifier {
+export default class NotifierProxy extends Notifier {
+  private unloadCompletedPromise: any = null;
 
-  constructor(addonManager, notifierId, name, packageName, plugin) {
+  constructor(
+    addonManager: any, notifierId: string, name: string, packageName: string, private plugin: any) {
     super(addonManager, notifierId, packageName);
-    this.name = name;
-    this.plugin = plugin;
-    this.unloadCompletedPromise = null;
+    this.setName(name);
   }
 
-  sendMsg(methodType, data, deferred) {
-    data.notifierId = this.id;
+  sendMsg(methodType: number, data: any, deferred? : Deferred<unknown, unknown>): void {
+    data.notifierId = this.getId();
     return this.plugin.sendMsg(methodType, data, deferred);
   }
 
@@ -38,7 +38,7 @@ class NotifierProxy extends Notifier {
    *
    * @returns a promise which resolves when the notifier has finished unloading.
    */
-  unload() {
+  unload(): Promise<void> {
     if (this.unloadCompletedPromise) {
       console.error('NotifierProxy: unload already in progress');
       return Promise.reject();
@@ -48,9 +48,7 @@ class NotifierProxy extends Notifier {
     return this.unloadCompletedPromise.promise;
   }
 
-  addOutlet(outletId, outletDescription) {
-    this.outlets[outletId] = new OutletProxy(this, outletDescription);
+  addOutlet(outletId: string, outletDescription: any): void {
+    this.getOutlets()[outletId] = new OutletProxy(this, outletDescription);
   }
 }
-
-module.exports = NotifierProxy;
