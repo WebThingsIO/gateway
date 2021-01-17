@@ -11,7 +11,7 @@
 
 import {Adapter, Constants} from 'gateway-addon';
 import Deferred from '../deferred';
-const DeviceProxy = require('./device-proxy');
+import DeviceProxy from './device-proxy';
 const MessageType = Constants.MessageType;
 const DEBUG = false;
 
