@@ -11,42 +11,35 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import config from 'config';
 import {EventEmitter} from 'events';
 import {IpcSocket, Constants} from 'gateway-addon';
-const pkg = require('../../package.json');
-import {getSetting} from '../models/settings';
+import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
 import {Message} from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
+import AdapterProxy from './adapter-proxy';
+import APIHandlerProxy from './api-handler-proxy';
+import NotifierProxy from './notifier-proxy';
+import pkg from '../package.json';
 
 const MessageType = Constants.MessageType;
 
 const Plugin = require('./plugin');
 
+// TODO: remove these
 type AddonManager = any;
-type AdapterProxy = any;
-type NotifierProxy = any;
-type APIHandlerProxy = any;
-type PluginType = any;
 
 export default class PluginServer extends EventEmitter {
   private manager: AddonManager;
 
-  private verbose: boolean | undefined;
+  private verbose?: boolean;
 
-  private plugins: Map<string, PluginType>;
+  private plugins: Map<string, Plugin>;
 
   private ipcSocket: IpcSocket;
 
-  emit(_event: string | symbol, ..._args: any[]): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  constructor(addonManager: AddonManager,
-              {verbose}: {verbose?: boolean} = {}) {
+  constructor(addonManager: AddonManager, {verbose}: {verbose?: boolean} = {}) {
     super();
     this.manager = addonManager;
 
@@ -106,17 +99,17 @@ export default class PluginServer extends EventEmitter {
 
     if (msg.messageType === MessageType.PLUGIN_REGISTER_REQUEST) {
       const plugin = this.registerPlugin(msg.data.pluginId);
-      plugin.setWebSocket(ws);
+      (plugin as any).ws = ws;
       let language = 'en-US';
       const units = {
         temperature: 'degree celsius',
       };
-      getSetting('localization.language').then((lang) => {
+      Settings.getSetting('localization.language').then((lang) => {
         if (lang) {
           language = lang;
         }
 
-        return getSetting('localization.units.temperature');
+        return Settings.getSetting('localization.units.temperature');
       }).then((temp) => {
         if (temp) {
           units.temperature = temp;
@@ -150,7 +143,7 @@ export default class PluginServer extends EventEmitter {
     } else if (msg.data.pluginId) {
       const plugin = this.getPlugin(msg.data.pluginId);
       if (plugin) {
-        plugin.onMsg(msg);
+        (plugin as any).onMsg(msg);
       }
     }
   }
@@ -160,7 +153,7 @@ export default class PluginServer extends EventEmitter {
    *
    * Returns a previously loaded plugin instance.
    */
-  getPlugin(pluginId: string): PluginType | undefined {
+  getPlugin(pluginId: string): Plugin | undefined {
     return this.plugins.get(pluginId);
   }
 
@@ -171,9 +164,9 @@ export default class PluginServer extends EventEmitter {
    */
   loadPlugin(pluginPath: string, manifest: any): void {
     const plugin = this.registerPlugin(manifest.name);
-    plugin.setExec(manifest.moziot.exec);
-    plugin.setExecPath(pluginPath);
-    plugin.start();
+    (plugin as any).exec = manifest.moziot.exec;
+    (plugin as any).execPath = pluginPath;
+    (plugin as any).start();
   }
 
   /**
@@ -182,16 +175,16 @@ export default class PluginServer extends EventEmitter {
    * Called when the plugin server receives a register plugin message
    * via IPC.
    */
-  registerPlugin(pluginId: string): PluginType {
+  registerPlugin(pluginId: string): Plugin {
     let plugin = this.plugins.get(pluginId);
     if (plugin) {
       // This is a plugin that we already know about.
     } else {
       // We haven't seen this plugin before.
-      plugin = new Plugin(this.manager, pluginId, this);
-      this.plugins.set(pluginId, plugin);
+      plugin = new Plugin(pluginId, this);
+      this.plugins.set(pluginId, plugin!);
     }
-    return plugin;
+    return plugin!;
   }
 
   /**

@@ -71,6 +71,8 @@ class Plugin {
     this.setCredentialsPromises = new Map();
     this.notifyPromises = new Map();
     this.apiRequestPromises = new Map();
+
+    this.ws = null;
   }
 
   asDict() {
