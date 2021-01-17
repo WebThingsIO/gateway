@@ -25,7 +25,6 @@ import readline from 'readline';
 import * as Settings from '../models/settings';
 import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
 const Things = require('../models/things');
-import PluginServer from './plugin-server';
 import UserProfile from '../user-profile';
 import {Constants as AddonConstants} from 'gateway-addon';
 import {AdapterAddedNotificationMessageData,
@@ -45,7 +44,6 @@ import {AdapterAddedNotificationMessageData,
   Message,
   NotifierAddedNotificationMessageData,
   OutletRemovedNotificationMessageData} from 'gateway-addon/lib/schema';
-import PropertyProxy from './property-proxy';
 
 const MessageType = AddonConstants.MessageType;
 
@@ -53,6 +51,8 @@ const DEBUG = false;
 
 type AddonManager = any;
 type Thing = any;
+type PluginServer = any;
+type PropertyProxy = any;
 
 Database.open();
 
