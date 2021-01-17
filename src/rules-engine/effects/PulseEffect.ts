@@ -7,18 +7,20 @@
 import assert from 'assert';
 import PropertyEffect from './PropertyEffect';
 import {SetEffectDescription} from './SetEffect';
+import {PropertyValue} from 'gateway-addon/lib/schema';
 
-type PulseEffectDescription = SetEffectDescription;
+export type PulseEffectDescription = SetEffectDescription;
+
 /**
  * An Effect which temporarily sets the target property to
  * a value before restoring its original value
  */
 export default class PulseEffect extends PropertyEffect {
-  private value: any;
+  private value: PropertyValue;
 
   private on: boolean;
 
-  private oldValue: any;
+  private oldValue: PropertyValue;
 
   /**
    * @param {EffectDescription} desc

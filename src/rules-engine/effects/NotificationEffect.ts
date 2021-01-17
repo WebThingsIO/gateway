@@ -8,7 +8,7 @@ import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
 import PushService from '../../push-service';
 
-interface NotificationEffectDescription extends EffectDescription {
+export interface NotificationEffectDescription extends EffectDescription {
   message: string;
 }
 
