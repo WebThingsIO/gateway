@@ -17,7 +17,7 @@ const MessageType = Constants.MessageType;
  * Class used to describe an API handler from the perspective of the gateway.
  */
 export default class APIHandlerProxy extends APIHandler {
-  private unloadCompletedPromise: any = null;
+  public unloadCompletedPromise: any = null;
 
   constructor(addonManager: any, packageName: string, private plugin: any) {
     super(addonManager, packageName);
