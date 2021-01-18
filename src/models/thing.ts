@@ -280,6 +280,22 @@ export default class Thing extends EventEmitter {
     }
   }
 
+  getId(): string {
+    return this.id;
+  }
+
+  getTitle(): string {
+    return this.title;
+  }
+
+  getLayoutIndex(): number {
+    return this.layoutIndex;
+  }
+
+  getHref(): string {
+    return this.href;
+  }
+
   /**
    * Set the x and y co-ordinates for a Thing on the floorplan.
    *

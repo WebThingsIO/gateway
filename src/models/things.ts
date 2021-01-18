@@ -10,33 +10,35 @@
 
 'use strict';
 
-const Ajv = require('ajv').default;
-const EventEmitter = require('events');
+import Ajv from 'ajv';
+import {EventEmitter} from 'events';
 
 const AddonManager = require('../addon-manager');
-const Database = require('../db').default;
+import Database from '../db';
 const Router = require('../router');
-const Thing = require('./thing').default;
-const Constants = require('../constants');
+import Thing, {ThingDescription} from './thing';
+import * as Constants from '../constants';
+import {Device, Device as DeviceSchema, PropertyValue} from 'gateway-addon/lib/schema';
+import WebSocket from 'ws';
 
 const ajv = new Ajv({strict: false});
 
-const Things = {
+class Things {
 
   /**
    * A Map of Things in the Things database.
    */
-  things: new Map(),
+  private things = new Map<string, Thing>();
 
   /**
    * A collection of open websockets listening for new things.
    */
-  websockets: [],
+  private websockets: WebSocket[] = [];
 
   /**
    * The promise object returned by Database.getThings()
    */
-  getThingsPromise: null,
+  private getThingsPromise?: Promise<Map<string, Thing>> | null;
 
   /**
    * An EventEmitter used to bubble up added things
@@ -45,7 +47,7 @@ const Things = {
    * added is when the addon discovers a thing, not when the model is
    * instantiated
    */
-  emitter: new EventEmitter(),
+  private emitter = new EventEmitter();
 
   /**
    * Get all Things known to the Gateway, initially loading them from the
@@ -53,7 +55,7 @@ const Things = {
    *
    * @return {Promise} which resolves with a Map of Thing objects.
    */
-  getThings: function() {
+  getThings() {
     if (this.things.size > 0) {
       return Promise.resolve(this.things);
     }
@@ -81,18 +83,18 @@ const Things = {
     });
 
     return this.getThingsPromise;
-  },
+  }
 
   /**
    * Get the titles of all things.
    *
    * @return {Promise<Array>} which resolves with a list of all thing titles.
    */
-  getThingTitles: function() {
-    return this.getThings().then(function(things) {
-      return Array.from(things.values()).map((t) => t.title);
+  getThingTitles() {
+    return this.getThings().then((things) => {
+      return Array.from(things.values()).map((t) => t.getTitle());
     });
-  },
+  }
 
   /**
    * Get Thing Descriptions for all Things stored in the database.
@@ -101,15 +103,15 @@ const Things = {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getThingDescriptions: function(reqHost, reqSecure) {
-    return this.getThings().then(function(things) {
+  getThingDescriptions(reqHost?: string, reqSecure?: boolean) {
+    return this.getThings().then((things) => {
       const descriptions = [];
       for (const thing of things.values()) {
         descriptions.push(thing.getDescription(reqHost, reqSecure));
       }
       return descriptions;
     });
-  },
+  }
 
   /**
    * Get a list of Things by their hrefs.
@@ -117,19 +119,19 @@ const Things = {
    * {Array} hrefs hrefs of the list of Things to get.
    * @return {Promise} A promise which resolves with a list of Things.
    */
-  getListThings: function(hrefs) {
-    return this.getThings().then(function(things) {
-      const listThings = [];
+  getListThings(hrefs: string[]): Promise<Thing[]> {
+    return this.getThings().then((things) => {
+      const listThings: Thing[] = [];
       for (const href of hrefs) {
-        things.forEach(function(thing) {
-          if (thing.href === href) {
+        things.forEach((thing) => {
+          if (thing.getHref() === href) {
             listThings.push(thing);
           }
         });
       }
       return listThings;
     });
-  },
+  }
 
   /**
    * Get Thing Descriptions for a list of Things by their hrefs.
@@ -140,15 +142,15 @@ const Things = {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS.
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getListThingDescriptions: function(hrefs, reqHost, reqSecure) {
-    return this.getListThings(hrefs).then(function(listThings) {
+  getListThingDescriptions(hrefs: string[], reqHost?: string, reqSecure?: boolean) {
+    return this.getListThings(hrefs).then((listThings) => {
       const descriptions = [];
       for (const thing of listThings) {
         descriptions.push(thing.getDescription(reqHost, reqSecure));
       }
       return descriptions;
     });
-  },
+  }
 
   /**
    * Get a list of things which are connected to adapters but not yet saved
@@ -156,13 +158,13 @@ const Things = {
    *
    * @returns Promise A promise which resolves with a list of Things.
    */
-  getNewThings: function() {
+  getNewThings() {
     // Get a map of things in the database
-    return this.getThings().then((function(storedThings) {
+    return this.getThings().then((storedThings) => {
       // Get a list of things connected to adapters
-      const connectedThings = AddonManager.getThings();
-      const newThings = [];
-      connectedThings.forEach(function(connectedThing) {
+      const connectedThings: DeviceSchema[] = AddonManager.getThings();
+      const newThings: DeviceSchema[] = [];
+      connectedThings.forEach((connectedThing) => {
         if (!storedThings.has(connectedThing.id)) {
           connectedThing.href =
            `${Constants.THINGS_PATH}/${encodeURIComponent(connectedThing.id)}`;
@@ -179,8 +181,8 @@ const Things = {
         }
       });
       return newThings;
-    }));
-  },
+    });
+  }
 
   /**
    * Create a new Thing with the given ID and description.
@@ -188,46 +190,47 @@ const Things = {
    * @param String id ID to give Thing.
    * @param Object description Thing description.
    */
-  createThing: function(id, description) {
+  createThing(id: string, description: ThingDescription) {
     const thing = new Thing(id, description);
-    thing.connected = true;
-    thing.layoutIndex = this.things.size;
+    thing.setConnected(true);
+    thing.setLayoutIndex(this.things.size);
 
-    return Database.createThing(thing.id, thing.getDescription())
+    return Database.createThing(thing.getId(), thing.getDescription())
       .then((thingDesc) => {
-        this.things.set(thing.id, thing);
+        this.things.set(thing.getId(), thing);
         this.emitter.emit(Constants.THING_ADDED, thing);
         return thingDesc;
       });
-  },
+  }
 
   /**
    * Handle a new Thing having been discovered.
    *
    * @param {Object} newThing - New Thing description
    */
-  handleNewThing: function(newThing) {
+  handleNewThing(newThing: ThingDescription) {
     this.getThing(newThing.id).then((thing) => {
-      thing.setConnected(true);
-      return thing.updateFromDescription(newThing);
+      thing?.setConnected(true);
+      return thing?.updateFromDescription(newThing);
     }).catch(() => {
       // If we don't already know about this thing, notify each open websocket
-      this.websockets.forEach(function(socket) {
+      this.websockets.forEach((socket) => {
         socket.send(JSON.stringify(newThing));
       });
     });
-  },
+  }
 
   /**
    * Handle a thing being removed by an adapter.
    *
    * @param {Object} thing - Thing which was removed
    */
-  handleThingRemoved: function(thing) {
+  handleThingRemoved(thing: DeviceSchema) {
     this.getThing(thing.id).then((thing) => {
-      thing.setConnected(false);
+      thing?.setConnected(false);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     }).catch(() => {});
-  },
+  }
 
   /**
    * Handle a thing's connectivity state change.
@@ -235,24 +238,25 @@ const Things = {
    * @param {string} thingId - ID of thing
    * @param {boolean} connected - New connectivity state
    */
-  handleConnected: function(thingId, connected) {
+  handleConnected(thingId: string, connected: boolean) {
     this.getThing(thingId).then((thing) => {
-      thing.setConnected(connected);
+      thing?.setConnected(connected);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     }).catch(() => {});
-  },
+  }
 
   /**
    * Add a websocket to the list of new Thing subscribers.
    *
    * @param {Websocket} websocket A websocket instance.
    */
-  registerWebsocket: function(websocket) {
+  registerWebsocket(websocket: WebSocket) {
     this.websockets.push(websocket);
     websocket.on('close', () => {
       const index = this.websockets.indexOf(websocket);
       this.websockets.splice(index, 1);
     });
-  },
+  }
 
   /**
    * Get a Thing by its ID.
@@ -260,15 +264,16 @@ const Things = {
    * @param {String} id The ID of the Thing to get.
    * @return {Promise<Thing>} A Thing object.
    */
-  getThing: function(id) {
-    return this.getThings().then(function(things) {
-      if (things.has(id)) {
-        return things.get(id);
+  getThing(id: string): Promise<Thing> {
+    return this.getThings().then((things) => {
+      const thing = things.get(id);
+      if (thing) {
+        return thing;
       } else {
-        throw new Error(`Unable to find thing with id: ${id}`);
+        throw new Error(`Unable to find thing with id = ${id}`);
       }
     });
-  },
+  }
 
   /**
    * Get a Thing by its title.
@@ -276,22 +281,22 @@ const Things = {
    * @param {String} title The title of the Thing to get.
    * @return {Promise<Thing>} A Thing object.
    */
-  getThingByTitle: function(title) {
+  getThingByTitle(title: string) {
     title = title.toLowerCase();
 
-    return this.getThings().then(function(things) {
+    return this.getThings().then((things) => {
       for (const thing of things.values()) {
-        if (thing.title.toLowerCase() === title) {
+        if (thing.getTitle().toLowerCase() === title) {
           return thing;
         }
       }
 
-      throw new Error(`Unable to find thing with title: ${title}`);
+      throw new Error(`Unable to find thing with title = ${title}`);
     }).catch((e) => {
       console.warn('Unexpected thing retrieval error', e);
       return null;
     });
-  },
+  }
 
   /**
    * Get a Thing description for a thing by its ID.
@@ -301,18 +306,19 @@ const Things = {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise<ThingDescription>} A Thing description object.
    */
-  getThingDescription: function(id, reqHost, reqSecure) {
+  getThingDescription(
+    id: string, reqHost?: string, reqSecure?: boolean): Promise<ThingDescription> {
     return this.getThing(id).then((thing) => {
-      return thing.getDescription(reqHost, reqSecure);
+      return thing?.getDescription(reqHost, reqSecure);
     });
-  },
+  }
 
   /**
    * Remove a Thing.
    *
    * @param String id ID to give Thing.
    */
-  removeThing: function(id) {
+  removeThing(id: string) {
     Router.removeProxyServer(id);
     return Database.removeThing(id).then(() => {
       const thing = this.things.get(id);
@@ -320,25 +326,25 @@ const Things = {
         return;
       }
 
-      const index = thing.layoutIndex;
+      const index = thing.getLayoutIndex();
 
       thing.remove();
       this.things.delete(id);
 
       this.things.forEach((t) => {
-        if (t.layoutIndex > index) {
-          t.setLayoutIndex(t.layoutIndex - 1);
+        if (t.getLayoutIndex() > index) {
+          t.setLayoutIndex(t.getLayoutIndex() - 1);
         }
       });
     });
-  },
+  }
 
   /**
    * @param {String} thingId
    * @param {String} propertyName
    * @return {Promise<any>} resolves to value of property
    */
-  getThingProperty: async function(thingId, propertyName) {
+  async getThingProperty(thingId: string, propertyName: string) {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
     } catch (error) {
@@ -350,7 +356,7 @@ const Things = {
         message: error,
       };
     }
-  },
+  }
 
   /**
    * @param {String} thingId
@@ -358,10 +364,10 @@ const Things = {
    * @param {any} value
    * @return {Promise<any>} resolves to new value
    */
-  setThingProperty: async function(thingId, propertyName, value) {
-    let thing;
+  async setThingProperty(thingId: string, propertyName: string, value: PropertyValue) {
+    let thing: ThingDescription;
     try {
-      thing = await Things.getThingDescription(thingId, 'localhost', true);
+      thing = await this.getThingDescription(thingId, 'localhost', true);
     } catch (e) {
       throw {
         code: 404,
@@ -405,33 +411,36 @@ const Things = {
         message: e,
       };
     }
-  },
+  }
 
-  on: function(name, listener) {
+  on(name: string, listener: () => void) {
     this.emitter.on(name, listener);
-  },
+  }
 
-  removeListener: function(name, listener) {
+  removeListener(name: string, listener: () => void) {
     this.emitter.removeListener(name, listener);
-  },
+  }
 
-  clearState: function() {
+  clearState() {
     this.websockets = [];
     this.things = new Map();
     this.emitter.removeAllListeners();
-  },
-};
+  }
+}
 
-AddonManager.on(Constants.THING_ADDED, (thing) => {
-  Things.handleNewThing(thing);
+const Instance = new Things();
+
+AddonManager.on(Constants.THING_ADDED, (thing: ThingDescription) => {
+  Instance.handleNewThing(thing);
 });
 
-AddonManager.on(Constants.THING_REMOVED, (thing) => {
-  Things.handleThingRemoved(thing);
+AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
+  Instance.handleThingRemoved(thing);
 });
 
-AddonManager.on(Constants.CONNECTED, ({device, connected}) => {
-  Things.handleConnected(device.id, connected);
-});
+AddonManager.on(
+  Constants.CONNECTED, ({device, connected}: {device: Device, connected: boolean}) => {
+    Instance.handleConnected(device.id, connected);
+  });
 
-module.exports = Things;
+module.exports = Instance;
