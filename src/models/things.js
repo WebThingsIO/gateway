@@ -16,7 +16,7 @@ const EventEmitter = require('events');
 const AddonManager = require('../addon-manager');
 const Database = require('../db').default;
 const Router = require('../router');
-const Thing = require('./thing');
+const Thing = require('./thing').default;
 const Constants = require('../constants');
 
 const ajv = new Ajv({strict: false});
