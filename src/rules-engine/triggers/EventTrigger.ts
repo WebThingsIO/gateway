@@ -7,8 +7,7 @@
 import assert from 'assert';
 import * as Events from '../Events';
 import Trigger, {TriggerDescription} from './Trigger';
-
-const Things = require('../../models/things');
+import Things from '../../models/things';
 
 export interface EventTriggerDescription extends TriggerDescription {
   thing: string;

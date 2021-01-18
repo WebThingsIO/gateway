@@ -12,8 +12,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
-
-const Things = require('../models/things');
+import Things from '../models/things';
 
 const NewThingsController = express.Router();
 

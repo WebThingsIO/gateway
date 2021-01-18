@@ -9,7 +9,7 @@
  */
 
 import Event, {EventDescription} from './event';
-const Things = require('../models/things');
+import Things from '../models/things';
 
 class Events {
   private events: Event[];

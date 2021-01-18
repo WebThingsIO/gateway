@@ -16,9 +16,10 @@ import EventsController from './events_controller';
 import express from 'express';
 import * as Settings from '../models/settings';
 import WebSocket from 'ws';
+import Thing from '../models/thing';
+import Things from '../models/things';
 
 const AddonManager = require('../addon-manager');
-const Things = require('../models/things');
 
 const ThingsController = express.Router();
 
@@ -159,7 +160,7 @@ ThingsController.post('/', async (request, response) => {
   }
 
   try {
-    const thing = await Things.createThing(id, description, webthing);
+    const thing = await Things.createThing(id, description);
     console.log(`Successfully created new thing ${thing.title}`);
     response.status(201).send(thing);
   } catch (error) {
@@ -209,7 +210,7 @@ ThingsController.get('/:thingId/properties', async (request, response) => {
   }
 
   const result: any = {};
-  for (const name in thing.properties) {
+  for (const name in thing.getProperties()) {
     try {
       const value = await AddonManager.getProperty(thingId, name);
       result[name] = value;
@@ -548,7 +549,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
       websocket.close();
     });
   } else {
-    Things.getThings().then((things: any[]) => {
+    Things.getThings().then((things: Map<string, Thing>) => {
       things.forEach(addThing);
     });
     Things.on(Constants.THING_ADDED, onThingAdded);
