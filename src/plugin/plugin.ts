@@ -22,10 +22,11 @@ import path from 'path';
 import readline from 'readline';
 import * as Settings from '../models/settings';
 import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
-const Things = require('../models/things');
+import Things from '../models/things';
 import UserProfile from '../user-profile';
 import {Constants as AddonConstants} from 'gateway-addon';
-import {AdapterAddedNotificationMessageData,
+import {
+  AdapterAddedNotificationMessageData,
   AdapterPairingPromptNotificationMessageData,
   AdapterRemoveDeviceResponseMessageData,
   AdapterUnpairingPromptNotificationMessageData,
@@ -41,7 +42,8 @@ import {AdapterAddedNotificationMessageData,
   DeviceSetPINResponseMessageData,
   Message,
   NotifierAddedNotificationMessageData,
-  OutletRemovedNotificationMessageData} from 'gateway-addon/lib/schema';
+  OutletRemovedNotificationMessageData,
+} from 'gateway-addon/lib/schema';
 
 const MessageType = AddonConstants.MessageType;
 
@@ -285,7 +287,7 @@ export default class Plugin {
           adapter.sendMsg(
             MessageType.DEVICE_SAVED_NOTIFICATION,
             {
-              deviceId: thing.id,
+              deviceId: thing.getId(),
               device: thing.getDescription(),
             }
           );
@@ -293,7 +295,7 @@ export default class Plugin {
 
         adapter.getEventHandlers()[Constants.THING_ADDED] = send;
 
-        Things.getThings().then((things: Thing[]) => {
+        Things.getThings().then((things: Map<string, Thing>) => {
           things.forEach(send);
         });
         Things.on(Constants.THING_ADDED, send);

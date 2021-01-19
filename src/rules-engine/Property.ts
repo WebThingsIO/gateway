@@ -7,7 +7,7 @@
 import assert from 'assert';
 const AddonManager = require('../addon-manager');
 import * as Constants from '../constants';
-const Things = require('../models/things');
+import Things from '../models/things';
 import {EventEmitter} from 'events';
 import * as Events from './Events';
 import {Property as AddonProperty} from 'gateway-addon';

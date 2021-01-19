@@ -11,8 +11,7 @@
 import Action, {ActionDescription} from './action';
 import * as Constants from '../constants';
 import {EventEmitter} from 'events';
-
-const Things = require('./things');
+import Things from './things';
 const AddonManager = require('../addon-manager');
 
 class Actions extends EventEmitter {
@@ -130,7 +129,7 @@ class Actions extends EventEmitter {
     action.on(Constants.ACTION_STATUS, this._onActionStatus);
 
     if (action.getThingId()) {
-      return Things.getThing(action.getThingId()).then((thing: any) => {
+      return Things.getThing(action.getThingId()!).then((thing: any) => {
         const success = thing.addAction(action);
         if (!success) {
           delete this.actions[id];
@@ -207,7 +206,7 @@ class Actions extends EventEmitter {
 
     if (action.getStatus() === 'pending') {
       if (action.getThingId()) {
-        Things.getThing(action.getThingId()).then((thing: any) => {
+        Things.getThing(action.getThingId()!).then((thing: any) => {
           if (!thing.removeAction(action)) {
             throw `Invalid thing action name: "${action.getName()}"`;
           }

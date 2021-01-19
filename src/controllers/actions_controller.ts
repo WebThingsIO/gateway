@@ -11,9 +11,9 @@
 import express from 'express';
 import Action from '../models/action';
 import Actions from '../models/actions';
+import Things from '../models/things';
 
 const AddonManager = require('../addon-manager');
-const Things = require('../models/things');
 
 const ActionsController = express.Router({mergeParams: true});
 

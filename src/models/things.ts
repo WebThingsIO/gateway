@@ -8,8 +8,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import Ajv from 'ajv';
 import {EventEmitter} from 'events';
 
@@ -55,7 +53,7 @@ class Things {
    *
    * @return {Promise} which resolves with a Map of Thing objects.
    */
-  getThings() {
+  getThings(): Promise<Map<string, Thing>> {
     if (this.things.size > 0) {
       return Promise.resolve(this.things);
     }
@@ -90,7 +88,7 @@ class Things {
    *
    * @return {Promise<Array>} which resolves with a list of all thing titles.
    */
-  getThingTitles() {
+  getThingTitles(): Promise<string[]> {
     return this.getThings().then((things) => {
       return Array.from(things.values()).map((t) => t.getTitle());
     });
@@ -103,7 +101,7 @@ class Things {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getThingDescriptions(reqHost?: string, reqSecure?: boolean) {
+  getThingDescriptions(reqHost?: string, reqSecure?: boolean): Promise<ThingDescription[]> {
     return this.getThings().then((things) => {
       const descriptions = [];
       for (const thing of things.values()) {
@@ -142,7 +140,8 @@ class Things {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS.
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getListThingDescriptions(hrefs: string[], reqHost?: string, reqSecure?: boolean) {
+  getListThingDescriptions(hrefs: string[], reqHost?: string, reqSecure?: boolean):
+  Promise<ThingDescription[]> {
     return this.getListThings(hrefs).then((listThings) => {
       const descriptions = [];
       for (const thing of listThings) {
@@ -158,7 +157,7 @@ class Things {
    *
    * @returns Promise A promise which resolves with a list of Things.
    */
-  getNewThings() {
+  getNewThings(): Promise<DeviceSchema[]> {
     // Get a map of things in the database
     return this.getThings().then((storedThings) => {
       // Get a list of things connected to adapters
@@ -190,7 +189,7 @@ class Things {
    * @param String id ID to give Thing.
    * @param Object description Thing description.
    */
-  createThing(id: string, description: ThingDescription) {
+  createThing(id: string, description: ThingDescription): Promise<ThingDescription> {
     const thing = new Thing(id, description);
     thing.setConnected(true);
     thing.setLayoutIndex(this.things.size);
@@ -208,7 +207,7 @@ class Things {
    *
    * @param {Object} newThing - New Thing description
    */
-  handleNewThing(newThing: ThingDescription) {
+  handleNewThing(newThing: ThingDescription): void {
     this.getThing(newThing.id).then((thing) => {
       thing?.setConnected(true);
       return thing?.updateFromDescription(newThing);
@@ -225,7 +224,7 @@ class Things {
    *
    * @param {Object} thing - Thing which was removed
    */
-  handleThingRemoved(thing: DeviceSchema) {
+  handleThingRemoved(thing: DeviceSchema): void {
     this.getThing(thing.id).then((thing) => {
       thing?.setConnected(false);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -238,7 +237,7 @@ class Things {
    * @param {string} thingId - ID of thing
    * @param {boolean} connected - New connectivity state
    */
-  handleConnected(thingId: string, connected: boolean) {
+  handleConnected(thingId: string, connected: boolean): void {
     this.getThing(thingId).then((thing) => {
       thing?.setConnected(connected);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -250,7 +249,7 @@ class Things {
    *
    * @param {Websocket} websocket A websocket instance.
    */
-  registerWebsocket(websocket: WebSocket) {
+  registerWebsocket(websocket: WebSocket): void {
     this.websockets.push(websocket);
     websocket.on('close', () => {
       const index = this.websockets.indexOf(websocket);
@@ -281,7 +280,7 @@ class Things {
    * @param {String} title The title of the Thing to get.
    * @return {Promise<Thing>} A Thing object.
    */
-  getThingByTitle(title: string) {
+  getThingByTitle(title: string): Promise<Thing|null> {
     title = title.toLowerCase();
 
     return this.getThings().then((things) => {
@@ -318,7 +317,7 @@ class Things {
    *
    * @param String id ID to give Thing.
    */
-  removeThing(id: string) {
+  removeThing(id: string): Promise<void> {
     Router.removeProxyServer(id);
     return Database.removeThing(id).then(() => {
       const thing = this.things.get(id);
@@ -344,7 +343,7 @@ class Things {
    * @param {String} propertyName
    * @return {Promise<any>} resolves to value of property
    */
-  async getThingProperty(thingId: string, propertyName: string) {
+  async getThingProperty(thingId: string, propertyName: string): Promise<any> {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
     } catch (error) {
@@ -364,7 +363,8 @@ class Things {
    * @param {any} value
    * @return {Promise<any>} resolves to new value
    */
-  async setThingProperty(thingId: string, propertyName: string, value: PropertyValue) {
+  async setThingProperty(thingId: string, propertyName: string, value: PropertyValue):
+  Promise<PropertyValue> {
     let thing: ThingDescription;
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
@@ -413,15 +413,15 @@ class Things {
     }
   }
 
-  on(name: string, listener: () => void) {
+  on(name: string, listener: (...args: any[]) => void): void {
     this.emitter.on(name, listener);
   }
 
-  removeListener(name: string, listener: () => void) {
+  removeListener(name: string, listener: (...args: any[]) => void): void {
     this.emitter.removeListener(name, listener);
   }
 
-  clearState() {
+  clearState(): void {
     this.websockets = [];
     this.things = new Map();
     this.emitter.removeAllListeners();
@@ -441,6 +441,7 @@ AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
 AddonManager.on(
   Constants.CONNECTED, ({device, connected}: {device: Device, connected: boolean}) => {
     Instance.handleConnected(device.id, connected);
-  });
+  }
+);
 
-module.exports = Instance;
+export default Instance;
