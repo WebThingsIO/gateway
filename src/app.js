@@ -11,8 +11,8 @@
 'use strict';
 
 // Set up the user profile.
-const {default: UserProfile, migrate} = require('./user-profile');
-const migration = migrate();
+const UserProfile = require('./user-profile').default;
+const migration = require('./migrate').default();
 
 // Causes a timestamp to be prepended to console log lines.
 require('./log-timestamps');
@@ -40,7 +40,7 @@ const Logs = require('./models/logs').default;
 const platform = require('./platform');
 const Router = require('./router');
 const sleep = require('./sleep').default;
-const Things = require('./models/things');
+const Things = require('./models/things').default;
 const TunnelService = require('./tunnel-service').default;
 const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
 

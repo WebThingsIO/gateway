@@ -5,12 +5,11 @@
  */
 
 import assert from 'assert';
-
 import Action from '../../models/action';
 import Actions from '../../models/actions';
 const AddonManager = require('../../addon-manager');
 import Effect, {EffectDescription} from './Effect';
-const Things = require('../../models/things');
+import Things from '../../models/things';
 
 export interface ActionEffectDescription extends EffectDescription {
   thing: string;

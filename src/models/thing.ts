@@ -16,10 +16,12 @@ import UserProfile from '../user-profile';
 import fs from 'fs';
 import path from 'path';
 import tmp from 'tmp';
-import {Action as ActionSchema,
+import {
+  Action as ActionSchema,
   Event as EventSchema,
   Property as PropertySchema,
-  Link} from 'gateway-addon/lib/schema';
+  Link,
+} from 'gateway-addon/lib/schema';
 import Action from './action';
 import Event from './event';
 
@@ -296,6 +298,10 @@ export default class Thing extends EventEmitter {
     return this.href;
   }
 
+  getProperties(): Record<string, PropertySchema> {
+    return this.properties;
+  }
+
   /**
    * Set the x and y co-ordinates for a Thing on the floorplan.
    *
@@ -451,7 +457,7 @@ export default class Thing extends EventEmitter {
    * Add a subscription to the Thing's events
    * @param {Function} callback
    */
-  addEventSubscription(callback: () => void): void {
+  addEventSubscription(callback: (arg: Event) => void): void {
     this.on(Constants.EVENT, callback);
   }
 
@@ -459,7 +465,7 @@ export default class Thing extends EventEmitter {
    * Remove a subscription to the Thing's events
    * @param {Function} callback
    */
-  removeEventSubscription(callback: () => void): void {
+  removeEventSubscription(callback: (arg: Event) => void): void {
     this.removeListener(Constants.EVENT, callback);
   }
 
@@ -476,7 +482,7 @@ export default class Thing extends EventEmitter {
    * Remove a subscription to the Thing's connected state
    * @param {Function} callback
    */
-  removeConnectedSubscription(callback: () => void): void {
+  removeConnectedSubscription(callback: (connected: boolean) => void): void {
     this.removeListener(Constants.CONNECTED, callback);
   }
 
@@ -500,7 +506,7 @@ export default class Thing extends EventEmitter {
    * Add a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  addRemovedSubscription(callback: () => void): void {
+  addRemovedSubscription(callback: (arg: boolean) => void): void {
     this.on(Constants.REMOVED, callback);
   }
 
@@ -508,7 +514,7 @@ export default class Thing extends EventEmitter {
    * Remove a subscription to the Thing's removed state
    * @param {Function} callback
    */
-  removeRemovedSubscription(callback: () => void): void {
+  removeRemovedSubscription(callback: (arg: boolean) => void): void {
     this.removeListener(Constants.REMOVED, callback);
   }
 
