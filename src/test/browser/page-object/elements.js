@@ -157,5 +157,4 @@ class Page extends Elements {
   }
 }
 
-
 module.exports = {Page, Section};

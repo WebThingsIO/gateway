@@ -1,19 +1,19 @@
-const {remote} = require('webdriverio');
-const selenium = require('selenium-standalone');
+import {remote, BrowserObject} from 'webdriverio';
+import * as selenium from 'selenium-standalone';
 
-const {server} = require('../common');
-const {compareImage} = require('./compare-images');
+import {server} from '../common';
+import {compareImage} from './compare-images';
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import {ChildProcess} from 'child_process';
 
 const TEST_OUTPUT_FOLDER = path.join(__dirname, '../../../browser-test-output');
-const SCREEN_SHOTS_FOLDER =
-  path.join(__dirname, '../../../browser-test-screenshots');
+const SCREEN_SHOTS_FOLDER = path.join(__dirname, '../../../browser-test-screenshots');
 const DIFF_IMAGES_FOLDER = path.join(__dirname, '../../../browser-test-diff');
 const compareImageDisabled = !fs.existsSync(SCREEN_SHOTS_FOLDER);
 
-const options = {
+const options: Record<string, unknown> = {
   logLevel: 'warn',
   capabilities: {
     browserName: 'firefox',
@@ -25,12 +25,12 @@ const options = {
 };
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-let child;
-let browser;
+let child: ChildProcess|null = null;
+let browser: BrowserObject|null = null;
 beforeAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   // Starting up and interacting with a browser takes forever
-  await new Promise((res, rej) => {
+  await new Promise<void>((res, rej) => {
     selenium.install((err) => {
       if (err) {
         rej(err);
@@ -51,26 +51,31 @@ beforeAll(async () => {
   options.baseUrl = `https://localhost:${server.address().port}`;
   browser = await remote(options);
 
-  await browser.setWindowRect(null, null, 1280, 800);
+  await browser.setWindowSize(1280, 800);
 });
 
 afterAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-  await browser.deleteSession();
-  child.stdin.pause();
-  child.kill();
+
+  if (browser) {
+    await (browser as any).deleteSession();
+  }
+
+  if (child) {
+    child.kill();
+  }
 });
 
-function getBrowser() {
-  return browser;
+export function getBrowser(): BrowserObject {
+  return browser!;
 }
 
 let stepName = '';
 let stepNumber = 0;
-let screenShots = [];
+let screenShots: string[] = [];
 
-jasmine.getEnv().addReporter({
-  specStarted: (result) => {
+(jasmine as any).getEnv().addReporter({
+  specStarted: (result: any) => {
     stepName = result.fullName;
     stepNumber = 0;
   },
@@ -107,13 +112,15 @@ afterEach(async () => {
   await Promise.all(promises);
 
   if (pendingMessage.length > 0) {
-    pendingMessage += `\n\n  1. Check screenshots in ${TEST_OUTPUT_FOLDER} and ${DIFF_IMAGES_FOLDER}`;
-    pendingMessage += `\n  2. Copy correct screenshots from ${TEST_OUTPUT_FOLDER} to ${SCREEN_SHOTS_FOLDER}`;
+    pendingMessage +=
+      `\n\n  1. Check screenshots in ${TEST_OUTPUT_FOLDER} and ${DIFF_IMAGES_FOLDER}`;
+    pendingMessage +=
+      `\n  2. Copy correct screenshots from ${TEST_OUTPUT_FOLDER} to ${SCREEN_SHOTS_FOLDER}`;
     pending(pendingMessage);
   }
 });
 
-async function saveStepScreen(stepStr) {
+export async function saveStepScreen(stepStr: string): Promise<void> {
   if (typeof stepStr !== 'string') {
     stepStr = (stepNumber++).toString();
     if (stepStr.length < 2) {
@@ -126,11 +133,11 @@ async function saveStepScreen(stepStr) {
   }
 
   // wait a bit for browser render
-  await browser.pause(200);
+  await browser!.pause(200);
 
   const output = `${stepName}-${stepStr}.png`;
-  await browser.saveScreenshot(path.join(TEST_OUTPUT_FOLDER, output));
+  await browser!.saveScreenshot(path.join(TEST_OUTPUT_FOLDER, output));
   screenShots.push(output);
 }
 
-module.exports = {getBrowser, saveStepScreen, server};
+export {server} from '../common';

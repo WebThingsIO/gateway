@@ -13,6 +13,13 @@ import Database from '../db';
 import * as Passwords from '../passwords';
 import speakeasy from 'speakeasy';
 
+export interface UserDescription {
+  id: number|null;
+  email: string;
+  name: string|null;
+  mfaEnrolled: boolean;
+}
+
 export default class User {
   private id: number|null;
 
@@ -51,7 +58,7 @@ export default class User {
    *
    * @return {Object} JSON description of user.
    */
-  getDescription(): {id: number|null, email: string, name: string|null, mfaEnrolled: boolean} {
+  getDescription(): UserDescription {
     return {
       id: this.id,
       email: this.email,

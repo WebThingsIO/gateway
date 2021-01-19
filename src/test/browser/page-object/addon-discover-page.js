@@ -58,5 +58,3 @@ class AddonDiscoverPage extends Page {
 }
 
 module.exports = AddonDiscoverPage;
-
-
