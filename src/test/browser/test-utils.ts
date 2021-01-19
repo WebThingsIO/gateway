@@ -1,14 +1,10 @@
-const fs = require('fs');
-const Constants = require('../../constants');
-const {server, chai, mockAdapter} = require('../common');
-const {getBrowser} = require('./browser-common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
+import fs from 'fs';
+import * as Constants from '../../constants';
+import {server, chai, mockAdapter} from '../common';
+import {getBrowser} from './browser-common';
+import {TEST_USER, createUser, headerAuth} from '../user';
 
-let jwt;
+let jwt: string;
 
 beforeEach(async () => {
   const browser = getBrowser();
@@ -25,55 +21,55 @@ beforeEach(async () => {
   await loginButton.click();
 });
 
-module.exports.getAddons = async () => {
+export async function getAddons(): Promise<Map<string, string>> {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.ADDONS_PATH}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
 
-  const installedAddons = new Map();
+  const installedAddons = new Map<string, string>();
   // Store a map of name->version.
   for (const s of res.body) {
     installedAddons.set(s.id, s);
   }
   return installedAddons;
-};
+}
 
 
-module.exports.addThing = async (desc) => {
+export async function addThing(desc: Record<string, unknown>): Promise<void> {
   const {id} = desc;
 
-  if (desc.hasOwnProperty('@type') && desc['@type'].length > 0 &&
+  if (desc.hasOwnProperty('@type') && (<string[]>desc['@type']).length > 0 &&
       !desc.hasOwnProperty('selectedCapability')) {
-    desc.selectedCapability = desc['@type'][0];
+    desc.selectedCapability = (<string[]>desc['@type'])[0];
   }
   await chai.request(server).keepOpen()
     .post(Constants.THINGS_PATH)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
     .send(desc);
-  await mockAdapter().addDevice(id, desc);
-};
+  await (mockAdapter() as any).addDevice(id, desc);
+}
 
-module.exports.getProperty = async (id, property) => {
+export async function getProperty<T>(id: string, property: string): Promise<T> {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
   return res.body[property];
-};
+}
 
-module.exports.setProperty = async (id, property, value) => {
+export async function setProperty<T>(id: string, property: string, value: T): Promise<T> {
   const res = await chai.request(server).keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
     .send({[property]: value});
   return res.body[property];
-};
+}
 
 let stepNumber = 0;
-module.exports.saveStepScreen = async (step) => {
+export async function saveStepScreen(step: string): Promise<void> {
   let stepStr = (stepNumber++).toString();
   if (stepStr.length < 2) {
     stepStr = `0${stepStr}`;
@@ -84,9 +80,9 @@ module.exports.saveStepScreen = async (step) => {
   }
   await getBrowser().saveScreenshot(
     `browser-test-output/${step}-${stepStr}.png`);
-};
+}
 
-module.exports.escapeHtmlForIdClass = (text) => {
+export function escapeHtmlForIdClass(text: string): string {
   if (typeof (text) !== 'string') {
     text = `${text}`;
   }
@@ -97,4 +93,4 @@ module.exports.escapeHtmlForIdClass = (text) => {
   }
 
   return text;
-};
+}

@@ -1,6 +1,6 @@
-const fs = require('fs');
-const PNG = require('pngjs').PNG;
-const pixelmatch = require('pixelmatch');
+import fs from 'fs';
+import {PNG} from 'pngjs';
+import pixelmatch from 'pixelmatch';
 
 /**
  * Compare images and create diff image.
@@ -11,7 +11,7 @@ const pixelmatch = require('pixelmatch');
  *
  * @return {Promise(Number)} Num of pixels differed.
  */
-exports.compareImage = (source, target, output) => {
+export function compareImage(source: string, target: string, output: string): Promise<number> {
   const image1 = fs.createReadStream(source).pipe(new PNG());
   const image2 = fs.createReadStream(target).pipe(new PNG());
 
@@ -22,7 +22,7 @@ exports.compareImage = (source, target, output) => {
     image2.once('error', onError);
 
     let errorOccurred = false;
-    function onError(err) {
+    function onError(err: unknown): void {
       if (!errorOccurred) {
         errorOccurred = true;
         console.error(err);
@@ -31,7 +31,7 @@ exports.compareImage = (source, target, output) => {
     }
 
     let filesRead = 0;
-    function onParsed() {
+    function onParsed(): void {
       if (errorOccurred) {
         return;
       }
@@ -51,4 +51,4 @@ exports.compareImage = (source, target, output) => {
       resolve(mismatchedPixels);
     }
   });
-};
+}

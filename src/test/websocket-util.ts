@@ -1,5 +1,5 @@
-const e2p = require('event-to-promise');
-const WebSocket = require('ws');
+import e2p from 'event-to-promise';
+import WebSocket from 'ws';
 
 const {server} = require('./common');
 
@@ -9,7 +9,7 @@ const {server} = require('./common');
  * @param {String} jwt
  * @return {WebSocket}
  */
-async function webSocketOpen(path, jwt) {
+export async function webSocketOpen(path: string, jwt: string): Promise<WebSocket> {
   if (!server.address()) {
     server.listen(0);
   }
@@ -18,11 +18,11 @@ async function webSocketOpen(path, jwt) {
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 
   const ws = new WebSocket(socketPath);
-  ws.unreadMessages = [];
+  (ws as any).unreadMessages = [];
 
-  ws.on('message', function(message) {
-    this.unreadMessages.push(message);
-  }.bind(ws));
+  ws.on('message', (message: any) => {
+    (ws as any).unreadMessages.push(message);
+  });
 
   await e2p(ws, 'open');
 
@@ -42,11 +42,12 @@ async function webSocketOpen(path, jwt) {
  *                   messages
  * @return {Array<Object>} read messages
  */
-async function webSocketRead(ws, expectedMessages, ignoreConnected = true) {
+export async function webSocketRead(ws: WebSocket, expectedMessages: number,
+                                    ignoreConnected = true): Promise<any[]> {
   const messages = [];
   while (messages.length < expectedMessages) {
-    if (ws.unreadMessages.length > 0) {
-      const data = ws.unreadMessages.shift();
+    if ((ws as any).unreadMessages.length > 0) {
+      const data = (ws as any).unreadMessages.shift();
       const parsed = JSON.parse(data);
 
       if (ignoreConnected && parsed.messageType === 'connected') {
@@ -66,12 +67,12 @@ async function webSocketRead(ws, expectedMessages, ignoreConnected = true) {
  * @param {WebSocket} ws
  * @param {Object|string} message
  */
-async function webSocketSend(ws, message) {
+export async function webSocketSend(ws: WebSocket, message: any): Promise<void> {
   if (typeof message !== 'string') {
     message = JSON.stringify(message);
   }
 
-  await new Promise((resolve) => {
+  await new Promise<void>((resolve) => {
     ws.send(message, () => {
       resolve();
     });
@@ -81,14 +82,7 @@ async function webSocketSend(ws, message) {
 /**
  * Close a WebSocket and wait for it to be closed
  */
-async function webSocketClose(ws) {
+export async function webSocketClose(ws: WebSocket): Promise<void> {
   ws.close();
   await e2p(ws, 'close');
 }
-
-module.exports = {
-  webSocketOpen,
-  webSocketRead,
-  webSocketSend,
-  webSocketClose,
-};
