@@ -116,6 +116,10 @@ export default class Plugin {
     this.logPrefix = pluginId;
   }
 
+  getProcess(): {p: ChildProcessWithoutNullStreams | null} {
+    return this.process;
+  }
+
   asDict(): Record<string, unknown> {
     let pid: string | number = 'not running';
     if (this.process.p) {

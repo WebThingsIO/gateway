@@ -18,7 +18,7 @@ import * as jwtMiddleware from '../jwt-middleware';
 import UserProfile from '../user-profile';
 import * as Utils from '../utils';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const InternalLogsController = express.Router();
 

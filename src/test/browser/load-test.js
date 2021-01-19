@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const {waitForExpect} = require('../expect-utils');
 const {getBrowser} = require('./browser-common');
-const AddonManager = require('../../addon-manager');
+const AddonManager = require('../../addon-manager').default;
 
 describe('basic browser tests', () => {
   afterEach(async () => {

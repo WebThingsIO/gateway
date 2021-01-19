@@ -8,7 +8,7 @@ import {Level} from 'gateway-addon/lib/schema';
 
 import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
-const AddonManager = require('../../addon-manager');
+const AddonManager = require('../../addon-manager').default;
 
 export interface NotifierOutletEffectDescription extends EffectDescription {
   notifier: string;

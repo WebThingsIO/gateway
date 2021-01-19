@@ -3,7 +3,7 @@ const {getAddons} = require('../test-utils');
 const SettingsPage = require('../page-object/settings-page');
 const {waitForExpect} = require('../../expect-utils');
 
-const addonManager = require('../../../addon-manager');
+const addonManager = require('../../../addon-manager').default;
 afterEach(async () => {
   await addonManager.uninstallAddon('virtual-things-adapter', true, false);
 });

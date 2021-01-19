@@ -19,7 +19,7 @@ import WebSocket from 'ws';
 import Thing from '../models/thing';
 import Things from '../models/things';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const ThingsController = express.Router();
 

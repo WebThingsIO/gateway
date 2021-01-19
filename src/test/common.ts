@@ -36,7 +36,7 @@ expect.extend({
 const {servers, serverStartup} = require('../app');
 (global as any).server = servers.https;
 
-const addonManager = require('../addon-manager');
+const addonManager = require('../addon-manager').default;
 
 export function mockAdapter(): Adapter {
   const adapter = addonManager.getAdapter('mock-adapter');
