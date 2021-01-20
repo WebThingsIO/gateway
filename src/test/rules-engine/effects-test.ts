@@ -1,4 +1,4 @@
-const effects = require('../../rules-engine/effects');
+import * as Effects from '../../rules-engine/effects/index';
 
 const pulseEffect = {
   property: {
@@ -32,24 +32,24 @@ const bothEffect = {
 
 describe('effects', () => {
   it('should parse a PulseEffect', () => {
-    const effect = effects.fromDescription(pulseEffect);
+    const effect = Effects.fromDescription(pulseEffect);
     expect(effect).toMatchObject(pulseEffect);
   });
 
   it('should parse a SetEffect', () => {
-    const effect = effects.fromDescription(setEffect);
+    const effect = Effects.fromDescription(setEffect);
     expect(effect).toMatchObject(setEffect);
   });
 
   it('should parse a MultiEffect', () => {
-    const effect = effects.fromDescription(bothEffect);
+    const effect = Effects.fromDescription(bothEffect);
     expect(effect).toMatchObject(bothEffect);
   });
 
   it('should reject an unknown effect type', () => {
     let err = null;
     try {
-      effects.fromDescription({type: 'LimaEffect'});
+      Effects.fromDescription({type: 'LimaEffect'});
     } catch (e) {
       err = e;
     }
@@ -59,7 +59,7 @@ describe('effects', () => {
   it('should reject a value type disagreeing with property type', () => {
     let err = null;
     try {
-      effects.fromDescription(Object.assign(
+      Effects.fromDescription(Object.assign(
         {},
         pulseEffect,
         {value: 12}
@@ -73,13 +73,13 @@ describe('effects', () => {
   it('should reject an effect without a property', () => {
     let err = null;
     try {
-      const brokenEffect = Object.assign(
+      const brokenEffect: any = Object.assign(
         {},
         setEffect
       );
       delete brokenEffect.property;
 
-      effects.fromDescription(brokenEffect);
+      Effects.fromDescription(brokenEffect);
     } catch (e) {
       err = e;
     }

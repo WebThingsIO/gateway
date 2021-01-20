@@ -1,4 +1,4 @@
-const DatabaseMigrate = require('../../rules-engine/DatabaseMigrate');
+import * as DatabaseMigrate from '../../rules-engine/DatabaseMigrate';
 
 const oldRule = {
   enabled: true,

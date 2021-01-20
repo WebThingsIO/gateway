@@ -1,7 +1,7 @@
-const Passwords = require('../passwords');
+import * as Passwords from '../passwords';
 
 describe('Passwords', () => {
-  let originalTimeout;
+  let originalTimeout: number;
   beforeEach(() => {
     // Increase timeout because bcrypt is slow
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
@@ -28,4 +28,3 @@ describe('Passwords', () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 });
-

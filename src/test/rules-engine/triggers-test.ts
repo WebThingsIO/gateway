@@ -1,4 +1,4 @@
-const Triggers = require('../../rules-engine/triggers/index');
+import * as Triggers from '../../rules-engine/triggers/index';
 
 const booleanTrigger = {
   property: {
@@ -118,7 +118,7 @@ describe('triggers', () => {
   it('should reject an trigger without a property', () => {
     let err = null;
     try {
-      const brokenTrigger = Object.assign(
+      const brokenTrigger: any = Object.assign(
         {},
         levelTrigger
       );
@@ -131,4 +131,3 @@ describe('triggers', () => {
     expect(err).toBeTruthy();
   });
 });
-

@@ -1,13 +1,10 @@
-const {scopeValidSubset} = require('../../oauth-types');
+import {scopeValidSubset} from '../../oauth-types';
 
 describe('OAuth types', () => {
   it('should verify scopes', () => {
-    expect(
-      scopeValidSubset('/things:read', '/things/potato:readwrite')).toBeFalsy();
+    expect(scopeValidSubset('/things:read', '/things/potato:readwrite')).toBeFalsy();
 
-    expect(
-      scopeValidSubset('/things:readwrite',
-                       '/things/potato:readwrite')).toBeTruthy();
+    expect(scopeValidSubset('/things:readwrite', '/things/potato:readwrite')).toBeTruthy();
 
     expect(
       scopeValidSubset('/things/potato:readwrite /things/tomato:read',
