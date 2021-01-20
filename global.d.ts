@@ -37,3 +37,7 @@ declare namespace ASN1 {
 declare module 'asn1.js' {
   export = ASN1;
 }
+
+declare module 'promisepipe' {
+  export default function(input: NodeJS.ReadableStream, outout: NodeJS.WritableStream): void;
+}

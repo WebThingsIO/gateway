@@ -10,8 +10,7 @@
 
 import Ajv from 'ajv';
 import {EventEmitter} from 'events';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 import Database from '../db';
 const Router = require('../router');
 import Thing, {ThingDescription} from './thing';

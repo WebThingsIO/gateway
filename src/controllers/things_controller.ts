@@ -18,8 +18,7 @@ import * as Settings from '../models/settings';
 import WebSocket from 'ws';
 import Thing from '../models/thing';
 import Things from '../models/things';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const ThingsController = express.Router();
 
@@ -693,4 +692,4 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
   });
 }
 
-export = ThingsController;
+export default ThingsController;

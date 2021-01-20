@@ -9,8 +9,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 import * as AddonUtils from './addon-utils';
 import config from 'config';
 import * as Constants from './constants';
@@ -33,17 +31,10 @@ import {URLSearchParams} from 'url';
 import {ncp} from 'ncp';
 
 import pkg from './package.json';
-import AdapterProxy from './plugin/adapter-proxy';
-import NotifierProxy from './plugin/notifier-proxy';
-import APIHandlerProxy from './plugin/api-handler-proxy';
 import {Level, PropertyValue, Device as DeviceSchema} from 'gateway-addon/lib/schema';
-import DeviceProxy from './plugin/device-proxy';
-import OutletProxy from './plugin/outlet-proxy';
 import Plugin from './plugin/plugin';
-import {Adapter} from 'gateway-addon';
+import {Adapter, APIHandler, Device, Notifier, Outlet} from 'gateway-addon';
 import {ChildProcessWithoutNullStreams} from 'child_process';
-
-let PluginServer;
 
 /**
  * @class AddonManager
@@ -51,15 +42,15 @@ let PluginServer;
  * directory. See loadAddons() for details.
  */
 class AddonManager extends EventEmitter {
-  private adapters = new Map<string, AdapterProxy>();
+  private adapters = new Map<string, Adapter>();
 
-  private notifiers = new Map<string, NotifierProxy>();
+  private notifiers = new Map<string, Notifier>();
 
-  private apiHandlers = new Map<string, APIHandlerProxy>();
+  private apiHandlers = new Map<string, APIHandler>();
 
-  private devices: Record<string, DeviceProxy> = {};
+  private devices: Record<string, Device> = {};
 
-  private outlets: Record<string, OutletProxy> = {};
+  private outlets: Record<string, Outlet> = {};
 
   private extensions: Record<string, any> = {};
 
@@ -104,7 +95,7 @@ class AddonManager extends EventEmitter {
    * Adds an adapter to the collection of adapters managed by AddonManager.
    * This function is typically called when loading add-ons.
    */
-  addAdapter(adapter: AdapterProxy): void {
+  addAdapter(adapter: Adapter): void {
     if (!adapter.getName()) {
       (adapter as any).name = adapter.constructor.name;
     }
@@ -127,7 +118,7 @@ class AddonManager extends EventEmitter {
     }
   }
 
-  addNotifier(notifier: NotifierProxy): void {
+  addNotifier(notifier: Notifier): void {
     if (!notifier.getName()) {
       (notifier as any).name = notifier.constructor.name;
     }
@@ -145,7 +136,7 @@ class AddonManager extends EventEmitter {
     this.emit(Constants.NOTIFIER_ADDED, notifier);
   }
 
-  addAPIHandler(handler: APIHandlerProxy): void {
+  addAPIHandler(handler: APIHandler): void {
     this.apiHandlers.set(handler.getPackageName(), handler);
 
     /**
@@ -239,7 +230,7 @@ class AddonManager extends EventEmitter {
    * @method getAdapter
    * @returns Returns the adapter with the indicated id.
    */
-  getAdapter(adapterId: string): AdapterProxy | undefined {
+  getAdapter(adapterId: string): Adapter | undefined {
     return this.adapters.get(adapterId);
   }
 
@@ -247,7 +238,7 @@ class AddonManager extends EventEmitter {
    * @method getAdaptersByPackageId
    * @returns Returns a list of loaded adapters with the given package ID.
    */
-  getAdaptersByPackageId(packageId: string): AdapterProxy[] {
+  getAdaptersByPackageId(packageId: string): Adapter[] {
     return Array.from(this.adapters.values()).filter(
       (a) => a.getPackageName() === packageId);
   }
@@ -257,7 +248,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns a Map of the loaded adapters. The dictionary
    *          key corresponds to the adapter id.
    */
-  getAdapters(): Map<string, AdapterProxy> {
+  getAdapters(): Map<string, Adapter> {
     return this.adapters;
   }
 
@@ -266,7 +257,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns a Map of the loaded notifiers. The dictionary
    *          key corresponds to the notifier id.
    */
-  getNotifiers(): Map<string, NotifierProxy> {
+  getNotifiers(): Map<string, Notifier> {
     return this.notifiers;
   }
 
@@ -274,7 +265,7 @@ class AddonManager extends EventEmitter {
    * @method getNotifier
    * @returns Returns the notifier with the indicated id.
    */
-  getNotifier(notifierId: string): NotifierProxy | undefined {
+  getNotifier(notifierId: string): Notifier | undefined {
     return this.notifiers.get(notifierId);
   }
 
@@ -282,7 +273,7 @@ class AddonManager extends EventEmitter {
    * @method getNotifiersByPackageId
    * @returns Returns a list of loaded notifiers with the given package ID.
    */
-  getNotifiersByPackageId(packageId: string): NotifierProxy[] {
+  getNotifiersByPackageId(packageId: string): Notifier[] {
     return Array.from(this.notifiers.values()).filter(
       (n) => n.getPackageName() === packageId);
   }
@@ -292,7 +283,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns a Map of the loaded API handlers. The dictionary
    *          key corresponds to the package ID.
    */
-  getAPIHandlers(): Map<string, APIHandlerProxy> {
+  getAPIHandlers(): Map<string, APIHandler> {
     return this.apiHandlers;
   }
 
@@ -300,7 +291,7 @@ class AddonManager extends EventEmitter {
    * @method getAPIHandler
    * @returns Returns the API handler with the given package ID.
    */
-  getAPIHandler(packageId: string): APIHandlerProxy | undefined {
+  getAPIHandler(packageId: string): APIHandler | undefined {
     return this.apiHandlers.get(packageId);
   }
 
@@ -329,7 +320,7 @@ class AddonManager extends EventEmitter {
    * @method getDevice
    * @returns Returns the device with the indicated id.
    */
-  getDevice(id: string): DeviceProxy {
+  getDevice(id: string): Device {
     return this.devices[id];
   }
 
@@ -338,7 +329,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns an dictionary of all of the known devices.
    *          The dictionary key corresponds to the device id.
    */
-  getDevices(): Record<string, DeviceProxy> {
+  getDevices(): Record<string, Device> {
     return this.devices;
   }
 
@@ -346,7 +337,7 @@ class AddonManager extends EventEmitter {
    * @method getOutlet
    * @returns Returns the outlet with the indicated id.
    */
-  getOutlet(id: string): OutletProxy {
+  getOutlet(id: string): Outlet {
     return this.outlets[id];
   }
 
@@ -355,7 +346,7 @@ class AddonManager extends EventEmitter {
    * @returns Returns an dictionary of all of the known outlets.
    *          The dictionary key corresponds to the outlet id.
    */
-  getOutlets(): Record<string, OutletProxy> {
+  getOutlets(): Record<string, Outlet> {
     return this.outlets;
   }
 
@@ -378,10 +369,13 @@ class AddonManager extends EventEmitter {
    * @returns Returns a dictionary of all of the known things.
    *          The dictionary key corresponds to the device id.
    */
-  getThings(): (DeviceSchema | undefined)[] {
+  getThings(): DeviceSchema[] {
     const things = [];
     for (const thingId in this.devices) {
-      things.push(this.getThing(thingId));
+      const thing = this.getThing(thingId);
+      if (thing) {
+        things.push(thing);
+      }
     }
     return things;
   }
@@ -501,7 +495,7 @@ class AddonManager extends EventEmitter {
    *
    * Called when the indicated device has been added to an adapter.
    */
-  handleDeviceAdded(device: DeviceProxy): void {
+  handleDeviceAdded(device: Device): void {
     this.devices[device.getId()] = device;
     const thing = device.asThing();
 
@@ -520,7 +514,7 @@ class AddonManager extends EventEmitter {
    * @method handleDeviceRemoved
    * Called when the indicated device has been removed by an adapter.
    */
-  handleDeviceRemoved(device: DeviceProxy): void {
+  handleDeviceRemoved(device: Device): void {
     delete this.devices[device.getId()];
     const thing = device.asThing();
 
@@ -552,7 +546,7 @@ class AddonManager extends EventEmitter {
    *
    * Called when the indicated outlet has been added to a notifier.
    */
-  handleOutletAdded(outlet: OutletProxy): void {
+  handleOutletAdded(outlet: Outlet): void {
     this.outlets[outlet.getId()] = outlet;
 
     /**
@@ -570,7 +564,7 @@ class AddonManager extends EventEmitter {
    * @method handleOutletRemoved
    * Called when the indicated outlet has been removed by a notifier.
    */
-  handleOutletRemoved(outlet: OutletProxy): void {
+  handleOutletRemoved(outlet: Outlet): void {
     delete this.outlets[outlet.getId()];
 
     /**
@@ -732,8 +726,8 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    PluginServer = require('./plugin/plugin-server').default;
-
+    // TODO: fix circular import
+    const PluginServer = require('./plugin/plugin-server').default;
     this.pluginServer = new PluginServer(this, {verbose: false});
 
     // Load the add-ons
@@ -1420,6 +1414,14 @@ class AddonManager extends EventEmitter {
 
       console.log('Finished updating add-ons');
     });
+  }
+
+  getInstalledAddons(): Map<string, any> {
+    return this.installedAddons;
+  }
+
+  getPluginServer(): any | null {
+    return this.pluginServer;
   }
 }
 

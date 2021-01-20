@@ -98,4 +98,4 @@ LoginController.post('/', limiter, async (request, response) => {
   response.status(200).json({jwt});
 });
 
-export = LoginController;
+export default LoginController;

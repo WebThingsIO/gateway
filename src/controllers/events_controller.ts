@@ -38,4 +38,4 @@ EventsController.get('/:eventName', (request, response) => {
   }
 });
 
-export = EventsController;
+export default EventsController;

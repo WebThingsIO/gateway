@@ -37,4 +37,4 @@ PushController.post('/register', async (request, response) => {
   response.status(200).json({});
 });
 
-export = PushController;
+export default PushController;

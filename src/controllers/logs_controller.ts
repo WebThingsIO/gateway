@@ -210,4 +210,4 @@ LogsController.delete(
   websocket.on('close', cleanup);
 });
 
-export = LogsController;
+export default LogsController;
