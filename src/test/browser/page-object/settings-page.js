@@ -11,7 +11,9 @@ class SettingSection extends Section {
     const el = this.rootElement;
     const href = await el.getAttribute('href');
     const id = await el.getAttribute('id');
+    console.error('trying to open add-on settings page');
     await el.click();
+    console.error('opened page');
 
     switch (id) {
       case 'domain-settings-link':
@@ -56,7 +58,16 @@ class SettingsPage extends Page {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (!(width && width.parsed && width.parsed.value === 0)) {
+        return false;
+      }
+
+      const addonLink = await this.browser.$('#addon-settings-link');
+      if (!addonLink || !addonLink.isClickable()) {
+        return false;
+      }
+
+      return true;
     }, 5000);
   }
 }

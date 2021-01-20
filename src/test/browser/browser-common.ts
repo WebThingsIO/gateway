@@ -16,12 +16,21 @@ const compareImageDisabled = !fs.existsSync(SCREEN_SHOTS_FOLDER);
 const options: Record<string, unknown> = {
   logLevel: 'warn',
   capabilities: {
+    browserName: 'chrome',
+    acceptInsecureCerts: true,
+    'goog:chromeOptions': {
+      args: ['--headless', '--disable-gpu'],
+    },
+  },
+  /*
+  {
     browserName: 'firefox',
     acceptInsecureCerts: true,
     'moz:firefoxOptions': {
       args: ['-headless'],
     },
   },
+  */
 };
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
