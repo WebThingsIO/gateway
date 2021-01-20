@@ -45,4 +45,4 @@ ProxyController.all('/:thingId/*', (request, response) => {
   proxy.web(request, response, {target: proxies.get(thingId)});
 });
 
-export = ProxyController;
+export default ProxyController;

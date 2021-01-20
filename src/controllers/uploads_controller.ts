@@ -67,4 +67,4 @@ UploadsController.post('/', (request, response) => {
   });
 });
 
-export = UploadsController;
+export default UploadsController;

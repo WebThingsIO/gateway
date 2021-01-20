@@ -418,4 +418,4 @@ Promise<AccessTokenSuccessResponse|null> {
   return res;
 }
 
-export = OAuthController;
+export default OAuthController;

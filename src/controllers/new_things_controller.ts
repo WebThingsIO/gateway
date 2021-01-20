@@ -88,4 +88,4 @@ NewThingsController.post('/', async (request, response) => {
   }
 });
 
-export = NewThingsController;
+export default NewThingsController;

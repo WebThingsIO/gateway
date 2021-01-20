@@ -581,4 +581,4 @@ SettingsController.put('/localization/units', auth, async (request, response) =>
   response.json({});
 });
 
-export = SettingsController;
+export default SettingsController;

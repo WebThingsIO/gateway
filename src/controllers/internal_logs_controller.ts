@@ -17,8 +17,8 @@ import * as Constants from '../constants';
 import * as jwtMiddleware from '../jwt-middleware';
 import UserProfile from '../user-profile';
 import * as Utils from '../utils';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
+import {EventEmitter} from 'events';
 
 const InternalLogsController = express.Router();
 
@@ -125,15 +125,18 @@ InternalLogsController.get('/zip', async (_request, response) => {
     });
   }
 
-  AddonManager.pluginServer.on('log', onLog);
+  const pluginServer: EventEmitter | null = AddonManager.getPluginServer();
+  if (pluginServer) {
+    pluginServer.on('log', onLog);
 
-  const cleanup = () => {
-    AddonManager.pluginServer.removeListener('log', onLog);
-    clearInterval(heartbeat);
-  };
+    const cleanup = () => {
+      pluginServer.removeListener('log', onLog);
+      clearInterval(heartbeat);
+    };
 
-  websocket.on('error', cleanup);
-  websocket.on('close', cleanup);
+    websocket.on('error', cleanup);
+    websocket.on('close', cleanup);
+  }
 });
 
-export = InternalLogsController;
+export default InternalLogsController;

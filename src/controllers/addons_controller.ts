@@ -3,13 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const AddonsController = express.Router();
 
 AddonsController.get('/', async (_request, response) => {
-  response.status(200).json(Array.from(AddonManager.installedAddons.values()));
+  response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
 });
 
 AddonsController.get('/:addonId/license', async (request, response) => {
@@ -180,4 +179,4 @@ AddonsController.delete('/:addonId', async (request, response) => {
   }
 });
 
-export = AddonsController;
+export default AddonsController;

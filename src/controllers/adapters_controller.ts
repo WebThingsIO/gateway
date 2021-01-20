@@ -9,8 +9,7 @@
  */
 
 import express from 'express';
-
-const addonManager = require('../addon-manager').default;
+import addonManager from '../addon-manager';
 
 const adaptersController = express.Router();
 
@@ -38,4 +37,4 @@ adaptersController.get('/:adapterId/', (request, response) => {
   }
 });
 
-export = adaptersController;
+export default adaptersController;

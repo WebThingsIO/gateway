@@ -186,4 +186,4 @@ UsersController.delete('/:userId', auth, async (request, response) => {
   response.sendStatus(204);
 });
 
-export = UsersController;
+export default UsersController;

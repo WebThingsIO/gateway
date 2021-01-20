@@ -41,4 +41,4 @@ OAuthClientsController.delete(
   }
 );
 
-export = OAuthClientsController;
+export default OAuthClientsController;
