@@ -1,4 +1,4 @@
-const Settings = require('../../models/settings');
+import * as Settings from '../../models/settings';
 
 describe('Settings', () => {
   it('should be able to round trip', async () => {
@@ -15,4 +15,3 @@ describe('Settings', () => {
     expect(await Settings.getSetting(key)).toEqual(newValue);
   });
 });
-

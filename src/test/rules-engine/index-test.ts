@@ -1,22 +1,11 @@
-const {server, chai, mockAdapter} = require('../common');
-const {waitForExpect} = require('../expect-utils');
-const util = require('util');
-
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const Constants = require('../../constants');
-const Event = require('../../models/event').default;
-const Events = require('../../models/events').default;
-
-const {
-  webSocketOpen,
-  webSocketRead,
-  webSocketClose,
-} = require('../websocket-util');
+import {server, chai, mockAdapter} from '../common';
+import {waitForExpect} from '../expect-utils';
+import util from 'util';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import * as Constants from '../../constants';
+import Event from '../../models/event';
+import Events from '../../models/events';
+import {webSocketOpen, webSocketRead, webSocketClose} from '../websocket-util';
 
 const thingLight1 = {
   id: 'light1',
@@ -284,20 +273,21 @@ const multiRule = {
 };
 
 describe('rules engine', () => {
-  let ruleId = null, jwt;
+  let ruleId: number | null = null;
+  let jwt: string;
 
-  async function addDevice(desc) {
+  async function addDevice(desc: Record<string, unknown>): Promise<ChaiHttp.Response> {
     const {id} = desc;
     const res = await chai.request(server)
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(desc);
-    await mockAdapter().addDevice(id, desc);
+    await (mockAdapter() as any).addDevice(id, desc);
     return res;
   }
 
-  async function deleteRule(id) {
+  async function deleteRule(id: number): Promise<void> {
     const res = await chai.request(server)
       .delete(`${Constants.RULES_PATH}/${id}`)
       .set('Accept', 'application/json')
@@ -396,7 +386,7 @@ describe('rules engine', () => {
   });
 
   it('deletes this rule', async () => {
-    await deleteRule(ruleId);
+    await deleteRule(ruleId!);
 
     const res = await chai.request(server)
       .get(Constants.RULES_PATH)
@@ -533,7 +523,7 @@ describe('rules engine', () => {
     await webSocketClose(ws);
   });
 
-  async function getOn(lightId) {
+  async function getOn(lightId: string): Promise<boolean> {
     const res = await chai.request(server)
       .get(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
       .set('Accept', 'application/json')
@@ -542,7 +532,7 @@ describe('rules engine', () => {
     return res.body.on;
   }
 
-  async function setOn(lightId, on) {
+  async function setOn(lightId: string, on: boolean): Promise<void> {
     const res = await chai.request(server)
       .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
       .set('Accept', 'application/json')

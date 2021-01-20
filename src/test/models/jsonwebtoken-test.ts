@@ -1,7 +1,7 @@
-const JSONWebToken = require('../../models/jsonwebtoken').default;
-const {v4: uuidv4} = require('uuid');
-const jwt = require('jsonwebtoken');
-const ec = require('../../ec-crypto');
+import JSONWebToken from '../../models/jsonwebtoken';
+import {v4 as uuidv4} from 'uuid';
+import jwt from 'jsonwebtoken';
+import * as ec from '../../ec-crypto';
 
 describe('JSONWebToken', () => {
   it('should be able to round trip', async () => {

@@ -1,27 +1,25 @@
-const {v4: uuidv4} = require('uuid');
-
-const Database = require('../db').default;
-const User = require('../models/user').default;
-const JSONWebToken = require('../models/jsonwebtoken').default;
+import {v4 as uuidv4} from 'uuid';
+import Database from '../db';
+import User from '../models/user';
+import JSONWebToken from '../models/jsonwebtoken';
 
 describe('db', () => {
   describe('jwt workflows', () => {
-    let user;
+    let user: User;
     const password = 'password';
 
     beforeEach(async () => {
       const email = `test-${uuidv4()}@example.com`;
       user = await User.generate(email, password, 'test');
-      // eslint-disable-next-line require-atomic-updates
-      user.id = await Database.createUser(user);
+      user.setId(await Database.createUser(user));
     });
 
     afterEach(async () => {
-      await Database.deleteUser(user.id);
+      await Database.deleteUser(user.getId()!);
     });
 
     it('should be able to insert and fetch a JWT', async () => {
-      const {token} = await JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb.publicKey).toEqual(token.publicKey);
@@ -31,20 +29,19 @@ describe('db', () => {
     });
 
     it('should be unreachable after deleting user', async () => {
-      const {token} = await JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb).toBeTruthy();
 
-      await Database.deleteUser(user.id);
-      const fromDbAfterDelete =
-       await Database.getJSONWebTokenByKeyId(token.keyId);
+      await Database.deleteUser(user.getId()!);
+      const fromDbAfterDelete = await Database.getJSONWebTokenByKeyId(token.keyId);
 
       expect(fromDbAfterDelete).toBeFalsy();
     });
 
     it('should be able to cleanup single keys', async () => {
-      const {token} = await JSONWebToken.create(user.id);
+      const {token} = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb).toEqual(expect.objectContaining({
@@ -52,8 +49,7 @@ describe('db', () => {
       }));
 
       await Database.deleteJSONWebTokenByKeyId(token.keyId);
-      const fromDbAfterDelete =
-       await Database.getJSONWebTokenByKeyId(token.keyId);
+      const fromDbAfterDelete = await Database.getJSONWebTokenByKeyId(token.keyId);
 
       expect(fromDbAfterDelete).toBeFalsy();
     });
