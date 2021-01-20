@@ -16,4 +16,4 @@ PingController.get('/', (_request, response) => {
   response.sendStatus(204);
 });
 
-export = PingController;
+export default PingController;

@@ -7,7 +7,7 @@
 import assert from 'assert';
 import Action from '../../models/action';
 import Actions from '../../models/actions';
-const AddonManager = require('../../addon-manager').default;
+import AddonManager from '../../addon-manager';
 import Effect, {EffectDescription} from './Effect';
 import Things from '../../models/things';
 

@@ -36,12 +36,12 @@ expect.extend({
 const {servers, serverStartup} = require('../app');
 (global as any).server = servers.https;
 
-const addonManager = require('../addon-manager').default;
+import addonManager from '../addon-manager';
 
 export function mockAdapter(): Adapter {
   const adapter = addonManager.getAdapter('mock-adapter');
   expect(adapter).not.toBeUndefined();
-  return adapter;
+  return adapter!;
 }
 (global as any).mockAdapter = mockAdapter;
 
@@ -72,7 +72,7 @@ afterEach(async () => {
   // This is all potentially brittle.
   const adapter = addonManager.getAdapter('mock-adapter');
   if (adapter) {
-    await adapter.clearState();
+    await (adapter as any).clearState();
   }
   Actions.clearState();
   Events.clearState();

@@ -5,8 +5,7 @@ import path from 'path';
 import {APIRequest} from 'gateway-addon';
 import UserProfile from '../user-profile';
 import * as jwtMiddleware from '../jwt-middleware';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const auth = jwtMiddleware.middleware();
 const ExtensionsController = express.Router();
@@ -42,12 +41,12 @@ ExtensionsController.all(
 
     try {
       const rsp = await apiHandler.handleRequest(req);
-      response.status(rsp.status);
+      response.status(rsp.getStatus());
 
-      if (rsp.contentType && rsp.content !== null &&
-          typeof rsp.content !== 'undefined') {
-        response.type(rsp.contentType);
-        response.send(rsp.content);
+      if (rsp.getContentType() && rsp.getContent() !== null &&
+          typeof rsp.getContent() !== 'undefined') {
+        response.type(rsp.getContentType()!);
+        response.send(rsp.getContent());
       } else {
         response.end();
       }
@@ -101,4 +100,4 @@ ExtensionsController.get('/:extensionId/*', (request, response) => {
   response.sendFile(fullPath);
 });
 
-export = ExtensionsController;
+export default ExtensionsController;

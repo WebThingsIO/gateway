@@ -12,8 +12,7 @@ import express from 'express';
 import Action from '../models/action';
 import Actions from '../models/actions';
 import Things from '../models/things';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const ActionsController = express.Router({mergeParams: true});
 
@@ -201,4 +200,4 @@ ActionsController.delete(
   }
 );
 
-export = ActionsController;
+export default ActionsController;

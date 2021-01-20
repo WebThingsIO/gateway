@@ -1,7 +1,6 @@
 import e2p from 'event-to-promise';
 import WebSocket from 'ws';
-
-const {server} = require('./common');
+import {server} from './common';
 
 /**
  * Open a websocket

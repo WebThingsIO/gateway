@@ -22,4 +22,4 @@ LogOutController.post('/', async (request, response) => {
   response.status(200).json({});
 });
 
-export = LogOutController;
+export default LogOutController;

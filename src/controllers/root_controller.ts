@@ -23,4 +23,4 @@ RootController.get('/', TunnelService.isTunnelSet.bind(TunnelService), (_request
   });
 });
 
-export = RootController;
+export default RootController;

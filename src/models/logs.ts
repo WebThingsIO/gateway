@@ -4,8 +4,7 @@ import path from 'path';
 import {verbose, Database as SQLiteDatabase} from 'sqlite3';
 import * as Constants from '../constants';
 import UserProfile from '../user-profile';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const sqlite3 = verbose();
 

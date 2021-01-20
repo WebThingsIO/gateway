@@ -1,7 +1,6 @@
 import express from 'express';
 import {Constants} from 'gateway-addon';
-
-const AddonManager = require('../addon-manager').default;
+import AddonManager from '../addon-manager';
 
 const NotifiersController = express.Router();
 
@@ -88,4 +87,4 @@ NotifiersController.post(
   }
 );
 
-export = NotifiersController;
+export default NotifiersController;

@@ -201,4 +201,4 @@ UpdatesController.put('/self-update', async (request, response) => {
   }
 });
 
-export = UpdatesController;
+export default UpdatesController;
