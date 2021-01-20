@@ -4,7 +4,7 @@ import path from 'path';
 import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const AddonsController = express.Router();
 

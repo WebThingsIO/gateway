@@ -5,7 +5,7 @@
  */
 
 import assert from 'assert';
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 import * as Constants from '../constants';
 import Things from '../models/things';
 import {EventEmitter} from 'events';

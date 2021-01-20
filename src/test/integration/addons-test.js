@@ -7,7 +7,7 @@ const {
   headerAuth,
 } = require('../user');
 
-const AddonManager = require('../../addon-manager');
+const AddonManager = require('../../addon-manager').default;
 const config = require('config');
 const Constants = require('../../constants');
 const fetch = require('node-fetch');

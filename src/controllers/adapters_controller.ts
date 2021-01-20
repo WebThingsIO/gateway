@@ -10,7 +10,7 @@
 
 import express from 'express';
 
-const addonManager = require('../addon-manager');
+const addonManager = require('../addon-manager').default;
 
 const adaptersController = express.Router();
 

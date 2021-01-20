@@ -32,7 +32,7 @@ const ipRegex = require('ip-regex');
 const SegfaultHandler = require('segfault-handler');
 
 // Internal Dependencies
-const addonManager = require('./addon-manager');
+const addonManager = require('./addon-manager').default;
 const Constants = require('./constants');
 const Database = require('./db').default;
 const mDNSserver = require('./mdns-server');
