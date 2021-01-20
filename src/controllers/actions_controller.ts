@@ -13,7 +13,7 @@ import Action from '../models/action';
 import Actions from '../models/actions';
 import Things from '../models/things';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const ActionsController = express.Router({mergeParams: true});
 

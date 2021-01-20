@@ -12,7 +12,7 @@ import Action, {ActionDescription} from './action';
 import * as Constants from '../constants';
 import {EventEmitter} from 'events';
 import Things from './things';
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 class Actions extends EventEmitter {
   private actions: Record<string, Action>;

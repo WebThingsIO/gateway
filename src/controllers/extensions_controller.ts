@@ -6,7 +6,7 @@ import {APIRequest} from 'gateway-addon';
 import UserProfile from '../user-profile';
 import * as jwtMiddleware from '../jwt-middleware';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const auth = jwtMiddleware.middleware();
 const ExtensionsController = express.Router();

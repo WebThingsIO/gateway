@@ -1,7 +1,7 @@
 import express from 'express';
 import {Constants} from 'gateway-addon';
 
-const AddonManager = require('../addon-manager');
+const AddonManager = require('../addon-manager').default;
 
 const NotifiersController = express.Router();
 
