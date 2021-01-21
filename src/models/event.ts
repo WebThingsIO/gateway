@@ -52,4 +52,8 @@ export default class Event {
   getThingId(): string {
     return this.thingId;
   }
+
+  getData(): any {
+    return this.data;
+  }
 }

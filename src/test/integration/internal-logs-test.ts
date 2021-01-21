@@ -1,20 +1,13 @@
-'use strict';
-
-const {server, chai} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const fs = require('fs');
-const path = require('path');
-const JSZip = require('jszip');
-const Constants = require('../../constants');
-const UserProfile = require('../../user-profile').default;
+import {server, chai} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import fs from 'fs';
+import path from 'path';
+import JSZip from 'jszip';
+import * as Constants from '../../constants';
+import UserProfile from '../../user-profile';
 
 describe('internal-logs/', () => {
-  let jwt;
+  let jwt: string;
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
@@ -41,19 +34,20 @@ describe('internal-logs/', () => {
   });
 
   it('GET logs.zip', async () => {
+    let responseData: string;
     const res = await chai.request(server)
       .get(`${Constants.INTERNAL_LOGS_PATH}/zip`)
       .set(...headerAuth(jwt))
       .buffer()
       .parse((res, cb) => {
         res.setEncoding('binary');
-        res.data = '';
+        responseData = '';
         res.on('data', (chunk) => {
-          res.data += chunk;
+          responseData += chunk;
         });
         res.on('end', () => {
           JSZip
-            .loadAsync(res.data, {base64: false, checkCRC32: true})
+            .loadAsync(responseData, {base64: false, checkCRC32: true})
             .then((zip) => cb(null, zip));
         });
       });

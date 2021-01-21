@@ -120,6 +120,18 @@ export default class Plugin {
     return this.process;
   }
 
+  getStartPromise(): Promise<void> | undefined {
+    return this.startPromise;
+  }
+
+  setExec(exec: string): void {
+    this.exec = exec;
+  }
+
+  setRestart(restart: boolean): void {
+    this.restart = restart;
+  }
+
   asDict(): Record<string, unknown> {
     let pid: string | number = 'not running';
     if (this.process.p) {

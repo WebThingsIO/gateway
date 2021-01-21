@@ -1,15 +1,9 @@
-'use strict';
-
-const {server, chai} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-const Constants = require('../../constants');
+import {server, chai} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import * as Constants from '../../constants';
 
 describe('notifiers/', () => {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
@@ -55,4 +49,3 @@ describe('notifiers/', () => {
     expect(res.status).toEqual(404);
   });
 });
-

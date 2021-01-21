@@ -1,26 +1,11 @@
-'use strict';
-
-const {server, chai, mockAdapter} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const e2p = require('event-to-promise');
-
-const {
-  webSocketOpen,
-  webSocketRead,
-  webSocketSend,
-  webSocketClose,
-} = require('../websocket-util');
-
-const WebSocket = require('ws');
-
-const Constants = require('../../constants');
-const Event = require('../../models/event').default;
-const Events = require('../../models/events').default;
+import {server, chai, mockAdapter} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import e2p from 'event-to-promise';
+import {webSocketOpen, webSocketRead, webSocketSend, webSocketClose} from '../websocket-util';
+import WebSocket from 'ws';
+import * as Constants from '../../constants';
+import Event from '../../models/event';
+import Events from '../../models/events';
 
 const TEST_THING = {
   id: 'test-1',
@@ -122,12 +107,12 @@ const piDescr = {
 };
 
 describe('things/', function() {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
 
-  async function addDevice(desc = TEST_THING) {
+  async function addDevice(desc: Record<string, unknown> = TEST_THING): Promise<ChaiHttp.Response> {
     const {id} = desc;
     const res = await chai.request(server)
       .post(Constants.THINGS_PATH)
@@ -137,11 +122,11 @@ describe('things/', function() {
     if (res.status !== 201) {
       throw res;
     }
-    await mockAdapter().addDevice(id, desc);
+    await (mockAdapter() as any).addDevice(id, desc);
     return res;
   }
 
-  function makeDescr(id) {
+  function makeDescr(id: string): {id: string, title: string, properties: Record<string, unknown>} {
     return {
       id: id,
       title: id,
@@ -474,8 +459,8 @@ describe('things/', function() {
   });
 
   it('lists new things when devices are added', async () => {
-    await mockAdapter().addDevice('test-2', makeDescr('test-2'));
-    await mockAdapter().addDevice('test-3', makeDescr('test-3'));
+    await (mockAdapter() as any).addDevice('test-2', makeDescr('test-2'));
+    await (mockAdapter() as any).addDevice('test-3', makeDescr('test-3'));
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
@@ -504,8 +489,8 @@ describe('things/', function() {
           .set(...headerAuth(jwt))
           .send({pair: {input: {timeout: 60}}});
 
-        await mockAdapter().addDevice('test-4', makeDescr('test-4'));
-        await mockAdapter().addDevice('test-5', makeDescr('test-5'));
+        await (mockAdapter() as any).addDevice('test-4', makeDescr('test-4'));
+        await (mockAdapter() as any).addDevice('test-5', makeDescr('test-5'));
         return res;
       })(),
     ]);
@@ -523,7 +508,7 @@ describe('things/', function() {
   it('should add a device during pairing then create a thing', async () => {
     const thingId = 'test-6';
     const descr = makeDescr(thingId);
-    mockAdapter().pairDevice(thingId, descr);
+    (mockAdapter() as any).pairDevice(thingId, descr);
     // send pair action
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -544,7 +529,7 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(found).assert('should find thing in /new_things output');
+    expect(found);
 
     res = await chai.request(server)
       .post(Constants.THINGS_PATH)
@@ -565,9 +550,7 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(!found).assert(
-      `should find no longer thing in /new_things output:${
-        JSON.stringify(res.body, null, 2)}`);
+    expect(!found);
 
     res = await chai.request(server)
       .get(Constants.THINGS_PATH)
@@ -581,13 +564,13 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(found).assert('should find thing in /new_things output');
+    expect(found);
   });
 
   it('should remove a thing', async () => {
     const thingId = 'test-6';
     const descr = makeDescr(thingId);
-    mockAdapter().pairDevice(thingId, descr);
+    (mockAdapter() as any).pairDevice(thingId, descr);
     // send pair action
     const pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -614,7 +597,7 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(!found).assert('should not find thing in /things output');
+    expect(!found);
   });
 
   it('should remove a device', async () => {
@@ -623,7 +606,7 @@ describe('things/', function() {
       id: thingId,
     }));
     const descr = makeDescr(thingId);
-    mockAdapter().pairDevice(thingId, descr);
+    (mockAdapter() as any).pairDevice(thingId, descr);
     // send pair action
     const pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -631,7 +614,7 @@ describe('things/', function() {
       .set(...headerAuth(jwt))
       .send({pair: {input: {timeout: 60}}});
     expect(pair.status).toEqual(201);
-    await mockAdapter().removeDevice(thingId);
+    await (mockAdapter() as any).removeDevice(thingId);
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
@@ -645,15 +628,15 @@ describe('things/', function() {
         found = true;
       }
     }
-    expect(!found).assert('should not find thing in /new_things output');
+    expect(!found);
   });
 
   it('should remove a device in response to unpair', async () => {
-    await mockAdapter().addDevice('test-5', makeDescr('test-5'));
+    await (mockAdapter() as any).addDevice('test-5', makeDescr('test-5'));
     const thingId = 'test-5';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
-    mockAdapter().unpairDevice(thingId);
+    (mockAdapter() as any).unpairDevice(thingId);
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
@@ -674,7 +657,7 @@ describe('things/', function() {
       }
     }
 
-    expect(!found).assert('should not find thing in /new_things output');
+    expect(!found);
   });
 
   it('should receive propertyStatus messages over websocket', async () => {
@@ -874,16 +857,14 @@ describe('things/', function() {
        expect(res).toBeTruthy();
 
        expect(messages[2].messageType).toEqual(Constants.EVENT);
-       expect(messages[2].data).toHaveProperty(eventAFirst.name);
-       expect(messages[2].data[eventAFirst.name]).toHaveProperty('data');
-       expect(messages[2].data[eventAFirst.name].data).toEqual(
-         eventAFirst.data);
+       expect(messages[2].data).toHaveProperty(eventAFirst.getName());
+       expect(messages[2].data[eventAFirst.getName()]).toHaveProperty('data');
+       expect(messages[2].data[eventAFirst.getName()].data).toEqual(eventAFirst.getData());
 
        expect(messages[3].messageType).toEqual(Constants.EVENT);
-       expect(messages[3].data).toHaveProperty(eventASecond.name);
-       expect(messages[3].data[eventASecond.name]).toHaveProperty('data');
-       expect(
-         messages[3].data[eventASecond.name].data).toEqual(eventASecond.data);
+       expect(messages[3].data).toHaveProperty(eventASecond.getName());
+       expect(messages[3].data[eventASecond.getName()]).toHaveProperty('data');
+       expect(messages[3].data[eventASecond.getName()].data).toEqual(eventASecond.getData());
 
        await webSocketClose(ws);
      }
@@ -1134,7 +1115,7 @@ describe('things/', function() {
     const thingBase = `${Constants.THINGS_PATH}/${piDescr.id}`;
     const ws = await webSocketOpen(thingBase, jwt);
 
-    const [_, messages] = await Promise.all([
+    const messages = (await Promise.all([
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
@@ -1144,7 +1125,7 @@ describe('things/', function() {
         },
       }),
       webSocketRead(ws, 2),
-    ]);
+    ]))[1];
 
     const actionStatus = messages[1];
     expect(actionStatus.messageType).toEqual(Constants.ACTION_STATUS);
@@ -1169,7 +1150,7 @@ describe('things/', function() {
     const thingBase = `${Constants.THINGS_PATH}/${piDescr.id}`;
     const ws = await webSocketOpen(thingBase, jwt);
 
-    const [_, messages] = await Promise.all([
+    const messages = (await Promise.all([
       webSocketSend(ws, {
         messageType: Constants.REQUEST_ACTION,
         data: {
@@ -1181,7 +1162,7 @@ describe('things/', function() {
         },
       }),
       webSocketRead(ws, 3),
-    ]);
+    ]))[1];
 
     const created = messages[1];
     expect(created.messageType).toEqual(Constants.ACTION_STATUS);
@@ -1198,13 +1179,13 @@ describe('things/', function() {
     const thingBase = `${Constants.THINGS_PATH}/${piDescr.id}`;
     const ws = await webSocketOpen(thingBase, jwt);
 
-    const [_, messages] = await Promise.all([
+    const messages = (await Promise.all([
       webSocketSend(ws, {
         messageType: 'tomato',
         data: {},
       }),
       webSocketRead(ws, 2),
-    ]);
+    ]))[1];
 
     const actionStatus = messages[1];
     expect(actionStatus.messageType).toEqual(Constants.ERROR);

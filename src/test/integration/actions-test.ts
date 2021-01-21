@@ -1,16 +1,9 @@
-'use strict';
-
-const {server, chai, mockAdapter} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const Constants = require('../../constants');
+import {server, chai, mockAdapter} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import * as Constants from '../../constants';
 
 describe('actions/', () => {
-  let jwt;
+  let jwt: string;
 
   const thingLight = {
     id: 'light',
@@ -37,14 +30,14 @@ describe('actions/', () => {
     },
   };
 
-  async function addDevice(desc) {
+  async function addDevice(desc: Record<string, unknown>): Promise<ChaiHttp.Response> {
     const {id} = desc;
     const res = await chai.request(server)
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(desc);
-    await mockAdapter().addDevice(id, desc);
+    await (mockAdapter() as any).addDevice(id, desc);
     return res;
   }
 
@@ -342,7 +335,7 @@ describe('actions/', () => {
     const thingId = 'test-nonexistent';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
-    mockAdapter().unpairDevice(thingId);
+    (mockAdapter() as any).unpairDevice(thingId);
 
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)

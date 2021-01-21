@@ -1,18 +1,11 @@
-'use strict';
-
-const {server, chai} = require('../common');
-const Database = require('../../db').default;
-const PushService = require('../../push-service').default;
-
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-const Constants = require('../../constants');
+import {server, chai} from '../common';
+import Database from '../../db';
+import PushService from '../../push-service';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import * as Constants from '../../constants';
 
 describe('push/', () => {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     // Clear settings storage
     await Database.deleteEverything();
