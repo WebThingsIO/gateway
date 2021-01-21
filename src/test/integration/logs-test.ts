@@ -1,15 +1,8 @@
-'use strict';
-
-const {server, chai, mockAdapter} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const Constants = require('../../constants');
-const Logs = require('../../models/logs').default;
-const sleep = require('../../sleep').default;
+import {server, chai, mockAdapter} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import * as Constants from '../../constants';
+import Logs from '../../models/logs';
+import sleep from '../../sleep';
 
 const thingLight1 = {
   id: 'light1',
@@ -35,24 +28,23 @@ const thingLight1 = {
   },
 };
 
-const thingLight2 = JSON.parse(
-  JSON.stringify(thingLight1).replace(/light1/g, 'light2'));
+const thingLight2 = JSON.parse(JSON.stringify(thingLight1).replace(/light1/g, 'light2'));
 
 describe('logs/', function() {
-  let jwt;
+  let jwt: string;
 
-  async function addDevice(desc) {
+  async function addDevice(desc: Record<string, unknown>): Promise<ChaiHttp.Response> {
     const {id} = desc;
     const res = await chai.request(server)
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(desc);
-    await mockAdapter().addDevice(id, desc);
+    await (mockAdapter() as any).addDevice(id, desc);
     return res;
   }
 
-  async function createLog(thing, property) {
+  async function createLog(thing: string, property: string): Promise<void> {
     const body = {
       descr: {
         type: 'property',
@@ -71,7 +63,7 @@ describe('logs/', function() {
     expect(res.status).toEqual(200);
   }
 
-  async function createAllLogs() {
+  async function createAllLogs(): Promise<void> {
     for (const prop in thingLight1.properties) {
       await createLog(thingLight1.id, prop);
     }
@@ -80,7 +72,7 @@ describe('logs/', function() {
     }
   }
 
-  async function setProp(thingId, propId, value) {
+  async function setProp(thingId: string, propId: string, value: unknown): Promise<void> {
     const res = await chai.request(server)
       .put(`${Constants.THINGS_PATH}/${thingId}/properties/${propId}`)
       .set('Accept', 'application/json')
@@ -107,7 +99,7 @@ describe('logs/', function() {
   const light1BriValues = [100, 12, 34];
   const light2BriValues = [100, 0, 31];
 
-  async function populatePropertyData() {
+  async function populatePropertyData(): Promise<void> {
     for (const value of light1OnValues.slice(1, light1OnValues.length - 1)) {
       await setProp('light1', 'on', value);
     }
@@ -123,7 +115,7 @@ describe('logs/', function() {
     await setProp('light1', 'on', light1OnValues[light1OnValues.length - 1]);
   }
 
-  function value(data) {
+  function value(data: Record<string, unknown>): unknown {
     return data.value;
   }
 
@@ -184,4 +176,3 @@ describe('logs/', function() {
       .toEqual(light2BriValues);
   });
 });
-

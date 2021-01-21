@@ -1,18 +1,14 @@
-const express = require('express');
-const e2p = require('event-to-promise');
-const http = require('http');
-const JSONWebToken = require('../../models/jsonwebtoken').default;
-const simpleOAuth2 = require('simple-oauth2');
-const URL = require('url').URL;
-const qs = require('querystring');
-
-const {server, chai, mockAdapter} = require('../common');
-const Constants = require('../../constants');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
+import express from 'express';
+import e2p from 'event-to-promise';
+import http from 'http';
+import JSONWebToken from '../../models/jsonwebtoken';
+import * as simpleOAuth2 from 'simple-oauth2';
+import {URL} from 'url';
+import qs from 'querystring';
+import {server, chai, mockAdapter} from '../common';
+import * as Constants from '../../constants';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import {AddressInfo} from 'net';
 
 const CLIENT_ID = 'test';
 const CLIENT_SECRET = 'super secret';
@@ -35,7 +31,10 @@ const TEST_THING = {
 };
 
 describe('oauth/', function() {
-  let clientServer, oauth2, customCallbackHandler, userJWT;
+  let clientServer: http.Server | null;
+  let oauth2: simpleOAuth2.OAuthClient | null;
+  let customCallbackHandler: ((req: express.Request, res: express.Response) => void) | null;
+  let userJWT: string;
 
   async function addDevice(desc = TEST_THING) {
     const {id} = desc;
@@ -44,7 +43,7 @@ describe('oauth/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT))
       .send(desc);
-    await mockAdapter().addDevice(id, desc);
+    await (mockAdapter() as any).addDevice(id, desc);
     return res;
   }
 
@@ -55,8 +54,8 @@ describe('oauth/', function() {
 
   beforeAll(async () => {
     const client = express();
-    client.get('/auth', (req, res) => {
-      res.redirect(oauth2.authorizationCode.authorizeURL({
+    client.get('/auth', (_req, res) => {
+      res.redirect(oauth2!.authorizationCode.authorizeURL({
         redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
@@ -73,8 +72,11 @@ describe('oauth/', function() {
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      oauth2.authorizationCode.getToken({code: code}).then((result) => {
-        const {token} = oauth2.accessToken.create(result);
+      oauth2!.authorizationCode.getToken({
+        code: `${code!}`,
+        redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
+      }).then((result) => {
+        const {token} = oauth2!.accessToken.create(result);
         res.json({token});
       }).catch((err) => {
         res.status(400).json(err.data.payload);
@@ -91,8 +93,11 @@ describe('oauth/', function() {
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      oauth2.authorizationCode.getToken({code: code}).then((result) => {
-        const {token} = oauth2.accessToken.create(result);
+      oauth2!.authorizationCode.getToken({
+        code: `${code!}`,
+        redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
+      }).then((result) => {
+        const {token} = oauth2!.accessToken.create(result);
         res.json(Object.assign({bonus: true}, {token}));
       }).catch((err) => {
         res.status(400).json(err.data.payload);
@@ -106,15 +111,21 @@ describe('oauth/', function() {
   });
 
   afterAll(async () => {
-    clientServer.close();
+    if (clientServer) {
+      clientServer.close();
+      await e2p(clientServer, 'close');
+      // eslint-disable-next-line require-atomic-updates
+      clientServer = null;
+    }
+
     oauth2 = null;
-    await e2p(clientServer, 'close');
-    // eslint-disable-next-line require-atomic-updates
-    clientServer = null;
   });
 
-  function setupOAuth(configProvided, customCallbackHandlerProvided,
-                      authorizationMethod = 'body') {
+  function setupOAuth(
+    configProvided?: Partial<simpleOAuth2.ModuleOptions> | null,
+    customCallbackHandlerProvided?: ((req: express.Request, res: express.Response) => void) | null,
+    authorizationMethod = 'body'
+  ): void {
     if (!server.address()) {
       server.listen(0);
     }
@@ -136,7 +147,7 @@ describe('oauth/', function() {
     }, configProvided || {});
 
     oauth2 = simpleOAuth2.create(config);
-    customCallbackHandler = customCallbackHandlerProvided;
+    customCallbackHandler = customCallbackHandlerProvided || null;
   }
 
   it('performs simple authorization', async () => {
@@ -249,7 +260,7 @@ describe('oauth/', function() {
   it('rejects client credential authorization', async () => {
     setupOAuth();
     try {
-      const result = await oauth2.clientCredentials.getToken({});
+      const result = await oauth2!.clientCredentials.getToken({});
       expect(result).toBeFalsy();
     } catch (err) {
       expect(err).toBeTruthy();
@@ -259,9 +270,10 @@ describe('oauth/', function() {
   it('rejects password credential authorization', async () => {
     setupOAuth();
     try {
-      const result = await oauth2.ownerPassword.getToken({
+      const result = await oauth2!.ownerPassword.getToken({
         username: CLIENT_ID,
         password: CLIENT_SECRET,
+        scope: REQUEST_SCOPE,
       });
       expect(result).toBeFalsy();
     } catch (err) {
@@ -275,35 +287,35 @@ describe('oauth/', function() {
       res.status(400).json(req.query);
     });
 
-    if (!clientServer.address()) {
-      clientServer.listen(CLIENT_SERVER_PORT);
+    if (!clientServer!.address()) {
+      clientServer!.listen(CLIENT_SERVER_PORT);
     }
 
-    let oauthUrl = new URL(oauth2.authorizationCode.authorizeURL({
-      redirect_uri: `http://127.0.0.1:${clientServer.address().port}/callback`,
+    const oauthUrl = new URL(oauth2!.authorizationCode.authorizeURL({
+      redirect_uri: `http://127.0.0.1:${(<AddressInfo>(clientServer!.address())!).port}/callback`,
       scope: 'potato',
       state: 'somethingrandom',
     }));
 
-    oauthUrl = oauthUrl.pathname + oauthUrl.search;
+    const url = oauthUrl.pathname + oauthUrl.search;
 
     const err = await chai.request(server)
-      .get(oauthUrl)
+      .get(url)
       .set('Accept', 'application/json');
     expect(err.status).toEqual(400);
   });
 
   it('rejects redirect_uri mismatch', async () => {
-    let oauthUrl = new URL(oauth2.authorizationCode.authorizeURL({
-      redirect_uri: `http://127.0.0.1:${clientServer.address().port}/rhubarb`,
+    const oauthUrl = new URL(oauth2!.authorizationCode.authorizeURL({
+      redirect_uri: `http://127.0.0.1:${(<AddressInfo>(clientServer!.address())!).port}/rhubarb`,
       scope: 'readwrite',
       state: 'somethingrandom',
     }));
 
-    oauthUrl = oauthUrl.pathname + oauthUrl.search;
+    const url = oauthUrl.pathname + oauthUrl.search;
 
     const err = await chai.request(server)
-      .get(oauthUrl)
+      .get(url)
       .set('Accept', 'application/json');
     expect(err.status).toEqual(400);
     expect(err.body.error).toEqual('invalid_request');
@@ -317,7 +329,8 @@ describe('oauth/', function() {
       .get(`${Constants.OAUTH_PATH}/allow?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
-        redirect_uri: `http://127.0.0.1:${clientServer.address().port}/bonus-entry`,
+        redirect_uri:
+          `http://127.0.0.1:${(<AddressInfo>(clientServer!.address())!).port}/bonus-entry`,
         scope: REQUEST_SCOPE,
         state: REQUEST_STATE,
       })}`)
@@ -336,7 +349,10 @@ describe('oauth/', function() {
   });
 
   it('rejects user JWT in access token request', async () => {
-    oauth2.authorizationCode.getToken({code: userJWT}).then((result) => {
+    oauth2!.authorizationCode.getToken({
+      code: userJWT,
+      redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
+    }).then((result) => {
       expect(result).toBeFalsy();
     }).catch((err) => {
       expect(err).toBeTruthy();
@@ -344,17 +360,20 @@ describe('oauth/', function() {
   });
 
   it('rejects revoked JWT in access token request', async () => {
-    setupOAuth({}, function customCallbackHandler(req, res) {
+    setupOAuth({}, function customCallbackHandler(req: express.Request, res: express.Response) {
       const code = req.query.code;
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
 
-      JSONWebToken.verifyJWT(code).then((token) => {
-        return JSONWebToken.revokeToken(token.keyId);
+      JSONWebToken.verifyJWT(`${code!}`).then((token) => {
+        return JSONWebToken.revokeToken(token!.getKeyId());
       }).then(() => {
-        return oauth2.authorizationCode.getToken({code: code});
+        return oauth2!.authorizationCode.getToken({
+          code: `${code!}`,
+          redirect_uri: `http://127.0.0.1:${CLIENT_SERVER_PORT}/callback`,
+        });
       }).then((result) => {
-        const token = oauth2.accessToken.create(result);
+        const token = oauth2!.accessToken.create(result);
         res.json(token);
       }).catch((err) => {
         res.status(400).json(err.data.payload);
@@ -421,7 +440,7 @@ describe('oauth/', function() {
   });
 
   it('rejects use of authorization code as access token', async () => {
-    setupOAuth({}, function customCallbackHandler(req, res) {
+    setupOAuth({}, function customCallbackHandler(req: express.Request, res: express.Response) {
       const code = req.query.code;
       expect(code).toBeTruthy();
       expect(req.query.state).toEqual('somethingrandom');
@@ -449,4 +468,3 @@ describe('oauth/', function() {
     expect(err.status).toEqual(401);
   });
 });
-

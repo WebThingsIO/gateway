@@ -1,17 +1,11 @@
-'use strict';
-
-const {server, chai} = require('../common');
-const fs = require('fs');
-const path = require('path');
-const Constants = require('../../constants');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
+import {server, chai} from '../common';
+import fs from 'fs';
+import path from 'path';
+import * as Constants from '../../constants';
+import {TEST_USER, createUser, headerAuth} from '../user';
 
 describe('uploads/', () => {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
