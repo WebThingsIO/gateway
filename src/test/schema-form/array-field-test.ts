@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {fireEvent, createSchemaForm, makeUndefined} = require('./test-utils');
+import '../jsdom-common';
+import {fireEvent, createSchemaForm, makeUndefined} from './test-utils';
 
 describe('ArrayField', () => {
   describe('Unsupported array schema', () => {
@@ -28,18 +28,18 @@ describe('ArrayField', () => {
     it('should render a fieldset legend', () => {
       const {node} = createSchemaForm({schema});
 
-      const legend = node.querySelector('fieldset > legend');
+      const legend = node.querySelector('fieldset > legend')!;
 
-      expect(legend.textContent.trim()).toEqual('my list');
+      expect(legend.textContent!.trim()).toEqual('my list');
       expect(legend.id).toEqual('root__title');
     });
 
     it('should render a description', () => {
       const {node} = createSchemaForm({schema});
 
-      const description = node.querySelector('fieldset > .field-description');
+      const description = node.querySelector('fieldset > .field-description')!;
 
-      expect(description.textContent.trim()).toEqual('my description');
+      expect(description.textContent!.trim()).toEqual('my description');
       expect(description.id).toEqual('root__description');
     });
 
@@ -56,18 +56,14 @@ describe('ArrayField', () => {
     });
 
     it('should not have an add button if addable is false', () => {
-      const {node} = createSchemaForm({
-        schema,
-        uiSchema: {'ui:options': {addable: false}},
-      });
-
+      const {node} = createSchemaForm({schema});
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
     it('should add a new field when clicking the add button', () => {
       const {node} = createSchemaForm({schema});
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
       expect(node.querySelectorAll('.field-string')).toHaveLength(1);
     });
@@ -93,9 +89,9 @@ describe('ArrayField', () => {
     it('should mark a non-null array item as required', () => {
       const {node} = createSchemaForm({schema});
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
-      expect(node.querySelector('.field-string input[type=text]').required)
+      expect((<HTMLInputElement>node.querySelector('.field-string input[type=text]')!).required)
         .toEqual(true);
     });
 
@@ -105,7 +101,7 @@ describe('ArrayField', () => {
         formData: {},
       });
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
       const inputs = node.querySelectorAll('.field-string input[type=text]');
       expect(inputs).toHaveLength(1);
@@ -118,7 +114,8 @@ describe('ArrayField', () => {
         schema,
         formData: ['foo', 'bar'],
       });
-      const inputs = node.querySelectorAll('.field-string input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> =
+        node.querySelectorAll('.field-string input[type=text]');
 
       expect(inputs).toHaveLength(2);
       expect(inputs[0].value).toEqual('foo');
@@ -130,11 +127,12 @@ describe('ArrayField', () => {
         schema,
         formData: ['foo', 'bar'],
       });
-      const dropBtns = node.querySelectorAll('.btn-remove');
+      const dropBtns: NodeListOf<HTMLButtonElement> = node.querySelectorAll('.btn-remove');
 
       dropBtns[0].click();
 
-      const inputs = node.querySelectorAll('.field-string input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> =
+        node.querySelectorAll('.field-string input[type=text]');
       expect(inputs).toHaveLength(1);
       expect(inputs[0].value).toEqual('bar');
     });
@@ -144,11 +142,12 @@ describe('ArrayField', () => {
         schema,
         formData: ['foo', 'bar', 'foobar'],
       });
-      let dropBtns = node.querySelectorAll('.btn-remove');
+      let dropBtns: NodeListOf<HTMLButtonElement> = node.querySelectorAll('.btn-remove');
 
       dropBtns[1].click();
 
-      let inputs = node.querySelectorAll('.field-string input[type=text]');
+      let inputs: NodeListOf<HTMLInputElement> =
+        node.querySelectorAll('.field-string input[type=text]');
       expect(inputs).toHaveLength(2);
       expect(inputs[0].value).toEqual('foo');
       expect(inputs[1].value).toEqual('foobar');
@@ -190,11 +189,12 @@ describe('ArrayField', () => {
         },
       });
 
-      let dropBtns = node.querySelectorAll('.btn-remove');
+      let dropBtns: NodeListOf<HTMLButtonElement> = node.querySelectorAll('.btn-remove');
 
       dropBtns[1].click();
 
-      let inputs = node.querySelectorAll('.field-string input[type=text]');
+      let inputs: NodeListOf<HTMLInputElement> =
+        node.querySelectorAll('.field-string input[type=text]');
       expect(inputs).toHaveLength(4);
       expect(inputs[0].value).toEqual('bar1');
       expect(inputs[1].value).toEqual('baz1');
@@ -223,7 +223,7 @@ describe('ArrayField', () => {
         formData,
       });
 
-      const input = node.querySelector('#root_1');
+      const input = <HTMLInputElement>node.querySelector('#root_1')!;
       expect(input.value).toEqual('2');
       input.value = '';
       fireEvent(input, 'change');
@@ -299,7 +299,7 @@ describe('ArrayField', () => {
       };
       const form = createSchemaForm({schema: schemaFormlexSchema,
                                      formData: {}});
-      const inputs = form.node.querySelectorAll('input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = form.node.querySelectorAll('input[type=text]');
       expect(inputs[0].value).toEqual('Default name');
       expect(inputs[1].value).toEqual('Default name');
     });
@@ -320,7 +320,7 @@ describe('ArrayField', () => {
         },
       };
       const {node} = createSchemaForm({schema: schema});
-      const inputs = node.querySelectorAll('input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
       expect(inputs.length).toEqual(4);
       expect(inputs[0].value).toEqual('Raphael');
       expect(inputs[1].value).toEqual('Michaelangelo');
@@ -344,7 +344,7 @@ describe('ArrayField', () => {
         },
       };
       const {node} = createSchemaForm({schema});
-      const inputs = node.querySelectorAll('input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
       expect(inputs.length).toEqual(4);
       expect(inputs[0].value).toEqual('Raphael');
       expect(inputs[1].value).toEqual('Michaelangelo');
@@ -369,7 +369,7 @@ describe('ArrayField', () => {
         },
       };
       const {node} = createSchemaForm({schema});
-      const inputs = node.querySelectorAll('input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
       expect(inputs.length).toEqual(4);
       expect(inputs[0].value).toEqual('Raphael');
       expect(inputs[1].value).toEqual('Michaelangelo');
@@ -463,7 +463,7 @@ describe('ArrayField', () => {
 
         const labels = [].map.call(
           node.querySelectorAll('fieldset span'),
-          (node) => node.textContent.trim()
+          (node: Element) => node.textContent!.trim()
         );
         expect(labels).toEqual(['foo', 'bar', 'fuzz']);
       });
@@ -471,8 +471,8 @@ describe('ArrayField', () => {
       it('should handle a change event', () => {
         const {schemaForm, node} = createSchemaForm({schema});
 
-        node.querySelectorAll('[type=checkbox]')[0].click();
-        node.querySelectorAll('[type=checkbox]')[2].click();
+        (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[0]).click();
+        (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[2]).click();
 
         expect(schemaForm.formData).toEqual(['foo', 'fuzz']);
       });
@@ -485,7 +485,7 @@ describe('ArrayField', () => {
 
         const labels = [].map.call(
           node.querySelectorAll('[type=checkbox]'),
-          (node) => node.checked
+          (node: HTMLInputElement) => node.checked
         );
         expect(labels).toEqual([true, false, true]);
       });
@@ -517,7 +517,7 @@ describe('ArrayField', () => {
       const {node} = createSchemaForm({schema});
       expect(node.querySelectorAll('fieldset fieldset')).toHaveLength(0);
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
       expect(node.querySelectorAll('fieldset fieldset')).toHaveLength(1);
     });
@@ -566,55 +566,55 @@ describe('ArrayField', () => {
 
     it('should render a fieldset legend', () => {
       const {node} = createSchemaForm({schema});
-      const legend = node.querySelector('fieldset > legend');
-      expect(legend.textContent.trim()).toEqual('List of fixed items');
+      const legend = node.querySelector('fieldset > legend')!;
+      expect(legend.textContent!.trim()).toEqual('List of fixed items');
       expect(legend.id).toEqual('root__title');
     });
 
     it('should render field', () => {
       const {node} = createSchemaForm({schema});
-      const strInput = node.querySelector(
+      const strInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-string input[type=text]'
-      );
-      const numInput = node.querySelector(
+      )!;
+      const numInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-number input[type=number]'
-      );
+      )!;
       expect(strInput.id).toEqual('root_0');
       expect(numInput.id).toEqual('root_1');
     });
 
     it('should mark non-null item as required', () => {
       const {node} = createSchemaForm({schema});
-      const strInput = node.querySelector(
+      const strInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-string input[type=text]'
-      );
-      const numInput = node.querySelector(
+      )!;
+      const numInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-number input[type=number]'
-      );
+      )!;
       expect(strInput.required).toEqual(true);
       expect(numInput.required).toEqual(true);
     });
 
     it('should fill fields with data', () => {
       const {node} = createSchemaForm({schema, formData: ['foo', 42]});
-      const strInput = node.querySelector(
+      const strInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-string input[type=text]'
-      );
-      const numInput = node.querySelector(
+      )!;
+      const numInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-number input[type=number]'
-      );
+      )!;
       expect(strInput.value).toEqual('foo');
       expect(numInput.value).toEqual('42');
     });
 
     it('should handle change events', () => {
       const {schemaForm, node} = createSchemaForm({schema});
-      const strInput = node.querySelector(
+      const strInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-string input[type=text]'
-      );
-      const numInput = node.querySelector(
+      )!;
+      const numInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-number input[type=number]'
-      );
+      )!;
 
       strInput.value = 'bar';
       fireEvent(strInput, 'change');
@@ -629,9 +629,9 @@ describe('ArrayField', () => {
         schema: schemaAdditional,
         formData: [1, 2, 'bar'],
       });
-      const addInput = node.querySelector(
+      const addInput = <HTMLInputElement>node.querySelector(
         'fieldset .field-string input[type=text]'
-      );
+      )!;
       expect(addInput.id).toEqual('root_2');
       expect(addInput.value).toEqual('bar');
     });
@@ -647,10 +647,7 @@ describe('ArrayField', () => {
     });
 
     it('should not have an add button if addable is false', () => {
-      const {node} = createSchemaForm({
-        schema,
-        uiSchema: {'ui:options': {addable: false}},
-      });
+      const {node} = createSchemaForm({schema});
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
@@ -688,14 +685,15 @@ describe('ArrayField', () => {
       });
 
       it('should add a field when clicking add button', () => {
-        node.querySelector('.btn-add').click();
+        (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
         expect(node.querySelectorAll('.field-string')).toHaveLength(2);
         expect(schemaForm.formData).toEqual([1, 2, 'foo', makeUndefined()]);
       });
 
       it('should change the state when changing input value', () => {
-        const inputs = node.querySelectorAll('.field-string input[type=text]');
+        const inputs: NodeListOf<HTMLInputElement> =
+          node.querySelectorAll('.field-string input[type=text]');
 
         inputs[0].value = 'bar';
         fireEvent(inputs[0], 'change');
@@ -706,7 +704,7 @@ describe('ArrayField', () => {
       });
 
       it('should remove array items when clicking remove buttons', () => {
-        let dropBtns = node.querySelectorAll('.btn-remove');
+        let dropBtns: NodeListOf<HTMLButtonElement> = node.querySelectorAll('.btn-remove');
 
         dropBtns[0].click();
 

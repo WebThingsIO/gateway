@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {fireEvent, createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {fireEvent, createSchemaForm} from './test-utils';
 
 describe('StringField', () => {
   describe('text input', () => {
@@ -23,7 +23,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label').textContent.trim())
+      expect(node.querySelector('.field .control-label')!.textContent!.trim())
         .toEqual('foo');
     });
 
@@ -35,7 +35,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field-description').textContent.trim())
+      expect(node.querySelector('.field-description')!.textContent!.trim())
         .toEqual('bar');
     });
 
@@ -47,7 +47,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field input').value).toEqual('plop');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('plop');
     });
 
     it('should default state value to undefined', () => {
@@ -63,7 +63,7 @@ describe('StringField', () => {
         },
       });
 
-      const input = node.querySelector('input');
+      const input = node.querySelector('input')!;
       input.setRangeText('yo');
       fireEvent(input, 'change');
 
@@ -76,7 +76,7 @@ describe('StringField', () => {
         formData: 'x',
       });
 
-      const input = node.querySelector('input');
+      const input = node.querySelector('input')!;
       input.setRangeText('', 0, 1);
       fireEvent(input, 'change');
 
@@ -91,7 +91,7 @@ describe('StringField', () => {
         formData: 'plip',
       });
 
-      expect(node.querySelector('.field input').value).toEqual('plip');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('plip');
     });
 
     it('should render the input with the expected id', () => {
@@ -101,7 +101,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('input').id).toEqual('root');
+      expect(node.querySelector('input')!.id).toEqual('root');
     });
   });
 
@@ -126,7 +126,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label').textContent.trim())
+      expect(node.querySelector('.field .control-label')!.textContent!.trim())
         .toEqual('foo');
     });
 
@@ -138,7 +138,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelectorAll('.field option')[0].value).toEqual('');
+      expect((<HTMLInputElement>node.querySelectorAll('.field option')[0]).value).toEqual('');
     });
 
     it('should assign a default value', () => {
@@ -161,7 +161,7 @@ describe('StringField', () => {
         },
       });
 
-      const select = node.querySelector('select');
+      const select = node.querySelector('select')!;
       select.value = 'foo';
       fireEvent(select, 'change');
 
@@ -177,7 +177,7 @@ describe('StringField', () => {
            },
          });
 
-         const select = node.querySelector('select');
+         const select = node.querySelector('select')!;
          select.value = '';
          fireEvent(select, 'change');
 
@@ -192,11 +192,11 @@ describe('StringField', () => {
         },
       });
 
-      const select = node.querySelector('select');
+      const select = node.querySelector('select')!;
       select.value = 'foo';
       fireEvent(select, 'change');
 
-      expect(node.querySelector('select').value).toEqual('foo');
+      expect(node.querySelector('select')!.value).toEqual('foo');
     });
 
     it('should reflect undefined value into the dom as empty option', () => {
@@ -207,11 +207,11 @@ describe('StringField', () => {
         },
       });
 
-      const select = node.querySelector('select');
+      const select = node.querySelector('select')!;
       select.value = '';
       fireEvent(select, 'change');
 
-      expect(node.querySelector('select').value).toEqual('');
+      expect(node.querySelector('select')!.value).toEqual('');
     });
 
     it('should fill field with data', () => {
@@ -234,7 +234,7 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('select').id).toEqual('root');
+      expect(node.querySelector('select')!.id).toEqual('root');
     });
   });
 });

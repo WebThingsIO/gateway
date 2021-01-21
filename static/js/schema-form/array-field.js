@@ -399,11 +399,6 @@ class ArrayField {
     if (SchemaUtils.isFixedItems(schema)) {
       return this.renderFixedArray();
     }
-    /*
-    if (SchemaUtils.isFilesArray(schema, this.uiSchema, this.definitions)) {
-      return this.renderFiles();
-    }
-    */
     if (SchemaUtils.isMultiSelect(schema, this.definitions)) {
       return this.renderMultiSelect();
     }

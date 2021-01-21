@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {fireEvent, createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {fireEvent, createSchemaForm} from './test-utils';
 
 describe('NumberField', () => {
   describe('text input', () => {
@@ -23,7 +23,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label').textContent.trim())
+      expect(node.querySelector('.field .control-label')!.textContent!.trim())
         .toEqual('foo');
     });
 
@@ -35,7 +35,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('.field-description').textContent.trim())
+      expect(node.querySelector('.field-description')!.textContent!.trim())
         .toEqual('bar');
     });
 
@@ -53,7 +53,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('.field input').value).toEqual('2');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2');
     });
 
     it('should handle a change event', () => {
@@ -63,7 +63,7 @@ describe('NumberField', () => {
         },
       });
 
-      const input = node.querySelector('input');
+      const input = <HTMLInputElement>node.querySelector('input')!;
       input.value = '2';
       fireEvent(input, 'change');
 
@@ -78,7 +78,7 @@ describe('NumberField', () => {
         formData: 2,
       });
 
-      expect(node.querySelector('.field input').value).toEqual('2');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2');
     });
 
     it('should cast the input as a float number if it ends with a dot', () => {
@@ -88,7 +88,7 @@ describe('NumberField', () => {
         },
       });
 
-      const input = node.querySelector('input');
+      const input = <HTMLInputElement>node.querySelector('input')!;
       input.value = '2.2';
       fireEvent(input, 'change');
 
@@ -102,7 +102,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('input').id).toEqual('root');
+      expect(node.querySelector('input')!.id).toEqual('root');
     });
 
     it('should render with trailing zeroes', () => {
@@ -112,7 +112,7 @@ describe('NumberField', () => {
         },
       });
 
-      const input = node.querySelector('input');
+      const input = <HTMLInputElement>node.querySelector('input')!;
 
       // TODO: uncomment this when jsdom is fixed. currently, it treats 2. as
       // invalid input, so value is reported as ""
@@ -125,17 +125,17 @@ describe('NumberField', () => {
 
       input.value = '2.0';
       fireEvent(input, 'change');
-      expect(node.querySelector('.field input').value).toEqual('2.0');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2.0');
       expect(schemaForm.formData).toEqual(2);
 
       input.value = '2.00';
       fireEvent(input, 'change');
-      expect(node.querySelector('.field input').value).toEqual('2.00');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2.00');
       expect(schemaForm.formData).toEqual(2);
 
       input.value = '2.000';
       fireEvent(input, 'change');
-      expect(node.querySelector('.field input').value).toEqual('2.000');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2.000');
       expect(schemaForm.formData).toEqual(2);
     });
   });
@@ -161,7 +161,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label').textContent.trim())
+      expect(node.querySelector('.field .control-label')!.textContent!.trim())
         .toEqual('foo');
     });
 
@@ -185,7 +185,7 @@ describe('NumberField', () => {
         },
       });
 
-      const select = node.querySelector('select');
+      const select = <HTMLSelectElement>node.querySelector('select')!;
       select.value = '2';
       fireEvent(select, 'change');
 
@@ -212,7 +212,7 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('select').id).toEqual('root');
+      expect(node.querySelector('select')!.id).toEqual('root');
     });
   });
 
@@ -230,9 +230,9 @@ describe('NumberField', () => {
         formData: 3.14,
       });
 
-      expect(node.querySelector('[type=range]').value)
+      expect((<HTMLInputElement>node.querySelector('[type=range]')!).value)
         .toEqual('3.14');
-      expect(node.querySelector('.range-view').textContent.trim())
+      expect(node.querySelector('.range-view')!.textContent!.trim())
         .toEqual('3.14');
     });
 
@@ -242,21 +242,21 @@ describe('NumberField', () => {
         formData: 3.14,
       });
 
-      const input = node.querySelector('[type=range]');
+      const input = <HTMLInputElement>node.querySelector('[type=range]')!;
       input.value = '6.28';
       fireEvent(input, 'change');
 
       expect(schemaForm.formData).toEqual(6.28);
-      expect(node.querySelector('.range-view').textContent.trim())
+      expect(node.querySelector('.range-view')!.textContent!.trim())
         .toEqual('6.28');
     });
 
     describe('Constraint attributes', () => {
-      let input;
+      let input: Element;
 
       beforeEach(() => {
         const {node} = createSchemaForm({schema});
-        input = node.querySelector('[type=range]');
+        input = node.querySelector('[type=range]')!;
       });
 
       it('should support the minimum constraint', () => {
@@ -275,7 +275,7 @@ describe('NumberField', () => {
         };
 
         const {node} = createSchemaForm({schema});
-        input = node.querySelector('[type=range]');
+        input = node.querySelector('[type=range]')!;
 
         expect(input.getAttribute('min')).toEqual('0');
         expect(input.getAttribute('max')).toEqual('0');
