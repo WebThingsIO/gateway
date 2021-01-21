@@ -1,25 +1,18 @@
-'use strict';
-
-const {server, chai} = require('../common');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
-
-const AddonManager = require('../../addon-manager').default;
-const config = require('config');
-const Constants = require('../../constants');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const jsonfile = require('jsonfile');
-const path = require('path');
-const Platform = require('../../platform');
-const pkg = require('../../package.json');
-const semver = require('semver');
-const sleep = require('../../sleep').default;
-const UserProfile = require('../../user-profile').default;
-const {URLSearchParams} = require('url');
+import {server, chai} from '../common';
+import {TEST_USER, createUser, headerAuth} from '../user';
+import AddonManager from '../../addon-manager';
+import config from 'config';
+import * as Constants from '../../constants';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import jsonfile from 'jsonfile';
+import path from 'path';
+import * as Platform from '../../platform';
+import pkg from '../../package.json';
+import semver from 'semver';
+import sleep from '../../sleep';
+import UserProfile from '../../user-profile';
+import {URLSearchParams} from 'url';
 
 const testManifestJsonFilename =
   path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
@@ -50,19 +43,19 @@ const testManifestJson = {
 const addonParams = new URLSearchParams();
 addonParams.set('arch', Platform.getArchitecture());
 addonParams.set('version', pkg.version);
-addonParams.set('node', Platform.getNodeVersion());
+addonParams.set('node', `${Platform.getNodeVersion()}`);
 addonParams.set('python', Platform.getPythonVersions().join(','));
 addonParams.set('test', config.get('addonManager.testAddons') ? '1' : '0');
 
-const addonUrl =
-  `${config.get('addonManager.listUrls')[0]}?${addonParams.toString()}`;
+const addonUrl = `${(<string[]>config.get('addonManager.listUrls'))[0]}?${addonParams.toString()}`;
 
-function copyManifest(manifest) {
+function copyManifest<T>(manifest: T): T {
   // This essentially does a deep copy.
   return JSON.parse(JSON.stringify(manifest));
 }
 
-async function loadSettingsAdapterWithManifestJson(manifest) {
+async function loadSettingsAdapterWithManifestJson(manifest: Record<string, unknown>):
+Promise<void> {
   // If the adapter is already loaded, then unload it.
   if (AddonManager.getAdapter('test-adapter')) {
     await AddonManager.unloadAdapter('test-adapter');
@@ -79,7 +72,7 @@ async function loadSettingsAdapterWithManifestJson(manifest) {
 }
 
 describe('addons', () => {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
@@ -243,14 +236,14 @@ describe('addons', () => {
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
     expect(
-      res1.body.filter((a) => a.id === 'example-adapter').length
+      res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(0);
 
     const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
 
-    const addon = list.find((a) => a.id === 'example-adapter');
+    const addon = list.find((a: Record<string, unknown>) => a.id === 'example-adapter');
     expect(addon).toHaveProperty('id');
     expect(addon).toHaveProperty('name');
     expect(addon).toHaveProperty('description');
@@ -279,14 +272,14 @@ describe('addons', () => {
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
     expect(
-      res1.body.filter((a) => a.id === 'example-adapter').length
+      res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(0);
 
     const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
 
-    const addon = list.find((a) => a.id === 'example-adapter');
+    const addon = list.find((a: Record<string, unknown>) => a.id === 'example-adapter');
     expect(addon).toHaveProperty('id');
     expect(addon).toHaveProperty('name');
     expect(addon).toHaveProperty('description');
@@ -313,7 +306,7 @@ describe('addons', () => {
     expect(res4.status).toEqual(200);
     expect(Array.isArray(res4.body)).toBe(true);
     expect(
-      res4.body.filter((a) => a.id === 'example-adapter').length
+      res4.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(1);
   });
 
@@ -333,7 +326,7 @@ describe('addons', () => {
     expect(res1.status).toEqual(200);
     expect(Array.isArray(res1.body)).toBe(true);
     expect(
-      res1.body.filter((a) => a.id === 'example-adapter').length
+      res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(1);
 
     const res2 = await chai.request(server)
@@ -350,7 +343,7 @@ describe('addons', () => {
     expect(res3.status).toEqual(200);
     expect(Array.isArray(res3.body)).toBe(true);
     expect(
-      res3.body.filter((a) => a.id === 'example-adapter').length
+      res3.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(0);
   });
 
@@ -360,13 +353,13 @@ describe('addons', () => {
   });
 
   it('Fail manifest.json with missing author key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.author;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing description key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.description;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
@@ -374,76 +367,76 @@ describe('addons', () => {
   it(
     'Fail manifest.json with missing gateway_specific_settings key',
     async () => {
-      const manifest = copyManifest(testManifestJson);
+      const manifest: any = copyManifest(testManifestJson);
       delete manifest.gateway_specific_settings;
       expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
     }
   );
 
   it('Fail manifest.json with missing webthings key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.gateway_specific_settings.webthings;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing primary_type key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.gateway_specific_settings.webthings.primary_type;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway min version', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     manifest.gateway_specific_settings.webthings.strict_min_version =
-      semver.inc(pkg.version, 'minor');
+      semver.inc(pkg.version, 'minor')!;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway max version', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     manifest.gateway_specific_settings.webthings.strict_max_version =
       `0.${pkg.version}`;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing homepage_url key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.homepage_url;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing id key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.id;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing license key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.license;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing manifest_version key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.manifest_version;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with incorrect manifest_version key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     manifest.manifest_version = 0;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing name key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.name;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing version key', async () => {
-    const manifest = copyManifest(testManifestJson);
+    const manifest: any = copyManifest(testManifestJson);
     delete manifest.version;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });

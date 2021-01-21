@@ -1,7 +1,5 @@
-'use strict';
-
-const {server} = require('../common');
-const {
+import {server} from '../common';
+import {
   TEST_USER,
   TEST_USER_DIFFERENT,
   TEST_USER_UPDATE_1,
@@ -17,12 +15,12 @@ const {
   userInfoById,
   userCount,
   logoutUser,
-} = require('../user');
-const speakeasy = require('speakeasy');
+} from '../user';
+import speakeasy from 'speakeasy';
 
 it('creates a user and get email', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   expect(info.email).toBe(TEST_USER.email);
 });
 
@@ -53,8 +51,8 @@ it('gets invalid user info', async () => {
 
 it('gets user info by id', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const info1 = await userInfo(server, jwt);
-  const info2 = await userInfoById(server, jwt, info1.id);
+  const info1 = (await userInfo(server, jwt))!;
+  const info2 = await userInfoById(server, jwt, info1.id!);
   expect(info2.id).toBe(info1.id);
   expect(info2.email).toBe(info1.email);
   expect(info2.name).toBe(info1.name);
@@ -95,7 +93,7 @@ it('logs in as a user', async () => {
   // Create the user but do not use the returning JWT.
   const createJWT = await createUser(server, TEST_USER);
   const loginJWT = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, loginJWT);
+  const info = (await userInfo(server, loginJWT))!;
   expect(info.email).toBe(TEST_USER.email);
 
   // logout
@@ -109,7 +107,7 @@ it('logs in as a user', async () => {
   }
 
   // try to use a non-revoked jwt again.
-  const altInfo = await userInfo(server, createJWT);
+  const altInfo = (await userInfo(server, createJWT))!;
   expect(altInfo.email).toBe(TEST_USER.email);
 });
 
@@ -124,7 +122,7 @@ it('edits an invalid user', async () => {
 
 it('fails to edit a user when missing data', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   try {
     await editUser(server, jwt, {id: info.id});
   } catch (err) {
@@ -134,7 +132,7 @@ it('fails to edit a user when missing data', async () => {
 
 it('fails to edit user with incorrect password', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   try {
     await editUser(
       server,
@@ -148,10 +146,10 @@ it('fails to edit user with incorrect password', async () => {
 
 it('edits a user', async () => {
   const jwt = await createUser(server, TEST_USER);
-  let info = await userInfo(server, jwt);
+  let info = (await userInfo(server, jwt))!;
   await editUser(
     server, jwt, Object.assign({}, TEST_USER_UPDATE_1, {id: info.id}));
-  info = await userInfo(server, jwt);
+  info = (await userInfo(server, jwt))!;
   expect(info.name).toBe(TEST_USER_UPDATE_1.name);
   expect(info.email).toBe(TEST_USER_UPDATE_1.email);
 
@@ -162,10 +160,10 @@ it('edits a user', async () => {
 
 it('edits a user, including password', async () => {
   const jwt = await createUser(server, TEST_USER);
-  let info = await userInfo(server, jwt);
+  let info = (await userInfo(server, jwt))!;
   await editUser(
     server, jwt, Object.assign({}, TEST_USER_UPDATE_2, {id: info.id}));
-  info = await userInfo(server, jwt);
+  info = (await userInfo(server, jwt))!;
   expect(info.name).toBe(TEST_USER_UPDATE_2.name);
   expect(info.email).toBe(TEST_USER_UPDATE_2.email);
 
@@ -178,8 +176,8 @@ it('edits a user, including password', async () => {
 
 it('deletes a user', async () => {
   const jwt = await createUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
-  await deleteUser(server, jwt, info.id);
+  const info = (await userInfo(server, jwt))!;
+  await deleteUser(server, jwt, info.id!);
   try {
     await userInfo(server, jwt);
   } catch (rsp1) {
@@ -213,7 +211,7 @@ it('fails to log in with incorrect password', async () => {
 it('fails to enable MFA with wrong token', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   try {
     await enableMfa(
       server,
@@ -229,7 +227,7 @@ it('fails to enable MFA with wrong token', async () => {
 it('fails to log in with missing MFA token', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
   try {
@@ -243,7 +241,7 @@ it('fails to log in with missing MFA token', async () => {
 it('fails to log in with incorrect MFA token', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
   try {
@@ -260,7 +258,7 @@ it('fails to log in with incorrect MFA token', async () => {
 it('logs in successfully with MFA token', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   const params =
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
@@ -274,7 +272,7 @@ it('logs in successfully with MFA token', async () => {
 it('fails to log in with incorrect MFA backup code', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
   try {
@@ -289,7 +287,7 @@ it('fails to log in with incorrect MFA backup code', async () => {
 it('logs in successfully with MFA backup code', async () => {
   await createUser(server, TEST_USER);
   const jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   const params =
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
@@ -302,7 +300,7 @@ it('logs in successfully with MFA backup code', async () => {
 it('fails to log in twice with same MFA backup code', async () => {
   await createUser(server, TEST_USER);
   let jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   const params =
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
@@ -325,7 +323,7 @@ it('fails to log in twice with same MFA backup code', async () => {
 it('enables and disables MFA, then logs in', async () => {
   await createUser(server, TEST_USER);
   let jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   const params =
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);
@@ -342,7 +340,7 @@ it('enables and disables MFA, then logs in', async () => {
 it('enables, disables, and re-enables MFA, but gets new secret', async () => {
   await createUser(server, TEST_USER);
   let jwt = await loginUser(server, TEST_USER);
-  const info = await userInfo(server, jwt);
+  const info = (await userInfo(server, jwt))!;
   const params1 =
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, {id: info.id}));
   await logoutUser(server, jwt);

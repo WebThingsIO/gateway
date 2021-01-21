@@ -1,16 +1,9 @@
-'use strict';
-
-const config = require('config');
-const nock = require('nock');
-const {URL} = require('url');
-
-const {server, chai} = require('../common');
-const Constants = require('../../constants');
-const {
-  TEST_USER,
-  createUser,
-  headerAuth,
-} = require('../user');
+import config from 'config';
+import nock from 'nock';
+import {URL} from 'url';
+import {server, chai} from '../common';
+import * as Constants from '../../constants';
+import {TEST_USER, createUser, headerAuth} from '../user';
 
 const releases = [
   {
@@ -38,7 +31,7 @@ const releases = [
 const updateUrl = new URL(config.get('updates.url'));
 
 describe('updates/', () => {
-  let jwt;
+  let jwt: string;
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
   });
@@ -97,4 +90,3 @@ describe('updates/', () => {
     expect(res.body).toHaveProperty('version');
   });
 });
-

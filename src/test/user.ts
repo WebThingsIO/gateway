@@ -87,7 +87,7 @@ export async function enableMfa(
   server: http.Server|https.Server,
   jwt: string,
   user: Record<string, unknown>,
-  totp: string
+  totp?: string
 ): Promise<{secret: string, url: string, backupCodes: string[]}> {
   const res1 = await chai.request(server).keepOpen()
     .post(`${Constants.USERS_PATH}/${user.id}/mfa`)
