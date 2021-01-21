@@ -33,8 +33,8 @@ expect.extend({
   },
 });
 
-const {servers, serverStartup} = require('../app');
-(global as any).server = servers.https;
+import {servers, serverStartup} from '../app';
+(global as any).server = servers.https!;
 
 import addonManager from '../addon-manager';
 
@@ -61,7 +61,7 @@ beforeAll(async () => {
 
   // The server may not be done with reading tunneltoken and related settings
   await serverStartup.promise;
-  console.log(servers.http.address(), servers.https.address());
+  console.log(servers.http.address(), servers.https!.address());
 
   // If the mock adapter is a plugin, then it may not be available
   // immediately, so wait for it to be available.
@@ -83,17 +83,20 @@ afterEach(async () => {
 afterAll(async () => {
   Logs.close();
   await addonManager.unloadAddons();
-  servers.https.close();
+
+  if (servers.https) {
+    servers.https.close();
+    await e2p(servers.https, 'close');
+  }
+
   servers.http.close();
-  await Promise.all([
-    e2p(servers.https, 'close'),
-    e2p(servers.http, 'close'),
-  ]);
+  await e2p(servers.http, 'close');
+
   removeTestManifest();
 });
 
 // Some tests take really long if Travis is having a bad day
 jest.setTimeout(60000);
 
-export const server = servers.https;
+export const server = servers.https!;
 export const httpServer = servers.http;
