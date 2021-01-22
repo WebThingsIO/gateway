@@ -8,6 +8,7 @@
  */
 
 import {Adapter, AddonManagerProxy} from 'gateway-addon';
+import manifest from './manifest.json';
 
 class SettingsTestAdapter extends Adapter {
   constructor(addonManager: AddonManagerProxy, packageName: string) {
@@ -16,8 +17,8 @@ class SettingsTestAdapter extends Adapter {
   }
 }
 
-function loadSettingsTestAdapter(addonManager: AddonManagerProxy, manifest: any): void {
-  new SettingsTestAdapter(addonManager, manifest.name);
+function loadSettingsTestAdapter(addonManager: AddonManagerProxy): void {
+  new SettingsTestAdapter(addonManager, manifest.id);
 }
 
 export = loadSettingsTestAdapter;

@@ -1,6 +1,5 @@
 /**
- * test-adapter.ts - Adapter for testing portions of the the
- *                   AddonManager.loadAddons.
+ * test-adapter.ts - Adapter for testing portions of AddonManager.loadAddons.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,8 +15,9 @@ class TestAdapter extends Adapter {
   }
 }
 
-function loadTestAdapter(addonManager: AddonManagerProxy, manifest: any): void {
-  new TestAdapter(addonManager, manifest.name);
+function loadTestAdapter(addonManager: AddonManagerProxy): void {
+  const manifest = require('./manifest.json');
+  new TestAdapter(addonManager, manifest.id);
 }
 
 export = loadTestAdapter;
