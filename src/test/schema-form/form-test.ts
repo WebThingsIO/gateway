@@ -1,7 +1,5 @@
-require('../jsdom-common');
-const {fireEvent, createSchemaForm} = require('./test-utils');
-
-/* globals sandbox */
+import '../jsdom-common';
+import {fireEvent, createSchemaForm} from './test-utils';
 
 describe('Form', () => {
   describe('Empty schema', () => {
@@ -124,10 +122,7 @@ describe('Form', () => {
         },
       };
 
-      expect(() => createSchemaForm({schema})).toThrow(
-        Error,
-        /#\/definitions\/nonexistent/
-      );
+      expect(() => createSchemaForm({schema})).toThrow(/#\/definitions\/nonexistent/);
     });
 
     it('should propagate referenced definition defaults', () => {
@@ -140,7 +135,7 @@ describe('Form', () => {
 
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('input[type=text]').value).toEqual('hello');
+      expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
     });
 
     it('should propagate nested referenced definition defaults', () => {
@@ -156,7 +151,7 @@ describe('Form', () => {
 
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('input[type=text]').value).toEqual('hello');
+      expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
     });
 
     it('should propagate referenced definition defaults for array items',
@@ -173,9 +168,9 @@ describe('Form', () => {
 
          const {node} = createSchemaForm({schema});
 
-         node.querySelector('.btn-add').click();
+         (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
-         expect(node.querySelector('input[type=text]').value).toEqual('hello');
+         expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
        });
 
     it('should recursively handle referenced definitions', () => {
@@ -201,7 +196,7 @@ describe('Form', () => {
 
       expect(node.querySelector('#root_children_0_name')).toBeNull();
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
       expect(node.querySelector('#root_children_0_name')).not.toBeNull();
     });
@@ -253,7 +248,7 @@ describe('Form', () => {
 
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('#root_foo__title').textContent.trim())
+      expect(node.querySelector('#root_foo__title')!.textContent!.trim())
         .toEqual('custom title');
     });
 
@@ -283,11 +278,11 @@ describe('Form', () => {
     it('should not set default when a text field is cleared', () => {
       const {node} = createSchemaForm({schema, formData: 'bar'});
 
-      const input = node.querySelector('input');
+      const input = <HTMLInputElement>node.querySelector('input')!;
       input.value = '';
       fireEvent(input, 'change');
 
-      expect(node.querySelector('input').value).toEqual('');
+      expect((<HTMLInputElement>node.querySelector('input')!).value).toEqual('');
     });
   });
 
@@ -321,7 +316,7 @@ describe('Form', () => {
     it('should propagate deeply nested defaults to form state', () => {
       const {schemaForm, node} = createSchemaForm({schema});
 
-      node.querySelector('.btn-add').click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
       expect(schemaForm.formData).toEqual({
         object: {
@@ -354,7 +349,7 @@ describe('Form', () => {
            formData,
          });
 
-         expect(node.querySelector('.button-submit').disabled)
+         expect((<HTMLButtonElement>node.querySelector('.button-submit')!).disabled)
            .toBeTruthy();
        });
 
@@ -365,18 +360,18 @@ describe('Form', () => {
           foo: {type: 'string'},
         },
       };
-      const onSubmit = sandbox.stub();
+      const onSubmit = (global as any).sandbox.stub();
 
       const {node} = createSchemaForm({
         schema,
         onSubmit,
       });
 
-      const input = node.querySelector('input');
+      const input = <HTMLInputElement>node.querySelector('input')!;
       input.value = 'bar';
       fireEvent(input, 'change');
 
-      node.querySelector('.button-submit').click();
+      (<HTMLButtonElement>node.querySelector('.button-submit')!).click();
 
       expect(onSubmit.calledOnce).toBeTruthy();
       expect(onSubmit.getCall(0).args[0]).toEqual({
@@ -394,13 +389,13 @@ describe('Form', () => {
         };
         const {node} = createSchemaForm({schema});
 
-        const input = node.querySelector('input');
+        const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
         fireEvent(input, 'change');
 
         expect(node.querySelectorAll('.errors-list')).toHaveLength(1);
         expect(
-          node.querySelector('.error-item').textContent.trim()
+          node.querySelector('.error-item')!.textContent!.trim()
         ).toContain('should NOT have fewer than 8 characters');
       });
     });
@@ -414,12 +409,12 @@ describe('Form', () => {
         };
         const {node} = createSchemaForm({schema});
 
-        const input = node.querySelector('input');
+        const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
         fireEvent(input, 'change');
 
         const liNodes = node.querySelectorAll('.error-item');
-        const errors = [].map.call(liNodes, (li) => li.textContent.trim());
+        const errors = [].map.call(liNodes, (li: Element) => li.textContent!.trim());
 
         expect(errors).toEqual([
           'should NOT have fewer than 8 characters',
@@ -446,12 +441,12 @@ describe('Form', () => {
         };
         const {node} = createSchemaForm({schema});
 
-        const input = node.querySelector('input');
+        const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
         fireEvent(input, 'change');
 
         expect(node.querySelectorAll('.errors-list')).toHaveLength(1);
-        expect(node.querySelector('.error-item').textContent.trim()).toEqual(
+        expect(node.querySelector('.error-item')!.textContent!.trim()).toEqual(
           '/level1/level2 should NOT have fewer than 8 characters'
         );
       });
@@ -506,11 +501,11 @@ describe('Form', () => {
           schema,
         });
 
-        const input = node.querySelector('input[type=number]');
+        const input = <HTMLInputElement>node.querySelector('input[type=number]')!;
         input.value = 'not a number';
         fireEvent(input, 'change');
 
-        expect(node.querySelector('.error-item').textContent.trim()).toEqual(
+        expect(node.querySelector('.error-item')!.textContent!.trim()).toEqual(
           // TODO: uncomment this when jsdom's validation is no longer broken.
           // it doesn't set input.validity.badInput when it should.
           // '.field1 should be number',
@@ -524,16 +519,16 @@ describe('Form', () => {
           formData: {branch: 2},
         });
 
-        const field1 = node.querySelector('#root_field1');
+        const field1 = <HTMLInputElement>node.querySelector('#root_field1')!;
         field1.value = 'not a number';
         fireEvent(field1, 'change');
 
-        const field2 = node.querySelector('#root_field2');
+        const field2 = <HTMLInputElement>node.querySelector('#root_field2')!;
         field2.value = 'not a number';
         fireEvent(field2, 'change');
 
         const liNodes = node.querySelectorAll('.error-item');
-        const errors = [].map.call(liNodes, (li) => li.textContent.trim());
+        const errors = [].map.call(liNodes, (li: Element) => li.textContent!.trim());
 
         expect(errors).toEqual(expect.arrayContaining([
           // TODO: uncomment this when jsdom's validation is no longer broken.
@@ -550,12 +545,12 @@ describe('Form', () => {
           schema,
         });
 
-        const select = node.querySelector('select');
-        select.value = 3;
+        const select = <HTMLSelectElement>node.querySelector('select')!;
+        select.value = '3';
         fireEvent(select, 'change');
 
         const liNodes = node.querySelectorAll('.error-item');
-        const errors = [].map.call(liNodes, (li) => li.textContent.trim());
+        const errors = [].map.call(liNodes, (li: Element) => li.textContent!.trim());
 
         expect(errors).toEqual(expect.arrayContaining([
           '/branch should be equal to one of the allowed values',
@@ -595,7 +590,7 @@ describe('Form', () => {
       const {node} = createSchemaForm({schema, formData});
 
       const inputs = node.querySelectorAll('select, input');
-      const ids = [].map.call(inputs, (input) => input.id);
+      const ids = [].map.call(inputs, (input: Element) => input.id);
 
       expect(ids).toEqual([
         'root_a',
@@ -606,12 +601,12 @@ describe('Form', () => {
       const formData = {a: 'int'};
       const {node} = createSchemaForm({schema, formData});
 
-      const select = node.querySelector('select');
+      const select = <HTMLSelectElement>node.querySelector('select')!;
       select.value = 'bool';
       fireEvent(select, 'change');
 
       const inputs = node.querySelectorAll('select, input');
-      const ids = [].map.call(inputs, (input) => input.id);
+      const ids = [].map.call(inputs, (input: Element) => input.id);
 
       expect(ids).toEqual([
         'root_a',
