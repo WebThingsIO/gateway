@@ -45,7 +45,7 @@ export function mockAdapter(): Adapter {
 }
 (global as any).mockAdapter = mockAdapter;
 
-function removeTestManifest() {
+function removeTestManifest(): void {
   const testManifestJsonFilename =
     path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
   if (fs.existsSync(testManifestJsonFilename)) {

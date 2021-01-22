@@ -10,7 +10,7 @@ declare namespace ASN1 {
 
   type PemParams = {
     label: string;
-  }
+  };
 
   class Builder {
     seq(): this;

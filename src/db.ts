@@ -511,7 +511,7 @@ class Database {
   createPushSubscription(desc: any): Promise<number> {
     const description = JSON.stringify(desc);
 
-    const insert = () => {
+    const insert = (): Promise<number> => {
       return this.run(
         'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
         [description]
@@ -618,7 +618,7 @@ class Database {
     });
   }
 
-  all(sql: string, values: any[], callback?: (this: any, err: Error|null, rows: any[]) => void):
+  all(sql: string, values: any[], callback?: (this: any, err: Error | null, rows: any[]) => void):
   void {
     this.db!.all(sql, values, callback);
   }

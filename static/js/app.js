@@ -454,8 +454,8 @@ const App = {
 
     if (extraUrl) {
       message += `<br><br>
-        <a href="${Utils.escapeHtml(extraUrl)}" target="_blank" rel="noopener" data-l10n-id="more-information">
-        </a>`;
+        <a href="${Utils.escapeHtml(extraUrl)}" target="_blank" rel="noopener"
+           data-l10n-id="more-information"></a>`;
     }
 
     this.messageArea.innerHTML = message;

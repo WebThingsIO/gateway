@@ -62,7 +62,8 @@ class SliderProperty extends BaseComponent {
   <div id="container-${BaseComponent.count}" class="webthing-slider-property-container">
     <div id="contents-${BaseComponent.count}" class="webthing-slider-property-contents">
       <form id="form-${BaseComponent.count}" class="webthing-slider-property-form">
-        <input type="range" id="slider-${BaseComponent.count}" class="webthing-slider-property-slider">
+        <input type="range" id="slider-${BaseComponent.count}"
+               class="webthing-slider-property-slider">
       </form>
     </div>
   </div>

@@ -40,7 +40,7 @@ const Utils = {
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
-      .replace(/&#039;/g, "'") // eslint-disable-line quotes
+      .replace(/&#039;/g, "'") // eslint-disable-line @typescript-eslint/quotes
       .replace(/&deg;/g, '°')
       .replace(/&sdot;/g, '⋅');
   },

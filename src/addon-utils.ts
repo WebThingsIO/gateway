@@ -29,7 +29,7 @@ const ENFORCE_STRICT_SHA_CHECK = false;
  *
  * @returns {string?} Error string, or undefined if no error.
  */
-function validateObject(prefix: string, obj: any, template: any): string|undefined {
+function validateObject(prefix: string, obj: any, template: any): string | undefined {
   for (const key in template) {
     if (key in obj) {
       const objectVal = obj[key];
@@ -79,7 +79,7 @@ function validateObject(prefix: string, obj: any, template: any): string|undefin
  *
  * @returns {string?} Error string, or undefined if no error.
  */
-function validateManifestJson(manifest: any): string|undefined {
+function validateManifestJson(manifest: any): string | undefined {
   const manifestTemplate = {
     author: '',
     description: '',

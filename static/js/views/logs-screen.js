@@ -335,6 +335,7 @@ class LogsScreen {
   }
 
   handleEdit() {
+    // pass
   }
 
   handleRemove() {

@@ -115,7 +115,7 @@ SettingsController.post('/subscribe', async (request, response, next) => {
   const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
   const optout = request.body.optout;
 
-  function cb(err: any) {
+  function cb(err: any): void {
     if (err) {
       response.statusMessage = `Error issuing certificate - ${err}`;
       response.status(400).end();

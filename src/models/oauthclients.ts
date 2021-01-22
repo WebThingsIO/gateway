@@ -7,7 +7,7 @@ import Database from '../db';
 class OAuthClients {
   private clients: Map<string, Array<ClientRegistry>> = new Map();
 
-  register(client: ClientRegistry) {
+  register(client: ClientRegistry): void {
     if (this.clients.get(client.id)) {
       this.clients.get(client.id)!.push(client);
     } else {
@@ -15,7 +15,7 @@ class OAuthClients {
     }
   }
 
-  get(id: string, redirectUri?: URL): ClientRegistry|null {
+  get(id: string, redirectUri?: URL): ClientRegistry | null {
     const clients = this.clients.get(id);
     if (!clients) {
       return null;
@@ -55,7 +55,7 @@ class OAuthClients {
     return Array.from(authorized.values());
   }
 
-  async revokeClientAuthorization(userId: number, clientId: string) {
+  async revokeClientAuthorization(userId: number, clientId: string): Promise<void> {
     const jwts = await Database.getJSONWebTokensByUser(userId);
 
     for (const jwt of jwts) {

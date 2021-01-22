@@ -117,7 +117,7 @@ InternalLogsController.get('/zip', async (_request, response) => {
     }
   }, 30 * 1000);
 
-  function onLog(message: any) {
+  function onLog(message: any): void {
     websocket.send(JSON.stringify(message), (err) => {
       if (err) {
         console.error('WebSocket sendMessage failed:', err);
@@ -129,7 +129,7 @@ InternalLogsController.get('/zip', async (_request, response) => {
   if (pluginServer) {
     pluginServer.on('log', onLog);
 
-    const cleanup = () => {
+    const cleanup = (): void => {
       pluginServer.removeListener('log', onLog);
       clearInterval(heartbeat);
     };

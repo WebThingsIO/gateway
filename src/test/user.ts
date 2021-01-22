@@ -34,7 +34,7 @@ export const TEST_USER_UPDATE_2 = {
   newPassword: 'strawberry',
 };
 
-async function getJWT(path: string, server: http.Server|https.Server,
+async function getJWT(path: string, server: http.Server | https.Server,
                       user: Record<string, unknown>): Promise<string> {
   const res = await chai.request(server).keepOpen()
     .post(path)
@@ -47,17 +47,17 @@ async function getJWT(path: string, server: http.Server|https.Server,
   return res.body.jwt;
 }
 
-export async function loginUser(server: http.Server|https.Server,
+export async function loginUser(server: http.Server | https.Server,
                                 user: Record<string, unknown>): Promise<string> {
   return getJWT(Constants.LOGIN_PATH, server, user);
 }
 
-export async function createUser(server: http.Server|https.Server, user: Record<string, unknown>):
+export async function createUser(server: http.Server | https.Server, user: Record<string, unknown>):
 Promise<string> {
   return getJWT(Constants.USERS_PATH, server, user);
 }
 
-export async function addUser(server: http.Server|https.Server, jwt: string,
+export async function addUser(server: http.Server | https.Server, jwt: string,
                               user: Record<string, unknown>): Promise<ChaiHttp.Response> {
   const res = await chai.request(server).keepOpen()
     .post(Constants.USERS_PATH)
@@ -70,7 +70,7 @@ export async function addUser(server: http.Server|https.Server, jwt: string,
   return res;
 }
 
-export async function editUser(server: http.Server|https.Server, jwt: string,
+export async function editUser(server: http.Server | https.Server, jwt: string,
                                user: Record<string, unknown>): Promise<ChaiHttp.Response> {
   const res = await chai.request(server).keepOpen()
     .put(`${Constants.USERS_PATH}/${user.id}`)
@@ -84,7 +84,7 @@ export async function editUser(server: http.Server|https.Server, jwt: string,
 }
 
 export async function enableMfa(
-  server: http.Server|https.Server,
+  server: http.Server | https.Server,
   jwt: string,
   user: Record<string, unknown>,
   totp?: string
@@ -118,7 +118,7 @@ export async function enableMfa(
   return Object.assign({}, res1.body, res2.body);
 }
 
-export async function disableMfa(server: http.Server|https.Server, jwt: string,
+export async function disableMfa(server: http.Server | https.Server, jwt: string,
                                  user: Record<string, unknown>): Promise<ChaiHttp.Response> {
   const res = await chai.request(server).keepOpen()
     .post(`${Constants.USERS_PATH}/${user.id}/mfa`)
@@ -131,7 +131,7 @@ export async function disableMfa(server: http.Server|https.Server, jwt: string,
   return res;
 }
 
-export async function deleteUser(server: http.Server|https.Server, jwt: string, userId: number):
+export async function deleteUser(server: http.Server | https.Server, jwt: string, userId: number):
 Promise<ChaiHttp.Response> {
   const res = await chai.request(server).keepOpen()
     .delete(`${Constants.USERS_PATH}/${userId}`)
@@ -144,8 +144,8 @@ Promise<ChaiHttp.Response> {
   return res;
 }
 
-export async function userInfo(server: http.Server|https.Server, jwt: string):
-Promise<UserDescription|null> {
+export async function userInfo(server: http.Server | https.Server, jwt: string):
+Promise<UserDescription | null> {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.USERS_PATH}/info`)
     .set(...headerAuth(jwt))
@@ -164,7 +164,7 @@ Promise<UserDescription|null> {
   return null;
 }
 
-export async function userInfoById(server: http.Server|https.Server, jwt: string, userId: number):
+export async function userInfoById(server: http.Server | https.Server, jwt: string, userId: number):
 Promise<UserDescription> {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.USERS_PATH}/${userId}`)
@@ -178,7 +178,7 @@ Promise<UserDescription> {
   return res.body;
 }
 
-export async function userCount(server: http.Server|https.Server): Promise<{count: number}> {
+export async function userCount(server: http.Server | https.Server): Promise<{count: number}> {
   const res = await chai.request(server).keepOpen()
     .get(`${Constants.USERS_PATH}/count`)
     .set('Accept', 'application/json')
@@ -190,7 +190,7 @@ export async function userCount(server: http.Server|https.Server): Promise<{coun
   return res.body;
 }
 
-export async function logoutUser(server: http.Server|https.Server, jwt: string):
+export async function logoutUser(server: http.Server | https.Server, jwt: string):
 Promise<ChaiHttp.Response> {
   const res = await chai.request(server).keepOpen()
     .post(Constants.LOG_OUT_PATH)

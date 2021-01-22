@@ -14,7 +14,7 @@ function extractThing(href: string): string {
   return href.match(/things\/([^/]+)/)![1];
 }
 
-function migrateTimeTrigger(trigger: TimeTriggerDescription): TimeTriggerDescription|null {
+function migrateTimeTrigger(trigger: TimeTriggerDescription): TimeTriggerDescription | null {
   if (trigger.localized) {
     return null;
   }
@@ -40,7 +40,7 @@ function migrateTimeTrigger(trigger: TimeTriggerDescription): TimeTriggerDescrip
   };
 }
 
-function migrateProperty(prop: PropertyDescription): PropertyDescription|null {
+function migrateProperty(prop: PropertyDescription): PropertyDescription | null {
   if (!prop.href) {
     return null;
   }
@@ -54,7 +54,7 @@ function migrateProperty(prop: PropertyDescription): PropertyDescription|null {
   });
 }
 
-function migrateThing(thing: Record<string, unknown>): string|null {
+function migrateThing(thing: Record<string, unknown>): string | null {
   if (typeof thing !== 'object') {
     return null;
   }
@@ -66,8 +66,8 @@ function migrateThing(thing: Record<string, unknown>): string|null {
   return extractThing(<string>thing.href);
 }
 
-function migratePart(part: TriggerDescription|EffectDescription):
-TriggerDescription|EffectDescription|null {
+function migratePart(part: TriggerDescription | EffectDescription):
+TriggerDescription | EffectDescription | null {
   let changed = false;
   const newPart = Object.assign({}, part);
   if (part.type === 'MultiTrigger') {
@@ -123,7 +123,7 @@ TriggerDescription|EffectDescription|null {
   return newPart;
 }
 
-export function migrate(oldRule: RuleDescription): RuleDescription|null {
+export function migrate(oldRule: RuleDescription): RuleDescription | null {
   const newRule = Object.assign({}, oldRule);
   const newTrigger = migratePart(oldRule.trigger);
   let changed = false;

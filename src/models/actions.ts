@@ -154,7 +154,7 @@ class Actions extends EventEmitter {
         break;
       case 'unpair':
         if (action.getInput().id) {
-          const _finally = () => {
+          const _finally = (): void => {
             console.log('unpair: thing:', action.getInput().id, 'was unpaired');
             Things.removeThing(action.getInput().id).then(() => {
               action.updateStatus('completed');
@@ -201,14 +201,14 @@ class Actions extends EventEmitter {
   remove(id: string): void {
     const action = this.actions[id];
     if (!action) {
-      throw `Invalid action id: ${id}`;
+      throw new Error(`Invalid action id: ${id}`);
     }
 
     if (action.getStatus() === 'pending') {
       if (action.getThingId()) {
         Things.getThing(action.getThingId()!).then((thing: any) => {
           if (!thing.removeAction(action)) {
-            throw `Invalid thing action name: "${action.getName()}"`;
+            throw new Error(`Invalid thing action name: "${action.getName()}"`);
           }
         }).catch((err: any) => {
           console.error('Error removing thing action:', err);
@@ -222,7 +222,7 @@ class Actions extends EventEmitter {
             AddonManager.cancelRemoveThing(action.getInput().id);
             break;
           default:
-            throw `Invalid action name: "${action.getName()}"`;
+            throw new Error(`Invalid action name: "${action.getName()}"`);
         }
       }
     }

@@ -43,7 +43,8 @@ class DiscoveredAddon {
   view() {
     let el;
     if (this.installed) {
-      el = `<span class="addon-discovery-settings-added" data-l10n-id="addon-discovery-added"></span>`;
+      el =
+        `<span class="addon-discovery-settings-added" data-l10n-id="addon-discovery-added"></span>`;
     } else {
       el = `
         <button id="addon-install-${Utils.escapeHtmlForIdClass(this.id)}"
@@ -65,10 +66,12 @@ class DiscoveredAddon {
             ${Utils.escapeHtml(this.description)}
           </span>
           <span class="addon-settings-author">
-            ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank" rel="noopener">${Utils.escapeHtml(this.author)}</a>
+            ${fluent.getMessage('by')} <a href="${this.homepageUrl}" target="_blank"
+                                          rel="noopener">${Utils.escapeHtml(this.author)}</a>
           </span>
-          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}" class="addon-settings-license" 
-            data-license-href="${this.licenseUrl}" data-id="${Utils.escapeHtmlForIdClass(this.id)}">
+          <span id="addon-license-${Utils.escapeHtmlForIdClass(this.id)}"
+                class="addon-settings-license" data-license-href="${this.licenseUrl}"
+                data-id="${Utils.escapeHtmlForIdClass(this.id)}">
             (${fluent.getMessage('license')})
           </span>
         </div>
@@ -143,7 +146,7 @@ class DiscoveredAddon {
           modalContainer.id = 'media-modal';
           const modalFrame = document.createElement('div');
           modalFrame.className = 'media-modal-frame';
-          const content = `<div class="media-modal-close" 
+          const content = `<div class="media-modal-close"
             id="modal-close-button"></div>
             <div class="media-modal-content">
             <p id="media-modal-text"></p></div>`;

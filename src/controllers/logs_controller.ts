@@ -183,7 +183,7 @@ LogsController.delete(
     }
   }, 30 * 1000);
 
-  function streamMetric(metrics: any[]) {
+  function streamMetric(metrics: any[]): void {
     if (!metrics || metrics.length === 0) {
       return;
     }
@@ -195,7 +195,7 @@ LogsController.delete(
     }
   }
 
-  const cleanup = () => {
+  const cleanup = (): void => {
     clearInterval(heartbeat);
   };
 

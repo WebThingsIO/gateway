@@ -103,8 +103,7 @@ function redirect(response: express.Response, baseURL: URL, params: {[key: strin
   response.redirect(url.toString());
 }
 
-function verifyClient(request: OAuthRequest, response: express.Response):
-ClientRegistry|null {
+function verifyClient(request: OAuthRequest, response: express.Response): ClientRegistry | null {
   const client = OAuthClients.get(request.client_id, request.redirect_uri);
   if (!client) {
     const err: ErrorResponse<UnauthorizedClient> = {
@@ -136,7 +135,7 @@ ClientRegistry|null {
 }
 
 function extractClientInfo(request: express.Request, response: express.Response):
-{clientId: string, clientSecret: string}|null {
+{clientId: string, clientSecret: string} | null {
   const authorization = request.headers.authorization;
   if (!authorization) {
     if (!request.body.client_id) {
@@ -180,7 +179,7 @@ function extractClientInfo(request: express.Request, response: express.Response)
 }
 
 function verifyAuthorizationRequest(authRequest: AuthorizationRequest, response: express.Response):
-ClientRegistry|null {
+ClientRegistry | null {
   const client = verifyClient(authRequest, response);
   if (!client) {
     return null;
@@ -341,7 +340,7 @@ OAuthController.post('/token', async (request: express.Request, response: expres
  * On error sends a 400 with a JSON reason.
  */
 async function handleAccessTokenRequest(request: express.Request, response: express.Response):
-Promise<AccessTokenSuccessResponse|null> {
+Promise<AccessTokenSuccessResponse | null> {
   const requestData = request.body;
   const reqClientInfo = extractClientInfo(request, response);
   if (!reqClientInfo) {
