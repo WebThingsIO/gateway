@@ -1,8 +1,9 @@
-const {Page, Section} = require('./elements');
-const ThingDetailPage = require('./thing-detail-page');
+import {Page, Section} from './elements';
+import {ThingDetailPage} from './thing-detail-page';
+import webdriverio from 'webdriverio';
 
 class ThingSection extends Section {
-  constructor(browser, rootElement) {
+  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
     super(browser, rootElement);
     this.defineElement('title', '.thing-title');
     this.defineElement('detailLink', '.thing-details-link');
@@ -27,13 +28,13 @@ class ThingSection extends Section {
     this.defineElement('power', 'webthing-smart-plug-capability');
   }
 
-  async click() {
+  async click(): Promise<void> {
     await this.waitClickable();
     const clickable = await this.clickable();
     await clickable.click();
   }
 
-  async waitClickable() {
+  async waitClickable(): Promise<void> {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
       if (!menuScrim || !menuScrim.isExisting()) {
@@ -41,35 +42,39 @@ class ThingSection extends Section {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (width && width.parsed && width.parsed.value === 0) {
+        return true;
+      }
+
+      return false;
     }, 5000);
   }
 
-  async thingTitle() {
+  async thingTitle(): Promise<string> {
     const title = await this.title();
     return await title.getText();
   }
 
-  async thingLevelDisplayed() {
+  async thingLevelDisplayed(): Promise<string> {
     const level = await this.level();
     return await level.getText();
   }
 
-  async thingPowerDisplayed() {
+  async thingPowerDisplayed(): Promise<string> {
     const power = await this.power();
     return await power.getText();
   }
 
-  async thingColorDisplayed() {
+  async thingColorDisplayed(): Promise<string> {
     // Function represented as string since otherwise mangling breaks it
-    const fill = await this.browser.execute(`
+    const fill = `${await this.browser.execute(`
       const wlc = document.querySelector('webthing-light-capability');
       const icon =
         wlc.shadowRoot.querySelector('.webthing-light-capability-icon');
       return icon.style.fill;
-    `);
+    `)}`;
 
-    const rgb = fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
+    const rgb = fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/)!;
     const colorStyle = `#${
       Number(rgb[1]).toString(16)}${
       Number(rgb[2]).toString(16)}${
@@ -77,13 +82,14 @@ class ThingSection extends Section {
     return colorStyle;
   }
 
-  async openDetailPage() {
+  async openDetailPage(): Promise<ThingDetailPage | null> {
     await this.waitClickable();
     const hasLink = await this.hasDetailLink();
     if (!hasLink) {
       return null;
     }
-    const el = this.rootElement;
+
+    const el = this.rootElement!;
     const href = await el.getAttribute('href');
 
     const detailLink = await this.detailLink();
@@ -93,8 +99,8 @@ class ThingSection extends Section {
   }
 }
 
-class ThingsPage extends Page {
-  constructor(browser) {
+export class ThingsPage extends Page {
+  constructor(browser: webdriverio.BrowserObject) {
     super(browser, '/things');
     this.defineSections('things', '.thing', ThingSection);
     this.defineSections(
@@ -123,7 +129,7 @@ class ThingsPage extends Page {
     );
   }
 
-  async wait() {
+  async wait(): Promise<void> {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
       if (!menuScrim || !menuScrim.isExisting()) {
@@ -131,13 +137,11 @@ class ThingsPage extends Page {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (width && width.parsed && width.parsed.value === 0) {
+        return true;
+      }
+
+      return false;
     }, 5000);
   }
-
-  async openAddThingPage() {
-    // TODO
-  }
 }
-
-module.exports = ThingsPage;

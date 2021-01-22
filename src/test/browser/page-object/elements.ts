@@ -1,15 +1,24 @@
+import webdriverio from 'webdriverio';
+
 const TIMEOUT_MS = 30000;
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 class Elements {
-  constructor(browser) {
+  protected browser: webdriverio.BrowserObject;
+
+  protected rootElement?: webdriverio.Element;
+
+  [name: string]: any;
+
+  constructor(browser: webdriverio.BrowserObject, rootElement?: webdriverio.Element) {
     this.browser = browser;
+    this.rootElement = rootElement;
   }
 
-  defineDisplayedProperty(name, selector) {
+  defineDisplayedProperty(name: string, selector: string): void {
     // Create new method which checks if elements are displayed.
     /**
      * @method hasName
@@ -21,20 +30,25 @@ class Elements {
         const el = await this.browser.$(selector);
         return await el.isExisting();
       }
+
       const elements = await rootElement.$$(selector);
       if (elements.length == 0) {
         return false;
       }
+
       // Check that all elements are displayed which match the selector.
-      return await elements.reduce(async (result, e) => {
-        const isExisting = await e.isDisplayed();
-        return result && isExisting;
-      }, true);
+      for (const el of elements) {
+        if (!(await el.isDisplayed())) {
+          return false;
+        }
+      }
+
+      return true;
     };
   }
 
   // Create new method which waits for elements are displayed.
-  defineWaitForProperty(name, selector, onValue) {
+  defineWaitForProperty(name: string, selector: string, onValue?: boolean): void {
     /**
      * @method waitForName
      */
@@ -44,6 +58,7 @@ class Elements {
         const el = await this.browser.$(selector);
         return await el.waitForExist(TIMEOUT_MS);
       }
+
       return await this.browser.waitUntil(async () => {
         const elements = await rootElement.$$(selector);
 
@@ -65,7 +80,7 @@ class Elements {
   }
 
   // Create new method which defines an HTML element.
-  defineElement(name, selector, onValue) {
+  defineElement(name: string, selector: string, onValue?: boolean): void {
     /**
      * @method name
      * @return element
@@ -80,7 +95,7 @@ class Elements {
   }
 
   // Create new method which defines multiple HTML elements.
-  defineElements(name, selector, onValue) {
+  defineElements(name: string, selector: string, onValue?: boolean): void {
     /**
      * @method name
      * @return element
@@ -95,15 +110,12 @@ class Elements {
   }
 }
 
-class Section extends Elements {
-  constructor(browser, rootElement) {
-    super(browser);
-    this.rootElement = rootElement;
-  }
-}
+export class Section extends Elements {}
 
-class Page extends Elements {
-  constructor(browser, path) {
+export class Page extends Elements {
+  protected path: string;
+
+  constructor(browser: webdriverio.BrowserObject, path: string) {
     super(browser);
     this.path = path;
   }
@@ -115,7 +127,7 @@ class Page extends Elements {
    * @param {Class Section} section
    * @param {Boolean} onValue
    */
-  defineSection(name, selector, section, onValue) {
+  defineSection(name: string, selector: string, section: typeof Section, onValue?: boolean): void {
     /**
      * @method name
      * @return Section
@@ -137,7 +149,7 @@ class Page extends Elements {
    * @param {Class Section} section
    * @param {Boolean} onValue
    */
-  defineSections(name, selector, section, onValue) {
+  defineSections(name: string, selector: string, section: typeof Section, onValue?: boolean): void {
     /**
      * @method name
      * @return Array[Section]
@@ -152,9 +164,7 @@ class Page extends Elements {
     this.defineWaitForProperty(name, selector, onValue);
   }
 
-  async open() {
+  async open(): Promise<void> {
     await this.browser.url(this.path);
   }
 }
-
-module.exports = {Page, Section};

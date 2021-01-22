@@ -1,8 +1,7 @@
-const fs = require('fs');
-
-const {waitForExpect} = require('../expect-utils');
-const {getBrowser} = require('./browser-common');
-const AddonManager = require('../../addon-manager').default;
+import fs from 'fs';
+import {waitForExpect} from '../expect-utils';
+import {getBrowser} from './browser-common';
+import AddonManager from '../../addon-manager';
 
 describe('basic browser tests', () => {
   afterEach(async () => {
@@ -18,7 +17,7 @@ describe('basic browser tests', () => {
     const browser = getBrowser();
 
     let stepNumber = 0;
-    async function saveStepScreen(step) {
+    async function saveStepScreen(step: string): Promise<void> {
       let stepStr = (stepNumber++).toString();
       if (stepStr.length < 2) {
         stepStr = `0${stepStr}`;
@@ -63,7 +62,7 @@ describe('basic browser tests', () => {
       const connectivityScrim = await browser.$('#connectivity-scrim');
       await connectivityScrim.waitForDisplayed();
       browser.execute(() => {
-        document.getElementById('connectivity-scrim').classList.add('hidden');
+        document.getElementById('connectivity-scrim')!.classList.add('hidden');
       });
       await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (_e) {
@@ -87,7 +86,11 @@ describe('basic browser tests', () => {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (width && width.parsed && width.parsed.value === 0) {
+        return true;
+      }
+
+      return false;
     }, 5000);
 
     const addonSettingsLink = await browser.$('#addon-settings-link');
@@ -125,7 +128,11 @@ describe('basic browser tests', () => {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (width && width.parsed && width.parsed.value === 0) {
+        return true;
+      }
+
+      return false;
     }, 5000);
 
     const addButton = await browser.$('#add-button');
