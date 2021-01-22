@@ -4,11 +4,10 @@
     "description": "Web of Things gateway",
     "main": "build/app.js",
     "scripts": {
-        "test": "npm run lint && npm run build && npm run jest && npm run dependencies-check",
+        "test": "npm run lint && npm run build && npm run jest",
         "lint": "eslint . && eslint --ext .ts -c .eslintrc-typescript.js src && stylelint static/**/*.css",
         "screenshots": "./build/test/take-prev-screenshots.sh",
         "jest": "./build/test/prepare-tests.sh && NODE_TLS_REJECT_UNAUTHORIZED=0 jest --runInBand --coverage --detectOpenHandles",
-        "dependencies-check": "./build/test/dependencies-test.sh",
         "coverage": "codecov",
         "start": "npm run build && node build/app.js",
         "watch": "npm-run-all --parallel start watch:build",
