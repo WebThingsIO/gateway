@@ -384,6 +384,7 @@ class Thing {
    * Find any properties required for this view.
    */
   findProperties() {
+    // pass
   }
 
   /**

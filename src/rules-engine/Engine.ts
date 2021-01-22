@@ -11,7 +11,7 @@ import Rule from './Rule';
  * An engine for running and managing list of rules
  */
 export default class Engine {
-  private rules: Record<string, Rule>|null;
+  private rules: Record<string, Rule> | null;
 
   constructor() {
     this.rules = null;

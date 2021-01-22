@@ -666,7 +666,7 @@ export function restartSystem(): boolean {
  * @param {string} device - The network device, e.g. wlan0
  * @returns {string|null} MAC address, or null on error
  */
-export function getMacAddress(device: string): string|null {
+export function getMacAddress(device: string): string | null {
   const addrFile = `/sys/class/net/${device}/address`;
   if (!fs.existsSync(addrFile)) {
     return null;

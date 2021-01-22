@@ -111,8 +111,10 @@ class LevelProperty extends BaseComponent {
         <span id="bar-${BaseComponent.count}" class="webthing-level-property-bar"></span>
       </div>
       <form id="form-${BaseComponent.count}" class="webthing-level-property-form">
-        <input type="number" id="number-${BaseComponent.count}" class="webthing-level-property-number">
-        <input type="range" id="slider-level-${BaseComponent.count}" class="webthing-level-property-slider">
+        <input type="number" id="number-${BaseComponent.count}"
+               class="webthing-level-property-number">
+        <input type="range" id="slider-level-${BaseComponent.count}"
+               class="webthing-level-property-slider">
       </form>
       <div id="unit-${BaseComponent.count}" class="webthing-level-property-unit"></div>
     </div>

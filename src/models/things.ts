@@ -279,7 +279,7 @@ class Things {
    * @param {String} title The title of the Thing to get.
    * @return {Promise<Thing>} A Thing object.
    */
-  getThingByTitle(title: string): Promise<Thing|null> {
+  getThingByTitle(title: string): Promise<Thing | null> {
     title = title.toLowerCase();
 
     return this.getThings().then((things) => {
@@ -345,14 +345,13 @@ class Things {
   async getThingProperty(thingId: string, propertyName: string): Promise<any> {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
-    } catch (error) {
-      console.error('Error getting value for thingId:', thingId,
-                    'property:', propertyName);
-      console.error(error);
-      throw {
-        code: 500,
-        message: error,
-      };
+    } catch (e) {
+      console.error('Error getting value for thingId:', thingId, 'property:', propertyName);
+      console.error(e);
+
+      const error = new Error(e);
+      (error as any).code = 500;
+      throw error;
     }
   }
 
@@ -368,32 +367,28 @@ class Things {
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
     } catch (e) {
-      throw {
-        code: 404,
-        message: 'Thing not found',
-      };
+      const error = new Error('Thing not found');
+      (error as any).code = 404;
+      throw error;
     }
 
     if (!thing.properties.hasOwnProperty(propertyName)) {
-      throw {
-        code: 404,
-        message: 'Property not found',
-      };
+      const error = new Error('Property not found');
+      (error as any).code = 404;
+      throw error;
     }
 
     if (thing.properties[propertyName].readOnly) {
-      throw {
-        code: 400,
-        message: 'Read-only property',
-      };
+      const error = new Error('Read-only property');
+      (error as any).code = 400;
+      throw error;
     }
 
     const valid = ajv.validate(thing.properties[propertyName], value);
     if (!valid) {
-      throw {
-        code: 400,
-        message: 'Invalid property value',
-      };
+      const error = new Error('Invalid property value');
+      (error as any).code = 400;
+      throw error;
     }
 
     try {
@@ -405,10 +400,10 @@ class Things {
       console.error('Error setting value for thingId:', thingId,
                     'property:', propertyName,
                     'value:', value);
-      throw {
-        code: 500,
-        message: e,
-      };
+
+      const error = new Error(e);
+      (error as any).code = 500;
+      throw error;
     }
   }
 

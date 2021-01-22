@@ -91,7 +91,8 @@ class SwitchProperty extends BaseComponent {
       <form>
         <input type="checkbox" id="switch-${BaseComponent.count}"
           class="webthing-switch-property-switch">
-        <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}" class="webthing-switch-property-slider">
+        <label id="slider-${BaseComponent.count}" for="switch-${BaseComponent.count}"
+               class="webthing-switch-property-slider">
         </label>
       </form>
       <div id="label-${BaseComponent.count}" class="webthing-switch-property-label"></div>

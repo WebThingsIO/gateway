@@ -24,19 +24,19 @@ import * as CertificateManager from './certificate-manager';
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 class TunnelService {
-  private pagekiteProcess: ChildProcess|null;
+  private pagekiteProcess: ChildProcess | null;
 
-  private tunnelToken: {base?: string, token: string}|null;
+  private tunnelToken: {base?: string, token: string} | null;
 
   private connected: Deferred<void, void>;
 
-  private pingInterval: NodeJS.Timeout|null;
+  private pingInterval: NodeJS.Timeout | null;
 
-  private renewInterval: NodeJS.Timeout|null;
+  private renewInterval: NodeJS.Timeout | null;
 
-  private server: Server|null;
+  private server: Server | null;
 
-  public switchToHttps: (() => void)|null;
+  public switchToHttps: (() => void) | null;
 
   constructor() {
     this.pagekiteProcess = null;
@@ -152,7 +152,7 @@ class TunnelService {
           // Enable push service
           PushService.init(`https://${endpoint}`);
 
-          const renew = () => {
+          const renew = (): Promise<void> => {
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             return CertificateManager.renew(this.server!).catch(() => {});
           };

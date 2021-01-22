@@ -31,13 +31,13 @@ export default class Action extends EventEmitter {
 
   private href: string;
 
-  private thingId: string|null;
+  private thingId: string | null;
 
   private status: string;
 
   private timeRequested: string;
 
-  private timeCompleted: string|null;
+  private timeCompleted: string | null;
 
   private error: string;
 
@@ -127,7 +127,7 @@ export default class Action extends EventEmitter {
     return this.input;
   }
 
-  getThingId(): string|null {
+  getThingId(): string | null {
     return this.thingId;
   }
 
@@ -139,7 +139,7 @@ export default class Action extends EventEmitter {
     return this.timeRequested;
   }
 
-  getTimeCompleted(): string|null {
+  getTimeCompleted(): string | null {
     return this.timeCompleted;
   }
 

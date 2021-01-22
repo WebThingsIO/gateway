@@ -36,7 +36,7 @@ describe('oauth/', function() {
   let customCallbackHandler: ((req: express.Request, res: express.Response) => void) | null;
   let userJWT: string;
 
-  async function addDevice(desc = TEST_THING) {
+  async function addDevice(desc = TEST_THING): Promise<ChaiHttp.Response> {
     const {id} = desc;
     const res = await chai.request(server).keepOpen()
       .post(Constants.THINGS_PATH)

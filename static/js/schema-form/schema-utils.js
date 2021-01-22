@@ -48,7 +48,7 @@ const SchemaUtils = {
       const $refSchema =
         SchemaUtils.findSchemaDefinition(schema.$ref, definitions);
       // Drop the $ref property of the source schema.
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {$ref, ...localSchema} = schema;
       // Update referenced schema definition with local schema properties.
       return SchemaUtils.retrieveSchema({...$refSchema, ...localSchema},
@@ -166,7 +166,7 @@ const SchemaUtils = {
     const subschema = validSubschemas[0];
     // Drop the dependency property from the subschema.
     const {
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       [dependencyKey]: conditionPropertySchema,
       ...dependentSubschema
     } = subschema.properties;

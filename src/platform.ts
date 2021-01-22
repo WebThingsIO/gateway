@@ -96,7 +96,7 @@ export function getNodeVersion(): number {
  */
 export function getPythonVersions(): string[] {
   const versions = new Set<string>();
-  const parse = (output: string) => {
+  const parse = (output: string): void => {
     const parts = output.split(' ');
     if (parts.length === 2) {
       const match = parts[1].match(/^\d+\.\d+/);

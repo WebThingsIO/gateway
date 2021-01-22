@@ -20,7 +20,7 @@ export default class TimeTrigger extends Trigger {
 
   private localized: boolean;
 
-  private timeout: NodeJS.Timeout|null;
+  private timeout: NodeJS.Timeout | null;
 
   private _sendOn: () => void;
 

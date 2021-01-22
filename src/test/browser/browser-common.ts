@@ -24,8 +24,8 @@ const options: Record<string, unknown> = {
 };
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-let child: ChildProcess|null = null;
-let browser: BrowserObject|null = null;
+let child: ChildProcess | null = null;
+let browser: BrowserObject | null = null;
 beforeAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   // Starting up and interacting with a browser takes forever

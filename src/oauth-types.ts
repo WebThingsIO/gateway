@@ -3,7 +3,7 @@ import * as Constants from './constants';
 
 type Read = 'read';
 type ReadWrite = 'readwrite';
-export type ScopeAccess = Read|ReadWrite;
+export type ScopeAccess = Read | ReadWrite;
 export type Scope = {[path: string]: ScopeAccess};
 
 export type ScopeRaw = string;
@@ -48,7 +48,7 @@ function stringToScope(scopeRaw: ScopeRaw): Scope {
     if (readwrite !== 'read' && readwrite !== 'readwrite') {
       readwrite = 'read';
     }
-    scope[path] = readwrite as 'read'|'readwrite';
+    scope[path] = readwrite as 'read' | 'readwrite';
   }
 
   return scope;
@@ -71,7 +71,7 @@ export function scopeValidSubset(clientScopeRaw: ScopeRaw, requestScopeRaw: Scop
       return false;
     }
     const requestAccess = requestScope[requestPath];
-    let access: ScopeAccess|undefined;
+    let access: ScopeAccess | undefined;
     if (clientScope[requestPath]) {
       access = clientScope[requestPath];
     } else {

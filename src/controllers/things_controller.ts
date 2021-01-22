@@ -373,7 +373,7 @@ ThingsController.put('/:thingId', async (request, response) => {
 ThingsController.delete('/:thingId', (request, response) => {
   const thingId = request.params.thingId;
 
-  const _finally = () => {
+  const _finally = (): void => {
     Things.removeThing(thingId).then(() => {
       console.log(`Successfully deleted ${thingId} from database.`);
       response.sendStatus(204);
@@ -469,7 +469,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
     }
     thing.addConnectedSubscription(onConnected);
 
-    const onRemoved = () => {
+    const onRemoved = (): void => {
       if (thingCleanups[thing.id]) {
         thingCleanups[thing.id]();
         delete thingCleanups[thing.id];
@@ -489,7 +489,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
     };
     thing.addRemovedSubscription(onRemoved);
 
-    const onModified = () => {
+    const onModified = (): void => {
       sendMessage({
         id: thing.id,
         messageType: Constants.THING_MODIFIED,
@@ -498,7 +498,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
     };
     thing.addModifiedSubscription(onModified);
 
-    const thingCleanup = () => {
+    const thingCleanup = (): void => {
       thing.removeEventSubscription(onEvent);
       thing.removeConnectedSubscription(onConnected);
       thing.removeRemovedSubscription(onRemoved);
@@ -566,7 +566,7 @@ function websocketHandler(websocket: WebSocket, request: express.Request): void 
     }
   }, 30 * 1000);
 
-  const cleanup = () => {
+  const cleanup = (): void => {
     Things.removeListener(Constants.THING_ADDED, onThingAdded);
     AddonManager.removeListener(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.removeListener(Constants.ACTION_STATUS, onActionStatus);
