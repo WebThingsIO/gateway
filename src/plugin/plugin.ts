@@ -128,6 +128,10 @@ export default class Plugin {
     this.exec = exec;
   }
 
+  setExecPath(execPath: string): void {
+    this.execPath = execPath;
+  }
+
   setRestart(restart: boolean): void {
     this.restart = restart;
   }

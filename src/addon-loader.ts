@@ -42,16 +42,12 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
     obj = await Settings.getSetting(key);
   }
 
-  const newSettings: any = {
-    name: obj.id,
-    display_name: obj.name,
-    moziot: {
-      exec: obj.exec,
-    },
+  const moziot: Record<string, unknown> = {
+    exec: obj.exec,
   };
 
   if (obj.schema) {
-    newSettings.moziot.schema = obj.schema;
+    moziot.schema = obj.schema;
   }
 
   if (process.env.NODE_ENV !== 'test') {
@@ -59,10 +55,33 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   }
 
   if (savedConfig) {
-    newSettings.moziot.config = savedConfig;
+    moziot.config = savedConfig;
   } else {
-    newSettings.moziot.config = {};
+    moziot.config = {};
   }
+
+  const newSettings = {
+    get name(): string {
+      console.warn('The `manifest` object is deprecated and will be removed soon.',
+                   'Instead of using `manifest.name`,',
+                   'please read the `id` field from your manifest.json instead.');
+      return obj.id;
+    },
+
+    get display_name(): string {
+      console.warn('The `manifest` object is deprecated and will be removed soon.',
+                   'Instead of using `manifest.display_name`,',
+                   'please read the `name` field from your manifest.json instead.');
+      return obj.name;
+    },
+
+    get moziot(): Record<string, unknown> {
+      console.warn('The `manifest` object is deprecated and will be removed soon.',
+                   'Instead of using `manifest.moziot`,',
+                   'please read the user configuration with the `Database` class instead.');
+      return moziot;
+    },
+  };
 
   const pluginClient = new PluginClient(
     packageName,
