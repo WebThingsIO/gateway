@@ -195,6 +195,7 @@ function stopWiFiSetup(): void {
  * Set up the rules engine.
  */
 function rulesEngineConfigure(): void {
+  // TODO: fix circular import
   const rulesEngine = require('./rules-engine/index').default;
   rulesEngine.configure();
 }
