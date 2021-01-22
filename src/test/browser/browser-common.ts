@@ -1,12 +1,11 @@
 import {remote, BrowserObject} from 'webdriverio';
 import * as selenium from 'selenium-standalone';
-
 import {server} from '../common';
 import {compareImage} from './compare-images';
-
 import fs from 'fs';
 import path from 'path';
 import {ChildProcess} from 'child_process';
+import {AddressInfo} from 'net';
 
 const TEST_OUTPUT_FOLDER = path.join(__dirname, '../../../browser-test-output');
 const SCREEN_SHOTS_FOLDER = path.join(__dirname, '../../../browser-test-screenshots');
@@ -48,7 +47,7 @@ beforeAll(async () => {
       }
     });
   });
-  options.baseUrl = `https://localhost:${server.address().port}`;
+  options.baseUrl = `https://localhost:${(<AddressInfo>server.address()!).port}`;
   browser = await remote(options);
 
   await browser.setWindowSize(1280, 800);
