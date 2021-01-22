@@ -1,13 +1,14 @@
-const {Page, Section} = require('./elements');
+import {Page, Section} from './elements';
+import webdriverio from 'webdriverio';
 
 class InputPropertySection extends Section {
-  async getId() {
-    return await this.rootElement.getProperty('id');
+  async getId(): Promise<string> {
+    return `${await this.rootElement!.getProperty('id')}`;
   }
 }
 
 class ColorPropertySection extends InputPropertySection {
-  async setValue(value) {
+  async setValue(value: string): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-color-property');
       const input = root.shadowRoot.querySelector('input[type="color"]');
@@ -17,7 +18,7 @@ class ColorPropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<string> {
     return await this.browser.execute(`
       const el = document.querySelector('webthing-color-property');
       return el.value;
@@ -26,8 +27,7 @@ class ColorPropertySection extends InputPropertySection {
 }
 
 class ColorTemperaturePropertySection extends InputPropertySection {
-  async setValue(value) {
-    value = Number(value);
+  async setValue(value: number): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-color-temperature-property');
       const input = root.shadowRoot.querySelector('input[type="number"]');
@@ -37,7 +37,7 @@ class ColorTemperaturePropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<number> {
     const val = await this.browser.execute(`
       const el = document.querySelector('webthing-color-temperature-property');
       return el.value;
@@ -47,16 +47,15 @@ class ColorTemperaturePropertySection extends InputPropertySection {
 }
 
 class LabelPropertySection extends Section {
-  async getDisplayedText() {
-    const element = this.rootElement;
+  async getDisplayedText(): Promise<string> {
+    const element = this.rootElement!;
     const data = await element.getText();
     return data.split('\n')[0].trim();
   }
 }
 
 class BrightnessPropertySection extends InputPropertySection {
-  async setValue(value) {
-    value = Number(value);
+  async setValue(value: number): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-brightness-property');
       const input = root.shadowRoot.querySelector('input[type="range"]');
@@ -65,7 +64,7 @@ class BrightnessPropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<number> {
     const val = await this.browser.execute(`
       const el = document.querySelector('webthing-brightness-property');
       return el.value;
@@ -75,8 +74,7 @@ class BrightnessPropertySection extends InputPropertySection {
 }
 
 class LevelPropertySection extends InputPropertySection {
-  async setValue(value) {
-    value = Number(value);
+  async setValue(value: number): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-level-property');
       const input = root.shadowRoot.querySelector('input[type="number"]');
@@ -86,7 +84,7 @@ class LevelPropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<number> {
     const val = await this.browser.execute(`
       const el = document.querySelector('webthing-level-property');
       return el.value;
@@ -96,7 +94,7 @@ class LevelPropertySection extends InputPropertySection {
 }
 
 class OnOffPropertySection extends InputPropertySection {
-  async click() {
+  async click(): Promise<void> {
     await this.waitForClickable();
     await this.browser.execute(`
       const root = document.querySelector('webthing-on-off-property');
@@ -105,8 +103,8 @@ class OnOffPropertySection extends InputPropertySection {
     `);
   }
 
-  async waitForClickable() {
-    const element = this.rootElement;
+  async waitForClickable(): Promise<void> {
+    const element = this.rootElement!;
     await this.browser.waitUntil(async () => {
       return await element.isDisplayed();
     }, 5000);
@@ -115,7 +113,7 @@ class OnOffPropertySection extends InputPropertySection {
     }, 5000);
   }
 
-  async getValue() {
+  async getValue(): Promise<boolean> {
     return await this.browser.execute(`
       const el = document.querySelector('webthing-on-off-property');
       return el.value;
@@ -124,7 +122,7 @@ class OnOffPropertySection extends InputPropertySection {
 }
 
 class BooleanPropertySection extends InputPropertySection {
-  async click() {
+  async click(): Promise<void> {
     await this.waitForClickable();
     await this.browser.execute(`
       const root = document.querySelector('webthing-boolean-property');
@@ -133,8 +131,8 @@ class BooleanPropertySection extends InputPropertySection {
     `);
   }
 
-  async waitForClickable() {
-    const element = this.rootElement;
+  async waitForClickable(): Promise<void> {
+    const element = this.rootElement!;
     await this.browser.waitUntil(async () => {
       return await element.isDisplayed();
     }, 5000);
@@ -143,7 +141,7 @@ class BooleanPropertySection extends InputPropertySection {
     }, 5000);
   }
 
-  async getValue() {
+  async getValue(): Promise<boolean> {
     return await this.browser.execute(`
       const el = document.querySelector('webthing-boolean-property');
       return el.value;
@@ -152,7 +150,7 @@ class BooleanPropertySection extends InputPropertySection {
 }
 
 class StringPropertySection extends InputPropertySection {
-  async setValue(value) {
+  async setValue(value: string): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-string-property');
       const input = root.shadowRoot.querySelector('input[type="text"]');
@@ -162,7 +160,7 @@ class StringPropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<string> {
     return await this.browser.execute(`
       const el = document.querySelector('webthing-string-property');
       return el.value;
@@ -171,8 +169,7 @@ class StringPropertySection extends InputPropertySection {
 }
 
 class NumberPropertySection extends InputPropertySection {
-  async setValue(value) {
-    value = Number(value);
+  async setValue(value: number): Promise<void> {
     await this.browser.execute(`
       const root = document.querySelector('webthing-number-property');
       const input = root.shadowRoot.querySelector('input[type="number"]');
@@ -182,7 +179,7 @@ class NumberPropertySection extends InputPropertySection {
     `);
   }
 
-  async getValue() {
+  async getValue(): Promise<number> {
     const val = await this.browser.execute(`
       const el = document.querySelector('webthing-number-property');
       return el.value;
@@ -191,8 +188,8 @@ class NumberPropertySection extends InputPropertySection {
   }
 }
 
-class ThingDetailPage extends Page {
-  constructor(browser, url) {
+export class ThingDetailPage extends Page {
+  constructor(browser: webdriverio.BrowserObject, url: string) {
     super(browser, url);
 
     this.defineSection(
@@ -286,5 +283,3 @@ class ThingDetailPage extends Page {
     );
   }
 }
-
-module.exports = ThingDetailPage;

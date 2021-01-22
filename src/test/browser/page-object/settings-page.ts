@@ -1,14 +1,15 @@
-const {Page, Section} = require('./elements');
-const AddonSettingsPage = require('./addon-settings-page');
+import {Page, Section} from './elements';
+import {AddonSettingsPage} from './addon-settings-pages';
+import webdriverio from 'webdriverio';
 
 class SettingSection extends Section {
-  constructor(browser, rootElement) {
+  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
     super(browser, rootElement);
     this.defineElement('link', 'a');
   }
 
-  async openSettingsPage() {
-    const el = this.rootElement;
+  async openSettingsPage(): Promise<Page | null> {
+    const el = this.rootElement!;
     const href = await el.getAttribute('href');
     const id = await el.getAttribute('id');
     await el.click();
@@ -31,8 +32,8 @@ class SettingSection extends Section {
   }
 }
 
-class SettingsPage extends Page {
-  constructor(browser) {
+export class SettingsPage extends Page {
+  constructor(browser: webdriverio.BrowserObject) {
     super(browser, '/settings');
     this.defineSection('domain', '#domain-settings-link', SettingSection);
     this.defineSection('user', '#user-settings-link', SettingSection);
@@ -48,7 +49,7 @@ class SettingsPage extends Page {
     this.defineSection('developer', '#developer-settings-link', SettingSection);
   }
 
-  async wait() {
+  async wait(): Promise<void> {
     await this.browser.waitUntil(async () => {
       const menuScrim = await this.browser.$('#menu-scrim.hidden');
       if (!menuScrim || !menuScrim.isExisting()) {
@@ -56,9 +57,11 @@ class SettingsPage extends Page {
       }
 
       const width = await menuScrim.getCSSProperty('width');
-      return width && width.parsed && width.parsed.value === 0;
+      if (width && width.parsed && width.parsed.value === 0) {
+        return true;
+      }
+
+      return false;
     }, 5000);
   }
 }
-
-module.exports = SettingsPage;

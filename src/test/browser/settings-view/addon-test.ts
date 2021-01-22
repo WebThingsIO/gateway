@@ -1,11 +1,11 @@
-const {getBrowser, saveStepScreen} = require('../browser-common');
-const {getAddons} = require('../test-utils');
-const SettingsPage = require('../page-object/settings-page');
-const {waitForExpect} = require('../../expect-utils');
+import {getBrowser, saveStepScreen} from '../browser-common';
+import {getAddons} from '../test-utils';
+import {SettingsPage} from '../page-object/settings-page';
+import {waitForExpect} from '../../expect-utils';
+import AddonManager from '../../../addon-manager';
 
-const addonManager = require('../../../addon-manager').default;
 afterEach(async () => {
-  await addonManager.uninstallAddon('virtual-things-adapter', true, false);
+  await AddonManager.uninstallAddon('virtual-things-adapter', true, false);
 });
 
 describe('Addon', () => {
@@ -23,8 +23,7 @@ describe('Addon', () => {
     expect(addon1).toBeNull();
     await saveStepScreen();
 
-    const discoverAddonPage =
-         await addonSettingsPage1.openDiscoverAddonPage();
+    const discoverAddonPage = await addonSettingsPage1.openDiscoverAddonPage();
     await waitForExpect(async () => {
       const addon2 = await discoverAddonPage.findAddon('Virtual Things');
       expect(addon2).not.toBeNull();

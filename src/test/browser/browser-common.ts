@@ -120,7 +120,7 @@ afterEach(async () => {
   }
 });
 
-export async function saveStepScreen(stepStr: string): Promise<void> {
+export async function saveStepScreen(stepStr?: string): Promise<void> {
   if (typeof stepStr !== 'string') {
     stepStr = (stepNumber++).toString();
     if (stepStr.length < 2) {

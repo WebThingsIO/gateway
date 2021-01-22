@@ -1,8 +1,7 @@
 import sleep from '../sleep';
 
-export function waitForExpect(expect: () => Promise<void>): Promise<void> {
+export function waitForExpect(expect: () => Promise<void>, wait = 2500): Promise<void> {
   return new Promise((resolve, reject) => {
-    let wait = 2500;
     const interval = 500;
     const retry = async () => {
       try {
