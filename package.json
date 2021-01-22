@@ -5,7 +5,7 @@
     "main": "build/app.js",
     "scripts": {
         "test": "npm run lint && npm run build && npm run jest",
-        "lint": "eslint . && eslint --ext .ts -c .eslintrc-typescript.js src && stylelint static/**/*.css",
+        "lint": "eslint . && stylelint static/**/*.css",
         "screenshots": "./build/test/take-prev-screenshots.sh",
         "jest": "./build/test/prepare-tests.sh && NODE_TLS_REJECT_UNAUTHORIZED=0 jest --runInBand --coverage --detectOpenHandles",
         "coverage": "codecov",

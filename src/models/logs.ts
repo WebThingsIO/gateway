@@ -13,7 +13,7 @@ const METRICS_BOOLEAN = 'metricsBoolean';
 const METRICS_OTHER = 'metricsOther';
 
 class Logs {
-  private db: SQLiteDatabase|null;
+  private db: SQLiteDatabase | null;
 
   private idToDescr: Record<number, any>;
 
@@ -110,7 +110,7 @@ class Logs {
     );`, []);
   }
 
-  createMetricTable(id: string, dataType: string) {
+  createMetricTable(id: string, dataType: string): Promise<any> {
     const table = id;
     let sqlType = 'TEXT';
 
@@ -167,7 +167,7 @@ class Logs {
    * @param {Object} rawDescr
    * @param {number} maxAge
    */
-  async registerMetric(rawDescr: any, maxAge: number): Promise<number|null> {
+  async registerMetric(rawDescr: any, maxAge: number): Promise<number | null> {
     const descr = JSON.stringify(rawDescr);
     if (this.descrToId.hasOwnProperty(descr)) {
       return null;
@@ -241,8 +241,8 @@ class Logs {
     this.insertMetric(descr, property.value, new Date());
   }
 
-  buildQuery(table: string, id: number|null, start: number|null, end: number|null,
-             limit: number|null): {query: string, params: number[]} {
+  buildQuery(table: string, id: number | null, start: number | null, end: number | null,
+             limit: number | null): {query: string, params: number[]} {
     const conditions = [];
     const params = [];
     if (typeof id === 'number') {
@@ -272,8 +272,8 @@ class Logs {
     };
   }
 
-  async loadMetrics(out: any, table: string, transformer: ((arg: any) => any)|null, id: number|null,
-                    start: number|null, end: number|null): Promise<void> {
+  async loadMetrics(out: any, table: string, transformer: ((arg: any) => any) | null,
+                    id: number | null, start: number | null, end: number | null): Promise<void> {
     const {query, params} = this.buildQuery(table, id, start, end, null);
     const rows = await this.all(query, params);
 
@@ -297,7 +297,7 @@ class Logs {
     }
   }
 
-  async getAll(start: number|null, end: number|null): Promise<any> {
+  async getAll(start: number | null, end: number | null): Promise<any> {
     const out = {};
     await this.loadMetrics(out, METRICS_NUMBER, null, null, start, end);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null,
@@ -307,13 +307,13 @@ class Logs {
     return out;
   }
 
-  async get(thingId: string, start: number|null, end: number|null): Promise<any> {
+  async get(thingId: string, start: number | null, end: number | null): Promise<any> {
     const all = await this.getAll(start, end);
     return all[thingId];
   }
 
-  async getProperty(thingId: string, propertyName: string, start: number|null, end: number|null):
-  Promise<any> {
+  async getProperty(thingId: string, propertyName: string, start: number | null,
+                    end: number | null): Promise<any> {
     const descr = JSON.stringify(this.propertyDescr(thingId, propertyName));
     const out: any = {};
     const id = this.descrToId[descr];
@@ -341,8 +341,8 @@ class Logs {
   }
 
   async streamMetrics(callback: (metrics: any[]) => void, table: string,
-                      transformer: ((arg: any) => any)|null, id: number|null, start: number|null,
-                      end: number|null): Promise<void> {
+                      transformer: ((arg: any) => any) | null, id: number | null,
+                      start: number | null, end: number | null): Promise<void> {
     const MAX_ROWS = 10000;
     start = start ?? 0;
     end = end ?? Date.now();
@@ -372,7 +372,7 @@ class Logs {
     }
   }
 
-  async streamAll(callback: (metrics: any[]) => void, start: number|null, end: number|null):
+  async streamAll(callback: (metrics: any[]) => void, start: number | null, end: number | null):
   Promise<void> {
     // Stream all three in parallel, which should look cool
     await Promise.all([

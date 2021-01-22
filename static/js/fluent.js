@@ -68,6 +68,7 @@ async function load() {
 
   if (language !== response.current) {
     // don't bother waiting for this, it's not super important
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     API.setLanguage(language).catch(() => {});
   }
 

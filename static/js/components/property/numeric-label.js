@@ -56,7 +56,8 @@ class NumericLabelProperty extends BaseComponent {
   <div id="container-${BaseComponent.count}" class="webthing-numeric-label-property-container">
     <div id="contents-${BaseComponent.count}" class="webthing-numeric-label-property-contents">
       <span id="value-${BaseComponent.count}" class="webthing-numeric-label-property-value">
-      </span><span id="unit-${BaseComponent.count}" class="webthing-numeric-label-property-unit"></span>
+      </span><span id="unit-${BaseComponent.count}"
+                   class="webthing-numeric-label-property-unit"></span>
     </div>
   </div>
   <div id="name-${BaseComponent.count}" class="webthing-numeric-label-property-name"></div>

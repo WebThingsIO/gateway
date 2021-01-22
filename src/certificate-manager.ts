@@ -57,7 +57,7 @@ function writeCertificates(certificate: string, privateKey: string, chain: strin
  * @param {boolean} optout - Whether or not the user opted out of emails
  * @param {function} callback - Callback function
  */
-export async function register(email: string, reclamationToken: string|null, subdomain: string,
+export async function register(email: string, reclamationToken: string | null, subdomain: string,
                                fulldomain: string, optout: boolean,
                                callback: (err?: string) => void): Promise<void> {
   if (DEBUG) {
@@ -133,7 +133,8 @@ export async function register(email: string, reclamationToken: string|null, sub
    * @returns {Promise}
    */
   const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string) => {
+    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string):
+    Promise<void> => {
       const params = new URLSearchParams();
       params.set('token', token);
       params.set('challenge', keyAuthorization);
@@ -160,7 +161,7 @@ export async function register(email: string, reclamationToken: string|null, sub
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeRemoveFn = async () => {
+  const challengeRemoveFn = async (): Promise<void> => {
     // do nothing for now
   };
 
@@ -273,7 +274,8 @@ export async function renew(server: Server): Promise<void> {
    * @returns {Promise}
    */
   const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string) => {
+    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string):
+    Promise<void> => {
       const params = new URLSearchParams();
       params.set('token', tunnelToken.token);
       params.set('challenge', keyAuthorization);
@@ -301,7 +303,7 @@ export async function renew(server: Server): Promise<void> {
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeRemoveFn = async () => {
+  const challengeRemoveFn = async (): Promise<void> => {
     // do nothing for now
   };
 

@@ -94,7 +94,7 @@ class MockAdapter extends Adapter {
 
   private server: Server;
 
-  private pairDeviceId: string|null;
+  private pairDeviceId: string | null;
 
   private pairDeviceDescription: any;
 

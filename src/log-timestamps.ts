@@ -72,7 +72,7 @@ const logger = winston.createLogger({
   exitOnError: false,
 });
 
-function logPrefix() {
+function logPrefix(): string {
   const currTime = new Date();
   return `${currTime.getFullYear()}-${
     (`0${currTime.getMonth() + 1}`).slice(-2)}-${

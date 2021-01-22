@@ -62,18 +62,6 @@ class Adapter {
    */
   render() {
     this.container.insertAdjacentHTML('beforeend', this.view());
-
-    /*
-    const button = document.getElementById(
-      `adapter-toggle-${Utils.escapeHtml(this.id)}`);
-    button.addEventListener('click', this.handleToggle.bind(this));
-    */
-  }
-
-  /**
-   * Handle a click on the enable/disable button.
-   */
-  handleToggle() {
   }
 }
 

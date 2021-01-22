@@ -303,7 +303,7 @@ export default class Plugin {
         this.pluginServer.addAdapter(adapter);
 
         // Tell the adapter about all saved things
-        const send = (thing: Thing) => {
+        const send = (thing: Thing): void => {
           adapter.sendMsg(
             MessageType.DEVICE_SAVED_NOTIFICATION,
             {
@@ -791,7 +791,7 @@ export default class Plugin {
             }
             console.log('Plugin:', this.pluginId, 'died, code =', code,
                         'restarting after', this.restartDelay);
-            const doRestart = () => {
+            const doRestart = (): void => {
               if (this.restart) {
                 this.lastRestart = Date.now();
                 this.pendingRestart = null;

@@ -21,7 +21,7 @@ const AUTH_TYPE = 'Bearer';
  * @param {Request} req incoming http request.
  * @return {string|false} JWT string or false.
  */
-export function extractJWTQS(req: express.Request): string|boolean {
+export function extractJWTQS(req: express.Request): string | false {
   if (typeof req.query === 'object' && req.query.jwt) {
     return `${req.query.jwt}`;
   }
@@ -34,7 +34,7 @@ export function extractJWTQS(req: express.Request): string|boolean {
  * @param {Request} req incoming http request.
  * @return {string|false} JWT string or false.
  */
-export function extractJWTHeader(req: express.Request): string|boolean {
+export function extractJWTHeader(req: express.Request): string | false {
   const {authorization} = req.headers;
   if (!authorization) {
     return false;
@@ -52,7 +52,7 @@ export function extractJWTHeader(req: express.Request): string|boolean {
  *
  * TODO: User error messages.
  */
-export async function authenticate(req: express.Request): Promise<JSONWebToken|null> {
+export async function authenticate(req: express.Request): Promise<JSONWebToken | null> {
   const sig = extractJWTHeader(req) || extractJWTQS(req);
   if (!sig) {
     return null;
@@ -60,7 +60,7 @@ export async function authenticate(req: express.Request): Promise<JSONWebToken|n
   return await JSONWebToken.verifyJWT(<string>sig);
 }
 
-export function scopeAllowsRequest(scope: string|undefined, request: express.Request): boolean {
+export function scopeAllowsRequest(scope: string | undefined, request: express.Request): boolean {
   const requestPath = request.originalUrl;
   if (!scope) {
     return true;

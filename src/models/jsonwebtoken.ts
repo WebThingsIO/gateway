@@ -28,7 +28,7 @@ interface Payload {
 
 export interface TokenData {
   user: number;
-  issuedAt: string|Date;
+  issuedAt: string | Date;
   publicKey: string;
   keyId: string;
   payload: Payload;
@@ -37,19 +37,19 @@ export interface TokenData {
 export default class JSONWebToken {
   private user: number;
 
-  private issuedAt: string|Date;
+  private issuedAt: string | Date;
 
   private publicKey: string;
 
   private keyId: string;
 
-  private payload: Payload|null;
+  private payload: Payload | null;
 
   getUser(): number {
     return this.user;
   }
 
-  getIssuedAt(): string|Date {
+  getIssuedAt(): string | Date {
     return this.issuedAt;
   }
 
@@ -61,7 +61,7 @@ export default class JSONWebToken {
     return this.keyId;
   }
 
-  getPayload(): Payload|null {
+  getPayload(): Payload | null {
     return this.payload;
   }
 
@@ -70,7 +70,7 @@ export default class JSONWebToken {
    *
    * @return {JSONWebToken|null} null when invalid JSONWebToken when valid.
    */
-  static async verifyJWT(sig: string): Promise<JSONWebToken|null> {
+  static async verifyJWT(sig: string): Promise<JSONWebToken | null> {
     const decoded = jwt.decode(sig, {
       complete: true,
       json: true,
@@ -184,7 +184,7 @@ export default class JSONWebToken {
    * @param string sig jwt token.
    * @returns {Object|null} jwt payload if signature matches.
    */
-  verify(sig: string): Payload|null {
+  verify(sig: string): Payload | null {
     try {
       return <Payload>jwt.verify(sig, this.publicKey, {
         algorithms: [ec.JWT_ALGORITHM],

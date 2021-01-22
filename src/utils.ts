@@ -17,7 +17,7 @@ import pkg from './package.json';
  * @param {String} fname File path
  * @returns A checksum as a lower case hex string.
  */
-export function hashFile(fname: string): string|null {
+export function hashFile(fname: string): string | null {
   const hash = crypto.createHash('sha256');
 
   let fd;

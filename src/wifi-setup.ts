@@ -34,7 +34,7 @@ app.get('/wifi-setup', handleWiFiSetup);
 app.post('/connecting', handleConnecting);
 app.use(express.static(Constants.BUILD_STATIC_PATH));
 
-export const WiFiSetupApp: {onConnection: (() => void)|null, onRequest: express.Express} = {
+export const WiFiSetupApp: {onConnection: (() => void) | null, onRequest: express.Express} = {
   onConnection: null,
   onRequest: app,
 };
@@ -261,7 +261,7 @@ function scan(): Promise<WirelessNetwork[]> {
   return new Promise(function(resolve) {
     let attempts = 0;
 
-    function tryScan() {
+    function tryScan(): void {
       attempts++;
 
       const results = Platform.scanWirelessNetworks();
@@ -339,7 +339,7 @@ function defineNetwork(ssid: string, password?: string): boolean {
  *                    or not we have a connection.
  */
 export function isWiFiConfigured(): Promise<boolean> {
-  const ensureAPStopped = () => {
+  const ensureAPStopped = (): void => {
     // If the host seems to be in AP mode (e.g. from a previous run), stop it
     if (Platform.getDhcpServerStatus() ||
         Platform.getWirelessMode().mode === 'ap') {
@@ -413,7 +413,7 @@ function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
       reject();
     }
 
-    function check() {
+    function check(): void {
       attempts++;
       const status = Platform.getWirelessMode();
       if (status.enabled && status.mode === 'sta') {
@@ -427,7 +427,7 @@ function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
       }
     }
 
-    function checkForAddress() {
+    function checkForAddress(): void {
       const ifaces = os.networkInterfaces();
 
       if (ifaces.hasOwnProperty('wlan0')) {
@@ -444,7 +444,7 @@ function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
       retryOrGiveUp();
     }
 
-    function retryOrGiveUp() {
+    function retryOrGiveUp(): void {
       if (attempts >= maxAttempts) {
         console.error('wifi-setup: waitForWiFi: No wifi available, giving up.');
         reject();

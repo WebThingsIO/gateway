@@ -34,7 +34,7 @@ function readVersion(packagePath: string): Promise<string> {
   });
 }
 
-function stat(path: string): Promise<fs.Stats|null> {
+function stat(path: string): Promise<fs.Stats | null> {
   return new Promise((resolve, reject) => {
     fs.stat(path, (err, stats) => {
       if (err) {

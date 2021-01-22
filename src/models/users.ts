@@ -16,7 +16,7 @@ import Database from '../db';
  * @return {Promise} Promise which resolves to user object
  *   or null if user doesn't exist.
  */
-export async function getUser(email: string): Promise<User|null> {
+export async function getUser(email: string): Promise<User | null> {
   const result = await Database.getUser(email);
 
   if (!result) {
@@ -45,7 +45,7 @@ export function getCount(): Promise<number> {
  * @return {Promise} Promise which resolves to user object
  *   or null if user doesn't exist.
  */
-export async function getUserById(id: number|string): Promise<User|null> {
+export async function getUserById(id: number | string): Promise<User | null> {
   if (typeof id !== 'number') {
     id = parseInt(id, 10);
     if (isNaN(id)) {
@@ -96,7 +96,7 @@ export async function getUsers(): Promise<User[]> {
  * @param {String?} name - optional name of user
  * @return {User} user object.
  */
-export async function createUser(email: string, password: string, name: string|null):
+export async function createUser(email: string, password: string, name: string | null):
 Promise<User> {
   const user =
     new User(null, email.toLowerCase(), password, name, '', false, '');
@@ -119,7 +119,7 @@ export async function editUser(user: User): Promise<void> {
  * @param {Number} userId
  * @return {Promise} Promise which resolves when operation is complete.
  */
-export async function deleteUser(userId: number|string): Promise<void> {
+export async function deleteUser(userId: number | string): Promise<void> {
   if (typeof userId !== 'number') {
     userId = parseInt(userId, 10);
     if (isNaN(userId)) {

@@ -27,9 +27,11 @@ class BaseComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    // pass
   }
 
   disconnectedCallback() {
+    // pass
   }
 
   _upgradeProperty(prop) {

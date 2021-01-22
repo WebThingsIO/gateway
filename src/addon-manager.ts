@@ -605,7 +605,7 @@ class AddonManager extends EventEmitter {
     await this.loadAddon(packageId);
   }
 
-  async disableAddon(packageId: string, wait = false) {
+  async disableAddon(packageId: string, wait = false): Promise<void> {
     if (!this.installedAddons.has(packageId)) {
       throw new Error('Package not installed.');
     }
@@ -963,7 +963,7 @@ class AddonManager extends EventEmitter {
     }
 
     // Give the process 3 seconds to exit before killing it.
-    const cleanup = () => {
+    const cleanup = (): void => {
       setTimeout(() => {
         if (pluginProcess.p) {
           console.log(`Killing ${packageId} plugin.`);

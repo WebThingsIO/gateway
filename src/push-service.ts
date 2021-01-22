@@ -36,7 +36,7 @@ class PushService {
     this.enabled = true;
   }
 
-  async getVAPIDKeys(): Promise<any|null> {
+  async getVAPIDKeys(): Promise<any | null> {
     try {
       const vapid = await Settings.getSetting('push.vapid');
       return vapid;

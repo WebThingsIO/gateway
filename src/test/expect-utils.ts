@@ -3,7 +3,7 @@ import sleep from '../sleep';
 export function waitForExpect(expect: () => Promise<void>, wait = 2500): Promise<void> {
   return new Promise((resolve, reject) => {
     const interval = 500;
-    const retry = async () => {
+    const retry = async (): Promise<void> => {
       try {
         await expect();
         resolve();

@@ -353,8 +353,8 @@ const RuleScreen = {
       return path;
     }
 
-    for (let i = 0; i < effectBlocks.length; i++) {
-      const effectCoords = effectTransformToCoords(effectBlocks[i]);
+    for (const effectBlock of effectBlocks) {
+      const effectCoords = effectTransformToCoords(effectBlock);
 
       let start = center;
       if (!multiTrigger) {
@@ -378,8 +378,8 @@ const RuleScreen = {
       }
     }
 
-    for (let i = 0; i < triggerBlocks.length; i++) {
-      const triggerCoords = triggerTransformToCoords(triggerBlocks[i]);
+    for (const triggerBlock of triggerBlocks) {
+      const triggerCoords = triggerTransformToCoords(triggerBlock);
       const circleTrigger =
         document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circleTrigger.classList.add('trigger');
@@ -582,12 +582,12 @@ const RuleScreen = {
       }
 
       const triggers = this.rule.trigger.triggers;
-      for (let i = 0; i < triggers.length; i++) {
+      for (const trigger of triggers) {
         if (flexDir === 'column') {
-          this.makeRulePartBlock('trigger', triggers[i], centerX,
+          this.makeRulePartBlock('trigger', trigger, centerX,
                                  areaRect.height / 4 - dpbRect.height / 2);
         } else {
-          this.makeRulePartBlock('trigger', triggers[i],
+          this.makeRulePartBlock('trigger', trigger,
                                  areaRect.width / 4 - dpbRect.width / 2,
                                  centerY);
         }
@@ -610,13 +610,13 @@ const RuleScreen = {
       }
 
       const effects = this.rule.effect.effects;
-      for (let i = 0; i < effects.length; i++) {
+      for (const effect of effects) {
         if (flexDir === 'column') {
-          this.makeRulePartBlock('effect', effects[i], centerX,
+          this.makeRulePartBlock('effect', effect, centerX,
                                  areaRect.height * 3 / 4 - dpbRect.height /
                                  2);
         } else {
-          this.makeRulePartBlock('effect', effects[i],
+          this.makeRulePartBlock('effect', effect,
                                  areaRect.width * 3 / 4 - dpbRect.width / 2,
                                  centerY);
         }

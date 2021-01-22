@@ -1,7 +1,4 @@
 module.exports = {
-  'plugins': [
-    'html'
-  ],
   'env': {
     'browser': true,
     'commonjs': true,
@@ -11,11 +8,19 @@ module.exports = {
     'mocha': true,
     'node': true
   },
-  'extends': 'eslint:recommended',
-  'parser': 'babel-eslint',
+  'extends': [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended'
+  ],
+  'parser': '@typescript-eslint/parser',
   'parserOptions': {
     'sourceType': 'module'
   },
+  'plugins': [
+    '@typescript-eslint',
+    'html'
+  ],
   'rules': {
     'arrow-parens': [
       'error',
@@ -27,15 +32,15 @@ module.exports = {
       'error',
       'always'
     ],
-    'brace-style': [
+    '@typescript-eslint/brace-style': [
       'error',
       '1tbs'
     ],
-    'comma-dangle': [
+    '@typescript-eslint/comma-dangle': [
       'error',
       'always-multiline'
     ],
-    'comma-spacing': 'error',
+    '@typescript-eslint/comma-spacing': 'error',
     'comma-style': [
       'error',
       'last'
@@ -45,9 +50,22 @@ module.exports = {
       'never'
     ],
     'curly': 'error',
+    '@typescript-eslint/default-param-last': 'error',
     'dot-notation': 'error',
     'eol-last': 'error',
-    'func-call-spacing': [
+    '@typescript-eslint/explicit-module-boundary-types': [
+      'warn',
+      {
+        'allowArgumentsExplicitlyTypedAsAny': true
+      }
+    ],
+    '@typescript-eslint/explicit-function-return-type': [
+      'error',
+      {
+        'allowExpressions': true
+      }
+    ],
+    '@typescript-eslint/func-call-spacing': [
       'error',
       'never'
     ],
@@ -55,7 +73,7 @@ module.exports = {
       'error',
       'beside'
     ],
-    'indent': [
+    '@typescript-eslint/indent': [
       'error',
       2,
       {
@@ -81,7 +99,7 @@ module.exports = {
         'mode': 'strict'
       }
     ],
-    'keyword-spacing': [
+    '@typescript-eslint/keyword-spacing': [
       'error',
       {
         'after': true,
@@ -92,15 +110,25 @@ module.exports = {
       'error',
       'unix'
     ],
-    'lines-between-class-members': [
+    '@typescript-eslint/lines-between-class-members': [
       'error',
       'always'
     ],
     'max-len': [
       'error',
+      100
+    ],
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
       {
-        'code': 100,
-        'ignoreTemplateLiterals': true
+        'singleline': {
+          'delimiter': 'comma',
+          'requireLast': false
+        },
+        'multiline': {
+          'delimiter': 'semi',
+          'requireLast': true
+        }
       }
     ],
     'multiline-ternary': [
@@ -108,8 +136,9 @@ module.exports = {
       'always-multiline'
     ],
     'no-console': 0,
-    'no-duplicate-imports': 'error',
+    '@typescript-eslint/no-duplicate-imports': 'error',
     'no-eval': 'error',
+    '@typescript-eslint/no-explicit-any': 'off',
     'no-floating-decimal': 'error',
     'no-implicit-globals': 'error',
     'no-implied-eval': 'error',
@@ -121,6 +150,13 @@ module.exports = {
       }
     ],
     'no-multiple-empty-lines': 'error',
+    '@typescript-eslint/no-namespace': [
+      'error',
+      {
+        'allowDeclarations': true
+      }
+    ],
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'no-prototype-builtins': 'off',
     'no-return-assign': 'error',
     'no-script-url': 'error',
@@ -128,10 +164,11 @@ module.exports = {
     'no-sequences': 'error',
     'no-shadow-restricted-names': 'error',
     'no-tabs': 'error',
+    'no-throw-literal': 'error',
     'no-trailing-spaces': 'error',
     'no-undefined': 'error',
     'no-unmodified-loop-condition': 'error',
-    'no-unused-vars': [
+    '@typescript-eslint/no-unused-vars': [
       'error',
       {
         'argsIgnorePattern': '^_',
@@ -140,9 +177,10 @@ module.exports = {
     ],
     'no-useless-computed-key': 'error',
     'no-useless-concat': 'error',
-    'no-useless-constructor': 'error',
+    '@typescript-eslint/no-useless-constructor': 'error',
     'no-useless-return': 'error',
     'no-var': 'error',
+    '@typescript-eslint/no-var-requires': 'off',
     'no-void': 'error',
     'no-whitespace-before-property': 'error',
     'object-curly-newline': [
@@ -172,20 +210,20 @@ module.exports = {
       }
     ],
     'prefer-const': 'error',
+    '@typescript-eslint/prefer-for-of': 'error',
     'prefer-template': 'error',
     'quote-props': [
       'error',
       'as-needed'
     ],
-    'quotes': [
+    '@typescript-eslint/quotes': [
       'error',
       'single',
       {
         'allowTemplateLiterals': true
       }
     ],
-    'require-atomic-updates': 'warn',
-    'semi': [
+    '@typescript-eslint/semi': [
       'error',
       'always'
     ],
@@ -204,7 +242,7 @@ module.exports = {
       'error',
       'always'
     ],
-    'space-before-function-paren': [
+    '@typescript-eslint/space-before-function-paren': [
       'error',
       {
         'anonymous': 'never',
@@ -216,7 +254,7 @@ module.exports = {
       'error',
       'never'
     ],
-    'space-infix-ops': 'error',
+    '@typescript-eslint/space-infix-ops': 'error',
     'space-unary-ops': [
       'error',
       {
@@ -247,6 +285,17 @@ module.exports = {
       'error',
       'never'
     ],
+    '@typescript-eslint/type-annotation-spacing': 'error',
     'yoda': 'error'
-  }
+  },
+  'overrides': [
+    {
+      'files': [
+        '**/*.js'
+      ],
+      'rules': {
+        '@typescript-eslint/explicit-function-return-type': 'off'
+      }
+    }
+  ]
 };

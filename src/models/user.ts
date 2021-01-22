@@ -14,14 +14,14 @@ import * as Passwords from '../passwords';
 import speakeasy from 'speakeasy';
 
 export interface UserDescription {
-  id: number|null;
+  id: number | null;
   email: string;
-  name: string|null;
+  name: string | null;
   mfaEnrolled: boolean;
 }
 
 export default class User {
-  private id: number|null;
+  private id: number | null;
 
   private email: string;
 
@@ -33,11 +33,11 @@ export default class User {
 
   private mfaBackupCodes: string[];
 
-  private name: string|null;
+  private name: string | null;
 
-  constructor(id: number|null, email: string, password: string,
-              name: string|null, mfaSharedSecret: string,
-              mfaEnrolled: number|boolean, mfaBackupCodes: string) {
+  constructor(id: number | null, email: string, password: string,
+              name: string | null, mfaSharedSecret: string,
+              mfaEnrolled: number | boolean, mfaBackupCodes: string) {
     this.id = id;
     this.email = email;
     this.password = password; // Hashed
@@ -99,7 +99,7 @@ export default class User {
     return Array.from(codes);
   }
 
-  getId(): number|null {
+  getId(): number | null {
     return this.id;
   }
 
@@ -123,7 +123,7 @@ export default class User {
     this.password = password;
   }
 
-  getName(): string|null {
+  getName(): string | null {
     return this.name;
   }
 

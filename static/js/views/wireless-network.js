@@ -43,7 +43,8 @@ class WirelessNetwork {
           `<div class="wireless-network-info-connected" data-l10n-id="wireless-connected"></div>`;
       } else {
         connectedDiv =
-          `<div class="wireless-network-info-disconnected" data-l10n-id="wireless-connected"></div>`;
+          `<div class="wireless-network-info-disconnected"
+                data-l10n-id="wireless-connected"></div>`;
       }
     }
 

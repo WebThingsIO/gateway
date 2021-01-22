@@ -84,7 +84,8 @@ class Action extends BaseComponent {
   </style>
   <div id="container-${BaseComponent.count}" class="webthing-action-container">
     <div id="contents-${BaseComponent.count}" class="webthing-action-contents">
-      <button id="button-${BaseComponent.count}" type="button" class="webthing-action-button"></button>
+      <button id="button-${BaseComponent.count}" type="button"
+              class="webthing-action-button"></button>
     </div>
   </div>
   <div id="name-${BaseComponent.count}" class="webthing-action-name"></div>
