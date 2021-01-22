@@ -1,15 +1,8 @@
-const {getBrowser, saveStepScreen} = require('../browser-common');
-const {
-  addThing,
-  escapeHtmlForIdClass,
-  getProperty,
-  setProperty,
-} = require('../test-utils');
-
-const {waitForExpect} = require('../../expect-utils');
-const ThingsPage = require('../page-object/things-page');
-const util = require('util');
-
+import {getBrowser, saveStepScreen} from '../browser-common';
+import {addThing, escapeHtmlForIdClass, getProperty, setProperty} from '../test-utils';
+import {waitForExpect} from '../../expect-utils';
+import {ThingsPage} from '../page-object/things-page';
+import util from 'util';
 
 describe('Thing', () => {
   it('should render an unknown thing and be able to change properties',

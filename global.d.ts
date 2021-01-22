@@ -41,3 +41,9 @@ declare module 'asn1.js' {
 declare module 'promisepipe' {
   export default function(input: NodeJS.ReadableStream, outout: NodeJS.WritableStream): void;
 }
+
+declare namespace WebdriverIO {
+  interface Browser extends WebDriver.BaseClient {
+    getUrl(): Promise<string>;
+  }
+}
