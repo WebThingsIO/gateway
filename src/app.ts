@@ -8,41 +8,41 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
-
 // Set up the user profile.
-const UserProfile = require('./user-profile').default;
-const migration = require('./migrate').default();
+import UserProfile from './user-profile';
+import migrate from './migrate';
+const migration = migrate();
 
 // Causes a timestamp to be prepended to console log lines.
-require('./log-timestamps');
+import './log-timestamps';
 
 // External Dependencies
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-const express = require('express');
-const expressWs = require('express-ws');
-const fileUpload = require('express-fileupload');
-const bodyParser = require('body-parser');
-const config = require('config');
-const path = require('path');
-const expressHandlebars = require('express-handlebars');
-const ipRegex = require('ip-regex');
-const SegfaultHandler = require('segfault-handler');
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+import express from 'express';
+import expressWs from 'express-ws';
+import fileUpload from 'express-fileupload';
+import bodyParser from 'body-parser';
+import config from 'config';
+import path from 'path';
+import expressHandlebars from 'express-handlebars';
+import ipRegex from 'ip-regex';
+import * as SegfaultHandler from 'segfault-handler';
 
 // Internal Dependencies
-const addonManager = require('./addon-manager').default;
-const Constants = require('./constants');
-const Database = require('./db').default;
-const mDNSserver = require('./mdns-server');
-const Logs = require('./models/logs').default;
-const platform = require('./platform');
+import AddonManager from './addon-manager';
+import * as Constants from './constants';
+import Database from './db';
+import * as mDNSserver from './mdns-server';
+import Logs from './models/logs';
+import * as Platform from './platform';
 const Router = require('./router');
-const sleep = require('./sleep').default;
-const Things = require('./models/things').default;
-const TunnelService = require('./tunnel-service').default;
-const {WiFiSetupApp, isWiFiConfigured} = require('./wifi-setup');
+import sleep from './sleep';
+import Things from './models/things';
+import TunnelService from './tunnel-service';
+import {WiFiSetupApp, isWiFiConfigured} from './wifi-setup';
+import {AddressInfo} from 'net';
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
@@ -50,12 +50,16 @@ SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 Database.open();
 Logs.open();
 
-const servers = {};
-servers.http = http.createServer();
-const httpApp = createGatewayApp(servers.http, false);
+export const servers: {
+  http: http.Server;
+  https: https.Server | null;
+} = {
+  http: http.createServer(),
+  https: createHttpsServer(),
+};
 
-servers.https = createHttpsServer();
-let httpsApp = null;
+const httpApp: express.Application = createGatewayApp(servers.http, false);
+let httpsApp: express.Application | null = null;
 
 /**
  * Creates an HTTPS server object, if successful. If there are no public and
@@ -64,24 +68,26 @@ let httpsApp = null;
  * @param {}
  * @return {Object|null} https server object if successful, else NULL
  */
-function createHttpsServer() {
+function createHttpsServer(): https.Server | null {
   if (!TunnelService.hasCertificates()) {
     return null;
   }
 
   // HTTPS server configuration
-  const options = {
+  const options: https.ServerOptions = {
     key: fs.readFileSync(path.join(UserProfile.sslDir, 'privatekey.pem')),
     cert: fs.readFileSync(path.join(UserProfile.sslDir, 'certificate.pem')),
   };
+
   if (fs.existsSync(path.join(UserProfile.sslDir, 'chain.pem'))) {
     options.ca = fs.readFileSync(path.join(UserProfile.sslDir, 'chain.pem'));
   }
+
   return https.createServer(options);
 }
 
 let httpsAttempts = 5;
-function startHttpsGateway() {
+function startHttpsGateway(): Promise<https.Server | null> {
   const port = config.get('ports.https');
 
   if (!servers.https) {
@@ -104,17 +110,16 @@ function startHttpsGateway() {
   const promises = [];
 
   // Start the HTTPS server
-  promises.push(new Promise((resolve) => {
-    servers.https.listen(port, () => {
+  promises.push(new Promise<void>((resolve) => {
+    servers.https!.listen(port, () => {
       migration.then(() => {
         // load existing things from the database
         return Things.getThings();
       }).then(() => {
-        addonManager.loadAddons();
+        AddonManager.loadAddons();
       });
       rulesEngineConfigure();
-      console.log('HTTPS server listening on port',
-                  servers.https.address().port);
+      console.log('HTTPS server listening on port', (<AddressInfo>servers.https!.address()!).port);
       resolve();
     });
   }));
@@ -123,9 +128,9 @@ function startHttpsGateway() {
   servers.http.on('request', httpsApp);
   const httpPort = config.get('ports.http');
 
-  promises.push(new Promise((resolve) => {
+  promises.push(new Promise<void>((resolve) => {
     servers.http.listen(httpPort, () => {
-      console.log('Redirector listening on port', servers.http.address().port);
+      console.log('Redirector listening on port', (<AddressInfo>servers.http.address()!).port);
       resolve();
     });
   }));
@@ -133,27 +138,27 @@ function startHttpsGateway() {
   return Promise.all(promises).then(() => servers.https);
 }
 
-function startHttpGateway() {
+function startHttpGateway(): Promise<void> {
   servers.http.on('request', httpApp);
 
   const port = config.get('ports.http');
 
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     servers.http.listen(port, () => {
       migration.then(() => {
         // load existing things from the database
         return Things.getThings();
       }).then(() => {
-        addonManager.loadAddons();
+        AddonManager.loadAddons();
       });
       rulesEngineConfigure();
-      console.log('HTTP server listening on port', servers.http.address().port);
+      console.log('HTTP server listening on port', (<AddressInfo>servers.http.address()!).port);
       resolve();
     });
   });
 }
 
-function stopHttpGateway() {
+function stopHttpGateway(): void {
   servers.http.removeListener('request', httpApp);
 
   if (httpsApp) {
@@ -163,7 +168,7 @@ function stopHttpGateway() {
   servers.http.close();
 }
 
-function stopHttpsGateway() {
+function stopHttpsGateway(): void {
   if (servers.https && httpsApp) {
     servers.https.removeListener('request', httpsApp);
     servers.https.close();
@@ -171,7 +176,7 @@ function stopHttpsGateway() {
   }
 }
 
-function startWiFiSetup() {
+function startWiFiSetup(): void {
   console.log('Starting WiFi setup');
   servers.http.on('request', WiFiSetupApp.onRequest);
 
@@ -180,7 +185,7 @@ function startWiFiSetup() {
   servers.http.listen(port);
 }
 
-function stopWiFiSetup() {
+function stopWiFiSetup(): void {
   console.log('Stopping WiFi Setup');
   servers.http.removeListener('request', WiFiSetupApp.onRequest);
   servers.http.close();
@@ -189,12 +194,12 @@ function stopWiFiSetup() {
 /**
  * Set up the rules engine.
  */
-function rulesEngineConfigure() {
+function rulesEngineConfigure(): void {
   const rulesEngine = require('./rules-engine/index').default;
   rulesEngine.configure();
 }
 
-function createApp(isSecure) {
+function createApp(isSecure: boolean): express.Application {
   const port = isSecure ? config.get('ports.https') : config.get('ports.http');
   const app = express();
   app.engine(
@@ -268,7 +273,8 @@ function createApp(isSecure) {
  * @param {http.Server|https.Server} server
  * @return {express.Router}
  */
-function createGatewayApp(server, isSecure) {
+function createGatewayApp(server: http.Server | https.Server, isSecure: boolean):
+express.Application {
   const app = createApp(isSecure);
 
   // Inject WebSocket support
@@ -280,11 +286,13 @@ function createGatewayApp(server, isSecure) {
   return app;
 }
 
-const serverStartup = {
+export const serverStartup: {
+  promise: Promise<void | unknown>;
+} = {
   promise: Promise.resolve(),
 };
 
-switch (platform.getOS()) {
+switch (Platform.getOS()) {
   case 'linux-raspbian':
     migration.then(() => {
       return isWiFiConfigured();
@@ -305,10 +313,10 @@ switch (platform.getOS()) {
     break;
 }
 
-function startGateway() {
+function startGateway(): void {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup.promise = TunnelService.userSkipped().then((skipped) => {
+    serverStartup.promise = TunnelService.userSkipped().then((skipped): Promise<unknown> => {
       const promise = startHttpsGateway();
 
       // if the user opted to skip the tunnel, but still has certificates, go
@@ -320,12 +328,16 @@ function startGateway() {
       // if they did not opt to skip, check if they have a tunnel token. if so,
       // start the tunnel.
       return promise.then((server) => {
-        TunnelService.hasTunnelToken().then((result) => {
-          if (result) {
-            TunnelService.setServerHandle(server);
-            TunnelService.start();
-          }
-        });
+        if (!server) {
+          console.error('Failed to start HTTPS gateway');
+        } else {
+          TunnelService.hasTunnelToken().then((result) => {
+            if (result) {
+              TunnelService.setServerHandle(server!);
+              TunnelService.start();
+            }
+          });
+        }
       });
     });
   } else {
@@ -333,8 +345,8 @@ function startGateway() {
   }
 }
 
-function gracefulExit() {
-  addonManager.unloadAddons();
+function gracefulExit(): void {
+  AddonManager.unloadAddons();
   TunnelService.stop();
 }
 
@@ -357,7 +369,11 @@ TunnelService.switchToHttps = () => {
   stopHttpGateway();
   stopHttpsGateway();
   startHttpsGateway().then((server) => {
-    TunnelService.setServerHandle(server);
+    if (!server) {
+      console.error('Failed to start HTTPS gateway');
+    } else {
+      TunnelService.setServerHandle(server!);
+    }
   });
 };
 
@@ -365,13 +381,7 @@ TunnelService.switchToHttps = () => {
 // We check to see if mDNS should be setup in default mode, or has a previous
 // user setup a unique domain. Then we start it.
 mDNSserver.getmDNSstate().then((state) => {
-  if (platform.implemented('setMdnsServerStatus')) {
-    platform.setMdnsServerStatus(state);
+  if (Platform.implemented('setMdnsServerStatus')) {
+    Platform.setMdnsServerStatus(state);
   }
 });
-
-// for testing
-module.exports = {
-  servers,
-  serverStartup,
-};

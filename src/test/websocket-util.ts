@@ -1,6 +1,7 @@
 import e2p from 'event-to-promise';
 import WebSocket from 'ws';
 import {server} from './common';
+import {AddressInfo} from 'net';
 
 /**
  * Open a websocket
@@ -12,7 +13,7 @@ export async function webSocketOpen(path: string, jwt: string): Promise<WebSocke
   if (!server.address()) {
     server.listen(0);
   }
-  const addr = server.address();
+  const addr = <AddressInfo>server.address()!;
   const socketPath =
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 

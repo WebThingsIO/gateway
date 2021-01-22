@@ -136,7 +136,7 @@ describe('oauth/', function() {
         secret: CLIENT_SECRET,
       },
       auth: {
-        tokenHost: `https://127.0.0.1:${server.address().port}`,
+        tokenHost: `https://127.0.0.1:${(<AddressInfo>server.address()!).port}`,
       },
       options: {
         authorizationMethod,
