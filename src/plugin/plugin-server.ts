@@ -162,11 +162,11 @@ export default class PluginServer extends EventEmitter {
    *
    * Loads a plugin by launching a separate process.
    */
-  loadPlugin(pluginPath: string, manifest: any): void {
-    const plugin = this.registerPlugin(manifest.name);
-    (plugin as any).exec = manifest.moziot.exec;
-    (plugin as any).execPath = pluginPath;
-    (plugin as any).start();
+  loadPlugin(pluginPath: string, id: string, exec: string): void {
+    const plugin = this.registerPlugin(id);
+    plugin.setExec(exec);
+    plugin.setExecPath(pluginPath);
+    plugin.start();
   }
 
   /**

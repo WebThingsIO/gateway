@@ -690,27 +690,9 @@ class AddonManager extends EventEmitter {
       console.error(`Failed to create add-on data directory ${dataPath}:`, e);
     }
 
-    // Now, we need to build an object so that add-ons which rely on things
-    // being passed in can function properly.
-    const newSettings: any = {
-      name: manifest.id,
-      display_name: manifest.name,
-      moziot: {
-        exec: manifest.exec,
-      },
-    };
-
-    if (manifest.schema) {
-      newSettings.moziot.schema = manifest.schema;
-    }
-
-    if (savedConfig) {
-      newSettings.moziot.config = savedConfig;
-    }
-
     // Load the add-on
     console.log(`Loading add-on: ${manifest.id}`);
-    this.pluginServer.loadPlugin(addonPath, newSettings);
+    this.pluginServer.loadPlugin(addonPath, manifest.id, manifest.exec);
   }
 
   /**

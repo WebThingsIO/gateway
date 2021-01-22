@@ -9,6 +9,7 @@
 import {Action, Adapter, AddonManagerProxy, Device, Property} from 'gateway-addon';
 import express from 'express';
 import {Server} from 'http';
+import manifest from './manifest.json';
 
 class MockProperty extends Property<any> {
   constructor(device: MockDevice, name: string, propertyDescription: any) {
@@ -238,8 +239,8 @@ class MockAdapter extends Adapter {
   }
 }
 
-function loadMockAdapter(addonManager: AddonManagerProxy, manifest: any): void {
-  new MockAdapter(addonManager, manifest.name);
+function loadMockAdapter(addonManager: AddonManagerProxy): void {
+  new MockAdapter(addonManager, manifest.id);
 }
 
 export = loadMockAdapter;
