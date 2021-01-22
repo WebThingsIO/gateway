@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {fireEvent, createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {fireEvent, createSchemaForm} from './test-utils';
 
 describe('ObjectField', () => {
   describe('schema', () => {
@@ -32,9 +32,9 @@ describe('ObjectField', () => {
     it('should render a fieldset legend', () => {
       const {node} = createSchemaForm({schema});
 
-      const legend = node.querySelector('fieldset > legend');
+      const legend = node.querySelector('fieldset > legend')!;
 
-      expect(legend.textContent.trim()).toEqual('my object');
+      expect(legend.textContent!.trim()).toEqual('my object');
       expect(legend.id).toEqual('root__title');
     });
 
@@ -42,7 +42,7 @@ describe('ObjectField', () => {
       const {node} = createSchemaForm({schema});
 
       expect(
-        node.querySelector('.field-boolean .control-label').textContent.trim()
+        node.querySelector('.field-boolean .control-label')!.textContent!.trim()
       ).toEqual('bar');
     });
 
@@ -65,9 +65,9 @@ describe('ObjectField', () => {
     it('should handle a default object value', () => {
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('.field input[type=text]').value)
+      expect((<HTMLInputElement>node.querySelector('.field input[type=text]')!).value)
         .toEqual('hey');
-      expect(node.querySelector('.field input[type=checkbox]').checked)
+      expect((<HTMLInputElement>node.querySelector('.field input[type=checkbox]')!).checked)
         .toEqual(true);
     });
 
@@ -76,10 +76,10 @@ describe('ObjectField', () => {
 
       // Required field is <input type="text" required="">
       expect(
-        node.querySelector('input[type=text]').getAttribute('required')
+        node.querySelector('input[type=text]')!.getAttribute('required')
       ).toEqual('');
       expect(
-        node.querySelector('.field-string .control-label').textContent.trim()
+        node.querySelector('.field-string .control-label')!.textContent!.trim()
       ).toEqual('Foo*');
     });
 
@@ -92,16 +92,16 @@ describe('ObjectField', () => {
         },
       });
 
-      expect(node.querySelector('.field input[type=text]').value)
+      expect((<HTMLInputElement>node.querySelector('.field input[type=text]')!).value)
         .toEqual('hey');
-      expect(node.querySelector('.field input[type=checkbox]').checked)
+      expect((<HTMLInputElement>node.querySelector('.field input[type=checkbox]')!).checked)
         .toEqual(true);
     });
 
     it('should handle object fields change events', () => {
       const {schemaForm, node} = createSchemaForm({schema});
 
-      const select = node.querySelector('input[type=text]');
+      const select = <HTMLInputElement>node.querySelector('input[type=text]');
       select.value = 'changed';
       fireEvent(select, 'change');
 
@@ -111,8 +111,8 @@ describe('ObjectField', () => {
     it('should render the field with the expected id', () => {
       const {node} = createSchemaForm({schema});
 
-      expect(node.querySelector('input[type=text]').id).toEqual('root_foo');
-      expect(node.querySelector('input[type=checkbox]').id).toEqual('root_bar');
+      expect(node.querySelector('input[type=text]')!.id).toEqual('root_foo');
+      expect(node.querySelector('input[type=checkbox]')!.id).toEqual('root_bar');
     });
   });
 });

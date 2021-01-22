@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {makeUndefined, fireEvent, createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {makeUndefined, fireEvent, createSchemaForm} from './test-utils';
 
 describe('Validation', () => {
   describe('Required fields', () => {
@@ -20,10 +20,10 @@ describe('Validation', () => {
         },
       });
 
-      fireEvent(node.querySelector('#root_foo'), 'change');
+      fireEvent(node.querySelector('#root_foo')!, 'change');
 
       expect(node.querySelectorAll('.errors-list li')).toHaveLength(1);
-      expect(node.querySelector('.errors-list li').textContent.trim())
+      expect(node.querySelector('.errors-list li')!.textContent!.trim())
         .toEqual('should have required property \'foo\'');
     });
   });
@@ -48,10 +48,10 @@ describe('Validation', () => {
         },
       });
 
-      fireEvent(node.querySelector('#root_foo'), 'change');
+      fireEvent(node.querySelector('#root_foo')!, 'change');
 
       expect(node.querySelectorAll('.error-item')).toHaveLength(1);
-      expect(node.querySelector('.error-item').textContent.trim())
+      expect(node.querySelector('.error-item')!.textContent!.trim())
         .toEqual('/foo should NOT have fewer than 10 characters');
     });
   });

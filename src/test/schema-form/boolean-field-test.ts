@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {createSchemaForm} from './test-utils';
 
 describe('BooleanField', () => {
   it('should render a boolean field', () => {
@@ -23,7 +23,7 @@ describe('BooleanField', () => {
     });
 
     expect(
-      node.querySelector('.field .control-label').textContent.trim()
+      node.querySelector('.field .control-label')!.textContent!.trim()
     ).toEqual('foo');
   });
 
@@ -46,8 +46,8 @@ describe('BooleanField', () => {
       },
     });
 
-    const description = node.querySelector('.field-description');
-    expect(description.textContent.trim()).toEqual('my description');
+    const description = node.querySelector('.field-description')!;
+    expect(description.textContent!.trim()).toEqual('my description');
   });
 
   it('should assign a default value', () => {
@@ -58,7 +58,7 @@ describe('BooleanField', () => {
       },
     });
 
-    expect(node.querySelector('.field input').checked).toEqual(true);
+    expect((<HTMLInputElement>node.querySelector('.field input')!).checked).toEqual(true);
   });
 
   it('should default state value to false', () => {
@@ -75,7 +75,7 @@ describe('BooleanField', () => {
       },
     });
 
-    node.querySelector('input').click();
+    node.querySelector('input')!.click();
 
     expect(schemaForm.formData).toEqual(true);
   });
@@ -88,7 +88,7 @@ describe('BooleanField', () => {
       formData: true,
     });
 
-    expect(node.querySelector('.field input').checked).toEqual(true);
+    expect((<HTMLInputElement>node.querySelector('.field input')!).checked).toEqual(true);
   });
 
   it('should render the input with the expected id', () => {
@@ -98,6 +98,6 @@ describe('BooleanField', () => {
       },
     });
 
-    expect(node.querySelector('input[type=checkbox]').id).toEqual('root');
+    expect(node.querySelector('input[type=checkbox]')!.id).toEqual('root');
   });
 });

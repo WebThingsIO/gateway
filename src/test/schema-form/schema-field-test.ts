@@ -1,5 +1,5 @@
-require('../jsdom-common');
-const {createSchemaForm} = require('./test-utils');
+import '../jsdom-common';
+import {createSchemaForm} from './test-utils';
 
 describe('SchemaField', () => {
   describe('Unsupported field', () => {
@@ -60,7 +60,7 @@ describe('SchemaField', () => {
 
          const matches = node.querySelectorAll('#root_foo__description');
          expect(matches).toHaveLength(1);
-         expect(matches[0].textContent.trim()).toEqual('A Foo field');
+         expect(matches[0].textContent!.trim()).toEqual('A Foo field');
        });
 
     it('should not render description if not available from schema', () => {
