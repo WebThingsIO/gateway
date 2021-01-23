@@ -1,4 +1,4 @@
-const migrate = require('../build/migrate').default
+const migrate = require('../build/migrate').default;
 const db = require('../build/db').default;
 db.open();
 
