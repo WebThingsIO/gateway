@@ -1,12 +1,13 @@
 process.env.ALLOW_CONFIG_MUTATIONS = 'true';
+
 const config = require('config');
-const exec = require('child_process').exec;
+const {exec} = require('child_process');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const pkg = require('../package.json');
 const semver = require('semver');
-const Utils = require('../src/utils');
+const Utils = require('../build/utils');
 
 // Load in the local.json file, if it exists
 const baseDir = path.resolve(
