@@ -37,7 +37,7 @@ import Database from './db';
 import * as mDNSserver from './mdns-server';
 import Logs from './models/logs';
 import * as Platform from './platform';
-const Router = require('./router');
+import Router from './router';
 import sleep from './sleep';
 import Things from './models/things';
 import TunnelService from './tunnel-service';
