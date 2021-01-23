@@ -44,3 +44,6 @@ jobs:
         env:
           WEBTHINGS_HOME: "${HOME}/.webthings/test"
           NODE_TLS_REJECT_UNAUTHORIZED: 0
+      - name: Check dependencies
+        run: |
+          npm run dependencies-check
