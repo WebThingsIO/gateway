@@ -12,7 +12,7 @@ import {WirelessNetwork} from './platforms/types';
 
 const hbs = expressHandlebars.create({
   helpers: {
-    escapeQuotes: (str: string) => `${str}`.replace(/'/, '\\\''),
+    escapeQuotes: (str: string) => `${str}`.replace(/"/g, '\\"'),
   },
   defaultLayout: undefined, // eslint-disable-line no-undefined
   layoutsDir: Constants.VIEWS_PATH,
