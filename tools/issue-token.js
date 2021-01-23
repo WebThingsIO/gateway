@@ -1,7 +1,7 @@
 const readline = require('readline');
-const Database = require('../src/db.js');
-const User = require('../src/models/user.js');
-const JSONWebToken = require('../src/models/jsonwebtoken.js');
+const Database = require('../build/db').default;
+const User = require('../build/models/user').default;
+const JSONWebToken = require('../build/models/jsonwebtoken').default;
 
 const rl = readline.createInterface({
   input: process.stdin,
