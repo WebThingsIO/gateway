@@ -22,13 +22,10 @@ import AdapterProxy from './adapter-proxy';
 import APIHandlerProxy from './api-handler-proxy';
 import NotifierProxy from './notifier-proxy';
 import pkg from '../package.json';
+import Plugin from './plugin';
+import {AddonManager} from '../addon-manager';
 
 const MessageType = Constants.MessageType;
-
-import Plugin from './plugin';
-
-// TODO: remove these
-type AddonManager = any;
 
 export default class PluginServer extends EventEmitter {
   private manager: AddonManager;
