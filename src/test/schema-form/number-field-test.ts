@@ -119,7 +119,7 @@ describe('NumberField', () => {
       /*
       input.value = '2.';
       fireEvent(input, 'change');
-      expect(node.querySelector('.field input').value).toEqual('2');
+      expect((<HTMLInputElement>node.querySelector('.field input')!).value).toEqual('2');
       expect(schemaForm.formData).toEqual(2);
       */
 

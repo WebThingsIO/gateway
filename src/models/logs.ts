@@ -317,7 +317,7 @@ class Logs {
     const descr = JSON.stringify(this.propertyDescr(thingId, propertyName));
     const out: any = {};
     const id = this.descrToId[descr];
-    // TODO determine property type to only do one of these
+    // TODO: determine property type to only do one of these
     await this.loadMetrics(out, METRICS_NUMBER, null, id, start, end);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id, start,
                            end);
