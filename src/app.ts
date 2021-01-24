@@ -30,6 +30,9 @@ import expressHandlebars from 'express-handlebars';
 import ipRegex from 'ip-regex';
 import * as SegfaultHandler from 'segfault-handler';
 
+// Keep the plugin import here to prevent circular dependencies
+import './plugin/plugin';
+
 // Internal Dependencies
 import AddonManager from './addon-manager';
 import * as Constants from './constants';
@@ -38,6 +41,7 @@ import * as mDNSserver from './mdns-server';
 import Logs from './models/logs';
 import * as Platform from './platform';
 import Router from './router';
+import RulesController from './controllers/rules_controller';
 import sleep from './sleep';
 import Things from './models/things';
 import TunnelService from './tunnel-service';
@@ -118,7 +122,7 @@ function startHttpsGateway(): Promise<https.Server | null> {
       }).then(() => {
         AddonManager.loadAddons();
       });
-      rulesEngineConfigure();
+      RulesController.configure();
       console.log('HTTPS server listening on port', (<AddressInfo>servers.https!.address()!).port);
       resolve();
     });
@@ -151,7 +155,7 @@ function startHttpGateway(): Promise<void> {
       }).then(() => {
         AddonManager.loadAddons();
       });
-      rulesEngineConfigure();
+      RulesController.configure();
       console.log('HTTP server listening on port', (<AddressInfo>servers.http.address()!).port);
       resolve();
     });
@@ -189,15 +193,6 @@ function stopWiFiSetup(): void {
   console.log('Stopping WiFi Setup');
   servers.http.removeListener('request', WiFiSetupApp.onRequest);
   servers.http.close();
-}
-
-/**
- * Set up the rules engine.
- */
-function rulesEngineConfigure(): void {
-  // TODO: fix circular import
-  const rulesEngine = require('./rules-engine/index').default;
-  rulesEngine.configure();
 }
 
 function createApp(isSecure: boolean): express.Application {
