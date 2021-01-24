@@ -11,7 +11,6 @@
 import * as Constants from '../constants';
 import Database from '../db';
 import {EventEmitter} from 'events';
-const Router = require('../router');
 import UserProfile from '../user-profile';
 import fs from 'fs';
 import path from 'path';
@@ -24,6 +23,11 @@ import {
 } from 'gateway-addon/lib/schema';
 import Action from './action';
 import Event from './event';
+
+export interface Router {
+  addProxyServer: (thingId: string, server: string) => void;
+  removeProxyServer: (thingId: string) => void;
+}
 
 export interface ThingDescription {
   id: string;
@@ -108,7 +112,7 @@ export default class Thing extends EventEmitter {
    * @param {String} id Unique ID.
    * @param {Object} description Thing description.
    */
-  constructor(id: string, description: ThingDescription) {
+  constructor(id: string, description: ThingDescription, router: Router) {
     super();
 
     if (!id || !description) {
@@ -187,7 +191,7 @@ export default class Thing extends EventEmitter {
     };
 
     if (description.hasOwnProperty('baseHref') && description.baseHref) {
-      Router.addProxyServer(this.id, description.baseHref);
+      router.addProxyServer(this.id, description.baseHref);
     }
 
     if (description.hasOwnProperty('links')) {
@@ -619,7 +623,7 @@ export default class Thing extends EventEmitter {
    * @param {Object} description Thing description.
    * @return {Promise} A promise which resolves with the description set.
    */
-  updateFromDescription(description: ThingDescription): Promise<ThingDescription> {
+  updateFromDescription(description: ThingDescription, router: Router): Promise<ThingDescription> {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
@@ -741,7 +745,7 @@ export default class Thing extends EventEmitter {
     }
 
     if (description.hasOwnProperty('baseHref') && description.baseHref) {
-      Router.addProxyServer(this.id, description.baseHref);
+      router.addProxyServer(this.id, description.baseHref);
     }
 
     // Update the UI href

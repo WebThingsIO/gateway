@@ -12,33 +12,37 @@ import express from 'express';
 import OAuthClients from '../models/oauthclients';
 import {ClientRegistry} from '../oauth-types';
 
-const OAuthClientsController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-/**
- * Get the currently authorized clients
- */
-OAuthClientsController.get('/', async (request: express.Request, response: express.Response) => {
-  const user = (request as any).jwt.user;
-  const clients = await OAuthClients.getAuthorized(user);
-
-  response.json(clients.map((client: ClientRegistry) => {
-    return client.getDescription();
-  }));
-});
-
-OAuthClientsController.delete(
-  '/:clientId',
-  async (request: express.Request, response: express.Response) => {
-    const clientId = request.params.clientId;
-    if (!OAuthClients.get(clientId)) {
-      response.status(404).send('Client not found');
-      return;
-    }
+  /**
+   * Get the currently authorized clients
+   */
+  controller.get('/', async (request: express.Request, response: express.Response) => {
     const user = (request as any).jwt.user;
+    const clients = await OAuthClients.getAuthorized(user);
 
-    await OAuthClients.revokeClientAuthorization(user, clientId);
-    response.sendStatus(204);
-  }
-);
+    response.json(clients.map((client: ClientRegistry) => {
+      return client.getDescription();
+    }));
+  });
 
-export default OAuthClientsController;
+  controller.delete(
+    '/:clientId',
+    async (request: express.Request, response: express.Response) => {
+      const clientId = request.params.clientId;
+      if (!OAuthClients.get(clientId)) {
+        response.status(404).send('Client not found');
+        return;
+      }
+      const user = (request as any).jwt.user;
+
+      await OAuthClients.revokeClientAuthorization(user, clientId);
+      response.sendStatus(204);
+    }
+  );
+
+  return controller;
+}
+
+export default build;

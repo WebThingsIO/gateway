@@ -11,31 +11,35 @@
 import express from 'express';
 import Events from '../models/events';
 
-const EventsController = express.Router({mergeParams: true});
+function build(): express.Router {
+  const controller = express.Router({mergeParams: true});
 
-/**
- * Handle getting a list of events.
- */
-EventsController.get('/', (request, response) => {
-  if (request.params.thingId) {
-    response.status(200).json(Events.getByThing(request.params.thingId));
-  } else {
-    response.status(200).json(Events.getGatewayEvents());
-  }
-});
+  /**
+   * Handle getting a list of events.
+   */
+  controller.get('/', (request, response) => {
+    if (request.params.thingId) {
+      response.status(200).json(Events.getByThing(request.params.thingId));
+    } else {
+      response.status(200).json(Events.getGatewayEvents());
+    }
+  });
 
-/**
- * Handle getting a list of events.
- */
-EventsController.get('/:eventName', (request, response) => {
-  const eventName = request.params.eventName;
+  /**
+   * Handle getting a list of events.
+   */
+  controller.get('/:eventName', (request, response) => {
+    const eventName = request.params.eventName;
 
-  if (request.params.thingId) {
-    response.status(200).json(Events.getByThing(request.params.thingId,
-                                                eventName));
-  } else {
-    response.status(200).json(Events.getGatewayEvents(eventName));
-  }
-});
+    if (request.params.thingId) {
+      response.status(200).json(Events.getByThing(request.params.thingId,
+                                                  eventName));
+    } else {
+      response.status(200).json(Events.getGatewayEvents(eventName));
+    }
+  });
 
-export default EventsController;
+  return controller;
+}
+
+export default build;

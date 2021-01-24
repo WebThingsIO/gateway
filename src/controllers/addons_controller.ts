@@ -5,178 +5,182 @@ import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
 import AddonManager from '../addon-manager';
 
-const AddonsController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-AddonsController.get('/', async (_request, response) => {
-  response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
-});
-
-AddonsController.get('/:addonId/license', async (request, response) => {
-  const addonId = request.params.addonId;
-  const addonDir = path.join(UserProfile.addonsDir, addonId);
-
-  fs.readdir(addonDir, (err, files) => {
-    if (err) {
-      response.status(404).send(err);
-      return;
-    }
-
-    const licenses = files.filter((f) => {
-      return /^LICENSE(\..*)?$/.test(f) &&
-        fs.lstatSync(path.join(addonDir, f)).isFile();
-    });
-
-    if (licenses.length === 0) {
-      response.status(404).send('License not found');
-      return;
-    }
-
-    fs.readFile(
-      path.join(addonDir, licenses[0]),
-      {encoding: 'utf8'},
-      (err, data) => {
-        if (err) {
-          response.status(404).send(err);
-          return;
-        }
-
-        response.status(200).type('text/plain').send(data);
-      }
-    );
+  controller.get('/', async (_request, response) => {
+    response.status(200).json(Array.from(AddonManager.getInstalledAddons().values()));
   });
-});
 
-AddonsController.put('/:addonId', async (request, response) => {
-  const addonId = request.params.addonId;
+  controller.get('/:addonId/license', async (request, response) => {
+    const addonId = request.params.addonId;
+    const addonDir = path.join(UserProfile.addonsDir, addonId);
 
-  if (!request.body || !request.body.hasOwnProperty('enabled')) {
-    response.status(400).send('Enabled property not defined');
-    return;
-  }
+    fs.readdir(addonDir, (err, files) => {
+      if (err) {
+        response.status(404).send(err);
+        return;
+      }
 
-  const enabled = request.body.enabled;
+      const licenses = files.filter((f) => {
+        return /^LICENSE(\..*)?$/.test(f) &&
+          fs.lstatSync(path.join(addonDir, f)).isFile();
+      });
 
-  try {
-    if (enabled) {
-      await AddonManager.enableAddon(addonId);
-    } else {
-      await AddonManager.disableAddon(addonId, true);
+      if (licenses.length === 0) {
+        response.status(404).send('License not found');
+        return;
+      }
+
+      fs.readFile(
+        path.join(addonDir, licenses[0]),
+        {encoding: 'utf8'},
+        (err, data) => {
+          if (err) {
+            response.status(404).send(err);
+            return;
+          }
+
+          response.status(200).type('text/plain').send(data);
+        }
+      );
+    });
+  });
+
+  controller.put('/:addonId', async (request, response) => {
+    const addonId = request.params.addonId;
+
+    if (!request.body || !request.body.hasOwnProperty('enabled')) {
+      response.status(400).send('Enabled property not defined');
+      return;
     }
 
-    response.status(200).json({enabled});
-  } catch (e) {
-    console.error(`Failed to toggle add-on ${addonId}`);
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
+    const enabled = request.body.enabled;
 
-AddonsController.get('/:addonId/config', async (request, response) => {
-  const addonId = request.params.addonId;
-  const key = `addons.config.${addonId}`;
+    try {
+      if (enabled) {
+        await AddonManager.enableAddon(addonId);
+      } else {
+        await AddonManager.disableAddon(addonId, true);
+      }
 
-  try {
-    const config = await Settings.getSetting(key);
-    response.status(200).json(config || {});
-  } catch (e) {
-    console.error(`Failed to get config for add-on ${addonId}`);
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
+      response.status(200).json({enabled});
+    } catch (e) {
+      console.error(`Failed to toggle add-on ${addonId}`);
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
 
-AddonsController.put('/:addonId/config', async (request, response) => {
-  const addonId = request.params.addonId;
+  controller.get('/:addonId/config', async (request, response) => {
+    const addonId = request.params.addonId;
+    const key = `addons.config.${addonId}`;
 
-  if (!request.body || !request.body.hasOwnProperty('config')) {
-    response.status(400).send('Config property not defined');
-    return;
-  }
+    try {
+      const config = await Settings.getSetting(key);
+      response.status(200).json(config || {});
+    } catch (e) {
+      console.error(`Failed to get config for add-on ${addonId}`);
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
 
-  const config = request.body.config;
-  const key = `addons.config.${addonId}`;
+  controller.put('/:addonId/config', async (request, response) => {
+    const addonId = request.params.addonId;
 
-  try {
-    await Settings.setSetting(key, config);
-  } catch (e) {
-    console.error(`Failed to set config for add-on ${addonId}`);
-    console.error(e);
-    response.status(400).send(e);
-    return;
-  }
-
-  try {
-    await AddonManager.unloadAddon(addonId, true);
-
-    if (await AddonManager.addonEnabled(addonId)) {
-      await AddonManager.loadAddon(addonId);
+    if (!request.body || !request.body.hasOwnProperty('config')) {
+      response.status(400).send('Config property not defined');
+      return;
     }
 
-    response.status(200).json({config});
-  } catch (e) {
-    console.error(`Failed to restart add-on ${addonId}`);
-    console.error(e);
-    response.status(400).send(e);
-  }
-});
+    const config = request.body.config;
+    const key = `addons.config.${addonId}`;
 
-AddonsController.post('/', async (request, response) => {
-  if (!request.body ||
-      !request.body.hasOwnProperty('id') ||
-      !request.body.hasOwnProperty('url') ||
-      !request.body.hasOwnProperty('checksum')) {
-    response.status(400).send('Missing required parameter(s).');
-    return;
-  }
+    try {
+      await Settings.setSetting(key, config);
+    } catch (e) {
+      console.error(`Failed to set config for add-on ${addonId}`);
+      console.error(e);
+      response.status(400).send(e);
+      return;
+    }
 
-  const id = request.body.id;
-  const url = request.body.url;
-  const checksum = request.body.checksum;
+    try {
+      await AddonManager.unloadAddon(addonId, true);
 
-  try {
-    await AddonManager.installAddonFromUrl(id, url, checksum, true);
-    const key = `addons.${id}`;
-    const obj = await Settings.getSetting(key);
-    response.status(200).json(obj);
-  } catch (e) {
-    response.status(400).send(e);
-  }
-});
+      if (await AddonManager.addonEnabled(addonId)) {
+        await AddonManager.loadAddon(addonId);
+      }
 
-AddonsController.patch('/:addonId', async (request, response) => {
-  const id = request.params.addonId;
+      response.status(200).json({config});
+    } catch (e) {
+      console.error(`Failed to restart add-on ${addonId}`);
+      console.error(e);
+      response.status(400).send(e);
+    }
+  });
 
-  if (!request.body ||
-      !request.body.hasOwnProperty('url') ||
-      !request.body.hasOwnProperty('checksum')) {
-    response.status(400).send('Missing required parameter(s).');
-    return;
-  }
+  controller.post('/', async (request, response) => {
+    if (!request.body ||
+        !request.body.hasOwnProperty('id') ||
+        !request.body.hasOwnProperty('url') ||
+        !request.body.hasOwnProperty('checksum')) {
+      response.status(400).send('Missing required parameter(s).');
+      return;
+    }
 
-  const url = request.body.url;
-  const checksum = request.body.checksum;
+    const id = request.body.id;
+    const url = request.body.url;
+    const checksum = request.body.checksum;
 
-  try {
-    await AddonManager.installAddonFromUrl(id, url, checksum, false);
-    const key = `addons.${id}`;
-    const obj = await Settings.getSetting(key);
-    response.status(200).json(obj);
-  } catch (e) {
-    console.error(`Failed to update add-on: ${id}\n${e}`);
-    response.status(400).send(e);
-  }
-});
+    try {
+      await AddonManager.installAddonFromUrl(id, url, checksum, true);
+      const key = `addons.${id}`;
+      const obj = await Settings.getSetting(key);
+      response.status(200).json(obj);
+    } catch (e) {
+      response.status(400).send(e);
+    }
+  });
 
-AddonsController.delete('/:addonId', async (request, response) => {
-  const addonId = request.params.addonId;
+  controller.patch('/:addonId', async (request, response) => {
+    const id = request.params.addonId;
 
-  try {
-    await AddonManager.uninstallAddon(addonId, false, true);
-    response.sendStatus(204);
-  } catch (e) {
-    console.error(`Failed to uninstall add-on: ${addonId}\n${e}`);
-    response.status(400).send(e);
-  }
-});
+    if (!request.body ||
+        !request.body.hasOwnProperty('url') ||
+        !request.body.hasOwnProperty('checksum')) {
+      response.status(400).send('Missing required parameter(s).');
+      return;
+    }
 
-export default AddonsController;
+    const url = request.body.url;
+    const checksum = request.body.checksum;
+
+    try {
+      await AddonManager.installAddonFromUrl(id, url, checksum, false);
+      const key = `addons.${id}`;
+      const obj = await Settings.getSetting(key);
+      response.status(200).json(obj);
+    } catch (e) {
+      console.error(`Failed to update add-on: ${id}\n${e}`);
+      response.status(400).send(e);
+    }
+  });
+
+  controller.delete('/:addonId', async (request, response) => {
+    const addonId = request.params.addonId;
+
+    try {
+      await AddonManager.uninstallAddon(addonId, false, true);
+      response.sendStatus(204);
+    } catch (e) {
+      console.error(`Failed to uninstall add-on: ${addonId}\n${e}`);
+      response.status(400).send(e);
+    }
+  });
+
+  return controller;
+}
+
+export default build;
