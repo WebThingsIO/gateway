@@ -11,30 +11,34 @@
 import express from 'express';
 import PushService from '../push-service';
 
-const PushController = express.Router();
+function build(): express.Router {
+  const controller = express.Router();
 
-/**
- * Handle requests for the public key
- */
-PushController.get('/vapid-public-key', async (_request, response) => {
-  const vapid = await PushService.getVAPIDKeys();
-  if (!vapid) {
-    response.status(500).json({error: 'vapid not configured'});
-    return;
-  }
-  response.status(200).json({publicKey: vapid.publicKey});
-});
+  /**
+   * Handle requests for the public key
+   */
+  controller.get('/vapid-public-key', async (_request, response) => {
+    const vapid = await PushService.getVAPIDKeys();
+    if (!vapid) {
+      response.status(500).json({error: 'vapid not configured'});
+      return;
+    }
+    response.status(200).json({publicKey: vapid.publicKey});
+  });
 
-PushController.post('/register', async (request, response) => {
-  const subscription = request.body.subscription;
-  try {
-    await PushService.createPushSubscription(subscription);
-  } catch (err) {
-    console.error(`PushController: Failed to register ${subscription}`, err);
-    response.status(500).json({error: 'register failed'});
-    return;
-  }
-  response.status(200).json({});
-});
+  controller.post('/register', async (request, response) => {
+    const subscription = request.body.subscription;
+    try {
+      await PushService.createPushSubscription(subscription);
+    } catch (err) {
+      console.error(`controller: Failed to register ${subscription}`, err);
+      response.status(500).json({error: 'register failed'});
+      return;
+    }
+    response.status(200).json({});
+  });
 
-export default PushController;
+  return controller;
+}
+
+export default build;

@@ -12,8 +12,7 @@ import Ajv from 'ajv';
 import {EventEmitter} from 'events';
 import AddonManager from '../addon-manager';
 import Database from '../db';
-const Router = require('../router');
-import Thing, {ThingDescription} from './thing';
+import Thing, {Router, ThingDescription} from './thing';
 import * as Constants from '../constants';
 import {Device, Device as DeviceSchema, PropertyValue} from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
@@ -46,6 +45,12 @@ class Things {
    */
   private emitter = new EventEmitter();
 
+  private router?: Router;
+
+  setRouter(router: Router): void {
+    this.router = router;
+  }
+
   /**
    * Get all Things known to the Gateway, initially loading them from the
    * database,
@@ -73,7 +78,7 @@ class Things {
           thing.layoutIndex = index;
         }
 
-        this.things.set(thing.id, new Thing(thing.id, thing));
+        this.things.set(thing.id, new Thing(thing.id, thing, this.router!));
       });
 
       return this.things;
@@ -189,7 +194,7 @@ class Things {
    * @param Object description Thing description.
    */
   createThing(id: string, description: ThingDescription): Promise<ThingDescription> {
-    const thing = new Thing(id, description);
+    const thing = new Thing(id, description, this.router!);
     thing.setConnected(true);
     thing.setLayoutIndex(this.things.size);
 
@@ -209,7 +214,7 @@ class Things {
   handleNewThing(newThing: ThingDescription): void {
     this.getThing(newThing.id).then((thing) => {
       thing?.setConnected(true);
-      return thing?.updateFromDescription(newThing);
+      return thing?.updateFromDescription(newThing, this.router!);
     }).catch(() => {
       // If we don't already know about this thing, notify each open websocket
       this.websockets.forEach((socket) => {
@@ -317,7 +322,7 @@ class Things {
    * @param String id ID to give Thing.
    */
   removeThing(id: string): Promise<void> {
-    Router.removeProxyServer(id);
+    this.router!.removeProxyServer(id);
     return Database.removeThing(id).then(() => {
       const thing = this.things.get(id);
       if (!thing) {
