@@ -131,6 +131,10 @@ export default class Plugin {
     this.restart = restart;
   }
 
+  getPluginId(): string {
+    return this.pluginId;
+  }
+
   asDict(): Record<string, unknown> {
     let pid: string | number = 'not running';
     if (this.process.p) {
@@ -659,6 +663,14 @@ export default class Plugin {
     DEBUG && console.log('Plugin: sendMsg:', msg);
 
     return this.ws?.send(JSON.stringify(msg));
+  }
+
+  sendMessage(message: Message): void {
+    return this.ws?.send(JSON.stringify(message));
+  }
+
+  checkUnload(): void {
+
   }
 
   /**
