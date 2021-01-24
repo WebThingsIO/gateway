@@ -1,4 +1,4 @@
-import {getBrowser, saveStepScreen} from '../browser-common';
+import {getBrowser} from '../browser-common';
 import {getAddons} from '../test-utils';
 import {SettingsPage} from '../page-object/settings-page';
 import {waitForExpect} from '../../expect-utils';
@@ -15,20 +15,17 @@ describe('Addon', () => {
     const settingsPage = new SettingsPage(browser);
     await settingsPage.open();
     await settingsPage.wait();
-    await saveStepScreen();
 
     const addonSettings = await settingsPage.addon();
     const addonSettingsPage1 = await addonSettings.openSettingsPage();
     const addon1 = await addonSettingsPage1.findAddon('Virtual Things');
     expect(addon1).toBeNull();
-    await saveStepScreen();
 
     const discoverAddonPage = await addonSettingsPage1.openDiscoverAddonPage();
     await waitForExpect(async () => {
       const addon2 = await discoverAddonPage.findAddon('Virtual Things');
       expect(addon2).not.toBeNull();
     }, 10000);
-    await saveStepScreen();
 
     const addon3 = await discoverAddonPage.findAddon('Virtual Things');
     await addon3.add();
@@ -40,7 +37,6 @@ describe('Addon', () => {
 
       return await addon4.hasAdded();
     }, 30000);
-    await saveStepScreen();
 
     const addonSettingsPage2 = await discoverAddonPage.back();
     await waitForExpect(async () => {
@@ -49,7 +45,6 @@ describe('Addon', () => {
       expect(await addon5.hasDisableButton()).toBeTruthy();
       expect(await addon5.hasRemoveButton()).toBeTruthy();
     });
-    await saveStepScreen();
 
     const addons = await getAddons();
     expect(addons.has('virtual-things-adapter')).toBeTruthy();

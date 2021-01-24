@@ -366,19 +366,10 @@ $ npm test
 To run a single test:
 
 ```
-$ jest src/test/{test-name}.js
+$ jest build/test/{test-name}.js
 ```
 
-(assumes you have the `jest` command on your `PATH`, otherwise use `./node_modules/jest/bin/jest.js`)
-
-To compare UI with parent branch:
-
-```
-$ npm run screenshots
-$ npm test
-```
-
-(if you have the screenshots in the folder `./browser-test-screenshots`, `npm test` should compare UI with screenshots stored)
+(assumes you have the `jest` command on your `PATH`, otherwise use `./node_modules/.bin/jest`)
 
 ## Source Code Structure
 
