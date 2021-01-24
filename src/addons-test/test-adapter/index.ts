@@ -7,6 +7,7 @@
  */
 
 import {Adapter, AddonManagerProxy} from 'gateway-addon';
+import fs from 'fs';
 
 class TestAdapter extends Adapter {
   constructor(addonManager: AddonManagerProxy, packageName: string) {
@@ -16,7 +17,7 @@ class TestAdapter extends Adapter {
 }
 
 function loadTestAdapter(addonManager: AddonManagerProxy): void {
-  const manifest = require('./manifest.json');
+  const manifest = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
   new TestAdapter(addonManager, manifest.id);
 }
 

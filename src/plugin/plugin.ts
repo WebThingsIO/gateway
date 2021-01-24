@@ -9,19 +9,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import PluginServer from './plugin-server';
+import {AddonManager} from '../addon-manager';
 import AdapterProxy from './adapter-proxy';
 import APIHandlerProxy from './api-handler-proxy';
 import * as Constants from '../constants';
-import Database from '../db';
 import Deferred from '../deferred';
 import DeviceProxy from './device-proxy';
 import format from 'string-format';
 import NotifierProxy from './notifier-proxy';
 import OutletProxy from './outlet-proxy';
+import PropertyProxy from './property-proxy';
 import path from 'path';
 import readline from 'readline';
 import * as Settings from '../models/settings';
 import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
+import Thing from '../models/thing';
 import Things from '../models/things';
 import UserProfile from '../user-profile';
 import {Constants as AddonConstants} from 'gateway-addon';
@@ -48,14 +51,6 @@ import {
 const MessageType = AddonConstants.MessageType;
 
 const DEBUG = false;
-
-// TODO: remove these types
-type AddonManager = any;
-type Thing = any;
-type PluginServer = any;
-type PropertyProxy = any;
-
-Database.open();
 
 export default class Plugin {
   private logPrefix: string;
@@ -111,7 +106,7 @@ export default class Plugin {
 
   constructor(
     private pluginId: string,
-    private pluginServer: PluginServer,
+    private pluginServer: PluginServer | null,
     private forceEnable = false) {
     this.logPrefix = pluginId;
   }
@@ -237,7 +232,7 @@ export default class Plugin {
           const deviceId = data.device.id;
           const device = new DeviceProxy(adapter, data.device);
           adapter.getDevices()[deviceId] = device;
-          (adapter.getManager() as AddonManager).devices[deviceId] = device;
+          (<AddonManager><unknown>adapter.getManager()).getDevices()[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -264,7 +259,7 @@ export default class Plugin {
           const deviceId = data.device.id;
           const device = new DeviceProxy(adapter, data.device);
           adapter.getDevices()[deviceId] = device;
-          (adapter.getManager() as AddonManager).devices[deviceId] = device;
+          (<AddonManager><unknown>adapter.getManager()).getDevices()[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -294,13 +289,13 @@ export default class Plugin {
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         const data = msg.data as AdapterAddedNotificationMessageData;
-        const adapter = new AdapterProxy(this.pluginServer.getAddonManager(),
+        const adapter = new AdapterProxy(this.pluginServer!.getAddonManager(),
                                          data.adapterId,
                                          data.name,
                                          data.packageName,
                                          this);
         this.adapters.set(data.adapterId, adapter);
-        this.pluginServer.addAdapter(adapter);
+        this.pluginServer!.addAdapter(adapter);
 
         // Tell the adapter about all saved things
         const send = (thing: Thing): void => {
@@ -323,23 +318,23 @@ export default class Plugin {
       }
       case MessageType.NOTIFIER_ADDED_NOTIFICATION: {
         const data = msg.data as NotifierAddedNotificationMessageData;
-        const notifier = new NotifierProxy(this.pluginServer.getAddonManager(),
+        const notifier = new NotifierProxy(this.pluginServer!.getAddonManager(),
                                            data.notifierId,
                                            data.name,
                                            data.packageName,
                                            this);
         this.notifiers.set(data.notifierId, notifier);
-        this.pluginServer.addNotifier(notifier);
+        this.pluginServer!.addNotifier(notifier);
         return;
       }
 
       case MessageType.API_HANDLER_ADDED_NOTIFICATION: {
         const data = msg.data as APIHandlerAddedNotificationMessageData;
-        const apiHandler = new APIHandlerProxy(this.pluginServer.getAddonManager(),
+        const apiHandler = new APIHandlerProxy(this.pluginServer!.getAddonManager(),
                                                data.packageName,
                                                this);
         this.apiHandlers.set(data.packageName, apiHandler);
-        this.pluginServer.addAPIHandler(apiHandler);
+        this.pluginServer!.addAPIHandler(apiHandler);
         return;
       }
 
@@ -372,7 +367,7 @@ export default class Plugin {
       }
       case MessageType.PLUGIN_UNLOAD_RESPONSE:
         this.shutdown();
-        this.pluginServer.unregisterPlugin(msg.data.pluginId);
+        this.pluginServer!.unregisterPlugin(msg.data.pluginId);
         if (this.unloadedRcvdPromise) {
           if (this.unloadCompletedPromise) {
             this.unloadCompletedPromise.resolve();
@@ -382,7 +377,7 @@ export default class Plugin {
         return;
 
       case MessageType.PLUGIN_ERROR_NOTIFICATION:
-        this.pluginServer.emit('log', {
+        this.pluginServer!.emit('log', {
           severity: Constants.LogSeverity.ERROR,
           message: msg.data.message,
         });
@@ -545,7 +540,7 @@ export default class Plugin {
           log.url = msg.data.url;
         }
 
-        this.pluginServer.emit('log', log);
+        this.pluginServer!.emit('log', log);
         return;
       }
       case MessageType.ADAPTER_UNPAIRING_PROMPT_NOTIFICATION: {
@@ -567,7 +562,7 @@ export default class Plugin {
           log.url = msg.data.url;
         }
 
-        this.pluginServer.emit('log', log);
+        this.pluginServer!.emit('log', log);
         return;
       }
       case MessageType.MOCK_ADAPTER_CLEAR_STATE_RESPONSE:

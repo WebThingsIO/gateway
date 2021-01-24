@@ -33,7 +33,7 @@ import PingController from './controllers/ping_controller';
 import ProxyController from './controllers/proxy_controller';
 import PushController from './controllers/push_controller';
 import RootController from './controllers/root_controller';
-import RulesController from './rules-engine/index';
+import RulesController from './controllers/rules_controller';
 import SettingsController from './controllers/settings_controller';
 import ThingsController from './controllers/things_controller';
 import UpdatesController from './controllers/updates_controller';
@@ -164,7 +164,7 @@ class Router {
     app.use(API_PREFIX + Constants.UPLOADS_PATH, nocache, auth, UploadsController());
     app.use(API_PREFIX + Constants.UPDATES_PATH, nocache, auth, UpdatesController());
     app.use(API_PREFIX + Constants.ADDONS_PATH, nocache, auth, AddonsController());
-    app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth, RulesController);
+    app.use(API_PREFIX + Constants.RULES_PATH, nocache, auth, RulesController.getController());
     app.use(API_PREFIX + Constants.INTERNAL_LOGS_PATH, nocache, auth, InternalLogsController());
     app.use(API_PREFIX + Constants.PUSH_PATH, nocache, auth, PushController());
     app.use(API_PREFIX + Constants.LOGS_PATH, nocache, auth, LogsController());

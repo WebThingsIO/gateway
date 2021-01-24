@@ -32,6 +32,7 @@ import {ncp} from 'ncp';
 
 import pkg from './package.json';
 import {Level, PropertyValue, Device as DeviceSchema} from 'gateway-addon/lib/schema';
+import PluginServer from './plugin/plugin-server';
 import Plugin from './plugin/plugin';
 import {Adapter, APIHandler, Device, Notifier, Outlet} from 'gateway-addon';
 import {ChildProcessWithoutNullStreams} from 'child_process';
@@ -41,7 +42,7 @@ import {ChildProcessWithoutNullStreams} from 'child_process';
  * @classdesc The AddonManager will load any add-ons from the 'addons'
  * directory. See loadAddons() for details.
  */
-class AddonManager extends EventEmitter {
+export class AddonManager extends EventEmitter {
   private adapters = new Map<string, Adapter>();
 
   private notifiers = new Map<string, Notifier>();
@@ -708,8 +709,6 @@ class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    // TODO: fix circular import
-    const PluginServer = require('./plugin/plugin-server').default;
     this.pluginServer = new PluginServer(this, {verbose: false});
 
     // Load the add-ons
