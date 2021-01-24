@@ -15,17 +15,15 @@ class SettingSection extends Section {
     await el.click();
 
     switch (id) {
-      case 'domain-settings-link':
-      case 'user-settings-link':
-        return null; // TODO
       case 'addon-settings-link':
         return new AddonSettingsPage(this.browser, href);
+      case 'domain-settings-link':
+      case 'user-settings-link':
       case 'adapter-settings-link':
       case 'update-settings-link':
       case 'authorization-settings-link':
       case 'experiment-settings-link':
       case 'developer-settings-link':
-        return null; // TODO
       default:
         return null;
     }
