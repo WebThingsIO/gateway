@@ -8,7 +8,3 @@ WEBTHINGS_TEST_HOME="${WEBTHINGS_HOME}/test"
 if [ ! -f "${WEBTHINGS_TEST_HOME}/ssl/certificate.pem" ]; then
   WEBTHINGS_HOME="${WEBTHINGS_TEST_HOME}" ${SCRIPTDIR}/../../tools/make-self-signed-cert.sh
 fi
-
-# cleanup the previous outputs
-rm -rf "${SCRIPTDIR}/../../browser-test-output"
-rm -rf "${SCRIPTDIR}/../../browser-test-diff"

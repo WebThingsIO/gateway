@@ -1,4 +1,3 @@
-import fs from 'fs';
 import {waitForExpect} from '../expect-utils';
 import {getBrowser} from './browser-common';
 import AddonManager from '../../addon-manager';
@@ -16,20 +15,6 @@ describe('basic browser tests', () => {
   it('creates a user', async () => {
     const browser = getBrowser();
 
-    let stepNumber = 0;
-    async function saveStepScreen(step: string): Promise<void> {
-      let stepStr = (stepNumber++).toString();
-      if (stepStr.length < 2) {
-        stepStr = `0${stepStr}`;
-      }
-
-      if (!fs.existsSync('browser-test-output')) {
-        fs.mkdirSync('browser-test-output');
-      }
-      await browser.saveScreenshot(
-        `browser-test-output/${stepStr}-${step}.png`);
-    }
-
     await browser.url('/');
 
     const name = await browser.$('#name');
@@ -42,8 +27,6 @@ describe('basic browser tests', () => {
     await email.setValue('test@example.com');
     await password.setValue('rosebud');
     await confirmPassword.setValue('rosebud');
-
-    await saveStepScreen('create-user');
 
     const createUserButton = await browser.$('#create-user-button');
     await createUserButton.click();
@@ -69,14 +52,10 @@ describe('basic browser tests', () => {
       // If it didn't appear, just move on.
     }
 
-    await saveStepScreen('main-screen');
-
     await menuButton.click();
-    await saveStepScreen('menu-open');
 
     const settingsMenuItem = await browser.$('#settings-menu-item');
     await settingsMenuItem.click();
-    await saveStepScreen('settings');
 
     // wait fadeout menu-scrim
     await browser.waitUntil(async () => {
@@ -95,11 +74,9 @@ describe('basic browser tests', () => {
 
     const addonSettingsLink = await browser.$('#addon-settings-link');
     await addonSettingsLink.click();
-    await saveStepScreen('addon-settings');
 
     const discoverAddonsButton = await browser.$('#discover-addons-button');
     await discoverAddonsButton.click();
-    await saveStepScreen('discovering-addons');
 
     const addonInstallVirtualThingsAdapter =
       await browser.$('#addon-install-virtual-things-adapter');
@@ -110,7 +87,6 @@ describe('basic browser tests', () => {
     const addonDiscoverySettingsAdded =
       await browser.$('.addon-discovery-settings-added');
     await addonDiscoverySettingsAdded.waitForExist(30000);
-    await saveStepScreen('adapter-added');
 
     const settingsBackButton = await browser.$('#settings-back-button');
     await settingsBackButton.click();
@@ -138,7 +114,6 @@ describe('basic browser tests', () => {
     const addButton = await browser.$('#add-button');
     await addButton.waitForDisplayed(5000);
     await addButton.click();
-    await saveStepScreen('add-things-list');
 
     const newThingVirtualThings2SaveButton =
       await browser.$('#new-thing-virtual-things-2 > .new-thing-save-button');
@@ -149,18 +124,15 @@ describe('basic browser tests', () => {
 
     const addThingBackButton = await browser.$('#add-thing-back-button');
     await addThingBackButton.click();
-    await saveStepScreen('things-list');
 
     let things = await browser.$$('.thing');
     expect(things.length).toBe(2);
     await things[0].click();
-    await saveStepScreen('things-list-dcl-on');
 
     let link = await things[0].$('.thing-details-link');
     await link.click();
     let detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-2')).toBeTruthy();
-    await saveStepScreen('dimmable-color-light-detail');
 
     const backButton = await browser.$('#back-button');
     await backButton.click();
@@ -175,6 +147,5 @@ describe('basic browser tests', () => {
     await link.click();
     detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-9')).toBeTruthy();
-    await saveStepScreen('unknown-thing-detail');
   });
 });

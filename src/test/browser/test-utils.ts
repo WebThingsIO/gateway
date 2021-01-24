@@ -1,4 +1,3 @@
-import fs from 'fs';
 import * as Constants from '../../constants';
 import {server, chai, mockAdapter} from '../common';
 import {getBrowser} from './browser-common';
@@ -66,20 +65,6 @@ export async function setProperty<T>(id: string, property: string, value: T): Pr
     .set(...headerAuth(jwt))
     .send({[property]: value});
   return res.body[property];
-}
-
-let stepNumber = 0;
-export async function saveStepScreen(step: string): Promise<void> {
-  let stepStr = (stepNumber++).toString();
-  if (stepStr.length < 2) {
-    stepStr = `0${stepStr}`;
-  }
-
-  if (!fs.existsSync('browser-test-output')) {
-    fs.mkdirSync('browser-test-output');
-  }
-  await getBrowser().saveScreenshot(
-    `browser-test-output/${step}-${stepStr}.png`);
 }
 
 export function escapeHtmlForIdClass(text: string): string {
