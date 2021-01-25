@@ -6,29 +6,71 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import * as LinuxRaspbian from './linux-raspbian';
-import {SelfUpdateStatus} from './types';
+import BasePlatform from './base';
+import LinuxRaspbianPlatform from './linux-raspbian';
+import {
+  LanMode,
+  NetworkAddresses,
+  SelfUpdateStatus,
+  WirelessMode,
+} from './types';
 
-/**
- * Determine whether or not the gateway can auto-update itself.
- *
- * @returns {Object} {available: <bool>, enabled: <bool>}
- */
-export function getSelfUpdateStatus(): SelfUpdateStatus {
-  return {
-    available: false,
-    enabled: false,
-  };
+export class LinuxDebianPlatform extends BasePlatform {
+  /**
+   * Determine whether or not the gateway can auto-update itself.
+   *
+   * @returns {Object} {available: <bool>, enabled: <bool>}
+   */
+  getSelfUpdateStatus(): SelfUpdateStatus {
+    return {
+      available: false,
+      enabled: false,
+    };
+  }
+
+  getDhcpServerStatus(): boolean {
+    return LinuxRaspbianPlatform.getDhcpServerStatus();
+  }
+
+  getHostname(): string {
+    return LinuxRaspbianPlatform.getHostname();
+  }
+
+  getLanMode(): LanMode {
+    return LinuxRaspbianPlatform.getLanMode();
+  }
+
+  getMacAddress(device: string): string | null {
+    return LinuxRaspbianPlatform.getMacAddress(device);
+  }
+
+  getMdnsServerStatus(): boolean {
+    return LinuxRaspbianPlatform.getMdnsServerStatus();
+  }
+
+  getNetworkAddresses(): NetworkAddresses {
+    return LinuxRaspbianPlatform.getNetworkAddresses();
+  }
+
+  getWirelessMode(): WirelessMode {
+    return LinuxRaspbianPlatform.getWirelessMode();
+  }
+
+  getValidTimezones(): string[] {
+    return LinuxRaspbianPlatform.getValidTimezones();
+  }
+
+  getTimezone(): string {
+    return LinuxRaspbianPlatform.getTimezone();
+  }
+
+  getValidWirelessCountries(): string[] {
+    return LinuxRaspbianPlatform.getValidWirelessCountries();
+  }
+
+  getNtpStatus(): boolean {
+    return LinuxRaspbianPlatform.getNtpStatus();
+  }
 }
 
-export const getDhcpServerStatus = LinuxRaspbian.getDhcpServerStatus;
-export const getHostname = LinuxRaspbian.getHostname;
-export const getLanMode = LinuxRaspbian.getLanMode;
-export const getMacAddress = LinuxRaspbian.getMacAddress;
-export const getMdnsServerStatus = LinuxRaspbian.getMdnsServerStatus;
-export const getNetworkAddresses = LinuxRaspbian.getNetworkAddresses;
-export const getWirelessMode = LinuxRaspbian.getWirelessMode;
-export const getValidTimezones = LinuxRaspbian.getValidTimezones;
-export const getTimezone = LinuxRaspbian.getTimezone;
-export const getValidWirelessCountries = LinuxRaspbian.getValidWirelessCountries;
-export const getNtpStatus = LinuxRaspbian.getNtpStatus;
+export default new LinuxDebianPlatform();

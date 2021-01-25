@@ -10,7 +10,6 @@ process.env.NODE_ENV = 'test';
 
 import Database from '../db';
 import Actions from '../models/actions';
-import {Adapter} from 'gateway-addon';
 import Events from '../models/events';
 import Logs from '../models/logs';
 import Things from '../models/things';
@@ -19,9 +18,17 @@ import e2p from 'event-to-promise';
 import fs from 'fs';
 import path from 'path';
 import _chai from './chai';
+import {MockAdapter} from '../addons-test/mock-adapter/index';
+import https from 'https';
+
+interface TestGlobals {
+  chai: Chai.ChaiStatic;
+  server: https.Server;
+  mockAdapter: () => MockAdapter;
+}
 
 export const chai = _chai;
-(global as any).chai = chai;
+(<NodeJS.Global & typeof globalThis & TestGlobals>global).chai = chai;
 
 expect.extend({
   assert(value, message = 'expected condition to be truthy') {
@@ -34,16 +41,16 @@ expect.extend({
 });
 
 import {servers, serverStartup} from '../app';
-(global as any).server = servers.https!;
+(<NodeJS.Global & typeof globalThis & TestGlobals>global).server = servers.https!;
 
 import addonManager from '../addon-manager';
 
-export function mockAdapter(): Adapter {
+export function mockAdapter(): MockAdapter {
   const adapter = addonManager.getAdapter('mock-adapter');
   expect(adapter).not.toBeUndefined();
-  return adapter!;
+  return <MockAdapter><unknown>adapter!;
 }
-(global as any).mockAdapter = mockAdapter;
+(<NodeJS.Global & typeof globalThis & TestGlobals>global).mockAdapter = mockAdapter;
 
 function removeTestManifest(): void {
   const testManifestJsonFilename =
@@ -72,7 +79,7 @@ afterEach(async () => {
   // This is all potentially brittle.
   const adapter = addonManager.getAdapter('mock-adapter');
   if (adapter) {
-    await (adapter as any).clearState();
+    await (<MockAdapter><unknown>adapter!).clearState();
   }
   Actions.clearState();
   Events.clearState();

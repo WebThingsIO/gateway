@@ -8,6 +8,7 @@ import assert from 'assert';
 import * as Events from '../Events';
 import Trigger, {TriggerDescription} from './Trigger';
 import Things from '../../models/things';
+import Event from '../../models/event';
 
 export interface EventTriggerDescription extends TriggerDescription {
   thing: string;
@@ -24,7 +25,7 @@ export default class EventTrigger extends Trigger {
 
   private stopped: boolean;
 
-  private _onEvent: (event: any) => void;
+  private _onEvent: (event: Event) => void;
 
   constructor(desc: EventTriggerDescription) {
     super(desc);
@@ -57,7 +58,7 @@ export default class EventTrigger extends Trigger {
     thing.addEventSubscription(this._onEvent);
   }
 
-  onEvent(event: any): void {
+  onEvent(event: Event): void {
     if (this.event !== event.getName()) {
       return;
     }
@@ -68,7 +69,7 @@ export default class EventTrigger extends Trigger {
 
   stop(): void {
     this.stopped = true;
-    Things.getThing(this.thing).then((thing: any) => {
+    Things.getThing(this.thing).then((thing) => {
       thing.removeEventSubscription(this._onEvent);
     });
   }

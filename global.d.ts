@@ -45,5 +45,6 @@ declare module 'promisepipe' {
 declare namespace WebdriverIO {
   interface Browser extends WebDriver.BaseClient {
     getUrl(): Promise<string>;
+    deleteSession(): Promise<void>;
   }
 }

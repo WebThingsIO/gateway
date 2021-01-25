@@ -7,16 +7,27 @@
  */
 
 import {Action, Adapter, AddonManagerProxy, Device, Property} from 'gateway-addon';
+import {
+  Action as ActionSchema,
+  Event as EventSchema,
+  Input,
+  Property as PropertySchema,
+  PropertyValue,
+} from 'gateway-addon/lib/schema';
 import express from 'express';
 import {Server} from 'http';
 import manifest from './manifest.json';
 
-class MockProperty extends Property<any> {
-  constructor(device: MockDevice, name: string, propertyDescription: any) {
+class MockProperty extends Property<PropertyValue> {
+  constructor(device: MockDevice, name: string, propertyDescription: PropertySchema) {
     super(device, name, propertyDescription);
-    this.setUnit(propertyDescription.unit);
-    this.setDescription(propertyDescription.description);
-    this.setCachedValue(propertyDescription.value);
+    if (propertyDescription.unit) {
+      this.setUnit(propertyDescription.unit!);
+    }
+    if (propertyDescription.description) {
+      this.setDescription(propertyDescription.description!);
+    }
+    this.setCachedValue(propertyDescription.value ?? null);
     this.getDevice().notifyPropertyChanged(this);
   }
 
@@ -27,7 +38,7 @@ class MockProperty extends Property<any> {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value: any): Promise<any> {
+  setValue(value: PropertyValue): Promise<PropertyValue> {
     return new Promise((resolve, reject) => {
       if (/^rejectProperty/.test(this.getName())) {
         reject('Read-only property');
@@ -43,28 +54,36 @@ class MockProperty extends Property<any> {
 }
 
 class MockDevice extends Device {
-  constructor(adapter: MockAdapter, id: string, deviceDescription: any) {
+  constructor(adapter: MockAdapter, id: string, deviceDescription: Record<string, unknown>) {
     super(adapter, id);
-    this.setTitle(deviceDescription.title);
+    this.setTitle(<string>deviceDescription.title);
+    // TODO: fix after updating gateway-addon
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this as any)['@type'] = deviceDescription['@type'];
-    this.setDescription(deviceDescription.description);
+    this.setDescription(<string>deviceDescription.description);
+    // TODO: fix after updating gateway-addon
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this as any).baseHref = `http://127.0.0.1:${adapter.getPort()}`;
-    for (const propertyName in deviceDescription.properties) {
-      const propertyDescription = deviceDescription.properties[propertyName];
+    for (const propertyName in <Record<string, PropertySchema>>deviceDescription.properties) {
+      const propertyDescription =
+        (<Record<string, PropertySchema>>deviceDescription.properties)[propertyName];
       const property = new MockProperty(this, propertyName, propertyDescription);
       this.addProperty(property);
     }
 
-    for (const actionName in deviceDescription.actions) {
-      this.addAction(actionName, deviceDescription.actions[actionName]);
+    for (const actionName in <Record<string, ActionSchema>>deviceDescription.actions) {
+      this.addAction(
+        actionName,
+        (<Record<string, ActionSchema>>deviceDescription.actions)[actionName]
+      );
     }
 
-    for (const eventName in deviceDescription.events) {
-      this.addEvent(eventName, deviceDescription.events[eventName]);
+    for (const eventName in <Record<string, EventSchema>>deviceDescription.events) {
+      this.addEvent(eventName, (<Record<string, EventSchema>>deviceDescription.events)[eventName]);
     }
   }
 
-  requestAction(actionId: string, actionName: string, input: any): Promise<void> {
+  requestAction(actionId: string, actionName: string, input: Input): Promise<void> {
     if (actionName === 'rejectRequest') {
       return Promise.reject();
     }
@@ -87,7 +106,7 @@ class MockDevice extends Device {
   }
 }
 
-class MockAdapter extends Adapter {
+export class MockAdapter extends Adapter {
   private port: number;
 
   private app: express.Express;
@@ -96,7 +115,7 @@ class MockAdapter extends Adapter {
 
   private pairDeviceId: string | null;
 
-  private pairDeviceDescription: any;
+  private pairDeviceDescription: Record<string, unknown> | null;
 
   constructor(addonManager: AddonManagerProxy, packageName: string) {
     super(addonManager, packageName, packageName);
@@ -117,7 +136,7 @@ class MockAdapter extends Adapter {
    * when all of the state has been cleared.
    */
   clearState(): Promise<Device[]> {
-    (this as any).actions = {};
+    (<Record<string, unknown>><unknown> this).actions = {};
 
     return Promise.all(
       Object.keys(this.getDevices()).map((deviceId) => {
@@ -132,7 +151,7 @@ class MockAdapter extends Adapter {
    * @param {String} deviceId ID of the device to add.
    * @return {Promise} which resolves to the device added.
    */
-  addDevice(deviceId: string, deviceDescription: any): Promise<Device> {
+  addDevice(deviceId: string, deviceDescription: Record<string, unknown>): Promise<Device> {
     return new Promise((resolve, reject) => {
       if (deviceId in this.getDevices()) {
         reject(`Device: ${deviceId} already exists.`);
@@ -162,7 +181,7 @@ class MockAdapter extends Adapter {
     });
   }
 
-  pairDevice(deviceId: string, deviceDescription: any): void {
+  pairDevice(deviceId: string, deviceDescription: Record<string, unknown>): void {
     this.pairDeviceId = deviceId;
     this.pairDeviceDescription = deviceDescription;
   }
@@ -175,7 +194,7 @@ class MockAdapter extends Adapter {
     console.log('MockAdapter:', this.getName(), 'id', this.getId(), 'pairing started');
     if (this.pairDeviceId) {
       const deviceId = this.pairDeviceId;
-      const deviceDescription = this.pairDeviceDescription;
+      const deviceDescription = this.pairDeviceDescription!;
       this.pairDeviceId = null;
       this.pairDeviceDescription = null;
       this.addDevice(deviceId, deviceDescription).then(() => {
@@ -243,4 +262,4 @@ function loadMockAdapter(addonManager: AddonManagerProxy): void {
   new MockAdapter(addonManager, manifest.id);
 }
 
-export = loadMockAdapter;
+export default loadMockAdapter;

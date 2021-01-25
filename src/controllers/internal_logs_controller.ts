@@ -118,7 +118,7 @@ function build(): express.Router {
       }
     }, 30 * 1000);
 
-    function onLog(message: any): void {
+    function onLog(message: Constants.LogMessage): void {
       websocket.send(JSON.stringify(message), (err) => {
         if (err) {
           console.error('WebSocket sendMessage failed:', err);

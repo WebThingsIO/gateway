@@ -9,12 +9,13 @@
  */
 
 import config from 'config';
-import {verbose, Database as SQLiteDatabase} from 'sqlite3';
+import {verbose, Database as SQLiteDatabase, RunResult} from 'sqlite3';
 import fs from 'fs';
 import path from 'path';
 import {TokenData} from './models/jsonwebtoken';
 import User from './models/user';
 import UserProfile from './user-profile';
+import {PushSubscription} from 'web-push';
 
 const sqlite3 = verbose();
 
@@ -137,25 +138,26 @@ class Database {
    */
   populate(): void {
     // Add any settings provided.
-    const generateSettings = (obj: any, baseKey: string): any => {
-      const settings = [];
+    const generateSettings =
+      (obj: Record<string, unknown>, baseKey: string): [string, unknown][] => {
+        const settings: [string, unknown][] = [];
 
-      for (const key in obj) {
-        let newKey;
-        if (baseKey !== '') {
-          newKey = `${baseKey}.${key}`;
-        } else {
-          newKey = key;
-        }
+        for (const key in obj) {
+          let newKey;
+          if (baseKey !== '') {
+            newKey = `${baseKey}.${key}`;
+          } else {
+            newKey = key;
+          }
 
-        if (typeof obj[key] === 'object') {
-          settings.push(...generateSettings(obj[key], newKey));
-        } else {
-          settings.push([newKey, obj[key]]);
+          if (typeof obj[key] === 'object') {
+            settings.push(...generateSettings(<Record<string, unknown>>obj[key], newKey));
+          } else {
+            settings.push([newKey, obj[key]]);
+          }
         }
-      }
-      return settings;
-    };
+        return settings;
+      };
 
     const settings = generateSettings(config.get('settings.defaults'), '');
     for (const setting of settings) {
@@ -164,11 +166,9 @@ class Database {
         [setting[0], setting[1]],
         (error) => {
           if (error) {
-            console.error(`Failed to insert setting ${
-              setting[0]}`);
+            console.error(`Failed to insert setting ${setting[0]}`);
           } else if (DEBUG) {
-            console.log(`Saved setting ${setting[0]} = ${
-              setting[1]}`);
+            console.log(`Saved setting ${setting[0]} = ${setting[1]}`);
           }
         }
       );
@@ -180,23 +180,16 @@ class Database {
    *
    * @return Promise which resolves with a list of Thing objects.
    */
-  getThings(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.db!.all(
-        'SELECT id, description FROM things',
-        ((err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            const things = [];
-            for (const row of rows) {
-              const thing = JSON.parse(row.description);
-              thing.id = row.id;
-              things.push(thing);
-            }
-            resolve(things);
-          }
-        }));
+  getThings(): Promise<Record<string, unknown>[]> {
+    return this.all('SELECT id, description FROM things').then((rows) => {
+      const things = [];
+      for (const row of rows) {
+        const thing = JSON.parse(<string>row.description);
+        thing.id = row.id;
+        things.push(thing);
+      }
+
+      return things;
     });
   }
 
@@ -252,7 +245,7 @@ class Database {
   removeThing(id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
-      db.run('DELETE FROM things WHERE id = ?', id, (error) => {
+      db.run('DELETE FROM things WHERE id = ?', [id], (error) => {
         if (error) {
           reject(error);
         } else {
@@ -265,7 +258,7 @@ class Database {
   /**
    * Get a user by their email address.
    */
-  getUser(email: string): Promise<any> {
+  getUser(email: string): Promise<Record<string, unknown>> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
       db.get(
@@ -284,7 +277,7 @@ class Database {
   /**
    * Get a user by it's primary key (id).
    */
-  async getUserById(id: number): Promise<any> {
+  async getUserById(id: number): Promise<Record<string, unknown>> {
     return await this.get(
       'SELECT * FROM users WHERE id = ?',
       id
@@ -296,16 +289,8 @@ class Database {
    *
    * @return {Promise<Array<User>>} resolves with a list of User objects
    */
-  getUsers(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.db!.all('SELECT * FROM users', (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
-      });
-    });
+  getUsers(): Promise<Record<string, unknown>[]> {
+    return this.all('SELECT * FROM users');
   }
 
   async getUserCount(): Promise<number> {
@@ -318,7 +303,7 @@ class Database {
    * @param {String} key
    * @return {Promise<Object?>} value
    */
-  async getSetting(key: string): Promise<any> {
+  async getSetting(key: string): Promise<unknown> {
     const res = await this.get('SELECT value FROM settings WHERE key=?', key);
     if (DEBUG) {
       console.log('getSetting', key, res);
@@ -344,14 +329,13 @@ class Database {
    * @param {Object} value
    * @return {Promise}
    */
-  async setSetting(key: string, value: any): Promise<any> {
+  async setSetting(key: string, value: unknown): Promise<RunResult> {
     value = JSON.stringify(value);
     const currentValue = await this.getSetting(key);
     if (typeof currentValue === 'undefined') {
-      return this.run('INSERT INTO settings (key, value) VALUES (?, ?)',
-                      [key, value]);
+      return this.run('INSERT INTO settings (key, value) VALUES (?, ?)', key, value);
     } else {
-      return this.run('UPDATE settings SET value=? WHERE key=?', [value, key]);
+      return this.run('UPDATE settings SET value=? WHERE key=?', value, key);
     }
   }
 
@@ -363,7 +347,7 @@ class Database {
    * @return {Promise}
    */
   async deleteSetting(key: string): Promise<void> {
-    this.run('DELETE FROM settings WHERE key = ?', [key]);
+    this.run('DELETE FROM settings WHERE key = ?', key);
   }
 
   /**
@@ -376,16 +360,14 @@ class Database {
       'INSERT INTO users ' +
       '(email, password, name, mfaSharedSecret, mfaEnrolled, mfaBackupCodes) ' +
       'VALUES (?, ?, ?, ?, ?, ?)',
-      [
-        user.getEmail(),
-        user.getPassword(),
-        user.getName(),
-        user.getMfaSharedSecret(),
-        user.getMfaEnrolled(),
-        JSON.stringify(user.getMfaBackupCodes() || '[]'),
-      ]
+      user.getEmail(),
+      user.getPassword(),
+      user.getName(),
+      user.getMfaSharedSecret(),
+      user.getMfaEnrolled(),
+      JSON.stringify(user.getMfaBackupCodes() || '[]'),
     );
-    return (result as any).lastID;
+    return result.lastID;
   }
 
   /**
@@ -393,20 +375,18 @@ class Database {
    * @param {User} user
    * @return Promise that resolves when operation is complete.
    */
-  async editUser(user: User): Promise<any> {
+  async editUser(user: User): Promise<RunResult> {
     return this.run(
       'UPDATE users SET ' +
       'email=?, password=?, name=?, mfaSharedSecret=?, mfaEnrolled=?, ' +
       'mfaBackupCodes=? WHERE id=?',
-      [
-        user.getEmail(),
-        user.getPassword(),
-        user.getName(),
-        user.getMfaSharedSecret(),
-        user.getMfaEnrolled(),
-        JSON.stringify(user.getMfaBackupCodes() || '[]'),
-        user.getId(),
-      ]
+      user.getEmail(),
+      user.getPassword(),
+      user.getName(),
+      user.getMfaSharedSecret(),
+      user.getMfaEnrolled(),
+      JSON.stringify(user.getMfaBackupCodes() || '[]'),
+      user.getId(),
     );
   }
 
@@ -415,11 +395,8 @@ class Database {
    * @param {Number} userId
    * @return Promise that resolves when operation is complete.
    */
-  deleteUser(userId: number): Promise<any[]> {
-    const deleteUser = this.run(
-      'DELETE FROM users WHERE id = ?',
-      [userId]
-    );
+  deleteUser(userId: number): Promise<RunResult[]> {
+    const deleteUser = this.run('DELETE FROM users WHERE id = ?', userId);
     const deleteTokens = this.deleteJSONWebTokensForUser(userId);
     /**
      * XXX: This is a terrible hack until we get foreign key constraint support
@@ -431,11 +408,8 @@ class Database {
   /**
    * Delete all jsonwebtoken's for a given user.
    */
-  deleteJSONWebTokensForUser(userId: number): Promise<any> {
-    return this.run(
-      'DELETE FROM jsonwebtokens WHERE user = ?',
-      [userId]
-    );
+  deleteJSONWebTokensForUser(userId: number): Promise<RunResult> {
+    return this.run('DELETE FROM jsonwebtokens WHERE user = ?', userId);
   }
 
   /**
@@ -447,15 +421,13 @@ class Database {
     const result = await this.run(
       'INSERT INTO jsonwebtokens (keyId, user, issuedAt, publicKey, payload) ' +
       'VALUES (?, ?, ?, ?, ?)',
-      [
-        token.keyId,
-        token.user,
-        token.issuedAt,
-        token.publicKey,
-        JSON.stringify(token.payload),
-      ]
+      token.keyId,
+      token.user,
+      token.issuedAt,
+      token.publicKey,
+      JSON.stringify(token.payload),
     );
-    return (result as any).lastID;
+    return result.lastID;
   }
 
   /**
@@ -463,7 +435,7 @@ class Database {
    * @param {string} keyId
    * @return {Promise<Object>} jwt data
    */
-  getJSONWebTokenByKeyId(keyId: string): Promise<any> {
+  getJSONWebTokenByKeyId(keyId: string): Promise<Record<string, unknown>> {
     return this.get(
       'SELECT * FROM jsonwebtokens WHERE keyId = ?',
       keyId
@@ -475,7 +447,7 @@ class Database {
    * @param {number} userId
    * @return {Promise<Array<Object>>}
    */
-  getJSONWebTokensByUser(userId: number): Promise<any[]> {
+  getJSONWebTokensByUser(userId: number): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
       this.db!.all(
         'SELECT * FROM jsonwebtokens WHERE user = ?',
@@ -496,11 +468,8 @@ class Database {
    * @return {Promise<boolean>} whether deleted
    */
   async deleteJSONWebTokenByKeyId(keyId: string): Promise<boolean> {
-    const result = await this.run(
-      'DELETE FROM jsonwebtokens WHERE keyId = ?',
-      [keyId]
-    );
-    return (result as any).changes !== 0;
+    const result = await this.run('DELETE FROM jsonwebtokens WHERE keyId = ?', keyId);
+    return result.changes !== 0;
   }
 
   /**
@@ -508,15 +477,15 @@ class Database {
    * @param {Object} subscription
    * @return {Promise<number>} resolves to sub id
    */
-  createPushSubscription(desc: any): Promise<number> {
+  createPushSubscription(desc: PushSubscription): Promise<number> {
     const description = JSON.stringify(desc);
 
     const insert = (): Promise<number> => {
       return this.run(
         'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
-        [description]
+        description
       ).then((res) => {
-        return parseInt((res as any).lastID);
+        return res.lastID;
       });
     };
 
@@ -528,7 +497,7 @@ class Database {
         return insert();
       }
 
-      return (res as any).id;
+      return <number>res.id;
     }).catch(() => {
       return insert();
     });
@@ -538,7 +507,7 @@ class Database {
    * Get all push subscriptions
    * @return {Promise<Array<PushSubscription>>}
    */
-  getPushSubscriptions(): Promise<any[]> {
+  getPushSubscriptions(): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
       this.db!.all(
         'SELECT id, subscription FROM pushSubscriptions',
@@ -548,12 +517,14 @@ class Database {
             reject(err);
             return;
           }
+
           const subs = [];
           for (const row of rows) {
             const sub = JSON.parse(row.subscription);
             sub.id = row.id;
             subs.push(sub);
           }
+
           resolve(subs);
         }
       );
@@ -564,31 +535,30 @@ class Database {
    * Delete a single subscription
    * @param {number} id
    */
-  deletePushSubscription(id: string): Promise<any> {
-    return this.run('DELETE FROM pushSubscriptions WHERE id = ?', [id]);
+  deletePushSubscription(id: string): Promise<RunResult> {
+    return this.run('DELETE FROM pushSubscriptions WHERE id = ?', id);
   }
 
   /**
    * ONLY for tests (clears all tables).
    */
-  async deleteEverything(): Promise<any[]> {
+  async deleteEverything(): Promise<RunResult[]> {
     return Promise.all(TABLES.map((t) => {
-      return this.run(`DELETE FROM ${t}`, []);
+      return this.run(`DELETE FROM ${t}`);
     }));
   }
 
-  get(sql: string, ...params: any[]): Promise<any> {
+  get(sql: string, ...values: any[]): Promise<Record<string, unknown>> {
     return new Promise((resolve, reject) => {
-      params.push((err: unknown, row: any) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(row);
-      });
-
       try {
-        this.db!.get(sql, ...params);
+        this.db!.get(sql, values, (err: unknown, row: Record<string, unknown>) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve(row);
+        });
       } catch (err) {
         reject(err);
       }
@@ -598,17 +568,18 @@ class Database {
   /**
    * Run a SQL statement
    * @param {String} sql
-   * @param {Array<any>} values
+   * @param {Array<unknown>} values
    * @return {Promise<Object>} promise resolved to `this` of statement result
    */
-  run(sql: string, values: any[]): Promise<any> {
+  run(sql: string, ...values: any[]): Promise<RunResult> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.run(sql, values, function(err) {
+        this.db!.run(sql, values, function(err: unknown) {
           if (err) {
             reject(err);
             return;
           }
+
           // node-sqlite puts results on "this" so avoid arrrow fn.
           resolve(this);
         });
@@ -618,11 +589,22 @@ class Database {
     });
   }
 
-  all(sql: string, values: any[], callback?: (this: any, err: Error | null, rows: any[]) => void):
-  void {
-    this.db!.all(sql, values, callback);
+  all(sql: string, ...values: any[]): Promise<Record<string, unknown>[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.db!.all(sql, values, function(err: unknown, rows: Record<string, unknown>[]) {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve(rows);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 }
 
-const db = new Database();
-export default db;
+export default new Database();

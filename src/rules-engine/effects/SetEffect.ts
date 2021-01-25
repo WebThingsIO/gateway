@@ -7,6 +7,7 @@
 import assert from 'assert';
 import PropertyEffect, {PropertyEffectDescription} from './PropertyEffect';
 import {PropertyValue} from 'gateway-addon/lib/schema';
+import {State} from '../State';
 
 export interface SetEffectDescription extends PropertyEffectDescription {
   value: PropertyValue;
@@ -50,17 +51,17 @@ export default class SetEffect extends PropertyEffect {
   /**
    * @return {State}
    */
-  setState(state: any): Promise<any> | undefined {
+  setState(state: State): Promise<PropertyValue> {
     if (!this.on && state.on) {
       this.on = true;
       return this.property.set(this.value);
     }
+
     if (this.on && !state.on) {
       this.on = false;
-      return Promise.resolve();
+      return Promise.resolve(null);
     }
 
-    // eslint-disable-next-line no-useless-return
-    return;
+    return Promise.resolve(null);
   }
 }

@@ -185,7 +185,7 @@ function build(): express.Router {
       }
     }, 30 * 1000);
 
-    function streamMetric(metrics: any[]): void {
+    function streamMetric(metrics: unknown[]): void {
       if (!metrics || metrics.length === 0) {
         return;
       }

@@ -19,7 +19,7 @@ function build(): express.Router {
    */
   controller.get('/', (_request, response) => {
     const adapters = addonManager.getAdapters();
-    const adapterList = Array.from(adapters.values()).map((adapter: any) => {
+    const adapterList = Array.from(adapters.values()).map((adapter) => {
       return adapter.asDict();
     });
     response.json(adapterList);

@@ -100,20 +100,26 @@ TriggerDescription | EffectDescription | null {
       changed = true;
       Object.assign(newPart, newTrigger);
     }
-  } else if ((part as any).property) {
-    const newProp = migrateProperty((part as any).property);
+  } else if ((<Record<string, unknown>><unknown>part).property) {
+    const newProp = migrateProperty(
+      <PropertyDescription>(<Record<string, unknown>><unknown>part).property
+    );
     if (newProp) {
       changed = true;
     }
 
-    (newPart as any).property = newProp || (part as any).property;
-  } else if ((part as any).thing) {
-    const newThing = migrateThing((part as any).thing);
+    (<Record<string, unknown>><unknown>newPart).property =
+      newProp || (<Record<string, unknown>><unknown>part).property;
+  } else if ((<Record<string, unknown>><unknown>part).thing) {
+    const newThing = migrateThing(
+      <Record<string, unknown>>(<Record<string, unknown>><unknown>part).thing
+    );
     if (newThing) {
       changed = true;
     }
 
-    (newPart as any).thing = newThing || (part as any).thing;
+    (<Record<string, unknown>><unknown>newPart).thing =
+      newThing || (<Record<string, unknown>><unknown>part).thing;
   }
 
   if (!changed) {

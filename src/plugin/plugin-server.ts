@@ -66,20 +66,20 @@ export default class PluginServer extends EventEmitter {
 
     if (msg.messageType === MessageType.PLUGIN_REGISTER_REQUEST) {
       const plugin = this.registerPlugin(msg.data.pluginId);
-      (plugin as any).ws = ws;
+      plugin.setWebSocket(ws);
       let language = 'en-US';
       const units = {
         temperature: 'degree celsius',
       };
       Settings.getSetting('localization.language').then((lang) => {
         if (lang) {
-          language = lang;
+          language = <string>lang;
         }
 
         return Settings.getSetting('localization.units.temperature');
       }).then((temp) => {
         if (temp) {
-          units.temperature = temp;
+          units.temperature = <string>temp;
         }
 
         return Promise.resolve();
@@ -110,7 +110,7 @@ export default class PluginServer extends EventEmitter {
     } else if (msg.data.pluginId) {
       const plugin = this.getPlugin(msg.data.pluginId);
       if (plugin) {
-        (plugin as any).onMsg(msg);
+        plugin.onMsg(msg);
       }
     }
   }

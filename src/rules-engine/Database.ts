@@ -7,6 +7,7 @@
 import Database from '../db';
 import * as DatabaseMigrate from './DatabaseMigrate';
 import {RuleDescription} from './Rule';
+import {RunResult} from 'sqlite3';
 
 class RulesDatabase {
   constructor() {
@@ -17,12 +18,12 @@ class RulesDatabase {
   /**
    * Open the database
    */
-  open(): Promise<any> {
+  open(): Promise<RunResult> {
     const rulesTableSQL = `CREATE TABLE IF NOT EXISTS rules (
       id INTEGER PRIMARY KEY,
       description TEXT
     );`;
-    return Database.run(rulesTableSQL, []);
+    return Database.run(rulesTableSQL);
   }
 
   /**
@@ -31,31 +32,24 @@ class RulesDatabase {
    * id to rule
    */
   getRules(): Promise<Record<number, RuleDescription>> {
-    return new Promise((resolve, reject) => {
-      Database.all(
-        'SELECT id, description FROM rules',
-        [],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          const rules: Record<number, RuleDescription> = {};
-          const updatePromises = [];
-          for (const row of rows) {
-            let desc = JSON.parse(row.description);
-            const updatedDesc = DatabaseMigrate.migrate(desc);
-            if (updatedDesc) {
-              desc = updatedDesc;
-              updatePromises.push(this.updateRule(row.id, desc));
-            }
-            rules[(row as Record<string, any>).id] = desc;
-          }
-          Promise.all(updatePromises).then(() => {
-            resolve(rules);
-          });
+    const rules: Record<number, RuleDescription> = {};
+
+    return Database.all('SELECT id, description FROM rules').then((rows) => {
+      const updatePromises = [];
+      for (const row of rows) {
+        let desc = JSON.parse(<string>row.description);
+        const updatedDesc = DatabaseMigrate.migrate(desc);
+        if (updatedDesc) {
+          desc = updatedDesc;
+          updatePromises.push(this.updateRule(<number>row.id, desc));
         }
-      );
+
+        rules[<number>row.id] = desc;
+      }
+
+      return Promise.all(updatePromises);
+    }).then(() => {
+      return rules;
     });
   }
 
@@ -67,9 +61,9 @@ class RulesDatabase {
   createRule(desc: RuleDescription): Promise<number> {
     return Database.run(
       'INSERT INTO rules (description) VALUES (?)',
-      [JSON.stringify(desc)]
+      JSON.stringify(desc)
     ).then((res) => {
-      return parseInt(res.lastID);
+      return res.lastID;
     });
   }
 
@@ -79,10 +73,11 @@ class RulesDatabase {
    * @param {RuleDescription} desc
    * @return {Promise}
    */
-  updateRule(id: number, desc: RuleDescription): Promise<any> {
+  updateRule(id: number, desc: RuleDescription): Promise<RunResult> {
     return Database.run(
       'UPDATE rules SET description = ? WHERE id = ?',
-      [JSON.stringify(desc), id]
+      JSON.stringify(desc),
+      id
     );
   }
 
@@ -91,10 +86,9 @@ class RulesDatabase {
    * @param {number} id
    * @return {Promise}
    */
-  deleteRule(id: number): Promise<any> {
-    return Database.run('DELETE FROM rules WHERE id = ?', [id]);
+  deleteRule(id: number): Promise<RunResult> {
+    return Database.run('DELETE FROM rules WHERE id = ?', id);
   }
 }
 
-const db = new RulesDatabase();
-export default db;
+export default new RulesDatabase();

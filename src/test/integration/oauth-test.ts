@@ -43,7 +43,7 @@ describe('oauth/', function() {
       .set('Accept', 'application/json')
       .set(...headerAuth(userJWT))
       .send(desc);
-    await (mockAdapter() as any).addDevice(id, desc);
+    await mockAdapter().addDevice(id, desc);
     return res;
   }
 

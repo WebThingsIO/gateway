@@ -19,7 +19,7 @@ const DEBUG = false || (process.env.NODE_ENV === 'test');
  *
  * @param {String} key Key of setting to get.
  */
-export async function getSetting(key: string): Promise<any> {
+export async function getSetting(key: string): Promise<unknown> {
   try {
     return await Database.getSetting(key);
   } catch (e) {
@@ -69,18 +69,18 @@ export async function deleteSetting(key: string): Promise<void> {
  * @return {localDomain, mDNSstate, tunnelDomain}
  */
 export async function getTunnelInfo():
-Promise<{localDomain: string, mDNSstate: string, tunnelDomain: string}> {
+Promise<{localDomain: string, mDNSstate: boolean, tunnelDomain: string}> {
   // Check to see if we have a tunnel endpoint first
   const result = await getSetting('tunneltoken');
-  let localDomain;
-  let mDNSstate;
-  let tunnelEndpoint;
+  let localDomain: string;
+  let mDNSstate: boolean;
+  let tunnelEndpoint: string;
 
   if (typeof result === 'object') {
-    console.log(`Tunnel domain found. Tunnel name is: ${result.name} and`,
-                `tunnel domain is: ${result.base}`);
-    tunnelEndpoint =
-      `https://${result.name}.${result.base}`;
+    const token = <Record<string, unknown>>result!;
+    console.log(`Tunnel domain found. Tunnel name is: ${token.name} and`,
+                `tunnel domain is: ${token.base}`);
+    tunnelEndpoint = `https://${token.name}.${token.base}`;
   } else {
     tunnelEndpoint = 'Not set.';
   }
@@ -88,8 +88,8 @@ Promise<{localDomain: string, mDNSstate: string, tunnelDomain: string}> {
   // Find out our default local DNS name Check for a previous name in the
   // DB, if that does not exist use the default.
   try {
-    mDNSstate = await getSetting('multicastDNSstate');
-    localDomain = await getSetting('localDNSname');
+    mDNSstate = <boolean>(await getSetting('multicastDNSstate'));
+    localDomain = <string>(await getSetting('localDNSname'));
     // If our DB is empty use defaults
     if (typeof mDNSstate === 'undefined') {
       mDNSstate = config.get('settings.defaults.mdns.enabled');
@@ -101,6 +101,7 @@ Promise<{localDomain: string, mDNSstate: string, tunnelDomain: string}> {
     // Catch this DB error. Since we don't know what state the mDNS process
     // should be in make sure it's off
     console.error(`Error getting DB entry for multicast from the DB: ${err}`);
+    mDNSstate = config.get('settings.defaults.mdns.enabled');
     localDomain = config.get('settings.defaults.mdns.domain');
   }
 

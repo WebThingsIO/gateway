@@ -49,7 +49,7 @@ afterAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 
   if (browser) {
-    await (browser as any).deleteSession();
+    await browser.deleteSession();
   }
 
   if (child) {

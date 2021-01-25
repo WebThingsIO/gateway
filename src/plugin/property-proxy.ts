@@ -9,7 +9,8 @@
 
 import {PropertyValue, Property as PropertySchema} from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
-import {Property, Constants, Device} from 'gateway-addon';
+import {Property, Constants} from 'gateway-addon';
+import DeviceProxy from './device-proxy';
 const MessageType = Constants.MessageType;
 
 export default class PropertyProxy extends Property<PropertyValue> {
@@ -17,13 +18,17 @@ export default class PropertyProxy extends Property<PropertyValue> {
 
   private propertyDict: PropertySchema;
 
-  constructor(device: Device, propertyName: string, propertyDict: PropertySchema) {
+  constructor(device: DeviceProxy, propertyName: string, propertyDict: PropertySchema) {
     super(device, propertyName, propertyDict);
 
     this.setCachedValue(propertyDict.value!);
 
     this.propertyChangedPromises = [];
     this.propertyDict = Object.assign({}, propertyDict);
+  }
+
+  getDevice(): DeviceProxy {
+    return <DeviceProxy>(super.getDevice());
   }
 
   asDict(): PropertySchema {
@@ -74,6 +79,8 @@ export default class PropertyProxy extends Property<PropertyValue> {
       this.setMultipleOf(propertyDict.multipleOf);
     }
     if (Array.isArray(propertyDict.enum)) {
+      // TODO: fix after updating gateway-addon
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this as any).enum = propertyDict.enum;
     }
     if (Array.isArray(propertyDict.links)) {
@@ -94,7 +101,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
    */
   setValue(value: PropertyValue): Promise<PropertyValue> {
     return new Promise((resolve, reject) => {
-      (this.getDevice().getAdapter() as any).sendMsg(
+      this.getDevice().getAdapter().sendMsg(
         MessageType.DEVICE_SET_PROPERTY_COMMAND,
         {
           deviceId: this.getDevice().getId(),

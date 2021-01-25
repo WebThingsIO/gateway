@@ -121,7 +121,7 @@ export default class Thing extends EventEmitter {
 
     // Parse the Thing Description
     this.id = id;
-    this.title = description.title || (description as any).name || '';
+    this.title = description.title || (<Record<string, string>><unknown>description).name || '';
     this['@context'] =
       description['@context'] || 'https://webthings.io/schemas';
     this['@type'] = description['@type'] || [];
@@ -360,11 +360,11 @@ export default class Thing extends EventEmitter {
    * @param {Boolean} updateDatabase Whether or not to update the database after
    *                                 setting.
    */
-  setIcon(iconData: IconData, updateDatabase: boolean): Promise<ThingDescription> | undefined {
+  setIcon(iconData: IconData, updateDatabase: boolean): Promise<ThingDescription> {
     if (!iconData.data ||
         !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
       console.error('Invalid icon data:', iconData);
-      return;
+      throw new Error('Invalid icon data');
     }
 
     if (this.iconHref) {
@@ -407,13 +407,13 @@ export default class Thing extends EventEmitter {
       console.error('Failed to write icon:', e);
       if (tempfile) {
         try {
-          fs.unlinkSync(tempfile.fd as any);
+          fs.unlinkSync(tempfile.name);
         } catch (e) {
           // pass
         }
       }
 
-      return;
+      throw new Error('Failed to write icon');
     }
 
     this.iconHref = path.join('/uploads', path.basename(tempfile.name));
@@ -426,8 +426,7 @@ export default class Thing extends EventEmitter {
         });
     }
 
-    // eslint-disable-next-line no-useless-return
-    return;
+    return Promise.resolve(this.getDescription());
   }
 
   /**
@@ -451,7 +450,7 @@ export default class Thing extends EventEmitter {
    */
   dispatchEvent(event: Event): void {
     if (!event.getThingId()) {
-      (event as any).thingId = this.id;
+      event.setThingId(this.id);
     }
     this.eventsDispatched.push(event);
     this.emit(Constants.EVENT, event);
@@ -732,7 +731,7 @@ export default class Thing extends EventEmitter {
       });
     }
 
-    let uiLink: any = {
+    let uiLink: Link = {
       rel: 'alternate',
       mediaType: 'text/html',
       href: this.href,

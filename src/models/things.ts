@@ -16,6 +16,7 @@ import Thing, {Router, ThingDescription} from './thing';
 import * as Constants from '../constants';
 import {Device, Device as DeviceSchema, PropertyValue} from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
+import {HttpErrorWithCode} from '../errors';
 
 const ajv = new Ajv({strict: false});
 
@@ -78,7 +79,10 @@ class Things {
           thing.layoutIndex = index;
         }
 
-        this.things.set(thing.id, new Thing(thing.id, thing, this.router!));
+        this.things.set(
+          <string>thing.id,
+          new Thing(<string>thing.id, <ThingDescription><unknown>thing, this.router!)
+        );
       });
 
       return this.things;
@@ -345,26 +349,24 @@ class Things {
   /**
    * @param {String} thingId
    * @param {String} propertyName
-   * @return {Promise<any>} resolves to value of property
+   * @return {Promise<PropertyValue>} resolves to value of property
    */
-  async getThingProperty(thingId: string, propertyName: string): Promise<any> {
+  async getThingProperty(thingId: string, propertyName: string): Promise<PropertyValue> {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
     } catch (e) {
       console.error('Error getting value for thingId:', thingId, 'property:', propertyName);
       console.error(e);
 
-      const error = new Error(e);
-      (error as any).code = 500;
-      throw error;
+      throw new HttpErrorWithCode(e, 500);
     }
   }
 
   /**
    * @param {String} thingId
    * @param {String} propertyName
-   * @param {any} value
-   * @return {Promise<any>} resolves to new value
+   * @param {PropertyValue} value
+   * @return {Promise<PropertyValue>} resolves to new value
    */
   async setThingProperty(thingId: string, propertyName: string, value: PropertyValue):
   Promise<PropertyValue> {
@@ -372,33 +374,24 @@ class Things {
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
     } catch (e) {
-      const error = new Error('Thing not found');
-      (error as any).code = 404;
-      throw error;
+      throw new HttpErrorWithCode('Thing not found', 404);
     }
 
     if (!thing.properties.hasOwnProperty(propertyName)) {
-      const error = new Error('Property not found');
-      (error as any).code = 404;
-      throw error;
+      throw new HttpErrorWithCode('Property not found', 404);
     }
 
     if (thing.properties[propertyName].readOnly) {
-      const error = new Error('Read-only property');
-      (error as any).code = 400;
-      throw error;
+      throw new HttpErrorWithCode('Read-only property', 400);
     }
 
     const valid = ajv.validate(thing.properties[propertyName], value);
     if (!valid) {
-      const error = new Error('Invalid property value');
-      (error as any).code = 400;
-      throw error;
+      throw new HttpErrorWithCode('Invalid property value', 400);
     }
 
     try {
-      const updatedValue = await AddonManager.setProperty(thingId,
-                                                          propertyName, value);
+      const updatedValue = await AddonManager.setProperty(thingId, propertyName, value);
       // Note: it's possible that updatedValue doesn't match value.
       return updatedValue;
     } catch (e) {
@@ -406,9 +399,7 @@ class Things {
                     'property:', propertyName,
                     'value:', value);
 
-      const error = new Error(e);
-      (error as any).code = 500;
-      throw error;
+      throw new HttpErrorWithCode(e, 500);
     }
   }
 
@@ -427,20 +418,20 @@ class Things {
   }
 }
 
-const Instance = new Things();
+const instance = new Things();
 
 AddonManager.on(Constants.THING_ADDED, (thing: ThingDescription) => {
-  Instance.handleNewThing(thing);
+  instance.handleNewThing(thing);
 });
 
 AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
-  Instance.handleThingRemoved(thing);
+  instance.handleThingRemoved(thing);
 });
 
 AddonManager.on(
   Constants.CONNECTED, ({device, connected}: {device: Device, connected: boolean}) => {
-    Instance.handleConnected(device.id, connected);
+    instance.handleConnected(device.id, connected);
   }
 );
 
-export default Instance;
+export default instance;

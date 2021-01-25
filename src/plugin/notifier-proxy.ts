@@ -10,23 +10,35 @@
  */
 
 import Deferred from '../deferred';
-import {Constants, Notifier} from 'gateway-addon';
+import {AddonManagerProxy, Constants, Notifier} from 'gateway-addon';
+import {OutletDescription} from 'gateway-addon/lib/schema';
 import OutletProxy from './outlet-proxy';
+import {AddonManager} from '../addon-manager';
+import Plugin from './plugin';
 const MessageType = Constants.MessageType;
 
 /**
  * Class used to describe a notifier from the perspective of the gateway.
  */
 export default class NotifierProxy extends Notifier {
-  public unloadCompletedPromise: any = null;
+  public unloadCompletedPromise: Deferred<void, void> | null = null;
 
   constructor(
-    addonManager: any, notifierId: string, name: string, packageName: string, private plugin: any) {
-    super(addonManager, notifierId, packageName);
+    addonManager: AddonManager,
+    notifierId: string,
+    name: string,
+    packageName: string,
+    private plugin: Plugin
+  ) {
+    super(<AddonManagerProxy><unknown>addonManager, notifierId, packageName);
     this.setName(name);
   }
 
-  sendMsg(methodType: number, data: any, deferred? : Deferred<unknown, unknown>): void {
+  sendMsg(
+    methodType: number,
+    data: Record<string, unknown>,
+    deferred?: Deferred<unknown, unknown>
+  ): void {
     data.notifierId = this.getId();
     return this.plugin.sendMsg(methodType, data, deferred);
   }
@@ -43,10 +55,10 @@ export default class NotifierProxy extends Notifier {
     }
     this.unloadCompletedPromise = new Deferred();
     this.sendMsg(MessageType.NOTIFIER_UNLOAD_REQUEST, {});
-    return this.unloadCompletedPromise.promise;
+    return this.unloadCompletedPromise.getPromise();
   }
 
-  addOutlet(outletId: string, outletDescription: any): void {
+  addOutlet(outletId: string, outletDescription: OutletDescription): void {
     this.getOutlets()[outletId] = new OutletProxy(this, outletDescription);
   }
 }

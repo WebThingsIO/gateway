@@ -20,6 +20,10 @@ import * as Settings from './models/settings';
 import User from './models/user';
 import * as Users from './models/users';
 
+interface WithParseFile {
+  parseFile: (fullFilename: string) => unknown;
+}
+
 /**
  * Manually copy, then unlink, to prevent issues with cross-device renames.
  */
@@ -55,7 +59,7 @@ function renameDir(src: string, dst: string): Promise<void> {
  * Migrate from old locations to new ones
  * @return {Promise} resolved when migration is complete
  */
-export default function migrate(): Promise<any[]> {
+export default function migrate(): Promise<unknown[]> {
   const pending = [];
   // Create all required profile directories.
   if (!fs.existsSync(UserProfile.configDir)) {
@@ -187,7 +191,7 @@ export default function migrate(): Promise<any[]> {
 
   if (!fs.existsSync(userConfigPath)) {
     if (fs.existsSync(oldUserConfigPath)) {
-      const oldConfig = (<any>config.util).parseFile(oldUserConfigPath);
+      const oldConfig = (<config.IUtil & WithParseFile>config.util).parseFile(oldUserConfigPath);
       fs.writeFileSync(userConfigPath, JSON.stringify(oldConfig, null, 2));
     } else {
       fs.writeFileSync(userConfigPath, '{\n}');
@@ -227,7 +231,7 @@ export default function migrate(): Promise<any[]> {
     }
   }
 
-  const localConfig = (<any>config.util).parseFile(userConfigPath);
+  const localConfig = (<config.IUtil & WithParseFile>config.util).parseFile(userConfigPath);
   if (localConfig) {
     config.util.extendDeep(config, localConfig);
   }

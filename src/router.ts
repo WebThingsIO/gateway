@@ -30,7 +30,7 @@ import NotifiersController from './controllers/notifiers_controller';
 import OAuthClientsController from './controllers/oauthclients_controller';
 import OAuthController from './controllers/oauth_controller';
 import PingController from './controllers/ping_controller';
-import ProxyController from './controllers/proxy_controller';
+import ProxyController, {WithProxyMethods} from './controllers/proxy_controller';
 import PushController from './controllers/push_controller';
 import RootController from './controllers/root_controller';
 import RulesController from './controllers/rules_controller';
@@ -50,7 +50,7 @@ const APP_PREFIX = '/app'; // A pseudo path to use for front end requests
  * Router.
  */
 class Router {
-  private proxyController: express.Router;
+  private proxyController: express.Router & WithProxyMethods;
 
   constructor() {
     this.proxyController = ProxyController();
@@ -175,11 +175,11 @@ class Router {
   }
 
   addProxyServer(thingId: string, server: string): void {
-    (this.proxyController as any).addProxyServer(thingId, server);
+    this.proxyController.addProxyServer(thingId, server);
   }
 
   removeProxyServer(thingId: string): void {
-    (this.proxyController as any).removeProxyServer(thingId);
+    this.proxyController.removeProxyServer(thingId);
   }
 }
 

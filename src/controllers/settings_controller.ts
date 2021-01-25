@@ -22,6 +22,7 @@ import * as Settings from '../models/settings';
 import TunnelService from '../tunnel-service';
 import * as CertificateManager from '../certificate-manager';
 import pkg from '../package.json';
+import {HttpErrorWithCode} from '../errors';
 
 function build(): express.Router {
   const auth = jwtMiddleware.middleware();
@@ -105,9 +106,7 @@ function build(): express.Router {
 
     // increase the timeout for this request, as registration can take a while
     request.setTimeout(5 * 60 * 1000, () => {
-      const err = new Error('Request Timeout');
-      (err as any).status = 408;
-      next(err);
+      next(new HttpErrorWithCode('Request Timeout', 408));
     });
 
     const email = request.body.email.trim().toLowerCase();
@@ -116,7 +115,7 @@ function build(): express.Router {
     const fulldomain = `${subdomain}.${config.get('ssltunnel.domain')}`;
     const optout = request.body.optout;
 
-    function cb(err: any): void {
+    function cb(err: unknown): void {
       if (err) {
         response.statusMessage = `Error issuing certificate - ${err}`;
         response.status(400).end();
@@ -445,7 +444,7 @@ function build(): express.Router {
   });
 
   controller.get('/localization/country', auth, (_request, response) => {
-    let valid = [];
+    let valid: string[] = [];
     if (Platform.implemented('getValidWirelessCountries')) {
       valid = Platform.getValidWirelessCountries();
     }
@@ -477,7 +476,7 @@ function build(): express.Router {
   });
 
   controller.get('/localization/timezone', auth, (_request, response) => {
-    let valid = [];
+    let valid: string[] = [];
     if (Platform.implemented('getValidTimezones')) {
       valid = Platform.getValidTimezones();
     }

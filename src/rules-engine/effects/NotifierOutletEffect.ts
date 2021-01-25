@@ -8,6 +8,7 @@ import {Level} from 'gateway-addon/lib/schema';
 import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
 import AddonManager from '../../addon-manager';
+import {State} from '../State';
 
 export interface NotifierOutletEffectDescription extends EffectDescription {
   notifier: string;
@@ -69,7 +70,7 @@ export default class NotifierOutletEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state: any): void {
+  setState(state: State): void {
     if (!state.on) {
       return;
     }
@@ -79,6 +80,7 @@ export default class NotifierOutletEffect extends Effect {
       console.warn(`Notifier "${this.notifier}" not found, unable to notify`);
       return;
     }
+
     const outlet = notifier.getOutlet(this.outlet);
     if (!outlet) {
       console.warn(
@@ -86,7 +88,7 @@ export default class NotifierOutletEffect extends Effect {
       return;
     }
 
-    outlet.notify(this.title, this.message, this.level).catch((e: any) => {
+    outlet.notify(this.title, this.message, this.level).catch((e: unknown) => {
       console.warn(`Outlet "${this.outlet}" of notifier "${this.notifier}" unable to notify`, e);
     });
   }

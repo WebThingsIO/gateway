@@ -26,7 +26,7 @@ const DEBUG = false || (process.env.NODE_ENV === 'test');
 class TunnelService {
   private pagekiteProcess: ChildProcess | null;
 
-  private tunnelToken: {base?: string, token: string} | null;
+  private tunnelToken: CertificateManager.TunnelToken | null;
 
   private connected: Deferred<void, void>;
 
@@ -93,17 +93,18 @@ class TunnelService {
   start(response?: express.Response, urlredirect?: {url: string}): void {
     Settings.getSetting('tunneltoken').then((result) => {
       if (typeof result === 'object') {
-        if (!result.base) {
+        const token = <CertificateManager.TunnelToken>result;
+        if (!token.base) {
           // handle legacy tunnels
-          result.base = 'mozilla-iot.org';
-          Settings.setSetting('tunneltoken', result).catch((e) => {
+          token.base = 'mozilla-iot.org';
+          Settings.setSetting('tunneltoken', token).catch((e) => {
             console.error('Failed to set tunneltoken.base:', e);
           });
         }
 
         let responseSent = false;
-        this.tunnelToken = result;
-        const endpoint = `${result.name}.${result.base}`;
+        this.tunnelToken = token;
+        const endpoint = `${token.name}.${token.base}`;
         this.pagekiteProcess =
           spawn(config.get('ssltunnel.pagekite_cmd'),
                 ['--clean', `--frontend=${endpoint}:${
@@ -225,5 +226,4 @@ class TunnelService {
   }
 }
 
-const service = new TunnelService();
-export default service;
+export default new TunnelService();

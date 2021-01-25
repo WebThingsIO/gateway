@@ -36,13 +36,13 @@ class OAuthClients {
     const authorized = new Map();
 
     for (const jwt of jwts) {
-      const payload = JSON.parse(jwt.payload);
+      const payload = JSON.parse(<string>jwt.payload);
       if (payload.role !== 'access_token') {
         continue;
       }
       if (!this.clients.has(payload.client_id)) {
         console.warn('Orphaned access_token', jwt);
-        await Database.deleteJSONWebTokenByKeyId(jwt.keyId);
+        await Database.deleteJSONWebTokenByKeyId(<string>jwt.keyId);
         continue;
       }
       const defaultClient = this.clients.get(payload.client_id)![0];
@@ -59,9 +59,9 @@ class OAuthClients {
     const jwts = await Database.getJSONWebTokensByUser(userId);
 
     for (const jwt of jwts) {
-      const payload = JSON.parse(jwt.payload);
+      const payload = JSON.parse(<string>jwt.payload);
       if (payload.client_id === clientId) {
-        await Database.deleteJSONWebTokenByKeyId(jwt.keyId);
+        await Database.deleteJSONWebTokenByKeyId(<string>jwt.keyId);
       }
     }
   }

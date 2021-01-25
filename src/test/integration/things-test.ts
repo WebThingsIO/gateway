@@ -122,7 +122,7 @@ describe('things/', function() {
     if (res.status !== 201) {
       throw res;
     }
-    await (mockAdapter() as any).addDevice(id, desc);
+    await mockAdapter().addDevice(<string>id, desc);
     return res;
   }
 
@@ -459,8 +459,8 @@ describe('things/', function() {
   });
 
   it('lists new things when devices are added', async () => {
-    await (mockAdapter() as any).addDevice('test-2', makeDescr('test-2'));
-    await (mockAdapter() as any).addDevice('test-3', makeDescr('test-3'));
+    await mockAdapter().addDevice('test-2', makeDescr('test-2'));
+    await mockAdapter().addDevice('test-3', makeDescr('test-3'));
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
@@ -489,8 +489,8 @@ describe('things/', function() {
           .set(...headerAuth(jwt))
           .send({pair: {input: {timeout: 60}}});
 
-        await (mockAdapter() as any).addDevice('test-4', makeDescr('test-4'));
-        await (mockAdapter() as any).addDevice('test-5', makeDescr('test-5'));
+        await mockAdapter().addDevice('test-4', makeDescr('test-4'));
+        await mockAdapter().addDevice('test-5', makeDescr('test-5'));
         return res;
       })(),
     ]);
@@ -508,7 +508,7 @@ describe('things/', function() {
   it('should add a device during pairing then create a thing', async () => {
     const thingId = 'test-6';
     const descr = makeDescr(thingId);
-    (mockAdapter() as any).pairDevice(thingId, descr);
+    mockAdapter().pairDevice(thingId, descr);
     // send pair action
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -570,7 +570,7 @@ describe('things/', function() {
   it('should remove a thing', async () => {
     const thingId = 'test-6';
     const descr = makeDescr(thingId);
-    (mockAdapter() as any).pairDevice(thingId, descr);
+    mockAdapter().pairDevice(thingId, descr);
     // send pair action
     const pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -606,7 +606,7 @@ describe('things/', function() {
       id: thingId,
     }));
     const descr = makeDescr(thingId);
-    (mockAdapter() as any).pairDevice(thingId, descr);
+    mockAdapter().pairDevice(thingId, descr);
     // send pair action
     const pair = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
@@ -614,7 +614,7 @@ describe('things/', function() {
       .set(...headerAuth(jwt))
       .send({pair: {input: {timeout: 60}}});
     expect(pair.status).toEqual(201);
-    await (mockAdapter() as any).removeDevice(thingId);
+    await mockAdapter().removeDevice(thingId);
 
     const res = await chai.request(server)
       .get(Constants.NEW_THINGS_PATH)
@@ -632,11 +632,11 @@ describe('things/', function() {
   });
 
   it('should remove a device in response to unpair', async () => {
-    await (mockAdapter() as any).addDevice('test-5', makeDescr('test-5'));
+    await mockAdapter().addDevice('test-5', makeDescr('test-5'));
     const thingId = 'test-5';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
-    (mockAdapter() as any).unpairDevice(thingId);
+    mockAdapter().unpairDevice(thingId);
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
@@ -675,7 +675,7 @@ describe('things/', function() {
     ]);
     expect(res.status).toEqual(200);
     expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
-    expect(messages[2].data.power).toEqual(true);
+    expect((<Record<string, unknown>>messages[2].data).power).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -725,7 +725,7 @@ describe('things/', function() {
 
        const error = messages[2];
        expect(error.messageType).toBe(Constants.ERROR);
-       expect(error.data.request).toMatchObject(request);
+       expect((<Record<string, unknown>>error.data).request).toMatchObject(request);
 
        await webSocketClose(ws);
      }
@@ -762,7 +762,7 @@ describe('things/', function() {
 
        const error = messages[0];
        expect(error.messageType).toBe(Constants.ERROR);
-       expect(error.data.status).toEqual('404 Not Found');
+       expect((<Record<string, unknown>>error.data).status).toEqual('404 Not Found');
 
        if (ws.readyState !== WebSocket.CLOSED) {
          await e2p(ws, 'close');
@@ -812,10 +812,10 @@ describe('things/', function() {
        expect(res.status).toEqual(200);
 
        expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[2].data.power).toEqual(true);
+       expect((<Record<string, unknown>>messages[2].data).power).toEqual(true);
 
        expect(messages[3].messageType).toEqual(Constants.PROPERTY_STATUS);
-       expect(messages[3].data.power).toEqual(false);
+       expect((<Record<string, unknown>>messages[3].data).power).toEqual(false);
 
        await webSocketClose(ws);
      }
@@ -858,13 +858,19 @@ describe('things/', function() {
 
        expect(messages[2].messageType).toEqual(Constants.EVENT);
        expect(messages[2].data).toHaveProperty(eventAFirst.getName());
-       expect(messages[2].data[eventAFirst.getName()]).toHaveProperty('data');
-       expect(messages[2].data[eventAFirst.getName()].data).toEqual(eventAFirst.getData());
+       expect((<Record<string, unknown>>messages[2].data)[eventAFirst.getName()])
+         .toHaveProperty('data');
+       // eslint-disable-next-line max-len
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[2].data)[eventAFirst.getName()]).data)
+         .toEqual(eventAFirst.getData());
 
        expect(messages[3].messageType).toEqual(Constants.EVENT);
        expect(messages[3].data).toHaveProperty(eventASecond.getName());
-       expect(messages[3].data[eventASecond.getName()]).toHaveProperty('data');
-       expect(messages[3].data[eventASecond.getName()].data).toEqual(eventASecond.getData());
+       expect((<Record<string, unknown>>messages[3].data)[eventASecond.getName()])
+         .toHaveProperty('data');
+       // eslint-disable-next-line max-len
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[3].data)[eventASecond.getName()]).data)
+         .toEqual(eventASecond.getData());
 
        await webSocketClose(ws);
      }
@@ -990,16 +996,22 @@ describe('things/', function() {
        ]);
 
        expect(messages[2].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[2].data.pair.status).toEqual('created');
-       expect(messages[2].data.pair.href).toEqual(actionHref);
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[2].data).pair).status)
+         .toEqual('created');
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[2].data).pair).href)
+         .toEqual(actionHref);
 
        expect(messages[3].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[3].data.pair.status).toEqual('pending');
-       expect(messages[3].data.pair.href).toEqual(actionHref);
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[3].data).pair).status)
+         .toEqual('pending');
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[3].data).pair).href)
+         .toEqual(actionHref);
 
        expect(messages[4].messageType).toEqual(Constants.ACTION_STATUS);
-       expect(messages[4].data.pair.status).toEqual('deleted');
-       expect(messages[4].data.pair.href).toEqual(actionHref);
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[4].data).pair).status)
+         .toEqual('deleted');
+       expect((<Record<string, unknown>>(<Record<string, unknown>>messages[4].data).pair).href)
+         .toEqual(actionHref);
 
        await webSocketClose(ws);
      }
@@ -1166,7 +1178,8 @@ describe('things/', function() {
 
     const created = messages[1];
     expect(created.messageType).toEqual(Constants.ACTION_STATUS);
-    expect(created.data.pair.status).toEqual('created');
+    expect((<Record<string, unknown>>(<Record<string, unknown>>created.data).pair).status)
+      .toEqual('created');
 
     const err = messages[2];
     expect(err.messageType).toEqual(Constants.ERROR);
