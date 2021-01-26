@@ -1,4 +1,6 @@
+import {AddonManager} from '../../addon-manager';
 import Plugin from '../../plugin/plugin';
+import PluginServer from '../../plugin/plugin-server';
 
 describe('plugins/', () => {
   it('Test the plugin start mechanism (good exec)', async () => {
@@ -6,7 +8,8 @@ describe('plugins/', () => {
     // Plugin class. However it doesn't test the start method, so we add
     // some tests here to do that.
 
-    const plugin = new Plugin('plugin-start-test', null, true);
+    const plugin = new Plugin(
+      'plugin-start-test', null as unknown as AddonManager, null as unknown as PluginServer, true);
     plugin.setExec('node -e process.exit(42);');
     await plugin.start();
 
@@ -26,7 +29,8 @@ describe('plugins/', () => {
   });
 
   it('Test the plugin start mechanism (bad exec)', async () => {
-    const plugin = new Plugin('plugin-start-test', null, true);
+    const plugin = new Plugin(
+      'plugin-start-test', null as unknown as AddonManager, null as unknown as PluginServer, true);
     plugin.setExec('./something-that-doesnt-exist');
     await plugin.start();
     const promise = new Promise((resolve) => {
@@ -42,7 +46,8 @@ describe('plugins/', () => {
   });
 
   it('Test the plugin restart mechanism', async () => {
-    const plugin = new Plugin('plugin-start-test', null, true);
+    const plugin = new Plugin(
+      'plugin-start-test', null as unknown as AddonManager, null as unknown as PluginServer, true);
     plugin.setExec('node -e process.exit(42);');
     await plugin.start();
 

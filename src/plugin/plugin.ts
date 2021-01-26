@@ -106,7 +106,8 @@ export default class Plugin {
 
   constructor(
     private pluginId: string,
-    private pluginServer: PluginServer | null,
+    private addonManager: AddonManager,
+    private pluginServer: PluginServer,
     private forceEnable = false) {
     this.logPrefix = pluginId;
   }
@@ -289,13 +290,13 @@ export default class Plugin {
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         const data = msg.data as AdapterAddedNotificationMessageData;
-        const adapter = new AdapterProxy(this.pluginServer!.getAddonManager(),
+        const adapter = new AdapterProxy(this.addonManager,
                                          data.adapterId,
                                          data.name,
                                          data.packageName,
                                          this);
         this.adapters.set(data.adapterId, adapter);
-        this.pluginServer!.addAdapter(adapter);
+        this.addonManager.addAdapter(adapter);
 
         // Tell the adapter about all saved things
         const send = (thing: Thing): void => {
@@ -318,23 +319,23 @@ export default class Plugin {
       }
       case MessageType.NOTIFIER_ADDED_NOTIFICATION: {
         const data = msg.data as NotifierAddedNotificationMessageData;
-        const notifier = new NotifierProxy(this.pluginServer!.getAddonManager(),
+        const notifier = new NotifierProxy(this.addonManager,
                                            data.notifierId,
                                            data.name,
                                            data.packageName,
                                            this);
         this.notifiers.set(data.notifierId, notifier);
-        this.pluginServer!.addNotifier(notifier);
+        this.addonManager.addNotifier(notifier);
         return;
       }
 
       case MessageType.API_HANDLER_ADDED_NOTIFICATION: {
         const data = msg.data as APIHandlerAddedNotificationMessageData;
-        const apiHandler = new APIHandlerProxy(this.pluginServer!.getAddonManager(),
+        const apiHandler = new APIHandlerProxy(this.addonManager,
                                                data.packageName,
                                                this);
         this.apiHandlers.set(data.packageName, apiHandler);
-        this.pluginServer!.addAPIHandler(apiHandler);
+        this.addonManager.addAPIHandler(apiHandler);
         return;
       }
 
@@ -816,5 +817,53 @@ export default class Plugin {
     this.restart = false;
     this.unloadedRcvdPromise = new Deferred();
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
+  }
+
+  unloadComponents(): Promise<void> {
+    const adapters = Array.from(this.adapters.values());
+    const notifiers = Array.from(this.notifiers.values());
+    const apiHandlers = Array.from(this.apiHandlers.values());
+
+    const unloadPromises = [];
+
+    for (const adapter of this.adapters.values()) {
+      console.log('Unloading', adapter.getName());
+      this.addonManager.removeAdapter(adapter.getId());
+      for (const device of Object.values(adapter.getDevices())) {
+        this.addonManager.handleDeviceRemoved(device);
+      }
+      unloadPromises.push(adapter.unload());
+    }
+
+    for (const notifier of this.notifiers.values()) {
+      console.log('Unloading', notifier.getName());
+      this.addonManager.removeNotifier(notifier.getId());
+      unloadPromises.push(notifier.unload());
+      for (const device of Object.values(notifier.getOutlets())) {
+        this.addonManager.handleOutletRemoved(device);
+      }
+    }
+
+    for (const [id, apiHandler] of this.apiHandlers.entries()) {
+      console.log('Unloading APIHandler');
+      this.addonManager.removeApiHandler(id);
+      unloadPromises.push(apiHandler.unload());
+    }
+
+    if (adapters.length === 0 && notifiers.length === 0 && apiHandlers.length === 0) {
+      // If there are no adapters, notifiers, or API handlers, manually unload
+      // the plugin, otherwise it will just restart. Note that if the addon is
+      // disabled, then there might not be a plugin either.
+      this.unload();
+    }
+
+    return Promise.all(unloadPromises).then();
+  }
+
+  kill(): void {
+    if (this.process) {
+      console.log(`Killing ${this.pluginId} plugin.`);
+      this.process.p?.kill();
+    }
   }
 }
