@@ -18,9 +18,6 @@ import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
 import {Message} from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
-import AdapterProxy from './adapter-proxy';
-import APIHandlerProxy from './api-handler-proxy';
-import NotifierProxy from './notifier-proxy';
 import pkg from '../package.json';
 import Plugin from './plugin';
 import {AddonManager} from '../addon-manager';
@@ -54,33 +51,6 @@ export default class PluginServer extends EventEmitter {
 
   public getAddonManager(): AddonManager {
     return this.manager;
-  }
-
-  /**
-   * @method addAdapter
-   *
-   * Tells the add-on manager about new adapters added via a plugin.
-   */
-  addAdapter(adapter: AdapterProxy): void {
-    this.manager.addAdapter(adapter);
-  }
-
-  /**
-   * @method addNotifier
-   *
-   * Tells the add-on manager about new notifiers added via a plugin.
-   */
-  addNotifier(notifier: NotifierProxy): void {
-    this.manager.addNotifier(notifier);
-  }
-
-  /**
-   * @method addAPIHandler
-   *
-   * Tells the add-on manager about new API handlers added via a plugin.
-   */
-  addAPIHandler(handler: APIHandlerProxy): void {
-    this.manager.addAPIHandler(handler);
   }
 
   /**
@@ -178,7 +148,7 @@ export default class PluginServer extends EventEmitter {
       // This is a plugin that we already know about.
     } else {
       // We haven't seen this plugin before.
-      plugin = new Plugin(pluginId, this);
+      plugin = new Plugin(pluginId, this.manager, this);
       this.plugins.set(pluginId, plugin!);
     }
     return plugin!;

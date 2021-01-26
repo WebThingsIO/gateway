@@ -35,7 +35,6 @@ import {Level, PropertyValue, Device as DeviceSchema} from 'gateway-addon/lib/sc
 import PluginServer from './plugin/plugin-server';
 import Plugin from './plugin/plugin';
 import {Adapter, APIHandler, Device, Notifier, Outlet} from 'gateway-addon';
-import {ChildProcessWithoutNullStreams} from 'child_process';
 
 /**
  * @class AddonManager
@@ -236,15 +235,6 @@ export class AddonManager extends EventEmitter {
   }
 
   /**
-   * @method getAdaptersByPackageId
-   * @returns Returns a list of loaded adapters with the given package ID.
-   */
-  getAdaptersByPackageId(packageId: string): Adapter[] {
-    return Array.from(this.adapters.values()).filter(
-      (a) => a.getPackageName() === packageId);
-  }
-
-  /**
    * @method getAdapters
    * @returns Returns a Map of the loaded adapters. The dictionary
    *          key corresponds to the adapter id.
@@ -271,15 +261,6 @@ export class AddonManager extends EventEmitter {
   }
 
   /**
-   * @method getNotifiersByPackageId
-   * @returns Returns a list of loaded notifiers with the given package ID.
-   */
-  getNotifiersByPackageId(packageId: string): Notifier[] {
-    return Array.from(this.notifiers.values()).filter(
-      (n) => n.getPackageName() === packageId);
-  }
-
-  /**
    * @method getAPIHandlers
    * @returns Returns a Map of the loaded API handlers. The dictionary
    *          key corresponds to the package ID.
@@ -303,18 +284,6 @@ export class AddonManager extends EventEmitter {
    */
   getExtensions(): Record<string, any> {
     return this.extensions;
-  }
-
-  /**
-   * @method getExtensionsByPackageId
-   * @returns Returns a Map of loaded extensions with the given package ID.
-   */
-  getExtensionsByPackageId(packageId: string): any {
-    if (this.extensions.hasOwnProperty(packageId)) {
-      return this.extensions[packageId];
-    }
-
-    return {};
   }
 
   /**
@@ -780,6 +749,18 @@ export class AddonManager extends EventEmitter {
     return deferredRemove.getPromise();
   }
 
+  removeAdapter(id: string): void {
+    this.adapters.delete(id);
+  }
+
+  removeNotifier(id: string): void {
+    this.notifiers.delete(id);
+  }
+
+  removeApiHandler(id: string): void {
+    this.apiHandlers.delete(id);
+  }
+
   /**
    * @method unloadAddons
    * Unloads all of the loaded add-ons.
@@ -919,69 +900,12 @@ export class AddonManager extends EventEmitter {
     }
 
     const plugin = this.getPlugin(packageId);
-    let pluginProcess: {p: ChildProcessWithoutNullStreams | null} = {p: null};
-    if (plugin) {
-      pluginProcess = plugin.getProcess();
-    }
-
-    const adapters = this.getAdaptersByPackageId(packageId);
-    const adapterIds = adapters.map((a) => a.getId());
-    const notifiers = this.getNotifiersByPackageId(packageId);
-    const notifierIds = notifiers.map((n) => n.getId());
-    const apiHandler = this.getAPIHandler(packageId);
-
-    const unloadPromises = [];
-    if (adapters.length > 0) {
-      for (const a of adapters) {
-        console.log('Unloading', a.getName());
-        unloadPromises.push(a.unload());
-        this.adapters.delete(a.getId());
-      }
-    }
-
-    if (notifiers.length > 0) {
-      for (const n of notifiers) {
-        console.log('Unloading', n.getName());
-        unloadPromises.push(n.unload());
-        this.notifiers.delete(n.getId());
-      }
-    }
-
-    if (apiHandler) {
-      console.log('Unloading API handler', packageId);
-      unloadPromises.push(apiHandler.unload());
-      this.apiHandlers.delete(packageId);
-    }
-
-    if (adapters.length === 0 && notifiers.length === 0 && !apiHandler &&
-        plugin) {
-      // If there are no adapters, notifiers, or API handlers, manually unload
-      // the plugin, otherwise it will just restart. Note that if the addon is
-      // disabled, then there might not be a plugin either.
-      plugin.unload();
-    }
+    const unloadPromise = plugin?.unloadComponents() ?? Promise.resolve();
 
     // Give the process 3 seconds to exit before killing it.
     const cleanup = (): void => {
       setTimeout(() => {
-        if (pluginProcess.p) {
-          console.log(`Killing ${packageId} plugin.`);
-          pluginProcess.p.kill();
-        }
-
-        // Remove devices owned by this add-on.
-        for (const deviceId of Object.keys(this.devices)) {
-          if (adapterIds.includes(this.devices[deviceId].getAdapter().getId())) {
-            this.handleDeviceRemoved(this.devices[deviceId]);
-          }
-        }
-
-        // Remove outlets owned by this add-on.
-        for (const outletId of Object.keys(this.outlets)) {
-          if (notifierIds.includes(this.outlets[outletId].getNotifier().getId())) {
-            this.handleOutletRemoved(this.outlets[outletId]);
-          }
-        }
+        plugin?.kill();
 
         if (this.extensions.hasOwnProperty(packageId)) {
           delete this.extensions[packageId];
@@ -989,8 +913,7 @@ export class AddonManager extends EventEmitter {
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
 
-    const all =
-      Promise.all(unloadPromises).then(() => cleanup(), () => cleanup());
+    const all = unloadPromise.then(() => cleanup(), () => cleanup());
 
     if (wait) {
       // If wait was set, wait 3 seconds + a little for the process to die.
