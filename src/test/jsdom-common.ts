@@ -19,10 +19,14 @@ global.localStorage = {
   },
 };
 
+interface TestGlobals {
+  sandbox: sinon.SinonSandbox;
+}
+
 beforeEach(() => {
-  (global as any).sandbox = sinon.createSandbox();
+  (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox = sinon.createSandbox();
 });
 
 afterEach(() => {
-  (global as any).sandbox.restore();
+  (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.restore();
 });

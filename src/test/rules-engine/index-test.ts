@@ -283,7 +283,7 @@ describe('rules engine', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(desc);
-    await (mockAdapter() as any).addDevice(id, desc);
+    await mockAdapter().addDevice(<string>id, desc);
     return res;
   }
 

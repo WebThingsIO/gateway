@@ -31,10 +31,18 @@ import {URLSearchParams} from 'url';
 import {ncp} from 'ncp';
 
 import pkg from './package.json';
-import {Level, PropertyValue, Device as DeviceSchema} from 'gateway-addon/lib/schema';
+import {Level, PropertyValue, Device as DeviceSchema, Input} from 'gateway-addon/lib/schema';
 import PluginServer from './plugin/plugin-server';
 import Plugin from './plugin/plugin';
 import {Adapter, APIHandler, Device, Notifier, Outlet} from 'gateway-addon';
+
+interface Extension {
+  extensions: {
+    css?: string[];
+    js?: string[];
+  }[];
+  resources: string[];
+}
 
 /**
  * @class AddonManager
@@ -52,7 +60,7 @@ export class AddonManager extends EventEmitter {
 
   private outlets: Record<string, Outlet> = {};
 
-  private extensions: Record<string, any> = {};
+  private extensions: Record<string, Extension> = {};
 
   private deferredAdd: Deferred<void, unknown> | null = null;
 
@@ -63,11 +71,11 @@ export class AddonManager extends EventEmitter {
 
   private addonsLoaded = false;
 
-  private installedAddons = new Map<string, any>();
+  private installedAddons = new Map<string, Record<string, unknown>>();
 
   private deferredWaitForAdapter = new Map<string, Deferred<Adapter, unknown>>();
 
-  private pluginServer: any | null = null;
+  private pluginServer: PluginServer | null = null;
 
   private updateTimeout: NodeJS.Timeout | null = null;
 
@@ -83,11 +91,11 @@ export class AddonManager extends EventEmitter {
     return '';
   }
 
-  getUserProfile(): any {
+  getUserProfile(): Record<string, unknown> {
     return {};
   }
 
-  getPreferences(): any {
+  getPreferences(): Record<string, unknown> {
     return {};
   }
 
@@ -97,6 +105,8 @@ export class AddonManager extends EventEmitter {
    */
   addAdapter(adapter: Adapter): void {
     if (!adapter.getName()) {
+      // TODO: fix after updating gateway-addon
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (adapter as any).name = adapter.constructor.name;
     }
     this.adapters.set(adapter.getId(), adapter);
@@ -120,7 +130,7 @@ export class AddonManager extends EventEmitter {
 
   addNotifier(notifier: Notifier): void {
     if (!notifier.getName()) {
-      (notifier as any).name = notifier.constructor.name;
+      notifier.setName(notifier.constructor.name);
     }
 
     this.notifiers.set(notifier.getId(), notifier);
@@ -282,7 +292,7 @@ export class AddonManager extends EventEmitter {
    * @returns Returns a Map of the loaded extensions. The dictionary
    *          key corresponds to the extension ID.
    */
-  getExtensions(): Record<string, any> {
+  getExtensions(): Record<string, Extension> {
     return this.extensions;
   }
 
@@ -372,10 +382,10 @@ export class AddonManager extends EventEmitter {
    * @returns a promise which resolves to the retrieved value of `propertyName`
    *          from the thing identified by `thingId`.
    */
-  getProperty(thingId: string, propertyName: string): Promise<unknown> {
+  getProperty(thingId: string, propertyName: string): Promise<PropertyValue> {
     const device = this.getDevice(thingId);
     if (device) {
-      return device.getProperty(propertyName);
+      return device.getProperty(propertyName).then((value) => <PropertyValue>value);
     }
 
     return Promise.reject(`getProperty: device: ${thingId} not found.`);
@@ -412,10 +422,10 @@ export class AddonManager extends EventEmitter {
    * @method setPin
    * @returns a promise which resolves when the PIN has been set.
    */
-  setPin(thingId: string, pin: string): Promise<void> {
+  setPin(thingId: string, pin: string): Promise<DeviceSchema> {
     const device = this.getDevice(thingId);
     if (device) {
-      return device.getAdapter().setPin(thingId, pin);
+      return <Promise<DeviceSchema>><unknown>(device.getAdapter().setPin(thingId, pin));
     }
 
     return Promise.reject(`setPin: device ${thingId} not found.`);
@@ -425,10 +435,12 @@ export class AddonManager extends EventEmitter {
    * @method setCredentials
    * @returns a promise which resolves when the credentials have been set.
    */
-  setCredentials(thingId: string, username: string, password: string): Promise<void> {
+  setCredentials(thingId: string, username: string, password: string): Promise<DeviceSchema> {
     const device = this.getDevice(thingId);
     if (device) {
-      return device.getAdapter().setCredentials(thingId, username, password);
+      return <Promise<DeviceSchema>><unknown>(
+        device.getAdapter().setCredentials(thingId, username, password)
+      );
     }
 
     return Promise.reject(`setCredentials: device ${thingId} not found.`);
@@ -438,7 +450,12 @@ export class AddonManager extends EventEmitter {
    * @method requestAction
    * @returns a promise which resolves when the action has been requested.
    */
-  requestAction(thingId: string, actionId: string, actionName: string, input: any): Promise<void> {
+  requestAction(
+    thingId: string,
+    actionId: string,
+    actionName: string,
+    input: Input
+  ): Promise<void> {
     const device = this.getDevice(thingId);
     if (device) {
       return device.requestAction(actionId, actionName, input);
@@ -558,7 +575,7 @@ export class AddonManager extends EventEmitter {
    */
   async addonEnabled(packageId: string): Promise<boolean> {
     if (this.installedAddons.has(packageId)) {
-      return this.installedAddons.get(packageId).enabled;
+      return <boolean>(this.installedAddons.get(packageId)!.enabled);
     }
 
     return false;
@@ -569,7 +586,7 @@ export class AddonManager extends EventEmitter {
       throw new Error('Package not installed.');
     }
 
-    const obj = this.installedAddons.get(packageId);
+    const obj = this.installedAddons.get(packageId)!;
     obj.enabled = true;
     await Settings.setSetting(`addons.${packageId}`, obj);
     await this.loadAddon(packageId);
@@ -580,7 +597,7 @@ export class AddonManager extends EventEmitter {
       throw new Error('Package not installed.');
     }
 
-    const obj = this.installedAddons.get(packageId);
+    const obj = this.installedAddons.get(packageId)!;
     obj.enabled = false;
     await Settings.setSetting(`addons.${packageId}`, obj);
     await this.unloadAddon(packageId, wait);
@@ -604,20 +621,23 @@ export class AddonManager extends EventEmitter {
     const key = `addons.${packageId}`;
     const configKey = `addons.config.${packageId}`;
     try {
-      const savedSettings = await Settings.getSetting(key);
+      const savedSettings = <Record<string, unknown>>(await Settings.getSetting(key));
 
       // If the old-style data is stored in the database, we need to transition
       // to the new format.
       if (savedSettings.hasOwnProperty('moziot') &&
-          savedSettings.moziot.hasOwnProperty('enabled')) {
-        manifest.enabled = savedSettings.moziot.enabled;
+          (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('enabled')) {
+        manifest.enabled = <boolean>(<Record<string, unknown>>savedSettings.moziot).enabled;
       } else if (savedSettings.hasOwnProperty('enabled')) {
-        manifest.enabled = savedSettings.enabled;
+        manifest.enabled = <boolean>savedSettings.enabled;
       }
 
       if (savedSettings.hasOwnProperty('moziot') &&
-          savedSettings.moziot.hasOwnProperty('config')) {
-        await Settings.setSetting(configKey, savedSettings.moziot.config);
+          (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('config')) {
+        await Settings.setSetting(
+          configKey,
+          (<Record<string, unknown>>savedSettings.moziot).config
+        );
       }
     } catch (_e) {
       // pass
@@ -640,9 +660,9 @@ export class AddonManager extends EventEmitter {
     }
 
     if (manifest.content_scripts && manifest.web_accessible_resources) {
-      this.extensions[manifest.id] = {
-        extensions: manifest.content_scripts,
-        resources: manifest.web_accessible_resources,
+      this.extensions[<string>manifest.id] = {
+        extensions: <{css?: string[], js?: string[]}[]>manifest.content_scripts,
+        resources: <string[]>manifest.web_accessible_resources,
       };
     }
 
@@ -650,7 +670,7 @@ export class AddonManager extends EventEmitter {
       return;
     }
 
-    const dataPath = path.join(UserProfile.dataDir, manifest.id);
+    const dataPath = path.join(UserProfile.dataDir, <string>manifest.id);
     try {
       // Create the add-on data directory, if necessary
       if (!fs.existsSync(dataPath)) {
@@ -662,7 +682,7 @@ export class AddonManager extends EventEmitter {
 
     // Load the add-on
     console.log(`Loading add-on: ${manifest.id}`);
-    this.pluginServer.loadPlugin(addonPath, manifest.id, manifest.exec);
+    this.pluginServer!.loadPlugin(addonPath, <string>manifest.id, <string>manifest.exec);
   }
 
   /**
@@ -1058,7 +1078,7 @@ export class AddonManager extends EventEmitter {
 
     // Update the saved settings (if any) and enable the add-on
     const key = `addons.${packageId}`;
-    let obj = await Settings.getSetting(key);
+    let obj = <Record<string, unknown>>(await Settings.getSetting(key));
     if (obj) {
       // Only enable if we're supposed to. Otherwise, keep whatever the current
       // setting is.
@@ -1126,7 +1146,7 @@ export class AddonManager extends EventEmitter {
     // Update the saved settings and disable the add-on
     if (disable) {
       const key = `addons.${packageId}`;
-      const obj = await Settings.getSetting(key);
+      const obj = <Record<string, unknown>>(await Settings.getSetting(key));
       if (obj) {
         obj.enabled = false;
         await Settings.setSetting(key, obj);
@@ -1320,11 +1340,11 @@ export class AddonManager extends EventEmitter {
     });
   }
 
-  getInstalledAddons(): Map<string, any> {
+  getInstalledAddons(): Map<string, Record<string, unknown>> {
     return this.installedAddons;
   }
 
-  getPluginServer(): any | null {
+  getPluginServer(): PluginServer | null {
     return this.pluginServer;
   }
 }

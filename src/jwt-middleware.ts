@@ -15,6 +15,10 @@ import JSONWebToken from './models/jsonwebtoken';
 
 const AUTH_TYPE = 'Bearer';
 
+export interface WithJWT {
+  jwt: JSONWebToken;
+}
+
 /**
  * Attempt to find the JWT in query parameters.
  *
@@ -120,7 +124,7 @@ export function middleware(): express.Handler {
           }
         }
 
-        (req as any).jwt = jwt;
+        (<express.Request & WithJWT>req).jwt = jwt;
         next();
       }).
       catch((err) => {

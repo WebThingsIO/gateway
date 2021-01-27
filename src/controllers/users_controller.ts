@@ -32,10 +32,11 @@ function build(): express.Router {
   /**
    * Get info about all users.
    */
-  controller.get('/info', auth, async (request, response) => {
+  controller.get('/info', auth, async (req, response) => {
+    const request = <express.Request & jwtMiddleware.WithJWT>req;
     const users = await Users.getUsers();
     const descriptions = users.map((user) => {
-      const loggedIn = user.getId() === (request as any).jwt.user;
+      const loggedIn = user.getId() === request.jwt.getUser();
       return Object.assign(user.getDescription(), {loggedIn});
     });
     return response.status(200).send(descriptions);
@@ -45,7 +46,7 @@ function build(): express.Router {
    * Get a user.
    */
   controller.get('/:userId', auth, async (request, response) => {
-    const user = await Users.getUserById(request.params.userId);
+    const user = await Users.getUserById(parseInt(request.params.userId));
 
     if (!user) {
       response.sendStatus(404);
@@ -94,7 +95,7 @@ function build(): express.Router {
   });
 
   controller.post('/:userId/mfa', auth, async (request, response) => {
-    const user = await Users.getUserById(request.params.userId);
+    const user = await Users.getUserById(parseInt(request.params.userId));
 
     if (!user) {
       response.sendStatus(404);
@@ -125,7 +126,7 @@ function build(): express.Router {
   });
 
   controller.put('/:userId/mfa/codes', auth, async (request, response) => {
-    const user = await Users.getUserById(request.params.userId);
+    const user = await Users.getUserById(parseInt(request.params.userId));
 
     if (!user) {
       response.sendStatus(404);
@@ -147,7 +148,7 @@ function build(): express.Router {
    * Edit a user
    */
   controller.put('/:userId', auth, async (request, response) => {
-    const user = await Users.getUserById(request.params.userId);
+    const user = await Users.getUserById(parseInt(request.params.userId));
 
     if (!user) {
       response.sendStatus(404);
@@ -181,9 +182,7 @@ function build(): express.Router {
    * Delete a user
    */
   controller.delete('/:userId', auth, async (request, response) => {
-    const userId = request.params.userId;
-
-    await Users.deleteUser(userId);
+    await Users.deleteUser(parseInt(request.params.userId));
     response.sendStatus(204);
   });
 

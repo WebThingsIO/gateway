@@ -14,6 +14,7 @@ import expressWs from 'express-ws';
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import Things from '../models/things';
+import {Device as DeviceSchema} from 'gateway-addon/lib/schema';
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
@@ -22,9 +23,9 @@ function build(): express.Router {
    * Handle GET requests to /new_things
    */
   controller.get('/', (_request, response) => {
-    Things.getNewThings().then((newThings: any) => {
+    Things.getNewThings().then((newThings: DeviceSchema[]) => {
       response.json(newThings);
-    }).catch((error: any) => {
+    }).catch((error: unknown) => {
       console.error(`Error getting a list of new things from adapters ${error}`);
       response.status(500).send(error);
     });
@@ -44,11 +45,11 @@ function build(): express.Router {
     // to the client as they are added.
     Things.registerWebsocket(websocket);
     // Send a list of things the adapter manager already knows about
-    Things.getNewThings().then((newThings: any) => {
-      newThings.forEach((newThing: any) => {
+    Things.getNewThings().then((newThings: DeviceSchema[]) => {
+      newThings.forEach((newThing: DeviceSchema) => {
         websocket.send(JSON.stringify(newThing));
       });
-    }).catch((error: any) => {
+    }).catch((error: unknown) => {
       console.error(`Error getting a list of new things from adapters ${error}`);
     });
   });

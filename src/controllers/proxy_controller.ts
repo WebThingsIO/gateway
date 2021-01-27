@@ -11,10 +11,30 @@
 import Server from 'http-proxy';
 import express from 'express';
 
-function build(): express.Router {
-  const controller = express.Router();
+export interface WithProxyMethods {
+  addProxyServer: (thingId: string, server: string) => void;
+  removeProxyServer: (thingId: string) => void;
+}
 
+function build(): express.Router & WithProxyMethods {
   const proxies = new Map();
+
+  function addProxyServer(thingId: string, server: string): void {
+    proxies.set(thingId, server);
+  }
+
+  function removeProxyServer(thingId: string): void {
+    proxies.delete(thingId);
+  }
+
+  const controller = Object.assign(
+    express.Router(),
+    {
+      addProxyServer,
+      removeProxyServer,
+    }
+  );
+
   const proxy = Server.createProxyServer({
     changeOrigin: true,
   });
@@ -22,14 +42,6 @@ function build(): express.Router {
   proxy.on('error', (e) => {
     console.debug('Proxy error:', e);
   });
-
-  (controller as any).addProxyServer = (thingId: string, server: string) => {
-    proxies.set(thingId, server);
-  };
-
-  (controller as any).removeProxyServer = (thingId: string) => {
-    proxies.delete(thingId);
-  };
 
   /**
    * Proxy the request, if configured.

@@ -8,11 +8,22 @@
  */
 
 import * as Constants from '../constants';
-import {Device, Action as AddonAction, Property, Constants as AddonConstants} from 'gateway-addon';
-import {PropertyValue, Device as DeviceSchema, Link, Input} from 'gateway-addon/lib/schema';
+import {
+  Constants as AddonConstants,
+  Device,
+  Property,
+} from 'gateway-addon';
+import {
+  ActionDescription,
+  Device as DeviceSchema,
+  EventDescription1,
+  Input,
+  Link,
+  PropertyValue,
+} from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
-import Action from '../models/action';
 import Actions from '../models/actions';
+import AdapterProxy from './adapter-proxy';
 import Event from '../models/event';
 import Events from '../models/events';
 import PropertyProxy from './property-proxy';
@@ -21,7 +32,7 @@ const MessageType = AddonConstants.MessageType;
 export default class DeviceProxy extends Device {
   private deviceDict: Record<string, unknown>;
 
-  constructor(adapter: any, deviceDict: DeviceSchema) {
+  constructor(adapter: AdapterProxy, deviceDict: DeviceSchema) {
     super(adapter, deviceDict.id);
 
     this.setTitle(deviceDict.title ?? '');
@@ -74,6 +85,10 @@ export default class DeviceProxy extends Device {
     }
   }
 
+  getAdapter(): AdapterProxy {
+    return <AdapterProxy>(super.getAdapter());
+  }
+
   asDict(): DeviceSchema {
     return Object.assign({}, this.deviceDict, super.asDict());
   }
@@ -83,6 +98,8 @@ export default class DeviceProxy extends Device {
    */
   requestAction(actionId: string, actionName: string, input: Input): Promise<void> {
     return new Promise((resolve, reject) => {
+      // TODO: fix after updating gateway-addon
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(this as any).actions.has(actionName)) {
         reject(`Action "${actionName}" not found`);
         return;
@@ -99,7 +116,7 @@ export default class DeviceProxy extends Device {
         reject();
       });
 
-      (this.getAdapter() as any).sendMsg(
+      this.getAdapter().sendMsg(
         MessageType.DEVICE_REQUEST_ACTION_REQUEST,
         {
           deviceId: this.getId(),
@@ -117,6 +134,8 @@ export default class DeviceProxy extends Device {
    */
   removeAction(actionId: string, actionName: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      // TODO: fix after updating gateway-addon
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(this as any).actions.has(actionName)) {
         reject(`Action "${actionName}" not found`);
         return;
@@ -133,7 +152,7 @@ export default class DeviceProxy extends Device {
         reject();
       });
 
-      (this.getAdapter() as any).sendMsg(
+      this.getAdapter().sendMsg(
         MessageType.DEVICE_REMOVE_ACTION_REQUEST,
         {
           deviceId: this.getId(),
@@ -149,17 +168,19 @@ export default class DeviceProxy extends Device {
     this.getAdapter().getManager().emit(Constants.PROPERTY_CHANGED, property);
   }
 
-  actionNotify(action: AddonAction): void {
-    const a = <Action><unknown> Actions.get((action as any).id);
-    if (a) {
-      a.update(action);
+  actionNotify(action: unknown): void {
+    const a = <ActionDescription>action;
+    const internalAction = Actions.get(a.id);
+    if (internalAction) {
+      internalAction.update(a);
     }
-    this.getAdapter().getManager().emit(Constants.ACTION_STATUS, action);
+    this.getAdapter().getManager().emit(Constants.ACTION_STATUS, a);
   }
 
-  eventNotify(event: any): void {
-    Events.add(new Event(event.name, event.data, this.getId(), event.timestamp));
-    this.getAdapter().getManager().emit(Constants.EVENT, event);
+  eventNotify(event: unknown): void {
+    const e = <EventDescription1>event;
+    Events.add(new Event(e.name, e.data, this.getId(), e.timestamp));
+    this.getAdapter().getManager().emit(Constants.EVENT, e);
   }
 
   connectedNotify(connected: boolean): void {

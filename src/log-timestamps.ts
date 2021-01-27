@@ -83,6 +83,7 @@ function logPrefix(): string {
     (`00${currTime.getMilliseconds()}`).slice(-3)} `;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 if (!(console.constructor as any).hooked) {
   (console.constructor as any).hooked = true;
 
@@ -166,3 +167,4 @@ if (!(console.constructor as any).hooked) {
     console.log = console.info;
   }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */

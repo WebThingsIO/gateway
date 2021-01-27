@@ -87,14 +87,15 @@ function build(): express.Router {
 
   type AccessTokenErrorResponse = ErrorResponse<AccessTokenError>;
 
-  function redirect(response: express.Response, baseURL: URL, params: {[key: string]: any}): void {
+  function redirect(response: express.Response, baseURL: URL, params: Record<string, unknown>):
+  void {
     const url = new URL(baseURL.toString());
     for (const key in params) {
       if (!params.hasOwnProperty(key)) {
         continue;
       }
       if (typeof params[key] !== 'undefined') {
-        url.searchParams.set(key, params[key].toString());
+        url.searchParams.set(key, `${params[key]}`);
       }
     }
     if (url.hostname === 'gateway.localhost') {
@@ -268,56 +269,53 @@ function build(): express.Router {
     }
   );
 
-  controller.get(
-    '/allow',
-    auth,
-    async (request: express.Request, response: express.Response) => {
-      let redirect_uri;
-      if (request.query.redirect_uri) {
-        redirect_uri = new URL(`${request.query.redirect_uri}`);
-      }
-
-      const authRequest: AuthorizationRequest = {
-        response_type: `${request.query.response_type}`,
-        client_id: `${request.query.client_id}`,
-        redirect_uri: redirect_uri,
-        scope: `${request.query.scope}`,
-        state: `${request.query.state}`,
-      };
-
-      const client = verifyAuthorizationRequest(authRequest, response);
-      if (!client) {
-        return;
-      }
-
-      const jwt = (request as any).jwt;
-      if (!jwt) {
-        return;
-      }
-
-      if (!jwt.payload || jwt.payload.role !== 'user_token') {
-        response.status(401).send('Authorization must come from user');
-        return;
-      }
-
-      // TODO: should expire in 10 minutes
-      const code = await JSONWebToken.issueOAuthToken(client, jwt.user, {
-        role: 'authorization_code',
-        scope: authRequest.scope,
-      });
-
-      const success: AuthorizationSuccessResponse = {
-        code: code,
-        state: authRequest.state,
-      };
-
-      redirect(
-        response,
-        client.redirect_uri,
-        success
-      );
+  controller.get('/allow', auth, async (req: express.Request, response: express.Response) => {
+    const request = <express.Request & jwtMiddleware.WithJWT>req;
+    let redirect_uri;
+    if (request.query.redirect_uri) {
+      redirect_uri = new URL(`${request.query.redirect_uri}`);
     }
-  );
+
+    const authRequest: AuthorizationRequest = {
+      response_type: `${request.query.response_type}`,
+      client_id: `${request.query.client_id}`,
+      redirect_uri: redirect_uri,
+      scope: `${request.query.scope}`,
+      state: `${request.query.state}`,
+    };
+
+    const client = verifyAuthorizationRequest(authRequest, response);
+    if (!client) {
+      return;
+    }
+
+    const jwt = request.jwt;
+    if (!jwt) {
+      return;
+    }
+
+    if (!jwt.getPayload() || jwt.getPayload()!.role !== 'user_token') {
+      response.status(401).send('Authorization must come from user');
+      return;
+    }
+
+    // TODO: should expire in 10 minutes
+    const code = await JSONWebToken.issueOAuthToken(client, jwt.getUser(), {
+      role: 'authorization_code',
+      scope: authRequest.scope,
+    });
+
+    const success: AuthorizationSuccessResponse = {
+      code: code,
+      state: authRequest.state,
+    };
+
+    redirect(
+      response,
+      client.redirect_uri,
+      success
+    );
+  });
 
   controller.post('/token', async (request: express.Request, response: express.Response) => {
     const requestData = request.body;

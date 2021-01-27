@@ -1,4 +1,6 @@
 import * as Effects from '../../rules-engine/effects/index';
+import {EffectDescription} from '../../rules-engine/effects/Effect';
+import {PropertyEffectDescription} from '../../rules-engine/effects/PropertyEffect';
 
 const pulseEffect = {
   property: {
@@ -73,13 +75,13 @@ describe('effects', () => {
   it('should reject an effect without a property', () => {
     let err = null;
     try {
-      const brokenEffect: any = Object.assign(
+      const brokenEffect: Partial<PropertyEffectDescription> = Object.assign(
         {},
         setEffect
       );
       delete brokenEffect.property;
 
-      Effects.fromDescription(brokenEffect);
+      Effects.fromDescription(<EffectDescription>brokenEffect);
     } catch (e) {
       err = e;
     }

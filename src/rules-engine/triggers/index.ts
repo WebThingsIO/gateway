@@ -13,6 +13,7 @@ import PropertyTrigger from './PropertyTrigger';
 import TimeTrigger from './TimeTrigger';
 import Trigger, {TriggerDescription} from './Trigger';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TriggerClass = { new(desc: any): Trigger };
 
 export const triggers: Record<string, TriggerClass> = {

@@ -399,7 +399,7 @@ function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
     // first, see if any networks are already configured
     const status = Platform.getWirelessMode();
     if (status.options && status.options.networks &&
-        status.options.networks.length > 0) {
+        (<string[]>status.options.networks).length > 0) {
       // there's at least one wifi network configured. Let's wait to see if it
       // will connect.
       console.log(

@@ -24,13 +24,13 @@ export async function getUser(email: string): Promise<User | null> {
   }
 
   return new User(
-    result.id,
-    result.email,
-    result.password,
-    result.name,
-    result.mfaSharedSecret,
-    result.mfaEnrolled,
-    result.mfaBackupCodes
+    <number>result.id,
+    <string>result.email,
+    <string>result.password,
+    <string>result.name,
+    <string>result.mfaSharedSecret,
+    <number>result.mfaEnrolled,
+    <string>result.mfaBackupCodes
   );
 }
 
@@ -45,27 +45,20 @@ export function getCount(): Promise<number> {
  * @return {Promise} Promise which resolves to user object
  *   or null if user doesn't exist.
  */
-export async function getUserById(id: number | string): Promise<User | null> {
-  if (typeof id !== 'number') {
-    id = parseInt(id, 10);
-    if (isNaN(id)) {
-      return Promise.reject('Invalid user ID');
-    }
-  }
-
+export async function getUserById(id: number): Promise<User | null> {
   const row = await Database.getUserById(id);
   if (!row) {
     return null;
   }
 
   return new User(
-    row.id,
-    row.email,
-    row.password,
-    row.name,
-    row.mfaSharedSecret,
-    row.mfaEnrolled,
-    row.mfaBackupCodes
+    <number>row.id,
+    <string>row.email,
+    <string>row.password,
+    <string>row.name,
+    <string>row.mfaSharedSecret,
+    <number>row.mfaEnrolled,
+    <string>row.mfaBackupCodes
   );
 }
 
@@ -78,13 +71,13 @@ export async function getUsers(): Promise<User[]> {
 
   return userRows.map((row) => {
     return new User(
-      row.id,
-      row.email,
-      row.password,
-      row.name,
-      row.mfaSharedSecret,
-      row.mfaEnrolled,
-      row.mfaBackupCodes
+      <number>row.id,
+      <string>row.email,
+      <string>row.password,
+      <string>row.name,
+      <string>row.mfaSharedSecret,
+      <number>row.mfaEnrolled,
+      <string>row.mfaBackupCodes
     );
   });
 }
@@ -119,13 +112,6 @@ export async function editUser(user: User): Promise<void> {
  * @param {Number} userId
  * @return {Promise} Promise which resolves when operation is complete.
  */
-export async function deleteUser(userId: number | string): Promise<void> {
-  if (typeof userId !== 'number') {
-    userId = parseInt(userId, 10);
-    if (isNaN(userId)) {
-      return Promise.reject('Invalid user ID');
-    }
-  }
-
+export async function deleteUser(userId: number): Promise<void> {
   await Database.deleteUser(userId);
 }

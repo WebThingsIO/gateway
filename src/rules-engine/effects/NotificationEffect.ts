@@ -7,6 +7,7 @@
 import assert from 'assert';
 import Effect, {EffectDescription} from './Effect';
 import PushService from '../../push-service';
+import {State} from '../State';
 
 export interface NotificationEffectDescription extends EffectDescription {
   message: string;
@@ -44,7 +45,7 @@ export default class NotificationEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state: any): void {
+  setState(state: State): void {
     if (!state.on) {
       return;
     }

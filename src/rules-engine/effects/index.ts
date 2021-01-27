@@ -12,7 +12,8 @@ import NotifierOutletEffect from './NotifierOutletEffect';
 import SetEffect from './SetEffect';
 import PulseEffect from './PulseEffect';
 
-type EffectClass = { new(desc: any): any };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EffectClass = { new(desc: any): Effect };
 
 export const effects: Record<string, EffectClass> = {
   Effect,

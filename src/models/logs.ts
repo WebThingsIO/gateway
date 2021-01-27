@@ -1,10 +1,12 @@
 import config from 'config';
 import fs from 'fs';
 import path from 'path';
-import {verbose, Database as SQLiteDatabase} from 'sqlite3';
+import {verbose, Database as SQLiteDatabase, RunResult} from 'sqlite3';
 import * as Constants from '../constants';
 import UserProfile from '../user-profile';
 import AddonManager from '../addon-manager';
+import {Property} from 'gateway-addon';
+import {PropertyValue} from 'gateway-addon/lib/schema';
 
 const sqlite3 = verbose();
 
@@ -15,11 +17,11 @@ const METRICS_OTHER = 'metricsOther';
 class Logs {
   private db: SQLiteDatabase | null;
 
-  private idToDescr: Record<number, any>;
+  private idToDescr: Record<number, Record<string, unknown>>;
 
   private descrToId: Record<string, number>;
 
-  private _onPropertyChanged: (property: any) => void;
+  private _onPropertyChanged: (property: Property<PropertyValue>) => void;
 
   private _clearOldMetrics: () => Promise<void>;
 
@@ -38,7 +40,7 @@ class Logs {
     this.clearOldMetricsInterval = setInterval(this._clearOldMetrics, 60 * 60 * 1000);
   }
 
-  clear(): Promise<any[]> {
+  clear(): Promise<RunResult[]> {
     this.idToDescr = {};
     this.descrToId = {};
     return Promise.all([
@@ -47,7 +49,7 @@ class Logs {
       METRICS_OTHER,
       'metricIds',
     ].map((table) => {
-      return this.run(`DELETE FROM ${table}`, []);
+      return this.run(`DELETE FROM ${table}`);
     }));
   }
 
@@ -91,7 +93,7 @@ class Logs {
     });
   }
 
-  createTables(): Promise<any[]> {
+  createTables(): Promise<RunResult[]> {
     return Promise.all([
       this.createMetricTable(METRICS_NUMBER, typeof 0),
       this.createMetricTable(METRICS_BOOLEAN, typeof false),
@@ -100,17 +102,17 @@ class Logs {
     ]);
   }
 
-  createIdTable(): Promise<any> {
+  createIdTable(): Promise<RunResult> {
     // We use a version of sqlite which doesn't support foreign keys so id is
     // an integer referenced by the metric tables
     return this.run(`CREATE TABLE IF NOT EXISTS metricIds (
       id INTEGER PRIMARY KEY ASC,
       descr TEXT,
       maxAge INTEGER
-    );`, []);
+    );`);
   }
 
-  createMetricTable(id: string, dataType: string): Promise<any> {
+  createMetricTable(id: string, dataType: string): Promise<RunResult> {
     const table = id;
     let sqlType = 'TEXT';
 
@@ -127,15 +129,15 @@ class Logs {
       id INTEGER,
       date DATE,
       value ${sqlType}
-    );`, []);
+    );`);
   }
 
   async loadKnownMetrics(): Promise<void> {
     const rows = await this.all('SELECT id, descr, maxAge FROM metricIds');
     for (const row of rows) {
-      this.idToDescr[row.id] = JSON.parse(row.descr);
-      this.idToDescr[row.id].maxAge = row.maxAge;
-      this.descrToId[row.descr] = row.id;
+      this.idToDescr[<number>row.id] = JSON.parse(<string>row.descr);
+      this.idToDescr[<number>row.id].maxAge = <number>row.maxAge;
+      this.descrToId[<string>row.descr] = <number>row.id;
     }
   }
 
@@ -167,14 +169,15 @@ class Logs {
    * @param {Object} rawDescr
    * @param {number} maxAge
    */
-  async registerMetric(rawDescr: any, maxAge: number): Promise<number | null> {
+  async registerMetric(rawDescr: Record<string, unknown>, maxAge: number): Promise<number | null> {
     const descr = JSON.stringify(rawDescr);
     if (this.descrToId.hasOwnProperty(descr)) {
       return null;
     }
     const result = await this.run(
       'INSERT INTO metricIds (descr, maxAge) VALUES (?, ?)',
-      [descr, maxAge]
+      descr,
+      maxAge
     );
     const id = result.lastID;
     this.idToDescr[id] = Object.assign({maxAge}, rawDescr);
@@ -184,10 +187,11 @@ class Logs {
 
   /**
    * @param {Object} rawDescr
-   * @param {any} rawValue
+   * @param {unknown} rawValue
    * @param {Date} date
    */
-  async insertMetric(rawDescr: any, rawValue: any, date: Date): Promise<void> {
+  async insertMetric(rawDescr: Record<string, unknown>, rawValue: unknown, date: Date):
+  Promise<void> {
     const descr = JSON.stringify(rawDescr);
     if (!this.descrToId.hasOwnProperty(descr)) {
       return;
@@ -211,7 +215,9 @@ class Logs {
 
     await this.run(
       `INSERT INTO ${table} (id, date, value) VALUES (?, ?, ?)`,
-      [id, date, value]
+      id,
+      date,
+      value
     );
   }
 
@@ -219,7 +225,7 @@ class Logs {
    * Remove a metric with all its associated data
    * @param {Object} rawDescr
    */
-  async unregisterMetric(rawDescr: any): Promise<void> {
+  async unregisterMetric(rawDescr: Record<string, unknown>): Promise<void> {
     const descr = JSON.stringify(rawDescr);
     const id = this.descrToId[descr];
     await Promise.all([
@@ -228,17 +234,18 @@ class Logs {
       METRICS_BOOLEAN,
       METRICS_OTHER,
     ].map((table) => {
-      return this.run(`DELETE FROM ${table} WHERE id = ?`,
-                      [id]);
+      return this.run(`DELETE FROM ${table} WHERE id = ?`, id);
     }));
     delete this.descrToId[descr];
     delete this.idToDescr[id];
   }
 
-  onPropertyChanged(property: any): void {
-    const thingId = property.device.id;
-    const descr = this.propertyDescr(thingId, property.name);
-    this.insertMetric(descr, property.value, new Date());
+  onPropertyChanged(property: Property<PropertyValue>): void {
+    const thingId = property.getDevice().getId();
+    const descr = this.propertyDescr(thingId, property.getName());
+    property.getValue().then((value) => {
+      this.insertMetric(descr, value, new Date());
+    });
   }
 
   buildQuery(table: string, id: number | null, start: number | null, end: number | null,
@@ -272,61 +279,65 @@ class Logs {
     };
   }
 
-  async loadMetrics(out: any, table: string, transformer: ((arg: any) => any) | null,
-                    id: number | null, start: number | null, end: number | null): Promise<void> {
+  async loadMetrics(out: Record<string, unknown>, table: string,
+                    transformer: ((arg: unknown) => unknown) | null, id: number | null,
+                    start: number | null, end: number | null): Promise<void> {
     const {query, params} = this.buildQuery(table, id, start, end, null);
-    const rows = await this.all(query, params);
+    const rows = await this.all(query, ...params);
 
     for (const row of rows) {
-      const descr = this.idToDescr[row.id];
+      const descr = this.idToDescr[<number>row.id];
       if (!descr) {
         console.error('Failed to load row:', row);
         continue;
       }
-      if (!out.hasOwnProperty(descr.thing)) {
-        out[descr.thing] = {};
+      if (!out.hasOwnProperty(<string>descr.thing)) {
+        out[<string>descr.thing] = {};
       }
-      if (!out[descr.thing].hasOwnProperty(descr.property)) {
-        out[descr.thing][descr.property] = [];
+      // eslint-disable-next-line max-len
+      if (!(<Record<string, unknown>>out[<string>descr.thing]).hasOwnProperty(<string>descr.property)) {
+        (<Record<string, unknown>>out[<string>descr.thing])[<string>descr.property] = [];
       }
       const value = transformer ? transformer(row.value) : row.value;
-      out[descr.thing][descr.property].push({
+      // eslint-disable-next-line max-len
+      (<Record<string, unknown>[]>(<Record<string, unknown>>out[<string>descr.thing])[<string>descr.property]).push({
         value: value,
         date: row.date,
       });
     }
   }
 
-  async getAll(start: number | null, end: number | null): Promise<any> {
+  async getAll(start: number | null, end: number | null): Promise<Record<string, unknown>> {
     const out = {};
     await this.loadMetrics(out, METRICS_NUMBER, null, null, start, end);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null,
                            start, end);
-    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value),
+    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(<string>value),
                            null, start, end);
     return out;
   }
 
-  async get(thingId: string, start: number | null, end: number | null): Promise<any> {
+  async get(thingId: string, start: number | null, end: number | null):
+  Promise<Record<string, unknown>> {
     const all = await this.getAll(start, end);
-    return all[thingId];
+    return <Record<string, unknown>>all[thingId];
   }
 
   async getProperty(thingId: string, propertyName: string, start: number | null,
-                    end: number | null): Promise<any> {
+                    end: number | null): Promise<unknown[]> {
     const descr = JSON.stringify(this.propertyDescr(thingId, propertyName));
-    const out: any = {};
+    const out: Record<string, unknown> = {};
     const id = this.descrToId[descr];
     // TODO: determine property type to only do one of these
     await this.loadMetrics(out, METRICS_NUMBER, null, id, start, end);
     await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id, start,
                            end);
-    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(value),
+    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(<string>value),
                            id, start, end);
-    return out[thingId][propertyName];
+    return <unknown[]>(<Record<string, unknown>>out[thingId])[propertyName];
   }
 
-  async getSchema(): Promise<any> {
+  async getSchema(): Promise<Record<string, unknown>[]> {
     await this.loadKnownMetrics();
     const schema = [];
     for (const id in this.idToDescr) {
@@ -340,8 +351,8 @@ class Logs {
     return schema;
   }
 
-  async streamMetrics(callback: (metrics: any[]) => void, table: string,
-                      transformer: ((arg: any) => any) | null, id: number | null,
+  async streamMetrics(callback: (metrics: unknown[]) => void, table: string,
+                      transformer: ((arg: unknown) => unknown) | null, id: number | null,
                       start: number | null, end: number | null): Promise<void> {
     const MAX_ROWS = 10000;
     start = start ?? 0;
@@ -350,11 +361,11 @@ class Logs {
     let queryCompleted = false;
     while (!queryCompleted) {
       const {query, params} = this.buildQuery(table, id, start, end, MAX_ROWS);
-      const rows = await this.all(query, params);
+      const rows = await this.all(query, ...params);
       if (rows.length < MAX_ROWS) {
         queryCompleted = true;
       }
-      callback(rows.map((row: any) => {
+      callback(rows.map((row: Record<string, unknown>) => {
         const value = transformer ? transformer(row.value) : row.value;
         return {
           id: row.id,
@@ -364,7 +375,7 @@ class Logs {
       }));
       if (!queryCompleted) {
         const lastRow = rows[rows.length - 1];
-        start = lastRow.date;
+        start = <number>lastRow.date;
         if (start! >= end) {
           queryCompleted = true;
         }
@@ -372,49 +383,47 @@ class Logs {
     }
   }
 
-  async streamAll(callback: (metrics: any[]) => void, start: number | null, end: number | null):
+  async streamAll(callback: (metrics: unknown[]) => void, start: number | null, end: number | null):
   Promise<void> {
     // Stream all three in parallel, which should look cool
     await Promise.all([
       this.streamMetrics(callback, METRICS_NUMBER, null, null, start, end),
       this.streamMetrics(callback, METRICS_BOOLEAN,
-                         (value: any) => !!value, null, start, end),
+                         (value: unknown) => !!value, null, start, end),
       this.streamMetrics(callback, METRICS_OTHER,
-                         (value: any) => JSON.parse(value), null, start, end),
+                         (value: unknown) => JSON.parse(<string>value), null, start, end),
     ]);
   }
 
-  async clearOldMetrics(): Promise<any> {
+  async clearOldMetrics(): Promise<void> {
     await this.loadKnownMetrics();
     for (const id in this.idToDescr) {
       const descr = this.idToDescr[id];
-      if (descr.maxAge <= 0) {
+      if (<number>descr.maxAge <= 0) {
         continue;
       }
-      const date = new Date(Date.now() - descr.maxAge);
+      const date = new Date(Date.now() - <number>descr.maxAge);
       await Promise.all([
         METRICS_NUMBER,
         METRICS_BOOLEAN,
         METRICS_OTHER,
       ].map((table) => {
-        return this.run(`DELETE FROM ${table} WHERE id = ? AND date < ?`,
-                        [id, date]);
+        return this.run(`DELETE FROM ${table} WHERE id = ? AND date < ?`, id, date);
       }));
     }
   }
 
-  all(sql: string, ...params: any[]): Promise<any> {
+  all(sql: string, ...values: any[]): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
-      params.push(function(err: any, rows: any[]) {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(rows);
-      });
-
       try {
-        this.db!.all(sql, ...params);
+        this.db!.all(sql, values, function(err: unknown, rows: Record<string, unknown>[]) {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve(rows);
+        });
       } catch (err) {
         reject(err);
       }
@@ -424,17 +433,18 @@ class Logs {
   /**
    * Run a SQL statement
    * @param {String} sql
-   * @param {Array<any>} values
+   * @param {Array<unknown>} values
    * @return {Promise<Object>} promise resolved to `this` of statement result
    */
-  run(sql: string, values: any[]): Promise<any> {
+  run(sql: string, ...values: any[]): Promise<RunResult> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.run(sql, values, function(err) {
+        this.db!.run(sql, values, function(err: unknown) {
           if (err) {
             reject(err);
             return;
           }
+
           // node-sqlite puts results on "this" so avoid arrrow fn.
           resolve(this);
         });
@@ -445,5 +455,4 @@ class Logs {
   }
 }
 
-const logs = new Logs();
-export default logs;
+export default new Logs();

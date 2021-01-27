@@ -87,28 +87,31 @@ export default class Property extends EventEmitter {
   /**
    * @return {Promise} resolves to property's value or undefined if not found
    */
-  async get(): Promise<any> {
+  async get(): Promise<PropertyValue> {
     try {
       return await Things.getThingProperty(this.thing, this.id);
     } catch (e) {
       console.warn('Rule get failed', e);
     }
+
+    return null;
   }
 
   /**
-   * @param {any} value
+   * @param {PropertyValue} value
    * @return {Promise} resolves when set is done
    */
-  set(value: PropertyValue): Promise<any> {
-    return Things.setThingProperty(this.thing, this.id, value).catch((e: any) => {
+  set(value: PropertyValue): Promise<PropertyValue> {
+    return Things.setThingProperty(this.thing, this.id, value).catch((e: unknown) => {
       console.warn('Rule set failed, retrying once', e);
       return Things.setThingProperty(this.thing, this.id, value);
-    }).catch((e: any) => {
+    }).catch((e: unknown) => {
       console.warn('Rule set failed completely', e);
+      return null;
     });
   }
 
-  async start(): Promise<any> {
+  async start(): Promise<void> {
     AddonManager.on(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
 
     try {
@@ -130,7 +133,7 @@ export default class Property extends EventEmitter {
    * Listener for AddonManager's THING_ADDED event
    * @param {String} thing - thing id
    */
-  onThingAdded(thing: any): void {
+  onThingAdded(thing: Record<string, unknown>): void {
     if (thing.id !== this.thing) {
       return;
     }
@@ -143,10 +146,12 @@ export default class Property extends EventEmitter {
     if (property.getDevice().getId() !== this.thing) {
       return;
     }
+
     if (property.getName() !== this.id) {
       return;
     }
-    this.emit(Events.VALUE_CHANGED, (property as any).value);
+
+    property.getValue().then((value) => this.emit(Events.VALUE_CHANGED, value));
   }
 
   stop(): void {

@@ -27,7 +27,11 @@ import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
 import Thing from '../models/thing';
 import Things from '../models/things';
 import UserProfile from '../user-profile';
-import {Constants as AddonConstants} from 'gateway-addon';
+import {
+  Action as AddonAction,
+  Constants as AddonConstants,
+  Event as AddonEvent,
+} from 'gateway-addon';
 import {
   AdapterAddedNotificationMessageData,
   AdapterPairingPromptNotificationMessageData,
@@ -45,8 +49,10 @@ import {
   DeviceSetPINResponseMessageData,
   Message,
   NotifierAddedNotificationMessageData,
+  OutletAddedNotificationMessageData,
   OutletRemovedNotificationMessageData,
 } from 'gateway-addon/lib/schema';
+import WebSocket from 'ws';
 
 const MessageType = AddonConstants.MessageType;
 
@@ -80,7 +86,7 @@ export default class Plugin {
 
   private pendingRestart: NodeJS.Timeout | null = null;
 
-  private unloadCompletedPromise: any = null;
+  private unloadCompletedPromise: Deferred<void, void> | null = null;
 
   private unloadedRcvdPromise?: Deferred<void, void>;
 
@@ -130,6 +136,10 @@ export default class Plugin {
 
   setRestart(restart: boolean): void {
     this.restart = restart;
+  }
+
+  setWebSocket(ws: WebSocket): void {
+    this.ws = ws;
   }
 
   asDict(): Record<string, unknown> {
@@ -468,10 +478,12 @@ export default class Plugin {
         break;
       }
 
-      case MessageType.OUTLET_ADDED_NOTIFICATION:
-        outlet = new OutletProxy(notifier, msg.data.outlet);
+      case MessageType.OUTLET_ADDED_NOTIFICATION: {
+        const data = msg.data as OutletAddedNotificationMessageData;
+        outlet = new OutletProxy(notifier, data.outlet);
         notifier.handleOutletAdded(outlet);
         break;
+      }
 
       case MessageType.OUTLET_REMOVED_NOTIFICATION: {
         const data = msg.data as OutletRemovedNotificationMessageData;
@@ -499,7 +511,9 @@ export default class Plugin {
         const data = msg.data as DeviceActionStatusNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
-          device.actionNotify(data.action as any);
+          // This is some inappropriate casting, but is necessary to work with the gateway-addon
+          // bindings.
+          device.actionNotify(<AddonAction><unknown>data.action);
         }
         break;
       }
@@ -508,7 +522,9 @@ export default class Plugin {
         const data = msg.data as DeviceEventNotificationMessageData;
         device = adapter.getDevice(data.deviceId);
         if (device) {
-          device.eventNotify(data.event as any);
+          // This is some inappropriate casting, but is necessary to work with the gateway-addon
+          // bindings.
+          device.eventNotify(<AddonEvent><unknown>data.event);
         }
         break;
       }
@@ -530,15 +546,15 @@ export default class Plugin {
           message += `(${device.getTitle()}): `;
         }
 
-        message += msg.data.prompt;
+        message += data.prompt;
 
-        const log: any = {
+        const log: Constants.LogMessage = {
           severity: Constants.LogSeverity.PROMPT,
           message,
         };
 
         if (msg.data.hasOwnProperty('url')) {
-          log.url = msg.data.url;
+          log.url = data.url;
         }
 
         this.pluginServer!.emit('log', log);
@@ -552,15 +568,15 @@ export default class Plugin {
           message += ` (${device.getTitle()})`;
         }
 
-        message += `: ${msg.data.prompt}`;
+        message += `: ${data.prompt}`;
 
-        const log: any = {
+        const log: Constants.LogMessage = {
           severity: Constants.LogSeverity.PROMPT,
           message,
         };
 
         if (msg.data.hasOwnProperty('url')) {
-          log.url = msg.data.url;
+          log.url = data.url;
         }
 
         this.pluginServer!.emit('log', log);
@@ -582,7 +598,7 @@ export default class Plugin {
         if (!deferredMock) {
           console.error('mockDeviceAddedRemoved: No deferredMock');
         } else if (msg.data.success) {
-          device = deferredMock.device;
+          device = deferredMock.device!;
           adapter.deferredMock = null;
           deferredMock.device = null;
           deferredMock.resolve(device);
@@ -607,7 +623,11 @@ export default class Plugin {
     return ++this.nextId;
   }
 
-  sendMsg(methodType: number, data: any, deferred?: Deferred<unknown, unknown>): void {
+  sendMsg(
+    methodType: number,
+    data: Record<string, unknown>,
+    deferred?: Deferred<unknown, unknown>
+  ): void {
     data.pluginId = this.pluginId;
 
     // Methods which could fail should await result.
@@ -701,7 +721,7 @@ export default class Plugin {
 
     this.startPromise = Settings.getSetting(key).then((savedSettings) => {
       if (!this.forceEnable &&
-          (!savedSettings || !savedSettings.enabled)) {
+          (!savedSettings || !<boolean>(<Record<string, unknown>>savedSettings).enabled)) {
         console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
         this.restart = false;
         this.process.p = null;

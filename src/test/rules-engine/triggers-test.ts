@@ -1,4 +1,6 @@
 import * as Triggers from '../../rules-engine/triggers/index';
+import {TriggerDescription} from '../../rules-engine/triggers/Trigger';
+import {PropertyTriggerDescription} from '../../rules-engine/triggers/PropertyTrigger';
 
 const booleanTrigger = {
   property: {
@@ -118,13 +120,13 @@ describe('triggers', () => {
   it('should reject an trigger without a property', () => {
     let err = null;
     try {
-      const brokenTrigger: any = Object.assign(
+      const brokenTrigger: Partial<PropertyTriggerDescription> = Object.assign(
         {},
         levelTrigger
       );
       delete brokenTrigger.property;
 
-      Triggers.fromDescription(brokenTrigger);
+      Triggers.fromDescription(<TriggerDescription>brokenTrigger);
     } catch (e) {
       err = e;
     }

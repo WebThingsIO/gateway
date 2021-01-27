@@ -13,12 +13,17 @@ import fs from 'fs';
 import path from 'path';
 import * as Constants from '../constants';
 import UserProfile from '../user-profile';
+import fileUpload from 'express-fileupload';
 
 const UPLOADS_PATH = UserProfile.uploadsDir;
 const FLOORPLAN_PATH = path.join(UPLOADS_PATH, 'floorplan.svg');
 const FALLBACK_FLOORPLAN_PATH = path.join(Constants.STATIC_PATH,
                                           'images',
                                           'floorplan.svg');
+
+interface WithFiles {
+  files?: fileUpload.FileArray;
+}
 
 // On startup, copy the default floorplan, if necessary.
 if (!fs.existsSync(FLOORPLAN_PATH)) {
@@ -35,8 +40,9 @@ function build(): express.Router {
   /**
    * Upload a file.
    */
-  controller.post('/', (request, response) => {
-    if (!(request as any).files || !((request as any).files as any).file) {
+  controller.post('/', (req, response) => {
+    const request = <express.Request & WithFiles>req;
+    if (!request.files || !request.files!.file) {
       response.status(500).send('No file provided for upload');
       return;
     }
@@ -50,8 +56,8 @@ function build(): express.Router {
       return;
     }
 
-    const file = ((request as any).files as any).file;
-    file.mv(FLOORPLAN_PATH, (error?: any) => {
+    const file = <fileUpload.UploadedFile>request.files!.file;
+    file.mv(FLOORPLAN_PATH, (error?: unknown) => {
       if (error) {
         // On error, try to copy the fallback.
         try {

@@ -47,7 +47,7 @@ export async function addThing(desc: Record<string, unknown>): Promise<void> {
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
     .send(desc);
-  await (mockAdapter() as any).addDevice(id, desc);
+  await mockAdapter().addDevice(<string>id, desc);
 }
 
 export async function getProperty<T>(id: string, property: string): Promise<T> {

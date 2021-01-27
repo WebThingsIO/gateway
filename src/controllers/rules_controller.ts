@@ -10,6 +10,10 @@ import Database from '../rules-engine/Database';
 import Engine from '../rules-engine/Engine';
 import Rule from '../rules-engine/Rule';
 
+export interface WithRule {
+  rule: Rule;
+}
+
 class RulesController {
   private controller: express.Router;
 
@@ -21,7 +25,7 @@ class RulesController {
 
     this.controller.get('/', async (_req, res) => {
       const rules = await this.engine.getRules();
-      res.send(rules.map((rule: any) => {
+      res.send(rules.map((rule) => {
         return rule.toDescription();
       }));
     });
@@ -33,23 +37,24 @@ class RulesController {
         const rule = await this.engine.getRule(id);
         res.send(rule.toDescription());
       } catch (e) {
-        res.status(404).send(
-          new APIError('Engine failed to get rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to get rule', e).toString());
       }
     });
 
     this.controller.post('/', this.parseRuleFromBody.bind(this), async (req, res) => {
-      const ruleId = await this.engine.addRule((req as any).rule);
+      const ruleId = await this.engine.addRule((<express.Request & WithRule>req).rule);
       res.send({id: ruleId});
     });
 
     this.controller.put('/:id', this.parseRuleFromBody.bind(this), async (req, res) => {
       try {
-        await this.engine.updateRule(parseInt(req.params.id), (req as any).rule);
+        await this.engine.updateRule(
+          parseInt(req.params.id),
+          (<express.Request & WithRule>req).rule
+        );
         res.send({});
       } catch (e) {
-        res.status(404).send(
-          new APIError('Engine failed to update rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to update rule', e).toString());
       }
     });
 
@@ -58,8 +63,7 @@ class RulesController {
         await this.engine.deleteRule(parseInt(req.params.id));
         res.send({});
       } catch (e) {
-        res.status(404).send(
-          new APIError('Engine failed to delete rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to delete rule', e).toString());
       }
     });
   }
@@ -92,7 +96,7 @@ class RulesController {
       res.status(400).send(new APIError('Invalid rule', e).toString());
       return;
     }
-    (req as any).rule = rule;
+    (<express.Request & WithRule>req).rule = rule;
     next();
   }
 

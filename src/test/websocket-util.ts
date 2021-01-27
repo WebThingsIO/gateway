@@ -3,13 +3,18 @@ import WebSocket from 'ws';
 import {server} from './common';
 import {AddressInfo} from 'net';
 
+interface WithUnreadMessages {
+  unreadMessages?: string[];
+}
+
 /**
  * Open a websocket
  * @param {String} path
  * @param {String} jwt
  * @return {WebSocket}
  */
-export async function webSocketOpen(path: string, jwt: string): Promise<WebSocket> {
+export async function webSocketOpen(path: string, jwt: string):
+Promise<WebSocket & WithUnreadMessages> {
   if (!server.address()) {
     server.listen(0);
   }
@@ -17,11 +22,11 @@ export async function webSocketOpen(path: string, jwt: string): Promise<WebSocke
   const socketPath =
     `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 
-  const ws = new WebSocket(socketPath);
-  (ws as any).unreadMessages = [];
+  const ws: WebSocket & WithUnreadMessages = new WebSocket(socketPath);
+  ws.unreadMessages = [];
 
-  ws.on('message', (message: any) => {
-    (ws as any).unreadMessages.push(message);
+  ws.on('message', (message: string) => {
+    ws.unreadMessages!.push(message);
   });
 
   await e2p(ws, 'open');
@@ -42,13 +47,13 @@ export async function webSocketOpen(path: string, jwt: string): Promise<WebSocke
  *                   messages
  * @return {Array<Object>} read messages
  */
-export async function webSocketRead(ws: WebSocket, expectedMessages: number,
-                                    ignoreConnected = true): Promise<any[]> {
+export async function webSocketRead(ws: WebSocket & WithUnreadMessages, expectedMessages: number,
+                                    ignoreConnected = true): Promise<Record<string, unknown>[]> {
   const messages = [];
   while (messages.length < expectedMessages) {
-    if ((ws as any).unreadMessages.length > 0) {
-      const data = (ws as any).unreadMessages.shift();
-      const parsed = JSON.parse(data);
+    if (ws.unreadMessages!.length > 0) {
+      const data = ws.unreadMessages!.shift();
+      const parsed = JSON.parse(data!);
 
       if (ignoreConnected && parsed.messageType === 'connected') {
         continue;
@@ -67,7 +72,7 @@ export async function webSocketRead(ws: WebSocket, expectedMessages: number,
  * @param {WebSocket} ws
  * @param {Object|string} message
  */
-export async function webSocketSend(ws: WebSocket, message: any): Promise<void> {
+export async function webSocketSend(ws: WebSocket, message: unknown): Promise<void> {
   if (typeof message !== 'string') {
     message = JSON.stringify(message);
   }
