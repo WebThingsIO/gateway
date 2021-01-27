@@ -33,13 +33,12 @@ describe('plugins/', () => {
       'plugin-start-test', null as unknown as AddonManager, null as unknown as PluginServer, true);
     plugin.setExec('./something-that-doesnt-exist');
     await plugin.start();
-    const promise = new Promise((resolve) => {
-      plugin.getProcess().p!.on('error', (err: any) => {
-        console.log('Got err.code', err.code);
+    const promise = new Promise<Record<string, unknown>>((resolve) => {
+      plugin.getProcess().p!.on('error', (err: Record<string, unknown>) => {
         resolve(err);
       });
     });
-    const err: any = await promise;
+    const err = await promise;
     expect(err.code).toEqual('ENOENT');
 
     plugin.shutdown();

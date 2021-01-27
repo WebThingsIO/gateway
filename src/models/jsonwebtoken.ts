@@ -28,7 +28,7 @@ interface Payload {
 
 export interface TokenData {
   user: number;
-  issuedAt: string | Date;
+  issuedAt: Date;
   publicKey: string;
   keyId: string;
   payload: Payload;
@@ -37,7 +37,7 @@ export interface TokenData {
 export default class JSONWebToken {
   private user: number;
 
-  private issuedAt: string | Date;
+  private issuedAt: Date;
 
   private publicKey: string;
 
@@ -49,7 +49,7 @@ export default class JSONWebToken {
     return this.user;
   }
 
-  getIssuedAt(): string | Date {
+  getIssuedAt(): Date {
     return this.issuedAt;
   }
 
@@ -82,12 +82,12 @@ export default class JSONWebToken {
 
     const {kid} = decoded.header;
 
-    const tokenData: any = await Database.getJSONWebTokenByKeyId(kid);
+    const tokenData = <TokenData><unknown>(await Database.getJSONWebTokenByKeyId(kid));
     if (!tokenData) {
       return null;
     }
 
-    const token = new JSONWebToken(<TokenData>tokenData);
+    const token = new JSONWebToken(tokenData);
     token.payload = token.verify(sig);
     if (token.payload) {
       return token;

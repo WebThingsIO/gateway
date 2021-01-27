@@ -17,7 +17,7 @@ const baseDir = path.resolve(
   process.env.WEBTHINGS_HOME || config.get('profileDir')
 );
 
-const UserProfile = {
+export default {
   baseDir,
   configDir: path.join(baseDir, 'config'),
   dataDir: path.join(baseDir, 'data'),
@@ -30,6 +30,3 @@ const UserProfile = {
     path.join(__dirname, 'addons-test') :
     path.join(baseDir, 'addons'),
 };
-
-
-export default UserProfile;

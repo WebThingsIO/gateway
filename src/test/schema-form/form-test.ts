@@ -1,5 +1,10 @@
 import '../jsdom-common';
+import sinon from 'sinon';
 import {fireEvent, createSchemaForm} from './test-utils';
+
+interface TestGlobals {
+  sandbox: sinon.SinonSandbox;
+}
 
 describe('Form', () => {
   describe('Empty schema', () => {
@@ -360,7 +365,7 @@ describe('Form', () => {
           foo: {type: 'string'},
         },
       };
-      const onSubmit = (global as any).sandbox.stub();
+      const onSubmit = (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.stub();
 
       const {node} = createSchemaForm({
         schema,

@@ -6,6 +6,7 @@
 
 import {fromDescription} from './index';
 import Effect, {EffectDescription} from './Effect';
+import {State} from '../State';
 
 export interface MultiEffectDescription extends EffectDescription {
   effects: EffectDescription[];
@@ -40,7 +41,7 @@ export default class MultiEffect extends Effect {
   /**
    * @param {State} state
    */
-  setState(state: any): void {
+  setState(state: State): void {
     for (const effect of this.effects) {
       effect.setState(state);
     }

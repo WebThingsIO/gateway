@@ -27,9 +27,13 @@ const ENFORCE_STRICT_SHA_CHECK = false;
  * @param {object} obj - Object to validate
  * @param {object} template - Template to validate against
  *
- * @returns {string?} Error string, or undefined if no error.
+ * @returns {string|null} Error string, or null if no error.
  */
-function validateObject(prefix: string, obj: any, template: any): string | undefined {
+function validateObject(
+  prefix: string,
+  obj: Record<string, unknown>,
+  template: Record<string, unknown>
+): string | null {
   for (const key in template) {
     if (key in obj) {
       const objectVal = obj[key];
@@ -42,8 +46,8 @@ function validateObject(prefix: string, obj: any, template: any): string | undef
 
       if (typeof objectVal === 'object') {
         if (Array.isArray(objectVal)) {
-          if (templateVal.length > 0) {
-            const expectedType = typeof templateVal[0];
+          if ((<unknown[]>templateVal).length > 0) {
+            const expectedType = typeof (<unknown[]>templateVal)[0];
             for (const val of objectVal) {
               if (typeof val !== expectedType) {
                 return `Expecting all values in ${prefix}${key} to be of ` +
@@ -54,8 +58,8 @@ function validateObject(prefix: string, obj: any, template: any): string | undef
         } else {
           const err = validateObject(
             `${prefix + key}.`,
-            objectVal,
-            templateVal
+            <Record<string, unknown>>objectVal,
+            <Record<string, unknown>>templateVal
           );
           if (err) {
             return err;
@@ -67,8 +71,7 @@ function validateObject(prefix: string, obj: any, template: any): string | undef
     }
   }
 
-  // eslint-disable-next-line no-useless-return
-  return;
+  return null;
 }
 
 /**
@@ -77,15 +80,16 @@ function validateObject(prefix: string, obj: any, template: any): string | undef
  *
  * @param {object} manifest - The parsed manifest.json manifest
  *
- * @returns {string?} Error string, or undefined if no error.
+ * @returns {string|null} Error string, or null if no error.
  */
-function validateManifestJson(manifest: any): string | undefined {
+function validateManifestJson(manifest: Record<string, unknown>): string | null {
   const manifestTemplate = {
     author: '',
     description: '',
     gateway_specific_settings: {
       webthings: {
         primary_type: '',
+        exec: '',
       },
     },
     homepage_url: '',
@@ -98,19 +102,21 @@ function validateManifestJson(manifest: any): string | undefined {
 
   // Since we're trying to use a field before full validation, make sure it
   // exists first.
-  if (!manifest.gateway_specific_settings ||
-      !manifest.gateway_specific_settings.webthings ||
-      !manifest.gateway_specific_settings.webthings.primary_type) {
-    return '' +
-      'Expecting manifest.gateway_specific_settings.webthings.primary_type ' +
-      'to have type: string, found: undefined';
+  if (typeof manifest.gateway_specific_settings !== 'object' ||
+      !manifest.gateway_specific_settings ||
+      typeof (<Record<string, unknown>>manifest.gateway_specific_settings).webthings !== 'object' ||
+      !(<Record<string, unknown>>manifest.gateway_specific_settings).webthings ||
+      // eslint-disable-next-line max-len
+      !(<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings).webthings).primary_type) {
+    return 'Expecting manifest.gateway_specific_settings.webthings.primary_type to have type: ' +
+      'string, found: undefined';
   }
 
   // eslint-disable-next-line max-len
-  if (manifest.gateway_specific_settings.webthings.primary_type !== 'extension') {
+  if ((<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings).webthings).primary_type !== 'extension') {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
-    (manifestTemplate.gateway_specific_settings.webthings as any).exec = '';
+    manifestTemplate.gateway_specific_settings.webthings.exec = '';
   }
 
   return validateObject('', manifest, manifestTemplate);
@@ -124,7 +130,7 @@ function validateManifestJson(manifest: any): string | undefined {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-function loadManifestJson(packageId: string): any[] {
+function loadManifestJson(packageId: string): [Record<string, unknown>, Record<string, unknown>] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   // Read the package.json file.
@@ -254,7 +260,7 @@ function loadManifestJson(packageId: string): any[] {
     }
   }
 
-  const obj = {
+  const obj: Record<string, unknown> = {
     id: manifest.id,
     author: manifest.author,
     name: manifest.name,
@@ -268,14 +274,14 @@ function loadManifestJson(packageId: string): any[] {
     enabled: false,
   };
 
-  let cfg = {};
+  let cfg: Record<string, unknown> = {};
   if (manifest.hasOwnProperty('options')) {
     if (manifest.options.hasOwnProperty('default')) {
       cfg = manifest.options.default;
     }
 
     if (manifest.options.hasOwnProperty('schema')) {
-      (obj as any).schema = manifest.options.schema;
+      obj.schema = manifest.options.schema;
     }
   }
 
@@ -297,7 +303,8 @@ function loadManifestJson(packageId: string): any[] {
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-export function loadManifest(packageId: string): any[] {
+export function loadManifest(packageId: string):
+[Record<string, unknown>, Record<string, unknown>] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   if (fs.existsSync(path.join(addonPath, 'manifest.json'))) {

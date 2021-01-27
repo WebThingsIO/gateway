@@ -5,13 +5,13 @@ export interface SelfUpdateStatus {
 
 export interface LanMode {
   mode: string;
-  options: any;
+  options: Record<string, unknown>;
 }
 
 export interface WirelessMode {
   enabled: boolean;
   mode: string;
-  options: any;
+  options: Record<string, unknown>;
 }
 
 export interface WirelessNetwork {

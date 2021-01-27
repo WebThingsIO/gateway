@@ -10,22 +10,28 @@
  */
 
 import Deferred from '../deferred';
-import {APIHandler, APIRequest, APIResponse, Constants} from 'gateway-addon';
+import {AddonManagerProxy, APIHandler, APIRequest, APIResponse, Constants} from 'gateway-addon';
+import {AddonManager} from '../addon-manager';
+import Plugin from './plugin';
 const MessageType = Constants.MessageType;
 
 /**
  * Class used to describe an API handler from the perspective of the gateway.
  */
 export default class APIHandlerProxy extends APIHandler {
-  public unloadCompletedPromise: any = null;
+  public unloadCompletedPromise: Deferred<void, void> | null = null;
 
-  constructor(addonManager: any, packageName: string, private plugin: any) {
-    super(addonManager, packageName);
+  constructor(addonManager: AddonManager, packageName: string, private plugin: Plugin) {
+    super(<AddonManagerProxy><unknown>addonManager, packageName);
   }
 
-  sendMsg(methodType: number, data: any, deferred?: Deferred<APIResponse, unknown>): void {
+  sendMsg(
+    methodType: number,
+    data: Record<string, unknown>,
+    deferred?: Deferred<APIResponse, unknown>
+  ): void {
     data.packageName = this.getPackageName();
-    return this.plugin.sendMsg(methodType, data, deferred);
+    return this.plugin.sendMsg(methodType, data, <Deferred<unknown, unknown>>deferred);
   }
 
   handleRequest(request: APIRequest): Promise<APIResponse> {
@@ -60,6 +66,6 @@ export default class APIHandlerProxy extends APIHandler {
     }
     this.unloadCompletedPromise = new Deferred();
     this.sendMsg(MessageType.API_HANDLER_UNLOAD_REQUEST, {});
-    return this.unloadCompletedPromise.promise;
+    return this.unloadCompletedPromise.getPromise();
   }
 }

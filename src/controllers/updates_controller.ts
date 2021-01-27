@@ -51,14 +51,20 @@ function build(): express.Router {
     });
   }
 
-  const cacheLatest: any = {
+  const cacheLatest: {
+    tag: string | null;
+    time: number;
+    value: {
+      version: string | null;
+    };
+  } = {
     tag: null,
     time: 0,
     value: {version: null},
   };
   const cacheDuration = 60 * 1000;
 
-  function cacheLatestInsert(response: express.Response, value: any): void {
+  function cacheLatestInsert(response: express.Response, value: {version: string | null}): void {
     cacheLatest.tag = response.get('etag');
     cacheLatest.time = Date.now();
     cacheLatest.value = value;
@@ -90,7 +96,7 @@ function build(): express.Router {
       cacheLatestInsert(response, value);
       return;
     }
-    const latestRelease = releases.filter((release: any) => {
+    const latestRelease = releases.filter((release: Record<string, unknown>) => {
       if (release.prerelease && !config.get('updates.allowPrerelease')) {
         return false;
       }

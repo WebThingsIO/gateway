@@ -9,16 +9,17 @@
  */
 
 import {Utils} from 'gateway-addon';
+import {Any} from 'gateway-addon/lib/schema';
 
 export interface EventDescription {
-  data: any;
+  data: Any;
   timestamp: string;
 }
 
 export default class Event {
   private name: string;
 
-  private data: any;
+  private data: Any;
 
   private thingId: string;
 
@@ -31,7 +32,7 @@ export default class Event {
    * @param {String} thingId
    * @param {String?} timestamp
    */
-  constructor(name: string, data: any, thingId: string, timestamp?: string) {
+  constructor(name: string, data: Any | undefined, thingId: string, timestamp?: string) {
     this.name = name;
     this.data = typeof data === 'undefined' ? null : data;
     this.thingId = thingId;
@@ -53,7 +54,11 @@ export default class Event {
     return this.thingId;
   }
 
-  getData(): any {
+  setThingId(thingId: string): void {
+    this.thingId = thingId;
+  }
+
+  getData(): Any {
     return this.data;
   }
 }

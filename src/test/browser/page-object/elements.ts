@@ -11,6 +11,7 @@ class Elements {
 
   protected rootElement?: webdriverio.Element;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: any;
 
   constructor(browser: webdriverio.BrowserObject, rootElement?: webdriverio.Element) {

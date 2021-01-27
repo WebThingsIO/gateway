@@ -9,6 +9,7 @@ import Effect, {EffectDescription} from './effects/Effect';
 import * as Triggers from './triggers/index';
 import * as Events from './Events';
 import Trigger, {TriggerDescription} from './triggers/Trigger';
+import {State} from './State';
 
 const DEBUG = false || (process.env.NODE_ENV === 'test');
 
@@ -31,7 +32,7 @@ export default class Rule {
 
   private name?: string;
 
-  private _onTriggerStateChanged: (state: any) => void;
+  private _onTriggerStateChanged: (state: State) => void;
 
   /**
    * @param {boolean} enabled
@@ -90,7 +91,7 @@ export default class Rule {
    * On a state changed event, pass the state forward to the rule's effect
    * @param {State} state
    */
-  onTriggerStateChanged(state: any): void {
+  onTriggerStateChanged(state: State): void {
     if (!this.enabled) {
       return;
     }

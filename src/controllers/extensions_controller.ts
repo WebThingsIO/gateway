@@ -12,9 +12,9 @@ function build(): express.Router {
   const controller = express.Router();
 
   controller.get('/', auth, (_request, response) => {
-    const map: any = {};
+    const map: Record<string, {css?: string[], js?: string[]}[]> = {};
     for (const [key, value] of Object.entries(AddonManager.getExtensions())) {
-      map[key] = (value as any).extensions;
+      map[key] = value.extensions;
     }
     response.status(200).json(map);
   });
@@ -77,9 +77,9 @@ function build(): express.Router {
     // web_accessible_resources array
     let matched = false;
     const resources = extensions[extensionId].resources;
-    for (let resource of resources) {
-      resource = GlobToRegExp(resource);
-      if (resource.test(relPath)) {
+    for (const resource of resources) {
+      const re = GlobToRegExp(resource);
+      if (re.test(relPath)) {
         matched = true;
         break;
       }

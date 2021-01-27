@@ -71,7 +71,7 @@ class Events {
     this.events.push(event);
 
     if (event.getThingId()) {
-      return Things.getThing(event.getThingId()).then((thing: any) => {
+      return Things.getThing(event.getThingId()).then((thing) => {
         thing.dispatchEvent(event);
       }).catch(() => {
         console.warn('Received event for unknown thing:', event.getThingId());
@@ -82,5 +82,4 @@ class Events {
   }
 }
 
-const events = new Events();
-export default events;
+export default new Events();

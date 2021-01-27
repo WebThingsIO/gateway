@@ -12,9 +12,11 @@ import Actions from './actions';
 import * as Constants from '../constants';
 import {EventEmitter} from 'events';
 import {Utils} from 'gateway-addon';
+import {ActionDescription as AddonActionDescription, Input} from 'gateway-addon/lib/schema';
+import Thing from './thing';
 
 export interface ActionDescription {
-  input: any;
+  input: Input;
   href: string;
   status: string;
   timeRequested: string;
@@ -27,7 +29,7 @@ export default class Action extends EventEmitter {
 
   private name: string;
 
-  private input: any;
+  private input: Input;
 
   private href: string;
 
@@ -47,15 +49,15 @@ export default class Action extends EventEmitter {
    * @param {Object} input
    * @param {Thing?} thing
    */
-  constructor(name: string, input?: any, thing?: any) {
+  constructor(name: string, input?: Input, thing?: Thing) {
     super();
 
     this.id = Actions.generateId();
     this.name = name;
     this.input = input || {};
     if (thing) {
-      this.href = `${thing.href}${Constants.ACTIONS_PATH}/${name}/${this.id}`;
-      this.thingId = thing.id;
+      this.href = `${thing.getHref()}${Constants.ACTIONS_PATH}/${name}/${this.id}`;
+      this.thingId = thing.getId();
     } else {
       this.href = `${Constants.ACTIONS_PATH}/${name}/${this.id}`;
       this.thingId = null;
@@ -105,9 +107,9 @@ export default class Action extends EventEmitter {
   /**
    * Update from another action.
    */
-  update(action: any): void {
+  update(action: AddonActionDescription): void {
     this.timeRequested = action.timeRequested;
-    this.timeCompleted = action.timeCompleted;
+    this.timeCompleted = action.timeCompleted || null;
 
     if (this.status !== action.status) {
       this.status = action.status;
@@ -123,7 +125,7 @@ export default class Action extends EventEmitter {
     return this.name;
   }
 
-  getInput(): any {
+  getInput(): Input {
     return this.input;
   }
 

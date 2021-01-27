@@ -4,6 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import {State} from '../State';
+
 export interface EffectDescription {
   type: string;
   label?: string;
@@ -40,7 +42,7 @@ export default class Effect {
    * Set the state of Effect based on a trigger
    * @param {State} _state
    */
-  setState(_state: any): void {
+  setState(_state: State): void {
     throw new Error('Unimplemented');
   }
 }

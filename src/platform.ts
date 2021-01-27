@@ -8,20 +8,19 @@
 
 import child_process from 'child_process';
 import fs from 'fs';
-import * as DarwinPlatform from './platforms/darwin';
-import * as LinuxArchPlatform from './platforms/linux-arch';
-import * as LinuxDebianPlatform from './platforms/linux-debian';
-import * as LinuxRaspbianPlatform from './platforms/linux-raspbian';
-import * as LinuxUbuntuPlatform from './platforms/linux-ubuntu';
-
-/**
- * Error to indicate that a method was not implemented for a platform.
- */
-export class NotImplementedError extends Error {
-  constructor(fn: string) {
-    super(`Method not implemented for platform: ${fn}`);
-  }
-}
+import BasePlatform, {NotImplementedError} from './platforms/base';
+import DarwinPlatform from './platforms/darwin';
+import LinuxArchPlatform from './platforms/linux-arch';
+import LinuxDebianPlatform from './platforms/linux-debian';
+import LinuxRaspbianPlatform from './platforms/linux-raspbian';
+import LinuxUbuntuPlatform from './platforms/linux-ubuntu';
+import {
+  LanMode,
+  NetworkAddresses,
+  SelfUpdateStatus,
+  WirelessMode,
+  WirelessNetwork,
+} from './platforms/types';
 
 /**
  * Get the OS the gateway is running on.
@@ -88,7 +87,7 @@ export function isContainer(): boolean {
  * Get the current node version.
  */
 export function getNodeVersion(): number {
-  return (process.config.variables as any).node_module_version;
+  return <number>(process.config.variables as Record<string, unknown>).node_module_version;
 }
 
 /**
@@ -123,21 +122,17 @@ export function getPythonVersions(): string[] {
 }
 
 // Wrap platform-specific methods
-function wrapPlatform(platform: any, fn: string): any {
-  return (...params: any[]) => {
+function wrapPlatform<T>(platform: BasePlatform | null, fn: string): ((...params: any[]) => T) {
+  return (...params: any[]): T => {
     if (platform === null) {
       throw new NotImplementedError(fn);
     }
 
-    if (!platform.hasOwnProperty(fn)) {
-      throw new NotImplementedError(fn);
-    }
-
-    return platform[fn](...params);
+    return (<(...args: any[]) => T>(<Record<string, unknown>><unknown>platform)[fn])(...params);
   };
 }
 
-let platform: any;
+let platform: BasePlatform | null;
 switch (getOS()) {
   case 'darwin':
     platform = DarwinPlatform;
@@ -159,39 +154,48 @@ switch (getOS()) {
     break;
 }
 
-export const getPlatformArchitecture = wrapPlatform(platform, 'getPlatformArchitecture');
-export const getDhcpServerStatus = wrapPlatform(platform, 'getDhcpServerStatus');
-export const setDhcpServerStatus = wrapPlatform(platform, 'setDhcpServerStatus');
-export const getHostname = wrapPlatform(platform, 'getHostname');
-export const setHostname = wrapPlatform(platform, 'setHostname');
-export const getLanMode = wrapPlatform(platform, 'getLanMode');
-export const setLanMode = wrapPlatform(platform, 'setLanMode');
-export const getMacAddress = wrapPlatform(platform, 'getMacAddress');
-export const getMdnsServerStatus = wrapPlatform(platform, 'getMdnsServerStatus');
-export const setMdnsServerStatus = wrapPlatform(platform, 'setMdnsServerStatus');
-export const getNetworkAddresses = wrapPlatform(platform, 'getNetworkAddresses');
-export const getSshServerStatus = wrapPlatform(platform, 'getSshServerStatus');
-export const setSshServerStatus = wrapPlatform(platform, 'setSshServerStatus');
-export const getWirelessMode = wrapPlatform(platform, 'getWirelessMode');
-export const setWirelessMode = wrapPlatform(platform, 'setWirelessMode');
-export const restartGateway = wrapPlatform(platform, 'restartGateway');
-export const restartSystem = wrapPlatform(platform, 'restartSystem');
-export const scanWirelessNetworks = wrapPlatform(platform, 'scanWirelessNetworks');
-export const getSelfUpdateStatus = wrapPlatform(platform, 'getSelfUpdateStatus');
-export const setSelfUpdateStatus = wrapPlatform(platform, 'setSelfUpdateStatus');
-export const getValidTimezones = wrapPlatform(platform, 'getValidTimezones');
-export const getTimezone = wrapPlatform(platform, 'getTimezone');
-export const setTimezone = wrapPlatform(platform, 'setTimezone');
-export const getValidWirelessCountries = wrapPlatform(platform, 'getValidWirelessCountries');
-export const getWirelessCountry = wrapPlatform(platform, 'getWirelessCountry');
-export const setWirelessCountry = wrapPlatform(platform, 'setWirelessCountry');
-export const restartNtpSync = wrapPlatform(platform, 'restartNtpSync');
+export const getDhcpServerStatus = wrapPlatform<boolean>(platform, 'getDhcpServerStatus');
+export const setDhcpServerStatus = wrapPlatform<boolean>(platform, 'setDhcpServerStatus');
+export const getHostname = wrapPlatform<string>(platform, 'getHostname');
+export const setHostname = wrapPlatform<boolean>(platform, 'setHostname');
+export const getLanMode = wrapPlatform<LanMode>(platform, 'getLanMode');
+export const setLanMode = wrapPlatform<boolean>(platform, 'setLanMode');
+export const getMacAddress = wrapPlatform<string | null>(platform, 'getMacAddress');
+export const getMdnsServerStatus = wrapPlatform<boolean>(platform, 'getMdnsServerStatus');
+export const setMdnsServerStatus = wrapPlatform<boolean>(platform, 'setMdnsServerStatus');
+export const getNetworkAddresses = wrapPlatform<NetworkAddresses>(platform, 'getNetworkAddresses');
+export const getSshServerStatus = wrapPlatform<boolean>(platform, 'getSshServerStatus');
+export const setSshServerStatus = wrapPlatform<boolean>(platform, 'setSshServerStatus');
+export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWirelessMode');
+export const setWirelessMode = wrapPlatform<boolean>(platform, 'setWirelessMode');
+export const restartGateway = wrapPlatform<boolean>(platform, 'restartGateway');
+export const restartSystem = wrapPlatform<boolean>(platform, 'restartSystem');
+export const scanWirelessNetworks =
+  wrapPlatform<WirelessNetwork[]>(platform, 'scanWirelessNetworks');
+export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
+export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
+export const getValidTimezones = wrapPlatform<string[]>(platform, 'getValidTimezones');
+export const getTimezone = wrapPlatform<string>(platform, 'getTimezone');
+export const setTimezone = wrapPlatform<boolean>(platform, 'setTimezone');
+export const getValidWirelessCountries =
+  wrapPlatform<string[]>(platform, 'getValidWirelessCountries');
+export const getWirelessCountry = wrapPlatform<string>(platform, 'getWirelessCountry');
+export const setWirelessCountry = wrapPlatform<boolean>(platform, 'setWirelessCountry');
+export const restartNtpSync = wrapPlatform<boolean>(platform, 'restartNtpSync');
 export const getNtpStatus = (): boolean => {
   if (isContainer()) {
     return true;
   }
 
-  return wrapPlatform(platform, 'getNtpStatus')();
+  return wrapPlatform<boolean>(platform, 'getNtpStatus')();
 };
 
-export const implemented = (fn: string): boolean => platform && platform.hasOwnProperty(fn);
+export const implemented = (fn: string): boolean => {
+  if (platform === null) {
+    return false;
+  }
+
+  const base = new BasePlatform();
+  return (<(...args: any[]) => unknown>(<Record<string, unknown>><unknown>base)[fn]) !=
+    (<(...args: any[]) => unknown>(<Record<string, unknown>><unknown>platform)[fn]);
+};

@@ -353,13 +353,13 @@ describe('addons', () => {
   });
 
   it('Fail manifest.json with missing author key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.author;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing description key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.description;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
@@ -367,76 +367,79 @@ describe('addons', () => {
   it(
     'Fail manifest.json with missing gateway_specific_settings key',
     async () => {
-      const manifest: any = copyManifest(testManifestJson);
+      const manifest: Record<string, unknown> = copyManifest(testManifestJson);
       delete manifest.gateway_specific_settings;
       expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
     }
   );
 
   it('Fail manifest.json with missing webthings key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
-    delete manifest.gateway_specific_settings.webthings;
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
+    delete (<Record<string, unknown>>manifest.gateway_specific_settings).webthings;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing primary_type key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
-    delete manifest.gateway_specific_settings.webthings.primary_type;
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
+    delete (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
+      .webthings).primary_type;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway min version', async () => {
-    const manifest: any = copyManifest(testManifestJson);
-    manifest.gateway_specific_settings.webthings.strict_min_version =
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
+    (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
+      .webthings).strict_min_version =
       semver.inc(pkg.version, 'minor')!;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway max version', async () => {
-    const manifest: any = copyManifest(testManifestJson);
-    manifest.gateway_specific_settings.webthings.strict_max_version =
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
+    (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
+      .webthings).strict_max_version =
       `0.${pkg.version}`;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing homepage_url key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.homepage_url;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing id key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.id;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing license key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.license;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing manifest_version key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.manifest_version;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with incorrect manifest_version key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     manifest.manifest_version = 0;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing name key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.name;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with missing version key', async () => {
-    const manifest: any = copyManifest(testManifestJson);
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     delete manifest.version;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });

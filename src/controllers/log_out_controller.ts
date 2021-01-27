@@ -10,6 +10,7 @@
 
 import express from 'express';
 import JSONWebToken from '../models/jsonwebtoken';
+import {WithJWT} from '../jwt-middleware';
 
 function build(): express.Router {
   const controller = express.Router();
@@ -17,9 +18,9 @@ function build(): express.Router {
   /**
    * Log out the user
    */
-  controller.post('/', async (request, response) => {
-    const {jwt} = request as any;
-    await JSONWebToken.revokeToken(jwt.keyId);
+  controller.post('/', async (req, response) => {
+    const request = <express.Request & WithJWT>req;
+    await JSONWebToken.revokeToken(request.jwt.getKeyId());
     response.status(200).json({});
   });
 

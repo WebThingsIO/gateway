@@ -77,5 +77,11 @@ export enum LogSeverity {
   PROMPT = 4,
 }
 
+export interface LogMessage {
+  severity: LogSeverity;
+  message: string;
+  url?: string;
+}
+
 export const UNLOAD_PLUGIN_KILL_DELAY = 3000;
 export const DEVICE_REMOVAL_TIMEOUT = 30000;

@@ -8,6 +8,7 @@ import assert from 'assert';
 import PropertyEffect from './PropertyEffect';
 import {SetEffectDescription} from './SetEffect';
 import {PropertyValue} from 'gateway-addon/lib/schema';
+import {State} from '../State';
 
 export type PulseEffectDescription = SetEffectDescription;
 
@@ -54,20 +55,23 @@ export default class PulseEffect extends PropertyEffect {
   /**
    * @param {State} state
    */
-  setState(state: any): Promise<any> | undefined {
+  setState(state: State): Promise<PropertyValue> {
     if (state.on) {
       // If we're already active, just perform the effect again
       if (this.on) {
         return this.property.set(this.value);
       }
+
       // Activate the effect and save our current state to revert to upon
       // deactivation
       this.property.get().then((value) => {
         this.oldValue = value;
+
         // Always set to the opposite (always toggle)
         if (typeof value === 'boolean') {
           this.oldValue = !this.value;
         }
+
         this.on = true;
         return this.property.set(this.value);
       });
@@ -79,7 +83,6 @@ export default class PulseEffect extends PropertyEffect {
       }
     }
 
-    // eslint-disable-next-line no-useless-return
-    return;
+    return Promise.resolve(null);
   }
 }

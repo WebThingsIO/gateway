@@ -30,7 +30,9 @@ import expressHandlebars from 'express-handlebars';
 import ipRegex from 'ip-regex';
 import * as SegfaultHandler from 'segfault-handler';
 
-// Keep the plugin import here to prevent circular dependencies
+// Keep these imports here to prevent circular dependencies
+import './plugin/outlet-proxy';
+import './plugin/property-proxy';
 import './plugin/plugin';
 
 // Internal Dependencies

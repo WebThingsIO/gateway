@@ -35,11 +35,12 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   const key = `addons.${packageName}`;
   const configKey = `addons.config.${packageName}`;
 
-  let obj: any, savedConfig: any;
+  let obj: Record<string, unknown>;
+  let savedConfig: Record<string, unknown> | null = null;
   if (process.env.NODE_ENV === 'test') {
     [obj, savedConfig] = loadManifest(addonPath.split('/').pop()!);
   } else {
-    obj = await Settings.getSetting(key);
+    obj = <Record<string, unknown>>(await Settings.getSetting(key));
   }
 
   const moziot: Record<string, unknown> = {
@@ -51,7 +52,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   }
 
   if (process.env.NODE_ENV !== 'test') {
-    savedConfig = await Settings.getSetting(configKey);
+    savedConfig = <Record<string, unknown>>(await Settings.getSetting(configKey));
   }
 
   if (savedConfig) {
@@ -65,14 +66,14 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
       console.warn('The `manifest` object is deprecated and will be removed soon.',
                    'Instead of using `manifest.name`,',
                    'please read the `id` field from your manifest.json instead.');
-      return obj.id;
+      return <string>obj.id;
     },
 
     get display_name(): string {
       console.warn('The `manifest` object is deprecated and will be removed soon.',
                    'Instead of using `manifest.display_name`,',
                    'please read the `name` field from your manifest.json instead.');
-      return obj.name;
+      return <string>obj.name;
     },
 
     get moziot(): Record<string, unknown> {
@@ -123,8 +124,12 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
           }
         }
 
-        const addonLoader = require(addonPath);
-        addonLoader(addonManagerProxy, newSettings, (packageName: string, err: any) => {
+        let addonLoader = require(addonPath);
+        if (addonLoader.hasOwnProperty('default')) {
+          addonLoader = addonLoader.default;
+        }
+
+        addonLoader(addonManagerProxy, newSettings, (packageName: string, err: unknown) => {
           console.error(`Failed to start add-on ${packageName}:`, err);
           fail(
             addonManagerProxy,

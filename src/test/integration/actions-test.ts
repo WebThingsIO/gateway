@@ -37,7 +37,7 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(desc);
-    await (mockAdapter() as any).addDevice(id, desc);
+    await mockAdapter().addDevice(<string>id, desc);
     return res;
   }
 
@@ -335,7 +335,7 @@ describe('actions/', () => {
     const thingId = 'test-nonexistent';
     // The mock adapter requires knowing in advance that we're going to unpair
     // a specific device
-    (mockAdapter() as any).unpairDevice(thingId);
+    mockAdapter().unpairDevice(thingId);
 
     let res = await chai.request(server)
       .post(Constants.ACTIONS_PATH)

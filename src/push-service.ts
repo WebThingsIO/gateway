@@ -24,7 +24,7 @@ class PushService {
    * if necessary.
    */
   async init(tunnelDomain: string): Promise<void> {
-    let vapid = await Settings.getSetting('push.vapid');
+    let vapid = <WebPush.VapidKeys>(await Settings.getSetting('push.vapid'));
     if (!vapid) {
       vapid = WebPush.generateVAPIDKeys();
       await Settings.setSetting('push.vapid', vapid);
@@ -36,9 +36,9 @@ class PushService {
     this.enabled = true;
   }
 
-  async getVAPIDKeys(): Promise<any | null> {
+  async getVAPIDKeys(): Promise<WebPush.VapidKeys | null> {
     try {
-      const vapid = await Settings.getSetting('push.vapid');
+      const vapid = <WebPush.VapidKeys>(await Settings.getSetting('push.vapid'));
       return vapid;
     } catch (err) {
       console.error('vapid still not generated');
@@ -46,7 +46,7 @@ class PushService {
     }
   }
 
-  async createPushSubscription(subscription: any): Promise<any> {
+  async createPushSubscription(subscription: WebPush.PushSubscription): Promise<number> {
     return await Database.createPushSubscription(subscription);
   }
 
@@ -54,15 +54,18 @@ class PushService {
     if (!this.enabled) {
       return;
     }
+
     const subscriptions = await Database.getPushSubscriptions();
     for (const subscription of subscriptions) {
-      WebPush.sendNotification(subscription, message).catch((err) => {
+      WebPush.sendNotification(
+        <WebPush.PushSubscription><unknown>subscription,
+        message
+      ).catch((err) => {
         console.warn('Push API error', err);
-        Database.deletePushSubscription(subscription.id);
+        Database.deletePushSubscription(<string>subscription.id);
       });
     }
   }
 }
 
-const service = new PushService();
-export default service;
+export default new PushService();

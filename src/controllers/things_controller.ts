@@ -8,10 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Action from '../models/action';
+import Action, {ActionDescription} from '../models/action';
 import Actions from '../models/actions';
 import ActionsController from './actions_controller';
 import * as Constants from '../constants';
+import Event, {EventDescription} from '../models/event';
 import EventsController from './events_controller';
 import express from 'express';
 import expressWs from 'express-ws';
@@ -20,6 +21,90 @@ import WebSocket from 'ws';
 import Thing from '../models/thing';
 import Things from '../models/things';
 import AddonManager from '../addon-manager';
+import {WithJWT} from '../jwt-middleware';
+import {Input, PropertyValue} from 'gateway-addon/lib/schema';
+import {Property} from 'gateway-addon';
+
+interface SetPropertyMessage {
+  messageType: 'setProperty';
+  id?: string;
+  data: Record<string, PropertyValue>;
+}
+
+interface RequestActionMessage {
+  messageType: 'requestAction';
+  id?: string;
+  data: Record<string, {input?: Input}>;
+}
+
+interface AddEventSubscriptionMessage {
+  messageType: 'addEventSubscription';
+  id?: string;
+  data: Record<string, Record<string, never>>;
+}
+
+interface PropertyStatusMessage {
+  messageType: 'propertyStatus';
+  id: string;
+  data: Record<string, PropertyValue>;
+}
+
+interface ActionStatusMessage {
+  messageType: 'actionStatus';
+  id?: string;
+  data: Record<string, ActionDescription>;
+}
+
+interface EventMessage {
+  messageType: 'event';
+  id: string;
+  data: Record<string, EventDescription>;
+}
+
+interface ConnectedMessage {
+  messageType: 'connected';
+  id: string;
+  data: boolean;
+}
+
+interface ThingAddedMessage {
+  messageType: 'thingAdded';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface ThingModifiedMessage {
+  messageType: 'thingModified';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface ThingRemovedMessage {
+  messageType: 'thingRemoved';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface ErrorMessage {
+  messageType: 'error';
+  data: {
+    code: number;
+    status: string;
+    message: string;
+    request?: IncomingMessage;
+  };
+}
+
+type IncomingMessage = SetPropertyMessage | RequestActionMessage | AddEventSubscriptionMessage;
+type OutgoingMessage =
+  PropertyStatusMessage |
+  ActionStatusMessage |
+  EventMessage |
+  ConnectedMessage |
+  ThingAddedMessage |
+  ThingModifiedMessage |
+  ThingRemovedMessage |
+  ErrorMessage;
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
@@ -35,16 +120,17 @@ function build(): express.Router {
   /**
    * Get a list of Things.
    */
-  controller.get('/', (request, response) => {
-    if ((request as any).jwt.payload.role !== Constants.USER_TOKEN) {
-      if (!(request as any).jwt.payload.scope) {
+  controller.get('/', (req, response) => {
+    const request = <express.Request & WithJWT>req;
+    if (request.jwt.getPayload()!.role !== Constants.USER_TOKEN) {
+      if (!request.jwt.getPayload()!.scope) {
         response.status(400).send('Token must contain scope');
       } else {
-        const scope = (request as any).jwt.payload.scope;
+        const scope = request.jwt.getPayload()!.scope!;
         if (!scope.includes(' ') && scope.indexOf('/') == 0 &&
           scope.split('/').length == 2 &&
           scope.split(':')[0] === Constants.THINGS_PATH) {
-          Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+          Things.getThingDescriptions(request.get('Host'), request.secure).then((things) => {
             response.status(200).json(things);
           });
         } else {
@@ -56,13 +142,13 @@ function build(): express.Router {
             hrefs.push(parts[0]);
           }
           Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure)
-            .then((things: any[]) => {
+            .then((things) => {
               response.status(200).json(things);
             });
         }
       }
     } else {
-      Things.getThingDescriptions(request.get('Host'), request.secure).then((things: any[]) => {
+      Things.getThingDescriptions(request.get('Host'), request.secure).then((things) => {
         response.status(200).json(things);
       });
     }
@@ -143,12 +229,12 @@ function build(): express.Router {
 
       const key = 'addons.config.thing-url-adapter';
       try {
-        const config = await Settings.getSetting(key);
+        const config = <Record<string, unknown>>(await Settings.getSetting(key));
         if (typeof config === 'undefined') {
           throw new Error('Setting is undefined.');
         }
 
-        config.urls.push(description.webthingUrl);
+        (<string[]>config.urls).push(description.webthingUrl);
         await Settings.setSetting(key, config);
       } catch (e) {
         console.error('Failed to update settings for thing-url-adapter');
@@ -187,9 +273,9 @@ function build(): express.Router {
    */
   controller.get('/:thingId', (request, response) => {
     const id = request.params.thingId;
-    Things.getThingDescription(id, request.get('Host'), request.secure).then((thing: any) => {
+    Things.getThingDescription(id, request.get('Host'), request.secure).then((thing) => {
       response.status(200).json(thing);
-    }).catch((error: any) => {
+    }).catch((error: unknown) => {
       console.error(`Error getting thing description for thing with id ${id}:`, error);
       response.status(404).send(error);
     });
@@ -210,7 +296,7 @@ function build(): express.Router {
       return;
     }
 
-    const result: any = {};
+    const result: Record<string, PropertyValue> = {};
     for (const name in thing.getProperties()) {
       try {
         const value = await AddonManager.getProperty(thingId, name);
@@ -233,7 +319,7 @@ function build(): express.Router {
       const propertyName = request.params.propertyName;
       try {
         const value = await Things.getThingProperty(thingId, propertyName);
-        const result: any = {};
+        const result: Record<string, unknown> = {};
         result[propertyName] = value;
         response.status(200).json(result);
       } catch (err) {
@@ -379,7 +465,7 @@ function build(): express.Router {
       Things.removeThing(thingId).then(() => {
         console.log(`Successfully deleted ${thingId} from database.`);
         response.sendStatus(204);
-      }).catch((e: any) => {
+      }).catch((e: unknown) => {
         response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
       });
     };
@@ -395,9 +481,10 @@ function build(): express.Router {
     }
 
     const thingId = request.params.thingId;
-    const subscribedEventNames: any = {};
+    const subscribedEventNames: Record<string, boolean> = {};
 
-    function sendMessage(message: any): void {
+    function sendMessage(message: OutgoingMessage):
+    void {
       websocket.send(JSON.stringify(message), (err) => {
         if (err) {
           console.error(`WebSocket sendMessage failed: ${err}`);
@@ -405,42 +492,44 @@ function build(): express.Router {
       });
     }
 
-    function onPropertyChanged(property: any): void {
-      if (typeof thingId !== 'undefined' && property.device.id !== thingId) {
+    function onPropertyChanged(property: Property<PropertyValue>): void {
+      if (typeof thingId !== 'undefined' && property.getDevice().getId() !== thingId) {
         return;
       }
 
-      sendMessage({
-        id: property.device.id,
-        messageType: Constants.PROPERTY_STATUS,
-        data: {
-          [property.name]: property.value,
-        },
+      property.getValue().then((value) => {
+        sendMessage({
+          id: property.getDevice().getId(),
+          messageType: Constants.PROPERTY_STATUS,
+          data: {
+            [property.getName()]: value,
+          },
+        });
       });
     }
 
-    function onActionStatus(action: any): void {
+    function onActionStatus(action: Action): void {
       if (action.hasOwnProperty('thingId') &&
-          action.thingId !== null &&
-          action.thingId !== thingId) {
+          action.getThingId() !== null &&
+          action.getThingId() !== thingId) {
         return;
       }
 
-      const message: any = {
+      const message: ActionStatusMessage = {
         messageType: Constants.ACTION_STATUS,
         data: {
-          [action.name]: action.getDescription(),
+          [action.getName()]: action.getDescription(),
         },
       };
 
-      if (action.thingId !== null) {
-        message.id = action.thingId;
+      if (action.getThingId() !== null) {
+        message.id = action.getThingId()!;
       }
 
       sendMessage(message);
     }
 
-    function onEvent(event: any): void {
+    function onEvent(event: Event): void {
       if (typeof thingId !== 'undefined' && event.getThingId() !== thingId) {
         return;
       }
@@ -458,13 +547,13 @@ function build(): express.Router {
       });
     }
 
-    let thingCleanups: any = {};
-    function addThing(thing: any): void {
+    let thingCleanups: Record<string, () => void> = {};
+    function addThing(thing: Thing): void {
       thing.addEventSubscription(onEvent);
 
       function onConnected(connected: boolean): void {
         sendMessage({
-          id: thing.id,
+          id: thing.getId(),
           messageType: Constants.CONNECTED,
           data: connected,
         });
@@ -472,9 +561,9 @@ function build(): express.Router {
       thing.addConnectedSubscription(onConnected);
 
       const onRemoved = (): void => {
-        if (thingCleanups[thing.id]) {
-          thingCleanups[thing.id]();
-          delete thingCleanups[thing.id];
+        if (thingCleanups[thing.getId()]) {
+          thingCleanups[thing.getId()]();
+          delete thingCleanups[thing.getId()];
         }
 
         if (typeof thingId !== 'undefined' &&
@@ -483,7 +572,7 @@ function build(): express.Router {
           websocket.close();
         } else {
           sendMessage({
-            id: thing.id,
+            id: thing.getId(),
             messageType: Constants.THING_REMOVED,
             data: {},
           });
@@ -493,7 +582,7 @@ function build(): express.Router {
 
       const onModified = (): void => {
         sendMessage({
-          id: thing.id,
+          id: thing.getId(),
           messageType: Constants.THING_MODIFIED,
           data: {},
         });
@@ -506,27 +595,27 @@ function build(): express.Router {
         thing.removeRemovedSubscription(onRemoved);
         thing.removeModifiedSubscription(onModified);
       };
-      thingCleanups[thing.id] = thingCleanup;
+      thingCleanups[thing.getId()] = thingCleanup;
 
       // send initial property values
-      for (const name in thing.properties) {
-        AddonManager.getProperty(thing.id, name).then((value: any) => {
+      for (const name in thing.getProperties()) {
+        AddonManager.getProperty(thing.getId(), name).then((value) => {
           sendMessage({
-            id: thing.id,
+            id: thing.getId(),
             messageType: Constants.PROPERTY_STATUS,
             data: {
               [name]: value,
             },
           });
-        }).catch((e: any) => {
+        }).catch((e: unknown) => {
           console.error(`Failed to get property ${name}:`, e);
         });
       }
     }
 
-    function onThingAdded(thing: any): void {
+    function onThingAdded(thing: Thing): void {
       sendMessage({
-        id: thing.id,
+        id: thing.getId(),
         messageType: Constants.THING_ADDED,
         data: {},
       });
@@ -535,7 +624,7 @@ function build(): express.Router {
     }
 
     if (typeof thingId !== 'undefined') {
-      Things.getThing(thingId).then((thing: any) => {
+      Things.getThing(thingId).then((thing) => {
         addThing(thing);
       }).catch(() => {
         console.error('WebSocket opened on nonexistent thing', thingId);
@@ -583,7 +672,7 @@ function build(): express.Router {
     websocket.on('close', cleanup);
 
     websocket.on('message', (requestText: string) => {
-      let request: any;
+      let request: IncomingMessage;
       try {
         request = JSON.parse(requestText);
       } catch (e) {
@@ -612,7 +701,7 @@ function build(): express.Router {
         return;
       }
 
-      const device = AddonManager.getDevice(id);
+      const device = AddonManager.getDevice(<string>id);
       if (!device) {
         sendMessage({
           messageType: Constants.ERROR,
@@ -628,10 +717,11 @@ function build(): express.Router {
 
       switch (request.messageType) {
         case Constants.SET_PROPERTY: {
-          const setRequests = Object.keys(request.data).map((property) => {
-            const value = request.data[property];
-            return device.setProperty(property, value);
-          });
+          const setRequests = Object.keys((<SetPropertyMessage>request).data)
+            .map((property) => {
+              const value = (<SetPropertyMessage>request).data[property];
+              return device.setProperty(property, value);
+            });
           Promise.all(setRequests).catch((err) => {
             // If any set fails, send an error
             sendMessage({
@@ -648,22 +738,26 @@ function build(): express.Router {
         }
 
         case Constants.ADD_EVENT_SUBSCRIPTION: {
-          for (const eventName in request.data) {
+          for (const eventName in (<AddEventSubscriptionMessage>request).data) {
             subscribedEventNames[eventName] = true;
           }
           break;
         }
 
         case Constants.REQUEST_ACTION: {
-          for (const actionName in request.data) {
-            const actionParams = request.data[actionName].input;
-            Things.getThing(id).then((thing: any) => {
+          for (const actionName in (<RequestActionMessage>request).data) {
+            const actionParams = (<RequestActionMessage>request).data[actionName].input;
+            Things.getThing(<string>id).then((thing) => {
               const action = new Action(actionName, actionParams, thing);
               return Actions.add(action).then(() => {
                 return AddonManager.requestAction(
-                  id, action.getId(), actionName, actionParams);
+                  <string>id,
+                  action.getId(),
+                  actionName,
+                  actionParams ?? null
+                );
               });
-            }).catch((err: any) => {
+            }).catch((err: Error) => {
               sendMessage({
                 messageType: Constants.ERROR,
                 data: {
@@ -684,7 +778,7 @@ function build(): express.Router {
             data: {
               code: 400,
               status: '400 Bad Request',
-              message: `Unknown messageType: ${request.messageType}`,
+              message: `Unknown messageType: ${(<IncomingMessage>request).messageType}`,
               request,
             },
           });

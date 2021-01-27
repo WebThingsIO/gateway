@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {Level} from 'gateway-addon/lib/schema';
+import {Level, OutletDescription} from 'gateway-addon/lib/schema';
 import {Constants, Outlet} from 'gateway-addon';
 import NotifierProxy from './notifier-proxy';
 import Deferred from '../deferred';
 const MessageType = Constants.MessageType;
 
 export default class OutletProxy extends Outlet {
-  constructor(notifier: NotifierProxy, outletDict: any) {
+  constructor(notifier: NotifierProxy, outletDict: OutletDescription) {
     super(notifier, outletDict.id);
 
     this.setName(outletDict.name);

@@ -1,5 +1,7 @@
 import express from 'express';
-import {Constants} from 'gateway-addon';
+import {Constants, Notifier, Outlet} from 'gateway-addon';
+import {NotifierDescription} from 'gateway-addon/lib/notifier';
+import {OutletDescription} from 'gateway-addon/lib/schema';
 import AddonManager from '../addon-manager';
 
 function build(): express.Router {
@@ -10,10 +12,12 @@ function build(): express.Router {
    * @param {Notifier} notifier
    * @return {Object}
    */
-  function notifierAsDictWithOutlets(notifier: any): any {
-    const notifierDict = notifier.asDict();
+  function notifierAsDictWithOutlets(notifier: Notifier):
+  NotifierDescription & {outlets: OutletDescription[]} {
+    const notifierDict: NotifierDescription & {outlets: OutletDescription[]} =
+      Object.assign(notifier.asDict(), {outlets: []});
     const outlets = notifier.getOutlets();
-    notifierDict.outlets = Array.from(Object.values(outlets)).map((outlet: any) => {
+    notifierDict.outlets = Array.from(Object.values(outlets)).map((outlet: Outlet) => {
       return outlet.asDict();
     });
     return notifierDict;
@@ -44,7 +48,7 @@ function build(): express.Router {
       return;
     }
     const outlets = notifier.getOutlets();
-    const outletList = Array.from(Object.values(outlets)).map((outlet: any) => {
+    const outletList = Array.from(Object.values(outlets)).map((outlet: Outlet) => {
       return outlet.asDict();
     });
     response.status(200).json(outletList);

@@ -21,6 +21,18 @@ const DEBUG = false || (process.env.NODE_ENV === 'test');
 
 const DIRECTORY_URL = acme.directory.letsencrypt.production;
 
+export interface TunnelToken {
+  name: string;
+  token: string;
+  base: string;
+}
+
+interface SSLContext {
+  setCert: (cert: string) => void;
+  setKey: (key: string) => void;
+  addCACert: (cert: string) => void;
+}
+
 // For test purposes, uncomment the following:
 // const DIRECTORY_URL = acme.directory.letsencrypt.staging;
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -133,7 +145,7 @@ export async function register(email: string, reclamationToken: string | null, s
    * @returns {Promise}
    */
   const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string):
+    async (_authz: acme.Authorization, _challenge: unknown, keyAuthorization: string):
     Promise<void> => {
       const params = new URLSearchParams();
       params.set('token', token);
@@ -257,9 +269,9 @@ export async function renew(server: Server): Promise<void> {
     // pass. move on to renewal.
   }
 
-  let tunnelToken: {name: string, token: string, base: string};
+  let tunnelToken: TunnelToken;
   try {
-    tunnelToken = await Settings.getSetting('tunneltoken');
+    tunnelToken = <TunnelToken>(await Settings.getSetting('tunneltoken'));
   } catch (e) {
     console.error('Tunnel token not set!');
     return;
@@ -274,7 +286,7 @@ export async function renew(server: Server): Promise<void> {
    * @returns {Promise}
    */
   const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: any, keyAuthorization: string):
+    async (_authz: acme.Authorization, _challenge: unknown, keyAuthorization: string):
     Promise<void> => {
       const params = new URLSearchParams();
       params.set('token', tunnelToken.token);
@@ -350,7 +362,8 @@ export async function renew(server: Server): Promise<void> {
     console.log('Wrote certificates to file system');
 
     if (server) {
-      const ctx = ((server as any)._sharedCreds as any).context;
+      // eslint-disable-next-line max-len
+      const ctx = <SSLContext>(<Record<string, unknown>>(<Record<string, unknown>><unknown>server)._sharedCreds).context;
       ctx.setCert(chain[0]);
       ctx.setKey(key.toString());
       ctx.addCACert(chain.join('\n'));

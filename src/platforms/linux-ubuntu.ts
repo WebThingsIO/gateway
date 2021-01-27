@@ -6,17 +6,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import * as LinuxDebian from './linux-debian';
+import {LinuxDebianPlatform} from './linux-debian';
 
-export const getSelfUpdateStatus = LinuxDebian.getSelfUpdateStatus;
-export const getNtpStatus = LinuxDebian.getNtpStatus;
-export const getDhcpServerStatus = LinuxDebian.getDhcpServerStatus;
-export const getHostname = LinuxDebian.getHostname;
-export const getLanMode = LinuxDebian.getLanMode;
-export const getMacAddress = LinuxDebian.getMacAddress;
-export const getMdnsServerStatus = LinuxDebian.getMdnsServerStatus;
-export const getNetworkAddresses = LinuxDebian.getNetworkAddresses;
-export const getWirelessMode = LinuxDebian.getWirelessMode;
-export const getValidTimezones = LinuxDebian.getValidTimezones;
-export const getTimezone = LinuxDebian.getTimezone;
-export const getValidWirelessCountries = LinuxDebian.getValidWirelessCountries;
+class LinuxUbuntuPlatform extends LinuxDebianPlatform {
+}
+
+export default new LinuxUbuntuPlatform();
