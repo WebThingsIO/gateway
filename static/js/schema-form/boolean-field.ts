@@ -11,42 +11,48 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const Utils = require('../utils');
+export default class BooleanField {
+  private formData: boolean;
 
-class BooleanField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
+  private idSchema: Record<string, unknown>;
+
+  private onChange: ((value: boolean) => void) | null;
+
+  private required: boolean;
+
+  private disabled: boolean;
+
+  private readOnly: boolean;
+
+  constructor(_schema: Record<string, unknown>,
+              formData: boolean,
+              idSchema: Record<string, unknown>,
+              _name: string,
+              _definitions: Record<string, unknown>,
+              onChange: ((value: boolean) => void) | null = null,
               required = false,
               disabled = false,
               readOnly = false) {
-    this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
-    this.name = name;
-    this.definitions = definitions;
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
     this.readOnly = readOnly;
   }
 
-  onBooleanChange(event) {
-    this.formData = event.target.checked;
+  onBooleanChange(event: Event): void {
+    this.formData = (<HTMLInputElement>event.target).checked;
 
     if (this.onChange) {
       this.onChange(this.formData);
     }
   }
 
-  render() {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+  render(): HTMLDivElement {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
     field.className = 'checkbox';
@@ -62,11 +68,9 @@ class BooleanField {
       <label for="${id}"></span>
       `;
 
-    const input = field.querySelector(`#${id}`);
+    const input = <HTMLInputElement>field.querySelector(`#${id}`)!;
     input.onchange = this.onBooleanChange.bind(this);
 
     return field;
   }
 }
-
-module.exports = BooleanField;

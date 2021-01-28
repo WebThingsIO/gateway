@@ -11,61 +11,91 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import {ErrorObject} from 'ajv';
+import * as SchemaUtils from './schema-utils';
+import Validator from './validator';
+import SchemaField from './schema-field';
+import ErrorField from './error-field';
+import * as Utils from '../utils';
+import * as Fluent from '../fluent';
 
-const SchemaUtils = require('./schema-utils');
-const Validator = require('./validator');
-const SchemaField = require('./schema-field');
-const ErrorField = require('./error-field');
-const Utils = require('../utils');
-const fluent = require('../fluent');
+export default class SchemaForm {
+  private definitions: Record<string, unknown>;
 
-class SchemaForm {
-  constructor(schema, id, name, formData, onSubmit, options = {}) {
-    this.definitions = schema.definitions;
+  private schema: Record<string, unknown>;
+
+  private id: string;
+
+  private name: string;
+
+  private onSubmit: ((formData: unknown, errors: ErrorObject[]) => void) | null;
+
+  private idSchema: Record<string, unknown>;
+
+  private submitText: string;
+
+  private noValidate: boolean;
+
+  private liveValidate: boolean;
+
+  private submitButton?: HTMLButtonElement;
+
+  private errorField?: ErrorField;
+
+  formData: unknown;
+
+  constructor(
+    schema: Record<string, unknown>,
+    id: string,
+    name: string,
+    formData: unknown,
+    onSubmit: ((formData: unknown, errors: ErrorObject[]) => void) | null = null,
+    options: Record<string, unknown> = {}
+  ) {
+    this.definitions = <Record<string, unknown>>schema.definitions;
     this.schema = schema;
     this.id = id;
     this.name = name;
     this.onSubmit = onSubmit;
-    this.idSchema = SchemaUtils.toIdSchema(schema,
-                                           null,
-                                           this.definitions,
-                                           formData);
-    this.formData = SchemaUtils.getDefaultFormState(schema,
-                                                    formData,
-                                                    this.definitions);
+    this.idSchema = SchemaUtils.toIdSchema(
+      schema,
+      null,
+      this.definitions,
+      <Record<string, unknown>>formData
+    );
+    this.formData = SchemaUtils.getDefaultFormState(schema, formData, this.definitions);
     this.submitText =
-      options.hasOwnProperty('submitText') ? options.submitText : '';
+      options.hasOwnProperty('submitText') ? <string>options.submitText : '';
     this.noValidate =
-      options.hasOwnProperty('validate') ? !options.validate : false;
+      options.hasOwnProperty('validate') ? !<boolean>options.validate : false;
     this.liveValidate =
-      options.hasOwnProperty('liveValidate') ? options.liveValidate : true;
+      options.hasOwnProperty('liveValidate') ? <boolean>options.liveValidate : true;
   }
 
-  onChange(formData) {
+  onChange(formData: unknown): void {
     let error = null;
     this.formData = formData;
 
-    this.submitButton.disabled = false;
+    this.submitButton!.disabled = false;
 
     if (!this.noValidate && this.liveValidate) {
       const {errors} = this.validate(formData);
       error = errors;
     }
     if (!this.noValidate && error) {
-      this.errorField.render(error);
+      this.errorField!.render(error);
     } else if (!this.noValidate) {
-      this.errorField.render([]);
+      this.errorField!.render([]);
     }
   }
 
-  validate(formData) {
+  validate(formData: unknown): {errors: ErrorObject[], errorSchema: Record<string, unknown>} {
     return Validator.validateFormData(formData, this.schema);
   }
 
-  handleSubmit(e) {
+  handleSubmit(e: MouseEvent): void {
     const {errors} = this.validate(this.formData);
-    const button = e.target;
+    const button = <HTMLButtonElement>e.target!;
     button.disabled = true;
 
     if (this.onSubmit) {
@@ -73,7 +103,7 @@ class SchemaForm {
     }
   }
 
-  renderSubmitButton() {
+  renderSubmitButton(): HTMLButtonElement {
     const submitButton = document.createElement('button');
     submitButton.id = `submit-${Utils.escapeHtml(this.id)}`;
     submitButton.type = 'button';
@@ -81,7 +111,7 @@ class SchemaForm {
     if (this.submitText) {
       submitButton.innerText = this.submitText;
     } else {
-      submitButton.innerText = fluent.getMessage('submit');
+      submitButton.innerText = Fluent.getMessage('submit');
     }
     submitButton.addEventListener('click', this.handleSubmit.bind(this));
     submitButton.disabled = true;
@@ -91,13 +121,13 @@ class SchemaForm {
     return submitButton;
   }
 
-  render() {
+  render(): HTMLFormElement {
     const form = document.createElement('form');
     form.className = 'json-schema-form';
     form.id = this.id;
     form.innerHTML = `<p></p>`;
 
-    const p = form.querySelector('p');
+    const p = form.querySelector('p')!;
 
     const submit = this.renderSubmitButton();
     p.appendChild(submit);
@@ -121,6 +151,5 @@ class SchemaForm {
 }
 
 // Elevate this to the window level.
-window.SchemaForm = SchemaForm;
-
-module.exports = SchemaForm;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).SchemaForm = SchemaForm;

@@ -15,7 +15,7 @@
         "debug-ide": "npm run build && node --inspect=5858 build/app.js",
         "debug": "npm run build && node --inspect build/app.js",
         "run-only": "node build/app.js",
-        "build": "rm -rf build && cp -r src build && find build -name '*.ts' -delete && tsc -p . && webpack"
+        "build": "rm -rf build && cp -rL src build && find build -name '*.ts' -delete && tsc -p . && webpack"
     },
     "repository": {
         "type": "git",
@@ -120,7 +120,6 @@
         "@typescript-eslint/eslint-plugin": "^4.14.1",
         "@typescript-eslint/parser": "^4.14.1",
         "@webcomponents/webcomponentsjs": "^2.5.0",
-        "awesome-typescript-loader": "^5.2.1",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.2.2",
         "chai": "^4.2.0",
@@ -163,6 +162,7 @@
         "stylelint": "^13.8.0",
         "stylelint-config-standard": "^20.0.0",
         "ts-jest": "^26.4.4",
+        "ts-loader": "^8.0.14",
         "typescript": "^4.1.3",
         "url-loader": "^4.1.1",
         "webdriverio": "^5.23.0",

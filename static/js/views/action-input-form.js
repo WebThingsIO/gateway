@@ -10,7 +10,7 @@
 
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const Units = require('../units');
 const Utils = require('../utils');
 

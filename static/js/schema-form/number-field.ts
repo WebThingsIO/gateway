@@ -11,34 +11,46 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as SchemaUtils from './schema-utils';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const Utils = require('../utils');
+export default class NumberField {
+  private schema: Record<string, unknown>;
 
-class NumberField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
+  private formData?: string | number;
+
+  private idSchema: Record<string, unknown>;
+
+  private onChange: ((value?: string | number) => void) | null;
+
+  private required: boolean;
+
+  private disabled: boolean;
+
+  private readOnly: boolean;
+
+  private rangeValue?: HTMLSpanElement;
+
+  constructor(schema: Record<string, unknown>,
+              formData: string | number | undefined,
+              idSchema: Record<string, unknown>,
+              _name: string,
+              definitions: Record<string, unknown>,
+              onChange: ((value?: string | number) => void) | null = null,
               required = false,
               disabled = false,
               readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
-    this.name = name;
-    this.definitions = definitions;
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
     this.readOnly = readOnly;
   }
 
-  toFormData(value, validityState) {
-    const number = Number(value);
+  toFormData(value: unknown, validityState?: ValidityState): string | number | undefined {
+    const num = Number(value);
 
     // HTML number inputs will never give us an invalid value. Instead, they
     // will give us an empty string when the input is invalid.
@@ -65,17 +77,17 @@ class NumberField {
         console.log('returning .');
         return '.';
       }
-    } else if (isNaN(number)) {
+    } else if (isNaN(num)) {
       // We should probably never hit this block unless HTML input validation is
       // not working.
       return '.';
     }
 
-    return number;
+    return num;
   }
 
-  onNumberChange(event) {
-    const value = event.target.value;
+  onNumberChange(event: Event): void {
+    const value = (<HTMLInputElement>event.target!).value;
 
     if (this.rangeValue) {
       this.rangeValue.textContent = value;
@@ -83,15 +95,15 @@ class NumberField {
 
     // If a user input nothing on required field, we should set undefined in
     // order to raise error.
-    this.formData = this.toFormData(value, event.target.validity);
+    this.formData = this.toFormData(value, (<HTMLInputElement>event.target!).validity);
 
     if (this.onChange) {
       this.onChange(this.formData);
     }
   }
 
-  render() {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+  render(): HTMLDivElement {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
     let value = Number(this.formData);
     if (isNaN(value)) {
       value = 0;
@@ -116,7 +128,7 @@ class NumberField {
         />
         <span class="range-view">${value}</span>`;
 
-      this.rangeValue = field.querySelector('span');
+      this.rangeValue = field.querySelector('span')!;
     } else if (SchemaUtils.isSelect(this.schema)) {
       const enumOptions = SchemaUtils.getOptionsList(this.schema);
       const selectedValue = value;
@@ -129,14 +141,14 @@ class NumberField {
 
       const selects = enumOptions.map(({value, label}, i) => {
         const selected = selectedValue === this.toFormData(value);
-        selectedAny |= selected;
+        selectedAny = selectedAny || selected;
 
         return `
           <option
           key="${i}"
-          value="${Utils.escapeHtml(value)}"
+          value="${Utils.escapeHtml(`${value}`)}"
           ${selected ? 'selected' : ''}>
-            ${Utils.escapeHtml(label)}
+            ${Utils.escapeHtml(<string>label)}
           </option>`;
       });
 
@@ -151,7 +163,7 @@ class NumberField {
         </select>`;
 
       if (!selectedAny) {
-        const select = field.querySelector(`#${id}`);
+        const select = <HTMLSelectElement>field.querySelector(`#${id}`)!;
         select.selectedIndex = -1;
       }
     } else {
@@ -176,16 +188,14 @@ class NumberField {
         ${this.required ? 'required' : ''}
         ${(this.disabled || this.readOnly) ? 'disabled' : ''}
         ${min} ${max} step="${step}"
-        value="${value == null ? '' : Utils.escapeHtml(value)}"
+        value="${value == null ? '' : Utils.escapeHtml(`${value}`)}"
         />`;
     }
 
-    const input = field.querySelector(`#${id}`);
+    const input = <HTMLInputElement>field.querySelector(`#${id}`)!;
     input.onchange = this.onNumberChange.bind(this);
     input.oninput = this.onNumberChange.bind(this);
 
     return field;
   }
 }
-
-module.exports = NumberField;

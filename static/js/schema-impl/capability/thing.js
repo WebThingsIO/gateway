@@ -12,7 +12,7 @@
 
 const ActionDetail = require('../action/action');
 const AlarmDetail = require('../property/alarm');
-const API = require('../../api');
+const API = require('../../api').default;
 const App = require('../../app');
 const BooleanDetail = require('../property/boolean');
 const BrightnessDetail = require('../property/brightness');
