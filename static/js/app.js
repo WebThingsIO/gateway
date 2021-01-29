@@ -473,7 +473,7 @@ const App = {
 module.exports = App;
 
 // avoid circular dependency
-API = require('./api');
+API = require('./api').default;
 GatewayModel = require('./models/gateway-model');
 ThingsScreen = require('./views/things');
 AddThingScreen = require('./views/add-thing');

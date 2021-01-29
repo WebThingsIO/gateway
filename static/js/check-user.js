@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const API = require('./api');
+const API = require('./api').default;
 
 if (API.isLoggedIn()) {
   API.verifyJWT().then((valid) => {

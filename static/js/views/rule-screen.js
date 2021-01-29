@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const DevicePropertyBlock = require('../rules/DevicePropertyBlock');
 const Gateway = require('../rules/Gateway');
 const Rule = require('../rules/Rule');

@@ -400,7 +400,8 @@ describe('ArrayField', () => {
 
       const {errors} = schemaForm.validate(schemaForm.formData);
       expect(schemaForm.formData).toHaveProperty('multipleChoicesList');
-      expect(schemaForm.formData.multipleChoicesList).toHaveLength(0);
+      expect((<Record<string, Record<string, unknown>>>schemaForm.formData).multipleChoicesList)
+        .toHaveLength(0);
       expect(errors.length).toEqual(1);
       expect(errors[0].keyword).toEqual('minItems');
       expect(errors[0].params.limit).toEqual(3);

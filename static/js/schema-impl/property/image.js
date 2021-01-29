@@ -11,7 +11,7 @@
 
 'use strict';
 
-const API = require('../../api');
+const API = require('../../api').default;
 const Utils = require('../../utils');
 
 class ImageDetail {

@@ -1,10 +1,9 @@
-const STATIC_JS_PATH = '../../../static/js';
-const SchemaForm = require(`${STATIC_JS_PATH}/schema-form/schema-form`);
+import SchemaForm from './ui/schema-form/schema-form';
 
 export function createSchemaForm(
   {schema, formData, onSubmit}:
   {schema: Record<string, unknown>, formData?: unknown, onSubmit?: () => void}
-): {schemaForm: typeof SchemaForm, node: Element} {
+): {schemaForm: SchemaForm, node: Element} {
   const schemaForm = new SchemaForm(schema, 'test', 'test', formData, onSubmit);
   const node = schemaForm.render();
   return {schemaForm, node};

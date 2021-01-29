@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const App = require('../app');
 const Model = require('./model');
 const Constants = require('../constants');

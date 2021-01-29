@@ -5,21 +5,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-'use strict';
 
-const API = {
-  jwt: localStorage.getItem('jwt'),
+class API {
+  jwt: string | null = localStorage.getItem('jwt');
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return !!this.jwt;
-  },
+  }
 
   /**
    * The default options to use with fetching API calls
    * @return {Object}
    */
-  headers(contentType) {
-    const headers = {
+  headers(contentType?: string): Record<string, string> {
+    const headers: Record<string, string> = {
       Accept: 'application/json',
     };
 
@@ -32,9 +31,9 @@ const API = {
     }
 
     return headers;
-  },
+  }
 
-  getJson(url) {
+  getJson(url: string): Promise<Record<string, unknown>> {
     const opts = {
       method: 'GET',
       headers: this.headers(),
@@ -42,14 +41,14 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
 
       return res.json();
     });
-  },
+  }
 
-  postJson(url, data) {
+  postJson(url: string, data: Record<string, unknown>): Promise<Record<string, unknown> | null> {
     const opts = {
       method: 'POST',
       headers: this.headers('application/json'),
@@ -58,16 +57,18 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
 
       if (res.status !== 204) {
         return res.json();
       }
-    });
-  },
 
-  putJson(url, data) {
+      return null;
+    });
+  }
+
+  putJson(url: string, data: Record<string, unknown>): Promise<Record<string, unknown>> {
     const opts = {
       method: 'PUT',
       headers: this.headers('application/json'),
@@ -76,14 +77,14 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
 
       return res.json();
     });
-  },
+  }
 
-  patchJson(url, data) {
+  patchJson(url: string, data: Record<string, unknown>): Promise<Record<string, unknown>> {
     const opts = {
       method: 'PATCH',
       headers: this.headers('application/json'),
@@ -92,14 +93,14 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
 
       return res.json();
     });
-  },
+  }
 
-  delete(url) {
+  delete(url: string): Promise<void> {
     const opts = {
       method: 'DELETE',
       headers: this.headers(),
@@ -107,13 +108,13 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
     });
-  },
+  }
 
-  loadImage(url) {
-    const opts = {
+  loadImage(url: string): Promise<Blob> {
+    const opts: RequestInit = {
       headers: {
         Authorization: `Bearer ${this.jwt}`,
       },
@@ -122,58 +123,64 @@ const API = {
 
     return fetch(url, opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
 
       return res.blob();
     });
-  },
+  }
 
-  userCount() {
+  userCount(): Promise<number> {
     return this.getJson('/users/count').then((body) => {
-      return body.count;
+      return <number>body.count;
     }).catch(() => {
       throw new Error('Failed to get user count.');
     });
-  },
+  }
 
-  assertJWT() {
+  assertJWT(): void {
     if (!this.jwt) {
       throw new Error('No JWT go login..');
     }
-  },
+  }
 
-  verifyJWT() {
+  verifyJWT(): Promise<boolean> {
     return fetch('/things', {headers: this.headers()}).then((res) => res.ok);
-  },
+  }
 
-  createUser(name, email, password) {
+  createUser(name: string, email: string, password: string): Promise<void> {
     return this.postJson('/users', {name, email, password}).then((body) => {
-      const jwt = body.jwt;
+      const jwt = <string>body!.jwt!;
       localStorage.setItem('jwt', jwt);
-      API.jwt = jwt;
+      this.jwt = jwt;
     }).catch(() => {
       throw new Error('Repeating signup not permitted');
     });
-  },
+  }
 
-  getUser(id) {
+  getUser(id: number): Promise<Record<string, unknown>> {
     return this.getJson(`/users/${encodeURIComponent(id)}`);
-  },
+  }
 
-  addUser(name, email, password) {
-    return this.postJson('/users', {name, email, password});
-  },
+  async addUser(name: string, email: string, password: string): Promise<Record<string, unknown>> {
+    return (await this.postJson('/users', {name, email, password}))!;
+  }
 
-  editUser(id, name, email, password, newPassword) {
+  editUser(
+    id: string,
+    name: string,
+    email: string,
+    password: string,
+    newPassword: string
+  ): Promise<Record<string, unknown>> {
     return this.putJson(
       `/users/${encodeURIComponent(id)}`,
       {id, name, email, password, newPassword}
     );
-  },
+  }
 
-  userEnableMfa(id, totp = null) {
-    const body = {
+  async userEnableMfa(id: number, totp: string): Promise<Record<string, unknown>> {
+    const body: Record<string, unknown> = {
       enable: true,
     };
 
@@ -181,33 +188,35 @@ const API = {
       body.mfa = {totp};
     }
 
-    return this.postJson(`/users/${encodeURIComponent(id)}/mfa`, body);
-  },
+    return (await this.postJson(`/users/${encodeURIComponent(id)}/mfa`, body))!;
+  }
 
-  userDisableMfa(id) {
-    return this.postJson(
+  async userDisableMfa(id: number): Promise<null> {
+    await this.postJson(
       `/users/${encodeURIComponent(id)}/mfa`,
       {enable: false}
     );
-  },
 
-  userRegenerateMfaBackupCodes(id) {
+    return null;
+  }
+
+  userRegenerateMfaBackupCodes(id: number): Promise<Record<string, unknown>> {
     return this.putJson(
       `/users/${encodeURIComponent(id)}/mfa/codes`,
       {generate: true}
     );
-  },
+  }
 
-  deleteUser(id) {
+  deleteUser(id: number): Promise<void> {
     return this.delete(`/users/${encodeURIComponent(id)}`);
-  },
+  }
 
-  getAllUserInfo() {
+  getAllUserInfo(): Promise<Record<string, unknown>> {
     return this.getJson('/users/info');
-  },
+  }
 
-  login(email, password, totp) {
-    const body = {
+  login(email: string, password: string, totp?: string): Promise<void> {
+    const body: Record<string, unknown> = {
       email,
       password,
     };
@@ -229,7 +238,7 @@ const API = {
             throw new Error(body);
           });
         } else {
-          throw new Error(res.status);
+          throw new Error(`${res.status}`);
         }
       }
 
@@ -239,49 +248,62 @@ const API = {
         this.jwt = jwt;
       });
     });
-  },
+  }
 
-  logout() {
+  async logout(): Promise<void> {
     this.assertJWT();
     localStorage.removeItem('jwt');
 
-    return this.postJson('/log-out', {}).catch(() => {
-      console.error('Logout failed...');
-    });
-  },
+    try {
+      await this.postJson('/log-out', {});
+    } catch (e) {
+      console.error('Logout failed:', e);
+    }
+  }
 
-  getInstalledAddons() {
+  getInstalledAddons(): Promise<Record<string, unknown>> {
     return this.getJson('/addons');
-  },
+  }
 
-  getAddonConfig(addonId) {
+  getAddonConfig(addonId: string): Promise<Record<string, unknown>> {
     return this.getJson(`/addons/${encodeURIComponent(addonId)}/config`);
-  },
+  }
 
-  setAddonConfig(addonId, config) {
+  setAddonConfig(
+    addonId: string,
+    config: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
     return this.putJson(
       `/addons/${encodeURIComponent(addonId)}/config`,
       {config}
     );
-  },
+  }
 
-  setAddonSetting(addonId, enabled) {
+  setAddonSetting(addonId: string, enabled: boolean): Promise<Record<string, unknown>> {
     return this.putJson(`/addons/${encodeURIComponent(addonId)}`, {enabled});
-  },
+  }
 
-  installAddon(addonId, addonUrl, addonChecksum) {
-    return this.postJson('/addons', {
+  async installAddon(
+    addonId: string,
+    addonUrl: string,
+    addonChecksum: string
+  ): Promise<Record<string, unknown>> {
+    return (await this.postJson('/addons', {
       id: addonId,
       url: addonUrl,
       checksum: addonChecksum,
-    });
-  },
+    }))!;
+  }
 
-  uninstallAddon(addonId) {
+  uninstallAddon(addonId: string): Promise<void> {
     return this.delete(`/addons/${encodeURIComponent(addonId)}`);
-  },
+  }
 
-  updateAddon(addonId, addonUrl, addonChecksum) {
+  updateAddon(
+    addonId: string,
+    addonUrl: string,
+    addonChecksum: string
+  ): Promise<Record<string, unknown>> {
     return this.patchJson(
       `/addons/${encodeURIComponent(addonId)}`,
       {
@@ -289,17 +311,17 @@ const API = {
         checksum: addonChecksum,
       }
     );
-  },
+  }
 
-  getAddonsInfo() {
+  getAddonsInfo(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/addonsInfo');
-  },
+  }
 
-  getExperimentSetting(experimentName) {
+  getExperimentSetting(experimentName: string): Promise<boolean> {
     return this.getJson(
       `/settings/experiments/${encodeURIComponent(experimentName)}`
     ).then((json) => {
-      return json.enabled;
+      return <boolean>json.enabled;
     }).catch((e) => {
       if (e.message === '404') {
         return false;
@@ -307,55 +329,59 @@ const API = {
 
       throw new Error(`Error getting ${experimentName}`);
     });
-  },
+  }
 
-  setExperimentSetting(experimentName, enabled) {
+  setExperimentSetting(experimentName: string, enabled: boolean): Promise<Record<string, unknown>> {
     return this.putJson(
       `/settings/experiments/${encodeURIComponent(experimentName)}`,
       {enabled}
     );
-  },
+  }
 
-  getUpdateStatus() {
+  getUpdateStatus(): Promise<Record<string, unknown>> {
     return this.getJson('/updates/status');
-  },
+  }
 
-  getUpdateLatest() {
+  getUpdateLatest(): Promise<Record<string, unknown>> {
     return this.getJson('/updates/latest');
-  },
+  }
 
-  getSelfUpdateStatus() {
+  getSelfUpdateStatus(): Promise<Record<string, unknown>> {
     return this.getJson('/updates/self-update');
-  },
+  }
 
-  setSelfUpdateStatus(enabled) {
+  setSelfUpdateStatus(enabled: boolean): Promise<Record<string, unknown>> {
     return this.putJson('/updates/self-update', {enabled});
-  },
+  }
 
-  startUpdate() {
-    return this.postJson('/updates/update', {});
-  },
+  async startUpdate(): Promise<Record<string, unknown>> {
+    return (await this.postJson('/updates/update', {}))!;
+  }
 
-  getExtensions() {
+  getExtensions(): Promise<Record<string, unknown>> {
     return this.getJson('/extensions');
-  },
+  }
 
-  getThings() {
+  getThings(): Promise<Record<string, unknown>> {
     return this.getJson('/things');
-  },
+  }
 
-  getThing(thingId) {
+  getThing(thingId: string): Promise<Record<string, unknown>> {
     return this.getJson(`/things/${encodeURIComponent(thingId)}`);
-  },
+  }
 
-  setThingLayoutIndex(thingId, index) {
+  setThingLayoutIndex(thingId: string, index: number): Promise<Record<string, unknown>> {
     return this.patchJson(
       `/things/${encodeURIComponent(thingId)}`,
       {layoutIndex: index}
     );
-  },
+  }
 
-  setThingFloorplanPosition(thingId, x, y) {
+  setThingFloorplanPosition(
+    thingId: string,
+    x: number,
+    y: number
+  ): Promise<Record<string, unknown>> {
     return this.patchJson(
       `/things/${encodeURIComponent(thingId)}`,
       {
@@ -363,10 +389,13 @@ const API = {
         floorplanY: y,
       }
     );
-  },
+  }
 
-  setThingCredentials(thingId, data) {
-    const body = {
+  setThingCredentials(
+    thingId: string,
+    data: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
+    const body: Record<string, unknown> = {
       thingId,
     };
 
@@ -378,104 +407,106 @@ const API = {
     }
 
     return this.patchJson('/things', body);
-  },
+  }
 
-  addThing(description) {
-    return this.postJson('/things', description);
-  },
+  async addThing(description: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/things', description))!;
+  }
 
-  addWebThing(url) {
-    return this.postJson('/new_things', {url});
-  },
+  async addWebThing(url: string): Promise<Record<string, unknown>> {
+    return (await this.postJson('/new_things', {url}))!;
+  }
 
-  removeThing(thingId) {
+  removeThing(thingId: string): Promise<void> {
     return this.delete(`/things/${encodeURIComponent(thingId)}`);
-  },
+  }
 
-  updateThing(thingId, updates) {
+  updateThing(thingId: string, updates: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson(`/things/${encodeURIComponent(thingId)}`, updates);
-  },
+  }
 
-  getPushKey() {
+  getPushKey(): Promise<Record<string, unknown>> {
     return this.getJson('/push/vapid-public-key');
-  },
+  }
 
-  pushSubscribe(subscription) {
-    return this.postJson('/push/register', subscription);
-  },
+  async pushSubscribe(subscription: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/push/register', subscription))!;
+  }
 
-  getNotifiers() {
+  getNotifiers(): Promise<Record<string, unknown>> {
     return this.getJson('/notifiers');
-  },
+  }
 
-  startPairing(timeout) {
-    return this.postJson('/actions', {
+  async startPairing(timeout: number): Promise<Record<string, unknown>> {
+    return (await this.postJson('/actions', {
       pair: {
         input: {
           timeout,
         },
       },
-    });
-  },
+    }))!;
+  }
 
-  cancelPairing(actionUrl) {
+  cancelPairing(actionUrl: string): Promise<void> {
     return this.delete(actionUrl);
-  },
+  }
 
-  getRules() {
+  getRules(): Promise<Record<string, unknown>> {
     return this.getJson('/rules');
-  },
+  }
 
-  getRule(ruleId) {
+  getRule(ruleId: string): Promise<Record<string, unknown>> {
     return this.getJson(`/rules/${encodeURIComponent(ruleId)}`);
-  },
+  }
 
-  addRule(description) {
-    return this.postJson('/rules', description);
-  },
+  async addRule(description: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/rules', description))!;
+  }
 
-  updateRule(ruleId, description) {
+  updateRule(
+    ruleId: string,
+    description: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
     return this.putJson(`/rules/${encodeURIComponent(ruleId)}`, description);
-  },
+  }
 
-  deleteRule(ruleId) {
+  deleteRule(ruleId: string): Promise<void> {
     return this.delete(`/rules/${encodeURIComponent(ruleId)}`);
-  },
+  }
 
-  getLogs() {
+  getLogs(): Promise<Record<string, unknown>> {
     return this.getJson('/logs/.schema');
-  },
+  }
 
-  addLog(description) {
+  async addLog(
+    description: Record<string, unknown>
+  ): Promise<[boolean, string | Record<string, unknown> | null]> {
     const opts = {
       method: 'POST',
       headers: this.headers('application/json'),
       body: JSON.stringify(description),
     };
 
-    let ok;
-    return fetch('/logs', opts).then((res) => {
-      ok = res.ok;
+    try {
+      const res = await fetch('/logs', opts);
 
       if (!res.ok) {
-        return res.text();
+        return [false, await res.text()];
       }
 
-      return res.json();
-    }).then((body) => {
-      return [ok, body];
-    }).catch(() => {
-      return [ok, null];
-    });
-  },
+      return [true, await res.json()];
+    } catch (_) {
+      return [false, null];
+    }
+  }
 
-  deleteLog(thingId, propertyId) {
+  deleteLog(thingId: string, propertyId: string): Promise<void> {
     return this.delete(
       `/logs/things/${encodeURIComponent(thingId)}/properties/${encodeURIComponent(propertyId)}`
     );
-  },
+  }
 
-  uploadFloorplan(file) {
+  uploadFloorplan(file: File): Promise<void> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -489,12 +520,17 @@ const API = {
 
     return fetch('/uploads', opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
     });
-  },
+  }
 
-  setupTunnel(email, subdomain, reclamationToken, optout) {
+  setupTunnel(
+    email: string,
+    subdomain: string,
+    reclamationToken:
+    string, optout: boolean
+  ): Promise<[boolean, string | Record<string, unknown>]> {
     const opts = {
       method: 'POST',
       headers: this.headers('application/json'),
@@ -508,9 +544,9 @@ const API = {
 
       return res.json().then((body) => [true, body]);
     });
-  },
+  }
 
-  skipTunnel() {
+  skipTunnel(): Promise<[boolean, string | Record<string, unknown>]> {
     const opts = {
       method: 'POST',
       headers: this.headers('application/json'),
@@ -524,85 +560,85 @@ const API = {
 
       return res.json().then((body) => [true, body]);
     });
-  },
+  }
 
-  reclaimDomain(subdomain) {
-    return this.postJson('/settings/reclaim', {subdomain});
-  },
+  async reclaimDomain(subdomain: string): Promise<Record<string, unknown>> {
+    return (await this.postJson('/settings/reclaim', {subdomain}))!;
+  }
 
-  getLanSettings() {
+  getLanSettings(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/network/lan');
-  },
+  }
 
-  getWlanSettings() {
+  getWlanSettings(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/network/wireless');
-  },
+  }
 
-  getDhcpSettings() {
+  getDhcpSettings(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/network/dhcp');
-  },
+  }
 
-  getWirelessNetworks() {
+  getWirelessNetworks(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/network/wireless/networks');
-  },
+  }
 
-  getNetworkAddresses() {
+  getNetworkAddresses(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/network/addresses');
-  },
+  }
 
-  setLanSettings(settings) {
+  setLanSettings(settings: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/network/lan', settings);
-  },
+  }
 
-  setWlanSettings(settings) {
+  setWlanSettings(settings: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/network/wireless', settings);
-  },
+  }
 
-  setDhcpSettings(settings) {
+  setDhcpSettings(settings: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/network/dhcp', settings);
-  },
+  }
 
-  getNtpStatus() {
+  getNtpStatus(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/system/ntp');
-  },
+  }
 
-  restartNtpSync() {
-    return this.postJson('/settings/system/ntp', {});
-  },
+  async restartNtpSync(): Promise<Record<string, unknown>> {
+    return (await this.postJson('/settings/system/ntp', {}))!;
+  }
 
-  getSshStatus() {
+  getSshStatus(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/system/ssh');
-  },
+  }
 
-  setSshStatus(enabled) {
+  setSshStatus(enabled: boolean): Promise<Record<string, unknown>> {
     return this.putJson('/settings/system/ssh', {enabled});
-  },
+  }
 
-  getPlatform() {
+  getPlatform(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/system/platform');
-  },
+  }
 
-  getTunnelInfo() {
+  getTunnelInfo(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/tunnelinfo');
-  },
+  }
 
-  setDomainSettings(settings) {
+  setDomainSettings(settings: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/domain', settings);
-  },
+  }
 
-  getAdapters() {
+  getAdapters(): Promise<Record<string, unknown>> {
     return this.getJson('/adapters');
-  },
+  }
 
-  getAuthorizations() {
+  getAuthorizations(): Promise<Record<string, unknown>> {
     return this.getJson('/authorizations');
-  },
+  }
 
-  revokeAuthorization(clientId) {
+  revokeAuthorization(clientId: string): Promise<void> {
     return this.delete(`/authorizations/${encodeURIComponent(clientId)}`);
-  },
+  }
 
-  ping() {
+  ping(): Promise<void> {
     const opts = {
       method: 'GET',
       headers: this.headers(),
@@ -610,45 +646,48 @@ const API = {
 
     return fetch('/ping', opts).then((res) => {
       if (!res.ok) {
-        throw new Error(res.status);
+        throw new Error(`${res.status}`);
       }
     });
-  },
+  }
 
-  getCountry() {
+  getCountry(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/localization/country');
-  },
+  }
 
-  setCountry(country) {
+  setCountry(country: string): Promise<Record<string, unknown>> {
     return this.putJson('/settings/localization/country', {country});
-  },
+  }
 
-  getTimezone() {
+  getTimezone(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/localization/timezone');
-  },
+  }
 
-  setTimezone(zone) {
+  setTimezone(zone: string): Promise<Record<string, unknown>> {
     return this.putJson('/settings/localization/timezone', {zone});
-  },
+  }
 
-  getLanguage() {
+  getLanguage(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/localization/language');
-  },
+  }
 
-  setLanguage(language) {
+  setLanguage(language: string): Promise<Record<string, unknown>> {
     return this.putJson('/settings/localization/language', {language});
-  },
+  }
 
-  getUnits() {
+  getUnits(): Promise<Record<string, unknown>> {
     return this.getJson('/settings/localization/units');
-  },
+  }
 
-  setUnits(units) {
+  setUnits(units: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/localization/units', units);
-  },
-};
+  }
+}
+
+const instance = new API();
 
 // Elevate this to the window level.
-window.API = API;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).API = instance;
 
-module.exports = API;
+export default instance;

@@ -11,24 +11,24 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as Utils from '../utils';
+import * as Fluent from '../fluent';
 
-const Utils = require('../utils');
-const fluent = require('../fluent');
+export default class UnsupportedField {
+  private schema: Record<string, unknown>;
 
-class UnsupportedField {
-  constructor(schema) {
+  constructor(schema: Record<string, unknown>) {
     // XXX render json as string so dev can inspect faulty subschema
     this.schema = schema;
   }
 
-  render() {
+  render(): HTMLDivElement {
     const schema = Utils.escapeHtml(JSON.stringify(this.schema, null, 2));
     const field = document.createElement('div');
     field.className = 'unsupported-field';
 
     const fieldMessage = document.createElement('span');
-    fieldMessage.innerText = fluent.getMessage('unsupported-field');
+    fieldMessage.innerText = Fluent.getMessage('unsupported-field');
 
     const schemaMessage = document.createElement('span');
     schemaMessage.innerHTML = schema;
@@ -39,5 +39,3 @@ class UnsupportedField {
     return field;
   }
 }
-
-module.exports = UnsupportedField;

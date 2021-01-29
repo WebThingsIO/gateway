@@ -159,7 +159,7 @@ class EventList {
 
   updateTimestamps() {
     for (const el of this.element.querySelectorAll('.event-time')) {
-      el.innerText = Utils.fuzzyTime(new Date(el.dataset.original));
+      el.innerText = Utils.fuzzyTime(new Date(el.dataset.original).getTime());
     }
   }
 }

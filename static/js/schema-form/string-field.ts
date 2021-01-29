@@ -11,39 +11,49 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as SchemaUtils from './schema-utils';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const Utils = require('../utils');
+export default class StringField {
+  private schema: Record<string, unknown>;
 
-class StringField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
+  private formData?: string;
+
+  private idSchema: Record<string, unknown>;
+
+  private onChange: ((value?: string) => void) | null;
+
+  private required: boolean;
+
+  private disabled: boolean;
+
+  private readOnly: boolean;
+
+  constructor(schema: Record<string, unknown>,
+              formData: string | undefined,
+              idSchema: Record<string, unknown>,
+              _name: string,
+              definitions: Record<string, unknown>,
+              onChange: ((value?: string) => void) | null = null,
               required = false,
               disabled = false,
               readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
-    this.name = name;
-    this.definitions = definitions;
     this.onChange = onChange;
     this.required = required;
     this.disabled = disabled;
     this.readOnly = readOnly;
   }
 
-  toFormData(value) {
+  toFormData(value: string): string | undefined {
     // eslint-disable-next-line no-undefined
     return value === '' ? undefined : value;
   }
 
-  onStringChange(event) {
-    const value = event.target.value;
+  onStringChange(event: Event): void {
+    const value = (<HTMLInputElement>event.target!).value;
 
     // If a user input nothing on required field, we should set undefined
     // in order to raise error.
@@ -54,14 +64,14 @@ class StringField {
     }
   }
 
-  render() {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+  render(): HTMLDivElement {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
 
     // list item
     if (SchemaUtils.isSelect(this.schema)) {
-      const enumOptions = SchemaUtils.getOptionsList(this.schema);
+      const enumOptions = <Record<string, string>[]>SchemaUtils.getOptionsList(this.schema);
       const selectedValue = value;
       let selectedAny = false;
 
@@ -72,7 +82,7 @@ class StringField {
 
       const selects = enumOptions.map(({value, label}, i) => {
         const selected = selectedValue === this.toFormData(value);
-        selectedAny |= selected;
+        selectedAny = selectedAny || selected;
 
         return `
           <option
@@ -94,7 +104,7 @@ class StringField {
         </select>`;
 
       if (!selectedAny) {
-        const select = field.querySelector(`#${id}`);
+        const select = <HTMLSelectElement>field.querySelector(`#${id}`)!;
         select.selectedIndex = -1;
       }
     } else {
@@ -109,12 +119,10 @@ class StringField {
         />`;
     }
 
-    const input = field.querySelector(`#${id}`);
+    const input = <HTMLInputElement>field.querySelector(`#${id}`)!;
     input.onchange = this.onStringChange.bind(this);
     input.oninput = this.onStringChange.bind(this);
 
     return field;
   }
 }
-
-module.exports = StringField;
