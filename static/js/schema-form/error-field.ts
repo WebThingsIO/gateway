@@ -11,9 +11,13 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import {ErrorObject} from 'ajv';
 
-class ErrorField {
+export default class ErrorField {
+  private field: HTMLDivElement;
+
+  private errorList: HTMLUListElement;
+
   constructor() {
     const field = document.createElement('div');
     field.className = 'errors-field hidden';
@@ -26,12 +30,10 @@ class ErrorField {
       </ul>`;
 
     this.field = field;
-    this.errorlist = field.querySelector('ul');
-
-    return this;
+    this.errorList = field.querySelector('ul')!;
   }
 
-  render(errors) {
+  render(errors: ErrorObject[]): HTMLDivElement {
     if (errors.length > 0) {
       const errorHtml = errors.map((error) => {
         return `
@@ -40,7 +42,7 @@ class ErrorField {
             </li>`;
       });
 
-      this.errorlist.innerHTML = errorHtml.join(' ');
+      this.errorList.innerHTML = errorHtml.join(' ');
 
       this.field.classList.remove('hidden');
     } else {
@@ -50,5 +52,3 @@ class ErrorField {
     return this.field;
   }
 }
-
-module.exports = ErrorField;

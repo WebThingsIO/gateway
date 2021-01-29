@@ -11,7 +11,7 @@
 'use strict';
 
 const Adapter = require('./adapter');
-const API = require('../api');
+const API = require('../api').default;
 const App = require('../app');
 const AddonConfig = require('./addon-config');
 const DiscoveredAddon = require('./discovered-addon');

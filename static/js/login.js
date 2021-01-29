@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const API = require('./api');
+const API = require('./api').default;
 const fluent = require('./fluent');
 
 function setupForm() {

@@ -11,27 +11,58 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import ArrayField from './array-field';
+import BooleanField from './boolean-field';
+import NumberField from './number-field';
+import ObjectField from './object-field';
+import * as SchemaUtils from './schema-utils';
+import StringField from './string-field';
+import UnsupportedField from './unsupported-field';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const NumberField = require('./number-field');
-const StringField = require('./string-field');
-const BooleanField = require('./boolean-field');
-const UnsupportedField = require('./unsupported-field');
-const Utils = require('../utils');
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type FieldClass = {
+  new(
+    schema: Record<string, unknown>,
+    formData: any,
+    idSchema: Record<string, unknown>,
+    name: string,
+    definitions: Record<string, unknown>,
+    onChange: ((value: unknown) => void) | null,
+    required: boolean,
+    disabled: boolean,
+    readOnly: boolean
+  ): any;
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
-// eslint-disable-next-line prefer-const
-let ObjectField;
-// eslint-disable-next-line prefer-const
-let ArrayField;
+export default class SchemaField {
+  private schema: Record<string, unknown>;
 
-class SchemaField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
+  private formData: unknown;
+
+  private idSchema: Record<string, unknown>;
+
+  private name: string | null;
+
+  private definitions: Record<string, unknown>;
+
+  private onChange: ((value: unknown) => void) | null;
+
+  private required: boolean;
+
+  private disabled: boolean;
+
+  private readOnly: boolean;
+
+  private retrievedSchema: Record<string, unknown>;
+
+  constructor(schema: Record<string, unknown>,
+              formData: unknown,
+              idSchema: Record<string, unknown>,
+              name: string | null,
+              definitions: Record<string, unknown>,
+              onChange: ((value: unknown) => void) | null = null,
               required = false,
               disabled = false,
               readOnly = false) {
@@ -49,8 +80,8 @@ class SchemaField {
     this.readOnly = readOnly;
   }
 
-  getFieldType() {
-    const FIELD_TYPES = {
+  getFieldType(): FieldClass {
+    const FIELD_TYPES: Record<string, FieldClass> = {
       array: ArrayField,
       boolean: BooleanField,
       integer: NumberField,
@@ -59,15 +90,15 @@ class SchemaField {
       string: StringField,
     };
 
-    const field = FIELD_TYPES[this.retrievedSchema.type];
-    return field ? field : UnsupportedField;
+    const field = FIELD_TYPES[<string> this.retrievedSchema.type];
+    return field ?? UnsupportedField;
   }
 
-  render() {
+  render(): HTMLDivElement {
     const fieldType = this.getFieldType();
     const type = this.retrievedSchema.type;
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-    const description = this.retrievedSchema.description;
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const description = <string> this.retrievedSchema.description;
     const classNames = [
       'form-group',
       'field',
@@ -75,7 +106,7 @@ class SchemaField {
     ]
       .join(' ')
       .trim();
-    let label = this.retrievedSchema.title || this.name;
+    let label = <string> this.retrievedSchema.title || this.name;
     if (typeof label !== 'undefined' && label !== null) {
       label = Utils.escapeHtml(label);
       label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
@@ -107,21 +138,16 @@ class SchemaField {
       this.schema,
       this.formData,
       this.idSchema,
-      this.name,
+      this.name || '',
       this.definitions,
       this.onChange,
       this.required,
       this.disabled,
-      this.readOnly).render();
+      this.readOnly
+    ).render();
 
     field.appendChild(child);
 
     return field;
   }
 }
-
-module.exports = SchemaField;
-
-// avoid circular dependency
-ObjectField = require('./object-field');
-ArrayField = require('./array-field');

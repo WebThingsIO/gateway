@@ -11,22 +11,36 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as SchemaUtils from './schema-utils';
+import SchemaField from './schema-field';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const SchemaField = require('./schema-field');
-const Utils = require('../utils');
+export default class ObjectField {
+  private schema: Record<string, unknown>;
 
-class ObjectField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
+  private formData: Record<string, unknown>;
+
+  private idSchema: Record<string, unknown>;
+
+  private name: string;
+
+  private definitions: Record<string, unknown>;
+
+  private onChange: ((value: unknown) => void) | null;
+
+  private required: boolean;
+
+  private retrievedSchema: Record<string, unknown>;
+
+  constructor(schema: Record<string, unknown>,
+              formData: Record<string, unknown>,
+              idSchema: Record<string, unknown>,
+              name: string,
+              definitions: Record<string, unknown>,
+              onChange: ((value: unknown) => void) | null = null,
               required = false,
-              disabled = false,
-              readOnly = false) {
+              _disabled = false,
+              _readOnly = false) {
     this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
                                                       definitions,
                                                       formData);
@@ -37,40 +51,38 @@ class ObjectField {
     this.definitions = definitions;
     this.onChange = onChange;
     this.required = required;
-    this.disabled = disabled;
-    this.readOnly = readOnly;
   }
 
-  isRequired(name) {
+  isRequired(name: string): boolean {
     return (
       Array.isArray(this.retrievedSchema.required) &&
       this.retrievedSchema.required.includes(name)
     );
   }
 
-  sortObject(obj) {
+  sortObject(obj: Record<string, unknown>): Record<string, unknown> {
     const keys = Object.keys(obj).sort();
-    const map = {};
+    const map: Record<string, unknown> = {};
     keys.forEach((key) => {
       let val = obj[key];
       if (typeof val === 'object') {
-        val = this.sortObject(val);
+        val = this.sortObject(<Record<string, unknown>>val);
       }
       map[key] = val;
     });
     return map;
   }
 
-  isSameSchema(schema1, schema2) {
+  isSameSchema(schema1: Record<string, unknown>, schema2: Record<string, unknown>): boolean {
     const json1 = JSON.stringify(this.sortObject(schema1));
     const json2 = JSON.stringify(this.sortObject(schema2));
     return json1 === json2;
   }
 
-  onPropertyChange(name, field) {
+  onPropertyChange(name: string, field: HTMLElement): (value: unknown) => void {
     return (value) => {
       const schema = this.schema;
-      const newFormData = {};
+      const newFormData: Record<string, unknown> = {};
       newFormData[name] = value;
 
       this.formData = Object.assign(this.formData, newFormData);
@@ -82,9 +94,11 @@ class ObjectField {
                                                               this.formData);
         if (!this.isSameSchema(this.retrievedSchema, newRetrievedSchema)) {
           this.retrievedSchema = newRetrievedSchema;
-          this.formData = SchemaUtils.getDefaultFormState(newRetrievedSchema,
-                                                          this.formData,
-                                                          this.definitions);
+          this.formData = <Record<string, unknown>>SchemaUtils.getDefaultFormState(
+            newRetrievedSchema,
+            this.formData,
+            this.definitions
+          );
           this.renderField(field);
         }
       }
@@ -95,11 +109,11 @@ class ObjectField {
     };
   }
 
-  renderField(field) {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-    const description = this.retrievedSchema.description;
+  renderField(field: HTMLElement): void {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const description = <string> this.retrievedSchema.description;
     let title = this.retrievedSchema.title ?
-      this.retrievedSchema.title :
+      <string> this.retrievedSchema.title :
       this.name;
     if (typeof title !== 'undefined' && title !== null) {
       title = Utils.escapeHtml(title);
@@ -114,12 +128,15 @@ class ObjectField {
         '');
 
     // TODO support to specific properties order
-    const orderedProperties = Object.keys(this.retrievedSchema.properties);
+    const orderedProperties = Object.keys(
+      <Record<string, unknown>> this.retrievedSchema.properties
+    );
 
     orderedProperties.forEach((name) => {
-      const childSchema = this.retrievedSchema.properties[name];
+      const childSchema =
+        <Record<string, unknown>>(<Record<string, unknown>> this.retrievedSchema.properties)[name];
       const childIdPrefix = `${this.idSchema.$id}_${name}`;
-      const childData = this.formData[name];
+      const childData = <Record<string, unknown>> this.formData[name];
       const childIdSchema = SchemaUtils.toIdSchema(
         childSchema,
         childIdPrefix,
@@ -135,14 +152,15 @@ class ObjectField {
         this.definitions,
         this.onPropertyChange(name, field),
         this.isRequired(name),
-        childSchema.disabled,
-        childSchema.readOnly).render();
+        <boolean>childSchema.disabled,
+        <boolean>childSchema.readOnly
+      ).render();
 
       field.appendChild(child);
     });
   }
 
-  render() {
+  render(): HTMLFieldSetElement {
     const field = document.createElement('fieldset');
 
     this.renderField(field);
@@ -150,5 +168,3 @@ class ObjectField {
     return field;
   }
 }
-
-module.exports = ObjectField;

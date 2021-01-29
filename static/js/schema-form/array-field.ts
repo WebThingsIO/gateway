@@ -11,21 +11,35 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-'use strict';
+import * as SchemaUtils from './schema-utils';
+import SchemaField from './schema-field';
+import UnsupportedField from './unsupported-field';
+import * as Utils from '../utils';
 
-const SchemaUtils = require('./schema-utils');
-const SchemaField = require('./schema-field');
-const Utils = require('../utils');
-const UnsupportedField = require('./unsupported-field');
+export default class ArrayField {
+  private schema: Record<string, unknown>;
 
-class ArrayField {
-  constructor(schema,
-              formData,
-              idSchema,
-              name,
-              definitions,
-              onChange,
-              required = false,
+  private formData: unknown[];
+
+  private idSchema: Record<string, unknown>;
+
+  private name: string;
+
+  private definitions: Record<string, unknown>;
+
+  private onChange: ((value: unknown) => void) | null;
+
+  private disabled: boolean;
+
+  private readOnly: boolean;
+
+  constructor(schema: Record<string, unknown>,
+              formData: unknown[],
+              idSchema: Record<string, unknown>,
+              name: string,
+              definitions: Record<string, unknown>,
+              onChange: ((value: unknown) => void) | null = null,
+              _required = false,
               disabled = false,
               readOnly = false) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
@@ -34,19 +48,18 @@ class ArrayField {
     this.name = name;
     this.definitions = definitions;
     this.onChange = onChange;
-    this.required = required;
     this.disabled = disabled;
     this.readOnly = readOnly;
   }
 
-  require(name) {
+  require(name: string): boolean {
     return (
       Array.isArray(this.schema.required) &&
       this.schema.required.includes(name)
     );
   }
 
-  onChangeForIndex(index) {
+  onChangeForIndex(index: number): (value: unknown) => void {
     return (value) => {
       const newFormData = this.formData.map((item, i) => {
         // We need to treat undefined items as nulls to have validation.
@@ -63,13 +76,13 @@ class ArrayField {
     };
   }
 
-  onSelectChange(value, all) {
+  onSelectChange(value: unknown, all: unknown[]): (event: Event) => void {
     return (event) => {
-      const checked = event.target.checked;
+      const checked = (<HTMLInputElement>event.target!).checked;
 
       if (checked) {
         this.formData.push(value);
-        this.formData.sort((a, b) => all.indexOf(a) > all.indexOf(b));
+        this.formData.sort((a, b) => all.indexOf(a) - all.indexOf(b));
       } else {
         this.formData = this.formData.filter((v) => v !== value);
       }
@@ -80,7 +93,7 @@ class ArrayField {
     };
   }
 
-  allowAdditionalItems() {
+  allowAdditionalItems(): boolean {
     const schema = this.schema;
     if (schema.additionalItems === true) {
       console.warn('additionalItems=true is currently not supported');
@@ -88,18 +101,18 @@ class ArrayField {
     return SchemaUtils.isObject(schema.additionalItems);
   }
 
-  isAddable(formItems) {
+  isAddable(formItems: unknown[]): boolean {
     const schema = this.schema;
     let addable = true;
 
     if (typeof schema.maxItems !== 'undefined') {
-      addable = formItems.length < schema.maxItems;
+      addable = formItems.length < <number>schema.maxItems;
     }
 
     return addable;
   }
 
-  isItemRequired(itemSchema) {
+  isItemRequired(itemSchema: Record<string, unknown>): boolean {
     if (Array.isArray(itemSchema.type)) {
       // While we don't yet support composite/nullable jsonschema types, it's
       // future-proof to check for requirement against these.
@@ -109,18 +122,17 @@ class ArrayField {
     return itemSchema.type !== 'null';
   }
 
-  itemFieldId(index) {
-    return `array_${Utils.escapeHtmlForIdClass(this.idSchema.$id)}_${index}`;
+  itemFieldId(index: number): string {
+    return `array_${Utils.escapeHtmlForIdClass(<string> this.idSchema.$id)}_${index}`;
   }
 
-  onDropIndexClick(field, index) {
+  onDropIndexClick(field: HTMLElement, index: number): (event: Event) => void {
     return (event) => {
       const schema = this.schema;
-      const itemsField = field.querySelector('div.array-items');
-      let itemSchema = schema.items;
-      if (SchemaUtils.isFixedItems(schema) &&
-        this.allowAdditionalItems(schema)) {
-        itemSchema = schema.additionalItems;
+      const itemsField = field.querySelector('div.array-items')!;
+      let itemSchema = <Record<string, unknown>>schema.items;
+      if (SchemaUtils.isFixedItems(schema) && this.allowAdditionalItems()) {
+        itemSchema = <Record<string, unknown>>schema.additionalItems;
       }
 
       const newItemsField = itemsField.cloneNode(false);
@@ -129,7 +141,7 @@ class ArrayField {
 
       for (let i = 0; i < index; i++) {
         const id = this.itemFieldId(i);
-        const item = field.querySelector(`#${id}`);
+        const item = field.querySelector(`#${id}`)!;
 
         newItemsField.appendChild(item);
       }
@@ -155,7 +167,7 @@ class ArrayField {
     };
   }
 
-  renderRemoveButton(field, index) {
+  renderRemoveButton(field: HTMLElement, index: number): HTMLButtonElement {
     const button = document.createElement('button');
     button.className = 'btn-remove btn-form-tools';
     button.disabled = this.disabled || this.readOnly;
@@ -164,19 +176,18 @@ class ArrayField {
     return button;
   }
 
-  onAddClick(field) {
+  onAddClick(field: HTMLElement): (event: Event) => void {
     return (event) => {
       const schema = this.schema;
       const definitions = this.definitions;
       const index = this.formData.length;
-      const itemsField = field.querySelector('div.array-items');
+      const itemsField = field.querySelector('div.array-items')!;
 
       event.preventDefault();
 
-      let itemSchema = schema.items;
-      if (SchemaUtils.isFixedItems(schema) &&
-        this.allowAdditionalItems(schema)) {
-        itemSchema = schema.additionalItems;
+      let itemSchema = <Record<string, unknown>>schema.items;
+      if (SchemaUtils.isFixedItems(schema) && this.allowAdditionalItems()) {
+        itemSchema = <Record<string, unknown>>schema.additionalItems;
       }
 
       const value = SchemaUtils.getDefaultFormState(
@@ -203,7 +214,7 @@ class ArrayField {
     };
   }
 
-  renderAddButton(field) {
+  renderAddButton(field: HTMLElement): HTMLButtonElement {
     const button = document.createElement('button');
     button.className = 'btn-add btn-form-tools';
     button.disabled = this.disabled || this.readOnly;
@@ -212,7 +223,13 @@ class ArrayField {
     return button;
   }
 
-  renderArrayFieldItem(field, itemData, index, itemSchema, canRemove) {
+  renderArrayFieldItem(
+    field: HTMLElement,
+    itemData: unknown,
+    index: number,
+    itemSchema: Record<string, unknown>,
+    canRemove: boolean
+  ): HTMLDivElement {
     const item = document.createElement('div');
     const id = this.itemFieldId(index);
     item.className = 'array-item-row';
@@ -227,7 +244,7 @@ class ArrayField {
       </div>
       `;
 
-      const toolbox = item.querySelector('div.array-item-toolbox');
+      const toolbox = item.querySelector('div.array-item-toolbox')!;
       const buttom = this.renderRemoveButton(field, index);
       toolbox.appendChild(buttom);
     } else {
@@ -241,10 +258,10 @@ class ArrayField {
       itemSchema,
       itemIdPrefix,
       this.definitions,
-      itemData
+      <Record<string, unknown>>itemData
     );
 
-    const childField = item.querySelector('div.array-item');
+    const childField = item.querySelector('div.array-item')!;
     const child = new SchemaField(
       itemSchema,
       itemData,
@@ -253,19 +270,20 @@ class ArrayField {
       this.definitions,
       this.onChangeForIndex(index),
       this.isItemRequired(itemSchema),
-      itemSchema.disabled,
-      itemSchema.readOnly).render();
+      <boolean>itemSchema.disabled,
+      <boolean>itemSchema.readOnly
+    ).render();
 
     childField.appendChild(child);
 
     return item;
   }
 
-  renderArrayFieldset() {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
-    const description = this.schema.description;
+  renderArrayFieldset(): HTMLFieldSetElement {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const description = <string> this.schema.description;
 
-    let title = this.schema.title ? this.schema.title : this.name;
+    let title = this.schema.title ? <string> this.schema.title : this.name;
     title = Utils.escapeHtml(title);
 
     const field = document.createElement('fieldset');
@@ -281,15 +299,17 @@ class ArrayField {
     return field;
   }
 
-  renderNormalArray() {
+  renderNormalArray(): HTMLFieldSetElement {
     const schema = this.schema;
     const definitions = this.definitions;
     const items = this.formData;
-    const itemSchema = SchemaUtils.retrieveSchema(schema.items,
-                                                  definitions,
-                                                  items);
+    const itemSchema = SchemaUtils.retrieveSchema(
+      <Record<string, unknown>>schema.items,
+      definitions,
+      items
+    );
     const field = this.renderArrayFieldset();
-    const itemsField = field.querySelector('div.array-items');
+    const itemsField = field.querySelector('div.array-items')!;
 
     items.forEach((item, index) => {
       const itemField = this.renderArrayFieldItem(
@@ -309,15 +329,15 @@ class ArrayField {
     return field;
   }
 
-  renderFixedArray() {
+  renderFixedArray(): HTMLFieldSetElement {
     const schema = this.schema;
     const definitions = this.definitions;
     const field = this.renderArrayFieldset();
-    const itemsField = field.querySelector('div.array-items');
+    const itemsField = field.querySelector('div.array-items')!;
 
     let items = this.formData;
-    const itemSchemas = schema.items.map((item, index) => {
-      return SchemaUtils.retrieveSchema(item, definitions, items[index]);
+    const itemSchemas = (<unknown[]>schema.items).map((item, index) => {
+      return SchemaUtils.retrieveSchema(<Record<string, unknown>>item, definitions, items[index]);
     });
 
     if (!items || items.length < itemSchemas.length) {
@@ -329,7 +349,7 @@ class ArrayField {
       const additional = index >= itemSchemas.length;
       const canRemove = additional;
       const itemSchema = additional ?
-        SchemaUtils.retrieveSchema(schema.additionalItems, definitions) :
+        SchemaUtils.retrieveSchema(<Record<string, unknown>>schema.additionalItems, definitions) :
         itemSchemas[index];
 
       const itemField = this.renderArrayFieldItem(
@@ -349,14 +369,16 @@ class ArrayField {
     return field;
   }
 
-  renderMultiSelect() {
-    const id = Utils.escapeHtmlForIdClass(this.idSchema.$id);
+  renderMultiSelect(): HTMLFieldSetElement {
+    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
     const items = this.formData;
     const schema = this.schema;
     const definitions = this.definitions;
-    const itemsSchema = SchemaUtils.retrieveSchema(schema.items,
-                                                   definitions,
-                                                   items);
+    const itemsSchema = SchemaUtils.retrieveSchema(
+      <Record<string, unknown>>schema.items,
+      definitions,
+      items
+    );
     const enumOptions = SchemaUtils.optionsList(itemsSchema);
     const all = enumOptions.map(({value}) => value);
 
@@ -378,10 +400,10 @@ class ArrayField {
         ${checked ? 'checked' : ''}
         ${(this.disabled || this.readOnly) ? 'disabled' : ''}
       />
-      <span class="checkbox-title">${Utils.escapeHtml(option.label)}</span>
+      <span class="checkbox-title">${Utils.escapeHtml(<string>option.label)}</span>
       `;
 
-      const input = div.querySelector('input');
+      const input = div.querySelector('input')!;
       input.onchange = this.onSelectChange(option.value, all);
 
       field.appendChild(div);
@@ -390,7 +412,7 @@ class ArrayField {
     return field;
   }
 
-  render() {
+  render(): HTMLElement {
     const schema = this.schema;
 
     if (!schema.hasOwnProperty('items')) {
@@ -406,5 +428,3 @@ class ArrayField {
     return this.renderNormalArray();
   }
 }
-
-module.exports = ArrayField;

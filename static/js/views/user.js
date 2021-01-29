@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const page = require('page');
 const Utils = require('../utils');
 

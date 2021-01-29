@@ -9,9 +9,9 @@
  */
 'use strict';
 
-const SchemaForm = require('../schema-form/schema-form');
+const SchemaForm = require('../schema-form/schema-form').default;
 const page = require('page');
-const API = require('../api');
+const API = require('../api').default;
 const fluent = require('../fluent');
 
 class AddonConfig {

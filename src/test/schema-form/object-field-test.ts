@@ -105,7 +105,7 @@ describe('ObjectField', () => {
       select.value = 'changed';
       fireEvent(select, 'change');
 
-      expect(schemaForm.formData.foo).toEqual('changed');
+      expect((<Record<string, string>>schemaForm.formData).foo).toEqual('changed');
     });
 
     it('should render the field with the expected id', () => {

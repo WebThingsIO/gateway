@@ -10,7 +10,7 @@
 
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const fluent = require('../fluent');
 const Utils = require('../utils');
 const {getClassFromCapability} =

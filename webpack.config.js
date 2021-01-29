@@ -2,7 +2,6 @@
  * Wepback configuration for the node server.
  */
 
-const {CheckerPlugin} = require('awesome-typescript-loader');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -17,14 +16,13 @@ const pluginsWeb = [
   new CleanWebpackPlugin({
     cleanOnceBeforeBuildPatterns: ['**/*', '!service-worker.js*'],
   }),
-  new CheckerPlugin(),
   new CopyWebpackPlugin({
     patterns: [
       {
         from: 'static/**/*',
         to: path.join(__dirname, 'build'),
         globOptions: {
-          ignore: ['**/*.js', '**/index.html'],
+          ignore: ['**/*.js', '**/*.ts', '**/index.html'],
         },
       },
       {
@@ -156,11 +154,12 @@ const webpackWeb = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /.\/static\/js\/.*\.ts$/,
         include: path.resolve(__dirname, 'static'),
-        use: [
-          'awesome-typescript-loader',
-        ],
+        loader: 'ts-loader',
+        options: {
+          onlyCompileBundledFiles: true,
+        },
       },
       {
         test: /.\/static\/js\/.*\.js$/,
@@ -253,17 +252,17 @@ const webpackWeb = {
       },
     ],
   },
-  // When require stm_web.min.js, can't resolve 'fs'.
-  // Maybe webpack bug.
   node: {
     fs: 'empty',
   },
   plugins: pluginsWeb,
   devtool: 'source-map',
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
 };
 
 const pluginsSW = [
-  new CheckerPlugin(),
   new webpack.BannerPlugin({
     banner: `const VERSION = '${uuidv1()}';`,
     raw: true,
@@ -286,13 +285,6 @@ const webpackSW = {
   },
   module: {
     rules: [
-      {
-        test: /\.ts$/,
-        include: path.resolve(__dirname, 'static'),
-        use: [
-          'awesome-typescript-loader',
-        ],
-      },
       {
         test: /\.js$/,
         include: path.resolve(__dirname, 'static'),

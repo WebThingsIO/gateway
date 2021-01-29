@@ -1,11 +1,11 @@
 // Polyfill for Intl.PluralRules
-require('intl-pluralrules');
+import 'intl-pluralrules';
 
-const API = require('./api');
-const FluentDOM = require('@fluent/dom');
-const Fluent = require('@fluent/bundle');
+import API from './api';
+import {DOMLocalization} from '@fluent/dom';
+import {FluentBundle, FluentResource, FluentVariable} from '@fluent/bundle';
 
-const availableLanguages = {
+const availableLanguages: Record<string, string[]> = {
   bn: ['/fluent/bn/main.ftl'],
   cs: ['/fluent/cs/main.ftl'],
   cy: ['/fluent/cy/main.ftl'],
@@ -44,14 +44,14 @@ const availableLanguages = {
   'zh-TW': ['/fluent/zh-TW/main.ftl'],
 };
 
-let language;
-let englishBundle;
-let bundle;
+let language: string;
+let englishBundle: FluentBundle;
+let bundle: FluentBundle;
 
-async function load() {
-  let response = {};
+export async function load(): Promise<void> {
+  let response: Record<string, string> = {};
   try {
-    response = await API.getLanguage();
+    response = <Record<string, string>>(await API.getLanguage());
   } catch (_) {
     // keep going
   }
@@ -73,12 +73,12 @@ async function load() {
   }
 
   const links = availableLanguages[language];
-  bundle = new Fluent.FluentBundle(language);
+  bundle = new FluentBundle(language);
   for (const link of links) {
     try {
       const res = await fetch(link);
       const text = await res.text();
-      bundle.addResource(new Fluent.FluentResource(text));
+      bundle.addResource(new FluentResource(text));
     } catch (e) {
       console.warn('Unable to download language pack:', e);
     }
@@ -88,12 +88,12 @@ async function load() {
     englishBundle = bundle;
   } else {
     const englishLinks = availableLanguages['en-US'];
-    englishBundle = new Fluent.FluentBundle('en-US');
+    englishBundle = new FluentBundle('en-US');
     for (const link of englishLinks) {
       try {
         const res = await fetch(link);
         const text = await res.text();
-        englishBundle.addResource(new Fluent.FluentResource(text));
+        englishBundle.addResource(new FluentResource(text));
       } catch (e) {
         console.warn('Unable to download English language pack:', e);
       }
@@ -101,16 +101,19 @@ async function load() {
   }
 }
 
-async function *generateBundles(_resourceIds) {
+async function *generateBundles(
+  _resourceIds: string[]
+// eslint-disable-next-line no-undefined
+): AsyncGenerator<FluentBundle, void, undefined> {
   if (!bundle) {
     await load();
   }
   yield *[bundle, englishBundle];
 }
 
-const l10n = new FluentDOM.DOMLocalization([], generateBundles);
+export const l10n = new DOMLocalization([], generateBundles);
 
-function init() {
+export function init(): void {
   l10n.connectRoot(document.documentElement);
   l10n.translateRoots();
 }
@@ -118,41 +121,49 @@ function init() {
 /**
  * @return {string|null} Translation of unit or null if not contained in bundle
  */
-function getMessageStrict(id, vars = {}) {
+export function getMessageStrict(
+  id: string,
+  vars: Record<string, FluentVariable> = {}
+): string | null {
   if (!bundle) {
     console.warn('Bundle not yet loaded');
     return null;
   }
 
-  const obj = bundle.getMessage(id, vars);
-  if (!obj) {
+  const obj = bundle.getMessage(id);
+  if (!obj || !obj.value) {
     console.warn('Missing id', id);
     return null;
   }
+
   return bundle.formatPattern(obj.value, vars);
 }
 
 /**
  * @return {string|null} Translation of unit or null if not contained in bundle
  */
-function getEnglishMessageStrict(id, vars = {}) {
+export function getEnglishMessageStrict(
+  id: string,
+  vars: Record<string, FluentVariable> = {}
+): string | null {
   if (!englishBundle) {
     console.warn('Bundle not yet loaded');
     return null;
   }
 
-  const obj = englishBundle.getMessage(id, vars);
-  if (!obj) {
+  const obj = englishBundle.getMessage(id);
+  if (!obj || !obj.value) {
     console.warn('Missing id', id);
     return null;
   }
+
   return englishBundle.formatPattern(obj.value, vars);
 }
 
 /**
  * @return {string} Translation of unit or unit's id for debugging purposes
  */
-function getMessage(id, vars = {}) {
+export function getMessage(id: string, vars: Record<string, FluentVariable> = {}): string {
   let msg = getMessageStrict(id, vars);
   if (msg) {
     return msg;
@@ -169,15 +180,6 @@ function getMessage(id, vars = {}) {
 /**
  * @return {string} The user's chosen language.
  */
-function getLanguage() {
+export function getLanguage(): string {
   return language;
 }
-
-module.exports = {
-  load,
-  l10n,
-  init,
-  getMessage,
-  getMessageStrict,
-  getLanguage,
-};

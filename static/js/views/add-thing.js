@@ -9,7 +9,7 @@
  */
 'use strict';
 
-const API = require('../api');
+const API = require('../api').default;
 const App = require('../app');
 const fluent = require('../fluent');
 const NewThing = require('./new-thing');

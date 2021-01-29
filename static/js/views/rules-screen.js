@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-const API = require('../api');
+const API = require('../api').default;
 const Gateway = require('../rules/Gateway');
 const RuleCard = require('../rules/RuleCard');
 const page = require('page');
