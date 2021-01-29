@@ -46,18 +46,6 @@ module.exports = {
     removeBeforeOpen: false,
   },
 
-  settings: {
-    defaults: {
-      mdns: {
-        // Whether or not to enable mDNS advertisements
-        enabled: true,
-
-        // Domain to advertise via mDNS
-        domain: os.hostname().split('.')[0],
-      },
-    },
-  },
-
   ssltunnel: {
     // Whether or not to enable the PageKite tunnel (if set up)
     enabled: true,

@@ -622,6 +622,10 @@ class API {
     return this.getJson('/settings/tunnelinfo');
   }
 
+  getDomainSettings(): Promise<Record<string, unknown>> {
+    return this.getJson('/settings/domain');
+  }
+
   setDomainSettings(settings: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson('/settings/domain', settings);
   }

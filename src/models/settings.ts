@@ -8,7 +8,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import config from 'config';
 import Database from '../db';
 import util from 'util';
 
@@ -66,50 +65,23 @@ export async function deleteSetting(key: string): Promise<void> {
 
 /**
  * Get an object of all tunnel settings
- * @return {localDomain, mDNSstate, tunnelDomain}
+ * @return {string}
  */
-export async function getTunnelInfo():
-Promise<{localDomain: string, mDNSstate: boolean, tunnelDomain: string}> {
+export async function getTunnelInfo(): Promise<string> {
   // Check to see if we have a tunnel endpoint first
   const result = await getSetting('tunneltoken');
-  let localDomain: string;
-  let mDNSstate: boolean;
-  let tunnelEndpoint: string;
+  let tunnelDomain: string;
 
   if (typeof result === 'object') {
     const token = <Record<string, unknown>>result!;
-    console.log(`Tunnel domain found. Tunnel name is: ${token.name} and`,
-                `tunnel domain is: ${token.base}`);
-    tunnelEndpoint = `https://${token.name}.${token.base}`;
+    console.log(
+      `Tunnel domain found. Tunnel name is: ${token.name} and tunnel domain is: ${token.base}`
+    );
+    tunnelDomain = `https://${token.name}.${token.base}`;
   } else {
-    tunnelEndpoint = 'Not set.';
+    console.log('Tunnel domain not set.');
+    tunnelDomain = 'Not set.';
   }
 
-  // Find out our default local DNS name Check for a previous name in the
-  // DB, if that does not exist use the default.
-  try {
-    mDNSstate = <boolean>(await getSetting('multicastDNSstate'));
-    localDomain = <string>(await getSetting('localDNSname'));
-    // If our DB is empty use defaults
-    if (typeof mDNSstate === 'undefined') {
-      mDNSstate = config.get('settings.defaults.mdns.enabled');
-    }
-    if (typeof localDomain === 'undefined') {
-      localDomain = config.get('settings.defaults.mdns.domain');
-    }
-  } catch (err) {
-    // Catch this DB error. Since we don't know what state the mDNS process
-    // should be in make sure it's off
-    console.error(`Error getting DB entry for multicast from the DB: ${err}`);
-    mDNSstate = config.get('settings.defaults.mdns.enabled');
-    localDomain = config.get('settings.defaults.mdns.domain');
-  }
-
-  console.log(`Tunnel name is set to: ${tunnelEndpoint}`);
-  console.log(`Local mDNS Service Domain Name is: ${localDomain}`);
-  return {
-    localDomain,
-    mDNSstate,
-    tunnelDomain: tunnelEndpoint,
-  };
+  return tunnelDomain;
 }
