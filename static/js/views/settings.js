@@ -782,24 +782,20 @@ const SettingsScreen = {
   showDomainSettings: function() {
     this.domainSettings.classList.remove('hidden');
 
-    // Comented out until full integration of Dynamic tunnel creation
-    // with Service Discovery
-    // const addDomainTunnelButton =
-    //   document.getElementById('domain-settings-moz-tunnel-change');
-    //     addDomainTunnelButton.addEventListener('click', () => {
-    //     this.onTunnelDomainClick();
-    // });
-
     API.getTunnelInfo().then((body) => {
       if (body) {
-        this.elements.domain.localCheckbox.checked = body.mDNSstate;
-        this.elements.domain.localName.value = body.localDomain;
         this.elements.domain.tunnelName.innerText = body.tunnelDomain;
       } else {
-        this.elements.domain.localName.value =
-          fluent.getMessage('unknown-state');
-        this.elements.domain.tunnelName.innerText =
-          fluent.getMessage('unknown-state');
+        this.elements.domain.tunnelName.innerText = fluent.getMessage('unknown-state');
+      }
+    });
+
+    API.getDomainSettings().then((body) => {
+      if (body) {
+        this.elements.domain.localCheckbox.checked = body.enabled;
+        this.elements.domain.localName.value = body.hostname;
+      } else {
+        this.elements.domain.localName.value = fluent.getMessage('unknown-state');
       }
 
       if (!this.elements.domain.localCheckbox.checked) {
@@ -813,7 +809,7 @@ const SettingsScreen = {
     const error = document.getElementById('domain-settings-error');
     const value = e.target.checked ? true : false;
 
-    API.setDomainSettings({local: {multicastDNSstate: value}}).then(() => {
+    API.setDomainSettings({enabled: value}).then(() => {
       document.getElementById('domain-settings-local-update').disabled = !value;
       document.getElementById('domain-settings-local-name').disabled = !value;
       error.classList.add('hidden');
@@ -831,69 +827,27 @@ const SettingsScreen = {
   // The button controller to update the local domain settings.
   // In menu -> Settings -> Domain
   onLocalDomainClick: () => {
-    const localDomainName =
-      document.getElementById('domain-settings-local-name');
+    const localDomainName = document.getElementById('domain-settings-local-name');
     const error = document.getElementById('domain-settings-error');
 
-    API.setDomainSettings({local: {localDNSname: localDomainName.value}})
-      .then((domainJson) => {
-        // if the update was successful, we have a legit local domain and mDNS
-        // is active then redirect
-        if (domainJson.update && domainJson.localDomain.length > 0) {
-          if (domainJson.mDNSstate) {
-            App.showMessage('Update succeeded.', 3000);
-          }
-        } else {
-          error.classList.remove('hidden');
-          error.textContent = domainJson.error;
-          document.getElementById('domain-settings-local-name')
-            .value = domainJson.localDomain;
-        }
-      }).catch((err) => {
-        const errorMessage = `${fluent.getMessage('error')}: ${err}`;
-        console.error(errorMessage);
+    API.setDomainSettings({hostname: localDomainName.value}).then((domainJson) => {
+      // if the update was successful, we have a legit local domain and mDNS
+      // is active then redirect
+      if (domainJson.update && domainJson.localDomain.length > 0 &&
+          domainJson.enabled) {
+        App.showMessage('Update succeeded.', 3000);
+      } else {
         error.classList.remove('hidden');
-        error.textContent = err;
-      });
+        error.textContent = domainJson.error;
+        document.getElementById('domain-settings-local-name').value = domainJson.localDomain;
+      }
+    }).catch((err) => {
+      const errorMessage = `${fluent.getMessage('error')}: ${err}`;
+      console.error(errorMessage);
+      error.classList.remove('hidden');
+      error.textContent = err;
+    });
   },
-
-  // The button controller to update the tunnel domain settings.
-  // In menu -> Settings -> Domain. Removed until this feature is done
-  // at a future point.
-
-  // onTunnelDomainClick: function() {
-  //   var tunnelDomainCheckbox = document.getElementById(
-  //     'domain-settings-tunnel-checkbox');
-  //   var tunnelDomainName = document.getElementById(
-  //     'domain-settings-tunnel-name');
-  //   var tunnelDomainEmail = document.getElementById(
-  //     'domain-settings-tunnel-email');
-  //   console.log('* tunnel domain checkbox is: ' +
-  //                'tunnelDomainCheckbox.checked');
-  //
-  //   var data = {tunnelState: tunnelDomainCheckbox.checked,
-  //               tunnelDNSname: tunnelDomainName.value,
-  //               tunnelUserEmail: tunnelDomainEmail};
-  //   console.log('* json data to send is: ' + JSON.stringify(data));
-  //
-  //
-  //   fetch('/settings/setdomain', {
-  //     body: JSON.stringify({answer: "42"}),
-  //     headers: API.headers(),
-  //     method: 'POST'
-  //   })
-  //     .then(function (response) {
-  //     return response.json();
-  //   })
-  //     .then((domainJson) => {
-  //
-  //     console.log(domainJson);
-  //   })
-  //   .catch(function () {
-  //     console.log('Error');
-  //   });
-  //
-  // }
 
   showNetworkSettings: function() {
     this.hideNetworkElements();

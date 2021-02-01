@@ -67,10 +67,6 @@ class Database {
     this.db.serialize(() => {
       this.createTables();
       this.migrate();
-      // If database newly created, populate with default data
-      if (!exists) {
-        this.populate();
-      }
     });
   }
 
@@ -131,48 +127,6 @@ class Database {
     this.db!.run('ALTER TABLE users ADD COLUMN mfaEnrolled BOOLEAN DEFAULT 0', () => {});
     this.db!.run('ALTER TABLE users ADD COLUMN mfaBackupCodes TEXT', () => {});
     /* eslint-enable @typescript-eslint/no-empty-function */
-  }
-
-  /**
-   * Populate the database with default data.
-   */
-  populate(): void {
-    // Add any settings provided.
-    const generateSettings =
-      (obj: Record<string, unknown>, baseKey: string): [string, unknown][] => {
-        const settings: [string, unknown][] = [];
-
-        for (const key in obj) {
-          let newKey;
-          if (baseKey !== '') {
-            newKey = `${baseKey}.${key}`;
-          } else {
-            newKey = key;
-          }
-
-          if (typeof obj[key] === 'object') {
-            settings.push(...generateSettings(<Record<string, unknown>>obj[key], newKey));
-          } else {
-            settings.push([newKey, obj[key]]);
-          }
-        }
-        return settings;
-      };
-
-    const settings = generateSettings(config.get('settings.defaults'), '');
-    for (const setting of settings) {
-      this.db!.run(
-        'INSERT INTO settings (key, value) VALUES (?, ?)',
-        [setting[0], setting[1]],
-        (error) => {
-          if (error) {
-            console.error(`Failed to insert setting ${setting[0]}`);
-          } else if (DEBUG) {
-            console.log(`Saved setting ${setting[0]} = ${setting[1]}`);
-          }
-        }
-      );
-    }
   }
 
   /**

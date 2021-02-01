@@ -39,7 +39,6 @@ import './plugin/plugin';
 import AddonManager from './addon-manager';
 import * as Constants from './constants';
 import Database from './db';
-import * as mDNSserver from './mdns-server';
 import Logs from './models/logs';
 import * as Platform from './platform';
 import Router from './router';
@@ -374,12 +373,3 @@ TunnelService.switchToHttps = () => {
     }
   });
 };
-
-// This part starts our Service Discovery process.
-// We check to see if mDNS should be setup in default mode, or has a previous
-// user setup a unique domain. Then we start it.
-mDNSserver.getmDNSstate().then((state) => {
-  if (Platform.implemented('setMdnsServerStatus')) {
-    Platform.setMdnsServerStatus(state);
-  }
-});
