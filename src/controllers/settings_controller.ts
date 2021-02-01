@@ -16,7 +16,6 @@ import path from 'path';
 import * as Constants from '../constants';
 import lookup from '../iso-639/index';
 import * as jwtMiddleware from '../jwt-middleware';
-import * as mDNSserver from '../mdns-server';
 import * as Platform from '../platform';
 import * as Settings from '../models/settings';
 import TunnelService from '../tunnel-service';
@@ -151,13 +150,30 @@ function build(): express.Router {
 
   controller.get('/tunnelinfo', auth, async (_request, response) => {
     try {
-      const localDomainSettings = await Settings.getTunnelInfo();
-      response.status(200).json(localDomainSettings);
+      const tunnelDomain = await Settings.getTunnelInfo();
+      response.status(200).json({tunnelDomain});
     } catch (e) {
-      console.error('Failed to retrieve default settings for ' +
-        'tunneltoken or local service discovery setting');
-      console.error(e);
+      console.error('Failed to retrieve default settings for tunneltoken:', e);
       response.status(400).send(e);
+    }
+  });
+
+  controller.get('/domain', auth, async (_request, response) => {
+    try {
+      let hostname = '';
+      if (Platform.implemented('getHostname')) {
+        hostname = Platform.getHostname();
+      }
+
+      let enabled = false;
+      if (Platform.implemented('getMdnsServerStatus')) {
+        enabled = Platform.getMdnsServerStatus();
+      }
+
+      response.status(200).json({hostname, enabled});
+    } catch (e) {
+      console.error('Failed to get domain settings:', e);
+      response.status(400).end();
     }
   });
 
@@ -167,29 +183,28 @@ function build(): express.Router {
    *   MainMenu -> Settings -> Doamin
    *
    * JSON data: {
-   *              local: {
-   *                multicastDNSstate: boolean,
-   *                localDNSname: string, - e.g. MyHome
-   *              }
+   *                enabled: boolean,
+   *                hostname: string, - e.g. MyHome
    *            }
    */
   controller.put('/domain', auth, async (request, response) => {
-    if (!request.body || !request.body.hasOwnProperty('local')) {
+    if (!request.body) {
       response.statusMessage = 'Invalid request.';
       response.status(400).end();
       return;
     }
 
     try {
-      if (request.body.local.hasOwnProperty('localDNSname')) {
-        if (!Platform.implemented('setHostname') ||
-            !Platform.setHostname(request.body.local.localDNSname)) {
+      if (request.body.hasOwnProperty('hostname')) {
+        const hostname = <string>request.body.hostname;
+        if (!Platform.implemented('setHostname') || !Platform.setHostname(hostname)) {
           response.sendStatus(500);
           return;
         }
-      } else if (request.body.local.hasOwnProperty('multicastDNSstate')) {
+      } else if (request.body.hasOwnProperty('enabled')) {
+        const enabled = <boolean>request.body.enabled;
         if (!Platform.implemented('setMdnsServerStatus') ||
-            !Platform.setMdnsServerStatus(request.body.local.multicastDNSstate)) {
+            !Platform.setMdnsServerStatus(enabled)) {
           response.sendStatus(500);
           return;
         }
@@ -208,23 +223,41 @@ function build(): express.Router {
         port = config.get('ports.http');
       }
 
-      const domain = await mDNSserver.getmDNSdomain();
-      const state = await mDNSserver.getmDNSstate();
+      let domain = '';
+      if (Platform.implemented('getHostname')) {
+        domain = Platform.getHostname();
+      }
+
+      let state = false;
+      if (Platform.implemented('getMdnsServerStatus')) {
+        state = Platform.getMdnsServerStatus();
+      }
+
       const url = `${protocol}://${domain}.local:${port}`;
       const localDomainSettings = {
         localDomain: url,
         update: true,
-        mDNSstate: state,
+        enabled: state,
       };
+
       response.status(200).json(localDomainSettings);
     } catch (err) {
       console.error(`Failed setting domain with: ${err} `);
-      const domain = await mDNSserver.getmDNSdomain();
-      const state = await mDNSserver.getmDNSstate();
+
+      let domain = '';
+      if (Platform.implemented('getHostname')) {
+        domain = Platform.getHostname();
+      }
+
+      let state = false;
+      if (Platform.implemented('getMdnsServerStatus')) {
+        state = Platform.getMdnsServerStatus();
+      }
+
       const localDomainSettings = {
         localDomain: domain,
         update: false,
-        mDNSstate: state,
+        enabled: state,
         error: err.message,
       };
       response.status(400).json(localDomainSettings);

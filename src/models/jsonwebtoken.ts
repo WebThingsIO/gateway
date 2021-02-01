@@ -146,8 +146,7 @@ export default class JSONWebToken {
     const pair = ec.generateKeyPair();
 
     const keyId = uuidv4();
-    const tunnelInfo = await Settings.getTunnelInfo();
-    const issuer = tunnelInfo.tunnelDomain;
+    const issuer = await Settings.getTunnelInfo();
     const options: jwt.SignOptions = {
       algorithm: ec.JWT_ALGORITHM,
       keyid: keyId,
